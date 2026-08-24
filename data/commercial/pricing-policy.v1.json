@@ -1,0 +1,311 @@
+{
+  "schema": "confenge.pricing-policy/1.0",
+  "policy_version": "CFG-PRICING-2026-08-24-v1",
+  "issue": "#341",
+  "parent_issue": "#329",
+  "related_issues": [
+    "#88",
+    "#336"
+  ],
+  "state": "NOT_STARTED",
+  "decision_state": {
+    "priority": "P0",
+    "stage": "VALIDATE",
+    "front": "REVENUE NOW",
+    "leverage": [
+      "revenue",
+      "customer",
+      "trust"
+    ],
+    "time_to_evidence_days": 30
+  },
+  "decision": "Competitivo significa a melhor relação entre consequência econômica evitada, escopo verificável, prazo, risco assumido e preço fixo, e não ser o menor número da internet. Todos os preços atuais permanecem. Todos os preços novos são hipóteses de piloto até existir proposta real, aceite ou rejeição, custo e outcome.",
+  "public_anchors": [
+    {
+      "source": "Exemplo público de consultoria em licitações",
+      "url": "https://www.xn--csconsultoriaemlicitaes-ibc46a.online/",
+      "observation": "Oferta genérica de análise de licitação por R$ 1.400 mais comissão de 1%, modelo que mistura preço e resultado.",
+      "is_market_truth": false
+    },
+    {
+      "source": "Effecti, precificação de consultoria em licitações",
+      "url": "https://effecti.com.br/comissao-consultoria-licitacoes/",
+      "observation": "Recomenda calcular por horas, complexidade, capacidade e limites explícitos, e exemplifica um piso de R$ 1.700 para oito horas antes de margem.",
+      "is_market_truth": false
+    },
+    {
+      "source": "oHub, custos de gerenciamento de obras",
+      "url": "https://base.ohub.com.br/facilities/construcao-reforma-e-obras/gerenciamento-de-obras/artigos/quanto-custa-uma-gerenciadora-de-obras-no-brasil",
+      "observation": "Referência secundária de auditoria e gerenciamento situa auditoria pontual de orçamento em R$ 5 mil a R$ 25 mil.",
+      "is_market_truth": false
+    }
+  ],
+  "public_anchors_framing": "O mercado público é ruidoso e não oferece uma tabela comparável. Essas âncoras são direcionais. Não devem ser apresentadas ao cliente como preço de mercado.",
+  "ladder": [
+    {
+      "tier_id": "entrada_factual",
+      "tier_order": 1,
+      "role": "experimentar método com uma decisão pequena",
+      "billing": "one_time",
+      "price_band": {
+        "min_cents": 59900,
+        "max_cents": 240000,
+        "currency": "BRL",
+        "display": "R$ 599 a R$ 2.400"
+      }
+    },
+    {
+      "tier_id": "diagnostico_delimitado",
+      "tier_order": 2,
+      "role": "revelar risco ou lacuna e decidir próximo passo",
+      "billing": "one_time",
+      "price_band": {
+        "min_cents": 290000,
+        "max_cents": 590000,
+        "currency": "BRL",
+        "display": "R$ 2.900 a R$ 5.900"
+      }
+    },
+    {
+      "tier_id": "dossie_critico",
+      "tier_order": 3,
+      "role": "instruir decisão ou protocolo técnico",
+      "billing": "one_time",
+      "price_band": {
+        "min_cents": 690000,
+        "max_cents": 790000,
+        "currency": "BRL",
+        "display": "R$ 6.900 a R$ 7.900"
+      }
+    },
+    {
+      "tier_id": "oportunidade_ou_problema_complexo",
+      "tier_order": 4,
+      "role": "coordenação, proposta ou análise profunda",
+      "billing": "one_time",
+      "price_band": {
+        "min_cents": 980000,
+        "max_cents": 1980000,
+        "currency": "BRL",
+        "display": "R$ 9.800 a R$ 19.800"
+      }
+    },
+    {
+      "tier_id": "inteligencia_estrategica",
+      "tier_order": 5,
+      "role": "problema público multirrecorte",
+      "billing": "one_time",
+      "price_band": {
+        "min_cents": 3980000,
+        "max_cents": 3980000,
+        "currency": "BRL",
+        "display": "R$ 39.800"
+      }
+    },
+    {
+      "tier_id": "recorrencia_gerenciada",
+      "tier_order": 6,
+      "role": "observar e prevenir",
+      "billing": "subscription_monthly",
+      "allowed_amounts_cents": [
+        490000,
+        690000
+      ],
+      "price_band": {
+        "min_cents": 490000,
+        "max_cents": 690000,
+        "currency": "BRL",
+        "display": "R$ 4.900 ou R$ 6.900 por mês"
+      }
+    },
+    {
+      "tier_id": "lideranca_fracionada",
+      "tier_order": 7,
+      "role": "decidir e executar portfólio",
+      "billing": "subscription_monthly",
+      "price_band": {
+        "min_cents": 1250000,
+        "max_cents": 2000000,
+        "currency": "BRL",
+        "display": "R$ 12.500 a R$ 20.000 por mês"
+      }
+    }
+  ],
+  "ladder_constraint": "A escada não autoriza arredondar ofertas diferentes para o mesmo preço sem justificar esforço e consequência.",
+  "unit_economics_required_fields": [
+    "horas estimadas e reais por senioridade",
+    "aquisição e limpeza de dados",
+    "análise",
+    "revisão técnica e QA",
+    "gestão, reuniões e revisões",
+    "aquisição comercial atribuível",
+    "retrabalho, urgência e ociosidade de capacidade",
+    "custo direto total",
+    "margem de contribuição",
+    "tempo até caixa",
+    "valor do ativo reutilizável produzido"
+  ],
+  "unit_economics_disclosure_rule": "Registrar sem expor dado interno sensível na página.",
+  "promotion_gate": {
+    "metric": "margem de contribuição direta observada",
+    "min_pct": 55,
+    "min_deliveries": 3,
+    "alternative": "decisão explícita do fundador sobre preço ou escopo",
+    "note": "A meta é guardrail de capacidade, não alegação pública."
+  },
+  "willingness_to_pay_test": {
+    "scope": "cada família P0 ou P1, em conversa real",
+    "state": "NOT_STARTED",
+    "steps": [
+      "apresentar primeiro trigger, consequência, escopo, prazo e amostra",
+      "pedir decisão de compra no preço cheio",
+      "registrar ACEITA, NEGOCIA, RECUSA ou ADIA, com motivo literal",
+      "testar no máximo uma alternativa predefinida: escopo menor, prazo normal ou step-up, nunca desconto improvisado",
+      "quando houver compra, reconciliar custo, satisfação e outcome",
+      "após três propostas comparáveis, manter, subir ou descer 10% a 15% com hipótese escrita",
+      "não chamar validado por entrevista, clique ou elogio"
+    ],
+    "decision_states": [
+      "ACEITA",
+      "NEGOCIA",
+      "RECUSA",
+      "ADIA"
+    ],
+    "max_predefined_alternatives": 1,
+    "allowed_alternatives": [
+      "escopo menor",
+      "prazo normal",
+      "step-up"
+    ],
+    "reprice_after_comparable_proposals": 3,
+    "reprice_range_pct": {
+      "min": 10,
+      "max": 15
+    },
+    "reprice_requires_written_hypothesis": true
+  },
+  "taxative_commercial_rules": [
+    "Proibido comissão sobre vitória, homologação, pleito ou valor recuperado.",
+    "Urgência acrescenta no máximo 50%, apenas quando tecnicamente segura e com capacidade confirmada.",
+    "Adicionais somente os explicitamente publicados por janela, família causal, revisão, rodada, audiência ou deslocamento.",
+    "Maior crédito aplicável uma única vez, sem empilhar.",
+    "Preço nunca muda depois do aceite para o mesmo escopo.",
+    "Qualquer exceção precisa de versão de terms e motivo registrável.",
+    "A expressão a partir de só é permitida quando a mesma tela mostra unidade-base e adicionais.",
+    "Nenhuma rota usa sob consulta como substituto de preço.",
+    "Proibido desconto silencioso ou improvisado: qualquer teste de preço usa alternativa predefinida e registrada.",
+    "Proibido preço por página como base de cobrança: a base é escopo, esforço e consequência.",
+    "Proibido success fee em qualquer forma."
+  ],
+  "acceptance": [
+    "planilha ou evento de custos por deliverable_id e versão de escopo",
+    "12 entrevistas e testes de preço de #336 concluídos com falas e decisões reais",
+    "pelo menos três propostas reais por família antes de VALIDATE para PROMOTE",
+    "margem, prazo, retrabalho e outcome reconciliados",
+    "benchmark competitivo usa escopo normalizado e data, não screenshot solto",
+    "preços públicos e terms derivam do mesmo registry e não divergem entre páginas",
+    "nenhum desconto, success fee ou adicional oculto",
+    "revisão trimestral apenas depois de existir volume suficiente, sem alteração automática"
+  ],
+  "registry_cross_check": {
+    "registry_version": "CFG-DELIVERABLES-2026-08-24-v1",
+    "protocol_version": "CFG-MARKET-FIT-2026-08-24-v1",
+    "basis": "Conferência informativa de preços do registry contra as faixas da escada de #341. #341 não atribui deliverable_id a faixa, portanto a atribuição de faixa abaixo é inferencial e não normativa. Nenhum preço do registry foi alterado.",
+    "outside_any_band": [
+      {
+        "id": "expansion_package",
+        "public_name": "Diagnóstico B2G de Expansão",
+        "type": "container",
+        "amount_cents": 800000,
+        "billing": "one_time",
+        "finding": "R$ 8.000 cai no vão entre o teto do dossiê crítico, R$ 7.900, e o piso de oportunidade ou problema complexo, R$ 9.800. Nenhuma faixa de #341 contém este preço."
+      }
+    ],
+    "band_gaps_declared_by_341": [
+      "R$ 2.400 a R$ 2.900",
+      "R$ 5.900 a R$ 6.900",
+      "R$ 7.900 a R$ 9.800",
+      "R$ 19.800 a R$ 39.800"
+    ],
+    "unpopulated_tiers": [
+      {
+        "tier_id": "inteligencia_estrategica",
+        "note": "Nenhum item do registry está precificado em R$ 39.800."
+      },
+      {
+        "tier_id": "recorrencia_gerenciada",
+        "note": "O registry usa apenas R$ 6.900 por mês em CFG-D25. O ponto de R$ 4.900 por mês previsto em #341 não tem item correspondente."
+      }
+    ],
+    "tier_role_tension_to_resolve_with_founder": [
+      {
+        "ids": [
+          "CFG-D18",
+          "CFG-D19",
+          "CFG-D20"
+        ],
+        "amounts_cents": [
+          490000,
+          590000,
+          590000
+        ],
+        "note": "São nomeados dossiê e instruem protocolo técnico, papel da faixa dossiê crítico, R$ 6.900 a R$ 7.900, mas estão precificados dentro da faixa diagnóstico delimitado, R$ 2.900 a R$ 5.900. Preço válido em alguma faixa, papel ambíguo entre duas."
+      },
+      {
+        "ids": [
+          "CFG-D12"
+        ],
+        "amounts_cents": [
+          190000
+        ],
+        "note": "Raio-X Go/No-Go do Edital exerce o papel de revelar risco e decidir próximo passo, papel da faixa diagnóstico delimitado, mas está precificado dentro da faixa entrada factual, R$ 599 a R$ 2.400."
+      }
+    ],
+    "within_band": {
+      "entrada_factual": [
+        "CFG-D01",
+        "CFG-D02",
+        "CFG-D03",
+        "CFG-D04",
+        "CFG-D05",
+        "CFG-D06",
+        "CFG-D07",
+        "CFG-D09",
+        "CFG-D10",
+        "CFG-D12"
+      ],
+      "diagnostico_delimitado": [
+        "CFG-D08",
+        "CFG-D11",
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D15",
+        "CFG-D17",
+        "CFG-D18",
+        "CFG-D19",
+        "CFG-D20",
+        "CFG-D21"
+      ],
+      "dossie_critico": [
+        "CFG-D22",
+        "CFG-D23",
+        "CFG-D24"
+      ],
+      "oportunidade_ou_problema_complexo": [
+        "CFG-D16 essencial",
+        "CFG-D16 complexa",
+        "CFG-D16 especial"
+      ],
+      "inteligencia_estrategica": [],
+      "recorrencia_gerenciada": [
+        "CFG-D25"
+      ],
+      "lideranca_fracionada": [
+        "diretoria_365",
+        "diretoria_180",
+        "diretoria_flex"
+      ]
+    }
+  },
+  "records": []
+}

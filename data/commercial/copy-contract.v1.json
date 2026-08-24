@@ -1,0 +1,625 @@
+{
+  "schema": "confenge.offer-copy-contract/1.0",
+  "contract_version": "CFG-COPY-2026-08-24-v1",
+  "issue": "#338",
+  "parent_issue": "#329",
+  "complements_issues": [
+    "#188",
+    "#327",
+    "#335",
+    "#336",
+    "#343"
+  ],
+  "state": "NOT_STARTED",
+  "operational_definition": {
+    "statement": "Impossivel de melhorar nao e alegacao vazia: significa submeter cada oferta a um contrato editorial completo, a uma revisao adversarial e a tres tempos de compreensao.",
+    "comprehension_times": [
+      {
+        "time": "3 segundos",
+        "requirement": "sei em que momento estou e qual consequencia a oferta evita"
+      },
+      {
+        "time": "30 segundos",
+        "requirement": "entendo diferenca, preco, prazo, saida e proxima acao"
+      },
+      {
+        "time": "3 minutos",
+        "requirement": "consigo avaliar fit, insumos, limites, prova e alternativa sem falar com vendedor"
+      }
+    ],
+    "failure_rule": "Uma falha material em qualquer etapa reprova a publicacao ou a prominencia da oferta.",
+    "site_self_claim_rule": "O site nao declara impossivel de melhorar; demonstra qualidade por clareza, prova e consistencia."
+  },
+  "per_offer_contract": [
+    {
+      "order": 1,
+      "key": "decision_oriented_name",
+      "requirement": "nome orientado a decisao, nao ao formato"
+    },
+    {
+      "order": 2,
+      "key": "observable_trigger",
+      "requirement": "trigger observavel: compre quando..."
+    },
+    {
+      "order": 3,
+      "key": "cost_of_inaction",
+      "requirement": "custo de nao agir, sem medo inventado nem valor financeiro nao provado"
+    },
+    {
+      "order": 4,
+      "key": "decision_that_changes",
+      "requirement": "decisao que muda ao receber o trabalho"
+    },
+    {
+      "order": 5,
+      "key": "concrete_result_and_artifact_example",
+      "requirement": "resultado concreto e exemplo do artefato"
+    },
+    {
+      "order": 6,
+      "key": "scope_in",
+      "requirement": "o que entra, delimitado por edital, lote, contrato, evento, fonte, cenario ou revisao"
+    },
+    {
+      "order": 7,
+      "key": "client_inputs_and_sla_start",
+      "requirement": "o que o cliente fornece e condicao para iniciar o SLA"
+    },
+    {
+      "order": 8,
+      "key": "method_and_provenance",
+      "requirement": "metodo e proveniencia: FACT, CALCULATION, INFERENCE ou UNKNOWN"
+    },
+    {
+      "order": 9,
+      "key": "price_and_sla_same_block",
+      "requirement": "prazo e preco no mesmo bloco visual"
+    },
+    {
+      "order": 10,
+      "key": "exclusions_and_third_party",
+      "requirement": "o que nao inclui e quando juridico, responsavel tecnico ou terceiro e necessario"
+    },
+    {
+      "order": 11,
+      "key": "fit_and_misfit",
+      "requirement": "para quem serve e para quem nao serve"
+    },
+    {
+      "order": 12,
+      "key": "proof_matching_real_state",
+      "requirement": "prova compativel com o estado real: amostra sintetica, metodo, fonte ou caso consentido"
+    },
+    {
+      "order": 13,
+      "key": "specific_objections",
+      "requirement": "objecoes especificas, nao FAQ generico repetido"
+    },
+    {
+      "order": 14,
+      "key": "cta_with_post_click_expectation",
+      "requirement": "CTA com expectativa pos-clique"
+    },
+    {
+      "order": 15,
+      "key": "neighbor_alternative_and_step_up",
+      "requirement": "alternativa vizinha e step-up, explicando por que nao comprar a outra"
+    }
+  ],
+  "screen_structure": {
+    "index_entregas": [
+      {
+        "order": 1,
+        "block": "eyebrow factual"
+      },
+      {
+        "order": 2,
+        "block": "H1 que promete escolha clara, nao solucoes completas"
+      },
+      {
+        "order": 3,
+        "block": "subhead com universo atendido, principio de preco e ausencia de promessa de vitoria"
+      },
+      {
+        "order": 4,
+        "block": "seletor o que esta acontecendo agora?"
+      },
+      {
+        "order": 5,
+        "block": "trilhas por momento do ciclo"
+      },
+      {
+        "order": 6,
+        "block": "cards resumidos com trigger, decisao, preco e SLA"
+      },
+      {
+        "order": 7,
+        "block": "comparacao"
+      },
+      {
+        "order": 8,
+        "block": "conteineres continuos e sob medida"
+      },
+      {
+        "order": 9,
+        "block": "metodo e prova"
+      },
+      {
+        "order": 10,
+        "block": "limites eticos"
+      },
+      {
+        "order": 11,
+        "block": "CTA final"
+      }
+    ],
+    "offer_detail": [
+      {
+        "order": 1,
+        "block": "situacao e consequencia"
+      },
+      {
+        "order": 2,
+        "block": "decisao antes e depois"
+      },
+      {
+        "order": 3,
+        "block": "amostra acima da dobra"
+      },
+      {
+        "order": 4,
+        "block": "escopo e entregaveis"
+      },
+      {
+        "order": 5,
+        "block": "processo e SLA"
+      },
+      {
+        "order": 6,
+        "block": "insumos"
+      },
+      {
+        "order": 7,
+        "block": "preco, adicionais e credito"
+      },
+      {
+        "order": 8,
+        "block": "limites"
+      },
+      {
+        "order": 9,
+        "block": "fontes e metodo"
+      },
+      {
+        "order": 10,
+        "block": "fit e misfit"
+      },
+      {
+        "order": 11,
+        "block": "perguntas reais"
+      },
+      {
+        "order": 12,
+        "block": "CTA e proximo passo"
+      }
+    ]
+  },
+  "forbidden_language_without_immediate_proof": [
+    {
+      "id": "FL-01",
+      "term": "solução completa",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "exception": "Termo de categoria pode existir no nome registrado, mas a frase seguinte precisa provar concretamente o que ele significa."
+    },
+    {
+      "id": "FL-02",
+      "term": "insights estratégicos",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "exception": "Termo de categoria pode existir no nome registrado, mas a frase seguinte precisa provar concretamente o que ele significa."
+    },
+    {
+      "id": "FL-03",
+      "term": "inteligência de ponta",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "exception": "Termo de categoria pode existir no nome registrado, mas a frase seguinte precisa provar concretamente o que ele significa."
+    },
+    {
+      "id": "FL-04",
+      "term": "excelência",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "exception": "Termo de categoria pode existir no nome registrado, mas a frase seguinte precisa provar concretamente o que ele significa."
+    },
+    {
+      "id": "FL-05",
+      "term": "personalizado",
+      "match_type": "literal_ci_accent_insensitive_stem",
+      "machine_checkable": true,
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "exception": "Termo de categoria pode existir no nome registrado, mas a frase seguinte precisa provar concretamente o que ele significa."
+    },
+    {
+      "id": "FL-06",
+      "term": "360°",
+      "match_type": "literal_ci",
+      "machine_checkable": true,
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "exception": "Termo de categoria pode existir no nome registrado, mas a frase seguinte precisa provar concretamente o que ele significa."
+    },
+    {
+      "id": "FL-07",
+      "term": "transformador",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "exception": "Termo de categoria pode existir no nome registrado, mas a frase seguinte precisa provar concretamente o que ele significa."
+    },
+    {
+      "id": "FL-08",
+      "term": "garantia",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "exception": "Termo de categoria pode existir no nome registrado, mas a frase seguinte precisa provar concretamente o que ele significa."
+    },
+    {
+      "id": "FL-09",
+      "term": "recupere",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "exception": "Termo de categoria pode existir no nome registrado, mas a frase seguinte precisa provar concretamente o que ele significa."
+    },
+    {
+      "id": "FL-10",
+      "term": "vença",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "exception": "Termo de categoria pode existir no nome registrado, mas a frase seguinte precisa provar concretamente o que ele significa."
+    },
+    {
+      "id": "FL-11",
+      "term": "poderá",
+      "match_type": "frequency_literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "rationale": "AI tells, traducao literal, nominalizacao burocratica e excesso de podera sao proibidos sem prova imediata. O scanner mede frequencia; excesso e defeito editorial julgado na revisao adversarial.",
+      "source": "#338 Linguagem proibida sem prova imediata"
+    },
+    {
+      "id": "FL-12",
+      "term": "impossível de melhorar",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "rationale": "O site nao declara impossivel de melhorar; demonstra qualidade por clareza, prova e consistencia.",
+      "source": "#338 Acceptance"
+    },
+    {
+      "id": "FL-13",
+      "term": "confie em nós",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "rationale": "0 claim depende de confie em nos.",
+      "source": "#338 Criterios quantitativos de qualidade"
+    },
+    {
+      "id": "FL-14",
+      "term": "saiba mais",
+      "match_type": "literal_ci_accent_insensitive",
+      "machine_checkable": true,
+      "rationale": "0 oferta termina em saiba mais como unico significado. O scanner sinaliza a ocorrencia; a proibicao so se confirma quando saiba mais e o unico significado do encerramento da oferta.",
+      "source": "#338 Criterios quantitativos de qualidade"
+    },
+    {
+      "id": "FL-15",
+      "claim_pattern": "superlativo não demonstrado",
+      "match_type": "human_or_lens_review",
+      "machine_checkable": false,
+      "rationale": "#338 proibe superlativo nao demonstrado sem nomear termos; nao ha lista lexical na issue para derivar sem invencao.",
+      "source": "#338 Linguagem proibida sem prova imediata"
+    },
+    {
+      "id": "FL-16",
+      "claim_pattern": "número financeiro inventado",
+      "match_type": "human_or_lens_review",
+      "machine_checkable": false,
+      "rationale": "Todo numero financeiro publicado precisa de fonte, data e cobertura; numero sem lastro e proibido.",
+      "source": "#338 Linguagem proibida sem prova imediata"
+    },
+    {
+      "id": "FL-17",
+      "claim_pattern": "urgência falsa, escassez falsa ou desconto teatral",
+      "match_type": "human_or_lens_review",
+      "machine_checkable": false,
+      "rationale": "Urgencia falsa, escassez falsa ou desconto teatral sao proibidos sem prova imediata.",
+      "source": "#338 Linguagem proibida sem prova imediata"
+    },
+    {
+      "id": "FL-18",
+      "claim_pattern": "depoimento, logo ou caso sem consentimento ou proveniência",
+      "match_type": "human_or_lens_review",
+      "machine_checkable": false,
+      "rationale": "Depoimento, logo ou caso sem consentimento e proveniencia sao proibidos.",
+      "source": "#338 Linguagem proibida sem prova imediata"
+    },
+    {
+      "id": "FL-19",
+      "claim_pattern": "parágrafo intercambiável entre duas ofertas",
+      "match_type": "cross_offer_duplicate_text",
+      "machine_checkable": true,
+      "rationale": "Paragrafo intercambiavel entre duas ofertas e proibido; a checagem e de duplicidade entre ofertas, nao de termo isolado.",
+      "source": "#338 Linguagem proibida sem prova imediata"
+    },
+    {
+      "id": "FL-20",
+      "claim_pattern": "AI tells, tradução literal e nominalização burocrática",
+      "match_type": "human_or_lens_review",
+      "machine_checkable": false,
+      "rationale": "AI tells, traducao literal, nominalizacao burocratica e excesso de podera sao proibidos sem prova imediata.",
+      "source": "#338 Linguagem proibida sem prova imediata"
+    },
+    {
+      "id": "FL-21",
+      "claim_pattern": "promessa jurídica, regulatória, técnica ou financeira fora da competência",
+      "match_type": "human_or_lens_review",
+      "machine_checkable": false,
+      "rationale": "Promessa juridica, regulatoria, tecnica ou financeira fora da competencia e proibida.",
+      "source": "#338 Linguagem proibida sem prova imediata"
+    }
+  ],
+  "differentiation_test": {
+    "name": "Teste de diferenciação",
+    "method": "Remover o título e o preço de cada card.",
+    "task": "Um revisor deve identificar a oferta apenas por trigger, decisão e saída.",
+    "identifiable_by": [
+      "trigger",
+      "decisão",
+      "saída"
+    ],
+    "target": "54/54",
+    "target_count": 54,
+    "on_confusion": "Se duas ofertas forem confundidas, reescrever ou explicitar a fronteira.",
+    "forbidden_remedies": [
+      "fundir ofertas",
+      "remover ofertas"
+    ],
+    "state": "NOT_STARTED",
+    "scope_note": "#338 diz 48 no contrato de comunicação por oferta e 54/54 no teste de diferenciação e no acceptance. O registry atual traz 25 entregáveis e 4 contêineres. A divergência de contagem não foi resolvida por esta issue; #343 é a fonte canônica de nomenclatura pública."
+  },
+  "adversarial_lenses": [
+    "fundador cético: por que comprar?",
+    "diretor financeiro: qual caixa ou risco muda?",
+    "engenheiro: qual método e limite?",
+    "licitações: qual prazo e insumo?",
+    "jurídico: onde termina a assistência técnica?",
+    "comprador apressado: qual item é meu?",
+    "acessibilidade e linguagem simples",
+    "compliance: prova, consentimento, fonte e ausência de promessa"
+  ],
+  "adversarial_review_rule": {
+    "defect_severities": [
+      "bloqueante",
+      "material",
+      "cosmético"
+    ],
+    "per_lens_record": [
+      "defeito",
+      "correção",
+      "rechecagem"
+    ],
+    "publish_gate": "Publicar com zero bloqueante e zero material.",
+    "state": "NOT_STARTED"
+  },
+  "quantitative_quality_criteria": [
+    {
+      "id": "QC-01",
+      "criterion": "título com no máximo 8 palavras sempre que não sacrificar precisão",
+      "metric": "title_word_count",
+      "operator": "<=",
+      "threshold": 8,
+      "unit": "palavras",
+      "enforcement": "heurística editorial"
+    },
+    {
+      "id": "QC-02",
+      "criterion": "frase inicial com no máximo 24 palavras",
+      "metric": "first_sentence_word_count",
+      "operator": "<=",
+      "threshold": 24,
+      "unit": "palavras",
+      "enforcement": "heurística editorial"
+    },
+    {
+      "id": "QC-03",
+      "criterion": "preço e SLA visíveis sem accordion",
+      "metric": "price_and_sla_visible_without_accordion",
+      "operator": "==",
+      "threshold": true,
+      "unit": "booleano",
+      "enforcement": "bloqueante"
+    },
+    {
+      "id": "QC-04",
+      "criterion": "no máximo um conceito novo por frase",
+      "metric": "new_concepts_per_sentence",
+      "operator": "<=",
+      "threshold": 1,
+      "unit": "conceitos",
+      "enforcement": "heurística editorial"
+    },
+    {
+      "id": "QC-05",
+      "criterion": "leitura em telas de 320 px sem truncar nome nem preço",
+      "metric": "min_viewport_width_no_truncation",
+      "operator": "==",
+      "threshold": 320,
+      "unit": "px",
+      "enforcement": "bloqueante"
+    },
+    {
+      "id": "QC-06",
+      "criterion": "CTA descreve ação e resposta esperada",
+      "metric": "cta_describes_action_and_expected_response",
+      "operator": "==",
+      "threshold": true,
+      "unit": "booleano",
+      "enforcement": "bloqueante"
+    },
+    {
+      "id": "QC-07",
+      "criterion": "100% dos números públicos têm fonte, data e cobertura",
+      "metric": "public_numbers_with_source_date_coverage",
+      "operator": "==",
+      "threshold": 100,
+      "unit": "porcento",
+      "enforcement": "bloqueante"
+    },
+    {
+      "id": "QC-08",
+      "criterion": "0 oferta termina em saiba mais como único significado",
+      "metric": "offers_ending_in_saiba_mais_only",
+      "operator": "==",
+      "threshold": 0,
+      "unit": "ofertas",
+      "enforcement": "bloqueante"
+    },
+    {
+      "id": "QC-09",
+      "criterion": "0 claim depende de confie em nós",
+      "metric": "claims_depending_on_trust_us",
+      "operator": "==",
+      "threshold": 0,
+      "unit": "claims",
+      "enforcement": "bloqueante"
+    }
+  ],
+  "quantitative_criteria_note": "Limites de palavras são heurísticas editoriais; precisão prevalece e exceção exige revisão humana.",
+  "human_protocol": {
+    "state": "NOT_STARTED",
+    "executes_protocols_from": [
+      "#188",
+      "#327"
+    ],
+    "roles_defined_in": "#336",
+    "minimum_icp_participants": 12,
+    "time_to_evidence": "14 dias para implementação; 30 dias para teste humano",
+    "activities": [
+      "teste não moderado de 3 segundos",
+      "tarefa de escolha entre três ofertas vizinhas",
+      "think-aloud de 3 minutos",
+      "pergunta: o que você acha que recebe, em quanto tempo e por quanto?",
+      "objeção e confiança em escala mais justificativa literal",
+      "decisão simulada com dinheiro ou orçamento realista"
+    ],
+    "targets": [
+      {
+        "id": "HP-01",
+        "target": "10/12 identificam a trilha correta",
+        "numerator": 10,
+        "denominator": 12
+      },
+      {
+        "id": "HP-02",
+        "target": "10/12 escolhem a oferta correta",
+        "numerator": 10,
+        "denominator": 12
+      },
+      {
+        "id": "HP-03",
+        "target": "10/12 reproduzem preço, prazo e saída sem ajuda",
+        "numerator": 10,
+        "denominator": 12
+      },
+      {
+        "id": "HP-04",
+        "target": "nenhuma interpretação de promessa de vitória ou êxito",
+        "numerator": 0,
+        "denominator": 12
+      }
+    ],
+    "evidence_requirement": "Testes humanos de #188, #327 e #336 executados com falas literais registradas."
+  },
+  "acceptance": [
+    {
+      "id": "AC-01",
+      "criterion": "contrato editorial aplicado a 54/54",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-02",
+      "criterion": "54/54 passam no teste sem título",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-03",
+      "criterion": "zero bloqueante e zero material nas oito lentes",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-04",
+      "criterion": "páginas mostram artefato e prova antes de adjetivo",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-05",
+      "criterion": "nenhum card ou página usa copy intercambiável",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-06",
+      "criterion": "testes humanos de #188, #327 e #336 executados com falas literais",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-07",
+      "criterion": "falhas geram ajuste de copy ou hierarquia, não remoção de oferta",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-08",
+      "criterion": "tests de copy e design ganham guards derivados do registry, sem allowlist manual",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-09",
+      "criterion": "o site não declara impossível de melhorar; demonstra qualidade por clareza, prova e consistência",
+      "state": "NOT_STARTED"
+    }
+  ],
+  "naming_authority": "#343 é a fonte canônica de public_name_pt_br, linha de valor, aliases e semântica entre 54 entregáveis, 2 contêineres e planos. Em divergência nominal prevalece #343; escopo e preço de #338 permanecem válidos.",
+  "reviews": [],
+  "gate_exceptions": [
+    {
+      "id": "GX-01",
+      "scope": "exclusions",
+      "rule": "Um termo dentro de exclusions marca fronteira do que a CONFENGE não faz. Fronteira não é claim.",
+      "source": "#338 Linguagem proibida sem prova imediata"
+    },
+    {
+      "id": "GX-02",
+      "scope": "name_aliases",
+      "rule": "Nome anterior permanece no registry para continuidade de URL, busca, analytics e atendimento. Alias não é claim.",
+      "source": "#343 regra de renomeação"
+    },
+    {
+      "id": "GX-03",
+      "scope": "FL-08",
+      "rule": "O termo garantia só reprova na forma de promessa (garantia de, garantimos, garantido). Garantia contratual, seguro-garantia e garantia de execução são institutos e permanecem descritíveis.",
+      "source": "#330 item 12, riscos de garantia; #333 fronteiras"
+    },
+    {
+      "id": "GX-04",
+      "scope": "public_name",
+      "rule": "public_name registra o nome hoje publicado. O nome canônico é public_name_pt_br sob #343; enquanto name_state for RENAME_PENDING, o nome legado é dado histórico e não claim novo.",
+      "source": "#343 prevalece em divergência nominal"
+    }
+  ]
+}

@@ -36,39 +36,10 @@
     "INFERENCE",
     "UNKNOWN"
   ],
-  "lifecycle_stages": [
-    {
-      "stage": "DISCOVER",
-      "public_label": "Descobrir onde crescer",
-      "decision_question": "Onde há mercado, comprador e capacidade para a empresa crescer?",
-      "requires_progressive_disclosure": true
-    },
-    {
-      "stage": "DECIDE",
-      "public_label": "Decidir se vale disputar",
-      "decision_question": "Este edital vale a disputa, e em que condições?",
-      "requires_progressive_disclosure": false
-    },
-    {
-      "stage": "PROTECT",
-      "public_label": "Proteger caixa, prazo e margem",
-      "decision_question": "O que precisa ser registrado, calculado e decidido antes de perder caixa, prazo ou posição probatória?",
-      "requires_progressive_disclosure": true
-    },
-    {
-      "stage": "OPERATE",
-      "public_label": "Organizar a operação",
-      "decision_question": "A empresa precisa de entrega pontual, rotina de acompanhamento ou direção contratada?",
-      "requires_progressive_disclosure": false
-    }
-  ],
   "containers": [
     {
       "container_id": "expansion_package",
       "public_name": "Diagnóstico B2G de Expansão",
-      "offer_id": "CFG-DIAG-EXP-v1",
-      "amount_cents": 800000,
-      "billing": "one_time",
       "route": "/diagnostico-b2g-expansao/",
       "composes_deliverables": [
         "CFG-D02",
@@ -84,48 +55,82 @@
       "credit_basis": "highest_single_paid",
       "credit_stackable": false,
       "price_state": "PUBLISHED_FIRM",
-      "sla_business_days": "10-15"
+      "capacity_required": false,
+      "plans": [
+        {
+          "plan_id": "expansion_one_time",
+          "offer_id": "CFG-DIAG-EXP-v1",
+          "public_name": "Pagamento único",
+          "amount_cents": 800000,
+          "billing": "one_time",
+          "commitment_months": 0,
+          "total_commitment_cents": 800000,
+          "sla_business_days": "10-15"
+        }
+      ],
+      "public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
+      "name_aliases": [
+        "Diagnóstico B2G de Expansão"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
-      "container_id": "diretoria_flex",
-      "public_name": "Diretoria B2G Fracionada Flex",
-      "offer_id": "CFG-DIRB2G-FLEX-v1",
-      "amount_cents": 2000000,
-      "billing": "subscription_monthly",
+      "container_id": "diretoria_fracionada",
+      "public_name": "Diretoria B2G Fracionada",
       "route": "/diretoria-b2g/",
       "composes_deliverables": [],
+      "unbundled_sum_cents": null,
+      "credit_window_days": null,
+      "credit_basis": null,
+      "credit_stackable": false,
       "price_state": "PUBLISHED_FIRM",
-      "capacity_required": true
-    },
-    {
-      "container_id": "diretoria_180",
-      "public_name": "Diretoria B2G Fracionada 180",
-      "offer_id": "CFG-DIRB2G-180-v1",
-      "amount_cents": 1500000,
-      "billing": "subscription_monthly",
-      "commitment_months": 6,
-      "total_commitment_cents": 9000000,
-      "route": "/diretoria-b2g/",
-      "composes_deliverables": [],
-      "price_state": "PUBLISHED_FIRM",
-      "capacity_required": true
-    },
-    {
-      "container_id": "diretoria_365",
-      "public_name": "Diretoria B2G Fracionada 365",
-      "offer_id": "CFG-DIRB2G-365-v1",
-      "amount_cents": 1250000,
-      "billing": "subscription_monthly",
-      "commitment_months": 12,
-      "total_commitment_cents": 15000000,
-      "route": "/diretoria-b2g/",
-      "composes_deliverables": [],
-      "price_state": "PUBLISHED_FIRM",
-      "capacity_required": true
+      "capacity_required": true,
+      "plans": [
+        {
+          "plan_id": "diretoria_flex",
+          "offer_id": "CFG-DIRB2G-FLEX-v1",
+          "public_name": "Plano Mensal",
+          "amount_cents": 2000000,
+          "billing": "subscription_monthly",
+          "commitment_months": 0,
+          "total_commitment_cents": null,
+          "notice_days": 30
+        },
+        {
+          "plan_id": "diretoria_180",
+          "offer_id": "CFG-DIRB2G-180-v1",
+          "public_name": "Compromisso Semestral",
+          "amount_cents": 1500000,
+          "billing": "subscription_monthly",
+          "commitment_months": 6,
+          "total_commitment_cents": 9000000,
+          "notice_days": 30
+        },
+        {
+          "plan_id": "diretoria_365",
+          "offer_id": "CFG-DIRB2G-365-v1",
+          "public_name": "Compromisso Anual",
+          "amount_cents": 1250000,
+          "billing": "subscription_monthly",
+          "commitment_months": 12,
+          "total_commitment_cents": 15000000,
+          "notice_days": 30
+        }
+      ],
+      "public_name_pt_br": "Diretoria Fracionada para o Mercado Público",
+      "name_aliases": [
+        "Diretoria B2G fracionada",
+        "Diretoria B2G Fracionada Flex",
+        "Diretoria B2G Fracionada 180",
+        "Diretoria B2G Fracionada 365",
+        "Flex",
+        "Diretoria B2G Fracionada"
+      ],
+      "name_state": "RENAME_PENDING"
     }
   ],
-  "catalog_count": 25,
-  "container_count": 4,
+  "catalog_count": 54,
+  "container_count": 2,
   "deliverables": [
     {
       "deliverable_id": "CFG-D01",
@@ -133,7 +138,6 @@
       "catalog_number": "01",
       "public_name": "Relatório Executivo de Priorização de Licitações",
       "decision_question": "Quais editais abertos vale disputar?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "A empresa tem equipe limitada e mais editais abertos do que capacidade de analisar.",
       "price": {
         "amount_cents": 59900,
@@ -209,7 +213,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Radar de Licitações Prioritárias",
+      "name_aliases": [
+        "Relatório Executivo de Priorização de Licitações"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D02",
@@ -217,7 +227,6 @@
       "catalog_number": "02",
       "public_name": "Base Quantitativa Canônica",
       "decision_question": "De onde vem cada número publicado?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "A diretoria não consegue rastrear um número apresentado até a fonte e a fórmula.",
       "price": {
         "amount_cents": 69000,
@@ -300,7 +309,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Base de Mercado para Expansão",
+      "name_aliases": [
+        "Base Quantitativa Canônica"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D03",
@@ -308,7 +323,6 @@
       "catalog_number": "03",
       "public_name": "Apresentação Executiva de Resultados",
       "decision_question": "O que a diretoria precisa decidir agora?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "Existe análise reconciliada, mas a reunião de direção termina sem decisão assinada.",
       "price": {
         "amount_cents": 89000,
@@ -387,7 +401,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Síntese Executiva de Expansão",
+      "name_aliases": [
+        "Apresentação Executiva de Resultados"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D04",
@@ -395,7 +415,6 @@
       "catalog_number": "04",
       "public_name": "Mapa de Compradores Públicos",
       "decision_question": "Quais órgãos compram o que a empresa executa?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "A empresa depende de poucos compradores e não sabe onde mais existe demanda recorrente.",
       "price": {
         "amount_cents": 120000,
@@ -477,7 +496,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Mapa de Órgãos com Maior Potencial",
+      "name_aliases": [
+        "Mapa de Compradores Públicos"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D05",
@@ -485,7 +510,6 @@
       "catalog_number": "05",
       "public_name": "Contratos Vincendos e Recontratação",
       "decision_question": "Quais contratos vencem entre 90 e 180 dias?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "A empresa quer entrar em carteira já contratada por concorrente antes da recontratação.",
       "price": {
         "amount_cents": 145000,
@@ -568,7 +592,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Radar de Contratos Próximos da Renovação",
+      "name_aliases": [
+        "Contratos Vincendos e Recontratação"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D06",
@@ -576,7 +606,6 @@
       "catalog_number": "06",
       "public_name": "Mapeamento de Concorrentes",
       "decision_question": "Contra quem a empresa disputa e onde o concorrente está exposto?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "A empresa perde disputas repetidamente para os mesmos nomes e não sabe por quê.",
       "price": {
         "amount_cents": 190000,
@@ -656,7 +685,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Mapa de Concorrentes Relevantes",
+      "name_aliases": [
+        "Mapeamento de Concorrentes"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D07",
@@ -664,7 +699,6 @@
       "catalog_number": "07",
       "public_name": "Painel de Preços de Obras Públicas",
       "decision_question": "Qual é a escala real de contrato por tipologia?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "A empresa precisa dimensionar proposta e capacidade sem tabela de mercado confiável.",
       "price": {
         "amount_cents": 240000,
@@ -746,7 +780,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Referências de Preços de Obras Públicas",
+      "name_aliases": [
+        "Painel de Preços de Obras Públicas"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D08",
@@ -754,7 +794,6 @@
       "catalog_number": "08",
       "public_name": "Relatório Executivo Consolidado",
       "decision_question": "Onde alocar equipe, acervo e caixa?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "A direção precisa de uma leitura única sobre módulos já reconciliados.",
       "price": {
         "amount_cents": 375000,
@@ -834,7 +873,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Plano Executivo de Expansão",
+      "name_aliases": [
+        "Relatório Executivo Consolidado"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D09",
@@ -842,7 +887,6 @@
       "catalog_number": "09",
       "public_name": "Radar de Investimentos Públicos Pré-Edital",
       "decision_question": "Onde há investimento público se formando antes do edital?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "A empresa só descobre a obra quando o edital já está publicado e o prazo é curto.",
       "price": {
         "amount_cents": 149000,
@@ -933,7 +977,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Radar de Obras Antes do Edital",
+      "name_aliases": [
+        "Radar de Investimentos Públicos Pré-Edital"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D10",
@@ -941,7 +991,6 @@
       "catalog_number": "10",
       "public_name": "Dossiê de Comprador Público e Risco de Recebimento",
       "decision_question": "Como este órgão compra, contrata e paga?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "A empresa avalia entrar em um comprador novo e não conhece o padrão de contratação e pagamento.",
       "price": {
         "amount_cents": 240000,
@@ -1029,7 +1078,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Dossiê do Órgão e Risco de Pagamento",
+      "name_aliases": [
+        "Dossiê de Comprador Público e Risco de Recebimento"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D11",
@@ -1037,7 +1092,6 @@
       "catalog_number": "11",
       "public_name": "Mapa de Parceiros, Consórcios e Subcontratados",
       "decision_question": "Quem pode cobrir a lacuna de acervo ou capacidade nesta oportunidade?",
-      "lifecycle_stage": "DISCOVER",
       "trigger": "A empresa identificou uma oportunidade que não consegue atender sozinha.",
       "price": {
         "amount_cents": 290000,
@@ -1114,7 +1168,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Mapa de Parceiros e Consórcios",
+      "name_aliases": [
+        "Mapa de Parceiros, Consórcios e Subcontratados"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D12",
@@ -1122,7 +1182,6 @@
       "catalog_number": "12",
       "public_name": "Raio-X Go/No-Go do Edital",
       "decision_question": "Vale a pena disputar este edital, e em que condições?",
-      "lifecycle_stage": "DECIDE",
       "trigger": "Um edital aderente foi publicado e a empresa precisa decidir antes de imobilizar equipe.",
       "price": {
         "amount_cents": 190000,
@@ -1205,7 +1264,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "QUALIFY",
+      "public_name_pt_br": "Decisão de Disputar o Edital",
+      "name_aliases": [
+        "Raio-X Go/No-Go do Edital"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D13",
@@ -1213,7 +1278,6 @@
       "catalog_number": "13",
       "public_name": "Matriz de Habilitação e Lacunas de Acervo",
       "decision_question": "A empresa consegue provar habilitação neste edital, e onde falta documento?",
-      "lifecycle_stage": "DECIDE",
       "trigger": "A empresa foi inabilitada ou teme diligência sobre acervo e quantitativos.",
       "price": {
         "amount_cents": 290000,
@@ -1225,7 +1289,7 @@
         "business_days_min": 3,
         "business_days_max": 3,
         "starts_after": "inputs válidos",
-        "safe_deadline_business_days": 5
+        "safe_deadline_business_days": null
       },
       "scope": {
         "unit": "um edital, um licitante e uma rodada de documentos",
@@ -1265,7 +1329,8 @@
       "offer_container": "none",
       "credit_rule": {
         "credits_into": [
-          "CFG-D16"
+          "CFG-D16",
+          "CFG-D51"
         ],
         "max_cents": 290000,
         "window_days": 30,
@@ -1293,7 +1358,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "QUALIFY",
+      "public_name_pt_br": "Mapa de Habilitação e Lacunas de Acervo",
+      "name_aliases": [
+        "Matriz de Habilitação e Lacunas de Acervo"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D14",
@@ -1301,7 +1372,6 @@
       "catalog_number": "14",
       "public_name": "Auditoria de Orçamento, BDI e Exequibilidade",
       "decision_question": "A planilha do edital e a nossa proposta sustentam preço, quantitativo e execução?",
-      "lifecycle_stage": "DECIDE",
       "trigger": "A planilha do edital parece inconsistente e o deságio esperado ameaça a exequibilidade.",
       "price": {
         "amount_cents": 590000,
@@ -1315,7 +1385,7 @@
         "business_days_min": 5,
         "business_days_max": 8,
         "starts_after": "inputs válidos",
-        "safe_deadline_business_days": 5
+        "safe_deadline_business_days": null
       },
       "scope": {
         "unit": "um lote e uma planilha principal",
@@ -1394,7 +1464,11 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "QUALIFY",
+      "public_name_pt_br": "Auditoria de Orçamento, BDI e Exequibilidade",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D15",
@@ -1402,7 +1476,6 @@
       "catalog_number": "15",
       "public_name": "Benchmark de Concorrência e Estratégia de Deságio",
       "decision_question": "Qual posicionamento de preço é defensável nesta disputa?",
-      "lifecycle_stage": "DECIDE",
       "trigger": "A empresa não sabe quanto os concorrentes historicamente descontam neste comprador.",
       "price": {
         "amount_cents": 375000,
@@ -1414,7 +1487,7 @@
         "business_days_min": 5,
         "business_days_max": 5,
         "starts_after": "inputs válidos",
-        "safe_deadline_business_days": 5
+        "safe_deadline_business_days": null
       },
       "scope": {
         "unit": "uma oportunidade ou comprador",
@@ -1484,7 +1557,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "QUALIFY",
+      "public_name_pt_br": "Referência de Concorrência e Faixa de Deságio",
+      "name_aliases": [
+        "Benchmark de Concorrência e Estratégia de Deságio"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D16",
@@ -1492,7 +1571,6 @@
       "catalog_number": "16",
       "public_name": "Bid Room por Oportunidade Crítica",
       "decision_question": "Quem coordena esta proposta crítica do go/no-go ao checklist final?",
-      "lifecycle_stage": "DECIDE",
       "trigger": "A oportunidade é material e a empresa não tem estrutura para coordenar a proposta sozinha.",
       "price": {
         "currency": "BRL",
@@ -1517,10 +1595,10 @@
       },
       "price_state": "PILOT_HYPOTHESIS",
       "sla": {
-        "business_days_min": 10,
+        "business_days_min": null,
         "business_days_max": null,
         "starts_after": "triagem de enquadramento",
-        "safe_deadline_business_days": 10
+        "safe_deadline_business_days": null
       },
       "scope": {
         "unit": "uma oportunidade crítica",
@@ -1587,7 +1665,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Operação de Proposta para Licitação Crítica",
+      "name_aliases": [
+        "Bid Room por Oportunidade Crítica"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D17",
@@ -1595,7 +1679,6 @@
       "catalog_number": "17",
       "public_name": "Diagnóstico de Defesa de Margem",
       "decision_question": "Quais eventos deste contrato ainda podem virar pleito e o que precisa ser registrado agora?",
-      "lifecycle_stage": "PROTECT",
       "trigger": "O contrato está perdendo margem e a empresa não sabe quais fatos ainda têm prova e prazo.",
       "price": {
         "amount_cents": 290000,
@@ -1686,7 +1769,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Diagnóstico de Riscos à Margem",
+      "name_aliases": [
+        "Diagnóstico de Defesa de Margem"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D18",
@@ -1694,7 +1783,6 @@
       "catalog_number": "18",
       "public_name": "Dossiê de Medição, Glosa e Pagamento",
       "decision_question": "A glosa desta medição tem base contratual e prova?",
-      "lifecycle_stage": "PROTECT",
       "trigger": "A fiscalização glosou uma medição e o caixa da obra depende da resposta.",
       "price": {
         "amount_cents": 490000,
@@ -1772,7 +1860,11 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Dossiê de Medição, Glosa e Pagamento",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D19",
@@ -1780,7 +1872,6 @@
       "catalog_number": "19",
       "public_name": "Dossiê de Aditivo e Serviço Extra",
       "decision_question": "Esta mudança de escopo está coberta, e o que falta para instruir o aditivo?",
-      "lifecycle_stage": "PROTECT",
       "trigger": "A obra executou ou vai executar serviço fora do escopo original sem cobertura formal.",
       "price": {
         "amount_cents": 590000,
@@ -1857,7 +1948,11 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Dossiê de Aditivo e Serviço Extra",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D20",
@@ -1865,7 +1960,6 @@
       "catalog_number": "20",
       "public_name": "Dossiê de Prorrogação e Atraso",
       "decision_question": "Quantos dias deste atraso são imputáveis a causa alheia à contratada?",
-      "lifecycle_stage": "PROTECT",
       "trigger": "O cronograma estourou e a empresa precisa sustentar pedido de prorrogação com nexo.",
       "price": {
         "amount_cents": 590000,
@@ -1941,7 +2035,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Dossiê de Atraso e Prorrogação",
+      "name_aliases": [
+        "Dossiê de Prorrogação e Atraso"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D21",
@@ -1949,7 +2049,6 @@
       "catalog_number": "21",
       "public_name": "Memória de Reajuste Contratual",
       "decision_question": "Qual é o reajuste devido nesta data-base, e sobre qual saldo?",
-      "lifecycle_stage": "PROTECT",
       "trigger": "O contrato completou o aniversário e o reajuste não foi aplicado.",
       "price": {
         "amount_cents": 290000,
@@ -2024,7 +2123,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Cálculo de Reajuste Contratual",
+      "name_aliases": [
+        "Memória de Reajuste Contratual"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D22",
@@ -2032,7 +2137,6 @@
       "catalog_number": "22",
       "public_name": "Dossiê de Reequilíbrio Econômico-Financeiro",
       "decision_question": "Este fato superveniente sustenta pedido de reequilíbrio, e em que medida?",
-      "lifecycle_stage": "PROTECT",
       "trigger": "Um fato superveniente alterou a equação econômica do contrato.",
       "price": {
         "amount_cents": 790000,
@@ -2111,7 +2215,11 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Dossiê de Reequilíbrio Econômico-Financeiro",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D23",
@@ -2119,7 +2227,6 @@
       "catalog_number": "23",
       "public_name": "Subsídio Técnico para Notificação ou Sanção",
       "decision_question": "Quais fatos e provas o jurídico precisa para responder esta notificação?",
-      "lifecycle_stage": "PROTECT",
       "trigger": "Chegou notificação ou processo sancionador com prazo curto.",
       "price": {
         "amount_cents": 690000,
@@ -2196,7 +2303,11 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Subsídio Técnico para Notificação ou Sanção",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D24",
@@ -2204,7 +2315,6 @@
       "catalog_number": "24",
       "public_name": "Diagnóstico B2G 360°",
       "decision_question": "Onde a operação perde tempo, margem e controle?",
-      "lifecycle_stage": "OPERATE",
       "trigger": "A direção suspeita que o gargalo é a própria operação B2G, não a falta de oportunidade.",
       "price": {
         "amount_cents": 690000,
@@ -2262,9 +2372,7 @@
       "credit_rule": {
         "credits_into": [
           "CFG-D25",
-          "diretoria_flex",
-          "diretoria_180",
-          "diretoria_365"
+          "diretoria_fracionada"
         ],
         "max_cents": 200000,
         "window_days": 30,
@@ -2292,7 +2400,13 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "CAPABILITY",
+      "public_name_pt_br": "Diagnóstico da Operação em Obras Públicas",
+      "name_aliases": [
+        "Diagnóstico B2G 360°"
+      ],
+      "name_state": "RENAME_PENDING"
     },
     {
       "deliverable_id": "CFG-D25",
@@ -2300,7 +2414,6 @@
       "catalog_number": "25",
       "public_name": "Acompanhamento Preventivo de Contrato",
       "decision_question": "Como um contrato ativo deve registrar e decidir antes da crise?",
-      "lifecycle_stage": "OPERATE",
       "trigger": "O contrato está em execução e os fatos não viram registro antes de virarem prejuízo.",
       "price": {
         "amount_cents": 690000,
@@ -2387,7 +2500,3059 @@
           "outcome": 0
         },
         "last_reviewed": null
-      }
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Acompanhamento Preventivo do Contrato Público",
+      "name_aliases": [
+        "Acompanhamento Preventivo de Contrato"
+      ],
+      "name_state": "RENAME_PENDING"
+    },
+    {
+      "deliverable_id": "CFG-D26",
+      "version": "v1",
+      "catalog_number": "26",
+      "public_name": "Auditoria do Projeto Básico e dos Riscos",
+      "decision_question": "O projeto básico e a matriz de riscos deste edital sustentam o preço, o prazo e a execução que a empresa vai assumir?",
+      "trigger": "Saiu o edital e o projeto básico tem lacunas, com desenhos, memoriais e planilha que não conversam entre si.",
+      "price": {
+        "amount_cents": 490000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 5,
+        "business_days_max": 5,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 5
+      },
+      "scope": {
+        "unit": "um edital, um lote e o conjunto de projeto e matriz de riscos que o rege",
+        "limits": [
+          "escopo delimitado por edital, lote e conjunto de projeto, nunca por número de páginas",
+          "análise documental sobre o material fornecido, sem inspeção de campo",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "edital e anexos",
+        "projeto básico com desenhos, memoriais e especificações",
+        "planilha orçamentária e cronograma",
+        "matriz de riscos publicada",
+        "estudos, licenças e pareceres disponíveis"
+      ],
+      "included_outputs": [
+        "mapa de completude e coerência do projeto básico",
+        "ambiguidades e pontos que exigem esclarecimento",
+        "incompatibilidades entre desenhos, memoriais, planilha, cronograma e matriz de riscos",
+        "premissas faltantes",
+        "riscos transferidos ao contratado",
+        "impacto provável em preço, prazo, qualificação técnica e execução",
+        "perguntas e decisões recomendadas"
+      ],
+      "exclusions": [
+        "refazer o projeto",
+        "emitir ART ou RRT",
+        "validar solução de engenharia como projetista",
+        "auditoria integral de orçamento, que é o item 14 (CFG-D14)",
+        "parecer jurídico ou peça processual",
+        "garantia de alteração do edital pelo órgão",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D26"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "QUALIFY",
+      "public_name_pt_br": "Auditoria do Projeto Básico e dos Riscos",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D27",
+      "version": "v1",
+      "catalog_number": "27",
+      "public_name": "Subsídio Técnico para Esclarecimento ou Impugnação",
+      "decision_question": "Quais perguntas e fundamentos técnicos devem ser levados ao órgão antes que o prazo de esclarecimento ou impugnação feche?",
+      "trigger": "O edital traz restrição ou ambiguidade relevante e o prazo de esclarecimento ou impugnação já está correndo.",
+      "price": {
+        "amount_cents": 375000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 3,
+        "business_days_max": 3,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 4
+      },
+      "scope": {
+        "unit": "um edital, um lote e um bloco técnico coerente de até cinco perguntas ou fundamentos",
+        "limits": [
+          "até cinco perguntas ou fundamentos por bloco técnico",
+          "aceito apenas quando restarem ao menos 4 dias úteis para o prazo do cliente",
+          "prazo inseguro é recusado em vez de gerar peça sem lastro",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "edital e anexos",
+        "projeto, planilha e matriz de riscos aplicáveis",
+        "prazo de esclarecimento ou impugnação em curso",
+        "pontos de dúvida ou restrição levantados pelo cliente",
+        "responsável interno ou jurídico designado para revisar e protocolar"
+      ],
+      "included_outputs": [
+        "fato editalício descrito com referência ao documento",
+        "risco ou restrição decorrente do fato",
+        "fundamento técnico verificável",
+        "pergunta objetiva formulada para resposta do órgão",
+        "efeito esperado na decisão de disputar",
+        "anexos probatórios organizados para revisão e protocolo pelo jurídico ou pelo licitante"
+      ],
+      "exclusions": [
+        "advocacia e tese jurídica",
+        "assinatura da peça",
+        "protocolo perante o órgão",
+        "promessa de alteração do edital",
+        "representação da empresa em qualquer instância",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D27"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Subsídio Técnico para Esclarecimento ou Impugnação",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D28",
+      "version": "v1",
+      "catalog_number": "28",
+      "public_name": "Comprovação de Exequibilidade e Resposta à Diligência",
+      "decision_question": "Como demonstrar, com composições e evidências, que o preço proposto é exequível e responder à diligência do órgão?",
+      "trigger": "O órgão abriu diligência ou questionou a exequibilidade do preço da proposta apresentada.",
+      "price": {
+        "amount_cents": 490000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 3,
+        "business_days_max": 3,
+        "starts_after": "aceite de escopo, recebimento íntegro dos insumos e confirmação de prazo remanescente suficiente",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "uma proposta ou lote e uma diligência ou questionamento de exequibilidade",
+        "limits": [
+          "condicionado a prazo remanescente e à documentação mínima de composições e cotações",
+          "prazo inseguro ou documentação insuficiente levam a recusa ou a diagnóstico de lacunas",
+          "trabalha apenas sobre documentos já existentes na data do pedido",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "edital, planilha do órgão e referência aplicável",
+        "proposta apresentada com composições próprias",
+        "cotações e comprovantes de custo utilizados",
+        "premissas de produtividade, encargos, tributos e BDI",
+        "cronograma e fluxo de caixa da proposta",
+        "termo da diligência ou do questionamento do órgão"
+      ],
+      "included_outputs": [
+        "reconciliação de preços, composições, produtividades, cotações, tributos, encargos, cronograma e margem",
+        "classificação das premissas em FACT, CALCULATION e INFERENCE",
+        "lacunas de comprovação identificadas",
+        "caderno de evidências organizado",
+        "nota técnica pronta para revisão e assinatura do cliente"
+      ],
+      "exclusions": [
+        "fabricar cotação",
+        "retroagir documento ou emitir prova com data anterior",
+        "substituir declaração do licitante",
+        "garantir aceitação da proposta pelo órgão",
+        "advocacia, assinatura e protocolo",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D28"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Comprovação de Exequibilidade e Resposta à Diligência",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D29",
+      "version": "v1",
+      "catalog_number": "29",
+      "public_name": "Desenvolvimento da Proposta Técnica",
+      "decision_question": "Como converter os critérios de julgamento deste edital em uma proposta técnica comprovável e aderente à forma exigida?",
+      "trigger": "O edital julga por técnica e a proposta precisa provar cada critério com evidência, não com adjetivo.",
+      "price": {
+        "currency": "BRL",
+        "billing": "one_time",
+        "tiers": [
+          {
+            "tier": "essencial",
+            "amount_cents": 790000,
+            "framing": "até três critérios de julgamento e uma revisão"
+          },
+          {
+            "tier": "complexa",
+            "amount_cents": 1290000,
+            "framing": "até oito critérios de julgamento e duas revisões"
+          }
+        ]
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 10,
+        "business_days_max": 10,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 10
+      },
+      "scope": {
+        "unit": "um edital, um lote e uma proposta",
+        "limits": [
+          "faixa essencial cobre até três critérios de julgamento e uma revisão",
+          "faixa complexa cobre até oito critérios de julgamento e duas revisões",
+          "escopo delimitado por critérios e revisões, nunca por número de páginas",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "edital, anexos e critérios de julgamento com pontuação",
+        "acervo, atestados e CAT disponíveis",
+        "currículos e responsabilidade técnica da equipe proposta",
+        "metodologia e experiências anteriores documentadas",
+        "planilha e cronograma da proposta",
+        "prazo de entrega da licitação"
+      ],
+      "included_outputs": [
+        "matriz que liga critério de julgamento, evidência e mensagem",
+        "arquitetura da proposta técnica",
+        "narrativa técnica redigida",
+        "metodologia de execução",
+        "plano de trabalho",
+        "equipe e acervo referenciados aos documentos comprobatórios",
+        "aderência formal ao que o edital exige",
+        "controle de versão e checklist final antes do envio"
+      ],
+      "exclusions": [
+        "criar experiência inexistente",
+        "emitir responsabilidade técnica alheia",
+        "produzir projeto executivo não contratado",
+        "garantia de nota, pontuação ou classificação",
+        "advocacia, assinatura e protocolo",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D29"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Desenvolvimento da Proposta Técnica",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D30",
+      "version": "v1",
+      "catalog_number": "30",
+      "public_name": "Plano de Garantias, Seguros e Capital de Giro",
+      "decision_question": "Quanto de garantia, seguro e capital de giro esta oportunidade exige antes de a empresa se comprometer?",
+      "trigger": "A empresa vai assumir uma disputa ou um contrato e ainda não dimensionou garantias, seguros e caixa de mobilização.",
+      "price": {
+        "amount_cents": 240000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 5,
+        "business_days_max": 5,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 5
+      },
+      "scope": {
+        "unit": "uma oportunidade ou contrato e um cenário de execução",
+        "limits": [
+          "um cenário de execução por entrega",
+          "trabalha com condições financeiras informadas pelo cliente, sem consulta a instituição em nome da empresa",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "edital ou contrato e anexos",
+        "exigências de garantia de proposta, garantia contratual e seguros",
+        "cronograma físico-financeiro",
+        "condições de pagamento, retenção e reajuste",
+        "custos previstos de mobilização",
+        "condições bancárias e de corretora informadas pelo cliente"
+      ],
+      "included_outputs": [
+        "garantia de proposta e garantia contratual dimensionadas",
+        "eventos de reforço e de liberação de garantia",
+        "seguros exigidos pelo instrumento",
+        "desembolso de mobilização",
+        "curva preliminar de entradas e saídas",
+        "exposição de caixa até a primeira medição",
+        "perguntas dirigidas a corretora, banco e financeiro",
+        "decisão GO, GO COM CONDIÇÕES ou NO-GO"
+      ],
+      "exclusions": [
+        "cotar ou intermediar seguro e crédito",
+        "recomendar produto financeiro",
+        "prometer limite bancário ou aprovação de apólice",
+        "parecer jurídico sobre apólice ou contrato de garantia",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D30"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "QUALIFY",
+      "public_name_pt_br": "Plano de Garantias, Seguros e Capital de Giro",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D31",
+      "version": "v1",
+      "catalog_number": "31",
+      "public_name": "Análise do Resultado da Licitação",
+      "decision_question": "Por que esta licitação terminou assim e o que isso muda na próxima decisão de disputar?",
+      "trigger": "O resultado do certame foi publicado e a empresa não sabe explicar a diferença entre a hipótese usada na decisão e o que aconteceu.",
+      "price": {
+        "amount_cents": 240000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 5,
+        "business_days_max": 5,
+        "starts_after": "aceite de escopo e disponibilidade pública dos atos do certame",
+        "safe_deadline_business_days": 5
+      },
+      "scope": {
+        "unit": "um lote e um resultado homologado, revogado ou fracassado",
+        "limits": [
+          "análise restrita a atos e documentos públicos do certame",
+          "prazo conta a partir da disponibilidade dos atos",
+          "não preenche silêncio documental com inferência",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "identificação do certame e do lote",
+        "atas, julgamentos e demais atos publicados",
+        "proposta apresentada pela empresa",
+        "hipótese de preço e de deságio usada na decisão de disputar",
+        "registro interno de esforço aplicado à oportunidade"
+      ],
+      "included_outputs": [
+        "linha do tempo do certame",
+        "posição da empresa e deságio praticado",
+        "concorrentes relevantes identificados conforme os atos publicados",
+        "motivos de desclassificação e de inabilitação registrados nos atos",
+        "diferença entre a hipótese assumida e o resultado observado",
+        "decisões repetíveis para as próximas disputas",
+        "atualização do benchmark interno de concorrência e preço"
+      ],
+      "exclusions": [
+        "elaborar recurso ou contrarrazão, que é o item 39 (CFG-D39)",
+        "acusação de conluio ou de fraude",
+        "inferência sobre fato não público",
+        "advocacia e representação perante o órgão",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D31"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "CLOSE",
+      "public_name_pt_br": "Análise do Resultado da Licitação",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D32",
+      "version": "v1",
+      "catalog_number": "32",
+      "public_name": "Plano de Acervo para Licitações Futuras",
+      "decision_question": "O que falta no acervo da empresa para disputar as famílias de obras que ela quer nos próximos 12 meses?",
+      "trigger": "A empresa vem sendo barrada em qualificação técnica ou evita editais por falta de atestado compatível.",
+      "price": {
+        "amount_cents": 375000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 7,
+        "business_days_max": 7,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 7
+      },
+      "scope": {
+        "unit": "até três famílias de obras ou serviços alvo e o acervo documental fornecido",
+        "limits": [
+          "até três famílias de obras ou serviços por entrega",
+          "trabalha sobre o acervo documental efetivamente fornecido pelo cliente",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "atestados e CAT disponíveis",
+        "contratos executados e medições correspondentes",
+        "quadro técnico, ARTs e RRTs vinculadas",
+        "editais alvo ou famílias de obras de interesse",
+        "plano de crescimento e restrições da empresa"
+      ],
+      "included_outputs": [
+        "matriz de requisitos recorrentes por família de obra",
+        "capacidades já provadas pelo acervo atual",
+        "lacunas de quantidade, relevância e equipe",
+        "documentação ausente ou incompleta",
+        "oportunidades de execução que constroem acervo",
+        "roteiro de 90, 180 e 365 dias"
+      ],
+      "exclusions": [
+        "emitir ou registrar atestado ou CAT",
+        "emprestar acervo",
+        "criar vínculo fictício de profissional",
+        "garantia de habilitação futura em qualquer certame",
+        "representação da empresa perante órgão ou conselho",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D32"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "CLOSE",
+      "public_name_pt_br": "Plano de Acervo para Licitações Futuras",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D33",
+      "version": "v1",
+      "catalog_number": "33",
+      "public_name": "Revisão Técnica Antes de Assinar o Contrato",
+      "decision_question": "A minuta contratual reproduz o que foi licitado e proposto, ou há divergência a corrigir antes da assinatura?",
+      "trigger": "Chegou a convocação para assinar e a minuta ainda não foi reconciliada com o edital e com a proposta.",
+      "price": {
+        "amount_cents": 375000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 5,
+        "business_days_max": 5,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 5
+      },
+      "scope": {
+        "unit": "uma adjudicação e uma minuta ou convocação contratual",
+        "limits": [
+          "uma minuta ou convocação por entrega",
+          "revisão técnica e contratual de escopo, prazo, obrigação e prova, sem análise de mérito jurídico",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "edital e anexos",
+        "proposta apresentada e planilha final",
+        "minuta contratual ou convocação recebida",
+        "ata de julgamento e ato de adjudicação",
+        "exigências de garantia, seguro e documentação prévia"
+      ],
+      "included_outputs": [
+        "reconciliação entre edital, proposta e minuta",
+        "obrigações e marcos contratuais mapeados",
+        "garantias exigidas e prazos correspondentes",
+        "riscos relevantes assumidos pelo contratado",
+        "condições precedentes ao início da execução",
+        "divergências identificadas documento a documento",
+        "reservas e perguntas a formalizar antes da assinatura",
+        "checklist com as opções ASSINAR, CORRIGIR ou ESCALAR"
+      ],
+      "exclusions": [
+        "parecer jurídico",
+        "renegociação representada pela CONFENGE",
+        "assinatura em nome da empresa",
+        "garantia de aceitação das ressalvas pelo órgão",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D33"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "START",
+      "public_name_pt_br": "Revisão Técnica Antes de Assinar o Contrato",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D34",
+      "version": "v1",
+      "catalog_number": "34",
+      "public_name": "Plano de Mobilização e Obrigações do Contrato",
+      "decision_question": "Quem responde por qual obrigação, em que prazo e com qual prova, para este contrato começar sob controle?",
+      "trigger": "O contrato foi assinado e a mobilização vai começar sem matriz de obrigações, prazos e provas.",
+      "price": {
+        "amount_cents": 490000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 7,
+        "business_days_max": 7,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 7
+      },
+      "scope": {
+        "unit": "um contrato, um empreendimento e uma mobilização",
+        "limits": [
+          "uma mobilização por entrega",
+          "planejamento e organização documental, sem execução ou gestão da obra pela CONFENGE",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "contrato, aditivos e anexos",
+        "cronograma físico-financeiro contratual",
+        "exigências de licença, seguro e garantia",
+        "quadro de equipe e equipamentos previstos",
+        "projetos aprovados e ordem de início",
+        "responsável interno nomeado"
+      ],
+      "included_outputs": [
+        "marcos de início e providências prévias à execução",
+        "matriz de obrigação, responsável, prazo e prova",
+        "licenças e liberações necessárias",
+        "seguros e garantias a apresentar",
+        "equipe e equipamentos-chave",
+        "submittals e aprovações a protocolar",
+        "diário de obra e protocolos de comunicação",
+        "baseline de cronograma e de evidência",
+        "pauta de reunião de kickoff"
+      ],
+      "exclusions": [
+        "gerir a obra",
+        "contratar equipe ou fornecedores",
+        "obter licenças em nome da empresa",
+        "assumir responsabilidade técnica do contratado",
+        "parecer jurídico",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D34"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "START",
+      "public_name_pt_br": "Plano de Mobilização e Obrigações do Contrato",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D35",
+      "version": "v1",
+      "catalog_number": "35",
+      "public_name": "Auditoria do Fluxo de Caixa do Contrato",
+      "decision_question": "Quanto capital de giro este contrato exige e em que momento o caixa fica sob maior pressão?",
+      "trigger": "O contrato está em execução ou prestes a começar e o pico de capital de giro nunca foi calculado.",
+      "price": {
+        "amount_cents": 490000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 10,
+        "business_days_max": 10,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 10
+      },
+      "scope": {
+        "unit": "um contrato e um cenário-base informado pelo cliente",
+        "limits": [
+          "um contrato e um cenário-base por entrega, com variações tratadas como sensibilidade",
+          "usa dados financeiros fornecidos pelo cliente, sem acesso a sistema contábil",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "contrato, aditivos e cronograma",
+        "planilha e composições de custo",
+        "condições de pagamento, retenção e reajuste",
+        "histórico de medição e de pagamento do órgão",
+        "custos de mobilização e desmobilização",
+        "tributos, encargos e regime aplicáveis"
+      ],
+      "included_outputs": [
+        "curva de desembolso e de recebimento",
+        "lag entre medição e pagamento",
+        "efeito de retenções, garantias, tributos e mobilização",
+        "cenários de atraso de medição e de pagamento",
+        "pico de capital de giro",
+        "análise de sensibilidade das premissas críticas",
+        "gatilhos de caixa e decisões de mitigação"
+      ],
+      "exclusions": [
+        "auditoria contábil",
+        "valuation",
+        "captação de recursos ou intermediação bancária",
+        "recomendação de investimento ou de crédito",
+        "parecer jurídico",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D35"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "START",
+      "public_name_pt_br": "Auditoria do Fluxo de Caixa do Contrato",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D36",
+      "version": "v1",
+      "catalog_number": "36",
+      "public_name": "Dossiê de Recebimento e Encerramento do Contrato",
+      "decision_question": "O que ainda falta entregar, provar e protocolar para encerrar este contrato sem pendência aberta?",
+      "trigger": "A obra chegou ao fim e as pendências de aceite, documentação e saldo continuam em aberto.",
+      "price": {
+        "amount_cents": 490000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 7,
+        "business_days_max": 7,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 7
+      },
+      "scope": {
+        "unit": "um contrato e um ciclo de encerramento",
+        "limits": [
+          "um ciclo de encerramento por entrega",
+          "organização documental e roteiro de protocolo, sem inspeção de campo nem aceite técnico pela CONFENGE",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "contrato, aditivos e anexos",
+        "medições, saldos e boletins",
+        "projetos as built, manuais e certificados",
+        "comunicações, notificações e protocolos do contrato",
+        "apontamentos e pendências registrados pela fiscalização"
+      ],
+      "included_outputs": [
+        "matriz que liga contrato, entrega e aceite",
+        "pendências e punch list consolidados",
+        "medições e saldos conciliados",
+        "documentação as built e manuais organizados",
+        "garantias vigentes e prazos correspondentes",
+        "pedidos e protocolos a formalizar",
+        "roteiro de recebimento provisório, liberação e encerramento"
+      ],
+      "exclusions": [
+        "declarar conformidade de engenharia sem responsável técnico",
+        "assinar termo do órgão",
+        "quitar obrigação jurídica",
+        "garantia de recebimento definitivo pelo órgão",
+        "advocacia e peça processual",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D36"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "CLOSE",
+      "public_name_pt_br": "Dossiê de Recebimento e Encerramento do Contrato",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D37",
+      "version": "v1",
+      "catalog_number": "37",
+      "public_name": "Dossiê de Atestação e Acervo da Obra",
+      "decision_question": "O que a empresa pode efetivamente comprovar deste contrato e como instruir o pedido de atestado correspondente?",
+      "trigger": "O contrato foi concluído e o atestado de capacidade técnica ainda não foi solicitado nem instruído.",
+      "price": {
+        "amount_cents": 290000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 5,
+        "business_days_max": 5,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 5
+      },
+      "scope": {
+        "unit": "um contrato e uma solicitação de atestado ou acervo",
+        "limits": [
+          "uma solicitação de atestado ou acervo por entrega",
+          "considera apenas quantitativos efetivamente medidos e documentados",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "contrato, aditivos e objeto contratado",
+        "medições e boletins aprovados",
+        "ARTs e RRTs da equipe técnica",
+        "projetos, relatórios e registros de execução",
+        "dados do responsável técnico a ser indicado",
+        "modelo do órgão ou do conselho quando existir"
+      ],
+      "included_outputs": [
+        "reconciliação de objeto, parcelas relevantes, quantitativos executados, período, equipe e documentos comprobatórios",
+        "minuta técnica do conteúdo a ser solicitado ao órgão",
+        "checklist de protocolo e de registro"
+      ],
+      "exclusions": [
+        "emitir atestado ou CAT",
+        "inserir quantidade não medida",
+        "garantia de deferimento pelo órgão ou pelo conselho",
+        "representação da empresa perante conselho profissional",
+        "advocacia",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D37"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "CLOSE",
+      "public_name_pt_br": "Dossiê de Atestação e Acervo da Obra",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D38",
+      "version": "v1",
+      "catalog_number": "38",
+      "public_name": "Análise Pós-Contrato e Lições para Próximas Obras",
+      "decision_question": "O que este contrato ensinou sobre preço, prazo, prova e escolha de disputa?",
+      "trigger": "Um contrato terminou com margem diferente da prevista e ninguém consolidou as causas.",
+      "price": {
+        "amount_cents": 375000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 7,
+        "business_days_max": 7,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 7
+      },
+      "scope": {
+        "unit": "um contrato encerrado ou uma fase material concluída",
+        "limits": [
+          "um contrato encerrado ou uma fase material por entrega",
+          "trabalha sobre registros existentes, sem reconstituir documentação inexistente",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "contrato, aditivos e planilha contratada",
+        "orçamento previsto e custo realizado",
+        "cronograma previsto e realizado",
+        "medições, glosas e pagamentos",
+        "pleitos apresentados e respectivas respostas",
+        "registros de eventos, diário e comunicações"
+      ],
+      "included_outputs": [
+        "comparação entre previsto e realizado em prazo, receita, custos e eventos",
+        "perdas de margem associadas a causas identificadas",
+        "histórico e resultado dos pleitos apresentados",
+        "desempenho do comprador público e dos fornecedores",
+        "falhas de prova que enfraqueceram pedidos",
+        "decisões repetíveis registradas",
+        "dados estruturados para as próximas decisões de disputar, orçar e mobilizar"
+      ],
+      "exclusions": [
+        "auditoria completa de contas",
+        "responsabilização individual de pessoas",
+        "auditoria contábil",
+        "advocacia e peça processual",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D38"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "CLOSE",
+      "public_name_pt_br": "Análise Pós-Contrato e Lições para Próximas Obras",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D39",
+      "version": "v1",
+      "catalog_number": "39",
+      "public_name": "Subsídio Técnico para Recurso e Contrarrazão",
+      "decision_question": "Quais fatos e evidências técnicas sustentam o recurso ou a contrarrazão dentro do prazo processual?",
+      "trigger": "Foi aberto prazo de recurso ou de contrarrazão e a empresa precisa de base técnica verificável para instruir a peça.",
+      "price": {
+        "amount_cents": 490000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 4,
+        "business_days_max": 4,
+        "starts_after": "aceite de escopo e recebimento íntegro dos insumos",
+        "safe_deadline_business_days": 5
+      },
+      "scope": {
+        "unit": "um evento processual, um lote e um bloco técnico coerente",
+        "limits": [
+          "um evento processual por entrega",
+          "aceito apenas quando restarem ao menos 5 dias úteis para o prazo do cliente",
+          "prazo inseguro é recusado em vez de gerar peça sem lastro",
+          "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+          "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+          "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+        ]
+      },
+      "required_inputs": [
+        "edital e anexos",
+        "ata, julgamento ou decisão recorrida",
+        "proposta e documentos das empresas envolvidas conforme atos públicos",
+        "prazo processual em curso",
+        "jurídico ou responsável interno designado para revisar, assinar e protocolar"
+      ],
+      "included_outputs": [
+        "matriz que liga alegação, regra editalícia, fato e evidência",
+        "cronologia do evento processual",
+        "cálculos ou comparação técnica que sustentam a alegação",
+        "lacunas de prova explicitadas",
+        "anexos técnicos organizados",
+        "nota técnica para o jurídico ou para o licitante"
+      ],
+      "exclusions": [
+        "elaborar tese jurídica",
+        "assinatura da peça",
+        "protocolo perante o órgão",
+        "obtenção de acesso privilegiado a documento não público",
+        "garantia de provimento do recurso ou da contrarrazão",
+        "advocacia e representação processual",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D39"
+      },
+      "source_issue": "#340",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Subsídio Técnico para Recurso e Contrarrazão",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D40",
+      "version": "v1",
+      "catalog_number": "40",
+      "public_name": "Análise de Causas e Impactos de Atrasos",
+      "decision_question": "Quantos dias deste atraso têm causa registrada, e qual é o nexo entre evento, responsável e caminho crítico?",
+      "trigger": "A discussão do atraso saiu do campo operacional e a empresa precisa de cronologia, causalidade e quantificação reproduzíveis para instruir decisão executiva, negociação ou o advogado.",
+      "price": {
+        "amount_cents": 1290000,
+        "currency": "BRL",
+        "billing": "one_time",
+        "additional_units": [
+          {
+            "label": "janela adicional no mesmo contrato",
+            "amount_cents": 490000
+          }
+        ]
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 15,
+        "business_days_max": 15,
+        "starts_after": "inputs válidos e gate de entrada aprovado",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "um contrato, um cronograma baseline verificável com suas atualizações e uma janela causal",
+        "limits": [
+          "uma janela causal por unidade base",
+          "baseline precisa ser verificável em registros contemporâneos",
+          "janela adicional no mesmo contrato é cobrada à parte",
+          "conflito de interesses documentado antes do início"
+        ]
+      },
+      "required_inputs": [
+        "contrato e aditivos",
+        "cronograma baseline e suas atualizações",
+        "diário de obra e comunicações formais",
+        "medições e relatórios de avanço",
+        "registros de eventos, paralisações e interferências",
+        "evidências das medidas de mitigação adotadas"
+      ],
+      "included_outputs": [
+        "protocolo de dados com proveniência",
+        "validação do baseline",
+        "cronologia dos eventos",
+        "análise do caminho crítico",
+        "eventos e responsáveis identificados",
+        "tratamento de concorrência de causas",
+        "avaliação da mitigação",
+        "quantificação reproduzível de dias",
+        "limitações e incertezas declaradas",
+        "caderno de evidências",
+        "sumário executivo"
+      ],
+      "exclusions": [
+        "afirmar causalidade sem registro contemporâneo",
+        "fabricar ou reconstruir baseline inexistente",
+        "emitir laudo pericial judicial ou atuar como perito nomeado",
+        "depor, testemunhar ou comparecer a audiência",
+        "a CONFENGE não pratica advocacia, não protocola peças e não representa a empresa perante órgão, tribunal ou câmara arbitral",
+        "nenhuma garantia de prorrogação, acordo, decisão favorável ou recuperação de valor"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D40"
+      },
+      "source_issue": "#339",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Análise de Causas e Impactos de Atrasos",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D41",
+      "version": "v1",
+      "catalog_number": "41",
+      "public_name": "Análise de Custos e Valores em Disputa",
+      "decision_question": "Qual é o valor em disputa que os registros sustentam, e como cada custo se liga ao evento que o gerou?",
+      "trigger": "A empresa precisa delimitar valores em disputa com memória de cálculo reproduzível antes de negociar, mediar ou entregar o tema ao advogado.",
+      "price": {
+        "amount_cents": 1490000,
+        "currency": "BRL",
+        "billing": "one_time",
+        "additional_units": [
+          {
+            "label": "família de custos adicional com a mesma causalidade",
+            "amount_cents": 490000
+          }
+        ]
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 15,
+        "business_days_max": 15,
+        "starts_after": "inputs válidos e gate de entrada aprovado",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "um evento causal e uma família de custos e efeitos",
+        "limits": [
+          "uma família de custos por unidade base",
+          "apenas custos com lastro documental e contábil",
+          "atualização monetária apresentada em cenários identificados",
+          "família adicional com a mesma causalidade é cobrada à parte"
+        ]
+      },
+      "required_inputs": [
+        "contrato, planilha contratual e aditivos",
+        "composições de custo e BDI",
+        "registros contábeis e fiscais do período",
+        "apropriação de mão de obra e equipamentos",
+        "notas fiscais e contratos de fornecedores",
+        "documentação do evento causal"
+      ],
+      "included_outputs": [
+        "baseline de custos",
+        "metodologia declarada",
+        "vínculo entre evento, efeito e custo",
+        "conciliação contábil e documental",
+        "custos evitados e efeito da mitigação",
+        "teste de dupla contagem",
+        "atualização monetária em cenários identificados",
+        "memória de cálculo reproduzível",
+        "limitações declaradas",
+        "anexos de apoio"
+      ],
+      "exclusions": [
+        "auditoria das demonstrações financeiras",
+        "opinião jurídica sobre o direito ao valor",
+        "lucro presumido ou lucro cessante sem prova",
+        "apresentar qualquer valor como recuperável, devido ou recebimento certo",
+        "a CONFENGE não pratica advocacia, não protocola peças e não representa a empresa em processo, mediação ou arbitragem",
+        "nenhuma garantia de acordo, decisão favorável ou recuperação de valor"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D41"
+      },
+      "source_issue": "#339",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Análise de Custos e Valores em Disputa",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D42",
+      "version": "v1",
+      "catalog_number": "42",
+      "public_name": "Assistência Técnica em Disputa Contratual Complexa",
+      "decision_question": "Que análise técnica sustenta a tese desta disputa, e onde o material da parte adversa não se sustenta?",
+      "trigger": "A disputa entrou em processo administrativo, mediação, arbitragem ou ação conduzida por advogado e o jurídico precisa de base técnica estruturada.",
+      "price": {
+        "amount_cents": 1980000,
+        "currency": "BRL",
+        "billing": "one_time",
+        "additional_units": [
+          {
+            "label": "rodada adicional de esclarecimento documentada",
+            "amount_cents": 290000
+          },
+          {
+            "label": "reunião técnica, oitiva ou audiência de até um dia, quando admissível, com deslocamento cobrado à parte",
+            "amount_cents": 490000
+          }
+        ]
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 20,
+        "business_days_max": 20,
+        "starts_after": "gate de entrada aprovado e acesso autorizado ao corpus",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "uma tese técnica, um contrato, um dossiê principal e até duas rodadas documentadas de esclarecimento",
+        "limits": [
+          "duas rodadas de esclarecimento incluídas, rodada adicional cobrada à parte",
+          "deslocamento não incluído na reunião, oitiva ou audiência",
+          "atuação apenas como assistência técnica contratada pela empresa ou pelo advogado dela",
+          "tese e destino jurídico permanecem sob responsabilidade do advogado do cliente"
+        ]
+      },
+      "required_inputs": [
+        "contrato, aditivos e documentos da execução",
+        "tese e delimitação do objeto pelo advogado do cliente",
+        "acesso autorizado ao corpus documental",
+        "material técnico da parte adversa",
+        "declaração de conflito de interesses",
+        "interlocutor jurídico e responsável técnico definidos"
+      ],
+      "included_outputs": [
+        "protocolo e cadeia de custódia lógica dos documentos",
+        "matriz de alegações",
+        "análise técnica da tese",
+        "crítica do material adverso",
+        "relatório principal",
+        "anexos técnicos",
+        "reunião com jurídico e gestão",
+        "respostas às duas rodadas de esclarecimento"
+      ],
+      "exclusions": [
+        "representação jurídica de qualquer natureza",
+        "elaborar, assinar ou protocolar petição ou peça processual",
+        "perícia oficial ou atuação como perito nomeado",
+        "testemunho de fato",
+        "a CONFENGE não pratica advocacia, não protocola, não representa a empresa e não conduz a estratégia jurídica",
+        "nenhuma garantia de acordo, sentença, laudo favorável ou recuperação de valor",
+        "aceitar o trabalho com conflito de interesses não declarado"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D42"
+      },
+      "source_issue": "#339",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROTECT",
+      "public_name_pt_br": "Assistência Técnica em Disputa Contratual Complexa",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D43",
+      "version": "v1",
+      "catalog_number": "43",
+      "public_name": "Verificação de Sanções e Restrições Públicas",
+      "decision_question": "O que as listas públicas oficiais registram sobre este grupo econômico dentro da cobertura consultada?",
+      "trigger": "A empresa vai formar consórcio, subcontratar ou disputar contra um grupo econômico e não sabe o que consta nas listas públicas.",
+      "price": {
+        "amount_cents": 490000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 5,
+        "business_days_max": 5,
+        "starts_after": "identificação dos CNPJs pelo cliente",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "um grupo econômico ou licitante e até cinco CNPJs ou pessoas jurídicas materialmente relacionadas, identificadas pelo cliente",
+        "limits": [
+          "até cinco CNPJs por unidade",
+          "apenas fontes públicas oficiais aplicáveis, com cobertura declarada",
+          "cada achado é classificado como ENCONTRADO, NÃO ENCONTRADO NA COBERTURA ou UNKNOWN",
+          "não localizado nunca significa inexistente"
+        ]
+      },
+      "required_inputs": [
+        "razão social e CNPJ de cada entidade a verificar",
+        "vínculos societários ou materiais informados pelo cliente",
+        "finalidade declarada da consulta",
+        "janela temporal de interesse"
+      ],
+      "included_outputs": [
+        "identidade resolvida com proveniência",
+        "restrições e sanções encontradas na cobertura",
+        "vigência e escopo de cada registro",
+        "vínculos públicos relevantes",
+        "divergências cadastrais",
+        "contratos e sinais que merecem diligência adicional",
+        "perguntas e documentos a obter com a contraparte",
+        "classificação factual por achado",
+        "fonte, consulta, corte, data e limitações ao lado de cada conclusão"
+      ],
+      "exclusions": [
+        "certificado, selo ou declaração de empresa limpa",
+        "investigação privada",
+        "dado pessoal não pertinente ao objeto",
+        "acusação ou juízo de valor sobre a entidade verificada",
+        "opinião jurídica",
+        "background check de pessoa natural",
+        "garantia de habilitação ou de inabilitação de qualquer licitante",
+        "promoção, cobrança ou emissão de conclusão antes de a issue #156 provar chave oficial, paginação terminal, freshness, identidade, cobertura e UNKNOWN correto"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": false,
+      "public_state": "BLOCKED",
+      "checkout_enabled": false,
+      "blocking_issue": "#156",
+      "route": null,
+      "lead_destination": null,
+      "analytics": {
+        "route_family": "entregas",
+        "deliverable_attr": "CFG-D43"
+      },
+      "source_issue": "#342",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "QUALIFY",
+      "public_name_pt_br": "Verificação de Sanções e Restrições Públicas",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D44",
+      "version": "v1",
+      "catalog_number": "44",
+      "public_name": "Auditoria de Prontidão do Empreendimento Público",
+      "decision_question": "Recurso, projeto, licença e área sustentam o início desta obra no prazo anunciado?",
+      "trigger": "O empreendimento foi anunciado e a empresa precisa saber se a maturidade observável sustenta investimento comercial antes do edital.",
+      "price": {
+        "amount_cents": 490000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 7,
+        "business_days_max": 7,
+        "starts_after": "identificação do empreendimento e do órgão executor",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "um empreendimento ou oportunidade e um território ou órgão executor",
+        "limits": [
+          "apenas fontes públicas oficiais e documentos fornecidos pelo cliente",
+          "sem vistoria de campo",
+          "cada sinal do semáforo de maturidade vem com evidência, fonte e cobertura",
+          "ausência de registro público é tratada como UNKNOWN, não como ausência do fato"
+        ]
+      },
+      "required_inputs": [
+        "identificação do empreendimento ou da oportunidade",
+        "órgão executor e território",
+        "edital, projeto e matriz de riscos quando já existirem",
+        "dados do órgão e do programa fornecidos pelo cliente",
+        "horizonte de decisão do cliente"
+      ],
+      "included_outputs": [
+        "estágio e fonte de recursos",
+        "situação de projeto e orçamento",
+        "licenças e autorizações identificadas",
+        "disponibilidade de área e desapropriação quando pública",
+        "governança do empreendimento",
+        "matriz de riscos de prontidão",
+        "histórico de tentativas anteriores",
+        "contratos predecessores",
+        "dependências críticas",
+        "semáforo de maturidade com evidência",
+        "perguntas críticas a levar ao órgão",
+        "efeito na decisão: GO, GO COM CONDIÇÕES, AGUARDAR ou NO-GO"
+      ],
+      "exclusions": [
+        "due diligence jurídica imobiliária",
+        "garantia de liberação ou de existência de recurso",
+        "confirmação de licença fora da fonte oficial",
+        "vistoria de campo",
+        "promessa de data de início da obra ou de publicação do edital",
+        "opinião jurídica sobre o empreendimento"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": false,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "entregas",
+        "deliverable_attr": "CFG-D44"
+      },
+      "source_issue": "#342",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "QUALIFY",
+      "public_name_pt_br": "Auditoria de Prontidão do Empreendimento Público",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D45",
+      "version": "v1",
+      "catalog_number": "45",
+      "public_name": "Monitoramento Mensal de Mercado e Contratos Públicos",
+      "decision_question": "O que mudou no mercado público e na carteira neste mês a ponto de exigir decisão agora?",
+      "trigger": "A direção descobre mudanças de comprador, contrato ou concorrente semanas depois, quando a janela de decisão já fechou.",
+      "price": {
+        "amount_cents": 490000,
+        "currency": "BRL",
+        "billing": "subscription_monthly",
+        "cycle": "MONTHLY",
+        "commitment_months": 3,
+        "unit_basis": "por carteira de até 20 objetos de vigilância"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": null,
+        "business_days_max": null,
+        "starts_after": "contratação, briefing inicial concluído e capacidade confirmada",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "uma empresa com até 20 objetos de vigilância combinando compradores, territórios, tipologias, concorrentes, contratos ou programas públicos",
+        "limits": [
+          "ciclo inicial de 3 meses",
+          "até 20 objetos de vigilância por ciclo",
+          "critérios de mudança material acordados no briefing inicial",
+          "síntese semanal emitida apenas quando houver mudança material",
+          "serviço gerenciado por pessoas, sem promessa de tempo real",
+          "contratação depende de capacidade",
+          "sem checkout automático"
+        ]
+      },
+      "required_inputs": [
+        "lista dos até 20 objetos de vigilância",
+        "critérios de mudança material aprovados pela direção",
+        "carteira e contratos ativos que devem ser acompanhados",
+        "concorrentes, territórios e tipologias de interesse",
+        "responsável interno nomeado para receber e decidir sobre o relatório"
+      ],
+      "included_outputs": [
+        "briefing inicial com objetos vigiados, critérios de mudança material e fontes",
+        "síntese semanal emitida apenas quando houver mudança material",
+        "relatório mensal com fatos, oportunidades, riscos, prioridades e decisões sugeridas",
+        "reunião mensal de 60 minutos com a direção",
+        "log de fonte, freshness e UNKNOWN por objeto vigiado",
+        "encaminhamento para o entregável pontual quando a mudança exigir análise dedicada"
+      ],
+      "exclusions": [
+        "plataforma de alertas, assinatura de software, trial ou quota de licenças",
+        "monitoramento em tempo real",
+        "participação em licitação em nome do cliente",
+        "gestão contratual ou ação executiva no lugar da equipe",
+        "priorizar e executar decisões rotineiramente, o que exige a Diretoria Fracionada para o Mercado Público",
+        "peça jurídica, recurso, defesa ou protocolo",
+        "promessa de vitória, de adjudicação, de habilitação da empresa ou de recebimento"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D45"
+      },
+      "source_issue": "#337",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "GROW",
+      "public_name_pt_br": "Monitoramento Mensal de Mercado e Contratos Públicos",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D46",
+      "version": "v1",
+      "catalog_number": "46",
+      "public_name": "Oficina para Decidir Quais Licitações Disputar",
+      "decision_question": "Com quais critérios explícitos a empresa escolhe quais licitações merecem equipe e quais recusa?",
+      "trigger": "A equipe entra em disputas por hábito e a direção não consegue explicar por que uma oportunidade foi escolhida e outra recusada.",
+      "price": {
+        "amount_cents": 790000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 7,
+        "business_days_max": 7,
+        "starts_after": "contratação, envio dos insumos e data da oficina confirmada",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "uma empresa, uma oficina de até 4 horas com grupo decisor de até 12 pessoas",
+        "limits": [
+          "até cinco oportunidades reais ou sintéticas previamente autorizadas",
+          "grupo decisor de até 12 pessoas",
+          "7 dias úteis de preparação antes da oficina",
+          "uma sessão única de até 4 horas",
+          "oficina aplicada ao perfil de cliente da própria empresa, não a turma aberta para iniciantes",
+          "contratação depende de capacidade",
+          "sem checkout automático"
+        ]
+      },
+      "required_inputs": [
+        "até cinco oportunidades reais ou sintéticas com autorização de uso em sala",
+        "histórico recente de disputas, resultados e decisões tomadas",
+        "capacidade instalada, restrições de equipe e limites de caixa",
+        "critérios econômicos e de risco já usados informalmente",
+        "lista nominal do grupo decisor e das funções envolvidas"
+      ],
+      "included_outputs": [
+        "diagnóstico prévio de como a decisão é tomada hoje",
+        "critérios econômicos, técnicos, documentais e de risco explicitados",
+        "matriz ponderada de decisão",
+        "simulação das oportunidades autorizadas dentro da matriz",
+        "papéis e rituais de decisão definidos",
+        "playbook de decisão da empresa",
+        "plano de adoção de 30 dias"
+      ],
+      "exclusions": [
+        "curso introdutório de licitações para iniciantes",
+        "certificação, diploma, carga horária oficial ou registro em conselho",
+        "plataforma de ensino, assinatura de software, trial ou quota de licenças",
+        "recorrência: a oficina é uma sessão contratada, não um acompanhamento continuado",
+        "análise completa dos cinco editais, que continua sendo objeto dos entregáveis de decisão contratados item a item",
+        "substituição do Raio-X Go/No-Go do Edital, da auditoria de orçamento ou dos demais entregáveis de decisão",
+        "peça jurídica, recurso, impugnação ou protocolo",
+        "garantia de resultado, de vitória, de adjudicação ou de habilitação da empresa"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D46"
+      },
+      "source_issue": "#337",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "CAPABILITY",
+      "public_name_pt_br": "Oficina para Decidir Quais Licitações Disputar",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D47",
+      "version": "v1",
+      "catalog_number": "47",
+      "public_name": "Capacitação de Equipes de Licitações e Contratos",
+      "decision_question": "Como transferir para a equipe o método de licitar e executar contratos que hoje depende de poucas pessoas?",
+      "trigger": "A empresa depende de uma ou duas pessoas para licitar e administrar contratos, e o método não está transferido para a equipe.",
+      "price": {
+        "currency": "BRL",
+        "billing": "one_time",
+        "tiers": [
+          {
+            "tier": "8 horas",
+            "amount_cents": 1290000,
+            "framing": "uma trilha em sessão de 8 horas para uma turma de até 20 participantes"
+          },
+          {
+            "tier": "16 horas",
+            "amount_cents": 1980000,
+            "framing": "a mesma trilha em 16 horas, com mais exercícios aplicados e mais casos da própria carteira"
+          }
+        ]
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": null,
+        "business_days_max": null,
+        "starts_after": "contratação, levantamento de contexto concluído e data da turma confirmada",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "uma turma de até 20 participantes em uma trilha escolhida",
+        "limits": [
+          "uma trilha por turma entre proposta e orçamento, habilitação e acervo, execução e prova, medições e pleitos, ou governança integrada",
+          "até 20 participantes por turma",
+          "8 horas ou 16 horas conforme a faixa contratada",
+          "deslocamento e hospedagem fora da Grande Florianópolis são cobrados a custo e aprovados previamente",
+          "capacitação aplicada ao perfil de cliente da própria empresa, não turma aberta para iniciantes",
+          "contratação depende de capacidade",
+          "sem checkout automático"
+        ]
+      },
+      "required_inputs": [
+        "trilha escolhida entre as cinco publicadas",
+        "lista de participantes com funções e nível de experiência",
+        "casos, propostas e documentos reais autorizados para uso em sala",
+        "contexto da carteira e gargalos percebidos pela direção",
+        "data, local e infraestrutura da turma"
+      ],
+      "included_outputs": [
+        "levantamento de contexto antes da turma",
+        "casos e exercícios aderentes ao perfil de cliente da empresa",
+        "sessão ao vivo de 8 ou 16 horas conforme a faixa contratada",
+        "materiais de apoio da trilha",
+        "avaliação aplicada dos participantes",
+        "plano de ação da equipe",
+        "encontro de 60 minutos 30 dias depois da turma"
+      ],
+      "exclusions": [
+        "graduação, pós-graduação ou curso livre com carga horária oficial",
+        "certificação, diploma ou registro em conselho",
+        "plataforma de ensino, assinatura de software, trial ou quota de licenças",
+        "treinamento genérico comprado pronto de terceiros",
+        "recorrência: a turma é uma contratação fechada, não uma assinatura de capacitação",
+        "assessoria de caso em curso, que continua sendo objeto dos entregáveis específicos",
+        "substituição dos entregáveis de decisão e de contrato, que continuam sendo contratados item a item",
+        "peça jurídica, recurso, defesa ou protocolo",
+        "garantia de resultado, de vitória, de adjudicação ou de habilitação da empresa"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D47"
+      },
+      "source_issue": "#337",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "CAPABILITY",
+      "public_name_pt_br": "Capacitação de Equipes de Licitações e Contratos",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D48",
+      "version": "v1",
+      "catalog_number": "48",
+      "public_name": "Estudo Sob Medida com Dados Públicos",
+      "decision_question": "Qual decisão inédita da empresa pode ser respondida com dados públicos rastreáveis e reproduzíveis?",
+      "trigger": "A direção precisa decidir com base em uma pergunta que nenhum outro item do catálogo responde.",
+      "price": {
+        "currency": "BRL",
+        "billing": "one_time",
+        "tiers": [
+          {
+            "tier": "essencial",
+            "amount_cents": 980000,
+            "framing": "uma decisão, até três famílias de fontes, um recorte e um artefato analítico, em 10 dias úteis"
+          },
+          {
+            "tier": "avancado",
+            "amount_cents": 1980000,
+            "framing": "uma decisão, até oito famílias de fontes, resolução de entidades, dataset versionado e relatório ou painel, em 20 dias úteis"
+          },
+          {
+            "tier": "estrategico",
+            "amount_cents": 3980000,
+            "framing": "problema multirrecorte, integração versionada, dataset, análise executiva, painel ou artefato e oficina, em 30 dias úteis"
+          }
+        ]
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 10,
+        "business_days_max": 30,
+        "starts_after": "contratação, faixa definida e entrada obrigatória completa",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "uma decisão e uma pergunta falsificável por estudo, na faixa contratada",
+        "limits": [
+          "essencial: até três famílias de fontes, um recorte e um artefato analítico em 10 dias úteis",
+          "avançado: até oito famílias de fontes, resolução de entidades, dataset versionado e relatório ou painel em 20 dias úteis",
+          "estratégico: problema multirrecorte, integração versionada, dataset, análise executiva, painel e oficina em 30 dias úteis",
+          "escopo fechado por faixa, com início, fim e artefato definidos na contratação",
+          "cada nova pergunta é um novo estudo contratado em uma das três faixas publicadas",
+          "somente dados públicos ou dados privados cedidos com autorização escrita",
+          "contratação depende de capacidade",
+          "sem checkout automático"
+        ]
+      },
+      "required_inputs": [
+        "decisão a tomar",
+        "pergunta falsificável",
+        "universo de análise",
+        "corte temporal",
+        "cobertura mínima aceitável",
+        "formato de consumo do resultado"
+      ],
+      "included_outputs": [
+        "protocolo do estudo com a pergunta falsificável registrada",
+        "fontes e licenças declaradas",
+        "dicionário de dados",
+        "proveniência por campo",
+        "método reproduzível",
+        "classificação FACT, CALCULATION, INFERENCE e UNKNOWN",
+        "dataset ou artefato analítico da faixa contratada",
+        "síntese executiva",
+        "limitações declaradas",
+        "briefing de decisão"
+      ],
+      "exclusions": [
+        "dado privado obtido sem autorização",
+        "coleta contrária aos termos de uso ou à licença da fonte",
+        "vigilância de pessoas",
+        "produto contínuo disfarçado de estudo: não é retainer, assinatura, banco de horas nem renovação automática",
+        "perguntas adicionais fora da faixa contratada, que exigem novo estudo com preço publicado",
+        "orçamento sob consulta: o pedido que não couber nas três faixas publicadas é recusado por fronteira ética ou técnica, e não existe serviço oculto atrás de fale conosco",
+        "crawler ou DataLake hospedado no web-cfg",
+        "resultado impossível de reproduzir",
+        "peça jurídica, recurso, defesa ou protocolo",
+        "promessa de vitória, de adjudicação, de habilitação da empresa ou de recebimento"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D48"
+      },
+      "source_issue": "#337",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "CAPABILITY",
+      "public_name_pt_br": "Estudo Sob Medida com Dados Públicos",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D49",
+      "version": "v1",
+      "catalog_number": "49",
+      "public_name": "Orçamento Completo da Proposta",
+      "decision_question": "A nossa proposta tem orçamento, composições e BDI prontos para envio, com memória reproduzível?",
+      "trigger": "O edital saiu e a empresa não tem orçamentista disponível para produzir a planilha dentro do prazo.",
+      "price": {
+        "currency": "BRL",
+        "billing": "one_time",
+        "tiers": [
+          {
+            "tier": "essencial",
+            "amount_cents": 980000,
+            "framing": "um lote, um sistema principal de referência, até 100 itens orçamentários e uma revisão, com SLA de 10 dias úteis"
+          },
+          {
+            "tier": "complexo",
+            "amount_cents": 1480000,
+            "framing": "um lote, até 300 itens, até dois sistemas ou fontes principais e duas revisões, com SLA de 15 dias úteis"
+          },
+          {
+            "tier": "extenso",
+            "amount_cents": 2480000,
+            "framing": "um lote, até 800 itens, múltiplas fontes e cotações e duas revisões, com SLA de 20 dias úteis"
+          }
+        ]
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 10,
+        "business_days_max": 20,
+        "starts_after": "inputs válidos e nível contratado",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "um lote orçamentário, no nível contratado",
+        "limits": [
+          "essencial: um sistema principal de referência, até 100 itens e uma revisão",
+          "complexo: até 300 itens, até dois sistemas ou fontes principais e duas revisões",
+          "extenso: até 800 itens, múltiplas fontes e cotações e duas revisões",
+          "limite por objeto, item, atividade, lote, sistema, revisão e evento, nunca por número de páginas",
+          "urgência somente com capacidade confirmada e acréscimo de 50 por cento informado previamente",
+          "pode compor o item 16 Bid Room por Oportunidade Crítica, mas continua comprável separadamente",
+          "quando o item 16 incluir a execução deste item, a proposta discrimina o que está incluído e não soma preços",
+          "preço piloto em validação, que não altera os itens 01 a 48",
+          "nenhum dado, planilha ou identidade nasce no web-cfg: verdade e proveniência permanecem no extra-cli"
+        ]
+      },
+      "required_inputs": [
+        "edital e anexos",
+        "projetos e memoriais",
+        "planilha-base quando houver",
+        "regime de execução",
+        "data-base",
+        "localização da obra",
+        "premissas tributárias validadas pelo cliente",
+        "cotações existentes",
+        "política de margem do cliente"
+      ],
+      "included_outputs": [
+        "quantitativos recebidos e reconciliados",
+        "composições de custo",
+        "insumos, equipamentos e mão de obra",
+        "cotações e fontes com proveniência",
+        "encargos",
+        "BDI analítico",
+        "curva ABC",
+        "planilha de preços",
+        "premissas registradas",
+        "memória de cálculo reproduzível",
+        "checklist de exequibilidade",
+        "arquivo nos formatos exigidos pelo edital"
+      ],
+      "exclusions": [
+        "revisar ou auditar orçamento já produzido, que é o item 14 Auditoria de Orçamento, BDI e Exequibilidade",
+        "coordenar a oportunidade inteira, que é o item 16 Bid Room por Oportunidade Crítica",
+        "levantamento quantitativo integral a partir de projeto ausente ou insuficiente",
+        "projeto executivo",
+        "cotação falsa ou de favor",
+        "definição tributária pelo consultor",
+        "garantia de aceitabilidade do preço",
+        "desconto recomendado sem limite de margem definido pelo cliente",
+        "comissão de êxito",
+        "promessa de vitória, de adjudicação ou de lance vencedor",
+        "guarda de token, certificado digital ou senha do cliente"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D49"
+      },
+      "source_issue": "#344",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Orçamento Completo da Proposta",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D50",
+      "version": "v1",
+      "catalog_number": "50",
+      "public_name": "Cronograma e Plano Executivo da Proposta",
+      "decision_question": "A nossa proposta tem cronograma e plano executivo coerentes com o prazo do edital e com o orçamento?",
+      "trigger": "O edital exige cronograma físico-financeiro e a empresa só tem o orçamento pronto.",
+      "price": {
+        "currency": "BRL",
+        "billing": "one_time",
+        "tiers": [
+          {
+            "tier": "essencial",
+            "amount_cents": 590000,
+            "framing": "um lote, até 80 atividades de controle e uma revisão, com SLA de 7 dias úteis"
+          },
+          {
+            "tier": "complexo",
+            "amount_cents": 980000,
+            "framing": "um lote, até 200 atividades, duas revisões e lógica de recursos com cenários, com SLA de 10 dias úteis"
+          }
+        ]
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 7,
+        "business_days_max": 10,
+        "starts_after": "inputs válidos e nível contratado",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "um lote, no nível contratado",
+        "limits": [
+          "essencial: até 80 atividades de controle e uma revisão",
+          "complexo: até 200 atividades, duas revisões e lógica de recursos com cenários",
+          "limite por objeto, item, atividade, lote, sistema, revisão e evento, nunca por número de páginas",
+          "urgência somente com capacidade confirmada e acréscimo de 50 por cento informado previamente",
+          "pode compor o item 16 Bid Room por Oportunidade Crítica, mas continua comprável separadamente",
+          "quando o item 16 incluir a execução deste item, a proposta discrimina o que está incluído e não soma preços",
+          "preço piloto em validação, que não altera os itens 01 a 48",
+          "nenhum dado, planilha ou identidade nasce no web-cfg: verdade e proveniência permanecem no extra-cli"
+        ]
+      },
+      "required_inputs": [
+        "escopo",
+        "prazo editalício",
+        "marcos contratuais",
+        "restrições de execução",
+        "orçamento e quantidades",
+        "índices de produtividade",
+        "estratégia construtiva fornecida ou validada pelo cliente"
+      ],
+      "included_outputs": [
+        "estrutura analítica do projeto",
+        "sequência e dependências",
+        "marcos",
+        "caminho crítico inferido com as premissas declaradas",
+        "plano de mobilização",
+        "cronograma físico e físico-financeiro",
+        "curva de avanço e de caixa",
+        "plano executivo resumido",
+        "riscos de prazo",
+        "verificação de compatibilidade com a proposta de preço"
+      ],
+      "exclusions": [
+        "coordenar a oportunidade inteira, que é o item 16 Bid Room por Oportunidade Crítica",
+        "planejamento executivo completo depois da assinatura do contrato",
+        "acompanhamento mensal da obra",
+        "garantia de produtividade",
+        "cronograma fabricado apenas para cumprir formalidade",
+        "comissão de êxito",
+        "promessa de vitória, de adjudicação ou de lance vencedor",
+        "guarda de token, certificado digital ou senha do cliente"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D50"
+      },
+      "source_issue": "#344",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Cronograma e Plano Executivo da Proposta",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D51",
+      "version": "v1",
+      "catalog_number": "51",
+      "public_name": "Dossiê de Habilitação Pronto para Envio",
+      "decision_question": "O pacote de habilitação está montado, conferido e pronto para o cliente enviar?",
+      "trigger": "Faltam poucos dias para o envio e os documentos de habilitação estão dispersos e sem conferência.",
+      "price": {
+        "amount_cents": 490000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 3,
+        "business_days_max": 3,
+        "starts_after": "inputs válidos, com pelo menos 5 dias úteis restantes e documentos-base existentes",
+        "safe_deadline_business_days": 5
+      },
+      "scope": {
+        "unit": "um edital, um licitante ou consórcio, um lote e uma rodada documental",
+        "limits": [
+          "gate de contratação: restarem pelo menos 5 dias úteis até o envio",
+          "gate de contratação: os documentos-base já existirem",
+          "uma rodada documental",
+          "limite por objeto, item, atividade, lote, sistema, revisão e evento, nunca por número de páginas",
+          "urgência somente com capacidade confirmada e acréscimo de 50 por cento informado previamente",
+          "pode compor o item 16 Bid Room por Oportunidade Crítica, mas continua comprável separadamente",
+          "quando o item 16 incluir a execução deste item, a proposta discrimina o que está incluído e não soma preços",
+          "preço piloto em validação, que não altera os itens 01 a 48",
+          "nenhum dado, planilha ou identidade nasce no web-cfg: verdade e proveniência permanecem no extra-cli"
+        ]
+      },
+      "required_inputs": [
+        "edital e anexos de habilitação",
+        "documentos-base já existentes do licitante ou do consórcio",
+        "atestados e acervo",
+        "certidões fiscais, trabalhistas e econômico-financeiras",
+        "dados cadastrais confirmados pelo cliente para preenchimento de formulários"
+      ],
+      "included_outputs": [
+        "índice de requisito para documento",
+        "validação de validade, assinatura e formato",
+        "formulários e declarações preenchidos com dados confirmados pelo cliente",
+        "padrão de nomes e pastas",
+        "lista de lacunas bloqueantes",
+        "pacote final organizado",
+        "checklist para o cliente enviar"
+      ],
+      "exclusions": [
+        "diagnosticar cobertura e estratégia de acervo, que é o item 13 Matriz de Habilitação e Lacunas de Acervo",
+        "criar atestado",
+        "alterar balanço",
+        "obter certidão inexistente",
+        "assinar em nome do cliente",
+        "usar credencial do cliente",
+        "protocolar",
+        "garantir a habilitação da empresa",
+        "comissão de êxito",
+        "promessa de vitória, de adjudicação ou de lance vencedor",
+        "guarda de token, certificado digital ou senha do cliente"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D51"
+      },
+      "source_issue": "#344",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Dossiê de Habilitação Pronto para Envio",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D52",
+      "version": "v1",
+      "catalog_number": "52",
+      "public_name": "Verificação de SICAF, Certidões e Regularidade",
+      "decision_question": "Os cadastros e as certidões da empresa estão em ordem antes do próximo edital?",
+      "trigger": "A empresa perdeu prazo por certidão vencida ou por divergência cadastral no SICAF.",
+      "price": {
+        "amount_cents": 149000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 2,
+        "business_days_max": 2,
+        "starts_after": "inputs válidos",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "um CNPJ e os cadastros e certidões oficiais aplicáveis à rota federal indicada",
+        "limits": [
+          "um CNPJ por verificação",
+          "somente a rota federal indicada pelo cliente",
+          "o cliente executa qualquer atualização cadastral",
+          "limite por objeto, item, atividade, lote, sistema, revisão e evento, nunca por número de páginas",
+          "urgência somente com capacidade confirmada e acréscimo de 50 por cento informado previamente",
+          "pode compor o item 16 Bid Room por Oportunidade Crítica, mas continua comprável separadamente",
+          "quando o item 16 incluir a execução deste item, a proposta discrimina o que está incluído e não soma preços",
+          "preço piloto em validação, que não altera os itens 01 a 48",
+          "nenhum dado, planilha ou identidade nasce no web-cfg: verdade e proveniência permanecem no extra-cli"
+        ]
+      },
+      "required_inputs": [
+        "CNPJ e razão social",
+        "rota federal de contratação pretendida",
+        "certidões e comprovantes já em poder do cliente",
+        "responsável interno nomeado"
+      ],
+      "included_outputs": [
+        "situação observada na data da consulta",
+        "níveis e documentos do SICAF informados ou consultáveis",
+        "validade das certidões",
+        "divergências cadastrais",
+        "lacunas identificadas",
+        "responsável, ação e prazo para cada lacuna",
+        "declaração de cobertura da verificação e marcação UNKNOWN onde não houve fonte"
+      ],
+      "exclusions": [
+        "montar o pacote de habilitação de um edital, que é o item 51 Dossiê de Habilitação Pronto para Envio",
+        "diagnosticar lacunas de acervo, que é o item 13 Matriz de Habilitação e Lacunas de Acervo",
+        "cobrar pelo cadastro público gratuito",
+        "alegar vínculo oficial com órgão ou com plataforma",
+        "guardar credencial do cliente",
+        "acessar conta do cliente sem autorização",
+        "emitir certidão em nome do cliente",
+        "prometer regularização em 24 horas",
+        "comissão de êxito",
+        "promessa de vitória, de adjudicação ou de lance vencedor",
+        "guarda de token, certificado digital ou senha do cliente"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D52"
+      },
+      "source_issue": "#344",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Verificação de SICAF, Certidões e Regularidade",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D53",
+      "version": "v1",
+      "catalog_number": "53",
+      "public_name": "Acompanhamento Técnico da Sessão de Disputa",
+      "decision_question": "Quem sustenta tecnicamente o preço-limite e a margem durante a sessão de disputa?",
+      "trigger": "A sessão de disputa está marcada e ninguém acompanha o limite de preço e a margem em tempo real.",
+      "price": {
+        "amount_cents": 375000,
+        "currency": "BRL",
+        "billing": "one_time",
+        "additional_units": [
+          {
+            "label": "lote adicional na mesma sessão",
+            "amount_cents": 149000
+          }
+        ]
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": null,
+        "business_days_max": null,
+        "starts_after": "contratação com pelo menos 3 dias úteis de antecedência da sessão",
+        "safe_deadline_business_days": 3
+      },
+      "scope": {
+        "unit": "uma sessão de disputa e um lote",
+        "limits": [
+          "gate de contratação: pelo menos 3 dias úteis antes da sessão",
+          "cada lote adicional na mesma sessão é cobrado à parte",
+          "o representante do licitante é o único operador da plataforma e o único decisor de lance",
+          "atuação limitada ao limite de preço aprovado pelo cliente antes da sessão",
+          "limite por objeto, item, atividade, lote, sistema, revisão e evento, nunca por número de páginas",
+          "urgência somente com capacidade confirmada e acréscimo de 50 por cento informado previamente",
+          "pode compor o item 16 Bid Room por Oportunidade Crítica, mas continua comprável separadamente",
+          "quando o item 16 incluir a execução deste item, a proposta discrimina o que está incluído e não soma preços",
+          "preço piloto em validação, que não altera os itens 01 a 48",
+          "nenhum dado, planilha ou identidade nasce no web-cfg: verdade e proveniência permanecem no extra-cli"
+        ]
+      },
+      "required_inputs": [
+        "edital, anexos e modo de disputa",
+        "orçamento e margem da proposta",
+        "preço-limite aprovado pelo cliente antes da sessão",
+        "credenciais operadas exclusivamente pelo representante do licitante",
+        "data, horário e plataforma da sessão"
+      ],
+      "included_outputs": [
+        "briefing do modo de disputa",
+        "registro do preço-limite aprovado pelo cliente",
+        "faixas e gatilhos de decisão",
+        "sala técnica remota durante a sessão",
+        "registro de lances e de eventos públicos",
+        "checagem de exequibilidade e de margem em tempo real",
+        "subsídio técnico para negociação e diligência",
+        "debrief imediato após a sessão"
+      ],
+      "exclusions": [
+        "coordenar a oportunidade inteira antes da sessão, que é o item 16 Bid Room por Oportunidade Crítica",
+        "dar lance pelo cliente: a CONFENGE não dá lance",
+        "operar o portal ou a plataforma em nome do cliente",
+        "operar credencial, login ou certificado do cliente",
+        "assinar qualquer documento",
+        "representar a empresa perante o órgão ou perante o pregoeiro",
+        "automatizar a disputa por robô",
+        "combinar conduta com outros licitantes",
+        "observar dado não público",
+        "ultrapassar o limite de preço aprovado pelo cliente",
+        "prometer resultado, classificação ou lance vencedor",
+        "comissão de êxito",
+        "promessa de vitória, de adjudicação ou de lance vencedor",
+        "guarda de token, certificado digital ou senha do cliente"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D53"
+      },
+      "source_issue": "#344",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Acompanhamento Técnico da Sessão de Disputa",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
+    },
+    {
+      "deliverable_id": "CFG-D54",
+      "version": "v1",
+      "catalog_number": "54",
+      "public_name": "Dossiê de Credenciamento ou Pré-Qualificação",
+      "decision_question": "A empresa reúne o que o credenciamento ou a pré-qualificação exige, e como se inscreve e renova?",
+      "trigger": "O órgão abriu credenciamento ou pré-qualificação e a empresa não sabe o que precisa reunir.",
+      "price": {
+        "amount_cents": 590000,
+        "currency": "BRL",
+        "billing": "one_time"
+      },
+      "price_state": "PILOT_HYPOTHESIS",
+      "sla": {
+        "business_days_min": 7,
+        "business_days_max": 7,
+        "starts_after": "inputs válidos",
+        "safe_deadline_business_days": null
+      },
+      "scope": {
+        "unit": "um edital ou procedimento, uma categoria ou lote e um interessado",
+        "limits": [
+          "um procedimento por dossiê, credenciamento ou pré-qualificação, nunca os dois no mesmo preço",
+          "uma categoria ou lote",
+          "um interessado",
+          "limite por objeto, item, atividade, lote, sistema, revisão e evento, nunca por número de páginas",
+          "urgência somente com capacidade confirmada e acréscimo de 50 por cento informado previamente",
+          "pode compor o item 16 Bid Room por Oportunidade Crítica, mas continua comprável separadamente",
+          "quando o item 16 incluir a execução deste item, a proposta discrimina o que está incluído e não soma preços",
+          "preço piloto em validação, que não altera os itens 01 a 48",
+          "nenhum dado, planilha ou identidade nasce no web-cfg: verdade e proveniência permanecem no extra-cli"
+        ]
+      },
+      "required_inputs": [
+        "edital ou regulamento do credenciamento ou da pré-qualificação",
+        "documentos e provas já existentes do interessado",
+        "categoria ou lote pretendido",
+        "capacidade de atendimento declarada pelo cliente",
+        "responsável interno nomeado"
+      ],
+      "included_outputs": [
+        "leitura de elegibilidade e das condições de contratação futura",
+        "matriz de requisitos",
+        "documentos e provas exigidos",
+        "validade e regras de manutenção",
+        "pacote organizado",
+        "lacunas identificadas",
+        "roteiro de inscrição e de renovação",
+        "riscos de preço, de capacidade e de convocação"
+      ],
+      "exclusions": [
+        "montar o pacote de habilitação de um edital de licitação, que é o item 51 Dossiê de Habilitação Pronto para Envio",
+        "tratar credenciamento e pré-qualificação como o mesmo procedimento",
+        "representação jurídica",
+        "assinatura ou protocolo pela CONFENGE",
+        "promessa de contratação futura pelo órgão",
+        "cadastramento genérico em portais sem edital ou regulamento",
+        "comissão de êxito",
+        "promessa de vitória, de adjudicação ou de lance vencedor",
+        "guarda de token, certificado digital ou senha do cliente"
+      ],
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "offer_container": "none",
+      "credit_rule": null,
+      "capacity_required": true,
+      "public_state": "VALIDATE",
+      "checkout_enabled": false,
+      "blocking_issue": null,
+      "route": null,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D54"
+      },
+      "source_issue": "#344",
+      "market_fit": {
+        "state": "HOLD",
+        "evidence": {
+          "problem": 0,
+          "solution": 0,
+          "price": 0,
+          "delivery": 0,
+          "outcome": 0
+        },
+        "last_reviewed": null
+      },
+      "task_door": "PROPOSE",
+      "public_name_pt_br": "Dossiê de Credenciamento ou Pré-Qualificação",
+      "name_aliases": [],
+      "name_state": "CANONICAL"
     }
-  ]
+  ],
+  "task_doors": [
+    {
+      "door": "GROW",
+      "order": 1,
+      "public_label": "Descobrir onde crescer e o que mudou",
+      "decision_question": "Onde há mercado, comprador e movimento antes do edital?",
+      "members": [
+        "CFG-D01",
+        "CFG-D02",
+        "CFG-D03",
+        "CFG-D04",
+        "CFG-D05",
+        "CFG-D06",
+        "CFG-D07",
+        "CFG-D08",
+        "CFG-D09",
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D45"
+      ],
+      "requires_progressive_disclosure": true
+    },
+    {
+      "door": "QUALIFY",
+      "order": 2,
+      "public_label": "Decidir se a oportunidade merece recursos",
+      "decision_question": "Esta oportunidade merece equipe, caixa e acervo?",
+      "members": [
+        "CFG-D12",
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D15",
+        "CFG-D26",
+        "CFG-D30",
+        "CFG-D43",
+        "CFG-D44"
+      ],
+      "requires_progressive_disclosure": true
+    },
+    {
+      "door": "PROPOSE",
+      "order": 3,
+      "public_label": "Levar a proposta até a decisão",
+      "decision_question": "O que ainda falta para a proposta chegar íntegra à sessão?",
+      "members": [
+        "CFG-D16",
+        "CFG-D27",
+        "CFG-D28",
+        "CFG-D29",
+        "CFG-D39",
+        "CFG-D49",
+        "CFG-D50",
+        "CFG-D51",
+        "CFG-D52",
+        "CFG-D53",
+        "CFG-D54"
+      ],
+      "requires_progressive_disclosure": true
+    },
+    {
+      "door": "START",
+      "order": 4,
+      "public_label": "Assinar e começar sem herdar surpresa",
+      "decision_question": "O que precisa estar resolvido antes de assinar e mobilizar?",
+      "members": [
+        "CFG-D33",
+        "CFG-D34",
+        "CFG-D35"
+      ],
+      "requires_progressive_disclosure": false
+    },
+    {
+      "door": "PROTECT",
+      "order": 5,
+      "public_label": "Proteger caixa, prazo e margem",
+      "decision_question": "O que precisa ser registrado, calculado e decidido antes de perder caixa, prazo ou prova?",
+      "members": [
+        "CFG-D17",
+        "CFG-D18",
+        "CFG-D19",
+        "CFG-D20",
+        "CFG-D21",
+        "CFG-D22",
+        "CFG-D23",
+        "CFG-D25",
+        "CFG-D40",
+        "CFG-D41",
+        "CFG-D42"
+      ],
+      "requires_progressive_disclosure": true
+    },
+    {
+      "door": "CLOSE",
+      "order": 6,
+      "public_label": "Encerrar, provar e aprender",
+      "decision_question": "O que este contrato deixa de prova, acervo e aprendizado?",
+      "members": [
+        "CFG-D31",
+        "CFG-D32",
+        "CFG-D36",
+        "CFG-D37",
+        "CFG-D38"
+      ],
+      "requires_progressive_disclosure": false
+    },
+    {
+      "door": "CAPABILITY",
+      "order": 7,
+      "public_label": "Instalar capacidade e liderança",
+      "decision_question": "A empresa precisa de entrega pontual, capacidade instalada ou direção contratada?",
+      "members": [
+        "CFG-D24",
+        "CFG-D46",
+        "CFG-D47",
+        "CFG-D48"
+      ],
+      "requires_progressive_disclosure": false
+    }
+  ],
+  "common_rules": {
+    "urgency_surcharge_pct": 50,
+    "urgency_rule": "Prazo inferior ao seguro só é aceito após confirmação de capacidade, com adicional de 50 por cento informado antes da cobrança. A capacidade pode recusar a urgência.",
+    "success_fee_allowed": false,
+    "credit_stacking_allowed": false,
+    "scope_limited_by_pages": false,
+    "scope_drivers": [
+      "empresa",
+      "território",
+      "tipologia",
+      "período",
+      "contrato",
+      "edital",
+      "lote",
+      "evento",
+      "módulo",
+      "revisão"
+    ],
+    "checkout_authority": "#88",
+    "data_authority": "extra-cli",
+    "commercial_action_authority": "warmbly"
+  },
+  "naming_authority": "#343",
+  "naming_source": "data/commercial/offer-naming.v1.json"
 }

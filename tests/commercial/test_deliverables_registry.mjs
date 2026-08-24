@@ -1,12 +1,14 @@
 /**
- * Fail-closed gate for the cumulative deliverables catalogue (#329 family).
+ * Fail-closed gate for the taxative deliverables catalogue (#329 family).
  *
  * The registry is the auditable commercial source. This gate proves the
  * invariants a reviewer cannot hold in their head: frozen prices, package
  * arithmetic, pilot prices that cannot reach checkout, blocked items that
- * cannot be published, credits that cannot stack, and evidence that cannot be
- * asserted without a record. It deliberately does not prove that a customer
- * exists or that a price is validated.
+ * cannot be published, credits that cannot stack, names that cannot drift from
+ * their authority, and evidence that cannot be asserted without a record.
+ *
+ * It deliberately does not prove that a customer exists or that a price is
+ * validated. Those need observed evidence, not a test.
  */
 
 import { createRequire } from "module";
@@ -30,6 +32,9 @@ const registry = lib.loadRegistry();
 const protocol = lib.loadProtocol();
 const firstFold = lib.loadFirstFoldContract();
 const realProof = lib.loadRealProofRegistry();
+const naming = lib.loadNaming();
+const pricing = lib.loadPricingPolicy();
+const copyContract = lib.loadCopyContract();
 const offerSnapshot = lib.loadOfferSnapshot();
 
 const entries = registry.deliverables;
@@ -62,36 +67,37 @@ assert("container_count_derived", registry.container_count === registry.containe
 const numbers = entries.map((entry) => entry.catalog_number);
 const expectedNumbers = Array.from({ length: entries.length }, (_, i) => String(i + 1).padStart(2, "0"));
 assert("catalog_numbers_contiguous", JSON.stringify(numbers) === JSON.stringify(expectedNumbers), numbers);
-for (const entry of entries) {
-  assert(`id_matches_number_${entry.deliverable_id}`, entry.deliverable_id === `CFG-D${entry.catalog_number}`, entry.deliverable_id);
-}
 
 for (const entry of entries) {
+  const id = entry.deliverable_id;
   const missing = lib.REQUIRED_FIELDS.filter((field) => !(field in entry));
-  assert(`fields_${entry.deliverable_id}`, missing.length === 0, missing);
-  assert(`lifecycle_${entry.deliverable_id}`, lib.LIFECYCLE_STAGES.includes(entry.lifecycle_stage), entry.lifecycle_stage);
-  assert(`public_state_${entry.deliverable_id}`, lib.PUBLISHED_STATES.has(entry.public_state), entry.public_state);
-  assert(`price_state_${entry.deliverable_id}`, lib.PRICE_STATES.has(entry.price_state), entry.price_state);
-  assert(`market_fit_state_${entry.deliverable_id}`, lib.MARKET_FIT_STATES.has(entry.market_fit.state), entry.market_fit.state);
-  assert(`decision_question_${entry.deliverable_id}`, /\?$/.test(entry.decision_question), entry.decision_question);
-  assert(`trigger_${entry.deliverable_id}`, typeof entry.trigger === "string" && entry.trigger.length > 10, entry.trigger);
-  assert(`inputs_${entry.deliverable_id}`, entry.required_inputs.length > 0);
-  assert(`outputs_${entry.deliverable_id}`, entry.included_outputs.length > 0);
-  assert(`exclusions_${entry.deliverable_id}`, entry.exclusions.length > 0);
-  assert(`data_owner_${entry.deliverable_id}`, entry.data_contract.owner === "extra-cli", entry.data_contract.owner);
+  assert(`fields_${id}`, missing.length === 0, missing);
+  assert(`id_matches_number_${id}`, id === `CFG-D${entry.catalog_number}`, id);
+  assert(`task_door_${id}`, lib.TASK_DOORS.includes(entry.task_door), entry.task_door);
+  assert(`public_state_${id}`, lib.PUBLIC_STATES.has(entry.public_state), entry.public_state);
+  assert(`price_state_${id}`, lib.PRICE_STATES.has(entry.price_state), entry.price_state);
+  assert(`name_state_${id}`, lib.NAME_STATES.has(entry.name_state), entry.name_state);
+  assert(`market_fit_state_${id}`, lib.MARKET_FIT_STATES.has(entry.market_fit.state), entry.market_fit.state);
+  assert(`decision_question_${id}`, /\?$/.test(entry.decision_question), entry.decision_question);
+  assert(`trigger_${id}`, typeof entry.trigger === "string" && entry.trigger.length > 10, entry.trigger);
+  assert(`inputs_${id}`, entry.required_inputs.length > 0);
+  assert(`outputs_${id}`, entry.included_outputs.length > 0);
+  assert(`exclusions_${id}`, entry.exclusions.length > 0);
+  assert(`data_owner_${id}`, entry.data_contract.owner === "extra-cli", entry.data_contract.owner);
   assert(
-    `offer_container_resolves_${entry.deliverable_id}`,
-    entry.offer_container === "none" || containerIds.has(entry.offer_container),
-    entry.offer_container
-  );
-  assert(
-    `evidence_grades_${entry.deliverable_id}`,
+    `evidence_grades_${id}`,
     JSON.stringify(entry.data_contract.evidence_grades) === JSON.stringify(lib.EVIDENCE_GRADES),
     entry.data_contract.evidence_grades
   );
+  assert(
+    `offer_container_resolves_${id}`,
+    entry.offer_container === "none" || containerIds.has(entry.offer_container),
+    entry.offer_container
+  );
+  assert(`priced_${id}`, lib.isPriced(entry), entry.price);
   // #329 rule 7: scope is bounded by object, not by page count.
   const scopeText = JSON.stringify(entry.scope).toLowerCase();
-  assert(`scope_not_page_limited_${entry.deliverable_id}`, !/limitad\w* (a|por) \d+ p[áa]ginas/.test(scopeText), entry.scope);
+  assert(`scope_not_page_limited_${id}`, !/limitad\w* (a|por) \d+ p[áa]ginas/.test(scopeText), entry.scope);
 }
 
 // -------------------------------------------------- frozen published prices
@@ -110,7 +116,8 @@ const packageSum = lib.PACKAGE_MEMBERS.reduce((total, id) => total + lib.entryAm
 assert("package_unbundled_sum", packageSum === lib.PACKAGE_UNBUNDLED_SUM_CENTS, { got: packageSum, want: lib.PACKAGE_UNBUNDLED_SUM_CENTS });
 
 const expansion = lib.containerById(registry, "expansion_package");
-assert("expansion_amount", expansion.amount_cents === lib.PACKAGE_AMOUNT_CENTS, expansion.amount_cents);
+const expansionPlan = expansion.plans[0];
+assert("expansion_amount", expansionPlan.amount_cents === lib.PACKAGE_AMOUNT_CENTS, expansionPlan.amount_cents);
 assert("expansion_declared_sum", expansion.unbundled_sum_cents === lib.PACKAGE_UNBUNDLED_SUM_CENTS, expansion.unbundled_sum_cents);
 assert(
   "expansion_members",
@@ -131,6 +138,8 @@ assert("unit01_not_in_package", !expansion.composes_deliverables.includes("CFG-D
 const entregasHtml = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
 for (const [id, cents] of Object.entries(lib.FROZEN_PUBLISHED_PRICES_CENTS)) {
   assert(`html_price_${id}`, entregasHtml.includes(brl(cents)), brl(cents));
+  // The published page still carries the name the registry records as current.
+  assert(`html_name_${id}`, entregasHtml.includes(byId.get(id).public_name), byId.get(id).public_name);
 }
 assert("html_unbundled_sum", entregasHtml.includes(brl(lib.PACKAGE_UNBUNDLED_SUM_CENTS)), brl(lib.PACKAGE_UNBUNDLED_SUM_CENTS));
 assert("html_package_amount", entregasHtml.includes(brl(lib.PACKAGE_AMOUNT_CENTS)), brl(lib.PACKAGE_AMOUNT_CENTS));
@@ -144,107 +153,172 @@ for (const entry of entries) {
 
 const snapshotById = new Map(offerSnapshot.offers.map((offer) => [offer.offer_id, offer]));
 for (const container of registry.containers) {
-  if (!container.offer_id) continue;
-  const offer = snapshotById.get(container.offer_id);
-  assert(`offer_known_${container.container_id}`, Boolean(offer), container.offer_id);
-  if (!offer) continue;
-  assert(`offer_cents_${container.container_id}`, offer.amount_cents === container.amount_cents, {
-    snapshot: offer.amount_cents,
-    registry: container.amount_cents,
-  });
-  if ("commitment_months" in container) {
-    assert(`offer_commitment_${container.container_id}`, offer.commitment_months === container.commitment_months, {
+  assert(`container_has_plans_${container.container_id}`, container.plans.length > 0, container.container_id);
+  assert(`container_route_${container.container_id}`, fs.existsSync(routeFile(container.route)), container.route);
+  for (const plan of container.plans) {
+    const offer = snapshotById.get(plan.offer_id);
+    assert(`offer_known_${plan.plan_id}`, Boolean(offer), plan.offer_id);
+    if (!offer) continue;
+    assert(`offer_cents_${plan.plan_id}`, offer.amount_cents === plan.amount_cents, {
+      snapshot: offer.amount_cents,
+      registry: plan.amount_cents,
+    });
+    assert(`offer_commitment_${plan.plan_id}`, offer.commitment_months === plan.commitment_months, {
       snapshot: offer.commitment_months,
-      registry: container.commitment_months,
+      registry: plan.commitment_months,
     });
-  }
-  if ("total_commitment_cents" in container) {
-    assert(`offer_total_${container.container_id}`, offer.total_commitment_cents === container.total_commitment_cents, {
+    assert(`offer_total_${plan.plan_id}`, offer.total_commitment_cents === plan.total_commitment_cents, {
       snapshot: offer.total_commitment_cents,
-      registry: container.total_commitment_cents,
+      registry: plan.total_commitment_cents,
     });
   }
+}
+// Every approved money offer must be reachable from the registry.
+const registryOfferIds = new Set(registry.containers.flatMap((c) => c.plans.map((p) => p.offer_id)));
+for (const offer of offerSnapshot.offers) {
+  assert(`snapshot_offer_mapped_${offer.offer_id}`, registryOfferIds.has(offer.offer_id), offer.offer_id);
 }
 
 // ------------------------------------------------------------- fail-closed
 
 for (const entry of entries) {
+  const id = entry.deliverable_id;
   // #88 owns money. No registry entry may open checkout on its own.
-  assert(`checkout_closed_${entry.deliverable_id}`, entry.checkout_enabled === false, entry.checkout_enabled);
+  assert(`checkout_closed_${id}`, entry.checkout_enabled === false, entry.checkout_enabled);
   if (Number(entry.catalog_number) >= 9) {
-    assert(`pilot_price_state_${entry.deliverable_id}`, entry.price_state === "PILOT_HYPOTHESIS", entry.price_state);
-    assert(`pilot_not_published_${entry.deliverable_id}`, entry.public_state !== "PUBLISHED", entry.public_state);
-    assert(`pilot_not_promoted_${entry.deliverable_id}`, entry.market_fit.state !== "PROMOTE", entry.market_fit.state);
+    assert(`pilot_price_state_${id}`, entry.price_state === "PILOT_HYPOTHESIS", entry.price_state);
+    assert(`pilot_not_published_${id}`, entry.public_state !== "PUBLISHED", entry.public_state);
+    assert(`pilot_not_promoted_${id}`, entry.market_fit.state !== "PROMOTE", entry.market_fit.state);
   }
   if (entry.public_state === "BLOCKED") {
-    assert(`blocked_issue_${entry.deliverable_id}`, typeof entry.blocking_issue === "string" && /^#\d+$/.test(entry.blocking_issue), entry.blocking_issue);
-    assert(`blocked_no_route_${entry.deliverable_id}`, entry.route === null, entry.route);
-    assert(`blocked_no_lead_${entry.deliverable_id}`, entry.lead_destination === null, entry.lead_destination);
-    assert(`blocked_no_credit_${entry.deliverable_id}`, entry.credit_rule === null, entry.credit_rule);
+    assert(`blocked_issue_${id}`, typeof entry.blocking_issue === "string" && /^#\d+$/.test(entry.blocking_issue), entry.blocking_issue);
+    assert(`blocked_no_route_${id}`, entry.route === null, entry.route);
+    assert(`blocked_no_lead_${id}`, entry.lead_destination === null, entry.lead_destination);
+    assert(`blocked_no_credit_${id}`, entry.credit_rule === null, entry.credit_rule);
   } else {
-    assert(`unblocked_no_issue_${entry.deliverable_id}`, entry.blocking_issue === null, entry.blocking_issue);
-  }
-  // Anything sellable must know where the lead goes (#329 rule 5).
-  if (lib.isPriced(entry) && entry.public_state !== "BLOCKED") {
-    assert(`lead_destination_${entry.deliverable_id}`, entry.lead_destination === "warmbly:CONFENGE_WEB", entry.lead_destination);
-    assert(`analytics_attr_${entry.deliverable_id}`, entry.analytics.deliverable_attr === entry.deliverable_id, entry.analytics);
+    assert(`unblocked_no_issue_${id}`, entry.blocking_issue === null, entry.blocking_issue);
+    assert(`lead_destination_${id}`, entry.lead_destination === "warmbly:CONFENGE_WEB", entry.lead_destination);
+    assert(`analytics_attr_${id}`, entry.analytics.deliverable_attr === id, entry.analytics);
   }
 }
 
-const blocked11 = byId.get("CFG-D11");
-assert("d11_blocked_by_156", blocked11.public_state === "BLOCKED" && blocked11.blocking_issue === "#156", {
-  state: blocked11.public_state,
-  issue: blocked11.blocking_issue,
-});
+// #332 and #342: both integrity items stay blocked until #156 proves coverage.
+for (const id of ["CFG-D11", "CFG-D43"]) {
+  const entry = byId.get(id);
+  assert(`blocked_by_156_${id}`, entry.public_state === "BLOCKED" && entry.blocking_issue === "#156", {
+    state: entry.public_state,
+    issue: entry.blocking_issue,
+  });
+}
 
 // ------------------------------------------------------------- credit rules
 
 for (const entry of entries) {
   const rule = entry.credit_rule;
   if (!rule) continue;
-  assert(`credit_not_stackable_${entry.deliverable_id}`, rule.stackable === false, rule.stackable);
-  assert(`credit_window_${entry.deliverable_id}`, rule.window_days > 0 && rule.window_days <= lib.MAX_CREDIT_WINDOW_DAYS, rule.window_days);
-  assert(`credit_basis_${entry.deliverable_id}`, rule.basis === "highest_single_paid", rule.basis);
-  assert(`credit_cap_${entry.deliverable_id}`, rule.max_cents > 0 && rule.max_cents <= lib.entryAmountCents(entry), {
+  const id = entry.deliverable_id;
+  assert(`credit_not_stackable_${id}`, rule.stackable === false, rule.stackable);
+  assert(`credit_window_${id}`, rule.window_days > 0 && rule.window_days <= lib.MAX_CREDIT_WINDOW_DAYS, rule.window_days);
+  assert(`credit_basis_${id}`, rule.basis === "highest_single_paid", rule.basis);
+  assert(`credit_cap_${id}`, rule.max_cents > 0 && rule.max_cents <= lib.entryAmountCents(entry), {
     cap: rule.max_cents,
     price: lib.entryAmountCents(entry),
   });
-  assert(`credit_targets_${entry.deliverable_id}`, rule.credits_into.length > 0, rule.credits_into);
+  assert(`credit_targets_${id}`, rule.credits_into.length > 0, rule.credits_into);
   const unknown = rule.credits_into.filter((target) => !byId.has(target) && !containerIds.has(target));
-  assert(`credit_targets_resolve_${entry.deliverable_id}`, unknown.length === 0, unknown);
-  assert(`credit_no_self_${entry.deliverable_id}`, !rule.credits_into.includes(entry.deliverable_id), rule.credits_into);
+  assert(`credit_targets_resolve_${id}`, unknown.length === 0, unknown);
+  assert(`credit_no_self_${id}`, !rule.credits_into.includes(id), rule.credits_into);
   // #331 keeps the 60-day package rule exactly as published.
   if (entry.offer_container === "expansion_package") {
-    assert(`credit_package_window_${entry.deliverable_id}`, rule.window_days === 60, rule.window_days);
+    assert(`credit_package_window_${id}`, rule.window_days === 60, rule.window_days);
   }
 }
 
-// ------------------------------------------------------- lifecycle grouping
+// #329 rules 2, 3 and 4 live in the registry, not only in prose.
+assert("common_urgency_surcharge", registry.common_rules.urgency_surcharge_pct === 50, registry.common_rules);
+assert("common_no_success_fee", registry.common_rules.success_fee_allowed === false, registry.common_rules);
+assert("common_no_stacking", registry.common_rules.credit_stacking_allowed === false, registry.common_rules);
+assert("common_not_page_limited", registry.common_rules.scope_limited_by_pages === false, registry.common_rules);
+assert("common_checkout_authority", registry.common_rules.checkout_authority === "#88", registry.common_rules);
+assert("common_data_authority", registry.common_rules.data_authority === "extra-cli", registry.common_rules);
 
-const stageCounts = { DISCOVER: 0, DECIDE: 0, PROTECT: 0, OPERATE: 0 };
-for (const entry of entries) stageCounts[entry.lifecycle_stage] += 1;
-// #335: every item belongs to exactly one moment of the cycle, and every moment is used.
-const stageTotal = Object.values(stageCounts).reduce((total, count) => total + count, 0);
-assert("stage_covers_catalogue", stageTotal === entries.length, { stageTotal, entries: entries.length });
-assert("stage_none_empty", Object.values(stageCounts).every((count) => count > 0), stageCounts);
+// --------------------------------------------------- task doors, #335 primary nav
 
-const stageMeta = new Map(registry.lifecycle_stages.map((stage) => [stage.stage, stage]));
-assert("stage_meta_complete", lib.LIFECYCLE_STAGES.every((stage) => stageMeta.has(stage)), [...stageMeta.keys()]);
-for (const [stage, count] of Object.entries(stageCounts)) {
-  const meta = stageMeta.get(stage);
-  // #335: no track shows more than seven options without progressive disclosure.
-  if (count > lib.MAX_OPTIONS_WITHOUT_DISCLOSURE) {
-    assert(`stage_disclosure_${stage}`, meta.requires_progressive_disclosure === true, { count, meta });
+const doorMeta = new Map(registry.task_doors.map((door) => [door.door, door]));
+assert("doors_complete", lib.TASK_DOORS.every((door) => doorMeta.has(door)), [...doorMeta.keys()]);
+assert("doors_count", registry.task_doors.length === lib.TASK_DOORS.length, registry.task_doors.length);
+
+const membership = new Map();
+for (const door of registry.task_doors) {
+  assert(`door_order_${door.door}`, Number.isInteger(door.order) && door.order >= 1 && door.order <= 7, door.order);
+  assert(`door_question_${door.door}`, /\?$/.test(door.decision_question), door.decision_question);
+  for (const id of door.members) {
+    assert(`door_member_known_${id}`, byId.has(id), id);
+    // #335: each item appears exactly once in the primary navigation.
+    assert(`door_member_unique_${id}`, !membership.has(id), { first: membership.get(id), second: door.door });
+    membership.set(id, door.door);
   }
-  assert(`stage_question_${stage}`, /\?$/.test(meta.decision_question), meta.decision_question);
+  // #335: no more than six options on one screen before subgroup or filter.
+  if (door.members.length > lib.MAX_OPTIONS_WITHOUT_DISCLOSURE) {
+    assert(`door_disclosure_${door.door}`, door.requires_progressive_disclosure === true, {
+      count: door.members.length,
+      declared: door.requires_progressive_disclosure,
+    });
+  } else {
+    assert(`door_no_disclosure_${door.door}`, door.requires_progressive_disclosure === false, door.requires_progressive_disclosure);
+  }
+}
+assert("doors_cover_catalogue", membership.size === entries.length, { covered: membership.size, entries: entries.length });
+for (const entry of entries) {
+  assert(`door_matches_${entry.deliverable_id}`, membership.get(entry.deliverable_id) === entry.task_door, {
+    door_members: membership.get(entry.deliverable_id),
+    entry: entry.task_door,
+  });
+}
+
+// ------------------------------------------------------------ naming, #343
+
+assert("naming_authority", registry.naming_authority === "#343", registry.naming_authority);
+const canonical = new Map(naming.names.map((name) => [name.deliverable_id, name]));
+assert("naming_covers_catalogue", entries.every((entry) => canonical.has(entry.deliverable_id)));
+for (const entry of entries) {
+  const name = canonical.get(entry.deliverable_id);
+  if (!name) continue;
+  const id = entry.deliverable_id;
+  assert(`canonical_name_${id}`, entry.public_name_pt_br === name.public_name_pt_br, {
+    registry: entry.public_name_pt_br,
+    authority: name.public_name_pt_br,
+  });
+  const expected = entry.public_name === name.public_name_pt_br ? "CANONICAL" : "RENAME_PENDING";
+  assert(`name_state_matches_${id}`, entry.name_state === expected, { declared: entry.name_state, expected });
+  // A rename never loses the old name: URL, search, analytics and support keep working.
+  if (entry.name_state === "RENAME_PENDING") {
+    assert(`rename_keeps_alias_${id}`, entry.name_aliases.includes(entry.public_name), entry.name_aliases);
+  }
+  assert(`alias_excludes_canonical_${id}`, !entry.name_aliases.includes(entry.public_name_pt_br), entry.name_aliases);
+}
+// A rename must not become a silent reprice or retirement (#343 rule 10).
+for (const id of Object.keys(lib.FROZEN_PUBLISHED_PRICES_CENTS)) {
+  const entry = byId.get(id);
+  assert(`rename_keeps_state_${id}`, entry.public_state === "PUBLISHED", entry.public_state);
+  assert(`rename_keeps_price_${id}`, lib.entryAmountCents(entry) === lib.FROZEN_PUBLISHED_PRICES_CENTS[id]);
 }
 
 // ------------------------------------------------------------------- claims
 
-const claimFindings = lib.scanForbiddenClaims(registry, "registry");
-assert("no_forbidden_claims_registry", claimFindings.length === 0, claimFindings);
-const protocolClaims = lib.scanForbiddenClaims(protocol, "protocol");
-assert("no_forbidden_claims_protocol", protocolClaims.length === 0, protocolClaims);
+assert("no_forbidden_claims_registry", lib.scanForbiddenClaims(registry, "registry").length === 0, lib.scanForbiddenClaims(registry, "registry"));
+assert("no_forbidden_claims_protocol", lib.scanForbiddenClaims(protocol, "protocol").length === 0, lib.scanForbiddenClaims(protocol, "protocol"));
+
+// #338 marketing-language scan over the canonical names and offer copy.
+// GX-04: a legacy public_name awaiting the #343 rename is historical data, not a
+// new claim, so it is scanned only once it becomes the canonical name.
+const copyScanInput = entries.map((entry) => {
+  if (entry.name_state !== "RENAME_PENDING") return entry;
+  const { public_name, ...rest } = entry;
+  return rest;
+});
+const copyFindings = lib.scanCopyLanguage(copyScanInput, copyContract, "deliverables");
+assert("no_forbidden_copy_language", copyFindings.length === 0, copyFindings.slice(0, 8));
 
 // ------------------------------------------------------- market-fit protocol
 
@@ -255,9 +329,6 @@ const phase1 = protocol.phases.find((phase) => phase.phase === 1);
 const quotaSum = phase1.quotas.reduce((total, quota) => total + quota.minimum, 0);
 assert("protocol_sample", phase1.minimum_sample === 12, phase1.minimum_sample);
 assert("protocol_quota_sum", quotaSum === phase1.minimum_sample, { quotaSum, minimum: phase1.minimum_sample });
-
-const phase2 = protocol.phases.find((phase) => phase.phase === 2);
-assert("protocol_card_sort_covers_catalogue", phase2.cards === entries.length, { cards: phase2.cards, entries: entries.length });
 
 const phase3 = protocol.phases.find((phase) => phase.phase === 3);
 for (const offer of phase3.founder_led_offers) {
@@ -289,6 +360,23 @@ for (const entry of entries) {
   }
 }
 
+// ------------------------------------------------------------ pricing, #341
+
+assert("pricing_not_started", pricing.state === "NOT_STARTED", pricing.state);
+assert("pricing_records_empty", pricing.records.length === 0, pricing.records.length);
+assert("pricing_ladder_present", pricing.ladder.length > 0, pricing.ladder.length);
+for (const anchor of pricing.public_anchors) {
+  // Public competitor pricing is directional noise, never a market table.
+  assert(`anchor_not_truth_${anchor.source}`, anchor.is_market_truth === false, anchor);
+}
+
+// ---------------------------------------------------------- copy contract, #338
+
+assert("copy_not_started", copyContract.state === "NOT_STARTED", copyContract.state);
+assert("copy_reviews_empty", copyContract.reviews.length === 0, copyContract.reviews.length);
+assert("copy_eight_lenses", copyContract.adversarial_lenses.length === 8, copyContract.adversarial_lenses.length);
+assert("copy_gate_exceptions_documented", copyContract.gate_exceptions.length > 0, copyContract.gate_exceptions);
+
 // ---------------------------------------------------- first-fold contract #327
 
 assert(
@@ -310,9 +398,13 @@ for (const surface of firstFold.census) {
     assert(`census_measured_has_record_${surface.route}`, surface.measurement && surface.measurement.date, surface.measurement);
   }
 }
+// Every published money route must be in the census; unbuilt offers have no route yet.
 for (const entry of entries) {
-  if (!entry.route || !lib.isPriced(entry)) continue;
+  if (!entry.route) continue;
   assert(`census_covers_${entry.deliverable_id}`, censusRoutes.has(entry.route), entry.route);
+}
+for (const container of registry.containers) {
+  assert(`census_covers_${container.container_id}`, censusRoutes.has(container.route), container.route);
 }
 
 // ------------------------------------------------------- real proof gate #328
@@ -330,8 +422,7 @@ const reviewPattern = /"@type"\s*:\s*"(Review|AggregateRating)"/;
 for (const surface of firstFold.census) {
   const file = routeFile(surface.route);
   if (!fs.existsSync(file)) continue;
-  const html = fs.readFileSync(file, "utf8");
-  assert(`no_review_schema_${surface.route}`, !reviewPattern.test(html), surface.route);
+  assert(`no_review_schema_${surface.route}`, !reviewPattern.test(fs.readFileSync(file, "utf8")), surface.route);
 }
 
 // ------------------------------------------------------------------ report
