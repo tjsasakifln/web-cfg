@@ -58,7 +58,9 @@ Non-real records (`synthetic` / `qa` / `spam` / `internal`) persist locally and 
 
 ## Ops
 
-- Counters and safe configuration state (auth): `GET /.netlify/functions/ops?action=inbound_handoff`
+- Counters and safe configuration state (auth): `GET /.netlify/functions/ops?action=inbound_handoff`.
+  The response exposes only the versioned destination fingerprint
+  (`WARMBLY_PRODUCTION_V1`, `UNEXPECTED`, or `MISSING`), never the configured URL.
 - Aggregate historical audit (auth): `GET /.netlify/functions/ops?action=audit_inbound_requeue`
 - Strict historical recovery (auth): `POST /.netlify/functions/ops?action=requeue_inbound`
 - Drain due rows: `POST /.netlify/functions/ops?action=drain_inbound`

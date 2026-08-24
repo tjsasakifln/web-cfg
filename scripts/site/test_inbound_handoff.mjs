@@ -193,6 +193,35 @@ const inbound = loadInbound();
     CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
   });
   if (prod.ok || !prod.blocked || prod.reason !== "https_required") fail("fail_closed_http", prod);
+  const wrongCanonicalHost = inbound.resolveInboundConfig({
+    NODE_ENV: "production",
+    CONTEXT: "production",
+    CONFENGE_INBOUND_WEBHOOK_URL: "https://evil.example/api/v1/webhooks/confenge/inbound",
+    CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
+  });
+  if (
+    wrongCanonicalHost.ok ||
+    !wrongCanonicalHost.blocked ||
+    wrongCanonicalHost.reason !== "noncanonical_destination"
+  ) fail("fail_closed_noncanonical_production_destination", wrongCanonicalHost);
+  if (
+    inbound.inboundDestinationFingerprint("https://api.confenge.com.br/api/v1/webhooks/confenge/inbound") !==
+      "WARMBLY_PRODUCTION_V1" ||
+    inbound.inboundDestinationFingerprint("https://evil.example/api/v1/webhooks/confenge/inbound") !==
+      "UNEXPECTED"
+  ) fail("inbound_destination_fingerprint");
+  const canonicalProduction = inbound.resolveInboundConfig({
+    NODE_ENV: "production",
+    CONTEXT: "production",
+    CONFENGE_INBOUND_WEBHOOK_URL: "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound",
+    CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
+  });
+  if (
+    !canonicalProduction.ok ||
+    canonicalProduction.url !== "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound"
+  ) {
+    fail("canonical_production_destination_ready", canonicalProduction);
+  }
   const noSecret = inbound.resolveInboundConfig({
     NODE_ENV: "production",
     CONFENGE_INBOUND_WEBHOOK_URL: "https://ops.example/api/v1/webhooks/confenge/inbound",
@@ -675,12 +704,13 @@ try {
       data.configuration.webhook_url !== "SET" ||
       data.configuration.webhook_secret !== "SET" ||
       data.configuration.contract !== "READY" ||
-      data.configuration.reason !== null
+      data.configuration.reason !== null ||
+      data.configuration.destination_fingerprint !== "UNEXPECTED"
     ) {
       fail("ops_inbound_configuration", data.configuration);
     }
     const s = JSON.stringify(data);
-    if (s.includes("maria.costa@") || s.includes("Maria Costa") || s.includes(SECRET)) {
+    if (s.includes("maria.costa@") || s.includes("Maria Costa") || s.includes(SECRET) || s.includes(mock.url)) {
       fail("ops_counters_pii_or_secret", data);
     }
     pass("ops_inbound_configuration", data.configuration);

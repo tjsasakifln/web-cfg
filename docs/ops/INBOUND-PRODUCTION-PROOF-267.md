@@ -7,9 +7,12 @@
 - Workflow run: [32685188116](https://github.com/tjsasakifln/web-cfg/actions/runs/32685188116)
 - Immutable artifact SHA-256: `98ab2bae579a350ee07624a1bac835162253f580014c6bfcd7f69b79428da1ac`
 
-The authenticated, read-only probe now fails closed unless production reports
-`SET/SET/READY`. Run 32685188116 passed that stronger contract. It also found
-126 persisted records, zero delivered records and exactly one aggregate
+Run 32685188116 passed the authenticated `SET/SET/READY` contract. The immutable
+artifact predates the non-secret canonical-destination fingerprint; current code
+also requires `WARMBLY_PRODUCTION_V1`, HTTP 200 and `body.ok=true`, and fails
+closed on a different host. A new deploy and authenticated run are required to
+prove that stricter state. The captured run also found 126 persisted records,
+zero delivered records and exactly one aggregate
 `ELIGIBLE_REAL_NOT_CONFIGURED` candidate. No identifier or contact field is in
 the artifact.
 
@@ -18,15 +21,17 @@ the artifact.
 | Requirement | State | Evidence |
 | --- | --- | --- |
 | GitHub `OPS_TOKEN` available | PROVEN | authenticated workflow check |
-| Netlify URL/secret and contract ready | PROVEN | `SET/SET/READY` |
+| Netlify URL/secret syntactically configured | PROVEN | `SET/SET/READY` |
+| canonical Warmbly destination fingerprint | OPEN | current code requires `WARMBLY_PRODUCTION_V1`; immutable run predates the field |
 | aggregate proof committed | PROVEN | `data/revops/inbound-proof-runs/inbound-issue-267-run-32685188116.json` |
-| Warmbly automatic outbound disabled | OPEN | this repository cannot observe or control it |
+| Warmbly automatic outbound disabled | OPEN | immutable run did not capture destination health; this repository does not control the setting |
 | exactly one real record reconciled | OPEN | probe is read-only; no replay/drain occurred |
 | delivered counter greater than zero | OPEN | current value is zero |
 | consented real commercial contact | `MISSING` | never inferred from configuration |
 
-The remaining external action must be explicit and bounded: verify Warmbly
-auto-send is off, approve the single eligible record, requeue at limit 1,
+The remaining external action must be explicit and bounded: deploy the stricter
+fingerprint, rerun the authenticated proof, verify Warmbly auto-send is off,
+approve the single eligible record, requeue at limit 1,
 reconcile one receipt to one action, then rerun this proof. Do not batch replay
 and do not invent a person.
 

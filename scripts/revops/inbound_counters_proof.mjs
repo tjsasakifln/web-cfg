@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 import { createOpsJsonClient, sanitizeTransportError } from "./ops_fetch.mjs";
 import {
   inboundConfigurationSummary,
-  inboundTransportReady,
+  inboundTransportProofReady,
 } from "./inbound_proof_contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -79,10 +79,10 @@ async function run() {
     `http=${inbound.status} configuration_present=${Boolean(configuration && typeof configuration === "object")}`
   );
   out.inbound_handoff_configuration = configuration && typeof configuration === "object" ? configuration : null;
-  const transportReady = inboundTransportReady(configuration);
+  const transportReady = inboundTransportProofReady(inbound);
   check(
     "inbound_transport_configuration_ready",
-    inbound.status === 200 && transportReady,
+    transportReady,
     `http=${inbound.status} configuration=${JSON.stringify(inboundConfigurationSummary(configuration))}`
   );
   out.transport_status = transportReady ? "READY" : "BLOCKED";

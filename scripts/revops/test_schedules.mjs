@@ -11,6 +11,8 @@ import { createHash } from "crypto";
 import { createOpsJsonClient } from "./ops_fetch.mjs";
 import {
   inboundConfigurationSummary,
+  inboundTransportConfigured,
+  inboundTransportProofReady,
   inboundTransportReady,
 } from "./inbound_proof_contract.mjs";
 
@@ -64,6 +66,7 @@ function fail(n, d) {
     webhook_secret: "SET",
     contract: "READY",
     reason: null,
+    destination_fingerprint: "WARMBLY_PRODUCTION_V1",
   };
   if (!inboundTransportReady(ready)) fail("inbound_proof_ready_contract", ready);
   else pass("inbound_proof_ready_contract");
@@ -71,6 +74,7 @@ function fail(n, d) {
     { ...ready, webhook_url: "UNSET" },
     { ...ready, webhook_secret: "UNSET" },
     { ...ready, contract: "BLOCKED", reason: "destination_unhealthy" },
+    { ...ready, destination_fingerprint: "UNEXPECTED" },
     null,
   ]) {
     if (inboundTransportReady(drift)) fail("inbound_proof_rejects_configuration_drift", drift);
@@ -80,6 +84,15 @@ function fail(n, d) {
   if (summary.webhook_url !== "MISSING" || summary.webhook_secret !== "MISSING") {
     fail("inbound_proof_missing_configuration_summary", summary);
   } else pass("inbound_proof_missing_configuration_summary");
+  if (inboundTransportProofReady({ status: 503, body: { ok: true, configuration: ready } })) {
+    fail("inbound_proof_http_failure_cannot_report_ready");
+  } else pass("inbound_proof_http_failure_cannot_report_ready");
+  if (inboundTransportProofReady({ status: 200, body: { ok: false, configuration: ready } })) {
+    fail("inbound_proof_body_failure_cannot_report_ready");
+  } else pass("inbound_proof_body_failure_cannot_report_ready");
+  if (!inboundTransportProofReady({ status: 200, body: { ok: true, configuration: ready } })) {
+    fail("inbound_proof_full_response_ready");
+  } else pass("inbound_proof_full_response_ready");
 }
 
 // #267: committed production evidence stays aggregate-only and immutable.
@@ -99,10 +112,14 @@ function fail(n, d) {
     proof.issue !== 267 ||
     proof.ok !== true ||
     proof.transport_status !== "READY" ||
-    !inboundTransportReady(proof.inbound_handoff_configuration)
+    !inboundTransportConfigured(proof.inbound_handoff_configuration) ||
+    Object.prototype.hasOwnProperty.call(
+      proof.inbound_handoff_configuration,
+      "destination_fingerprint"
+    )
   ) {
     fail("inbound_proof_committed_contract", proof);
-  } else pass("inbound_proof_committed_contract");
+  } else pass("inbound_proof_committed_contract", "immutable pre-fingerprint run");
   if (
     proof.inbound_handoff_counters?.delivered !== 0 ||
     proof.consented_real_contact !== "MISSING" ||

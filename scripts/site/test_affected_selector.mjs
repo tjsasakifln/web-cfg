@@ -107,6 +107,12 @@ function expectSubset(result, mustInclude, because) {
   expectSubset(result, ["test:schedules"], "inbound backlog decision");
 }
 
+{
+  const paths = ["data/revops/inbound-proof-runs/inbound-issue-267-run-99999999999.json"];
+  const result = selectAffected(paths, scripts);
+  expectSubset(result, ["test:schedules"], "future inbound proof artifact");
+}
+
 // script.js is read by the shipped pSEO attribution test — must not omit that suite
 {
   const src = readFileSync(path.join(ROOT, "seo/scripts/test_pseo_attribution.mjs"), "utf8");

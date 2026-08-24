@@ -20,6 +20,8 @@ const {
 } = require("./inbound-backlog-policy.cjs");
 
 const INBOUND_PATH = "/api/v1/webhooks/confenge/inbound";
+const CANONICAL_INBOUND_HOST = "api.confenge.com.br";
+const CANONICAL_INBOUND_DESTINATION = "WARMBLY_PRODUCTION_V1";
 const SOURCE_INTERNAL = "CONFENGE_WEB";
 const SOURCE_WARMBLY = "CONFENGE_WEB";
 const DEFAULT_TIMEOUT_MS = 8000;
@@ -231,6 +233,28 @@ function verifyWarmblyInbound(secret, header, rawBody, nowMs = Date.now(), skewM
   return crypto.timingSafeEqual(a, b);
 }
 
+/**
+ * Stable, non-secret destination identity. Never returns the configured URL.
+ */
+function inboundDestinationFingerprint(rawUrl) {
+  const raw = String(rawUrl || "").trim();
+  if (!raw) return "MISSING";
+  try {
+    const parsed = new URL(raw);
+    const canonical = parsed.protocol === "https:"
+      && parsed.hostname.toLowerCase() === CANONICAL_INBOUND_HOST
+      && parsed.port === ""
+      && parsed.pathname === INBOUND_PATH
+      && parsed.search === ""
+      && parsed.hash === ""
+      && parsed.username === ""
+      && parsed.password === "";
+    return canonical ? CANONICAL_INBOUND_DESTINATION : "UNEXPECTED";
+  } catch {
+    return "UNEXPECTED";
+  }
+}
+
 function resolveInboundConfig(env = process.env) {
   const url = String(env.CONFENGE_INBOUND_WEBHOOK_URL || "").trim();
   const secret = String(env.CONFENGE_INBOUND_WEBHOOK_SECRET || "").trim();
@@ -267,6 +291,9 @@ function resolveInboundConfig(env = process.env) {
 
   if (parsed.pathname !== INBOUND_PATH && !parsed.pathname.endsWith(INBOUND_PATH)) {
     return { ok: false, blocked: true, reason: "invalid_path", timeoutMs, maxAttempts };
+  }
+  if (prodLike && inboundDestinationFingerprint(url) !== CANONICAL_INBOUND_DESTINATION) {
+    return { ok: false, blocked: true, reason: "noncanonical_destination", timeoutMs, maxAttempts };
   }
   if (allowHosts.length && !allowHosts.includes(parsed.hostname.toLowerCase())) {
     return { ok: false, blocked: true, reason: "host_not_allowed", timeoutMs, maxAttempts };
@@ -945,6 +972,8 @@ function summarizeHandoffs(leads) {
 
 module.exports = {
   INBOUND_PATH,
+  CANONICAL_INBOUND_HOST,
+  CANONICAL_INBOUND_DESTINATION,
   SOURCE_INTERNAL,
   SOURCE_WARMBLY,
   STATUS,
@@ -953,6 +982,7 @@ module.exports = {
   mapLeadToInboundV1,
   signWarmblyInbound,
   verifyWarmblyInbound,
+  inboundDestinationFingerprint,
   resolveInboundConfig,
   sanitizeUrl,
   urlHasPiiQuery,
