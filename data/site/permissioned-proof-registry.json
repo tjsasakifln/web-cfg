@@ -1,0 +1,27 @@
+{
+  "schema": "confenge.permissioned-proof-registry/1.0",
+  "policy": "confenge.permissioned-proof-policy/1.0",
+  "updated_at": "2026-08-24",
+  "state": "NO_APPROVED_CLIENT_PROOF",
+  "approved_public_proof_count": 0,
+  "records": [],
+  "next_test": {
+    "id": "first-real-delivery-permissioned-proof",
+    "status": "WAIT_FIRST_REAL_DELIVERY",
+    "owner": {
+      "id": "tiago-jun-sasaki",
+      "name": "Engº Tiago Sasaki"
+    },
+    "trigger": "A first real CONFENGE delivery has documentary outcome evidence and the client independently agrees to consider a scoped public proof.",
+    "required_result": "Create one private consent receipt and one registry record; end in PUBLISHED only after active scoped consent and material-hash-bound human approval, otherwise end in REJECTED or REVOKED.",
+    "forbidden_shortcuts": [
+      "fabricated_delivery",
+      "fabricated_client",
+      "commercial_contact_consent_reused_as_publication_consent",
+      "approval_by_agent_ci_or_bot",
+      "raw_consent_or_client_pii_committed",
+      "bulk_approval",
+      "publication_without_material_hash"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "fixture_only": true,
+  "proof_id": "fixture-consented-no-approver",
+  "policy_version": "1.0.0",
+  "state": "PUBLISHED",
+  "permission_class": "consented",
+  "consent": {
+    "status": "ACTIVE",
+    "captured_at": "2026-08-24T00:00:00Z",
+    "scope": {
+      "public_fields": [
+        "problem",
+        "intervention",
+        "outcome"
+      ],
+      "public_channels": [
+        "confenge.com.br"
+      ],
+      "withdrawal_channel": "PRIVATE_OWNER_CHANNEL"
+    },
+    "scope_hash": "23d979c018dbb8ed2dbe256d8aab19e26b44f8eac2d21b568fd02b646dc771ff",
+    "receipt_ref": "private://permissioned-proof/fixture-consented-no-approver"
+  },
+  "retention": {
+    "policy_days": 730,
+    "delete_after": "2028-08-23T00:00:00Z",
+    "private_material_location": "PRIVATE_ONLY"
+  },
+  "revocation": {
+    "allowed": true,
+    "channel": "PRIVATE_OWNER_CHANNEL",
+    "status": "NOT_REQUESTED",
+    "requested_at": null,
+    "effective_at": null,
+    "reason_code": null
+  },
+  "approval": {
+    "status": "PENDING",
+    "decision": null,
+    "approver": null,
+    "approved_at": null,
+    "consent_scope_hash": "23d979c018dbb8ed2dbe256d8aab19e26b44f8eac2d21b568fd02b646dc771ff",
+    "material_hash": "42afb64075fc93559cd7d793c738f2eb20743cb83c7942c3d6380b0b0ef4f519"
+  },
+  "publication": {
+    "status": "PUBLISHED",
+    "public_url": "https://confenge.com.br/casos/fixture-consented-no-approver/",
+    "published_at": "2026-08-24T01:00:00Z",
+    "material_hash": "42afb64075fc93559cd7d793c738f2eb20743cb83c7942c3d6380b0b0ef4f519"
+  }
+}

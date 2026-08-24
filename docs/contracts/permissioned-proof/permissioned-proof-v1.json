@@ -1,0 +1,215 @@
+{
+  "schema": "confenge.permissioned-proof-policy/1.0",
+  "version": "1.0.0",
+  "status": "ACTIVE_GUARD",
+  "effective_at": "2026-08-24",
+  "decision_state": "P2_DEFER_UNTIL_FIRST_REAL_DELIVERY",
+  "owner_issue": 249,
+  "authority": {
+    "public_contract_owner": "web-cfg",
+    "observed_outcome_owner": "warmbly",
+    "canonical_public_domain": "confenge.com.br",
+    "private_consent_receipt_store": "OWNER_CONTROLLED_PRIVATE_STORE",
+    "public_client_pii": "FORBIDDEN",
+    "publication_approver": {
+      "id": "tiago-jun-sasaki",
+      "name": "Engº Tiago Sasaki",
+      "human_required": true
+    }
+  },
+  "states": [
+    {
+      "id": "DRAFT",
+      "public_allowed": false
+    },
+    {
+      "id": "CONSENT_CAPTURED",
+      "public_allowed": false
+    },
+    {
+      "id": "HUMAN_REVIEW_REQUIRED",
+      "public_allowed": false
+    },
+    {
+      "id": "APPROVED",
+      "public_allowed": false
+    },
+    {
+      "id": "PUBLISHED",
+      "public_allowed": true
+    },
+    {
+      "id": "REJECTED",
+      "public_allowed": false
+    },
+    {
+      "id": "REVOKED",
+      "public_allowed": false
+    },
+    {
+      "id": "RETENTION_EXPIRED",
+      "public_allowed": false
+    }
+  ],
+  "transitions": {
+    "DRAFT": [
+      "CONSENT_CAPTURED",
+      "REJECTED"
+    ],
+    "CONSENT_CAPTURED": [
+      "HUMAN_REVIEW_REQUIRED",
+      "REVOKED",
+      "RETENTION_EXPIRED"
+    ],
+    "HUMAN_REVIEW_REQUIRED": [
+      "APPROVED",
+      "REJECTED",
+      "REVOKED",
+      "RETENTION_EXPIRED"
+    ],
+    "APPROVED": [
+      "PUBLISHED",
+      "REJECTED",
+      "REVOKED",
+      "RETENTION_EXPIRED"
+    ],
+    "PUBLISHED": [
+      "REVOKED",
+      "RETENTION_EXPIRED"
+    ],
+    "REJECTED": [
+      "RETENTION_EXPIRED"
+    ],
+    "REVOKED": [
+      "RETENTION_EXPIRED"
+    ],
+    "RETENTION_EXPIRED": []
+  },
+  "permission_classes": [
+    {
+      "id": "demonstrativo",
+      "is_client_proof": false,
+      "public_allowed": true,
+      "requires_consent": false,
+      "rule": "Must remain visibly labeled as demonstrative and never imply a client relationship."
+    },
+    {
+      "id": "consented",
+      "is_client_proof": true,
+      "public_allowed": true,
+      "requires_consent": true,
+      "rule": "Only the fields expressly listed in the active consent scope may be published."
+    },
+    {
+      "id": "confidential",
+      "is_client_proof": true,
+      "public_allowed": false,
+      "requires_consent": true,
+      "rule": "May support private delivery review, but never a public page or public structured-data claim."
+    },
+    {
+      "id": "redacted",
+      "is_client_proof": true,
+      "public_allowed": true,
+      "requires_consent": true,
+      "rule": "Redactions and the remaining publishable fields must be expressly listed in the active consent scope."
+    }
+  ],
+  "required_record_fields": [
+    "proof_id",
+    "policy_version",
+    "state",
+    "permission_class",
+    "consent",
+    "retention",
+    "revocation",
+    "approval",
+    "publication"
+  ],
+  "consent": {
+    "active_state": "ACTIVE",
+    "required_fields": [
+      "status",
+      "captured_at",
+      "scope",
+      "scope_hash",
+      "receipt_ref"
+    ],
+    "receipt_ref_prefix": "private://permissioned-proof/",
+    "scope_must_name": [
+      "public_fields",
+      "public_channels",
+      "withdrawal_channel"
+    ],
+    "rules": [
+      "Consent for commercial contact is not consent for public proof.",
+      "Silence, delivery acceptance, payment or a public contract is not publication consent.",
+      "The committed registry stores only opaque receipt references and hashes, never client PII or raw consent."
+    ]
+  },
+  "human_approval": {
+    "required_for_states": [
+      "APPROVED",
+      "PUBLISHED"
+    ],
+    "required_status": "APPROVED",
+    "required_decision": "APPROVE_PUBLICATION",
+    "binds": [
+      "proof_id",
+      "consent_scope_hash",
+      "material_hash"
+    ],
+    "automation_may_approve": false,
+    "bulk_approval": false
+  },
+  "retention": {
+    "default_days": 730,
+    "policy_source": "docs/ops/DSAR-RETENTION-RUNBOOK.md",
+    "delete_after_required": true,
+    "raw_material_location": "PRIVATE_ONLY",
+    "public_registry_content": "OPAQUE_REFERENCES_AND_HASHES_ONLY",
+    "revocation_effect": "UNPUBLISH_IMMEDIATELY",
+    "purge_mode": "HUMAN_CONFIRMED_DSAR_APPLY"
+  },
+  "revocation": {
+    "allowed_at_any_time_after_consent": true,
+    "required_fields_when_revoked": [
+      "requested_at",
+      "effective_at",
+      "reason_code"
+    ],
+    "public_effect": "REMOVE_PUBLIC_PROOF_AND_STRUCTURED_CLAIMS",
+    "approval_effect": "VOID",
+    "redirect_rule": "URL_LEVEL_DECISION_ONLY_NEVER_HOME_BLANKET_REDIRECT"
+  },
+  "publication": {
+    "allowed_state": "PUBLISHED",
+    "allowed_path_prefix": "/casos/",
+    "allowed_permission_classes": [
+      "consented",
+      "redacted"
+    ],
+    "required_fields": [
+      "status",
+      "public_url",
+      "published_at",
+      "material_hash"
+    ],
+    "required_status": "PUBLISHED",
+    "forbidden_schema_types_until_separately_authorized": [
+      "Review",
+      "AggregateRating"
+    ],
+    "fixture_publication": false
+  },
+  "analytics": {
+    "source": "CONFENGE_WEB",
+    "allowed_fields": [
+      "proof_id",
+      "permission_class",
+      "state"
+    ],
+    "pii": "FORBIDDEN",
+    "consent_receipt_ref": "FORBIDDEN"
+  }
+}
