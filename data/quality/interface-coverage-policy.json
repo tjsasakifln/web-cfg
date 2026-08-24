@@ -97,7 +97,8 @@
       {
         "family_id": "analises-contratos-publicos",
         "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
-        "reason": "indexable analysis canary; the noindex family hub cannot waive SEO"
+        "reason": "authorized canary retained as the family representative after its stale approval failed closed",
+        "seo_exempt_reason": "the entire family is intentionally noindex until a new hash-bound human INDEX approval exists"
       },
       {
         "family_id": "casos",

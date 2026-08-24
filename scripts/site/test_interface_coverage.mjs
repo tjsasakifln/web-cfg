@@ -96,7 +96,12 @@ for (const family of coverage.lighthouse.families) {
   assert(family.representative_reason, `family has no representative reason: ${family.id}`);
   const html = readFileSync(routeToFile(ROOT, family.lighthouse_representative), "utf8");
   if (family.kind === "canonical") {
-    assert(!isNoindex(html), `canonical representative must exercise SEO: ${family.id}`);
+    if (family.seo_exempt) {
+      assert(family.seo_exempt_reason, `canonical noindex family has no SEO reason: ${family.id}`);
+      assert(isNoindex(html), `canonical SEO exemption is not noindex: ${family.id}`);
+    } else {
+      assert(!isNoindex(html), `canonical representative must exercise SEO: ${family.id}`);
+    }
   } else {
     assert(family.seo_exempt_reason, `supplemental family has no SEO reason: ${family.id}`);
     assert(isNoindex(html), `supplemental representative is not noindex: ${family.id}`);
@@ -158,7 +163,7 @@ const noindexCanonical = structuredClone(policy);
 noindexCanonical.lighthouse.canonical_representatives.find((entry) => entry.family_id === "radar").route = "/radar/";
 assert.throws(
   () => deriveCoverage({ policy: noindexCanonical, registry, siteRoot: ROOT }),
-  /must exercise the SEO threshold/,
+  /must exercise SEO when an indexable family route exists/,
 );
 
 const unclassified = structuredClone(policy);

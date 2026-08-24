@@ -183,8 +183,8 @@ export function deriveCoverage(options = {}) {
         lighthouse_representative: representative.route,
         representative_reason: representative.reason,
         image_gate: Boolean(representative.image_gate),
-        seo_exempt: false,
-        seo_exempt_reason: null,
+        seo_exempt: Boolean(representative.seo_exempt_reason),
+        seo_exempt_reason: representative.seo_exempt_reason || null,
       }];
     }),
   );
@@ -257,14 +257,21 @@ export function deriveCoverage(options = {}) {
     throw new Error(`Lighthouse representatives require reasons: ${missingReasons.map((f) => f.id).join(", ")}`);
   }
 
-  const canonicalNoindexRepresentatives = [...canonicalFamilies.values()].filter((family) => {
-    const html = readFileSync(routeToFile(siteRoot, family.lighthouse_representative), "utf8");
-    return isNoindex(html);
+  const invalidCanonicalSeo = [...canonicalFamilies.values()].filter((family) => {
+    const representativeNoindex = isNoindex(
+      readFileSync(routeToFile(siteRoot, family.lighthouse_representative), "utf8"),
+    );
+    const allNoindex = family.routes.every((route) =>
+      isNoindex(readFileSync(routeToFile(siteRoot, route), "utf8"))
+    );
+    if (!representativeNoindex) return family.seo_exempt;
+    return !family.seo_exempt_reason || !allNoindex;
   });
-  if (canonicalNoindexRepresentatives.length) {
+  if (invalidCanonicalSeo.length) {
     throw new Error(
-      "canonical family representatives must exercise the SEO threshold on an indexable route: "
-        + canonicalNoindexRepresentatives.map((family) => family.id).join(", "),
+      "canonical family representatives must exercise SEO when an indexable family route exists; "
+        + "an all-noindex family requires an explicit exemption reason: "
+        + invalidCanonicalSeo.map((family) => family.id).join(", "),
     );
   }
   const invalidSupplemental = [...supplementalFamilies.values()].filter((family) => {
