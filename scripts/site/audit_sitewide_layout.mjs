@@ -131,7 +131,14 @@ async function auditWorker() {
       // parsed. Wait briefly so geometry is never sampled from raw HTML while
       // still retaining stylesheet_unloaded as a real failure signal.
       await page.waitForFunction(
-        () => [...document.querySelectorAll('link[rel="stylesheet"]')].every((link) => link.sheet),
+        () => [...document.querySelectorAll('link[rel="stylesheet"]')].every((link) => {
+          if (!link.sheet) return false;
+          try {
+            return link.sheet.cssRules.length > 0;
+          } catch {
+            return false;
+          }
+        }),
         { timeout: 5000 },
       ).catch(() => {});
       const status = response?.status() || 0;
@@ -167,7 +174,14 @@ async function auditWorker() {
         }
 
         const unloaded = [...document.querySelectorAll('link[rel="stylesheet"]')]
-          .filter((link) => !link.sheet)
+          .filter((link) => {
+            if (!link.sheet) return true;
+            try {
+              return link.sheet.cssRules.length === 0;
+            } catch {
+              return true;
+            }
+          })
           .map((link) => link.getAttribute("href"));
         if (unloaded.length) problems.push({ code: "stylesheet_unloaded", detail: unloaded });
 

@@ -132,6 +132,10 @@ assert(!axeRunner.includes("exceptionFor"), "critical/serious axe violations can
 const layoutRunner = readFileSync(new URL("./audit_sitewide_layout.mjs", import.meta.url), "utf8");
 assert(layoutRunner.includes("resolveSiteRoot"), "layout audit must serve the built public artifact");
 assert(layoutRunner.includes("loadManifestRoutes"), "layout audit must include root public HTML routes");
+for (const route of ["404.html", "comercial/privacidade-leads/index.html"]) {
+  const html = readFileSync(join(ROOT, route), "utf8");
+  assert(html.includes("/assets/simple-page-a11y-v293.css"), `${route} needs cache-busted narrow-screen CSS`);
+}
 assert(!Object.hasOwn(policy.axe, "always_include"), "historical axe route lists are forbidden");
 assert(!Object.hasOwn(policy, "known_exceptions"), "known axe exceptions are forbidden");
 

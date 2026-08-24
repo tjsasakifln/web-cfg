@@ -227,10 +227,16 @@ def test_rendered_page_states_the_out_of_range_treatment():
 
 
 def test_rendered_limitations_translate_producer_infrastructure_language():
-    payload = _payload(limitations=["Contratos refletem o estado canônico do DataLake."])
+    payload = _payload(
+        limitations=[
+            "Contratos refletem o estado canônico do DataLake.",
+            "DataLake indisponível na data de referência.",
+        ]
+    )
     decision = evaluate(payload, source_kind=SOURCE_OFFICIAL_LIVE, approvals={})
     html = render_panorama_html(payload, decision)
     assert "Contratos refletem o estado canônico do repositório de dados de referência." in html
+    assert "Repositório de dados de referência indisponível na data de referência." in html
     assert "DataLake" not in html
 
 
