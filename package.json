@@ -89,7 +89,7 @@
     "pseo:build": "python3 scripts/pseo/build.py",
     "pseo:validate": "python3 scripts/pseo/validate.py",
     "pseo:audit": "python3 scripts/pseo/audit.py && python3 scripts/pseo/editorial_audit.py",
-    "pseo:audit:production": "python3 scripts/pseo/production_audit.py",
+    "pseo:audit:production": "python3 -m scripts.pseo.production_audit",
     "pseo:verify:release": "python3 scripts/pseo/verify_release.py",
     "pseo:gsc:ingest": "python3 scripts/pseo/gsc_ingest.py",
     "pseo:evidence:freeze-shas": "python3 scripts/pseo/freeze_shas.py",

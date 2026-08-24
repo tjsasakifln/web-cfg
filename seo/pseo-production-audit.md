@@ -1,8 +1,8 @@
 # pSEO production audit
 
-- generated_at: `2026-08-02T03:44:46.438558+00:00`
+- generated_at: `2026-08-24T13:16:28.771640+00:00`
 - base_url: `https://confenge.com.br`
-- web_cfg_sha: `06edd555fab77c96e8e69d624ec58f9f785cbda0`
+- web_cfg_sha: `2285e84de30cdeb0bba32bbbb9117af6318affeb`
 - ok: **False**
 - critical_defects: `7`
 - crawlable_production: `0`
@@ -38,7 +38,7 @@ CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. index,follow / sitemap / local build
 | `/inteligencia/cenarios/aditivos-e-risco-de-margem/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/ad | no | DEPLOYED_PRODUCTION | — |
 | `/inteligencia/cenarios/inconsistencia-orcamento-edital/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/in | no | DEPLOYED_PRODUCTION | — |
 | `/inteligencia/cenarios/referencia-sinapi-sicro-margem/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/re | no | DEPLOYED_PRODUCTION | — |
-| `/radar/edificacoes-publicas-pr/` | noindex_sample | 404 | noindex,nofollow |  | no | DEPLOYED_PRODUCTION | — |
-| `/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/` | publish_candidate | 200 | noindex,follow | https://confenge.com.br/inteligencia/precos/manu | no | DEPLOYED_PRODUCTION | — |
+| `/radar/edificacoes-publicas-pr/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/radar/edificacoes-public | no | DEPLOYED_PRODUCTION | — |
+| `/inteligencia/precos/manutencao-predial-engenharia-rs-manutencao-predial/` | publish_candidate | 404 | noindex,nofollow |  | no | DEPLOYED_PRODUCTION | — |
 | `/radar/pavimentacao-infraestrutura-viaria-sc/` | publish_candidate | 200 | noindex,follow | https://confenge.com.br/radar/pavimentacao-infra | no | DEPLOYED_PRODUCTION | — |
 
