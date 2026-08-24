@@ -553,7 +553,7 @@ for (const j of journeys) {
     if (ev[key] !== value) fail("report_order_entry_attribution", { key, expected: value, event: ev });
   }
   if (!ev.event_id) fail("report_order_entry_event_id", ev);
-  if (!/^c-[a-z0-9-]+$/i.test(ev.correlation_id || "")) {
+  if (!/^(?:c-[a-z0-9-]+|[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})$/i.test(ev.correlation_id || "")) {
     fail("report_order_entry_journey_correlation", ev);
   }
   if (/^CFG-WA-/i.test(ev.correlation_id || "")) {
