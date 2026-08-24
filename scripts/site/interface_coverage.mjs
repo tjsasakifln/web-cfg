@@ -1,16 +1,10 @@
 /**
- * Declared interface-quality coverage for the public CONFENGE artifact (#293).
+ * Fail-closed interface-quality coverage for the public CONFENGE artifact.
  *
- * The axe and Lighthouse gates must not be hand-written route lists that age.
- * This module derives them from data:
- *   - the built public artifact (seo/PUBLIC-ARTIFACT-MANIFEST.json + _site HTML);
- *   - the risk rules and commercial families declared in
- *     data/quality/interface-coverage-policy.json.
- *
- * Every route with a price or a capture form is an axe route. Every commercial
- * family must declare one Lighthouse representative. A route that matches no
- * family is a hard failure, so a new URL family cannot ship without deciding
- * how it is measured.
+ * Axe routes come only from rendered visitor risk: a visible BRL amount or a
+ * capture/checkout form. Lighthouse families come from the canonical public
+ * family registry; this policy only chooses one owned representative per
+ * canonical family and classifies the intentionally noindex remainder.
  */
 import { existsSync, readFileSync } from "fs";
 import { join, resolve } from "path";
@@ -18,7 +12,10 @@ import { fileURLToPath } from "url";
 
 export const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 export const POLICY_PATH = join(ROOT, "data/quality/interface-coverage-policy.json");
+export const FAMILY_REGISTRY_PATH = join(ROOT, "data/organic/public-family-registry.json");
+const BOFU_MATRIX_PATH = join(ROOT, "data/organic/bofu-intent-matrix.json");
 const MANIFEST_PATH = join(ROOT, "seo/PUBLIC-ARTIFACT-MANIFEST.json");
+const BOFU_SOURCE = "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route";
 
 /** Prefer the built public artifact; fall back to the repo root working copy. */
 export function resolveSiteRoot() {
@@ -30,12 +27,14 @@ export function loadPolicy() {
   return JSON.parse(readFileSync(POLICY_PATH, "utf8"));
 }
 
+export function loadPublicFamilyRegistry() {
+  return JSON.parse(readFileSync(FAMILY_REGISTRY_PATH, "utf8"));
+}
+
 export function loadManifestRoutes() {
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, "utf8"));
   const routes = manifest.html_routes || [];
   if (!routes.length) throw new Error("PUBLIC-ARTIFACT-MANIFEST.json has no html_routes");
-  // html_routes covers directory routes only; root .html files (404, obrigado*)
-  // are public surfaces too and live in root_files.
   const rootFiles = (manifest.root_files || [])
     .filter((name) => name.endsWith(".html") && name !== "index.html")
     .map((name) => `/${name}`);
@@ -47,23 +46,39 @@ export function routeToFile(siteRoot, route) {
   return join(siteRoot, relative.replace(/^\//, ""));
 }
 
-const PRICE_RE = /R\$\s*\d/;
-const FORM_RE = /<form\b[^>]*>([\s\S]*?)<\/form>/gi;
+const PRICE_RE = /R\$\s*\d/u;
+const FORM_RE = /<form\b([^>]*)>([\s\S]*?)<\/form>/gi;
 const CONTROL_RE = /<(input|select|textarea)\b/i;
+const CAPTURE_ACTION_RE = /\baction\s*=\s*["']\/\.netlify\/functions\/(?:lead|nurture|conversion-intake|offer-eligibility|correction)(?:\?[^"']*)?["']/i;
+const CAPTURE_MARKER_RE = /\bdata-capture-form(?:\s*=\s*["'][^"']*["'])?(?=\s|\/?>|$)/i;
 const ROBOTS_META_RE = /<meta\b[^>]*\bname=["']robots["'][^>]*>/i;
 
-/** A capture surface is a <form> that actually collects something. */
+/** Strip non-visible payloads and normalize the entity forms used around BRL. */
+export function visibleText(html) {
+  return html
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/<(script|style|template)\b[^>]*>[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&(?:nbsp|#0*160|#x0*a0);/gi, "\u00a0")
+    .replace(/&amp;/gi, "&")
+    .replace(/\s+/gu, " ");
+}
+
+/** A capture form has a persistent endpoint or an explicit positive marker. */
 export function hasCaptureForm(html) {
   FORM_RE.lastIndex = 0;
   let match;
   while ((match = FORM_RE.exec(html)) !== null) {
-    if (CONTROL_RE.test(match[1] || "")) return true;
+    const attrs = match[1] || "";
+    const body = match[2] || "";
+    if (!CONTROL_RE.test(body)) continue;
+    if (CAPTURE_ACTION_RE.test(attrs) || CAPTURE_MARKER_RE.test(attrs)) return true;
   }
   return false;
 }
 
 export function hasPrice(html) {
-  return PRICE_RE.test(html);
+  return PRICE_RE.test(visibleText(html));
 }
 
 export function isNoindex(html) {
@@ -71,32 +86,122 @@ export function isNoindex(html) {
   return /\bcontent=["'][^"']*\bnoindex\b[^"']*["']/i.test(robots);
 }
 
-function familyFor(policy, route) {
-  for (const family of policy.commercial_families) {
-    for (const pattern of family.patterns) {
-      if (new RegExp(pattern).test(route)) return family;
-    }
-  }
-  return null;
+function serviceRoutes() {
+  const matrix = JSON.parse(readFileSync(BOFU_MATRIX_PATH, "utf8"));
+  return new Set((matrix.rows || []).map((row) => row.canonical_service_route));
 }
 
-/**
- * Derive the whole coverage plan. Throws when the policy has aged out of the
- * built artifact (unknown family, missing representative, phantom route).
- */
-export function deriveCoverage(options = {}) {
-  const policy = options.policy || loadPolicy();
-  const siteRoot = options.siteRoot || resolveSiteRoot();
-  const routes = options.routes || loadManifestRoutes();
+function canonicalMatchSpec(family, bofuRoutes) {
+  const match = family.match || {};
+  if (match.source === BOFU_SOURCE) return { routes: bofuRoutes, prefix: null };
+  if (Array.isArray(match.routes)) return { routes: new Set(match.routes), prefix: null };
+  if (typeof match.prefix === "string" && match.prefix.startsWith("/") && match.prefix !== "/") {
+    return { routes: new Set(), prefix: match.prefix };
+  }
+  throw new Error(`canonical family has an unsupported match contract: ${family.id}`);
+}
 
-  const risks = new Map();
-  const families = new Map();
-  const unassigned = [];
+/** Mirror inbound_gates.py: exact route first, then the longest prefix. */
+function canonicalFamilyFor(route, families, bofuRoutes) {
+  let best = null;
+  let bestLength = -1;
+  for (const family of families) {
+    const spec = canonicalMatchSpec(family, bofuRoutes);
+    if (spec.routes.has(route)) return family;
+    if (spec.prefix && route.startsWith(spec.prefix) && spec.prefix.length > bestLength) {
+      best = family;
+      bestLength = spec.prefix.length;
+    }
+  }
+  return best;
+}
 
-  for (const family of policy.commercial_families) {
-    families.set(family.id, { ...family, routes: [] });
+function supplementalFamilyFor(route, families) {
+  const matches = families.filter((family) =>
+    family.patterns.some((pattern) => new RegExp(pattern).test(route))
+  );
+  if (matches.length > 1) {
+    throw new Error(`route matches multiple supplemental Lighthouse families: ${route}`);
+  }
+  return matches[0] || null;
+}
+
+function validatePolicyShape(policy, registry) {
+  if (policy.axe?.always_include?.length) {
+    throw new Error("axe.always_include is forbidden: axe coverage must derive from price/capture risk");
+  }
+  if (policy.axe?.exclusions?.length) {
+    throw new Error("axe exclusions are forbidden while acceptance requires every price/capture route");
+  }
+  if (policy.known_exceptions?.length) {
+    throw new Error("critical/serious axe known exceptions are forbidden by #293");
   }
 
+  const canonicalIds = registry.families.map((family) => family.id);
+  const representatives = policy.lighthouse?.canonical_representatives || [];
+  const representativeIds = representatives.map((entry) => entry.family_id);
+  const duplicateIds = representativeIds.filter((id, index) => representativeIds.indexOf(id) !== index);
+  const missing = canonicalIds.filter((id) => !representativeIds.includes(id));
+  const unknown = representativeIds.filter((id) => !canonicalIds.includes(id));
+  if (duplicateIds.length || missing.length || unknown.length) {
+    throw new Error(
+      `canonical Lighthouse representatives must match public-family-registry exactly; `
+        + `duplicate=${[...new Set(duplicateIds)].join(",") || "none"} `
+        + `missing=${missing.join(",") || "none"} unknown=${unknown.join(",") || "none"}`,
+    );
+  }
+  const duplicateRoutes = representatives
+    .map((entry) => entry.route)
+    .filter((route, index, all) => all.indexOf(route) !== index);
+  if (duplicateRoutes.length) {
+    throw new Error(`canonical Lighthouse representatives must be unique: ${duplicateRoutes.join(", ")}`);
+  }
+}
+
+/** Derive the complete axe and Lighthouse coverage plan. */
+export function deriveCoverage(options = {}) {
+  const policy = options.policy || loadPolicy();
+  const registry = options.registry || loadPublicFamilyRegistry();
+  const siteRoot = options.siteRoot || resolveSiteRoot();
+  const routes = options.routes || loadManifestRoutes();
+  validatePolicyShape(policy, registry);
+
+  const routeSet = new Set(routes);
+  const bofuRoutes = serviceRoutes();
+  const representativeById = new Map(
+    policy.lighthouse.canonical_representatives.map((entry) => [entry.family_id, entry]),
+  );
+  const canonicalFamilies = new Map(
+    registry.families.map((family) => {
+      const representative = representativeById.get(family.id);
+      return [family.id, {
+        id: family.id,
+        label: family.visitor_job,
+        kind: "canonical",
+        routes: [],
+        lighthouse_representative: representative.route,
+        representative_reason: representative.reason,
+        image_gate: Boolean(representative.image_gate),
+        seo_exempt: false,
+        seo_exempt_reason: null,
+      }];
+    }),
+  );
+  const supplementalFamilies = new Map(
+    (policy.supplemental_families || []).map((family) => [family.id, {
+      ...family,
+      kind: "supplemental_noindex",
+      routes: [],
+      seo_exempt: true,
+    }]),
+  );
+  if (supplementalFamilies.size !== (policy.supplemental_families || []).length) {
+    throw new Error("supplemental Lighthouse family ids must be unique");
+  }
+
+  const risks = new Map();
+  const familyOf = new Map();
+  const unassigned = [];
   for (const route of routes) {
     const file = routeToFile(siteRoot, route);
     if (!existsSync(file)) {
@@ -108,56 +213,67 @@ export function deriveCoverage(options = {}) {
     if (hasCaptureForm(html)) reasons.push("capture_form");
     if (reasons.length) risks.set(route, reasons);
 
-    const family = familyFor(policy, route);
-    if (!family) unassigned.push(route);
-    else families.get(family.id).routes.push(route);
+    const canonical = canonicalFamilyFor(route, registry.families, bofuRoutes);
+    if (canonical) {
+      canonicalFamilies.get(canonical.id).routes.push(route);
+      familyOf.set(route, canonical.id);
+      continue;
+    }
+    const supplemental = supplementalFamilyFor(route, policy.supplemental_families || []);
+    if (!supplemental) {
+      unassigned.push(route);
+      continue;
+    }
+    supplementalFamilies.get(supplemental.id).routes.push(route);
+    familyOf.set(route, supplemental.id);
   }
 
   if (unassigned.length) {
     throw new Error(
-      "routes match no commercial family in data/quality/interface-coverage-policy.json — "
-        + "declare the family and its Lighthouse representative before shipping: "
+      "routes match neither the canonical public-family-registry nor a supplemental noindex family: "
         + unassigned.join(", "),
     );
   }
 
-  const emptyFamilies = [...families.values()].filter((f) => !f.routes.length);
+  const families = [...canonicalFamilies.values(), ...supplementalFamilies.values()];
+  const emptyFamilies = families.filter((family) => !family.routes.length);
   if (emptyFamilies.length) {
-    throw new Error(
-      `commercial families declared but absent from the built artifact: ${emptyFamilies
-        .map((f) => f.id)
-        .join(", ")}`,
-    );
+    throw new Error(`Lighthouse families absent from the artifact: ${emptyFamilies.map((f) => f.id).join(", ")}`);
   }
-
-  const routeSet = new Set(routes);
-  const alwaysInclude = policy.axe.always_include || [];
-  const phantom = alwaysInclude.map((e) => e.route).filter((r) => !routeSet.has(r));
-  if (phantom.length) {
-    throw new Error(`axe.always_include names routes absent from the artifact: ${phantom.join(", ")}`);
-  }
-
-  const missingRepresentative = [...families.values()].filter(
-    (f) => !routeSet.has(f.lighthouse_representative),
+  const invalidRepresentatives = families.filter(
+    (family) => !family.routes.includes(family.lighthouse_representative),
   );
-  if (missingRepresentative.length) {
+  if (invalidRepresentatives.length) {
     throw new Error(
-      `lighthouse_representative absent from the artifact: ${missingRepresentative
-        .map((f) => `${f.id} -> ${f.lighthouse_representative}`)
-        .join(", ")}`,
+      "Lighthouse representative must belong to its resolved family: "
+        + invalidRepresentatives
+          .map((family) => `${family.id} -> ${family.lighthouse_representative}`)
+          .join(", "),
     );
   }
+  const missingReasons = families.filter((family) => !family.representative_reason);
+  if (missingReasons.length) {
+    throw new Error(`Lighthouse representatives require reasons: ${missingReasons.map((f) => f.id).join(", ")}`);
+  }
 
-  const seoExemptFamilies = [...families.values()].filter((family) => family.seo_exempt);
-  const invalidSeoExemptFamilies = seoExemptFamilies.filter((family) => {
-    if (!family.seo_exempt_reason) return true;
+  const canonicalNoindexRepresentatives = [...canonicalFamilies.values()].filter((family) => {
     const html = readFileSync(routeToFile(siteRoot, family.lighthouse_representative), "utf8");
-    return !isNoindex(html);
+    return isNoindex(html);
   });
-  if (invalidSeoExemptFamilies.length) {
+  if (canonicalNoindexRepresentatives.length) {
     throw new Error(
-      "SEO exemptions require a reason and an intentional noindex representative: "
-        + invalidSeoExemptFamilies.map((family) => family.id).join(", "),
+      "canonical family representatives must exercise the SEO threshold on an indexable route: "
+        + canonicalNoindexRepresentatives.map((family) => family.id).join(", "),
+    );
+  }
+  const invalidSupplemental = [...supplementalFamilies.values()].filter((family) => {
+    if (!family.seo_exempt_reason) return true;
+    return family.routes.some((route) => !isNoindex(readFileSync(routeToFile(siteRoot, route), "utf8")));
+  });
+  if (invalidSupplemental.length) {
+    throw new Error(
+      "supplemental Lighthouse families require a reason and must contain only noindex routes: "
+        + invalidSupplemental.map((family) => family.id).join(", "),
     );
   }
 
@@ -174,8 +290,7 @@ export function deriveCoverage(options = {}) {
   const invalidAdditionalSeoExemptions = additionalLighthousePages.filter((entry) => {
     if (!entry.seo_exempt) return false;
     if (!entry.seo_exempt_reason) return true;
-    const html = readFileSync(routeToFile(siteRoot, entry.route), "utf8");
-    return !isNoindex(html);
+    return !isNoindex(readFileSync(routeToFile(siteRoot, entry.route), "utf8"));
   });
   if (invalidAdditionalSeoExemptions.length) {
     throw new Error(
@@ -184,31 +299,9 @@ export function deriveCoverage(options = {}) {
     );
   }
 
-  const familyOf = new Map();
-  for (const family of families.values()) {
-    for (const route of family.routes) familyOf.set(route, family.id);
-  }
-
-  // Selected axe routes: risk-derived union always_include, minus declared exclusions.
-  const exclusions = policy.axe.exclusions || [];
-  const excludedMap = new Map();
-  const selected = new Map();
-
-  const consider = (route, why) => {
-    const hit = exclusions.find((e) => new RegExp(e.route_pattern).test(route));
-    if (hit) {
-      excludedMap.set(route, { route, reason: hit.reason, matched_by: why, rule: hit.route_pattern });
-      return;
-    }
-    const entry = selected.get(route) || { route, family: familyOf.get(route), reasons: [] };
-    for (const value of why) if (!entry.reasons.includes(value)) entry.reasons.push(value);
-    selected.set(route, entry);
-  };
-
-  for (const [route, reasons] of risks) consider(route, reasons);
-  for (const entry of alwaysInclude) consider(entry.route, ["always_include"]);
-
-  // Declared rotating sampling, only if the policy turns it on.
+  const selected = new Map(
+    [...risks].map(([route, reasons]) => [route, { route, family: familyOf.get(route), reasons }]),
+  );
   const sampling = policy.axe.sampling || { enabled: false };
   const sampled = { enabled: Boolean(sampling.enabled), reason: sampling.reason, dropped: [] };
   if (sampling.enabled && Number(sampling.max_routes_per_family) > 0) {
@@ -216,93 +309,107 @@ export function deriveCoverage(options = {}) {
     const seed = isoWeekSeed();
     sampled.seed = seed;
     sampled.max_routes_per_family = cap;
-    const mandatory = new Set(alwaysInclude.map((e) => e.route));
     const byFamily = new Map();
     for (const entry of selected.values()) {
       if (!byFamily.has(entry.family)) byFamily.set(entry.family, []);
       byFamily.get(entry.family).push(entry.route);
     }
     for (const [familyId, familyRoutes] of byFamily) {
-      const optional = familyRoutes.filter((r) => !mandatory.has(r)).sort();
-      const keepCount = Math.max(0, cap - (familyRoutes.length - optional.length));
-      if (optional.length <= keepCount) continue;
-      const offset = seed % optional.length;
+      if (familyRoutes.length <= cap) continue;
+      const ordered = familyRoutes.sort();
+      const offset = seed % ordered.length;
       const drawn = new Set();
-      for (let i = 0; i < keepCount; i += 1) drawn.add(optional[(offset + i) % optional.length]);
-      for (const route of optional) {
+      for (let i = 0; i < cap; i += 1) drawn.add(ordered[(offset + i) % ordered.length]);
+      for (const route of ordered) {
         if (drawn.has(route)) continue;
         selected.delete(route);
         sampled.dropped.push({ route, family: familyId });
-        excludedMap.set(route, {
-          route,
-          reason: `declared rotating sample (seed ${seed}, max ${cap} per family) — covered on another rotation`,
-          matched_by: ["sampling"],
-        });
       }
     }
   }
 
   const axeRoutes = [...selected.values()].sort((a, b) => a.route.localeCompare(b.route));
-  const notSampled = routes
-    .filter((r) => !selected.has(r))
+  const axeNotSampled = routes
+    .filter((route) => !selected.has(route))
     .map((route) => {
-      const excluded = excludedMap.get(route);
-      if (excluded) return excluded;
+      const dropped = sampled.dropped.find((entry) => entry.route === route);
       return {
         route,
         family: familyOf.get(route),
-        reason:
-          "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide "
-          + "and the template semantics are proved by this family's covered representative",
-        matched_by: [],
+        reason: dropped
+          ? `declared rotating sample (seed ${sampled.seed}, max ${sampled.max_routes_per_family} per family)`
+          : "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        matched_by: dropped ? ["sampling"] : [],
+      };
+    });
+
+  const representativePages = families.map((family) => family.lighthouse_representative);
+  const lighthousePages = [
+    ...representativePages,
+    ...additionalLighthousePages.map((entry) => entry.route),
+  ];
+  if (new Set(lighthousePages).size !== lighthousePages.length) {
+    throw new Error("Lighthouse family representatives and additional pages must be unique");
+  }
+  const lighthouseSelected = new Set(lighthousePages);
+  const lighthouseNotSampled = routes
+    .filter((route) => !lighthouseSelected.has(route))
+    .map((route) => {
+      const familyId = familyOf.get(route);
+      const family = families.find((entry) => entry.id === familyId);
+      return {
+        route,
+        family: familyId,
+        reason: `template semantics represented by ${family.lighthouse_representative} for family ${familyId}`,
       };
     });
 
   return {
     site_root: siteRoot === ROOT ? "." : "_site",
     policy_path: "data/quality/interface-coverage-policy.json",
+    family_registry_path: "data/organic/public-family-registry.json",
     route_count: routes.length,
     viewports: policy.axe.viewports,
     axe: {
       route_count: axeRoutes.length,
       page_loads: axeRoutes.length * policy.axe.viewports.length,
       routes: axeRoutes,
-      price_route_count: [...risks.values()].filter((r) => r.includes("price")).length,
-      capture_form_route_count: [...risks.values()].filter((r) => r.includes("capture_form")).length,
+      price_route_count: [...risks.values()].filter((reasons) => reasons.includes("price")).length,
+      capture_form_route_count: [...risks.values()].filter((reasons) => reasons.includes("capture_form")).length,
       sampling: sampled,
-      not_sampled_count: notSampled.length,
-      not_sampled: notSampled,
+      not_sampled_count: axeNotSampled.length,
+      not_sampled: axeNotSampled,
     },
     lighthouse: {
       form_factor: policy.lighthouse.form_factor,
       viewport: policy.lighthouse.viewport,
       thresholds: policy.lighthouse.thresholds,
-      families: [...families.values()].map((f) => ({
-        id: f.id,
-        label: f.label,
-        route_count: f.routes.length,
-        lighthouse_representative: f.lighthouse_representative,
-        representative_reason: f.representative_reason,
-        image_gate: Boolean(f.image_gate),
-        seo_exempt: Boolean(f.seo_exempt),
-        seo_exempt_reason: f.seo_exempt_reason || null,
+      canonical_family_count: canonicalFamilies.size,
+      supplemental_family_count: supplementalFamilies.size,
+      families: families.map((family) => ({
+        id: family.id,
+        label: family.label,
+        kind: family.kind,
+        route_count: family.routes.length,
+        lighthouse_representative: family.lighthouse_representative,
+        representative_reason: family.representative_reason,
+        image_gate: Boolean(family.image_gate),
+        seo_exempt: Boolean(family.seo_exempt),
+        seo_exempt_reason: family.seo_exempt_reason || null,
       })),
       additional_pages: additionalLighthousePages,
-      pages: [...new Set([
-        ...[...families.values()].map((f) => f.lighthouse_representative),
-        ...additionalLighthousePages.map((entry) => entry.route),
-      ])],
-      image_gate_pages: [...new Set([
-        ...[...families.values()].filter((f) => f.image_gate).map((f) => f.lighthouse_representative),
+      pages: lighthousePages,
+      image_gate_pages: [
+        ...families.filter((family) => family.image_gate).map((family) => family.lighthouse_representative),
         ...additionalLighthousePages.filter((entry) => entry.image_gate).map((entry) => entry.route),
-      ])],
-      seo_exempt_pages: [...new Set([
-        ...[...families.values()].filter((f) => f.seo_exempt).map((f) => f.lighthouse_representative),
+      ],
+      seo_exempt_pages: [
+        ...families.filter((family) => family.seo_exempt).map((family) => family.lighthouse_representative),
         ...additionalLighthousePages.filter((entry) => entry.seo_exempt).map((entry) => entry.route),
-      ])],
-      exclusions: policy.lighthouse_exclusions || [],
+      ],
+      not_sampled_count: lighthouseNotSampled.length,
+      not_sampled: lighthouseNotSampled,
     },
-    known_exceptions: policy.known_exceptions || [],
   };
 }
 
@@ -318,37 +425,19 @@ function isoWeekSeed() {
 
 /** Human-readable coverage declaration printed by every gate that uses it. */
 export function formatCoverageDeclaration(coverage) {
-  const lines = [];
-  lines.push(
+  return [
     `coverage: ${coverage.axe.route_count}/${coverage.route_count} routes x `
       + `${coverage.viewports.length} viewports (${coverage.viewports
-        .map((v) => `${v.id} ${v.width}x${v.height}`)
+        .map((viewport) => `${viewport.id} ${viewport.width}x${viewport.height}`)
         .join(", ")}) = ${coverage.axe.page_loads} page loads`,
-  );
-  lines.push(
     `risk rules: price=${coverage.axe.price_route_count} routes, `
       + `capture_form=${coverage.axe.capture_form_route_count} routes`,
-  );
-  lines.push(
-    `sampling: ${coverage.axe.sampling.enabled ? `on (seed ${coverage.axe.sampling.seed})` : "off"} — ${coverage.axe.sampling.reason}`,
-  );
-  lines.push(
-    `not sampled: ${coverage.axe.not_sampled_count} routes, each with a recorded reason in the report`,
-  );
-  lines.push(
-    `lighthouse families: ${coverage.lighthouse.families.length} — `
-      + coverage.lighthouse.families.map((f) => `${f.id}:${f.lighthouse_representative}`).join(" "),
-  );
-  if (coverage.known_exceptions.length) {
-    lines.push(`known exceptions (${coverage.known_exceptions.length}):`);
-    for (const item of coverage.known_exceptions) {
-      lines.push(
-        `  - ${item.route} @ ${item.viewport} rule=${item.rule} registered=${item.registered_at} `
-          + `review=${item.review_by} — ${item.reason}`,
-      );
-    }
-  } else {
-    lines.push("known exceptions: none registered");
-  }
-  return lines.join("\n");
+    `sampling: ${coverage.axe.sampling.enabled ? `on (seed ${coverage.axe.sampling.seed})` : "off"} — `
+      + coverage.axe.sampling.reason,
+    `axe not sampled: ${coverage.axe.not_sampled_count} routes, each with a recorded reason`,
+    `lighthouse families: ${coverage.lighthouse.canonical_family_count} canonical + `
+      + `${coverage.lighthouse.supplemental_family_count} supplemental noindex; `
+      + `${coverage.lighthouse.pages.length} pages, ${coverage.lighthouse.not_sampled_count} omissions recorded`,
+    "axe critical/serious exceptions: unsupported",
+  ].join("\n");
 }

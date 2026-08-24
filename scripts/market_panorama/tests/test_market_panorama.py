@@ -230,7 +230,8 @@ def test_rendered_limitations_translate_producer_infrastructure_language():
     payload = _payload(limitations=["Contratos refletem o estado canônico do DataLake."])
     decision = evaluate(payload, source_kind=SOURCE_OFFICIAL_LIVE, approvals={})
     html = render_panorama_html(payload, decision)
-    assert "base canônica de dados" in html
+    assert "Contratos refletem o estado canônico da base canônica de dados." in html
+    assert "do base canônica" not in html
     assert "DataLake" not in html
 
 
