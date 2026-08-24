@@ -1,27 +1,32 @@
 {
   "decisions": [
     {
-      "content_hash": "sha256:bde025fed2ba4247c79f6e57358c5187b56fb8bbdeecf2e03e2bacbe4e58903a",
+      "content_hash": "sha256:3332d3f020b9f5a21a37451b960cee934d1c628576ab585edb54074cfad8882b",
       "indexable": false,
-      "panorama_id": "mp-518b8c14f902",
+      "panorama_id": "mp-7dfb54ba1ea3",
       "reason_codes": [
-        "payload_not_official_live",
-        "payload_not_publication_ready"
+        "no_individual_index_approval"
       ],
       "slug": "obras-publicas-sc-2026-08",
-      "state": "BLOCKED"
+      "state": "PUBLISHABLE_NOINDEX"
     }
   ],
   "evaluated": 1,
   "handoff": {
-    "decision": "FIXTURE"
+    "content_hash": "sha256:3332d3f020b9f5a21a37451b960cee934d1c628576ab585edb54074cfad8882b",
+    "decision": "READY",
+    "dossier_id": "cfg-dossier-cb06e7fa204654f7",
+    "producer_commit": "0eed54de0d3dc4647633277fe362acbf4d59e115"
   },
   "index_count": 0,
   "reason_codes": [],
-  "source_kind": "test_only_fixture",
+  "source_kind": "official_live",
   "states": [
-    "BLOCKED"
+    "PUBLISHABLE_NOINDEX"
   ],
-  "test_only": true,
-  "written": {}
+  "test_only": false,
+  "written": {
+    "hub": "/home/tjsasakifln/code/confenge/web-cfg-293-current/panorama-mercado-obras-publicas/index.html",
+    "mp-7dfb54ba1ea3": "/home/tjsasakifln/code/confenge/web-cfg-293-current/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/index.html"
+  }
 }

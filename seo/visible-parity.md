@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `76`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/web-cfg/.claude/worktrees/agent-a439004ff77cf6cf0/_site`
+- site_root: `/home/tjsasakifln/code/confenge/web-cfg-293-current/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -57,7 +57,7 @@
 | https://confenge.com.br/diagnostico-b2g-expansao/ | True | — | Organization,BreadcrumbList,Person | Diagnóstico B2G de Expansão |
 | https://confenge.com.br/diagnostico-pre-licitacao/ | True | — | Organization,Person,BreadcrumbList | Diagnóstico pré-licitação para obras públicas |
 | https://confenge.com.br/diretoria-b2g/ | True | — | Organization,Person,BreadcrumbList | Diretoria B2G fracionada |
-| https://confenge.com.br/entregas/ | True | — | Organization,BreadcrumbList | Veja o que chega à mesa antes de contratar. |
+| https://confenge.com.br/entregas/ | True | — | Organization,BreadcrumbList | Oito entregas, lado a lado, antes de contratar. |
 | https://confenge.com.br/especialista/tiago-jun-sasaki/ | True | — | Organization,Person,BreadcrumbList | Engº Tiago Sasaki |
 | https://confenge.com.br/ferramentas/ | True | — |  | O que você precisa resolver agora? |
 | https://confenge.com.br/ferramentas/checklist-reequilibrio/ | True | — | Organization | Checklist de documentação para reequilíbrio |

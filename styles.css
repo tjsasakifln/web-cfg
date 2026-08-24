@@ -990,8 +990,6 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 .aside-card--primary{background:#071a31;border-color:#0a294b;color:#fff}
 .aside-card--primary h2,.aside-card--primary .aside-title{color:#fff}
 .aside-card--primary p{color:#c8d4df}
-/* #293: the dark primary aside inherits the light-surface kicker green (2.85:1). */
-.aside-card--primary .aside-kicker{color:#8ed08e}
 
 /* Criterion / document lists: less boxy */
 .criterion-card,.document-list li,.error-list li{

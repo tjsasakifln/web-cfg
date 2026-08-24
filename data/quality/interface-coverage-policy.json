@@ -1,7 +1,7 @@
 {
   "schema_version": "interface-coverage-policy-v1",
   "issue": 293,
-  "updated_at": "2026-08-23",
+  "updated_at": "2026-08-24",
   "purpose": "Declare, from data and not from a hand-written route list, which public routes the axe and Lighthouse gates must cover, at which viewports, and what is deliberately left out and why.",
   "axe": {
     "viewports": [
@@ -57,7 +57,16 @@
     "form_factor": "mobile",
     "viewport": { "width": 390, "height": 844, "device_scale_factor": 2 },
     "thresholds": { "performance": 90, "accessibility": 95, "best_practices": 95, "seo": 95 },
-    "thresholds_note": "#293 widens coverage only. Any change to these numbers belongs to a different issue."
+    "thresholds_note": "#293 widens coverage only. Any change to these numbers belongs to a different issue.",
+    "additional_pages": [
+      {
+        "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+        "reason": "article-template representative that preserves the #253 responsive-image regression gate",
+        "image_gate": true,
+        "seo_exempt": true,
+        "seo_exempt_reason": "intentional noindex,follow editorial review surface"
+      }
+    ]
   },
   "commercial_families": [
     {
@@ -95,7 +104,8 @@
         "^/reequilibrio-obras-publicas/$"
       ],
       "lighthouse_representative": "/acompanhamento-contratos-obras/",
-      "representative_reason": "shared pillar template; this route also carries the #253 responsive-image regression gate"
+      "representative_reason": "shared pillar template; this route also carries the #253 responsive-image regression gate",
+      "image_gate": true
     },
     {
       "id": "escada-de-valor",
@@ -151,28 +161,36 @@
       "label": "Inteligencia de mercado (pSEO)",
       "patterns": ["^/inteligencia/", "^/assets/data-desk/", "^/metodologia-inteligencia/$"],
       "lighthouse_representative": "/inteligencia/",
-      "representative_reason": "index of the largest pSEO family"
+      "representative_reason": "index of the largest pSEO family",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,follow containment surface until editorial and data approval"
     },
     {
       "id": "radar-mercado",
       "label": "Radar de mercado",
       "patterns": ["^/radar/"],
       "lighthouse_representative": "/radar/edificacoes-publicas-sc/",
-      "representative_reason": "priced radar route on the shared radar template"
+      "representative_reason": "priced radar route on the shared radar template",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,follow route while its freshness and quality gates reject publication"
     },
     {
       "id": "panorama-mercado",
       "label": "Panorama de mercado",
       "patterns": ["^/panorama-mercado-obras-publicas/"],
       "lighthouse_representative": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
-      "representative_reason": "the published panorama edition, heavier than its index"
+      "representative_reason": "the rendered panorama edition, heavier than its index",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,nofollow,noarchive while publication_authorization and index_authorization are false"
     },
     {
       "id": "analise-contrato",
       "label": "Analises de contrato",
       "patterns": ["^/analises-contratos-publicos/"],
       "lighthouse_representative": "/analises-contratos-publicos/",
-      "representative_reason": "index of the contract-analysis family"
+      "representative_reason": "index of the contract-analysis family",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,nofollow,noarchive pre-publication surface"
     },
     {
       "id": "piloto-comercial",
@@ -195,7 +213,9 @@
       "label": "Superficies transacionais e pos-conversao",
       "patterns": ["^/obrigado", "^/nurture/", "^/correcoes/$", "^/comercial/"],
       "lighthouse_representative": "/obrigado.html",
-      "representative_reason": "the post-conversion surface every form redirects to"
+      "representative_reason": "the post-conversion surface every form redirects to",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,follow post-conversion utility page"
     },
     {
       "id": "institucional-legal",

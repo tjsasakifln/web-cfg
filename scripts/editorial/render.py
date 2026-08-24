@@ -513,7 +513,7 @@ def render_page(page: dict[str, Any]) -> str:
         extra_head=(
             '<meta name="editorial-material-hash" content="'
             + e(current_material_hash)
-            + '"/>'
+            + '"/><link href="/assets/editorial-a11y.css" rel="stylesheet"/>'
         ),
     )
 

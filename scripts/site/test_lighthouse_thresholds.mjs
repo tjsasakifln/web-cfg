@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { evaluateLighthouseResults, percentile75 } from "./lighthouse_thresholds.mjs";
+import { ROOT, deriveCoverage, loadPolicy } from "./interface_coverage.mjs";
 
 const home = (run, performance, tbt_ms, longest_own_task_ms) => ({
   path: "/",
@@ -46,27 +47,30 @@ for (const [name, rows] of [
 const committedSummary = JSON.parse(
   readFileSync(new URL("../../docs/lighthouse-runs/summary.json", import.meta.url), "utf8"),
 );
-const expectedRows = [
-  "/#1",
-  "/#2",
-  "/#3",
-  "/acompanhamento-contratos-obras/#1",
-  "/conteudos/#1",
-  "/conteudos/documentos-reequilibrio-obra-publica/#1",
-  "/diretoria-b2g/#1",
-];
+const interfaceCoverage = deriveCoverage({ policy: loadPolicy(), siteRoot: ROOT });
+const expectedRows = interfaceCoverage.lighthouse.pages.flatMap((path) =>
+  path === "/" ? ["/#1", "/#2", "/#3"] : [`${path}#1`],
+);
 assert.deepEqual(
   (committedSummary.results || []).map((row) => `${row.path}#${row.run}`).sort(),
-  expectedRows,
+  expectedRows.sort(),
   "committed Lighthouse evidence must cover the complete CI matrix",
+);
+assert.deepEqual(
+  committedSummary.coverage.pages,
+  interfaceCoverage.lighthouse.pages,
+  "committed evidence must name the derived family representatives",
+);
+assert.deepEqual(
+  committedSummary.coverage.thresholds,
+  interfaceCoverage.lighthouse.thresholds,
+  "committed evidence must preserve the declared thresholds",
 );
 const committedEvaluation = evaluateLighthouseResults(committedSummary.results, {
   homeRuns: 3,
-  imageGatePages: new Set([
-    "/conteudos/documentos-reequilibrio-obra-publica/",
-    "/acompanhamento-contratos-obras/",
-  ]),
-  seoExemptPages: new Set(["/conteudos/documentos-reequilibrio-obra-publica/"]),
+  imageGatePages: new Set(interfaceCoverage.lighthouse.image_gate_pages),
+  seoExemptPages: new Set(interfaceCoverage.lighthouse.seo_exempt_pages),
+  thresholds: interfaceCoverage.lighthouse.thresholds,
 });
 assert.deepEqual(
   committedSummary.evaluation,

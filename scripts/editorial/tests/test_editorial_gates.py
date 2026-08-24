@@ -98,6 +98,7 @@ def test_naturalness_on_bodies():
 
 
 def test_render_has_contextual_ctas_and_no_internal_terms():
+    assert (ROOT / "assets" / "editorial-a11y.css").is_file()
     for page in _load_pages():
         page = {**page, "status": "EDITORIAL_REVIEWED", "material_hash": material_hash(page)}
         html = render_page(page)
@@ -107,6 +108,7 @@ def test_render_has_contextual_ctas_and_no_internal_terms():
         assert ok_em, (page["page_id"], detail_em)
         assert not find_internal_terms(html), page["page_id"]
         assert 'data-content-type="' in html
+        assert '<link href="/assets/editorial-a11y.css" rel="stylesheet"/>' in html
         # unapproved must be noindex
         assert "noindex" in html.lower()
 

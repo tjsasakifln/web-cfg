@@ -226,6 +226,14 @@ def test_rendered_page_states_the_out_of_range_treatment():
     assert "Ausência de observação não é ausência de edital." in html
 
 
+def test_rendered_limitations_translate_producer_infrastructure_language():
+    payload = _payload(limitations=["Contratos refletem o estado canônico do DataLake."])
+    decision = evaluate(payload, source_kind=SOURCE_OFFICIAL_LIVE, approvals={})
+    html = render_panorama_html(payload, decision)
+    assert "base canônica de dados" in html
+    assert "DataLake" not in html
+
+
 def test_rendered_page_is_byte_stable():
     payload = _payload()
     decision = evaluate(payload, source_kind=SOURCE_OFFICIAL_LIVE, approvals={})

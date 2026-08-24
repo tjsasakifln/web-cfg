@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -254,7 +255,13 @@ def _opportunities_block(payload: dict[str, Any]) -> str:
 
 def _limitations_block(payload: dict[str, Any]) -> str:
     limitations = payload.get("limitations") or []
-    items = "".join(f"<li>{e(text)}</li>" for text in limitations)
+    # The producer owns the fact and provenance; the public renderer owns
+    # visitor-facing language. Keep infrastructure vocabulary out of copy.
+    public_limitations = [
+        re.sub(r"\bDataLake\b", "base canônica de dados", str(text), flags=re.IGNORECASE)
+        for text in limitations
+    ]
+    items = "".join(f"<li>{e(text)}</li>" for text in public_limitations)
     reasons = payload.get("reason_codes") or []
     reason_html = ""
     if reasons:

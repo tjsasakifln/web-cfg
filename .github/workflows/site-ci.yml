@@ -119,9 +119,6 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           LH_HOME_RUNS: "3"
-          LH_PAGES: "/,/diretoria-b2g/,/conteudos/,/conteudos/documentos-reequilibrio-obra-publica/,/acompanhamento-contratos-obras/"
-          LH_IMAGE_GATE_PAGES: "/conteudos/documentos-reequilibrio-obra-publica/,/acompanhamento-contratos-obras/"
-          LH_SEO_EXEMPT_PAGES: "/conteudos/documentos-reequilibrio-obra-publica/" # intentional noindex,follow
         run: |
           npm run test:lighthouse
           LH_REQUIRE_RAW_EVIDENCE=1 npm run test:lighthouse-gates

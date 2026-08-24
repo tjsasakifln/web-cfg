@@ -50,6 +50,7 @@ export function routeToFile(siteRoot, route) {
 const PRICE_RE = /R\$\s*\d/;
 const FORM_RE = /<form\b[^>]*>([\s\S]*?)<\/form>/gi;
 const CONTROL_RE = /<(input|select|textarea)\b/i;
+const ROBOTS_META_RE = /<meta\b[^>]*\bname=["']robots["'][^>]*>/i;
 
 /** A capture surface is a <form> that actually collects something. */
 export function hasCaptureForm(html) {
@@ -63,6 +64,11 @@ export function hasCaptureForm(html) {
 
 export function hasPrice(html) {
   return PRICE_RE.test(html);
+}
+
+export function isNoindex(html) {
+  const robots = html.match(ROBOTS_META_RE)?.[0] || "";
+  return /\bcontent=["'][^"']*\bnoindex\b[^"']*["']/i.test(robots);
 }
 
 function familyFor(policy, route) {
@@ -139,6 +145,42 @@ export function deriveCoverage(options = {}) {
       `lighthouse_representative absent from the artifact: ${missingRepresentative
         .map((f) => `${f.id} -> ${f.lighthouse_representative}`)
         .join(", ")}`,
+    );
+  }
+
+  const seoExemptFamilies = [...families.values()].filter((family) => family.seo_exempt);
+  const invalidSeoExemptFamilies = seoExemptFamilies.filter((family) => {
+    if (!family.seo_exempt_reason) return true;
+    const html = readFileSync(routeToFile(siteRoot, family.lighthouse_representative), "utf8");
+    return !isNoindex(html);
+  });
+  if (invalidSeoExemptFamilies.length) {
+    throw new Error(
+      "SEO exemptions require a reason and an intentional noindex representative: "
+        + invalidSeoExemptFamilies.map((family) => family.id).join(", "),
+    );
+  }
+
+  const additionalLighthousePages = policy.lighthouse.additional_pages || [];
+  const invalidAdditionalPages = additionalLighthousePages.filter(
+    (entry) => !entry.route || !entry.reason || !routeSet.has(entry.route),
+  );
+  if (invalidAdditionalPages.length) {
+    throw new Error(
+      "lighthouse.additional_pages entries require an existing route and a reason: "
+        + invalidAdditionalPages.map((entry) => entry.route || "<missing route>").join(", "),
+    );
+  }
+  const invalidAdditionalSeoExemptions = additionalLighthousePages.filter((entry) => {
+    if (!entry.seo_exempt) return false;
+    if (!entry.seo_exempt_reason) return true;
+    const html = readFileSync(routeToFile(siteRoot, entry.route), "utf8");
+    return !isNoindex(html);
+  });
+  if (invalidAdditionalSeoExemptions.length) {
+    throw new Error(
+      "additional-page SEO exemptions require a reason and an intentional noindex route: "
+        + invalidAdditionalSeoExemptions.map((entry) => entry.route).join(", "),
     );
   }
 
@@ -241,13 +283,23 @@ export function deriveCoverage(options = {}) {
         route_count: f.routes.length,
         lighthouse_representative: f.lighthouse_representative,
         representative_reason: f.representative_reason,
+        image_gate: Boolean(f.image_gate),
         seo_exempt: Boolean(f.seo_exempt),
         seo_exempt_reason: f.seo_exempt_reason || null,
       })),
-      pages: [...families.values()].map((f) => f.lighthouse_representative),
-      seo_exempt_pages: [...families.values()]
-        .filter((f) => f.seo_exempt)
-        .map((f) => f.lighthouse_representative),
+      additional_pages: additionalLighthousePages,
+      pages: [...new Set([
+        ...[...families.values()].map((f) => f.lighthouse_representative),
+        ...additionalLighthousePages.map((entry) => entry.route),
+      ])],
+      image_gate_pages: [...new Set([
+        ...[...families.values()].filter((f) => f.image_gate).map((f) => f.lighthouse_representative),
+        ...additionalLighthousePages.filter((entry) => entry.image_gate).map((entry) => entry.route),
+      ])],
+      seo_exempt_pages: [...new Set([
+        ...[...families.values()].filter((f) => f.seo_exempt).map((f) => f.lighthouse_representative),
+        ...additionalLighthousePages.filter((entry) => entry.seo_exempt).map((entry) => entry.route),
+      ])],
       exclusions: policy.lighthouse_exclusions || [],
     },
     known_exceptions: policy.known_exceptions || [],
