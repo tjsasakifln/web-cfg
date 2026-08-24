@@ -38,6 +38,8 @@
       "owner": null,
       "route_url": null,
       "implementation_ref": null,
+      "activated_at": null,
+      "activation_base_sha": null,
       "sla": "UNKNOWN",
       "reason": "no public booking route with owner and measured latency",
       "decision_state": "DEFER",
@@ -60,7 +62,9 @@
         "period_start": null,
         "period_end": null,
         "sample_count": null,
+        "eligible_cycle_count": null,
         "representative": null,
+        "sampling_method": null,
         "stage_interval": null,
         "route_scope": null,
         "source_clock": null,
@@ -71,11 +75,15 @@
         "same_pr_required": true,
         "activation_decision_state": "EXECUTE_NOW",
         "sla_after_activation": "UNKNOWN",
+        "minimum_closed_cycles": 20,
+        "minimum_window_days": 28,
+        "maximum_baseline_age_days": 30,
         "required_fields": [
           "operational_channels.agenda.owner",
           "operational_channels.agenda.route_url",
           "operational_channels.agenda.implementation_ref",
           "operational_channels.agenda.activated_at",
+          "operational_channels.agenda.activation_base_sha",
           "operational_channels.agenda.baseline.status=MEASURED",
           "operational_channels.agenda.baseline.evidence_ref",
           "operational_channels.agenda.baseline.snapshot_path",
@@ -84,7 +92,9 @@
           "operational_channels.agenda.baseline.period_start",
           "operational_channels.agenda.baseline.period_end",
           "operational_channels.agenda.baseline.sample_count",
+          "operational_channels.agenda.baseline.eligible_cycle_count",
           "operational_channels.agenda.baseline.representative=true",
+          "operational_channels.agenda.baseline.sampling_method=all_eligible_commercial_cycles",
           "operational_channels.agenda.baseline.stage_interval",
           "operational_channels.agenda.baseline.route_scope",
           "operational_channels.agenda.baseline.source_clock",
@@ -95,7 +105,7 @@
           "operational_channels.agenda.baseline.metrics.p90_minutes",
           "operational_channels.agenda.baseline.metrics.censored_open_cycles"
         ],
-        "rule": "agenda.exists may change to true only in the same PR as a named owner, a canonical CONFENGE route with local implementation, and a local SHA-256-bound snapshot of an immutable, dated, representative Warmbly #55 baseline pinned to a commit/blob. SLA remains UNKNOWN; baseline is not a promised prazo."
+        "rule": "agenda.exists may change to true only in the same PR as the authorized operational owner, a canonical CONFENGE route with local implementation and CONFENGE_WEB attribution, and a local SHA-256-bound snapshot of an immutable Warmbly #55 baseline. The baseline must census every eligible cycle over at least 28 days, contain at least 20 closed cycles, and be no more than 30 days old at activation. activation_base_sha preserves and CI verifies the atomic PR boundary. SLA remains UNKNOWN; baseline is not a promised prazo."
       }
     }
   },

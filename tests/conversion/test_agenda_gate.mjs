@@ -14,8 +14,13 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const matrixModule = require(path.join(root, "scripts/conversion/matrix.cjs"));
 const gate = require(path.join(root, "scripts/conversion/agenda-gate.cjs"));
 const fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "agenda-gate-"));
-const fixtureOptions = { root: fixtureRoot };
 const snapshotPath = "docs/evidence/commercial-latency/warmbly-55.synthetic.json";
+const activationBaseSha = "b".repeat(40);
+const activationPaths = [gate.MATRIX_PATH, snapshotPath, "agenda/index.html"];
+const fixtureOptions = {
+  root: fixtureRoot,
+  activationDiff: { baseSha: activationBaseSha, changedPaths: activationPaths },
+};
 childProcess.execFileSync("git", ["init", "-q"], { cwd: fixtureRoot });
 
 function clone(value) {
@@ -37,7 +42,9 @@ function snapshotFromBaseline(baseline) {
     period_start: baseline.period_start,
     period_end: baseline.period_end,
     sample_count: baseline.sample_count,
+    eligible_cycle_count: baseline.eligible_cycle_count,
     representative: baseline.representative,
+    sampling_method: baseline.sampling_method,
     stage_interval: baseline.stage_interval,
     route_scope: baseline.route_scope,
     source_clock: baseline.source_clock,
@@ -65,12 +72,15 @@ function measuredActivation() {
   const evidence = `https://github.com/tjsasakifln/warmbly/blob/${"a".repeat(40)}/docs/evidence/commercial-latency.json`;
   matrix.as_of = "2026-09-15";
   agenda.exists = true;
-  agenda.owner = "tiago-jun-sasaki";
+  agenda.owner = gate.OPERATIONAL_OWNER;
   agenda.route_url = "https://confenge.com.br/agenda/";
   agenda.implementation_ref = "agenda/index.html";
   agenda.reason = null;
   agenda.decision_state = "EXECUTE_NOW";
   agenda.activated_at = "2026-09-15";
+  agenda.activation_base_sha = activationBaseSha;
+  agenda.blocked_by = null;
+  agenda.decided_at = agenda.activated_at;
   agenda.decision_evidence.push(evidence);
   Object.assign(agenda.baseline, {
     status: "MEASURED",
@@ -79,7 +89,9 @@ function measuredActivation() {
     period_start: "2026-08-15",
     period_end: "2026-09-13",
     sample_count: 20,
+    eligible_cycle_count: 23,
     representative: true,
+    sampling_method: gate.SAMPLING_METHOD,
     stage_interval: "first_commercial_action_to_conversation",
     route_scope: "representative_existing_owned_routes",
     source_clock: "warmbly.commercial_event.occurred_at",
@@ -94,14 +106,17 @@ function measuredActivation() {
   });
   const implementation = path.join(fixtureRoot, agenda.implementation_ref);
   fs.mkdirSync(path.dirname(implementation), { recursive: true });
-  fs.writeFileSync(implementation, "<!doctype html><title>Synthetic agenda fixture</title>\n");
+  fs.writeFileSync(
+    implementation,
+    '<!doctype html><link rel="canonical" href="https://confenge.com.br/agenda/"><script>const source = "CONFENGE_WEB";</script>\n',
+  );
   writeSnapshot(matrix);
   childProcess.execFileSync("git", ["add", "--", snapshotPath, agenda.implementation_ref], { cwd: fixtureRoot });
   return matrix;
 }
 
-function expectFailure(matrix, code) {
-  const result = gate.validateAgendaGate(matrix, fixtureOptions);
+function expectFailure(matrix, code, options = fixtureOptions) {
+  const result = gate.validateAgendaGate(matrix, options);
   assert.equal(result.ok, false, `expected failure ${code}`);
   assert.ok(result.errors.includes(code), `${code} missing from ${JSON.stringify(result.errors)}`);
 }
@@ -115,6 +130,8 @@ try {
     assert.equal(matrix.operational_channels.agenda.owner, null);
     assert.equal(matrix.operational_channels.agenda.route_url, null);
     assert.equal(matrix.operational_channels.agenda.implementation_ref, null);
+    assert.equal(matrix.operational_channels.agenda.activated_at, null);
+    assert.equal(matrix.operational_channels.agenda.activation_base_sha, null);
     assert.equal(matrix.operational_channels.agenda.sla, "UNKNOWN");
     assert.equal(matrix.operational_channels.agenda.baseline.status, "MISSING");
     assert.equal(matrix.operational_channels.agenda.baseline.snapshot_path, null);
@@ -142,9 +159,27 @@ try {
   }
 
   {
+    const matrix = clone(matrixModule.loadMatrix());
+    matrix.operational_channels.agenda.next_review_at = "2026-08-23";
+    expectFailure(matrix, "agenda_review_window_invalid");
+  }
+
+  {
+    const matrix = clone(matrixModule.loadMatrix());
+    matrix.operational_channels.agenda.reopen_gate.bypass = true;
+    expectFailure(matrix, "agenda_reopen_field_forbidden:bypass");
+  }
+
+  {
     const matrix = measuredActivation();
     matrix.operational_channels.agenda.owner = "UNKNOWN";
     expectFailure(matrix, "active_agenda_owner_placeholder");
+  }
+
+  {
+    const matrix = measuredActivation();
+    matrix.operational_channels.agenda.owner = "generic-team";
+    expectFailure(matrix, "active_agenda_owner_not_authorized");
   }
 
   {
@@ -163,6 +198,25 @@ try {
     const matrix = measuredActivation();
     fs.rmSync(path.join(fixtureRoot, matrix.operational_channels.agenda.implementation_ref));
     expectFailure(matrix, "active_agenda_implementation_missing");
+  }
+
+  {
+    const matrix = measuredActivation();
+    fs.writeFileSync(
+      path.join(fixtureRoot, matrix.operational_channels.agenda.implementation_ref),
+      "<!doctype html><title>No canonical or attribution</title>\n",
+    );
+    expectFailure(matrix, "active_agenda_canonical_missing");
+    expectFailure(matrix, "active_agenda_attribution_missing");
+  }
+
+  {
+    const matrix = measuredActivation();
+    fs.writeFileSync(
+      path.join(fixtureRoot, matrix.operational_channels.agenda.implementation_ref),
+      '<!doctype html><link rel="canonical" href="https://confenge.com.br/agenda/">CONFENGE_WEB SmartLic\n',
+    );
+    expectFailure(matrix, "active_agenda_public_brand_forbidden");
   }
 
   {
@@ -260,6 +314,79 @@ try {
     const matrix = measuredActivation();
     matrix.operational_channels.agenda.baseline.metrics.count = 19;
     expectFailure(matrix, "active_baseline_count_mismatch");
+  }
+
+  {
+    const matrix = measuredActivation();
+    matrix.operational_channels.agenda.baseline.sample_count = 19;
+    matrix.operational_channels.agenda.baseline.metrics.count = 19;
+    matrix.operational_channels.agenda.baseline.eligible_cycle_count = 22;
+    expectFailure(matrix, "active_baseline_sample_invalid");
+  }
+
+  {
+    const matrix = measuredActivation();
+    matrix.operational_channels.agenda.baseline.eligible_cycle_count = 24;
+    expectFailure(matrix, "active_baseline_eligible_cycle_count_mismatch");
+  }
+
+  {
+    const matrix = measuredActivation();
+    matrix.operational_channels.agenda.baseline.sampling_method = "selected_successes_only";
+    expectFailure(matrix, "active_baseline_sampling_method_invalid");
+  }
+
+  {
+    const matrix = measuredActivation();
+    matrix.operational_channels.agenda.decision_evidence.push("person@example.invalid");
+    expectFailure(matrix, "active_agenda_decision_evidence_not_closed");
+  }
+
+  {
+    const matrix = measuredActivation();
+    matrix.operational_channels.agenda.baseline.period_start = "2026-09-01";
+    expectFailure(matrix, "active_baseline_window_too_short");
+  }
+
+  {
+    const matrix = measuredActivation();
+    matrix.operational_channels.agenda.activated_at = "2026-10-15";
+    matrix.operational_channels.agenda.decided_at = "2026-10-15";
+    matrix.as_of = "2026-10-15";
+    matrix.operational_channels.agenda.next_review_at = "2026-11-15";
+    expectFailure(matrix, "active_baseline_stale");
+  }
+
+  {
+    const matrix = measuredActivation();
+    matrix.operational_channels.agenda.activation_base_sha = "c".repeat(40);
+    expectFailure(matrix, "active_activation_base_sha_mismatch");
+  }
+
+  {
+    const matrix = measuredActivation();
+    const previousActions = process.env.GITHUB_ACTIONS;
+    const previousEventName = process.env.GITHUB_EVENT_NAME;
+    process.env.GITHUB_ACTIONS = "true";
+    process.env.GITHUB_EVENT_NAME = "pull_request";
+    try {
+      expectFailure(matrix, "active_pull_request_context_missing", { root: fixtureRoot });
+    } finally {
+      if (previousActions === undefined) delete process.env.GITHUB_ACTIONS;
+      else process.env.GITHUB_ACTIONS = previousActions;
+      if (previousEventName === undefined) delete process.env.GITHUB_EVENT_NAME;
+      else process.env.GITHUB_EVENT_NAME = previousEventName;
+    }
+  }
+
+  {
+    const matrix = measuredActivation();
+    const changedPaths = [gate.MATRIX_PATH, snapshotPath];
+    expectFailure(
+      matrix,
+      "active_same_pr_path_missing:agenda/index.html",
+      { root: fixtureRoot, activationDiff: { baseSha: activationBaseSha, changedPaths } },
+    );
   }
 
   {

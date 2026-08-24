@@ -13,8 +13,15 @@ const path = require("node:path");
 const WARMBLY_55 = "https://github.com/tjsasakifln/warmbly/issues/55";
 const WEB_CFG_248 = "https://github.com/tjsasakifln/web-cfg/issues/248";
 const DECISION_DOC = "docs/ops/AGENDA-LATENCY-DEFER-248.md";
+const MATRIX_PATH = "docs/contracts/intent-action/intent-action-matrix.v1.json";
+const OPERATIONAL_OWNER = "tiago-jun-sasaki";
 const SLA_POLICY = "Commercial response SLA is UNKNOWN until Warmbly #55 measures a representative baseline. The owner-authorized Radar delivery clock is a separate contract: up to 48 business hours from persisted parameter submission, never from payment confirmation.";
-const SNAPSHOT_SCHEMA = "warmbly.commercial-latency-baseline/1.0";
+const SNAPSHOT_SCHEMA = "warmbly.commercial-latency-baseline/1.1";
+const SAMPLING_METHOD = "all_eligible_commercial_cycles";
+const MINIMUM_CLOSED_CYCLES = 20;
+const MINIMUM_WINDOW_DAYS = 28;
+const MAXIMUM_BASELINE_AGE_DAYS = 30;
+const REOPEN_RULE = "agenda.exists may change to true only in the same PR as the authorized operational owner, a canonical CONFENGE route with local implementation and CONFENGE_WEB attribution, and a local SHA-256-bound snapshot of an immutable Warmbly #55 baseline. The baseline must census every eligible cycle over at least 28 days, contain at least 20 closed cycles, and be no more than 30 days old at activation. activation_base_sha preserves and CI verifies the atomic PR boundary. SLA remains UNKNOWN; baseline is not a promised prazo.";
 const REPO_ROOT = path.resolve(__dirname, "../..");
 
 const REQUIRED_FIELDS = Object.freeze([
@@ -22,6 +29,7 @@ const REQUIRED_FIELDS = Object.freeze([
   "operational_channels.agenda.route_url",
   "operational_channels.agenda.implementation_ref",
   "operational_channels.agenda.activated_at",
+  "operational_channels.agenda.activation_base_sha",
   "operational_channels.agenda.baseline.status=MEASURED",
   "operational_channels.agenda.baseline.evidence_ref",
   "operational_channels.agenda.baseline.snapshot_path",
@@ -30,7 +38,9 @@ const REQUIRED_FIELDS = Object.freeze([
   "operational_channels.agenda.baseline.period_start",
   "operational_channels.agenda.baseline.period_end",
   "operational_channels.agenda.baseline.sample_count",
+  "operational_channels.agenda.baseline.eligible_cycle_count",
   "operational_channels.agenda.baseline.representative=true",
+  `operational_channels.agenda.baseline.sampling_method=${SAMPLING_METHOD}`,
   "operational_channels.agenda.baseline.stage_interval",
   "operational_channels.agenda.baseline.route_scope",
   "operational_channels.agenda.baseline.source_clock",
@@ -58,6 +68,17 @@ const AGENDA_KEYS = new Set([
   "baseline",
   "reopen_gate",
   "activated_at",
+  "activation_base_sha",
+]);
+const REOPEN_KEYS = new Set([
+  "same_pr_required",
+  "activation_decision_state",
+  "sla_after_activation",
+  "minimum_closed_cycles",
+  "minimum_window_days",
+  "maximum_baseline_age_days",
+  "required_fields",
+  "rule",
 ]);
 const BASELINE_KEYS = new Set([
   "status",
@@ -70,7 +91,9 @@ const BASELINE_KEYS = new Set([
   "period_start",
   "period_end",
   "sample_count",
+  "eligible_cycle_count",
   "representative",
+  "sampling_method",
   "stage_interval",
   "route_scope",
   "source_clock",
@@ -87,7 +110,9 @@ const SNAPSHOT_KEYS = new Set([
   "period_start",
   "period_end",
   "sample_count",
+  "eligible_cycle_count",
   "representative",
+  "sampling_method",
   "stage_interval",
   "route_scope",
   "source_clock",
@@ -104,7 +129,9 @@ const SNAPSHOT_BOUND_FIELDS = Object.freeze([
   "period_start",
   "period_end",
   "sample_count",
+  "eligible_cycle_count",
   "representative",
+  "sampling_method",
   "stage_interval",
   "route_scope",
   "source_clock",
@@ -121,7 +148,8 @@ const METRIC_KEYS = new Set([
 const PRIVACY_KEYS = new Set(["aggregate_only", "pii_included"]);
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-const IMMUTABLE_EVIDENCE_RE = /^https:\/\/github\.com\/tjsasakifln\/warmbly\/(?:commit\/[0-9a-f]{40}|blob\/[0-9a-f]{40}\/[A-Za-z0-9._~!$&'()*+,;=:@%\/-]+(?:#L\d+(?:-L\d+)?)?)$/;
+const COMMIT_SHA_RE = /^[0-9a-f]{40}$/;
+const IMMUTABLE_EVIDENCE_RE = /^https:\/\/github\.com\/tjsasakifln\/warmbly\/(?:commit\/[0-9a-f]{40}|blob\/[0-9a-f]{40}\/[A-Za-z0-9._~!$&'()*+,;=:\/-]+(?:#L\d+(?:-L\d+)?)?)$/;
 const SNAPSHOT_PATH_RE = /^docs\/evidence\/commercial-latency\/[A-Za-z0-9][A-Za-z0-9._-]*\.json$/;
 const IMPLEMENTATION_PATH_RE = /^(?!_site\/)[A-Za-z0-9][A-Za-z0-9._\/-]*\/index\.html$/;
 const IDENTIFIER_RE = /^[a-z0-9][a-z0-9._\/-]*$/;
@@ -204,6 +232,77 @@ function isTracked(root, relativePath) {
   return result.status === 0;
 }
 
+function gitResult(root, args) {
+  return childProcess.spawnSync("git", args, {
+    cwd: root,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "ignore"],
+  });
+}
+
+function pullRequestContext(root) {
+  if (process.env.GITHUB_ACTIONS !== "true" || process.env.GITHUB_EVENT_NAME !== "pull_request") return null;
+  const base = gitResult(root, ["rev-parse", "HEAD^1"]);
+  const head = gitResult(root, ["rev-parse", "HEAD^2"]);
+  const baseSha = base.status === 0 ? base.stdout.trim() : "";
+  const headSha = head.status === 0 ? head.stdout.trim() : "";
+  return COMMIT_SHA_RE.test(baseSha) && COMMIT_SHA_RE.test(headSha) ? { baseSha, headSha } : null;
+}
+
+function activationDiff(errors, agenda, baseline, root, options) {
+  const baseSha = String(agenda.activation_base_sha || "");
+  if (!COMMIT_SHA_RE.test(baseSha)) {
+    errors.push("active_activation_base_sha_invalid");
+    return;
+  }
+
+  let changedPaths;
+  if (options.activationDiff) {
+    if (options.activationDiff.baseSha !== baseSha) {
+      errors.push("active_activation_base_sha_mismatch");
+      return;
+    }
+    changedPaths = new Set(options.activationDiff.changedPaths || []);
+  } else {
+    const prContext = pullRequestContext(root);
+    if (process.env.GITHUB_ACTIONS === "true" && process.env.GITHUB_EVENT_NAME === "pull_request" && !prContext) {
+      errors.push("active_pull_request_context_missing");
+      return;
+    }
+    if (prContext && prContext.baseSha !== baseSha) {
+      errors.push("active_activation_base_sha_not_pr_base");
+      return;
+    }
+    const headRef = prContext?.headSha || "HEAD";
+    if (gitResult(root, ["cat-file", "-e", `${baseSha}^{commit}`]).status !== 0) {
+      errors.push("active_activation_base_sha_missing");
+      return;
+    }
+    if (gitResult(root, ["merge-base", "--is-ancestor", baseSha, headRef]).status !== 0) {
+      errors.push("active_activation_base_sha_not_ancestor");
+      return;
+    }
+    const diff = gitResult(root, [
+      "diff",
+      "--name-only",
+      "--diff-filter=ACMR",
+      "-z",
+      `${baseSha}...${headRef}`,
+    ]);
+    if (diff.status !== 0) {
+      errors.push("active_activation_diff_unavailable");
+      return;
+    }
+    changedPaths = new Set(diff.stdout.split("\0").filter(Boolean));
+  }
+
+  for (const requiredPath of [MATRIX_PATH, agenda.implementation_ref, baseline.snapshot_path]) {
+    if (!changedPaths.has(requiredPath)) {
+      errors.push(`active_same_pr_path_missing:${requiredPath}`);
+    }
+  }
+}
+
 function expectedImplementationRef(routeUrl) {
   try {
     const parsed = new URL(routeUrl);
@@ -223,6 +322,23 @@ function expectedImplementationRef(routeUrl) {
   } catch {
     return null;
   }
+}
+
+function validateImplementation(errors, absolutePath, routeUrl) {
+  let html;
+  try {
+    html = fs.readFileSync(absolutePath, "utf8");
+  } catch {
+    errors.push("active_agenda_implementation_unreadable");
+    return;
+  }
+  const canonicals = [...html.matchAll(/<link\s+rel="canonical"\s+href="([^"]+)"\s*>/g)]
+    .map((match) => match[1]);
+  if (canonicals.length !== 1 || canonicals[0] !== routeUrl) {
+    errors.push("active_agenda_canonical_missing");
+  }
+  if (!html.includes("CONFENGE_WEB")) errors.push("active_agenda_attribution_missing");
+  if (/smartlic|warmbly/i.test(html)) errors.push("active_agenda_public_brand_forbidden");
 }
 
 function containsPiiKey(value) {
@@ -288,10 +404,11 @@ function validateAgendaGate(matrix, options = {}) {
   const root = options.root ? path.resolve(options.root) : REPO_ROOT;
   const channels = matrix && matrix.operational_channels;
   const agenda = channels && channels.agenda;
+  const asOf = dateValue(matrix?.as_of);
 
   if (!matrix || typeof matrix !== "object") return { ok: false, errors: ["matrix_missing"] };
   if (matrix.sla_policy !== SLA_POLICY) errors.push("sla_policy_drift");
-  if (dateValue(matrix.as_of) == null) errors.push("matrix_as_of_invalid");
+  if (asOf == null) errors.push("matrix_as_of_invalid");
   if (!channels || typeof channels !== "object") return { ok: false, errors: [...errors, "operational_channels_missing"] };
   for (const channelName of ["whatsapp", "phone", "agenda"]) {
     const channel = channels[channelName];
@@ -303,9 +420,13 @@ function validateAgendaGate(matrix, options = {}) {
   for (const key of unknownKeys(agenda, AGENDA_KEYS)) errors.push(`agenda_field_forbidden:${key}`);
   if (typeof agenda.exists !== "boolean") errors.push("agenda_exists_not_boolean");
   if (agenda.decision_owner !== "web-cfg/conversion") errors.push("agenda_decision_owner_missing");
-  if (dateValue(agenda.decided_at) == null) errors.push("agenda_decided_at_invalid");
-  if (dateValue(agenda.next_review_at) == null) errors.push("agenda_next_review_at_invalid");
-  if (agenda.blocked_by !== WARMBLY_55) errors.push("agenda_blocker_drift");
+  const decidedAt = dateValue(agenda.decided_at);
+  const nextReviewAt = dateValue(agenda.next_review_at);
+  if (decidedAt == null) errors.push("agenda_decided_at_invalid");
+  if (nextReviewAt == null) errors.push("agenda_next_review_at_invalid");
+  if (decidedAt != null && asOf != null && nextReviewAt != null && !(decidedAt <= asOf && asOf <= nextReviewAt)) {
+    errors.push("agenda_review_window_invalid");
+  }
   if (!Array.isArray(agenda.decision_evidence)) errors.push("agenda_decision_evidence_missing");
   else {
     if (!hasExactReference(agenda.decision_evidence, WEB_CFG_248)) errors.push("agenda_issue_evidence_missing");
@@ -315,13 +436,17 @@ function validateAgendaGate(matrix, options = {}) {
   const reopen = agenda.reopen_gate;
   if (!reopen || typeof reopen !== "object") errors.push("agenda_reopen_gate_missing");
   else {
+    for (const key of unknownKeys(reopen, REOPEN_KEYS)) errors.push(`agenda_reopen_field_forbidden:${key}`);
     if (reopen.same_pr_required !== true) errors.push("agenda_same_pr_gate_disabled");
     if (reopen.activation_decision_state !== "EXECUTE_NOW") errors.push("agenda_activation_state_drift");
     if (reopen.sla_after_activation !== "UNKNOWN") errors.push("agenda_activation_sla_drift");
+    if (reopen.minimum_closed_cycles !== MINIMUM_CLOSED_CYCLES) errors.push("agenda_minimum_sample_drift");
+    if (reopen.minimum_window_days !== MINIMUM_WINDOW_DAYS) errors.push("agenda_minimum_window_drift");
+    if (reopen.maximum_baseline_age_days !== MAXIMUM_BASELINE_AGE_DAYS) errors.push("agenda_maximum_age_drift");
     if (JSON.stringify(reopen.required_fields) !== JSON.stringify(REQUIRED_FIELDS)) {
       errors.push("agenda_required_fields_drift");
     }
-    if (!String(reopen.rule || "").includes("same PR")) errors.push("agenda_atomic_rule_missing");
+    if (reopen.rule !== REOPEN_RULE) errors.push("agenda_atomic_rule_drift");
   }
 
   const baseline = agenda.baseline;
@@ -337,9 +462,14 @@ function validateAgendaGate(matrix, options = {}) {
     if (agenda.route_url != null) errors.push("deferred_agenda_route_url_must_be_null");
     if (agenda.implementation_ref != null) errors.push("deferred_agenda_implementation_ref_must_be_null");
     if (agenda.activated_at != null) errors.push("deferred_agenda_activation_must_be_null");
+    if (agenda.activation_base_sha != null) errors.push("deferred_activation_base_sha_must_be_null");
     if (agenda.decision_state !== "DEFER") errors.push("deferred_agenda_state_must_be_defer");
+    if (agenda.blocked_by !== WARMBLY_55) errors.push("deferred_agenda_blocker_drift");
     if (agenda.reason !== "no public booking route with owner and measured latency") {
       errors.push("deferred_agenda_reason_drift");
+    }
+    if (JSON.stringify(agenda.decision_evidence) !== JSON.stringify([WEB_CFG_248, DECISION_DOC])) {
+      errors.push("deferred_agenda_decision_evidence_not_closed");
     }
     if (baseline.status !== "MISSING") errors.push("deferred_baseline_must_be_missing");
     for (const key of [
@@ -350,7 +480,9 @@ function validateAgendaGate(matrix, options = {}) {
       "period_start",
       "period_end",
       "sample_count",
+      "eligible_cycle_count",
       "representative",
+      "sampling_method",
       "stage_interval",
       "route_scope",
       "source_clock",
@@ -364,8 +496,13 @@ function validateAgendaGate(matrix, options = {}) {
 
   if (agenda.decision_state !== "EXECUTE_NOW") errors.push("active_agenda_state_not_execute_now");
   validateNamedField(errors, agenda.owner, "agenda_owner", IDENTIFIER_RE);
+  if (meaningfulString(agenda.owner) && agenda.owner !== OPERATIONAL_OWNER) {
+    errors.push("active_agenda_owner_not_authorized");
+  }
   if (agenda.reason != null) errors.push("active_agenda_reason_not_cleared");
+  if (agenda.blocked_by != null) errors.push("active_agenda_blocker_not_cleared");
   if (dateValue(agenda.activated_at) == null) errors.push("active_agenda_date_missing");
+  if (agenda.decided_at !== agenda.activated_at) errors.push("active_agenda_decision_date_mismatch");
 
   const expectedImplementation = expectedImplementationRef(agenda.route_url);
   if (!expectedImplementation) errors.push("active_agenda_route_url_invalid");
@@ -374,10 +511,13 @@ function validateAgendaGate(matrix, options = {}) {
     errors.push("active_agenda_route_implementation_mismatch");
   }
   if (meaningfulString(agenda.implementation_ref) && IMPLEMENTATION_PATH_RE.test(agenda.implementation_ref)) {
-    if (!resolveLocalFile(root, agenda.implementation_ref, IMPLEMENTATION_PATH_RE)) {
+    const absoluteImplementation = resolveLocalFile(root, agenda.implementation_ref, IMPLEMENTATION_PATH_RE);
+    if (!absoluteImplementation) {
       errors.push("active_agenda_implementation_missing");
     } else if (!isTracked(root, agenda.implementation_ref)) {
       errors.push("active_agenda_implementation_not_versioned");
+    } else {
+      validateImplementation(errors, absoluteImplementation, agenda.route_url);
     }
   }
 
@@ -388,23 +528,28 @@ function validateAgendaGate(matrix, options = {}) {
   if (!hasExactReference(agenda.decision_evidence, baseline.evidence_ref)) {
     errors.push("active_baseline_not_in_decision_evidence");
   }
+  if (
+    JSON.stringify(agenda.decision_evidence) !==
+    JSON.stringify([WEB_CFG_248, DECISION_DOC, baseline.evidence_ref])
+  ) errors.push("active_agenda_decision_evidence_not_closed");
   loadBoundSnapshot(errors, baseline, root);
   if (baseline.representative !== true) errors.push("active_baseline_not_representative");
-  if (!Number.isInteger(baseline.sample_count) || baseline.sample_count <= 0) errors.push("active_baseline_sample_invalid");
+  if (!Number.isSafeInteger(baseline.sample_count) || baseline.sample_count < MINIMUM_CLOSED_CYCLES) {
+    errors.push("active_baseline_sample_invalid");
+  }
+  if (!Number.isSafeInteger(baseline.eligible_cycle_count) || baseline.eligible_cycle_count < baseline.sample_count) {
+    errors.push("active_baseline_eligible_cycle_count_invalid");
+  }
+  if (baseline.sampling_method !== SAMPLING_METHOD) errors.push("active_baseline_sampling_method_invalid");
   if (baseline.stage_interval !== "first_commercial_action_to_conversation") {
     errors.push("active_baseline_stage_interval_invalid");
   }
   validateNamedField(errors, baseline.route_scope, "baseline_route_scope", IDENTIFIER_RE);
   validateNamedField(errors, baseline.source_clock, "baseline_source_clock", IDENTIFIER_RE);
   validateNamedField(errors, baseline.timezone, "baseline_timezone");
-  if (meaningfulString(baseline.timezone)) {
-    try {
-      if (!baseline.timezone.includes("/")) throw new Error("timezone_must_be_iana_named");
-      new Intl.DateTimeFormat("en-US", { timeZone: baseline.timezone }).format();
-    } catch {
-      errors.push("active_baseline_timezone_invalid");
-    }
-  }
+  if (baseline.route_scope !== "representative_existing_owned_routes") errors.push("active_baseline_route_scope_invalid");
+  if (baseline.source_clock !== "warmbly.commercial_event.occurred_at") errors.push("active_baseline_source_clock_invalid");
+  if (baseline.timezone !== "America/Sao_Paulo") errors.push("active_baseline_timezone_invalid");
 
   const dates = {
     start: dateValue(baseline.period_start),
@@ -420,6 +565,10 @@ function validateAgendaGate(matrix, options = {}) {
     if (!(dates.start <= dates.end && dates.end <= dates.measured && dates.measured <= dates.activated && dates.activated <= dates.asOf)) {
       errors.push("active_baseline_date_order_invalid");
     }
+    const windowDays = Math.floor((dates.end - dates.start) / 86_400_000) + 1;
+    if (windowDays < MINIMUM_WINDOW_DAYS) errors.push("active_baseline_window_too_short");
+    const baselineAgeDays = Math.floor((dates.activated - dates.measured) / 86_400_000);
+    if (baselineAgeDays > MAXIMUM_BASELINE_AGE_DAYS) errors.push("active_baseline_stale");
   }
 
   const metrics = baseline.metrics;
@@ -427,11 +576,16 @@ function validateAgendaGate(matrix, options = {}) {
     errors.push("active_baseline_metrics_missing");
   } else {
     for (const key of unknownKeys(metrics, METRIC_KEYS)) errors.push(`baseline_metric_forbidden:${key}`);
-    if (!Number.isInteger(metrics.count) || metrics.count <= 0) errors.push("active_baseline_count_invalid");
+    if (!Number.isSafeInteger(metrics.count) || metrics.count <= 0) errors.push("active_baseline_count_invalid");
     if (metrics.count !== baseline.sample_count) errors.push("active_baseline_count_mismatch");
-    if (!Number.isInteger(metrics.censored_open_cycles) || metrics.censored_open_cycles < 0) {
+    if (!Number.isSafeInteger(metrics.censored_open_cycles) || metrics.censored_open_cycles < 0) {
       errors.push("active_baseline_censored_invalid");
     }
+    if (
+      Number.isSafeInteger(metrics.count) &&
+      Number.isSafeInteger(metrics.censored_open_cycles) &&
+      metrics.count + metrics.censored_open_cycles !== baseline.eligible_cycle_count
+    ) errors.push("active_baseline_eligible_cycle_count_mismatch");
     const percentiles = [metrics.median_minutes, metrics.p75_minutes, metrics.p90_minutes];
     if (!percentiles.every((value) => Number.isFinite(value) && value >= 0)) {
       errors.push("active_baseline_percentile_invalid");
@@ -440,13 +594,22 @@ function validateAgendaGate(matrix, options = {}) {
     }
   }
 
+  activationDiff(errors, agenda, baseline, root, options);
+
   return { ok: errors.length === 0, errors, state: agenda.decision_state, activated: true };
 }
 
 module.exports = {
   DECISION_DOC,
   IMMUTABLE_EVIDENCE_RE,
+  MATRIX_PATH,
+  MAXIMUM_BASELINE_AGE_DAYS,
+  MINIMUM_CLOSED_CYCLES,
+  MINIMUM_WINDOW_DAYS,
+  OPERATIONAL_OWNER,
+  REOPEN_RULE,
   REQUIRED_FIELDS,
+  SAMPLING_METHOD,
   SLA_POLICY,
   SNAPSHOT_SCHEMA,
   WARMBLY_55,
