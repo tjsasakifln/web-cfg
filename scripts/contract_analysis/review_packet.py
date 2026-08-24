@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -29,6 +30,9 @@ PACKET_FILES = (
 
 
 def _root() -> Path:
+    env = os.environ.get("CONFENGE_CONTRACT_ANALYSIS_ROOT")
+    if env:
+        return Path(env)
     return Path(__file__).resolve().parents[2]
 
 

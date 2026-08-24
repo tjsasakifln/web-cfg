@@ -11,6 +11,7 @@ import shutil
 import sys
 from dataclasses import replace
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -302,6 +303,67 @@ def test_public_shell_drift_refuses_index(tmp_path, monkeypatch):
     downgraded, _ = apply_rendered_hash_gate(rec, after, live_html)
     assert downgraded.state == "PUBLISHABLE_NOINDEX"
     assert "approval_rendered_hash_mismatch" in downgraded.reason_codes
+
+
+def test_build_report_uses_post_shell_hash_decision(tmp_path, monkeypatch, capsys):
+    bundle = _stage_official(tmp_path, monkeypatch)
+    rec = bundle["records"][0]
+    rec["root_content_hash"] = rec.get("root_content_hash") or rec.get("content_hash")
+    decision = evaluate_publication(rec, cohort=[rec])
+    html, _ = _index_shaped(rec, decision)
+    _approve_v2(rec, tmp_path, html)
+    assert evaluate_publication(rec, cohort=[rec]).state == "PUBLISHABLE_INDEX"
+
+    import scripts.pseo.public_artifact as artifact
+    from scripts.contract_analysis.__main__ import cmd_build
+
+    monkeypatch.setattr(
+        artifact,
+        "FOOTER_SCRIPTURE_HTML",
+        artifact.FOOTER_SCRIPTURE_HTML.replace("Sl 127:1 (ARC)", "shell drift"),
+    )
+    rc = cmd_build(
+        SimpleNamespace(
+            live=str(tmp_path / "contract-analysis" / "official-live-01"),
+            fixture=None,
+            limit=10,
+            report_only=False,
+        )
+    )
+    assert rc == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["index_count"] == 0
+    assert output["state_counts"]["PUBLISHABLE_INDEX"] == 0
+    status = json.loads(
+        (tmp_path / "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert status["items"][0]["state"] == "PUBLISHABLE_NOINDEX"
+    assert "approval_rendered_hash_mismatch" in status["items"][0]["reason_codes"]
+
+
+def test_rendered_hash_equals_full_assembled_artifact_with_scrub(tmp_path):
+    import hashlib
+
+    from scripts.pseo.public_artifact import assemble_public_artifact
+
+    rec = {"slug": "hash-scrub-canary"}
+    html = (
+        '<!doctype html><html><head><link rel="stylesheet" href="/styles.css">'
+        '</head><body><main><p>Antes — depois</p></main></body></html>'
+    )
+    for name in ("styles.css", "styles-tokens.css", "styles-tools.css", "styles-offers.css"):
+        shutil.copy2(ROOT / name, tmp_path / name)
+    page = tmp_path / "analises-contratos-publicos" / rec["slug"] / "index.html"
+    page.parent.mkdir(parents=True, exist_ok=True)
+    page.write_text(html, encoding="utf-8")
+    expected = rendered_content_hash(html, record=rec, root=tmp_path)
+    report = assemble_public_artifact(tmp_path)
+    assert report["ok"], report
+    published = tmp_path / "_site" / page.relative_to(tmp_path)
+    assert "—" not in published.read_text(encoding="utf-8")
+    assert hashlib.sha256(published.read_bytes()).hexdigest() == expected
 
 
 def test_index_count_xor_and_no_other_slug(tmp_path, monkeypatch):

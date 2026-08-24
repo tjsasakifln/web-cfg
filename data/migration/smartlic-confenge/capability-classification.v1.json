@@ -6,7 +6,7 @@
   "canonical_public_host": "confenge.com.br",
   "donor_host": "smartlic.tech",
   "rule": "SmartLic is donor, URL-specific migration bridge and sunset evidence only. Classification never authorizes a SmartLic public runtime or a new capability.",
-  "classes": ["PORT_TO_WEB_CFG", "REIMPLEMENT_IN_WEB_CFG", "KEEP_TEMPORARILY_FOR_MIGRATION", "DEFER", "DROP"],
+  "classes": ["PORT_TO_WEB_CFG", "REIMPLEMENT", "MIGRATION_ONLY", "DEFER", "DROP"],
   "hold_review_date": "2026-09-20",
   "capabilities": [
     {
@@ -50,7 +50,7 @@
     {
       "id": "market-answer-engine",
       "label": "Resposta pública answer-first",
-      "class": "REIMPLEMENT_IN_WEB_CFG",
+      "class": "REIMPLEMENT",
       "current_truth": "One narrow CONFENGE canary is the maximum next slice; the SmartLic Q&A corpus is not a migration queue.",
       "justification": "The mechanism may acquire non-branded demand only when a distinct answer, provenance and maintenance owner exist.",
       "estimated_cost": "SMALL_CANARY",
@@ -169,7 +169,7 @@
     {
       "id": "smartlic-raiox-watchlists",
       "label": "Raio-X, watchlists e inventário doador",
-      "class": "KEEP_TEMPORARILY_FOR_MIGRATION",
+      "class": "MIGRATION_ONLY",
       "current_truth": "Retained only as donor evidence for URL-level migrate/redirect/retire decisions.",
       "justification": "The identity and facts authority is extra-cli; SmartLic cannot remain an operational data or public plane.",
       "estimated_cost": "SUNSET_ONLY",

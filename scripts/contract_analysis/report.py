@@ -17,6 +17,7 @@ REPORT_MD = Path("docs/editorial") / f"{REPORT_STEM}.md"
 REPORT_JSON = Path("docs/editorial") / f"{REPORT_STEM}.json"
 # Keep the previous filename as a pointer so older links do not 404 in-repo.
 LEGACY_STEM = "CONTRACT_ANALYSIS_EDITORIAL_STATUS"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _root() -> Path:
@@ -35,16 +36,26 @@ def _portable_paths(value: Any) -> Any:
     if not isinstance(value, str) or not value.startswith("/"):
         return value
     path = Path(value)
+    handoff_base = Path(
+        os.environ.get(
+            "CONFENGE_HANDOFF_DIR",
+            str(Path.home() / ".local" / "share" / "confenge" / "handoffs"),
+        )
+    )
+    sibling_extra_cli = (PROJECT_ROOT.parent / "extra-cli").resolve()
     for base, label in (
-        (_root(), ""),
-        (Path(os.environ.get("CONFENGE_HANDOFF_DIR", "/__missing_handoff__")), "$CONFENGE_HANDOFF_DIR"),
+        (_root().resolve(), ""),
+        (handoff_base.resolve(), "$CONFENGE_HANDOFF_DIR"),
+        (sibling_extra_cli, "$EXTRA_CLI_ROOT"),
     ):
         try:
             relative = path.relative_to(base)
         except ValueError:
             continue
         return str(relative) if not label else f"{label}/{relative.as_posix()}"
-    return value
+    # Never persist checkout-, user- or runner-specific absolute locations.
+    # Keep only a stable opaque leaf for diagnostics outside known roots.
+    return f"$EXTERNAL_PATH/{path.name}"
 
 
 def _rel_written(path: Path) -> str:

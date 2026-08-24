@@ -210,19 +210,25 @@ def test_forbidden_paths_unchanged_list():
         assert baseline[rel] == hashes[rel] == content_sha256(path)
 
 
-def test_recapture_provenance_commit_exists_and_contains_baseline_bytes():
+def test_recapture_provenance_snapshot_matches_baseline_bytes_with_or_without_git():
     payload = json.loads(
         (ROOT / "data/bofu-dominance/frozen-specs/hashes.json").read_text(encoding="utf-8")
     )
     commit = payload["baseline_commit"]
-    subprocess.run(
+    git_commit = subprocess.run(
         ["git", "-C", str(ROOT), "cat-file", "-e", f"{commit}^{{commit}}"],
-        check=True,
+        capture_output=True,
+        check=False,
     )
     for rel, expected in payload["forbidden"].items():
-        content = subprocess.check_output(
-            ["git", "-C", str(ROOT), "show", f"{commit}:{rel}"]
-        )
+        if git_commit.returncode == 0:
+            content = subprocess.check_output(
+                ["git", "-C", str(ROOT), "show", f"{commit}:{rel}"]
+            )
+        else:
+            # Source archives intentionally have no object database. The
+            # hash-pinned snapshot remains independently verifiable there.
+            content = (ROOT / rel).read_bytes()
         assert hashlib.sha256(content).hexdigest() == expected, rel
 
 

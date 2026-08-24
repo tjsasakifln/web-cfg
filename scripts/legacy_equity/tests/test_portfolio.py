@@ -17,9 +17,9 @@ def test_capability_matrix_is_complete_and_fail_closed():
     assert report["by_class"] == {
         "DEFER": 3,
         "DROP": 4,
-        "KEEP_TEMPORARILY_FOR_MIGRATION": 1,
+        "MIGRATION_ONLY": 1,
         "PORT_TO_WEB_CFG": 2,
-        "REIMPLEMENT_IN_WEB_CFG": 1,
+        "REIMPLEMENT": 1,
     }
 
 
@@ -63,3 +63,32 @@ def test_capability_ids_and_required_content_are_fail_closed():
     assert any(item.startswith("missing_capability:") for item in report["fails"])
     assert any(item.startswith("unknown_capability:") for item in report["fails"])
     assert any(item.startswith("empty_field:") for item in report["fails"])
+
+
+def test_classification_is_pinned_per_capability_and_drop_cannot_hold():
+    data = load_json(CLASS_PATH)
+    execute = load_json(EXECUTE_SET_PATH)
+    by_id = {row["id"]: row for row in data["capabilities"]}
+    by_id["tender-operations-hub"]["class"] = "DROP"
+    by_id["static-entity-profile-farms"]["class"] = "DEFER"
+    report = evaluate_portfolio(data, execute)
+    assert not report["ok"]
+    assert "canonical_class_drift:tender-operations-hub" in report["fails"]
+    assert "canonical_class_drift:static-entity-profile-farms" in report["fails"]
+    assert "hold_under_drop:tender-operations-hub" in report["fails"]
+
+
+def test_required_types_paths_and_root_contract_are_fail_closed():
+    data = load_json(CLASS_PATH)
+    execute = load_json(EXECUTE_SET_PATH)
+    row = data["capabilities"][0]
+    row["label"] = []
+    row["executor_issue"] = True
+    row["legacy_hold_paths"] = ["/glossario/../bdi"]
+    data["rule"] = "SmartLic runtime is allowed"
+    report = evaluate_portfolio(data, execute)
+    assert not report["ok"]
+    assert any(item.startswith("empty_field:") for item in report["fails"])
+    assert any(item.startswith("invalid_executor_issue:") for item in report["fails"])
+    assert any(item.startswith("invalid_hold_path:") for item in report["fails"])
+    assert "root_contract:rule" in report["fails"]

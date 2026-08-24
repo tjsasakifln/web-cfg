@@ -373,13 +373,9 @@ def rendered_content_hash(
             source = css_root / name
             if source.is_file():
                 shutil.copy2(source, public_root / name)
-        from scripts.pseo.public_artifact import add_footer_scripture
-        from scripts.site.fingerprint_css import fingerprint_published_css
-        from scripts.site.public_navigation import promote_public_navigation_tree
+        from scripts.pseo.public_artifact import finalize_public_artifact
 
-        promote_public_navigation_tree(public_root)
-        add_footer_scripture(public_root)
-        fingerprint_published_css(public_root)
+        finalize_public_artifact(public_root)
         return hashlib.sha256(page.read_bytes()).hexdigest()
 
 
