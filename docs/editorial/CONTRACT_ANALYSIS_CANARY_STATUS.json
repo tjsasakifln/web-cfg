@@ -1,7 +1,7 @@
 {
   "report": "CONTRACT_ANALYSIS_CANARY_STATUS",
   "gate_version": "contract-analysis-publication-gate/1.0",
-  "generated_at": "2026-08-24T13:27:52Z",
+  "generated_at": "2026-08-24T13:57:37Z",
   "evaluated": 1,
   "evaluated_cap": 10,
   "source_kind": "official_live",
@@ -28,7 +28,7 @@
       "slug": "reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026",
       "state": "PUBLISHABLE_NOINDEX",
       "reason_codes": [
-        "approval_absent"
+        "approval_material_hash_mismatch"
       ],
       "source_kind": "official_live",
       "fixture": false,
@@ -61,10 +61,10 @@
   "factual_handoff_pending": false,
   "handoff": {
     "status": "HANDOFF_READY",
-    "path": "/tmp/web-cfg-backlog-truth.2xBzB9/scripts/contract_analysis/fixtures/official-live-01",
+    "path": "scripts/contract_analysis/fixtures/official-live-01",
     "checked": [
       {
-        "path": "/tmp/web-cfg-backlog-truth.2xBzB9/scripts/contract_analysis/fixtures/official-live-01",
+        "path": "scripts/contract_analysis/fixtures/official-live-01",
         "exists": true,
         "layout": "dossiers",
         "schema_ok": true,
@@ -72,7 +72,7 @@
         "no_index_authorization": false,
         "official_live": true,
         "producer_commit": "5984750c14a4653bf64e16ba7547063f3e1cdab9",
-        "hashes_ok": true,
+        "hashes_ok": false,
         "source_claim_matrix": true,
         "replay": true,
         "fixture": false,
@@ -110,7 +110,7 @@
   "quality_version": "authority-content-quality/1.0",
   "written_analyses": 1,
   "review_packets": [
-    "/tmp/web-cfg-backlog-truth.2xBzB9/docs/editorial/contract-analysis/review/13ec615146b3d348190a9b0b9148831e"
+    "docs/editorial/contract-analysis/review/13ec615146b3d348190a9b0b9148831e"
   ],
   "citations": [
     {

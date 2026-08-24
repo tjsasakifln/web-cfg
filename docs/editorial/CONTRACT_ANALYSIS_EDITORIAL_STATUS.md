@@ -5,7 +5,7 @@ Superseded by `CONTRACT_ANALYSIS_CANARY_STATUS`.
 # CONTRACT_ANALYSIS_CANARY_STATUS
 
 - Gate: `contract-analysis-publication-gate/1.0`
-- Generated: `2026-08-24T13:27:52Z`
+- Generated: `2026-08-24T13:57:37Z`
 - Evaluated: **1** (cap 10)
 - Source: `official_live` (`scripts/contract_analysis/fixtures/official-live-01`)
 - catalog_mode: `official_live` claimed_live=`False`
@@ -30,7 +30,7 @@ Superseded by `CONTRACT_ANALYSIS_CANARY_STATUS`.
 
 ## Items
 
-- `13ec615146b3d348190a9b0b9148831e` · `PUBLISHABLE_NOINDEX` · source=`official_live` · fixture=False · robots=`noindex,nofollow` · reasons: approval_absent
+- `13ec615146b3d348190a9b0b9148831e` · `PUBLISHABLE_NOINDEX` · source=`official_live` · fixture=False · robots=`noindex,nofollow` · reasons: approval_material_hash_mismatch
 
 ## Rendered
 

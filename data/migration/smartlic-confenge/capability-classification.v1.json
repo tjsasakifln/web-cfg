@@ -6,7 +6,7 @@
   "canonical_public_host": "confenge.com.br",
   "donor_host": "smartlic.tech",
   "rule": "SmartLic is donor, URL-specific migration bridge and sunset evidence only. Classification never authorizes a SmartLic public runtime or a new capability.",
-  "classes": ["PORT_TO_WEB_CFG", "REIMPLEMENT", "MIGRATION_ONLY", "DEFER", "DROP"],
+  "classes": ["PORT_TO_WEB_CFG", "REIMPLEMENT_IN_WEB_CFG", "KEEP_TEMPORARILY_FOR_MIGRATION", "DEFER", "DROP"],
   "hold_review_date": "2026-09-20",
   "capabilities": [
     {
@@ -50,7 +50,7 @@
     {
       "id": "market-answer-engine",
       "label": "Resposta pública answer-first",
-      "class": "REIMPLEMENT",
+      "class": "REIMPLEMENT_IN_WEB_CFG",
       "current_truth": "One narrow CONFENGE canary is the maximum next slice; the SmartLic Q&A corpus is not a migration queue.",
       "justification": "The mechanism may acquire non-branded demand only when a distinct answer, provenance and maintenance owner exist.",
       "estimated_cost": "SMALL_CANARY",
@@ -79,8 +79,21 @@
       "smartlic_runtime": false
     },
     {
-      "id": "company-agency-municipality-profiles",
-      "label": "Perfis combinatórios de CNPJ, fornecedor, órgão e município",
+      "id": "company-agency-municipality-hubs",
+      "label": "Hubs de consulta de CNPJ, fornecedor, órgão e município",
+      "class": "DEFER",
+      "current_truth": "Only the four exact hub URLs remain on hold; combinatorial entity pages remain retired.",
+      "justification": "A narrow entity lookup may become useful, but it has no authorized visitor job or public-read contract today.",
+      "estimated_cost": "MEDIUM_IF_NARROW",
+      "data_dependency": "A named lookup job, a versioned extra-cli public-read contract, freshness and a distinct-utility gate.",
+      "executor_issue": null,
+      "promotion_gate": "Promote only a narrow hub after an explicit issue and utility gate; never revive entity-page farms.",
+      "legacy_hold_paths": ["/cnpj", "/fornecedores", "/municipios", "/orgaos"],
+      "smartlic_runtime": false
+    },
+    {
+      "id": "static-entity-profile-farms",
+      "label": "Perfis combinatórios de entidades",
       "class": "DROP",
       "current_truth": "Static entity-page farms remain retired; contextual X-Ray may answer a named user job without reviving them.",
       "justification": "Entity substitution is thin utility and page count is not an outcome.",
@@ -88,7 +101,7 @@
       "data_dependency": "No dependency can promote a page farm; any future contextual tool requires its own evidence gate.",
       "executor_issue": null,
       "promotion_gate": "None for static profile families.",
-      "legacy_hold_paths": ["/cnpj", "/fornecedores", "/municipios", "/orgaos"],
+      "legacy_hold_paths": [],
       "smartlic_runtime": false
     },
     {
@@ -156,7 +169,7 @@
     {
       "id": "smartlic-raiox-watchlists",
       "label": "Raio-X, watchlists e inventário doador",
-      "class": "MIGRATION_ONLY",
+      "class": "KEEP_TEMPORARILY_FOR_MIGRATION",
       "current_truth": "Retained only as donor evidence for URL-level migrate/redirect/retire decisions.",
       "justification": "The identity and facts authority is extra-cli; SmartLic cannot remain an operational data or public plane.",
       "estimated_cost": "SUNSET_ONLY",

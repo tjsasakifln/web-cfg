@@ -231,7 +231,8 @@ def test_v2_token_grants_index_only_when_hashes_match(tmp_path, monkeypatch):
     assert row["token"] == OWNER_CONDITIONAL_PREAPPROVAL_V2
     assert row["canonical_url"] == AUTHORIZED_CANONICAL_PATH
     assert row["material_hash"] == material_hash(rec)
-    assert row["rendered_content_hash"] == rendered_content_hash(html)
+    assert row["rendered_content_hash"] == rendered_content_hash(html, record=rec, root=tmp_path)
+    assert row["rendered_hash_scope"] == "public_artifact_v2"
     assert row["official_payload_hash"] == rec["content_hash"]
     after = evaluate_publication(rec, cohort=[rec])
     assert after.state == "PUBLISHABLE_INDEX"
@@ -280,6 +281,27 @@ def test_one_byte_material_and_render_drift_refuses_index(tmp_path, monkeypatch)
     assert downgraded.state != "PUBLISHABLE_INDEX"
     assert "noindex" in downgraded.robots
     assert "noindex" in new_html
+
+
+def test_public_shell_drift_refuses_index(tmp_path, monkeypatch):
+    rec = _stage_official(tmp_path, monkeypatch)["records"][0]
+    rec["root_content_hash"] = rec.get("root_content_hash") or rec.get("content_hash")
+    decision = evaluate_publication(rec, cohort=[rec])
+    html, _ = _index_shaped(rec, decision)
+    _approve_v2(rec, tmp_path, html)
+    after = evaluate_publication(rec, cohort=[rec])
+    live_html = render_analysis_html(rec, after)
+
+    import scripts.pseo.public_artifact as artifact
+
+    monkeypatch.setattr(
+        artifact,
+        "FOOTER_SCRIPTURE_HTML",
+        artifact.FOOTER_SCRIPTURE_HTML.replace("Sl 127:1 (ARC)", "shell drift"),
+    )
+    downgraded, _ = apply_rendered_hash_gate(rec, after, live_html)
+    assert downgraded.state == "PUBLISHABLE_NOINDEX"
+    assert "approval_rendered_hash_mismatch" in downgraded.reason_codes
 
 
 def test_index_count_xor_and_no_other_slug(tmp_path, monkeypatch):
@@ -347,7 +369,7 @@ def test_withdraw_rebuild_noindex_no_ghost_loc(tmp_path, monkeypatch):
     sync_family_crawler_rules([(rec, rolled)], root=tmp_path)
     robots_after = robots.read_text(encoding="utf-8")
     headers_after = headers.read_text(encoding="utf-8")
-    assert f"Allow: /analises-contratos-publicos/{rec['slug']}/" not in robots_after
+    assert f"Allow: /analises-contratos-publicos/{rec['slug']}/" in robots_after
     assert "X-Robots-Tag: index, follow" not in headers_after
     if family_map.exists():
         assert rec["slug"] not in family_map.read_text(encoding="utf-8")

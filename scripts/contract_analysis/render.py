@@ -11,6 +11,7 @@ from typing import Any
 
 from scripts.contract_analysis import (
     ASSET_FAMILY,
+    AUTHORIZED_CANONICAL_PATH,
     FAMILY_PATH,
     FAMILY_SLUG,
     GATE_VERSION,
@@ -449,11 +450,25 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             "</p>"
         )
     elif not decision.indexable:
+        review_ready = bool(reviewer)
+        authorship_ready = _author_confirmed(record)
+        if authorship_ready and review_ready:
+            review_message = (
+                "Autoria e revisão estão identificadas; a autorização hash-bound "
+                "de INDEX está ausente ou desatualizada. "
+            )
+        elif authorship_ready:
+            review_message = (
+                "A autoria humana está confirmada, mas a revisão ou a autorização "
+                "hash-bound de INDEX ainda não está válida. "
+            )
+        else:
+            review_message = "Autoria e revisão humanas ainda não foram confirmadas. "
         fixture_banner = (
             '<p class="ca-draft-banner" role="status">'
             "Rascunho editorial noindex. HUMAN_REVIEW_PENDING"
             f"{' · READY_FOR_HUMAN_REVIEW' if _text(record.get('editorial_status')) == 'ready_for_human_review' or _text(getattr(decision, 'human_review_status', '')) == 'READY_FOR_HUMAN_REVIEW' else ''}. "
-            "Autoria e revisão humanas ainda não foram confirmadas. "
+            f"{review_message}"
             "Esta página não deve ser indexada. Sem autorização de INDEX."
             "</p>"
         )
@@ -835,7 +850,12 @@ def sync_family_crawler_rules(
     robots_path = root / "robots.txt"
     if robots_path.is_file():
         robots = robots_path.read_text(encoding="utf-8")
-        allow_lines = "".join(f"Allow: {FAMILY_PATH}{slug}/\n" for slug in slugs)
+        crawlable_paths = {f"{FAMILY_PATH}{slug}/" for slug in slugs}
+        # The authorized canary was previously INDEX. Keep it crawlable while
+        # meta/header noindex is observed; robots blocking would strand it in
+        # search as a URL-only result.
+        crawlable_paths.add(AUTHORIZED_CANONICAL_PATH)
+        allow_lines = "".join(f"Allow: {path}\n" for path in sorted(crawlable_paths))
         block = f"{ROBOTS_FAMILY_BEGIN}\n{allow_lines}Disallow: {FAMILY_PATH}\n"
         robots = _replace_or_append_block(
             robots,

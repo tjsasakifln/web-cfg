@@ -115,6 +115,14 @@ def test_execute_set_names_a_review_date_for_every_hold():
     assert {row["review_date"] for row in execute["holds"]} == {"2026-09-20"}
 
 
+def test_hold_review_date_expires_against_injected_current_date():
+    from datetime import date
+
+    report = validate_inventory(load_inventory(), today=date(2026, 9, 21))
+    assert not report["ok"]
+    assert any("review_date is already stale" in item for item in report["errors"])
+
+
 def test_query_pii_is_dropped_from_location():
     data = load_inventory()
     ready = ready_redirects(data)

@@ -412,10 +412,7 @@ def _inspect_dir(path: Path) -> dict[str, Any]:
     if manifest.get("content_hash"):
         result["hashes_ok"] = verify_content_hash(manifest)
         if not result["hashes_ok"]:
-            # payload-style manifests hash a projection, not the on-disk object.
-            result["hashes_ok"] = bool(manifest.get("content_hash") and result["producer_commit"])
-            if not verify_content_hash(manifest):
-                result["reasons"].append("manifest_hash_unverified")
+            result["reasons"].append("manifest_hash_unverified")
     else:
         result["reasons"].append("content_hash_absent")
 

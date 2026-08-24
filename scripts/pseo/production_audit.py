@@ -634,6 +634,7 @@ def run_audit(
         prod_sm = set()
         prod_sm_text = f"<!-- fetch_error: {e} -->"
 
+    production_sitemap_available = bool(prod_sm)
     sitemap_urls = prod_sm or local_sm
     hub_links = collect_hub_links(root)
     targets = collect_targets(reg)
@@ -661,6 +662,8 @@ def run_audit(
                 critical.append(f"{r.path}:{d}")
     for d in sm_defects:
         critical.append(f"sitemap:{d}")
+    if not production_sitemap_available:
+        critical.append("sitemap:production_sitemap_unavailable")
 
     # global: netlify host as canonical anywhere
     web_cfg_sha = _git_sha(root)
@@ -744,6 +747,7 @@ def run_audit(
             "urls": sorted(sitemap_urls),
             "defects": sm_defects,
             "source": "production" if prod_sm else "local",
+            "production_available": production_sitemap_available,
         },
         "counts": {
             "urls_audited": len(rows),

@@ -20,7 +20,31 @@ LEGACY_STEM = "CONTRACT_ANALYSIS_EDITORIAL_STATUS"
 
 
 def _root() -> Path:
+    env = os.environ.get("CONFENGE_CONTRACT_ANALYSIS_ROOT")
+    if env:
+        return Path(env)
     return Path(__file__).resolve().parents[2]
+
+
+def _portable_paths(value: Any) -> Any:
+    """Strip checkout-specific absolute prefixes from committed evidence."""
+    if isinstance(value, dict):
+        return {key: _portable_paths(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_portable_paths(item) for item in value]
+    if not isinstance(value, str) or not value.startswith("/"):
+        return value
+    path = Path(value)
+    for base, label in (
+        (_root(), ""),
+        (Path(os.environ.get("CONFENGE_HANDOFF_DIR", "/__missing_handoff__")), "$CONFENGE_HANDOFF_DIR"),
+    ):
+        try:
+            relative = path.relative_to(base)
+        except ValueError:
+            continue
+        return str(relative) if not label else f"{label}/{relative.as_posix()}"
+    return value
 
 
 def _rel_written(path: Path) -> str:
@@ -206,6 +230,7 @@ def write_status(status: dict[str, Any]) -> dict[str, Path]:
     md_path = root / REPORT_MD
     json_path = root / REPORT_JSON
     md_path.parent.mkdir(parents=True, exist_ok=True)
+    status = _portable_paths(status)
     body = render_markdown(status)
     md_path.write_text(body, encoding="utf-8")
     json_path.write_text(json.dumps(status, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

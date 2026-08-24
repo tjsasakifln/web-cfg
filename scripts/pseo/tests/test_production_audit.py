@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import patch
+from tempfile import TemporaryDirectory
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -12,6 +14,7 @@ from scripts.pseo.production_audit import (
     audit_sitemap_lastmod,
     evaluate_row,
     local_html_hash,
+    run_audit,
 )
 
 
@@ -152,6 +155,27 @@ class TestProductionAuditGates(unittest.TestCase):
 
     def test_local_html_hash_none_missing(self):
         self.assertIsNone(local_html_hash(ROOT, "/path/that/does/not/exist/"))
+
+    def test_production_sitemap_absence_is_fail_closed(self):
+        fake = {
+            "status": 503,
+            "html_snippet": "",
+            "body_size": 0,
+            "headers": {},
+            "redirect_chain": [],
+        }
+        with TemporaryDirectory() as temp_dir, patch(
+            "scripts.pseo.production_audit.fetch_url", return_value=fake
+        ), patch("scripts.pseo.production_audit.urllib.request.urlopen", side_effect=OSError("offline")):
+            report = run_audit(
+                root=ROOT,
+                base_url="https://invalid.example",
+                out_dir=Path(temp_dir),
+            )
+        self.assertFalse(report["ok"])
+        self.assertFalse(report["technical_ok"])
+        self.assertFalse(report["sitemap"]["production_available"])
+        self.assertIn("sitemap:production_sitemap_unavailable", report["critical"])
 
     def _ok_browser(self, path="/radar/x/", **extra):
         base = {

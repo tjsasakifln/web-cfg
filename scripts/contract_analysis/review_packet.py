@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.contract_analysis import AUTHORIZED_LISTING_SHA256, AUTHORIZED_PDF_SHA256
-from scripts.contract_analysis.approval import material_hash
+from scripts.contract_analysis.approval import material_hash, rendered_content_hash
 from scripts.contract_analysis.gate import PublicationDecision
 from scripts.contract_analysis.quality import HUMAN_REVIEW_PENDING, material_claims, source_claim_matrix_of
 
@@ -211,7 +211,7 @@ def emit_review_packet(
     dest.mkdir(parents=True, exist_ok=True)
     (dest / "screenshots").mkdir(exist_ok=True)
     quality = decision.quality if isinstance(getattr(decision, "quality", None), dict) else {}
-    rendered_hash = _sha256_text(rendered_html)
+    rendered_hash = rendered_content_hash(rendered_html, record=record, root=base)
     evidence_hash = str(record.get("evidence_pack_hash") or _sha256_text(json.dumps(record.get("sources") or [], sort_keys=True)))
     files = {
         "REVIEW.md": _review_markdown(
@@ -267,11 +267,17 @@ def packet_complete(path: Path) -> bool:
     return all((path / name).is_file() for name in PACKET_FILES) and (path / "screenshots").is_dir()
 
 
-def packet_hashes_match_rendered(path: Path, *, rendered_html: str) -> bool:
+def packet_hashes_match_rendered(
+    path: Path,
+    *,
+    rendered_html: str,
+    record: dict[str, Any] | None = None,
+    root: Path | None = None,
+) -> bool:
     """True only when packet SHA files match the rendered HTML and evidence bytes."""
     if not packet_complete(path):
         return False
-    expected_rendered = _sha256_text(rendered_html)
+    expected_rendered = rendered_content_hash(rendered_html, record=record, root=root)
     stored_rendered = (path / "rendered-content.sha256").read_text(encoding="utf-8").strip()
     if stored_rendered != expected_rendered:
         return False

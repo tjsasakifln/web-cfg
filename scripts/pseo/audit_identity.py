@@ -105,6 +105,10 @@ def evaluate_audit_currency(
     live_man = identity.get("live_manifest_sha")
     snap = identity.get("snapshot_hash")
     seeds = identity.get("seed_set_hash")
+    artifact = identity.get("public_artifact_hash")
+
+    if not artifact:
+        mismatches.append("public_artifact_hash_missing")
 
     if not netlify_deployed_sha:
         mismatches.append("netlify_deployed_sha_missing")

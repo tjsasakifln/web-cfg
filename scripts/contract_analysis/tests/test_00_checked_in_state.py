@@ -1,7 +1,7 @@
 """The checked-in public surface must match the current hash-bound decision.
 
-This file sorts before tests that exercise the mutating build command, so the
-assertions always inspect the committed artifacts rather than test output.
+The CLI tests are isolated under ``CONFENGE_CONTRACT_ANALYSIS_ROOT``; this
+test therefore does not depend on collection order.
 """
 
 from __future__ import annotations
@@ -32,6 +32,8 @@ def test_checked_in_canary_matches_current_approval_decision() -> None:
     decision = evaluate_cohort(records)[0]
     expected_html = render_analysis_html(record, decision)
     decision, expected_html = apply_rendered_hash_gate(record, decision, expected_html)
+    assert "Autoria e revisão estão identificadas" in expected_html
+    assert "Autoria e revisão humanas ainda não foram confirmadas" not in expected_html
 
     page = ROOT / AUTHORIZED_CANONICAL_PATH.strip("/") / "index.html"
     assert page.read_text(encoding="utf-8") == expected_html
@@ -60,7 +62,9 @@ def test_checked_in_canary_matches_current_approval_decision() -> None:
     )
 
     assert sitemap_exists is decision.indexable
-    assert robots_allows is decision.indexable
+    # The previously indexable canary must stay crawlable while noindex is
+    # being observed. Blocking it in robots.txt would prevent deindexation.
+    assert robots_allows is True
     assert header_override is decision.indexable
     if sitemap_exists:
         assert slug in (ROOT / "sitemap-analises-contratos.xml").read_text(
