@@ -276,6 +276,38 @@ const journeys = [
     expectAsset: "valor-tipico-contratos-pavimentacao",
     expectFamily: "market-answer",
   },
+  {
+    // #290: the two first-level navigation hubs used to end on a link back to
+    // the home form. Their one dominant next action is now a real transition.
+    name: "hub_servicos_diagnostico",
+    html: "servicos-obras-publicas/index.html",
+    pathname: "/servicos-obras-publicas/",
+    pick: (a) => a["data-cta-id"] === "hub-servicos-diagnostico-360",
+    expectDest: "/diagnostico-b2g-360/",
+    expectService: "diagnostico-b2g-360",
+    expectAsset: "servicos-obras-publicas",
+    expectFamily: "hub",
+  },
+  {
+    name: "hub_problemas_defesa_margem",
+    html: "problemas-que-resolvemos/index.html",
+    pathname: "/problemas-que-resolvemos/",
+    pick: (a) => a["data-cta-id"] === "hub-problemas-defesa-margem",
+    expectDest: "/defesa-margem-contratos-publicos/",
+    expectService: "defesa-margem-contratos-publicos",
+    expectAsset: "problemas-que-resolvemos",
+    expectFamily: "hub",
+  },
+  {
+    name: "hub_ferramentas_expansao",
+    html: "ferramentas/index.html",
+    pathname: "/ferramentas/",
+    pick: (a) => a["data-cta-id"] === "ferramentas-hub-diagnostico-expansao",
+    expectDest: "/diagnostico-b2g-expansao/",
+    expectService: "diagnostico-b2g-expansao",
+    expectAsset: "ferramentas-hub",
+    expectFamily: "tool",
+  },
 ];
 
 const journeyResults = [];

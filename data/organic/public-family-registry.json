@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-08-23",
+  "as_of": "2026-08-24",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -8,6 +8,7 @@
     "capture_form": "<form action=\"/.netlify/functions/lead\"> dentro do <main> — captura persistida.",
     "whatsapp": "<a href=\"...wa.me/...\"> dentro do <main> — conversa direta.",
     "capture_form_or_whatsapp": "captura persistida ou WhatsApp dentro do <main>.",
+    "service_transition": "Exatamente um CTA dominante no <main> para uma rota canônica de serviço, com atribuição completa para content_to_service e sem UNKNOWN_SERVICE.",
     "none": "sem ação terminal. Só é aceito com profile trust_or_legal e motivo escrito."
   },
   "profile_rules": {
@@ -207,12 +208,6 @@
       "owner_issue": 290,
       "debt": [
         {
-          "route": "/casos/",
-          "owner_issue": 290,
-          "reason": "Hub de casos listado na evidência de #290: 0 formulário e 0 wa.me no <main>, passando no gate antigo apenas por has_attributed_cta. A ação terminal do hub é entrega de #290.",
-          "expires_at": "2026-09-30"
-        },
-        {
           "route": "/casos/aditivo-art125-demonstrativo/",
           "owner_issue": 290,
           "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
@@ -295,50 +290,40 @@
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
       "owner_issue": 295,
-      "debt": [
-        {
-          "route": "/entregas/",
-          "owner_issue": 295,
-          "reason": "33 KB de prova de entrega com preços de R$ 599 a R$ 8.000 e nenhuma forma de dizer \"quero isto\": 0 formulário e 0 wa.me no <main>. A reestruturação comparável e a ação terminal são a entrega de #295, com o padrão de captura de #289.",
-          "expires_at": "2026-09-30"
-        }
-      ]
+      "debt": []
     },
     {
       "id": "servicos-obras-publicas",
       "visitor_job": "Triar qual serviço da CONFENGE corresponde ao próprio evento contratual.",
       "profile": "commercial_content",
-      "terminal_action": "capture_form_or_whatsapp",
+      "terminal_action": "service_transition",
       "match": {"routes": ["/servicos-obras-publicas/"]},
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
       "owner_issue": 290,
-      "debt": [
-        {
-          "route": "/servicos-obras-publicas/",
-          "owner_issue": 290,
-          "reason": "Destino de primeiro nível do header desde #280, publicado em 2026-08-23 sem ação terminal no <main>: a única saída é o CTA do chrome, que tira o visitante da página. A próxima ação dominante é entrega de #290.",
-          "expires_at": "2026-09-30"
-        }
-      ]
+      "debt": []
     },
     {
       "id": "problemas-que-resolvemos",
       "visitor_job": "Reconhecer o próprio problema contratual na lista e ir para quem o resolve.",
       "profile": "commercial_content",
-      "terminal_action": "capture_form_or_whatsapp",
+      "terminal_action": "service_transition",
       "match": {"routes": ["/problemas-que-resolvemos/"]},
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
       "owner_issue": 290,
-      "debt": [
-        {
-          "route": "/problemas-que-resolvemos/",
-          "owner_issue": 290,
-          "reason": "Destino de primeiro nível do header desde #280, publicado em 2026-08-23 sem ação terminal no <main>: a única saída é o CTA do chrome, que tira o visitante da página. A próxima ação dominante é entrega de #290.",
-          "expires_at": "2026-09-30"
-        }
-      ]
+      "debt": []
+    },
+    {
+      "id": "ferramentas-hub",
+      "visitor_job": "Escolher o cálculo aplicável e avançar para o diagnóstico de carteira quando a decisão ultrapassa uma ferramenta isolada.",
+      "profile": "commercial_content",
+      "terminal_action": "service_transition",
+      "match": {"routes": ["/ferramentas/"]},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "none"},
+      "declared_at": "2026-08-24",
+      "owner_issue": 290,
+      "debt": []
     },
     {
       "id": "ferramentas",
@@ -350,12 +335,6 @@
       "declared_at": "2026-08-23",
       "owner_issue": 290,
       "debt": [
-        {
-          "route": "/ferramentas/",
-          "owner_issue": 290,
-          "reason": "Hub de ferramentas listado na evidência de #290: 0 formulário e 0 wa.me no <main>. #290 decide se o hub precisa de encaminhamento explícito ou se a ação terminal fica no resultado da ferramenta.",
-          "expires_at": "2026-09-30"
-        },
         {
           "route": "/ferramentas/checklist-reequilibrio/",
           "owner_issue": 290,

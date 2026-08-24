@@ -269,6 +269,103 @@ _reset();
   pass("pillar_forms_distinct_attribution", { routes: pillars.map(([slug]) => slug) });
 }
 
+// 5c) The two hub forms introduced by #290 reach the real persistence path
+// with their shipped attribution. A static <form> alone is not conversion.
+{
+  const hubs = [
+    {
+      route: "casos",
+      journey: "contrato",
+      stage: "casos-hub",
+      asset: "casos-hub",
+      cta: "casos-hub-handraise",
+    },
+    {
+      route: "entregas",
+      journey: "operacao",
+      stage: "entregas-exemplos-hub",
+      asset: "entregas-exemplos-hub",
+      cta: "entregas-hub-handraise",
+    },
+  ];
+  const ids = new Set();
+  for (let i = 0; i < hubs.length; i += 1) {
+    const hub = hubs[i];
+    const html = fs.readFileSync(path.join(root, hub.route, "index.html"), "utf8");
+    const form = html.match(/<form\b[^>]*action="\/\.netlify\/functions\/lead"[^>]*>[\s\S]*?<\/form>/i)?.[0] || "";
+    if (!form) fail("hub_form_missing", hub.route);
+    if (/data-[a-z-]+="[^"]*(?:@|\b\d{8,}\b)[^"]*"/i.test(form)) {
+      fail("hub_form_data_attr_pii", hub.route);
+    }
+    const hiddenValue = (name) => form.match(
+      new RegExp(`<input\\b(?=[^>]*\\bname=["']${name}["'])[^>]*\\bvalue=["']([^"']*)["'][^>]*>`, "i"),
+    )?.[1];
+    const expectedHidden = {
+      offer_id: "",
+      terms_id: "",
+      jornada: hub.journey,
+      estagio: hub.stage,
+      origem: hub.route,
+      asset_id: hub.asset,
+      cta_id: hub.cta,
+      route_family: hub.route,
+      landing_page: `https://confenge.com.br/${hub.route}/`,
+    };
+    for (const [name, expected] of Object.entries(expectedHidden)) {
+      const got = hiddenValue(name);
+      if (got !== expected) fail("hub_form_hidden_attribution", { route: hub.route, name, got, expected });
+    }
+    if (!/<input\b(?=[^>]*type="checkbox")(?=[^>]*name="consentimento")(?=[^>]*\brequired\b)[^>]*>/i.test(form)) {
+      fail("hub_form_consent_required", hub.route);
+    }
+
+    const res = await handler(
+      event(
+        {
+          nome: `QA Hub ${i + 1}`,
+          email: `qa-hub-${i + 1}@example.com`,
+          estagio: hub.stage,
+          jornada: hub.journey,
+          consentimento: "1",
+          offer_id: "",
+          terms_id: "",
+          origem: hub.route,
+          landing_page: `https://confenge.com.br/${hub.route}/`,
+          route_family: hub.route,
+          asset_id: hub.asset,
+          cta_id: hub.cta,
+          record_kind: "qa",
+          test_mode: true,
+          idempotency_key: `qa-hub-${i + 1}`,
+        },
+        "POST",
+        { ip: `192.0.2.${30 + i}` },
+      ),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.ok || !data.lead_id) {
+      fail("hub_form_persist", { route: hub.route, status: res.statusCode, data });
+    }
+    const stored = await mem.get(data.lead_id);
+    if (
+      !stored
+      || stored.route_family !== hub.route
+      || stored.origem !== hub.route
+      || stored.asset_id !== hub.asset
+      || stored.cta_id !== hub.cta
+      || stored.jornada !== hub.journey
+    ) {
+      fail("hub_form_attribution", { route: hub.route, stored });
+    }
+    if (stored.offer_id || stored.terms_id || stored.source !== "CONFENGE_WEB") {
+      fail("hub_form_unpriced_contract", { route: hub.route, stored });
+    }
+    ids.add(data.lead_id);
+  }
+  if (ids.size !== hubs.length) fail("hub_form_distinct_receipts", [...ids]);
+  pass("hub_forms_persisted_attribution", { routes: hubs.map(({ route }) => route) });
+}
+
 // 6) idempotency — second submit same payload returns same lead_id + HTTP 200 + idempotent
 {
   const payload = {

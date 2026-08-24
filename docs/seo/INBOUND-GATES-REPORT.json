@@ -87,69 +87,6 @@
         },
         {
           "gate": "conversion",
-          "path": "servicos-obras-publicas/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/servicos-obras-publicas/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "servicos-obras-publicas/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "ferramentas/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/ferramentas/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "ferramentas/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "problemas-que-resolvemos/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/problemas-que-resolvemos/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "problemas-que-resolvemos/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "entregas/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/entregas/ required=capture_form issue=#295 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "entregas/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
           "path": "reequilibrio-obras-publicas/index.html",
           "reason": "missing_on_page_form",
           "excerpt": "profile=service_pillar route=/reequilibrio-obras-publicas/",
@@ -332,16 +269,16 @@
         "family_registry": {
           "path": "data/organic/public-family-registry.json",
           "schema_version": "public-family-registry-v1",
-          "families": 19,
+          "families": 20,
           "fail_closed": true,
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 41,
+          "covered": 46,
           "total": 67,
-          "coverage": 0.6119,
+          "coverage": 0.6866,
           "exempt_trust_or_legal": 9,
-          "registered_debt": 20
+          "registered_debt": 15
         },
         "exemptions": [
           {
@@ -351,16 +288,6 @@
             "reason": "Canário de análise técnica publicado sob gate editorial de #83, sem ação terminal no <main>. A ação terminal do canário é decisão de #83, que controla o gate editorial da família; alterar o HTML aqui furaria aquele gate.",
             "owner_issue": 83,
             "expires_at": "2026-10-31",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
-          {
-            "route": "/casos/",
-            "family": "casos",
-            "kind": "debt",
-            "reason": "Hub de casos listado na evidência de #290: 0 formulário e 0 wa.me no <main>, passando no gate antigo apenas por has_attributed_cta. A ação terminal do hub é entrega de #290.",
-            "owner_issue": 290,
-            "expires_at": "2026-09-30",
             "required_terminal_action": "capture_form_or_whatsapp",
             "expired": false
           },
@@ -465,26 +392,6 @@
             "expired": false
           },
           {
-            "route": "/entregas/",
-            "family": "entregas",
-            "kind": "debt",
-            "reason": "33 KB de prova de entrega com preços de R$ 599 a R$ 8.000 e nenhuma forma de dizer \"quero isto\": 0 formulário e 0 wa.me no <main>. A reestruturação comparável e a ação terminal são a entrega de #295, com o padrão de captura de #289.",
-            "owner_issue": 295,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form",
-            "expired": false
-          },
-          {
-            "route": "/ferramentas/",
-            "family": "ferramentas",
-            "kind": "debt",
-            "reason": "Hub de ferramentas listado na evidência de #290: 0 formulário e 0 wa.me no <main>. #290 decide se o hub precisa de encaminhamento explícito ou se a ação terminal fica no resultado da ferramenta.",
-            "owner_issue": 290,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
-          {
             "route": "/ferramentas/checklist-reequilibrio/",
             "family": "ferramentas",
             "kind": "debt",
@@ -521,26 +428,6 @@
             "reason": "Página de método publicada antes deste gate existir: hoje encerra sem captura e sem WhatsApp no <main>. A ação terminal pertence ao trabalho de autoridade de #74; corrigir o HTML aqui invadiria o escopo daquela issue.",
             "owner_issue": 74,
             "expires_at": "2026-10-31",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
-          {
-            "route": "/problemas-que-resolvemos/",
-            "family": "problemas-que-resolvemos",
-            "kind": "debt",
-            "reason": "Destino de primeiro nível do header desde #280, publicado em 2026-08-23 sem ação terminal no <main>: a única saída é o CTA do chrome, que tira o visitante da página. A próxima ação dominante é entrega de #290.",
-            "owner_issue": 290,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
-          {
-            "route": "/servicos-obras-publicas/",
-            "family": "servicos-obras-publicas",
-            "kind": "debt",
-            "reason": "Destino de primeiro nível do header desde #280, publicado em 2026-08-23 sem ação terminal no <main>: a única saída é o CTA do chrome, que tira o visitante da página. A próxima ação dominante é entrega de #290.",
-            "owner_issue": 290,
-            "expires_at": "2026-09-30",
             "required_terminal_action": "capture_form_or_whatsapp",
             "expired": false
           },
@@ -630,7 +517,7 @@
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 39
+        "warnings": 30
       }
     },
     "legacy_entity": {
