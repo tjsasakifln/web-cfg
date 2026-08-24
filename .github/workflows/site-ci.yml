@@ -60,6 +60,7 @@ jobs:
           npm run test:lead-function
           npm run test:search-observation
           npm run test:checkout-negatives
+          npm run test:deliverables-registry
           npm run test:radar-params
           npm run test:bofu-dominance
           npm run test:local-entity

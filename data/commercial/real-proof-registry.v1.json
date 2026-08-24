@@ -1,0 +1,35 @@
+{
+  "schema": "confenge.real-proof-registry/1.0",
+  "registry_version": "CFG-REAL-PROOF-2026-08-24-v1",
+  "issue": "#328",
+  "state": "BLOCKED_EXTERNAL",
+  "consent_contract": "#249",
+  "audit_2026_08_24": {
+    "reviews": 0,
+    "aggregate_ratings": 0,
+    "client_logos": 0,
+    "testimonials": 0,
+    "approved_client_cases": 0
+  },
+  "required_consent_fields": [
+    "autorizacao_explicita_do_titular",
+    "escopo_de_identificacao_e_reproducao",
+    "aprovador_humano_nomeado",
+    "evidencia_de_que_a_entrega_ocorreu",
+    "fatos_afirmaveis_com_fonte",
+    "regras_de_retencao_revisao_e_revogacao"
+  ],
+  "publication_rules": [
+    "publicar no máximo um canário; sem carrossel de logos, sem rating agregado, sem multiplicação de cases",
+    "exemplos sintéticos permanecem rotulados e não se misturam visualmente à prova real",
+    "resultado não verificável é declarado UNKNOWN, nunca preenchido com copy",
+    "revogação retira conteúdo visível, schema, cache, sitemap e referências internas"
+  ],
+  "forbidden_schema_types_on_public_pages": ["Review", "AggregateRating"],
+  "kill_rules": [
+    "sem consentimento: não publicar",
+    "consentimento ambíguo: não publicar",
+    "prova fraca ou sem diferença material: manter privada e não criar um segundo caso para compensar volume"
+  ],
+  "entries": []
+}

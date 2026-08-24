@@ -165,6 +165,17 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/diagnostico-b2g-expansao/"],
   },
+  "test:deliverables-registry": {
+    producers: [
+      "tests/commercial/",
+      "scripts/commercial/",
+      "data/commercial/",
+      "data/offers/catalog.snapshot.json",
+      "entregas/index.html",
+    ],
+    artifacts: [],
+    surfaces: ["/entregas/"],
+  },
   "test:bofu-dominance": {
     producers: ["tests/bofu_dominance/", "scripts/bofu_dominance/", "data/bofu-dominance/"],
     artifacts: ["docs/seo/bofu-dominance/"],
