@@ -437,6 +437,8 @@ export const SUITE_GRAPH = Object.freeze({
       "scripts/revops/test_schedules.mjs",
       "scripts/revops/inbound_counters_proof.mjs",
       "scripts/revops/inbound_proof_contract.mjs",
+      "data/revops/inbound-proof-runs/inbound-issue-267-run-32685188116.json",
+      "docs/ops/INBOUND-PRODUCTION-PROOF-267.md",
       "scripts/revops/scheduled_daily.mjs",
       "scripts/revops/scheduled_nurture.mjs",
       "scripts/revops/scheduled_weekly.mjs",

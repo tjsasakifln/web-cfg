@@ -7,6 +7,7 @@ import { execFileSync, execSync } from "child_process";
 import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { tmpdir } from "os";
+import { createHash } from "crypto";
 import { createOpsJsonClient } from "./ops_fetch.mjs";
 import {
   inboundConfigurationSummary,
@@ -79,6 +80,37 @@ function fail(n, d) {
   if (summary.webhook_url !== "MISSING" || summary.webhook_secret !== "MISSING") {
     fail("inbound_proof_missing_configuration_summary", summary);
   } else pass("inbound_proof_missing_configuration_summary");
+}
+
+// #267: committed production evidence stays aggregate-only and immutable.
+{
+  const proofPath = resolve(
+    ROOT,
+    "data/revops/inbound-proof-runs/inbound-issue-267-run-32685188116.json"
+  );
+  const proofBytes = readFileSync(proofPath);
+  const proof = JSON.parse(proofBytes.toString("utf8"));
+  const digest = createHash("sha256").update(proofBytes).digest("hex");
+  if (digest !== "98ab2bae579a350ee07624a1bac835162253f580014c6bfcd7f69b79428da1ac") {
+    fail("inbound_proof_committed_digest", digest);
+  } else pass("inbound_proof_committed_digest");
+  if (
+    proof.schema !== "confenge-inbound-counters-proof/1.1" ||
+    proof.issue !== 267 ||
+    proof.ok !== true ||
+    proof.transport_status !== "READY" ||
+    !inboundTransportReady(proof.inbound_handoff_configuration)
+  ) {
+    fail("inbound_proof_committed_contract", proof);
+  } else pass("inbound_proof_committed_contract");
+  if (
+    proof.inbound_handoff_counters?.delivered !== 0 ||
+    proof.consented_real_contact !== "MISSING" ||
+    proof.real_loop_status !== "BLOCKED" ||
+    !proof.non_claims?.includes("does_not_requeue_or_drain_any_record")
+  ) {
+    fail("inbound_proof_committed_residual", proof);
+  } else pass("inbound_proof_committed_residual");
 }
 
 // 2d) The focal proof fails closed without the Actions secret and still emits evidence.
