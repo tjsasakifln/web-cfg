@@ -94,8 +94,9 @@ Ver `forbidden_patterns` em `design-system.json`. Resumo operacional:
 ## Arquétipos fora da home
 
 O gate de arquétipo não é exclusivo da home. `archetype_gated_surfaces` em
-`design-system.json` lista as superfícies em que **toda** seção narrativa dentro de `<main>`
-precisa declarar `data-section-archetype`, com o valor presente em `section_archetypes`.
+`design-system.json` lista as superfícies em que **toda** seção narrativa no primeiro nível de
+`<main>` precisa declarar `data-section-archetype`, com o valor presente em
+`section_archetypes`.
 Nessas páginas o gate reprova:
 
 - seção narrativa sem arquétipo declarado;

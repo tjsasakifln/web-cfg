@@ -149,7 +149,9 @@ for (const width of widths) {
   if (!metrics.compareAboveExamples) errors.push("compare_before_sections");
   if (!metrics.compareScrollFocusable) errors.push("compare_scroll_focus");
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
-  if (metrics.primaries > 1) errors.push(`primary_cta_overuse=${metrics.primaries}`);
+  // One primary leads to comparison and the other submits the terminal
+  // hand-raise added by #290; neither replaces a priced offer path.
+  if (metrics.primaries > 2) errors.push(`primary_cta_overuse=${metrics.primaries}`);
   if (metrics.navDeliverables !== "Entregas" || metrics.navCurrent !== "page") errors.push("nav_contract");
   if (metrics.emptyPlaceholders) errors.push("empty_placeholders");
 
