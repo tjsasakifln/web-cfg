@@ -23,58 +23,15 @@ const { REQUIRED_DECLARATIONS } = require(path.join(root, "scripts/offers/accept
 
 const PIN = prodConfig.PINNED_LEGAL_HASH;
 const CNPJ = "52407089000109";
-const EXECUTE_EVIDENCE_REF = "tests/offers/fixtures/piloto-decision/execute-authority.json";
-const ROLLBACK_EVIDENCE_REF = "tests/offers/fixtures/piloto-decision/rollback-authority.json";
-const EXECUTE_EVIDENCE_SHA = "4c4b3eb0f9cab70fa9265a57b2070e49f3e71ad88112ae902adb02371f6f50c7";
-const ROLLBACK_EVIDENCE_SHA = "e1b7719f6330815da8b6e744aca0f8b4e4b38b15e780712967dc561b50cf11fc";
-const CONTRACT_EVIDENCE = {
-  root,
-  allowedEvidencePrefixes: ["tests/offers/fixtures/piloto-decision/"],
-  allowSyntheticEvidence: true,
-  requireTracked: true,
-};
-const canonicalDecision = require(path.join(root, "scripts/offers/piloto-decision.cjs")).loadDecision();
-const CONTRACT_EXECUTE_DECISION = structuredClone(canonicalDecision);
-CONTRACT_EXECUTE_DECISION.decision_id = "CFG-PILOTO-CHECKOUT-TEST-EXECUTE";
-CONTRACT_EXECUTE_DECISION.decision_state = "EXECUTE";
-CONTRACT_EXECUTE_DECISION.activation_authorized = true;
-CONTRACT_EXECUTE_DECISION.scope.url_decisions[0].decision = "EXECUTE";
-for (const criterion of CONTRACT_EXECUTE_DECISION.reopening_gate.criteria) {
-  criterion.status = "PASS";
-  criterion.evidence_ref = EXECUTE_EVIDENCE_REF;
-  criterion.evidence_sha256 = EXECUTE_EVIDENCE_SHA;
-}
-CONTRACT_EXECUTE_DECISION.execution_authority.canary_offer_id = "CFG-DIAG-EXP-v1";
-CONTRACT_EXECUTE_DECISION.execution_authority.spend_ceiling_cents = 800000;
-CONTRACT_EXECUTE_DECISION.execution_authority.evidence_ref = EXECUTE_EVIDENCE_REF;
-CONTRACT_EXECUTE_DECISION.execution_authority.evidence_sha256 = EXECUTE_EVIDENCE_SHA;
-const APPROVERS = {
-  legal: "test-legal-owner",
-  fiscal_nfse: "test-fiscal-owner",
-  delivery_capacity: "test-delivery-owner",
-  security: "test-security-owner",
-};
-for (const approval of CONTRACT_EXECUTE_DECISION.execution_authority.approvals) {
-  approval.approver_id = APPROVERS[approval.role];
-}
-const CONTRACT_ROLLBACK_DECISION = structuredClone(canonicalDecision);
-CONTRACT_ROLLBACK_DECISION.decision_id = "CFG-PILOTO-CHECKOUT-TEST-ROLLBACK";
-CONTRACT_ROLLBACK_DECISION.rollback_webhook_receive = {
-  authorized: true,
-  prior_execute_evidence_ref: EXECUTE_EVIDENCE_REF,
-  prior_execute_evidence_sha256: EXECUTE_EVIDENCE_SHA,
-  rollback_evidence_ref: ROLLBACK_EVIDENCE_REF,
-  rollback_evidence_sha256: ROLLBACK_EVIDENCE_SHA,
-};
 
 function createCheckout(deps = {}) {
-  return checkoutFn.createHandler({ ...deps, decision: CONTRACT_EXECUTE_DECISION, evidence: CONTRACT_EVIDENCE });
+  return checkoutFn.createHandler({ ...deps, config: deps.config || productionTestConfig(deps.env || PROD_ENV) });
 }
 function createWebhook(deps = {}) {
-  return webhookFn.createHandler({ ...deps, decision: CONTRACT_EXECUTE_DECISION, evidence: CONTRACT_EVIDENCE });
+  return webhookFn.createHandler({ ...deps, config: deps.config || productionTestConfig(deps.env || PROD_ENV) });
 }
 function createAcceptance(deps = {}) {
-  return acceptFn.createHandler({ ...deps, decision: CONTRACT_EXECUTE_DECISION, evidence: CONTRACT_EVIDENCE });
+  return acceptFn.createHandler({ ...deps, config: deps.config || productionTestConfig(deps.env || PROD_ENV) });
 }
 
 const PROD_ENV = {
@@ -90,6 +47,27 @@ const PROD_ENV = {
   ASAAS_PRODUCTION_WEBHOOK_TOKEN: "prod-webhook-token-contract",
   CONFENGE_WEBHOOK_APPLY: "true",
 };
+
+function productionTestConfig(env = PROD_ENV) {
+  return {
+    ok: true,
+    mode: "production",
+    baseUrl: prodConfig.DEFAULT_PRODUCTION_BASE,
+    apiKey: env.ASAAS_PRODUCTION_API_KEY,
+    webhookToken: env.ASAAS_PRODUCTION_WEBHOOK_TOKEN,
+    webhookApply: true,
+    onboardingEnabled: false,
+    legalHash: PIN,
+    termsVersion: prodConfig.TERMS_VERSION,
+    approvedOffer: prodConfig.APPROVED_OFFER,
+    approvedAmountCents: prodConfig.APPROVED_AMOUNT_CENTS,
+    timeoutMs: 8000,
+    maxRetries: 1,
+    maxBodyBytes: 64 * 1024,
+    minutesToExpire: 60,
+    userAgent: "CONFENGE-web-cfg/asaas-production-contract-test",
+  };
+}
 
 const results = [];
 function pass(name, detail) {
@@ -183,7 +161,7 @@ async function seedAcceptance(store) {
 }
 
 {
-  const sandboxKey = parse(await createCheckout({
+  const sandboxKey = parse(await checkoutFn.createHandler({
     env: { ...PROD_ENV, ASAAS_PRODUCTION_API_KEY: "FAKESECRET_e1f2g3h4i5j6k7l8m9n0" },
     store: new MemoryOfferStore(),
   })({ httpMethod: "POST", body: "{}" }));
@@ -199,13 +177,13 @@ async function seedAcceptance(store) {
 }
 
 {
-  const missingHash = parse(await createCheckout({
+  const missingHash = parse(await checkoutFn.createHandler({
     env: { ...PROD_ENV, CONFENGE_LEGAL_AUTHORITY_HASH: "" },
     store: new MemoryOfferStore(),
   })({ httpMethod: "POST", body: "{}" }));
   assert("legal_hash_missing_rejected", missingHash.body.error === "legal_hash_missing" || missingHash.statusCode >= 400, missingHash);
 
-  const badHash = parse(await createCheckout({
+  const badHash = parse(await checkoutFn.createHandler({
     env: { ...PROD_ENV, CONFENGE_LEGAL_AUTHORITY_HASH: "sha256:deadbeef" },
     store: new MemoryOfferStore(),
   })({ httpMethod: "POST", body: "{}" }));
@@ -372,65 +350,6 @@ async function seedAcceptance(store) {
 }
 
 {
-  const store = new MemoryOfferStore();
-  const { confirmed } = await seedAcceptance(store);
-  const created = parse(await createCheckout({ env: PROD_ENV, store, http: prodHttp() })({
-    httpMethod: "POST",
-    body: JSON.stringify({
-      offer_id: "CFG-DIAG-EXP-v1",
-      acceptance_id: confirmed.body.acceptance_id,
-      cnpj: CNPJ,
-    }),
-  }));
-  assert("rollback_fixture_checkout_created", created.statusCode === 201, created);
-
-  const rollbackWebhook = webhookFn.createHandler({
-    env: PROD_ENV,
-    store,
-    decision: CONTRACT_ROLLBACK_DECISION,
-    evidence: CONTRACT_EVIDENCE,
-  });
-  const known = parse(await rollbackWebhook({
-    httpMethod: "POST",
-    headers: { "asaas-access-token": PROD_ENV.ASAAS_PRODUCTION_WEBHOOK_TOKEN },
-    body: JSON.stringify({
-      id: "evt_rollback_known",
-      event: "PAYMENT_RECEIVED",
-      payment: {
-        id: "pay_rollback_known",
-        value: 8000,
-        externalReference: created.body.created.external_reference,
-      },
-    }),
-  }));
-  assert("rollback_known_event_persisted", known.statusCode === 200 && known.body.persisted === true, known);
-  assert("rollback_receive_only", known.body.receive_only === true && known.body.apply === false, known);
-  assert("rollback_known_receipt_exists", Boolean(await store.get("receipt:evt_rollback_known")), known);
-  assert("rollback_does_not_apply", (await store.get("processed:evt_rollback_known")) == null, known);
-  assert("rollback_does_not_create_payment_object", (await store.get("object:pay_rollback_known")) == null, known);
-
-  const unknown = parse(await rollbackWebhook({
-    httpMethod: "POST",
-    headers: { "asaas-access-token": PROD_ENV.ASAAS_PRODUCTION_WEBHOOK_TOKEN },
-    body: JSON.stringify({
-      id: "evt_rollback_unknown",
-      event: "PAYMENT_RECEIVED",
-      payment: { id: "pay_unknown", value: 8000, externalReference: "cfg:unknown" },
-    }),
-  }));
-  assert("rollback_unknown_object_rejected", unknown.statusCode === 404 && unknown.body.error === "rollback_object_unknown", unknown);
-  assert("rollback_unknown_not_persisted", (await store.get("receipt:evt_rollback_unknown")) == null, unknown);
-
-  const rollbackCheckout = parse(await checkoutFn.createHandler({
-    env: PROD_ENV,
-    store,
-    decision: CONTRACT_ROLLBACK_DECISION,
-    evidence: CONTRACT_EVIDENCE,
-  })({ httpMethod: "POST", body: "{}" }));
-  assert("rollback_checkout_stays_blocked", rollbackCheckout.statusCode === 404, rollbackCheckout);
-}
-
-{
   assert("normalize_splits_confirmed", events.normalizeStatus("CONFIRMED") === "PAYMENT_CONFIRMED", events.normalizeStatus("CONFIRMED"));
   assert("normalize_splits_received", events.normalizeStatus("RECEIVED") === "PAYMENT_RECEIVED", events.normalizeStatus("RECEIVED"));
   assert("confirmed_is_financial_not_cash", events.isFinancialConfirmation("PAYMENT_CONFIRMED") && !events.isReceivedRevenue("PAYMENT_CONFIRMED"), true);
@@ -459,7 +378,7 @@ async function seedAcceptance(store) {
 }
 
 {
-  const kill = parse(await createCheckout({
+  const kill = parse(await checkoutFn.createHandler({
     env: { ...PROD_ENV, CONFENGE_DIAG_CHECKOUT_ENABLED: "false" },
     store: new MemoryOfferStore(),
   })({ httpMethod: "POST", body: "{}" }));

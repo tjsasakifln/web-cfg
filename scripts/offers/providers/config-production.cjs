@@ -4,7 +4,6 @@
  */
 const crypto = require("crypto");
 const { loadFlags } = require("../flags.cjs");
-const { loadDecision } = require("../piloto-decision.cjs");
 
 const DEFAULT_PRODUCTION_BASE = "https://api.asaas.com/v3";
 const PRODUCTION_API_HOSTS = Object.freeze(["api.asaas.com"]);
@@ -98,8 +97,8 @@ function assertCallbackUrl(raw) {
   return { ok: true, url: url.toString() };
 }
 
-function resolveProductionConfig(env = process.env, options = {}) {
-  const flags = loadFlags(env, options);
+function resolveProductionConfig(env = process.env) {
+  const flags = loadFlags(env);
   const mode = String(flags.ASAAS_MODE || "disabled").trim();
   if (mode !== "production") {
     return { ok: false, error: "feature_disabled", mode };
@@ -118,17 +117,6 @@ function resolveProductionConfig(env = process.env, options = {}) {
   }
   if (flags.CONFENGE_OFFER_CATALOG_PUBLIC !== true) {
     return { ok: false, error: "catalog_not_public", mode };
-  }
-  const decision = Object.prototype.hasOwnProperty.call(options, "decision") && options.decision !== undefined
-    ? options.decision
-    : loadDecision();
-  const authority = decision && decision.execution_authority;
-  if (!authority || authority.canary_offer_id !== APPROVED_OFFER) {
-    return { ok: false, error: "canary_offer_not_approved", mode };
-  }
-  if (!Number.isSafeInteger(authority.spend_ceiling_cents)
-      || authority.spend_ceiling_cents < APPROVED_AMOUNT_CENTS) {
-    return { ok: false, error: "spend_ceiling_exceeded", mode };
   }
   const providedHash = String(flags.legal_authority_hash || "").trim();
   if (!providedHash) return { ok: false, error: "legal_hash_missing", mode };
@@ -174,32 +162,6 @@ function resolveProductionConfig(env = process.env, options = {}) {
     minutesToExpire: Math.min(Math.max(Number(env.ASAAS_CHECKOUT_MINUTES || 60), 60), 1440),
     userAgent: "CONFENGE-web-cfg/asaas-production",
   };
-}
-
-function resolveProductionWebhookConfig(env = process.env, options = {}) {
-  const flags = loadFlags(env, options);
-  if (flags.rollback_webhook_receive_authorized === true) {
-    const webhookToken = String(env.ASAAS_PRODUCTION_WEBHOOK_TOKEN || "");
-    const apiKey = String(env.ASAAS_PRODUCTION_API_KEY || "");
-    if (!webhookToken) return { ok: false, error: "webhook_token_missing", mode: "rollback_receive_only" };
-    if (webhookToken.startsWith(SANDBOX_KEY_PREFIX) || webhookToken.startsWith("test_")) {
-      return { ok: false, error: "sandbox_key_blocked", mode: "rollback_receive_only" };
-    }
-    if (apiKey && safeEqual(apiKey, webhookToken)) {
-      return { ok: false, error: "webhook_token_must_differ", mode: "rollback_receive_only" };
-    }
-    return {
-      ok: true,
-      mode: "rollback_receive_only",
-      webhookToken,
-      webhookApply: false,
-      receiveOnly: true,
-      userAgent: "CONFENGE-web-cfg/asaas-production-rollback-receive-only",
-    };
-  }
-  const config = resolveProductionConfig(env, options);
-  if (!config.ok) return config;
-  return { ...config, receiveOnly: false };
 }
 
 function requireProductionRuntime(config, { needApiKey = false, needWebhook = false } = {}) {
@@ -249,7 +211,6 @@ module.exports = {
   assertProductionLinkUrl,
   assertCallbackUrl,
   resolveProductionConfig,
-  resolveProductionWebhookConfig,
   requireProductionRuntime,
   verifyWebhookToken,
   headerValue,

@@ -57,41 +57,6 @@ function computeCorrelationId({ acceptance_id } = {}) {
   return `corr_${crypto.createHash("sha256").update(String(acceptance_id || "")).digest("hex").slice(0, 24)}`;
 }
 
-function knownObjectKey(kind, value) {
-  if (!value) return null;
-  const digest = crypto.createHash("sha256").update(String(value)).digest("hex");
-  return `known-production-${kind}:${digest}`;
-}
-
-async function indexKnownProductionObject(store, { provider_id, external_reference } = {}) {
-  if (!store) return;
-  const entries = [
-    [knownObjectKey("provider-object", provider_id), "provider_object"],
-    [knownObjectKey("external-reference", external_reference), "external_reference"],
-  ];
-  for (const [key, kind] of entries) {
-    if (!key) continue;
-    await store.put(key, {
-      kind: "known_production_object",
-      environment: "production",
-      identity_kind: kind,
-      active_for_rollback_receive: true,
-    });
-  }
-}
-
-async function isKnownProductionObject(store, raw, mapped) {
-  if (!store) return false;
-  const objectId = objectIdFromPayload(raw);
-  if (objectId) {
-    if (await store.get(knownObjectKey("provider-object", objectId))) return true;
-    if (await store.get(`object:${objectId}`)) return true;
-  }
-  const externalReference = mapped && mapped.event && mapped.event.external_reference;
-  if (externalReference && await store.get(knownObjectKey("external-reference", externalReference))) return true;
-  return false;
-}
-
 function minimizeCreated(record) {
   if (!record) return null;
   return {
@@ -198,10 +163,7 @@ function createAsaasProductionProvider(deps = {}) {
   const clock = deps.clock || { now: () => new Date() };
   const sleep = deps.sleep || ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
   const logger = deps.logger || { warn() {}, info() {} };
-  const config = deps.config || resolveProductionConfig(deps.env || process.env, {
-    decision: deps.decision,
-    evidence: deps.evidence,
-  });
+  const config = deps.config || resolveProductionConfig(deps.env || process.env);
   const store = deps.store;
   const http = deps.http;
 
@@ -378,10 +340,6 @@ function createAsaasProductionProvider(deps = {}) {
         card_data_present: false,
       };
       await store.put(idempotencyKey, saved);
-      await indexKnownProductionObject(store, {
-        provider_id: record.provider_id,
-        external_reference: externalReference,
-      });
       if (store.appendCanonicalEvent) await store.appendCanonicalEvent(event);
       return {
         ok: true,
@@ -485,10 +443,6 @@ function createAsaasProductionProvider(deps = {}) {
       };
     }
     const objectId = objectIdFromPayload(raw);
-    await indexKnownProductionObject(store, {
-      provider_id: objectId,
-      external_reference: event.external_reference,
-    });
     const current = objectId ? await store.get(`object:${objectId}`) : null;
     const decision = decideCanonicalTransition(current && current.canonical_status, mapped);
     if (store.appendCanonicalEvent) await store.appendCanonicalEvent(event);
@@ -520,8 +474,6 @@ function createAsaasProductionProvider(deps = {}) {
     applyProductionWebhookEvent,
     findOrCreateCustomer,
     computeProviderIdempotencyKey,
-    indexKnownProductionObject,
-    isKnownProductionObject,
     redactProviderPayload,
     config,
     store,
@@ -533,6 +485,4 @@ module.exports = {
   mapProductionEvent,
   centsToReais,
   computeProviderIdempotencyKey,
-  indexKnownProductionObject,
-  isKnownProductionObject,
 };

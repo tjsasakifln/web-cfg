@@ -3,7 +3,7 @@
  */
 const path = require("path");
 const fs = require("fs");
-const { applyDecisionGuard, loadDecision } = require("./piloto-decision.cjs");
+const { applyDecisionGuard } = require("./piloto-decision.cjs");
 
 const DEFAULTS = Object.freeze({
   CONFENGE_OFFER_CATALOG_PUBLIC: false,
@@ -35,7 +35,7 @@ function boolFromEnv(name, fallback, env = process.env) {
   return fallback;
 }
 
-function loadFlags(env = process.env, options = {}) {
+function loadFlags(env = process.env) {
   const file = loadFileFlags();
   const candidate = {
     CONFENGE_OFFER_CATALOG_PUBLIC: boolFromEnv(
@@ -76,10 +76,7 @@ function loadFlags(env = process.env, options = {}) {
     ),
     legal_authority_hash: String(env.CONFENGE_LEGAL_AUTHORITY_HASH || file.legal_authority_hash || DEFAULTS.legal_authority_hash).trim(),
   };
-  const decision = Object.prototype.hasOwnProperty.call(options, "decision") && options.decision !== undefined
-    ? options.decision
-    : loadDecision();
-  return applyDecisionGuard(candidate, decision, options.evidence || {});
+  return applyDecisionGuard(candidate);
 }
 
 function catalogPublic(env) {

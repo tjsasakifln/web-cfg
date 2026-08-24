@@ -81,25 +81,6 @@
       }
     ]
   },
-  "execution_authority": {
-    "canary_offer_id": null,
-    "spend_ceiling_cents": null,
-    "evidence_ref": null,
-    "evidence_sha256": null,
-    "approvals": [
-      { "role": "legal", "approver_id": null },
-      { "role": "fiscal_nfse", "approver_id": null },
-      { "role": "delivery_capacity", "approver_id": null },
-      { "role": "security", "approver_id": null }
-    ]
-  },
-  "rollback_webhook_receive": {
-    "authorized": false,
-    "prior_execute_evidence_ref": null,
-    "prior_execute_evidence_sha256": null,
-    "rollback_evidence_ref": null,
-    "rollback_evidence_sha256": null
-  },
   "analytics": {
     "source": "CONFENGE_WEB",
     "aggregate_only": true,
@@ -107,5 +88,5 @@
     "new_runtime_while_deferred": false
   },
   "sunset_rule": "If the review does not justify another DEFER or EXECUTE decision, publish a versioned URL-by-URL MIGRATE/REDIRECT/RETIRE plan for all 24 pages. A blanket redirect to the home page is forbidden.",
-  "rollback": "Keep catalog, checkout, webhook-apply and real-money flags false; keep ASAAS_MODE disabled in production. A separate versioned rollback authority may retain authenticated persist-only webhook receive for pre-indexed real objects, while unknown objects and every apply/mutation path stay blocked. Revert to the last known-good deploy."
+  "rollback": "Keep catalog, checkout, webhook and real-money flags false; keep ASAAS_MODE disabled in production. This DEFER schema cannot authorize checkout or rollback receive-only. A later EXECUTE needs a separate reviewed schema and implementation with production_evidence=true, durable cumulative limits and individual authority for every real charge, refund and cancellation. Revert to the last known-good deploy."
 }
