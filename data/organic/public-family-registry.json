@@ -1,0 +1,380 @@
+{
+  "schema_version": "public-family-registry-v1",
+  "as_of": "2026-08-23",
+  "owner_issue": 300,
+  "fail_closed": true,
+  "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
+  "terminal_action_definitions": {
+    "capture_form": "<form action=\"/.netlify/functions/lead\"> dentro do <main> — captura persistida.",
+    "whatsapp": "<a href=\"...wa.me/...\"> dentro do <main> — conversa direta.",
+    "capture_form_or_whatsapp": "captura persistida ou WhatsApp dentro do <main>.",
+    "none": "sem ação terminal. Só é aceito com profile trust_or_legal e motivo escrito."
+  },
+  "profile_rules": {
+    "priced_offer": "Derivado do HTML, não da declaração: rota indexável que exibe preço passa a exigir captura persistida, mesmo que a família declare ação mais fraca. Uma família comercial que exiba preço sem se declarar priced_offer reprova (undeclared_priced_offer).",
+    "service_pillar": "Rotas de data/organic/bofu-intent-matrix.json. A exigência de captura on-page permanece na regra dedicada missing_on_page_form, que honra o congelamento de #291; a checagem de ação terminal não duplica esse achado.",
+    "trust_or_legal": "Páginas legais e de confiança. Isentas de ação terminal, com motivo escrito. Preço nessas rotas reprova, salvo se a rota exata estiver em priced_reference_routes com motivo.",
+    "commercial_content": "Conteúdo comercial. A ação terminal exigida é a declarada pela família."
+  },
+  "debt_policy": {
+    "rule": "Débito é exceção explícita, datada e por rota exata — nunca por prefixo. Uma rota nova dentro de uma família com débito NÃO herda a isenção: ela precisa cumprir a ação terminal declarada ou reprova. Toda entrada exige owner_issue, motivo escrito e expires_at; depois de expires_at o gate reprova.",
+    "reported_in": "docs/seo/INBOUND-GATES-REPORT.json → gates.conversion.stats.exemptions"
+  },
+  "families": [
+    {
+      "id": "home",
+      "visitor_job": "Entender em 10 segundos o que a CONFENGE resolve em contrato de obra pública e escolher a próxima ação.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/"]},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "full"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 300,
+      "debt": []
+    },
+    {
+      "id": "service-pillars",
+      "visitor_job": "Resolver um evento contratual específico (aditivo, glosa, reequilíbrio, atraso) com a CONFENGE.",
+      "profile": "service_pillar",
+      "terminal_action": "capture_form",
+      "match": {"source": "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route"},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "partial"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 227,
+      "note": "A cobertura de captura destes pilares é auditada pela regra dedicada missing_on_page_form, que honra o congelamento EARLIEST_SAFE_ACTION_AT de #291. Esta declaração não afrouxa aquela regra.",
+      "debt": []
+    },
+    {
+      "id": "legal-and-trust",
+      "visitor_job": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "exemption_reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
+      "match": {
+        "routes": [
+          "/privacidade/",
+          "/termos-de-uso/",
+          "/conflitos/",
+          "/uso-de-ia/",
+          "/imprensa/",
+          "/correcoes/"
+        ]
+      },
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 300,
+      "debt": []
+    },
+    {
+      "id": "comercial-condicoes",
+      "visitor_job": "Ler as condições comerciais e a política de leads antes de aceitar um diagnóstico pago.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/comercial/"},
+      "priced_reference_routes": [
+        {
+          "route": "/comercial/termos-diagnostico-b2g/",
+          "reason": "O preço aparece como referência contratual do Diagnóstico B2G dentro das condições, não como oferta. A superfície de oferta é /diagnostico-b2g-expansao/, que já captura com formulário persistido no <main>."
+        }
+      ],
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 88,
+      "debt": []
+    },
+    {
+      "id": "politica-editorial",
+      "visitor_job": "Auditar a política editorial vigente e o seu histórico versionado.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "exemption_reason": "Registro editorial versionado. Existe para ser citado e auditado; ação comercial no corpo contaminaria a prova de independência editorial.",
+      "match": {"prefix": "/politica-editorial/"},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 300,
+      "debt": []
+    },
+    {
+      "id": "editorial-library",
+      "visitor_job": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/conteudos/"},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 245,
+      "debt": []
+    },
+    {
+      "id": "guias-contratos-obras",
+      "visitor_job": "Executar um passo a passo documental (aditivo, glosa, reequilíbrio, notificação) dentro do prazo contratual.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/guias-contratos-obras/"},
+      "gate_coverage": {"conversion": "full", "copy": "partial", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 245,
+      "debt": []
+    },
+    {
+      "id": "lei-14133-obras",
+      "visitor_job": "Encontrar o dispositivo da Lei 14.133 que sustenta um pleito de obra pública.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/lei-14133-obras/"},
+      "gate_coverage": {"conversion": "full", "copy": "partial", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 245,
+      "debt": []
+    },
+    {
+      "id": "especialista",
+      "visitor_job": "Verificar quem responde tecnicamente pela CONFENGE antes de enviar um caso.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/especialista/"},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 74,
+      "debt": []
+    },
+    {
+      "id": "nurture",
+      "visitor_job": "Retomar uma conversa comercial já iniciada a partir de um material enviado.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/nurture/"},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 88,
+      "debt": []
+    },
+    {
+      "id": "metodologia-inteligencia",
+      "visitor_job": "Auditar como a CONFENGE produz a inteligência pública que publica.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/metodologia-inteligencia/"]},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 74,
+      "debt": [
+        {
+          "route": "/metodologia-inteligencia/",
+          "owner_issue": 74,
+          "reason": "Página de método publicada antes deste gate existir: hoje encerra sem captura e sem WhatsApp no <main>. A ação terminal pertence ao trabalho de autoridade de #74; corrigir o HTML aqui invadiria o escopo daquela issue.",
+          "expires_at": "2026-10-31"
+        }
+      ]
+    },
+    {
+      "id": "radar",
+      "visitor_job": "Ler o radar nacional de obras públicas e decidir se quer o recorte aplicado ao próprio mercado.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/radar/"},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 266,
+      "debt": []
+    },
+    {
+      "id": "analises-contratos-publicos",
+      "visitor_job": "Ler uma análise contratual desidentificada e reconhecer o próprio caso nela.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/analises-contratos-publicos/"},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 83,
+      "debt": [
+        {
+          "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+          "owner_issue": 83,
+          "reason": "Canário de análise técnica publicado sob gate editorial de #83, sem ação terminal no <main>. A ação terminal do canário é decisão de #83, que controla o gate editorial da família; alterar o HTML aqui furaria aquele gate.",
+          "expires_at": "2026-10-31"
+        }
+      ]
+    },
+    {
+      "id": "casos",
+      "visitor_job": "Ver o artefato que a CONFENGE entrega em um caso real antes de contratar.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/casos/"},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 290,
+      "debt": [
+        {
+          "route": "/casos/",
+          "owner_issue": 290,
+          "reason": "Hub de casos listado na evidência de #290: 0 formulário e 0 wa.me no <main>, passando no gate antigo apenas por has_attributed_cta. A ação terminal do hub é entrega de #290.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/casos/aditivo-art125-demonstrativo/",
+          "owner_issue": 290,
+          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/casos/medicao-glosa-demonstrativo/",
+          "owner_issue": 290,
+          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
+          "expires_at": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "id": "casos-modelos-precificados",
+      "visitor_job": "Comparar modelos de entrega com preço público (R$ 599 a R$ 3.750) e comprar o que resolve o próprio problema.",
+      "profile": "priced_offer",
+      "terminal_action": "capture_form",
+      "match": {"prefix": "/casos/modelo-"},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 289,
+      "debt": [
+        {
+          "route": "/casos/modelo-apresentacao-executiva-resultados/",
+          "owner_issue": 289,
+          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/casos/modelo-base-quantitativa-canonica/",
+          "owner_issue": 289,
+          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+          "owner_issue": 289,
+          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/casos/modelo-mapa-compradores-publicos/",
+          "owner_issue": 289,
+          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+          "owner_issue": 289,
+          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/casos/modelo-painel-precos-obras-publicas/",
+          "owner_issue": 289,
+          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/casos/modelo-relatorio-executivo-consolidado/",
+          "owner_issue": 289,
+          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+          "owner_issue": 289,
+          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
+          "expires_at": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "id": "entregas",
+      "visitor_job": "Comparar a profundidade das entregas com preço antes de escolher o que contratar.",
+      "profile": "priced_offer",
+      "terminal_action": "capture_form",
+      "match": {"routes": ["/entregas/"]},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 295,
+      "debt": [
+        {
+          "route": "/entregas/",
+          "owner_issue": 295,
+          "reason": "33 KB de prova de entrega com preços de R$ 599 a R$ 8.000 e nenhuma forma de dizer \"quero isto\": 0 formulário e 0 wa.me no <main>. A reestruturação comparável e a ação terminal são a entrega de #295, com o padrão de captura de #289.",
+          "expires_at": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "id": "servicos-obras-publicas",
+      "visitor_job": "Triar qual serviço da CONFENGE corresponde ao próprio evento contratual.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/servicos-obras-publicas/"]},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 290,
+      "debt": [
+        {
+          "route": "/servicos-obras-publicas/",
+          "owner_issue": 290,
+          "reason": "Destino de primeiro nível do header desde #280, publicado em 2026-08-23 sem ação terminal no <main>: a única saída é o CTA do chrome, que tira o visitante da página. A próxima ação dominante é entrega de #290.",
+          "expires_at": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "id": "problemas-que-resolvemos",
+      "visitor_job": "Reconhecer o próprio problema contratual na lista e ir para quem o resolve.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/problemas-que-resolvemos/"]},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 290,
+      "debt": [
+        {
+          "route": "/problemas-que-resolvemos/",
+          "owner_issue": 290,
+          "reason": "Destino de primeiro nível do header desde #280, publicado em 2026-08-23 sem ação terminal no <main>: a única saída é o CTA do chrome, que tira o visitante da página. A próxima ação dominante é entrega de #290.",
+          "expires_at": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "id": "ferramentas",
+      "visitor_job": "Calcular um limite, prazo ou risco contratual e sair com um número defensável.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/ferramentas/"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "partial"},
+      "declared_at": "2026-08-23",
+      "owner_issue": 290,
+      "debt": [
+        {
+          "route": "/ferramentas/",
+          "owner_issue": 290,
+          "reason": "Hub de ferramentas listado na evidência de #290: 0 formulário e 0 wa.me no <main>. #290 decide se o hub precisa de encaminhamento explícito ou se a ação terminal fica no resultado da ferramenta.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/ferramentas/checklist-reequilibrio/",
+          "owner_issue": 290,
+          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/ferramentas/limite-acrescimos-supressoes/",
+          "owner_issue": 290,
+          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+          "expires_at": "2026-09-30"
+        },
+        {
+          "route": "/ferramentas/matriz-atraso-obra/",
+          "owner_issue": 290,
+          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+          "expires_at": "2026-09-30"
+        }
+      ]
+    }
+  ]
+}

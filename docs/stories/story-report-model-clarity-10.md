@@ -20,11 +20,11 @@ quality_gate_tools: ["test:report-model", "test:report-model-ui", "test:design",
 
 1. O primeiro viewport nomeia o produto como `Relatório Executivo de Priorização de Licitações`, explicita a decisão que ele suporta e mostra o resultado do exemplo `12 analisadas → 3 priorizadas → 7 recusadas`, sem depender de rolagem a 390 × 844 px.
 2. Antes do exemplar, a página responde em linguagem direta `o que é`, `para quem serve`, `o que você recebe`, `por que vale` e `como contratar`, sem jargão interno, formulário, modal, download ou conteúdo oculto.
-3. A oferta declara `R$ 599 = 1 relatório adaptado`; a empresa informa raio de atuação e contexto, a CONFENGE busca os editais abertos nesse recorte e a quantidade decorre das licitações publicadas, sem cota combinada. A análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa; prazo e aceite são confirmados por uma pessoa no WhatsApp antes da cobrança.
+3. A oferta declara `R$ 599 = 1 relatório adaptado`; a empresa informa raio de atuação e contexto, a CONFENGE busca os editais abertos nesse recorte e a quantidade decorre das licitações publicadas, sem cota combinada. A análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa; o prazo autorizado é de até 48 horas úteis desde o envio persistido dos parâmetros, antes da cobrança.
 4. A percepção de valor cresce nesta ordem: custo da decisão errada, decisão executiva, entregáveis, exemplo, critérios eliminatórios, aderência da empresa, ficha por oportunidade, exposição financeira, rastreabilidade, plano de ação e limites.
 5. O exemplar preserva a topologia de evidência de uma entrega profissional com campos visíveis para fonte oficial, requisito do edital, evidência da empresa, confiança, ponto a revalidar e validade da decisão; todos os fatos permanecem sintéticos e não há links oficiais falsos.
 6. A carteira tem leitura móvel imediata das 12 decisões sem exigir rolagem horizontal para descobrir o status; a tabela detalhada pode continuar disponível como segunda camada acessível.
-7. O CTA principal usa WhatsApp direto, mantém o contrato versionado de analytics sem PII e aparece no hero, após a principal prova e no fechamento; a ação móvel fixa só aparece depois que o hero deixa o viewport e nunca cobre conteúdo.
+7. O CTA principal entra no formulário persistido e fail-closed do Radar, mantém o contrato versionado de analytics sem PII e aparece no hero, após a principal prova e no fechamento; a ação móvel fixa só aparece depois que o hero deixa o viewport e nunca cobre conteúdo.
 8. A página mantém canonical, `index,follow`, JSON-LD `WebPage` + `Report` + `BreadcrumbList`, acesso integral em HTML e as rotas internas/sitemap existentes.
 9. Os gates automatizados provam anonimização, reconciliação dos 12 valores, clareza da promessa, entregáveis, escopo honesto, rastreabilidade, ausência de fricção, geometria móvel, WCAG AA, design, copy, SEO, analytics e artefato público.
 10. Revisão visual cobre 320, 390, 768, 1024 e 1440 px; após CI verde, merge em `main` e deploy Netlify, a URL pública responde 200 e o build marker corresponde ao SHA integrado.
@@ -33,7 +33,7 @@ quality_gate_tools: ["test:report-model", "test:report-model-ui", "test:design",
 
 - Decision state: `EXECUTE_NOW`
 - Executive fronts: Revenue Now + Inbound Core
-- Time to evidence: deploy imediato; primeira evidência por leitura do exemplar e clique qualificado no WhatsApp
+- Time to evidence: deploy imediato; primeira evidência por leitura do exemplar, entrada no formulário e pedido persistido
 - Leverage: revenue, trust, distribution
 - Repetition test: um único exemplar indexável reduz a incerteza de muitos leads e acumula aprendizado comercial sem criar uma página por lead.
 
@@ -59,10 +59,10 @@ quality_gate_tools: ["test:report-model", "test:report-model-ui", "test:design",
 ## Dev Notes
 
 - `confenge.com.br` continua como única superfície pública. Esta mudança não cria crawler, dado canônico ou nova arquitetura. [Source: `docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md`]
-- O preço versionado autoriza uma unidade `one_adapted_report`; `scope_state`, `terms_state` e `sla` permanecem desconhecidos até aceite humano. [Source: `docs/contracts/intent-action/intent-action-matrix.v1.json`]
+- O preço versionado autoriza uma unidade `one_adapted_report`; os parâmetros são persistidos antes do handoff humano de pagamento, os termos permanecem desconhecidos até aceite e o relógio de entrega autorizado é de até 48 horas úteis desde a submissão. [Source: `docs/contracts/intent-action/intent-action-matrix.v1.json`]
 - O modelo é aquisição com utilidade real: precisa exibir método, proveniência, próximo passo e confiança, não apenas aparência premium. [Source: `docs/strategy/MARKET-CAPTURE-OS.md`]
 - A revisão adversarial observou no mobile: H1 em cinco linhas, prova abaixo da dobra, barra fixa cobrindo a nota do hero, tabela escondendo a decisão e explicação do método tardia. Esses defeitos viram regressões automatizadas.
-- Não alterar preço, habilitar checkout, prometer prazo, cota de oportunidades, vitória, economia ou resultado. A CONFENGE busca os editais abertos no raio informado; a quantidade resulta da disponibilidade publicada e a profundidade chega ao máximo sustentado pelas informações apresentadas pela empresa.
+- Não alterar preço, habilitar checkout, inventar prazo além das 48 horas úteis autorizadas, prometer cota de oportunidades, vitória, economia ou resultado. A CONFENGE busca os editais abertos no raio informado; a quantidade resulta da disponibilidade publicada e a profundidade chega ao máximo sustentado pelas informações apresentadas pela empresa.
 - Não inventar URL de fonte para os dados sintéticos. A página deve demonstrar quais campos rastreáveis existem na entrega contratada.
 
 ### Testing
@@ -73,7 +73,7 @@ quality_gate_tools: ["test:report-model", "test:report-model-ui", "test:design",
 - `npm run test:copy`
 - `npm run test:ui`
 - `npm run test:analytics`
-- `npm run test:cta-whatsapp`
+- `npm run test:radar-params`
 - `npm run validate:seo`
 - `npm run build:site && npm run audit:public-artifact`
 

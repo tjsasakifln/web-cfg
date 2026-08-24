@@ -7,6 +7,10 @@ const MATRIX_PATH = path.join(
   __dirname,
   "../../docs/contracts/intent-action/intent-action-matrix.v1.json",
 );
+const AUTHORIZED_ROUTE_SLA = Object.freeze({
+  contratar_relatorio_inteligencia_599:
+    "delivery_within_48_business_hours_from_persisted_form_submission",
+});
 
 let _cached = null;
 function loadMatrix() {
@@ -76,7 +80,8 @@ function validateMatrixShape(matrix) {
         missing.push(`${route.id || "?"}.${field}`);
       }
     }
-    if (route.sla !== "UNKNOWN") missing.push(`${route.id}.sla_not_unknown`);
+    const expectedSla = AUTHORIZED_ROUTE_SLA[route.id] || "UNKNOWN";
+    if (route.sla !== expectedSla) missing.push(`${route.id}.sla_not_authorized`);
     if (route.auto_send !== false) missing.push(`${route.id}.auto_send`);
     if (route.id) ids.add(route.id);
   }

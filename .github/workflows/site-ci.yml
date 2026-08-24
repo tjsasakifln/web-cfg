@@ -50,6 +50,7 @@ jobs:
           npm run test:copy
           npm run test:design
           npm run audit:accessibility
+          npm run test:skip-link
           npm run test:lighthouse-gates
           npm run pseo:test
           npm run organic:test
@@ -59,6 +60,7 @@ jobs:
           npm run test:lead-function
           npm run test:search-observation
           npm run test:checkout-negatives
+          npm run test:radar-params
           npm run test:bofu-dominance
           npm run test:local-entity
           npm run test:market-answers

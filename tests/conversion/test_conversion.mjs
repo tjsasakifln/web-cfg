@@ -66,10 +66,14 @@ const VALID = "11222333000181";
   if (matrix.firstCanaryCta() !== "Veja sua empresa neste mercado") {
     fail("first_canary_cta", matrix.firstCanaryCta());
   } else pass("first_canary_cta");
+  const radarDeliverySla = "delivery_within_48_business_hours_from_persisted_form_submission";
   for (const r of matrix.listRoutes()) {
-    if (r.sla !== "UNKNOWN") fail("sla_unknown", r.id);
+    const expected = r.id === "contratar_relatorio_inteligencia_599"
+      ? radarDeliverySla
+      : "UNKNOWN";
+    if (r.sla !== expected) fail("sla_authority", { id: r.id, expected, actual: r.sla });
   }
-  pass("sla_unknown_all_routes");
+  pass("sla_authorized_exception_only");
   const canonicalServices = JSON.parse(
     fs.readFileSync(path.join(root, "data/organic/bofu-intent-matrix.json"), "utf8"),
   ).rows.map((row) => row.destination_service_id);

@@ -58,7 +58,8 @@
 .report-decision-sheet .report-risk li { line-height: 1.5; }
 .report-decision-sheet .report-risk li { font-family: var(--r-mono); font-size: .88rem; }
 .report-decision-sheet .report-next li strong { color: var(--r-ink); }
-.report-proof .report-table-note { color: var(--r-muted); margin-top: 22px; }
+.report-section:not(.report-section-dark) .report-table-note { color: var(--r-muted); margin-top: 22px; }
+.report-section:not(.report-section-dark) .report-table-wrap:focus { outline-color: var(--r-green); }
 
 /* O gate aplicado no exemplo ganha respiro extra. */
 #unidade .report-constraint { margin-top: 40px; }
@@ -85,6 +86,8 @@
   .report-table-note { display: block; }
   .report-table { font-size: .84rem; min-width: 620px; }
   .report-table.is-light { min-width: 0; }
+  /* Cinco colunas com uma célula longa: rola em vez de virar torre. */
+  #dependencia .report-table.is-light { min-width: 560px; }
   .report-table th,
   .report-table td { padding: 12px 10px; }
   .report-disclaimer .case-badge { line-height: 1.5; }

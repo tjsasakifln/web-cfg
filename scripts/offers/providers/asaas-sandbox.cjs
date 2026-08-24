@@ -4,6 +4,7 @@
  */
 const crypto = require("crypto");
 const { AUTHORITY, getOffer, snapshotOffer } = require("../registry.cjs");
+const { buildExternalReference } = require("../external-reference.cjs");
 const { commercialEvent, TYPES, normalizeStatus } = require("../events.cjs");
 const { decideCapacity, emptyInventory } = require("../capacity.cjs");
 const { evaluateEligibility } = require("../eligibility.cjs");
@@ -581,7 +582,11 @@ function createAsaasSandboxProvider(deps = {}) {
       offer_id: offer.offer_id,
       catalog_version: catalogVersion,
     });
-    const externalReference = `cfg:${offer.offer_id}:${correlationId}`.slice(0, 200);
+    const referenceCheck = buildExternalReference(offer.offer_id, correlationId);
+    if (!referenceCheck.ok) {
+      return { ok: false, error: referenceCheck.error || "external_reference_invalid", statusCode: 422 };
+    }
+    const externalReference = referenceCheck.external_reference;
 
     let amountReais;
     try {
