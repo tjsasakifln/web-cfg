@@ -34,13 +34,16 @@ available vendor dashboard is not evidence of that need.
 Promotion requires one new reviewed PR that changes the machine decision to
 `EXECUTE` and proves every condition below in the same revision:
 
-1. issue #87 is `EXECUTE`, with a versioned acquisition hypothesis;
-2. a positive BRL spend cap and its human approval are referenced;
+1. issue #87 is `EXECUTE`, with an in-repository versioned acquisition
+   hypothesis;
+2. a positive BRL spend cap and its in-repository human approval are
+   referenced;
 3. consent defaults to denied and the visitor explicitly opts in before any
    browser or server-side export;
 4. the versioned consent contract supports withdrawal and has an enforcement
    test proving that denied consent exports zero events;
-5. the provider, authorization owner, validity window and rollback are named;
+5. exactly one provider is named and matches the reviewed runtime; its
+   authorization owner and valid, unexpired ISO-date window are recorded;
 6. `npm run test:analytics` continues to prove an empty PII allowlist.
 
 The measurable revisit trigger is the first of:

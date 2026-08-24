@@ -13,6 +13,29 @@ const EXCLUDED_DIRS = new Set([
   "docs",
   "tests",
   "test-results",
+  "_site",
+  "fixtures",
+]);
+
+const RUNTIME_EXTENSIONS = new Set([
+  ".cjs",
+  ".css",
+  ".html",
+  ".js",
+  ".jsx",
+  ".mjs",
+  ".py",
+  ".sh",
+  ".toml",
+  ".ts",
+  ".tsx",
+  ".yaml",
+  ".yml",
+]);
+
+const SELF_TEST_FILES = new Set([
+  "scripts/site/third_party_analytics_gate.mjs",
+  "seo/scripts/test_third_party_analytics_gate.mjs",
 ]);
 
 const EXTERNAL_ANALYTICS_PATTERNS = Object.freeze([
@@ -25,7 +48,16 @@ const EXTERNAL_ANALYTICS_PATTERNS = Object.freeze([
   ["segment", /cdn\.segment\.com\/analytics\.js|api\.segment\.io/i],
   ["fathom", /cdn\.usefathom\.com\/script\.js/i],
   ["cloudflare_beacon", /static\.cloudflareinsights\.com\/beacon/i],
-  ["analytics_package", /"(?:plausible-tracker|posthog-js|mixpanel-browser|react-ga|@segment\/analytics[^"/]*)"\s*:/i],
+  ["matomo", /matomo\.js|matomo\.php|"@datapunt\/matomo-tracker-js"\s*:/i],
+  ["tiktok_pixel", /analytics\.tiktok\.com\/(?:i18n\/pixel|api\/v\d\/pixel)/i],
+  ["linkedin_insight", /snap\.licdn\.com\/li\.lms-analytics/i],
+  ["x_ads", /static\.ads-twitter\.com\/uwt\.js/i],
+  ["google_ads", /googleadservices\.com\/pagead\/conversion/i],
+  ["plausible", /"plausible-tracker"\s*:/i],
+  ["posthog", /"posthog-js"\s*:/i],
+  ["mixpanel", /"mixpanel-browser"\s*:/i],
+  ["google_tag_manager", /"react-ga(?:4)?"\s*:/i],
+  ["segment", /"@segment\/analytics[^"/]*"\s*:/i],
 ]);
 
 function walk(dir, accept, out = []) {
@@ -40,25 +72,14 @@ function walk(dir, accept, out = []) {
 }
 
 export function runtimeFiles(root = ROOT) {
-  const files = walk(root, (full) => full.endsWith(".html"));
-  for (const rel of [
-    "script.js",
-    "js",
-    "assets/js",
-    "netlify/functions",
-    ".env.example",
-    "_headers",
-    "netlify.toml",
-    "package.json",
-  ]) {
-    const full = path.join(root, rel);
-    if (!fs.existsSync(full)) continue;
-    if (fs.statSync(full).isDirectory()) {
-      walk(full, (candidate) => /\.(?:c?js|mjs)$/.test(candidate), files);
-    } else {
-      files.push(full);
-    }
-  }
+  const files = walk(root, (full) => {
+    const rel = path.relative(root, full).split(path.sep).join("/");
+    const basename = path.basename(full);
+    if (SELF_TEST_FILES.has(rel)) return false;
+    if (/^(?:test_|.*\.(?:test|spec)\.)/.test(basename)) return false;
+    if ([".env.example", "_headers", "package.json"].includes(rel)) return true;
+    return RUNTIME_EXTENSIONS.has(path.extname(full));
+  });
   return [...new Set(files)].sort();
 }
 
@@ -81,18 +102,44 @@ function nonEmpty(value) {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+function isIsoDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return false;
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === value;
+}
+
+function isSafeRepoRef(value) {
+  if (!nonEmpty(value) || path.isAbsolute(value) || value.includes("\\")) return false;
+  const parts = value.split("/");
+  return !parts.includes("") && !parts.includes(".") && !parts.includes("..");
+}
+
 export function validateDecision(decision, hits, options = {}) {
   const errors = [];
   const exists = options.pathExists || (() => false);
+  const today = options.today || new Date().toISOString().slice(0, 10);
   if (decision.contract !== "CONFENGE_THIRD_PARTY_CONVERSION_DECISION/1.0") {
     errors.push("decision contract must be CONFENGE_THIRD_PARTY_CONVERSION_DECISION/1.0");
   }
   if (decision.schema_version !== "1.0.0") errors.push("decision schema_version must be 1.0.0");
-  if (!nonEmpty(decision.issue) || !nonEmpty(decision.decision_owner)) {
-    errors.push("decision issue and owner are required");
+  if (decision.issue !== "https://github.com/tjsasakifln/web-cfg/issues/247") {
+    errors.push("decision must remain bound to web-cfg issue #247");
   }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(decision.review_at || "")) {
-    errors.push("decision review_at must be a versioned ISO date");
+  if (!nonEmpty(decision.decision_owner)) errors.push("decision owner is required");
+  if (!new Set(["DEFER", "EXECUTE"]).has(decision.decision_state)) {
+    errors.push("decision_state must be DEFER or EXECUTE");
+  }
+  if (
+    typeof decision.decision?.browser_tag_authorized !== "boolean" ||
+    typeof decision.decision?.server_side_forward_authorized !== "boolean" ||
+    !nonEmpty(decision.decision?.reason)
+  ) {
+    errors.push("decision channel flags and written reason are required");
+  }
+  if (!isIsoDate(decision.decided_at) || !isIsoDate(decision.review_at)) {
+    errors.push("decision and review dates must be valid ISO dates");
+  } else if (decision.review_at < decision.decided_at) {
+    errors.push("decision review_at cannot precede decided_at");
   }
   const baseline = decision.first_party_baseline || {};
   if (baseline.required !== true || baseline.collector !== "/.netlify/functions/collect") {
@@ -101,19 +148,51 @@ export function validateDecision(decision, hits, options = {}) {
   if (baseline.source !== "CONFENGE_WEB" || baseline.pii_policy !== "aggregate_allowlist_empty") {
     errors.push("first-party source/PII policy drift");
   }
+  if (baseline.third_party_cookie_required !== false) {
+    errors.push("first-party baseline cannot require a third-party cookie");
+  }
+
+  const gate = decision.promotion_gate || {};
+  if (gate.all_required !== true) errors.push("promotion gate must require every condition");
+  const revisit = decision.measurable_revisit_trigger || {};
+  const revisitTriggers = Array.isArray(revisit.triggers) ? revisit.triggers : [];
+  const dateTrigger = revisitTriggers.find((item) => item?.type === "date");
+  const conditionTrigger = revisitTriggers.find((item) => item?.type === "all_conditions");
+  const expectedConditions = [
+    "approved_hypothesis_ref_is_versioned",
+    "approved_spend_cap_brl_is_greater_than_zero",
+    "explicit_consent_contract_and_enforcement_test_are_versioned",
+    "issue_87_decision_state_equals_EXECUTE",
+  ];
+  const actualConditions = Array.isArray(conditionTrigger?.conditions)
+    ? [...conditionTrigger.conditions].sort()
+    : [];
+  if (
+    revisit.mode !== "first_of" ||
+    dateTrigger?.value !== decision.review_at ||
+    JSON.stringify(actualConditions) !== JSON.stringify(expectedConditions)
+  ) {
+    errors.push("measurable revisit trigger must preserve the review date and readiness facts");
+  }
 
   const hasExternalRuntime = hits.length > 0;
   const browserAuthorized = decision.decision?.browser_tag_authorized === true;
   const forwardAuthorized = decision.decision?.server_side_forward_authorized === true;
-  if (!hasExternalRuntime) {
-    if (decision.decision_state === "DEFER" && (browserAuthorized || forwardAuthorized)) {
-      errors.push("DEFER must not authorize browser tags or server-side forwarding");
+  if (decision.decision_state === "DEFER") {
+    if (browserAuthorized || forwardAuthorized || decision.decision?.provider !== null) {
+      errors.push("DEFER must not pre-authorize a provider, browser tag or server forwarding");
+    }
+    if (gate.authorization !== null) {
+      errors.push("DEFER must not carry a dormant provider authorization");
+    }
+    if (hasExternalRuntime) {
+      errors.push("external analytics runtime found while decision_state is not EXECUTE");
     }
     return errors;
   }
 
-  if (decision.decision_state !== "EXECUTE") {
-    errors.push("external analytics runtime found while decision_state is not EXECUTE");
+  if (!hasExternalRuntime) {
+    errors.push("EXECUTE requires the reviewed external runtime in the same revision");
   }
   if (hits.some((hit) => hit.channel === "browser_tag") && !browserAuthorized) {
     errors.push("external browser analytics found without browser_tag_authorized");
@@ -121,17 +200,31 @@ export function validateDecision(decision, hits, options = {}) {
   if (hits.some((hit) => hit.channel === "server_side_forward") && !forwardAuthorized) {
     errors.push("external server analytics found without server_side_forward_authorized");
   }
-  const gate = decision.promotion_gate || {};
+  if (!browserAuthorized && !forwardAuthorized) {
+    errors.push("EXECUTE must authorize at least one detected export channel");
+  }
+  const providers = [...new Set(hits.map((hit) => hit.provider))];
+  if (providers.length !== 1) {
+    errors.push("EXECUTE supports exactly one named analytics provider per canary");
+  }
+  const detectedProvider = providers[0];
+  if (!nonEmpty(decision.decision?.provider) || decision.decision.provider !== detectedProvider) {
+    errors.push("decision provider must match the detected runtime provider");
+  }
+
   const issue87 = gate.issue_87 || {};
   if (
+    issue87.required_state !== "EXECUTE" ||
     issue87.current_state !== "EXECUTE" ||
     issue87.hypothesis_approved !== true ||
-    !nonEmpty(issue87.hypothesis_ref) ||
+    !isSafeRepoRef(issue87.hypothesis_ref) ||
+    !exists(issue87.hypothesis_ref) ||
     issue87.spend_approved !== true ||
     !(Number(issue87.spend_cap_brl) > 0) ||
-    !nonEmpty(issue87.spend_approval_ref)
+    !isSafeRepoRef(issue87.spend_approval_ref) ||
+    !exists(issue87.spend_approval_ref)
   ) {
-    errors.push("issue #87 EXECUTE, hypothesis and positive approved spend cap are required");
+    errors.push("issue #87 EXECUTE plus in-repo hypothesis and spend approval are required");
   }
   const consent = gate.explicit_consent || {};
   if (
@@ -140,8 +233,8 @@ export function validateDecision(decision, hits, options = {}) {
     consent.default_state !== "denied" ||
     consent.opt_in_before_export !== true ||
     consent.withdrawal_supported !== true ||
-    !nonEmpty(consent.contract_ref) ||
-    !nonEmpty(consent.enforcement_test_ref) ||
+    !isSafeRepoRef(consent.contract_ref) ||
+    !isSafeRepoRef(consent.enforcement_test_ref) ||
     !exists(consent.contract_ref) ||
     !exists(consent.enforcement_test_ref)
   ) {
@@ -150,14 +243,23 @@ export function validateDecision(decision, hits, options = {}) {
   const authorization = gate.authorization;
   if (
     !authorization ||
-    !nonEmpty(authorization.provider) ||
+    authorization.provider !== detectedProvider ||
     !nonEmpty(authorization.approved_by) ||
-    !nonEmpty(authorization.approved_at) ||
-    !nonEmpty(authorization.expires_at)
+    !isIsoDate(authorization.approved_at) ||
+    !isIsoDate(authorization.expires_at)
   ) {
-    errors.push("provider authorization owner and validity window are required");
+    errors.push("matching provider authorization owner and valid ISO window are required");
+  } else if (
+    authorization.approved_at < decision.decided_at ||
+    authorization.expires_at < authorization.approved_at ||
+    authorization.expires_at < today
+  ) {
+    errors.push("provider authorization window is invalid or expired");
   }
-  if (gate.privacy?.pii_policy !== "aggregate_allowlist_empty") {
+  if (
+    gate.privacy?.pii_policy !== "aggregate_allowlist_empty" ||
+    gate.privacy?.zero_pii_gate !== "npm run test:analytics"
+  ) {
     errors.push("external analytics cannot relax the empty PII allowlist");
   }
   return errors;

@@ -142,15 +142,17 @@ pode substituir revisão de código e decisão humana.
 **Revisão:** 2026-09-20, ou antes somente quando todas as condições forem
 verdadeiras:
 
-1. #87 muda para `EXECUTE` com hipótese versionada;
-2. existe teto de gasto em BRL maior que zero e aprovação humana referenciada;
+1. #87 muda para `EXECUTE` com hipótese versionada neste repositório;
+2. existe teto de gasto em BRL maior que zero e aprovação humana referenciada
+   neste repositório;
 3. consentimento explícito, default-denied, é versionado e ocorre antes do
    primeiro evento exportado;
 4. um teste prova exportação zero quando o consentimento é negado.
 
 Chegar à data apenas abre nova decisão; não instala nada automaticamente. Um
 futuro canário deve nomear provedor, validade da autorização e rollback, manter
-PII zero e passar `npm run test:analytics`.
+PII zero e passar `npm run test:analytics`. O provedor deve ser único, coincidir
+com o runtime revisado e ter autorização não expirada.
 
 ---
 
