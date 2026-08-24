@@ -65,10 +65,11 @@
   },
   "field_mapping": {
     "aliases": "uniao de legacy_names[] e seo_aliases[] ate o registry completo separar os dois campos",
-    "value_line": "value_line_pt_br da #343"
+    "value_line": "value_line_pt_br da #343",
+    "decision_question": "join por deliverable_id com data/commercial/deliverables-registry.v1.json#deliverables[].decision_question; nao duplicar a pergunta neste arquivo"
   },
   "pending_fields": {
-    "decision_question": "NOT_STARTED: a #343 exige uma pergunta de decisao por oferta, mas nao fornece o texto das 54 perguntas. Campo fica null ate evidencia humana.",
+    "container_decision_question": "NOT_STARTED: as perguntas dos 54 entregaveis resolvem pelo registro canonico; os dois conteineres ainda nao tem pergunta fornecida.",
     "public_slug": "NOT_STARTED: as URLs atuais nao mudam nesta PR; slug canonico entra junto com a execucao da renomeacao.",
     "redirects": "NOT_STARTED: sem mudanca de URL, nao ha redirect 301 a declarar."
   },
@@ -114,7 +115,6 @@
       "aliases": [
         "Relatório Executivo de Priorização de Licitações"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -126,7 +126,6 @@
       "aliases": [
         "Base Quantitativa Canônica"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -138,7 +137,6 @@
       "aliases": [
         "Apresentação Executiva de Resultados"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -150,7 +148,6 @@
       "aliases": [
         "Mapa de Compradores Públicos"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -162,7 +159,6 @@
       "aliases": [
         "Contratos Vincendos e Recontratação"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -174,7 +170,6 @@
       "aliases": [
         "Mapeamento de Concorrentes"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -186,7 +181,6 @@
       "aliases": [
         "Painel de Preços de Obras Públicas"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -198,7 +192,6 @@
       "aliases": [
         "Relatório Executivo Consolidado"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -210,7 +203,6 @@
       "aliases": [
         "Radar de Investimentos Públicos Pré-Edital"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -222,7 +214,6 @@
       "aliases": [
         "Dossiê de Comprador Público e Risco de Recebimento"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -234,7 +225,6 @@
       "aliases": [
         "Mapa de Parceiros, Consórcios e Subcontratados"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -246,7 +236,6 @@
       "aliases": [
         "Raio-X Go/No-Go do Edital"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -258,7 +247,6 @@
       "aliases": [
         "Matriz de Habilitação e Lacunas de Acervo"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -268,7 +256,6 @@
       "public_name_pt_br": "Auditoria de Orçamento, BDI e Exequibilidade",
       "value_line": "Testa preços, BDI, premissas e risco de inexequibilidade antes da proposta.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -280,7 +267,6 @@
       "aliases": [
         "Benchmark de Concorrência e Estratégia de Deságio"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -292,7 +278,6 @@
       "aliases": [
         "Bid Room por Oportunidade Crítica"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -304,7 +289,6 @@
       "aliases": [
         "Diagnóstico de Defesa de Margem"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -314,7 +298,6 @@
       "public_name_pt_br": "Dossiê de Medição, Glosa e Pagamento",
       "value_line": "Organiza cálculo e prova para contestar glosa ou cobrar pagamento.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -324,7 +307,6 @@
       "public_name_pt_br": "Dossiê de Aditivo e Serviço Extra",
       "value_line": "Prova mudança de escopo, custo e prazo para instruir o aditivo.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -336,7 +318,6 @@
       "aliases": [
         "Dossiê de Prorrogação e Atraso"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -348,7 +329,6 @@
       "aliases": [
         "Memória de Reajuste Contratual"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -358,7 +338,6 @@
       "public_name_pt_br": "Dossiê de Reequilíbrio Econômico-Financeiro",
       "value_line": "Liga fato, risco, nexo e impacto para instruir o reequilíbrio.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -368,7 +347,6 @@
       "public_name_pt_br": "Subsídio Técnico para Notificação ou Sanção",
       "value_line": "Organiza fatos e provas técnicas para responder à acusação.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -380,7 +358,6 @@
       "aliases": [
         "Diagnóstico B2G 360°"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -392,7 +369,6 @@
       "aliases": [
         "Acompanhamento Preventivo de Contrato"
       ],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -402,7 +378,6 @@
       "public_name_pt_br": "Auditoria do Projeto Básico e dos Riscos",
       "value_line": "Expõe omissões e incompatibilidades que afetam preço, prazo e execução.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -412,7 +387,6 @@
       "public_name_pt_br": "Subsídio Técnico para Esclarecimento ou Impugnação",
       "value_line": "Transforma dúvida ou restrição em perguntas e fundamentos verificáveis.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -422,7 +396,6 @@
       "public_name_pt_br": "Comprovação de Exequibilidade e Resposta à Diligência",
       "value_line": "Reconcilia custos e evidências para responder à dúvida sobre o preço.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -432,7 +405,6 @@
       "public_name_pt_br": "Desenvolvimento da Proposta Técnica",
       "value_line": "Converte critérios de julgamento em uma proposta técnica comprovável.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -442,7 +414,6 @@
       "public_name_pt_br": "Plano de Garantias, Seguros e Capital de Giro",
       "value_line": "Estima garantias e pico de caixa antes de comprometer a empresa.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -452,7 +423,6 @@
       "public_name_pt_br": "Análise do Resultado da Licitação",
       "value_line": "Explica o resultado público e melhora a próxima decisão de disputa.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -462,7 +432,6 @@
       "public_name_pt_br": "Plano de Acervo para Licitações Futuras",
       "value_line": "Transforma o acervo atual em plano para habilitações futuras.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -472,7 +441,6 @@
       "public_name_pt_br": "Revisão Técnica Antes de Assinar o Contrato",
       "value_line": "Encontra divergências e obrigações críticas antes da assinatura.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -482,7 +450,6 @@
       "public_name_pt_br": "Plano de Mobilização e Obrigações do Contrato",
       "value_line": "Define responsáveis, prazos e provas para começar sob controle.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -492,7 +459,6 @@
       "public_name_pt_br": "Auditoria do Fluxo de Caixa do Contrato",
       "value_line": "Projeta desembolso, recebimento e pico de capital de giro.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -502,7 +468,6 @@
       "public_name_pt_br": "Dossiê de Recebimento e Encerramento do Contrato",
       "value_line": "Organiza pendências e provas para receber e encerrar corretamente.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -512,7 +477,6 @@
       "public_name_pt_br": "Dossiê de Atestação e Acervo da Obra",
       "value_line": "Consolida serviços e quantitativos para solicitar atestado e registrar acervo.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -522,7 +486,6 @@
       "public_name_pt_br": "Análise Pós-Contrato e Lições para Próximas Obras",
       "value_line": "Converte o resultado real em decisões melhores para próximos contratos.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -532,7 +495,6 @@
       "public_name_pt_br": "Subsídio Técnico para Recurso e Contrarrazão",
       "value_line": "Organiza fatos e evidências técnicas para recurso ou contrarrazão.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -542,7 +504,6 @@
       "public_name_pt_br": "Análise de Causas e Impactos de Atrasos",
       "value_line": "Quantifica causas e dias de atraso com método reproduzível.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -552,7 +513,6 @@
       "public_name_pt_br": "Análise de Custos e Valores em Disputa",
       "value_line": "Liga evento, efeito e custo para delimitar o valor em disputa.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -562,7 +522,6 @@
       "public_name_pt_br": "Assistência Técnica em Disputa Contratual Complexa",
       "value_line": "Entrega análise técnica estruturada para a estratégia conduzida pelo jurídico.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -572,7 +531,6 @@
       "public_name_pt_br": "Verificação de Sanções e Restrições Públicas",
       "value_line": "Mostra achados, cobertura e lacunas da consulta sem emitir “selo”.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -582,7 +540,6 @@
       "public_name_pt_br": "Auditoria de Prontidão do Empreendimento Público",
       "value_line": "Testa se recurso, projeto, licença e área sustentam o início da obra.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -592,7 +549,6 @@
       "public_name_pt_br": "Monitoramento Mensal de Mercado e Contratos Públicos",
       "value_line": "Destaca mudanças públicas relevantes para priorizar mercado e carteira todo mês.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -602,7 +558,6 @@
       "public_name_pt_br": "Oficina para Decidir Quais Licitações Disputar",
       "value_line": "Instala critérios e ritual para escolher quais oportunidades merecem equipe.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -612,7 +567,6 @@
       "public_name_pt_br": "Capacitação de Equipes de Licitações e Contratos",
       "value_line": "Treina a equipe nos casos e rotinas que ela realmente executa.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -622,7 +576,6 @@
       "public_name_pt_br": "Estudo Sob Medida com Dados Públicos",
       "value_line": "Responde uma decisão inédita com dados públicos rastreáveis.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -632,7 +585,6 @@
       "public_name_pt_br": "Orçamento Completo da Proposta",
       "value_line": "Monta preços, composições e BDI em planilha reproduzível.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -642,7 +594,6 @@
       "public_name_pt_br": "Cronograma e Plano Executivo da Proposta",
       "value_line": "Converte escopo e prazo em sequência, marcos e curva de execução.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -652,7 +603,6 @@
       "public_name_pt_br": "Dossiê de Habilitação Pronto para Envio",
       "value_line": "Organiza cada exigência e documento no pacote final da licitação.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -662,7 +612,6 @@
       "public_name_pt_br": "Verificação de SICAF, Certidões e Regularidade",
       "value_line": "Mostra cadastros, vencimentos e lacunas antes que bloqueiem a participação.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -672,7 +621,6 @@
       "public_name_pt_br": "Acompanhamento Técnico da Sessão de Disputa",
       "value_line": "Sustenta decisões de preço e margem enquanto o cliente opera os lances.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     },
@@ -682,7 +630,6 @@
       "public_name_pt_br": "Dossiê de Credenciamento ou Pré-Qualificação",
       "value_line": "Organiza requisitos e provas para entrar no procedimento correto.",
       "aliases": [],
-      "decision_question": null,
       "public_slug": null,
       "redirects": []
     }

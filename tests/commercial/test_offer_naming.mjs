@@ -29,6 +29,9 @@ function assert(name, cond, detail) {
 const dataPath = path.join(root, "data/commercial/offer-naming.v1.json");
 const raw = fs.readFileSync(dataPath, "utf8");
 const data = JSON.parse(raw);
+const deliverableRegistry = JSON.parse(
+  fs.readFileSync(path.join(root, "data/commercial/deliverables-registry.v1.json"), "utf8"),
+);
 
 const names = data.names || [];
 const containers = data.containers || [];
@@ -314,9 +317,32 @@ assert("human_test_not_started", data.human_test && data.human_test.state === "N
 assert("human_test_evidence_empty", Array.isArray(data.human_test && data.human_test.evidence) && data.human_test.evidence.length === 0, data.human_test && data.human_test.evidence);
 assert("effective_at_null_until_rename_executes", data.effective_at === null, data.effective_at);
 assert(
-  "decision_question_never_fabricated",
-  allOffers.every((o) => o.decision_question === null),
-  allOffers.filter((o) => o.decision_question !== null).map((o) => o.public_name_pt_br),
+  "decision_question_uses_canonical_join",
+  /deliverables-registry\.v1\.json/.test(data.field_mapping?.decision_question || ""),
+  data.field_mapping?.decision_question,
+);
+const canonicalById = new Map(deliverableRegistry.deliverables.map((entry) => [entry.deliverable_id, entry]));
+assert(
+  "deliverable_questions_resolve_54_of_54",
+  names.every((offer) => {
+    const canonical = canonicalById.get(offer.deliverable_id);
+    return canonical &&
+      canonical.public_name_pt_br === offer.public_name_pt_br &&
+      typeof canonical.decision_question === "string" &&
+      canonical.decision_question.trim().endsWith("?") &&
+      !("decision_question" in offer);
+  }),
+  names.filter((offer) => {
+    const canonical = canonicalById.get(offer.deliverable_id);
+    return !canonical || canonical.public_name_pt_br !== offer.public_name_pt_br ||
+      typeof canonical.decision_question !== "string" || !canonical.decision_question.trim().endsWith("?") ||
+      "decision_question" in offer;
+  }).map((offer) => offer.deliverable_id),
+);
+assert(
+  "container_questions_remain_unfabricated",
+  containers.every((container) => container.decision_question === null),
+  containers.map((container) => container.decision_question),
 );
 assert(
   "no_url_change_declared",
