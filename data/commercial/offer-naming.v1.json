@@ -1,0 +1,740 @@
+{
+  "schema": "confenge.offer-naming/1.0",
+  "naming_version": "CFG-NAMING-2026-08-24-v1",
+  "issue": "#343",
+  "effective_at": null,
+  "effective_at_note": "null porque esta PR grava a autoridade de nome, nao executa a renomeacao no site. A data efetiva entra quando a execucao (#338 copy, #335 navegacao) publicar os nomes.",
+  "convention": {
+    "language": "pt-BR",
+    "language_rule": "português do Brasil primeiro",
+    "max_words": 8,
+    "max_words_qualifier": "até oito palavras sempre que a precisão permitir",
+    "naming_basis": "objeto ou decisão reconhecível pelo ICP",
+    "allowed_acronyms": [
+      "BDI"
+    ],
+    "allowed_institutes": [
+      "acervo",
+      "glosa",
+      "reequilíbrio"
+    ],
+    "b2g_policy": "B2G pode ser badge, categoria e alias; o nome precisa funcionar sem conhecer a sigla",
+    "value_line_policy": "cada nome recebe uma linha de valor específica, não intercambiável",
+    "legacy_policy": "nomes anteriores ficam no registry para continuidade de URL, busca, analytics e atendimento",
+    "rename_policy": "renomear não remove, deprecia nem altera o preço da entrega",
+    "legacy_alias_policy": "termos ingleses e jargões de consultoria podem permanecer como legacy_alias ou seo_alias, mas não como o esforço principal de compreensão",
+    "registry_fields": [
+      "public_name_pt_br",
+      "value_line_pt_br",
+      "legacy_names[]",
+      "seo_aliases[]",
+      "decision_question",
+      "public_slug",
+      "redirects[]",
+      "name_version",
+      "effective_at"
+    ],
+    "url_policy": "URLs atuais não precisam mudar. Se mudarem, redirect 301, canonical, sitemap, analytics e inbound mapping são obrigatórios.",
+    "rules": [
+      "português do Brasil primeiro",
+      "até oito palavras sempre que a precisão permitir",
+      "objeto ou decisão reconhecível pelo ICP",
+      "sem superlativo ou valor autodeclarado",
+      "sem nome baseado apenas no formato (“relatório”, “apresentação”) quando a decisão puder nomeá-lo melhor",
+      "siglas técnicas do ICP (BDI) e institutos jurídicos/técnicos (acervo, glosa, reequilíbrio) podem permanecer, com explicação na página",
+      "B2G pode ser badge, categoria e alias; o nome precisa funcionar sem conhecer a sigla",
+      "cada nome recebe uma linha de valor específica, não intercambiável",
+      "nomes anteriores ficam no registry para continuidade de URL, busca, analytics e atendimento",
+      "renomear não remove, deprecia nem altera o preço da entrega"
+    ],
+    "name_to_value_test": {
+      "procedure": "Para cada item, mostrar somente o nome e perguntar: (1) em que situação você compraria? (2) qual decisão ou resultado espera? (3) com quais duas ofertas poderia confundir? Depois mostrar a linha de valor e repetir.",
+      "questions": [
+        "em que situação você compraria?",
+        "qual decisão ou resultado espera?",
+        "com quais duas ofertas poderia confundir?"
+      ],
+      "targets": [
+        "≥10/12 participantes ligam o nome à tarefa correta",
+        "≥10/12 diferenciam cada oferta de suas duas vizinhas",
+        "0 depende de traduzir inglês",
+        "0 interpreta nome como garantia de vitória, pagamento, pleito ou absolvição"
+      ],
+      "failure_policy": "Falha ajusta nome/linha de valor e aliases; nunca remove a oferta."
+    }
+  },
+  "field_mapping": {
+    "aliases": "uniao de legacy_names[] e seo_aliases[] ate o registry completo separar os dois campos",
+    "value_line": "value_line_pt_br da #343"
+  },
+  "pending_fields": {
+    "decision_question": "NOT_STARTED: a #343 exige uma pergunta de decisao por oferta, mas nao fornece o texto das 54 perguntas. Campo fica null ate evidencia humana.",
+    "public_slug": "NOT_STARTED: as URLs atuais nao mudam nesta PR; slug canonico entra junto com a execucao da renomeacao.",
+    "redirects": "NOT_STARTED: sem mudanca de URL, nao ha redirect 301 a declarar."
+  },
+  "forbidden_name_patterns": [
+    "Go/No-Go",
+    "Bid Room",
+    "Win/Loss",
+    "post-mortem",
+    "quantum",
+    "in company",
+    "superlativo ou valor autodeclarado no nome público",
+    "nome baseado apenas no formato (“relatório”, “apresentação”) quando a decisão puder nomeá-lo melhor",
+    "“B2G” como pré-requisito para compreender a oferta",
+    "“Flex” como único nome público (pode permanecer como alias interno)",
+    "nome que sugira garantia de vitória, pagamento, pleito ou absolvição",
+    "termos ingleses e jargões de consultoria como esforço principal de compreensão"
+  ],
+  "published_surface": {
+    "path": "entregas/index.html",
+    "policy": "esta PR nao renomeia nada no site: os oito nomes hoje publicados continuam no ar e cada um precisa aparecer como alias ou como nome canonico neste arquivo",
+    "published_names": [
+      "Relatório Executivo de Priorização de Licitações",
+      "Base Quantitativa Canônica",
+      "Apresentação Executiva de Resultados",
+      "Mapa de Compradores Públicos",
+      "Contratos Vincendos e Recontratação",
+      "Mapeamento de Concorrentes",
+      "Painel de Preços de Obras Públicas",
+      "Relatório Executivo Consolidado"
+    ]
+  },
+  "human_test": {
+    "state": "NOT_STARTED",
+    "matrix": "matriz balanceada da #336: 20 participantes, 18 cartoes por pessoa, cada entregavel exposto a pelo menos 6 pessoas e cada fronteira critica a pelo menos 3",
+    "evidence": []
+  },
+  "names": [
+    {
+      "deliverable_id": "CFG-D01",
+      "catalog_number": "01",
+      "public_name_pt_br": "Radar de Licitações Prioritárias",
+      "value_line": "Prioriza editais por aderência, risco e esforço antes de mobilizar a equipe.",
+      "aliases": [
+        "Relatório Executivo de Priorização de Licitações"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D02",
+      "catalog_number": "02",
+      "public_name_pt_br": "Base de Mercado para Expansão",
+      "value_line": "Entrega dados tratados para comparar mercados, órgãos e territórios.",
+      "aliases": [
+        "Base Quantitativa Canônica"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D03",
+      "catalog_number": "03",
+      "public_name_pt_br": "Síntese Executiva de Expansão",
+      "value_line": "Converte os dados do estudo em uma decisão clara para a diretoria.",
+      "aliases": [
+        "Apresentação Executiva de Resultados"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D04",
+      "catalog_number": "04",
+      "public_name_pt_br": "Mapa de Órgãos com Maior Potencial",
+      "value_line": "Mostra quais órgãos concentram demanda compatível com a empresa.",
+      "aliases": [
+        "Mapa de Compradores Públicos"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D05",
+      "catalog_number": "05",
+      "public_name_pt_br": "Radar de Contratos Próximos da Renovação",
+      "value_line": "Antecipa contratos perto do fim e possíveis novas disputas.",
+      "aliases": [
+        "Contratos Vincendos e Recontratação"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D06",
+      "catalog_number": "06",
+      "public_name_pt_br": "Mapa de Concorrentes Relevantes",
+      "value_line": "Mostra quem compete, onde contrata e com que padrão de preço.",
+      "aliases": [
+        "Mapeamento de Concorrentes"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D07",
+      "catalog_number": "07",
+      "public_name_pt_br": "Referências de Preços de Obras Públicas",
+      "value_line": "Compara preços contratados e referências públicas para reduzir achismo.",
+      "aliases": [
+        "Painel de Preços de Obras Públicas"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D08",
+      "catalog_number": "08",
+      "public_name_pt_br": "Plano Executivo de Expansão",
+      "value_line": "Integra mercado, compradores, concorrência e preços em prioridades executivas.",
+      "aliases": [
+        "Relatório Executivo Consolidado"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D09",
+      "catalog_number": "09",
+      "public_name_pt_br": "Radar de Obras Antes do Edital",
+      "value_line": "Acompanha sinais públicos de obras antes da publicação do edital.",
+      "aliases": [
+        "Radar de Investimentos Públicos Pré-Edital"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D10",
+      "catalog_number": "10",
+      "public_name_pt_br": "Dossiê do Órgão e Risco de Pagamento",
+      "value_line": "Revela histórico contratual e sinais públicos que afetam o recebimento.",
+      "aliases": [
+        "Dossiê de Comprador Público e Risco de Recebimento"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D11",
+      "catalog_number": "11",
+      "public_name_pt_br": "Mapa de Parceiros e Consórcios",
+      "value_line": "Encontra organizações compatíveis e expõe riscos públicos da composição.",
+      "aliases": [
+        "Mapa de Parceiros, Consórcios e Subcontratados"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D12",
+      "catalog_number": "12",
+      "public_name_pt_br": "Decisão de Disputar o Edital",
+      "value_line": "Mostra se a oportunidade merece tempo, garantia e capital da empresa.",
+      "aliases": [
+        "Raio-X Go/No-Go do Edital"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D13",
+      "catalog_number": "13",
+      "public_name_pt_br": "Mapa de Habilitação e Lacunas de Acervo",
+      "value_line": "Confere requisitos e mostra o que falta provar no acervo.",
+      "aliases": [
+        "Matriz de Habilitação e Lacunas de Acervo"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D14",
+      "catalog_number": "14",
+      "public_name_pt_br": "Auditoria de Orçamento, BDI e Exequibilidade",
+      "value_line": "Testa preços, BDI, premissas e risco de inexequibilidade antes da proposta.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D15",
+      "catalog_number": "15",
+      "public_name_pt_br": "Referência de Concorrência e Faixa de Deságio",
+      "value_line": "Compara o padrão competitivo e delimita uma faixa defensável de deságio.",
+      "aliases": [
+        "Benchmark de Concorrência e Estratégia de Deságio"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D16",
+      "catalog_number": "16",
+      "public_name_pt_br": "Operação de Proposta para Licitação Crítica",
+      "value_line": "Coordena documentos, preço, técnica e revisão até a entrega da proposta.",
+      "aliases": [
+        "Bid Room por Oportunidade Crítica"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D17",
+      "catalog_number": "17",
+      "public_name_pt_br": "Diagnóstico de Riscos à Margem",
+      "value_line": "Localiza eventos que podem corroer a margem antes de virarem perda.",
+      "aliases": [
+        "Diagnóstico de Defesa de Margem"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D18",
+      "catalog_number": "18",
+      "public_name_pt_br": "Dossiê de Medição, Glosa e Pagamento",
+      "value_line": "Organiza cálculo e prova para contestar glosa ou cobrar pagamento.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D19",
+      "catalog_number": "19",
+      "public_name_pt_br": "Dossiê de Aditivo e Serviço Extra",
+      "value_line": "Prova mudança de escopo, custo e prazo para instruir o aditivo.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D20",
+      "catalog_number": "20",
+      "public_name_pt_br": "Dossiê de Atraso e Prorrogação",
+      "value_line": "Separa causas, responsabilidades e dias afetados para instruir prorrogação.",
+      "aliases": [
+        "Dossiê de Prorrogação e Atraso"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D21",
+      "catalog_number": "21",
+      "public_name_pt_br": "Cálculo de Reajuste Contratual",
+      "value_line": "Calcula o reajuste previsto pela cláusula e pela data-base do contrato.",
+      "aliases": [
+        "Memória de Reajuste Contratual"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D22",
+      "catalog_number": "22",
+      "public_name_pt_br": "Dossiê de Reequilíbrio Econômico-Financeiro",
+      "value_line": "Liga fato, risco, nexo e impacto para instruir o reequilíbrio.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D23",
+      "catalog_number": "23",
+      "public_name_pt_br": "Subsídio Técnico para Notificação ou Sanção",
+      "value_line": "Organiza fatos e provas técnicas para responder à acusação.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D24",
+      "catalog_number": "24",
+      "public_name_pt_br": "Diagnóstico da Operação em Obras Públicas",
+      "value_line": "Mostra onde a operação perde oportunidades, tempo, margem e controle.",
+      "aliases": [
+        "Diagnóstico B2G 360°"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D25",
+      "catalog_number": "25",
+      "public_name_pt_br": "Acompanhamento Preventivo do Contrato Público",
+      "value_line": "Acompanha eventos antes que prova, prazo ou caixa se percam.",
+      "aliases": [
+        "Acompanhamento Preventivo de Contrato"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D26",
+      "catalog_number": "26",
+      "public_name_pt_br": "Auditoria do Projeto Básico e dos Riscos",
+      "value_line": "Expõe omissões e incompatibilidades que afetam preço, prazo e execução.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D27",
+      "catalog_number": "27",
+      "public_name_pt_br": "Subsídio Técnico para Esclarecimento ou Impugnação",
+      "value_line": "Transforma dúvida ou restrição em perguntas e fundamentos verificáveis.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D28",
+      "catalog_number": "28",
+      "public_name_pt_br": "Comprovação de Exequibilidade e Resposta à Diligência",
+      "value_line": "Reconcilia custos e evidências para responder à dúvida sobre o preço.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D29",
+      "catalog_number": "29",
+      "public_name_pt_br": "Desenvolvimento da Proposta Técnica",
+      "value_line": "Converte critérios de julgamento em uma proposta técnica comprovável.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D30",
+      "catalog_number": "30",
+      "public_name_pt_br": "Plano de Garantias, Seguros e Capital de Giro",
+      "value_line": "Estima garantias e pico de caixa antes de comprometer a empresa.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D31",
+      "catalog_number": "31",
+      "public_name_pt_br": "Análise do Resultado da Licitação",
+      "value_line": "Explica o resultado público e melhora a próxima decisão de disputa.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D32",
+      "catalog_number": "32",
+      "public_name_pt_br": "Plano de Acervo para Licitações Futuras",
+      "value_line": "Transforma o acervo atual em plano para habilitações futuras.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D33",
+      "catalog_number": "33",
+      "public_name_pt_br": "Revisão Técnica Antes de Assinar o Contrato",
+      "value_line": "Encontra divergências e obrigações críticas antes da assinatura.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D34",
+      "catalog_number": "34",
+      "public_name_pt_br": "Plano de Mobilização e Obrigações do Contrato",
+      "value_line": "Define responsáveis, prazos e provas para começar sob controle.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D35",
+      "catalog_number": "35",
+      "public_name_pt_br": "Auditoria do Fluxo de Caixa do Contrato",
+      "value_line": "Projeta desembolso, recebimento e pico de capital de giro.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D36",
+      "catalog_number": "36",
+      "public_name_pt_br": "Dossiê de Recebimento e Encerramento do Contrato",
+      "value_line": "Organiza pendências e provas para receber e encerrar corretamente.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D37",
+      "catalog_number": "37",
+      "public_name_pt_br": "Dossiê de Atestação e Acervo da Obra",
+      "value_line": "Consolida serviços e quantitativos para solicitar atestado e registrar acervo.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D38",
+      "catalog_number": "38",
+      "public_name_pt_br": "Análise Pós-Contrato e Lições para Próximas Obras",
+      "value_line": "Converte o resultado real em decisões melhores para próximos contratos.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D39",
+      "catalog_number": "39",
+      "public_name_pt_br": "Subsídio Técnico para Recurso e Contrarrazão",
+      "value_line": "Organiza fatos e evidências técnicas para recurso ou contrarrazão.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D40",
+      "catalog_number": "40",
+      "public_name_pt_br": "Análise de Causas e Impactos de Atrasos",
+      "value_line": "Quantifica causas e dias de atraso com método reproduzível.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D41",
+      "catalog_number": "41",
+      "public_name_pt_br": "Análise de Custos e Valores em Disputa",
+      "value_line": "Liga evento, efeito e custo para delimitar o valor em disputa.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D42",
+      "catalog_number": "42",
+      "public_name_pt_br": "Assistência Técnica em Disputa Contratual Complexa",
+      "value_line": "Entrega análise técnica estruturada para a estratégia conduzida pelo jurídico.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D43",
+      "catalog_number": "43",
+      "public_name_pt_br": "Verificação de Sanções e Restrições Públicas",
+      "value_line": "Mostra achados, cobertura e lacunas da consulta sem emitir “selo”.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D44",
+      "catalog_number": "44",
+      "public_name_pt_br": "Auditoria de Prontidão do Empreendimento Público",
+      "value_line": "Testa se recurso, projeto, licença e área sustentam o início da obra.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D45",
+      "catalog_number": "45",
+      "public_name_pt_br": "Monitoramento Mensal de Mercado e Contratos Públicos",
+      "value_line": "Destaca mudanças públicas relevantes para priorizar mercado e carteira todo mês.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D46",
+      "catalog_number": "46",
+      "public_name_pt_br": "Oficina para Decidir Quais Licitações Disputar",
+      "value_line": "Instala critérios e ritual para escolher quais oportunidades merecem equipe.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D47",
+      "catalog_number": "47",
+      "public_name_pt_br": "Capacitação de Equipes de Licitações e Contratos",
+      "value_line": "Treina a equipe nos casos e rotinas que ela realmente executa.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D48",
+      "catalog_number": "48",
+      "public_name_pt_br": "Estudo Sob Medida com Dados Públicos",
+      "value_line": "Responde uma decisão inédita com dados públicos rastreáveis.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D49",
+      "catalog_number": "49",
+      "public_name_pt_br": "Orçamento Completo da Proposta",
+      "value_line": "Monta preços, composições e BDI em planilha reproduzível.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D50",
+      "catalog_number": "50",
+      "public_name_pt_br": "Cronograma e Plano Executivo da Proposta",
+      "value_line": "Converte escopo e prazo em sequência, marcos e curva de execução.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D51",
+      "catalog_number": "51",
+      "public_name_pt_br": "Dossiê de Habilitação Pronto para Envio",
+      "value_line": "Organiza cada exigência e documento no pacote final da licitação.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D52",
+      "catalog_number": "52",
+      "public_name_pt_br": "Verificação de SICAF, Certidões e Regularidade",
+      "value_line": "Mostra cadastros, vencimentos e lacunas antes que bloqueiem a participação.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D53",
+      "catalog_number": "53",
+      "public_name_pt_br": "Acompanhamento Técnico da Sessão de Disputa",
+      "value_line": "Sustenta decisões de preço e margem enquanto o cliente opera os lances.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    },
+    {
+      "deliverable_id": "CFG-D54",
+      "catalog_number": "54",
+      "public_name_pt_br": "Dossiê de Credenciamento ou Pré-Qualificação",
+      "value_line": "Organiza requisitos e provas para entrar no procedimento correto.",
+      "aliases": [],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    }
+  ],
+  "containers": [
+    {
+      "container_id": "expansion_package",
+      "public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
+      "value_line": "Reúne as entregas 02 a 08 para decidir onde e como crescer.",
+      "aliases": [
+        "Diagnóstico B2G de Expansão"
+      ],
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": [],
+      "catalog_offer_id": "CFG-DIAG-EXP-v1"
+    },
+    {
+      "container_id": "diretoria_fracionada",
+      "public_name_pt_br": "Diretoria Fracionada para o Mercado Público",
+      "value_line": "Coloca liderança sênior na rotina para decidir, coordenar e melhorar resultados.",
+      "aliases": [
+        "Diretoria B2G fracionada",
+        "Diretoria B2G Fracionada Flex",
+        "Diretoria B2G Fracionada 180",
+        "Diretoria B2G Fracionada 365",
+        "Flex"
+      ],
+      "plans": [
+        {
+          "plan_id": "diretoria_flex",
+          "public_name_pt_br": "Plano Mensal",
+          "terms": "R$ 20.000/mês",
+          "catalog_offer_id": "CFG-DIRB2G-FLEX-v1"
+        },
+        {
+          "plan_id": "diretoria_180",
+          "public_name_pt_br": "Compromisso Semestral",
+          "terms": "6 × R$ 15.000",
+          "catalog_offer_id": "CFG-DIRB2G-180-v1"
+        },
+        {
+          "plan_id": "diretoria_365",
+          "public_name_pt_br": "Compromisso Anual",
+          "terms": "12 × R$ 12.500",
+          "catalog_offer_id": "CFG-DIRB2G-365-v1"
+        }
+      ],
+      "plans_note": "três condições de contratação da Diretoria, que são planos/preços, não três produtos adicionais",
+      "decision_question": null,
+      "public_slug": null,
+      "redirects": []
+    }
+  ]
+}
