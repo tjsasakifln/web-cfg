@@ -51,6 +51,14 @@ coaching ou métricas fora de intervalo. Ele passa com o residual humano
 explicitamente aberto; `READY` significa instrumento pronto, não pesquisa
 concluída.
 
+O v1 também fixa por SHA-256 o protocolo JSON, recrutamento, consentimento, os
+três instrumentos e o runbook. Uma execução precisa ligar SHA e origem HTTPS da
+CONFENGE, hashes dos três estímulos, distribuição mobile/desktop, as quatro
+ofertas congeladas e as três sondagens de nomes. Pasta, `run_id`, data,
+`STATE.json` e agregado precisam reconciliar. Arquivo extra, interpretação com
+placeholder/PII/citação/fechamento ou mudança do instrumento sem nova versão
+falha fechado.
+
 ## North Star e repetição
 
 O pacote não mede leads, páginas ou commits. Ele reduz o risco de uma navegação

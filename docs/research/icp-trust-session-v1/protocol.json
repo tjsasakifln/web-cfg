@@ -100,6 +100,12 @@
         "deliverable",
         "next_action"
       ],
+      "offer_scope": [
+        {"id": "diagnostico-b2g-360", "path": "/diagnostico-b2g-360/"},
+        {"id": "diretoria-b2g", "path": "/diretoria-b2g/"},
+        {"id": "bid-room", "path": "/bid-room-licitacoes-obras/"},
+        {"id": "contract-defense", "path": "/defesa-margem-contratos-publicos/"}
+      ],
       "terms_requiring_explicit_probe": [
         "Bid Room",
         "Contract Defense & Margin",

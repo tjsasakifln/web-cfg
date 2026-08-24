@@ -8,6 +8,11 @@ Usar as ofertas e descrições do SHA registrado, sem reescrever no instrumento.
 Exibir uma oferta por vez, em ordem alternada. Para cada oferta, perguntar sem
 explicação do moderador:
 
+O escopo v1 é fechado: `diagnostico-b2g-360`, `diretoria-b2g`, `bid-room` e
+`contract-defense`, nos quatro caminhos registrados em `protocol.json`. O
+agregado deve conter as quatro ofertas; remover, renomear ou acrescentar uma
+exige nova versão do protocolo antes do recrutamento.
+
 1. Para quem é esta oferta?
 2. Em qual situação ela seria usada?
 3. O que a CONFENGE entrega?

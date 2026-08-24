@@ -7,6 +7,10 @@
   "stimulus": {
     "git_sha": null,
     "base_url": null,
+    "captured_at": null,
+    "home_first_viewport_sha256": null,
+    "navigation_tree_sha256": null,
+    "offer_copy_sha256": null,
     "viewport_assignment": {
       "mobile": null,
       "desktop": null

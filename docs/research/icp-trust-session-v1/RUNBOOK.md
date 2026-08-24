@@ -3,11 +3,16 @@
 ## 1. Congelar e preparar
 
 1. Rodar `npm run test:trust-session-protocol`.
-2. Registrar o SHA exato e a URL local/preview do mesmo SHA.
+2. Registrar o SHA exato e a URL canônica/deploy preview do mesmo SHA.
 3. Copiar os dois templates para `runs/YYYY-MM-DD-NN/` como `aggregate.json` e
    `interpretation.md`; não preencher interpretação ainda.
 4. Preparar árvore de navegação e captura mobile/desktop a partir do mesmo SHA.
 5. Definir ordem contrabalanceada antes de receber respostas.
+
+Antes da primeira sessão, registrar no agregado o SHA-256 da primeira viewport
+da home, da árvore apresentada e do snapshot das quatro ofertas do escopo. A URL
+versionada deve ser `confenge.com.br` ou um deploy preview HTTPS da CONFENGE, sem
+query, fragmento ou credencial. URL local não é evidência reproduzível.
 
 ## 2. Recrutar e consentir
 
