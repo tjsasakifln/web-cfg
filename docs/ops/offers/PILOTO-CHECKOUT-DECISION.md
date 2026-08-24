@@ -2,9 +2,9 @@
 
 - Issue: [#251](https://github.com/tjsasakifln/web-cfg/issues/251)
 - Decisão: **DEFER**
-- Owner: **CONFENGE founder**
+- Owner: **tiago-jun-sasaki**
 - Data: **2026-08-24**
-- Revisão obrigatória: **2026-09-21**
+- Revisão obrigatória: **2026-09-20**
 
 Contrato versionado: `data/offers/piloto-checkout-decision.v1.json`
 
@@ -12,7 +12,7 @@ Contrato versionado: `data/offers/piloto-checkout-decision.v1.json`
 
 As 24 páginas ficam preservadas, não indexadas e sem checkout de produção. Não há justificativa para `SUNSET` agora: o catálogo e o adaptador são ativos reversíveis ligados à validação da issue #88. Também não há evidência para `EXECUTE`: #88 segue em `VALIDATE`, os quatro mapeamentos do provedor estão vazios, todas as flags de dinheiro estão desligadas e ainda faltam autorização de canário e aprovações externas versionadas.
 
-O estado, portanto, é `DEFER`. A revisão em 2026-09-21 não ativa nada automaticamente. Nessa data o owner deve publicar uma nova decisão `EXECUTE`, `DEFER` ou `SUNSET` apoiada em evidência.
+O estado, portanto, é `DEFER`. A revisão em 2026-09-20 não ativa nada automaticamente. Nessa data o owner deve publicar uma nova decisão `EXECUTE`, `DEFER` ou `SUNSET` apoiada em evidência.
 
 ## Gate mensurável de reabertura
 
@@ -24,6 +24,13 @@ Os quatro critérios abaixo são cumulativos:
 4. A oferta canário tem mapeamento de provedor preenchido e evidências verdes de sandbox, caminhos negativos e rollback.
 
 Mesmo com os quatro critérios marcados como `PASS`, este contrato `1.0` não autoriza produção. `productionAuthorized()` permanece invariavelmente falso. Uma decisão posterior de `EXECUTE` exige outro schema e outro PR, com `production_evidence: true` obrigatório, oferta canário, teto cumulativo durável e autorização individual para cada cobrança, estorno e cancelamento, conforme #88. O gate precisa reservar o limite de forma atômica antes de qualquer mutação externa e tratar retry idempotente; não basta somar flags ou anexar um manifesto. Variáveis de ambiente, isoladamente, não contornam `DEFER`: `scripts/offers/flags.cjs` força catálogo público, checkout, webhook e dinheiro real para `false`, e força `ASAAS_MODE=disabled` em produção. O sandbox isolado permanece disponível.
+
+O schema `1.0` é fechado ao estado atual: owner nomeado, calendário de 28 dias
+inclusivos, lista e ordem exatas das 24 URLs, quatro critérios `WAITING` sem
+evidência, analytics sem PII e referências da decisão. Campos extras, `PASS`
+decorativo, data impossível, revisão depois de 2026-09-20 ou edição para
+`EXECUTE` falham. Uma nova decisão precisa de schema/revisão próprios; não se
+obtém autoridade editando este JSON.
 
 ## Inventário, indexação e eventual sunset
 
@@ -45,4 +52,4 @@ Se a próxima revisão decidir `SUNSET`, ela precisa substituir `DEFER` por `MIG
 
 ## Limitações conhecidas
 
-O gate prova o estado `DEFER`, o inventário das 24 páginas e o bloqueio por ambiente. Ele deliberadamente não tenta provar nem ativar uma futura execução. Validade material das aprovações humanas, limite durável, autorização por cobrança, configuração Asaas/Netlify, prontidão fiscal, capacidade operacional e rollback recuperável pertencem ao futuro PR de `EXECUTE`.
+O gate prova o estado `DEFER`, o inventário das 24 páginas e o bloqueio por ambiente. Ele deliberadamente não tenta provar nem ativar uma futura execução. Validade material das aprovações humanas, limite durável, autorização por cobrança, configuração Asaas/Netlify, prontidão fiscal, capacidade operacional e rollback recuperável pertencem ao futuro PR de `EXECUTE`. As referências de issue/comentário são prova de decisão revisável, não assinatura criptográfica do founder; a aprovação do PR continua sendo o controle humano.

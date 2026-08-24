@@ -3,11 +3,16 @@
   "decision_id": "CFG-PILOTO-CHECKOUT-2026-08-24",
   "issue": 251,
   "parent_issue": 88,
+  "decision_evidence": [
+    "https://github.com/tjsasakifln/web-cfg/issues/251",
+    "https://github.com/tjsasakifln/web-cfg/issues/251#issuecomment-5389755464",
+    "docs/ops/offers/PILOTO-CHECKOUT-DECISION.md"
+  ],
   "decision_state": "DEFER",
   "activation_authorized": false,
   "decided_on": "2026-08-24",
-  "review_on": "2026-09-21",
-  "owner": "CONFENGE founder",
+  "review_on": "2026-09-20",
+  "owner": "tiago-jun-sasaki",
   "executive_front": "SCALE/SUNSET",
   "time_to_evidence_days": 28,
   "leverage": [
