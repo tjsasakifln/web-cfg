@@ -1,11 +1,11 @@
 {
   "schema_version": "bofu-intent-matrix-v1",
   "campaign": "CONFENGE-WEB-BOFU-CHECKOUT-CONVERGENCE-01",
-  "as_of": "2026-08-20",
+  "as_of": "2026-08-24",
   "public_surface": "https://confenge.com.br",
   "gsc_live_state": "LIVE_JOB_OK",
   "core_ready_for_product_decisions": false,
-  "gsc_source": "seo/gsc-2026-08-09 + issue#128; overlay data/bofu-dominance/core/gsc-live-overlay.v1.json",
+  "gsc_source": "seo/gsc-2026-08-09 historical + seo/gsc-2026-08-24 live redacted export; decision data/bofu-dominance/remeasurements/2026-08-24/decision.json",
   "aditivos_snippet_hypothesis": {
     "status": "LANDED_IN_REPO",
     "before_title": "Aditivos em obras públicas: limites, serviços extras e pleitos | CONFENGE",
@@ -19,7 +19,8 @@
     "Existing routes only. No new URL family.",
     "Missing GSC top-rows stay UNKNOWN, not zero.",
     "offer_id only when the page already names a #88 catalog offer.",
-    "Parent/child: bid-room is a WIP component of diretoria-b2g."
+    "Parent/child: bid-room is a WIP component of diretoria-b2g.",
+    "Live GSC is current, but the one-query SERP sentinel is not comparable with the 2026-08-19 four-query census; core readiness remains false."
   ],
   "rows": [
     {

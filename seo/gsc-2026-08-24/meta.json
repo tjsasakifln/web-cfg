@@ -1,0 +1,23 @@
+{
+  "schema": "confenge-gsc-versioned-export/1.0",
+  "run_id": 32683875926,
+  "run_url": "https://github.com/tjsasakifln/web-cfg/actions/runs/32683875926",
+  "base_sha": "c79281d086cdc3533b7dd782b58f8ace99f62ace",
+  "pulled_at": "2026-08-24T02:41:26.374863+00:00",
+  "as_of": "2026-08-20",
+  "provider_max_date": "2026-08-18",
+  "source": "search_analytics_api",
+  "source_kind": "search_analytics_api",
+  "site": "sc-domain:confenge.com.br",
+  "rows": 75,
+  "pages_fetched": 1,
+  "synthetic": false,
+  "query_text_redacted": true,
+  "raw_query_rows_in_git": false,
+  "official_position_claimed": false,
+  "job_ready_for_product_decisions": true,
+  "core_ready_for_product_decisions": false,
+  "core_ready_reason": "GSC is current, but the 2026-08-24 SERP sentinel is not comparable with the four-query 2026-08-19 census.",
+  "artifact_sha256": "c2215b8a36529efd6d8343a3d90822808834698dfbdd18df84553aeb6957b8d3",
+  "search_analytics_limitation": "Search Analytics may return top rows only and is not an exhaustive total. Row counts describe the returned set, not the property universe."
+}

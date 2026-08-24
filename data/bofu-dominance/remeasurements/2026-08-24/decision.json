@@ -1,0 +1,46 @@
+{
+  "schema": "bofu-remeasurement-decision/1.0",
+  "issue": 292,
+  "decision_state": "VALIDATE",
+  "executive_front": "INBOUND ENGINE",
+  "leverage": "data",
+  "as_of": "2026-08-24",
+  "gsc": {
+    "path": "seo/gsc-2026-08-24",
+    "source": "search_analytics_api",
+    "synthetic": false,
+    "query_text_redacted": true,
+    "job_ready_for_product_decisions": true,
+    "provider_max_date": "2026-08-18"
+  },
+  "serp": {
+    "path": "data/bofu-dominance/remeasurements/2026-08-24/serp-sentinel.json",
+    "official_position_claimed": false,
+    "families": 11,
+    "comparison_states": {
+      "MUDOU": 0,
+      "NAO_MUDOU": 0,
+      "AMOSTRA_INSUFICIENTE": 11
+    }
+  },
+  "core_ready_for_product_decisions": false,
+  "core_ready_owner": "web-cfg#292",
+  "core_ready_condition": {
+    "all_required": [
+      "live non-synthetic GSC export with redacted query text and provider_max_date no older than 5 days",
+      "same-query-set SERP census for all 11 families, using the 2026-08-19 query set and the same collector class",
+      "each family classified MUDOU, NAO_MUDOU or AMOSTRA_INSUFICIENTE against a like-for-like sample",
+      "official_position_claimed remains false"
+    ]
+  },
+  "unmet_conditions": [
+    "The fresh SERP sentinel uses one query per family, while the comparator uses up to four."
+  ],
+  "plan_b_if_unmet_on_2026_09_16": [
+    "Keep html_mutation_authorized=false for the six frozen pillars.",
+    "Do not change earliest_safe_action_at, hashes, robots or canonical tags.",
+    "Record a dated human decision and schedule a same-method census; UNKNOWN does not become a release authorization."
+  ],
+  "next_check": "2026-09-09",
+  "north_star_effect": "Prevents a stale or non-comparable sample from authorizing six units of BOFU work without qualified-pipeline evidence."
+}
