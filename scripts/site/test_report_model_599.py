@@ -1141,7 +1141,7 @@ def test_price_has_versioned_non_catalog_action_authority() -> None:
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
     catalog_ids = {offer["offer_id"] for offer in catalog["offers"]}
 
-    assert matrix["version"] == "1.4.0"
+    assert matrix["version"] == "1.4.1"
     assert route["offer_id"] == HANDRAISE_ID
     assert route["service_id"] is None
     assert route["asset_id"] == "relatorio-inteligencia-licitacoes-demonstrativo"

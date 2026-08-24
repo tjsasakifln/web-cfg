@@ -1,7 +1,7 @@
 {
   "schema": "intent-action-matrix/1.0",
-  "version": "1.4.0",
-  "as_of": "2026-08-23",
+  "version": "1.4.1",
+  "as_of": "2026-08-24",
   "owner": "web-cfg/conversion",
   "sla_policy": "Commercial response SLA is UNKNOWN until Warmbly #55 measures a representative baseline. The owner-authorized Radar delivery clock is a separate contract: up to 48 business hours from persisted parameter submission, never from payment confirmation.",
   "first_canary": {
@@ -35,7 +35,60 @@
     },
     "agenda": {
       "exists": false,
-      "reason": "no public booking route with owner and measured latency"
+      "owner": null,
+      "sla": "UNKNOWN",
+      "reason": "no public booking route with owner and measured latency",
+      "decision_state": "DEFER",
+      "decision_owner": "web-cfg/conversion",
+      "decided_at": "2026-08-24",
+      "next_review_at": "2026-09-20",
+      "blocked_by": "https://github.com/tjsasakifln/warmbly/issues/55",
+      "decision_evidence": [
+        "https://github.com/tjsasakifln/web-cfg/issues/248",
+        "docs/ops/AGENDA-LATENCY-DEFER-248.md"
+      ],
+      "baseline": {
+        "status": "MISSING",
+        "owner": "warmbly/commercial-latency",
+        "source_issue": "https://github.com/tjsasakifln/warmbly/issues/55",
+        "evidence_ref": null,
+        "measured_at": null,
+        "period_start": null,
+        "period_end": null,
+        "sample_count": null,
+        "representative": null,
+        "stage_interval": null,
+        "route_scope": null,
+        "source_clock": null,
+        "timezone": null,
+        "metrics": null
+      },
+      "reopen_gate": {
+        "same_pr_required": true,
+        "activation_decision_state": "EXECUTE_NOW",
+        "sla_after_activation": "UNKNOWN",
+        "required_fields": [
+          "operational_channels.agenda.owner",
+          "operational_channels.agenda.activated_at",
+          "operational_channels.agenda.baseline.status=MEASURED",
+          "operational_channels.agenda.baseline.evidence_ref",
+          "operational_channels.agenda.baseline.measured_at",
+          "operational_channels.agenda.baseline.period_start",
+          "operational_channels.agenda.baseline.period_end",
+          "operational_channels.agenda.baseline.sample_count",
+          "operational_channels.agenda.baseline.representative=true",
+          "operational_channels.agenda.baseline.stage_interval",
+          "operational_channels.agenda.baseline.route_scope",
+          "operational_channels.agenda.baseline.source_clock",
+          "operational_channels.agenda.baseline.timezone",
+          "operational_channels.agenda.baseline.metrics.count",
+          "operational_channels.agenda.baseline.metrics.median_minutes",
+          "operational_channels.agenda.baseline.metrics.p75_minutes",
+          "operational_channels.agenda.baseline.metrics.p90_minutes",
+          "operational_channels.agenda.baseline.metrics.censored_open_cycles"
+        ],
+        "rule": "agenda.exists may change to true only in the same PR as a named owner and an immutable, dated, representative Warmbly #55 baseline. SLA remains UNKNOWN; baseline is not a promised prazo."
+      }
     }
   },
   "routes": [

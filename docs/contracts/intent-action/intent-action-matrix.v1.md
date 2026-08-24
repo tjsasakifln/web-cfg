@@ -1,6 +1,6 @@
-# Intent → action matrix v1.4.0
+# Intent → action matrix v1.4.1
 
-Schema: `intent-action-matrix/1.0`. Owner: `web-cfg/conversion`. As of 2026-08-23.
+Schema: `intent-action-matrix/1.0`. Owner: `web-cfg/conversion`. As of 2026-08-24.
 
 Commercial response SLA is `UNKNOWN` until Warmbly #55 measures a representative baseline. The Radar order has a distinct owner-authorized delivery clock: up to 48 business hours from persisted parameter submission, never from payment confirmation.
 
@@ -33,7 +33,17 @@ Nesta rota, `scope_state=PARAMETERS_PERSISTED_PENDING_HUMAN_PAYMENT_HANDOFF`: o 
 ## Operational channels
 
 - WhatsApp/phone: exists (`5548988344559`, owner Tiago). Commercial response SLA `UNKNOWN`; it is only the owner-operated payment handoff after persistence for the Radar order.
-- Agenda: **does not exist**. Do not offer.
+- Agenda: **does not exist**. Decision `DEFER`, owner
+  `web-cfg/conversion`, decided on 2026-08-24, review on 2026-09-20. Blocker:
+  [Warmbly #55](https://github.com/tjsasakifln/warmbly/issues/55). Do not offer.
+- Exact reopen gate: `agenda.exists=true` is accepted only in the same PR as a
+  named operational owner, `EXECUTE_NOW`, activation date and an immutable,
+  dated, representative Warmbly #55 baseline with count, median, p75, p90,
+  censored/open cycles, intervalo de estágios, escopo de rota, clock e timezone.
+  The measured baseline does not become a public promise: agenda SLA remains
+  `UNKNOWN`.
+- Decision evidence and rollback:
+  [`AGENDA-LATENCY-DEFER-248.md`](../../ops/AGENDA-LATENCY-DEFER-248.md).
 
 ## Auto-send
 
