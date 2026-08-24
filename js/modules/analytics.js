@@ -41,6 +41,8 @@
     '/analises-contratos-publicos/': 'editorial',
     '/panorama-mercado-obras-publicas/': 'editorial',
     '/casos/': 'case',
+    '/servicos-obras-publicas/': 'hub',
+    '/problemas-que-resolvemos/': 'hub',
     '/inteligencia/': 'data',
     '/radar/': 'data',
     '/ferramentas/': 'tool',

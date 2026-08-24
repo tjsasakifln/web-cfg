@@ -103,6 +103,9 @@ for (const width of widths) {
       ),
       h1Count: document.querySelectorAll("h1").length,
       reportSections: document.querySelectorAll(".report-section").length,
+      orderEntryCtas: document.querySelectorAll(
+        'a[href="/comercial/radar-decisorio/"][data-terminal-action="capture-route"]'
+      ).length,
       whatsappCtas: document.querySelectorAll('a[href^="https://wa.me/5548988344559"]').length,
       overflowOffenders: [...document.querySelectorAll("body *")]
         .filter((element) => {
@@ -131,7 +134,7 @@ for (const width of widths) {
   if (metrics.h1Text !== "Escolha quais licitações disputar e quais recusar.") errors.push("hero_promise");
   if (!metrics.deliverablesBeforeExample) errors.push("offer_before_example");
   if (metrics.h1Count !== 1 || metrics.reportSections < 8) errors.push("report_structure");
-  if (metrics.whatsappCtas < 4) errors.push("whatsapp_ctas");
+  if (metrics.orderEntryCtas !== 5 || metrics.whatsappCtas !== 0) errors.push("order_entry_ctas");
   if (width <= 390 && metrics.h1Height > 180) errors.push("mobile_h1_too_tall");
   if (width <= 620 && (!metrics.mobilePortfolioVisible || metrics.mobilePortfolioItems !== 12)) errors.push("mobile_portfolio");
   if (width > 620 && (!metrics.tableVisible || !metrics.tableOverflowContained)) errors.push("table_overflow_not_contained");
@@ -181,7 +184,7 @@ const clickEvents = await page.evaluate(() => {
 });
 if (
   clickEvents.length !== 1 ||
-  clickEvents[0]?.event !== "whatsapp_click" ||
+  clickEvents[0]?.event !== "cta_click" ||
   clickEvents[0]?.asset_id !== "relatorio-inteligencia-licitacoes-demonstrativo" ||
   clickEvents[0]?.route_family !== "edital-proposta" ||
   clickEvents[0]?.cta_id !== "report-599-hero" ||
@@ -189,6 +192,8 @@ if (
   clickEvents[0]?.cta_kind !== "offer" ||
   clickEvents[0]?.offer_id !== "handraise-report-intelligence-599-v1" ||
   clickEvents[0]?.next_action_id !== "contratar_relatorio_inteligencia_599" ||
+  !/^(?:c-[a-z0-9-]+|[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})$/i.test(clickEvents[0]?.correlation_id || "") ||
+  /^CFG-WA-/i.test(clickEvents[0]?.correlation_id || "") ||
   !clickEvents[0]?.event_id ||
   clickEvents[0]?.source !== "CONFENGE_WEB"
 ) {

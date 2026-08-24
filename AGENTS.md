@@ -10,6 +10,7 @@ Read [ADR-STRAT-002](docs/architecture/ADR-STRAT-002-confenge-canonical-public-s
 - `extra-cli` owns acquisition, canonical facts, identity and provenance. Consume versioned SELECT-only contracts; do not build a crawler, parallel DataLake or second identity model here.
 - `warmbly` owns commercial action. Emit normalized source `CONFENGE_WEB`, attribution and next-action context without leaking PII into analytics.
 - Programmatic expansion requires distinct user utility, provenance/freshness, canonical hygiene, editorial/data gates and monitoring. Page count is not a success metric.
+- The conversion gate is fail-closed. Every indexable public route must belong to a family declared in `data/organic/public-family-registry.json` (visitor job, profile, terminal action, gate coverage). The declaration is checked against the rendered HTML, and any route that displays a price must capture the lead. Commercial debt exceptions are route-exact, dated, owned by an issue and reported on every `npm run inbound:gates`; permanent trust/legal exemptions require an explicit reason and may not hide a priced offer.
 - Preserve reversible migration and explicit URL-level MIGRATE/REDIRECT/RETIRE decisions. Never blanket-redirect legacy URLs to the home page.
 
 ## Pull-request evidence

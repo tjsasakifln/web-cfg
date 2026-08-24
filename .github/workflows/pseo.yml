@@ -48,6 +48,8 @@ jobs:
           PY
       - name: Build site (exact production command)
         run: npm run build:site
+      - name: Published HTML and FAQ integrity
+        run: npm run test:html-integrity:site
       - name: Audit public artifact
         run: npm run audit:public-artifact
       - name: pSEO validate

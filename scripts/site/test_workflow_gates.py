@@ -124,6 +124,7 @@ def test_site_ci_shape():
     # Central scripts must appear
     for needle in (
         "npm run build:site",
+        "npm run test:html-integrity:site",
         "npm run pseo:validate",
         "npm run pseo:audit",
         "npm run audit:public-artifact",
@@ -200,6 +201,7 @@ def test_pseo_shape():
 
     for needle in (
         "npm run build:site",
+        "npm run test:html-integrity:site",
         "npm run audit:public-artifact",
         "npm run pseo:validate",
         "npm run pseo:audit",
