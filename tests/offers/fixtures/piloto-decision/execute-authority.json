@@ -1,0 +1,21 @@
+{
+  "schema": "confenge.piloto-checkout-execute-evidence/1.0",
+  "decision_id": "CFG-PILOTO-CHECKOUT-TEST-EXECUTE",
+  "activation_authorized": true,
+  "canary_offer_id": "CFG-DIAG-EXP-v1",
+  "spend_ceiling_cents": 800000,
+  "criteria": [
+    { "id": "parent-88-execute", "status": "PASS" },
+    { "id": "qualified-demand", "status": "PASS" },
+    { "id": "external-approvals", "status": "PASS" },
+    { "id": "canary-readiness", "status": "PASS" }
+  ],
+  "approvals": [
+    { "role": "legal", "approver_id": "test-legal-owner", "status": "APPROVED" },
+    { "role": "fiscal_nfse", "approver_id": "test-fiscal-owner", "status": "APPROVED" },
+    { "role": "delivery_capacity", "approver_id": "test-delivery-owner", "status": "APPROVED" },
+    { "role": "security", "approver_id": "test-security-owner", "status": "APPROVED" }
+  ],
+  "classification": "SYNTHETIC_CONTRACT_FIXTURE",
+  "production_evidence": false
+}

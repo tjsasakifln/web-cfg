@@ -23,7 +23,7 @@ Os quatro critérios abaixo são cumulativos:
 3. Aprovações legal, fiscal/NFS-e, capacidade de entrega e segurança têm quatro referências versionadas.
 4. A oferta canário tem mapeamento de provedor preenchido e evidências verdes de sandbox, caminhos negativos e rollback.
 
-Só uma revisão separada pode marcar cada critério como `PASS`, anexar `evidence_ref`, mudar o estado para `EXECUTE` e definir `activation_authorized: true`. Variáveis de ambiente, isoladamente, não contornam a decisão: `scripts/offers/flags.cjs` força catálogo público, checkout, webhook e dinheiro real para `false`, e força `ASAAS_MODE=disabled` em produção enquanto a autorização não for válida. O sandbox isolado permanece disponível.
+Só uma revisão separada pode marcar cada critério como `PASS`, anexar um manifesto JSON local, versionado e preso por SHA-256, mudar o estado para `EXECUTE` e definir `activation_authorized: true`. O manifesto e o contrato devem repetir a oferta canário, um teto positivo de gasto e as quatro aprovações `legal`, `fiscal_nfse`, `delivery_capacity` e `security`, cada uma com `approver_id` distinto. Referência ausente, fora do repositório, não versionada, sintética, com hash divergente ou com aprovadores repetidos falha fechada. Variáveis de ambiente, isoladamente, não contornam a decisão: `scripts/offers/flags.cjs` força catálogo público, checkout, webhook e dinheiro real para `false`, e força `ASAAS_MODE=disabled` em produção enquanto a autorização não for válida. O sandbox isolado permanece disponível.
 
 ## Inventário, indexação e eventual sunset
 
@@ -39,10 +39,10 @@ Se a próxima revisão decidir `SUNSET`, ela precisa substituir `DEFER` por `MIG
 - **North Star:** oportunidade comercial qualificada, não número de páginas, cliques, leads brutos ou checkouts criados.
 - **Analytics:** nenhuma instrumentação nova durante `DEFER`; eventos futuros usam `CONFENGE_WEB`, agregados e com allowlist de PII vazia. Checkout, pagamento e receita continuam camadas distintas.
 - **Quality gates:** `npm run test:checkout-negatives`, `npm run test:conversion`, `npm run test:asaas-production` e `node scripts/offers/piloto-decision.cjs`.
-- **Rollback:** manter flags de catálogo, checkout, webhook e dinheiro real em `false`; manter produção Asaas desabilitada; restaurar o último deploy conhecido. Se uma execução futura já tiver objetos reais, preservar recebimento de webhook para esses objetos e não cancelar, estornar ou emitir NFS-e automaticamente.
+- **Rollback:** manter flags de catálogo, checkout, aplicação de webhook e dinheiro real em `false`; manter produção Asaas desabilitada; restaurar o último deploy conhecido. Se uma execução futura já tiver objetos reais, uma decisão de rollback separada, com evidência local/versionada e hash, pode autorizar somente o recebimento autenticado e persistência de eventos ligados a objetos ou referências já indexados no store. Eventos desconhecidos falham sem persistência; nada é aplicado, criado, cancelado, estornado ou enviado à NFS-e automaticamente.
 - **ADR afetado:** nenhuma mudança de fronteira. A decisão reforça ADR-STRAT-002 e RUNTIME-AUTHORITY: CONFENGE segue como única superfície pública, sem runtime externo novo, sem segundo modelo de identidade e sem PII em analytics.
 - **Repetição x100:** a automação só melhora o sistema depois de provar demanda, aprovações e uma operação canário; antes disso, repetir 100 checkouts cria risco e trabalho operacional, não alavancagem.
 
 ## Limitações conhecidas
 
-O gate prova estado do repositório e bloqueia ativação pelo loader de flags. Ele não comprova aprovação humana, configuração no painel Asaas/Netlify, prontidão fiscal ou capacidade operacional; esses itens devem existir como referências reais antes de uma futura decisão `EXECUTE`.
+O gate prova estado do repositório, existência e integridade das evidências versionadas e bloqueia ativação pelo loader de flags. Ele não substitui a validade material da aprovação humana, a configuração no painel Asaas/Netlify, a prontidão fiscal ou a capacidade operacional; esses itens devem existir no manifesto real antes de uma futura decisão `EXECUTE`.

@@ -1,8 +1,8 @@
 /**
  * Production Asaas webhook. Dedicated token. Persist-then-2xx. No provider mutation.
  */
-const { resolveProductionConfig, requireProductionRuntime, verifyWebhookToken, headerValue } = require("../../scripts/offers/providers/config-production.cjs");
-const { createAsaasProductionProvider, mapProductionEvent } = require("../../scripts/offers/providers/asaas-production.cjs");
+const { resolveProductionWebhookConfig, requireProductionRuntime, verifyWebhookToken, headerValue } = require("../../scripts/offers/providers/config-production.cjs");
+const { createAsaasProductionProvider, mapProductionEvent, isKnownProductionObject } = require("../../scripts/offers/providers/asaas-production.cjs");
 const { redactProviderPayload } = require("../../scripts/offers/providers/redact.cjs");
 const { resolveProductionStore } = require("../../scripts/offers/stores/sandbox-store.cjs");
 
@@ -22,7 +22,10 @@ function createHandler(deps = {}) {
       return json(405, { ok: false, error: "method_not_allowed" });
     }
     const env = deps.env || process.env;
-    const config = deps.config || resolveProductionConfig(env, { decision: deps.decision });
+    const config = deps.config || resolveProductionWebhookConfig(env, {
+      decision: deps.decision,
+      evidence: deps.evidence,
+    });
     if (!config.ok) {
       const runtime = requireProductionRuntime(config, { needWebhook: true });
       return json(runtime.statusCode || 404, { ok: false, error: config.error || "feature_disabled" });
@@ -37,14 +40,6 @@ function createHandler(deps = {}) {
 
     const store = await resolveProductionStore(deps, event);
     if (!store) return json(503, { ok: false, error: "store_unavailable" });
-    const provider = createAsaasProductionProvider({
-      http: deps.http,
-      clock: deps.clock,
-      store,
-      config,
-      env,
-      logger: deps.logger,
-    });
 
     const rawBody = event.body == null ? "" : String(event.body);
     if (Buffer.byteLength(rawBody, "utf8") > (deps.maxBodyBytes || MAX_BODY)) {
@@ -63,19 +58,37 @@ function createHandler(deps = {}) {
       return json(400, { ok: false, error: mapped.error || "event_id_missing", environment: "production" });
     }
 
-    const receiptKey = `receipt:${mapped.event.provider_event_id}`;
-    await store.putIfAbsent(receiptKey, { kind: "webhook_receipt", raw_redacted: true, event_id: mapped.event.provider_event_id });
+    if (config.receiveOnly === true && !(await isKnownProductionObject(store, payload, mapped))) {
+      return json(404, { ok: false, error: "rollback_object_unknown", environment: "production" });
+    }
 
-    if (config.webhookApply !== true) {
+    const receiptKey = `receipt:${mapped.event.provider_event_id}`;
+    await store.putIfAbsent(receiptKey, {
+      kind: "webhook_receipt",
+      raw_redacted: true,
+      event_id: mapped.event.provider_event_id,
+      receive_only: config.receiveOnly === true,
+    });
+
+    if (config.receiveOnly === true || config.webhookApply !== true) {
       return json(200, {
         ok: true,
         persisted: true,
         apply: false,
+        receive_only: config.receiveOnly === true,
         environment: "production",
         provider_event_id: mapped.event.provider_event_id,
       });
     }
 
+    const provider = createAsaasProductionProvider({
+      http: deps.http,
+      clock: deps.clock,
+      store,
+      config,
+      env,
+      logger: deps.logger,
+    });
     try {
       const applied = await provider.applyProductionWebhookEvent(mapped, payload);
       if (applied.duplicate) {

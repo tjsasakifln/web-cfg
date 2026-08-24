@@ -6,7 +6,8 @@ CURRENT DECISION (2026-08-24): DEFER under issue #251.
 Do NOT execute the activation steps below while
 data/offers/piloto-checkout-decision.v1.json remains DEFER.
 This file is a readiness checklist, not authorization. A later EXECUTE decision
-must pass all four reopening criteria and carry versioned evidence references.
+must pass all four reopening criteria, name the canary and spend ceiling, carry
+four distinct approvers and bind a local versioned evidence manifest by SHA-256.
 
 Production Asaas credentials are not present in this environment.
 Do not invent customers, acceptances, checkouts or payments.
@@ -50,8 +51,9 @@ UI / flag activation order (keep OFF until the previous step is done):
      CONFENGE_OFFER_CATALOG_PUBLIC=true
   8. Leave recurring offers, automated refund and automated NFS-e OFF.
   9. Probe: GET /diagnostico-b2g-expansao/ and POST checkout without acceptance must fail closed.
- 10. Rollback: set CONFENGE_DIAG_CHECKOUT_ENABLED=false and/or CONFENGE_OFFER_CATALOG_PUBLIC=false.
-     Keep webhook receive on for existing objects. Do not auto-cancel or refund.
+  10. Rollback: set CONFENGE_DIAG_CHECKOUT_ENABLED=false and/or CONFENGE_OFFER_CATALOG_PUBLIC=false.
+      A versioned rollback decision may keep authenticated persist-only webhook
+      receive for already indexed objects. Keep apply off. Do not auto-cancel or refund.
 
 Honest state until a real B2B client accepts: LIVE_READY_AWAITING_FIRST_REAL_B2B_ACCEPTANCE
 is only valid after secrets + flags above. Until then:

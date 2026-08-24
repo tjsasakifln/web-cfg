@@ -1,0 +1,12 @@
+{
+  "schema": "confenge.piloto-checkout-rollback-evidence/1.0",
+  "decision_id": "CFG-PILOTO-CHECKOUT-TEST-ROLLBACK",
+  "prior_execute_decision_id": "CFG-PILOTO-CHECKOUT-TEST-EXECUTE",
+  "webhook_receive_only_authorized": true,
+  "checkout_authorized": false,
+  "webhook_apply_authorized": false,
+  "real_money_mutation_authorized": false,
+  "approved_by": "test-rollback-owner",
+  "classification": "SYNTHETIC_CONTRACT_FIXTURE",
+  "production_evidence": false
+}

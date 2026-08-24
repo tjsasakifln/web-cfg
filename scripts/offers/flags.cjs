@@ -79,7 +79,7 @@ function loadFlags(env = process.env, options = {}) {
   const decision = Object.prototype.hasOwnProperty.call(options, "decision") && options.decision !== undefined
     ? options.decision
     : loadDecision();
-  return applyDecisionGuard(candidate, decision);
+  return applyDecisionGuard(candidate, decision, options.evidence || {});
 }
 
 function catalogPublic(env) {
