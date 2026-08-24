@@ -9,9 +9,13 @@
 
 Run 32685188116 passed the authenticated `SET/SET/READY` contract. The immutable
 artifact predates the non-secret canonical-destination fingerprint; current code
-also requires `WARMBLY_PRODUCTION_V1`, HTTP 200 and `body.ok=true`, and fails
-closed on a different host. A new deploy and authenticated run are required to
-prove that stricter state. The captured run also found 126 persisted records,
+emits schema `confenge-inbound-counters-proof/1.2`, requires the textually exact
+canonical destination, `WARMBLY_PRODUCTION_V1`, HTTP 200 and `body.ok=true`, and
+fails closed before any authenticated request when `BASE_URL` is not exactly
+`https://confenge.com.br`. A new deploy and authenticated run are required to
+prove that stricter state. Future artifacts project only schema-closed aggregate
+fields and allowlisted category keys; raw runtime objects and transport errors
+are not persisted. The captured run also found 126 persisted records,
 zero delivered records and exactly one aggregate
 `ELIGIBLE_REAL_NOT_CONFIGURED` candidate. No identifier or contact field is in
 the artifact.
@@ -22,7 +26,7 @@ the artifact.
 | --- | --- | --- |
 | GitHub `OPS_TOKEN` available | PROVEN | authenticated workflow check |
 | Netlify URL/secret syntactically configured | PROVEN | `SET/SET/READY` |
-| canonical Warmbly destination fingerprint | OPEN | current code requires `WARMBLY_PRODUCTION_V1`; immutable run predates the field |
+| canonical Warmbly destination fingerprint | OPEN | current v1.2 code requires the exact URL and `WARMBLY_PRODUCTION_V1`; immutable v1.1 run predates the field |
 | aggregate proof committed | PROVEN | `data/revops/inbound-proof-runs/inbound-issue-267-run-32685188116.json` |
 | Warmbly automatic outbound disabled | OPEN | immutable run did not capture destination health; this repository does not control the setting |
 | exactly one real record reconciled | OPEN | probe is read-only; no replay/drain occurred |

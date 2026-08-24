@@ -210,6 +210,18 @@ const inbound = loadInbound();
     inbound.inboundDestinationFingerprint("https://evil.example/api/v1/webhooks/confenge/inbound") !==
       "UNEXPECTED"
   ) fail("inbound_destination_fingerprint");
+  for (const ambiguous of [
+    "https://api.confenge.com.br:443/api/v1/webhooks/confenge/inbound",
+    "https://API.confenge.com.br/api/v1/webhooks/confenge/inbound",
+    "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound/",
+    "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound?probe=1",
+    "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound#fragment",
+    "https://user@api.confenge.com.br/api/v1/webhooks/confenge/inbound",
+  ]) {
+    if (inbound.inboundDestinationFingerprint(ambiguous) !== "UNEXPECTED") {
+      fail("inbound_destination_fingerprint_rejects_ambiguous_url", ambiguous);
+    }
+  }
   const canonicalProduction = inbound.resolveInboundConfig({
     NODE_ENV: "production",
     CONTEXT: "production",
@@ -298,6 +310,28 @@ const inbound = loadInbound();
   }
   const auditBlob = JSON.stringify(audit);
   if (auditBlob.includes(base.email) || auditBlob.includes(base.lead_id)) fail("requeue_audit_pii", audit);
+  const hostileAudit = inbound.auditSkippedHandoffs([
+    {
+      ...base,
+      record_kind: "person@example.com",
+      handoff: { status: "person@example.com", reason: "person@example.com" },
+    },
+    {
+      ...base,
+      handoff: { status: "SKIPPED", reason: "person@example.com" },
+    },
+  ]);
+  const hostileAuditBlob = JSON.stringify(hostileAudit);
+  if (
+    hostileAuditBlob.includes("person@example.com") ||
+    hostileAudit.by_status.OTHER !== 1 ||
+    hostileAudit.by_reason.OTHER !== 2 ||
+    hostileAudit.by_record_kind.OTHER !== 1 ||
+    hostileAudit.reason_counts.unexpected_handoff_reason !== 1 ||
+    hostileAudit.reason_counts.not_skipped !== 1
+  ) {
+    fail("requeue_audit_dynamic_categories_pii_safe", hostileAudit);
+  }
   pass("strict_requeue_classifier_and_aggregate_audit", audit.by_commercial_eligibility);
 }
 

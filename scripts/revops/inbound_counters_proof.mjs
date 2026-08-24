@@ -8,25 +8,34 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
-import { createOpsJsonClient, sanitizeTransportError } from "./ops_fetch.mjs";
+import { createOpsJsonClient } from "./ops_fetch.mjs";
 import {
+  commercialFunnelSummary,
+  inboundAuditSummary,
   inboundConfigurationSummary,
+  inboundCountersSummary,
+  inboundDryRunSummary,
   inboundTransportProofReady,
 } from "./inbound_proof_contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const BASE = (process.env.BASE_URL || "https://confenge.com.br").replace(/\/$/, "");
+const CANONICAL_BASE = "https://confenge.com.br";
+const rawBase = String(process.env.BASE_URL || CANONICAL_BASE).trim();
+const baseIsCanonical = rawBase === CANONICAL_BASE || rawBase === `${CANONICAL_BASE}/`;
+const BASE = CANONICAL_BASE;
 const TOKEN = process.env.OPS_TOKEN || "";
 const out = {
-  schema: "confenge-inbound-counters-proof/1.1",
+  schema: "confenge-inbound-counters-proof/1.2",
   issue: 267,
   decision_state: "EXECUTE_NOW",
   executive_front: "REVENUE NOW",
   leverage: "revenue",
   evidence_scope: "read_only_authenticated_ops_configuration_and_aggregate_counters",
-  base: BASE,
+  base: baseIsCanonical ? CANONICAL_BASE : "UNEXPECTED",
   ts: new Date().toISOString(),
-  git_sha: process.env.GITHUB_SHA || null,
+  git_sha: /^[0-9a-f]{40}$/.test(String(process.env.GITHUB_SHA || ""))
+    ? process.env.GITHUB_SHA
+    : null,
   checks: [],
   ops_requests: [],
   consented_real_contact: "MISSING",
@@ -38,6 +47,39 @@ const out = {
     "does_not_requeue_or_drain_any_record",
   ],
 };
+const OPS_PATHS = new Set([
+  "/.netlify/functions/ops?action=audit_inbound_requeue",
+  "/.netlify/functions/ops?action=funnel",
+  "/.netlify/functions/ops?action=health",
+  "/.netlify/functions/ops?action=inbound_handoff",
+  "/.netlify/functions/ops?action=requeue_inbound",
+]);
+let unsafeOpsRequestSummary = false;
+
+function safeOpsRequestSummary(summary) {
+  const safe = summary &&
+    OPS_PATHS.has(summary.path) &&
+    ["GET", "POST"].includes(summary.method) &&
+    Number.isInteger(summary.status) && summary.status >= 0 && summary.status <= 599 &&
+    Number.isInteger(summary.attempts) && summary.attempts >= 1 && summary.attempts <= 5;
+  if (!safe) {
+    unsafeOpsRequestSummary = true;
+    return {
+      path: "UNEXPECTED",
+      method: "UNEXPECTED",
+      status: 0,
+      attempts: 0,
+      error: "TRANSPORT_ERROR",
+    };
+  }
+  return {
+    path: summary.path,
+    method: summary.method,
+    status: summary.status,
+    attempts: summary.attempts,
+    error: summary.error ? "TRANSPORT_ERROR" : null,
+  };
+}
 
 function check(name, ok, detail = "") {
   out.checks.push({ name, ok, detail, critical: true });
@@ -47,10 +89,12 @@ function check(name, ok, detail = "") {
 const request = createOpsJsonClient({
   base: BASE,
   token: TOKEN,
-  onResult: (summary) => out.ops_requests.push(summary),
+  onResult: (summary) => out.ops_requests.push(safeOpsRequestSummary(summary)),
 });
 
 async function run() {
+  check("production_base_canonical", baseIsCanonical, `base=${out.base}`);
+  if (!baseIsCanonical) return;
   if (!TOKEN) {
     check("ops_token_configured", false, "OPS_TOKEN missing from workflow environment");
     return;
@@ -66,19 +110,20 @@ async function run() {
 
   const inbound = await request("/.netlify/functions/ops?action=inbound_handoff");
   const counters = inbound.body?.counters;
+  const countersSummary = inboundCountersSummary(counters);
   check(
     "inbound_handoff_counters",
-    inbound.status === 200 && inbound.body.ok === true && counters && typeof counters === "object",
-    `http=${inbound.status} counters_present=${Boolean(counters && typeof counters === "object")}`
+    inbound.status === 200 && inbound.body.ok === true && countersSummary !== null,
+    `http=${inbound.status} aggregate_contract_valid=${countersSummary !== null}`
   );
-  out.inbound_handoff_counters = counters && typeof counters === "object" ? counters : null;
+  out.inbound_handoff_counters = countersSummary;
   const configuration = inbound.body?.configuration;
   check(
     "inbound_handoff_configuration_observable",
     inbound.status === 200 && configuration && typeof configuration === "object",
     `http=${inbound.status} configuration_present=${Boolean(configuration && typeof configuration === "object")}`
   );
-  out.inbound_handoff_configuration = configuration && typeof configuration === "object" ? configuration : null;
+  out.inbound_handoff_configuration = inboundConfigurationSummary(configuration);
   const transportReady = inboundTransportProofReady(inbound);
   check(
     "inbound_transport_configuration_ready",
@@ -89,12 +134,13 @@ async function run() {
 
   const audit = await request("/.netlify/functions/ops?action=audit_inbound_requeue");
   const skippedAudit = audit.body?.audit;
+  const skippedAuditSummary = inboundAuditSummary(skippedAudit);
   check(
     "skipped_requeue_audit_aggregate_only",
-    audit.status === 200 && audit.body.ok === true && skippedAudit && typeof skippedAudit === "object",
-    `http=${audit.status} aggregate_present=${Boolean(skippedAudit && typeof skippedAudit === "object")}`
+    audit.status === 200 && audit.body.ok === true && skippedAuditSummary !== null,
+    `http=${audit.status} aggregate_contract_valid=${skippedAuditSummary !== null}`
   );
-  out.skipped_requeue_audit = skippedAudit && typeof skippedAudit === "object" ? skippedAudit : null;
+  out.skipped_requeue_audit = skippedAuditSummary;
 
   const requeueDryRun = await request("/.netlify/functions/ops?action=requeue_inbound", {
     method: "POST",
@@ -106,33 +152,33 @@ async function run() {
     manual_review_count: requeueDryRun.body?.manual_review_count,
     reason_counts: requeueDryRun.body?.reason_counts,
   };
-  const dryRunAggregatePresent =
-    Number.isInteger(dryRunSummary.eligible_count) &&
-    Number.isInteger(dryRunSummary.never_requeue_count) &&
-    Number.isInteger(dryRunSummary.manual_review_count) &&
-    dryRunSummary.reason_counts &&
-    typeof dryRunSummary.reason_counts === "object";
+  const safeDryRunSummary = inboundDryRunSummary(dryRunSummary);
   check(
     "skipped_requeue_dry_run_aggregate_only",
     requeueDryRun.status === 200 &&
       requeueDryRun.body.ok === true &&
       requeueDryRun.body.dry_run === true &&
-      dryRunAggregatePresent,
-    `http=${requeueDryRun.status} dry_run=${requeueDryRun.body.dry_run === true} aggregate_present=${Boolean(dryRunAggregatePresent)}`
+      safeDryRunSummary !== null,
+    `http=${requeueDryRun.status} dry_run=${requeueDryRun.body.dry_run === true} aggregate_contract_valid=${safeDryRunSummary !== null}`
   );
-  out.skipped_requeue_dry_run = dryRunAggregatePresent ? dryRunSummary : null;
+  out.skipped_requeue_dry_run = safeDryRunSummary;
 
   const funnel = await request("/.netlify/functions/ops?action=funnel");
   const funnelCounts = funnel.body?.funnel?.counts;
+  const funnelSummary = commercialFunnelSummary(funnelCounts);
   check(
     "commercial_funnel_counters",
-    funnel.status === 200 && funnel.body.ok === true && funnelCounts && typeof funnelCounts === "object",
+    funnel.status === 200 &&
+      funnel.body.ok === true &&
+      funnel.body.commercial_only === true &&
+      funnelSummary !== null,
     `http=${funnel.status} commercial_only=${funnel.body.commercial_only === true}`
   );
   out.funnel = {
     commercial_only: funnel.body.commercial_only === true,
-    counts: funnelCounts && typeof funnelCounts === "object" ? funnelCounts : null,
+    counts: funnelSummary,
   };
+  check("ops_request_summaries_safe", !unsafeOpsRequestSummary, `safe=${!unsafeOpsRequestSummary}`);
 }
 
 function persist() {
@@ -140,23 +186,23 @@ function persist() {
     ? resolve(process.env.INBOUND_PROOF_RUN_DIR)
     : resolve(ROOT, "data/revops/inbound-proof-runs");
   mkdirSync(runDir, { recursive: true });
-  const runIdentity = String(process.env.GITHUB_RUN_ID || "").replace(/[^0-9]/g, "");
+  const rawRunIdentity = String(process.env.GITHUB_RUN_ID || "");
+  const runIdentity = /^\d{1,20}$/.test(rawRunIdentity) ? rawRunIdentity : "";
   const filename = runIdentity
     ? `inbound-issue-267-run-${runIdentity}.json`
     : `inbound-${out.ts.slice(0, 10)}-${Date.now().toString(36)}.json`;
   const proofPath = resolve(runDir, filename);
   out.ok = out.checks.length > 0 && out.checks.every((item) => item.ok);
-  writeFileSync(proofPath, JSON.stringify(out, null, 2) + "\n");
+  writeFileSync(proofPath, JSON.stringify(out, null, 2) + "\n", { flag: "wx" });
   console.log(JSON.stringify({ ok: out.ok, proof: proofPath }, null, 2));
   return out.ok;
 }
 
 try {
   await run();
-} catch (error) {
-  const detail = sanitizeTransportError(error);
-  out.fatal_error = detail;
-  check("proof_unhandled", false, detail);
+} catch {
+  out.fatal_error = "TRANSPORT_ERROR";
+  check("proof_unhandled", false, "TRANSPORT_ERROR");
 } finally {
   if (!persist()) process.exitCode = 1;
 }
