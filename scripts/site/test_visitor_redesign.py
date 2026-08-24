@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import tempfile
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -146,6 +147,32 @@ class _DesktopNav(HTMLParser):
     def handle_data(self, data: str) -> None:
         if self._capture:
             self._buf.append(data)
+
+
+class _LeadInlineHierarchyParser(HTMLParser):
+    """Track actual elements with a ``lead-inline`` class in document order."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.has_main = False
+        self.has_h1 = False
+        self.has_lead_inline = False
+        self.lead_before_main = False
+        self.lead_before_h1 = False
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        tag = tag.lower()
+        if tag == "main":
+            self.has_main = True
+        if tag == "h1":
+            self.has_h1 = True
+
+        classes = next((value or "" for key, value in attrs if key.lower() == "class"), "")
+        if "lead-inline" not in classes.split():
+            return
+        self.has_lead_inline = True
+        self.lead_before_main = self.lead_before_main or not self.has_main
+        self.lead_before_h1 = self.lead_before_h1 or not self.has_h1
 
 
 def _hub_html() -> str:
@@ -709,48 +736,168 @@ def test_home_nav_and_hierarchy():
     assert "evidence-matrix" in home or "hero-evidence" in home
 
 
-LEAD_INLINE_HIERARCHY_ROUTES = [
-    ROOT / "aditivos-obras-publicas" / "index.html",
-    ROOT / "atrasos-prorrogacao-obras-publicas" / "index.html",
-    ROOT / "auditoria-orcamento-licitacao" / "index.html",
-    ROOT / "medicoes-glosas-obras-publicas" / "index.html",
-    ROOT / "reequilibrio-obras-publicas" / "index.html",
-    ROOT / "conteudos" / "limite-aditivo-25-50-obra-publica" / "index.html",
-]
+# ---------------------------------------------------------------------------
+# Promotional lead-inline hierarchy (#181 measured it, #299 made the guard sitewide)
+# ---------------------------------------------------------------------------
+
+# #181 measured the cost on these routes at 390x844: the <aside class="lead-inline">
+# band took about 260 px and pushed <main> to y ~= 386, so the visitor met an offer
+# before the breadcrumb, the H1 and the page's explanation. They stay named only as
+# regression anchors. The guard itself derives its scope from the shipped HTML (#299),
+# so a page published tomorrow is covered without anyone editing this file.
+LEAD_INLINE_MEASURED_ROUTES = (
+    "aditivos-obras-publicas/index.html",
+    "atrasos-prorrogacao-obras-publicas/index.html",
+    "auditoria-orcamento-licitacao/index.html",
+    "medicoes-glosas-obras-publicas/index.html",
+    "reequilibrio-obras-publicas/index.html",
+    "conteudos/limite-aditivo-25-50-obra-publica/index.html",
+)
+
+# Public pages allowed to ship lead-inline above <main>/<h1>, each with a written
+# reason. Empty on purpose: the scope of this guard is never narrowed to hide a page.
+LEAD_INLINE_HIERARCHY_EXCEPTIONS: dict[str, str] = {}
+
+# #306 repaired every page registered by #299. The expected set is deliberately
+# empty: any future page that loses its closing main tag fails closed.
+TRUNCATED_BEFORE_MAIN_CLOSE = frozenset()
+
+
+def _lead_inline_pages() -> list[Path]:
+    """Every shipped public page that carries the promotional lead-inline class."""
+    pages: list[Path] = []
+    for path in _public_html_files():
+        parser = _LeadInlineHierarchyParser()
+        parser.feed(path.read_text(encoding="utf-8", errors="replace"))
+        if parser.has_lead_inline:
+            pages.append(path)
+    return sorted(pages)
+
+
+def _lead_inline_hierarchy_failures(rel: str, html: str) -> list[str]:
+    """Hierarchy violations for one page.
+
+    Pure on (rel, html) so the same assertion drives both the shipped pages and the
+    synthetic page in test_lead_inline_guard_catches_a_newly_published_page.
+    """
+    parser = _LeadInlineHierarchyParser()
+    parser.feed(html)
+    if not parser.has_lead_inline:
+        return []
+    if not parser.has_main:
+        return [f"{rel}: page has lead-inline but no <main"]
+    if not parser.has_h1:
+        return [f"{rel}: page has lead-inline but no <h1"]
+    failures: list[str] = []
+    if parser.lead_before_main:
+        failures.append(f"{rel}: lead-inline appears before <main")
+    if parser.lead_before_h1:
+        failures.append(f"{rel}: lead-inline appears before first <h1")
+    return failures
 
 
 def test_lead_inline_not_before_main_or_h1():
-    """Promotional lead-inline must not sit between site header and main/H1."""
-    for path in LEAD_INLINE_HIERARCHY_ROUTES:
-        assert path.exists(), f"missing {path.relative_to(ROOT)}"
-        html = path.read_text(encoding="utf-8")
-        main = re.search(r"<main\b", html, re.I)
-        assert main, f"{path.relative_to(ROOT)}: missing <main"
-        h1 = re.search(r"<h1\b", html, re.I)
-        assert h1, f"{path.relative_to(ROOT)}: missing <h1"
-        for m in re.finditer(r"\blead-inline\b", html):
-            assert m.start() > main.start(), (
-                f"{path.relative_to(ROOT)}: lead-inline appears before <main"
-            )
-            assert m.start() > h1.start(), (
-                f"{path.relative_to(ROOT)}: lead-inline appears before first <h1"
-            )
+    """Promotional lead-inline must not sit between site header and main/H1.
+
+    #299: the scope comes from the shipped HTML, not from a hand-written route list,
+    so every page that contains the class is checked and a seventh route cannot
+    reintroduce the #181 defect with CI green.
+    """
+    pages = _lead_inline_pages()
+    assert len(pages) >= 150, (
+        f"lead-inline scan collapsed to {len(pages)} pages; the guard must stay sitewide"
+    )
+    relatives = {path.relative_to(ROOT).as_posix() for path in pages}
+    dropped = [route for route in LEAD_INLINE_MEASURED_ROUTES if route not in relatives]
+    assert not dropped, f"#181 routes fell out of the derived scope: {dropped}"
+
+    failures: list[str] = []
+    for path in pages:
+        rel = path.relative_to(ROOT).as_posix()
+        page_failures = _lead_inline_hierarchy_failures(
+            rel, path.read_text(encoding="utf-8", errors="replace")
+        )
+        if page_failures and rel in LEAD_INLINE_HIERARCHY_EXCEPTIONS:
+            continue
+        failures.extend(page_failures)
+    assert not failures, (
+        f"lead-inline hoisted above the page hierarchy in {len(failures)} place(s):\n"
+        + "\n".join(failures[:20])
+    )
+
+    invalid_reasons = [
+        rel
+        for rel, reason in LEAD_INLINE_HIERARCHY_EXCEPTIONS.items()
+        if not reason.strip()
+    ]
+    assert not invalid_reasons, (
+        f"lead-inline exceptions require a written reason: {invalid_reasons}"
+    )
+    stale = [
+        rel
+        for rel in LEAD_INLINE_HIERARCHY_EXCEPTIONS
+        if rel not in relatives
+        or not _lead_inline_hierarchy_failures(
+            rel, (ROOT / rel).read_text(encoding="utf-8", errors="replace")
+        )
+    ]
+    assert not stale, f"registered lead-inline exceptions no longer apply: {stale}"
 
 
-def test_lead_inline_never_precedes_main_or_h1_sitewide():
-    """No public page may hoist a promotional lead-inline above <main>/<h1>."""
+def test_lead_inline_guard_catches_a_newly_published_page():
+    """A page published after this test still fails CI without editing the test.
+
+    Two halves: the assertion itself rejects the #181 shape, and the scope is read
+    from disk, so simply shipping the file is enough to be caught.
+    """
+    offending = (
+        '<header class="site-header"></header>'
+        '<aside class="lead-inline">Oferta</aside>'
+        '<main id="conteudo"><h1>Titulo</h1><p>Resposta</p></main>'
+    )
+    assert _lead_inline_hierarchy_failures("novo/index.html", offending) == [
+        "novo/index.html: lead-inline appears before <main",
+        "novo/index.html: lead-inline appears before first <h1",
+    ]
+    compliant = (
+        '<header class="site-header"></header>'
+        '<main id="conteudo"><h1>Titulo</h1><p>Resposta</p>'
+        '<aside class="lead-inline">Oferta</aside></main>'
+    )
+    assert not _lead_inline_hierarchy_failures("novo/index.html", compliant)
+
+    incidental_text = (
+        '<style>.lead-inline{display:block}</style><!-- lead-inline -->'
+        '<aside class="lead-inline-note">Nota</aside>'
+        '<main id="conteudo"><h1>Titulo</h1><p>Resposta</p>'
+        '<aside class="lead-inline">Oferta</aside></main>'
+    )
+    assert not _lead_inline_hierarchy_failures("novo/index.html", incidental_text), (
+        "CSS, comments and partial class names must not look like lead-inline elements"
+    )
+
+    with tempfile.TemporaryDirectory(prefix="_lead_inline_guard_probe_", dir=ROOT) as raw_dir:
+        probe_dir = Path(raw_dir)
+        probe = probe_dir / "index.html"
+        probe.write_text(offending, encoding="utf-8")
+        discovered = {path.relative_to(ROOT).as_posix() for path in _lead_inline_pages()}
+        assert probe.relative_to(ROOT).as_posix() in discovered, (
+            "a newly published page with lead-inline is outside the derived scope"
+        )
+
+
+def test_no_public_page_truncated_before_main_close():
+    """#299/#306: no shipped public page may stop before </main>."""
+    observed: set[str] = set()
     for path in _public_html_files():
         html = path.read_text(encoding="utf-8", errors="replace")
-        if "lead-inline" not in html:
-            continue
-        rel = path.relative_to(ROOT)
-        main = re.search(r"<main\b", html, re.I)
-        h1 = re.search(r"<h1\b", html, re.I)
-        assert main, f"{rel}: page has lead-inline but no <main"
-        assert h1, f"{rel}: page has lead-inline but no <h1"
-        first = re.search(r"\blead-inline\b", html)
-        assert first.start() > main.start(), f"{rel}: lead-inline before <main"
-        assert first.start() > h1.start(), f"{rel}: lead-inline before first <h1"
+        if re.search(r"<main\b", html, re.I) and not re.search(r"</main\s*>", html, re.I):
+            observed.add(path.relative_to(ROOT).as_posix())
+    assert observed == set(TRUNCATED_BEFORE_MAIN_CLOSE), (
+        "truncated public pages changed; repair the page or update the register.\n"
+        f"new: {sorted(observed - set(TRUNCATED_BEFORE_MAIN_CLOSE))}\n"
+        f"repaired: {sorted(set(TRUNCATED_BEFORE_MAIN_CLOSE) - observed)}"
+    )
 
 
 _ANCHOR = re.compile(r"<a\b[^>]*>[\s\S]*?</a>", re.I)
@@ -771,22 +918,35 @@ def _cta_anchors(fragment: str) -> list[tuple[str, str]]:
 
 
 def _main_fragment(html: str) -> str:
+    """Return the <main> contents; the truncation gate separately requires closure."""
     start = re.search(r"<main\b", html, re.I)
-    end = re.search(r"</main>", html, re.I)
-    assert start and end
-    return html[start.start() : end.start()]
+    assert start, "page has no <main"
+    end = re.search(r"</main\s*>", html, re.I)
+    return html[start.start() : end.start() if end else len(html)]
 
 
 def test_no_consecutive_duplicate_cta():
-    """The same offer must not be repeated back to back before any content."""
-    for path in LEAD_INLINE_HIERARCHY_ROUTES:
-        html = path.read_text(encoding="utf-8")
+    """The same offer must not be repeated back to back before any content.
+
+    #299: scope derived from the pages that actually ship lead-inline, not from a
+    hand-written route list.
+    """
+    pages = _lead_inline_pages()
+    assert len(pages) >= 150, f"duplicate-CTA scan collapsed to {len(pages)} pages"
+    failures: list[str] = []
+    for path in pages:
+        html = path.read_text(encoding="utf-8", errors="replace")
         seq = _cta_anchors(_main_fragment(html))
         for before, after in zip(seq, seq[1:]):
-            assert before != after, (
-                f"{path.relative_to(ROOT)}: duplicated consecutive CTA "
-                f"{before[0]} / {before[1]!r}"
-            )
+            if before == after:
+                failures.append(
+                    f"{path.relative_to(ROOT).as_posix()}: duplicated consecutive CTA "
+                    f"{before[0]} / {before[1]!r}"
+                )
+    assert not failures, (
+        f"duplicated consecutive CTA in {len(failures)} place(s):\n"
+        + "\n".join(failures[:20])
+    )
 
 
 def test_organic_tool_block_never_glued_to_hero():

@@ -136,8 +136,13 @@ def test_every_model_is_direct_public_html_without_friction() -> None:
             'max-video-preview:-1" name="robots"/>' in html
         ), slug
         assert f'<link href="{canonical}" rel="canonical"/>' in html, slug
-        for forbidden in ("<form", "<dialog", "<details", ".pdf", "download"):
+        # The document stays readable without a gate. The only form allowed is
+        # the persisted capture of the price (#289), and it lives after the
+        # report, never in front of it.
+        for forbidden in ("<dialog", "<details", ".pdf", "download"):
             assert forbidden not in lowered, (slug, forbidden)
+        assert lowered.count("<form") == 1, slug
+        assert lowered.index("<form") > lowered.index("<article"), slug
         # The em dash gate covers /casos/; keep the family clean at source.
         assert "\u2014" not in html, slug
 
@@ -256,31 +261,57 @@ def test_competitor_shares_use_the_shared_base_denominator() -> None:
 
 
 def test_price_outliers_distinguish_consolidated_rows_from_all_marks() -> None:
+    """The consolidated cut marks 17, not 7.
+
+    The consolidated Tukey ceiling is P75 + 1.5 * IQR = 664.0k + 1.5 * 615.0k =
+    R$ 1.586,5k. The construção median is R$ 1,74 mi over N=24, so by the
+    definition of a median at least twelve construção contracts already sit
+    above that ceiling. A consolidated count of 7 is therefore arithmetically
+    impossible, and any page publishing it contradicts its own Tukey limit.
+    """
     price_panel = _html("modelo-painel-precos-obras-publicas")
     presentation = _html("modelo-apresentacao-executiva-resultados")
     consolidated = _html("modelo-relatorio-executivo-consolidado")
     base = _html("modelo-base-quantitativa-canonica")
 
+    p75_k, iqr_k, construcao_median_k = 664.0, 615.0, 1740.0
+    ceiling_k = p75_k + 1.5 * iqr_k
+    assert ceiling_k == 1586.5
+    assert ceiling_k < construcao_median_k, "consolidated ceiling must sit below the construção median"
+
+    # Marked within each typology: 2 + 5 + 4 = 11.
     assert re.search(
-        r">TOTAL</th><td>118</td>.*?<td>7</td></tr>",
+        r">Construção de edificações</th><td>24</td>.*?<td>2</td></tr>",
         price_panel,
         flags=re.DOTALL,
     )
-    assert re.search(
-        r">Total consolidado</th>.*?<td>118</td><td>7</td></tr>",
-        presentation,
-        flags=re.DOTALL,
-    )
-    assert re.search(
-        r">Total consolidado</th><td>118</td>.*?<td>7</td></tr>",
-        consolidated,
-        flags=re.DOTALL,
-    )
-    assert "Outliers no consolidado</dt><dd>7 de 118" in price_panel
+    assert "2 mais 5 mais 4, ou seja 11" in price_panel
+
+    # Marked against the consolidated ceiling: 17 (13 construção, 3 reforma, 1 manutenção).
+    for label, html in (
+        ("painel", price_panel),
+        ("apresentacao", presentation),
+        ("consolidado", consolidated),
+    ):
+        total_row = re.search(
+            r"<tr[^>]*>(?:(?!</tr>).)*?>(?:TOTAL|Total consolidado)</th>.*?</tr>",
+            html,
+            flags=re.DOTALL,
+        )
+        assert total_row, label
+        row = total_row.group(0)
+        assert row.rstrip().endswith("<td>17</td></tr>"), (label, row[-90:])
+        assert not row.rstrip().endswith("<td>7</td></tr>"), label
+
+    assert "Outliers no consolidado</dt><dd>17 de 118" in price_panel
+    assert "<dd>7 de 118" not in price_panel
     assert "<dt>MARCAÇÕES DE OUTLIER</dt><dd>17" in price_panel
-    assert "<dt>Marcações de outlier preservadas</dt><dd>17" in presentation
     assert "17 marcações de outlier" in consolidated.casefold()
     assert "17 marcações de outlier" in base.casefold()
+
+    # No page may describe the consolidated cut as an increment over the typologies.
+    for slug, *_ in MODELS:
+        assert "e 7 no consolidado" not in _html(slug), slug
 
 
 def test_competitor_ranking_rule_is_consistent() -> None:
@@ -356,6 +387,56 @@ def test_whatsapp_contract_is_specific_per_deliverable() -> None:
             assert re.search(rf'data-cta-id="{re.escape(prefix)}-[^"]+"', tag), slug
         assert 'data-event-name="offer_cta_click"' not in html, slug
         assert 'window.confengeTrack("offer_cta_click"' not in html, slug
+
+
+def test_price_leaves_a_persisted_record_not_only_a_whatsapp_click() -> None:
+    """#289: the most expensive offers of the site must write a lead down."""
+    for slug, price, _cents, asset_id, _action_id, prefix, _subject in MODELS:
+        html = _html(slug)
+        match = re.search(r"<form\b[^>]*>.*?</form>", html, re.S)
+        assert match, slug
+        form = match.group(0)
+        open_tag = form.split(">", 1)[0]
+        for attr, value in (
+            ("method", "post"),
+            ("action", "/.netlify/functions/lead"),
+            ("id", "captura-modelo"),
+            ("data-offer-id", f"handraise-{slug}-v1"),
+            ("data-cta-id", f"{prefix}-capture"),
+            ("data-asset-id", asset_id),
+            ("data-cta-position", "offer_capture"),
+        ):
+            assert f'{attr}="{value}"' in open_tag, (slug, attr)
+        route_family = re.search(r'data-route-family="([^"]+)"', open_tag)
+        assert route_family, slug
+        assert f'data-route-family="{route_family.group(1)}"' in html.split(form)[0], slug
+
+        hidden = dict(re.findall(r'<input\b[^>]*name="([^"]+)"[^>]*value="([^"]*)"', form))
+        assert hidden["origem"] == f"/casos/{slug}/", slug
+        assert hidden["landing_page"] == f"https://confenge.com.br/casos/{slug}/", slug
+        assert hidden["asset_id"] == asset_id, slug
+        assert hidden["cta_id"] == f"{prefix}-capture", slug
+        assert hidden["route_family"] == route_family.group(1), slug
+        assert hidden["estagio"] == slug, slug
+        # Handraise, never checkout: #88 keeps the Asaas catalog frozen.
+        assert hidden["offer_id"] == "", slug
+        assert hidden["terms_id"] == "", slug
+        assert "amount_cents" not in hidden, slug
+        assert re.search(
+            r'<input[^>]+name="consentimento"[^>]+required[^>]*type="checkbox"', form
+        ) or re.search(
+            r'<input[^>]+name="consentimento"[^>]+type="checkbox"[^>]+required', form
+        ), slug
+        # The visitor can reach the record without leaving the page.
+        anchor = html.find('href="#captura-modelo"')
+        assert 0 < anchor < match.start(), slug
+        # The written path repeats the published price, and adds no new one.
+        band = re.search(r'<section class="report-capture".*?</section>', html, re.S)
+        assert band, slug
+        assert price in band.group(0), slug
+        assert set(re.findall(r"R\$ [\d.]*\d", band.group(0))) == {price}, slug
+        # WhatsApp is not replaced.
+        assert html.count("wa.me/5548988344559") == 5, slug
 
 
 def test_analytics_identifiers_are_stable_and_pii_free() -> None:

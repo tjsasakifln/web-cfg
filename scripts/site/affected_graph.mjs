@@ -20,6 +20,7 @@ const PUBLIC_HTML_SUITES = Object.freeze([
   "test:design",
   "test:copy",
   "audit:accessibility",
+  "test:skip-link",
   "test:ui",
   "test:inbound-gates",
   "test:cta-whatsapp",
@@ -219,6 +220,7 @@ export const SUITE_GRAPH = Object.freeze({
       "casos/index.html",
       "entregas/index.html",
       "assets/report-model.css",
+      "assets/report-capture.css",
       "docs/contracts/intent-action/intent-action-matrix.v1.json",
       "docs/stories/story-deliverable-models-value-ladder.md",
       "sitemap.xml",
@@ -229,6 +231,7 @@ export const SUITE_GRAPH = Object.freeze({
     producers: [
       "scripts/site/test_report_model_599.py",
       "casos/modelo-relatorio-inteligencia-licitacoes/",
+      "assets/report-capture.css",
       "casos/index.html",
       "bid-room-licitacoes-obras/index.html",
       "diretoria-b2g/index.html",
@@ -351,6 +354,11 @@ export const SUITE_GRAPH = Object.freeze({
     producers: ["scripts/site/audit_accessibility.py"],
     artifacts: [],
     surfaces: ["/", "/ferramentas/", "/diretoria-b2g/"],
+  },
+  "test:skip-link": {
+    producers: ["scripts/site/test_skip_link_coverage.py", "scripts/pseo/public_artifact.py"],
+    artifacts: [],
+    surfaces: ["/", "/obrigado.html", "/404.html", "/privacidade/", "/termos-de-uso/"],
   },
   "test:lighthouse-gates": {
     producers: [

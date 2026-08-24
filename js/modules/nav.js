@@ -768,6 +768,8 @@
         asset_id: namedAttrs.asset_id,
         route_family: namedAttrs.route_family,
         cta_id: namedAttrs.cta_id,
+        cta_kind: el.getAttribute('data-cta-kind') || '',
+        next_action_id: el.getAttribute('data-next-action-id') || '',
       });
     };
 

@@ -115,8 +115,15 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
         '<meta content="index,follow,max-image-preview:large,max-snippet:-1,'
         'max-video-preview:-1" name="robots"/>' in html
     )
-    for forbidden in ("<form", "<dialog", "<details", ".pdf", "download=", "cadastre"):
+    for forbidden in ("<dialog", "<details", ".pdf", "download=", "cadastre"):
         assert forbidden not in lowered
+    # Issue #290 gives the hub a terminal capture. The library still must not be
+    # gated: exactly one form, and it opens only after the last published example.
+    assert lowered.count("<form") == 1, "the hub takes one terminal capture, not a gate"
+    form_at = lowered.index("<form")
+    last_feature_at = lowered.rindex('class="deliverable-feature"')
+    assert form_at > last_feature_at, "capture must not sit above the published examples"
+    assert 'action="/.netlify/functions/lead"' in lowered
     assert html.count("<h1") == 1
 
 
@@ -134,8 +141,11 @@ def test_hub_is_honest_about_every_published_example() -> None:
         assert phrase in html
     for route in LADDER_ROUTES:
         assert f'href="{route}"' in html, route
-    assert "em breve" not in html.casefold()
-    assert "placeholder" not in html.casefold()
+    # "No placeholder" is a claim about the published library, not about the
+    # input hints of the terminal capture form (#290).
+    library = re.sub(r"(?is)<form\b.*?</form>", "", html).casefold()
+    assert "em breve" not in library
+    assert "placeholder" not in library
     features = re.findall(r'class="deliverable-feature(?:["\s])', html)
     assert len(features) == len(LADDER_ROUTES)
     for number in range(1, 9):
@@ -190,6 +200,34 @@ def test_the_eight_are_comparable_before_the_long_sections() -> None:
     # The mobile equivalent is the same table inside a focusable scroll region.
     assert 'class="compare-scroll" role="region"' in table
     assert 'tabindex="0"' in table
+
+
+def test_bundle_arithmetic_is_derived_from_the_comparison_rows() -> None:
+    """The package total excludes the declared R$ 599 standalone delivery."""
+    html = _html()
+    tbody = re.search(r"<tbody>(.*?)</tbody>", html, flags=re.DOTALL)
+    assert tbody, "comparison table has no body"
+    rows = re.findall(r"<tr>(.*?)</tr>", tbody.group(1), flags=re.DOTALL)
+    assert len(rows) == len(LADDER_ROUTES)
+
+    def row_price(row: str) -> int:
+        prices = re.findall(r"R\$\s*([\d.]+)", row)
+        assert len(prices) == 1, row
+        return int(prices[0].replace(".", ""))
+
+    standalone = [row for row in rows if "fora do pacote" in row]
+    credited = [row for row in rows if "Sim, em até 60 dias" in row]
+    assert len(standalone) == 1
+    assert row_price(standalone[0]) == 599
+    assert len(credited) == 7
+
+    units_total = sum(row_price(row) for row in credited)
+    bundle_total = 8_000
+    assert units_total == 12_280
+    assert units_total - bundle_total == 4_280
+    assert f"R$ {units_total:,.0f}".replace(",", ".") in html
+    assert f"R$ {bundle_total:,.0f}".replace(",", ".") in html
+    assert f"R$ {units_total - bundle_total:,.0f}".replace(",", ".") in html
 
 
 def test_the_credit_rule_is_coherent_across_the_eight() -> None:
@@ -371,7 +409,18 @@ def test_report_returns_to_deliverables_without_changing_offer_contract() -> Non
     assert '"name":"Entregas","item":"https://confenge.com.br/entregas/"' in html
     assert "R$ 599 = 1 relatório adaptado" in html
     assert html.count('data-next-action-id="contratar_relatorio_inteligencia_599"') == 5
-    assert html.count('data-offer-id="handraise-report-intelligence-599-v1"') == 5
+    # Five canonical order-entry CTAs plus the inline capture form share the id.
+    assert html.count('data-offer-id="handraise-report-intelligence-599-v1"') == 6
+    assert (
+        html.count(
+            'data-cta-position="offer_capture" action="/.netlify/functions/lead"'
+        )
+        + html.count(
+            'action="/.netlify/functions/lead" data-offer-id='
+            '"handraise-report-intelligence-599-v1"'
+        )
+        == 1
+    )
 
 
 def test_sitemap_allowlist_and_public_artifact_contract() -> None:
