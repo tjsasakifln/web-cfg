@@ -18,9 +18,9 @@ const MANIFEST_PATH = join(ROOT, "seo/PUBLIC-ARTIFACT-MANIFEST.json");
 const BOFU_SOURCE = "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route";
 
 /** Prefer the built public artifact; fall back to the repo root working copy. */
-export function resolveSiteRoot() {
-  const site = join(ROOT, "_site");
-  return existsSync(join(site, "index.html")) ? site : ROOT;
+export function resolveSiteRoot(root = ROOT) {
+  const site = join(root, "_site");
+  return existsSync(join(site, "index.html")) ? site : root;
 }
 
 export function loadPolicy() {
@@ -46,7 +46,7 @@ export function routeToFile(siteRoot, route) {
   return join(siteRoot, relative.replace(/^\//, ""));
 }
 
-const PRICE_RE = /R\$\s*\d/u;
+const PRICE_RE = /R\s*\$\s*\d/u;
 const FORM_RE = /<form\b([^>]*)>([\s\S]*?)<\/form>/gi;
 const CONTROL_RE = /<(input|select|textarea)\b/i;
 const CAPTURE_ACTION_RE = /\baction\s*=\s*["']\/\.netlify\/functions\/(?:lead|nurture|conversion-intake|offer-eligibility|correction)(?:\?[^"']*)?["']/i;
@@ -60,6 +60,7 @@ export function visibleText(html) {
     .replace(/<(script|style|template)\b[^>]*>[\s\S]*?<\/\1>/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/&(?:nbsp|#0*160|#x0*a0);/gi, "\u00a0")
+    .replace(/&(?:dollar|#0*36|#x0*24);/gi, "$")
     .replace(/&amp;/gi, "&")
     .replace(/\s+/gu, " ");
 }

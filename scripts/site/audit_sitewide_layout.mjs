@@ -13,10 +13,12 @@ import { dirname, extname, join, resolve } from "path";
 import { fileURLToPath } from "url";
 import { mkdirSync } from "fs";
 import { resolveChromePath } from "./resolve_chrome.mjs";
+import { loadManifestRoutes, resolveSiteRoot } from "./interface_coverage.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const PORT = Number(process.env.LAYOUT_AUDIT_PORT || 8796);
 const CHROME = resolveChromePath();
+const SITE_ROOT = resolveSiteRoot();
 const VIEWPORTS = [360, 390, 768, 1024, 1440, 1920];
 const CRITICAL_ROUTES = [
   "/",
@@ -50,14 +52,14 @@ const MIME = {
   ".txt": "text/plain; charset=utf-8",
 };
 
-function startStaticServer() {
+function startStaticServer(siteRoot) {
   const server = createServer((req, res) => {
     try {
       let urlPath = decodeURIComponent((req.url || "/").split("?")[0]);
       if (urlPath.endsWith("/")) urlPath += "index.html";
       if (!urlPath) urlPath = "/index.html";
-      const filePath = join(ROOT, urlPath);
-      if (!filePath.startsWith(ROOT) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
+      const filePath = join(siteRoot, urlPath);
+      if (!filePath.startsWith(siteRoot) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
         res.writeHead(404);
         res.end("not found");
         return;
@@ -79,18 +81,18 @@ function publicRoutes() {
     .filter(Boolean);
   if (explicit.length) return explicit;
   if (process.env.LAYOUT_AUDIT_SCOPE === "critical") return CRITICAL_ROUTES;
-  const manifest = JSON.parse(readFileSync(join(ROOT, "seo/PUBLIC-ARTIFACT-MANIFEST.json"), "utf8"));
-  return manifest.html_routes;
+  return loadManifestRoutes();
 }
 
 const baseArg = process.argv[2];
 const reportArg = process.env.LAYOUT_AUDIT_REPORT || process.argv[3] || "";
-const server = baseArg ? null : await startStaticServer();
+const server = baseArg ? null : await startStaticServer(SITE_ROOT);
 const BASE = (baseArg || `http://127.0.0.1:${PORT}`).replace(/\/$/, "");
 const routes = publicRoutes();
 const report = {
   generated_at: new Date().toISOString(),
   base_url: BASE,
+  site_root: SITE_ROOT === ROOT ? "." : "_site",
   scope: process.env.LAYOUT_AUDIT_SCOPE || (process.env.LAYOUT_AUDIT_ROUTES ? "explicit" : "sitewide"),
   route_count: routes.length,
   widths: VIEWPORTS,

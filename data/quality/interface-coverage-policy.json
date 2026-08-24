@@ -12,7 +12,7 @@
       {
         "id": "price",
         "reason": "route renders a visible BRL amount, so it is a money surface where a semantic defect costs revenue",
-        "detector": "visible text, excluding script/style/template, matches /R\\$\\s*\\d/ after HTML entity normalization"
+        "detector": "visible text, excluding script/style/template, matches /R\\s*\\$\\s*\\d/ after HTML entity normalization"
       },
       {
         "id": "capture_form",
@@ -136,6 +136,14 @@
       }
     ],
     "additional_pages": [
+      {
+        "route": "/diretoria-b2g/",
+        "reason": "priced subscription offer retained as a distinct performance and SEO regression surface"
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/",
+        "reason": "the site's only checkout journey, retained as a distinct performance and SEO regression surface"
+      },
       {
         "route": "/conteudos/documentos-reequilibrio-obra-publica/",
         "reason": "article-template representative that preserves the #253 responsive-image regression gate",

@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import {
   ROOT,
   deriveCoverage,
@@ -9,14 +11,25 @@ import {
   loadManifestRoutes,
   loadPolicy,
   loadPublicFamilyRegistry,
+  resolveSiteRoot,
   routeToFile,
 } from "./interface_coverage.mjs";
+
+const rootFixture = mkdtempSync(join(tmpdir(), "confenge-site-root-"));
+writeFileSync(join(rootFixture, "index.html"), "source");
+assert.equal(resolveSiteRoot(rootFixture), rootFixture);
+mkdirSync(join(rootFixture, "_site"));
+writeFileSync(join(rootFixture, "_site", "index.html"), "artifact");
+assert.equal(resolveSiteRoot(rootFixture), join(rootFixture, "_site"));
 
 // Detector fixtures are independent of the production census and cover the
 // encodings/forms that caused the adversarial-review false results.
 assert(hasPrice("<p>Investimento: R$&nbsp;1.000,00</p>"));
 assert(hasPrice("<p>Investimento: R$&#160;<strong>599</strong></p>"));
 assert(hasPrice("<p>Investimento: <span>R$</span>&#xA0;<strong>750</strong></p>"));
+assert(hasPrice("<p>Investimento: R<span>$</span><strong>599</strong></p>"));
+assert(hasPrice("<p>Investimento: R&#36; 599</p>"));
+assert(hasPrice("<p>Investimento: R&dollar; 599</p>"));
 assert(!hasPrice('<script type="application/ld+json">{"price":"R$ 599"}</script>'));
 assert(!hasCaptureForm('<form class="tool-form"><input name="valor"></form>'));
 assert(!hasCaptureForm('<form action="#"><select name="base"></select></form>'));
@@ -69,7 +82,9 @@ assert(coverage.axe.not_sampled.every((entry) => entry.reason), "every omitted a
 assert.equal(coverage.lighthouse.canonical_family_count, registry.families.length);
 assert.equal(coverage.lighthouse.canonical_family_count, 20);
 assert.equal(coverage.lighthouse.supplemental_family_count, 6);
-assert.equal(coverage.lighthouse.pages.length, 27);
+assert.equal(coverage.lighthouse.pages.length, 29);
+assert(coverage.lighthouse.pages.includes("/diretoria-b2g/"));
+assert(coverage.lighthouse.pages.includes("/diagnostico-b2g-expansao/"));
 assert.equal(new Set(coverage.lighthouse.pages).size, coverage.lighthouse.pages.length);
 assert.deepEqual(
   new Set(coverage.lighthouse.families.filter((family) => family.kind === "canonical").map((family) => family.id)),
@@ -114,6 +129,9 @@ for (const envName of ["LH_PAGES", "LH_IMAGE_GATE_PAGES", "LH_SEO_EXEMPT_PAGES"]
 }
 const axeRunner = readFileSync(new URL("./audit_axe.mjs", import.meta.url), "utf8");
 assert(!axeRunner.includes("exceptionFor"), "critical/serious axe violations cannot be excused");
+const layoutRunner = readFileSync(new URL("./audit_sitewide_layout.mjs", import.meta.url), "utf8");
+assert(layoutRunner.includes("resolveSiteRoot"), "layout audit must serve the built public artifact");
+assert(layoutRunner.includes("loadManifestRoutes"), "layout audit must include root public HTML routes");
 assert(!Object.hasOwn(policy.axe, "always_include"), "historical axe route lists are forbidden");
 assert(!Object.hasOwn(policy, "known_exceptions"), "known axe exceptions are forbidden");
 
