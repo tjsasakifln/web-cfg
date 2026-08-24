@@ -2,7 +2,7 @@
   "meta": {
     "version": "v2",
     "schema": "smartlic-url-map-v2",
-    "generated_at": "2026-08-16T00:00:00Z",
+    "generated_at": "2026-08-24T00:00:00Z",
     "baseline_as_of": "2026-04-27",
     "issue": "https://github.com/tjsasakifln/web-cfg/issues/62",
     "handoff_issue": "https://github.com/tjsasakifln/SmartLic/issues/2115",
@@ -31,6 +31,7 @@
     },
     "ready_redirect_count": 11,
     "hold_count": 54,
+    "hold_review_date": "2026-09-20",
     "retire_count": 1190,
     "migrate_count": 0,
     "ignore_count": 0,
@@ -1567,6 +1568,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE habilitação checklist (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Habilitação checklist is a future tender-operations surface. Intended surface: CONFENGE habilitação checklist (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -1654,6 +1656,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE hidden-clause edital guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Edital-clause review is a future tender-operations surface. Intended surface: CONFENGE hidden-clause edital guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -1993,6 +1996,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE PNCP/public-contracts explorer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: PNCP contract-lookup how-to belongs to a future public-read vertical. Intended surface: CONFENGE PNCP/public-contracts explorer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -2164,6 +2168,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE first-tender participation guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: First-tender how-to is a future inbound vertical; bid-room is not 1:1. Intended surface: CONFENGE first-tender participation guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -4435,6 +4440,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE impugnação guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Impugnação how-to is a future lei-14133 child. Intended surface: CONFENGE impugnação guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -4690,6 +4696,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE lei-14133 supplier guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Supplier-facing lei-14133 guide is a future child, not the parent hub. Intended surface: CONFENGE lei-14133 supplier guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -5281,6 +5288,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE engineering-tenders surface (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Engineering tender discovery is a future vertical; bid-room is not 1:1. Intended surface: CONFENGE engineering-tenders surface (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -8325,6 +8333,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE PNCP integration note (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: PNCP API integration is a future developer/data surface. Intended surface: CONFENGE PNCP integration note (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -8412,6 +8421,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE PNCP contracts how-to (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Step-by-step PNCP contract lookup is a future public-read surface. Intended surface: CONFENGE PNCP contracts how-to (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -8499,6 +8509,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE dispensa guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Dispensa-when-to-apply is a future lei-14133 child, not the parent hub. Intended surface: CONFENGE dispensa guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -8586,6 +8597,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE PNCP common-errors guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: PNCP beginner errors belong to a future PNCP guide, not a #60 pillar. Intended surface: CONFENGE PNCP common-errors guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -8673,6 +8685,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE PNCP guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: PNCP how-to for firms is a future surface; no ready 1:1 CONFENGE page. Intended surface: CONFENGE PNCP guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -8760,6 +8773,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE pregão eletrônico guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Pregão modality explainer is a future tender-operations surface. Intended surface: CONFENGE pregão eletrônico guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -8847,6 +8861,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE registro-de-preços guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: SRP participation is a future tender-operations surface. Intended surface: CONFENGE registro-de-preços guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -8934,6 +8949,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE edital-publication timeline (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Edital calendar/timeline is a future tender-operations surface. Intended surface: CONFENGE edital-publication timeline (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -9021,6 +9037,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE PNCP vs Compras.gov explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Portal comparison is a future tender-operations surface. Intended surface: CONFENGE PNCP vs Compras.gov explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -9108,6 +9125,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE contract-term/vigência guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Vigência how-to is a future contracts-operations surface. Intended surface: CONFENGE contract-term/vigência guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -10119,6 +10137,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE lei-14133 subcontracting child (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Subcontracting rules need a dedicated child; parent /lei-14133-obras/ dump is forbidden. Intended surface: CONFENGE lei-14133 subcontracting child (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -11214,6 +11233,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE CNPJ/company lookup hub (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Company-lookup hub is a future extra-cli public-read surface; farm instances stay retired. Intended surface: CONFENGE CNPJ/company lookup hub (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -14325,6 +14345,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE tender-evaluation guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Tender-evaluation job belongs to a future inbound vertical; no ready 1:1 CONFENGE page. Intended surface: CONFENGE tender-evaluation guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -14412,6 +14433,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE bid-loss prevention guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Bid-loss prevention is a future tender-operations surface; not #60 margin-defense. Intended surface: CONFENGE bid-loss prevention guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -14499,6 +14521,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE edital-filtering guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Edital filtering is a future tender-discovery surface; bid-room is not 1:1. Intended surface: CONFENGE edital-filtering guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -14586,6 +14609,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE opportunity-prioritization guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Opportunity prioritization is a future tender-operations surface. Intended surface: CONFENGE opportunity-prioritization guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -15177,6 +15201,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE public-contracts explorer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Contracts explorer would be a new public-read vertical, not a #60 pillar. Intended surface: CONFENGE public-contracts explorer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -31476,6 +31501,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE suppliers hub (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Supplier explorer hub is a future public-read surface; /fornecedores/{id} farm stays retired. Intended surface: CONFENGE suppliers hub (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -86751,6 +86777,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE glossary hub (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: No CONFENGE glossary hub exists; individual ready terms already REDIRECT_301. Intended surface: CONFENGE glossary hub (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -87275,6 +87302,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE ACT explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: ACT term waits for the habilitação/qualification surface. Intended surface: CONFENGE ACT explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -87446,6 +87474,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE BDI explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: BDI term is not equivalent to the SC case study. Intended surface: CONFENGE BDI explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -88037,6 +88066,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE contrato administrativo explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: General administrative-contract term has no ready 1:1 pillar. Intended surface: CONFENGE contrato administrativo explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -88376,6 +88406,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE edital explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Edital term belongs to a future tender-operations surface. Intended surface: CONFENGE edital explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -88463,6 +88494,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE ETP explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: ETP term is a future lei-14133 child. Intended surface: CONFENGE ETP explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -88550,6 +88582,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE fiscalização explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Contract inspection term is a future contracts-operations surface. Intended surface: CONFENGE fiscalização explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -88637,6 +88670,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE garantia contratual explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Contract-guarantee term is a future contracts-operations surface. Intended surface: CONFENGE garantia contratual explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -88808,6 +88842,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE habilitação explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Habilitação term waits for the tender-operations surface. Intended surface: CONFENGE habilitação explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -88979,6 +89014,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE impugnação explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Impugnação term waits for the lei-14133 child. Intended surface: CONFENGE impugnação explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -90377,6 +90413,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE PNCP glossary/explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: PNCP term page waits for the PNCP public-read surface. Intended surface: CONFENGE PNCP glossary/explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -91758,6 +91795,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE guides hub (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: CONFENGE /guias-contratos-obras/ is a different corpus, not a 1:1 SmartLic /guia hub. Intended surface: CONFENGE guides hub (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -93105,6 +93143,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE tenders hub (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Tender-discovery hub has no ready CONFENGE equivalent; parent dumps forbidden. Intended surface: CONFENGE tenders hub (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -93192,6 +93231,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE 2026 tenders landing (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Calendar/year landing is a future tender-discovery surface. Intended surface: CONFENGE 2026 tenders landing (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -93783,6 +93823,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE municipalities hub (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Municipality explorer hub is a future public-read surface; farm instances stay retired. Intended surface: CONFENGE municipalities hub (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -94710,6 +94751,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE agencies hub (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Agency explorer hub is a future public-read surface; /orgaos/{slug} farm stays retired. Intended surface: CONFENGE agencies hub (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -100341,6 +100383,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE Q&A hub (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: No CONFENGE perguntas hub exists; ready Q&A slugs already REDIRECT_301. Intended surface: CONFENGE Q&A hub (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -100428,6 +100471,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE electronic-signature contracts guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: e-signature on public contracts is a future contracts-operations surface. Intended surface: CONFENGE electronic-signature contracts guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -100599,6 +100643,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE atestado de capacidade técnica guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: ACT how-to is a future tender-operations surface. Intended surface: CONFENGE atestado de capacidade técnica guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -100686,6 +100731,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE BDI explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: analises-contratos-publicos/bdi-composicao-vs-referencia-sc/ is a case study, not a 1:1 guide. Intended surface: CONFENGE BDI explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -100857,6 +100903,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE PNCP supplier-registration guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: PNCP cadastro is a future tender-operations surface. Intended surface: CONFENGE PNCP supplier-registration guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -101784,6 +101831,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE habilitação documents guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Habilitação document list is a future tender-operations surface. Intended surface: CONFENGE habilitação documents guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -102644,6 +102692,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE obras qualification guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Engineering qualification is a future lei-14133/obras child. Intended surface: CONFENGE obras qualification guide (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -103655,6 +103704,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE PNCP explainer (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: PNCP what/how is a future public-read surface. Intended surface: CONFENGE PNCP explainer (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -103910,6 +103960,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE impugnação timing page (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Impugnação deadline is a future lei-14133 child. Intended surface: CONFENGE impugnação timing page (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -104182,6 +104233,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE edital-publication timing page (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Edital calendar question has no ready 1:1 CONFENGE page. Intended surface: CONFENGE edital-publication timing page (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -104521,6 +104573,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE lei-14133 qualification child (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Technical qualification is a future lei-14133 child, not the parent hub. Intended surface: CONFENGE lei-14133 qualification child (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -105045,6 +105098,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE lei-14133 subcontracting child (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Same job as the subcontracting blog; parent hub dump forbidden. Intended surface: CONFENGE lei-14133 subcontracting child (not live). Do not 301 to a weak substitute or home."
     },
     {
@@ -105132,6 +105186,7 @@
       "removal_trigger": "Remove smartlic.tech bridge only after: 28-day observation of this hash, zero residual priority 404/5xx/chain, critical backlinks (if any become known) point at CONFENGE or are accepted as retired, and SmartLic#2111 archive gate.",
       "bridge_owner": "SmartLic#2115 — redirect bridge only after this manifesto hash",
       "intended_future_surface": "CONFENGE contract vigência guide (not live)",
+      "review_date": "2026-09-20",
       "skip_reason": "HOLD_TARGET_NOT_READY: Administrative-contract term question is a future contracts-operations surface. Intended surface: CONFENGE contract vigência guide (not live). Do not 301 to a weak substitute or home."
     },
     {

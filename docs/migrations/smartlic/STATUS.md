@@ -5,9 +5,10 @@
 | Field | Value |
 |---|---|
 | Date | 2026-08-16 |
-| Inventory SHA-256 | `9e5667c127fc5494f5849aece2234b13a1c1db10257a17274545019634506ca9` |
+| Inventory SHA-256 | `9c47b1b26e1dfb83cb8ea476091d9893931d17ce434ca54e7b6af933b85433fa` |
 | Ready REDIRECT_301 | 11 |
 | HOLD_TARGET_NOT_READY | 54 |
+| HOLD review date | `2026-09-20` |
 | RETIRE_410 | 1190 |
 | MIGRATE | 0 |
 | IGNORE_NONCANONICAL | 0 (no www/http/query rows in the 2026-04-27 GSC extract) |

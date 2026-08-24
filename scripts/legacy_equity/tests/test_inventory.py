@@ -109,6 +109,12 @@ def test_execute_set_matches_ready_redirects():
         assert path in execute_paths
 
 
+def test_execute_set_names_a_review_date_for_every_hold():
+    execute = json.loads((INVENTORY_PATH.parent / "execute-set.v2.json").read_text(encoding="utf-8"))
+    assert len(execute["holds"]) == 54
+    assert {row["review_date"] for row in execute["holds"]} == {"2026-09-20"}
+
+
 def test_query_pii_is_dropped_from_location():
     data = load_inventory()
     ready = ready_redirects(data)

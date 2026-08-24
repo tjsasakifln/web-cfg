@@ -12,6 +12,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from datetime import date
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -253,6 +254,13 @@ def validate_entry(entry: dict, *, index: int) -> list[str]:
             errors.append(f"{prefix}: HOLD requires intended_future_surface")
         if entry.get("intended_future_surface", "").startswith("https://"):
             errors.append(f"{prefix}: HOLD must not pin a live URL as intended_future_surface")
+        try:
+            review_date = date.fromisoformat(entry.get("review_date", ""))
+        except (TypeError, ValueError):
+            errors.append(f"{prefix}: HOLD requires an ISO review_date")
+        else:
+            if review_date < date(2026, 8, 24):
+                errors.append(f"{prefix}: HOLD review_date is already stale")
 
     if action == "RETIRE_410":
         if target not in (None, ""):

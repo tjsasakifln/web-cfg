@@ -204,7 +204,10 @@ async function main() {
     "politica-de-privacidade → /privacidade/"
   );
   check(/\/blog\s+\/conteudos\//.test(redirectsFile), "_redirects has /blog → /conteudos/");
-  check(/\/servicos\s+\/#atuacao/.test(redirectsFile), "_redirects has /servicos → /#atuacao");
+  check(
+    /\/servicos\s+\/#como-atuamos/.test(redirectsFile),
+    "_redirects has /servicos → /#como-atuamos"
+  );
   check(/\/contato\s+\/#contato/.test(redirectsFile), "_redirects has /contato → /#contato");
   let slashOnly = 0;
   for (const line of redirectsFile.split("\n")) {
@@ -230,7 +233,7 @@ async function main() {
   check(/href=["']\/#contato["']/.test(html404), "404.html links to contato");
   check(/href=["']\/["']/.test(html404), "404.html links to home");
   check(
-    /Sitemap:\s*https:\/\/confenge\.com\.br\/sitemap\.xml/i.test(robotsLocal),
+    /Sitemap:\s*https:\/\/confenge\.com\.br\/sitemap-index\.xml/i.test(robotsLocal),
     "robots.txt Sitemap canonical"
   );
   check(!/netlify\.app/i.test(robotsLocal), "robots.txt has no netlify.app");
@@ -253,11 +256,10 @@ async function main() {
     "sitemap includes /termos-de-uso/"
   );
   check(
-    !smUrls.some((u) =>
-      ["/vision", "/nexgen", "/avcbclcb", "/blog", "/servicos", "/404"].some((x) =>
-        u.includes(x)
-      )
-    ),
+    !smUrls.some((u) => {
+      const path = new URL(u).pathname.replace(/\/$/, "") || "/";
+      return new Set(["/vision", "/nexgen", "/avcbclcb", "/blog", "/servicos", "/404"]).has(path);
+    }),
     "sitemap excludes legacy/error paths"
   );
 
@@ -331,8 +333,8 @@ async function main() {
     {
       path: "/servicos",
       wantStatus: [301, 308],
-      locIncludes: "atuacao",
-      name: "servicos→atuacao",
+      locIncludes: "como-atuamos",
+      name: "servicos→como-atuamos",
     },
     {
       path: "/contato",
@@ -360,9 +362,9 @@ async function main() {
     },
     {
       path: "/trabalhe-conosco",
-      wantStatus: [301, 308],
-      locIncludes: "contato",
-      name: "trabalhe-conosco",
+      wantStatus: [404, 410],
+      forbidLocHome: true,
+      name: "trabalhe-conosco gone",
     },
     {
       path: "/vision",
@@ -571,7 +573,7 @@ async function main() {
   const robotsLive = await fetchHead(base + "/robots.txt", { follow: true });
   if (robotsLive.ok && robotsLive.status === 200) {
     check(
-      /Sitemap:\s*https:\/\/confenge\.com\.br\/sitemap\.xml/i.test(robotsLive.body),
+      /Sitemap:\s*https:\/\/confenge\.com\.br\/sitemap-index\.xml/i.test(robotsLive.body),
       "live robots Sitemap line"
     );
   }
