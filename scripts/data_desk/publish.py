@@ -43,14 +43,14 @@ def kit_landing_html(package: dict[str, Any], *, files: list[str]) -> str:
         "<head>\n"
         '<meta charset="utf-8"/>\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1"/>\n'
-        f"<title>Kit de citação (noindex) — {title}</title>\n"
+        f"<title>{title} (noindex)</title>\n"
         '<meta name="robots" content="noindex,follow"/>\n'
         '<meta name="description" content="Pacote de citação e recorte agregado. Fonte canônica CONFENGE. Esta URL não é indexável."/>\n'
         f'<link rel="canonical" href="{source}"/>\n'
         "</head>\n"
         "<body>\n"
-        "<p><strong>noindex,follow</strong> — esta URL não é uma página indexável.</p>\n"
-        "<h1>Kit de citação — ticket contratual de pavimentação em Santa Catarina</h1>\n"
+        "<p><strong>noindex,follow</strong>: esta URL não é uma página indexável.</p>\n"
+        "<h1>Kit de citação: ticket contratual de pavimentação em Santa Catarina</h1>\n"
         f"<p>Fonte canônica: <a href=\"{source}\">{source}</a></p>\n"
         "<p>Este kit não reescreve a resposta. Cite o Market Answer. "
         "O recorte é UF=SC. Ticket nominal não é custo por km. "

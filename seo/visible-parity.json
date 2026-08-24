@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 58,
+  "page_count": 76,
   "pages": [
     {
       "claimed": {
@@ -55,8 +55,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Gestão contratual e pleitos em obras públicas"
+          "Acompanhamento de contratos de obras públicas"
         ],
         "dataset_names": [],
         "dates": [],
@@ -86,21 +85,24 @@
       "ok": true,
       "url": "https://confenge.com.br/acompanhamento-contratos-obras/",
       "visible": {
-        "authors": [],
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Gestão contratual e pleitos em obras públicas"
+          "Acompanhamento de contratos de obras públicas"
         ],
         "canonical": "https://confenge.com.br/acompanhamento-contratos-obras/",
-        "dates": [],
-        "description": "Diário de obra, comunicações, controle de mudanças, indicadores e auditorias periódicas para encontrar desvios antes que virem perda financeira ou defesa…",
-        "h1": "Gestão contratual e pleitos em obras públicas",
+        "dates": [
+          "2026-08-15"
+        ],
+        "description": "Rotina preventiva e recorrente de acompanhamento de contrato de obra pública: registros, indicadores e decisão da direção antes do desvio virar defesa tardia.",
+        "h1": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Gestão contratual e pleitos em obras públicas | CONFENGE",
+        "title": "Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente | CONFENGE",
         "versions": []
       }
     },
@@ -110,7 +112,7 @@
         "breadcrumbs": [
           "Início",
           "Conteúdos",
-          "Aditivos e serviços não previstos em obras públicas"
+          "Aditivos e serviços extras em obras públicas"
         ],
         "dataset_names": [],
         "dates": [],
@@ -146,19 +148,95 @@
         "breadcrumb_names": [
           "Início",
           "Conteúdos",
-          "Aditivos e serviços não previstos em obras públicas"
+          "Aditivos e serviços extras em obras públicas"
         ],
         "canonical": "https://confenge.com.br/aditivos-obras-publicas/",
         "dates": [
           "2026-08-15"
         ],
-        "description": "Aditivos em obras públicas: limite 25%/50%, serviços não previstos, empreitada global e documentos para formalizar sem estourar o contrato. Biblioteca CONFENGE.",
-        "h1": "Aditivos e serviços não previstos em obras públicas",
+        "description": "Aditivos em obras públicas: tipos de alteração, documentos, decisão formal e proteção de margem antes de executar sem cobertura.",
+        "h1": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Aditivos em obras públicas: limites, serviços extras e pleitos | CONFENGE",
+        "title": "Aditivos em obras públicas: documentos e margem | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumbs": [
+          "Início",
+          "Análise técnica de contrato público",
+          "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo"
+        ],
+        "dataset_names": [],
+        "dates": [
+          "2026-08-18",
+          "2026-08-20"
+        ],
+        "descriptions": [
+          "O contrato público PNCP 14862788000150-2-000069/2026 publica pavimentação em paralelepípedo de 4.710,00 m² no município de São Gonçalo do Piauí – PI, valor global 719177.48 BRL e vigência 2026-07-08 a 2027-07-08. A unidade listada no JSON oficial traz município Teresina. São duas strings publicadas; esta análise não reconcilia qual descreve a execução.\n\nO PDF oficial (SHA-256 64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604), páginas 14–15, não trata o reajuste como aniversário da vigência. A cláusula 12.1 fixa preços por um ano contado da data do orçamento estimado. A cláusula 12.2 autoriza reajuste após o interregno de um ano contado da data do orçamento a que a proposta se referir, com fórmula Io/I pro rata dia. A cláusula 12.3 nomeia o Índice Nacional da Construção Civil – Coluna 35, FGV, revista Conjuntura Econômica, salvo indicação diversa na Parte Específica. A página 46 marca 12.3 com (x) no mesmo índice.\n\nA divisão 719177.48 / 4710.00 = 152.6916 BRL/m² é apenas valor global publicado ÷ área publicada no objeto. Não é custo completo, preço de referência, SINAPI/SICRO, custo/km nem prova de economicidade.\n\nEsta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE. Não implica relação comercial da CONFENGE com o órgão ou o contratado. publication_authorization=false e index_authorization=false permanecem falsos."
+        ],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo"
+        ],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki",
+          "Revisão editorial/técnica do responsável técnico, em engenharia e gestão contratual; revisão jurídica externa ausente"
+        ],
+        "reviewers": [
+          "Revisão editorial/técnica do responsável técnico, em engenharia e gestão contratual; revisão jurídica externa ausente"
+        ],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList",
+          "Article"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Análise técnica de contrato público",
+          "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo"
+        ],
+        "canonical": "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+        "dates": [
+          "2026-07-08",
+          "2026-08-18",
+          "2026-08-20",
+          "2027-07-08"
+        ],
+        "description": "O instrumento oficial separa vigência, orçamento estimado e orçamento da proposta. A listagem não publica as duas datas de orçamento. Não é caso CONFENGE.",
+        "h1": "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": null,
+        "reviewers": [
+          "Revisão editorial/técnica do responsável técnico, em engenharia e gestão contratual; revisão jurídica externa ausente"
+        ],
+        "title": "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo | CONFENGE",
         "versions": []
       }
     },
@@ -167,8 +245,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Atrasos, prorrogação e paralisação em obras públicas"
+          "Atrasos e prorrogações em obras públicas"
         ],
         "dataset_names": [],
         "dates": [],
@@ -203,20 +280,19 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Atrasos, prorrogação e paralisação em obras públicas"
+          "Atrasos e prorrogações em obras públicas"
         ],
         "canonical": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
         "dates": [
           "2026-08-15"
         ],
-        "description": "Prorrogação, suspensão, chuva, projeto atrasado, frentes indisponíveis, interferências e aceleração exigida: o prazo só se protege quando causa e impacto…",
-        "h1": "Atrasos, prorrogação e paralisação em obras públicas",
+        "description": "Causa, responsabilidade, caminho crítico e registro contemporâneo de atraso, paralisação e prorrogação em obra pública. Não é o artigo de chuva nem o dossiê de defesa de margem.",
+        "h1": "Atrasos e prorrogações: causa, responsabilidade, caminho crítico e registro contemporâneo",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Atrasos, prorrogação e paralisação em obras públicas | CONFENGE",
+        "title": "Atrasos e prorrogações em obras públicas: causa, responsabilidade, caminho crítico e registro contemporâneo | CONFENGE",
         "versions": []
       }
     },
@@ -268,13 +344,13 @@
         "dates": [
           "2026-08-15"
         ],
-        "description": "BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de…",
+        "description": "BDI, deságio, exequibilidade, SINAPI, SICRO, composições próprias, cotações e data-base tratados como sistema econômico, não como preenchimento mecânico de planilha.",
         "h1": "Auditoria de orçamento, BDI, SINAPI e preço",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Orçamento, BDI e SINAPI em obras públicas | CONFENGE",
+        "title": "Auditoria de orçamento, BDI, SINAPI e preço | CONFENGE",
         "versions": []
       }
     },
@@ -296,11 +372,14 @@
         "organizations": [
           "CONFENGE"
         ],
-        "people": [],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
         "reviewers": [],
         "types": [
           "Organization",
-          "BreadcrumbList"
+          "BreadcrumbList",
+          "Person"
         ],
         "versions": []
       },
@@ -319,22 +398,25 @@
         ],
         "canonical": "https://confenge.com.br/bid-room-licitacoes-obras/",
         "dates": [
-          "2026-08-01"
+          "2026-08-19"
         ],
-        "description": "Sala de operação para o edital crítico: leitura, estratégia, habilitação, acervo, orçamento, cronograma, revisão crítica independente e controle final da proposta.",
+        "description": "Coordenação de propostas para licitações de obras: leitura do edital, habilitação, acervo, orçamento, cronograma e revisão crítica antes do envio.",
         "h1": "Bid Room",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Bid Room para licitações de obras | CONFENGE",
+        "title": "Bid Room: operação recorrente de propostas em obras | CONFENGE",
         "versions": []
       }
     },
     {
       "claimed": {
         "authors": [],
-        "breadcrumbs": [],
+        "breadcrumbs": [
+          "Início",
+          "Casos técnicos demonstrativos"
+        ],
         "dataset_names": [],
         "dates": [],
         "descriptions": [],
@@ -343,10 +425,18 @@
         "has_false_case_type": false,
         "headlines": [],
         "licenses": [],
-        "organizations": [],
-        "people": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
         "reviewers": [],
-        "types": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
         "versions": []
       },
       "defects": [],
@@ -358,10 +448,13 @@
         "authors": [
           "Engº Tiago Sasaki"
         ],
-        "breadcrumb_names": [],
+        "breadcrumb_names": [
+          "Início",
+          "Casos técnicos demonstrativos"
+        ],
         "canonical": "https://confenge.com.br/casos/",
         "dates": [
-          "2026-08-03"
+          "2026-08-23"
         ],
         "description": "Casos técnicos demonstrativos baseados em Lei 14.133/2021, não são cases de clientes.",
         "h1": "Casos técnicos demonstrativos",
@@ -376,7 +469,11 @@
     {
       "claimed": {
         "authors": [],
-        "breadcrumbs": [],
+        "breadcrumbs": [
+          "Início",
+          "Casos técnicos demonstrativos",
+          "Aditivo: verificar saldos do art. 125 antes de protocolar"
+        ],
         "dataset_names": [],
         "dates": [],
         "descriptions": [],
@@ -385,10 +482,18 @@
         "has_false_case_type": false,
         "headlines": [],
         "licenses": [],
-        "organizations": [],
-        "people": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
         "reviewers": [],
-        "types": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
         "versions": []
       },
       "defects": [],
@@ -400,7 +505,11 @@
         "authors": [
           "Engº Tiago Sasaki"
         ],
-        "breadcrumb_names": [],
+        "breadcrumb_names": [
+          "Início",
+          "Casos técnicos demonstrativos",
+          "Aditivo: verificar saldos do art. 125 antes de protocolar"
+        ],
         "canonical": "https://confenge.com.br/casos/aditivo-art125-demonstrativo/",
         "dates": [
           "2026-08-03"
@@ -418,6 +527,516 @@
     {
       "claimed": {
         "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Casos técnicos demonstrativos",
+          "Medição glosada: do apontamento ao pedido certo"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Casos técnicos demonstrativos",
+          "Medição glosada: do apontamento ao pedido certo"
+        ],
+        "canonical": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
+        "dates": [
+          "2026-08-03"
+        ],
+        "description": "Demonstração metodológica de dossiê frente a glosa de medição. Não é case de cliente.",
+        "h1": "Medição glosada: do apontamento ao pedido certo",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Medição glosada: do apontamento ao pedido certo | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Entregas",
+          "Modelo de apresentação executiva"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Entregas",
+          "Modelo de apresentação executiva"
+        ],
+        "canonical": "https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/",
+        "dates": [
+          "2026-08-23"
+        ],
+        "description": "Veja como a CONFENGE leva a diretoria de dados brutos a decisões assináveis em uma reunião, sem criar um único número novo. Modelo integral; apresentação adaptada por R$ 890.",
+        "h1": "Transforme o diagnóstico em decisão assinada na reunião.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Apresentação Executiva de Resultados | Modelo CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Entregas",
+          "Modelo de base quantitativa canônica"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/casos/modelo-base-quantitativa-canonica/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Entregas",
+          "Modelo de base quantitativa canônica"
+        ],
+        "canonical": "https://confenge.com.br/casos/modelo-base-quantitativa-canonica/",
+        "dates": [
+          "2026-08-23"
+        ],
+        "description": "Veja a arquitetura da planilha que sustenta todos os entregáveis da CONFENGE: 13 abas, 252 campos com natureza declarada e 29 controles reproduzíveis. Modelo integral; base quantitativa adaptada por R$ 690.",
+        "h1": "Confira cada número antes de acreditar nele.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Base Quantitativa Canônica | Modelo CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Entregas",
+          "Modelo de contratos vincendos"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/casos/modelo-contratos-vincendos-relicitacao/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Entregas",
+          "Modelo de contratos vincendos"
+        ],
+        "canonical": "https://confenge.com.br/casos/modelo-contratos-vincendos-relicitacao/",
+        "dates": [
+          "2026-08-23",
+          "2027-01-31",
+          "2027-02-03"
+        ],
+        "description": "Veja como a CONFENGE identifica contratos que vencem entre 91 e 179 dias, mede a propensão à recontratação e declara quando não existe sinal. Modelo integral; mapa de contratos vincendos adaptado por R$ 1.450.",
+        "h1": "Descubra quais contratos vencem antes que o edital apareça.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Contratos Vincendos e Recontratação | Modelo CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Entregas",
+          "Modelo de mapa de compradores públicos"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/casos/modelo-mapa-compradores-publicos/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Entregas",
+          "Modelo de mapa de compradores públicos"
+        ],
+        "canonical": "https://confenge.com.br/casos/modelo-mapa-compradores-publicos/",
+        "dates": [
+          "2026-08-23"
+        ],
+        "description": "Veja como a CONFENGE ordena os órgãos que compram o tipo de obra da sua construtora por frequência, escala e acessibilidade. Modelo integral; mapa de compradores adaptado por R$ 1.200.",
+        "h1": "Descubra quais órgãos compram o que a sua empresa executa.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Mapa de Compradores Públicos | Modelo CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Entregas",
+          "Modelo de mapeamento de concorrentes"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/casos/modelo-mapeamento-concorrentes-publicos/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Entregas",
+          "Modelo de mapeamento de concorrentes"
+        ],
+        "canonical": "https://confenge.com.br/casos/modelo-mapeamento-concorrentes-publicos/",
+        "dates": [
+          "2026-08-23"
+        ],
+        "description": "Veja como a CONFENGE mede contra quem a sua construtora disputa, quanto cada rival depende de um único comprador e em que faixa de ticket ele opera. Modelo integral; mapeamento de concorrentes adaptado por R$ 1.900.",
+        "h1": "Descubra contra quem você realmente disputa.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Mapeamento de Concorrentes | Modelo CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Entregas",
+          "Modelo de painel de preços"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/casos/modelo-painel-precos-obras-publicas/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Entregas",
+          "Modelo de painel de preços"
+        ],
+        "canonical": "https://confenge.com.br/casos/modelo-painel-precos-obras-publicas/",
+        "dates": [
+          "2026-08-23"
+        ],
+        "description": "Veja como a CONFENGE separa a escala de contrato que um mercado público realmente adjudica, por tipologia e por ano, e declara o que a base não responde. Modelo integral; painel adaptado por R$ 2.400.",
+        "h1": "Descubra a escala de contrato que este mercado realmente adjudica.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Painel de Preços de Obras Públicas | Modelo CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Entregas",
+          "Modelo de relatório executivo consolidado"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/casos/modelo-relatorio-executivo-consolidado/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Entregas",
+          "Modelo de relatório executivo consolidado"
+        ],
+        "canonical": "https://confenge.com.br/casos/modelo-relatorio-executivo-consolidado/",
+        "dates": [
+          "2026-08-23",
+          "2027-01-31",
+          "2027-02-03"
+        ],
+        "description": "Veja como os cinco módulos do diagnóstico viram uma única leitura de diretoria, com quatro decisões assináveis e cada número re-derivável na base. Modelo integral; relatório executivo consolidado adaptado por R$ 3.750.",
+        "h1": "Decida onde alocar equipe, acervo e caixa nos próximos 90 dias.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Relatório Executivo Consolidado | Modelo CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Entregas",
+          "Modelo de relatório de inteligência"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Entregas",
+          "Modelo de relatório de inteligência"
+        ],
+        "canonical": "https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "dates": [
+          "2026-08-23"
+        ],
+        "description": "Veja como a CONFENGE transforma editais e a realidade da construtora em decisões de participar, condicionar ou recusar. Modelo integral; relatório adaptado por R$ 599.",
+        "h1": "Escolha quais licitações disputar e quais recusar.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Relatório executivo de priorização de licitações | Modelo CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
         "breadcrumbs": [],
         "dataset_names": [],
         "dates": [],
@@ -437,24 +1056,60 @@
       "fixture_only": false,
       "index_intent": true,
       "ok": true,
-      "url": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
+      "url": "https://confenge.com.br/comercial/privacidade-leads/",
       "visible": {
-        "authors": [
-          "Engº Tiago Sasaki"
-        ],
+        "authors": [],
         "breadcrumb_names": [],
-        "canonical": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
-        "dates": [
-          "2026-08-03"
-        ],
-        "description": "Demonstração metodológica de dossiê frente a glosa de medição. Não é case de cliente.",
-        "h1": "Medição glosada: do apontamento ao pedido certo",
+        "canonical": "https://confenge.com.br/comercial/privacidade-leads/",
+        "dates": [],
+        "description": "Aviso de privacidade do Diagnóstico B2G da CONFENGE. Inventário mínimo, bases legais por finalidade e canal de privacidade.",
+        "h1": "Aviso de privacidade - leads e contratação",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
-        "title": "Medição glosada: do apontamento ao pedido certo | CONFENGE",
+        "title": "Aviso de privacidade - Diagnóstico B2G | CONFENGE",
         "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/comercial/termos-diagnostico-b2g/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [],
+        "canonical": "https://confenge.com.br/comercial/termos-diagnostico-b2g/",
+        "dates": [],
+        "description": "Termos B2B do Diagnóstico B2G de Expansão da CONFENGE. R$ 8.000, pagamento único. Obrigação de meio. Não é serviço jurídico.",
+        "h1": "Termos B2B - Diagnóstico B2G de Expansão",
+        "has_dataset_surface": true,
+        "licenses": [],
+        "permission_class": "confidential",
+        "reviewers": [],
+        "title": "Termos B2B - Diagnóstico B2G | CONFENGE",
+        "versions": [
+          "75% ganho acumulado"
+        ]
       }
     },
     {
@@ -501,9 +1156,9 @@
         ],
         "canonical": "https://confenge.com.br/conflitos/",
         "dates": [
-          "2026-08-15"
+          "2026-08-16"
         ],
-        "description": "A CONFENGE é consultoria comercial. Conteúdo técnico pode apoiar ofertas, sem comprar review nem inventar cliente.",
+        "description": "A CONFENGE é consultoria comercial. Conteúdo técnico pode apoiar ofertas; conflito não declarado pode ser contestado.",
         "h1": "Conflitos e interesses comerciais",
         "has_dataset_surface": false,
         "licenses": [],
@@ -549,7 +1204,10 @@
       "url": "https://confenge.com.br/conteudos/",
       "visible": {
         "authors": [],
-        "breadcrumb_names": [],
+        "breadcrumb_names": [
+          "Início",
+          "Conteúdos"
+        ],
         "canonical": "https://confenge.com.br/conteudos/",
         "dates": [],
         "description": "Biblioteca técnica da CONFENGE para construtoras: licitações, orçamento, BDI, medições, aditivos, reequilíbrio, atrasos, pleitos e defesas.",
@@ -849,7 +1507,7 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "Atraso de pagamento permite suspender a obra pública?"
+          "Atraso de pagamento: pode suspender a obra pública?"
         ],
         "dataset_names": [],
         "dates": [
@@ -919,12 +1577,12 @@
           "Início",
           "Conteúdos",
           "Orçamento e BDI",
-          "BDI diferenciado para materiais e equipamentos: quando usar"
+          "BDI diferenciado em materiais e equipamentos: quando usar"
         ],
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-18"
         ],
         "descriptions": [
           "BDI diferenciado para materiais e equipamentos: critérios técnicos, riscos de rejeição e quando a planilha exige decomposição, guia CONFENGE."
@@ -970,7 +1628,7 @@
         "canonical": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-18"
         ],
         "description": "Quando o edital ou a natureza do item autoriza BDI distinto, e o risco de aplicar o mesmo percentual em tudo.",
         "h1": "BDI diferenciado em materiais e equipamentos: quando usar",
@@ -1408,6 +2066,77 @@
         "breadcrumbs": [
           "Início",
           "Conteúdos",
+          "Aditivos e serviços extras",
+          "Limite de aditivo 25% e 50% em obra pública: o que conta"
+        ],
+        "dataset_names": [],
+        "dates": [
+          "2026-07-15",
+          "2026-08-18"
+        ],
+        "descriptions": [
+          "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo e supressão, alteração quantitativa ou qualitativa e por que o caso concreto precisa ser analisado."
+        ],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Limite de aditivo 25% e 50% em obra pública: o que conta"
+        ],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "Article",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki",
+          "Guia técnico"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Conteúdos",
+          "Aditivos e serviços extras",
+          "Limite de aditivo 25% e 50% em obra pública: o que conta"
+        ],
+        "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+        "dates": [
+          "2026-07-15",
+          "2026-08-17",
+          "2026-08-18"
+        ],
+        "description": "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo e supressão, alteração quantitativa ou qualitativa e por que o caso concreto precisa ser analisado.",
+        "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Limite de aditivo 25% e 50% em obra pública: o que conta | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Conteúdos",
           "Reequilíbrio contratual",
           "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?"
         ],
@@ -1549,7 +2278,7 @@
           "Início",
           "Conteúdos",
           "Orçamento e BDI",
-          "Frete, mobilização e desmobilização: custos esquecidos na proposta"
+          "Como calcular mobilização e desmobilização na proposta"
         ],
         "dataset_names": [],
         "dates": [
@@ -1834,7 +2563,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-18"
         ],
         "descriptions": [
           "Entenda quando usar o SINAPI desonerado ou não desonerado, como conferir encargos, BDI e edital e quais erros podem comprometer a proposta."
@@ -1880,15 +2609,16 @@
         "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-07-30",
+          "2026-08-18"
         ],
-        "description": "A diferença está nos encargos da mão de obra. Veja como ler a regra do edital, alinhar BDI e evitar planilha inexequível.",
+        "description": "SINAPI desonerado e não desonerado diferem nos encargos da mão de obra. Use a tabela que o edital e a planilha modelo fixam na data-base; misturar bases distorce o preço.",
         "h1": "SINAPI desonerado ou não desonerado: qual usar?",
         "has_dataset_surface": true,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "SINAPI desonerado ou não: qual base o edital exige | CONFENGE",
+        "title": "Desonerado e não desonerado no SINAPI: o que o edital fixa | CONFENGE",
         "versions": []
       }
     },
@@ -1967,7 +2697,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Como pedir e publicar uma correção"
+          "Como contestar e corrigir"
         ],
         "dataset_names": [],
         "dates": [],
@@ -2002,19 +2732,19 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Como pedir e publicar uma correção"
+          "Como contestar e corrigir"
         ],
         "canonical": "https://confenge.com.br/correcoes/",
         "dates": [
-          "2026-08-15"
+          "2026-08-16"
         ],
-        "description": "Canal, dono e prazos para corrigir erro material no site da CONFENGE. Sem silêncio editorial.",
-        "h1": "Como pedir e publicar uma correção",
+        "description": "Canal de contestação com recibo, PII mínima e prazo UNKNOWN até existir série medida.",
+        "h1": "Como contestar e corrigir",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Política de correções | CONFENGE",
+        "title": "Correções e contestação | CONFENGE",
         "versions": []
       }
     },
@@ -2023,7 +2753,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Contract Defense & Margin"
+          "Defesa de margem"
         ],
         "dataset_names": [],
         "dates": [],
@@ -2036,11 +2766,14 @@
         "organizations": [
           "CONFENGE"
         ],
-        "people": [],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
         "reviewers": [],
         "types": [
           "Organization",
-          "BreadcrumbList"
+          "BreadcrumbList",
+          "Person"
         ],
         "versions": []
       },
@@ -2055,19 +2788,19 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Contract Defense & Margin"
+          "Defesa de margem"
         ],
         "canonical": "https://confenge.com.br/defesa-margem-contratos-publicos/",
         "dates": [
           "2026-08-15"
         ],
-        "description": "Defesa técnica e proteção de margem em contratos públicos: cronologia, causalidade, cálculos, evidências, notificações, aditivos e reequilíbrio.",
-        "h1": "Contract Defense & Margin",
+        "description": "Proteção de margem em contratos públicos: detecção, documentação, cálculo e decisão da margem com cronologia, evidências e posição para a direção.",
+        "h1": "Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Defesa técnica e proteção de margem (Contract Defense & Margin) | CONFENGE",
+        "title": "Proteção de margem em contratos públicos: detecção, documentação, cálculo e decisão | CONFENGE",
         "versions": []
       }
     },
@@ -2076,8 +2809,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Defesa técnica, sanções e extinção de contratos públicos"
+          "Defesa técnica em contratos públicos"
         ],
         "dataset_names": [],
         "dates": [],
@@ -2107,21 +2839,24 @@
       "ok": true,
       "url": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
       "visible": {
-        "authors": [],
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Defesa técnica, sanções e extinção de contratos públicos"
+          "Defesa técnica em contratos públicos"
         ],
         "canonical": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
-        "dates": [],
-        "description": "Notificações, multas, impedimento de licitar, rescisão, subcontratação, habilitação e defesas que precisam separar fato, culpa, proporcionalidade e…",
-        "h1": "Defesa técnica, sanções e extinção de contratos públicos",
+        "dates": [
+          "2026-08-15"
+        ],
+        "description": "Subsídio técnico, não advocacia, para notificação, sanção ou risco de extinção em contrato público de obra. Fatos, cronologia e pedido coerente para o jurídico.",
+        "h1": "Defesa técnica em contratos públicos: subsídio técnico, não advocacia",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Defesa técnica, sanções e extinção de contratos públicos | CONFENGE",
+        "title": "Defesa técnica em contratos públicos: subsídio técnico, não advocacia | CONFENGE",
         "versions": []
       }
     },
@@ -2183,6 +2918,64 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Diagnóstico B2G de Expansão"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList",
+          "Person"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/diagnostico-b2g-expansao/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Diagnóstico B2G de Expansão"
+        ],
+        "canonical": "https://confenge.com.br/diagnostico-b2g-expansao/",
+        "dates": [
+          "2026-08-17",
+          "2026-08-19",
+          "2026-08-22"
+        ],
+        "description": "Diagnóstico B2G pontual por R$ 8.000: mapa de compradores, até 15 concorrentes, painel de preços públicos e recomendações para decidir onde crescer.",
+        "h1": "Diagnóstico B2G de Expansão",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Diagnóstico B2G de Expansão - R$ 8.000 | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
           "Conteúdos",
           "Diagnóstico pré-licitação para obras públicas"
         ],
@@ -2214,15 +3007,19 @@
       "ok": true,
       "url": "https://confenge.com.br/diagnostico-pre-licitacao/",
       "visible": {
-        "authors": [],
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
         "breadcrumb_names": [
           "Início",
           "Conteúdos",
           "Diagnóstico pré-licitação para obras públicas"
         ],
         "canonical": "https://confenge.com.br/diagnostico-pre-licitacao/",
-        "dates": [],
-        "description": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um…",
+        "dates": [
+          "2026-08-15"
+        ],
+        "description": "Edital, regime de execução, matriz de riscos, atestados, projeto, cronograma e exequibilidade analisados antes de transformar uma vitória na licitação em um contrato ruim.",
         "h1": "Diagnóstico pré-licitação para obras públicas",
         "has_dataset_surface": false,
         "licenses": [],
@@ -2276,15 +3073,67 @@
         ],
         "canonical": "https://confenge.com.br/diretoria-b2g/",
         "dates": [
-          "2026-08-01"
+          "2026-08-17",
+          "2026-08-19"
         ],
-        "description": "Rotina contínua de decisão em licitações e contratos públicos para construtoras (modelo Diretoria B2G fracionada): triagem, participar ou recusar, proposta e proteção de margem.",
+        "description": "Direção semanal para construtoras com licitações e contratos públicos: até quatro propostas aceitas e um contrato ativo, com prioridades, responsáveis e decisões registradas.",
         "h1": "Diretoria B2G fracionada",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
         "title": "Diretoria B2G fracionada | Rotina de licitações e contratos | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Entregas"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/entregas/",
+      "visible": {
+        "authors": [],
+        "breadcrumb_names": [
+          "Início",
+          "Entregas"
+        ],
+        "canonical": "https://confenge.com.br/entregas/",
+        "dates": [
+          "2026-08-23"
+        ],
+        "description": "Consulte exemplos completos das entregas da CONFENGE no navegador. Veja método, profundidade e utilidade antes de contratar uma análise adaptada à sua empresa.",
+        "h1": "Veja o que chega à mesa antes de contratar.",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Exemplos de entregas da CONFENGE | Consulte antes de contratar",
         "versions": []
       }
     },
@@ -2368,13 +3217,17 @@
       "ok": true,
       "url": "https://confenge.com.br/ferramentas/",
       "visible": {
-        "authors": [],
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
         "breadcrumb_names": [
           "Início",
           "Ferramentas"
         ],
         "canonical": "https://confenge.com.br/ferramentas/",
-        "dates": [],
+        "dates": [
+          "2026-08-15"
+        ],
         "description": "Instrumentos de decisão para aditivos, reequilíbrio e atraso em obras públicas. Resultado no navegador, sem cadastro.",
         "h1": "O que você precisa resolver agora?",
         "has_dataset_surface": false,
@@ -2977,7 +3830,7 @@
         "dates": [
           "2026-08-15"
         ],
-        "description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente…",
+        "description": "Critérios de medição, glosas, parcelas incontroversas, atrasos de pagamento e documentação capaz de transformar serviço executado em valor efetivamente recebido.",
         "h1": "Medições, glosas e pagamentos em obras públicas",
         "has_dataset_surface": false,
         "licenses": [],
@@ -3122,15 +3975,132 @@
         ],
         "canonical": "https://confenge.com.br/politica-editorial/",
         "dates": [
-          "2026-08-15"
+          "2026-08-16"
         ],
-        "description": "Quem afirma, com qual competência, com qual método, quando atualiza e como corrigir o conteúdo público da CONFENGE.",
+        "description": "Como a CONFENGE classifica fontes e afirmações, revisa, atualiza, contesta, corrige e retira o que publica em confenge.com.br.",
         "h1": "Política editorial",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
         "title": "Política editorial | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Política editorial",
+          "Histórico"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/politica-editorial/historico/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Política editorial",
+          "Histórico"
+        ],
+        "canonical": "https://confenge.com.br/politica-editorial/historico/",
+        "dates": [
+          "2026-08-15",
+          "2026-08-16"
+        ],
+        "description": "Changelog das políticas públicas da CONFENGE. Versões anteriores permanecem legíveis.",
+        "h1": "Histórico da política editorial",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Histórico da política editorial | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Política editorial",
+          "Versão 1.0.0"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Engº Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/politica-editorial/v/1.0.0/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Política editorial",
+          "Versão 1.0.0"
+        ],
+        "canonical": "https://confenge.com.br/politica-editorial/v/1.0.0/",
+        "dates": [
+          "2026-08-15"
+        ],
+        "description": "Primeira publicação das políticas públicas (#78). Registrava prazos de 2 e 10 dias úteis sem série medida.",
+        "h1": "Política editorial 1.0.0",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Política editorial 1.0.0 (histórica) | CONFENGE",
         "versions": []
       }
     },
@@ -3169,6 +4139,54 @@
         "permission_class": null,
         "reviewers": [],
         "title": "Política de Privacidade | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Problemas que resolvemos em licitações e contratos de obras"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/problemas-que-resolvemos/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Problemas que resolvemos em licitações e contratos de obras"
+        ],
+        "canonical": "https://confenge.com.br/problemas-que-resolvemos/",
+        "dates": [],
+        "description": "Edital e orçamento, medição e glosa, aditivo, atraso, reequilíbrio e defesa técnica: escolha o problema do seu contrato e veja o caminho técnico.",
+        "h1": "Problemas que resolvemos em licitações e contratos de obras",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Problemas que resolvemos em licitações e contratos de obras | CONFENGE",
         "versions": []
       }
     },
@@ -3241,7 +4259,7 @@
         "breadcrumbs": [
           "Início",
           "Conteúdos",
-          "Reequilíbrio econômico-financeiro de contratos de obras"
+          "Reequilíbrio econômico-financeiro de obra pública"
         ],
         "dataset_names": [],
         "dates": [],
@@ -3277,19 +4295,67 @@
         "breadcrumb_names": [
           "Início",
           "Conteúdos",
-          "Reequilíbrio econômico-financeiro de contratos de obras"
+          "Reequilíbrio econômico-financeiro de obra pública"
         ],
         "canonical": "https://confenge.com.br/reequilibrio-obras-publicas/",
         "dates": [
           "2026-08-15"
         ],
-        "description": "Reajuste, revisão, matriz de riscos, fatos extraordinários, custos indiretos prolongados e memórias que demonstram quando a equação original deixou de…",
-        "h1": "Reequilíbrio econômico-financeiro de contratos de obras",
+        "description": "Reequilíbrio econômico-financeiro de obra pública: o que é, quando pode existir, diferença entre reajuste e revisão, evento, matriz de riscos, nexo e demonstração do impacto.",
+        "h1": "Reequilíbrio econômico-financeiro de obra pública",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Reequilíbrio econômico-financeiro de contratos de obras | CONFENGE",
+        "title": "Reequilíbrio econômico-financeiro de obra pública: o que é e quando cabe | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Serviços para licitações e contratos de obras públicas"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/servicos-obras-publicas/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Serviços para licitações e contratos de obras públicas"
+        ],
+        "canonical": "https://confenge.com.br/servicos-obras-publicas/",
+        "dates": [],
+        "description": "Os quatro serviços da CONFENGE para construtoras: diagnóstico da operação, rotina de decisão, sala de decisão da proposta e defesa de margem em contrato público.",
+        "h1": "Serviços para licitações e contratos de obras públicas",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Serviços para licitações e contratos de obras públicas | CONFENGE",
         "versions": []
       }
     },
@@ -3339,7 +4405,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Como a CONFENGE usa inteligência artificial"
+          "Uso material de inteligência artificial"
         ],
         "dataset_names": [],
         "dates": [],
@@ -3374,22 +4440,22 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Como a CONFENGE usa inteligência artificial"
+          "Uso material de inteligência artificial"
         ],
         "canonical": "https://confenge.com.br/uso-de-ia/",
         "dates": [
-          "2026-08-15"
+          "2026-08-16"
         ],
-        "description": "Assistência de redação e operação não substitui responsável técnico, fonte nem consentimento.",
-        "h1": "Como a CONFENGE usa inteligência artificial",
+        "description": "Onde a IA entra na produção pública da CONFENGE, o que ela não faz e quem responde pelo texto publicado.",
+        "h1": "Uso material de inteligência artificial",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Uso de IA | CONFENGE",
+        "title": "Uso material de IA | CONFENGE",
         "versions": []
       }
     }
   ],
-  "site_root": "_site"
+  "site_root": "/home/tjsasakifln/code/confenge/web-cfg/.claude/worktrees/agent-a439004ff77cf6cf0/_site"
 }

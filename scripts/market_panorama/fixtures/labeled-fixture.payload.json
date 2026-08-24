@@ -28,7 +28,7 @@
   "limitations": [
     "Campo ausente permanece UNKNOWN e não entra no denominador. UNKNOWN não é zero.",
     "Os achados são fatos observados mais a pergunta que abrem. O dossiê não afirma direito, desequilíbrio econômico-financeiro, dano ou que um reajuste seja devido.",
-    "Contratos refletem o estado canônico do DataLake na data de observação; aditivos posteriores à última coleta podem não estar refletidos.",
+    "Contratos refletem o estado canônico do base canônica de dados na data de observação; aditivos posteriores à última coleta podem não estar refletidos.",
     "O painel de preços usa o conjunto de referência de órgãos públicos no raio de 200 km da base de referência; não é uma amostra nacional."
   ],
   "method_version": "confenge-dossier-compose/1.0",

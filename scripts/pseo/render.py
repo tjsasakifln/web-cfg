@@ -586,7 +586,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 {confenge_help(
     ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/acompanhamento-contratos-obras/"],
     "A CONFENGE transforma este recorte em mapa aplicado à sua carteira: órgãos prioritários, "
-    "objetos compatíveis, riscos de planilha e roteiro de abordagem, sem ranking proprietário público.",
+    "objetos compatíveis, riscos de planilha e roteiro de abordagem.",
 )}
 {cta_block(meta, c.cta_label, wa, f"Mercado {m.get('segment')} {m.get('region')}")}
 {methodology_block(m.get("period_start"), m.get("period_end"), m.get("sources") or [], _scrub_limitations(m.get("limitations")))}
@@ -1538,7 +1538,7 @@ def render_hub(
             "<p>Quando houver recortes publicáveis, eles aparecem aqui com data, fonte e limites. "
             "Até lá, o próximo passo é aplicar os dados à sua operação B2G.</p>"
             '<div class="hero-actions">'
-            '<a class="button button-primary" href="/diretoria-b2g/">Conhecer a Diretoria B2G</a>'
+            '<a class="button button-primary" href="/diretoria-b2g/">Como funciona a Diretoria B2G</a>'
             '<a class="button button-secondary" href="/diagnostico-b2g-360/">Solicitar diagnóstico B2G</a>'
             "</div></div>"
 )

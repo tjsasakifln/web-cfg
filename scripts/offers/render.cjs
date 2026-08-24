@@ -84,7 +84,7 @@ function writePages() {
     h1: "Comparar ofertas",
     lead: "Precos visiveis, sem link generico de pagamento. Preview noindex enquanto o catalogo publico permanece desligado.",
     body: `
-<p>Flags: catalogo publico=${flags.CONFENGE_OFFER_CATALOG_PUBLIC} · ASAAS_MODE=${flags.ASAAS_MODE} · checkout de producao=${flags.production_checkout_enabled}.</p>
+<p>Flags: catalogo publico=${flags.CONFENGE_OFFER_CATALOG_PUBLIC} · ASAAS_MODE=${flags.ASAAS_MODE} · pagamento de producao=${flags.production_checkout_enabled}.</p>
 <table class="ma-table">
 <caption>Ofertas publicas aprovadas (sem Extra historico)</caption>
 <thead><tr><th scope="col">Oferta</th><th scope="col">Preco</th><th scope="col">Modo</th><th scope="col">Proximo passo</th></tr></thead>
@@ -101,13 +101,13 @@ function writePages() {
   const details = {
     "CFG-DIAG-EXP-v1": {
       slug: "diagnostico-expansao",
-      scope: "Mapa de compradores, 15 concorrentes, painel de precos, contratos a vencer, avisos triados, recomendacoes, PDF executivo, planilhas, kickoff e apresentacao final. Credito nao cumulativo de R$ 2.000 no primeiro mes Flex/180/365 se contratado em 60 dias.",
+      scope: "Mapa de compradores, 15 concorrentes, painel de precos, contratos a vencer, avisos triados, recomendacoes, PDF executivo, planilhas, reuniao inicial e apresentacao final. Credito nao cumulativo de R$ 2.000 no primeiro mes Flex/180/365 se contratado em 60 dias.",
       exclusions: "Nao inclui execucao de obra, garantia financeira, orcamento completo do zero nem quadro dedicado.",
       prazo: "10 a 15 dias uteis apos alinhamento e dados.",
     },
     "CFG-DIRB2G-FLEX-v1": {
       slug: "diretoria-flex",
-      scope: "Defesa de um contrato/obra ativo + Bid Room WIP de ate 4 oportunidades aceitas. Kickoff <=90 min, uma reuniao executiva mensal <=90 min, ate duas taticas de 30 min, canal assincrono.",
+      scope: "Defesa de um contrato/obra ativo + Bid Room com ate 4 oportunidades aceitas em andamento. Reuniao inicial <=90 min, uma reuniao executiva mensal <=90 min, ate duas taticas de 30 min, canal assincrono.",
       exclusions: "Quinto item simultaneo, segundo contrato, urgencia abaixo de 5 dias uteis, juridico de foro, ART/RRT, vistoria fisica e equipe full-time exigem aditivo.",
       prazo: "Sem minimo. Aviso de 30 dias.",
     },
@@ -145,7 +145,7 @@ function writePages() {
 <a class="button button-primary" href="/piloto/ofertas/contratar/?plano=${encodeURIComponent(offer.offer_id)}">Verificar capacidade</a>
 <a class="button" href="/piloto/ofertas/">Voltar a comparacao</a>
 </p>
-<p>Nao ha link generico de pagamento. Checkout so existe depois de capacidade APPROVED e aceite de termos.</p>`,
+<p>Nao ha link generico de pagamento. O pagamento so existe depois de capacidade APPROVED e aceite de termos.</p>`,
       }),
     );
   }
@@ -157,15 +157,15 @@ function writePages() {
       title: "FAQ das ofertas",
       canonical: `${SITE}/piloto/ofertas/faq/`,
       h1: "Perguntas frequentes",
-      lead: "WIP 4, uma obra/contrato, capacidade, aviso, Diagnostico e credito.",
+      lead: "Ate 4 oportunidades em andamento, uma obra/contrato, capacidade, aviso, Diagnostico e credito.",
       body: `
 <dl>
-<dt>O que e WIP 4?</dt>
+<dt>O que e o limite de 4 oportunidades?</dt>
 <dd>Ate quatro oportunidades ativas aceitas ao mesmo tempo. Nao e cota mensal.</dd>
 <dt>Uma obra ou contrato?</dt>
 <dd>O padrao cobre um contrato/obra ativo. Um segundo contrato exige capacidade e aditivo.</dd>
 <dt>Como funciona a capacidade?</dt>
-<dd>Teto de 50 slots Full, um slot padrao, hold de 72 horas, reserva final so apos pagamento confirmado.</dd>
+<dd>Teto de 50 vagas Full, uma vaga padrao, reserva provisoria de 72 horas, reserva final so apos pagamento confirmado.</dd>
 <dt>Aviso e cancelamento</dt>
 <dd>Flex: aviso de 30 dias. 180/365: compromisso minimo; saida antecipada depende de texto juridico ainda nao validado.</dd>
 <dt>Diagnostico e credito</dt>
@@ -182,7 +182,7 @@ function writePages() {
       title: "Solicitar contratacao",
       canonical: `${SITE}/piloto/ofertas/contratar/`,
       h1: "Solicitar contratacao",
-      lead: "Capacidade e termos antes de qualquer checkout. Preview sem dinheiro real.",
+      lead: "Capacidade e termos antes de qualquer pagamento. Preview sem dinheiro real.",
       body: `
 <form class="tool-form" method="post" action="/.netlify/functions/offer-eligibility" data-no-url-cnpj="true">
 <input type="hidden" name="action" value="eligibility"/>

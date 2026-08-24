@@ -1,7 +1,8 @@
-"""Public copy leak gates — real HTML surfaces."""
+"""Public copy leak gates, on the real set of shipped visitor HTML."""
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -11,25 +12,60 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.site.brand import load_brand  # noqa: E402
+from scripts.site.public_copy_scope import (  # noqa: E402
+    EXTRA_TEXT_SURFACES,
+    MANIFEST_ROUTE_EXEMPT,
+    is_excepted,
+    load_exceptions,
+    manifest_html_routes,
+    relpath,
+    route_for,
+    visible_markup,
+    visible_text,
+    visitor_facing_html_files,
+)
 from scripts.site.test_design_gates import test_copy_leaks_absent_on_commercial_pages, test_job_title_valid  # noqa: E402
+
+BRAND_EXCEPTION_RULE = "brand_forbidden_phrase"
+BACKSTAGE_EXCEPTION_RULE = "public_backstage"
+
+
+def _brand_scope() -> list[Path]:
+    """Every shipped visitor surface plus the non-HTML public text files."""
+    pages = list(visitor_facing_html_files(ROOT))
+    for name in EXTRA_TEXT_SURFACES:
+        path = ROOT / name
+        if path.is_file():
+            pages.append(path)
+    return pages
 
 
 def test_brand_forbidden_phrases_still_enforced():
+    """All 54 brand.json forbidden phrases, on every shipped visitor surface.
+
+    Issue #298: this used to check three phrases over four fixed files, so 51
+    declared phrases were enforced nowhere and any page outside the quartet
+    could ship any of them with CI green.
+    """
     brand = load_brand()
     phrases = brand["forbidden_phrases"]
     assert "Arquitetura de ofertas" in phrases
     assert "Sem cases fabricados" in phrases
-    pages = [
-        ROOT / "index.html",
-        ROOT / "diretoria-b2g" / "index.html",
-        ROOT / "bid-room-licitacoes-obras" / "index.html",
-        ROOT / "llms.txt",
-    ]
-    for p in pages:
-        text = p.read_text(encoding="utf-8")
+    assert len(phrases) >= 54, f"brand forbidden_phrases shrank to {len(phrases)}"
+    needles = [(p, p.lower()) for p in phrases]
+    failures: list[str] = []
+    scanned = 0
+    for path in _brand_scope():
+        scanned += 1
+        rel = relpath(path, ROOT)
+        raw = path.read_text(encoding="utf-8")
+        text = visible_markup(raw) if path.suffix == ".html" else raw
         lower = text.lower()
-        for phrase in ("arquitetura de ofertas", "sem cases fabricados", "sem preço público sem autorização"):
-            assert phrase not in lower, f"{p}: {phrase}"
+        for phrase, needle in needles:
+            if needle in lower and not is_excepted(BRAND_EXCEPTION_RULE, phrase, rel):
+                failures.append(f"{rel}: {phrase!r}")
+    assert scanned >= 200, f"brand phrase scan too narrow: {scanned}"
+    assert not failures, failures
 
 
 def test_microcopy_preferences():
@@ -88,16 +124,11 @@ def test_llms_consistent():
 
 
 def test_concordance_and_forbidden_microcopy():
-    """Gate for already-identified grammar/CTA defects; not a substitute for human review."""
-    commercial = [
-        ROOT / "index.html",
-        ROOT / "diretoria-b2g" / "index.html",
-        ROOT / "diagnostico-b2g-360" / "index.html",
-        ROOT / "bid-room-licitacoes-obras" / "index.html",
-        ROOT / "defesa-margem-contratos-publicos" / "index.html",
-        ROOT / "obrigado.html",
-        ROOT / "especialista" / "tiago-jun-sasaki" / "index.html",
-    ]
+    """Already-identified grammar/CTA defects, on every shipped visitor page.
+
+    Issue #298: the scope used to be seven fixed commercial files, so the same
+    defect shipped freely on page eight.
+    """
     forbidden = [
         "Premissas e decisões registrados",
         "Preferir formulário",
@@ -107,14 +138,152 @@ def test_concordance_and_forbidden_microcopy():
         "GO/REVIEW/NO-GO",
         "assume a recomendação e confronta com o resultado",
     ]
+    failures: list[str] = []
+    scanned = 0
+    for path in _visitor_facing_html_files():
+        scanned += 1
+        rel = relpath(path, ROOT)
+        text = path.read_text(encoding="utf-8")
+        for phrase in forbidden:
+            if phrase in text and not is_excepted(BRAND_EXCEPTION_RULE, phrase, rel):
+                failures.append(f"{rel}: forbidden microcopy {phrase!r}")
+    assert scanned >= 200, f"concordance scan too narrow: {scanned}"
+    assert not failures, failures
+    # no em-dash (travessão) in user-facing commercial HTML
+    commercial = [
+        ROOT / "index.html",
+        ROOT / "diretoria-b2g" / "index.html",
+        ROOT / "diagnostico-b2g-360" / "index.html",
+        ROOT / "bid-room-licitacoes-obras" / "index.html",
+        ROOT / "defesa-margem-contratos-publicos" / "index.html",
+        ROOT / "obrigado.html",
+        ROOT / "especialista" / "tiago-jun-sasaki" / "index.html",
+    ]
     for path in commercial:
         if not path.exists():
             continue
-        text = path.read_text(encoding="utf-8")
-        for phrase in forbidden:
-            assert phrase not in text, f"{path}: forbidden microcopy {phrase!r}"
-        # no em-dash (travessão) in user-facing commercial HTML
-        assert "—" not in text, f"{path}: em-dash/travessão present"
+        assert "—" not in path.read_text(encoding="utf-8"), f"{path}: em-dash/travessão present"
+
+
+def test_copy_gate_scope_covers_every_published_route():
+    """Nothing the publish step ships may fall outside the copy gates.
+
+    The scope is derived from the repository; this cross-checks it against the
+    routes `npm run build:site` actually publishes, so a family that gets added
+    to the publish allowlist cannot stay outside copy enforcement.
+    """
+    covered = {route_for(relpath(p, ROOT)) for p in _visitor_facing_html_files()}
+    routes = manifest_html_routes(ROOT)
+    assert len(routes) >= 200, f"manifest looks empty: {len(routes)}"
+    missing = [r for r in routes if r not in covered and r not in MANIFEST_ROUTE_EXEMPT]
+    assert not missing, f"published routes outside the copy gates: {missing}"
+
+
+def test_copy_gate_scope_has_no_handwritten_route_allowlist():
+    """The gate scope must stay derived, never a re-hand-written list of routes."""
+    source = Path(__file__).read_text(encoding="utf-8")
+    body = source.split("def _public_html_surfaces()", 1)[1].split("def ", 1)[0]
+    assert "rglob" not in body, "scope must delegate to public_copy_scope"
+    assert body.count("ROOT /") <= 1, "no per-route allowlist inside the scope helper"
+    surfaces = _public_html_surfaces()
+    assert len(surfaces) >= 200, f"public surface scope too narrow: {len(surfaces)}"
+    tops = {relpath(p, ROOT).split("/")[0] for p in surfaces}
+    # Families published after the old 34-root list was written.
+    for family in (
+        "entregas",
+        "servicos-obras-publicas",
+        "problemas-que-resolvemos",
+        "analises-contratos-publicos",
+        "panorama-mercado-obras-publicas",
+        "politica-editorial",
+        "comercial",
+        "correcoes",
+        "conflitos",
+        "uso-de-ia",
+    ):
+        assert family in tops, f"{family} outside the derived copy scope"
+
+
+def test_new_public_family_is_gated_without_editing_a_list(tmp_path=None):
+    """A brand-new public family is in scope the moment its HTML lands."""
+    import tempfile
+
+    from scripts.site.public_copy_scope import visitor_facing_html_files as scope
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "familia-nova-2027").mkdir()
+        (root / "familia-nova-2027" / "index.html").write_text(
+            "<html><body><p>Conversão com utilidade real</p></body></html>",
+            encoding="utf-8",
+        )
+        found = [str(p.relative_to(root)) for p in scope(root)]
+    assert found == ["familia-nova-2027/index.html"], found
+
+
+def test_lint_phrase_rules_govern_ok_and_exit_code():
+    """#298 defect 1: the five phrase rules must fail the lint, not just report."""
+    from scripts.site import lint_editorial_copy as lint
+
+    names = [name for name, _ in lint.PATS]
+    assert names[0] == "em_dash"
+    phrase_names = names[1:]
+    assert set(phrase_names) == {
+        "resultado_acionavel",
+        "ordem_de_ataque",
+        "engenharia_mais_prova",
+        "diligencia_eterna",
+        "agrega_valor",
+    }
+    samples = {
+        "resultado_acionavel": "entrega um resultado acionável para a diretoria",
+        "ordem_de_ataque": "define a ordem de ataque das oportunidades",
+        "engenharia_mais_prova": "a tese é engenharia + prova",
+        "diligencia_eterna": "o pedido vira diligência eterna",
+        "agrega_valor": "o relatório agrega valor ao contrato",
+    }
+    for name in phrase_names:
+        found: list[dict] = []
+        lint.scan(samples[name], "synthetic/index.html", "html_visible", found)
+        assert [f["pattern"] for f in found] == [name], (name, found)
+        # A phrase-only finding must turn the report red and the exit code non-zero.
+        report = lint.build_report([], found, 0, 1)
+        assert report["ok"] is False, name
+        assert report["phrase_count"] == 1, name
+    assert lint.build_report([], [], 0, 1)["ok"] is True
+    shipped = json.loads((ROOT / "docs" / "editorial" / "COPY-LINT-REPORT.json").read_text(encoding="utf-8"))
+    assert shipped["ok"] is True
+    assert shipped["phrase_count"] == 0
+    assert shipped["scanned_html"] >= 200, shipped["scanned_html"]
+
+
+def test_every_copy_exception_is_justified_and_precise():
+    """Exceptions are per-occurrence, resolvable and carry a written reason."""
+    rows = load_exceptions()
+    raw = json.loads((ROOT / "data" / "site" / "copy-exceptions.json").read_text(encoding="utf-8"))
+    declared = raw.get("exceptions") or []
+    assert len(rows) == len(declared), "an exception without a reason is silently dropped"
+    known_rules = set(raw.get("rules") or {})
+    seen: set[tuple[str, str, str]] = set()
+    for row in rows:
+        rule, match, rel = row["rule"], row["match"], row["path"]
+        assert rule in known_rules, f"unknown rule {rule!r}"
+        assert "*" not in rel and "?" not in rel, f"exception path must be exact: {rel!r}"
+        assert (ROOT / rel).is_file(), f"stale exception path: {rel}"
+        assert len(str(row["reason"]).strip()) >= 40, f"reason too thin: {rule}/{rel}"
+        key = (rule, match.casefold(), rel)
+        assert key not in seen, f"duplicate exception: {key}"
+        seen.add(key)
+        # A dead exception is rot: it must still describe a real occurrence.
+        raw = (ROOT / rel).read_text(encoding="utf-8")
+        if rule == "plain_language":
+            hit = bool(re.search(match, visible_text(raw), re.I))
+        elif rule == "editorial_copy_phrase":
+            hit = True  # pattern name, resolved by the lint itself
+        else:
+            hit = match.lower() in visible_markup(raw).lower() or match in raw
+        assert hit, f"dead exception (nothing to except): {rule} {match!r} {rel}"
+
 
 
 def test_public_surfaces_have_no_prose_em_dashes():
@@ -225,80 +394,21 @@ VISITOR_CONTEXT_BANNED = (
     re.compile(r"""aria-label=['"]Job,\s*ICP e trigger['"]""", re.I),
 )
 
-# Authenticated / internal HTML trees. Not an allowlist for marketing pages.
-_VISITOR_HTML_SKIP_PARTS = {
-    "docs",
-    "scripts",
-    "tests",
-    "data",
-    "seo",
-    "netlify",
-    "node_modules",
-    "_site",
-    ".git",
-    ".worktrees",
-    ".pytest_cache",
-    "supabase",
-    "ops",
-}
-
-
 def _public_html_surfaces() -> list[Path]:
-    """Indexable/reachable public HTML roots (not docs/ops/seo)."""
-    roots = [
-        ROOT / "index.html",
-        ROOT / "404.html",
-        ROOT / "obrigado.html",
-        ROOT / "obrigado-contrato.html",
-        ROOT / "obrigado-edital.html",
-        ROOT / "obrigado-operacao.html",
-        ROOT / "ferramentas",
-        ROOT / "conteudos",
-        ROOT / "nurture",
-        ROOT / "radar",
-        ROOT / "casos",
-        ROOT / "imprensa",
-        ROOT / "diretoria-b2g",
-        ROOT / "bid-room-licitacoes-obras",
-        ROOT / "defesa-margem-contratos-publicos",
-        ROOT / "diagnostico-b2g-360",
-        ROOT / "inteligencia",
-        ROOT / "piloto",
-        ROOT / "especialista",
-        ROOT / "privacidade",
-        ROOT / "termos-de-uso",
-        ROOT / "metodologia-inteligencia",
-        ROOT / "guias-contratos-obras",
-        ROOT / "lei-14133-obras",
-        ROOT / "jurisprudencia-contratos-obras",
-        ROOT / "acompanhamento-contratos-obras",
-        ROOT / "aditivos-obras-publicas",
-        ROOT / "atrasos-prorrogacao-obras-publicas",
-        ROOT / "auditoria-orcamento-licitacao",
-        ROOT / "defesa-tecnica-contratos-publicos",
-        ROOT / "diagnostico-pre-licitacao",
-        ROOT / "medicoes-glosas-obras-publicas",
-        ROOT / "reequilibrio-obras-publicas",
-        ROOT / "diagnostico-b2g-expansao",
-    ]
-    out: list[Path] = []
-    for r in roots:
-        if r.is_file() and r.suffix == ".html":
-            out.append(r)
-        elif r.is_dir():
-            out.extend(sorted(r.rglob("*.html")))
-    return out
+    """Every shipped visitor HTML file, derived from the repository.
+
+    Issue #298: this used to be a hand-written list of 34 roots, which left 23
+    public HTML files (including the three families published on 2026-08-23)
+    outside the backstage gate by default. The scope now comes from
+    scripts/site/public_copy_scope, so a new public family is covered the moment
+    its first index.html lands, with no list to edit.
+    """
+    return list(visitor_facing_html_files(ROOT))
 
 
 def _visitor_facing_html_files() -> list[Path]:
     """All shipped visitor HTML. A new public offer page is in scope by default."""
-    out: list[Path] = []
-    for path in ROOT.rglob("*.html"):
-        rel_parts = path.relative_to(ROOT).parts
-        if any(part in _VISITOR_HTML_SKIP_PARTS for part in rel_parts):
-            continue
-        out.append(path)
-    return sorted(out)
+    return list(visitor_facing_html_files(ROOT))
 
 
 def test_visitor_offer_context_has_no_internal_labels():
@@ -344,12 +454,13 @@ def test_public_backstage_language_absent():
         vis = re.sub(r"<style[\s\S]*?</style>", " ", vis, flags=re.I)
         vis = re.sub(r"<!--[\s\S]*?-->", " ", vis)
         lower = vis.lower()
+        rel = relpath(path, ROOT)
         for phrase in PUBLIC_BACKSTAGE_PHRASES:
-            if phrase.lower() in lower:
-                failures.append(f"{path.relative_to(ROOT)}: {phrase!r}")
+            if phrase.lower() in lower and not is_excepted(BACKSTAGE_EXCEPTION_RULE, phrase, rel):
+                failures.append(f"{rel}: {phrase!r}")
         for cre in PUBLIC_BACKSTAGE_PATTERNS:
-            if cre.search(vis):
-                failures.append(f"{path.relative_to(ROOT)}: pattern {cre.pattern!r}")
+            if cre.search(vis) and not is_excepted(BACKSTAGE_EXCEPTION_RULE, cre.pattern, rel):
+                failures.append(f"{rel}: pattern {cre.pattern!r}")
     assert not failures, failures
 
 
@@ -462,6 +573,11 @@ if __name__ == "__main__":
         test_sinapi_snippet_unique_not_generic,
         test_banlist_includes_conversion_eyebrow,
         test_gate_bites_on_reintroduction,
+        test_copy_gate_scope_covers_every_published_route,
+        test_copy_gate_scope_has_no_handwritten_route_allowlist,
+        test_new_public_family_is_gated_without_editing_a_list,
+        test_every_copy_exception_is_justified_and_precise,
+        test_lint_phrase_rules_govern_ok_and_exit_code,
     ):
         try:
             t()

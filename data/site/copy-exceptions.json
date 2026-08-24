@@ -1,0 +1,307 @@
+{
+  "schema_version": "1.0.0",
+  "owner": "CONFENGE editorial",
+  "policy": "Excecoes registradas aos gates de copy sitewide (issue #298). Uma entrada por (rule, match, caminho exato), cada uma com motivo escrito. Nunca um glob e nunca um diretorio: uma pagina nova da mesma familia continua reprovando. Alargar a regra em vez de registrar a ocorrencia aqui nao e permitido.",
+  "rules": {
+    "editorial_copy_phrase": "nomes de padrao em PATS de scripts/site/lint_editorial_copy.py",
+    "brand_forbidden_phrase": "entradas de forbidden_phrases em data/site/brand.json",
+    "public_backstage": "PUBLIC_BACKSTAGE_PHRASES / PUBLIC_BACKSTAGE_PATTERNS em scripts/site/test_copy_gates.py",
+    "plain_language": "regexes de FORBIDDEN em scripts/site/test_public_plain_language.py"
+  },
+  "exceptions": [
+    {
+      "rule": "plain_language",
+      "match": "\\bfact\\b",
+      "path": "analises-contratos-publicos/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bfact\\b",
+      "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bfact\\b",
+      "path": "correcoes/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bfact\\b",
+      "path": "politica-editorial/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bfact\\b",
+      "path": "politica-editorial/historico/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bfact\\b",
+      "path": "uso-de-ia/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcalculation\\b",
+      "path": "analises-contratos-publicos/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcalculation\\b",
+      "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcalculation\\b",
+      "path": "politica-editorial/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcalculation\\b",
+      "path": "politica-editorial/historico/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\binference\\b",
+      "path": "analises-contratos-publicos/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\binference\\b",
+      "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\binference\\b",
+      "path": "correcoes/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\binference\\b",
+      "path": "politica-editorial/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\binference\\b",
+      "path": "politica-editorial/historico/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\binference\\b",
+      "path": "uso-de-ia/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "analises-contratos-publicos/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "ferramentas/diagnostico-defesa-margem/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "inteligencia/valor-tipico-contratos-pavimentacao/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/index.html",
+      "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "correcoes/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "politica-editorial/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "politica-editorial/historico/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "uso-de-ia/index.html",
+      "reason": "FACT, CALCULATION, INFERENCE e UNKNOWN sao as quatro classes epistemicas definidas e publicadas em /politica-editorial/ (versao 1.1.0). scripts/site/test_authority_contract.py exige literalmente o conjunto {FACT, CALCULATION, INFERENCE, UNKNOWN} na politica e a string UNKNOWN no HTML de /correcoes/: o nome da classe e contrato editorial publicado, nao microcopy. Renomear esse vocabulario para o visitante e escopo da issue #188, nao deste gate."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "auditoria-orcamento-licitacao/index.html",
+      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "medicoes-glosas-obras-publicas/index.html",
+      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
+    },
+    {
+      "rule": "plain_language",
+      "match": "offer_id",
+      "path": "diagnostico-b2g-360/index.html",
+      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
+    },
+    {
+      "rule": "plain_language",
+      "match": "contract defense",
+      "path": "diagnostico-b2g-360/index.html",
+      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcfg-",
+      "path": "diagnostico-b2g-360/index.html",
+      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
+    },
+    {
+      "rule": "brand_forbidden_phrase",
+      "match": "Conhecer a Diretoria B2G",
+      "path": "diagnostico-pre-licitacao/index.html",
+      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "politica-editorial/v/1.0.0/index.html",
+      "reason": "/politica-editorial/v/1.0.0/ e o arquivo imutavel da versao 1.0.0 da politica editorial, renderizado de data/site/editorial-policy.json em versions/1.0.0. O corpo tem que continuar sendo o que foi publicado sob aquela versao; reescreve-lo falsificaria o historico de versoes. A versao vigente (1.1.0) foi corrigida neste PR."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bowner\\b",
+      "path": "politica-editorial/v/1.0.0/index.html",
+      "reason": "/politica-editorial/v/1.0.0/ e o arquivo imutavel da versao 1.0.0 da politica editorial, renderizado de data/site/editorial-policy.json em versions/1.0.0. O corpo tem que continuar sendo o que foi publicado sob aquela versao; reescreve-lo falsificaria o historico de versoes. A versao vigente (1.1.0) foi corrigida neste PR."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcfg-",
+      "path": "comercial/privacidade-leads/index.html",
+      "reason": "CFG-... e o identificador versionado do instrumento (termos B2B, aviso de privacidade de leads, snapshot de oferta). O identificador e a prova de qual versao do instrumento o cliente aceitou; remove-lo da pagina tiraria prova contratual, nao jargao interno."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcfg-",
+      "path": "comercial/termos-diagnostico-b2g/index.html",
+      "reason": "CFG-... e o identificador versionado do instrumento (termos B2B, aviso de privacidade de leads, snapshot de oferta). O identificador e a prova de qual versao do instrumento o cliente aceitou; remove-lo da pagina tiraria prova contratual, nao jargao interno."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcfg-",
+      "path": "diagnostico-b2g-expansao/index.html",
+      "reason": "CFG-... e o identificador versionado do instrumento (termos B2B, aviso de privacidade de leads, snapshot de oferta). O identificador e a prova de qual versao do instrumento o cliente aceitou; remove-lo da pagina tiraria prova contratual, nao jargao interno."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcfg-",
+      "path": "piloto/ofertas/contratar/index.html",
+      "reason": "CFG-... e o identificador versionado do instrumento (termos B2B, aviso de privacidade de leads, snapshot de oferta). O identificador e a prova de qual versao do instrumento o cliente aceitou; remove-lo da pagina tiraria prova contratual, nao jargao interno."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcfg-",
+      "path": "piloto/ofertas/index.html",
+      "reason": "CFG-... e o identificador versionado do instrumento (termos B2B, aviso de privacidade de leads, snapshot de oferta). O identificador e a prova de qual versao do instrumento o cliente aceitou; remove-lo da pagina tiraria prova contratual, nao jargao interno."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcheckout\\b",
+      "path": "comercial/privacidade-leads/index.html",
+      "reason": "'checkout' aqui nomeia o objeto da API do provedor de pagamento (Asaas) inventariado no aviso de privacidade e o fluxo hospedado descrito na clausula financeira dos termos B2B. E identificacao tecnica dentro de instrumento juridico, nao microcopy comercial: trocar a palavra tornaria o inventario de dados e a clausula imprecisos."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcheckout\\b",
+      "path": "comercial/termos-diagnostico-b2g/index.html",
+      "reason": "'checkout' aqui nomeia o objeto da API do provedor de pagamento (Asaas) inventariado no aviso de privacidade e o fluxo hospedado descrito na clausula financeira dos termos B2B. E identificacao tecnica dentro de instrumento juridico, nao microcopy comercial: trocar a palavra tornaria o inventario de dados e a clausula imprecisos."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "defesa-margem-contratos-publicos/index.html",
+      "reason": "scripts/site/test_authority_contract.py::test_margin_defense_pillar_shows_source_as_of_limitation exige que este pilar mostre os quatro tokens de proveniencia visiveis (source, as_of, limitation, unknown). O token UNKNOWN e a prova de que o recorte publico declara o que nao sabe; remove-lo apagaria a declaracao de limite, nao so a palavra. Traduzir o vocabulario de proveniencia e escopo da issue #188."
+    },
+    {
+      "rule": "brand_forbidden_phrase",
+      "match": "garantia de vitória",
+      "path": "comercial/termos-diagnostico-b2g/index.html",
+      "reason": "A frase so aparece negada, como recusa expressa de promessa de resultado ('Nao ha garantia de vitoria...', 'Sem garantia de vitoria...'), exigida pela obrigacao de meio declarada no instrumento B2B. Banir a promessa nao pode banir a negacao dela, que e justamente o que a politica de marca quer que a pagina diga."
+    },
+    {
+      "rule": "brand_forbidden_phrase",
+      "match": "garantia de vitória",
+      "path": "diagnostico-b2g-expansao/index.html",
+      "reason": "A frase so aparece negada, como recusa expressa de promessa de resultado ('Nao ha garantia de vitoria...', 'Sem garantia de vitoria...'), exigida pela obrigacao de meio declarada no instrumento B2B. Banir a promessa nao pode banir a negacao dela, que e justamente o que a politica de marca quer que a pagina diga."
+    },
+    {
+      "rule": "brand_forbidden_phrase",
+      "match": "inovação",
+      "path": "conteudos/contratacao-integrada-semi-integrada-obra/index.html",
+      "reason": "A pagina trata do regime de contratacao integrada, em que 'inovacao' nomeia o criterio contratual de solucao inovadora e sua alocacao na matriz de riscos (Lei 14.133/2021). E vocabulario do regime discutido, nao a promessa de marketing que a politica de marca proibe."
+    }
+  ]
+}
