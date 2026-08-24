@@ -135,9 +135,9 @@ def test_site_ci_shape():
         if needle not in text:
             errors.append(f"site-ci missing required step command: {needle}")
 
-    # Node pin aligned with Netlify/PR1 restore
-    if 'node-version: "20"' not in text and "node-version: '20'" not in text:
-        errors.append('site-ci must pin node-version: "20" until deliberate Node 22 migration')
+    # Node pin aligned with Netlify (issue #149 migrated the whole set to 22)
+    if 'node-version: "22"' not in text and "node-version: '22'" not in text:
+        errors.append('site-ci must pin node-version: "22" (Node 22 + Lighthouse 13 runtime)')
 
     chrome_at = text.find("browser-actions/setup-chrome")
     ui_at = text.find("npm run test:ui")
@@ -206,8 +206,8 @@ def test_pseo_shape():
         if needle not in text:
             errors.append(f"pseo missing required step command: {needle}")
 
-    if 'node-version: "20"' not in text and "node-version: '20'" not in text:
-        errors.append('pseo must pin node-version: "20" until deliberate Node 22 migration')
+    if 'node-version: "22"' not in text and "node-version: '22'" not in text:
+        errors.append('pseo must pin node-version: "22" (Node 22 + Lighthouse 13 runtime)')
 
     chrome_at = text.find("browser-actions/setup-chrome")
     npm_test_at = text.find("npm test")
@@ -243,13 +243,29 @@ def test_node_pin_is_single_source():
         raise AssertionError("netlify.toml must pin [build.environment] NODE_VERSION")
     expected = m.group(1)
 
-    # package.json engines must bound the same major, e.g. ">=20 <21"
+    # package.json engines must bound the same major, e.g. ">=22 <23".
+    # A minor/patch floor is allowed on the lower bound (">=22.19 <23") because
+    # lighthouse@13 declares `node >=22.19`: the floor has to be expressible, but
+    # the upper bound still has to close the major so a Node 23/24-only
+    # dependency cannot install green under `npm ci --engine-strict`.
     pkg = _json.loads(_read(PACKAGE_JSON))
-    engines = (pkg.get("engines") or {}).get("node", "")
-    wanted = f">={expected} <{int(expected) + 1}"
-    if engines.strip() != wanted:
+    engines = (pkg.get("engines") or {}).get("node", "").strip()
+    engines_match = re.fullmatch(
+        r">=(?P<lo>\d+)(?P<lo_rest>(?:\.\d+){0,2})\s+<(?P<hi>\d+)",
+        engines,
+    )
+    if not engines_match:
         errors.append(
-            f"package.json engines.node must be {wanted!r} to match "
+            f'package.json engines.node must look like ">={expected} <{int(expected) + 1}" '
+            f'(a minor floor such as ">={expected}.19 <{int(expected) + 1}" is allowed), '
+            f"got {engines!r}"
+        )
+    elif (
+        engines_match.group("lo") != expected
+        or engines_match.group("hi") != str(int(expected) + 1)
+    ):
+        errors.append(
+            f"package.json engines.node must bound Node {expected} to match "
             f"netlify.toml NODE_VERSION={expected}, got {engines!r}"
         )
 

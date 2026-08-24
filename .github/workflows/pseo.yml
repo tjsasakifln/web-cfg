@@ -19,7 +19,7 @@ jobs:
           python-version: "3.12"
       - uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "22"
       - name: Install test deps
         run: pip install pytest
       - name: npm ci
