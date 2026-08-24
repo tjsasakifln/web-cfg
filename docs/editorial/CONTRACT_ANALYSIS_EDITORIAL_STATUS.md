@@ -5,7 +5,7 @@ Superseded by `CONTRACT_ANALYSIS_CANARY_STATUS`.
 # CONTRACT_ANALYSIS_CANARY_STATUS
 
 - Gate: `contract-analysis-publication-gate/1.0`
-- Generated: `2026-08-24T13:27:52Z`
+- Generated: `2026-08-24T14:33:04Z`
 - Evaluated: **1** (cap 10)
 - Source: `official_live` (`scripts/contract_analysis/fixtures/official-live-01`)
 - catalog_mode: `official_live` claimed_live=`False`
@@ -16,7 +16,7 @@ Superseded by `CONTRACT_ANALYSIS_CANARY_STATUS`.
 - expand/adjust/kill: **ADJUST**
 - nenhum INDEX ativo: **True**
 - FACTUAL_HANDOFF_PENDING: **False**
-- Reason: Família e gate prontos. Consumer aceita authority-handoff-contract-analysis/1.0 e 1.1 além de public-read-contract-analysis/1.x. O rendezvous `$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01/` está `HANDOFF_READY`. index_count=0. Nenhum INDEX ativo. Não expandir. Replay o produtor até READY.json + SHA256SUMS conferirem; só então avaliar ≤3 dossiês. Producer publication/index flags nunca autorizam INDEX.
+- Reason: O handoff está `HANDOFF_READY` e seus hashes conferem, mas index_count=0 por gates editoriais atuais: `approval_material_hash_mismatch`. Nenhum INDEX ativo. Não repetir o produtor nem expandir a coorte. Reavaliar o material e, quando aplicável, registrar nova aprovação humana vinculada aos hashes atuais; producer publication/index flags nunca autorizam INDEX.
 
 ## State counts
 
@@ -30,7 +30,7 @@ Superseded by `CONTRACT_ANALYSIS_CANARY_STATUS`.
 
 ## Items
 
-- `13ec615146b3d348190a9b0b9148831e` · `PUBLISHABLE_NOINDEX` · source=`official_live` · fixture=False · robots=`noindex,nofollow` · reasons: approval_absent
+- `13ec615146b3d348190a9b0b9148831e` · `PUBLISHABLE_NOINDEX` · source=`official_live` · fixture=False · robots=`noindex,nofollow` · reasons: approval_material_hash_mismatch
 
 ## Rendered
 

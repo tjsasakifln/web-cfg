@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import subprocess
 import sys
 from datetime import date
 from pathlib import Path
@@ -206,6 +208,28 @@ def test_forbidden_paths_unchanged_list():
         path = ROOT / rel
         assert path.is_file(), rel
         assert baseline[rel] == hashes[rel] == content_sha256(path)
+
+
+def test_recapture_provenance_snapshot_matches_baseline_bytes_with_or_without_git():
+    payload = json.loads(
+        (ROOT / "data/bofu-dominance/frozen-specs/hashes.json").read_text(encoding="utf-8")
+    )
+    commit = payload["baseline_commit"]
+    git_commit = subprocess.run(
+        ["git", "-C", str(ROOT), "cat-file", "-e", f"{commit}^{{commit}}"],
+        capture_output=True,
+        check=False,
+    )
+    for rel, expected in payload["forbidden"].items():
+        if git_commit.returncode == 0:
+            content = subprocess.check_output(
+                ["git", "-C", str(ROOT), "show", f"{commit}:{rel}"]
+            )
+        else:
+            # Source archives intentionally have no object database. The
+            # hash-pinned snapshot remains independently verifiable there.
+            content = (ROOT / rel).read_bytes()
+        assert hashlib.sha256(content).hexdigest() == expected, rel
 
 
 def test_forbidden_drift_reads_committed_baseline(tmp_path):

@@ -1,7 +1,7 @@
 {
   "report": "CONTRACT_ANALYSIS_CANARY_STATUS",
   "gate_version": "contract-analysis-publication-gate/1.0",
-  "generated_at": "2026-08-24T13:27:52Z",
+  "generated_at": "2026-08-24T14:33:04Z",
   "evaluated": 1,
   "evaluated_cap": 10,
   "source_kind": "official_live",
@@ -28,7 +28,7 @@
       "slug": "reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026",
       "state": "PUBLISHABLE_NOINDEX",
       "reason_codes": [
-        "approval_absent"
+        "approval_material_hash_mismatch"
       ],
       "source_kind": "official_live",
       "fixture": false,
@@ -55,16 +55,16 @@
     "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html"
   ],
   "recommendation": "ADJUST",
-  "recommendation_reason": "Família e gate prontos. Consumer aceita authority-handoff-contract-analysis/1.0 e 1.1 além de public-read-contract-analysis/1.x. O rendezvous `$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01/` está `HANDOFF_READY`. index_count=0. Nenhum INDEX ativo. Não expandir. Replay o produtor até READY.json + SHA256SUMS conferirem; só então avaliar ≤3 dossiês. Producer publication/index flags nunca autorizam INDEX.",
+  "recommendation_reason": "O handoff está `HANDOFF_READY` e seus hashes conferem, mas index_count=0 por gates editoriais atuais: `approval_material_hash_mismatch`. Nenhum INDEX ativo. Não repetir o produtor nem expandir a coorte. Reavaliar o material e, quando aplicável, registrar nova aprovação humana vinculada aos hashes atuais; producer publication/index flags nunca autorizam INDEX.",
   "expand_adjust_kill": "ADJUST",
   "nenhum_index_ativo": true,
   "factual_handoff_pending": false,
   "handoff": {
     "status": "HANDOFF_READY",
-    "path": "/tmp/web-cfg-backlog-truth.2xBzB9/scripts/contract_analysis/fixtures/official-live-01",
+    "path": "scripts/contract_analysis/fixtures/official-live-01",
     "checked": [
       {
-        "path": "/tmp/web-cfg-backlog-truth.2xBzB9/scripts/contract_analysis/fixtures/official-live-01",
+        "path": "scripts/contract_analysis/fixtures/official-live-01",
         "exists": true,
         "layout": "dossiers",
         "schema_ok": true,
@@ -90,9 +90,7 @@
         "rendezvous_verified": true,
         "producer_index_authorization": false,
         "producer_publication_authorization": false,
-        "reasons": [
-          "manifest_hash_unverified"
-        ],
+        "reasons": [],
         "root_content_hash": "5957e02b7982e000ca7dda2a9a06b88769085bc2a163eadcd8d59bd134b26b3e",
         "analysis_ids": [
           "13ec615146b3d348190a9b0b9148831e"
@@ -110,7 +108,7 @@
   "quality_version": "authority-content-quality/1.0",
   "written_analyses": 1,
   "review_packets": [
-    "/tmp/web-cfg-backlog-truth.2xBzB9/docs/editorial/contract-analysis/review/13ec615146b3d348190a9b0b9148831e"
+    "docs/editorial/contract-analysis/review/13ec615146b3d348190a9b0b9148831e"
   ],
   "citations": [
     {

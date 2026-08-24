@@ -4,17 +4,17 @@
   "production_audit_is_current": true,
   "stale_code": null,
   "identity_mismatches": [],
-  "audit_generated_at": "2026-08-24T13:16:28Z",
+  "audit_generated_at": "2026-08-24T14:33:55Z",
   "audit_target_sha": "73030dd88f9883bef0d841c59b04a7991ca99653",
   "live_manifest_sha": "73030dd88f9883bef0d841c59b04a7991ca99653",
   "snapshot_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-  "public_artifact_hash": null,
+  "public_artifact_hash": "9d6aa47ade9b02d4037e3e1b0c53ad6cb7d4a5e75daffbcaf5b7271cbe5cbbdf",
   "seed_set_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "auditor_version": "wave0-closure-02",
-  "generated_at": "2026-08-24T13:16:28.771640+00:00",
+  "generated_at": "2026-08-24T14:33:55.789256+00:00",
   "base_url": "https://confenge.com.br",
-  "web_cfg_sha": "2285e84de30cdeb0bba32bbbb9117af6318affeb",
-  "git_head": "2285e84de30cdeb0bba32bbbb9117af6318affeb",
+  "web_cfg_sha": "25725ac22ea91b58a914b174f5b2d7f86a8dd9bd",
+  "git_head": "25725ac22ea91b58a914b174f5b2d7f86a8dd9bd",
   "netlify_deployed_sha": "73030dd88f9883bef0d841c59b04a7991ca99653",
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
   "vocabulary_note": "CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. index,follow / sitemap / local build never mean 'indexado'. ok=true only when technical audit passes AND identities match live deploy.",
@@ -22,22 +22,21 @@
     "url_count": 0,
     "urls": [],
     "defects": [],
-    "source": "local"
+    "source": "local",
+    "production_available": false
   },
   "counts": {
     "urls_audited": 18,
-    "critical_defects": 7,
+    "critical_defects": 5,
     "crawlable_production": 0,
     "deployed_only": 18
   },
   "critical": [
-    "/inteligencia/:prod_html_mismatch",
     "/inteligencia/mercados/:prod_html_mismatch",
     "/inteligencia/orgaos/:prod_html_mismatch",
     "/inteligencia/precos/:prod_html_mismatch",
     "/inteligencia/concorrencia/:prod_html_mismatch",
-    "/inteligencia/cenarios/:prod_html_mismatch",
-    "/radar/:prod_html_mismatch"
+    "sitemap:production_sitemap_unavailable"
   ],
   "rows": [
     {
@@ -52,7 +51,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535976"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535519"
         },
         "redirect_chain": [
           {
@@ -80,7 +79,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535977"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535519"
         },
         "redirect_chain": [
           {
@@ -99,16 +98,12 @@
         "canonical": "https://confenge.com.br/inteligencia/",
         "text_len": 1881
       },
-      "local_html_sha256": "0ad28813baf7a624d700ff0487b29f0a5bf0248692c58e06776c5096f65a898c",
+      "local_html_sha256": "e29161cfa1a52b18dd09646cdd174e04092f0ef55de87dab54902b56de7c27df",
       "prod_html_sha256": "e29161cfa1a52b18dd09646cdd174e04092f0ef55de87dab54902b56de7c27df",
       "in_sitemap": false,
       "in_hub": true,
-      "defects": [
-        "prod_html_mismatch"
-      ],
-      "notes": [
-        "local_and_production_html_differ"
-      ],
+      "defects": [],
+      "notes": [],
       "stage_reached": "DEPLOYED_PRODUCTION"
     },
     {
@@ -123,7 +118,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535977"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535520"
         },
         "redirect_chain": [
           {
@@ -151,7 +146,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535977"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535520"
         },
         "redirect_chain": [
           {
@@ -170,7 +165,7 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/",
         "text_len": 1526
       },
-      "local_html_sha256": "1e323719ca78cd1e3446e9d16e1c01e91d8fdd2f821bd7bc99bebae994dd482e",
+      "local_html_sha256": "347c05cb81bed3713d85d7decbc43315f2ca1518f10d20944ada8f57c7e57318",
       "prod_html_sha256": "4ca027930042c22dba86abe16cd22eb3998b9f367c224e11a92246496ec54fbb",
       "in_sitemap": false,
       "in_hub": true,
@@ -194,7 +189,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535977"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535520"
         },
         "redirect_chain": [
           {
@@ -222,7 +217,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535977"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535520"
         },
         "redirect_chain": [
           {
@@ -241,7 +236,7 @@
         "canonical": "https://confenge.com.br/inteligencia/orgaos/",
         "text_len": 1522
       },
-      "local_html_sha256": "513f47282634b8ec4f5021b5c3ad919699fbed1cb349251de79b0c6302c83702",
+      "local_html_sha256": "7bf35ad0522dcb3dfc4d80bfe3cd8ab99b0e419724555dfe5c9eee38158b3ef4",
       "prod_html_sha256": "5628c4ffa1fa218184bc658c6e44da7d98894474c02a372d625445395bb7410b",
       "in_sitemap": false,
       "in_hub": true,
@@ -265,7 +260,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535978"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535521"
         },
         "redirect_chain": [
           {
@@ -293,7 +288,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535978"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535521"
         },
         "redirect_chain": [
           {
@@ -312,7 +307,7 @@
         "canonical": "https://confenge.com.br/inteligencia/precos/",
         "text_len": 1480
       },
-      "local_html_sha256": "5d2bd1269c827c68fbf2bb2445bea77070443aaa595aebe4690cb5d2c1ce6c12",
+      "local_html_sha256": "ba5b840066ef0d432533c849c1b572f23c233821d6bf959fba1a0ce9ff449608",
       "prod_html_sha256": "24eef84f7cfa8dc35257d8c3f3b6f25f7464786832de30f64e726cb179d1c8e0",
       "in_sitemap": false,
       "in_hub": true,
@@ -336,7 +331,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535979"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535521"
         },
         "redirect_chain": [
           {
@@ -364,7 +359,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535978"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535522"
         },
         "redirect_chain": [
           {
@@ -383,7 +378,7 @@
         "canonical": "https://confenge.com.br/inteligencia/concorrencia/",
         "text_len": 1489
       },
-      "local_html_sha256": "81e4a9792bcfa9c13d7f38152b54e6cda5a5708a5ed688bcf288b7830c5d33ff",
+      "local_html_sha256": "e774048506c0d9c8c501d7c5495d9cb8539fa87f62a6411519ca041850ebc0f7",
       "prod_html_sha256": "6112bb27355eaf022abca76c9382b1ac42aa217317c2e417f5e791a8909cb7a0",
       "in_sitemap": false,
       "in_hub": true,
@@ -407,7 +402,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535979"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535521"
         },
         "redirect_chain": [
           {
@@ -435,7 +430,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535979"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535521"
         },
         "redirect_chain": [
           {
@@ -454,16 +449,12 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/",
         "text_len": 1776
       },
-      "local_html_sha256": "8d8061a2e4cb775aca69d3cc742de71db30eb8ca462f051ebc3ee996b1c92eaf",
+      "local_html_sha256": "185d1bf9ff0eeb735a7fa3c2ae402a9d714b1a396ff5c4d20b00b481ced3e631",
       "prod_html_sha256": "185d1bf9ff0eeb735a7fa3c2ae402a9d714b1a396ff5c4d20b00b481ced3e631",
       "in_sitemap": false,
       "in_hub": true,
-      "defects": [
-        "prod_html_mismatch"
-      ],
-      "notes": [
-        "local_and_production_html_differ"
-      ],
+      "defects": [],
+      "notes": [],
       "stage_reached": "DEPLOYED_PRODUCTION"
     },
     {
@@ -478,7 +469,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535979"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535522"
         },
         "redirect_chain": [
           {
@@ -506,7 +497,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535980"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535522"
         },
         "redirect_chain": [
           {
@@ -525,16 +516,12 @@
         "canonical": "https://confenge.com.br/radar/",
         "text_len": 1699
       },
-      "local_html_sha256": "1c478d18f651b9555525353aa5b8cdc7cc2096a813d7c981c1ff5b11785c40a5",
+      "local_html_sha256": "f2c97a953f138be081e017945818b6c7aab8904c568be264a198f28ff31e060a",
       "prod_html_sha256": "f2c97a953f138be081e017945818b6c7aab8904c568be264a198f28ff31e060a",
       "in_sitemap": false,
       "in_hub": false,
-      "defects": [
-        "prod_html_mismatch"
-      ],
-      "notes": [
-        "local_and_production_html_differ"
-      ],
+      "defects": [],
+      "notes": [],
       "stage_reached": "DEPLOYED_PRODUCTION"
     },
     {
@@ -549,7 +536,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535980"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535523"
         },
         "redirect_chain": [
           {
@@ -577,7 +564,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535980"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535523"
         },
         "redirect_chain": [
           {
@@ -596,7 +583,7 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
         "text_len": 5791
       },
-      "local_html_sha256": "77452af52327d57261410a92e5daa0cb89bd3fb5da414c0bf2e180e910b471b4",
+      "local_html_sha256": "c4922ea38a5ddb166a857be5ea6fc48fc4539e5e37919f8facb76abb4e239511",
       "prod_html_sha256": "24bd070cd3210da335c54bcca9b74d06d9440786487a4503682f23f217b49e90",
       "in_sitemap": false,
       "in_hub": false,
@@ -616,7 +603,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535980"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535523"
         },
         "redirect_chain": [
           {
@@ -644,7 +631,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535980"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535523"
         },
         "redirect_chain": [
           {
@@ -663,7 +650,7 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
         "text_len": 5749
       },
-      "local_html_sha256": "cacf08aa613494210ae45f6a4b4224bc3e42c7745aa46836561125ed0b7db38c",
+      "local_html_sha256": "8b8ea2a514b64eb845c7a2d280b0fbd1e67e359290aec6fdd2766efdf1fac0c1",
       "prod_html_sha256": "ff5e4f956548637a6409872dc3f810d2e8cd4c0817610162fbdfe2d3d5b04df7",
       "in_sitemap": false,
       "in_hub": false,
@@ -683,7 +670,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535981"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535524"
         },
         "redirect_chain": [
           {
@@ -711,7 +698,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535981"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535524"
         },
         "redirect_chain": [
           {
@@ -730,7 +717,7 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-mg/",
         "text_len": 5738
       },
-      "local_html_sha256": "de87d14f5ae4166e82af7a1fd0a14a7ba2cd9ca04969a20616c57053a7311ccc",
+      "local_html_sha256": "d86e0004c4766f7c448469f156337a6f9ea745b00133d1a1de3db8170a826cfd",
       "prod_html_sha256": "1d8f6d3496d1685b58b99ad6da2dd0f71b61a8211de9e1cf47b9ef0a7feb2818",
       "in_sitemap": false,
       "in_hub": false,
@@ -750,7 +737,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535982"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535525"
         },
         "redirect_chain": [
           {
@@ -778,7 +765,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535981"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535525"
         },
         "redirect_chain": [
           {
@@ -797,7 +784,7 @@
         "canonical": "https://confenge.com.br/inteligencia/mercados/edificacoes-publicas-rs/",
         "text_len": 5783
       },
-      "local_html_sha256": "9d3fe87135aa3ed9c1ed5d19cf7fe5c798e2039c484f6694c99a21669dc7bd04",
+      "local_html_sha256": "2acea3b5b4e05a1f47c7abddec6822764263d3d15ffce563a3a63672f03bd1ce",
       "prod_html_sha256": "119c80c3e41c37dedd9e473c08518a390a4d12ec68f55c532d82677dd218f4fe",
       "in_sitemap": false,
       "in_hub": false,
@@ -817,7 +804,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535982"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535525"
         },
         "redirect_chain": [
           {
@@ -845,7 +832,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535983"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535525"
         },
         "redirect_chain": [
           {
@@ -864,7 +851,7 @@
         "canonical": "https://confenge.com.br/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
         "text_len": 4646
       },
-      "local_html_sha256": "0297d27eca2b4a58058e5470f7d63e001730f581046670cd6ed7996c79665d6b",
+      "local_html_sha256": "1c880f8ed86d603c196dd13634f7b9f7149150a9b692afe876f805eb5bd0868c",
       "prod_html_sha256": "d2c2e89b64ca07e1d50e31d7043dc95b85afd856c5a09957a18ed39904a0ef43",
       "in_sitemap": false,
       "in_hub": false,
@@ -884,7 +871,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535983"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535525"
         },
         "redirect_chain": [
           {
@@ -912,7 +899,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535984"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535526"
         },
         "redirect_chain": [
           {
@@ -931,7 +918,7 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/",
         "text_len": 5077
       },
-      "local_html_sha256": "20334fb94228afeabcca1563dc96966950317e4bf1d43c7b23c7acfa98e2936a",
+      "local_html_sha256": "401d90fbe88a19cc1116ce18550d0edeac5ec6b03db5654c8b3a3c221f6700ec",
       "prod_html_sha256": "401d90fbe88a19cc1116ce18550d0edeac5ec6b03db5654c8b3a3c221f6700ec",
       "in_sitemap": false,
       "in_hub": true,
@@ -951,7 +938,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535984"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535526"
         },
         "redirect_chain": [
           {
@@ -979,7 +966,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535984"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535526"
         },
         "redirect_chain": [
           {
@@ -998,7 +985,7 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/inconsistencia-orcamento-edital/",
         "text_len": 5248
       },
-      "local_html_sha256": "26365daa2d6c760f8c82ea775ce1c3812b186019592b12a45dbf333261bf22c1",
+      "local_html_sha256": "f9fc20c727da40c0360cf525afefd6b3a1088bdf91ad1d02acf2ff1c1bb64262",
       "prod_html_sha256": "f9fc20c727da40c0360cf525afefd6b3a1088bdf91ad1d02acf2ff1c1bb64262",
       "in_sitemap": false,
       "in_hub": true,
@@ -1018,7 +1005,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535984"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535527"
         },
         "redirect_chain": [
           {
@@ -1046,7 +1033,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535984"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535526"
         },
         "redirect_chain": [
           {
@@ -1065,7 +1052,7 @@
         "canonical": "https://confenge.com.br/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
         "text_len": 4997
       },
-      "local_html_sha256": "635ab6b1ece2fbdcee824d1051cce498ed3033d6c225e8086a40fe54e676b8aa",
+      "local_html_sha256": "2a5a374beadf6b51b5b04c50d6677a992a4ad4d9ed96da961d6b4b621baeccba",
       "prod_html_sha256": "2a5a374beadf6b51b5b04c50d6677a992a4ad4d9ed96da961d6b4b621baeccba",
       "in_sitemap": false,
       "in_hub": true,
@@ -1085,7 +1072,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535984"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535527"
         },
         "redirect_chain": [
           {
@@ -1113,7 +1100,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535985"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535527"
         },
         "redirect_chain": [
           {
@@ -1132,7 +1119,7 @@
         "canonical": "https://confenge.com.br/radar/edificacoes-publicas-pr/",
         "text_len": 7227
       },
-      "local_html_sha256": "de5781b7fb0793587fd61a0ec284759d93f36dad7ae075e1528883c0e56d2b9c",
+      "local_html_sha256": "1505cba42d2097bc91492d1e22f9bceb2b00859bc5b9578c0b9e8b676c013b5b",
       "prod_html_sha256": "5b72fd0580048700f79d7d88694019348831973346c427f2e8d9c9ad675dd8fe",
       "in_sitemap": false,
       "in_hub": false,
@@ -1152,7 +1139,7 @@
           "content-type": "text/html; charset=utf-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535985"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535527"
         },
         "redirect_chain": [
           {
@@ -1180,7 +1167,7 @@
           "content-type": "text/html; charset=utf-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535985"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535528"
         },
         "redirect_chain": [
           {
@@ -1222,7 +1209,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535985"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535528"
         },
         "redirect_chain": [
           {
@@ -1250,7 +1237,7 @@
           "content-type": "text/html; charset=UTF-8",
           "x-robots-tag": null,
           "server": "Netlify",
-          "cache-status": "\"Netlify Edge\"; hit; ttl=31535985"
+          "cache-status": "\"Netlify Edge\"; hit; ttl=31535528"
         },
         "redirect_chain": [
           {
@@ -1269,7 +1256,7 @@
         "canonical": "https://confenge.com.br/radar/pavimentacao-infraestrutura-viaria-sc/",
         "text_len": 5788
       },
-      "local_html_sha256": "60aca2a1e32778405b4b2e201cc01a22674aec796e8f03528bd2dce4826b2392",
+      "local_html_sha256": "5cde78ac93170364621d778348cb6e6d5a75350437fa422ad0058a34ad4320f0",
       "prod_html_sha256": "b92d1d99ef59bb13f1b16565e47768ac8b827418815cef868862be7dac3cbeb7",
       "in_sitemap": false,
       "in_hub": false,

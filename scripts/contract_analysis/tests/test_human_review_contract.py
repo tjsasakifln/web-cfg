@@ -172,9 +172,19 @@ def test_packet_hashes_match_rendered_bytes(tmp_path, monkeypatch):
     decision = evaluate_publication(rec, cohort=[rec])
     html = render_analysis_html(rec, decision)
     packet = emit_review_packet(rec, decision, rendered_html=html, root=tmp_path)
-    assert packet_hashes_match_rendered(packet, rendered_html=html)
+    assert packet_hashes_match_rendered(
+        packet,
+        rendered_html=html,
+        record=rec,
+        root=tmp_path,
+    )
     (packet / "rendered-content.sha256").write_text("0" * 64 + "\n", encoding="utf-8")
-    assert packet_hashes_match_rendered(packet, rendered_html=html) is False
+    assert packet_hashes_match_rendered(
+        packet,
+        rendered_html=html,
+        record=rec,
+        root=tmp_path,
+    ) is False
 
 
 def test_indexable_state_refused_when_approvals_empty(tmp_path, monkeypatch):

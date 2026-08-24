@@ -410,12 +410,15 @@ def _inspect_dir(path: Path) -> dict[str, Any]:
         result["fixture"] = False
 
     if manifest.get("content_hash"):
-        result["hashes_ok"] = verify_content_hash(manifest)
+        manifest_schema = str(manifest.get("schema") or "")
+        verifier = (
+            verify_authority_content_hash
+            if manifest_schema.startswith("official-live-authority-handoff/1")
+            else verify_content_hash
+        )
+        result["hashes_ok"] = verifier(manifest)
         if not result["hashes_ok"]:
-            # payload-style manifests hash a projection, not the on-disk object.
-            result["hashes_ok"] = bool(manifest.get("content_hash") and result["producer_commit"])
-            if not verify_content_hash(manifest):
-                result["reasons"].append("manifest_hash_unverified")
+            result["reasons"].append("manifest_hash_unverified")
     else:
         result["reasons"].append("content_hash_absent")
 
@@ -493,6 +496,7 @@ def inspect_handoff(explicit: Path | None = None) -> dict[str, Any]:
             and not row["fixture"]
             and row["data_ready_count"] > 0
             and row.get("rendezvous_verified")
+            and row.get("hashes_ok")
         )
         if ready:
             return {

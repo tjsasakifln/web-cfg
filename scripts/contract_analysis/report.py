@@ -17,10 +17,45 @@ REPORT_MD = Path("docs/editorial") / f"{REPORT_STEM}.md"
 REPORT_JSON = Path("docs/editorial") / f"{REPORT_STEM}.json"
 # Keep the previous filename as a pointer so older links do not 404 in-repo.
 LEGACY_STEM = "CONTRACT_ANALYSIS_EDITORIAL_STATUS"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _root() -> Path:
+    env = os.environ.get("CONFENGE_CONTRACT_ANALYSIS_ROOT")
+    if env:
+        return Path(env)
     return Path(__file__).resolve().parents[2]
+
+
+def _portable_paths(value: Any) -> Any:
+    """Strip checkout-specific absolute prefixes from committed evidence."""
+    if isinstance(value, dict):
+        return {key: _portable_paths(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_portable_paths(item) for item in value]
+    if not isinstance(value, str) or not value.startswith("/"):
+        return value
+    path = Path(value)
+    handoff_base = Path(
+        os.environ.get(
+            "CONFENGE_HANDOFF_DIR",
+            str(Path.home() / ".local" / "share" / "confenge" / "handoffs"),
+        )
+    )
+    sibling_extra_cli = (PROJECT_ROOT.parent / "extra-cli").resolve()
+    for base, label in (
+        (_root().resolve(), ""),
+        (handoff_base.resolve(), "$CONFENGE_HANDOFF_DIR"),
+        (sibling_extra_cli, "$EXTRA_CLI_ROOT"),
+    ):
+        try:
+            relative = path.relative_to(base)
+        except ValueError:
+            continue
+        return str(relative) if not label else f"{label}/{relative.as_posix()}"
+    # Never persist checkout-, user- or runner-specific absolute locations.
+    # Keep only a stable opaque leaf for diagnostics outside known roots.
+    return f"$EXTERNAL_PATH/{path.name}"
 
 
 def _rel_written(path: Path) -> str:
@@ -89,7 +124,15 @@ def build_status(
         handoff.get("status") in {FACTUAL_HANDOFF_PENDING, HANDOFF_BLOCKED, None, ""}
         or live_absent
     )
-    if handoff_pending or index_count == 0:
+    blocking_reason_codes = sorted(
+        {
+            str(reason)
+            for decision in decisions
+            for reason in decision.reason_codes
+            if reason
+        }
+    )
+    if handoff_pending:
         recommendation = "ADJUST"
         recommendation_reason = (
             "Família e gate prontos. Consumer aceita "
@@ -100,6 +143,16 @@ def build_status(
             "index_count=0. Nenhum INDEX ativo. Não expandir. Replay o produtor "
             "até READY.json + SHA256SUMS conferirem; só então avaliar ≤3 dossiês. "
             "Producer publication/index flags nunca autorizam INDEX."
+        )
+    elif index_count == 0:
+        recommendation = "ADJUST"
+        reasons = ", ".join(blocking_reason_codes) or "nenhum reason_code nominal"
+        recommendation_reason = (
+            f"O handoff está `{handoff.get('status')}` e seus hashes conferem, mas "
+            f"index_count=0 por gates editoriais atuais: `{reasons}`. Nenhum INDEX "
+            "ativo. Não repetir o produtor nem expandir a coorte. Reavaliar o material "
+            "e, quando aplicável, registrar nova aprovação humana vinculada aos hashes "
+            "atuais; producer publication/index flags nunca autorizam INDEX."
         )
     elif index_count == 1:
         recommendation = "ADJUST"
@@ -206,6 +259,7 @@ def write_status(status: dict[str, Any]) -> dict[str, Path]:
     md_path = root / REPORT_MD
     json_path = root / REPORT_JSON
     md_path.parent.mkdir(parents=True, exist_ok=True)
+    status = _portable_paths(status)
     body = render_markdown(status)
     md_path.write_text(body, encoding="utf-8")
     json_path.write_text(json.dumps(status, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

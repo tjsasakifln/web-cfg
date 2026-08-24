@@ -76,6 +76,39 @@ def test_official_pack_verifies_with_shipped_handoff(tmp_path, monkeypatch):
     assert result["analysis_ids"] == [AUTHORIZED_ANALYSIS_ID]
 
 
+def test_semantically_mutated_manifest_cannot_remain_handoff_ready(tmp_path, monkeypatch):
+    dest = _stage_rendezvous(tmp_path)
+    monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))
+    manifest_path = dest / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["consumer"] = "mutated-consumer"
+    manifest_path.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    ready_path = dest / "READY.json"
+    ready = json.loads(ready_path.read_text(encoding="utf-8"))
+    ready["manifest_sha256"] = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+    ready_path.write_text(
+        json.dumps(ready, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    sums_path = dest / "SHA256SUMS.txt"
+    rows = []
+    for raw in sums_path.read_text(encoding="utf-8").splitlines():
+        _digest, rel = raw.split(None, 1)
+        rel = rel.strip()
+        rows.append(f"{hashlib.sha256((dest / rel).read_bytes()).hexdigest()}  {rel}")
+    sums_path.write_text("\n".join(rows) + "\n", encoding="utf-8")
+
+    ok, reasons = verify_sha256sums(dest)
+    assert ok, reasons
+    result = inspect_handoff()
+    assert result["status"] != HANDOFF_READY
+    checked = next(row for row in result["checked"] if row["path"] == str(dest))
+    assert checked["rendezvous_verified"] is True
+    assert checked["hashes_ok"] is False
+    assert "manifest_hash_unverified" in checked["reasons"]
+
+
 def test_xor_ready_blocked(tmp_path, monkeypatch):
     dest = _stage_rendezvous(tmp_path)
     monkeypatch.setenv("CONFENGE_HANDOFF_DIR", str(tmp_path))

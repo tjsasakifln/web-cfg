@@ -23,6 +23,7 @@ def cmd_build(args: argparse.Namespace) -> int:
     )
     decisions = evaluate_cohort(bundle["records"])
     pairs = list(zip(bundle["records"], decisions))
+    effective_pairs = pairs
     written = {}
     if not args.report_only:
         # Extra-cli facts-only shortlist rarely reaches NOINDEX. Keep the
@@ -45,16 +46,21 @@ def cmd_build(args: argparse.Namespace) -> int:
             dec, _html = apply_rendered_hash_gate(rec, dec, html)
             gated_pairs.append((rec, dec))
         render_pairs = gated_pairs
+        effective_pairs = gated_pairs
         index_count = sum(1 for _rec, dec in render_pairs if dec.state == "PUBLISHABLE_INDEX")
         written = write_pages(render_pairs, index_count=index_count)
         sync_family_crawler_rules(render_pairs)
         write_sitemap(render_pairs)
-    status = build_status(bundle=bundle, decisions=decisions, written=written)
+    status_bundle = dict(bundle)
+    status_bundle["records"] = [rec for rec, _dec in effective_pairs]
+    status = build_status(
+        bundle=status_bundle,
+        decisions=[dec for _rec, dec in effective_pairs],
+        written=written,
+    )
     # Review packets for official-live READY_FOR_HUMAN_REVIEW. Never approve or activate.
     if not args.report_only:
-        import hashlib
-
-        from scripts.contract_analysis.approval import material_hash
+        from scripts.contract_analysis.approval import material_hash, rendered_content_hash
         from scripts.contract_analysis.quality import (
             DEPTH_REVIEW_REQUIRED,
             INDEX_READY_VERDICT,
@@ -64,7 +70,7 @@ def cmd_build(args: argparse.Namespace) -> int:
         from scripts.contract_analysis.render import render_analysis_html
 
         packets = []
-        for rec, dec in pairs:
+        for rec, dec in effective_pairs:
             official = (
                 dec.human_review_status == READY_FOR_HUMAN_REVIEW
                 or dec.review_recommendation in {INDEX_READY_VERDICT, DEPTH_REVIEW_REQUIRED}
@@ -79,12 +85,12 @@ def cmd_build(args: argparse.Namespace) -> int:
             rec["producer_commit"] = rec.get("producer_commit") or ready.get("producer_commit")
             rec["root_content_hash"] = rec.get("root_content_hash") or ready.get("root_content_hash")
             html = render_analysis_html(rec, dec)
-            rec["rendered_hash"] = hashlib.sha256(html.encode("utf-8")).hexdigest()
+            rec["rendered_hash"] = rendered_content_hash(html, record=rec)
             dest = emit_review_packet(rec, dec, rendered_html=html)
             packets.append(str(dest))
         status["review_packets"] = packets
     citations = []
-    for rec, dec in pairs:
+    for rec, dec in effective_pairs:
         if dec.state in {"PUBLISHABLE_NOINDEX", "PUBLISHABLE_INDEX"}:
             report = prepare_citation(rec, indexable=dec.indexable)
             citations.append(

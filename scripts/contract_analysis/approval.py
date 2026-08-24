@@ -5,6 +5,8 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -48,6 +50,7 @@ CONDITIONAL_CHECKLIST = (
     "v2_token_and_hashes_bound",
 )
 APPROVAL_SCHEMA = "contract-analysis-approvals/1.0"
+RENDERED_HASH_SCOPE = "public_artifact_v2"
 
 _MATERIAL_KEYS = (
     "id",
@@ -143,18 +146,20 @@ def approval_rendered_hash_ok(
         return True, []
     expected = str(stored.get("rendered_content_hash") or "")
     if not expected:
-        return True, []
-    actual = rendered_content_hash(rendered_html)
+        return False, ["approval_rendered_hash_absent"]
+    if stored.get("rendered_hash_scope") != RENDERED_HASH_SCOPE:
+        return False, ["approval_rendered_hash_scope_stale"]
+    actual = rendered_content_hash(rendered_html, record=record, root=root)
     if actual != expected:
         return False, ["approval_rendered_hash_mismatch"]
     return True, []
 
 
-def find_approval(record: dict[str, Any], *, root: Path | None = None) -> dict[str, Any] | None:
+def find_active_approval(record: dict[str, Any], *, root: Path | None = None) -> dict[str, Any] | None:
+    """Find the active approval triple before evaluating mutable material."""
     aid, pack, digest = approval_triple(record)
     if not (aid and pack and digest):
         return None
-    expected = material_hash(record)
     for row in load_approvals(root).get("approvals") or []:
         if not isinstance(row, dict):
             continue
@@ -171,12 +176,19 @@ def find_approval(record: dict[str, Any], *, root: Path | None = None) -> dict[s
             continue
         if str(row.get("content_hash") or "") != digest:
             continue
-        if str(row.get("material_hash") or "") != expected:
-            continue
         if row.get("state") != "PUBLISHABLE_INDEX":
             continue
         return row
     return None
+
+
+def find_approval(record: dict[str, Any], *, root: Path | None = None) -> dict[str, Any] | None:
+    stored = find_active_approval(record, root=root)
+    if stored is None:
+        return None
+    if str(stored.get("material_hash") or "") != material_hash(record):
+        return None
+    return stored
 
 
 class ApprovalError(ValueError):
@@ -284,9 +296,10 @@ def approval_allows_index(record: dict[str, Any], *, root: Path | None = None) -
         return False, ["approval_refused_fixture"]
     if not triple_complete(record):
         return False, ["approval_triple_incomplete"]
-    if not record.get("approved_for_index") and not find_approval(record, root=root):
+    active = find_active_approval(record, root=root)
+    if not record.get("approved_for_index") and active is None:
         return False, ["approval_absent"]
-    stored = find_approval(record, root=root)
+    stored = active
     expected = material_hash(record)
     aid, pack, digest = approval_triple(record)
     if stored is not None and str(stored.get("token") or "") in STALE_INDEX_TOKENS:
@@ -339,8 +352,31 @@ def active_index_count(*, root: Path | None = None) -> int:
     )
 
 
-def rendered_content_hash(html: str) -> str:
-    return hashlib.sha256((html or "").encode("utf-8")).hexdigest()
+def rendered_content_hash(
+    html: str,
+    *,
+    record: dict[str, Any] | None = None,
+    root: Path | None = None,
+) -> str:
+    """Hash the deterministic HTML that the public assembler would deploy."""
+    record = record or {}
+    slug = str(record.get("slug") or AUTHORIZED_CANONICAL_PATH.strip("/").split("/")[-1])
+    relative = Path("analises-contratos-publicos") / slug / "index.html"
+    project_root = root or _root()
+    css_root = project_root if (project_root / "styles.css").is_file() else Path(__file__).resolve().parents[2]
+    with tempfile.TemporaryDirectory(prefix="contract-analysis-public-hash-") as tmp:
+        public_root = Path(tmp)
+        page = public_root / relative
+        page.parent.mkdir(parents=True, exist_ok=True)
+        page.write_text(html or "", encoding="utf-8")
+        for name in ("styles.css", "styles-tokens.css", "styles-tools.css", "styles-offers.css"):
+            source = css_root / name
+            if source.is_file():
+                shutil.copy2(source, public_root / name)
+        from scripts.pseo.public_artifact import finalize_public_artifact
+
+        finalize_public_artifact(public_root)
+        return hashlib.sha256(page.read_bytes()).hexdigest()
 
 
 def evaluate_conditional_checklist(
@@ -498,7 +534,12 @@ def approve_conditional_canary(
     row["producer_root_hash"] = producer_root_hash
     row["source_dossier_hash"] = source_dossier_hash
     row["official_payload_hash"] = source_dossier_hash
-    row["rendered_content_hash"] = rendered_content_hash(rendered_html)
+    row["rendered_content_hash"] = rendered_content_hash(
+        rendered_html,
+        record=record,
+        root=root,
+    )
+    row["rendered_hash_scope"] = RENDERED_HASH_SCOPE
     row["material_hash"] = material_hash(record)
     row["analysis_id"] = aid or row.get("analysis_id")
     if aid == AUTHORIZED_ANALYSIS_ID:

@@ -300,6 +300,44 @@ def add_footer_scripture(dest: Path) -> dict[str, int]:
     }
 
 
+def finalize_public_artifact(dest: Path) -> dict[str, Any]:
+    """Apply the complete deterministic HTML/CSS transform used at publish time.
+
+    This is deliberately shared with approval hashing: an INDEX approval is
+    bound to the bytes after copy normalization, navigation promotion, footer
+    insertion and CSS fingerprinting, not to an earlier source-page snapshot.
+    """
+    from scripts.site.scrub_em_dashes import scrub_html
+
+    scrubbed = 0
+    for html_path in sorted(Path(dest).rglob("*.html")):
+        raw = html_path.read_text(encoding="utf-8")
+        cleaned = scrub_html(raw)
+        if cleaned != raw:
+            html_path.write_text(cleaned, encoding="utf-8")
+            scrubbed += 1
+
+    from scripts.site.public_navigation import (
+        audit_public_navigation_tree,
+        promote_public_navigation_tree,
+    )
+
+    promoted_navigation_files = promote_public_navigation_tree(dest)
+    navigation_audit = audit_public_navigation_tree(dest)
+    footer_scripture = add_footer_scripture(dest)
+
+    from scripts.site.fingerprint_css import fingerprint_published_css
+
+    css_assets = fingerprint_published_css(dest)
+    return {
+        "scrubbed_html_files": scrubbed,
+        "promoted_navigation_files": promoted_navigation_files,
+        "navigation_audit": navigation_audit,
+        "footer_scripture": footer_scripture,
+        "css_assets": css_assets,
+    }
+
+
 def inventory_public_routes(root: Path | None = None) -> dict[str, Any]:
     """Explicit inventory of routes/files that must land in the public artifact."""
     root = root or ROOT
@@ -403,19 +441,11 @@ def assemble_public_artifact(
         if ".well-known/" not in copied_dirs:
             copied_dirs.append(".well-known/")
 
-    from scripts.site.public_navigation import (
-        audit_public_navigation_tree,
-        promote_public_navigation_tree,
-    )
-
-    promoted_navigation_files = promote_public_navigation_tree(dest)
-    navigation_audit = audit_public_navigation_tree(dest)
-
-    footer_scripture = add_footer_scripture(dest)
-
-    from scripts.site.fingerprint_css import fingerprint_published_css
-
-    css_assets = fingerprint_published_css(dest)
+    finalized = finalize_public_artifact(dest)
+    promoted_navigation_files = finalized["promoted_navigation_files"]
+    navigation_audit = finalized["navigation_audit"]
+    footer_scripture = finalized["footer_scripture"]
+    css_assets = finalized["css_assets"]
 
     artifact_hash = _sha256_tree(dest)
     inv = inventory_public_routes(root)
@@ -432,6 +462,7 @@ def assemble_public_artifact(
         "promoted_navigation_files": promoted_navigation_files,
         "navigation_audit": navigation_audit,
         "footer_scripture": footer_scripture,
+        "scrubbed_html_files": finalized["scrubbed_html_files"],
     }
 
     # Private inventory (not published)

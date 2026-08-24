@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import patch
+from tempfile import TemporaryDirectory
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -12,6 +14,7 @@ from scripts.pseo.production_audit import (
     audit_sitemap_lastmod,
     evaluate_row,
     local_html_hash,
+    run_audit,
 )
 
 
@@ -29,6 +32,7 @@ class TestProductionAuditGates(unittest.TestCase):
             "missing_from_sitemap",
             "future_lastmod",
             "prod_html_mismatch",
+            "local_artifact_missing",
             "ua_skew",
         ):
             self.assertIn(code, CRITICAL_CODES)
@@ -152,6 +156,47 @@ class TestProductionAuditGates(unittest.TestCase):
 
     def test_local_html_hash_none_missing(self):
         self.assertIsNone(local_html_hash(ROOT, "/path/that/does/not/exist/"))
+
+    def test_existing_empty_site_never_falls_back_to_source_html(self):
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            source = root / "radar" / "x" / "index.html"
+            source.parent.mkdir(parents=True)
+            source.write_text("<html>source only</html>", encoding="utf-8")
+            (root / "_site").mkdir()
+            self.assertIsNone(local_html_hash(root, "/radar/x/"))
+
+    def test_required_route_missing_from_artifact_is_critical(self):
+        row = UrlAudit(path="/radar/x/", expected_role="publish")
+        row.browser = self._ok_browser()
+        row.googlebot = dict(row.browser)
+        out = evaluate_row(
+            row,
+            sitemap_urls={"https://confenge.com.br/radar/x/"},
+            hub_link_targets={"/radar/x/"},
+        )
+        self.assertIn("local_artifact_missing", out.defects)
+
+    def test_production_sitemap_absence_is_fail_closed(self):
+        fake = {
+            "status": 503,
+            "html_snippet": "",
+            "body_size": 0,
+            "headers": {},
+            "redirect_chain": [],
+        }
+        with TemporaryDirectory() as temp_dir, patch(
+            "scripts.pseo.production_audit.fetch_url", return_value=fake
+        ), patch("scripts.pseo.production_audit.urllib.request.urlopen", side_effect=OSError("offline")):
+            report = run_audit(
+                root=ROOT,
+                base_url="https://invalid.example",
+                out_dir=Path(temp_dir),
+            )
+        self.assertFalse(report["ok"])
+        self.assertFalse(report["technical_ok"])
+        self.assertFalse(report["sitemap"]["production_available"])
+        self.assertIn("sitemap:production_sitemap_unavailable", report["critical"])
 
     def _ok_browser(self, path="/radar/x/", **extra):
         base = {

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -49,6 +50,13 @@ def test_editorial_fixture_still_exercises_non_index_states():
 
 
 def test_cli_build_and_validate_from_clean_entry():
+    report_paths = [
+        ROOT / "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.json",
+        ROOT / "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.md",
+        ROOT / "docs/editorial/CONTRACT_ANALYSIS_EDITORIAL_STATUS.json",
+        ROOT / "docs/editorial/CONTRACT_ANALYSIS_EDITORIAL_STATUS.md",
+    ]
+    before = {path: path.read_bytes() for path in report_paths}
     build = subprocess.run(
         [sys.executable, "-m", "scripts.contract_analysis", "build"],
         cwd=ROOT,
@@ -64,6 +72,13 @@ def test_cli_build_and_validate_from_clean_entry():
     assert payload["index_count"] == 0
     assert payload["recommendation"] in {"ADJUST", "STOP"}
     assert payload["recommendation"] != "EXPAND"
+    isolated_root = Path(os.environ["CONFENGE_CONTRACT_ANALYSIS_ROOT"])
+    isolated_status = json.loads(
+        (isolated_root / "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert isolated_status["source_kind"] == "test_only_fixture"
 
     validate = subprocess.run(
         [sys.executable, "-m", "scripts.contract_analysis", "validate"],
@@ -77,6 +92,7 @@ def test_cli_build_and_validate_from_clean_entry():
     assert v["ok"] is True
     assert v["index_count"] == 0
     assert v["fixture_indexed"] == []
+    assert {path: path.read_bytes() for path in report_paths} == before
 
 
 def test_status_report_exists_and_names_the_gate():
@@ -88,8 +104,8 @@ def test_status_report_exists_and_names_the_gate():
     assert data["report"] == "CONTRACT_ANALYSIS_CANARY_STATUS"
     assert data["evaluated"] <= MAX_CANARY
     assert data["index_count"] == 0
-    assert data["test_only"] is True
-    assert data["source_kind"] == "test_only_fixture"
+    assert data["test_only"] is False
+    assert data["source_kind"] == "official_live"
     assert data["recommendation"] in {"EXPAND", "ADJUST", "STOP"}
     assert data["recommendation"] != "EXPAND"
     for item in data["items"]:
@@ -101,7 +117,7 @@ def test_status_report_exists_and_names_the_gate():
             "PUBLISHABLE_INDEX",
         }
         assert "reason_codes" in item
-        assert item["fixture"] is True
+        assert item["fixture"] is False
         assert item["state"] != "PUBLISHABLE_INDEX"
     text = md.read_text(encoding="utf-8")
     assert "CONTRACT_ANALYSIS_CANARY_STATUS" in text

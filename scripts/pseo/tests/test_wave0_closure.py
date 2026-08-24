@@ -215,6 +215,44 @@ class TestAuditIdentity(unittest.TestCase):
         self.assertTrue(currency["production_audit_is_current"])
         bound = bind_ok_to_identity(True, identity, currency)
         self.assertTrue(bound["ok"])
+
+    def test_missing_public_artifact_hash_blocks_ok(self):
+        from scripts.pseo.audit_identity import (
+            bind_ok_to_identity,
+            evaluate_audit_currency,
+            identity_block,
+        )
+
+        identity = identity_block(
+            audit_target_sha="deadbeef",
+            live_manifest_sha="deadbeef",
+            snapshot_hash="snap",
+            public_artifact_hash_value=None,
+            seed_urls=["/a/"],
+        )
+        currency = evaluate_audit_currency(
+            identity,
+            netlify_deployed_sha="deadbeef",
+            live_snapshot_hash="snap",
+            current_seed_set_hash=identity["seed_set_hash"],
+        )
+        self.assertIn("public_artifact_hash_missing", currency["mismatches"])
+        self.assertFalse(bind_ok_to_identity(True, identity, currency)["ok"])
+
+    def test_empty_or_incomplete_public_artifact_has_no_identity(self):
+        from scripts.pseo.audit_identity import public_artifact_hash
+
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            site = root / "_site"
+            site.mkdir()
+            self.assertIsNone(public_artifact_hash(root))
+            (site / "index.html").write_text("<html></html>", encoding="utf-8")
+            self.assertIsNone(public_artifact_hash(root))
+            (site / "404.html").write_text("<html></html>", encoding="utf-8")
+            (site / "robots.txt").write_text("User-agent: *\n", encoding="utf-8")
+            self.assertIsNotNone(public_artifact_hash(root))
+
     def test_audit_target_binds_to_live_not_git_head(self):
         """Evidence-only HEAD must not stale a healthy live deploy audit."""
         from scripts.pseo.audit_identity import (

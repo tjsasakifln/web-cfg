@@ -188,7 +188,7 @@ def _unknown_or_number(value) -> bool:
     return isinstance(value, (int, float))
 
 
-def validate_entry(entry: dict, *, index: int) -> list[str]:
+def validate_entry(entry: dict, *, index: int, today: date | None = None) -> list[str]:
     errors: list[str] = []
     prefix = f"entries[{index}] {entry.get('legacy_url', '?')}"
     for field in REQUIRED_FIELDS:
@@ -259,7 +259,7 @@ def validate_entry(entry: dict, *, index: int) -> list[str]:
         except (TypeError, ValueError):
             errors.append(f"{prefix}: HOLD requires an ISO review_date")
         else:
-            if review_date < date(2026, 8, 24):
+            if review_date < (today or date.today()):
                 errors.append(f"{prefix}: HOLD review_date is already stale")
 
     if action == "RETIRE_410":
@@ -286,7 +286,7 @@ def validate_entry(entry: dict, *, index: int) -> list[str]:
     return errors
 
 
-def validate_inventory(data: dict | None = None) -> dict:
+def validate_inventory(data: dict | None = None, *, today: date | None = None) -> dict:
     inventory = data if data is not None else load_inventory()
     entries = inventory.get("entries") or []
     errors: list[str] = []
@@ -294,7 +294,7 @@ def validate_inventory(data: dict | None = None) -> dict:
     ready = []
     counts = {action: 0 for action in ACTIONS}
     for i, entry in enumerate(entries):
-        errors.extend(validate_entry(entry, index=i))
+        errors.extend(validate_entry(entry, index=i, today=today))
         url = entry.get("legacy_url")
         if url in seen:
             errors.append(f"duplicate legacy_url {url}")
