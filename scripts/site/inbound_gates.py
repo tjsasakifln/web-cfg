@@ -854,6 +854,16 @@ PRICE_NEAR_RE = re.compile(
 )
 
 
+def _is_iso_date(value: Any) -> bool:
+    if not isinstance(value, str):
+        return False
+    try:
+        date.fromisoformat(value)
+    except ValueError:
+        return False
+    return True
+
+
 def _displays_price(main: str) -> bool:
     """True when ``<main>`` shows a price for something CONFENGE sells."""
     if PRICE_MARKUP_RE.search(main):
@@ -977,9 +987,7 @@ def _validate_family_registry(
             bad("family_visitor_job_missing", fid)
         if not isinstance(family.get("owner_issue"), int):
             bad("family_owner_issue_missing", fid)
-        try:
-            _as_date(family.get("declared_at"))
-        except (TypeError, ValueError):
+        if not _is_iso_date(family.get("declared_at")):
             bad("family_declared_at_invalid", f"{fid}: {family.get('declared_at')}")
         match = family.get("match") or {}
         if len([k for k in ("routes", "prefix", "source") if k in match]) != 1:
@@ -1029,9 +1037,7 @@ def _validate_family_registry(
                 bad("debt_owner_issue_missing", f"{fid}:{route}")
             if len(str(entry.get("reason") or "").strip()) < MIN_WRITTEN_REASON:
                 bad("debt_reason_missing", f"{fid}:{route}")
-            try:
-                _as_date(entry.get("expires_at"))
-            except (TypeError, ValueError):
+            if not _is_iso_date(entry.get("expires_at")):
                 bad("debt_expires_at_invalid", f"{fid}:{route}")
             in_family = route in routes or (prefix and route.startswith(prefix))
             if not in_family:
