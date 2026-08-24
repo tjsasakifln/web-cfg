@@ -123,11 +123,8 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
 def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
-        "Conheça nossas entregas",
-        "8 exemplos disponíveis",
-        "Primeiro exemplo publicado",
+        "8 entregas, de R$ 599 a R$ 3.750",
         "Relatório Executivo de Priorização de Licitações",
-        "Consultar o relatório completo",
         "12",
         "3",
         "7",
@@ -139,18 +136,83 @@ def test_hub_is_honest_about_every_published_example() -> None:
         assert f'href="{route}"' in html, route
     assert "em breve" not in html.casefold()
     assert "placeholder" not in html.casefold()
-    assert html.count('class="deliverable-feature"') == len(LADDER_ROUTES)
+    features = re.findall(r'class="deliverable-feature(?:["\s])', html)
+    assert len(features) == len(LADDER_ROUTES)
     for number in range(1, 9):
         assert f"EXEMPLO 0{number}" in html
     assert "EXEMPLO 09" not in html
+    assert html.count("DADOS SINTÉTICOS") == len(LADDER_ROUTES)
     assert "Marcações de outlier</dt><dd>17" in html
     assert "<dt>Outliers</dt><dd>17" not in html
+
+
+def test_every_example_uses_the_same_action_label() -> None:
+    """One label for the same action; the entry step is not a special case."""
+    html = _html()
+    assert html.count("Consultar o exemplo completo") == len(LADDER_ROUTES)
+    assert "Consultar o relatório completo" not in html
+    assert html.count("Ver o que a entrega inclui") == len(LADDER_ROUTES)
+
+
+def test_the_library_has_one_name_across_its_own_surfaces() -> None:
+    html = _html()
+    title = re.search(r"<title>([^<]*)</title>", html).group(1)
+    h1 = re.sub(r"<[^>]+>", " ", re.search(r"<h1[^>]*>(.*?)</h1>", html, re.DOTALL).group(1))
+    breadcrumb = re.search(r'class="breadcrumbs container">(.*?)</nav>', html, re.DOTALL).group(1)
+    assert title.startswith("Entregas da CONFENGE")
+    assert "entregas" in h1.casefold()
+    assert "Entregas" in breadcrumb
+    assert "Exemplos de entregas da CONFENGE" not in html
+    # The entry example carries the same name here, on its own page and in JSON-LD.
+    report = _html(REPORT)
+    for surface in (html, report):
+        assert "Relatório Executivo de Priorização de Licitações" in surface
+    assert "Modelo de relatório de inteligência" not in report
+
+
+def test_the_eight_are_comparable_before_the_long_sections() -> None:
+    """Price, question answered and ladder position must precede the sections."""
+    html = _html()
+    compare = re.search(
+        r'<section[^>]+id="comparar".*?</section>', html, flags=re.DOTALL
+    )
+    assert compare, "no comparable view"
+    table = compare.group(0)
+    assert html.index('id="comparar"') < html.index('id="primeiro-exemplo"')
+    for price in ("R$ 599", "R$ 690", "R$ 890", "R$ 1.200", "R$ 1.450", "R$ 1.900", "R$ 2.400", "R$ 3.750"):
+        assert price in table, price
+    for route in LADDER_ROUTES:
+        assert f'href="{route}"' in table, route
+    assert table.count("<tr>") == len(LADDER_ROUTES) + 1
+    # Credit rule is legible per row, including the declared exception.
+    assert table.count("Sim, em até 60 dias") == len(LADDER_ROUTES) - 1
+    assert "Não. Entrega à parte, fora do pacote" in table
+    # The mobile equivalent is the same table inside a focusable scroll region.
+    assert 'class="compare-scroll" role="region"' in table
+    assert 'tabindex="0"' in table
+
+
+def test_the_credit_rule_is_coherent_across_the_eight() -> None:
+    html = _html()
+    credit = "se ele for contratado em até 60 dias"
+    assert html.count(credit) >= len(LADDER_ROUTES) - 1
+    entry = re.search(
+        r'<section[^>]+id="primeiro-exemplo".*?</section>', html, flags=re.DOTALL
+    ).group(0)
+    assert "Por que abre a biblioteca" in entry
+    assert "único sem o crédito de 60 dias" in entry
+    assert "Primeiro exemplo publicado" not in html
+    assert "Entrega à parte, fora do Diagnóstico B2G de Expansão" in entry
 
 
 def test_hub_states_the_bundle_without_replacing_the_unit_prices() -> None:
     html = _html()
     assert 'href="/diagnostico-b2g-expansao/"' in html
-    assert "R$ 8.000" in html
+    # Ladder arithmetic authorised in docs/stories/story-deliverable-models-value-ladder.md
+    assert html.count("R$ 8.000") >= 3
+    assert "R$ 12.280" in html
+    assert "R$ 4.280" in html
+    assert "R$ 599 a R$ 3.750" in html
     for price in (
         "R$ 599",
         "R$ 690",
@@ -329,18 +391,45 @@ def test_asset_identifiers_are_stable_and_do_not_contain_pii() -> None:
     assert 'data-asset-family="biblioteca-entregas"' in html
     assert 'data-source="CONFENGE_WEB"' in html
     for cta_id in (
-        "deliverables-hero-first-example",
+        "deliverables-hero-compare",
         "deliverables-open-report",
         "deliverables-understand-scope",
-        "deliverables-final-open-report",
+        "deliverables-final-bundle",
     ):
         assert f'data-cta-id="{cta_id}"' in html
     tags = re.findall(r'<a\b[^>]*data-cta-id="[^"]+"[^>]*>', html)
     assert tags
     assert all('data-event-name="cta_click"' in tag for tag in tags)
+    assert all('data-cta-position="' in tag for tag in tags)
     assert not any("@" in tag or re.search(r"\+?\d{10,}", tag) for tag in tags)
+    ids = re.findall(r'data-cta-id="([^"]+)"', html)
+    assert len(ids) == len(set(ids)), f"duplicate cta ids: {ids}"
 
     home = _html(ROOT / "index.html")
     for cta_id in ("home-know-deliverables", "home-open-first-deliverable"):
         tag = re.search(rf'<a\b[^>]*data-cta-id="{cta_id}"[^>]*>', home)
         assert tag and 'data-event-name="cta_click"' in tag.group(0)
+
+
+def test_every_bundle_transition_is_attributable_to_its_origin() -> None:
+    """The most valuable transition of the page cannot stay anonymous."""
+    html = _html()
+    links = re.findall(
+        r'<a\b[^>]*href="/diagnostico-b2g-expansao/"[^>]*>', html
+    )
+    assert len(links) >= 8, f"expected the bundle link on every example, got {len(links)}"
+    ids, positions = [], []
+    for link in links:
+        cta_id = re.search(r'data-cta-id="([^"]+)"', link)
+        position = re.search(r'data-cta-position="([^"]+)"', link)
+        assert cta_id, f"unattributed bundle link: {link}"
+        assert position, f"bundle link without position: {link}"
+        assert 'data-asset-id="entregas-exemplos-hub"' in link, link
+        assert 'data-event-name="cta_click"' in link, link
+        ids.append(cta_id.group(1))
+        positions.append(position.group(1))
+    assert len(set(ids)) == len(ids), ids
+    assert len(set(positions)) == len(positions), positions
+    for number in range(1, 9):
+        assert f"example_{number:02d}_price" in positions, number
+    assert "UNKNOWN_SERVICE" not in html
