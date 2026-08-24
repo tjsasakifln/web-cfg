@@ -1,0 +1,120 @@
+{
+  "schema": "confenge.market-fit-protocol/1.0",
+  "protocol_version": "CFG-MARKET-FIT-2026-08-24-v1",
+  "issue": "#336",
+  "state": "NOT_STARTED",
+  "principle": "Pesquisa documental prova que o problema existe no mercado. Não prova que o ICP da CONFENGE comprará esta embalagem, neste preço e agora. Nenhum preço-piloto é chamado de validado por opinião de modelo de linguagem, tráfego, entrevista elogiosa ou formulário sem proposta.",
+  "human_session_machinery": "docs/research/icp-trust-session-v1",
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Entrevistas de problema, sem mostrar o catálogo",
+      "minimum_sample": 12,
+      "quotas": [
+        { "role": "dono, sócio ou diretor", "minimum": 3 },
+        { "role": "líder de licitações ou comercial", "minimum": 3 },
+        { "role": "engenharia de proposta ou orçamento", "minimum": 3 },
+        { "role": "contratos, obra ou financeiro", "minimum": 3 }
+      ],
+      "maturity_requirement": "pelo menos 8 de 12 com licitação ou contrato ativo nos últimos 12 meses",
+      "behavior_probes": [
+        "última oportunidade recusada ou ruim aceita",
+        "última inabilitação ou diligência",
+        "última erosão de margem, glosa, atraso, reajuste ou pleito",
+        "custo em horas, caixa, atraso e decisão",
+        "solução tentada, quem decidiu, orçamento e por que comprou ou não comprou",
+        "trigger que faria agir em até 30 dias"
+      ],
+      "forbidden": "não perguntar se compraria antes de reconstruir comportamento real"
+    },
+    {
+      "phase": 2,
+      "name": "Card sort e compreensão",
+      "cards": 25,
+      "shown_only_after": "entrevista de problema concluída",
+      "measures": [
+        "agrupamento espontâneo",
+        "nomes confundidos",
+        "entrega escolhida para as seis tarefas de #330 e #335",
+        "percepção de sobreposição",
+        "valor percebido e informação faltante",
+        "escolha entre fazer interno, comprar pontual ou contratar rotina"
+      ],
+      "invariant": "preservar as oito entregas atuais; baixa prioridade muda destaque ou embalagem, nunca apaga"
+    },
+    {
+      "phase": 3,
+      "name": "Willingness to pay observada",
+      "founder_led_offers": [
+        { "deliverable_id": "CFG-D01", "amount_cents": 59900 },
+        { "deliverable_id": "CFG-D12", "amount_cents": 190000 },
+        { "deliverable_id": "CFG-D14", "amount_cents": 590000 },
+        { "deliverable_id": "CFG-D17", "amount_cents": 290000 },
+        { "deliverable_id": "CFG-D18", "amount_cents": 490000 },
+        { "deliverable_id": "CFG-D22", "amount_cents": 790000 }
+      ],
+      "recommendation_rule": "em cada oportunidade comercial qualificada, recomendar exatamente uma entrega principal",
+      "record_fields": [
+        "preço exibido",
+        "proposta enviada",
+        "decisão ACEITOU, NEGOCIOU, RECUSOU ou SEM DECISÃO",
+        "motivo literal",
+        "prazo até decisão",
+        "valor e urgência do problema",
+        "horas reais, retrabalho, margem e qualidade do output",
+        "expansão para outro produto",
+        "outcome ou UNKNOWN"
+      ],
+      "pricing_discipline": "sem desconto silencioso; teste de preço usa versões explícitas e sequência registrada, nunca preços diferentes para pessoas equivalentes sem registro"
+    }
+  ],
+  "score_dimensions": [
+    "frequência do trigger",
+    "severidade econômica",
+    "urgência",
+    "sponsor ou budget owner identificável",
+    "suficiência de dados",
+    "vantagem CONFENGE",
+    "repetibilidade e reuso",
+    "margem de entrega",
+    "ponte natural para a próxima oferta",
+    "prova observada de compra"
+  ],
+  "score_range": { "min": 0, "max": 5 },
+  "evidence_classes": ["problem", "solution", "price", "delivery", "outcome"],
+  "gates": {
+    "PROMOTE": {
+      "min_recent_triggers": 3,
+      "min_qualified_handraises": 2,
+      "min_plausible_proposals_at_published_price": 1,
+      "delivery_hours_tolerance_pct": 25,
+      "requires_positive_margin": true,
+      "requires_no_forbidden_claim": true
+    },
+    "ADJUST": {
+      "signals": [
+        "problema forte, mas confusão de nome ou escopo",
+        "negociação recorrente do mesmo ponto",
+        "entrega artesanal demais",
+        "dependência de dados com cobertura insuficiente"
+      ]
+    },
+    "HOLD": {
+      "signals": [
+        "curiosidade sem why-now",
+        "comprador indefinido",
+        "dados fundamentais UNKNOWN",
+        "zero proposta plausível após 5 oportunidades comerciais qualificadas elegíveis"
+      ],
+      "effect": "HOLD não remove item do catálogo cumulativo; impede promoção, checkout e automação"
+    }
+  },
+  "instrumentation": {
+    "funnel": ["view", "detail", "example", "handraise", "qco", "proposal", "paid", "delivered", "outcome", "expansion"],
+    "attributes": ["route_family", "deliverable_id", "price_version", "trigger", "deadline", "decision_state"],
+    "pii_in_analytics": false,
+    "action_and_outcome_owner": "warmbly",
+    "web_cfg_is_crm": false
+  },
+  "runs": []
+}
