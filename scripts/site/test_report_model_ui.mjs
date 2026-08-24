@@ -181,7 +181,7 @@ const clickEvents = await page.evaluate(() => {
 });
 if (
   clickEvents.length !== 1 ||
-  clickEvents[0]?.event !== "whatsapp_click" ||
+  clickEvents[0]?.event !== "cta_click" ||
   clickEvents[0]?.asset_id !== "relatorio-inteligencia-licitacoes-demonstrativo" ||
   clickEvents[0]?.route_family !== "edital-proposta" ||
   clickEvents[0]?.cta_id !== "report-599-hero" ||
@@ -189,6 +189,8 @@ if (
   clickEvents[0]?.cta_kind !== "offer" ||
   clickEvents[0]?.offer_id !== "handraise-report-intelligence-599-v1" ||
   clickEvents[0]?.next_action_id !== "contratar_relatorio_inteligencia_599" ||
+  !/^c-[a-z0-9-]+$/i.test(clickEvents[0]?.correlation_id || "") ||
+  /^CFG-WA-/i.test(clickEvents[0]?.correlation_id || "") ||
   !clickEvents[0]?.event_id ||
   clickEvents[0]?.source !== "CONFENGE_WEB"
 ) {

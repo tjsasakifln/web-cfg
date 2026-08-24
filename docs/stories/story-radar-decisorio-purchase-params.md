@@ -32,7 +32,7 @@ está `noindex` e contém, no `<main>`, um formulário POST para a função de l
 com atribuição e consentimento obrigatórios. Um link interno comum não satisfaz
 o contrato.
 
-## Campos (padrão documentado, aguardando congelamento pelo fundador)
+## Campos (contrato operacional v1)
 
 | Campo | Obrigatório | Observação |
 | --- | --- | --- |
@@ -46,6 +46,11 @@ o contrato.
 
 Anexo de CAT ou atestado não é exigido no formulário. Documentos, quando
 necessários, são recebidos pelo canal comercial depois do envio.
+
+Este conjunto é o contrato operacional publicado e validado no servidor. Uma
+confirmação posterior do fundador que altere os campos exige nova versão do
+contrato e migração compatível; não autoriza divergência silenciosa entre HTML,
+servidor e matriz de intenção.
 
 Vocabulário de segmentos: `edificacoes-publicas`,
 `pavimentacao-infraestrutura-viaria`, `saneamento-hidraulica`,
@@ -84,8 +89,16 @@ Vocabulário de segmentos: `edificacoes-publicas`,
 A oferta avulsa de R$ 599 é a ação não catalogada aprovada pelo proprietário
 `handraise-report-intelligence-599-v1`, registrada em
 `docs/contracts/intent-action/intent-action-matrix.v1.json` com
-`authorized_amount_cents = 59900`. Ela não é um SKU do catálogo congelado
+`authorized_amount_cents = 59900` e ação
+`owner_approved_non_catalog_persisted_order_intake`. Ela não é um SKU do catálogo congelado
 (`data/offers/catalog.snapshot.json`), e o pin de governança permanece intacto.
+
+## Analytics
+
+Cada CTA que entra no formulário emite um único `cta_click` com `offer_id`,
+`next_action_id`, identidade, posição, `event_id` e a correlação anônima da
+jornada web, sem PII. Essa correlação não é protocolo de pagamento.
+`external_reference` só nasce no servidor depois da persistência do pedido.
 
 ## Evidência
 
@@ -95,5 +108,6 @@ A oferta avulsa de R$ 599 é a ação não catalogada aprovada pelo proprietári
 
 - Ativar o link de pagamento no Asaas e preencher o `externalReference` no link
   hospedado: ação do fundador.
-- Congelar a lista final de campos: confirmação do fundador.
+- Aprovar eventual revisão futura dos campos; o conjunto acima permanece como
+  contrato operacional v1 até uma mudança versionada.
 - Produzir o relatório em si.
