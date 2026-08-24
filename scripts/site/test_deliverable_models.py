@@ -136,8 +136,13 @@ def test_every_model_is_direct_public_html_without_friction() -> None:
             'max-video-preview:-1" name="robots"/>' in html
         ), slug
         assert f'<link href="{canonical}" rel="canonical"/>' in html, slug
-        for forbidden in ("<form", "<dialog", "<details", ".pdf", "download"):
+        # The document stays readable without a gate. The only form allowed is
+        # the persisted capture of the price (#289), and it lives after the
+        # report, never in front of it.
+        for forbidden in ("<dialog", "<details", ".pdf", "download"):
             assert forbidden not in lowered, (slug, forbidden)
+        assert lowered.count("<form") == 1, slug
+        assert lowered.index("<form") > lowered.index("<article"), slug
         # The em dash gate covers /casos/; keep the family clean at source.
         assert "\u2014" not in html, slug
 
@@ -382,6 +387,56 @@ def test_whatsapp_contract_is_specific_per_deliverable() -> None:
             assert re.search(rf'data-cta-id="{re.escape(prefix)}-[^"]+"', tag), slug
         assert 'data-event-name="offer_cta_click"' not in html, slug
         assert 'window.confengeTrack("offer_cta_click"' not in html, slug
+
+
+def test_price_leaves_a_persisted_record_not_only_a_whatsapp_click() -> None:
+    """#289: the most expensive offers of the site must write a lead down."""
+    for slug, price, _cents, asset_id, _action_id, prefix, _subject in MODELS:
+        html = _html(slug)
+        match = re.search(r"<form\b[^>]*>.*?</form>", html, re.S)
+        assert match, slug
+        form = match.group(0)
+        open_tag = form.split(">", 1)[0]
+        for attr, value in (
+            ("method", "post"),
+            ("action", "/.netlify/functions/lead"),
+            ("id", "captura-modelo"),
+            ("data-offer-id", f"handraise-{slug}-v1"),
+            ("data-cta-id", f"{prefix}-capture"),
+            ("data-asset-id", asset_id),
+            ("data-cta-position", "offer_capture"),
+        ):
+            assert f'{attr}="{value}"' in open_tag, (slug, attr)
+        route_family = re.search(r'data-route-family="([^"]+)"', open_tag)
+        assert route_family, slug
+        assert f'data-route-family="{route_family.group(1)}"' in html.split(form)[0], slug
+
+        hidden = dict(re.findall(r'<input\b[^>]*name="([^"]+)"[^>]*value="([^"]*)"', form))
+        assert hidden["origem"] == f"/casos/{slug}/", slug
+        assert hidden["landing_page"] == f"https://confenge.com.br/casos/{slug}/", slug
+        assert hidden["asset_id"] == asset_id, slug
+        assert hidden["cta_id"] == f"{prefix}-capture", slug
+        assert hidden["route_family"] == route_family.group(1), slug
+        assert hidden["estagio"] == slug, slug
+        # Handraise, never checkout: #88 keeps the Asaas catalog frozen.
+        assert hidden["offer_id"] == "", slug
+        assert hidden["terms_id"] == "", slug
+        assert "amount_cents" not in hidden, slug
+        assert re.search(
+            r'<input[^>]+name="consentimento"[^>]+required[^>]*type="checkbox"', form
+        ) or re.search(
+            r'<input[^>]+name="consentimento"[^>]+type="checkbox"[^>]+required', form
+        ), slug
+        # The visitor can reach the record without leaving the page.
+        anchor = html.find('href="#captura-modelo"')
+        assert 0 < anchor < match.start(), slug
+        # The written path repeats the published price, and adds no new one.
+        band = re.search(r'<section class="report-capture".*?</section>', html, re.S)
+        assert band, slug
+        assert price in band.group(0), slug
+        assert set(re.findall(r"R\$ [\d.]*\d", band.group(0))) == {price}, slug
+        # WhatsApp is not replaced.
+        assert html.count("wa.me/5548988344559") == 5, slug
 
 
 def test_analytics_identifiers_are_stable_and_pii_free() -> None:

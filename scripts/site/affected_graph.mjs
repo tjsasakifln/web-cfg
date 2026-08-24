@@ -220,6 +220,7 @@ export const SUITE_GRAPH = Object.freeze({
       "casos/index.html",
       "entregas/index.html",
       "assets/report-model.css",
+      "assets/report-capture.css",
       "docs/contracts/intent-action/intent-action-matrix.v1.json",
       "docs/stories/story-deliverable-models-value-ladder.md",
       "sitemap.xml",
@@ -230,6 +231,7 @@ export const SUITE_GRAPH = Object.freeze({
     producers: [
       "scripts/site/test_report_model_599.py",
       "casos/modelo-relatorio-inteligencia-licitacoes/",
+      "assets/report-capture.css",
       "casos/index.html",
       "bid-room-licitacoes-obras/index.html",
       "diretoria-b2g/index.html",
