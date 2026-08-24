@@ -10,7 +10,7 @@
 .rec-tag.is-fact { background: rgba(45, 111, 45, .13); color: var(--r-green); }
 .rec-tag.is-calc { background: rgba(6, 26, 51, .09); color: var(--r-navy-2); }
 .rec-tag.is-infer { background: rgba(206, 214, 42, .34); color: #575c07; }
-.rec-tag.is-unknown { background: rgba(100, 113, 130, .15); color: #4d5765; }
+.rec-tag.is-unknown { background: rgba(100, 113, 130, .15); color: #4d5765; } /* #293: keep contrast above 4.5:1 on the tinted chip */
 .report-section-dark .rec-tag.is-fact { background: rgba(206, 214, 42, .16); color: var(--r-lime); }
 .report-section-dark .rec-tag.is-calc { background: rgba(255, 255, 255, .11); color: #dbe4ec; }
 .report-section-dark .rec-tag.is-infer { background: rgba(206, 214, 42, .16); color: #e4ea86; }

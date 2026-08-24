@@ -654,7 +654,7 @@ def _visual_html(record: dict[str, Any]) -> str:
             '<div class="breakout-visual" data-visual-id="bdi-incidence-map">'
             "<h2>Mapa de incidência de BDI por família</h2>"
             "<p>Rótulos relativos (alta / média / baixa). <strong>Não é tabela oficial de percentuais</strong> e não substitui o modelo do edital.</p>"
-            '<div class="table-wrap"><table class="compare-table">'
+            '<div class="table-wrap" role="group" tabindex="0" aria-label="Mapa de incidência de BDI por família"><table class="compare-table">'
             "<thead><tr><th>Família</th><th>Administração</th><th>Risco</th><th>Garantia</th><th>Lucro</th><th>Nota</th></tr></thead>"
             f"<tbody>{rows}</tbody></table></div>"
             '<svg class="breakout-bars" viewBox="0 0 320 90" role="img" aria-label="Incidência relativa ilustrativa, sem percentuais oficiais">'
@@ -677,7 +677,7 @@ def _visual_html(record: dict[str, Any]) -> str:
         "<h2>Memória de saldo do art. 125 (exemplo trabalhável)</h2>"
         "<p>Exemplo com valor inicial atualizado de R$ 1.000.000, acréscimos de R$ 180.000 e supressões de R$ 40.000, sem hipótese de reforma. "
         "Conjuntos isolados; compensação automática = não.</p>"
-        '<div class="table-wrap"><table class="compare-table"><tbody>'
+        '<div class="table-wrap" role="group" tabindex="0" aria-label="Memória de saldo do art. 125"><table class="compare-table"><tbody>'
         f"<tr><th scope='row'>Teto de acréscimo</th><td>25% = {_brl(float(example['limite_acrescimo']))}</td></tr>"
         f"<tr><th scope='row'>Acréscimos já usados</th><td>{_brl(float(example['acrescimos']))}</td></tr>"
         f"<tr><th scope='row'>Saldo de acréscimo</th><td>{_brl(float(example['saldo_acrescimo']))}</td></tr>"

@@ -386,7 +386,9 @@ def _chart_table(chart: dict[str, Any]) -> str:
         tds = "".join(f"<td>{escape(str(row.get(key)))}</td>" for key in keys)
         body.append(f"<tr>{tds}</tr>")
     return (
-        f"<table class=\"radar-table\"><thead><tr>{head}</tr></thead>"
+        # main .radar-table is the horizontal scroll container on mobile, so it
+        # must be reachable by keyboard (axe scrollable-region-focusable).
+        f"<table class=\"radar-table\" tabindex=\"0\"><thead><tr>{head}</tr></thead>"
         f"<tbody>{''.join(body)}</tbody></table>"
     )
 

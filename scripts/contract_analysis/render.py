@@ -210,7 +210,7 @@ def _ficha_html(ficha: dict[str, Any]) -> str:
         return ""
     return (
         '<section class="section" id="ficha"><h2>Ficha do contrato</h2>'
-        '<div class="table-wrap"><table class="data-table">'
+        '<div class="table-wrap" role="group" tabindex="0" aria-label="Ficha do contrato"><table class="data-table">'
         f"<tbody>{''.join(rows)}</tbody></table></div>"
         "<p><small>Identificadores vêm da fonte pública. A ficha não afirma "
         "relação comercial da CONFENGE com as partes.</small></p></section>"
@@ -230,7 +230,7 @@ def _timeline_html(items: list[Any]) -> str:
         return ""
     return (
         '<section class="section" id="timeline"><h2>Linha do tempo</h2>'
-        f'<div class="table-wrap"><table class="data-table"><tbody>{"".join(rows)}</tbody></table></div></section>'
+        f'<div class="table-wrap" role="group" tabindex="0" aria-label="Linha do tempo"><table class="data-table"><tbody>{"".join(rows)}</tbody></table></div></section>'
     )
 
 
@@ -564,7 +564,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
     if hash_rows:
         sections.append(
             '<section class="section" id="hashes"><h2>Hashes e proveniência</h2>'
-            '<div class="table-wrap"><table class="data-table">'
+            '<div class="table-wrap" role="group" tabindex="0" aria-label="Hashes e proveniência"><table class="data-table">'
             f"<tbody>{''.join(hash_rows)}</tbody></table></div>"
             "<p>publication_authorization e index_authorization do produtor permanecem "
             "<code>false</code>. "
