@@ -13,7 +13,7 @@ const path = require("node:path");
 const WARMBLY_55 = "https://github.com/tjsasakifln/warmbly/issues/55";
 const WEB_CFG_248 = "https://github.com/tjsasakifln/web-cfg/issues/248";
 const DECISION_DOC = "docs/ops/AGENDA-LATENCY-DEFER-248.md";
-const SLA_POLICY = "UNKNOWN until Warmbly #55 measures a representative baseline. No invented prazo.";
+const SLA_POLICY = "Commercial response SLA is UNKNOWN until Warmbly #55 measures a representative baseline. The owner-authorized Radar delivery clock is a separate contract: up to 48 business hours from persisted parameter submission, never from payment confirmation.";
 const SNAPSHOT_SCHEMA = "warmbly.commercial-latency-baseline/1.0";
 const REPO_ROOT = path.resolve(__dirname, "../..");
 
@@ -156,6 +156,11 @@ function dateValue(value) {
 function unknownKeys(value, allowed) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return [];
   return Object.keys(value).filter((key) => !allowed.has(key));
+}
+
+function hasExactReference(references, expected) {
+  return Array.isArray(references)
+    && references.some((reference) => typeof reference === "string" && reference === expected);
 }
 
 function meaningfulString(value) {
@@ -303,8 +308,8 @@ function validateAgendaGate(matrix, options = {}) {
   if (agenda.blocked_by !== WARMBLY_55) errors.push("agenda_blocker_drift");
   if (!Array.isArray(agenda.decision_evidence)) errors.push("agenda_decision_evidence_missing");
   else {
-    if (!agenda.decision_evidence.includes(WEB_CFG_248)) errors.push("agenda_issue_evidence_missing");
-    if (!agenda.decision_evidence.includes(DECISION_DOC)) errors.push("agenda_local_evidence_missing");
+    if (!hasExactReference(agenda.decision_evidence, WEB_CFG_248)) errors.push("agenda_issue_evidence_missing");
+    if (!hasExactReference(agenda.decision_evidence, DECISION_DOC)) errors.push("agenda_local_evidence_missing");
   }
 
   const reopen = agenda.reopen_gate;
@@ -380,7 +385,7 @@ function validateAgendaGate(matrix, options = {}) {
   if (!IMMUTABLE_EVIDENCE_RE.test(String(baseline.evidence_ref || ""))) {
     errors.push("active_baseline_evidence_not_immutable");
   }
-  if (!Array.isArray(agenda.decision_evidence) || !agenda.decision_evidence.includes(baseline.evidence_ref)) {
+  if (!hasExactReference(agenda.decision_evidence, baseline.evidence_ref)) {
     errors.push("active_baseline_not_in_decision_evidence");
   }
   loadBoundSnapshot(errors, baseline, root);

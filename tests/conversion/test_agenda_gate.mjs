@@ -132,6 +132,16 @@ try {
   }
 
   {
+    const matrix = clone(matrixModule.loadMatrix());
+    matrix.operational_channels.agenda.decision_evidence = [
+      `https://attacker.invalid/${gate.WEB_CFG_248}`,
+      `prefix-${gate.DECISION_DOC}`,
+    ];
+    expectFailure(matrix, "agenda_issue_evidence_missing");
+    expectFailure(matrix, "agenda_local_evidence_missing");
+  }
+
+  {
     const matrix = measuredActivation();
     matrix.operational_channels.agenda.owner = "UNKNOWN";
     expectFailure(matrix, "active_agenda_owner_placeholder");
