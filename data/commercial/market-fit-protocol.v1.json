@@ -9,14 +9,26 @@
     {
       "phase": 1,
       "name": "Entrevistas de problema, sem mostrar o catálogo",
-      "minimum_sample": 12,
+      "minimum_sample": 20,
       "quotas": [
-        { "role": "dono, sócio ou diretor", "minimum": 3 },
-        { "role": "líder de licitações ou comercial", "minimum": 3 },
-        { "role": "engenharia de proposta ou orçamento", "minimum": 3 },
-        { "role": "contratos, obra ou financeiro", "minimum": 3 }
+        {
+          "role": "dono, sócio ou diretor",
+          "minimum": 5
+        },
+        {
+          "role": "líder de licitações ou comercial",
+          "minimum": 5
+        },
+        {
+          "role": "engenharia de proposta ou orçamento",
+          "minimum": 5
+        },
+        {
+          "role": "contratos, obra ou financeiro",
+          "minimum": 5
+        }
       ],
-      "maturity_requirement": "pelo menos 8 de 12 com licitação ou contrato ativo nos últimos 12 meses",
+      "maturity_requirement": "pelo menos 14 de 20 com licitação ou contrato ativo nos últimos 12 meses",
       "behavior_probes": [
         "última oportunidade recusada ou ruim aceita",
         "última inabilitação ou diligência",
@@ -30,7 +42,6 @@
     {
       "phase": 2,
       "name": "Card sort e compreensão",
-      "cards": 25,
       "shown_only_after": "entrevista de problema concluída",
       "measures": [
         "agrupamento espontâneo",
@@ -40,18 +51,54 @@
         "valor percebido e informação faltante",
         "escolha entre fazer interno, comprar pontual ou contratar rotina"
       ],
-      "invariant": "preservar as oito entregas atuais; baixa prioridade muda destaque ou embalagem, nunca apaga"
+      "invariant": "preservar as oito entregas atuais; baixa prioridade muda destaque ou embalagem, nunca apaga",
+      "catalogue_size": 54,
+      "cards_per_participant": 18,
+      "exposure_rules": [
+        "cada um dos 54 entregáveis aparece para pelo menos 6 participantes",
+        "ofertas vizinhas e fronteiras críticas aparecem juntas para pelo menos 3 participantes",
+        "cada pessoa recebe as trilhas mais próximas do seu papel mais quatro cartões de fronteira",
+        "ordem dos cartões é randomizada dentro do bloco",
+        "primeiro classificar por situação ou tarefa sem preço; depois revelar saída, preço e SLA",
+        "o desenho e a matriz de exposição são salvos antes das sessões; não trocar cartões para perseguir resultado"
+      ]
     },
     {
       "phase": 3,
       "name": "Willingness to pay observada",
       "founder_led_offers": [
-        { "deliverable_id": "CFG-D01", "amount_cents": 59900 },
-        { "deliverable_id": "CFG-D12", "amount_cents": 190000 },
-        { "deliverable_id": "CFG-D14", "amount_cents": 590000 },
-        { "deliverable_id": "CFG-D17", "amount_cents": 290000 },
-        { "deliverable_id": "CFG-D18", "amount_cents": 490000 },
-        { "deliverable_id": "CFG-D22", "amount_cents": 790000 }
+        {
+          "deliverable_id": "CFG-D01",
+          "amount_cents": 59900
+        },
+        {
+          "deliverable_id": "CFG-D12",
+          "amount_cents": 190000
+        },
+        {
+          "deliverable_id": "CFG-D14",
+          "amount_cents": 590000
+        },
+        {
+          "deliverable_id": "CFG-D17",
+          "amount_cents": 290000
+        },
+        {
+          "deliverable_id": "CFG-D18",
+          "amount_cents": 490000
+        },
+        {
+          "deliverable_id": "CFG-D22",
+          "amount_cents": 790000
+        },
+        {
+          "deliverable_id": "CFG-D49",
+          "amount_cents": 980000
+        },
+        {
+          "deliverable_id": "CFG-D51",
+          "amount_cents": 490000
+        }
       ],
       "recommendation_rule": "em cada oportunidade comercial qualificada, recomendar exatamente uma entrega principal",
       "record_fields": [
@@ -80,8 +127,17 @@
     "ponte natural para a próxima oferta",
     "prova observada de compra"
   ],
-  "score_range": { "min": 0, "max": 5 },
-  "evidence_classes": ["problem", "solution", "price", "delivery", "outcome"],
+  "score_range": {
+    "min": 0,
+    "max": 5
+  },
+  "evidence_classes": [
+    "problem",
+    "solution",
+    "price",
+    "delivery",
+    "outcome"
+  ],
   "gates": {
     "PROMOTE": {
       "min_recent_triggers": 3,
@@ -110,8 +166,26 @@
     }
   },
   "instrumentation": {
-    "funnel": ["view", "detail", "example", "handraise", "qco", "proposal", "paid", "delivered", "outcome", "expansion"],
-    "attributes": ["route_family", "deliverable_id", "price_version", "trigger", "deadline", "decision_state"],
+    "funnel": [
+      "view",
+      "detail",
+      "example",
+      "handraise",
+      "qco",
+      "proposal",
+      "paid",
+      "delivered",
+      "outcome",
+      "expansion"
+    ],
+    "attributes": [
+      "route_family",
+      "deliverable_id",
+      "price_version",
+      "trigger",
+      "deadline",
+      "decision_state"
+    ],
     "pii_in_analytics": false,
     "action_and_outcome_owner": "warmbly",
     "web_cfg_is_crm": false

@@ -208,104 +208,16 @@
     "revisão trimestral apenas depois de existir volume suficiente, sem alteração automática"
   ],
   "registry_cross_check": {
-    "registry_version": "CFG-DELIVERABLES-2026-08-24-v1",
-    "protocol_version": "CFG-MARKET-FIT-2026-08-24-v1",
-    "basis": "Conferência informativa de preços do registry contra as faixas da escada de #341. #341 não atribui deliverable_id a faixa, portanto a atribuição de faixa abaixo é inferencial e não normativa. Nenhum preço do registry foi alterado.",
-    "outside_any_band": [
-      {
-        "id": "expansion_package",
-        "public_name": "Diagnóstico B2G de Expansão",
-        "type": "container",
-        "amount_cents": 800000,
-        "billing": "one_time",
-        "finding": "R$ 8.000 cai no vão entre o teto do dossiê crítico, R$ 7.900, e o piso de oportunidade ou problema complexo, R$ 9.800. Nenhuma faixa de #341 contém este preço."
-      }
+    "checked_against": "data/commercial/deliverables-registry.v1.json",
+    "catalog_count": 54,
+    "container_count": 2,
+    "note": "Cross-check por faixa ainda não foi refeito para os 54 itens. A #341 não mapeia deliverable_id para tier, então qualquer atribuição de faixa é inferência.",
+    "known_gaps": [
+      "O Diagnóstico de Expansão de R$ 8.000 fica entre o teto de R$ 7.900 e o piso de R$ 9.800, fora de qualquer faixa.",
+      "As lacunas declaradas pela própria #341 permanecem: R$ 2.400 a 2.900, R$ 5.900 a 6.900, R$ 7.900 a 9.800 e R$ 19.800 a 39.800."
     ],
-    "band_gaps_declared_by_341": [
-      "R$ 2.400 a R$ 2.900",
-      "R$ 5.900 a R$ 6.900",
-      "R$ 7.900 a R$ 9.800",
-      "R$ 19.800 a R$ 39.800"
-    ],
-    "unpopulated_tiers": [
-      {
-        "tier_id": "inteligencia_estrategica",
-        "note": "Nenhum item do registry está precificado em R$ 39.800."
-      },
-      {
-        "tier_id": "recorrencia_gerenciada",
-        "note": "O registry usa apenas R$ 6.900 por mês em CFG-D25. O ponto de R$ 4.900 por mês previsto em #341 não tem item correspondente."
-      }
-    ],
-    "tier_role_tension_to_resolve_with_founder": [
-      {
-        "ids": [
-          "CFG-D18",
-          "CFG-D19",
-          "CFG-D20"
-        ],
-        "amounts_cents": [
-          490000,
-          590000,
-          590000
-        ],
-        "note": "São nomeados dossiê e instruem protocolo técnico, papel da faixa dossiê crítico, R$ 6.900 a R$ 7.900, mas estão precificados dentro da faixa diagnóstico delimitado, R$ 2.900 a R$ 5.900. Preço válido em alguma faixa, papel ambíguo entre duas."
-      },
-      {
-        "ids": [
-          "CFG-D12"
-        ],
-        "amounts_cents": [
-          190000
-        ],
-        "note": "Raio-X Go/No-Go do Edital exerce o papel de revelar risco e decidir próximo passo, papel da faixa diagnóstico delimitado, mas está precificado dentro da faixa entrada factual, R$ 599 a R$ 2.400."
-      }
-    ],
-    "within_band": {
-      "entrada_factual": [
-        "CFG-D01",
-        "CFG-D02",
-        "CFG-D03",
-        "CFG-D04",
-        "CFG-D05",
-        "CFG-D06",
-        "CFG-D07",
-        "CFG-D09",
-        "CFG-D10",
-        "CFG-D12"
-      ],
-      "diagnostico_delimitado": [
-        "CFG-D08",
-        "CFG-D11",
-        "CFG-D13",
-        "CFG-D14",
-        "CFG-D15",
-        "CFG-D17",
-        "CFG-D18",
-        "CFG-D19",
-        "CFG-D20",
-        "CFG-D21"
-      ],
-      "dossie_critico": [
-        "CFG-D22",
-        "CFG-D23",
-        "CFG-D24"
-      ],
-      "oportunidade_ou_problema_complexo": [
-        "CFG-D16 essencial",
-        "CFG-D16 complexa",
-        "CFG-D16 especial"
-      ],
-      "inteligencia_estrategica": [],
-      "recorrencia_gerenciada": [
-        "CFG-D25"
-      ],
-      "lideranca_fracionada": [
-        "diretoria_365",
-        "diretoria_180",
-        "diretoria_flex"
-      ]
-    }
+    "state": "NOT_RECHECKED"
   },
-  "records": []
+  "records": [],
+  "acceptance_sample_note": "A #341 depende da amostra da #336, hoje de 20 participantes. Qualquer número menor no texto de acceptance está desatualizado."
 }

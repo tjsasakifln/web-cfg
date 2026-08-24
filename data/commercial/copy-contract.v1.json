@@ -392,7 +392,7 @@
       "remover ofertas"
     ],
     "state": "NOT_STARTED",
-    "scope_note": "#338 diz 48 no contrato de comunicação por oferta e 54/54 no teste de diferenciação e no acceptance. O registry atual traz 25 entregáveis e 4 contêineres. A divergência de contagem não foi resolvida por esta issue; #343 é a fonte canônica de nomenclatura pública."
+    "scope_note": "O rol taxativo tem 54 entregáveis e 2 contêineres. O contrato de comunicação vale para cada item do rol. A prosa da #338 ainda cita 48 em um trecho; título, teste de diferenciação e acceptance dizem 54, e o registro segue 54."
   },
   "adversarial_lenses": [
     "fundador cético: por que comprar?",

@@ -327,8 +327,24 @@ assert("protocol_runs_empty", Array.isArray(protocol.runs) && protocol.runs.leng
 
 const phase1 = protocol.phases.find((phase) => phase.phase === 1);
 const quotaSum = phase1.quotas.reduce((total, quota) => total + quota.minimum, 0);
-assert("protocol_sample", phase1.minimum_sample === 12, phase1.minimum_sample);
+// The sample size belongs to #336, not to this file. The gate proves the quotas
+// add up to whatever the protocol declares, so a resample cannot leave a gap.
+assert("protocol_sample_positive", phase1.minimum_sample > 0, phase1.minimum_sample);
 assert("protocol_quota_sum", quotaSum === phase1.minimum_sample, { quotaSum, minimum: phase1.minimum_sample });
+assert("protocol_quota_roles_distinct", new Set(phase1.quotas.map((q) => q.role)).size === phase1.quotas.length, phase1.quotas);
+
+// #336 phase 2 never shows the whole rol at once, but every item must be exposed.
+const phase2 = protocol.phases.find((phase) => phase.phase === 2);
+assert("protocol_catalogue_size", phase2.catalogue_size === entries.length, {
+  protocol: phase2.catalogue_size,
+  registry: entries.length,
+});
+assert(
+  "protocol_cards_below_catalogue",
+  phase2.cards_per_participant > 0 && phase2.cards_per_participant < phase2.catalogue_size,
+  { cards: phase2.cards_per_participant, catalogue: phase2.catalogue_size }
+);
+assert("protocol_exposure_rules", phase2.exposure_rules.length > 0, phase2.exposure_rules);
 
 const phase3 = protocol.phases.find((phase) => phase.phase === 3);
 for (const offer of phase3.founder_led_offers) {
