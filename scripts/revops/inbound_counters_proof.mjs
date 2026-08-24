@@ -1,5 +1,5 @@
 /**
- * Read-only production proof for #230.
+ * Read-only production proof for #267.
  *
  * It verifies authenticated ops health and snapshots aggregate inbound/funnel
  * counters. It does not submit a lead, drain a queue, or prove a consented
@@ -9,13 +9,17 @@ import { mkdirSync, writeFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { createOpsJsonClient, sanitizeTransportError } from "./ops_fetch.mjs";
+import {
+  inboundConfigurationSummary,
+  inboundTransportReady,
+} from "./inbound_proof_contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const BASE = (process.env.BASE_URL || "https://confenge.com.br").replace(/\/$/, "");
 const TOKEN = process.env.OPS_TOKEN || "";
 const out = {
-  schema: "confenge-inbound-counters-proof/1.0",
-  issue: 230,
+  schema: "confenge-inbound-counters-proof/1.1",
+  issue: 267,
   decision_state: "EXECUTE_NOW",
   executive_front: "REVENUE NOW",
   leverage: "revenue",
@@ -28,9 +32,10 @@ const out = {
   consented_real_contact: "MISSING",
   real_loop_status: "BLOCKED",
   non_claims: [
-    "does_not_prove_netlify_inbound_secrets_are_configured",
+    "does_not_prove_warmbly_auto_send_is_off",
     "does_not_prove_a_consented_real_contact_exists",
     "does_not_prove_end_to_end_commercial_handoff",
+    "does_not_requeue_or_drain_any_record",
   ],
 };
 
@@ -74,6 +79,13 @@ async function run() {
     `http=${inbound.status} configuration_present=${Boolean(configuration && typeof configuration === "object")}`
   );
   out.inbound_handoff_configuration = configuration && typeof configuration === "object" ? configuration : null;
+  const transportReady = inboundTransportReady(configuration);
+  check(
+    "inbound_transport_configuration_ready",
+    inbound.status === 200 && transportReady,
+    `http=${inbound.status} configuration=${JSON.stringify(inboundConfigurationSummary(configuration))}`
+  );
+  out.transport_status = transportReady ? "READY" : "BLOCKED";
 
   const audit = await request("/.netlify/functions/ops?action=audit_inbound_requeue");
   const skippedAudit = audit.body?.audit;
@@ -128,10 +140,11 @@ function persist() {
     ? resolve(process.env.INBOUND_PROOF_RUN_DIR)
     : resolve(ROOT, "data/revops/inbound-proof-runs");
   mkdirSync(runDir, { recursive: true });
-  const proofPath = resolve(
-    runDir,
-    `inbound-${out.ts.slice(0, 10)}-${Date.now().toString(36)}.json`
-  );
+  const runIdentity = String(process.env.GITHUB_RUN_ID || "").replace(/[^0-9]/g, "");
+  const filename = runIdentity
+    ? `inbound-issue-267-run-${runIdentity}.json`
+    : `inbound-${out.ts.slice(0, 10)}-${Date.now().toString(36)}.json`;
+  const proofPath = resolve(runDir, filename);
   out.ok = out.checks.length > 0 && out.checks.every((item) => item.ok);
   writeFileSync(proofPath, JSON.stringify(out, null, 2) + "\n");
   console.log(JSON.stringify({ ok: out.ok, proof: proofPath }, null, 2));

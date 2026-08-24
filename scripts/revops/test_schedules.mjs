@@ -8,6 +8,10 @@ import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { tmpdir } from "os";
 import { createOpsJsonClient } from "./ops_fetch.mjs";
+import {
+  inboundConfigurationSummary,
+  inboundTransportReady,
+} from "./inbound_proof_contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 let failed = 0;
@@ -50,6 +54,31 @@ function pass(n, d = "") {
 function fail(n, d) {
   console.error("FAIL", n, d);
   failed += 1;
+}
+
+// #267: merely returning a configuration object is not production readiness.
+{
+  const ready = {
+    webhook_url: "SET",
+    webhook_secret: "SET",
+    contract: "READY",
+    reason: null,
+  };
+  if (!inboundTransportReady(ready)) fail("inbound_proof_ready_contract", ready);
+  else pass("inbound_proof_ready_contract");
+  for (const drift of [
+    { ...ready, webhook_url: "UNSET" },
+    { ...ready, webhook_secret: "UNSET" },
+    { ...ready, contract: "BLOCKED", reason: "destination_unhealthy" },
+    null,
+  ]) {
+    if (inboundTransportReady(drift)) fail("inbound_proof_rejects_configuration_drift", drift);
+  }
+  pass("inbound_proof_rejects_configuration_drift");
+  const summary = inboundConfigurationSummary(null);
+  if (summary.webhook_url !== "MISSING" || summary.webhook_secret !== "MISSING") {
+    fail("inbound_proof_missing_configuration_summary", summary);
+  } else pass("inbound_proof_missing_configuration_summary");
 }
 
 // 2d) The focal proof fails closed without the Actions secret and still emits evidence.

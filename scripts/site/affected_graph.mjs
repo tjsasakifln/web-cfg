@@ -435,6 +435,8 @@ export const SUITE_GRAPH = Object.freeze({
       "scripts/revops/inbound_backlog_policy.mjs",
       "scripts/revops/test_inbound_backlog_policy.mjs",
       "scripts/revops/test_schedules.mjs",
+      "scripts/revops/inbound_counters_proof.mjs",
+      "scripts/revops/inbound_proof_contract.mjs",
       "scripts/revops/scheduled_daily.mjs",
       "scripts/revops/scheduled_nurture.mjs",
       "scripts/revops/scheduled_weekly.mjs",
