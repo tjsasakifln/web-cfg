@@ -88,11 +88,33 @@ for (const width of widths) {
   await page.setViewport({ width, height, deviceScaleFactor: 1 });
   const response = await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
   const metrics = await page.evaluate(() => {
-    const heroCta = document.querySelector('.deliverables-hero [href="#primeiro-exemplo"]')?.getBoundingClientRect();
+    const heroCta = document.querySelector('.deliverables-hero [href="#comparar"]')?.getBoundingClientRect();
     const firstReport = document.querySelector('[data-cta-id="deliverables-open-report"]')?.getBoundingClientRect();
+    const compare = document.querySelector('#comparar .compare-table');
+    const compareRows = document.querySelectorAll('#comparar .compare-table tbody tr').length;
+    const compareScroll = document.querySelector('#comparar .compare-scroll');
+    const archetypes = [...document.querySelectorAll('main > [data-section-archetype]')]
+      .map((element) => element.getAttribute('data-section-archetype'));
+    const primaries = document.querySelectorAll('main .button-primary').length;
     const desktopDeliverables = document.querySelector('.desktop-nav a[href="/entregas/"]');
     return {
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      compareVisible: Boolean(compare && compare.getBoundingClientRect().height > 0),
+      compareRows,
+      compareAboveExamples: Boolean(
+        compare && document.querySelector("#primeiro-exemplo")
+        && compare.getBoundingClientRect().top
+          < document.querySelector("#primeiro-exemplo").getBoundingClientRect().top,
+      ),
+      compareScrollFocusable: compareScroll?.getAttribute("tabindex") === "0",
+      longestArchetypeRun: archetypes.reduce(
+        (state, value) => {
+          const run = value === state.previous ? state.run + 1 : 1;
+          return { previous: value, run, best: Math.max(state.best, run) };
+        },
+        { previous: null, run: 0, best: 0 },
+      ).best,
+      primaries,
       h1Count: document.querySelectorAll("h1").length,
       h1Text: document.querySelector("h1")?.textContent?.replace(/\s+/g, " ").trim() || "",
       heroCtaVisible: Boolean(heroCta && heroCta.width > 0 && heroCta.height >= 44),
@@ -123,6 +145,13 @@ for (const width of widths) {
   if (metrics.h1Count !== 1 || !metrics.h1Text.includes("antes de contratar")) errors.push("hero_clarity");
   if (!metrics.heroCtaVisible || (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
   if (!metrics.firstReportVisible || metrics.examples !== EXPECTED_EXAMPLES) errors.push("ladder_examples");
+  if (!metrics.compareVisible || metrics.compareRows !== EXPECTED_EXAMPLES) errors.push("compare_view");
+  if (!metrics.compareAboveExamples) errors.push("compare_before_sections");
+  if (!metrics.compareScrollFocusable) errors.push("compare_scroll_focus");
+  if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
+  // One primary leads to comparison and the other submits the terminal
+  // hand-raise added by #290; neither replaces a priced offer path.
+  if (metrics.primaries > 2) errors.push(`primary_cta_overuse=${metrics.primaries}`);
   if (metrics.navDeliverables !== "Entregas" || metrics.navCurrent !== "page") errors.push("nav_contract");
   if (metrics.emptyPlaceholders) errors.push("empty_placeholders");
 

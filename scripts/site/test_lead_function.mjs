@@ -366,6 +366,96 @@ _reset();
   pass("hub_forms_persisted_attribution", { routes: hubs.map(({ route }) => route) });
 }
 
+// 5d) Every priced model form reaches the real persistence path. Static markup
+// is insufficient: receipts must be distinct and retain the shipped attribution.
+{
+  const modelSlugs = fs.readdirSync(path.join(root, "casos"), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && entry.name.startsWith("modelo-"))
+    .map((entry) => entry.name)
+    .sort();
+  if (modelSlugs.length !== 8) fail("priced_model_census", modelSlugs);
+
+  const ids = new Set();
+  for (let i = 0; i < modelSlugs.length; i += 1) {
+    const slug = modelSlugs[i];
+    const html = fs.readFileSync(path.join(root, "casos", slug, "index.html"), "utf8");
+    const form = html.match(
+      /<form\b[^>]*action="\/\.netlify\/functions\/lead"[^>]*>[\s\S]*?<\/form>/i,
+    )?.[0] || "";
+    if (!form) fail("priced_model_form_missing", slug);
+    if (/data-[a-z-]+="[^"]*(?:@|\b\d{8,}\b)[^"]*"/i.test(form)) {
+      fail("priced_model_form_data_attr_pii", slug);
+    }
+    const openTag = form.split(">", 1)[0];
+    const dataValue = (name) => openTag.match(
+      new RegExp(`\\bdata-${name}=["']([^"']*)["']`, "i"),
+    )?.[1];
+    const hiddenValue = (name) => form.match(
+      new RegExp(`<input\\b(?=[^>]*\\bname=["']${name}["'])[^>]*\\bvalue=["']([^"']*)["'][^>]*>`, "i"),
+    )?.[1];
+    const expected = {
+      origem: `/casos/${slug}/`,
+      landing_page: `https://confenge.com.br/casos/${slug}/`,
+      asset_id: dataValue("asset-id"),
+      cta_id: dataValue("cta-id"),
+      route_family: dataValue("route-family"),
+      jornada: hiddenValue("jornada"),
+      estagio: slug,
+    };
+    for (const [name, value] of Object.entries(expected)) {
+      if (!value || hiddenValue(name) !== value) {
+        fail("priced_model_form_hidden_attribution", { slug, name, got: hiddenValue(name), expected: value });
+      }
+    }
+    if (hiddenValue("offer_id") !== "" || hiddenValue("terms_id") !== "" || hiddenValue("amount_cents")) {
+      fail("priced_model_form_invented_checkout", slug);
+    }
+
+    const res = await handler(
+      event(
+        {
+          nome: `QA Modelo ${i + 1}`,
+          email: `qa-model-${i + 1}@example.com`,
+          estagio: expected.estagio,
+          jornada: expected.jornada,
+          consentimento: "1",
+          offer_id: "",
+          terms_id: "",
+          origem: expected.origem,
+          landing_page: expected.landing_page,
+          route_family: expected.route_family,
+          asset_id: expected.asset_id,
+          cta_id: expected.cta_id,
+          record_kind: "qa",
+          test_mode: true,
+          idempotency_key: `qa-priced-model-${i + 1}`,
+        },
+        "POST",
+        { ip: `203.0.113.${80 + i}` },
+      ),
+    );
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 201 || !data.ok || !data.lead_id) {
+      fail("priced_model_form_persist", { slug, status: res.statusCode, data });
+    }
+    const stored = await mem.get(data.lead_id);
+    if (
+      !stored || stored.source !== "CONFENGE_WEB" ||
+      stored.origem !== expected.origem || stored.landing_page !== expected.landing_page ||
+      stored.route_family !== expected.route_family || stored.asset_id !== expected.asset_id ||
+      stored.cta_id !== expected.cta_id || stored.jornada !== expected.jornada
+    ) {
+      fail("priced_model_form_attribution", { slug, stored, expected });
+    }
+    if (stored.offer_id || stored.terms_id || stored.amount_cents) {
+      fail("priced_model_form_checkout_state", { slug, stored });
+    }
+    ids.add(data.lead_id);
+  }
+  if (ids.size !== modelSlugs.length) fail("priced_model_form_distinct_receipts", [...ids]);
+  pass("priced_model_forms_persisted_attribution", { routes: modelSlugs });
+}
+
 // 6) idempotency — second submit same payload returns same lead_id + HTTP 200 + idempotent
 {
   const payload = {

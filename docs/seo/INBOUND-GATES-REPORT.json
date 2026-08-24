@@ -164,58 +164,9 @@
         },
         {
           "gate": "conversion",
-          "path": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/modelo-relatorio-inteligencia-licitacoes/ required=capture_form issue=#289 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/modelo-apresentacao-executiva-resultados/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/modelo-apresentacao-executiva-resultados/ required=capture_form issue=#289 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/modelo-contratos-vincendos-relicitacao/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/modelo-contratos-vincendos-relicitacao/ required=capture_form issue=#289 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/modelo-mapeamento-concorrentes-publicos/ required=capture_form issue=#289 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
           "path": "casos/aditivo-art125-demonstrativo/index.html",
           "reason": "terminal_action_debt",
           "excerpt": "/casos/aditivo-art125-demonstrativo/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/modelo-base-quantitativa-canonica/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/modelo-base-quantitativa-canonica/ required=capture_form issue=#289 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/modelo-painel-precos-obras-publicas/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/modelo-painel-precos-obras-publicas/ required=capture_form issue=#289 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/modelo-relatorio-executivo-consolidado/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/modelo-relatorio-executivo-consolidado/ required=capture_form issue=#289 expires_at=2026-09-30",
           "severity": "warn"
         },
         {
@@ -230,13 +181,6 @@
           "path": "casos/medicao-glosa-demonstrativo/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/modelo-mapa-compradores-publicos/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/modelo-mapa-compradores-publicos/ required=capture_form issue=#289 expires_at=2026-09-30",
           "severity": "warn"
         }
       ],
@@ -266,6 +210,11 @@
           "total": 13,
           "coverage": 0.5385
         },
+        "priced_offer_capture": {
+          "covered": 9,
+          "total": 9,
+          "coverage": 1.0
+        },
         "family_registry": {
           "path": "data/organic/public-family-registry.json",
           "schema_version": "public-family-registry-v1",
@@ -274,11 +223,11 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 46,
+          "covered": 54,
           "total": 67,
-          "coverage": 0.6866,
+          "coverage": 0.806,
           "exempt_trust_or_legal": 9,
-          "registered_debt": 15
+          "registered_debt": 7
         },
         "exemptions": [
           {
@@ -309,86 +258,6 @@
             "owner_issue": 290,
             "expires_at": "2026-09-30",
             "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
-          {
-            "route": "/casos/modelo-apresentacao-executiva-resultados/",
-            "family": "casos-modelos-precificados",
-            "kind": "debt",
-            "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-            "owner_issue": 289,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form",
-            "expired": false
-          },
-          {
-            "route": "/casos/modelo-base-quantitativa-canonica/",
-            "family": "casos-modelos-precificados",
-            "kind": "debt",
-            "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-            "owner_issue": 289,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form",
-            "expired": false
-          },
-          {
-            "route": "/casos/modelo-contratos-vincendos-relicitacao/",
-            "family": "casos-modelos-precificados",
-            "kind": "debt",
-            "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-            "owner_issue": 289,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form",
-            "expired": false
-          },
-          {
-            "route": "/casos/modelo-mapa-compradores-publicos/",
-            "family": "casos-modelos-precificados",
-            "kind": "debt",
-            "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-            "owner_issue": 289,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form",
-            "expired": false
-          },
-          {
-            "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
-            "family": "casos-modelos-precificados",
-            "kind": "debt",
-            "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-            "owner_issue": 289,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form",
-            "expired": false
-          },
-          {
-            "route": "/casos/modelo-painel-precos-obras-publicas/",
-            "family": "casos-modelos-precificados",
-            "kind": "debt",
-            "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-            "owner_issue": 289,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form",
-            "expired": false
-          },
-          {
-            "route": "/casos/modelo-relatorio-executivo-consolidado/",
-            "family": "casos-modelos-precificados",
-            "kind": "debt",
-            "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-            "owner_issue": 289,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form",
-            "expired": false
-          },
-          {
-            "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
-            "family": "casos-modelos-precificados",
-            "kind": "debt",
-            "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-            "owner_issue": 289,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form",
             "expired": false
           },
           {
@@ -517,7 +386,7 @@
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 30
+        "warnings": 22
       }
     },
     "legacy_entity": {
