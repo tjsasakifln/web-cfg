@@ -40,6 +40,29 @@ CAPTURE_HIDDEN_FIELDS = (
     "landing_page",
 )
 
+# ALLOWLIST-FREE BY DESIGN (#289). The priced-offer profile is never a list of
+# routes. A page enters it when it publishes a purchasable price of its own —
+# proved either by the versioned action contract or by the page's own commercial
+# markup — so a ninth priced page is gated the day it ships, without an edit
+# here. Editorial pages that merely quote a currency figure are not offers and
+# must not be dragged into the profile.
+INTENT_ACTION_MATRIX = ROOT / "docs/contracts/intent-action/intent-action-matrix.v1.json"
+OFFER_CTA_RE = re.compile(
+    r'(?is)<a\b(?=[^>]*\bdata-cta-kind=["\']offer["\'])[^>]*>.*?</a>'
+)
+VISIBLE_PRICE_RE = re.compile(r"R\$\s*\d")
+CAPTURE_FORM_RE = re.compile(
+    r'(?is)<form\b(?=[^>]*\bmethod=["\']post["\'])'
+    r'(?=[^>]*\baction=["\']/\.netlify/functions/lead["\'])[^>]*>.*?</form>'
+)
+CAPTURE_DATA_ATTRS = (
+    "data-offer-id",
+    "data-cta-id",
+    "data-asset-id",
+    "data-route-family",
+    "data-cta-position",
+)
+
 # --- Patterns that signal machine / keyword-stuffed copy ---
 MACHINE_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     (
@@ -822,13 +845,184 @@ def _as_date(value: date | datetime | str | None) -> date:
     return date.today()
 
 
-def _conversion_profile(route: str, service_routes: set[str]) -> str:
+def priced_action_registry() -> tuple[set[str], set[str]]:
+    """Action and offer ids the versioned intent-action contract prices.
+
+    Derived from ``intent-action-matrix.v1.json`` on every run. Publishing a
+    priced route without registering it there is itself a contract break, so
+    this stays the authoritative half of the priced-offer signal.
+    """
+    matrix = json.loads(INTENT_ACTION_MATRIX.read_text(encoding="utf-8"))
+    actions: set[str] = set()
+    offers: set[str] = set()
+    for row in matrix.get("routes") or []:
+        cents = row.get("authorized_amount_cents")
+        if not isinstance(cents, int) or isinstance(cents, bool) or cents <= 0:
+            continue
+        if row.get("id"):
+            actions.add(str(row["id"]))
+        if row.get("offer_id"):
+            offers.add(str(row["offer_id"]))
+    return actions, offers
+
+
+def priced_offer_signal(main: str, priced_actions: set[str], priced_offers: set[str]) -> str:
+    """Why this page counts as a priced offer, or "" when it does not.
+
+    Two independent detectors, both read off the page instead of a route list:
+
+    ``registered_priced_action``
+        the page carries a ``data-next-action-id`` / ``data-offer-id`` that the
+        intent-action contract prices;
+    ``visible_price_on_offer_cta``
+        the page shows a currency figure inside its own commercial CTA, which is
+        what "exibe preço" means for a visitor deciding to buy.
+
+    A page that quotes a value inside editorial prose has no commercial CTA
+    carrying it and is deliberately not matched.
+    """
+    for match in re.finditer(r'data-next-action-id=["\']([^"\']+)["\']', main, re.I):
+        if match.group(1) in priced_actions:
+            return "registered_priced_action"
+    for match in re.finditer(r'data-offer-id=["\']([^"\']+)["\']', main, re.I):
+        if match.group(1) in priced_offers:
+            return "registered_priced_action"
+    for tag in OFFER_CTA_RE.finditer(main):
+        block = tag.group(0)
+        label = re.search(r'aria-label=["\']([^"\']*)["\']', block, re.I)
+        if VISIBLE_PRICE_RE.search(strip_html(block)) or (
+            label and VISIBLE_PRICE_RE.search(label.group(1))
+        ):
+            return "visible_price_on_offer_cta"
+    return ""
+
+
+def priced_offer_routes(base: Path | None = None) -> dict[str, str]:
+    """Every indexable route that publishes a purchasable price, route -> signal."""
+    root = base or ROOT
+    priced_actions, priced_offers = priced_action_registry()
+    routes: dict[str, str] = {}
+    for page in _conversion_files(root):
+        html = page.read_text(encoding="utf-8", errors="replace")
+        if not is_indexable_html(html):
+            continue
+        rel = page.relative_to(root)
+        route = "/" if rel.as_posix() == "index.html" else "/" + rel.as_posix().removesuffix("index.html")
+        signal = priced_offer_signal(_main_html(html), priced_actions, priced_offers)
+        if signal:
+            routes[route] = signal
+    return routes
+
+
+def _priced_offer_findings(
+    page: Path,
+    base: Path,
+    route: str,
+    main: str,
+    priced_offers: set[str],
+) -> list[Finding]:
+    """A published price must leave a persisted, attributed record behind.
+
+    ``has_attributed_cta`` is not enough here: a WhatsApp click on the most
+    expensive offer of the site is unobservable after it leaves the page.
+    """
+    rel = str(page.relative_to(base))
+    findings: list[Finding] = []
+
+    def fail(reason: str, excerpt: str = "") -> None:
+        findings.append(
+            Finding(gate="conversion", path=rel, reason=reason, excerpt=excerpt or f"route={route}")
+        )
+
+    form_match = CAPTURE_FORM_RE.search(main)
+    if not form_match:
+        fail("priced_offer_missing_persisted_capture")
+        return findings
+    form = form_match.group(0)
+    open_tag = form.split(">", 1)[0]
+
+    for attr in CAPTURE_DATA_ATTRS:
+        if not re.search(rf'\b{attr}=["\'][^"\']+["\']', open_tag, re.I):
+            fail("priced_offer_capture_data_contract_missing", attr)
+
+    declared_offer = re.search(r'\bdata-offer-id=["\']([^"\']*)["\']', open_tag, re.I)
+    if declared_offer and declared_offer.group(1) not in priced_offers:
+        fail("priced_offer_capture_offer_unregistered", declared_offer.group(1)[:80])
+
+    form_id = re.search(r'\bid=["\']([^"\']+)["\']', open_tag, re.I)
+    if not form_id:
+        fail("priced_offer_capture_anchor_missing", "form has no id to link to")
+    else:
+        anchor = main.find(f'href="#{form_id.group(1)}"')
+        if anchor < 0 or anchor > form_match.start():
+            fail("priced_offer_capture_not_linked", f"#{form_id.group(1)}")
+
+    for name in CAPTURE_HIDDEN_FIELDS:
+        if not re.search(
+            rf'<input\b(?=[^>]*\btype=["\']hidden["\'])(?=[^>]*\bname=["\']{name}["\'])[^>]*>',
+            form,
+            re.I,
+        ):
+            fail("priced_offer_capture_attribution_missing", name)
+
+    def declared(attr: str) -> str:
+        found = re.search(rf'\b{attr}=["\']([^"\']*)["\']', open_tag, re.I)
+        return found.group(1) if found else ""
+
+    # The persisted record must repeat exactly what the page already reports to
+    # analytics. A form that attributes itself differently is an unjoinable lead.
+    expected = {
+        "origem": route,
+        "landing_page": f"{SITE}{route}",
+        "asset_id": declared("data-asset-id"),
+        "cta_id": declared("data-cta-id"),
+        "route_family": declared("data-route-family"),
+    }
+    for name, want in expected.items():
+        field = re.search(
+            rf'<input\b(?=[^>]*\bname=["\']{name}["\'])[^>]*\bvalue=["\']([^"\']*)["\'][^>]*>',
+            form,
+            re.I,
+        )
+        got = field.group(1) if field else "MISSING"
+        if got != want:
+            fail("priced_offer_capture_attribution_mismatch", f"{name}={got} expected={want}")
+
+    # #88 keeps the Asaas catalog frozen. A priced handraise page may never
+    # submit a catalog offer id, terms id or amount: that would be checkout.
+    for empty_name in ("offer_id", "terms_id", "amount_cents"):
+        field = re.search(
+            rf'<input\b(?=[^>]*\bname=["\']{empty_name}["\'])[^>]*\bvalue=["\']([^"\']*)["\'][^>]*>',
+            form,
+            re.I,
+        )
+        if field and field.group(1).strip():
+            fail("priced_offer_checkout_invented", f"{empty_name}={field.group(1)[:80]}")
+
+    if not re.search(
+        r'<input\b(?=[^>]*\btype=["\']checkbox["\'])(?=[^>]*\bname=["\']consentimento["\'])'
+        r'(?=[^>]*\brequired\b)[^>]*>',
+        form,
+        re.I,
+    ):
+        fail("priced_offer_capture_consent_not_required")
+
+    return findings
+
+
+def _conversion_profile(
+    route: str,
+    service_routes: set[str],
+    priced_signal: str = "",
+) -> str:
     if route in service_routes:
         return "service_pillar"
     if route in {"/privacidade/", "/termos-de-uso/", "/conflitos/", "/uso-de-ia/", "/imprensa/", "/correcoes/"}:
         return "trust_or_legal"
     if route.startswith("/politica-editorial/"):
         return "trust_or_legal"
+    if priced_signal:
+        return "priced_offer"
     return "commercial_content"
 
 
@@ -883,7 +1077,16 @@ def gate_conversion(
     main_cta_exempt = 0
     service_scanned = 0
     service_capture_count = 0
-    profile_counts = {"service_pillar": 0, "commercial_content": 0, "trust_or_legal": 0}
+    priced_scanned = 0
+    priced_capture_count = 0
+    priced_signals: dict[str, str] = {}
+    priced_actions, priced_offers = priced_action_registry()
+    profile_counts = {
+        "service_pillar": 0,
+        "priced_offer": 0,
+        "commercial_content": 0,
+        "trust_or_legal": 0,
+    }
     pii_re = re.compile(
         r"\b(\d{3}\.?\d{3}\.?\d{3}-?\d{2}|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\b",
         re.I,
@@ -896,7 +1099,8 @@ def gate_conversion(
         rel = p.relative_to(base)
         route = "/" if rel.as_posix() == "index.html" else "/" + rel.as_posix().removesuffix("index.html")
         main = _main_html(html)
-        profile = _conversion_profile(route, set(service_routes))
+        priced_signal = priced_offer_signal(main, priced_actions, priced_offers)
+        profile = _conversion_profile(route, set(service_routes), priced_signal)
         profile_counts[profile] += 1
         conversion_exempt = profile == "trust_or_legal"
         has_main_wa = bool(re.search(r'(?is)<a\b[^>]+href=["\'][^"\']*(?:wa\.me|whatsapp\.com)', main))
@@ -953,6 +1157,14 @@ def gate_conversion(
                     path=str(p.relative_to(base)),
                     reason="missing_main_cta",
                 )
+            )
+        if profile == "priced_offer":
+            priced_scanned += 1
+            priced_signals[route] = priced_signal
+            if has_main_form:
+                priced_capture_count += 1
+            findings.extend(
+                _priced_offer_findings(p, base, route, main, priced_offers)
             )
         if route in service_routes:
             service_scanned += 1
@@ -1031,6 +1243,14 @@ def gate_conversion(
                 "coverage": round(service_capture_count / service_scanned, 4)
                 if service_scanned
                 else 0.0,
+            },
+            "priced_offer_capture": {
+                "covered": priced_capture_count,
+                "total": priced_scanned,
+                "coverage": round(priced_capture_count / priced_scanned, 4)
+                if priced_scanned
+                else 0.0,
+                "routes": dict(sorted(priced_signals.items())),
             },
             "freeze": {
                 "earliest_safe_action_at": EARLIEST_SAFE_ACTION_AT.isoformat(),

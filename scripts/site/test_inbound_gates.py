@@ -170,6 +170,13 @@ def test_conversion_indexable_has_cta():
     assert r.stats["profiles"]["service_pillar"] == 13
     assert r.stats["main_cta"]["coverage"] == 1.0
     assert r.stats["main_cta"]["total"] + r.stats["main_cta"]["exempt"] == r.stats["scanned"]
+    # The priced profile is a census of the live surface, never a literal list.
+    from scripts.site.inbound_gates import priced_offer_routes
+
+    priced = priced_offer_routes(ROOT)
+    assert r.stats["profiles"]["priced_offer"] == len(priced)
+    assert r.stats["priced_offer_capture"]["total"] == len(priced)
+    assert r.stats["priced_offer_capture"]["coverage"] == 1.0
 
 
 def test_conversion_fails_before_and_passes_after_onpage_capture():
@@ -197,6 +204,127 @@ def test_conversion_fails_before_and_passes_after_onpage_capture():
         missing = [f for f in report.findings if f.reason == "pillar_missing_onpage_capture"]
         assert report.ok is False
         assert len(missing) == 5
+
+
+def _capture_gate_tree(tmp_path: Path) -> None:
+    """Smallest tree the conversion gate can grade: pillars + every priced route.
+
+    The priced half is discovered, never listed, so a page added to the value
+    ladder is graded here the moment it ships.
+    """
+    from scripts.site.inbound_gates import ONPAGE_CAPTURE_ROUTES, priced_offer_routes
+
+    rels = [f"{slug}/index.html" for slug in ONPAGE_CAPTURE_ROUTES]
+    rels += [f"{route.strip('/')}/index.html" for route in priced_offer_routes(ROOT)]
+    for rel in rels:
+        target = tmp_path / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text((ROOT / rel).read_text(encoding="utf-8"), encoding="utf-8")
+
+
+def test_priced_offer_profile_is_derived_from_the_published_price():
+    """The census comes from the action contract and the page, not a literal list."""
+    from scripts.site.inbound_gates import priced_action_registry, priced_offer_routes
+
+    actions, offers = priced_action_registry()
+    assert actions and offers, "the intent-action contract must price the ladder"
+
+    priced = priced_offer_routes(ROOT)
+    assert priced, "a site that publishes prices cannot have an empty priced census"
+    assert len(priced) == len(actions), sorted(priced)
+    assert all(route.startswith("/casos/modelo-") for route in priced), sorted(priced)
+    for route, signal in priced.items():
+        html = (ROOT / route.strip("/") / "index.html").read_text(encoding="utf-8")
+        assert signal in {"registered_priced_action", "visible_price_on_offer_cta"}, route
+        # Persisted capture, not only an attributed link out of the page.
+        assert 'action="/.netlify/functions/lead"' in html, route
+        assert 'name="consentimento"' in html, route
+        assert re.search(r'<input[^>]+name="offer_id"[^>]+value=""', html), route
+
+
+def test_priced_offer_gate_rejects_a_priced_page_without_persisted_capture():
+    with tempfile.TemporaryDirectory(prefix="confenge-priced-gate-") as tmp:
+        tmp_path = Path(tmp)
+        _capture_gate_tree(tmp_path)
+        assert gate_conversion(tmp_path).ok
+
+        # 1) An existing priced page keeps every attributed WhatsApp CTA and
+        #    loses only the form. `has_attributed_cta` must stop being enough.
+        priced_pages = sorted(tmp_path.glob("casos/modelo-*/index.html"))
+        assert priced_pages
+        victim = priced_pages[-1]
+        stripped = re.sub(
+            r"<form\b[^>]*>.*?</form>", "", victim.read_text(encoding="utf-8"), flags=re.I | re.S
+        )
+        assert 'data-cta-id="' in stripped and "wa.me" in stripped
+        victim.write_text(stripped, encoding="utf-8")
+        report = gate_conversion(tmp_path)
+        assert report.ok is False
+        assert [
+            f.path
+            for f in report.findings
+            if f.reason == "priced_offer_missing_persisted_capture"
+        ] == [str(victim.relative_to(tmp_path))]
+
+        # 2) A ninth priced page shipped without capture fails on arrival.
+        victim.write_text(
+            (ROOT / victim.relative_to(tmp_path)).read_text(encoding="utf-8"), encoding="utf-8"
+        )
+        ninth = tmp_path / "casos/modelo-nono-entregavel-precificado/index.html"
+        ninth.parent.mkdir(parents=True)
+        ninth.write_text(stripped, encoding="utf-8")
+        report = gate_conversion(tmp_path)
+        assert report.ok is False
+        assert [
+            f.path
+            for f in report.findings
+            if f.reason == "priced_offer_missing_persisted_capture"
+        ] == [str(ninth.relative_to(tmp_path))]
+
+
+def test_priced_offer_gate_catches_a_price_that_was_never_registered():
+    """A price the action contract never saw is still a price to the visitor."""
+    from scripts.site.inbound_gates import priced_offer_routes
+
+    with tempfile.TemporaryDirectory(prefix="confenge-rogue-price-") as tmp:
+        tmp_path = Path(tmp)
+        _capture_gate_tree(tmp_path)
+        donor = sorted(tmp_path.glob("casos/modelo-*/index.html"))[-1]
+        html = re.sub(
+            r"<form\b[^>]*>.*?</form>", "", donor.read_text(encoding="utf-8"), flags=re.I | re.S
+        )
+        html = re.sub(r'data-next-action-id="[^"]*"', 'data-next-action-id="contratar_x"', html)
+        html = re.sub(r'data-offer-id="[^"]*"', 'data-offer-id="handraise-nao-registrada-v1"', html)
+        rogue = tmp_path / "casos/modelo-oferta-fora-do-contrato/index.html"
+        rogue.parent.mkdir(parents=True)
+        rogue.write_text(html, encoding="utf-8")
+
+        route = "/casos/modelo-oferta-fora-do-contrato/"
+        assert priced_offer_routes(tmp_path)[route] == "visible_price_on_offer_cta"
+        report = gate_conversion(tmp_path)
+        assert report.ok is False
+        assert any(
+            f.reason == "priced_offer_missing_persisted_capture"
+            and f.path == str(rogue.relative_to(tmp_path))
+            for f in report.findings
+        ), report.findings[:5]
+
+
+def test_priced_offer_gate_refuses_an_invented_checkout_on_a_handraise_page():
+    """#88 freezes the catalog: a ladder page may never submit a paid offer id."""
+    with tempfile.TemporaryDirectory(prefix="confenge-priced-checkout-") as tmp:
+        tmp_path = Path(tmp)
+        _capture_gate_tree(tmp_path)
+        victim = sorted(tmp_path.glob("casos/modelo-*/index.html"))[-1]
+        html = victim.read_text(encoding="utf-8").replace(
+            '<input name="offer_id" type="hidden" value=""/>',
+            '<input name="offer_id" type="hidden" value="CFG-DIAG-EXP-v1"/>',
+            1,
+        )
+        victim.write_text(html, encoding="utf-8")
+        report = gate_conversion(tmp_path)
+        assert report.ok is False
+        assert any(f.reason == "priced_offer_checkout_invented" for f in report.findings)
 
 
 def test_legacy_redirects_matrix():

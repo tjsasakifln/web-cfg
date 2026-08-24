@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 55,
+        "scanned": 45,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,7 +14,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 65
+        "sitemap_locs": 76
       }
     },
     "brand_shell": {
@@ -31,14 +31,56 @@
       "findings": [
         {
           "gate": "conversion",
-          "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+          "path": "aditivos-obras-publicas/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/aditivos-obras-publicas/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "diagnostico-pre-licitacao/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/diagnostico-pre-licitacao/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "diagnostico-pre-licitacao/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
         },
         {
           "gate": "conversion",
-          "path": "casos/medicao-glosa-demonstrativo/index.html",
+          "path": "diagnostico-b2g-360/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/diagnostico-b2g-360/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "metodologia-inteligencia/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "medicoes-glosas-obras-publicas/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/medicoes-glosas-obras-publicas/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "auditoria-orcamento-licitacao/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/auditoria-orcamento-licitacao/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "servicos-obras-publicas/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
@@ -46,6 +88,48 @@
         {
           "gate": "conversion",
           "path": "ferramentas/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "problemas-que-resolvemos/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "entregas/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "reequilibrio-obras-publicas/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/reequilibrio-obras-publicas/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "comercial/termos-diagnostico-b2g/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "comercial/privacidade-leads/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
@@ -73,63 +157,15 @@
         },
         {
           "gate": "conversion",
-          "path": "diagnostico-b2g-360/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/diagnostico-b2g-360/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "medicoes-glosas-obras-publicas/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/medicoes-glosas-obras-publicas/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "aditivos-obras-publicas/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/aditivos-obras-publicas/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "reequilibrio-obras-publicas/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/reequilibrio-obras-publicas/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "auditoria-orcamento-licitacao/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/auditoria-orcamento-licitacao/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "diagnostico-pre-licitacao/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/diagnostico-pre-licitacao/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "diagnostico-pre-licitacao/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "metodologia-inteligencia/index.html",
+          "path": "casos/medicao-glosa-demonstrativo/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
         }
       ],
       "stats": {
-        "scanned": 55,
+        "scanned": 76,
+        "onpage_capture_scanned": 5,
         "journeys": [
           "contrato",
           "edital",
@@ -137,24 +173,43 @@
         ],
         "profiles": {
           "service_pillar": 13,
-          "editorial_or_other": 42
+          "priced_offer": 8,
+          "commercial_content": 46,
+          "trust_or_legal": 9
         },
         "main_cta": {
-          "covered": 55,
-          "total": 55,
-          "coverage": 1.0
+          "covered": 67,
+          "total": 67,
+          "coverage": 1.0,
+          "exempt": 9,
+          "public_scanned": 76
         },
         "on_page_capture": {
           "covered": 7,
           "total": 13,
           "coverage": 0.5385
         },
+        "priced_offer_capture": {
+          "covered": 8,
+          "total": 8,
+          "coverage": 1.0,
+          "routes": {
+            "/casos/modelo-apresentacao-executiva-resultados/": "registered_priced_action",
+            "/casos/modelo-base-quantitativa-canonica/": "registered_priced_action",
+            "/casos/modelo-contratos-vincendos-relicitacao/": "registered_priced_action",
+            "/casos/modelo-mapa-compradores-publicos/": "registered_priced_action",
+            "/casos/modelo-mapeamento-concorrentes-publicos/": "registered_priced_action",
+            "/casos/modelo-painel-precos-obras-publicas/": "registered_priced_action",
+            "/casos/modelo-relatorio-executivo-consolidado/": "registered_priced_action",
+            "/casos/modelo-relatorio-inteligencia-licitacoes/": "registered_priced_action"
+          }
+        },
         "freeze": {
           "earliest_safe_action_at": "2026-09-16",
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 14
+        "warnings": 19
       }
     },
     "legacy_entity": {

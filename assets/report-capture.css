@@ -1,0 +1,139 @@
+/* Persisted capture band for the priced deliverable models (/casos/modelo-*).
+ * Loaded by every page of the value ladder. The WhatsApp path keeps the offer
+ * buttons; this band is the written record, so it must not repeat the green
+ * primary archetype used by the offer CTAs above it.
+ */
+
+.report-capture {
+  background: var(--r-soft, #f3f4f5);
+  border-top: 1px solid var(--r-line, #dce3e8);
+  color: var(--r-text, #26374a);
+  padding: 56px 0 64px;
+}
+
+.report-capture-grid {
+  align-items: start;
+  display: grid;
+  gap: 32px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.report-capture-copy { max-width: 34rem; }
+
+.report-capture-copy h2 {
+  color: var(--r-ink, #071a31);
+  margin: 6px 0 12px;
+}
+
+.report-capture-notes {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+}
+
+.report-capture-notes li {
+  border-left: 3px solid var(--r-lime, #ced62a);
+  color: var(--r-muted, #647182);
+  font-size: .92rem;
+  line-height: 1.5;
+  padding-left: 12px;
+}
+
+.report-capture-form {
+  background: #fff;
+  border: 1px solid var(--r-line, #dce3e8);
+  border-radius: 10px;
+  display: grid;
+  gap: 14px;
+  padding: 26px;
+}
+
+.report-capture-form label {
+  color: var(--r-ink, #071a31);
+  display: grid;
+  font-size: .9rem;
+  font-weight: 650;
+  gap: 6px;
+}
+
+.report-capture-form input[type="text"],
+.report-capture-form input[type="email"],
+.report-capture-form input:not([type]),
+.report-capture-form textarea {
+  border: 1px solid var(--r-line, #dce3e8);
+  border-radius: 7px;
+  color: var(--r-ink, #071a31);
+  font: inherit;
+  font-weight: 500;
+  padding: 11px 12px;
+  width: 100%;
+}
+
+.report-capture-form input:focus-visible,
+.report-capture-form textarea:focus-visible {
+  border-color: var(--r-navy-2, #0a294b);
+  outline: 3px solid rgba(10, 41, 75, .22);
+  outline-offset: 1px;
+}
+
+.report-capture-form .capture-consent {
+  align-items: flex-start;
+  display: flex;
+  font-size: .86rem;
+  font-weight: 500;
+  gap: 10px;
+  line-height: 1.45;
+}
+
+.report-capture-form .capture-consent input { margin-top: 3px; }
+
+.report-capture-submit {
+  background: var(--r-navy, #061a33);
+  border: 1px solid var(--r-navy, #061a33);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  justify-self: start;
+  padding: 13px 22px;
+  text-align: center;
+}
+
+.report-capture-submit:hover { background: var(--r-navy-2, #0a294b); }
+
+.report-capture-submit:focus-visible {
+  outline: 3px solid var(--r-lime, #ced62a);
+  outline-offset: 2px;
+}
+
+.report-capture-submit[disabled] { cursor: progress; opacity: .6; }
+
+.report-capture-form .form-status {
+  font-size: .88rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.report-capture-legal {
+  color: var(--r-muted, #647182);
+  font-size: .82rem;
+  margin: 0;
+}
+
+.report-capture-link {
+  color: inherit;
+  display: inline-block;
+  font-size: .88rem;
+  font-weight: 650;
+  margin-top: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 860px) {
+  .report-capture-grid { grid-template-columns: minmax(0, 1fr); }
+  .report-capture { padding: 44px 0 48px; }
+}

@@ -772,7 +772,48 @@ def test_page_is_direct_public_html_without_friction() -> None:
     assert '<main id="conteudo">' in html
     assert '<meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/>' in html
     assert f'<link href="{CANONICAL}" rel="canonical"/>' in html
-    assert not any(token in lowered for token in ("<form", "<dialog", "<details", ".pdf", "download"))
+    assert not any(token in lowered for token in ("<dialog", "<details", ".pdf", "download"))
+    # The report is never gated. The single form is the persisted capture of the
+    # published price (#289) and it sits after the document, not in front of it.
+    assert lowered.count("<form") == 1
+    assert lowered.index("<form") > lowered.index("<article")
+
+
+def test_price_leaves_a_persisted_record_not_only_a_whatsapp_click() -> None:
+    """#289: the cheapest rung of the ladder still has to write a lead down."""
+    html = _html()
+    match = re.search(r"<form\b[^>]*>.*?</form>", html, re.S)
+    assert match
+    form = match.group(0)
+    open_tag = form.split(">", 1)[0]
+    for attr, value in (
+        ("method", "post"),
+        ("action", "/.netlify/functions/lead"),
+        ("id", "captura-modelo"),
+        ("data-offer-id", HANDRAISE_ID),
+        ("data-cta-id", "report-599-capture"),
+        ("data-asset-id", "relatorio-inteligencia-licitacoes-demonstrativo"),
+        ("data-cta-position", "offer_capture"),
+    ):
+        assert f'{attr}="{value}"' in open_tag, attr
+
+    hidden = dict(re.findall(r'<input\b[^>]*name="([^"]+)"[^>]*value="([^"]*)"', form))
+    assert hidden["origem"] == ROUTE
+    assert hidden["landing_page"] == CANONICAL
+    assert hidden["asset_id"] == "relatorio-inteligencia-licitacoes-demonstrativo"
+    assert hidden["cta_id"] == "report-599-capture"
+    assert hidden["estagio"] == ROUTE.strip("/").split("/")[-1]
+    # Handraise only: #88 keeps the Asaas catalog frozen and checkout disabled.
+    assert hidden["offer_id"] == ""
+    assert hidden["terms_id"] == ""
+    assert "amount_cents" not in hidden
+    assert 'name="consentimento"' in form and "required" in form
+    anchor = html.find('href="#captura-modelo"')
+    assert 0 < anchor < match.start()
+    band = re.search(r'<section class="report-capture".*?</section>', html, re.S)
+    assert band and set(re.findall(r"R\$ [\d.]*\d", band.group(0))) == {"R$ 599"}
+    # WhatsApp is complemented, never replaced.
+    assert html.count("wa.me/5548988344559") == 5
 
 
 def test_product_promise_value_and_scope_are_explicit_before_the_example() -> None:
