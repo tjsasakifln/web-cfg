@@ -364,6 +364,14 @@ assert("first_fold_sessions_pending", firstFold.human_validation.state === "NOT_
 assert("first_fold_min_sessions", firstFold.human_validation.minimum_icp_sessions === 5, firstFold.human_validation);
 
 const censusRoutes = new Set(firstFold.census.map((surface) => surface.route));
+
+// A página de uma oferta vizinha não pode ser registrada como se já publicasse
+// um item sem página própria. Os contratos de escopo #330 e #333 mantêm estas
+// rotas nulas até a oferta efetivamente existir na superfície pública.
+for (const id of ["CFG-D13", "CFG-D15", "CFG-D21"]) {
+  assert(`unbuilt_offer_has_no_borrowed_route_${id}`, byId.get(id).route === null, byId.get(id).route);
+}
+
 for (const surface of firstFold.census) {
   assert(`census_route_exists_${surface.route}`, fs.existsSync(routeFile(surface.route)), surface.route);
   assert(`census_state_${surface.route}`, firstFold.evidence_states.includes(surface.evidence_state), surface.evidence_state);
