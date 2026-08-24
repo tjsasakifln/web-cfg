@@ -319,7 +319,18 @@ def test_report_returns_to_deliverables_without_changing_offer_contract() -> Non
     assert '"name":"Entregas","item":"https://confenge.com.br/entregas/"' in html
     assert "R$ 599 = 1 relatório adaptado" in html
     assert html.count('data-next-action-id="contratar_relatorio_inteligencia_599"') == 5
-    assert html.count('data-offer-id="handraise-report-intelligence-599-v1"') == 5
+    # Five canonical order-entry CTAs plus the inline capture form share the id.
+    assert html.count('data-offer-id="handraise-report-intelligence-599-v1"') == 6
+    assert (
+        html.count(
+            'data-cta-position="offer_capture" action="/.netlify/functions/lead"'
+        )
+        + html.count(
+            'action="/.netlify/functions/lead" data-offer-id='
+            '"handraise-report-intelligence-599-v1"'
+        )
+        == 1
+    )
 
 
 def test_sitemap_allowlist_and_public_artifact_contract() -> None:
