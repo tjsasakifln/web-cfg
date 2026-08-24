@@ -10,7 +10,7 @@
 .rec-tag.is-fact { background: rgba(45, 111, 45, .13); color: var(--r-green); }
 .rec-tag.is-calc { background: rgba(6, 26, 51, .09); color: var(--r-navy-2); }
 .rec-tag.is-infer { background: rgba(206, 214, 42, .34); color: #575c07; }
-.rec-tag.is-unknown { background: rgba(100, 113, 130, .15); color: var(--r-muted); }
+.rec-tag.is-unknown { background: rgba(100, 113, 130, .15); color: #4d5765; }
 .report-section-dark .rec-tag.is-fact { background: rgba(206, 214, 42, .16); color: var(--r-lime); }
 .report-section-dark .rec-tag.is-calc { background: rgba(255, 255, 255, .11); color: #dbe4ec; }
 .report-section-dark .rec-tag.is-infer { background: rgba(206, 214, 42, .16); color: #e4ea86; }
@@ -77,6 +77,8 @@
 .report-section:not(.report-section-dark) .report-table tbody tr.is-go { background: rgba(45, 111, 45, .07); }
 .report-section:not(.report-section-dark) .report-table tbody tr.is-condition { background: rgba(6, 26, 51, .04); }
 .report-section:not(.report-section-dark) .report-table-note { color: var(--r-muted); }
+.report-section:not(.report-section-dark) .decision-review { border-color: #8ba2b5; color: var(--r-ink); }
+.report-section:not(.report-section-dark) .decision-no { border-color: #a9b6c2; color: var(--r-muted); }
 .report-section:not(.report-section-dark) .report-table-wrap:focus { outline-color: var(--r-green); }
 
 @media (max-width: 700px) {
