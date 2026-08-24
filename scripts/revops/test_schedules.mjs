@@ -107,7 +107,14 @@ function fail(n, d) {
     reason: "person@example.com",
     destination_fingerprint: "WARMBLY_PRODUCTION_V1",
   });
-  if (Object.values(hostileSummary).some((value) => String(value).includes("example.com") || value === "actual-secret")) {
+  const expectedHostileSummary = {
+    webhook_url: "UNEXPECTED",
+    webhook_secret: "UNEXPECTED",
+    contract: "READY",
+    reason: "UNEXPECTED",
+    destination_fingerprint: "WARMBLY_PRODUCTION_V1",
+  };
+  if (JSON.stringify(hostileSummary) !== JSON.stringify(expectedHostileSummary)) {
     fail("inbound_proof_configuration_summary_allowlist", hostileSummary);
   } else pass("inbound_proof_configuration_summary_allowlist");
 
