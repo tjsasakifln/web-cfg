@@ -1,0 +1,5 @@
+/* Cache-busted narrow-screen hardening exposed by the complete #293 layout census. */
+.simple-card code{overflow-wrap:anywhere;word-break:break-word}
+.simple-page .footer-links a{min-width:0;overflow-wrap:anywhere}
+.simple-page .button{min-height:50px;padding-block:.75rem;white-space:normal;text-align:center}
+.simple-page .header-cta{height:50px;min-height:50px}

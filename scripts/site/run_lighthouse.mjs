@@ -21,21 +21,9 @@ import {
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const OUT = join(ROOT, "docs", "lighthouse-runs");
 const coverage = deriveCoverage({ policy: loadPolicy(), siteRoot: resolveSiteRoot() });
-const PAGES = process.env.LH_PAGES
-  ? process.env.LH_PAGES.split(",").map((s) => s.trim()).filter(Boolean)
-  : coverage.lighthouse.pages;
-const IMAGE_GATE_PAGES = new Set(
-  (process.env.LH_IMAGE_GATE_PAGES || coverage.lighthouse.image_gate_pages.join(","))
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean),
-);
-const SEO_EXEMPT_PAGES = new Set(
-  (process.env.LH_SEO_EXEMPT_PAGES || coverage.lighthouse.seo_exempt_pages.join(","))
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean),
-);
+const PAGES = coverage.lighthouse.pages;
+const IMAGE_GATE_PAGES = new Set(coverage.lighthouse.image_gate_pages);
+const SEO_EXEMPT_PAGES = new Set(coverage.lighthouse.seo_exempt_pages);
 const HOME_RUNS = Number(process.env.LH_HOME_RUNS || 1);
 console.log(formatCoverageDeclaration(coverage));
 console.log(`lighthouse pages (${PAGES.length}): ${PAGES.join(" ")}`);
@@ -43,12 +31,12 @@ if (!Number.isInteger(HOME_RUNS) || HOME_RUNS < 1 || HOME_RUNS > 5) {
   throw new Error(`LH_HOME_RUNS must be an integer from 1 to 5, got ${process.env.LH_HOME_RUNS}`);
 }
 for (const [name, configuredPages] of [
-  ["LH_IMAGE_GATE_PAGES", IMAGE_GATE_PAGES],
-  ["LH_SEO_EXEMPT_PAGES", SEO_EXEMPT_PAGES],
+  ["image_gate_pages", IMAGE_GATE_PAGES],
+  ["seo_exempt_pages", SEO_EXEMPT_PAGES],
 ]) {
   const missingPages = [...configuredPages].filter((path) => !PAGES.includes(path));
   if (missingPages.length) {
-    throw new Error(`${name} must be included in LH_PAGES: ${missingPages.join(", ")}`);
+    throw new Error(`${name} must be included in derived Lighthouse pages: ${missingPages.join(", ")}`);
   }
 }
 const PORT = 8766;
@@ -132,12 +120,12 @@ try {
           output: "json",
           logLevel: "error",
           onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
-          formFactor: "mobile",
+          formFactor: coverage.lighthouse.form_factor,
           screenEmulation: {
-            mobile: true,
-            width: 390,
-            height: 844,
-            deviceScaleFactor: 2,
+            mobile: coverage.lighthouse.form_factor === "mobile",
+            width: coverage.lighthouse.viewport.width,
+            height: coverage.lighthouse.viewport.height,
+            deviceScaleFactor: coverage.lighthouse.viewport.device_scale_factor,
             disabled: false,
           },
           maxWaitForLoad: 45000,
@@ -199,7 +187,8 @@ const summary = {
     additional_pages: coverage.lighthouse.additional_pages,
     image_gate_pages: [...IMAGE_GATE_PAGES],
     seo_exempt_pages: [...SEO_EXEMPT_PAGES],
-    exclusions: coverage.lighthouse.exclusions,
+    not_sampled_count: coverage.lighthouse.not_sampled_count,
+    not_sampled: coverage.lighthouse.not_sampled,
     thresholds: coverage.lighthouse.thresholds,
   },
   results,

@@ -1,0 +1,5 @@
+/* Cache-busted #293 accessibility overrides for the shared report template. */
+.report-section:not(.report-section-dark) .report-table-note{color:var(--r-muted)}
+.report-section:not(.report-section-dark) .decision-review{border-color:#8ba2b5;color:var(--r-ink)}
+.report-section:not(.report-section-dark) .decision-no{border-color:#a9b6c2;color:var(--r-muted)}
+.report-constraint p a{text-decoration:underline;text-underline-offset:2px}

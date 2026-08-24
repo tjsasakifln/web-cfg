@@ -154,6 +154,8 @@ def test_site_ci_shape():
         errors.append("site-ci must install Chrome before npm run audit:axe")
     if 'UI_GEOMETRY_REQUIRED: "1"' not in text:
         errors.append("site-ci must fail closed when UI geometry cannot launch Chrome")
+    if "npm run audit:layout-sitewide" not in text:
+        errors.append("site-ci must execute the full sitewide layout audit claimed by #293")
     if 'LH_HOME_RUNS: "3"' not in text:
         errors.append("site-ci must run the #185 home Lighthouse gate three times")
     for needle in ("npm run audit:accessibility", "npm run test:lighthouse-gates"):
@@ -385,9 +387,9 @@ def test_lighthouse_covers_article_cover_regression_routes():
         "/acompanhamento-contratos-obras/",
     )
     image_gate_routes = {
-        family["lighthouse_representative"]
-        for family in policy["commercial_families"]
-        if family.get("image_gate")
+        entry["route"]
+        for entry in policy["lighthouse"]["canonical_representatives"]
+        if entry.get("image_gate")
     }
     image_gate_routes.update(
         entry["route"]
