@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 """Lint CONFENGE public copy for em-dashes and high-confidence AI phrases.
 
+Every pattern in PATS governs `ok` and the exit code (issue #298). Before that
+fix only `em_dash` did: the five phrase rules were computed, written to the
+report's `patterns` field and then ignored, so the report was green because no
+travessão existed, not because the phrases were absent.
+
 Covers:
 - data/editorial/pages/*.json fields
-- ferramentas/** HTML (visible text)
+- every shipped visitor HTML file (visible text), derived from
+  scripts/site/public_copy_scope, not from a hand-written route list
 - public HTML surfaces via residual_em_dashes (official source titles allowed)
+
+Legitimate individual occurrences live in data/site/copy-exceptions.json with a
+written reason, one entry per (rule, match, exact path).
 """
 from __future__ import annotations
 
@@ -18,6 +27,11 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts.site.public_copy_scope import (  # noqa: E402
+    is_excepted,
+    visible_text,
+    visitor_facing_html_files,
+)
 from scripts.site.scrub_em_dashes import (  # noqa: E402
     EM,
     iter_public_html,
@@ -45,6 +59,9 @@ PATS = [
     ("agrega_valor", re.compile(r"agrega valor", re.I)),
 ]
 
+# Rule name used by data/site/copy-exceptions.json for this lint.
+EXCEPTION_RULE = "editorial_copy_phrase"
+
 
 def snip(t: str, i: int) -> str:
     return t[max(0, i - 24) : i + 72].replace("\n", " ")
@@ -55,6 +72,8 @@ def scan(text: str, path: str, field: str, out: list) -> None:
         return
     for name, rx in PATS:
         for m in rx.finditer(text):
+            if name != "em_dash" and is_excepted(EXCEPTION_RULE, name, path):
+                continue
             out.append(
                 {
                     "path": path,
@@ -65,13 +84,35 @@ def scan(text: str, path: str, field: str, out: list) -> None:
             )
 
 
+def build_report(
+    em: list[dict],
+    phrase: list[dict],
+    public_residual: int,
+    scanned_html: int,
+) -> dict:
+    """The report and the exit code come from BOTH em-dash and phrase findings.
+
+    Issue #298: `ok` used to be computed from em-dash findings only, so the five
+    phrase rules were reported and never enforced.
+    """
+    return {
+        "ok": len(em) == 0 and len(phrase) == 0,
+        "scanned_html": scanned_html,
+        "em_dash_count": len(em),
+        "em_dash": em[:200],
+        "phrase_count": len(phrase),
+        "patterns": phrase,
+        "public_html_residual": public_residual,
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--report", type=Path)
     ap.add_argument(
         "--skip-public-html",
         action="store_true",
-        help="Only scan editorial JSON + ferramentas (legacy scope)",
+        help="Only scan editorial JSON + visitor HTML (skip residual em-dash sweep)",
     )
     args = ap.parse_args()
     findings: list[dict] = []
@@ -92,12 +133,28 @@ def main() -> int:
             if isinstance(req, dict) and isinstance(req.get("label"), str):
                 scan(req["label"], rel, f"items[{i}]", findings)
 
-    for p in sorted((ROOT / "ferramentas").rglob("index.html")):
+    # Sitewide: every shipped visitor HTML file, derived from the repository.
+    # The em_dash pattern stays on the residual sweep below (official source
+    # titles may keep —); here only the five phrase rules run.
+    html_files = visitor_facing_html_files(ROOT)
+    for p in html_files:
         raw = p.read_text(encoding="utf-8")
-        visible = re.sub(r"<script\b[^>]*>.*?</script>", " ", raw, flags=re.I | re.S)
-        visible = re.sub(r"<style\b[^>]*>.*?</style>", " ", visible, flags=re.I | re.S)
-        visible = re.sub(r"<[^>]+>", " ", visible)
-        scan(re.sub(r"\s+", " ", visible), str(p.relative_to(ROOT)), "html_visible", findings)
+        rel = str(p.relative_to(ROOT))
+        text = visible_text(raw)
+        for name, rx in PATS:
+            if name == "em_dash":
+                continue
+            for m in rx.finditer(text):
+                if is_excepted(EXCEPTION_RULE, name, rel):
+                    continue
+                findings.append(
+                    {
+                        "path": rel,
+                        "field": "html_visible",
+                        "pattern": name,
+                        "snippet": snip(text, m.start()),
+                    }
+                )
 
     public_residual: list[dict] = []
     if not args.skip_public_html:
@@ -120,21 +177,22 @@ def main() -> int:
                     )
 
     em = [f for f in findings if f["pattern"] == "em_dash"] + public_residual
-    rep = {
-        "ok": len(em) == 0,
-        "em_dash_count": len(em),
-        "em_dash": em[:200],
-        "patterns": [f for f in findings if f["pattern"] != "em_dash"],
-        "public_html_residual": len(public_residual),
-    }
+    phrase = [f for f in findings if f["pattern"] != "em_dash"]
+    rep = build_report(em, phrase, len(public_residual), len(html_files))
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(rep, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print("em_dash hits:", len(em), f"(public_html residual: {len(public_residual)})")
+    print(
+        f"scanned {len(html_files)} visitor HTML files; "
+        f"em_dash hits: {len(em)} (public_html residual: {len(public_residual)}); "
+        f"phrase hits: {len(phrase)}"
+    )
     for f in em[:20]:
         print(" EM", f["path"], f["field"], f["snippet"])
-    if em:
+    for f in phrase[:40]:
+        print(" PHRASE", f["pattern"], f["path"], f["field"], f["snippet"])
+    if em or phrase:
         print("FAIL", file=sys.stderr)
         return 1
     print("PASS copy lint")

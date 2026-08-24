@@ -1,7 +1,9 @@
 {
   "ok": true,
+  "scanned_html": 259,
   "em_dash_count": 0,
   "em_dash": [],
+  "phrase_count": 0,
   "patterns": [],
   "public_html_residual": 0
 }

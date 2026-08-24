@@ -18,6 +18,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 EM = "\u2014"  # —
 MIDDOT = "\u00b7"  # ·
 
@@ -303,7 +306,16 @@ PUBLIC_ROOTS = (
 
 
 def iter_public_html(root: Path = ROOT) -> list[Path]:
-    files: list[Path] = []
+    """Every shipped visitor HTML file, plus the legacy PUBLIC_ROOTS list.
+
+    Issue #298: PUBLIC_ROOTS was a hand-written list of 28 roots, so a public
+    family published after it was written escaped the travessão sweep. The scope
+    now derives from scripts/site/public_copy_scope; PUBLIC_ROOTS is kept only
+    as a floor so nothing that used to be covered can silently drop out.
+    """
+    from scripts.site.public_copy_scope import visitor_facing_html_files
+
+    files: list[Path] = list(visitor_facing_html_files(root))
     for name in PUBLIC_ROOTS:
         base = root / name
         if not base.exists():

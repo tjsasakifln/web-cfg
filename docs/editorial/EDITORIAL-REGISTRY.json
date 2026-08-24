@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-22T23:39:05Z",
+  "generated_at": "2026-08-24T02:33:09Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
@@ -636,9 +636,9 @@
           "a": "Só de forma lateral (responsabilidade técnica do projeto que gerou a alteração). Não use a 260 como fundamento principal de aditivo quantitativo."
         }
       ],
-      "body_markdown": "## Identificação\n\n- **Tribunal:** TCU\n- **Enunciado:** Súmula nº 260\n- **Tema:** dever de exigir ART de projeto, execução e fiscalização de obras e serviços de engenharia\n- **Fonte de acesso:** portal de jurisprudência do TCU\n- **Última conferência desta página:** 02/08/2026\n- **Observação:** o texto integral e a data de aprovação devem ser confirmados na base oficial antes de citação formal em processo.\n\nA súmula é também referida em materiais oficiais de orientação (documentação AGU/PGF sobre obras), o que reforça sua circulação prática, sem transformar resumo secundário em substituto do enunciado oficial.\n\n## Controvérsia típica na obra\n\nQuem deveria ter ART naquele projeto complementar? A fiscalização do órgão tem ART de fiscalização? A contratada registrou ART de execução cobrindo o objeto real (incluindo aditivos)?\n\n## O que o enunciado ajuda a decidir\n\n- Cobrar regularidade de ART como item de conformidade contratual e de controle\n- Organizar dossiê técnico antes de medições e aditivos sensíveis\n- Separar responsabilidade de projeto, de execução e de fiscalização\n\n## O que a súmula não decide\n\n- Preço de item novo\n- Culpa por atraso\n- Procedência de reequilíbrio\n- Se um aditivo específico é legal\n\n## Quando invocar\n\n- Em resposta a apontamento de controle sobre ausência de ART\n- Em checklist interno de kickoff e de aditivo\n- Em defesa técnica quando a Administração exige responsável técnico sem rito claro\n\n## Quando distinguir\n\n- Discussões cíveis de responsabilidade civil por defeito construtivo (outro regime)\n- Processos judiciais em que o TCU não é parte\n- Casos em que o rito profissional (CREA) já impõe dever próprio, independente da súmula\n\n## Documentos úteis\n\n- ARTs e RRTs registradas e quitadas\n- Contratos de responsável técnico e subcontratos\n- Projetos com identificação de autoria\n- Portarias de fiscalização do órgão\n- Diário com identificação do responsável técnico de campo\n\n## Relação com a Lei 14.133/2021\n\nA lei reforça planejamento, gestão e fiscalização contratuais. A Súmula 260 continua sendo referência de controle sobre formalização da responsabilidade técnica. Não substitua a leitura da lei e do contrato pela súmula.\n\n## Limites honestos desta página\n\nNão reproduzimos o texto integral do enunciado para evitar desatualização. A consulta à base do TCU é passo obrigatório antes de uso em peça formal.\n\n## Exemplo de uso correto\n\nEm kickoff de contrato, a contratada organiza pasta de ARTs de execução por disciplina e confere se aditivos posteriores exigem registro complementar. Isso reduz apontamento futuro e melhora a rastreabilidade em medição.\n\n## Exemplo de uso incorreto\n\nInvocar a Súmula 260 como se ela determinasse o preço do aditivo ou a culpa por atraso. O enunciado não carrega essas consequências.\n\n## Conferência periódica\n\nAntes de citar em peça formal, abra a base de jurisprudência do TCU e confirme o texto vigente do enunciado. Esta página registra a data de conferência editorial, não substitui a captura do PDF/HTML oficial nos autos.\n\n\n## Risco de citação desatualizada\n\nO erro mais comum é copiar o enunciado de fonte secundária sem abrir a base oficial do TCU. Outro risco é transformar a súmula em argumento para tema que ela não cobre (preço, atraso, reequilíbrio).\n",
+      "body_markdown": "## Identificação\n\n- **Tribunal:** TCU\n- **Enunciado:** Súmula nº 260\n- **Tema:** dever de exigir ART de projeto, execução e fiscalização de obras e serviços de engenharia\n- **Fonte de acesso:** portal de jurisprudência do TCU\n- **Última conferência desta página:** 02/08/2026\n- **Observação:** o texto integral e a data de aprovação devem ser confirmados na base oficial antes de citação formal em processo.\n\nA súmula é também referida em materiais oficiais de orientação (documentação AGU/PGF sobre obras), o que reforça sua circulação prática, sem transformar resumo secundário em substituto do enunciado oficial.\n\n## Controvérsia típica na obra\n\nQuem deveria ter ART naquele projeto complementar? A fiscalização do órgão tem ART de fiscalização? A contratada registrou ART de execução cobrindo o objeto real (incluindo aditivos)?\n\n## O que o enunciado ajuda a decidir\n\n- Cobrar regularidade de ART como item de conformidade contratual e de controle\n- Organizar dossiê técnico antes de medições e aditivos sensíveis\n- Separar responsabilidade de projeto, de execução e de fiscalização\n\n## O que a súmula não decide\n\n- Preço de item novo\n- Culpa por atraso\n- Procedência de reequilíbrio\n- Se um aditivo específico é legal\n\n## Quando invocar\n\n- Em resposta a apontamento de controle sobre ausência de ART\n- Em checklist interno de reunião inicial e de aditivo\n- Em defesa técnica quando a Administração exige responsável técnico sem rito claro\n\n## Quando distinguir\n\n- Discussões cíveis de responsabilidade civil por defeito construtivo (outro regime)\n- Processos judiciais em que o TCU não é parte\n- Casos em que o rito profissional (CREA) já impõe dever próprio, independente da súmula\n\n## Documentos úteis\n\n- ARTs e RRTs registradas e quitadas\n- Contratos de responsável técnico e subcontratos\n- Projetos com identificação de autoria\n- Portarias de fiscalização do órgão\n- Diário com identificação do responsável técnico de campo\n\n## Relação com a Lei 14.133/2021\n\nA lei reforça planejamento, gestão e fiscalização contratuais. A Súmula 260 continua sendo referência de controle sobre formalização da responsabilidade técnica. Não substitua a leitura da lei e do contrato pela súmula.\n\n## Limites honestos desta página\n\nNão reproduzimos o texto integral do enunciado para evitar desatualização. A consulta à base do TCU é passo obrigatório antes de uso em peça formal.\n\n## Exemplo de uso correto\n\nEm reunião inicial de contrato, a contratada organiza pasta de ARTs de execução por disciplina e confere se aditivos posteriores exigem registro complementar. Isso reduz apontamento futuro e melhora a rastreabilidade em medição.\n\n## Exemplo de uso incorreto\n\nInvocar a Súmula 260 como se ela determinasse o preço do aditivo ou a culpa por atraso. O enunciado não carrega essas consequências.\n\n## Conferência periódica\n\nAntes de citar em peça formal, abra a base de jurisprudência do TCU e confirme o texto vigente do enunciado. Esta página registra a data de conferência editorial, não substitui a captura do PDF/HTML oficial nos autos.\n\n\n## Risco de citação desatualizada\n\nO erro mais comum é copiar o enunciado de fonte secundária sem abrir a base oficial do TCU. Outro risco é transformar a súmula em argumento para tema que ela não cobre (preço, atraso, reequilíbrio).\n",
       "_source_file": "data/editorial/pages/jur-sumula-260-art.json",
-      "material_hash": "775e90c4cb586f46e7725c78310d130fc56644c01c833b55b8f944d980ef746e",
+      "material_hash": "6c11aa04e87e45faa19f09235af8869f677b7ffca63f4d31deca0c7e82e5f467",
       "status": "REJECTED",
       "history": [
         {
@@ -850,6 +850,46 @@
         },
         {
           "at": "2026-08-22T23:38:55Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-24T02:23:32Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-24T02:24:29Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-24T02:25:26Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-24T02:27:35Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-24T02:28:30Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-24T02:30:45Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-24T02:30:54Z",
+          "event": "REJECTED",
+          "reason": "official_sumula_text_date_url_not_verified"
+        },
+        {
+          "at": "2026-08-24T02:33:08Z",
           "event": "REJECTED",
           "reason": "official_sumula_text_date_url_not_verified"
         }
