@@ -141,6 +141,12 @@ async function auditWorker() {
         }),
         { timeout: 5000 },
       ).catch(() => {});
+      // CSSOM availability can precede the first styled layout on a newly
+      // opened concurrent page. Sample only after two painted frames so the
+      // first route handled by each worker cannot produce raw-HTML geometry.
+      await page.evaluate(() => new Promise((done) => {
+        requestAnimationFrame(() => requestAnimationFrame(done));
+      }));
       const status = response?.status() || 0;
       if (!status || status >= 400) issues.push({ code: "http_status", detail: status });
       const rendered = await page.evaluate((viewportWidth) => {
