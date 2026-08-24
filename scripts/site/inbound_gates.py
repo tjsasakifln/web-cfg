@@ -837,7 +837,13 @@ BOFU_SERVICE_ROUTE_SOURCE = (
     "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route"
 )
 CONVERSION_PROFILES = {"service_pillar", "priced_offer", "commercial_content", "trust_or_legal"}
-TERMINAL_ACTIONS = {"capture_form", "whatsapp", "capture_form_or_whatsapp", "none"}
+TERMINAL_ACTIONS = {
+    "capture_form",
+    "whatsapp",
+    "capture_form_or_whatsapp",
+    "service_transition",
+    "none",
+}
 GATE_COVERAGE_LEVELS = {"full", "partial", "none"}
 GATE_COVERAGE_KEYS = ("conversion", "copy", "accessibility")
 MIN_WRITTEN_REASON = 24
@@ -967,6 +973,39 @@ def _has_linked_capture_route(root: Path, main: str) -> bool:
             continue
         return True
     return False
+
+
+SERVICE_TRANSITION_ATTRS = (
+    "data-cta-id",
+    "data-cta-position",
+    "data-asset-id",
+    "data-asset-family",
+    "data-route-family",
+    "data-journey",
+)
+
+
+def _service_transition_destinations(main: str, service_routes: set[str]) -> list[str]:
+    """Return fully attributed, canonical service CTAs in ``<main>``.
+
+    This is intentionally narrower than ``has_main_service_link``. A navigation
+    link does not pay terminal-action debt. The owning family must declare a
+    service transition and expose exactly one dominant CTA whose destination is
+    in the versioned BOFU service contract and whose analytics context is
+    complete enough to emit ``content_to_service`` without guessing.
+    """
+    destinations: list[str] = []
+    for tag in re.findall(r"(?is)<a\b[^>]*>", main):
+        href_match = re.search(r'\bhref=["\']([^"\']+)["\']', tag, re.I)
+        if not href_match or href_match.group(1) not in service_routes:
+            continue
+        if any(
+            not re.search(rf'\b{re.escape(attr)}=["\'][^"\']+["\']', tag, re.I)
+            for attr in SERVICE_TRANSITION_ATTRS
+        ):
+            continue
+        destinations.append(href_match.group(1))
+    return destinations
 
 
 def load_family_registry(root: Path | None = None) -> dict[str, Any]:
@@ -1151,6 +1190,10 @@ def _validate_family_registry(
             bad("family_no_action_outside_trust", fid)
         if profile == "trust_or_legal" and action != "none":
             bad("family_trust_action_invalid", fid)
+        if action == "service_transition" and profile != "commercial_content":
+            bad("family_service_transition_profile_invalid", fid)
+        if action == "service_transition" and not isinstance(match.get("routes"), list):
+            bad("family_service_transition_match_invalid", fid)
         if action == "none" and len(
             str(family.get("exemption_reason") or "").strip()
         ) < MIN_WRITTEN_REASON:
@@ -1394,6 +1437,9 @@ def gate_conversion(
             re.search(r'(?is)<form\b[^>]+action=["\']/.netlify/functions/lead["\']', main)
         )
         has_linked_capture_route = _has_linked_capture_route(base, main)
+        service_transition_destinations = _service_transition_destinations(
+            main, set(service_routes)
+        )
         has_main_service_link = any(
             f'href="{destination}"' in main or f"href='{destination}'" in main
             for destination in service_routes
@@ -1511,6 +1557,7 @@ def gate_conversion(
                 "capture_form_or_whatsapp": (
                     has_main_form or has_main_wa or has_linked_capture_route
                 ),
+                "service_transition": len(service_transition_destinations) == 1,
             }.get(required, False)
 
             if required == "none":

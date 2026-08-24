@@ -260,6 +260,9 @@
           urgency_category: (urgenciaEl?.value || '').slice(0, 80),
           journey: journey || '',
           cta_label: (estagioEl?.value || '').slice(0, 80),
+          route_family: routeFamily,
+          asset_id: assetId,
+          cta_id: ctaId,
         });
         if (assetId) {
           track('cta_click', {
@@ -296,6 +299,9 @@
               destination_type: 'form',
               journey: journey || '',
               receipt_id: protocol,
+              route_family: routeFamily,
+              asset_id: assetId,
+              cta_id: ctaId,
             });
             track('lead_persisted', {
               page_path: pagePath,
@@ -303,6 +309,7 @@
               journey: journey || '',
               route_family: routeFamily,
               asset_id: assetId,
+              cta_id: ctaId,
               public_id_slug: publicSlug,
               source: 'CONFENGE_WEB',
             });

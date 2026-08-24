@@ -395,6 +395,62 @@ def test_linked_capture_route_is_terminal_only_with_the_full_contract():
         assert any(f.reason == "missing_terminal_action" for f in report.findings)
 
 
+def test_service_transition_requires_one_canonical_fully_attributed_cta():
+    from scripts.site.inbound_gates import _service_transition_destinations
+
+    services = {"/diagnostico-b2g-360/", "/defesa-margem-contratos-publicos/"}
+    valid = (
+        '<a href="/diagnostico-b2g-360/" data-cta-id="hub-diagnostico" '
+        'data-cta-position="hub_services" data-asset-id="servicos-obras-publicas" '
+        'data-asset-family="hub" data-route-family="servicos-obras-publicas" '
+        'data-journey="operacao">Começar</a>'
+    )
+    assert _service_transition_destinations(valid, services) == [
+        "/diagnostico-b2g-360/"
+    ]
+
+    for attr in (
+        "data-cta-id",
+        "data-cta-position",
+        "data-asset-id",
+        "data-asset-family",
+        "data-route-family",
+        "data-journey",
+    ):
+        weakened = re.sub(rf' {attr}="[^"]+"', "", valid)
+        assert _service_transition_destinations(weakened, services) == [], attr
+
+    unknown = valid.replace("/diagnostico-b2g-360/", "/pagina-interna-qualquer/")
+    assert _service_transition_destinations(unknown, services) == []
+    assert len(_service_transition_destinations(valid + valid, services)) == 2
+
+
+def test_three_hubs_prove_exactly_one_service_transition_from_shipped_html():
+    from scripts.site.inbound_gates import (
+        _bofu_service_routes,
+        _main_html,
+        _service_transition_destinations,
+        load_family_registry,
+    )
+
+    expected = {
+        "/servicos-obras-publicas/": "/diagnostico-b2g-360/",
+        "/problemas-que-resolvemos/": "/defesa-margem-contratos-publicos/",
+        "/ferramentas/": "/diagnostico-b2g-expansao/",
+    }
+    registry = load_family_registry()
+    services = _bofu_service_routes()
+    for route, destination in expected.items():
+        family = next(
+            family
+            for family in registry["families"]
+            if route in (family.get("match") or {}).get("routes", [])
+        )
+        assert family["terminal_action"] == "service_transition", route
+        html = (ROOT / route.strip("/") / "index.html").read_text(encoding="utf-8")
+        assert _service_transition_destinations(_main_html(html), services) == [destination]
+
+
 def test_registered_debt_is_route_exact_and_never_absorbs_a_sibling():
     """A new page inside a family that carries debt does not inherit the exemption."""
     with tempfile.TemporaryDirectory(prefix="confenge-family-gate-") as tmp:
@@ -479,11 +535,21 @@ def test_report_lists_every_exempt_route_with_its_reason():
         assert entry["reason"] and entry["reason"].strip()
         assert entry["route"].startswith("/")
     debt_routes = {e["route"] for e in exemptions if e["kind"] == "debt"}
-    # The four commercial surfaces published on 2026-08-23 are now covered.
+    # #290/#305 pays only the five hub routes. Child tools and demonstratives
+    # remain exact, visible debt until their own rendered action changes.
     for route in (
+        "/casos/",
         "/entregas/",
         "/servicos-obras-publicas/",
         "/problemas-que-resolvemos/",
+        "/ferramentas/",
+    ):
+        assert route not in debt_routes, route
+    for route in (
+        "/ferramentas/checklist-reequilibrio/",
+        "/ferramentas/limite-acrescimos-supressoes/",
+        "/ferramentas/matriz-atraso-obra/",
+        "/casos/aditivo-art125-demonstrativo/",
         "/casos/modelo-painel-precos-obras-publicas/",
     ):
         assert route in debt_routes, route
@@ -580,6 +646,12 @@ def test_registry_matching_is_unambiguous_and_cannot_absorb_the_site():
     service["profile"] = "commercial_content"
     service["terminal_action"] = "capture_form_or_whatsapp"
 
+    unbounded_service_transition = json.loads(json.dumps(registry))
+    editorial = next(
+        f for f in unbounded_service_transition["families"] if f["id"] == "editorial-library"
+    )
+    editorial["terminal_action"] = "service_transition"
+
     unbounded_debt = json.loads(json.dumps(registry))
     debt_family = next(f for f in unbounded_debt["families"] if f.get("debt"))
     debt_family["debt"][0]["expires_at"] = "2099-12-31"
@@ -592,6 +664,7 @@ def test_registry_matching_is_unambiguous_and_cannot_absorb_the_site():
         (blank_legal_reason, "family_owner_issue_missing"),
         (invented_service_profile, "family_service_profile_match_invalid"),
         (weakened_service_source, "family_service_source_profile_invalid"),
+        (unbounded_service_transition, "family_service_transition_match_invalid"),
         (unbounded_debt, "debt_expiry_window_invalid"),
     )
     for payload, expected in cases:
