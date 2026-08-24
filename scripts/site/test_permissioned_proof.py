@@ -33,12 +33,13 @@ FIXTURES = ROOT / "scripts" / "site" / "fixtures" / "permissioned_proof"
 
 
 def _synthetic_publishable() -> tuple[dict, str]:
-    html = """<!doctype html><html lang="pt-BR"><head><title>Prova sintética de gate</title></head>
+    html = """<!doctype html><html lang="pt-BR"><head><title>Prova sintética de gate</title>
+    <link rel="canonical" href="https://confenge.com.br/casos/synthetic-proof-gate/"/></head>
     <body data-surface-type="caso_proof" data-proof-id="synthetic-proof-gate">
     <main><h1>Prova sintética de gate</h1>
-    <p data-permission-class="consented">CASO CONFENGE consentido.</p>
-    <p>Registro de consentimento documentado e escopado em recibo privado.</p>
-    <p>Material sintético usado somente para provar o gate; não é caso real.</p>
+    <p data-permission-class="consented" data-proof-field="problem">CASO CONFENGE consentido.</p>
+    <p data-proof-field="intervention">Registro de consentimento documentado e escopado em recibo privado.</p>
+    <p data-proof-field="outcome">Material sintético usado somente para provar o gate; não é caso real.</p>
     </main></body></html>"""
     scope = {
         "public_fields": ["problem", "intervention", "outcome"],
@@ -57,7 +58,7 @@ def _synthetic_publishable() -> tuple[dict, str]:
             "captured_at": "2026-08-24T00:00:00Z",
             "scope": scope,
             "scope_hash": scope_hash,
-            "receipt_ref": "private://permissioned-proof/synthetic-proof-gate",
+            "receipt_ref": "private://permissioned-proof/synthetic-proof-gate/receipt-v1",
         },
         "retention": {
             "policy_days": 730,
@@ -75,6 +76,8 @@ def _synthetic_publishable() -> tuple[dict, str]:
         "approval": {
             "status": "APPROVED",
             "decision": "APPROVE_PUBLICATION",
+            "approval_ref": "private://permissioned-proof-approval/synthetic-proof-gate/approval-v1",
+            "proof_id": "synthetic-proof-gate",
             "approver": {
                 "id": "tiago-jun-sasaki",
                 "name": "Engº Tiago Sasaki",
@@ -88,8 +91,16 @@ def _synthetic_publishable() -> tuple[dict, str]:
             "status": "PUBLISHED",
             "public_url": "https://confenge.com.br/casos/synthetic-proof-gate/",
             "published_at": "2026-08-24T01:00:00Z",
+            "unpublished_at": None,
             "material_hash": digest,
         },
+        "lifecycle": [
+            {"state": "DRAFT", "at": "2026-08-23T23:50:00Z", "actor": "OWNER_CONFENGE"},
+            {"state": "CONSENT_CAPTURED", "at": "2026-08-24T00:00:00Z", "actor": "OWNER_CONFENGE"},
+            {"state": "HUMAN_REVIEW_REQUIRED", "at": "2026-08-24T00:20:00Z", "actor": "OWNER_CONFENGE"},
+            {"state": "APPROVED", "at": "2026-08-24T00:30:00Z", "actor": "HUMAN_TIAGO_JUN_SASAKI"},
+            {"state": "PUBLISHED", "at": "2026-08-24T01:00:00Z", "actor": "OWNER_CONFENGE"},
+        ],
     }
     return record, html
 
@@ -174,10 +185,14 @@ def test_revocation_is_allowed_and_requires_unpublish_and_void_approval():
     revoked["approval"]["status"] = "VOID"
     revoked["publication"] = {
         "status": "UNPUBLISHED",
+        "published_at": record["publication"]["published_at"],
         "unpublished_at": "2026-08-25T00:05:00Z",
         "public_url": record["publication"]["public_url"],
         "material_hash": record["publication"]["material_hash"],
     }
+    revoked["lifecycle"].append(
+        {"state": "REVOKED", "at": "2026-08-25T00:05:00Z", "actor": "OWNER_CONFENGE"}
+    )
     assert validate_record(revoked, policy=policy) == []
 
     broken = copy.deepcopy(revoked)
@@ -188,12 +203,208 @@ def test_revocation_is_allowed_and_requires_unpublish_and_void_approval():
     assert "revoked_proof_not_unpublished" in errors
     assert "revoked_approval_not_void" in errors
 
+    before_approval = copy.deepcopy(record)
+    before_approval["state"] = "REVOKED"
+    before_approval["consent"]["status"] = "REVOKED"
+    before_approval["approval"] = {
+        "status": "VOID",
+        "decision": None,
+        "approval_ref": None,
+        "proof_id": record["proof_id"],
+        "approver": None,
+        "approved_at": None,
+        "consent_scope_hash": record["consent"]["scope_hash"],
+        "material_hash": None,
+    }
+    before_approval["publication"] = {
+        "status": "NOT_PUBLISHED",
+        "public_url": None,
+        "published_at": None,
+        "unpublished_at": None,
+        "material_hash": None,
+    }
+    before_approval["revocation"].update(
+        {
+            "status": "EFFECTIVE",
+            "requested_at": "2026-08-24T00:05:00Z",
+            "effective_at": "2026-08-24T00:10:00Z",
+            "reason_code": "SUBJECT_WITHDRAWAL",
+        }
+    )
+    before_approval["lifecycle"] = before_approval["lifecycle"][:2] + [
+        {"state": "REVOKED", "at": "2026-08-24T00:10:00Z", "actor": "OWNER_CONFENGE"}
+    ]
+    assert validate_record(before_approval, policy=policy) == []
+
 
 def test_committed_registry_rejects_client_pii():
     record, _html = _synthetic_publishable()
     record["client_name"] = "Empresa que não pode entrar no git"
     errors = validate_record(record)
     assert "client_pii_forbidden:record.client_name" in errors
+
+
+def test_lifecycle_cannot_start_published_skip_review_or_fake_human_actor():
+    record, _html = _synthetic_publishable()
+    direct = copy.deepcopy(record)
+    direct["lifecycle"] = [direct["lifecycle"][-1]]
+    assert "lifecycle_must_start_draft" in validate_record(direct)
+
+    skipped = copy.deepcopy(record)
+    skipped["lifecycle"].pop(2)
+    assert "lifecycle_transition_invalid:CONSENT_CAPTURED:APPROVED" in validate_record(skipped)
+
+    automated = copy.deepcopy(record)
+    automated["lifecycle"][3]["actor"] = "OWNER_CONFENGE"
+    assert "lifecycle_approval_not_human" in validate_record(automated)
+
+
+def test_receipt_and_approval_are_bound_to_exact_proof():
+    record, _html = _synthetic_publishable()
+    copied = copy.deepcopy(record)
+    copied["consent"]["receipt_ref"] = "private://permissioned-proof/other-proof/receipt-v1"
+    copied["approval"]["approval_ref"] = "private://permissioned-proof-approval/other-proof/approval-v1"
+    copied["approval"]["proof_id"] = "other-proof"
+    errors = validate_record(copied)
+    assert "consent_receipt_ref_not_private" in errors
+    assert "approval_ref_not_private" in errors
+    assert "approval_proof_id_mismatch" in errors
+
+
+def test_consent_scope_is_closed_to_safe_fields_channel_and_redactions():
+    record, _html = _synthetic_publishable()
+    unsafe = copy.deepcopy(record)
+    unsafe["consent"]["scope"]["public_fields"].append("client_identity")
+    unsafe["consent"]["scope"]["public_channels"] = ["example.com"]
+    errors = validate_record(unsafe)
+    assert "consent_public_fields_invalid" in errors
+    assert "consent_public_channels_invalid" in errors
+
+    redacted = copy.deepcopy(record)
+    redacted["permission_class"] = "redacted"
+    errors = validate_record(redacted)
+    assert "schema_keys_mismatch:record.consent.scope" in errors
+    assert "consent_redactions_invalid" in errors
+
+
+def test_timestamps_are_strict_utc_ordered_and_retention_is_exact():
+    record, _html = _synthetic_publishable()
+    naive = copy.deepcopy(record)
+    naive["approval"]["approved_at"] = "2026-08-24T00:30:00"
+    assert "human_approval_timestamp_invalid" in validate_record(naive)
+
+    reversed_order = copy.deepcopy(record)
+    reversed_order["approval"]["approved_at"] = "2026-08-23T23:55:00Z"
+    reversed_order["lifecycle"][3]["at"] = "2026-08-23T23:55:00Z"
+    assert "human_approval_not_after_consent" in validate_record(reversed_order)
+
+    loose_retention = copy.deepcopy(record)
+    loose_retention["retention"]["delete_after"] = "2028-08-24T00:00:00Z"
+    assert "retention_delete_after_not_exact" in validate_record(loose_retention)
+
+
+def test_publication_url_is_exact_canonical_identity():
+    record, _html = _synthetic_publishable()
+    attacks = (
+        "https://confenge.com.br:443/casos/synthetic-proof-gate/",
+        "https://user@confenge.com.br/casos/synthetic-proof-gate/",
+        "https://confenge.com.br/casos/synthetic-proof-gate/?preview=1",
+        "https://confenge.com.br/casos/other-proof/",
+        "https://confenge.com.br/casos/%2e%2e/synthetic-proof-gate/",
+    )
+    for url in attacks:
+        mutated = copy.deepcopy(record)
+        mutated["publication"]["public_url"] = url
+        errors = validate_record(mutated)
+        assert {"publication_url_not_canonical", "publication_url_outside_case_family"} & set(errors)
+
+
+def test_visible_material_fields_must_equal_consent_scope():
+    record, html = _synthetic_publishable()
+    missing = html.replace(' data-proof-field="outcome"', "")
+    assert "visible_public_fields_scope_mismatch" in validate_record(record, html=missing)
+
+    extra = html.replace("</main>", '<p data-proof-field="evidence">extra</p></main>')
+    assert "visible_public_fields_scope_mismatch" in validate_record(record, html=extra)
+
+    wrong_canonical = html.replace(
+        "https://confenge.com.br/casos/synthetic-proof-gate/",
+        "https://confenge.com.br/casos/other-proof/",
+    )
+    assert "visible_canonical_url_mismatch" in validate_record(record, html=wrong_canonical)
+
+
+def test_normalized_keys_phone_tax_id_and_email_are_rejected_as_pii():
+    record, _html = _synthetic_publishable()
+    record["metadata"] = {
+        "Contato E-mail": "pessoa@example.com",
+        "telefone_publico": "+55 (11) 99999-8888",
+        "document": "123.456.789-00",
+    }
+    errors = validate_record(record)
+    assert "client_pii_forbidden:record.metadata.Contato E-mail" in errors
+    assert "client_pii_phone_forbidden:record.metadata.telefone_publico" in errors
+    assert "client_pii_tax_id_forbidden:record.metadata.document" in errors
+
+
+def test_policy_registry_and_record_schemas_fail_closed_on_drift():
+    policy = load_policy()
+    drifted = copy.deepcopy(policy)
+    drifted["consent"]["rules"].append("silent semantic drift")
+    assert "policy_contract_digest_mismatch" in validate_policy(drifted)
+    assert "policy_schema_invalid" in validate_policy({})
+    malformed_policy = copy.deepcopy(policy)
+    malformed_policy["transitions"] = []
+    assert "transition_sources_incomplete_or_reordered" in validate_policy(malformed_policy)
+
+    registry = load_registry()
+    registry["unexpected"] = True
+    assert "schema_keys_mismatch:registry" in validate_registry(registry)
+    assert "registry_schema_invalid" in validate_registry({})
+
+    record, _html = _synthetic_publishable()
+    record["approval"]["unexpected"] = True
+    assert "schema_keys_mismatch:record.approval" in validate_record(record)
+    malformed_record, _html = _synthetic_publishable()
+    malformed_record["consent"] = []
+    assert "object_required:record.consent" in validate_record(malformed_record)
+
+
+def test_registry_rejects_copied_private_refs_and_public_urls():
+    first, _html = _synthetic_publishable()
+    second = copy.deepcopy(first)
+    second["proof_id"] = "synthetic-second-proof"
+    registry = load_registry()
+    registry["records"] = [first, second]
+    registry["approved_public_proof_count"] = 2
+    registry["state"] = "HAS_APPROVED_CLIENT_PROOF"
+    registry["next_test"]["status"] = "FIRST_REAL_DELIVERY_PROOF_COMPLETE"
+    errors = validate_registry(registry)
+    assert any(code.startswith("registry_duplicate_receipt_ref:") for code in errors)
+    assert any(code.startswith("registry_duplicate_approval_ref:") for code in errors)
+    assert any(code.startswith("registry_duplicate_public_url:") for code in errors)
+
+
+def test_revocation_request_cannot_predate_consent():
+    policy = load_policy()
+    record, _html = _synthetic_publishable()
+    record["state"] = "REVOKED"
+    record["consent"]["status"] = "REVOKED"
+    record["approval"]["status"] = "VOID"
+    record["revocation"].update(
+        {
+            "status": "EFFECTIVE",
+            "requested_at": "2026-08-23T23:00:00Z",
+            "effective_at": "2026-08-25T00:05:00Z",
+            "reason_code": "SUBJECT_WITHDRAWAL",
+        }
+    )
+    record["publication"]["status"] = "UNPUBLISHED"
+    record["publication"]["unpublished_at"] = "2026-08-25T00:05:00Z"
+    record["lifecycle"].append(
+        {"state": "REVOKED", "at": "2026-08-25T00:05:00Z", "actor": "OWNER_CONFENGE"}
+    )
+    assert "revocation_requested_before_consent" in validate_record(record, policy=policy)
 
 
 def test_existing_cases_registry_cannot_bypass_permissioned_proof():

@@ -80,6 +80,13 @@ A record may move beyond `DRAFT` only with:
 - `retention.delete_after` and a private material location;
 - an available revocation channel.
 
+The receipt reference must be bound to the exact `proof_id`; it cannot be
+copied from another record. The scope is schema-closed: the only public channel
+is `confenge.com.br`, public fields come from the policy allowlist, and a
+`redacted` proof must name its redactions explicitly. Lifecycle events start at
+`DRAFT`, follow a legal transition, use strict UTC timestamps and end at the
+record's current state.
+
 The actual receipt, client identity, contact data and delivery files never go
 into this repository.
 
@@ -95,11 +102,22 @@ Approval is individual, never bulk, and binds:
 
 An agent, CI job or bot may validate the record but may not fill or infer the
 approval. The transition to `PUBLISHED` also requires the same material hash, a
-canonical `https://confenge.com.br/casos/.../` URL and a publication timestamp.
+proof-bound private approval reference, a canonical
+`https://confenge.com.br/casos/<proof_id>/` URL and a publication timestamp
+after approval. The page must declare that exact canonical and mark exactly the
+fields allowed by the consent scope.
 The registry resolves that URL to the committed HTML and refuses a missing or
 hash-drifted file. An approved row in the existing `data/site/cases.json` must
 have the same `proof_id`, permission class and public path; neither registry can
 bypass the other.
+
+This is an explicit solo-operator trust boundary, not a cryptographic claim:
+CI validates chronology, state, exact bindings, duplicate-reference reuse and
+the committed material, but it cannot authenticate the contents of the private
+receipt store or prove who created a receipt. The named owner must create the
+private approval receipt and review the code change. The machine contract calls
+this `OWNER_ATTESTED_PRIVATE_RECEIPT_PLUS_CODE_REVIEW` rather than pretending
+that a self-declared JSON `human=true` is independently verified.
 
 This slice does not authorize review/rating structured data. Those schema types
 remain forbidden until a separate decision and evidence gate explicitly allow
@@ -124,14 +142,19 @@ Revocation is allowed at any time after consent and has immediate public effect:
 
 ## Fail-closed gates
 
-`scripts/site/permissioned_proof.py` validates the policy, registry, individual
-records and material binding. `npm run test:authority` covers:
+`scripts/site/permissioned_proof.py` validates the pinned policy, schema-closed
+registry, individual records and material binding. `npm run test:authority`
+covers:
 
 - the empty real-proof registry and named `next_test`;
 - a satisfiable synthetic positive contract, without a public file;
 - scope and material hash drift;
+- direct-publication and skipped-review lifecycle attacks;
+- copied consent/approval references and duplicate public identities;
+- strict timestamp order, exact retention and canonical URL attacks;
+- consent-field/channel/redaction scope closure and visible canonical/field parity;
 - immediate revocation/unpublish semantics;
-- refusal of client PII in committed records;
+- refusal of normalized PII keys, email, phone and tax IDs in committed records;
 - the existing false-case-study fixture;
 - a second fixture that claims consent but has no named human approver.
 

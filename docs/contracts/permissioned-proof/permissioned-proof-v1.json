@@ -124,7 +124,8 @@
     "retention",
     "revocation",
     "approval",
-    "publication"
+    "publication",
+    "lifecycle"
   ],
   "consent": {
     "active_state": "ACTIVE",
@@ -140,6 +141,21 @@
       "public_fields",
       "public_channels",
       "withdrawal_channel"
+    ],
+    "public_fields_allowlist": [
+      "problem",
+      "intervention",
+      "outcome",
+      "evidence",
+      "limitations"
+    ],
+    "public_channels_exact": ["confenge.com.br"],
+    "withdrawal_channel_exact": "PRIVATE_OWNER_CHANNEL",
+    "redactions_allowlist": [
+      "client_identity",
+      "contact_details",
+      "contract_identifiers",
+      "commercial_values"
     ],
     "rules": [
       "Consent for commercial contact is not consent for public proof.",
@@ -159,6 +175,19 @@
       "consent_scope_hash",
       "material_hash"
     ],
+    "required_fields": [
+      "status",
+      "decision",
+      "approval_ref",
+      "proof_id",
+      "approver",
+      "approved_at",
+      "consent_scope_hash",
+      "material_hash"
+    ],
+    "approval_ref_prefix": "private://permissioned-proof-approval/",
+    "verification_mode": "OWNER_ATTESTED_PRIVATE_RECEIPT_PLUS_CODE_REVIEW",
+    "ci_limit": "CI_VALIDATES_BINDINGS_NOT_PRIVATE_RECEIPT_AUTHENTICITY",
     "automation_may_approve": false,
     "bulk_approval": false
   },
@@ -201,6 +230,13 @@
       "AggregateRating"
     ],
     "fixture_publication": false
+  },
+  "lifecycle": {
+    "required_first_state": "DRAFT",
+    "event_fields": ["state", "at", "actor"],
+    "allowed_actors": ["OWNER_CONFENGE", "HUMAN_TIAGO_JUN_SASAKI"],
+    "human_actor_required_for_state": "APPROVED",
+    "current_state_must_be_last": true
   },
   "analytics": {
     "source": "CONFENGE_WEB",
