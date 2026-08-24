@@ -82,6 +82,38 @@ def test_empty_disclosure_answer_fails(tmp: Path) -> None:
     assert "faq_answer_missing_from_details" in codes(path)
 
 
+def test_disclosure_answer_must_match_jsonld(tmp: Path) -> None:
+    path = tmp / "mismatched-answer.html"
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [faq_schema()["mainEntity"][0]],
+    }
+    path.write_text(
+        document(
+            "<details><summary>Pergunta 1?</summary><p>Resposta diferente.</p></details>",
+            schema=schema,
+        ),
+        encoding="utf-8",
+    )
+    assert "faq_answer_not_in_details" in codes(path)
+
+
+def test_noindex_disclosure_debt_does_not_block_publication(tmp: Path) -> None:
+    path = tmp / "noindex-mismatched-answer.html"
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [faq_schema()["mainEntity"][0]],
+    }
+    html = document(
+        "<details><summary>Pergunta 1?</summary><p>Resposta diferente.</p></details>",
+        schema=schema,
+    ).replace("<head>", '<head><meta content="noindex,follow" name="robots">')
+    path.write_text(html, encoding="utf-8")
+    assert codes(path) == set()
+
+
 def test_direct_answer_dom_is_supported(tmp: Path) -> None:
     path = tmp / "direct.html"
     schema = {
@@ -124,6 +156,8 @@ def main() -> int:
         test_truncated_document_fails_closed(tmp)
         test_partial_disclosure_fails_schema_dom_parity(tmp)
         test_empty_disclosure_answer_fails(tmp)
+        test_disclosure_answer_must_match_jsonld(tmp)
+        test_noindex_disclosure_debt_does_not_block_publication(tmp)
         test_direct_answer_dom_is_supported(tmp)
         test_source_census_is_derived(tmp)
     print("HTML_INTEGRITY_TESTS_OK")

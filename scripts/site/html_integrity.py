@@ -69,6 +69,23 @@ def normalize_text(value: str) -> str:
     return re.sub(r"\s+", " ", html_lib.unescape(" ".join(parser.parts))).strip()
 
 
+def is_noindex(raw: str) -> bool:
+    """Read the robots directive without depending on attribute order."""
+    for tag in re.findall(r"<meta\b[^>]*>", raw, re.I):
+        attrs = {
+            name.lower(): value
+            for name, _, value in re.findall(
+                r"([a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*=\s*([\"'])(.*?)\2", tag
+            )
+        }
+        if attrs.get("name", "").casefold() != "robots":
+            continue
+        directives = {part.strip().casefold() for part in attrs.get("content", "").split(",")}
+        if "noindex" in directives:
+            return True
+    return False
+
+
 def source_html_files(root: Path) -> list[Path]:
     """Return the production source census without a gate-specific allowlist."""
     paths: set[Path] = set()
@@ -207,6 +224,11 @@ def audit_html(path: Path, *, display_path: str | None = None) -> tuple[list[Fin
                     findings.append(Finding(rel, "faq_question_not_in_details", question[:120]))
                 elif not any(visible_answer.strip() for visible_answer in visible_answers):
                     findings.append(Finding(rel, "faq_answer_missing_from_details", question[:120]))
+                elif not is_noindex(raw) and not any(
+                    all(fragment in visible_answer for fragment in _answer_fragments(answer))
+                    for visible_answer in visible_answers
+                ):
+                    findings.append(Finding(rel, "faq_answer_not_in_details", question[:120]))
                 continue
             if question not in visible:
                 findings.append(Finding(rel, "faq_question_not_visible", question[:120]))
