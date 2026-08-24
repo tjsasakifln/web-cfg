@@ -424,6 +424,11 @@ export const SUITE_GRAPH = Object.freeze({
   },
   "test:schedules": {
     producers: [
+      "data/revops/inbound-backlog-decision.v1.json",
+      "docs/ops/INBOUND-BACKLOG-DECISION-268.md",
+      "netlify/functions/lib/inbound-backlog-policy.cjs",
+      "scripts/revops/inbound_backlog_policy.mjs",
+      "scripts/revops/test_inbound_backlog_policy.mjs",
       "scripts/revops/test_schedules.mjs",
       "scripts/revops/scheduled_daily.mjs",
       "scripts/revops/scheduled_nurture.mjs",
