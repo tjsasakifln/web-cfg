@@ -163,7 +163,7 @@ function createAsaasProductionProvider(deps = {}) {
   const clock = deps.clock || { now: () => new Date() };
   const sleep = deps.sleep || ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
   const logger = deps.logger || { warn() {}, info() {} };
-  const config = deps.config || resolveProductionConfig(deps.env || process.env);
+  const config = deps.config || resolveProductionConfig(deps.env || process.env, { decision: deps.decision });
   const store = deps.store;
   const http = deps.http;
 

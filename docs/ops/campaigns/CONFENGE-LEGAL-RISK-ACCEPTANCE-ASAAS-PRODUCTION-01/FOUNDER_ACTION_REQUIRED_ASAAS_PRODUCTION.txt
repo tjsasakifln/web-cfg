@@ -2,6 +2,12 @@ FOUNDER_ACTION_REQUIRED_ASAAS_PRODUCTION
 Campaign: CONFENGE-LEGAL-RISK-ACCEPTANCE-ASAAS-PRODUCTION-01
 Date: 2026-08-18 America/Sao_Paulo
 
+CURRENT DECISION (2026-08-24): DEFER under issue #251.
+Do NOT execute the activation steps below while
+data/offers/piloto-checkout-decision.v1.json remains DEFER.
+This file is a readiness checklist, not authorization. A later EXECUTE decision
+must pass all four reopening criteria and carry versioned evidence references.
+
 Production Asaas credentials are not present in this environment.
 Do not invent customers, acceptances, checkouts or payments.
 

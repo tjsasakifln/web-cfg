@@ -88,6 +88,17 @@ function sandboxEnabled(env = {}) {
 function resolveConfig(env = process.env) {
   const flags = loadFlags(env);
   const mode = String(flags.ASAAS_MODE || "disabled").trim();
+  if (flags.decision_blocked_activation) {
+    const requestedMode = String(env.ASAAS_MODE || "disabled").trim();
+    if (requestedMode !== "disabled" && requestedMode !== "sandbox") {
+      return { ok: false, error: "asaas_mode_blocked", mode: requestedMode };
+    }
+    if (["CONFENGE_PRODUCTION_CHECKOUT", "CONFENGE_PRODUCTION_WEBHOOK", "CONFENGE_REAL_MONEY"]
+      .some((name) => env[name] === "1" || env[name] === "true")) {
+      return { ok: false, error: "production_money_blocked", mode };
+    }
+    return { ok: false, error: "decision_blocked_activation", mode };
+  }
   if (mode !== "disabled" && mode !== "sandbox") {
     return { ok: false, error: "asaas_mode_blocked", mode };
   }

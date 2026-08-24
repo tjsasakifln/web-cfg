@@ -97,8 +97,8 @@ function assertCallbackUrl(raw) {
   return { ok: true, url: url.toString() };
 }
 
-function resolveProductionConfig(env = process.env) {
-  const flags = loadFlags(env);
+function resolveProductionConfig(env = process.env, options = {}) {
+  const flags = loadFlags(env, options);
   const mode = String(flags.ASAAS_MODE || "disabled").trim();
   if (mode !== "production") {
     return { ok: false, error: "feature_disabled", mode };

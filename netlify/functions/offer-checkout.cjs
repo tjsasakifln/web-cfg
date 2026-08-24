@@ -22,7 +22,7 @@ function createHandler(deps = {}) {
       return json(405, { ok: false, error: "method_not_allowed" });
     }
     const env = deps.env || process.env;
-    const config = deps.config || resolveProductionConfig(env);
+    const config = deps.config || resolveProductionConfig(env, { decision: deps.decision });
     if (!config.ok) {
       const runtime = requireProductionRuntime(config, { needApiKey: true });
       return json(runtime.statusCode || 404, { ok: false, error: config.error || "feature_disabled" });

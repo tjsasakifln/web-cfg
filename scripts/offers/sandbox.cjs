@@ -17,6 +17,9 @@ const SANDBOX_OFFERS = new Set(["CFG-DIAG-EXP-v1", "CFG-DIRB2G-180-v1"]);
 
 function refuseRealMoney(env) {
   const flags = loadFlags(env);
+  if (flags.decision_blocked_activation) {
+    return { ok: false, error: "decision_blocked_activation" };
+  }
   if (flags.real_money_mutation_enabled || flags.production_checkout_enabled) {
     return { ok: false, error: "real_money_blocked" };
   }

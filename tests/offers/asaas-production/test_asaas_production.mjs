@@ -23,6 +23,25 @@ const { REQUIRED_DECLARATIONS } = require(path.join(root, "scripts/offers/accept
 
 const PIN = prodConfig.PINNED_LEGAL_HASH;
 const CNPJ = "52407089000109";
+const canonicalDecision = require(path.join(root, "scripts/offers/piloto-decision.cjs")).loadDecision();
+const CONTRACT_EXECUTE_DECISION = structuredClone(canonicalDecision);
+CONTRACT_EXECUTE_DECISION.decision_state = "EXECUTE";
+CONTRACT_EXECUTE_DECISION.activation_authorized = true;
+CONTRACT_EXECUTE_DECISION.scope.url_decisions[0].decision = "EXECUTE";
+for (const criterion of CONTRACT_EXECUTE_DECISION.reopening_gate.criteria) {
+  criterion.status = "PASS";
+  criterion.evidence_ref = `test-fixture://${criterion.id}`;
+}
+
+function createCheckout(deps = {}) {
+  return checkoutFn.createHandler({ ...deps, decision: CONTRACT_EXECUTE_DECISION });
+}
+function createWebhook(deps = {}) {
+  return webhookFn.createHandler({ ...deps, decision: CONTRACT_EXECUTE_DECISION });
+}
+function createAcceptance(deps = {}) {
+  return acceptFn.createHandler({ ...deps, decision: CONTRACT_EXECUTE_DECISION });
+}
 
 const PROD_ENV = {
   NODE_ENV: "test",
@@ -91,7 +110,7 @@ function prodHttp() {
 
 async function seedAcceptance(store) {
   const mailer = async () => ({ ok: true });
-  const accept = acceptFn.createHandler({
+  const accept = createAcceptance({
     env: PROD_ENV,
     store,
     clock: { now: () => new Date("2026-08-18T15:00:00Z") },
@@ -130,7 +149,7 @@ async function seedAcceptance(store) {
 }
 
 {
-  const sandboxKey = parse(await checkoutFn.createHandler({
+  const sandboxKey = parse(await createCheckout({
     env: { ...PROD_ENV, ASAAS_PRODUCTION_API_KEY: "FAKESECRET_e1f2g3h4i5j6k7l8m9n0" },
     store: new MemoryOfferStore(),
   })({ httpMethod: "POST", body: "{}" }));
@@ -146,13 +165,13 @@ async function seedAcceptance(store) {
 }
 
 {
-  const missingHash = parse(await checkoutFn.createHandler({
+  const missingHash = parse(await createCheckout({
     env: { ...PROD_ENV, CONFENGE_LEGAL_AUTHORITY_HASH: "" },
     store: new MemoryOfferStore(),
   })({ httpMethod: "POST", body: "{}" }));
   assert("legal_hash_missing_rejected", missingHash.body.error === "legal_hash_missing" || missingHash.statusCode >= 400, missingHash);
 
-  const badHash = parse(await checkoutFn.createHandler({
+  const badHash = parse(await createCheckout({
     env: { ...PROD_ENV, CONFENGE_LEGAL_AUTHORITY_HASH: "sha256:deadbeef" },
     store: new MemoryOfferStore(),
   })({ httpMethod: "POST", body: "{}" }));
@@ -162,7 +181,7 @@ async function seedAcceptance(store) {
 {
   const store = new MemoryOfferStore();
   const http = prodHttp();
-  const missingAcc = parse(await checkoutFn.createHandler({ env: PROD_ENV, store, http })({
+  const missingAcc = parse(await createCheckout({ env: PROD_ENV, store, http })({
     httpMethod: "POST",
     body: JSON.stringify({ offer_id: "CFG-DIAG-EXP-v1", acceptance_id: "acc_missing" }),
   }));
@@ -174,7 +193,7 @@ async function seedAcceptance(store) {
   const { confirmed } = await seedAcceptance(store);
   assert("acceptance_created", confirmed.statusCode === 201 && Boolean(confirmed.body.acceptance_id), confirmed);
   const http = prodHttp();
-  const tamper = parse(await checkoutFn.createHandler({ env: PROD_ENV, store, http })({
+  const tamper = parse(await createCheckout({ env: PROD_ENV, store, http })({
     httpMethod: "POST",
     body: JSON.stringify({
       offer_id: "CFG-DIAG-EXP-v1",
@@ -185,7 +204,7 @@ async function seedAcceptance(store) {
   }));
   assert("client_price_tamper_rejected", tamper.body.error === "price_tamper", tamper);
 
-  const rec = parse(await checkoutFn.createHandler({ env: PROD_ENV, store, http })({
+  const rec = parse(await createCheckout({ env: PROD_ENV, store, http })({
     httpMethod: "POST",
     body: JSON.stringify({
       offer_id: "CFG-DIAG-EXP-v1",
@@ -196,7 +215,7 @@ async function seedAcceptance(store) {
   }));
   assert("recurring_rejected", rec.body.error === "recurring_blocked", rec);
 
-  const inst = parse(await checkoutFn.createHandler({ env: PROD_ENV, store, http })({
+  const inst = parse(await createCheckout({ env: PROD_ENV, store, http })({
     httpMethod: "POST",
     body: JSON.stringify({
       offer_id: "CFG-DIAG-EXP-v1",
@@ -207,7 +226,7 @@ async function seedAcceptance(store) {
   }));
   assert("installment_rejected", inst.body.error === "recurring_blocked", inst);
 
-  const other = parse(await checkoutFn.createHandler({ env: PROD_ENV, store, http })({
+  const other = parse(await createCheckout({ env: PROD_ENV, store, http })({
     httpMethod: "POST",
     body: JSON.stringify({
       offer_id: "CFG-DIRB2G-180-v1",
@@ -222,7 +241,7 @@ async function seedAcceptance(store) {
   const store = new MemoryOfferStore();
   const { confirmed } = await seedAcceptance(store);
   const http = prodHttp();
-  const created = parse(await checkoutFn.createHandler({ env: PROD_ENV, store, http })({
+  const created = parse(await createCheckout({ env: PROD_ENV, store, http })({
     httpMethod: "POST",
     body: JSON.stringify({
       offer_id: "CFG-DIAG-EXP-v1",
@@ -244,7 +263,7 @@ async function seedAcceptance(store) {
 
 {
   const store = new MemoryOfferStore();
-  const wh = webhookFn.createHandler({ env: PROD_ENV, store });
+  const wh = createWebhook({ env: PROD_ENV, store });
   const badTok = parse(await wh({
     httpMethod: "POST",
     headers: { "asaas-access-token": "wrong" },
@@ -347,7 +366,7 @@ async function seedAcceptance(store) {
 }
 
 {
-  const kill = parse(await checkoutFn.createHandler({
+  const kill = parse(await createCheckout({
     env: { ...PROD_ENV, CONFENGE_DIAG_CHECKOUT_ENABLED: "false" },
     store: new MemoryOfferStore(),
   })({ httpMethod: "POST", body: "{}" }));
@@ -357,7 +376,7 @@ async function seedAcceptance(store) {
 {
   const store = new MemoryOfferStore();
   const mailed = [];
-  const accept = acceptFn.createHandler({
+  const accept = createAcceptance({
     env: PROD_ENV,
     store,
     mailer: async (msg) => { mailed.push(msg); return { ok: true }; },
@@ -423,7 +442,7 @@ async function seedAcceptance(store) {
         declarations: Object.fromEntries(Object.keys(REQUIRED_DECLARATIONS).map((k) => [k, true])),
       }),
     }));
-    assert("uninjected_accept_durable_or_503", acceptBare.statusCode === 503 && acceptBare.body.error === "store_unavailable", acceptBare);
+    assert("uninjected_accept_blocked_by_defer", acceptBare.statusCode === 404 && acceptBare.body.error === "feature_disabled", acceptBare);
     assert("uninjected_accept_no_otp_leak", acceptBare.body.otp_for_test == null, acceptBare.body);
 
     const checkoutBare = parse(await checkoutFn.handler({
@@ -431,14 +450,14 @@ async function seedAcceptance(store) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ offer_id: "CFG-DIAG-EXP-v1", acceptance_id: "acc_x" }),
     }));
-    assert("uninjected_checkout_durable_or_503", checkoutBare.statusCode === 503 && checkoutBare.body.error === "store_unavailable", checkoutBare);
+    assert("uninjected_checkout_blocked_by_defer", checkoutBare.statusCode === 404 && checkoutBare.body.error === "feature_disabled", checkoutBare);
 
     const webhookBare = parse(await webhookFn.handler({
       httpMethod: "POST",
       headers: { "asaas-access-token": PROD_ENV.ASAAS_PRODUCTION_WEBHOOK_TOKEN, "content-type": "application/json" },
       body: JSON.stringify({ id: "evt_bare", event: "PAYMENT_RECEIVED" }),
     }));
-    assert("uninjected_webhook_durable_or_503", webhookBare.statusCode === 503 && webhookBare.body.error === "store_unavailable", webhookBare);
+    assert("uninjected_webhook_blocked_by_defer", webhookBare.statusCode === 404 && webhookBare.body.error === "feature_disabled", webhookBare);
   } finally {
     for (const key of Object.keys(PROD_ENV)) {
       if (saved[key] === undefined) delete process.env[key];

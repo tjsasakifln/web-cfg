@@ -1,0 +1,92 @@
+{
+  "schema": "confenge.piloto-checkout-decision/1.0",
+  "decision_id": "CFG-PILOTO-CHECKOUT-2026-08-24",
+  "issue": 251,
+  "parent_issue": 88,
+  "decision_state": "DEFER",
+  "activation_authorized": false,
+  "decided_on": "2026-08-24",
+  "review_on": "2026-09-21",
+  "owner": "CONFENGE founder",
+  "executive_front": "SCALE/SUNSET",
+  "time_to_evidence_days": 28,
+  "leverage": [
+    "revenue",
+    "trust",
+    "automation"
+  ],
+  "reason": "The 24 /piloto/ pages and production checkout code are prepared assets, but the parent offer decision remains VALIDATE, provider mappings are empty, production flags are off and no versioned evidence authorizes a real-money canary. Preserve the reversible asset while founder-led demand and external approvals are proved.",
+  "scope": {
+    "namespace": "/piloto/",
+    "expected_html_pages": 24,
+    "robots_rule": "Disallow: /piloto/",
+    "defer_flags_sha256": "afa4be12f2b9ceb0693cee5e36253aca161b92df40d93678b019d7ee4e629b08",
+    "url_decisions": [
+      { "url": "/piloto/", "decision": "DEFER" },
+      { "url": "/piloto/concorrencia/edificacoes-publicas-rs/", "decision": "DEFER" },
+      { "url": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/", "decision": "DEFER" },
+      { "url": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/", "decision": "DEFER" },
+      { "url": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sc/", "decision": "DEFER" },
+      { "url": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/", "decision": "DEFER" },
+      { "url": "/piloto/conversao-xray/", "decision": "DEFER" },
+      { "url": "/piloto/mercados/edificacoes-publicas-rs/", "decision": "DEFER" },
+      { "url": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/", "decision": "DEFER" },
+      { "url": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/", "decision": "DEFER" },
+      { "url": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/", "decision": "DEFER" },
+      { "url": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/", "decision": "DEFER" },
+      { "url": "/piloto/ofertas/", "decision": "DEFER" },
+      { "url": "/piloto/ofertas/contratar/", "decision": "DEFER" },
+      { "url": "/piloto/ofertas/diagnostico-expansao/", "decision": "DEFER" },
+      { "url": "/piloto/ofertas/diretoria-180/", "decision": "DEFER" },
+      { "url": "/piloto/ofertas/diretoria-365/", "decision": "DEFER" },
+      { "url": "/piloto/ofertas/diretoria-flex/", "decision": "DEFER" },
+      { "url": "/piloto/ofertas/faq/", "decision": "DEFER" },
+      { "url": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/", "decision": "DEFER" },
+      { "url": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/", "decision": "DEFER" },
+      { "url": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/", "decision": "DEFER" },
+      { "url": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/", "decision": "DEFER" },
+      { "url": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/", "decision": "DEFER" }
+    ]
+  },
+  "reopening_gate": {
+    "mode": "ALL",
+    "criteria": [
+      {
+        "id": "parent-88-execute",
+        "measure": "Issue #88 has a versioned EXECUTE decision naming the canary offer and approved spend",
+        "threshold": "EXECUTE with one named offer and spend ceiling",
+        "status": "WAITING",
+        "evidence_ref": null
+      },
+      {
+        "id": "qualified-demand",
+        "measure": "Founder-led manual channel records qualified willingness to buy the named offer at approved terms",
+        "threshold": ">= 1 qualified commercial opportunity; aggregate record only, no PII in this contract",
+        "status": "WAITING",
+        "evidence_ref": null
+      },
+      {
+        "id": "external-approvals",
+        "measure": "Legal, fiscal/NFS-e, delivery-capacity and security approvals are versioned",
+        "threshold": "4/4 approval references present",
+        "status": "WAITING",
+        "evidence_ref": null
+      },
+      {
+        "id": "canary-readiness",
+        "measure": "The named offer has provider mapping plus sandbox, negative-path and rollback evidence",
+        "threshold": "Provider mapping complete for one offer and all required gates green",
+        "status": "WAITING",
+        "evidence_ref": null
+      }
+    ]
+  },
+  "analytics": {
+    "source": "CONFENGE_WEB",
+    "aggregate_only": true,
+    "pii_allowlist": [],
+    "new_runtime_while_deferred": false
+  },
+  "sunset_rule": "If the review does not justify another DEFER or EXECUTE decision, publish a versioned URL-by-URL MIGRATE/REDIRECT/RETIRE plan for all 24 pages. A blanket redirect to the home page is forbidden.",
+  "rollback": "Keep catalog, checkout, webhook and real-money flags false; keep ASAAS_MODE disabled in production; retain webhook receive only for pre-existing objects if a later execution is rolled back. Revert to the last known-good deploy."
+}
