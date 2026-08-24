@@ -11,7 +11,9 @@
     "synthetic": false,
     "query_text_redacted": true,
     "job_ready_for_product_decisions": true,
-    "provider_max_date": "2026-08-18"
+    "provider_max_date": "2026-08-18",
+    "property_date_at_pull": "2026-08-23",
+    "provider_age_days_at_pull": 5
   },
   "serp": {
     "path": "data/bofu-dominance/remeasurements/2026-08-24/serp-sentinel.json",
@@ -27,7 +29,7 @@
   "core_ready_owner": "web-cfg#292",
   "core_ready_condition": {
     "all_required": [
-      "live non-synthetic GSC export with redacted query text and provider_max_date no older than 5 days",
+      "live non-synthetic GSC export with redacted query text and provider_max_date at most 5 calendar days behind property_date_at_pull in America/Sao_Paulo",
       "same-query-set SERP census for all 11 families, using the 2026-08-19 query set and the same collector class",
       "each family classified MUDOU, NAO_MUDOU or AMOSTRA_INSUFICIENTE against a like-for-like sample",
       "official_position_claimed remains false"

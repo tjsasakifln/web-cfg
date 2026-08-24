@@ -7,6 +7,8 @@ This directory is the immutable, git-safe Search Analytics export pulled by the
 - Property: `sc-domain:confenge.com.br`
 - Provider window: 2026-07-24 through 2026-08-20
 - Provider maximum observed date: 2026-08-18
+- Property-local pull date: 2026-08-23 (`America/Sao_Paulo`); provider age at
+  pull: 5 calendar days; lag to the requested window end: 2 calendar days
 - Returned rows: 75; clicks: 0; impressions: 78
 - Source: live Search Analytics API, not a fixture
 - Query text: redacted to stable hashes before commit

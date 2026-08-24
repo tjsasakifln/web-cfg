@@ -15,6 +15,10 @@ Time to evidence: this dated measurement, with a same-method SERP follow-up by 2
 The live GSC pull succeeded with 75 returned, query-redacted rows and a provider
 maximum date of 2026-08-18. The immutable export is in
 `seo/gsc-2026-08-24/`; `seo/gsc-2026-08-09/` remains untouched.
+The UTC pull timestamp falls on 2026-08-23 in the property timezone
+(`America/Sao_Paulo`), making the observed provider date 5 calendar days old at
+pull time and 2 days behind the requested window end. The readiness rule uses
+that explicit property-local date, not the later UTC document date.
 
 The SERP sentinel was also rerun for all 11 families. It used one representative
 query per family, while the 2026-08-19 comparator used up to four. That makes a
