@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T13:37:09.099Z",
+  "generated_at": "2026-08-24T13:56:30.836Z",
   "issue": 293,
   "base": "http://127.0.0.1:8793",
   "site_root": "_site",
@@ -3915,5 +3915,5 @@
   "serious": 0,
   "moderate": 4,
   "minor": 0,
-  "duration_seconds": 185
+  "duration_seconds": 187
 }
