@@ -83,6 +83,8 @@ jobs:
           npm run test:nurture
       - name: Build public site
         run: npm run build:site
+      - name: Published HTML and FAQ integrity
+        run: npm run test:html-integrity:site
       - name: CSS asset integrity after publish
         run: python3 scripts/site/test_fingerprint_css.py
       - name: Setup Chrome
