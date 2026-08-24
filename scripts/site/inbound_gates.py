@@ -822,14 +822,251 @@ def _as_date(value: date | datetime | str | None) -> date:
     return date.today()
 
 
-def _conversion_profile(route: str, service_routes: set[str]) -> str:
+# --- Public family registry: fail-closed conversion contract (issue #300) ---
+#
+# The default conversion profile used to be ``commercial_content``, the most
+# permissive one, satisfied by any ``<a data-cta-id href>``. Every newly
+# published family landed there and passed. The default is now "declare
+# yourself": an indexable route with no family declaration in
+# ``data/organic/public-family-registry.json`` fails the gate. The declaration
+# is versioned data, not a Python constant, and every claim it makes is checked
+# against the rendered HTML.
+FAMILY_REGISTRY_REL = "data/organic/public-family-registry.json"
+FAMILY_REGISTRY_SCHEMA = "public-family-registry-v1"
+CONVERSION_PROFILES = {"service_pillar", "priced_offer", "commercial_content", "trust_or_legal"}
+TERMINAL_ACTIONS = {"capture_form", "whatsapp", "capture_form_or_whatsapp", "none"}
+GATE_COVERAGE_LEVELS = {"full", "partial", "none"}
+GATE_COVERAGE_KEYS = ("conversion", "copy", "accessibility")
+MIN_WRITTEN_REASON = 24
+
+# A price is "displayed" when structured offer markup is present, or when a
+# BRL amount sits next to a commitment word. Bare BRL amounts are data (contract
+# values, reference costs), not offers, so they must not escalate the profile.
+PRICE_MARKUP_RE = re.compile(r'"price"\s*:|"priceCurrency"\s*:|itemprop=["\']price["\']', re.I)
+_PRICE_AMOUNT = r"R\$\s?\d{1,3}(?:\.\d{3})*(?:,\d{2})?"
+_PRICE_COMMITMENT = (
+    r"investimento|pre[çc]o|a partir de|por unidade|pagamento [úu]nico|"
+    r"mensal|assinatura|por relat[óo]rio|entrega por|sob demanda|avulso|por entrega|plano"
+)
+PRICE_NEAR_RE = re.compile(
+    rf"(?is)(?:{_PRICE_COMMITMENT})[^.]{{0,80}}?{_PRICE_AMOUNT}"
+    rf"|{_PRICE_AMOUNT}[^.]{{0,60}}?(?:{_PRICE_COMMITMENT})"
+)
+
+
+def _displays_price(main: str) -> bool:
+    """True when ``<main>`` shows a price for something CONFENGE sells."""
+    if PRICE_MARKUP_RE.search(main):
+        return True
+    return bool(PRICE_NEAR_RE.search(strip_html(main)))
+
+
+def load_family_registry(root: Path | None = None) -> dict[str, Any]:
+    path = (root or ROOT) / FAMILY_REGISTRY_REL
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _bofu_service_routes(root: Path | None = None) -> set[str]:
+    matrix = json.loads(
+        ((root or ROOT) / "data/organic/bofu-intent-matrix.json").read_text(encoding="utf-8")
+    )
+    return {str(row["canonical_service_route"]) for row in matrix.get("rows") or []}
+
+
+def _family_routes(family: dict[str, Any], service_routes: set[str]) -> tuple[set[str], str | None]:
+    """Return (explicit routes, prefix) declared by a family."""
+    match = family.get("match") or {}
+    if "source" in match:
+        return set(service_routes), None
+    if "routes" in match:
+        return {str(r) for r in match["routes"]}, None
+    if "prefix" in match:
+        return set(), str(match["prefix"])
+    return set(), None
+
+
+def _match_family(
+    route: str, families: list[dict[str, Any]], service_routes: set[str]
+) -> dict[str, Any] | None:
+    """Most specific declaration wins: exact route, then longest prefix."""
+    best: dict[str, Any] | None = None
+    best_len = -1
+    for family in families:
+        routes, prefix = _family_routes(family, service_routes)
+        if route in routes:
+            return family
+        if prefix and route.startswith(prefix) and len(prefix) > best_len:
+            best, best_len = family, len(prefix)
+    return best
+
+
+def _a11y_census() -> set[str]:
+    """Routes actually audited by scripts/site/audit_accessibility.py."""
+    from scripts.site.audit_accessibility import PAGES
+
+    census = set()
+    for page in PAGES:
+        rel = page.relative_to(ROOT).as_posix()
+        census.add("/" if rel == "index.html" else "/" + rel.removesuffix("index.html"))
+    return census
+
+
+def _copy_lint_census(root: Path | None = None) -> set[str]:
+    """Routes actually linted by scripts/site/lint_editorial_copy.py."""
+    base = root or ROOT
+    census = set()
+    for page in sorted((base / "data/editorial/pages").glob("*.json")):
+        payload = json.loads(page.read_text(encoding="utf-8"))
+        url = payload.get("url")
+        if isinstance(url, str) and url.startswith("/"):
+            census.add(url)
+    for page in sorted((base / "ferramentas").rglob("index.html")):
+        rel = page.relative_to(base).as_posix()
+        census.add("/" + rel.removesuffix("index.html"))
+    return census
+
+
+def _coverage_level(matched: set[str], census: set[str]) -> str:
+    if not matched:
+        return "none"
+    covered = matched & census
+    if not covered:
+        return "none"
+    return "full" if covered == matched else "partial"
+
+
+def _validate_family_registry(
+    registry: dict[str, Any],
+    service_routes: set[str],
+    indexable_routes: set[str],
+    *,
+    verify_coverage: bool = True,
+) -> list[Finding]:
+    """The registry must not be satisfiable by an empty line. Every field is checked."""
+    findings: list[Finding] = []
+    rel = FAMILY_REGISTRY_REL
+
+    def bad(reason: str, excerpt: str) -> None:
+        findings.append(Finding(gate="conversion", path=rel, reason=reason, excerpt=excerpt[:160]))
+
+    if registry.get("schema_version") != FAMILY_REGISTRY_SCHEMA:
+        bad("registry_schema_mismatch", str(registry.get("schema_version")))
+    if registry.get("fail_closed") is not True:
+        bad("registry_not_fail_closed", "fail_closed must be true")
+
+    families = registry.get("families") or []
+    if not families:
+        bad("registry_empty", "no families declared")
+
+    a11y_census = _a11y_census()
+    copy_census = _copy_lint_census()
+    seen_ids: set[str] = set()
+    for family in families:
+        fid = str(family.get("id") or "")
+        if not fid or fid in seen_ids:
+            bad("family_id_invalid_or_duplicated", fid or "<empty>")
+            continue
+        seen_ids.add(fid)
+        profile = family.get("profile")
+        action = family.get("terminal_action")
+        if profile not in CONVERSION_PROFILES:
+            bad("family_profile_invalid", f"{fid}: {profile}")
+        if action not in TERMINAL_ACTIONS:
+            bad("family_terminal_action_invalid", f"{fid}: {action}")
+        if len(str(family.get("visitor_job") or "").strip()) < MIN_WRITTEN_REASON:
+            bad("family_visitor_job_missing", fid)
+        if not isinstance(family.get("owner_issue"), int):
+            bad("family_owner_issue_missing", fid)
+        try:
+            _as_date(family.get("declared_at"))
+        except (TypeError, ValueError):
+            bad("family_declared_at_invalid", f"{fid}: {family.get('declared_at')}")
+        match = family.get("match") or {}
+        if len([k for k in ("routes", "prefix", "source") if k in match]) != 1:
+            bad("family_match_invalid", fid)
+        coverage = family.get("gate_coverage") or {}
+        for key in GATE_COVERAGE_KEYS:
+            if coverage.get(key) not in GATE_COVERAGE_LEVELS:
+                bad("family_gate_coverage_invalid", f"{fid}.{key}={coverage.get(key)}")
+        if coverage.get("conversion") != "full":
+            bad("family_conversion_coverage_understated", fid)
+        if action == "none" and profile != "trust_or_legal":
+            bad("family_no_action_outside_trust", fid)
+        if action == "none" and len(str(family.get("exemption_reason") or "")) < MIN_WRITTEN_REASON:
+            bad("family_exemption_reason_missing", fid)
+
+        routes, prefix = _family_routes(family, service_routes)
+        matched = {r for r in indexable_routes if r in routes}
+        if prefix:
+            matched |= {r for r in indexable_routes if r.startswith(prefix)}
+        # A prefix family only owns the routes no more specific family claims.
+        for other in families:
+            if other is family:
+                continue
+            other_routes, other_prefix = _family_routes(other, service_routes)
+            matched -= {r for r in matched if r in other_routes}
+            if other_prefix and prefix and len(other_prefix) > len(prefix):
+                matched -= {r for r in matched if r.startswith(other_prefix)}
+
+        # Declared gate coverage is verified against the real gate censuses,
+        # so the field cannot become decoration.
+        if verify_coverage:
+            for key, census in (("accessibility", a11y_census), ("copy", copy_census)):
+                actual = _coverage_level(matched, census)
+                declared = coverage.get(key)
+                if declared in GATE_COVERAGE_LEVELS and declared != actual and matched:
+                    bad(
+                        "family_gate_coverage_mismatch",
+                        f"{fid}.{key} declared={declared} actual={actual}",
+                    )
+
+        for entry in family.get("debt") or []:
+            route = str(entry.get("route") or "")
+            if not route:
+                bad("debt_route_missing", fid)
+                continue
+            if not isinstance(entry.get("owner_issue"), int):
+                bad("debt_owner_issue_missing", f"{fid}:{route}")
+            if len(str(entry.get("reason") or "").strip()) < MIN_WRITTEN_REASON:
+                bad("debt_reason_missing", f"{fid}:{route}")
+            try:
+                _as_date(entry.get("expires_at"))
+            except (TypeError, ValueError):
+                bad("debt_expires_at_invalid", f"{fid}:{route}")
+            in_family = route in routes or (prefix and route.startswith(prefix))
+            if not in_family:
+                bad("debt_route_outside_family", f"{fid}:{route}")
+
+        for entry in family.get("priced_reference_routes") or []:
+            if len(str(entry.get("reason") or "").strip()) < MIN_WRITTEN_REASON:
+                bad("priced_reference_reason_missing", f"{fid}:{entry.get('route')}")
+    return findings
+
+
+def _conversion_profile(
+    route: str,
+    service_routes: set[str],
+    family: dict[str, Any] | None = None,
+    priced: bool = False,
+) -> str:
+    """Effective conversion profile. Derived from data + rendered HTML, never defaulted."""
     if route in service_routes:
         return "service_pillar"
+    if family is not None:
+        declared = str(family.get("profile"))
+        if declared == "trust_or_legal":
+            return "trust_or_legal"
+        if declared == "service_pillar":
+            return "service_pillar"
+        return "priced_offer" if priced else declared
+    # No declaration: legacy legal allowlist stays only so that a registry
+    # failure still classifies legal pages sanely. The missing declaration is
+    # reported as an error by gate_conversion itself.
     if route in {"/privacidade/", "/termos-de-uso/", "/conflitos/", "/uso-de-ia/", "/imprensa/", "/correcoes/"}:
         return "trust_or_legal"
     if route.startswith("/politica-editorial/"):
         return "trust_or_legal"
-    return "commercial_content"
+    return "priced_offer" if priced else "commercial_content"
 
 
 def _conversion_files(base: Path) -> list[Path]:
@@ -883,20 +1120,58 @@ def gate_conversion(
     main_cta_exempt = 0
     service_scanned = 0
     service_capture_count = 0
-    profile_counts = {"service_pillar": 0, "commercial_content": 0, "trust_or_legal": 0}
+    profile_counts = {
+        "service_pillar": 0,
+        "priced_offer": 0,
+        "commercial_content": 0,
+        "trust_or_legal": 0,
+    }
+    terminal_required = 0
+    terminal_covered = 0
+    terminal_exempt_legal = 0
+    terminal_debt = 0
+    exemptions: list[dict[str, Any]] = []
     pii_re = re.compile(
         r"\b(\d{3}\.?\d{3}\.?\d{3}-?\d{2}|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\b",
         re.I,
     )
+
+    # Pass 1: census of indexable public routes (sitewide, derived, never a list).
+    pages: list[tuple[Path, str, str, str]] = []
     for p in _conversion_files(base):
         html = p.read_text(encoding="utf-8", errors="replace")
         if not is_indexable_html(html):
             continue
-        scanned += 1
         rel = p.relative_to(base)
         route = "/" if rel.as_posix() == "index.html" else "/" + rel.as_posix().removesuffix("index.html")
-        main = _main_html(html)
-        profile = _conversion_profile(route, set(service_routes))
+        pages.append((p, html, route, _main_html(html)))
+    indexable_routes = {route for _, _, route, _ in pages}
+
+    registry = load_family_registry()
+    families = registry.get("families") or []
+    findings.extend(
+        _validate_family_registry(
+            registry,
+            set(service_routes),
+            indexable_routes,
+            # Declared gate coverage describes the real public surface, so it is
+            # verified against ROOT, not against a fixture root under test.
+            verify_coverage=base == ROOT,
+        )
+    )
+    satisfied_debt: set[tuple[str, str]] = set()
+
+    for p, html, route, main in pages:
+        scanned += 1
+        family = _match_family(route, families, set(service_routes))
+        priced = _displays_price(main)
+        priced_refs = (
+            {str(e.get("route")) for e in (family or {}).get("priced_reference_routes") or []}
+        )
+        priced_reference = priced and route in priced_refs
+        if priced_reference:
+            priced = False
+        profile = _conversion_profile(route, set(service_routes), family, priced)
         profile_counts[profile] += 1
         conversion_exempt = profile == "trust_or_legal"
         has_main_wa = bool(re.search(r'(?is)<a\b[^>]+href=["\'][^"\']*(?:wa\.me|whatsapp\.com)', main))
@@ -954,6 +1229,137 @@ def gate_conversion(
                     reason="missing_main_cta",
                 )
             )
+        # --- Fail-closed family + terminal-action contract (issue #300) ---
+        rel_path = str(p.relative_to(base))
+        if family is None:
+            findings.append(
+                Finding(
+                    gate="conversion",
+                    path=rel_path,
+                    reason="public_family_not_declared",
+                    excerpt=(
+                        f"{route} — declare a família em {FAMILY_REGISTRY_REL} "
+                        "(profile, ação terminal, cobertura de gate)"
+                    ),
+                )
+            )
+        else:
+            declared_profile = str(family.get("profile"))
+            if priced_reference:
+                entry = next(
+                    e
+                    for e in family.get("priced_reference_routes") or []
+                    if str(e.get("route")) == route
+                )
+                exemptions.append(
+                    {
+                        "route": route,
+                        "family": family.get("id"),
+                        "kind": "priced_reference",
+                        "reason": entry.get("reason"),
+                        "owner_issue": family.get("owner_issue"),
+                        "expires_at": None,
+                    }
+                )
+            if profile == "trust_or_legal" and priced:
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=rel_path,
+                        reason="priced_route_in_trust_family",
+                        excerpt=f"{route} family={family.get('id')} rendered_price=yes",
+                    )
+                )
+            elif profile == "priced_offer" and declared_profile not in {
+                "priced_offer",
+                "service_pillar",
+            }:
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=rel_path,
+                        reason="undeclared_priced_offer",
+                        excerpt=f"{route} declared={declared_profile} rendered_price=yes",
+                    )
+                )
+
+            required = "none" if profile == "trust_or_legal" else str(family.get("terminal_action"))
+            if profile == "priced_offer":
+                # A displayed price always demands persisted capture, whatever
+                # the family declared. Derived from the HTML, not declarable away.
+                required = "capture_form"
+            satisfied = {
+                "none": True,
+                "capture_form": has_main_form,
+                "whatsapp": has_main_wa,
+                "capture_form_or_whatsapp": has_main_form or has_main_wa,
+            }.get(required, False)
+
+            if required == "none":
+                terminal_exempt_legal += 1
+                exemptions.append(
+                    {
+                        "route": route,
+                        "family": family.get("id"),
+                        "kind": "trust_or_legal",
+                        "reason": family.get("exemption_reason"),
+                        "owner_issue": family.get("owner_issue"),
+                        "expires_at": None,
+                    }
+                )
+            else:
+                terminal_required += 1
+                debt = next(
+                    (e for e in family.get("debt") or [] if str(e.get("route")) == route), None
+                )
+                if satisfied:
+                    terminal_covered += 1
+                    if debt is not None:
+                        satisfied_debt.add((str(family.get("id")), route))
+                elif profile == "service_pillar":
+                    # Owned by the dedicated missing_on_page_form rule below,
+                    # which honours the #291 freeze. Do not duplicate it here.
+                    pass
+                elif debt is None:
+                    findings.append(
+                        Finding(
+                            gate="conversion",
+                            path=rel_path,
+                            reason="missing_terminal_action",
+                            excerpt=f"{route} family={family.get('id')} required={required}",
+                        )
+                    )
+                else:
+                    expires = _as_date(debt.get("expires_at"))
+                    expired = today > expires
+                    terminal_debt += 1
+                    exemptions.append(
+                        {
+                            "route": route,
+                            "family": family.get("id"),
+                            "kind": "debt",
+                            "reason": debt.get("reason"),
+                            "owner_issue": debt.get("owner_issue"),
+                            "expires_at": expires.isoformat(),
+                            "required_terminal_action": required,
+                            "expired": expired,
+                        }
+                    )
+                    findings.append(
+                        Finding(
+                            gate="conversion",
+                            path=rel_path,
+                            reason="terminal_action_debt_expired"
+                            if expired
+                            else "terminal_action_debt",
+                            excerpt=(
+                                f"{route} required={required} "
+                                f"issue=#{debt.get('owner_issue')} expires_at={expires.isoformat()}"
+                            ),
+                            severity="error" if expired else "warn",
+                        )
+                    )
+
         if route in service_routes:
             service_scanned += 1
             if has_main_form:
@@ -1005,6 +1411,21 @@ def gate_conversion(
                 )
             )
 
+    # Debt that the owning issue already paid must be removed, not left to rot
+    # into a silent exemption for whatever lands on that route next.
+    for family in families:
+        for entry in family.get("debt") or []:
+            if (str(family.get("id")), str(entry.get("route"))) in satisfied_debt:
+                findings.append(
+                    Finding(
+                        gate="conversion",
+                        path=FAMILY_REGISTRY_REL,
+                        reason="debt_entry_satisfied_remove_it",
+                        excerpt=f"{entry.get('route')} issue=#{entry.get('owner_issue')}",
+                        severity="warn",
+                    )
+                )
+
     capture_findings, capture_scanned = _onpage_capture_findings(base, pii_re)
     findings.extend(capture_findings)
     errors = [f for f in findings if f.severity == "error"]
@@ -1032,6 +1453,25 @@ def gate_conversion(
                 if service_scanned
                 else 0.0,
             },
+            "family_registry": {
+                "path": FAMILY_REGISTRY_REL,
+                "schema_version": registry.get("schema_version"),
+                "families": len(families),
+                "fail_closed": bool(registry.get("fail_closed")),
+                "undeclared_routes": sum(
+                    1 for f in findings if f.reason == "public_family_not_declared"
+                ),
+            },
+            "terminal_action": {
+                "covered": terminal_covered,
+                "total": terminal_required,
+                "coverage": round(terminal_covered / terminal_required, 4)
+                if terminal_required
+                else 0.0,
+                "exempt_trust_or_legal": terminal_exempt_legal,
+                "registered_debt": terminal_debt,
+            },
+            "exemptions": sorted(exemptions, key=lambda e: (e["kind"], e["route"])),
             "freeze": {
                 "earliest_safe_action_at": EARLIEST_SAFE_ACTION_AT.isoformat(),
                 "warn_before_date": today < EARLIEST_SAFE_ACTION_AT,
