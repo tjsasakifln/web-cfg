@@ -1,0 +1,85 @@
+{
+  "contract": "CONFENGE_INBOUND_BACKLOG_DECISION/1.0",
+  "schema_version": "1.0.0",
+  "issue": 268,
+  "depends_on_issue": 267,
+  "decision_state": "DEFER_REPLAY_UNTIL_267_RECONCILED",
+  "executive_front": "REVENUE NOW",
+  "leverage": ["revenue", "trust"],
+  "owner": "CONFENGE",
+  "decided_at": "2026-08-24",
+  "time_to_evidence": "1 day after issue #267 reconciles exactly one real record",
+  "source": {
+    "workflow_run": 32685188116,
+    "url": "https://github.com/tjsasakifln/web-cfg/actions/runs/32685188116",
+    "git_sha": "09c676c85a7a0b901ff8bf5a25306193c738a9bc",
+    "artifact_sha256": "98ab2bae579a350ee07624a1bac835162253f580014c6bfcd7f69b79428da1ac",
+    "captured_at": "2026-08-24T03:05:22.262Z",
+    "scope": "authenticated aggregate-only read plus dry-run; no identifiers, replay or drain"
+  },
+  "inventory": {
+    "total": 126,
+    "by_status": {"SKIPPED": 24, "MISSING": 102},
+    "by_record_kind": {"synthetic": 67, "qa": 12, "MISSING": 45, "real": 2},
+    "by_consent_state": {"EXPLICIT_TRUE": 126},
+    "by_created_at_window": {"2026-08": 126},
+    "by_commercial_eligibility": {
+      "DNC_OR_SUPPRESSED": 79,
+      "OTHER_BLOCKER": 46,
+      "ELIGIBLE_REAL_NOT_CONFIGURED": 1
+    }
+  },
+  "cutoff_policy": {
+    "candidate_count": 1,
+    "approved_count": 0,
+    "max_batch_size": 1,
+    "one_at_a_time": true,
+    "selection_all_required": [
+      "record_kind_real",
+      "explicit_consent_true",
+      "commercial_eligibility_ELIGIBLE_REAL_NOT_CONFIGURED",
+      "created_at_within_30_days_at_execution",
+      "issue_267_single_case_reconciled",
+      "warmbly_auto_send_proven_off",
+      "human_approval_reference_present"
+    ],
+    "approval": {
+      "state": "PENDING_HUMAN",
+      "approved_by": null,
+      "approved_at": null,
+      "reference": null
+    }
+  },
+  "disposition": {
+    "DNC_OR_SUPPRESSED": {"count": 79, "action": "NEVER_REQUEUE", "delete": false},
+    "OTHER_BLOCKER": {"count": 46, "action": "NO_REPLAY_KEEP_REASON", "delete": false},
+    "ELIGIBLE_REAL_NOT_CONFIGURED": {"count": 1, "action": "HOLD_FOR_267_AND_APPROVAL", "delete": false}
+  },
+  "replay": {
+    "executed": false,
+    "selected_count": 0,
+    "automatic_messages_allowed": false,
+    "mass_replay_allowed": false,
+    "delete_unselected_allowed": false
+  },
+  "prerequisites": {
+    "transport_SET_SET_READY": true,
+    "issue_267_one_receipt_one_action_reconciled": false,
+    "warmbly_auto_send_proven_off": false,
+    "human_approval_reference_present": false
+  },
+  "analytics": {
+    "source": "CONFENGE_WEB",
+    "pii_policy": "aggregate_only_empty_allowlist",
+    "north_star": "qualified_commercial_opportunities",
+    "current_outcome": "UNKNOWN"
+  },
+  "rollback": "Stop after the current single item, preserve every record and reason, and revert the approval/policy PR; never compensate with a batch replay.",
+  "affected_adr": "ADR-STRAT-002 (no boundary change)",
+  "non_claims": [
+    "the original 124 count is superseded by the dated 126-record inventory",
+    "EXPLICIT_TRUE aggregate does not authorize replay by itself",
+    "the one eligible candidate is not an approved replay subset",
+    "no replay, drain, deletion or automatic message occurred"
+  ]
+}
