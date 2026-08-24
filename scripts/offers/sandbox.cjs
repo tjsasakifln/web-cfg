@@ -3,8 +3,15 @@
  */
 const crypto = require("crypto");
 const { getOffer } = require("./registry.cjs");
+const { buildExternalReference } = require("./external-reference.cjs");
 const { commercialEvent, TYPES, normalizeStatus } = require("./events.cjs");
 const { loadFlags } = require("./flags.cjs");
+
+/** Policy `cfg:{offer_id}:{correlation_id}`; empty rather than a broken shape. */
+function defaultExternalReference(offerId, correlationId) {
+  const built = buildExternalReference(offerId, correlationId);
+  return built.ok ? built.external_reference : "";
+}
 
 const SANDBOX_OFFERS = new Set(["CFG-DIAG-EXP-v1", "CFG-DIRB2G-180-v1"]);
 
@@ -42,7 +49,7 @@ function createSandboxCheckout({ offerId, externalReference, eligibility, terms,
     amount_cents: offer.amount_cents,
     max_payments: offer.max_payments,
     cycle: offer.cycle,
-    external_reference: externalReference || `cfg:${offer.offer_id}:${eligibility.eligibility_id}`,
+    external_reference: externalReference || defaultExternalReference(offer.offer_id, eligibility.eligibility_id),
     provider_raw_status: "CREATED",
     created_at: createdAt,
     expires_at: new Date((now || new Date()).getTime() + 48 * 3600 * 1000).toISOString(),

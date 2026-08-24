@@ -176,14 +176,7 @@
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
       "owner_issue": 266,
-      "debt": [
-        {
-          "route": "/radar/nacional-obras-publicas/",
-          "owner_issue": 266,
-          "reason": "O radar tem WhatsApp no rodapé, fora do <main>: é exatamente o defeito que #245 corrigiu e que #266 vai fechar ao coletar os parâmetros do Radar Decisório em formulário. Deixar registrado como dívida datada em vez de editar o HTML dentro do escopo de #300.",
-          "expires_at": "2026-10-31"
-        }
-      ]
+      "debt": []
     },
     {
       "id": "analises-contratos-publicos",

@@ -240,6 +240,51 @@ exports.handler = async (event) => {
   const idemKey = idempotencyKeyFor(lead, headerIdem || null);
   lead.idempotency_key = idemKey;
 
+  // Paid parameter orders (Radar Decisório): mint the payment correlation from
+  // the idempotency key so a retry reconciles against the same payment, and
+  // fail closed if the `cfg:{offer_id}:{correlation_id}` policy cannot be met.
+  // Nothing is emitted to the visitor before the durable persist succeeds.
+  let radarPublic = null;
+  if (lead.radar_params) {
+    try {
+      const radar = require("./lib/radar-params.cjs");
+      const correlationId = radar.correlationIdFor(idemKey);
+      const ref = radar.buildExternalReference(lead.radar_params.offer_id, correlationId);
+      if (!ref.ok) throw new Error(ref.error || "external_reference_invalid");
+      lead.radar_params = {
+        ...lead.radar_params,
+        correlation_id: correlationId,
+        external_reference: ref.external_reference,
+      };
+      lead.external_reference = ref.external_reference;
+      radarPublic = {
+        correlation_id: correlationId,
+        external_reference: ref.external_reference,
+        delivery_business_hours: radar.DELIVERY_CLOCK.business_hours,
+      };
+      safeLog("info", "radar_params_correlated", {
+        offer_id: lead.radar_params.offer_id,
+        recorte: lead.radar_params.recorte,
+        uf: lead.radar_params.uf,
+        segment_count: (lead.radar_params.segmentos || []).length,
+      });
+    } catch (err) {
+      safeLog("error", "radar_correlation_failed", {
+        code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      });
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify(
+          publicErrorBody({
+            error: "radar_correlation_failed",
+            message: "Não foi possível registrar os parâmetros do Radar. O pagamento não foi liberado.",
+          }),
+        ),
+      };
+    }
+  }
+
   // Deterministic id from idempotency key — same key always same lead_id even if
   // the idempotency map read is eventually consistent on first retry.
   const lead_id = generateLeadId(`idem|${idemKey}`, { deterministic: true });
@@ -258,6 +303,12 @@ exports.handler = async (event) => {
         notify_status: rec.delivery?.notify?.status,
         email_status: rec.delivery?.email?.status,
         idempotent: true,
+        // Correlation comes from the stored record, never from the request.
+        correlation_id: rec.radar_params ? rec.radar_params.correlation_id : undefined,
+        external_reference: rec.radar_params ? rec.external_reference : undefined,
+        delivery_business_hours: rec.radar_params
+          ? rec.radar_params.delivery_clock && rec.radar_params.delivery_clock.business_hours
+          : undefined,
       }),
     ),
   });
@@ -364,6 +415,7 @@ exports.handler = async (event) => {
             notify_status: "pending",
             email_status: "pending",
             idempotent: true,
+            ...(radarPublic || {}),
           }),
         ),
       };
@@ -480,6 +532,9 @@ exports.handler = async (event) => {
           notify_status === "ok" || email_status === "ok" ? "persisted_notified" : "persisted",
         notify_status,
         email_status,
+        // Fail-closed contract: the visitor only ever learns the payment
+        // correlation on this path, after the record is durably stored.
+        ...(radarPublic || {}),
       }),
     ),
   };

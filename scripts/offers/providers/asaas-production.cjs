@@ -21,6 +21,7 @@ const {
   PINNED_LEGAL_HASH,
 } = require("./config-production.cjs");
 const { requireValidAcceptance } = require("../acceptance.cjs");
+const { buildExternalReference } = require("../external-reference.cjs");
 
 const PIXEL_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=";
 
@@ -280,7 +281,13 @@ function createAsaasProductionProvider(deps = {}) {
       acceptance_id: acceptance.acceptance_id,
       offer_id: APPROVED_OFFER,
     });
-    const externalReference = `cfg:${crypto.createHash("sha256").update(acceptance.acceptance_id).digest("hex").slice(0, 24)}`.slice(0, 200);
+    // Policy: `cfg:{offer_id}:{correlation_id}`. A two-segment reference cannot
+    // be reconciled to the offer that must be produced, so it fails closed.
+    const referenceCheck = buildExternalReference(APPROVED_OFFER, correlationId);
+    if (!referenceCheck.ok) {
+      return { ok: false, error: referenceCheck.error || "external_reference_invalid", statusCode: 422 };
+    }
+    const externalReference = referenceCheck.external_reference;
 
     const origin = String(input.callback_origin || "https://confenge.com.br");
     const success = assertCallbackUrl(`${origin.replace(/\/$/, "")}/diagnostico-b2g-expansao/obrigado/`);

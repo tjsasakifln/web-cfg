@@ -596,6 +596,10 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     evidence_pack_version: lead.evidence_pack_version || null,
     asset_family: lead.asset_family || null,
     cnpj: lead.cnpj || null,
+    // Radar Decisório purchase parameters. Durable record of what was bought;
+    // never rendered into analytics, fixtures or git.
+    radar_params: lead.radar_params || null,
+    external_reference: lead.external_reference || null,
     source: "CONFENGE_WEB",
     idempotency_key: lead.idempotency_key,
     ip_hash,

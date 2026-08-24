@@ -516,7 +516,7 @@ for (const j of journeys) {
   if (!names.includes("outbound_click")) fail("missing_outbound_click", names);
 }
 
-// --- Versioned report hand-raise: one physical click, one enriched event ---
+// --- Versioned report order entry: one physical click, one enriched event ---
 {
   const html = htmlOf("casos/modelo-relatorio-inteligencia-licitacoes/index.html");
   const attrs = findAnchor(html, (a) =>
@@ -529,14 +529,14 @@ for (const j of journeys) {
     pathname: "/casos/modelo-relatorio-inteligencia-licitacoes/",
     body: bodyAttrs(html),
     hrefEls: [el],
-    waEls: [el],
+    namedEls: [el],
   });
   el.click();
   const physicalClickEvents = driven.dataLayer.filter((e) =>
     e.event === "whatsapp_click" || e.event === "cta_click"
   );
-  if (physicalClickEvents.length !== 1 || physicalClickEvents[0].event !== "whatsapp_click") {
-    fail("report_handraise_dual_count", physicalClickEvents);
+  if (physicalClickEvents.length !== 1 || physicalClickEvents[0].event !== "cta_click") {
+    fail("report_order_entry_dual_count", physicalClickEvents);
   }
   const ev = physicalClickEvents[0];
   const expected = {
@@ -550,23 +550,24 @@ for (const j of journeys) {
     source: "CONFENGE_WEB",
   };
   for (const [key, value] of Object.entries(expected)) {
-    if (ev[key] !== value) fail("report_handraise_attribution", { key, expected: value, event: ev });
+    if (ev[key] !== value) fail("report_order_entry_attribution", { key, expected: value, event: ev });
   }
-  if (!ev.event_id) fail("report_handraise_event_id", ev);
-  if (!/^CFG-WA-[A-Z0-9]{8}$/.test(ev.correlation_id || "")) {
-    fail("report_handraise_correlation_protocol", ev);
+  if (!ev.event_id) fail("report_order_entry_event_id", ev);
+  if (!/^(?:c-[a-z0-9-]+|[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})$/i.test(ev.correlation_id || "")) {
+    fail("report_order_entry_journey_correlation", ev);
   }
-  if (!decodeURIComponent(el.attrs.href.replace(/\+/g, "%20")).includes(
-    `Protocolo CONFENGE: ${ev.correlation_id}`
-  )) {
-    fail("report_handraise_conversation_marker", { href: el.attrs.href, event: ev });
+  if (/^CFG-WA-/i.test(ev.correlation_id || "")) {
+    fail("report_order_entry_invented_whatsapp_protocol", ev);
+  }
+  if (el.attrs.href !== "/comercial/radar-decisorio/") {
+    fail("report_order_entry_destination_mutated", { href: el.attrs.href, event: ev });
   }
   const reconciled = contract.reconcileFunnel({ events: [{ event: ev.event, props: ev }] });
   if (reconciled.denominators.engagement !== 1) {
-    fail("report_handraise_engagement_inflated", reconciled);
+    fail("report_order_entry_engagement_inflated", reconciled);
   }
   const admission = contract.admitEvent({ event: ev.event, props: ev });
-  if (!admission.ok) fail("report_handraise_rejected", admission);
+  if (!admission.ok) fail("report_order_entry_rejected", admission);
   const admitted = admission.event.props;
   if (
     admitted?.offer_id !== expected.offer_id ||
@@ -575,13 +576,13 @@ for (const j of journeys) {
     admitted?.correlation_id !== ev.correlation_id ||
     Object.prototype.hasOwnProperty.call(admitted || {}, "whatsapp_protocol")
   ) {
-    fail("report_handraise_context_dropped", admitted);
+    fail("report_order_entry_context_dropped", admitted);
   }
   const collectResult = await postCollect([{
     event: ev.event,
     props: ev,
     path: "/casos/modelo-relatorio-inteligencia-licitacoes/",
-    sid: "report-handraise",
+    sid: "report-order-entry",
   }]);
   const collectBody = JSON.parse(collectResult.body);
   const persisted = collect._recent().slice(-1)[0];
@@ -594,7 +595,7 @@ for (const j of journeys) {
     persisted?.event_id !== ev.event_id ||
     Object.prototype.hasOwnProperty.call(persisted || {}, "whatsapp_protocol")
   ) {
-    fail("report_handraise_collector_persistence", { collectBody, persisted });
+    fail("report_order_entry_collector_persistence", { collectBody, persisted });
   }
 }
 

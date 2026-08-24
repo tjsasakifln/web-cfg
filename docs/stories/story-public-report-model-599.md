@@ -21,8 +21,8 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 1. Existe uma página pública em `/casos/modelo-relatorio-inteligencia-licitacoes/`, renderizada em HTML estático, integralmente legível sem cadastro, formulário, modal, download ou conteúdo oculto.
 2. O exemplar usa apenas um caso composto sintético e declara de forma visível que empresa, oportunidades, números e decisões são demonstrativos; nenhum dado capaz de identificar a Extra Construtora aparece no HTML, metadados ou JSON-LD.
 3. A narrativa aumenta a percepção de valor ao longo da leitura: conclusão executiva, carteira priorizada, critérios e gates, capacidade da empresa, fichas decisórias, exposição financeira, exclusões, plano de 72 horas, metodologia e limitações.
-4. O preço `R$ 599 por relatório` e o CTA `Quero meu relatório por R$ 599` aparecem no primeiro viewport e retornam após a principal prova de valor e no encerramento, sem bloquear a consulta. A empresa informa raio de atuação e contexto; a CONFENGE busca os editais abertos; a quantidade decorre das licitações publicadas no recorte, sem cota combinada; e a análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa.
-5. Todos os CTAs comerciais abrem `https://wa.me/5548988344559` com mensagem pré-preenchida sobre o modelo e o preço; não ativam checkout nem alteram os flags financeiros existentes.
+4. O preço `R$ 599 por relatório` e o CTA para configurar o relatório aparecem no primeiro viewport e retornam após a principal prova de valor e no encerramento, sem bloquear a consulta. A empresa informa raio de atuação e contexto; a CONFENGE busca os editais abertos; a quantidade decorre das licitações publicadas no recorte, sem cota combinada; e a análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa.
+5. Todos os CTAs comerciais entram em `/comercial/radar-decisorio/`, rota `noindex` com formulário persistido e validado no servidor. A instrução de pagamento só aparece depois de uma referência `cfg:{offer_id}:{correlation_id}` confirmada pelo servidor; checkout direto e flags financeiros continuam desabilitados.
 6. A página segue o design system de engenharia editorial premium, HTML semântico, WCAG AA, mobile-first e sem sequência de cards genéricos ou dashboard fictício.
 7. A URL possui canonical próprio, `index,follow`, Open Graph e JSON-LD `WebPage` + `Report`, consta no sitemap canônico e é alcançável por links no hub de casos, na página de Bid Room e na Diretoria B2G.
 8. Analytics usam apenas eventos e atributos sem PII, com `source=CONFENGE_WEB`, `asset_id=relatorio-inteligencia-licitacoes-demonstrativo` e posições de CTA distinguíveis.
@@ -33,7 +33,7 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 
 - Decision state: `EXECUTE_NOW`
 - Executive fronts: Revenue Now + Inbound Core
-- Time to evidence: imediatamente após deploy por `asset_view`, profundidade de leitura e clique no WhatsApp
+- Time to evidence: imediatamente após deploy por `asset_view`, profundidade de leitura, entrada no formulário e pedido persistido
 - Leverage: revenue, trust, distribution
 - Repetition test: o mesmo modelo público demonstra o formato para muitos leads; cada repetição melhora aprendizado comercial sem exigir uma nova página.
 
@@ -46,10 +46,10 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 - [x] Task 2: Integrar descoberta, SEO e conversão (AC: 4, 5, 7, 8)
   - [x] Adicionar canonical, robots, OG, JSON-LD, sitemap e links internos.
   - [x] Instrumentar visualização/profundidade/CTA somente com propriedades sem PII.
-  - [x] Usar WhatsApp direto com cópia de R$ 599.
+  - [x] Encaminhar os CTAs de R$ 599 ao formulário persistido e fail-closed do Radar.
 - [x] Task 3: Provar anonimização e qualidade (AC: 2, 6, 9)
   - [x] Adicionar teste dedicado de contrato público da página e denylist dos identificadores privados conhecidos.
-  - [x] Rodar design, copy, UI, SEO, analytics, WhatsApp e build público.
+  - [x] Rodar design, copy, UI, SEO, analytics, contrato do pedido e build público.
   - [x] Capturar e revisar screenshots nos cinco breakpoints.
 - [ ] Task 4: Publicar e comprovar produção (AC: 10)
   - [ ] Rodar gates pré-push/PR, CodeRabbit e políticas de reviewability.
@@ -64,20 +64,21 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 - O design deve comunicar precisão técnica, responsabilidade e alto valor econômico, usando tokens, contraste editorial e artefatos de método, não card soup ou dashboard SaaS. [Source: `docs/DESIGN-SYSTEM.md#conceito`]
 - A página vive sob `casos/`, diretório já permitido no artefato público. O build deve copiar somente arquivos allowlisted. [Source: `scripts/pseo/public_artifact.py`]
 - Não usar dados dos PDFs como fatos públicos. O exemplar deve ser sintético, coerente e explicitamente demonstrativo.
-- Não criar promessa de prazo, vitória, economia ou resultado. O usuário autorizou o preço unitário de R$ 599 e três invariantes de entrega: a CONFENGE busca os editais abertos no raio da empresa; a quantidade resulta da disponibilidade publicada, sem negociação de cota; e a análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa.
+- Não criar promessa de vitória, economia ou resultado. O proprietário autorizou o preço unitário de R$ 599, o prazo de até 48 horas úteis contado do envio persistido dos parâmetros e três invariantes de entrega: a CONFENGE busca os editais abertos no raio da empresa; a quantidade resulta da disponibilidade publicada, sem negociação de cota; e a análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa.
 - O preço não cria SKU no catálogo congelado #88. A ação versionada
-  `handraise-report-intelligence-599-v1` é WhatsApp iniciado pelo visitante,
-  com raio, contexto concreto, prazo e termos `UNKNOWN` até aceite humano e
-  checkout desabilitado em `intent-action-matrix.v1.json`. Esse estado não
+  `handraise-report-intelligence-599-v1` é uma entrada de pedido não catalogada,
+  com parâmetros persistidos antes do handoff humano de pagamento, termos
+  `UNKNOWN` até aceite humano e checkout desabilitado em
+  `intent-action-matrix.v1.json`. Esse estado não
   reabre negociação sobre os três invariantes de entrega autorizados.
-- Cada ativação comercial emite somente um `whatsapp_click`, enriquecido com
-  `offer_id`, `next_action_id`, identidade/posição do CTA e `event_id`; não há
-  segundo `cta_click` para o mesmo clique físico. O marcador `CFG-WA-*` usado
-  pela conversa é persistido no campo canônico `correlation_id`.
+- Cada entrada no formulário emite somente um `cta_click`, enriquecido com
+  `offer_id`, `next_action_id`, identidade/posição do CTA, `event_id` e a
+  correlação anônima da jornada web. Esse clique não finge ser a referência do
+  pedido: `external_reference` só existe depois que o servidor o persiste.
 
 ### Testing
 
-- Teste dedicado em `scripts/site/` deve validar rota, estrutura, texto sintético, ausência de identificadores privados, canonical, robots, schema, três CTAs, WhatsApp, preço e sitemap.
+- Teste dedicado em `scripts/site/` deve validar rota, estrutura, texto sintético, ausência de identificadores privados, canonical, robots, schema, cinco entradas fail-closed, preço e sitemap.
 - Rodar ao menos: teste dedicado; `npm run test:cta-whatsapp`; `npm run test:analytics`; `npm run test:design`; `npm run test:copy`; `npm run test:ui`; `npm run validate:seo`; `npm run build:site`; auditoria do artefato público.
 - Revisão visual manual/automatizada em 320, 390, 768, 1024 e 1440 px, incluindo tabela horizontal, foco de teclado e barra de CTA móvel.
 
@@ -142,7 +143,7 @@ Codex GPT-5
 
 - Página integralmente consultável em HTML, sem formulário, conteúdo oculto ou arquivo para baixar.
 - Caso composto sintético com aviso no topo e denylist automatizada de identidade privada.
-- Preço e WhatsApp direto no hero, após a prova principal, no fechamento e em CTA móvel.
+- Preço e entrada no formulário persistido no hero, após a prova principal, no fechamento e em CTA móvel.
 - A revisão dedicada encontrou e corrigiu overflow a 320 px, contrastes AA e semântica de lista de definições.
 - O gate de design será repetido fora de `.worktrees`, pois esse teste exclui caminhos que contenham esse nome.
 
