@@ -216,6 +216,26 @@ TEXT_SCAN_SUFFIXES = frozenset(
     {".html", ".js", ".css", ".json", ".xml", ".txt", ".webmanifest", ".map"}
 )
 
+FOOTER_SCRIPTURE_TEXT = (
+    "Se o Senhor não edificar a casa, em vão trabalham os que edificam; "
+    "se o Senhor não guardar a cidade, em vão vigia a sentinela."
+)
+FOOTER_SCRIPTURE_REFERENCE = "Sl 127:1 (ARC)"
+FOOTER_SCRIPTURE_HTML = (
+    '<blockquote class="container footer-scripture" '
+    'style="margin:18px auto 0;text-align:center">'
+    f'<p style="max-width:760px;margin:0 auto 4px">{FOOTER_SCRIPTURE_TEXT}</p>'
+    f'<cite style="font-size:.875rem;font-style:normal">'
+    f"{FOOTER_SCRIPTURE_REFERENCE}</cite>"
+    "</blockquote>"
+)
+FOOTER_SCRIPTURE_ONLY_HTML = (
+    f'<footer class="site-footer footer-scripture-only">\n{FOOTER_SCRIPTURE_HTML}\n</footer>'
+)
+FOOTER_BLOCK_RE = re.compile(r"<footer\b[^>]*>.*?</footer\s*>", re.IGNORECASE | re.DOTALL)
+FOOTER_CLOSE_RE = re.compile(r"</footer\s*>", re.IGNORECASE)
+BODY_CLOSE_RE = re.compile(r"</body\s*>", re.IGNORECASE)
+
 
 def public_dir(root: Path | None = None) -> Path:
     return (root or ROOT) / PUBLIC_DIR_NAME
@@ -236,6 +256,48 @@ def _sha256_tree(base: Path) -> str:
     if not base.exists():
         return hashlib.sha256(b"").hexdigest()
     return content_tree_hash(base)
+
+
+def add_footer_scripture(dest: Path) -> dict[str, int]:
+    """Add the centered ARC scripture once to every published HTML page."""
+    html_scanned = 0
+    footers_found = 0
+    footers_created = 0
+    html_rewritten = 0
+
+    for html_path in sorted(Path(dest).rglob("*.html")):
+        html_scanned += 1
+        raw = html_path.read_text(encoding="utf-8")
+
+        def _add_to_footer(match: re.Match[str]) -> str:
+            nonlocal footers_found
+            footers_found += 1
+            footer = match.group(0)
+            if FOOTER_SCRIPTURE_HTML in footer:
+                return footer
+            return FOOTER_CLOSE_RE.sub(
+                f"\n{FOOTER_SCRIPTURE_HTML}\n</footer>", footer, count=1
+            )
+
+        updated = FOOTER_BLOCK_RE.sub(_add_to_footer, raw)
+        if not FOOTER_BLOCK_RE.search(raw):
+            footers_created += 1
+            if BODY_CLOSE_RE.search(raw):
+                updated = BODY_CLOSE_RE.sub(
+                    f"{FOOTER_SCRIPTURE_ONLY_HTML}\n</body>", raw, count=1
+                )
+            else:
+                updated = f"{raw.rstrip()}\n{FOOTER_SCRIPTURE_ONLY_HTML}\n"
+        if updated != raw:
+            html_path.write_text(updated, encoding="utf-8")
+            html_rewritten += 1
+
+    return {
+        "html_scanned": html_scanned,
+        "footers_found": footers_found,
+        "footers_created": footers_created,
+        "html_rewritten": html_rewritten,
+    }
 
 
 def inventory_public_routes(root: Path | None = None) -> dict[str, Any]:
@@ -349,6 +411,8 @@ def assemble_public_artifact(
     promoted_navigation_files = promote_public_navigation_tree(dest)
     navigation_audit = audit_public_navigation_tree(dest)
 
+    footer_scripture = add_footer_scripture(dest)
+
     from scripts.site.fingerprint_css import fingerprint_published_css
 
     css_assets = fingerprint_published_css(dest)
@@ -367,6 +431,7 @@ def assemble_public_artifact(
         "css_assets": css_assets,
         "promoted_navigation_files": promoted_navigation_files,
         "navigation_audit": navigation_audit,
+        "footer_scripture": footer_scripture,
     }
 
     # Private inventory (not published)
@@ -555,6 +620,18 @@ def audit_public_artifact(
         except OSError as exc:
             findings.append({"code": "read_error", "path": rel, "detail": str(exc)})
             continue
+        footers = FOOTER_BLOCK_RE.findall(html)
+        markers_in_footers = sum(
+            footer.count(FOOTER_SCRIPTURE_HTML) for footer in footers
+        )
+        if html.count(FOOTER_SCRIPTURE_HTML) != 1 or markers_in_footers != 1:
+            findings.append(
+                {
+                    "code": "footer_scripture_missing_or_duplicated",
+                    "path": rel,
+                    "detail": f'every published page must contain exactly one "{FOOTER_SCRIPTURE_REFERENCE}" ARC marker inside a footer',
+                }
+            )
         if not stylesheet_hrefs(html):
             continue
         if html_uses_unversioned_styles(html):
