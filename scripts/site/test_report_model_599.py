@@ -27,6 +27,18 @@ def _html() -> str:
     return PAGE.read_text(encoding="utf-8")
 
 
+def test_shared_report_a11y_override_uses_a_new_immutable_url():
+    override = ROOT / "assets" / "report-model-a11y-v293.css"
+    assert override.is_file()
+    pages = []
+    for page in (ROOT / "casos").glob("modelo-*/index.html"):
+        html = page.read_text(encoding="utf-8")
+        if '/assets/report-model.css' in html:
+            pages.append(page)
+            assert '/assets/report-model-a11y-v293.css' in html, page
+    assert len(pages) == 7
+
+
 def _visible_text(markup: str) -> str:
     without_hidden_blocks = re.sub(
         r"<(script|style|template|noscript)\b[^>]*>.*?</\1>",

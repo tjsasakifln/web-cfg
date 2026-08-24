@@ -13,10 +13,12 @@ import { dirname, extname, join, resolve } from "path";
 import { fileURLToPath } from "url";
 import { mkdirSync } from "fs";
 import { resolveChromePath } from "./resolve_chrome.mjs";
+import { loadManifestRoutes, resolveSiteRoot } from "./interface_coverage.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const PORT = Number(process.env.LAYOUT_AUDIT_PORT || 8796);
 const CHROME = resolveChromePath();
+const SITE_ROOT = resolveSiteRoot();
 const VIEWPORTS = [360, 390, 768, 1024, 1440, 1920];
 const CRITICAL_ROUTES = [
   "/",
@@ -50,14 +52,14 @@ const MIME = {
   ".txt": "text/plain; charset=utf-8",
 };
 
-function startStaticServer() {
+function startStaticServer(siteRoot) {
   const server = createServer((req, res) => {
     try {
       let urlPath = decodeURIComponent((req.url || "/").split("?")[0]);
       if (urlPath.endsWith("/")) urlPath += "index.html";
       if (!urlPath) urlPath = "/index.html";
-      const filePath = join(ROOT, urlPath);
-      if (!filePath.startsWith(ROOT) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
+      const filePath = join(siteRoot, urlPath);
+      if (!filePath.startsWith(siteRoot) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
         res.writeHead(404);
         res.end("not found");
         return;
@@ -79,18 +81,18 @@ function publicRoutes() {
     .filter(Boolean);
   if (explicit.length) return explicit;
   if (process.env.LAYOUT_AUDIT_SCOPE === "critical") return CRITICAL_ROUTES;
-  const manifest = JSON.parse(readFileSync(join(ROOT, "seo/PUBLIC-ARTIFACT-MANIFEST.json"), "utf8"));
-  return manifest.html_routes;
+  return loadManifestRoutes();
 }
 
 const baseArg = process.argv[2];
 const reportArg = process.env.LAYOUT_AUDIT_REPORT || process.argv[3] || "";
-const server = baseArg ? null : await startStaticServer();
+const server = baseArg ? null : await startStaticServer(SITE_ROOT);
 const BASE = (baseArg || `http://127.0.0.1:${PORT}`).replace(/\/$/, "");
 const routes = publicRoutes();
 const report = {
   generated_at: new Date().toISOString(),
   base_url: BASE,
+  site_root: SITE_ROOT === ROOT ? "." : "_site",
   scope: process.env.LAYOUT_AUDIT_SCOPE || (process.env.LAYOUT_AUDIT_ROUTES ? "explicit" : "sitewide"),
   route_count: routes.length,
   widths: VIEWPORTS,
@@ -129,9 +131,21 @@ async function auditWorker() {
       // parsed. Wait briefly so geometry is never sampled from raw HTML while
       // still retaining stylesheet_unloaded as a real failure signal.
       await page.waitForFunction(
-        () => [...document.querySelectorAll('link[rel="stylesheet"]')].every((link) => link.sheet),
+        () => [...document.querySelectorAll('link[rel="stylesheet"]')].every((link) => {
+          if (!link.sheet) return false;
+          try {
+            return link.sheet.cssRules.length > 0;
+          } catch {
+            return false;
+          }
+        }),
         { timeout: 5000 },
       ).catch(() => {});
+      // CSSOM availability can precede the first styled layout on a newly
+      // opened concurrent page. A process-clock pause avoids raw-HTML
+      // geometry without relying on requestAnimationFrame, which Chromium
+      // may indefinitely throttle in background worker tabs.
+      await new Promise((done) => setTimeout(done, 50));
       const status = response?.status() || 0;
       if (!status || status >= 400) issues.push({ code: "http_status", detail: status });
       const rendered = await page.evaluate((viewportWidth) => {
@@ -165,7 +179,14 @@ async function auditWorker() {
         }
 
         const unloaded = [...document.querySelectorAll('link[rel="stylesheet"]')]
-          .filter((link) => !link.sheet)
+          .filter((link) => {
+            if (!link.sheet) return true;
+            try {
+              return link.sheet.cssRules.length === 0;
+            } catch {
+              return true;
+            }
+          })
           .map((link) => link.getAttribute("href"));
         if (unloaded.length) problems.push({ code: "stylesheet_unloaded", detail: unloaded });
 

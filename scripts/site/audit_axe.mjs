@@ -75,16 +75,6 @@ const VIEWPORTS = coverage.viewports;
 console.log(formatCoverageDeclaration(coverage));
 console.log("");
 
-const exceptions = (coverage.known_exceptions || []).map((item) => ({ ...item, matched: 0 }));
-function exceptionFor(route, viewportId, ruleId) {
-  return exceptions.find(
-    (item) =>
-      item.route === route
-      && item.rule === ruleId
-      && (item.viewport === "all" || item.viewport === viewportId),
-  );
-}
-
 const baseArg = process.argv[2];
 const server = baseArg ? null : await startServer(siteRoot);
 const BASE = (baseArg || `http://127.0.0.1:${PORT}`).replace(/\/$/, "");
@@ -114,13 +104,11 @@ const report = {
     not_audited_count: coverage.axe.not_sampled_count,
     not_audited: coverage.axe.not_sampled,
   },
-  known_exceptions: coverage.known_exceptions,
   pages: [],
   critical: 0,
   serious: 0,
   moderate: 0,
   minor: 0,
-  excused: 0,
 };
 let hardFail = 0;
 
@@ -150,15 +138,12 @@ for (const viewport of VIEWPORTS) {
     let blocking = 0;
     const violations = (results.violations || []).map((v) => {
       counts[v.impact] = (counts[v.impact] || 0) + 1;
-      const excused = exceptionFor(path, viewport.id, v.id);
-      if (excused) excused.matched += 1;
-      else if (v.impact === "critical" || v.impact === "serious") blocking += 1;
+      if (v.impact === "critical" || v.impact === "serious") blocking += 1;
       return {
         id: v.id,
         impact: v.impact,
         description: v.description,
         nodes: v.nodes.length,
-        excused: excused ? excused.reason : null,
         targets: v.nodes.slice(0, 3).map((n) => n.target),
       };
     });
@@ -175,13 +160,12 @@ for (const viewport of VIEWPORTS) {
     report.serious += counts.serious || 0;
     report.moderate += counts.moderate || 0;
     report.minor += counts.minor || 0;
-    report.excused += violations.filter((v) => v.excused).length;
     if (blocking > 0) hardFail += 1;
     console.log(
       viewport.id,
       path,
       JSON.stringify(counts),
-      violations.length ? violations.map((v) => (v.excused ? `${v.id}(excused)` : v.id)).join(",") : "clean",
+      violations.length ? violations.map((v) => v.id).join(",") : "clean",
     );
   }
 }
@@ -190,9 +174,6 @@ await browser.close();
 if (server) server.close();
 
 report.duration_seconds = Math.round((Date.now() - startedAt) / 1000);
-report.known_exceptions = exceptions.map(({ matched, ...rest }) => ({ ...rest, matched }));
-const staleExceptions = report.known_exceptions.filter((item) => item.matched === 0);
-
 const outDir = join(ROOT, "docs/uiux-evidence");
 mkdirSync(outDir, { recursive: true });
 const outFile = join(outDir, "axe-report.json");
@@ -204,16 +185,9 @@ console.log(
 );
 console.log(`not audited: ${coverage.axe.not_sampled_count} routes (reasons recorded in ${outFile})`);
 
-if (staleExceptions.length) {
-  console.error(
-    "FAIL: registered axe exceptions no longer match any violation — delete them from "
-      + `${coverage.policy_path}: ${staleExceptions.map((e) => `${e.route}@${e.viewport}:${e.rule}`).join(", ")}`,
-  );
-  process.exit(1);
-}
 if (hardFail) {
-  console.error(`FAIL: ${hardFail} page audit(s) with unexcused critical/serious axe violations`);
+  console.error(`FAIL: ${hardFail} page audit(s) with critical/serious axe violations`);
   process.exit(1);
 }
-console.log("OK audit:axe — zero unexcused critical/serious across mobile and desktop");
+console.log("OK audit:axe — zero critical/serious across mobile and desktop; exceptions are unsupported");
 process.exit(0);

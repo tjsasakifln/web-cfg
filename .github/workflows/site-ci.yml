@@ -99,6 +99,11 @@ jobs:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           UI_GEOMETRY_REQUIRED: "1"
         run: npm run test:ui
+      - name: Sitewide layout geometry
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          UI_GEOMETRY_REQUIRED: "1"
+        run: npm run audit:layout-sitewide
       - name: pSEO validate and audit
         run: |
           npm run pseo:validate

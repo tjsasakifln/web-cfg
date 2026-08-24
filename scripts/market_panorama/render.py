@@ -257,10 +257,16 @@ def _limitations_block(payload: dict[str, Any]) -> str:
     limitations = payload.get("limitations") or []
     # The producer owns the fact and provenance; the public renderer owns
     # visitor-facing language. Keep infrastructure vocabulary out of copy.
-    public_limitations = [
-        re.sub(r"\bDataLake\b", "base canônica de dados", str(text), flags=re.IGNORECASE)
-        for text in limitations
-    ]
+    def public_wording(text: Any) -> str:
+        source = str(text)
+
+        def replace_datalake(match: re.Match[str]) -> str:
+            replacement = "repositório de dados de referência"
+            return replacement.capitalize() if not source[: match.start()].strip() else replacement
+
+        return re.sub(r"\bDataLake\b", replace_datalake, source, flags=re.IGNORECASE)
+
+    public_limitations = [public_wording(text) for text in limitations]
     items = "".join(f"<li>{e(text)}</li>" for text in public_limitations)
     reasons = payload.get("reason_codes") or []
     reason_html = ""
