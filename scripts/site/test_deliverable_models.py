@@ -256,31 +256,57 @@ def test_competitor_shares_use_the_shared_base_denominator() -> None:
 
 
 def test_price_outliers_distinguish_consolidated_rows_from_all_marks() -> None:
+    """The consolidated cut marks 17, not 7.
+
+    The consolidated Tukey ceiling is P75 + 1.5 * IQR = 664.0k + 1.5 * 615.0k =
+    R$ 1.586,5k. The construção median is R$ 1,74 mi over N=24, so by the
+    definition of a median at least twelve construção contracts already sit
+    above that ceiling. A consolidated count of 7 is therefore arithmetically
+    impossible, and any page publishing it contradicts its own Tukey limit.
+    """
     price_panel = _html("modelo-painel-precos-obras-publicas")
     presentation = _html("modelo-apresentacao-executiva-resultados")
     consolidated = _html("modelo-relatorio-executivo-consolidado")
     base = _html("modelo-base-quantitativa-canonica")
 
+    p75_k, iqr_k, construcao_median_k = 664.0, 615.0, 1740.0
+    ceiling_k = p75_k + 1.5 * iqr_k
+    assert ceiling_k == 1586.5
+    assert ceiling_k < construcao_median_k, "consolidated ceiling must sit below the construção median"
+
+    # Marked within each typology: 2 + 5 + 4 = 11.
     assert re.search(
-        r">TOTAL</th><td>118</td>.*?<td>7</td></tr>",
+        r">Construção de edificações</th><td>24</td>.*?<td>2</td></tr>",
         price_panel,
         flags=re.DOTALL,
     )
-    assert re.search(
-        r">Total consolidado</th>.*?<td>118</td><td>7</td></tr>",
-        presentation,
-        flags=re.DOTALL,
-    )
-    assert re.search(
-        r">Total consolidado</th><td>118</td>.*?<td>7</td></tr>",
-        consolidated,
-        flags=re.DOTALL,
-    )
-    assert "Outliers no consolidado</dt><dd>7 de 118" in price_panel
+    assert "2 mais 5 mais 4, ou seja 11" in price_panel
+
+    # Marked against the consolidated ceiling: 17 (13 construção, 3 reforma, 1 manutenção).
+    for label, html in (
+        ("painel", price_panel),
+        ("apresentacao", presentation),
+        ("consolidado", consolidated),
+    ):
+        total_row = re.search(
+            r"<tr[^>]*>(?:(?!</tr>).)*?>(?:TOTAL|Total consolidado)</th>.*?</tr>",
+            html,
+            flags=re.DOTALL,
+        )
+        assert total_row, label
+        row = total_row.group(0)
+        assert row.rstrip().endswith("<td>17</td></tr>"), (label, row[-90:])
+        assert not row.rstrip().endswith("<td>7</td></tr>"), label
+
+    assert "Outliers no consolidado</dt><dd>17 de 118" in price_panel
+    assert "<dd>7 de 118" not in price_panel
     assert "<dt>MARCAÇÕES DE OUTLIER</dt><dd>17" in price_panel
-    assert "<dt>Marcações de outlier preservadas</dt><dd>17" in presentation
     assert "17 marcações de outlier" in consolidated.casefold()
     assert "17 marcações de outlier" in base.casefold()
+
+    # No page may describe the consolidated cut as an increment over the typologies.
+    for slug, *_ in MODELS:
+        assert "e 7 no consolidado" not in _html(slug), slug
 
 
 def test_competitor_ranking_rule_is_consistent() -> None:
