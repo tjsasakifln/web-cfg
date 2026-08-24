@@ -56,8 +56,9 @@ def evaluate_gate(
     earliest_safe_action_at: date | datetime | str | None = None,
     issue_state: dict[str, Any] | None = None,
     unlock_plan: dict[str, Any] | None = None,
+    unlock_plan_path: Path | None = None,
 ) -> dict[str, Any]:
-    """Evaluate the legacy freeze or the stricter all-required unlock plan."""
+    """Require the versioned all-required unlock plan; absence fails closed."""
     today = _as_date(now, date.today())
     earliest = _as_date(earliest_safe_action_at, EARLIEST_SAFE_ACTION_AT)
     state = issue_state if issue_state is not None else load_issue_state()
@@ -67,15 +68,20 @@ def evaluate_gate(
         else bool(state.get("evidential_close"))
     )
     date_ok = today >= earliest
-    plan = unlock_plan if unlock_plan is not None else load_unlock_plan()
+    plan = (
+        unlock_plan
+        if unlock_plan is not None
+        else load_unlock_plan(unlock_plan_path)
+    )
     plan_authorized = None
     unmet_preconditions: list[str] = []
-    authorization_mode = "legacy_date_or_evidential_close"
+    authorization_mode = "unlock_plan_all_required"
     plan_date_matches_patch = True
     if plan is None:
-        gate_open = date_ok or closed
+        plan_authorized = False
+        unmet_preconditions.append("unlock_plan")
+        gate_open = False
     else:
-        authorization_mode = "unlock_plan_all_required"
         plan_earliest = _as_date(plan.get("earliest_safe_action_at"), earliest)
         plan_date_matches_patch = plan_earliest == earliest
         preconditions = plan.get("preconditions_all_required") or []
@@ -97,7 +103,9 @@ def evaluate_gate(
         )
     refused = not gate_open
     reason = "gate_open" if gate_open else "before_gate"
-    if plan is not None and refused:
+    if plan is None:
+        reason = "unlock_plan_missing"
+    elif refused:
         if not date_ok:
             reason = "before_date"
         elif not plan_date_matches_patch:
@@ -106,8 +114,6 @@ def evaluate_gate(
             reason = "unlock_plan_preconditions_not_ready"
         elif not plan_authorized:
             reason = "unlock_plan_not_authorized"
-    elif refused and not date_ok and not closed:
-        reason = "before_date_and_issue_not_evidentially_closed"
     return {
         "refused": refused,
         "gate_open": gate_open,

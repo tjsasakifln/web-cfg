@@ -79,7 +79,7 @@ def test_every_precondition_is_named_and_fail_closed():
     assert any("without --force" in item for item in PLAN["execution_sequence"])
 
 
-def test_unlock_gate_requires_date_all_evidence_and_explicit_authorization():
+def test_unlock_gate_requires_date_all_evidence_and_explicit_authorization(tmp_path):
     rule = PLAN["authorization_rule"]
     assert rule["operator"] == "AND"
     assert rule["required"] == [
@@ -91,6 +91,11 @@ def test_unlock_gate_requires_date_all_evidence_and_explicit_authorization():
     ]
     assert rule["date_or_evidential_close_is_sufficient"] is False
     assert evaluate_gate(now="2026-09-16", evidential_close=True)["gate_open"] is False
+    missing = evaluate_gate(
+        now="2026-09-16", unlock_plan_path=tmp_path / "missing-plan.json"
+    )
+    assert missing["gate_open"] is False
+    assert missing["reason"] == "unlock_plan_missing"
 
     ready_plan = json.loads(json.dumps(PLAN))
     ready_plan["html_mutation_authorized"] = True
