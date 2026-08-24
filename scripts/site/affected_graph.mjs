@@ -20,6 +20,7 @@ const PUBLIC_HTML_SUITES = Object.freeze([
   "test:design",
   "test:copy",
   "audit:accessibility",
+  "test:skip-link",
   "test:ui",
   "test:inbound-gates",
   "test:cta-whatsapp",
@@ -351,6 +352,11 @@ export const SUITE_GRAPH = Object.freeze({
     producers: ["scripts/site/audit_accessibility.py"],
     artifacts: [],
     surfaces: ["/", "/ferramentas/", "/diretoria-b2g/"],
+  },
+  "test:skip-link": {
+    producers: ["scripts/site/test_skip_link_coverage.py", "scripts/pseo/public_artifact.py"],
+    artifacts: [],
+    surfaces: ["/", "/obrigado.html", "/404.html", "/privacidade/", "/termos-de-uso/"],
   },
   "test:lighthouse-gates": {
     producers: [

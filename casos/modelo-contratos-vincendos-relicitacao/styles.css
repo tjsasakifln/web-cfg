@@ -124,6 +124,11 @@
 }
 
 @media (max-width: 620px) {
+  /* O kit esconde as notas de tabela no telefone. Aqui a tabela de regras, o funil
+     e a lista do calendário continuam visíveis, mas a aritmética de reconciliação
+     só existe na nota: sem ela o conteúdo se perde sem equivalente. */
+  #recorte .report-table-note,
+  #calendario .report-table-note { display: block; }
   .vinc-null { display: block; padding: 20px; }
   .vinc-null strong { display: block; margin-top: 4px; }
   .vinc-rules tbody th { padding-bottom: 6px; padding-right: 0; white-space: normal; }
