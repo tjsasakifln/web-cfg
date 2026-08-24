@@ -22,10 +22,11 @@ updates:
     # .nvmrc 22, node-version "22" in all workflows), so those engines are now
     # satisfied and the ignores were removed together as that issue instructed.
     #
-    # `npm ci --engine-strict` in site-ci.yml and pseo.yml keeps the guarantee
-    # that replaced these ignores: a dependency declaring a Node floor above
-    # the runner hard-fails the install instead of passing green. Prove each
-    # remaining major on its own Dependabot PR, never as a drive-by bump.
+    # `npm ci --engine-strict` in the merge workflows and the scheduled RevOps
+    # install keeps the guarantee that replaced these ignores: a dependency
+    # declaring a Node floor above the runner hard-fails instead of passing
+    # green. Prove each remaining major on its own Dependabot PR, never as a
+    # drive-by bump.
 
   - package-ecosystem: github-actions
     directory: "/"

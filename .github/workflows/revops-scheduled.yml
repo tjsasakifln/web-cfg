@@ -54,7 +54,7 @@ jobs:
           python-version: "3.12"
       - name: Install
         run: |
-          npm ci || npm install
+          npm ci --engine-strict
           pip install google-api-python-client google-auth || true
       - name: Daily scheduled run
         env:

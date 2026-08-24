@@ -38,8 +38,10 @@ issue #149 recorded. All four were flipped.
 The three Node-floor ignores (`lighthouse`, `puppeteer-core`, `@netlify/blobs`
 majors) existed only because the runtime was Node 20, and the config itself said
 to remove them together as part of this migration. They are gone.
-`npm ci --engine-strict` in `site-ci.yml` and `pseo.yml` is what now enforces the
-floor, so the guarantee those ignores provided did not go away with them.
+`npm ci --engine-strict` in `site-ci.yml`, `pseo.yml` and the dependency-bearing
+RevOps scheduled job is what now enforces the floor, so the guarantee those
+ignores provided did not go away with them. The scheduler no longer falls back
+from a broken lockfile to `npm install`.
 
 Consequence to expect: Dependabot will now open `puppeteer-core@25` and
 `@netlify/blobs@11` PRs. Prove each on its own PR — `@netlify/blobs` in
@@ -53,6 +55,9 @@ Local runtime: Node **v22.23.2** (nvm), npm 11.x, Chrome for Testing 152.
 
 - `npm install lighthouse@^13 --save-dev` — no `--force`, no `--legacy-peer-deps`. Resolved `lighthouse@13.4.1`.
 - `rm -rf node_modules && npm ci --engine-strict` — **twice**, both clean, **zero `EBADENGINE`**. The `proxy-agent@8.0.2` lockfile desync that sank the earlier attempt (PR #92) did not recur; the lock was regenerated from a clean tree rather than patched.
+- `package-lock.json` repeats the exact root engine range from `package.json`;
+  the workflow gate rejects drift and also rejects a repository floor below
+  Lighthouse's own declared minimum.
 - `npm test` — full suite green on Node 22.
 - `npm run build:site` — green; `_site` assembled, public artifact audit clean.
 - `npm run audit:axe` — 14 routes, **zero critical / serious / moderate / minor**.
