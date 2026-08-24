@@ -93,16 +93,23 @@ consented, has a valid join ID, is not DNC/suppressed and has no test identity.
 Missing legacy kind or consent requires manual review. Non-real, QA, internal,
 spam and reserved test identities are never requeued.
 
-Execution requires an explicit bounded limit (`1..20`) and re-probes the
-Warmbly health endpoint server-side. It refuses to mutate unless the configured
-contract is `READY`, `auto_send_enabled=false` and `dispatch_attempted=false`:
+The committed issue-268 decision is `DEFER`, so execution currently returns
+`409 backlog_policy_blocked` before mutation. A future execution requires a
+separate versioned single-case authority that references the frozen decision
+digest, records owner approval, proves the issue-267 reconciliation and sets an
+exact approval reference. That authority carries only a non-reversible binding
+digest for the approved join-key pair, never the raw `lead_id` or `receipt_id`,
+and its approval window is at most 24 hours. Runtime also requires `limit=1`,
+age at most 30 days and re-probes the Warmbly health endpoint server-side. It refuses to mutate
+unless the configured contract is `READY`, `auto_send_enabled=false` and
+`dispatch_attempted=false`:
 
 ```bash
-# Canary: requeue at most one eligible row. This does not drain automatically.
+# Future canary, only after a separate execution authority is committed.
 curl -fsS -X POST 'https://confenge.com.br/.netlify/functions/ops?action=requeue_inbound' \
   -H "Authorization: Bearer $OPS_TOKEN" \
   -H 'Content-Type: application/json' \
-  --data '{"mode":"eligible_only","dry_run":false,"limit":1}'
+  --data '{"mode":"eligible_only","dry_run":false,"limit":1,"approval_reference":"INBOUND-268-APPROVAL-v1"}'
 
 # Only after reviewing the canary result:
 curl -fsS -X POST 'https://confenge.com.br/.netlify/functions/ops?action=drain_inbound' \
@@ -111,8 +118,11 @@ curl -fsS -X POST 'https://confenge.com.br/.netlify/functions/ops?action=drain_i
   --data '{"limit":1}'
 ```
 
-The drain aborts the remaining batch on `401/403` and on an abnormal retryable
-failure rate. Repeating requeue does not move `PENDING` or `DELIVERED` rows.
+The scheduled drain cannot bypass the policy: historical backlog rows carry a
+versioned record-bound marker, are re-authorized, binding-checked, age-checked
+and safety-probed immediately before delivery, with at most one backlog attempt per drain. The general drain
+still aborts on `401/403` and on an abnormal retryable failure rate. Repeating
+requeue does not move `PENDING` or `DELIVERED` rows.
 Warmbly uses the same `lead_id` as its durable idempotency key, so a transport
 retry cannot create a second commercial action.
 

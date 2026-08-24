@@ -862,6 +862,13 @@ PRICE_NEAR_RE = re.compile(
     rf"(?is)(?:{_PRICE_COMMITMENT})[^.]{{0,80}}?{_PRICE_AMOUNT}"
     rf"|{_PRICE_AMOUNT}[^.]{{0,60}}?(?:{_PRICE_COMMITMENT})"
 )
+PRICED_CAPTURE_DATA_ATTRS = (
+    "data-offer-id",
+    "data-cta-id",
+    "data-asset-id",
+    "data-route-family",
+    "data-cta-position",
+)
 
 
 def _is_iso_date(value: Any) -> bool:
@@ -904,6 +911,163 @@ def _displays_price(main: str) -> bool:
     if PRICE_MARKUP_RE.search(main):
         return True
     return bool(PRICE_NEAR_RE.search(strip_html(main)))
+
+
+def priced_action_registry() -> tuple[set[str], set[str]]:
+    """Return the action and handraise ids with an owner-authorized amount."""
+    matrix = json.loads(
+        (ROOT / "docs/contracts/intent-action/intent-action-matrix.v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    actions: set[str] = set()
+    offers: set[str] = set()
+    for row in matrix.get("routes") or []:
+        cents = row.get("authorized_amount_cents")
+        if not isinstance(cents, int) or isinstance(cents, bool) or cents <= 0:
+            continue
+        if row.get("id"):
+            actions.add(str(row["id"]))
+        if row.get("offer_id"):
+            offers.add(str(row["offer_id"]))
+    return actions, offers
+
+
+def priced_offer_routes(base: Path | None = None) -> dict[str, str]:
+    """Discover routes whose effective profile is a non-reference priced offer."""
+    root = base or ROOT
+    routes: dict[str, str] = {}
+    registry = load_family_registry()
+    families = registry.get("families") or []
+    service_routes = _bofu_service_routes()
+    for page in _conversion_files(root):
+        html = page.read_text(encoding="utf-8", errors="replace")
+        if not is_indexable_html(html):
+            continue
+        main = _main_html(html)
+        if not _displays_price(main):
+            continue
+        rel = page.relative_to(root).as_posix()
+        route = "/" if rel == "index.html" else "/" + rel.removesuffix("index.html")
+        family = _match_family(route, families, service_routes)
+        priced_refs = {
+            str(entry.get("route"))
+            for entry in (family or {}).get("priced_reference_routes") or []
+        }
+        if route in service_routes or route in priced_refs:
+            continue
+        routes[route] = "displayed_price"
+    return routes
+
+
+def _priced_offer_findings(
+    page: Path,
+    base: Path,
+    route: str,
+    main: str,
+    priced_offers: set[str],
+    family_id: str,
+) -> list[Finding]:
+    """A priced surface must persist a fully attributed, non-checkout handraise."""
+    rel = str(page.relative_to(base))
+    findings: list[Finding] = []
+
+    def fail(reason: str, excerpt: str = "") -> None:
+        findings.append(
+            Finding(
+                gate="conversion",
+                path=rel,
+                reason=reason,
+                excerpt=excerpt or f"route={route}",
+            )
+        )
+
+    form_match = re.search(
+        r'<form\b(?=[^>]*\bmethod=["\']post["\'])'
+        r'(?=[^>]*\baction=["\']/.netlify/functions/lead["\'])[^>]*>.*?</form>',
+        main,
+        re.I | re.S,
+    )
+    if not form_match:
+        fail("priced_offer_missing_persisted_capture")
+        return findings
+    form = form_match.group(0)
+    open_tag = form.split(">", 1)[0]
+
+    declared: dict[str, str] = {}
+    for attr in PRICED_CAPTURE_DATA_ATTRS:
+        match = re.search(rf'\b{re.escape(attr)}=["\']([^"\']*)["\']', open_tag, re.I)
+        if not match:
+            fail("priced_offer_capture_data_contract_missing", attr)
+        else:
+            declared[attr] = match.group(1)
+
+    offer_id = declared.get("data-offer-id", "")
+    if offer_id and offer_id not in priced_offers:
+        fail("priced_offer_capture_offer_unregistered", offer_id[:80])
+    direct_model = family_id == "casos-modelos-precificados"
+    if direct_model and not offer_id:
+        fail("priced_offer_capture_offer_missing")
+    if direct_model and offer_id and main.count(f'data-offer-id="{offer_id}"') < 2:
+        fail("priced_offer_capture_offer_mismatch", offer_id[:80])
+
+    form_id = re.search(r'\bid=["\']([^"\']+)["\']', open_tag, re.I)
+    if direct_model:
+        if not form_id:
+            fail("priced_offer_capture_anchor_missing", "form has no id")
+        else:
+            anchor = main.find(f'href="#{form_id.group(1)}"')
+            if anchor < 0 or anchor > form_match.start():
+                fail("priced_offer_capture_not_linked", f"#{form_id.group(1)}")
+
+    hidden: dict[str, str] = {}
+    for name in CAPTURE_HIDDEN_FIELDS:
+        field = re.search(
+            rf'<input\b(?=[^>]*\btype=["\']hidden["\'])'
+            rf'(?=[^>]*\bname=["\']{re.escape(name)}["\'])'
+            r'[^>]*\bvalue=["\']([^"\']*)["\'][^>]*>',
+            form,
+            re.I,
+        )
+        if not field:
+            fail("priced_offer_capture_attribution_missing", name)
+        else:
+            hidden[name] = field.group(1)
+
+    expected = {
+        "asset_id": declared.get("data-asset-id", ""),
+        "cta_id": declared.get("data-cta-id", ""),
+        "route_family": declared.get("data-route-family", ""),
+        "landing_page": f"{SITE}{route}",
+    }
+    if direct_model:
+        expected["origem"] = route
+    for name, want in expected.items():
+        got = hidden.get(name, "MISSING")
+        if got != want:
+            fail("priced_offer_capture_attribution_mismatch", f"{name}={got} expected={want}")
+    for name in ("origem", "jornada", "estagio"):
+        if not hidden.get(name, "").strip():
+            fail("priced_offer_capture_attribution_empty", name)
+
+    for empty_name in ("offer_id", "terms_id", "amount_cents"):
+        field = re.search(
+            rf'<input\b(?=[^>]*\bname=["\']{empty_name}["\'])'
+            r'[^>]*\bvalue=["\']([^"\']*)["\'][^>]*>',
+            form,
+            re.I,
+        )
+        if field and field.group(1).strip():
+            fail("priced_offer_checkout_invented", f"{empty_name}={field.group(1)[:80]}")
+
+    if not re.search(
+        r'<input\b(?=[^>]*\btype=["\']checkbox["\'])'
+        r'(?=[^>]*\bname=["\']consentimento["\'])(?=[^>]*\brequired\b)[^>]*>',
+        form,
+        re.I,
+    ):
+        fail("priced_offer_capture_consent_not_required")
+    return findings
 
 
 def _has_linked_capture_route(root: Path, main: str) -> bool:
@@ -1388,7 +1552,10 @@ def gate_conversion(
     terminal_covered = 0
     terminal_exempt_legal = 0
     terminal_debt = 0
+    priced_capture_total = 0
+    priced_capture_covered = 0
     exemptions: list[dict[str, Any]] = []
+    _, registered_priced_offers = priced_action_registry()
     pii_re = re.compile(
         r"\b(\d{3}\.?\d{3}\.?\d{3}-?\d{2}|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\b",
         re.I,
@@ -1436,6 +1603,19 @@ def gate_conversion(
         has_main_form = bool(
             re.search(r'(?is)<form\b[^>]+action=["\']/.netlify/functions/lead["\']', main)
         )
+        if profile == "priced_offer":
+            priced_capture_total += 1
+            priced_findings = _priced_offer_findings(
+                p,
+                base,
+                route,
+                main,
+                registered_priced_offers,
+                str((family or {}).get("id") or ""),
+            )
+            findings.extend(priced_findings)
+            if not priced_findings:
+                priced_capture_covered += 1
         has_linked_capture_route = _has_linked_capture_route(base, main)
         service_transition_destinations = _service_transition_destinations(
             main, set(service_routes)
@@ -1716,6 +1896,13 @@ def gate_conversion(
                 "total": service_scanned,
                 "coverage": round(service_capture_count / service_scanned, 4)
                 if service_scanned
+                else 0.0,
+            },
+            "priced_offer_capture": {
+                "covered": priced_capture_covered,
+                "total": priced_capture_total,
+                "coverage": round(priced_capture_covered / priced_capture_total, 4)
+                if priced_capture_total
                 else 0.0,
             },
             "family_registry": {

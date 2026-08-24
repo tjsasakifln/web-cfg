@@ -23,7 +23,7 @@
     "audit:migration": "node scripts/audit-migration.mjs",
     "audit:public-artifact": "python3 scripts/pseo/public_artifact.py audit",
     "validate:seo": "python3 seo/scripts/validate_seo.py",
-    "test:analytics": "node seo/scripts/test_analytics_pii.mjs && node seo/scripts/test_editorial_analytics.mjs && node seo/scripts/test_event_dictionary.mjs && npm run test:attribution",
+    "test:analytics": "node seo/scripts/test_third_party_analytics_gate.mjs && node seo/scripts/test_analytics_pii.mjs && node seo/scripts/test_editorial_analytics.mjs && node seo/scripts/test_event_dictionary.mjs && npm run test:attribution",
     "test:attribution": "node tests/attribution/test_source_to_service.mjs",
     "test:event-dictionary": "node seo/scripts/test_event_dictionary.mjs",
     "test:form-funnel": "node seo/scripts/test_form_funnel.mjs",
@@ -130,7 +130,7 @@
     "editorial:packet": "python3 -c \"print(\"use docs/editorial/WAVE1-HUMAN-REVIEW-PACKET.json\")\"",
     "editorial:truth:write": "python3 scripts/editorial/truth.py --write --fail-on-contradiction --require-packaged-live",
     "test:revops": "node scripts/revops/test_lead_stages.mjs && node scripts/revops/backfill_record_kind.mjs --local-fixture && python3 scripts/revops/test_search_demand.py",
-    "test:schedules": "node scripts/revops/test_schedules.mjs",
+    "test:schedules": "node scripts/revops/test_schedules.mjs && node scripts/revops/test_inbound_backlog_policy.mjs",
     "revops:backfill-kind": "node scripts/revops/backfill_record_kind.mjs",
     "revops:backfill-kind:apply": "node scripts/revops/backfill_record_kind.mjs --apply",
     "revops:scheduled-daily": "node scripts/revops/scheduled_daily.mjs",
@@ -194,12 +194,12 @@
     "scrub:em-dashes:check": "python3 scripts/site/scrub_em_dashes.py --check"
   },
   "engines": {
-    "node": ">=20 <21"
+    "node": ">=22.19 <23"
   },
   "devDependencies": {
     "axe-core": "^4.13.0",
     "chrome-launcher": "^1.2.1",
-    "lighthouse": "^12.8.2",
+    "lighthouse": "^13.4.1",
     "puppeteer-core": "^23.0.0",
     "terser": "^5.50.0"
   },

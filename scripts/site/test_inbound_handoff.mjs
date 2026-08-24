@@ -67,6 +67,36 @@ function fail(name, detail) {
 const inboundPath = path.join(root, "netlify/functions/lib/inbound-handoff.cjs");
 const leadPath = path.join(root, "netlify/functions/lead.cjs");
 const opsPath = path.join(root, "netlify/functions/ops.cjs");
+const backlogPolicyPath = path.join(root, "netlify/functions/lib/inbound-backlog-policy.cjs");
+
+function approvedBacklogAuthority(policy, record, now) {
+  return {
+    contract: policy.EXECUTION_CONTRACT,
+    schema_version: policy.EXECUTION_VERSION,
+    issue: 268,
+    decision_contract: policy.DECISION_CONTRACT,
+    decision_sha256: policy.PINNED_DECISION_SHA256,
+    state: policy.EXECUTE_STATE,
+    approved_subset_count: 1,
+    max_batch_size: 1,
+    candidate_binding_sha256: policy.candidateBinding(record),
+    selection_all_required: [...policy.REQUIRED_SELECTION],
+    approval: {
+      state: "APPROVED",
+      approved_by: "OWNER_CONFENGE",
+      approved_at: new Date(now.getTime() - 60 * 1000).toISOString(),
+      expires_at: new Date(now.getTime() + 2 * 60 * 60 * 1000).toISOString(),
+      reference: "INBOUND-268-APPROVAL-v1",
+    },
+    prerequisites: {
+      transport_SET_SET_READY: true,
+      issue_267_one_receipt_one_action_reconciled: true,
+      warmbly_auto_send_proven_off: true,
+      human_approval_reference_present: true,
+    },
+    replay: { executed: false, selected_count: 0 },
+  };
+}
 
 function loadInbound() {
   delete require.cache[require.resolve(inboundPath)];
@@ -706,21 +736,28 @@ try {
     if (dryRes.statusCode !== 200 || dryData.eligible_count !== 1 || dryData.never_requeue_count !== 1) {
       fail("ops_requeue_dry_run", dryData);
     }
-    mock.setAutoSendEnabled(true);
-    const unsafeRes = await ops.handler(
+    const deferredRes = await ops.handler(
       opsEvent("requeue_inbound", "POST", { mode: "eligible_only", dry_run: false, limit: 1 }),
     );
-    if (unsafeRes.statusCode !== 409) fail("ops_requeue_auto_send_abort", JSON.parse(unsafeRes.body));
+    const deferredData = JSON.parse(deferredRes.body);
+    if (
+      deferredRes.statusCode !== 409 ||
+      deferredData.error !== "backlog_policy_blocked" ||
+      deferredData.reason !== "backlog_execution_authority_missing"
+    ) fail("ops_requeue_defer_abort", deferredData);
     if ((await opsFileStore.get("opsaudit:0000000000000001")).handoff.status !== "SKIPPED") {
-      fail("ops_requeue_auto_send_mutation");
+      fail("ops_requeue_defer_mutation");
     }
-    mock.setAutoSendEnabled(false);
-    pass("ops_requeue_audit_dry_run_and_global_abort");
+    pass("ops_requeue_audit_dry_run_and_defer_abort");
     delete process.env.OPS_TOKEN;
   }
 
-  // Strict requeue is dry-run first, safety-gated, bounded, and idempotent.
+  // Strict requeue requires a separate authority, one fresh candidate and a
+  // current destination safety gate. The committed DEFER snapshot cannot run.
   {
+    const policy = require(backlogPolicyPath);
+    const decision = policy.loadInboundBacklogDecision();
+    const replayNow = new Date();
     const requeueStore = new MemoryStore();
     const eligible = {
       lead_id: "eligible0000000000000001",
@@ -728,14 +765,38 @@ try {
       record_kind: "real",
       consentimento: true,
       email: "compras@empresa-real.com.br",
-      received_at: "2026-08-01T12:00:00.000Z",
+      received_at: new Date(replayNow.getTime() - 24 * 60 * 60 * 1000).toISOString(),
       handoff: { status: "SKIPPED", reason: "not_configured", attempts: 0 },
     };
+    const executionAuthority = approvedBacklogAuthority(policy, eligible, replayNow);
+    const approvalReference = executionAuthority.approval.reference;
     await requeueStore.put(eligible);
     const dry = await inbound.requeueEligibleHandoffs(requeueStore, { dryRun: true });
     if (!dry.ok || dry.eligible_count !== 1) fail("requeue_dry_run", dry);
-    const withoutGate = await inbound.requeueEligibleHandoffs(requeueStore, { dryRun: false, limit: 1 });
-    if (withoutGate.ok || withoutGate.error !== "global_safety_gate_required") fail("requeue_requires_global_gate", withoutGate);
+    const deferred = await inbound.requeueEligibleHandoffs(requeueStore, {
+      dryRun: false,
+      limit: 1,
+      backlogDecision: decision,
+      now: replayNow,
+    });
+    if (deferred.ok || deferred.error !== "backlog_execution_authority_missing") {
+      fail("requeue_defer_requires_separate_authority", deferred);
+    }
+    if ((await requeueStore.get(eligible.lead_id)).handoff.status !== "SKIPPED") {
+      fail("requeue_defer_changed_status");
+    }
+
+    const withoutGate = await inbound.requeueEligibleHandoffs(requeueStore, {
+      dryRun: false,
+      limit: 1,
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      approvalReference,
+      now: replayNow,
+    });
+    if (withoutGate.ok || withoutGate.error !== "global_safety_gate_required") {
+      fail("requeue_requires_global_gate", withoutGate);
+    }
 
     mock.setAutoSendEnabled(true);
     const unsafeGate = await inbound.probeInboundDestinationHealth({ env: process.env });
@@ -744,6 +805,10 @@ try {
       dryRun: false,
       limit: 1,
       safetyGate: unsafeGate,
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      approvalReference,
+      now: replayNow,
     });
     if (unsafeRun.ok) fail("requeue_auto_send_mutated", unsafeRun);
     if ((await requeueStore.get(eligible.lead_id)).handoff.status !== "SKIPPED") fail("requeue_auto_send_changed_status");
@@ -751,11 +816,89 @@ try {
     mock.setAutoSendEnabled(false);
     const gate = await inbound.probeInboundDestinationHealth({ env: process.env });
     if (!gate.ok || !gate.auto_send_off || gate.contract !== "READY") fail("requeue_safe_gate", gate);
+
+    const oldStore = new MemoryStore();
+    await oldStore.put({ ...eligible, lead_id: "oldeligible00000000000001", receipt_id: "oldeligible00000000000001", received_at: "2020-01-01T00:00:00.000Z" });
+    const oldRun = await inbound.requeueEligibleHandoffs(oldStore, {
+      dryRun: false,
+      limit: 1,
+      safetyGate: gate,
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      approvalReference,
+      now: replayNow,
+    });
+    if (oldRun.ok || oldRun.error !== "approved_candidate_outside_age_cutoff") {
+      fail("requeue_old_candidate_blocked", oldRun);
+    }
+    if ((await oldStore.list())[0].handoff.status !== "SKIPPED") fail("requeue_old_candidate_mutated");
+
+    const multipleStore = new MemoryStore();
+    await multipleStore.put(eligible);
+    await multipleStore.put({ ...eligible, lead_id: "eligible0000000000000002", receipt_id: "eligible0000000000000002" });
+    const multipleRun = await inbound.requeueEligibleHandoffs(multipleStore, {
+      dryRun: false,
+      limit: 1,
+      safetyGate: gate,
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      approvalReference,
+      now: replayNow,
+    });
+    if (multipleRun.ok || multipleRun.error !== "approved_candidate_count_drift") {
+      fail("requeue_multiple_candidates_blocked", multipleRun);
+    }
+    if ((await multipleStore.list()).some((row) => row.handoff.status !== "SKIPPED")) {
+      fail("requeue_multiple_candidates_mutated");
+    }
+
+    const wrongCandidateStore = new MemoryStore();
+    await wrongCandidateStore.put({
+      ...eligible,
+      lead_id: "wrongcandidate000000000001",
+      receipt_id: "wrongcandidate000000000001",
+    });
+    const wrongCandidateRun = await inbound.requeueEligibleHandoffs(wrongCandidateStore, {
+      dryRun: false,
+      limit: 1,
+      safetyGate: gate,
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      approvalReference,
+      now: replayNow,
+    });
+    if (wrongCandidateRun.ok || wrongCandidateRun.error !== "approved_candidate_binding_mismatch") {
+      fail("requeue_wrong_candidate_binding", wrongCandidateRun);
+    }
+
+    const changedStore = new MemoryStore();
+    await changedStore.put(eligible);
+    const originalChangedGet = changedStore.get.bind(changedStore);
+    changedStore.get = async (leadId) => ({ ...(await originalChangedGet(leadId)), dnc: true });
+    const changedRun = await inbound.requeueEligibleHandoffs(changedStore, {
+      dryRun: false,
+      limit: 1,
+      safetyGate: gate,
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      approvalReference,
+      now: replayNow,
+    });
+    if (changedRun.ok || changedRun.error !== "approved_candidate_changed_before_mutation") {
+      fail("requeue_candidate_changed_before_mutation", changedRun);
+    }
+    if ((await originalChangedGet(eligible.lead_id)).handoff.status !== "SKIPPED") {
+      fail("requeue_changed_candidate_mutated");
+    }
+
     const run = await inbound.requeueEligibleHandoffs(requeueStore, {
       dryRun: false,
       limit: 1,
       safetyGate: gate,
-      now: new Date("2026-08-23T02:00:00.000Z"),
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      approvalReference,
+      now: replayNow,
     });
     if (!run.ok || run.requeued_count !== 1) fail("requeue_eligible_to_pending", run);
     if ((await requeueStore.get(eligible.lead_id)).handoff.status !== "PENDING") fail("requeue_not_pending", run);
@@ -763,15 +906,68 @@ try {
       dryRun: false,
       limit: 1,
       safetyGate: gate,
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      approvalReference,
+      now: replayNow,
     });
-    if (!repeat.ok || repeat.requeued_count !== 0) fail("requeue_second_run_idempotent", repeat);
+    if (repeat.ok || repeat.error !== "approved_candidate_count_drift") {
+      fail("requeue_second_run_fails_closed", repeat);
+    }
     const before = mock.seen.filter((item) => item.body && item.body.lead_id === eligible.lead_id).length;
-    const drain = await inbound.drainPendingHandoffs(requeueStore, { now: new Date() });
+    const blockedDrain = await inbound.drainPendingHandoffs(requeueStore, {
+      now: new Date(replayNow.getTime() + 60 * 1000),
+      backlogDecision: decision,
+      backlogSafetyGate: gate,
+    });
+    if (blockedDrain.attempted !== 0 || blockedDrain.backlog_policy_blocked !== 1) {
+      fail("scheduled_drain_requires_execution_authority", blockedDrain);
+    }
+    if ((await requeueStore.get(eligible.lead_id)).handoff.status !== "PENDING") {
+      fail("scheduled_drain_defer_mutated");
+    }
+    const drain = await inbound.drainPendingHandoffs(requeueStore, {
+      now: new Date(replayNow.getTime() + 60 * 1000),
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      backlogSafetyGate: gate,
+    });
     const delivered = await requeueStore.get(eligible.lead_id);
     if (!drain.ok || drain.delivered !== 1 || delivered.handoff.status !== "DELIVERED") fail("requeue_pending_to_delivered", { drain, handoff: delivered.handoff });
     const after = mock.seen.filter((item) => item.body && item.body.lead_id === eligible.lead_id).length;
     if (after !== before + 1) fail("requeue_exactly_one_post", { before, after });
-    pass("requeue_dry_run_gate_pending_delivered_idempotent");
+
+    const backlogBatchStore = new MemoryStore();
+    const marker = delivered.handoff.requeue_policy;
+    for (const lead_id of ["batchbacklog0000000000001", "batchbacklog0000000000002"]) {
+      await backlogBatchStore.put({
+        ...eligible,
+        lead_id,
+        receipt_id: lead_id,
+        handoff: {
+          status: "PENDING",
+          attempts: 0,
+          next_attempt_at: replayNow.toISOString(),
+          requeue_mode: "eligible_only",
+          requeue_policy: marker,
+        },
+      });
+    }
+    const boundedDrain = await inbound.drainPendingHandoffs(backlogBatchStore, {
+      now: new Date(replayNow.getTime() + 60 * 1000),
+      limit: 20,
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      backlogSafetyGate: gate,
+    });
+    const boundedRows = await backlogBatchStore.list();
+    if (
+      boundedDrain.attempted !== 0 ||
+      boundedDrain.backlog_attempted !== 0 ||
+      boundedDrain.backlog_policy_blocked !== 2 ||
+      boundedRows.some((row) => row.handoff.status !== "PENDING")
+    ) fail("scheduled_drain_rejects_copied_marker", { boundedDrain, statuses: boundedRows.map((row) => row.handoff.status) });
+    pass("requeue_defer_authority_age_identity_unique_and_drain_gates");
   }
 
   // Auth failures block the row and abort the remaining batch immediately.

@@ -23,7 +23,7 @@
  *   POST rollback_record_kind { snapshot_id }
  *   GET  inbound_handoff
  *   GET  audit_inbound_requeue
- *   POST requeue_inbound { mode: "eligible_only", dry_run: boolean, limit?: 1..20 }
+ *   POST requeue_inbound { mode: "eligible_only", dry_run: boolean, limit: 1, approval_reference?: string }
  *   POST drain_inbound
  *   GET  search_observation
  *   POST produce_search_observation
@@ -60,6 +60,12 @@ const {
   probeInboundDestinationHealth,
   requeueEligibleHandoffs,
 } = require("./lib/inbound-handoff.cjs");
+const {
+  loadInboundBacklogDecision,
+  loadInboundBacklogExecutionAuthority,
+  validateInboundBacklogDecision,
+  authorizeInboundBacklogReplay,
+} = require("./lib/inbound-backlog-policy.cjs");
 const {
   createObservationStore,
   produceFromShippedOverlay,
@@ -839,9 +845,30 @@ exports.handler = async (event) => {
       const result = await requeueEligibleHandoffs(store, { dryRun: true });
       return json(200, result, origin);
     }
+    const backlogDecision = loadInboundBacklogDecision();
+    const backlogExecutionAuthority = loadInboundBacklogExecutionAuthority();
     const limit = Number(body.limit);
-    if (!Number.isInteger(limit) || limit < 1 || limit > 20) {
-      return json(400, { ok: false, error: "bounded_limit_1_20_required" }, origin);
+    const replayNow = new Date();
+    const policyAuthorization = authorizeInboundBacklogReplay(
+      backlogDecision,
+      backlogExecutionAuthority,
+      {
+        approvalReference: String(body.approval_reference || "").trim(),
+        limit,
+        now: replayNow,
+      }
+    );
+    if (!policyAuthorization.ok) {
+      safeLog("warn", "ops_requeue_inbound_policy_abort", {
+        decision_state: backlogDecision?.decision_state || "MISSING",
+        reason: policyAuthorization.reason,
+      });
+      return json(409, {
+        ok: false,
+        error: "backlog_policy_blocked",
+        decision_state: backlogDecision?.decision_state || "MISSING",
+        reason: policyAuthorization.reason,
+      }, origin);
     }
     const gate = await probeInboundDestinationHealth({ env: process.env });
     if (!gate.ok) {
@@ -856,8 +883,11 @@ exports.handler = async (event) => {
     const result = await requeueEligibleHandoffs(store, {
       dryRun: false,
       limit,
-      now: new Date(),
+      now: replayNow,
       safetyGate: gate,
+      backlogDecision,
+      backlogExecutionAuthority,
+      approvalReference: policyAuthorization.approval_reference,
     });
     safeLog("info", "ops_requeue_inbound", {
       eligible: result.eligible_count,
@@ -871,7 +901,18 @@ exports.handler = async (event) => {
     if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
     const body = parseBody(event) || {};
     const limit = Math.min(50, Math.max(1, Number(body.limit || 20)));
-    const result = await drainPendingHandoffs(store, { limit });
+    const backlogDecision = loadInboundBacklogDecision();
+    const backlogExecutionAuthority = loadInboundBacklogExecutionAuthority();
+    const backlogPolicyErrors = validateInboundBacklogDecision(backlogDecision);
+    const backlogSafetyGate = backlogPolicyErrors.length || !backlogExecutionAuthority
+      ? null
+      : await probeInboundDestinationHealth({ env: process.env });
+    const result = await drainPendingHandoffs(store, {
+      limit,
+      backlogDecision,
+      backlogExecutionAuthority,
+      backlogSafetyGate,
+    });
     safeLog("info", "ops_drain_inbound", {
       attempted: result.attempted,
       delivered: result.delivered,
@@ -879,6 +920,8 @@ exports.handler = async (event) => {
       dead: result.dead,
       aborted: result.aborted,
       abort_reason: result.abort_reason,
+      backlog_attempted: result.backlog_attempted,
+      backlog_policy_blocked: result.backlog_policy_blocked,
     });
     return json(200, { ok: true, ...result }, origin);
   }

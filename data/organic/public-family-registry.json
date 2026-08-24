@@ -230,56 +230,7 @@
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
       "owner_issue": 289,
-      "debt": [
-        {
-          "route": "/casos/modelo-apresentacao-executiva-resultados/",
-          "owner_issue": 289,
-          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-          "expires_at": "2026-09-30"
-        },
-        {
-          "route": "/casos/modelo-base-quantitativa-canonica/",
-          "owner_issue": 289,
-          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-          "expires_at": "2026-09-30"
-        },
-        {
-          "route": "/casos/modelo-contratos-vincendos-relicitacao/",
-          "owner_issue": 289,
-          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-          "expires_at": "2026-09-30"
-        },
-        {
-          "route": "/casos/modelo-mapa-compradores-publicos/",
-          "owner_issue": 289,
-          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-          "expires_at": "2026-09-30"
-        },
-        {
-          "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
-          "owner_issue": 289,
-          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-          "expires_at": "2026-09-30"
-        },
-        {
-          "route": "/casos/modelo-painel-precos-obras-publicas/",
-          "owner_issue": 289,
-          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-          "expires_at": "2026-09-30"
-        },
-        {
-          "route": "/casos/modelo-relatorio-executivo-consolidado/",
-          "owner_issue": 289,
-          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-          "expires_at": "2026-09-30"
-        },
-        {
-          "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
-          "owner_issue": 289,
-          "reason": "Página de preço publicada em 2026-08-23 com WhatsApp como única saída: o lead não é persistido nem atribuído. A captura é a entrega de #289.",
-          "expires_at": "2026-09-30"
-        }
-      ]
+      "debt": []
     },
     {
       "id": "entregas",

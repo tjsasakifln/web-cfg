@@ -78,9 +78,16 @@ export const SUITE_GRAPH = Object.freeze({
   },
   "test:analytics": {
     producers: [
+      ".env.example",
+      "data/ops/third-party-conversion-decision.v1.json",
+      "docs/ops/ENV-VARS.md",
+      "docs/ops/EXTERNAL-ACTIONS.md",
+      "docs/ops/THIRD-PARTY-CONVERSION-DECISION.md",
       "seo/scripts/test_analytics_pii.mjs",
       "seo/scripts/test_editorial_analytics.mjs",
       "seo/scripts/test_event_dictionary.mjs",
+      "seo/scripts/test_third_party_analytics_gate.mjs",
+      "scripts/site/third_party_analytics_gate.mjs",
       "netlify/functions/lib/event-registry.json",
       "netlify/functions/lib/event-contract.cjs",
       "script.js",
@@ -220,6 +227,7 @@ export const SUITE_GRAPH = Object.freeze({
       "casos/index.html",
       "entregas/index.html",
       "assets/report-model.css",
+      "assets/report-capture.css",
       "docs/contracts/intent-action/intent-action-matrix.v1.json",
       "docs/stories/story-deliverable-models-value-ladder.md",
       "sitemap.xml",
@@ -230,6 +238,7 @@ export const SUITE_GRAPH = Object.freeze({
     producers: [
       "scripts/site/test_report_model_599.py",
       "casos/modelo-relatorio-inteligencia-licitacoes/",
+      "assets/report-capture.css",
       "casos/index.html",
       "bid-room-licitacoes-obras/index.html",
       "diretoria-b2g/index.html",
@@ -415,6 +424,11 @@ export const SUITE_GRAPH = Object.freeze({
   },
   "test:schedules": {
     producers: [
+      "data/revops/inbound-backlog-decision.v1.json",
+      "docs/ops/INBOUND-BACKLOG-DECISION-268.md",
+      "netlify/functions/lib/inbound-backlog-policy.cjs",
+      "scripts/revops/inbound_backlog_policy.mjs",
+      "scripts/revops/test_inbound_backlog_policy.mjs",
       "scripts/revops/test_schedules.mjs",
       "scripts/revops/scheduled_daily.mjs",
       "scripts/revops/scheduled_nurture.mjs",
