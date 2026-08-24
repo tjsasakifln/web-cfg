@@ -758,30 +758,9 @@ LEAD_INLINE_MEASURED_ROUTES = (
 # reason. Empty on purpose: the scope of this guard is never narrowed to hide a page.
 LEAD_INLINE_HIERARCHY_EXCEPTIONS: dict[str, str] = {}
 
-# Shipped pages whose HTML stops mid-FAQ: no </main>, no footer, no </html>. Found by
-# the #299 expansion. The missing tail is editorial copy, so rebuilding it does not
-# belong in a test-scope change; the pages are registered here instead of skipped, so
-# the guards below still read them to the end of the document and
-# test_no_public_page_truncated_before_main_close fails if the set moves either way.
-TRUNCATED_BEFORE_MAIN_CLOSE = frozenset(
-    {
-        "conteudos/administracao-local-prolongada-obra-publica/index.html",
-        "conteudos/aditivo-qualitativo-quantitativo/index.html",
-        "conteudos/atraso-projeto-executivo-obra-publica/index.html",
-        "conteudos/calculo-reequilibrio-economico-financeiro/index.html",
-        "conteudos/curva-abc-reequilibrio-contrato/index.html",
-        "conteudos/extincao-contrato-culpa-administracao/index.html",
-        "conteudos/indenizacao-servico-extracontratual-obra-publica/index.html",
-        "conteudos/pagamento-contrato-publico-certidao-vencida/index.html",
-        "conteudos/preco-de-item-novo-aditivo-obra-publica/index.html",
-        "conteudos/preco-unitario-acima-referencia-proposta-global/index.html",
-        "conteudos/produtividade-sinapi-obra-publica/index.html",
-        "conteudos/recuperar-contrato-obra-publica-problematico/index.html",
-        "conteudos/reequilibrio-empreitada-preco-global/index.html",
-        "conteudos/seguro-garantia-execucao-contrato-publico/index.html",
-        "conteudos/visita-tecnica-licitacao-obra-publica/index.html",
-    }
-)
+# #306 repaired every page registered by #299. The expected set is deliberately
+# empty: any future page that loses its closing main tag fails closed.
+TRUNCATED_BEFORE_MAIN_CLOSE = frozenset()
 
 
 def _lead_inline_pages() -> list[Path]:
@@ -908,11 +887,7 @@ def test_lead_inline_guard_catches_a_newly_published_page():
 
 
 def test_no_public_page_truncated_before_main_close():
-    """#299 expansion finding: 15 shipped pages stop mid-FAQ with no </main>.
-
-    Registered rather than hidden. This fails if the set grows (a new truncated page)
-    and also if it shrinks (a page was repaired and the register went stale).
-    """
+    """#299/#306: no shipped public page may stop before </main>."""
     observed: set[str] = set()
     for path in _public_html_files():
         html = path.read_text(encoding="utf-8", errors="replace")
@@ -943,11 +918,7 @@ def _cta_anchors(fragment: str) -> list[tuple[str, str]]:
 
 
 def _main_fragment(html: str) -> str:
-    """<main> contents.
-
-    Pages in TRUNCATED_BEFORE_MAIN_CLOSE ship without a closing tag; they are read to
-    the end of the document instead of being skipped, so their CTAs stay under guard.
-    """
+    """Return the <main> contents; the truncation gate separately requires closure."""
     start = re.search(r"<main\b", html, re.I)
     assert start, "page has no <main"
     end = re.search(r"</main\s*>", html, re.I)
