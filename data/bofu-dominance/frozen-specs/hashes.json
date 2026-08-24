@@ -3,7 +3,7 @@
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
   "baseline_commit": "9d0f75e8cb13e810de40840ef04e55d556fa2616",
   "recaptured_at": "2026-08-23",
-  "recapture_reason": "Combined reviewed recapture after integrating the P0 systemic UI/layout remediation, issue #182 mobile form reveal, issue #183 task-first public navigation and the seven public deliverable models of the Diagnostico B2G de Expansao value ladder. The six protected pillar HTML files remain byte-identical and html_mutation remains false. script.js retains the reviewed fragment lifecycle; styles.css retains only the reviewed shared layout and active-navigation state. sitemap.xml and sitemap.txt contain the two task hubs plus the seven new indexable /casos/ model routes. The models use page-scoped CSS and shared report-model assets without changing frozen rendering collateral.",
+  "recapture_reason": "Reviewed recapture for issue #290. Only script.js and js/modules/analytics.js change, and only by adding two entries to the source-to-service origin_prefixes map (/servicos-obras-publicas/ and /problemas-que-resolvemos/ as family \"hub\"), so the two first-level navigation hubs emit content_to_service with a real destination_service_id instead of resolving to UNKNOWN_SERVICE. No DOM, layout, style, fragment lifecycle or navigation behaviour changes. The six protected pillar HTML files remain byte-identical, html_mutation remains false, and styles.css, styles-tokens.css, styles-tools.css, robots.txt, the sitemaps, _redirects and data/organic/content-service-map.json are untouched.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
@@ -20,7 +20,7 @@
     "auditoria-orcamento-licitacao/index.html": "cd391bd30fad6ac0553416b07cf00fea17cb569e83f0acbfdf5868649972fb01",
     "diagnostico-b2g-360/index.html": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
     "diagnostico-pre-licitacao/index.html": "5f2179d837e1c8d01b8bd505420cab4c549d6d1d5f47e84910da06ca447f7529",
-    "script.js": "90aa03319410e6f5acd424323750999f92c49b96d90a53079ace88be6790dc55",
+    "script.js": "18b9764f7f1d63854de27375432edbfd605a596eba2e7237deb6c501ec42c391",
     "styles.css": "c533be6395bad714566d7c8b1d36a607d6b19cb44b5e9dc3bbadc422aaedfbbe",
     "styles-tokens.css": "a25a9603d5c0a7abec5471d9730eec7506ce3950c29c428a6d86d130b41a2e1c",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",
@@ -30,6 +30,6 @@
     "sitemap-index.xml": "bff94a1e5fb612cd05ef9803a90c044f9419dd4a4528e8c6f40c3f20776d572e",
     "_redirects": "402f730e21b73c73574290bc572bf63fd36a713e1143b30a8df989b80f200a05",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "480a12e3a3b05686326e2376803d4946e844d96c899401c84965954966dc2188"
+    "js/modules/analytics.js": "2bb200bf12345d1fd2cf95571082511214d7a2f86c42faf2192a4001d19028a2"
   }
 }

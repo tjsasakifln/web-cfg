@@ -115,8 +115,15 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
         '<meta content="index,follow,max-image-preview:large,max-snippet:-1,'
         'max-video-preview:-1" name="robots"/>' in html
     )
-    for forbidden in ("<form", "<dialog", "<details", ".pdf", "download=", "cadastre"):
+    for forbidden in ("<dialog", "<details", ".pdf", "download=", "cadastre"):
         assert forbidden not in lowered
+    # Issue #290 gives the hub a terminal capture. The library still must not be
+    # gated: exactly one form, and it opens only after the last published example.
+    assert lowered.count("<form") == 1, "the hub takes one terminal capture, not a gate"
+    form_at = lowered.index("<form")
+    last_feature_at = lowered.rindex('class="deliverable-feature"')
+    assert form_at > last_feature_at, "capture must not sit above the published examples"
+    assert 'action="/.netlify/functions/lead"' in lowered
     assert html.count("<h1") == 1
 
 
@@ -137,8 +144,11 @@ def test_hub_is_honest_about_every_published_example() -> None:
         assert phrase in html
     for route in LADDER_ROUTES:
         assert f'href="{route}"' in html, route
-    assert "em breve" not in html.casefold()
-    assert "placeholder" not in html.casefold()
+    # "No placeholder" is a claim about the published library, not about the
+    # input hints of the terminal capture form (#290).
+    library = re.sub(r"(?is)<form\b.*?</form>", "", html).casefold()
+    assert "em breve" not in library
+    assert "placeholder" not in library
     assert html.count('class="deliverable-feature"') == len(LADDER_ROUTES)
     for number in range(1, 9):
         assert f"EXEMPLO 0{number}" in html

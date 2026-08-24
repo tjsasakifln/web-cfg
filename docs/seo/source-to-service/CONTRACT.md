@@ -19,7 +19,7 @@ Duplicate listeners on the same physical click (generic `a[href]` plus `[data-ev
 |---|---|
 | `source_path` | Canonical origin path (no host/query/fragment) |
 | `source_asset_id` | From `data-asset-id` or last path segment |
-| `source_asset_family` | From `data-asset-family` or origin family (`editorial` / `data` / `tool`) |
+| `source_asset_family` | From `data-asset-family` or origin family (`editorial` / `case` / `data` / `tool` / `hub`) |
 | `destination_path` | Canonical dest path (no host/query/fragment) |
 | `destination_service_id` | Registry dest id, or `UNKNOWN_SERVICE` |
 | `cta_id` | From `data-cta-id` when present |
@@ -37,8 +37,10 @@ No email, phone, CNPJ, document id, raw query, or free-text PII.
 
 A transition is classified only when:
 
-1. Origin family is editorial (`/conteudos/`, `/lei-14133-obras/`, `/jurisprudencia-contratos-obras/`, `/guias-contratos-obras/`, `/analises-contratos-publicos/`), data (`/inteligencia/`, `/radar/`), or tool (`/ferramentas/`).
+1. Origin family is editorial (`/conteudos/`, `/lei-14133-obras/`, `/jurisprudencia-contratos-obras/`, `/guias-contratos-obras/`, `/analises-contratos-publicos/`, `/panorama-mercado-obras-publicas/`), case (`/casos/`), data (`/inteligencia/`, `/radar/`), tool (`/ferramentas/`) or hub (`/servicos-obras-publicas/`, `/problemas-que-resolvemos/`).
 2. Destination is an internal canonical service/offer **or** an internal non-chrome path that is not another origin-family URL.
+
+The hub family (#290) exists so the two first-level header hubs emit their one dominant next action as a transition, and so a link that only reaches another hub stops producing `UNKNOWN_SERVICE`.
 
 Known destinations (fail-closed: anything else that still classifies is `UNKNOWN_SERVICE`, never a guessed service):
 
@@ -54,6 +56,7 @@ Known destinations (fail-closed: anything else that still classifies is `UNKNOWN
 - `/diagnostico-b2g-360/` → `diagnostico-b2g-360`
 - `/bid-room-licitacoes-obras/` → `bid-room-licitacoes-obras`
 - `/defesa-margem-contratos-publicos/` → `defesa-margem-contratos-publicos`
+- `/diagnostico-b2g-expansao/` → `diagnostico-b2g-expansao`
 - `/ferramentas/diagnostico-defesa-margem/` → `diagnostico-defesa-margem`
 
 External / `tel:` / `sms:` clicks emit `outbound_click`. `wa.me` emits `whatsapp_click`. `mailto:` emits `email_click`. `#contato` remains `cta_click`. Those are not transitions.

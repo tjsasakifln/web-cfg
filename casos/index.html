@@ -8,6 +8,7 @@
 <meta name="robots" content="index,follow"/>
 <link rel="canonical" href="https://confenge.com.br/casos/"/>
 <link rel="stylesheet" href="/styles.css"/>
+<link rel="stylesheet" href="/styles-offers.css"/>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <meta content="#061a33" name="theme-color"/>
@@ -71,15 +72,44 @@
 </ul>
 
 <div class="n-card">
-<h2>Ferramentas e próximo passo</h2>
-<p>Use as ferramentas gratuitas no navegador e, se o caso for material, envie o contexto para análise inicial.</p>
+<h2>Ferramentas gratuitas para o mesmo problema</h2>
+<p>Rode o cálculo no navegador antes de decidir. Nada sai do seu aparelho até você copiar, baixar ou enviar.</p>
 <p>
 <a href="/ferramentas/limite-acrescimos-supressoes/">Verificador art. 125</a> ·
 <a href="/ferramentas/matriz-atraso-obra/">Matriz de atraso</a> ·
-<a href="/defesa-margem-contratos-publicos/">Contract Defense &amp; Margin</a> ·
-<a href="/#contato?jornada=contrato">Análise inicial</a>
+<a href="/defesa-margem-contratos-publicos/">Defesa de margem</a>
 </p>
 </div>
+
+<section aria-labelledby="casos-captura-title" class="section pillar-capture" id="captura-casos">
+<div class="container pillar-capture-grid">
+<div class="pillar-capture-copy">
+<p class="eyebrow">Próximo passo</p>
+<h2 id="casos-captura-title">Traga o seu caso, com os números reais</h2>
+<p>Estes demonstrativos usam contexto, órgãos e valores hipotéticos. Se o seu contrato tem o mesmo problema, descreva aqui o evento e o documento que você já tem: a resposta diz qual prova falta e qual é o pedido correto.</p>
+<p>Este formulário registra o pedido de análise. Ele não cobra, não recebe pagamento e não conclui a contratação.</p>
+</div>
+<form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="casos-hub-handraise" data-asset-id="casos-hub" data-route-family="casos" data-cta-position="hub_capture" data-journey="contrato">
+<input type="hidden" name="offer_id" value=""/>
+<input type="hidden" name="terms_id" value=""/>
+<input type="hidden" id="jornada-hidden" name="jornada" value="contrato"/>
+<input type="hidden" id="estagio" name="estagio" value="casos-hub"/>
+<input type="hidden" name="origem" value="casos"/>
+<input type="hidden" name="asset_id" value="casos-hub"/>
+<input type="hidden" name="cta_id" value="casos-hub-handraise"/>
+<input type="hidden" name="route_family" value="casos"/>
+<input type="hidden" name="landing_page" value="https://confenge.com.br/casos/"/>
+<label>Nome do representante <input id="nome" name="nome" required autocomplete="name"/></label>
+<label>Empresa <input id="empresa" name="empresa" autocomplete="organization"/></label>
+<label>E-mail profissional <input id="email" name="email" type="email" autocomplete="email"/></label>
+<label>WhatsApp <input id="telefone" name="telefone" inputmode="numeric" autocomplete="tel"/></label>
+<label>Evento e documento disponível <textarea id="mensagem" name="mensagem" rows="4" maxlength="2000" placeholder="Aditivo, medição, glosa ou atraso: o que aconteceu, quando e qual registro existe."></textarea></label>
+<label class="capture-consent"><input type="checkbox" name="consentimento" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label>
+<button class="button button-primary" type="submit">Enviar para análise</button>
+<p class="form-status" role="status" aria-live="polite"></p>
+</form>
+</div>
+</section>
 
 </main>
 <footer class="site-footer">
