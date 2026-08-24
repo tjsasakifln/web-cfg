@@ -26,6 +26,12 @@ Os cinco CTAs de R$ 599 do modelo público e a ação terminal do Radar Nacional
 entram nessa rota. Nenhum CTA precificado desses percursos pode saltar a coleta
 e abrir diretamente WhatsApp ou pagamento.
 
+O Radar Nacional declara `data-terminal-action="capture-route"`. O gate só
+aceita esse marcador quando o destino é uma rota canônica em `/comercial/`,
+está `noindex` e contém, no `<main>`, um formulário POST para a função de lead
+com atribuição e consentimento obrigatórios. Um link interno comum não satisfaz
+o contrato.
+
 ## Campos (padrão documentado, aguardando congelamento pelo fundador)
 
 | Campo | Obrigatório | Observação |

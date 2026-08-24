@@ -347,6 +347,54 @@ def test_declared_family_still_has_to_prove_the_terminal_action():
         assert any(f.reason == "missing_terminal_action" for f in report.findings)
 
 
+def test_linked_capture_route_is_terminal_only_with_the_full_contract():
+    """A marked checkout step is valid; an arbitrary internal link stays invalid."""
+    source_body = (
+        '<h1>Novo radar</h1><p>Recorte aplicado à empresa.</p>'
+        '<a data-cta-id="radar-order" data-terminal-action="capture-route" '
+        'href="/comercial/radar-teste/">Configurar pedido</a>'
+        '<span data-journey="edital"></span>'
+    )
+    capture = (
+        '<!doctype html><html><head><meta name="robots" content="noindex,nofollow">'
+        '</head><body><main><form method="post" action="/.netlify/functions/lead" '
+        'data-cta-id="radar-order-form" data-asset-id="radar-order" '
+        'data-route-family="radar" data-cta-position="order">'
+        '<input name="nome"><input name="estagio"><input name="jornada">'
+        '<input name="origem"><input name="asset_id"><input name="cta_id">'
+        '<input name="route_family"><input type="checkbox" name="consentimento" required>'
+        '</form></main></body></html>'
+    )
+    with tempfile.TemporaryDirectory(prefix="confenge-capture-route-") as tmp:
+        tmp_path = Path(tmp)
+        _green_fixture_root(tmp_path)
+        _publish(tmp_path, "/radar/captura-dedicada/", source_body)
+        target = tmp_path / "comercial" / "radar-teste" / "index.html"
+        target.parent.mkdir(parents=True)
+        target.write_text(capture, encoding="utf-8")
+
+        assert gate_conversion(tmp_path).ok
+
+        target.write_text(capture.replace("noindex,nofollow", "index,follow"), encoding="utf-8")
+        report = gate_conversion(tmp_path)
+        assert report.ok is False
+        assert any(f.reason == "missing_terminal_action" for f in report.findings)
+
+        target.write_text(capture.replace("/.netlify/functions/lead", "/contato"), encoding="utf-8")
+        report = gate_conversion(tmp_path)
+        assert report.ok is False
+        assert any(f.reason == "missing_terminal_action" for f in report.findings)
+
+        target.write_text(capture, encoding="utf-8")
+        source = tmp_path / "radar" / "captura-dedicada" / "index.html"
+        source.write_text(source.read_text(encoding="utf-8").replace(
+            ' data-terminal-action="capture-route"', ""
+        ), encoding="utf-8")
+        report = gate_conversion(tmp_path)
+        assert report.ok is False
+        assert any(f.reason == "missing_terminal_action" for f in report.findings)
+
+
 def test_registered_debt_is_route_exact_and_never_absorbs_a_sibling():
     """A new page inside a family that carries debt does not inherit the exemption."""
     with tempfile.TemporaryDirectory(prefix="confenge-family-gate-") as tmp:

@@ -900,6 +900,75 @@ def _displays_price(main: str) -> bool:
     return bool(PRICE_NEAR_RE.search(strip_html(main)))
 
 
+def _has_linked_capture_route(root: Path, main: str) -> bool:
+    """Prove that an explicit terminal link lands on a real persisted capture.
+
+    A generic internal link is never terminal. This narrow contract exists for
+    dedicated noindex transaction steps: the source opts in on the anchor and
+    the gate follows only canonical ``/comercial/`` routes whose ``<main>``
+    contains the complete lead-function attribution/consent contract.
+    """
+    for tag in re.findall(r"(?is)<a\b[^>]*>", main):
+        marker = re.search(
+            r'\bdata-terminal-action=["\']capture-route["\']', tag, re.I
+        )
+        href_match = re.search(r'\bhref=["\']([^"\']+)["\']', tag, re.I)
+        if not marker or not href_match:
+            continue
+        route = href_match.group(1)
+        if not _is_canonical_route(route) or not route.startswith("/comercial/"):
+            continue
+        page = root / route.strip("/") / "index.html"
+        if not page.is_file():
+            continue
+        html = page.read_text(encoding="utf-8", errors="replace")
+        if not is_noindex(html):
+            continue
+        destination_main = _main_html(html)
+        form_match = re.search(
+            r'<form\b(?=[^>]*\bmethod=["\']post["\'])'
+            r'(?=[^>]*\baction=["\']/.netlify/functions/lead["\'])[^>]*>.*?</form>',
+            destination_main,
+            re.I | re.S,
+        )
+        if not form_match:
+            continue
+        form = form_match.group(0)
+        form_open = form.split(">", 1)[0]
+        if any(
+            not re.search(rf'\b{attr}=["\'][^"\']+["\']', form_open, re.I)
+            for attr in (
+                "data-cta-id",
+                "data-asset-id",
+                "data-route-family",
+                "data-cta-position",
+            )
+        ):
+            continue
+        if any(
+            not re.search(rf'\bname=["\']{name}["\']', form, re.I)
+            for name in (
+                "nome",
+                "estagio",
+                "jornada",
+                "origem",
+                "asset_id",
+                "cta_id",
+                "route_family",
+            )
+        ):
+            continue
+        if not re.search(
+            r'<input\b(?=[^>]*\btype=["\']checkbox["\'])'
+            r'(?=[^>]*\bname=["\']consentimento["\'])(?=[^>]*\brequired\b)[^>]*>',
+            form,
+            re.I,
+        ):
+            continue
+        return True
+    return False
+
+
 def load_family_registry(root: Path | None = None) -> dict[str, Any]:
     path = (root or ROOT) / FAMILY_REGISTRY_REL
     return json.loads(path.read_text(encoding="utf-8"))
@@ -1324,6 +1393,7 @@ def gate_conversion(
         has_main_form = bool(
             re.search(r'(?is)<form\b[^>]+action=["\']/.netlify/functions/lead["\']', main)
         )
+        has_linked_capture_route = _has_linked_capture_route(base, main)
         has_main_service_link = any(
             f'href="{destination}"' in main or f"href='{destination}'" in main
             for destination in service_routes
@@ -1438,7 +1508,9 @@ def gate_conversion(
                 "none": True,
                 "capture_form": has_main_form,
                 "whatsapp": has_main_wa,
-                "capture_form_or_whatsapp": has_main_form or has_main_wa,
+                "capture_form_or_whatsapp": (
+                    has_main_form or has_main_wa or has_linked_capture_route
+                ),
             }.get(required, False)
 
             if required == "none":

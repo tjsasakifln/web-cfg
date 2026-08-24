@@ -227,13 +227,6 @@
         },
         {
           "gate": "conversion",
-          "path": "radar/nacional-obras-publicas/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/radar/nacional-obras-publicas/ required=capture_form_or_whatsapp issue=#266 expires_at=2026-10-31",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
           "path": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
           "reason": "terminal_action_debt",
           "excerpt": "/casos/modelo-relatorio-inteligencia-licitacoes/ required=capture_form issue=#289 expires_at=2026-09-30",
@@ -344,11 +337,11 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 40,
+          "covered": 41,
           "total": 67,
-          "coverage": 0.597,
+          "coverage": 0.6119,
           "exempt_trust_or_legal": 9,
-          "registered_debt": 21
+          "registered_debt": 20
         },
         "exemptions": [
           {
@@ -542,16 +535,6 @@
             "expired": false
           },
           {
-            "route": "/radar/nacional-obras-publicas/",
-            "family": "radar",
-            "kind": "debt",
-            "reason": "O radar tem WhatsApp no rodapé, fora do <main>: é exatamente o defeito que #245 corrigiu e que #266 vai fechar ao coletar os parâmetros do Radar Decisório em formulário. Deixar registrado como dívida datada em vez de editar o HTML dentro do escopo de #300.",
-            "owner_issue": 266,
-            "expires_at": "2026-10-31",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
-          {
             "route": "/servicos-obras-publicas/",
             "family": "servicos-obras-publicas",
             "kind": "debt",
@@ -647,7 +630,7 @@
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 40
+        "warnings": 39
       }
     },
     "legacy_entity": {
