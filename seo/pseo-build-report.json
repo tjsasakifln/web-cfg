@@ -20,28 +20,28 @@
       "reasons": [
         "contracts<15"
       ],
-      "score": 79
+      "score": 77
     },
     {
       "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
       "reasons": [
         "contracts<15"
       ],
-      "score": 73
+      "score": 71
     },
     {
       "url": "/inteligencia/mercados/edificacoes-publicas-mg/",
       "reasons": [
         "contracts<15"
       ],
-      "score": 77
+      "score": 75
     },
     {
       "url": "/inteligencia/mercados/edificacoes-publicas-rs/",
       "reasons": [
         "contracts<15"
       ],
-      "score": 77
+      "score": 75
     },
     {
       "url": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
@@ -50,9 +50,9 @@
         "suppliers<3",
         "temporal_span_days<180",
         "max_single_day_share>0.70",
-        "score=85"
+        "score=83"
       ],
-      "score": 85
+      "score": 83
     },
     {
       "url": "/inteligencia/precos/manutencao-predial-engenharia-rs/",
@@ -61,18 +61,18 @@
         "temporal_span_days<90",
         "max_buyer_share>0.60",
         "no_comparison_group",
-        "score=77"
+        "score=75"
       ],
-      "score": 77
+      "score": 75
     },
     {
       "url": "/inteligencia/precos/edificacoes-publicas-mg/",
       "reasons": [
         "temporal_span_days<90",
         "no_comparison_group",
-        "score=75"
+        "score=73"
       ],
-      "score": 75
+      "score": 73
     },
     {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
@@ -81,9 +81,9 @@
         "primary_contracts<15",
         "temporal_span_days<90",
         "no_comparison_group",
-        "score=74"
+        "score=72"
       ],
-      "score": 74
+      "score": 72
     },
     {
       "url": "/inteligencia/precos/edificacoes-publicas-rs/",
@@ -91,9 +91,9 @@
         "obs<15",
         "primary_contracts<15",
         "no_comparison_group",
-        "score=73"
+        "score=71"
       ],
-      "score": 73
+      "score": 71
     },
     {
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
@@ -101,9 +101,9 @@
         "obs<15",
         "primary_contracts<15",
         "no_comparison_group",
-        "score=73"
+        "score=71"
       ],
-      "score": 73
+      "score": 71
     },
     {
       "url": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",

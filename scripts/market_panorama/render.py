@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -177,7 +178,7 @@ def _price_table(payload: dict[str, Any]) -> str:
             "</p>"
         )
     return (
-        '<div class="table-wrap"><table class="data-table">'
+        '<div class="table-wrap" role="group" tabindex="0" aria-label="Painel de preços por categoria"><table class="data-table">'
         "<thead><tr><th>Categoria</th><th>Contratos na referência</th><th>p25</th><th>Mediana</th>"
         "<th>p75</th><th>Posição observada</th></tr></thead>"
         f"<tbody>{rows}</tbody></table></div>"
@@ -197,7 +198,7 @@ def _competition_block(payload: dict[str, Any]) -> str:
     return (
         f"<p>Regra de seleção: {e(section.get('selection_rule', UNKNOWN))}. "
         f"Categoria principal: <strong>{e(section.get('primary_category', UNKNOWN))}</strong>.</p>"
-        '<div class="table-wrap"><table class="data-table">'
+        '<div class="table-wrap" role="group" tabindex="0" aria-label="Estrutura de concorrência observada"><table class="data-table">'
         "<thead><tr><th>Indicador</th><th>Valor observado</th></tr></thead><tbody>"
         f"<tr><th scope='row'>Fornecedores no recorte</th><td>{e(len(competitors))}</td></tr>"
         f"<tr><th scope='row'>Contratos por fornecedor (mín.–máx.)</th>"
@@ -245,7 +246,7 @@ def _opportunities_block(payload: dict[str, Any]) -> str:
         "os demais editais",
     )
     return (
-        '<div class="table-wrap"><table class="data-table">'
+        '<div class="table-wrap" role="group" tabindex="0" aria-label="Editais observados no recorte"><table class="data-table">'
         "<thead><tr><th>Órgão</th><th>Modalidade</th><th>Encerramento</th><th>Valor estimado</th></tr></thead>"
         f"<tbody>{rows}</tbody></table></div>"
         f"{truncated}"
@@ -254,7 +255,13 @@ def _opportunities_block(payload: dict[str, Any]) -> str:
 
 def _limitations_block(payload: dict[str, Any]) -> str:
     limitations = payload.get("limitations") or []
-    items = "".join(f"<li>{e(text)}</li>" for text in limitations)
+    # The producer owns the fact and provenance; the public renderer owns
+    # visitor-facing language. Keep infrastructure vocabulary out of copy.
+    public_limitations = [
+        re.sub(r"\bDataLake\b", "base canônica de dados", str(text), flags=re.IGNORECASE)
+        for text in limitations
+    ]
+    items = "".join(f"<li>{e(text)}</li>" for text in public_limitations)
     reasons = payload.get("reason_codes") or []
     reason_html = ""
     if reasons:
@@ -280,7 +287,7 @@ def _provenance_block(payload: dict[str, Any], decision: PublicationDecision) ->
         else "Esta página não autoriza INDEX."
     )
     return (
-        '<div class="table-wrap"><table class="data-table">'
+        '<div class="table-wrap" role="group" tabindex="0" aria-label="Proveniência do payload"><table class="data-table">'
         f"<tbody>{body}</tbody></table></div>"
         "<p>O produtor mantém <code>publication_authorization</code> e "
         f"<code>index_authorization</code> em <code>false</code>. {e(tail)}</p>"
@@ -341,7 +348,7 @@ def render_panorama_html(payload: dict[str, Any], decision: PublicationDecision)
         "</header>",
         breadcrumbs_html([("Início", "/"), (FAMILY_LABEL_PT, FAMILY_PATH), (title, None)]),
         '<section class="section" id="recorte"><h2>Recorte observado</h2>'
-        '<div class="table-wrap"><table class="data-table"><tbody>'
+        '<div class="table-wrap" role="group" tabindex="0" aria-label="Recorte observado"><table class="data-table"><tbody>'
         f"<tr><th scope='row'>UF</th><td>{e(profile.get('uf', UNKNOWN))}</td></tr>"
         f"<tr><th scope='row'>CNAE principal do recorte</th><td>{e(profile.get('cnae_principal', UNKNOWN))}</td></tr>"
         f"<tr><th scope='row'>Compradores no recorte</th><td>{e(profile.get('buyer_count', UNKNOWN))}</td></tr>"

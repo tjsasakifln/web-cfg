@@ -1,149 +1,4825 @@
 {
-  "generated_at": "2026-08-23T02:33:36.237Z",
+  "generated_at": "2026-08-24T12:11:18.837Z",
+  "issue": 293,
+  "base": "http://127.0.0.1:8793",
+  "site_root": "_site",
+  "policy_path": "data/quality/interface-coverage-policy.json",
+  "coverage": {
+    "public_route_count": 261,
+    "audited_route_count": 91,
+    "viewports": [
+      {
+        "id": "mobile",
+        "width": 390,
+        "height": 844,
+        "device_scale_factor": 2,
+        "is_mobile": true,
+        "has_touch": true
+      },
+      {
+        "id": "desktop",
+        "width": 1440,
+        "height": 1000,
+        "device_scale_factor": 1,
+        "is_mobile": false,
+        "has_touch": false
+      }
+    ],
+    "page_loads": 182,
+    "price_route_count": 56,
+    "capture_form_route_count": 29,
+    "sampling": {
+      "enabled": false,
+      "reason": "full price+form coverage was measured well inside the 45-minute site-ci budget, so no route is sampled away. If it ever stops fitting, set enabled=true with max_routes_per_family and the drawn list is recorded in the report under axe.sampling.",
+      "dropped": []
+    },
+    "audited_routes": [
+      {
+        "route": "/",
+        "family": "home",
+        "reasons": [
+          "price",
+          "capture_form",
+          "always_include"
+        ]
+      },
+      {
+        "route": "/404.html",
+        "family": "institucional-legal",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/acompanhamento-contratos-obras/",
+        "family": "servico-pilar",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/aditivos-obras-publicas/",
+        "family": "servico-pilar",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/atrasos-prorrogacao-obras-publicas/",
+        "family": "servico-pilar",
+        "reasons": [
+          "capture_form",
+          "always_include"
+        ]
+      },
+      {
+        "route": "/auditoria-orcamento-licitacao/",
+        "family": "servico-pilar",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/bid-room-licitacoes-obras/",
+        "family": "oferta-assinatura",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/",
+        "family": "caso-demonstrativo",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/aditivo-art125-demonstrativo/",
+        "family": "caso-demonstrativo",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/casos/modelo-apresentacao-executiva-resultados/",
+        "family": "escada-de-valor",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-base-quantitativa-canonica/",
+        "family": "escada-de-valor",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+        "family": "escada-de-valor",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-mapa-compradores-publicos/",
+        "family": "escada-de-valor",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+        "family": "escada-de-valor",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-painel-precos-obras-publicas/",
+        "family": "escada-de-valor",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-relatorio-executivo-consolidado/",
+        "family": "escada-de-valor",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "family": "escada-de-valor",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/comercial/radar-decisorio/",
+        "family": "conversao-transacional",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/comercial/termos-diagnostico-b2g/",
+        "family": "conversao-transacional",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/conflitos/",
+        "family": "hub-navegacao",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/conteudos/",
+        "family": "biblioteca",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+        "family": "biblioteca",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "family": "biblioteca",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "family": "biblioteca",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/correcoes/",
+        "family": "conversao-transacional",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/defesa-margem-contratos-publicos/",
+        "family": "servico-pilar",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/defesa-tecnica-contratos-publicos/",
+        "family": "servico-pilar",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/diagnostico-b2g-360/",
+        "family": "oferta-diagnostico",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/",
+        "family": "oferta-diagnostico",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/diagnostico-pre-licitacao/",
+        "family": "oferta-diagnostico",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/diretoria-b2g/",
+        "family": "oferta-assinatura",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/entregas/",
+        "family": "hub-navegacao",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/especialista/tiago-jun-sasaki/",
+        "family": "autoridade",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/ferramentas/checklist-reequilibrio/",
+        "family": "ferramenta",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/ferramentas/diagnostico-defesa-margem/",
+        "family": "ferramenta",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/ferramentas/limite-acrescimos-supressoes/",
+        "family": "ferramenta",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/ferramentas/matriz-atraso-obra/",
+        "family": "ferramenta",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/inteligencia/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/mercados/edificacoes-publicas-mg/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/mercados/edificacoes-publicas-rs/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/precos/edificacoes-publicas-mg/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/precos/edificacoes-publicas-rs/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+        "family": "inteligencia-mercado",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+        "family": "referencia-legal",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/medicoes-glosas-obras-publicas/",
+        "family": "servico-pilar",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/nurture/",
+        "family": "conversao-transacional",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/obrigado-contrato.html",
+        "family": "conversao-transacional",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/obrigado-edital.html",
+        "family": "conversao-transacional",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/obrigado-operacao.html",
+        "family": "conversao-transacional",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/obrigado.html",
+        "family": "conversao-transacional",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
+        "family": "panorama-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/conversao-xray/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/piloto/mercados/edificacoes-publicas-rs/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/ofertas/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/ofertas/contratar/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "capture_form"
+        ]
+      },
+      {
+        "route": "/piloto/ofertas/diagnostico-expansao/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/ofertas/diretoria-180/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/ofertas/diretoria-365/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/ofertas/diretoria-flex/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/ofertas/faq/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/",
+        "family": "piloto-comercial",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/problemas-que-resolvemos/",
+        "family": "hub-navegacao",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/radar/edificacoes-publicas-pr/",
+        "family": "radar-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/radar/edificacoes-publicas-rs/",
+        "family": "radar-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/radar/edificacoes-publicas-sc/",
+        "family": "radar-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/radar/nacional-obras-publicas/",
+        "family": "radar-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/radar/pavimentacao-infraestrutura-viaria-pr/",
+        "family": "radar-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/radar/pavimentacao-infraestrutura-viaria-rs/",
+        "family": "radar-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/radar/pavimentacao-infraestrutura-viaria-sc/",
+        "family": "radar-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/radar/pesquisa/edicao-zero-4uf/",
+        "family": "radar-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/radar/saneamento-hidraulica-sc/",
+        "family": "radar-mercado",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
+        "route": "/reequilibrio-obras-publicas/",
+        "family": "servico-pilar",
+        "reasons": [
+          "always_include"
+        ]
+      },
+      {
+        "route": "/servicos-obras-publicas/",
+        "family": "hub-navegacao",
+        "reasons": [
+          "always_include"
+        ]
+      }
+    ],
+    "not_audited_count": 170,
+    "not_audited": [
+      {
+        "route": "/analises-contratos-publicos/",
+        "family": "analise-contrato",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
+        "family": "analise-contrato",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/",
+        "family": "analise-contrato",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/",
+        "family": "analise-contrato",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/",
+        "family": "analise-contrato",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/analises-contratos-publicos/reajuste-aniversario-serie-indice/",
+        "family": "analise-contrato",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
+        "family": "analise-contrato",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+        "family": "inteligencia-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/casos/medicao-glosa-demonstrativo/",
+        "family": "caso-demonstrativo",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/comercial/privacidade-leads/",
+        "family": "conversao-transacional",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/aceleracao-obra-publica-custo-adicional/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/aditivo-empreitada-por-preco-global/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/aditivo-qualitativo-quantitativo/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/administracao-local-orcamento-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/administracao-local-prolongada-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/analise-edital-obra-publica-construtora/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/ata-reuniao-ordem-servico-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/atraso-na-medicao-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/atraso-obra-culpa-administracao/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/atraso-projeto-executivo-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/auditoria-contrato-obra-publica-mensal/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/aumento-material-reequilibrio-contrato-publico/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/bdi-diferenciado-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/bdi-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/calculo-reequilibrio-economico-financeiro/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/capacidade-tecnica-operacional-profissional-licitacao/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/clausula-matriz-risco-abusiva-edital/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/como-provar-atraso-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/compensacao-acrescimo-supressao-aditivo/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/composicao-propria-preco-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/comprovacao-exequibilidade-proposta-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/comunicacao-fiscal-contrato-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/consorcio-subcontratacao-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/consultoria-b2g-engenharia-construtora/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/consultoria-contrato-obra-publica-construtora/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/contratacao-integrada-semi-integrada-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/controle-mudancas-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/cotacao-mercado-orcamento-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/criterio-de-medicao-nao-previsto-contrato/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/cronograma-fisico-financeiro-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/cronologia-contrato-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/culpa-sancao-atraso-contrato-publico/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/curva-abc-orcamento-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/curva-abc-reequilibrio-contrato/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/custos-indiretos-atraso-administracao-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/defesa-processo-sancionador-contrato-publico/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/demolicao-nao-prevista-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/demora-decisao-administracao-contrato-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/desagio-licitacao-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/diario-de-obra-pleito-contrato-publico/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/divergencia-diario-obra-fiscalizacao/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/divergencia-quantitativo-medicao-as-built/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/dosimetria-multa-contrato-administrativo/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/empreitada-preco-global-preco-unitario/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/erros-comunicacao-contrato-publico-construtora/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/extincao-contrato-culpa-administracao/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/extincao-contrato-obra-publica-pelo-contratado/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/fiscal-mandou-executar-sem-aditivo/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/frente-de-servico-nao-liberada-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/garantia-proposta-licitacao-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/gestao-contrato-obra-publica-indicadores/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/glosa-de-medicao-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/glosa-por-qualidade-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/impedimento-de-licitar-construtora/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/indenizacao-servico-extracontratual-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/interferencia-concessionaria-obra-publica-atraso/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/jogo-de-planilha-aditivo-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/manutencao-habilitacao-contrato-publico/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/matriz-de-riscos-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/medicao-por-evento-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/multa-atraso-parcial-contrato-publico/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/multa-contrato-obra-publica-defesa/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/notas-fiscais-reequilibrio-contrato/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/notificacao-impacto-prazo-custo-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/orcamento-incompleto-edital-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/orcamento-sigiloso-licitacao-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/ordem-paralisacao-obra-publica-custos/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/pagamento-contrato-publico-certidao-vencida/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/pedido-de-reequilibrio-negado/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/pedido-prorrogacao-prazo-antes-vencimento/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/plano-recuperacao-obra-atrasada/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/pleito-tecnico-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/preco-de-item-novo-aditivo-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/preco-unitario-acima-referencia-proposta-global/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/produtividade-sinapi-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/projeto-basico-incompleto-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/proposta-inexequivel-obra-publica-lei-14133/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/prova-custos-adicionais-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/prova-de-medicao-diario-de-obra-fotos/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/quantitativo-insuficiente-planilha-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reajuste-repactuacao-reequilibrio-diferenca/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/recuperar-contrato-obra-publica-problematico/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/recurso-inabilitacao-tecnica-licitacao/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reequilibrio-antes-da-prorrogacao-contrato/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reequilibrio-apos-fim-do-contrato/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reequilibrio-economico-financeiro-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reequilibrio-empreitada-preco-global/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/registro-contemporaneo-pleito-obra/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/reprogramacao-cronograma-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/rescisao-unilateral-contrato-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/resposta-notificacao-atraso-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/seguro-garantia-execucao-contrato-publico/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/servico-executado-sem-projeto-aprovado/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/servico-executado-sem-termo-aditivo/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/servico-nao-previsto-na-planilha-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/sinapi-ou-sicro-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/subcontratacao-obra-publica-autorizacao/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/suspensao-execucao-contrato-publico-contratado/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/tributos-bdi-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/troca-responsavel-tecnico-contrato-publico/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/conteudos/visita-tecnica-licitacao-obra-publica/",
+        "family": "biblioteca",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/cancelado/",
+        "family": "oferta-diagnostico",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/expirado/",
+        "family": "oferta-diagnostico",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/diagnostico-b2g-expansao/obrigado/",
+        "family": "oferta-diagnostico",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/ferramentas/",
+        "family": "ferramenta",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/guias-contratos-obras/",
+        "family": "guia-operacional",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/guias-contratos-obras/checklist-pedido-aditivo/",
+        "family": "guia-operacional",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/guias-contratos-obras/contestar-glosa-medicao/",
+        "family": "guia-operacional",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+        "family": "guia-operacional",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/guias-contratos-obras/responder-notificacao-atraso/",
+        "family": "guia-operacional",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/imprensa/",
+        "family": "autoridade",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/cenarios/",
+        "family": "inteligencia-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+        "family": "inteligencia-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
+        "family": "inteligencia-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/concorrencia/",
+        "family": "inteligencia-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/mercados/",
+        "family": "inteligencia-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/orgaos/",
+        "family": "inteligencia-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/inteligencia/precos/",
+        "family": "inteligencia-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/jurisprudencia-contratos-obras/",
+        "family": "referencia-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+        "family": "referencia-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/",
+        "family": "referencia-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+        "family": "referencia-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/atraso-imputavel-administracao/",
+        "family": "referencia-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+        "family": "referencia-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+        "family": "referencia-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
+        "family": "referencia-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
+        "family": "referencia-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/metodologia-inteligencia/",
+        "family": "inteligencia-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/nurture/sair/",
+        "family": "conversao-transacional",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/ops/",
+        "family": "institucional-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/panorama-mercado-obras-publicas/",
+        "family": "panorama-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/piloto/",
+        "family": "piloto-comercial",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/piloto/concorrencia/edificacoes-publicas-rs/",
+        "family": "piloto-comercial",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
+        "family": "piloto-comercial",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/",
+        "family": "piloto-comercial",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sc/",
+        "family": "piloto-comercial",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/",
+        "family": "piloto-comercial",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/politica-editorial/",
+        "family": "autoridade",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/politica-editorial/historico/",
+        "family": "autoridade",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/politica-editorial/v/1.0.0/",
+        "family": "autoridade",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/privacidade/",
+        "family": "institucional-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/radar/",
+        "family": "radar-mercado",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/termos-de-uso/",
+        "family": "institucional-legal",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      },
+      {
+        "route": "/uso-de-ia/",
+        "family": "autoridade",
+        "reason": "no price and no capture form — geometry is proved sitewide by npm run audit:layout-sitewide and the template semantics are proved by this family's covered representative",
+        "matched_by": []
+      }
+    ]
+  },
+  "known_exceptions": [],
   "pages": [
     {
       "path": "/",
+      "viewport": "mobile",
+      "family": "home",
+      "selected_by": [
+        "price",
+        "capture_form",
+        "always_include"
+      ],
       "counts": {
         "critical": 0,
         "serious": 0,
         "moderate": 0,
         "minor": 0
       },
-      "violations": []
-    },
-    {
-      "path": "/diretoria-b2g/",
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "violations": []
-    },
-    {
-      "path": "/diagnostico-b2g-360/",
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "violations": []
-    },
-    {
-      "path": "/bid-room-licitacoes-obras/",
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "violations": []
-    },
-    {
-      "path": "/defesa-margem-contratos-publicos/",
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "violations": []
-    },
-    {
-      "path": "/ferramentas/diagnostico-defesa-margem/",
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "violations": []
-    },
-    {
-      "path": "/especialista/tiago-jun-sasaki/",
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "violations": []
-    },
-    {
-      "path": "/inteligencia/",
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "violations": []
-    },
-    {
-      "path": "/conteudos/",
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
-      "violations": []
-    },
-    {
-      "path": "/obrigado.html",
-      "counts": {
-        "critical": 0,
-        "serious": 0,
-        "moderate": 0,
-        "minor": 0
-      },
+      "blocking": 0,
       "violations": []
     },
     {
       "path": "/404.html",
+      "viewport": "mobile",
+      "family": "institucional-legal",
+      "selected_by": [
+        "always_include"
+      ],
       "counts": {
         "critical": 0,
         "serious": 0,
         "moderate": 0,
         "minor": 0
       },
+      "blocking": 0,
       "violations": []
     },
     {
-      "path": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "path": "/acompanhamento-contratos-obras/",
+      "viewport": "mobile",
+      "family": "servico-pilar",
+      "selected_by": [
+        "capture_form"
+      ],
       "counts": {
         "critical": 0,
         "serious": 0,
         "moderate": 0,
         "minor": 0
       },
+      "blocking": 0,
       "violations": []
     },
     {
-      "path": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "path": "/aditivos-obras-publicas/",
+      "viewport": "mobile",
+      "family": "servico-pilar",
+      "selected_by": [
+        "always_include"
+      ],
       "counts": {
         "critical": 0,
         "serious": 0,
         "moderate": 0,
         "minor": 0
       },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/atrasos-prorrogacao-obras-publicas/",
+      "viewport": "mobile",
+      "family": "servico-pilar",
+      "selected_by": [
+        "capture_form",
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/auditoria-orcamento-licitacao/",
+      "viewport": "mobile",
+      "family": "servico-pilar",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/bid-room-licitacoes-obras/",
+      "viewport": "mobile",
+      "family": "oferta-assinatura",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/",
+      "viewport": "mobile",
+      "family": "caso-demonstrativo",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "mobile",
+      "family": "caso-demonstrativo",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-apresentacao-executiva-resultados/",
+      "viewport": "mobile",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-base-quantitativa-canonica/",
+      "viewport": "mobile",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-contratos-vincendos-relicitacao/",
+      "viewport": "mobile",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-mapa-compradores-publicos/",
+      "viewport": "mobile",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-mapeamento-concorrentes-publicos/",
+      "viewport": "mobile",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-painel-precos-obras-publicas/",
+      "viewport": "mobile",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-relatorio-executivo-consolidado/",
+      "viewport": "mobile",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "viewport": "mobile",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/comercial/radar-decisorio/",
+      "viewport": "mobile",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/comercial/termos-diagnostico-b2g/",
+      "viewport": "mobile",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conflitos/",
+      "viewport": "mobile",
+      "family": "hub-navegacao",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/",
+      "viewport": "mobile",
+      "family": "biblioteca",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "viewport": "mobile",
+      "family": "biblioteca",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "viewport": "mobile",
+      "family": "biblioteca",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "viewport": "mobile",
+      "family": "biblioteca",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/correcoes/",
+      "viewport": "mobile",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/defesa-margem-contratos-publicos/",
+      "viewport": "mobile",
+      "family": "servico-pilar",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/defesa-tecnica-contratos-publicos/",
+      "viewport": "mobile",
+      "family": "servico-pilar",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-b2g-360/",
+      "viewport": "mobile",
+      "family": "oferta-diagnostico",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-b2g-expansao/",
+      "viewport": "mobile",
+      "family": "oferta-diagnostico",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-pre-licitacao/",
+      "viewport": "mobile",
+      "family": "oferta-diagnostico",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "viewport": "mobile",
+      "family": "oferta-assinatura",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/entregas/",
+      "viewport": "mobile",
+      "family": "hub-navegacao",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "landmark-unique",
+          "impact": "moderate",
+          "description": "Ensure landmarks are unique",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "#exemplo-base-quantitativa > .container > .deliverable-feature > .deliverable-result[aria-label=\"Síntese do exemplo\"]"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "viewport": "mobile",
+      "family": "autoridade",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "mobile",
+      "family": "ferramenta",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "#metodo"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "mobile",
+      "family": "ferramenta",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/limite-acrescimos-supressoes/",
+      "viewport": "mobile",
+      "family": "ferramenta",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "#metodo"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/ferramentas/matriz-atraso-obra/",
+      "viewport": "mobile",
+      "family": "ferramenta",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 2,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "heading-order",
+          "impact": "moderate",
+          "description": "Ensure the order of headings is semantically correct",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "h3"
+            ]
+          ]
+        },
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "#metodo"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/inteligencia/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
       "violations": []
     },
     {
       "path": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "always_include"
+      ],
       "counts": {
         "critical": 0,
         "serious": 0,
         "moderate": 0,
         "minor": 0
       },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/mercados/edificacoes-publicas-mg/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/mercados/edificacoes-publicas-rs/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/precos/edificacoes-publicas-mg/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/precos/edificacoes-publicas-rs/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "viewport": "mobile",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "viewport": "mobile",
+      "family": "referencia-legal",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "landmark-unique",
+          "impact": "moderate",
+          "description": "Ensure landmarks are unique",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "#cta-mid"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/medicoes-glosas-obras-publicas/",
+      "viewport": "mobile",
+      "family": "servico-pilar",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/nurture/",
+      "viewport": "mobile",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/obrigado-contrato.html",
+      "viewport": "mobile",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/obrigado-edital.html",
+      "viewport": "mobile",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/obrigado-operacao.html",
+      "viewport": "mobile",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/obrigado.html",
+      "viewport": "mobile",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
+      "viewport": "mobile",
+      "family": "panorama-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/conversao-xray/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/mercados/edificacoes-publicas-rs/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/contratar/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/diagnostico-expansao/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/diretoria-180/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/diretoria-365/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/diretoria-flex/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/faq/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/",
+      "viewport": "mobile",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/problemas-que-resolvemos/",
+      "viewport": "mobile",
+      "family": "hub-navegacao",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/edificacoes-publicas-pr/",
+      "viewport": "mobile",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/edificacoes-publicas-rs/",
+      "viewport": "mobile",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/edificacoes-publicas-sc/",
+      "viewport": "mobile",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/nacional-obras-publicas/",
+      "viewport": "mobile",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/pavimentacao-infraestrutura-viaria-pr/",
+      "viewport": "mobile",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/pavimentacao-infraestrutura-viaria-rs/",
+      "viewport": "mobile",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/pavimentacao-infraestrutura-viaria-sc/",
+      "viewport": "mobile",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/pesquisa/edicao-zero-4uf/",
+      "viewport": "mobile",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/saneamento-hidraulica-sc/",
+      "viewport": "mobile",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/reequilibrio-obras-publicas/",
+      "viewport": "mobile",
+      "family": "servico-pilar",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/servicos-obras-publicas/",
+      "viewport": "mobile",
+      "family": "hub-navegacao",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/",
+      "viewport": "desktop",
+      "family": "home",
+      "selected_by": [
+        "price",
+        "capture_form",
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/404.html",
+      "viewport": "desktop",
+      "family": "institucional-legal",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/acompanhamento-contratos-obras/",
+      "viewport": "desktop",
+      "family": "servico-pilar",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/aditivos-obras-publicas/",
+      "viewport": "desktop",
+      "family": "servico-pilar",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/atrasos-prorrogacao-obras-publicas/",
+      "viewport": "desktop",
+      "family": "servico-pilar",
+      "selected_by": [
+        "capture_form",
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/auditoria-orcamento-licitacao/",
+      "viewport": "desktop",
+      "family": "servico-pilar",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/bid-room-licitacoes-obras/",
+      "viewport": "desktop",
+      "family": "oferta-assinatura",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/",
+      "viewport": "desktop",
+      "family": "caso-demonstrativo",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/aditivo-art125-demonstrativo/",
+      "viewport": "desktop",
+      "family": "caso-demonstrativo",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-apresentacao-executiva-resultados/",
+      "viewport": "desktop",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-base-quantitativa-canonica/",
+      "viewport": "desktop",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-contratos-vincendos-relicitacao/",
+      "viewport": "desktop",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-mapa-compradores-publicos/",
+      "viewport": "desktop",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-mapeamento-concorrentes-publicos/",
+      "viewport": "desktop",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-painel-precos-obras-publicas/",
+      "viewport": "desktop",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-relatorio-executivo-consolidado/",
+      "viewport": "desktop",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "viewport": "desktop",
+      "family": "escada-de-valor",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/comercial/radar-decisorio/",
+      "viewport": "desktop",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/comercial/termos-diagnostico-b2g/",
+      "viewport": "desktop",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conflitos/",
+      "viewport": "desktop",
+      "family": "hub-navegacao",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/",
+      "viewport": "desktop",
+      "family": "biblioteca",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "viewport": "desktop",
+      "family": "biblioteca",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "viewport": "desktop",
+      "family": "biblioteca",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "viewport": "desktop",
+      "family": "biblioteca",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/correcoes/",
+      "viewport": "desktop",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/defesa-margem-contratos-publicos/",
+      "viewport": "desktop",
+      "family": "servico-pilar",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/defesa-tecnica-contratos-publicos/",
+      "viewport": "desktop",
+      "family": "servico-pilar",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-b2g-360/",
+      "viewport": "desktop",
+      "family": "oferta-diagnostico",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-b2g-expansao/",
+      "viewport": "desktop",
+      "family": "oferta-diagnostico",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diagnostico-pre-licitacao/",
+      "viewport": "desktop",
+      "family": "oferta-diagnostico",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/diretoria-b2g/",
+      "viewport": "desktop",
+      "family": "oferta-assinatura",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/entregas/",
+      "viewport": "desktop",
+      "family": "hub-navegacao",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "landmark-unique",
+          "impact": "moderate",
+          "description": "Ensure landmarks are unique",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "#exemplo-base-quantitativa > .container > .deliverable-feature > .deliverable-result[aria-label=\"Síntese do exemplo\"]"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "viewport": "desktop",
+      "family": "autoridade",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/checklist-reequilibrio/",
+      "viewport": "desktop",
+      "family": "ferramenta",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "#metodo"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "viewport": "desktop",
+      "family": "ferramenta",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/limite-acrescimos-supressoes/",
+      "viewport": "desktop",
+      "family": "ferramenta",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "#metodo"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/ferramentas/matriz-atraso-obra/",
+      "viewport": "desktop",
+      "family": "ferramenta",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 2,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "heading-order",
+          "impact": "moderate",
+          "description": "Ensure the order of headings is semantically correct",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "h3"
+            ]
+          ]
+        },
+        {
+          "id": "region",
+          "impact": "moderate",
+          "description": "Ensure all page content is contained by landmarks",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "#metodo"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/inteligencia/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/cenarios/aditivos-e-risco-de-margem/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/mercados/edificacoes-publicas-mg/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/mercados/edificacoes-publicas-rs/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/precos/edificacoes-publicas-mg/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/precos/edificacoes-publicas-rs/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/precos/manutencao-predial-engenharia-rs/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "viewport": "desktop",
+      "family": "inteligencia-mercado",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "viewport": "desktop",
+      "family": "referencia-legal",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 1,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": [
+        {
+          "id": "landmark-unique",
+          "impact": "moderate",
+          "description": "Ensure landmarks are unique",
+          "nodes": 1,
+          "excused": null,
+          "targets": [
+            [
+              "#cta-mid"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/medicoes-glosas-obras-publicas/",
+      "viewport": "desktop",
+      "family": "servico-pilar",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/nurture/",
+      "viewport": "desktop",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/obrigado-contrato.html",
+      "viewport": "desktop",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/obrigado-edital.html",
+      "viewport": "desktop",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/obrigado-operacao.html",
+      "viewport": "desktop",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/obrigado.html",
+      "viewport": "desktop",
+      "family": "conversao-transacional",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
+      "viewport": "desktop",
+      "family": "panorama-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/conversao-xray/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/mercados/edificacoes-publicas-rs/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-rs/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sc/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/contratar/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/diagnostico-expansao/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/diretoria-180/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/diretoria-365/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/diretoria-flex/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/ofertas/faq/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/orgaos/base-aerea-de-anapolis-go/engenharia/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/",
+      "viewport": "desktop",
+      "family": "piloto-comercial",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/problemas-que-resolvemos/",
+      "viewport": "desktop",
+      "family": "hub-navegacao",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/edificacoes-publicas-pr/",
+      "viewport": "desktop",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/edificacoes-publicas-rs/",
+      "viewport": "desktop",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/edificacoes-publicas-sc/",
+      "viewport": "desktop",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/nacional-obras-publicas/",
+      "viewport": "desktop",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/pavimentacao-infraestrutura-viaria-pr/",
+      "viewport": "desktop",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/pavimentacao-infraestrutura-viaria-rs/",
+      "viewport": "desktop",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/pavimentacao-infraestrutura-viaria-sc/",
+      "viewport": "desktop",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/pesquisa/edicao-zero-4uf/",
+      "viewport": "desktop",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/radar/saneamento-hidraulica-sc/",
+      "viewport": "desktop",
+      "family": "radar-mercado",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/reequilibrio-obras-publicas/",
+      "viewport": "desktop",
+      "family": "servico-pilar",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/servicos-obras-publicas/",
+      "viewport": "desktop",
+      "family": "hub-navegacao",
+      "selected_by": [
+        "always_include"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
       "violations": []
     }
   ],
   "critical": 0,
   "serious": 0,
-  "moderate": 0,
-  "minor": 0
+  "moderate": 12,
+  "minor": 0,
+  "excused": 0,
+  "duration_seconds": 221
 }

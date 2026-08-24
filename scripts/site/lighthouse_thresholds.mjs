@@ -11,6 +11,13 @@ export function evaluateLighthouseResults(results, options = {}) {
   const homeRuns = Number(options.homeRuns || 1);
   const imageGatePages = options.imageGatePages || new Set();
   const seoExemptPages = options.seoExemptPages || new Set();
+  const thresholds = {
+    performance: 90,
+    accessibility: 95,
+    best_practices: 95,
+    seo: 95,
+    ...(options.thresholds || {}),
+  };
   const errors = [];
 
   for (const row of results) {
@@ -18,13 +25,17 @@ export function evaluateLighthouseResults(results, options = {}) {
       errors.push(`${row.path} run ${row.run || 1}: ${row.error}`);
       continue;
     }
-    if (row.accessibility < 95) errors.push(`${row.path}: accessibility ${row.accessibility} < 95`);
-    if (row.best_practices < 95) errors.push(`${row.path}: best-practices ${row.best_practices} < 95`);
-    if (!seoExemptPages.has(row.path) && row.seo < 95) {
-      errors.push(`${row.path}: seo ${row.seo} < 95`);
+    if (row.accessibility < thresholds.accessibility) {
+      errors.push(`${row.path}: accessibility ${row.accessibility} < ${thresholds.accessibility}`);
     }
-    if (row.path !== "/" && row.performance < 90) {
-      errors.push(`${row.path}: performance ${row.performance} < 90`);
+    if (row.best_practices < thresholds.best_practices) {
+      errors.push(`${row.path}: best-practices ${row.best_practices} < ${thresholds.best_practices}`);
+    }
+    if (!seoExemptPages.has(row.path) && row.seo < thresholds.seo) {
+      errors.push(`${row.path}: seo ${row.seo} < ${thresholds.seo}`);
+    }
+    if (row.path !== "/" && row.performance < thresholds.performance) {
+      errors.push(`${row.path}: performance ${row.performance} < ${thresholds.performance}`);
     }
     if (
       imageGatePages.has(row.path)

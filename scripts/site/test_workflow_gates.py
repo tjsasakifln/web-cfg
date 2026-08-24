@@ -23,6 +23,7 @@ PSEO = ROOT / ".github" / "workflows" / "pseo.yml"
 CODEQL = ROOT / ".github" / "workflows" / "codeql.yml"
 LIGHTHOUSE_RUNNER = ROOT / "scripts" / "site" / "run_lighthouse.mjs"
 LIGHTHOUSE_THRESHOLDS = ROOT / "scripts" / "site" / "lighthouse_thresholds.mjs"
+INTERFACE_COVERAGE_POLICY = ROOT / "data" / "quality" / "interface-coverage-policy.json"
 WORKFLOWS_DIR = ROOT / ".github" / "workflows"
 NETLIFY_TOML = ROOT / "netlify.toml"
 PACKAGE_JSON = ROOT / "package.json"
@@ -378,16 +379,31 @@ def test_lighthouse_covers_article_cover_regression_routes():
     workflow = _read(SITE_CI)
     runner = _read(LIGHTHOUSE_RUNNER)
     thresholds = _read(LIGHTHOUSE_THRESHOLDS)
+    policy = json.loads(_read(INTERFACE_COVERAGE_POLICY))
     routes = (
         "/conteudos/documentos-reequilibrio-obra-publica/",
         "/acompanhamento-contratos-obras/",
     )
-    for route in routes:
-        if route not in workflow:
-            raise AssertionError(f"site-ci Lighthouse sample missing {route}")
+    image_gate_routes = {
+        family["lighthouse_representative"]
+        for family in policy["commercial_families"]
+        if family.get("image_gate")
+    }
+    image_gate_routes.update(
+        entry["route"]
+        for entry in policy["lighthouse"].get("additional_pages", [])
+        if entry.get("image_gate")
+    )
+    missing = set(routes) - image_gate_routes
+    if missing:
+        raise AssertionError(f"interface coverage policy is missing image gates: {sorted(missing)}")
+    if "LH_PAGES:" in workflow:
+        raise AssertionError("site-ci must derive Lighthouse coverage instead of fixing a route list")
+    if "npm run test:lighthouse" not in workflow:
+        raise AssertionError("site-ci must execute the derived Lighthouse matrix")
     for needle in (
-        "LH_IMAGE_GATE_PAGES",
-        "LH_SEO_EXEMPT_PAGES",
+        "coverage.lighthouse.pages",
+        "coverage.lighthouse.image_gate_pages",
         'audits["image-aspect-ratio"]?.score',
         'audits["image-size-responsive"]?.score',
     ):
@@ -395,7 +411,7 @@ def test_lighthouse_covers_article_cover_regression_routes():
             raise AssertionError(f"Lighthouse image regression gate missing {needle}")
     for needle in (
         "imageGatePages.has(row.path)",
-        "!seoExemptPages.has(row.path) && row.seo < 95",
+        "!seoExemptPages.has(row.path) && row.seo < thresholds.seo",
     ):
         if needle not in thresholds:
             raise AssertionError(f"Lighthouse threshold module missing {needle}")

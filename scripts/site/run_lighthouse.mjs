@@ -11,25 +11,34 @@ import { fileURLToPath } from "url";
 import { launch as launchChrome } from "chrome-launcher";
 import lighthouse from "lighthouse";
 import { evaluateLighthouseResults } from "./lighthouse_thresholds.mjs";
+import {
+  deriveCoverage,
+  formatCoverageDeclaration,
+  loadPolicy,
+  resolveSiteRoot,
+} from "./interface_coverage.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const OUT = join(ROOT, "docs", "lighthouse-runs");
+const coverage = deriveCoverage({ policy: loadPolicy(), siteRoot: resolveSiteRoot() });
 const PAGES = process.env.LH_PAGES
   ? process.env.LH_PAGES.split(",").map((s) => s.trim()).filter(Boolean)
-  : ["/", "/diretoria-b2g/", "/conteudos/"];
+  : coverage.lighthouse.pages;
 const IMAGE_GATE_PAGES = new Set(
-  (process.env.LH_IMAGE_GATE_PAGES || "")
+  (process.env.LH_IMAGE_GATE_PAGES || coverage.lighthouse.image_gate_pages.join(","))
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean),
 );
 const SEO_EXEMPT_PAGES = new Set(
-  (process.env.LH_SEO_EXEMPT_PAGES || "")
+  (process.env.LH_SEO_EXEMPT_PAGES || coverage.lighthouse.seo_exempt_pages.join(","))
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean),
 );
 const HOME_RUNS = Number(process.env.LH_HOME_RUNS || 1);
+console.log(formatCoverageDeclaration(coverage));
+console.log(`lighthouse pages (${PAGES.length}): ${PAGES.join(" ")}`);
 if (!Number.isInteger(HOME_RUNS) || HOME_RUNS < 1 || HOME_RUNS > 5) {
   throw new Error(`LH_HOME_RUNS must be an integer from 1 to 5, got ${process.env.LH_HOME_RUNS}`);
 }
@@ -176,8 +185,26 @@ const evaluation = evaluateLighthouseResults(results, {
   homeRuns: HOME_RUNS,
   imageGatePages: IMAGE_GATE_PAGES,
   seoExemptPages: SEO_EXEMPT_PAGES,
+  thresholds: coverage.lighthouse.thresholds,
 });
-const summary = { base: BASE, generated_at: new Date().toISOString(), results, evaluation };
+const summary = {
+  base: BASE,
+  generated_at: new Date().toISOString(),
+  coverage: {
+    policy_path: coverage.policy_path,
+    public_route_count: coverage.route_count,
+    family_count: coverage.lighthouse.families.length,
+    families: coverage.lighthouse.families,
+    pages: PAGES,
+    additional_pages: coverage.lighthouse.additional_pages,
+    image_gate_pages: [...IMAGE_GATE_PAGES],
+    seo_exempt_pages: [...SEO_EXEMPT_PAGES],
+    exclusions: coverage.lighthouse.exclusions,
+    thresholds: coverage.lighthouse.thresholds,
+  },
+  results,
+  evaluation,
+};
 writeFileSync(join(OUT, "summary.json"), JSON.stringify(summary, null, 2));
 console.log("Wrote", join(OUT, "summary.json"));
 if (!evaluation.ok) console.error("Lighthouse gates failed", JSON.stringify(evaluation));

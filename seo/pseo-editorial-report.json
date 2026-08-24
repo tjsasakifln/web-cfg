@@ -41,7 +41,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": "tiago-sasaki-editorial-audit",
-      "page_material_hash": "7ff5b67c2417b2f549f43eeab8e493f947f51935bdc31136fe344f7de6e19854"
+      "page_material_hash": "d40cd67a939d9063dca65e38c5a1956595caebc9d3c3b8dbf4c4ccc9d72766cd"
     },
     {
       "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
@@ -79,7 +79,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "9c488d51e053545667e11f70e5fe968e7b149a640ae71ee2dcf71d503a384839"
+      "page_material_hash": "e5a1c803ac2ccf27587f77e44f1d1da6018cf88193be5de8ad4f0d6577ed6e06"
     },
     {
       "page_id": "market-edificacoes-publicas-mg",
@@ -117,7 +117,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": "tiago",
-      "page_material_hash": "fafd65a881b3d3bbef507b0307bb8bc723aa43c94fc0b8fc4df7514e282212d7"
+      "page_material_hash": "cb22db149447e316a40c4042cde24f717744b7deb0e383e10934f4cf129c14d1"
     },
     {
       "page_id": "market-edificacoes-publicas-rs",
@@ -155,7 +155,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "d5b140f4d4ff19d3e3d260855e29b17139a935986393f9bc2873de79bc28eeea"
+      "page_material_hash": "cdf7262367ac51ff558609e2c679a513fd7f4330707490741e5312f7e4e8e80c"
     },
     {
       "page_id": "agency-88830609",
@@ -263,7 +263,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "932e8191451b13b6b305c21124f8777f717e68e11c87132a701b0b1b0f5cfd0c"
+      "page_material_hash": "64996ff24e4c38798d8a72dfe7c596a019dda710de3c75bc7eb49d8e2e7e9e17"
     },
     {
       "page_id": "price-edificacoes-publicas-mg",
@@ -314,7 +314,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "0ee9aa2ca7459b51c36cfa6f6841da0c6baa8a1faea230a0b40938fb8edf4cf9"
+      "page_material_hash": "550fe84a17bcb8cdd4dca7f5ddb9c3c2c1d9837a89d9dd48dc2200dd22528cc2"
     },
     {
       "page_id": "price-pavimentacao-infraestrutura-viaria-pi",
@@ -359,7 +359,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "a353f928fbc684dd9cdea20b5a9e7b5439e43032a2be28a46b29d9b0c8fbe84f"
+      "page_material_hash": "7fad3894611e3d9114c7f48ab0f989cfa28055645001d28a29e362086f9356b9"
     },
     {
       "page_id": "price-edificacoes-publicas-rs",
@@ -410,7 +410,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "8384a35f4666bcc8b23aa41c16e1623d6fe9660e2d5ebaa312f38be6e479c977"
+      "page_material_hash": "b933d983a00bb907f49be794f55e49b63d7e911f9d4884708e87e8787774005a"
     },
     {
       "page_id": "price-pavimentacao-infraestrutura-viaria-sc",
@@ -448,7 +448,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "067fa35c2703dc1eefc31b0103e79202acb1e241faa4b9fbc9a2a07825fd7f51"
+      "page_material_hash": "623a3c2c13fc215c53fa87d84e2c614ecdccc40eb8d77990c0b7d09288ef9f03"
     },
     {
       "page_id": "comp-manutencao-predial-engenharia-rs",
@@ -493,7 +493,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "1ced1a37efe8e46388cd116c35846e5e03f4e69210e6882fab75b7d7e5f3aa16"
+      "page_material_hash": "e75e4e17e4867e0948520d3288bdd8bb731eb12e7be4cffc358f2e801197c3a3"
     },
     {
       "page_id": "radar-edificacoes-publicas-pr",
@@ -550,7 +550,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "3c51da9b37d54bae134468f10df0c9e123fff4021b11ab5ff1e8cf897f8ada07"
+      "page_material_hash": "9d6ea07cb1349634e1cb4bc105b2c8f985b75315859fa99861201ad7a49c0ef5"
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
@@ -613,7 +613,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": "grok-build-editorial-audit",
-      "page_material_hash": "805ca57d06a5dcb679bb67045248b390613743f10862b4580b3f219c95f6020b"
+      "page_material_hash": "b86ce825b3f426baf3b35c85dfb8519352b65961707f9aa048850f79fe75a37a"
     },
     {
       "page_id": "radar-saneamento-hidraulica-sc",
@@ -664,7 +664,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "e175f615a8048f4789d08d5077e23d3d58b1685db26d4fff290fd6ef51d174da"
+      "page_material_hash": "9785b43329924307857b5bd5c2436f2b0b6cca1143a3a9ee78bedee580889d6e"
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
@@ -715,7 +715,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "99df985a4a8fc4a1d6f3ce1505734956bf0be0e33f26eb044dcfb14d3e0d9c28"
+      "page_material_hash": "f7283d92c14dae3e689ae9ed6f169cd3d53a941788999345c634a72cb358df11"
     },
     {
       "page_id": "radar-edificacoes-publicas-sc",
@@ -766,7 +766,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "08970782dcf759cc64ddf9b70b7f41754ba7637bcf05782a2b34fa0ca364e39e"
+      "page_material_hash": "f16efda0353d936aaff7a4604ccae059ea5c85d8c49730082ca9c8f12b530563"
     },
     {
       "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
@@ -817,7 +817,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "b7fd39c71123209d2aaf1d75fdb032c2bda36813bf5b33fc47ca50c485e5dbfb"
+      "page_material_hash": "0325780713ebd038c138e493b3ae0a20411525b8ad2e7c262f19501ae8007eb3"
     },
     {
       "page_id": "radar-edificacoes-publicas-rs",
@@ -868,7 +868,7 @@
       "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
       "indexability": "reject",
       "reviewer": null,
-      "page_material_hash": "425810cf20eddc6d1033b3abaab5e1e2df13f3e06a2839a75444c153d852103f"
+      "page_material_hash": "e4b68976adf793e9edf2b64a2dba43cda00f05663c48c65288651d9da652e5cd"
     },
     {
       "page_id": "prob-orcamento-edital",

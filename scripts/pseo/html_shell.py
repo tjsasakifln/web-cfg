@@ -352,8 +352,12 @@ def table_html(headers: list[str], rows: list[list[Any]], caption: str | None = 
     for row in rows:
         trs.append("<tr>" + "".join(f"<td>{e(c)}</td>" for c in row) + "</tr>")
     cap = f"<caption>{e(caption)}</caption>" if caption else ""
+    # The wrapper scrolls horizontally on mobile, so it must be reachable by
+    # keyboard and carry an accessible name (axe scrollable-region-focusable).
+    label = e(caption) if caption else "Tabela de dados"
     return (
-        f'<div class="table-wrap" data-pseo-table="1"><table class="data-table">{cap}'
+        f'<div class="table-wrap" data-pseo-table="1" role="group" tabindex="0" '
+        f'aria-label="{label}"><table class="data-table">{cap}'
         f"<thead><tr>{th}</tr></thead><tbody>{''.join(trs)}</tbody></table></div>"
     )
 

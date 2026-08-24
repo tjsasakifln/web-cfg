@@ -1,0 +1,235 @@
+{
+  "schema_version": "interface-coverage-policy-v1",
+  "issue": 293,
+  "updated_at": "2026-08-24",
+  "purpose": "Declare, from data and not from a hand-written route list, which public routes the axe and Lighthouse gates must cover, at which viewports, and what is deliberately left out and why.",
+  "axe": {
+    "viewports": [
+      { "id": "mobile", "width": 390, "height": 844, "device_scale_factor": 2, "is_mobile": true, "has_touch": true },
+      { "id": "desktop", "width": 1440, "height": 1000, "device_scale_factor": 1, "is_mobile": false, "has_touch": false }
+    ],
+    "risk_rules": [
+      {
+        "id": "price",
+        "reason": "route renders a BRL amount, so it is a money surface where a semantic defect costs revenue",
+        "detector": "rendered HTML matches /R\\$\\s*\\d/"
+      },
+      {
+        "id": "capture_form",
+        "reason": "route contains a capture or checkout form, so a semantic defect blocks a qualified commercial opportunity",
+        "detector": "rendered HTML contains a <form> with at least one input, select or textarea control"
+      }
+    ],
+    "always_include": [
+      { "route": "/", "reason": "home is the primary entry surface for every acquisition channel" },
+      { "route": "/servicos-obras-publicas/", "reason": "header hub - no price of its own, but every commercial journey routes through it (#293)" },
+      { "route": "/problemas-que-resolvemos/", "reason": "header hub - no price of its own, but every commercial journey routes through it (#293)" },
+      { "route": "/conflitos/", "reason": "header-adjacent hub that fans out to the pillar pages" },
+      { "route": "/conteudos/", "reason": "library index - top organic landing surface, historically covered by audit:axe" },
+      { "route": "/inteligencia/", "reason": "intelligence index - historically covered by audit:axe" },
+      { "route": "/especialista/tiago-jun-sasaki/", "reason": "E-E-A-T authority page - historically covered by audit:axe" },
+      { "route": "/obrigado.html", "reason": "post-conversion surface - historically covered by audit:axe" },
+      { "route": "/obrigado-contrato.html", "reason": "post-conversion surface, same template family as /obrigado.html" },
+      { "route": "/obrigado-edital.html", "reason": "post-conversion surface, same template family as /obrigado.html" },
+      { "route": "/obrigado-operacao.html", "reason": "post-conversion surface, same template family as /obrigado.html" },
+      { "route": "/404.html", "reason": "error surface reachable from any broken inbound link - historically covered by audit:axe" },
+      { "route": "/diagnostico-b2g-360/", "reason": "named offer - historically covered by audit:axe" },
+      { "route": "/diagnostico-pre-licitacao/", "reason": "named offer in the diagnostic family" },
+      { "route": "/aditivos-obras-publicas/", "reason": "BOFU pillar (data/organic/bofu-intent-matrix.json) with a commercial CTA" },
+      { "route": "/atrasos-prorrogacao-obras-publicas/", "reason": "BOFU pillar with a commercial CTA" },
+      { "route": "/auditoria-orcamento-licitacao/", "reason": "BOFU pillar with a commercial CTA" },
+      { "route": "/medicoes-glosas-obras-publicas/", "reason": "BOFU pillar with a commercial CTA" },
+      { "route": "/reequilibrio-obras-publicas/", "reason": "BOFU pillar with a commercial CTA" },
+      { "route": "/inteligencia/cenarios/aditivos-e-risco-de-margem/", "reason": "representative pSEO scenario template - historically covered by audit:axe" },
+      { "route": "/inteligencia/cenarios/inconsistencia-orcamento-edital/", "reason": "representative pSEO scenario template - historically covered by audit:axe" },
+      { "route": "/inteligencia/cenarios/referencia-sinapi-sicro-margem/", "reason": "representative pSEO scenario template - historically covered by audit:axe" },
+      { "route": "/conteudos/documentos-reequilibrio-obra-publica/", "reason": "article template carrying the responsive-image regression from #253" }
+    ],
+    "exclusions": [],
+    "sampling": {
+      "enabled": false,
+      "reason": "full price+form coverage was measured well inside the 45-minute site-ci budget, so no route is sampled away. If it ever stops fitting, set enabled=true with max_routes_per_family and the drawn list is recorded in the report under axe.sampling.",
+      "max_routes_per_family": null,
+      "seed_source": "iso_week"
+    }
+  },
+  "lighthouse": {
+    "form_factor": "mobile",
+    "viewport": { "width": 390, "height": 844, "device_scale_factor": 2 },
+    "thresholds": { "performance": 90, "accessibility": 95, "best_practices": 95, "seo": 95 },
+    "thresholds_note": "#293 widens coverage only. Any change to these numbers belongs to a different issue.",
+    "additional_pages": [
+      {
+        "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+        "reason": "article-template representative that preserves the #253 responsive-image regression gate",
+        "image_gate": true,
+        "seo_exempt": true,
+        "seo_exempt_reason": "intentional noindex,follow editorial review surface"
+      }
+    ]
+  },
+  "commercial_families": [
+    {
+      "id": "home",
+      "label": "Home",
+      "patterns": ["^/$"],
+      "lighthouse_representative": "/",
+      "representative_reason": "single-route family"
+    },
+    {
+      "id": "oferta-assinatura",
+      "label": "Oferta de assinatura (Diretoria B2G / Bid Room)",
+      "patterns": ["^/diretoria-b2g/$", "^/bid-room-licitacoes-obras/$"],
+      "lighthouse_representative": "/diretoria-b2g/",
+      "representative_reason": "the priced parent offer; bid-room is its WIP component per data/organic/bofu-intent-matrix.json"
+    },
+    {
+      "id": "oferta-diagnostico",
+      "label": "Oferta de diagnostico (checkout)",
+      "patterns": ["^/diagnostico-b2g-expansao/", "^/diagnostico-b2g-360/$", "^/diagnostico-pre-licitacao/$"],
+      "lighthouse_representative": "/diagnostico-b2g-expansao/",
+      "representative_reason": "the only offer on the site with a checkout form in the journey (#293)"
+    },
+    {
+      "id": "servico-pilar",
+      "label": "Pilares de servico BOFU",
+      "patterns": [
+        "^/acompanhamento-contratos-obras/$",
+        "^/aditivos-obras-publicas/$",
+        "^/atrasos-prorrogacao-obras-publicas/$",
+        "^/auditoria-orcamento-licitacao/$",
+        "^/defesa-margem-contratos-publicos/$",
+        "^/defesa-tecnica-contratos-publicos/$",
+        "^/medicoes-glosas-obras-publicas/$",
+        "^/reequilibrio-obras-publicas/$"
+      ],
+      "lighthouse_representative": "/acompanhamento-contratos-obras/",
+      "representative_reason": "shared pillar template; this route also carries the #253 responsive-image regression gate",
+      "image_gate": true
+    },
+    {
+      "id": "escada-de-valor",
+      "label": "Escada de valor (modelos de entregavel, R$ 599 a R$ 3.750)",
+      "patterns": ["^/casos/modelo-"],
+      "lighthouse_representative": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "representative_reason": "top rung of the ladder on the shared template of the eight modelo-* routes"
+    },
+    {
+      "id": "caso-demonstrativo",
+      "label": "Casos demonstrativos",
+      "patterns": ["^/casos/"],
+      "lighthouse_representative": "/casos/",
+      "representative_reason": "index of the demonstrative cases family"
+    },
+    {
+      "id": "hub-navegacao",
+      "label": "Hubs de navegacao do header",
+      "patterns": ["^/entregas/$", "^/servicos-obras-publicas/$", "^/problemas-que-resolvemos/$", "^/conflitos/$"],
+      "lighthouse_representative": "/entregas/",
+      "representative_reason": "the only hub that renders prices, so it is the heaviest of the header hubs"
+    },
+    {
+      "id": "ferramenta",
+      "label": "Ferramentas interativas",
+      "patterns": ["^/ferramentas/"],
+      "lighthouse_representative": "/ferramentas/diagnostico-defesa-margem/",
+      "representative_reason": "heaviest tool (client-side scoring plus lead capture)"
+    },
+    {
+      "id": "biblioteca",
+      "label": "Biblioteca de conteudo",
+      "patterns": ["^/conteudos/"],
+      "lighthouse_representative": "/conteudos/",
+      "representative_reason": "library index; the article template is additionally sampled by the #253 image-gate route"
+    },
+    {
+      "id": "guia-operacional",
+      "label": "Guias operacionais",
+      "patterns": ["^/guias-contratos-obras/"],
+      "lighthouse_representative": "/guias-contratos-obras/",
+      "representative_reason": "index of the guides family, shared template"
+    },
+    {
+      "id": "referencia-legal",
+      "label": "Referencia legal e jurisprudencia",
+      "patterns": ["^/lei-14133-obras/", "^/jurisprudencia-contratos-obras/"],
+      "lighthouse_representative": "/lei-14133-obras/",
+      "representative_reason": "index of the largest legal-reference family"
+    },
+    {
+      "id": "inteligencia-mercado",
+      "label": "Inteligencia de mercado (pSEO)",
+      "patterns": ["^/inteligencia/", "^/assets/data-desk/", "^/metodologia-inteligencia/$"],
+      "lighthouse_representative": "/inteligencia/",
+      "representative_reason": "index of the largest pSEO family",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,follow containment surface until editorial and data approval"
+    },
+    {
+      "id": "radar-mercado",
+      "label": "Radar de mercado",
+      "patterns": ["^/radar/"],
+      "lighthouse_representative": "/radar/edificacoes-publicas-sc/",
+      "representative_reason": "priced radar route on the shared radar template",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,follow route while its freshness and quality gates reject publication"
+    },
+    {
+      "id": "panorama-mercado",
+      "label": "Panorama de mercado",
+      "patterns": ["^/panorama-mercado-obras-publicas/"],
+      "lighthouse_representative": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
+      "representative_reason": "the rendered panorama edition, heavier than its index",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,nofollow,noarchive while publication_authorization and index_authorization are false"
+    },
+    {
+      "id": "analise-contrato",
+      "label": "Analises de contrato",
+      "patterns": ["^/analises-contratos-publicos/"],
+      "lighthouse_representative": "/analises-contratos-publicos/",
+      "representative_reason": "index of the contract-analysis family",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,nofollow,noarchive pre-publication surface"
+    },
+    {
+      "id": "piloto-comercial",
+      "label": "Superficie piloto (noindex)",
+      "patterns": ["^/piloto/"],
+      "lighthouse_representative": "/piloto/ofertas/",
+      "representative_reason": "priced pilot offer index; the family is noindex by design, so it is SEO-exempt in the Lighthouse gate",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,nofollow pilot surface"
+    },
+    {
+      "id": "autoridade",
+      "label": "Autoridade e politica editorial",
+      "patterns": ["^/especialista/", "^/imprensa/$", "^/politica-editorial/", "^/uso-de-ia/$"],
+      "lighthouse_representative": "/especialista/tiago-jun-sasaki/",
+      "representative_reason": "the E-E-A-T page every offer links to"
+    },
+    {
+      "id": "conversao-transacional",
+      "label": "Superficies transacionais e pos-conversao",
+      "patterns": ["^/obrigado", "^/nurture/", "^/correcoes/$", "^/comercial/"],
+      "lighthouse_representative": "/obrigado.html",
+      "representative_reason": "the post-conversion surface every form redirects to",
+      "seo_exempt": true,
+      "seo_exempt_reason": "intentional noindex,follow post-conversion utility page"
+    },
+    {
+      "id": "institucional-legal",
+      "label": "Institucional e legal",
+      "patterns": ["^/privacidade/$", "^/termos-de-uso/$", "^/ops/$", "^/404\\.html$"],
+      "lighthouse_representative": "/termos-de-uso/",
+      "representative_reason": "indexable representative of the institutional template; /ops/ is a 302 gateway and /404.html is an error surface"
+    }
+  ],
+  "lighthouse_exclusions": [
+    {
+      "scope": "every route that is not a family representative",
+      "reason": "Lighthouse is a lab measurement of a template, not of a URL. One representative per commercial family keeps the signal and keeps the gates job inside timeout-minutes: 45. The full per-route geometry proof stays with npm run audit:layout-sitewide and per-route semantics stay with npm run audit:axe."
+    }
+  ],
+  "known_exceptions": []
+}

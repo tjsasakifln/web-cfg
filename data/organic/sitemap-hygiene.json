@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 69,
-  "unique_paths": 69,
+  "url_count": 76,
+  "unique_paths": 76,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -13,6 +13,13 @@
     "https://confenge.com.br/casos/",
     "https://confenge.com.br/casos/aditivo-art125-demonstrativo/",
     "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
+    "https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/",
+    "https://confenge.com.br/casos/modelo-base-quantitativa-canonica/",
+    "https://confenge.com.br/casos/modelo-contratos-vincendos-relicitacao/",
+    "https://confenge.com.br/casos/modelo-mapa-compradores-publicos/",
+    "https://confenge.com.br/casos/modelo-mapeamento-concorrentes-publicos/",
+    "https://confenge.com.br/casos/modelo-painel-precos-obras-publicas/",
+    "https://confenge.com.br/casos/modelo-relatorio-executivo-consolidado/",
     "https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/",
     "https://confenge.com.br/comercial/privacidade-leads/",
     "https://confenge.com.br/comercial/termos-diagnostico-b2g/",
@@ -75,7 +82,7 @@
     "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
   ],
   "families": {
-    "core": 63,
+    "core": 70,
     "editorial": 5,
     "contract_analysis": 1
   },
