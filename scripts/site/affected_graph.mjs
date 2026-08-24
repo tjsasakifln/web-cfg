@@ -165,6 +165,17 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/diagnostico-b2g-expansao/"],
   },
+  "test:deliverables-registry": {
+    producers: [
+      "tests/commercial/",
+      "scripts/commercial/",
+      "data/commercial/",
+      "data/offers/catalog.snapshot.json",
+      "entregas/index.html",
+    ],
+    artifacts: [],
+    surfaces: ["/entregas/"],
+  },
   "test:offer-naming": {
     producers: ["tests/commercial/test_offer_naming.mjs", "data/commercial/offer-naming.v1.json", "entregas/index.html", "data/offers/catalog.snapshot.json"],
     artifacts: [],
