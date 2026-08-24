@@ -10,6 +10,7 @@ import json
 import re
 import sys
 from collections import Counter
+from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -494,6 +495,29 @@ def test_home_header_footer_asset_budget():
     )
 
 
+class _MainScriptCollector(HTMLParser):
+    """Collect the real /script.js tag and its boolean defer attribute."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.tags: list[tuple[str, bool]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.lower() != "script":
+            return
+        normalized = {key.lower(): value for key, value in attrs}
+        src = (normalized.get("src") or "").split("?", 1)[0].split("#", 1)[0]
+        if src != "/script.js":
+            return
+        self.tags.append((self.get_starttag_text() or "<script>", "defer" in normalized))
+
+
+def _main_script_tags(html: str) -> list[tuple[str, bool]]:
+    parser = _MainScriptCollector()
+    parser.feed(html)
+    return parser.tags
+
+
 def test_shipped_pages_defer_the_main_script():
     """#299: the render-blocking half of the home asset budget, checked sitewide.
 
@@ -506,16 +530,21 @@ def test_shipped_pages_defer_the_main_script():
     skip = {"node_modules", "_site", "docs", "scripts", "tests", "netlify", "seo", "data", "supabase"}
     offenders: list[str] = []
     tags = 0
+
+    assert _main_script_tags('<script defer src="/script.js?v=1"></script>')
+    assert _main_script_tags('<script data-defer src="/script.js"></script>') == [
+        ('<script data-defer src="/script.js">', False)
+    ]
+    assert not _main_script_tags('<script defer src="/foo-script.js"></script>')
+
     for path in sorted(ROOT.rglob("*.html")):
         relative = path.relative_to(ROOT)
         if any(part in skip for part in relative.parts):
             continue
         html = path.read_text(encoding="utf-8", errors="replace")
-        for tag in re.findall(r"<script\b[^>]*>", html, re.I):
-            if "script.js" not in tag:
-                continue
+        for tag, has_defer in _main_script_tags(html):
             tags += 1
-            if not re.search(r"\bdefer\b", tag, re.I):
+            if not has_defer:
                 offenders.append(f"{relative}: script.js without defer: {tag}")
     assert tags > 100, f"expected the whole shipped chrome, scanned only {tags} script tags"
     assert not offenders, "render-blocking script.js:\n" + "\n".join(offenders[:20])

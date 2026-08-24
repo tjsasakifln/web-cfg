@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import tempfile
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -146,6 +147,32 @@ class _DesktopNav(HTMLParser):
     def handle_data(self, data: str) -> None:
         if self._capture:
             self._buf.append(data)
+
+
+class _LeadInlineHierarchyParser(HTMLParser):
+    """Track actual elements with a ``lead-inline`` class in document order."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.has_main = False
+        self.has_h1 = False
+        self.has_lead_inline = False
+        self.lead_before_main = False
+        self.lead_before_h1 = False
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        tag = tag.lower()
+        if tag == "main":
+            self.has_main = True
+        if tag == "h1":
+            self.has_h1 = True
+
+        classes = next((value or "" for key, value in attrs if key.lower() == "class"), "")
+        if "lead-inline" not in classes.split():
+            return
+        self.has_lead_inline = True
+        self.lead_before_main = self.lead_before_main or not self.has_main
+        self.lead_before_h1 = self.lead_before_h1 or not self.has_h1
 
 
 def _hub_html() -> str:
@@ -759,11 +786,12 @@ TRUNCATED_BEFORE_MAIN_CLOSE = frozenset(
 
 def _lead_inline_pages() -> list[Path]:
     """Every shipped public page that carries the promotional lead-inline class."""
-    pages = [
-        path
-        for path in _public_html_files()
-        if "lead-inline" in path.read_text(encoding="utf-8", errors="replace")
-    ]
+    pages: list[Path] = []
+    for path in _public_html_files():
+        parser = _LeadInlineHierarchyParser()
+        parser.feed(path.read_text(encoding="utf-8", errors="replace"))
+        if parser.has_lead_inline:
+            pages.append(path)
     return sorted(pages)
 
 
@@ -773,21 +801,19 @@ def _lead_inline_hierarchy_failures(rel: str, html: str) -> list[str]:
     Pure on (rel, html) so the same assertion drives both the shipped pages and the
     synthetic page in test_lead_inline_guard_catches_a_newly_published_page.
     """
-    main = re.search(r"<main\b", html, re.I)
-    if not main:
+    parser = _LeadInlineHierarchyParser()
+    parser.feed(html)
+    if not parser.has_lead_inline:
+        return []
+    if not parser.has_main:
         return [f"{rel}: page has lead-inline but no <main"]
-    h1 = re.search(r"<h1\b", html, re.I)
-    if not h1:
+    if not parser.has_h1:
         return [f"{rel}: page has lead-inline but no <h1"]
     failures: list[str] = []
-    for m in re.finditer(r"\blead-inline\b", html):
-        if m.start() < main.start():
-            failures.append(f"{rel}: lead-inline appears before <main")
-            break
-    for m in re.finditer(r"\blead-inline\b", html):
-        if m.start() < h1.start():
-            failures.append(f"{rel}: lead-inline appears before first <h1")
-            break
+    if parser.lead_before_main:
+        failures.append(f"{rel}: lead-inline appears before <main")
+    if parser.lead_before_h1:
+        failures.append(f"{rel}: lead-inline appears before first <h1")
     return failures
 
 
@@ -820,6 +846,14 @@ def test_lead_inline_not_before_main_or_h1():
         + "\n".join(failures[:20])
     )
 
+    invalid_reasons = [
+        rel
+        for rel, reason in LEAD_INLINE_HIERARCHY_EXCEPTIONS.items()
+        if not reason.strip()
+    ]
+    assert not invalid_reasons, (
+        f"lead-inline exceptions require a written reason: {invalid_reasons}"
+    )
     stale = [
         rel
         for rel in LEAD_INLINE_HIERARCHY_EXCEPTIONS
@@ -853,20 +887,24 @@ def test_lead_inline_guard_catches_a_newly_published_page():
     )
     assert not _lead_inline_hierarchy_failures("novo/index.html", compliant)
 
-    probe_dir = ROOT / "_lead_inline_guard_probe"
-    probe = probe_dir / "index.html"
-    try:
-        probe_dir.mkdir(exist_ok=True)
+    incidental_text = (
+        '<style>.lead-inline{display:block}</style><!-- lead-inline -->'
+        '<aside class="lead-inline-note">Nota</aside>'
+        '<main id="conteudo"><h1>Titulo</h1><p>Resposta</p>'
+        '<aside class="lead-inline">Oferta</aside></main>'
+    )
+    assert not _lead_inline_hierarchy_failures("novo/index.html", incidental_text), (
+        "CSS, comments and partial class names must not look like lead-inline elements"
+    )
+
+    with tempfile.TemporaryDirectory(prefix="_lead_inline_guard_probe_", dir=ROOT) as raw_dir:
+        probe_dir = Path(raw_dir)
+        probe = probe_dir / "index.html"
         probe.write_text(offending, encoding="utf-8")
         discovered = {path.relative_to(ROOT).as_posix() for path in _lead_inline_pages()}
-        assert "_lead_inline_guard_probe/index.html" in discovered, (
+        assert probe.relative_to(ROOT).as_posix() in discovered, (
             "a newly published page with lead-inline is outside the derived scope"
         )
-    finally:
-        if probe.exists():
-            probe.unlink()
-        if probe_dir.exists():
-            probe_dir.rmdir()
 
 
 def test_no_public_page_truncated_before_main_close():
