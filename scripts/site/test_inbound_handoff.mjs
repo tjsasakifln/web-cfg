@@ -69,7 +69,7 @@ const leadPath = path.join(root, "netlify/functions/lead.cjs");
 const opsPath = path.join(root, "netlify/functions/ops.cjs");
 const backlogPolicyPath = path.join(root, "netlify/functions/lib/inbound-backlog-policy.cjs");
 
-function approvedBacklogAuthority(policy) {
+function approvedBacklogAuthority(policy, record, now) {
   return {
     contract: policy.EXECUTION_CONTRACT,
     schema_version: policy.EXECUTION_VERSION,
@@ -79,11 +79,13 @@ function approvedBacklogAuthority(policy) {
     state: policy.EXECUTE_STATE,
     approved_subset_count: 1,
     max_batch_size: 1,
+    candidate_binding_sha256: policy.candidateBinding(record),
     selection_all_required: [...policy.REQUIRED_SELECTION],
     approval: {
       state: "APPROVED",
       approved_by: "OWNER_CONFENGE",
-      approved_at: "2026-08-24T12:00:00Z",
+      approved_at: new Date(now.getTime() - 60 * 1000).toISOString(),
+      expires_at: new Date(now.getTime() + 2 * 60 * 60 * 1000).toISOString(),
       reference: "INBOUND-268-APPROVAL-v1",
     },
     prerequisites: {
@@ -755,8 +757,6 @@ try {
   {
     const policy = require(backlogPolicyPath);
     const decision = policy.loadInboundBacklogDecision();
-    const executionAuthority = approvedBacklogAuthority(policy);
-    const approvalReference = executionAuthority.approval.reference;
     const replayNow = new Date();
     const requeueStore = new MemoryStore();
     const eligible = {
@@ -768,6 +768,8 @@ try {
       received_at: new Date(replayNow.getTime() - 24 * 60 * 60 * 1000).toISOString(),
       handoff: { status: "SKIPPED", reason: "not_configured", attempts: 0 },
     };
+    const executionAuthority = approvedBacklogAuthority(policy, eligible, replayNow);
+    const approvalReference = executionAuthority.approval.reference;
     await requeueStore.put(eligible);
     const dry = await inbound.requeueEligibleHandoffs(requeueStore, { dryRun: true });
     if (!dry.ok || dry.eligible_count !== 1) fail("requeue_dry_run", dry);
@@ -850,6 +852,45 @@ try {
       fail("requeue_multiple_candidates_mutated");
     }
 
+    const wrongCandidateStore = new MemoryStore();
+    await wrongCandidateStore.put({
+      ...eligible,
+      lead_id: "wrongcandidate000000000001",
+      receipt_id: "wrongcandidate000000000001",
+    });
+    const wrongCandidateRun = await inbound.requeueEligibleHandoffs(wrongCandidateStore, {
+      dryRun: false,
+      limit: 1,
+      safetyGate: gate,
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      approvalReference,
+      now: replayNow,
+    });
+    if (wrongCandidateRun.ok || wrongCandidateRun.error !== "approved_candidate_binding_mismatch") {
+      fail("requeue_wrong_candidate_binding", wrongCandidateRun);
+    }
+
+    const changedStore = new MemoryStore();
+    await changedStore.put(eligible);
+    const originalChangedGet = changedStore.get.bind(changedStore);
+    changedStore.get = async (leadId) => ({ ...(await originalChangedGet(leadId)), dnc: true });
+    const changedRun = await inbound.requeueEligibleHandoffs(changedStore, {
+      dryRun: false,
+      limit: 1,
+      safetyGate: gate,
+      backlogDecision: decision,
+      backlogExecutionAuthority: executionAuthority,
+      approvalReference,
+      now: replayNow,
+    });
+    if (changedRun.ok || changedRun.error !== "approved_candidate_changed_before_mutation") {
+      fail("requeue_candidate_changed_before_mutation", changedRun);
+    }
+    if ((await originalChangedGet(eligible.lead_id)).handoff.status !== "SKIPPED") {
+      fail("requeue_changed_candidate_mutated");
+    }
+
     const run = await inbound.requeueEligibleHandoffs(requeueStore, {
       dryRun: false,
       limit: 1,
@@ -921,12 +962,12 @@ try {
     });
     const boundedRows = await backlogBatchStore.list();
     if (
-      boundedDrain.attempted !== 1 ||
-      boundedDrain.backlog_attempted !== 1 ||
-      boundedDrain.backlog_policy_blocked !== 1 ||
-      boundedRows.filter((row) => row.handoff.status === "PENDING").length !== 1
-    ) fail("scheduled_drain_backlog_max_one", { boundedDrain, statuses: boundedRows.map((row) => row.handoff.status) });
-    pass("requeue_defer_authority_age_unique_and_drain_gates");
+      boundedDrain.attempted !== 0 ||
+      boundedDrain.backlog_attempted !== 0 ||
+      boundedDrain.backlog_policy_blocked !== 2 ||
+      boundedRows.some((row) => row.handoff.status !== "PENDING")
+    ) fail("scheduled_drain_rejects_copied_marker", { boundedDrain, statuses: boundedRows.map((row) => row.handoff.status) });
+    pass("requeue_defer_authority_age_identity_unique_and_drain_gates");
   }
 
   // Auth failures block the row and abort the remaining batch immediately.

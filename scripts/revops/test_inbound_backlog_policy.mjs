@@ -4,6 +4,7 @@ import {
   PINNED_DECISION_SHA256,
   REQUIRED_SELECTION,
   authorizeInboundBacklogReplay,
+  candidateBinding,
   loadDecision,
   recordWithinApprovedAge,
   validateInboundBacklogDecision,
@@ -50,6 +51,12 @@ assert.equal(PINNED_DECISION_SHA256, "f8e89e749ff52df862b3724b7df61d2469c71c5519
 assert.deepEqual(base.inventory.by_origin, { UNKNOWN: 126 });
 assert.equal(authorizeInboundBacklogReplay(base, null, { limit: 1 }).reason, "backlog_execution_authority_missing");
 
+const candidate = {
+  lead_id: "eligible0000000000000001",
+  receipt_id: "eligible0000000000000001",
+};
+const approvalNow = new Date("2026-08-24T12:30:00Z");
+
 function executionAuthority() {
   return {
     contract: "CONFENGE_INBOUND_BACKLOG_EXECUTION/1.0",
@@ -60,11 +67,13 @@ function executionAuthority() {
     state: EXECUTE_STATE,
     approved_subset_count: 1,
     max_batch_size: 1,
+    candidate_binding_sha256: candidateBinding(candidate),
     selection_all_required: [...REQUIRED_SELECTION],
     approval: {
       state: "APPROVED",
       approved_by: "OWNER_CONFENGE",
       approved_at: "2026-08-24T12:00:00Z",
+      expires_at: "2026-08-25T12:00:00Z",
       reference: "INBOUND-268-APPROVAL-v1",
     },
     prerequisites: {
@@ -79,15 +88,19 @@ function executionAuthority() {
 
 const authority = executionAuthority();
 assert.deepEqual(validateInboundBacklogExecutionAuthority(authority), []);
-assert.equal(authorizeInboundBacklogReplay(base, authority, { limit: 20, approvalReference: authority.approval.reference }).reason, "single_item_limit_required");
-assert.equal(authorizeInboundBacklogReplay(base, authority, { limit: 1, approvalReference: "wrong" }).reason, "versioned_human_approval_required");
-assert.equal(authorizeInboundBacklogReplay(base, authority, { limit: 1, approvalReference: authority.approval.reference }).ok, true);
+assert.equal(authorizeInboundBacklogReplay(base, authority, { limit: 20, approvalReference: authority.approval.reference, now: approvalNow }).reason, "single_item_limit_required");
+assert.equal(authorizeInboundBacklogReplay(base, authority, { limit: 1, approvalReference: "wrong", now: approvalNow }).reason, "versioned_human_approval_required");
+assert.equal(authorizeInboundBacklogReplay(base, authority, { limit: 1, approvalReference: authority.approval.reference, now: approvalNow }).ok, true);
+assert.equal(authorizeInboundBacklogReplay(base, authority, { limit: 1, approvalReference: authority.approval.reference, now: new Date("2026-08-24T11:59:59Z") }).reason, "execution_approval_outside_validity_window");
+assert.equal(authorizeInboundBacklogReplay(base, authority, { limit: 1, approvalReference: authority.approval.reference, now: new Date("2026-08-25T12:00:01Z") }).reason, "execution_approval_outside_validity_window");
 for (const mutate of [
   (a) => { a.decision_sha256 = "0".repeat(64); },
   (a) => { a.approved_subset_count = 2; },
   (a) => { a.max_batch_size = 2; },
+  (a) => { a.candidate_binding_sha256 = "0".repeat(63); },
   (a) => { a.selection_all_required.pop(); },
   (a) => { a.approval.reference = "ticket-raw"; },
+  (a) => { a.approval.expires_at = "2026-08-26T12:00:00Z"; },
   (a) => { a.prerequisites.issue_267_one_receipt_one_action_reconciled = false; },
 ]) {
   const drift = executionAuthority();
@@ -98,4 +111,4 @@ for (const mutate of [
 assert.equal(recordWithinApprovedAge({ received_at: "2026-08-01T00:00:00Z" }, new Date("2026-08-24T00:00:00Z")), true);
 assert.equal(recordWithinApprovedAge({ received_at: "2020-01-01T00:00:00Z" }, new Date("2026-08-24T00:00:00Z")), false);
 
-console.log("INBOUND_BACKLOG_POLICY_TEST_OK", JSON.stringify({adversarial_cases: 39}));
+console.log("INBOUND_BACKLOG_POLICY_TEST_OK", JSON.stringify({adversarial_cases: 43}));

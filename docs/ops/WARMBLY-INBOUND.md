@@ -97,8 +97,10 @@ The committed issue-268 decision is `DEFER`, so execution currently returns
 `409 backlog_policy_blocked` before mutation. A future execution requires a
 separate versioned single-case authority that references the frozen decision
 digest, records owner approval, proves the issue-267 reconciliation and sets an
-exact approval reference. Runtime also requires `limit=1`, age at most 30 days
-and re-probes the Warmbly health endpoint server-side. It refuses to mutate
+exact approval reference. That authority carries only a non-reversible binding
+digest for the approved join-key pair, never the raw `lead_id` or `receipt_id`,
+and its approval window is at most 24 hours. Runtime also requires `limit=1`,
+age at most 30 days and re-probes the Warmbly health endpoint server-side. It refuses to mutate
 unless the configured contract is `READY`, `auto_send_enabled=false` and
 `dispatch_attempted=false`:
 
@@ -117,8 +119,8 @@ curl -fsS -X POST 'https://confenge.com.br/.netlify/functions/ops?action=drain_i
 ```
 
 The scheduled drain cannot bypass the policy: historical backlog rows carry a
-versioned marker, are re-authorized, age-checked and safety-probed immediately
-before delivery, with at most one backlog attempt per drain. The general drain
+versioned record-bound marker, are re-authorized, binding-checked, age-checked
+and safety-probed immediately before delivery, with at most one backlog attempt per drain. The general drain
 still aborts on `401/403` and on an abnormal retryable failure rate. Repeating
 requeue does not move `PENDING` or `DELIVERED` rows.
 Warmbly uses the same `lead_id` as its durable idempotency key, so a transport

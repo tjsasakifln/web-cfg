@@ -26,8 +26,10 @@ Decision v1 is a frozen DEFER snapshot with canonical SHA-256
 It cannot be edited into EXECUTE. A future single-case execution requires a
 separate versioned authority that references this digest, proves #267 has
 reconciled one receipt to one action, records owner approval, re-probes Warmbly
-auto-send off, enforces age at most 30 days and caps both requeue and backlog
-drain at exactly one.
+auto-send off, binds the approved `lead_id`/`receipt_id` pair through a
+non-reversible SHA-256 digest, expires within 24 hours, enforces age at most 30
+days and caps both requeue and backlog drain at exactly one. The raw identifiers
+never enter the authority artifact or analytics.
 
 Visitor job: a legitimate consented request should reach one accountable action
 without old, synthetic, suppressed or ambiguous records producing contact. The

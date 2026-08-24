@@ -14,6 +14,7 @@ export const {
   DECISION_VERSION,
   EXECUTION_VERSION,
   MAX_RECORD_AGE_DAYS,
+  MAX_APPROVAL_WINDOW_MS,
   REQUIRED_SELECTION,
   PINNED_INVENTORY,
   PINNED_DECISION_SHA256,
@@ -24,6 +25,7 @@ export const {
   authorizeInboundBacklogReplay,
   authorizeInboundBacklogDrain,
   recordWithinApprovedAge,
+  candidateBinding,
 } = policy;
 
 export function loadDecision() {

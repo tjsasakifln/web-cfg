@@ -848,12 +848,14 @@ exports.handler = async (event) => {
     const backlogDecision = loadInboundBacklogDecision();
     const backlogExecutionAuthority = loadInboundBacklogExecutionAuthority();
     const limit = Number(body.limit);
+    const replayNow = new Date();
     const policyAuthorization = authorizeInboundBacklogReplay(
       backlogDecision,
       backlogExecutionAuthority,
       {
         approvalReference: String(body.approval_reference || "").trim(),
         limit,
+        now: replayNow,
       }
     );
     if (!policyAuthorization.ok) {
@@ -881,7 +883,7 @@ exports.handler = async (event) => {
     const result = await requeueEligibleHandoffs(store, {
       dryRun: false,
       limit,
-      now: new Date(),
+      now: replayNow,
       safetyGate: gate,
       backlogDecision,
       backlogExecutionAuthority,

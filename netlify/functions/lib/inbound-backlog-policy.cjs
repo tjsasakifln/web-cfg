@@ -53,10 +53,12 @@ const EXECUTE_STATE = "EXECUTE_APPROVED_SINGLE_REPLAY";
 const DECISION_CONTRACT = "CONFENGE_INBOUND_BACKLOG_DECISION/1.0";
 const EXECUTION_CONTRACT = "CONFENGE_INBOUND_BACKLOG_EXECUTION/1.0";
 const REQUEUE_MARKER_CONTRACT = "CONFENGE_INBOUND_BACKLOG_REQUEUE/1.0";
+const CANDIDATE_BINDING_CONTRACT = "CONFENGE_INBOUND_BACKLOG_CANDIDATE/1.0";
 const DECISION_VERSION = "1.0.0";
 const EXECUTION_VERSION = "1.0.0";
 const PINNED_DECISION_SHA256 = "f8e89e749ff52df862b3724b7df61d2469c71c55190ec3bfeb9e16fc1bec71b6";
 const MAX_RECORD_AGE_DAYS = 30;
+const MAX_APPROVAL_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 let EMBEDDED_DECISION = null;
 try {
@@ -102,6 +104,15 @@ function canonicalDigest(value) {
   return createHash("sha256").update(JSON.stringify(canonicalize(value)), "utf8").digest("hex");
 }
 
+function candidateBinding(record) {
+  const leadId = String(record?.lead_id || "").trim();
+  const receiptId = String(record?.receipt_id || record?.lead_id || "").trim();
+  if (!leadId || !receiptId) return null;
+  return createHash("sha256")
+    .update(`${CANDIDATE_BINDING_CONTRACT}\n${leadId}\n${receiptId}`, "utf8")
+    .digest("hex");
+}
+
 function sumAxis(axis) {
   return Object.values(axis || {}).reduce((sum, value) => sum + Number(value || 0), 0);
 }
@@ -144,7 +155,8 @@ function scanPii(value, path = "$", errors = []) {
   }
   if (typeof value === "string") {
     const exactSafe = path === "$.source.url" || path === "$.source.git_sha" ||
-      path === "$.source.artifact_sha256" || path === "$.source.captured_at";
+      path === "$.source.artifact_sha256" || path === "$.source.captured_at" ||
+      path === "$execution.candidate_binding_sha256";
     if (!exactSafe && (EMAIL_VALUE.test(value) || PHONE_VALUE.test(value) || TAX_ID_VALUE.test(value))) {
       errors.push(`PII-like value forbidden at ${path}`);
     }
@@ -250,7 +262,8 @@ function validateInboundBacklogExecutionAuthority(authority) {
   if (!isPlainObject(authority)) return ["execution authority must be a separate object"];
   assertKeys(authority, [
     "contract", "schema_version", "issue", "decision_contract", "decision_sha256",
-    "state", "approved_subset_count", "max_batch_size", "selection_all_required",
+    "state", "approved_subset_count", "max_batch_size", "candidate_binding_sha256",
+    "selection_all_required",
     "approval", "prerequisites", "replay",
   ], "$execution", errors);
   scanPii(authority, "$execution", errors);
@@ -265,14 +278,26 @@ function validateInboundBacklogExecutionAuthority(authority) {
   if (authority.approved_subset_count !== 1 || authority.max_batch_size !== 1) {
     errors.push("execution authority must approve exactly one case");
   }
+  if (!/^[a-f0-9]{64}$/.test(authority.candidate_binding_sha256 || "")) {
+    errors.push("execution authority requires one non-reversible candidate binding");
+  }
   if (!sameJson(authority.selection_all_required, REQUIRED_SELECTION)) errors.push("execution selection criteria mismatch");
-  assertKeys(authority.approval, ["state", "approved_by", "approved_at", "reference"], "$execution.approval", errors);
+  assertKeys(authority.approval, ["state", "approved_by", "approved_at", "expires_at", "reference"], "$execution.approval", errors);
   if (authority.approval?.state !== "APPROVED" || authority.approval?.approved_by !== "OWNER_CONFENGE") {
     errors.push("execution authority requires the owner role approval");
   }
   if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(authority.approval?.approved_at || "")) {
     errors.push("execution approved_at must be UTC ISO-8601");
   }
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(authority.approval?.expires_at || "")) {
+    errors.push("execution expires_at must be UTC ISO-8601");
+  }
+  const approvedMs = Date.parse(authority.approval?.approved_at || "");
+  const expiresMs = Date.parse(authority.approval?.expires_at || "");
+  if (
+    !Number.isFinite(approvedMs) || !Number.isFinite(expiresMs) ||
+    expiresMs <= approvedMs || expiresMs - approvedMs > MAX_APPROVAL_WINDOW_MS
+  ) errors.push("execution approval window must be positive and at most 24 hours");
   if (!/^INBOUND-268-APPROVAL-v[1-9]\d*$/.test(authority.approval?.reference || "")) {
     errors.push("execution approval reference must be versioned");
   }
@@ -296,7 +321,7 @@ function validateInboundBacklogExecutionAuthority(authority) {
 function authorizeInboundBacklogReplay(
   decision,
   executionAuthority,
-  { approvalReference = "", limit = 1 } = {}
+  { approvalReference = "", limit = 1, now = new Date() } = {}
 ) {
   const decisionErrors = validateInboundBacklogDecision(decision);
   if (decisionErrors.length) return { ok: false, reason: "backlog_policy_invalid", errors: decisionErrors };
@@ -307,11 +332,18 @@ function authorizeInboundBacklogReplay(
   if (approvalReference !== executionAuthority.approval.reference) {
     return { ok: false, reason: "versioned_human_approval_required" };
   }
+  const nowMs = now instanceof Date ? now.getTime() : Date.parse(now || "");
+  const approvedMs = Date.parse(executionAuthority.approval.approved_at);
+  const expiresMs = Date.parse(executionAuthority.approval.expires_at);
+  if (!Number.isFinite(nowMs) || nowMs < approvedMs || nowMs > expiresMs) {
+    return { ok: false, reason: "execution_approval_outside_validity_window" };
+  }
   return {
     ok: true,
     decision_state: executionAuthority.state,
     policy_version: `${decision.schema_version}+execution-${executionAuthority.schema_version}`,
     approval_reference: executionAuthority.approval.reference,
+    candidate_binding_sha256: executionAuthority.candidate_binding_sha256,
     max_record_age_days: MAX_RECORD_AGE_DAYS,
     max_batch_size: 1,
   };
@@ -326,12 +358,15 @@ function recordWithinApprovedAge(record, now = new Date()) {
   return ageMs >= 0 && ageMs <= MAX_RECORD_AGE_DAYS * 24 * 60 * 60 * 1000;
 }
 
-function backlogRequeueMarker(authorization) {
+function backlogRequeueMarker(authorization, record) {
   if (!authorization?.ok) return null;
+  const binding = candidateBinding(record);
+  if (!binding || binding !== authorization.candidate_binding_sha256) return null;
   return {
     contract: REQUEUE_MARKER_CONTRACT,
     policy_version: authorization.policy_version,
     approval_reference: authorization.approval_reference,
+    candidate_binding_sha256: binding,
   };
 }
 
@@ -346,12 +381,14 @@ function authorizeInboundBacklogDrain(
   const authorization = authorizeInboundBacklogReplay(
     decision,
     executionAuthority,
-    { approvalReference, limit: 1 }
+    { approvalReference, limit: 1, now }
   );
   if (!authorization.ok) return authorization;
   if (
     marker?.contract !== REQUEUE_MARKER_CONTRACT ||
-    marker?.policy_version !== authorization.policy_version
+    marker?.policy_version !== authorization.policy_version ||
+    marker?.candidate_binding_sha256 !== authorization.candidate_binding_sha256 ||
+    marker?.candidate_binding_sha256 !== candidateBinding(record)
   ) return { ok: false, reason: "requeue_marker_invalid" };
   if (!recordWithinApprovedAge(record, now)) return { ok: false, reason: "approved_candidate_outside_age_cutoff" };
   if (
@@ -372,9 +409,11 @@ module.exports = {
   DECISION_CONTRACT,
   EXECUTION_CONTRACT,
   REQUEUE_MARKER_CONTRACT,
+  CANDIDATE_BINDING_CONTRACT,
   DECISION_VERSION,
   EXECUTION_VERSION,
   MAX_RECORD_AGE_DAYS,
+  MAX_APPROVAL_WINDOW_MS,
   loadInboundBacklogDecision,
   loadInboundBacklogExecutionAuthority,
   validateInboundBacklogDecision,
@@ -382,5 +421,6 @@ module.exports = {
   authorizeInboundBacklogReplay,
   authorizeInboundBacklogDrain,
   recordWithinApprovedAge,
+  candidateBinding,
   backlogRequeueMarker,
 };

@@ -15,6 +15,7 @@ const {
   authorizeInboundBacklogReplay,
   authorizeInboundBacklogDrain,
   recordWithinApprovedAge,
+  candidateBinding,
   backlogRequeueMarker,
 } = require("./inbound-backlog-policy.cjs");
 
@@ -538,7 +539,7 @@ async function requeueEligibleHandoffs(
   const authorization = authorizeInboundBacklogReplay(
     backlogDecision,
     backlogExecutionAuthority,
-    { approvalReference, limit }
+    { approvalReference, limit, now }
   );
   if (!authorization.ok) {
     return { ok: false, error: authorization.reason, ...base };
@@ -558,17 +559,34 @@ async function requeueEligibleHandoffs(
   const eligible = (leads || [])
     .filter((record) =>
       classifySkippedForRequeue(record).classification === REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED &&
-      recordWithinApprovedAge(record, now)
+      recordWithinApprovedAge(record, now) &&
+      candidateBinding(record) === authorization.candidate_binding_sha256
     )
     .sort((a, b) => String(a.received_at || a.created_at || "").localeCompare(String(b.received_at || b.created_at || "")))
     .slice(0, 1);
   if (eligible.length !== 1) {
-    return { ok: false, error: "approved_candidate_outside_age_cutoff", ...base };
+    const anyFresh = (leads || []).some((record) =>
+      classifySkippedForRequeue(record).classification === REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED &&
+      recordWithinApprovedAge(record, now)
+    );
+    return {
+      ok: false,
+      error: anyFresh ? "approved_candidate_binding_mismatch" : "approved_candidate_outside_age_cutoff",
+      ...base,
+    };
   }
   let requeued = 0;
   for (const record of eligible) {
     const fresh = typeof store.get === "function" ? await store.get(record.lead_id) : record;
-    if (classifySkippedForRequeue(fresh).classification !== REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED) continue;
+    if (
+      classifySkippedForRequeue(fresh).classification !== REQUEUE_CLASS.ELIGIBLE_REAL_NOT_CONFIGURED ||
+      !recordWithinApprovedAge(fresh, now) ||
+      candidateBinding(fresh) !== authorization.candidate_binding_sha256
+    ) {
+      return { ok: false, error: "approved_candidate_changed_before_mutation", ...base };
+    }
+    const requeuePolicy = backlogRequeueMarker(authorization, fresh);
+    if (!requeuePolicy) return { ok: false, error: "approved_candidate_binding_mismatch", ...base };
     const next = {
       ...(fresh.handoff || {}),
       target: "warmbly_inbound",
@@ -579,7 +597,7 @@ async function requeueEligibleHandoffs(
       next_attempt_at: now.toISOString(),
       requeued_at: now.toISOString(),
       requeue_mode: "eligible_only",
-      requeue_policy: backlogRequeueMarker(authorization),
+      requeue_policy: requeuePolicy,
     };
     const updated = await store.update(fresh.lead_id, { handoff: next });
     if (updated && updated.handoff && updated.handoff.status === STATUS.PENDING) requeued += 1;
