@@ -1,35 +1,33 @@
 # pSEO production audit
 
-- generated_at: `2026-08-24T13:16:28.771640+00:00`
+- generated_at: `2026-08-24T14:26:04.063072+00:00`
 - base_url: `https://confenge.com.br`
-- web_cfg_sha: `2285e84de30cdeb0bba32bbbb9117af6318affeb`
+- web_cfg_sha: `dac27b11359a9476e4673e058add92a40b31990d`
 - ok: **False**
-- critical_defects: `7`
+- critical_defects: `5`
 - crawlable_production: `0`
 
 CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. index,follow / sitemap / local build never mean 'indexado'. ok=true only when technical audit passes AND identities match live deploy.
 
 ## Critical
 
-- `/inteligencia/:prod_html_mismatch`
 - `/inteligencia/mercados/:prod_html_mismatch`
 - `/inteligencia/orgaos/:prod_html_mismatch`
 - `/inteligencia/precos/:prod_html_mismatch`
 - `/inteligencia/concorrencia/:prod_html_mismatch`
-- `/inteligencia/cenarios/:prod_html_mismatch`
-- `/radar/:prod_html_mismatch`
+- `sitemap:production_sitemap_unavailable`
 
 ## Per-URL matrix
 
 | path | role | HTTP | robots | canonical | sitemap | stage | defects |
 |---|---|---:|---|---|---|---|---|
-| `/inteligencia/` | hub | 200 | noindex,follow | https://confenge.com.br/inteligencia/ | no | DEPLOYED_PRODUCTION | prod_html_mismatch |
+| `/inteligencia/` | hub | 200 | noindex,follow | https://confenge.com.br/inteligencia/ | no | DEPLOYED_PRODUCTION | — |
 | `/inteligencia/mercados/` | hub | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/ | no | DEPLOYED_PRODUCTION | prod_html_mismatch |
 | `/inteligencia/orgaos/` | hub | 200 | noindex,follow | https://confenge.com.br/inteligencia/orgaos/ | no | DEPLOYED_PRODUCTION | prod_html_mismatch |
 | `/inteligencia/precos/` | hub | 200 | noindex,follow | https://confenge.com.br/inteligencia/precos/ | no | DEPLOYED_PRODUCTION | prod_html_mismatch |
 | `/inteligencia/concorrencia/` | hub | 200 | noindex,follow | https://confenge.com.br/inteligencia/concorrenci | no | DEPLOYED_PRODUCTION | prod_html_mismatch |
-| `/inteligencia/cenarios/` | hub | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/ | no | DEPLOYED_PRODUCTION | prod_html_mismatch |
-| `/radar/` | hub | 200 | noindex,follow | https://confenge.com.br/radar/ | no | DEPLOYED_PRODUCTION | prod_html_mismatch |
+| `/inteligencia/cenarios/` | hub | 200 | noindex,follow | https://confenge.com.br/inteligencia/cenarios/ | no | DEPLOYED_PRODUCTION | — |
+| `/radar/` | hub | 200 | noindex,follow | https://confenge.com.br/radar/ | no | DEPLOYED_PRODUCTION | — |
 | `/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/pa | no | DEPLOYED_PRODUCTION | — |
 | `/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/pa | no | DEPLOYED_PRODUCTION | — |
 | `/inteligencia/mercados/edificacoes-publicas-mg/` | noindex_sample | 200 | noindex,follow | https://confenge.com.br/inteligencia/mercados/ed | no | DEPLOYED_PRODUCTION | — |
