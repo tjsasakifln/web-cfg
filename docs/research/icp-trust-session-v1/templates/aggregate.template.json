@@ -1,0 +1,34 @@
+{
+  "schema": "confenge.icp-trust-session-aggregate.v1",
+  "template": true,
+  "protocol_version": "1.0.0",
+  "run_id": null,
+  "executed_at": null,
+  "stimulus": {
+    "git_sha": null,
+    "base_url": null,
+    "viewport_assignment": {
+      "mobile": null,
+      "desktop": null
+    }
+  },
+  "participant_counts": {
+    "screened": null,
+    "eligible": null,
+    "consented": null,
+    "completed_all_protocols": null
+  },
+  "consent_attestation": {
+    "private_records_verified": false,
+    "pii_in_repository": false,
+    "pii_in_analytics": false
+  },
+  "status": "AMOSTRA_INSUFICIENTE",
+  "raw_aggregate": null,
+  "issue_disposition": {
+    "183": "OPEN_BLOCKED_HUMAN_EVIDENCE",
+    "184": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_TRAFFIC_WINDOW",
+    "188": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_CLICK_WINDOW",
+    "297": "OPEN_BLOCKED_HUMAN_PARTICIPANTS"
+  }
+}

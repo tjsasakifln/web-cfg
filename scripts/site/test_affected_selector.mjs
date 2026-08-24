@@ -80,6 +80,16 @@ function expectSubset(result, mustInclude, because) {
 }
 
 {
+  const paths = ["docs/research/icp-trust-session-v1/PROTOCOL-TREE-TEST.md"];
+  const result = selectAffected(paths, scripts);
+  expectSubset(
+    result,
+    ["test:research-pack", "test:trust-session-protocol"],
+    "human research protocol",
+  );
+}
+
+{
   const paths = [".github/workflows/site-ci.yml"];
   const result = selectAffected(paths, scripts);
   expectSubset(result, ["test:workflow-gates"], "workflow yaml");
