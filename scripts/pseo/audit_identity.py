@@ -69,7 +69,16 @@ def snapshot_hash_from_manifest(root: Path | None = None) -> str | None:
 
 def public_artifact_hash(root: Path | None = None, dirname: str = "_site") -> str | None:
     root = root or ROOT
-    return sha256_tree(root / dirname)
+    artifact = root / dirname
+    # A digest of an empty or structurally incomplete directory is not a
+    # publish identity. Require the public entrypoints before hashing; target
+    # route completeness is enforced by production_audit.local_html_hash.
+    required = ("index.html", "404.html", "robots.txt")
+    if not artifact.is_dir() or any(not (artifact / rel).is_file() for rel in required):
+        return None
+    if not any(artifact.rglob("*.html")):
+        return None
+    return sha256_tree(artifact)
 
 
 def identity_block(

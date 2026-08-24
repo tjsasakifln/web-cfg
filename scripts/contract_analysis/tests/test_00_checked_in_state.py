@@ -12,6 +12,7 @@ from pathlib import Path
 from scripts.contract_analysis import AUTHORIZED_ANALYSIS_ID, AUTHORIZED_CANONICAL_PATH
 from scripts.contract_analysis.consume import load_canary
 from scripts.contract_analysis.gate import evaluate_cohort
+from scripts.contract_analysis.handoff import inspect_handoff
 from scripts.contract_analysis.render import apply_rendered_hash_gate, render_analysis_html
 
 
@@ -51,6 +52,14 @@ def test_checked_in_canary_matches_current_approval_decision() -> None:
     assert status["index_count"] == int(decision.indexable)
     assert status_item["state"] == decision.state
     assert status_item["indexable"] is decision.indexable
+    expected_handoff = inspect_handoff(OFFICIAL_CANARY)
+    assert status["handoff"]["status"] == expected_handoff["status"] == "HANDOFF_READY"
+    status_live = next(row for row in status["handoff"]["checked"] if row["official_live"])
+    expected_live = next(row for row in expected_handoff["checked"] if row["official_live"])
+    assert status_live["hashes_ok"] is expected_live["hashes_ok"] is True
+    assert status_live["reasons"] == expected_live["reasons"] == []
+    assert "Replay o produtor" not in status["recommendation_reason"]
+    assert "approval_material_hash_mismatch" in status["recommendation_reason"]
 
     slug = AUTHORIZED_CANONICAL_PATH.strip("/").split("/")[-1]
     sitemap_exists = (ROOT / "sitemap-analises-contratos.xml").is_file()

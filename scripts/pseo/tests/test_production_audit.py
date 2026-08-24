@@ -32,6 +32,7 @@ class TestProductionAuditGates(unittest.TestCase):
             "missing_from_sitemap",
             "future_lastmod",
             "prod_html_mismatch",
+            "local_artifact_missing",
             "ua_skew",
         ):
             self.assertIn(code, CRITICAL_CODES)
@@ -155,6 +156,26 @@ class TestProductionAuditGates(unittest.TestCase):
 
     def test_local_html_hash_none_missing(self):
         self.assertIsNone(local_html_hash(ROOT, "/path/that/does/not/exist/"))
+
+    def test_existing_empty_site_never_falls_back_to_source_html(self):
+        with TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            source = root / "radar" / "x" / "index.html"
+            source.parent.mkdir(parents=True)
+            source.write_text("<html>source only</html>", encoding="utf-8")
+            (root / "_site").mkdir()
+            self.assertIsNone(local_html_hash(root, "/radar/x/"))
+
+    def test_required_route_missing_from_artifact_is_critical(self):
+        row = UrlAudit(path="/radar/x/", expected_role="publish")
+        row.browser = self._ok_browser()
+        row.googlebot = dict(row.browser)
+        out = evaluate_row(
+            row,
+            sitemap_urls={"https://confenge.com.br/radar/x/"},
+            hub_link_targets={"/radar/x/"},
+        )
+        self.assertIn("local_artifact_missing", out.defects)
 
     def test_production_sitemap_absence_is_fail_closed(self):
         fake = {

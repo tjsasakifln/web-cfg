@@ -239,6 +239,20 @@ class TestAuditIdentity(unittest.TestCase):
         self.assertIn("public_artifact_hash_missing", currency["mismatches"])
         self.assertFalse(bind_ok_to_identity(True, identity, currency)["ok"])
 
+    def test_empty_or_incomplete_public_artifact_has_no_identity(self):
+        from scripts.pseo.audit_identity import public_artifact_hash
+
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            site = root / "_site"
+            site.mkdir()
+            self.assertIsNone(public_artifact_hash(root))
+            (site / "index.html").write_text("<html></html>", encoding="utf-8")
+            self.assertIsNone(public_artifact_hash(root))
+            (site / "404.html").write_text("<html></html>", encoding="utf-8")
+            (site / "robots.txt").write_text("User-agent: *\n", encoding="utf-8")
+            self.assertIsNotNone(public_artifact_hash(root))
+
     def test_audit_target_binds_to_live_not_git_head(self):
         """Evidence-only HEAD must not stale a healthy live deploy audit."""
         from scripts.pseo.audit_identity import (

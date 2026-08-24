@@ -60,6 +60,7 @@ CRITICAL_CODES = frozenset(
         "ua_skew",
         "future_lastmod",
         "prod_html_mismatch",
+        "local_artifact_missing",
         "fetch_error",
     }
 )
@@ -294,12 +295,12 @@ def load_sitemap_urls(path: Path) -> set[str]:
 
 def local_html_hash(root: Path, path: str) -> str | None:
     rel = path.strip("/")
-    # Prefer isolated public artifact when present (Netlify publish = _site)
-    for base in (root / "_site", root):
-        fp = base / rel / "index.html"
-        if fp.exists():
-            return _sha256_bytes(fp.read_bytes())
-    return None
+    # Netlify publishes _site. Once that artifact exists, never conceal a
+    # missing public route by falling back to a source HTML file at repo root.
+    artifact = root / "_site"
+    base = artifact if artifact.is_dir() else root
+    fp = base / rel / "index.html"
+    return _sha256_bytes(fp.read_bytes()) if fp.is_file() else None
 
 
 def collect_targets(
@@ -398,6 +399,13 @@ def evaluate_row(
     g = row.googlebot
     defects: list[str] = []
     notes: list[str] = list(row.notes)
+
+    if row.local_html_sha256 is None and row.expected_role in {
+        "publish",
+        "hub",
+        "noindex_sample",
+    }:
+        defects.append("local_artifact_missing")
 
     if b.get("error") and not b.get("status"):
         if row.expected_role != "noindex_sample":

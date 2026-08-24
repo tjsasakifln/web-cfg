@@ -124,7 +124,15 @@ def build_status(
         handoff.get("status") in {FACTUAL_HANDOFF_PENDING, HANDOFF_BLOCKED, None, ""}
         or live_absent
     )
-    if handoff_pending or index_count == 0:
+    blocking_reason_codes = sorted(
+        {
+            str(reason)
+            for decision in decisions
+            for reason in decision.reason_codes
+            if reason
+        }
+    )
+    if handoff_pending:
         recommendation = "ADJUST"
         recommendation_reason = (
             "Família e gate prontos. Consumer aceita "
@@ -135,6 +143,16 @@ def build_status(
             "index_count=0. Nenhum INDEX ativo. Não expandir. Replay o produtor "
             "até READY.json + SHA256SUMS conferirem; só então avaliar ≤3 dossiês. "
             "Producer publication/index flags nunca autorizam INDEX."
+        )
+    elif index_count == 0:
+        recommendation = "ADJUST"
+        reasons = ", ".join(blocking_reason_codes) or "nenhum reason_code nominal"
+        recommendation_reason = (
+            f"O handoff está `{handoff.get('status')}` e seus hashes conferem, mas "
+            f"index_count=0 por gates editoriais atuais: `{reasons}`. Nenhum INDEX "
+            "ativo. Não repetir o produtor nem expandir a coorte. Reavaliar o material "
+            "e, quando aplicável, registrar nova aprovação humana vinculada aos hashes "
+            "atuais; producer publication/index flags nunca autorizam INDEX."
         )
     elif index_count == 1:
         recommendation = "ADJUST"
