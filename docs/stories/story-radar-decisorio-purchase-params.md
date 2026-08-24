@@ -22,6 +22,10 @@ gravado.
 Rota: `/comercial/radar-decisorio/` (noindex; é etapa transacional, não ativo de
 SEO). O formulário publica em `/.netlify/functions/lead`.
 
+Os cinco CTAs de R$ 599 do modelo público e a ação terminal do Radar Nacional
+entram nessa rota. Nenhum CTA precificado desses percursos pode saltar a coleta
+e abrir diretamente WhatsApp ou pagamento.
+
 ## Campos (padrão documentado, aguardando congelamento pelo fundador)
 
 | Campo | Obrigatório | Observação |
@@ -64,6 +68,10 @@ Vocabulário de segmentos: `edificacoes-publicas`,
 6. **Nenhum dado pessoal em git.** Fixtures e testes usam CNPJ sintético e
    domínio de exemplo. `analyticsShape()` é a única projeção que sai do servidor
    para medição: sem CNPJ, sem e-mail, sem texto de acervo.
+7. **Idempotência representa o pedido.** A chave automática inclui um resumo
+   estável dos parâmetros normalizados. Repetir a mesma configuração converge;
+   alterar recorte, segmento, acervo ou destino cria outro pedido, mesmo para o
+   mesmo contato dentro da janela de quinze minutos.
 
 ## Identidade comercial
 

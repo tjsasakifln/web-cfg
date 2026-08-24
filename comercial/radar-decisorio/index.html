@@ -191,7 +191,9 @@
   var button = document.getElementById("btn-radar-params");
   var paymentStep = document.querySelector("[data-radar-payment-step]");
   var reference = document.querySelector("[data-radar-reference]");
+  var paymentLink = document.querySelector("[data-radar-payment-link]");
   var submitted = false;
+  var externalReferenceShape = /^cfg:[A-Za-z0-9._-]{1,120}:[A-Za-z0-9._-]{1,60}$/;
 
   function show(message) {
     if (status) status.textContent = message || "";
@@ -200,8 +202,14 @@
   // Fail-closed: the payment step only ever opens from a persisted server
   // response that carries the cfg:{offer_id}:{correlation_id} reference.
   function openPaymentStep(externalReference) {
-    if (!paymentStep || !externalReference) return false;
+    if (!paymentStep || !externalReferenceShape.test(String(externalReference))) return false;
     if (reference) reference.textContent = "Referência do pedido: " + externalReference;
+    if (paymentLink) {
+      var paymentUrl = new URL(paymentLink.href, window.location.origin);
+      var baseMessage = paymentUrl.searchParams.get("text") || "Quero a instrução de pagamento do Radar Decisório.";
+      paymentUrl.searchParams.set("text", baseMessage + "\nReferência do pedido: " + externalReference);
+      paymentLink.href = paymentUrl.toString();
+    }
     paymentStep.removeAttribute("hidden");
     if (paymentStep.scrollIntoView) paymentStep.scrollIntoView({ block: "start" });
     return true;

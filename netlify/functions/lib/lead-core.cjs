@@ -527,12 +527,35 @@ function idempotencyKeyFor(lead, explicit) {
   }
   // 15-minute window bucket to collapse double-submit
   const bucket = Math.floor(Date.now() / (15 * 60 * 1000));
+  // A Radar submission is an order specification, not only a contact lead.
+  // Two configurations from the same person in the same bucket must not
+  // collapse into one record and silently discard the later parameters.
+  // Normalize the set-valued field so a retry with a different checkbox order
+  // still converges to the same key.
+  const radar = lead && lead.radar_params;
+  const radarMaterial = radar
+    ? JSON.stringify({
+        schema: radar.schema || "",
+        offer_id: radar.offer_id || "",
+        cnpj: radar.cnpj || "",
+        recorte: radar.recorte || "",
+        uf: radar.uf || "",
+        cidade_base: radar.cidade_base || "",
+        raio_km: radar.raio_km == null ? "" : radar.raio_km,
+        segmentos: Array.isArray(radar.segmentos)
+          ? [...new Set(radar.segmentos.map(String))].sort()
+          : [],
+        acervo_tecnico: radar.acervo_tecnico || "",
+        email_entrega: radar.email_entrega || "",
+      })
+    : "";
   const material = [
     lead.nome,
     lead.telefone || "",
     lead.email || "",
     lead.jornada,
     lead.estagio,
+    radarMaterial,
     String(bucket),
   ].join("|");
   return `auto:${crypto.createHash("sha256").update(material).digest("hex").slice(0, 32)}`;

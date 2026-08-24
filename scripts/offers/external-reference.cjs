@@ -12,16 +12,19 @@ const MAX_LENGTH = 200;
 const SHAPE = /^cfg:[A-Za-z0-9._-]{1,120}:[A-Za-z0-9._-]{1,60}$/;
 const CONTROL_CHARS = /[\u0000-\u001f\u007f]/g;
 
-function clean(raw, max) {
+function clean(raw) {
   if (raw == null) return "";
-  return String(raw).replace(CONTROL_CHARS, "").trim().slice(0, max);
+  return String(raw).replace(CONTROL_CHARS, "").trim();
 }
 
 function buildExternalReference(offerId, correlationId) {
-  const offer = clean(offerId, 120);
-  const correlation = clean(correlationId, 60);
+  const offer = clean(offerId);
+  const correlation = clean(correlationId);
   if (!offer || !correlation) {
     return { ok: false, error: "external_reference_incomplete" };
+  }
+  if (offer.length > 120 || correlation.length > 60) {
+    return { ok: false, error: "external_reference_too_long" };
   }
   const value = `cfg:${offer}:${correlation}`;
   if (value.length > MAX_LENGTH) {
@@ -34,7 +37,10 @@ function buildExternalReference(offerId, correlationId) {
 }
 
 function parseExternalReference(raw) {
-  const value = clean(raw, MAX_LENGTH);
+  const value = clean(raw);
+  if (value.length > MAX_LENGTH) {
+    return { ok: false, error: "external_reference_too_long" };
+  }
   if (!SHAPE.test(value)) {
     return { ok: false, error: "external_reference_shape" };
   }

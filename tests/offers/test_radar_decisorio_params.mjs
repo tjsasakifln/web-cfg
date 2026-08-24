@@ -47,6 +47,14 @@ const leadCore = require(path.join(root, "netlify/functions/lib/lead-core.cjs"))
 
 const PAGE_ROUTE = "comercial/radar-decisorio/index.html";
 const page = fs.readFileSync(path.join(root, PAGE_ROUTE), "utf8");
+const modelPage = fs.readFileSync(
+  path.join(root, "casos/modelo-relatorio-inteligencia-licitacoes/index.html"),
+  "utf8",
+);
+const publicRadarPage = fs.readFileSync(
+  path.join(root, "radar/nacional-obras-publicas/index.html"),
+  "utf8",
+);
 
 const VALID_PARAMS = {
   cnpj: "11222333000181",
@@ -99,11 +107,68 @@ const BASE_LEAD = {
     "the legacy two-segment shape cannot be reconciled to an offer",
   );
   assert(
+    "external_reference_builder_rejects_overlong_offer",
+    !policy.buildExternalReference("a".repeat(121), correlationId).ok,
+    "an overlong offer id must fail instead of being silently truncated",
+  );
+  assert(
+    "external_reference_builder_rejects_overlong_correlation",
+    !policy.buildExternalReference(radar.RADAR_OFFER_ID, "b".repeat(61)).ok,
+    "an overlong correlation id must fail instead of being silently truncated",
+  );
+  assert(
+    "external_reference_parser_rejects_overlong_input",
+    !policy.parseExternalReference(`cfg:${"a".repeat(120)}:${"b".repeat(61)}`).ok,
+    "the parser must not accept a truncated prefix of an overlong reference",
+  );
+  assert(
     "correlation_id_deterministic",
     radar.correlationIdFor("idk:radar-1") === correlationId
       && radar.correlationIdFor("idk:radar-2") !== correlationId,
     "same idempotency key must converge, different keys must not collide",
   );
+}
+
+/* ------------------------------------------------------------------ */
+/* 1a. Automatic idempotency includes the complete order              */
+/* ------------------------------------------------------------------ */
+
+{
+  const realNow = Date.now;
+  Date.now = () => Date.UTC(2026, 7, 24, 3, 0, 0);
+  const first = leadCore.validateAndNormalize({ ...BASE_LEAD });
+  const reordered = leadCore.validateAndNormalize({
+    ...BASE_LEAD,
+    radar_segmentos: [...VALID_PARAMS.radar_segmentos].reverse(),
+  });
+  const changed = leadCore.validateAndNormalize({
+    ...BASE_LEAD,
+    radar_raio_km: "250",
+  });
+  assert(
+    "auto_idempotency_same_order_is_stable",
+    first.ok && leadCore.idempotencyKeyFor(first.lead) === leadCore.idempotencyKeyFor(first.lead),
+    "a retry of the same normalized order must converge",
+  );
+  assert(
+    "auto_idempotency_ignores_segment_order",
+    reordered.ok
+      && leadCore.idempotencyKeyFor(first.lead) === leadCore.idempotencyKeyFor(reordered.lead),
+    "checkbox order is not order identity",
+  );
+  assert(
+    "auto_idempotency_changes_with_order_parameters",
+    changed.ok
+      && leadCore.idempotencyKeyFor(first.lead) !== leadCore.idempotencyKeyFor(changed.lead),
+    "a changed purchase configuration must persist as a distinct order",
+  );
+  assert(
+    "explicit_idempotency_remains_authoritative",
+    leadCore.idempotencyKeyFor(first.lead, "radar-explicit")
+      === leadCore.idempotencyKeyFor(changed.lead, "radar-explicit"),
+    "an explicit retry key intentionally identifies the same request",
+  );
+  Date.now = realNow;
 }
 
 /* ------------------------------------------------------------------ */
@@ -414,7 +479,8 @@ let happyPathReference = null;
   assert(
     "payment_step_opens_only_from_server_reference",
     page.includes("payload.external_reference")
-      && page.includes("if (!payload.ok || !payload.external_reference)"),
+      && page.includes("if (!payload.ok || !payload.external_reference)")
+      && page.includes("externalReferenceShape.test(String(externalReference))"),
     "the browser must not open the payment step without a persisted reference",
   );
   assert(
@@ -422,11 +488,31 @@ let happyPathReference = null;
     paymentSection.includes("data-radar-reference"),
     "reference placeholder",
   );
+  assert(
+    "payment_handoff_carries_the_server_reference",
+    page.includes('paymentUrl.searchParams.set("text"')
+      && page.includes('"\\nReferência do pedido: " + externalReference'),
+    "the commercial handoff must carry the exact persisted order reference",
+  );
   assert("page_has_no_em_dash", !page.includes("—"), "em dash");
   assert(
     "page_carries_no_asaas_url",
     !/asaas\.com|2inumo70747k90a2/i.test(page),
     "no provider URL or payment link id may be hardcoded in public HTML",
+  );
+  const purchaseCtas = modelPage.match(
+    /data-cta-id="report-599-[^"]+"[^>]+href="\/comercial\/radar-decisorio\/"/g,
+  ) || [];
+  assert(
+    "all_priced_model_ctas_enter_fail_closed_form",
+    purchaseCtas.length === 5,
+    `expected 5 purchase CTAs to enter the parameter form, found ${purchaseCtas.length}`,
+  );
+  assert(
+    "public_radar_has_terminal_order_action",
+    publicRadarPage.includes('href="/comercial/radar-decisorio/"')
+      && publicRadarPage.includes('data-next-action-id="contratar_relatorio_inteligencia_599"'),
+    "the public Radar must expose a normalized terminal action into the order flow",
   );
 }
 
