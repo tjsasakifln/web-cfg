@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import subprocess
 import sys
 from datetime import date
 from pathlib import Path
@@ -206,6 +208,22 @@ def test_forbidden_paths_unchanged_list():
         path = ROOT / rel
         assert path.is_file(), rel
         assert baseline[rel] == hashes[rel] == content_sha256(path)
+
+
+def test_recapture_provenance_commit_exists_and_contains_baseline_bytes():
+    payload = json.loads(
+        (ROOT / "data/bofu-dominance/frozen-specs/hashes.json").read_text(encoding="utf-8")
+    )
+    commit = payload["baseline_commit"]
+    subprocess.run(
+        ["git", "-C", str(ROOT), "cat-file", "-e", f"{commit}^{{commit}}"],
+        check=True,
+    )
+    for rel, expected in payload["forbidden"].items():
+        content = subprocess.check_output(
+            ["git", "-C", str(ROOT), "show", f"{commit}:{rel}"]
+        )
+        assert hashlib.sha256(content).hexdigest() == expected, rel
 
 
 def test_forbidden_drift_reads_committed_baseline(tmp_path):
