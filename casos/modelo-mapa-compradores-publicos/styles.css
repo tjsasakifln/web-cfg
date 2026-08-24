@@ -11,6 +11,7 @@
 .map-rules tbody th { color: var(--r-ink); font-weight: 800; white-space: nowrap; }
 .map-rules tbody td { line-height: 1.5; }
 .report-section-content > .report-table-wrap { margin-top: 42px; }
+.report-section:not(.report-section-dark) .report-table-wrap:focus { outline-color: var(--r-green); }
 
 /* Rótulos epistêmicos: FATO, CÁLCULO, INFERÊNCIA, INCERTEZA, AÇÃO. */
 .map-claims { border-bottom: 1px solid var(--r-line); margin: 38px 0 0; }
