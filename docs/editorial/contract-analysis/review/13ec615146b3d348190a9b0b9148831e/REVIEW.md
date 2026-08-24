@@ -18,7 +18,7 @@ Esta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE
 - score: 100
 - dimensions: {'profundidade_documental': 100, 'singularidade_novidade': 100, 'utilidade_decisoria': 100, 'integridade_epistemica': 100, 'calculos_engenharia': 100, 'comunicacao': 100, 'seo_citabilidade_manutencao': 100}
 - findings: []
-- rendered-content.sha256: 94f6000af688bdbbab92562f05da665cb68386074bb260a9d9039dddcdf55a05
+- rendered-content.sha256: 2d5f7a6b3e17ac442c9553bf1c3a397709f182008df181dd6bcaef39ef5ee6d4
 - evidence-pack.sha256: f7ed6bcc70a74e274c222b89293afaf430ed88679264c4189bbe4c033fabcb1b
 - material_hash: 7b927ffe7c68d3297a2bf9eb1621f41e5472e78a1c74dc69a8f4b6e7baf2fb19
 

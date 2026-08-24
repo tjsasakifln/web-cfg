@@ -34,6 +34,7 @@ def test_checked_in_canary_matches_current_approval_decision() -> None:
     decision, expected_html = apply_rendered_hash_gate(record, decision, expected_html)
     assert "Autoria e revisão estão identificadas" in expected_html
     assert "Autoria e revisão humanas ainda não foram confirmadas" not in expected_html
+    assert "HUMAN_REVIEW_PENDING" not in expected_html
 
     page = ROOT / AUTHORIZED_CANONICAL_PATH.strip("/") / "index.html"
     assert page.read_text(encoding="utf-8") == expected_html

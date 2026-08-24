@@ -450,6 +450,10 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             "</p>"
         )
     elif not decision.indexable:
+        ready_for_human_review = (
+            _text(record.get("editorial_status")) == "ready_for_human_review"
+            or _text(getattr(decision, "human_review_status", "")) == "READY_FOR_HUMAN_REVIEW"
+        )
         review_ready = bool(reviewer)
         authorship_ready = _author_confirmed(record)
         if authorship_ready and review_ready:
@@ -466,8 +470,8 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             review_message = "Autoria e revisão humanas ainda não foram confirmadas. "
         fixture_banner = (
             '<p class="ca-draft-banner" role="status">'
-            "Rascunho editorial noindex. HUMAN_REVIEW_PENDING"
-            f"{' · READY_FOR_HUMAN_REVIEW' if _text(record.get('editorial_status')) == 'ready_for_human_review' or _text(getattr(decision, 'human_review_status', '')) == 'READY_FOR_HUMAN_REVIEW' else ''}. "
+            "Rascunho editorial noindex. "
+            f"{'READY_FOR_HUMAN_REVIEW' if ready_for_human_review else 'HUMAN_REVIEW_PENDING'}. "
             f"{review_message}"
             "Esta página não deve ser indexada. Sem autorização de INDEX."
             "</p>"

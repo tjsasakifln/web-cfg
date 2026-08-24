@@ -1,7 +1,7 @@
 {
   "report": "CONTRACT_ANALYSIS_CANARY_STATUS",
   "gate_version": "contract-analysis-publication-gate/1.0",
-  "generated_at": "2026-08-24T13:57:37Z",
+  "generated_at": "2026-08-24T14:11:02Z",
   "evaluated": 1,
   "evaluated_cap": 10,
   "source_kind": "official_live",
