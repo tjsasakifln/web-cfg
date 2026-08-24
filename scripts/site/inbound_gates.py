@@ -833,17 +833,21 @@ def _as_date(value: date | datetime | str | None) -> date:
 # against the rendered HTML.
 FAMILY_REGISTRY_REL = "data/organic/public-family-registry.json"
 FAMILY_REGISTRY_SCHEMA = "public-family-registry-v1"
+BOFU_SERVICE_ROUTE_SOURCE = (
+    "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route"
+)
 CONVERSION_PROFILES = {"service_pillar", "priced_offer", "commercial_content", "trust_or_legal"}
 TERMINAL_ACTIONS = {"capture_form", "whatsapp", "capture_form_or_whatsapp", "none"}
 GATE_COVERAGE_LEVELS = {"full", "partial", "none"}
 GATE_COVERAGE_KEYS = ("conversion", "copy", "accessibility")
 MIN_WRITTEN_REASON = 24
+MAX_DEBT_DURATION_DAYS = 90
 
 # A price is "displayed" when structured offer markup is present, or when a
 # BRL amount sits next to a commitment word. Bare BRL amounts are data (contract
 # values, reference costs), not offers, so they must not escalate the profile.
 PRICE_MARKUP_RE = re.compile(r'"price"\s*:|"priceCurrency"\s*:|itemprop=["\']price["\']', re.I)
-_PRICE_AMOUNT = r"R\$\s?\d{1,3}(?:\.\d{3})*(?:,\d{2})?"
+_PRICE_AMOUNT = r"R\$\s*(?:\d{1,3}(?:\.\d{3})+|\d+)(?:,\d{2})?(?![\d.,])"
 _PRICE_COMMITMENT = (
     r"investimento|pre[çc]o|a partir de|por unidade|pagamento [úu]nico|"
     r"mensal|assinatura|por relat[óo]rio|entrega por|sob demanda|avulso|por entrega|plano"
@@ -862,6 +866,31 @@ def _is_iso_date(value: Any) -> bool:
     except ValueError:
         return False
     return True
+
+
+def _is_owner_issue(value: Any) -> bool:
+    """A bool is an int in Python, but it is not an issue identifier."""
+    return type(value) is int and value > 0
+
+
+def _is_safe_public_path(value: Any) -> bool:
+    if not isinstance(value, str) or not value.startswith("/"):
+        return False
+    if any(char.isspace() for char in value):
+        return False
+    if any(token in value for token in ("?", "#", "\\", "//", "/./", "/../")):
+        return False
+    return not value.endswith("index.html")
+
+
+def _is_canonical_route(value: Any) -> bool:
+    return _is_safe_public_path(value) and (value == "/" or value.endswith("/"))
+
+
+def _is_safe_family_prefix(value: Any) -> bool:
+    # A root prefix would silently absorb every future family and recreate the
+    # permissive default this registry exists to remove.
+    return _is_safe_public_path(value) and value != "/"
 
 
 def _displays_price(main: str) -> bool:
@@ -886,11 +915,11 @@ def _bofu_service_routes(root: Path | None = None) -> set[str]:
 def _family_routes(family: dict[str, Any], service_routes: set[str]) -> tuple[set[str], str | None]:
     """Return (explicit routes, prefix) declared by a family."""
     match = family.get("match") or {}
-    if "source" in match:
+    if match.get("source") == BOFU_SERVICE_ROUTE_SOURCE:
         return set(service_routes), None
-    if "routes" in match:
-        return {str(r) for r in match["routes"]}, None
-    if "prefix" in match:
+    if isinstance(match.get("routes"), list):
+        return {r for r in match["routes"] if _is_canonical_route(r)}, None
+    if _is_safe_family_prefix(match.get("prefix")):
         return set(), str(match["prefix"])
     return set(), None
 
@@ -963,15 +992,34 @@ def _validate_family_registry(
         bad("registry_schema_mismatch", str(registry.get("schema_version")))
     if registry.get("fail_closed") is not True:
         bad("registry_not_fail_closed", "fail_closed must be true")
+    registry_as_of_value = registry.get("as_of")
+    registry_as_of = (
+        date.fromisoformat(registry_as_of_value)
+        if _is_iso_date(registry_as_of_value)
+        else None
+    )
+    if registry_as_of is None:
+        bad("registry_as_of_invalid", str(registry_as_of_value))
+    if not _is_owner_issue(registry.get("owner_issue")):
+        bad("registry_owner_issue_invalid", str(registry.get("owner_issue")))
 
-    families = registry.get("families") or []
-    if not families:
+    families_value = registry.get("families")
+    if not isinstance(families_value, list) or not families_value:
         bad("registry_empty", "no families declared")
+        families: list[dict[str, Any]] = []
+    else:
+        families = families_value
 
     a11y_census = _a11y_census()
     copy_census = _copy_lint_census()
     seen_ids: set[str] = set()
+    exact_owners: dict[str, str] = {}
+    prefix_owners: dict[str, str] = {}
+    service_source_ids: set[str] = set()
     for family in families:
+        if not isinstance(family, dict):
+            bad("family_entry_invalid", repr(family))
+            continue
         fid = str(family.get("id") or "")
         if not fid or fid in seen_ids:
             bad("family_id_invalid_or_duplicated", fid or "<empty>")
@@ -985,13 +1033,45 @@ def _validate_family_registry(
             bad("family_terminal_action_invalid", f"{fid}: {action}")
         if len(str(family.get("visitor_job") or "").strip()) < MIN_WRITTEN_REASON:
             bad("family_visitor_job_missing", fid)
-        if not isinstance(family.get("owner_issue"), int):
+        if not _is_owner_issue(family.get("owner_issue")):
             bad("family_owner_issue_missing", fid)
-        if not _is_iso_date(family.get("declared_at")):
-            bad("family_declared_at_invalid", f"{fid}: {family.get('declared_at')}")
+        declared_at_value = family.get("declared_at")
+        declared_at = (
+            date.fromisoformat(declared_at_value) if _is_iso_date(declared_at_value) else None
+        )
+        if declared_at is None:
+            bad("family_declared_at_invalid", f"{fid}: {declared_at_value}")
+        elif registry_as_of is not None and declared_at > registry_as_of:
+            bad("family_declared_at_after_registry_as_of", f"{fid}: {declared_at_value}")
         match = family.get("match") or {}
-        if len([k for k in ("routes", "prefix", "source") if k in match]) != 1:
+        if not isinstance(match, dict):
+            match = {}
+        match_keys = [key for key in ("routes", "prefix", "source") if key in match]
+        if len(match_keys) != 1:
             bad("family_match_invalid", fid)
+        elif match_keys[0] == "source" and match.get("source") != BOFU_SERVICE_ROUTE_SOURCE:
+            bad("family_match_source_invalid", f"{fid}: {match.get('source')}")
+        elif match_keys[0] == "routes":
+            route_values = match.get("routes")
+            if not isinstance(route_values, list) or not route_values:
+                bad("family_match_routes_invalid", fid)
+            else:
+                if len(route_values) != len(set(map(str, route_values))):
+                    bad("family_match_routes_duplicated", fid)
+                for route in route_values:
+                    if not _is_canonical_route(route):
+                        bad("family_match_route_invalid", f"{fid}: {route}")
+        elif match_keys[0] == "prefix" and not _is_safe_family_prefix(match.get("prefix")):
+            bad("family_match_prefix_invalid", f"{fid}: {match.get('prefix')}")
+        uses_service_source = match.get("source") == BOFU_SERVICE_ROUTE_SOURCE
+        if uses_service_source:
+            service_source_ids.add(fid)
+        if profile == "service_pillar" and not uses_service_source:
+            bad("family_service_profile_match_invalid", fid)
+        if uses_service_source and profile != "service_pillar":
+            bad("family_service_source_profile_invalid", fid)
+        if profile == "service_pillar" and action != "capture_form":
+            bad("family_service_terminal_action_invalid", fid)
         coverage = family.get("gate_coverage") or {}
         for key in GATE_COVERAGE_KEYS:
             if coverage.get(key) not in GATE_COVERAGE_LEVELS:
@@ -1000,10 +1080,22 @@ def _validate_family_registry(
             bad("family_conversion_coverage_understated", fid)
         if action == "none" and profile != "trust_or_legal":
             bad("family_no_action_outside_trust", fid)
-        if action == "none" and len(str(family.get("exemption_reason") or "")) < MIN_WRITTEN_REASON:
+        if profile == "trust_or_legal" and action != "none":
+            bad("family_trust_action_invalid", fid)
+        if action == "none" and len(
+            str(family.get("exemption_reason") or "").strip()
+        ) < MIN_WRITTEN_REASON:
             bad("family_exemption_reason_missing", fid)
 
         routes, prefix = _family_routes(family, service_routes)
+        for route in routes:
+            previous = exact_owners.setdefault(route, fid)
+            if previous != fid:
+                bad("family_match_overlap", f"{route}: {previous}, {fid}")
+        if prefix:
+            previous = prefix_owners.setdefault(prefix, fid)
+            if previous != fid:
+                bad("family_match_overlap", f"{prefix}: {previous}, {fid}")
         matched = {r for r in indexable_routes if r in routes}
         if prefix:
             matched |= {r for r in indexable_routes if r.startswith(prefix)}
@@ -1028,24 +1120,74 @@ def _validate_family_registry(
                         f"{fid}.{key} declared={declared} actual={actual}",
                     )
 
-        for entry in family.get("debt") or []:
+        debt_entries = family.get("debt") or []
+        if not isinstance(debt_entries, list):
+            bad("family_debt_invalid", fid)
+            debt_entries = []
+        seen_debt_routes: set[str] = set()
+        for entry in debt_entries:
+            if not isinstance(entry, dict):
+                bad("debt_entry_invalid", f"{fid}: {entry}")
+                continue
             route = str(entry.get("route") or "")
             if not route:
                 bad("debt_route_missing", fid)
                 continue
-            if not isinstance(entry.get("owner_issue"), int):
+            if not _is_canonical_route(route):
+                bad("debt_route_invalid", f"{fid}:{route}")
+            if route in seen_debt_routes:
+                bad("debt_route_duplicated", f"{fid}:{route}")
+            seen_debt_routes.add(route)
+            if not _is_owner_issue(entry.get("owner_issue")):
                 bad("debt_owner_issue_missing", f"{fid}:{route}")
             if len(str(entry.get("reason") or "").strip()) < MIN_WRITTEN_REASON:
                 bad("debt_reason_missing", f"{fid}:{route}")
-            if not _is_iso_date(entry.get("expires_at")):
+            expires_at_value = entry.get("expires_at")
+            expires_at = (
+                date.fromisoformat(expires_at_value) if _is_iso_date(expires_at_value) else None
+            )
+            if expires_at is None:
                 bad("debt_expires_at_invalid", f"{fid}:{route}")
+            elif declared_at is not None and not (
+                0 <= (expires_at - declared_at).days <= MAX_DEBT_DURATION_DAYS
+            ):
+                bad(
+                    "debt_expiry_window_invalid",
+                    f"{fid}:{route} declared={declared_at} expires={expires_at}",
+                )
             in_family = route in routes or (prefix and route.startswith(prefix))
             if not in_family:
                 bad("debt_route_outside_family", f"{fid}:{route}")
+            if verify_coverage and route not in indexable_routes:
+                bad("debt_route_not_indexable", f"{fid}:{route}")
 
-        for entry in family.get("priced_reference_routes") or []:
+        priced_reference_entries = family.get("priced_reference_routes") or []
+        if not isinstance(priced_reference_entries, list):
+            bad("family_priced_reference_invalid", fid)
+            priced_reference_entries = []
+        seen_reference_routes: set[str] = set()
+        for entry in priced_reference_entries:
+            if not isinstance(entry, dict):
+                bad("priced_reference_entry_invalid", f"{fid}: {entry}")
+                continue
+            route = str(entry.get("route") or "")
+            if not _is_canonical_route(route):
+                bad("priced_reference_route_invalid", f"{fid}:{route}")
+            if route in seen_reference_routes:
+                bad("priced_reference_route_duplicated", f"{fid}:{route}")
+            seen_reference_routes.add(route)
             if len(str(entry.get("reason") or "").strip()) < MIN_WRITTEN_REASON:
-                bad("priced_reference_reason_missing", f"{fid}:{entry.get('route')}")
+                bad("priced_reference_reason_missing", f"{fid}:{route}")
+            in_family = route in routes or (prefix and route.startswith(prefix))
+            if not in_family:
+                bad("priced_reference_route_outside_family", f"{fid}:{route}")
+            if verify_coverage and route not in indexable_routes:
+                bad("priced_reference_route_not_indexable", f"{fid}:{route}")
+    if len(service_source_ids) != 1:
+        bad(
+            "registry_service_source_owner_invalid",
+            f"expected one owner for {BOFU_SERVICE_ROUTE_SOURCE}, got {sorted(service_source_ids)}",
+        )
     return findings
 
 
@@ -1062,8 +1204,6 @@ def _conversion_profile(
         declared = str(family.get("profile"))
         if declared == "trust_or_legal":
             return "trust_or_legal"
-        if declared == "service_pillar":
-            return "service_pillar"
         return "priced_offer" if priced else declared
     # No declaration: legacy legal allowlist stays only so that a registry
     # failure still classifies legal pages sanely. The missing declaration is
@@ -1322,7 +1462,7 @@ def gate_conversion(
                     terminal_covered += 1
                     if debt is not None:
                         satisfied_debt.add((str(family.get("id")), route))
-                elif profile == "service_pillar":
+                elif route in service_routes:
                     # Owned by the dedicated missing_on_page_form rule below,
                     # which honours the #291 freeze. Do not duplicate it here.
                     pass

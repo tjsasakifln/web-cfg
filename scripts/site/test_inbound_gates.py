@@ -393,6 +393,8 @@ def test_bare_currency_amounts_are_data_not_a_priced_offer():
 
     assert not _displays_price("<p>O contrato somava R$ 248,0 mil em serviços medidos.</p>")
     assert _displays_price("<p>Investimento: R$ 3.750 por relatório.</p>")
+    assert _displays_price("<p>Investimento: R$ 3750 por relatório.</p>")
+    assert not _displays_price("<p>Investimento público de R$ 1,2 milhão.</p>")
     assert _displays_price('<script type="application/ld+json">{"price": "599.00"}</script>')
 
 
@@ -453,6 +455,8 @@ def test_registry_declaration_cannot_be_an_empty_line():
     assert not _validate_family_registry(registry, service_routes, set(), verify_coverage=False)
 
     hollow = json.loads(json.dumps(registry))
+    hollow["as_of"] = "nao-e-data"
+    hollow["owner_issue"] = False
     hollow["families"].append(
         {
             "id": "familia-vazia",
@@ -472,6 +476,8 @@ def test_registry_declaration_cannot_be_an_empty_line():
         )
     }
     for reason in (
+        "registry_as_of_invalid",
+        "registry_owner_issue_invalid",
         "family_visitor_job_missing",
         "family_owner_issue_missing",
         "family_declared_at_invalid",
@@ -483,6 +489,71 @@ def test_registry_declaration_cannot_be_an_empty_line():
         "debt_route_outside_family",
     ):
         assert reason in reasons, (reason, reasons)
+
+
+def test_registry_matching_is_unambiguous_and_cannot_absorb_the_site():
+    """Fail-closed means ownership cannot depend on JSON order or a root wildcard."""
+    from scripts.site.inbound_gates import (
+        _bofu_service_routes,
+        _validate_family_registry,
+        load_family_registry,
+    )
+
+    registry = load_family_registry()
+    service_routes = _bofu_service_routes()
+
+    invalid_source = json.loads(json.dumps(registry))
+    service = next(f for f in invalid_source["families"] if f["id"] == "service-pillars")
+    service["match"]["source"] = "qualquer-arquivo.json"
+
+    root_prefix = json.loads(json.dumps(registry))
+    home = next(f for f in root_prefix["families"] if f["id"] == "home")
+    home["match"] = {"prefix": "/"}
+
+    overlap = json.loads(json.dumps(registry))
+    duplicate = json.loads(json.dumps(next(f for f in overlap["families"] if f["id"] == "home")))
+    duplicate["id"] = "home-duplicated"
+    overlap["families"].append(duplicate)
+
+    blank_legal_reason = json.loads(json.dumps(registry))
+    legal = next(f for f in blank_legal_reason["families"] if f["id"] == "legal-and-trust")
+    legal["exemption_reason"] = " " * 30
+    legal["owner_issue"] = True
+
+    invented_service_profile = json.loads(json.dumps(registry))
+    home = next(f for f in invented_service_profile["families"] if f["id"] == "home")
+    home["profile"] = "service_pillar"
+    home["terminal_action"] = "capture_form"
+
+    weakened_service_source = json.loads(json.dumps(registry))
+    service = next(
+        f for f in weakened_service_source["families"] if f["id"] == "service-pillars"
+    )
+    service["profile"] = "commercial_content"
+    service["terminal_action"] = "capture_form_or_whatsapp"
+
+    unbounded_debt = json.loads(json.dumps(registry))
+    debt_family = next(f for f in unbounded_debt["families"] if f.get("debt"))
+    debt_family["debt"][0]["expires_at"] = "2099-12-31"
+
+    cases = (
+        (invalid_source, "family_match_source_invalid"),
+        (root_prefix, "family_match_prefix_invalid"),
+        (overlap, "family_match_overlap"),
+        (blank_legal_reason, "family_exemption_reason_missing"),
+        (blank_legal_reason, "family_owner_issue_missing"),
+        (invented_service_profile, "family_service_profile_match_invalid"),
+        (weakened_service_source, "family_service_source_profile_invalid"),
+        (unbounded_debt, "debt_expiry_window_invalid"),
+    )
+    for payload, expected in cases:
+        reasons = {
+            finding.reason
+            for finding in _validate_family_registry(
+                payload, service_routes, set(), verify_coverage=False
+            )
+        }
+        assert expected in reasons, (expected, reasons)
 
 
 def test_declared_gate_coverage_is_verified_against_the_real_censuses():

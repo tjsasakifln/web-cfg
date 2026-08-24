@@ -222,13 +222,13 @@
         {
           "route": "/casos/aditivo-art125-demonstrativo/",
           "owner_issue": 290,
-          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Corrigido junto com a família em #290.",
+          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
           "expires_at": "2026-09-30"
         },
         {
           "route": "/casos/medicao-glosa-demonstrativo/",
           "owner_issue": 290,
-          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Corrigido junto com a família em #290.",
+          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
           "expires_at": "2026-09-30"
         }
       ]
