@@ -65,7 +65,7 @@
     "test:pseo-attribution": "node seo/scripts/test_pseo_attribution.mjs",
     "test:structure": "python3 seo/scripts/test_criterion_structure.py",
     "test:brand": "python3 scripts/site/test_brand_contract.py",
-    "test:authority": "python3 scripts/site/test_authority_contract.py && node scripts/site/test_correction_request.mjs",
+    "test:authority": "python3 scripts/site/test_authority_contract.py && python3 scripts/site/test_permissioned_proof.py && node scripts/site/test_correction_request.mjs",
     "test:visible-parity": "python3 scripts/site/test_visible_parity.py",
     "parity:site": "python3 -m scripts.site.visible_parity --root _site --json seo/visible-parity.json --md seo/visible-parity.md",
     "test:design": "python3 scripts/site/test_design_gates.py && python3 scripts/site/test_visitor_redesign.py && python3 scripts/site/test_fingerprint_css.py && npm run test:html-integrity",
