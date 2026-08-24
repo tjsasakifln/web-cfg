@@ -125,7 +125,7 @@ def test_family_is_preserved_from_pseo_wipe():
 
 def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
     from scripts.contract_analysis import AUTHORIZED_CANONICAL_PATH
-    from scripts.contract_analysis.approval import find_approval, load_approvals
+    from scripts.contract_analysis.approval import approval_allows_index
 
     hub = ROOT / "analises-contratos-publicos" / "index.html"
     assert hub.is_file()
@@ -133,13 +133,15 @@ def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
     assert 'content="noindex' in html
     assert "/correcoes/" in html
     canary_slug = AUTHORIZED_CANONICAL_PATH.strip("/").split("/")[-1]
-    approved = any(
-        isinstance(row, dict)
-        and row.get("analysis_id") == "13ec615146b3d348190a9b0b9148831e"
-        and row.get("state") == "PUBLISHABLE_INDEX"
-        and not row.get("withdrawn")
-        for row in (load_approvals(ROOT).get("approvals") or [])
+    official = load_canary(
+        live_path=ROOT / "scripts/contract_analysis/fixtures/official-live-01"
     )
+    record = next(
+        row
+        for row in official["records"]
+        if row.get("id") == "13ec615146b3d348190a9b0b9148831e"
+    )
+    approved, _reasons = approval_allows_index(record, root=ROOT)
     pages = list((ROOT / "analises-contratos-publicos").rglob("index.html"))
     assert pages
     indexable_pages = []
@@ -163,20 +165,22 @@ def test_rendered_preview_is_noindex_and_absent_from_sitemaps():
 
 def test_robots_and_headers_block_fixture_family():
     from scripts.contract_analysis import AUTHORIZED_CANONICAL_PATH
-    from scripts.contract_analysis.approval import load_approvals
+    from scripts.contract_analysis.approval import approval_allows_index
 
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     headers = (ROOT / "_headers").read_text(encoding="utf-8")
     assert "Disallow: /analises-contratos-publicos/" in robots
     assert "/analises-contratos-publicos/*" in headers
     assert "X-Robots-Tag: noindex" in headers
-    approved = any(
-        isinstance(row, dict)
-        and row.get("analysis_id") == "13ec615146b3d348190a9b0b9148831e"
-        and row.get("state") == "PUBLISHABLE_INDEX"
-        and not row.get("withdrawn")
-        for row in (load_approvals(ROOT).get("approvals") or [])
+    official = load_canary(
+        live_path=ROOT / "scripts/contract_analysis/fixtures/official-live-01"
     )
+    record = next(
+        row
+        for row in official["records"]
+        if row.get("id") == "13ec615146b3d348190a9b0b9148831e"
+    )
+    approved, _reasons = approval_allows_index(record, root=ROOT)
     slug = AUTHORIZED_CANONICAL_PATH.strip("/")
     sitemap_files = [
         ROOT / "sitemap.xml",

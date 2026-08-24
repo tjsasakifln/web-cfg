@@ -59,7 +59,6 @@
     "obrigado.html",
     "robots.txt",
     "script.js",
-    "sitemap-analises-contratos.xml",
     "sitemap-editorial.xml",
     "sitemap-index.xml",
     "sitemap-inteligencia.xml",
@@ -330,8 +329,8 @@
     "/termos-de-uso/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-08-24T12:10:53Z",
-  "public_artifact_hash": "9b71d6246b870224d8785092384c638125eee37d2e50cf01341f5c35a55d7607",
+  "generated_at": "2026-08-24T13:25:45Z",
+  "public_artifact_hash": "fccbf5cd44c2c3a92d6445ca7fc62f14a694ca61ebe222d8a8d6039848a81a06",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -391,7 +390,6 @@
     "obrigado.html",
     "robots.txt",
     "script.js",
-    "sitemap-analises-contratos.xml",
     "sitemap-editorial.xml",
     "sitemap-index.xml",
     "sitemap-inteligencia.xml",
@@ -403,7 +401,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 223,
+  "promoted_navigation_files": 222,
   "navigation_audit": {
     "audited_files": 223,
     "audited_blocks": 445,

@@ -65,9 +65,6 @@
 /analises-contratos-publicos/*
   X-Robots-Tag: noindex, nofollow, noarchive
 
-/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/*
-  X-Robots-Tag: index, follow
-
 # Offer catalog preview: public gate still off
 /piloto/ofertas/*
   X-Robots-Tag: noindex, nofollow
