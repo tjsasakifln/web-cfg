@@ -1,0 +1,93 @@
+{
+  "schema": "bofu_frozen_unlock_plan/v1",
+  "issue": 291,
+  "decision_state": "DEFER_UNTIL_DATE",
+  "executive_front": "INBOUND ENGINE",
+  "leverage": ["revenue", "distribution"],
+  "owner": "CONFENGE",
+  "prepared_at": "2026-08-24",
+  "earliest_safe_action_at": "2026-09-16",
+  "html_mutation_authorized": false,
+  "execution_pr_policy": "one PR on or after earliest_safe_action_at",
+  "protected_pillars": [
+    "aditivos-obras-publicas",
+    "medicoes-glosas-obras-publicas",
+    "reequilibrio-obras-publicas",
+    "auditoria-orcamento-licitacao",
+    "diagnostico-b2g-360",
+    "diagnostico-pre-licitacao"
+  ],
+  "true_replacements": {
+    "aditivos-obras-publicas": ["h1"],
+    "reequilibrio-obras-publicas": ["title_og"],
+    "diagnostico-b2g-360": ["og_title"]
+  },
+  "no_op_replacements_to_remove": {
+    "medicoes-glosas-obras-publicas": ["meta_og_schema_description"],
+    "auditoria-orcamento-licitacao": ["when_not_to_hire"],
+    "diagnostico-pre-licitacao": ["meta_og_schema_description"]
+  },
+  "capture": {
+    "required_on_all_six": true,
+    "contract": "persisted CONFENGE_WEB lead capture introduced by issue #289",
+    "current_coverage": 0,
+    "current_total": 6
+  },
+  "structured_data_residual": {
+    "pillar": "diagnostico-b2g-360",
+    "required_types": ["FAQPage", "Person"],
+    "current_types_present": []
+  },
+  "preconditions_all_required": [
+    {
+      "id": "date_gate",
+      "state": "WAITING",
+      "evidence": "current date is on or after 2026-09-16"
+    },
+    {
+      "id": "measurement_gate",
+      "state": "WAITING",
+      "owner": "web-cfg#292",
+      "evidence": "core_ready_for_product_decisions=true from comparable, dated evidence"
+    },
+    {
+      "id": "capture_profile",
+      "state": "WAITING",
+      "owner": "web-cfg#289",
+      "evidence": "persisted capture profile is merged and green before reuse"
+    },
+    {
+      "id": "frozen_hashes",
+      "state": "READY",
+      "evidence": "all protected paths match data/bofu-dominance/frozen-specs/hashes.json"
+    }
+  ],
+  "execution_sequence": [
+    "Rebase the execution branch on the then-current origin/main.",
+    "Re-run the comparable measurement gate and abort unless it is ready.",
+    "Remove the three before-equals-after entries with a written no-op reason.",
+    "Apply only the three true replacements through the frozen patch mechanism.",
+    "Add persisted capture to all six pillars without changing the source or attribution contract.",
+    "Add FAQPage and Person only to diagnostico-b2g-360 with visible parity.",
+    "Run all acceptance gates before recapturing hashes.",
+    "Recapture hashes and snapshots without --force, then rerun the gates."
+  ],
+  "required_gates": [
+    "npm run test:bofu-dominance",
+    "npm run test:bofu-audit",
+    "npm run test:authority",
+    "npm run validate:seo",
+    "npm run inbound:gates",
+    "npm test"
+  ],
+  "rollback": [
+    "Revert the single execution PR.",
+    "Restore its pre-execution hashes.json and snapshots.json in the same revert.",
+    "Verify the six canonical URLs and frozen protected paths; never change earliest_safe_action_at to make rollback pass."
+  ],
+  "non_claims": [
+    "this plan does not authorize HTML mutation",
+    "the date alone does not prove core readiness",
+    "a green prepare-only PR is not an index or pipeline outcome"
+  ]
+}
