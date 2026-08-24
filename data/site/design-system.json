@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "campaign": "CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01",
-  "updated_at": "2026-08-01",
+  "updated_at": "2026-08-23",
   "concept": "engenharia editorial premium",
   "design_principles": [
     "Cards are the exception, not the default section structure",
@@ -93,7 +93,14 @@
     "content_editorial": "Featured + thematic trails, not six equal cards",
     "icp_contrast": "Faz sentido / Não faz sentido as typographic contrast",
     "faq_compact": "Dense Q&A with clear open state",
-    "cta_formal": "Memorable close + private form; not generic template form"
+    "cta_formal": "Memorable close + private form; not generic template form",
+    "journey_paths": "Three buyer journeys as first-class paths; not three equal cards",
+    "compare_ladder": "Comparable view of a product ladder: name, question answered, price and relation to the bundle, before any long section",
+    "ladder_entry": "Declared entry step of a ladder; the reason it opens the page is written, not implied by extra length",
+    "ladder_top": "Declared top of a ladder; distinct composition, same depth as the peers",
+    "deliverable_feature": "One deliverable as editorial feature: promise, input/output, price, one action",
+    "reading_method": "Numbered reading criteria that apply to the whole library, not to a single item",
+    "ladder_credit": "Ladder arithmetic and credit rule on an authority surface"
   },
   "component_usage_rules": {
     "card_allowed_when": [
@@ -126,7 +133,9 @@
     "generic_stock_construction_photos",
     "abstract_startup_illustration",
     "icon_as_art_direction_substitute",
-    "fictional_metrics_or_fake_case_numbers"
+    "fictional_metrics_or_fake_case_numbers",
+    "more_than_two_consecutive_identical_section_archetypes",
+    "more_than_two_consecutive_identical_section_skeletons"
   ],
   "public_copy_leaks": [
     "0 guias",
@@ -243,5 +252,9 @@
   ],
   "job_title_forbidden": [
     "Engenheiro Civil e Diretoria B2G fracionada"
+  ],
+  "archetype_gated_surfaces": [
+    "index.html",
+    "entregas/index.html"
   ]
 }

@@ -14,29 +14,19 @@ updates:
           - "puppeteer-core"
           - "axe-core"
           - "chrome-launcher"
-    ignore:
-      # Node 20 is the repository, CI and Netlify authority (PR #193 close,
-      # netlify.toml NODE_VERSION=20, engines ">=20 <21"). Every major below
-      # declares an engine this runtime does not satisfy, so Dependabot keeps
-      # reopening PRs that cannot land. Remove these ignores together, as part
-      # of the coordinated Node 22 migration tracked in issue #149 -- never
-      # one at a time as a drive-by bump.
-      #
-      # puppeteer-core@25+ requires Node >=22.12.
-      - dependency-name: "puppeteer-core"
-        update-types:
-          - "version-update:semver-major"
-      # lighthouse@13+ requires Node >=22.19 (closed PRs #92, #264).
-      - dependency-name: "lighthouse"
-        update-types:
-          - "version-update:semver-major"
-      # @netlify/blobs@11+ requires Node >=22.12 (closed PR #265). This one is
-      # a runtime dependency of the Netlify Functions lead/ops path and is
-      # listed in netlify.toml external_node_modules, so it is never loaded
-      # during CI -- a green pipeline does NOT prove it works on Node 20.
-      - dependency-name: "@netlify/blobs"
-        update-types:
-          - "version-update:semver-major"
+    # No Node-floor ignores. The three majors that used to be blocked here
+    # (lighthouse@13 >=22.19, puppeteer-core@25 >=22.12, @netlify/blobs@11
+    # >=22.12) were unlanded only because the repository, CI and Netlify were
+    # pinned to Node 20. Issue #149 lifted every surface to Node 22 in one
+    # coordinated change (netlify.toml NODE_VERSION=22, engines ">=22.19 <23",
+    # .nvmrc 22, node-version "22" in all workflows), so those engines are now
+    # satisfied and the ignores were removed together as that issue instructed.
+    #
+    # `npm ci --engine-strict` in the merge workflows and the scheduled RevOps
+    # install keeps the guarantee that replaced these ignores: a dependency
+    # declaring a Node floor above the runner hard-fails instead of passing
+    # green. Prove each remaining major on its own Dependabot PR, never as a
+    # drive-by bump.
 
   - package-ecosystem: github-actions
     directory: "/"

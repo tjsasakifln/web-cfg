@@ -39,11 +39,10 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 
 ## Analytics
 
-| Nome | Descrição |
-| --- | --- |
-| `PLAUSIBLE_DOMAIN` | Domínio Plausible se forward ativo |
-| `PLAUSIBLE_FORWARD` | `1` para encaminhar eventos server-side |
-| `PLAUSIBLE_API_URL` | Default `https://plausible.io/api/event` |
+O coletor first-party `/.netlify/functions/collect` não exige variável de
+provedor. Exportação para analytics de terceiros está `DEFER` por #247 e não
+pode ser habilitada por ambiente. Consulte
+[`data/ops/third-party-conversion-decision.v1.json`](../../data/ops/third-party-conversion-decision.v1.json).
 
 ## Front-end (build-time se aplicável)
 

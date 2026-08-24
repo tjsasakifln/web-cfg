@@ -1,0 +1,121 @@
+{
+  "schema": "bofu-serp-sentinel/1.0",
+  "issue": 292,
+  "observed_at": "2026-08-24T02:45:00Z",
+  "source": "web_search_api",
+  "sample_design": "one representative query per family",
+  "historical_comparator": "data/bofu-dominance/core/serp-census.v1.json",
+  "historical_sample_design": "up to four queries per family",
+  "official_position_claimed": false,
+  "geo": "UNKNOWN",
+  "device": "UNKNOWN",
+  "personalization": "UNKNOWN",
+  "rows": [
+    {
+      "family_id": "aditivos",
+      "query": "aditivos obras públicas",
+      "confenge_observed": true,
+      "confenge_urls": ["https://confenge.com.br/aditivos-obras-publicas/"],
+      "sample_url": "https://confenge.com.br/aditivos-obras-publicas/",
+      "historical_confenge_observed": false,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    },
+    {
+      "family_id": "bid-readiness",
+      "query": "prontidão licitação obras",
+      "confenge_observed": false,
+      "confenge_urls": [],
+      "sample_url": "https://www.licitaeng.com.br/",
+      "historical_confenge_observed": false,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    },
+    {
+      "family_id": "carteira-operacao",
+      "query": "diagnóstico B2G 360",
+      "confenge_observed": false,
+      "confenge_urls": [],
+      "sample_url": "https://b2g.com.br/diagnostico/",
+      "historical_confenge_observed": true,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    },
+    {
+      "family_id": "defesa-margem",
+      "query": "defesa de margem contrato público",
+      "confenge_observed": false,
+      "confenge_urls": [],
+      "sample_url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/perguntas-frequentes/margem-de-preferencia",
+      "historical_confenge_observed": true,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    },
+    {
+      "family_id": "diagnostico-expansao",
+      "query": "diagnóstico B2G de expansão",
+      "confenge_observed": false,
+      "confenge_urls": [],
+      "sample_url": "https://b2g.com.br/diagnostico/",
+      "historical_confenge_observed": false,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    },
+    {
+      "family_id": "diretoria-b2g",
+      "query": "diretoria B2G fracionada",
+      "confenge_observed": false,
+      "confenge_urls": [],
+      "sample_url": "https://b2g.com.br/",
+      "historical_confenge_observed": false,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    },
+    {
+      "family_id": "edital-proposta",
+      "query": "diagnóstico pré-licitação obras",
+      "confenge_observed": true,
+      "confenge_urls": ["https://confenge.com.br/conteudos/visita-tecnica-licitacao-obra-publica/"],
+      "sample_url": "https://confenge.com.br/conteudos/visita-tecnica-licitacao-obra-publica/",
+      "historical_confenge_observed": true,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    },
+    {
+      "family_id": "medicoes-pagamentos",
+      "query": "glosa de medição obra pública",
+      "confenge_observed": false,
+      "confenge_urls": [],
+      "sample_url": "https://gestobra.com.br/obras-publicas/gestao-de-medicoes",
+      "historical_confenge_observed": true,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    },
+    {
+      "family_id": "orcamento-bdi",
+      "query": "auditoria orçamento licitação",
+      "confenge_observed": true,
+      "confenge_urls": ["https://confenge.com.br/auditoria-orcamento-licitacao/"],
+      "sample_url": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+      "historical_confenge_observed": true,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    },
+    {
+      "family_id": "partner-integrity",
+      "query": "consulta CEIS CNEP empresa",
+      "confenge_observed": false,
+      "confenge_urls": [],
+      "sample_url": "https://www.tcepe.tc.br/internet/index.php/sem-categoria/4682-acesso-ao-ceis-cadastro-nacional-de-empresas-inidoneas-e-suspensas-e-cnep-cadastro-nacional-das-empresas-punidas",
+      "historical_confenge_observed": false,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    },
+    {
+      "family_id": "reequilibrio",
+      "query": "reequilíbrio econômico financeiro obra pública",
+      "confenge_observed": false,
+      "confenge_urls": [],
+      "sample_url": "https://www.gov.br/codevasf/pt-br/acesso-a-informacao/institucional/legislacao-e-demais-normativos/normas-rotinas-e-procedimentos/procedimentos/procedimento-para-calculo-de-reequilibrio-economico-financeiro-para-obras-de-pavimentacao-asfaltica.pdf",
+      "historical_confenge_observed": false,
+      "comparison_state": "AMOSTRA_INSUFICIENTE"
+    }
+  ],
+  "comparison_note": "The sentinel is fresh but not like-for-like with the 2026-08-19 four-query census. No observed/not-observed delta is promoted to a product decision.",
+  "non_claims": [
+    "not_an_official_google_position",
+    "not_a_complete_serp",
+    "missing_result_is_not_zero",
+    "does_not_authorize_frozen_html_mutation"
+  ]
+}

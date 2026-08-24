@@ -26,7 +26,9 @@ LIGHTHOUSE_THRESHOLDS = ROOT / "scripts" / "site" / "lighthouse_thresholds.mjs"
 WORKFLOWS_DIR = ROOT / ".github" / "workflows"
 NETLIFY_TOML = ROOT / "netlify.toml"
 PACKAGE_JSON = ROOT / "package.json"
+PACKAGE_LOCK = ROOT / "package-lock.json"
 NVMRC = ROOT / ".nvmrc"
+REVOPS_SCHEDULED = WORKFLOWS_DIR / "revops-scheduled.yml"
 
 # Stable check contexts documented in docs/ops/REQUIRED-BRANCH-CHECKS.md
 EXPECTED_SITE_CI_JOB_NAME = "site-ci"
@@ -136,9 +138,9 @@ def test_site_ci_shape():
         if needle not in text:
             errors.append(f"site-ci missing required step command: {needle}")
 
-    # Node pin aligned with Netlify/PR1 restore
-    if 'node-version: "20"' not in text and "node-version: '20'" not in text:
-        errors.append('site-ci must pin node-version: "20" until deliberate Node 22 migration')
+    # Node pin aligned with Netlify (issue #149 migrated the whole set to 22)
+    if 'node-version: "22"' not in text and "node-version: '22'" not in text:
+        errors.append('site-ci must pin node-version: "22" (Node 22 + Lighthouse 13 runtime)')
 
     chrome_at = text.find("browser-actions/setup-chrome")
     ui_at = text.find("npm run test:ui")
@@ -208,8 +210,8 @@ def test_pseo_shape():
         if needle not in text:
             errors.append(f"pseo missing required step command: {needle}")
 
-    if 'node-version: "20"' not in text and "node-version: '20'" not in text:
-        errors.append('pseo must pin node-version: "20" until deliberate Node 22 migration')
+    if 'node-version: "22"' not in text and "node-version: '22'" not in text:
+        errors.append('pseo must pin node-version: "22" (Node 22 + Lighthouse 13 runtime)')
 
     chrome_at = text.find("browser-actions/setup-chrome")
     npm_test_at = text.find("npm test")
@@ -245,15 +247,67 @@ def test_node_pin_is_single_source():
         raise AssertionError("netlify.toml must pin [build.environment] NODE_VERSION")
     expected = m.group(1)
 
-    # package.json engines must bound the same major, e.g. ">=20 <21"
+    # package.json engines must bound the same major, e.g. ">=22 <23".
+    # A minor/patch floor is allowed on the lower bound (">=22.19 <23") because
+    # lighthouse@13 declares `node >=22.19`: the floor has to be expressible, but
+    # the upper bound still has to close the major so a Node 23/24-only
+    # dependency cannot install green under `npm ci --engine-strict`.
     pkg = _json.loads(_read(PACKAGE_JSON))
-    engines = (pkg.get("engines") or {}).get("node", "")
-    wanted = f">={expected} <{int(expected) + 1}"
-    if engines.strip() != wanted:
+    engines = (pkg.get("engines") or {}).get("node", "").strip()
+    engines_match = re.fullmatch(
+        r">=(?P<lo>\d+)(?P<lo_rest>(?:\.\d+){0,2})\s+<(?P<hi>\d+)",
+        engines,
+    )
+    if not engines_match:
         errors.append(
-            f"package.json engines.node must be {wanted!r} to match "
+            f'package.json engines.node must look like ">={expected} <{int(expected) + 1}" '
+            f'(a minor floor such as ">={expected}.19 <{int(expected) + 1}" is allowed), '
+            f"got {engines!r}"
+        )
+    elif (
+        engines_match.group("lo") != expected
+        or engines_match.group("hi") != str(int(expected) + 1)
+    ):
+        errors.append(
+            f"package.json engines.node must bound Node {expected} to match "
             f"netlify.toml NODE_VERSION={expected}, got {engines!r}"
         )
+
+    lock = _json.loads(_read(PACKAGE_LOCK))
+    lock_packages = lock.get("packages") or {}
+    lock_root = lock_packages.get("") or {}
+    lock_engine = (lock_root.get("engines") or {}).get("node", "").strip()
+    if lock_engine != engines:
+        errors.append(
+            "package-lock.json root engines.node must exactly match package.json, "
+            f"got {lock_engine!r} versus {engines!r}"
+        )
+
+    # Protect the minor floor that forced this migration. Merely agreeing on
+    # major 22 is insufficient: Lighthouse 13.4.1 refuses Node 22.0–22.18.
+    lighthouse = lock_packages.get("node_modules/lighthouse") or {}
+    lighthouse_engine = (lighthouse.get("engines") or {}).get("node", "").strip()
+    required_match = re.fullmatch(r">=(\d+(?:\.\d+){0,2})", lighthouse_engine)
+    if not required_match:
+        errors.append(
+            "locked Lighthouse must declare a simple minimum Node engine, "
+            f"got {lighthouse_engine!r}"
+        )
+    elif engines_match:
+        configured_floor = (
+            engines_match.group("lo") + engines_match.group("lo_rest")
+        )
+
+        def version_tuple(value: str) -> tuple[int, int, int]:
+            parts = [int(part) for part in value.split(".")]
+            return tuple((parts + [0, 0, 0])[:3])
+
+        required_floor = required_match.group(1)
+        if version_tuple(configured_floor) < version_tuple(required_floor):
+            errors.append(
+                f"package.json Node floor {configured_floor} is below locked "
+                f"Lighthouse requirement {required_floor}"
+            )
 
     # .nvmrc keeps local dev on the same major as CI and Netlify
     if not NVMRC.is_file():
@@ -274,6 +328,15 @@ def test_node_pin_is_single_source():
                 )
 
     assert not errors, "node pin drift:\n- " + "\n- ".join(errors)
+
+
+def test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed():
+    """The production scheduler must not bypass the lock or engine contract."""
+    text = _read(REVOPS_SCHEDULED)
+    if "npm ci --engine-strict" not in text:
+        raise AssertionError("revops scheduler must enforce the Node engine floor")
+    if re.search(r"npm ci[^\n]*\|\|\s*npm install", text):
+        raise AssertionError("revops scheduler must not hide a broken lock with npm install")
 
 
 def _on_block(text: str) -> str:
@@ -384,6 +447,8 @@ def main() -> int:
     tests = [
         test_site_ci_shape,
         test_pseo_shape,
+        test_node_pin_is_single_source,
+        test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed,
         test_merge_workflows_have_no_path_skip,
         test_pseo_still_requires_full_npm_test,
         test_lighthouse_covers_article_cover_regression_routes,

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 from datetime import date
 from pathlib import Path
@@ -132,23 +133,55 @@ def test_apply_refused_before_gate_and_html_mutation_false():
     assert after == before
 
 
-def test_gate_opens_on_date_or_evidential_close_but_prepare_only_still_refuses_write():
+def test_date_or_evidential_close_does_not_bypass_the_unlock_plan():
     by_date = evaluate_gate(now=date(2026, 9, 16), evidential_close=False)
-    assert by_date["gate_open"] is True
-    assert by_date["apply_refused_before_gate"] is False
+    assert by_date["gate_open"] is False
+    assert by_date["reason"] == "unlock_plan_preconditions_not_ready"
     by_issue = evaluate_gate(now=FROZEN_NOW, evidential_close=True)
-    assert by_issue["gate_open"] is True
+    assert by_issue["gate_open"] is False
+    assert by_issue["reason"] == "before_date"
     result = apply_frozen_patch(
         PILLAR_SLUGS[0],
         root=ROOT,
-        mutate=False,
+        mutate=True,
+        now=date(2026, 9, 16),
+        evidential_close=True,
+    )
+    assert result["gate_open"] is False
+    assert result["refused"] is True
+    assert result["reason"] == "before_gate"
+    assert result["html_mutation"] is False
+
+
+def test_ready_plan_still_requires_an_explicitly_authorized_patch():
+    unlock_plan = json.loads(
+        (ROOT / "data/bofu-dominance/frozen-specs/unlock-plan.v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    unlock_plan["html_mutation_authorized"] = True
+    for item in unlock_plan["preconditions_all_required"]:
+        item["state"] = "READY"
+    gate = evaluate_gate(
         now=date(2026, 9, 16),
         evidential_close=False,
+        unlock_plan=unlock_plan,
+    )
+    assert gate["gate_open"] is True
+
+    before = content_sha256(html_path(PILLAR_SLUGS[0], ROOT))
+    result = apply_frozen_patch(
+        PILLAR_SLUGS[0],
+        root=ROOT,
+        mutate=True,
+        now=date(2026, 9, 16),
+        unlock_plan=unlock_plan,
     )
     assert result["gate_open"] is True
     assert result["refused"] is True
-    assert result["reason"] == "mutate_false_prepare_only"
+    assert result["reason"] == "patch_not_authorized"
     assert result["html_mutation"] is False
+    assert content_sha256(html_path(PILLAR_SLUGS[0], ROOT)) == before
 
 
 def test_entry_twice_html_mutation_false():
