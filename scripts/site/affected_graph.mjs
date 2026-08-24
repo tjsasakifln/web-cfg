@@ -78,9 +78,16 @@ export const SUITE_GRAPH = Object.freeze({
   },
   "test:analytics": {
     producers: [
+      ".env.example",
+      "data/ops/third-party-conversion-decision.v1.json",
+      "docs/ops/ENV-VARS.md",
+      "docs/ops/EXTERNAL-ACTIONS.md",
+      "docs/ops/THIRD-PARTY-CONVERSION-DECISION.md",
       "seo/scripts/test_analytics_pii.mjs",
       "seo/scripts/test_editorial_analytics.mjs",
       "seo/scripts/test_event_dictionary.mjs",
+      "seo/scripts/test_third_party_analytics_gate.mjs",
+      "scripts/site/third_party_analytics_gate.mjs",
       "netlify/functions/lib/event-registry.json",
       "netlify/functions/lib/event-contract.cjs",
       "script.js",

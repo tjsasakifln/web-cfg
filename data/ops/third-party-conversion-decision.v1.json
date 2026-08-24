@@ -1,0 +1,77 @@
+{
+  "contract": "CONFENGE_THIRD_PARTY_CONVERSION_DECISION/1.0",
+  "schema_version": "1.0.0",
+  "issue": "https://github.com/tjsasakifln/web-cfg/issues/247",
+  "decision_state": "DEFER",
+  "decision_owner": "CONFENGE",
+  "decided_at": "2026-08-23",
+  "review_at": "2026-09-20",
+  "executive_front": "INBOUND ENGINE",
+  "leverage": [
+    "distribution",
+    "trust"
+  ],
+  "time_to_evidence": "28 days after an explicitly authorized canary starts",
+  "decision": {
+    "browser_tag_authorized": false,
+    "server_side_forward_authorized": false,
+    "provider": null,
+    "reason": "Do not export conversion events while issue #87 is not EXECUTE with an approved hypothesis and spend cap, and while no explicit-consent contract is versioned and enforced."
+  },
+  "first_party_baseline": {
+    "required": true,
+    "collector": "/.netlify/functions/collect",
+    "source": "CONFENGE_WEB",
+    "pii_policy": "aggregate_allowlist_empty",
+    "third_party_cookie_required": false
+  },
+  "promotion_gate": {
+    "all_required": true,
+    "issue_87": {
+      "required_state": "EXECUTE",
+      "current_state": "VALIDATE",
+      "hypothesis_approved": false,
+      "hypothesis_ref": null,
+      "spend_approved": false,
+      "spend_cap_brl": null,
+      "spend_approval_ref": null
+    },
+    "explicit_consent": {
+      "required": true,
+      "current_state": "MISSING",
+      "default_state": "denied",
+      "opt_in_before_export": false,
+      "withdrawal_supported": false,
+      "contract_ref": null,
+      "enforcement_test_ref": null
+    },
+    "privacy": {
+      "pii_policy": "aggregate_allowlist_empty",
+      "zero_pii_gate": "npm run test:analytics"
+    },
+    "authorization": null
+  },
+  "measurable_revisit_trigger": {
+    "mode": "first_of",
+    "triggers": [
+      {
+        "type": "date",
+        "value": "2026-09-20"
+      },
+      {
+        "type": "all_conditions",
+        "conditions": [
+          "issue_87_decision_state_equals_EXECUTE",
+          "approved_hypothesis_ref_is_versioned",
+          "approved_spend_cap_brl_is_greater_than_zero",
+          "explicit_consent_contract_and_enforcement_test_are_versioned"
+        ]
+      }
+    ]
+  },
+  "rollback": {
+    "action": "Remove the external loader/exporter and its runtime configuration, keep the first-party collector active, and verify npm run test:analytics.",
+    "owner": "CONFENGE"
+  },
+  "affected_adr": "ADR-STRAT-002 (no boundary change)"
+}

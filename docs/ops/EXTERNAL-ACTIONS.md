@@ -2,7 +2,8 @@
 
 Cada item **OPEN** impede `COMPLETE_10_10_REPO_AND_PRODUCTION` até validação.
 
-Legenda: **DONE** = comprovado nesta entrega · **OPEN** = só o owner.
+Legenda: **DONE** = comprovado nesta entrega · **OPEN** = só o owner ·
+**DEFER** = não executar até o gatilho versionado.
 
 ---
 
@@ -124,10 +125,32 @@ Probe periódico de lead: `npm run probe:lead:prod` (cron owner) com `LEAD_PROBE
 
 ---
 
-## 7. Analytics SaaS opcional (Plausible) — **OPEN (não bloqueia coletor 1ª parte)**
+## 7. Exportação de conversão para analytics de terceiros — **DEFER**
 
-Coletor `/.netlify/functions/collect` **já opera em produção**.  
-Plausible: conta → domain → `PLAUSIBLE_DOMAIN` + `PLAUSIBLE_FORWARD=1` se quiser dashboard SaaS.
+**Decisão:** não instalar tag no browser e não encaminhar eventos server-side.
+O coletor `/.netlify/functions/collect` continua sendo a autoridade de mensuração
+da superfície pública, com origem `CONFENGE_WEB` e política de PII
+`aggregate_allowlist_empty`.
+
+Autoridade versionada:
+[`data/ops/third-party-conversion-decision.v1.json`](../../data/ops/third-party-conversion-decision.v1.json)
+e [decisão operacional](THIRD-PARTY-CONVERSION-DECISION.md).
+
+Não há variável de ambiente que autorize exportação. Configuração externa não
+pode substituir revisão de código e decisão humana.
+
+**Revisão:** 2026-09-20, ou antes somente quando todas as condições forem
+verdadeiras:
+
+1. #87 muda para `EXECUTE` com hipótese versionada;
+2. existe teto de gasto em BRL maior que zero e aprovação humana referenciada;
+3. consentimento explícito, default-denied, é versionado e ocorre antes do
+   primeiro evento exportado;
+4. um teste prova exportação zero quando o consentimento é negado.
+
+Chegar à data apenas abre nova decisão; não instala nada automaticamente. Um
+futuro canário deve nomear provedor, validade da autorização e rollback, manter
+PII zero e passar `npm run test:analytics`.
 
 ---
 

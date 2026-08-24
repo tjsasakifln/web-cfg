@@ -1,7 +1,7 @@
 /**
  * First-party analytics collector — no PII.
- * Accepts batch of events from the site, stores aggregates/samples in Blobs when available.
- * Optional forward to Plausible events API when PLAUSIBLE_DOMAIN + PLAUSIBLE_API_URL set.
+ * Accepts batch of events from the site and stores aggregates/samples in Blobs when available.
+ * Third-party export is deliberately absent; see the versioned #247 decision.
  */
 const crypto = require("crypto");
 const fs = require("fs");
@@ -178,27 +178,6 @@ exports.handler = async (event) => {
     });
     accepted.push(safe);
 
-    // Optional Plausible forward (server-side, no cookies)
-    const domain = process.env.PLAUSIBLE_DOMAIN;
-    if (domain && process.env.PLAUSIBLE_FORWARD === "1") {
-      try {
-        await fetch(process.env.PLAUSIBLE_API_URL || "https://plausible.io/api/event", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "User-Agent": "confenge-collect/1.0",
-          },
-          body: JSON.stringify({
-            name: safe.event,
-            url: `https://${domain}${safe.path || "/"}`,
-            domain,
-            props: safe.props,
-          }),
-        });
-      } catch {
-        /* never break client */
-      }
-    }
   }
 
   persistAnalyticsLocal(accepted);
