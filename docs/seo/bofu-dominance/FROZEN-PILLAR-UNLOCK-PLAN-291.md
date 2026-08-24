@@ -26,11 +26,18 @@ must be honored by the future execution PR:
 
 The execution PR is refused unless the calendar gate, the comparable evidence
 owned by #292, the merged capture profile owned by #289 and the frozen hash gate
-are all green. Reaching 2026-09-16 by itself does not authorize mutation.
+are all green, and that reviewed PR explicitly changes
+`html_mutation_authorized` to `true`. The capture profile is already `READY`
+through merged PR #307; the calendar and comparable-measurement gates are still
+`WAITING`. Reaching 2026-09-16 or closing the older evidential issue by itself
+does not authorize mutation.
 
-The execution sequence requires rebase, preflight, application through the
-frozen patch mechanism, full acceptance gates and only then a hash/snapshot
-recapture without `--force`.
+The execution sequence requires rebase, preflight and application through
+explicitly authorized hash-bound patches. Content/contract checks and review of
+the expected drift happen before recapture; the complete acceptance suite runs
+after the hash/snapshot baseline is recaptured without `--force`. This ordering
+avoids asking the frozen-hash gate to pass against an intentionally obsolete
+baseline.
 
 ## Visitor job and hypothesis
 

@@ -8,6 +8,17 @@
   "prepared_at": "2026-08-24",
   "earliest_safe_action_at": "2026-09-16",
   "html_mutation_authorized": false,
+  "authorization_rule": {
+    "operator": "AND",
+    "required": [
+      "date_gate",
+      "measurement_gate",
+      "capture_profile",
+      "frozen_hashes",
+      "html_mutation_authorized"
+    ],
+    "date_or_evidential_close_is_sufficient": false
+  },
   "execution_pr_policy": "one PR on or after earliest_safe_action_at",
   "protected_pillars": [
     "aditivos-obras-publicas",
@@ -48,13 +59,19 @@
       "id": "measurement_gate",
       "state": "WAITING",
       "owner": "web-cfg#292",
-      "evidence": "core_ready_for_product_decisions=true from comparable, dated evidence"
+      "evidence": "core_ready_for_product_decisions=true from comparable, dated evidence",
+      "evidence_path": "data/bofu-dominance/remeasurements/2026-08-24/decision.json"
     },
     {
       "id": "capture_profile",
-      "state": "WAITING",
+      "state": "READY",
       "owner": "web-cfg#289",
-      "evidence": "persisted capture profile is merged and green before reuse"
+      "evidence": "PR #307 merged the derived priced_offer persisted-capture profile and its fail-closed tests",
+      "evidence_paths": [
+        "scripts/site/inbound_gates.py",
+        "scripts/site/test_deliverable_models.py",
+        "scripts/site/test_report_model_599.py"
+      ]
     },
     {
       "id": "frozen_hashes",
@@ -65,12 +82,13 @@
   "execution_sequence": [
     "Rebase the execution branch on the then-current origin/main.",
     "Re-run the comparable measurement gate and abort unless it is ready.",
+    "Mark every evidenced precondition READY and set html_mutation_authorized=true only in the reviewed execution PR; the date or evidential close alone is insufficient.",
     "Remove the three before-equals-after entries with a written no-op reason.",
     "Apply only the three true replacements through the frozen patch mechanism.",
     "Add persisted capture to all six pillars without changing the source or attribution contract.",
     "Add FAQPage and Person only to diagnostico-b2g-360 with visible parity.",
-    "Run all acceptance gates before recapturing hashes.",
-    "Recapture hashes and snapshots without --force, then rerun the gates."
+    "Run the non-hash content and contract checks, then inspect the expected frozen drift before recapture.",
+    "Recapture hashes and snapshots without --force, then run every required gate against the reviewed baseline."
   ],
   "required_gates": [
     "npm run test:bofu-dominance",

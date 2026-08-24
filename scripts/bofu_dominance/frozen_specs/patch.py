@@ -71,6 +71,7 @@ def render_patch(
     content_hash: str,
     replacements: list[dict[str, str]],
     earliest: str | None = None,
+    html_mutation_authorized: bool = False,
 ) -> str:
     pillar = pillar_by_slug(slug)
     lines = [
@@ -80,7 +81,7 @@ def render_patch(
         f"content_sha256: {content_hash}",
         f"earliest_safe_action_at: {earliest or EARLIEST_SAFE_ACTION_AT.isoformat()}",
         f"corresponding_issue: {CORRESPONDING_ISSUE}",
-        "html_mutation_authorized: false",
+        f"html_mutation_authorized: {str(html_mutation_authorized).lower()}",
         "do_not_git_apply: true",
         HEADER_END,
     ]
@@ -113,8 +114,9 @@ def apply_frozen_patch(
     now: date | datetime | str | None = None,
     evidential_close: bool | None = None,
     patch_text: str | None = None,
+    unlock_plan: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Apply is refused before the date/issue-close gate. mutate=False never writes HTML."""
+    """Apply only through the active gate and an authorized patch header."""
     path = html_path(slug, root)
     live_hash = content_sha256(path)
     text = patch_text if patch_text is not None else patch_path(slug).read_text(encoding="utf-8")
@@ -123,6 +125,7 @@ def apply_frozen_patch(
         now=now,
         evidential_close=evidential_close,
         earliest_safe_action_at=parsed.get("earliest_safe_action_at") or None,
+        unlock_plan=unlock_plan,
     )
     hash_match = parsed["content_sha256"] == live_hash
     original = path.read_text(encoding="utf-8")
@@ -144,6 +147,8 @@ def apply_frozen_patch(
         reason = "replacement_not_found"
     elif not gate["gate_open"]:
         reason = "before_gate"
+    elif not parsed["html_mutation_authorized"]:
+        reason = "patch_not_authorized"
     elif not mutate:
         reason = "mutate_false_prepare_only"
     else:

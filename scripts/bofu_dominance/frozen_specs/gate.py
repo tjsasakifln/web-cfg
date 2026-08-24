@@ -1,4 +1,4 @@
-"""Apply-gate: refuse HTML mutation before 2026-09-16 unless the issue is evidentially closed."""
+"""Apply gate for the legacy freeze and the all-required unlock plan."""
 
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ from scripts.bofu_dominance.frozen_specs.constants import (
 )
 
 ISSUE_STATE_PATH = DATA_DIR / "issue-state.json"
+UNLOCK_PLAN_PATH = DATA_DIR / "unlock-plan.v1.json"
 
 
 def _as_date(value: date | datetime | str | None, default: date) -> date:
@@ -38,14 +39,25 @@ def load_issue_state(path: Path | None = None) -> dict[str, Any]:
     return json.loads(target.read_text(encoding="utf-8"))
 
 
+def load_unlock_plan(path: Path | None = None) -> dict[str, Any] | None:
+    target = path or UNLOCK_PLAN_PATH
+    if not target.is_file():
+        return None
+    payload = json.loads(target.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError(f"invalid unlock plan: {target}")
+    return payload
+
+
 def evaluate_gate(
     *,
     now: date | datetime | str | None = None,
     evidential_close: bool | None = None,
     earliest_safe_action_at: date | datetime | str | None = None,
     issue_state: dict[str, Any] | None = None,
+    unlock_plan: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Refuse apply when now < 2026-09-16 AND the corresponding issue is not evidentially closed."""
+    """Evaluate the legacy freeze or the stricter all-required unlock plan."""
     today = _as_date(now, date.today())
     earliest = _as_date(earliest_safe_action_at, EARLIEST_SAFE_ACTION_AT)
     state = issue_state if issue_state is not None else load_issue_state()
@@ -55,10 +67,46 @@ def evaluate_gate(
         else bool(state.get("evidential_close"))
     )
     date_ok = today >= earliest
-    gate_open = date_ok or closed
+    plan = unlock_plan if unlock_plan is not None else load_unlock_plan()
+    plan_authorized = None
+    unmet_preconditions: list[str] = []
+    authorization_mode = "legacy_date_or_evidential_close"
+    plan_date_matches_patch = True
+    if plan is None:
+        gate_open = date_ok or closed
+    else:
+        authorization_mode = "unlock_plan_all_required"
+        plan_earliest = _as_date(plan.get("earliest_safe_action_at"), earliest)
+        plan_date_matches_patch = plan_earliest == earliest
+        preconditions = plan.get("preconditions_all_required") or []
+        if not isinstance(preconditions, list) or not preconditions:
+            unmet_preconditions.append("preconditions_all_required")
+        else:
+            for item in preconditions:
+                if not isinstance(item, dict) or not item.get("id"):
+                    unmet_preconditions.append("invalid_precondition")
+                    continue
+                if item.get("state") != "READY":
+                    unmet_preconditions.append(str(item["id"]))
+        plan_authorized = plan.get("html_mutation_authorized") is True
+        gate_open = (
+            date_ok
+            and plan_date_matches_patch
+            and not unmet_preconditions
+            and plan_authorized
+        )
     refused = not gate_open
     reason = "gate_open" if gate_open else "before_gate"
-    if refused and not date_ok and not closed:
+    if plan is not None and refused:
+        if not date_ok:
+            reason = "before_date"
+        elif not plan_date_matches_patch:
+            reason = "unlock_plan_date_mismatch"
+        elif unmet_preconditions:
+            reason = "unlock_plan_preconditions_not_ready"
+        elif not plan_authorized:
+            reason = "unlock_plan_not_authorized"
+    elif refused and not date_ok and not closed:
         reason = "before_date_and_issue_not_evidentially_closed"
     return {
         "refused": refused,
@@ -66,6 +114,11 @@ def evaluate_gate(
         "now": today.isoformat(),
         "earliest_safe_action_at": earliest.isoformat(),
         "evidential_close": closed,
+        "authorization_mode": authorization_mode,
+        "unlock_plan_present": plan is not None,
+        "unlock_plan_authorized": plan_authorized,
+        "unlock_plan_date_matches_patch": plan_date_matches_patch,
+        "unmet_preconditions": unmet_preconditions,
         "corresponding_issue": int(state.get("issue") or CORRESPONDING_ISSUE),
         "issue_state": state.get("state"),
         "date_ok": date_ok,
