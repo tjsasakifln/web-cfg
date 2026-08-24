@@ -305,7 +305,7 @@
         {"label": "Descritores dos pares sugeridos no pacote", "url": "https://www.gov.br/pncp", "as_of": "2026-08-02", "document_id": "FIXTURE-CMP-005-pares"}
       ],
       "methodology": "Aplicar teste de comparabilidade (UF, arquétipo, regime, visibilidade de BDI, unidade de quantitativo) antes de qualquer estatística de preço. Falha em regime ou BDI produz NOT_COMPARABLE.",
-      "limitations": "O grupo de pares é o do pacote de teste. Não é censo. Fixture; extra-cli #415 ainda não está neste repositório.",
+      "limitations": "O grupo de pares é o do pacote de teste. Não é censo. Fixture; a base ampliada de pares ainda não está publicada.",
       "as_of": "2026-08-02",
       "freshness": {"as_of": "2026-08-02", "max_age_days": 180},
       "date_published": "2026-08-16",

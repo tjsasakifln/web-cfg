@@ -235,7 +235,7 @@ def method_markdown(doc: dict[str, Any]) -> str:
             f"- payload_content_hash: `{doc.get('payload_content_hash')}`",
             f"- rendered_content_hash: `{doc.get('rendered_content_hash')}`",
             f"- PNG: omitido ({(doc.get('png') or {}).get('reason')})",
-            f"- Owner de refresh: {doc.get('refresh_owner')}",
+            f"- Responsável pela atualização: {doc.get('refresh_owner')}",
             "",
             "Atualização do payload invalida este pacote ou exige nova `data_version`. "
             "Não há backfill silencioso.",

@@ -271,7 +271,7 @@ def _history_html(items: list[Any]) -> str:
             when = _iso(item.get("date") or item.get("as_of"))
             note = _text(item.get("text") or item.get("note"))
             if when or note:
-                lis.append(f"<li>{e(when)} — {e(note)}</li>")
+                lis.append(f"<li>{e(when)}: {e(note)}</li>")
         else:
             note = _text(item)
             if note:
@@ -544,7 +544,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
     if owner:
         sections.append(
             '<section class="section" id="manutencao"><h2>Manutenção</h2>'
-            f"<p>Owner de atualização: {e(owner)}.</p></section>"
+            f"<p>Responsável pela atualização: {e(owner)}.</p></section>"
         )
     sections.append(_history_html(_items(record.get("update_history"))))
     sections.append(_related_html(record))
@@ -570,7 +570,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             "<code>false</code>. "
             + (
                 "INDEX desta URL, se existir, é decisão do consumidor bound a hashes "
-                "e token de owner — não é autorização do produtor."
+                "e token do responsável, não é autorização do produtor."
                 if decision.indexable
                 else "Esta página não autoriza INDEX."
             )

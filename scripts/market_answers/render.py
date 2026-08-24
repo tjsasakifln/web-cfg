@@ -389,7 +389,7 @@ def render_html(
 <li>content_hash: <code>{escape(decision.content_hash)}</code></li>
 <li>producer_status: <code>{escape(decision.producer_status)}</code></li>
 <li>producer_sha: <code>{escape(_text(payload.get("producer_sha")))}</code></li>
-<li>Owner de refresh: {escape(_text(((record.get("refresh") or {{}}).get("owner")) if isinstance(record.get("refresh"), dict) else record.get("refresh_owner") or "CONFENGE / market-answers"))}</li>
+<li>Responsável pela atualização: {escape(_text(((record.get("refresh") or {{}}).get("owner")) if isinstance(record.get("refresh"), dict) else record.get("refresh_owner") or "CONFENGE / market-answers"))}</li>
 <li>Estado do gate: <code>{escape(decision.state)}</code> · recomendação <code>{escape(decision.recommendation)}</code></li>
 </ul>
 <p>A leitura factual é SELECT-only, versionada e com proveniência. Notas internas de integração ficam fora desta página.</p>
