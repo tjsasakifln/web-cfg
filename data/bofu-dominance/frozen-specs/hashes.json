@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "c318f77d725b3f3f18e7d7fecd150688a8e4d2b2",
+  "baseline_commit": "37b28fbbf065a275e9d05846dd4ed099537b8380",
   "recaptured_at": "2026-08-24",
-  "recapture_reason": "Reviewed recapture after merging issue #266 into the #290 hub work and proving the two new hub forms through the real lead handler. The six protected pillar HTML files remain byte-identical and html_mutation remains false. script.js is the deterministic module build; relative to the reviewed #266 baseline it only adds route_family, asset_id and cta_id to existing form submit/success/persisted analytics, without DOM, layout, style or fragment-lifecycle mutation.",
+  "recapture_reason": "Reviewed non-rendering recapture for #83 fail-closed publication. The six protected BOFU pillar HTML files and their rendering assets remain byte-identical; html_mutation remains false. Only robots.txt, sitemap.txt and sitemap-index.xml changed to remove the contract-analysis canary after its material approval became stale.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
@@ -24,10 +24,10 @@
     "styles.css": "c533be6395bad714566d7c8b1d36a607d6b19cb44b5e9dc3bbadc422aaedfbbe",
     "styles-tokens.css": "a25a9603d5c0a7abec5471d9730eec7506ce3950c29c428a6d86d130b41a2e1c",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",
-    "robots.txt": "762ed294580bfb8a88944481c93a7dad9bef70eb2e580cfa14ac6c46548bacc3",
+    "robots.txt": "f6cb2e97d1c32b8a8d15a6f2df29e7985176941c0a8329f61a09c10115c443d2",
     "sitemap.xml": "573a622bad0ae726ec02fea876674550eff6af207210ed7bb1db805f3f03f1ef",
-    "sitemap.txt": "4971166f7a2c545763478248b004081910fb1b7b106655ac2bb3c95228e0e0b2",
-    "sitemap-index.xml": "bff94a1e5fb612cd05ef9803a90c044f9419dd4a4528e8c6f40c3f20776d572e",
+    "sitemap.txt": "ff1ad0d1f8635b8dccbf8fde975c2d893acd7ca0511910e1c1dd70c14b8a9472",
+    "sitemap-index.xml": "7eaa4151c47a01fa4841be3af82f7e2cdbbd696b4508c89d3716ef4c8dd47083",
     "_redirects": "402f730e21b73c73574290bc572bf63fd36a713e1143b30a8df989b80f200a05",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "2bb200bf12345d1fd2cf95571082511214d7a2f86c42faf2192a4001d19028a2"

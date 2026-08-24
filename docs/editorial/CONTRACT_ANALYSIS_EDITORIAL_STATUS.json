@@ -1,39 +1,41 @@
 {
   "report": "CONTRACT_ANALYSIS_CANARY_STATUS",
   "gate_version": "contract-analysis-publication-gate/1.0",
-  "generated_at": "2026-08-20T12:17:26Z",
+  "generated_at": "2026-08-24T13:27:52Z",
   "evaluated": 1,
   "evaluated_cap": 10,
   "source_kind": "official_live",
   "catalog_mode": "official_live",
   "claimed_live": false,
   "test_only": false,
-  "source_path": "/home/tjsasakifln/.local/share/confenge/handoffs/contract-analysis/official-live-01",
+  "source_path": "scripts/contract_analysis/fixtures/official-live-01",
   "schema": "public-read-contract-analysis/1.0",
   "export_kind": "extra_cli_public_read",
   "live_absent": false,
   "live_absent_reason": null,
-  "index_count": 1,
+  "index_count": 0,
   "state_counts": {
     "REJECT": 0,
     "HOLD_FOR_DATA": 0,
     "EDITORIAL_REVIEW": 0,
-    "PUBLISHABLE_NOINDEX": 0,
-    "PUBLISHABLE_INDEX": 1
+    "PUBLISHABLE_NOINDEX": 1,
+    "PUBLISHABLE_INDEX": 0
   },
   "states_are_closed": true,
   "items": [
     {
       "id": "13ec615146b3d348190a9b0b9148831e",
       "slug": "reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026",
-      "state": "PUBLISHABLE_INDEX",
-      "reason_codes": [],
+      "state": "PUBLISHABLE_NOINDEX",
+      "reason_codes": [
+        "approval_absent"
+      ],
       "source_kind": "official_live",
       "fixture": false,
-      "indexable": true,
-      "robots": "index,follow",
+      "indexable": false,
+      "robots": "noindex,nofollow",
       "review_recommendation": "INDEX_READY_HUMAN_REVIEW",
-      "human_review_status": "",
+      "human_review_status": "READY_FOR_HUMAN_REVIEW",
       "quality_score": 100
     }
   ],
@@ -53,16 +55,16 @@
     "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html"
   ],
   "recommendation": "ADJUST",
-  "recommendation_reason": "Canário INDEX de uma URL official_live. Não expandir. Medir citação, correção e engagement qualificado antes de qualquer segunda análise. Producer publication/index flags nunca autorizam INDEX.",
+  "recommendation_reason": "Família e gate prontos. Consumer aceita authority-handoff-contract-analysis/1.0 e 1.1 além de public-read-contract-analysis/1.x. O rendezvous `$CONFENGE_HANDOFF_DIR/contract-analysis/official-live-01/` está `HANDOFF_READY`. index_count=0. Nenhum INDEX ativo. Não expandir. Replay o produtor até READY.json + SHA256SUMS conferirem; só então avaliar ≤3 dossiês. Producer publication/index flags nunca autorizam INDEX.",
   "expand_adjust_kill": "ADJUST",
-  "nenhum_index_ativo": false,
+  "nenhum_index_ativo": true,
   "factual_handoff_pending": false,
   "handoff": {
     "status": "HANDOFF_READY",
-    "path": "/home/tjsasakifln/.local/share/confenge/handoffs/contract-analysis/official-live-01",
+    "path": "/tmp/web-cfg-backlog-truth.2xBzB9/scripts/contract_analysis/fixtures/official-live-01",
     "checked": [
       {
-        "path": "/home/tjsasakifln/.local/share/confenge/handoffs/contract-analysis/official-live-01",
+        "path": "/tmp/web-cfg-backlog-truth.2xBzB9/scripts/contract_analysis/fixtures/official-live-01",
         "exists": true,
         "layout": "dossiers",
         "schema_ok": true,
@@ -106,15 +108,15 @@
     "reasons": []
   },
   "quality_version": "authority-content-quality/1.0",
-  "written_analyses": 0,
+  "written_analyses": 1,
   "review_packets": [
-    "/home/tjsasakifln/code/confenge/web-cfg/.worktrees/contract-analysis-v2-current-main-01/docs/editorial/contract-analysis/review/13ec615146b3d348190a9b0b9148831e"
+    "/tmp/web-cfg-backlog-truth.2xBzB9/docs/editorial/contract-analysis/review/13ec615146b3d348190a9b0b9148831e"
   ],
   "citations": [
     {
       "id": "13ec615146b3d348190a9b0b9148831e",
       "auto_send": false,
-      "distribute": true
+      "distribute": false
     }
   ]
 }

@@ -30,7 +30,8 @@ from legacy_equity.inventory import (  # noqa: E402
 
 LEGACY_ORIGIN = "https://smartlic.tech"
 CONFENGE = "https://confenge.com.br"
-STABLE_GENERATED_AT = "2026-08-16T00:00:00Z"
+STABLE_GENERATED_AT = "2026-08-24T00:00:00Z"
+HOLD_REVIEW_DATE = "2026-09-20"
 
 QUERY_RULE = DEFAULT_QUERY_STRING_POLICY
 
@@ -492,6 +493,7 @@ def _project_entry(src: dict) -> dict:
         )
     if action == "HOLD_TARGET_NOT_READY":
         out["intended_future_surface"] = hold[0]
+        out["review_date"] = HOLD_REVIEW_DATE
         out["skip_reason"] = (
             f"HOLD_TARGET_NOT_READY: {hold[1]} Intended surface: {hold[0]}. "
             "Do not 301 to a weak substitute or home."
@@ -551,6 +553,7 @@ def build(source: dict) -> dict:
             "action_counts": counts,
             "ready_redirect_count": counts.get("REDIRECT_301", 0),
             "hold_count": counts.get("HOLD_TARGET_NOT_READY", 0),
+            "hold_review_date": HOLD_REVIEW_DATE,
             "retire_count": counts.get("RETIRE_410", 0),
             "migrate_count": counts.get("MIGRATE", 0),
             "ignore_count": counts.get("IGNORE_NONCANONICAL", 0),
@@ -590,6 +593,7 @@ def execute_set_payload(data: dict, digest: str) -> dict:
                     "path": _norm_path(entry["legacy_url"]),
                     "skip_reason": entry["skip_reason"],
                     "intended_future_surface": entry["intended_future_surface"],
+                    "review_date": entry["review_date"],
                     "expected_http": 410,
                     "target_url": None,
                 }
@@ -602,6 +606,7 @@ def execute_set_payload(data: dict, digest: str) -> dict:
         "default_status": 410,
         "owner": "SmartLic#2115",
         "observation_window_days": 28,
+        "hold_review_date": HOLD_REVIEW_DATE,
         "persist": persist or list(QUERY_RULE["persist"]),
         "redirects": redirects,
         "holds": holds,

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from datetime import date
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -71,6 +72,7 @@ def test_hold_is_fail_closed_no_location():
         assert entry["status"] == "hold"
         assert entry["skip_reason"]
         assert entry["intended_future_surface"]
+        assert date.fromisoformat(entry["review_date"]) >= date(2026, 8, 24)
         assert not str(entry["intended_future_surface"]).startswith("https://")
         assert "301" not in entry["skip_reason"] or "Do not 301" in entry["skip_reason"]
 

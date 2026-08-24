@@ -136,7 +136,7 @@
       "match": {"prefix": "/especialista/"},
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
-      "owner_issue": 74,
+      "owner_issue": 243,
       "debt": []
     },
     {
@@ -158,12 +158,12 @@
       "match": {"routes": ["/metodologia-inteligencia/"]},
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
-      "owner_issue": 74,
+      "owner_issue": 61,
       "debt": [
         {
           "route": "/metodologia-inteligencia/",
-          "owner_issue": 74,
-          "reason": "Página de método publicada antes deste gate existir: hoje encerra sem captura e sem WhatsApp no <main>. A ação terminal pertence ao trabalho de autoridade de #74; corrigir o HTML aqui invadiria o escopo daquela issue.",
+          "owner_issue": 61,
+          "reason": "Página de método publicada antes deste gate existir: hoje encerra sem captura e sem WhatsApp no <main>. #74 foi superseded; o épico operacional #61 mantém este débito nominal até a data de expiração, sem reativar a iniciativa histórica.",
           "expires_at": "2026-10-31"
         }
       ]
@@ -188,14 +188,7 @@
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
       "owner_issue": 83,
-      "debt": [
-        {
-          "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
-          "owner_issue": 83,
-          "reason": "Canário de análise técnica publicado sob gate editorial de #83, sem ação terminal no <main>. A ação terminal do canário é decisão de #83, que controla o gate editorial da família; alterar o HTML aqui furaria aquele gate.",
-          "expires_at": "2026-10-31"
-        }
-      ]
+      "debt": []
     },
     {
       "id": "casos",

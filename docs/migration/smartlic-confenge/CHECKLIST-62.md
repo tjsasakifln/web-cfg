@@ -10,7 +10,7 @@ Issue remains **OPEN**. 28-day observation is planned, not complete.
 | CONFENGE-only brand/canonical | YES | crawl: no SmartLic; canonical `https://confenge.com.br/...` |
 | Zero indiscriminate home/parent 301 | YES | validator rejects ready home/`/consultoria-b2g`/parent without justification; RETIRE = 410 |
 | CTA + allowlisted attribution, no PII | YES | `lead-core.pickAttribution` + `window.confengeAttribution`; tests inject unlisted + PII |
-| Manifesto + #2115 handoff pinned by hash | YES | `9e5667c127fc5494f5849aece2234b13a1c1db10257a17274545019634506ca9` |
+| Manifesto + #2115 handoff pinned by hash | YES | `9c47b1b26e1dfb83cb8ea476091d9893931d17ce434ca54e7b6af933b85433fa` |
 | Zero chain/loop/soft-404 on priority crawl of **targets** | YES | built artifact crawl |
 | Live SmartLic 301s | NOT THIS PR | SmartLic#2115 after this hash |
 | DNS/TLS/cutover | **BLOCKED** | Railway fallback 404; www TLS SAN mismatch |
@@ -21,7 +21,7 @@ Issue remains **OPEN**. 28-day observation is planned, not complete.
 
 | Lane | State |
 |---|---|
-| In-repo 11-row accept | READY_FOR_HUMAN_ACCEPTANCE (WEB-017 remapped payment-delay row; pin `9e5667c1…`) |
+| In-repo 11-row accept | READY_FOR_HUMAN_ACCEPTANCE (WEB-017 remapped payment-delay row; pin `9c47b1b2…`) |
 | DNS / TLS / Cloudflare / Railway cutover | BLOCKED (not authorized; Railway fallback 404; www TLS SAN mismatch) |
 | 28-day GSC Change-of-Address | HUMAN ACTION REQUIRED after cutover (window not started) |
 
