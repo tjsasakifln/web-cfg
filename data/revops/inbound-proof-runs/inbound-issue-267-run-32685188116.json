@@ -1,0 +1,196 @@
+{
+  "schema": "confenge-inbound-counters-proof/1.1",
+  "issue": 267,
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "REVENUE NOW",
+  "leverage": "revenue",
+  "evidence_scope": "read_only_authenticated_ops_configuration_and_aggregate_counters",
+  "base": "https://confenge.com.br",
+  "ts": "2026-08-24T03:05:22.262Z",
+  "git_sha": "09c676c85a7a0b901ff8bf5a25306193c738a9bc",
+  "checks": [
+    {
+      "name": "ops_token_configured",
+      "ok": true,
+      "detail": "configured=true",
+      "critical": true
+    },
+    {
+      "name": "ops_health_authenticated",
+      "ok": true,
+      "detail": "http=200 auth_configured=true",
+      "critical": true
+    },
+    {
+      "name": "inbound_handoff_counters",
+      "ok": true,
+      "detail": "http=200 counters_present=true",
+      "critical": true
+    },
+    {
+      "name": "inbound_handoff_configuration_observable",
+      "ok": true,
+      "detail": "http=200 configuration_present=true",
+      "critical": true
+    },
+    {
+      "name": "inbound_transport_configuration_ready",
+      "ok": true,
+      "detail": "http=200 configuration={\"webhook_url\":\"SET\",\"webhook_secret\":\"SET\",\"contract\":\"READY\",\"reason\":null}",
+      "critical": true
+    },
+    {
+      "name": "skipped_requeue_audit_aggregate_only",
+      "ok": true,
+      "detail": "http=200 aggregate_present=true",
+      "critical": true
+    },
+    {
+      "name": "skipped_requeue_dry_run_aggregate_only",
+      "ok": true,
+      "detail": "http=200 dry_run=true aggregate_present=true",
+      "critical": true
+    },
+    {
+      "name": "commercial_funnel_counters",
+      "ok": true,
+      "detail": "http=200 commercial_only=true",
+      "critical": true
+    }
+  ],
+  "ops_requests": [
+    {
+      "path": "/.netlify/functions/ops?action=health",
+      "method": "GET",
+      "status": 200,
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "path": "/.netlify/functions/ops?action=inbound_handoff",
+      "method": "GET",
+      "status": 200,
+      "attempts": 2,
+      "error": null
+    },
+    {
+      "path": "/.netlify/functions/ops?action=audit_inbound_requeue",
+      "method": "GET",
+      "status": 200,
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "path": "/.netlify/functions/ops?action=requeue_inbound",
+      "method": "POST",
+      "status": 200,
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "path": "/.netlify/functions/ops?action=funnel",
+      "method": "GET",
+      "status": 200,
+      "attempts": 1,
+      "error": null
+    }
+  ],
+  "consented_real_contact": "MISSING",
+  "real_loop_status": "BLOCKED",
+  "non_claims": [
+    "does_not_prove_warmbly_auto_send_is_off",
+    "does_not_prove_a_consented_real_contact_exists",
+    "does_not_prove_end_to_end_commercial_handoff",
+    "does_not_requeue_or_drain_any_record"
+  ],
+  "inbound_handoff_counters": {
+    "persisted_leads": 126,
+    "pending": 0,
+    "delivered": 0,
+    "retryable": 0,
+    "retries": 0,
+    "permanent_failures": 0,
+    "skipped": 126,
+    "blocked": 0,
+    "dead": 0,
+    "latency": {
+      "count": 0,
+      "last_ms": null,
+      "p50_ms": null,
+      "p95_ms": null
+    }
+  },
+  "inbound_handoff_configuration": {
+    "webhook_url": "SET",
+    "webhook_secret": "SET",
+    "contract": "READY",
+    "reason": null
+  },
+  "transport_status": "READY",
+  "skipped_requeue_audit": {
+    "total": 126,
+    "by_status": {
+      "SKIPPED": 24,
+      "MISSING": 102
+    },
+    "by_reason": {
+      "non_real": 23,
+      "MISSING": 102,
+      "not_configured": 1
+    },
+    "by_record_kind": {
+      "synthetic": 67,
+      "qa": 12,
+      "MISSING": 45,
+      "real": 2
+    },
+    "by_consent_state": {
+      "EXPLICIT_TRUE": 126
+    },
+    "by_commercial_eligibility": {
+      "DNC_OR_SUPPRESSED": 79,
+      "OTHER_BLOCKER": 46,
+      "ELIGIBLE_REAL_NOT_CONFIGURED": 1
+    },
+    "by_created_at_window": {
+      "2026-08": 126
+    },
+    "eligible_real_not_configured": 1,
+    "never_requeue": 0,
+    "manual_review": 0,
+    "suppressed": 79,
+    "already_delivered": 0,
+    "other": 46,
+    "reason_counts": {
+      "dnc_or_suppressed": 79,
+      "not_skipped": 46,
+      "eligible_real_not_configured": 1
+    }
+  },
+  "skipped_requeue_dry_run": {
+    "eligible_count": 1,
+    "never_requeue_count": 0,
+    "manual_review_count": 0,
+    "reason_counts": {
+      "dnc_or_suppressed": 79,
+      "not_skipped": 46,
+      "eligible_real_not_configured": 1
+    }
+  },
+  "funnel": {
+    "commercial_only": true,
+    "counts": {
+      "visitor": 0,
+      "cta_triggered": 0,
+      "form_started": 0,
+      "lead_persisted": 36,
+      "contacted": 0,
+      "qualified": 0,
+      "meeting": 0,
+      "proposal": 0,
+      "won": 0,
+      "lost": 0
+    }
+  },
+  "ok": true
+}

@@ -57,6 +57,7 @@ const {
   resolveInboundConfig,
   summarizeHandoffs,
   auditSkippedHandoffs,
+  inboundDestinationFingerprint,
   probeInboundDestinationHealth,
   requeueEligibleHandoffs,
 } = require("./lib/inbound-handoff.cjs");
@@ -780,6 +781,9 @@ exports.handler = async (event) => {
       webhook_secret: process.env.CONFENGE_INBOUND_WEBHOOK_SECRET ? "SET" : "UNSET",
       contract: inboundConfig.ok ? "READY" : inboundConfig.skip ? "UNSET" : "BLOCKED",
       reason: inboundConfig.ok ? null : inboundConfig.reason || "UNKNOWN",
+      destination_fingerprint: inboundDestinationFingerprint(
+        process.env.CONFENGE_INBOUND_WEBHOOK_URL
+      ),
     };
     return json(
       200,

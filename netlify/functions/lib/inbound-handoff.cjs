@@ -20,6 +20,9 @@ const {
 } = require("./inbound-backlog-policy.cjs");
 
 const INBOUND_PATH = "/api/v1/webhooks/confenge/inbound";
+const CANONICAL_INBOUND_HOST = "api.confenge.com.br";
+const CANONICAL_INBOUND_URL = `https://${CANONICAL_INBOUND_HOST}${INBOUND_PATH}`;
+const CANONICAL_INBOUND_DESTINATION = "WARMBLY_PRODUCTION_V1";
 const SOURCE_INTERNAL = "CONFENGE_WEB";
 const SOURCE_WARMBLY = "CONFENGE_WEB";
 const DEFAULT_TIMEOUT_MS = 8000;
@@ -231,6 +234,15 @@ function verifyWarmblyInbound(secret, header, rawBody, nowMs = Date.now(), skewM
   return crypto.timingSafeEqual(a, b);
 }
 
+/**
+ * Stable, non-secret destination identity. Never returns the configured URL.
+ */
+function inboundDestinationFingerprint(rawUrl) {
+  const raw = String(rawUrl || "").trim();
+  if (!raw) return "MISSING";
+  return raw === CANONICAL_INBOUND_URL ? CANONICAL_INBOUND_DESTINATION : "UNEXPECTED";
+}
+
 function resolveInboundConfig(env = process.env) {
   const url = String(env.CONFENGE_INBOUND_WEBHOOK_URL || "").trim();
   const secret = String(env.CONFENGE_INBOUND_WEBHOOK_SECRET || "").trim();
@@ -267,6 +279,9 @@ function resolveInboundConfig(env = process.env) {
 
   if (parsed.pathname !== INBOUND_PATH && !parsed.pathname.endsWith(INBOUND_PATH)) {
     return { ok: false, blocked: true, reason: "invalid_path", timeoutMs, maxAttempts };
+  }
+  if (prodLike && inboundDestinationFingerprint(url) !== CANONICAL_INBOUND_DESTINATION) {
+    return { ok: false, blocked: true, reason: "noncanonical_destination", timeoutMs, maxAttempts };
   }
   if (allowHosts.length && !allowHosts.includes(parsed.hostname.toLowerCase())) {
     return { ok: false, blocked: true, reason: "host_not_allowed", timeoutMs, maxAttempts };
@@ -393,7 +408,10 @@ function classifySkippedForRequeue(record) {
     return { classification: REQUEUE_CLASS.NEVER_REQUEUE_NON_REAL, reason: "non_real" };
   }
   if (reason !== "not_configured") {
-    return { classification: REQUEUE_CLASS.OTHER_BLOCKER, reason: reason || "missing_skip_reason" };
+    return {
+      classification: REQUEUE_CLASS.OTHER_BLOCKER,
+      reason: reason ? "unexpected_handoff_reason" : "missing_skip_reason",
+    };
   }
   if (!kind) {
     return { classification: REQUEUE_CLASS.MANUAL_REVIEW_LEGACY, reason: "legacy_kind_unknown" };
@@ -416,6 +434,28 @@ function classifySkippedForRequeue(record) {
 function countInto(target, key) {
   const safe = String(key || "UNKNOWN").slice(0, 120);
   target[safe] = (target[safe] || 0) + 1;
+}
+
+const AUDIT_HANDOFF_STATUSES = new Set([...Object.values(STATUS), "MISSING"]);
+const AUDIT_HANDOFF_REASONS = new Set([
+  "MISSING",
+  "non_real",
+  "not_configured",
+  "pii_on_url",
+  "invalid_url",
+  "https_required",
+  "invalid_path",
+  "noncanonical_destination",
+  "host_not_allowed",
+  "secret_missing",
+]);
+const AUDIT_RECORD_KINDS = new Set(["MISSING", "real", "synthetic", "qa", "spam", "internal"]);
+
+function aggregateCategory(value, allowed, { missing = "MISSING", normalize = (item) => item } = {}) {
+  const raw = String(value || "").trim();
+  if (!raw) return missing;
+  const normalized = normalize(raw);
+  return allowed.has(normalized) ? normalized : "OTHER";
 }
 
 function createdWindow(record) {
@@ -447,9 +487,20 @@ function auditSkippedHandoffs(leads) {
     audit.total += 1;
     const handoff = (record && record.handoff) || {};
     const result = classifySkippedForRequeue(record);
-    countInto(audit.by_status, String(handoff.status || "MISSING").toUpperCase());
-    countInto(audit.by_reason, handoff.reason || "MISSING");
-    countInto(audit.by_record_kind, (record && record.record_kind) || "MISSING");
+    countInto(
+      audit.by_status,
+      aggregateCategory(handoff.status, AUDIT_HANDOFF_STATUSES, { normalize: (item) => item.toUpperCase() })
+    );
+    countInto(
+      audit.by_reason,
+      aggregateCategory(handoff.reason, AUDIT_HANDOFF_REASONS, { normalize: (item) => item.toLowerCase() })
+    );
+    countInto(
+      audit.by_record_kind,
+      aggregateCategory(record && record.record_kind, AUDIT_RECORD_KINDS, {
+        normalize: (item) => item.toLowerCase(),
+      })
+    );
     countInto(audit.by_consent_state, hasExplicitConsent(record) ? "EXPLICIT_TRUE" : "MISSING_OR_FALSE");
     countInto(audit.by_commercial_eligibility, result.classification);
     countInto(audit.by_created_at_window, createdWindow(record));
@@ -945,6 +996,9 @@ function summarizeHandoffs(leads) {
 
 module.exports = {
   INBOUND_PATH,
+  CANONICAL_INBOUND_HOST,
+  CANONICAL_INBOUND_URL,
+  CANONICAL_INBOUND_DESTINATION,
   SOURCE_INTERNAL,
   SOURCE_WARMBLY,
   STATUS,
@@ -953,6 +1007,7 @@ module.exports = {
   mapLeadToInboundV1,
   signWarmblyInbound,
   verifyWarmblyInbound,
+  inboundDestinationFingerprint,
   resolveInboundConfig,
   sanitizeUrl,
   urlHasPiiQuery,

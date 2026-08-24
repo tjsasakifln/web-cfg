@@ -193,6 +193,47 @@ const inbound = loadInbound();
     CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
   });
   if (prod.ok || !prod.blocked || prod.reason !== "https_required") fail("fail_closed_http", prod);
+  const wrongCanonicalHost = inbound.resolveInboundConfig({
+    NODE_ENV: "production",
+    CONTEXT: "production",
+    CONFENGE_INBOUND_WEBHOOK_URL: "https://evil.example/api/v1/webhooks/confenge/inbound",
+    CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
+  });
+  if (
+    wrongCanonicalHost.ok ||
+    !wrongCanonicalHost.blocked ||
+    wrongCanonicalHost.reason !== "noncanonical_destination"
+  ) fail("fail_closed_noncanonical_production_destination", wrongCanonicalHost);
+  if (
+    inbound.inboundDestinationFingerprint("https://api.confenge.com.br/api/v1/webhooks/confenge/inbound") !==
+      "WARMBLY_PRODUCTION_V1" ||
+    inbound.inboundDestinationFingerprint("https://evil.example/api/v1/webhooks/confenge/inbound") !==
+      "UNEXPECTED"
+  ) fail("inbound_destination_fingerprint");
+  for (const ambiguous of [
+    "https://api.confenge.com.br:443/api/v1/webhooks/confenge/inbound",
+    "https://API.confenge.com.br/api/v1/webhooks/confenge/inbound",
+    "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound/",
+    "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound?probe=1",
+    "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound#fragment",
+    "https://user@api.confenge.com.br/api/v1/webhooks/confenge/inbound",
+  ]) {
+    if (inbound.inboundDestinationFingerprint(ambiguous) !== "UNEXPECTED") {
+      fail("inbound_destination_fingerprint_rejects_ambiguous_url", ambiguous);
+    }
+  }
+  const canonicalProduction = inbound.resolveInboundConfig({
+    NODE_ENV: "production",
+    CONTEXT: "production",
+    CONFENGE_INBOUND_WEBHOOK_URL: "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound",
+    CONFENGE_INBOUND_WEBHOOK_SECRET: SECRET,
+  });
+  if (
+    !canonicalProduction.ok ||
+    canonicalProduction.url !== "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound"
+  ) {
+    fail("canonical_production_destination_ready", canonicalProduction);
+  }
   const noSecret = inbound.resolveInboundConfig({
     NODE_ENV: "production",
     CONFENGE_INBOUND_WEBHOOK_URL: "https://ops.example/api/v1/webhooks/confenge/inbound",
@@ -269,6 +310,28 @@ const inbound = loadInbound();
   }
   const auditBlob = JSON.stringify(audit);
   if (auditBlob.includes(base.email) || auditBlob.includes(base.lead_id)) fail("requeue_audit_pii", audit);
+  const hostileAudit = inbound.auditSkippedHandoffs([
+    {
+      ...base,
+      record_kind: "person@example.com",
+      handoff: { status: "person@example.com", reason: "person@example.com" },
+    },
+    {
+      ...base,
+      handoff: { status: "SKIPPED", reason: "person@example.com" },
+    },
+  ]);
+  const hostileAuditBlob = JSON.stringify(hostileAudit);
+  if (
+    hostileAuditBlob.includes("person@example.com") ||
+    hostileAudit.by_status.OTHER !== 1 ||
+    hostileAudit.by_reason.OTHER !== 2 ||
+    hostileAudit.by_record_kind.OTHER !== 1 ||
+    hostileAudit.reason_counts.unexpected_handoff_reason !== 1 ||
+    hostileAudit.reason_counts.not_skipped !== 1
+  ) {
+    fail("requeue_audit_dynamic_categories_pii_safe", hostileAudit);
+  }
   pass("strict_requeue_classifier_and_aggregate_audit", audit.by_commercial_eligibility);
 }
 
@@ -675,12 +738,13 @@ try {
       data.configuration.webhook_url !== "SET" ||
       data.configuration.webhook_secret !== "SET" ||
       data.configuration.contract !== "READY" ||
-      data.configuration.reason !== null
+      data.configuration.reason !== null ||
+      data.configuration.destination_fingerprint !== "UNEXPECTED"
     ) {
       fail("ops_inbound_configuration", data.configuration);
     }
     const s = JSON.stringify(data);
-    if (s.includes("maria.costa@") || s.includes("Maria Costa") || s.includes(SECRET)) {
+    if (s.includes("maria.costa@") || s.includes("Maria Costa") || s.includes(SECRET) || s.includes(mock.url)) {
       fail("ops_counters_pii_or_secret", data);
     }
     pass("ops_inbound_configuration", data.configuration);

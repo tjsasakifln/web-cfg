@@ -7,7 +7,18 @@ import { execFileSync, execSync } from "child_process";
 import { resolve, dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { tmpdir } from "os";
+import { createHash } from "crypto";
 import { createOpsJsonClient } from "./ops_fetch.mjs";
+import {
+  commercialFunnelSummary,
+  inboundAuditSummary,
+  inboundConfigurationSummary,
+  inboundCountersSummary,
+  inboundDryRunSummary,
+  inboundTransportConfigured,
+  inboundTransportProofReady,
+  inboundTransportReady,
+} from "./inbound_proof_contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 let failed = 0;
@@ -52,6 +63,168 @@ function fail(n, d) {
   failed += 1;
 }
 
+// #267: merely returning a configuration object is not production readiness.
+{
+  const ready = {
+    webhook_url: "SET",
+    webhook_secret: "SET",
+    contract: "READY",
+    reason: null,
+    destination_fingerprint: "WARMBLY_PRODUCTION_V1",
+  };
+  if (!inboundTransportReady(ready)) fail("inbound_proof_ready_contract", ready);
+  else pass("inbound_proof_ready_contract");
+  for (const drift of [
+    { ...ready, webhook_url: "UNSET" },
+    { ...ready, webhook_secret: "UNSET" },
+    { ...ready, contract: "BLOCKED", reason: "destination_unhealthy" },
+    { ...ready, destination_fingerprint: "UNEXPECTED" },
+    null,
+  ]) {
+    if (inboundTransportReady(drift)) fail("inbound_proof_rejects_configuration_drift", drift);
+  }
+  pass("inbound_proof_rejects_configuration_drift");
+  const summary = inboundConfigurationSummary(null);
+  if (summary.webhook_url !== "MISSING" || summary.webhook_secret !== "MISSING") {
+    fail("inbound_proof_missing_configuration_summary", summary);
+  } else pass("inbound_proof_missing_configuration_summary");
+  if (inboundTransportProofReady({ status: 503, body: { ok: true, configuration: ready } })) {
+    fail("inbound_proof_http_failure_cannot_report_ready");
+  } else pass("inbound_proof_http_failure_cannot_report_ready");
+  if (inboundTransportProofReady({ status: 200, body: { ok: false, configuration: ready } })) {
+    fail("inbound_proof_body_failure_cannot_report_ready");
+  } else pass("inbound_proof_body_failure_cannot_report_ready");
+  if (!inboundTransportProofReady({ status: 200, body: { ok: true, configuration: ready } })) {
+    fail("inbound_proof_full_response_ready");
+  } else pass("inbound_proof_full_response_ready");
+  if (inboundTransportReady({ ...ready, raw_url: "https://must-not-persist.invalid" })) {
+    fail("inbound_proof_configuration_schema_closed");
+  } else pass("inbound_proof_configuration_schema_closed");
+  const hostileSummary = inboundConfigurationSummary({
+    webhook_url: "https://person@example.com/?token=secret",
+    webhook_secret: "actual-secret",
+    contract: "READY",
+    reason: "person@example.com",
+    destination_fingerprint: "WARMBLY_PRODUCTION_V1",
+  });
+  const expectedHostileSummary = {
+    webhook_url: "UNEXPECTED",
+    webhook_secret: "UNEXPECTED",
+    contract: "READY",
+    reason: "UNEXPECTED",
+    destination_fingerprint: "WARMBLY_PRODUCTION_V1",
+  };
+  if (JSON.stringify(hostileSummary) !== JSON.stringify(expectedHostileSummary)) {
+    fail("inbound_proof_configuration_summary_allowlist", hostileSummary);
+  } else pass("inbound_proof_configuration_summary_allowlist");
+
+  const counters = {
+    persisted_leads: 1,
+    pending: 0,
+    delivered: 0,
+    retryable: 0,
+    retries: 0,
+    permanent_failures: 0,
+    skipped: 1,
+    blocked: 0,
+    dead: 0,
+    latency: { count: 0, last_ms: null, p50_ms: null, p95_ms: null },
+  };
+  if (!inboundCountersSummary(counters)) fail("inbound_proof_counter_contract", counters);
+  else pass("inbound_proof_counter_contract");
+  if (inboundCountersSummary({ ...counters, client_name: "must-not-persist" })) {
+    fail("inbound_proof_counter_schema_closed");
+  } else pass("inbound_proof_counter_schema_closed");
+
+  const audit = {
+    total: 1,
+    by_status: { SKIPPED: 1 },
+    by_reason: { not_configured: 1 },
+    by_record_kind: { real: 1 },
+    by_consent_state: { EXPLICIT_TRUE: 1 },
+    by_commercial_eligibility: { ELIGIBLE_REAL_NOT_CONFIGURED: 1 },
+    by_created_at_window: { "2026-08": 1 },
+    eligible_real_not_configured: 1,
+    never_requeue: 0,
+    manual_review: 0,
+    suppressed: 0,
+    already_delivered: 0,
+    other: 0,
+    reason_counts: { eligible_real_not_configured: 1 },
+  };
+  if (!inboundAuditSummary(audit)) fail("inbound_proof_audit_contract", audit);
+  else pass("inbound_proof_audit_contract");
+  const hostileAudit = { ...audit, by_reason: { "person@example.com": 1 } };
+  if (inboundAuditSummary(hostileAudit)) fail("inbound_proof_audit_dynamic_pii_key", hostileAudit);
+  else pass("inbound_proof_audit_dynamic_pii_key");
+
+  const dryRun = {
+    eligible_count: 1,
+    never_requeue_count: 0,
+    manual_review_count: 0,
+    reason_counts: { eligible_real_not_configured: 1 },
+  };
+  if (!inboundDryRunSummary(dryRun)) fail("inbound_proof_dry_run_contract", dryRun);
+  else pass("inbound_proof_dry_run_contract");
+  const funnel = {
+    visitor: 0,
+    cta_triggered: 0,
+    form_started: 0,
+    lead_persisted: 1,
+    contacted: 0,
+    qualified: 0,
+    meeting: 0,
+    proposal: 0,
+    won: 0,
+    lost: 0,
+  };
+  if (!commercialFunnelSummary(funnel)) fail("inbound_proof_funnel_contract", funnel);
+  else pass("inbound_proof_funnel_contract");
+}
+
+// #267: committed production evidence stays aggregate-only and immutable.
+{
+  const proofPath = resolve(
+    ROOT,
+    "data/revops/inbound-proof-runs/inbound-issue-267-run-32685188116.json"
+  );
+  const proofBytes = readFileSync(proofPath);
+  const proof = JSON.parse(proofBytes.toString("utf8"));
+  const digest = createHash("sha256").update(proofBytes).digest("hex");
+  if (digest !== "98ab2bae579a350ee07624a1bac835162253f580014c6bfcd7f69b79428da1ac") {
+    fail("inbound_proof_committed_digest", digest);
+  } else pass("inbound_proof_committed_digest");
+  if (
+    proof.schema !== "confenge-inbound-counters-proof/1.1" ||
+    proof.issue !== 267 ||
+    proof.ok !== true ||
+    proof.transport_status !== "READY" ||
+    !inboundTransportConfigured(proof.inbound_handoff_configuration) ||
+    Object.prototype.hasOwnProperty.call(
+      proof.inbound_handoff_configuration,
+      "destination_fingerprint"
+    )
+  ) {
+    fail("inbound_proof_committed_contract", proof);
+  } else pass("inbound_proof_committed_contract", "immutable pre-fingerprint run");
+  if (
+    !inboundCountersSummary(proof.inbound_handoff_counters) ||
+    !inboundAuditSummary(proof.skipped_requeue_audit) ||
+    !inboundDryRunSummary(proof.skipped_requeue_dry_run) ||
+    !commercialFunnelSummary(proof.funnel?.counts)
+  ) {
+    fail("inbound_proof_committed_aggregate_contracts", proof);
+  } else pass("inbound_proof_committed_aggregate_contracts");
+  if (
+    proof.inbound_handoff_counters?.delivered !== 0 ||
+    proof.consented_real_contact !== "MISSING" ||
+    proof.real_loop_status !== "BLOCKED" ||
+    !proof.non_claims?.includes("does_not_requeue_or_drain_any_record")
+  ) {
+    fail("inbound_proof_committed_residual", proof);
+  } else pass("inbound_proof_committed_residual");
+}
+
 // 2d) The focal proof fails closed without the Actions secret and still emits evidence.
 {
   const proofDir = mkdtempSync(join(tmpdir(), "confenge-inbound-proof-"));
@@ -80,6 +253,39 @@ function fail(n, d) {
   if (proof?.consented_real_contact !== "MISSING" || proof?.real_loop_status !== "BLOCKED") {
     fail("inbound_proof_preserves_real_loop_blocker", proof);
   } else pass("inbound_proof_preserves_real_loop_blocker");
+}
+
+// #267: never send OPS_TOKEN to a caller-controlled proof base.
+{
+  const proofDir = mkdtempSync(join(tmpdir(), "confenge-inbound-base-"));
+  const hostileBase = "https://person@example.invalid/?token=must-not-persist";
+  let failedAsExpected = false;
+  try {
+    execFileSync(process.execPath, [resolve(ROOT, "scripts/revops/inbound_counters_proof.mjs")], {
+      cwd: ROOT,
+      encoding: "utf8",
+      stdio: "pipe",
+      env: {
+        ...process.env,
+        BASE_URL: hostileBase,
+        OPS_TOKEN: "must-not-leave-the-runner",
+        INBOUND_PROOF_RUN_DIR: proofDir,
+      },
+    });
+  } catch {
+    failedAsExpected = true;
+  }
+  const reports = readdirSync(proofDir).filter((name) => name.endsWith(".json"));
+  const proof = reports.length === 1
+    ? JSON.parse(readFileSync(resolve(proofDir, reports[0]), "utf8"))
+    : null;
+  const blob = JSON.stringify(proof || {});
+  if (!failedAsExpected || !proof || proof.ok !== false || proof.base !== "UNEXPECTED") {
+    fail("inbound_proof_noncanonical_base_fails_before_request", proof || reports);
+  } else pass("inbound_proof_noncanonical_base_fails_before_request");
+  if (proof?.ops_requests?.length !== 0 || blob.includes("example.invalid") || blob.includes("must-not")) {
+    fail("inbound_proof_noncanonical_base_secret_safe", proof);
+  } else pass("inbound_proof_noncanonical_base_secret_safe");
 }
 
 // 1) Workflow exists and is the single primary scheduler
