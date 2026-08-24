@@ -2,9 +2,9 @@
   "ok": true,
   "found": 42,
   "service_pages": 13,
-  "html_scanned": 267,
+  "html_scanned": 276,
   "svg_files_scanned": 4,
-  "svg_paths_checked": 3507,
+  "svg_paths_checked": 3553,
   "svg_path_fixtures": [
     {
       "id": "corrupt-whatsapp-glyph",
@@ -40,7 +40,7 @@
   "svg_path_parser_regressions": 15,
   "svg_path_extraction_regressions": 23,
   "earliest_safe_action_at": "2026-09-16",
-  "audit_date": "2026-08-23",
+  "audit_date": "2026-08-24",
   "warnings": [
     {
       "rel": "aditivos-obras-publicas/index.html",

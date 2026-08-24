@@ -71,7 +71,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 255,
+  "html_route_count": 256,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -99,6 +99,7 @@
     "/casos/modelo-relatorio-executivo-consolidado/",
     "/casos/modelo-relatorio-inteligencia-licitacoes/",
     "/comercial/privacidade-leads/",
+    "/comercial/radar-decisorio/",
     "/comercial/termos-diagnostico-b2g/",
     "/conflitos/",
     "/conteudos/aceleracao-obra-publica-custo-adicional/",
@@ -329,8 +330,8 @@
     "/termos-de-uso/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-08-24T02:33:10Z",
-  "public_artifact_hash": "2b4ec9bc2d688af817b66e784aa8f277ea5340aa3c247fcbd16f19dff061fd67",
+  "generated_at": "2026-08-24T11:24:39Z",
+  "public_artifact_hash": "7a72f1b11f317345ca21d2e5d65f7e7b1c24b11a5990cf40b28f8c8dc3151d8d",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -402,10 +403,10 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 221,
+  "promoted_navigation_files": 222,
   "navigation_audit": {
-    "audited_files": 222,
-    "audited_blocks": 443,
+    "audited_files": 223,
+    "audited_blocks": 445,
     "frozen_files": 6
   }
 }
