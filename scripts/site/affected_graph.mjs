@@ -266,6 +266,15 @@ export const SUITE_GRAPH = Object.freeze({
       "/defesa-tecnica-contratos-publicos/",
     ],
   },
+  "test:task-doors": {
+    producers: [
+      "tests/commercial/test_task_doors.mjs",
+      "data/commercial/task-doors.v1.json",
+      "entregas/index.html",
+    ],
+    artifacts: [],
+    surfaces: ["/entregas/"],
+  },
   "test:bofu-dominance": {
     producers: ["tests/bofu_dominance/", "scripts/bofu_dominance/", "data/bofu-dominance/"],
     artifacts: ["docs/seo/bofu-dominance/"],
