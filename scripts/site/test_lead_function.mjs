@@ -503,6 +503,133 @@ _reset();
   pass("catalog_deliverable_selection_persisted", stored.deliverable_id);
 }
 
+// The generic catalogue hand-raise may name a specialised deliverable without
+// pretending to be its full product questionnaire.
+{
+  const before = mem.map.size;
+  const res = await handler(event({
+    nome: "QA Catálogo Licitação",
+    email: "qa-catalogo-licitacao@example.com",
+    estagio: "entregas-exemplos-hub",
+    jornada: "edital",
+    consentimento: "1",
+    origem: "entregas",
+    landing_page: "https://confenge.com.br/entregas/",
+    route_family: "entregas",
+    asset_id: "entregas-exemplos-hub",
+    cta_id: "entregas-hub-handraise",
+    deliverable_id: "CFG-D14",
+    record_kind: "qa",
+    test_mode: true,
+  }, "POST", { ip: "192.0.2.91" }));
+  const data = JSON.parse(res.body);
+  const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+  if (res.statusCode !== 201 || mem.map.size !== before + 1 || stored?.deliverable_id !== "CFG-D14") {
+    fail("catalog_specialised_deliverable_handraise", { status: res.statusCode, data, stored });
+  }
+  pass("catalog_specialised_deliverable_handraise", stored.deliverable_id);
+}
+
+// 5f) The five #330 units have a prepared structured qualification contract,
+// while the protected dedicated route remains dormant under the #291 freeze.
+// Invalid context fails before persistence; valid context stays on the lead.
+{
+  const html = fs.readFileSync(path.join(root, "diagnostico-pre-licitacao/index.html"), "utf8");
+  const licitacaoContract = JSON.parse(fs.readFileSync(
+    path.join(root, "data/commercial/page-contract-licitacao.v1.json"),
+    "utf8",
+  ));
+  const qualificationDeadline = new Date(Date.now() + 45 * 86400000).toISOString().slice(0, 10);
+  for (const field of [
+    "deliverable_id",
+    "public_contract_id",
+    "opportunity_deadline",
+    "contract_value_band",
+    "lot_count",
+    "execution_regime",
+    "decision_intent",
+  ]) {
+    if (!licitacaoContract.public_implementation.prepared_capture_fields.includes(field)) {
+      fail("licitacao_prepared_qualification_field", field);
+    }
+  }
+  if (html.includes("GENERATED:LICITACAO-PRODUCTS") || html.includes('id="captura-licitacao"')) {
+    fail("licitacao_protected_route_must_remain_dormant");
+  }
+
+  const base = {
+    nome: "QA Licitação",
+    email: "qa-licitacao@example.com",
+    estagio: "licitacao-produto",
+    jornada: "edital",
+    consentimento: "1",
+    origem: "diagnostico-pre-licitacao",
+    landing_page: "https://confenge.com.br/diagnostico-pre-licitacao/",
+    route_family: "diagnostico-pre-licitacao",
+    asset_id: "licitacao-products",
+    cta_id: "licitacao-products-handraise",
+    deliverable_id: "CFG-D14",
+    public_contract_id: "EDITAL-DEMO-2026-001",
+    opportunity_deadline: qualificationDeadline,
+    contract_value_band: "20m_100m",
+    lot_count: "2",
+    execution_regime: "empreitada_preco_unitario",
+    decision_intent: "avaliar_disputa",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  for (const invalid of [
+    { opportunity_deadline: "2026-99-99" },
+    { contract_value_band: "valor_livre" },
+    { lot_count: "0" },
+    { execution_regime: "regime_livre" },
+    { decision_intent: "decisao_livre" },
+    { public_contract_id: "" },
+  ]) {
+    const before = mem.map.size;
+    const res = await handler(event({ ...base, ...invalid }, "POST", { ip: "192.0.2.92" }));
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 422 || data.error !== "licitacao_qualification_invalid" || mem.map.size !== before) {
+      fail("licitacao_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    }
+  }
+
+  for (const [index, deliverableId] of ["CFG-D12", "CFG-D13", "CFG-D14", "CFG-D15", "CFG-D16"].entries()) {
+    const unsafeDeadline = await handler(event({
+      ...base,
+      deliverable_id: deliverableId,
+      opportunity_deadline: new Date().toISOString().slice(0, 10),
+    }, "POST", { ip: `192.0.2.${94 + index}` }));
+    if (
+      unsafeDeadline.statusCode !== 422 ||
+      JSON.parse(unsafeDeadline.body).error !== "licitacao_qualification_invalid"
+    ) {
+      fail("licitacao_safe_deadline_fail_closed", { deliverableId, response: unsafeDeadline });
+    }
+  }
+
+  const res = await handler(event({
+    ...base,
+    idempotency_key: "qa-licitacao-d14",
+  }, "POST", { ip: "192.0.2.93" }));
+  const data = JSON.parse(res.body);
+  const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+  if (
+    res.statusCode !== 201 ||
+    !stored ||
+    stored.deliverable_id !== "CFG-D14" ||
+    stored.public_contract_id !== "EDITAL-DEMO-2026-001" ||
+    stored.opportunity_deadline !== qualificationDeadline ||
+    stored.contract_value_band !== "20m_100m" ||
+    stored.lot_count !== 2 ||
+    stored.execution_regime !== "empreitada_preco_unitario" ||
+    stored.decision_intent !== "avaliar_disputa"
+  ) {
+    fail("licitacao_qualification_persisted", { status: res.statusCode, data, stored });
+  }
+  pass("licitacao_qualification_persisted", stored?.deliverable_id);
+}
+
 // 5d) Every priced model form reaches the real persistence path. Static markup
 // is insufficient: receipts must be distinct and retain the shipped attribution.
 {

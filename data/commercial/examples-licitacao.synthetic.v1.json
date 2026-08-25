@@ -1,0 +1,128 @@
+{
+  "schema": "confenge.licitacao-synthetic-examples/1.0",
+  "version": "2026-08-25",
+  "source_issue": 330,
+  "classification": "SYNTHETIC",
+  "public_disclosure_pt_br": "Cenários demonstrativos, sem cliente, edital, órgão ou resultado real. Os números existem apenas para tornar o formato auditável.",
+  "evidence_policy": [
+    "FACT_SYNTHETIC",
+    "CALCULATION_SYNTHETIC",
+    "INFERENCE_SYNTHETIC",
+    "UNKNOWN"
+  ],
+  "examples": [
+    {
+      "deliverable_id": "CFG-D12",
+      "example_id": "SYN-330-D12-v1",
+      "scenario_pt_br": "Edital fictício para restauração viária, com sete dias úteis até a proposta, regime de preço unitário e acervo parcialmente conferido.",
+      "decision_pt_br": "AVANÇAR COM CONDIÇÕES",
+      "facts_synthetic_pt_br": [
+        "7 dias úteis restantes no cenário",
+        "1 lote e regime de empreitada por preço unitário",
+        "projeto básico e orçamento de referência disponíveis"
+      ],
+      "calculations_synthetic_pt_br": [
+        "3 de 11 requisitos críticos ainda sem evidência vinculada",
+        "2 perguntas precisam de resposta antes de congelar o preço"
+      ],
+      "inferences_synthetic_pt_br": [
+        "a oportunidade só deve consumir a equipe depois de fechar acervo, mobilização e regra de medição"
+      ],
+      "unknowns_pt_br": [
+        "resposta oficial aos dois esclarecimentos",
+        "disponibilidade final do responsável técnico"
+      ],
+      "next_action_pt_br": "Nomear os donos das três condições e reavaliar a decisão em 24 horas."
+    },
+    {
+      "deliverable_id": "CFG-D13",
+      "example_id": "SYN-330-D13-v1",
+      "scenario_pt_br": "Matriz fictícia de habilitação para uma empresa e uma rodada documental, sem reproduzir documento, assinatura ou dado pessoal.",
+      "decision_pt_br": "LACUNAS COM DONO E PRAZO",
+      "facts_synthetic_pt_br": [
+        "18 requisitos extraídos do edital demonstrativo",
+        "12 classificados como COBERTO e 2 como INAPLICÁVEL"
+      ],
+      "calculations_synthetic_pt_br": [
+        "3 requisitos em LACUNA e 1 em REVALIDAR",
+        "2 validades terminam antes da data fictícia da sessão"
+      ],
+      "inferences_synthetic_pt_br": [
+        "o acervo operacional é o caminho crítico; certidões não são o principal risco deste cenário"
+      ],
+      "unknowns_pt_br": [
+        "aceitação, pelo órgão, da equivalência entre dois serviços",
+        "confirmação de disponibilidade do profissional indicado"
+      ],
+      "next_action_pt_br": "Vincular evidência às três lacunas ou recusar a disputa antes de montar o pacote final."
+    },
+    {
+      "deliverable_id": "CFG-D14",
+      "example_id": "SYN-330-D14-v1",
+      "scenario_pt_br": "Planilha fictícia de um lote, com 146 itens, curva ABC, referência pública hipotética e data-base declarada.",
+      "decision_pt_br": "AJUSTAR ANTES DE PRECIFICAR",
+      "facts_synthetic_pt_br": [
+        "146 itens na planilha demonstrativa",
+        "22 itens representam 80 por cento do valor de referência",
+        "data-base e regime tributário aparecem no cenário"
+      ],
+      "calculations_synthetic_pt_br": [
+        "4 itens da curva ABC usam composição incompatível com a premissa declarada",
+        "o cenário de 11 por cento de deságio elimina a reserva fictícia de contingência"
+      ],
+      "inferences_synthetic_pt_br": [
+        "precificar agora transfere incerteza de produtividade e mobilização para a margem"
+      ],
+      "unknowns_pt_br": [
+        "cotação válida do insumo mais sensível",
+        "distância operacional efetiva da jazida"
+      ],
+      "next_action_pt_br": "Recalcular os quatro itens críticos, registrar a fonte e repetir a sensibilidade."
+    },
+    {
+      "deliverable_id": "CFG-D15",
+      "example_id": "SYN-330-D15-v1",
+      "scenario_pt_br": "Histórico público inteiramente fictício de 12 certames comparáveis de um comprador, em uma janela demonstrativa de 36 meses.",
+      "decision_pt_br": "FAIXA PARA TESTE, NÃO LANCE RECOMENDADO",
+      "facts_synthetic_pt_br": [
+        "12 certames demonstrativos passaram pelo critério de comparabilidade",
+        "9 possuem valor de referência e proposta contratada observáveis"
+      ],
+      "calculations_synthetic_pt_br": [
+        "mediana fictícia de deságio de 8,4 por cento",
+        "intervalo interquartil fictício de 5,1 a 12,7 por cento"
+      ],
+      "inferences_synthetic_pt_br": [
+        "a dispersão impede tratar a mediana como preço-alvo; custo, capacidade e edital prevalecem"
+      ],
+      "unknowns_pt_br": [
+        "custos privados dos participantes",
+        "motivos de ausência em três certames"
+      ],
+      "next_action_pt_br": "Comparar cenários de margem próprios com a distribuição; não copiar o histórico como lance."
+    },
+    {
+      "deliverable_id": "CFG-D16",
+      "example_id": "SYN-330-D16-v1",
+      "scenario_pt_br": "Operação fictícia de proposta complexa, com dois lotes, uma retificação e quatro frentes responsáveis.",
+      "decision_pt_br": "COORDENAR COM GATES EXPLÍCITOS",
+      "facts_synthetic_pt_br": [
+        "2 lotes e 4 frentes na matriz demonstrativa",
+        "1 retificação altera prazo e quantitativo",
+        "o cliente permanece responsável pelo protocolo"
+      ],
+      "calculations_synthetic_pt_br": [
+        "17 de 21 entregas internas prontas no corte demonstrativo",
+        "4 pendências impedem o checklist final"
+      ],
+      "inferences_synthetic_pt_br": [
+        "o risco dominante é coordenação entre orçamento, habilitação e proposta técnica, não volume de documentos"
+      ],
+      "unknowns_pt_br": [
+        "resposta do órgão ao esclarecimento aberto",
+        "aprovação final da direção sobre a margem"
+      ],
+      "next_action_pt_br": "Fechar os quatro gates, executar revisão crítica e entregar o checklist para protocolo pelo cliente."
+    }
+  ]
+}

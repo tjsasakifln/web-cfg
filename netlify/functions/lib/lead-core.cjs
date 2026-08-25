@@ -39,6 +39,11 @@ const MAX_FIELD = {
   asset_family: 80,
   query_class: 80,
   deliverable_id: 16,
+  opportunity_deadline: 10,
+  contract_value_band: 24,
+  lot_count: 4,
+  execution_regime: 40,
+  decision_intent: 32,
   offer_id: 80,
   terms_id: 80,
   amount_cents: 16,
@@ -130,6 +135,105 @@ function assertDeliverableSelection(raw) {
     };
   }
   return { ok: true, deliverable_id: id };
+}
+
+// The catalogue hub captures an initial hand-raise, not the qualification
+// questionnaire of a product route. Keep this exception route-exact so a
+// forged product-page payload cannot bypass the published fail-closed fields.
+function isGenericDeliverablesHandraise(data) {
+  if (!data || typeof data !== "object") return false;
+  const landingPage = String(data.landing_page || data.landing_url || "").trim();
+  return (
+    (landingPage === "/entregas/" || landingPage === "https://confenge.com.br/entregas/") &&
+    String(data.route_family || "").trim() === "entregas" &&
+    String(data.origem || "").trim() === "entregas" &&
+    String(data.estagio || "").trim() === "entregas-exemplos-hub" &&
+    String(data.asset_id || "").trim() === "entregas-exemplos-hub" &&
+    String(data.cta_id || "").trim() === "entregas-hub-handraise" &&
+    !String(data.offer_id || "").trim()
+  );
+}
+
+const LICITACAO_PRODUCT_IDS = new Set(["CFG-D12", "CFG-D13", "CFG-D14", "CFG-D15", "CFG-D16"]);
+const CONTRACT_VALUE_BANDS = new Set(["ate_5m", "5m_20m", "20m_100m", "acima_100m", "UNKNOWN"]);
+const EXECUTION_REGIMES = new Set([
+  "empreitada_preco_global",
+  "empreitada_preco_unitario",
+  "contratacao_integrada",
+  "contratacao_semi_integrada",
+  "outro",
+  "UNKNOWN",
+]);
+const DECISION_INTENTS = new Set([
+  "avaliar_disputa",
+  "avancar",
+  "avancar_condicoes",
+  "esclarecer_impugnar",
+  "recusar",
+  "UNKNOWN",
+]);
+
+function isCanonicalIsoDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+}
+
+function businessDaysUntil(value, now = new Date()) {
+  if (!isCanonicalIsoDate(value)) return -1;
+  const cursor = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
+  const end = new Date(`${value}T00:00:00Z`);
+  const calendarDays = Math.ceil((end.getTime() - cursor.getTime()) / 86400000) + 1;
+  if (calendarDays < 0 || calendarDays > 366) return -1;
+  let days = 0;
+  while (cursor <= end) {
+    const weekday = cursor.getUTCDay();
+    if (weekday !== 0 && weekday !== 6) days += 1;
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+  return days;
+}
+
+function assertLicitacaoQualification(data, deliverableId) {
+  if (!LICITACAO_PRODUCT_IDS.has(deliverableId)) return { ok: true, qualification: null };
+  const publicContractId = clamp(data.public_contract_id, MAX_FIELD.public_contract_id);
+  const deadline = clamp(data.opportunity_deadline, MAX_FIELD.opportunity_deadline);
+  const valueBand = clamp(data.contract_value_band, MAX_FIELD.contract_value_band);
+  const regime = clamp(data.execution_regime, MAX_FIELD.execution_regime);
+  const decisionIntent = clamp(data.decision_intent, MAX_FIELD.decision_intent);
+  const lotRaw = clamp(data.lot_count, MAX_FIELD.lot_count);
+  const lotCount = Number(lotRaw);
+  const deadlineBusinessDays = businessDaysUntil(deadline);
+  const minimumBusinessDays = deliverableId === "CFG-D12" ? 5 : 1;
+  if (
+    publicContractId.length < 3 ||
+    !isCanonicalIsoDate(deadline) ||
+    !CONTRACT_VALUE_BANDS.has(valueBand) ||
+    !EXECUTION_REGIMES.has(regime) ||
+    !DECISION_INTENTS.has(decisionIntent) ||
+    !/^\d{1,3}$/.test(lotRaw) ||
+    !Number.isInteger(lotCount) ||
+    lotCount < 1 ||
+    lotCount > 999 ||
+    deadlineBusinessDays < minimumBusinessDays
+  ) {
+    return {
+      ok: false,
+      status: 422,
+      error: "licitacao_qualification_invalid",
+      message: "Informe edital, prazo seguro, faixa de valor, lotes, regime e decisão nos formatos publicados.",
+    };
+  }
+  return {
+    ok: true,
+    qualification: {
+      opportunity_deadline: deadline,
+      contract_value_band: valueBand,
+      lot_count: lotCount,
+      execution_regime: regime,
+      decision_intent: decisionIntent,
+    },
+  };
 }
 
 function looksLikePii(value, key) {
@@ -398,6 +502,11 @@ function validateAndNormalize(data) {
   if (!offerCheck.ok) return offerCheck;
   const deliverableCheck = assertDeliverableSelection(data.deliverable_id);
   if (!deliverableCheck.ok) return deliverableCheck;
+  const qualificationDeliverableId = isGenericDeliverablesHandraise(data)
+    ? null
+    : deliverableCheck.deliverable_id;
+  const licitacaoCheck = assertLicitacaoQualification(data, qualificationDeliverableId);
+  if (!licitacaoCheck.ok) return licitacaoCheck;
 
   // Radar Decisório purchase parameters. Server-side, fail-closed: the browser
   // check is a convenience, this one is the contract.
@@ -522,6 +631,11 @@ function validateAndNormalize(data) {
     asset_family: sanitizeAttributionValue(data.asset_family, MAX_FIELD.asset_family, "asset_family") || null,
     query_class: sanitizeAttributionValue(data.query_class, MAX_FIELD.query_class, "query_class") || null,
     deliverable_id: deliverableCheck.deliverable_id,
+    opportunity_deadline: licitacaoCheck.qualification?.opportunity_deadline || null,
+    contract_value_band: licitacaoCheck.qualification?.contract_value_band || null,
+    lot_count: licitacaoCheck.qualification?.lot_count || null,
+    execution_regime: licitacaoCheck.qualification?.execution_regime || null,
+    decision_intent: licitacaoCheck.qualification?.decision_intent || null,
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
     public_contract_id: clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
@@ -750,6 +864,7 @@ module.exports = {
   nonCatalogAction,
   assertOfferTermsAndPrice,
   assertDeliverableSelection,
+  assertLicitacaoQualification,
   validateAndNormalize,
   generateLeadId,
   idempotencyKeyFor,
