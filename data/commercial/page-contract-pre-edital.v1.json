@@ -1,0 +1,341 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "page-contract-pre-edital.v1",
+  "family_pt_br": "Pré-edital",
+  "source_issue": 332,
+  "parent_issue": 329,
+  "related_issues": [84, 88, 89, 156, 300, 327, 343],
+  "naming_authority_issue": 343,
+  "decision_state": "VALIDATE",
+  "priority": "P1",
+  "executive_front": "MARKET INTELLIGENCE MOAT",
+  "leverage": ["data", "revenue", "distribution", "customer"],
+  "time_to_evidence_days": 30,
+  "research_state": "NOT_STARTED",
+  "evidence": [],
+  "human_validation": {
+    "state": "NOT_STARTED",
+    "real_proposals_required_per_product_before_promoting_price": 1,
+    "records_required_pt_br": ["aceitar ou rejeitar", "horas", "margem"],
+    "collected": []
+  },
+  "currency": "BRL",
+  "price_unit": "cents",
+  "price_basis": "piloto",
+  "pages_created_by_this_contract": [],
+  "checkout_enabled_anywhere": false,
+  "hypothesis_pt_br": "A biblioteca atual começa em edital aberto ou histórico de contratos. O ICP também precisa ver o mercado antes do edital, aprofundar o risco de um comprador depois do mapa e encontrar cobertura de acervo ou capacidade sem confiar em networking informal.",
+  "items": [
+    {
+      "number": 9,
+      "deliverable_id": "CFG-D09",
+      "public_name_pt_br": "Radar de Obras Antes do Edital",
+      "value_line_pt_br": "Mostra onde o investimento público está se formando antes de existir edital.",
+      "decision_question_pt_br": "Onde há investimento público se formando antes do edital?",
+      "verb_pt_br": "antecipa",
+      "price_cents": 149000,
+      "billing": "one_time",
+      "sla_business_days": 5,
+      "sla_starts_after_pt_br": "definição do recorte",
+      "public_state": "VALIDATE",
+      "blocking_issue": null,
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "scope_pt_br": {
+        "unit": "uma empresa, um estado ou raio de até 200 km",
+        "radius_km_max": 200,
+        "typologies_max": 5,
+        "horizon_months_min": 3,
+        "horizon_months_max": 24,
+        "max_prioritised_signals": 40,
+        "limits": [
+          "uma empresa por recorte",
+          "um estado ou raio de até 200 km",
+          "até cinco tipologias",
+          "horizonte de 3 a 24 meses",
+          "até 40 sinais priorizados",
+          "sem busca artesanal ilimitada"
+        ]
+      },
+      "inputs_pt_br": [
+        "CNPJ da empresa e capacidade executável declarada",
+        "estado ou raio de atuação com centro definido",
+        "até cinco tipologias de obra ou serviço",
+        "horizonte de 3 a 24 meses",
+        "data de corte da consulta"
+      ],
+      "outputs_pt_br": [
+        "até 40 sinais priorizados no recorte contratado",
+        "estágio de cada sinal entre planejamento, selecionado, habilitado, financiado, contratação publicada ou UNKNOWN",
+        "fonte, data, valor e objeto quando disponíveis, e a próxima mudança observável",
+        "confiança declarada com o motivo que a sustenta",
+        "lista explícita do que não permite afirmar que haverá edital"
+      ],
+      "exclusions_pt_br": [
+        "previsão garantida de que o edital será publicado",
+        "influência sobre órgão, agenda ou decisão de contratar",
+        "contato político ou intermediação junto ao comprador",
+        "busca artesanal ilimitada fora do recorte contratado",
+        "monitoramento recorrente, que é o item 45"
+      ],
+      "signal_stages": [
+        "planejamento",
+        "selecionado",
+        "habilitado",
+        "financiado",
+        "contratacao_publicada",
+        "UNKNOWN"
+      ],
+      "pre_edital_boundary": {
+        "separates_pre_edital_signal_from_open_opportunity": true,
+        "open_opportunity_owner_item": 1,
+        "open_opportunity_owner_public_name_pt_br": "Radar de Licitações Prioritárias",
+        "statement_pt_br": "O item 9 entrega sinal pré-edital, que é investimento em formação e ainda pode não virar certame. O item 1 entrega oportunidade aberta, que é edital publicado com prazo correndo. O radar pré-edital nunca apresenta um sinal como oportunidade disputável e nunca apresenta uma oportunidade aberta como previsão."
+      },
+      "public_sources": [
+        { "name": "PNCP e PCA", "url": "https://www.gov.br/pncp/pt-br" },
+        { "name": "Transferegov, arquivos diários de dados abertos", "url": "https://www.gov.br/transferegov/pt-br/ferramentas-gestao/dados-abertos/download-dados" },
+        { "name": "Novo PAC, seleções 2026", "url": "https://www.gov.br/cidades/pt-br/acesso-a-informacao/acoes-e-programas/pac/selecoes-novo-pac/investimentos-selecionados" }
+      ],
+      "prohibitions": {
+        "guarantees_that_an_edital_will_exist": false,
+        "influences_public_agency": false,
+        "uses_political_contact": false,
+        "presents_signal_as_open_opportunity": false,
+        "sells_recurring_monitoring_under_this_item": false
+      },
+      "credit_rule": {
+        "credits_into": ["expansion_package"],
+        "credits_into_public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
+        "cap_basis_pt_br": "maior valor pago",
+        "cap_cents": 149000,
+        "window_days": 30,
+        "uses_allowed": 1,
+        "accumulates": false,
+        "changes_units_02_to_08": false,
+        "statement_pt_br": "O valor pago no item 9 pode gerar crédito do maior valor pago no Diagnóstico de Expansão no Mercado Público em até 30 dias, uma vez e sem acúmulo. A regra das unidades 02 a 08 não muda."
+      }
+    },
+    {
+      "number": 10,
+      "deliverable_id": "CFG-D10",
+      "public_name_pt_br": "Dossiê do Órgão e Risco de Pagamento",
+      "value_line_pt_br": "Mostra como um órgão específico compra, contrata e paga antes de o cliente disputar.",
+      "decision_question_pt_br": "Como este órgão compra, contrata e paga?",
+      "verb_pt_br": "aprofunda",
+      "price_cents": 240000,
+      "billing": "one_time",
+      "sla_business_days": 7,
+      "sla_starts_after_pt_br": "inputs válidos",
+      "public_state": "VALIDATE",
+      "blocking_issue": null,
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "scope_pt_br": {
+        "unit": "um órgão ou entidade identificado por CNPJ",
+        "lookback_months": 36,
+        "typologies_max": 5,
+        "limits": [
+          "um órgão ou entidade por dossiê, identificado por CNPJ",
+          "36 meses de histórico",
+          "até cinco tipologias"
+        ]
+      },
+      "inputs_pt_br": [
+        "CNPJ do órgão ou entidade compradora",
+        "até cinco tipologias de interesse",
+        "janela de 36 meses e data de corte",
+        "decisão comercial que o dossiê precisa apoiar"
+      ],
+      "outputs_pt_br": [
+        "perfil de compra e calendário observado",
+        "ticket e dispersão por tipologia",
+        "recorrência de fornecedores e concentração observada",
+        "padrões de prazo, aditivos e encerramento",
+        "pagamento e ordem cronológica como FACT apenas quando a fonte permite, e UNKNOWN quando não permite",
+        "matriz de risco comercial e perguntas para o edital concreto"
+      ],
+      "exclusions_pt_br": [
+        "atribuir bom pagador ou mau pagador por inferência",
+        "atribuir corrupção, favorecimento ou conluio",
+        "avaliar qualidade de gestão do órgão por inferência",
+        "converter ausência de pagamento público em atraso de pagamento",
+        "opinião jurídica sobre atos do órgão"
+      ],
+      "payment_evidence_rule": {
+        "absence_of_public_payment_is_never_delay": true,
+        "absence_state_pt_br": "UNKNOWN",
+        "fact_requires_source_that_publishes_payment": true,
+        "statement_pt_br": "Ausência de pagamento público significa ausência de dado publicado, nunca atraso do órgão. Sem fonte que publique o pagamento, o dossiê registra UNKNOWN e diz qual consulta foi feita, em qual cobertura e em qual data.",
+        "reference": {
+          "name": "TCU, Pagamento",
+          "url": "https://licitacoesecontratos.tcu.gov.br/6-1-7-pagamento/"
+        },
+        "availability_varies_by_agency": true
+      },
+      "forbidden_inferences_pt_br": [
+        "bom pagador",
+        "corrupção",
+        "favorecimento",
+        "qualidade de gestão"
+      ],
+      "prohibitions": {
+        "labels_agency_as_good_or_bad_payer": false,
+        "asserts_corruption_or_favouring": false,
+        "rates_management_quality_by_inference": false,
+        "converts_missing_payment_into_delay": false,
+        "issues_legal_opinion": false
+      },
+      "credit_rule": {
+        "credits_into": ["expansion_package"],
+        "credits_into_public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
+        "cap_basis_pt_br": "maior valor pago",
+        "cap_cents": 240000,
+        "window_days": 30,
+        "uses_allowed": 1,
+        "accumulates": false,
+        "changes_units_02_to_08": false,
+        "statement_pt_br": "O valor pago no item 10 pode gerar crédito do maior valor pago no Diagnóstico de Expansão no Mercado Público em até 30 dias, uma vez e sem acúmulo. A regra das unidades 02 a 08 não muda."
+      }
+    },
+    {
+      "number": 11,
+      "deliverable_id": "CFG-D11",
+      "public_name_pt_br": "Mapa de Parceiros e Consórcios",
+      "value_line_pt_br": "Mostra quem pode cobrir a lacuna de acervo ou capacidade de uma oportunidade concreta.",
+      "decision_question_pt_br": "Quem pode cobrir a lacuna de acervo ou capacidade nesta oportunidade?",
+      "verb_pt_br": "mapeia",
+      "price_cents": 290000,
+      "billing": "one_time",
+      "sla_business_days": 7,
+      "sla_starts_after_pt_br": "oportunidade ou lacuna de capacidade definida",
+      "public_state": "BLOCKED",
+      "blocking_issue": 156,
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "scope_pt_br": {
+        "unit": "uma oportunidade ou território",
+        "candidates_max": 20,
+        "limits": [
+          "uma oportunidade ou um território por mapa",
+          "até 20 candidatos",
+          "quantitativos de consórcio apenas como cenário"
+        ]
+      },
+      "inputs_pt_br": [
+        "oportunidade ou lacuna de capacidade definida pelo cliente",
+        "requisitos de acervo e capacidade a cobrir",
+        "território de busca",
+        "restrições comerciais e conflitos já conhecidos pelo cliente"
+      ],
+      "outputs_pt_br": [
+        "shortlist explicável de até 20 candidatos",
+        "cobertura potencial da lacuna por candidato",
+        "concentração e conflitos observáveis",
+        "ocorrências públicas e freshness por fonte",
+        "diligências que o cliente ainda precisa executar",
+        "UNKNOWN quando paginação ou cobertura não fecha"
+      ],
+      "exclusions_pt_br": [
+        "parecer de habilitação sobre soma de quantitativos em consórcio",
+        "certificado de empresa limpa a partir de CEIS ou CNEP",
+        "intermediação, apresentação comercial ou negociação com o candidato",
+        "investigação privada ou dado pessoal não pertinente",
+        "garantia de que o parceiro aceitará ou será habilitado"
+      ],
+      "consortium_rule": {
+        "quantities_are_scenario_only": true,
+        "never_an_habilitation_opinion": true,
+        "statement_pt_br": "Somar quantitativos de consórcio é apenas cenário para conversa comercial. O mapa nunca emite parecer de habilitação e nunca afirma que a soma será aceita pelo órgão."
+      },
+      "integrity_signal_rule": {
+        "sources_pt_br": ["CEIS", "CNEP"],
+        "is_preliminary_signal": true,
+        "is_clean_company_certificate": false,
+        "not_found_means_not_found_in_coverage": true,
+        "statement_pt_br": "CEIS e CNEP são sinais preliminares, nunca certificado de empresa limpa. Não localizado significa não localizado na cobertura consultada, com fonte, consulta, data e limitação ao lado.",
+        "reference": {
+          "name": "Portal da Transparência, sanções",
+          "url": "https://portaldatransparencia.gov.br/sancoes"
+        }
+      },
+      "blocker": {
+        "blocked_by_issue": 156,
+        "state": "BLOCKED",
+        "may_be_published": false,
+        "may_be_sold": false,
+        "may_be_promoted": false,
+        "release_conditions_pt_br": [
+          "chave oficial da fonte configurada no ambiente do produtor",
+          "paginação terminal comprovada",
+          "canário live-safe redigido sem CNPJ em artefato público"
+        ],
+        "statement_pt_br": "O item 11 não é publicado, promovido nem vendido enquanto a issue #156 não provar chave oficial, paginação terminal e canário live-safe."
+      },
+      "prohibitions": {
+        "issues_habilitation_opinion": false,
+        "issues_clean_company_certificate": false,
+        "brokers_or_negotiates_with_candidate": false,
+        "runs_private_investigation": false,
+        "guarantees_partner_acceptance": false,
+        "is_published_before_issue_156": false
+      },
+      "credit_rule": null
+    }
+  ],
+  "credit_rule_family": {
+    "eligible_items": [9, 10],
+    "ineligible_items": [11],
+    "credits_into_public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
+    "cap_basis_pt_br": "maior valor pago",
+    "window_days": 30,
+    "uses_allowed": 1,
+    "accumulates": false,
+    "changes_units_02_to_08_without_versioned_commercial_decision": false,
+    "statement_pt_br": "O Radar de Obras Antes do Edital ou o Dossiê do Órgão e Risco de Pagamento pode gerar crédito do maior valor pago no Diagnóstico de Expansão no Mercado Público em até 30 dias, uma vez e sem acúmulo. A regra das unidades 02 a 08 não muda sem decisão comercial versionada."
+  },
+  "data_contract": {
+    "owner": "extra-cli",
+    "consumption": "SELECT_ONLY_SNAPSHOT",
+    "public_read_contracts_versioned": true,
+    "provenance_required": true,
+    "freshness_required": true,
+    "coverage_required": true,
+    "deduplication_required": true,
+    "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+    "no_new_crawler_in_web_cfg": true,
+    "no_source_acquired_directly_by_web_cfg": true,
+    "web_cfg_role_pt_br": "publicar e capturar CONFENGE_WEB",
+    "statement_pt_br": "Os contratos public-read são criados e versionados no extra-cli com provenance, freshness, coverage, deduplicação e FACT, CALCULATION, INFERENCE ou UNKNOWN. O web-cfg consome apenas snapshots SELECT-only e captura CONFENGE_WEB. Nenhum crawler novo nasce no site."
+  },
+  "conversion_gate": {
+    "every_priced_route_captures_lead": true,
+    "lead_destination": "warmbly:CONFENGE_WEB",
+    "gate_owner_issues": [88, 300, 327],
+    "statement_pt_br": "Toda rota com preço desta família captura lead e passa pelos gates de captura, ação terminal e primeira dobra, cujas donas continuam sendo as issues #88, #300 e #327."
+  },
+  "synthetic_examples": {
+    "required_count": 3,
+    "must_be_comparable": true,
+    "must_be_labelled_synthetic": true,
+    "state": "NOT_STARTED",
+    "published": [],
+    "statement_pt_br": "Cada produto desta família precisa de um exemplo sintético completo e comparável aos demais, rotulado como sintético. Nenhum exemplo foi publicado por este contrato."
+  },
+  "acceptance": [
+    { "key": "ids_scope_price_sla_inputs_exclusions", "state": "MET_BY_CONTRACT", "statement_pt_br": "Cada produto tem deliverable_id, scope_version, preço-piloto, SLA, inputs e exclusions." },
+    { "key": "three_comparable_synthetic_examples", "state": "NOT_STARTED", "statement_pt_br": "Existem três exemplos sintéticos completos e comparáveis." },
+    { "key": "radar_separates_pre_edital_from_open", "state": "MET_BY_CONTRACT", "statement_pt_br": "O Radar distingue sinal pré-edital de oportunidade aberta." },
+    { "key": "buyer_dossier_never_infers_delay", "state": "MET_BY_CONTRACT", "statement_pt_br": "O Dossiê de Comprador nunca converte ausência de pagamento público em atraso." },
+    { "key": "partner_map_blocked_by_156", "state": "MET_BY_CONTRACT", "statement_pt_br": "O Mapa de Parceiros permanece bloqueado por #156 até cobertura terminal." },
+    { "key": "priced_route_captures_lead", "state": "MET_BY_CONTRACT", "statement_pt_br": "Toda rota com preço captura lead e passa os gates de #88, #300 e #327." },
+    { "key": "one_real_proposal_per_product", "state": "NOT_STARTED", "statement_pt_br": "Uma proposta real por produto registra aceitar ou rejeitar, horas e margem." },
+    { "key": "no_source_acquired_by_web_cfg", "state": "MET_BY_CONTRACT", "statement_pt_br": "Nenhuma fonte é adquirida diretamente pelo web-cfg." }
+  ],
+  "scope_version": "CFG-PRE-EDITAL-2026-08-24-v1",
+  "naming_source": "data/commercial/offer-naming.v1.json",
+  "canonical_registry": "data/commercial/deliverables-registry.v1.json"
+}

@@ -62,6 +62,7 @@ jobs:
           npm run test:checkout-negatives
           npm run test:deliverables-registry
           npm run test:offer-naming
+          npm run test:page-contract-pre-edital
           npm run test:pricing-policy
           npm run test:page-contract-eight
           npm run test:market-fit-protocol

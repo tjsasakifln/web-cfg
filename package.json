@@ -35,6 +35,7 @@
     "test:checkout-negatives": "node tests/offers/test_checkout_negatives.mjs && node tests/offers/test_piloto_decision.mjs && npm run test:asaas-production",
     "test:deliverables-registry": "node tests/commercial/test_deliverables_registry.mjs",
     "test:offer-naming": "node tests/commercial/test_offer_naming.mjs",
+    "test:page-contract-pre-edital": "node tests/commercial/test_page_contract_pre_edital.mjs",
     "test:pricing-policy": "node tests/commercial/test_pricing_policy.mjs",
     "test:page-contract-eight": "node tests/commercial/test_page_contract_eight.mjs",
     "test:market-fit-protocol": "node tests/commercial/test_market_fit_protocol.mjs",
