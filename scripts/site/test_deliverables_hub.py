@@ -131,6 +131,23 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
     assert html.count("<h1") == 1
 
 
+def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> None:
+    html = _html().casefold()
+    for forbidden in (
+        "no_match_confirmed",
+        "empresa limpa",
+        "empresa idônea",
+        "empresa idonea",
+        "nada consta",
+    ):
+        assert forbidden not in html
+    boundary = re.search(
+        r'data-deliverable-id="cfg-d43"[^>]+data-exclusion="([^"]+)"', html
+    )
+    assert boundary
+    assert "certificado" in boundary.group(1) and "declaração" in boundary.group(1)
+
+
 def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
