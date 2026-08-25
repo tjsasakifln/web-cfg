@@ -12,6 +12,13 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { evaluatePromotion } from "../../scripts/commercial/market_fit_promotion.mjs";
+import { generateExposurePlan } from "../../scripts/commercial/market_fit_exposure_plan.mjs";
+import {
+  validateExposurePlan,
+  validateProductDecisions,
+  validateQcoAggregate,
+  validateResearchAggregate,
+} from "../../scripts/commercial/market_fit_evidence.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -73,6 +80,8 @@ assert("maturity_lookback_12m", maturity.lookback_months === 12, maturity.lookba
 assert("consent_and_raw_notes", p1.consent_required === true && p1.raw_notes_required === true, p1);
 assert("behavior_probes_six", Array.isArray(p1.behavior_probes) && p1.behavior_probes.length === 6, p1.behavior_probes.length);
 assert("no_would_you_buy_first", /não perguntar/i.test(p1.forbidden || ""), p1.forbidden);
+assert("quota_ids_unique", new Set(p1.quotas.map((quota) => quota.role_id)).size === 4, p1.quotas);
+assert("quota_focus_doors", p1.quotas.every((quota) => quota.focus_doors.length === 3), p1.quotas);
 
 /* ---------------------------------------------------------------- 3. exposição parcial do rol */
 assert("catalogue_54", p2.catalogue_size === 54, p2.catalogue_size);
@@ -115,6 +124,9 @@ assert("measures_seven", Array.isArray(p2.measures) && p2.measures.length === 7,
 assert("measure_task_chosen", p2.measures.includes("tarefa escolhida"), p2.measures);
 assert("measures_have_no_issue_refs", p2.measures.every((m) => !m.includes("#")), p2.measures);
 assert("eight_current_preserved", /nunca apaga/i.test(p2.invariant || ""), p2.invariant);
+assert("critical_boundaries_declared", p2.critical_boundaries.length >= 10, p2.critical_boundaries.length);
+assert("critical_boundary_ids_unique", new Set(p2.critical_boundaries.map((boundary) => boundary.boundary_id)).size === p2.critical_boundaries.length, p2.critical_boundaries);
+assert("critical_boundaries_are_pairs", p2.critical_boundaries.every((boundary) => boundary.deliverable_ids.length === 2 && new Set(boundary.deliverable_ids).size === 2), p2.critical_boundaries);
 
 /* ---------------------------------------------------------------- 4. fase 3, decisão unitária */
 const offers = p3.founder_led_offers;
@@ -351,11 +363,84 @@ assert(
   promote,
 );
 
-/* ---------------------------------------------------------------- 9. sem travessão */
+/* ---------------------------------------------------------------- 9. pacote executavel sem PII */
+const execution = protocol.execution_package || {};
+assert("execution_instrument_ready", execution.status === "INSTRUMENT_READY_HUMAN_EVIDENCE_PENDING", execution.status);
+assert("execution_keeps_data_authorities", execution.commercial_action_owner === "warmbly" && execution.repository_accepts_individual_records === false && execution.analytics_accepts_pii === false, execution);
+for (const field of ["root", "runbook", "exposure_plan", "exposure_plan_generator", "evidence_validator", "research_aggregate_template", "qco_aggregate_template", "decision_template"]) {
+  assert(`execution_artifact_${field}`, typeof execution[field] === "string" && fs.existsSync(path.join(root, execution[field])), execution[field]);
+}
+
+const taskDoors = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/task-doors.v1.json"), "utf8"));
+const exposurePlan = JSON.parse(fs.readFileSync(path.join(root, execution.exposure_plan), "utf8"));
+assert("exposure_plan_is_reproducible", same(generateExposurePlan(protocol, taskDoors), exposurePlan), exposurePlan.plan_version);
+assert("exposure_plan_valid", validateExposurePlan(exposurePlan, protocol, taskDoors).length === 0, validateExposurePlan(exposurePlan, protocol, taskDoors));
+assert("exposure_plan_20_slots", exposurePlan.participant_slots.length === 20, exposurePlan.participant_slots.length);
+assert("exposure_plan_18_each", exposurePlan.participant_slots.every((slot) => slot.cards.length === 18 && slot.display_order.length === 18), "slots");
+assert("exposure_plan_four_boundary_cards_each", exposurePlan.participant_slots.every((slot) => slot.boundary_cards.length === 4), "slots");
+assert("exposure_plan_role_quotas", p1.quotas.every((quota) => exposurePlan.participant_slots.filter((slot) => slot.role_id === quota.role_id).length === 5), "roles");
+assert("exposure_plan_covers_54", Object.keys(exposurePlan.coverage.item_exposure_counts).length === 54, exposurePlan.coverage);
+assert("exposure_plan_min_six", exposurePlan.coverage.minimum_item_exposures_observed >= 6, exposurePlan.coverage.minimum_item_exposures_observed);
+assert("exposure_plan_boundaries_min_three", exposurePlan.coverage.minimum_joint_boundary_exposures_observed >= 3, exposurePlan.coverage.minimum_joint_boundary_exposures_observed);
+assert("exposure_plan_has_no_identity", exposurePlan.contains_participant_identity === false, exposurePlan.contains_participant_identity);
+
+const researchTemplate = JSON.parse(fs.readFileSync(path.join(root, execution.research_aggregate_template), "utf8"));
+const qcoTemplate = JSON.parse(fs.readFileSync(path.join(root, execution.qco_aggregate_template), "utf8"));
+const decisionTemplate = JSON.parse(fs.readFileSync(path.join(root, execution.decision_template), "utf8"));
+assert("research_template_valid", validateResearchAggregate(researchTemplate, protocol, exposurePlan).length === 0, validateResearchAggregate(researchTemplate, protocol, exposurePlan));
+assert("qco_template_valid", validateQcoAggregate(qcoTemplate, protocol).length === 0, validateQcoAggregate(qcoTemplate, protocol));
+assert("decision_template_valid", validateProductDecisions(decisionTemplate, protocol).length === 0, validateProductDecisions(decisionTemplate, protocol));
+
+const validResearch = structuredClone(researchTemplate);
+validResearch.template = false;
+validResearch.run_id = "2026-09-24-01";
+validResearch.status = "COMPLETE";
+validResearch.exposure_plan_sha256 = "a".repeat(64);
+validResearch.participant_counts = { screened: 24, eligible: 20, consented: 20, completed: 20, active_public_contract_last_12_months: 14 };
+validResearch.completed_by_role = { direcao: 5, licitacoes_comercial: 5, engenharia_proposta: 5, contratos_obra_financeiro: 5 };
+validResearch.consent_attestation = { private_records_verified: true, pii_in_repository: false, pii_in_analytics: false, raw_notes_in_repository: false };
+validResearch.exposure_counts_by_deliverable = exposurePlan.coverage.item_exposure_counts;
+validResearch.joint_counts_by_critical_boundary = exposurePlan.coverage.boundary_joint_counts;
+validResearch.problem_evidence_aggregate = { recent_trigger_count: 20 };
+validResearch.card_sort_aggregate = { completed_sort_count: 20 };
+assert("valid_research_fixture_passes", validateResearchAggregate(validResearch, protocol, exposurePlan).length === 0, validateResearchAggregate(validResearch, protocol, exposurePlan));
+const shortResearch = structuredClone(validResearch);
+shortResearch.participant_counts.completed = 19;
+assert("research_below_20_fails", validateResearchAggregate(shortResearch, protocol, exposurePlan).includes("sample_below_minimum"), validateResearchAggregate(shortResearch, protocol, exposurePlan));
+const researchWithPii = structuredClone(validResearch);
+researchWithPii.email = "proibido@example.invalid";
+assert("research_pii_key_fails", validateResearchAggregate(researchWithPii, protocol, exposurePlan).some((problem) => problem.startsWith("forbidden_key:")), validateResearchAggregate(researchWithPii, protocol, exposurePlan));
+
+const validQco = structuredClone(qcoTemplate);
+validQco.template = false;
+validQco.run_id = "2026-09-24-01";
+validQco.status = "COMPLETE";
+validQco.warmbly_export_sha256 = "b".repeat(64);
+for (const row of validQco.by_deliverable) {
+  row.price_version = "CFG-PRICE-PILOT-V1";
+  row.eligible_qcos = 1;
+  row.unit_recommendations = 1;
+  row.decisions.SEM_DECISAO = 1;
+}
+validQco.totals.eligible_qcos = 8;
+validQco.totals.unit_recommendations = 8;
+assert("valid_qco_fixture_passes", validateQcoAggregate(validQco, protocol).length === 0, validateQcoAggregate(validQco, protocol));
+const ambiguousQco = structuredClone(validQco);
+ambiguousQco.by_deliverable[0].unit_recommendations = 0;
+assert("qco_without_unit_recommendation_fails", validateQcoAggregate(ambiguousQco, protocol).some((problem) => problem.startsWith("unit_recommendation:")), validateQcoAggregate(ambiguousQco, protocol));
+const qcoWithPii = structuredClone(validQco);
+qcoWithPii.by_deliverable[0].company_name = "proibido";
+assert("qco_pii_key_fails", validateQcoAggregate(qcoWithPii, protocol).some((problem) => problem.startsWith("forbidden_key:")), validateQcoAggregate(qcoWithPii, protocol));
+
+/* ---------------------------------------------------------------- 10. sem travessão */
 const moduleSource = fs.readFileSync(path.join(root, "scripts/commercial/market_fit_promotion.mjs"), "utf8");
+const evidenceSource = fs.readFileSync(path.join(root, "scripts/commercial/market_fit_evidence.mjs"), "utf8");
+const exposureSource = fs.readFileSync(path.join(root, "scripts/commercial/market_fit_exposure_plan.mjs"), "utf8");
 const EM_DASH = String.fromCharCode(0x2014);
 assert("protocol_has_no_em_dash", !rawProtocol.includes(EM_DASH), "data");
 assert("module_has_no_em_dash", !moduleSource.includes(EM_DASH), "module");
+assert("evidence_module_has_no_em_dash", !evidenceSource.includes(EM_DASH), "evidence module");
+assert("exposure_module_has_no_em_dash", !exposureSource.includes(EM_DASH), "exposure module");
 assert("test_has_no_em_dash", !SELF_SOURCE.includes(EM_DASH), "test");
 
 const failed = results.filter((r) => !r.ok);
