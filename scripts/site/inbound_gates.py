@@ -2024,6 +2024,24 @@ def gate_similarity_indexable(threshold: float = 0.55) -> GateReport:
     )
 
 
+def gate_semantic_query_ownership() -> GateReport:
+    """Require a complete, conflict-safe Medicoes/Glosas ownership ledger."""
+    from scripts.organic.query_ownership import validate_query_ownership
+
+    report = validate_query_ownership(ROOT)
+    findings = [
+        Finding(
+            gate="semantic_query_ownership",
+            path=item.path,
+            reason=item.reason,
+            excerpt=item.detail,
+            severity=item.severity,
+        )
+        for item in report.findings
+    ]
+    return GateReport(ok=report.ok, findings=findings, stats=report.stats)
+
+
 def run_all_gates() -> dict[str, Any]:
     reports = {
         "naturalness": gate_naturalness(only_indexable=True),
@@ -2032,6 +2050,7 @@ def run_all_gates() -> dict[str, Any]:
         "conversion": gate_conversion(),
         "legacy_entity": gate_legacy_entity_matrix(),
         "similarity": gate_similarity_indexable(),
+        "semantic_query_ownership": gate_semantic_query_ownership(),
     }
     ok = all(r.ok for r in reports.values())
     return {
