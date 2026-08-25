@@ -24,7 +24,7 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "53e4a0e0503088fc3e32ec50ae4c11378ca4aaafb413ee192354e68c587fab98"
+    "after_sha256": "4cdd0e31bc52f5344373bd21ce6ded4c0771e749f95882acfc5efe9f95100d3d"
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -66,6 +66,16 @@
     "robots_flip": false,
     "issue_127_gate": "NOT_APPLICABLE_NO_INDEXABILITY_CHANGE",
     "issue_128_pillar_mutated": false
+  },
+  "sitemap": {
+    "membership_before": true,
+    "membership_after": true,
+    "membership_changed": false,
+    "new_sitemap_created": false,
+    "lastmod_before": "2026-07-30",
+    "lastmod_after": "2026-08-25",
+    "recapture_registry": "data/bofu-dominance/frozen-specs/hashes.json",
+    "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente; os seis pilares protegidos e a composição dos sitemaps permanecem inalterados."
   },
   "content_contract": {
     "title": "Atraso na medição de obra pública: o que fazer | CONFENGE",

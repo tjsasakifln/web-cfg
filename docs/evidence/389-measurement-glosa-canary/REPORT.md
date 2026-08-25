@@ -6,7 +6,10 @@
 A única superfície pública alterada é
 `/conteudos/atraso-na-medicao-obra-publica/`. Nenhuma URL foi criada, nenhuma
 segunda página foi reescrita e não houve mudança de `robots`, canonical,
-redirect ou sitemap.
+redirect ou composição de sitemap. O `lastmod` da URL já existente foi
+atualizado de 2026-07-30 para a revisão factual de 2026-08-25; somente os
+hashes não-HTML de `sitemap.xml` e `sitemap-index.xml` foram recapturados, com
+os seis pilares protegidos byte-idênticos.
 
 ## Por que esta URL
 

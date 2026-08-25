@@ -187,6 +187,18 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
 
     assert contract["indexability"]["robots_flip"] is False
     assert contract["indexability"]["issue_128_pillar_mutated"] is False
+    sitemap = contract["sitemap"]
+    assert sitemap["membership_before"] is sitemap["membership_after"] is True
+    assert sitemap["membership_changed"] is False
+    assert sitemap["new_sitemap_created"] is False
+    sitemap_xml = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+    sitemap_entry = re.search(
+        rf"<loc>https://confenge.com.br{re.escape(canary['path'])}</loc>\s*"
+        rf"<lastmod>{sitemap['lastmod_after']}</lastmod>",
+        sitemap_xml,
+    )
+    assert sitemap_entry
+    assert sitemap_xml.count(f"https://confenge.com.br{canary['path']}") == 1
     assert contract["second_wave"]["status"] == "BLOCKED"
     assert contract["selection_evidence"]["country"]["value"] == "UNKNOWN"
     assert contract["selection_evidence"]["device_for_candidate"]["value"] == "UNKNOWN"
