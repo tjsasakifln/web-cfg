@@ -16,6 +16,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { consumerSuitesForPath } from "../../scripts/site/affected_graph.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -1303,6 +1304,11 @@ const graph = fs.readFileSync(path.join(root, "scripts/site/affected_graph.mjs")
 assert("affected_graph_declares_gate", graph.includes('"test:real-proof-registry"'), "affected_graph.mjs");
 assert("affected_graph_declares_registry_producer", graph.includes("data/commercial/real-proof-registry.v1.json"), "producer");
 assert("affected_graph_declares_test_producer", graph.includes("tests/commercial/test_real_proof_registry.mjs"), "producer");
+assert(
+  "affected_public_html_selects_real_proof_gate",
+  consumerSuitesForPath("conteudos/fixture-public-surface/index.html").some((entry) => entry.id === "test:real-proof-registry"),
+  "conteudos/fixture-public-surface/index.html",
+);
 
 /* ------------------------------------------------------------------ */
 

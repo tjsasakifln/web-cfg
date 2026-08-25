@@ -29,6 +29,10 @@ const PUBLIC_HTML_SUITES = Object.freeze([
   "test:ferramentas-footer",
   "test:hub-truth",
   "test:nav",
+  "test:first-fold-contract",
+  "test:real-proof-registry",
+  "test:integrity-promotion-gate",
+  "test:logo-contract",
   "test:wave1-fields",
 ]);
 
