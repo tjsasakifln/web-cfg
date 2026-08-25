@@ -65,6 +65,7 @@ jobs:
           npm run test:pricing-policy
           npm run test:page-contract-eight
           npm run test:market-fit-protocol
+          npm run test:real-proof-registry
           npm run test:page-contract-licitacao
           npm run test:page-contract-contratos
           npm run test:task-doors
