@@ -10,6 +10,7 @@
  */
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
 import { fileURLToPath } from "url";
 import { evaluatePromotion } from "../../scripts/commercial/market_fit_promotion.mjs";
 import { generateExposurePlan } from "../../scripts/commercial/market_fit_exposure_plan.mjs";
@@ -394,36 +395,68 @@ assert("decision_template_valid", validateProductDecisions(decisionTemplate, pro
 const validResearch = structuredClone(researchTemplate);
 validResearch.template = false;
 validResearch.run_id = "2026-09-24-01";
+validResearch.executed_at = "2026-09-24T18:00:00Z";
 validResearch.status = "COMPLETE";
-validResearch.exposure_plan_sha256 = "a".repeat(64);
+validResearch.exposure_plan_sha256 = crypto.createHash("sha256").update(`${JSON.stringify(exposurePlan, null, 2)}\n`).digest("hex");
 validResearch.participant_counts = { screened: 24, eligible: 20, consented: 20, completed: 20, active_public_contract_last_12_months: 14 };
 validResearch.completed_by_role = { direcao: 5, licitacoes_comercial: 5, engenharia_proposta: 5, contratos_obra_financeiro: 5 };
 validResearch.consent_attestation = { private_records_verified: true, pii_in_repository: false, pii_in_analytics: false, raw_notes_in_repository: false };
 validResearch.exposure_counts_by_deliverable = exposurePlan.coverage.item_exposure_counts;
 validResearch.joint_counts_by_critical_boundary = exposurePlan.coverage.boundary_joint_counts;
-validResearch.problem_evidence_aggregate = { recent_trigger_count: 20 };
-validResearch.card_sort_aggregate = { completed_sort_count: 20 };
+const zeroByDeliverable = Object.fromEntries(Object.keys(exposurePlan.coverage.item_exposure_counts).map((id) => [id, 0]));
+validResearch.problem_evidence_aggregate = { recent_concrete_triggers_by_deliverable: { ...zeroByDeliverable, "CFG-D01": 3 } };
+validResearch.card_sort_aggregate = {
+  completed_sort_count: 20,
+  relevance_selections_by_deliverable: structuredClone(zeroByDeliverable),
+  confusion_mentions_by_deliverable: structuredClone(zeroByDeliverable),
+};
+validResearch.review = { operator_role: "research_operator", second_reviewer_role: "research_reviewer", reviewed_at: "2026-09-25T12:00:00Z" };
 assert("valid_research_fixture_passes", validateResearchAggregate(validResearch, protocol, exposurePlan).length === 0, validateResearchAggregate(validResearch, protocol, exposurePlan));
 const shortResearch = structuredClone(validResearch);
 shortResearch.participant_counts.completed = 19;
-assert("research_below_20_fails", validateResearchAggregate(shortResearch, protocol, exposurePlan).includes("sample_below_minimum"), validateResearchAggregate(shortResearch, protocol, exposurePlan));
+assert("research_below_20_fails", validateResearchAggregate(shortResearch, protocol, exposurePlan).includes("sample_not_exact"), validateResearchAggregate(shortResearch, protocol, exposurePlan));
+const fakePlanHash = structuredClone(validResearch);
+fakePlanHash.exposure_plan_sha256 = "a".repeat(64);
+assert("research_fake_plan_hash_fails", validateResearchAggregate(fakePlanHash, protocol, exposurePlan).includes("exposure_plan_sha256"), validateResearchAggregate(fakePlanHash, protocol, exposurePlan));
 const researchWithPii = structuredClone(validResearch);
 researchWithPii.email = "proibido@example.invalid";
 assert("research_pii_key_fails", validateResearchAggregate(researchWithPii, protocol, exposurePlan).some((problem) => problem.startsWith("forbidden_key:")), validateResearchAggregate(researchWithPii, protocol, exposurePlan));
+const researchWithPiiValue = structuredClone(validResearch);
+researchWithPiiValue.note = "pessoa@example.invalid";
+assert("research_pii_value_fails", validateResearchAggregate(researchWithPiiValue, protocol, exposurePlan).some((problem) => problem.startsWith("forbidden_value:")), validateResearchAggregate(researchWithPiiValue, protocol, exposurePlan));
 
 const validQco = structuredClone(qcoTemplate);
 validQco.template = false;
 validQco.run_id = "2026-09-24-01";
 validQco.status = "COMPLETE";
+validQco.window = { started_at: "2026-09-01T00:00:00Z", ended_at: "2026-09-24T23:59:59Z" };
 validQco.warmbly_export_sha256 = "b".repeat(64);
+validQco.review = { operator_role: "commercial_operator", second_reviewer_role: "commercial_reviewer", reviewed_at: "2026-09-25T13:00:00Z" };
 for (const row of validQco.by_deliverable) {
   row.price_version = "CFG-PRICE-PILOT-V1";
   row.eligible_qcos = 1;
   row.unit_recommendations = 1;
   row.decisions.SEM_DECISAO = 1;
 }
-validQco.totals.eligible_qcos = 8;
-validQco.totals.unit_recommendations = 8;
+const promotedQco = validQco.by_deliverable.find((row) => row.deliverable_id === "CFG-D01");
+promotedQco.eligible_qcos = 2;
+promotedQco.unit_recommendations = 2;
+promotedQco.proposals_sent = 1;
+promotedQco.plausible_proposals_at_published_price = 1;
+promotedQco.decisions.ACEITOU = 1;
+promotedQco.paid = 1;
+promotedQco.delivered = 1;
+promotedQco.outcomes_unknown = 1;
+promotedQco.deliveries_with_positive_margin = 1;
+promotedQco.delivery_hours_deviation_pct = 0;
+validQco.totals.eligible_qcos = 9;
+validQco.totals.unit_recommendations = 9;
+validQco.totals.proposals_sent = 1;
+validQco.totals.plausible_proposals_at_published_price = 1;
+validQco.totals.paid = 1;
+validQco.totals.delivered = 1;
+validQco.totals.outcomes_unknown = 1;
+validQco.totals.deliveries_with_positive_margin = 1;
 assert("valid_qco_fixture_passes", validateQcoAggregate(validQco, protocol).length === 0, validateQcoAggregate(validQco, protocol));
 const ambiguousQco = structuredClone(validQco);
 ambiguousQco.by_deliverable[0].unit_recommendations = 0;
@@ -431,6 +464,42 @@ assert("qco_without_unit_recommendation_fails", validateQcoAggregate(ambiguousQc
 const qcoWithPii = structuredClone(validQco);
 qcoWithPii.by_deliverable[0].company_name = "proibido";
 assert("qco_pii_key_fails", validateQcoAggregate(qcoWithPii, protocol).some((problem) => problem.startsWith("forbidden_key:")), validateQcoAggregate(qcoWithPii, protocol));
+const unreconciledOutcome = structuredClone(validQco);
+unreconciledOutcome.by_deliverable[0].outcomes_unknown = 0;
+assert("qco_requires_every_delivery_outcome", validateQcoAggregate(unreconciledOutcome, protocol).some((problem) => problem.startsWith("outcome_reconciliation:")), validateQcoAggregate(unreconciledOutcome, protocol));
+
+const validDecisions = structuredClone(decisionTemplate);
+validDecisions.template = false;
+validDecisions.run_id = "2026-09-25-01";
+validDecisions.research_run_id = validResearch.run_id;
+validDecisions.qco_run_id = validQco.run_id;
+validDecisions.status = "COMPLETE";
+validDecisions.review = { operator_role: "portfolio_owner", second_reviewer_role: "portfolio_reviewer", reviewed_at: "2026-09-25T14:00:00Z" };
+validDecisions.decisions = Array.from({ length: 54 }, (_, index) => ({
+  deliverable_id: `CFG-D${String(index + 1).padStart(2, "0")}`,
+  decision: "HOLD",
+  scores: Object.fromEntries(protocol.score_dimensions.map((dimension) => [dimension, 0])),
+  evidence_classes: Object.fromEntries(protocol.evidence_classes.map((evidenceClass) => [evidenceClass, false])),
+  promotion_evidence: null,
+}));
+const promotedDecision = validDecisions.decisions[0];
+promotedDecision.decision = "PROMOTE";
+for (const evidenceClass of protocol.gates.PROMOTE.required_evidence_classes) promotedDecision.evidence_classes[evidenceClass] = true;
+promotedDecision.promotion_evidence = {
+  recent_concrete_triggers: 3,
+  qualified_handraises: 2,
+  plausible_proposals_at_published_price: 1,
+  delivery_hours_deviation_pct: 0,
+  margin_positive: true,
+  no_forbidden_claim: true,
+};
+assert("valid_decision_fixture_passes", validateProductDecisions(validDecisions, protocol, validResearch, validQco).length === 0, validateProductDecisions(validDecisions, protocol, validResearch, validQco));
+const inventedPromotion = structuredClone(validDecisions);
+inventedPromotion.decisions[0].promotion_evidence.qualified_handraises = 99;
+assert("decision_invented_promotion_evidence_fails", validateProductDecisions(inventedPromotion, protocol, validResearch, validQco).some((problem) => problem.startsWith("promotion_evidence_drift:")), validateProductDecisions(inventedPromotion, protocol, validResearch, validQco));
+const wrongDecisionSet = structuredClone(validDecisions);
+wrongDecisionSet.decisions[53].deliverable_id = "CFG-D99";
+assert("decision_requires_exact_01_54_set", validateProductDecisions(wrongDecisionSet, protocol, validResearch, validQco).includes("product_decision_set"), validateProductDecisions(wrongDecisionSet, protocol, validResearch, validQco));
 
 /* ---------------------------------------------------------------- 10. sem travessão */
 const moduleSource = fs.readFileSync(path.join(root, "scripts/commercial/market_fit_promotion.mjs"), "utf8");

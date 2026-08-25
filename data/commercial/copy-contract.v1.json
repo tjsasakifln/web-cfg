@@ -469,7 +469,7 @@
       "implemented_by": "scripts/commercial/copy_contract_audit.mjs",
       "corpus": "trigger, decisão, saída e as 15 cláusulas publicadas por deliverable_id",
       "source": "#338 Linguagem proibida sem prova imediata",
-      "rationale": "A checagem é de duplicidade de parágrafo entre ofertas, não de termo isolado."
+      "rationale": "O precheck bloqueia assinatura sem título duplicada e corpo normalizado de qualquer uma das 15 cláusulas exatamente duplicado entre ofertas. Similaridade semântica continua humana."
     },
     {
       "id": "FL-20",
@@ -496,7 +496,7 @@
       "id": "GX-01",
       "scope": "exclusão ou negação explícita",
       "rule": "Termo dentro de uma lista de exclusões ou dentro de frase que nega explicitamente é fronteira, não claim. Sem esta exceção documentada, um scanner honesto reprovaria fronteiras corretas, como não prometemos vitória.",
-      "implemented_as": "explicit_negation_window",
+      "implemented_as": "explicit_negation_or_exclusion_structure",
       "window_chars": 60,
       "negation_markers": [
         "sem",
@@ -597,6 +597,8 @@
       "runner": "scripts/commercial/copy_contract_audit.mjs",
       "signature_fields": ["trigger", "decision_question", "included_outputs[0]"],
       "unique_signatures": 54,
+      "published_clause_bodies_checked": 810,
+      "exact_duplicate_clause_bodies": 0,
       "human_equivalence_claimed": false
     }
   },
@@ -833,7 +835,7 @@
       "id": "AC-05",
       "criterion": "nenhum card ou página usa copy intercambiável",
       "state": "MACHINE_PRECHECK_PASS_HUMAN_PENDING",
-      "evidence": "54 assinaturas distintas de trigger, decisão e saída; teste humano sem título continua NOT_STARTED"
+      "evidence": "54 assinaturas sem título distintas e 810/810 corpos de cláusula exatos distintos; equivalência semântica e teste humano sem título continuam NOT_STARTED"
     },
     {
       "id": "AC-06",
@@ -874,6 +876,8 @@
     "deliverables_covered": 54,
     "clauses_per_deliverable": 15,
     "clause_instances": 810,
+    "distinct_clause_bodies": 810,
+    "exact_duplicate_clause_bodies": 0,
     "adversarial_review_package": "docs/research/copy-adversarial-v1",
     "human_review_state": "NOT_STARTED"
   },
@@ -884,8 +888,18 @@
     "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
     "route_discovery": "registry_and_public_family_derived",
     "manual_route_allowlist": false,
-    "method": "Cada página é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Cada ocorrência é classificada como isenta por exceção documentada ou como violação.",
-    "gate_rule": "Toda ocorrência viva precisa estar registrada: as isentas em boundaries com contagem exata, as demais em violations. Ocorrência não registrada reprova o portão.",
+    "method": "Cada rota derivada é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Só o nome registrado exato, um instituto de mercado, uma negação na mesma frase ou uma seção estrutural Não inclui pode gerar isenção.",
+    "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
+    "live_measurement": {
+      "routes_derived": 23,
+      "language_boundaries": 119,
+      "language_observations": 0,
+      "language_violations": 0,
+      "structured_social_proof_hits": 0,
+      "clause_bodies_unique": 810,
+      "clause_body_duplicates": 0
+    },
+    "historical_baseline_note": "A lista pages e suas boundaries são o recorte inicial de doze páginas e permanecem apenas como trilha auditável. O portão atual não as consome como allowlist.",
     "pages": [
       "entregas/index.html",
       "servicos-obras-publicas/index.html",
@@ -901,7 +915,7 @@
       "casos/modelo-relatorio-inteligencia-licitacoes/index.html"
     ],
     "violations": [],
-    "violations_note": "Nenhuma violação real encontrada em 2026-08-24. Toda ocorrência viva dos termos verificáveis por máquina cai em exceção documentada, registrada em boundaries.",
+    "violations_note": "Nenhuma violação real encontrada nas 23 rotas derivadas em 2026-08-25. O relatório vivo expõe as isenções e reprova qualquer ocorrência sem exceção documentada; boundaries abaixo é somente o baseline histórico.",
     "boundaries": [
       {
         "id": "B-01",
@@ -1095,7 +1109,7 @@
         "AggregateRating"
       ],
       "occurrences": 0,
-      "note": "Nenhuma das doze páginas de dinheiro publica Review nem AggregateRating em application/ld+json."
+      "note": "Nenhuma das 23 rotas derivadas publica Review nem AggregateRating em application/ld+json."
     },
     "exemption_precedence": [
       "GX-04",
@@ -1107,14 +1121,14 @@
       "count_only": "Ocorrência sem exceção documentada de um termo que a issue só proíbe em excesso ou como único significado. Vira observação registrada em observations, não violação."
     },
     "observations": [],
-    "observations_note": "Nenhuma ocorrência de poderá nem de saiba mais nas doze páginas de dinheiro em 2026-08-24."
+    "observations_note": "Nenhuma ocorrência de poderá nem de saiba mais nas 23 rotas derivadas em 2026-08-25."
   },
   "not_delivered_by_this_pr": [
     "As 15 cláusulas são publicadas para 54/54 no catálogo, mas não são declaradas compreendidas por pessoas reais.",
     "A revisão adversarial em oito lentes não foi executada: reviews está vazio e state é NOT_STARTED.",
     "O protocolo humano de 20 participantes não rodou: human_protocol.results está vazio.",
     "O teste humano de diferenciação não rodou: o rol taxativo existe e fixa o alvo em 54/54, mas ainda não há resultados humanos.",
-    "O precheck de duplicidade prova assinaturas distintas; não substitui o revisor que identifica a oferta sem título e preço.",
+    "O precheck rejeita assinaturas ou corpos de cláusula exatamente duplicados; não prova que paráfrases sejam semanticamente distintas nem substitui o revisor que identifica a oferta sem título e preço.",
     "Os critérios que dependem de julgamento, tela real ou proveniência externa continuam para a revisão humana e os gates especializados."
   ]
 }
