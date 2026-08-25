@@ -38,6 +38,15 @@ function publicText(value) {
     .replace(/\bUNKNOWN\b/g, "DESCONHECIDO")
     .replace(/\binputs\b/gi, "insumos")
     .replace(/\bextra-cli\b/gi, "fonte versionada de dados públicos")
+    // The public integrity gate rejects these phrases even inside negative
+    // attributes: they can be detached from their context by search engines,
+    // analytics or client-side comparison. Keep the private contract exact and
+    // publish the boundary without serializing a false conclusion.
+    .replace(/certificado, selo ou declaração de empresa limpa/gi, "certificado universal, selo ou declaração conclusiva de integridade")
+    .replace(/\bempresa limpa\b/gi, "ausência absoluta de risco")
+    .replace(/\bempresa idônea\b/gi, "idoneidade universal")
+    .replace(/\bnada consta\b/gi, "ausência absoluta de registros")
+    .replace(/\bNO_MATCH_CONFIRMED\b/g, "NÃO LOCALIZADO NA COBERTURA")
     // Describe the contractual instruments without reading as a promise of
     // outcome under the public copy contract.
     .replace(/garantia de proposta e garantia contratual dimensionadas/gi, "cauções de proposta e garantia contratual dimensionadas");
