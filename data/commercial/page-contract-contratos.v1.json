@@ -1,0 +1,322 @@
+{
+  "schema": "confenge.commercial.page-contract.contratos.v1",
+  "version": 1,
+  "source_issue": 333,
+  "parent_issue": 329,
+  "name_authority_issue": 343,
+  "scope_pt_br": "Contrato de página dos itens 17 a 23 da issue 333: defesa de margem, caixa, prazo e sanções na execução de contratos públicos.",
+  "validation": {
+    "state": "NOT_STARTED",
+    "evidence": []
+  },
+  "public_proof_ownership": {
+    "owner_issue": 60,
+    "reopened_here": false,
+    "note_pt_br": "A prova vertical aberta continua sob a issue 60 e não é reaberta por este contrato de página. Nenhum entregável listado aqui promete virar peça aberta de vitrine."
+  },
+  "common_rules": {
+    "credit_rule": {
+      "source_item": 17,
+      "cap_cents": 290000,
+      "window_days": 30,
+      "eligible_items": [18, 19, 20, 21, 22, 23],
+      "max_credited_items": 1,
+      "cumulative": false,
+      "statement_pt_br": "O Diagnóstico de Riscos à Margem gera crédito de até R$ 2.900 para um único dossiê entre os itens 18 e 23 contratado em 30 dias, sem acúmulo com outro crédito."
+    },
+    "urgency_rule": {
+      "below_sla_allowed": true,
+      "requires_confirmed_capacity": true,
+      "surcharge_percent": 50,
+      "surcharge_prepaid": true,
+      "statement_pt_br": "Urgência inferior ao SLA só é aceita com capacidade confirmada e adicional de 50 por cento pago previamente."
+    },
+    "public_sources_rule": {
+      "complements": true,
+      "replaces_contemporaneous_records": false,
+      "statement_pt_br": "Fontes públicas complementam, mas não substituem, documentos contemporâneos da obra."
+    },
+    "obligation_rule": {
+      "obligation_type": "meio",
+      "includes_legal_representation": false,
+      "statement_pt_br": "O resultado é obrigação de meio e não inclui representação jurídica."
+    },
+    "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+    "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
+    "legal_boundary_required_negatives": [
+      "no_legal_practice",
+      "no_legal_document_drafting",
+      "no_filing",
+      "no_representation",
+      "no_outcome_promise"
+    ],
+    "public_sources": [
+      "https://licitacoesecontratos.tcu.gov.br/6-1-7-pagamento/",
+      "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/"
+    ]
+  },
+  "items": [
+    {
+      "item": 17,
+      "deliverable_id": "CFG-D17",
+      "public_name_pt_br": "Diagnóstico de Riscos à Margem",
+      "value_line_pt_br": "Localiza eventos que podem corroer a margem antes de virarem perda.",
+      "decision_question_pt_br": "Quais eventos deste contrato ameaçam a margem e o que priorizar, registrar, quantificar ou levar ao jurídico?",
+      "route": "/defesa-margem-contratos-publicos/",
+      "page_file": "defesa-margem-contratos-publicos/index.html",
+      "pilot_price_cents": 290000,
+      "sla_business_days": 5,
+      "safe_deadline_gate": null,
+      "scope_unit_pt_br": "Um contrato e até cinco eventos indicados pelo cliente ou encontrados na leitura.",
+      "minimum_document_pt_br": "Contrato assinado com os anexos vigentes e registro contemporâneo dos eventos analisados, no limite de cinco eventos por diagnóstico.",
+      "output_pt_br": "Cronologia inicial, obrigações, matriz de risco, eventos, prazo, impacto potencial, prova existente, lacunas e decisão PRIORIZAR, REGISTRAR, QUANTIFICAR, NÃO PLEITEAR ou JURÍDICO.",
+      "not_included_pt_br": [
+        "Quantificação integral de todos os pleitos.",
+        "Representação jurídica."
+      ],
+      "legal_boundary": {
+        "no_legal_practice": true,
+        "no_legal_document_drafting": true,
+        "no_filing": true,
+        "no_representation": true,
+        "no_outcome_promise": true,
+        "statement_pt_br": "Não presta advocacia, não elabora peça, não protocola, não representa a empresa e não promete resultado, recebimento nem afastamento de sanção."
+      },
+      "evidence_grades": {
+        "FACT": "Cláusula, obrigação e evento lidos em documento contemporâneo do contrato, com origem citada.",
+        "CALCULATION": "Impacto potencial aritmético a partir de valores contratados, com insumos e fórmula visíveis.",
+        "INFERENCE": "Leitura técnica de risco declarada como interpretação, separada do que é FACT.",
+        "UNKNOWN": "Evento indicado sem registro contemporâneo disponível na data do diagnóstico."
+      },
+      "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
+      "promises_public_case_publication": false,
+      "public_source_urls": []
+    },
+    {
+      "item": 18,
+      "deliverable_id": "CFG-D18",
+      "public_name_pt_br": "Dossiê de Medição, Glosa e Pagamento",
+      "value_line_pt_br": "Organiza cálculo e prova para contestar glosa ou cobrar pagamento.",
+      "decision_question_pt_br": "A glosa desta medição se sustenta no critério contratado e na prova existente?",
+      "route": "/medicoes-glosas-obras-publicas/",
+      "page_file": "medicoes-glosas-obras-publicas/index.html",
+      "pilot_price_cents": 490000,
+      "sla_business_days": 5,
+      "safe_deadline_gate": null,
+      "scope_unit_pt_br": "Uma medição ou glosa, ou conjunto inseparável do mesmo período.",
+      "minimum_document_pt_br": "Contrato e critérios de medição, memória de cálculo, diário de obra, protocolos, aceite e nota fiscal do período, mais a ordem cronológica quando pública.",
+      "output_pt_br": "Valor classificado em FACT ou CALCULATION, itens controvertidos, causa, evidência, lacunas, parcela incontroversa e subsídio técnico para contestação.",
+      "not_included_pt_br": [
+        "Petição jurídica.",
+        "Promessa de recebimento.",
+        "Representação jurídica."
+      ],
+      "legal_boundary": {
+        "no_legal_practice": true,
+        "no_legal_document_drafting": true,
+        "no_filing": true,
+        "no_representation": true,
+        "no_outcome_promise": true,
+        "statement_pt_br": "Não presta advocacia, não elabora peça, não protocola, não representa a empresa e não promete resultado, recebimento nem afastamento de sanção."
+      },
+      "evidence_grades": {
+        "FACT": "Quantitativo medido, critério contratado e glosa aplicada extraídos de documento contemporâneo, com origem citada.",
+        "CALCULATION": "Diferença entre o medido e o glosado, reproduzível a partir de FACT, com fórmula e insumos visíveis.",
+        "INFERENCE": "Causa provável da glosa declarada como interpretação técnica, separada do que é FACT.",
+        "UNKNOWN": "Item cuja memória, diário ou protocolo não foi entregue até o fechamento do dossiê."
+      },
+      "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
+      "promises_public_case_publication": false,
+      "public_source_urls": ["https://licitacoesecontratos.tcu.gov.br/6-1-7-pagamento/"]
+    },
+    {
+      "item": 19,
+      "deliverable_id": "CFG-D19",
+      "public_name_pt_br": "Dossiê de Aditivo e Serviço Extra",
+      "value_line_pt_br": "Prova mudança de escopo, custo e prazo para instruir o aditivo.",
+      "decision_question_pt_br": "A mudança de escopo está provada e coberta para instruir o aditivo?",
+      "route": "/aditivos-obras-publicas/",
+      "page_file": "aditivos-obras-publicas/index.html",
+      "pilot_price_cents": 590000,
+      "sla_business_days": 7,
+      "safe_deadline_gate": null,
+      "scope_unit_pt_br": "Um evento de mudança ou conjunto causal único.",
+      "minimum_document_pt_br": "Escopo original contratado com planilha e projeto, ordem ou autorização da mudança, comunicações do período e controle de acréscimos e supressões.",
+      "output_pt_br": "Escopo original comparado ao alterado, cronologia, ordem ou autorização, natureza qualitativa ou quantitativa, saldo de acréscimos e supressões, preço de item novo, impacto em prazo e custo, e matriz documental para termo ou apostila conforme revisão jurídica do cliente.",
+      "not_included_pt_br": [
+        "Autorização para executar serviço sem cobertura contratual.",
+        "Redação do termo aditivo ou da apostila.",
+        "Representação jurídica."
+      ],
+      "legal_boundary": {
+        "no_legal_practice": true,
+        "no_legal_document_drafting": true,
+        "no_filing": true,
+        "no_representation": true,
+        "no_outcome_promise": true,
+        "statement_pt_br": "Não presta advocacia, não elabora peça, não protocola, não representa a empresa e não promete resultado, recebimento nem afastamento de sanção."
+      },
+      "evidence_grades": {
+        "FACT": "Escopo contratado, ordem de serviço e autorização lidos em documento contemporâneo, com origem citada.",
+        "CALCULATION": "Saldo de acréscimos e supressões e preço de item novo, reproduzíveis a partir de FACT, com fórmula e insumos visíveis.",
+        "INFERENCE": "Enquadramento da natureza qualitativa ou quantitativa declarado como interpretação técnica.",
+        "UNKNOWN": "Mudança executada sem ordem, autorização ou comunicação localizada nos registros entregues."
+      },
+      "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
+      "promises_public_case_publication": false,
+      "public_source_urls": []
+    },
+    {
+      "item": 20,
+      "deliverable_id": "CFG-D20",
+      "public_name_pt_br": "Dossiê de Atraso e Prorrogação",
+      "value_line_pt_br": "Separa causas, responsabilidades e dias afetados para instruir prorrogação.",
+      "decision_question_pt_br": "Quais causas responderam pelos dias de atraso e quantos dias sustentam o pedido de prorrogação?",
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "page_file": "atrasos-prorrogacao-obras-publicas/index.html",
+      "pilot_price_cents": 590000,
+      "sla_business_days": 7,
+      "safe_deadline_gate": null,
+      "scope_unit_pt_br": "Uma janela causal de atraso.",
+      "minimum_document_pt_br": "Cronograma de linha de base, diário de obra, comunicações do período, registros de liberação de frente, projeto e licença, e boletim climático oficial quando pertinente.",
+      "output_pt_br": "Cronologia, nexo, dias impactados calculados, concorrência de causas, medidas de mitigação, pedido técnico recomendado e lacunas.",
+      "not_included_pt_br": [
+        "Produtividade estimada sem registro contemporâneo.",
+        "Tratamento de chuva ordinária como força maior.",
+        "Representação jurídica."
+      ],
+      "legal_boundary": {
+        "no_legal_practice": true,
+        "no_legal_document_drafting": true,
+        "no_filing": true,
+        "no_representation": true,
+        "no_outcome_promise": true,
+        "statement_pt_br": "Não presta advocacia, não elabora peça, não protocola, não representa a empresa e não promete resultado, recebimento nem afastamento de sanção."
+      },
+      "evidence_grades": {
+        "FACT": "Linha de base, caminho crítico, liberações e comunicações lidos em registro contemporâneo, com origem citada.",
+        "CALCULATION": "Dias impactados apurados por método reproduzível a partir de FACT, com insumos visíveis.",
+        "INFERENCE": "Atribuição de responsabilidade e concorrência de causas declaradas como interpretação técnica.",
+        "UNKNOWN": "Janela sem diário, comunicação ou registro de liberação disponível."
+      },
+      "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
+      "promises_public_case_publication": false,
+      "public_source_urls": []
+    },
+    {
+      "item": 21,
+      "deliverable_id": "CFG-D21",
+      "public_name_pt_br": "Cálculo de Reajuste Contratual",
+      "value_line_pt_br": "Calcula o reajuste previsto pela cláusula e pela data-base do contrato.",
+      "decision_question_pt_br": "Qual reajuste a cláusula e a data-base do contrato sustentam?",
+      "route": null,
+      "page_file": null,
+      "pilot_price_cents": 290000,
+      "sla_business_days": 4,
+      "safe_deadline_gate": null,
+      "scope_unit_pt_br": "Um contrato, uma data-base ou aniversário e um índice ou cláusula.",
+      "minimum_document_pt_br": "Contrato com a cláusula de reajuste, comprovação da data-base ou do aniversário, e a série oficial do índice aplicável no período.",
+      "output_pt_br": "Marco temporal, índice aplicável, saldo elegível, memória reproduzível, parcelas excluídas, documentos e minuta técnica de cálculo.",
+      "not_included_pt_br": [
+        "Repactuação.",
+        "Reequilíbrio econômico-financeiro.",
+        "Representação jurídica."
+      ],
+      "legal_boundary": {
+        "no_legal_practice": true,
+        "no_legal_document_drafting": true,
+        "no_filing": true,
+        "no_representation": true,
+        "no_outcome_promise": true,
+        "statement_pt_br": "Não presta advocacia, não elabora peça, não protocola, não representa a empresa e não promete resultado, recebimento nem afastamento de sanção."
+      },
+      "evidence_grades": {
+        "FACT": "Cláusula de reajuste, data-base e série oficial do índice lidas na fonte, com origem citada.",
+        "CALCULATION": "Reajuste apurado com memória reproduzível a partir de FACT, com fórmula e insumos visíveis.",
+        "INFERENCE": "Enquadramento do saldo elegível e das parcelas excluídas declarado como interpretação técnica.",
+        "UNKNOWN": "Parcela sem data de execução ou sem comprovação de marco temporal."
+      },
+      "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
+      "promises_public_case_publication": false,
+      "public_source_urls": ["https://licitacoesecontratos.tcu.gov.br/6-2-2-1-2-reajuste-em-sentido-estrito/"]
+    },
+    {
+      "item": 22,
+      "deliverable_id": "CFG-D22",
+      "public_name_pt_br": "Dossiê de Reequilíbrio Econômico-Financeiro",
+      "value_line_pt_br": "Liga fato, risco, nexo e impacto para instruir o reequilíbrio.",
+      "decision_question_pt_br": "O fato superveniente, o risco alocado e o impacto sustentam um pedido de reequilíbrio?",
+      "route": "/reequilibrio-obras-publicas/",
+      "page_file": "reequilibrio-obras-publicas/index.html",
+      "pilot_price_cents": 790000,
+      "sla_business_days": 10,
+      "safe_deadline_gate": null,
+      "scope_unit_pt_br": "Um evento ou família causal coerente e uma linha de base.",
+      "minimum_document_pt_br": "Contrato com a matriz de alocação de risco, linha de base de custo e prazo, e prova contemporânea do fato superveniente e do seu efeito.",
+      "output_pt_br": "Fato superveniente, imprevisibilidade e consequência, alocação de risco, nexo, linha de base, metodologia, quantificação, mitigação, documentação e subsídio técnico ao pedido.",
+      "not_included_pt_br": [
+        "Validação da tese e da peça, que cabe ao jurídico do cliente.",
+        "Tratamento de variação isolada de mercado como direito.",
+        "Representação jurídica."
+      ],
+      "legal_boundary": {
+        "no_legal_practice": true,
+        "no_legal_document_drafting": true,
+        "no_filing": true,
+        "no_representation": true,
+        "no_outcome_promise": true,
+        "statement_pt_br": "Não presta advocacia, não elabora peça, não protocola, não representa a empresa e não promete resultado, recebimento nem afastamento de sanção."
+      },
+      "evidence_grades": {
+        "FACT": "Fato superveniente, matriz de risco e linha de base lidos em documento contemporâneo, com origem citada.",
+        "CALCULATION": "Quantificação do impacto sobre a linha de base, reproduzível a partir de FACT, com metodologia declarada.",
+        "INFERENCE": "Imprevisibilidade, consequência e nexo declarados como interpretação técnica, separados do que é FACT.",
+        "UNKNOWN": "Efeito alegado sem linha de base ou sem prova contemporânea do evento."
+      },
+      "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
+      "promises_public_case_publication": false,
+      "public_source_urls": ["https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/"]
+    },
+    {
+      "item": 23,
+      "deliverable_id": "CFG-D23",
+      "public_name_pt_br": "Subsídio Técnico para Notificação ou Sanção",
+      "value_line_pt_br": "Organiza fatos e provas técnicas para responder à acusação.",
+      "decision_question_pt_br": "Quais fatos e provas técnicas sustentam a resposta a esta notificação dentro do prazo?",
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "page_file": "defesa-tecnica-contratos-publicos/index.html",
+      "pilot_price_cents": 690000,
+      "sla_business_days": 5,
+      "safe_deadline_gate": {
+        "min_business_days_remaining_to_respond": 5,
+        "statement_pt_br": "Aceito apenas quando restarem ao menos 5 dias úteis para a resposta."
+      },
+      "scope_unit_pt_br": "Uma notificação ou processo e uma matriz de alegações.",
+      "minimum_document_pt_br": "Notificação ou processo recebido com o prazo de resposta comprovado, contrato aplicável e registros contemporâneos das medidas adotadas.",
+      "output_pt_br": "Fatos admitidos e controvertidos, cronologia, obrigação, causa, nexo, medidas adotadas, evidências, lacunas e anexos técnicos para o jurídico.",
+      "not_included_pt_br": [
+        "Advocacia.",
+        "Protocolo da resposta.",
+        "Garantia de afastamento de multa ou de impedimento.",
+        "Representação jurídica."
+      ],
+      "legal_boundary": {
+        "no_legal_practice": true,
+        "no_legal_document_drafting": true,
+        "no_filing": true,
+        "no_representation": true,
+        "no_outcome_promise": true,
+        "statement_pt_br": "Não presta advocacia, não elabora peça, não protocola, não representa a empresa e não promete resultado, recebimento nem afastamento de sanção."
+      },
+      "evidence_grades": {
+        "FACT": "Alegação da notificação, obrigação contratual e medida adotada lidas em documento contemporâneo, com origem citada.",
+        "CALCULATION": "Prazos, quantitativos e efeitos apurados de forma reproduzível a partir de FACT, com insumos visíveis.",
+        "INFERENCE": "Nexo entre causa e efeito declarado como interpretação técnica, separado do que é FACT.",
+        "UNKNOWN": "Alegação sem registro contemporâneo localizado nos documentos entregues."
+      },
+      "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
+      "promises_public_case_publication": false,
+      "public_source_urls": ["https://licitacoesecontratos.tcu.gov.br/6-1-8-infracoes-e-sancoes-administrativas-contratado/"]
+    }
+  ]
+}

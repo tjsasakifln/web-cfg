@@ -245,6 +245,27 @@ export const SUITE_GRAPH = Object.freeze({
       "/bid-room-licitacoes-obras/",
     ],
   },
+  "test:page-contract-contratos": {
+    producers: [
+      "tests/commercial/test_page_contract_contratos.mjs",
+      "data/commercial/page-contract-contratos.v1.json",
+      "defesa-margem-contratos-publicos/index.html",
+      "medicoes-glosas-obras-publicas/index.html",
+      "aditivos-obras-publicas/index.html",
+      "atrasos-prorrogacao-obras-publicas/index.html",
+      "reequilibrio-obras-publicas/index.html",
+      "defesa-tecnica-contratos-publicos/index.html",
+    ],
+    artifacts: [],
+    surfaces: [
+      "/defesa-margem-contratos-publicos/",
+      "/medicoes-glosas-obras-publicas/",
+      "/aditivos-obras-publicas/",
+      "/atrasos-prorrogacao-obras-publicas/",
+      "/reequilibrio-obras-publicas/",
+      "/defesa-tecnica-contratos-publicos/",
+    ],
+  },
   "test:bofu-dominance": {
     producers: ["tests/bofu_dominance/", "scripts/bofu_dominance/", "data/bofu-dominance/"],
     artifacts: ["docs/seo/bofu-dominance/"],
