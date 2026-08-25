@@ -18,6 +18,7 @@ import os
 import re
 import subprocess
 import sys
+from html import escape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -189,6 +190,40 @@ def run_node_gate(script: str) -> dict:
     }
 
 
+def configure_turnstile_site_key(public_root: Path, env: dict[str, str] | None = None) -> dict:
+    """Inject the public Turnstile site key into the publish artifact only.
+
+    Production builds fail closed without the public key so the function-side
+    mandatory Turnstile policy cannot publish a form that has no widget.
+    Source HTML keeps an empty marker and never receives an environment value.
+    """
+    resolved_env = os.environ if env is None else env
+    context = (resolved_env.get("CONTEXT") or resolved_env.get("NETLIFY_CONTEXT") or "").strip().lower()
+    site_key = (resolved_env.get("TURNSTILE_SITE_KEY") or "").strip()
+    target = public_root / "index.html"
+    marker = 'data-turnstile-sitekey=""'
+
+    if not site_key:
+        if context == "production":
+            raise RuntimeError("TURNSTILE_SITE_KEY is required for the production publish artifact")
+        return {"configured": False, "context": context or "local", "target": "index.html"}
+    if len(site_key) < 10 or len(site_key) > 200 or re.search(r"[\x00-\x1f\x7f]", site_key):
+        raise RuntimeError("TURNSTILE_SITE_KEY is malformed")
+    if not target.exists():
+        raise RuntimeError("public index.html is missing for Turnstile injection")
+
+    raw = target.read_text(encoding="utf-8")
+    if raw.count(marker) != 1:
+        raise RuntimeError("Turnstile site-key marker must occur exactly once")
+    rendered = raw.replace(
+        marker,
+        f'data-turnstile-sitekey="{escape(site_key, quote=True)}"',
+        1,
+    )
+    target.write_text(rendered, encoding="utf-8")
+    return {"configured": True, "context": context or "local", "target": "index.html"}
+
+
 def main(argv: list[str] | None = None) -> int:
     data_dir = ROOT / "data" / "pseo"
     errors: list[str] = []
@@ -259,6 +294,12 @@ def main(argv: list[str] | None = None) -> int:
     artifact = assemble_public_artifact(ROOT)
     if not artifact.get("ok"):
         errors.extend(artifact.get("errors") or ["assemble_public_artifact failed"])
+
+    turnstile_config: dict = {}
+    try:
+        turnstile_config = configure_turnstile_site_key(ROOT / PUBLIC_DIR_NAME)
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"turnstile_publish_config_failed:{exc}")
 
     # Write identity, then hash the final publish tree, then stamp those hashes.
     repro_manifest: dict = {}
@@ -356,6 +397,7 @@ def main(argv: list[str] | None = None) -> int:
         },
         "validate": {"ok": v.get("ok"), "error_count": len(v.get("errors") or [])},
         "visible_parity": parity_summary,
+        "turnstile": turnstile_config,
         "public_artifact": {
             "assembled": True,
             "audit_ok": audit.get("ok"),

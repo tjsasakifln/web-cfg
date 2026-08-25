@@ -102,6 +102,7 @@ def main() -> int:
             "LEAD_RATE_MAX_FP",
             "OPS_WEBHOOK_SECRET",
             "OPS_WEBHOOK_BEARER",
+            "OPS_WEBHOOK_ALLOWED_HOSTS",
             "CONFENGE_INBOUND_WEBHOOK_URL",
             "CONFENGE_INBOUND_WEBHOOK_SECRET",
             "CONFENGE_INBOUND_ALLOWED_HOSTS",
@@ -115,6 +116,7 @@ def main() -> int:
             "CONFENGE_COMMERCIAL_EVENT_TIMEOUT_MS",
             "NTFY_TOKEN",
             "NTFY_TOPIC",
+            "NTFY_ALLOWED_HOSTS",
             "BASE_URL",
             "OPS_BASE",
         ):

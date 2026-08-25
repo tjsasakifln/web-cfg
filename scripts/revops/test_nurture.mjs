@@ -108,6 +108,55 @@ function event(action, { method = "GET", body, qs = {}, headers = {} } = {}) {
   else pass("consent_required");
 }
 
+// 3b) a foreign browser origin cannot create a subscription.
+{
+  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const res = await handler(
+    event("subscribe", {
+      method: "POST",
+      body: { email: "foreign@example.com", track: "contrato", consent: true },
+      headers: { origin: "https://evil.example" },
+    })
+  );
+  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  if (res.statusCode !== 403 || JSON.parse(res.body).error !== "origin_denied") {
+    fail("foreign_origin_denied", { status: res.statusCode, body: res.body });
+  } else if (after !== before) fail("foreign_origin_persisted", { before, after });
+  else pass("foreign_origin_denied");
+}
+
+// 3c) production only admits the canonical visitor surface.
+{
+  const previousNodeEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = "production";
+  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  for (const headers of [
+    { origin: "https://confenge.netlify.app" },
+    { origin: "http://localhost:8765" },
+    { origin: "", referer: "https://confenge.netlify.app/nurture/" },
+    { origin: "" },
+  ]) {
+    const res = await handler(
+      event("subscribe", {
+        method: "POST",
+        body: { email: "noncanonical@example.com", track: "contrato", consent: true },
+        headers,
+      })
+    );
+    if (
+      res.statusCode !== 403 ||
+      JSON.parse(res.body).error !== "origin_denied" ||
+      res.headers["Access-Control-Allow-Origin"] !== "https://confenge.com.br"
+    ) {
+      fail("noncanonical_production_origin_denied", { headers, response: res });
+    }
+  }
+  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  process.env.NODE_ENV = previousNodeEnv;
+  if (after !== before) fail("noncanonical_production_origin_persisted", { before, after });
+  else pass("noncanonical_production_origin_denied");
+}
+
 // 4) subscribe ok
 let subId;
 let confirmToken;

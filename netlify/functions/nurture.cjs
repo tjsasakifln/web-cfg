@@ -36,6 +36,37 @@ const {
   TRACKS,
 } = require("./lib/nurture-core.cjs");
 
+const CANONICAL_PUBLIC_ORIGINS = new Set([
+  "https://confenge.com.br",
+  "https://www.confenge.com.br",
+]);
+
+function isProductionProfile(env = process.env) {
+  const nodeEnv = String(env.NODE_ENV || "").trim().toLowerCase();
+  const context = String(env.CONTEXT || env.NETLIFY_CONTEXT || "").trim().toLowerCase();
+  return nodeEnv === "production" || context === "production";
+}
+
+function productionRequestOrigin(event) {
+  const headers = event?.headers || {};
+  const origin = String(headers.origin || headers.Origin || "").trim();
+  if (origin) return origin;
+  const referer = String(headers.referer || headers.Referer || "").trim();
+  if (!referer) return "";
+  try {
+    const parsed = new URL(referer);
+    return `${parsed.protocol}//${parsed.host}`;
+  } catch {
+    return "";
+  }
+}
+
+function subscribeOriginAllowed(event, originCheck, env = process.env) {
+  if (!originCheck.ok) return false;
+  if (!isProductionProfile(env)) return true;
+  return CANONICAL_PUBLIC_ORIGINS.has(productionRequestOrigin(event));
+}
+
 function bindBlobs(event) {
   try {
     const { connectLambda } = require("@netlify/blobs");
@@ -302,6 +333,15 @@ exports.handler = async (event) => {
       message_count: (t.messages || []).length,
     }));
     return json(200, { ok: true, tracks: publicTracks }, origin);
+  }
+
+  if (
+    action === "subscribe" &&
+    event.httpMethod === "POST" &&
+    !subscribeOriginAllowed(event, originCheck)
+  ) {
+    safeLog("warn", "nurture_origin_denied", {});
+    return json(403, { ok: false, error: "origin_denied" }, "https://confenge.com.br");
   }
 
   const store = await getNurtureStore(event);

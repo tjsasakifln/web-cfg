@@ -14,22 +14,58 @@ const MAX_SEEN_EVENT_IDS = 4000;
 
 const MAX_EVENTS = 25;
 const MAX_BODY = 16 * 1024;
+let blobStoreForTests = null;
+const CANONICAL_PUBLIC_ORIGINS = new Set([
+  "https://confenge.com.br",
+  "https://www.confenge.com.br",
+]);
+
+function isProductionProfile(env = process.env) {
+  const nodeEnv = String(env.NODE_ENV || "").trim().toLowerCase();
+  const context = String(env.CONTEXT || env.NETLIFY_CONTEXT || "").trim().toLowerCase();
+  return nodeEnv === "production" || context === "production";
+}
+
+function unavailablePersistenceResult(accepted) {
+  if (!isProductionProfile()) {
+    return { handled: true, accepted, duplicates: [], failures: [] };
+  }
+  return {
+    handled: true,
+    accepted: accepted.filter((row) => !row.props?.event_id),
+    duplicates: [],
+    failures: accepted.filter((row) => row.props?.event_id),
+  };
+}
+
+function collectorOriginAllowed(origin, env = process.env) {
+  const allowed = isProductionProfile(env) ? CANONICAL_PUBLIC_ORIGINS : ALLOWED_ORIGINS;
+  return allowed.has(origin);
+}
 
 function originOk(event) {
   const h = event.headers || {};
   const origin = String(h.origin || h.Origin || "").trim();
-  if (origin && ALLOWED_ORIGINS.has(origin)) return origin;
+  if (origin) {
+    return collectorOriginAllowed(origin)
+      ? { ok: true, origin }
+      : { ok: false, origin: "https://confenge.com.br" };
+  }
   const referer = String(h.referer || h.Referer || "").trim();
   if (referer) {
     try {
       const u = new URL(referer);
       const base = `${u.protocol}//${u.host}`;
-      if (ALLOWED_ORIGINS.has(base)) return base;
+      return collectorOriginAllowed(base)
+        ? { ok: true, origin: base }
+        : { ok: false, origin: "https://confenge.com.br" };
     } catch {
-      /* ignore */
+      return { ok: false, origin: "https://confenge.com.br" };
     }
   }
-  return "https://confenge.com.br";
+  return isProductionProfile() || process.env.LEAD_REQUIRE_ORIGIN === "1"
+    ? { ok: false, origin: "https://confenge.com.br" }
+    : { ok: true, origin: "https://confenge.com.br" };
 }
 
 function scrubPropsCompat(props) {
@@ -46,22 +82,100 @@ function pushRecent(ev) {
 /** Local/dev durable sample when LEAD_STORE_DIR is set (same dir as FileStore). */
 function persistAnalyticsLocal(accepted) {
   const dir = process.env.LEAD_STORE_DIR;
-  if (!dir || !accepted.length) return;
-  try {
-    const day = new Date().toISOString().slice(0, 10);
-    const dest = path.join(dir, "analytics", "events", day);
-    fs.mkdirSync(dest, { recursive: true });
-    const key = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}.json`;
-    fs.writeFileSync(path.join(dest, key), JSON.stringify({ events: accepted }), "utf8");
-  } catch (err) {
-    safeLog("warn", "analytics_local_store_skip", {
-      reason: err && err.message ? String(err.message).slice(0, 80) : "skip",
-    });
+  if (!dir || !accepted.length) {
+    return { handled: false, accepted, duplicates: [], failures: [] };
   }
+  const day = new Date().toISOString().slice(0, 10);
+  const eventsDir = path.join(dir, "analytics", "events");
+  const persisted = [];
+  const duplicates = [];
+  const failures = [];
+  for (const event of accepted) {
+    const eventId = String(event.props?.event_id || "").slice(0, 80);
+    const dest = eventId ? path.join(eventsDir, "by-id") : path.join(eventsDir, day);
+    const key = eventId
+      ? `id-${crypto.createHash("sha256").update(eventId).digest("hex")}.json`
+      : `${Date.now()}-${crypto.randomBytes(8).toString("hex")}.json`;
+    try {
+      fs.mkdirSync(dest, { recursive: true });
+      fs.writeFileSync(
+        path.join(dest, key),
+        JSON.stringify({ events: [event] }),
+        { encoding: "utf8", flag: eventId ? "wx" : "w" },
+      );
+      persisted.push(event);
+    } catch (err) {
+      if (eventId && err?.code === "EEXIST") {
+        duplicates.push(event);
+      } else {
+        safeLog("warn", "analytics_local_store_skip", { reason: "write_failed" });
+        if (eventId) failures.push(event);
+        else persisted.push(event);
+      }
+    }
+  }
+  return { handled: true, accepted: persisted, duplicates, failures };
+}
+
+async function persistAnalyticsBlobs(accepted, event) {
+  if (!accepted.length) {
+    return { handled: true, accepted, duplicates: [], failures: [] };
+  }
+  if (process.env.LEAD_STORE === "memory") {
+    return unavailablePersistenceResult(accepted);
+  }
+  let store;
+  try {
+    if (blobStoreForTests) {
+      store = blobStoreForTests;
+    } else {
+      const { getStore, connectLambda } = require("@netlify/blobs");
+      if (event && event.blobs) connectLambda(event);
+      store = getStore({ name: "confenge-analytics" });
+    }
+  } catch {
+    safeLog("warn", "analytics_store_skip", { reason: "store_unavailable" });
+    return unavailablePersistenceResult(accepted);
+  }
+  const day = new Date().toISOString().slice(0, 10);
+  const persisted = [];
+  const duplicates = [];
+  const failures = [];
+  for (const analyticsEvent of accepted) {
+    const eventId = String(analyticsEvent.props?.event_id || "").slice(0, 80);
+    const key = eventId
+      ? `events/by-id/id-${crypto.createHash("sha256").update(eventId).digest("hex")}`
+      : `events/${day}/${Date.now()}-${crypto.randomBytes(8).toString("hex")}`;
+    try {
+      if (eventId) {
+        const result = await store.set(key, JSON.stringify({ events: [analyticsEvent] }), {
+          onlyIfNew: true,
+          contentType: "application/json",
+        });
+        if (result?.modified === false) {
+          duplicates.push(analyticsEvent);
+          continue;
+        }
+      } else {
+        await store.setJSON(key, { events: [analyticsEvent] });
+      }
+      persisted.push(analyticsEvent);
+    } catch (err) {
+      if (eventId && /precondition|412|if-none-match/i.test(String(err?.message || err))) {
+        duplicates.push(analyticsEvent);
+      } else {
+        safeLog("warn", "analytics_store_skip", { reason: "write_failed" });
+        if (eventId) failures.push(analyticsEvent);
+        else persisted.push(analyticsEvent);
+      }
+    }
+  }
+  return { handled: true, accepted: persisted, duplicates, failures };
 }
 
 exports.handler = async (event) => {
-  const origin = originOk(event);
+  const originCheck = originOk(event);
+  const origin = originCheck.origin;
   const headers = {
     ...corsHeaders(origin),
     "Access-Control-Allow-Headers": "Content-Type, Accept",
@@ -88,6 +202,14 @@ exports.handler = async (event) => {
       statusCode: 405,
       headers,
       body: JSON.stringify({ ok: false, error: "method_not_allowed" }),
+    };
+  }
+  if (!originCheck.ok) {
+    safeLog("warn", "analytics_origin_denied", {});
+    return {
+      statusCode: 403,
+      headers,
+      body: JSON.stringify({ ok: false, error: "origin_denied" }),
     };
   }
 
@@ -134,16 +256,10 @@ exports.handler = async (event) => {
 
   const accepted = [];
   const rejected = [];
-  const batch = admitBatch(events, seenEventIds);
-  if (seenEventIds.size > MAX_SEEN_EVENT_IDS) {
-    const extra = seenEventIds.size - MAX_SEEN_EVENT_IDS;
-    let dropped = 0;
-    for (const id of seenEventIds) {
-      if (dropped >= extra) break;
-      seenEventIds.delete(id);
-      dropped += 1;
-    }
-  }
+  // Admission uses a candidate set. Durable failures must remain retryable in
+  // this warm instance, so event IDs reach the live cache only after persist.
+  const candidateSeenEventIds = new Set(seenEventIds);
+  const batch = admitBatch(events, candidateSeenEventIds);
   for (const row of batch.rejected) {
     rejected.push({
       event: String((row && row.event) || "").slice(0, 64),
@@ -164,6 +280,39 @@ exports.handler = async (event) => {
       ip_hash,
       sid: admitted.event.sid,
     };
+    accepted.push(safe);
+
+  }
+
+  let durable = persistAnalyticsLocal(accepted);
+  if (!durable.handled) durable = await persistAnalyticsBlobs(accepted, event);
+  const finalAccepted = durable.accepted;
+  for (const duplicate of durable.duplicates) {
+    rejected.push({
+      event: duplicate.event,
+      reason: "duplicate_event_id",
+    });
+  }
+  for (const failed of durable.failures) {
+    rejected.push({
+      event: failed.event,
+      reason: "durable_store_unavailable",
+    });
+  }
+  for (const row of [...finalAccepted, ...durable.duplicates]) {
+    const eventId = String(row.props?.event_id || "").slice(0, 80);
+    if (eventId) seenEventIds.add(eventId);
+  }
+  if (seenEventIds.size > MAX_SEEN_EVENT_IDS) {
+    const extra = seenEventIds.size - MAX_SEEN_EVENT_IDS;
+    let dropped = 0;
+    for (const id of seenEventIds) {
+      if (dropped >= extra) break;
+      seenEventIds.delete(id);
+      dropped += 1;
+    }
+  }
+  for (const safe of finalAccepted) {
     pushRecent({
       event: safe.event,
       path: safe.path,
@@ -176,36 +325,22 @@ exports.handler = async (event) => {
       offer_id: safe.props && safe.props.offer_id,
       next_action_id: safe.props && safe.props.next_action_id,
     });
-    accepted.push(safe);
-
   }
 
-  persistAnalyticsLocal(accepted);
-
-  // Best-effort durable sample store
-  if (accepted.length && process.env.LEAD_STORE !== "memory") {
-    try {
-      const { getStore, connectLambda } = require("@netlify/blobs");
-      if (event && event.blobs) connectLambda(event);
-      const store = getStore({ name: "confenge-analytics" });
-      const day = new Date().toISOString().slice(0, 10);
-      const key = `events/${day}/${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
-      await store.setJSON(key, { events: accepted });
-    } catch (err) {
-      safeLog("warn", "analytics_store_skip", {
-        reason: err && err.message ? String(err.message).slice(0, 80) : "skip",
-      });
-    }
-  }
-
-  safeLog("info", "analytics_batch", { count: accepted.length, rejected: rejected.length });
+  const durableStoreFailed = durable.failures.length > 0;
+  safeLog(durableStoreFailed ? "warn" : "info", "analytics_batch", {
+    count: finalAccepted.length,
+    rejected: rejected.length,
+    durable_store_failed: durableStoreFailed,
+  });
 
   return {
-    statusCode: 202,
+    statusCode: durableStoreFailed ? 503 : 202,
     headers,
     body: JSON.stringify({
-      ok: true,
-      accepted: accepted.length,
+      ok: !durableStoreFailed,
+      ...(durableStoreFailed ? { error: "durable_store_unavailable" } : {}),
+      accepted: finalAccepted.length,
       rejected: rejected.length,
       rejected_events: rejected,
     }),
@@ -216,3 +351,6 @@ exports.handler = async (event) => {
 exports._recent = () => recent.slice();
 exports._scrubProps = scrubPropsCompat;
 exports._admitEvent = admitEvent;
+exports._setBlobStoreForTests = (store) => {
+  blobStoreForTests = store || null;
+};
