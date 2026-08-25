@@ -141,6 +141,23 @@ function assertDeliverableSelection(raw) {
   return { ok: true, deliverable_id: id };
 }
 
+// The catalogue hub captures an initial hand-raise, not the qualification
+// questionnaire of a product route. Keep this exception route-exact so a
+// forged product-page payload cannot bypass the published fail-closed fields.
+function isGenericDeliverablesHandraise(data) {
+  if (!data || typeof data !== "object") return false;
+  const landingPage = String(data.landing_page || data.landing_url || "").trim();
+  return (
+    (landingPage === "/entregas/" || landingPage === "https://confenge.com.br/entregas/") &&
+    String(data.route_family || "").trim() === "entregas" &&
+    String(data.origem || "").trim() === "entregas" &&
+    String(data.estagio || "").trim() === "entregas-exemplos-hub" &&
+    String(data.asset_id || "").trim() === "entregas-exemplos-hub" &&
+    String(data.cta_id || "").trim() === "entregas-hub-handraise" &&
+    !String(data.offer_id || "").trim()
+  );
+}
+
 const LICITACAO_PRODUCT_IDS = new Set(["CFG-D12", "CFG-D13", "CFG-D14", "CFG-D15", "CFG-D16"]);
 const CONTRACT_VALUE_BANDS = new Set(["ate_5m", "5m_20m", "20m_100m", "acima_100m", "UNKNOWN"]);
 const EXECUTION_REGIMES = new Set([
@@ -190,6 +207,8 @@ function assertLicitacaoQualification(data, deliverableId) {
   const decisionIntent = clamp(data.decision_intent, MAX_FIELD.decision_intent);
   const lotRaw = clamp(data.lot_count, MAX_FIELD.lot_count);
   const lotCount = Number(lotRaw);
+  const deadlineBusinessDays = businessDaysUntil(deadline);
+  const minimumBusinessDays = deliverableId === "CFG-D12" ? 5 : 1;
   if (
     publicContractId.length < 3 ||
     !isCanonicalIsoDate(deadline) ||
@@ -200,7 +219,7 @@ function assertLicitacaoQualification(data, deliverableId) {
     !Number.isInteger(lotCount) ||
     lotCount < 1 ||
     lotCount > 999 ||
-    (deliverableId === "CFG-D12" && businessDaysUntil(deadline) < 5)
+    deadlineBusinessDays < minimumBusinessDays
   ) {
     return {
       ok: false,
@@ -586,9 +605,12 @@ function validateAndNormalize(data) {
   if (!offerCheck.ok) return offerCheck;
   const deliverableCheck = assertDeliverableSelection(data.deliverable_id);
   if (!deliverableCheck.ok) return deliverableCheck;
-  const licitacaoCheck = assertLicitacaoQualification(data, deliverableCheck.deliverable_id);
+  const qualificationDeliverableId = isGenericDeliverablesHandraise(data)
+    ? null
+    : deliverableCheck.deliverable_id;
+  const licitacaoCheck = assertLicitacaoQualification(data, qualificationDeliverableId);
   if (!licitacaoCheck.ok) return licitacaoCheck;
-  const eightCheck = assertEightProductQualification(data, deliverableCheck.deliverable_id);
+  const eightCheck = assertEightProductQualification(data, qualificationDeliverableId);
   if (!eightCheck.ok) return eightCheck;
   const contractCheck = assertContractDefenseQualification(data, deliverableCheck.deliverable_id);
   if (!contractCheck.ok) return contractCheck;
@@ -793,6 +815,19 @@ function idempotencyKeyFor(lead, explicit) {
         email_entrega: radar.email_entrega || "",
       })
     : "";
+  const productMaterial = lead?.deliverable_id
+    ? JSON.stringify({
+        deliverable_id: lead.deliverable_id,
+        cnpj: lead.cnpj || "",
+        public_contract_id: lead.public_contract_id || "",
+        analysis_cutoff: lead.analysis_cutoff || "",
+        opportunity_deadline: lead.opportunity_deadline || "",
+        contract_value_band: lead.contract_value_band || "",
+        lot_count: lead.lot_count == null ? "" : lead.lot_count,
+        execution_regime: lead.execution_regime || "",
+        decision_intent: lead.decision_intent || "",
+      })
+    : "";
   const material = [
     lead.nome,
     lead.telefone || "",
@@ -800,6 +835,7 @@ function idempotencyKeyFor(lead, explicit) {
     lead.jornada,
     lead.estagio,
     radarMaterial,
+    productMaterial,
     String(bucket),
   ].join("|");
   return `auto:${crypto.createHash("sha256").update(material).digest("hex").slice(0, 32)}`;
