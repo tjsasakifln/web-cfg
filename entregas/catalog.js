@@ -141,11 +141,53 @@
     return element;
   };
 
-  function renderRecommendations(matches) {
+  const INPUT_TERMS = {
+    edital: ["edital"],
+    planilha: ["planilha", "orcamento", "curva abc", "bdi"],
+    documentos: ["documento", "anexo", "contrato", "atestado", "protocolo"],
+    cronograma: ["cronograma"],
+    dados: ["dado", "base", "fonte", "historico", "serie", "cnpj"],
+  };
+
+  function matchesInput(card, input) {
+    const terms = INPUT_TERMS[input] || [];
+    const inputs = normalize(card.dataset.inputs);
+    return terms.some((term) => inputs.includes(term));
+  }
+
+  function businessDaysUntil(value) {
+    const parts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || "");
+    if (!parts) return null;
+    const deadline = new Date(Number(parts[1]), Number(parts[2]) - 1, Number(parts[3]));
+    if (
+      deadline.getFullYear() !== Number(parts[1]) ||
+      deadline.getMonth() !== Number(parts[2]) - 1 ||
+      deadline.getDate() !== Number(parts[3])
+    ) return null;
+    const cursor = new Date();
+    cursor.setHours(0, 0, 0, 0);
+    cursor.setDate(cursor.getDate() + 1);
+    let days = 0;
+    while (cursor <= deadline) {
+      if (cursor.getDay() !== 0 && cursor.getDay() !== 6) days += 1;
+      cursor.setDate(cursor.getDate() + 1);
+    }
+    return days;
+  }
+
+  function requiredBusinessDays(card) {
+    const parsed = Number.parseInt(card.dataset.decisionBusinessDays || "", 10);
+    return Number.isInteger(parsed) ? parsed : Number.POSITIVE_INFINITY;
+  }
+
+  function renderRecommendations(matches, context = {}) {
     if (!recommendation) return;
     recommendation.replaceChildren();
     if (!matches.length) {
-      appendText(recommendation, "p", "Nenhum caminho disponível combina com esse enquadramento. Ajuste objeto ou tarefa; ofertas indisponíveis não são elevadas pela recomendação.");
+      const noMatch = context.deadline && context.excludedForDeadline
+        ? `Nenhum caminho disponível cabe nos ${context.deadlineDays} dias úteis informados. Aumente o prazo ou peça revisão humana; a recomendação não encurta o SLA publicado.`
+        : "Nenhum caminho disponível combina com esse enquadramento. Ajuste objeto, tarefa ou insumo; ofertas indisponíveis não são elevadas pela recomendação.";
+      appendText(recommendation, "p", noMatch);
       recommendation.hidden = false;
       return;
     }
@@ -159,7 +201,19 @@
       appendText(item, "h5", card.dataset.name);
       appendText(item, "p", `Motivo: ${card.dataset.trigger}`);
       appendText(item, "p", `${card.dataset.price} · ${card.dataset.sla} · ${card.dataset.publicState === "PUBLISHED" ? "publicada" : "em validação"}`);
-      appendText(item, "p", `Insumo inicial: ${card.dataset.input}`);
+      if (context.input === "apenas a pergunta") {
+        appendText(item, "p", `Você ainda precisará reunir: ${card.dataset.input}.`);
+      } else if (context.input) {
+        const inputNote = matchesInput(card, context.input)
+          ? `O insumo informado (${context.input}) aparece nas entradas publicadas.`
+          : `Além de ${context.input}, este caminho ainda exige: ${card.dataset.input}.`;
+        appendText(item, "p", inputNote);
+      } else {
+        appendText(item, "p", `Insumo inicial: ${card.dataset.input}`);
+      }
+      if (context.deadline) {
+        appendText(item, "p", `Prazo: requer até ${requiredBusinessDays(card)} dias úteis e cabe nos ${context.deadlineDays} dias úteis informados.`);
+      }
       const link = appendText(item, "a", "Ver escopo e diferenças");
       link.href = `#${card.id}`;
       list.append(item);
@@ -172,16 +226,31 @@
     event.preventDefault();
     const task = frameTask?.value || "";
     const object = frameObject?.value || "";
+    const input = frameInput?.value || "";
+    const deadline = frameDeadline?.value || "";
+    const deadlineDays = deadline ? businessDaysUntil(deadline) : null;
     if (filters.task) filters.task.value = task;
     if (filters.object) filters.object.value = object;
     applyFilters(false);
 
-    const matches = cards
+    const candidates = cards
       .filter((card) => card.dataset.publicState !== "BLOCKED")
       .filter((card) => !task || card.dataset.taskDoor === task)
-      .filter((card) => !object || card.dataset.object === object)
+      .filter((card) => !object || card.dataset.object === object);
+    const excludedForDeadline = deadlineDays !== null
+      ? candidates.filter((card) => requiredBusinessDays(card) > deadlineDays).length
+      : 0;
+    const matches = candidates
+      .filter((card) => deadlineDays === null || requiredBusinessDays(card) <= deadlineDays)
+      .sort((left, right) => {
+        if (input === "apenas a pergunta") {
+          return Number(left.dataset.inputCount || 0) - Number(right.dataset.inputCount || 0);
+        }
+        if (!input) return 0;
+        return Number(matchesInput(right, input)) - Number(matchesInput(left, input));
+      })
       .slice(0, MAX_RECOMMENDATIONS);
-    renderRecommendations(matches);
+    renderRecommendations(matches, { input, deadline, deadlineDays, excludedForDeadline });
     setUrlState();
     recommendation?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
