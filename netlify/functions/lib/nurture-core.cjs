@@ -65,6 +65,12 @@ function nurtureTokenKey(env = process.env) {
   return crypto.createHash("sha256").update(secret).digest();
 }
 
+function previousNurtureTokenKey(env = process.env) {
+  const secret = String(env.NURTURE_TOKEN_SECRET_PREVIOUS || "");
+  if (secret.length < 32) return null;
+  return crypto.createHash("sha256").update(secret).digest();
+}
+
 function sealToken(raw, context, env = process.env) {
   const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv("aes-256-gcm", nurtureTokenKey(env), iv);
@@ -74,31 +80,42 @@ function sealToken(raw, context, env = process.env) {
   return ["v1", iv.toString("base64url"), tag.toString("base64url"), encrypted.toString("base64url")].join(".");
 }
 
+function openTokenDetails(sealed, context, env = process.env) {
+  const parts = String(sealed || "").split(".");
+  const [version, ivRaw, tagRaw, encryptedRaw] = parts;
+  if (parts.length !== 4 || version !== "v1" || !ivRaw || !tagRaw || !encryptedRaw) {
+    const err = new Error("invalid_sealed_token");
+    err.code = "invalid_sealed_token";
+    throw err;
+  }
+  const candidates = [{ slot: "current", key: nurtureTokenKey(env) }];
+  const previousKey = previousNurtureTokenKey(env);
+  if (previousKey) candidates.push({ slot: "previous", key: previousKey });
+  for (const candidate of candidates) {
+    try {
+      const decipher = crypto.createDecipheriv(
+        "aes-256-gcm",
+        candidate.key,
+        Buffer.from(ivRaw, "base64url"),
+      );
+      decipher.setAAD(Buffer.from(String(context || ""), "utf8"));
+      decipher.setAuthTag(Buffer.from(tagRaw, "base64url"));
+      const token = Buffer.concat([
+        decipher.update(Buffer.from(encryptedRaw, "base64url")),
+        decipher.final(),
+      ]).toString("utf8");
+      return { token, key_slot: candidate.slot };
+    } catch {
+      // Try the previous key during an explicit rotation window.
+    }
+  }
+  const err = new Error("invalid_sealed_token");
+  err.code = "invalid_sealed_token";
+  throw err;
+}
+
 function openToken(sealed, context, env = process.env) {
-  const [version, ivRaw, tagRaw, encryptedRaw] = String(sealed || "").split(".");
-  if (version !== "v1" || !ivRaw || !tagRaw || !encryptedRaw) {
-    const err = new Error("invalid_sealed_token");
-    err.code = "invalid_sealed_token";
-    throw err;
-  }
-  try {
-    const decipher = crypto.createDecipheriv(
-      "aes-256-gcm",
-      nurtureTokenKey(env),
-      Buffer.from(ivRaw, "base64url"),
-    );
-    decipher.setAAD(Buffer.from(String(context || ""), "utf8"));
-    decipher.setAuthTag(Buffer.from(tagRaw, "base64url"));
-    return Buffer.concat([
-      decipher.update(Buffer.from(encryptedRaw, "base64url")),
-      decipher.final(),
-    ]).toString("utf8");
-  } catch (cause) {
-    if (cause?.code === "nurture_token_secret_not_configured") throw cause;
-    const err = new Error("invalid_sealed_token");
-    err.code = "invalid_sealed_token";
-    throw err;
-  }
+  return openTokenDetails(sealed, context, env).token;
 }
 
 function publicSubSummary(rec) {
@@ -381,4 +398,5 @@ module.exports = {
   nurtureTokenKey,
   sealToken,
   openToken,
+  openTokenDetails,
 };

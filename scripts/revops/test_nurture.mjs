@@ -87,7 +87,12 @@ function event(action, { method = "GET", body, qs = {}, headers = {} } = {}) {
 {
   const res = await handler(event("health"));
   const j = JSON.parse(res.body);
-  if (!j.ok || !j.tracks?.includes("contrato")) fail("health", j);
+  if (
+    !j.ok ||
+    !j.tracks?.includes("contrato") ||
+    j.token_secret_configured !== true ||
+    j.token_rotation_window !== false
+  ) fail("health", j);
   else pass("health");
 }
 
@@ -159,6 +164,10 @@ let unsubToken;
 
 // 5) confirm
 {
+  const oldSecret = process.env.NURTURE_TOKEN_SECRET;
+  const rotatedSecret = "r".repeat(48);
+  process.env.NURTURE_TOKEN_SECRET_PREVIOUS = oldSecret;
+  process.env.NURTURE_TOKEN_SECRET = rotatedSecret;
   const res = await handler(
     event("confirm", { qs: { id: subId, token: confirmToken }, headers: { accept: "application/json" } })
   );
@@ -168,6 +177,34 @@ let unsubToken;
   const rec = JSON.parse(fs.readFileSync(path.join(storeDir, `${subId}.json`), "utf8"));
   if (rec.messages_sent < 1) fail("first_message_after_confirm", rec.messages_sent);
   else pass("first_message_sent", rec.messages_sent);
+  if (core.openToken(rec.unsub_token_sealed, subId, process.env) !== unsubToken) {
+    fail("rotated_token_not_opened_with_current_key");
+  } else pass("rotated_token_resealed_with_current_key");
+  let oldKeyStillOpens = false;
+  try {
+    core.openToken(rec.unsub_token_sealed, subId, { NURTURE_TOKEN_SECRET: oldSecret });
+    oldKeyStillOpens = true;
+  } catch {
+    /* expected: record was re-sealed with the current key */
+  }
+  if (oldKeyStillOpens) fail("rotated_token_still_uses_old_key");
+  else pass("rotated_token_no_longer_uses_old_key");
+  const rollbackOpen = core.openTokenDetails(rec.unsub_token_sealed, subId, {
+    NURTURE_TOKEN_SECRET: oldSecret,
+    NURTURE_TOKEN_SECRET_PREVIOUS: rotatedSecret,
+  });
+  if (rollbackOpen.token !== unsubToken || rollbackOpen.key_slot !== "previous") {
+    fail("rotated_token_operational_rollback", rollbackOpen);
+  } else pass("rotated_token_operational_rollback");
+  let suffixAccepted = false;
+  try {
+    core.openToken(`${rec.unsub_token_sealed}.extra`, subId, process.env);
+    suffixAccepted = true;
+  } catch {
+    /* expected */
+  }
+  if (suffixAccepted) fail("sealed_token_extra_segment_accepted");
+  else pass("sealed_token_exact_format");
 }
 
 // 6) tick advances remaining (day_offset future may skip — force by rewriting confirmed_at)

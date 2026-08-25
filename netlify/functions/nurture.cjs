@@ -32,7 +32,7 @@ const {
   sendResendNurture,
   publicSubSummary,
   sealToken,
-  openToken,
+  openTokenDetails,
   TRACKS,
 } = require("./lib/nurture-core.cjs");
 
@@ -281,6 +281,8 @@ exports.handler = async (event) => {
         service: "confenge-nurture",
         tracks: TRACKS,
         resend_configured: Boolean(process.env.RESEND_API_KEY),
+        token_secret_configured: String(process.env.NURTURE_TOKEN_SECRET || "").length >= 32,
+        token_rotation_window: String(process.env.NURTURE_TOKEN_SECRET_PREVIOUS || "").length >= 32,
         ts: new Date().toISOString(),
       },
       origin
@@ -529,7 +531,16 @@ async function processOne(store, rec, tracksData) {
   let unsubToken;
   try {
     if (rec.unsub_token_sealed) {
-      unsubToken = openToken(rec.unsub_token_sealed, rec.subscription_id, process.env);
+      const opened = openTokenDetails(rec.unsub_token_sealed, rec.subscription_id, process.env);
+      unsubToken = opened.token;
+      if (opened.key_slot === "previous") {
+        const migrated = {
+          ...rec,
+          unsub_token_sealed: sealToken(unsubToken, rec.subscription_id, process.env),
+        };
+        await store.put(migrated);
+        rec = migrated;
+      }
     } else if (rec._unsub_raw) {
       // One-way migration for records created before sealed-token support.
       unsubToken = rec._unsub_raw;

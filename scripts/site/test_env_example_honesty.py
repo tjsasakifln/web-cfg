@@ -93,6 +93,7 @@ def main() -> int:
             "LEAD_FROM_EMAIL",
             "LEAD_NOTIFY_EMAIL",
             "NURTURE_TOKEN_SECRET",
+            "NURTURE_TOKEN_SECRET_PREVIOUS",
             "LEAD_REQUIRE_TURNSTILE",
             "LEAD_PROBE_SECRET",
             "LEAD_REQUIRE_ORIGIN",
