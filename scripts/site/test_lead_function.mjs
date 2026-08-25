@@ -444,6 +444,65 @@ _reset();
   pass("hub_forms_persisted_attribution", { routes: hubs.map(({ route }) => route) });
 }
 
+// 5e) The public catalogue captures a canonical deliverable selection without
+// opening checkout. Unknown and blocked IDs fail before persistence.
+{
+  const html = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
+  const options = [...html.matchAll(/<option value="(CFG-D\d{2})"( disabled)?/g)]
+    .map((match) => ({ id: match[1], disabled: Boolean(match[2]) }));
+  if (options.length !== 54 || new Set(options.map(({ id }) => id)).size !== 54) {
+    fail("catalog_deliverable_select_census", options);
+  }
+  for (const blocked of ["CFG-D11", "CFG-D43"]) {
+    if (!options.some(({ id, disabled }) => id === blocked && disabled)) {
+      fail("catalog_blocked_option_disabled", blocked);
+    }
+  }
+
+  const base = {
+    nome: "QA Catálogo",
+    email: "qa-catalogo@example.com",
+    estagio: "entregas-exemplos-hub",
+    jornada: "operacao",
+    consentimento: "1",
+    offer_id: "",
+    terms_id: "",
+    origem: "entregas",
+    landing_page: "https://confenge.com.br/entregas/",
+    route_family: "entregas",
+    asset_id: "entregas-exemplos-hub",
+    cta_id: "entregas-hub-handraise",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  for (const [deliverable_id, error] of [
+    ["CFG-D99", "deliverable_id_unknown"],
+    ["CFG-D11", "deliverable_unavailable"],
+  ]) {
+    const before = mem.map.size;
+    const res = await handler(event({ ...base, deliverable_id }, "POST", { ip: "192.0.2.90" }));
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 422 || data.error !== error || mem.map.size !== before) {
+      fail("catalog_deliverable_fail_closed", { deliverable_id, status: res.statusCode, data });
+    }
+  }
+
+  const res = await handler(event({
+    ...base,
+    deliverable_id: "CFG-D49",
+    idempotency_key: "qa-catalog-deliverable-49",
+  }, "POST", { ip: "192.0.2.91" }));
+  const data = JSON.parse(res.body);
+  const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+  if (res.statusCode !== 201 || !stored || stored.deliverable_id !== "CFG-D49") {
+    fail("catalog_deliverable_persisted", { status: res.statusCode, data, stored });
+  }
+  if (stored.offer_id || stored.terms_id || stored.asset_id !== "entregas-exemplos-hub") {
+    fail("catalog_deliverable_does_not_invent_checkout", stored);
+  }
+  pass("catalog_deliverable_selection_persisted", stored.deliverable_id);
+}
+
 // 5d) Every priced model form reaches the real persistence path. Static markup
 // is insufficient: receipts must be distinct and retain the shipped attribution.
 {

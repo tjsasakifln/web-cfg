@@ -38,6 +38,7 @@ const MAX_FIELD = {
   evidence_pack_version: 80,
   asset_family: 80,
   query_class: 80,
+  deliverable_id: 16,
   offer_id: 80,
   terms_id: 80,
   amount_cents: 16,
@@ -76,6 +77,7 @@ const ATTR_ALLOWLIST = [
   "evidence_pack_version",
   "asset_family",
   "query_class",
+  "deliverable_id",
   "offer_id",
   "terms_id",
 ];
@@ -93,6 +95,42 @@ const ATTR_LOCATION_KEYS = new Set([
 // or analytics through a UTM/data-* field.
 const ATTR_TOKEN_RE = /^[A-Za-z0-9][A-Za-z0-9._:/-]*$/;
 const ATTR_PATH_RE = /^\/[A-Za-z0-9._~!$&'()*+,;=:@/-]*$/;
+
+// Public catalogue IDs are accepted only from the versioned canonical source.
+// A broken/missing registry makes a submitted selection fail closed; a generic
+// hand-raise without deliverable_id remains valid.
+let DELIVERABLE_STATE_BY_ID = new Map();
+try {
+  const registry = require("../../../data/commercial/deliverables-registry.v1.json");
+  DELIVERABLE_STATE_BY_ID = new Map(
+    (registry.deliverables || []).map((entry) => [entry.deliverable_id, entry.public_state]),
+  );
+} catch {
+  DELIVERABLE_STATE_BY_ID = new Map();
+}
+
+function assertDeliverableSelection(raw) {
+  const id = clamp(raw, MAX_FIELD.deliverable_id).toUpperCase();
+  if (!id) return { ok: true, deliverable_id: null };
+  const state = DELIVERABLE_STATE_BY_ID.get(id);
+  if (!state) {
+    return {
+      ok: false,
+      status: 422,
+      error: "deliverable_id_unknown",
+      message: "Entrega inexistente no catálogo vigente.",
+    };
+  }
+  if (state === "BLOCKED") {
+    return {
+      ok: false,
+      status: 422,
+      error: "deliverable_unavailable",
+      message: "Esta entrega ainda não está disponível para análise comercial.",
+    };
+  }
+  return { ok: true, deliverable_id: id };
+}
 
 function looksLikePii(value, key) {
   const s = String(value || "");
@@ -358,6 +396,8 @@ function validateAndNormalize(data) {
 
   const offerCheck = assertOfferTermsAndPrice(data);
   if (!offerCheck.ok) return offerCheck;
+  const deliverableCheck = assertDeliverableSelection(data.deliverable_id);
+  if (!deliverableCheck.ok) return deliverableCheck;
 
   // Radar Decisório purchase parameters. Server-side, fail-closed: the browser
   // check is a convenience, this one is the contract.
@@ -481,6 +521,7 @@ function validateAndNormalize(data) {
     ) || null,
     asset_family: sanitizeAttributionValue(data.asset_family, MAX_FIELD.asset_family, "asset_family") || null,
     query_class: sanitizeAttributionValue(data.query_class, MAX_FIELD.query_class, "query_class") || null,
+    deliverable_id: deliverableCheck.deliverable_id,
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
     public_contract_id: clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
@@ -708,6 +749,7 @@ module.exports = {
   isHoneypot,
   nonCatalogAction,
   assertOfferTermsAndPrice,
+  assertDeliverableSelection,
   validateAndNormalize,
   generateLeadId,
   idempotencyKeyFor,

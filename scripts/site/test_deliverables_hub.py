@@ -265,7 +265,16 @@ def test_hub_states_the_bundle_without_replacing_the_unit_prices() -> None:
 
 
 def test_hub_and_report_share_the_versioned_delivery_scope() -> None:
-    hub_text = _visible_text(_html())
+    # The scope linter below owns the wording of the published eight examples.
+    # Catalogue numbers 01..54 and the matching form select are identifiers, not
+    # promises about how many opportunities a report will contain.
+    hub_scope_html = re.sub(
+        r"(?s)<!-- GENERATED:PUBLIC-CATALOG:START -->.*?<!-- GENERATED:PUBLIC-CATALOG:END -->",
+        "",
+        _html(),
+    )
+    hub_scope_html = re.sub(r"(?is)<form\b.*?</form>", "", hub_scope_html)
+    hub_text = _visible_text(hub_scope_html)
     report_text = _visible_text(_html(REPORT))
 
     for phrase in (
