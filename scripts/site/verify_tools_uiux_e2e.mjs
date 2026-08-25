@@ -15,7 +15,7 @@ import {
   writeFileSync,
   mkdirSync,
 } from "fs";
-import { join, resolve, extname } from "path";
+import { join, resolve, extname, sep } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { resolveSiteRoot } from "./interface_coverage.mjs";
@@ -94,7 +94,7 @@ function startServer() {
     if (urlPath.endsWith("/")) urlPath += "index.html";
     const filePath = join(SITE_ROOT, urlPath);
     if (
-      !filePath.startsWith(SITE_ROOT) ||
+      !filePath.startsWith(`${SITE_ROOT}${sep}`) ||
       !existsSync(filePath) ||
       statSync(filePath).isDirectory()
     ) {

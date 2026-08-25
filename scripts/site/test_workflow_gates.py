@@ -388,6 +388,8 @@ def test_post_build_browser_gates_use_public_artifact():
             raise AssertionError(f"{label} still serves the source tree")
         if "PUBLIC_ARTIFACT_REQUIRED" not in text:
             raise AssertionError(f"{label} must fail closed when _site is absent")
+        if "startsWith(`${SITE_ROOT}${sep}`)" not in text:
+            raise AssertionError(f"{label} must reject sibling paths that only share the _site prefix")
     for label, path in (("site-ci", SITE_CI), ("pseo", PSEO)):
         if 'PUBLIC_ARTIFACT_REQUIRED: "1"' not in _read(path):
             raise AssertionError(f"{label} must require _site for post-build browser gates")

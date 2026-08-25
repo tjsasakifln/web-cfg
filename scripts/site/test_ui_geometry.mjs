@@ -8,7 +8,7 @@
 import puppeteer from "puppeteer-core";
 import { createServer } from "http";
 import { readFileSync, existsSync, statSync } from "fs";
-import { join, extname, resolve } from "path";
+import { join, extname, resolve, sep } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { resolveChromePath } from "./resolve_chrome.mjs";
@@ -42,7 +42,7 @@ function startStaticServer() {
       if (urlPath.endsWith("/")) urlPath += "index.html";
       if (urlPath === "") urlPath = "/index.html";
       const filePath = join(SITE_ROOT, urlPath);
-      if (!filePath.startsWith(SITE_ROOT) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
+      if (!filePath.startsWith(`${SITE_ROOT}${sep}`) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
         res.writeHead(404);
         res.end("not found");
         return;
