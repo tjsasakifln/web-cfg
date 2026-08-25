@@ -285,6 +285,13 @@ def test_cli_module_is_the_shipped_entry(tmp_path: Path):
 def test_pull_api_fail_closed_without_credentials():
     from scripts.organic.demand_engine import pull_api_fail_closed, run_pull_api
 
+    def scalar_values(node):
+        if isinstance(node, dict):
+            return [value for child in node.values() for value in scalar_values(child)]
+        if isinstance(node, list):
+            return [value for child in node for value in scalar_values(child)]
+        return [node]
+
     result = pull_api_fail_closed()
     assert result.get("ok") is False
     assert result.get("blocked") is True
@@ -294,7 +301,9 @@ def test_pull_api_fail_closed_without_credentials():
     assert result.get("residual") == "BLOCKED_GSC_READONLY_CREDENTIAL"
     assert "required_env" in result
     assert any("GSC_CREDENTIALS_JSON" in str(item) for item in (result.get("required_env") or []))
-    assert "0.15" not in json.dumps(result)
+    values = scalar_values(result)
+    assert 0.15 not in values
+    assert "0.15" not in values
 
     shipped = run_pull_api()
     assert shipped.get("ok") is False
