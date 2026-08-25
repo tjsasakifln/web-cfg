@@ -819,6 +819,49 @@ _reset();
   pass("collect_scrub");
 }
 
+// 13) event_id remains idempotent after a collector cold start.
+{
+  const analyticsDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-analytics-replay-"));
+  const previousDir = process.env.LEAD_STORE_DIR;
+  const previousStore = process.env.LEAD_STORE;
+  process.env.LEAD_STORE_DIR = analyticsDir;
+  delete process.env.LEAD_STORE;
+  const collectPath = path.join(root, "netlify/functions/collect.cjs");
+  const replayEvent = {
+    httpMethod: "POST",
+    headers: { origin: "https://confenge.com.br", "x-forwarded-for": "203.0.113.77" },
+    body: JSON.stringify({
+      event: "cta_click",
+      props: { event_id: "durable-cold-start-replay", cta_id: "durable-replay" },
+      path: "/",
+    }),
+  };
+  try {
+    delete require.cache[require.resolve(collectPath)];
+    let collector = require(collectPath);
+    const first = await collector.handler(replayEvent);
+    delete require.cache[require.resolve(collectPath)];
+    collector = require(collectPath);
+    const second = await collector.handler(replayEvent);
+    const firstBody = JSON.parse(first.body);
+    const secondBody = JSON.parse(second.body);
+    const day = new Date().toISOString().slice(0, 10);
+    const eventDir = path.join(analyticsDir, "analytics", "events", day);
+    const files = fs.existsSync(eventDir) ? fs.readdirSync(eventDir) : [];
+    if (firstBody.accepted !== 1 || secondBody.accepted !== 0 || secondBody.rejected !== 1) {
+      fail("collect_durable_replay_response", { firstBody, secondBody });
+    }
+    if (files.length !== 1) fail("collect_durable_replay_files", files);
+    pass("collect_durable_replay", { files: files.length });
+  } finally {
+    if (previousDir == null) delete process.env.LEAD_STORE_DIR;
+    else process.env.LEAD_STORE_DIR = previousDir;
+    if (previousStore == null) delete process.env.LEAD_STORE;
+    else process.env.LEAD_STORE = previousStore;
+    fs.rmSync(analyticsDir, { recursive: true, force: true });
+  }
+}
+
 console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
 // cleanup store dir
 try {

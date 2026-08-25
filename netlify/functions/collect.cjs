@@ -46,18 +46,86 @@ function pushRecent(ev) {
 /** Local/dev durable sample when LEAD_STORE_DIR is set (same dir as FileStore). */
 function persistAnalyticsLocal(accepted) {
   const dir = process.env.LEAD_STORE_DIR;
-  if (!dir || !accepted.length) return;
+  if (!dir || !accepted.length) return { handled: false, accepted, duplicates: [] };
+  const day = new Date().toISOString().slice(0, 10);
+  const dest = path.join(dir, "analytics", "events", day);
+  const persisted = [];
+  const duplicates = [];
   try {
-    const day = new Date().toISOString().slice(0, 10);
-    const dest = path.join(dir, "analytics", "events", day);
     fs.mkdirSync(dest, { recursive: true });
-    const key = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}.json`;
-    fs.writeFileSync(path.join(dest, key), JSON.stringify({ events: accepted }), "utf8");
-  } catch (err) {
-    safeLog("warn", "analytics_local_store_skip", {
-      reason: err && err.message ? String(err.message).slice(0, 80) : "skip",
-    });
+  } catch {
+    safeLog("warn", "analytics_local_store_skip", { reason: "mkdir_failed" });
+    return { handled: false, accepted, duplicates: [] };
   }
+  for (const event of accepted) {
+    const eventId = String(event.props?.event_id || "").slice(0, 80);
+    const key = eventId
+      ? `id-${crypto.createHash("sha256").update(eventId).digest("hex")}.json`
+      : `${Date.now()}-${crypto.randomBytes(8).toString("hex")}.json`;
+    try {
+      fs.writeFileSync(
+        path.join(dest, key),
+        JSON.stringify({ events: [event] }),
+        { encoding: "utf8", flag: eventId ? "wx" : "w" },
+      );
+      persisted.push(event);
+    } catch (err) {
+      if (eventId && err?.code === "EEXIST") {
+        duplicates.push(event);
+      } else {
+        safeLog("warn", "analytics_local_store_skip", { reason: "write_failed" });
+        persisted.push(event);
+      }
+    }
+  }
+  return { handled: true, accepted: persisted, duplicates };
+}
+
+async function persistAnalyticsBlobs(accepted, event) {
+  if (!accepted.length || process.env.LEAD_STORE === "memory") {
+    return { handled: false, accepted, duplicates: [] };
+  }
+  let store;
+  try {
+    const { getStore, connectLambda } = require("@netlify/blobs");
+    if (event && event.blobs) connectLambda(event);
+    store = getStore({ name: "confenge-analytics" });
+  } catch {
+    safeLog("warn", "analytics_store_skip", { reason: "store_unavailable" });
+    return { handled: false, accepted, duplicates: [] };
+  }
+  const day = new Date().toISOString().slice(0, 10);
+  const persisted = [];
+  const duplicates = [];
+  for (const analyticsEvent of accepted) {
+    const eventId = String(analyticsEvent.props?.event_id || "").slice(0, 80);
+    const key = eventId
+      ? `events/${day}/id-${crypto.createHash("sha256").update(eventId).digest("hex")}`
+      : `events/${day}/${Date.now()}-${crypto.randomBytes(8).toString("hex")}`;
+    try {
+      if (eventId) {
+        const result = await store.set(key, JSON.stringify({ events: [analyticsEvent] }), {
+          onlyIfNew: true,
+          contentType: "application/json",
+        });
+        if (result?.modified === false) {
+          duplicates.push(analyticsEvent);
+          continue;
+        }
+      } else {
+        await store.setJSON(key, { events: [analyticsEvent] });
+      }
+      persisted.push(analyticsEvent);
+    } catch (err) {
+      if (eventId && /precondition|412|if-none-match/i.test(String(err?.message || err))) {
+        duplicates.push(analyticsEvent);
+      } else {
+        safeLog("warn", "analytics_store_skip", { reason: "write_failed" });
+        persisted.push(analyticsEvent);
+      }
+    }
+  }
+  return { handled: true, accepted: persisted, duplicates };
 }
 
 exports.handler = async (event) => {
@@ -164,6 +232,20 @@ exports.handler = async (event) => {
       ip_hash,
       sid: admitted.event.sid,
     };
+    accepted.push(safe);
+
+  }
+
+  let durable = persistAnalyticsLocal(accepted);
+  if (!durable.handled) durable = await persistAnalyticsBlobs(accepted, event);
+  const finalAccepted = durable.accepted;
+  for (const duplicate of durable.duplicates) {
+    rejected.push({
+      event: duplicate.event,
+      reason: "duplicate_event_id",
+    });
+  }
+  for (const safe of finalAccepted) {
     pushRecent({
       event: safe.event,
       path: safe.path,
@@ -176,36 +258,16 @@ exports.handler = async (event) => {
       offer_id: safe.props && safe.props.offer_id,
       next_action_id: safe.props && safe.props.next_action_id,
     });
-    accepted.push(safe);
-
   }
 
-  persistAnalyticsLocal(accepted);
-
-  // Best-effort durable sample store
-  if (accepted.length && process.env.LEAD_STORE !== "memory") {
-    try {
-      const { getStore, connectLambda } = require("@netlify/blobs");
-      if (event && event.blobs) connectLambda(event);
-      const store = getStore({ name: "confenge-analytics" });
-      const day = new Date().toISOString().slice(0, 10);
-      const key = `events/${day}/${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
-      await store.setJSON(key, { events: accepted });
-    } catch (err) {
-      safeLog("warn", "analytics_store_skip", {
-        reason: err && err.message ? String(err.message).slice(0, 80) : "skip",
-      });
-    }
-  }
-
-  safeLog("info", "analytics_batch", { count: accepted.length, rejected: rejected.length });
+  safeLog("info", "analytics_batch", { count: finalAccepted.length, rejected: rejected.length });
 
   return {
     statusCode: 202,
     headers,
     body: JSON.stringify({
       ok: true,
-      accepted: accepted.length,
+      accepted: finalAccepted.length,
       rejected: rejected.length,
       rejected_events: rejected,
     }),
