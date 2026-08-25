@@ -269,7 +269,62 @@ _reset();
   pass("pillar_forms_distinct_attribution", { routes: pillars.map(([slug]) => slug) });
 }
 
-// 5c) The two hub forms introduced by #290 reach the real persistence path
+// 5c) PII notification destinations are HTTPS + explicitly allowlisted in production.
+{
+  const previous = { ...process.env };
+  const originalFetch = globalThis.fetch;
+  const calls = [];
+  globalThis.fetch = async (url, init = {}) => {
+    calls.push({ url: String(url), body: String(init.body || "") });
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+  };
+  const deliveryPath = path.join(root, "netlify/functions/lib/lead-delivery.cjs");
+  delete require.cache[require.resolve(deliveryPath)];
+  const { deliverOpsWebhook, deliverNtfyAuth } = require(deliveryPath);
+  const record = {
+    lead_id: "pii-destination-probe",
+    record_kind: "real",
+    received_at: new Date().toISOString(),
+    jornada: "contrato",
+    estagio: "lead",
+    nome: "Contato Sensível",
+    email: "private@example.com",
+    telefone: "48999999999",
+  };
+  try {
+    process.env.NODE_ENV = "production";
+    process.env.OPS_WEBHOOK_URL = "http://ops.example.test/hook";
+    delete process.env.OPS_WEBHOOK_ALLOWED_HOSTS;
+    const plain = await deliverOpsWebhook(record);
+    if (plain.status !== "error" || calls.length) fail("ops_webhook_plain_http_blocked", { plain, calls });
+
+    process.env.OPS_WEBHOOK_URL = "https://ops.example.test/hook";
+    const noAllowlist = await deliverOpsWebhook(record);
+    if (noAllowlist.status !== "error" || calls.length) {
+      fail("ops_webhook_allowlist_required", { noAllowlist, calls });
+    }
+
+    process.env.OPS_WEBHOOK_ALLOWED_HOSTS = "ops.example.test";
+    const allowed = await deliverOpsWebhook(record);
+    if (allowed.status !== "ok" || calls.length !== 1 || !calls[0].body.includes("private@example.com")) {
+      fail("ops_webhook_allowed_https", { allowed, calls });
+    }
+
+    process.env.NTFY_URL = "https://evil.example/topic";
+    process.env.NTFY_TOKEN = "private-token";
+    process.env.NTFY_ALLOWED_HOSTS = "ntfy.example.test";
+    const ntfyDenied = await deliverNtfyAuth(record);
+    if (ntfyDenied.status !== "error" || calls.length !== 1) {
+      fail("ntfy_host_denied_before_fetch", { ntfyDenied, calls });
+    }
+    pass("pii_notification_destinations_fail_closed");
+  } finally {
+    globalThis.fetch = originalFetch;
+    process.env = previous;
+  }
+}
+
+// 5d) The two hub forms introduced by #290 reach the real persistence path
 // with their shipped attribution. A static <form> alone is not conversion.
 {
   const hubs = [

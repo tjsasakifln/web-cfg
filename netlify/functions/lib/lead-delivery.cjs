@@ -19,6 +19,38 @@ function skipNonReal(record, channel) {
 
 const MAX_ATTEMPTS = 3;
 
+function isProductionProfile(env = process.env) {
+  const nodeEnv = String(env.NODE_ENV || "").toLowerCase();
+  const context = String(env.CONTEXT || env.NETLIFY_CONTEXT || "").toLowerCase();
+  return nodeEnv === "production" || context === "production";
+}
+
+function validatePiiDestination(rawUrl, allowedHostsRaw, env = process.env) {
+  const raw = String(rawUrl || "").trim();
+  if (!raw || raw.length > 2048) return { ok: false, reason: "invalid_url" };
+  let parsed;
+  try {
+    parsed = new URL(raw);
+  } catch {
+    return { ok: false, reason: "invalid_url" };
+  }
+  if (parsed.protocol !== "https:") return { ok: false, reason: "https_required" };
+  if (parsed.username || parsed.password) return { ok: false, reason: "embedded_credentials" };
+  if (parsed.port) return { ok: false, reason: "port_not_allowed" };
+  if (parsed.search || parsed.hash) return { ok: false, reason: "query_or_fragment_not_allowed" };
+  const allowedHosts = String(allowedHostsRaw || "")
+    .split(",")
+    .map((host) => host.trim().toLowerCase())
+    .filter(Boolean);
+  if (isProductionProfile(env) && !allowedHosts.length) {
+    return { ok: false, reason: "host_allowlist_required" };
+  }
+  if (allowedHosts.length && !allowedHosts.includes(parsed.hostname.toLowerCase())) {
+    return { ok: false, reason: "host_not_allowed" };
+  }
+  return { ok: true, url: parsed.toString() };
+}
+
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -78,6 +110,14 @@ async function deliverOpsWebhook(record) {
   if (!url) {
     return { channel: "ops_webhook", status: "skipped", reason: "not_configured" };
   }
+  const destination = validatePiiDestination(
+    url,
+    process.env.OPS_WEBHOOK_ALLOWED_HOSTS,
+  );
+  if (!destination.ok) {
+    safeLog("error", "ops_webhook_misconfigured", { reason: destination.reason });
+    return { channel: "ops_webhook", status: "error", reason: "misconfigured" };
+  }
   const payload = {
     type: "confenge.lead",
     lead_id: record.lead_id,
@@ -116,7 +156,7 @@ async function deliverOpsWebhook(record) {
   }
 
   return withBackoff(async () => {
-    const res = await fetch(url, { method: "POST", headers, body });
+    const res = await fetch(destination.url, { method: "POST", headers, body });
     if (!res.ok) {
       const err = new Error(`webhook_http_${res.status}`);
       err.status = res.status;
@@ -150,6 +190,11 @@ async function deliverNtfyAuth(record) {
     safeLog("error", "ntfy_misconfigured", { reason: "token_missing" });
     return { channel: "ntfy", status: "error", reason: "misconfigured" };
   }
+  const destination = validatePiiDestination(url, process.env.NTFY_ALLOWED_HOSTS);
+  if (!destination.ok) {
+    safeLog("error", "ntfy_misconfigured", { reason: destination.reason });
+    return { channel: "ntfy", status: "error", reason: "misconfigured" };
+  }
   // Never put full PII in title; body for private authenticated topic only
   const message = [
     `lead_id=${record.lead_id}`,
@@ -165,7 +210,7 @@ async function deliverNtfyAuth(record) {
     .join("\n");
 
   return withBackoff(async () => {
-    const res = await fetch(url, {
+    const res = await fetch(destination.url, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -293,4 +338,5 @@ module.exports = {
   deliverResendEmail,
   deliverAll,
   withBackoff,
+  validatePiiDestination,
 };

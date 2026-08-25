@@ -9,6 +9,7 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | `OPS_WEBHOOK_URL` | recomendada | URL HTTPS autenticada para notificação ops (Slack-style `confenge.lead`; **not** Warmbly inbound) |
 | `OPS_WEBHOOK_SECRET` | recomendada | HMAC SHA-256 do body (`X-Confenge-Signature`) |
 | `OPS_WEBHOOK_BEARER` | opcional | Bearer token alternativo/adicional |
+| `OPS_WEBHOOK_ALLOWED_HOSTS` | com OPS webhook em produção | Allowlist exata de hosts HTTPS (vírgula); obrigatória porque o body contém contato |
 | `CONFENGE_INBOUND_WEBHOOK_URL` | para INBOUND NOW | HTTPS `…/api/v1/webhooks/confenge/inbound`. Fail-closed sem HTTPS em staging/prod. Sem PII na query. |
 | `CONFENGE_INBOUND_WEBHOOK_SECRET` | com inbound URL | Segredo HMAC compartilhado com Warmbly (`X-Warmbly-Signature`). Somente server env. |
 | `CONFENGE_INBOUND_ALLOWED_HOSTS` | recomendada em prod | Allowlist de hosts (vírgula). Vazio + URL HTTPS válida é aceito. |
@@ -28,6 +29,7 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | `IP_HASH_SALT` | recomendada | Sal para hash de IP em logs/store |
 | `NTFY_URL` | opcional | URL completa de tópico **privado** |
 | `NTFY_TOKEN` | se NTFY_URL | Bearer token ntfy |
+| `NTFY_ALLOWED_HOSTS` | com ntfy em produção | Allowlist exata de hosts HTTPS (vírgula); obrigatória porque o body contém contato |
 | `LEAD_STORE_DIR` | só local/dev | Diretório FileStore |
 | `LEAD_STORE` | teste | `memory` para testes |
 | `LEAD_ALLOW_MEMORY_FALLBACK` | perigoso | Nunca em produção |
