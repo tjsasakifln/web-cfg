@@ -354,10 +354,10 @@ const FROZEN = {
   },
   "/diagnostico-b2g-expansao/": {
     surface_class: "money_offer",
-    evidence_state: "MEASURED_PASS",
+    evidence_state: "MEASURED_FAIL",
     date: "2026-08-24",
     viewport: "1363x936",
-    finding: "preço, prazo, destinatário e CTA na primeira dobra; razão de confiança ainda declaratória",
+    finding: "preço, prazo, destinatário e CTA na primeira dobra; razão de confiança ainda declaratória e sem prova verificável",
   },
 };
 for (const [route, expected] of Object.entries(FROZEN)) {
@@ -382,8 +382,10 @@ assert(
   byRoute.get("/problemas-que-resolvemos/")?.measurement?.finding,
 );
 assert(
-  "reference_pass_still_admits_weak_trust_reason",
-  /declarat[oó]ria/i.test(byRoute.get("/diagnostico-b2g-expansao/")?.measurement?.finding || ""),
+  "reference_fails_without_verifiable_proof",
+  byRoute.get("/diagnostico-b2g-expansao/")?.evidence_state === "MEASURED_FAIL" &&
+    /declarat[oó]ria/i.test(byRoute.get("/diagnostico-b2g-expansao/")?.measurement?.finding || "") &&
+    /sem prova verific[aá]vel/i.test(byRoute.get("/diagnostico-b2g-expansao/")?.measurement?.finding || ""),
   byRoute.get("/diagnostico-b2g-expansao/")?.measurement?.finding,
 );
 
