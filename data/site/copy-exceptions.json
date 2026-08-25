@@ -12,6 +12,30 @@
     {
       "rule": "plain_language",
       "match": "\\bfact\\b",
+      "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+      "reason": "A issue #389 exige os quatro rotulos epistemicos visiveis FACT, CALCULATION, INFERENCE e UNKNOWN. Eles reproduzem o vocabulario publicado na politica editorial 1.1.0 e aparecem aqui somente ao lado da explicacao em portugues; a excecao e route-exact e nao autoriza jargao em outra pagina."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bcalculation\\b",
+      "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+      "reason": "A issue #389 exige os quatro rotulos epistemicos visiveis FACT, CALCULATION, INFERENCE e UNKNOWN. Eles reproduzem o vocabulario publicado na politica editorial 1.1.0 e aparecem aqui somente ao lado da explicacao em portugues; a excecao e route-exact e nao autoriza jargao em outra pagina."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\binference\\b",
+      "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+      "reason": "A issue #389 exige os quatro rotulos epistemicos visiveis FACT, CALCULATION, INFERENCE e UNKNOWN. Eles reproduzem o vocabulario publicado na politica editorial 1.1.0 e aparecem aqui somente ao lado da explicacao em portugues; a excecao e route-exact e nao autoriza jargao em outra pagina."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+      "reason": "A issue #389 exige os quatro rotulos epistemicos visiveis FACT, CALCULATION, INFERENCE e UNKNOWN. Eles reproduzem o vocabulario publicado na politica editorial 1.1.0 e aparecem aqui somente ao lado da explicacao em portugues; a excecao e route-exact e nao autoriza jargao em outra pagina."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bfact\\b",
       "path": "analises-contratos-publicos/index.html",
       "reason": "O valor e a classe epistemica emitida pelo contrato de dados versionado que alimenta a pagina (contract-analysis, market-answers, market-panorama e o recorte public-read-margin-defense). E enum da fonte, exibido para o leitor conferir de onde vem cada afirmacao, nao texto de redacao. Traduzir o enum e escopo da issue #188 e exige mudar o contrato de dados junto."
     },

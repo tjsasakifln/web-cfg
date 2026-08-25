@@ -24,7 +24,7 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "9131bbbcc7d6d1ecb9f6b88114dcee8caf0338d8be74e9f2f4c467225a623921"
+    "after_sha256": "53e4a0e0503088fc3e32ec50ae4c11378ca4aaafb413ee192354e68c587fab98"
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -84,6 +84,18 @@
       "medição rejeitada obra pública"
     ],
     "no_recovery_promise": true
+  },
+  "plain_language_contract": {
+    "registry": "data/site/copy-exceptions.json",
+    "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+    "scope": "ROUTE_EXACT",
+    "required_editorial_tokens": [
+      "\\bfact\\b",
+      "\\bcalculation\\b",
+      "\\binference\\b",
+      "\\bunknown\\b"
+    ],
+    "other_english_internal_labels_allowed": false
   },
   "frozen_siblings": [
     {

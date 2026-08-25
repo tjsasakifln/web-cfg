@@ -42,6 +42,8 @@ em `canary-contract.json` e impede transformar ausência em evidência.
 - exemplo hipotético calculado separa R$ 78.000,00 sem controvérsia no exemplo
   e R$ 18.000,00 em conferência, sem afirmar crédito ou recuperação;
 - `FACT | CALCULATION | INFERENCE | UNKNOWN` ficam visíveis;
+- esses quatro nomes de classe são as únicas exceções de idioma, registradas
+  uma a uma e apenas para esta rota; os demais rótulos ficam em português;
 - seis documentos mínimos, cinco limites e fronteira jurídica explícita;
 - fontes oficiais e data de consulta visíveis;
 - autoria técnica continua ligada ao perfil verificável;

@@ -57,6 +57,11 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
             encoding="utf-8"
         )
     )
+    copy_exceptions = json.loads(
+        (ROOT / "data" / "site" / "copy-exceptions.json").read_text(
+            encoding="utf-8"
+        )
+    )
 
     assert contract["issue"] == 389
     assert contract["public_url_mutations"] == [
@@ -65,7 +70,10 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     canary = contract["canary"]
     page = ROOT / canary["source"]
     html = page.read_text(encoding="utf-8")
+    visible_html = re.sub(r"<script[\s\S]*?</script>", "", html, flags=re.I)
     assert _sha256(page) == canary["after_sha256"]
+    assert not re.search(r"\bowner\b", visible_html, re.I)
+    assert len(re.findall(r"\bUNKNOWN\b", visible_html)) == 1
 
     assert (
         '<meta content="index,follow,max-image-preview:large,max-snippet:-1,'
@@ -89,6 +97,7 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     article = re.search(r'<article class="article-main".*?</article>', html, re.S)
     assert article
     article_html = article.group(0)
+    assert not re.search(r"\bowner\b", article_html, re.I)
     route = re.escape(canary["commercial_destination"])
     assert len(re.findall(rf'href="{route}[^\"]*"', article_html)) == 1
     assert "wa.me" not in article_html
@@ -111,6 +120,17 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
         "data-journey",
     ):
         assert re.search(rf'\b{attr}="[^"]+"', article_html)
+
+    plain = contract["plain_language_contract"]
+    scoped = [
+        row
+        for row in copy_exceptions["exceptions"]
+        if row.get("rule") == "plain_language" and row.get("path") == plain["path"]
+    ]
+    assert {row["match"] for row in scoped} == set(plain["required_editorial_tokens"])
+    assert all("route-exact" in row["reason"] for row in scoped)
+    assert plain["scope"] == "ROUTE_EXACT"
+    assert plain["other_english_internal_labels_allowed"] is False
 
     for sibling in contract["frozen_siblings"]:
         assert _sha256(ROOT / sibling["path"]) == sibling["sha256"], sibling["path"]
