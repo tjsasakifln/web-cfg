@@ -1,0 +1,15 @@
+{
+  "schema": "confenge.unit-economics-ledger/1.0",
+  "ledger_version": "CFG-UNIT-ECONOMICS-2026-08-25-v1",
+  "issue": "#341",
+  "state": "NOT_STARTED",
+  "storage_authority": "private_finance_store",
+  "repository_role": "schema_templates_and_aggregate_hashes_only",
+  "public_surface": false,
+  "contains_sensitive_values": false,
+  "source": "CONFENGE_WEB",
+  "records": [],
+  "rollups": [],
+  "founder_decisions": [],
+  "records_note": "Nenhuma entrega real foi registrada. Custos, taxas internas e eventos por entrega permanecem no store financeiro privado; este repositório conserva apenas contrato, templates e agregados sem identificação."
+}

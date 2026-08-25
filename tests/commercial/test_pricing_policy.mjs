@@ -15,6 +15,12 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import {
+  ACTIVITY_KEYS,
+  calculateUnitEconomics,
+  evaluateUnitEconomicsPromotion,
+  validateUnitEconomicsEvent,
+} from "../../scripts/commercial/unit_economics.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -29,6 +35,8 @@ const policy = JSON.parse(policyRaw);
 const catalog = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8"));
 const entregasHtml = fs.readFileSync(ENTREGAS_PATH, "utf8");
 const deliverablesRegistry = JSON.parse(fs.readFileSync(DELIVERABLES_PATH, "utf8"));
+const ledger = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/unit-economics-ledger.v1.json"), "utf8"));
+const unitEconomicsTemplate = JSON.parse(fs.readFileSync(path.join(root, "docs/commercial/unit-economics-v1/event.template.json"), "utf8"));
 
 const results = [];
 function pass(name, detail) {
@@ -491,14 +499,185 @@ assert(
 );
 
 /* ------------------------------------------------------------------ */
-/* 8. Higiene: sem travessao, sem dependencia de arquivo ausente.      */
+/* 8. Ledger operacional sem fabricar entrega ou custo real.           */
+/* ------------------------------------------------------------------ */
+const implementation = policy.unit_economics_implementation || {};
+assert(
+  "unit_economics_artifacts_declared",
+  implementation.ledger === "data/commercial/unit-economics-ledger.v1.json" &&
+    implementation.calculator === "scripts/commercial/unit_economics.mjs" &&
+    implementation.event_template === "docs/commercial/unit-economics-v1/event.template.json" &&
+    implementation.promotion_template === "docs/commercial/unit-economics-v1/promotion-aggregate.template.json",
+  implementation,
+);
+assert(
+  "unit_economics_stays_private",
+  implementation.storage_authority === "private_finance_store" &&
+    implementation.commercial_decision_owner === "warmbly" &&
+    implementation.source === "CONFENGE_WEB" &&
+    implementation.public_surface === false &&
+    implementation.sensitive_values_in_repository === false &&
+    implementation.promotion_automation === false,
+  implementation,
+);
+assert(
+  "ledger_has_no_fabricated_records",
+  ledger.schema === "confenge.unit-economics-ledger/1.0" &&
+    ledger.state === "NOT_STARTED" &&
+    ledger.contains_sensitive_values === false &&
+    Array.isArray(ledger.records) && ledger.records.length === 0 &&
+    Array.isArray(ledger.rollups) && ledger.rollups.length === 0 &&
+    Array.isArray(ledger.founder_decisions) && ledger.founder_decisions.length === 0,
+  ledger,
+);
+assert(
+  "event_template_is_safe_and_valid",
+  validateUnitEconomicsEvent(unitEconomicsTemplate, policy, deliverablesRegistry).length === 0,
+  validateUnitEconomicsEvent(unitEconomicsTemplate, policy, deliverablesRegistry),
+);
+assert(
+  "activity_contract_is_complete",
+  JSON.stringify(Object.keys(unitEconomicsTemplate.activity_hours).sort()) === JSON.stringify([...ACTIVITY_KEYS].sort()),
+  Object.keys(unitEconomicsTemplate.activity_hours),
+);
+
+function fixtureEvent(id = "UE-CFG-D01-001") {
+  const activityHours = Object.fromEntries(ACTIVITY_KEYS.map((key) => [key, { estimated_hours: 0, actual_hours: 0 }]));
+  activityHours.analysis = { estimated_hours: 3, actual_hours: 2 };
+  activityHours.technical_review_qa = { estimated_hours: 1, actual_hours: 1 };
+  const event = {
+    schema: "confenge.unit-economics-event/1.0",
+    template: false,
+    state: "DELIVERED",
+    event_id: id,
+    deliverable_id: "CFG-D01",
+    scope_version: "v1",
+    price_version: "CFG-PRICE-2026-08-25-V1",
+    terms_version: "CFG-TERMS-2026-08-25-V1",
+    pricing: {
+      list_price_cents: 59900,
+      displayed_price_cents: 59900,
+      accepted_price_cents: 59900,
+      recognized_revenue_cents: 59900,
+      accepted_at: "2026-08-01",
+      paid_at: "2026-08-10",
+      urgency: {
+        applied: false,
+        capacity_confirmed: false,
+        technically_safe: false,
+        disclosed_before_charge: false,
+      },
+      predefined_alternative: null,
+    },
+    hours_by_seniority: [
+      { role: "analista_senior", estimated_hours: 3, actual_hours: 2, direct_hour_cost_cents: 6000 },
+      { role: "revisor_tecnico", estimated_hours: 1, actual_hours: 1, direct_hour_cost_cents: 8000 },
+    ],
+    activity_hours: activityHours,
+    direct_costs: {
+      data_sources_and_cleaning_cents: 1000,
+      attributable_commercial_acquisition_cents: 500,
+      other_direct_cents: 0,
+    },
+    calculated: null,
+    delivery_quality: { rework_hours: 0, qa_state: "PASS" },
+    reusable_asset: { kind: "modelo_priorizacao", observed_reuse_count: 0, observed_hours_saved: 0 },
+    outcome: { state: "UNKNOWN", observed_at: null },
+  };
+  event.calculated = calculateUnitEconomics(event);
+  return event;
+}
+
+const validEvent = fixtureEvent();
+assert(
+  "real_event_calculation_is_reconciled",
+  validateUnitEconomicsEvent(validEvent, policy, deliverablesRegistry).length === 0 &&
+    validEvent.calculated.direct_cost_total_cents === 21500 &&
+    validEvent.calculated.contribution_cents === 38400 &&
+    validEvent.calculated.contribution_margin_pct === 64.11 &&
+    validEvent.calculated.days_to_cash === 9,
+  validEvent.calculated,
+);
+const activityDrift = structuredClone(validEvent);
+activityDrift.activity_hours.analysis.actual_hours = 1;
+assert(
+  "activity_drift_fails_closed",
+  validateUnitEconomicsEvent(activityDrift, policy, deliverablesRegistry).includes("activity_hours_do_not_reconcile"),
+  validateUnitEconomicsEvent(activityDrift, policy, deliverablesRegistry),
+);
+const silentDiscount = structuredClone(validEvent);
+silentDiscount.pricing.accepted_price_cents = 50000;
+silentDiscount.pricing.recognized_revenue_cents = 50000;
+silentDiscount.calculated = calculateUnitEconomics(silentDiscount);
+assert(
+  "silent_discount_fails_closed",
+  validateUnitEconomicsEvent(silentDiscount, policy, deliverablesRegistry).includes("silent_discount_or_unversioned_alternative"),
+  validateUnitEconomicsEvent(silentDiscount, policy, deliverablesRegistry),
+);
+const unsafeUrgency = structuredClone(validEvent);
+unsafeUrgency.pricing.urgency.applied = true;
+unsafeUrgency.pricing.displayed_price_cents = 89850;
+unsafeUrgency.pricing.accepted_price_cents = 89850;
+unsafeUrgency.pricing.recognized_revenue_cents = 89850;
+unsafeUrgency.calculated = calculateUnitEconomics(unsafeUrgency);
+assert(
+  "unsafe_urgency_fails_closed",
+  validateUnitEconomicsEvent(unsafeUrgency, policy, deliverablesRegistry).includes("unsafe_or_hidden_urgency"),
+  validateUnitEconomicsEvent(unsafeUrgency, policy, deliverablesRegistry),
+);
+const withPii = structuredClone(validEvent);
+withPii.contact_email = "proibido@example.invalid";
+assert(
+  "pii_key_fails_closed",
+  validateUnitEconomicsEvent(withPii, policy, deliverablesRegistry).some((problem) => problem.startsWith("forbidden_key:")),
+  validateUnitEconomicsEvent(withPii, policy, deliverablesRegistry),
+);
+const calculationDrift = structuredClone(validEvent);
+calculationDrift.calculated.direct_cost_total_cents += 1;
+assert(
+  "calculation_drift_fails_closed",
+  validateUnitEconomicsEvent(calculationDrift, policy, deliverablesRegistry).includes("calculated_drift:direct_cost_total_cents"),
+  validateUnitEconomicsEvent(calculationDrift, policy, deliverablesRegistry),
+);
+const qualifyingEvents = [fixtureEvent("UE-CFG-D01-001"), fixtureEvent("UE-CFG-D01-002"), fixtureEvent("UE-CFG-D01-003")];
+assert(
+  "promotion_needs_three_observed_deliveries",
+  evaluateUnitEconomicsPromotion(qualifyingEvents.slice(0, 2), policy).eligible === false &&
+    evaluateUnitEconomicsPromotion(qualifyingEvents, policy).eligible === true,
+  evaluateUnitEconomicsPromotion(qualifyingEvents, policy),
+);
+assert(
+  "explicit_founder_decision_can_override",
+  evaluateUnitEconomicsPromotion([], policy, {
+    explicit: true,
+    subject: "SCOPE",
+    rationale: "Reduzir escopo para preservar a capacidade e a qualidade técnica.",
+    decided_at: "2026-08-25",
+  }).eligible === true,
+  "founder decision",
+);
+assert(
+  "weak_founder_note_does_not_override",
+  evaluateUnitEconomicsPromotion([], policy, {
+    explicit: true,
+    subject: "PRICE",
+    rationale: "ajustar",
+    decided_at: "2026-08-25",
+  }).eligible === false,
+  "short rationale",
+);
+
+/* ------------------------------------------------------------------ */
+/* 9. Higiene: sem travessao, sem dependencia de arquivo ausente.      */
 /* ------------------------------------------------------------------ */
 const selfRaw = fs.readFileSync(path.join(__dirname, "test_pricing_policy.mjs"), "utf8");
+const unitEconomicsRaw = fs.readFileSync(path.join(root, "scripts/commercial/unit_economics.mjs"), "utf8");
 // Travessao e meia-risca montados por codigo, para que o proprio teste nao os contenha.
 const DASH_RE = new RegExp("[" + String.fromCharCode(8212, 8211) + "]");
 assert("policy_has_no_em_dash", !DASH_RE.test(policyRaw), "travessao proibido no JSON");
 assert("test_has_no_em_dash", !DASH_RE.test(selfRaw), "travessao proibido no teste");
-const referencedPaths = [...policyRaw.matchAll(/"((?:data|tests|entregas|scripts)\/[A-Za-z0-9._\/-]+)"/g)].map((m) => m[1]);
+assert("unit_economics_has_no_em_dash", !DASH_RE.test(unitEconomicsRaw), "travessao proibido no modulo");
+const referencedPaths = [...policyRaw.matchAll(/"((?:data|docs|tests|entregas|scripts)\/[A-Za-z0-9._\/-]+)"/g)].map((m) => m[1]);
 const missing = referencedPaths.filter((rel) => !fs.existsSync(path.join(root, rel)));
 assert("no_missing_referenced_file", missing.length === 0, missing);
 

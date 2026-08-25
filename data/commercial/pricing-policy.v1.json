@@ -1,6 +1,6 @@
 {
   "schema": "confenge.pricing-policy/1.0",
-  "policy_version": "CFG-PRICING-2026-08-24-v1",
+  "policy_version": "CFG-PRICING-2026-08-25-v2",
   "issue": "#341",
   "parent_issue": "#329",
   "related_issues": [
@@ -206,6 +206,19 @@
     "valor do ativo reutilizável produzido"
   ],
   "unit_economics_disclosure_rule": "Registrar sem expor dado interno sensível na página.",
+  "unit_economics_implementation": {
+    "status": "INSTRUMENT_READY_OBSERVED_DELIVERIES_PENDING",
+    "ledger": "data/commercial/unit-economics-ledger.v1.json",
+    "calculator": "scripts/commercial/unit_economics.mjs",
+    "event_template": "docs/commercial/unit-economics-v1/event.template.json",
+    "promotion_template": "docs/commercial/unit-economics-v1/promotion-aggregate.template.json",
+    "storage_authority": "private_finance_store",
+    "commercial_decision_owner": "warmbly",
+    "source": "CONFENGE_WEB",
+    "public_surface": false,
+    "sensitive_values_in_repository": false,
+    "promotion_automation": false
+  },
   "promotion_gate": {
     "metric": "margem de contribuição direta observada",
     "min_pct": 55,

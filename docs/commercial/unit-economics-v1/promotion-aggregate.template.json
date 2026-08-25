@@ -1,0 +1,15 @@
+{
+  "schema": "confenge.unit-economics-promotion-aggregate/1.0",
+  "template": true,
+  "state": "NOT_STARTED",
+  "run_id": null,
+  "deliverable_id": null,
+  "observed_deliveries": 0,
+  "deliveries_at_or_above_margin": 0,
+  "minimum_margin_pct": 55,
+  "minimum_deliveries": 3,
+  "founder_override": false,
+  "eligible": false,
+  "generated_at": null,
+  "source_event_hashes": []
+}
