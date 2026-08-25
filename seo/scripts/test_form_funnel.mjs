@@ -16,7 +16,9 @@ const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
-  "Enviar documentos para análise",
+  "Avaliar o Dossiê de Medição, Glosa e Pagamento",
+  'data-cta-id="home-medicoes-glosas-dossie"',
+  'href="/medicoes-glosas-obras-publicas/"',
   "Enviar edital para triagem",
   'data-set-journey="contrato"',
   'data-set-journey="edital"',
