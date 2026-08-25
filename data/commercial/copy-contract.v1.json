@@ -892,7 +892,7 @@
     "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
     "live_measurement": {
       "routes_derived": 23,
-      "language_boundaries": 119,
+      "language_boundaries": 121,
       "language_observations": 0,
       "language_violations": 0,
       "structured_social_proof_hits": 0,
