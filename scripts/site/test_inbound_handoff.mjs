@@ -145,6 +145,8 @@ const inbound = loadInbound();
     opportunity_deadline: "2026-09-30",
     decision_intent: "validar_mercado",
     analysis_cutoff: "2026-08-25",
+    contract_event: "medicao_glosa_pagamento",
+    contract_stage: "documentando",
     correlation_id: "corr-1",
   });
   if (mapped.lead_id !== "abc123abc123abc123abc123") fail("map_lead_id", mapped);
@@ -166,7 +168,9 @@ const inbound = loadInbound();
   if (!mapped.message.includes("Quero uma segunda leitura") ||
       !mapped.message.includes("prazo=2026-09-30") ||
       !mapped.message.includes("decisão=validar_mercado") ||
-      !mapped.message.includes("data de corte=2026-08-25")) {
+      !mapped.message.includes("data de corte=2026-08-25") ||
+      !mapped.message.includes("evento contratual=medicao_glosa_pagamento") ||
+      !mapped.message.includes("estágio contratual=documentando")) {
     fail("map_next_action_context", mapped.message);
   }
   pass("mapper_present_fields");

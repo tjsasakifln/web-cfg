@@ -1,6 +1,6 @@
 {
   "schema": "confenge.commercial.page-contract.contratos.v1",
-  "version": 1,
+  "version": 2,
   "source_issue": 333,
   "parent_issue": 329,
   "name_authority_issue": 343,
@@ -8,6 +8,24 @@
   "validation": {
     "state": "NOT_STARTED",
     "evidence": []
+  },
+  "public_implementation": {
+    "renderer": "scripts/commercial/render_contract_defense_products.mjs",
+    "route_pages": 6,
+    "hub_route": "/servicos-obras-publicas/",
+    "hub_includes_unrouted_item_21": true,
+    "capture_fields": [
+      "deliverable_id",
+      "origem",
+      "public_contract_id",
+      "contract_event",
+      "opportunity_deadline",
+      "contract_stage"
+    ],
+    "analytics_contains_qualification": false,
+    "checkout_enabled": false,
+    "first_sale_fields": ["hours", "input_quality", "rework", "margin", "outcome"],
+    "first_sale_evidence": "NOT_STARTED"
   },
   "public_proof_ownership": {
     "owner_issue": 60,

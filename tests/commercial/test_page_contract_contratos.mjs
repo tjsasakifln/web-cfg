@@ -4,6 +4,7 @@
  */
 import fs from "fs";
 import path from "path";
+import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -54,6 +55,14 @@ assert(
 
 function filledString(value) {
   return typeof value === "string" && value.trim().length > 0;
+}
+
+function publicEvidence(value) {
+  return String(value)
+    .replace(/\bFACT\b/g, "fato")
+    .replace(/\bCALCULATION\b/g, "cálculo")
+    .replace(/\bINFERENCE\b/g, "inferência")
+    .replace(/\bUNKNOWN\b/g, "não informado");
 }
 
 for (const number of EXPECTED_NUMBERS) {
@@ -361,7 +370,65 @@ assert("routes_are_unique", new Set(items.map((it) => it.route).filter(Boolean))
 assert("at_least_one_route_declared", routed >= 1, routed);
 
 /* ---------------------------------------------------------------------------
- * 11. Nenhum travessao no arquivo de dados nem neste gate.
+ * 11. Implementacao publica: seis rotas, hub integral e captura fail closed.
+ * ------------------------------------------------------------------------- */
+assert("public_version_is_two", doc.version === 2, doc.version);
+const implementation = doc.public_implementation || {};
+assert(
+  "public_implementation_declared",
+  implementation.route_pages === 6 && implementation.hub_route === "/servicos-obras-publicas/" &&
+    implementation.hub_includes_unrouted_item_21 === true && implementation.checkout_enabled === false &&
+    implementation.analytics_contains_qualification === false,
+  implementation,
+);
+const requiredCapture = [
+  "deliverable_id", "origem", "public_contract_id", "contract_event",
+  "opportunity_deadline", "contract_stage",
+];
+assert("capture_fields_exact", JSON.stringify(implementation.capture_fields) === JSON.stringify(requiredCapture), implementation.capture_fields);
+for (const item of items.filter((entry) => entry.page_file)) {
+  const html = fs.readFileSync(path.join(root, item.page_file), "utf8");
+  assert(`public_contract_block_${item.item}`, html.includes("GENERATED:CONTRACT-DEFENSE-PRODUCT:START"), item.page_file);
+  assert(`public_css_${item.item}`, html.includes('/assets/contract-defense-products.css'), item.page_file);
+  for (const value of [
+    item.public_name_pt_br,
+    `R$ ${new Intl.NumberFormat("pt-BR").format(item.pilot_price_cents / 100)}`,
+    `${item.sla_business_days} dias úteis`,
+    item.scope_unit_pt_br,
+    item.minimum_document_pt_br,
+    publicEvidence(item.output_pt_br),
+    item.legal_boundary.statement_pt_br,
+  ]) assert(`public_value_${item.item}_${results.length}`, html.includes(value), value);
+  for (const grade of GRADES) assert(`public_grade_${item.item}_${grade}`, html.includes(`data-evidence-grade="${grade}"`), grade);
+  assert(`public_synthetic_flow_${item.item}`, /Evento sintético/.test(html) && /<strong>Decisão<\/strong>/.test(html), item.page_file);
+  assert(`public_lead_form_${item.item}`, /action="\/\.netlify\/functions\/lead"/.test(html), item.page_file);
+  for (const field of requiredCapture) assert(`public_capture_${item.item}_${field}`, html.includes(`name="${field}"`), field);
+  assert(`public_no_checkout_${item.item}`, html.includes('name="offer_id"') && !/data-checkout|\/\.netlify\/functions\/checkout/i.test(html), item.page_file);
+}
+const hubHtml = fs.readFileSync(path.join(root, "servicos-obras-publicas/index.html"), "utf8");
+for (const item of items) {
+  assert(`hub_name_${item.item}`, hubHtml.includes(item.public_name_pt_br), item.public_name_pt_br);
+  assert(`hub_id_${item.item}`, hubHtml.includes(`value="${item.deliverable_id}"`), item.deliverable_id);
+}
+assert("hub_has_capture", requiredCapture.every((field) => hubHtml.includes(`name="${field}"`)), requiredCapture);
+for (const rule of [
+  doc.common_rules.credit_rule.statement_pt_br,
+  doc.common_rules.urgency_rule.statement_pt_br,
+  doc.common_rules.public_sources_rule.statement_pt_br,
+  doc.common_rules.obligation_rule.statement_pt_br,
+]) assert(`hub_common_rule_${results.length}`, hubHtml.includes(rule), rule);
+const familyRegistry = JSON.parse(fs.readFileSync(path.join(root, "data/organic/public-family-registry.json"), "utf8"));
+const hubFamily = familyRegistry.families.find((family) => family.id === "servicos-obras-publicas");
+assert("hub_family_fails_closed", hubFamily?.profile === "priced_offer" && hubFamily?.terminal_action === "capture_form" && hubFamily?.owner_issue === 333, hubFamily);
+const collectSource = fs.readFileSync(path.join(root, "netlify/functions/collect.cjs"), "utf8");
+for (const field of ["public_contract_id", "contract_event", "opportunity_deadline", "contract_stage"]) {
+  assert(`qualification_not_in_analytics_${field}`, !collectSource.includes(field), field);
+}
+const renderer = spawnSync(process.execPath, [path.join(root, implementation.renderer), "--check"], { cwd: root, encoding: "utf8" });
+assert("public_renderer_has_no_drift", renderer.status === 0, `${renderer.stdout}\n${renderer.stderr}`);
+
+/* ---------------------------------------------------------------------------
+ * 12. Nenhum travessao no arquivo de dados nem neste gate.
  * ------------------------------------------------------------------------- */
 const EM_DASH = String.fromCharCode(0x2014);
 const EN_DASH = String.fromCharCode(0x2013);

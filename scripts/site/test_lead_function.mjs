@@ -723,6 +723,65 @@ _reset();
   pass("priced_model_forms_persisted_attribution", { routes: modelSlugs });
 }
 
+// 5h) The #333 contract products require contract, event, safe deadline and
+// stage. All seven IDs share one fail-closed server contract; the hub captures
+// the unrouted reajuste item as well.
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const deadline = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10);
+  const base = {
+    nome: "QA Contratos",
+    email: "qa-contratos@example.com",
+    estagio: "contract-defense-products",
+    jornada: "contrato",
+    consentimento: "1",
+    origem: "servicos-obras-publicas",
+    public_contract_id: "CONTRATO-DEMO-2026-01",
+    contract_event: "medicao_glosa_pagamento",
+    opportunity_deadline: deadline,
+    contract_stage: "documentando",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  for (let number = 17; number <= 23; number += 1) {
+    const check = core.validateAndNormalize({ ...base, deliverable_id: `CFG-D${number}` });
+    if (!check.ok || check.lead.deliverable_id !== `CFG-D${number}`) {
+      fail("contract_product_server_contract", { number, check });
+    }
+  }
+  for (const invalid of [
+    { public_contract_id: "" },
+    { contract_event: "evento_livre" },
+    { opportunity_deadline: "2026-99-99" },
+    { contract_stage: "estagio_livre" },
+  ]) {
+    const before = mem.map.size;
+    const res = await handler(event({ ...base, deliverable_id: "CFG-D18", ...invalid }, "POST", { ip: "203.0.113.98" }));
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 422 || data.error !== "contract_qualification_invalid" || mem.map.size !== before) {
+      fail("contract_product_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    }
+  }
+  const res = await handler(event({
+    ...base,
+    deliverable_id: "CFG-D21",
+    contract_event: "reajuste",
+    contract_stage: "quantificando",
+    idempotency_key: "qa-contract-product-21",
+  }, "POST", { ip: "203.0.113.97" }));
+  const data = JSON.parse(res.body);
+  const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+  if (res.statusCode !== 201 || !stored || stored.deliverable_id !== "CFG-D21" ||
+      stored.public_contract_id !== base.public_contract_id || stored.contract_event !== "reajuste" ||
+      stored.opportunity_deadline !== deadline || stored.contract_stage !== "quantificando") {
+    fail("contract_product_qualification_persisted", { status: res.statusCode, data, stored });
+  }
+  if (stored.offer_id || stored.terms_id || stored.source !== "CONFENGE_WEB") {
+    fail("contract_product_no_checkout", stored);
+  }
+  pass("contract_products_fail_closed_and_persisted", { ids: 7, lead_id: data.lead_id });
+}
+
 // 6) idempotency — second submit same payload returns same lead_id + HTTP 200 + idempotent
 {
   const payload = {

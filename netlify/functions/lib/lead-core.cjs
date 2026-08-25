@@ -42,6 +42,8 @@ const MAX_FIELD = {
   deliverable_id: 16,
   analysis_cutoff: 10,
   opportunity_deadline: 10,
+  contract_event: 32,
+  contract_stage: 24,
   contract_value_band: 24,
   lot_count: 4,
   execution_regime: 40,
@@ -265,6 +267,55 @@ function assertEightProductQualification(data, deliverableId) {
       analysis_cutoff: analysisCutoff,
       opportunity_deadline: deadline,
       decision_intent: decisionIntent,
+    },
+  };
+}
+
+const CONTRACT_DEFENSE_IDS = new Set([
+  "CFG-D17", "CFG-D18", "CFG-D19", "CFG-D20", "CFG-D21", "CFG-D22", "CFG-D23",
+]);
+const CONTRACT_EVENTS = new Set([
+  "risco_margem",
+  "medicao_glosa_pagamento",
+  "mudanca_escopo",
+  "atraso_prorrogacao",
+  "reajuste",
+  "reequilibrio",
+  "notificacao_sancao",
+  "outro",
+]);
+const CONTRACT_STAGES = new Set([
+  "identificado", "documentando", "quantificando", "em_resposta", "UNKNOWN",
+]);
+
+function assertContractDefenseQualification(data, deliverableId) {
+  if (!CONTRACT_DEFENSE_IDS.has(deliverableId)) return { ok: true, qualification: null };
+  const publicContractId = clamp(data.public_contract_id, MAX_FIELD.public_contract_id);
+  const contractEvent = clamp(data.contract_event, MAX_FIELD.contract_event);
+  const deadline = clamp(data.opportunity_deadline, MAX_FIELD.opportunity_deadline);
+  const contractStage = clamp(data.contract_stage, MAX_FIELD.contract_stage);
+  const safeDays = businessDaysUntil(deadline);
+  const minDays = deliverableId === "CFG-D23" ? 5 : 1;
+  if (
+    publicContractId.length < 3 ||
+    !CONTRACT_EVENTS.has(contractEvent) ||
+    !CONTRACT_STAGES.has(contractStage) ||
+    safeDays < minDays
+  ) {
+    return {
+      ok: false,
+      status: 422,
+      error: "contract_qualification_invalid",
+      message: "Informe contrato, evento, prazo seguro e estágio nos formatos publicados.",
+    };
+  }
+  return {
+    ok: true,
+    qualification: {
+      public_contract_id: publicContractId,
+      contract_event: contractEvent,
+      opportunity_deadline: deadline,
+      contract_stage: contractStage,
     },
   };
 }
@@ -539,7 +590,9 @@ function validateAndNormalize(data) {
   if (!licitacaoCheck.ok) return licitacaoCheck;
   const eightCheck = assertEightProductQualification(data, deliverableCheck.deliverable_id);
   if (!eightCheck.ok) return eightCheck;
-  const productQualification = licitacaoCheck.qualification || eightCheck.qualification;
+  const contractCheck = assertContractDefenseQualification(data, deliverableCheck.deliverable_id);
+  if (!contractCheck.ok) return contractCheck;
+  const productQualification = licitacaoCheck.qualification || eightCheck.qualification || contractCheck.qualification;
 
   // Radar Decisório purchase parameters. Server-side, fail-closed: the browser
   // check is a convenience, this one is the contract.
@@ -666,13 +719,15 @@ function validateAndNormalize(data) {
     deliverable_id: deliverableCheck.deliverable_id,
     analysis_cutoff: productQualification?.analysis_cutoff || null,
     opportunity_deadline: productQualification?.opportunity_deadline || null,
+    contract_event: productQualification?.contract_event || null,
+    contract_stage: productQualification?.contract_stage || null,
     contract_value_band: productQualification?.contract_value_band || null,
     lot_count: productQualification?.lot_count || null,
     execution_regime: productQualification?.execution_regime || null,
     decision_intent: productQualification?.decision_intent || null,
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
-    public_contract_id: clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
+    public_contract_id: productQualification?.public_contract_id || clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
     public_entity_id: clamp(data.public_entity_id, MAX_FIELD.public_entity_id) || null,
     public_id_slug: clamp(data.public_id_slug, MAX_FIELD.public_id_slug) || null,
     cnpj: eightCheck.qualification?.cnpj || clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj) || null,
@@ -900,6 +955,7 @@ module.exports = {
   assertDeliverableSelection,
   assertLicitacaoQualification,
   assertEightProductQualification,
+  assertContractDefenseQualification,
   validateAndNormalize,
   generateLeadId,
   idempotencyKeyFor,

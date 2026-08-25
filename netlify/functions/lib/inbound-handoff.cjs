@@ -198,6 +198,8 @@ function mapLeadToInboundV1(record) {
   if (referrer) body.referrer = referrer;
   const qualification = [
     ["prazo", record.opportunity_deadline],
+    ["evento contratual", record.contract_event],
+    ["estágio contratual", record.contract_stage],
     ["decisão", record.decision_intent],
     ["data de corte", record.analysis_cutoff],
     ["faixa de valor", record.contract_value_band],
