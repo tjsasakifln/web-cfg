@@ -14,12 +14,27 @@ const MAX_SEEN_EVENT_IDS = 4000;
 
 const MAX_EVENTS = 25;
 const MAX_BODY = 16 * 1024;
+const CANONICAL_PUBLIC_ORIGINS = new Set([
+  "https://confenge.com.br",
+  "https://www.confenge.com.br",
+]);
+
+function isProductionProfile(env = process.env) {
+  const nodeEnv = String(env.NODE_ENV || "").trim().toLowerCase();
+  const context = String(env.CONTEXT || env.NETLIFY_CONTEXT || "").trim().toLowerCase();
+  return nodeEnv === "production" || context === "production";
+}
+
+function collectorOriginAllowed(origin, env = process.env) {
+  const allowed = isProductionProfile(env) ? CANONICAL_PUBLIC_ORIGINS : ALLOWED_ORIGINS;
+  return allowed.has(origin);
+}
 
 function originOk(event) {
   const h = event.headers || {};
   const origin = String(h.origin || h.Origin || "").trim();
   if (origin) {
-    return ALLOWED_ORIGINS.has(origin)
+    return collectorOriginAllowed(origin)
       ? { ok: true, origin }
       : { ok: false, origin: "https://confenge.com.br" };
   }
@@ -28,14 +43,14 @@ function originOk(event) {
     try {
       const u = new URL(referer);
       const base = `${u.protocol}//${u.host}`;
-      return ALLOWED_ORIGINS.has(base)
+      return collectorOriginAllowed(base)
         ? { ok: true, origin: base }
         : { ok: false, origin: "https://confenge.com.br" };
     } catch {
       return { ok: false, origin: "https://confenge.com.br" };
     }
   }
-  return process.env.LEAD_REQUIRE_ORIGIN === "1"
+  return isProductionProfile() || process.env.LEAD_REQUIRE_ORIGIN === "1"
     ? { ok: false, origin: "https://confenge.com.br" }
     : { ok: true, origin: "https://confenge.com.br" };
 }

@@ -821,6 +821,7 @@ _reset();
     props: { event_id: "origin-gate-probe", cta_id: "origin-gate" },
     path: "/",
   });
+  const recentBeforeDenied = collect._recent().length;
   for (const headers of [
     { origin: "https://evil.example" },
     { referer: "https://evil.example/page" },
@@ -834,6 +835,31 @@ _reset();
       fail("collect_foreign_origin_echoed", denied.headers);
     }
   }
+  if (collect._recent().length !== recentBeforeDenied) {
+    fail("collect_foreign_origin_zero_persist", collect._recent());
+  }
+  const previousNodeEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = "production";
+  for (const headers of [
+    { origin: "https://confenge.netlify.app" },
+    { origin: "http://localhost:8765" },
+    { referer: "https://confenge.netlify.app/page" },
+    {},
+  ]) {
+    const denied = await collect.handler({ httpMethod: "POST", headers, body: analyticsEvent });
+    const deniedBody = JSON.parse(denied.body);
+    if (denied.statusCode !== 403 || deniedBody.error !== "origin_denied") {
+      fail("collect_noncanonical_production_origin_denied", {
+        headers,
+        status: denied.statusCode,
+        body: deniedBody,
+      });
+    }
+  }
+  if (collect._recent().length !== recentBeforeDenied) {
+    fail("collect_noncanonical_production_zero_persist", collect._recent());
+  }
+  process.env.NODE_ENV = previousNodeEnv;
   const allowed = await collect.handler({
     httpMethod: "POST",
     headers: { origin: "https://confenge.com.br" },
