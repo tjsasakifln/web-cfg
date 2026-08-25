@@ -22,6 +22,7 @@ import {
   classifyOccurrence,
   deriveMoneyRoutes,
   explicitExclusionRanges,
+  frozenRouteExemption,
   registeredNameRanges as auditRegisteredNameRanges,
 } from "../../scripts/commercial/copy_contract_audit.mjs";
 
@@ -419,6 +420,7 @@ assert(
   guarantee,
 );
 const registered = exceptionById.get("GX-04");
+const fl360 = termEntries.find((entry) => entry.id === "FL-06");
 assert(
   "gx04_registered_public_name",
   registered &&
@@ -427,7 +429,18 @@ assert(
     registered.registered_public_names.length > 0,
   registered,
 );
-const fl360 = termEntries.find((entry) => entry.id === "FL-06");
+const frozenRoute = exceptionById.get("GX-05");
+const frozenHtml = fs.readFileSync(path.join(root, "diagnostico-b2g-360/index.html"), "utf8");
+assert(
+  "gx05_is_exact_hash_pinned_frozen_route",
+  frozenRoute &&
+    frozenRoute.implemented_as === "hash_pinned_frozen_route_occurrence" &&
+    frozenRoute.route === "/diagnostico-b2g-360/" &&
+    frozenRoute.forbidden_id === "FL-06" &&
+    frozenRouteExemption(fl360, frozenRoute.route, frozenHtml, contract) === "hash_pinned_frozen_route" &&
+    frozenRouteExemption(fl360, frozenRoute.route, `${frozenHtml}\n`, contract) === null,
+  frozenRoute,
+);
 const registeredLeakText = normalize("Diagnóstico B2G 360° é o nome. Nesta página, 360° resolve tudo.");
 const registeredLeakIndex = registeredLeakText.lastIndexOf("360°");
 assert(
@@ -475,7 +488,7 @@ for (const entry of termEntries) {
 const precedence = contract.money_page_scan?.exemption_precedence || [];
 assert(
   "exemption_precedence_declared",
-  precedence.length === 3 && precedence.every((id) => exceptionById.has(id)),
+  precedence.length === 4 && precedence.every((id) => exceptionById.has(id)),
   precedence,
 );
 

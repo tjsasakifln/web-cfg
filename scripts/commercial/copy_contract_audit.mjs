@@ -10,6 +10,7 @@
 
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
 import { fileURLToPath } from "url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
@@ -109,6 +110,14 @@ export function classifyOccurrence(entry, text, index, matched, contract, ranges
   return null;
 }
 
+export function frozenRouteExemption(entry, route, html, contract) {
+  if (!(entry.exemption_ids || []).includes("GX-05")) return null;
+  const frozen = contract.gate_exceptions.find((item) => item.id === "GX-05");
+  if (!frozen || frozen.route !== route || frozen.forbidden_id !== entry.id) return null;
+  const digest = crypto.createHash("sha256").update(html).digest("hex");
+  return digest === frozen.content_sha256 ? "hash_pinned_frozen_route" : null;
+}
+
 function scanLanguage(routes, contract) {
   const violations = [];
   const observations = [];
@@ -124,7 +133,8 @@ function scanLanguage(routes, contract) {
       const expression = new RegExp(entry.pattern, "g");
       let match;
       while ((match = expression.exec(text)) !== null) {
-        const exemption = classifyOccurrence(entry, text, match.index, match[0], contract, ranges, exclusionRanges);
+        const exemption = classifyOccurrence(entry, text, match.index, match[0], contract, ranges, exclusionRanges) ||
+          frozenRouteExemption(entry, route, html, contract);
         const finding = { route, forbidden_id: entry.id, matched: match[0], exemption };
         if (exemption) boundaries.push(finding);
         else if (entry.finding_kind === "count_only") observations.push(finding);

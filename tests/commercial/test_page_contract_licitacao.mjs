@@ -17,6 +17,7 @@
  */
 import fs from "fs";
 import path from "path";
+import { createHash } from "crypto";
 import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 
@@ -460,30 +461,40 @@ for (const example of examples) {
 const examplesRaw = fs.readFileSync(examplesPath, "utf8");
 assert("synthetic_examples_no_direct_pii_keys", !/\b(cpf|cnpj|email|telefone|whatsapp|nome_cliente)\b/i.test(examplesRaw), "PII key found");
 
-const publicPagePath = path.join(root, "diagnostico-pre-licitacao/index.html");
-const publicPage = fs.readFileSync(publicPagePath, "utf8");
+const protectedPagePath = path.join(root, "diagnostico-pre-licitacao/index.html");
+const protectedPage = fs.readFileSync(protectedPagePath, "utf8");
+const frozenHashes = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/hashes.json"), "utf8"));
+const unlockPlan = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/unlock-plan.v1.json"), "utf8"));
+const protectedHash = createHash("sha256").update(protectedPage).digest("hex");
+assert(
+  "dedicated_route_remains_frozen",
+  protectedHash === frozenHashes.forbidden["diagnostico-pre-licitacao/index.html"],
+  { expected: frozenHashes.forbidden["diagnostico-pre-licitacao/index.html"], actual: protectedHash },
+);
+assert("dedicated_route_has_no_product_renderer", !protectedPage.includes("GENERATED:LICITACAO-PRODUCTS"));
+assert("dedicated_route_has_no_new_capture", !protectedPage.includes('id="captura-licitacao"'));
+assert(
+  "dedicated_route_mutation_not_authorized",
+  unlockPlan.html_mutation_authorized === false &&
+    unlockPlan.protected_pillars.includes("diagnostico-pre-licitacao"),
+  unlockPlan,
+);
+
+const catalogPage = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
 for (const item of items) {
-  assert(`public_product_anchor_${item.item}`, publicPage.includes(`id="unidade-${item.item}"`), item.item);
-  assert(`public_product_name_${item.item}`, publicPage.includes(item.public_name_pt_br), item.public_name_pt_br);
-  assert(`public_product_price_${item.item}`, publicPage.includes(item.price.display_pt_br), item.price.display_pt_br);
-  assert(`public_product_sla_${item.item}`, publicPage.includes(item.sla_business_days.display_pt_br), item.sla_business_days.display_pt_br);
-  if (item.safe_deadline_statement_pt_br) {
-    assert(`public_product_safe_deadline_${item.item}`, publicPage.includes(item.safe_deadline_statement_pt_br), item.safe_deadline_statement_pt_br);
-  }
-  for (const tier of item.price.tiers || []) {
-    assert(`public_product_tier_${item.item}_${tier.tier}`, publicPage.includes(tier.framing_pt_br) && publicPage.includes(tier.display_pt_br), tier);
-  }
-  assert(`public_product_example_${item.item}`, publicPage.includes(`example-${item.deliverable_id}`), item.deliverable_id);
+  assert(`catalog_product_anchor_${item.item}`, catalogPage.includes(`id="entrega-${item.item}"`), item.item);
+  assert(`catalog_product_id_${item.item}`, catalogPage.includes(`data-deliverable-id="${item.deliverable_id}"`), item.deliverable_id);
+  assert(`catalog_product_name_${item.item}`, catalogPage.includes(item.public_name_pt_br), item.public_name_pt_br);
+  const catalogPriceVisible = (item.price.tiers || []).length
+    ? [item.price.tiers[0], item.price.tiers.at(-1)].every((tier) => catalogPage.includes(tier.display_pt_br))
+    : catalogPage.includes(item.price.display_pt_br);
+  assert(`catalog_product_price_${item.item}`, catalogPriceVisible, item.price.display_pt_br);
+  assert(`catalog_product_handraise_${item.item}`, catalogPage.includes(`data-cta-id="catalog-fit-${item.item}"`), item.item);
 }
-assert("public_credit_rule", publicPage.includes(doc.credit_rule.statement_pt_br));
-assert("public_urgency_rule", publicPage.includes(doc.urgency_rule.statement_pt_br));
-assert("public_one_terminal_form", (publicPage.match(/<form\b/g) || []).length === 1);
-for (const field of doc.public_implementation.capture_fields) {
-  assert(`public_capture_${field}`, publicPage.includes(`name="${field}"`), field);
-}
-assert("public_capture_no_upload", !/<input\b[^>]*type="(?:file|password)"/i.test(publicPage));
-assert("public_capture_terms_field", publicPage.includes('name="terms_id" value=""'));
-assert("public_capture_no_checkout", !/\.netlify\/functions\/checkout|data-checkout/i.test(publicPage));
+assert("catalog_capture_present", catalogPage.includes('id="captura-entregas"'));
+assert("catalog_capture_persisted", catalogPage.includes('action="/.netlify/functions/lead"'));
+assert("catalog_capture_no_upload", !/<input\b[^>]*type="(?:file|password)"/i.test(catalogPage));
+assert("catalog_capture_no_checkout", !/\.netlify\/functions\/checkout|data-checkout/i.test(catalogPage));
 const rendererCheck = spawnSync(
   process.execPath,
   [path.join(root, "scripts/commercial/render_licitacao_products.mjs"), "--check"],
@@ -502,8 +513,12 @@ assert("declares_missing_human_wtp", /pesquisa humana/.test(notDelivered) && /wi
 assert(
   "public_implementation_declared",
   doc.public_implementation?.route === "/diagnostico-pre-licitacao/" &&
-    doc.public_implementation?.rendered_from_contract === true &&
-    doc.public_implementation?.product_sections === 5 &&
+    doc.public_implementation?.state === "DEFERRED_FROZEN" &&
+    doc.public_implementation?.decision_state === "DEFER_UNTIL_DATE" &&
+    doc.public_implementation?.rendered_from_contract === false &&
+    doc.public_implementation?.catalog_route === "/entregas/" &&
+    doc.public_implementation?.catalog_product_sections === 5 &&
+    doc.public_implementation?.earliest_safe_action_at === unlockPlan.earliest_safe_action_at &&
     doc.public_implementation?.checkout_enabled === false,
   doc.public_implementation,
 );
