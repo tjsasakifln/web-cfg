@@ -28,7 +28,19 @@ const { handler } = require(nurturePath);
 const sentEmails = [];
 const originalFetch = globalThis.fetch;
 globalThis.fetch = async (url, init = {}) => {
-  if (!String(url).includes("api.resend.com")) throw new Error(`unexpected_fetch:${url}`);
+  const target = new URL(String(url));
+  if (
+    target.protocol !== "https:" ||
+    target.hostname !== "api.resend.com" ||
+    target.port ||
+    target.username ||
+    target.password ||
+    target.pathname !== "/emails" ||
+    target.search ||
+    target.hash
+  ) {
+    throw new Error(`unexpected_fetch:${target.origin}${target.pathname}`);
+  }
   sentEmails.push(JSON.parse(String(init.body || "{}")));
   return { ok: true, status: 200, json: async () => ({ id: `msg-${sentEmails.length}` }), text: async () => "" };
 };
