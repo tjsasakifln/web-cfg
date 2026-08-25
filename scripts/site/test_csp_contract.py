@@ -8,18 +8,70 @@ import hashlib
 import re
 import sys
 from collections import Counter
+from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 HEADERS = ROOT / "_headers"
 SITE = ROOT / "_site"
-SCRIPT_RE = re.compile(
-    r"<script\b(?P<attrs>[^>]*)>(?P<body>[\s\S]*?)</script>",
-    re.IGNORECASE,
-)
-TYPE_RE = re.compile(r"\btype\s*=\s*[\"'](?P<type>[^\"']+)", re.IGNORECASE)
-SRC_RE = re.compile(r"\bsrc\s*=", re.IGNORECASE)
-DATA_TYPES = frozenset({"application/ld+json", "application/json", "importmap"})
+DATA_TYPES = frozenset({"application/ld+json", "application/json"})
+
+
+class ScriptParser(HTMLParser):
+    """Collect script bodies with exact attribute names and body bytes.
+
+    Regex-only attribute matching mistakes ``data-src`` for ``src`` and can
+    stop at a ``>`` inside a quoted value. Either bug could let an executable
+    block escape the CSP census.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=False)
+        self.blocks: list[tuple[list[tuple[str, str | None]], str]] = []
+        self._attrs: list[tuple[str, str | None]] | None = None
+        self._body: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.lower() == "script":
+            if self._attrs is not None:
+                raise AssertionError("nested script start tag")
+            self._attrs = [(name.lower(), value) for name, value in attrs]
+            self._body = []
+
+    def handle_data(self, data: str) -> None:
+        if self._attrs is not None:
+            self._body.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.lower() == "script" and self._attrs is not None:
+            self.blocks.append((self._attrs, "".join(self._body)))
+            self._attrs = None
+            self._body = []
+
+    def finish(self) -> list[tuple[list[tuple[str, str | None]], str]]:
+        self.close()
+        if self._attrs is not None:
+            raise AssertionError("unclosed script tag")
+        return self.blocks
+
+
+def parse_scripts(html: str) -> list[tuple[list[tuple[str, str | None]], str]]:
+    parser = ScriptParser()
+    parser.feed(html)
+    return parser.finish()
+
+
+def verify_parser_is_fail_closed() -> None:
+    blocks = parse_scripts(
+        '<script data-note=">" data-src="ignored.js" '
+        'data-type="application/json">window.executed = true;</script>'
+        '<script src="real.js">ignored()</script>'
+    )
+    attrs, body = blocks[0]
+    assert not any(name == "src" for name, _ in attrs)
+    assert next((value for name, value in attrs if name == "type"), None) is None
+    assert body == "window.executed = true;"
+    assert any(name == "src" for name, _ in blocks[1][0])
 
 
 def csp_directives() -> dict[str, list[str]]:
@@ -43,22 +95,22 @@ def executable_inline_hashes() -> Counter[str]:
     hashes: Counter[str] = Counter()
     for path in sorted(SITE.rglob("*.html")):
         html = path.read_text(encoding="utf-8")
-        for match in SCRIPT_RE.finditer(html):
-            attrs = match.group("attrs")
-            if SRC_RE.search(attrs):
+        for attrs, body in parse_scripts(html):
+            if any(name == "src" for name, _ in attrs):
                 continue
-            type_match = TYPE_RE.search(attrs)
-            script_type = type_match.group("type").strip().lower() if type_match else ""
+            script_type = next((value or "" for name, value in attrs if name == "type"), "")
+            script_type = script_type.strip().lower()
             if script_type in DATA_TYPES:
                 continue
             digest = base64.b64encode(
-                hashlib.sha256(match.group("body").encode("utf-8")).digest()
+                hashlib.sha256(body.encode("utf-8")).digest()
             ).decode("ascii")
             hashes[f"'sha256-{digest}'"] += 1
     return hashes
 
 
 def main() -> int:
+    verify_parser_is_fail_closed()
     directives = csp_directives()
     script_src = set(directives.get("script-src", []))
     errors: list[str] = []
