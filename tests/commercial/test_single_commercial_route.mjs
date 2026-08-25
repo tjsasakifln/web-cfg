@@ -41,6 +41,18 @@ assert("schema", contract.schema === "confenge.organic.single-commercial-route.v
 assert("decision_execute_now", contract.decision_state === "EXECUTE_NOW", contract.decision_state);
 assert("source_issue_390", contract.source_issue === 390, contract.source_issue);
 assert("parent_issue_387", contract.parent_issue === 387, contract.parent_issue);
+assert("public_implementation_is_partial", contract.implementation?.public_state === "PARTIAL", contract.implementation);
+assert(
+  "completed_surfaces_are_home_and_hub",
+  equal(contract.implementation?.completed_surface_roles, ["home", "services_hub"]),
+  contract.implementation?.completed_surface_roles,
+);
+assert(
+  "pending_surfaces_are_explicit",
+  equal(contract.implementation?.pending_surface_roles, ["editorial_canary", "canonical_destination"]),
+  contract.implementation?.pending_surface_roles,
+);
+assert("parent_issue_cannot_close", contract.implementation?.parent_issue_close_allowed === false, contract.implementation);
 
 const route = contract.route;
 assert(

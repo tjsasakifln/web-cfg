@@ -17,6 +17,19 @@
     "structural": "pull_request",
     "human_and_gsc_days": 28
   },
+  "implementation": {
+    "public_state": "PARTIAL",
+    "completed_surface_roles": [
+      "home",
+      "services_hub"
+    ],
+    "pending_surface_roles": [
+      "editorial_canary",
+      "canonical_destination"
+    ],
+    "parent_issue_close_allowed": false,
+    "limitation_pt_br": "O canário é exclusivo da issue #389 e o destino canônico permanece congelado até 2026-09-16; esta entrega não satisfaz sozinha toda a aceitação da issue #390."
+  },
   "hypothesis_pt_br": "Uma dor de medição ou glosa reconhecida na busca deve avançar por uma única transferência comercial, com nome estável e contexto completo, antes da captura CONFENGE_WEB.",
   "route": {
     "commercial_transfer_route": "/medicoes-glosas-obras-publicas/",
@@ -110,6 +123,6 @@
   },
   "rollback": {
     "trigger_pt_br": "Aumento de confusão entre a resposta editorial e a próxima ação, queda observável na transferência ou conflito de ownership.",
-    "action_pt_br": "Reverter a copy e os links das três superfícies autorizadas, mantendo o conteúdo técnico, a URL canônica e o pilar byte-frozen."
+    "action_pt_br": "Reverter a copy e os links das duas superfícies autorizadas, mantendo o conteúdo técnico, a URL canônica, o canário sob #389 e o pilar byte-frozen."
   }
 }
