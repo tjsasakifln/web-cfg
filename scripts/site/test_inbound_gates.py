@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -38,6 +39,103 @@ from scripts.site.test_organic_striking_distance_cro_01 import (  # noqa: E402,F
     test_no_redirect_of_promoted_article,
     test_one_self_canonical_and_expected_robots,
 )
+
+
+def _sha256(path: Path) -> str:
+    # Keep the evidence stable across Windows and Linux checkouts.
+    normalized = path.read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(normalized).hexdigest()
+
+
+def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
+    evidence = ROOT / "docs" / "evidence" / "389-measurement-glosa-canary"
+    contract = json.loads((evidence / "canary-contract.json").read_text(encoding="utf-8"))
+    review = json.loads((evidence / "review.json").read_text(encoding="utf-8"))
+    serp = json.loads((evidence / "serp-contract.json").read_text(encoding="utf-8"))
+    registry = json.loads(
+        (ROOT / "data" / "organic" / "public-family-registry.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    assert contract["issue"] == 389
+    assert contract["public_url_mutations"] == [
+        "/conteudos/atraso-na-medicao-obra-publica/"
+    ]
+    canary = contract["canary"]
+    page = ROOT / canary["source"]
+    html = page.read_text(encoding="utf-8")
+    assert _sha256(page) == canary["after_sha256"]
+
+    assert (
+        '<meta content="index,follow,max-image-preview:large,max-snippet:-1,'
+        'max-video-preview:-1" name="robots"/>'
+    ) in html
+    assert (
+        '<link href="https://confenge.com.br/conteudos/'
+        'atraso-na-medicao-obra-publica/" rel="canonical"/>'
+    ) in html
+    assert f"<title>{contract['content_contract']['title']}</title>" in html
+    assert f"<h1>{contract['content_contract']['h1']}</h1>" in html
+    assert contract["content_contract"]["direct_answer_fragment"] in html
+    assert contract["content_contract"]["demonstrative_example_label"] in html
+    for label in contract["content_contract"]["required_epistemic_labels"]:
+        assert label in html
+
+    title_h1 = " ".join(re.findall(r"<(?:title|h1)>(.*?)</(?:title|h1)>", html, re.S)).lower()
+    for prohibited in contract["content_contract"]["prohibited_target_intents_in_title_h1"]:
+        assert prohibited.lower() not in title_h1
+
+    article = re.search(r'<article class="article-main".*?</article>', html, re.S)
+    assert article
+    article_html = article.group(0)
+    route = re.escape(canary["commercial_destination"])
+    assert len(re.findall(rf'href="{route}[^\"]*"', article_html)) == 1
+    assert "wa.me" not in article_html
+    assert "#formulario-contato" not in article_html
+
+    terminal = contract["terminal_action_contract"]
+    family = next(f for f in registry["families"] if f["id"] == terminal["family"])
+    assert family["match"] == {"routes": terminal["match"]}
+    assert family["terminal_action"] == "service_transition"
+    assert family["owner_issue"] == 389
+    assert family["debt"] == []
+    assert terminal["no_prefix_fallback"] is True
+    assert terminal["destination"] == canary["commercial_destination"]
+    for attr in (
+        "data-cta-id",
+        "data-cta-position",
+        "data-asset-id",
+        "data-asset-family",
+        "data-route-family",
+        "data-journey",
+    ):
+        assert re.search(rf'\b{attr}="[^"]+"', article_html)
+
+    for sibling in contract["frozen_siblings"]:
+        assert _sha256(ROOT / sibling["path"]) == sibling["sha256"], sibling["path"]
+
+    assert contract["indexability"]["robots_flip"] is False
+    assert contract["indexability"]["issue_128_pillar_mutated"] is False
+    assert contract["second_wave"]["status"] == "BLOCKED"
+    assert contract["selection_evidence"]["country"]["value"] == "UNKNOWN"
+    assert contract["selection_evidence"]["device_for_candidate"]["value"] == "UNKNOWN"
+    assert (
+        contract["selection_evidence"]["latest_live_export"]["interpretation"]
+        == "UNKNOWN_NOT_ZERO"
+    )
+
+    assert serp["before"]["robots"] == serp["after"]["robots"]
+    assert serp["before"]["canonical"] == serp["after"]["canonical"]
+    assert serp["after"]["title"] == contract["content_contract"]["title"]
+    assert serp["after"]["h1"] == contract["content_contract"]["h1"]
+    for shot in (serp["before"]["screenshot"], serp["after"]["screenshot"]):
+        assert (evidence / shot).stat().st_size > 10_000
+
+    assert review["candidate_approval"]["status"] == "HUMAN_REQUIRED"
+    assert review["human_factual_review"]["status"] == "HUMAN_REQUIRED"
+    assert review["human_editorial_review"]["status"] == "HUMAN_REQUIRED"
+    assert review["merge_gate"] == "HUMAN_REVIEW_REQUIRED_BEFORE_MERGE"
 
 
 def test_naturalness_indexable_clean():

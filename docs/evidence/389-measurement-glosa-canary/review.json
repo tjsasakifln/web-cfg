@@ -1,0 +1,39 @@
+{
+  "schema": "confenge-editorial-review-record/1.0",
+  "issue": 389,
+  "candidate_approval": {
+    "status": "HUMAN_REQUIRED",
+    "note": "A autorização para implementar a issue não é aprovação editorial do candidato em nome do responsável técnico."
+  },
+  "quality_review": {
+    "status": "COMPLETE",
+    "reviewer_kind": "CODE_REVIEW_AND_AUTOMATED_GATES",
+    "official_sources_checked_at": "2026-08-25",
+    "checks": [
+      "Lei 14.133/2021 arts. 92, 137, 141 and 143",
+      "TCU manual: criteria for measurement and payment",
+      "TCU manual: payment, liquidation and undisputed portion",
+      "hypothetical example arithmetic",
+      "no client, case or outcome invented",
+      "legal and technical boundaries visible"
+    ]
+  },
+  "human_factual_review": {
+    "status": "HUMAN_REQUIRED",
+    "required_identity": "Engº Tiago Sasaki or another named accountable human reviewer",
+    "must_not_be_inferred_from": "issue implementation request"
+  },
+  "human_editorial_review": {
+    "status": "HUMAN_REQUIRED",
+    "required_identity": "Named accountable human reviewer",
+    "review_surface": "pull request diff and versioned screenshots"
+  },
+  "indexability_approval": {
+    "status": "PRESERVED_EXISTING_INDEXABLE",
+    "robots_changed": false,
+    "canonical_changed": false,
+    "new_indexable_url": false,
+    "issue_127_mass_flip": false
+  },
+  "merge_gate": "HUMAN_REVIEW_REQUIRED_BEFORE_MERGE"
+}
