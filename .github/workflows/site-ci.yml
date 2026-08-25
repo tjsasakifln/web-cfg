@@ -63,6 +63,7 @@ jobs:
           npm run test:deliverables-registry
           npm run test:offer-naming
           npm run test:pricing-policy
+          npm run test:page-contract-eight
           npm run test:radar-params
           npm run test:bofu-dominance
           npm run test:local-entity
