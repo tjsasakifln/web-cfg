@@ -27,6 +27,9 @@ Templates: `data/nurture/tracks.json`
 | `NURTURE_FROM_EMAIL` | From (default nurture@confenge.com.br) |
 | `OPS_TOKEN` | tick / list / stop_commercial |
 | `NURTURE_ADVANCE_WITHOUT_RESEND=1` | Dev/test only |
+| `NURTURE_RATE_WINDOW_MS` | Janela antiabuso (default 1 hora) |
+| `NURTURE_RATE_MAX_IP` | Máximo por IP/janela (default 5) |
+| `NURTURE_RATE_MAX_FP` | Máximo por fingerprint/janela (default 8) |
 
 Landing: `/nurture/` · Sair: `/nurture/sair/`
 

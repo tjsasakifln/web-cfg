@@ -33,6 +33,12 @@ const {
   publicSubSummary,
   TRACKS,
 } = require("./lib/nurture-core.cjs");
+const {
+  nurtureRateLimit,
+  nurtureFingerprint,
+} = require("./lib/nurture-rate-limit.cjs");
+
+const MAX_SUBSCRIBE_BODY = 8 * 1024;
 
 function bindBlobs(event) {
   try {
@@ -101,6 +107,11 @@ function parseBody(event) {
     }
     return out;
   }
+}
+
+function rawBody(event) {
+  const raw = event.body || "";
+  return event.isBase64Encoded ? Buffer.from(raw, "base64").toString("utf8") : String(raw);
 }
 
 async function getNurtureStore(event) {
@@ -300,6 +311,21 @@ exports.handler = async (event) => {
     return json(200, { ok: true, tracks: publicTracks }, origin);
   }
 
+  if (action === "subscribe" && event.httpMethod === "POST") {
+    if (Buffer.byteLength(rawBody(event), "utf8") > MAX_SUBSCRIBE_BODY) {
+      return json(413, { ok: false, error: "payload_too_large" }, origin);
+    }
+    const ip = clientIp(event);
+    const rate = nurtureRateLimit({ ip, fingerprint: nurtureFingerprint(event) });
+    if (!rate.allowed) {
+      const ipHash = crypto.createHash("sha256").update(ip).digest("hex").slice(0, 12);
+      safeLog("warn", "nurture_rate_limited", { reason: rate.reason, ip_hash: ipHash });
+      const response = json(429, { ok: false, error: "rate_limited" }, origin);
+      response.headers["Retry-After"] = String(rate.retryAfter);
+      return response;
+    }
+  }
+
   const store = await getNurtureStore(event);
 
   if (action === "subscribe" && event.httpMethod === "POST") {
@@ -360,7 +386,7 @@ exports.handler = async (event) => {
         subscription_id: record.subscription_id,
         track: record.track,
         send: send.status,
-        ip: clientIp(event).slice(0, 16),
+        ip_hash: crypto.createHash("sha256").update(clientIp(event)).digest("hex").slice(0, 12),
       });
 
       // Never return email or raw tokens in JSON

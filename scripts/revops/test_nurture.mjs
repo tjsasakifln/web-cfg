@@ -21,6 +21,8 @@ const storeDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-nurture-"));
 process.env.NURTURE_STORE_DIR = storeDir;
 
 const core = require(path.join(root, "netlify/functions/lib/nurture-core.cjs"));
+const ratePath = path.join(root, "netlify/functions/lib/nurture-rate-limit.cjs");
+const rate = require(ratePath);
 const nurturePath = path.join(root, "netlify/functions/nurture.cjs");
 delete require.cache[require.resolve(nurturePath)];
 const { handler } = require(nurturePath);
@@ -199,6 +201,68 @@ let unsubToken;
   const blob = JSON.stringify(t);
   if (/datalake|slug de ingest|\bpipeline de ingest/i.test(blob)) fail("internal_lang_tracks", "jargon");
   else pass("tracks_clean_language");
+}
+
+// 10) rate window expires deterministically and subscribe blocks before persist/send.
+{
+  const env = {
+    NURTURE_RATE_WINDOW_MS: "1000",
+    NURTURE_RATE_MAX_IP: "1",
+    NURTURE_RATE_MAX_FP: "2",
+  };
+  rate._reset();
+  const first = rate.nurtureRateLimit({ ip: "203.0.113.200", fingerprint: "fp-window", now: 0, env });
+  const blocked = rate.nurtureRateLimit({ ip: "203.0.113.200", fingerprint: "fp-window", now: 500, env });
+  const expired = rate.nurtureRateLimit({ ip: "203.0.113.200", fingerprint: "fp-window", now: 1001, env });
+  if (!first.allowed || blocked.allowed || !expired.allowed) {
+    fail("rate_window", { first, blocked, expired });
+  } else pass("rate_window");
+
+  process.env.NURTURE_RATE_MAX_IP = "2";
+  process.env.NURTURE_RATE_MAX_FP = "2";
+  process.env.NURTURE_RATE_WINDOW_MS = "60000";
+  rate._reset();
+  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  for (let i = 0; i < 2; i += 1) {
+    const accepted = await handler(
+      event("subscribe", {
+        method: "POST",
+        body: { email: `rate-${i}@example.com`, track: "contrato", consent: true },
+        headers: { "x-forwarded-for": "203.0.113.201", "user-agent": "rate-probe/1.0" },
+      })
+    );
+    if (accepted.statusCode !== 201) fail("rate_happy_path", accepted.statusCode);
+  }
+  const limited = await handler(
+    event("subscribe", {
+      method: "POST",
+      body: { email: "rate-blocked@example.com", track: "contrato", consent: true },
+      headers: { "x-forwarded-for": "203.0.113.201", "user-agent": "rate-probe/1.0" },
+    })
+  );
+  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  if (limited.statusCode !== 429 || !limited.headers["Retry-After"]) {
+    fail("rate_handler_429", { status: limited.statusCode, headers: limited.headers });
+  } else if (after !== before + 2) fail("rate_blocked_before_persist", { before, after });
+  else pass("rate_handler_429");
+
+  rate._reset();
+  const beforeLarge = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const tooLarge = await handler(
+    event("subscribe", {
+      method: "POST",
+      body: { email: "large@example.com", track: "contrato", consent: true, source: "x".repeat(9000) },
+    })
+  );
+  const afterLarge = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  if (tooLarge.statusCode !== 413 || afterLarge !== beforeLarge) {
+    fail("subscribe_payload_limit", { status: tooLarge.statusCode, beforeLarge, afterLarge });
+  } else pass("subscribe_payload_limit");
+
+  delete process.env.NURTURE_RATE_MAX_IP;
+  delete process.env.NURTURE_RATE_MAX_FP;
+  delete process.env.NURTURE_RATE_WINDOW_MS;
+  rate._reset();
 }
 
 if (failed) {

@@ -49,3 +49,6 @@ OPS_TOKEN=… OPS_BASE=https://confenge.com.br npm run revops:lead -- list --rem
 | `NURTURE_FROM_EMAIL` | From address |
 | `OPS_TOKEN` | Daily tick + stop_commercial |
 | `NURTURE_ADVANCE_WITHOUT_RESEND` | Test only |
+| `NURTURE_RATE_WINDOW_MS` | Subscribe abuse window (default 1 hour) |
+| `NURTURE_RATE_MAX_IP` | Maximum subscribes per IP/window (default 5) |
+| `NURTURE_RATE_MAX_FP` | Maximum subscribes per technical fingerprint/window (default 8) |

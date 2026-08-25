@@ -15,6 +15,9 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | `CONFENGE_INBOUND_MAX_ATTEMPTS` | opcional | Default 8. Depois `DEAD`. |
 | `CONFENGE_INBOUND_TIMEOUT_MS` | opcional | Default 8000 |
 | `RESEND_API_KEY` | para e-mail real | API key Resend |
+| `NURTURE_RATE_WINDOW_MS` | opcional | Janela antiabuso do subscribe; default 1 hora |
+| `NURTURE_RATE_MAX_IP` | opcional | Máximo de subscribes por IP/janela; default 5 |
+| `NURTURE_RATE_MAX_FP` | opcional | Máximo de subscribes por fingerprint/janela; default 8 |
 | `LEAD_FROM_EMAIL` | para e-mail | Remetente, ex. `CONFENGE Leads <leads@confenge.com.br>` |
 | `LEAD_NOTIFY_EMAIL` | para e-mail | Destino ops, ex. `tiago.sasaki@confenge.com.br` |
 | `TURNSTILE_SECRET_KEY` | para Turnstile | Secret Cloudflare Turnstile |
