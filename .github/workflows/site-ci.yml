@@ -67,6 +67,7 @@ jobs:
           npm run test:market-fit-protocol
           npm run test:page-contract-licitacao
           npm run test:page-contract-contratos
+          npm run test:task-doors
           npm run test:radar-params
           npm run test:bofu-dominance
           npm run test:local-entity
