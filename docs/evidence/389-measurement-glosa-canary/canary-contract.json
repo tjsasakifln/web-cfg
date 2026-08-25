@@ -24,7 +24,7 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "53e4a0e0503088fc3e32ec50ae4c11378ca4aaafb413ee192354e68c587fab98"
+    "after_sha256": "c6dc13c40dd6c5cba955994628b578629b4615c9881ffd8a77eb573b76ae5e94"
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -152,6 +152,13 @@
     "action": "service_transition",
     "destination": "/medicoes-glosas-obras-publicas/",
     "owner_issue": 389,
+    "html_element": "aside",
+    "bridge_attributes": {
+      "class_token": "commercial-bridge",
+      "data-commercial-bridge": "1",
+      "data-cluster": "medicoes-pagamentos",
+      "data-bridge-mode": "soft"
+    },
     "no_prefix_fallback": true,
     "rollback": "Remove only the measurement-delay-canary route-exact declaration together with the canary HTML rollback."
   },
