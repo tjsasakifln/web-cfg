@@ -1291,23 +1291,25 @@ async function main() {
         // must not contaminate a fresh visitor arrival. Each route gets an
         // isolated page and the top position must remain stable over time.
         const routePage = await browser.newPage();
-        await routePage.setViewport({ width, height: 844, deviceScaleFactor: 1 });
-        await routePage.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
-        await routePage.evaluate(async () => {
-          await document.fonts.ready;
-          const cover = document.querySelector(".article-cover img");
-          if (cover && !cover.complete) {
-            await Promise.race([
-              new Promise((resolveImage) => {
-                cover.addEventListener("load", resolveImage, { once: true });
-                cover.addEventListener("error", resolveImage, { once: true });
-              }),
-              new Promise((resolveTimeout) => setTimeout(resolveTimeout, 2000)),
-            ]);
-          }
-        });
-        await assertStableDocumentTop(routePage);
-        const rep = await routePage.evaluate(() => {
+        let rep;
+        try {
+          await routePage.setViewport({ width, height: 844, deviceScaleFactor: 1 });
+          await routePage.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+          await routePage.evaluate(async () => {
+            await document.fonts.ready;
+            const cover = document.querySelector(".article-cover img");
+            if (cover && !cover.complete) {
+              await Promise.race([
+                new Promise((resolveImage) => {
+                  cover.addEventListener("load", resolveImage, { once: true });
+                  cover.addEventListener("error", resolveImage, { once: true });
+                }),
+                new Promise((resolveTimeout) => setTimeout(resolveTimeout, 2000)),
+              ]);
+            }
+          });
+          await assertStableDocumentTop(routePage);
+          rep = await routePage.evaluate(() => {
           const h1 = document.querySelector("h1");
           const hero = document.querySelector(".content-hero");
           const answer = document.querySelector("#resposta");
@@ -1342,8 +1344,10 @@ async function main() {
               gridBox.left >= -1 && gridBox.right <= window.innerWidth + 1
             ),
           };
-        });
-        await routePage.close();
+          });
+        } finally {
+          if (!routePage.isClosed()) await routePage.close();
+        }
         reports.push(`${path}@${width}:hero=${rep.heroHeight},answer=${rep.answerTop}`);
         if (!rep.h1Visible) {
           throw new Error(
