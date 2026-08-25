@@ -1,9 +1,10 @@
 {
   "schema": "confenge.offer-naming/1.0",
-  "naming_version": "CFG-NAMING-2026-08-24-v1",
+  "naming_version": "CFG-NAMING-2026-08-25-v2",
   "issue": "#343",
-  "effective_at": null,
-  "effective_at_note": "null porque esta PR grava a autoridade de nome, nao executa a renomeacao no site. A data efetiva entra quando a execucao (#338 copy, #335 navegacao) publicar os nomes.",
+  "effective_at": "2026-08-25",
+  "effective_at_note": "Os nomes PT-BR passam a ser canônicos no registry e no catálogo público nesta versão. Alias, URL, preço e escopo anteriores permanecem rastreáveis e inalterados.",
+  "publication_state": "PUBLISHED_UNVALIDATED",
   "convention": {
     "language": "pt-BR",
     "language_rule": "português do Brasil primeiro",
@@ -55,8 +56,9 @@
         "com quais duas ofertas poderia confundir?"
       ],
       "targets": [
-        "≥10/12 participantes ligam o nome à tarefa correta",
-        "≥10/12 diferenciam cada oferta de suas duas vizinhas",
+        "por item, pelo menos 5 de 6 exposições ligam nome à tarefa correta",
+        "por fronteira crítica, nenhuma dupla permanece confundida pela maioria",
+        "no agregado, pelo menos 16 de 20 concluem a navegação sem ajuda",
         "0 depende de traduzir inglês",
         "0 interpreta nome como garantia de vitória, pagamento, pleito ou absolvição"
       ],
@@ -65,7 +67,7 @@
   },
   "field_mapping": {
     "aliases": "uniao de legacy_names[] e seo_aliases[] ate o registry completo separar os dois campos",
-    "value_line": "value_line_pt_br da #343",
+    "value_line_pt_br": "value_line_pt_br da #343",
     "decision_question": "join por deliverable_id com data/commercial/deliverables-registry.v1.json#deliverables[].decision_question; nao duplicar a pergunta neste arquivo"
   },
   "pending_fields": {
@@ -89,8 +91,20 @@
   ],
   "published_surface": {
     "path": "entregas/index.html",
-    "policy": "esta PR nao renomeia nada no site: os oito nomes hoje publicados continuam no ar e cada um precisa aparecer como alias ou como nome canonico neste arquivo",
-    "published_names": [
+    "policy": "Os 54 nomes canônicos aparecem no catálogo; os oito primeiros também substituem aliases na comparação principal. Alias anteriores seguem pesquisáveis e rastreáveis, sem mudar URL, preço ou escopo.",
+    "canonical_names_source": "names[].public_name_pt_br",
+    "published_deliverable_count": 54,
+    "primary_comparison_ids": [
+      "CFG-D01",
+      "CFG-D02",
+      "CFG-D03",
+      "CFG-D04",
+      "CFG-D05",
+      "CFG-D06",
+      "CFG-D07",
+      "CFG-D08"
+    ],
+    "legacy_names_before_2026_08_25": [
       "Relatório Executivo de Priorização de Licitações",
       "Base Quantitativa Canônica",
       "Apresentação Executiva de Resultados",
@@ -104,14 +118,15 @@
   "human_test": {
     "state": "NOT_STARTED",
     "matrix": "matriz balanceada da #336: 20 participantes, 18 cartoes por pessoa, cada entregavel exposto a pelo menos 6 pessoas e cada fronteira critica a pelo menos 3",
-    "evidence": []
+    "evidence": [],
+    "publication_does_not_imply_validation": true
   },
   "names": [
     {
       "deliverable_id": "CFG-D01",
       "catalog_number": "01",
       "public_name_pt_br": "Radar de Licitações Prioritárias",
-      "value_line": "Prioriza editais por aderência, risco e esforço antes de mobilizar a equipe.",
+      "value_line_pt_br": "Prioriza editais por aderência, risco e esforço antes de mobilizar a equipe.",
       "aliases": [
         "Relatório Executivo de Priorização de Licitações"
       ],
@@ -122,7 +137,7 @@
       "deliverable_id": "CFG-D02",
       "catalog_number": "02",
       "public_name_pt_br": "Base de Mercado para Expansão",
-      "value_line": "Entrega dados tratados para comparar mercados, órgãos e territórios.",
+      "value_line_pt_br": "Entrega dados tratados para comparar mercados, órgãos e territórios.",
       "aliases": [
         "Base Quantitativa Canônica"
       ],
@@ -133,7 +148,7 @@
       "deliverable_id": "CFG-D03",
       "catalog_number": "03",
       "public_name_pt_br": "Síntese Executiva de Expansão",
-      "value_line": "Converte os dados do estudo em uma decisão clara para a diretoria.",
+      "value_line_pt_br": "Converte os dados do estudo em uma decisão clara para a diretoria.",
       "aliases": [
         "Apresentação Executiva de Resultados"
       ],
@@ -144,7 +159,7 @@
       "deliverable_id": "CFG-D04",
       "catalog_number": "04",
       "public_name_pt_br": "Mapa de Órgãos com Maior Potencial",
-      "value_line": "Mostra quais órgãos concentram demanda compatível com a empresa.",
+      "value_line_pt_br": "Mostra quais órgãos concentram demanda compatível com a empresa.",
       "aliases": [
         "Mapa de Compradores Públicos"
       ],
@@ -155,7 +170,7 @@
       "deliverable_id": "CFG-D05",
       "catalog_number": "05",
       "public_name_pt_br": "Radar de Contratos Próximos da Renovação",
-      "value_line": "Antecipa contratos perto do fim e possíveis novas disputas.",
+      "value_line_pt_br": "Antecipa contratos perto do fim e possíveis novas disputas.",
       "aliases": [
         "Contratos Vincendos e Recontratação"
       ],
@@ -166,7 +181,7 @@
       "deliverable_id": "CFG-D06",
       "catalog_number": "06",
       "public_name_pt_br": "Mapa de Concorrentes Relevantes",
-      "value_line": "Mostra quem compete, onde contrata e com que padrão de preço.",
+      "value_line_pt_br": "Mostra quem compete, onde contrata e com que padrão de preço.",
       "aliases": [
         "Mapeamento de Concorrentes"
       ],
@@ -177,7 +192,7 @@
       "deliverable_id": "CFG-D07",
       "catalog_number": "07",
       "public_name_pt_br": "Referências de Preços de Obras Públicas",
-      "value_line": "Compara preços contratados e referências públicas para reduzir achismo.",
+      "value_line_pt_br": "Compara preços contratados e referências públicas para reduzir achismo.",
       "aliases": [
         "Painel de Preços de Obras Públicas"
       ],
@@ -188,7 +203,7 @@
       "deliverable_id": "CFG-D08",
       "catalog_number": "08",
       "public_name_pt_br": "Plano Executivo de Expansão",
-      "value_line": "Integra mercado, compradores, concorrência e preços em prioridades executivas.",
+      "value_line_pt_br": "Integra mercado, compradores, concorrência e preços em prioridades executivas.",
       "aliases": [
         "Relatório Executivo Consolidado"
       ],
@@ -199,7 +214,7 @@
       "deliverable_id": "CFG-D09",
       "catalog_number": "09",
       "public_name_pt_br": "Radar de Obras Antes do Edital",
-      "value_line": "Acompanha sinais públicos de obras antes da publicação do edital.",
+      "value_line_pt_br": "Acompanha sinais públicos de obras antes da publicação do edital.",
       "aliases": [
         "Radar de Investimentos Públicos Pré-Edital"
       ],
@@ -210,7 +225,7 @@
       "deliverable_id": "CFG-D10",
       "catalog_number": "10",
       "public_name_pt_br": "Dossiê do Órgão e Risco de Pagamento",
-      "value_line": "Revela histórico contratual e sinais públicos que afetam o recebimento.",
+      "value_line_pt_br": "Revela histórico contratual e sinais públicos que afetam o recebimento.",
       "aliases": [
         "Dossiê de Comprador Público e Risco de Recebimento"
       ],
@@ -221,7 +236,7 @@
       "deliverable_id": "CFG-D11",
       "catalog_number": "11",
       "public_name_pt_br": "Mapa de Parceiros e Consórcios",
-      "value_line": "Encontra organizações compatíveis e expõe riscos públicos da composição.",
+      "value_line_pt_br": "Encontra organizações compatíveis e expõe riscos públicos da composição.",
       "aliases": [
         "Mapa de Parceiros, Consórcios e Subcontratados"
       ],
@@ -232,7 +247,7 @@
       "deliverable_id": "CFG-D12",
       "catalog_number": "12",
       "public_name_pt_br": "Decisão de Disputar o Edital",
-      "value_line": "Mostra se a oportunidade merece tempo, garantia e capital da empresa.",
+      "value_line_pt_br": "Mostra se a oportunidade merece tempo, garantia e capital da empresa.",
       "aliases": [
         "Raio-X Go/No-Go do Edital"
       ],
@@ -243,7 +258,7 @@
       "deliverable_id": "CFG-D13",
       "catalog_number": "13",
       "public_name_pt_br": "Mapa de Habilitação e Lacunas de Acervo",
-      "value_line": "Confere requisitos e mostra o que falta provar no acervo.",
+      "value_line_pt_br": "Confere requisitos e mostra o que falta provar no acervo.",
       "aliases": [
         "Matriz de Habilitação e Lacunas de Acervo"
       ],
@@ -254,7 +269,7 @@
       "deliverable_id": "CFG-D14",
       "catalog_number": "14",
       "public_name_pt_br": "Auditoria de Orçamento, BDI e Exequibilidade",
-      "value_line": "Testa preços, BDI, premissas e risco de inexequibilidade antes da proposta.",
+      "value_line_pt_br": "Testa preços, BDI, premissas e risco de inexequibilidade antes da proposta.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -263,7 +278,7 @@
       "deliverable_id": "CFG-D15",
       "catalog_number": "15",
       "public_name_pt_br": "Referência de Concorrência e Faixa de Deságio",
-      "value_line": "Compara o padrão competitivo e delimita uma faixa defensável de deságio.",
+      "value_line_pt_br": "Compara o padrão competitivo e delimita uma faixa defensável de deságio.",
       "aliases": [
         "Benchmark de Concorrência e Estratégia de Deságio"
       ],
@@ -274,7 +289,7 @@
       "deliverable_id": "CFG-D16",
       "catalog_number": "16",
       "public_name_pt_br": "Operação de Proposta para Licitação Crítica",
-      "value_line": "Coordena documentos, preço, técnica e revisão até a entrega da proposta.",
+      "value_line_pt_br": "Coordena documentos, preço, técnica e revisão até a entrega da proposta.",
       "aliases": [
         "Bid Room por Oportunidade Crítica"
       ],
@@ -285,7 +300,7 @@
       "deliverable_id": "CFG-D17",
       "catalog_number": "17",
       "public_name_pt_br": "Diagnóstico de Riscos à Margem",
-      "value_line": "Localiza eventos que podem corroer a margem antes de virarem perda.",
+      "value_line_pt_br": "Localiza eventos que podem corroer a margem antes de virarem perda.",
       "aliases": [
         "Diagnóstico de Defesa de Margem"
       ],
@@ -296,7 +311,7 @@
       "deliverable_id": "CFG-D18",
       "catalog_number": "18",
       "public_name_pt_br": "Dossiê de Medição, Glosa e Pagamento",
-      "value_line": "Organiza cálculo e prova para contestar glosa ou cobrar pagamento.",
+      "value_line_pt_br": "Organiza cálculo e prova para contestar glosa ou cobrar pagamento.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -305,7 +320,7 @@
       "deliverable_id": "CFG-D19",
       "catalog_number": "19",
       "public_name_pt_br": "Dossiê de Aditivo e Serviço Extra",
-      "value_line": "Prova mudança de escopo, custo e prazo para instruir o aditivo.",
+      "value_line_pt_br": "Prova mudança de escopo, custo e prazo para instruir o aditivo.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -314,7 +329,7 @@
       "deliverable_id": "CFG-D20",
       "catalog_number": "20",
       "public_name_pt_br": "Dossiê de Atraso e Prorrogação",
-      "value_line": "Separa causas, responsabilidades e dias afetados para instruir prorrogação.",
+      "value_line_pt_br": "Separa causas, responsabilidades e dias afetados para instruir prorrogação.",
       "aliases": [
         "Dossiê de Prorrogação e Atraso"
       ],
@@ -325,7 +340,7 @@
       "deliverable_id": "CFG-D21",
       "catalog_number": "21",
       "public_name_pt_br": "Cálculo de Reajuste Contratual",
-      "value_line": "Calcula o reajuste previsto pela cláusula e pela data-base do contrato.",
+      "value_line_pt_br": "Calcula o reajuste previsto pela cláusula e pela data-base do contrato.",
       "aliases": [
         "Memória de Reajuste Contratual"
       ],
@@ -336,7 +351,7 @@
       "deliverable_id": "CFG-D22",
       "catalog_number": "22",
       "public_name_pt_br": "Dossiê de Reequilíbrio Econômico-Financeiro",
-      "value_line": "Liga fato, risco, nexo e impacto para instruir o reequilíbrio.",
+      "value_line_pt_br": "Liga fato, risco, nexo e impacto para instruir o reequilíbrio.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -345,7 +360,7 @@
       "deliverable_id": "CFG-D23",
       "catalog_number": "23",
       "public_name_pt_br": "Subsídio Técnico para Notificação ou Sanção",
-      "value_line": "Organiza fatos e provas técnicas para responder à acusação.",
+      "value_line_pt_br": "Organiza fatos e provas técnicas para responder à acusação.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -354,7 +369,7 @@
       "deliverable_id": "CFG-D24",
       "catalog_number": "24",
       "public_name_pt_br": "Diagnóstico da Operação em Obras Públicas",
-      "value_line": "Mostra onde a operação perde oportunidades, tempo, margem e controle.",
+      "value_line_pt_br": "Mostra onde a operação perde oportunidades, tempo, margem e controle.",
       "aliases": [
         "Diagnóstico B2G 360°"
       ],
@@ -365,7 +380,7 @@
       "deliverable_id": "CFG-D25",
       "catalog_number": "25",
       "public_name_pt_br": "Acompanhamento Preventivo do Contrato Público",
-      "value_line": "Acompanha eventos antes que prova, prazo ou caixa se percam.",
+      "value_line_pt_br": "Acompanha eventos antes que prova, prazo ou caixa se percam.",
       "aliases": [
         "Acompanhamento Preventivo de Contrato"
       ],
@@ -376,7 +391,7 @@
       "deliverable_id": "CFG-D26",
       "catalog_number": "26",
       "public_name_pt_br": "Auditoria do Projeto Básico e dos Riscos",
-      "value_line": "Expõe omissões e incompatibilidades que afetam preço, prazo e execução.",
+      "value_line_pt_br": "Expõe omissões e incompatibilidades que afetam preço, prazo e execução.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -385,7 +400,7 @@
       "deliverable_id": "CFG-D27",
       "catalog_number": "27",
       "public_name_pt_br": "Subsídio Técnico para Esclarecimento ou Impugnação",
-      "value_line": "Transforma dúvida ou restrição em perguntas e fundamentos verificáveis.",
+      "value_line_pt_br": "Transforma dúvida ou restrição em perguntas e fundamentos verificáveis.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -394,7 +409,7 @@
       "deliverable_id": "CFG-D28",
       "catalog_number": "28",
       "public_name_pt_br": "Comprovação de Exequibilidade e Resposta à Diligência",
-      "value_line": "Reconcilia custos e evidências para responder à dúvida sobre o preço.",
+      "value_line_pt_br": "Reconcilia custos e evidências para responder à dúvida sobre o preço.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -403,7 +418,7 @@
       "deliverable_id": "CFG-D29",
       "catalog_number": "29",
       "public_name_pt_br": "Desenvolvimento da Proposta Técnica",
-      "value_line": "Converte critérios de julgamento em uma proposta técnica comprovável.",
+      "value_line_pt_br": "Converte critérios de julgamento em uma proposta técnica comprovável.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -412,7 +427,7 @@
       "deliverable_id": "CFG-D30",
       "catalog_number": "30",
       "public_name_pt_br": "Plano de Garantias, Seguros e Capital de Giro",
-      "value_line": "Estima garantias e pico de caixa antes de comprometer a empresa.",
+      "value_line_pt_br": "Estima garantias e pico de caixa antes de comprometer a empresa.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -421,7 +436,7 @@
       "deliverable_id": "CFG-D31",
       "catalog_number": "31",
       "public_name_pt_br": "Análise do Resultado da Licitação",
-      "value_line": "Explica o resultado público e melhora a próxima decisão de disputa.",
+      "value_line_pt_br": "Explica o resultado público e melhora a próxima decisão de disputa.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -430,7 +445,7 @@
       "deliverable_id": "CFG-D32",
       "catalog_number": "32",
       "public_name_pt_br": "Plano de Acervo para Licitações Futuras",
-      "value_line": "Transforma o acervo atual em plano para habilitações futuras.",
+      "value_line_pt_br": "Transforma o acervo atual em plano para habilitações futuras.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -439,7 +454,7 @@
       "deliverable_id": "CFG-D33",
       "catalog_number": "33",
       "public_name_pt_br": "Revisão Técnica Antes de Assinar o Contrato",
-      "value_line": "Encontra divergências e obrigações críticas antes da assinatura.",
+      "value_line_pt_br": "Encontra divergências e obrigações críticas antes da assinatura.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -448,7 +463,7 @@
       "deliverable_id": "CFG-D34",
       "catalog_number": "34",
       "public_name_pt_br": "Plano de Mobilização e Obrigações do Contrato",
-      "value_line": "Define responsáveis, prazos e provas para começar sob controle.",
+      "value_line_pt_br": "Define responsáveis, prazos e provas para começar sob controle.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -457,7 +472,7 @@
       "deliverable_id": "CFG-D35",
       "catalog_number": "35",
       "public_name_pt_br": "Auditoria do Fluxo de Caixa do Contrato",
-      "value_line": "Projeta desembolso, recebimento e pico de capital de giro.",
+      "value_line_pt_br": "Projeta desembolso, recebimento e pico de capital de giro.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -466,7 +481,7 @@
       "deliverable_id": "CFG-D36",
       "catalog_number": "36",
       "public_name_pt_br": "Dossiê de Recebimento e Encerramento do Contrato",
-      "value_line": "Organiza pendências e provas para receber e encerrar corretamente.",
+      "value_line_pt_br": "Organiza pendências e provas para receber e encerrar corretamente.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -475,7 +490,7 @@
       "deliverable_id": "CFG-D37",
       "catalog_number": "37",
       "public_name_pt_br": "Dossiê de Atestação e Acervo da Obra",
-      "value_line": "Consolida serviços e quantitativos para solicitar atestado e registrar acervo.",
+      "value_line_pt_br": "Consolida serviços e quantitativos para solicitar atestado e registrar acervo.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -484,7 +499,7 @@
       "deliverable_id": "CFG-D38",
       "catalog_number": "38",
       "public_name_pt_br": "Análise Pós-Contrato e Lições para Próximas Obras",
-      "value_line": "Converte o resultado real em decisões melhores para próximos contratos.",
+      "value_line_pt_br": "Converte o resultado real em decisões melhores para próximos contratos.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -493,7 +508,7 @@
       "deliverable_id": "CFG-D39",
       "catalog_number": "39",
       "public_name_pt_br": "Subsídio Técnico para Recurso e Contrarrazão",
-      "value_line": "Organiza fatos e evidências técnicas para recurso ou contrarrazão.",
+      "value_line_pt_br": "Organiza fatos e evidências técnicas para recurso ou contrarrazão.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -502,7 +517,7 @@
       "deliverable_id": "CFG-D40",
       "catalog_number": "40",
       "public_name_pt_br": "Análise de Causas e Impactos de Atrasos",
-      "value_line": "Quantifica causas e dias de atraso com método reproduzível.",
+      "value_line_pt_br": "Quantifica causas e dias de atraso com método reproduzível.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -511,7 +526,7 @@
       "deliverable_id": "CFG-D41",
       "catalog_number": "41",
       "public_name_pt_br": "Análise de Custos e Valores em Disputa",
-      "value_line": "Liga evento, efeito e custo para delimitar o valor em disputa.",
+      "value_line_pt_br": "Liga evento, efeito e custo para delimitar o valor em disputa.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -520,7 +535,7 @@
       "deliverable_id": "CFG-D42",
       "catalog_number": "42",
       "public_name_pt_br": "Assistência Técnica em Disputa Contratual Complexa",
-      "value_line": "Entrega análise técnica estruturada para a estratégia conduzida pelo jurídico.",
+      "value_line_pt_br": "Entrega análise técnica estruturada para a estratégia conduzida pelo jurídico.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -529,7 +544,7 @@
       "deliverable_id": "CFG-D43",
       "catalog_number": "43",
       "public_name_pt_br": "Verificação de Sanções e Restrições Públicas",
-      "value_line": "Mostra achados, cobertura e lacunas da consulta sem emitir “selo”.",
+      "value_line_pt_br": "Mostra achados, cobertura e lacunas da consulta sem emitir “selo”.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -538,7 +553,7 @@
       "deliverable_id": "CFG-D44",
       "catalog_number": "44",
       "public_name_pt_br": "Auditoria de Prontidão do Empreendimento Público",
-      "value_line": "Testa se recurso, projeto, licença e área sustentam o início da obra.",
+      "value_line_pt_br": "Testa se recurso, projeto, licença e área sustentam o início da obra.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -547,7 +562,7 @@
       "deliverable_id": "CFG-D45",
       "catalog_number": "45",
       "public_name_pt_br": "Monitoramento Mensal de Mercado e Contratos Públicos",
-      "value_line": "Destaca mudanças públicas relevantes para priorizar mercado e carteira todo mês.",
+      "value_line_pt_br": "Destaca mudanças públicas relevantes para priorizar mercado e carteira todo mês.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -556,7 +571,7 @@
       "deliverable_id": "CFG-D46",
       "catalog_number": "46",
       "public_name_pt_br": "Oficina para Decidir Quais Licitações Disputar",
-      "value_line": "Instala critérios e ritual para escolher quais oportunidades merecem equipe.",
+      "value_line_pt_br": "Instala critérios e ritual para escolher quais oportunidades merecem equipe.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -565,7 +580,7 @@
       "deliverable_id": "CFG-D47",
       "catalog_number": "47",
       "public_name_pt_br": "Capacitação de Equipes de Licitações e Contratos",
-      "value_line": "Treina a equipe nos casos e rotinas que ela realmente executa.",
+      "value_line_pt_br": "Treina a equipe nos casos e rotinas que ela realmente executa.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -574,7 +589,7 @@
       "deliverable_id": "CFG-D48",
       "catalog_number": "48",
       "public_name_pt_br": "Estudo Sob Medida com Dados Públicos",
-      "value_line": "Responde uma decisão inédita com dados públicos rastreáveis.",
+      "value_line_pt_br": "Responde uma decisão inédita com dados públicos rastreáveis.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -583,7 +598,7 @@
       "deliverable_id": "CFG-D49",
       "catalog_number": "49",
       "public_name_pt_br": "Orçamento Completo da Proposta",
-      "value_line": "Monta preços, composições e BDI em planilha reproduzível.",
+      "value_line_pt_br": "Monta preços, composições e BDI em planilha reproduzível.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -592,7 +607,7 @@
       "deliverable_id": "CFG-D50",
       "catalog_number": "50",
       "public_name_pt_br": "Cronograma e Plano Executivo da Proposta",
-      "value_line": "Converte escopo e prazo em sequência, marcos e curva de execução.",
+      "value_line_pt_br": "Converte escopo e prazo em sequência, marcos e curva de execução.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -601,7 +616,7 @@
       "deliverable_id": "CFG-D51",
       "catalog_number": "51",
       "public_name_pt_br": "Dossiê de Habilitação Pronto para Envio",
-      "value_line": "Organiza cada exigência e documento no pacote final da licitação.",
+      "value_line_pt_br": "Organiza cada exigência e documento no pacote final da licitação.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -610,7 +625,7 @@
       "deliverable_id": "CFG-D52",
       "catalog_number": "52",
       "public_name_pt_br": "Verificação de SICAF, Certidões e Regularidade",
-      "value_line": "Mostra cadastros, vencimentos e lacunas antes que bloqueiem a participação.",
+      "value_line_pt_br": "Mostra cadastros, vencimentos e lacunas antes que bloqueiem a participação.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -619,7 +634,7 @@
       "deliverable_id": "CFG-D53",
       "catalog_number": "53",
       "public_name_pt_br": "Acompanhamento Técnico da Sessão de Disputa",
-      "value_line": "Sustenta decisões de preço e margem enquanto o cliente opera os lances.",
+      "value_line_pt_br": "Sustenta decisões de preço e margem enquanto o cliente opera os lances.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -628,7 +643,7 @@
       "deliverable_id": "CFG-D54",
       "catalog_number": "54",
       "public_name_pt_br": "Dossiê de Credenciamento ou Pré-Qualificação",
-      "value_line": "Organiza requisitos e provas para entrar no procedimento correto.",
+      "value_line_pt_br": "Organiza requisitos e provas para entrar no procedimento correto.",
       "aliases": [],
       "public_slug": null,
       "redirects": []
@@ -638,7 +653,7 @@
     {
       "container_id": "expansion_package",
       "public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
-      "value_line": "Reúne as entregas 02 a 08 para decidir onde e como crescer.",
+      "value_line_pt_br": "Reúne as entregas 02 a 08 para decidir onde e como crescer.",
       "aliases": [
         "Diagnóstico B2G de Expansão"
       ],
@@ -650,7 +665,7 @@
     {
       "container_id": "diretoria_fracionada",
       "public_name_pt_br": "Diretoria Fracionada para o Mercado Público",
-      "value_line": "Coloca liderança sênior na rotina para decidir, coordenar e melhorar resultados.",
+      "value_line_pt_br": "Coloca liderança sênior na rotina para decidir, coordenar e melhorar resultados.",
       "aliases": [
         "Diretoria B2G fracionada",
         "Diretoria B2G Fracionada Flex",

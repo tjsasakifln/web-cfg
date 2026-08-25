@@ -252,7 +252,7 @@ for (const n of NUMBERS) {
   assert(`reconcile_${n}_deliverable_id`, it.deliverable_id === reg.deliverable_id, [it.deliverable_id, reg.deliverable_id]);
   assert(`reconcile_${n}_name`, it.public_name_pt_br === reg.public_name_pt_br, [it.public_name_pt_br, reg.public_name_pt_br]);
   assert(`reconcile_${n}_name_vs_naming_343`, it.public_name_pt_br === nm.public_name_pt_br, [it.public_name_pt_br, nm.public_name_pt_br]);
-  assert(`reconcile_${n}_value_line_vs_343`, it.value_line_pt_br === nm.value_line, [it.value_line_pt_br, nm.value_line]);
+  assert(`reconcile_${n}_value_line_vs_343`, it.value_line_pt_br === nm.value_line_pt_br, [it.value_line_pt_br, nm.value_line_pt_br]);
   assert(`reconcile_${n}_route`, (it.route ?? null) === (reg.route ?? null), [it.route, reg.route]);
   assert(`reconcile_${n}_public_state`, it.public_state === reg.public_state, [it.public_state, reg.public_state]);
   assert(`reconcile_${n}_price_state`, it.price_state === reg.price_state, [it.price_state, reg.price_state]);

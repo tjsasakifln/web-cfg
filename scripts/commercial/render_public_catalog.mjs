@@ -15,6 +15,7 @@ import { fileURLToPath } from "url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const registryPath = path.join(root, "data/commercial/deliverables-registry.v1.json");
 const doorsPath = path.join(root, "data/commercial/task-doors.v1.json");
+const namingPath = path.join(root, "data/commercial/offer-naming.v1.json");
 const pagePath = path.join(root, "entregas/index.html");
 
 const CATALOG_START = "<!-- GENERATED:PUBLIC-CATALOG:START -->";
@@ -177,10 +178,11 @@ const STATE = {
 function itemCard(entry, byTask) {
   const state = STATE[entry.public_state];
   const title = escapeHtml(entry.public_name_pt_br);
-  const alias = entry.public_name !== entry.public_name_pt_br
-    ? /360\s*°/.test(entry.public_name)
+  const legacyName = (entry.name_aliases || []).find((name) => name !== entry.public_name_pt_br);
+  const alias = legacyName
+    ? /360\s*°/.test(legacyName)
       ? '<p class="catalog-item__alias">Nome anterior preservado no histórico do catálogo.</p>'
-      : `<p class="catalog-item__alias">Também publicado como: ${escapeHtml(entry.public_name)}</p>`
+      : `<p class="catalog-item__alias">Nome anterior: ${escapeHtml(legacyName)}</p>`
     : "";
   const action = entry.public_state === "PUBLISHED"
     ? `<a class="text-link" data-asset-id="${entry.deliverable_id}" data-cta-id="catalog-open-${entry.catalog_number}" data-cta-position="catalog_index" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Consultar exemplo completo</a>`
@@ -197,6 +199,7 @@ function itemCard(entry, byTask) {
 <header class="catalog-item__head"><span class="catalog-item__number">${entry.catalog_number}</span><span class="catalog-item__state">${state.label}</span></header>
 <h5>${title}</h5>
 ${alias}
+<p class="catalog-item__value">${escapeHtml(entry.value_line_pt_br)}</p>
 <p class="catalog-item__question">${escapeHtml(entry.decision_question)}</p>
 <dl class="catalog-item__facts"><div><dt>Preço</dt><dd>${priceLabel(entry)}</dd></div><div><dt>Prazo</dt><dd>${escapeHtml(publicText(slaLabel(entry)))}</dd></div><div><dt>Saída principal</dt><dd>${escapeHtml(publicText(entry.included_outputs[0]))}</dd></div></dl>
 <p class="catalog-item__evidence">Dados públicos com fonte, data, método e cobertura. Cada afirmação é marcada como fato, cálculo, inferência ou desconhecido.</p>
@@ -287,8 +290,17 @@ export function renderPage(html, registry, taskDoors) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
   const taskDoors = JSON.parse(fs.readFileSync(doorsPath, "utf8"));
+  const naming = JSON.parse(fs.readFileSync(namingPath, "utf8"));
+  const valueById = new Map(naming.names.map((entry) => [entry.deliverable_id, entry.value_line_pt_br]));
+  const renderedRegistry = {
+    ...registry,
+    deliverables: registry.deliverables.map((entry) => ({
+      ...entry,
+      value_line_pt_br: valueById.get(entry.deliverable_id),
+    })),
+  };
   const current = fs.readFileSync(pagePath, "utf8");
-  const rendered = renderPage(current, registry, taskDoors);
+  const rendered = renderPage(current, renderedRegistry, taskDoors);
   if (process.argv.includes("--check")) {
     if (rendered !== current) {
       console.error("PUBLIC_CATALOG_DRIFT: run node scripts/commercial/render_public_catalog.mjs --write");

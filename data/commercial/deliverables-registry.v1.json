@@ -1,6 +1,6 @@
 {
   "schema": "confenge.deliverables-registry/1.0",
-  "registry_version": "CFG-DELIVERABLES-2026-08-24-v1",
+  "registry_version": "CFG-DELIVERABLES-2026-08-25-v2",
   "generated_for_issues": [
     "#329",
     "#330",
@@ -39,7 +39,7 @@
   "containers": [
     {
       "container_id": "expansion_package",
-      "public_name": "Diagnóstico B2G de Expansão",
+      "public_name": "Diagnóstico de Expansão no Mercado Público",
       "route": "/diagnostico-b2g-expansao/",
       "composes_deliverables": [
         "CFG-D02",
@@ -72,11 +72,11 @@
       "name_aliases": [
         "Diagnóstico B2G de Expansão"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "container_id": "diretoria_fracionada",
-      "public_name": "Diretoria B2G Fracionada",
+      "public_name": "Diretoria Fracionada para o Mercado Público",
       "route": "/diretoria-b2g/",
       "composes_deliverables": [],
       "unbundled_sum_cents": null,
@@ -126,7 +126,7 @@
         "Flex",
         "Diretoria B2G Fracionada"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     }
   ],
   "catalog_count": 54,
@@ -136,7 +136,7 @@
       "deliverable_id": "CFG-D01",
       "version": "v1",
       "catalog_number": "01",
-      "public_name": "Relatório Executivo de Priorização de Licitações",
+      "public_name": "Radar de Licitações Prioritárias",
       "decision_question": "Quais editais abertos vale disputar?",
       "trigger": "A empresa tem equipe limitada e mais editais abertos do que capacidade de analisar.",
       "price": {
@@ -219,13 +219,13 @@
       "name_aliases": [
         "Relatório Executivo de Priorização de Licitações"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D02",
       "version": "v1",
       "catalog_number": "02",
-      "public_name": "Base Quantitativa Canônica",
+      "public_name": "Base de Mercado para Expansão",
       "decision_question": "De onde vem cada número publicado?",
       "trigger": "A diretoria não consegue rastrear um número apresentado até a fonte e a fórmula.",
       "price": {
@@ -315,13 +315,13 @@
       "name_aliases": [
         "Base Quantitativa Canônica"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D03",
       "version": "v1",
       "catalog_number": "03",
-      "public_name": "Apresentação Executiva de Resultados",
+      "public_name": "Síntese Executiva de Expansão",
       "decision_question": "O que a diretoria precisa decidir agora?",
       "trigger": "Existe análise reconciliada, mas a reunião de direção termina sem decisão assinada.",
       "price": {
@@ -407,13 +407,13 @@
       "name_aliases": [
         "Apresentação Executiva de Resultados"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D04",
       "version": "v1",
       "catalog_number": "04",
-      "public_name": "Mapa de Compradores Públicos",
+      "public_name": "Mapa de Órgãos com Maior Potencial",
       "decision_question": "Quais órgãos compram o que a empresa executa?",
       "trigger": "A empresa depende de poucos compradores e não sabe onde mais existe demanda recorrente.",
       "price": {
@@ -502,13 +502,13 @@
       "name_aliases": [
         "Mapa de Compradores Públicos"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D05",
       "version": "v1",
       "catalog_number": "05",
-      "public_name": "Contratos Vincendos e Recontratação",
+      "public_name": "Radar de Contratos Próximos da Renovação",
       "decision_question": "Quais contratos vencem entre 90 e 180 dias?",
       "trigger": "A empresa quer entrar em carteira já contratada por concorrente antes da recontratação.",
       "price": {
@@ -598,13 +598,13 @@
       "name_aliases": [
         "Contratos Vincendos e Recontratação"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D06",
       "version": "v1",
       "catalog_number": "06",
-      "public_name": "Mapeamento de Concorrentes",
+      "public_name": "Mapa de Concorrentes Relevantes",
       "decision_question": "Contra quem a empresa disputa e onde o concorrente está exposto?",
       "trigger": "A empresa perde disputas repetidamente para os mesmos nomes e não sabe por quê.",
       "price": {
@@ -691,13 +691,13 @@
       "name_aliases": [
         "Mapeamento de Concorrentes"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D07",
       "version": "v1",
       "catalog_number": "07",
-      "public_name": "Painel de Preços de Obras Públicas",
+      "public_name": "Referências de Preços de Obras Públicas",
       "decision_question": "Qual é a escala real de contrato por tipologia?",
       "trigger": "A empresa precisa dimensionar proposta e capacidade sem tabela de mercado confiável.",
       "price": {
@@ -786,13 +786,13 @@
       "name_aliases": [
         "Painel de Preços de Obras Públicas"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D08",
       "version": "v1",
       "catalog_number": "08",
-      "public_name": "Relatório Executivo Consolidado",
+      "public_name": "Plano Executivo de Expansão",
       "decision_question": "Onde alocar equipe, acervo e caixa?",
       "trigger": "A direção precisa de uma leitura única sobre módulos já reconciliados.",
       "price": {
@@ -879,13 +879,13 @@
       "name_aliases": [
         "Relatório Executivo Consolidado"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D09",
       "version": "v1",
       "catalog_number": "09",
-      "public_name": "Radar de Investimentos Públicos Pré-Edital",
+      "public_name": "Radar de Obras Antes do Edital",
       "decision_question": "Onde há investimento público se formando antes do edital?",
       "trigger": "A empresa só descobre a obra quando o edital já está publicado e o prazo é curto.",
       "price": {
@@ -983,13 +983,13 @@
       "name_aliases": [
         "Radar de Investimentos Públicos Pré-Edital"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D10",
       "version": "v1",
       "catalog_number": "10",
-      "public_name": "Dossiê de Comprador Público e Risco de Recebimento",
+      "public_name": "Dossiê do Órgão e Risco de Pagamento",
       "decision_question": "Como este órgão compra, contrata e paga?",
       "trigger": "A empresa avalia entrar em um comprador novo e não conhece o padrão de contratação e pagamento.",
       "price": {
@@ -1084,13 +1084,13 @@
       "name_aliases": [
         "Dossiê de Comprador Público e Risco de Recebimento"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D11",
       "version": "v1",
       "catalog_number": "11",
-      "public_name": "Mapa de Parceiros, Consórcios e Subcontratados",
+      "public_name": "Mapa de Parceiros e Consórcios",
       "decision_question": "Quem pode cobrir a lacuna de acervo ou capacidade nesta oportunidade?",
       "trigger": "A empresa identificou uma oportunidade que não consegue atender sozinha.",
       "price": {
@@ -1174,13 +1174,13 @@
       "name_aliases": [
         "Mapa de Parceiros, Consórcios e Subcontratados"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D12",
       "version": "v1",
       "catalog_number": "12",
-      "public_name": "Raio-X Go/No-Go do Edital",
+      "public_name": "Decisão de Disputar o Edital",
       "decision_question": "Vale a pena disputar este edital, e em que condições?",
       "trigger": "Um edital aderente foi publicado e a empresa precisa decidir antes de imobilizar equipe.",
       "price": {
@@ -1270,13 +1270,13 @@
       "name_aliases": [
         "Raio-X Go/No-Go do Edital"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D13",
       "version": "v1",
       "catalog_number": "13",
-      "public_name": "Matriz de Habilitação e Lacunas de Acervo",
+      "public_name": "Mapa de Habilitação e Lacunas de Acervo",
       "decision_question": "A empresa consegue provar habilitação neste edital, e onde falta documento?",
       "trigger": "A empresa foi inabilitada ou teme diligência sobre acervo e quantitativos.",
       "price": {
@@ -1364,7 +1364,7 @@
       "name_aliases": [
         "Matriz de Habilitação e Lacunas de Acervo"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D14",
@@ -1474,7 +1474,7 @@
       "deliverable_id": "CFG-D15",
       "version": "v1",
       "catalog_number": "15",
-      "public_name": "Benchmark de Concorrência e Estratégia de Deságio",
+      "public_name": "Referência de Concorrência e Faixa de Deságio",
       "decision_question": "Qual posicionamento de preço é defensável nesta disputa?",
       "trigger": "A empresa não sabe quanto os concorrentes historicamente descontam neste comprador.",
       "price": {
@@ -1563,13 +1563,13 @@
       "name_aliases": [
         "Benchmark de Concorrência e Estratégia de Deságio"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D16",
       "version": "v1",
       "catalog_number": "16",
-      "public_name": "Bid Room por Oportunidade Crítica",
+      "public_name": "Operação de Proposta para Licitação Crítica",
       "decision_question": "Quem coordena esta proposta crítica da decisão de disputar ao checklist final?",
       "trigger": "A oportunidade é material e a empresa não tem estrutura para coordenar a proposta sozinha.",
       "price": {
@@ -1671,13 +1671,13 @@
       "name_aliases": [
         "Bid Room por Oportunidade Crítica"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D17",
       "version": "v1",
       "catalog_number": "17",
-      "public_name": "Diagnóstico de Defesa de Margem",
+      "public_name": "Diagnóstico de Riscos à Margem",
       "decision_question": "Quais eventos deste contrato ainda podem virar pleito e o que precisa ser registrado agora?",
       "trigger": "O contrato está perdendo margem e a empresa não sabe quais fatos ainda têm prova e prazo.",
       "price": {
@@ -1775,7 +1775,7 @@
       "name_aliases": [
         "Diagnóstico de Defesa de Margem"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D18",
@@ -1958,7 +1958,7 @@
       "deliverable_id": "CFG-D20",
       "version": "v1",
       "catalog_number": "20",
-      "public_name": "Dossiê de Prorrogação e Atraso",
+      "public_name": "Dossiê de Atraso e Prorrogação",
       "decision_question": "Quantos dias deste atraso são imputáveis a causa alheia à contratada?",
       "trigger": "O cronograma estourou e a empresa precisa sustentar pedido de prorrogação com nexo.",
       "price": {
@@ -2041,13 +2041,13 @@
       "name_aliases": [
         "Dossiê de Prorrogação e Atraso"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D21",
       "version": "v1",
       "catalog_number": "21",
-      "public_name": "Memória de Reajuste Contratual",
+      "public_name": "Cálculo de Reajuste Contratual",
       "decision_question": "Qual é o reajuste devido nesta data-base, e sobre qual saldo?",
       "trigger": "O contrato completou o aniversário e o reajuste não foi aplicado.",
       "price": {
@@ -2129,7 +2129,7 @@
       "name_aliases": [
         "Memória de Reajuste Contratual"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D22",
@@ -2315,7 +2315,7 @@
       "deliverable_id": "CFG-D24",
       "version": "v1",
       "catalog_number": "24",
-      "public_name": "Diagnóstico B2G 360°",
+      "public_name": "Diagnóstico da Operação em Obras Públicas",
       "decision_question": "Onde a operação perde tempo, margem e controle?",
       "trigger": "A direção suspeita que o gargalo é a própria operação B2G, não a falta de oportunidade.",
       "price": {
@@ -2408,13 +2408,13 @@
       "name_aliases": [
         "Diagnóstico B2G 360°"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D25",
       "version": "v1",
       "catalog_number": "25",
-      "public_name": "Acompanhamento Preventivo de Contrato",
+      "public_name": "Acompanhamento Preventivo do Contrato Público",
       "decision_question": "Como um contrato ativo deve registrar e decidir antes da crise?",
       "trigger": "O contrato está em execução e os fatos não viram registro antes de virarem prejuízo.",
       "price": {
@@ -2508,7 +2508,7 @@
       "name_aliases": [
         "Acompanhamento Preventivo de Contrato"
       ],
-      "name_state": "RENAME_PENDING"
+      "name_state": "CANONICAL"
     },
     {
       "deliverable_id": "CFG-D26",

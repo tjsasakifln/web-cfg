@@ -73,7 +73,7 @@ const name18 = naming.names.find((item) => item.deliverable_id === "CFG-D18");
 assert("page_contract_item_18_exists", Boolean(item18));
 assert("naming_item_18_exists", Boolean(name18));
 assert("name_from_343", route.public_name_pt_br === name18?.public_name_pt_br, route.public_name_pt_br);
-assert("value_line_from_343", route.value_line_pt_br === name18?.value_line, route.value_line_pt_br);
+assert("value_line_from_343", route.value_line_pt_br === name18?.value_line_pt_br, route.value_line_pt_br);
 assert("route_from_333", route.commercial_transfer_route === item18?.route, item18?.route);
 assert("decision_question_from_333", route.decision_question_pt_br === item18?.decision_question_pt_br, route.decision_question_pt_br);
 

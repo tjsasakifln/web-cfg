@@ -172,7 +172,7 @@ for (const it of items) {
   const namedIn343 = namingById.get(it.deliverable_id);
   assert(`item_${n}_exists_in_naming_343`, Boolean(namedIn343), it.deliverable_id);
   assert(`item_${n}_name_matches_343`, it.public_name_pt_br === namedIn343?.public_name_pt_br, [it.public_name_pt_br, namedIn343?.public_name_pt_br]);
-  assert(`item_${n}_value_line_matches_343`, it.value_line_pt_br === namedIn343?.value_line, [it.value_line_pt_br, namedIn343?.value_line]);
+  assert(`item_${n}_value_line_matches_343`, it.value_line_pt_br === namedIn343?.value_line_pt_br, [it.value_line_pt_br, namedIn343?.value_line_pt_br]);
   assert(`item_${n}_aliases_match_343`, eq(it.name_aliases, namedIn343?.aliases), [it.name_aliases, namedIn343?.aliases]);
 
   // pergunta, gatilho, porta e estado

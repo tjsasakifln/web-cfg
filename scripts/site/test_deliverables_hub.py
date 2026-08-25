@@ -136,7 +136,7 @@ def test_hub_is_honest_about_every_published_example() -> None:
     for phrase in (
         "54 entregas, de R$ 599 a R$ 39.800",
         "Amostra verificável: 8 exemplos integrais, sem cadastro",
-        "Relatório Executivo de Priorização de Licitações",
+        "Radar de Licitações Prioritárias",
         "12",
         "3",
         "7",
@@ -178,10 +178,10 @@ def test_the_library_has_one_name_across_its_own_surfaces() -> None:
     assert "entregas" in h1.casefold()
     assert "Entregas" in breadcrumb
     assert "Exemplos de entregas da CONFENGE" not in html
-    # The entry example carries the same name here, on its own page and in JSON-LD.
+    # The entry example carries the canonical #343 name here, on its own page and in JSON-LD.
     report = _html(REPORT)
     for surface in (html, report):
-        assert "Relatório Executivo de Priorização de Licitações" in surface
+        assert "Radar de Licitações Prioritárias" in surface
     assert "Modelo de relatório de inteligência" not in report
 
 

@@ -880,7 +880,7 @@
   "money_page_scan": {
     "state": "MEASURED_PASS",
     "measured_at": "2026-08-25",
-    "measured_against": "feat/338-copy-contract-enforcement",
+    "measured_against": "feat/343-canonical-offer-names",
     "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
     "route_discovery": "registry_and_public_family_derived",
     "manual_route_allowlist": false,
@@ -1080,12 +1080,12 @@
         "id": "B-18",
         "page": "entregas/index.html",
         "forbidden_id": "FL-08",
-        "occurrences": 51,
+        "occurrences": 53,
         "by_exemption": {
           "GX-01": 21,
-          "GX-03": 30
+          "GX-03": 32
         },
-        "evidence": "O índice e os contratos editoriais citam garantia como instituto de proposta, contrato, seguro ou exclusão explícita; nenhuma ocorrência promete resultado."
+        "evidence": "O índice, os contratos editoriais e as linhas de valor canônicas da #343 citam garantia como instituto de proposta, contrato, seguro ou exclusão explícita; nenhuma ocorrência promete resultado."
       }
     ],
     "structured_data_check": {
