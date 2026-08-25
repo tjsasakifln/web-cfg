@@ -275,6 +275,14 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/entregas/"],
   },
+  "test:page-contract-complementares": {
+    producers: [
+      "tests/commercial/test_page_contract_complementares.mjs",
+      "data/commercial/page-contract-complementares.v1.json",
+    ],
+    artifacts: [],
+    surfaces: [],
+  },
   "test:page-contract-execucao": {
     producers: [
       "tests/commercial/test_page_contract_execucao.mjs",
