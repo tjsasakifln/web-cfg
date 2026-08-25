@@ -321,6 +321,12 @@ assert("cnpj_bloqueado_como_pii_no_analytics", eventRegistry.pii_keys.includes("
 for (const field of ["analysis_cutoff", "opportunity_deadline", "decision_intent"]) {
   assert(`qualificacao_fora_do_analytics_${field}`, !analyticsCode.includes(field), field);
 }
+const captureCss = fs.readFileSync(path.join(root, "assets/report-capture.css"), "utf8");
+assert(
+  "datas_com_alvo_de_toque_legivel",
+  captureCss.includes('.report-capture-form input[type="date"]'),
+  "inputs de data escapam do estilo de controles do formulário",
+);
 const rendererCheck = spawnSync(
   process.execPath,
   [path.join(root, "scripts/commercial/render_eight_offer_contracts.mjs"), "--check"],
