@@ -298,7 +298,8 @@
       "exemption_ids": [
         "GX-01",
         "GX-02",
-        "GX-04"
+        "GX-04",
+        "GX-05"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -555,6 +556,16 @@
         "Diagnóstico B2G 360°"
       ],
       "source": "#338 Termos de categoria podem existir no nome registrado"
+    },
+    {
+      "id": "GX-05",
+      "scope": "ocorrência legada em rota pública congelada por hash",
+      "rule": "A ocorrência de 360° fora do nome registrado só permanece enquanto /diagnostico-b2g-360/ conservar exatamente o hash congelado. Qualquer alteração de byte invalida a exceção e reprova o portão.",
+      "implemented_as": "hash_pinned_frozen_route_occurrence",
+      "route": "/diagnostico-b2g-360/",
+      "forbidden_id": "FL-06",
+      "content_sha256": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
+      "source": "data/bofu-dominance/frozen-specs/hashes.json"
     }
   ],
   "structured_data_ban": {
@@ -888,11 +899,11 @@
     "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
     "route_discovery": "registry_and_public_family_derived",
     "manual_route_allowlist": false,
-    "method": "Cada rota derivada é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Só o nome registrado exato, um instituto de mercado, uma negação na mesma frase ou uma seção estrutural Não inclui pode gerar isenção.",
-    "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
+    "method": "Cada rota derivada é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Só o nome registrado exato, um instituto de mercado, uma negação na mesma frase, uma seção estrutural Não inclui ou a rota congelada com hash exato pode gerar isenção.",
+    "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. A única exceção legada de rota é vinculada ao hash congelado e falha com qualquer alteração de byte. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
     "live_measurement": {
       "routes_derived": 23,
-      "language_boundaries": 119,
+      "language_boundaries": 117,
       "language_observations": 0,
       "language_violations": 0,
       "structured_social_proof_hits": 0,
@@ -1114,7 +1125,8 @@
     "exemption_precedence": [
       "GX-04",
       "GX-03",
-      "GX-01"
+      "GX-01",
+      "GX-05"
     ],
     "finding_kinds": {
       "violation": "Ocorrência sem exceção documentada. Reprova o portão enquanto não estiver registrada em violations com state MEASURED_FAIL.",
