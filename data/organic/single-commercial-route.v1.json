@@ -1,0 +1,115 @@
+{
+  "schema": "confenge.organic.single-commercial-route.v1",
+  "version": 1,
+  "decision_state": "EXECUTE_NOW",
+  "source_issue": 390,
+  "parent_issue": 387,
+  "decision_fronts": [
+    "INBOUND_CORE",
+    "REVENUE_NOW"
+  ],
+  "leverage": [
+    "conversion",
+    "trust",
+    "revenue"
+  ],
+  "time_to_evidence": {
+    "structural": "pull_request",
+    "human_and_gsc_days": 28
+  },
+  "hypothesis_pt_br": "Uma dor de medição ou glosa reconhecida na busca deve avançar por uma única transferência comercial, com nome estável e contexto completo, antes da captura CONFENGE_WEB.",
+  "route": {
+    "commercial_transfer_route": "/medicoes-glosas-obras-publicas/",
+    "destination_service_id": "medicoes-glosas-obras-publicas",
+    "deliverable_id": "CFG-D18",
+    "public_name_pt_br": "Dossiê de Medição, Glosa e Pagamento",
+    "value_line_pt_br": "Organiza cálculo e prova para contestar glosa ou cobrar pagamento.",
+    "decision_question_pt_br": "A glosa desta medição se sustenta no critério contratado e na prova existente?",
+    "downstream_context_routes": [
+      "/defesa-margem-contratos-publicos/"
+    ]
+  },
+  "commercial_terms": {
+    "source_contract": "data/commercial/page-contract-contratos.v1.json#items[item=18]",
+    "name_authority": "data/commercial/offer-naming.v1.json#deliverables[deliverable_id=CFG-D18]",
+    "scope_unit_pt_br": "Uma medição ou glosa, ou conjunto inseparável do mesmo período.",
+    "minimum_documents_pt_br": "Contrato e critérios de medição, memória de cálculo, diário de obra, protocolos, aceite e nota fiscal do período, mais a ordem cronológica quando pública.",
+    "output_pt_br": "Valor classificado em FACT ou CALCULATION, itens controvertidos, causa, evidência, lacunas, parcela incontroversa e subsídio técnico para contestação.",
+    "pilot_price_cents": 490000,
+    "price_state": "PILOT_HYPOTHESIS",
+    "sla_business_days": 5,
+    "legal_boundary_pt_br": "Não presta advocacia, não elabora peça, não protocola, não representa a empresa e não promete resultado, recebimento nem afastamento de sanção.",
+    "evidence_grades": [
+      "FACT",
+      "CALCULATION",
+      "INFERENCE",
+      "UNKNOWN"
+    ],
+    "public_price_exposure": {
+      "state": "DEFERRED_BY_FROZEN_DESTINATION",
+      "reason_pt_br": "O preço-piloto continua aplicável no contrato comercial, mas não é inserido nas superfícies desta transferência enquanto o destino canônico estiver byte-frozen e sem captura persistida on-page."
+    }
+  },
+  "surfaces": [
+    {
+      "role": "home",
+      "route": "/",
+      "file": "index.html",
+      "cta_id": "home-medicoes-glosas-dossie",
+      "mutation_state": "AUTHORIZED"
+    },
+    {
+      "role": "services_hub",
+      "route": "/servicos-obras-publicas/",
+      "file": "servicos-obras-publicas/index.html",
+      "cta_id": "hub-servicos-medicoes-glosas",
+      "mutation_state": "AUTHORIZED"
+    },
+    {
+      "role": "editorial_canary",
+      "route": "/conteudos/atraso-na-medicao-obra-publica/",
+      "file": "conteudos/atraso-na-medicao-obra-publica/index.html",
+      "mutation_state": "OWNED_BY_389_READ_ONLY",
+      "content_owner_issue": 389,
+      "existing_semantic_link": "/medicoes-glosas-obras-publicas/",
+      "required_final_cta_id": "canary-medicao-dossie"
+    },
+    {
+      "role": "canonical_destination",
+      "route": "/medicoes-glosas-obras-publicas/",
+      "file": "medicoes-glosas-obras-publicas/index.html",
+      "mutation_state": "FROZEN_READ_ONLY",
+      "freeze_owner_issues": [
+        128,
+        291
+      ],
+      "earliest_safe_action_at": "2026-09-16",
+      "expected_sha256": "a137bd04b117a0f8b4983611e1ecb18a3fa9065b68949f522e13d503003d2442"
+    }
+  ],
+  "primary_cta_contract": {
+    "href": "/medicoes-glosas-obras-publicas/",
+    "required_attributes": [
+      "data-cta-id",
+      "data-cta-position",
+      "data-asset-id",
+      "data-asset-family",
+      "data-route-family",
+      "data-journey"
+    ],
+    "route_family": "medicoes-glosas",
+    "journey": "contrato",
+    "analytics_source": "CONFENGE_WEB",
+    "pii_in_analytics": false
+  },
+  "ownership": {
+    "commercial_owner_route": "/medicoes-glosas-obras-publicas/",
+    "informational_canary_route": "/conteudos/atraso-na-medicao-obra-publica/",
+    "informational_route_may_promote_competing_offer": false,
+    "new_public_route_created": false
+  },
+  "rollback": {
+    "trigger_pt_br": "Aumento de confusão entre a resposta editorial e a próxima ação, queda observável na transferência ou conflito de ownership.",
+    "action_pt_br": "Reverter a copy e os links das três superfícies autorizadas, mantendo o conteúdo técnico, a URL canônica e o pilar byte-frozen."
+  }
+}

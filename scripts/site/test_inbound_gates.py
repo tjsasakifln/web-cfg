@@ -585,7 +585,7 @@ def test_three_hubs_prove_exactly_one_service_transition_from_shipped_html():
     )
 
     expected = {
-        "/servicos-obras-publicas/": "/diagnostico-b2g-360/",
+        "/servicos-obras-publicas/": "/medicoes-glosas-obras-publicas/",
         "/problemas-que-resolvemos/": "/defesa-margem-contratos-publicos/",
         "/ferramentas/": "/diagnostico-b2g-expansao/",
     }
