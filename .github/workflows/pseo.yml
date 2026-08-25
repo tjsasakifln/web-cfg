@@ -10,18 +10,18 @@ jobs:
     name: pSEO quality gates
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           # Full history required for package commit_sha ancestor checks (PR merge refs)
           fetch-depth: 0
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.12"
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "22"
       - name: Install test deps
-        run: pip install pytest
+        run: python -m pip install --disable-pip-version-check -r requirements-ci.txt
       - name: npm ci
         # Hard fail on lock desync — never soft-fallback to npm install.
         # --engine-strict also hard-fails EBADENGINE, so a dependency declaring a
@@ -57,7 +57,7 @@ jobs:
       - name: pSEO audit
         run: npm run pseo:audit
       - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v2
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: setup-chrome
       - name: Full test suite
         env:

@@ -30,6 +30,7 @@ PACKAGE_JSON = ROOT / "package.json"
 PACKAGE_LOCK = ROOT / "package-lock.json"
 NVMRC = ROOT / ".nvmrc"
 REVOPS_SCHEDULED = WORKFLOWS_DIR / "revops-scheduled.yml"
+PYTHON_REQUIREMENTS = ROOT / "requirements-ci.txt"
 
 # Stable check contexts documented in docs/ops/REQUIRED-BRANCH-CHECKS.md
 EXPECTED_SITE_CI_JOB_NAME = "site-ci"
@@ -342,6 +343,56 @@ def test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed():
         raise AssertionError("revops scheduler must not hide a broken lock with npm install")
 
 
+def test_ci_supply_chain_is_pinned():
+    """Remote Actions and the complete Python resolver set must be immutable."""
+    errors: list[str] = []
+    sha = re.compile(r"^[0-9a-f]{40}$")
+    for workflow in sorted(WORKFLOWS_DIR.glob("*.yml")):
+        for line_number, line in enumerate(_read(workflow).splitlines(), start=1):
+            match = re.search(r"\buses:\s*([^@\s]+)@([^\s#]+)", line)
+            if not match or match.group(1).startswith("./"):
+                continue
+            if not sha.fullmatch(match.group(2)):
+                errors.append(
+                    f"{workflow.name}:{line_number} remote action is not pinned by commit SHA"
+                )
+            if not re.search(r"#\s*v\d+", line):
+                errors.append(
+                    f"{workflow.name}:{line_number} pinned action needs a reviewed version comment"
+                )
+
+    if not PYTHON_REQUIREMENTS.is_file():
+        errors.append("requirements-ci.txt is missing")
+    else:
+        names: set[str] = set()
+        for line_number, raw in enumerate(_read(PYTHON_REQUIREMENTS).splitlines(), start=1):
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            match = re.fullmatch(r"([A-Za-z0-9_.-]+)==([^\s]+)", line)
+            if not match:
+                errors.append(
+                    f"requirements-ci.txt:{line_number} must use one exact == pin"
+                )
+                continue
+            normalized = match.group(1).lower().replace("_", "-")
+            if normalized in names:
+                errors.append(f"requirements-ci.txt:{line_number} duplicates {normalized}")
+            names.add(normalized)
+        for required in ("pytest", "google-api-python-client", "google-auth"):
+            if required not in names:
+                errors.append(f"requirements-ci.txt is missing {required}")
+
+    for workflow in sorted(WORKFLOWS_DIR.glob("*.yml")):
+        text = _read(workflow)
+        if re.search(r"(?m)^\s+(?:python\s+-m\s+)?pip install(?![^\n]*-r requirements-ci\.txt)", text):
+            errors.append(f"{workflow.name} installs Python outside requirements-ci.txt")
+        if re.search(r"pip install[^\n]*\|\|\s*true", text):
+            errors.append(f"{workflow.name} hides a failed Python install")
+
+    assert not errors, "CI supply-chain pin failures:\n- " + "\n- ".join(errors)
+
+
 def _on_block(text: str) -> str:
     """YAML `on:` mapping only — used to forbid path filters that skip merge."""
     m = re.search(r"(?m)^on:\n", text)
@@ -467,6 +518,7 @@ def main() -> int:
         test_pseo_shape,
         test_node_pin_is_single_source,
         test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed,
+        test_ci_supply_chain_is_pinned,
         test_merge_workflows_have_no_path_skip,
         test_pseo_still_requires_full_npm_test,
         test_lighthouse_covers_article_cover_regression_routes,
