@@ -1,0 +1,385 @@
+{
+  "schema": "page-contract-licitacao.v1",
+  "contract_version": 1,
+  "source_issue": 330,
+  "name_authority_issue": 343,
+  "fail_closed_canary_issue": 155,
+  "currency": "BRL",
+  "research_state": "NOT_STARTED",
+  "human_evidence": [],
+  "purpose_pt_br": "Contrato de página dos itens 12 a 16 da issue 330: o que cada unidade comercial de licitação publica em preço, prazo, insumos, saída, não inclusões e fronteira jurídica.",
+  "naming_rule_pt_br": "Os nomes públicos vêm da issue 343. Anglicismos aposentados não aparecem em texto novo; permanecem apenas em URLs anteriores, preservadas para continuidade.",
+  "credit_rule": {
+    "eligible_source_items": [
+      12,
+      13,
+      14,
+      15
+    ],
+    "target_item": 16,
+    "window_days": 30,
+    "credit_basis": "maior_valor_pago",
+    "credit_applications_max": 1,
+    "cumulative": false,
+    "statement_pt_br": "Se a Decisão de Disputar o Edital, o Mapa de Habilitação e Lacunas de Acervo, a Auditoria de Orçamento, BDI e Exequibilidade ou a Referência de Concorrência e Faixa de Deságio evoluir para a Operação de Proposta para Licitação Crítica em até 30 dias, credita apenas o maior valor pago, uma vez, sem acúmulo."
+  },
+  "urgency_rule": {
+    "surcharge_percent": 50,
+    "disclosed_before_charge": true,
+    "requires_capacity_triage": true,
+    "capacity_may_refuse": true,
+    "applies_when_pt_br": "prazo inferior ao prazo seguro do item",
+    "statement_pt_br": "Prazo inferior ao seguro exige triagem de capacidade e adicional de 50 por cento informado antes da cobrança. A capacidade pode recusar a urgência."
+  },
+  "fail_closed": {
+    "automated_opinion": false,
+    "human_decision_and_publication": true,
+    "statement_pt_br": "O canário de prontidão de disputa da issue 155 permanece fail closed: nenhum item emite parecer automático, e a decisão e a publicação são humanas."
+  },
+  "shared_legal_boundary_pt_br": [
+    "Não presta advocacia.",
+    "Não protocola peças nem documentos.",
+    "Não representa a empresa perante o órgão ou perante terceiros.",
+    "Não promete resultado."
+  ],
+  "items": [
+    {
+      "item": 12,
+      "deliverable_id": "CFG-D12",
+      "scope_version": "licitacao-12.v1",
+      "public_name_pt_br": "Decisão de Disputar o Edital",
+      "value_line_pt_br": "Mostra se a oportunidade merece tempo, garantia e capital da empresa.",
+      "decision_question_pt_br": "Esta oportunidade merece o tempo, a garantia e o capital da empresa?",
+      "route": "/diagnostico-pre-licitacao/",
+      "route_slug_is_legacy": false,
+      "legacy_public_names_pt_br": [],
+      "price": {
+        "mode": "fixed",
+        "amount_cents": 190000,
+        "display_pt_br": "R$ 1.900",
+        "tiers": null,
+        "quote_before_charge": false,
+        "quote_drivers_pt_br": null,
+        "forbidden_price_drivers_pt_br": [],
+        "success_fee": false
+      },
+      "sla_business_days": {
+        "min": 2,
+        "max": 2,
+        "display_pt_br": "2 dias úteis"
+      },
+      "safe_deadline_business_days": 5,
+      "safe_deadline_statement_pt_br": "Só aceitar quando restarem pelo menos 5 dias úteis para a entrega da proposta.",
+      "scope_note_pt_br": "Um edital e uma empresa licitante por contratação.",
+      "required_inputs_pt_br": [
+        "um edital",
+        "as retificações publicadas",
+        "a minuta contratual",
+        "o projeto e o orçamento disponíveis",
+        "uma empresa licitante"
+      ],
+      "output_pt_br": [
+        "decisão AVANÇAR, AVANÇAR COM CONDIÇÕES, ESCLARECER-IMPUGNAR ou RECUSAR",
+        "riscos de regime, matriz contratual, exigências de habilitação, prazo, caixa, garantia e orçamento",
+        "perguntas abertas para o cliente ou para o órgão",
+        "responsável e próxima ação"
+      ],
+      "exclusions_pt_br": [
+        "auditoria integral de planilha",
+        "montagem documental",
+        "peça jurídica",
+        "protocolo",
+        "parecer automático"
+      ],
+      "legal_boundary_pt_br": [
+        "Não presta advocacia.",
+        "Não protocola peças nem documentos.",
+        "Não representa a empresa perante o órgão ou perante terceiros.",
+        "Não promete resultado: não promete vitória, adjudicação, habilitação da empresa nem preço vencedor.",
+        "O producer do canário da issue 155 pode apoiar, mas a decisão e a publicação são humanas, e nenhum parecer automático é emitido."
+      ],
+      "disclaims_automated_opinion": true,
+      "distinction_pt_br": null,
+      "inputs_derivation_pt_br": "transcrito do escopo declarado na issue 330 para o item 12"
+    },
+    {
+      "item": 13,
+      "deliverable_id": "CFG-D13",
+      "scope_version": "licitacao-13.v1",
+      "public_name_pt_br": "Mapa de Habilitação e Lacunas de Acervo",
+      "value_line_pt_br": "Confere requisitos e mostra o que falta provar no acervo.",
+      "decision_question_pt_br": "Quais requisitos já estão provados e o que ainda falta provar no acervo?",
+      "route": null,
+      "route_slug_is_legacy": false,
+      "legacy_public_names_pt_br": [],
+      "price": {
+        "mode": "fixed",
+        "amount_cents": 290000,
+        "display_pt_br": "R$ 2.900",
+        "tiers": null,
+        "quote_before_charge": false,
+        "quote_drivers_pt_br": null,
+        "forbidden_price_drivers_pt_br": [],
+        "success_fee": false
+      },
+      "sla_business_days": {
+        "min": 3,
+        "max": 3,
+        "display_pt_br": "3 dias úteis"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_statement_pt_br": null,
+      "scope_note_pt_br": "Um edital, um licitante e uma rodada de documentos.",
+      "required_inputs_pt_br": [
+        "um edital",
+        "um licitante",
+        "uma rodada de documentos",
+        "requisitos técnico-profissionais e técnico-operacionais do edital",
+        "quantitativos e parcelas relevantes exigidos",
+        "registros profissionais e comprovação de disponibilidade",
+        "documentos econômico-financeiros, fiscais e trabalhistas",
+        "previsão de consórcio ou subcontratação, quando o edital admitir"
+      ],
+      "output_pt_br": [
+        "classificação COBERTO, LACUNA, AMBÍGUO, INAPLICÁVEL ou REVALIDAR para cada requisito",
+        "documento que sustenta cada requisito",
+        "validade de cada documento",
+        "risco associado",
+        "dono responsável por resolver",
+        "alternativas legítimas de consórcio ou subcontratação, quando previstas no edital"
+      ],
+      "exclusions_pt_br": [
+        "não habilita a empresa",
+        "não fabrica atestado"
+      ],
+      "legal_boundary_pt_br": [
+        "Não presta advocacia.",
+        "Não protocola peças nem documentos.",
+        "Não representa a empresa perante o órgão ou perante terceiros.",
+        "Não promete resultado: não promete vitória, adjudicação, habilitação da empresa nem preço vencedor."
+      ],
+      "disclaims_automated_opinion": false,
+      "distinction_pt_br": null,
+      "inputs_derivation_pt_br": "transcrito do escopo declarado na issue 330 para o item 13"
+    },
+    {
+      "item": 14,
+      "deliverable_id": "CFG-D14",
+      "scope_version": "licitacao-14.v1",
+      "public_name_pt_br": "Auditoria de Orçamento, BDI e Exequibilidade",
+      "value_line_pt_br": "Testa preços, BDI, premissas e risco de inexequibilidade antes da proposta.",
+      "decision_question_pt_br": "O orçamento sustenta preço, BDI e premissas, ou o risco de inexequibilidade impede precificar?",
+      "route": "/auditoria-orcamento-licitacao/",
+      "route_slug_is_legacy": false,
+      "legacy_public_names_pt_br": [],
+      "price": {
+        "mode": "base_plus_quote",
+        "amount_cents": 590000,
+        "display_pt_br": "R$ 5.900",
+        "base_scope_pt_br": "um lote e uma planilha principal",
+        "tiers": null,
+        "quote_before_charge": true,
+        "quote_rule_pt_br": "Escopo maior que um lote e uma planilha principal recebe preço fechado antes da cobrança.",
+        "quote_drivers_pt_br": [
+          "número de lotes",
+          "número de itens",
+          "composições próprias",
+          "regime de execução"
+        ],
+        "forbidden_price_drivers_pt_br": [
+          "páginas"
+        ],
+        "success_fee": false
+      },
+      "sla_business_days": {
+        "min": 5,
+        "max": 8,
+        "display_pt_br": "5 a 8 dias úteis"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_statement_pt_br": null,
+      "scope_note_pt_br": "Preço base cobre um lote e uma planilha principal; escopo maior é fechado antes da cobrança.",
+      "required_inputs_pt_br": [
+        "edital",
+        "planilha orçamentária",
+        "curva ABC",
+        "referência SINAPI, SICRO ou ORSE aplicável",
+        "encargos",
+        "BDI",
+        "data-base",
+        "cotações fornecidas",
+        "cronograma",
+        "fluxo de caixa"
+      ],
+      "output_pt_br": [
+        "inconsistências de quantitativo, de preço e de base de referência",
+        "itens críticos da curva ABC",
+        "coerência de BDI, encargos e tributação informada",
+        "cenários de deságio e sensibilidade",
+        "risco de exequibilidade global e unitária",
+        "decisão de precificar, esclarecer ou impugnar, ajustar ou recusar"
+      ],
+      "exclusions_pt_br": [
+        "não substitui o orçamentista na montagem completa da proposta"
+      ],
+      "legal_boundary_pt_br": [
+        "Não presta advocacia.",
+        "Não protocola peças nem documentos.",
+        "Não representa a empresa perante o órgão ou perante terceiros.",
+        "Não promete resultado: não promete vitória, adjudicação, habilitação da empresa nem preço vencedor."
+      ],
+      "disclaims_automated_opinion": false,
+      "distinction_pt_br": null,
+      "inputs_derivation_pt_br": "transcrito do escopo declarado na issue 330 para o item 14"
+    },
+    {
+      "item": 15,
+      "deliverable_id": "CFG-D15",
+      "scope_version": "licitacao-15.v1",
+      "public_name_pt_br": "Referência de Concorrência e Faixa de Deságio",
+      "value_line_pt_br": "Compara o padrão competitivo e delimita uma faixa defensável de deságio.",
+      "decision_question_pt_br": "Qual faixa de deságio é defensável diante do padrão competitivo deste comprador?",
+      "route": null,
+      "route_slug_is_legacy": false,
+      "legacy_public_names_pt_br": [],
+      "price": {
+        "mode": "fixed",
+        "amount_cents": 375000,
+        "display_pt_br": "R$ 3.750",
+        "tiers": null,
+        "quote_before_charge": false,
+        "quote_drivers_pt_br": null,
+        "forbidden_price_drivers_pt_br": [],
+        "success_fee": false
+      },
+      "sla_business_days": {
+        "min": 5,
+        "max": 5,
+        "display_pt_br": "5 dias úteis"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_statement_pt_br": null,
+      "scope_note_pt_br": "Uma oportunidade ou comprador, histórico de até 60 meses e até 20 concorrentes observáveis.",
+      "required_inputs_pt_br": [
+        "uma oportunidade ou um comprador",
+        "histórico público de até 60 meses",
+        "até 20 concorrentes observáveis"
+      ],
+      "output_pt_br": [
+        "participantes e empresas contratadas no histórico público do comprador",
+        "distribuição de descontos quando os certames forem comparáveis",
+        "frequência de participação",
+        "concentração de mercado",
+        "comportamento por comprador",
+        "cenários de posicionamento",
+        "limites de inferência do método"
+      ],
+      "exclusions_pt_br": [
+        "não recomenda lance vencedor",
+        "não infere conluio"
+      ],
+      "legal_boundary_pt_br": [
+        "Não presta advocacia.",
+        "Não protocola peças nem documentos.",
+        "Não representa a empresa perante o órgão ou perante terceiros.",
+        "Não promete resultado: não promete vitória, adjudicação, habilitação da empresa nem preço vencedor."
+      ],
+      "disclaims_automated_opinion": false,
+      "distinction_pt_br": "O Mapa de Concorrentes Relevantes é territorial e estrutural, e pertence à expansão. Esta entrega é específica do edital e termina em decisão de preço e de capacidade.",
+      "inputs_derivation_pt_br": "transcrito do escopo declarado na issue 330 para o item 15"
+    },
+    {
+      "item": 16,
+      "deliverable_id": "CFG-D16",
+      "scope_version": "licitacao-16.v1",
+      "public_name_pt_br": "Operação de Proposta para Licitação Crítica",
+      "value_line_pt_br": "Coordena documentos, preço, técnica e revisão até a entrega da proposta.",
+      "decision_question_pt_br": "Quem coordena documentos, preço, técnica e revisão até a entrega desta proposta?",
+      "route": "/bid-room-licitacoes-obras/",
+      "route_slug_is_legacy": true,
+      "route_slug_note_pt_br": "URL anterior preservada para continuidade de busca, analytics e atendimento. O nome público segue a issue 343.",
+      "legacy_public_names_pt_br": [],
+      "price": {
+        "mode": "tiered",
+        "amount_cents": null,
+        "display_pt_br": "R$ 9.800, R$ 14.800 ou R$ 19.800 conforme enquadramento",
+        "selected_at_pt_br": "triagem",
+        "quote_before_charge": false,
+        "quote_drivers_pt_br": null,
+        "forbidden_price_drivers_pt_br": [
+          "páginas"
+        ],
+        "success_fee": false,
+        "tiers": [
+          {
+            "tier": "essencial",
+            "amount_cents": 980000,
+            "display_pt_br": "R$ 9.800",
+            "framing_pt_br": "um edital e um lote, modalidade e habilitação usuais, prazo seguro de pelo menos 10 dias úteis",
+            "safe_deadline_business_days": 10
+          },
+          {
+            "tier": "complexa",
+            "amount_cents": 1480000,
+            "display_pt_br": "R$ 14.800",
+            "framing_pt_br": "múltiplos lotes, consórcio ou subcontratação relevante, muitas retificações ou coordenação ampliada",
+            "safe_deadline_business_days": null
+          },
+          {
+            "tier": "especial",
+            "amount_cents": 1980000,
+            "display_pt_br": "R$ 19.800",
+            "framing_pt_br": "contratação integrada ou semi-integrada, julgamento por técnica e preço, proposta técnica substantiva ou matriz e projeto de alta complexidade",
+            "safe_deadline_business_days": null
+          }
+        ]
+      },
+      "sla_business_days": {
+        "min": null,
+        "max": null,
+        "display_pt_br": "prazo acordado na triagem, dentro do enquadramento escolhido"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_statement_pt_br": "O prazo seguro de pelo menos 10 dias úteis pertence ao enquadramento essencial, não ao item inteiro.",
+      "scope_note_pt_br": "Preço escolhido na triagem, sem comissão de êxito.",
+      "required_inputs_pt_br": [
+        "o edital e o lote enquadrados na triagem",
+        "os documentos de habilitação e o acervo do licitante",
+        "o orçamento, o BDI e o cronograma que entram na coordenação"
+      ],
+      "output_pt_br": [
+        "decisão de disputar",
+        "plano de trabalho",
+        "matriz de responsabilidade",
+        "habilitação e acervo organizados",
+        "coordenação de orçamento, BDI e cronograma",
+        "riscos",
+        "revisão crítica",
+        "checklist final para o cliente protocolar"
+      ],
+      "exclusions_pt_br": [
+        "não assina a proposta",
+        "não protocola a proposta",
+        "não substitui o jurídico",
+        "não substitui o orçamentista",
+        "não promete vitória",
+        "comissão de êxito"
+      ],
+      "legal_boundary_pt_br": [
+        "Não presta advocacia.",
+        "Não protocola peças nem documentos: o checklist final é para o cliente protocolar.",
+        "Não representa a empresa perante o órgão ou perante terceiros.",
+        "Não promete resultado: não promete vitória, adjudicação, habilitação da empresa nem preço vencedor."
+      ],
+      "disclaims_automated_opinion": false,
+      "distinction_pt_br": null,
+      "inputs_derivation_pt_br": "derivado do escopo declarado na issue 330 para o item 16, que cita edital e lote na triagem, habilitação e acervo, e coordenação de orçamento, BDI e cronograma"
+    }
+  ],
+  "not_delivered_here_pt_br": [
+    "nenhuma página nova é criada nesta entrega",
+    "nenhum checkout é ligado nesta entrega",
+    "exemplos sintéticos completos dos cinco itens ainda não existem",
+    "a primeira venda P0 com esforço, retrabalho, margem e resultado ainda não existe"
+  ]
+}

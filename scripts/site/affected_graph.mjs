@@ -230,6 +230,21 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/entregas/"],
   },
+  "test:page-contract-licitacao": {
+    producers: [
+      "tests/commercial/test_page_contract_licitacao.mjs",
+      "data/commercial/page-contract-licitacao.v1.json",
+      "diagnostico-pre-licitacao/index.html",
+      "auditoria-orcamento-licitacao/index.html",
+      "bid-room-licitacoes-obras/index.html",
+    ],
+    artifacts: [],
+    surfaces: [
+      "/diagnostico-pre-licitacao/",
+      "/auditoria-orcamento-licitacao/",
+      "/bid-room-licitacoes-obras/",
+    ],
+  },
   "test:bofu-dominance": {
     producers: ["tests/bofu_dominance/", "scripts/bofu_dominance/", "data/bofu-dominance/"],
     artifacts: ["docs/seo/bofu-dominance/"],
