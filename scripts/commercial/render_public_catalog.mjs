@@ -16,6 +16,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const registryPath = path.join(root, "data/commercial/deliverables-registry.v1.json");
 const doorsPath = path.join(root, "data/commercial/task-doors.v1.json");
 const namingPath = path.join(root, "data/commercial/offer-naming.v1.json");
+const executionPath = path.join(root, "data/commercial/page-contract-execucao.v1.json");
 const pagePath = path.join(root, "entregas/index.html");
 
 const CATALOG_START = "<!-- GENERATED:PUBLIC-CATALOG:START -->";
@@ -70,6 +71,58 @@ function publicList(values, prefix = "") {
 
 function copyClause(key, title, content) {
   return `<section data-copy-clause="${key}"><h6>${title}</h6>${content}</section>`;
+}
+
+function boundaryAgainst(item, number) {
+  return item?.boundary_vs_existing_offers?.find((boundary) => boundary.against_item === number);
+}
+
+function executionCallout(entry, executionContract) {
+  if (!executionContract) return "";
+  const byNumber = new Map(executionContract.items.map((item) => [item.number, item]));
+
+  if (entry.deliverable_id === "CFG-D16") {
+    const executionItems = executionContract.items.map((item) =>
+      `<li><a href="#entrega-${item.number}"><span>${item.number}</span>${escapeHtml(item.public_name_pt_br)}</a></li>`
+    ).join("");
+    const credit = byNumber.get(51).credit_rule;
+    return `<section class="catalog-item__execution" data-execution-composition="CFG-D16" aria-labelledby="execution-composition-title">
+<h6 id="execution-composition-title">Coordenação ou execução avulsa?</h6>
+<p>O item 16 coordena a oportunidade inteira. As seis execuções abaixo continuam compráveis separadamente:</p>
+<ul>${executionItems}</ul>
+<p data-execution-no-double-charge>Quando alguma execução compõe o item 16, a proposta discrimina cada item incluído e não soma preços silenciosamente.</p>
+<p data-execution-credit>O maior valor pago no item ${credit.source_item} gera um único crédito para o item 51 ou para o item 16 em até ${credit.window_days} dias, sem acúmulo.</p>
+</section>`;
+  }
+
+  const executionItem = executionContract.items.find((item) => item.deliverable_id === entry.deliverable_id);
+  if (!executionItem) return "";
+  const tierLines = executionItem.pricing.tiers.map((tier) => {
+    const sla = Number.isInteger(tier.sla_business_days) ? ` · ${tier.sla_business_days} dias úteis` : "";
+    return `<li><strong>${escapeHtml(tier.name_pt_br)}: ${brl(tier.price_cents)}</strong>${sla}<br/>${escapeHtml(tier.unit_pt_br)}</li>`;
+  });
+  const additionLines = (executionItem.pricing.additional_charges || []).map((charge) =>
+    `<li><strong>${escapeHtml(charge.name_pt_br)}: ${brl(charge.price_cents)}</strong><br/>${escapeHtml(charge.unit_pt_br)}</li>`
+  );
+  const sections = [
+    `<div data-execution-pricing="${entry.deliverable_id}"><h6>Faixas publicadas</h6><ul>${[...tierLines, ...additionLines].join("")}</ul></div>`,
+  ];
+
+  if (entry.deliverable_id === "CFG-D49") {
+    const boundary = boundaryAgainst(executionItem, 14);
+    sections.push(`<div data-execution-boundary="14-49"><h6>Auditar ou produzir?</h6><p>${escapeHtml(boundary.statement_pt_br)}</p></div>`);
+  }
+
+  if (entry.deliverable_id === "CFG-D51") {
+    const boundary = boundaryAgainst(executionItem, 13);
+    sections.push(`<div data-execution-boundary="13-51"><h6>Diagnosticar ou montar?</h6><p>${escapeHtml(boundary.statement_pt_br)}</p></div>`);
+  }
+
+  if (entry.deliverable_id === "CFG-D53") {
+    sections.push(`<div data-execution-operator="client-only"><h6>Quem opera a sessão</h6><p>${escapeHtml(executionItem.operator_of_record_pt_br)} A CONFENGE não dá lance e não opera credencial, login, certificado ou plataforma pelo cliente.</p></div>`);
+  }
+
+  return `<aside class="catalog-item__execution" data-execution-offer="${entry.deliverable_id}">${sections.join("")}</aside>`;
 }
 
 function contractDetails(entry, neighbor) {
@@ -175,7 +228,7 @@ const STATE = {
   },
 };
 
-function itemCard(entry, byTask) {
+function itemCard(entry, byTask, executionContract) {
   const state = STATE[entry.public_state];
   const title = escapeHtml(entry.public_name_pt_br);
   const legacyName = (entry.name_aliases || []).find((name) => name !== entry.public_name_pt_br);
@@ -204,27 +257,28 @@ ${alias}
 <dl class="catalog-item__facts"><div><dt>Preço</dt><dd>${priceLabel(entry)}</dd></div><div><dt>Prazo</dt><dd>${escapeHtml(publicText(slaLabel(entry)))}</dd></div><div><dt>Saída principal</dt><dd>${escapeHtml(publicText(entry.included_outputs[0]))}</dd></div></dl>
 <p class="catalog-item__evidence">Dados públicos com fonte, data, método e cobertura. Cada afirmação é marcada como fato, cálculo, inferência ou desconhecido.</p>
 <p class="catalog-item__state-note">${state.explanation}</p>
+${executionCallout(entry, executionContract)}
 ${contractDetails(entry, neighbor)}
 <label class="catalog-item__compare"><input type="checkbox" value="${entry.deliverable_id}" data-compare-item/> Comparar esta entrega</label>
 ${action}
 </article>`;
 }
 
-function subgroupMarkup(door, subgroup, byNumber, byTask) {
+function subgroupMarkup(door, subgroup, byNumber, byTask, executionContract) {
   const entries = subgroup.items.map((number) => byNumber.get(number));
   return `<section class="catalog-subgroup" aria-labelledby="subgrupo-${subgroup.subgroup_id}">
 <header><h4 id="subgrupo-${subgroup.subgroup_id}">${escapeHtml(subgroup.label_pt_br)}</h4><p>${escapeHtml(subgroup.decisive_difference_pt_br)}</p></header>
-<div class="catalog-items">${entries.map((entry) => itemCard(entry, byTask)).join("\n")}</div>
+<div class="catalog-items">${entries.map((entry) => itemCard(entry, byTask, executionContract)).join("\n")}</div>
 </section>`;
 }
 
-function doorMarkup(door, byNumber, byTask) {
+function doorMarkup(door, byNumber, byTask, executionContract) {
   const progressive = door.progressive_disclosure;
   let content;
   if (progressive?.required) {
-    content = progressive.subgroups.map((subgroup) => subgroupMarkup(door, subgroup, byNumber, byTask)).join("\n");
+    content = progressive.subgroups.map((subgroup) => subgroupMarkup(door, subgroup, byNumber, byTask, executionContract)).join("\n");
   } else {
-    content = `<section class="catalog-subgroup" aria-label="Opções para ${escapeHtml(door.public_label_pt_br)}"><h4 class="catalog-subgroup__title catalog-subgroup__title--plain">Opções para esta tarefa</h4><div class="catalog-items">${door.members.map(({ item }) => itemCard(byNumber.get(item), byTask)).join("\n")}</div></section>`;
+    content = `<section class="catalog-subgroup" aria-label="Opções para ${escapeHtml(door.public_label_pt_br)}"><h4 class="catalog-subgroup__title catalog-subgroup__title--plain">Opções para esta tarefa</h4><div class="catalog-items">${door.members.map(({ item }) => itemCard(byNumber.get(item), byTask, executionContract)).join("\n")}</div></section>`;
   }
   return `<section class="catalog-door" data-task-door="${door.door}" id="porta-${door.door.toLowerCase()}" aria-labelledby="porta-${door.door.toLowerCase()}-title">
 <header class="catalog-door__head"><p class="eyebrow">Tarefa ${String(door.order).padStart(2, "0")}</p><h3 id="porta-${door.door.toLowerCase()}-title">${escapeHtml(door.public_label_pt_br)}</h3><p>${escapeHtml(door.decision_question_pt_br)}</p><span>${door.member_count} entregáveis</span></header>
@@ -232,14 +286,14 @@ ${content}
 </section>`;
 }
 
-export function renderCatalog(registry, taskDoors) {
+export function renderCatalog(registry, taskDoors, executionContract) {
   const byNumber = new Map(registry.deliverables.map((entry) => [entry.catalog_number, entry]));
   const byTask = new Map(taskDoors.doors.map((door) => [
     door.door,
     door.members.map((member) => byNumber.get(member.item)),
   ]));
   const nav = taskDoors.doors.map((door) => `<a href="#porta-${door.door.toLowerCase()}"><span>${door.order}</span>${escapeHtml(door.public_label_pt_br)} <small>${door.member_count}</small></a>`).join("\n");
-  const doors = taskDoors.doors.map((door) => doorMarkup(door, byNumber, byTask)).join("\n");
+  const doors = taskDoors.doors.map((door) => doorMarkup(door, byNumber, byTask, executionContract)).join("\n");
   const taskOptions = taskDoors.doors.map((door) => `<option value="${door.door}">${escapeHtml(door.public_label_pt_br)}</option>`).join("");
   const inputOptions = taskDoors.interaction_rules.framing_steps[2].options_pt_br.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("");
   const alphabetical = [...registry.deliverables]
@@ -281,8 +335,8 @@ function replaceBlock(html, start, end, rendered) {
   return `${html.slice(0, from)}${rendered}${html.slice(to + end.length)}`;
 }
 
-export function renderPage(html, registry, taskDoors) {
-  let next = replaceBlock(html, CATALOG_START, CATALOG_END, renderCatalog(registry, taskDoors));
+export function renderPage(html, registry, taskDoors, executionContract) {
+  let next = replaceBlock(html, CATALOG_START, CATALOG_END, renderCatalog(registry, taskDoors, executionContract));
   next = replaceBlock(next, SELECT_START, SELECT_END, renderSelect(registry));
   return next;
 }
@@ -291,6 +345,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
   const taskDoors = JSON.parse(fs.readFileSync(doorsPath, "utf8"));
   const naming = JSON.parse(fs.readFileSync(namingPath, "utf8"));
+  const executionContract = JSON.parse(fs.readFileSync(executionPath, "utf8"));
   const valueById = new Map(naming.names.map((entry) => [entry.deliverable_id, entry.value_line_pt_br]));
   const renderedRegistry = {
     ...registry,
@@ -300,7 +355,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     })),
   };
   const current = fs.readFileSync(pagePath, "utf8");
-  const rendered = renderPage(current, renderedRegistry, taskDoors);
+  const rendered = renderPage(current, renderedRegistry, taskDoors, executionContract);
   if (process.argv.includes("--check")) {
     if (rendered !== current) {
       console.error("PUBLIC_CATALOG_DRIFT: run node scripts/commercial/render_public_catalog.mjs --write");

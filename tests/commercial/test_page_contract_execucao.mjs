@@ -64,6 +64,7 @@ function walkStrings(node, at, out) {
 const allStrings = walkStrings(data, "$", []);
 const filled = (v) => typeof v === "string" && v.trim().length > 0;
 const filledList = (v, min) => Array.isArray(v) && v.length >= min && v.every(filled);
+const brl = (cents) => `R$ ${Math.round(Number(cents) / 100).toLocaleString("pt-BR")}`;
 const items = Array.isArray(data.items) ? data.items : [];
 const byNumber = new Map(items.map((it) => [it.number, it]));
 
@@ -583,6 +584,79 @@ assert(
   items.every((it) => !hub.includes(`/${it.deliverable_id.toLowerCase()}/`)),
   items.map((it) => it.deliverable_id),
 );
+
+/* ------------------------------------------------------------------ */
+/* publicação progressiva da família no catálogo                       */
+/* ------------------------------------------------------------------ */
+
+function articleFor(number) {
+  const idAt = hub.indexOf(`id="entrega-${number}"`);
+  const start = hub.lastIndexOf("<article", idAt);
+  const end = hub.indexOf("</article>", idAt);
+  return idAt >= 0 && start >= 0 && end > idAt ? hub.slice(start, end) : "";
+}
+
+for (const item of items) {
+  const article = articleFor(item.number);
+  assert(`item_${item.number}_is_visible_in_hub`, article.length > 0, item.deliverable_id);
+  assert(`item_${item.number}_canonical_name_is_visible`, article.includes(item.public_name_pt_br), item.public_name_pt_br);
+  assert(`item_${item.number}_value_line_is_visible`, article.includes(item.value_line_pt_br), item.value_line_pt_br);
+  assert(`item_${item.number}_price_is_visible`, item.pricing.tiers.every((tier) => article.includes(brl(tier.price_cents))), item.pricing.tiers);
+  assert(
+    `item_${item.number}_inputs_are_progressively_visible`,
+    article.includes('data-copy-clause="client_inputs_and_sla_start"') && /data-input-count="[4-9]/.test(article),
+    item.inputs_pt_br,
+  );
+  assert(
+    `item_${item.number}_outputs_are_progressively_visible`,
+    article.includes('data-copy-clause="concrete_result_and_artifact_example"') && article.includes('data-output="'),
+    item.outputs_pt_br,
+  );
+}
+
+const item16 = articleFor(16);
+assert("item_16_shows_execution_composition", item16.includes('data-execution-composition="CFG-D16"'), item16.length);
+assert(
+  "item_16_links_all_six_separate_executions",
+  items.every((item) => item16.includes(`href="#entrega-${item.number}"`) && item16.includes(item.public_name_pt_br)),
+  items.map((item) => item.number),
+);
+assert(
+  "item_16_forbids_silent_double_charging",
+  item16.includes("não soma preços silenciosamente") && item16.includes("proposta discrimina cada item incluído"),
+  "composition disclosure",
+);
+assert(
+  "item_16_shows_item_13_credit_once",
+  item16.includes("maior valor pago no item 13") && item16.includes("um único crédito") && item16.includes("em até 30 dias") && item16.includes("sem acúmulo"),
+  "credit disclosure",
+);
+
+const item49 = articleFor(49);
+assert(
+  "item_49_visibly_differs_from_item_14",
+  item49.includes('data-execution-boundary="14-49"') && item49.includes("item 14 audita") && item49.includes("item 49 produz"),
+  "audit versus production",
+);
+const item51 = articleFor(51);
+assert(
+  "item_51_visibly_differs_from_item_13",
+  item51.includes('data-execution-boundary="13-51"') && item51.includes("item 13 diagnostica") && item51.includes("item 51 monta"),
+  "diagnosis versus assembly",
+);
+const item53 = articleFor(53);
+assert(
+  "item_53_visibly_keeps_client_as_operator",
+  item53.includes('data-execution-operator="client-only"') &&
+    item53.includes("único operador da plataforma") &&
+    item53.includes("A CONFENGE não dá lance") &&
+    item53.includes("não opera credencial, login, certificado ou plataforma"),
+  "client only operator",
+);
+
+const captureAt = hub.indexOf('id="captura-entregas"');
+assert("execution_items_precede_terminal_capture", items.every((item) => hub.indexOf(`id="entrega-${item.number}"`) < captureAt), captureAt);
+assert("execution_items_use_terminal_capture", items.every((item) => articleFor(item.number).includes('href="#captura-entregas"')), items.map((item) => item.number));
 
 /* ------------------------------------------------------------------ */
 
