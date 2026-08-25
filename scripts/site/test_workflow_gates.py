@@ -30,6 +30,8 @@ PACKAGE_JSON = ROOT / "package.json"
 PACKAGE_LOCK = ROOT / "package-lock.json"
 NVMRC = ROOT / ".nvmrc"
 REVOPS_SCHEDULED = WORKFLOWS_DIR / "revops-scheduled.yml"
+UI_GEOMETRY = ROOT / "scripts" / "site" / "test_ui_geometry.mjs"
+TOOLS_UIUX = ROOT / "scripts" / "site" / "verify_tools_uiux_e2e.mjs"
 
 # Stable check contexts documented in docs/ops/REQUIRED-BRANCH-CHECKS.md
 EXPECTED_SITE_CI_JOB_NAME = "site-ci"
@@ -376,6 +378,21 @@ def test_pseo_still_requires_full_npm_test():
         raise AssertionError("pseo.yml must not soften or replace npm test with test:affected")
 
 
+def test_post_build_browser_gates_use_public_artifact():
+    """Browser checks after build must serve _site, never the source tree."""
+    for label, path in (("UI geometry", UI_GEOMETRY), ("tools UI/UX", TOOLS_UIUX)):
+        text = _read(path)
+        if "resolveSiteRoot" not in text:
+            raise AssertionError(f"{label} must resolve the built public artifact")
+        if "join(ROOT, urlPath)" in text:
+            raise AssertionError(f"{label} still serves the source tree")
+        if "PUBLIC_ARTIFACT_REQUIRED" not in text:
+            raise AssertionError(f"{label} must fail closed when _site is absent")
+    for label, path in (("site-ci", SITE_CI), ("pseo", PSEO)):
+        if 'PUBLIC_ARTIFACT_REQUIRED: "1"' not in _read(path):
+            raise AssertionError(f"{label} must require _site for post-build browser gates")
+
+
 def test_lighthouse_covers_article_cover_regression_routes():
     """The image acceptance gate must exercise the article and pillar changed by #253."""
     workflow = _read(SITE_CI)
@@ -469,6 +486,7 @@ def main() -> int:
         test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed,
         test_merge_workflows_have_no_path_skip,
         test_pseo_still_requires_full_npm_test,
+        test_post_build_browser_gates_use_public_artifact,
         test_lighthouse_covers_article_cover_regression_routes,
         test_codeql_soft_fail_is_explicit,
         test_copy_ci_is_check_not_write,

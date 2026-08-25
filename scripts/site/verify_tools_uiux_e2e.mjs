@@ -18,8 +18,10 @@ import {
 import { join, resolve, extname } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
+import { resolveSiteRoot } from "./interface_coverage.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
+const SITE_ROOT = resolveSiteRoot(ROOT);
 const OUT = resolve(
   process.argv[2] || join(ROOT, "docs/uiux-tools-remediation/evidence")
 );
@@ -84,12 +86,15 @@ const MIME = {
 };
 
 function startServer() {
+  if (process.env.PUBLIC_ARTIFACT_REQUIRED === "1" && SITE_ROOT === ROOT) {
+    throw new Error("public artifact required: run npm run build:site before tools UI/UX E2E");
+  }
   const server = createServer((req, res) => {
     let urlPath = decodeURIComponent((req.url || "/").split("?")[0]);
     if (urlPath.endsWith("/")) urlPath += "index.html";
-    const filePath = join(ROOT, urlPath);
+    const filePath = join(SITE_ROOT, urlPath);
     if (
-      !filePath.startsWith(ROOT) ||
+      !filePath.startsWith(SITE_ROOT) ||
       !existsSync(filePath) ||
       statSync(filePath).isDirectory()
     ) {
@@ -127,6 +132,7 @@ const browser = await puppeteer.launch({
 const report = {
   generated_at: new Date().toISOString(),
   base: BASE,
+  site_root: SITE_ROOT === ROOT ? "." : "_site",
   viewports: VIEWPORTS.map(([w, h]) => `${w}x${h}`),
   results: [],
   overflows: [],
