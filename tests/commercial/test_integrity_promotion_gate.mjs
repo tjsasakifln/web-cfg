@@ -2,6 +2,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { consumerSuitesForPath } from "../../scripts/site/affected_graph.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const DATA_PATH = path.join(root, "data/quality/integrity-promotion-gate.v1.json");
@@ -222,6 +223,11 @@ const graph = fs.readFileSync(path.join(root, "scripts/site/affected_graph.mjs")
 assert("graph", graph.includes('"test:integrity-promotion-gate"'), "affected_graph.mjs");
 assert("graph_contract", graph.includes("data/quality/integrity-promotion-gate.v1.json"), "affected_graph.mjs");
 assert("graph_registry", graph.includes("data/commercial/deliverables-registry.v1.json"), "affected_graph.mjs");
+assert(
+  "affected_public_html_selects_integrity_gate",
+  consumerSuitesForPath("conteudos/fixture-public-surface/index.html").some((entry) => entry.id === "test:integrity-promotion-gate"),
+  "conteudos/fixture-public-surface/index.html",
+);
 
 const failed = results.filter((result) => !result.ok);
 console.log(`${NAME}: ${results.length - failed.length}/${results.length} checks passed`);
