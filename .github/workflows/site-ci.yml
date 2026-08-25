@@ -67,6 +67,7 @@ jobs:
           npm run test:page-contract-eight
           npm run test:first-fold-contract
           npm run test:market-fit-protocol
+          npm run test:real-proof-registry
           npm run test:page-contract-licitacao
           npm run test:page-contract-contratos
           npm run test:page-contract-operacao
