@@ -91,15 +91,13 @@
       "role": "canonical_destination",
       "route": "/medicoes-glosas-obras-publicas/",
       "file": "medicoes-glosas-obras-publicas/index.html",
-      "mutation_state": "REFROZEN_AFTER_AUTHORIZED_333",
+      "mutation_state": "FROZEN_READ_ONLY",
       "freeze_owner_issues": [
         128,
-        291,
-        333
+        291
       ],
-      "last_authorized_mutation_issue": 333,
       "earliest_safe_action_at": "2026-09-16",
-      "expected_sha256": "a499a9876ea6f4edc41a6b0fce63b52585defd97ddfe3d5643c8c963c7702470"
+      "expected_sha256": "a137bd04b117a0f8b4983611e1ecb18a3fa9065b68949f522e13d503003d2442"
     }
   ],
   "primary_cta_contract": {

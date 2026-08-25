@@ -40,7 +40,7 @@ MANAGED_EXTENSIONS = [
     (
         "<!-- GENERATED:CONTRACT-DEFENSE-HUB:START -->",
         "<!-- GENERATED:CONTRACT-DEFENSE-HUB:END -->",
-        '<link href="/assets/contract-defense-products.css" rel="stylesheet"/>',
+        '<link href="/styles-offers.css" rel="stylesheet"/>',
     ),
 ]
 
@@ -164,7 +164,9 @@ def _preserve_managed_extensions(rendered: str, current: str | None) -> str:
         start_count = current.count(start)
         end_count = current.count(end)
         if start_count != end_count:
-            raise ValueError(f"managed extension marker mismatch: {start}={start_count}, {end}={end_count}")
+            raise ValueError(
+                f"managed extension marker mismatch: {start}={start_count}, {end}={end_count}"
+            )
         if start_count == 0:
             continue
         if start_count != 1:

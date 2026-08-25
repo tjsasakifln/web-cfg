@@ -11,7 +11,12 @@
   },
   "public_implementation": {
     "renderer": "scripts/commercial/render_contract_defense_products.mjs",
-    "route_pages": 6,
+    "route_pages": 3,
+    "active_route_items": [17, 20, 23],
+    "held_protected_route_items": [18, 19, 22],
+    "held_state": "DEFER_UNTIL_DATE",
+    "held_by_contract": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+    "earliest_safe_action_at": "2026-09-16",
     "hub_route": "/servicos-obras-publicas/",
     "hub_includes_unrouted_item_21": true,
     "capture_fields": [
