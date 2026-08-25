@@ -150,11 +150,11 @@
 .catalog-item--published .catalog-item__state{color:#285d2a;background:#e8f2e8}
 .catalog-item--blocked .catalog-item__state{color:#704918;background:#f3e9d6}
 .catalog-item h5{margin:0 0 10px;color:var(--ink);font-size:1.08rem;line-height:1.3}
-.catalog-item__alias{margin:-4px 0 10px;color:#68778a;font-size:.7rem;line-height:1.45}
+.catalog-item__alias{margin:-4px 0 10px;color:#435369;font-size:.7rem;line-height:1.45}
 .catalog-item__question{margin:0 0 16px;color:#34465a;font-size:.86rem;font-weight:680;line-height:1.55}
 .catalog-item__facts{display:grid;gap:10px;margin:0 0 15px;padding:14px 0;border-top:1px solid #dde3e8;border-bottom:1px solid #dde3e8}
 .catalog-item__facts div{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px}
-.catalog-item__facts dt{color:#68778a;font-family:var(--mono);font-size:.62rem;font-weight:800;text-transform:uppercase}
+.catalog-item__facts dt{color:#435369;font-family:var(--mono);font-size:.62rem;font-weight:800;text-transform:uppercase}
 .catalog-item__facts dd{margin:0;color:#24364a;font-size:.76rem;line-height:1.45}
 .catalog-item__evidence,.catalog-item__state-note{margin:0 0 12px;color:#617084;font-size:.72rem;line-height:1.52}
 .catalog-item__state-note{padding-left:10px;border-left:2px solid #9eabb6}
@@ -163,6 +163,9 @@
 .catalog-boundary{margin-top:48px;padding:24px 26px;color:#dce5ed;background:#071a31;border-left:4px solid var(--lime)}
 .catalog-boundary h3{margin:0 0 8px;color:#fff;font-size:1.25rem}
 .catalog-boundary p{max-width:780px;margin:0;color:#c3ced8;line-height:1.65}
+.deliverables-page .pillar-capture-grid,.deliverables-page .pillar-capture-form,.deliverables-page .pillar-capture-form label{min-width:0}
+.deliverables-page .pillar-capture-form select{box-sizing:border-box;display:block;width:100%;max-width:100%;min-width:0;padding:12px 14px;color:var(--text);background:#fff;border:1px solid #a9b6b0;border-radius:8px;font:inherit}
+.deliverables-page .pillar-capture-form select:focus{outline:3px solid rgba(14,124,102,.2);border-color:var(--green)}
 @media(max-width:900px){
   .deliverables-hero-grid,.deliverable-feature,.deliverable-feature--mirror,.deliverable-anatomy,.deliverables-next-grid,.home-deliverables,.compare-head,.ladder-grid{grid-template-columns:1fr}
   .deliverable-feature--mirror .deliverable-feature-copy{order:0}
