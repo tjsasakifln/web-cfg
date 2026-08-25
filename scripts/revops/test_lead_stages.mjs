@@ -374,6 +374,37 @@ function fail(name, detail) {
     Module._load = originalLoad;
   }
 
+  const recordKindPath = path.join(root, "netlify/functions/lib/record-kind.cjs");
+  const realRecordKind = require(recordKindPath);
+  Module._load = function failRecordKindClassification(request, parent, isMain) {
+    if (request === "./record-kind.cjs" && parent?.filename === leadStorePath) {
+      return {
+        ...realRecordKind,
+        resolveRecordKind() {
+          throw new Error("injected_classification_failure");
+        },
+      };
+    }
+    return originalLoad.call(this, request, parent, isMain);
+  };
+  try {
+    const failClosed = buildLeadRecord({
+      lead_id: "rk-classification-failure",
+      lead: { nome: "Lead humano", email: "humano@example.com", jornada: "operacao" },
+      received_at: new Date().toISOString(),
+      ip_hash: "h",
+      fingerprint: "f",
+    });
+    if (failClosed.record_kind !== "internal") {
+      fail("classification_failure_kind_fail_closed", failClosed.record_kind);
+    } else pass("classification_failure_kind_fail_closed", failClosed.record_kind);
+    if (failClosed.next_action !== "exclude_from_commercial") {
+      fail("classification_failure_excluded", failClosed.next_action);
+    } else pass("classification_failure_excluded");
+  } finally {
+    Module._load = originalLoad;
+  }
+
   // Single ambiguous signal must not reclassify for backfill
   const amb = rk.classifyForBackfill({
     nome: "João",
