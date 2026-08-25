@@ -22,7 +22,10 @@ Never commit secrets.
 Production capture fails closed unless `LEAD_REQUIRE_ORIGIN=1`,
 `LEAD_REQUIRE_TURNSTILE=1`, a real `TURNSTILE_SECRET_KEY`, and a private
 `IP_HASH_SALT` of at least 32 characters are configured. Do not reuse a public
-brand string as the salt.
+brand string as the salt. The production build also requires the public
+`TURNSTILE_SITE_KEY` and injects it only into the `_site` artifact; a missing
+site key fails the build before the backend-only requirement can strand the
+published form without a widget.
 
 ## Search Demand Observatory (optional API)
 
