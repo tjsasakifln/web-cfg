@@ -532,17 +532,36 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
   }
 
   let kindInfo = {
-    record_kind: "real",
-    signals: [],
+    record_kind: "internal",
+    signals: ["classifier_unavailable"],
     classified_at: received_at,
-    classifier: "default_real",
+    classifier: "classifier_error_fail_closed",
   };
   try {
-    const { resolveRecordKind, kindAuditEntry } = require("./record-kind.cjs");
-    kindInfo = resolveRecordKind(lead || {}, { headers });
-    if (!kindInfo.classified_at) kindInfo.classified_at = received_at;
+    const { resolveRecordKind, RECORD_KINDS } = require("./record-kind.cjs");
+    const classified = resolveRecordKind(lead || {}, { headers });
+    if (
+      !classified ||
+      !Array.isArray(RECORD_KINDS) ||
+      !RECORD_KINDS.includes(classified.record_kind)
+    ) {
+      throw new Error("record_kind_classifier_invalid_result");
+    }
+    kindInfo = {
+      ...classified,
+      classified_at: classified.classified_at || received_at,
+    };
   } catch {
-    /* keep default real */
+    kindInfo = {
+      record_kind: "internal",
+      signals: ["classifier_unavailable"],
+      classified_at: received_at,
+      classifier: "classifier_error_fail_closed",
+    };
+    safeLog("error", "record_kind_classifier_fail_closed", {
+      lead_id: String(lead_id || "").slice(0, 64),
+      fallback_kind: "internal",
+    });
   }
 
   const audit = [
