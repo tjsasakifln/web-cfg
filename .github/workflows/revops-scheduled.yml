@@ -55,7 +55,7 @@ jobs:
       - name: Install
         run: |
           npm ci --engine-strict
-          pip install google-api-python-client google-auth || true
+          pip install google-api-python-client google-auth
       - name: Daily scheduled run
         env:
           BASE_URL: https://confenge.com.br
@@ -144,7 +144,12 @@ jobs:
             echo "$GSC_CREDENTIALS_JSON" > /tmp/gsc-sa.json
             export GSC_CREDENTIALS_JSON=/tmp/gsc-sa.json
           fi
-          python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3 --allow-missing-creds
+          python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3
+      - name: Publish redacted insights to durable private ops
+        env:
+          BASE_URL: https://confenge.com.br
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+        run: node scripts/revops/publish_gsc_insights.mjs
       - name: Upload GSC state
         if: always()
         uses: actions/upload-artifact@v7
@@ -153,7 +158,8 @@ jobs:
           path: |
             data/revops/gsc/last_sync.json
             data/revops/gsc/daily/
-          if-no-files-found: ignore
+            data/revops/gsc/publish_receipt.json
+          if-no-files-found: error
 
   weekly:
     name: weekly-report
