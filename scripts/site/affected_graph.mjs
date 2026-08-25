@@ -293,6 +293,14 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: [],
   },
+  "test:page-contract-ciclo": {
+    producers: [
+      "tests/commercial/test_page_contract_ciclo.mjs",
+      "data/commercial/page-contract-ciclo.v1.json",
+    ],
+    artifacts: [],
+    surfaces: [],
+  },
   "test:copy-contract": {
     producers: [
       "tests/commercial/test_copy_contract.mjs",
