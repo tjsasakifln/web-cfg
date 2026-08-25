@@ -668,21 +668,46 @@ try {
     const before = mock.seen.length;
     process.env.NODE_ENV = "production";
     process.env.CONTEXT = "production";
+    process.env.LEAD_REQUIRE_ORIGIN = "1";
+    process.env.LEAD_REQUIRE_TURNSTILE = "1";
+    process.env.TURNSTILE_SECRET_KEY = "turnstile-test-secret-not-for-prod";
+    process.env.IP_HASH_SALT = "inbound-test-ip-hash-salt-32-chars-minimum";
     process.env.CONFENGE_INBOUND_WEBHOOK_URL = "http://127.0.0.1:9/api/v1/webhooks/confenge/inbound";
-    const res = await handler(
-      event(moneyPayload({ idempotency_key: "inbound-closed-001", email: "maria.closed@construtora-norte.com.br" }), {
-        "Idempotency-Key": "inbound-closed-001",
-      }),
-    );
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async (url, init) => {
+      if (String(url) === "https://challenges.cloudflare.com/turnstile/v0/siteverify") {
+        return { json: async () => ({ success: true }) };
+      }
+      return originalFetch(url, init);
+    };
+    let res;
+    try {
+      res = await handler(
+        event(
+          moneyPayload({
+            idempotency_key: "inbound-closed-001",
+            email: "maria.closed@construtora-norte.com.br",
+            turnstile_token: "turnstile-test-token",
+          }),
+          { "Idempotency-Key": "inbound-closed-001" },
+        ),
+      );
+    } finally {
+      globalThis.fetch = originalFetch;
+      process.env.NODE_ENV = "test";
+      delete process.env.CONTEXT;
+      delete process.env.LEAD_REQUIRE_ORIGIN;
+      delete process.env.LEAD_REQUIRE_TURNSTILE;
+      delete process.env.TURNSTILE_SECRET_KEY;
+      delete process.env.IP_HASH_SALT;
+      process.env.CONFENGE_INBOUND_WEBHOOK_URL = mock.url;
+    }
     const data = JSON.parse(res.body);
     if (res.statusCode !== 201 || !data.lead_id) fail("closed_capture", data);
     const stored = await mem.get(data.lead_id);
     if (!stored) fail("closed_dropped", data.lead_id);
     if (!stored.handoff || stored.handoff.status !== "BLOCKED") fail("closed_status", stored.handoff);
     if (mock.seen.length !== before) fail("closed_posted", mock.seen.length - before);
-    process.env.NODE_ENV = "test";
-    delete process.env.CONTEXT;
-    process.env.CONFENGE_INBOUND_WEBHOOK_URL = mock.url;
     pass("fail_closed_no_post");
   }
 

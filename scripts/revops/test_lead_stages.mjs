@@ -9,9 +9,11 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const require = createRequire(import.meta.url);
+const Module = require("module");
 
 const stages = require(path.join(root, "netlify/functions/lib/lead-stages.cjs"));
-const { buildLeadRecord, MemoryStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+const leadStorePath = path.join(root, "netlify/functions/lib/lead-store.cjs");
+const { buildLeadRecord, MemoryStore } = require(leadStorePath);
 const ops = require(path.join(root, "netlify/functions/ops.cjs"));
 const { aggregateEvents, attributeLeads } = require(path.join(root, "netlify/functions/lib/analytics-agg.cjs"));
 
@@ -341,6 +343,67 @@ function fail(name, detail) {
   else pass("probe_synthetic", probeRec.record_kind);
   if (probeRec.next_action !== "exclude_from_commercial") fail("probe_next_action", probeRec.next_action);
   else pass("probe_excluded_from_commercial");
+
+  const originalLoad = Module._load;
+  Module._load = function failRecordKindLoad(request, parent, isMain) {
+    if (request === "./record-kind.cjs" && parent?.filename === leadStorePath) {
+      throw new Error("injected_classifier_failure");
+    }
+    return originalLoad.call(this, request, parent, isMain);
+  };
+  try {
+    const failClosed = buildLeadRecord({
+      lead_id: "rk-classifier-failure",
+      lead: {
+        nome: "SYNTHETIC-PROBE",
+        email: "probe@example.com",
+        record_kind: "synthetic",
+        jornada: "operacao",
+      },
+      received_at: new Date().toISOString(),
+      ip_hash: "h",
+      fingerprint: "f",
+    });
+    if (failClosed.record_kind !== "internal") {
+      fail("classifier_failure_kind_fail_closed", failClosed.record_kind);
+    } else pass("classifier_failure_kind_fail_closed", failClosed.record_kind);
+    if (failClosed.next_action !== "exclude_from_commercial") {
+      fail("classifier_failure_excluded", failClosed.next_action);
+    } else pass("classifier_failure_excluded");
+  } finally {
+    Module._load = originalLoad;
+  }
+
+  const recordKindPath = path.join(root, "netlify/functions/lib/record-kind.cjs");
+  const realRecordKind = require(recordKindPath);
+  Module._load = function failRecordKindClassification(request, parent, isMain) {
+    if (request === "./record-kind.cjs" && parent?.filename === leadStorePath) {
+      return {
+        ...realRecordKind,
+        resolveRecordKind() {
+          throw new Error("injected_classification_failure");
+        },
+      };
+    }
+    return originalLoad.call(this, request, parent, isMain);
+  };
+  try {
+    const failClosed = buildLeadRecord({
+      lead_id: "rk-classification-failure",
+      lead: { nome: "Lead humano", email: "humano@example.com", jornada: "operacao" },
+      received_at: new Date().toISOString(),
+      ip_hash: "h",
+      fingerprint: "f",
+    });
+    if (failClosed.record_kind !== "internal") {
+      fail("classification_failure_kind_fail_closed", failClosed.record_kind);
+    } else pass("classification_failure_kind_fail_closed", failClosed.record_kind);
+    if (failClosed.next_action !== "exclude_from_commercial") {
+      fail("classification_failure_excluded", failClosed.next_action);
+    } else pass("classification_failure_excluded");
+  } finally {
+    Module._load = originalLoad;
+  }
 
   // Single ambiguous signal must not reclassify for backfill
   const amb = rk.classifyForBackfill({
