@@ -43,6 +43,26 @@ function fail(name, detail) {
     LEAD_ALLOW_MEMORY_FALLBACK: "1",
   });
   if (bad.ok) fail("policy_should_fail_memory_flag");
+  const required = {
+    NODE_ENV: "production",
+    LEAD_REQUIRE_ORIGIN: "1",
+    LEAD_REQUIRE_TURNSTILE: "1",
+    TURNSTILE_SECRET_KEY: "turnstile-secret-24chars",
+    IP_HASH_SALT: "private-ip-hash-salt-32-characters",
+  };
+  for (const [name, env, code] of [
+    ["origin", { ...required, LEAD_REQUIRE_ORIGIN: "" }, "origin_guard_required_in_production"],
+    ["turnstile_flag", { ...required, LEAD_REQUIRE_TURNSTILE: "" }, "turnstile_guard_required_in_production"],
+    ["turnstile_secret", { ...required, TURNSTILE_SECRET_KEY: "" }, "turnstile_secret_required_in_production"],
+    ["ip_salt", { ...required, IP_HASH_SALT: "confenge" }, "ip_hash_salt_required_in_production"],
+  ]) {
+    const result = assertProductionStorePolicy(env);
+    if (result.ok || result.code !== code) fail(`policy_requires_${name}`, result);
+    pass(`policy_requires_${name}`, result.code);
+  }
+  const ready = assertProductionStorePolicy(required);
+  if (!ready.ok) fail("production_policy_ready", ready);
+  pass("production_policy_ready");
   pass("helpers");
 }
 

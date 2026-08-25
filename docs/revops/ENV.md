@@ -19,6 +19,11 @@ Never commit secrets.
 | `OPS_WEBHOOK_URL` | Optional Slack/Discord webhook |
 | `TURNSTILE_SECRET_KEY` | Bot protection |
 
+Production capture fails closed unless `LEAD_REQUIRE_ORIGIN=1`,
+`LEAD_REQUIRE_TURNSTILE=1`, a real `TURNSTILE_SECRET_KEY`, and a private
+`IP_HASH_SALT` of at least 32 characters are configured. Do not reuse a public
+brand string as the salt.
+
 ## Search Demand Observatory (optional API)
 
 | Variable | Purpose |
