@@ -142,6 +142,9 @@ const inbound = loadInbound();
     utm_source: "test",
     utm_medium: "cpc",
     mensagem: "Quero uma segunda leitura",
+    opportunity_deadline: "2026-09-30",
+    decision_intent: "validar_mercado",
+    analysis_cutoff: "2026-08-25",
     correlation_id: "corr-1",
   });
   if (mapped.lead_id !== "abc123abc123abc123abc123") fail("map_lead_id", mapped);
@@ -160,8 +163,12 @@ const inbound = loadInbound();
   if (!mapped.consent || mapped.consent.granted !== true) fail("map_consent", mapped);
   if (!mapped.utm || mapped.utm.source !== "test") fail("map_utm", mapped);
   if (mapped.correlation_id !== "corr-1") fail("map_corr", mapped);
-  if (!mapped.message.startsWith("Contexto do próximo passo: entrega=CFG-D18.")) {
-    fail("map_deliverable_as_next_action_context", mapped);
+  if (!mapped.message.startsWith("Contexto do próximo passo: entrega=CFG-D18;") ||
+      !mapped.message.includes("Quero uma segunda leitura") ||
+      !mapped.message.includes("prazo=2026-09-30") ||
+      !mapped.message.includes("decisão=validar_mercado") ||
+      !mapped.message.includes("data de corte=2026-08-25")) {
+    fail("map_next_action_context", mapped.message);
   }
   pass("mapper_present_fields");
 }

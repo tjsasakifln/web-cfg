@@ -618,6 +618,7 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     previous_page: lead.previous_page || lead.referrer || null,
     cta_id: lead.cta_id || null,
     deliverable_id: lead.deliverable_id || null,
+    analysis_cutoff: lead.analysis_cutoff || null,
     opportunity_deadline: lead.opportunity_deadline || null,
     contract_value_band: lead.contract_value_band || null,
     lot_count: lead.lot_count || null,

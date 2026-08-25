@@ -196,11 +196,22 @@ function mapLeadToInboundV1(record) {
 
   const referrer = sanitizeUrl(record.referrer);
   if (referrer) body.referrer = referrer;
-  const deliverableContext = deliverableId
-    ? `Contexto do próximo passo: entrega=${deliverableId}.`
-    : "";
+  const qualification = [
+    ["entrega", deliverableId],
+    ["prazo", record.opportunity_deadline],
+    ["decisão", record.decision_intent],
+    ["data de corte", record.analysis_cutoff],
+    ["faixa de valor", record.contract_value_band],
+    ["lotes", record.lot_count],
+    ["regime", record.execution_regime],
+  ]
+    .filter(([, value]) => value !== null && value !== undefined && String(value).trim())
+    .map(([label, value]) => `${label}=${clampText(value, 80)}`)
+    .join("; ");
   const message = clampText(
-    [deliverableContext, record.mensagem || record.message].filter(Boolean).join("\n"),
+    [qualification ? `Contexto do próximo passo: ${qualification}.` : "", record.mensagem || record.message]
+      .filter(Boolean)
+      .join("\n"),
     2000,
   );
   if (message) body.message = message;
