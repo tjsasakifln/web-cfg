@@ -419,13 +419,16 @@ def test_lighthouse_covers_article_cover_regression_routes():
             raise AssertionError(f"Lighthouse threshold module missing {needle}")
 
 
-def test_codeql_soft_fail_is_explicit():
-    """CodeQL may soft-fail only while code scanning is org-disabled — must stay honest."""
+def test_codeql_is_fail_closed():
+    """A security-analysis failure must remain a failed workflow conclusion."""
     text = _read(CODEQL)
-    assert "continue-on-error: true" in text
-    assert "Code scanning" in text or "code scanning" in text.lower()
-    # Must not claim to be a hard required security gate without enablement
-    assert "do not block" in text.lower() or "until then" in text.lower()
+    job = _job_block(text, "analyze")
+    if re.search(r"(?m)^\s+continue-on-error:\s*true\s*$", job):
+        raise AssertionError("CodeQL analysis must not convert failure into success")
+    if "security-events: write" not in job:
+        raise AssertionError("CodeQL must retain permission to upload security events")
+    if "github/codeql-action/analyze" not in job:
+        raise AssertionError("CodeQL analyze action is missing")
 
 
 def test_copy_ci_is_check_not_write():
@@ -470,7 +473,7 @@ def main() -> int:
         test_merge_workflows_have_no_path_skip,
         test_pseo_still_requires_full_npm_test,
         test_lighthouse_covers_article_cover_regression_routes,
-        test_codeql_soft_fail_is_explicit,
+        test_codeql_is_fail_closed,
         test_copy_ci_is_check_not_write,
         test_deliberate_force_fail_env,
     ]

@@ -11,9 +11,8 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    # Code scanning must be enabled in repo Settings → Code security.
-    # Until then, do not block PR merges (site-ci "gates" remains the required check).
-    continue-on-error: true
+    # The analysis is fail-closed even while branch protection keeps the two
+    # stable product gates as its required contexts (#408).
     permissions:
       actions: read
       contents: read
