@@ -31,6 +31,11 @@ Templates: `data/nurture/tracks.json`
 | `NURTURE_RATE_MAX_IP` | Máximo por IP/janela (default 5) |
 | `NURTURE_RATE_MAX_FP` | Máximo por fingerprint/janela (default 8) |
 
+O fingerprint técnico é escopado ao IP para não compartilhar quota entre
+visitantes distintos com o mesmo navegador/idioma. Chaves e logs usam HMAC com
+`IP_HASH_SALT` quando configurado ou pepper privado do processo; o mapa
+in-process é limitado a 10.000 buckets.
+
 Landing: `/nurture/` · Sair: `/nurture/sair/`
 
 ## Cron sugerido (diário)

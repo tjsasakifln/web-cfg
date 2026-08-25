@@ -218,6 +218,41 @@ let unsubToken;
     fail("rate_window", { first, blocked, expired });
   } else pass("rate_window");
 
+  rate._reset();
+  const sharedHeaders = {
+    headers: { "user-agent": "common-browser/1.0", "accept-language": "pt-BR" },
+  };
+  const fingerprintEnv = {
+    IP_HASH_SALT: "test-private-rate-limit-salt",
+    NURTURE_RATE_WINDOW_MS: "60000",
+    NURTURE_RATE_MAX_IP: "5",
+    NURTURE_RATE_MAX_FP: "1",
+  };
+  const firstIp = "203.0.113.210";
+  const secondIp = "203.0.113.211";
+  const firstFingerprint = rate.nurtureFingerprint(sharedHeaders, firstIp, fingerprintEnv);
+  const secondFingerprint = rate.nurtureFingerprint(sharedHeaders, secondIp, fingerprintEnv);
+  const firstVisitor = rate.nurtureRateLimit({
+    ip: firstIp,
+    fingerprint: firstFingerprint,
+    now: 0,
+    env: fingerprintEnv,
+  });
+  const secondVisitor = rate.nurtureRateLimit({
+    ip: secondIp,
+    fingerprint: secondFingerprint,
+    now: 0,
+    env: fingerprintEnv,
+  });
+  if (firstFingerprint === secondFingerprint || !firstVisitor.allowed || !secondVisitor.allowed) {
+    fail("rate_distinct_visitors_common_browser", {
+      firstFingerprint,
+      secondFingerprint,
+      firstVisitor,
+      secondVisitor,
+    });
+  } else pass("rate_distinct_visitors_common_browser");
+
   process.env.NURTURE_RATE_MAX_IP = "2";
   process.env.NURTURE_RATE_MAX_FP = "2";
   process.env.NURTURE_RATE_WINDOW_MS = "60000";

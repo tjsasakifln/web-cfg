@@ -36,6 +36,7 @@ const {
 const {
   nurtureRateLimit,
   nurtureFingerprint,
+  nurtureIpHash,
 } = require("./lib/nurture-rate-limit.cjs");
 
 const MAX_SUBSCRIBE_BODY = 8 * 1024;
@@ -316,9 +317,9 @@ exports.handler = async (event) => {
       return json(413, { ok: false, error: "payload_too_large" }, origin);
     }
     const ip = clientIp(event);
-    const rate = nurtureRateLimit({ ip, fingerprint: nurtureFingerprint(event) });
+    const rate = nurtureRateLimit({ ip, fingerprint: nurtureFingerprint(event, ip) });
     if (!rate.allowed) {
-      const ipHash = crypto.createHash("sha256").update(ip).digest("hex").slice(0, 12);
+      const ipHash = nurtureIpHash(ip);
       safeLog("warn", "nurture_rate_limited", { reason: rate.reason, ip_hash: ipHash });
       const response = json(429, { ok: false, error: "rate_limited" }, origin);
       response.headers["Retry-After"] = String(rate.retryAfter);
@@ -386,7 +387,7 @@ exports.handler = async (event) => {
         subscription_id: record.subscription_id,
         track: record.track,
         send: send.status,
-        ip_hash: crypto.createHash("sha256").update(clientIp(event)).digest("hex").slice(0, 12),
+        ip_hash: nurtureIpHash(clientIp(event)),
       });
 
       // Never return email or raw tokens in JSON
