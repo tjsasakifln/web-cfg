@@ -222,7 +222,35 @@ def _validate_baseline(
         dimensions = current.get("dimensions") or []
         if dimensions != ["date", "query_hash", "page", "country", "device"]:
             bad("gsc_country_device_dimensions_invalid", str(source), str(dimensions))
+        window = current.get("window") or {}
+        source_window = {
+            "start": payload.get("start"),
+            "end": payload.get("end"),
+            "provider_max_date": payload.get("max_date"),
+        }
+        if window != source_window:
+            bad(
+                "gsc_current_window_drift",
+                str(source),
+                f"declared={window} actual={source_window}",
+            )
+        if payload.get("query_text_redacted") is not True:
+            bad("gsc_query_redaction_not_proven", str(source))
+        if payload.get("ready_for_product_decisions") is not True:
+            bad("gsc_source_not_ready", str(source))
         rows = payload.get("queries") or []
+        required_dimensions = set(dimensions)
+        for index, row in enumerate(rows):
+            missing = sorted(key for key in required_dimensions if row.get(key) in (None, ""))
+            if missing:
+                bad(
+                    "gsc_row_dimension_missing",
+                    str(source),
+                    f"row={index} missing={','.join(missing)}",
+                )
+            query_hash = str(row.get("query_hash") or "")
+            if "query" in row or not re.fullmatch(r"sha256:[0-9a-f]{16}", query_hash):
+                bad("gsc_query_redaction_invalid", str(source), f"row={index}")
         matched = [row for row in rows if _url_path(str(row.get("page") or "")) in cluster_routes]
         clicks = sum(_number(row.get("clicks")) for row in matched)
         impressions = sum(_number(row.get("impressions")) for row in matched)

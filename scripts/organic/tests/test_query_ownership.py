@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import json
 import sys
 from pathlib import Path
 
@@ -128,6 +129,45 @@ def test_public_mutations_and_baseline_drift_fail_closed():
         "impressions"
     ] = 1
     assert "gsc_current_baseline_drift" in _reasons(drift)
+
+    window_drift = copy.deepcopy(contract)
+    window_drift["gsc_baseline"]["current_country_device"]["window"]["end"] = "2026-08-19"
+    assert "gsc_current_window_drift" in _reasons(window_drift)
+
+
+def test_current_gsc_source_metadata_and_redaction_fail_closed(tmp_path: Path):
+    contract = load_query_ownership_contract(ROOT)
+    source = ROOT / contract["gsc_baseline"]["current_country_device"]["source"]
+    payload = json.loads(source.read_text(encoding="utf-8"))
+
+    mutations = [
+        ("query_text_redacted", False, "gsc_query_redaction_not_proven"),
+        ("ready_for_product_decisions", False, "gsc_source_not_ready"),
+    ]
+    for key, value, reason in mutations:
+        mutated = copy.deepcopy(payload)
+        mutated[key] = value
+        fixture = tmp_path / f"{key}.json"
+        fixture.write_text(json.dumps(mutated), encoding="utf-8")
+        candidate = copy.deepcopy(contract)
+        candidate["gsc_baseline"]["current_country_device"]["source"] = str(fixture)
+        assert reason in _reasons(candidate)
+
+    missing_dimension = copy.deepcopy(payload)
+    missing_dimension["queries"][0].pop("country")
+    fixture = tmp_path / "missing-dimension.json"
+    fixture.write_text(json.dumps(missing_dimension), encoding="utf-8")
+    candidate = copy.deepcopy(contract)
+    candidate["gsc_baseline"]["current_country_device"]["source"] = str(fixture)
+    assert "gsc_row_dimension_missing" in _reasons(candidate)
+
+    exposed_query = copy.deepcopy(payload)
+    exposed_query["queries"][0]["query"] = "medicao obra publica"
+    fixture = tmp_path / "exposed-query.json"
+    fixture.write_text(json.dumps(exposed_query), encoding="utf-8")
+    candidate = copy.deepcopy(contract)
+    candidate["gsc_baseline"]["current_country_device"]["source"] = str(fixture)
+    assert "gsc_query_redaction_invalid" in _reasons(candidate)
 
 
 def test_required_overlap_and_protected_windows_are_explicit():
