@@ -1105,12 +1105,12 @@
         "id": "B-18",
         "page": "entregas/index.html",
         "forbidden_id": "FL-08",
-        "occurrences": 51,
+        "occurrences": 52,
         "by_exemption": {
           "GX-01": 21,
-          "GX-03": 30
+          "GX-03": 31
         },
-        "evidence": "O índice e os contratos editoriais citam garantia como instituto de proposta, contrato, seguro ou exclusão explícita; nenhuma ocorrência promete resultado."
+        "evidence": "O índice, sua navegação alfabética e os contratos editoriais citam garantia como instituto de proposta, contrato, seguro ou exclusão explícita; nenhuma ocorrência promete resultado."
       }
     ],
     "structured_data_check": {
