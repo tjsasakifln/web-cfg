@@ -612,7 +612,7 @@ function validateAndNormalize(data) {
   if (!licitacaoCheck.ok) return licitacaoCheck;
   const eightCheck = assertEightProductQualification(data, qualificationDeliverableId);
   if (!eightCheck.ok) return eightCheck;
-  const contractCheck = assertContractDefenseQualification(data, deliverableCheck.deliverable_id);
+  const contractCheck = assertContractDefenseQualification(data, qualificationDeliverableId);
   if (!contractCheck.ok) return contractCheck;
   const productQualification = licitacaoCheck.qualification || eightCheck.qualification || contractCheck.qualification;
 
@@ -822,6 +822,8 @@ function idempotencyKeyFor(lead, explicit) {
         public_contract_id: lead.public_contract_id || "",
         analysis_cutoff: lead.analysis_cutoff || "",
         opportunity_deadline: lead.opportunity_deadline || "",
+        contract_event: lead.contract_event || "",
+        contract_stage: lead.contract_stage || "",
         contract_value_band: lead.contract_value_band || "",
         lot_count: lead.lot_count == null ? "" : lead.lot_count,
         execution_regime: lead.execution_regime || "",

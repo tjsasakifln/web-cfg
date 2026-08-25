@@ -506,7 +506,7 @@ _reset();
 // The generic catalogue hand-raise may name a specialised deliverable without
 // pretending to be its full product questionnaire.
 {
-  for (const [index, deliverableId] of ["CFG-D14", "CFG-D01"].entries()) {
+  for (const [index, deliverableId] of ["CFG-D14", "CFG-D01", "CFG-D17"].entries()) {
     const before = mem.map.size;
     const res = await handler(event({
       nome: "QA Catálogo Especializado",
