@@ -290,8 +290,11 @@ assert("catalog_has_comparison_controls", (entregas.match(/data-compare-item/g) 
 assert("catalog_has_alphabetical_index", (entregas.match(/data-alpha-item=/g) || []).length === CATALOG_SIZE && entregas.includes("data-alpha-view"), "alphabetical");
 assert("catalog_has_empty_result_guidance", entregas.includes("data-catalog-empty") && entregas.includes("Nenhuma entrega combina"), "empty result");
 assert("catalog_cards_expose_comparison_dimensions", ["data-trigger", "data-decision", "data-unit", "data-input", "data-output", "data-sla", "data-price", "data-exclusion", "data-step-up"].every((field) => (entregas.match(new RegExp(field, "g")) || []).length >= CATALOG_SIZE), "comparison dimensions");
+assert("catalog_cards_expose_framing_dimensions", ["data-inputs", "data-input-count", "data-decision-business-days"].every((field) => (entregas.match(new RegExp(field, "g")) || []).length === CATALOG_SIZE), "framing dimensions");
 assert("script_preserves_url_state", catalogScript.includes("URLSearchParams") && catalogScript.includes("history.replaceState"), "URL state");
 assert("script_limits_recommendation", catalogScript.includes("MAX_RECOMMENDATIONS = 3") && catalogScript.includes("slice(0, MAX_RECOMMENDATIONS)"), "recommendation cap");
+assert("script_uses_declared_input", catalogScript.includes("matchesInput(card, input)") && catalogScript.includes("INPUT_TERMS") && catalogScript.includes("input === \"apenas a pergunta\""), "input framing");
+assert("script_enforces_declared_deadline", catalogScript.includes("businessDaysUntil(deadline)") && catalogScript.includes("requiredBusinessDays(card) <= deadlineDays") && catalogScript.includes("não encurta o SLA publicado"), "deadline framing");
 assert("script_limits_comparison", catalogScript.includes("MIN_COMPARE = 2") && catalogScript.includes("MAX_COMPARE = 4"), "comparison cap");
 assert("script_has_no_network_or_analytics_sink", !/(fetch\s*\(|XMLHttpRequest|sendBeacon|dataLayer\.push)/.test(catalogScript), "client script");
 assert("style_progressively_reveals_comparison", catalogStyle.includes(".catalog-enhanced .catalog-item__compare") && catalogStyle.includes(".catalog-item__compare{display:none"), "progressive enhancement");
