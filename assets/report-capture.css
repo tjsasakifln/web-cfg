@@ -60,6 +60,7 @@
 
 .report-capture-form input[type="text"],
 .report-capture-form input[type="email"],
+.report-capture-form input[type="date"],
 .report-capture-form input:not([type]),
 .report-capture-form textarea {
   border: 1px solid var(--r-line, #dce3e8);
