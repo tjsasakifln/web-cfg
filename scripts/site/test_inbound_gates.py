@@ -110,9 +110,36 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     assert "wa.me" not in article_html
     assert "#formulario-contato" not in article_html
 
+    terminal = contract["terminal_action_contract"]
+    bridge = re.search(
+        r'<aside\b(?=[^>]*class="[^"]*\bcommercial-bridge\b[^"]*")'
+        r'(?P<attrs>[^>]*)>.*?</aside>',
+        article_html,
+        re.I | re.S,
+    )
+    assert bridge
+    assert len(re.findall(r'<aside\b[^>]*\bcommercial-bridge\b', article_html, re.I)) == 1
+    bridge_attrs = dict(
+        re.findall(
+            r'([\w-]+)="([^\"]*)"',
+            bridge.group("attrs"),
+        )
+    )
+    expected_bridge = terminal["bridge_attributes"]
+    assert terminal["html_element"] == "aside"
+    assert expected_bridge == {
+        "class_token": "commercial-bridge",
+        "data-commercial-bridge": "1",
+        "data-cluster": "medicoes-pagamentos",
+        "data-bridge-mode": "soft",
+    }
+    assert expected_bridge["class_token"] in bridge_attrs["class"].split()
+    for attr in ("data-commercial-bridge", "data-cluster", "data-bridge-mode"):
+        assert bridge_attrs.get(attr) == expected_bridge[attr]
+
     cta = re.search(
         r'<a\b(?P<before>[^>]*)href="/medicoes-glosas-obras-publicas/"(?P<after>[^>]*)>',
-        article_html,
+        bridge.group(0),
     )
     assert cta
     cta_attrs = dict(
@@ -137,7 +164,6 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
         "data-journey": "contrato",
     }
 
-    terminal = contract["terminal_action_contract"]
     assert terminal["match"] == [canary["path"]]
     assert terminal["destination"] == "/medicoes-glosas-obras-publicas/"
     family = next(f for f in registry["families"] if f["id"] == terminal["family"])

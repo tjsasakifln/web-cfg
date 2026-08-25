@@ -52,6 +52,8 @@ em `canary-contract.json` e impede transformar ausência em evidência.
 - autoria técnica continua ligada ao perfil verificável;
 - o artigo possui uma única ponte comercial contextual, para
   `/medicoes-glosas-obras-publicas/`, sem WhatsApp direto ou promessa.
+- essa mesma ponte única também declara o contrato orgânico `commercial-bridge`
+  em modo `soft` e cluster `medicoes-pagamentos`; não existe uma segunda CTA.
 - a ponte é declarada como `service_transition` apenas para a rota do canário,
   owner #389; a regra ampla da família `/conteudos/` não foi relaxada.
 - a rota representa sua própria família no Lighthouse, sem isenção de SEO; os
