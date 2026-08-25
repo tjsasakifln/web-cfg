@@ -800,7 +800,7 @@ def test_service_transition_requires_one_canonical_fully_attributed_cta():
     assert len(_service_transition_destinations(valid + valid, services)) == 2
 
 
-def test_three_hubs_prove_exactly_one_service_transition_from_shipped_html():
+def test_three_hubs_prove_their_declared_terminal_action_from_shipped_html():
     from scripts.site.inbound_gates import (
         _bofu_service_routes,
         _main_html,
@@ -808,14 +808,28 @@ def test_three_hubs_prove_exactly_one_service_transition_from_shipped_html():
         load_family_registry,
     )
 
-    expected = {
-        "/servicos-obras-publicas/": "/medicoes-glosas-obras-publicas/",
+    service_hub_route = "/servicos-obras-publicas/"
+    service_hub_family = next(
+        family
+        for family in load_family_registry()["families"]
+        if service_hub_route in (family.get("match") or {}).get("routes", [])
+    )
+    assert service_hub_family["terminal_action"] == "capture_form"
+    service_hub_html = (ROOT / service_hub_route.strip("/") / "index.html").read_text(
+        encoding="utf-8"
+    )
+    assert 'action="/.netlify/functions/lead"' in _main_html(service_hub_html)
+    assert _service_transition_destinations(
+        _main_html(service_hub_html), _bofu_service_routes()
+    ) == ["/medicoes-glosas-obras-publicas/"]
+
+    expected_transitions = {
         "/problemas-que-resolvemos/": "/defesa-margem-contratos-publicos/",
         "/ferramentas/": "/diagnostico-b2g-expansao/",
     }
     registry = load_family_registry()
     services = _bofu_service_routes()
-    for route, destination in expected.items():
+    for route, destination in expected_transitions.items():
         family = next(
             family
             for family in registry["families"]
