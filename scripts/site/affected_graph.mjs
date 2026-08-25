@@ -181,6 +181,18 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/entregas/"],
   },
+  "test:page-contract-pre-edital": {
+    producers: [
+      "tests/commercial/test_page_contract_pre_edital.mjs",
+      "data/commercial/page-contract-pre-edital.v1.json",
+      "data/commercial/deliverables-registry.v1.json",
+      "data/offers/catalog.snapshot.json",
+      "entregas/index.html",
+      "diagnostico-b2g-expansao/index.html",
+    ],
+    artifacts: [],
+    surfaces: ["/entregas/", "/diagnostico-b2g-expansao/"],
+  },
   "test:pricing-policy": {
     producers: [
       "tests/commercial/test_pricing_policy.mjs",
