@@ -360,7 +360,7 @@ def test_trace_matrix_and_tension_present():
     assert "Diretoria B2G" in html
     assert "Arquitetura de ofertas" not in html
     # Three differentiated conversion paths (required by conversion architecture)
-    assert "Enviar documentos para análise" in html
+    assert "Avaliar o Dossiê de Medição, Glosa e Pagamento" in html
     assert "Enviar edital para triagem" in html
     assert "Diagnosticar operação B2G" in html or "Diagnosticar a operação B2G" in html
     assert 'data-journey="contrato"' in html
@@ -369,7 +369,7 @@ def test_trace_matrix_and_tension_present():
     # Client-facing journey section — no briefing metalinguage
     assert "Como podemos ajudar" in html
     assert "Qual situação sua empresa precisa resolver agora" in html
-    assert "Tenho um contrato sob pressão" in html
+    assert "Uma medição ou glosa travou meu caixa" in html
     assert ("journey-list" in html or "journey-paths" in html)
     assert "Sem CTA genérico" not in html
     assert not re.search(r">\s*Jornada\s+[ABC]\s*<", html)

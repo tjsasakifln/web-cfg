@@ -381,6 +381,26 @@ export const SUITE_GRAPH = Object.freeze({
       "/defesa-tecnica-contratos-publicos/",
     ],
   },
+  "test:single-commercial-route": {
+    producers: [
+      "tests/commercial/test_single_commercial_route.mjs",
+      "data/organic/single-commercial-route.v1.json",
+      "data/commercial/page-contract-contratos.v1.json",
+      "data/commercial/offer-naming.v1.json",
+      "scripts/site/render_nav_hubs.py",
+      "index.html",
+      "servicos-obras-publicas/index.html",
+      "conteudos/atraso-na-medicao-obra-publica/index.html",
+      "medicoes-glosas-obras-publicas/index.html",
+    ],
+    artifacts: ["data/organic/single-commercial-route.v1.json"],
+    surfaces: [
+      "/",
+      "/servicos-obras-publicas/",
+      "/conteudos/atraso-na-medicao-obra-publica/",
+      "/medicoes-glosas-obras-publicas/",
+    ],
+  },
   "test:page-contract-operacao": {
     producers: [
       "tests/commercial/test_page_contract_operacao.mjs",

@@ -175,16 +175,24 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <h1 id="hub-title">{e(meta["h1"])}</h1>
 <p class="section-lead">{e(meta["lead"])}</p>
 </header>
+<aside class="lead-inline" data-commercial-route="medicoes-glosas" aria-label="Rota para medição, glosa e pagamento">
+<div class="lead-inline-copy"><span>Medição ou glosa sob pressão</span>
+<strong>Dossiê de Medição, Glosa e Pagamento</strong>
+<p>Uma medição ou glosa do mesmo período, organizada em fatos, cálculo, controvérsias, provas e lacunas. Prazo-piloto de 5 dias úteis após os documentos mínimos. Não é petição jurídica nem promessa de recebimento.</p></div>
+<div class="lead-inline-actions">
+<a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Avaliar o Dossiê de Medição, Glosa e Pagamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
+</div>
+</aside>
 <div class="related-grid">{grid}</div>
 </div>
 </section>
 <section aria-labelledby="hub-next" class="section section--default">
 <div class="container">
 <header class="section-head">
-<h2 id="hub-next">Ainda não sabe qual serviço se aplica?</h2>
+<h2 id="hub-next">O problema é outro ou ainda não está delimitado?</h2>
 <p class="section-lead">O Diagnóstico B2G 360° é o degrau de entrada: mapeia onde a frente pública perde tempo, margem e controle e diz qual dos quatro serviços responde ao seu caso.</p>
 </header>
-<p><a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-diagnostico-360" data-cta-position="hub_services" data-journey="operacao" data-route-family="servicos-obras-publicas" href="/diagnostico-b2g-360/">Começar pelo Diagnóstico B2G 360° <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p><a class="button button-secondary" href="/diagnostico-b2g-360/">Começar pelo Diagnóstico B2G 360° <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="{e(problems["url"])}">Conhecer os problemas que resolvemos <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="/ferramentas/">Usar uma ferramenta antes de falar com a gente <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 </div>

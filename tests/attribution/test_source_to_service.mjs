@@ -277,14 +277,13 @@ const journeys = [
     expectFamily: "market-answer",
   },
   {
-    // #290: the two first-level navigation hubs used to end on a link back to
-    // the home form. Their one dominant next action is now a real transition.
-    name: "hub_servicos_diagnostico",
+    // #390: medicao/glosa has one commercial transfer route from the hub.
+    name: "hub_servicos_medicoes_glosas",
     html: "servicos-obras-publicas/index.html",
     pathname: "/servicos-obras-publicas/",
-    pick: (a) => a["data-cta-id"] === "hub-servicos-diagnostico-360",
-    expectDest: "/diagnostico-b2g-360/",
-    expectService: "diagnostico-b2g-360",
+    pick: (a) => a["data-cta-id"] === "hub-servicos-medicoes-glosas",
+    expectDest: "/medicoes-glosas-obras-publicas/",
+    expectService: "medicoes-glosas-obras-publicas",
     expectAsset: "servicos-obras-publicas",
     expectFamily: "hub",
   },

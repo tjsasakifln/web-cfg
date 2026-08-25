@@ -1,0 +1,155 @@
+{
+  "schema": "on-page-margin-focus/1.0",
+  "version": "1.0.0",
+  "program_id": "on-page-margin-focus-01",
+  "issues": {
+    "parent": 387,
+    "children": [388, 389, 390],
+    "governance_parent": 61
+  },
+  "decision": {
+    "execution_state": "EXECUTE_NOW",
+    "outcome_state": "VALIDATE",
+    "front": "INBOUND_CORE",
+    "leverage": ["revenue", "customer", "trust"],
+    "time_to_evidence": "first judgment after one complete 28-day GSC window post-deploy; kill judgment after two"
+  },
+  "implementation": {
+    "contract_status": "READY",
+    "public_change_status": "NOT_STARTED",
+    "close_parent_after_children": [388, 389, 390],
+    "deploy_anchor_status": "UNKNOWN_UNTIL_PUBLIC_CHANGE"
+  },
+  "visitor_job": "A contractor with a rejected measurement or glosa needs to identify the defensible next action before margin and cash deteriorate.",
+  "hypothesis": "Concentrating existing on-page authority on the Medicoes/Glosas owner and one contextual commercial route can increase qualified Brazilian top-10 exposure and make the first commercial handraise observable without paid or borrowed distribution.",
+  "scope_guard": {
+    "acquisition_surface": "ON_PAGE_ONLY",
+    "new_public_url_budget": 0,
+    "new_keyword_pages": false,
+    "paid_media": false,
+    "external_distribution_dependency": false,
+    "mass_robots_flip": false,
+    "invented_case_or_result": false,
+    "page_count_is_success_metric": false
+  },
+  "focus": {
+    "inventory_intent": "medicao_glosa",
+    "intent_cluster": "medicoes-pagamentos",
+    "canonical_owner": "/medicoes-glosas-obras-publicas/",
+    "commercial_transfer_route": "/medicoes-glosas-obras-publicas/",
+    "margin_context_route": "/defesa-margem-contratos-publicos/",
+    "money_asset": "/ferramentas/diagnostico-defesa-margem/",
+    "canary_policy": {
+      "maximum_concurrent_human_rewrites": 1,
+      "selection_owner_issue": 389,
+      "selected_canary": "UNKNOWN_PENDING_389",
+      "second_canary_allowed_after_first_window": false
+    }
+  },
+  "contracts": {
+    "intent_inventory": "data/organic/margin-defense-cluster-inventory.json",
+    "intent_to_service": "data/organic/content-service-map.json",
+    "bofu_matrix": "data/organic/bofu-intent-matrix.json",
+    "conversion_events": ["service_view", "service_cta"],
+    "data_owner": "CONFENGE editorial + web-cfg organic/revops contracts",
+    "runtime_authority": "confenge.com.br is the only canonical public surface; extra-cli owns public-read truth and Warmbly owns action"
+  },
+  "baseline": {
+    "live_gsc": {
+      "source": "seo/gsc-2026-08-24/search-analytics-redacted.json",
+      "provider_max_date": "2026-08-18",
+      "requested_end_date": "2026-08-20",
+      "search_analytics_limitation": "Top rows are not an exhaustive property total.",
+      "impressions": 78,
+      "clicks": 0,
+      "impressions_beyond_position_20": 64,
+      "brazil_top_10_impressions": 12
+    },
+    "historical_gsc": {
+      "source": "data/organic/growth-report.json",
+      "snapshot": "gsc-2026-08-09",
+      "page_impressions": 373,
+      "page_clicks": 10,
+      "commercial_impressions": 29,
+      "commercial_clicks": 0,
+      "commercial_impression_share": 0.0777,
+      "signals": [
+        {
+          "query": "glosa de medição obra pública",
+          "position": 4.0,
+          "impressions": 8,
+          "clicks": 1
+        },
+        {
+          "query": "medição rejeitada obra pública",
+          "position": 5.5,
+          "impressions": 5,
+          "clicks": 1
+        },
+        {
+          "page": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+          "position": 6.5,
+          "impressions": 12,
+          "clicks": 1
+        }
+      ]
+    }
+  },
+  "measurement": {
+    "ordered_chain": [
+      {
+        "metric": "brazil_top_10_impressions",
+        "owner": "Google Search Console aggregate"
+      },
+      {
+        "metric": "organic_clicks",
+        "owner": "Google Search Console aggregate"
+      },
+      {
+        "metric": "commercial_route_visits",
+        "owner": "web-cfg service_view analytics export"
+      },
+      {
+        "metric": "persisted_handraises",
+        "owner": "web-cfg CONFENGE_WEB conversion receipt"
+      },
+      {
+        "metric": "qualified_commercial_opportunities",
+        "owner": "extra-cli commercial-intent projection"
+      },
+      {
+        "metric": "commercial_actions_or_outcomes",
+        "owner": "Warmbly action and observed-outcome contracts"
+      }
+    ],
+    "post_change": {
+      "brazil_top_10_impressions": "UNKNOWN",
+      "organic_clicks": "UNKNOWN",
+      "commercial_route_visits": "UNKNOWN",
+      "persisted_handraises": "UNKNOWN",
+      "qualified_commercial_opportunities": "UNKNOWN",
+      "commercial_actions_or_outcomes": "UNKNOWN",
+      "revenue": "UNKNOWN"
+    },
+    "window_policy": {
+      "complete_days_per_window": 28,
+      "first_judgment_windows": 1,
+      "kill_judgment_windows": 2,
+      "anchor": "DEPLOY_DATE_UNKNOWN"
+    },
+    "causal_claim_policy": "Observed counts remain separate; no click, lead or revenue is attributed causally without joined evidence."
+  },
+  "protected_work": {
+    "do_not_mutate_before_window_or_explicit_supersession": [126, 128],
+    "human_indexation_gate_owner": 127,
+    "live_vertical_proof_owner": 60,
+    "first_fold_contract_owner": 327,
+    "offer_scope_price_boundary_owner": 333
+  },
+  "kill_adjust": {
+    "kill_if": "After two complete 28-day post-deploy windows there is neither growth in Brazilian top-10 impressions nor a click signal on the selected commercial route.",
+    "adjust_before_more_content": ["query ownership", "intent", "offer"],
+    "forbidden_response": "Do not answer failure with more pages."
+  },
+  "rollback": "Revert only the selected canary and convergence changes, restore their prior on-page copy and links, and preserve the versioned baseline and UNKNOWN outcomes."
+}

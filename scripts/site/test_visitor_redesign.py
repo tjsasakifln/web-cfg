@@ -1097,16 +1097,22 @@ def test_home_form_anchor_reveals_fields():
         r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
-    # #182: every direct-intent journey CTA sends the visitor to the fields,
-    # not to the contact intro that precedes them.
+    # #182 keeps edital/operacao on the fields. #390 makes the contract path
+    # cross the canonical Medicoes/Glosas service page before capture.
     for match in re.finditer(
         r'<a\b[^>]*data-cta-position="(journey_[abc])"[^>]*>', html
     ):
         tag = match.group(0)
         href = re.search(r'href="([^"]+)"', tag)
-        assert href and "#formulario-contato" in href.group(1), (
-            f'{match.group(1)} CTA must target #formulario-contato, got {href and href.group(1)!r}'
-        )
+        if match.group(1) == "journey_a":
+            assert href and href.group(1) == "/medicoes-glosas-obras-publicas/", (
+                f"journey_a CTA must target the canonical commercial route, got {href and href.group(1)!r}"
+            )
+            assert 'data-cta-id="home-medicoes-glosas-dossie"' in tag
+        else:
+            assert href and "#formulario-contato" in href.group(1), (
+                f'{match.group(1)} CTA must target #formulario-contato, got {href and href.group(1)!r}'
+            )
     # The shipped script must realign the landing: deferred section sizes (#185)
     # move the target while the jump runs.
     nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")

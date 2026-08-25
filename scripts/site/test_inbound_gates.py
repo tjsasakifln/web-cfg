@@ -791,7 +791,7 @@ def test_three_hubs_prove_exactly_one_service_transition_from_shipped_html():
     )
 
     expected = {
-        "/servicos-obras-publicas/": "/diagnostico-b2g-360/",
+        "/servicos-obras-publicas/": "/medicoes-glosas-obras-publicas/",
         "/problemas-que-resolvemos/": "/defesa-margem-contratos-publicos/",
         "/ferramentas/": "/diagnostico-b2g-expansao/",
     }
@@ -1071,6 +1071,22 @@ def test_declared_gate_coverage_is_verified_against_the_real_censuses():
         f.reason for f in _validate_family_registry(overclaimed, service_routes, routes)
     }
     assert "family_gate_coverage_mismatch" in reasons, reasons
+
+
+def test_semantic_query_ownership_is_complete_and_non_mutating():
+    from scripts.site.inbound_gates import gate_semantic_query_ownership
+
+    report = gate_semantic_query_ownership()
+    assert report.ok is True
+    assert report.stats["coverage"] == 1.0
+    assert report.stats["discovered_routes"] == 19
+    assert report.stats["classified_routes"] == 19
+    assert report.stats["declared_conflicts"] == 5
+    assert report.stats["automatic_public_mutation"] is False
+    assert all(f.severity == "warn" for f in report.findings)
+    assert {f.reason for f in report.findings} == {
+        "declared_query_conflict_controlled"
+    }
 
 
 if __name__ == "__main__":
