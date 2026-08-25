@@ -128,6 +128,15 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
+      - name: Restore durable GSC state
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            data/revops/gsc/daily/
+            data/revops/gsc/last_sync.json
+          key: ${{ runner.os }}-gsc-state-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ runner.os }}-gsc-state-
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -138,13 +147,20 @@ jobs:
           GSC_CLIENT_SECRETS_JSON: ${{ secrets.GSC_CLIENT_SECRETS_JSON }}
           GSC_TOKEN_JSON: ${{ secrets.GSC_TOKEN_JSON }}
         run: |
-          pip install google-api-python-client google-auth || true
+          pip install google-api-python-client google-auth
           # Write service account file if secret is JSON content
           if [ -n "$GSC_CREDENTIALS_JSON" ] && [ "${GSC_CREDENTIALS_JSON:0:1}" = "{" ]; then
             echo "$GSC_CREDENTIALS_JSON" > /tmp/gsc-sa.json
             export GSC_CREDENTIALS_JSON=/tmp/gsc-sa.json
           fi
-          python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3 --allow-missing-creds
+          python3 scripts/revops/search_demand_observatory.py sync --days 28 --reprocess-days 3
+      - name: Persist successful GSC state
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            data/revops/gsc/daily/
+            data/revops/gsc/last_sync.json
+          key: ${{ runner.os }}-gsc-state-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Upload GSC state
         if: always()
         uses: actions/upload-artifact@v7
@@ -153,7 +169,7 @@ jobs:
           path: |
             data/revops/gsc/last_sync.json
             data/revops/gsc/daily/
-          if-no-files-found: ignore
+          if-no-files-found: error
 
   weekly:
     name: weekly-report

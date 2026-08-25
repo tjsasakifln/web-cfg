@@ -551,6 +551,62 @@ def main() -> int:
         ok("pull_missing_no_fake_clicks", '"clicks": 0' not in blob or creds_pull.get("clicks") is None)
         ok("pull_missing_ready_false", creds_pull.get("ready_for_product_decisions") is False)
 
+        original_data = sdo.DATA
+        try:
+            with tempfile.TemporaryDirectory() as td:
+                sdo.DATA = Path(td)
+                daily = sdo.DATA / "daily"
+                daily.mkdir(parents=True)
+                (daily / "2026-08-03.json").write_text(
+                    json.dumps(
+                        {
+                            "source": "search_analytics_api",
+                            "synthetic": False,
+                            "truncated": False,
+                            "start": "2026-08-01",
+                            "end": "2026-08-03",
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+                gaps = sdo.detect_gsc_gaps(sdo.date(2026, 8, 1), sdo.date(2026, 8, 4))
+                ok("gsc_window_coverage_not_filename_coverage", gaps == ["2026-08-04"], str(gaps))
+                no_gaps = sdo.detect_gsc_gaps(
+                    sdo.date(2026, 8, 1),
+                    sdo.date(2026, 8, 4),
+                    additional_coverage=[(sdo.date(2026, 8, 4), sdo.date(2026, 8, 4))],
+                )
+                ok("gsc_current_window_closes_gap", no_gaps == [], str(no_gaps))
+                (daily / "2026-08-05.json").write_text(
+                    json.dumps(
+                        {
+                            "source": "search_analytics_api",
+                            "synthetic": False,
+                            "truncated": True,
+                            "start": "2026-08-04",
+                            "end": "2026-08-05",
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+                still_gap = sdo.detect_gsc_gaps(sdo.date(2026, 8, 4), sdo.date(2026, 8, 5))
+                ok(
+                    "gsc_truncated_window_not_coverage",
+                    still_gap == ["2026-08-04", "2026-08-05"],
+                    str(still_gap),
+                )
+        finally:
+            sdo.DATA = original_data
+
+        workflow = (ROOT / ".github/workflows/revops-scheduled.yml").read_text(encoding="utf-8")
+        gsc_job = workflow.split("\n  gsc:\n", 1)[1].split("\n  weekly:\n", 1)[0]
+        ok("gsc_workflow_restores_state", "actions/cache/restore@" in gsc_job)
+        ok("gsc_workflow_saves_state", "actions/cache/save@" in gsc_job)
+        ok(
+            "gsc_workflow_fail_closed",
+            "--allow-missing-creds" not in gsc_job and "|| true" not in gsc_job,
+        )
+
         hist_rows = [
             {
                 "date": "2026-07-28",

@@ -1881,12 +1881,32 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         today=today,
         provider_max_date=date.fromisoformat(str(max_date)),
     )
+    # A successful Search Analytics query covers the requested provider window
+    # even when a low-traffic calendar day returns no top rows. Daily files are
+    # window snapshots, not one-file-per-provider-day records.
+    gaps = detect_gsc_gaps(
+        start,
+        end,
+        additional_coverage=[] if truncated else [(start, end)],
+    )
+    readiness_reasons = []
+    if truncated:
+        readiness_reasons.append("top_row_truncation")
+    if gaps:
+        readiness_reasons.append("provider_coverage_gap")
+    ready_for_product_decisions = not readiness_reasons
+    coverage = {
+        "kind": "provider_query_window",
+        "start": start.isoformat(),
+        "end": end.isoformat(),
+        "complete": not truncated,
+    }
     manifest = snapshot_manifest(
         source=source_kind,
         rows=deduped,
         max_date=str(max_date),
         latency_ms=latency_ms,
-        ready_for_product_decisions=True,
+        ready_for_product_decisions=ready_for_product_decisions,
         synthetic=False,
     )
     payload = {
@@ -1911,7 +1931,10 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "latency_ms": latency_ms,
         "windows": windows,
         "manifest": manifest,
-        "ready_for_product_decisions": True,
+        "coverage": coverage,
+        "coverage_gaps": gaps,
+        "readiness_reasons": readiness_reasons,
+        "ready_for_product_decisions": ready_for_product_decisions,
         "synthetic": False,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "note": "API pull is current. July CSV snapshot is historical only.",
@@ -1930,8 +1953,6 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         json.dumps(payload, ensure_ascii=False), encoding="utf-8"
     )
 
-    # Gap detection: missing calendar days in daily/ history
-    gaps = detect_gsc_gaps(start, end)
     last_sync = {
         "last_sync_at": last_sync_at,
         "as_of": end.isoformat(),
@@ -1940,6 +1961,8 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "rows": len(deduped),
         "pages_fetched": pages_fetched,
         "gaps": gaps,
+        "coverage": coverage,
+        "readiness_reasons": readiness_reasons,
         "site": site,
         "source": "search_analytics_api",
         "source_kind": source_kind,
@@ -1947,7 +1970,7 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "timezone": "America/Sao_Paulo",
         "max_date": max_date,
         "latency_ms": latency_ms,
-        "ready_for_product_decisions": True,
+        "ready_for_product_decisions": ready_for_product_decisions,
         "synthetic": False,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "manifest_sha256": manifest["content_sha256"],
@@ -1979,20 +2002,53 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "source_kind": source_kind,
         "truncated": truncated,
         "synthetic": False,
-        "ready_for_product_decisions": True,
+        "readiness_reasons": readiness_reasons,
+        "ready_for_product_decisions": ready_for_product_decisions,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "manifest_sha256": manifest["content_sha256"],
     }
 
 
-def detect_gsc_gaps(start: date, end: date) -> list[str]:
-    """List dates in [start, end] with no daily history file."""
+def detect_gsc_gaps(
+    start: date,
+    end: date,
+    *,
+    additional_coverage: list[tuple[date, date]] | None = None,
+) -> list[str]:
+    """List provider dates not covered by a successful query window.
+
+    A file under ``daily/`` represents the whole ``start``/``end`` query
+    window recorded in its payload. Treating its filename as the only covered
+    day produced 27 false gaps for every healthy 28-day pull.
+    """
     ensure_dirs()
     daily = DATA / "daily"
+    covered: set[date] = set()
+    windows = list(additional_coverage or [])
+    for path in daily.glob("*.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            if (
+                payload.get("source") != "search_analytics_api"
+                or payload.get("synthetic") is True
+                or payload.get("truncated") is True
+            ):
+                continue
+            windows.append(
+                (date.fromisoformat(str(payload["start"])), date.fromisoformat(str(payload["end"])))
+            )
+        except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError):
+            continue
+    for window_start, window_end in windows:
+        cur = max(start, window_start)
+        boundary = min(end, window_end)
+        while cur <= boundary:
+            covered.add(cur)
+            cur += timedelta(days=1)
     gaps: list[str] = []
     cur = start
     while cur <= end:
-        if not (daily / f"{cur.isoformat()}.json").is_file():
+        if cur not in covered:
             gaps.append(cur.isoformat())
         cur += timedelta(days=1)
     return gaps
@@ -2933,7 +2989,7 @@ def main(argv: list[str] | None = None) -> int:
             )
         else:
             print(json.dumps(result, ensure_ascii=False, indent=2))
-        if result.get("ok"):
+        if result.get("ok") and result.get("ready_for_product_decisions") is True:
             return 0
         return 2  # soft external blocker
 
@@ -2978,7 +3034,7 @@ def main(argv: list[str] | None = None) -> int:
             )
         else:
             print(json.dumps(result, ensure_ascii=False, indent=2))
-        if result.get("ok"):
+        if result.get("ok") and result.get("ready_for_product_decisions") is True:
             return 0
         if args.allow_missing_creds and result.get("error") == "missing_credentials":
             return 0  # external blocker recorded; schedule continues
