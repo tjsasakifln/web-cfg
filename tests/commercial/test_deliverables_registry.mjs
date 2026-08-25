@@ -157,6 +157,7 @@ assert("public_catalog_has_one_terminal_form", (entregasHtml.match(/<form\b/g) |
 assert("public_catalog_captures_deliverable_id", entregasHtml.includes('name="deliverable_id"'));
 assert("public_catalog_captures_terms_id", entregasHtml.includes('name="terms_id"'));
 assert("public_catalog_renderer_is_declared", entregasHtml.includes("GENERATED:PUBLIC-CATALOG:START"));
+assert("public_catalog_has_no_nullish_copy", !/\b(?:null|undefined|NaN)\b/.test(entregasHtml));
 const rendererCheck = spawnSync(
   process.execPath,
   [path.join(root, "scripts/commercial/render_public_catalog.mjs"), "--check"],
