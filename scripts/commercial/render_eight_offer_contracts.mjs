@@ -56,9 +56,13 @@ ${FIELDS_END}`;
 }
 
 function hubBlock(contract) {
-  const cards = contract.deliverables.map((item) => `<article class="eight-hub__item"><header class="eight-hub__item-head"><span>${item.number}</span><strong>${escapeHtml(item.issue_331_name)}</strong><em>${escapeHtml(item.price_display)}</em></header><div><dl><div><dt>Objeto incluído</dt><dd>${escapeHtml(item.objeto_incluido)}</dd></div><div><dt>Saída mínima</dt><dd>${escapeHtml(item.saida_minima)}</dd></div><div><dt>SLA</dt><dd>${escapeHtml(item.sla.text)}</dd></div></dl><section><h3>Entradas</h3>${list(item.entrada)}</section><section><h3>Fronteiras</h3>${list(item.fronteira.map((value) => publicCopy(contract, value)))}</section><a href="${item.route}">Ver exemplo integral e registrar esta unidade</a></div></article>`).join("\n");
+  const cards = contract.deliverables.map((item) => `<article class="eight-hub__item"><header class="eight-hub__item-head"><span>${item.number}</span><strong>${escapeHtml(item.issue_331_name)}</strong><em>${escapeHtml(item.price_display)}</em></header><dl><div><dt>Objeto incluído</dt><dd>${escapeHtml(item.objeto_incluido)}</dd></div><div><dt>Saída mínima</dt><dd>${escapeHtml(item.saida_minima)}</dd></div><div><dt>SLA</dt><dd>${escapeHtml(item.sla.text)}</dd></div></dl><a href="${item.route}">Ver exemplo integral e registrar esta unidade</a></article>`).join("\n");
+  const common = contract.deliverables[0];
+  if (!contract.deliverables.every((item) => JSON.stringify(item.entrada) === JSON.stringify(common.entrada) && JSON.stringify(item.fronteira) === JSON.stringify(common.fronteira))) {
+    throw new Error("hub common scope drift: render per-unit inputs and boundaries instead");
+  }
   return `${HUB_START}
-<section class="eight-hub" data-section-archetype="reading_method" aria-labelledby="eight-hub-title"><div class="container"><header><p class="eyebrow">Escopo antes da contratação</p><h2 id="eight-hub-title">Compare o contrato das oito unidades atuais.</h2><p>Cada unidade mostra objeto, entradas, saída, SLA e fronteiras sem exigir interação. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado; preço e aritmética do pacote permanecem iguais.</p></header><div class="eight-hub__list">${cards}</div></div></section>
+<section class="eight-hub" data-section-archetype="reading_method" aria-labelledby="eight-hub-title"><div class="container"><header><p class="eyebrow">Escopo antes da contratação</p><h2 id="eight-hub-title">Compare o contrato das oito unidades atuais.</h2><p>Cada unidade mostra objeto, saída e SLA sem exigir interação. As entradas e fronteiras comuns aparecem uma vez, sem duplicação. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado; preço e aritmética do pacote permanecem iguais.</p></header><div class="eight-hub__common"><section><h3>Entradas comuns às oito unidades</h3>${list(common.entrada)}</section><section><h3>Fronteiras comuns às oito unidades</h3>${list(common.fronteira.map((value) => publicCopy(contract, value)))}</section></div><div class="eight-hub__list">${cards}</div></div></section>
 ${HUB_END}`;
 }
 
