@@ -17,7 +17,13 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { auditCopyContract, deriveMoneyRoutes } from "../../scripts/commercial/copy_contract_audit.mjs";
+import {
+  auditCopyContract,
+  classifyOccurrence,
+  deriveMoneyRoutes,
+  explicitExclusionRanges,
+  registeredNameRanges as auditRegisteredNameRanges,
+} from "../../scripts/commercial/copy_contract_audit.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -39,13 +45,6 @@ function assert(name, cond, detail) {
 /* ---------- normalizacao publicada no proprio contrato ---------- */
 function normalize(text) {
   return text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-}
-function stableJson(obj) {
-  return JSON.stringify(
-    Object.keys(obj || {})
-      .sort()
-      .map((k) => [k, obj[k]]),
-  );
 }
 function visibleText(html) {
   return html
@@ -346,10 +345,33 @@ const derivedAudit = auditCopyContract({ contract, registry, taskDoors, familyRe
 assert("copy_audit_is_registry_derived", contract.public_implementation?.manual_route_allowlist === false && contract.money_page_scan?.manual_route_allowlist === false, contract.public_implementation);
 assert("copy_audit_covers_54", derivedAudit.metrics.deliverables === 54 && derivedAudit.metrics.titleless_unique === 54, derivedAudit.metrics);
 assert("copy_audit_covers_810_clauses", derivedAudit.metrics.clauses_per_deliverable === 15 && derivedAudit.metrics.clause_instances === 810, derivedAudit.metrics);
+assert(
+  "copy_audit_810_clause_bodies_are_distinct",
+  derivedAudit.metrics.clause_bodies_unique === 810 && derivedAudit.metrics.clause_body_duplicates === 0,
+  derivedAudit.metrics,
+);
 assert("copy_audit_discovers_live_routes", derivedRoutes.length >= 20 && derivedAudit.metrics.routes_derived === derivedRoutes.length, derivedRoutes);
 assert("copy_audit_zero_violations", derivedAudit.ok && derivedAudit.metrics.language_violations === 0 && derivedAudit.metrics.structured_social_proof_hits === 0, derivedAudit.problems);
+assert(
+  "copy_audit_live_measurement_is_reconciled",
+  Object.entries(contract.money_page_scan.live_measurement || {}).every(([key, value]) => derivedAudit.metrics[key] === value),
+  { recorded: contract.money_page_scan.live_measurement, live: derivedAudit.metrics },
+);
 assert("copy_audit_runner_exists", fs.existsSync(path.join(root, contract.public_implementation.audit_runner)), contract.public_implementation.audit_runner);
 assert("copy_review_package_exists", fs.existsSync(path.join(root, contract.public_implementation.adversarial_review_package, "review.template.json")) && fs.existsSync(path.join(root, contract.public_implementation.adversarial_review_package, "differentiation.template.json")), contract.public_implementation.adversarial_review_package);
+
+const triggerSections = [...catalogHtml.matchAll(/(<section[^>]+data-copy-clause="observable_trigger"[^>]*>)([\s\S]*?)(<\/section>)/g)];
+assert("duplicate_mutation_has_two_targets", triggerSections.length >= 2, triggerSections.length);
+if (triggerSections.length >= 2) {
+  const second = triggerSections[1];
+  const mutatedCatalog = `${catalogHtml.slice(0, second.index)}${second[1]}${triggerSections[0][2]}${second[3]}${catalogHtml.slice(second.index + second[0].length)}`;
+  const mutatedAudit = auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml: mutatedCatalog });
+  assert(
+    "duplicate_clause_mutation_fails_closed",
+    !mutatedAudit.ok && mutatedAudit.problems.some((problem) => problem.startsWith("duplicate_copy_clause:observable_trigger:")),
+    mutatedAudit.problems,
+  );
+}
 
 /* ---------- 5. excecoes de portao documentadas no proprio arquivo ---------- */
 const exceptions = contract.gate_exceptions || [];
@@ -369,7 +391,7 @@ const negation = exceptionById.get("GX-01");
 assert(
   "gx01_negation_window",
   negation &&
-    negation.implemented_as === "explicit_negation_window" &&
+    negation.implemented_as === "explicit_negation_or_exclusion_structure" &&
     typeof negation.window_chars === "number" &&
     Array.isArray(negation.negation_markers) &&
     negation.negation_markers.includes("sem") &&
@@ -404,6 +426,45 @@ assert(
     Array.isArray(registered.registered_public_names) &&
     registered.registered_public_names.length > 0,
   registered,
+);
+const fl360 = termEntries.find((entry) => entry.id === "FL-06");
+const registeredLeakText = normalize("Diagnóstico B2G 360° é o nome. Nesta página, 360° resolve tudo.");
+const registeredLeakIndex = registeredLeakText.lastIndexOf("360°");
+assert(
+  "gx04_does_not_exempt_term_elsewhere_on_registered_route",
+  classifyOccurrence(
+    fl360,
+    registeredLeakText,
+    registeredLeakIndex,
+    "360°",
+    contract,
+    auditRegisteredNameRanges(registeredLeakText, registered.registered_public_names),
+  ) === null,
+  registeredLeakText,
+);
+const flGuarantee = termEntries.find((entry) => entry.id === "FL-08");
+const crossSentenceText = normalize("Não prometemos resultado. Garantimos vitória.");
+const crossSentenceIndex = crossSentenceText.indexOf("garantimos");
+assert(
+  "gx01_negation_does_not_cross_sentence_boundary",
+  classifyOccurrence(flGuarantee, crossSentenceText, crossSentenceIndex, "garantimos", contract, [], []) === null,
+  crossSentenceText,
+);
+const exclusionHtml = "<section><h3>Não inclui</h3><ul><li>Garantia de vitória.</li></ul></section>";
+const exclusionText = normalize(visibleText(exclusionHtml));
+const exclusionIndex = exclusionText.indexOf("garantia");
+assert(
+  "gx01_recognizes_explicit_exclusion_structure",
+  classifyOccurrence(
+    flGuarantee,
+    exclusionText,
+    exclusionIndex,
+    "garantia",
+    contract,
+    [],
+    explicitExclusionRanges(exclusionHtml, exclusionText),
+  ) === "explicit_exclusion",
+  exclusionText,
 );
 // toda excecao citada por uma entrada proibida precisa existir
 for (const entry of termEntries) {
@@ -566,7 +627,8 @@ assert(
   scan?.measured_at,
 );
 
-// toda fronteira viva precisa estar registrada com contagem exata, e nada a mais
+// O baseline preservado precisa continuar íntegro, mas não funciona como allowlist:
+// o audit derivado acima é a autoridade para todas as rotas e contagens vivas.
 const recordedBoundaries = scan?.boundaries || [];
 const recordedByKey = new Map(recordedBoundaries.map((b) => [`${b.page}|${b.forbidden_id}`, b]));
 assert(
@@ -574,27 +636,17 @@ assert(
   recordedByKey.size === recordedBoundaries.length,
   recordedBoundaries.length,
 );
-for (const [key, bucket] of liveBoundaries) {
-  const rec = recordedByKey.get(key);
-  assert(`boundary_registered_${key}`, Boolean(rec), { key, bucket });
-  if (!rec) continue;
-  assert(`boundary_count_${key}`, rec.occurrences === bucket.total, {
-    recorded: rec.occurrences,
-    live: bucket.total,
-  });
+for (const [key, rec] of recordedByKey) {
   assert(
-    `boundary_exemptions_${key}`,
-    stableJson(rec.by_exemption) === stableJson(bucket.byExemption),
-    { recorded: rec.by_exemption, live: bucket.byExemption },
+    `historical_boundary_has_positive_measurement_${key}`,
+    Number.isInteger(rec.occurrences) && rec.occurrences > 0 && Object.values(rec.by_exemption || {}).every((count) => Number.isInteger(count) && count > 0),
+    rec,
   );
   assert(
-    `boundary_has_evidence_${key}`,
+    `historical_boundary_has_evidence_${key}`,
     typeof rec.evidence === "string" && rec.evidence.length > 20,
     rec.evidence,
   );
-}
-for (const [key, rec] of recordedByKey) {
-  assert(`boundary_still_live_${key}`, liveBoundaries.has(key), rec);
 }
 // a varredura precisa ter encontrado alguma coisa: um portao que nao ve nada nao prova nada
 assert("scan_found_occurrences", liveBoundaries.size > 0, liveBoundaries.size);
