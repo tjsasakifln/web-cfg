@@ -1,0 +1,976 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "page-contract-complementares.v1",
+  "family_pt_br": "Ofertas complementares",
+  "source_issue": 337,
+  "parent_issue": 329,
+  "related_issues": [88, 334, 343],
+  "naming_authority_issue": 343,
+  "decision_state": "VALIDATE",
+  "priority": "P1",
+  "executive_fronts": ["REVENUE NOW", "MARKET INTELLIGENCE MOAT"],
+  "leverage": ["revenue", "data", "trust", "customer"],
+  "time_to_evidence_days": 30,
+  "research_state": "NOT_STARTED",
+  "evidence": [],
+  "human_validation": {
+    "state": "NOT_STARTED",
+    "real_proposals_required_before_promoting_price": 3,
+    "collected": []
+  },
+  "currency": "BRL",
+  "price_unit": "cents",
+  "price_basis": "piloto",
+  "pages_created_by_this_contract": [],
+  "checkout_enabled_anywhere": false,
+  "acceptance": [
+    {
+      "id": "quatro_containers_com_preco_limite_sla_exclusao_e_step_up",
+      "criterion_pt_br": "Os quatro itens têm preço, limite, SLA, exclusão e step-up declarados neste contrato.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "id": "nenhuma_cta_sem_faixa_de_preco",
+      "criterion_pt_br": "Nenhuma chamada termina em pedido de orçamento sem preço ou faixa publicada.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "id": "item_45_servico_gerenciado_sem_tempo_real",
+      "criterion_pt_br": "O item 45 é serviço gerenciado por pessoas e não promete tempo real nem plataforma de alertas.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "id": "itens_46_47_aplicados_ao_icp",
+      "criterion_pt_br": "Os itens 46 e 47 são aplicados ao perfil de cliente e não reposicionam a CONFENGE como escola para iniciantes.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "id": "item_48_materializa_no_extra_cli",
+      "criterion_pt_br": "O item 48 materializa dado no extra-cli e o web-cfg apenas publica e captura.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "id": "fronteira_entre_containers_exaustiva",
+      "criterion_pt_br": "A tabela de fronteira entre contêineres é exaustiva e mutuamente exclusiva.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "id": "cada_repeticao_produz_ativo_reutilizavel",
+      "criterion_pt_br": "Cada repetição produz ativo reutilizável governado, não apenas horas.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "id": "quatro_rotas_publicas_publicadas",
+      "criterion_pt_br": "As quatro rotas públicas existem, publicadas e capturando lead.",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "depende de página pública, que este contrato não cria",
+      "evidence": []
+    },
+    {
+      "id": "preco_promovido_apos_proposta_custo_e_resultado",
+      "criterion_pt_br": "O preço só promove depois de proposta real, custo observado e resultado registrado.",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "depende de venda real e de registro humano, que este contrato não fabrica",
+      "evidence": []
+    },
+    {
+      "id": "faixas_validadas_com_cliente_real",
+      "criterion_pt_br": "As faixas de preço foram testadas contra pelo menos três propostas reais.",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "depende de proposta real enviada a cliente, que este contrato não fabrica",
+      "evidence": []
+    }
+  ],
+  "no_price_on_request": {
+    "enforced": true,
+    "every_item_has_concrete_price_or_exhaustive_tiers": true,
+    "forbidden_phrases_pt_br": [
+      "sob consulta",
+      "preço sob consulta",
+      "valor sob consulta",
+      "orçamento sob consulta",
+      "fale conosco para orçamento",
+      "consulte-nos",
+      "solicite um orçamento",
+      "a combinar",
+      "a partir de",
+      "sob demanda"
+    ],
+    "scan_exempt_paths": ["$.no_price_on_request"],
+    "statement_pt_br": "Nenhuma chamada desta família pode terminar em pedido de orçamento sem preço. Todo item publica um preço fechado ou uma lista taxativa de faixas com valor em reais."
+  },
+  "common_rules": {
+    "prices_match_canonical_registry": true,
+    "canonical_registry_path": "data/commercial/deliverables-registry.v1.json",
+    "naming_authority_pt_br": "A issue 343 é a fonte canônica de nome público, linha de valor e aliases.",
+    "capacity_required_for_every_item": true,
+    "checkout_disabled_everywhere": true,
+    "lead_destination": "warmbly:CONFENGE_WEB",
+    "no_data_or_identity_originates_in_web_cfg": true,
+    "truth_and_provenance_remain_in": "extra-cli",
+    "web_cfg_only_publishes_and_captures": true,
+    "no_crawler_in_web_cfg": true,
+    "no_datalake_in_web_cfg": true,
+    "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+    "every_repetition_produces_governed_reusable_asset": true,
+    "hours_alone_are_not_the_deliverable": true,
+    "no_success_fee": true,
+    "no_promise_of_victory_or_award": true,
+    "no_custody_of_token_certificate_or_password": true,
+    "not_a_beginners_school": true,
+    "no_certification_diploma_or_graduation": true,
+    "no_software_subscription_trial_or_licence_quota": true,
+    "price_promotion_rule": {
+      "requires_real_proposal": true,
+      "requires_observed_cost": true,
+      "requires_recorded_outcome": true,
+      "all_three_required": true,
+      "state": "NOT_PROMOTED",
+      "statement_pt_br": "Preço desta família só promove depois de proposta real enviada, custo de entrega observado e resultado registrado. Faltando qualquer um dos três, o preço permanece piloto."
+    },
+    "statements_pt_br": [
+      "Os quatro itens desta família repetem exatamente o preço, o SLA e a porta registrados no rol canônico e não criam um segundo preço.",
+      "Nenhuma chamada desta família pode terminar em pedido de orçamento sem preço: todo item publica valor fechado ou faixa taxativa.",
+      "O item 45 é serviço gerenciado por pessoas e não promete tempo real nem plataforma de alertas.",
+      "Os itens 46 e 47 são aplicados ao perfil de cliente da própria empresa e não reposicionam a CONFENGE como escola para iniciantes: não há certificação, diploma nem graduação.",
+      "O item 48 materializa dado no extra-cli, e o web-cfg apenas publica a oferta e captura o lead, sem crawler e sem DataLake.",
+      "Cada repetição desta família produz ativo reutilizável governado, não apenas horas vendidas.",
+      "Preço só promove depois de proposta real, custo observado e resultado registrado.",
+      "Nenhum item desta família tem comissão de êxito, promete vitória ou adjudicação, nem guarda token, certificado digital ou senha do cliente.",
+      "Contratação de qualquer item depende de capacidade confirmada e não existe checkout automático nesta família."
+    ]
+  },
+  "container_boundary": {
+    "exhaustive": true,
+    "mutually_exclusive": true,
+    "row_count": 6,
+    "statement_pt_br": "Toda necessidade dominante que chega a esta família tem exatamente um destino. Nenhuma linha cobre duas necessidades e nenhuma necessidade fica sem destino.",
+    "rows": [
+      {
+        "dominant_need_pt_br": "observar mudança material em objetos definidos",
+        "target_kind": "item",
+        "target_item": 45,
+        "target_container_id": null,
+        "target_public_name_pt_br": "Monitoramento Mensal de Mercado e Contratos Públicos"
+      },
+      {
+        "dominant_need_pt_br": "instalar ritual executivo de decisão",
+        "target_kind": "item",
+        "target_item": 46,
+        "target_container_id": null,
+        "target_public_name_pt_br": "Oficina para Decidir Quais Licitações Disputar"
+      },
+      {
+        "dominant_need_pt_br": "elevar competência de uma equipe",
+        "target_kind": "item",
+        "target_item": 47,
+        "target_container_id": null,
+        "target_public_name_pt_br": "Capacitação de Equipes de Licitações e Contratos"
+      },
+      {
+        "dominant_need_pt_br": "responder pergunta inédita com dados públicos",
+        "target_kind": "item",
+        "target_item": 48,
+        "target_container_id": null,
+        "target_public_name_pt_br": "Estudo Sob Medida com Dados Públicos"
+      },
+      {
+        "dominant_need_pt_br": "coordenar decisões e execução B2G continuamente",
+        "target_kind": "container",
+        "target_item": null,
+        "target_container_id": "diretoria_fracionada",
+        "target_public_name_pt_br": "Diretoria Fracionada para o Mercado Público"
+      },
+      {
+        "dominant_need_pt_br": "prevenir eventos em um contrato específico",
+        "target_kind": "item",
+        "target_item": 25,
+        "target_container_id": null,
+        "target_public_name_pt_br": "Acompanhamento Preventivo do Contrato Público"
+      }
+    ]
+  },
+  "neighbour_offers": [
+    {
+      "kind": "item",
+      "item": 12,
+      "container_id": null,
+      "public_name_pt_br": "Decisão de Disputar o Edital",
+      "route": "/diagnostico-pre-licitacao/",
+      "verb_pt_br": "decide"
+    },
+    {
+      "kind": "item",
+      "item": 25,
+      "container_id": null,
+      "public_name_pt_br": "Acompanhamento Preventivo do Contrato Público",
+      "route": "/acompanhamento-contratos-obras/",
+      "verb_pt_br": "previne"
+    },
+    {
+      "kind": "container",
+      "item": null,
+      "container_id": "diretoria_fracionada",
+      "public_name_pt_br": "Diretoria Fracionada para o Mercado Público",
+      "route": "/diretoria-b2g/",
+      "verb_pt_br": "coordena"
+    }
+  ],
+  "routes_owned_by_other_items": [
+    {
+      "route": "/diagnostico-pre-licitacao/",
+      "owner_item": 12,
+      "owner_container_id": null,
+      "owner_public_name_pt_br": "Decisão de Disputar o Edital"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "owner_item": 25,
+      "owner_container_id": null,
+      "owner_public_name_pt_br": "Acompanhamento Preventivo do Contrato Público"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "owner_item": null,
+      "owner_container_id": "diretoria_fracionada",
+      "owner_public_name_pt_br": "Diretoria Fracionada para o Mercado Público"
+    }
+  ],
+  "items": [
+    {
+      "number": 45,
+      "deliverable_id": "CFG-D45",
+      "public_name_pt_br": "Monitoramento Mensal de Mercado e Contratos Públicos",
+      "value_line_pt_br": "Destaca mudanças públicas relevantes para priorizar mercado e carteira todo mês.",
+      "decision_question_pt_br": "O que mudou no mercado público e na carteira neste mês a ponto de exigir decisão agora?",
+      "trigger_pt_br": "A direção descobre mudanças de comprador, contrato ou concorrente semanas depois, quando a janela de decisão já fechou.",
+      "verb_pt_br": "observa",
+      "task_door": "GROW",
+      "public_state": "VALIDATE",
+      "capacity_required": true,
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": { "route_family": "servicos", "deliverable_attr": "CFG-D45" },
+      "pricing": {
+        "model": "subscription_monthly",
+        "billing": "subscription_monthly",
+        "cycle": "MONTHLY",
+        "commitment_months": 3,
+        "price_on_request": false,
+        "tiers_are_exhaustive": true,
+        "tiers": [
+          {
+            "tier_id": "assinatura_mensal",
+            "name_pt_br": "Assinatura mensal",
+            "price_cents": 490000,
+            "unit_pt_br": "por carteira de até 20 objetos de vigilância",
+            "sla_business_days": null
+          }
+        ],
+        "additional_charges": []
+      },
+      "sla": {
+        "business_days_min": null,
+        "business_days_max": null,
+        "starts_after_pt_br": "contratação, briefing inicial concluído e capacidade confirmada",
+        "safe_deadline_business_days": null,
+        "why_no_business_day_sla_pt_br": "O item 45 é serviço recorrente com cadência mensal declarada, não entrega pontual com prazo em dias úteis."
+      },
+      "unit_pt_br": "uma empresa com até 20 objetos de vigilância combinando compradores, territórios, tipologias, concorrentes, contratos ou programas públicos",
+      "limits_pt_br": [
+        "ciclo inicial de 3 meses",
+        "até 20 objetos de vigilância por ciclo",
+        "critérios de mudança material acordados no briefing inicial",
+        "síntese semanal emitida apenas quando houver mudança material",
+        "serviço gerenciado por pessoas, sem promessa de tempo real",
+        "contratação depende de capacidade",
+        "sem checkout automático"
+      ],
+      "watch_objects": {
+        "max_count": 20,
+        "kinds_pt_br": ["compradores", "territórios", "tipologias", "concorrentes", "contratos", "programas públicos"],
+        "kinds_are_exhaustive": true,
+        "statement_pt_br": "A carteira vigiada tem até 20 objetos, combinando compradores, territórios, tipologias, concorrentes, contratos ou programas públicos, nomeados no briefing inicial."
+      },
+      "managed_service": {
+        "is_managed_service": true,
+        "delivered_by_people": true,
+        "promises_real_time": false,
+        "is_alerts_platform": false,
+        "is_software_subscription": false,
+        "has_licence_quota": false,
+        "has_trial": false,
+        "statement_pt_br": "O item 45 é serviço gerenciado por pessoas, com cadência declarada. Não é plataforma de alertas, não é assinatura de software e não promete tempo real."
+      },
+      "cadence_pt_br": [
+        "briefing inicial com objetos vigiados, critérios de mudança material e fontes",
+        "critérios de mudança material aprovados pela direção antes do primeiro ciclo",
+        "síntese semanal emitida apenas quando houver mudança material",
+        "relatório mensal com fatos, oportunidades, riscos, prioridades e decisões sugeridas",
+        "reunião mensal de 60 minutos com a direção",
+        "log de fonte, freshness e UNKNOWN por objeto vigiado"
+      ],
+      "required_inputs_pt_br": [
+        "lista dos até 20 objetos de vigilância",
+        "critérios de mudança material aprovados pela direção",
+        "carteira e contratos ativos que devem ser acompanhados",
+        "concorrentes, territórios e tipologias de interesse",
+        "responsável interno nomeado para receber e decidir sobre o relatório"
+      ],
+      "delivery_pt_br": [
+        "briefing inicial com objetos vigiados, critérios de mudança material e fontes",
+        "síntese semanal emitida apenas quando houver mudança material",
+        "relatório mensal com fatos, oportunidades, riscos, prioridades e decisões sugeridas",
+        "reunião mensal de 60 minutos com a direção",
+        "log de fonte, freshness e UNKNOWN por objeto vigiado",
+        "encaminhamento para o entregável pontual quando a mudança exigir análise dedicada"
+      ],
+      "exclusions_pt_br": [
+        "plataforma de alertas",
+        "monitoramento em tempo real",
+        "assinatura de software, trial ou quota de licenças",
+        "participação em licitação em nome do cliente",
+        "gestão contratual ou ação executiva no lugar da equipe",
+        "priorizar e executar decisões rotineiramente, o que exige a Diretoria Fracionada para o Mercado Público",
+        "peça jurídica, recurso, defesa ou protocolo",
+        "promessa de vitória, de adjudicação, de habilitação da empresa ou de recebimento"
+      ],
+      "step_up": {
+        "target_kind": "container",
+        "target_item": null,
+        "target_container_id": "diretoria_fracionada",
+        "target_public_name_pt_br": "Diretoria Fracionada para o Mercado Público",
+        "declared_by_issue": true,
+        "trigger_pt_br": "quando a necessidade inclui priorizar e executar rotineiramente, e não apenas observar mudança material",
+        "statement_pt_br": "O item 45 observa mudança material em objetos definidos e entrega decisão sugerida. Quando a necessidade passa a incluir priorizar e executar rotineiramente, o destino é a Diretoria Fracionada para o Mercado Público."
+      },
+      "reusable_asset": {
+        "produces_governed_reusable_asset": true,
+        "hours_only": false,
+        "asset_pt_br": "carteira de vigilância versionada, com critérios de mudança material, fontes declaradas e log de freshness reutilizado a cada ciclo",
+        "governed_by_pt_br": "extra-cli, dono de proveniência e freshness",
+        "statement_pt_br": "Cada ciclo do item 45 alimenta uma carteira de vigilância governada e reutilizável, não apenas horas de leitura."
+      },
+      "price_promotion": {
+        "state": "NOT_PROMOTED",
+        "requires_real_proposal": true,
+        "requires_observed_cost": true,
+        "requires_recorded_outcome": true,
+        "evidence": []
+      },
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+        "materialises_in": "extra-cli",
+        "web_cfg_role_pt_br": "publica a oferta e captura o lead",
+        "web_cfg_hosts_crawler": false,
+        "web_cfg_hosts_datalake": false
+      },
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false,
+        "promises_real_time": false,
+        "sells_alerts_platform": false,
+        "sells_software_subscription": false,
+        "grants_certification": false,
+        "grants_graduation": false,
+        "positions_as_beginners_school": false,
+        "hosts_crawler_in_web_cfg": false,
+        "hosts_datalake_in_web_cfg": false,
+        "price_on_request": false,
+        "checkout_enabled": false
+      },
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "A CONFENGE não participa de licitação em nome do cliente e não substitui a equipe na gestão contratual.",
+        "Não há comissão de êxito nem promessa de vitória, adjudicação, habilitação ou recebimento.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ]
+    },
+    {
+      "number": 46,
+      "deliverable_id": "CFG-D46",
+      "public_name_pt_br": "Oficina para Decidir Quais Licitações Disputar",
+      "value_line_pt_br": "Instala critérios e ritual para escolher quais oportunidades merecem equipe.",
+      "decision_question_pt_br": "Com quais critérios explícitos a empresa escolhe quais licitações merecem equipe e quais recusa?",
+      "trigger_pt_br": "A equipe entra em disputas por hábito e a direção não consegue explicar por que uma oportunidade foi escolhida e outra recusada.",
+      "verb_pt_br": "instala",
+      "task_door": "CAPABILITY",
+      "public_state": "VALIDATE",
+      "capacity_required": true,
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": { "route_family": "servicos", "deliverable_attr": "CFG-D46" },
+      "pricing": {
+        "model": "single",
+        "billing": "one_time",
+        "cycle": null,
+        "commitment_months": null,
+        "price_on_request": false,
+        "tiers_are_exhaustive": true,
+        "tiers": [
+          {
+            "tier_id": "unico",
+            "name_pt_br": "Único",
+            "price_cents": 790000,
+            "unit_pt_br": "uma empresa, uma oficina de até 4 horas com grupo decisor de até 12 pessoas",
+            "sla_business_days": 7
+          }
+        ],
+        "additional_charges": []
+      },
+      "sla": {
+        "business_days_min": 7,
+        "business_days_max": 7,
+        "starts_after_pt_br": "contratação, envio dos insumos e data da oficina confirmada",
+        "safe_deadline_business_days": null,
+        "statement_pt_br": "São 7 dias úteis de preparação antes da oficina, seguidos de uma sessão única de até 4 horas."
+      },
+      "workshop": {
+        "preparation_business_days": 7,
+        "session_max_hours": 4,
+        "session_count": 1,
+        "max_decision_group": 12,
+        "max_opportunities": 5,
+        "opportunities_may_be_synthetic": true,
+        "opportunities_require_prior_authorisation": true,
+        "adoption_plan_days": 30
+      },
+      "unit_pt_br": "uma empresa, uma oficina de até 4 horas com grupo decisor de até 12 pessoas",
+      "limits_pt_br": [
+        "até cinco oportunidades reais ou sintéticas previamente autorizadas",
+        "grupo decisor de até 12 pessoas",
+        "7 dias úteis de preparação antes da oficina",
+        "uma sessão única de até 4 horas",
+        "oficina aplicada ao perfil de cliente da própria empresa, não turma aberta para iniciantes",
+        "contratação depende de capacidade",
+        "sem checkout automático"
+      ],
+      "icp_application": {
+        "applied_to_icp": true,
+        "uses_client_own_cases": true,
+        "is_beginners_school": false,
+        "is_open_class_for_beginners": false,
+        "is_introductory_course": false,
+        "grants_certification": false,
+        "grants_diploma": false,
+        "grants_graduation": false,
+        "grants_official_workload": false,
+        "grants_council_registration": false,
+        "statement_pt_br": "A oficina é aplicada ao perfil de cliente da própria empresa e usa as oportunidades autorizadas dela. Não é curso introdutório, não é turma aberta para iniciantes e não emite certificação, diploma ou graduação."
+      },
+      "required_inputs_pt_br": [
+        "até cinco oportunidades reais ou sintéticas com autorização de uso em sala",
+        "histórico recente de disputas, resultados e decisões tomadas",
+        "capacidade instalada, restrições de equipe e limites de caixa",
+        "critérios econômicos e de risco já usados informalmente",
+        "lista nominal do grupo decisor e das funções envolvidas"
+      ],
+      "delivery_pt_br": [
+        "diagnóstico prévio de como a decisão é tomada hoje",
+        "critérios econômicos, técnicos, documentais e de risco explicitados",
+        "matriz ponderada de decisão",
+        "simulação das oportunidades autorizadas dentro da matriz",
+        "papéis e rituais de decisão definidos",
+        "playbook de decisão da empresa",
+        "plano de adoção de 30 dias"
+      ],
+      "exclusions_pt_br": [
+        "curso introdutório de licitações para iniciantes",
+        "certificação, diploma, carga horária oficial ou registro em conselho",
+        "plataforma de ensino, assinatura de software, trial ou quota de licenças",
+        "recorrência: a oficina é uma sessão contratada, não um acompanhamento continuado",
+        "análise completa dos cinco editais, que continua sendo objeto dos entregáveis de decisão contratados item a item",
+        "substituição do Decisão de Disputar o Edital, da auditoria de orçamento ou dos demais entregáveis de decisão",
+        "peça jurídica, recurso, impugnação ou protocolo",
+        "promessa de vitória, de adjudicação ou de habilitação da empresa"
+      ],
+      "step_up": {
+        "target_kind": "item",
+        "target_item": 12,
+        "target_container_id": null,
+        "target_public_name_pt_br": "Decisão de Disputar o Edital",
+        "declared_by_issue": true,
+        "trigger_pt_br": "quando a necessidade deixa de ser instalar o ritual de decisão e passa a ser a análise completa de um edital específico",
+        "statement_pt_br": "O item 46 instala critérios e ritual de decisão e simula as oportunidades autorizadas. A análise completa de um edital fica fora da oficina, e o destino é o item 12, Decisão de Disputar o Edital, contratado edital a edital."
+      },
+      "reusable_asset": {
+        "produces_governed_reusable_asset": true,
+        "hours_only": false,
+        "asset_pt_br": "matriz ponderada e playbook de decisão da empresa, versionados e reaplicáveis a toda oportunidade seguinte",
+        "governed_by_pt_br": "CONFENGE, com critérios registrados e aprovados pela direção do cliente",
+        "statement_pt_br": "A oficina entrega matriz e playbook reutilizáveis pela empresa depois da sessão, não apenas quatro horas de sala."
+      },
+      "price_promotion": {
+        "state": "NOT_PROMOTED",
+        "requires_real_proposal": true,
+        "requires_observed_cost": true,
+        "requires_recorded_outcome": true,
+        "evidence": []
+      },
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+        "materialises_in": "extra-cli",
+        "web_cfg_role_pt_br": "publica a oferta e captura o lead",
+        "web_cfg_hosts_crawler": false,
+        "web_cfg_hosts_datalake": false
+      },
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false,
+        "promises_real_time": false,
+        "sells_alerts_platform": false,
+        "sells_software_subscription": false,
+        "grants_certification": false,
+        "grants_graduation": false,
+        "positions_as_beginners_school": false,
+        "hosts_crawler_in_web_cfg": false,
+        "hosts_datalake_in_web_cfg": false,
+        "price_on_request": false,
+        "checkout_enabled": false
+      },
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "A oficina não emite certificação, diploma, carga horária oficial ou registro em conselho.",
+        "Não há comissão de êxito nem promessa de vitória, adjudicação ou habilitação.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ]
+    },
+    {
+      "number": 47,
+      "deliverable_id": "CFG-D47",
+      "public_name_pt_br": "Capacitação de Equipes de Licitações e Contratos",
+      "value_line_pt_br": "Treina a equipe nos casos e rotinas que ela realmente executa.",
+      "decision_question_pt_br": "Como transferir para a equipe o método de licitar e executar contratos que hoje depende de poucas pessoas?",
+      "trigger_pt_br": "A empresa depende de uma ou duas pessoas para licitar e administrar contratos, e o método não está transferido para a equipe.",
+      "verb_pt_br": "capacita",
+      "task_door": "CAPABILITY",
+      "public_state": "VALIDATE",
+      "capacity_required": true,
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": { "route_family": "servicos", "deliverable_attr": "CFG-D47" },
+      "pricing": {
+        "model": "tiers",
+        "billing": "one_time",
+        "cycle": null,
+        "commitment_months": null,
+        "price_on_request": false,
+        "tiers_are_exhaustive": true,
+        "tiers": [
+          {
+            "tier_id": "8h",
+            "name_pt_br": "8 horas",
+            "price_cents": 1290000,
+            "unit_pt_br": "uma trilha em sessão de 8 horas para uma turma de até 20 participantes",
+            "sla_business_days": null
+          },
+          {
+            "tier_id": "16h",
+            "name_pt_br": "16 horas",
+            "price_cents": 1980000,
+            "unit_pt_br": "a mesma trilha em 16 horas, com mais exercícios aplicados e mais casos da própria carteira",
+            "sla_business_days": null
+          }
+        ],
+        "additional_charges": [
+          {
+            "name_pt_br": "Deslocamento e hospedagem fora da Grande Florianópolis",
+            "charged_at_cost": true,
+            "price_cents": null,
+            "markup_percent": 0,
+            "requires_prior_approval": true,
+            "exhaustive": true,
+            "statement_pt_br": "Deslocamento e hospedagem fora da Grande Florianópolis são cobrados a custo, sem acréscimo, e aprovados previamente pelo cliente."
+          }
+        ]
+      },
+      "sla": {
+        "business_days_min": null,
+        "business_days_max": null,
+        "starts_after_pt_br": "contratação, levantamento de contexto concluído e data da turma confirmada",
+        "safe_deadline_business_days": null,
+        "why_no_business_day_sla_pt_br": "O item 47 é turma com data combinada entre as partes, e não entrega pontual com prazo em dias úteis."
+      },
+      "travel_and_lodging": {
+        "base_area_pt_br": "Grande Florianópolis",
+        "charged_at_cost_outside_base_area": true,
+        "markup_percent": 0,
+        "requires_prior_approval": true,
+        "included_inside_base_area": true,
+        "statement_pt_br": "Deslocamento e hospedagem fora da Grande Florianópolis são cobrados a custo e aprovados previamente pelo cliente, sem margem embutida e sem alterar o preço da faixa contratada."
+      },
+      "class": {
+        "max_participants": 20,
+        "tracks_are_exhaustive": true,
+        "tracks_pt_br": [
+          "proposta e orçamento",
+          "habilitação e acervo",
+          "execução e prova",
+          "medições e pleitos",
+          "governança integrada"
+        ],
+        "tracks_per_class": 1,
+        "follow_up_meeting_minutes": 60,
+        "follow_up_after_days": 30
+      },
+      "unit_pt_br": "uma turma de até 20 participantes em uma trilha escolhida",
+      "limits_pt_br": [
+        "uma trilha por turma entre proposta e orçamento, habilitação e acervo, execução e prova, medições e pleitos, ou governança integrada",
+        "até 20 participantes por turma",
+        "8 horas ou 16 horas conforme a faixa contratada",
+        "deslocamento e hospedagem fora da Grande Florianópolis são cobrados a custo e aprovados previamente",
+        "capacitação aplicada ao perfil de cliente da própria empresa, não turma aberta para iniciantes",
+        "contratação depende de capacidade",
+        "sem checkout automático"
+      ],
+      "icp_application": {
+        "applied_to_icp": true,
+        "uses_client_own_cases": true,
+        "is_beginners_school": false,
+        "is_open_class_for_beginners": false,
+        "is_introductory_course": false,
+        "grants_certification": false,
+        "grants_diploma": false,
+        "grants_graduation": false,
+        "grants_official_workload": false,
+        "grants_council_registration": false,
+        "statement_pt_br": "A capacitação usa casos, propostas e documentos reais autorizados da própria empresa. Não é graduação, não é curso livre com carga horária oficial e não emite certificação, diploma ou registro em conselho."
+      },
+      "required_inputs_pt_br": [
+        "trilha escolhida entre as cinco publicadas",
+        "lista de participantes com funções e nível de experiência",
+        "casos, propostas e documentos reais autorizados para uso em sala",
+        "contexto da carteira e gargalos percebidos pela direção",
+        "data, local e infraestrutura da turma"
+      ],
+      "delivery_pt_br": [
+        "levantamento de contexto antes da turma",
+        "casos e exercícios aderentes ao perfil de cliente da empresa",
+        "sessão ao vivo de 8 ou 16 horas conforme a faixa contratada",
+        "materiais de apoio da trilha",
+        "avaliação aplicada dos participantes",
+        "plano de ação da equipe",
+        "encontro de 60 minutos 30 dias depois da turma"
+      ],
+      "exclusions_pt_br": [
+        "graduação, pós-graduação ou curso livre com carga horária oficial",
+        "certificação, diploma ou registro em conselho",
+        "plataforma de ensino, assinatura de software, trial ou quota de licenças",
+        "treinamento genérico comprado pronto de terceiros",
+        "recorrência: a turma é uma contratação fechada, não uma assinatura de capacitação",
+        "assessoria de caso em curso, que continua sendo objeto dos entregáveis específicos",
+        "substituição dos entregáveis de decisão e de contrato, que continuam sendo contratados item a item",
+        "peça jurídica, recurso, defesa ou protocolo",
+        "promessa de vitória, de adjudicação ou de habilitação da empresa"
+      ],
+      "step_up": {
+        "target_kind": "container",
+        "target_item": null,
+        "target_container_id": "diretoria_fracionada",
+        "target_public_name_pt_br": "Diretoria Fracionada para o Mercado Público",
+        "declared_by_issue": true,
+        "trigger_pt_br": "quando a necessidade deixa de ser transferir método para uma turma fechada e passa a ser coordenar decisões e execução B2G continuamente",
+        "statement_pt_br": "O item 47 é turma fechada e não vira assinatura de capacitação. Quando a necessidade é coordenar decisões e execução B2G continuamente, o destino é a Diretoria Fracionada para o Mercado Público."
+      },
+      "reusable_asset": {
+        "produces_governed_reusable_asset": true,
+        "hours_only": false,
+        "asset_pt_br": "trilha versionada com casos autorizados da carteira, materiais, avaliação aplicada e plano de ação reaproveitados pela equipe depois da turma",
+        "governed_by_pt_br": "CONFENGE, com trilha registrada e casos autorizados por escrito pelo cliente",
+        "statement_pt_br": "Cada turma consolida uma trilha governada e reutilizável, não apenas horas de sala vendidas."
+      },
+      "price_promotion": {
+        "state": "NOT_PROMOTED",
+        "requires_real_proposal": true,
+        "requires_observed_cost": true,
+        "requires_recorded_outcome": true,
+        "evidence": []
+      },
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+        "materialises_in": "extra-cli",
+        "web_cfg_role_pt_br": "publica a oferta e captura o lead",
+        "web_cfg_hosts_crawler": false,
+        "web_cfg_hosts_datalake": false
+      },
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false,
+        "promises_real_time": false,
+        "sells_alerts_platform": false,
+        "sells_software_subscription": false,
+        "grants_certification": false,
+        "grants_graduation": false,
+        "positions_as_beginners_school": false,
+        "hosts_crawler_in_web_cfg": false,
+        "hosts_datalake_in_web_cfg": false,
+        "price_on_request": false,
+        "checkout_enabled": false
+      },
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "A capacitação não é graduação, não emite certificação, diploma, carga horária oficial ou registro em conselho.",
+        "Não há comissão de êxito nem promessa de vitória, adjudicação ou habilitação.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ]
+    },
+    {
+      "number": 48,
+      "deliverable_id": "CFG-D48",
+      "public_name_pt_br": "Estudo Sob Medida com Dados Públicos",
+      "value_line_pt_br": "Responde uma decisão inédita com dados públicos rastreáveis.",
+      "decision_question_pt_br": "Qual decisão inédita da empresa pode ser respondida com dados públicos rastreáveis e reproduzíveis?",
+      "trigger_pt_br": "A direção precisa decidir com base em uma pergunta que nenhum outro item do catálogo responde.",
+      "verb_pt_br": "responde",
+      "task_door": "CAPABILITY",
+      "public_state": "VALIDATE",
+      "capacity_required": true,
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": { "route_family": "servicos", "deliverable_attr": "CFG-D48" },
+      "pricing": {
+        "model": "tiers",
+        "billing": "one_time",
+        "cycle": null,
+        "commitment_months": null,
+        "price_on_request": false,
+        "tiers_are_exhaustive": true,
+        "tiers": [
+          {
+            "tier_id": "essencial",
+            "name_pt_br": "Essencial",
+            "price_cents": 980000,
+            "unit_pt_br": "uma decisão, até três famílias de fontes, um recorte e um artefato analítico",
+            "sla_business_days": 10
+          },
+          {
+            "tier_id": "avancado",
+            "name_pt_br": "Avançado",
+            "price_cents": 1980000,
+            "unit_pt_br": "uma decisão, até oito famílias de fontes, resolução de entidades, dataset versionado e relatório ou painel",
+            "sla_business_days": 20
+          },
+          {
+            "tier_id": "estrategico",
+            "name_pt_br": "Estratégico",
+            "price_cents": 3980000,
+            "unit_pt_br": "problema multirrecorte, integração versionada, dataset, análise executiva, painel ou artefato e oficina",
+            "sla_business_days": 30
+          }
+        ],
+        "additional_charges": []
+      },
+      "sla": {
+        "business_days_min": 10,
+        "business_days_max": 30,
+        "starts_after_pt_br": "contratação, faixa definida e entrada obrigatória completa",
+        "safe_deadline_business_days": null,
+        "statement_pt_br": "Cada faixa tem um SLA fechado: 10 dias úteis no essencial, 20 no avançado e 30 no estratégico."
+      },
+      "unit_pt_br": "uma decisão e uma pergunta falsificável por estudo, na faixa contratada",
+      "limits_pt_br": [
+        "essencial: até três famílias de fontes, um recorte e um artefato analítico em 10 dias úteis",
+        "avançado: até oito famílias de fontes, resolução de entidades, dataset versionado e relatório ou painel em 20 dias úteis",
+        "estratégico: problema multirrecorte, integração versionada, dataset, análise executiva, painel e oficina em 30 dias úteis",
+        "escopo fechado por faixa, com início, fim e artefato definidos na contratação",
+        "cada nova pergunta é um novo estudo contratado em uma das três faixas publicadas",
+        "somente dados públicos ou dados privados cedidos com autorização escrita",
+        "contratação depende de capacidade",
+        "sem checkout automático"
+      ],
+      "mandatory_entry_inputs_pt_br": [
+        "decisão a tomar",
+        "pergunta falsificável",
+        "universo de análise",
+        "corte temporal",
+        "cobertura mínima aceitável",
+        "formato de consumo do resultado"
+      ],
+      "entry_inputs_are_mandatory": true,
+      "entry_inputs_are_exhaustive": true,
+      "required_inputs_pt_br": [
+        "decisão a tomar",
+        "pergunta falsificável",
+        "universo de análise",
+        "corte temporal",
+        "cobertura mínima aceitável",
+        "formato de consumo do resultado"
+      ],
+      "common_delivery_pt_br": [
+        "protocolo do estudo com a pergunta falsificável registrada",
+        "fontes e licenças declaradas",
+        "dicionário de dados",
+        "proveniência por campo",
+        "método reproduzível",
+        "classificação FACT, CALCULATION, INFERENCE e UNKNOWN",
+        "dataset ou artefato analítico da faixa contratada",
+        "síntese executiva",
+        "limitações declaradas",
+        "briefing de decisão"
+      ],
+      "delivery_pt_br": [
+        "protocolo do estudo com a pergunta falsificável registrada",
+        "fontes e licenças declaradas",
+        "dicionário de dados",
+        "proveniência por campo",
+        "método reproduzível",
+        "classificação FACT, CALCULATION, INFERENCE e UNKNOWN",
+        "dataset ou artefato analítico da faixa contratada",
+        "síntese executiva",
+        "limitações declaradas",
+        "briefing de decisão"
+      ],
+      "reproducibility": {
+        "method_must_be_reproducible": true,
+        "sources_and_licences_declared": true,
+        "provenance_per_field": true,
+        "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+        "statement_pt_br": "Todo resultado do item 48 declara fonte, licença, proveniência por campo e método, e classifica cada afirmação como FACT, CALCULATION, INFERENCE ou UNKNOWN. Resultado impossível de reproduzir não é entregue."
+      },
+      "data_materialisation": {
+        "materialises_in": "extra-cli",
+        "web_cfg_role_pt_br": "publica a oferta e captura o lead",
+        "web_cfg_publishes": true,
+        "web_cfg_captures": true,
+        "web_cfg_materialises_data": false,
+        "web_cfg_hosts_crawler": false,
+        "web_cfg_hosts_datalake": false,
+        "statement_pt_br": "O dado do item 48 materializa no extra-cli, dono de aquisição, identidade e proveniência. O web-cfg apenas publica a oferta e captura o lead, sem crawler e sem DataLake."
+      },
+      "exclusions_pt_br": [
+        "dado privado obtido sem autorização",
+        "coleta contrária aos termos de uso ou à licença da fonte",
+        "vigilância de pessoas",
+        "produto contínuo disfarçado de estudo: não é contrato continuado, assinatura, banco de horas nem renovação automática",
+        "crawler ou DataLake hospedado no web-cfg",
+        "resultado impossível de reproduzir",
+        "perguntas adicionais fora da faixa contratada, que exigem novo estudo com preço publicado",
+        "peça jurídica, recurso, defesa ou protocolo",
+        "promessa de vitória, de adjudicação, de habilitação da empresa ou de recebimento"
+      ],
+      "forbidden_pt_br": [
+        "dado privado obtido sem autorização",
+        "coleta contrária aos termos de uso ou à licença da fonte",
+        "vigilância de pessoas",
+        "produto contínuo disfarçado de estudo",
+        "crawler hospedado no web-cfg",
+        "DataLake hospedado no web-cfg",
+        "resultado impossível de reproduzir"
+      ],
+      "step_up": {
+        "target_kind": "item",
+        "target_item": 45,
+        "target_container_id": null,
+        "target_public_name_pt_br": "Monitoramento Mensal de Mercado e Contratos Públicos",
+        "declared_by_issue": true,
+        "trigger_pt_br": "quando a necessidade deixa de ser responder uma pergunta inédita e passa a ser observar mudança material em objetos definidos de forma recorrente",
+        "statement_pt_br": "O item 48 é estudo fechado por faixa e não pode virar produto contínuo disfarçado. Quando a necessidade é observar mudança material em objetos definidos mês a mês, o destino é o item 45, Monitoramento Mensal de Mercado e Contratos Públicos."
+      },
+      "reusable_asset": {
+        "produces_governed_reusable_asset": true,
+        "hours_only": false,
+        "asset_pt_br": "protocolo, dicionário, proveniência e dataset ou artefato versionado que ficam disponíveis para reuso governado no extra-cli",
+        "governed_by_pt_br": "extra-cli, dono de aquisição, identidade e proveniência",
+        "statement_pt_br": "Cada estudo deixa protocolo, dicionário e dataset governados no extra-cli, reutilizáveis por estudos seguintes, e não apenas horas de análise."
+      },
+      "price_promotion": {
+        "state": "NOT_PROMOTED",
+        "requires_real_proposal": true,
+        "requires_observed_cost": true,
+        "requires_recorded_outcome": true,
+        "evidence": []
+      },
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+        "materialises_in": "extra-cli",
+        "web_cfg_role_pt_br": "publica a oferta e captura o lead",
+        "web_cfg_hosts_crawler": false,
+        "web_cfg_hosts_datalake": false
+      },
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false,
+        "promises_real_time": false,
+        "sells_alerts_platform": false,
+        "sells_software_subscription": false,
+        "grants_certification": false,
+        "grants_graduation": false,
+        "positions_as_beginners_school": false,
+        "hosts_crawler_in_web_cfg": false,
+        "hosts_datalake_in_web_cfg": false,
+        "price_on_request": false,
+        "checkout_enabled": false,
+        "uses_private_data_without_authorisation": false,
+        "scrapes_against_terms_or_licence": false,
+        "performs_personal_surveillance": false,
+        "sells_disguised_continuous_product": false,
+        "delivers_non_reproducible_result": false
+      },
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "O estudo usa apenas dado público ou dado privado cedido com autorização escrita, respeitando termos de uso e licença da fonte.",
+        "Não há comissão de êxito nem promessa de vitória, adjudicação, habilitação ou recebimento.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ]
+    }
+  ]
+}
