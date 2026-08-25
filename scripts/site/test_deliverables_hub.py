@@ -148,6 +148,17 @@ def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> N
     assert "certificado" in boundary.group(1) and "declaração" in boundary.group(1)
 
 
+def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
+    css = CSS.read_text(encoding="utf-8")
+    selector = (
+        ".catalog-filter-actions button,.catalog-compare-tray button,"
+        ".catalog-empty button"
+    )
+    rule = re.search(rf"{re.escape(selector)}\{{([^}}]+)\}}", css)
+    assert rule
+    assert "min-height:44px" in rule.group(1)
+
+
 def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
