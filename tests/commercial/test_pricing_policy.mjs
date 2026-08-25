@@ -19,7 +19,10 @@ import {
   ACTIVITY_KEYS,
   calculateUnitEconomics,
   evaluateUnitEconomicsPromotion,
+  hashUnitEconomicsEvent,
+  validateRepositoryUnitEconomicsLedger,
   validateUnitEconomicsEvent,
+  validateUnitEconomicsPromotionAggregate,
 } from "../../scripts/commercial/unit_economics.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -37,6 +40,7 @@ const entregasHtml = fs.readFileSync(ENTREGAS_PATH, "utf8");
 const deliverablesRegistry = JSON.parse(fs.readFileSync(DELIVERABLES_PATH, "utf8"));
 const ledger = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/unit-economics-ledger.v1.json"), "utf8"));
 const unitEconomicsTemplate = JSON.parse(fs.readFileSync(path.join(root, "docs/commercial/unit-economics-v1/event.template.json"), "utf8"));
+const promotionTemplate = JSON.parse(fs.readFileSync(path.join(root, "docs/commercial/unit-economics-v1/promotion-aggregate.template.json"), "utf8"));
 
 const results = [];
 function pass(name, detail) {
@@ -507,7 +511,8 @@ assert(
   implementation.ledger === "data/commercial/unit-economics-ledger.v1.json" &&
     implementation.calculator === "scripts/commercial/unit_economics.mjs" &&
     implementation.event_template === "docs/commercial/unit-economics-v1/event.template.json" &&
-    implementation.promotion_template === "docs/commercial/unit-economics-v1/promotion-aggregate.template.json",
+    implementation.promotion_template === "docs/commercial/unit-economics-v1/promotion-aggregate.template.json" &&
+    implementation.terms_authority === "data/offers/governance-authority-pin.json#terms_version",
   implementation,
 );
 assert(
@@ -531,9 +536,26 @@ assert(
   ledger,
 );
 assert(
+  "repository_ledger_contract_is_strict",
+  validateRepositoryUnitEconomicsLedger(ledger).length === 0,
+  validateRepositoryUnitEconomicsLedger(ledger),
+);
+const ledgerWithPii = structuredClone(ledger);
+ledgerWithPii.records_note = "Contato proibido@example.invalid não pode entrar no artefato versionado.";
+assert(
+  "repository_ledger_rejects_pii_values",
+  validateRepositoryUnitEconomicsLedger(ledgerWithPii).some((problem) => problem.startsWith("forbidden_value:")),
+  validateRepositoryUnitEconomicsLedger(ledgerWithPii),
+);
+assert(
   "event_template_is_safe_and_valid",
   validateUnitEconomicsEvent(unitEconomicsTemplate, policy, deliverablesRegistry).length === 0,
   validateUnitEconomicsEvent(unitEconomicsTemplate, policy, deliverablesRegistry),
+);
+assert(
+  "promotion_template_is_safe_and_valid",
+  validateUnitEconomicsPromotionAggregate(promotionTemplate, [], policy, deliverablesRegistry).length === 0,
+  validateUnitEconomicsPromotionAggregate(promotionTemplate, [], policy, deliverablesRegistry),
 );
 assert(
   "activity_contract_is_complete",
@@ -552,14 +574,20 @@ function fixtureEvent(id = "UE-CFG-D01-001") {
     event_id: id,
     deliverable_id: "CFG-D01",
     scope_version: "v1",
-    price_version: "CFG-PRICE-2026-08-25-V1",
-    terms_version: "CFG-TERMS-2026-08-25-V1",
+    price_version: policy.policy_version,
+    terms_version: "CFG-TERMS-B2B-2026-08-17-v1",
+    source: "CONFENGE_WEB",
+    source_record_hash: null,
+    delivered_at: "2026-08-08",
     pricing: {
+      currency: "BRL",
+      price_tier: "base",
       list_price_cents: 59900,
       displayed_price_cents: 59900,
       accepted_price_cents: 59900,
       recognized_revenue_cents: 59900,
       accepted_at: "2026-08-01",
+      payment_state: "PAID",
       paid_at: "2026-08-10",
       urgency: {
         applied: false,
@@ -582,9 +610,10 @@ function fixtureEvent(id = "UE-CFG-D01-001") {
     calculated: null,
     delivery_quality: { rework_hours: 0, qa_state: "PASS" },
     reusable_asset: { kind: "modelo_priorizacao", observed_reuse_count: 0, observed_hours_saved: 0 },
-    outcome: { state: "UNKNOWN", observed_at: null },
+    outcome: { state: "UNKNOWN", category: "UNKNOWN", observed_at: null },
   };
   event.calculated = calculateUnitEconomics(event);
+  event.source_record_hash = hashUnitEconomicsEvent(event);
   return event;
 }
 
@@ -639,28 +668,223 @@ assert(
   validateUnitEconomicsEvent(calculationDrift, policy, deliverablesRegistry).includes("calculated_drift:direct_cost_total_cents"),
   validateUnitEconomicsEvent(calculationDrift, policy, deliverablesRegistry),
 );
+const unknownField = structuredClone(validEvent);
+unknownField.notes = "campo não contratado";
+assert(
+  "unknown_event_field_fails_closed",
+  validateUnitEconomicsEvent(unknownField, policy, deliverablesRegistry).includes("keys:event"),
+  validateUnitEconomicsEvent(unknownField, policy, deliverablesRegistry),
+);
+const piiInAllowedValue = structuredClone(validEvent);
+piiInAllowedValue.reusable_asset.kind = "modelo_proibido@example.invalid";
+assert(
+  "pii_value_fails_closed",
+  validateUnitEconomicsEvent(piiInAllowedValue, policy, deliverablesRegistry).some((problem) => problem.startsWith("forbidden_value:")),
+  validateUnitEconomicsEvent(piiInAllowedValue, policy, deliverablesRegistry),
+);
+const fabricatedTemplate = structuredClone(unitEconomicsTemplate);
+fabricatedTemplate.direct_costs.other_direct_cents = 0;
+assert(
+  "template_cannot_hide_measurements",
+  validateUnitEconomicsEvent(fabricatedTemplate, policy, deliverablesRegistry).includes("template_claims_execution"),
+  validateUnitEconomicsEvent(fabricatedTemplate, policy, deliverablesRegistry),
+);
+const scopeDrift = structuredClone(validEvent);
+scopeDrift.scope_version = "v999";
+assert(
+  "scope_version_must_match_registry",
+  validateUnitEconomicsEvent(scopeDrift, policy, deliverablesRegistry).includes("scope_version"),
+  validateUnitEconomicsEvent(scopeDrift, policy, deliverablesRegistry),
+);
+const priceVersionDrift = structuredClone(validEvent);
+priceVersionDrift.price_version = "CFG-PRICING-INVENTED-v1";
+assert(
+  "price_version_must_match_policy",
+  validateUnitEconomicsEvent(priceVersionDrift, policy, deliverablesRegistry).includes("price_version"),
+  validateUnitEconomicsEvent(priceVersionDrift, policy, deliverablesRegistry),
+);
+const impossibleDate = structuredClone(validEvent);
+impossibleDate.pricing.accepted_at = "2026-02-31";
+assert(
+  "calendar_dates_fail_closed",
+  validateUnitEconomicsEvent(impossibleDate, policy, deliverablesRegistry).includes("payment_state"),
+  validateUnitEconomicsEvent(impossibleDate, policy, deliverablesRegistry),
+);
+const estimatedDrift = structuredClone(validEvent);
+estimatedDrift.activity_hours.analysis.estimated_hours = 2;
+assert(
+  "estimated_activity_hours_must_reconcile",
+  validateUnitEconomicsEvent(estimatedDrift, policy, deliverablesRegistry).includes("activity_estimated_hours_do_not_reconcile"),
+  validateUnitEconomicsEvent(estimatedDrift, policy, deliverablesRegistry),
+);
+const reworkDrift = structuredClone(validEvent);
+reworkDrift.delivery_quality.rework_hours = 1;
+assert(
+  "rework_hours_must_reconcile",
+  validateUnitEconomicsEvent(reworkDrift, policy, deliverablesRegistry).includes("rework_hours_do_not_reconcile"),
+  validateUnitEconomicsEvent(reworkDrift, policy, deliverablesRegistry),
+);
+const unpaidEvent = structuredClone(validEvent);
+unpaidEvent.pricing.payment_state = "UNPAID";
+unpaidEvent.pricing.recognized_revenue_cents = 0;
+unpaidEvent.pricing.paid_at = null;
+unpaidEvent.calculated = calculateUnitEconomics(unpaidEvent);
+unpaidEvent.source_record_hash = hashUnitEconomicsEvent(unpaidEvent);
+assert(
+  "delivered_unpaid_event_is_recorded_honestly",
+  validateUnitEconomicsEvent(unpaidEvent, policy, deliverablesRegistry).length === 0 && unpaidEvent.calculated.days_to_cash === null,
+  validateUnitEconomicsEvent(unpaidEvent, policy, deliverablesRegistry),
+);
+const additionalUnitAsBase = structuredClone(validEvent);
+additionalUnitAsBase.event_id = "UE-CFG-D40-001";
+additionalUnitAsBase.deliverable_id = "CFG-D40";
+additionalUnitAsBase.pricing.list_price_cents = 490000;
+additionalUnitAsBase.pricing.displayed_price_cents = 490000;
+additionalUnitAsBase.pricing.accepted_price_cents = 490000;
+additionalUnitAsBase.pricing.recognized_revenue_cents = 490000;
+additionalUnitAsBase.calculated = calculateUnitEconomics(additionalUnitAsBase);
+assert(
+  "additional_unit_cannot_masquerade_as_base_price",
+  validateUnitEconomicsEvent(additionalUnitAsBase, policy, deliverablesRegistry).includes("list_price_not_in_registry"),
+  validateUnitEconomicsEvent(additionalUnitAsBase, policy, deliverablesRegistry),
+);
+
 const qualifyingEvents = [fixtureEvent("UE-CFG-D01-001"), fixtureEvent("UE-CFG-D01-002"), fixtureEvent("UE-CFG-D01-003")];
+qualifyingEvents.forEach((event) => {
+  event.outcome = { state: "OBSERVED", category: "POSITIVE", observed_at: "2026-08-20" };
+  event.source_record_hash = hashUnitEconomicsEvent(event);
+});
 assert(
   "promotion_needs_three_observed_deliveries",
-  evaluateUnitEconomicsPromotion(qualifyingEvents.slice(0, 2), policy).eligible === false &&
-    evaluateUnitEconomicsPromotion(qualifyingEvents, policy).eligible === true,
-  evaluateUnitEconomicsPromotion(qualifyingEvents, policy),
+  evaluateUnitEconomicsPromotion(qualifyingEvents.slice(0, 2), policy, deliverablesRegistry).eligible === false &&
+    evaluateUnitEconomicsPromotion(qualifyingEvents, policy, deliverablesRegistry).eligible === true,
+  evaluateUnitEconomicsPromotion(qualifyingEvents, policy, deliverablesRegistry),
+);
+const promotionEvaluation = evaluateUnitEconomicsPromotion(qualifyingEvents, policy, deliverablesRegistry);
+const promotionAggregate = {
+  schema: "confenge.unit-economics-promotion-aggregate/1.0",
+  template: false,
+  state: "MEASURED",
+  run_id: "UEP-CFG-D01-001",
+  deliverable_id: "CFG-D01",
+  scope_version: "v1",
+  price_version: policy.policy_version,
+  terms_version: "CFG-TERMS-B2B-2026-08-17-v1",
+  price_tier: "base",
+  observed_deliveries: promotionEvaluation.observed_deliveries,
+  deliveries_at_or_above_margin: promotionEvaluation.deliveries_at_or_above_margin,
+  minimum_margin_pct: promotionEvaluation.minimum_margin_pct,
+  minimum_deliveries: promotionEvaluation.minimum_deliveries,
+  founder_override: promotionEvaluation.founder_override,
+  founder_decision_id: null,
+  eligible: promotionEvaluation.eligible,
+  comparable: promotionEvaluation.comparable,
+  invalid_events: promotionEvaluation.invalid_events,
+  generated_at: "2026-08-25",
+  source_event_hashes: qualifyingEvents.map((event) => event.source_record_hash),
+};
+assert(
+  "promotion_aggregate_reconciles_source_events",
+  validateUnitEconomicsPromotionAggregate(promotionAggregate, qualifyingEvents, policy, deliverablesRegistry).length === 0,
+  validateUnitEconomicsPromotionAggregate(promotionAggregate, qualifyingEvents, policy, deliverablesRegistry),
+);
+const inventedPromotionHash = structuredClone(promotionAggregate);
+inventedPromotionHash.source_event_hashes[0] = `sha256:${"0".repeat(64)}`;
+assert(
+  "promotion_aggregate_rejects_invented_hash",
+  validateUnitEconomicsPromotionAggregate(inventedPromotionHash, qualifyingEvents, policy, deliverablesRegistry).includes("promotion_source_event_hashes"),
+  validateUnitEconomicsPromotionAggregate(inventedPromotionHash, qualifyingEvents, policy, deliverablesRegistry),
 );
 assert(
-  "explicit_founder_decision_can_override",
-  evaluateUnitEconomicsPromotion([], policy, {
-    explicit: true,
-    subject: "SCOPE",
-    rationale: "Reduzir escopo para preservar a capacidade e a qualidade técnica.",
-    decided_at: "2026-08-25",
-  }).eligible === true,
-  "founder decision",
+  "duplicate_event_ids_do_not_count_as_three_deliveries",
+  evaluateUnitEconomicsPromotion([qualifyingEvents[0], qualifyingEvents[0], qualifyingEvents[0]], policy, deliverablesRegistry).eligible === false,
+  evaluateUnitEconomicsPromotion([qualifyingEvents[0], qualifyingEvents[0], qualifyingEvents[0]], policy, deliverablesRegistry),
+);
+const otherDeliverable = structuredClone(qualifyingEvents[2]);
+otherDeliverable.event_id = "UE-CFG-D02-001";
+otherDeliverable.deliverable_id = "CFG-D02";
+otherDeliverable.pricing.list_price_cents = 69000;
+otherDeliverable.pricing.displayed_price_cents = 69000;
+otherDeliverable.pricing.accepted_price_cents = 69000;
+otherDeliverable.pricing.recognized_revenue_cents = 69000;
+otherDeliverable.calculated = calculateUnitEconomics(otherDeliverable);
+otherDeliverable.source_record_hash = hashUnitEconomicsEvent(otherDeliverable);
+const mixedPromotion = evaluateUnitEconomicsPromotion([qualifyingEvents[0], qualifyingEvents[1], otherDeliverable], policy, deliverablesRegistry);
+assert(
+  "different_deliverables_are_not_comparable",
+  mixedPromotion.eligible === false && mixedPromotion.comparable === false,
+  mixedPromotion,
+);
+const forgedMarginEvents = qualifyingEvents.map((event, index) => {
+  const forged = structuredClone(event);
+  forged.event_id = `UE-CFG-D01-FORGED-${index + 1}`;
+  forged.calculated.contribution_margin_pct = 99;
+  return forged;
+});
+const forgedPromotion = evaluateUnitEconomicsPromotion(forgedMarginEvents, policy, deliverablesRegistry);
+assert(
+  "promotion_revalidates_source_events",
+  forgedPromotion.eligible === false && forgedPromotion.invalid_events === 3,
+  forgedPromotion,
+);
+const unknownOutcomeEvents = [fixtureEvent("UE-CFG-D01-U01"), fixtureEvent("UE-CFG-D01-U02"), fixtureEvent("UE-CFG-D01-U03")];
+assert(
+  "unknown_outcomes_do_not_promote",
+  evaluateUnitEconomicsPromotion(unknownOutcomeEvents, policy, deliverablesRegistry).eligible === false,
+  evaluateUnitEconomicsPromotion(unknownOutcomeEvents, policy, deliverablesRegistry),
+);
+const founderDecision = {
+  explicit: true,
+  decision_id: "FD-CFG-D01-001",
+  decided_by_role: "FOUNDER",
+  deliverable_id: "CFG-D01",
+  scope_version: "v1",
+  price_version: policy.policy_version,
+  terms_version: "CFG-TERMS-B2B-2026-08-17-v1",
+  price_tier: "base",
+  subject: "SCOPE",
+  action: "CHANGE_SCOPE",
+  rationale: "Reduzir escopo para preservar a capacidade e a qualidade técnica.",
+  decided_at: "2026-08-25",
+};
+const founderEvaluation = evaluateUnitEconomicsPromotion([], policy, deliverablesRegistry, founderDecision);
+assert("explicit_founder_decision_can_override", founderEvaluation.eligible === true, founderEvaluation);
+const founderAggregate = {
+  ...promotionAggregate,
+  run_id: "UEP-CFG-D01-FOUNDER-001",
+  observed_deliveries: 0,
+  deliveries_at_or_above_margin: 0,
+  founder_override: true,
+  founder_decision_id: founderDecision.decision_id,
+  eligible: true,
+  comparable: true,
+  invalid_events: 0,
+  source_event_hashes: [],
+};
+assert(
+  "founder_aggregate_is_bound_to_decision_scope",
+  validateUnitEconomicsPromotionAggregate(founderAggregate, [], policy, deliverablesRegistry, founderDecision).length === 0,
+  validateUnitEconomicsPromotionAggregate(founderAggregate, [], policy, deliverablesRegistry, founderDecision),
+);
+const founderScopeDrift = { ...founderAggregate, deliverable_id: "CFG-D02" };
+assert(
+  "founder_scope_drift_fails_closed",
+  validateUnitEconomicsPromotionAggregate(founderScopeDrift, [], policy, deliverablesRegistry, founderDecision).includes("promotion_founder_scope"),
+  validateUnitEconomicsPromotionAggregate(founderScopeDrift, [], policy, deliverablesRegistry, founderDecision),
 );
 assert(
   "weak_founder_note_does_not_override",
-  evaluateUnitEconomicsPromotion([], policy, {
+  evaluateUnitEconomicsPromotion([], policy, deliverablesRegistry, {
     explicit: true,
+    decision_id: "FD-CFG-D01-002",
+    decided_by_role: "FOUNDER",
+    deliverable_id: "CFG-D01",
+    scope_version: "v1",
+    price_version: policy.policy_version,
+    terms_version: "CFG-TERMS-B2B-2026-08-17-v1",
+    price_tier: "base",
     subject: "PRICE",
+    action: "KEEP",
     rationale: "ajustar",
     decided_at: "2026-08-25",
   }).eligible === false,

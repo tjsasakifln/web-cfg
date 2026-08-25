@@ -214,6 +214,7 @@
     "promotion_template": "docs/commercial/unit-economics-v1/promotion-aggregate.template.json",
     "storage_authority": "private_finance_store",
     "commercial_decision_owner": "warmbly",
+    "terms_authority": "data/offers/governance-authority-pin.json#terms_version",
     "source": "CONFENGE_WEB",
     "public_surface": false,
     "sensitive_values_in_repository": false,
@@ -223,6 +224,13 @@
     "metric": "margem de contribuição direta observada",
     "min_pct": 55,
     "min_deliveries": 3,
+    "event_requirements": [
+      "eventos válidos e com hashes distintos",
+      "mesmo deliverable_id, scope_version, price_version, terms_version e price_tier",
+      "pagamento reconciliado como PAID",
+      "QA em PASS ou PASS_WITH_NOTES",
+      "outcome em OBSERVED"
+    ],
     "alternative": "decisão explícita do fundador sobre preço ou escopo",
     "note": "A meta é guardrail de capacidade, não alegação pública."
   },
