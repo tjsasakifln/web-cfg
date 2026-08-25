@@ -7,12 +7,18 @@
   "scope_version": null,
   "price_version": null,
   "terms_version": null,
+  "source": "CONFENGE_WEB",
+  "source_record_hash": null,
+  "delivered_at": null,
   "pricing": {
+    "currency": null,
+    "price_tier": null,
     "list_price_cents": null,
     "displayed_price_cents": null,
     "accepted_price_cents": null,
     "recognized_revenue_cents": null,
     "accepted_at": null,
+    "payment_state": null,
     "paid_at": null,
     "urgency": {
       "applied": false,
@@ -79,6 +85,7 @@
   },
   "outcome": {
     "state": "UNKNOWN",
+    "category": "UNKNOWN",
     "observed_at": null
   }
 }

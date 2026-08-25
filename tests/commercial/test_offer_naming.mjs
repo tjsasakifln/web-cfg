@@ -26,6 +26,16 @@ function assert(name, cond, detail) {
   }
 }
 
+function exactKeys(value, expected) {
+  return value && typeof value === "object" && !Array.isArray(value) &&
+    JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...expected].sort());
+}
+
+function normalizeIdentity(value) {
+  return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim();
+}
+
 const dataPath = path.join(root, "data/commercial/offer-naming.v1.json");
 const raw = fs.readFileSync(dataPath, "utf8");
 const data = JSON.parse(raw);
@@ -44,7 +54,19 @@ const allOffers = [...names, ...containers];
  * ------------------------------------------------------------------ */
 assert("schema", data.schema === "confenge.offer-naming/1.0", data.schema);
 assert("issue_ref", data.issue === "#343", data.issue);
+assert(
+  "top_level_schema_is_exact",
+  exactKeys(data, ["schema", "naming_version", "issue", "effective_at", "effective_at_note", "publication_state", "convention", "field_mapping", "pending_fields", "forbidden_name_patterns", "published_surface", "human_test", "names", "containers"]),
+  Object.keys(data),
+);
+assert("naming_version_is_versioned", /^CFG-NAMING-\d{4}-\d{2}-\d{2}-v\d+$/.test(data.naming_version || ""), data.naming_version);
+assert("effective_at_is_exact_date", /^\d{4}-\d{2}-\d{2}$/.test(data.effective_at || "") && new Date(`${data.effective_at}T00:00:00Z`).toISOString().slice(0, 10) === data.effective_at, data.effective_at);
 assert("deliverable_count_54", names.length === 54, names.length);
+assert(
+  "deliverable_name_schema_is_exact",
+  names.every((entry) => exactKeys(entry, ["deliverable_id", "catalog_number", "public_name_pt_br", "value_line_pt_br", "aliases", "public_slug", "redirects"])),
+  names.filter((entry) => !exactKeys(entry, ["deliverable_id", "catalog_number", "public_name_pt_br", "value_line_pt_br", "aliases", "public_slug", "redirects"])).map((entry) => entry.deliverable_id),
+);
 
 const expectedIds = Array.from({ length: 54 }, (_, i) => `CFG-D${String(i + 1).padStart(2, "0")}`);
 const actualIds = names.map((n) => n.deliverable_id);
@@ -65,6 +87,8 @@ assert("catalog_numbers_unique", new Set(catalogNumbers).size === 54, 54 - new S
 const publicNames = allOffers.map((o) => o.public_name_pt_br);
 const dupNames = publicNames.filter((n, i) => publicNames.indexOf(n) !== i);
 assert("public_names_unique", dupNames.length === 0, dupNames);
+const normalizedPublicNames = publicNames.map(normalizeIdentity);
+assert("public_names_unique_normalized", new Set(normalizedPublicNames).size === normalizedPublicNames.length, publicNames);
 assert(
   "public_name_non_empty",
   allOffers.every((o) => typeof o.public_name_pt_br === "string" && o.public_name_pt_br.trim().length > 3),
@@ -140,7 +164,12 @@ const formatOnly = allOffers.filter((o) => FORMAT_ONLY.test(o.public_name_pt_br.
 assert("name_is_not_format_only", formatOnly.length === 0, formatOnly.map((o) => o.public_name_pt_br));
 
 // 2.7 siglas: só BDI e SICAF (cadastro nomeado do ICP) podem aparecer em caixa alta
-const ALLOWED_ACRONYMS = new Set(["BDI", "SICAF"]);
+const ALLOWED_ACRONYMS = new Set(data.convention?.allowed_acronyms || []);
+assert(
+  "declared_acronyms_are_exact",
+  JSON.stringify([...ALLOWED_ACRONYMS].sort()) === JSON.stringify(["BDI", "SICAF"]),
+  [...ALLOWED_ACRONYMS],
+);
 const strayAcronyms = [];
 for (const o of allOffers) {
   for (const token of o.public_name_pt_br.split(/[\s,]+/)) {
@@ -175,7 +204,7 @@ assert(
 const dupLines = valueLines.filter((v, i) => valueLines.indexOf(v) !== i);
 assert("value_lines_unique", dupLines.length === 0, dupLines);
 // não intercambiável também no nível normalizado (caixa/pontuação não contam como diferença)
-const normalized = valueLines.map((v) => v.toLowerCase().replace(/[^a-zà-ÿ0-9]+/g, " ").trim());
+const normalized = valueLines.map(normalizeIdentity);
 const dupNormalized = normalized.filter((v, i) => normalized.indexOf(v) !== i);
 assert("value_lines_unique_normalized", dupNormalized.length === 0, dupNormalized);
 // a linha de valor descreve a entrega, não repete o nome
@@ -208,6 +237,8 @@ assert("legacy_surface_declares_8_names", legacyPublishedNames.length === 8, leg
 
 const missingCanonicalOnPage = names.filter((offer) => !entregasHtml.includes(offer.public_name_pt_br));
 assert("canonical_names_visible_54_of_54", missingCanonicalOnPage.length === 0, missingCanonicalOnPage.map((offer) => offer.deliverable_id));
+const missingValueLinesOnPage = names.filter((offer) => !entregasHtml.includes(offer.value_line_pt_br));
+assert("value_lines_visible_54_of_54", missingValueLinesOnPage.length === 0, missingValueLinesOnPage.map((offer) => offer.deliverable_id));
 const compareBody = entregasHtml.match(/<table class="compare-table">[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/)?.[1] || "";
 const primaryNames = names.slice(0, 8).map((offer) => offer.public_name_pt_br);
 assert("primary_comparison_uses_canonical_names", primaryNames.every((name) => compareBody.includes(name)), primaryNames.filter((name) => !compareBody.includes(name)));
@@ -238,6 +269,21 @@ assert("alias_does_not_shadow_another_canonical", aliasCollisions.length === 0, 
 const allAliases = allOffers.flatMap((o) => o.aliases || []);
 const dupAliases = allAliases.filter((a, i) => allAliases.indexOf(a) !== i);
 assert("aliases_unique_across_offers", dupAliases.length === 0, dupAliases);
+const normalizedAliases = allAliases.map(normalizeIdentity);
+assert("aliases_unique_normalized", new Set(normalizedAliases).size === normalizedAliases.length, allAliases);
+const normalizedCanonicalOwners = new Map(allOffers.map((offer) => [normalizeIdentity(offer.public_name_pt_br), offer.deliverable_id || offer.container_id]));
+const normalizedAliasShadows = allOffers.flatMap((offer) => (offer.aliases || [])
+  .filter((alias) => {
+    const canonicalOwner = normalizedCanonicalOwners.get(normalizeIdentity(alias));
+    return canonicalOwner && canonicalOwner !== (offer.deliverable_id || offer.container_id);
+  })
+  .map((alias) => `${offer.deliverable_id || offer.container_id}:${alias}`));
+assert("aliases_do_not_shadow_canonical_names_normalized", normalizedAliasShadows.length === 0, normalizedAliasShadows);
+assert(
+  "all_aliases_searchable_in_catalog_or_primary_page",
+  names.every((offer) => (offer.aliases || []).every((alias) => entregasHtml.toLocaleLowerCase("pt-BR").includes(alias.toLocaleLowerCase("pt-BR")))),
+  names.filter((offer) => (offer.aliases || []).some((alias) => !entregasHtml.toLocaleLowerCase("pt-BR").includes(alias.toLocaleLowerCase("pt-BR")))).map((offer) => offer.deliverable_id),
+);
 
 // as oito ofertas publicadas são exatamente CFG-D01..CFG-D08 (a trilha de expansão)
 const ownersOfPublished = legacyPublishedNames.map((name) => aliasIndex.get(name));
@@ -248,6 +294,12 @@ assert("published_eight_map_to_d01_d08", JSON.stringify(publishedIds.sort()) ===
  * 6. Contêineres e planos: semântica clara, sem inflar a contagem.
  * ------------------------------------------------------------------ */
 assert("container_count_2", containers.length === 2, containers.length);
+assert(
+  "container_schema_is_exact",
+  exactKeys(containers[0], ["container_id", "public_name_pt_br", "value_line_pt_br", "aliases", "decision_question", "public_slug", "redirects", "catalog_offer_id"]) &&
+    exactKeys(containers[1], ["container_id", "public_name_pt_br", "value_line_pt_br", "aliases", "plans", "plans_note", "decision_question", "public_slug", "redirects"]),
+  containers.map((entry) => Object.keys(entry)),
+);
 const containerIds = containers.map((c) => c.container_id);
 assert("container_ids_expected", JSON.stringify(containerIds) === JSON.stringify(["expansion_package", "diretoria_fracionada"]), containerIds);
 assert(
@@ -261,6 +313,7 @@ assert("containers_are_not_deliverables", containers.every((c) => c.deliverable_
 const diretoria = containers.find((c) => c.container_id === "diretoria_fracionada");
 const plans = (diretoria && diretoria.plans) || [];
 assert("diretoria_has_3_plans", plans.length === 3, plans.length);
+assert("plan_schema_is_exact", plans.every((plan) => exactKeys(plan, ["plan_id", "public_name_pt_br", "terms", "catalog_offer_id"])), plans.map((plan) => Object.keys(plan)));
 assert(
   "diretoria_plan_names_pt_br",
   JSON.stringify(plans.map((p) => p.public_name_pt_br)) === JSON.stringify(["Plano Mensal", "Compromisso Semestral", "Compromisso Anual"]),
@@ -394,6 +447,17 @@ assert(
     entry.public_name === entry.public_name_pt_br && entry.name_state === "CANONICAL"),
   deliverableRegistry.deliverables.filter((entry) =>
     entry.public_name !== entry.public_name_pt_br || entry.name_state !== "CANONICAL").map((entry) => entry.deliverable_id),
+);
+assert(
+  "canonical_registry_aliases_match_naming_contract",
+  names.every((offer) => JSON.stringify(canonicalById.get(offer.deliverable_id)?.name_aliases || []) === JSON.stringify(offer.aliases || [])),
+  names.filter((offer) => JSON.stringify(canonicalById.get(offer.deliverable_id)?.name_aliases || []) !== JSON.stringify(offer.aliases || [])).map((offer) => offer.deliverable_id),
+);
+const registryContainers = new Map(deliverableRegistry.containers.map((entry) => [entry.container_id, entry]));
+assert(
+  "canonical_container_aliases_match_naming_contract",
+  containers.every((container) => JSON.stringify(registryContainers.get(container.container_id)?.name_aliases || []) === JSON.stringify(container.aliases || [])),
+  containers.filter((container) => JSON.stringify(registryContainers.get(container.container_id)?.name_aliases || []) !== JSON.stringify(container.aliases || [])).map((container) => container.container_id),
 );
 assert(
   "canonical_registry_publishes_two_container_names",
