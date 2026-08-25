@@ -93,7 +93,7 @@
     "parity:site": "python3 -m scripts.site.visible_parity --root _site --json seo/visible-parity.json --md seo/visible-parity.md",
     "test:design": "python3 scripts/site/test_design_gates.py && python3 scripts/site/test_visitor_redesign.py && python3 scripts/site/test_fingerprint_css.py && npm run test:html-integrity",
     "test:html-integrity": "python3 scripts/site/test_html_integrity.py && python3 scripts/site/html_integrity.py --root . --surface source",
-    "test:html-integrity:site": "python3 scripts/site/html_integrity.py --root _site --surface artifact",
+    "test:html-integrity:site": "python3 scripts/site/html_integrity.py --root _site --surface artifact && python3 scripts/site/test_cache_contract.py",
     "test:copy": "python3 scripts/site/test_copy_gates.py && python3 scripts/site/test_public_internal_marketing_labels.py && python3 scripts/site/test_public_plain_language.py && python3 scripts/site/lint_editorial_copy.py --report docs/editorial/COPY-LINT-REPORT.json && python3 scripts/site/test_scrub_em_dashes.py && python3 scripts/site/scrub_em_dashes.py --check && python3 scripts/site/test_copy_ci_hermetic.py",
     "test:visual-structure": "python3 scripts/site/test_design_gates.py",
     "test:ui": "node scripts/site/test_ui_geometry.mjs && npm run test:layout-primitives",

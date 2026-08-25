@@ -10,6 +10,16 @@
   Cache-Control: no-cache, max-age=0, must-revalidate
 
 /assets/*
+  # Safe default also applies to a missing /assets/ path, so a 404 can recover
+  # on a later deploy instead of being poisoned for one year (#411).
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# Only content-addressed files may be immutable. Keep these exact rules in
+# sync with scripts/site/test_cache_contract.py.
+/assets/logo-confenge-500-f8a83f6d.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/logo-confenge-white-500-1677038e.png
   Cache-Control: public, max-age=31536000, immutable
 
 /styles.css
