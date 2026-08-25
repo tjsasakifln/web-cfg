@@ -18,6 +18,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { consumerSuitesForPath } from "../../scripts/site/affected_graph.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -654,6 +655,11 @@ const graph = fs.readFileSync(path.join(root, "scripts/site/affected_graph.mjs")
 assert("affected_graph_declares_this_gate", graph.includes('"test:first-fold-contract"'), "affected_graph.mjs");
 assert("affected_graph_declares_the_contract_producer", graph.includes("data/commercial/first-fold-contract.v1.json"), "affected_graph.mjs");
 assert("affected_graph_declares_the_family_registry_producer", graph.includes("data/organic/public-family-registry.json"), "affected_graph.mjs");
+assert(
+  "affected_public_html_selects_first_fold_gate",
+  consumerSuitesForPath("conteudos/fixture-public-surface/index.html").some((entry) => entry.id === "test:first-fold-contract"),
+  "conteudos/fixture-public-surface/index.html",
+);
 
 /* ------------------------------------------------------------------ */
 /* auditoria legivel da derivacao                                       */
