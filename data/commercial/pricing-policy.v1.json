@@ -1,0 +1,375 @@
+{
+  "schema": "confenge.pricing-policy/1.0",
+  "policy_version": "CFG-PRICING-2026-08-24-v1",
+  "issue": "#341",
+  "parent_issue": "#329",
+  "related_issues": [
+    "#88",
+    "#336"
+  ],
+  "state": "NOT_STARTED",
+  "decision_state": {
+    "priority": "P0",
+    "stage": "VALIDATE",
+    "front": "REVENUE NOW",
+    "leverage": [
+      "revenue",
+      "customer",
+      "trust"
+    ],
+    "time_to_evidence_days": 30
+  },
+  "decision": "Competitivo significa a melhor relação entre consequência econômica evitada, escopo verificável, prazo, risco assumido e preço fixo, e não ser o menor número da internet. Todos os preços atuais permanecem. Todos os preços novos são hipóteses de piloto até existir proposta real, aceite ou rejeição, custo e outcome.",
+  "public_anchors_framing": "O mercado público é ruidoso e não oferece uma tabela comparável. Essas âncoras são direcionais. Não devem ser apresentadas ao cliente como preço de mercado, nem convertidas em centavos, nem usadas como campo comparativo de preço.",
+  "public_anchors": [
+    {
+      "source": "Exemplo público de consultoria em licitações",
+      "url": "https://www.xn--csconsultoriaemlicitaes-ibc46a.online/",
+      "observation": "Oferta genérica de análise de licitação por R$ 1.400 mais comissão de 1%, modelo que mistura preço e resultado.",
+      "is_market_truth": false
+    },
+    {
+      "source": "Effecti, precificação de consultoria em licitações",
+      "url": "https://effecti.com.br/comissao-consultoria-licitacoes/",
+      "observation": "Recomenda calcular por horas, complexidade, capacidade e limites explícitos, e exemplifica um piso de R$ 1.700 para oito horas antes de margem.",
+      "is_market_truth": false
+    },
+    {
+      "source": "oHub, custos de gerenciamento de obras",
+      "url": "https://base.ohub.com.br/facilities/construcao-reforma-e-obras/gerenciamento-de-obras/artigos/quanto-custa-uma-gerenciadora-de-obras-no-brasil",
+      "observation": "Referência secundária de auditoria e gerenciamento situa auditoria pontual de orçamento entre R$ 5 mil e R$ 25 mil.",
+      "is_market_truth": false
+    }
+  ],
+  "public_anchor_allowed_fields": [
+    "source",
+    "url",
+    "observation",
+    "is_market_truth"
+  ],
+  "ladder": [
+    {
+      "tier_id": "entrada_factual",
+      "tier_order": 1,
+      "role": "experimentar método com uma decisão pequena",
+      "billing": "one_time",
+      "price_band": {
+        "min_cents": 59900,
+        "max_cents": 240000,
+        "currency": "BRL",
+        "display": "R$ 599 a R$ 2.400"
+      }
+    },
+    {
+      "tier_id": "diagnostico_delimitado",
+      "tier_order": 2,
+      "role": "revelar risco ou lacuna e decidir próximo passo",
+      "billing": "one_time",
+      "price_band": {
+        "min_cents": 290000,
+        "max_cents": 590000,
+        "currency": "BRL",
+        "display": "R$ 2.900 a R$ 5.900"
+      }
+    },
+    {
+      "tier_id": "dossie_critico",
+      "tier_order": 3,
+      "role": "instruir decisão ou protocolo técnico",
+      "billing": "one_time",
+      "price_band": {
+        "min_cents": 690000,
+        "max_cents": 790000,
+        "currency": "BRL",
+        "display": "R$ 6.900 a R$ 7.900"
+      }
+    },
+    {
+      "tier_id": "oportunidade_ou_problema_complexo",
+      "tier_order": 4,
+      "role": "coordenação, proposta ou análise profunda",
+      "billing": "one_time",
+      "price_band": {
+        "min_cents": 980000,
+        "max_cents": 1980000,
+        "currency": "BRL",
+        "display": "R$ 9.800 a R$ 19.800"
+      }
+    },
+    {
+      "tier_id": "inteligencia_estrategica",
+      "tier_order": 5,
+      "role": "problema público multirrecorte",
+      "billing": "one_time",
+      "price_band": {
+        "min_cents": 3980000,
+        "max_cents": 3980000,
+        "currency": "BRL",
+        "display": "R$ 39.800"
+      }
+    },
+    {
+      "tier_id": "recorrencia_gerenciada",
+      "tier_order": 6,
+      "role": "observar e prevenir",
+      "billing": "subscription_monthly",
+      "allowed_amounts_cents": [
+        490000,
+        690000
+      ],
+      "price_band": {
+        "min_cents": 490000,
+        "max_cents": 690000,
+        "currency": "BRL",
+        "display": "R$ 4.900 ou R$ 6.900 por mês"
+      }
+    },
+    {
+      "tier_id": "lideranca_fracionada",
+      "tier_order": 7,
+      "role": "decidir e executar portfólio",
+      "billing": "subscription_monthly",
+      "price_band": {
+        "min_cents": 1250000,
+        "max_cents": 2000000,
+        "currency": "BRL",
+        "display": "R$ 12.500 a R$ 20.000 por mês"
+      }
+    }
+  ],
+  "ladder_constraint": "A escada não autoriza arredondar ofertas diferentes para o mesmo preço sem justificar esforço e consequência.",
+  "declared_band_gaps": [
+    {
+      "billing": "one_time",
+      "below_tier_id": "entrada_factual",
+      "above_tier_id": "diagnostico_delimitado",
+      "gap_above_cents": 240000,
+      "gap_below_cents": 290000,
+      "display": "R$ 2.400 a R$ 2.900"
+    },
+    {
+      "billing": "one_time",
+      "below_tier_id": "diagnostico_delimitado",
+      "above_tier_id": "dossie_critico",
+      "gap_above_cents": 590000,
+      "gap_below_cents": 690000,
+      "display": "R$ 5.900 a R$ 6.900"
+    },
+    {
+      "billing": "one_time",
+      "below_tier_id": "dossie_critico",
+      "above_tier_id": "oportunidade_ou_problema_complexo",
+      "gap_above_cents": 790000,
+      "gap_below_cents": 980000,
+      "display": "R$ 7.900 a R$ 9.800"
+    },
+    {
+      "billing": "one_time",
+      "below_tier_id": "oportunidade_ou_problema_complexo",
+      "above_tier_id": "inteligencia_estrategica",
+      "gap_above_cents": 1980000,
+      "gap_below_cents": 3980000,
+      "display": "R$ 19.800 a R$ 39.800"
+    },
+    {
+      "billing": "subscription_monthly",
+      "below_tier_id": "recorrencia_gerenciada",
+      "above_tier_id": "lideranca_fracionada",
+      "gap_above_cents": 690000,
+      "gap_below_cents": 1250000,
+      "display": "R$ 6.900 a R$ 12.500 por mês"
+    }
+  ],
+  "band_gaps_note": "A escada publicada pela #341 deixa vãos entre faixas. Os vãos ficam declarados como dado, e não são fechados por invenção de faixa nova. Fechar um vão exige decisão explícita do fundador, com escopo e consequência descritos.",
+  "pilot_gap_exceptions": [
+    {
+      "deliverable_id": "CFG-D49",
+      "price_tier": "extenso",
+      "amount_cents": 2480000,
+      "billing": "one_time",
+      "source_issue": "#344",
+      "state": "PILOT_HYPOTHESIS",
+      "note": "O nível Extenso do Orçamento Completo da Proposta foi decidido na #344 com escopo de até 800 itens, múltiplas fontes e duas revisões. Ele permanece hipótese explícita dentro do vão de R$ 19.800 a R$ 39.800 e não cria uma faixa nova."
+    }
+  ],
+  "unit_economics_required_fields": [
+    "horas estimadas e reais por senioridade",
+    "aquisição e limpeza de dados",
+    "análise",
+    "revisão técnica e QA",
+    "gestão, reuniões e revisões",
+    "aquisição comercial atribuível",
+    "retrabalho, urgência e ociosidade de capacidade",
+    "custo direto total",
+    "margem de contribuição",
+    "tempo até caixa",
+    "valor do ativo reutilizável produzido"
+  ],
+  "unit_economics_disclosure_rule": "Registrar sem expor dado interno sensível na página.",
+  "promotion_gate": {
+    "metric": "margem de contribuição direta observada",
+    "min_pct": 55,
+    "min_deliveries": 3,
+    "alternative": "decisão explícita do fundador sobre preço ou escopo",
+    "note": "A meta é guardrail de capacidade, não alegação pública."
+  },
+  "willingness_to_pay_test": {
+    "scope": "cada família P0 ou P1, em conversa real",
+    "state": "NOT_STARTED",
+    "required_interviews": 20,
+    "interviews_completed": 0,
+    "proposals_observed": 0,
+    "steps": [
+      "apresentar primeiro trigger, consequência, escopo, prazo e amostra",
+      "pedir decisão de compra no preço cheio",
+      "registrar ACEITA, NEGOCIA, RECUSA ou ADIA, com motivo literal",
+      "testar no máximo uma alternativa predefinida: escopo menor, prazo normal ou step-up, nunca desconto improvisado",
+      "quando houver compra, reconciliar custo, satisfação e outcome",
+      "após três propostas comparáveis, manter, subir ou descer de 10% a 15% com hipótese escrita",
+      "não chamar de validado por entrevista, clique ou elogio"
+    ],
+    "decision_states": [
+      "ACEITA",
+      "NEGOCIA",
+      "RECUSA",
+      "ADIA"
+    ],
+    "max_predefined_alternatives": 1,
+    "allowed_alternatives": [
+      "escopo menor",
+      "prazo normal",
+      "step-up"
+    ],
+    "reprice_after_comparable_proposals": 3,
+    "reprice_range_pct": {
+      "min": 10,
+      "max": 15
+    },
+    "reprice_requires_written_hypothesis": true
+  },
+  "urgency_surcharge": {
+    "pct": 50,
+    "requires_confirmed_capacity": true,
+    "requires_technically_safe": true,
+    "requires_disclosure_before_charge": true,
+    "rule": "Urgência acrescenta 50%, apenas quando tecnicamente segura, com capacidade confirmada e informada ao cliente antes da cobrança."
+  },
+  "prohibitions": [
+    {
+      "id": "success_fee",
+      "label": "comissão de êxito",
+      "is_prohibited": true,
+      "rule": "Proibida comissão de êxito em qualquer forma, incluindo comissão sobre vitória, homologação, pleito ou valor recuperado."
+    },
+    {
+      "id": "silent_discount",
+      "label": "desconto silencioso",
+      "is_prohibited": true,
+      "rule": "Proibido desconto silencioso ou improvisado: qualquer teste de preço usa alternativa predefinida e registrada."
+    },
+    {
+      "id": "price_per_page",
+      "label": "preço por página",
+      "is_prohibited": true,
+      "rule": "Proibido preço por página como base de cobrança: a base é escopo, esforço e consequência."
+    },
+    {
+      "id": "sob_consulta_as_price",
+      "label": "sob consulta como preço de rota",
+      "is_prohibited": true,
+      "rule": "Proibido usar sob consulta como preço de rota: nenhuma rota substitui preço por sob consulta."
+    }
+  ],
+  "taxative_commercial_rules": [
+    "Proibida comissão de êxito em qualquer forma, incluindo comissão sobre vitória, homologação, pleito ou valor recuperado.",
+    "Urgência acrescenta 50%, apenas quando tecnicamente segura, com capacidade confirmada e informada ao cliente antes da cobrança.",
+    "Adicionais somente os explicitamente publicados por janela, família causal, revisão, rodada, audiência ou deslocamento.",
+    "Maior crédito aplicável uma única vez, sem empilhar.",
+    "Preço nunca muda depois do aceite para o mesmo escopo.",
+    "Qualquer exceção precisa de versão de terms e motivo registrável.",
+    "A expressão a partir de só é permitida quando a mesma tela mostra unidade-base e adicionais.",
+    "Proibido desconto silencioso ou improvisado: qualquer teste de preço usa alternativa predefinida e registrada.",
+    "Proibido preço por página como base de cobrança: a base é escopo, esforço e consequência.",
+    "Proibido usar sob consulta como preço de rota: nenhuma rota substitui preço por sob consulta."
+  ],
+  "acceptance": [
+    "planilha ou evento de custos por deliverable_id e versão de escopo",
+    "20 entrevistas e testes de preço de #336 concluídos com falas e decisões reais",
+    "pelo menos três propostas reais por família antes de VALIDATE para PROMOTE",
+    "margem, prazo, retrabalho e outcome reconciliados",
+    "benchmark competitivo usa escopo normalizado e data, não screenshot solto",
+    "preços públicos e terms derivam do mesmo registry e não divergem entre páginas",
+    "nenhum desconto, success fee ou adicional oculto",
+    "revisão trimestral apenas depois de existir volume suficiente, sem alteração automática"
+  ],
+  "repricing_effect": {
+    "changes_published_prices": false,
+    "changes_approved_offer_amounts": false,
+    "note": "Esta política descreve escada, regras e método de teste. Ela não reprecifica nenhuma entrega publicada nem nenhuma oferta aprovada."
+  },
+  "catalog_cross_check": {
+    "state": "CHECKED_AGAINST_MAIN",
+    "checked_against": [
+      "data/offers/catalog.snapshot.json",
+      "entregas/index.html"
+    ],
+    "note": "A #341 não mapeia offer_id nem entrega publicada para faixa da escada. A conferência abaixo é aritmética, contra os limites publicados, e não atribui escopo a faixa.",
+    "published_unit_prices_source": "entregas/index.html",
+    "published_unit_prices_cents": [
+      59900,
+      69000,
+      89000,
+      120000,
+      145000,
+      190000,
+      240000,
+      375000
+    ],
+    "published_unit_prices_display": [
+      "R$ 599",
+      "R$ 690",
+      "R$ 890",
+      "R$ 1.200",
+      "R$ 1.450",
+      "R$ 1.900",
+      "R$ 2.400",
+      "R$ 3.750"
+    ],
+    "approved_offers": [
+      {
+        "offer_id": "CFG-DIAG-EXP-v1",
+        "amount_cents": 800000,
+        "billing_mode": "one_time",
+        "ladder_status": "BETWEEN_TIERS",
+        "ladder_tier_id": null,
+        "note": "O Diagnóstico B2G de Expansão custa R$ 8.000 e cai no vão entre o teto de R$ 7.900 do dossiê crítico e o piso de R$ 9.800 da faixa de oportunidade ou problema complexo. O preço permanece como está. O vão fica declarado."
+      },
+      {
+        "offer_id": "CFG-DIRB2G-FLEX-v1",
+        "amount_cents": 2000000,
+        "billing_mode": "subscription",
+        "ladder_status": "IN_TIER",
+        "ladder_tier_id": "lideranca_fracionada",
+        "note": "R$ 20.000 por mês fica no teto da faixa de liderança fracionada."
+      },
+      {
+        "offer_id": "CFG-DIRB2G-180-v1",
+        "amount_cents": 1500000,
+        "billing_mode": "subscription",
+        "ladder_status": "IN_TIER",
+        "ladder_tier_id": "lideranca_fracionada",
+        "note": "R$ 15.000 por mês fica dentro da faixa de liderança fracionada."
+      },
+      {
+        "offer_id": "CFG-DIRB2G-365-v1",
+        "amount_cents": 1250000,
+        "billing_mode": "subscription",
+        "ladder_status": "IN_TIER",
+        "ladder_tier_id": "lideranca_fracionada",
+        "note": "R$ 12.500 por mês fica no piso da faixa de liderança fracionada."
+      }
+    ]
+  },
+  "records": [],
+  "records_note": "Nenhuma willingness to pay foi observada. Enquanto records estiver vazio, nenhum preço desta escada está validado."
+}
