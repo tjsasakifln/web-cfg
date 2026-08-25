@@ -98,8 +98,10 @@ function fail(name, detail) {
     if (policy.ok || policy.code !== "http_store_atomic_create_unproven") {
       fail("http_store_policy_should_fail", policy);
     }
-    const store = await createStore();
-    if (store !== null) fail("http_store_should_be_blocked_in_prod", store);
+    const stores = await Promise.all([createStore(), createStore()]);
+    if (stores.some((store) => store !== null)) {
+      fail("http_store_should_be_blocked_in_prod", stores);
+    }
     if (fetchCalls !== 0) fail("http_store_blocked_before_fetch", fetchCalls);
     pass("http_store_blocked_before_fetch");
   } finally {
