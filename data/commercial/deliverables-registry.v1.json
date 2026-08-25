@@ -1127,7 +1127,7 @@
       ],
       "exclusions": [
         "parecer de habilitação",
-        "certificado de empresa limpa",
+        "certificado universal de ausência de restrições",
         "conclusão de integridade a partir de CEIS ou CNEP"
       ],
       "data_contract": {
@@ -4192,7 +4192,7 @@
         "fonte, consulta, corte, data e limitações ao lado de cada conclusão"
       ],
       "exclusions": [
-        "certificado, selo ou declaração de empresa limpa",
+        "certificado, selo ou declaração universal de ausência de restrições",
         "investigação privada",
         "dado pessoal não pertinente ao objeto",
         "acusação ou juízo de valor sobre a entidade verificada",
