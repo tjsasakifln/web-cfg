@@ -25,6 +25,13 @@ function isProductionProfile(env = process.env) {
   return nodeEnv === "production" || context === "production";
 }
 
+function hasExplicitPort(rawUrl) {
+  const authority = String(rawUrl || "").match(/^https:\/\/([^/?#]*)/i)?.[1] || "";
+  const hostPort = authority.split("@").pop() || "";
+  if (hostPort.startsWith("[")) return /^\[[^\]]+\]:\d+$/.test(hostPort);
+  return /:\d+$/.test(hostPort);
+}
+
 function validatePiiDestination(rawUrl, allowedHostsRaw, env = process.env) {
   const raw = String(rawUrl || "").trim();
   if (!raw || raw.length > 2048) return { ok: false, reason: "invalid_url" };
@@ -36,7 +43,7 @@ function validatePiiDestination(rawUrl, allowedHostsRaw, env = process.env) {
   }
   if (parsed.protocol !== "https:") return { ok: false, reason: "https_required" };
   if (parsed.username || parsed.password) return { ok: false, reason: "embedded_credentials" };
-  if (parsed.port) return { ok: false, reason: "port_not_allowed" };
+  if (parsed.port || hasExplicitPort(raw)) return { ok: false, reason: "port_not_allowed" };
   if (parsed.search || parsed.hash) return { ok: false, reason: "query_or_fragment_not_allowed" };
   const allowedHosts = String(allowedHostsRaw || "")
     .split(",")

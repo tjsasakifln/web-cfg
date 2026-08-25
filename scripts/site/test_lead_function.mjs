@@ -280,7 +280,7 @@ _reset();
   };
   const deliveryPath = path.join(root, "netlify/functions/lib/lead-delivery.cjs");
   delete require.cache[require.resolve(deliveryPath)];
-  const { deliverOpsWebhook, deliverNtfyAuth } = require(deliveryPath);
+  const { deliverOpsWebhook, deliverNtfyAuth, validatePiiDestination } = require(deliveryPath);
   const record = {
     lead_id: "pii-destination-probe",
     record_kind: "real",
@@ -297,6 +297,19 @@ _reset();
     delete process.env.OPS_WEBHOOK_ALLOWED_HOSTS;
     const plain = await deliverOpsWebhook(record);
     if (plain.status !== "error" || calls.length) fail("ops_webhook_plain_http_blocked", { plain, calls });
+
+    for (const [name, url, reason] of [
+      ["credentials", "https://user:secret@ops.example.test/hook", "embedded_credentials"],
+      ["default_port", "https://ops.example.test:443/hook", "port_not_allowed"],
+      ["custom_port", "https://ops.example.test:8443/hook", "port_not_allowed"],
+      ["query", "https://ops.example.test/hook?token=secret", "query_or_fragment_not_allowed"],
+      ["fragment", "https://ops.example.test/hook#secret", "query_or_fragment_not_allowed"],
+    ]) {
+      const checked = validatePiiDestination(url, "ops.example.test", process.env);
+      if (checked.ok || checked.reason !== reason) {
+        fail(`pii_destination_${name}_blocked`, checked);
+      }
+    }
 
     process.env.OPS_WEBHOOK_URL = "https://ops.example.test/hook";
     const noAllowlist = await deliverOpsWebhook(record);
@@ -316,6 +329,16 @@ _reset();
     const ntfyDenied = await deliverNtfyAuth(record);
     if (ntfyDenied.status !== "error" || calls.length !== 1) {
       fail("ntfy_host_denied_before_fetch", { ntfyDenied, calls });
+    }
+    process.env.NTFY_URL = "https://ntfy.example.test/private-topic";
+    const ntfyAllowed = await deliverNtfyAuth(record);
+    if (
+      ntfyAllowed.status !== "ok" ||
+      calls.length !== 2 ||
+      calls[1].url !== "https://ntfy.example.test/private-topic" ||
+      !calls[1].body.includes("private@example.com")
+    ) {
+      fail("ntfy_allowed_https", { ntfyAllowed, calls });
     }
     pass("pii_notification_destinations_fail_closed");
   } finally {
