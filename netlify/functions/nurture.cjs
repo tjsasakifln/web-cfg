@@ -300,6 +300,11 @@ exports.handler = async (event) => {
     return json(200, { ok: true, tracks: publicTracks }, origin);
   }
 
+  if (action === "subscribe" && event.httpMethod === "POST" && !originCheck.ok) {
+    safeLog("warn", "nurture_origin_denied", {});
+    return json(403, { ok: false, error: "origin_denied" }, origin);
+  }
+
   const store = await getNurtureStore(event);
 
   if (action === "subscribe" && event.httpMethod === "POST") {
