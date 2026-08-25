@@ -142,7 +142,7 @@ def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> N
     ):
         assert forbidden not in html
     boundary = re.search(
-        r'data-deliverable-id="CFG-D43"[^>]+data-exclusion="([^"]+)"', html
+        r'data-deliverable-id="cfg-d43"[^>]+data-exclusion="([^"]+)"', html
     )
     assert boundary
     assert "certificado" in boundary.group(1) and "declaração" in boundary.group(1)
