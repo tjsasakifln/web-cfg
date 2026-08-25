@@ -377,11 +377,16 @@
     }
   ],
   "public_implementation": {
+    "state": "DEFERRED_FROZEN",
+    "decision_state": "DEFER_UNTIL_DATE",
     "route": "/diagnostico-pre-licitacao/",
-    "rendered_from_contract": true,
+    "rendered_from_contract": false,
+    "catalog_route": "/entregas/",
+    "catalog_rendered_from_contract": true,
     "synthetic_examples_contract": "data/commercial/examples-licitacao.synthetic.v1.json",
-    "product_sections": 5,
-    "capture_fields": [
+    "dedicated_product_sections": 0,
+    "catalog_product_sections": 5,
+    "prepared_capture_fields": [
       "deliverable_id",
       "public_contract_id",
       "opportunity_deadline",
@@ -390,10 +395,15 @@
       "execution_regime",
       "decision_intent"
     ],
+    "persisted_handraise_route": "/entregas/#captura-entregas",
+    "frozen_gate_contract": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+    "protected_hash_contract": "data/bofu-dominance/frozen-specs/hashes.json",
+    "earliest_safe_action_at": "2026-09-16",
     "checkout_enabled": false
   },
   "not_delivered_here_pt_br": [
     "nenhum checkout é ligado nesta entrega",
+    "nenhuma mutação da rota protegida /diagnostico-pre-licitacao/ é autorizada antes de todos os gates da issue 291 ficarem prontos",
     "a primeira venda P0 com esforço, retrabalho, margem e resultado ainda não existe",
     "a pesquisa humana e de willingness to pay ainda não foi executada",
     "os itens 13 e 15 são seções profundas da página de decisão e proposta, não rotas canônicas independentes"

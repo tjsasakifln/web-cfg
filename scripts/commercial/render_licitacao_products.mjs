@@ -4,12 +4,17 @@
 
 import fs from "fs";
 import path from "path";
+import { createHash } from "crypto";
 import { fileURLToPath } from "url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const contractPath = path.join(root, "data/commercial/page-contract-licitacao.v1.json");
 const examplesPath = path.join(root, "data/commercial/examples-licitacao.synthetic.v1.json");
 const pagePath = path.join(root, "diagnostico-pre-licitacao/index.html");
+const unlockPlanPath = path.join(root, "data/bofu-dominance/frozen-specs/unlock-plan.v1.json");
+const frozenHashesPath = path.join(root, "data/bofu-dominance/frozen-specs/hashes.json");
+const protectedRoute = "diagnostico-pre-licitacao";
+const protectedPath = `${protectedRoute}/index.html`;
 const START = "<!-- GENERATED:LICITACAO-PRODUCTS:START -->";
 const END = "<!-- GENERATED:LICITACAO-PRODUCTS:END -->";
 
@@ -95,10 +100,39 @@ function replaceBlock(html, rendered) {
   return `${html.slice(0, start)}${rendered}${html.slice(end + END.length)}`;
 }
 
+function sha256(value) {
+  return createHash("sha256").update(value).digest("hex");
+}
+
+function frozenState(current) {
+  const plan = JSON.parse(fs.readFileSync(unlockPlanPath, "utf8"));
+  const hashes = JSON.parse(fs.readFileSync(frozenHashesPath, "utf8"));
+  const allPreconditionsReady = (plan.preconditions_all_required || []).every(
+    (entry) => entry.state === "READY",
+  );
+  const mutationAuthorized = plan.html_mutation_authorized === true && allPreconditionsReady;
+  if (mutationAuthorized) return { held: false };
+
+  if (!(plan.protected_pillars || []).includes(protectedRoute)) {
+    throw new Error(`LICITACAO_FREEZE_CONTRACT_INVALID: ${protectedRoute} is not protected`);
+  }
+  const expected = hashes.forbidden?.[protectedPath];
+  const actual = sha256(current);
+  if (!expected || actual !== expected) {
+    throw new Error(`LICITACAO_FROZEN_DRIFT: ${protectedPath} expected=${expected} actual=${actual}`);
+  }
+  return { held: true, expected };
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const contract = JSON.parse(fs.readFileSync(contractPath, "utf8"));
   const examples = JSON.parse(fs.readFileSync(examplesPath, "utf8"));
   const current = fs.readFileSync(pagePath, "utf8");
+  const freeze = frozenState(current);
+  if (freeze.held) {
+    console.log(`LICITACAO_PRODUCTS_HELD route=/${protectedRoute}/ sha256=${freeze.expected}`);
+    process.exit(0);
+  }
   const next = replaceBlock(current, render(contract, examples));
   if (process.argv.includes("--check")) {
     if (next !== current) {
