@@ -14,6 +14,12 @@
     "leverage": ["revenue", "customer", "trust"],
     "time_to_evidence": "first judgment after one complete 28-day GSC window post-deploy; kill judgment after two"
   },
+  "implementation": {
+    "contract_status": "READY",
+    "public_change_status": "NOT_STARTED",
+    "close_parent_after_children": [388, 389, 390],
+    "deploy_anchor_status": "UNKNOWN_UNTIL_PUBLIC_CHANGE"
+  },
   "visitor_job": "A contractor with a rejected measurement or glosa needs to identify the defensible next action before margin and cash deteriorate.",
   "hypothesis": "Concentrating existing on-page authority on the Medicoes/Glosas owner and one contextual commercial route can increase qualified Brazilian top-10 exposure and make the first commercial handraise observable without paid or borrowed distribution.",
   "scope_guard": {
@@ -104,15 +110,25 @@
         "owner": "web-cfg service_view analytics export"
       },
       {
-        "metric": "qualified_handraises",
-        "owner": "web-cfg lead attribution contract"
+        "metric": "persisted_handraises",
+        "owner": "web-cfg CONFENGE_WEB conversion receipt"
+      },
+      {
+        "metric": "qualified_commercial_opportunities",
+        "owner": "extra-cli commercial-intent projection"
+      },
+      {
+        "metric": "commercial_actions_or_outcomes",
+        "owner": "Warmbly action and observed-outcome contracts"
       }
     ],
     "post_change": {
       "brazil_top_10_impressions": "UNKNOWN",
       "organic_clicks": "UNKNOWN",
       "commercial_route_visits": "UNKNOWN",
-      "qualified_handraises": "UNKNOWN",
+      "persisted_handraises": "UNKNOWN",
+      "qualified_commercial_opportunities": "UNKNOWN",
+      "commercial_actions_or_outcomes": "UNKNOWN",
       "revenue": "UNKNOWN"
     },
     "window_policy": {

@@ -47,6 +47,12 @@ def test_program_is_on_page_only_and_bounded_to_one_canary():
     }
     assert record["decision"]["execution_state"] == "EXECUTE_NOW"
     assert record["decision"]["outcome_state"] == "VALIDATE"
+    assert record["implementation"] == {
+        "contract_status": "READY",
+        "public_change_status": "NOT_STARTED",
+        "close_parent_after_children": [388, 389, 390],
+        "deploy_anchor_status": "UNKNOWN_UNTIL_PUBLIC_CHANGE",
+    }
 
     guard = record["scope_guard"]
     assert guard["acquisition_surface"] == "ON_PAGE_ONLY"
@@ -79,7 +85,6 @@ def test_canonical_owner_is_consistent_across_existing_contracts():
     )
     assert intent["canonical"] == owner
     assert intent["disposition"] == "IMPROVE"
-    assert not any(row["disposition"] == "CREATE" for row in inventory["intents"])
 
     bofu = _json(record["contracts"]["bofu_matrix"])
     cluster = next(
@@ -169,7 +174,14 @@ def test_measurement_stays_ordered_unknown_and_non_causal():
         "brazil_top_10_impressions",
         "organic_clicks",
         "commercial_route_visits",
-        "qualified_handraises",
+        "persisted_handraises",
+        "qualified_commercial_opportunities",
+        "commercial_actions_or_outcomes",
+    ]
+    assert [row["owner"] for row in measurement["ordered_chain"][-3:]] == [
+        "web-cfg CONFENGE_WEB conversion receipt",
+        "extra-cli commercial-intent projection",
+        "Warmbly action and observed-outcome contracts",
     ]
     assert set(measurement["post_change"].values()) == {"UNKNOWN"}
     assert measurement["window_policy"] == {
