@@ -12,7 +12,8 @@
     "max_words_qualifier": "até oito palavras sempre que a precisão permitir",
     "naming_basis": "objeto ou decisão reconhecível pelo ICP",
     "allowed_acronyms": [
-      "BDI"
+      "BDI",
+      "SICAF"
     ],
     "allowed_institutes": [
       "acervo",
