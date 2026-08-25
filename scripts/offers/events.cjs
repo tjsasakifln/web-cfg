@@ -95,6 +95,7 @@ function isReceivedRevenue(status) {
 function commercialEvent(partial = {}) {
   const providerRaw = partial.provider_raw_status;
   const canonical = partial.canonical_status || normalizeStatus(providerRaw);
+  const synthetic = partial.synthetic === true;
   return {
     schema: SCHEMA,
     event_id: partial.event_id || `evt_${crypto.randomBytes(8).toString("hex")}`,
@@ -110,8 +111,9 @@ function commercialEvent(partial = {}) {
     amount_cents: partial.amount_cents == null ? null : Number(partial.amount_cents),
     currency: partial.currency || "BRL",
     source: "CONFENGE_WEB",
+    synthetic,
     financial_confirmation: isFinancialConfirmation(canonical),
-    received_revenue: isReceivedRevenue(canonical),
+    received_revenue: synthetic ? false : isReceivedRevenue(canonical),
     revenue: false,
     exception_code: partial.exception_code || null,
   };

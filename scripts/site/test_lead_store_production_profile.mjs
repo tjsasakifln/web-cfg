@@ -43,6 +43,26 @@ function fail(name, detail) {
     LEAD_ALLOW_MEMORY_FALLBACK: "1",
   });
   if (bad.ok) fail("policy_should_fail_memory_flag");
+  const required = {
+    NODE_ENV: "production",
+    LEAD_REQUIRE_ORIGIN: "1",
+    LEAD_REQUIRE_TURNSTILE: "1",
+    TURNSTILE_SECRET_KEY: "turnstile-secret-24chars",
+    IP_HASH_SALT: "private-ip-hash-salt-32-characters",
+  };
+  for (const [name, env, code] of [
+    ["origin", { ...required, LEAD_REQUIRE_ORIGIN: "" }, "origin_guard_required_in_production"],
+    ["turnstile_flag", { ...required, LEAD_REQUIRE_TURNSTILE: "" }, "turnstile_guard_required_in_production"],
+    ["turnstile_secret", { ...required, TURNSTILE_SECRET_KEY: "" }, "turnstile_secret_required_in_production"],
+    ["ip_salt", { ...required, IP_HASH_SALT: "confenge" }, "ip_hash_salt_required_in_production"],
+  ]) {
+    const result = assertProductionStorePolicy(env);
+    if (result.ok || result.code !== code) fail(`policy_requires_${name}`, result);
+    pass(`policy_requires_${name}`, result.code);
+  }
+  const ready = assertProductionStorePolicy(required);
+  if (!ready.ok) fail("production_policy_ready", ready);
+  pass("production_policy_ready");
   pass("helpers");
 }
 
@@ -76,6 +96,38 @@ function fail(name, detail) {
   if (!store || !store.ephemeral) fail("test_memory_allowed", store);
   pass("test_memory_allowed");
   process.env = prev;
+}
+
+// 3b) generic HTTP store is not a production-safe create-only backend
+{
+  const prev = { ...process.env };
+  const originalFetch = globalThis.fetch;
+  let fetchCalls = 0;
+  process.env.NODE_ENV = "production";
+  process.env.LEAD_STORE_HTTP_URL = "https://store.example.test/leads";
+  delete process.env.LEAD_ALLOW_MEMORY_FALLBACK;
+  delete process.env.LEAD_STORE;
+  delete process.env.LEAD_STORE_DIR;
+  globalThis.fetch = async () => {
+    fetchCalls += 1;
+    return { ok: true, status: 201, json: async () => ({}) };
+  };
+  try {
+    const { createStore, assertProductionStorePolicy } = loadStore();
+    const policy = assertProductionStorePolicy(process.env);
+    if (policy.ok || policy.code !== "http_store_atomic_create_unproven") {
+      fail("http_store_policy_should_fail", policy);
+    }
+    const stores = await Promise.all([createStore(), createStore()]);
+    if (stores.some((store) => store !== null)) {
+      fail("http_store_should_be_blocked_in_prod", stores);
+    }
+    if (fetchCalls !== 0) fail("http_store_blocked_before_fetch", fetchCalls);
+    pass("http_store_blocked_before_fetch");
+  } finally {
+    globalThis.fetch = originalFetch;
+    process.env = prev;
+  }
 }
 
 // 4) lead handler rejects production + memory fallback without durable store
