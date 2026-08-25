@@ -28,7 +28,20 @@ def cmd_run(args: argparse.Namespace) -> int:
     from scripts.organic.demand_graph import demand_map
     from scripts.organic.gsc_loader import load_gsc_dir
     from scripts.organic.metrics import commercial_exposure_metrics
+    from scripts.organic.query_ownership import validate_query_ownership
     from scripts.organic.service_map import audit_link_coverage
+
+    ownership = validate_query_ownership(ROOT)
+    if not ownership.ok:
+        print(
+            json.dumps(
+                {"ok": False, "semantic_query_ownership": ownership.to_dict()},
+                ensure_ascii=False,
+                indent=2,
+            ),
+            file=sys.stderr,
+        )
+        return 1
 
     gsc_dir = Path(args.gsc_dir) if args.gsc_dir else GSC_DEFAULT
     out = Path(args.out) if args.out else ORGANIC / "SEO_OPPORTUNITIES.json"
@@ -115,6 +128,15 @@ def cmd_run(args: argparse.Namespace) -> int:
                 "bofu": doc["counts"]["bofu"],
                 "serp_ctr_gap": doc["counts"].get("serp_ctr_gap"),
                 "commercial_impression_share": metrics.get("commercial_impression_share"),
+                "semantic_query_ownership": {
+                    "ok": ownership.ok,
+                    "coverage": ownership.stats.get("coverage"),
+                    "classified_routes": ownership.stats.get("classified_routes"),
+                    "declared_conflicts": ownership.stats.get("declared_conflicts"),
+                    "automatic_public_mutation": ownership.stats.get(
+                        "automatic_public_mutation"
+                    ),
+                },
                 "top3": [
                     {"id": o["id"], "score": o["score"], "action": o["action"], "intent": o["intent"]}
                     for o in doc["opportunities"][:3]
