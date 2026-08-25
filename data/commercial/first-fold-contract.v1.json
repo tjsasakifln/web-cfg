@@ -19,14 +19,18 @@
   "human_validation": {
     "minimum_icp_sessions": 5,
     "state": "NOT_STARTED",
-    "protocol_package": "docs/research/icp-trust-session-v1"
+    "protocol_package": "docs/research/icp-trust-session-v1",
+    "completed_icp_sessions": 0,
+    "sessions": [],
+    "participants": [],
+    "note_pt_br": "O protocolo humano de 3 segundos ainda não foi executado. Nenhuma sessão, nenhum participante e nenhum resultado podem ser registrados aqui sem recrutamento e consentimento reais."
   },
   "census": [
     { "route": "/", "surface_class": "home", "evidence_state": "PENDING", "measurement": null },
     { "route": "/entregas/", "surface_class": "money_hub", "evidence_state": "PENDING", "measurement": null, "observed_2026_08_24": "documento com cerca de 11266 px de altura; hero promove Conhecer o primeiro exemplo" },
     { "route": "/servicos-obras-publicas/", "surface_class": "money_hub", "evidence_state": "MEASURED_FAIL", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "H1 de y=235 a y=453; lista de serviços começa em y=620; sem prova verificável nem ação contextual no primeiro enquadramento" } },
     { "route": "/problemas-que-resolvemos/", "surface_class": "money_hub", "evidence_state": "MEASURED_FAIL", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "H1 de y=235 a y=525; primeira estrutura decisória em y=700; prova e próxima ação fora da primeira dobra" } },
-    { "route": "/diagnostico-b2g-expansao/", "surface_class": "money_offer", "evidence_state": "MEASURED_PASS", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "preço, prazo, destinatário e CTA na primeira dobra; razão de confiança ainda declaratória" } },
+    { "route": "/diagnostico-b2g-expansao/", "surface_class": "money_offer", "evidence_state": "MEASURED_FAIL", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "preço, prazo, destinatário e CTA na primeira dobra; razão de confiança ainda declaratória e sem prova verificável" } },
     { "route": "/diagnostico-pre-licitacao/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
     { "route": "/auditoria-orcamento-licitacao/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
     { "route": "/bid-room-licitacoes-obras/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
@@ -47,5 +51,87 @@
     { "route": "/casos/modelo-mapeamento-concorrentes-publicos/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
     { "route": "/casos/modelo-painel-precos-obras-publicas/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
     { "route": "/casos/modelo-relatorio-executivo-consolidado/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null }
-  ]
+  ],
+  "obligated_surface_classes": ["home", "money_hub", "money_offer", "money_example"],
+  "census_derivation": {
+    "rule_pt_br": "O censo não é allowlist manual. O conjunto obrigado é derivado do registro público de famílias e do que está publicado no disco. Superfície comercial nova sem linha no censo reprova o gate.",
+    "authority": "data/organic/public-family-registry.json",
+    "sources": [
+      {
+        "id": "home",
+        "surface_class": "home",
+        "from": "data/organic/public-family-registry.json#families[id=home].match.routes",
+        "note_pt_br": "A home é a única superfície da família home e é sempre obrigada."
+      },
+      {
+        "id": "money_offer",
+        "surface_class": "money_offer",
+        "from": "data/organic/public-family-registry.json#families[id=service-pillars].match.source",
+        "resolves_to": "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route",
+        "note_pt_br": "Cada rota canônica de serviço vende uma unidade com preço e entra no censo sem edição manual da lista."
+      },
+      {
+        "id": "money_example",
+        "surface_class": "money_example",
+        "from": "data/organic/public-family-registry.json#families[profile=priced_offer].match.prefix",
+        "resolves_to": "expansão do prefixo contra os diretórios publicados que têm index.html",
+        "note_pt_br": "Modelo novo publicado com preço passa a exigir linha de censo no mesmo commit."
+      },
+      {
+        "id": "money_hub_priced",
+        "surface_class": "money_hub",
+        "from": "data/organic/public-family-registry.json#families[profile=priced_offer].match.routes",
+        "note_pt_br": "Hub que exibe preço declarado pela própria família, hoje apenas /entregas/."
+      },
+      {
+        "id": "money_hub_triage",
+        "surface_class": "money_hub",
+        "from": "data/organic/public-family-registry.json#families[terminal_action=service_transition].match.routes",
+        "minimum_distinct_service_links": 2,
+        "filter_pt_br": "A rota só é hub de dinheiro quando o <main> publicado aponta para duas ou mais rotas canônicas de serviço. Porta única com um destino não é triagem e fica fora até passar a oferecer escolha."
+      }
+    ],
+    "audit_pt_br": "O gate imprime o conjunto derivado e a diferença contra o censo em cada execução, para que a derivação possa ser conferida por um humano sem ler o código."
+  },
+  "first_fold_invariants": {
+    "single_primary_action": {
+      "max_primary_actions": 1,
+      "secondary_requires_distinct_function": true,
+      "rule_pt_br": "Nenhuma primeira dobra obrigada pode declarar mais de uma ação primária concorrente. Ação secundária só é aceita quando cumpre função distinta da primária.",
+      "state": "DECLARED_NOT_MEASURED",
+      "measured_surfaces": []
+    },
+    "category_repetition": {
+      "fields": ["eyebrow", "h1", "lead"],
+      "rule_pt_br": "Eyebrow, H1 e lead não podem repetir a mesma categoria sem acrescentar informação. Repetição lexical sem decisão nova consome a primeira dobra.",
+      "state": "DECLARED_NOT_MEASURED",
+      "measured_surfaces": [],
+      "recorded_findings": [
+        {
+          "route": "/problemas-que-resolvemos/",
+          "date": "2026-08-24",
+          "viewport": "1363x936",
+          "finding": "o texto repete a mesma categoria no eyebrow, no H1, no title e na navegação sem acrescentar decisão"
+        }
+      ]
+    }
+  },
+  "automation_boundary": {
+    "may_verify_pt_br": ["presença", "ordem", "viewport", "regressão de contrato"],
+    "may_not_declare_pt_br": "A automação nunca declara compreensão humana, confiança percebida nem aprovação de superfície. Isso depende do protocolo humano de 3 segundos.",
+    "llm_and_synthetic_users_pt_br": "Nenhum LLM, usuário sintético ou screenshot test produz evidência de compreensão neste contrato."
+  },
+  "ownership": {
+    "human_protocol_owners": [
+      { "issue": "#183", "owns_pt_br": "recrutamento e protocolo de arquitetura e navegação por tarefa" },
+      { "issue": "#184", "owns_pt_br": "recrutamento e protocolo do painel Fato Prova Impacto da home" },
+      { "issue": "#188", "owns_pt_br": "recrutamento e protocolo de compreensão da copy das ofertas" }
+    ],
+    "delegated_scopes": [
+      { "issue": "#295", "owns_pt_br": "comparabilidade de /entregas/" },
+      { "issue": "#300", "owns_pt_br": "ação terminal das famílias públicas" },
+      { "issue": "#267", "owns_pt_br": "paridade entre main e a superfície viva" }
+    ],
+    "non_restatement_pt_br": "Este contrato nomeia os donos e não repete os critérios de aceitação deles. Cada issue recebe somente a evidência que lhe pertence."
+  }
 }
