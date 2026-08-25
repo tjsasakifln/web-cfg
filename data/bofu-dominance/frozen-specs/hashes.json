@@ -7,7 +7,7 @@
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
-    "medicoes-glosas-obras-publicas": "a499a9876ea6f4edc41a6b0fce63b52585defd97ddfe3d5643c8c963c7702470",
+    "medicoes-glosas-obras-publicas": "a137bd04b117a0f8b4983611e1ecb18a3fa9065b68949f522e13d503003d2442",
     "reequilibrio-obras-publicas": "0d87ae2a0a8c0c17f353c97ee41aae31d6a2473b7c229808cbf8a201430be202",
     "auditoria-orcamento-licitacao": "cd391bd30fad6ac0553416b07cf00fea17cb569e83f0acbfdf5868649972fb01",
     "diagnostico-b2g-360": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
@@ -15,7 +15,7 @@
   },
   "forbidden": {
     "aditivos-obras-publicas/index.html": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
-    "medicoes-glosas-obras-publicas/index.html": "a499a9876ea6f4edc41a6b0fce63b52585defd97ddfe3d5643c8c963c7702470",
+    "medicoes-glosas-obras-publicas/index.html": "a137bd04b117a0f8b4983611e1ecb18a3fa9065b68949f522e13d503003d2442",
     "reequilibrio-obras-publicas/index.html": "0d87ae2a0a8c0c17f353c97ee41aae31d6a2473b7c229808cbf8a201430be202",
     "auditoria-orcamento-licitacao/index.html": "cd391bd30fad6ac0553416b07cf00fea17cb569e83f0acbfdf5868649972fb01",
     "diagnostico-b2g-360/index.html": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",

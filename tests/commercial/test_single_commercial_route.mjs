@@ -151,12 +151,8 @@ assert(
 );
 
 const pillar = contract.surfaces.find((surface) => surface.role === "canonical_destination");
-assert(
-  "pillar_is_refrozen_after_authorized_product_capture",
-  pillar?.mutation_state === "REFROZEN_AFTER_AUTHORIZED_333" && pillar?.last_authorized_mutation_issue === 333,
-  pillar,
-);
-assert("pillar_freeze_owners", equal(pillar?.freeze_owner_issues, [128, 291, 333]), pillar?.freeze_owner_issues);
+assert("pillar_is_frozen_read_only", pillar?.mutation_state === "FROZEN_READ_ONLY", pillar);
+assert("pillar_freeze_owners", equal(pillar?.freeze_owner_issues, [128, 291]), pillar?.freeze_owner_issues);
 assert("pillar_unlock_date_unchanged", pillar?.earliest_safe_action_at === "2026-09-16", pillar?.earliest_safe_action_at);
 assert("pillar_hash_matches_live", sha256(pillar.file) === pillar.expected_sha256, sha256(pillar.file));
 assert("pillar_hash_matches_reviewed_baseline", frozenHashes.forbidden[pillar.file] === pillar.expected_sha256, frozenHashes.forbidden[pillar.file]);
