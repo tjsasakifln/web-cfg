@@ -44,6 +44,7 @@ const CATALOG_SIZE = 54;
 
 /* 1. Identidade do documento -------------------------------------- */
 assert("schema_id", doc.schema === "confenge.commercial.task_doors.v1", doc.schema);
+assert("implementation_contract_v2", doc.version === "2.0.0", doc.version);
 assert("source_issue_335", doc.source_issue === 335, doc.source_issue);
 assert("parent_issue_329", doc.parent_issue === 329, doc.parent_issue);
 assert("decision_state_not_validated", doc.decision_state === "VALIDATE", doc.decision_state);
@@ -182,9 +183,9 @@ assert(
   ["deep_link", "public_state", "price"].every((k) => (idx.per_item_fields_required || []).includes(k)),
   idx.per_item_fields_required,
 );
-assert("index_route_null_is_documented", idx.route !== undefined && (idx.route !== null || typeof idx.route_note_pt_br === "string"), idx.route_note_pt_br);
+assert("index_route_is_canonical_deliverables", idx.route === "/entregas/", idx.route);
 assert("deep_link_required_per_item", f.deep_link && f.deep_link.required_per_item === true, f.deep_link);
-assert("deep_link_pattern_gap_documented", f.deep_link && (f.deep_link.pattern !== null || typeof f.deep_link.pattern_note_pt_br === "string"), f.deep_link);
+assert("deep_link_pattern_is_stable", f.deep_link && f.deep_link.pattern === "#entrega-{NN}", f.deep_link);
 const sec = f.secondary_access || {};
 assert("secondary_access_label", sec.label_pt_br === "Ver as 54 entregáveis", sec.label_pt_br);
 assert("secondary_access_on_first_fold", sec.location === "primeira_dobra" && sec.target === "indice_integral", sec);
@@ -266,7 +267,37 @@ for (const item of legacy.items || []) {
 }
 assert("legacy_names_unique", new Set((legacy.items || []).map((i) => i.public_name)).size === 8, "legacy names");
 
-/* 12. Conteineres fora da contagem 01 a 54 ------------------------- */
+/* 12. Superficie progressiva publicada ---------------------------- */
+const catalogScriptPath = path.join(root, "entregas/catalog.js");
+const catalogStylePath = path.join(root, "entregas/styles.css");
+const catalogScript = fs.readFileSync(catalogScriptPath, "utf8");
+const catalogStyle = fs.readFileSync(catalogStylePath, "utf8");
+const implementation = doc.public_implementation || {};
+assert("implementation_route", implementation.route === "/entregas/", implementation.route);
+assert("implementation_artifacts_exist", [implementation.renderer, implementation.client_script, implementation.stylesheet].every((file) => fs.existsSync(path.join(root, file))), implementation);
+assert("implementation_count_and_steps", implementation.index_count === 54 && implementation.framing_steps === 3, implementation);
+assert("implementation_filter_contract", eq(implementation.filter_dimensions, fl.dimensions), implementation.filter_dimensions);
+assert("implementation_comparison_contract", implementation.comparison?.min_selection === 2 && implementation.comparison?.max_selection === 4 && implementation.comparison?.mobile_layout === cp.mobile_layout, implementation.comparison);
+assert("implementation_fail_closed", implementation.terminal_capture === true && implementation.human_validation === "NOT_STARTED", implementation);
+assert("implementation_no_new_analytics_dimensions", implementation.new_analytics_dimensions === false, implementation.new_analytics_dimensions);
+assert("hero_decision_h1", entregas.includes("Encontre, entre 54 entregas") && entregas.includes("a decisão que cabe agora"), "hero");
+assert("hero_price_range_and_recurrence", entregas.includes("R$ 599 a R$ 39.800") && /recorr/i.test(entregas), "price range");
+assert("hero_primary_and_secondary_access", entregas.includes(">Encontrar a entrega certa ") && entregas.includes(">Ver as 54 entregáveis</a>"), "hero actions");
+assert("catalog_has_54_static_cards", (entregas.match(/<article class="catalog-item /g) || []).length === CATALOG_SIZE, (entregas.match(/<article class="catalog-item /g) || []).length);
+assert("catalog_has_54_deep_links", expectedItems.every((item) => entregas.includes(`id="entrega-${item}"`)), "deep links");
+assert("catalog_has_all_filter_dimensions", ["task", "object", "urgency", "price", "billing", "state"].every((key) => entregas.includes(`data-filter="${key}"`)), "filters");
+assert("catalog_has_comparison_controls", (entregas.match(/data-compare-item/g) || []).length === CATALOG_SIZE && entregas.includes("data-compare-tray") && entregas.includes("data-comparison-items"), "comparison");
+assert("catalog_has_alphabetical_index", (entregas.match(/data-alpha-item=/g) || []).length === CATALOG_SIZE && entregas.includes("data-alpha-view"), "alphabetical");
+assert("catalog_has_empty_result_guidance", entregas.includes("data-catalog-empty") && entregas.includes("Nenhuma entrega combina"), "empty result");
+assert("catalog_cards_expose_comparison_dimensions", ["data-trigger", "data-decision", "data-unit", "data-input", "data-output", "data-sla", "data-price", "data-exclusion", "data-step-up"].every((field) => (entregas.match(new RegExp(field, "g")) || []).length >= CATALOG_SIZE), "comparison dimensions");
+assert("script_preserves_url_state", catalogScript.includes("URLSearchParams") && catalogScript.includes("history.replaceState"), "URL state");
+assert("script_limits_recommendation", catalogScript.includes("MAX_RECOMMENDATIONS = 3") && catalogScript.includes("slice(0, MAX_RECOMMENDATIONS)"), "recommendation cap");
+assert("script_limits_comparison", catalogScript.includes("MIN_COMPARE = 2") && catalogScript.includes("MAX_COMPARE = 4"), "comparison cap");
+assert("script_has_no_network_or_analytics_sink", !/(fetch\s*\(|XMLHttpRequest|sendBeacon|dataLayer\.push)/.test(catalogScript), "client script");
+assert("style_progressively_reveals_comparison", catalogStyle.includes(".catalog-enhanced .catalog-item__compare") && catalogStyle.includes(".catalog-item__compare{display:none"), "progressive enhancement");
+assert("style_uses_stacked_mobile_comparison", catalogStyle.includes(".catalog-comparison [data-comparison-items],.catalog-alpha ol{grid-template-columns:1fr}"), "mobile comparison");
+
+/* 13. Conteineres fora da contagem 01 a 54 ------------------------- */
 const containers = doc.containers || [];
 assert("two_containers", containers.length === 2 && doc.catalog.container_count === 2, containers.length);
 assert("containers_not_counted", containers.every((c) => c.counted_in_01_54 === false), containers.map((c) => c.counted_in_01_54));
@@ -282,7 +313,7 @@ assert(
 );
 assert("container_ids_unique", new Set(containers.map((c) => c.container_id)).size === 2, containers.map((c) => c.container_id));
 
-/* 13. Nada declarado validado ------------------------------------- */
+/* 14. Nada declarado validado ------------------------------------- */
 const hr = doc.human_research || {};
 assert("research_not_started", hr.state === "NOT_STARTED", hr.state);
 assert("research_no_sessions_yet", hr.sessions_completed === 0 && hr.sessions_planned === 20, hr);
@@ -292,13 +323,13 @@ assert("research_targets_unobserved", (hr.targets || []).length === 7 && hr.targ
 assert("research_rejects_synthetic_user", hr.synthetic_user_accepted === false, hr.synthetic_user_accepted);
 assert("research_failure_never_deletes_offer", /nunca apaga oferta/i.test(hr.failure_policy_pt_br || ""), hr.failure_policy_pt_br);
 
-/* 14. Escopo declarado do que a mudanca nao entrega ---------------- */
+/* 15. Escopo declarado do que a mudanca nao entrega ---------------- */
 const nd = doc.not_delivered_by_this_change_pt_br || [];
 assert("not_delivered_declared", nd.length >= 3, nd.length);
-assert("not_delivered_says_no_screens", nd.some((s) => /tela/i.test(s)), nd);
+assert("not_delivered_rejects_automatic_fit", nd.some((s) => /tela/i.test(s) && /não declara adequação automática/i.test(s)), nd);
 assert("not_delivered_says_no_human_sessions", nd.some((s) => /sess(ã|a)o|sessões|sessoes/i.test(s)), nd);
 
-/* 15. Divergencia 48 vs 54 registrada ------------------------------ */
+/* 16. Divergencia 48 vs 54 registrada ------------------------------ */
 assert(
   "prose_divergence_recorded",
   typeof doc.catalog.prose_divergence_note_pt_br === "string"
@@ -307,7 +338,7 @@ assert(
   doc.catalog.prose_divergence_note_pt_br,
 );
 
-/* 16. Sem travessao ------------------------------------------------ */
+/* 17. Sem travessao ------------------------------------------------ */
 const EM_DASH = String.fromCharCode(0x2014);
 const EN_DASH = String.fromCharCode(0x2013);
 assert("no_em_dash_in_data", !raw.includes(EM_DASH), "U+2014");

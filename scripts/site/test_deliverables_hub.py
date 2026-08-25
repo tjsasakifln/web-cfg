@@ -115,8 +115,12 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
         '<meta content="index,follow,max-image-preview:large,max-snippet:-1,'
         'max-video-preview:-1" name="robots"/>' in html
     )
-    for forbidden in ("<dialog", "<details", ".pdf", "download=", "cadastre"):
+    for forbidden in ("<dialog", ".pdf", "download=", "cadastre"):
         assert forbidden not in lowered
+    # Details are progressive disclosure for dense scope and the alphabetical
+    # index; their summaries are present in the direct HTML and never gate the
+    # published example routes or the terminal capture.
+    assert lowered.count("<details") == lowered.count("<summary")
     # Issue #290 gives the hub a terminal capture. The library still must not be
     # gated: exactly one form, and it opens only after the last published example.
     assert lowered.count("<form") == 1, "the hub takes one terminal capture, not a gate"
@@ -130,7 +134,8 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
 def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
-        "8 entregas, de R$ 599 a R$ 3.750",
+        "54 entregas, de R$ 599 a R$ 39.800",
+        "Amostra verificável: 8 exemplos integrais, sem cadastro",
         "Relatório Executivo de Priorização de Licitações",
         "12",
         "3",
