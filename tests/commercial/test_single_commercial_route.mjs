@@ -107,6 +107,18 @@ for (const surface of authorized) {
   assert(`${surface.role}_journey`, attr(tag, "data-journey") === "contrato", attr(tag, "data-journey"));
 }
 
+const homeJourney = (read("index.html").match(
+  /<li\b(?=[^>]*\bid=["']jornada-contrato["'])[^>]*>[\s\S]*?<\/li>/i,
+) || [""])[0];
+assert("home_focused_journey_present", Boolean(homeJourney));
+assert(
+  "home_focused_journey_has_single_route",
+  homeJourney.includes(`href="${route.commercial_transfer_route}"`) &&
+    !/wa\.me|#formulario-contato|\/reequilibrio-obras-publicas\//i.test(homeJourney),
+  homeJourney,
+);
+assert("home_focused_journey_uses_canonical_name", homeJourney.includes(route.public_name_pt_br), homeJourney);
+
 const canarySurface = contract.surfaces.find((surface) => surface.role === "editorial_canary");
 const canaryHtml = read(canarySurface.file);
 assert(

@@ -58,21 +58,17 @@ def test_home_has_canonical_copy():
     assert 'id="estagio"' in html
     assert 'id="urgencia"' in html
     assert 'data-form-multistep="true"' in html
-    # Three differentiated journey CTAs (client-facing; no Jornada A/B/C labels).
-    # #390 moves the contract journey through its canonical service route first.
-    assert "Avaliar o Dossiê de Medição, Glosa e Pagamento" in html
-    assert 'href="/medicoes-glosas-obras-publicas/"' in html
+    # Three differentiated journey CTAs (client-facing; no Jornada A/B/C labels)
+    assert "Enviar documentos para análise" in html
     assert "Enviar edital para triagem" in html
     assert "Diagnosticar operação B2G" in html or "Diagnosticar a operação B2G" in html
     assert "Como podemos ajudar" in html
     assert "Analisar meu caso" in html
-    assert "Uma medição ou glosa travou meu caixa" in html
+    assert "Tenho um contrato sob pressão" in html
     assert "Estou analisando uma licitação" in html
     assert "Preciso organizar minha operação B2G" in html
     assert "Sem CTA genérico" not in html
     for j in brand.get("journeys") or []:
-        if j["id"] == "contrato":
-            continue
         assert j["label"] in html, j["label"]
         assert j["cta"] in html, j["cta"]
     for o in brand["offers"]:
@@ -132,15 +128,13 @@ def test_org_description_consistent():
 def test_whatsapp_contextual_on_home():
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "wa.me/5548988344559" in html
-    # The site keeps contextual WhatsApp, but #390 removes it as a competing
-    # action from the Medicoes/Glosas journey itself.
-    contract_journey = re.search(
-        r'<li\b[^>]*id="jornada-contrato"[^>]*>[\s\S]*?</li>', html, re.I
+    # Contextual prefill for urgent contract / critical decision path
+    assert (
+        "decis%C3%A3o%20cr%C3%ADtica" in html
+        or "cr%C3%ADtica" in html
+        or "an%C3%A1lise%20inicial" in html
+        or "problema%20urgente" in html
     )
-    assert contract_journey
-    assert 'href="/medicoes-glosas-obras-publicas/"' in contract_journey.group(0)
-    assert "wa.me" not in contract_journey.group(0)
-    assert "Tenho%20um%20contrato%20p%C3%BAblico" in html
 
 
 def test_radar_not_empty_wave_message():

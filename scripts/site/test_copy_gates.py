@@ -100,11 +100,11 @@ def test_microcopy_preferences():
     # Client-facing journey section (not briefing metalinguage)
     assert "como podemos ajudar" in lower
     assert "qual situação sua empresa precisa resolver agora" in lower
-    assert "uma medição ou glosa travou meu caixa" in lower
+    assert "tenho um contrato sob pressão" in lower
     assert "estou analisando uma licitação" in lower
     assert "preciso organizar minha operação b2g" in lower
     assert "analisar meu caso" in lower
-    assert "avaliar o dossiê de medição, glosa e pagamento" in lower
+    assert "enviar documentos para análise" in lower
     assert "enviar edital para triagem" in lower
     assert "diagnosticar operação b2g" in lower or "diagnosticar a operação b2g" in lower
     # Visible labels "Jornada A/B/C" must not appear (data-journey attrs OK)
@@ -324,8 +324,7 @@ def test_public_surfaces_have_no_prose_em_dashes():
         assert "Prazo" in t or "prazo" in t
         assert "wa.me" in t
     assert "Diagnosticar a operação B2G" in home or "Diagnosticar operação B2G" in home
-    assert "Avaliar o Dossiê de Medição, Glosa e Pagamento" in home
-    assert 'href="/medicoes-glosas-obras-publicas/"' in home
+    assert "Enviar documentos para análise" in home
     # Thank-you pages must not expose journey letter labels to visitors
     for name in ("obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         ty = (ROOT / name).read_text(encoding="utf-8")
