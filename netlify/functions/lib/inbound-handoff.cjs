@@ -146,13 +146,13 @@ function mapLeadToInboundV1(record) {
 
   const routeFamily = clampText(record.route_family, 80);
   if (routeFamily) body.route_family = routeFamily;
-  // confenge.inbound.v1 already carries asset_id. For a catalogue hand-raise,
-  // the selected canonical deliverable is the most useful next-action context
-  // and avoids inventing an unversioned field in Warmbly's contract.
+  // `asset_id` identifies the acquisition asset and must not be repurposed as a
+  // product identifier. The selected deliverable is carried in the versioned
+  // free-text next-action context until Warmbly exposes a dedicated field.
   const deliverableId = /^CFG-D\d{2}$/.test(String(record.deliverable_id || ""))
     ? String(record.deliverable_id)
     : "";
-  const assetId = clampText(deliverableId || record.asset_id, 120);
+  const assetId = clampText(record.asset_id, 120);
   if (assetId) body.asset_id = assetId;
   const ctaId = clampText(record.cta_id, 120);
   if (ctaId) body.cta_id = ctaId;
@@ -197,6 +197,7 @@ function mapLeadToInboundV1(record) {
   const referrer = sanitizeUrl(record.referrer);
   if (referrer) body.referrer = referrer;
   const qualification = [
+    ["entrega", deliverableId],
     ["prazo", record.opportunity_deadline],
     ["evento contratual", record.contract_event],
     ["estágio contratual", record.contract_stage],
@@ -210,7 +211,7 @@ function mapLeadToInboundV1(record) {
     .map(([label, value]) => `${label}=${clampText(value, 80)}`)
     .join("; ");
   const message = clampText(
-    [record.mensagem || record.message, qualification ? `Contexto do próximo passo: ${qualification}.` : ""]
+    [qualification ? `Contexto do próximo passo: ${qualification}.` : "", record.mensagem || record.message]
       .filter(Boolean)
       .join("\n"),
     2000,

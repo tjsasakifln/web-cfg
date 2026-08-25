@@ -503,6 +503,35 @@ _reset();
   pass("catalog_deliverable_selection_persisted", stored.deliverable_id);
 }
 
+// The generic catalogue hand-raise may name a specialised deliverable without
+// pretending to be its full product questionnaire.
+{
+  for (const [index, deliverableId] of ["CFG-D14", "CFG-D01", "CFG-D17"].entries()) {
+    const before = mem.map.size;
+    const res = await handler(event({
+      nome: "QA Catálogo Especializado",
+      email: "qa-catalogo-especializado@example.com",
+      estagio: "entregas-exemplos-hub",
+      jornada: "edital",
+      consentimento: "1",
+      origem: "entregas",
+      landing_page: "https://confenge.com.br/entregas/",
+      route_family: "entregas",
+      asset_id: "entregas-exemplos-hub",
+      cta_id: "entregas-hub-handraise",
+      deliverable_id: deliverableId,
+      record_kind: "qa",
+      test_mode: true,
+    }, "POST", { ip: `192.0.2.${91 + index}` }));
+    const data = JSON.parse(res.body);
+    const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+    if (res.statusCode !== 201 || mem.map.size !== before + 1 || stored?.deliverable_id !== deliverableId) {
+      fail("catalog_specialised_deliverable_handraise", { deliverableId, status: res.statusCode, data, stored });
+    }
+    pass("catalog_specialised_deliverable_handraise", stored.deliverable_id);
+  }
+}
+
 // 5f) The five #330 units require structured, non-analytics qualification.
 // Invalid context fails before persistence; valid context stays on the lead.
 {
@@ -558,13 +587,18 @@ _reset();
     }
   }
 
-  const unsafeD12 = await handler(event({
-    ...base,
-    deliverable_id: "CFG-D12",
-    opportunity_deadline: new Date().toISOString().slice(0, 10),
-  }, "POST", { ip: "192.0.2.94" }));
-  if (unsafeD12.statusCode !== 422 || JSON.parse(unsafeD12.body).error !== "licitacao_qualification_invalid") {
-    fail("licitacao_d12_safe_deadline_fail_closed", unsafeD12);
+  for (const [index, deliverableId] of ["CFG-D12", "CFG-D13", "CFG-D14", "CFG-D15", "CFG-D16"].entries()) {
+    const unsafeDeadline = await handler(event({
+      ...base,
+      deliverable_id: deliverableId,
+      opportunity_deadline: new Date().toISOString().slice(0, 10),
+    }, "POST", { ip: `192.0.2.${94 + index}` }));
+    if (
+      unsafeDeadline.statusCode !== 422 ||
+      JSON.parse(unsafeDeadline.body).error !== "licitacao_qualification_invalid"
+    ) {
+      fail("licitacao_safe_deadline_fail_closed", { deliverableId, response: unsafeDeadline });
+    }
   }
 
   const res = await handler(event({
