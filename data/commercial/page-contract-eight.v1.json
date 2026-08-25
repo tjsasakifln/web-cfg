@@ -1,0 +1,347 @@
+{
+  "schema": "confenge.page-contract-eight/1.0",
+  "version": "v1",
+  "issue": 331,
+  "parent_issue": 329,
+  "purpose": "Contrato de página das oito entregas atuais: o que cada rota publicada e o hub precisam exibir, com escopo, entrada, saída, SLA e fronteira. Não altera preço nem HTML.",
+  "source_of_truth": "issue 331, seção 'Escopo comercial canônico', 'Entradas comuns' e 'Fronteiras'",
+  "nomenclature_authority": "issue 343 é a fonte canônica de public_name_pt_br; em caso de divergência nominal prevalece a 343, e escopo e preço da 331 permanecem válidos",
+  "currency": "BRL",
+  "price_change_allowed": false,
+  "price_change_condition": "Nenhuma das oito entregas atuais sai, muda de nome ou recebe aumento sem evidência paga.",
+  "limit_dimensions": [
+    "empresa",
+    "território",
+    "tipologia",
+    "período",
+    "módulo",
+    "número de casos aprofundados"
+  ],
+  "forbidden_limit_dimensions": [
+    "páginas"
+  ],
+  "forbidden_limit_rule": "A 331 determina não limitar por contagem de folhas. Qualquer limite de escopo escrito nessa unidade reprova o gate.",
+  "unknown_rule": "ausência de dado vira UNKNOWN",
+  "human_decision_rule": "classificação automática nunca encerra decisão humana",
+  "common_inputs": [
+    "CNPJ e decisão que está na mesa",
+    "território/raio e tipologias executáveis",
+    "acervo, equipe, caixa e restrições quando a decisão exigir aderência da empresa",
+    "autorização para usar documentos privados fornecidos",
+    "data de corte"
+  ],
+  "common_boundaries": [
+    "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
+    "não promete edital futuro, vitória, preço vencedor ou demanda",
+    "ausência de dado vira UNKNOWN",
+    "classificação automática nunca encerra decisão humana",
+    "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
+  ],
+  "package": {
+    "public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
+    "hub_route": "/entregas/",
+    "hub_file": "entregas/index.html",
+    "units_in_package": ["02", "03", "04", "05", "06", "07", "08"],
+    "units_sum_cents": 1228000,
+    "units_sum_display": "R$ 12.280",
+    "package_price_cents": 800000,
+    "package_price_display": "R$ 8.000",
+    "credit_window_days": 60,
+    "credit_basis": "o maior valor de uma unidade 02 a 08 é creditado se o pacote for contratado dentro da janela",
+    "credit_stacks": false,
+    "credit_stacking_note": "sem acúmulo",
+    "unit_01_in_package": false,
+    "unit_01_generates_credit": false,
+    "unit_01_note": "a unidade 01 permanece à parte e não gera crédito",
+    "package_sla_business_days_min": 10,
+    "package_sla_business_days_max": 15,
+    "arithmetic_changed": false
+  },
+  "sla_counts_from_gap": {
+    "declared_in_issue": ["01", "03", "08"],
+    "unknown": ["02", "04", "05", "06", "07"],
+    "note": "A tabela da 331 declara o marco inicial apenas em três linhas. Nas outras cinco o marco é UNKNOWN, conforme a própria regra de ausência de dado da issue. O gate impede que essa lacuna cresça."
+  },
+  "deliverables": [
+    {
+      "number": "01",
+      "deliverable_id": "CFG-D01",
+      "issue_331_name": "Radar de Licitações Prioritárias",
+      "published_name_pt_br": "Relatório Executivo de Priorização de Licitações",
+      "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "file": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+      "price_cents": 59900,
+      "price_display": "R$ 599",
+      "objeto_incluido": "uma empresa, um recorte geográfico, até cinco perfis de obra; oportunidades abertas na data de corte; aprofundar as 12 mais aderentes, ou todas se houver menos",
+      "entrada": [
+        "CNPJ e decisão que está na mesa",
+        "território/raio e tipologias executáveis",
+        "acervo, equipe, caixa e restrições quando a decisão exigir aderência da empresa",
+        "autorização para usar documentos privados fornecidos",
+        "data de corte"
+      ],
+      "saida_minima": "AVANÇAR / CONDICIONAR / INVESTIGAR / RECUSAR, justificativa, responsável e ponto de revalidação",
+      "sla": {
+        "text": "3 dias úteis após inputs válidos",
+        "business_days": 3,
+        "counts_from": "após inputs válidos",
+        "counts_from_declared": true
+      },
+      "fronteira": [
+        "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
+        "não promete edital futuro, vitória, preço vencedor ou demanda",
+        "ausência de dado vira UNKNOWN",
+        "classificação automática nunca encerra decisão humana",
+        "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
+      ],
+      "in_package": false,
+      "generates_package_credit": false
+    },
+    {
+      "number": "02",
+      "deliverable_id": "CFG-D02",
+      "issue_331_name": "Base de Mercado para Expansão",
+      "published_name_pt_br": "Base Quantitativa Canônica",
+      "route": "/casos/modelo-base-quantitativa-canonica/",
+      "file": "casos/modelo-base-quantitativa-canonica/index.html",
+      "price_cents": 69000,
+      "price_display": "R$ 690",
+      "objeto_incluido": "base que sustenta um módulo contratado, com fontes públicas disponíveis no recorte",
+      "entrada": [
+        "CNPJ e decisão que está na mesa",
+        "território/raio e tipologias executáveis",
+        "acervo, equipe, caixa e restrições quando a decisão exigir aderência da empresa",
+        "autorização para usar documentos privados fornecidos",
+        "data de corte"
+      ],
+      "saida_minima": "dados reconciliados, dicionário, fórmulas, memória de cálculo, checks e ressalvas",
+      "sla": {
+        "text": "5 dias úteis",
+        "business_days": 5,
+        "counts_from": "UNKNOWN",
+        "counts_from_declared": false
+      },
+      "fronteira": [
+        "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
+        "não promete edital futuro, vitória, preço vencedor ou demanda",
+        "ausência de dado vira UNKNOWN",
+        "classificação automática nunca encerra decisão humana",
+        "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
+      ],
+      "in_package": true,
+      "generates_package_credit": true
+    },
+    {
+      "number": "03",
+      "deliverable_id": "CFG-D03",
+      "issue_331_name": "Síntese Executiva de Expansão",
+      "published_name_pt_br": "Apresentação Executiva de Resultados",
+      "route": "/casos/modelo-apresentacao-executiva-resultados/",
+      "file": "casos/modelo-apresentacao-executiva-resultados/index.html",
+      "price_cents": 89000,
+      "price_display": "R$ 890",
+      "objeto_incluido": "transforma uma análise CONFENGE já reconciliada em uma reunião decisória; não inicia nova pesquisa",
+      "entrada": [
+        "CNPJ e decisão que está na mesa",
+        "território/raio e tipologias executáveis",
+        "acervo, equipe, caixa e restrições quando a decisão exigir aderência da empresa",
+        "autorização para usar documentos privados fornecidos",
+        "data de corte"
+      ],
+      "saida_minima": "narrativa executiva, evidências vinculadas e até quatro decisões assináveis",
+      "sla": {
+        "text": "3 dias úteis após análise-base",
+        "business_days": 3,
+        "counts_from": "após análise-base",
+        "counts_from_declared": true
+      },
+      "fronteira": [
+        "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
+        "não promete edital futuro, vitória, preço vencedor ou demanda",
+        "ausência de dado vira UNKNOWN",
+        "classificação automática nunca encerra decisão humana",
+        "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
+      ],
+      "in_package": true,
+      "generates_package_credit": true
+    },
+    {
+      "number": "04",
+      "deliverable_id": "CFG-D04",
+      "issue_331_name": "Mapa de Órgãos com Maior Potencial",
+      "published_name_pt_br": "Mapa de Compradores Públicos",
+      "route": "/casos/modelo-mapa-compradores-publicos/",
+      "file": "casos/modelo-mapa-compradores-publicos/index.html",
+      "price_cents": 120000,
+      "price_display": "R$ 1.200",
+      "objeto_incluido": "uma empresa, um território, até cinco tipologias e 36 meses de histórico",
+      "entrada": [
+        "CNPJ e decisão que está na mesa",
+        "território/raio e tipologias executáveis",
+        "acervo, equipe, caixa e restrições quando a decisão exigir aderência da empresa",
+        "autorização para usar documentos privados fornecidos",
+        "data de corte"
+      ],
+      "saida_minima": "até 20 órgãos priorizados, recorrência, concentração, calendário e cobertura",
+      "sla": {
+        "text": "6 dias úteis",
+        "business_days": 6,
+        "counts_from": "UNKNOWN",
+        "counts_from_declared": false
+      },
+      "fronteira": [
+        "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
+        "não promete edital futuro, vitória, preço vencedor ou demanda",
+        "ausência de dado vira UNKNOWN",
+        "classificação automática nunca encerra decisão humana",
+        "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
+      ],
+      "in_package": true,
+      "generates_package_credit": true
+    },
+    {
+      "number": "05",
+      "deliverable_id": "CFG-D05",
+      "issue_331_name": "Radar de Contratos Próximos da Renovação",
+      "published_name_pt_br": "Contratos Vincendos e Recontratação",
+      "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+      "file": "casos/modelo-contratos-vincendos-relicitacao/index.html",
+      "price_cents": 145000,
+      "price_display": "R$ 1.450",
+      "objeto_incluido": "um território, até cinco tipologias, janela de 90 a 180 dias e vigência publicamente verificável",
+      "entrada": [
+        "CNPJ e decisão que está na mesa",
+        "território/raio e tipologias executáveis",
+        "acervo, equipe, caixa e restrições quando a decisão exigir aderência da empresa",
+        "autorização para usar documentos privados fornecidos",
+        "data de corte"
+      ],
+      "saida_minima": "até 30 sinais candidatos, estágio, confiança, falso positivo e próxima observação",
+      "sla": {
+        "text": "6 dias úteis",
+        "business_days": 6,
+        "counts_from": "UNKNOWN",
+        "counts_from_declared": false
+      },
+      "fronteira": [
+        "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
+        "não promete edital futuro, vitória, preço vencedor ou demanda",
+        "ausência de dado vira UNKNOWN",
+        "classificação automática nunca encerra decisão humana",
+        "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
+      ],
+      "in_package": true,
+      "generates_package_credit": true
+    },
+    {
+      "number": "06",
+      "deliverable_id": "CFG-D06",
+      "issue_331_name": "Mapa de Concorrentes Relevantes",
+      "published_name_pt_br": "Mapeamento de Concorrentes",
+      "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+      "file": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
+      "price_cents": 190000,
+      "price_display": "R$ 1.900",
+      "objeto_incluido": "um território/segmento, 36 meses e até 15 concorrentes materialmente observados",
+      "entrada": [
+        "CNPJ e decisão que está na mesa",
+        "território/raio e tipologias executáveis",
+        "acervo, equipe, caixa e restrições quando a decisão exigir aderência da empresa",
+        "autorização para usar documentos privados fornecidos",
+        "data de corte"
+      ],
+      "saida_minima": "concentração por comprador, faixa de contrato, exposição ativa e resposta sugerida",
+      "sla": {
+        "text": "7 dias úteis",
+        "business_days": 7,
+        "counts_from": "UNKNOWN",
+        "counts_from_declared": false
+      },
+      "fronteira": [
+        "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
+        "não promete edital futuro, vitória, preço vencedor ou demanda",
+        "ausência de dado vira UNKNOWN",
+        "classificação automática nunca encerra decisão humana",
+        "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
+      ],
+      "in_package": true,
+      "generates_package_credit": true
+    },
+    {
+      "number": "07",
+      "deliverable_id": "CFG-D07",
+      "issue_331_name": "Referências de Preços de Obras Públicas",
+      "published_name_pt_br": "Painel de Preços de Obras Públicas",
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "file": "casos/modelo-painel-precos-obras-publicas/index.html",
+      "price_cents": 240000,
+      "price_display": "R$ 2.400",
+      "objeto_incluido": "um território, até cinco tipologias, 36 meses e contratos com valor positivo e classificação comparável",
+      "entrada": [
+        "CNPJ e decisão que está na mesa",
+        "território/raio e tipologias executáveis",
+        "acervo, equipe, caixa e restrições quando a decisão exigir aderência da empresa",
+        "autorização para usar documentos privados fornecidos",
+        "data de corte"
+      ],
+      "saida_minima": "P25, mediana, P75, dispersão, evolução e outliers; nunca preço unitário sem normalização",
+      "sla": {
+        "text": "7 dias úteis",
+        "business_days": 7,
+        "counts_from": "UNKNOWN",
+        "counts_from_declared": false
+      },
+      "fronteira": [
+        "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
+        "não promete edital futuro, vitória, preço vencedor ou demanda",
+        "ausência de dado vira UNKNOWN",
+        "classificação automática nunca encerra decisão humana",
+        "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
+      ],
+      "in_package": true,
+      "generates_package_credit": true
+    },
+    {
+      "number": "08",
+      "deliverable_id": "CFG-D08",
+      "issue_331_name": "Plano Executivo de Expansão",
+      "published_name_pt_br": "Relatório Executivo Consolidado",
+      "route": "/casos/modelo-relatorio-executivo-consolidado/",
+      "file": "casos/modelo-relatorio-executivo-consolidado/index.html",
+      "price_cents": 375000,
+      "price_display": "R$ 3.750",
+      "objeto_incluido": "integra módulos já reconciliados; não compra uma segunda pesquisa escondida",
+      "entrada": [
+        "CNPJ e decisão que está na mesa",
+        "território/raio e tipologias executáveis",
+        "acervo, equipe, caixa e restrições quando a decisão exigir aderência da empresa",
+        "autorização para usar documentos privados fornecidos",
+        "data de corte"
+      ],
+      "saida_minima": "leitura de direção, até quatro decisões, trilha até fonte/célula e lacunas",
+      "sla": {
+        "text": "5 dias úteis após módulos disponíveis",
+        "business_days": 5,
+        "counts_from": "após módulos disponíveis",
+        "counts_from_declared": true
+      },
+      "fronteira": [
+        "não é alerta ilimitado, assinatura, SaaS ou banco de dados do cliente",
+        "não promete edital futuro, vitória, preço vencedor ou demanda",
+        "ausência de dado vira UNKNOWN",
+        "classificação automática nunca encerra decisão humana",
+        "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg"
+      ],
+      "in_package": true,
+      "generates_package_credit": true
+    }
+  ],
+  "not_delivered_here": {
+    "html_changed": false,
+    "price_changed": false,
+    "sla_visible_on_route_pages": "NOT_STARTED",
+    "first_sale_evidence": "NOT_STARTED",
+    "first_sale_fields": ["horas", "retrabalho", "margem", "outcome"],
+    "evidence": []
+  }
+}
