@@ -14,8 +14,9 @@ const require = createRequire(import.meta.url);
 process.env.NODE_ENV = "test";
 process.env.NURTURE_ADVANCE_WITHOUT_RESEND = "1";
 process.env.LEAD_ALLOW_MEMORY_FALLBACK = "1";
-delete process.env.RESEND_API_KEY;
+process.env.RESEND_API_KEY = "re_nurture_test";
 process.env.OPS_TOKEN = "x".repeat(24);
+process.env.NURTURE_TOKEN_SECRET = "n".repeat(48);
 
 const storeDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-nurture-"));
 process.env.NURTURE_STORE_DIR = storeDir;
@@ -26,6 +27,25 @@ const rate = require(ratePath);
 const nurturePath = path.join(root, "netlify/functions/nurture.cjs");
 delete require.cache[require.resolve(nurturePath)];
 const { handler } = require(nurturePath);
+const sentEmails = [];
+const originalFetch = globalThis.fetch;
+globalThis.fetch = async (url, init = {}) => {
+  const target = new URL(String(url));
+  if (
+    target.protocol !== "https:" ||
+    target.hostname !== "api.resend.com" ||
+    target.port ||
+    target.username ||
+    target.password ||
+    target.pathname !== "/emails" ||
+    target.search ||
+    target.hash
+  ) {
+    throw new Error(`unexpected_fetch:${target.origin}${target.pathname}`);
+  }
+  sentEmails.push(JSON.parse(String(init.body || "{}")));
+  return { ok: true, status: 200, json: async () => ({ id: `msg-${sentEmails.length}` }), text: async () => "" };
+};
 
 let failed = 0;
 function pass(n, d = "") {
@@ -69,7 +89,12 @@ function event(action, { method = "GET", body, qs = {}, headers = {} } = {}) {
 {
   const res = await handler(event("health"));
   const j = JSON.parse(res.body);
-  if (!j.ok || !j.tracks?.includes("contrato")) fail("health", j);
+  if (
+    !j.ok ||
+    !j.tracks?.includes("contrato") ||
+    j.token_secret_configured !== true ||
+    j.token_rotation_window !== false
+  ) fail("health", j);
   else pass("health");
 }
 
@@ -85,10 +110,77 @@ function event(action, { method = "GET", body, qs = {}, headers = {} } = {}) {
   else pass("consent_required");
 }
 
+// 3b) a foreign browser origin cannot create a subscription.
+{
+  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const res = await handler(
+    event("subscribe", {
+      method: "POST",
+      body: { email: "foreign@example.com", track: "contrato", consent: true },
+      headers: { origin: "https://evil.example" },
+    })
+  );
+  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  if (res.statusCode !== 403 || JSON.parse(res.body).error !== "origin_denied") {
+    fail("foreign_origin_denied", { status: res.statusCode, body: res.body });
+  } else if (after !== before) fail("foreign_origin_persisted", { before, after });
+  else pass("foreign_origin_denied");
+}
+
+// 3c) production only admits the canonical visitor surface.
+{
+  const previousNodeEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = "production";
+  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  for (const headers of [
+    { origin: "https://confenge.netlify.app" },
+    { origin: "http://localhost:8765" },
+    { origin: "", referer: "https://confenge.netlify.app/nurture/" },
+    { origin: "" },
+  ]) {
+    const res = await handler(
+      event("subscribe", {
+        method: "POST",
+        body: { email: "noncanonical@example.com", track: "contrato", consent: true },
+        headers,
+      })
+    );
+    if (
+      res.statusCode !== 403 ||
+      JSON.parse(res.body).error !== "origin_denied" ||
+      res.headers["Access-Control-Allow-Origin"] !== "https://confenge.com.br"
+    ) {
+      fail("noncanonical_production_origin_denied", { headers, response: res });
+    }
+  }
+  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  process.env.NODE_ENV = previousNodeEnv;
+  if (after !== before) fail("noncanonical_production_origin_persisted", { before, after });
+  else pass("noncanonical_production_origin_denied");
+}
+
 // 4) subscribe ok
 let subId;
 let confirmToken;
 let unsubToken;
+{
+  const secret = process.env.NURTURE_TOKEN_SECRET;
+  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  delete process.env.NURTURE_TOKEN_SECRET;
+  const res = await handler(
+    event("subscribe", {
+      method: "POST",
+      body: { email: "no-secret@example.com", track: "contrato", consent: true },
+    })
+  );
+  process.env.NURTURE_TOKEN_SECRET = secret;
+  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  if (res.statusCode !== 503 || JSON.parse(res.body).error !== "nurture_not_configured") {
+    fail("token_secret_required", { status: res.statusCode, body: res.body });
+  } else if (after !== before) fail("token_secret_failure_persisted", { before, after });
+  else pass("token_secret_required");
+}
+
 {
   const res = await handler(
     event("subscribe", {
@@ -106,12 +198,16 @@ let unsubToken;
   if (res.statusCode !== 201 || j.status !== "pending_confirm") fail("subscribe", j);
   else pass("subscribe", j.subscription_id);
   subId = j.subscription_id;
-  // read raw tokens from file store
+  // Raw tokens exist only in the outbound confirmation email, never in the store.
   const rec = JSON.parse(fs.readFileSync(path.join(storeDir, `${subId}.json`), "utf8"));
-  confirmToken = rec._confirm_raw;
-  unsubToken = rec._unsub_raw;
-  if (!confirmToken) fail("confirm_token_stored");
-  else pass("confirm_token_stored");
+  const confirmationText = sentEmails[0]?.text || "";
+  confirmToken = confirmationText.match(/action=confirm[^\s]*[?&]token=([^&\s]+)/)?.[1];
+  unsubToken = confirmationText.match(/action=unsubscribe[^\s]*[?&]token=([^&\s]+)/)?.[1];
+  if (!confirmToken || !unsubToken) fail("tokens_present_only_in_email", confirmationText);
+  else pass("tokens_present_only_in_email");
+  if (rec._confirm_raw || rec._unsub_raw || !rec.unsub_token_sealed) {
+    fail("raw_tokens_not_persisted", rec);
+  } else pass("raw_tokens_not_persisted");
   // public body must not include email
   if (JSON.stringify(j).includes("construtora@")) fail("pii_in_response");
   else pass("no_email_in_subscribe_response");
@@ -119,6 +215,10 @@ let unsubToken;
 
 // 5) confirm
 {
+  const oldSecret = process.env.NURTURE_TOKEN_SECRET;
+  const rotatedSecret = "r".repeat(48);
+  process.env.NURTURE_TOKEN_SECRET_PREVIOUS = oldSecret;
+  process.env.NURTURE_TOKEN_SECRET = rotatedSecret;
   const res = await handler(
     event("confirm", { qs: { id: subId, token: confirmToken }, headers: { accept: "application/json" } })
   );
@@ -128,6 +228,34 @@ let unsubToken;
   const rec = JSON.parse(fs.readFileSync(path.join(storeDir, `${subId}.json`), "utf8"));
   if (rec.messages_sent < 1) fail("first_message_after_confirm", rec.messages_sent);
   else pass("first_message_sent", rec.messages_sent);
+  if (core.openToken(rec.unsub_token_sealed, subId, process.env) !== unsubToken) {
+    fail("rotated_token_not_opened_with_current_key");
+  } else pass("rotated_token_resealed_with_current_key");
+  let oldKeyStillOpens = false;
+  try {
+    core.openToken(rec.unsub_token_sealed, subId, { NURTURE_TOKEN_SECRET: oldSecret });
+    oldKeyStillOpens = true;
+  } catch {
+    /* expected: record was re-sealed with the current key */
+  }
+  if (oldKeyStillOpens) fail("rotated_token_still_uses_old_key");
+  else pass("rotated_token_no_longer_uses_old_key");
+  const rollbackOpen = core.openTokenDetails(rec.unsub_token_sealed, subId, {
+    NURTURE_TOKEN_SECRET: oldSecret,
+    NURTURE_TOKEN_SECRET_PREVIOUS: rotatedSecret,
+  });
+  if (rollbackOpen.token !== unsubToken || rollbackOpen.key_slot !== "previous") {
+    fail("rotated_token_operational_rollback", rollbackOpen);
+  } else pass("rotated_token_operational_rollback");
+  let suffixAccepted = false;
+  try {
+    core.openToken(`${rec.unsub_token_sealed}.extra`, subId, process.env);
+    suffixAccepted = true;
+  } catch {
+    /* expected */
+  }
+  if (suffixAccepted) fail("sealed_token_extra_segment_accepted");
+  else pass("sealed_token_exact_format");
 }
 
 // 6) tick advances remaining (day_offset future may skip — force by rewriting confirmed_at)
@@ -253,6 +381,32 @@ let unsubToken;
     });
   } else pass("rate_distinct_visitors_common_browser");
 
+  process.env.NURTURE_RATE_MAX_IP = "1";
+  process.env.NURTURE_RATE_MAX_FP = "1";
+  process.env.NURTURE_RATE_WINDOW_MS = "60000";
+  rate._reset();
+  const sharedIp = "203.0.113.212";
+  const hostile = await handler(
+    event("subscribe", {
+      method: "POST",
+      body: { email: "hostile-rate@example.com", track: "contrato", consent: true },
+      headers: { origin: "https://evil.example", "x-forwarded-for": sharedIp },
+    })
+  );
+  const legitimate = await handler(
+    event("subscribe", {
+      method: "POST",
+      body: { email: "legitimate-rate@example.com", track: "contrato", consent: true },
+      headers: { "x-forwarded-for": sharedIp },
+    })
+  );
+  if (hostile.statusCode !== 403 || legitimate.statusCode !== 201) {
+    fail("origin_denial_does_not_consume_rate_quota", {
+      hostile: hostile.statusCode,
+      legitimate: legitimate.statusCode,
+    });
+  } else pass("origin_denial_does_not_consume_rate_quota");
+
   process.env.NURTURE_RATE_MAX_IP = "2";
   process.env.NURTURE_RATE_MAX_FP = "2";
   process.env.NURTURE_RATE_WINDOW_MS = "60000";
@@ -305,3 +459,4 @@ if (failed) {
   process.exit(1);
 }
 console.log("\nALL nurture tests passed");
+globalThis.fetch = originalFetch;

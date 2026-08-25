@@ -125,6 +125,7 @@ function mapProviderEventToCanonicalEvent(raw, context = {}) {
       error: "invalid_event",
       status: "UNKNOWN",
       event: commercialEvent({
+        synthetic: true,
         type: TYPES.COMMERCIAL_EXCEPTION,
         exception_code: "INVALID_PROVIDER_EVENT",
         offer_id: context.offer_id,
@@ -138,6 +139,7 @@ function mapProviderEventToCanonicalEvent(raw, context = {}) {
       error: "event_id_missing",
       status: "UNKNOWN",
       event: commercialEvent({
+        synthetic: true,
         type: TYPES.COMMERCIAL_EXCEPTION,
         exception_code: "PROVIDER_EVENT_ID_MISSING",
         offer_id: context.offer_id,
@@ -168,6 +170,7 @@ function mapProviderEventToCanonicalEvent(raw, context = {}) {
       status: "UNKNOWN",
       exception: true,
       event: commercialEvent({
+        synthetic: true,
         type: TYPES.COMMERCIAL_EXCEPTION,
         exception_code: "UNKNOWN_PROVIDER_STATUS",
         offer_id: offerId,
@@ -220,6 +223,7 @@ function mapProviderEventToCanonicalEvent(raw, context = {}) {
       status: "UNKNOWN",
       exception: true,
       event: commercialEvent({
+        synthetic: true,
         type: TYPES.COMMERCIAL_EXCEPTION,
         exception_code: "UNKNOWN_PROVIDER_STATUS",
         offer_id: offerId,
@@ -232,6 +236,7 @@ function mapProviderEventToCanonicalEvent(raw, context = {}) {
   }
 
   const event = commercialEvent({
+    synthetic: true,
     event_id: `canon_${crypto.createHash("sha256").update(String(providerEventId)).digest("hex").slice(0, 16)}`,
     type,
     offer_id: offerId,
@@ -612,6 +617,7 @@ function createAsaasSandboxProvider(deps = {}) {
 
     async function persistSuccess(record, { idempotent = false } = {}) {
       const event = commercialEvent({
+        synthetic: true,
         type: TYPES.CHECKOUT_CREATED,
         offer_id: offer.offer_id,
         offer_version: offer.offer_version,

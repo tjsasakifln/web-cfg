@@ -76,10 +76,12 @@ Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
 | --- | --- |
 | Domain | `confenge.com.br` |
 | Widget mode | Managed |
-| Site key (pública) | `index.html` → `#turnstile-slot` attribute `data-turnstile-sitekey="…"` **ou** `window.CONFENGE_TURNSTILE_SITEKEY` |
+| Site key (pública) | Netlify `TURNSTILE_SITE_KEY` (build scope); `build:site` injeta em `_site/index.html` |
 | Secret key | Netlify `TURNSTILE_SECRET_KEY` |
 
-Depois: set `LEAD_REQUIRE_TURNSTILE=1`, redeploy.  
+Depois: set `LEAD_REQUIRE_TURNSTILE=1`, `LEAD_REQUIRE_ORIGIN=1` e um
+`IP_HASH_SALT` privado de 32+ caracteres, então redeploy. Build de produção sem
+site key falha antes de publicar; o secret nunca entra no HTML.  
 
 **Validação:**  
 - Form carrega widget  

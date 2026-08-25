@@ -38,7 +38,7 @@ function load() {
   return require(opsPath);
 }
 
-function event({ action, token, method = "GET", body = null }) {
+function event({ action, token, queryToken, method = "GET", body = null }) {
   const headers = {
     origin: "https://confenge.com.br",
     "x-forwarded-for": "198.51.100.10",
@@ -47,8 +47,8 @@ function event({ action, token, method = "GET", body = null }) {
   return {
     httpMethod: method,
     headers,
-    queryStringParameters: { action },
-    rawUrl: `https://confenge.com.br/.netlify/functions/ops?action=${action}`,
+    queryStringParameters: { action, ...(queryToken ? { token: queryToken } : {}) },
+    rawUrl: `https://confenge.com.br/.netlify/functions/ops?action=${action}${queryToken ? `&token=${encodeURIComponent(queryToken)}` : ""}`,
     body: body ? JSON.stringify(body) : null,
   };
 }
@@ -118,6 +118,11 @@ function fail(n, d) {
     if (bad.statusCode !== 401) fail(`${action}_bad_token`, bad.statusCode);
     else pass(`${action}_bad_token`, bad.statusCode);
     assertNoLeadPii(bad.body);
+
+    const leakedQuery = await handler(event({ action, queryToken: process.env.OPS_TOKEN }));
+    if (leakedQuery.statusCode !== 401) fail(`${action}_query_token_rejected`, leakedQuery.statusCode);
+    else pass(`${action}_query_token_rejected`, leakedQuery.statusCode);
+    assertNoLeadPii(leakedQuery.body);
   }
 
   // health may succeed without token
