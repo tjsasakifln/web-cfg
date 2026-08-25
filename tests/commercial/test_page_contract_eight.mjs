@@ -221,7 +221,8 @@ for (const d of dels) {
       !/\.netlify\/functions\/checkout|data-checkout/i.test(pageHtml),
     d.file);
 }
-assert("hub_css_contrato", hubHtml.includes('/assets/eight-offer-contract.css'));
+assert("hub_sem_css_contrato_bloqueante", !hubHtml.includes('/assets/eight-offer-contract.css'));
+assert("hub_css_local", hubHtml.includes('/entregas/styles.css') && textOf("entregas/styles.css").includes('.eight-hub'));
 assert("hub_contexto_resultado", /Cobertura, data de corte, método e o rótulo NÃO INFORMADO/.test(hubText));
 const radarPurchaseText = textOf("comercial/radar-decisorio/index.html");
 assert("radar_compra_sla_3_dias", /prazo de 3 dias úteis/i.test(radarPurchaseText), radarPurchaseText.slice(0, 180));
