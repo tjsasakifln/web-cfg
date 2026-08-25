@@ -64,6 +64,7 @@ jobs:
           npm run test:offer-naming
           npm run test:pricing-policy
           npm run test:page-contract-eight
+          npm run test:first-fold-contract
           npm run test:market-fit-protocol
           npm run test:page-contract-licitacao
           npm run test:page-contract-contratos
