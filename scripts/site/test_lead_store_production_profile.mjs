@@ -98,6 +98,38 @@ function fail(name, detail) {
   process.env = prev;
 }
 
+// 3b) generic HTTP store is not a production-safe create-only backend
+{
+  const prev = { ...process.env };
+  const originalFetch = globalThis.fetch;
+  let fetchCalls = 0;
+  process.env.NODE_ENV = "production";
+  process.env.LEAD_STORE_HTTP_URL = "https://store.example.test/leads";
+  delete process.env.LEAD_ALLOW_MEMORY_FALLBACK;
+  delete process.env.LEAD_STORE;
+  delete process.env.LEAD_STORE_DIR;
+  globalThis.fetch = async () => {
+    fetchCalls += 1;
+    return { ok: true, status: 201, json: async () => ({}) };
+  };
+  try {
+    const { createStore, assertProductionStorePolicy } = loadStore();
+    const policy = assertProductionStorePolicy(process.env);
+    if (policy.ok || policy.code !== "http_store_atomic_create_unproven") {
+      fail("http_store_policy_should_fail", policy);
+    }
+    const stores = await Promise.all([createStore(), createStore()]);
+    if (stores.some((store) => store !== null)) {
+      fail("http_store_should_be_blocked_in_prod", stores);
+    }
+    if (fetchCalls !== 0) fail("http_store_blocked_before_fetch", fetchCalls);
+    pass("http_store_blocked_before_fetch");
+  } finally {
+    globalThis.fetch = originalFetch;
+    process.env = prev;
+  }
+}
+
 // 4) lead handler rejects production + memory fallback without durable store
 {
   const prev = { ...process.env };

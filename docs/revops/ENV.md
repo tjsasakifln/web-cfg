@@ -56,4 +56,9 @@ OPS_TOKEN=… OPS_BASE=https://confenge.com.br npm run revops:lead -- list --rem
 | `RESEND_API_KEY` | Required for real sends |
 | `NURTURE_FROM_EMAIL` | From address |
 | `OPS_TOKEN` | Daily tick + stop_commercial |
+| `NURTURE_TOKEN_SECRET` | Required 32+ character secret used to seal unsubscribe bearer tokens at rest |
+| `NURTURE_TOKEN_SECRET_PREVIOUS` | Previous 32+ character secret during a controlled rotation window |
 | `NURTURE_ADVANCE_WITHOUT_RESEND` | Test only |
+| `NURTURE_RATE_WINDOW_MS` | Subscribe abuse window (default 1 hour) |
+| `NURTURE_RATE_MAX_IP` | Maximum subscribes per IP/window (default 5) |
+| `NURTURE_RATE_MAX_FP` | Maximum subscribes per technical fingerprint/window (default 8) |

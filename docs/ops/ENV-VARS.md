@@ -9,12 +9,18 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | `OPS_WEBHOOK_URL` | recomendada | URL HTTPS autenticada para notificação ops (Slack-style `confenge.lead`; **not** Warmbly inbound) |
 | `OPS_WEBHOOK_SECRET` | recomendada | HMAC SHA-256 do body (`X-Confenge-Signature`) |
 | `OPS_WEBHOOK_BEARER` | opcional | Bearer token alternativo/adicional |
+| `OPS_WEBHOOK_ALLOWED_HOSTS` | com OPS webhook em produção | Allowlist exata de hosts HTTPS (vírgula); obrigatória porque o body contém contato |
 | `CONFENGE_INBOUND_WEBHOOK_URL` | para INBOUND NOW | HTTPS `…/api/v1/webhooks/confenge/inbound`. Fail-closed sem HTTPS em staging/prod. Sem PII na query. |
 | `CONFENGE_INBOUND_WEBHOOK_SECRET` | com inbound URL | Segredo HMAC compartilhado com Warmbly (`X-Warmbly-Signature`). Somente server env. |
 | `CONFENGE_INBOUND_ALLOWED_HOSTS` | recomendada em prod | Allowlist de hosts (vírgula). Vazio + URL HTTPS válida é aceito. |
 | `CONFENGE_INBOUND_MAX_ATTEMPTS` | opcional | Default 8. Depois `DEAD`. |
 | `CONFENGE_INBOUND_TIMEOUT_MS` | opcional | Default 8000 |
 | `RESEND_API_KEY` | para e-mail real | API key Resend |
+| `NURTURE_RATE_WINDOW_MS` | opcional | Janela antiabuso do subscribe; default 1 hora |
+| `NURTURE_RATE_MAX_IP` | opcional | Máximo de subscribes por IP/janela; default 5 |
+| `NURTURE_RATE_MAX_FP` | opcional | Máximo de subscribes por fingerprint/janela; default 8 |
+| `NURTURE_TOKEN_SECRET` | para nurture | Segredo dedicado de 32+ caracteres; obrigatório para selar tokens bearer no store |
+| `NURTURE_TOKEN_SECRET_PREVIOUS` | durante rotação nurture | Chave anterior de 32+ caracteres; manter somente durante a janela de migração |
 | `LEAD_FROM_EMAIL` | para e-mail | Remetente, ex. `CONFENGE Leads <leads@confenge.com.br>` |
 | `LEAD_NOTIFY_EMAIL` | para e-mail | Destino ops, ex. `tiago.sasaki@confenge.com.br` |
 | `TURNSTILE_SECRET_KEY` | obrigatório em produção | Secret Cloudflare Turnstile; nunca expor no HTML/build |
@@ -29,12 +35,13 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | `IP_HASH_SALT` | obrigatório em produção | Valor privado aleatório com 32+ caracteres para hash de IP em logs/store |
 | `NTFY_URL` | opcional | URL completa de tópico **privado** |
 | `NTFY_TOKEN` | se NTFY_URL | Bearer token ntfy |
+| `NTFY_ALLOWED_HOSTS` | com ntfy em produção | Allowlist exata de hosts HTTPS (vírgula); obrigatória porque o body contém contato |
 | `LEAD_STORE_DIR` | só local/dev | Diretório FileStore |
 | `LEAD_STORE` | teste | `memory` para testes |
 | `LEAD_ALLOW_MEMORY_FALLBACK` | perigoso | Nunca em produção |
-| `LEAD_STORE_HTTP_URL` | alternativa | Backend HTTP durável (POST JSON do lead) |
-| `LEAD_STORE_HTTP_TOKEN` | com HTTP store | Bearer do backend |
-| `LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL` | opcional | Template com `{idempotency_key}` |
+| `LEAD_STORE_HTTP_URL` | só local/dev | Adapter genérico GET→POST; bloqueado em produção por não provar create-only atômico |
+| `LEAD_STORE_HTTP_TOKEN` | com HTTP store local | Bearer do backend |
+| `LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL` | local/dev | Template com `{idempotency_key}`; consulta não torna a criação atômica |
 | `NETLIFY_BLOBS_TOKEN` | se contexto Blobs ausente | Token API Netlify com acesso a Blobs |
 | `NETLIFY_BLOBS_SITE_ID` | com token | Site ID (senão usa `SITE_ID`) |
 
