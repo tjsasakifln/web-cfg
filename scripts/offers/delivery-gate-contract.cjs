@@ -82,12 +82,24 @@ function isNonEmptyString(value) {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+function isBoundedNonEmptyString(value, maxLength) {
+  return isNonEmptyString(value) && value.length <= maxLength;
+}
+
+function isRfc3339DateTime(value) {
+  if (typeof value !== "string") return false;
+  if (!/^\d{4}-\d{2}-\d{2}[tT]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:[zZ]|[+-]\d{2}:\d{2})$/.test(value)) {
+    return false;
+  }
+  return Number.isFinite(Date.parse(value));
+}
+
 function validateEvidenceRefs(value, prefix, errors) {
   if (!Array.isArray(value)) {
     errors.push(`${prefix}_not_array`);
     return;
   }
-  if (value.some((ref) => !isNonEmptyString(ref))) errors.push(`${prefix}_invalid_ref`);
+  if (value.some((ref) => !isBoundedNonEmptyString(ref, 500))) errors.push(`${prefix}_invalid_ref`);
   if (new Set(value).size !== value.length) errors.push(`${prefix}_duplicate_ref`);
 }
 
@@ -106,7 +118,7 @@ function validateFinancialGate(gate) {
 
   if (gate.state === "UNKNOWN") {
     if (gate.source_event_id !== null) errors.push("financial_gate_unknown_source_must_be_null");
-  } else if (!isNonEmptyString(gate.source_event_id)) {
+  } else if (!isBoundedNonEmptyString(gate.source_event_id, 200)) {
     errors.push("financial_gate_source_event_id_required");
   }
   if (gate.state === "SYNTHETIC_VALID") {
@@ -131,8 +143,8 @@ function validateDeliveryOrderRequested(event) {
   }
   if (event.schema_version !== DELIVERY_SCHEMA_VERSION) errors.push("delivery_order_schema_version_unknown");
   for (const field of DELIVERY_FIELDS) {
-    if (["schema_version", "synthetic", "proposal_version", "financial_gate", "onboarding_ref", "evidence_refs"].includes(field)) continue;
-    if (!isNonEmptyString(event[field])) errors.push(`delivery_order_${field}_invalid`);
+    if (["schema_version", "synthetic", "proposal_version", "accepted_snapshot_hash", "financial_gate", "onboarding_ref", "occurred_at", "evidence_refs"].includes(field)) continue;
+    if (!isBoundedNonEmptyString(event[field], 200)) errors.push(`delivery_order_${field}_invalid`);
   }
   if (typeof event.synthetic !== "boolean") errors.push("delivery_order_synthetic_not_boolean");
   if (!Number.isInteger(event.proposal_version) || event.proposal_version < 1) {
@@ -141,7 +153,7 @@ function validateDeliveryOrderRequested(event) {
   if (!/^(sha256:)?[a-f0-9]{64}$/.test(String(event.accepted_snapshot_hash || ""))) {
     errors.push("delivery_order_accepted_snapshot_hash_invalid");
   }
-  if (!Number.isFinite(Date.parse(String(event.occurred_at || "")))) {
+  if (!isRfc3339DateTime(event.occurred_at)) {
     errors.push("delivery_order_occurred_at_invalid");
   }
   validateEvidenceRefs(event.evidence_refs, "delivery_order_evidence_refs", errors);
@@ -154,7 +166,7 @@ function validateDeliveryOrderRequested(event) {
   if (gate.ok && event.financial_gate.state !== "UNKNOWN" && !isNonEmptyString(event.onboarding_ref)) {
     errors.push("delivery_order_onboarding_ref_required");
   }
-  if (event.onboarding_ref !== null && typeof event.onboarding_ref !== "string") {
+  if (event.onboarding_ref !== null && (typeof event.onboarding_ref !== "string" || event.onboarding_ref.length > 200)) {
     errors.push("delivery_order_onboarding_ref_invalid");
   }
 

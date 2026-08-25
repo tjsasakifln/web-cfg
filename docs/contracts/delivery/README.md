@@ -38,7 +38,7 @@ The two repositories pin the following compatibility fingerprints:
 | --- | --- |
 | `confenge.delivery_order_requested.v1.schema.json` bytes | `6464c124040bbadea9f719dcecacdcd3faa85febfa4610950f3791bb224fb0ba` |
 | `confenge.financial_gate.v1.schema.json` bytes | `5c0bdecf80fdfe1101ba1606f8a5462f035aae7c2a2b0d262af86de7b6d4a903` |
-| sorted-key golden JSON semantics | `c3de0cfe6648ca576f86be930fc9a9313e4a32961eee9d33cafe6f9b9cddbe03` |
+| sorted-key golden JSON semantics | `1b57b3ba107ed0adb2d27a8e2b6088b8f6584512152c864d90f39da5f5d4345e` |
 
 The validator additionally enforces invariants JSON Schema cannot express: for
 `SYNTHETIC_VALID` and `AUTHORIZED`, top-level `synthetic` must equal

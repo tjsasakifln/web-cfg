@@ -57,7 +57,7 @@ assert("gate_schema_never_received_revenue", gateSchema.properties.received_reve
 assert("reconciled_event_not_owned_here", !fs.existsSync(path.join(root, "docs/contracts/delivery/confenge.financial_gate_reconciled.v1.schema.json")));
 assert("delivery_schema_cross_repo_fingerprint", sha256(fs.readFileSync(contract.CONTRACT_PATHS.delivery)) === "6464c124040bbadea9f719dcecacdcd3faa85febfa4610950f3791bb224fb0ba");
 assert("financial_gate_cross_repo_fingerprint", sha256(fs.readFileSync(contract.CONTRACT_PATHS.financialGate)) === "5c0bdecf80fdfe1101ba1606f8a5462f035aae7c2a2b0d262af86de7b6d4a903");
-assert("warmbly_golden_semantic_fingerprint", sha256(stableJson(requestFixture)) === "c3de0cfe6648ca576f86be930fc9a9313e4a32961eee9d33cafe6f9b9cddbe03");
+assert("warmbly_golden_semantic_fingerprint", sha256(stableJson(requestFixture)) === "1b57b3ba107ed0adb2d27a8e2b6088b8f6584512152c864d90f39da5f5d4345e");
 
 const checkedGate = contract.validateFinancialGate(gateFixture);
 assert("synthetic_gate_fixture_valid", checkedGate.ok, checkedGate.errors);
@@ -73,7 +73,8 @@ assert("canary_deliverable_binding", requestFixture.deliverable_id === "CFG-DIAG
 assert("canary_scope_binding", requestFixture.scope_version === "CFG-SCOPE-DIAG-EXP-v1");
 assert("canary_price_binding", requestFixture.price_version === "CFG-OFFER-CATALOG-v1");
 assert("canary_terms_binding", requestFixture.terms_version === "CFG-TERMS-B2B-2026-08-17-v1");
-assert("warmbly_golden_event_binding", requestFixture.event_id === "7bb44bf9-e37f-5833-8958-4e5c313eaceb");
+assert("warmbly_golden_event_binding", requestFixture.event_id === "e69e1dd3-7204-51d2-9768-36cf5ede789a");
+assert("warmbly_golden_idempotency_binding", requestFixture.idempotency_key === "delivery-order:sha256:e1e93bd326036d3a399193c9e9492ffd6351c378c6866fda23e9e229f6493c76");
 assert("warmbly_golden_proposal_binding", requestFixture.proposal_id === "220f817a-5b2b-5799-b403-2ce8c731e4bf");
 assert("warmbly_golden_snapshot_binding", requestFixture.accepted_snapshot_hash === "sha256:7cbe3a5d5663e4ae15001e56f97b852287c94eea2836e200c3a5a309bc73f2bd");
 assert("warmbly_golden_financial_source_binding", requestFixture.financial_gate.source_event_id === "fixture-financial-gate-cfg-diag-exp-001");
@@ -192,6 +193,41 @@ for (let replay = 0; replay < 3; replay += 1) {
   bad.proposal_version = 0;
   const checked = contract.validateDeliveryOrderRequested(bad);
   assert("proposal_version_zero_rejected", !checked.ok && checked.errors.includes("delivery_order_proposal_version_invalid"), checked.errors);
+}
+
+{
+  const bad = clone(requestFixture);
+  bad.proposal_id = "p".repeat(201);
+  const checked = contract.validateDeliveryOrderRequested(bad);
+  assert("oversized_join_rejected", !checked.ok && checked.errors.includes("delivery_order_proposal_id_invalid"), checked.errors);
+}
+
+{
+  const bad = clone(requestFixture);
+  bad.financial_gate.source_event_id = "e".repeat(201);
+  const checked = contract.validateDeliveryOrderRequested(bad);
+  assert("oversized_financial_source_rejected", !checked.ok && checked.errors.includes("financial_gate_source_event_id_required"), checked.errors);
+}
+
+{
+  const bad = clone(requestFixture);
+  bad.evidence_refs = ["e".repeat(501)];
+  const checked = contract.validateDeliveryOrderRequested(bad);
+  assert("oversized_evidence_ref_rejected", !checked.ok && checked.errors.includes("delivery_order_evidence_refs_invalid_ref"), checked.errors);
+}
+
+{
+  const bad = clone(requestFixture);
+  bad.onboarding_ref = "o".repeat(201);
+  const checked = contract.validateDeliveryOrderRequested(bad);
+  assert("oversized_onboarding_ref_rejected", !checked.ok && checked.errors.includes("delivery_order_onboarding_ref_invalid"), checked.errors);
+}
+
+{
+  const bad = clone(requestFixture);
+  bad.occurred_at = "2026-08-25";
+  const checked = contract.validateDeliveryOrderRequested(bad);
+  assert("date_without_time_rejected", !checked.ok && checked.errors.includes("delivery_order_occurred_at_invalid"), checked.errors);
 }
 
 const refused = contract.refuseAuthorizedGateFromWebCfg();
