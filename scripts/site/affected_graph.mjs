@@ -490,6 +490,21 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/", "/casos/"],
   },
+  "test:logo-contract": {
+    producers: [
+      "tests/brand/test_logo_contract.mjs",
+      "data/brand/logo-contract.v1.json",
+      "assets/logo-confenge.png",
+      "assets/logo-confenge-500-f8a83f6d.png",
+      "assets/logo-confenge-white.png",
+      "assets/logo-confenge-white-500-1677038e.png",
+      "styles.css",
+      "scripts/pseo/html_shell.py",
+      "scripts/pseo/build.py",
+    ],
+    artifacts: [],
+    surfaces: ["/"],
+  },
   "test:authority": {
     producers: [
       "scripts/site/test_authority_contract.py",

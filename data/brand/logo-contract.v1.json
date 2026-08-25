@@ -1,0 +1,254 @@
+{
+  "schema": "confenge-logo-contract-v1",
+  "contract_version": "v1",
+  "source_issue": "#326",
+  "updated_at": "2026-08-25",
+  "priority": "P1",
+  "decision_state": "EXECUTE_NOW",
+  "campaign_category": "BLOCKED_EXTERNAL",
+  "executive_front": "INBOUND_ENGINE",
+  "leverage_types": [
+    "trust",
+    "distribution",
+    "automation"
+  ],
+  "public_surface": {
+    "brand": "CONFENGE",
+    "domain": "confenge.com.br",
+    "canonical_visitor_surface": "confenge.com.br",
+    "lockup_only": true,
+    "sitewide_recolor_allowed": false
+  },
+  "delivery_scope": {
+    "this_change": "FAIL_CLOSED_CONTRACT_AND_GATE",
+    "changes_public_html": false,
+    "changes_live_asset": false,
+    "claims_issue_acceptance": false,
+    "reason_pt_br": "Sem o master vetorial autorizado, trocar o asset exigiria inferir geometria, espacamento ou tipografia a partir de raster. O gate impede essa fabricacao e registra a entrada exata que falta."
+  },
+  "authority": {
+    "geometry_owner": "founder",
+    "artwork_owner": "founder",
+    "runtime_owner": "web-cfg",
+    "production_parity_owner": "#267",
+    "architecture_refs": [
+      "AGENTS.md",
+      "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+      "docs/architecture/RUNTIME-AUTHORITY.md"
+    ]
+  },
+  "authorized_master": {
+    "state": "ABSENT",
+    "promotion_state": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
+    "target_path": "assets/logo-confenge.svg",
+    "target_format": "SVG",
+    "may_trace_raster": false,
+    "may_guess_font": false,
+    "may_generate_geometry": false,
+    "may_embed_raster_image": false,
+    "may_swap_live_asset": false,
+    "required_input": {
+      "owner": "founder",
+      "state": "PENDING",
+      "items": [
+        "master vetorial autorizado do lockup completo",
+        "geometria e espacamentos aprovados",
+        "assinatura INTELIGENCIA TECNICA convertida em contornos ou tipografia licenciada identificada",
+        "variantes monocromaticas preta e branca",
+        "tamanho minimo e decisao de variante responsiva para a assinatura"
+      ]
+    }
+  },
+  "target_system": {
+    "header": {
+      "foreground_nominal": "#000000",
+      "background_nominal": "#FFFFFF",
+      "blue_or_navy_allowed_in_source": false
+    },
+    "footer": {
+      "foreground_nominal": "#FFFFFF",
+      "background": "DARK",
+      "blue_or_navy_allowed_in_source": false
+    },
+    "source_rules": {
+      "raster_image_element_allowed": false,
+      "css_filter_allowed": false,
+      "css_sharpen_allowed": false,
+      "raster_upscale_allowed": false,
+      "intrinsic_ratio_required": true,
+      "width_height_required": true,
+      "non_empty_alt_required": true,
+      "click_target_minimum_px": 44
+    },
+    "viewports_px": [
+      320,
+      390,
+      768,
+      1024,
+      1366,
+      1440
+    ],
+    "dpr": [
+      1,
+      2
+    ]
+  },
+  "observed_legacy_assets": [
+    {
+      "path": "assets/logo-confenge.png",
+      "role": "header_export",
+      "format": "PNG",
+      "width": 800,
+      "height": 208,
+      "sha256": "e6af0125c73edd476cff82ab4ea1de3e459fbdbde63b886f6c55f8a93531505b"
+    },
+    {
+      "path": "assets/logo-confenge-500-f8a83f6d.png",
+      "role": "header_primary_legacy",
+      "format": "PNG",
+      "width": 500,
+      "height": 130,
+      "sha256": "f8a83f6de028bfffd07c609b1c241eb5b2fa122187f0a79a1173353c0e9f6e2f"
+    },
+    {
+      "path": "assets/logo-confenge-white.png",
+      "role": "footer_export",
+      "format": "PNG",
+      "width": 800,
+      "height": 208,
+      "sha256": "e6bb135d070993411cb46adce88747187f3decd2f85f23e9899a9c89e97e7586"
+    },
+    {
+      "path": "assets/logo-confenge-white-500-1677038e.png",
+      "role": "footer_primary_legacy",
+      "format": "PNG",
+      "width": 500,
+      "height": 130,
+      "sha256": "1677038e71416979dd7534f4c726e718a1cdd2d8ccf8e1b4a08506fa002f13ea"
+    }
+  ],
+  "current_surface_observation": {
+    "state": "LEGACY_RASTER_RETAINED",
+    "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
+    "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
+    "intrinsic_ratio": "50:13",
+    "header_black_on_white": "NON_COMPLIANT",
+    "master_svg": "MISSING",
+    "sharpness_viewport_matrix": "NOT_EXECUTED",
+    "tagline_minimum_legibility": "NOT_APPROVED",
+    "screenshot_regression": "MISSING",
+    "production_svg_delivery": "BLOCKED_AWAITING_FOUNDER_ARTWORK"
+  },
+  "promotion": {
+    "current": "BLOCKED_AWAITING_FOUNDER_ARTWORK",
+    "terminal": "PROMOTED",
+    "advance_requires_all_conditions_satisfied": true,
+    "required_evidence_fields": [
+      "recorded_at",
+      "recorded_by",
+      "artifact_ref",
+      "verification_note_pt_br"
+    ],
+    "conditions": [
+      {
+        "condition_id": "authorized_vector_received",
+        "order": 1,
+        "owner": "founder",
+        "satisfied": false,
+        "evidence": {
+          "recorded_at": null,
+          "recorded_by": null,
+          "artifact_ref": null,
+          "verification_note_pt_br": null
+        }
+      },
+      {
+        "condition_id": "source_contract_validated",
+        "order": 2,
+        "owner": "web-cfg",
+        "satisfied": false,
+        "evidence": {
+          "recorded_at": null,
+          "recorded_by": null,
+          "artifact_ref": null,
+          "verification_note_pt_br": null
+        }
+      },
+      {
+        "condition_id": "viewport_and_dpr_regression_approved",
+        "order": 3,
+        "owner": "founder",
+        "satisfied": false,
+        "evidence": {
+          "recorded_at": null,
+          "recorded_by": null,
+          "artifact_ref": null,
+          "verification_note_pt_br": null
+        }
+      },
+      {
+        "condition_id": "production_svg_parity_proved",
+        "order": 4,
+        "owner": "#267",
+        "satisfied": false,
+        "evidence": {
+          "recorded_at": null,
+          "recorded_by": null,
+          "artifact_ref": null,
+          "verification_note_pt_br": null
+        }
+      }
+    ]
+  },
+  "acceptance_matrix": [
+    {
+      "criterion": "authorized_master_svg",
+      "state": "BLOCKED",
+      "blocker": "founder_artwork"
+    },
+    {
+      "criterion": "header_black_on_white",
+      "state": "NON_COMPLIANT",
+      "blocker": "founder_artwork"
+    },
+    {
+      "criterion": "footer_white_variant",
+      "state": "UNVERIFIED",
+      "blocker": "founder_artwork"
+    },
+    {
+      "criterion": "viewport_dpr_sharpness",
+      "state": "NOT_EXECUTED",
+      "blocker": "founder_artwork"
+    },
+    {
+      "criterion": "tagline_legibility",
+      "state": "NOT_APPROVED",
+      "blocker": "founder_artwork"
+    },
+    {
+      "criterion": "screenshot_regression",
+      "state": "MISSING",
+      "blocker": "founder_artwork"
+    },
+    {
+      "criterion": "production_svg_primary",
+      "state": "BLOCKED",
+      "blocker": "founder_artwork_and_267"
+    },
+    {
+      "criterion": "lockup_only_scope",
+      "state": "ENFORCED",
+      "blocker": null
+    }
+  ],
+  "rollback": {
+    "method": "revert_contract_and_gate_commit",
+    "public_asset_impact": "NONE",
+    "public_route_impact": "NONE"
+  },
+  "repetition_test": {
+    "one_hundred_repetitions_improve_system": true,
+    "reason_pt_br": "Cada execucao impede regressao de proporcao, ausencia de atributos, filtro, upscale ou promocao sem arte autorizada. Nao cria uma unidade manual de redesenho."
+  }
+}
