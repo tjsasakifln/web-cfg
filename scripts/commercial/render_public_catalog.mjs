@@ -77,8 +77,14 @@ function boundaryAgainst(item, number) {
   return item?.boundary_vs_existing_offers?.find((boundary) => boundary.against_item === number);
 }
 
+function executionCreditDisclosure(credit) {
+  return `O maior valor efetivamente pago no item ${credit.source_item} gera um único crédito para o item 51 ou para o item 16 em até ${credit.window_days} dias, sem acúmulo e limitado ao valor pago.`;
+}
+
 function executionCallout(entry, executionContract) {
-  if (!executionContract) return "";
+  if (!Array.isArray(executionContract?.items)) {
+    throw new Error("PUBLIC_EXECUTION_CONTRACT_MISSING: data/commercial/page-contract-execucao.v1.json is required");
+  }
   const byNumber = new Map(executionContract.items.map((item) => [item.number, item]));
 
   if (entry.deliverable_id === "CFG-D16") {
@@ -91,7 +97,7 @@ function executionCallout(entry, executionContract) {
 <p>O item 16 coordena a oportunidade inteira. As seis execuções abaixo continuam compráveis separadamente:</p>
 <ul>${executionItems}</ul>
 <p data-execution-no-double-charge>Quando alguma execução compõe o item 16, a proposta discrimina cada item incluído e não soma preços silenciosamente.</p>
-<p data-execution-credit>O maior valor pago no item ${credit.source_item} gera um único crédito para o item 51 ou para o item 16 em até ${credit.window_days} dias, sem acúmulo.</p>
+<p data-execution-credit>${executionCreditDisclosure(credit)}</p>
 </section>`;
   }
 
@@ -116,6 +122,7 @@ function executionCallout(entry, executionContract) {
   if (entry.deliverable_id === "CFG-D51") {
     const boundary = boundaryAgainst(executionItem, 13);
     sections.push(`<div data-execution-boundary="13-51"><h6>Diagnosticar ou montar?</h6><p>${escapeHtml(boundary.statement_pt_br)}</p></div>`);
+    sections.push(`<div data-execution-credit="13-51"><h6>Crédito do diagnóstico</h6><p>${escapeHtml(executionCreditDisclosure(executionItem.credit_rule))}</p></div>`);
   }
 
   if (entry.deliverable_id === "CFG-D53") {

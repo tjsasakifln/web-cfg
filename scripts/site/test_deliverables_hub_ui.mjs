@@ -88,7 +88,8 @@ for (const width of widths) {
   await page.setViewport({ width, height, deviceScaleFactor: 1 });
   const response = await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
   const metrics = await page.evaluate(() => {
-    const heroCta = document.querySelector('.deliverables-hero [href="#comparar"]')?.getBoundingClientRect();
+    const heroCtaElement = document.querySelector('.deliverables-hero [href="#enquadrar"]');
+    const heroCta = heroCtaElement?.getBoundingClientRect();
     const firstReport = document.querySelector('[data-cta-id="deliverables-open-report"]')?.getBoundingClientRect();
     const compare = document.querySelector('#comparar .compare-table');
     const compareRows = document.querySelectorAll('#comparar .compare-table tbody tr').length;
@@ -117,6 +118,8 @@ for (const width of widths) {
       primaries,
       h1Count: document.querySelectorAll("h1").length,
       h1Text: document.querySelector("h1")?.textContent?.replace(/\s+/g, " ").trim() || "",
+      heroCtaHref: heroCtaElement?.getAttribute("href") || "",
+      heroCtaTargetExists: Boolean(document.querySelector("#enquadrar")),
       heroCtaVisible: Boolean(heroCta && heroCta.width > 0 && heroCta.height >= 44),
       heroCtaBottom: heroCta?.bottom || null,
       firstReportVisible: Boolean(firstReport && firstReport.width > 0 && firstReport.height >= 44),
@@ -142,15 +145,16 @@ for (const width of widths) {
   const errors = [];
   if (!response || ![200, 304].includes(response.status())) errors.push(`http=${response?.status()}`);
   if (metrics.overflow) errors.push("document_overflow");
-  if (metrics.h1Count !== 1 || !metrics.h1Text.includes("antes de contratar")) errors.push("hero_clarity");
-  if (!metrics.heroCtaVisible || (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
+  if (metrics.h1Count !== 1 || !metrics.h1Text.includes("54 entregas") || !metrics.h1Text.includes("decisão que cabe agora")) errors.push("hero_clarity");
+  if (!metrics.heroCtaVisible || !metrics.heroCtaTargetExists || metrics.heroCtaHref !== "#enquadrar" ||
+      (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
   if (!metrics.firstReportVisible || metrics.examples !== EXPECTED_EXAMPLES) errors.push("ladder_examples");
   if (!metrics.compareVisible || metrics.compareRows !== EXPECTED_EXAMPLES) errors.push("compare_view");
   if (!metrics.compareAboveExamples) errors.push("compare_before_sections");
   if (!metrics.compareScrollFocusable) errors.push("compare_scroll_focus");
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
-  // One primary leads to comparison and the other submits the terminal
-  // hand-raise added by #290; neither replaces a priced offer path.
+  // One primary leads to the progressive framing and the other submits the
+  // terminal hand-raise added by #290; neither replaces a priced offer path.
   if (metrics.primaries > 2) errors.push(`primary_cta_overuse=${metrics.primaries}`);
   if (metrics.navDeliverables !== "Entregas" || metrics.navCurrent !== "page") errors.push("nav_contract");
   if (metrics.emptyPlaceholders) errors.push("empty_placeholders");

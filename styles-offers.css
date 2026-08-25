@@ -101,9 +101,11 @@
   gap:clamp(32px,6vw,72px);
   align-items:start;
 }
-.pillar-capture-copy{max-width:38rem}
+.pillar-capture-grid > *{min-width:0}
+.pillar-capture-copy{width:100%;max-width:38rem}
 .pillar-capture-form{
   display:grid;
+  min-width:0;
   gap:14px;
   padding:clamp(22px,4vw,36px);
   background:#fff;
@@ -111,10 +113,15 @@
   border-radius:18px;
   box-shadow:0 18px 45px rgba(6,26,51,.08);
 }
-.pillar-capture-form label{display:grid;gap:7px;font-weight:650;color:var(--text)}
+.pillar-capture-form label{display:grid;min-width:0;gap:7px;font-weight:650;color:var(--text)}
 .pillar-capture-form input,
+.pillar-capture-form select,
 .pillar-capture-form textarea{
+  box-sizing:border-box;
+  display:block;
   width:100%;
+  max-width:100%;
+  min-width:0;
   padding:12px 14px;
   color:var(--text);
   background:#fff;
@@ -122,14 +129,17 @@
   border-radius:8px;
   font:inherit;
 }
+.pillar-capture-form input,
+.pillar-capture-form select{min-height:48px}
 .pillar-capture-form input:focus,
+.pillar-capture-form select:focus,
 .pillar-capture-form textarea:focus{outline:3px solid rgba(14,124,102,.2);border-color:var(--green)}
 .pillar-capture-form .capture-consent{display:flex;gap:10px;align-items:flex-start;font-weight:500}
 .pillar-capture-form .capture-consent input{width:auto;margin-top:4px}
 .pillar-capture-form .form-status{min-height:1.5em;margin:0}
 .pillar-capture-alternative{margin-top:18px}
-@media (max-width:760px){
-  .pillar-capture-grid{grid-template-columns:1fr}
+@media (max-width:900px){
+  .pillar-capture-grid{grid-template-columns:minmax(0,1fr)}
   .pillar-capture-form{padding:20px 18px;border-radius:14px}
 }
 
