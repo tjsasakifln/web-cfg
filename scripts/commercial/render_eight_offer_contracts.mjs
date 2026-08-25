@@ -81,6 +81,10 @@ function ensureCss(html, needle) {
   return html.replace(needle, `${needle}\n${link}`);
 }
 
+function removeSharedContractCss(html) {
+  return html.replace('<link href="/assets/eight-offer-contract.css" rel="stylesheet"/>\n', "");
+}
+
 function renderRoute(html, contract, item) {
   let next = ensureCss(html, '<link href="/assets/report-capture.css" rel="stylesheet"/>');
   next = replaceBlock(next, ROUTE_START, ROUTE_END, routeBlock(contract, item), '<section class="report-capture"');
@@ -104,7 +108,7 @@ function renderAll(contract) {
   }
   const hubPath = path.join(root, contract.package.hub_file);
   const hubCurrent = fs.readFileSync(hubPath, "utf8");
-  let hubNext = ensureCss(hubCurrent, '<link href="/styles-offers.css" rel="stylesheet"/>');
+  let hubNext = removeSharedContractCss(hubCurrent);
   hubNext = replaceBlock(hubNext, HUB_START, HUB_END, hubBlock(contract), "<!-- GENERATED:PUBLIC-CATALOG:START -->");
   updates.push({ absolute: hubPath, current: hubCurrent, next: hubNext });
   return updates;
