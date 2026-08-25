@@ -1,0 +1,1067 @@
+{
+  "schema": "confenge.offer-copy-contract/1.0",
+  "contract_version": "CFG-COPY-2026-08-24-v1",
+  "issue": "#338",
+  "parent_issue": "#329",
+  "complements_issues": [
+    "#188",
+    "#327",
+    "#335",
+    "#336",
+    "#343"
+  ],
+  "state": "NOT_STARTED",
+  "state_note": "NOT_STARTED significa que a revisão adversarial em oito lentes não foi executada e o protocolo humano não rodou. Esta PR grava o contrato e o portão; não reescreve copy de nenhuma página.",
+  "recorded_at": "2026-08-24",
+  "operational_definition": {
+    "statement": "Impossível de melhorar não é alegação vazia: significa submeter cada oferta a um contrato editorial completo, a uma revisão adversarial e a três tempos de compreensão.",
+    "comprehension_times": [
+      {
+        "order": 1,
+        "time": "3 segundos",
+        "requirement": "sei em que momento estou e qual consequência a oferta evita"
+      },
+      {
+        "order": 2,
+        "time": "30 segundos",
+        "requirement": "entendo diferença, preço, prazo, saída e próxima ação"
+      },
+      {
+        "order": 3,
+        "time": "3 minutos",
+        "requirement": "consigo avaliar fit, insumos, limites, prova e alternativa sem falar com vendedor"
+      }
+    ],
+    "failure_rule": "Uma falha material em qualquer etapa reprova a publicação ou a prominência da oferta.",
+    "site_self_claim_rule": "O site não declara impossível de melhorar; demonstra qualidade por clareza, prova e consistência."
+  },
+  "per_offer_contract": [
+    {
+      "order": 1,
+      "key": "decision_oriented_name",
+      "requirement": "nome orientado à decisão, não ao formato"
+    },
+    {
+      "order": 2,
+      "key": "observable_trigger",
+      "requirement": "trigger observável: compre quando..."
+    },
+    {
+      "order": 3,
+      "key": "cost_of_inaction",
+      "requirement": "custo de não agir, sem medo inventado nem valor financeiro não provado"
+    },
+    {
+      "order": 4,
+      "key": "decision_that_changes",
+      "requirement": "decisão que muda ao receber o trabalho"
+    },
+    {
+      "order": 5,
+      "key": "concrete_result_and_artifact_example",
+      "requirement": "resultado concreto e exemplo do artefato"
+    },
+    {
+      "order": 6,
+      "key": "scope_in",
+      "requirement": "o que entra, delimitado por edital, lote, contrato, evento, fonte, cenário ou revisão"
+    },
+    {
+      "order": 7,
+      "key": "client_inputs_and_sla_start",
+      "requirement": "o que o cliente fornece e condição para iniciar o SLA"
+    },
+    {
+      "order": 8,
+      "key": "method_and_provenance",
+      "requirement": "método e proveniência: FACT, CALCULATION, INFERENCE ou UNKNOWN"
+    },
+    {
+      "order": 9,
+      "key": "price_and_sla_same_block",
+      "requirement": "prazo e preço no mesmo bloco visual"
+    },
+    {
+      "order": 10,
+      "key": "exclusions_and_third_party",
+      "requirement": "o que não inclui e quando jurídico, responsável técnico ou terceiro é necessário"
+    },
+    {
+      "order": 11,
+      "key": "fit_and_misfit",
+      "requirement": "para quem serve e para quem não serve"
+    },
+    {
+      "order": 12,
+      "key": "proof_matching_real_state",
+      "requirement": "prova compatível com o estado real: amostra sintética, método, fonte ou caso consentido"
+    },
+    {
+      "order": 13,
+      "key": "specific_objections",
+      "requirement": "objeções específicas, não FAQ genérico repetido"
+    },
+    {
+      "order": 14,
+      "key": "cta_with_post_click_expectation",
+      "requirement": "CTA com expectativa pós-clique"
+    },
+    {
+      "order": 15,
+      "key": "neighbor_alternative_and_step_up",
+      "requirement": "alternativa vizinha e step-up, explicando por que não comprar a outra"
+    }
+  ],
+  "screen_structure": {
+    "index_entregas": [
+      {
+        "order": 1,
+        "block": "eyebrow factual"
+      },
+      {
+        "order": 2,
+        "block": "H1 que promete escolha clara, não soluções completas"
+      },
+      {
+        "order": 3,
+        "block": "subhead com universo atendido, princípio de preço e ausência de promessa de vitória"
+      },
+      {
+        "order": 4,
+        "block": "seletor o que está acontecendo agora?"
+      },
+      {
+        "order": 5,
+        "block": "trilhas por momento do ciclo"
+      },
+      {
+        "order": 6,
+        "block": "cards resumidos com trigger, decisão, preço e SLA"
+      },
+      {
+        "order": 7,
+        "block": "comparação"
+      },
+      {
+        "order": 8,
+        "block": "contêineres contínuos e sob medida"
+      },
+      {
+        "order": 9,
+        "block": "método e prova"
+      },
+      {
+        "order": 10,
+        "block": "limites éticos"
+      },
+      {
+        "order": 11,
+        "block": "CTA final"
+      }
+    ],
+    "offer_detail": [
+      {
+        "order": 1,
+        "block": "situação e consequência"
+      },
+      {
+        "order": 2,
+        "block": "decisão antes e depois"
+      },
+      {
+        "order": 3,
+        "block": "amostra acima da dobra"
+      },
+      {
+        "order": 4,
+        "block": "escopo e entregáveis"
+      },
+      {
+        "order": 5,
+        "block": "processo e SLA"
+      },
+      {
+        "order": 6,
+        "block": "insumos"
+      },
+      {
+        "order": 7,
+        "block": "preço, adicionais e crédito"
+      },
+      {
+        "order": 8,
+        "block": "limites"
+      },
+      {
+        "order": 9,
+        "block": "fontes e método"
+      },
+      {
+        "order": 10,
+        "block": "fit e misfit"
+      },
+      {
+        "order": 11,
+        "block": "perguntas reais"
+      },
+      {
+        "order": 12,
+        "block": "CTA e próximo passo"
+      }
+    ]
+  },
+  "text_normalization": {
+    "id": "NFD_STRIP_ACCENTS_LOWERCASE",
+    "steps": [
+      "remover blocos script e style do HTML",
+      "remover marcação e colapsar espaço em branco",
+      "normalizar para NFD, remover marcas de acento, converter para minúsculas"
+    ]
+  },
+  "forbidden_language_without_immediate_proof": [
+    {
+      "id": "FL-01",
+      "term": "solução completa",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\bsolucao completa\\b|\\bsolucoes completas\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-02",
+      "term": "insights estratégicos",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\binsights? estrategicos?\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-03",
+      "term": "inteligência de ponta",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\binteligencia de ponta\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-04",
+      "term": "excelência",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\bexcelencias?\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-05",
+      "term": "personalizado",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\bpersonalizad[oa]s?\\b|\\bpersonalizacao\\b|\\bpersonalizacoes\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-06",
+      "term": "360°",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "360\\s*°",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-07",
+      "term": "transformador",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\btransformador[ae]?s?\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-08",
+      "term": "garantia",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\bgarant(ia|ias|imos|ido|ida|idos|idas)\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-03",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-09",
+      "term": "recupere",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\brecupere\\b|\\brecuperamos\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-10",
+      "term": "vença",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\bvenca\\b|\\bvencam\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "false_positive_note": "A comparação usa fronteira de palavra sobre o texto sem acento. Sem fronteira de palavra, invenção viraria falso positivo de vença.",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-11",
+      "term": "poderá",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\bpodera\\b|\\bpoderao\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "rationale": "A issue proíbe excesso de poderá. O scanner conta ocorrências; o julgamento de excesso pertence à revisão adversarial, que não rodou.",
+      "finding_kind": "count_only",
+      "count_only_reason": "A issue não proíbe a ocorrência isolada: proíbe excesso de poderá e proíbe que saiba mais seja o único significado do encerramento da oferta. O scanner registra a contagem como observação para a revisão adversarial. Nenhum limiar numérico é inventado, porque a issue não publica nenhum."
+    },
+    {
+      "id": "FL-12",
+      "term": "impossível de melhorar",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\bimpossivel de melhorar\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Acceptance",
+      "rationale": "O site não declara impossível de melhorar; demonstra qualidade por clareza, prova e consistência.",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-13",
+      "term": "confie em nós",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\bconfie em nos\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Critérios quantitativos de qualidade",
+      "rationale": "Zero claim depende de confie em nós.",
+      "finding_kind": "violation"
+    },
+    {
+      "id": "FL-14",
+      "term": "saiba mais",
+      "machine_checkable": true,
+      "checker": "term_scan",
+      "pattern": "\\bsaiba mais\\b",
+      "exemption_ids": [
+        "GX-01",
+        "GX-02",
+        "GX-04"
+      ],
+      "source": "#338 Critérios quantitativos de qualidade",
+      "rationale": "Zero oferta termina em saiba mais como único significado. O scanner sinaliza a ocorrência; a reprovação só se confirma quando saiba mais é o único significado do encerramento da oferta.",
+      "finding_kind": "count_only",
+      "count_only_reason": "A issue não proíbe a ocorrência isolada: proíbe excesso de poderá e proíbe que saiba mais seja o único significado do encerramento da oferta. O scanner registra a contagem como observação para a revisão adversarial. Nenhum limiar numérico é inventado, porque a issue não publica nenhum."
+    },
+    {
+      "id": "FL-15",
+      "claim_pattern": "superlativo não demonstrado",
+      "machine_checkable": false,
+      "checker": null,
+      "reviewed_by": "revisão adversarial em oito lentes",
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "rationale": "A issue proíbe superlativo não demonstrado sem publicar lista lexical. Derivar termos aqui seria invenção."
+    },
+    {
+      "id": "FL-16",
+      "claim_pattern": "número financeiro inventado",
+      "machine_checkable": false,
+      "checker": null,
+      "reviewed_by": "revisão adversarial em oito lentes",
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "rationale": "Depende de conferir fonte, data e cobertura de cada número publicado, não de casar termo."
+    },
+    {
+      "id": "FL-17",
+      "claim_pattern": "urgência falsa, escassez falsa ou desconto teatral",
+      "machine_checkable": false,
+      "checker": null,
+      "reviewed_by": "revisão adversarial em oito lentes",
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "rationale": "A falsidade da urgência depende do fato por trás dela, não do termo."
+    },
+    {
+      "id": "FL-18",
+      "claim_pattern": "depoimento, logo ou caso sem consentimento ou proveniência",
+      "machine_checkable": false,
+      "checker": null,
+      "reviewed_by": "revisão adversarial em oito lentes",
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "rationale": "O consentimento é documento externo. A parte verificável por máquina é a proibição de prova social estruturada, registrada em structured_data_ban.",
+      "partial_machine_check": "structured_data_ban"
+    },
+    {
+      "id": "FL-19",
+      "claim_pattern": "parágrafo intercambiável entre duas ofertas",
+      "machine_checkable": true,
+      "checker": "corpus_duplicate_scan",
+      "runnable_in_this_branch": false,
+      "blocked_by": "O registro taxativo e a autoridade nominal existem, mas ainda não existe corpus de parágrafos de copy por oferta para comparar.",
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "rationale": "A checagem é de duplicidade de parágrafo entre ofertas, não de termo isolado."
+    },
+    {
+      "id": "FL-20",
+      "claim_pattern": "AI tells, tradução literal e nominalização burocrática",
+      "machine_checkable": false,
+      "checker": null,
+      "reviewed_by": "revisão adversarial em oito lentes",
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "rationale": "A issue não publica lista lexical para estes padrões."
+    },
+    {
+      "id": "FL-21",
+      "claim_pattern": "promessa jurídica, regulatória, técnica ou financeira fora da competência",
+      "machine_checkable": false,
+      "checker": null,
+      "reviewed_by": "revisão adversarial em oito lentes",
+      "source": "#338 Linguagem proibida sem prova imediata",
+      "rationale": "Exige julgar competência e alcance da promessa, não casar termo."
+    }
+  ],
+  "category_term_rule": "Termos de categoria podem existir no nome registrado, mas a frase seguinte precisa provar concretamente o que significam. A prova concreta é julgada pela revisão adversarial, que não rodou.",
+  "gate_exceptions": [
+    {
+      "id": "GX-01",
+      "scope": "exclusão ou negação explícita",
+      "rule": "Termo dentro de uma lista de exclusões ou dentro de frase que nega explicitamente é fronteira, não claim. Sem esta exceção documentada, um scanner honesto reprovaria fronteiras corretas, como não prometemos vitória.",
+      "implemented_as": "explicit_negation_window",
+      "window_chars": 60,
+      "negation_markers": [
+        "sem",
+        "nao",
+        "nem",
+        "nenhum",
+        "nenhuma",
+        "nenhuns",
+        "nenhumas",
+        "jamais",
+        "exceto",
+        "fora de"
+      ],
+      "source": "#338 Linguagem proibida sem prova imediata"
+    },
+    {
+      "id": "GX-02",
+      "scope": "nome anterior preservado",
+      "rule": "Nome anterior mantido para continuidade de URL, busca, analytics e atendimento é dado histórico, não claim novo.",
+      "implemented_as": "offer_naming_alias_join",
+      "state": "IMPLEMENTED_NOT_EXERCISED",
+      "implementation_note": "Aliases e nomes canônicos resolvem por deliverable_id em data/commercial/offer-naming.v1.json; nenhuma ocorrência viva nas páginas varridas depende desta exceção.",
+      "source": "#343 é a fonte canônica de public_name_pt_br, aliases e semântica"
+    },
+    {
+      "id": "GX-03",
+      "scope": "garantia como instituto",
+      "rule": "Garantia contratual, seguro-garantia, garantia financeira e garantia como insumo de caixa são institutos do mercado público e permanecem descritíveis. FL-08 só reprova na forma de promessa: garantia de, garantimos, garantido.",
+      "implemented_as": "guarantee_promise_forms",
+      "promise_forms": [
+        "garantia de",
+        "garantias de",
+        "garantimos",
+        "garantido",
+        "garantida",
+        "garantidos",
+        "garantidas"
+      ],
+      "source": "#338 promessa jurídica, regulatória, técnica ou financeira fora da competência"
+    },
+    {
+      "id": "GX-04",
+      "scope": "nome registrado de oferta",
+      "rule": "Termo de categoria dentro do nome registrado de uma oferta é rótulo publicado, não claim isolado. A frase seguinte continua obrigada a provar concretamente o que o termo significa, e essa prova é julgada pela revisão adversarial.",
+      "implemented_as": "registered_public_name_prefix",
+      "registered_public_names": [
+        "Diagnóstico B2G 360°"
+      ],
+      "source": "#338 Termos de categoria podem existir no nome registrado"
+    }
+  ],
+  "structured_data_ban": {
+    "rule": "Nenhuma página de dinheiro publica prova social estruturada sem consentimento e proveniência.",
+    "forbidden_types": [
+      "Review",
+      "AggregateRating"
+    ],
+    "source": "#338 depoimento, logo ou caso sem consentimento e proveniência"
+  },
+  "differentiation_test": {
+    "name": "Teste de diferenciação",
+    "method": "Remover o título e o preço de cada card.",
+    "task": "Um revisor deve identificar a oferta apenas por trigger, decisão e saída.",
+    "identifiable_by": [
+      "trigger",
+      "decisão",
+      "saída"
+    ],
+    "target": "54/54",
+    "target_count": 54,
+    "contract_scope_count_in_issue_prose": 48,
+    "count_discrepancy": {
+      "state": "RESOLVED_BY_CANONICAL_REGISTRY",
+      "note": "A prosa de #338 preserva a referência histórica a 48, mas #329 e #343 fixam o rol canônico em 54 entregáveis; o teste de diferenciação usa 54/54.",
+      "resolved_by": [
+        "#329",
+        "#343"
+      ]
+    },
+    "on_confusion": "Se duas ofertas forem confundidas, reescrever ou explicitar a fronteira.",
+    "forbidden_remedies": [
+      "fundir ofertas",
+      "remover ofertas"
+    ],
+    "state": "NOT_STARTED",
+    "scope_note": "O alvo de 54/54 é conferido contra data/commercial/deliverables-registry.v1.json. A execução humana do teste continua NOT_STARTED e nenhuma oferta é declarada diferenciada por este contrato."
+  },
+  "adversarial_lenses": [
+    {
+      "order": 1,
+      "id": "AL-01",
+      "lens": "fundador cético",
+      "criterion": "por que comprar?",
+      "question": "por que comprar?"
+    },
+    {
+      "order": 2,
+      "id": "AL-02",
+      "lens": "diretor financeiro",
+      "criterion": "qual caixa ou risco muda?",
+      "question": "qual caixa ou risco muda?"
+    },
+    {
+      "order": 3,
+      "id": "AL-03",
+      "lens": "engenheiro",
+      "criterion": "qual método e limite?",
+      "question": "qual método e limite?"
+    },
+    {
+      "order": 4,
+      "id": "AL-04",
+      "lens": "licitações",
+      "criterion": "qual prazo e insumo?",
+      "question": "qual prazo e insumo?"
+    },
+    {
+      "order": 5,
+      "id": "AL-05",
+      "lens": "jurídico",
+      "criterion": "onde termina a assistência técnica?",
+      "question": "onde termina a assistência técnica?"
+    },
+    {
+      "order": 6,
+      "id": "AL-06",
+      "lens": "comprador apressado",
+      "criterion": "qual item é meu?",
+      "question": "qual item é meu?"
+    },
+    {
+      "order": 7,
+      "id": "AL-07",
+      "lens": "acessibilidade e linguagem simples",
+      "criterion": "acessibilidade e linguagem simples",
+      "question": null
+    },
+    {
+      "order": 8,
+      "id": "AL-08",
+      "lens": "compliance",
+      "criterion": "prova, consentimento, fonte e ausência de promessa",
+      "question": "prova, consentimento, fonte e ausência de promessa"
+    }
+  ],
+  "adversarial_review_rule": {
+    "defect_severities": [
+      "bloqueante",
+      "material",
+      "cosmético"
+    ],
+    "per_lens_record": [
+      "defeito",
+      "correção",
+      "rechecagem"
+    ],
+    "publish_gate": "Publicar com zero bloqueante e zero material.",
+    "publish_gate_thresholds": {
+      "max_blocking_defects": 0,
+      "max_material_defects": 0
+    },
+    "state": "NOT_STARTED"
+  },
+  "reviews": [],
+  "quantitative_quality_criteria": [
+    {
+      "id": "QC-01",
+      "criterion": "título com no máximo 8 palavras sempre que não sacrificar precisão",
+      "metric": "title_word_count",
+      "operator": "<=",
+      "threshold": 8,
+      "unit": "palavras",
+      "enforcement": "heurística editorial"
+    },
+    {
+      "id": "QC-02",
+      "criterion": "frase inicial com no máximo 24 palavras",
+      "metric": "first_sentence_word_count",
+      "operator": "<=",
+      "threshold": 24,
+      "unit": "palavras",
+      "enforcement": "heurística editorial"
+    },
+    {
+      "id": "QC-03",
+      "criterion": "preço e SLA visíveis sem accordion",
+      "metric": "price_and_sla_visible_without_accordion",
+      "operator": "==",
+      "threshold": true,
+      "unit": "booleano",
+      "enforcement": "bloqueante"
+    },
+    {
+      "id": "QC-04",
+      "criterion": "no máximo um conceito novo por frase",
+      "metric": "new_concepts_per_sentence",
+      "operator": "<=",
+      "threshold": 1,
+      "unit": "conceitos",
+      "enforcement": "heurística editorial"
+    },
+    {
+      "id": "QC-05",
+      "criterion": "leitura em telas de 320 px sem truncar nome nem preço",
+      "metric": "min_viewport_width_no_truncation",
+      "operator": "==",
+      "threshold": 320,
+      "unit": "px",
+      "enforcement": "bloqueante"
+    },
+    {
+      "id": "QC-06",
+      "criterion": "CTA descreve ação e resposta esperada",
+      "metric": "cta_describes_action_and_expected_response",
+      "operator": "==",
+      "threshold": true,
+      "unit": "booleano",
+      "enforcement": "bloqueante"
+    },
+    {
+      "id": "QC-07",
+      "criterion": "100% dos números públicos têm fonte, data e cobertura",
+      "metric": "public_numbers_with_source_date_coverage",
+      "operator": "==",
+      "threshold": 100,
+      "unit": "porcento",
+      "enforcement": "bloqueante"
+    },
+    {
+      "id": "QC-08",
+      "criterion": "zero oferta termina em saiba mais como único significado",
+      "metric": "offers_ending_in_saiba_mais_only",
+      "operator": "==",
+      "threshold": 0,
+      "unit": "ofertas",
+      "enforcement": "bloqueante"
+    },
+    {
+      "id": "QC-09",
+      "criterion": "zero claim depende de confie em nós",
+      "metric": "claims_depending_on_trust_us",
+      "operator": "==",
+      "threshold": 0,
+      "unit": "claims",
+      "enforcement": "bloqueante"
+    }
+  ],
+  "quantitative_criteria_note": "Limites de palavras são heurísticas editoriais; precisão prevalece e exceção exige revisão humana.",
+  "human_protocol": {
+    "state": "NOT_STARTED",
+    "executes_protocols_from": [
+      "#188",
+      "#327"
+    ],
+    "roles_defined_in": "#336",
+    "icp_participants": 20,
+    "time_to_evidence": "14 dias para implementação; 30 dias para teste humano",
+    "activities": [
+      "teste não moderado de 3 segundos",
+      "tarefa de escolha entre três ofertas vizinhas",
+      "think-aloud de 3 minutos",
+      "pergunta: o que você acha que recebe, em quanto tempo e por quanto?",
+      "objeção e confiança em escala mais justificativa literal",
+      "decisão simulada com dinheiro ou orçamento realista"
+    ],
+    "targets": [
+      {
+        "id": "HP-01",
+        "target": "16/20 identificam a trilha correta",
+        "numerator": 16,
+        "denominator": 20
+      },
+      {
+        "id": "HP-02",
+        "target": "16/20 escolhem a oferta correta",
+        "numerator": 16,
+        "denominator": 20
+      },
+      {
+        "id": "HP-03",
+        "target": "16/20 reproduzem preço, prazo e saída sem ajuda",
+        "numerator": 16,
+        "denominator": 20
+      },
+      {
+        "id": "HP-04",
+        "target": "nenhuma interpretação de promessa de vitória ou êxito",
+        "numerator": 0,
+        "denominator": 20
+      }
+    ],
+    "evidence_requirement": "Testes humanos de #188, #327 e #336 executados com falas literais registradas.",
+    "results": []
+  },
+  "acceptance": [
+    {
+      "id": "AC-01",
+      "criterion": "contrato editorial aplicado a 54/54",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-02",
+      "criterion": "54/54 passam no teste sem título",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-03",
+      "criterion": "zero bloqueante e zero material nas oito lentes",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-04",
+      "criterion": "páginas mostram artefato e prova antes de adjetivo",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-05",
+      "criterion": "nenhum card ou página usa copy intercambiável",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-06",
+      "criterion": "testes humanos de #188, #327 e #336 executados com falas literais",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-07",
+      "criterion": "falhas geram ajuste de copy ou hierarquia, não remoção de oferta",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-08",
+      "criterion": "tests de copy e design ganham guards derivados do registry, sem allowlist manual",
+      "state": "NOT_STARTED"
+    },
+    {
+      "id": "AC-09",
+      "criterion": "o site não declara impossível de melhorar; demonstra qualidade por clareza, prova e consistência",
+      "state": "NOT_STARTED"
+    }
+  ],
+  "naming_authority": "#343 é a fonte canônica de public_name_pt_br, linha de valor, aliases e semântica entre 54 entregáveis, 2 contêineres e planos. Em divergência nominal prevalece #343; escopo e preço de #338 permanecem válidos.",
+  "money_page_scan": {
+    "state": "MEASURED_PASS",
+    "measured_at": "2026-08-24",
+    "measured_against": "origin/main em 12f05ad3",
+    "method": "Cada página é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Cada ocorrência é classificada como isenta por exceção documentada ou como violação.",
+    "gate_rule": "Toda ocorrência viva precisa estar registrada: as isentas em boundaries com contagem exata, as demais em violations. Ocorrência não registrada reprova o portão.",
+    "pages": [
+      "entregas/index.html",
+      "servicos-obras-publicas/index.html",
+      "problemas-que-resolvemos/index.html",
+      "diagnostico-b2g-expansao/index.html",
+      "casos/modelo-apresentacao-executiva-resultados/index.html",
+      "casos/modelo-base-quantitativa-canonica/index.html",
+      "casos/modelo-contratos-vincendos-relicitacao/index.html",
+      "casos/modelo-mapa-compradores-publicos/index.html",
+      "casos/modelo-mapeamento-concorrentes-publicos/index.html",
+      "casos/modelo-painel-precos-obras-publicas/index.html",
+      "casos/modelo-relatorio-executivo-consolidado/index.html",
+      "casos/modelo-relatorio-inteligencia-licitacoes/index.html"
+    ],
+    "violations": [],
+    "violations_note": "Nenhuma violação real encontrada em 2026-08-24. Toda ocorrência viva dos termos verificáveis por máquina cai em exceção documentada, registrada em boundaries.",
+    "boundaries": [
+      {
+        "id": "B-01",
+        "page": "entregas/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-04": 1
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
+      },
+      {
+        "id": "B-02",
+        "page": "servicos-obras-publicas/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 4,
+        "by_exemption": {
+          "GX-04": 4
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, na trilha de escolha e na navegação."
+      },
+      {
+        "id": "B-03",
+        "page": "problemas-que-resolvemos/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-04": 1
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
+      },
+      {
+        "id": "B-04",
+        "page": "diagnostico-b2g-expansao/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 6,
+        "by_exemption": {
+          "GX-04": 6
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado, usado sobretudo para negar identidade: não é o Diagnóstico B2G 360°."
+      },
+      {
+        "id": "B-05",
+        "page": "diagnostico-b2g-expansao/index.html",
+        "forbidden_id": "FL-08",
+        "occurrences": 3,
+        "by_exemption": {
+          "GX-01": 2,
+          "GX-03": 1
+        },
+        "evidence": "Duas promessas negadas (sem garantia de vitória, adjudicação, economia ou receita; não há garantia de resultado) e uma citação do instituto (garantia financeira, na lista do que não entra)."
+      },
+      {
+        "id": "B-06",
+        "page": "casos/modelo-apresentacao-executiva-resultados/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-04": 1
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
+      },
+      {
+        "id": "B-07",
+        "page": "casos/modelo-base-quantitativa-canonica/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-04": 1
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
+      },
+      {
+        "id": "B-08",
+        "page": "casos/modelo-contratos-vincendos-relicitacao/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-04": 1
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
+      },
+      {
+        "id": "B-09",
+        "page": "casos/modelo-contratos-vincendos-relicitacao/index.html",
+        "forbidden_id": "FL-08",
+        "occurrences": 7,
+        "by_exemption": {
+          "GX-01": 1,
+          "GX-03": 6
+        },
+        "evidence": "Seis citações do instituto como insumo de caixa e de preparação (garantia negociada, garantia cotada, levantar acervo, equipe, garantia e caixa) e uma forma de promessa negada (sem quantitativo mínimo garantido)."
+      },
+      {
+        "id": "B-10",
+        "page": "casos/modelo-mapa-compradores-publicos/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-04": 1
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
+      },
+      {
+        "id": "B-11",
+        "page": "casos/modelo-mapa-compradores-publicos/index.html",
+        "forbidden_id": "FL-08",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-01": 1
+        },
+        "evidence": "Promessa negada: não é rota garantida nem estimativa de custo de mobilização."
+      },
+      {
+        "id": "B-12",
+        "page": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-04": 1
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
+      },
+      {
+        "id": "B-13",
+        "page": "casos/modelo-painel-precos-obras-publicas/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-04": 1
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
+      },
+      {
+        "id": "B-14",
+        "page": "casos/modelo-relatorio-executivo-consolidado/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-04": 1
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
+      },
+      {
+        "id": "B-15",
+        "page": "casos/modelo-relatorio-executivo-consolidado/index.html",
+        "forbidden_id": "FL-08",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-01": 1
+        },
+        "evidence": "Promessa negada: nenhuma vitória é garantida, nenhum acesso privilegiado é oferecido e nenhum resultado é prometido."
+      },
+      {
+        "id": "B-16",
+        "page": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+        "forbidden_id": "FL-06",
+        "occurrences": 1,
+        "by_exemption": {
+          "GX-04": 1
+        },
+        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
+      },
+      {
+        "id": "B-17",
+        "page": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+        "forbidden_id": "FL-08",
+        "occurrences": 6,
+        "by_exemption": {
+          "GX-01": 1,
+          "GX-03": 5
+        },
+        "evidence": "Cinco citações do instituto como exposição financeira e insumo de caixa (garantia estimada, capacidade financeira, gate econômico) e uma forma de promessa negada (o valor total não equivale a receita garantida)."
+      }
+    ],
+    "structured_data_check": {
+      "state": "MEASURED_PASS",
+      "forbidden_types": [
+        "Review",
+        "AggregateRating"
+      ],
+      "occurrences": 0,
+      "note": "Nenhuma das doze páginas de dinheiro publica Review nem AggregateRating em application/ld+json."
+    },
+    "exemption_precedence": [
+      "GX-04",
+      "GX-03",
+      "GX-01"
+    ],
+    "finding_kinds": {
+      "violation": "Ocorrência sem exceção documentada. Reprova o portão enquanto não estiver registrada em violations com state MEASURED_FAIL.",
+      "count_only": "Ocorrência sem exceção documentada de um termo que a issue só proíbe em excesso ou como único significado. Vira observação registrada em observations, não violação."
+    },
+    "observations": [],
+    "observations_note": "Nenhuma ocorrência de poderá nem de saiba mais nas doze páginas de dinheiro em 2026-08-24."
+  },
+  "not_delivered_by_this_pr": [
+    "Nenhuma copy de página é reescrita. Esta PR grava o contrato e o portão.",
+    "A revisão adversarial em oito lentes não foi executada: reviews está vazio e state é NOT_STARTED.",
+    "O protocolo humano de 20 participantes não rodou: human_protocol.results está vazio.",
+    "O teste humano de diferenciação não rodou: o rol taxativo existe e fixa o alvo em 54/54, mas ainda não há resultados humanos.",
+    "FL-19, duplicidade de parágrafo entre ofertas, não é executável nesta branch por falta do corpus de copy por oferta.",
+    "Os critérios QC-01 a QC-09 não são medidos aqui: eles ainda precisam do corpus de copy por oferta."
+  ]
+}
