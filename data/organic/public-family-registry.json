@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-08-24",
+  "as_of": "2026-08-25",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -93,6 +93,18 @@
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
       "owner_issue": 300,
+      "debt": []
+    },
+    {
+      "id": "measurement-delay-canary",
+      "visitor_job": "Entender por que o processamento da medição parou e avançar para uma segunda leitura técnica quando houver documentos suficientes.",
+      "profile": "commercial_content",
+      "terminal_action": "service_transition",
+      "match": {"routes": ["/conteudos/atraso-na-medicao-obra-publica/"]},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-08-25",
+      "owner_issue": 389,
+      "note": "Exceção route-exact: exige uma única ponte plenamente atribuída para /medicoes-glosas-obras-publicas/. Não altera a ação terminal da família /conteudos/.",
       "debt": []
     },
     {

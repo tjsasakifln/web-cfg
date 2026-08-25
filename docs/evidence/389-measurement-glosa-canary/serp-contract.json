@@ -1,0 +1,39 @@
+{
+  "schema": "confenge-serp-contract-before-after/1.0",
+  "issue": 389,
+  "url": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+  "intent": "atraso_processamento_medicao",
+  "before": {
+    "title": "Atraso na medição: como proteger o caixa | CONFENGE",
+    "meta_description": "Atraso na medição de obra pública: como protocolar, tratar glosa e proteger o fluxo de caixa do serviço já executado.",
+    "h1": "Atraso na medição: como proteger o caixa",
+    "first_answer": "Atraso na medição trava caixa mesmo com serviço executado.",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "canonical": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+    "screenshot": "screenshots/before-desktop.png"
+  },
+  "after": {
+    "title": "Atraso na medição de obra pública: o que fazer | CONFENGE",
+    "meta_description": "A medição da obra pública atrasou? Veja como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir medição com pagamento.",
+    "h1": "Atraso na medição de obra pública: onde o processo travou?",
+    "first_answer": "Se o boletim foi protocolado e a fiscalização não concluiu a medição no prazo do contrato, registre a demora por escrito, peça a indicação objetiva das pendências e separe os itens aceitos dos controvertidos.",
+    "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "canonical": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+    "screenshot": "screenshots/after-desktop.png"
+  },
+  "changed_variables": [
+    "title",
+    "meta_description",
+    "h1",
+    "direct_answer",
+    "technical_utility",
+    "contextual_route"
+  ],
+  "invariants": [
+    "url",
+    "robots",
+    "canonical",
+    "author_identity",
+    "commercial_destination"
+  ]
+}

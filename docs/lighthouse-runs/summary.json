@@ -1,10 +1,10 @@
 {
   "base": "http://127.0.0.1:8766",
-  "generated_at": "2026-08-24T14:09:08.773Z",
+  "generated_at": "2026-08-25T13:58:20.115Z",
   "coverage": {
     "policy_path": "data/quality/interface-coverage-policy.json",
     "public_route_count": 261,
-    "family_count": 26,
+    "family_count": 27,
     "families": [
       {
         "id": "home",
@@ -62,10 +62,21 @@
         "seo_exempt_reason": null
       },
       {
+        "id": "measurement-delay-canary",
+        "label": "Entender por que o processamento da medição parou e avançar para uma segunda leitura técnica quando houver documentos suficientes.",
+        "kind": "canonical",
+        "route_count": 1,
+        "lighthouse_representative": "/conteudos/atraso-na-medicao-obra-publica/",
+        "representative_reason": "single-route indexable canary owned by #389; exercises the article, epistemic labels and service-transition contract",
+        "image_gate": false,
+        "seo_exempt": false,
+        "seo_exempt_reason": null
+      },
+      {
         "id": "editorial-library",
         "label": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
         "kind": "canonical",
-        "route_count": 121,
+        "route_count": 120,
         "lighthouse_representative": "/conteudos/",
         "representative_reason": "index of the canonical editorial library",
         "image_gate": false,
@@ -299,6 +310,7 @@
       "/termos-de-uso/",
       "/comercial/privacidade-leads/",
       "/politica-editorial/",
+      "/conteudos/atraso-na-medicao-obra-publica/",
       "/conteudos/",
       "/guias-contratos-obras/",
       "/lei-14133-obras/",
@@ -355,7 +367,7 @@
       "/piloto/ofertas/",
       "/conteudos/documentos-reequilibrio-obra-publica/"
     ],
-    "not_sampled_count": 232,
+    "not_sampled_count": 231,
     "not_sampled": [
       {
         "route": "/404.html",
@@ -509,11 +521,6 @@
       },
       {
         "route": "/conteudos/ata-reuniao-ordem-servico-obra-publica/",
-        "family": "editorial-library",
-        "reason": "template semantics represented by /conteudos/ for family editorial-library"
-      },
-      {
-        "route": "/conteudos/atraso-na-medicao-obra-publica/",
         "family": "editorial-library",
         "reason": "template semantics represented by /conteudos/ for family editorial-library"
       },
@@ -1641,6 +1648,23 @@
       "longest_own_task_ms": 0,
       "fcp_ms": 1501.8431999999998,
       "si_ms": 1501.8431999999998,
+      "image_aspect_ratio": 1,
+      "image_size_responsive": 1,
+      "seo_exempt": false
+    },
+    {
+      "path": "/conteudos/atraso-na-medicao-obra-publica/",
+      "run": 1,
+      "performance": 99,
+      "accessibility": 100,
+      "best_practices": 100,
+      "seo": 100,
+      "lcp_ms": 1525.8491999999997,
+      "cls": 0,
+      "tbt_ms": 97.99999999999977,
+      "longest_own_task_ms": 498.9999999999999,
+      "fcp_ms": 1123.6164,
+      "si_ms": 1123.6164,
       "image_aspect_ratio": 1,
       "image_size_responsive": 1,
       "seo_exempt": false

@@ -1,0 +1,185 @@
+{
+  "schema": "confenge-on-page-canary/1.0",
+  "issue": 389,
+  "decision_state": "VALIDATE",
+  "executive_front": "INBOUND_CORE",
+  "leverage": [
+    "customer",
+    "trust",
+    "revenue"
+  ],
+  "time_to_evidence": {
+    "pr_quality_review": "on_pull_request",
+    "search_observation": "28_complete_days_after_deploy"
+  },
+  "public_url_mutations": [
+    "/conteudos/atraso-na-medicao-obra-publica/"
+  ],
+  "canary": {
+    "path": "/conteudos/atraso-na-medicao-obra-publica/",
+    "source": "conteudos/atraso-na-medicao-obra-publica/index.html",
+    "intent_id": "atraso_processamento_medicao",
+    "representative_query": "atraso na medição obra pública",
+    "role": "INDEXABLE_INFORMATIONAL_OWNER",
+    "commercial_destination": "/medicoes-glosas-obras-publicas/",
+    "offer": "Dossiê de Medição, Glosa e Pagamento",
+    "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
+    "after_sha256": "c6dc13c40dd6c5cba955994628b578629b4615c9881ffd8a77eb573b76ae5e94"
+  },
+  "selection_evidence": {
+    "source": "seo/gsc-2026-08-09/Paginas.csv",
+    "source_kind": "goal-baseline-snapshot",
+    "window_days": 7,
+    "as_of": "2026-08-09",
+    "candidate_page_row": {
+      "clicks": 0,
+      "impressions": 10,
+      "ctr": 0.0,
+      "position": 8.1
+    },
+    "why_selected": "É a maior exposição observada do cluster sem clique e possui uma intenção estreita própria. As URLs de glosa de medição e medição rejeitada já tinham clique e devem preservar seus respectivos owners.",
+    "country": {
+      "value": "UNKNOWN",
+      "reason": "O snapshot histórico não contém dimensão país por página; idioma ou consulta não substituem país observado."
+    },
+    "query_page_join": {
+      "value": "UNKNOWN",
+      "reason": "As tabelas dimensionais do GSC não podem ser somadas ou unidas como se fossem uma linha query-page."
+    },
+    "device_for_candidate": {
+      "value": "UNKNOWN",
+      "reason": "A URL não aparece na matriz limitada Paginas-por-dispositivo.csv. Ausência não é zero."
+    },
+    "latest_live_export": {
+      "source": "seo/gsc-2026-08-24/search-analytics-redacted.json",
+      "window": "2026-07-24/2026-08-20",
+      "candidate_rows_returned": 0,
+      "interpretation": "UNKNOWN_NOT_ZERO",
+      "query_text": "REDACTED"
+    }
+  },
+  "indexability": {
+    "before": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "after": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
+    "canonical_before": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+    "canonical_after": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
+    "robots_flip": false,
+    "issue_127_gate": "NOT_APPLICABLE_NO_INDEXABILITY_CHANGE",
+    "issue_128_pillar_mutated": false
+  },
+  "sitemap": {
+    "membership_before": true,
+    "membership_after": true,
+    "membership_changed": false,
+    "new_sitemap_created": false,
+    "lastmod_before": "2026-07-30",
+    "lastmod_after": "2026-08-25",
+    "recapture_registry": "data/bofu-dominance/frozen-specs/hashes.json",
+    "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente; os seis pilares protegidos e a composição dos sitemaps permanecem inalterados."
+  },
+  "content_contract": {
+    "title": "Atraso na medição de obra pública: o que fazer | CONFENGE",
+    "h1": "Atraso na medição de obra pública: onde o processo travou?",
+    "direct_answer_fragment": "Não chame automaticamente isso de atraso de pagamento",
+    "required_epistemic_labels": [
+      "FACT",
+      "CALCULATION",
+      "INFERENCE",
+      "UNKNOWN"
+    ],
+    "demonstrative_example_label": "Exemplo hipotético, não é caso de cliente nem resultado da CONFENGE.",
+    "contextual_commercial_links_in_article": 1,
+    "prohibited_target_intents_in_title_h1": [
+      "glosa de medição obra pública",
+      "medição rejeitada obra pública"
+    ],
+    "no_recovery_promise": true
+  },
+  "plain_language_contract": {
+    "registry": "data/site/copy-exceptions.json",
+    "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+    "scope": "ROUTE_EXACT",
+    "required_editorial_tokens": [
+      "\\bfact\\b",
+      "\\bcalculation\\b",
+      "\\binference\\b",
+      "\\bunknown\\b"
+    ],
+    "other_english_internal_labels_allowed": false
+  },
+  "interface_quality_coverage": {
+    "policy": "data/quality/interface-coverage-policy.json",
+    "lighthouse_family": "measurement-delay-canary",
+    "lighthouse_representative": "/conteudos/atraso-na-medicao-obra-publica/",
+    "seo_exemption": false,
+    "axe_risk": "DERIVED_FROM_VISIBLE_BRL",
+    "axe_exemption": false
+  },
+  "frozen_siblings": [
+    {
+      "path": "conteudos/glosa-de-medicao-obra-publica/index.html",
+      "sha256": "08f3523ab92210a2c2d4d44e882eb8f06b86fba9940702d809d14728411391cd"
+    },
+    {
+      "path": "conteudos/medicao-de-obra-publica-rejeitada/index.html",
+      "sha256": "5a8edc62c0d4591a2d560513dc5564619bcf67daef2362d9ff40e9307ea13aad"
+    },
+    {
+      "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+      "sha256": "90706bee78a9416ea2cb952ca86821fbce64d49403f94e41ea22121b68e0158b"
+    },
+    {
+      "path": "medicoes-glosas-obras-publicas/index.html",
+      "sha256": "a137bd04b117a0f8b4983611e1ecb18a3fa9065b68949f522e13d503003d2442"
+    }
+  ],
+  "second_wave": {
+    "status": "BLOCKED",
+    "earliest_decision": "DEPLOY_DATE_PLUS_28_COMPLETE_DAYS",
+    "requires": [
+      "human factual and editorial decision",
+      "BR query-page-device observation when returned by GSC",
+      "owner position and CTR review",
+      "explicit keep, adjust or kill decision"
+    ]
+  },
+  "analytics": {
+    "cta_position": "inline",
+    "cta_id": "canary-medicao-dossie",
+    "asset_id": "atraso-na-medicao-obra-publica",
+    "journey": "contrato",
+    "destination": "/medicoes-glosas-obras-publicas/",
+    "source": "CONFENGE_WEB",
+    "pii_in_analytics": false,
+    "causal_attribution": "FORBIDDEN_WITHOUT_OBSERVED_EVIDENCE"
+  },
+  "terminal_action_contract": {
+    "registry": "data/organic/public-family-registry.json",
+    "family": "measurement-delay-canary",
+    "match": [
+      "/conteudos/atraso-na-medicao-obra-publica/"
+    ],
+    "action": "service_transition",
+    "destination": "/medicoes-glosas-obras-publicas/",
+    "owner_issue": 389,
+    "html_element": "aside",
+    "bridge_attributes": {
+      "class_token": "commercial-bridge",
+      "data-commercial-bridge": "1",
+      "data-cluster": "medicoes-pagamentos",
+      "data-bridge-mode": "soft"
+    },
+    "no_prefix_fallback": true,
+    "rollback": "Remove only the measurement-delay-canary route-exact declaration together with the canary HTML rollback."
+  },
+  "rollback": {
+    "scope": "URL_EXACT",
+    "action": "Restore only the canary HTML from before_sha256; do not alter siblings, pillar, canonical or redirects.",
+    "triggers": [
+      "owned query loses stable ranking to a worse URL",
+      "CTR does not improve with position stable and a minimally observable sample",
+      "sibling begins cannibalizing atraso_processamento_medicao"
+    ]
+  },
+  "adr": "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md"
+}

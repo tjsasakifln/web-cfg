@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -38,6 +39,229 @@ from scripts.site.test_organic_striking_distance_cro_01 import (  # noqa: E402,F
     test_no_redirect_of_promoted_article,
     test_one_self_canonical_and_expected_robots,
 )
+
+
+def _sha256(path: Path) -> str:
+    # Keep the evidence stable across Windows and Linux checkouts.
+    normalized = path.read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(normalized).hexdigest()
+
+
+def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
+    evidence = ROOT / "docs" / "evidence" / "389-measurement-glosa-canary"
+    contract = json.loads((evidence / "canary-contract.json").read_text(encoding="utf-8"))
+    review = json.loads((evidence / "review.json").read_text(encoding="utf-8"))
+    serp = json.loads((evidence / "serp-contract.json").read_text(encoding="utf-8"))
+    registry = json.loads(
+        (ROOT / "data" / "organic" / "public-family-registry.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    copy_exceptions = json.loads(
+        (ROOT / "data" / "site" / "copy-exceptions.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    interface_policy = json.loads(
+        (ROOT / "data" / "quality" / "interface-coverage-policy.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    assert contract["issue"] == 389
+    assert contract["public_url_mutations"] == [
+        "/conteudos/atraso-na-medicao-obra-publica/"
+    ]
+    canary = contract["canary"]
+    assert canary["path"] == "/conteudos/atraso-na-medicao-obra-publica/"
+    assert canary["commercial_destination"] == "/medicoes-glosas-obras-publicas/"
+    page = ROOT / canary["source"]
+    html = page.read_text(encoding="utf-8")
+    visible_html = re.sub(r"<script[\s\S]*?</script>", "", html, flags=re.I)
+    assert _sha256(page) == canary["after_sha256"]
+    assert not re.search(r"\bowner\b", visible_html, re.I)
+    assert len(re.findall(r"\bUNKNOWN\b", visible_html)) == 1
+
+    assert (
+        '<meta content="index,follow,max-image-preview:large,max-snippet:-1,'
+        'max-video-preview:-1" name="robots"/>'
+    ) in html
+    assert (
+        '<link href="https://confenge.com.br/conteudos/'
+        'atraso-na-medicao-obra-publica/" rel="canonical"/>'
+    ) in html
+    assert f"<title>{contract['content_contract']['title']}</title>" in html
+    assert f"<h1>{contract['content_contract']['h1']}</h1>" in html
+    assert contract["content_contract"]["direct_answer_fragment"] in html
+    assert contract["content_contract"]["demonstrative_example_label"] in html
+    for label in contract["content_contract"]["required_epistemic_labels"]:
+        assert label in html
+
+    title_h1 = " ".join(re.findall(r"<(?:title|h1)>(.*?)</(?:title|h1)>", html, re.S)).lower()
+    for prohibited in contract["content_contract"]["prohibited_target_intents_in_title_h1"]:
+        assert prohibited.lower() not in title_h1
+
+    article = re.search(r'<article class="article-main".*?</article>', html, re.S)
+    assert article
+    article_html = article.group(0)
+    assert not re.search(r"\bowner\b", article_html, re.I)
+    route = re.escape("/medicoes-glosas-obras-publicas/")
+    assert len(re.findall(rf'href="{route}[^\"]*"', article_html)) == 1
+    assert "wa.me" not in article_html
+    assert "#formulario-contato" not in article_html
+
+    terminal = contract["terminal_action_contract"]
+    bridge = re.search(
+        r'<aside\b(?=[^>]*class="[^"]*\bcommercial-bridge\b[^"]*")'
+        r'(?P<attrs>[^>]*)>.*?</aside>',
+        article_html,
+        re.I | re.S,
+    )
+    assert bridge
+    assert len(re.findall(r'<aside\b[^>]*\bcommercial-bridge\b', article_html, re.I)) == 1
+    bridge_attrs = dict(
+        re.findall(
+            r'([\w-]+)="([^\"]*)"',
+            bridge.group("attrs"),
+        )
+    )
+    expected_bridge = terminal["bridge_attributes"]
+    assert terminal["html_element"] == "aside"
+    assert expected_bridge == {
+        "class_token": "commercial-bridge",
+        "data-commercial-bridge": "1",
+        "data-cluster": "medicoes-pagamentos",
+        "data-bridge-mode": "soft",
+    }
+    assert expected_bridge["class_token"] in bridge_attrs["class"].split()
+    for attr in ("data-commercial-bridge", "data-cluster", "data-bridge-mode"):
+        assert bridge_attrs.get(attr) == expected_bridge[attr]
+
+    cta = re.search(
+        r'<a\b(?P<before>[^>]*)href="/medicoes-glosas-obras-publicas/"(?P<after>[^>]*)>',
+        bridge.group(0),
+    )
+    assert cta
+    cta_attrs = dict(
+        re.findall(r'([\w-]+)="([^\"]*)"', f'{cta.group("before")} {cta.group("after")}')
+    )
+    assert {
+        key: cta_attrs.get(key)
+        for key in (
+            "data-cta-id",
+            "data-cta-position",
+            "data-asset-id",
+            "data-asset-family",
+            "data-route-family",
+            "data-journey",
+        )
+    } == {
+        "data-cta-id": "canary-medicao-dossie",
+        "data-cta-position": "inline",
+        "data-asset-id": "atraso-na-medicao-obra-publica",
+        "data-asset-family": "editorial",
+        "data-route-family": "medicoes-glosas",
+        "data-journey": "contrato",
+    }
+
+    assert terminal["match"] == [canary["path"]]
+    assert terminal["destination"] == "/medicoes-glosas-obras-publicas/"
+    family = next(f for f in registry["families"] if f["id"] == terminal["family"])
+    assert family["match"] == {"routes": terminal["match"]}
+    assert family["terminal_action"] == "service_transition"
+    assert family["owner_issue"] == 389
+    assert family["debt"] == []
+    assert terminal["no_prefix_fallback"] is True
+    assert terminal["destination"] == canary["commercial_destination"]
+
+    plain = contract["plain_language_contract"]
+    scoped = [
+        row
+        for row in copy_exceptions["exceptions"]
+        if row.get("rule") == "plain_language" and row.get("path") == plain["path"]
+    ]
+    assert {row["match"] for row in scoped} == set(plain["required_editorial_tokens"])
+    assert len(scoped) == 4
+    assert all("route-exact" in row["reason"] for row in scoped)
+    assert plain["scope"] == "ROUTE_EXACT"
+    assert plain["other_english_internal_labels_allowed"] is False
+    classification_terms = [
+        re.sub(r"<[^>]+>", "", value)
+        for value in re.findall(r"<dt\b[^>]*>(.*?)</dt>", article_html, re.I | re.S)
+    ]
+    for row in scoped:
+        token = re.compile(row["match"], re.I)
+        assert len(token.findall(visible_html)) == 1, row["match"]
+        assert sum(bool(token.search(term)) for term in classification_terms) == 1, row[
+            "match"
+        ]
+
+    interface = contract["interface_quality_coverage"]
+    representative = next(
+        row
+        for row in interface_policy["lighthouse"]["canonical_representatives"]
+        if row["family_id"] == interface["lighthouse_family"]
+    )
+    assert representative["route"] == interface["lighthouse_representative"]
+    assert representative["route"] == canary["path"]
+    assert "seo_exempt_reason" not in representative
+    assert interface["seo_exemption"] is False
+    assert interface["axe_exemption"] is False
+
+    for sibling in contract["frozen_siblings"]:
+        assert _sha256(ROOT / sibling["path"]) == sibling["sha256"], sibling["path"]
+
+    assert contract["indexability"]["robots_flip"] is False
+    assert contract["indexability"]["issue_128_pillar_mutated"] is False
+    sitemap = contract["sitemap"]
+    assert sitemap["membership_before"] is sitemap["membership_after"] is True
+    assert sitemap["membership_changed"] is False
+    assert sitemap["new_sitemap_created"] is False
+    sitemap_xml = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+    sitemap_entry = re.search(
+        rf"<loc>https://confenge.com.br{re.escape(canary['path'])}</loc>\s*"
+        rf"<lastmod>{sitemap['lastmod_after']}</lastmod>",
+        sitemap_xml,
+    )
+    assert sitemap_entry
+    assert sitemap_xml.count(f"https://confenge.com.br{canary['path']}") == 1
+    assert contract["second_wave"]["status"] == "BLOCKED"
+    assert contract["selection_evidence"]["country"]["value"] == "UNKNOWN"
+    assert contract["selection_evidence"]["device_for_candidate"]["value"] == "UNKNOWN"
+    assert (
+        contract["selection_evidence"]["latest_live_export"]["interpretation"]
+        == "UNKNOWN_NOT_ZERO"
+    )
+
+    assert serp["before"]["robots"] == serp["after"]["robots"]
+    assert serp["before"]["canonical"] == serp["after"]["canonical"]
+    assert serp["after"]["title"] == contract["content_contract"]["title"]
+    assert serp["after"]["h1"] == contract["content_contract"]["h1"]
+    for shot in (serp["before"]["screenshot"], serp["after"]["screenshot"]):
+        assert (evidence / shot).stat().st_size > 10_000
+
+    approval = review["candidate_approval"]
+    factual = review["human_factual_review"]
+    editorial = review["human_editorial_review"]
+    assert approval["status"] == "APPROVED"
+    assert approval["approval_scope"] == "FACTUAL_AND_EDITORIAL"
+    assert approval["approval_statement"] == (
+        "Aprovo factual e editorialmente a PR #393 como Tiago Sasaki."
+    )
+    assert approval["approved_content_head"] == (
+        "e43edd6a469dc53d74589c728881f40f42dddef9"
+    )
+    for named_review in (approval, factual, editorial):
+        assert named_review["reviewer_name"] == "Tiago Sasaki"
+        assert named_review["reviewed_at"] == "2026-08-25"
+        assert named_review["prior_status"] == "HUMAN_REQUIRED"
+        assert named_review["evidence_url"] == (
+            "https://github.com/tjsasakifln/web-cfg/pull/393"
+            "#issuecomment-5412232948"
+        )
+    assert factual["status"] == "APPROVED"
+    assert editorial["status"] == "APPROVED"
+    assert review["merge_gate"] == "NAMED_HUMAN_REVIEW_COMPLETE"
 
 
 def test_naturalness_indexable_clean():
