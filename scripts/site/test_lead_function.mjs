@@ -845,8 +845,7 @@ _reset();
     const second = await collector.handler(replayEvent);
     const firstBody = JSON.parse(first.body);
     const secondBody = JSON.parse(second.body);
-    const day = new Date().toISOString().slice(0, 10);
-    const eventDir = path.join(analyticsDir, "analytics", "events", day);
+    const eventDir = path.join(analyticsDir, "analytics", "events", "by-id");
     const files = fs.existsSync(eventDir) ? fs.readdirSync(eventDir) : [];
     if (firstBody.accepted !== 1 || secondBody.accepted !== 0 || secondBody.rejected !== 1) {
       fail("collect_durable_replay_response", { firstBody, secondBody });
@@ -859,6 +858,96 @@ _reset();
     if (previousStore == null) delete process.env.LEAD_STORE;
     else process.env.LEAD_STORE = previousStore;
     fs.rmSync(analyticsDir, { recursive: true, force: true });
+  }
+}
+
+// 14) Blob create-only dedupe survives cold starts; failed writes stay retryable.
+{
+  const previousDir = process.env.LEAD_STORE_DIR;
+  const previousStore = process.env.LEAD_STORE;
+  const previousNodeEnv = process.env.NODE_ENV;
+  delete process.env.LEAD_STORE_DIR;
+  delete process.env.LEAD_STORE;
+  const collectPath = path.join(root, "netlify/functions/collect.cjs");
+  const blobRecords = new Map();
+  let failWrites = false;
+  let createOnlyCalls = 0;
+  const fakeBlobStore = {
+    async set(key, value, options) {
+      if (failWrites) throw new Error("injected_blob_write_failure");
+      if (options?.onlyIfNew !== true) fail("collect_blob_not_create_only", options);
+      createOnlyCalls += 1;
+      if (blobRecords.has(key)) return { modified: false };
+      blobRecords.set(key, value);
+      return { modified: true };
+    },
+    async setJSON(key, value) {
+      blobRecords.set(key, JSON.stringify(value));
+      return { modified: true };
+    },
+  };
+  const blobEvent = (eventId) => ({
+    httpMethod: "POST",
+    headers: { origin: "https://confenge.com.br", "x-forwarded-for": "203.0.113.78" },
+    body: JSON.stringify({
+      event: "cta_click",
+      props: { event_id: eventId, cta_id: "durable-blob" },
+      path: "/",
+    }),
+  });
+  try {
+    delete require.cache[require.resolve(collectPath)];
+    let collector = require(collectPath);
+    collector._setBlobStoreForTests(fakeBlobStore);
+    const first = await collector.handler(blobEvent("durable-blob-replay"));
+    delete require.cache[require.resolve(collectPath)];
+    collector = require(collectPath);
+    collector._setBlobStoreForTests(fakeBlobStore);
+    const second = await collector.handler(blobEvent("durable-blob-replay"));
+    const firstBody = JSON.parse(first.body);
+    const secondBody = JSON.parse(second.body);
+    const keys = [...blobRecords.keys()];
+    if (firstBody.accepted !== 1 || secondBody.accepted !== 0 || secondBody.rejected !== 1) {
+      fail("collect_blob_replay_response", { firstBody, secondBody });
+    }
+    if (keys.length !== 1 || !keys[0].startsWith("events/by-id/id-")) {
+      fail("collect_blob_global_event_key", keys);
+    }
+    if (createOnlyCalls !== 2) fail("collect_blob_create_only_calls", createOnlyCalls);
+
+    failWrites = true;
+    const failed = await collector.handler(blobEvent("durable-blob-retry"));
+    const failedBody = JSON.parse(failed.body);
+    if (
+      failed.statusCode !== 503 ||
+      failedBody.accepted !== 0 ||
+      failedBody.error !== "durable_store_unavailable" ||
+      failedBody.rejected_events?.[0]?.reason !== "durable_store_unavailable"
+    ) {
+      fail("collect_blob_write_fail_closed", failedBody);
+    }
+    failWrites = false;
+    const retried = await collector.handler(blobEvent("durable-blob-retry"));
+    const retriedBody = JSON.parse(retried.body);
+    if (retried.statusCode !== 202 || retriedBody.accepted !== 1) {
+      fail("collect_blob_write_retryable", retriedBody);
+    }
+    collector._setBlobStoreForTests(null);
+    process.env.NODE_ENV = "production";
+    process.env.LEAD_STORE = "memory";
+    const unavailable = await collector.handler(blobEvent("durable-store-unavailable"));
+    const unavailableBody = JSON.parse(unavailable.body);
+    if (unavailable.statusCode !== 503 || unavailableBody.accepted !== 0) {
+      fail("collect_production_store_unavailable_fail_closed", unavailableBody);
+    }
+    pass("collect_blob_durable_replay", { keys: blobRecords.size, createOnlyCalls });
+  } finally {
+    if (previousDir == null) delete process.env.LEAD_STORE_DIR;
+    else process.env.LEAD_STORE_DIR = previousDir;
+    if (previousStore == null) delete process.env.LEAD_STORE;
+    else process.env.LEAD_STORE = previousStore;
+    if (previousNodeEnv == null) delete process.env.NODE_ENV;
+    else process.env.NODE_ENV = previousNodeEnv;
   }
 }
 
