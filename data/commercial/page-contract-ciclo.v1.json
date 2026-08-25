@@ -1,0 +1,1926 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "page-contract-ciclo.v1",
+  "schema": "page-contract-ciclo.v1",
+  "contract_version": 1,
+  "family_pt_br": "Ciclo completo",
+  "purpose_pt_br": "Contrato de página dos itens 26 a 39 da issue 340: o que cada unidade comercial do ciclo completo publica em preço, unidade, prazo, entrada, saída, exclusão, gate de prazo seguro e fronteira jurídica. Esta entrega grava o contrato e seu gate, e não cria texto de página pública.",
+  "source_issue": 340,
+  "parent_issue": 329,
+  "related_issues": [
+    330,
+    333,
+    334
+  ],
+  "naming_authority_issue": 343,
+  "decision_state": "VALIDATE",
+  "priority": "P1",
+  "executive_fronts": [
+    "REVENUE NOW",
+    "MARKET INTELLIGENCE MOAT"
+  ],
+  "leverage": [
+    "revenue",
+    "trust",
+    "data",
+    "customer"
+  ],
+  "time_to_evidence_days": 30,
+  "research_state": "NOT_STARTED",
+  "evidence": [],
+  "human_validation": {
+    "state": "NOT_STARTED",
+    "real_proposals_required_before_promoting_price": 3,
+    "collected": []
+  },
+  "currency": "BRL",
+  "price_unit": "cents",
+  "price_basis": "piloto",
+  "price_state": "VALIDATE",
+  "price_promotion_rule": {
+    "requires_real_offer": true,
+    "requires_accept_or_reject": true,
+    "requires_observed_delivery_cost": true,
+    "promoted": false,
+    "statement_pt_br": "Os preços desta família permanecem VALIDATE até existirem oferta real, aceite ou rejeição registrados e custo de entrega observado."
+  },
+  "pages_created_by_this_contract": [],
+  "checkout_enabled_anywhere": false,
+  "common_rules": {
+    "scope_units_allowed_pt_br": [
+      "decisão",
+      "edital",
+      "lote",
+      "contrato",
+      "evento",
+      "cenário",
+      "critério",
+      "revisão"
+    ],
+    "scope_units_forbidden_pt_br": [
+      "página",
+      "número de páginas"
+    ],
+    "scope_never_measured_by_pages": true,
+    "missing_inputs_response_pt_br": [
+      "não iniciar",
+      "diagnóstico de lacunas"
+    ],
+    "missing_inputs_never_filled_with_inference": true,
+    "price_excludes_pt_br": [
+      "deslocamento",
+      "ART ou RRT",
+      "parecer jurídico",
+      "projeto de engenharia",
+      "emissão de documento por terceiros",
+      "taxa pública"
+    ],
+    "clock_starts_after_scope_acceptance_and_intact_inputs": true,
+    "clock_start_statement_pt_br": "O prazo começa após o aceite de escopo e o recebimento íntegro dos insumos.",
+    "urgency_below_sla_requires_capacity": true,
+    "urgency_surcharge_percent": 50,
+    "urgency_disclosed_before_contracting": true,
+    "truth_plane_owner": "extra-cli",
+    "web_cfg_only_publishes_and_captures": true,
+    "warmbly_records_action_and_outcome": true,
+    "no_parallel_datalake_in_web_cfg": true,
+    "statements_pt_br": [
+      "O escopo é delimitado por decisão, edital ou lote, contrato, evento, cenário, critério e revisão, nunca por número de páginas.",
+      "Se os insumos mínimos não existirem, a proposta diz não iniciar ou converte o trabalho em diagnóstico de lacunas, e nunca preenche o silêncio com inferência.",
+      "Os preços não incluem deslocamento, ART ou RRT, parecer jurídico, projeto de engenharia, emissão de documento por terceiros nem taxa pública.",
+      "O prazo começa após o aceite de escopo e o recebimento íntegro dos insumos.",
+      "Urgência abaixo do SLA só é aceita após confirmação de capacidade, com adicional de 50 por cento informado antes da contratação.",
+      "Dados públicos e modelos residem no plano de verdade do extra-cli; o web-cfg apenas publica e captura, e o Warmbly registra ação e outcome."
+    ]
+  },
+  "global_prohibitions": {
+    "sells_advocacy": false,
+    "assumes_regulated_technical_responsibility": false,
+    "guarantees_result": false,
+    "produces_backdated_document": false
+  },
+  "shared_legal_boundary_pt_br": [
+    "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+    "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+    "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+    "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+    "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+  ],
+  "lifecycle_references": [
+    {
+      "key": "projeto_basico",
+      "label_pt_br": "Projeto básico",
+      "url": "https://licitacoesecontratos.tcu.gov.br/4-4-3-projeto-basico-pb/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "publicação do edital com projeto básico que precisa sustentar preço, prazo e execução",
+      "justifies_items": [
+        26
+      ]
+    },
+    {
+      "key": "matriz_de_riscos",
+      "label_pt_br": "Matriz de riscos",
+      "url": "https://licitacoesecontratos.tcu.gov.br/4-5-5-matriz-de-riscos/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "alocação contratual de riscos entre órgão e contratado",
+      "justifies_items": [
+        26
+      ]
+    },
+    {
+      "key": "impugnacao_esclarecimento",
+      "label_pt_br": "Impugnação e pedidos de esclarecimento",
+      "url": "https://licitacoesecontratos.tcu.gov.br/5-1-1-impugnacao-e-pedidos-de-esclarecimento/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "abertura do prazo de esclarecimento ou impugnação do edital",
+      "justifies_items": [
+        27
+      ]
+    },
+    {
+      "key": "apresentacao_de_propostas",
+      "label_pt_br": "Apresentação de propostas",
+      "url": "https://licitacoesecontratos.tcu.gov.br/5-2-apresentacao-de-propostas/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "apresentação da proposta técnica e comercial no certame",
+      "justifies_items": [
+        29
+      ]
+    },
+    {
+      "key": "envio_de_lances",
+      "label_pt_br": "Envio de lances e prova de exequibilidade",
+      "url": "https://licitacoesecontratos.tcu.gov.br/5-3-envio-de-lances/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "diligência sobre exequibilidade do preço após o envio de lances",
+      "justifies_items": [
+        28
+      ]
+    },
+    {
+      "key": "garantia_de_proposta",
+      "label_pt_br": "Garantia de proposta",
+      "url": "https://licitacoesecontratos.tcu.gov.br/5-2-1-garantia-de-proposta/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "exigência de garantia de proposta para participar do certame",
+      "justifies_items": [
+        30
+      ]
+    },
+    {
+      "key": "garantias_contratuais",
+      "label_pt_br": "Garantias contratuais",
+      "url": "https://licitacoesecontratos.tcu.gov.br/5-11-2-garantias-2/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "exigência de garantia contratual e de seguros na contratação",
+      "justifies_items": [
+        30,
+        33
+      ]
+    },
+    {
+      "key": "providencias_previas",
+      "label_pt_br": "Providências prévias ao início da execução",
+      "url": "https://licitacoesecontratos.tcu.gov.br/6-1-2-providencias-previas-ao-inicio-da-execucao-do-contrato/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "providências obrigatórias antes de iniciar a execução do contrato",
+      "justifies_items": [
+        33,
+        34
+      ]
+    },
+    {
+      "key": "recebimento_provisorio",
+      "label_pt_br": "Recebimento provisório",
+      "url": "https://licitacoesecontratos.tcu.gov.br/6-1-4-fiscalizacao-tecnica-e-recebimento-provisorio-2/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "fiscalização técnica e recebimento provisório do objeto",
+      "justifies_items": [
+        36
+      ]
+    },
+    {
+      "key": "recebimento_definitivo",
+      "label_pt_br": "Recebimento definitivo",
+      "url": "https://licitacoesecontratos.tcu.gov.br/6-1-6-gestao-do-contrato-e-recebimento-definitivo-2/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "gestão do contrato e recebimento definitivo do objeto",
+      "justifies_items": [
+        36,
+        37
+      ]
+    },
+    {
+      "key": "extincao_normal",
+      "label_pt_br": "Extinção normal do contrato",
+      "url": "https://licitacoesecontratos.tcu.gov.br/6-4-1-extincao-normal-do-contrato/",
+      "source": "TCU",
+      "lifecycle_event_pt_br": "extinção normal do contrato e encerramento do vínculo",
+      "justifies_items": [
+        36,
+        38
+      ]
+    }
+  ],
+  "corpus_rule": {
+    "items": [
+      31,
+      38
+    ],
+    "feeds_versioned_corpus": true,
+    "feeds_outcome": true,
+    "creates_parallel_datalake": false,
+    "truth_plane_owner": "extra-cli",
+    "outcome_owner": "warmbly",
+    "statement_pt_br": "Os itens 31 e 38 alimentam o corpus versionado do extra-cli e o outcome registrado no Warmbly. Nenhum dado público, identidade ou proveniência nasce no web-cfg, e nenhum DataLake paralelo é criado por esta família."
+  },
+  "repetition_rule": {
+    "repetitions": 100,
+    "must_improve_pt_br": [
+      "matrizes",
+      "benchmarks",
+      "templates"
+    ],
+    "artisanal_work_is_promoted": false,
+    "statement_pt_br": "Cem repetições destes itens têm de melhorar matrizes, benchmarks e templates. Trabalho meramente artesanal, que não devolve estrutura reutilizável, não é promovido."
+  },
+  "acceptance": [
+    {
+      "key": "fourteen_distinct_deliverables",
+      "criterion_pt_br": "14 deliverable_id distintos, cada um com preço, unidade, SLA, entrada, saída, exclusão e porta de decisão.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "pages_and_examples_make_purchase_unambiguous",
+      "criterion_pt_br": "Páginas e exemplos deixam inequívoco qual item comprar e quando fazer step-up.",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "depende de página pública e de exemplo real, que esta entrega não cria.",
+      "evidence": []
+    },
+    {
+      "key": "no_item_sells_forbidden_scope",
+      "criterion_pt_br": "Nenhum item vende advocacia, responsabilidade técnica regulada, garantia de resultado ou documento retroativo.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "items_27_28_39_refuse_unsafe_deadlines",
+      "criterion_pt_br": "Os itens 27, 28 e 39 recusam prazos inseguros.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "items_31_38_feed_corpus_without_parallel_datalake",
+      "criterion_pt_br": "Os itens 31 e 38 alimentam o corpus versionado e o outcome sem criar DataLake paralelo.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "hundred_repetitions_improve_the_system",
+      "criterion_pt_br": "100 repetições melhoram matrizes, benchmarks e templates; trabalho meramente artesanal não é promovido.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "prices_stay_validate_until_real_evidence",
+      "criterion_pt_br": "Os preços permanecem VALIDATE até oferta real, aceite ou rejeição e custo de entrega observado.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    }
+  ],
+  "not_delivered_here_pt_br": [
+    "nenhuma página pública é criada nesta entrega",
+    "nenhum texto de página pública é alterado nesta entrega",
+    "nenhum checkout é ligado nesta entrega",
+    "exemplos sintéticos completos dos catorze itens ainda não existem",
+    "a primeira venda real com esforço, retrabalho, margem e resultado ainda não existe"
+  ],
+  "items": [
+    {
+      "number": 26,
+      "deliverable_id": "CFG-D26",
+      "scope_version": "ciclo-26.v1",
+      "public_name_pt_br": "Auditoria do Projeto Básico e dos Riscos",
+      "value_line_pt_br": "Expõe omissões e incompatibilidades que afetam preço, prazo e execução.",
+      "decision_question_pt_br": "O projeto básico e a matriz de riscos deste edital sustentam o preço, o prazo e a execução que a empresa vai assumir?",
+      "trigger_pt_br": "Saiu o edital e o projeto básico tem lacunas, com desenhos, memoriais e planilha que não conversam entre si.",
+      "verb_pt_br": "audita",
+      "task_door": "QUALIFY",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D26"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 490000,
+            "display_pt_br": "R$ 4.900",
+            "unit_pt_br": "um edital, um lote e o conjunto de projeto e matriz de riscos que o rege",
+            "framing_pt_br": "um edital, um lote e o conjunto de projeto e matriz de riscos que o rege"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "um edital, um lote e o conjunto de projeto e matriz de riscos que o rege",
+      "scope_limits_pt_br": [
+        "escopo delimitado por edital, lote e conjunto de projeto, nunca por número de páginas",
+        "análise documental sobre o material fornecido, sem inspeção de campo",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 5,
+        "max": 5,
+        "display_pt_br": "5 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "edital e anexos",
+        "projeto básico com desenhos, memoriais e especificações",
+        "planilha orçamentária e cronograma",
+        "matriz de riscos publicada",
+        "estudos, licenças e pareceres disponíveis"
+      ],
+      "outputs_pt_br": [
+        "mapa de completude e coerência do projeto básico",
+        "ambiguidades e pontos que exigem esclarecimento",
+        "incompatibilidades entre desenhos, memoriais, planilha, cronograma e matriz de riscos",
+        "premissas faltantes",
+        "riscos transferidos ao contratado",
+        "impacto provável em preço, prazo, qualificação técnica e execução",
+        "perguntas e decisões recomendadas"
+      ],
+      "exclusions_pt_br": [
+        "refazer o projeto",
+        "emitir ART ou RRT",
+        "validar solução de engenharia como projetista",
+        "auditoria integral de orçamento, que é o item 14 (CFG-D14)",
+        "parecer jurídico ou peça processual",
+        "garantia de alteração do edital pelo órgão",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/4-4-3-projeto-basico-pb/",
+        "https://licitacoesecontratos.tcu.gov.br/4-5-5-matriz-de-riscos/"
+      ],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 26, cuja fonte é a issue 340"
+    },
+    {
+      "number": 27,
+      "deliverable_id": "CFG-D27",
+      "scope_version": "ciclo-27.v1",
+      "public_name_pt_br": "Subsídio Técnico para Esclarecimento ou Impugnação",
+      "value_line_pt_br": "Transforma dúvida ou restrição em perguntas e fundamentos verificáveis.",
+      "decision_question_pt_br": "Quais perguntas e fundamentos técnicos devem ser levados ao órgão antes que o prazo de esclarecimento ou impugnação feche?",
+      "trigger_pt_br": "O edital traz restrição ou ambiguidade relevante e o prazo de esclarecimento ou impugnação já está correndo.",
+      "verb_pt_br": "instrui",
+      "task_door": "PROPOSE",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D27"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 375000,
+            "display_pt_br": "R$ 3.750",
+            "unit_pt_br": "um edital, um lote e um bloco técnico coerente de até cinco perguntas ou fundamentos",
+            "framing_pt_br": "um edital, um lote e um bloco técnico coerente de até cinco perguntas ou fundamentos"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "um edital, um lote e um bloco técnico coerente de até cinco perguntas ou fundamentos",
+      "scope_limits_pt_br": [
+        "até cinco perguntas ou fundamentos por bloco técnico",
+        "aceito apenas quando restarem ao menos 4 dias úteis para o prazo do cliente",
+        "prazo inseguro é recusado em vez de gerar peça sem lastro",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 3,
+        "max": 3,
+        "display_pt_br": "3 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": 4,
+      "safe_deadline_gate": {
+        "declared_by_issue": true,
+        "issue": 340,
+        "min_business_days_remaining": 4,
+        "conditioned_on_remaining_deadline": true,
+        "conditioned_on_minimum_documentation": false,
+        "refuses_unsafe_deadline": true,
+        "on_unsafe_deadline_pt_br": "recusar o pedido ou converter o trabalho em diagnóstico de lacunas",
+        "extra_conditions_pt_br": [
+          "prazo de esclarecimento ou impugnação em curso, informado por escrito pelo cliente",
+          "responsável interno ou jurídico designado para revisar e protocolar"
+        ],
+        "statement_pt_br": "O item 27 é aceito apenas quando restarem ao menos 4 dias úteis para o prazo de esclarecimento ou impugnação do cliente. Prazo inferior é recusado em vez de gerar peça sem lastro."
+      },
+      "refuses_unsafe_deadline": true,
+      "inputs_pt_br": [
+        "edital e anexos",
+        "projeto, planilha e matriz de riscos aplicáveis",
+        "prazo de esclarecimento ou impugnação em curso",
+        "pontos de dúvida ou restrição levantados pelo cliente",
+        "responsável interno ou jurídico designado para revisar e protocolar"
+      ],
+      "outputs_pt_br": [
+        "fato editalício descrito com referência ao documento",
+        "risco ou restrição decorrente do fato",
+        "fundamento técnico verificável",
+        "pergunta objetiva formulada para resposta do órgão",
+        "efeito esperado na decisão de disputar",
+        "anexos probatórios organizados para revisão e protocolo pelo jurídico ou pelo licitante"
+      ],
+      "exclusions_pt_br": [
+        "advocacia e tese jurídica",
+        "assinatura da peça",
+        "protocolo perante o órgão",
+        "promessa de alteração do edital",
+        "representação da empresa em qualquer instância",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros",
+        "prometer acolhimento do esclarecimento, da impugnação ou alteração do edital"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/5-1-1-impugnacao-e-pedidos-de-esclarecimento/"
+      ],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 27, cuja fonte é a issue 340"
+    },
+    {
+      "number": 28,
+      "deliverable_id": "CFG-D28",
+      "scope_version": "ciclo-28.v1",
+      "public_name_pt_br": "Comprovação de Exequibilidade e Resposta à Diligência",
+      "value_line_pt_br": "Reconcilia custos e evidências para responder à dúvida sobre o preço.",
+      "decision_question_pt_br": "Como demonstrar, com composições e evidências, que o preço proposto é exequível e responder à diligência do órgão?",
+      "trigger_pt_br": "O órgão abriu diligência ou questionou a exequibilidade do preço da proposta apresentada.",
+      "verb_pt_br": "comprova",
+      "task_door": "PROPOSE",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D28"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 490000,
+            "display_pt_br": "R$ 4.900",
+            "unit_pt_br": "uma proposta ou lote e uma diligência ou questionamento de exequibilidade",
+            "framing_pt_br": "uma proposta ou lote e uma diligência ou questionamento de exequibilidade"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "uma proposta ou lote e uma diligência ou questionamento de exequibilidade",
+      "scope_limits_pt_br": [
+        "condicionado a prazo remanescente e à documentação mínima de composições e cotações",
+        "prazo inseguro ou documentação insuficiente levam a recusa ou a diagnóstico de lacunas",
+        "trabalha apenas sobre documentos já existentes na data do pedido",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 3,
+        "max": 3,
+        "display_pt_br": "3 dias úteis",
+        "starts_after_pt_br": "aceite de escopo, recebimento íntegro dos insumos e confirmação de prazo remanescente suficiente"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": {
+        "declared_by_issue": true,
+        "issue": 340,
+        "min_business_days_remaining": null,
+        "conditioned_on_remaining_deadline": true,
+        "conditioned_on_minimum_documentation": true,
+        "refuses_unsafe_deadline": true,
+        "on_unsafe_deadline_pt_br": "recusar o pedido ou converter o trabalho em diagnóstico de lacunas",
+        "extra_conditions_pt_br": [
+          "prazo remanescente da diligência suficiente para a entrega em 3 dias úteis",
+          "documentação mínima de composições, cotações e comprovantes já existente na data do pedido"
+        ],
+        "statement_pt_br": "O item 28 é condicionado ao prazo remanescente da diligência e à documentação mínima de composições e cotações. Sem prazo suficiente ou sem documentação mínima, a CONFENGE recusa ou converte o trabalho em diagnóstico de lacunas."
+      },
+      "refuses_unsafe_deadline": true,
+      "inputs_pt_br": [
+        "edital, planilha do órgão e referência aplicável",
+        "proposta apresentada com composições próprias",
+        "cotações e comprovantes de custo utilizados",
+        "premissas de produtividade, encargos, tributos e BDI",
+        "cronograma e fluxo de caixa da proposta",
+        "termo da diligência ou do questionamento do órgão"
+      ],
+      "outputs_pt_br": [
+        "reconciliação de preços, composições, produtividades, cotações, tributos, encargos, cronograma e margem",
+        "classificação das premissas em FACT, CALCULATION e INFERENCE",
+        "lacunas de comprovação identificadas",
+        "caderno de evidências organizado",
+        "nota técnica pronta para revisão e assinatura do cliente"
+      ],
+      "exclusions_pt_br": [
+        "fabricar cotação",
+        "retroagir documento ou emitir prova com data anterior",
+        "substituir declaração do licitante",
+        "garantir aceitação da proposta pelo órgão",
+        "advocacia, assinatura e protocolo",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros",
+        "representar a empresa perante o órgão na diligência: a resposta é assinada e enviada pelo licitante",
+        "prometer aceitação do preço, manutenção da proposta ou resultado da diligência"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/5-3-envio-de-lances/"
+      ],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 28, cuja fonte é a issue 340"
+    },
+    {
+      "number": 29,
+      "deliverable_id": "CFG-D29",
+      "scope_version": "ciclo-29.v1",
+      "public_name_pt_br": "Desenvolvimento da Proposta Técnica",
+      "value_line_pt_br": "Converte critérios de julgamento em uma proposta técnica comprovável.",
+      "decision_question_pt_br": "Como converter os critérios de julgamento deste edital em uma proposta técnica comprovável e aderente à forma exigida?",
+      "trigger_pt_br": "O edital julga por técnica e a proposta precisa provar cada critério com evidência, não com adjetivo.",
+      "verb_pt_br": "desenvolve",
+      "task_door": "PROPOSE",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D29"
+      },
+      "pricing": {
+        "model": "tiers",
+        "tiers": [
+          {
+            "name_pt_br": "Essencial",
+            "tier_key": "essencial",
+            "price_cents": 790000,
+            "display_pt_br": "R$ 7.900",
+            "unit_pt_br": "um edital, um lote e uma proposta, até três critérios de julgamento e uma revisão",
+            "framing_pt_br": "até três critérios de julgamento e uma revisão"
+          },
+          {
+            "name_pt_br": "Complexa",
+            "tier_key": "complexa",
+            "price_cents": 1290000,
+            "display_pt_br": "R$ 12.900",
+            "unit_pt_br": "um edital, um lote e uma proposta, até oito critérios de julgamento e duas revisões",
+            "framing_pt_br": "até oito critérios de julgamento e duas revisões"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "um edital, um lote e uma proposta",
+      "scope_limits_pt_br": [
+        "faixa essencial cobre até três critérios de julgamento e uma revisão",
+        "faixa complexa cobre até oito critérios de julgamento e duas revisões",
+        "escopo delimitado por critérios e revisões, nunca por número de páginas",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 10,
+        "max": 10,
+        "display_pt_br": "10 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "edital, anexos e critérios de julgamento com pontuação",
+        "acervo, atestados e CAT disponíveis",
+        "currículos e responsabilidade técnica da equipe proposta",
+        "metodologia e experiências anteriores documentadas",
+        "planilha e cronograma da proposta",
+        "prazo de entrega da licitação"
+      ],
+      "outputs_pt_br": [
+        "matriz que liga critério de julgamento, evidência e mensagem",
+        "arquitetura da proposta técnica",
+        "narrativa técnica redigida",
+        "metodologia de execução",
+        "plano de trabalho",
+        "equipe e acervo referenciados aos documentos comprobatórios",
+        "aderência formal ao que o edital exige",
+        "controle de versão e checklist final antes do envio"
+      ],
+      "exclusions_pt_br": [
+        "criar experiência inexistente",
+        "emitir responsabilidade técnica alheia",
+        "produzir projeto executivo não contratado",
+        "garantia de nota, pontuação ou classificação",
+        "advocacia, assinatura e protocolo",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/5-2-apresentacao-de-propostas/"
+      ],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 29, cuja fonte é a issue 340"
+    },
+    {
+      "number": 30,
+      "deliverable_id": "CFG-D30",
+      "scope_version": "ciclo-30.v1",
+      "public_name_pt_br": "Plano de Garantias, Seguros e Capital de Giro",
+      "value_line_pt_br": "Estima garantias e pico de caixa antes de comprometer a empresa.",
+      "decision_question_pt_br": "Quanto de garantia, seguro e capital de giro esta oportunidade exige antes de a empresa se comprometer?",
+      "trigger_pt_br": "A empresa vai assumir uma disputa ou um contrato e ainda não dimensionou garantias, seguros e caixa de mobilização.",
+      "verb_pt_br": "dimensiona",
+      "task_door": "QUALIFY",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D30"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 240000,
+            "display_pt_br": "R$ 2.400",
+            "unit_pt_br": "uma oportunidade ou contrato e um cenário de execução",
+            "framing_pt_br": "uma oportunidade ou contrato e um cenário de execução"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "uma oportunidade ou contrato e um cenário de execução",
+      "scope_limits_pt_br": [
+        "um cenário de execução por entrega",
+        "trabalha com condições financeiras informadas pelo cliente, sem consulta a instituição em nome da empresa",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 5,
+        "max": 5,
+        "display_pt_br": "5 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "edital ou contrato e anexos",
+        "exigências de garantia de proposta, garantia contratual e seguros",
+        "cronograma físico-financeiro",
+        "condições de pagamento, retenção e reajuste",
+        "custos previstos de mobilização",
+        "condições bancárias e de corretora informadas pelo cliente"
+      ],
+      "outputs_pt_br": [
+        "garantia de proposta e garantia contratual dimensionadas",
+        "eventos de reforço e de liberação de garantia",
+        "seguros exigidos pelo instrumento",
+        "desembolso de mobilização",
+        "curva preliminar de entradas e saídas",
+        "exposição de caixa até a primeira medição",
+        "perguntas dirigidas a corretora, banco e financeiro",
+        "decisão GO, GO COM CONDIÇÕES ou NO-GO"
+      ],
+      "exclusions_pt_br": [
+        "cotar ou intermediar seguro e crédito",
+        "recomendar produto financeiro",
+        "prometer limite bancário ou aprovação de apólice",
+        "parecer jurídico sobre apólice ou contrato de garantia",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros",
+        "projeção completa do fluxo de caixa do contrato, que é o item 35 (CFG-D35)"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/5-2-1-garantia-de-proposta/",
+        "https://licitacoesecontratos.tcu.gov.br/5-11-2-garantias-2/"
+      ],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 30, cuja fonte é a issue 340"
+    },
+    {
+      "number": 31,
+      "deliverable_id": "CFG-D31",
+      "scope_version": "ciclo-31.v1",
+      "public_name_pt_br": "Análise do Resultado da Licitação",
+      "value_line_pt_br": "Explica o resultado público e melhora a próxima decisão de disputa.",
+      "decision_question_pt_br": "Por que esta licitação terminou assim e o que isso muda na próxima decisão de disputar?",
+      "trigger_pt_br": "O resultado do certame foi publicado e a empresa não sabe explicar a diferença entre a hipótese usada na decisão e o que aconteceu.",
+      "verb_pt_br": "analisa",
+      "task_door": "CLOSE",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D31"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 240000,
+            "display_pt_br": "R$ 2.400",
+            "unit_pt_br": "um lote e um resultado homologado, revogado ou fracassado",
+            "framing_pt_br": "um lote e um resultado homologado, revogado ou fracassado"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "um lote e um resultado homologado, revogado ou fracassado",
+      "scope_limits_pt_br": [
+        "análise restrita a atos e documentos públicos do certame",
+        "prazo conta a partir da disponibilidade dos atos",
+        "não preenche silêncio documental com inferência",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 5,
+        "max": 5,
+        "display_pt_br": "5 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e disponibilidade pública dos atos do certame"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "identificação do certame e do lote",
+        "atas, julgamentos e demais atos publicados",
+        "proposta apresentada pela empresa",
+        "hipótese de preço e de deságio usada na decisão de disputar",
+        "registro interno de esforço aplicado à oportunidade"
+      ],
+      "outputs_pt_br": [
+        "linha do tempo do certame",
+        "posição da empresa e deságio praticado",
+        "concorrentes relevantes identificados conforme os atos publicados",
+        "motivos de desclassificação e de inabilitação registrados nos atos",
+        "diferença entre a hipótese assumida e o resultado observado",
+        "decisões repetíveis para as próximas disputas",
+        "atualização do benchmark interno de concorrência e preço"
+      ],
+      "exclusions_pt_br": [
+        "elaborar recurso ou contrarrazão, que é o item 39 (CFG-D39)",
+        "acusação de conluio ou de fraude",
+        "inferência sobre fato não público",
+        "advocacia e representação perante o órgão",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros",
+        "protocolar qualquer peça decorrente da análise",
+        "prometer reversão de resultado, nova licitação ou posição em disputa futura"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [],
+      "feeds_versioned_corpus": true,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 31, cuja fonte é a issue 340"
+    },
+    {
+      "number": 32,
+      "deliverable_id": "CFG-D32",
+      "scope_version": "ciclo-32.v1",
+      "public_name_pt_br": "Plano de Acervo para Licitações Futuras",
+      "value_line_pt_br": "Transforma o acervo atual em plano para habilitações futuras.",
+      "decision_question_pt_br": "O que falta no acervo da empresa para disputar as famílias de obras que ela quer nos próximos 12 meses?",
+      "trigger_pt_br": "A empresa vem sendo barrada em qualificação técnica ou evita editais por falta de atestado compatível.",
+      "verb_pt_br": "planeja",
+      "task_door": "CLOSE",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D32"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 375000,
+            "display_pt_br": "R$ 3.750",
+            "unit_pt_br": "até três famílias de obras ou serviços alvo e o acervo documental fornecido",
+            "framing_pt_br": "até três famílias de obras ou serviços alvo e o acervo documental fornecido"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "até três famílias de obras ou serviços alvo e o acervo documental fornecido",
+      "scope_limits_pt_br": [
+        "até três famílias de obras ou serviços por entrega",
+        "trabalha sobre o acervo documental efetivamente fornecido pelo cliente",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 7,
+        "max": 7,
+        "display_pt_br": "7 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "atestados e CAT disponíveis",
+        "contratos executados e medições correspondentes",
+        "quadro técnico, ARTs e RRTs vinculadas",
+        "editais alvo ou famílias de obras de interesse",
+        "plano de crescimento e restrições da empresa"
+      ],
+      "outputs_pt_br": [
+        "matriz de requisitos recorrentes por família de obra",
+        "capacidades já provadas pelo acervo atual",
+        "lacunas de quantidade, relevância e equipe",
+        "documentação ausente ou incompleta",
+        "oportunidades de execução que constroem acervo",
+        "roteiro de 90, 180 e 365 dias"
+      ],
+      "exclusions_pt_br": [
+        "emitir ou registrar atestado ou CAT",
+        "emprestar acervo",
+        "criar vínculo fictício de profissional",
+        "garantia de habilitação futura em qualquer certame",
+        "representação da empresa perante órgão ou conselho",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 32, cuja fonte é a issue 340"
+    },
+    {
+      "number": 33,
+      "deliverable_id": "CFG-D33",
+      "scope_version": "ciclo-33.v1",
+      "public_name_pt_br": "Revisão Técnica Antes de Assinar o Contrato",
+      "value_line_pt_br": "Encontra divergências e obrigações críticas antes da assinatura.",
+      "decision_question_pt_br": "A minuta contratual reproduz o que foi licitado e proposto, ou há divergência a corrigir antes da assinatura?",
+      "trigger_pt_br": "Chegou a convocação para assinar e a minuta ainda não foi reconciliada com o edital e com a proposta.",
+      "verb_pt_br": "revisa",
+      "task_door": "START",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D33"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 375000,
+            "display_pt_br": "R$ 3.750",
+            "unit_pt_br": "uma adjudicação e uma minuta ou convocação contratual",
+            "framing_pt_br": "uma adjudicação e uma minuta ou convocação contratual"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "uma adjudicação e uma minuta ou convocação contratual",
+      "scope_limits_pt_br": [
+        "uma minuta ou convocação por entrega",
+        "revisão técnica e contratual de escopo, prazo, obrigação e prova, sem análise de mérito jurídico",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 5,
+        "max": 5,
+        "display_pt_br": "5 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "edital e anexos",
+        "proposta apresentada e planilha final",
+        "minuta contratual ou convocação recebida",
+        "ata de julgamento e ato de adjudicação",
+        "exigências de garantia, seguro e documentação prévia"
+      ],
+      "outputs_pt_br": [
+        "reconciliação entre edital, proposta e minuta",
+        "obrigações e marcos contratuais mapeados",
+        "garantias exigidas e prazos correspondentes",
+        "riscos relevantes assumidos pelo contratado",
+        "condições precedentes ao início da execução",
+        "divergências identificadas documento a documento",
+        "reservas e perguntas a formalizar antes da assinatura",
+        "checklist com as opções ASSINAR, CORRIGIR ou ESCALAR"
+      ],
+      "exclusions_pt_br": [
+        "parecer jurídico",
+        "renegociação representada pela CONFENGE",
+        "assinatura em nome da empresa",
+        "garantia de aceitação das ressalvas pelo órgão",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/5-11-2-garantias-2/",
+        "https://licitacoesecontratos.tcu.gov.br/6-1-2-providencias-previas-ao-inicio-da-execucao-do-contrato/"
+      ],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 33, cuja fonte é a issue 340"
+    },
+    {
+      "number": 34,
+      "deliverable_id": "CFG-D34",
+      "scope_version": "ciclo-34.v1",
+      "public_name_pt_br": "Plano de Mobilização e Obrigações do Contrato",
+      "value_line_pt_br": "Define responsáveis, prazos e provas para começar sob controle.",
+      "decision_question_pt_br": "Quem responde por qual obrigação, em que prazo e com qual prova, para este contrato começar sob controle?",
+      "trigger_pt_br": "O contrato foi assinado e a mobilização vai começar sem matriz de obrigações, prazos e provas.",
+      "verb_pt_br": "planeja",
+      "task_door": "START",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D34"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 490000,
+            "display_pt_br": "R$ 4.900",
+            "unit_pt_br": "um contrato, um empreendimento e uma mobilização",
+            "framing_pt_br": "um contrato, um empreendimento e uma mobilização"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "um contrato, um empreendimento e uma mobilização",
+      "scope_limits_pt_br": [
+        "uma mobilização por entrega",
+        "planejamento e organização documental, sem execução ou gestão da obra pela CONFENGE",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 7,
+        "max": 7,
+        "display_pt_br": "7 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "contrato, aditivos e anexos",
+        "cronograma físico-financeiro contratual",
+        "exigências de licença, seguro e garantia",
+        "quadro de equipe e equipamentos previstos",
+        "projetos aprovados e ordem de início",
+        "responsável interno nomeado"
+      ],
+      "outputs_pt_br": [
+        "marcos de início e providências prévias à execução",
+        "matriz de obrigação, responsável, prazo e prova",
+        "licenças e liberações necessárias",
+        "seguros e garantias a apresentar",
+        "equipe e equipamentos-chave",
+        "submittals e aprovações a protocolar",
+        "diário de obra e protocolos de comunicação",
+        "baseline de cronograma e de evidência",
+        "pauta de reunião de kickoff"
+      ],
+      "exclusions_pt_br": [
+        "gerir a obra",
+        "contratar equipe ou fornecedores",
+        "obter licenças em nome da empresa",
+        "assumir responsabilidade técnica do contratado",
+        "parecer jurídico",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/6-1-2-providencias-previas-ao-inicio-da-execucao-do-contrato/"
+      ],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 34, cuja fonte é a issue 340"
+    },
+    {
+      "number": 35,
+      "deliverable_id": "CFG-D35",
+      "scope_version": "ciclo-35.v1",
+      "public_name_pt_br": "Auditoria do Fluxo de Caixa do Contrato",
+      "value_line_pt_br": "Projeta desembolso, recebimento e pico de capital de giro.",
+      "decision_question_pt_br": "Quanto capital de giro este contrato exige e em que momento o caixa fica sob maior pressão?",
+      "trigger_pt_br": "O contrato está em execução ou prestes a começar e o pico de capital de giro nunca foi calculado.",
+      "verb_pt_br": "audita",
+      "task_door": "START",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D35"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 490000,
+            "display_pt_br": "R$ 4.900",
+            "unit_pt_br": "um contrato e um cenário-base informado pelo cliente",
+            "framing_pt_br": "um contrato e um cenário-base informado pelo cliente"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "um contrato e um cenário-base informado pelo cliente",
+      "scope_limits_pt_br": [
+        "um contrato e um cenário-base por entrega, com variações tratadas como sensibilidade",
+        "usa dados financeiros fornecidos pelo cliente, sem acesso a sistema contábil",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 10,
+        "max": 10,
+        "display_pt_br": "10 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "contrato, aditivos e cronograma",
+        "planilha e composições de custo",
+        "condições de pagamento, retenção e reajuste",
+        "histórico de medição e de pagamento do órgão",
+        "custos de mobilização e desmobilização",
+        "tributos, encargos e regime aplicáveis"
+      ],
+      "outputs_pt_br": [
+        "curva de desembolso e de recebimento",
+        "lag entre medição e pagamento",
+        "efeito de retenções, garantias, tributos e mobilização",
+        "cenários de atraso de medição e de pagamento",
+        "pico de capital de giro",
+        "análise de sensibilidade das premissas críticas",
+        "gatilhos de caixa e decisões de mitigação"
+      ],
+      "exclusions_pt_br": [
+        "auditoria contábil",
+        "valuation",
+        "captação de recursos ou intermediação bancária",
+        "recomendação de investimento ou de crédito",
+        "parecer jurídico",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros",
+        "dimensionamento de garantias e seguros da oportunidade, que é o item 30 (CFG-D30)"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 35, cuja fonte é a issue 340"
+    },
+    {
+      "number": 36,
+      "deliverable_id": "CFG-D36",
+      "scope_version": "ciclo-36.v1",
+      "public_name_pt_br": "Dossiê de Recebimento e Encerramento do Contrato",
+      "value_line_pt_br": "Organiza pendências e provas para receber e encerrar corretamente.",
+      "decision_question_pt_br": "O que ainda falta entregar, provar e protocolar para encerrar este contrato sem pendência aberta?",
+      "trigger_pt_br": "A obra chegou ao fim e as pendências de aceite, documentação e saldo continuam em aberto.",
+      "verb_pt_br": "organiza",
+      "task_door": "CLOSE",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D36"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 490000,
+            "display_pt_br": "R$ 4.900",
+            "unit_pt_br": "um contrato e um ciclo de encerramento",
+            "framing_pt_br": "um contrato e um ciclo de encerramento"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "um contrato e um ciclo de encerramento",
+      "scope_limits_pt_br": [
+        "um ciclo de encerramento por entrega",
+        "organização documental e roteiro de protocolo, sem inspeção de campo nem aceite técnico pela CONFENGE",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 7,
+        "max": 7,
+        "display_pt_br": "7 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "contrato, aditivos e anexos",
+        "medições, saldos e boletins",
+        "projetos as built, manuais e certificados",
+        "comunicações, notificações e protocolos do contrato",
+        "apontamentos e pendências registrados pela fiscalização"
+      ],
+      "outputs_pt_br": [
+        "matriz que liga contrato, entrega e aceite",
+        "pendências e punch list consolidados",
+        "medições e saldos conciliados",
+        "documentação as built e manuais organizados",
+        "garantias vigentes e prazos correspondentes",
+        "pedidos e protocolos a formalizar",
+        "roteiro de recebimento provisório, liberação e encerramento"
+      ],
+      "exclusions_pt_br": [
+        "declarar conformidade de engenharia sem responsável técnico",
+        "assinar termo do órgão",
+        "quitar obrigação jurídica",
+        "garantia de recebimento definitivo pelo órgão",
+        "advocacia e peça processual",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/6-1-4-fiscalizacao-tecnica-e-recebimento-provisorio-2/",
+        "https://licitacoesecontratos.tcu.gov.br/6-1-6-gestao-do-contrato-e-recebimento-definitivo-2/",
+        "https://licitacoesecontratos.tcu.gov.br/6-4-1-extincao-normal-do-contrato/"
+      ],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 36, cuja fonte é a issue 340"
+    },
+    {
+      "number": 37,
+      "deliverable_id": "CFG-D37",
+      "scope_version": "ciclo-37.v1",
+      "public_name_pt_br": "Dossiê de Atestação e Acervo da Obra",
+      "value_line_pt_br": "Consolida serviços e quantitativos para solicitar atestado e registrar acervo.",
+      "decision_question_pt_br": "O que a empresa pode efetivamente comprovar deste contrato e como instruir o pedido de atestado correspondente?",
+      "trigger_pt_br": "O contrato foi concluído e o atestado de capacidade técnica ainda não foi solicitado nem instruído.",
+      "verb_pt_br": "consolida",
+      "task_door": "CLOSE",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D37"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 290000,
+            "display_pt_br": "R$ 2.900",
+            "unit_pt_br": "um contrato e uma solicitação de atestado ou acervo",
+            "framing_pt_br": "um contrato e uma solicitação de atestado ou acervo"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "um contrato e uma solicitação de atestado ou acervo",
+      "scope_limits_pt_br": [
+        "uma solicitação de atestado ou acervo por entrega",
+        "considera apenas quantitativos efetivamente medidos e documentados",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 5,
+        "max": 5,
+        "display_pt_br": "5 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "contrato, aditivos e objeto contratado",
+        "medições e boletins aprovados",
+        "ARTs e RRTs da equipe técnica",
+        "projetos, relatórios e registros de execução",
+        "dados do responsável técnico a ser indicado",
+        "modelo do órgão ou do conselho quando existir"
+      ],
+      "outputs_pt_br": [
+        "reconciliação de objeto, parcelas relevantes, quantitativos executados, período, equipe e documentos comprobatórios",
+        "minuta técnica do conteúdo a ser solicitado ao órgão",
+        "checklist de protocolo e de registro"
+      ],
+      "exclusions_pt_br": [
+        "emitir atestado ou CAT",
+        "inserir quantidade não medida",
+        "garantia de deferimento pelo órgão ou pelo conselho",
+        "representação da empresa perante conselho profissional",
+        "advocacia",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/6-1-6-gestao-do-contrato-e-recebimento-definitivo-2/"
+      ],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 37, cuja fonte é a issue 340"
+    },
+    {
+      "number": 38,
+      "deliverable_id": "CFG-D38",
+      "scope_version": "ciclo-38.v1",
+      "public_name_pt_br": "Análise Pós-Contrato e Lições para Próximas Obras",
+      "value_line_pt_br": "Converte o resultado real em decisões melhores para próximos contratos.",
+      "decision_question_pt_br": "O que este contrato ensinou sobre preço, prazo, prova e escolha de disputa?",
+      "trigger_pt_br": "Um contrato terminou com margem diferente da prevista e ninguém consolidou as causas.",
+      "verb_pt_br": "analisa",
+      "task_door": "CLOSE",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D38"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 375000,
+            "display_pt_br": "R$ 3.750",
+            "unit_pt_br": "um contrato encerrado ou uma fase material concluída",
+            "framing_pt_br": "um contrato encerrado ou uma fase material concluída"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "um contrato encerrado ou uma fase material concluída",
+      "scope_limits_pt_br": [
+        "um contrato encerrado ou uma fase material por entrega",
+        "trabalha sobre registros existentes, sem reconstituir documentação inexistente",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 7,
+        "max": 7,
+        "display_pt_br": "7 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": null,
+      "safe_deadline_gate": null,
+      "refuses_unsafe_deadline": false,
+      "inputs_pt_br": [
+        "contrato, aditivos e planilha contratada",
+        "orçamento previsto e custo realizado",
+        "cronograma previsto e realizado",
+        "medições, glosas e pagamentos",
+        "pleitos apresentados e respectivas respostas",
+        "registros de eventos, diário e comunicações"
+      ],
+      "outputs_pt_br": [
+        "comparação entre previsto e realizado em prazo, receita, custos e eventos",
+        "perdas de margem associadas a causas identificadas",
+        "histórico e resultado dos pleitos apresentados",
+        "desempenho do comprador público e dos fornecedores",
+        "falhas de prova que enfraqueceram pedidos",
+        "decisões repetíveis registradas",
+        "dados estruturados para as próximas decisões de disputar, orçar e mobilizar"
+      ],
+      "exclusions_pt_br": [
+        "auditoria completa de contas",
+        "responsabilização individual de pessoas",
+        "auditoria contábil",
+        "advocacia e peça processual",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [
+        "https://licitacoesecontratos.tcu.gov.br/6-4-1-extincao-normal-do-contrato/"
+      ],
+      "feeds_versioned_corpus": true,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 38, cuja fonte é a issue 340"
+    },
+    {
+      "number": 39,
+      "deliverable_id": "CFG-D39",
+      "scope_version": "ciclo-39.v1",
+      "public_name_pt_br": "Subsídio Técnico para Recurso e Contrarrazão",
+      "value_line_pt_br": "Organiza fatos e evidências técnicas para recurso ou contrarrazão.",
+      "decision_question_pt_br": "Quais fatos e evidências técnicas sustentam o recurso ou a contrarrazão dentro do prazo processual?",
+      "trigger_pt_br": "Foi aberto prazo de recurso ou de contrarrazão e a empresa precisa de base técnica verificável para instruir a peça.",
+      "verb_pt_br": "instrui",
+      "task_door": "PROPOSE",
+      "public_state": "VALIDATE",
+      "price_state": "PILOT_HYPOTHESIS",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "analytics": {
+        "route_family": "servicos",
+        "deliverable_attr": "CFG-D39"
+      },
+      "pricing": {
+        "model": "fixed",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "tier_key": "unico",
+            "price_cents": 490000,
+            "display_pt_br": "R$ 4.900",
+            "unit_pt_br": "um evento processual, um lote e um bloco técnico coerente",
+            "framing_pt_br": "um evento processual, um lote e um bloco técnico coerente"
+          }
+        ],
+        "additional_charges": []
+      },
+      "unit_pt_br": "um evento processual, um lote e um bloco técnico coerente",
+      "scope_limits_pt_br": [
+        "um evento processual por entrega",
+        "aceito apenas quando restarem ao menos 5 dias úteis para o prazo do cliente",
+        "prazo inseguro é recusado em vez de gerar peça sem lastro",
+        "prazo começa após aceite de escopo e recebimento íntegro dos insumos",
+        "se os insumos mínimos não existirem, a CONFENGE recomenda não iniciar ou converte o trabalho em diagnóstico de lacunas",
+        "urgência abaixo do SLA depende de capacidade e de adicional de 50% informado antes da contratação"
+      ],
+      "sla_business_days": {
+        "min": 4,
+        "max": 4,
+        "display_pt_br": "4 dias úteis",
+        "starts_after_pt_br": "aceite de escopo e recebimento íntegro dos insumos"
+      },
+      "safe_deadline_business_days": 5,
+      "safe_deadline_gate": {
+        "declared_by_issue": true,
+        "issue": 340,
+        "min_business_days_remaining": 5,
+        "conditioned_on_remaining_deadline": true,
+        "conditioned_on_minimum_documentation": false,
+        "refuses_unsafe_deadline": true,
+        "on_unsafe_deadline_pt_br": "recusar o pedido ou converter o trabalho em diagnóstico de lacunas",
+        "extra_conditions_pt_br": [
+          "prazo processual de recurso ou contrarrazão em curso, informado por escrito pelo cliente",
+          "jurídico ou responsável interno designado para revisar, assinar e protocolar"
+        ],
+        "statement_pt_br": "O item 39 é aceito apenas quando restarem ao menos 5 dias úteis para o prazo processual do cliente. Prazo inferior é recusado em vez de gerar peça sem lastro."
+      },
+      "refuses_unsafe_deadline": true,
+      "inputs_pt_br": [
+        "edital e anexos",
+        "ata, julgamento ou decisão recorrida",
+        "proposta e documentos das empresas envolvidas conforme atos públicos",
+        "prazo processual em curso",
+        "jurídico ou responsável interno designado para revisar, assinar e protocolar"
+      ],
+      "outputs_pt_br": [
+        "matriz que liga alegação, regra editalícia, fato e evidência",
+        "cronologia do evento processual",
+        "cálculos ou comparação técnica que sustentam a alegação",
+        "lacunas de prova explicitadas",
+        "anexos técnicos organizados",
+        "nota técnica para o jurídico ou para o licitante"
+      ],
+      "exclusions_pt_br": [
+        "elaborar tese jurídica",
+        "assinatura da peça",
+        "protocolo perante o órgão",
+        "obtenção de acesso privilegiado a documento não público",
+        "garantia de provimento do recurso ou da contrarrazão",
+        "advocacia e representação processual",
+        "deslocamento, ART ou RRT, taxa pública e documentos emitidos por terceiros"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora tese jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assume responsabilidade técnica regulada de terceiro e não emite ART ou RRT em nome do cliente.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão, o conselho ou terceiros.",
+        "A CONFENGE não promete resultado: não promete vitória, adjudicação, habilitação, deferimento nem provimento.",
+        "A CONFENGE não produz documento retroativo e não emite prova com data anterior à sua elaboração."
+      ],
+      "prohibitions": {
+        "sells_advocacy": false,
+        "assumes_regulated_technical_responsibility": false,
+        "guarantees_result": false,
+        "produces_backdated_document": false,
+        "signs_for_client": false,
+        "files_or_protocols_for_client": false,
+        "represents_client_before_agency": false,
+        "success_fee": false
+      },
+      "lifecycle_reference_urls": [],
+      "feeds_versioned_corpus": false,
+      "credit_rule": null,
+      "offer_container": "none",
+      "capacity_required": true,
+      "data_contract": {
+        "owner": "extra-cli",
+        "provenance_required": true,
+        "freshness_required": true,
+        "evidence_grades": [
+          "FACT",
+          "CALCULATION",
+          "INFERENCE",
+          "UNKNOWN"
+        ]
+      },
+      "inputs_derivation_pt_br": "transcrito do registro canônico de entregáveis para o item 39, cuja fonte é a issue 340"
+    }
+  ]
+}
