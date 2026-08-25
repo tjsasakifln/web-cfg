@@ -816,6 +816,33 @@ _reset();
   const scrubbed = collect._scrubProps({ path: "/x", email: "a@b.com", journey: "contrato", nome: "X" });
   if (scrubbed.email || scrubbed.nome) fail("collect_pii", scrubbed);
   if (scrubbed.journey !== "contrato") fail("collect_keep", scrubbed);
+  const analyticsEvent = JSON.stringify({
+    event: "cta_click",
+    props: { event_id: "origin-gate-probe", cta_id: "origin-gate" },
+    path: "/",
+  });
+  for (const headers of [
+    { origin: "https://evil.example" },
+    { referer: "https://evil.example/page" },
+  ]) {
+    const denied = await collect.handler({ httpMethod: "POST", headers, body: analyticsEvent });
+    const deniedBody = JSON.parse(denied.body);
+    if (denied.statusCode !== 403 || deniedBody.error !== "origin_denied") {
+      fail("collect_foreign_origin_denied", { headers, status: denied.statusCode, body: deniedBody });
+    }
+    if (denied.headers["Access-Control-Allow-Origin"] === "https://evil.example") {
+      fail("collect_foreign_origin_echoed", denied.headers);
+    }
+  }
+  const allowed = await collect.handler({
+    httpMethod: "POST",
+    headers: { origin: "https://confenge.com.br" },
+    body: analyticsEvent,
+  });
+  if (allowed.statusCode !== 202 || JSON.parse(allowed.body).accepted !== 1) {
+    fail("collect_canonical_origin_allowed", allowed);
+  }
+  pass("collect_origin_gate");
   pass("collect_scrub");
 }
 

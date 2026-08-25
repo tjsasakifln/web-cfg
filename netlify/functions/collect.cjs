@@ -18,18 +18,26 @@ const MAX_BODY = 16 * 1024;
 function originOk(event) {
   const h = event.headers || {};
   const origin = String(h.origin || h.Origin || "").trim();
-  if (origin && ALLOWED_ORIGINS.has(origin)) return origin;
+  if (origin) {
+    return ALLOWED_ORIGINS.has(origin)
+      ? { ok: true, origin }
+      : { ok: false, origin: "https://confenge.com.br" };
+  }
   const referer = String(h.referer || h.Referer || "").trim();
   if (referer) {
     try {
       const u = new URL(referer);
       const base = `${u.protocol}//${u.host}`;
-      if (ALLOWED_ORIGINS.has(base)) return base;
+      return ALLOWED_ORIGINS.has(base)
+        ? { ok: true, origin: base }
+        : { ok: false, origin: "https://confenge.com.br" };
     } catch {
-      /* ignore */
+      return { ok: false, origin: "https://confenge.com.br" };
     }
   }
-  return "https://confenge.com.br";
+  return process.env.LEAD_REQUIRE_ORIGIN === "1"
+    ? { ok: false, origin: "https://confenge.com.br" }
+    : { ok: true, origin: "https://confenge.com.br" };
 }
 
 function scrubPropsCompat(props) {
@@ -61,7 +69,8 @@ function persistAnalyticsLocal(accepted) {
 }
 
 exports.handler = async (event) => {
-  const origin = originOk(event);
+  const originCheck = originOk(event);
+  const origin = originCheck.origin;
   const headers = {
     ...corsHeaders(origin),
     "Access-Control-Allow-Headers": "Content-Type, Accept",
@@ -88,6 +97,14 @@ exports.handler = async (event) => {
       statusCode: 405,
       headers,
       body: JSON.stringify({ ok: false, error: "method_not_allowed" }),
+    };
+  }
+  if (!originCheck.ok) {
+    safeLog("warn", "analytics_origin_denied", {});
+    return {
+      statusCode: 403,
+      headers,
+      body: JSON.stringify({ ok: false, error: "origin_denied" }),
     };
   }
 
