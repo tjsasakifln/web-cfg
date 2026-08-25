@@ -17,6 +17,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { auditCopyContract, deriveMoneyRoutes } from "../../scripts/commercial/copy_contract_audit.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -77,13 +78,11 @@ assert(
   contract.differentiation_test?.state === "NOT_STARTED",
   contract.differentiation_test?.state,
 );
-assert(
-  "acceptance_all_not_started",
-  Array.isArray(contract.acceptance) &&
-    contract.acceptance.length === 9 &&
-    contract.acceptance.every((a) => a.state === "NOT_STARTED"),
-  contract.acceptance?.map((a) => a.state),
-);
+const acceptanceById = new Map((contract.acceptance || []).map((item) => [item.id, item]));
+assert("acceptance_has_nine_items", acceptanceById.size === 9, contract.acceptance?.length);
+assert("machine_acceptance_measured", ["AC-01", "AC-08", "AC-09"].every((id) => acceptanceById.get(id)?.state === "MEASURED_PASS"), contract.acceptance);
+assert("differentiation_acceptance_keeps_human_pending", acceptanceById.get("AC-05")?.state === "MACHINE_PRECHECK_PASS_HUMAN_PENDING", acceptanceById.get("AC-05"));
+assert("human_acceptance_not_started", ["AC-02", "AC-03", "AC-04", "AC-06", "AC-07"].every((id) => acceptanceById.get(id)?.state === "NOT_STARTED"), contract.acceptance);
 // nada declarado validado: nenhum estado do arquivo pode dizer que a revisao passou
 const forbiddenStates = JSON.stringify(contract).match(/"state"\s*:\s*"(VALIDATED|PASSED|APPROVED|DONE)"/g);
 assert("no_validated_state_anywhere", forbiddenStates === null, forbiddenStates);
@@ -244,11 +243,11 @@ for (const entry of termEntries) {
     assert(`term_entry_count_only_has_no_threshold_${entry.id}`, entry.threshold === undefined, entry);
   }
 }
-// a entrada de duplicidade e verificavel por maquina mas nao roda nesta branch, e diz isso
+// a entrada de duplicidade agora roda sobre o corpus publicado e derivado do registro
 const dup = forbidden.find((f) => f.checker === "corpus_duplicate_scan");
 assert(
-  "duplicate_entry_declares_blocked",
-  dup && dup.machine_checkable === true && dup.runnable_in_this_branch === false && typeof dup.blocked_by === "string",
+  "duplicate_entry_is_runnable",
+  dup && dup.machine_checkable === true && dup.runnable_in_this_branch === true && fs.existsSync(path.join(root, dup.implemented_by)),
   dup,
 );
 
@@ -337,6 +336,20 @@ assert(
     contract.differentiation_test.scope_note.includes("deliverables-registry.v1.json"),
   contract.differentiation_test?.scope_note,
 );
+assert("differentiation_machine_precheck_54", contract.differentiation_test?.machine_precheck?.state === "MEASURED_PASS" && contract.differentiation_test.machine_precheck.unique_signatures === 54 && contract.differentiation_test.machine_precheck.human_equivalence_claimed === false, contract.differentiation_test?.machine_precheck);
+
+const taskDoors = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/task-doors.v1.json"), "utf8"));
+const familyRegistry = JSON.parse(fs.readFileSync(path.join(root, "data/organic/public-family-registry.json"), "utf8"));
+const catalogHtml = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
+const derivedRoutes = deriveMoneyRoutes(registry, taskDoors, familyRegistry);
+const derivedAudit = auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml });
+assert("copy_audit_is_registry_derived", contract.public_implementation?.manual_route_allowlist === false && contract.money_page_scan?.manual_route_allowlist === false, contract.public_implementation);
+assert("copy_audit_covers_54", derivedAudit.metrics.deliverables === 54 && derivedAudit.metrics.titleless_unique === 54, derivedAudit.metrics);
+assert("copy_audit_covers_810_clauses", derivedAudit.metrics.clauses_per_deliverable === 15 && derivedAudit.metrics.clause_instances === 810, derivedAudit.metrics);
+assert("copy_audit_discovers_live_routes", derivedRoutes.length >= 20 && derivedAudit.metrics.routes_derived === derivedRoutes.length, derivedRoutes);
+assert("copy_audit_zero_violations", derivedAudit.ok && derivedAudit.metrics.language_violations === 0 && derivedAudit.metrics.structured_social_proof_hits === 0, derivedAudit.problems);
+assert("copy_audit_runner_exists", fs.existsSync(path.join(root, contract.public_implementation.audit_runner)), contract.public_implementation.audit_runner);
+assert("copy_review_package_exists", fs.existsSync(path.join(root, contract.public_implementation.adversarial_review_package, "review.template.json")) && fs.existsSync(path.join(root, contract.public_implementation.adversarial_review_package, "differentiation.template.json")), contract.public_implementation.adversarial_review_package);
 
 /* ---------- 5. excecoes de portao documentadas no proprio arquivo ---------- */
 const exceptions = contract.gate_exceptions || [];
@@ -378,7 +391,9 @@ assert(
     guarantee.implemented_as === "guarantee_promise_forms" &&
     Array.isArray(guarantee.promise_forms) &&
     guarantee.promise_forms.includes("garantia de") &&
-    guarantee.promise_forms.includes("garantimos"),
+    guarantee.promise_forms.includes("garantimos") &&
+    guarantee.market_institute_forms.includes("garantia de proposta") &&
+    guarantee.market_institute_forms.includes("garantia contratual"),
   guarantee,
 );
 const registered = exceptionById.get("GX-04");
@@ -445,9 +460,12 @@ function classify(entry, normText, index, matched, ranges) {
   if (exemptionIds.includes("GX-04") && ranges.some(([a, b]) => index >= a && index < b)) return "GX-04";
   if (exemptionIds.includes("GX-03")) {
     const tail = normText.slice(index, index + matched.length + 4);
+    const instituteTail = normText.slice(index, index + matched.length + 24);
+    const isMarketInstitute = (guarantee?.market_institute_forms || []).some((form) => instituteTail.startsWith(normalize(form)));
     const isPromiseForm =
       promiseForms.some((f) => normalize(f) === matched) ||
       promiseForms.some((f) => normalize(f) === tail.slice(0, normalize(f).length));
+    if (isMarketInstitute) return "GX-03";
     if (!isPromiseForm) return "GX-03";
   }
   if (exemptionIds.includes("GX-01")) {
@@ -638,11 +656,11 @@ assert(
 const EM_DASH = String.fromCharCode(0x2014);
 assert("no_em_dash_in_contract", !raw.includes(EM_DASH), "travessao encontrado");
 assert(
-  "declares_what_is_not_delivered",
+  "declares_remaining_human_work",
   Array.isArray(contract.not_delivered_by_this_pr) &&
     contract.not_delivered_by_this_pr.length >= 4 &&
     contract.not_delivered_by_this_pr.some((s) =>
-      /nenhuma copy[\s\S]*reescrit|n[aã]o reescreve/i.test(s),
+      /revisão adversarial[\s\S]*não foi executada/i.test(s),
     ),
   contract.not_delivered_by_this_pr,
 );

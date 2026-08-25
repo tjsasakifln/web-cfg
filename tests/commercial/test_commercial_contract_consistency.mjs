@@ -159,7 +159,11 @@ assert("no_obsolete_lic_or_dlv_identity", !/CFG-(?:LIC|DLV)-/.test(commercialTex
 assert("copy_names_issue_343_as_authority", /#343/.test(copy.naming_authority || ""), copy.naming_authority);
 assert("copy_target_matches_registry", copy.differentiation_test.target_count === registry.deliverables.length && copy.differentiation_test.count_discrepancy.state === "RESOLVED_BY_CANONICAL_REGISTRY", copy.differentiation_test);
 assert("copy_stays_not_started", copy.state === "NOT_STARTED", copy.state);
-assert("copy_acceptance_stays_not_started", copy.acceptance.every((criterion) => criterion.state === "NOT_STARTED"), copy.acceptance);
+assert("copy_human_acceptance_stays_not_started", ["AC-02", "AC-03", "AC-04", "AC-06", "AC-07"].every((id) => copy.acceptance.find((criterion) => criterion.id === id)?.state === "NOT_STARTED"), copy.acceptance);
+assert("copy_machine_acceptance_has_evidence", ["AC-01", "AC-08", "AC-09"].every((id) => {
+  const criterion = copy.acceptance.find((item) => item.id === id);
+  return criterion?.state === "MEASURED_PASS" && typeof criterion.evidence === "string";
+}), copy.acceptance);
 assert("copy_has_no_review_evidence", copy.reviews.length === 0 && copy.human_protocol.results.length === 0, [copy.reviews, copy.human_protocol.results]);
 
 const failed = results.filter((result) => !result.ok);

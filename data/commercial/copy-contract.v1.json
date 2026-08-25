@@ -1,6 +1,6 @@
 {
   "schema": "confenge.offer-copy-contract/1.0",
-  "contract_version": "CFG-COPY-2026-08-24-v1",
+  "contract_version": "CFG-COPY-2026-08-25-v2",
   "issue": "#338",
   "parent_issue": "#329",
   "complements_issues": [
@@ -11,7 +11,7 @@
     "#343"
   ],
   "state": "NOT_STARTED",
-  "state_note": "NOT_STARTED significa que a revisão adversarial em oito lentes não foi executada e o protocolo humano não rodou. Esta PR grava o contrato e o portão; não reescreve copy de nenhuma página.",
+  "state_note": "NOT_STARTED significa que a revisão adversarial em oito lentes e o protocolo humano não rodaram. A aplicação pública das 15 cláusulas e os gates derivados do registro estão medidos separadamente; não substituem julgamento humano.",
   "recorded_at": "2026-08-24",
   "operational_definition": {
     "statement": "Impossível de melhorar não é alegação vazia: significa submeter cada oferta a um contrato editorial completo, a uma revisão adversarial e a três tempos de compreensão.",
@@ -465,8 +465,9 @@
       "claim_pattern": "parágrafo intercambiável entre duas ofertas",
       "machine_checkable": true,
       "checker": "corpus_duplicate_scan",
-      "runnable_in_this_branch": false,
-      "blocked_by": "O registro taxativo e a autoridade nominal existem, mas ainda não existe corpus de parágrafos de copy por oferta para comparar.",
+      "runnable_in_this_branch": true,
+      "implemented_by": "scripts/commercial/copy_contract_audit.mjs",
+      "corpus": "trigger, decisão, saída e as 15 cláusulas publicadas por deliverable_id",
       "source": "#338 Linguagem proibida sem prova imediata",
       "rationale": "A checagem é de duplicidade de parágrafo entre ofertas, não de termo isolado."
     },
@@ -534,6 +535,15 @@
         "garantidos",
         "garantidas"
       ],
+      "market_institute_forms": [
+        "garantia de proposta",
+        "garantias de proposta",
+        "garantia contratual",
+        "garantias contratuais",
+        "garantia financeira",
+        "garantias financeiras",
+        "seguro-garantia"
+      ],
       "source": "#338 promessa jurídica, regulatória, técnica ou financeira fora da competência"
     },
     {
@@ -581,7 +591,14 @@
       "remover ofertas"
     ],
     "state": "NOT_STARTED",
-    "scope_note": "O alvo de 54/54 é conferido contra data/commercial/deliverables-registry.v1.json. A execução humana do teste continua NOT_STARTED e nenhuma oferta é declarada diferenciada por este contrato."
+    "scope_note": "O alvo de 54/54 é conferido contra data/commercial/deliverables-registry.v1.json. A execução humana do teste continua NOT_STARTED e nenhuma oferta é declarada compreendida por este precheck.",
+    "machine_precheck": {
+      "state": "MEASURED_PASS",
+      "runner": "scripts/commercial/copy_contract_audit.mjs",
+      "signature_fields": ["trigger", "decision_question", "included_outputs[0]"],
+      "unique_signatures": 54,
+      "human_equivalence_claimed": false
+    }
   },
   "adversarial_lenses": [
     {
@@ -794,7 +811,8 @@
     {
       "id": "AC-01",
       "criterion": "contrato editorial aplicado a 54/54",
-      "state": "NOT_STARTED"
+      "state": "MEASURED_PASS",
+      "evidence": "54 contratos públicos com 15 cláusulas cada, 810 instâncias verificadas pelo runner derivado do registro"
     },
     {
       "id": "AC-02",
@@ -814,7 +832,8 @@
     {
       "id": "AC-05",
       "criterion": "nenhum card ou página usa copy intercambiável",
-      "state": "NOT_STARTED"
+      "state": "MACHINE_PRECHECK_PASS_HUMAN_PENDING",
+      "evidence": "54 assinaturas distintas de trigger, decisão e saída; teste humano sem título continua NOT_STARTED"
     },
     {
       "id": "AC-06",
@@ -829,19 +848,42 @@
     {
       "id": "AC-08",
       "criterion": "tests de copy e design ganham guards derivados do registry, sem allowlist manual",
-      "state": "NOT_STARTED"
+      "state": "MEASURED_PASS",
+      "evidence": "scripts/commercial/copy_contract_audit.mjs deriva 54 ofertas e rotas públicas de registros versionados"
     },
     {
       "id": "AC-09",
       "criterion": "o site não declara impossível de melhorar; demonstra qualidade por clareza, prova e consistência",
-      "state": "NOT_STARTED"
+      "state": "MEASURED_PASS",
+      "evidence": "scanner derivado de rotas precificadas encontra zero ocorrência não isenta"
     }
   ],
   "naming_authority": "#343 é a fonte canônica de public_name_pt_br, linha de valor, aliases e semântica entre 54 entregáveis, 2 contêineres e planos. Em divergência nominal prevalece #343; escopo e preço de #338 permanecem válidos.",
+  "public_implementation": {
+    "state": "MACHINE_GATES_GREEN_HUMAN_REVIEW_PENDING",
+    "catalog_route": "/entregas/",
+    "renderer": "scripts/commercial/render_public_catalog.mjs",
+    "audit_runner": "scripts/commercial/copy_contract_audit.mjs",
+    "offer_source": "data/commercial/deliverables-registry.v1.json",
+    "route_sources": [
+      "data/commercial/deliverables-registry.v1.json#deliverables[].route",
+      "data/commercial/task-doors.v1.json#containers[].route",
+      "data/organic/public-family-registry.json#families[profile=priced_offer]"
+    ],
+    "manual_route_allowlist": false,
+    "deliverables_covered": 54,
+    "clauses_per_deliverable": 15,
+    "clause_instances": 810,
+    "adversarial_review_package": "docs/research/copy-adversarial-v1",
+    "human_review_state": "NOT_STARTED"
+  },
   "money_page_scan": {
     "state": "MEASURED_PASS",
     "measured_at": "2026-08-25",
-    "measured_against": "feat/329-public-catalog-surface",
+    "measured_against": "feat/338-copy-contract-enforcement",
+    "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
+    "route_discovery": "registry_and_public_family_derived",
+    "manual_route_allowlist": false,
     "method": "Cada página é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Cada ocorrência é classificada como isenta por exceção documentada ou como violação.",
     "gate_rule": "Toda ocorrência viva precisa estar registrada: as isentas em boundaries com contagem exata, as demais em violations. Ocorrência não registrada reprova o portão.",
     "pages": [
@@ -1038,11 +1080,12 @@
         "id": "B-18",
         "page": "entregas/index.html",
         "forbidden_id": "FL-08",
-        "occurrences": 6,
+        "occurrences": 51,
         "by_exemption": {
-          "GX-03": 6
+          "GX-01": 21,
+          "GX-03": 30
         },
-        "evidence": "O índice integral cita o instituto no nome canônico, na pergunta decisória e na descrição de caixa, seguro, caução e garantia contratual do item 30; nenhuma ocorrência promete resultado."
+        "evidence": "O índice e os contratos editoriais citam garantia como instituto de proposta, contrato, seguro ou exclusão explícita; nenhuma ocorrência promete resultado."
       }
     ],
     "structured_data_check": {
@@ -1067,11 +1110,11 @@
     "observations_note": "Nenhuma ocorrência de poderá nem de saiba mais nas doze páginas de dinheiro em 2026-08-24."
   },
   "not_delivered_by_this_pr": [
-    "Nenhuma copy de página é reescrita. Esta PR grava o contrato e o portão.",
+    "As 15 cláusulas são publicadas para 54/54 no catálogo, mas não são declaradas compreendidas por pessoas reais.",
     "A revisão adversarial em oito lentes não foi executada: reviews está vazio e state é NOT_STARTED.",
     "O protocolo humano de 20 participantes não rodou: human_protocol.results está vazio.",
     "O teste humano de diferenciação não rodou: o rol taxativo existe e fixa o alvo em 54/54, mas ainda não há resultados humanos.",
-    "FL-19, duplicidade de parágrafo entre ofertas, não é executável nesta branch por falta do corpus de copy por oferta.",
-    "Os critérios QC-01 a QC-09 não são medidos aqui: eles ainda precisam do corpus de copy por oferta."
+    "O precheck de duplicidade prova assinaturas distintas; não substitui o revisor que identifica a oferta sem título e preço.",
+    "Os critérios que dependem de julgamento, tela real ou proveniência externa continuam para a revisão humana e os gates especializados."
   ]
 }

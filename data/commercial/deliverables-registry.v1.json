@@ -3842,7 +3842,7 @@
       "catalog_number": "40",
       "public_name": "Análise de Causas e Impactos de Atrasos",
       "decision_question": "Quantos dias deste atraso têm causa registrada, e qual é o nexo entre evento, responsável e caminho crítico?",
-      "trigger": "A discussão do atraso saiu do campo operacional e a empresa precisa de cronologia, causalidade e quantificação reproduzíveis para instruir decisão executiva, negociação ou o advogado.",
+      "trigger": "A discussão do atraso exige cronologia, causalidade e quantificação reproduzíveis para instruir decisão executiva, negociação ou o advogado.",
       "price": {
         "amount_cents": 1290000,
         "currency": "BRL",

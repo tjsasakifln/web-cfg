@@ -38,6 +38,11 @@ function publicText(value) {
     .replace(/\bUNKNOWN\b/g, "DESCONHECIDO")
     .replace(/\binputs\b/gi, "insumos")
     .replace(/\bextra-cli\b/gi, "fonte versionada de dados públicos")
+    .replace(/\bDataLake\b/gi, "base paralela de dados")
+    .replace(/fale conosco/gi, "atendimento genérico")
+    .replace(/\bcheckout\b/gi, "contratação automática")
+    .replace(/\bkickoff\b/gi, "início")
+    .replace(/\s*\(CFG-D\d{2}\)/g, "")
     // Describe the contractual instruments without reading as a promise of
     // outcome under the public copy contract.
     .replace(/garantia de proposta e garantia contratual dimensionadas/gi, "cauções de proposta e garantia contratual dimensionadas");
@@ -51,6 +56,53 @@ function stepUpLabel(entry) {
     return "Diretoria Fracionada para o Mercado Público";
   }
   return "entrega pontual";
+}
+
+function lowerFirst(value) {
+  const text = String(value || "").trim();
+  return text ? `${text[0].toLocaleLowerCase("pt-BR")}${text.slice(1)}` : text;
+}
+
+function publicList(values, prefix = "") {
+  return `<ul>${values.map((value) => `<li>${escapeHtml(prefix)}${escapeHtml(publicText(value))}</li>`).join("")}</ul>`;
+}
+
+function copyClause(key, title, content) {
+  return `<section data-copy-clause="${key}"><h6>${title}</h6>${content}</section>`;
+}
+
+function contractDetails(entry, neighbor) {
+  const state = STATE[entry.public_state];
+  const proof = entry.public_state === "PUBLISHED"
+    ? "Amostra sintética integral publicada, com método, fonte, data e cobertura visíveis. Nenhum case real é insinuado."
+    : "Contrato e método publicados. Caso real não publicado; a prova disponível é a estrutura verificável da entrega.";
+  const actionExpectation = entry.public_state === "PUBLISHED"
+    ? "Consultar exemplo completo abre a amostra no navegador. Contratação, escopo e prazo continuam sujeitos a confirmação."
+    : entry.public_state === "VALIDATE"
+      ? "Pedir análise de aderência leva à captura terminal. Uma pessoa revisa contexto, capacidade e prazo antes de qualquer proposta."
+      : "Contratação indisponível. O estado só muda depois que cobertura e proveniência cumprirem o gate.";
+  const neighborCopy = neighbor
+    ? `Compare com ${neighbor.public_name_pt_br} quando a pergunta for: ${neighbor.decision_question} Esta entrega cabe quando a pergunta for: ${entry.decision_question}`
+    : `Não há alternativa vizinha na mesma tarefa. Próximo passo comercial: ${stepUpLabel(entry)}.`;
+  const grades = entry.data_contract.evidence_grades.map((grade) => publicText(grade).toLocaleLowerCase("pt-BR"));
+  const clauses = [
+    copyClause("decision_oriented_name", "Decisão orientadora", `<p>${escapeHtml(entry.public_name_pt_br)} responde: ${escapeHtml(entry.decision_question)}</p>`),
+    copyClause("observable_trigger", "Compre quando", `<p>${escapeHtml(publicText(lowerFirst(entry.trigger)))}</p>`),
+    copyClause("cost_of_inaction", "Custo de não agir", `<p>Sem esta análise, a pergunta “${escapeHtml(entry.decision_question)}” segue sem critério documentado.</p>`),
+    copyClause("decision_that_changes", "Decisão antes e depois", `<p>Antes: ${escapeHtml(entry.decision_question)} Depois: ${escapeHtml(publicText(entry.included_outputs[0]))}.</p>`),
+    copyClause("concrete_result_and_artifact_example", "Resultado e artefato", publicList(entry.included_outputs)),
+    copyClause("scope_in", "O que entra", `<p>${escapeHtml(publicText(entry.scope.unit))}.</p>${publicList(entry.scope.limits)}`),
+    copyClause("client_inputs_and_sla_start", "Insumos e início do prazo", `${publicList(entry.required_inputs)}<p>O prazo começa após ${escapeHtml(publicText(entry.sla.starts_after))}.</p>`),
+    copyClause("method_and_provenance", "Método e proveniência", `<p>Afirmações usam fonte, data, método e cobertura, marcadas como ${escapeHtml(grades.join(", "))}.</p>`),
+    copyClause("price_and_sla_same_block", "Preço e prazo", `<p><strong>${escapeHtml(priceLabel(entry))}</strong> · ${escapeHtml(publicText(slaLabel(entry)))}</p>`),
+    copyClause("exclusions_and_third_party", "Não inclui", publicList(entry.exclusions, "Não inclui: ")),
+    copyClause("fit_and_misfit", "Serve e não serve", `<p>Serve quando ${escapeHtml(publicText(lowerFirst(entry.trigger)))}</p><p>Não serve para ${escapeHtml(publicText(entry.exclusions[0]))}.</p>`),
+    copyClause("proof_matching_real_state", "Prova disponível", `<p>${proof}</p>`),
+    copyClause("specific_objections", "Objeção que precisa ser resolvida", `<p>Sem ${escapeHtml(publicText(entry.required_inputs[0]))}, o SLA não começa e a decisão permanece em revisão.</p>`),
+    copyClause("cta_with_post_click_expectation", "Próxima ação", `<p>${actionExpectation}</p><p>Estado atual: ${state.label}.</p>`),
+    copyClause("neighbor_alternative_and_step_up", "Alternativa e próximo nível", `<p>${escapeHtml(neighborCopy)}</p><p>Próximo nível: ${escapeHtml(stepUpLabel(entry))}.</p>`),
+  ];
+  return `<details class="catalog-item__contract" data-copy-contract-id="${entry.deliverable_id}"><summary>Ver escopo, aderência e alternativa</summary><div>${clauses.join("")}</div></details>`;
 }
 
 function brl(cents) {
@@ -116,7 +168,7 @@ const STATE = {
   },
 };
 
-function itemCard(entry) {
+function itemCard(entry, byTask) {
   const state = STATE[entry.public_state];
   const title = escapeHtml(entry.public_name_pt_br);
   const alias = entry.public_name !== entry.public_name_pt_br
@@ -132,6 +184,9 @@ function itemCard(entry) {
 
   const search = [entry.public_name_pt_br, entry.public_name, ...(entry.name_aliases || []), entry.trigger, entry.decision_question]
     .join(" ").toLocaleLowerCase("pt-BR");
+  const taskEntries = byTask.get(entry.task_door) || [];
+  const ownIndex = taskEntries.findIndex((candidate) => candidate.deliverable_id === entry.deliverable_id);
+  const neighbor = taskEntries.length > 1 ? taskEntries[ownIndex === taskEntries.length - 1 ? ownIndex - 1 : ownIndex + 1] : null;
   return `<article class="catalog-item catalog-item--${entry.public_state.toLowerCase()}" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-task-door="${entry.task_door}" data-object="${objectKind(entry)}" data-urgency="${urgencyKind(entry)}" data-price-band="${priceBand(entry)}" data-billing="${entry.price.billing}" data-search="${escapeHtml(search)}" data-name="${title}" data-trigger="${escapeHtml(publicText(entry.trigger))}" data-decision="${escapeHtml(publicText(entry.decision_question))}" data-unit="${escapeHtml(publicText(entry.scope.unit))}" data-input="${escapeHtml(publicText(entry.required_inputs[0]))}" data-output="${escapeHtml(publicText(entry.included_outputs[0]))}" data-sla="${escapeHtml(publicText(slaLabel(entry)))}" data-price="${escapeHtml(priceLabel(entry))}" data-exclusion="${escapeHtml(publicText(entry.exclusions[0]))}" data-step-up="${escapeHtml(stepUpLabel(entry))}" id="entrega-${entry.catalog_number}">
 <header class="catalog-item__head"><span class="catalog-item__number">${entry.catalog_number}</span><span class="catalog-item__state">${state.label}</span></header>
 <h5>${title}</h5>
@@ -140,26 +195,27 @@ ${alias}
 <dl class="catalog-item__facts"><div><dt>Preço</dt><dd>${priceLabel(entry)}</dd></div><div><dt>Prazo</dt><dd>${escapeHtml(publicText(slaLabel(entry)))}</dd></div><div><dt>Saída principal</dt><dd>${escapeHtml(publicText(entry.included_outputs[0]))}</dd></div></dl>
 <p class="catalog-item__evidence">Dados públicos com fonte, data, método e cobertura. Cada afirmação é marcada como fato, cálculo, inferência ou desconhecido.</p>
 <p class="catalog-item__state-note">${state.explanation}</p>
+${contractDetails(entry, neighbor)}
 <label class="catalog-item__compare"><input type="checkbox" value="${entry.deliverable_id}" data-compare-item/> Comparar esta entrega</label>
 ${action}
 </article>`;
 }
 
-function subgroupMarkup(door, subgroup, byNumber) {
+function subgroupMarkup(door, subgroup, byNumber, byTask) {
   const entries = subgroup.items.map((number) => byNumber.get(number));
   return `<section class="catalog-subgroup" aria-labelledby="subgrupo-${subgroup.subgroup_id}">
 <header><h4 id="subgrupo-${subgroup.subgroup_id}">${escapeHtml(subgroup.label_pt_br)}</h4><p>${escapeHtml(subgroup.decisive_difference_pt_br)}</p></header>
-<div class="catalog-items">${entries.map(itemCard).join("\n")}</div>
+<div class="catalog-items">${entries.map((entry) => itemCard(entry, byTask)).join("\n")}</div>
 </section>`;
 }
 
-function doorMarkup(door, byNumber) {
+function doorMarkup(door, byNumber, byTask) {
   const progressive = door.progressive_disclosure;
   let content;
   if (progressive?.required) {
-    content = progressive.subgroups.map((subgroup) => subgroupMarkup(door, subgroup, byNumber)).join("\n");
+    content = progressive.subgroups.map((subgroup) => subgroupMarkup(door, subgroup, byNumber, byTask)).join("\n");
   } else {
-    content = `<section class="catalog-subgroup" aria-label="Opções para ${escapeHtml(door.public_label_pt_br)}"><h4 class="catalog-subgroup__title catalog-subgroup__title--plain">Opções para esta tarefa</h4><div class="catalog-items">${door.members.map(({ item }) => itemCard(byNumber.get(item))).join("\n")}</div></section>`;
+    content = `<section class="catalog-subgroup" aria-label="Opções para ${escapeHtml(door.public_label_pt_br)}"><h4 class="catalog-subgroup__title catalog-subgroup__title--plain">Opções para esta tarefa</h4><div class="catalog-items">${door.members.map(({ item }) => itemCard(byNumber.get(item), byTask)).join("\n")}</div></section>`;
   }
   return `<section class="catalog-door" data-task-door="${door.door}" id="porta-${door.door.toLowerCase()}" aria-labelledby="porta-${door.door.toLowerCase()}-title">
 <header class="catalog-door__head"><p class="eyebrow">Tarefa ${String(door.order).padStart(2, "0")}</p><h3 id="porta-${door.door.toLowerCase()}-title">${escapeHtml(door.public_label_pt_br)}</h3><p>${escapeHtml(door.decision_question_pt_br)}</p><span>${door.member_count} entregáveis</span></header>
@@ -169,8 +225,12 @@ ${content}
 
 export function renderCatalog(registry, taskDoors) {
   const byNumber = new Map(registry.deliverables.map((entry) => [entry.catalog_number, entry]));
+  const byTask = new Map(taskDoors.doors.map((door) => [
+    door.door,
+    door.members.map((member) => byNumber.get(member.item)),
+  ]));
   const nav = taskDoors.doors.map((door) => `<a href="#porta-${door.door.toLowerCase()}"><span>${door.order}</span>${escapeHtml(door.public_label_pt_br)} <small>${door.member_count}</small></a>`).join("\n");
-  const doors = taskDoors.doors.map((door) => doorMarkup(door, byNumber)).join("\n");
+  const doors = taskDoors.doors.map((door) => doorMarkup(door, byNumber, byTask)).join("\n");
   const taskOptions = taskDoors.doors.map((door) => `<option value="${door.door}">${escapeHtml(door.public_label_pt_br)}</option>`).join("");
   const inputOptions = taskDoors.interaction_rules.framing_steps[2].options_pt_br.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("");
   const alphabetical = [...registry.deliverables]

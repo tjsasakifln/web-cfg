@@ -158,6 +158,16 @@
 .catalog-item__facts dd{margin:0;color:#24364a;font-size:.76rem;line-height:1.45}
 .catalog-item__evidence,.catalog-item__state-note{margin:0 0 12px;color:#617084;font-size:.72rem;line-height:1.52}
 .catalog-item__state-note{padding-left:10px;border-left:2px solid #9eabb6}
+.catalog-item__contract{margin:2px 0 14px;padding:11px 0;border-top:1px solid #dce3df;border-bottom:1px solid #dce3df}
+.catalog-item__contract summary{color:#0b684f;font-size:.75rem;font-weight:850;cursor:pointer}
+.catalog-item__contract>div{display:grid;gap:0;margin-top:12px;background:#f7f9f8;border:1px solid #dfe6e1;border-radius:5px}
+.catalog-item__contract section{padding:12px 13px}
+.catalog-item__contract section+section{border-top:1px solid #dfe6e1}
+.catalog-item__contract h6{margin:0 0 5px;color:#0b684f;font-family:var(--mono);font-size:.61rem;font-weight:850;letter-spacing:.02em;text-transform:uppercase}
+.catalog-item__contract p,.catalog-item__contract ul{margin:0;color:#435369;font-size:.69rem;line-height:1.5}
+.catalog-item__contract p+p{margin-top:5px}
+.catalog-item__contract ul{padding-left:17px}
+.catalog-item__contract li+li{margin-top:3px}
 .catalog-item .text-link,.catalog-item__unavailable{margin-top:auto;padding-top:6px;font-size:.78rem;font-weight:800}
 .catalog-item__unavailable{color:#704918}
 .catalog-boundary{margin-top:48px;padding:24px 26px;color:#dce5ed;background:#071a31;border-left:4px solid var(--lime)}

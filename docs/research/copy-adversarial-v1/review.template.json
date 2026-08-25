@@ -1,0 +1,26 @@
+{
+  "schema": "confenge.copy-adversarial-review/1.0",
+  "template": true,
+  "contract_version": "CFG-COPY-2026-08-25-v2",
+  "deliverable_id": null,
+  "reviewed_sha": null,
+  "reviewed_at": null,
+  "state": "NOT_STARTED",
+  "lenses": [
+    { "lens_id": "AL-01", "severity": null, "defect": null, "correction": null, "recheck": null },
+    { "lens_id": "AL-02", "severity": null, "defect": null, "correction": null, "recheck": null },
+    { "lens_id": "AL-03", "severity": null, "defect": null, "correction": null, "recheck": null },
+    { "lens_id": "AL-04", "severity": null, "defect": null, "correction": null, "recheck": null },
+    { "lens_id": "AL-05", "severity": null, "defect": null, "correction": null, "recheck": null },
+    { "lens_id": "AL-06", "severity": null, "defect": null, "correction": null, "recheck": null },
+    { "lens_id": "AL-07", "severity": null, "defect": null, "correction": null, "recheck": null },
+    { "lens_id": "AL-08", "severity": null, "defect": null, "correction": null, "recheck": null }
+  ],
+  "totals": {
+    "blocking": null,
+    "material": null,
+    "cosmetic": null
+  },
+  "publish_gate": "PENDING_HUMAN_REVIEW"
+}
+
