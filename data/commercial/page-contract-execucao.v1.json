@@ -1,0 +1,615 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "page-contract-execucao.v1",
+  "family_pt_br": "Execução da licitação",
+  "source_issue": 344,
+  "parent_issue": 329,
+  "related_issues": [88, 330, 343],
+  "naming_authority_issue": 343,
+  "decision_state": "VALIDATE",
+  "priority": "P0",
+  "executive_front": "REVENUE NOW",
+  "leverage": ["revenue", "trust", "customer", "data"],
+  "time_to_evidence_days": 30,
+  "research_state": "NOT_STARTED",
+  "evidence": [],
+  "human_validation": {
+    "state": "NOT_STARTED",
+    "real_proposals_required_before_promoting_price": 3,
+    "collected": []
+  },
+  "currency": "BRL",
+  "price_unit": "cents",
+  "price_basis": "piloto",
+  "pages_created_by_this_contract": [],
+  "checkout_enabled_anywhere": false,
+  "common_rules": {
+    "pilot_prices_do_not_change_items_01_to_48": true,
+    "scope_units_allowed_pt_br": ["objeto", "item", "atividade", "lote", "sistema", "revisão", "evento"],
+    "scope_units_forbidden_pt_br": ["página"],
+    "scope_never_measured_by_pages": true,
+    "urgency_surcharge_percent": 50,
+    "urgency_requires_confirmed_capacity": true,
+    "urgency_disclosed_before_charging": true,
+    "may_compose_item_16": true,
+    "remains_separately_purchasable": true,
+    "item_16_composition_is_itemized": true,
+    "item_16_never_sums_prices_silently": true,
+    "no_data_or_identity_originates_in_web_cfg": true,
+    "truth_and_provenance_remain_in": "extra-cli",
+    "no_success_fee": true,
+    "no_promise_of_victory_or_award": true,
+    "no_custody_of_token_certificate_or_password": true,
+    "statements_pt_br": [
+      "Os preços desta família são pilotos do estado VALIDATE e não alteram nenhum preço dos itens 01 a 48.",
+      "O escopo é limitado por objeto, item, atividade, lote, sistema, revisão e evento, nunca por número de páginas.",
+      "Urgência é aceita apenas com capacidade confirmada, com adicional de 50 por cento informado antes de qualquer cobrança.",
+      "Os itens 49 a 54 podem compor o item 16 e continuam compráveis separadamente, com a composição discriminada na proposta.",
+      "Nenhum dado, planilha ou identidade nasce no web-cfg: verdade e proveniência permanecem no extra-cli.",
+      "Nenhum item desta família tem comissão de êxito, promete vitória ou adjudicação, nem guarda token, certificado digital ou senha do cliente."
+    ]
+  },
+  "routes_owned_by_other_items": [
+    { "route": "/auditoria-orcamento-licitacao/", "owner_item": 14, "owner_public_name_pt_br": "Auditoria de Orçamento, BDI e Exequibilidade" },
+    { "route": "/diagnostico-pre-licitacao/", "owner_item": 12, "owner_public_name_pt_br": "Decisão de Disputar o Edital" },
+    { "route": "/bid-room-licitacoes-obras/", "owner_item": 16, "owner_public_name_pt_br": "Operação de Proposta para Licitação Crítica" }
+  ],
+  "neighbour_offers": [
+    { "item": 12, "public_name_pt_br": "Decisão de Disputar o Edital", "verb_pt_br": "decide" },
+    { "item": 13, "public_name_pt_br": "Mapa de Habilitação e Lacunas de Acervo", "verb_pt_br": "diagnostica" },
+    { "item": 14, "public_name_pt_br": "Auditoria de Orçamento, BDI e Exequibilidade", "verb_pt_br": "audita" },
+    { "item": 16, "public_name_pt_br": "Operação de Proposta para Licitação Crítica", "verb_pt_br": "coordena" }
+  ],
+  "items": [
+    {
+      "number": 49,
+      "deliverable_id": "CFG-D49",
+      "public_name_pt_br": "Orçamento Completo da Proposta",
+      "value_line_pt_br": "Monta preços, composições e BDI em planilha reproduzível.",
+      "decision_question_pt_br": "Qual preço a empresa pode apresentar neste edital, com composições, encargos e BDI que sustentem exame público?",
+      "verb_pt_br": "produz",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "pricing": {
+        "model": "tiers",
+        "tiers": [
+          { "name_pt_br": "Essencial", "price_cents": 980000, "unit_pt_br": "um lote, um sistema principal de referência, até 100 itens orçamentários, uma revisão", "sla_business_days": 10 },
+          { "name_pt_br": "Complexo", "price_cents": 1480000, "unit_pt_br": "um lote, até 300 itens, até dois sistemas ou fontes principais, duas revisões", "sla_business_days": 15 },
+          { "name_pt_br": "Extenso", "price_cents": 2480000, "unit_pt_br": "um lote, até 800 itens, múltiplas fontes e cotações, duas revisões", "sla_business_days": 20 }
+        ],
+        "additional_charges": []
+      },
+      "sla_business_days": null,
+      "safe_deadline_gate": null,
+      "credit_rule": null,
+      "inputs_pt_br": [
+        "edital",
+        "projetos e memoriais",
+        "planilha-base quando houver",
+        "regime de execução",
+        "data-base",
+        "localização",
+        "premissas tributárias validadas pelo cliente",
+        "cotações existentes",
+        "política de margem"
+      ],
+      "outputs_pt_br": [
+        "quantitativos recebidos e reconciliados",
+        "composições de custo",
+        "insumos, equipamentos e mão de obra",
+        "cotações e fontes",
+        "encargos",
+        "BDI analítico",
+        "curva ABC",
+        "planilha de preços",
+        "premissas registradas",
+        "memória de cálculo reproduzível",
+        "checklist de exequibilidade",
+        "arquivo nos formatos exigidos pelo edital"
+      ],
+      "exclusions_pt_br": [
+        "levantamento quantitativo integral a partir de projeto ausente ou insuficiente",
+        "projeto executivo",
+        "cotação falsa ou de complacência",
+        "definição tributária pelo consultor",
+        "garantia de aceitabilidade do preço pelo órgão",
+        "desconto recomendado sem limite de margem definido pelo cliente"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "A definição tributária é do cliente e de seus assessores, e o orçamento apenas registra a premissa recebida.",
+        "Não há comissão de êxito nem promessa de vitória ou adjudicação.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ],
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 14,
+          "against_public_name_pt_br": "Auditoria de Orçamento, BDI e Exequibilidade",
+          "their_verb_pt_br": "audita",
+          "our_verb_pt_br": "produz",
+          "statement_pt_br": "O item 14 audita um orçamento que já existe. O item 49 produz o orçamento que ainda não existe. Quem já tem planilha pronta compra o 14, quem precisa da planilha compra o 49."
+        },
+        {
+          "against_item": 16,
+          "against_public_name_pt_br": "Operação de Proposta para Licitação Crítica",
+          "their_verb_pt_br": "coordena",
+          "our_verb_pt_br": "produz",
+          "statement_pt_br": "O item 16 coordena a oportunidade inteira até a entrega da proposta. O item 49 é um artefato único e comprável isoladamente, e quando compõe o 16 aparece discriminado na proposta."
+        }
+      ],
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false
+      }
+    },
+    {
+      "number": 50,
+      "deliverable_id": "CFG-D50",
+      "public_name_pt_br": "Cronograma e Plano Executivo da Proposta",
+      "value_line_pt_br": "Converte escopo e prazo em sequência, marcos e curva de execução.",
+      "decision_question_pt_br": "Em que sequência, com que marcos e com que curva de avanço a empresa consegue executar o objeto dentro do prazo do edital?",
+      "verb_pt_br": "produz",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "pricing": {
+        "model": "tiers",
+        "tiers": [
+          { "name_pt_br": "Essencial", "price_cents": 590000, "unit_pt_br": "um lote, até 80 atividades de controle, uma revisão", "sla_business_days": 7 },
+          { "name_pt_br": "Complexo", "price_cents": 980000, "unit_pt_br": "um lote, até 200 atividades, duas revisões, lógica de recursos e cenários", "sla_business_days": 10 }
+        ],
+        "additional_charges": []
+      },
+      "sla_business_days": null,
+      "safe_deadline_gate": null,
+      "credit_rule": null,
+      "inputs_pt_br": [
+        "escopo",
+        "prazo editalício",
+        "marcos",
+        "restrições",
+        "orçamento e quantidades",
+        "produtividade",
+        "estratégia construtiva fornecida ou validada pelo cliente"
+      ],
+      "outputs_pt_br": [
+        "estrutura analítica",
+        "sequência e dependências",
+        "marcos",
+        "caminho crítico inferido e premissas",
+        "mobilização",
+        "cronograma físico",
+        "cronograma físico-financeiro",
+        "curva de avanço e de caixa",
+        "plano executivo resumido",
+        "riscos",
+        "compatibilidade com a proposta"
+      ],
+      "exclusions_pt_br": [
+        "planejamento executivo completo posterior ao contrato",
+        "acompanhamento mensal da execução",
+        "garantia de produtividade",
+        "cronograma fabricado apenas para cumprir formalidade"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "A produtividade adotada é premissa do cliente e não é garantida pela CONFENGE.",
+        "Não há comissão de êxito nem promessa de vitória ou adjudicação.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ],
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 16,
+          "against_public_name_pt_br": "Operação de Proposta para Licitação Crítica",
+          "their_verb_pt_br": "coordena",
+          "our_verb_pt_br": "produz",
+          "statement_pt_br": "O item 16 coordena a oportunidade inteira, com documentos, preço, técnica e revisão. O item 50 é um artefato único, o cronograma e o plano executivo da proposta, comprável isoladamente."
+        },
+        {
+          "against_item": 49,
+          "against_public_name_pt_br": "Orçamento Completo da Proposta",
+          "their_verb_pt_br": "produz",
+          "our_verb_pt_br": "produz",
+          "statement_pt_br": "O item 49 produz o preço e as composições. O item 50 produz o tempo, a sequência e a curva. São artefatos distintos e cada um tem a sua unidade de escopo e o seu SLA."
+        }
+      ],
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false
+      }
+    },
+    {
+      "number": 51,
+      "deliverable_id": "CFG-D51",
+      "public_name_pt_br": "Dossiê de Habilitação Pronto para Envio",
+      "value_line_pt_br": "Organiza cada exigência e documento no pacote final da licitação.",
+      "decision_question_pt_br": "O pacote de habilitação deste edital está completo, válido e no formato exigido para o cliente enviar?",
+      "verb_pt_br": "monta",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "pricing": {
+        "model": "single",
+        "tiers": [
+          { "name_pt_br": "Único", "price_cents": 490000, "unit_pt_br": "um edital, um licitante ou consórcio, um lote e uma rodada documental", "sla_business_days": 3 }
+        ],
+        "additional_charges": []
+      },
+      "sla_business_days": 3,
+      "safe_deadline_gate": {
+        "declared_by_issue": true,
+        "min_business_days_remaining": 5,
+        "extra_conditions_pt_br": ["os documentos-base precisam existir"],
+        "statement_pt_br": "A contratação só é aceita se restarem pelo menos 5 dias úteis até o prazo de entrega e se os documentos-base já existirem."
+      },
+      "credit_rule": {
+        "source_item": 13,
+        "source_public_name_pt_br": "Mapa de Habilitação e Lacunas de Acervo",
+        "cap_basis_pt_br": "o maior valor pago no item 13",
+        "cap_cents": null,
+        "window_days": 30,
+        "uses_allowed": 1,
+        "accumulates": false,
+        "applies_to_items": [51, 16],
+        "originates_in_paying_item": true,
+        "statement_pt_br": "O crédito nasce no item pagador, o 13. O maior valor pago no item 13 credita uma única vez o item 51 ou o item 16, dentro de 30 dias, sem acumulação com outros créditos e limitado a esse maior valor pago."
+      },
+      "inputs_pt_br": [
+        "edital e anexos de habilitação",
+        "documentos societários e contábeis existentes",
+        "certidões e atestados já emitidos",
+        "dados cadastrais confirmados pelo cliente",
+        "identificação do licitante ou do consórcio",
+        "identificação do lote"
+      ],
+      "outputs_pt_br": [
+        "índice que liga cada requisito ao documento correspondente",
+        "validação de validade, assinatura e formato",
+        "formulários e declarações preenchidos com dados confirmados pelo cliente",
+        "padrão de nomes e pastas",
+        "lista de lacunas bloqueantes",
+        "pacote final organizado",
+        "checklist de envio para o cliente executar"
+      ],
+      "exclusions_pt_br": [
+        "criar atestado",
+        "alterar balanço",
+        "obter certidão inexistente",
+        "assinar documento pelo cliente",
+        "usar credencial do cliente",
+        "protocolar o envio",
+        "garantir habilitação"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "O envio da documentação é ato do licitante e ocorre com a credencial do próprio licitante.",
+        "Não há comissão de êxito nem promessa de vitória, habilitação ou adjudicação.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ],
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 13,
+          "against_public_name_pt_br": "Mapa de Habilitação e Lacunas de Acervo",
+          "their_verb_pt_br": "diagnostica",
+          "our_verb_pt_br": "monta",
+          "statement_pt_br": "O item 13 diagnostica a cobertura de habilitação e a estratégia de acervo. O item 51 monta a versão final do pacote de habilitação para envio. Quem ainda não sabe o que falta compra o 13, quem já sabe e precisa do pacote pronto compra o 51."
+        },
+        {
+          "against_item": 16,
+          "against_public_name_pt_br": "Operação de Proposta para Licitação Crítica",
+          "their_verb_pt_br": "coordena",
+          "our_verb_pt_br": "monta",
+          "statement_pt_br": "O item 16 coordena a oportunidade inteira. O item 51 monta apenas o pacote documental de habilitação, em uma rodada documental, e continua comprável separadamente."
+        },
+        {
+          "against_item": 54,
+          "against_public_name_pt_br": "Dossiê de Credenciamento ou Pré-Qualificação",
+          "their_verb_pt_br": "monta",
+          "our_verb_pt_br": "monta",
+          "statement_pt_br": "O item 51 trata da habilitação exigida por um edital de licitação. O item 54 trata de credenciamento ou pré-qualificação, procedimentos distintos, com elegibilidade, manutenção e convocação próprias. Não são o mesmo pacote e não se substituem."
+        }
+      ],
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false
+      }
+    },
+    {
+      "number": 52,
+      "deliverable_id": "CFG-D52",
+      "public_name_pt_br": "Verificação de SICAF, Certidões e Regularidade",
+      "value_line_pt_br": "Mostra cadastros, vencimentos e lacunas antes que bloqueiem a participação.",
+      "decision_question_pt_br": "Os cadastros e as certidões da empresa sustentam a participação hoje, ou algo vence ou diverge antes da sessão?",
+      "verb_pt_br": "verifica",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "pricing": {
+        "model": "single",
+        "tiers": [
+          { "name_pt_br": "Único", "price_cents": 149000, "unit_pt_br": "um CNPJ e os cadastros e certidões oficiais aplicáveis à rota federal indicada", "sla_business_days": 2 }
+        ],
+        "additional_charges": []
+      },
+      "sla_business_days": 2,
+      "safe_deadline_gate": null,
+      "credit_rule": null,
+      "inputs_pt_br": [
+        "CNPJ do licitante",
+        "rota federal indicada pelo cliente",
+        "relação de cadastros e certidões aplicáveis",
+        "documentos cadastrais já emitidos",
+        "autorização do cliente para consultar fontes públicas"
+      ],
+      "outputs_pt_br": [
+        "situação observada na data da consulta",
+        "níveis e documentos do SICAF informados ou consultáveis",
+        "validade das certidões",
+        "divergências cadastrais",
+        "lacunas identificadas",
+        "responsável por cada pendência",
+        "ação e prazo sugeridos",
+        "declaração de cobertura da consulta e marcação UNKNOWN onde a fonte não respondeu"
+      ],
+      "exclusions_pt_br": [
+        "cobrar pelo cadastro público gratuito",
+        "alegar vínculo oficial com o órgão ou com o portal",
+        "guardar credencial do cliente",
+        "acessar conta do cliente sem autorização",
+        "emitir certidão em nome do cliente",
+        "prometer regularização em 24 horas",
+        "executar a atualização cadastral, que é do cliente"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não tem vínculo oficial com o SICAF, com o Compras.gov.br ou com qualquer órgão.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "Qualquer atualização cadastral é executada pelo próprio cliente.",
+        "Não há comissão de êxito nem promessa de vitória ou adjudicação.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ],
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 13,
+          "against_public_name_pt_br": "Mapa de Habilitação e Lacunas de Acervo",
+          "their_verb_pt_br": "diagnostica",
+          "our_verb_pt_br": "verifica",
+          "statement_pt_br": "O item 13 diagnostica requisitos de habilitação e lacunas de acervo diante de um edital. O item 52 verifica cadastros, certidões e regularidade de um CNPJ antes de existir edital, na rota federal indicada."
+        },
+        {
+          "against_item": 51,
+          "against_public_name_pt_br": "Dossiê de Habilitação Pronto para Envio",
+          "their_verb_pt_br": "monta",
+          "our_verb_pt_br": "verifica",
+          "statement_pt_br": "O item 51 monta o pacote final de um edital específico. O item 52 verifica a condição cadastral do CNPJ e não monta pacote de envio."
+        }
+      ],
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false
+      }
+    },
+    {
+      "number": 53,
+      "deliverable_id": "CFG-D53",
+      "public_name_pt_br": "Acompanhamento Técnico da Sessão de Disputa",
+      "value_line_pt_br": "Sustenta decisões de preço e margem enquanto o cliente opera os lances.",
+      "decision_question_pt_br": "Até que preço a empresa pode ir nesta sessão sem perder margem nem cair em inexequibilidade?",
+      "verb_pt_br": "apoia",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "pricing": {
+        "model": "single_plus_additions",
+        "tiers": [
+          { "name_pt_br": "Base", "price_cents": 375000, "unit_pt_br": "uma sessão e um lote", "sla_business_days": null }
+        ],
+        "additional_charges": [
+          { "name_pt_br": "Lote adicional na mesma sessão", "price_cents": 149000, "unit_pt_br": "cada lote adicional na mesma sessão", "exhaustive": true }
+        ]
+      },
+      "sla_business_days": null,
+      "safe_deadline_gate": {
+        "declared_by_issue": true,
+        "min_business_days_before_session": 3,
+        "extra_conditions_pt_br": [],
+        "statement_pt_br": "A contratação precisa ocorrer ao menos 3 dias úteis antes da sessão."
+      },
+      "credit_rule": null,
+      "inputs_pt_br": [
+        "edital e modo de disputa",
+        "data e horário da sessão",
+        "identificação dos lotes",
+        "preço-limite aprovado por escrito pelo cliente",
+        "composição de custos e margem de referência",
+        "identificação do representante do licitante que operará a plataforma"
+      ],
+      "outputs_pt_br": [
+        "briefing do modo de disputa",
+        "registro do preço-limite aprovado pelo cliente",
+        "faixas e gatilhos de decisão",
+        "sala técnica remota durante a sessão",
+        "registro de lances e eventos públicos",
+        "checagem de exequibilidade e margem em tempo real",
+        "subsídio técnico para negociação e diligência",
+        "debrief imediato após a sessão"
+      ],
+      "session_conduct_negatives_pt_br": {
+        "nao_da_lance": "A CONFENGE não dá lance.",
+        "nao_opera_portal": "A CONFENGE não opera o portal ou a plataforma pelo cliente.",
+        "nao_opera_credencial": "A CONFENGE não opera credencial, login ou certificado do cliente.",
+        "nao_assina": "A CONFENGE não assina nada pelo cliente.",
+        "nao_representa": "A CONFENGE não representa a empresa perante o órgão ou o pregoeiro.",
+        "nao_presta_advocacia": "A CONFENGE não presta advocacia.",
+        "nao_protocola": "A CONFENGE não protocola nada pelo cliente.",
+        "nao_promete_resultado": "A CONFENGE não promete resultado, classificação nem lance vencedor."
+      },
+      "operator_of_record_pt_br": "O representante do licitante é o único operador da plataforma e o único decisor de lance.",
+      "exclusions_pt_br": [
+        "A CONFENGE não dá lance.",
+        "A CONFENGE não opera o portal ou a plataforma pelo cliente.",
+        "A CONFENGE não opera credencial, login ou certificado do cliente.",
+        "A CONFENGE não assina nada pelo cliente.",
+        "A CONFENGE não representa a empresa perante o órgão ou o pregoeiro.",
+        "A CONFENGE não presta advocacia.",
+        "A CONFENGE não protocola nada pelo cliente.",
+        "A CONFENGE não promete resultado, classificação nem lance vencedor.",
+        "automatizar a disputa por robô ou script",
+        "combinar conduta com outro licitante",
+        "observar dado que não seja público",
+        "ultrapassar o preço-limite aprovado pelo cliente"
+      ],
+      "legal_boundary_pt_br": [
+        "A sessão de disputa é do licitante, e o representante do licitante é o único operador da plataforma e decisor de lance.",
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não representa a empresa perante o órgão ou o pregoeiro, não assina e não protocola.",
+        "Qualquer conduta combinada entre licitantes é vedada e a CONFENGE não participa dela.",
+        "Não há comissão de êxito nem promessa de vitória, classificação ou adjudicação.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ],
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 16,
+          "against_public_name_pt_br": "Operação de Proposta para Licitação Crítica",
+          "their_verb_pt_br": "coordena",
+          "our_verb_pt_br": "apoia",
+          "statement_pt_br": "O item 16 coordena a oportunidade inteira até a entrega da proposta. O item 53 é um evento único, uma sessão de disputa, comprável isoladamente e cobrado por sessão e por lote."
+        },
+        {
+          "against_item": 12,
+          "against_public_name_pt_br": "Decisão de Disputar o Edital",
+          "their_verb_pt_br": "decide",
+          "our_verb_pt_br": "apoia",
+          "statement_pt_br": "O item 12 decide se a empresa entra na disputa, antes da proposta. O item 53 apoia tecnicamente a empresa durante a sessão, quando a decisão de disputar já foi tomada."
+        }
+      ],
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false,
+        "places_bids": false,
+        "operates_platform_for_client": false,
+        "represents_client_before_agency": false,
+        "promises_ranking_or_winning_bid": false
+      }
+    },
+    {
+      "number": 54,
+      "deliverable_id": "CFG-D54",
+      "public_name_pt_br": "Dossiê de Credenciamento ou Pré-Qualificação",
+      "value_line_pt_br": "Organiza requisitos e provas para entrar no procedimento correto.",
+      "decision_question_pt_br": "A empresa é elegível a este credenciamento ou a esta pré-qualificação, e o que precisa provar para entrar e se manter?",
+      "verb_pt_br": "monta",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "pricing": {
+        "model": "single",
+        "tiers": [
+          { "name_pt_br": "Único", "price_cents": 590000, "unit_pt_br": "um edital ou procedimento, uma categoria ou lote e um interessado", "sla_business_days": 7 }
+        ],
+        "additional_charges": []
+      },
+      "sla_business_days": 7,
+      "safe_deadline_gate": null,
+      "credit_rule": null,
+      "inputs_pt_br": [
+        "edital ou regulamento do credenciamento ou da pré-qualificação",
+        "categoria ou lote pretendido",
+        "identificação do interessado",
+        "documentos societários, técnicos e contábeis existentes",
+        "capacidade declarada de atendimento",
+        "política de preço aplicável ao procedimento"
+      ],
+      "outputs_pt_br": [
+        "leitura de elegibilidade e das condições de contratação futura",
+        "matriz de requisitos",
+        "documentos e provas correspondentes",
+        "validade e regras de manutenção",
+        "pacote organizado",
+        "lacunas identificadas",
+        "roteiro de inscrição e de renovação",
+        "riscos de preço, de capacidade e de convocação"
+      ],
+      "exclusions_pt_br": [
+        "confundir credenciamento com pré-qualificação",
+        "representação jurídica",
+        "assinatura ou protocolo pelo cliente",
+        "promessa de contratação futura",
+        "cadastramento genérico em portais sem edital ou regulamento"
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não faz representação jurídica e não emite parecer jurídico.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "Credenciamento e pré-qualificação são procedimentos distintos e o dossiê declara qual deles está sendo instruído.",
+        "Não há comissão de êxito, promessa de contratação futura, de convocação, de vitória ou de adjudicação.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ],
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 51,
+          "against_public_name_pt_br": "Dossiê de Habilitação Pronto para Envio",
+          "their_verb_pt_br": "monta",
+          "our_verb_pt_br": "monta",
+          "statement_pt_br": "O item 51 monta a habilitação exigida por um edital de licitação. O item 54 monta a entrada em credenciamento ou pré-qualificação, procedimentos distintos, com elegibilidade, manutenção e convocação próprias. Não são o mesmo pacote e não se substituem."
+        },
+        {
+          "against_item": 13,
+          "against_public_name_pt_br": "Mapa de Habilitação e Lacunas de Acervo",
+          "their_verb_pt_br": "diagnostica",
+          "our_verb_pt_br": "monta",
+          "statement_pt_br": "O item 13 diagnostica lacunas de habilitação e de acervo para licitações. O item 54 monta o dossiê de um procedimento de credenciamento ou pré-qualificação, que não é licitação com julgamento de propostas."
+        }
+      ],
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false
+      }
+    }
+  ]
+}
