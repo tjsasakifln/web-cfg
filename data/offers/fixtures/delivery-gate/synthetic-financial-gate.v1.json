@@ -1,0 +1,10 @@
+{
+  "schema_version": "confenge.financial_gate.v1",
+  "state": "SYNTHETIC_VALID",
+  "synthetic": true,
+  "source_event_id": "fixture-financial-gate-cfg-diag-exp-001",
+  "received_revenue": false,
+  "evidence_refs": [
+    "fixture:financial-gate:synthetic-valid"
+  ]
+}

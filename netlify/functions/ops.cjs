@@ -149,14 +149,6 @@ function authOk(event) {
   const headerTok = String(h["x-ops-token"] || h["X-Ops-Token"] || "");
   let token = headerTok;
   if (auth.toLowerCase().startsWith("bearer ")) token = auth.slice(7).trim();
-  if (!token) {
-    try {
-      const q = new URL(event.rawUrl || `https://x/?${event.queryStringParameters ? new URLSearchParams(event.queryStringParameters).toString() : ""}`);
-      token = q.searchParams.get("token") || "";
-    } catch {
-      token = (event.queryStringParameters && event.queryStringParameters.token) || "";
-    }
-  }
   if (!token || token.length < 16) return { ok: false, reason: "unauthorized" };
   const a = Buffer.from(token);
   const b = Buffer.from(expected);

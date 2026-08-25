@@ -58,6 +58,7 @@ function createSandboxCheckout({ offerId, externalReference, eligibility, terms,
     expires_at: new Date((now || new Date()).getTime() + 48 * 3600 * 1000).toISOString(),
   };
   const event = commercialEvent({
+    synthetic: true,
     type: TYPES.CHECKOUT_CREATED,
     offer_id: offer.offer_id,
     offer_version: offer.offer_version,
@@ -103,6 +104,7 @@ function applyProviderEvent({ checkout, raw, seenIds, env } = {}) {
       status: "UNKNOWN",
       exception: true,
       event: commercialEvent({
+        synthetic: true,
         type: TYPES.COMMERCIAL_EXCEPTION,
         exception_code: "UNKNOWN_PROVIDER_STATUS",
         offer_id: checkout && checkout.offer_id,
@@ -113,6 +115,7 @@ function applyProviderEvent({ checkout, raw, seenIds, env } = {}) {
     };
   }
   const event = commercialEvent({
+    synthetic: true,
     event_id: eventId,
     type:
       canonical === "PAYMENT_RECEIVED"

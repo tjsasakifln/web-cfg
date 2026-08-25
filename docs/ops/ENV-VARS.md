@@ -18,24 +18,25 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | `RESEND_API_KEY` | para e-mail real | API key Resend |
 | `LEAD_FROM_EMAIL` | para e-mail | Remetente, ex. `CONFENGE Leads <leads@confenge.com.br>` |
 | `LEAD_NOTIFY_EMAIL` | para e-mail | Destino ops, ex. `tiago.sasaki@confenge.com.br` |
-| `TURNSTILE_SECRET_KEY` | para Turnstile | Secret Cloudflare Turnstile |
-| `LEAD_REQUIRE_TURNSTILE` | opcional | `1` força Turnstile mesmo em dev |
+| `TURNSTILE_SECRET_KEY` | obrigatório em produção | Secret Cloudflare Turnstile; nunca expor no HTML/build |
+| `TURNSTILE_SITE_KEY` | obrigatório no build de produção | Chave pública injetada em `_site/index.html`; build falha fechado se ausente |
+| `LEAD_REQUIRE_TURNSTILE` | obrigatório em produção | Deve ser `1`; força Turnstile no endpoint |
 | `LEAD_PROBE_SECRET` | opcional | Header `X-Confenge-Probe` para smoke sintético |
-| `LEAD_REQUIRE_ORIGIN` | opcional | `1` exige Origin em todo POST |
+| `LEAD_REQUIRE_ORIGIN` | obrigatório em produção | Deve ser `1`; exige Origin em todo POST |
 | `LEAD_RETAIN_DAYS` | opcional | Default 730 |
 | `LEAD_RATE_WINDOW_MS` | opcional | Janela rate limit |
 | `LEAD_RATE_MAX_IP` | opcional | Max por IP na janela |
 | `LEAD_RATE_MAX_FP` | opcional | Max por fingerprint |
-| `IP_HASH_SALT` | recomendada | Sal para hash de IP em logs/store |
+| `IP_HASH_SALT` | obrigatório em produção | Valor privado aleatório com 32+ caracteres para hash de IP em logs/store |
 | `NTFY_URL` | opcional | URL completa de tópico **privado** |
 | `NTFY_TOKEN` | se NTFY_URL | Bearer token ntfy |
 | `NTFY_ALLOWED_HOSTS` | com ntfy em produção | Allowlist exata de hosts HTTPS (vírgula); obrigatória porque o body contém contato |
 | `LEAD_STORE_DIR` | só local/dev | Diretório FileStore |
 | `LEAD_STORE` | teste | `memory` para testes |
 | `LEAD_ALLOW_MEMORY_FALLBACK` | perigoso | Nunca em produção |
-| `LEAD_STORE_HTTP_URL` | alternativa | Backend HTTP durável (POST JSON do lead) |
-| `LEAD_STORE_HTTP_TOKEN` | com HTTP store | Bearer do backend |
-| `LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL` | opcional | Template com `{idempotency_key}` |
+| `LEAD_STORE_HTTP_URL` | só local/dev | Adapter genérico GET→POST; bloqueado em produção por não provar create-only atômico |
+| `LEAD_STORE_HTTP_TOKEN` | com HTTP store local | Bearer do backend |
+| `LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL` | local/dev | Template com `{idempotency_key}`; consulta não torna a criação atômica |
 | `NETLIFY_BLOBS_TOKEN` | se contexto Blobs ausente | Token API Netlify com acesso a Blobs |
 | `NETLIFY_BLOBS_SITE_ID` | com token | Site ID (senão usa `SITE_ID`) |
 
