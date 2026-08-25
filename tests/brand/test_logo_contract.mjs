@@ -51,6 +51,16 @@ function cssBlocks(css) {
     declarations: match[2],
   }));
 }
+function elementsWithClass(html, tagName, className) {
+  const openingPattern = new RegExp(`<${tagName}\\b[^>]*>`, "gi");
+  const blocks = [];
+  for (const match of html.matchAll(openingPattern)) {
+    if (!String(attrs(match[0]).class ?? "").split(/\s+/).includes(className)) continue;
+    const end = html.indexOf(`</${tagName}>`, match.index + match[0].length);
+    if (end >= 0) blocks.push(html.slice(match.index, end + tagName.length + 3));
+  }
+  return blocks;
+}
 
 assert("contract_exists", fs.existsSync(contractPath), contractPath);
 const raw = fs.readFileSync(contractPath, "utf8");
@@ -148,6 +158,16 @@ const observation = contract.current_surface_observation ?? {};
 assert("legacy_retained", observation.state === "LEGACY_RASTER_RETAINED", observation.state);
 assert("legacy_primary_exact", observation.header_primary === "/assets/logo-confenge-500-f8a83f6d.png" && observation.footer_primary === "/assets/logo-confenge-white-500-1677038e.png", observation);
 assert("legacy_ratio", observation.intrinsic_ratio === "50:13", observation.intrinsic_ratio);
+assert("observed_html_count", observation.source_html_files_scanned === 276, observation.source_html_files_scanned);
+assert("observed_logo_count", observation.logo_image_occurrences === 462, observation.logo_image_occurrences);
+assert("observed_header_count", observation.header_lockup_occurrences === 238, observation.header_lockup_occurrences);
+assert("observed_footer_count", observation.footer_lockup_occurrences === 224, observation.footer_lockup_occurrences);
+assert("observed_asset_counts", JSON.stringify(observation.legacy_asset_occurrences) === JSON.stringify({
+  "/assets/logo-confenge.png": 6,
+  "/assets/logo-confenge-500-f8a83f6d.png": 232,
+  "/assets/logo-confenge-white.png": 6,
+  "/assets/logo-confenge-white-500-1677038e.png": 218,
+}), observation.legacy_asset_occurrences);
 assert("current_noncompliance_honest", observation.header_black_on_white === "NON_COMPLIANT" && observation.master_svg === "MISSING", observation);
 assert("unexecuted_visual_proof", observation.sharpness_viewport_matrix === "NOT_EXECUTED" && observation.tagline_minimum_legibility === "NOT_APPROVED" && observation.screenshot_regression === "MISSING", observation);
 assert("production_blocked", observation.production_svg_delivery === "BLOCKED_AWAITING_FOUNDER_ARTWORK", observation);
@@ -191,13 +211,35 @@ assert("html_inventory", htmlFiles.length >= 200, htmlFiles.length);
 let logoImages = 0;
 let headerPrimary = 0;
 let footerPrimary = 0;
+let headerBrandBlocks = 0;
+let footerBrandBlocks = 0;
+const logoOccurrencesBySrc = new Map();
+const allowedHeaderSources = new Set(legacy.filter((asset) => asset.role.startsWith("header_")).map((asset) => `/${asset.path}`));
+const allowedFooterSources = new Set(legacy.filter((asset) => asset.role.startsWith("footer_")).map((asset) => `/${asset.path}`));
 for (const file of htmlFiles) {
   const html = fs.readFileSync(file, "utf8");
+  const relative = path.relative(root, file);
+  for (const block of elementsWithClass(html, "a", "brand")) {
+    headerBrandBlocks += 1;
+    const images = [...block.matchAll(/<img\b[^>]*>/gi)].map((match) => match[0]);
+    assert(`html_${relative}_brand_one_image_${headerBrandBlocks}`, images.length === 1, block);
+    const parsed = attrs(images[0] ?? "");
+    assert(`html_${relative}_brand_legacy_source_${headerBrandBlocks}`, allowedHeaderSources.has(parsed.src), parsed.src);
+    assert(`html_${relative}_brand_no_alternate_vector_${headerBrandBlocks}`, !/<(?:svg|picture|source)\b/i.test(block) && !("srcset" in parsed), block);
+  }
+  for (const block of elementsWithClass(html, "div", "footer-brand")) {
+    footerBrandBlocks += 1;
+    const images = [...block.matchAll(/<img\b[^>]*>/gi)].map((match) => match[0]);
+    assert(`html_${relative}_footer_brand_one_image_${footerBrandBlocks}`, images.length === 1, block);
+    const parsed = attrs(images[0] ?? "");
+    assert(`html_${relative}_footer_brand_legacy_source_${footerBrandBlocks}`, allowedFooterSources.has(parsed.src), parsed.src);
+    assert(`html_${relative}_footer_brand_no_alternate_vector_${footerBrandBlocks}`, !/<(?:svg|picture|source)\b/i.test(block) && !("srcset" in parsed), block);
+  }
   for (const match of html.matchAll(/<img\b[^>]*\bsrc\s*=\s*["'][^"']*logo-confenge[^"']*["'][^>]*>/gi)) {
     logoImages += 1;
     const tag = match[0];
     const parsed = attrs(tag);
-    const relative = path.relative(root, file);
+    logoOccurrencesBySrc.set(parsed.src, (logoOccurrencesBySrc.get(parsed.src) ?? 0) + 1);
     assert(`html_${relative}_logo_src_known_${logoImages}`, intrinsicByUrl.has(parsed.src), parsed.src);
     assert(`html_${relative}_logo_alt_${logoImages}`, filled(parsed.alt), tag);
     assert(`html_${relative}_logo_width_${logoImages}`, /^\d+$/.test(parsed.width ?? ""), tag);
@@ -212,9 +254,14 @@ for (const file of htmlFiles) {
     if (parsed.src === observation.footer_primary) footerPrimary += 1;
   }
 }
-assert("logo_inventory", logoImages >= 400, logoImages);
-assert("header_primary_inventory", headerPrimary >= 200, headerPrimary);
-assert("footer_primary_inventory", footerPrimary >= 200, footerPrimary);
+assert("html_inventory_matches_observation", htmlFiles.length === observation.source_html_files_scanned, htmlFiles.length);
+assert("logo_inventory_matches_observation", logoImages === observation.logo_image_occurrences, logoImages);
+for (const [src, expected] of Object.entries(observation.legacy_asset_occurrences ?? {})) {
+  assert(`asset_occurrence_${path.basename(src)}`, logoOccurrencesBySrc.get(src) === expected, [logoOccurrencesBySrc.get(src), expected]);
+}
+assert("header_lockup_inventory_matches_observation", headerBrandBlocks === observation.header_lockup_occurrences, headerBrandBlocks);
+assert("footer_lockup_inventory_matches_observation", footerBrandBlocks === observation.footer_lockup_occurrences, footerBrandBlocks);
+assert("every_logo_occurrence_is_accounted_for", [...logoOccurrencesBySrc.values()].reduce((sum, count) => sum + count, 0) === logoImages, logoOccurrencesBySrc);
 
 const cssFile = path.join(root, "styles.css");
 assert("styles_exists", fs.existsSync(cssFile), cssFile);
