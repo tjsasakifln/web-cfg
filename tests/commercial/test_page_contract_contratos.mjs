@@ -4,6 +4,7 @@
  */
 import fs from "fs";
 import path from "path";
+import { createHash } from "crypto";
 import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 
@@ -370,13 +371,20 @@ assert("routes_are_unique", new Set(items.map((it) => it.route).filter(Boolean))
 assert("at_least_one_route_declared", routed >= 1, routed);
 
 /* ---------------------------------------------------------------------------
- * 11. Implementacao publica: seis rotas, hub integral e captura fail closed.
+ * 11. Implementacao publica: tres rotas ativas, tres congeladas, hub integral
+ * e captura fail closed.
  * ------------------------------------------------------------------------- */
 assert("public_version_is_two", doc.version === 2, doc.version);
 const implementation = doc.public_implementation || {};
+const ACTIVE_ITEMS = [17, 20, 23];
+const HELD_ITEMS = [18, 19, 22];
 assert(
   "public_implementation_declared",
-  implementation.route_pages === 6 && implementation.hub_route === "/servicos-obras-publicas/" &&
+  implementation.route_pages === 3 &&
+    JSON.stringify(implementation.active_route_items) === JSON.stringify(ACTIVE_ITEMS) &&
+    JSON.stringify(implementation.held_protected_route_items) === JSON.stringify(HELD_ITEMS) &&
+    implementation.held_state === "DEFER_UNTIL_DATE" &&
+    implementation.hub_route === "/servicos-obras-publicas/" &&
     implementation.hub_includes_unrouted_item_21 === true && implementation.checkout_enabled === false &&
     implementation.analytics_contains_qualification === false,
   implementation,
@@ -386,10 +394,10 @@ const requiredCapture = [
   "opportunity_deadline", "contract_stage",
 ];
 assert("capture_fields_exact", JSON.stringify(implementation.capture_fields) === JSON.stringify(requiredCapture), implementation.capture_fields);
-for (const item of items.filter((entry) => entry.page_file)) {
+for (const item of ACTIVE_ITEMS.map((number) => byItem.get(number))) {
   const html = fs.readFileSync(path.join(root, item.page_file), "utf8");
   assert(`public_contract_block_${item.item}`, html.includes("GENERATED:CONTRACT-DEFENSE-PRODUCT:START"), item.page_file);
-  assert(`public_css_${item.item}`, html.includes('/assets/contract-defense-products.css'), item.page_file);
+  assert(`public_css_${item.item}`, html.includes('/styles-offers.css'), item.page_file);
   for (const value of [
     item.public_name_pt_br,
     `R$ ${new Intl.NumberFormat("pt-BR").format(item.pilot_price_cents / 100)}`,
@@ -405,11 +413,30 @@ for (const item of items.filter((entry) => entry.page_file)) {
   for (const field of requiredCapture) assert(`public_capture_${item.item}_${field}`, html.includes(`name="${field}"`), field);
   assert(`public_no_checkout_${item.item}`, html.includes('name="offer_id"') && !/data-checkout|\/\.netlify\/functions\/checkout/i.test(html), item.page_file);
 }
+const frozenHashes = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/hashes.json"), "utf8"));
+const unlockPlan = JSON.parse(fs.readFileSync(path.join(root, implementation.held_by_contract), "utf8"));
+assert(
+  "held_route_mutation_is_not_authorized",
+  unlockPlan.html_mutation_authorized === false && implementation.earliest_safe_action_at === unlockPlan.earliest_safe_action_at,
+  unlockPlan,
+);
+for (const item of HELD_ITEMS.map((number) => byItem.get(number))) {
+  const html = fs.readFileSync(path.join(root, item.page_file), "utf8");
+  const actualHash = createHash("sha256").update(html).digest("hex");
+  assert(`held_hash_${item.item}`, actualHash === frozenHashes.forbidden[item.page_file], { expected: frozenHashes.forbidden[item.page_file], actual: actualHash });
+  assert(`held_no_contract_block_${item.item}`, !html.includes("GENERATED:CONTRACT-DEFENSE-PRODUCT"), item.page_file);
+  assert(`held_no_product_css_${item.item}`, !html.includes("contract-defense-products.css"), item.page_file);
+  assert(`held_no_new_capture_${item.item}`, !html.includes("CONTRACT-DEFENSE-FIELDS"), item.page_file);
+}
 const hubHtml = fs.readFileSync(path.join(root, "servicos-obras-publicas/index.html"), "utf8");
 for (const item of items) {
   assert(`hub_name_${item.item}`, hubHtml.includes(item.public_name_pt_br), item.public_name_pt_br);
   assert(`hub_id_${item.item}`, hubHtml.includes(`value="${item.deliverable_id}"`), item.deliverable_id);
+  const card = hubHtml.match(new RegExp(`<article class="contract-products-hub__card" id="entrega-${item.item}">[\\s\\S]*?<\\/article>`))?.[0] || "";
+  const expectedHref = ACTIVE_ITEMS.includes(item.item) ? item.route : "#captura-contrato";
+  assert(`hub_action_${item.item}`, card.includes(`href="${expectedHref}"`), { item: item.item, expectedHref });
 }
+assert("hub_css_contract", hubHtml.includes('/styles-offers.css'));
 assert("hub_has_capture", requiredCapture.every((field) => hubHtml.includes(`name="${field}"`)), requiredCapture);
 for (const rule of [
   doc.common_rules.credit_rule.statement_pt_br,
