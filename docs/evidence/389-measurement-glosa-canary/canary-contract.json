@@ -97,6 +97,14 @@
     ],
     "other_english_internal_labels_allowed": false
   },
+  "interface_quality_coverage": {
+    "policy": "data/quality/interface-coverage-policy.json",
+    "lighthouse_family": "measurement-delay-canary",
+    "lighthouse_representative": "/conteudos/atraso-na-medicao-obra-publica/",
+    "seo_exemption": false,
+    "axe_risk": "DERIVED_FROM_VISIBLE_BRL",
+    "axe_exemption": false
+  },
   "frozen_siblings": [
     {
       "path": "conteudos/glosa-de-medicao-obra-publica/index.html",

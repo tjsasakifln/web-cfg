@@ -62,6 +62,11 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
             encoding="utf-8"
         )
     )
+    interface_policy = json.loads(
+        (ROOT / "data" / "quality" / "interface-coverage-policy.json").read_text(
+            encoding="utf-8"
+        )
+    )
 
     assert contract["issue"] == 389
     assert contract["public_url_mutations"] == [
@@ -131,6 +136,18 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     assert all("route-exact" in row["reason"] for row in scoped)
     assert plain["scope"] == "ROUTE_EXACT"
     assert plain["other_english_internal_labels_allowed"] is False
+
+    interface = contract["interface_quality_coverage"]
+    representative = next(
+        row
+        for row in interface_policy["lighthouse"]["canonical_representatives"]
+        if row["family_id"] == interface["lighthouse_family"]
+    )
+    assert representative["route"] == interface["lighthouse_representative"]
+    assert representative["route"] == canary["path"]
+    assert "seo_exempt_reason" not in representative
+    assert interface["seo_exemption"] is False
+    assert interface["axe_exemption"] is False
 
     for sibling in contract["frozen_siblings"]:
         assert _sha256(ROOT / sibling["path"]) == sibling["sha256"], sibling["path"]

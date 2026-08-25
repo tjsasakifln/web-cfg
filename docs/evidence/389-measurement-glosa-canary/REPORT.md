@@ -51,6 +51,8 @@ em `canary-contract.json` e impede transformar ausência em evidência.
   `/medicoes-glosas-obras-publicas/`, sem WhatsApp direto ou promessa.
 - a ponte é declarada como `service_transition` apenas para a rota do canário,
   owner #389; a regra ampla da família `/conteudos/` não foi relaxada.
+- a rota representa sua própria família no Lighthouse, sem isenção de SEO; os
+  valores demonstrativos também ampliam automaticamente a cobertura Axe.
 
 O before/after nominal está em `serp-contract.json`; as capturas renderizadas
 estão em `screenshots/`.

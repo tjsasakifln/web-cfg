@@ -1,7 +1,7 @@
 {
   "schema_version": "interface-coverage-policy-v2",
   "issue": 293,
-  "updated_at": "2026-08-24",
+  "updated_at": "2026-08-25",
   "purpose": "Derive axe coverage from visible money/capture risk and Lighthouse coverage from the canonical public-family-registry, with explicit noindex-only supplemental families for public artifact routes outside the indexable registry.",
   "axe": {
     "viewports": [
@@ -58,6 +58,11 @@
         "family_id": "politica-editorial",
         "route": "/politica-editorial/",
         "reason": "current indexable editorial-policy document"
+      },
+      {
+        "family_id": "measurement-delay-canary",
+        "route": "/conteudos/atraso-na-medicao-obra-publica/",
+        "reason": "single-route indexable canary owned by #389; exercises the article, epistemic labels and service-transition contract"
       },
       {
         "family_id": "editorial-library",

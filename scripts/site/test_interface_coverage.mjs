@@ -59,9 +59,10 @@ assert(coverage.axe.routes.every((entry) =>
   entry.reasons.length > 0
   && entry.reasons.every((reason) => reason === "price" || reason === "capture_form")
 ), "axe routes must derive only from declared visitor risk");
-assert.equal(coverage.axe.price_route_count, 57);
+assert.equal(coverage.axe.price_route_count, 58);
 assert.equal(coverage.axe.capture_form_route_count, 25);
-assert.equal(coverage.axe.route_count, 67);
+assert.equal(coverage.axe.route_count, 68);
+assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(
   coverage.axe.routes.find((entry) => entry.route === "/conteudos/sinapi-desonerado-nao-desonerado/").reasons,
@@ -80,9 +81,10 @@ for (const route of [
 assert.equal(coverage.axe.page_loads, coverage.axe.route_count * 2);
 assert(coverage.axe.not_sampled.every((entry) => entry.reason), "every omitted axe route needs a reason");
 assert.equal(coverage.lighthouse.canonical_family_count, registry.families.length);
-assert.equal(coverage.lighthouse.canonical_family_count, 20);
+assert.equal(coverage.lighthouse.canonical_family_count, 21);
 assert.equal(coverage.lighthouse.supplemental_family_count, 6);
-assert.equal(coverage.lighthouse.pages.length, 29);
+assert.equal(coverage.lighthouse.pages.length, 30);
+assert(coverage.lighthouse.pages.includes("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(coverage.lighthouse.pages.includes("/diretoria-b2g/"));
 assert(coverage.lighthouse.pages.includes("/diagnostico-b2g-expansao/"));
 assert.equal(new Set(coverage.lighthouse.pages).size, coverage.lighthouse.pages.length);
