@@ -558,13 +558,18 @@ _reset();
     }
   }
 
-  const unsafeD12 = await handler(event({
-    ...base,
-    deliverable_id: "CFG-D12",
-    opportunity_deadline: new Date().toISOString().slice(0, 10),
-  }, "POST", { ip: "192.0.2.94" }));
-  if (unsafeD12.statusCode !== 422 || JSON.parse(unsafeD12.body).error !== "licitacao_qualification_invalid") {
-    fail("licitacao_d12_safe_deadline_fail_closed", unsafeD12);
+  for (const [index, deliverableId] of ["CFG-D12", "CFG-D13", "CFG-D14", "CFG-D15", "CFG-D16"].entries()) {
+    const unsafeDeadline = await handler(event({
+      ...base,
+      deliverable_id: deliverableId,
+      opportunity_deadline: new Date().toISOString().slice(0, 10),
+    }, "POST", { ip: `192.0.2.${94 + index}` }));
+    if (
+      unsafeDeadline.statusCode !== 422 ||
+      JSON.parse(unsafeDeadline.body).error !== "licitacao_qualification_invalid"
+    ) {
+      fail("licitacao_safe_deadline_fail_closed", { deliverableId, response: unsafeDeadline });
+    }
   }
 
   const res = await handler(event({

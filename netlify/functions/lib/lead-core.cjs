@@ -186,6 +186,8 @@ function assertLicitacaoQualification(data, deliverableId) {
   const decisionIntent = clamp(data.decision_intent, MAX_FIELD.decision_intent);
   const lotRaw = clamp(data.lot_count, MAX_FIELD.lot_count);
   const lotCount = Number(lotRaw);
+  const deadlineBusinessDays = businessDaysUntil(deadline);
+  const minimumBusinessDays = deliverableId === "CFG-D12" ? 5 : 1;
   if (
     publicContractId.length < 3 ||
     !isCanonicalIsoDate(deadline) ||
@@ -196,7 +198,7 @@ function assertLicitacaoQualification(data, deliverableId) {
     !Number.isInteger(lotCount) ||
     lotCount < 1 ||
     lotCount > 999 ||
-    (deliverableId === "CFG-D12" && businessDaysUntil(deadline) < 5)
+    deadlineBusinessDays < minimumBusinessDays
   ) {
     return {
       ok: false,
