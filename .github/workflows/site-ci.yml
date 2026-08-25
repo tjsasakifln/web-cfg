@@ -47,6 +47,7 @@ jobs:
           npm run test:inbound-gates
           npm run editorial:truth
           npm run test:brand
+          npm run test:logo-contract
           npm run test:copy
           npm run test:design
           npm run audit:accessibility
