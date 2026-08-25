@@ -66,7 +66,7 @@ const VALID = "11222333000181";
   if (matrix.firstCanaryCta() !== "Veja sua empresa neste mercado") {
     fail("first_canary_cta", matrix.firstCanaryCta());
   } else pass("first_canary_cta");
-  const radarDeliverySla = "delivery_within_48_business_hours_from_persisted_form_submission";
+  const radarDeliverySla = "delivery_within_3_business_days_from_valid_persisted_form_submission";
   for (const r of matrix.listRoutes()) {
     const expected = r.id === "contratar_relatorio_inteligencia_599"
       ? radarDeliverySla
