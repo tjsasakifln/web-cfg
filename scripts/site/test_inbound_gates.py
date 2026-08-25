@@ -240,10 +240,28 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     for shot in (serp["before"]["screenshot"], serp["after"]["screenshot"]):
         assert (evidence / shot).stat().st_size > 10_000
 
-    assert review["candidate_approval"]["status"] == "HUMAN_REQUIRED"
-    assert review["human_factual_review"]["status"] == "HUMAN_REQUIRED"
-    assert review["human_editorial_review"]["status"] == "HUMAN_REQUIRED"
-    assert review["merge_gate"] == "HUMAN_REVIEW_REQUIRED_BEFORE_MERGE"
+    approval = review["candidate_approval"]
+    factual = review["human_factual_review"]
+    editorial = review["human_editorial_review"]
+    assert approval["status"] == "APPROVED"
+    assert approval["approval_scope"] == "FACTUAL_AND_EDITORIAL"
+    assert approval["approval_statement"] == (
+        "Aprovo factual e editorialmente a PR #393 como Tiago Sasaki."
+    )
+    assert approval["approved_content_head"] == (
+        "e43edd6a469dc53d74589c728881f40f42dddef9"
+    )
+    for named_review in (approval, factual, editorial):
+        assert named_review["reviewer_name"] == "Tiago Sasaki"
+        assert named_review["reviewed_at"] == "2026-08-25"
+        assert named_review["prior_status"] == "HUMAN_REQUIRED"
+        assert named_review["evidence_url"] == (
+            "https://github.com/tjsasakifln/web-cfg/pull/393"
+            "#issuecomment-5412232948"
+        )
+    assert factual["status"] == "APPROVED"
+    assert editorial["status"] == "APPROVED"
+    assert review["merge_gate"] == "NAMED_HUMAN_REVIEW_COMPLETE"
 
 
 def test_naturalness_indexable_clean():

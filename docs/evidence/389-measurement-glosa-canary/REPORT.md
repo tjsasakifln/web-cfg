@@ -89,9 +89,10 @@ seleção reutilizável tiver sido validada.
 
 ## Gate humano e janela
 
-A revisão de qualidade e as fontes foram verificadas no PR. Isso não equivale a
-aprovação factual/editorial humana em nome do responsável técnico. O registro
-`review.json` permanece `HUMAN_REQUIRED`; o merge exige um humano nomeado.
+A revisão de qualidade e as fontes foram verificadas no PR. Tiago Sasaki
+registrou aprovação factual e editorial nominal em 2026-08-25 para o head de
+conteúdo `e43edd6a469dc53d74589c728881f40f42dddef9`. O `review.json` preserva a
+situação anterior e vincula a evidência permanente da aprovação na PR #393.
 
 A segunda URL fica bloqueada até 28 dias completos após o deploy e uma decisão
 explícita `KEEP | ADJUST | KILL`. Posição estável sem melhora de CTR, perda do

@@ -2,8 +2,14 @@
   "schema": "confenge-editorial-review-record/1.0",
   "issue": 389,
   "candidate_approval": {
-    "status": "HUMAN_REQUIRED",
-    "note": "A autorização para implementar a issue não é aprovação editorial do candidato em nome do responsável técnico."
+    "status": "APPROVED",
+    "reviewer_name": "Tiago Sasaki",
+    "reviewed_at": "2026-08-25",
+    "approved_content_head": "e43edd6a469dc53d74589c728881f40f42dddef9",
+    "approval_scope": "FACTUAL_AND_EDITORIAL",
+    "approval_statement": "Aprovo factual e editorialmente a PR #393 como Tiago Sasaki.",
+    "evidence_url": "https://github.com/tjsasakifln/web-cfg/pull/393#issuecomment-5412232948",
+    "prior_status": "HUMAN_REQUIRED"
   },
   "quality_review": {
     "status": "COMPLETE",
@@ -19,14 +25,19 @@
     ]
   },
   "human_factual_review": {
-    "status": "HUMAN_REQUIRED",
-    "required_identity": "Engº Tiago Sasaki or another named accountable human reviewer",
-    "must_not_be_inferred_from": "issue implementation request"
+    "status": "APPROVED",
+    "reviewer_name": "Tiago Sasaki",
+    "reviewed_at": "2026-08-25",
+    "evidence_url": "https://github.com/tjsasakifln/web-cfg/pull/393#issuecomment-5412232948",
+    "prior_status": "HUMAN_REQUIRED"
   },
   "human_editorial_review": {
-    "status": "HUMAN_REQUIRED",
-    "required_identity": "Named accountable human reviewer",
-    "review_surface": "pull request diff and versioned screenshots"
+    "status": "APPROVED",
+    "reviewer_name": "Tiago Sasaki",
+    "reviewed_at": "2026-08-25",
+    "review_surface": "pull request diff and versioned screenshots",
+    "evidence_url": "https://github.com/tjsasakifln/web-cfg/pull/393#issuecomment-5412232948",
+    "prior_status": "HUMAN_REQUIRED"
   },
   "indexability_approval": {
     "status": "PRESERVED_EXISTING_INDEXABLE",
@@ -35,5 +46,5 @@
     "new_indexable_url": false,
     "issue_127_mass_flip": false
   },
-  "merge_gate": "HUMAN_REVIEW_REQUIRED_BEFORE_MERGE"
+  "merge_gate": "NAMED_HUMAN_REVIEW_COMPLETE"
 }
