@@ -278,6 +278,16 @@ export const SUITE_GRAPH = Object.freeze({
       "/defesa-tecnica-contratos-publicos/",
     ],
   },
+  "test:page-contract-operacao": {
+    producers: [
+      "tests/commercial/test_page_contract_operacao.mjs",
+      "data/commercial/page-contract-operacao.v1.json",
+      "diagnostico-b2g-360/index.html",
+      "acompanhamento-contratos-obras/index.html",
+    ],
+    artifacts: [],
+    surfaces: ["/diagnostico-b2g-360/", "/acompanhamento-contratos-obras/"],
+  },
   "test:task-doors": {
     producers: [
       "tests/commercial/test_task_doors.mjs",
@@ -291,6 +301,14 @@ export const SUITE_GRAPH = Object.freeze({
     producers: [
       "tests/commercial/test_page_contract_execucao.mjs",
       "data/commercial/page-contract-execucao.v1.json",
+    ],
+    artifacts: [],
+    surfaces: [],
+  },
+  "test:page-contract-ciclo": {
+    producers: [
+      "tests/commercial/test_page_contract_ciclo.mjs",
+      "data/commercial/page-contract-ciclo.v1.json",
     ],
     artifacts: [],
     surfaces: [],
