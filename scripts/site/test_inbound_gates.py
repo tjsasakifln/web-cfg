@@ -73,6 +73,8 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
         "/conteudos/atraso-na-medicao-obra-publica/"
     ]
     canary = contract["canary"]
+    assert canary["path"] == "/conteudos/atraso-na-medicao-obra-publica/"
+    assert canary["commercial_destination"] == "/medicoes-glosas-obras-publicas/"
     page = ROOT / canary["source"]
     html = page.read_text(encoding="utf-8")
     visible_html = re.sub(r"<script[\s\S]*?</script>", "", html, flags=re.I)
@@ -103,12 +105,41 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     assert article
     article_html = article.group(0)
     assert not re.search(r"\bowner\b", article_html, re.I)
-    route = re.escape(canary["commercial_destination"])
+    route = re.escape("/medicoes-glosas-obras-publicas/")
     assert len(re.findall(rf'href="{route}[^\"]*"', article_html)) == 1
     assert "wa.me" not in article_html
     assert "#formulario-contato" not in article_html
 
+    cta = re.search(
+        r'<a\b(?P<before>[^>]*)href="/medicoes-glosas-obras-publicas/"(?P<after>[^>]*)>',
+        article_html,
+    )
+    assert cta
+    cta_attrs = dict(
+        re.findall(r'([\w-]+)="([^\"]*)"', f'{cta.group("before")} {cta.group("after")}')
+    )
+    assert {
+        key: cta_attrs.get(key)
+        for key in (
+            "data-cta-id",
+            "data-cta-position",
+            "data-asset-id",
+            "data-asset-family",
+            "data-route-family",
+            "data-journey",
+        )
+    } == {
+        "data-cta-id": "canary-medicao-dossie",
+        "data-cta-position": "inline",
+        "data-asset-id": "atraso-na-medicao-obra-publica",
+        "data-asset-family": "editorial",
+        "data-route-family": "medicoes-glosas",
+        "data-journey": "contrato",
+    }
+
     terminal = contract["terminal_action_contract"]
+    assert terminal["match"] == [canary["path"]]
+    assert terminal["destination"] == "/medicoes-glosas-obras-publicas/"
     family = next(f for f in registry["families"] if f["id"] == terminal["family"])
     assert family["match"] == {"routes": terminal["match"]}
     assert family["terminal_action"] == "service_transition"
@@ -116,15 +147,6 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
     assert family["debt"] == []
     assert terminal["no_prefix_fallback"] is True
     assert terminal["destination"] == canary["commercial_destination"]
-    for attr in (
-        "data-cta-id",
-        "data-cta-position",
-        "data-asset-id",
-        "data-asset-family",
-        "data-route-family",
-        "data-journey",
-    ):
-        assert re.search(rf'\b{attr}="[^"]+"', article_html)
 
     plain = contract["plain_language_contract"]
     scoped = [
@@ -133,9 +155,20 @@ def test_measurement_delay_canary_389_is_single_url_and_fail_closed():
         if row.get("rule") == "plain_language" and row.get("path") == plain["path"]
     ]
     assert {row["match"] for row in scoped} == set(plain["required_editorial_tokens"])
+    assert len(scoped) == 4
     assert all("route-exact" in row["reason"] for row in scoped)
     assert plain["scope"] == "ROUTE_EXACT"
     assert plain["other_english_internal_labels_allowed"] is False
+    classification_terms = [
+        re.sub(r"<[^>]+>", "", value)
+        for value in re.findall(r"<dt\b[^>]*>(.*?)</dt>", article_html, re.I | re.S)
+    ]
+    for row in scoped:
+        token = re.compile(row["match"], re.I)
+        assert len(token.findall(visible_html)) == 1, row["match"]
+        assert sum(bool(token.search(term)) for term in classification_terms) == 1, row[
+            "match"
+        ]
 
     interface = contract["interface_quality_coverage"]
     representative = next(
