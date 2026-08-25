@@ -1,0 +1,590 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "page-contract-integridade.v1",
+  "family_pt_br": "Integridade e maturidade",
+  "source_issue": 342,
+  "parent_issue": 329,
+  "related_issues": [156, 332, 343],
+  "naming_authority_issue": 343,
+  "decision_state": "VALIDATE",
+  "priority": "P1",
+  "executive_fronts": ["REVENUE NOW", "MARKET INTELLIGENCE MOAT"],
+  "leverage": ["trust", "data", "revenue"],
+  "time_to_evidence_days": 30,
+  "time_to_evidence_statement_pt_br": "Trinta dias após o desbloqueio do item 43 pela issue #156.",
+  "research_state": "NOT_STARTED",
+  "evidence": [],
+  "human_validation": {
+    "state": "NOT_STARTED",
+    "real_proposals_required_before_promoting_price": 3,
+    "collected": []
+  },
+  "currency": "BRL",
+  "price_unit": "cents",
+  "price_basis": "piloto",
+  "pages_created_by_this_contract": [],
+  "checkout_enabled_anywhere": false,
+  "registry_reconciliation": {
+    "registry_path": "data/commercial/deliverables-registry.v1.json",
+    "naming_path": "data/commercial/offer-naming.v1.json",
+    "reconciled_fields": [
+      "public_name_pt_br",
+      "route",
+      "price_cents",
+      "sla_business_days",
+      "public_state",
+      "blocking_issue",
+      "task_door",
+      "capacity_required"
+    ],
+    "contract_never_overrides_registry": true,
+    "statement_pt_br": "O registro canônico é a fonte de nome, rota, preço, prazo, estado público, issue bloqueadora, porta e capacidade. Este contrato reconcilia e nunca sobrescreve o registro."
+  },
+  "architecture": {
+    "consumes_versioned_contracts_from": "extra-cli",
+    "contract_access": "SELECT-only",
+    "producer_contracts": ["public-read-integrity/1.0"],
+    "crawler_in_web_cfg": false,
+    "identity_store_in_web_cfg": false,
+    "parallel_datalake_in_web_cfg": false,
+    "no_data_or_identity_originates_in_web_cfg": true,
+    "truth_and_provenance_remain_in": "extra-cli",
+    "commercial_action_owner": "warmbly",
+    "statement_pt_br": "Esta família consome contratos versionados do extra-cli em modo SELECT-only. Nenhum crawler, nenhum DataLake paralelo e nenhum identity store nascem no web-cfg."
+  },
+  "communication_principle": {
+    "not_found_means_nonexistent": false,
+    "is_a_seal": false,
+    "statement_pt_br": "“Não localizado” nunca significa “inexistente”.",
+    "integrity_is_pt_br": "Integridade é risco a investigar.",
+    "maturity_is_pt_br": "Maturidade é prontidão observável.",
+    "neither_is_a_seal_pt_br": "Nem integridade nem maturidade é selo, certificado ou garantia.",
+    "disclosure_required_on_screen": true,
+    "disclosure_required_on_artifact": true,
+    "disclosure_sits_beside_conclusion": true,
+    "required_disclosure": [
+      {
+        "element": "source",
+        "label_pt_br": "fonte",
+        "statement_pt_br": "A tela e o artefato mostram a fonte consultada ao lado da conclusão."
+      },
+      {
+        "element": "coverage",
+        "label_pt_br": "cobertura",
+        "statement_pt_br": "A tela e o artefato mostram a cobertura obtida, incluindo o que ficou fora dela."
+      },
+      {
+        "element": "query",
+        "label_pt_br": "consulta",
+        "statement_pt_br": "A tela e o artefato mostram a consulta executada, com os parâmetros usados."
+      },
+      {
+        "element": "date",
+        "label_pt_br": "data",
+        "statement_pt_br": "A tela e o artefato mostram a data da consulta e o corte temporal aplicado."
+      },
+      {
+        "element": "limitations",
+        "label_pt_br": "limitações",
+        "statement_pt_br": "A tela e o artefato mostram as limitações da consulta, sem atenuá-las na conclusão."
+      },
+      {
+        "element": "unknown",
+        "label_pt_br": "UNKNOWN",
+        "statement_pt_br": "A tela e o artefato mostram UNKNOWN ao lado da conclusão sempre que a fonte não respondeu ou respondeu de forma incompleta."
+      }
+    ],
+    "every_fact_carries_pt_br": ["entidade", "fonte", "consulta ou corte", "data", "cobertura"],
+    "negative_inference_becomes_accusation": false,
+    "negative_inference_becomes_seal": false,
+    "results_promote_human_decision": true,
+    "results_promote_diligence": true,
+    "automates_veto": false,
+    "negative_inference_statement_pt_br": "Nenhuma inferência negativa vira acusação nem selo: o resultado promove decisão e diligência humana, nunca automação de veto."
+  },
+  "forbidden_claims": {
+    "patterns_pt_br": [
+      "empresa limpa",
+      "ficha limpa",
+      "nada consta",
+      "certidão negativa universal",
+      "selo de integridade",
+      "garantia de habilitação"
+    ],
+    "forbidden_classification_values": ["LIMPO", "LIMPA", "SEM RESTRIÇÕES", "NADA CONSTA", "NO_MATCH_CONFIRMED"],
+    "statement_pt_br": "Nenhuma tela, artefato, proposta ou página desta família pode afirmar empresa limpa, ficha limpa, nada consta, certidão negativa universal, selo de integridade ou garantia de habilitação.",
+    "absence_of_record_is_not_absence_of_fact": true,
+    "unknown_never_becomes_zero": true
+  },
+  "common_rules": {
+    "prices_come_from_registry": true,
+    "prices_not_changed_by_this_contract": true,
+    "price_state": "PILOT_HYPOTHESIS",
+    "no_checkout_enabled_by_this_contract": true,
+    "scope_units_allowed_pt_br": ["grupo econômico", "CNPJ", "empreendimento", "território", "órgão executor", "consulta"],
+    "scope_units_forbidden_pt_br": ["página"],
+    "scope_never_measured_by_pages": true,
+    "urgency_surcharge_percent": 50,
+    "urgency_requires_confirmed_capacity": true,
+    "urgency_disclosed_before_charging": true,
+    "no_data_or_identity_originates_in_web_cfg": true,
+    "truth_and_provenance_remain_in": "extra-cli",
+    "no_success_fee": true,
+    "no_promise_of_habilitation_or_award": true,
+    "no_custody_of_token_certificate_or_password": true,
+    "every_fact_carries_entity_source_query_date_and_coverage": true,
+    "statements_pt_br": [
+      "Os preços desta família vêm do registro canônico, permanecem hipótese de preço-piloto e não são alterados por este contrato.",
+      "O escopo é limitado por grupo econômico, CNPJ, empreendimento, território, órgão executor e consulta, nunca por número de páginas.",
+      "Urgência é aceita apenas com capacidade confirmada, com adicional de 50 por cento informado antes de qualquer cobrança.",
+      "Nenhum dado e nenhuma identidade nascem no web-cfg: verdade e proveniência permanecem no extra-cli, em contratos versionados SELECT-only.",
+      "Nenhum item desta família tem comissão de êxito, promete habilitação ou adjudicação, nem guarda token, certificado digital ou senha do cliente.",
+      "“Não localizado” nunca significa “inexistente”, e cada fato entregue traz entidade, fonte, consulta ou corte, data e cobertura.",
+      "O item 43 permanece fail-closed até a issue #156: não é promovido, não é cobrado e não emite conclusão."
+    ]
+  },
+  "neighbour_offers": [
+    { "item": 12, "deliverable_id": "CFG-D12", "public_name_pt_br": "Decisão de Disputar o Edital", "verb_pt_br": "decide" },
+    { "item": 52, "deliverable_id": "CFG-D52", "public_name_pt_br": "Verificação de SICAF, Certidões e Regularidade", "verb_pt_br": "verifica" }
+  ],
+  "synthetic_example": {
+    "state": "NOT_STARTED",
+    "produced": false,
+    "published": false,
+    "artifacts": [],
+    "contains_real_cnpj": false,
+    "contains_real_company": false,
+    "required_cases": [
+      {
+        "case": "homonym",
+        "label_pt_br": "homônimo",
+        "statement_pt_br": "O exemplo sintético precisa conter um homônimo, para mostrar que nome igual não é identidade igual."
+      },
+      {
+        "case": "divergent_cnpj",
+        "label_pt_br": "CNPJ divergente",
+        "statement_pt_br": "O exemplo sintético precisa conter um CNPJ divergente, para mostrar divergência cadastral sem virar acusação."
+      },
+      {
+        "case": "unavailable_source",
+        "label_pt_br": "fonte indisponível",
+        "statement_pt_br": "O exemplo sintético precisa conter uma fonte indisponível, para mostrar UNKNOWN e cobertura incompleta ao lado da conclusão."
+      }
+    ],
+    "statement_pt_br": "O exemplo sintético ainda não foi produzido nem publicado, e por isso este critério permanece NOT_STARTED."
+  },
+  "acceptance": [
+    {
+      "key": "two_deliverables_not_confusable",
+      "criterion_pt_br": "Dois deliverable_id, preços, SLAs e escopos não confundíveis.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "item_43_fail_closed_until_156",
+      "criterion_pt_br": "O item 43 permanece fail-closed até a issue #156.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "every_fact_carries_provenance",
+      "criterion_pt_br": "Cada fato traz entidade, fonte, consulta ou corte, data e cobertura.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "no_negative_inference_becomes_accusation_or_seal",
+      "criterion_pt_br": "Nenhuma inferência negativa vira acusação ou selo.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "synthetic_example_with_three_cases",
+      "criterion_pt_br": "O exemplo sintético inclui homônimo, CNPJ divergente e fonte indisponível.",
+      "state": "NOT_STARTED",
+      "evidence": []
+    },
+    {
+      "key": "architecture_consumes_extra_cli_contracts",
+      "criterion_pt_br": "A arquitetura consulta contratos versionados do extra-cli, sem crawler e sem identity store no web-cfg.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "results_promote_human_decision",
+      "criterion_pt_br": "Os resultados promovem decisão e diligência humana, não automação de veto.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "key": "price_validated_by_real_proposals",
+      "criterion_pt_br": "O preço-piloto só deixa de ser hipótese depois de propostas reais e outcome observado.",
+      "state": "NOT_STARTED",
+      "evidence": []
+    },
+    {
+      "key": "public_page_published",
+      "criterion_pt_br": "A página pública da família só existe depois de decisão editorial e revisão humana.",
+      "state": "NOT_STARTED",
+      "evidence": []
+    }
+  ],
+  "items": [
+    {
+      "number": 43,
+      "deliverable_id": "CFG-D43",
+      "public_name_pt_br": "Verificação de Sanções e Restrições Públicas",
+      "value_line_pt_br": "Mostra achados, cobertura e lacunas da consulta sem emitir “selo”.",
+      "decision_question_pt_br": "O que as listas públicas oficiais registram sobre este grupo econômico dentro da cobertura consultada?",
+      "verb_pt_br": "verifica",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "public_state": "BLOCKED",
+      "blocking_issue": "#156",
+      "task_door": "QUALIFY",
+      "capacity_required": false,
+      "price_cents": 490000,
+      "price_state": "PILOT_HYPOTHESIS",
+      "billing": "one_time",
+      "pricing": {
+        "model": "single",
+        "billing": "one_time",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "price_cents": 490000,
+            "unit_pt_br": "um grupo econômico ou licitante e até cinco CNPJs ou pessoas jurídicas materialmente relacionadas, identificadas pelo cliente",
+            "sla_business_days": 5
+          }
+        ],
+        "additional_charges": []
+      },
+      "sla_business_days": 5,
+      "sla_business_days_min": 5,
+      "sla_business_days_max": 5,
+      "sla_starts_after_pt_br": "identificação dos CNPJs pelo cliente",
+      "safe_deadline_gate": null,
+      "credit_rule": null,
+      "scope_unit": {
+        "unit_pt_br": "um grupo econômico ou licitante e até cinco CNPJs ou pessoas jurídicas materialmente relacionadas, identificadas pelo cliente",
+        "max_cnpjs": 5,
+        "entities_identified_by": "cliente",
+        "entities_identified_by_confenge": false,
+        "statement_pt_br": "A unidade é um grupo econômico ou licitante e até cinco CNPJs ou pessoas jurídicas materialmente relacionadas. A identificação das entidades é do cliente, e a CONFENGE não descobre o grupo econômico no lugar dele."
+      },
+      "sources": {
+        "are_possible_not_guaranteed": true,
+        "coverage_declared_per_source": true,
+        "list_pt_br": [
+          "CEIS, CNEP, CEPIM e outras listas oficiais aplicáveis",
+          "PNCP",
+          "atos e contratos públicos",
+          "tribunais",
+          "cadastros profissionais quando licenciados e pertinentes"
+        ],
+        "official_lists_pt_br": ["CEIS", "CNEP", "CEPIM"],
+        "public_source_urls": [
+          {
+            "key": "portal_transparencia_sancoes",
+            "name_pt_br": "Portal da Transparência, sanções",
+            "url": "https://portaldatransparencia.gov.br/sancoes"
+          }
+        ],
+        "statement_pt_br": "As fontes são possíveis, não garantidas. Cada consulta declara a fonte que respondeu, a cobertura obtida e o que permaneceu UNKNOWN."
+      },
+      "inputs_pt_br": [
+        "razão social e CNPJ de cada entidade a verificar",
+        "vínculos societários ou materiais informados pelo cliente",
+        "finalidade declarada da consulta",
+        "janela temporal de interesse"
+      ],
+      "outputs_pt_br": [
+        "identidade resolvida com proveniência",
+        "restrições e sanções encontradas na cobertura",
+        "vigência e escopo de cada registro",
+        "vínculos públicos relevantes",
+        "divergências cadastrais",
+        "contratos e sinais que merecem diligência adicional",
+        "perguntas e documentos a obter com a contraparte",
+        "classificação factual por achado",
+        "fonte, consulta, corte, data e limitações ao lado de cada conclusão"
+      ],
+      "classification": {
+        "kind": "factual",
+        "values": ["ENCONTRADO", "NÃO ENCONTRADO NA COBERTURA", "UNKNOWN"],
+        "value_count": 3,
+        "closed_vocabulary": true,
+        "has_clean_value": false,
+        "definitions_pt_br": {
+          "ENCONTRADO": "A fonte respondeu e registrou a ocorrência dentro da cobertura consultada.",
+          "NÃO ENCONTRADO NA COBERTURA": "A fonte respondeu e não registrou ocorrência dentro da cobertura consultada, o que não afirma inexistência fora dela.",
+          "UNKNOWN": "A fonte não respondeu, respondeu de forma incompleta ou não permitiu fechar a paginação, e a lacuna permanece declarada."
+        },
+        "statement_pt_br": "A classificação é factual e fechada em três valores. Não existe quarto valor, não existe valor que afirme ausência absoluta e UNKNOWN nunca é convertido em zero."
+      },
+      "exclusions_pt_br": [
+        "certificado, selo ou declaração de empresa limpa",
+        "investigação privada",
+        "dado pessoal não pertinente ao objeto",
+        "acusação ou juízo de valor sobre a entidade verificada",
+        "opinião jurídica",
+        "background check de pessoa natural",
+        "garantia de habilitação ou de inabilitação de qualquer licitante"
+      ],
+      "dependency": {
+        "blocking_issue": "#156",
+        "blocking_issue_number": 156,
+        "state": "BLOCKED",
+        "fail_closed": true,
+        "may_be_promoted": false,
+        "may_be_charged": false,
+        "may_issue_conclusion": false,
+        "may_open_checkout": false,
+        "public_source_url": "https://portaldatransparencia.gov.br/sancoes",
+        "release_conditions": [
+          {
+            "key": "official_key",
+            "label_pt_br": "chave oficial",
+            "statement_pt_br": "A issue #156 precisa provar chave oficial configurada na fonte pública de sanções."
+          },
+          {
+            "key": "terminal_pagination",
+            "label_pt_br": "paginação terminal",
+            "statement_pt_br": "A issue #156 precisa provar paginação terminal, com página final bem-sucedida em cada fonte consultada."
+          },
+          {
+            "key": "freshness",
+            "label_pt_br": "freshness",
+            "statement_pt_br": "A issue #156 precisa provar freshness por fonte, com data de corte declarada."
+          },
+          {
+            "key": "identity",
+            "label_pt_br": "identidade",
+            "statement_pt_br": "A issue #156 precisa provar resolução de identidade, distinguindo homônimo e CNPJ divergente."
+          },
+          {
+            "key": "coverage",
+            "label_pt_br": "cobertura",
+            "statement_pt_br": "A issue #156 precisa provar cobertura declarada por fonte, sem completar lacuna por inferência."
+          },
+          {
+            "key": "correct_unknown",
+            "label_pt_br": "UNKNOWN correto",
+            "statement_pt_br": "A issue #156 precisa provar UNKNOWN correto, sem transformar ausência de resposta em ausência de registro."
+          }
+        ],
+        "release_conditions_complete": false,
+        "statement_pt_br": "O item 43 não é promovido, não é cobrado e não emite conclusão enquanto a issue #156 não provar chave oficial, paginação terminal, freshness, identidade, cobertura e UNKNOWN correto."
+      },
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não acusa, não julga e não atribui conduta a nenhuma entidade verificada.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "Não há comissão de êxito nem promessa de habilitação, de inabilitação ou de adjudicação.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ],
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 44,
+          "against_deliverable_id": "CFG-D44",
+          "against_public_name_pt_br": "Auditoria de Prontidão do Empreendimento Público",
+          "their_verb_pt_br": "audita",
+          "our_verb_pt_br": "verifica",
+          "statement_pt_br": "O item 43 verifica quem é a contraparte diante das listas públicas de sanções e restrições. O item 44 audita se o empreendimento tem prontidão observável para começar. São objetos distintos, com unidades, prazos e conclusões distintas, e nenhum substitui o outro."
+        },
+        {
+          "against_item": 52,
+          "against_deliverable_id": "CFG-D52",
+          "against_public_name_pt_br": "Verificação de SICAF, Certidões e Regularidade",
+          "their_verb_pt_br": "verifica",
+          "our_verb_pt_br": "verifica",
+          "statement_pt_br": "O item 52 verifica cadastros, certidões e regularidade do próprio cliente para participar. O item 43 verifica sanções e restrições públicas de um grupo econômico terceiro, com cobertura declarada e classificação factual. Não são a mesma consulta e não se substituem."
+        }
+      ],
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "promises_habilitation": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false,
+        "issues_clean_company_claim": false,
+        "issues_seal_or_certificate": false,
+        "accuses_verified_entity": false,
+        "runs_private_investigation": false,
+        "profiles_natural_person": false,
+        "automates_veto": false,
+        "stores_identity_in_web_cfg": false
+      }
+    },
+    {
+      "number": 44,
+      "deliverable_id": "CFG-D44",
+      "public_name_pt_br": "Auditoria de Prontidão do Empreendimento Público",
+      "value_line_pt_br": "Testa se recurso, projeto, licença e área sustentam o início da obra.",
+      "decision_question_pt_br": "Recurso, projeto, licença e área sustentam o início desta obra no prazo anunciado?",
+      "verb_pt_br": "audita",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "public_state": "VALIDATE",
+      "blocking_issue": null,
+      "task_door": "QUALIFY",
+      "capacity_required": false,
+      "price_cents": 490000,
+      "price_state": "PILOT_HYPOTHESIS",
+      "billing": "one_time",
+      "pricing": {
+        "model": "single",
+        "billing": "one_time",
+        "tiers": [
+          {
+            "name_pt_br": "Único",
+            "price_cents": 490000,
+            "unit_pt_br": "um empreendimento ou oportunidade e um território ou órgão executor",
+            "sla_business_days": 7
+          }
+        ],
+        "additional_charges": []
+      },
+      "sla_business_days": 7,
+      "sla_business_days_min": 7,
+      "sla_business_days_max": 7,
+      "sla_starts_after_pt_br": "identificação do empreendimento e do órgão executor",
+      "safe_deadline_gate": null,
+      "credit_rule": null,
+      "scope_unit": {
+        "unit_pt_br": "um empreendimento ou oportunidade e um território ou órgão executor",
+        "enterprises_per_unit": 1,
+        "territories_or_agencies_per_unit": 1,
+        "statement_pt_br": "A unidade é um empreendimento ou oportunidade e um território ou órgão executor. Um segundo empreendimento é uma segunda unidade."
+      },
+      "sources": {
+        "are_possible_not_guaranteed": true,
+        "coverage_declared_per_source": true,
+        "field_inspection": false,
+        "list_pt_br": [
+          "PNCP e PCA",
+          "Transferegov e orçamento quando aplicável",
+          "Novo PAC",
+          "licenças e atos públicos",
+          "projeto, edital e matriz de riscos fornecidos pelo cliente",
+          "dados do órgão"
+        ],
+        "public_source_urls": [
+          {
+            "key": "pncp",
+            "name_pt_br": "PNCP",
+            "url": "https://www.gov.br/pncp/pt-br"
+          },
+          {
+            "key": "transferegov_dados_abertos",
+            "name_pt_br": "Transferegov, dados abertos",
+            "url": "https://www.gov.br/transferegov/pt-br/ferramentas-gestao/dados-abertos/download-dados"
+          },
+          {
+            "key": "novo_pac_selecoes",
+            "name_pt_br": "Novo PAC, seleções",
+            "url": "https://www.gov.br/cidades/pt-br/acesso-a-informacao/acoes-e-programas/pac/selecoes-novo-pac/investimentos-selecionados"
+          }
+        ],
+        "statement_pt_br": "As fontes são públicas oficiais e documentos fornecidos pelo cliente. Não há vistoria de campo, e ausência de registro público é tratada como UNKNOWN."
+      },
+      "inputs_pt_br": [
+        "identificação do empreendimento ou da oportunidade",
+        "órgão executor e território",
+        "edital, projeto e matriz de riscos quando já existirem",
+        "dados do órgão e do programa fornecidos pelo cliente",
+        "horizonte de decisão do cliente"
+      ],
+      "outputs_pt_br": [
+        "estágio e fonte de recursos",
+        "situação de projeto e orçamento",
+        "licenças e autorizações identificadas",
+        "disponibilidade de área e desapropriação quando pública",
+        "governança do empreendimento",
+        "matriz de riscos de prontidão",
+        "histórico de tentativas anteriores",
+        "contratos predecessores",
+        "dependências críticas",
+        "semáforo de maturidade com evidência",
+        "perguntas críticas a levar ao órgão",
+        "efeito na decisão: GO, GO COM CONDIÇÕES, AGUARDAR ou NO-GO"
+      ],
+      "maturity_traffic_light": {
+        "requires_evidence_per_signal": true,
+        "requires_source_per_signal": true,
+        "requires_coverage_per_signal": true,
+        "requires_date_per_signal": true,
+        "is_a_seal": false,
+        "unknown_is_a_valid_signal": true,
+        "statement_pt_br": "Cada sinal do semáforo de maturidade vem com evidência, fonte, cobertura e data. O semáforo não é selo, não é garantia e admite UNKNOWN quando a fonte não respondeu."
+      },
+      "decision_effect": {
+        "states": ["GO", "GO COM CONDIÇÕES", "AGUARDAR", "NO-GO"],
+        "state_count": 4,
+        "closed_vocabulary": true,
+        "is_a_seal": false,
+        "automates_veto": false,
+        "statement_pt_br": "O efeito na decisão é declarado em quatro estados: GO, GO COM CONDIÇÕES, AGUARDAR e NO-GO. O estado orienta decisão e diligência humana e nunca automatiza veto."
+      },
+      "exclusions_pt_br": [
+        "due diligence jurídica imobiliária",
+        "garantia de liberação ou de existência de recurso",
+        "confirmação de licença fora da fonte oficial",
+        "vistoria de campo",
+        "promessa de data de início da obra ou de publicação do edital"
+      ],
+      "dependency": null,
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia e não emite parecer jurídico.",
+        "A CONFENGE não garante recurso, licença, data de início da obra ou publicação de edital.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "Não há comissão de êxito nem promessa de habilitação, de contratação ou de adjudicação.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ],
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 43,
+          "against_deliverable_id": "CFG-D43",
+          "against_public_name_pt_br": "Verificação de Sanções e Restrições Públicas",
+          "their_verb_pt_br": "verifica",
+          "our_verb_pt_br": "audita",
+          "statement_pt_br": "O item 43 verifica a contraparte diante das listas públicas de sanções e restrições. O item 44 audita a prontidão observável do empreendimento e do órgão executor. São objetos distintos, com unidades, prazos e conclusões distintas, e nenhum substitui o outro."
+        },
+        {
+          "against_item": 12,
+          "against_deliverable_id": "CFG-D12",
+          "against_public_name_pt_br": "Decisão de Disputar o Edital",
+          "their_verb_pt_br": "decide",
+          "our_verb_pt_br": "audita",
+          "statement_pt_br": "O item 12 decide se a empresa disputa um edital que já existe. O item 44 audita a maturidade do empreendimento antes do edital, quando ainda se decide se a oportunidade merece investimento comercial. Não são a mesma decisão e não se substituem."
+        }
+      ],
+      "prohibitions": {
+        "success_fee": false,
+        "promises_victory_or_award": false,
+        "promises_habilitation": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false,
+        "issues_clean_company_claim": false,
+        "issues_seal_or_certificate": false,
+        "accuses_verified_entity": false,
+        "runs_private_investigation": false,
+        "profiles_natural_person": false,
+        "automates_veto": false,
+        "stores_identity_in_web_cfg": false
+      }
+    }
+  ]
+}

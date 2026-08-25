@@ -465,6 +465,14 @@ export const SUITE_GRAPH = Object.freeze({
       "/casos/modelo-relatorio-inteligencia-licitacoes/",
     ],
   },
+  "test:page-contract-integridade": {
+    producers: [
+      "tests/commercial/test_page_contract_integridade.mjs",
+      "data/commercial/page-contract-integridade.v1.json",
+    ],
+    artifacts: [],
+    surfaces: [],
+  },
   "test:commercial-contract-consistency": {
     producers: [
       "tests/commercial/test_commercial_contract_consistency.mjs",
