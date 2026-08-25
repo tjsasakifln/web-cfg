@@ -109,16 +109,17 @@ function loadGscInsights() {
   return { ok: false, error: "gsc_insights_missing" };
 }
 
-/** Strip any accidental PII keys from GSC payload (defense in depth). */
+const SENSITIVE_GSC_KEY = /^(?:query|query_text|raw_query|raw_query_text|search_term|search_terms|keyword|keywords|termo|termos|consulta|consultas|email|telefone|phone|nome|name|full_name|cpf|cnpj|whatsapp|pii)$/i;
+
+/** Strip any accidental PII or raw-search keys from GSC payload (defense in depth). */
 function sanitizeGscForOps(data) {
   if (!data || typeof data !== "object") return data;
-  const banned = /email|telefone|phone|nome|name|cpf|cnpj|whatsapp|pii/i;
   function walk(v) {
     if (Array.isArray(v)) return v.map(walk);
     if (v && typeof v === "object") {
       const out = {};
       for (const [k, val] of Object.entries(v)) {
-        if (banned.test(k)) continue;
+        if (SENSITIVE_GSC_KEY.test(k)) continue;
         out[k] = walk(val);
       }
       return out;
@@ -134,11 +135,10 @@ function gscInsightsHash(data) {
   return crypto.createHash("sha256").update(JSON.stringify(data)).digest("hex");
 }
 
-function validateGscInsights(data) {
+function validateGscInsights(data, { now = Date.now() } = {}) {
   if (!data || typeof data !== "object" || Array.isArray(data)) {
     return { ok: false, error: "gsc_insights_invalid" };
   }
-  const forbidden = /^(query|email|telefone|phone|nome|name|cpf|cnpj|whatsapp|pii)$/i;
   let badKey = null;
   let emailLikeValue = false;
   function walk(value) {
@@ -148,7 +148,7 @@ function validateGscInsights(data) {
     }
     if (value && typeof value === "object") {
       for (const [key, item] of Object.entries(value)) {
-        if (forbidden.test(key)) badKey = badKey || key;
+        if (SENSITIVE_GSC_KEY.test(key)) badKey = badKey || key;
         walk(item);
       }
       return;
@@ -172,8 +172,25 @@ function validateGscInsights(data) {
   }
   const asOf = String(data.as_of || "");
   const generatedAt = String(data.generated_at || "");
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(asOf) || !Number.isFinite(Date.parse(generatedAt))) {
+  const asOfStart = Date.parse(`${asOf}T00:00:00Z`);
+  const generatedAtMs = Date.parse(generatedAt);
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(asOf) ||
+    !Number.isFinite(asOfStart) ||
+    new Date(asOfStart).toISOString().slice(0, 10) !== asOf ||
+    !Number.isFinite(generatedAtMs)
+  ) {
     return { ok: false, error: "gsc_insights_invalid_freshness" };
+  }
+  const maxAgeMs = 14 * 864e5;
+  const asOfEnd = asOfStart + 864e5 - 1;
+  if (
+    now - generatedAtMs > maxAgeMs ||
+    now - asOfEnd > maxAgeMs ||
+    generatedAtMs > now + 5 * 60_000 ||
+    asOfStart > now + 864e5
+  ) {
+    return { ok: false, error: "gsc_insights_stale" };
   }
   return { ok: true };
 }
@@ -422,7 +439,11 @@ exports.handler = async (event) => {
     };
     await store.putSystemRecord(GSC_INSIGHTS_STATE_ID, record);
     const proof = await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
-    if (!proof || proof.content_sha256 !== contentSha256) {
+    if (
+      !proof ||
+      proof.content_sha256 !== contentSha256 ||
+      gscInsightsHash(proof.insights) !== contentSha256
+    ) {
       return json(503, { ok: false, error: "gsc_insights_persist_verify_miss" }, origin);
     }
     safeLog("info", "gsc_insights_ingested", {
@@ -448,11 +469,16 @@ exports.handler = async (event) => {
     let durableMeta = {};
     if (store && typeof store.getSystemRecord === "function") {
       const durable = await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
-      if (durable?.insights && validateGscInsights(durable.insights).ok) {
+      const durableHash = durable?.insights ? gscInsightsHash(durable.insights) : null;
+      if (
+        durable?.insights &&
+        durable.content_sha256 === durableHash &&
+        validateGscInsights(durable.insights).ok
+      ) {
         loaded = { ok: true, data: durable.insights };
         deliverySource = "durable_store";
         durableMeta = {
-          content_sha256: durable.content_sha256 || gscInsightsHash(durable.insights),
+          content_sha256: durableHash,
           published_at: durable.published_at || null,
         };
       }
@@ -460,6 +486,10 @@ exports.handler = async (event) => {
     if (!loaded) loaded = loadGscInsights();
     if (!loaded.ok) {
       return json(404, { ok: false, error: loaded.error || "gsc_insights_missing" }, origin);
+    }
+    const deliveryValidation = validateGscInsights(loaded.data);
+    if (!deliveryValidation.ok) {
+      return json(404, { ok: false, error: deliveryValidation.error }, origin);
     }
     const safe = sanitizeGscForOps(loaded.data);
     const blob = JSON.stringify(safe);

@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const DEFAULT_INPUT = path.join(root, "data/revops/gsc/insights_latest.json");
 const DEFAULT_SYNC_STATE = path.join(root, "data/revops/gsc/last_sync.json");
+const SENSITIVE_GSC_KEY = /^(?:query|query_text|raw_query|raw_query_text|search_term|search_terms|keyword|keywords|termo|termos|consulta|consultas|email|telefone|phone|nome|name|full_name|cpf|cnpj|whatsapp|pii)$/i;
 
 export function contentHash(insights) {
   return crypto.createHash("sha256").update(JSON.stringify(insights)).digest("hex");
@@ -17,8 +18,21 @@ export function validatePublishable(insights, { now = new Date() } = {}) {
   if (!insights || typeof insights !== "object" || Array.isArray(insights)) {
     throw new Error("gsc_insights_invalid");
   }
-  const serialized = JSON.stringify(insights);
-  if (/"query"\s*:|"(?:email|telefone|phone|nome|cpf|cnpj|whatsapp|pii)"\s*:/i.test(serialized)) {
+  let sensitiveKey = null;
+  let emailLikeValue = false;
+  function inspect(value) {
+    if (Array.isArray(value)) return value.forEach(inspect);
+    if (value && typeof value === "object") {
+      for (const [key, item] of Object.entries(value)) {
+        if (SENSITIVE_GSC_KEY.test(key)) sensitiveKey ||= key;
+        inspect(item);
+      }
+    } else if (typeof value === "string" && /\b[^\s@]+@[^\s@]+\.[^\s@]+\b/.test(value)) {
+      emailLikeValue = true;
+    }
+  }
+  inspect(insights);
+  if (sensitiveKey || emailLikeValue) {
     throw new Error("gsc_insights_sensitive_field");
   }
   if (
@@ -36,7 +50,12 @@ export function validatePublishable(insights, { now = new Date() } = {}) {
     throw new Error("gsc_insights_invalid_freshness");
   }
   const maxAgeMs = 14 * 864e5;
-  if (now.getTime() - generatedAt > maxAgeMs || now.getTime() - asOf > maxAgeMs) {
+  if (
+    now.getTime() - generatedAt > maxAgeMs ||
+    now.getTime() - asOf > maxAgeMs ||
+    generatedAt > now.getTime() + 5 * 60_000 ||
+    asOf > now.getTime() + 864e5
+  ) {
     throw new Error("gsc_insights_stale");
   }
   return { content_sha256: contentHash(insights), as_of: insights.as_of };

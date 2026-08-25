@@ -44,6 +44,18 @@ try {
   check("raw_query_rejected", error.message === "gsc_insights_sensitive_field", error.message);
 }
 try {
+  validatePublishable({ ...insights, analyses: [{ search_term: "private nested term" }] });
+  check("nested_raw_search_term_rejected", false);
+} catch (error) {
+  check("nested_raw_search_term_rejected", error.message === "gsc_insights_sensitive_field", error.message);
+}
+try {
+  validatePublishable({ ...insights, analyses: [{ note: "contact me at private@example.com" }] });
+  check("email_like_value_rejected", false);
+} catch (error) {
+  check("email_like_value_rejected", error.message === "gsc_insights_sensitive_field", error.message);
+}
+try {
   validatePublishable(
     { ...insights, as_of: "2025-01-01", generated_at: "2025-01-02T00:00:00Z" },
     { now }

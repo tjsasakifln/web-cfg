@@ -577,6 +577,19 @@ function fail(name, detail) {
   });
   if (rawQueryRejected.statusCode !== 422) fail("gsc_ingest_rejects_raw_query", rawQueryRejected.body);
   else pass("gsc_ingest_rejects_raw_query");
+  const nestedRawRejected = ops._validateGscInsights({
+    ...currentInsights,
+    analyses: [{ raw_query: "private nested term" }],
+  });
+  if (nestedRawRejected.ok) fail("gsc_ingest_rejects_nested_raw_query", nestedRawRejected);
+  else pass("gsc_ingest_rejects_nested_raw_query", nestedRawRejected.error);
+  const staleRejected = ops._validateGscInsights({
+    ...currentInsights,
+    as_of: "2025-01-01",
+    generated_at: "2025-01-02T00:00:00Z",
+  });
+  if (staleRejected.ok) fail("gsc_ingest_rejects_stale_snapshot", staleRejected);
+  else pass("gsc_ingest_rejects_stale_snapshot", staleRejected.error);
 
   const ingested = await ops.handler({
     httpMethod: "POST",
