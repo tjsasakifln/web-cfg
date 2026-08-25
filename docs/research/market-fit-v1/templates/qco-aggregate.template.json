@@ -15,22 +15,30 @@
     "eligible_qcos": 0,
     "unit_recommendations": 0,
     "proposals_sent": 0,
+    "plausible_proposals_at_published_price": 0,
     "paid": 0,
     "delivered": 0,
     "outcomes_observed": 0,
-    "expansions": 0
+    "outcomes_unknown": 0,
+    "expansions": 0,
+    "deliveries_with_positive_margin": 0,
+    "deliveries_with_forbidden_claim": 0
   },
   "by_deliverable": [
-    { "deliverable_id": "CFG-D01", "price_version": null, "price_displayed_cents": 59900, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0 },
-    { "deliverable_id": "CFG-D12", "price_version": null, "price_displayed_cents": 190000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0 },
-    { "deliverable_id": "CFG-D14", "price_version": null, "price_displayed_cents": 590000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0 },
-    { "deliverable_id": "CFG-D17", "price_version": null, "price_displayed_cents": 290000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0 },
-    { "deliverable_id": "CFG-D18", "price_version": null, "price_displayed_cents": 490000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0 },
-    { "deliverable_id": "CFG-D22", "price_version": null, "price_displayed_cents": 790000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0 },
-    { "deliverable_id": "CFG-D49", "price_version": null, "price_displayed_cents": 980000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0 },
-    { "deliverable_id": "CFG-D51", "price_version": null, "price_displayed_cents": 490000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0 }
+    { "deliverable_id": "CFG-D01", "price_version": null, "price_displayed_cents": 59900, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "deliverable_id": "CFG-D12", "price_version": null, "price_displayed_cents": 190000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "deliverable_id": "CFG-D14", "price_version": null, "price_displayed_cents": 590000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "deliverable_id": "CFG-D17", "price_version": null, "price_displayed_cents": 290000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "deliverable_id": "CFG-D18", "price_version": null, "price_displayed_cents": 490000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "deliverable_id": "CFG-D22", "price_version": null, "price_displayed_cents": 790000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "deliverable_id": "CFG-D49", "price_version": null, "price_displayed_cents": 980000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null },
+    { "deliverable_id": "CFG-D51", "price_version": null, "price_displayed_cents": 490000, "eligible_qcos": 0, "unit_recommendations": 0, "proposals_sent": 0, "plausible_proposals_at_published_price": 0, "paid": 0, "delivered": 0, "outcomes_observed": 0, "outcomes_unknown": 0, "expansions": 0, "deliveries_with_positive_margin": 0, "deliveries_with_forbidden_claim": 0, "decisions": { "ACEITOU": 0, "NEGOCIOU": 0, "RECUSOU": 0, "SEM_DECISAO": 0 }, "delivery_hours_deviation_pct": null }
   ],
   "contains_individual_records": false,
-  "contains_pii": false
+  "contains_pii": false,
+  "review": {
+    "operator_role": null,
+    "second_reviewer_role": null,
+    "reviewed_at": null
+  }
 }
-

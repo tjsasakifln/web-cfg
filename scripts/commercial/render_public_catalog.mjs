@@ -75,13 +75,13 @@ function copyClause(key, title, content) {
 function contractDetails(entry, neighbor) {
   const state = STATE[entry.public_state];
   const proof = entry.public_state === "PUBLISHED"
-    ? "Amostra sintética integral publicada, com método, fonte, data e cobertura visíveis. Nenhum case real é insinuado."
-    : "Contrato e método publicados. Caso real não publicado; a prova disponível é a estrutura verificável da entrega.";
+    ? `Em ${entry.public_name_pt_br}, a amostra sintética integral mostra ${publicText(lowerFirst(entry.included_outputs[0]))}, com método, fonte, data e cobertura visíveis. Nenhum caso real é insinuado.`
+    : `Em ${entry.public_name_pt_br}, a prova disponível é a estrutura verificável de ${publicText(lowerFirst(entry.included_outputs[0]))}. Caso real não publicado.`;
   const actionExpectation = entry.public_state === "PUBLISHED"
-    ? "Consultar exemplo completo abre a amostra no navegador. Contratação, escopo e prazo continuam sujeitos a confirmação."
+    ? `Consultar o exemplo de ${entry.public_name_pt_br} abre a amostra no navegador. Contratação, escopo e prazo continuam sujeitos a confirmação.`
     : entry.public_state === "VALIDATE"
-      ? "Pedir análise de aderência leva à captura terminal. Uma pessoa revisa contexto, capacidade e prazo antes de qualquer proposta."
-      : "Contratação indisponível. O estado só muda depois que cobertura e proveniência cumprirem o gate.";
+      ? `Pedir aderência para ${entry.public_name_pt_br} leva à captura terminal. Uma pessoa revisa contexto, capacidade e prazo antes de qualquer proposta.`
+      : `${entry.public_name_pt_br} está indisponível. O estado só muda depois que cobertura e proveniência cumprirem o gate.`;
   const neighborCopy = neighbor
     ? `Compare com ${neighbor.public_name_pt_br} quando a pergunta for: ${neighbor.decision_question} Esta entrega cabe quando a pergunta for: ${entry.decision_question}`
     : `Não há alternativa vizinha na mesma tarefa. Próximo passo comercial: ${stepUpLabel(entry)}.`;
@@ -94,13 +94,13 @@ function contractDetails(entry, neighbor) {
     copyClause("concrete_result_and_artifact_example", "Resultado e artefato", publicList(entry.included_outputs)),
     copyClause("scope_in", "O que entra", `<p>${escapeHtml(publicText(entry.scope.unit))}.</p>${publicList(entry.scope.limits)}`),
     copyClause("client_inputs_and_sla_start", "Insumos e início do prazo", `${publicList(entry.required_inputs)}<p>O prazo começa após ${escapeHtml(publicText(entry.sla.starts_after))}.</p>`),
-    copyClause("method_and_provenance", "Método e proveniência", `<p>Afirmações usam fonte, data, método e cobertura, marcadas como ${escapeHtml(grades.join(", "))}.</p>`),
-    copyClause("price_and_sla_same_block", "Preço e prazo", `<p><strong>${escapeHtml(priceLabel(entry))}</strong> · ${escapeHtml(publicText(slaLabel(entry)))}</p>`),
+    copyClause("method_and_provenance", "Método e proveniência", `<p>Em ${escapeHtml(entry.public_name_pt_br)}, a decisão “${escapeHtml(entry.decision_question)}” usa fonte, data, método e cobertura, com afirmações marcadas como ${escapeHtml(grades.join(", "))}.</p>`),
+    copyClause("price_and_sla_same_block", "Preço e prazo", `<p>${escapeHtml(entry.public_name_pt_br)}: <strong>${escapeHtml(priceLabel(entry))}</strong> · ${escapeHtml(publicText(slaLabel(entry)))}</p>`),
     copyClause("exclusions_and_third_party", "Não inclui", publicList(entry.exclusions, "Não inclui: ")),
     copyClause("fit_and_misfit", "Serve e não serve", `<p>Serve quando ${escapeHtml(publicText(lowerFirst(entry.trigger)))}</p><p>Não serve para ${escapeHtml(publicText(entry.exclusions[0]))}.</p>`),
-    copyClause("proof_matching_real_state", "Prova disponível", `<p>${proof}</p>`),
-    copyClause("specific_objections", "Objeção que precisa ser resolvida", `<p>Sem ${escapeHtml(publicText(entry.required_inputs[0]))}, o SLA não começa e a decisão permanece em revisão.</p>`),
-    copyClause("cta_with_post_click_expectation", "Próxima ação", `<p>${actionExpectation}</p><p>Estado atual: ${state.label}.</p>`),
+    copyClause("proof_matching_real_state", "Prova disponível", `<p>${escapeHtml(proof)}</p>`),
+    copyClause("specific_objections", "Objeção que precisa ser resolvida", `<p>Em ${escapeHtml(entry.public_name_pt_br)}, sem ${escapeHtml(publicText(entry.required_inputs[0]))}, o SLA não começa e a decisão “${escapeHtml(entry.decision_question)}” permanece em revisão.</p>`),
+    copyClause("cta_with_post_click_expectation", "Próxima ação", `<p>${escapeHtml(actionExpectation)}</p><p>Estado atual: ${escapeHtml(state.label)}.</p>`),
     copyClause("neighbor_alternative_and_step_up", "Alternativa e próximo nível", `<p>${escapeHtml(neighborCopy)}</p><p>Próximo nível: ${escapeHtml(stepUpLabel(entry))}.</p>`),
   ];
   return `<details class="catalog-item__contract" data-copy-contract-id="${entry.deliverable_id}"><summary>Ver escopo, aderência e alternativa</summary><div>${clauses.join("")}</div></details>`;

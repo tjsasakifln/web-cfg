@@ -60,7 +60,7 @@ export function deriveMoneyRoutes(registry, taskDoors, familyRegistry) {
   return [...routes].filter((route) => fs.existsSync(routePath(route))).sort();
 }
 
-function registeredNameRanges(text, names) {
+export function registeredNameRanges(text, names) {
   const ranges = [];
   for (const rawName of names) {
     const name = normalize(rawName);
@@ -73,22 +73,38 @@ function registeredNameRanges(text, names) {
   return ranges;
 }
 
-function classifyOccurrence(entry, text, index, matched, contract, ranges, registeredRoute) {
+export function explicitExclusionRanges(html, text) {
+  const ranges = [];
+  const sectionPattern = /<section\b[^>]*>[\s\S]*?<h[2-6]\b[^>]*>\s*N(?:ã|&atilde;)o inclui\s*<\/h[2-6]>[\s\S]*?<\/section>/gi;
+  for (const match of String(html).matchAll(sectionPattern)) {
+    const sectionText = normalize(visibleText(match[0])).trim();
+    if (!sectionText) continue;
+    let index = 0;
+    while ((index = text.indexOf(sectionText, index)) !== -1) {
+      ranges.push([index, index + sectionText.length]);
+      index += sectionText.length;
+    }
+  }
+  return ranges;
+}
+
+export function classifyOccurrence(entry, text, index, matched, contract, ranges, exclusionRanges = []) {
   const exceptionIds = entry.exemption_ids || [];
   if (exceptionIds.includes("GX-04") && ranges.some(([start, end]) => index >= start && index < end)) return "registered_name";
-  if (exceptionIds.includes("GX-04") && registeredRoute) return "registered_route_term";
-  const guarantee = contract.gate_exceptions.find((item) => item.id === "GX-03");
-  if (exceptionIds.includes("GX-03")) {
-    const forms = guarantee.promise_forms.map(normalize);
-    const tail = text.slice(index, index + matched.length + 16);
-    if ((guarantee.market_institute_forms || []).map(normalize).some((form) => tail.startsWith(form))) return "market_institute";
-    if (!forms.some((form) => tail.startsWith(form))) return "market_institute";
-  }
   const negation = contract.gate_exceptions.find((item) => item.id === "GX-01");
   if (exceptionIds.includes("GX-01")) {
-    const before = text.slice(Math.max(0, index - negation.window_chars), index);
+    if (exclusionRanges.some(([start, end]) => index >= start && index < end)) return "explicit_exclusion";
+    const window = text.slice(Math.max(0, index - negation.window_chars), index);
+    const before = window.slice(Math.max(window.lastIndexOf("."), window.lastIndexOf("!"), window.lastIndexOf("?")) + 1);
     const marker = new RegExp(`\\b(${negation.negation_markers.map((value) => normalize(value).replace(/\s/g, "\\s")).join("|")})\\b`);
     if (marker.test(before)) return "explicit_negation";
+  }
+  const guarantee = contract.gate_exceptions.find((item) => item.id === "GX-03");
+  if (exceptionIds.includes("GX-03")) {
+    const tail = text.slice(index, index + matched.length + 16);
+    if ((guarantee.market_institute_forms || []).map(normalize).some((form) => tail.startsWith(form))) return "market_institute";
+    const promiseForms = (guarantee.promise_forms || []).map(normalize);
+    if (!promiseForms.some((form) => tail.startsWith(form))) return "market_institute";
   }
   return null;
 }
@@ -103,12 +119,12 @@ function scanLanguage(routes, contract) {
     const html = fs.readFileSync(routePath(route), "utf8");
     const text = normalize(visibleText(html));
     const ranges = registeredNameRanges(text, registeredNames);
-    const registeredRoute = registeredNames.some((name) => new RegExp(`<h1[^>]*>[\\s\\S]{0,180}${normalize(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i").test(normalize(html)));
+    const exclusionRanges = explicitExclusionRanges(html, text);
     for (const entry of terms) {
       const expression = new RegExp(entry.pattern, "g");
       let match;
       while ((match = expression.exec(text)) !== null) {
-        const exemption = classifyOccurrence(entry, text, match.index, match[0], contract, ranges, registeredRoute);
+        const exemption = classifyOccurrence(entry, text, match.index, match[0], contract, ranges, exclusionRanges);
         const finding = { route, forbidden_id: entry.id, matched: match[0], exemption };
         if (exemption) boundaries.push(finding);
         else if (entry.finding_kind === "count_only") observations.push(finding);
@@ -152,6 +168,25 @@ function words(value) {
   return String(value || "").trim().split(/\s+/).filter(Boolean).length;
 }
 
+function scanClauseDuplicates(catalogHtml, expectedClauses) {
+  const duplicates = [];
+  const signatures = new Map();
+  let observed = 0;
+  for (const contractMatch of catalogHtml.matchAll(/<details[^>]+data-copy-contract-id="([^"]+)"[^>]*>([\s\S]*?)<\/details>/g)) {
+    const deliverableId = contractMatch[1];
+    for (const clauseMatch of contractMatch[2].matchAll(/<section[^>]+data-copy-clause="([^"]+)"[^>]*>([\s\S]*?)<\/section>/g)) {
+      const clause = clauseMatch[1];
+      observed += 1;
+      if (!expectedClauses.includes(clause)) continue;
+      const signature = normalize(visibleText(clauseMatch[2])).trim();
+      const key = signature;
+      if (signatures.has(key)) duplicates.push({ clause, deliverable_id: deliverableId, duplicates: signatures.get(key) });
+      else signatures.set(key, deliverableId);
+    }
+  }
+  return { duplicates, observed, unique: signatures.size };
+}
+
 export function auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml }) {
   const problems = [];
   const clauses = contract.per_offer_contract.map((clause) => clause.key);
@@ -175,6 +210,9 @@ export function auditCopyContract({ contract, registry, taskDoors, familyRegistr
   }
   if ((catalogHtml.match(/data-copy-contract-id=/g) || []).length !== ids.length) problems.push("public_contract_count");
   if (!catalogHtml.includes("Compre quando") || catalogHtml.includes(">Saiba mais<")) problems.push("catalog_action_copy");
+  const clauseScan = scanClauseDuplicates(catalogHtml, clauses);
+  if (clauseScan.observed !== ids.length * clauses.length) problems.push(`clause_scan_count:${clauseScan.observed}`);
+  clauseScan.duplicates.forEach((finding) => problems.push(`duplicate_copy_clause:${finding.clause}:${finding.deliverable_id}:${finding.duplicates}`));
 
   const language = scanLanguage(routes, contract);
   language.violations.forEach((finding) => problems.push(`forbidden_language:${finding.route}:${finding.forbidden_id}`));
@@ -188,6 +226,8 @@ export function auditCopyContract({ contract, registry, taskDoors, familyRegistr
       deliverables: ids.length,
       clauses_per_deliverable: clauses.length,
       clause_instances: ids.length * clauses.length,
+      clause_bodies_unique: clauseScan.unique,
+      clause_body_duplicates: clauseScan.duplicates.length,
       titleless_unique: signatures.size,
       routes_derived: routes.length,
       language_boundaries: language.boundaries.length,
