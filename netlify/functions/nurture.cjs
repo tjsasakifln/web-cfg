@@ -31,8 +31,48 @@ const {
   afterSend,
   sendResendNurture,
   publicSubSummary,
+  sealToken,
+  openTokenDetails,
   TRACKS,
 } = require("./lib/nurture-core.cjs");
+const {
+  nurtureRateLimit,
+  nurtureFingerprint,
+  nurtureIpHash,
+} = require("./lib/nurture-rate-limit.cjs");
+
+const MAX_SUBSCRIBE_BODY = 8 * 1024;
+
+const CANONICAL_PUBLIC_ORIGINS = new Set([
+  "https://confenge.com.br",
+  "https://www.confenge.com.br",
+]);
+
+function isProductionProfile(env = process.env) {
+  const nodeEnv = String(env.NODE_ENV || "").trim().toLowerCase();
+  const context = String(env.CONTEXT || env.NETLIFY_CONTEXT || "").trim().toLowerCase();
+  return nodeEnv === "production" || context === "production";
+}
+
+function productionRequestOrigin(event) {
+  const headers = event?.headers || {};
+  const origin = String(headers.origin || headers.Origin || "").trim();
+  if (origin) return origin;
+  const referer = String(headers.referer || headers.Referer || "").trim();
+  if (!referer) return "";
+  try {
+    const parsed = new URL(referer);
+    return `${parsed.protocol}//${parsed.host}`;
+  } catch {
+    return "";
+  }
+}
+
+function subscribeOriginAllowed(event, originCheck, env = process.env) {
+  if (!originCheck.ok) return false;
+  if (!isProductionProfile(env)) return true;
+  return CANONICAL_PUBLIC_ORIGINS.has(productionRequestOrigin(event));
+}
 
 function bindBlobs(event) {
   try {
@@ -101,6 +141,11 @@ function parseBody(event) {
     }
     return out;
   }
+}
+
+function rawBody(event) {
+  const raw = event.body || "";
+  return event.isBase64Encoded ? Buffer.from(raw, "base64").toString("utf8") : String(raw);
 }
 
 async function getNurtureStore(event) {
@@ -279,6 +324,8 @@ exports.handler = async (event) => {
         service: "confenge-nurture",
         tracks: TRACKS,
         resend_configured: Boolean(process.env.RESEND_API_KEY),
+        token_secret_configured: String(process.env.NURTURE_TOKEN_SECRET || "").length >= 32,
+        token_rotation_window: String(process.env.NURTURE_TOKEN_SECRET_PREVIOUS || "").length >= 32,
         ts: new Date().toISOString(),
       },
       origin
@@ -300,6 +347,25 @@ exports.handler = async (event) => {
     return json(200, { ok: true, tracks: publicTracks }, origin);
   }
 
+  if (action === "subscribe" && event.httpMethod === "POST") {
+    if (!subscribeOriginAllowed(event, originCheck)) {
+      safeLog("warn", "nurture_origin_denied", {});
+      return json(403, { ok: false, error: "origin_denied" }, "https://confenge.com.br");
+    }
+    if (Buffer.byteLength(rawBody(event), "utf8") > MAX_SUBSCRIBE_BODY) {
+      return json(413, { ok: false, error: "payload_too_large" }, origin);
+    }
+    const ip = clientIp(event);
+    const rate = nurtureRateLimit({ ip, fingerprint: nurtureFingerprint(event, ip) });
+    if (!rate.allowed) {
+      const ipHash = nurtureIpHash(ip);
+      safeLog("warn", "nurture_rate_limited", { reason: rate.reason, ip_hash: ipHash });
+      const response = json(429, { ok: false, error: "rate_limited" }, origin);
+      response.headers["Retry-After"] = String(rate.retryAfter);
+      return response;
+    }
+  }
+
   const store = await getNurtureStore(event);
 
   if (action === "subscribe" && event.httpMethod === "POST") {
@@ -319,17 +385,13 @@ exports.handler = async (event) => {
         landing_page: body.landing_page,
         lead_id: body.lead_id,
       });
-      // Store tokens hashed only; keep unsub hash. confirm hash stored.
-      // We need unsub_token later for emails — store encrypted? For v1 store unsub raw encrypted via env salt hash reverse not possible.
-      // Store unsub_token_raw encrypted with OPS secret if present, else store hash-only and regenerate message links via id+signed MAC.
-      record.unsub_token_mac = crypto
-        .createHmac("sha256", process.env.OPS_TOKEN || process.env.IP_HASH_SALT || "confenge-nurture")
-        .update(record.subscription_id + "|unsub|" + record.unsub_token_hash)
-        .digest("hex")
-        .slice(0, 32);
-      // Persist raw unsub for link generation only in private field (store is private blobs)
-      record._unsub_raw = unsub_token;
-      record._confirm_raw = confirm_token;
+      // Confirmation raw exists only long enough to build this response email.
+      // Future unsubscribe links use an authenticated sealed token at rest.
+      record.unsub_token_sealed = sealToken(
+        unsub_token,
+        record.subscription_id,
+        process.env,
+      );
       await store.put(record);
 
       const base = process.env.URL || process.env.DEPLOY_PRIME_URL || "https://confenge.com.br";
@@ -360,7 +422,7 @@ exports.handler = async (event) => {
         subscription_id: record.subscription_id,
         track: record.track,
         send: send.status,
-        ip: clientIp(event).slice(0, 16),
+        ip_hash: nurtureIpHash(clientIp(event)),
       });
 
       // Never return email or raw tokens in JSON
@@ -377,7 +439,16 @@ exports.handler = async (event) => {
         origin
       );
     } catch (err) {
-      return json(400, { ok: false, error: err.code || "subscribe_error", message: err.message }, origin);
+      const unavailable = err.code === "nurture_token_secret_not_configured";
+      return json(
+        unavailable ? 503 : 400,
+        {
+          ok: false,
+          error: unavailable ? "nurture_not_configured" : (err.code || "subscribe_error"),
+          message: unavailable ? "Serviço temporariamente indisponível." : err.message,
+        },
+        origin,
+      );
     }
   }
 
@@ -519,11 +590,42 @@ exports.handler = async (event) => {
 async function processOne(store, rec, tracksData) {
   const due = nextDueMessage(rec, tracksData, Date.now());
   if (!due) return "not_due";
-  const unsubToken = rec._unsub_raw;
+  let unsubToken;
+  try {
+    if (rec.unsub_token_sealed) {
+      const opened = openTokenDetails(rec.unsub_token_sealed, rec.subscription_id, process.env);
+      unsubToken = opened.token;
+      if (opened.key_slot === "previous") {
+        const migrated = {
+          ...rec,
+          unsub_token_sealed: sealToken(unsubToken, rec.subscription_id, process.env),
+        };
+        await store.put(migrated);
+        rec = migrated;
+      }
+    } else if (rec._unsub_raw) {
+      // One-way migration for records created before sealed-token support.
+      unsubToken = rec._unsub_raw;
+      const migrated = {
+        ...rec,
+        unsub_token_sealed: sealToken(unsubToken, rec.subscription_id, process.env),
+      };
+      delete migrated._unsub_raw;
+      delete migrated._confirm_raw;
+      await store.put(migrated);
+      rec = migrated;
+    } else {
+      throw Object.assign(new Error("unsubscribe_token_missing"), { code: "unsubscribe_token_missing" });
+    }
+  } catch (err) {
+    safeLog("error", "nurture_unsubscribe_token_unavailable", {
+      subscription_id: String(rec.subscription_id || "").slice(0, 32),
+      reason: String(err.code || "token_error").slice(0, 64),
+    });
+    return "error";
+  }
   const base = process.env.URL || process.env.DEPLOY_PRIME_URL || "https://confenge.com.br";
-  const unsubUrl = unsubToken
-    ? `${base}/.netlify/functions/nurture?action=unsubscribe&id=${rec.subscription_id}&token=${unsubToken}`
-    : `${base}/nurture/sair/`;
+  const unsubUrl = `${base}/.netlify/functions/nurture?action=unsubscribe&id=${rec.subscription_id}&token=${unsubToken}`;
   const text = renderBody(due.body_template, {
     cta_url: due.cta_url,
     tool_url: due.tool_url,

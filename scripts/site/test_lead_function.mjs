@@ -269,7 +269,85 @@ _reset();
   pass("pillar_forms_distinct_attribution", { routes: pillars.map(([slug]) => slug) });
 }
 
-// 5c) The two hub forms introduced by #290 reach the real persistence path
+// 5c) PII notification destinations are HTTPS + explicitly allowlisted in production.
+{
+  const previous = { ...process.env };
+  const originalFetch = globalThis.fetch;
+  const calls = [];
+  globalThis.fetch = async (url, init = {}) => {
+    calls.push({ url: String(url), body: String(init.body || "") });
+    return { ok: true, status: 200, text: async () => "{}", json: async () => ({}) };
+  };
+  const deliveryPath = path.join(root, "netlify/functions/lib/lead-delivery.cjs");
+  delete require.cache[require.resolve(deliveryPath)];
+  const { deliverOpsWebhook, deliverNtfyAuth, validatePiiDestination } = require(deliveryPath);
+  const record = {
+    lead_id: "pii-destination-probe",
+    record_kind: "real",
+    received_at: new Date().toISOString(),
+    jornada: "contrato",
+    estagio: "lead",
+    nome: "Contato Sensível",
+    email: "private@example.com",
+    telefone: "48999999999",
+  };
+  try {
+    process.env.NODE_ENV = "production";
+    process.env.OPS_WEBHOOK_URL = "http://ops.example.test/hook";
+    delete process.env.OPS_WEBHOOK_ALLOWED_HOSTS;
+    const plain = await deliverOpsWebhook(record);
+    if (plain.status !== "error" || calls.length) fail("ops_webhook_plain_http_blocked", { plain, calls });
+
+    for (const [name, url, reason] of [
+      ["credentials", "https://user:secret@ops.example.test/hook", "embedded_credentials"],
+      ["default_port", "https://ops.example.test:443/hook", "port_not_allowed"],
+      ["custom_port", "https://ops.example.test:8443/hook", "port_not_allowed"],
+      ["query", "https://ops.example.test/hook?token=secret", "query_or_fragment_not_allowed"],
+      ["fragment", "https://ops.example.test/hook#secret", "query_or_fragment_not_allowed"],
+    ]) {
+      const checked = validatePiiDestination(url, "ops.example.test", process.env);
+      if (checked.ok || checked.reason !== reason) {
+        fail(`pii_destination_${name}_blocked`, checked);
+      }
+    }
+
+    process.env.OPS_WEBHOOK_URL = "https://ops.example.test/hook";
+    const noAllowlist = await deliverOpsWebhook(record);
+    if (noAllowlist.status !== "error" || calls.length) {
+      fail("ops_webhook_allowlist_required", { noAllowlist, calls });
+    }
+
+    process.env.OPS_WEBHOOK_ALLOWED_HOSTS = "ops.example.test";
+    const allowed = await deliverOpsWebhook(record);
+    if (allowed.status !== "ok" || calls.length !== 1 || !calls[0].body.includes("private@example.com")) {
+      fail("ops_webhook_allowed_https", { allowed, calls });
+    }
+
+    process.env.NTFY_URL = "https://evil.example/topic";
+    process.env.NTFY_TOKEN = "private-token";
+    process.env.NTFY_ALLOWED_HOSTS = "ntfy.example.test";
+    const ntfyDenied = await deliverNtfyAuth(record);
+    if (ntfyDenied.status !== "error" || calls.length !== 1) {
+      fail("ntfy_host_denied_before_fetch", { ntfyDenied, calls });
+    }
+    process.env.NTFY_URL = "https://ntfy.example.test/private-topic";
+    const ntfyAllowed = await deliverNtfyAuth(record);
+    if (
+      ntfyAllowed.status !== "ok" ||
+      calls.length !== 2 ||
+      calls[1].url !== "https://ntfy.example.test/private-topic" ||
+      !calls[1].body.includes("private@example.com")
+    ) {
+      fail("ntfy_allowed_https", { ntfyAllowed, calls });
+    }
+    pass("pii_notification_destinations_fail_closed");
+  } finally {
+    globalThis.fetch = originalFetch;
+    process.env = previous;
+  }
+}
+
+// 5d) The two hub forms introduced by #290 reach the real persistence path
 // with their shipped attribution. A static <form> alone is not conversion.
 {
   const hubs = [
@@ -816,7 +894,192 @@ _reset();
   const scrubbed = collect._scrubProps({ path: "/x", email: "a@b.com", journey: "contrato", nome: "X" });
   if (scrubbed.email || scrubbed.nome) fail("collect_pii", scrubbed);
   if (scrubbed.journey !== "contrato") fail("collect_keep", scrubbed);
+  const analyticsEvent = JSON.stringify({
+    event: "cta_click",
+    props: { event_id: "origin-gate-probe", cta_id: "origin-gate" },
+    path: "/",
+  });
+  const recentBeforeDenied = collect._recent().length;
+  for (const headers of [
+    { origin: "https://evil.example" },
+    { referer: "https://evil.example/page" },
+  ]) {
+    const denied = await collect.handler({ httpMethod: "POST", headers, body: analyticsEvent });
+    const deniedBody = JSON.parse(denied.body);
+    if (denied.statusCode !== 403 || deniedBody.error !== "origin_denied") {
+      fail("collect_foreign_origin_denied", { headers, status: denied.statusCode, body: deniedBody });
+    }
+    if (denied.headers["Access-Control-Allow-Origin"] === "https://evil.example") {
+      fail("collect_foreign_origin_echoed", denied.headers);
+    }
+  }
+  if (collect._recent().length !== recentBeforeDenied) {
+    fail("collect_foreign_origin_zero_persist", collect._recent());
+  }
+  const previousNodeEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = "production";
+  for (const headers of [
+    { origin: "https://confenge.netlify.app" },
+    { origin: "http://localhost:8765" },
+    { referer: "https://confenge.netlify.app/page" },
+    {},
+  ]) {
+    const denied = await collect.handler({ httpMethod: "POST", headers, body: analyticsEvent });
+    const deniedBody = JSON.parse(denied.body);
+    if (denied.statusCode !== 403 || deniedBody.error !== "origin_denied") {
+      fail("collect_noncanonical_production_origin_denied", {
+        headers,
+        status: denied.statusCode,
+        body: deniedBody,
+      });
+    }
+  }
+  if (collect._recent().length !== recentBeforeDenied) {
+    fail("collect_noncanonical_production_zero_persist", collect._recent());
+  }
+  process.env.NODE_ENV = previousNodeEnv;
+  const allowed = await collect.handler({
+    httpMethod: "POST",
+    headers: { origin: "https://confenge.com.br" },
+    body: analyticsEvent,
+  });
+  if (allowed.statusCode !== 202 || JSON.parse(allowed.body).accepted !== 1) {
+    fail("collect_canonical_origin_allowed", allowed);
+  }
+  pass("collect_origin_gate");
   pass("collect_scrub");
+}
+
+// 13) event_id remains idempotent after a collector cold start.
+{
+  const analyticsDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-analytics-replay-"));
+  const previousDir = process.env.LEAD_STORE_DIR;
+  const previousStore = process.env.LEAD_STORE;
+  process.env.LEAD_STORE_DIR = analyticsDir;
+  delete process.env.LEAD_STORE;
+  const collectPath = path.join(root, "netlify/functions/collect.cjs");
+  const replayEvent = {
+    httpMethod: "POST",
+    headers: { origin: "https://confenge.com.br", "x-forwarded-for": "203.0.113.77" },
+    body: JSON.stringify({
+      event: "cta_click",
+      props: { event_id: "durable-cold-start-replay", cta_id: "durable-replay" },
+      path: "/",
+    }),
+  };
+  try {
+    delete require.cache[require.resolve(collectPath)];
+    let collector = require(collectPath);
+    const first = await collector.handler(replayEvent);
+    delete require.cache[require.resolve(collectPath)];
+    collector = require(collectPath);
+    const second = await collector.handler(replayEvent);
+    const firstBody = JSON.parse(first.body);
+    const secondBody = JSON.parse(second.body);
+    const eventDir = path.join(analyticsDir, "analytics", "events", "by-id");
+    const files = fs.existsSync(eventDir) ? fs.readdirSync(eventDir) : [];
+    if (firstBody.accepted !== 1 || secondBody.accepted !== 0 || secondBody.rejected !== 1) {
+      fail("collect_durable_replay_response", { firstBody, secondBody });
+    }
+    if (files.length !== 1) fail("collect_durable_replay_files", files);
+    pass("collect_durable_replay", { files: files.length });
+  } finally {
+    if (previousDir == null) delete process.env.LEAD_STORE_DIR;
+    else process.env.LEAD_STORE_DIR = previousDir;
+    if (previousStore == null) delete process.env.LEAD_STORE;
+    else process.env.LEAD_STORE = previousStore;
+    fs.rmSync(analyticsDir, { recursive: true, force: true });
+  }
+}
+
+// 14) Blob create-only dedupe survives cold starts; failed writes stay retryable.
+{
+  const previousDir = process.env.LEAD_STORE_DIR;
+  const previousStore = process.env.LEAD_STORE;
+  const previousNodeEnv = process.env.NODE_ENV;
+  delete process.env.LEAD_STORE_DIR;
+  delete process.env.LEAD_STORE;
+  const collectPath = path.join(root, "netlify/functions/collect.cjs");
+  const blobRecords = new Map();
+  let failWrites = false;
+  let createOnlyCalls = 0;
+  const fakeBlobStore = {
+    async set(key, value, options) {
+      if (failWrites) throw new Error("injected_blob_write_failure");
+      if (options?.onlyIfNew !== true) fail("collect_blob_not_create_only", options);
+      createOnlyCalls += 1;
+      if (blobRecords.has(key)) return { modified: false };
+      blobRecords.set(key, value);
+      return { modified: true };
+    },
+    async setJSON(key, value) {
+      blobRecords.set(key, JSON.stringify(value));
+      return { modified: true };
+    },
+  };
+  const blobEvent = (eventId) => ({
+    httpMethod: "POST",
+    headers: { origin: "https://confenge.com.br", "x-forwarded-for": "203.0.113.78" },
+    body: JSON.stringify({
+      event: "cta_click",
+      props: { event_id: eventId, cta_id: "durable-blob" },
+      path: "/",
+    }),
+  });
+  try {
+    delete require.cache[require.resolve(collectPath)];
+    let collector = require(collectPath);
+    collector._setBlobStoreForTests(fakeBlobStore);
+    const first = await collector.handler(blobEvent("durable-blob-replay"));
+    delete require.cache[require.resolve(collectPath)];
+    collector = require(collectPath);
+    collector._setBlobStoreForTests(fakeBlobStore);
+    const second = await collector.handler(blobEvent("durable-blob-replay"));
+    const firstBody = JSON.parse(first.body);
+    const secondBody = JSON.parse(second.body);
+    const keys = [...blobRecords.keys()];
+    if (firstBody.accepted !== 1 || secondBody.accepted !== 0 || secondBody.rejected !== 1) {
+      fail("collect_blob_replay_response", { firstBody, secondBody });
+    }
+    if (keys.length !== 1 || !keys[0].startsWith("events/by-id/id-")) {
+      fail("collect_blob_global_event_key", keys);
+    }
+    if (createOnlyCalls !== 2) fail("collect_blob_create_only_calls", createOnlyCalls);
+
+    failWrites = true;
+    const failed = await collector.handler(blobEvent("durable-blob-retry"));
+    const failedBody = JSON.parse(failed.body);
+    if (
+      failed.statusCode !== 503 ||
+      failedBody.accepted !== 0 ||
+      failedBody.error !== "durable_store_unavailable" ||
+      failedBody.rejected_events?.[0]?.reason !== "durable_store_unavailable"
+    ) {
+      fail("collect_blob_write_fail_closed", failedBody);
+    }
+    failWrites = false;
+    const retried = await collector.handler(blobEvent("durable-blob-retry"));
+    const retriedBody = JSON.parse(retried.body);
+    if (retried.statusCode !== 202 || retriedBody.accepted !== 1) {
+      fail("collect_blob_write_retryable", retriedBody);
+    }
+    collector._setBlobStoreForTests(null);
+    process.env.NODE_ENV = "production";
+    process.env.LEAD_STORE = "memory";
+    const unavailable = await collector.handler(blobEvent("durable-store-unavailable"));
+    const unavailableBody = JSON.parse(unavailable.body);
+    if (unavailable.statusCode !== 503 || unavailableBody.accepted !== 0) {
+      fail("collect_production_store_unavailable_fail_closed", unavailableBody);
+    }
+    pass("collect_blob_durable_replay", { keys: blobRecords.size, createOnlyCalls });
+  } finally {
+    if (previousDir == null) delete process.env.LEAD_STORE_DIR;
+    else process.env.LEAD_STORE_DIR = previousDir;
+    if (previousStore == null) delete process.env.LEAD_STORE;
+    else process.env.LEAD_STORE = previousStore;
+    if (previousNodeEnv == null) delete process.env.NODE_ENV;
+    else process.env.NODE_ENV = previousNodeEnv;
+  }
 }
 
 console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
