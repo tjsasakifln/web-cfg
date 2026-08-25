@@ -1,0 +1,192 @@
+{
+  "schema": "confenge.market-fit-protocol/1.0",
+  "protocol_version": "CFG-MARKET-FIT-2026-08-24-v1",
+  "issue": "#336",
+  "parent_issue": "#329",
+  "state": "NOT_STARTED",
+  "principle": "Pesquisa documental prova que o problema existe no mercado. Não prova que o ICP da CONFENGE comprará esta embalagem, neste preço e agora. Nenhum preço-piloto é chamado de validado por opinião de modelo de linguagem, tráfego, entrevista elogiosa ou formulário sem proposta.",
+  "reuses_human_session_machinery": "docs/research/icp-trust-session-v1",
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Entrevistas de problema, sem mostrar o catálogo",
+      "status": "NOT_STARTED",
+      "minimum_sample": 20,
+      "quotas": [
+        { "role": "dono, sócio ou diretor", "minimum": 5 },
+        { "role": "líder de licitações ou comercial", "minimum": 5 },
+        { "role": "engenharia de proposta ou orçamento", "minimum": 5 },
+        { "role": "contratos, obra ou financeiro", "minimum": 5 }
+      ],
+      "maturity_requirement": {
+        "statement": "pelo menos 14 de 20 com licitação ou contrato ativo nos últimos 12 meses",
+        "minimum_participants": 14,
+        "of_sample": 20,
+        "lookback_months": 12
+      },
+      "icp_scope": "empresa média com carteira pública material",
+      "consent_required": true,
+      "raw_notes_required": true,
+      "behavior_probes": [
+        "última oportunidade recusada ou ruim aceita",
+        "última inabilitação ou diligência",
+        "última erosão de margem, glosa, atraso, reajuste ou pleito",
+        "custo em horas, caixa, atraso e decisão",
+        "solução tentada, quem decidiu, orçamento e por que comprou ou não comprou",
+        "trigger que faria agir em até 30 dias"
+      ],
+      "forbidden": "não perguntar se compraria antes de reconstruir comportamento real"
+    },
+    {
+      "phase": 2,
+      "name": "Card sort e compreensão",
+      "status": "NOT_STARTED",
+      "shown_only_after": "entrevista de problema concluída",
+      "catalogue_size": 54,
+      "cards_per_participant": 18,
+      "boundary_cards_per_participant": 4,
+      "min_exposures_per_item": 6,
+      "min_joint_exposures_per_critical_boundary": 3,
+      "randomize_card_order_within_block": true,
+      "price_revealed_after_task_sorting": true,
+      "exposure_matrix_frozen_before_sessions": true,
+      "cards_may_be_swapped_to_chase_result": false,
+      "exposure_rules": [
+        "cada um dos 54 entregáveis aparece para pelo menos 6 participantes",
+        "ofertas vizinhas e fronteiras críticas aparecem juntas para pelo menos 3 participantes",
+        "cada pessoa recebe as trilhas mais próximas do seu papel mais quatro cartões de fronteira",
+        "ordem dos cartões é randomizada dentro do bloco",
+        "primeiro classificar por situação ou tarefa sem preço; depois revelar saída, preço e SLA",
+        "o desenho e a matriz de exposição são salvos antes das sessões; não trocar cartões para perseguir resultado"
+      ],
+      "measures": [
+        "agrupamento espontâneo",
+        "nome confundido",
+        "tarefa escolhida",
+        "percepção de sobreposição",
+        "valor percebido",
+        "informação faltante",
+        "escolha entre fazer internamente, comprar pontual ou contratar rotina"
+      ],
+      "invariant": "preservar as oito entregas atuais; baixa prioridade muda destaque ou embalagem, nunca apaga"
+    },
+    {
+      "phase": 3,
+      "name": "Willingness to pay observada",
+      "status": "NOT_STARTED",
+      "founder_led_offers": [
+        { "rank": 1, "deliverable_id": "CFG-D01", "label": "Radar", "price_brl_label": "R$ 599", "amount_cents": 59900, "matches_published_unit_price": true },
+        { "rank": 2, "deliverable_id": "CFG-D12", "label": "decisão de disputar", "price_brl_label": "R$ 1.900", "amount_cents": 190000, "matches_published_unit_price": true },
+        { "rank": 3, "deliverable_id": "CFG-D14", "label": "Auditoria de Orçamento/BDI", "price_brl_label": "R$ 5.900", "amount_cents": 590000, "matches_published_unit_price": false },
+        { "rank": 4, "deliverable_id": "CFG-D17", "label": "Diagnóstico de Riscos à Margem", "price_brl_label": "R$ 2.900", "amount_cents": 290000, "matches_published_unit_price": false },
+        { "rank": 5, "deliverable_id": "CFG-D18", "label": "Dossiê de Medição/Glosa", "price_brl_label": "R$ 4.900", "amount_cents": 490000, "matches_published_unit_price": false },
+        { "rank": 6, "deliverable_id": "CFG-D22", "label": "Dossiê de Reequilíbrio", "price_brl_label": "R$ 7.900", "amount_cents": 790000, "matches_published_unit_price": false },
+        { "rank": 7, "deliverable_id": "CFG-D49", "label": "Orçamento Completo da Proposta", "price_brl_label": "R$ 9.800", "amount_cents": 980000, "matches_published_unit_price": false },
+        { "rank": 8, "deliverable_id": "CFG-D51", "label": "Dossiê de Habilitação Pronto para Envio", "price_brl_label": "R$ 4.900", "amount_cents": 490000, "matches_published_unit_price": false }
+      ],
+      "deliverable_registry_ref": {
+        "note": "os identificadores CFG-D** são definidos pelo registro do catálogo ampliado, que chega em #329; este protocolo não carrega o registro e não depende dele para valer",
+        "loaded_by_this_gate": false
+      },
+      "recommendation_rule": {
+        "statement": "em cada oportunidade comercial qualificada, recomendar exatamente uma entrega principal",
+        "primary_recommendations_per_qco": 1
+      },
+      "minimum_qcos_with_unit_recommendation": 8,
+      "decision_states": ["ACEITOU", "NEGOCIOU", "RECUSOU", "SEM DECISÃO"],
+      "decision_reason_verbatim_required": true,
+      "record_fields": [
+        "preço exibido",
+        "proposta enviada",
+        "decisão ACEITOU, NEGOCIOU, RECUSOU ou SEM DECISÃO",
+        "motivo literal",
+        "prazo até decisão",
+        "valor e urgência do problema",
+        "horas reais, retrabalho, margem e qualidade do output",
+        "expansão para outro produto",
+        "outcome ou UNKNOWN"
+      ],
+      "pricing_discipline": {
+        "statement": "sem desconto silencioso; teste de preço usa versões explícitas e sequência registrada, nunca preços diferentes para pessoas equivalentes sem registro",
+        "silent_discount_allowed": false,
+        "price_versions_must_be_explicit": true
+      }
+    }
+  ],
+  "published_unit_prices": {
+    "source": "entregas/index.html",
+    "count": 8,
+    "cents": [59900, 69000, 89000, 120000, 145000, 190000, 240000, 375000],
+    "change_requires": "decisão posterior com evidência paga registrada nas fases 1 a 3"
+  },
+  "score_dimensions": [
+    "frequência do trigger",
+    "severidade econômica",
+    "urgência",
+    "sponsor ou budget owner identificável",
+    "suficiência de dados",
+    "vantagem CONFENGE",
+    "repetibilidade e reuso",
+    "margem de entrega",
+    "ponte natural para a próxima oferta",
+    "prova observada de compra"
+  ],
+  "score_range": { "min": 0, "max": 5 },
+  "evidence_classes": ["problem", "solution", "price", "delivery", "outcome"],
+  "gates": {
+    "PROMOTE": {
+      "required_evidence_classes": ["problem", "solution", "price", "delivery"],
+      "criteria": [
+        { "id": "recent_concrete_triggers", "evidence_class": "problem", "kind": "min_count", "field": "recent_concrete_triggers", "min": 3, "statement": "pelo menos 3 triggers recentes e concretos no ICP" },
+        { "id": "qualified_handraises", "evidence_class": "solution", "kind": "min_count", "field": "qualified_handraises", "min": 2, "statement": "pelo menos 2 handraises qualificados" },
+        { "id": "plausible_proposals", "evidence_class": "price", "kind": "min_count", "field": "plausible_proposals_at_published_price", "min": 1, "statement": "pelo menos 1 proposta plausível no preço publicado" },
+        { "id": "scope_hours_tolerance", "evidence_class": "delivery", "kind": "max_abs_pct", "field": "delivery_hours_deviation_pct", "max_abs": 25, "statement": "escopo entregue dentro de mais ou menos 25 por cento das horas previstas" },
+        { "id": "positive_margin", "evidence_class": "delivery", "kind": "must_be_true", "field": "margin_positive", "statement": "margem positiva" },
+        { "id": "no_forbidden_claim", "evidence_class": "delivery", "kind": "must_be_true", "field": "no_forbidden_claim", "statement": "sem claim proibido" }
+      ],
+      "outcome_evidence_required_for_promotion": false
+    },
+    "ADJUST": {
+      "min_signals_observed": 1,
+      "requires_problem_evidence_at_promote_threshold": true,
+      "repeated_negotiation_point_threshold": null,
+      "signals": [
+        "problema forte, mas confusão de nome ou escopo",
+        "negociação recorrente do mesmo ponto",
+        "entrega artesanal demais",
+        "dependência de dados com cobertura insuficiente"
+      ]
+    },
+    "HOLD": {
+      "min_signals_observed": 1,
+      "eligible_qcos_before_zero_proposal_hold": 5,
+      "max_plausible_proposals_for_zero_proposal_hold": 0,
+      "signals": [
+        "curiosidade sem why-now",
+        "comprador indefinido",
+        "dados fundamentais UNKNOWN",
+        "zero proposta plausível após 5 oportunidades comerciais qualificadas elegíveis"
+      ],
+      "effect": {
+        "statement": "HOLD não remove item do catálogo cumulativo; impede promoção, checkout e automação",
+        "removes_from_catalogue": false,
+        "blocks_promotion": true,
+        "blocks_checkout": true,
+        "blocks_automation": true
+      }
+    }
+  },
+  "instrumentation": {
+    "funnel": ["view", "detail", "example", "handraise", "qco", "proposal", "paid", "delivered", "outcome", "expansion"],
+    "attributes": ["route_family", "deliverable_id", "price_version", "trigger", "deadline", "decision_state"],
+    "pii_in_analytics": false,
+    "action_and_outcome_owner": "warmbly",
+    "web_cfg_is_crm": false
+  },
+  "disclosure": {
+    "client_or_case_exposure_requires": ["#249", "#328"],
+    "inferred_sale_or_willingness_to_pay_allowed": false
+  },
+  "runs": [],
+  "decisions": []
+}

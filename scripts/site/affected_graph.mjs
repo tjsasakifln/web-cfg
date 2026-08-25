@@ -219,6 +219,17 @@ export const SUITE_GRAPH = Object.freeze({
       "/casos/modelo-relatorio-executivo-consolidado/",
     ],
   },
+  "test:market-fit-protocol": {
+    producers: [
+      "tests/commercial/test_market_fit_protocol.mjs",
+      "scripts/commercial/market_fit_promotion.mjs",
+      "data/commercial/market-fit-protocol.v1.json",
+      "entregas/index.html",
+      "data/offers/catalog.snapshot.json",
+    ],
+    artifacts: [],
+    surfaces: ["/entregas/"],
+  },
   "test:bofu-dominance": {
     producers: ["tests/bofu_dominance/", "scripts/bofu_dominance/", "data/bofu-dominance/"],
     artifacts: ["docs/seo/bofu-dominance/"],
