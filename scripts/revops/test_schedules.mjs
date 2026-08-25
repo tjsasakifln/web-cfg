@@ -311,8 +311,8 @@ else {
   else pass("weekly_entry");
   if (!y.includes("search_demand_observatory.py sync")) fail("gsc_sync_entry");
   else pass("gsc_sync_entry");
-  if (!y.includes("--allow-missing-creds")) fail("gsc_allow_missing_creds");
-  else pass("gsc_allow_missing_creds");
+  if (y.includes("--allow-missing-creds")) fail("gsc_sync_fail_closed");
+  else pass("gsc_sync_fail_closed");
   // Secrets not hardcoded
   if (/OPS_TOKEN:\s*['\"][^$]/.test(y)) fail("secret_hardcoded");
   else pass("secrets_via_env");
