@@ -3,6 +3,7 @@ import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { consumerSuitesForPath } from "../../scripts/site/affected_graph.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const contractPath = path.join(root, "data/brand/logo-contract.v1.json");
@@ -292,6 +293,11 @@ for (const needle of [
   "assets/logo-confenge-500-f8a83f6d.png",
   "assets/logo-confenge-white-500-1677038e.png",
 ]) assert(`graph_${needle}`, graph.includes(needle), needle);
+assert(
+  "affected_public_html_selects_logo_gate",
+  consumerSuitesForPath("conteudos/fixture-public-surface/index.html").some((entry) => entry.id === "test:logo-contract"),
+  "conteudos/fixture-public-surface/index.html",
+);
 
 const emDash = String.fromCodePoint(0x2014);
 const enDash = String.fromCodePoint(0x2013);
