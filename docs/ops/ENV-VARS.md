@@ -31,9 +31,9 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | `LEAD_STORE_DIR` | só local/dev | Diretório FileStore |
 | `LEAD_STORE` | teste | `memory` para testes |
 | `LEAD_ALLOW_MEMORY_FALLBACK` | perigoso | Nunca em produção |
-| `LEAD_STORE_HTTP_URL` | alternativa | Backend HTTP durável (POST JSON do lead) |
-| `LEAD_STORE_HTTP_TOKEN` | com HTTP store | Bearer do backend |
-| `LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL` | opcional | Template com `{idempotency_key}` |
+| `LEAD_STORE_HTTP_URL` | só local/dev | Adapter genérico GET→POST; bloqueado em produção por não provar create-only atômico |
+| `LEAD_STORE_HTTP_TOKEN` | com HTTP store local | Bearer do backend |
+| `LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL` | local/dev | Template com `{idempotency_key}`; consulta não torna a criação atômica |
 | `NETLIFY_BLOBS_TOKEN` | se contexto Blobs ausente | Token API Netlify com acesso a Blobs |
 | `NETLIFY_BLOBS_SITE_ID` | com token | Site ID (senão usa `SITE_ID`) |
 

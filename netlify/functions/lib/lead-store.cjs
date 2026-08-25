@@ -410,6 +410,13 @@ function assertProductionStorePolicy(env = process.env) {
       message: "LEAD_STORE=memory is forbidden in production profile",
     };
   }
+  if (env.LEAD_STORE_HTTP_URL) {
+    return {
+      ok: false,
+      code: "http_store_atomic_create_unproven",
+      message: "Generic HTTP lead stores are forbidden in production without atomic create-only semantics",
+    };
+  }
   return { ok: true };
 }
 
