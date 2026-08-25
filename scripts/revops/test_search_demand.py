@@ -563,6 +563,7 @@ def main() -> int:
                             "source": "search_analytics_api",
                             "synthetic": False,
                             "truncated": False,
+                            "ready_for_product_decisions": True,
                             "start": "2026-08-01",
                             "end": "2026-08-03",
                         }
@@ -583,6 +584,7 @@ def main() -> int:
                             "source": "search_analytics_api",
                             "synthetic": False,
                             "truncated": True,
+                            "ready_for_product_decisions": False,
                             "start": "2026-08-04",
                             "end": "2026-08-05",
                         }
@@ -595,6 +597,21 @@ def main() -> int:
                     still_gap == ["2026-08-04", "2026-08-05"],
                     str(still_gap),
                 )
+                (daily / "2026-08-06.json").write_text(
+                    json.dumps(
+                        {
+                            "source": "search_analytics_api",
+                            "synthetic": False,
+                            "truncated": False,
+                            "ready_for_product_decisions": False,
+                            "start": "2026-08-06",
+                            "end": "2026-08-06",
+                        }
+                    ),
+                    encoding="utf-8",
+                )
+                unready_gap = sdo.detect_gsc_gaps(sdo.date(2026, 8, 6), sdo.date(2026, 8, 6))
+                ok("gsc_unready_window_not_coverage", unready_gap == ["2026-08-06"], str(unready_gap))
         finally:
             sdo.DATA = original_data
 

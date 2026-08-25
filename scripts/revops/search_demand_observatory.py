@@ -2032,6 +2032,7 @@ def detect_gsc_gaps(
                 payload.get("source") != "search_analytics_api"
                 or payload.get("synthetic") is True
                 or payload.get("truncated") is True
+                or payload.get("ready_for_product_decisions") is not True
             ):
                 continue
             windows.append(
