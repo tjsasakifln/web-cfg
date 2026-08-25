@@ -47,6 +47,7 @@ jobs:
           npm run test:inbound-gates
           npm run editorial:truth
           npm run test:brand
+          npm run test:logo-contract
           npm run test:copy
           npm run test:design
           npm run audit:accessibility
@@ -62,13 +63,21 @@ jobs:
           npm run test:checkout-negatives
           npm run test:deliverables-registry
           npm run test:offer-naming
+          npm run test:page-contract-pre-edital
           npm run test:pricing-policy
+          npm run test:integrity-promotion-gate
           npm run test:page-contract-eight
+          npm run test:first-fold-contract
           npm run test:market-fit-protocol
+          npm run test:real-proof-registry
           npm run test:page-contract-licitacao
           npm run test:page-contract-contratos
+          npm run test:page-contract-operacao
           npm run test:task-doors
+          npm run test:page-contract-complementares
           npm run test:page-contract-execucao
+          npm run test:page-contract-disputas
+          npm run test:page-contract-ciclo
           npm run test:copy-contract
           npm run test:page-contract-integridade
           npm run test:commercial-contract-consistency

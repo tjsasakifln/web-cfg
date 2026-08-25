@@ -1,0 +1,688 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "page-contract-disputas.v1",
+  "family_pt_br": "Disputas complexas",
+  "source_issue": 339,
+  "parent_issue": 329,
+  "related_issues": [333, 343],
+  "naming_authority_issue": 343,
+  "decision_state": "VALIDATE",
+  "priority": "P1",
+  "executive_front": "REVENUE NOW",
+  "leverage": ["revenue", "trust", "customer", "data"],
+  "time_to_evidence_days": 30,
+  "research_state": "NOT_STARTED",
+  "evidence": [],
+  "human_validation": {
+    "state": "NOT_STARTED",
+    "real_proposals_required_before_promoting_price": 3,
+    "collected": []
+  },
+  "currency": "BRL",
+  "price_unit": "cents",
+  "price_basis": "piloto",
+  "pages_created_by_this_contract": [],
+  "checkout_enabled_anywhere": false,
+  "hypothesis_pt_br": "Quando a disputa supera um dossiê operacional, o comprador precisa separar cronologia, causalidade e custos com método reproduzível para instruir decisão executiva, negociação, processo administrativo, mediação, arbitragem ou ação conduzida por advogado.",
+  "positioning_boundary": {
+    "acts_as_pt_br": "assistência técnica contratada pela empresa ou pelo advogado dela",
+    "never_acts_as_pt_br": [
+      "escritório jurídico",
+      "perito nomeado sem contratação e regulação compatíveis"
+    ],
+    "requires_compatible_engagement_and_regulation": true,
+    "legal_thesis_owner_pt_br": "o advogado do cliente",
+    "statements_pt_br": [
+      "A CONFENGE atua como assistência técnica e nunca como escritório jurídico.",
+      "A CONFENGE nunca atua como perito nomeado sem contratação e regulação compatíveis com esse papel.",
+      "A tese e o destino jurídico do material permanecem sob responsabilidade do advogado do cliente.",
+      "Nenhum material desta família se apresenta como laudo pericial.",
+      "Nenhum material desta família se apresenta como parecer jurídico.",
+      "Nenhum material desta família promete ou garante acordo, sentença, decisão favorável ou recuperação de valor.",
+      "Não existe cobrança por hora aberta nesta família: preço-base e adicionais são objetivos e taxativos.",
+      "Nenhum trabalho é aceito com conflito de interesses omitido ou não declarado."
+    ],
+    "forbidden_claims_pt_br": [
+      "Não é permitido apresentar o entregável como laudo pericial ou como perícia oficial.",
+      "Não é permitido apresentar o entregável como parecer jurídico ou como opinião sobre o direito da parte.",
+      "Não é permitido prometer êxito, acordo, sentença favorável ou recuperação de valor.",
+      "Não é permitido sugerir representação da empresa perante órgão, tribunal ou câmara arbitral."
+    ],
+    "asserted_for_every_item": true
+  },
+  "context_references": [
+    {
+      "source": "TCU",
+      "title_pt_br": "Matriz de riscos",
+      "url": "https://licitacoesecontratos.tcu.gov.br/4-5-5-matriz-de-riscos/",
+      "use_pt_br": "leitura de alocação contratual de risco ao interpretar evento, responsabilidade e impacto"
+    },
+    {
+      "source": "TCU",
+      "title_pt_br": "Reequilíbrio econômico-financeiro",
+      "url": "https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/",
+      "use_pt_br": "referência de contexto para distinguir recomposição, revisão e valores discutidos em disputa"
+    },
+    {
+      "source": "TCU",
+      "title_pt_br": "Infrações e sanções administrativas do contratado",
+      "url": "https://licitacoesecontratos.tcu.gov.br/6-1-8-infracoes-e-sancoes-administrativas-contratado/",
+      "use_pt_br": "referência de contexto para o campo sancionatório que costuma acompanhar a disputa"
+    }
+  ],
+  "entry_gate": {
+    "applies_to_items": [40, 41, 42],
+    "must_pass_before_selling": true,
+    "conditions": [
+      {
+        "order": 1,
+        "id": "conflito_de_interesses_documentado",
+        "label_pt_br": "Conflito de interesses documentado",
+        "critical": true,
+        "prose_pt_br": "A CONFENGE declara por escrito qualquer relação anterior ou atual com as partes, com os fornecedores e com o objeto discutido, e o cliente registra ciência antes de qualquer trabalho. Conflito omitido impede a contratação."
+      },
+      {
+        "order": 2,
+        "id": "objeto_e_tese_delimitados",
+        "label_pt_br": "Objeto e tese delimitados",
+        "critical": true,
+        "prose_pt_br": "O contrato, a janela de tempo, o evento causal e a tese técnica ficam delimitados por escrito antes do início. Sem delimitação não existe unidade de escopo e o trabalho não é vendido."
+      },
+      {
+        "order": 3,
+        "id": "acesso_autorizado_ao_corpus",
+        "label_pt_br": "Acesso autorizado ao corpus",
+        "critical": true,
+        "prose_pt_br": "O cliente autoriza formalmente o acesso ao conjunto documental necessário e indica quem entrega cada bloco. Sem acesso autorizado o prazo não começa a correr."
+      },
+      {
+        "order": 4,
+        "id": "integridade_e_proveniencia_dos_documentos",
+        "label_pt_br": "Integridade e proveniência dos documentos",
+        "critical": true,
+        "prose_pt_br": "Cada documento recebido é registrado com origem, data, responsável pela entrega e forma de obtenção. Documento sem proveniência verificável é marcado como UNKNOWN e não sustenta conclusão."
+      },
+      {
+        "order": 5,
+        "id": "advogado_do_cliente_responsavel_pela_tese",
+        "label_pt_br": "Advogado do cliente responsável pela tese e pelo destino jurídico",
+        "critical": true,
+        "prose_pt_br": "O advogado do cliente é o responsável pela tese jurídica e pelo destino processual do material técnico. A CONFENGE não conduz a estratégia jurídica e não decide onde o material será usado."
+      },
+      {
+        "order": 6,
+        "id": "responsavel_tecnico_definido",
+        "label_pt_br": "Responsável técnico definido quando a disciplina exigir",
+        "critical": true,
+        "prose_pt_br": "Quando a disciplina exigir responsável técnico habilitado, o profissional é nomeado antes do início e o registro profissional correspondente é providenciado. Sem responsável definido a análise não é emitida."
+      },
+      {
+        "order": 7,
+        "id": "cronograma_e_capacidade_compativeis",
+        "label_pt_br": "Cronograma e capacidade compatíveis",
+        "critical": true,
+        "prose_pt_br": "O prazo pedido pelo cliente precisa caber na capacidade real da equipe na janela contratada. Prazo incompatível com capacidade confirmada leva a recusa, não a promessa."
+      },
+      {
+        "order": 8,
+        "id": "regra_de_confidencialidade_e_retencao_acordada",
+        "label_pt_br": "Regra de confidencialidade e retenção acordada",
+        "critical": true,
+        "prose_pt_br": "Confidencialidade, base de tratamento, prazo de retenção e forma de descarte do corpus são acordados por escrito antes do primeiro documento ser recebido."
+      }
+    ],
+    "failure_policy": {
+      "on_critical_failure": "REFUSE_OR_REDIRECT",
+      "refuse_pt_br": "Se qualquer gate crítico falhar, a CONFENGE recusa a venda dos itens 40, 41 e 42.",
+      "redirect_target_pt_br": "diagnóstico de lacunas",
+      "redirect_pt_br": "Quando a lacuna for sanável, a alternativa oferecida é um diagnóstico de lacunas que identifica o que falta antes de qualquer análise de disputa.",
+      "never_sells_anyway": true,
+      "no_partial_pass": true,
+      "statement_pt_br": "Se qualquer gate crítico falhar, recusar ou redirecionar para diagnóstico de lacunas. Não existe aprovação parcial do gate de entrada."
+    }
+  },
+  "synthetic_example_requirements": {
+    "required_before_first_sale": true,
+    "state": "NOT_STARTED",
+    "produced": [],
+    "required_elements_pt_br": [
+      "fonte de cada dado usado, com proveniência declarada",
+      "cadeia lógica do evento até o efeito",
+      "cálculo reproduzível passo a passo",
+      "limitação declarada do que o material não sustenta",
+      "divergência possível e como a parte adversa poderia contestar"
+    ],
+    "uses_real_client_data": false,
+    "statement_pt_br": "O exemplo sintético é construído com dados fictícios e mostra fonte, cadeia lógica, cálculo, limitação e divergência. Ele não usa dado de cliente real e não é evidência de venda."
+  },
+  "adversarial_review": {
+    "required_before_first_sale": true,
+    "independent": true,
+    "reviewer_is_not_the_author": true,
+    "covers_pt_br": [
+      "templates dos itens 40, 41 e 42",
+      "exemplo sintético completo",
+      "linguagem de fronteira jurídica e de limitação"
+    ],
+    "state": "NOT_STARTED",
+    "reviews": [],
+    "statement_pt_br": "Os templates passam por revisão adversarial independente antes da primeira venda, conduzida por quem não os escreveu, e a revisão tenta derrubar a cadeia lógica antes que a parte adversa tente."
+  },
+  "unit_economics": {
+    "state": "NOT_STARTED",
+    "records": [],
+    "recorded_fields": [
+      "actual_hours",
+      "rework_hours",
+      "seniority_mix",
+      "contribution_margin"
+    ],
+    "recorded_fields_pt_br": [
+      "horas efetivamente trabalhadas por entrega",
+      "retrabalho separado da produção original",
+      "composição de senioridade da equipe alocada",
+      "margem de contribuição por caso"
+    ],
+    "recorded_per_case": true,
+    "statement_pt_br": "Cada caso registra horas efetivamente trabalhadas, retrabalho, composição de senioridade e margem de contribuição. O registro é interno, serve para recalibrar preço e escopo e nunca vira cobrança por hora aberta."
+  },
+  "recalibration": {
+    "paid_cases_required": 3,
+    "recalibrates_pt_br": ["escopo", "preço"],
+    "state_until_recalibration": "VALIDATE",
+    "paid_cases_recorded": [],
+    "statement_pt_br": "Depois de três casos pagos, escopo e preço são recalibrados com base nos números reais. Até lá o estado desta família permanece VALIDATE."
+  },
+  "anonymised_patterns": {
+    "consent_required": true,
+    "governance_required": true,
+    "identifies_client_or_counterparty": false,
+    "originates_data_in_web_cfg": false,
+    "patterns_published": [],
+    "statement_pt_br": "Cada resultado alimenta padrões anonimizados somente com consentimento expresso e governança aplicável. Nenhum padrão identifica cliente, contraparte, obra ou processo."
+  },
+  "acceptance": [
+    {
+      "id": "tres_rotas_com_preco_base_e_adicionais_objetivos",
+      "criterion_pt_br": "Três rotas com preço-base e adicionais objetivos, sem hora aberta.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "id": "exemplo_sintetico_completo",
+      "criterion_pt_br": "Exemplo sintético completo mostra fonte, cadeia lógica, cálculo, limitação e divergência.",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "o exemplo precisa ser produzido e revisado por pessoa antes da primeira venda",
+      "evidence": []
+    },
+    {
+      "id": "nenhum_material_como_laudo_parecer_ou_garantia",
+      "criterion_pt_br": "Nenhum material se apresenta como laudo pericial, parecer jurídico ou garantia de êxito.",
+      "state": "MET_BY_CONTRACT",
+      "evidence": []
+    },
+    {
+      "id": "revisao_adversarial_independente",
+      "criterion_pt_br": "Templates passam por revisão adversarial independente antes da primeira venda.",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "a revisão depende de pessoa independente e ainda não ocorreu",
+      "evidence": []
+    },
+    {
+      "id": "registro_de_economia_unitaria",
+      "criterion_pt_br": "Actual hours, retrabalho, seniority mix e margem de contribuição são registrados.",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "o registro depende de caso pago real",
+      "evidence": []
+    },
+    {
+      "id": "padroes_anonimizados_com_consentimento",
+      "criterion_pt_br": "Cada resultado alimenta padrões anonimizados somente com consentimento e governança aplicável.",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "não existe resultado real para anonimizar",
+      "evidence": []
+    },
+    {
+      "id": "recalibracao_apos_tres_casos_pagos",
+      "criterion_pt_br": "Depois de três casos pagos, recalibrar escopo e preço. Até lá o estado permanece VALIDATE.",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "nenhum caso pago foi registrado",
+      "evidence": []
+    }
+  ],
+  "common_rules": {
+    "pilot_prices_do_not_change_items_01_to_48": true,
+    "scope_units_allowed_pt_br": ["contrato", "janela causal", "evento causal", "família de custos", "tese técnica", "dossiê", "rodada de esclarecimento", "reunião"],
+    "scope_units_forbidden_pt_br": ["página", "hora"],
+    "scope_never_measured_by_pages": true,
+    "scope_never_measured_by_open_hours": true,
+    "no_open_hourly_billing": true,
+    "additional_charges_are_exhaustive": true,
+    "additional_charges_disclosed_before_charging": true,
+    "travel_charged_separately_only_where_declared": true,
+    "entry_gate_required_before_selling": true,
+    "capacity_required_before_accepting": true,
+    "no_data_or_identity_originates_in_web_cfg": true,
+    "truth_and_provenance_remain_in": "extra-cli",
+    "no_success_fee": true,
+    "no_promise_of_settlement_or_judgment": true,
+    "no_legal_practice": true,
+    "no_official_expert_examination": true,
+    "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+    "statements_pt_br": [
+      "Os preços desta família são pilotos do estado VALIDATE e não alteram nenhum preço dos itens 01 a 48.",
+      "O escopo é limitado por contrato, janela causal, evento causal, família de custos, tese técnica, dossiê, rodada e reunião, nunca por número de páginas e nunca por hora aberta.",
+      "Os adicionais são taxativos, com preço fechado, e são informados por escrito antes de qualquer cobrança.",
+      "Nenhum item desta família é vendido antes de o gate de entrada de oito condições ser aprovado.",
+      "Nenhum dado, planilha ou identidade nasce no web-cfg: verdade e proveniência permanecem no extra-cli.",
+      "Nenhum item desta família tem comissão de êxito, promete acordo, sentença ou recuperação de valor, nem se apresenta como laudo pericial ou parecer jurídico.",
+      "Cada afirmação recebe grau de evidência FACT, CALCULATION, INFERENCE ou UNKNOWN, e o que não tem lastro fica marcado como UNKNOWN."
+    ]
+  },
+  "routes_owned_by_other_items": [
+    { "route": "/atrasos-prorrogacao-obras-publicas/", "owner_item": 20, "owner_public_name_pt_br": "Dossiê de Atraso e Prorrogação" },
+    { "route": "/medicoes-glosas-obras-publicas/", "owner_item": 18, "owner_public_name_pt_br": "Dossiê de Medição, Glosa e Pagamento" },
+    { "route": "/reequilibrio-obras-publicas/", "owner_item": 22, "owner_public_name_pt_br": "Dossiê de Reequilíbrio Econômico-Financeiro" },
+    { "route": "/defesa-tecnica-contratos-publicos/", "owner_item": 23, "owner_public_name_pt_br": "Subsídio Técnico para Notificação ou Sanção" }
+  ],
+  "neighbour_offers": [
+    { "item": 18, "public_name_pt_br": "Dossiê de Medição, Glosa e Pagamento", "verb_pt_br": "instrui" },
+    { "item": 20, "public_name_pt_br": "Dossiê de Atraso e Prorrogação", "verb_pt_br": "instrui" },
+    { "item": 22, "public_name_pt_br": "Dossiê de Reequilíbrio Econômico-Financeiro", "verb_pt_br": "instrui" },
+    { "item": 23, "public_name_pt_br": "Subsídio Técnico para Notificação ou Sanção", "verb_pt_br": "subsidia" }
+  ],
+  "items": [
+    {
+      "number": 40,
+      "deliverable_id": "CFG-D40",
+      "public_name_pt_br": "Análise de Causas e Impactos de Atrasos",
+      "value_line_pt_br": "Quantifica causas e dias de atraso com método reproduzível.",
+      "decision_question_pt_br": "Quantos dias deste atraso têm causa registrada, e qual é o nexo entre evento, responsável e caminho crítico?",
+      "trigger_pt_br": "A discussão do atraso saiu do campo operacional e a empresa precisa de cronologia, causalidade e quantificação reproduzíveis para instruir decisão executiva, negociação ou o advogado.",
+      "verb_pt_br": "analisa",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "task_door": "PROTECT",
+      "public_state": "VALIDATE",
+      "capacity_required": true,
+      "entry_gate_required": true,
+      "pricing": {
+        "model": "single_plus_additions",
+        "billing": "one_time",
+        "open_hourly_billing": false,
+        "additional_charges_are_exhaustive": true,
+        "tiers": [
+          {
+            "name_pt_br": "Base",
+            "price_cents": 1290000,
+            "unit_pt_br": "um contrato, um cronograma baseline verificável com suas atualizações e uma janela causal",
+            "sla_business_days": 15
+          }
+        ],
+        "additional_charges": [
+          {
+            "name_pt_br": "janela adicional no mesmo contrato",
+            "price_cents": 490000,
+            "unit_pt_br": "cada janela causal adicional dentro do mesmo contrato",
+            "exhaustive": true,
+            "disclosed_before_charging": true,
+            "travel_charged_separately": false
+          }
+        ]
+      },
+      "sla_business_days": 15,
+      "sla_starts_after_pt_br": "inputs válidos e gate de entrada aprovado",
+      "safe_deadline_gate": null,
+      "credit_rule": null,
+      "scope_unit_pt_br": "um contrato, um cronograma baseline verificável com suas atualizações e uma janela causal",
+      "scope_limits_pt_br": [
+        "uma janela causal por unidade base",
+        "baseline precisa ser verificável em registros contemporâneos",
+        "janela adicional no mesmo contrato é cobrada à parte",
+        "conflito de interesses documentado antes do início"
+      ],
+      "inputs_pt_br": [
+        "contrato e aditivos",
+        "cronograma baseline e suas atualizações",
+        "diário de obra e comunicações formais",
+        "medições e relatórios de avanço",
+        "registros de eventos, paralisações e interferências",
+        "evidências das medidas de mitigação adotadas"
+      ],
+      "outputs_pt_br": [
+        "protocolo de dados com proveniência",
+        "validação do baseline",
+        "cronologia dos eventos",
+        "análise do caminho crítico",
+        "eventos e responsáveis identificados",
+        "tratamento de concorrência de causas",
+        "avaliação da mitigação",
+        "quantificação reproduzível de dias",
+        "limitações e incertezas declaradas",
+        "caderno de evidências",
+        "sumário executivo"
+      ],
+      "exclusions_pt_br": [
+        "A CONFENGE não afirma causalidade sem registro contemporâneo que a sustente.",
+        "A CONFENGE não fabrica e não reconstrói baseline inexistente.",
+        "A CONFENGE não emite laudo pericial judicial e não atua como perito nomeado.",
+        "A CONFENGE não depõe, não testemunha e não comparece a audiência como testemunha de fato.",
+        "A CONFENGE não pratica advocacia, não protocola peças e não representa a empresa perante órgão, tribunal ou câmara arbitral.",
+        "A CONFENGE não oferece nenhuma garantia de prorrogação, acordo, decisão favorável ou recuperação de valor."
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE atua como assistência técnica e nunca como escritório jurídico.",
+        "A CONFENGE nunca atua como perito nomeado sem contratação e regulação compatíveis.",
+        "A CONFENGE não emite parecer jurídico e não opina sobre o direito da parte.",
+        "A tese e o destino jurídico do material permanecem sob responsabilidade do advogado do cliente.",
+        "Não há comissão de êxito e nenhuma garantia de prorrogação, acordo ou decisão favorável.",
+        "O material não se apresenta como laudo pericial e não substitui perícia oficial."
+      ],
+      "positioning_statement_pt_br": "O item 40 entrega análise técnica de causas e impactos de atraso para instruir decisão executiva, negociação ou o advogado do cliente. Não é laudo pericial, não é parecer jurídico e não garante resultado.",
+      "prohibitions": {
+        "provides_legal_representation": false,
+        "files_or_protocols": false,
+        "official_expert_examination": false,
+        "witness_testimony": false,
+        "guarantees_settlement_or_judgment": false,
+        "conceals_conflict_of_interest": false,
+        "acts_as_law_firm": false,
+        "acts_as_court_appointed_expert": false,
+        "issues_forensic_report": false,
+        "issues_legal_opinion": false,
+        "success_fee": false,
+        "promises_recovery_of_value": false,
+        "signs_for_client": false,
+        "open_hourly_billing": false,
+        "asserts_causality_without_contemporaneous_record": false,
+        "fabricates_baseline": false
+      },
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 20,
+          "against_public_name_pt_br": "Dossiê de Atraso e Prorrogação",
+          "their_verb_pt_br": "instrui",
+          "our_verb_pt_br": "analisa",
+          "statement_pt_br": "O item 20 instrui o pedido de prorrogação dentro do contrato em andamento, no ritmo da obra. O item 40 analisa causas e impactos quando a discussão já saiu do campo operacional e precisa de cronologia, nexo e quantificação reproduzíveis para instruir decisão executiva ou o advogado."
+        },
+        {
+          "against_item": 42,
+          "against_public_name_pt_br": "Assistência Técnica em Disputa Contratual Complexa",
+          "their_verb_pt_br": "assiste",
+          "our_verb_pt_br": "analisa",
+          "statement_pt_br": "O item 42 assiste tecnicamente a tese inteira da disputa, com matriz de alegações, crítica do material adverso e rodadas de esclarecimento. O item 40 analisa apenas causas e impactos de atraso, é comprável isoladamente e tem a sua própria unidade de escopo e o seu próprio prazo."
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "deliverable_id": "CFG-D41",
+      "public_name_pt_br": "Análise de Custos e Valores em Disputa",
+      "value_line_pt_br": "Liga evento, efeito e custo para delimitar o valor em disputa.",
+      "decision_question_pt_br": "Qual é o valor em disputa que os registros sustentam, e como cada custo se liga ao evento que o gerou?",
+      "trigger_pt_br": "A empresa precisa delimitar valores em disputa com memória de cálculo reproduzível antes de negociar, mediar ou entregar o tema ao advogado.",
+      "verb_pt_br": "quantifica",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "task_door": "PROTECT",
+      "public_state": "VALIDATE",
+      "capacity_required": true,
+      "entry_gate_required": true,
+      "pricing": {
+        "model": "single_plus_additions",
+        "billing": "one_time",
+        "open_hourly_billing": false,
+        "additional_charges_are_exhaustive": true,
+        "tiers": [
+          {
+            "name_pt_br": "Base",
+            "price_cents": 1490000,
+            "unit_pt_br": "um evento causal e uma família de custos e efeitos",
+            "sla_business_days": 15
+          }
+        ],
+        "additional_charges": [
+          {
+            "name_pt_br": "família de custos adicional com a mesma causalidade",
+            "price_cents": 490000,
+            "unit_pt_br": "cada família de custos adicional ligada à mesma causalidade",
+            "exhaustive": true,
+            "disclosed_before_charging": true,
+            "travel_charged_separately": false
+          }
+        ]
+      },
+      "sla_business_days": 15,
+      "sla_starts_after_pt_br": "inputs válidos e gate de entrada aprovado",
+      "safe_deadline_gate": null,
+      "credit_rule": null,
+      "scope_unit_pt_br": "um evento causal e uma família de custos e efeitos",
+      "scope_limits_pt_br": [
+        "uma família de custos por unidade base",
+        "apenas custos com lastro documental e contábil",
+        "atualização monetária apresentada em cenários identificados",
+        "família adicional com a mesma causalidade é cobrada à parte"
+      ],
+      "inputs_pt_br": [
+        "contrato, planilha contratual e aditivos",
+        "composições de custo e BDI",
+        "registros contábeis e fiscais do período",
+        "apropriação de mão de obra e equipamentos",
+        "notas fiscais e contratos de fornecedores",
+        "documentação do evento causal"
+      ],
+      "outputs_pt_br": [
+        "baseline de custos",
+        "metodologia declarada",
+        "vínculo entre evento, efeito e custo",
+        "conciliação contábil e documental",
+        "custos evitados e efeito da mitigação",
+        "teste de dupla contagem",
+        "atualização monetária em cenários identificados",
+        "memória de cálculo reproduzível",
+        "limitações declaradas",
+        "anexos de apoio"
+      ],
+      "exclusions_pt_br": [
+        "A CONFENGE não faz auditoria das demonstrações financeiras da empresa.",
+        "A CONFENGE não emite opinião jurídica sobre o direito ao valor discutido.",
+        "A CONFENGE não usa lucro presumido nem lucro cessante sem prova documental.",
+        "A CONFENGE não apresenta nenhum valor como recuperável, devido ou de recebimento certo.",
+        "A CONFENGE não pratica advocacia, não protocola peças e não representa a empresa em processo, mediação ou arbitragem.",
+        "A CONFENGE não oferece nenhuma garantia de acordo, decisão favorável ou recuperação de valor."
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE atua como assistência técnica e nunca como escritório jurídico.",
+        "A CONFENGE nunca atua como perito nomeado sem contratação e regulação compatíveis.",
+        "A CONFENGE não emite parecer jurídico e não opina sobre o direito ao valor.",
+        "A tese e o destino jurídico do material permanecem sob responsabilidade do advogado do cliente.",
+        "Não há comissão de êxito e nenhuma garantia de acordo, decisão favorável ou recuperação de valor.",
+        "O material não se apresenta como laudo pericial e não substitui perícia oficial."
+      ],
+      "positioning_statement_pt_br": "O item 41 delimita, com memória de cálculo reproduzível, o valor que os registros sustentam. Não é laudo pericial, não é parecer jurídico sobre o direito ao valor e não afirma que o valor será recebido.",
+      "prohibitions": {
+        "provides_legal_representation": false,
+        "files_or_protocols": false,
+        "official_expert_examination": false,
+        "witness_testimony": false,
+        "guarantees_settlement_or_judgment": false,
+        "conceals_conflict_of_interest": false,
+        "acts_as_law_firm": false,
+        "acts_as_court_appointed_expert": false,
+        "issues_forensic_report": false,
+        "issues_legal_opinion": false,
+        "success_fee": false,
+        "promises_recovery_of_value": false,
+        "signs_for_client": false,
+        "open_hourly_billing": false,
+        "audits_financial_statements": false,
+        "legal_opinion_on_entitlement": false,
+        "uses_presumed_profit_without_proof": false,
+        "presents_recoverable_amount_as_certain": false
+      },
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 22,
+          "against_public_name_pt_br": "Dossiê de Reequilíbrio Econômico-Financeiro",
+          "their_verb_pt_br": "instrui",
+          "our_verb_pt_br": "quantifica",
+          "statement_pt_br": "O item 22 instrui um pedido de reequilíbrio dentro do contrato em andamento, com a lógica administrativa desse pedido. O item 41 quantifica custos e valores já em disputa, ligando cada custo ao evento causal e declarando a incerteza, para instruir negociação, mediação, arbitragem ou o advogado."
+        },
+        {
+          "against_item": 18,
+          "against_public_name_pt_br": "Dossiê de Medição, Glosa e Pagamento",
+          "their_verb_pt_br": "instrui",
+          "our_verb_pt_br": "quantifica",
+          "statement_pt_br": "O item 18 instrui a contestação de uma glosa ou de uma medição no fluxo corrente de pagamento. O item 41 quantifica a família de custos ligada a um evento causal quando a discussão virou disputa e precisa de conciliação contábil e teste de dupla contagem."
+        },
+        {
+          "against_item": 42,
+          "against_public_name_pt_br": "Assistência Técnica em Disputa Contratual Complexa",
+          "their_verb_pt_br": "assiste",
+          "our_verb_pt_br": "quantifica",
+          "statement_pt_br": "O item 42 assiste tecnicamente a tese inteira e responde ao material da parte adversa. O item 41 quantifica apenas custos e valores, é comprável isoladamente e tem a sua própria unidade de escopo e o seu próprio prazo."
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "deliverable_id": "CFG-D42",
+      "public_name_pt_br": "Assistência Técnica em Disputa Contratual Complexa",
+      "value_line_pt_br": "Entrega análise técnica estruturada para a estratégia conduzida pelo jurídico.",
+      "decision_question_pt_br": "Que análise técnica sustenta a tese desta disputa, e onde o material da parte adversa não se sustenta?",
+      "trigger_pt_br": "A disputa entrou em processo administrativo, mediação, arbitragem ou ação conduzida por advogado e o jurídico precisa de base técnica estruturada.",
+      "verb_pt_br": "assiste",
+      "route": null,
+      "page_exists": false,
+      "checkout_enabled": false,
+      "task_door": "PROTECT",
+      "public_state": "VALIDATE",
+      "capacity_required": true,
+      "entry_gate_required": true,
+      "pricing": {
+        "model": "single_plus_additions",
+        "billing": "one_time",
+        "open_hourly_billing": false,
+        "additional_charges_are_exhaustive": true,
+        "tiers": [
+          {
+            "name_pt_br": "Base",
+            "price_cents": 1980000,
+            "unit_pt_br": "uma tese técnica, um contrato, um dossiê principal e até duas rodadas documentadas de esclarecimento",
+            "sla_business_days": 20
+          }
+        ],
+        "additional_charges": [
+          {
+            "name_pt_br": "rodada adicional de esclarecimento documentada",
+            "price_cents": 290000,
+            "unit_pt_br": "cada rodada de esclarecimento documentada além das duas incluídas",
+            "exhaustive": true,
+            "disclosed_before_charging": true,
+            "travel_charged_separately": false
+          },
+          {
+            "name_pt_br": "reunião técnica, oitiva ou audiência de até um dia, quando admissível, com deslocamento cobrado à parte",
+            "price_cents": 490000,
+            "unit_pt_br": "cada reunião técnica, oitiva ou audiência de até um dia, quando admissível",
+            "exhaustive": true,
+            "disclosed_before_charging": true,
+            "travel_charged_separately": true,
+            "travel_note_pt_br": "O deslocamento não está incluído no valor e é cobrado à parte, informado por escrito antes da viagem."
+          }
+        ]
+      },
+      "sla_business_days": 20,
+      "sla_starts_after_pt_br": "gate de entrada aprovado e acesso autorizado ao corpus",
+      "safe_deadline_gate": null,
+      "credit_rule": null,
+      "scope_unit_pt_br": "uma tese técnica, um contrato, um dossiê principal e até duas rodadas documentadas de esclarecimento",
+      "scope_limits_pt_br": [
+        "duas rodadas de esclarecimento incluídas, rodada adicional cobrada à parte",
+        "deslocamento não incluído na reunião, oitiva ou audiência",
+        "atuação apenas como assistência técnica contratada pela empresa ou pelo advogado dela",
+        "tese e destino jurídico permanecem sob responsabilidade do advogado do cliente"
+      ],
+      "included_clarification_rounds": 2,
+      "inputs_pt_br": [
+        "contrato, aditivos e documentos da execução",
+        "tese e delimitação do objeto pelo advogado do cliente",
+        "acesso autorizado ao corpus documental",
+        "material técnico da parte adversa",
+        "declaração de conflito de interesses",
+        "interlocutor jurídico e responsável técnico definidos"
+      ],
+      "outputs_pt_br": [
+        "protocolo e cadeia de custódia lógica dos documentos",
+        "matriz de alegações",
+        "análise técnica da tese",
+        "crítica do material adverso",
+        "relatório principal",
+        "anexos técnicos",
+        "reunião com jurídico e gestão",
+        "respostas às duas rodadas de esclarecimento"
+      ],
+      "exclusions_pt_br": [
+        "A CONFENGE não faz representação jurídica de nenhuma natureza.",
+        "A CONFENGE não elabora, não assina e não protocola petição ou peça processual.",
+        "A CONFENGE não realiza perícia oficial e não atua como perito nomeado.",
+        "A CONFENGE não presta testemunho de fato.",
+        "A CONFENGE não pratica advocacia, não representa a empresa e não conduz a estratégia jurídica.",
+        "A CONFENGE não oferece nenhuma garantia de acordo, sentença, decisão favorável ou recuperação de valor.",
+        "A CONFENGE não aceita o trabalho com conflito de interesses omitido ou não declarado."
+      ],
+      "legal_boundary_pt_br": [
+        "A CONFENGE atua como assistência técnica contratada pela empresa ou pelo advogado dela e nunca como escritório jurídico.",
+        "A CONFENGE nunca atua como perito nomeado sem contratação e regulação compatíveis.",
+        "A CONFENGE não emite parecer jurídico e não conduz a estratégia jurídica.",
+        "A tese e o destino jurídico do material permanecem sob responsabilidade do advogado do cliente.",
+        "Não há comissão de êxito e nenhuma garantia de acordo, sentença ou recuperação de valor.",
+        "O material não se apresenta como laudo pericial e não substitui perícia oficial."
+      ],
+      "positioning_statement_pt_br": "O item 42 entrega assistência técnica à disputa conduzida pelo advogado do cliente. Não é laudo pericial, não é parecer jurídico, não é perícia oficial e não garante acordo nem sentença.",
+      "prohibitions": {
+        "provides_legal_representation": false,
+        "files_or_protocols": false,
+        "official_expert_examination": false,
+        "witness_testimony": false,
+        "guarantees_settlement_or_judgment": false,
+        "conceals_conflict_of_interest": false,
+        "acts_as_law_firm": false,
+        "acts_as_court_appointed_expert": false,
+        "issues_forensic_report": false,
+        "issues_legal_opinion": false,
+        "success_fee": false,
+        "promises_recovery_of_value": false,
+        "signs_for_client": false,
+        "open_hourly_billing": false,
+        "drafts_or_signs_pleadings": false,
+        "leads_legal_strategy": false
+      },
+      "boundary_vs_existing_offers": [
+        {
+          "against_item": 23,
+          "against_public_name_pt_br": "Subsídio Técnico para Notificação ou Sanção",
+          "their_verb_pt_br": "subsidia",
+          "our_verb_pt_br": "assiste",
+          "statement_pt_br": "O item 23 subsidia a resposta a uma notificação ou a um processo sancionatório específico, dentro do prazo administrativo daquele ato. O item 42 assiste tecnicamente uma disputa contratual complexa já instalada em processo, mediação ou arbitragem, com matriz de alegações, crítica do material adverso e duas rodadas de esclarecimento."
+        },
+        {
+          "against_item": 40,
+          "against_public_name_pt_br": "Análise de Causas e Impactos de Atrasos",
+          "their_verb_pt_br": "analisa",
+          "our_verb_pt_br": "assiste",
+          "statement_pt_br": "O item 40 analisa causas e impactos de atraso como artefato único. O item 42 assiste a tese inteira, pode consumir o produto do item 40 como insumo e cobra a sua própria unidade de escopo, sem somar preços de forma silenciosa."
+        },
+        {
+          "against_item": 41,
+          "against_public_name_pt_br": "Análise de Custos e Valores em Disputa",
+          "their_verb_pt_br": "quantifica",
+          "our_verb_pt_br": "assiste",
+          "statement_pt_br": "O item 41 quantifica custos e valores como artefato único. O item 42 assiste a tese inteira, pode consumir o produto do item 41 como insumo e cobra a sua própria unidade de escopo, sem somar preços de forma silenciosa."
+        }
+      ]
+    }
+  ]
+}
