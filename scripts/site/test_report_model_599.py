@@ -1176,7 +1176,7 @@ def test_price_has_versioned_non_catalog_action_authority() -> None:
     assert route["terms_state"] == "UNKNOWN_UNTIL_HUMAN_ACCEPTANCE"
     assert route["checkout_enabled"] is False
     assert route["auto_send"] is False
-    assert route["sla"] == "delivery_within_48_business_hours_from_persisted_form_submission"
+    assert route["sla"] == "delivery_within_3_business_days_from_valid_persisted_form_submission"
     assert route["channel"] == "persisted_web_form_then_owner_payment_handoff"
     assert route["minimum_fields"] == [
         "nome",

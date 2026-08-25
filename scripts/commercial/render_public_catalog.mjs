@@ -143,6 +143,12 @@ function urgencyKind(entry) {
   return "planejada";
 }
 
+function decisionBusinessDays(entry) {
+  const candidates = [entry.sla.business_days_max, entry.sla.safe_deadline_business_days]
+    .filter(Number.isInteger);
+  return candidates.length ? Math.max(...candidates) : "";
+}
+
 function priceBand(entry) {
   const amount = Array.isArray(entry.price.tiers)
     ? Math.min(...entry.price.tiers.map((tier) => tier.amount_cents))
@@ -187,7 +193,7 @@ function itemCard(entry, byTask) {
   const taskEntries = byTask.get(entry.task_door) || [];
   const ownIndex = taskEntries.findIndex((candidate) => candidate.deliverable_id === entry.deliverable_id);
   const neighbor = taskEntries.length > 1 ? taskEntries[ownIndex === taskEntries.length - 1 ? ownIndex - 1 : ownIndex + 1] : null;
-  return `<article class="catalog-item catalog-item--${entry.public_state.toLowerCase()}" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-task-door="${entry.task_door}" data-object="${objectKind(entry)}" data-urgency="${urgencyKind(entry)}" data-price-band="${priceBand(entry)}" data-billing="${entry.price.billing}" data-search="${escapeHtml(search)}" data-name="${title}" data-trigger="${escapeHtml(publicText(entry.trigger))}" data-decision="${escapeHtml(publicText(entry.decision_question))}" data-unit="${escapeHtml(publicText(entry.scope.unit))}" data-input="${escapeHtml(publicText(entry.required_inputs[0]))}" data-output="${escapeHtml(publicText(entry.included_outputs[0]))}" data-sla="${escapeHtml(publicText(slaLabel(entry)))}" data-price="${escapeHtml(priceLabel(entry))}" data-exclusion="${escapeHtml(publicText(entry.exclusions[0]))}" data-step-up="${escapeHtml(stepUpLabel(entry))}" id="entrega-${entry.catalog_number}">
+  return `<article class="catalog-item catalog-item--${entry.public_state.toLowerCase()}" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-task-door="${entry.task_door}" data-object="${objectKind(entry)}" data-urgency="${urgencyKind(entry)}" data-price-band="${priceBand(entry)}" data-billing="${entry.price.billing}" data-search="${escapeHtml(search)}" data-name="${title}" data-trigger="${escapeHtml(publicText(entry.trigger))}" data-decision="${escapeHtml(publicText(entry.decision_question))}" data-unit="${escapeHtml(publicText(entry.scope.unit))}" data-input="${escapeHtml(publicText(entry.required_inputs[0]))}" data-inputs="${escapeHtml(entry.required_inputs.map(publicText).join(" | "))}" data-input-count="${entry.required_inputs.length}" data-decision-business-days="${decisionBusinessDays(entry)}" data-output="${escapeHtml(publicText(entry.included_outputs[0]))}" data-sla="${escapeHtml(publicText(slaLabel(entry)))}" data-price="${escapeHtml(priceLabel(entry))}" data-exclusion="${escapeHtml(publicText(entry.exclusions[0]))}" data-step-up="${escapeHtml(stepUpLabel(entry))}" id="entrega-${entry.catalog_number}">
 <header class="catalog-item__head"><span class="catalog-item__number">${entry.catalog_number}</span><span class="catalog-item__state">${state.label}</span></header>
 <h5>${title}</h5>
 ${alias}
