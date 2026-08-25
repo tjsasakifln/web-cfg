@@ -417,6 +417,34 @@ function assertProductionStorePolicy(env = process.env) {
       message: "Generic HTTP lead stores are forbidden in production without atomic create-only semantics",
     };
   }
+  if (env.LEAD_REQUIRE_ORIGIN !== "1") {
+    return {
+      ok: false,
+      code: "origin_guard_required_in_production",
+      message: "LEAD_REQUIRE_ORIGIN=1 is required in production profile",
+    };
+  }
+  if (env.LEAD_REQUIRE_TURNSTILE !== "1") {
+    return {
+      ok: false,
+      code: "turnstile_guard_required_in_production",
+      message: "LEAD_REQUIRE_TURNSTILE=1 is required in production profile",
+    };
+  }
+  if (String(env.TURNSTILE_SECRET_KEY || "").length < 16) {
+    return {
+      ok: false,
+      code: "turnstile_secret_required_in_production",
+      message: "TURNSTILE_SECRET_KEY must be configured in production profile",
+    };
+  }
+  if (String(env.IP_HASH_SALT || "").length < 32 || env.IP_HASH_SALT === "confenge") {
+    return {
+      ok: false,
+      code: "ip_hash_salt_required_in_production",
+      message: "IP_HASH_SALT must be a private value of at least 32 characters in production profile",
+    };
+  }
   return { ok: true };
 }
 
@@ -511,17 +539,36 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
   }
 
   let kindInfo = {
-    record_kind: "real",
-    signals: [],
+    record_kind: "internal",
+    signals: ["classifier_unavailable"],
     classified_at: received_at,
-    classifier: "default_real",
+    classifier: "classifier_error_fail_closed",
   };
   try {
-    const { resolveRecordKind, kindAuditEntry } = require("./record-kind.cjs");
-    kindInfo = resolveRecordKind(lead || {}, { headers });
-    if (!kindInfo.classified_at) kindInfo.classified_at = received_at;
+    const { resolveRecordKind, RECORD_KINDS } = require("./record-kind.cjs");
+    const classified = resolveRecordKind(lead || {}, { headers });
+    if (
+      !classified ||
+      !Array.isArray(RECORD_KINDS) ||
+      !RECORD_KINDS.includes(classified.record_kind)
+    ) {
+      throw new Error("record_kind_classifier_invalid_result");
+    }
+    kindInfo = {
+      ...classified,
+      classified_at: classified.classified_at || received_at,
+    };
   } catch {
-    /* keep default real */
+    kindInfo = {
+      record_kind: "internal",
+      signals: ["classifier_unavailable"],
+      classified_at: received_at,
+      classifier: "classifier_error_fail_closed",
+    };
+    safeLog("error", "record_kind_classifier_fail_closed", {
+      lead_id: String(lead_id || "").slice(0, 64),
+      fallback_kind: "internal",
+    });
   }
 
   const audit = [
