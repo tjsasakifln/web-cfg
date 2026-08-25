@@ -503,6 +503,33 @@ _reset();
   pass("catalog_deliverable_selection_persisted", stored.deliverable_id);
 }
 
+// The generic catalogue hand-raise may name a specialised deliverable without
+// pretending to be its full product questionnaire.
+{
+  const before = mem.map.size;
+  const res = await handler(event({
+    nome: "QA Catálogo Licitação",
+    email: "qa-catalogo-licitacao@example.com",
+    estagio: "entregas-exemplos-hub",
+    jornada: "edital",
+    consentimento: "1",
+    origem: "entregas",
+    landing_page: "https://confenge.com.br/entregas/",
+    route_family: "entregas",
+    asset_id: "entregas-exemplos-hub",
+    cta_id: "entregas-hub-handraise",
+    deliverable_id: "CFG-D14",
+    record_kind: "qa",
+    test_mode: true,
+  }, "POST", { ip: "192.0.2.91" }));
+  const data = JSON.parse(res.body);
+  const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+  if (res.statusCode !== 201 || mem.map.size !== before + 1 || stored?.deliverable_id !== "CFG-D14") {
+    fail("catalog_specialised_deliverable_handraise", { status: res.statusCode, data, stored });
+  }
+  pass("catalog_specialised_deliverable_handraise", stored.deliverable_id);
+}
+
 // 5f) The five #330 units require structured, non-analytics qualification.
 // Invalid context fails before persistence; valid context stays on the lead.
 {
