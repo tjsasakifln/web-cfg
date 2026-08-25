@@ -3034,7 +3034,9 @@ def main(argv: list[str] | None = None) -> int:
             )
         else:
             print(json.dumps(result, ensure_ascii=False, indent=2))
-        if result.get("ok") and result.get("ready_for_product_decisions") is True:
+        if result.get("ok") and (
+            result.get("ready_for_product_decisions") is True or args.fixture
+        ):
             return 0
         if args.allow_missing_creds and result.get("error") == "missing_credentials":
             return 0  # external blocker recorded; schedule continues
