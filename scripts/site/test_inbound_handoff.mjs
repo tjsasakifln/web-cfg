@@ -130,6 +130,7 @@ const inbound = loadInbound();
     source: "CONFENGE_WEB",
     route_family: "defesa-margem-diagnostico",
     asset_id: "diagnostico-defesa-margem",
+    deliverable_id: "CFG-D18",
     cta_id: "segunda-leitura-contrato",
     landing_page: "/ferramentas/diagnostico-defesa-margem/",
     public_contract_id: "01619104000141-1-000123/2026",
@@ -146,6 +147,7 @@ const inbound = loadInbound();
   if (mapped.lead_id !== "abc123abc123abc123abc123") fail("map_lead_id", mapped);
   if (mapped.receipt_id !== mapped.lead_id) fail("map_receipt", mapped);
   if (mapped.source !== "CONFENGE_WEB") fail("map_source", mapped.source);
+  if (mapped.asset_id !== "diagnostico-defesa-margem") fail("map_preserves_acquisition_asset", mapped);
   if (mapped.landing_url !== "https://confenge.com.br/ferramentas/diagnostico-defesa-margem/") {
     fail("map_landing_url", mapped.landing_url);
   }
@@ -158,6 +160,9 @@ const inbound = loadInbound();
   if (!mapped.consent || mapped.consent.granted !== true) fail("map_consent", mapped);
   if (!mapped.utm || mapped.utm.source !== "test") fail("map_utm", mapped);
   if (mapped.correlation_id !== "corr-1") fail("map_corr", mapped);
+  if (!mapped.message.startsWith("Contexto do próximo passo: entrega=CFG-D18.")) {
+    fail("map_deliverable_as_next_action_context", mapped);
+  }
   pass("mapper_present_fields");
 }
 

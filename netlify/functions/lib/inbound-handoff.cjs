@@ -146,6 +146,12 @@ function mapLeadToInboundV1(record) {
 
   const routeFamily = clampText(record.route_family, 80);
   if (routeFamily) body.route_family = routeFamily;
+  // `asset_id` identifies the acquisition asset and must not be repurposed as a
+  // product identifier. The selected deliverable is carried in the versioned
+  // free-text next-action context until Warmbly exposes a dedicated field.
+  const deliverableId = /^CFG-D\d{2}$/.test(String(record.deliverable_id || ""))
+    ? String(record.deliverable_id)
+    : "";
   const assetId = clampText(record.asset_id, 120);
   if (assetId) body.asset_id = assetId;
   const ctaId = clampText(record.cta_id, 120);
@@ -190,7 +196,13 @@ function mapLeadToInboundV1(record) {
 
   const referrer = sanitizeUrl(record.referrer);
   if (referrer) body.referrer = referrer;
-  const message = clampText(record.mensagem || record.message, 2000);
+  const deliverableContext = deliverableId
+    ? `Contexto do próximo passo: entrega=${deliverableId}.`
+    : "";
+  const message = clampText(
+    [deliverableContext, record.mensagem || record.message].filter(Boolean).join("\n"),
+    2000,
+  );
   if (message) body.message = message;
   const correlation = clampText(record.correlation_id, 160);
   if (correlation) body.correlation_id = correlation;
