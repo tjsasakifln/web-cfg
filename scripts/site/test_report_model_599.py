@@ -841,7 +841,7 @@ def test_product_promise_value_and_scope_are_explicit_before_the_example() -> No
         "A CONFENGE busca os editais abertos nesse recorte",
         "a quantidade decorre das licitações publicadas",
         "a profundidade máxima permitida pelas informações da empresa",
-        "O prazo é de até 48 horas úteis",
+        "O prazo é de 3 dias úteis",
         "começa no envio dos parâmetros",
         "antes da cobrança",
     ):
@@ -1153,7 +1153,7 @@ def test_price_has_versioned_non_catalog_action_authority() -> None:
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
     catalog_ids = {offer["offer_id"] for offer in catalog["offers"]}
 
-    assert matrix["version"] == "1.4.2"
+    assert matrix["version"] == "1.4.3"
     assert route["offer_id"] == HANDRAISE_ID
     assert route["service_id"] is None
     assert route["asset_id"] == "relatorio-inteligencia-licitacoes-demonstrativo"
@@ -1194,7 +1194,7 @@ def test_price_has_versioned_non_catalog_action_authority() -> None:
     assert body_tag and "data-offer-id" not in body_tag.group(0), (
         "non-catalog order intake must not emit catalog offer_view on page load"
     )
-    assert "O prazo é de até 48 horas úteis" in html
+    assert "O prazo é de 3 dias úteis" in html
 
     matrix_md = (ACTION_MATRIX.with_suffix(".md")).read_text(encoding="utf-8")
     public_story = (ROOT / "docs/stories/story-public-report-model-599.md").read_text(

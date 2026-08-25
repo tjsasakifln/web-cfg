@@ -196,7 +196,23 @@ function mapLeadToInboundV1(record) {
 
   const referrer = sanitizeUrl(record.referrer);
   if (referrer) body.referrer = referrer;
-  const message = clampText(record.mensagem || record.message, 2000);
+  const qualification = [
+    ["prazo", record.opportunity_deadline],
+    ["decisão", record.decision_intent],
+    ["data de corte", record.analysis_cutoff],
+    ["faixa de valor", record.contract_value_band],
+    ["lotes", record.lot_count],
+    ["regime", record.execution_regime],
+  ]
+    .filter(([, value]) => value !== null && value !== undefined && String(value).trim())
+    .map(([label, value]) => `${label}=${clampText(value, 80)}`)
+    .join("; ");
+  const message = clampText(
+    [record.mensagem || record.message, qualification ? `Contexto do próximo passo: ${qualification}.` : ""]
+      .filter(Boolean)
+      .join("\n"),
+    2000,
+  );
   if (message) body.message = message;
   const correlation = clampText(record.correlation_id, 160);
   if (correlation) body.correlation_id = correlation;

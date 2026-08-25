@@ -1,8 +1,8 @@
-# Intent → action matrix v1.4.2
+# Intent → action matrix v1.4.3
 
-Schema: `intent-action-matrix/1.0`. Owner: `web-cfg/conversion`. As of 2026-08-24.
+Schema: `intent-action-matrix/1.0`. Owner: `web-cfg/conversion`. As of 2026-08-25.
 
-Commercial response SLA is `UNKNOWN` until Warmbly #55 measures a representative baseline. The Radar order has a distinct owner-authorized delivery clock: up to 48 business hours from persisted parameter submission, never from payment confirmation.
+Commercial response SLA is `UNKNOWN` until Warmbly #55 measures a representative baseline. Issue #331 authorizes a distinct Radar delivery clock: 3 business days from a valid persisted parameter submission, never from payment confirmation.
 
 Issue #90 (owned-audience opt-in) is **not authorized**. The `ainda_nao_pronto` route is citation/download only.
 

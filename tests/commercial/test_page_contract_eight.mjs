@@ -8,6 +8,7 @@
  */
 import fs from "fs";
 import path from "path";
+import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -51,6 +52,10 @@ function nonEmptyList(v) {
   return Array.isArray(v) && v.length > 0 && v.every(nonEmptyString);
 }
 
+function publicCopy(value) {
+  return contract.public_copy_overrides?.[value] || value;
+}
+
 // ---------------------------------------------------------------- 0. tipografia
 // travessao e meia-risca sao proibidos; o padrao e montado por code point para
 // que o proprio gate nao contenha os caracteres que ele proibe.
@@ -62,6 +67,7 @@ assert(
   "travessao proibido no teste",
 );
 assert("issue_declarada", contract.issue === 331 && contract.parent_issue === 329, contract.issue);
+assert("versao_publica_v2", contract.version === "v2", contract.version);
 assert("preco_congelado", contract.price_change_allowed === false, contract.price_change_allowed);
 
 // ------------------------------------------------- 1. as oito entradas completas
@@ -158,6 +164,7 @@ const PRECO_ESPERADO = {
 const hubFile = contract.package.hub_file;
 assert("hub_existe", fs.existsSync(path.join(root, hubFile)), hubFile);
 const hubText = textOf(hubFile);
+const hubHtml = fs.readFileSync(path.join(root, hubFile), "utf8");
 
 for (const d of dels) {
   const n = d.number;
@@ -169,6 +176,7 @@ for (const d of dels) {
     `${d.price_cents} != ${PRECO_ESPERADO[n]}`);
   if (!exists) continue;
   const pageText = textOf(d.file);
+  const pageHtml = fs.readFileSync(abs, "utf8");
   assert(`pagina_imprime_preco_${n}`, pageText.includes(d.price_display),
     `${d.price_display} ausente em ${d.file}`);
   assert(`pagina_imprime_nome_${n}`,
@@ -179,7 +187,45 @@ for (const d of dels) {
   assert(`hub_imprime_nome_${n}`,
     hubText.toLowerCase().includes(d.published_name_pt_br.toLowerCase()),
     `${d.published_name_pt_br} ausente no hub`);
+  for (const [field, value] of [
+    ["objeto", d.objeto_incluido],
+    ["saida", d.saida_minima],
+    ["sla", d.sla.text],
+  ]) {
+    assert(`pagina_imprime_${field}_${n}`, pageText.includes(value), `${field} ausente em ${d.file}`);
+    assert(`hub_imprime_${field}_${n}`, hubText.includes(value), `${field} ausente no hub`);
+  }
+  for (const value of [...d.entrada, ...d.fronteira.map(publicCopy)]) {
+    assert(`pagina_imprime_campo_${n}_${results.length}`, pageText.includes(value), value);
+    assert(`hub_imprime_campo_${n}_${results.length}`, hubText.includes(value), value);
+  }
+  assert(`pagina_exemplo_sintetico_${n}`, /sint[ée]tic/i.test(pageText), d.file);
+  assert(`pagina_contexto_resultado_${n}`,
+    /Como ler o resultado/.test(pageText) && /Cobertura/.test(pageText) &&
+      /Data/.test(pageText) && /Método/.test(pageText) && /NÃO INFORMADO/.test(pageText),
+    d.file);
+  const numericSlas = [...pageText.matchAll(/\b(\d+) dias úteis/g)].map((match) => Number(match[1]));
+  assert(`pagina_sem_sla_concorrente_${n}`,
+    numericSlas.length > 0 && numericSlas.every((days) => days === d.sla.business_days),
+    numericSlas.join(","));
+  assert(`pagina_css_contrato_${n}`, pageHtml.includes('/assets/eight-offer-contract.css'), d.file);
+  assert(`pagina_form_deliverable_${n}`,
+    pageHtml.includes(`name="deliverable_id" type="hidden" value="${d.deliverable_id}"`),
+    d.deliverable_id);
+  for (const field of contract.public_implementation.capture_fields) {
+    assert(`pagina_form_captura_${n}_${field}`, pageHtml.includes(`name="${field}"`), field);
+  }
+  assert(`pagina_form_sem_checkout_${n}`,
+    pageHtml.includes('name="offer_id" type="hidden" value=""') &&
+      pageHtml.includes('name="terms_id" type="hidden" value=""') &&
+      !/\.netlify\/functions\/checkout|data-checkout/i.test(pageHtml),
+    d.file);
 }
+assert("hub_css_contrato", hubHtml.includes('/assets/eight-offer-contract.css'));
+assert("hub_contexto_resultado", /Cobertura, data de corte, método e o rótulo NÃO INFORMADO/.test(hubText));
+const radarPurchaseText = textOf("comercial/radar-decisorio/index.html");
+assert("radar_compra_sla_3_dias", /prazo de 3 dias úteis/i.test(radarPurchaseText), radarPurchaseText.slice(0, 180));
+assert("radar_sem_promessa_48h", !/48 horas úteis/i.test(`${radarPurchaseText} ${textOf(dels[0].file)}`), "48h residual");
 
 // nenhum preço fora dos oito aparece como preço de unidade no contrato
 const cents = dels.map((d) => d.price_cents);
@@ -252,16 +298,35 @@ assert("marcos_declarados_pela_issue",
 // -------------------------------------- o que esta PR deliberadamente não entrega
 const nd = contract.not_delivered_here;
 assert("nada_declarado_validado",
-  nd.html_changed === false && nd.price_changed === false &&
+  nd.html_changed === true && nd.price_changed === false &&
     nd.first_sale_evidence === "NOT_STARTED" && Array.isArray(nd.evidence) && nd.evidence.length === 0,
   JSON.stringify(nd));
 assert("campos_da_primeira_venda",
   JSON.stringify(nd.first_sale_fields) === JSON.stringify(["horas", "retrabalho", "margem", "outcome"]),
   nd.first_sale_fields);
-assert("sla_ainda_nao_visivel_nas_rotas",
-  nd.sla_visible_on_route_pages === "NOT_STARTED" &&
-    dels.every((d) => !textOf(d.file).includes(`${d.sla.business_days} dias úteis`)),
-  "alguma rota já imprime o SLA; atualize o estado do contrato");
+assert("sla_visivel_nas_rotas",
+  nd.sla_visible_on_route_pages === "DONE" && dels.every((d) => textOf(d.file).includes(d.sla.text)),
+  "SLA ausente em alguma rota");
+assert("implementacao_publica_declarada",
+  contract.public_implementation?.route_pages === 8 &&
+    contract.public_implementation?.hub_route === "/entregas/" &&
+    contract.public_implementation?.analytics_contains_qualification === false &&
+    contract.public_implementation?.checkout_enabled === false,
+  JSON.stringify(contract.public_implementation));
+const analyticsCode = [
+  "netlify/functions/collect.cjs",
+].map((file) => fs.readFileSync(path.join(root, file), "utf8")).join("\n");
+const eventRegistry = JSON.parse(fs.readFileSync(path.join(root, "netlify/functions/lib/event-registry.json"), "utf8"));
+assert("cnpj_bloqueado_como_pii_no_analytics", eventRegistry.pii_keys.includes("cnpj"));
+for (const field of ["analysis_cutoff", "opportunity_deadline", "decision_intent"]) {
+  assert(`qualificacao_fora_do_analytics_${field}`, !analyticsCode.includes(field), field);
+}
+const rendererCheck = spawnSync(
+  process.execPath,
+  [path.join(root, "scripts/commercial/render_eight_offer_contracts.mjs"), "--check"],
+  { cwd: root, encoding: "utf8" },
+);
+assert("renderer_sem_drift", rendererCheck.status === 0, `${rendererCheck.stdout}\n${rendererCheck.stderr}`);
 
 const failed = results.filter((r) => !r.ok);
 console.log(`${NAME}: ${results.length - failed.length}/${results.length} checks passed`);

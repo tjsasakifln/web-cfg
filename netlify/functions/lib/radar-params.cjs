@@ -30,9 +30,9 @@ const RADAR_OFFER_ID = "handraise-report-intelligence-599-v1";
 const RADAR_AMOUNT_CENTS = 59900;
 const RADAR_CURRENCY = "BRL";
 
-/** Delivery clock. Starts at form submission, never at payment confirmation. */
+/** Delivery clock. Starts at a valid form submission, never at payment confirmation. */
 const DELIVERY_CLOCK = Object.freeze({
-  business_hours: 48,
+  business_days: 3,
   starts_at: "form_submitted",
   never_starts_at: "payment_confirmed",
 });
@@ -243,7 +243,7 @@ function analyticsShape(params) {
     segmentos: Array.isArray(params.segmentos) ? params.segmentos.slice() : [],
     acervo_tecnico_len: String(params.acervo_tecnico || "").length,
     has_cidade_base: Boolean(params.cidade_base),
-    delivery_business_hours: DELIVERY_CLOCK.business_hours,
+    delivery_business_days: DELIVERY_CLOCK.business_days,
     opportunity_count_promised: false,
   };
 }

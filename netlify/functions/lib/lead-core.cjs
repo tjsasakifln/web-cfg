@@ -3,6 +3,7 @@
  * No I/O — unit-testable without mocks of the unit under test.
  */
 const crypto = require("crypto");
+const { validateCnpj } = require("../../../scripts/conversion/cnpj.cjs");
 
 const MAX_BODY_BYTES = 24 * 1024;
 const MAX_FIELD = {
@@ -39,6 +40,7 @@ const MAX_FIELD = {
   asset_family: 80,
   query_class: 80,
   deliverable_id: 16,
+  analysis_cutoff: 10,
   opportunity_deadline: 10,
   contract_value_band: 24,
   lot_count: 4,
@@ -147,7 +149,7 @@ const EXECUTION_REGIMES = new Set([
   "outro",
   "UNKNOWN",
 ]);
-const DECISION_INTENTS = new Set([
+const LICITACAO_DECISION_INTENTS = new Set([
   "avaliar_disputa",
   "avancar",
   "avancar_condicoes",
@@ -191,7 +193,7 @@ function assertLicitacaoQualification(data, deliverableId) {
     !isCanonicalIsoDate(deadline) ||
     !CONTRACT_VALUE_BANDS.has(valueBand) ||
     !EXECUTION_REGIMES.has(regime) ||
-    !DECISION_INTENTS.has(decisionIntent) ||
+    !LICITACAO_DECISION_INTENTS.has(decisionIntent) ||
     !/^\d{1,3}$/.test(lotRaw) ||
     !Number.isInteger(lotCount) ||
     lotCount < 1 ||
@@ -212,6 +214,56 @@ function assertLicitacaoQualification(data, deliverableId) {
       contract_value_band: valueBand,
       lot_count: lotCount,
       execution_regime: regime,
+      decision_intent: decisionIntent,
+    },
+  };
+}
+
+const EIGHT_PRODUCT_IDS = new Set([
+  "CFG-D01", "CFG-D02", "CFG-D03", "CFG-D04",
+  "CFG-D05", "CFG-D06", "CFG-D07", "CFG-D08",
+]);
+const EXPANSION_DECISION_INTENTS = new Set([
+  "priorizar_oportunidades",
+  "validar_mercado",
+  "escolher_territorio",
+  "monitorar_renovacoes",
+  "comparar_concorrentes",
+  "referenciar_precos",
+  "consolidar_plano",
+  "UNKNOWN",
+]);
+
+function assertEightProductQualification(data, deliverableId) {
+  if (!EIGHT_PRODUCT_IDS.has(deliverableId)) return { ok: true, qualification: null };
+  const cnpjCheck = validateCnpj(clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj));
+  const analysisCutoff = clamp(data.analysis_cutoff, MAX_FIELD.analysis_cutoff);
+  const deadline = clamp(data.opportunity_deadline, MAX_FIELD.opportunity_deadline);
+  const decisionIntent = clamp(data.decision_intent, MAX_FIELD.decision_intent);
+  const cutoffTime = isCanonicalIsoDate(analysisCutoff) ? Date.parse(`${analysisCutoff}T00:00:00Z`) : NaN;
+  const deadlineTime = isCanonicalIsoDate(deadline) ? Date.parse(`${deadline}T00:00:00Z`) : NaN;
+  if (
+    !cnpjCheck.ok ||
+    !Number.isFinite(cutoffTime) ||
+    !Number.isFinite(deadlineTime) ||
+    cutoffTime < Date.parse("2000-01-01T00:00:00Z") ||
+    cutoffTime > deadlineTime ||
+    businessDaysUntil(deadline) < 1 ||
+    !EXPANSION_DECISION_INTENTS.has(decisionIntent)
+  ) {
+    return {
+      ok: false,
+      status: 422,
+      error: "expansion_qualification_invalid",
+      message: "Informe CNPJ, data de corte, prazo e decisão nos formatos publicados.",
+    };
+  }
+  return {
+    ok: true,
+    qualification: {
+      cnpj: cnpjCheck.cnpj,
+      analysis_cutoff: analysisCutoff,
+      opportunity_deadline: deadline,
       decision_intent: decisionIntent,
     },
   };
@@ -485,6 +537,9 @@ function validateAndNormalize(data) {
   if (!deliverableCheck.ok) return deliverableCheck;
   const licitacaoCheck = assertLicitacaoQualification(data, deliverableCheck.deliverable_id);
   if (!licitacaoCheck.ok) return licitacaoCheck;
+  const eightCheck = assertEightProductQualification(data, deliverableCheck.deliverable_id);
+  if (!eightCheck.ok) return eightCheck;
+  const productQualification = licitacaoCheck.qualification || eightCheck.qualification;
 
   // Radar Decisório purchase parameters. Server-side, fail-closed: the browser
   // check is a convenience, this one is the contract.
@@ -609,17 +664,18 @@ function validateAndNormalize(data) {
     asset_family: sanitizeAttributionValue(data.asset_family, MAX_FIELD.asset_family, "asset_family") || null,
     query_class: sanitizeAttributionValue(data.query_class, MAX_FIELD.query_class, "query_class") || null,
     deliverable_id: deliverableCheck.deliverable_id,
-    opportunity_deadline: licitacaoCheck.qualification?.opportunity_deadline || null,
-    contract_value_band: licitacaoCheck.qualification?.contract_value_band || null,
-    lot_count: licitacaoCheck.qualification?.lot_count || null,
-    execution_regime: licitacaoCheck.qualification?.execution_regime || null,
-    decision_intent: licitacaoCheck.qualification?.decision_intent || null,
+    analysis_cutoff: productQualification?.analysis_cutoff || null,
+    opportunity_deadline: productQualification?.opportunity_deadline || null,
+    contract_value_band: productQualification?.contract_value_band || null,
+    lot_count: productQualification?.lot_count || null,
+    execution_regime: productQualification?.execution_regime || null,
+    decision_intent: productQualification?.decision_intent || null,
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
     public_contract_id: clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,
     public_entity_id: clamp(data.public_entity_id, MAX_FIELD.public_entity_id) || null,
     public_id_slug: clamp(data.public_id_slug, MAX_FIELD.public_id_slug) || null,
-    cnpj: clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj) || null,
+    cnpj: eightCheck.qualification?.cnpj || clamp(data.cnpj || data.cnpj14, MAX_FIELD.cnpj) || null,
     offer_id: offerCheck.offer_id || null,
     terms_id: offerCheck.terms_id || null,
     radar_params: radarParams,
@@ -773,7 +829,7 @@ function publicSuccessBody({
   idempotent,
   correlation_id,
   external_reference,
-  delivery_business_hours,
+  delivery_business_days,
 }) {
   const body = {
     ok: true,
@@ -788,8 +844,8 @@ function publicSuccessBody({
   // digest. Emitted only after the durable persist succeeded.
   if (correlation_id) body.correlation_id = String(correlation_id).slice(0, 60);
   if (external_reference) body.external_reference = String(external_reference).slice(0, 200);
-  if (delivery_business_hours) {
-    body.delivery_business_hours = Number(delivery_business_hours);
+  if (delivery_business_days) {
+    body.delivery_business_days = Number(delivery_business_days);
     body.delivery_clock_starts_at = "form_submitted";
   }
   // Non-PII delivery status for probe/ops verification (never secrets/topics)
@@ -843,6 +899,7 @@ module.exports = {
   assertOfferTermsAndPrice,
   assertDeliverableSelection,
   assertLicitacaoQualification,
+  assertEightProductQualification,
   validateAndNormalize,
   generateLeadId,
   idempotencyKeyFor,

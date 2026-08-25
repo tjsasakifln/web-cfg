@@ -597,6 +597,8 @@ _reset();
     .map((entry) => entry.name)
     .sort();
   if (modelSlugs.length !== 8) fail("priced_model_census", modelSlugs);
+  const analysisCutoff = new Date().toISOString().slice(0, 10);
+  const opportunityDeadline = new Date(Date.now() + 45 * 86400000).toISOString().slice(0, 10);
 
   const ids = new Set();
   for (let i = 0; i < modelSlugs.length; i += 1) {
@@ -624,6 +626,7 @@ _reset();
       route_family: dataValue("route-family"),
       jornada: hiddenValue("jornada"),
       estagio: slug,
+      deliverable_id: hiddenValue("deliverable_id"),
     };
     for (const [name, value] of Object.entries(expected)) {
       if (!value || hiddenValue(name) !== value) {
@@ -632,6 +635,9 @@ _reset();
     }
     if (hiddenValue("offer_id") !== "" || hiddenValue("terms_id") !== "" || hiddenValue("amount_cents")) {
       fail("priced_model_form_invented_checkout", slug);
+    }
+    for (const field of ["cnpj", "analysis_cutoff", "opportunity_deadline", "decision_intent"]) {
+      if (!form.includes(`name="${field}"`)) fail("priced_model_form_qualification_field", { slug, field });
     }
 
     const res = await handler(
@@ -649,6 +655,11 @@ _reset();
           route_family: expected.route_family,
           asset_id: expected.asset_id,
           cta_id: expected.cta_id,
+          deliverable_id: expected.deliverable_id,
+          cnpj: "52407089000109",
+          analysis_cutoff: analysisCutoff,
+          opportunity_deadline: opportunityDeadline,
+          decision_intent: "validar_mercado",
           record_kind: "qa",
           test_mode: true,
           idempotency_key: `qa-priced-model-${i + 1}`,
@@ -666,7 +677,10 @@ _reset();
       !stored || stored.source !== "CONFENGE_WEB" ||
       stored.origem !== expected.origem || stored.landing_page !== expected.landing_page ||
       stored.route_family !== expected.route_family || stored.asset_id !== expected.asset_id ||
-      stored.cta_id !== expected.cta_id || stored.jornada !== expected.jornada
+      stored.cta_id !== expected.cta_id || stored.jornada !== expected.jornada ||
+      stored.deliverable_id !== expected.deliverable_id || stored.cnpj !== "52407089000109" ||
+      stored.analysis_cutoff !== analysisCutoff || stored.opportunity_deadline !== opportunityDeadline ||
+      stored.decision_intent !== "validar_mercado"
     ) {
       fail("priced_model_form_attribution", { slug, stored, expected });
     }
@@ -676,6 +690,36 @@ _reset();
     ids.add(data.lead_id);
   }
   if (ids.size !== modelSlugs.length) fail("priced_model_form_distinct_receipts", [...ids]);
+
+  const invalidBase = {
+    nome: "QA Escopo",
+    email: "qa-escopo@example.com",
+    estagio: "modelo-relatorio-inteligencia-licitacoes",
+    jornada: "edital",
+    consentimento: "1",
+    origem: "/casos/modelo-relatorio-inteligencia-licitacoes/",
+    deliverable_id: "CFG-D01",
+    cnpj: "52407089000109",
+    analysis_cutoff: analysisCutoff,
+    opportunity_deadline: opportunityDeadline,
+    decision_intent: "priorizar_oportunidades",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  for (const invalid of [
+    { cnpj: "123" },
+    { cnpj: "11111111111111" },
+    { analysis_cutoff: "2026-99-99" },
+    { opportunity_deadline: analysisCutoff },
+    { decision_intent: "decisao_livre" },
+  ]) {
+    const before = mem.map.size;
+    const res = await handler(event({ ...invalidBase, ...invalid }, "POST", { ip: "203.0.113.99" }));
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 422 || data.error !== "expansion_qualification_invalid" || mem.map.size !== before) {
+      fail("priced_model_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    }
+  }
   pass("priced_model_forms_persisted_attribution", { routes: modelSlugs });
 }
 
