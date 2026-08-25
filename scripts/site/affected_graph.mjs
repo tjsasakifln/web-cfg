@@ -176,6 +176,11 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: [],
     surfaces: ["/entregas/"],
   },
+  "test:offer-naming": {
+    producers: ["tests/commercial/test_offer_naming.mjs", "data/commercial/offer-naming.v1.json", "entregas/index.html", "data/offers/catalog.snapshot.json"],
+    artifacts: [],
+    surfaces: ["/entregas/"],
+  },
   "test:bofu-dominance": {
     producers: ["tests/bofu_dominance/", "scripts/bofu_dominance/", "data/bofu-dominance/"],
     artifacts: ["docs/seo/bofu-dominance/"],
