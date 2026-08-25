@@ -530,10 +530,15 @@ _reset();
   pass("catalog_specialised_deliverable_handraise", stored.deliverable_id);
 }
 
-// 5f) The five #330 units require structured, non-analytics qualification.
+// 5f) The five #330 units have a prepared structured qualification contract,
+// while the protected dedicated route remains dormant under the #291 freeze.
 // Invalid context fails before persistence; valid context stays on the lead.
 {
   const html = fs.readFileSync(path.join(root, "diagnostico-pre-licitacao/index.html"), "utf8");
+  const licitacaoContract = JSON.parse(fs.readFileSync(
+    path.join(root, "data/commercial/page-contract-licitacao.v1.json"),
+    "utf8",
+  ));
   const qualificationDeadline = new Date(Date.now() + 45 * 86400000).toISOString().slice(0, 10);
   for (const field of [
     "deliverable_id",
@@ -544,9 +549,13 @@ _reset();
     "execution_regime",
     "decision_intent",
   ]) {
-    if (!html.includes(`name="${field}"`)) fail("licitacao_qualification_field", field);
+    if (!licitacaoContract.public_implementation.prepared_capture_fields.includes(field)) {
+      fail("licitacao_prepared_qualification_field", field);
+    }
   }
-  if (/<input\b[^>]*type="(?:file|password)"/i.test(html)) fail("licitacao_capture_forbidden_secret_field");
+  if (html.includes("GENERATED:LICITACAO-PRODUCTS") || html.includes('id="captura-licitacao"')) {
+    fail("licitacao_protected_route_must_remain_dormant");
+  }
 
   const base = {
     nome: "QA Licitação",
