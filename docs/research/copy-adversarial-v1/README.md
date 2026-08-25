@@ -28,9 +28,11 @@ ou fronteira; nunca funde nem remove item do rol cumulativo.
 ## Teste sem título
 
 O precheck de máquina confirma 54 assinaturas distintas de trigger, decisão e
-saída. O resultado humano usa `differentiation.template.json`: o revisor recebe
-o trio sem título nem preço e escolhe o identificador. A meta 54/54 só é marcada
-depois de respostas reais; assinatura distinta não equivale a compreensão.
+saída, além de 810/810 corpos de cláusula sem duplicidade exata. O resultado
+humano usa `differentiation.template.json`: o revisor recebe o trio sem título
+nem preço e escolhe o identificador. A meta 54/54 só é marcada depois de
+respostas reais; ausência de repetição literal não equivale a diferenciação
+semântica nem a compreensão.
 
 ## Privacidade e evidência
 
@@ -38,4 +40,3 @@ Recrutamento, consentimento, fala literal e notas individuais seguem os limites
 do pacote `market-fit-v1` e ficam no store privado. O repositório recebe apenas
 contagens agregadas, defeitos editoriais sem identidade e decisões de copy. Não
 publicar cliente, caso, logo ou citação sem #249/#328.
-
