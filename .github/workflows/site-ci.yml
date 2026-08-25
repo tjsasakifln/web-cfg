@@ -63,6 +63,7 @@ jobs:
           npm run test:deliverables-registry
           npm run test:offer-naming
           npm run test:pricing-policy
+          npm run test:integrity-promotion-gate
           npm run test:page-contract-eight
           npm run test:market-fit-protocol
           npm run test:page-contract-licitacao

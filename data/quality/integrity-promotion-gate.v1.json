@@ -1,0 +1,393 @@
+{
+  "schema": "integrity-promotion-gate-v1",
+  "contract_version": "v1",
+  "source_issue": "#156",
+  "issue_title_pt_br": "[P2][BOFU integrity] Provar consulta preliminar de integridade de parceiro",
+  "updated_at": "2026-08-24",
+  "priority": "P2",
+  "campaign_category": "BLOCKED_EXTERNAL",
+  "decision_state": "VALIDATE",
+  "decision_mode": "HOLD",
+  "executive_front": "MARKET INTELLIGENCE MOAT",
+  "leverage_types": ["trust", "data"],
+  "time_to_evidence_pt_br": "30 dias contados a partir do desbloqueio externo, não a partir do merge deste gate.",
+  "purpose_pt_br": "Transformar o bloqueio da consulta preliminar de integridade de parceiro em regra verificável por máquina. Este contrato não promove nada, não libera rota e não vende nada: ele apenas impede que o bloqueio seja desfeito sem a evidência que a issue #156 exige.",
+  "honest_summary_pt_br": "O producer está pronto. O insumo externo não está. Enquanto a chave oficial não existir no ec-prod e enquanto não houver um canário live-safe redigido, qualquer promoção é uma promessa sem lastro.",
+  "hermetic": true,
+  "offline_only": true,
+  "network_calls_allowed": false,
+  "network_policy_pt_br": "O gate roda offline no CI. Nenhuma chamada a API externa, nenhum segredo lido, nenhuma consulta ao Portal da Transparência. A evidência do canário sem chave é registrada como fato observado, nunca reexecutada aqui.",
+
+  "producer": {
+    "contract_id": "public-read-integrity/1.0",
+    "owner": "extra-cli",
+    "owner_branch": "main",
+    "owner_commit": "8e15f94",
+    "delivered": true,
+    "in_production": true,
+    "access_mode": "SELECT_ONLY",
+    "focused_suite_tests_passed": 45,
+    "focused_suite_tests_failed": 0,
+    "delivered_capabilities": [
+      "schema",
+      "fixtures",
+      "fail_closed_pagination",
+      "provenance",
+      "ttl",
+      "select_only"
+    ],
+    "pagination_rule_pt_br": "A paginação só fecha com página terminal bem-sucedida. Sem página terminal, a cobertura é incompleta e o resultado agregado é UNKNOWN.",
+    "sources": [
+      {
+        "source_id": "CEIS",
+        "name_pt_br": "Cadastro de Empresas Inidôneas e Suspensas",
+        "official_url": "https://portaldatransparencia.gov.br/sancoes",
+        "requires_official_key": true,
+        "freshness_required": true,
+        "coverage_declared_required": true
+      },
+      {
+        "source_id": "CNEP",
+        "name_pt_br": "Cadastro Nacional de Empresas Punidas",
+        "official_url": "https://portaldatransparencia.gov.br/sancoes",
+        "requires_official_key": true,
+        "freshness_required": true,
+        "coverage_declared_required": true
+      }
+    ],
+    "web_cfg_boundary": {
+      "creates_crawler": false,
+      "creates_identity_store": false,
+      "creates_second_truth_plane": false,
+      "creates_parallel_datalake": false,
+      "acquires_sources_directly": false,
+      "stores_cnpj": false,
+      "consumes_versioned_select_only_contract": true,
+      "statement_pt_br": "O web-cfg consome contrato versionado SELECT-only do extra-cli. Não cria crawler, não cria identity store, não cria segundo plano de verdade, não cria DataLake paralelo e não adquire fonte diretamente.",
+      "authority_refs": [
+        "AGENTS.md",
+        "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+        "docs/architecture/RUNTIME-AUTHORITY.md"
+      ]
+    }
+  },
+
+  "blocker": {
+    "blocker_id": "portal-transparencia-api-key-absent",
+    "kind": "EXTERNAL_INPUT_MISSING",
+    "secret_name": "PORTAL_TRANSPARENCIA_API_KEY",
+    "environment": "ec-prod",
+    "state": "ABSENT",
+    "owner": "extra-cli",
+    "resolvable_by_web_cfg": false,
+    "resolvable_by_this_pr": false,
+    "statement_pt_br": "PORTAL_TRANSPARENCIA_API_KEY está ausente no ec-prod. Nenhum trabalho dentro do web-cfg resolve este bloqueio."
+  },
+
+  "promotion_state": {
+    "current": "BLOCKED_EXTERNAL",
+    "allowed_states": ["BLOCKED_EXTERNAL", "READY_FOR_KEYED_CANARY", "PROMOTED"],
+    "initial_state": "BLOCKED_EXTERNAL",
+    "terminal_state": "PROMOTED",
+    "advance_requires_all_conditions_satisfied": true,
+    "advance_requires_all_evidence_slots_filled": true,
+    "empty_slot_sentinel": null,
+    "required_evidence_fields": [
+      "recorded_at",
+      "recorded_by",
+      "artifact_ref",
+      "verification_note_pt_br"
+    ],
+    "rule_pt_br": "promotion_state.current só pode sair de BLOCKED_EXTERNAL quando todas as condições estiverem satisfied=true e todos os campos de evidência de todas as condições estiverem preenchidos. Slot vazio com estado avançado é falha do gate, nunca aviso.",
+    "conditions": [
+      {
+        "condition_id": "official_api_key_configured",
+        "order": 1,
+        "title_pt_br": "Chave oficial configurada no ambiente do producer",
+        "requirement_pt_br": "PORTAL_TRANSPARENCIA_API_KEY oficial configurada no ec-prod, sob posse do extra-cli, nunca no web-cfg.",
+        "owner": "extra-cli",
+        "environment": "ec-prod",
+        "secret_name": "PORTAL_TRANSPARENCIA_API_KEY",
+        "secret_stored_in_web_cfg": false,
+        "satisfied": false,
+        "evidence": {
+          "recorded_at": null,
+          "recorded_by": null,
+          "artifact_ref": null,
+          "verification_note_pt_br": null
+        }
+      },
+      {
+        "condition_id": "redacted_live_safe_canary",
+        "order": 2,
+        "title_pt_br": "Um canário live-safe redigido",
+        "requirement_pt_br": "Um único canário live-safe redigido demonstrando paginação terminal e freshness por fonte, sem nenhum CNPJ em artefato público.",
+        "owner": "extra-cli",
+        "must_prove": [
+          "terminal_pagination",
+          "per_source_freshness",
+          "no_cnpj_in_public_artifacts"
+        ],
+        "redaction_required": true,
+        "cnpj_allowed_in_public_artifact": false,
+        "satisfied": false,
+        "evidence": {
+          "recorded_at": null,
+          "recorded_by": null,
+          "artifact_ref": null,
+          "verification_note_pt_br": null,
+          "terminal_pagination_proof": null,
+          "per_source_freshness_proof": null,
+          "cnpj_redaction_proof": null
+        }
+      }
+    ]
+  },
+
+  "never_publish": {
+    "forbidden_conclusion_tokens": [
+      "NO_MATCH_CONFIRMED",
+      "empresa limpa",
+      "empresa idônea",
+      "nada consta"
+    ],
+    "forbidden_conclusion_variants": [
+      "NO_MATCH_CONFIRMED",
+      "empresa limpa",
+      "empresa idônea",
+      "empresa idonea",
+      "nada consta"
+    ],
+    "clean_company_certificate_publishable": false,
+    "partial_never_becomes_zero": true,
+    "unknown_never_becomes_zero": true,
+    "partial_never_becomes_no_match_confirmed": true,
+    "unknown_never_becomes_no_match_confirmed": true,
+    "absence_of_evidence_is_not_evidence_of_absence": true,
+    "allowed_finding_states": [
+      "ENCONTRADO",
+      "NAO_ENCONTRADO_NA_COBERTURA",
+      "UNKNOWN"
+    ],
+    "allowed_aggregate_states": [
+      "PARTIAL",
+      "UNKNOWN",
+      "COMPLETE_WITHIN_DECLARED_COVERAGE"
+    ],
+    "zero_result_requires": [
+      "terminal_pagination_closed",
+      "per_source_freshness_within_ttl",
+      "declared_coverage_present",
+      "identity_resolved_with_provenance"
+    ],
+    "statement_pt_br": "PARTIAL e UNKNOWN nunca viram zero e nunca viram NO_MATCH_CONFIRMED. Não localizado dentro da cobertura consultada nunca significa inexistente. Certificado de empresa limpa não é publicável em nenhuma hipótese.",
+    "false_negative_cost_pt_br": "Um falso negativo publicado transforma risco não verificado em selo de confiança. O custo cai sobre o cliente que decidiu com base nele, e o dano não é reversível por errata."
+  },
+
+  "failure_modes": [
+    {
+      "failure_mode_id": "timeout",
+      "label_pt_br": "Tempo limite na consulta à fonte oficial",
+      "maps_to": "UNKNOWN",
+      "may_produce_confirmed_negative": false,
+      "may_produce_zero": false,
+      "retry_allowed": true,
+      "publishable": false
+    },
+    {
+      "failure_mode_id": "http_429",
+      "label_pt_br": "Limite de requisições atingido na fonte oficial",
+      "maps_to": "UNKNOWN",
+      "may_produce_confirmed_negative": false,
+      "may_produce_zero": false,
+      "retry_allowed": true,
+      "publishable": false
+    },
+    {
+      "failure_mode_id": "http_5xx",
+      "label_pt_br": "Erro de servidor na fonte oficial",
+      "maps_to": "UNKNOWN",
+      "may_produce_confirmed_negative": false,
+      "may_produce_zero": false,
+      "retry_allowed": true,
+      "publishable": false
+    },
+    {
+      "failure_mode_id": "schema_drift",
+      "label_pt_br": "Mudança de schema na fonte oficial",
+      "maps_to": "UNKNOWN",
+      "may_produce_confirmed_negative": false,
+      "may_produce_zero": false,
+      "retry_allowed": false,
+      "publishable": false
+    },
+    {
+      "failure_mode_id": "partial_parse",
+      "label_pt_br": "Parse parcial da resposta da fonte oficial",
+      "maps_to": "PARTIAL",
+      "may_produce_confirmed_negative": false,
+      "may_produce_zero": false,
+      "retry_allowed": true,
+      "publishable": false
+    },
+    {
+      "failure_mode_id": "incomplete_pagination",
+      "label_pt_br": "Paginação incompleta, sem página terminal bem-sucedida",
+      "maps_to": "UNKNOWN",
+      "may_produce_confirmed_negative": false,
+      "may_produce_zero": false,
+      "retry_allowed": true,
+      "publishable": false
+    },
+    {
+      "failure_mode_id": "stale",
+      "label_pt_br": "Snapshot fora do TTL declarado por fonte",
+      "maps_to": "PARTIAL",
+      "may_produce_confirmed_negative": false,
+      "may_produce_zero": false,
+      "retry_allowed": true,
+      "publishable": false
+    }
+  ],
+
+  "failure_mode_policy": {
+    "exhaustive": true,
+    "closed_list": true,
+    "allowed_mappings": ["PARTIAL", "UNKNOWN"],
+    "forbidden_mappings": ["NO_MATCH_CONFIRMED", "ZERO", "CLEAN", "COMPLETE_WITHIN_DECLARED_COVERAGE"],
+    "default_when_unlisted": "UNKNOWN",
+    "statement_pt_br": "A lista de modos de falha é exaustiva e fechada. Todo modo de falha mapeia para PARTIAL ou UNKNOWN. Nenhum modo de falha produz negativa confirmada nem resultado zero. Falha desconhecida cai em UNKNOWN por padrão."
+  },
+
+  "keyless_canary_observation": {
+    "recorded_as": "FACT",
+    "observed_at": "2026-08-24",
+    "reexecuted_by_this_gate": false,
+    "key_present": false,
+    "environment": "ec-prod",
+    "purpose_pt_br": "Registro do comportamento observado sem chave. Serve como evidência de que o fail-closed funciona, não como evidência de promoção.",
+    "per_source": [
+      {
+        "source_id": "CEIS",
+        "result_state": "UNKNOWN",
+        "coverage": "INCOMPLETE",
+        "false_no_match_confirmed_count": 0
+      },
+      {
+        "source_id": "CNEP",
+        "result_state": "UNKNOWN",
+        "coverage": "INCOMPLETE",
+        "false_no_match_confirmed_count": 0
+      }
+    ],
+    "aggregate_result_state": "UNKNOWN",
+    "false_no_match_confirmed_total": 0,
+    "published": false,
+    "satisfies_promotion": false,
+    "conclusion_pt_br": "O canário sem chave retornou UNKNOWN em CEIS e CNEP, cobertura incompleta nas duas fontes, agregado UNKNOWN e zero falso NO_MATCH_CONFIRMED. O comportamento fail-closed está correto e o produto continua bloqueado."
+  },
+
+  "consumer_pr_174": {
+    "pr_number": 174,
+    "repository": "web-cfg",
+    "state": "CLOSED_UNMERGED",
+    "may_be_resurrected": false,
+    "resurrection_requires_all": [
+      "keyed_canary_recorded",
+      "explicit_slot_after_issue_155"
+    ],
+    "sequencing_issue": "#155",
+    "must_come_after_issue": 155,
+    "statement_pt_br": "O PR consumer web #174 foi fechado sem merge. Não ressuscitar antes do canário com chave e de um slot explícito depois da #155.",
+    "forbidden_surface_reintroduction": {
+      "integrity_result_route": false,
+      "integrity_result_sitemap_entry": false,
+      "integrity_result_internal_link": false
+    },
+    "forbidden_route_prefixes": [
+      "integridade-parceiro",
+      "consulta-integridade",
+      "verificacao-sancoes",
+      "sancoes-parceiro",
+      "parceiro-integridade",
+      "integridade-fornecedor",
+      "mapa-de-parceiros",
+      "mapa-parceiros-consorcios"
+    ]
+  },
+
+  "publication_constraints": {
+    "individual_result_noindex": true,
+    "individual_result_in_sitemap": false,
+    "individual_result_in_internal_links": false,
+    "individual_result_indexable": false,
+    "cnpj_in_public_artifacts": false,
+    "cnpj_in_analytics": false,
+    "cnpj_in_urls": false,
+    "pii_in_analytics": false,
+    "price_route_requires_lead_capture": true,
+    "statement_pt_br": "O resultado individual permanece noindex, fora de todo sitemap e fora de links internos. Nenhum CNPJ aparece em artefato público, em URL ou em analytics."
+  },
+
+  "downstream_blocks": [
+    {
+      "deliverable_id": "CFG-D11",
+      "catalog_number": "11",
+      "public_name_pt_br": "Mapa de Parceiros e Consórcios",
+      "source_issue": "#332",
+      "issue_item_number": 11,
+      "expected_public_state": "BLOCKED",
+      "expected_blocking_issue": "#156",
+      "expected_route": null,
+      "expected_checkout_enabled": false,
+      "expected_lead_destination": null,
+      "unblock_requires_promotion_state": "PROMOTED"
+    },
+    {
+      "deliverable_id": "CFG-D43",
+      "catalog_number": "43",
+      "public_name_pt_br": "Verificação de Sanções e Restrições Públicas",
+      "source_issue": "#342",
+      "issue_item_number": 43,
+      "expected_public_state": "BLOCKED",
+      "expected_blocking_issue": "#156",
+      "expected_route": null,
+      "expected_checkout_enabled": false,
+      "expected_lead_destination": null,
+      "unblock_requires_promotion_state": "PROMOTED"
+    }
+  ],
+
+  "what_this_pr_does_not_do": [
+    "não desbloqueia CFG-D11",
+    "não desbloqueia CFG-D43",
+    "não cria rota pública de resultado de integridade",
+    "não ressuscita o PR consumer #174",
+    "não configura a chave oficial",
+    "não executa canário com chave",
+    "não chama nenhuma API externa",
+    "não altera página pública, contrato existente ou teste existente"
+  ],
+
+  "external_input_still_required": [
+    {
+      "input_id": "official_api_key_in_ec_prod",
+      "description_pt_br": "PORTAL_TRANSPARENCIA_API_KEY oficial configurada no ec-prod.",
+      "owner": "extra-cli",
+      "state": "PENDING"
+    },
+    {
+      "input_id": "redacted_live_safe_canary_run",
+      "description_pt_br": "Um canário live-safe redigido com paginação terminal e freshness por fonte, sem CNPJ em artefato público.",
+      "owner": "extra-cli",
+      "state": "PENDING"
+    }
+  ],
+
+  "rollback_pt_br": "Reverter o commit remove o gate e a rota do npm test. Nenhuma superfície pública muda, nenhum dado publicado muda e nenhum bloqueio comercial é alterado pela reversão.",
+  "analytics_pt_br": "Nenhum evento novo. Este gate não renderiza superfície, não captura lead e não emite evento de analytics.",
+  "typography": {
+    "em_dash_allowed": false,
+    "en_dash_allowed": false
+  }
+}
