@@ -690,6 +690,21 @@ assert("no_en_dash_in_test_file", !selfRaw.includes(EN_DASH), selfRaw.indexOf(EN
 
 /* ------------------------------------------------------------------ */
 
+const pkg = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
+assert(
+  "npm_script_registered",
+  pkg.scripts?.["test:page-contract-pre-edital"] === "node tests/commercial/test_page_contract_pre_edital.mjs",
+  pkg.scripts?.["test:page-contract-pre-edital"],
+);
+assert("npm_test_runs_gate", String(pkg.scripts?.test ?? "").includes("npm run test:page-contract-pre-edital"), pkg.scripts?.test);
+const workflow = fs.readFileSync(path.join(root, ".github/workflows/site-ci.yml"), "utf8");
+assert("site_ci_runs_gate", workflow.includes("npm run test:page-contract-pre-edital"), ".github/workflows/site-ci.yml");
+const affectedGraph = fs.readFileSync(path.join(root, "scripts/site/affected_graph.mjs"), "utf8");
+assert("affected_graph_declares_gate", affectedGraph.includes('"test:page-contract-pre-edital"'), "scripts/site/affected_graph.mjs");
+assert("affected_graph_declares_contract", affectedGraph.includes("data/commercial/page-contract-pre-edital.v1.json"), "scripts/site/affected_graph.mjs");
+
+/* ------------------------------------------------------------------ */
+
 const failed = results.filter((r) => !r.ok);
 console.log(`${NAME}: ${results.length - failed.length}/${results.length} checks passed`);
 if (failed.length) {
