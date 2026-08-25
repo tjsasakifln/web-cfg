@@ -189,7 +189,7 @@
 .catalog-filters>div:first-child{grid-column:1/-1}
 .catalog-filters>label:first-of-type{grid-column:span 2}
 .catalog-filter-actions{display:flex;grid-column:1/-1;flex-wrap:wrap;gap:8px;padding-top:4px}
-.catalog-filter-actions button,.catalog-compare-tray button,.catalog-empty button{padding:10px 13px;color:#17314b;background:#fff;border:1px solid #9ca9b5;border-radius:5px;font:inherit;font-size:.74rem;font-weight:800;cursor:pointer}
+.catalog-filter-actions button,.catalog-compare-tray button,.catalog-empty button{min-height:44px;padding:10px 13px;color:#17314b;background:#fff;border:1px solid #9ca9b5;border-radius:5px;font:inherit;font-size:.74rem;font-weight:800;cursor:pointer}
 .catalog-filter-actions button[aria-pressed="true"],.catalog-compare-tray [data-compare-open]{color:#fff;background:#0b684f;border-color:#0b684f}
 .catalog-filter-actions button:focus-visible,.catalog-compare-tray button:focus-visible,.catalog-empty button:focus-visible{outline:3px solid rgba(14,124,102,.22);outline-offset:2px}
 .catalog-filter-status{grid-column:1/-1;margin:0;color:#435369;font-family:var(--mono);font-size:.7rem;font-weight:800}
