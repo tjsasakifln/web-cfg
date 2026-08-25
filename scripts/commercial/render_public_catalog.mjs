@@ -68,8 +68,13 @@ function priceLabel(entry) {
 
 function slaLabel(entry) {
   const { business_days_min: min, business_days_max: max, starts_after: after } = entry.sla;
+  if (min === null && max === null) {
+    if (entry.sla.cadence) return `${entry.sla.cadence}; início após ${after}`;
+    if (after === "triagem de enquadramento") return "Definido na triagem de enquadramento";
+    return `Definido na triagem; início após ${after}`;
+  }
   if (!Number.isInteger(min) || !Number.isInteger(max)) {
-    return entry.sla.cadence ? `${entry.sla.cadence}, após ${after}` : `cadência confirmada após ${after}`;
+    throw new Error(`invalid SLA bounds for ${entry.deliverable_id}`);
   }
   const days = min === max ? `${min} dias úteis` : `${min} a ${max} dias úteis`;
   return `${days}, após ${after}`;
