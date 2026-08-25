@@ -1,0 +1,460 @@
+{
+  "schema_version": "semantic-query-ownership/v1",
+  "contract_version": "1.0.0",
+  "as_of": "2026-08-25",
+  "owner_issue": 388,
+  "parent_issue": 387,
+  "priority": "P1",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "INBOUND CORE",
+  "leverage": ["data", "distribution", "revenue"],
+  "time_to_evidence": "contract_and_tests_in_pr; ranking_after_28_complete_days",
+  "public_surface": "https://confenge.com.br",
+  "cluster_id": "medicoes-pagamentos",
+  "visitor_job": "Recuperar medição, contestar glosa e transformar serviço executado em valor recebido com prova contemporânea.",
+  "commercial_destination": "/medicoes-glosas-obras-publicas/",
+  "data_owner": {
+    "query_and_route_decision": "web-cfg",
+    "search_evidence": "Google Search Console versioned exports in web-cfg",
+    "canonical_facts_and_provenance": "extra-cli SELECT-only versioned contracts when factual data is used",
+    "commercial_action": "warmbly with source CONFENGE_WEB"
+  },
+  "inventory": {
+    "policy": "Every existing route discovered by the bounded slug vocabulary or mapped to the cluster in the canonical service map must have exactly one row below.",
+    "discovery": {
+      "exact_paths": ["/medicoes-glosas-obras-publicas/"],
+      "path_tokens": [
+        "medicao",
+        "medicoes",
+        "glosa",
+        "pagamento",
+        "parcela-incontroversa",
+        "fiscal-nao-assina"
+      ],
+      "service_map": "data/organic/content-service-map.json",
+      "service_map_cluster_id": "medicoes-pagamentos"
+    },
+    "expected_existing_routes": 19,
+    "success_metric": "100% classified routes; page count is not success"
+  },
+  "mutation_policy": {
+    "mode": "DECISION_DATA_ONLY",
+    "automatic_robots": false,
+    "automatic_canonical": false,
+    "automatic_redirect": false,
+    "rule": "A score or ownership decision never changes public HTML, robots, canonical or redirects. A later change needs a URL-exact PR, evidence and rollback.",
+    "protected_routes": [
+      {
+        "path": "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "issue": 126,
+        "scope": "external_overlap_orcamento_bdi",
+        "mutation_allowed": false,
+        "not_before": "2026-09-20"
+      },
+      {
+        "path": "/medicoes-glosas-obras-publicas/",
+        "issue": 128,
+        "scope": "cluster_canonical_owner",
+        "mutation_allowed": false,
+        "not_before": "2026-09-16"
+      },
+      {
+        "path": "/conteudos/glosa-de-medicao-obra-publica/",
+        "issue": 127,
+        "scope": "human_research_wait",
+        "mutation_allowed": false,
+        "not_before": "human_editorial_approval"
+      },
+      {
+        "path": "/conteudos/medicao-de-obra-publica-rejeitada/",
+        "issue": 127,
+        "scope": "human_research_wait",
+        "mutation_allowed": false,
+        "not_before": "human_editorial_approval"
+      }
+    ]
+  },
+  "intents": [
+    {
+      "id": "commercial_medicao_glosa_pagamento",
+      "stage": "COMMERCIAL_INVESTIGATION",
+      "job": "Enquadrar uma medição, glosa ou retenção real e decidir a próxima ação técnica.",
+      "representative_queries": [
+        "medições glosas obras públicas",
+        "glosa de medição obra pública",
+        "medição de obra pública rejeitada",
+        "parcela incontroversa medição"
+      ],
+      "negative_queries": [
+        "glosa plano de saúde",
+        "glosa médica convênio",
+        "glosa em contratos de TIC",
+        "glosa TCU como auditoria de contas"
+      ],
+      "canonical_owner": "/medicoes-glosas-obras-publicas/",
+      "owner_rule": "The service pillar owns the broad contractor decision. Narrow informational pages may support it but do not become a second service landing."
+    },
+    {
+      "id": "atraso_processamento_medicao",
+      "stage": "INFORMATIONAL",
+      "job": "Entender como documentar uma medição não processada sem confundir o problema com atraso físico da obra.",
+      "representative_queries": ["atraso na medição obra pública", "medição não processada obra pública"],
+      "negative_queries": ["atraso da obra", "prorrogação de prazo", "chuva na obra pública"],
+      "canonical_owner": "/conteudos/atraso-na-medicao-obra-publica/",
+      "owner_rule": "Own processing delay and cash protection; schedule delay belongs to atrasos-prorrogacao."
+    },
+    {
+      "id": "atraso_pagamento_suspensao",
+      "stage": "INFORMATIONAL",
+      "job": "Entender atraso de pagamento, preservação de direitos e limites de suspensão.",
+      "representative_queries": [
+        "atraso pagamento contrato público suspender",
+        "juros atraso pagamento contrato administrativo"
+      ],
+      "negative_queries": ["atraso na medição", "prorrogação de prazo da obra", "paralisação por chuva"],
+      "canonical_owner": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+      "owner_rule": "Own post-measurement payment delay; physical schedule and extension remain outside this cluster."
+    },
+    {
+      "id": "fiscal_nao_assina_medicao",
+      "stage": "INFORMATIONAL",
+      "job": "Preservar prova e protocolo quando a fiscalização não assina a medição.",
+      "representative_queries": ["fiscal não assina medição obra pública"],
+      "negative_queries": ["fiscal não assina diário de obra", "processo sancionador por atraso"],
+      "canonical_owner": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+      "owner_rule": "Own the refusal-to-sign first-response job, then bridge to the broad service route."
+    },
+    {
+      "id": "glosa_qualidade_extensao",
+      "stage": "INFORMATIONAL",
+      "job": "Distinguir defeito localizado de glosa integral e organizar a prova de qualidade.",
+      "representative_queries": ["glosa por qualidade obra pública", "pode glosar a medição inteira"],
+      "negative_queries": ["glosa médica", "glosa genérica de medição", "auditoria de qualidade ISO"],
+      "canonical_owner": "/conteudos/glosa-por-qualidade-obra-publica/",
+      "owner_rule": "Own only the quality-and-extension question; the broad glosa service query stays on the pillar."
+    },
+    {
+      "id": "criterio_medicao_evento_quantitativo",
+      "stage": "INFORMATIONAL",
+      "job": "Comparar medição por evento e por quantitativo e identificar a prova exigida.",
+      "representative_queries": ["medição por evento obra pública", "medição por evento ou quantitativo"],
+      "negative_queries": ["glosa de medição obra pública", "divergência de orçamento BDI"],
+      "canonical_owner": "/conteudos/medicao-por-evento-obra-publica/",
+      "owner_rule": "Own the criterion-model comparison; noindex criterion/as-built variants remain supporting evidence."
+    },
+    {
+      "id": "pagamento_parcial_empreitada_global",
+      "stage": "INFORMATIONAL",
+      "job": "Verificar quando uma etapa admite pagamento parcial em empreitada global.",
+      "representative_queries": ["pagamento parcial etapa empreitada global"],
+      "negative_queries": ["pagamento parcial de nota fiscal", "medição por evento genérica"],
+      "canonical_owner": "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+      "owner_rule": "Own the regime-specific partial-payment question and bridge to the broad service."
+    },
+    {
+      "id": "caso_demonstrativo_medicao_glosa",
+      "stage": "INFORMATIONAL",
+      "job": "Ver um exemplo demonstrativo do apontamento de glosa até a decisão recomendada.",
+      "representative_queries": ["exemplo medição glosada obra pública", "caso demonstrativo glosa medição"],
+      "negative_queries": ["glosa de medição obra pública", "consultoria glosa medição"],
+      "canonical_owner": "/casos/medicao-glosa-demonstrativo/",
+      "owner_rule": "Own demonstrative/example intent only; it is not permissioned customer proof or a service landing."
+    }
+  ],
+  "routes": [
+    {
+      "path": "/casos/medicao-glosa-demonstrativo/",
+      "status": "INDEXABLE",
+      "intent_roles": [{"intent_id": "caso_demonstrativo_medicao_glosa", "role": "OWNER"}],
+      "semantic_bridge": {"mode": "INFORMATIONAL_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Demonstrative evidence precedes service evaluation; it is not a paid offer."},
+      "decision": "Keep the synthetic demonstrative distinct from broad service and customer proof queries.",
+      "rollback": "Revert only this contract row if the route begins capturing the broad commercial query; no blanket redirect."
+    },
+    {
+      "path": "/conteudos/atraso-na-medicao-obra-publica/",
+      "status": "INDEXABLE",
+      "intent_roles": [{"intent_id": "atraso_processamento_medicao", "role": "OWNER"}],
+      "semantic_bridge": {"mode": "INFORMATIONAL_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Answer processing delay first, then offer a contextual route to the service pillar."},
+      "decision": "Own the narrow processing-delay query, not physical schedule delay.",
+      "rollback": "Restore the previous URL-exact decision if qualified Brazilian impressions move to a worse route."
+    },
+    {
+      "path": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+      "status": "INDEXABLE",
+      "intent_roles": [{"intent_id": "atraso_pagamento_suspensao", "role": "OWNER"}],
+      "semantic_bridge": {"mode": "INFORMATIONAL_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Explain payment-delay limits before a contextual service transition."},
+      "decision": "Own payment delay and suspension, excluding schedule extension.",
+      "rollback": "Revert only this ownership row if it displaces the schedule-delay owner."
+    },
+    {
+      "path": "/conteudos/criterio-de-medicao-nao-previsto-contrato/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "criterio_medicao_evento_quantitativo", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Remain outside the index while supporting the criterion owner and broad service."},
+      "decision": "Retain current noindex; no mass promotion.",
+      "rollback": "Remove only a later URL-exact decision after preserving its prior evidence."
+    },
+    {
+      "path": "/conteudos/divergencia-quantitativo-medicao-as-built/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "criterio_medicao_evento_quantitativo", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Support quantity-proof interpretation without becoming another criterion owner."},
+      "decision": "Retain current noindex pending distinct-demand evidence.",
+      "rollback": "Revert only this row if a later evidence-backed status is reversed."
+    },
+    {
+      "path": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+      "status": "INDEXABLE",
+      "intent_roles": [{"intent_id": "fiscal_nao_assina_medicao", "role": "OWNER"}],
+      "semantic_bridge": {"mode": "INFORMATIONAL_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Resolve the first-48-hours information job before service evaluation."},
+      "decision": "Keep as the sole owner of refusal-to-sign intent.",
+      "rollback": "Revert only this owner decision if a measured query conflict appears."
+    },
+    {
+      "path": "/conteudos/glosa-de-medicao-obra-publica/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "commercial_medicao_glosa_pagamento", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Historical query winner remains noindex under #127; do not redirect it onto the pillar."},
+      "decision": "Preserve #127 HUMAN_RESEARCH_WAIT and historical GSC evidence.",
+      "rollback": "A later human-approved index decision must be URL-exact and can be reverted without touching the pillar.",
+      "protected_by": {"issue": 127, "mutation_allowed": false}
+    },
+    {
+      "path": "/conteudos/glosa-por-qualidade-obra-publica/",
+      "status": "INDEXABLE",
+      "intent_roles": [{"intent_id": "glosa_qualidade_extensao", "role": "OWNER"}],
+      "semantic_bridge": {"mode": "INFORMATIONAL_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Answer quality-scope first; broad commercial glosa remains on the pillar."},
+      "decision": "Keep as the sole owner of quality-glosa extent intent.",
+      "rollback": "Revert only this owner row if it captures the broad service query."
+    },
+    {
+      "path": "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "atraso_pagamento_suspensao", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Support the payment-delay owner without splitting a second indexable landing."},
+      "decision": "Retain noindex until distinct qualified demand is evidenced.",
+      "rollback": "Revert only a later URL-specific decision, preserving this baseline."
+    },
+    {
+      "path": "/conteudos/medicao-de-obra-publica-rejeitada/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "commercial_medicao_glosa_pagamento", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Historical query winner remains noindex under #127 and is not redirected to the pillar."},
+      "decision": "Preserve #127 HUMAN_RESEARCH_WAIT and historical GSC evidence.",
+      "rollback": "A later human-approved index decision must be URL-exact and independently reversible.",
+      "protected_by": {"issue": 127, "mutation_allowed": false}
+    },
+    {
+      "path": "/conteudos/medicao-por-evento-obra-publica/",
+      "status": "INDEXABLE",
+      "intent_roles": [{"intent_id": "criterio_medicao_evento_quantitativo", "role": "OWNER"}],
+      "semantic_bridge": {"mode": "INFORMATIONAL_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Own the model comparison and transition contextually to the service."},
+      "decision": "Keep as the sole indexable criterion-model owner.",
+      "rollback": "Revert only this owner decision if supporting pages begin outranking it for the same intent."
+    },
+    {
+      "path": "/conteudos/pagamento-contrato-publico-certidao-vencida/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "atraso_pagamento_suspensao", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Remain a supporting edge case, not a second payment landing."},
+      "decision": "Retain current noindex.",
+      "rollback": "Revert only a later URL-specific status after preserving the prior row."
+    },
+    {
+      "path": "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+      "status": "INDEXABLE",
+      "intent_roles": [{"intent_id": "pagamento_parcial_empreitada_global", "role": "OWNER"}],
+      "semantic_bridge": {"mode": "INFORMATIONAL_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Answer the regime-specific question before service evaluation."},
+      "decision": "Keep as the sole owner of the partial-payment regime query.",
+      "rollback": "Revert only this owner decision if it cannibalizes broad payment intent."
+    },
+    {
+      "path": "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "commercial_medicao_glosa_pagamento", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Support the pillar's broad decision; do not compete with the Lei 14.133 explainer."},
+      "decision": "Retain current noindex and avoid a duplicate parcela landing.",
+      "rollback": "Revert only a later URL-exact status; never redirect both variants as a batch."
+    },
+    {
+      "path": "/conteudos/prova-de-medicao-diario-de-obra-fotos/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "commercial_medicao_glosa_pagamento", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Remain supporting proof content rather than a commercial owner."},
+      "decision": "Retain current noindex.",
+      "rollback": "Revert only a later URL-specific status after measuring qualified Brazilian demand."
+    },
+    {
+      "path": "/guias-contratos-obras/contestar-glosa-medicao/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "commercial_medicao_glosa_pagamento", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Checklist supports the decision but is not directly assigned to a paid offer."},
+      "decision": "Retain current noindex while the broad service owns the commercial query.",
+      "rollback": "Revert only a later URL-exact decision; preserve checklist evidence."
+    },
+    {
+      "path": "/inteligencia/cenarios/medicao-glosa-contratos-recorrentes/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "commercial_medicao_glosa_pagamento", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Scenario intelligence remains supporting and does not become a second offer route."},
+      "decision": "Retain noindex until unique data and qualified demand clear their own gates.",
+      "rollback": "Revert only a later scenario-specific status; no family-wide flip."
+    },
+    {
+      "path": "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+      "status": "RETAIN_NOINDEX",
+      "intent_roles": [{"intent_id": "commercial_medicao_glosa_pagamento", "role": "SUPPORTING"}],
+      "semantic_bridge": {"mode": "SUPPORTING_TO_SERVICE", "destination": "/medicoes-glosas-obras-publicas/", "rule": "Legal explanation supports, but does not own, the contractor's commercial decision query."},
+      "decision": "Retain current noindex and the distinction from the service route.",
+      "rollback": "Revert only a later URL-exact decision, preserving the service owner."
+    },
+    {
+      "path": "/medicoes-glosas-obras-publicas/",
+      "status": "INDEXABLE",
+      "intent_roles": [{"intent_id": "commercial_medicao_glosa_pagamento", "role": "OWNER"}],
+      "semantic_bridge": {"mode": "DIRECT_OWNER", "destination": "/medicoes-glosas-obras-publicas/", "rule": "This is the one broad commercial destination for the cluster."},
+      "decision": "Canonical semantic owner of broad Medições/Glosas commercial intent; HTML remains frozen by #128.",
+      "rollback": "Revert only a later hash-bound URL patch if the owner loses qualified Brazilian impressions to a worse route.",
+      "protected_by": {"issue": 128, "mutation_allowed": false, "not_before": "2026-09-16"}
+    }
+  ],
+  "overlaps": [
+    {
+      "family": "aditivos",
+      "owner_path": "/aditivos-obras-publicas/",
+      "ownership_rule": "Alteração de escopo, item novo and 25%/50% belong to aditivos; measuring an already executed item and paying it belongs here.",
+      "negative_for_this_cluster": ["aditivo qualitativo", "limite aditivo 25 50", "serviço extra sem cobertura"]
+    },
+    {
+      "family": "atrasos-prorrogacao",
+      "owner_path": "/atrasos-prorrogacao-obras-publicas/",
+      "ownership_rule": "Physical schedule, culpability and extension belong to atrasos; delay in processing a measurement or paying an accepted amount belongs here.",
+      "negative_for_this_cluster": ["prorrogação prazo obra pública", "chuva atraso obra", "culpa da Administração no cronograma"]
+    },
+    {
+      "family": "reequilibrio",
+      "owner_path": "/reequilibrio-obras-publicas/",
+      "ownership_rule": "Recomposition from a supervening cost event belongs to reequilibrio; recognition and payment of executed quantities belongs here.",
+      "negative_for_this_cluster": ["curva ABC reequilíbrio", "fato superveniente custo", "reajuste ou reequilíbrio"]
+    },
+    {
+      "family": "orcamento-bdi",
+      "owner_path": "/auditoria-orcamento-licitacao/",
+      "ownership_rule": "Reference price, SINAPI/SICRO and BDI audit belong to orçamento; contractual measurement criteria and payment belong here.",
+      "negative_for_this_cluster": ["sinapi desonerado", "bdi diferenciado", "auditoria orçamento licitação"]
+    },
+    {
+      "family": "defesa-margem",
+      "owner_path": "/defesa-margem-contratos-publicos/",
+      "ownership_rule": "A broad second reading of one contract belongs to defesa-margem; the specific measurement/glosa decision and its content route to /medicoes-glosas-obras-publicas/.",
+      "negative_for_this_cluster": ["diagnóstico riscos à margem", "segunda leitura contrato público"]
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "broad_glosa_historical_content_winner",
+      "intent_id": "commercial_medicao_glosa_pagamento",
+      "owner_path": "/medicoes-glosas-obras-publicas/",
+      "competing_routes": [
+        "/conteudos/glosa-de-medicao-obra-publica/",
+        "/guias-contratos-obras/contestar-glosa-medicao/"
+      ],
+      "state": "CONTROLLED_BY_CURRENT_NOINDEX",
+      "evidence": "Historical page had 8 impressions, 1 click and position 4.0; service had 8 impressions, 0 clicks and position 7.88 in seo/gsc-2026-08-09.",
+      "resolution": "Keep both supporting routes noindex under the current human/freeze windows; do not 301 them to the pillar.",
+      "rollback": "If a later URL-exact experiment underperforms, restore its prior status without changing sibling routes."
+    },
+    {
+      "id": "medicao_rejeitada_historical_content_winner",
+      "intent_id": "commercial_medicao_glosa_pagamento",
+      "owner_path": "/medicoes-glosas-obras-publicas/",
+      "competing_routes": ["/conteudos/medicao-de-obra-publica-rejeitada/"],
+      "state": "CONTROLLED_BY_CURRENT_NOINDEX",
+      "evidence": "Historical page had 6 impressions, 1 click and position 5.5 in seo/gsc-2026-08-09.",
+      "resolution": "Preserve #127 HUMAN_RESEARCH_WAIT and use the route only as declared supporting content.",
+      "rollback": "Any later human-approved promotion is reverted on this URL only."
+    },
+    {
+      "id": "parcela_incontroversa_duplicate_explainers",
+      "intent_id": "commercial_medicao_glosa_pagamento",
+      "owner_path": "/medicoes-glosas-obras-publicas/",
+      "competing_routes": [
+        "/conteudos/parcela-incontroversa-medicao-contrato-publico/",
+        "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/"
+      ],
+      "state": "CONTROLLED_BY_CURRENT_NOINDEX",
+      "evidence": "Two self-canonical explanatory routes exist but both currently declare noindex,follow.",
+      "resolution": "Keep both outside the index and do not create or redirect a keyword variant.",
+      "rollback": "A later consolidation must name one exact source, one exact target and restore instructions."
+    },
+    {
+      "id": "criterion_variants_compete_with_event_owner",
+      "intent_id": "criterio_medicao_evento_quantitativo",
+      "owner_path": "/conteudos/medicao-por-evento-obra-publica/",
+      "competing_routes": [
+        "/conteudos/criterio-de-medicao-nao-previsto-contrato/",
+        "/conteudos/divergencia-quantitativo-medicao-as-built/"
+      ],
+      "state": "CONTROLLED_BY_CURRENT_NOINDEX",
+      "evidence": "The two variants are current noindex supporting pages; only the event-versus-quantity page is indexable.",
+      "resolution": "Retain the current index boundary until distinct Brazilian demand is observed.",
+      "rollback": "Revert only a later URL-specific promotion if the owner query shifts to the wrong route."
+    },
+    {
+      "id": "payment_delay_edge_variants",
+      "intent_id": "atraso_pagamento_suspensao",
+      "owner_path": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+      "competing_routes": [
+        "/conteudos/juros-atraso-pagamento-contrato-administrativo/",
+        "/conteudos/pagamento-contrato-publico-certidao-vencida/"
+      ],
+      "state": "CONTROLLED_BY_CURRENT_NOINDEX",
+      "evidence": "The edge-case routes are noindex while the suspension/payment-delay page is indexable.",
+      "resolution": "Keep one indexable owner and treat juros/certidão as supporting edge cases.",
+      "rollback": "Revert only a later edge-route decision if it creates query overlap."
+    }
+  ],
+  "gsc_baseline": {
+    "interpretation": "Brazilian qualified demand is the decision denominator. Foreign impressions and missing top rows never prove ICP demand or zero demand.",
+    "current_country_device": {
+      "source": "seo/gsc-2026-08-24/search-analytics-redacted.json",
+      "window": {"start": "2026-07-24", "end": "2026-08-20", "provider_max_date": "2026-08-18"},
+      "dimensions": ["date", "query_hash", "page", "country", "device"],
+      "returned_cluster_set": {"rows": 0, "clicks": 0, "impressions": 0},
+      "missing_row_semantics": "UNKNOWN_NOT_ZERO",
+      "limitation": "Search Analytics returns top rows only; no cluster row in the returned set is not an exhaustive zero."
+    },
+    "historical_page_device": {
+      "window": "7_days_ending_2026-08-09",
+      "pages_source": "seo/gsc-2026-08-09/Paginas.csv",
+      "devices_source": "seo/gsc-2026-08-09/Paginas-por-dispositivo.csv",
+      "country_dimension": "UNAVAILABLE_IN_HISTORICAL_EXPORT",
+      "country_rule": "Do not infer Brazil or use foreign traffic as ICP proof.",
+      "page_rows": [
+        {"route": "/conteudos/atraso-na-medicao-obra-publica/", "clicks": 0, "impressions": 10, "position": 8.1},
+        {"route": "/conteudos/fiscal-nao-assina-medicao-obra-publica/", "clicks": 1, "impressions": 12, "position": 6.5},
+        {"route": "/conteudos/glosa-de-medicao-obra-publica/", "clicks": 1, "impressions": 8, "position": 4.0},
+        {"route": "/conteudos/medicao-de-obra-publica-rejeitada/", "clicks": 1, "impressions": 6, "position": 5.5},
+        {"route": "/medicoes-glosas-obras-publicas/", "clicks": 0, "impressions": 8, "position": 7.88}
+      ],
+      "country_device_rows": [
+        {"route": "/conteudos/glosa-de-medicao-obra-publica/", "country": "UNKNOWN_NOT_EXPORTED", "device": "Celular", "clicks": 0, "impressions": 3, "position": 4.5},
+        {"route": "/conteudos/glosa-de-medicao-obra-publica/", "country": "UNKNOWN_NOT_EXPORTED", "device": "Computador", "clicks": 1, "impressions": 5, "position": 4.0},
+        {"route": "/conteudos/medicao-de-obra-publica-rejeitada/", "country": "UNKNOWN_NOT_EXPORTED", "device": "Celular", "clicks": 0, "impressions": 2, "position": 6.0},
+        {"route": "/conteudos/medicao-de-obra-publica-rejeitada/", "country": "UNKNOWN_NOT_EXPORTED", "device": "Computador", "clicks": 1, "impressions": 4, "position": 5.5}
+      ]
+    }
+  },
+  "next_decision": {
+    "owner": "founder / organic measurement",
+    "not_before": "2026-09-16",
+    "evidence_window": "one complete 28-day GSC window with country and device dimensions",
+    "decision": "KEEP | URL_EXACT_CONSOLIDATE | URL_EXACT_REWRITE | KILL",
+    "north_star": "inbound qualified pipeline per month; clicks and impressions are diagnostic, not the corporate outcome"
+  },
+  "kill_rule": {
+    "trigger": "After a complete comparable 28-day window, kill further ownership/snippet work if the service remains at zero clicks while supporting content retains clicks, or if demand is informational-only at this volume.",
+    "action": "Do not create another page. Preserve the ledger and return the next decision to offer/SERP or qualified-demand evidence.",
+    "rollback": "Revert only the URL-exact decision that reduced qualified Brazilian impressions or shifted the owned query to a worse route."
+  }
+}
