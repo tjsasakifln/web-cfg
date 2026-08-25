@@ -67,6 +67,22 @@ function fail(name, err) {
   console.log("FAIL", name, err);
 }
 
+async function assertStableDocumentTop(targetPage, { samples = 6, intervalMs = 50 } = {}) {
+  await targetPage.evaluate(() => {
+    document.documentElement.style.scrollBehavior = "auto";
+    if (document.body) document.body.style.scrollBehavior = "auto";
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  });
+  const positions = [];
+  for (let index = 0; index < samples; index += 1) {
+    await new Promise((done) => setTimeout(done, intervalMs));
+    positions.push(await targetPage.evaluate(() => Math.round(window.scrollY)));
+  }
+  if (positions.some((position) => Math.abs(position) > 1)) {
+    throw new Error(`document top did not remain stable: ${positions.join(",")}`);
+  }
+}
+
 async function main() {
   let server = null;
   let ownServer = false;
@@ -90,6 +106,27 @@ async function main() {
     process.exit(required ? 2 : 0);
   }
   const page = await browser.newPage();
+
+  // Prove the precondition guard catches asynchronous scroll restoration. A
+  // single window.scrollTo(0, 0) would incorrectly pass this fixture (#407).
+  try {
+    const racePage = await browser.newPage();
+    await racePage.setViewport({ width: 320, height: 844, deviceScaleFactor: 1 });
+    await racePage.setContent('<main style="height:9000px"><h1>fixture</h1></main>');
+    await racePage.evaluate(() => setTimeout(() => window.scrollTo(0, 5000), 75));
+    let detected = false;
+    try {
+      await assertStableDocumentTop(racePage);
+    } catch {
+      detected = true;
+    } finally {
+      await racePage.close();
+    }
+    if (!detected) throw new Error("late scroll fixture was not detected");
+    ok("stable_top_guard_detects_late_scroll");
+  } catch (e) {
+    fail("stable_top_guard_detects_late_scroll", e.message || e);
+  }
 
   // 1) overflow 320–1920
   try {
@@ -1248,11 +1285,15 @@ async function main() {
     ];
     const reports = [];
     for (const width of [320, 390, 768, 1024, 1440]) {
-      await page.setViewport({ width, height: 844, deviceScaleFactor: 1 });
       for (const route of routes) {
         const { path, frozen } = route;
-        await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
-        await page.evaluate(async () => {
+        // Navigation history and in-flight smooth scrolling from earlier tests
+        // must not contaminate a fresh visitor arrival. Each route gets an
+        // isolated page and the top position must remain stable over time.
+        const routePage = await browser.newPage();
+        await routePage.setViewport({ width, height: 844, deviceScaleFactor: 1 });
+        await routePage.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+        await routePage.evaluate(async () => {
           await document.fonts.ready;
           const cover = document.querySelector(".article-cover img");
           if (cover && !cover.complete) {
@@ -1265,19 +1306,8 @@ async function main() {
             ]);
           }
         });
-        // Earlier interaction tests intentionally leave this shared page scrolled.
-        // This gate measures a fresh top-of-document arrival, so make that
-        // precondition explicit instead of depending on navigation restoration.
-        await page.evaluate(async () => {
-          document.documentElement.style.setProperty("scroll-behavior", "auto", "important");
-          document.body.style.setProperty("scroll-behavior", "auto", "important");
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0;
-          await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0;
-        });
-        const rep = await page.evaluate(() => {
+        await assertStableDocumentTop(routePage);
+        const rep = await routePage.evaluate(() => {
           const h1 = document.querySelector("h1");
           const hero = document.querySelector(".content-hero");
           const answer = document.querySelector("#resposta");
@@ -1313,6 +1343,7 @@ async function main() {
             ),
           };
         });
+        await routePage.close();
         reports.push(`${path}@${width}:hero=${rep.heroHeight},answer=${rep.answerTop}`);
         if (!rep.h1Visible) {
           throw new Error(
