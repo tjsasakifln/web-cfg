@@ -92,6 +92,7 @@ def main() -> int:
             "LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL",
             "LEAD_FROM_EMAIL",
             "LEAD_NOTIFY_EMAIL",
+            "NURTURE_TOKEN_SECRET",
             "LEAD_REQUIRE_TURNSTILE",
             "LEAD_PROBE_SECRET",
             "LEAD_REQUIRE_ORIGIN",

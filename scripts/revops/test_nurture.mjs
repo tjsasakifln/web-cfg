@@ -14,8 +14,9 @@ const require = createRequire(import.meta.url);
 process.env.NODE_ENV = "test";
 process.env.NURTURE_ADVANCE_WITHOUT_RESEND = "1";
 process.env.LEAD_ALLOW_MEMORY_FALLBACK = "1";
-delete process.env.RESEND_API_KEY;
+process.env.RESEND_API_KEY = "re_nurture_test";
 process.env.OPS_TOKEN = "x".repeat(24);
+process.env.NURTURE_TOKEN_SECRET = "n".repeat(48);
 
 const storeDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-nurture-"));
 process.env.NURTURE_STORE_DIR = storeDir;
@@ -24,6 +25,13 @@ const core = require(path.join(root, "netlify/functions/lib/nurture-core.cjs"));
 const nurturePath = path.join(root, "netlify/functions/nurture.cjs");
 delete require.cache[require.resolve(nurturePath)];
 const { handler } = require(nurturePath);
+const sentEmails = [];
+const originalFetch = globalThis.fetch;
+globalThis.fetch = async (url, init = {}) => {
+  if (!String(url).includes("api.resend.com")) throw new Error(`unexpected_fetch:${url}`);
+  sentEmails.push(JSON.parse(String(init.body || "{}")));
+  return { ok: true, status: 200, json: async () => ({ id: `msg-${sentEmails.length}` }), text: async () => "" };
+};
 
 let failed = 0;
 function pass(n, d = "") {
@@ -88,6 +96,24 @@ let subId;
 let confirmToken;
 let unsubToken;
 {
+  const secret = process.env.NURTURE_TOKEN_SECRET;
+  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  delete process.env.NURTURE_TOKEN_SECRET;
+  const res = await handler(
+    event("subscribe", {
+      method: "POST",
+      body: { email: "no-secret@example.com", track: "contrato", consent: true },
+    })
+  );
+  process.env.NURTURE_TOKEN_SECRET = secret;
+  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  if (res.statusCode !== 503 || JSON.parse(res.body).error !== "nurture_not_configured") {
+    fail("token_secret_required", { status: res.statusCode, body: res.body });
+  } else if (after !== before) fail("token_secret_failure_persisted", { before, after });
+  else pass("token_secret_required");
+}
+
+{
   const res = await handler(
     event("subscribe", {
       method: "POST",
@@ -104,12 +130,16 @@ let unsubToken;
   if (res.statusCode !== 201 || j.status !== "pending_confirm") fail("subscribe", j);
   else pass("subscribe", j.subscription_id);
   subId = j.subscription_id;
-  // read raw tokens from file store
+  // Raw tokens exist only in the outbound confirmation email, never in the store.
   const rec = JSON.parse(fs.readFileSync(path.join(storeDir, `${subId}.json`), "utf8"));
-  confirmToken = rec._confirm_raw;
-  unsubToken = rec._unsub_raw;
-  if (!confirmToken) fail("confirm_token_stored");
-  else pass("confirm_token_stored");
+  const confirmationText = sentEmails[0]?.text || "";
+  confirmToken = confirmationText.match(/action=confirm[^\s]*[?&]token=([^&\s]+)/)?.[1];
+  unsubToken = confirmationText.match(/action=unsubscribe[^\s]*[?&]token=([^&\s]+)/)?.[1];
+  if (!confirmToken || !unsubToken) fail("tokens_present_only_in_email", confirmationText);
+  else pass("tokens_present_only_in_email");
+  if (rec._confirm_raw || rec._unsub_raw || !rec.unsub_token_sealed) {
+    fail("raw_tokens_not_persisted", rec);
+  } else pass("raw_tokens_not_persisted");
   // public body must not include email
   if (JSON.stringify(j).includes("construtora@")) fail("pii_in_response");
   else pass("no_email_in_subscribe_response");
@@ -206,3 +236,4 @@ if (failed) {
   process.exit(1);
 }
 console.log("\nALL nurture tests passed");
+globalThis.fetch = originalFetch;

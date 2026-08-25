@@ -26,7 +26,13 @@ Templates: `data/nurture/tracks.json`
 | `RESEND_API_KEY` | Envio real |
 | `NURTURE_FROM_EMAIL` | From (default nurture@confenge.com.br) |
 | `OPS_TOKEN` | tick / list / stop_commercial |
+| `NURTURE_TOKEN_SECRET` | Segredo dedicado de 32+ caracteres para selar token de unsubscribe no store |
 | `NURTURE_ADVANCE_WITHOUT_RESEND=1` | Dev/test only |
+
+Novas inscrições falham fechado sem `NURTURE_TOKEN_SECRET`. O token de
+confirmação só existe durante a montagem do e-mail; o token de unsubscribe é
+persistido com AES-256-GCM e AAD ligada ao `subscription_id`. Registros legados
+com `_unsub_raw` são migrados para o formato selado no próximo envio.
 
 Landing: `/nurture/` · Sair: `/nurture/sair/`
 
