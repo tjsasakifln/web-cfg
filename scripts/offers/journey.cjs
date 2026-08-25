@@ -213,6 +213,7 @@ function wrapPaymentObservation(applied) {
   return {
     ...applied,
     observation: commercialEvent({
+      synthetic: applied.event.synthetic === true,
       type: TYPES.PAYMENT_STATE_OBSERVED,
       offer_id: applied.event.offer_id,
       offer_version: applied.event.offer_version,
