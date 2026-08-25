@@ -11,8 +11,10 @@ proposta, pagamento, venda ou disposição a pagar registrada neste repositório
 - cobertura de 54/54 entregáveis com ao menos seis exposições por item;
 - fronteiras críticas apresentadas em conjunto ao menos três vezes;
 - ordem dos cartões congelada antes das sessões;
-- templates agregados, sem PII, para pesquisa, QCOs e decisões por produto;
-- validador fail-closed para impedir promoção por campo ausente ou inferência.
+- templates agregados, de chaves fechadas e sem PII, para pesquisa, QCOs e
+  decisões por produto;
+- validador fail-closed que reconcilia funil, quotas, hash real, entregas,
+  outcomes e os números usados por PROMOTE;
 
 A matriz usa `MF-P01` a `MF-P20` como posições do desenho, não como
 identificadores de pessoas. A associação entre slot e participante real fica no
@@ -39,7 +41,9 @@ npm run test:market-fit-protocol
 O primeiro comando detecta qualquer troca de cartão depois do congelamento. O
 segundo valida os templates e artefatos agregados que venham a ser adicionados.
 O gate pode confirmar prontidão do instrumento, mas somente sessões e QCOs
-reais podem alterar o estado de evidência.
+reais podem alterar o estado de evidência. Uma decisão PROMOTE não aceita
+contadores digitados isoladamente: eles precisam coincidir com os agregados
+revisados de pesquisa e Warmbly do mesmo ciclo.
 
 ## Estado decisório
 
@@ -54,4 +58,3 @@ reais podem alterar o estado de evidência.
 Em 100 repetições, o desenho melhora o sistema apenas quando acumula evidência
 comparável sobre decisão, preço, entrega e outcome. Repetir entrevista sem QCO,
 proposta e retorno decisório cria trabalho, não valida market fit.
-
