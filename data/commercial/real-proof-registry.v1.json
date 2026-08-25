@@ -38,7 +38,10 @@
     "fail_closed": true,
     "purpose_pt_br": "Impedir que prova comercial fabricada entre no site antes de existir uma autorização real de titular, e impedir que o registro seja preenchido de forma desonesta.",
     "blocked_state_rule_pt_br": "Enquanto o estado for BLOCKED_EXTERNAL, a lista de entradas permanece vazia; qualquer entrada presente reprova o gate.",
-    "entries_must_be_empty_while_state_is": ["BLOCKED_EXTERNAL"]
+    "entries_must_be_empty_while_state_is": ["BLOCKED_EXTERNAL"],
+    "allowed_registry_states": ["BLOCKED_EXTERNAL", "PREPARE_ONLY", "AUTHORIZED"],
+    "pre_authorization_entry_states": ["DRAFT", "PENDING_CLIENT_APPROVAL"],
+    "authorized_registry_state": "AUTHORIZED"
   },
   "entry_schema": {
     "required_entry_fields": [
@@ -60,6 +63,14 @@
       "REVOKED"
     ],
     "required_consent_field_reference": "required_consent_fields",
+    "required_consent_field_shapes": {
+      "autorizacao_explicita_do_titular": "non_empty_string",
+      "escopo_de_identificacao_e_reproducao": "non_empty_string",
+      "aprovador_humano_nomeado": "non_empty_string",
+      "evidencia_de_que_a_entrega_ocorreu": "non_empty_string",
+      "fatos_afirmaveis_com_fonte": "non_empty_string_list",
+      "regras_de_retencao_revisao_e_revogacao": "non_empty_string"
+    },
     "required_final_approval_fields": [
       "approver_name",
       "approver_role",
@@ -71,6 +82,7 @@
     "required_verifiable_evidence_fields": ["kind", "reference", "within_authorized_scope"],
     "allowed_verifiable_evidence_kinds": ["trecho", "captura_redigida", "checksum"],
     "required_claim_fields": ["statement_pt_br", "evidence_grade", "source_pt_br"],
+    "calculation_method_field": "calculation_pt_br",
     "required_revocation_fields": ["channel", "removes"],
     "revocation_must_remove": [
       "conteudo_visivel",

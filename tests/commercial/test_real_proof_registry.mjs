@@ -166,6 +166,14 @@ assert(
 /* ------------------------------------------------------------------ */
 
 const schema = data.entry_schema ?? {};
+const CONSENT_SHAPES = {
+  autorizacao_explicita_do_titular: "non_empty_string",
+  escopo_de_identificacao_e_reproducao: "non_empty_string",
+  aprovador_humano_nomeado: "non_empty_string",
+  evidencia_de_que_a_entrega_ocorreu: "non_empty_string",
+  fatos_afirmaveis_com_fonte: "non_empty_string_list",
+  regras_de_retencao_revisao_e_revogacao: "non_empty_string",
+};
 const REQUIRED_ENTRY_FIELDS = [
   "entry_id",
   "state",
@@ -185,6 +193,11 @@ assert(
 for (const f of REQUIRED_ENTRY_FIELDS) {
   assert(`entry_schema_requires_${f}`, (schema.required_entry_fields ?? []).includes(f), f);
 }
+assert(
+  "consent_field_shapes_exact",
+  JSON.stringify(schema.required_consent_field_shapes) === JSON.stringify(CONSENT_SHAPES),
+  schema.required_consent_field_shapes,
+);
 assert(
   "entry_states_declared",
   JSON.stringify(schema.allowed_entry_states) ===
@@ -218,6 +231,7 @@ assert(
   JSON.stringify(schema.required_claim_fields) === JSON.stringify(["statement_pt_br", "evidence_grade", "source_pt_br"]),
   schema.required_claim_fields,
 );
+assert("calculation_method_field_declared", schema.calculation_method_field === "calculation_pt_br", schema.calculation_method_field);
 assert(
   "revocation_fields_declared",
   JSON.stringify(schema.required_revocation_fields) === JSON.stringify(["channel", "removes"]),
@@ -435,7 +449,12 @@ function validateEntry(entry) {
   } else {
     for (const f of CONSENT_FIELDS) {
       if (!(f in consent)) P("consent_missing", f);
-      else if (!filledDeep(consent[f])) P("consent_empty", f);
+      else {
+        if (!filledDeep(consent[f])) P("consent_empty", f);
+        const shape = schema.required_consent_field_shapes?.[f];
+        if (shape === "non_empty_string" && !filled(consent[f])) P("consent_wrong_shape", f);
+        if (shape === "non_empty_string_list" && !filledList(consent[f], 1)) P("consent_wrong_shape", f);
+      }
     }
     for (const k of Object.keys(consent)) {
       if (!CONSENT_FIELDS.includes(k)) P("consent_unknown_field", k);
@@ -454,6 +473,19 @@ function validateEntry(entry) {
       P("final_approval_binding_kind", String(fa.binding_kind));
     }
     if (filled(fa.binding_value) && fa.binding_value.trim().length < 8) P("final_approval_binding_value_too_short");
+    if (filled(fa.approved_at)) {
+      const parsed = new Date(`${fa.approved_at}T00:00:00Z`);
+      const isCalendarDate = /^\d{4}-\d{2}-\d{2}$/.test(fa.approved_at) &&
+        !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === fa.approved_at;
+      if (!isCalendarDate) P("final_approval_invalid_date");
+      else if (parsed.valueOf() > Date.now()) P("final_approval_future_date");
+    }
+    if (fa.binding_kind === "material_hash" && !/^sha256:[a-f0-9]{64}$/i.test(String(fa.binding_value ?? ""))) {
+      P("final_approval_invalid_sha256");
+    }
+    if (fa.binding_kind === "material_version" && !/^[A-Za-z0-9][A-Za-z0-9._:-]{7,}$/.test(String(fa.binding_value ?? ""))) {
+      P("final_approval_invalid_version");
+    }
     if (/\b(bot|ci|agent|automation|claude|robo)\b/i.test(String(fa.approver_name ?? ""))) {
       P("final_approval_non_human_approver");
     }
@@ -478,6 +510,8 @@ function validateEntry(entry) {
   }
 
   const claims = entry.claims;
+  const outcomeClaim = /\b(melhoria|economia|receita|recupera[cç][aã]o|vit[oó]ria|satisfa[cç][aã]o)\b/i;
+  const unknownMarker = /\b(UNKNOWN|desconhecid[oa]|n[aã]o (?:foi|[ée]|pode ser) verificad[oa]?|n[aã]o pode ser medid[oa]|sem medi[cç][aã]o|sem evid[eê]ncia)\b/i;
   if (!Array.isArray(claims) || claims.length < 1) {
     P("claims_missing");
   } else {
@@ -491,10 +525,19 @@ function validateEntry(entry) {
       }
       if (!GRADES.includes(c.evidence_grade)) P(`claim_${i}_bad_grade`, String(c.evidence_grade));
       if (!filled(c.statement_pt_br)) P(`claim_${i}_empty_statement`);
+      if (!filled(c.source_pt_br)) P(`claim_${i}_empty_source`);
+      if (outcomeClaim.test(String(c.statement_pt_br ?? "")) && !["FACT", "CALCULATION"].includes(c.evidence_grade)) {
+        P(`claim_${i}_outcome_requires_fact_or_calculation`);
+      }
+      if (c.evidence_grade === "CALCULATION" && !filled(c[schema.calculation_method_field])) {
+        P(`claim_${i}_calculation_method_missing`);
+      }
+      if (c.evidence_grade === "INFERENCE" && !/\b(infer[eê]ncia|interpreta[cç][aã]o)\b/i.test(String(c.statement_pt_br ?? ""))) {
+        P(`claim_${i}_inference_not_labelled`);
+      }
       if (c.evidence_grade === "UNKNOWN") {
         if (/\d/.test(String(c.statement_pt_br ?? ""))) P(`claim_${i}_unknown_filled_with_number`);
-      } else if (!filled(c.source_pt_br)) {
-        P(`claim_${i}_empty_source`);
+        if (!unknownMarker.test(String(c.statement_pt_br ?? ""))) P(`claim_${i}_unknown_not_labelled`);
       }
     });
   }
@@ -505,6 +548,12 @@ function validateEntry(entry) {
   } else {
     if (dist.canary !== true) P("distribution_not_canary");
     if (!Array.isArray(dist.surfaces) || dist.surfaces.length < 1) P("distribution_no_surfaces");
+    else for (const surface of dist.surfaces) {
+      if (!/^\/(?:[a-z0-9-]+\/)*$/.test(String(surface))) P("distribution_bad_surface", String(surface));
+      const slug = String(surface).replace(/^\/+|\/+$/g, "");
+      const file = slug ? path.join(root, slug, "index.html") : path.join(root, "index.html");
+      if (!fs.existsSync(file)) P("distribution_surface_missing", String(surface));
+    }
     if (dist.logo_carousel === true) P("distribution_logo_carousel");
     if (dist.aggregate_rating === true) P("distribution_aggregate_rating");
     if (dist.review_schema === true) P("distribution_review_schema");
@@ -530,8 +579,15 @@ function validateRegistryShape(reg) {
   const problems = [];
   const entries = Array.isArray(reg.entries) ? reg.entries : null;
   if (entries === null) return ["entries_not_array"];
+  const allowedRegistryStates = data.gate?.allowed_registry_states ?? [];
+  if (!allowedRegistryStates.includes(reg.state)) problems.push("bad_registry_state");
   const blockedStates = data.gate?.entries_must_be_empty_while_state_is ?? [];
   if (blockedStates.includes(reg.state) && entries.length > 0) problems.push("entries_present_while_blocked");
+  const authorizedState = data.gate?.authorized_registry_state;
+  const preAuthorizationStates = data.gate?.pre_authorization_entry_states ?? [];
+  if (reg.state !== authorizedState && entries.some((entry) => entry && !preAuthorizationStates.includes(entry.state))) {
+    problems.push("entry_state_requires_authorized_registry");
+  }
   const published = entries.filter((e) => e && e.state === "PUBLISHED");
   if (published.length > schema.max_published_entries) problems.push("more_than_one_canary");
   const ids = entries.map((e) => e && e.entry_id);
@@ -627,6 +683,14 @@ for (const f of CONSENT_FIELDS) {
   const falseValue = clone(WELL_FORMED);
   falseValue.consent[f] = false;
   assert(`fixture_consent_false_${f}_fails`, validateEntry(falseValue).includes(`consent_empty:${f}`), f);
+
+  const trueValue = clone(WELL_FORMED);
+  trueValue.consent[f] = true;
+  assert(`fixture_consent_true_${f}_fails`, validateEntry(trueValue).includes(`consent_wrong_shape:${f}`), f);
+
+  const numericValue = clone(WELL_FORMED);
+  numericValue.consent[f] = 1;
+  assert(`fixture_consent_number_${f}_fails`, validateEntry(numericValue).includes(`consent_wrong_shape:${f}`), f);
 }
 {
   const noConsent = clone(WELL_FORMED);
@@ -671,6 +735,22 @@ for (const f of ["approver_name", "approver_role", "approved_at", "binding_kind"
     "fixture_final_approval_short_binding_fails",
     validateEntry(shortBinding).includes("final_approval_binding_value_too_short"),
     validateEntry(shortBinding),
+  );
+
+  const invalidDate = clone(WELL_FORMED);
+  invalidDate.final_approval.approved_at = "2026-02-31";
+  assert(
+    "fixture_final_approval_invalid_calendar_date_fails",
+    validateEntry(invalidDate).includes("final_approval_invalid_date"),
+    validateEntry(invalidDate),
+  );
+
+  const fakeHash = clone(WELL_FORMED);
+  fakeHash.final_approval.binding_value = "sha256:not-a-real-digest";
+  assert(
+    "fixture_final_approval_fake_hash_fails",
+    validateEntry(fakeHash).includes("final_approval_invalid_sha256"),
+    validateEntry(fakeHash),
   );
 
   const versionBinding = clone(WELL_FORMED);
@@ -741,9 +821,40 @@ for (const f of ["approver_name", "approver_role", "approved_at", "binding_kind"
     validateEntry(unknownFilled),
   );
 
+  const outcomeAsInference = clone(WELL_FORMED);
+  outcomeAsInference.claims = [{
+    statement_pt_br: "inferência de economia para o cliente",
+    evidence_grade: "INFERENCE",
+    source_pt_br: "fonte sintética",
+  }];
+  assert(
+    "fixture_outcome_as_inference_fails",
+    validateEntry(outcomeAsInference).includes("claim_0_outcome_requires_fact_or_calculation"),
+    validateEntry(outcomeAsInference),
+  );
+
+  const calculationWithoutMethod = clone(WELL_FORMED);
+  calculationWithoutMethod.claims = [{
+    statement_pt_br: "economia calculada de 10 por cento",
+    evidence_grade: "CALCULATION",
+    source_pt_br: "dados sintéticos",
+  }];
+  assert(
+    "fixture_calculation_without_method_fails",
+    validateEntry(calculationWithoutMethod).includes("claim_0_calculation_method_missing"),
+    validateEntry(calculationWithoutMethod),
+  );
+
   for (const grade of GRADES) {
     const ok = clone(WELL_FORMED);
-    ok.claims = [{ statement_pt_br: "afirmacao sintetica da fixture", evidence_grade: grade, source_pt_br: "fonte sintetica" }];
+    const statementByGrade = {
+      FACT: "afirmacao sintetica da fixture",
+      CALCULATION: "economia calculada a partir da fixture",
+      INFERENCE: "inferência sintética claramente rotulada",
+      UNKNOWN: "resultado desconhecido por falta de medição",
+    };
+    ok.claims = [{ statement_pt_br: statementByGrade[grade], evidence_grade: grade, source_pt_br: "fonte sintetica" }];
+    if (grade === "CALCULATION") ok.claims[0].calculation_pt_br = "subtração explícita entre dois valores sintéticos declarados";
     assert(`fixture_claim_grade_${grade}_passes`, validateEntry(ok).length === 0, grade);
   }
 }
@@ -769,6 +880,14 @@ for (const f of ["approver_name", "approver_role", "approved_at", "binding_kind"
   const noSurfaces = clone(WELL_FORMED);
   noSurfaces.distribution.surfaces = [];
   assert("fixture_no_surfaces_fails", validateEntry(noSurfaces).includes("distribution_no_surfaces"), validateEntry(noSurfaces));
+
+  const missingSurface = clone(WELL_FORMED);
+  missingSurface.distribution.surfaces = ["/rota-inexistente-do-gate/"];
+  assert(
+    "fixture_missing_distribution_surface_fails",
+    validateEntry(missingSurface).includes("distribution_surface_missing:/rota-inexistente-do-gate/"),
+    validateEntry(missingSurface),
+  );
 }
 
 /* revogacao completa */
@@ -809,6 +928,23 @@ assert("registry_shape_valid_today", validateRegistryShape(data).length === 0, v
     "simulated_authorized_with_valid_entry_passes",
     validateRegistryShape(authorizedWithGoodEntry).length === 0,
     validateRegistryShape(authorizedWithGoodEntry),
+  );
+  const preparingDraft = clone(WELL_FORMED);
+  preparingDraft.state = "DRAFT";
+  assert(
+    "simulated_prepare_only_with_draft_passes",
+    validateRegistryShape({ state: "PREPARE_ONLY", entries: [preparingDraft] }).length === 0,
+    validateRegistryShape({ state: "PREPARE_ONLY", entries: [preparingDraft] }),
+  );
+  assert(
+    "simulated_prepare_only_with_approved_entry_fails",
+    validateRegistryShape({ state: "PREPARE_ONLY", entries: [clone(WELL_FORMED)] }).includes("entry_state_requires_authorized_registry"),
+    validateRegistryShape({ state: "PREPARE_ONLY", entries: [clone(WELL_FORMED)] }),
+  );
+  assert(
+    "simulated_unknown_registry_state_fails",
+    validateRegistryShape({ state: "LIVE", entries: [] }).includes("bad_registry_state"),
+    validateRegistryShape({ state: "LIVE", entries: [] }),
   );
   const bare = clone(WELL_FORMED);
   bare.consent = {};
