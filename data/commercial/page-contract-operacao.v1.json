@@ -1,0 +1,621 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "page-contract-operacao.v1",
+  "family_pt_br": "Operação e acompanhamento",
+  "scope_pt_br": "Contrato de página dos itens 24 e 25 da issue 334: diagnóstico da operação em obras públicas e acompanhamento preventivo de um contrato público ativo.",
+  "source_issue": 334,
+  "parent_issue": 329,
+  "related_issues": [88, 232, 327, 343],
+  "naming_authority_issue": 343,
+  "decision_state": "VALIDATE",
+  "priority": "P1",
+  "executive_front": "REVENUE NOW + CUSTOMER EXPANSION",
+  "leverage": ["revenue", "customer", "trust"],
+  "time_to_evidence_days": 21,
+  "research_state": "NOT_STARTED",
+  "evidence": [],
+  "human_validation": {
+    "state": "NOT_STARTED",
+    "real_proposals_required_before_promoting_price": 3,
+    "collected": []
+  },
+  "currency": "BRL",
+  "price_unit": "cents",
+  "price_basis": "piloto",
+  "pages_created_by_this_contract": [],
+  "checkout_enabled_anywhere": false,
+  "public_price_copy_published_by_this_contract": false,
+  "naming_divergence": {
+    "authority_issue": 343,
+    "authority_wins_on_names": true,
+    "scope_and_price_of_issue_334_remain_valid": true,
+    "statement_pt_br": "A issue 343 é a fonte canônica de nome público, linha de valor e aliases. Em divergência nominal prevalece a 343. O escopo e o preço-piloto declarados pela issue 334 permanecem válidos."
+  },
+  "common_rules": {
+    "pilot_prices_do_not_change_other_items": true,
+    "capacity_gate_required_in_family": true,
+    "automatic_checkout_anywhere_in_family": false,
+    "lead_capture_required_where_price_is_displayed": true,
+    "no_data_or_identity_originates_in_web_cfg": true,
+    "truth_and_provenance_remain_in": "extra-cli",
+    "no_success_fee": true,
+    "no_promise_of_result_or_award": true,
+    "no_legal_practice": true,
+    "evidence_grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+    "missing_data_rule_pt_br": "Ausência de dado vira UNKNOWN declarado, nunca estimativa apresentada como fato.",
+    "forbidden_constructs": {
+      "saas_subscription": false,
+      "free_trial": false,
+      "platform_quota": false,
+      "smartlic_reference": false
+    },
+    "forbidden_constructs_statement_pt_br": "Nenhum item desta família é assinatura de software, nenhum item oferece período de teste gratuito, nenhum item mede escopo por quota de plataforma e nenhum item referencia a marca legada de licitações.",
+    "statements_pt_br": [
+      "Os preços desta família são pilotos do estado VALIDATE e não alteram nenhum preço já aprovado da Diretoria Fracionada para o Mercado Público nem do Diagnóstico de Expansão no Mercado Público.",
+      "Toda contratação desta família depende de capacidade confirmada e não tem checkout automático.",
+      "Nenhum item desta família é assinatura de software, período de teste gratuito ou quota de plataforma.",
+      "Nenhum dado, planilha ou identidade nasce no web-cfg: verdade e proveniência permanecem no extra-cli.",
+      "Nenhum item desta família tem comissão de êxito, promete resultado, presta advocacia, elabora peça, protocola ou representa a empresa perante o órgão."
+    ]
+  },
+  "hundred_repetition_rule": {
+    "question_pt_br": "Cem repetições melhoram o sistema ou apenas criam cem unidades de trabalho artesanal?",
+    "item_24_system_gain_pt_br": [
+      "benchmark de maturidade",
+      "taxa de acerto da recomendação"
+    ],
+    "item_25_system_gain_pt_br": [
+      "biblioteca de eventos",
+      "templates de registro",
+      "detecção precoce"
+    ],
+    "scale_denied_if_only_multiplies_artisanal_meetings": true,
+    "statement_pt_br": "O item 24 precisa melhorar o benchmark de maturidade e a taxa de acerto da recomendação. O item 25 precisa melhorar a biblioteca de eventos, os templates de registro e a detecção precoce. Se apenas multiplicar reuniões artesanais, esta família não recebe escala."
+  },
+  "ownership_not_appropriated_by_this_contract": [
+    {
+      "issue": 232,
+      "owns_pt_br": "captura",
+      "owner_scope_pt_br": "Captura de lead na página, incluindo formulário, campos e destino do lead.",
+      "reopened_here": false,
+      "statement_pt_br": "A captura de lead continua sob a issue 232. Este contrato não cria formulário, não altera campos e não redefine destino de lead."
+    },
+    {
+      "issue": 88,
+      "owns_pt_br": "checkout",
+      "owner_scope_pt_br": "Orquestração de intenção, próxima melhor ação, catálogo de ofertas e checkout.",
+      "reopened_here": false,
+      "statement_pt_br": "O checkout continua sob a issue 88. Este contrato não habilita checkout, não cria offer_id e não altera o catálogo congelado."
+    },
+    {
+      "issue": 327,
+      "owns_pt_br": "first-fold",
+      "owner_scope_pt_br": "Primeira dobra das páginas de dinheiro e sobrevivência ao teste cético de 3 segundos.",
+      "reopened_here": false,
+      "statement_pt_br": "A primeira dobra continua sob a issue 327. Este contrato não escreve copy de página e não altera hierarquia visual."
+    }
+  ],
+  "routes_published_and_not_modified_by_this_contract": [
+    {
+      "route": "/diagnostico-b2g-360/",
+      "page_file": "diagnostico-b2g-360/index.html",
+      "owner_deliverable_id": "CFG-D24",
+      "modified_by_this_contract": false,
+      "price_copy_published": false
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "page_file": "acompanhamento-contratos-obras/index.html",
+      "owner_deliverable_id": "CFG-D25",
+      "modified_by_this_contract": false,
+      "price_copy_published": false
+    }
+  ],
+  "frozen_references": {
+    "source": "data/offers/catalog.snapshot.json",
+    "frozen_at": "2026-08-17",
+    "changed_by_this_contract": false,
+    "statement_pt_br": "Os preços e a capacidade da Diretoria Fracionada para o Mercado Público e do Diagnóstico de Expansão no Mercado Público estão congelados no catálogo e não são alterados por este contrato.",
+    "offers": [
+      { "offer_id": "CFG-DIAG-EXP-v1", "amount_cents": 800000 },
+      { "offer_id": "CFG-DIRB2G-FLEX-v1", "amount_cents": 2000000 },
+      { "offer_id": "CFG-DIRB2G-180-v1", "amount_cents": 1500000 },
+      { "offer_id": "CFG-DIRB2G-365-v1", "amount_cents": 1250000 }
+    ]
+  },
+  "differentiation_table": {
+    "required": true,
+    "required_where_pt_br": "Onde o visitante pode confundir as quatro ofertas: diagnóstico da operação, diagnóstico de expansão, acompanhamento de um contrato e Diretoria Fracionada para o Mercado Público.",
+    "publication_state": "NOT_STARTED",
+    "published_by_this_contract": false,
+    "publication_owner_issue": 327,
+    "row_count": 6,
+    "rows": [
+      {
+        "order": 1,
+        "kind": "deliverable",
+        "source_file": "data/commercial/deliverables-registry.v1.json",
+        "source_id": "CFG-D24",
+        "public_name_pt_br": "Diagnóstico da Operação em Obras Públicas",
+        "issue_label_pt_br": "Diagnóstico da Operação em Obras Públicas",
+        "question_pt_br": "Onde a operação perde tempo, margem e controle?",
+        "price_cents": 690000,
+        "price_display_pt_br": "R$ 6.900 uma vez",
+        "billing": "one_time",
+        "installments": 1,
+        "total_commitment_cents": 690000,
+        "changed_by_this_contract": false
+      },
+      {
+        "order": 2,
+        "kind": "container",
+        "source_file": "data/offers/catalog.snapshot.json",
+        "source_id": "CFG-DIAG-EXP-v1",
+        "public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
+        "issue_label_pt_br": "Diagnóstico de Expansão no Mercado Público",
+        "question_pt_br": "Em quais compradores, territórios e segmentos concentrar expansão?",
+        "price_cents": 800000,
+        "price_display_pt_br": "R$ 8.000 uma vez",
+        "billing": "one_time",
+        "installments": 1,
+        "total_commitment_cents": 800000,
+        "changed_by_this_contract": false
+      },
+      {
+        "order": 3,
+        "kind": "deliverable",
+        "source_file": "data/commercial/deliverables-registry.v1.json",
+        "source_id": "CFG-D25",
+        "public_name_pt_br": "Acompanhamento Preventivo do Contrato Público",
+        "issue_label_pt_br": "Acompanhamento Preventivo",
+        "question_pt_br": "Como um contrato ativo deve registrar e decidir antes da crise?",
+        "price_cents": 690000,
+        "price_display_pt_br": "R$ 6.900/mês por contrato",
+        "billing": "subscription_monthly",
+        "installments": null,
+        "total_commitment_cents": null,
+        "changed_by_this_contract": false
+      },
+      {
+        "order": 4,
+        "kind": "container_plan",
+        "source_file": "data/offers/catalog.snapshot.json",
+        "source_id": "CFG-DIRB2G-FLEX-v1",
+        "public_name_pt_br": "Diretoria Fracionada para o Mercado Público Flex",
+        "issue_label_pt_br": "Diretoria Fracionada para o Mercado Público Flex",
+        "question_pt_br": "Como coordenar até quatro oportunidades e um contrato com direção semanal?",
+        "price_cents": 2000000,
+        "price_display_pt_br": "R$ 20.000/mês",
+        "billing": "subscription_monthly",
+        "installments": null,
+        "total_commitment_cents": null,
+        "changed_by_this_contract": false
+      },
+      {
+        "order": 5,
+        "kind": "container_plan",
+        "source_file": "data/offers/catalog.snapshot.json",
+        "source_id": "CFG-DIRB2G-180-v1",
+        "public_name_pt_br": "Diretoria Fracionada para o Mercado Público 180",
+        "issue_label_pt_br": "Diretoria Fracionada para o Mercado Público 180",
+        "question_pt_br": "Mesmo escopo da Diretoria Fracionada para o Mercado Público Flex, com compromisso de 6 meses.",
+        "price_cents": 1500000,
+        "price_display_pt_br": "6 x R$ 15.000",
+        "billing": "subscription_monthly",
+        "installments": 6,
+        "total_commitment_cents": 9000000,
+        "changed_by_this_contract": false
+      },
+      {
+        "order": 6,
+        "kind": "container_plan",
+        "source_file": "data/offers/catalog.snapshot.json",
+        "source_id": "CFG-DIRB2G-365-v1",
+        "public_name_pt_br": "Diretoria Fracionada para o Mercado Público 365",
+        "issue_label_pt_br": "Diretoria Fracionada para o Mercado Público 365",
+        "question_pt_br": "Mesmo escopo da Diretoria Fracionada para o Mercado Público Flex, com compromisso de 12 meses.",
+        "price_cents": 1250000,
+        "price_display_pt_br": "12 x R$ 12.500",
+        "billing": "subscription_monthly",
+        "installments": 12,
+        "total_commitment_cents": 15000000,
+        "changed_by_this_contract": false
+      }
+    ]
+  },
+  "expansion_credit_rule": {
+    "source_item": 24,
+    "source_deliverable_id": "CFG-D24",
+    "source_public_name_pt_br": "Diagnóstico da Operação em Obras Públicas",
+    "cap_cents": 200000,
+    "cap_display_pt_br": "R$ 2.000",
+    "window_days": 30,
+    "uses_allowed": 1,
+    "accumulates": false,
+    "basis": "highest_single_paid",
+    "credits_into": ["CFG-D25", "diretoria_fracionada"],
+    "applies_to_first_monthly_instalment_only": true,
+    "instalment_pt_br": "primeira mensalidade",
+    "not_credited_into": [
+      {
+        "target_id": "expansion_package",
+        "public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
+        "reason_pt_br": "O Diagnóstico de Expansão no Mercado Público responde outra pergunta, sobre compradores, territórios e segmentos, e por isso não recebe o crédito do item 24."
+      }
+    ],
+    "statement_pt_br": "O Diagnóstico da Operação em Obras Públicas gera crédito de até R$ 2.000 na primeira mensalidade do Acompanhamento Preventivo do Contrato Público ou da Diretoria Fracionada para o Mercado Público, se a contratação ocorrer em 30 dias. O crédito não se aplica ao Diagnóstico de Expansão no Mercado Público. É um crédito único e não acumulável."
+  },
+  "items": [
+    {
+      "number": 24,
+      "catalog_number": "24",
+      "deliverable_id": "CFG-D24",
+      "public_name_pt_br": "Diagnóstico da Operação em Obras Públicas",
+      "value_line_pt_br": "Mostra onde a operação perde oportunidades, tempo, margem e controle.",
+      "name_aliases": ["Diagnóstico B2G 360°"],
+      "name_state": "RENAME_PENDING",
+      "decision_question_pt_br": "Onde a operação perde tempo, margem e controle?",
+      "trigger_pt_br": "A direção suspeita que o gargalo é a própria operação B2G, não a falta de oportunidade.",
+      "verb_pt_br": "diagnostica",
+      "task_door": "CAPABILITY",
+      "public_state": "VALIDATE",
+      "route": "/diagnostico-b2g-360/",
+      "page_file": "diagnostico-b2g-360/index.html",
+      "page_exists": true,
+      "page_created_by_this_contract": false,
+      "page_modified_by_this_contract": false,
+      "price_copy_published_on_page": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "pricing": {
+        "model": "one_time",
+        "price_cents": 690000,
+        "price_display_pt_br": "R$ 6.900",
+        "billing": "one_time",
+        "commitment_months": null,
+        "notice_days": null,
+        "unit_basis_pt_br": "uma empresa ou CNPJ",
+        "price_state": "PILOT_HYPOTHESIS"
+      },
+      "sla": {
+        "business_days_min": 7,
+        "business_days_max": 10,
+        "display_pt_br": "7 a 10 dias úteis",
+        "starts_after_pt_br": "inputs e entrevistas",
+        "safe_deadline_business_days": null
+      },
+      "capacity_gate": {
+        "required": true,
+        "automatic_checkout": false,
+        "statement_pt_br": "A contratação depende de capacidade confirmada e não tem checkout automático."
+      },
+      "scope": {
+        "unit_pt_br": "uma empresa ou CNPJ",
+        "max_interviews": 4,
+        "interview_roles_pt_br": [
+          "direção",
+          "licitações ou comercial",
+          "orçamento ou engenharia",
+          "contratos ou financeiro"
+        ],
+        "limits_pt_br": [
+          "até quatro entrevistas: direção, licitações ou comercial, orçamento ou engenharia, contratos ou financeiro",
+          "a carteira ativa apresentada"
+        ]
+      },
+      "inputs_pt_br": [
+        "carteira recente",
+        "atestados e acervo",
+        "propostas e BDIs relevantes",
+        "contratos ativos",
+        "organograma e responsáveis",
+        "indicadores existentes"
+      ],
+      "outputs_pt_br": [
+        "mapa de maturidade nos seis eixos publicados",
+        "gargalos com evidência",
+        "prioridades ordenadas",
+        "backlog de 90 dias com dono, dependência e decisão",
+        "recomendação: interno, entrega pontual, Operação de Proposta para Licitação Crítica, Acompanhamento ou Diretoria"
+      ],
+      "exclusions_pt_br": [
+        "operação dos 90 dias",
+        "elaboração de propostas",
+        "inteligência territorial profunda",
+        "promessa comercial",
+        "assinatura SaaS ou trial"
+      ],
+      "terminal_artifact": {
+        "ends_in_pt_br": "backlog de 90 dias com dono, dependência e decisão",
+        "is_generic_report": false,
+        "maturity_axes_count": 6,
+        "recommendation_options_pt_br": [
+          "interno",
+          "entrega pontual",
+          "Operação de Proposta para Licitação Crítica",
+          "Acompanhamento Preventivo do Contrato Público",
+          "Diretoria Fracionada para o Mercado Público"
+        ],
+        "statement_pt_br": "O Diagnóstico da Operação em Obras Públicas termina em backlog de 90 dias com dono, dependência e decisão, nunca em relatório genérico."
+      },
+      "credit_rule": {
+        "source_item": 24,
+        "cap_cents": 200000,
+        "window_days": 30,
+        "uses_allowed": 1,
+        "accumulates": false,
+        "basis": "highest_single_paid",
+        "credits_into": ["CFG-D25", "diretoria_fracionada"],
+        "applies_to_first_monthly_instalment_only": true,
+        "statement_pt_br": "O crédito nasce no item pagador, o 24, vale até R$ 2.000 na primeira mensalidade do item 25 ou da Diretoria Fracionada para o Mercado Público contratada em 30 dias, uma única vez e sem acumulação."
+      },
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora peça e não emite parecer jurídico.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "O diagnóstico é obrigação de meio e não promete resultado comercial, contratação nem adjudicação.",
+        "Não há comissão de êxito em nenhuma hipótese.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ],
+      "boundary_vs_neighbour_offers": [
+        {
+          "against_id": "expansion_package",
+          "against_public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
+          "their_question_pt_br": "Em quais compradores, territórios e segmentos concentrar expansão?",
+          "our_question_pt_br": "Onde a operação perde tempo, margem e controle?",
+          "statement_pt_br": "O item 24 olha para dentro e diagnostica a operação que já existe. O Diagnóstico de Expansão no Mercado Público olha para fora e escolhe compradores, territórios e segmentos. São perguntas diferentes e por isso o crédito do item 24 não se aplica ao Diagnóstico de Expansão."
+        },
+        {
+          "against_id": "CFG-D25",
+          "against_public_name_pt_br": "Acompanhamento Preventivo do Contrato Público",
+          "their_question_pt_br": "Como um contrato ativo deve registrar e decidir antes da crise?",
+          "our_question_pt_br": "Onde a operação perde tempo, margem e controle?",
+          "statement_pt_br": "O item 24 é um diagnóstico único da empresa e termina em backlog de 90 dias. O item 25 é uma rotina mensal sobre um contrato ativo. O item 24 não executa os 90 dias que recomenda."
+        },
+        {
+          "against_id": "diretoria_fracionada",
+          "against_public_name_pt_br": "Diretoria Fracionada para o Mercado Público",
+          "their_question_pt_br": "Como coordenar até quatro oportunidades e um contrato com direção semanal?",
+          "our_question_pt_br": "Onde a operação perde tempo, margem e controle?",
+          "statement_pt_br": "O item 24 diagnostica e recomenda. A Diretoria Fracionada para o Mercado Público coordena a carteira, as propostas e um contrato com direção semanal. O item 24 não coordena nada e não altera preço nem capacidade da Diretoria."
+        }
+      ],
+      "prohibitions": {
+        "success_fee": false,
+        "promises_result_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false,
+        "saas_subscription": false,
+        "free_trial": false,
+        "platform_quota": false,
+        "smartlic_reference": false,
+        "automatic_checkout": false
+      }
+    },
+    {
+      "number": 25,
+      "catalog_number": "25",
+      "deliverable_id": "CFG-D25",
+      "public_name_pt_br": "Acompanhamento Preventivo do Contrato Público",
+      "value_line_pt_br": "Acompanha eventos antes que prova, prazo ou caixa se percam.",
+      "name_aliases": ["Acompanhamento Preventivo de Contrato"],
+      "name_state": "RENAME_PENDING",
+      "decision_question_pt_br": "Como um contrato ativo deve registrar e decidir antes da crise?",
+      "trigger_pt_br": "O contrato está em execução e os fatos não viram registro antes de virarem prejuízo.",
+      "verb_pt_br": "acompanha",
+      "task_door": "PROTECT",
+      "public_state": "VALIDATE",
+      "route": "/acompanhamento-contratos-obras/",
+      "page_file": "acompanhamento-contratos-obras/index.html",
+      "page_exists": true,
+      "page_created_by_this_contract": false,
+      "page_modified_by_this_contract": false,
+      "price_copy_published_on_page": false,
+      "checkout_enabled": false,
+      "lead_destination": "warmbly:CONFENGE_WEB",
+      "pricing": {
+        "model": "subscription_monthly",
+        "price_cents": 690000,
+        "price_display_pt_br": "R$ 6.900/mês por contrato",
+        "billing": "subscription_monthly",
+        "cycle": "MONTHLY",
+        "commitment_months": 3,
+        "notice_days": 30,
+        "unit_basis_pt_br": "por contrato",
+        "price_state": "PILOT_HYPOTHESIS"
+      },
+      "sla": {
+        "business_days_min": null,
+        "business_days_max": null,
+        "display_pt_br": "sem prazo de entrega único: a entrega é recorrente e segue a cadência contratada",
+        "starts_after_pt_br": "contratação e capacidade confirmada",
+        "safe_deadline_business_days": null,
+        "cadence_pt_br": "semanal assíncrona, uma reunião executiva mensal de até 90 minutos e até duas reuniões táticas de 30 minutos quando necessárias"
+      },
+      "cadence": {
+        "weekly_asynchronous": true,
+        "executive_meetings_per_month": 1,
+        "executive_meeting_max_minutes": 90,
+        "tactical_meetings_per_month_max": 2,
+        "tactical_meeting_max_minutes": 30,
+        "unlimited_urgency": false
+      },
+      "capacity_gate": {
+        "required": true,
+        "automatic_checkout": false,
+        "statement_pt_br": "A contratação depende de capacidade confirmada e não tem checkout automático."
+      },
+      "scope": {
+        "unit_pt_br": "um contrato ativo não litigioso",
+        "contracts_covered": 1,
+        "non_litigious_required": true,
+        "initial_cycle_months": 3,
+        "notice_days": 30,
+        "limits_pt_br": [
+          "ciclo inicial de 3 meses",
+          "aviso de 30 dias",
+          "contratação depende de capacidade",
+          "sem checkout automático"
+        ]
+      },
+      "inputs_pt_br": [
+        "contrato e anexos",
+        "cronograma",
+        "acesso ao diário e comunicações",
+        "medições",
+        "responsável interno nomeado"
+      ],
+      "outputs_pt_br": [
+        "matriz de obrigações, mudanças e pendências",
+        "painel de prazo, medição e caixa",
+        "fila de fatos ainda não convertidos em pleito",
+        "pauta e ata de decisão",
+        "alertas de lacuna documental",
+        "encaminhamento para dossiê específico"
+      ],
+      "exclusions_pt_br": [
+        "gestão diária da obra",
+        "preenchimento do diário pelo cliente",
+        "segundo contrato",
+        "Operação de Proposta para Licitação Crítica",
+        "peça jurídica",
+        "protocolo",
+        "urgência ilimitada",
+        "assinatura SaaS, trial ou quota de plataforma"
+      ],
+      "terminal_artifact": {
+        "ends_in_pt_br": "pauta e ata de decisão do ciclo, com a fila de fatos ainda não convertidos em pleito",
+        "is_generic_report": false,
+        "recurring": true,
+        "statement_pt_br": "O Acompanhamento Preventivo do Contrato Público entrega registro e decisão recorrentes sobre um contrato, nunca um relatório genérico avulso."
+      },
+      "credit_rule": null,
+      "legal_boundary_pt_br": [
+        "A CONFENGE não presta advocacia, não elabora peça e não emite parecer jurídico.",
+        "A CONFENGE não assina, não protocola e não representa a empresa perante o órgão.",
+        "O acompanhamento é obrigação de meio e não promete recebimento, deferimento de pleito nem afastamento de sanção.",
+        "Não há comissão de êxito em nenhuma hipótese.",
+        "A CONFENGE não guarda token, certificado digital ou senha do cliente."
+      ],
+      "boundary_vs_neighbour_offers": [
+        {
+          "against_id": "CFG-D24",
+          "against_public_name_pt_br": "Diagnóstico da Operação em Obras Públicas",
+          "their_question_pt_br": "Onde a operação perde tempo, margem e controle?",
+          "our_question_pt_br": "Como um contrato ativo deve registrar e decidir antes da crise?",
+          "statement_pt_br": "O item 24 diagnostica a empresa uma vez e termina em backlog de 90 dias. O item 25 é a rotina recorrente de um contrato ativo e não diagnostica a operação inteira."
+        },
+        {
+          "against_id": "diretoria_fracionada",
+          "against_public_name_pt_br": "Diretoria Fracionada para o Mercado Público",
+          "their_question_pt_br": "Como coordenar até quatro oportunidades e um contrato com direção semanal?",
+          "our_question_pt_br": "Como um contrato ativo deve registrar e decidir antes da crise?",
+          "statement_pt_br": "O item 25 cobre um contrato ativo, com cadência semanal assíncrona e uma reunião executiva mensal. A Diretoria Fracionada para o Mercado Público coordena carteira, propostas e um contrato com direção semanal. O item 25 não altera preço nem capacidade da Diretoria."
+        },
+        {
+          "against_id": "expansion_package",
+          "against_public_name_pt_br": "Diagnóstico de Expansão no Mercado Público",
+          "their_question_pt_br": "Em quais compradores, territórios e segmentos concentrar expansão?",
+          "our_question_pt_br": "Como um contrato ativo deve registrar e decidir antes da crise?",
+          "statement_pt_br": "O item 25 defende a execução de um contrato que já existe. O Diagnóstico de Expansão no Mercado Público escolhe onde a empresa deve crescer. Não são a mesma pergunta e não se substituem."
+        }
+      ],
+      "prohibitions": {
+        "success_fee": false,
+        "promises_result_or_award": false,
+        "custody_of_token": false,
+        "custody_of_digital_certificate": false,
+        "custody_of_password": false,
+        "operates_client_credential": false,
+        "signs_for_client": false,
+        "files_or_protocols": false,
+        "provides_legal_representation": false,
+        "saas_subscription": false,
+        "free_trial": false,
+        "platform_quota": false,
+        "smartlic_reference": false,
+        "automatic_checkout": false
+      }
+    }
+  ],
+  "acceptance_states_allowed": ["MET_BY_CONTRACT", "NOT_STARTED"],
+  "acceptance": [
+    {
+      "id": "AC-01",
+      "criterion_pt_br": "as duas páginas exibem preço-piloto, capacidade, inputs, SLA e não-inclusões",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "Depende de copy publicada nas duas páginas, que não está neste diff.",
+      "evidence": []
+    },
+    {
+      "id": "AC-02",
+      "criterion_pt_br": "a tabela de diferenciação aparece onde o visitante pode confundir as quatro ofertas",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "A tabela está codificada como dado versionado neste contrato, mas a publicação em página é copy e continua sob a issue 327.",
+      "evidence": []
+    },
+    {
+      "id": "AC-03",
+      "criterion_pt_br": "lead carrega offer/deliverable_id e destino correto",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "Captura e destino de lead continuam sob as issues 232 e 88 e não são alterados aqui.",
+      "evidence": []
+    },
+    {
+      "id": "AC-04",
+      "criterion_pt_br": "acompanhamento possui gate de capacidade e um contrato",
+      "state": "MET_BY_CONTRACT",
+      "delivered_by_pt_br": "O contrato declara capacity_gate.required, automatic_checkout false e contracts_covered 1, e o gate falha se qualquer um deles mudar.",
+      "evidence": []
+    },
+    {
+      "id": "AC-05",
+      "criterion_pt_br": "Diagnóstico da Operação termina em backlog de 90 dias, não em relatório genérico",
+      "state": "MET_BY_CONTRACT",
+      "delivered_by_pt_br": "O contrato declara terminal_artifact.ends_in_pt_br como backlog de 90 dias com dono, dependência e decisão, e o gate falha se a saída sumir.",
+      "evidence": []
+    },
+    {
+      "id": "AC-06",
+      "criterion_pt_br": "exemplo sintético integral mostra mapa, pauta e ata sem cliente inventado",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "Depende de artefato sintético publicado e revisado por humano, que não está neste diff.",
+      "evidence": []
+    },
+    {
+      "id": "AC-07",
+      "criterion_pt_br": "nenhuma assinatura SaaS, trial, quota de plataforma ou referência à marca legada",
+      "state": "MET_BY_CONTRACT",
+      "delivered_by_pt_br": "O contrato declara os quatro construtos proibidos e o gate varre todas as strings do arquivo para provar que só aparecem como negativa explícita.",
+      "evidence": []
+    },
+    {
+      "id": "AC-08",
+      "criterion_pt_br": "primeira venda mede horas, margem, aderência da recomendação e expansão observada",
+      "state": "NOT_STARTED",
+      "blocked_by_pt_br": "Depende de uma venda real. Nenhuma evidência é fabricada aqui.",
+      "evidence": []
+    },
+    {
+      "id": "AC-09",
+      "criterion_pt_br": "as issues 88, 232 e 327 permanecem donas de captura, checkout e first-fold",
+      "state": "MET_BY_CONTRACT",
+      "delivered_by_pt_br": "O contrato declara as três donas, marca reopened_here false e o gate falha se qualquer uma for reaberta ou apropriada.",
+      "evidence": []
+    }
+  ],
+  "first_sale_measurement": {
+    "state": "NOT_STARTED",
+    "measures_pt_br": [
+      "horas gastas",
+      "margem realizada",
+      "aderência da recomendação",
+      "expansão observada"
+    ],
+    "collected": []
+  }
+}
