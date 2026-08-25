@@ -527,7 +527,7 @@ function fail(name, detail) {
       mensagem: null,
       idempotency_key: "idk:ops-real",
     },
-    received_at: new Date().toISOString(),
+    received_at: new Date(Date.now() - 10 * 3600e3).toISOString(),
     ip_hash: "1",
     fingerprint: "2",
   });
@@ -584,6 +584,41 @@ function fail(name, detail) {
     if (/"email"\s*:\s*"[^"]+@/.test(b)) fail("gsc_auth_response_pii", b.slice(0, 200));
     else pass("gsc_auth_response_no_email_pii");
   }
+
+  const previousFetch = global.fetch;
+  const previousResend = process.env.RESEND_API_KEY;
+  const previousSlaOwner = process.env.LEAD_SLA_OWNER_EMAIL;
+  let outboundEmail = null;
+  process.env.RESEND_API_KEY = "re_test_key";
+  process.env.LEAD_SLA_OWNER_EMAIL = "owner@confenge.com.br";
+  global.fetch = async (_url, options = {}) => {
+    outboundEmail = JSON.parse(options.body || "{}");
+    return new Response(JSON.stringify({ id: "resend-test" }), { status: 200 });
+  };
+  const slaAlert = await ops.handler({
+    httpMethod: "POST",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action: "sla_alert" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=sla_alert",
+    body: "{}",
+  });
+  const slaBody = JSON.parse(slaAlert.body || "{}");
+  if (slaAlert.statusCode !== 200 || !slaBody.alerted || slaBody.breaches !== 1) {
+    fail("real_sla_alert_routed", slaBody);
+  } else pass("real_sla_alert_routed", slaBody.breaches);
+  const slaArtifact = JSON.stringify(slaBody);
+  const emailHtml = String(outboundEmail?.html || "");
+  if (/lead_ids|ops-real|r@empresa|Real Co|48990001111/.test(`${slaArtifact}${emailHtml}`)) {
+    fail("real_sla_alert_aggregate_no_pii", `${slaArtifact}${emailHtml}`);
+  } else pass("real_sla_alert_aggregate_no_pii");
+  if (slaBody.age_buckets?.h8_24 !== 1 || !emailHtml.includes("atribuir owner")) {
+    fail("real_sla_alert_actionable", { body: slaBody, html: emailHtml });
+  } else pass("real_sla_alert_actionable", slaBody.age_buckets);
+  global.fetch = previousFetch;
+  if (previousResend === undefined) delete process.env.RESEND_API_KEY;
+  else process.env.RESEND_API_KEY = previousResend;
+  if (previousSlaOwner === undefined) delete process.env.LEAD_SLA_OWNER_EMAIL;
+  else process.env.LEAD_SLA_OWNER_EMAIL = previousSlaOwner;
 
   const week = await ops.handler({
     httpMethod: "GET",

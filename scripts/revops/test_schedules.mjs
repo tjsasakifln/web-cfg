@@ -327,6 +327,14 @@ else {
   } else pass("daily_search_observation");
   if (!daily.includes("finally") || !daily.includes("persistProof()")) fail("daily_always_persists");
   else pass("daily_always_persists");
+  if (!daily.includes('check("real_leads_sla"') || daily.includes("uncontacted_reals_listed")) {
+    fail("daily_real_lead_sla_is_critical");
+  } else pass("daily_real_lead_sla_is_critical");
+  if (!daily.includes("action=sla_alert") || !daily.includes("real_leads_sla_alert_delivery")) {
+    fail("daily_real_lead_sla_routes_owner");
+  } else pass("daily_real_lead_sla_routes_owner");
+  if (daily.includes("lead_ids:")) fail("daily_real_lead_sla_artifact_contains_ids");
+  else pass("daily_real_lead_sla_artifact_is_aggregate");
   const toml = readFileSync(resolve(ROOT, "netlify.toml"), "utf8");
   if (!toml.includes("search-observation-tick") || !toml.includes("schedule")) {
     fail("netlify_search_observation_tick");

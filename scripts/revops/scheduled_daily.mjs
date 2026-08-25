@@ -163,15 +163,41 @@ if (TOKEN) {
 
   const leads = await j("/.netlify/functions/ops?action=leads&kind=real&pii=0");
   const breaches = (leads.body.leads || []).filter((l) => l.needs_contact);
-  check("uncontacted_reals_listed", leads.body.ok === true, `sla_breaches=${breaches.length}`, {
-    critical: false,
-  });
+  const leadsOk = leads.status === 200 && leads.body.ok === true;
+  check("real_leads_sla", leadsOk && breaches.length === 0, `sla_breaches=${breaches.length}`);
   if (breaches.length) {
+    const ages = breaches.map((lead) => Number(lead.sla_hours_open || 0));
+    const ageBuckets = {
+      h4_8: ages.filter((hours) => hours < 8).length,
+      h8_24: ages.filter((hours) => hours >= 8 && hours < 24).length,
+      h24_plus: ages.filter((hours) => hours >= 24).length,
+    };
+    out.lead_sla = {
+      breaches: breaches.length,
+      age_buckets: ageBuckets,
+      max_age_hours: Math.max(...ages),
+      commercial_only: true,
+    };
     out.alerts.push({
       name: "real_leads_sla_breach",
       detail: `${breaches.length} real lead(s) need first contact`,
-      lead_ids: breaches.slice(0, 10).map((l) => l.lead_id),
+      age_buckets: ageBuckets,
     });
+    const alert = await j("/.netlify/functions/ops?action=sla_alert", {
+      method: "POST",
+      body: "{}",
+    });
+    check(
+      "real_leads_sla_alert_delivery",
+      alert.status === 200 && alert.body.ok === true && alert.body.alerted === true,
+      `http=${alert.status} routed=${Boolean(alert.body.alerted)}`
+    );
+    out.lead_sla.alert_delivery = {
+      ok: alert.body.ok === true,
+      http: alert.status,
+      alerted: alert.body.alerted === true,
+      owner_domain: alert.body.owner_domain || null,
+    };
   }
 
   // Resend / storage signals via weekly report shape (no email send)
@@ -229,9 +255,7 @@ if (TOKEN) {
   );
   out.search_observation = { ...(out.search_observation || {}), drain: soDrain.body || null };
 } else {
-  check("ops_token", true, "OPS_TOKEN not set — commercial checks skipped (set OPS_TOKEN for full daily)", {
-    critical: false,
-  });
+  check("ops_token", false, "OPS_TOKEN not set — real-lead SLA cannot be evaluated");
   out.alerts.push({
     name: "ops_token_missing",
     detail: "OPS_TOKEN not set — commercial funnel/system_health checks skipped",

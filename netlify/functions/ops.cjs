@@ -18,6 +18,7 @@
  *   GET  analytics_summary
  *   GET  weekly_report       (real-only)
  *   POST weekly_email        (real-only)
+ *   POST sla_alert           (aggregate real-lead SLA alert)
  *   GET  gsc_insights        (auth required)
  *   POST backfill_record_kind { dry_run?, apply_ids? }
  *   POST rollback_record_kind { snapshot_id }
@@ -628,6 +629,75 @@ exports.handler = async (event) => {
       return json(502, { ok: false, error: "resend_failed", detail: t.slice(0, 200) }, origin);
     }
     return json(200, { ok: true, emailed: true, commercial_only: true, to_domain: to.split("@")[1] || "redacted" }, origin);
+  }
+
+  if (action === "sla_alert" && event.httpMethod === "POST") {
+    if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
+    const leads = await listLeads(store);
+    const breaches = filterCommercialLeads(leads)
+      .map((lead) => publicLeadSummary(lead))
+      .filter((lead) => lead.needs_contact);
+    if (!breaches.length) {
+      return json(200, { ok: true, alerted: false, breaches: 0, commercial_only: true }, origin);
+    }
+    const to = process.env.LEAD_SLA_OWNER_EMAIL || process.env.OPS_REPORT_EMAIL || process.env.LEAD_NOTIFY_EMAIL;
+    if (!to) return json(503, { ok: false, error: "lead_sla_owner_not_configured" }, origin);
+    if (!process.env.RESEND_API_KEY) return json(503, { ok: false, error: "resend_not_configured" }, origin);
+    const ages = breaches.map((lead) => Number(lead.sla_hours_open || 0));
+    const ageBuckets = {
+      h4_8: ages.filter((hours) => hours < 8).length,
+      h8_24: ages.filter((hours) => hours >= 8 && hours < 24).length,
+      h24_plus: ages.filter((hours) => hours >= 24).length,
+    };
+    const maxAgeHours = Math.max(...ages);
+    const html = `
+      <h1>CONFENGE — SLA de primeiro contato violado</h1>
+      <p><strong>${breaches.length}</strong> lead(s) real(is) aguardam primeiro contato.</p>
+      <ul>
+        <li>4–8h: ${ageBuckets.h4_8}</li>
+        <li>8–24h: ${ageBuckets.h8_24}</li>
+        <li>24h+: ${ageBuckets.h24_plus}</li>
+        <li>Maior espera: ${maxAgeHours}h</li>
+      </ul>
+      <p>Ação: atribuir owner e registrar o próximo contato no dashboard autenticado.</p>
+      <p>Dashboard: https://confenge.com.br/ops/</p>
+      <p>Somente contagens de leads reais; probes, QA, spam e PII foram excluídos.</p>
+    `;
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: process.env.RESEND_FROM || "CONFENGE Ops <ops@confenge.com.br>",
+        to: [to],
+        subject: `[CONFENGE][AÇÃO] ${breaches.length} lead(s) real(is) fora do SLA`,
+        html,
+      }),
+    });
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "");
+      return json(502, { ok: false, error: "lead_sla_alert_failed", detail: detail.slice(0, 160) }, origin);
+    }
+    safeLog("warn", "real_lead_sla_alerted", {
+      breaches: breaches.length,
+      max_age_hours: maxAgeHours,
+      owner_domain: to.split("@")[1] || "redacted",
+    });
+    return json(
+      200,
+      {
+        ok: true,
+        alerted: true,
+        commercial_only: true,
+        breaches: breaches.length,
+        age_buckets: ageBuckets,
+        max_age_hours: maxAgeHours,
+        owner_domain: to.split("@")[1] || "redacted",
+      },
+      origin
+    );
   }
 
   if (action === "backfill_record_kind" && event.httpMethod === "POST") {

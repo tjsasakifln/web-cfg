@@ -19,6 +19,7 @@ const SENSITIVE = [
   "stage",
   "funnel",
   "gsc_insights",
+  "sla_alert",
   "backfill_record_kind",
   "inbound_handoff",
   "audit_inbound_requeue",
