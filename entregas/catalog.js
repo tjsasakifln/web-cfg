@@ -76,6 +76,7 @@
     const body = document.createElement("div");
     body.dataset.copyContractBody = "";
     details.append(summary, body);
+    details.addEventListener("toggle", () => hydrateContract(details));
 
     const compare = document.createElement("label");
     compare.className = "catalog-item__compare";
@@ -103,10 +104,6 @@
     details.dataset.copyContractHydrated = "true";
   }
 
-  document.addEventListener("toggle", (event) => {
-    const details = event.target.closest?.("details[data-copy-contract-id]");
-    if (details) hydrateContract(details);
-  }, true);
   document.querySelectorAll("details[data-copy-contract-id][open]").forEach(hydrateContract);
 
   const MAX_COMPARE = 4;
