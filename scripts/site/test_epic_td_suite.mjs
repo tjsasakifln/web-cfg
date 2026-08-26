@@ -27,6 +27,7 @@ import { checkParity, syncFrom, PRIMARY, FUNCTIONS_COPY } from "../revops/gsc_in
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const require = createRequire(import.meta.url);
+const { FileStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
 
 let failed = 0;
 function pass(n, d) {
@@ -77,9 +78,8 @@ const leads = [
     utm_source: "(direct)",
   },
 ];
-for (const l of leads) {
-  fs.writeFileSync(path.join(dir, `${l.lead_id}.json`), JSON.stringify(l), "utf8");
-}
+const fixtureStore = new FileStore(dir);
+for (const l of leads) await fixtureStore.put(l, { onlyIfNew: true });
 
 // Export
 {
@@ -159,7 +159,7 @@ for (const l of leads) {
     { encoding: "utf8", env: { ...process.env, LEAD_STORE_DIR: dir } },
   );
   if (del.status !== 0) fail("dsar_delete_dry", del.stderr || del.stdout);
-  else if (!fs.existsSync(path.join(dir, "lead_synth_1.json"))) fail("dsar_dry_mutated");
+  else if (!(await fixtureStore.get("lead_synth_1"))) fail("dsar_dry_mutated");
   else pass("dsar_delete_dry_run");
 }
 

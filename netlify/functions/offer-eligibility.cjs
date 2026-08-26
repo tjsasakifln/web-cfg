@@ -20,7 +20,7 @@ exports.handler = async (event) => {
   } catch {
     return { statusCode: 400, body: JSON.stringify({ ok: false, error: "invalid_json" }) };
   }
-  const store = await createStore({ allowMemory: process.env.NODE_ENV === "test" });
+  const store = await createStore({ event, allowMemory: process.env.NODE_ENV === "test" });
   const inventory = emptyInventory(new Date());
   const elig = await submitEligibility(store, {
     cnpj: body.cnpj,

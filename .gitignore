@@ -42,6 +42,11 @@ C:/
 
 # Ephemeral schedule run proofs (CI artifacts)
 data/revops/schedule-runs/
+data/revops/dsar/
+data/revops/exports/
+storage-dumps/
+storage-backups/
+*.confenge-storage-dump
 data/discovery/receipts/*.json
 data/revops/gsc/last_sync.json
 data/revops/gsc/history.json

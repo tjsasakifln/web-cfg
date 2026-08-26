@@ -8,7 +8,6 @@
  * Warmbly is not edited here. Real-money stays off.
  */
 const crypto = require("crypto");
-const path = require("path");
 const {
   signWarmblyInbound,
   resolveInboundConfig,
@@ -171,19 +170,13 @@ function asStored(record) {
 }
 
 async function createCommercialStore(env = process.env) {
-  if (env.LEAD_STORE_DIR) {
-    return new FileStore(path.join(env.LEAD_STORE_DIR, "commercial-event"));
-  }
-  if (String(env.LEAD_STORE || "").toLowerCase() === "memory") {
-    return commercialMemory();
-  }
-  const inner = await createStore();
+  const inner = await createStore({ env, namespace: "commercial-events" });
   if (!inner) return null;
   if (inner instanceof NetlifyBlobsStore) {
     return new NetlifyBlobsStore(inner.store, { prefix: BLOBS_PREFIX });
   }
   if (inner instanceof FileStore) {
-    return new FileStore(path.join(inner.dir, "commercial-event"));
+    return inner;
   }
   if (inner.ephemeral) return commercialMemory();
   return null;

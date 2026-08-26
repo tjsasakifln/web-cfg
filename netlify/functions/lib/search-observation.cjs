@@ -171,27 +171,21 @@ function asStored(record) {
   return { ...record, lead_id: id };
 }
 
-async function createObservationStore(env = process.env) {
-  if (env.LEAD_STORE_DIR) {
-    return new FileStore(path.join(env.LEAD_STORE_DIR, "search-observation"));
-  }
-  if (String(env.LEAD_STORE || "").toLowerCase() === "memory") {
-    return observationMemory();
-  }
-  const inner = await createStore();
+async function createObservationStore(env = process.env, event = null) {
+  const inner = await createStore({ env, event, namespace: "search-observations" });
   if (!inner) return null;
   if (inner instanceof NetlifyBlobsStore) {
     return new NetlifyBlobsStore(inner.store, { prefix: BLOBS_PREFIX });
   }
   if (inner instanceof FileStore) {
-    return new FileStore(path.join(inner.dir, "search-observation"));
+    return inner;
   }
   if (inner.ephemeral) return observationMemory();
   return null;
 }
 
-async function persistRecord(record, env = process.env, store = null) {
-  const obsStore = store || (await createObservationStore(env));
+async function persistRecord(record, env = process.env, store = null, event = null) {
+  const obsStore = store || (await createObservationStore(env, event));
   if (!obsStore) return { ok: false, error: "store_unavailable" };
   const stored = asStored(record);
   const existing = await obsStore.get(stored.lead_id);
@@ -207,8 +201,8 @@ async function persistRecord(record, env = process.env, store = null) {
   return { ok: true, record: stored, replay: false };
 }
 
-async function updateRecord(eventId, patch, env = process.env, store = null) {
-  const obsStore = store || (await createObservationStore(env));
+async function updateRecord(eventId, patch, env = process.env, store = null, event = null) {
+  const obsStore = store || (await createObservationStore(env, event));
   if (!obsStore) return null;
   return obsStore.update(eventId, patch);
 }
@@ -358,7 +352,7 @@ async function postObservation(record, { now = new Date(), env = process.env } =
   }
 }
 
-async function produce(input = {}, { env = process.env, now = new Date(), store = null } = {}) {
+async function produce(input = {}, { env = process.env, now = new Date(), store = null, event = null } = {}) {
   const built = buildPayload(input);
   if (!built.ok) return built;
   const destination = clampText(input.destination || input.asset_id, 120);
@@ -378,7 +372,7 @@ async function produce(input = {}, { env = process.env, now = new Date(), store 
       last_error: null,
     },
   };
-  const persisted = await persistRecord(record, env, store);
+  const persisted = await persistRecord(record, env, store, event);
   if (!persisted.ok) return persisted;
   if (persisted.replay) {
     return { ok: true, record: persisted.record, replay: true };
@@ -396,6 +390,7 @@ async function produce(input = {}, { env = process.env, now = new Date(), store 
       },
       env,
       store,
+      event,
     );
     return { ok: true, record: held || persisted.record, synthetic: true };
   }
@@ -409,7 +404,7 @@ async function produce(input = {}, { env = process.env, now = new Date(), store 
     latency_ms: result.latency_ms,
     echoed: result.echoed,
   };
-  const updated = await updateRecord(record.event_id, { outbox: nextOutbox }, env, store);
+  const updated = await updateRecord(record.event_id, { outbox: nextOutbox }, env, store, event);
   return { ok: true, record: updated || { ...persisted.record, outbox: nextOutbox } };
 }
 
@@ -474,12 +469,12 @@ function loadShippedOverlay() {
   return null;
 }
 
-async function produceFromShippedOverlay({ env = process.env, now = new Date(), store = null } = {}) {
+async function produceFromShippedOverlay({ env = process.env, now = new Date(), store = null, event = null } = {}) {
   const overlay = loadShippedOverlay();
   if (!overlay) return { ok: false, error: "overlay_missing" };
   const mapped = overlayToInput(overlay);
   if (!mapped.ok) return mapped;
-  return produce(mapped.input, { env, now, store });
+  return produce(mapped.input, { env, now, store, event });
 }
 
 function summarizeObservations(records) {
@@ -508,7 +503,7 @@ function summarizeObservations(records) {
   return counts;
 }
 
-async function drainHeld({ env = process.env, now = new Date(), limit = 20, store = null } = {}) {
+async function drainHeld({ env = process.env, now = new Date(), limit = 20, store = null, event = null } = {}) {
   const summary = {
     scanned: 0,
     attempted: 0,
@@ -519,7 +514,7 @@ async function drainHeld({ env = process.env, now = new Date(), limit = 20, stor
     dead: 0,
     skipped: 0,
   };
-  const obsStore = store || (await createObservationStore(env));
+  const obsStore = store || (await createObservationStore(env, event));
   if (!obsStore || typeof obsStore.list !== "function") {
     return { ok: false, error: "store_unavailable", ...summary };
   }

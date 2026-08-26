@@ -4,8 +4,13 @@
  * as the serverless dedupe guarantee.
  */
 const crypto = require("crypto");
-const fs = require("fs");
-const path = require("path");
+const { HostFileBackend } = require("../../../netlify/functions/lib/host-file-store.cjs");
+const {
+  isProductionProfile,
+  resolveStorageConfig,
+  createHostBackend,
+  loadLegacyNetlifyStore,
+} = require("../../../netlify/functions/lib/storage-config.cjs");
 
 const DEFAULT_TTL_MS = 48 * 3600 * 1000;
 
@@ -89,61 +94,50 @@ class MemoryOfferStore {
 }
 
 class FileOfferStore {
-  constructor(dir, { clock } = {}) {
+  constructor(dir, { clock, namespace = "offers-sandbox", backend } = {}) {
     this.dir = dir;
     this.clock = clock || { now: () => new Date() };
-    fs.mkdirSync(dir, { recursive: true });
-  }
-  _path(key) {
-    const h = crypto.createHash("sha256").update(String(key)).digest("hex").slice(0, 40);
-    return path.join(this.dir, `${h}.json`);
+    this.backend = backend || new HostFileBackend(dir);
+    this.records = this.backend.namespace(namespace);
   }
   async get(key) {
-    try {
-      const file = this._path(key);
-      if (!fs.existsSync(file)) return null;
-      const rec = JSON.parse(fs.readFileSync(file, "utf8"));
-      if (expired(rec, this.clock.now())) {
-        try { fs.unlinkSync(file); } catch { /* ignore */ }
-        return null;
-      }
-      return rec;
-    } catch {
+    const rec = this.records.get(String(key));
+    if (!rec) return null;
+    if (expired(rec, this.clock.now())) {
+      this.records.delete(String(key));
       return null;
     }
+    return rec;
   }
   async putIfAbsent(key, value, { ttlMs = DEFAULT_TTL_MS } = {}) {
-    const file = this._path(key);
-    if (fs.existsSync(file)) {
-      const existing = await this.get(key);
-      if (existing) return { inserted: false, value: existing };
-    }
-    const now = this.clock.now();
-    const record = {
-      ...value,
-      store_key: key,
-      created_at: value.created_at || now.toISOString(),
-      expires_at: value.expires_at || new Date(now.getTime() + ttlMs).toISOString(),
-    };
-    const tmp = `${file}.${process.pid}.${crypto.randomBytes(4).toString("hex")}.tmp`;
-    fs.writeFileSync(tmp, JSON.stringify(record), { flag: "wx" });
-    try {
-      fs.linkSync(tmp, file);
-      fs.unlinkSync(tmp);
-      return { inserted: true, value: record };
-    } catch (err) {
-      try { fs.unlinkSync(tmp); } catch { /* ignore */ }
-      if (err && err.code === "EEXIST") {
-        return { inserted: false, value: await this.get(key) };
+    return this.backend.withExclusiveLock(() => {
+      const logicalKey = String(key);
+      const current = this.records.get(logicalKey);
+      if (current && !expired(current, this.clock.now())) {
+        return { inserted: false, value: current };
       }
-      throw err;
-    }
+      if (current) this.records._deleteUnlocked(logicalKey);
+      const now = this.clock.now();
+      const record = {
+        ...value,
+        store_key: key,
+        created_at: value.created_at || now.toISOString(),
+        expires_at: value.expires_at || new Date(now.getTime() + ttlMs).toISOString(),
+      };
+      return this.records._putUnlocked(logicalKey, record, { onlyIfNew: true });
+    });
   }
   async put(key, value) {
     const now = this.clock.now();
     const record = { ...value, store_key: key, updated_at: now.toISOString() };
-    fs.writeFileSync(this._path(key), JSON.stringify(record));
+    this.records.put(String(key), record);
     return record;
+  }
+  async delete(key) {
+    return this.records.delete(String(key));
+  }
+  async list() {
+    return this.records.list().map((row) => row.value);
   }
   async appendCanonicalEvent(event) {
     if (event && event.event_id) {
@@ -242,39 +236,28 @@ class NetlifyBlobsOfferStore {
   }
 }
 
-function isProductionProfile(env = process.env) {
-  const nodeEnv = String(env.NODE_ENV || "").toLowerCase();
-  const context = String(env.CONTEXT || env.NETLIFY_CONTEXT || "").toLowerCase();
-  return nodeEnv === "production" || context === "production";
-}
-
 async function createSandboxStore(options = {}) {
   if (options.store) return options.store;
   const env = options.env || process.env;
   const clock = options.clock;
   if (options.forceUnavailable) return null;
-  if (env.ASAAS_SANDBOX_STORE_DIR) {
-    return new FileOfferStore(env.ASAAS_SANDBOX_STORE_DIR, { clock });
+  const cfgEnv = env.ASAAS_SANDBOX_STORE_DIR && !env.CONFENGE_STORAGE_BACKEND
+    ? { ...env, LEAD_STORE_DIR: env.ASAAS_SANDBOX_STORE_DIR }
+    : env;
+  const cfg = resolveStorageConfig(cfgEnv, options.event, { allowTestMemory: options.allowMemory === true });
+  if (cfg.ok && cfg.backend === "filesystem") {
+    const opened = createHostBackend(cfgEnv, { event: options.event });
+    return opened.backend
+      ? new FileOfferStore(cfg.root, { clock, namespace: "offers-sandbox", backend: opened.backend })
+      : null;
   }
-  try {
-    // eslint-disable-next-line import/no-unresolved
-    const blobs = require("@netlify/blobs");
-    if (options.event && options.event.blobs) {
-      try { blobs.connectLambda(options.event); } catch { /* context already bound */ }
-    }
-    const siteID = env.NETLIFY_BLOBS_SITE_ID || env.SITE_ID || env.NETLIFY_SITE_ID || "";
-    const token = env.NETLIFY_BLOBS_TOKEN || env.NETLIFY_API_TOKEN || env.NETLIFY_AUTH_TOKEN || "";
-    let store;
-    if (siteID && token) {
-      store = blobs.getStore({ name: "confenge-offers-sandbox", siteID, token });
-    } else if (env.NETLIFY_BLOBS_CONTEXT || (options.event && options.event.blobs)) {
-      store = blobs.getStore("confenge-offers-sandbox");
-    }
-    if (store) return new NetlifyBlobsOfferStore(store, { clock });
+  if (cfg.ok && cfg.backend === "netlify-blobs") try {
+    const store = loadLegacyNetlifyStore("confenge-offers-sandbox", env, options.event);
+    return new NetlifyBlobsOfferStore(store, { clock });
   } catch {
     /* blobs unavailable */
   }
-  if (options.allowMemory === true && !isProductionProfile(env)) {
+  if (options.allowMemory === true && cfg.ok && cfg.backend === "memory") {
     return new MemoryOfferStore({ clock });
   }
   return null;
@@ -285,28 +268,23 @@ async function createProductionStore(options = {}) {
   const env = options.env || process.env;
   const clock = options.clock;
   if (options.forceUnavailable) return null;
-  if (env.ASAAS_PRODUCTION_STORE_DIR) {
-    return new FileOfferStore(env.ASAAS_PRODUCTION_STORE_DIR, { clock });
+  const cfgEnv = env.ASAAS_PRODUCTION_STORE_DIR && !env.CONFENGE_STORAGE_BACKEND
+    ? { ...env, LEAD_STORE_DIR: env.ASAAS_PRODUCTION_STORE_DIR }
+    : env;
+  const cfg = resolveStorageConfig(cfgEnv, options.event, { allowTestMemory: options.allowMemory === true });
+  if (cfg.ok && cfg.backend === "filesystem") {
+    const opened = createHostBackend(cfgEnv, { event: options.event });
+    return opened.backend
+      ? new FileOfferStore(cfg.root, { clock, namespace: "offers-production", backend: opened.backend })
+      : null;
   }
-  try {
-    // eslint-disable-next-line import/no-unresolved
-    const blobs = require("@netlify/blobs");
-    if (options.event && options.event.blobs) {
-      try { blobs.connectLambda(options.event); } catch { /* context already bound */ }
-    }
-    const siteID = env.NETLIFY_BLOBS_SITE_ID || env.SITE_ID || env.NETLIFY_SITE_ID || "";
-    const token = env.NETLIFY_BLOBS_TOKEN || env.NETLIFY_API_TOKEN || env.NETLIFY_AUTH_TOKEN || "";
-    let store;
-    if (siteID && token) {
-      store = blobs.getStore({ name: "confenge-offers-production", siteID, token });
-    } else if (env.NETLIFY_BLOBS_CONTEXT || (options.event && options.event.blobs)) {
-      store = blobs.getStore("confenge-offers-production");
-    }
-    if (store) return new NetlifyBlobsOfferStore(store, { clock, keyPrefix: "offers-production/" });
+  if (cfg.ok && cfg.backend === "netlify-blobs") try {
+    const store = loadLegacyNetlifyStore("confenge-offers-production", env, options.event);
+    return new NetlifyBlobsOfferStore(store, { clock, keyPrefix: "offers-production/" });
   } catch {
     /* blobs unavailable */
   }
-  if (options.allowMemory === true && !isProductionProfile(env)) {
+  if (options.allowMemory === true && cfg.ok && cfg.backend === "memory") {
     return new MemoryOfferStore({ clock });
   }
   return null;

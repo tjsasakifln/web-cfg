@@ -30,6 +30,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 from collections import defaultdict
@@ -64,6 +65,29 @@ SEARCH_ANALYTICS_LIMITATION = (
     "Search Analytics may return top rows only and is not an exhaustive total. "
     "Row counts describe the returned set, not the property universe."
 )
+
+
+def load_host_leads(store_dir: Path) -> list[dict[str, Any]]:
+    """Read via the canonical adapter so filenames and envelopes remain opaque."""
+    if not store_dir.is_dir():
+        return []
+    script = r"""
+const path = require('path');
+const { FileStore } = require(path.join(process.cwd(), 'netlify/functions/lib/lead-store.cjs'));
+(async () => process.stdout.write(JSON.stringify(await new FileStore(path.resolve(process.argv[1])).list())))()
+  .catch((error) => { process.stderr.write(String(error && (error.code || error.message) || error)); process.exit(1); });
+"""
+    result = subprocess.run(
+        ["node", "-e", script, str(store_dir.resolve())],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"lead store unavailable: {(result.stderr or 'unknown error')[:200]}")
+    payload = json.loads(result.stdout or "[]")
+    return payload if isinstance(payload, list) else []
 SNAPSHOT_SOURCE_KINDS = (
     "search_analytics_api",
     "historical_csv_export",
@@ -1587,17 +1611,13 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
 
     # 9/10 cohort analyses: page traffic vs local lead store (never query↔lead identity)
     lead_pages: dict[str, int] = defaultdict(int)
-    leads_dir = Path(os.environ.get("LEAD_STORE_DIR") or (ROOT / ".leads"))
-    if leads_dir.is_dir():
-        for lf in leads_dir.glob("*.json"):
-            try:
-                rec = json.loads(lf.read_text(encoding="utf-8"))
-                lp = rec.get("landing_page") or rec.get("page") or ""
-                if lp:
-                    path = urlparse(lp).path if str(lp).startswith("http") else str(lp)
-                    lead_pages[path.rstrip("/") or "/"] += 1
-            except (OSError, json.JSONDecodeError, TypeError):
-                continue
+    leads_store = os.environ.get("CONFENGE_STORAGE_DIR") or os.environ.get("LEAD_STORE_DIR")
+    lead_records = load_host_leads(Path(leads_store).resolve()) if leads_store else []
+    for rec in lead_records:
+        lp = rec.get("landing_page") or rec.get("page") or ""
+        if lp:
+            lead_path = urlparse(lp).path if str(lp).startswith("http") else str(lp)
+            lead_pages[lead_path.rstrip("/") or "/"] += 1
     page_impr = {
         urlparse(p.get("page") or p.get("path") or "").path.rstrip("/") or "/": float(
             p.get("impressions") or 0

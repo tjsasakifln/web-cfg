@@ -102,15 +102,15 @@ It is **not** a SPA framework app. The product is:
 
 | Function | Lines | Store |
 |----------|-------|-------|
-| `lead.cjs` | ~441 | Lead store (Blobs / file / memory) |
-| `nurture.cjs` | ~559 | Blobs + nurture state |
-| `ops.cjs` | ~720 | Blobs list + packaged GSC JSON |
-| `collect.cjs` | ~241 | Blobs `confenge-analytics` |
+| `lead.cjs` | ~441 | Host-owned filesystem; Blobs somente adapter legado; memory test-only |
+| `nurture.cjs` | ~559 | Namespace host-owned + adapter Blobs legado |
+| `ops.cjs` | ~720 | Store host-owned + fallback GSC empacotado |
+| `collect.cjs` | ~241 | Namespace host-owned `analytics-events` + rollback Blobs |
 | `lib/*` | ~2500 | Core lead/nurture/analytics modules |
 
 ### 4.4 Dependencies (`package.json`)
 
-**Production:** only `@netlify/blobs`  
+**Production npm:** `@netlify/blobs` permanece temporariamente somente para rollback Netlify; o perfil filesystem não o carrega.
 **Dev:** `axe-core`, `chrome-launcher`, `lighthouse`, `puppeteer-core`  
 
 Heavy logic lives in **first-party Python/Node scripts**, not npm frameworks.

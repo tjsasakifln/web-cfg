@@ -3,14 +3,16 @@
 **IDs:** DATA-04, DATA-20, SYS-13  
 **Policy:** Production must never acknowledge lead success with MemoryStore or `LEAD_ALLOW_MEMORY_FALLBACK=1`.
 
-## Netlify production env (verify UI)
+## Production env
 
 | Variable | Production value |
 |----------|------------------|
 | `LEAD_ALLOW_MEMORY_FALLBACK` | **unset** (must not be `1`) |
 | `LEAD_STORE` | **unset** (must not be `memory`) |
-| `LEAD_STORE_DIR` | unset in production (use Blobs) |
-| Blobs | Site has Blobs enabled; functions can `getStore("confenge-leads")` |
+| `CONFENGE_STORAGE_BACKEND` | `filesystem` na Netcup; `netlify-blobs` na janela de rollback Netlify |
+| `CONFENGE_STORAGE_DIR` | absoluto, `0700`, fora do release quando backend é `filesystem` |
+| `LEAD_STORE_DIR` | alias legado; não usar na nova produção |
+| Blobs | somente adapter legado; carregamento lazy e contexto obrigatório quando selecionado |
 
 ## Local / CI
 
@@ -30,7 +32,12 @@ npm run test:lead-store-production
 npm run test:lead-function
 ```
 
+O primeiro gate inclui concorrência com 64 processos, restart, corrupção,
+permissões, traversal/symlink, migração, retention e backup/restore.
+
 ## Code references
 
 - `netlify/functions/lib/lead-store.cjs` — `isProductionProfile`, `assertProductionStorePolicy`, `createStore`
+- `netlify/functions/lib/host-file-store.cjs` — atomicidade, checksums, modos e proteção de path
+- `netlify/functions/lib/storage-config.cjs` — seleção explícita + readiness
 - `netlify/functions/lead.cjs` — rejects ephemeral / policy violations with 503, no success body
