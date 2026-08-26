@@ -583,6 +583,18 @@ function fail(name, detail) {
   });
   if (nestedRawRejected.ok) fail("gsc_ingest_rejects_nested_raw_query", nestedRawRejected);
   else pass("gsc_ingest_rejects_nested_raw_query", nestedRawRejected.error);
+  const dynamicPiiKeyRejected = ops._validateGscInsights({
+    ...currentInsights,
+    analyses: [{ contactPhoneNumber: "redacted" }],
+  });
+  if (dynamicPiiKeyRejected.ok) fail("gsc_ingest_rejects_dynamic_pii_key", dynamicPiiKeyRejected);
+  else pass("gsc_ingest_rejects_dynamic_pii_key", dynamicPiiKeyRejected.error);
+  const phoneValueRejected = ops._validateGscInsights({
+    ...currentInsights,
+    analyses: [{ note: "+55 (48) 99999-0000" }],
+  });
+  if (phoneValueRejected.ok) fail("gsc_ingest_rejects_phone_like_value", phoneValueRejected);
+  else pass("gsc_ingest_rejects_phone_like_value", phoneValueRejected.error);
   const staleRejected = ops._validateGscInsights({
     ...currentInsights,
     as_of: "2025-01-01",

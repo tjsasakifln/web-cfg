@@ -24,6 +24,7 @@ const insights = {
   synthetic: false,
   query_text_redacted: true,
   raw_query_rows_in_git: false,
+  "11_emerging_terms": [],
   analyses: [{ query_hash: "sha256:abc123", clicks: 2 }],
 };
 
@@ -54,6 +55,18 @@ try {
   check("email_like_value_rejected", false);
 } catch (error) {
   check("email_like_value_rejected", error.message === "gsc_insights_sensitive_field", error.message);
+}
+try {
+  validatePublishable({ ...insights, analyses: [{ contactPhoneNumber: "redacted" }] });
+  check("dynamic_pii_key_rejected", false);
+} catch (error) {
+  check("dynamic_pii_key_rejected", error.message === "gsc_insights_sensitive_field", error.message);
+}
+try {
+  validatePublishable({ ...insights, analyses: [{ note: "+55 (48) 99999-0000" }] });
+  check("phone_like_value_rejected", false);
+} catch (error) {
+  check("phone_like_value_rejected", error.message === "gsc_insights_sensitive_field", error.message);
 }
 try {
   validatePublishable(

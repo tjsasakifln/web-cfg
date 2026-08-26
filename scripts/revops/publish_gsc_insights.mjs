@@ -8,7 +8,36 @@ import { fileURLToPath } from "url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const DEFAULT_INPUT = path.join(root, "data/revops/gsc/insights_latest.json");
 const DEFAULT_SYNC_STATE = path.join(root, "data/revops/gsc/last_sync.json");
-const SENSITIVE_GSC_KEY = /^(?:query|query_text|raw_query|raw_query_text|search_term|search_terms|keyword|keywords|termo|termos|consulta|consultas|email|telefone|phone|nome|name|full_name|cpf|cnpj|whatsapp|pii)$/i;
+const SAFE_GSC_QUERY_KEYS = new Set([
+  "query_class",
+  "query_count",
+  "query_hash",
+  "query_text_redacted",
+  "raw_query_rows_in_git",
+]);
+
+function isSensitiveGscKey(key) {
+  const normalized = String(key || "")
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+  if (SAFE_GSC_QUERY_KEYS.has(normalized) || /^\d+_emerging_terms$/.test(normalized)) return false;
+  const tokens = new Set(normalized.split("_").filter(Boolean));
+  return [
+    "query", "queries", "term", "terms", "keyword", "keywords", "termo", "termos",
+    "consulta", "consultas", "email", "telefone", "phone", "nome", "name", "cpf",
+    "cnpj", "whatsapp", "pii", "contact", "contato", "person", "pessoa", "customer",
+    "cliente", "user", "usuario", "fullname", "username",
+  ].some((token) => tokens.has(token));
+}
+
+function isSensitiveGscValue(value) {
+  if (typeof value !== "string") return false;
+  return /\b[^\s@]+@[^\s@]+\.[^\s@]+\b/.test(value) ||
+    /(?:\+?\d[\s().-]*){10,15}/.test(value) ||
+    /(?:wa\.me|whatsapp\.com)\//i.test(value);
+}
 
 export function contentHash(insights) {
   return crypto.createHash("sha256").update(JSON.stringify(insights)).digest("hex");
@@ -19,20 +48,20 @@ export function validatePublishable(insights, { now = new Date() } = {}) {
     throw new Error("gsc_insights_invalid");
   }
   let sensitiveKey = null;
-  let emailLikeValue = false;
+  let sensitiveValue = false;
   function inspect(value) {
     if (Array.isArray(value)) return value.forEach(inspect);
     if (value && typeof value === "object") {
       for (const [key, item] of Object.entries(value)) {
-        if (SENSITIVE_GSC_KEY.test(key)) sensitiveKey ||= key;
+        if (isSensitiveGscKey(key)) sensitiveKey ||= key;
         inspect(item);
       }
-    } else if (typeof value === "string" && /\b[^\s@]+@[^\s@]+\.[^\s@]+\b/.test(value)) {
-      emailLikeValue = true;
+    } else if (isSensitiveGscValue(value)) {
+      sensitiveValue = true;
     }
   }
   inspect(insights);
-  if (sensitiveKey || emailLikeValue) {
+  if (sensitiveKey || sensitiveValue) {
     throw new Error("gsc_insights_sensitive_field");
   }
   if (
