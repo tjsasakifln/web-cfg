@@ -64,7 +64,7 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 - O design deve comunicar precisão técnica, responsabilidade e alto valor econômico, usando tokens, contraste editorial e artefatos de método, não card soup ou dashboard SaaS. [Source: `docs/DESIGN-SYSTEM.md#conceito`]
 - A página vive sob `casos/`, diretório já permitido no artefato público. O build deve copiar somente arquivos allowlisted. [Source: `scripts/pseo/public_artifact.py`]
 - Não usar dados dos PDFs como fatos públicos. O exemplar deve ser sintético, coerente e explicitamente demonstrativo.
-- Não criar promessa de vitória, economia ou resultado. O proprietário autorizou o preço unitário de R$ 599, o prazo de até 48 horas úteis contado do envio persistido dos parâmetros e três invariantes de entrega: a CONFENGE busca os editais abertos no raio da empresa; a quantidade resulta da disponibilidade publicada, sem negociação de cota; e a análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa.
+- Não criar promessa de vitória, economia ou resultado. O proprietário autorizou o preço unitário de R$ 599; a #331 atualizou o prazo para 3 dias úteis, contado do envio persistido de parâmetros válidos. Permanecem três invariantes de entrega: a CONFENGE busca os editais abertos no raio da empresa; a quantidade resulta da disponibilidade publicada, sem negociação de cota; e a análise alcança a profundidade máxima permitida pelas informações apresentadas pela empresa.
 - O preço não cria SKU no catálogo congelado #88. A ação versionada
   `handraise-report-intelligence-599-v1` é uma entrada de pedido não catalogada,
   com parâmetros persistidos antes do handoff humano de pagamento, termos

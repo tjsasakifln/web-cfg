@@ -1,6 +1,6 @@
 {
   "schema": "page-contract-licitacao.v1",
-  "contract_version": 1,
+  "contract_version": 2,
   "source_issue": 330,
   "name_authority_issue": 343,
   "fail_closed_canary_issue": 155,
@@ -376,10 +376,36 @@
       "inputs_derivation_pt_br": "derivado do escopo declarado na issue 330 para o item 16, que cita edital e lote na triagem, habilitação e acervo, e coordenação de orçamento, BDI e cronograma"
     }
   ],
+  "public_implementation": {
+    "state": "DEFERRED_FROZEN",
+    "decision_state": "DEFER_UNTIL_DATE",
+    "route": "/diagnostico-pre-licitacao/",
+    "rendered_from_contract": false,
+    "catalog_route": "/entregas/",
+    "catalog_rendered_from_contract": true,
+    "synthetic_examples_contract": "data/commercial/examples-licitacao.synthetic.v1.json",
+    "dedicated_product_sections": 0,
+    "catalog_product_sections": 5,
+    "prepared_capture_fields": [
+      "deliverable_id",
+      "public_contract_id",
+      "opportunity_deadline",
+      "contract_value_band",
+      "lot_count",
+      "execution_regime",
+      "decision_intent"
+    ],
+    "persisted_handraise_route": "/entregas/#captura-entregas",
+    "frozen_gate_contract": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+    "protected_hash_contract": "data/bofu-dominance/frozen-specs/hashes.json",
+    "earliest_safe_action_at": "2026-09-16",
+    "checkout_enabled": false
+  },
   "not_delivered_here_pt_br": [
-    "nenhuma página nova é criada nesta entrega",
     "nenhum checkout é ligado nesta entrega",
-    "exemplos sintéticos completos dos cinco itens ainda não existem",
-    "a primeira venda P0 com esforço, retrabalho, margem e resultado ainda não existe"
+    "nenhuma mutação da rota protegida /diagnostico-pre-licitacao/ é autorizada antes de todos os gates da issue 291 ficarem prontos",
+    "a primeira venda P0 com esforço, retrabalho, margem e resultado ainda não existe",
+    "a pesquisa humana e de willingness to pay ainda não foi executada",
+    "os itens 13 e 15 são seções profundas da página de decisão e proposta, não rotas canônicas independentes"
   ]
 }

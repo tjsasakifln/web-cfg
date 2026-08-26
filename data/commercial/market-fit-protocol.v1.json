@@ -1,6 +1,6 @@
 {
   "schema": "confenge.market-fit-protocol/1.0",
-  "protocol_version": "CFG-MARKET-FIT-2026-08-24-v1",
+  "protocol_version": "CFG-MARKET-FIT-2026-08-25-v2",
   "issue": "#336",
   "parent_issue": "#329",
   "state": "NOT_STARTED",
@@ -13,10 +13,10 @@
       "status": "NOT_STARTED",
       "minimum_sample": 20,
       "quotas": [
-        { "role": "dono, sócio ou diretor", "minimum": 5 },
-        { "role": "líder de licitações ou comercial", "minimum": 5 },
-        { "role": "engenharia de proposta ou orçamento", "minimum": 5 },
-        { "role": "contratos, obra ou financeiro", "minimum": 5 }
+        { "role_id": "direcao", "role": "dono, sócio ou diretor", "minimum": 5, "focus_doors": ["GROW", "QUALIFY", "CLOSE"] },
+        { "role_id": "licitacoes_comercial", "role": "líder de licitações ou comercial", "minimum": 5, "focus_doors": ["GROW", "QUALIFY", "PROPOSE"] },
+        { "role_id": "engenharia_proposta", "role": "engenharia de proposta ou orçamento", "minimum": 5, "focus_doors": ["QUALIFY", "PROPOSE", "START"] },
+        { "role_id": "contratos_obra_financeiro", "role": "contratos, obra ou financeiro", "minimum": 5, "focus_doors": ["START", "PROTECT", "CLOSE"] }
       ],
       "maturity_requirement": {
         "statement": "pelo menos 14 de 20 com licitação ou contrato ativo nos últimos 12 meses",
@@ -47,6 +47,21 @@
       "boundary_cards_per_participant": 4,
       "min_exposures_per_item": 6,
       "min_joint_exposures_per_critical_boundary": 3,
+      "critical_boundaries": [
+        { "boundary_id": "disputar_habilitar", "deliverable_ids": ["CFG-D12", "CFG-D13"] },
+        { "boundary_id": "habilitar_orcamento", "deliverable_ids": ["CFG-D13", "CFG-D14"] },
+        { "boundary_id": "orcamento_proposta", "deliverable_ids": ["CFG-D14", "CFG-D16"] },
+        { "boundary_id": "risco_margem_medicao", "deliverable_ids": ["CFG-D17", "CFG-D18"] },
+        { "boundary_id": "medicao_atraso", "deliverable_ids": ["CFG-D18", "CFG-D19"] },
+        { "boundary_id": "medicao_reequilibrio", "deliverable_ids": ["CFG-D18", "CFG-D22"] },
+        { "boundary_id": "reequilibrio_aditivo", "deliverable_ids": ["CFG-D22", "CFG-D23"] },
+        { "boundary_id": "mobilizacao_matriz", "deliverable_ids": ["CFG-D33", "CFG-D34"] },
+        { "boundary_id": "encerramento_acervo", "deliverable_ids": ["CFG-D36", "CFG-D37"] },
+        { "boundary_id": "orcamento_habilitacao", "deliverable_ids": ["CFG-D49", "CFG-D51"] },
+        { "boundary_id": "habilitacao_proposta_tecnica", "deliverable_ids": ["CFG-D51", "CFG-D52"] },
+        { "boundary_id": "proposta_tecnica_revisao", "deliverable_ids": ["CFG-D52", "CFG-D53"] },
+        { "boundary_id": "revisao_sessao", "deliverable_ids": ["CFG-D53", "CFG-D54"] }
+      ],
       "randomize_card_order_within_block": true,
       "price_revealed_after_task_sorting": true,
       "exposure_matrix_frozen_before_sessions": true,
@@ -186,6 +201,21 @@
   "disclosure": {
     "client_or_case_exposure_requires": ["#249", "#328"],
     "inferred_sale_or_willingness_to_pay_allowed": false
+  },
+  "execution_package": {
+    "status": "INSTRUMENT_READY_HUMAN_EVIDENCE_PENDING",
+    "root": "docs/research/market-fit-v1",
+    "runbook": "docs/research/market-fit-v1/RUNBOOK.md",
+    "exposure_plan": "data/commercial/market-fit-exposure-plan.v1.json",
+    "exposure_plan_generator": "scripts/commercial/market_fit_exposure_plan.mjs",
+    "evidence_validator": "scripts/commercial/market_fit_evidence.mjs",
+    "research_aggregate_template": "docs/research/market-fit-v1/templates/research-aggregate.template.json",
+    "qco_aggregate_template": "docs/research/market-fit-v1/templates/qco-aggregate.template.json",
+    "decision_template": "docs/research/market-fit-v1/templates/product-decisions.template.json",
+    "private_data_destination": "armazenamento operacional privado",
+    "commercial_action_owner": "warmbly",
+    "repository_accepts_individual_records": false,
+    "analytics_accepts_pii": false
   },
   "runs": [],
   "decisions": []

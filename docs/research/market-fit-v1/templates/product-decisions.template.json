@@ -1,0 +1,16 @@
+{
+  "schema": "confenge.market-fit-product-decisions/1.0",
+  "template": true,
+  "protocol_version": "CFG-MARKET-FIT-2026-08-25-v2",
+  "run_id": null,
+  "research_run_id": null,
+  "qco_run_id": null,
+  "status": "NOT_STARTED",
+  "decision_rule": "PROMOTE exige todos os critérios numéricos reconciliados com os agregados de pesquisa e Warmbly; ADJUST e HOLD não removem item do catálogo.",
+  "decisions": [],
+  "review": {
+    "operator_role": null,
+    "second_reviewer_role": null,
+    "reviewed_at": null
+  }
+}

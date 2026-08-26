@@ -17,11 +17,14 @@
  */
 import fs from "fs";
 import path from "path";
+import { createHash } from "crypto";
+import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const dataPath = path.join(root, "data/commercial/page-contract-licitacao.v1.json");
+const examplesPath = path.join(root, "data/commercial/examples-licitacao.synthetic.v1.json");
 const testPath = path.join(__dirname, "test_page_contract_licitacao.mjs");
 
 const results = [];
@@ -36,6 +39,7 @@ const doc = JSON.parse(raw);
 
 // ---------------------------------------------------------------- estrutura
 assert("schema_id", doc.schema === "page-contract-licitacao.v1", doc.schema);
+assert("contract_version_2", doc.contract_version === 2, doc.contract_version);
 assert("source_issue", doc.source_issue === 330, doc.source_issue);
 assert("name_authority_issue", doc.name_authority_issue === 343, doc.name_authority_issue);
 assert("research_not_started", doc.research_state === "NOT_STARTED", doc.research_state);
@@ -430,16 +434,94 @@ for (const [label, file] of [["data", dataPath], ["test", testPath]]) {
   assert(`no_en_dash_${label}`, !text.includes(EN_DASH), label);
 }
 
+// ------------------------------------------ exemplos e superfície publicados
+assert("synthetic_examples_file_exists", fs.existsSync(examplesPath), examplesPath);
+const examplesDoc = JSON.parse(fs.readFileSync(examplesPath, "utf8"));
+assert("synthetic_examples_schema", examplesDoc.schema === "confenge.licitacao-synthetic-examples/1.0", examplesDoc.schema);
+assert("synthetic_examples_classification", examplesDoc.classification === "SYNTHETIC", examplesDoc.classification);
+const examples = examplesDoc.examples || [];
+assert("synthetic_examples_five", examples.length === 5, examples.length);
+assert(
+  "synthetic_examples_exact_ids",
+  JSON.stringify(examples.map((example) => example.deliverable_id)) ===
+    JSON.stringify(["CFG-D12", "CFG-D13", "CFG-D14", "CFG-D15", "CFG-D16"]),
+  examples.map((example) => example.deliverable_id),
+);
+for (const example of examples) {
+  for (const key of [
+    "facts_synthetic_pt_br",
+    "calculations_synthetic_pt_br",
+    "inferences_synthetic_pt_br",
+    "unknowns_pt_br",
+  ]) {
+    assert(`example_${example.deliverable_id}_${key}`, Array.isArray(example[key]) && example[key].length > 0, example[key]);
+  }
+  assert(`example_${example.deliverable_id}_next_action`, typeof example.next_action_pt_br === "string" && example.next_action_pt_br.length > 20, example.next_action_pt_br);
+}
+const examplesRaw = fs.readFileSync(examplesPath, "utf8");
+assert("synthetic_examples_no_direct_pii_keys", !/\b(cpf|cnpj|email|telefone|whatsapp|nome_cliente)\b/i.test(examplesRaw), "PII key found");
+
+const protectedPagePath = path.join(root, "diagnostico-pre-licitacao/index.html");
+const protectedPage = fs.readFileSync(protectedPagePath, "utf8");
+const frozenHashes = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/hashes.json"), "utf8"));
+const unlockPlan = JSON.parse(fs.readFileSync(path.join(root, "data/bofu-dominance/frozen-specs/unlock-plan.v1.json"), "utf8"));
+const protectedHash = createHash("sha256").update(protectedPage).digest("hex");
+assert(
+  "dedicated_route_remains_frozen",
+  protectedHash === frozenHashes.forbidden["diagnostico-pre-licitacao/index.html"],
+  { expected: frozenHashes.forbidden["diagnostico-pre-licitacao/index.html"], actual: protectedHash },
+);
+assert("dedicated_route_has_no_product_renderer", !protectedPage.includes("GENERATED:LICITACAO-PRODUCTS"));
+assert("dedicated_route_has_no_new_capture", !protectedPage.includes('id="captura-licitacao"'));
+assert(
+  "dedicated_route_mutation_not_authorized",
+  unlockPlan.html_mutation_authorized === false &&
+    unlockPlan.protected_pillars.includes("diagnostico-pre-licitacao"),
+  unlockPlan,
+);
+
+const catalogPage = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
+for (const item of items) {
+  assert(`catalog_product_anchor_${item.item}`, catalogPage.includes(`id="entrega-${item.item}"`), item.item);
+  assert(`catalog_product_id_${item.item}`, catalogPage.includes(`data-deliverable-id="${item.deliverable_id}"`), item.deliverable_id);
+  assert(`catalog_product_name_${item.item}`, catalogPage.includes(item.public_name_pt_br), item.public_name_pt_br);
+  const catalogPriceVisible = (item.price.tiers || []).length
+    ? [item.price.tiers[0], item.price.tiers.at(-1)].every((tier) => catalogPage.includes(tier.display_pt_br))
+    : catalogPage.includes(item.price.display_pt_br);
+  assert(`catalog_product_price_${item.item}`, catalogPriceVisible, item.price.display_pt_br);
+  assert(`catalog_product_handraise_${item.item}`, catalogPage.includes(`data-cta-id="catalog-fit-${item.item}"`), item.item);
+}
+assert("catalog_capture_present", catalogPage.includes('id="captura-entregas"'));
+assert("catalog_capture_persisted", catalogPage.includes('action="/.netlify/functions/lead"'));
+assert("catalog_capture_no_upload", !/<input\b[^>]*type="(?:file|password)"/i.test(catalogPage));
+assert("catalog_capture_no_checkout", !/\.netlify\/functions\/checkout|data-checkout/i.test(catalogPage));
+const rendererCheck = spawnSync(
+  process.execPath,
+  [path.join(root, "scripts/commercial/render_licitacao_products.mjs"), "--check"],
+  { cwd: root, encoding: "utf8" },
+);
+assert("public_renderer_has_no_drift", rendererCheck.status === 0, {
+  stdout: rendererCheck.stdout,
+  stderr: rendererCheck.stderr,
+});
+
 // ------------------------------------------------ o que esta entrega não faz
 const notDelivered = (doc.not_delivered_here_pt_br || []).join(" ").toLowerCase();
-assert(
-  "declares_no_new_page",
-  /nenhuma p[áa]gina nova/.test(notDelivered),
-  notDelivered,
-);
 assert("declares_no_checkout", /nenhum checkout/.test(notDelivered), notDelivered);
-assert("declares_missing_synthetic_example", /exemplos sint[ée]ticos/.test(notDelivered), notDelivered);
 assert("declares_missing_first_sale", /primeira venda/.test(notDelivered), notDelivered);
+assert("declares_missing_human_wtp", /pesquisa humana/.test(notDelivered) && /willingness to pay/.test(notDelivered), notDelivered);
+assert(
+  "public_implementation_declared",
+  doc.public_implementation?.route === "/diagnostico-pre-licitacao/" &&
+    doc.public_implementation?.state === "DEFERRED_FROZEN" &&
+    doc.public_implementation?.decision_state === "DEFER_UNTIL_DATE" &&
+    doc.public_implementation?.rendered_from_contract === false &&
+    doc.public_implementation?.catalog_route === "/entregas/" &&
+    doc.public_implementation?.catalog_product_sections === 5 &&
+    doc.public_implementation?.earliest_safe_action_at === unlockPlan.earliest_safe_action_at &&
+    doc.public_implementation?.checkout_enabled === false,
+  doc.public_implementation,
+);
 
 const failed = results.filter((r) => !r.ok);
 console.log(`page-contract-licitacao: ${results.length - failed.length}/${results.length} checks passed`);

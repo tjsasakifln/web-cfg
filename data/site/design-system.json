@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "campaign": "CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01",
-  "updated_at": "2026-08-23",
+  "updated_at": "2026-08-25",
   "concept": "engenharia editorial premium",
   "design_principles": [
     "Cards are the exception, not the default section structure",
@@ -100,7 +100,8 @@
     "ladder_top": "Declared top of a ladder; distinct composition, same depth as the peers",
     "deliverable_feature": "One deliverable as editorial feature: promise, input/output, price, one action",
     "reading_method": "Numbered reading criteria that apply to the whole library, not to a single item",
-    "ladder_credit": "Ladder arithmetic and credit rule on an authority surface"
+    "ladder_credit": "Ladder arithmetic and credit rule on an authority surface",
+    "catalog_index": "Taxative full-catalog index grouped by visitor task, with canonical state, price, SLA, evidence boundary and one terminal action per available item"
   },
   "component_usage_rules": {
     "card_allowed_when": [
