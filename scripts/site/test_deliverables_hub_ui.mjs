@@ -200,8 +200,21 @@ const catalogBoot = await page.evaluate(() => ({
   filterVisible: !document.querySelector("[data-catalog-filters]")?.hidden,
 }));
 if (!catalogBoot.enhanced || !catalogBoot.filterVisible) catalogErrors.push("catalog_not_enhanced");
-if (catalogBoot.dataSchema !== "confenge.public-deliverable-catalog/1.0" || catalogBoot.dataCount !== 54) {
+if (catalogBoot.dataSchema !== "confenge.public-deliverable-catalog/1.1" || catalogBoot.dataCount !== 54) {
   catalogErrors.push("catalog_data_contract");
+}
+await page.click('details[data-copy-contract-id="CFG-D01"] summary');
+const hydratedContract = await page.evaluate(() => {
+  const details = document.querySelector('details[data-copy-contract-id="CFG-D01"]');
+  return {
+    open: details?.open,
+    hydrated: details?.dataset.copyContractHydrated,
+    clauses: details?.querySelectorAll("[data-copy-clause]").length || 0,
+    text: details?.textContent || "",
+  };
+});
+if (!hydratedContract.open || hydratedContract.hydrated !== "true" || hydratedContract.clauses !== 15 || !hydratedContract.text.includes("Compre quando")) {
+  catalogErrors.push("catalog_copy_contract_hydration");
 }
 await page.type("[data-filter-query]", "Radar de Licitações Prioritárias");
 const filtered = await page.evaluate(() => ({
@@ -240,7 +253,7 @@ const progressiveComparison = await page.evaluate(() => ({
 if (progressiveComparison.hidden || progressiveComparison.count !== 2 || progressiveComparison.criteria !== 18 || progressiveComparison.selected !== 2) {
   catalogErrors.push("catalog_comparison_behavior");
 }
-findings.push({ route: "/entregas/", check: "progressive_catalog", catalogLazyBefore, catalogBoot, filtered, recommendation, progressiveComparison, errors: catalogErrors });
+findings.push({ route: "/entregas/", check: "progressive_catalog", catalogLazyBefore, catalogBoot, hydratedContract, filtered, recommendation, progressiveComparison, errors: catalogErrors });
 if (catalogErrors.length) failed += 1;
 
 const noScriptPage = await browser.newPage();
