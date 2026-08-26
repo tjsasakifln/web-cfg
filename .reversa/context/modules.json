@@ -1186,8 +1186,7 @@
         "_headers",
         ".github/workflows/site-ci.yml",
         ".github/workflows/pseo.yml",
-        ".github/workflows/revops-scheduled.yml",
-        "scripts/pseo/ignore_evidence_build.sh"
+        ".github/workflows/revops-scheduled.yml"
       ],
       "functions": [],
       "entities": [],
@@ -1198,8 +1197,8 @@
           "confidence": "confirmed"
         },
         {
-          "description": "ignore_evidence_build prevents SHA freeze from advancing live build identity",
-          "location": "netlify.toml ignore",
+          "description": "Every main push builds; workflow gate forbids Netlify build.ignore drift",
+          "location": "netlify.toml + scripts/site/test_workflow_gates.py",
           "confidence": "confirmed"
         },
         {

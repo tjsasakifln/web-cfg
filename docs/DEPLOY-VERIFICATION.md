@@ -12,7 +12,7 @@ Date: 2026-08-02T03:35:31Z
 | Netlify build command | `npm run build:site` |
 | Publish directory | `_site` |
 | Branch | `main` |
-| ignore script | `scripts/pseo/ignore_evidence_build.sh` skips evidence-only paths under `seo/*` |
+| production build policy | every push to `main` builds; `build.ignore` is forbidden by `test_workflow_gates.py` |
 
 **Root cause of prior "old deploy" reports:** earlier UIUX sessions documented COMPLETE while production still served older SHAs for some commits, and `lighthouse.status=not_run` / moderate axe remained. At the start of this cutover session, production already matched HEAD `06edd555fab77c96e8e69d624ec58f9f785cbda0`. Remaining gap was content quality, a11y landmark, broken `/servicos` fragment (`/#atuacao` missing), CSS dead code, pSEO provenance, and missing production gates.
 
@@ -25,6 +25,8 @@ Date: 2026-08-02T03:35:31Z
 - `netlify` CLI: not installed in this environment
 - Netlify auth token: not present
 - Deploy trigger path: material push to `main` (GitHub → Netlify)
+- Production drift guard: every `main` push builds; Netlify content deduplication
+  avoids redundant uploads without suppressing the release identity.
 
 ## Post-push verification commands
 

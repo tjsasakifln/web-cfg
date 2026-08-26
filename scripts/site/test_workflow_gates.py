@@ -26,6 +26,7 @@ LIGHTHOUSE_THRESHOLDS = ROOT / "scripts" / "site" / "lighthouse_thresholds.mjs"
 INTERFACE_COVERAGE_POLICY = ROOT / "data" / "quality" / "interface-coverage-policy.json"
 WORKFLOWS_DIR = ROOT / ".github" / "workflows"
 NETLIFY_TOML = ROOT / "netlify.toml"
+NETLIFY_IGNORE_SCRIPT = ROOT / "scripts" / "pseo" / "ignore_evidence_build.sh"
 PACKAGE_JSON = ROOT / "package.json"
 PACKAGE_LOCK = ROOT / "package-lock.json"
 NVMRC = ROOT / ".nvmrc"
@@ -449,6 +450,22 @@ def test_merge_workflows_have_no_path_skip():
             )
 
 
+def test_netlify_production_cannot_skip_main_commits():
+    """Every push to main must reach the canonical production build.
+
+    A path-based ``build.ignore`` let production remain hundreds of commits
+    behind main while required GitHub gates stayed green.  Evidence-only
+    optimization is not allowed on the canonical public runtime: Netlify's
+    content deduplication is the safe optimization, and rollback remains a
+    previous known-good deploy.
+    """
+    text = _read(NETLIFY_TOML)
+    if re.search(r"(?m)^\s*ignore\s*=", text):
+        raise AssertionError("netlify.toml build.ignore can silently skip production main")
+    if NETLIFY_IGNORE_SCRIPT.exists():
+        raise AssertionError("obsolete Netlify ignore script must not remain available")
+
+
 def test_merge_workflows_cover_every_pr_base():
     """Required checks must not disappear when a PR targets a feature branch."""
     _assert_unfiltered_pull_request(SITE_CI, "site-ci")
@@ -576,6 +593,7 @@ def main() -> int:
         test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed,
         test_ci_supply_chain_is_pinned,
         test_merge_workflows_have_no_path_skip,
+        test_netlify_production_cannot_skip_main_commits,
         test_merge_workflows_cover_every_pr_base,
         test_pseo_still_requires_full_npm_test,
         test_post_build_browser_gates_use_public_artifact,

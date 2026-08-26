@@ -2,8 +2,9 @@
 """Freeze deploy identity into seo/pseo-operational-result.json from live well-known.
 
 Does NOT invent tip equality. Live https://confenge.com.br/.well-known/pseo-build.json
-is the sole deploy identity. After Netlify ignore for evidence-only commits is on,
-freezing this JSON no longer advances the live tip.
+is the sole deploy identity. Every main push builds, so committing a frozen result
+creates a new release identity; prefer ``--capture-dir`` for operational evidence
+that must not change the repository tip.
 
 Usage:
   python3 scripts/pseo/freeze_shas.py

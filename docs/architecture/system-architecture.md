@@ -169,7 +169,8 @@ Source HTML/JSON ──► pseo/editorial/site scripts ──► validate gates
 **Rules (from `netlify.toml`):**
 
 - Netlify must **not** call private DBs; publish **only** public artifact  
-- Evidence-only changes can skip publish via `ignore_evidence_build.sh`  
+- Every push to `main` builds; path-based `build.ignore` is forbidden so the
+  public release identity cannot remain behind the canonical branch.
 - Redirects live in `_redirects` (copied into `_site`)
 
 ---
