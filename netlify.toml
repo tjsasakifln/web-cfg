@@ -5,6 +5,9 @@
 [build]
   command = "npm run build:site"
   publish = "_site"
+  # Override Netlify's default change detector: every canonical main revision
+  # must receive a production build identity, even when content is deduplicated.
+  ignore = "exit 1"
   functions = "netlify/functions"
 
 [build.environment]

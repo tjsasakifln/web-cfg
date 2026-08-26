@@ -169,8 +169,8 @@ Source HTML/JSON ──► pseo/editorial/site scripts ──► validate gates
 **Rules (from `netlify.toml`):**
 
 - Netlify must **not** call private DBs; publish **only** public artifact  
-- Every push to `main` builds; path-based `build.ignore` is forbidden so the
-  public release identity cannot remain behind the canonical branch.
+- Every push to `main` builds; `build.ignore = "exit 1"` overrides Netlify's
+  default skip detector, and the workflow gate forbids any path-based variant.
 - Redirects live in `_redirects` (copied into `_site`)
 
 ---

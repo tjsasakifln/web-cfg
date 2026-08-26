@@ -454,14 +454,18 @@ def test_netlify_production_cannot_skip_main_commits():
     """Every push to main must reach the canonical production build.
 
     A path-based ``build.ignore`` let production remain hundreds of commits
-    behind main while required GitHub gates stayed green.  Evidence-only
-    optimization is not allowed on the canonical public runtime: Netlify's
+    behind main while required GitHub gates stayed green.  Omitting ``ignore``
+    re-enables Netlify's default change detector, which can also skip a release.
+    The only allowed override is fail-closed ``exit 1`` (always build); Netlify's
     content deduplication is the safe optimization, and rollback remains a
     previous known-good deploy.
     """
     text = _read(NETLIFY_TOML)
-    if re.search(r"(?m)^\s*ignore\s*=", text):
-        raise AssertionError("netlify.toml build.ignore can silently skip production main")
+    commands = re.findall(r'(?m)^\s*ignore\s*=\s*["\']([^"\']+)["\']\s*$', text)
+    if commands != ["exit 1"]:
+        raise AssertionError(
+            "netlify.toml must override default skip detection with exactly ignore = \"exit 1\""
+        )
     if NETLIFY_IGNORE_SCRIPT.exists():
         raise AssertionError("obsolete Netlify ignore script must not remain available")
 

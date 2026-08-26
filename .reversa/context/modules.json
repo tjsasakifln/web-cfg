@@ -1197,7 +1197,7 @@
           "confidence": "confirmed"
         },
         {
-          "description": "Every main push builds; workflow gate forbids Netlify build.ignore drift",
+          "description": "Every main push builds; workflow gate requires Netlify build.ignore to be exactly exit 1",
           "location": "netlify.toml + scripts/site/test_workflow_gates.py",
           "confidence": "confirmed"
         },
