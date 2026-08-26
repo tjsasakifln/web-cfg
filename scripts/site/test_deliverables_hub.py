@@ -26,7 +26,8 @@ ROOT = Path(__file__).resolve().parents[2]
 ROUTE = "/entregas/"
 CANONICAL = f"https://confenge.com.br{ROUTE}"
 PAGE = ROOT / "entregas" / "index.html"
-CSS = PAGE.with_name("styles.css")
+CSS = PAGE.with_name("catalog.css")
+CATALOG_DATA = PAGE.with_name("catalog-data.js")
 REPORT_ROUTE = "/casos/modelo-relatorio-inteligencia-licitacoes/"
 REPORT = ROOT / REPORT_ROUTE.strip("/") / "index.html"
 # Ascending value ladder, anchored on the published R$ 599 report.
@@ -133,6 +134,7 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
 
 def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> None:
     html = _html().casefold()
+    client_data = CATALOG_DATA.read_text(encoding="utf-8").casefold()
     for forbidden in (
         "no_match_confirmed",
         "empresa limpa",
@@ -140,12 +142,11 @@ def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> N
         "empresa idonea",
         "nada consta",
     ):
-        assert forbidden not in html
-    boundary = re.search(
-        r'data-deliverable-id="cfg-d43"[^>]+data-exclusion="([^"]+)"', html
-    )
-    assert boundary
-    assert "certificado" in boundary.group(1) and "declaração" in boundary.group(1)
+        assert forbidden not in f"{html}\n{client_data}"
+    assert "data-exclusion=" not in html
+    assert "confenge.public-deliverable-catalog/1.0" in client_data
+    assert "certificado, selo ou declaração" in client_data
+    assert "universal" in client_data
 
 
 def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
@@ -157,6 +158,19 @@ def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
     rule = re.search(rf"{re.escape(selector)}\{{([^}}]+)\}}", css)
     assert rule
     assert "min-height:44px" in rule.group(1)
+
+
+def test_progressive_catalog_css_does_not_block_first_paint() -> None:
+    html = _html()
+    assert '<link data-catalog-css' not in html
+    assert '<noscript><link href="/entregas/catalog.css" rel="stylesheet"/></noscript>' in html
+    assert html.index("/entregas/catalog-bootstrap.js") > html.index("</footer>")
+    assert "/entregas/catalog-data.js" not in html
+    assert '<script defer fetchpriority="low" src="/entregas/catalog.js"' not in html
+    base_css = (PAGE.with_name("styles.css")).read_text(encoding="utf-8")
+    assert ".catalog-framing select,.catalog-framing input" in base_css
+    assert "max-width:100%" in base_css
+    assert "min-height:44px" in base_css
 
 
 def test_hub_is_honest_about_every_published_example() -> None:

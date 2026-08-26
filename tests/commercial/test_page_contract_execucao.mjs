@@ -743,21 +743,43 @@ function articleFor(number) {
   return idAt >= 0 && start >= 0 && end > idAt ? hub.slice(start, end) : "";
 }
 
+function sectionFor(article, clause) {
+  const marker = `data-copy-clause="${clause}"`;
+  const markerAt = article.indexOf(marker);
+  const start = article.lastIndexOf("<section", markerAt);
+  const end = article.indexOf("</section>", markerAt);
+  return markerAt >= 0 && start >= 0 && end > markerAt ? article.slice(start, end) : "";
+}
+
+function publicHtml(value) {
+  return String(value ?? "")
+    .replace(/\bUNKNOWN\b/g, "DESCONHECIDO")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
 for (const item of items) {
   const article = articleFor(item.number);
+  const canonical = canonicalById.get(item.deliverable_id);
+  const inputSection = sectionFor(article, "client_inputs_and_sla_start");
+  const outputSection = sectionFor(article, "concrete_result_and_artifact_example");
   assert(`item_${item.number}_is_visible_in_hub`, article.length > 0, item.deliverable_id);
   assert(`item_${item.number}_canonical_name_is_visible`, article.includes(item.public_name_pt_br), item.public_name_pt_br);
   assert(`item_${item.number}_value_line_is_visible`, article.includes(item.value_line_pt_br), item.value_line_pt_br);
   assert(`item_${item.number}_price_is_visible`, item.pricing.tiers.every((tier) => article.includes(brl(tier.price_cents))), item.pricing.tiers);
   assert(
     `item_${item.number}_inputs_are_progressively_visible`,
-    article.includes('data-copy-clause="client_inputs_and_sla_start"') && /data-input-count="[4-9]/.test(article),
-    item.inputs_pt_br,
+    canonical?.required_inputs?.length >= 4 &&
+      canonical.required_inputs.every((value) => inputSection.includes(`<li>${publicHtml(value)}</li>`)),
+    canonical?.required_inputs,
   );
   assert(
     `item_${item.number}_outputs_are_progressively_visible`,
-    article.includes('data-copy-clause="concrete_result_and_artifact_example"') && article.includes('data-output="'),
-    item.outputs_pt_br,
+    canonical?.included_outputs?.length >= 4 &&
+      canonical.included_outputs.every((value) => outputSection.includes(`<li>${publicHtml(value)}</li>`)),
+    canonical?.included_outputs,
   );
 }
 
