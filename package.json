@@ -6,6 +6,10 @@
   "type": "module",
   "scripts": {
     "prepare": "bash scripts/install-git-filters.sh",
+    "runtime:start": "node runtime/server.mjs",
+    "runtime:inventory": "node runtime/inventory.mjs",
+    "runtime:schedule": "node runtime/schedule.mjs",
+    "test:runtime": "node --test --test-concurrency=1 runtime/test/*.test.mjs",
     "test:release-filters": "python3 scripts/site/test_release_result_filters.py",
     "research:build": "python3 -m scripts.research build",
     "research:validate": "python3 -m scripts.research validate",
