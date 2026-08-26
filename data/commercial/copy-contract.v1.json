@@ -1038,11 +1038,11 @@
         "id": "B-18",
         "page": "entregas/index.html",
         "forbidden_id": "FL-08",
-        "occurrences": 6,
+        "occurrences": 7,
         "by_exemption": {
-          "GX-03": 6
+          "GX-03": 7
         },
-        "evidence": "O índice integral cita o instituto no nome canônico, na pergunta decisória e na descrição de caixa, seguro, caução e garantia contratual do item 30; nenhuma ocorrência promete resultado."
+        "evidence": "O índice integral e sua navegação alfabética citam o instituto no nome canônico, na pergunta decisória e na descrição de caixa, seguro, caução e garantia contratual do item 30; nenhuma ocorrência promete resultado."
       }
     ],
     "structured_data_check": {

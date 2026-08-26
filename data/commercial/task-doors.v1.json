@@ -1,6 +1,6 @@
 {
   "schema": "confenge.commercial.task_doors.v1",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "source_issue": 335,
   "parent_issue": 329,
   "related_issues": [183, 188, 295, 300, 327, 336, 338, 343],
@@ -373,13 +373,13 @@
       "views": ["por_tarefa", "alfabetica"],
       "count_derived_from_registry": true,
       "per_item_fields_required": ["deep_link", "public_state", "price"],
-      "route": null,
-      "route_note_pt_br": "A issue 335 não publica a rota do índice integral. O campo fica nulo até a issue de implementação definir a rota."
+      "route": "/entregas/",
+      "route_note_pt_br": "O índice integral é publicado na superfície canônica de entregáveis e deriva do registro versionado."
     },
     "deep_link": {
       "required_per_item": true,
-      "pattern": null,
-      "pattern_note_pt_br": "A issue 335 exige deep link por item mas não fixa o padrão do fragmento. O campo fica nulo até a implementação."
+      "pattern": "#entrega-{NN}",
+      "pattern_note_pt_br": "Cada item de 01 a 54 tem fragmento estável na superfície canônica."
     },
     "secondary_access": {
       "label_pt_br": "Ver as 54 entregáveis",
@@ -450,11 +450,31 @@
     "evidence": [],
     "failure_policy_pt_br": "Falha ajusta hierarquia e copy, nunca apaga oferta."
   },
+  "public_implementation": {
+    "route": "/entregas/",
+    "renderer": "scripts/commercial/render_public_catalog.mjs",
+    "client_loader": "entregas/catalog-bootstrap.js",
+    "client_script": "entregas/catalog.js",
+    "client_data_asset": "entregas/catalog-data.js",
+    "client_stylesheet": "entregas/catalog.css",
+    "stylesheet": "entregas/styles.css",
+    "index_count": 54,
+    "framing_steps": 3,
+    "filter_dimensions": ["tarefa", "objeto", "urgencia_segura", "preco", "contratacao", "estado"],
+    "url_state": true,
+    "alphabetical_view": true,
+    "comparison": {
+      "min_selection": 2,
+      "max_selection": 4,
+      "mobile_layout": "blocos_empilhados_por_criterio"
+    },
+    "terminal_capture": true,
+    "new_analytics_dimensions": false,
+    "human_validation": "NOT_STARTED"
+  },
   "not_delivered_by_this_change_pt_br": [
-    "Nenhuma tela é construída aqui: esta entrega grava a arquitetura de navegação e o gate que impede contagem ambígua.",
-    "Índice integral, filtros, bandeja de comparação e formulário de enquadramento continuam por implementar.",
+    "A tela pública está construída, mas não declara adequação automática entre situação e oferta.",
     "As 20 sessões humanas da issue 335 não foram executadas, então nenhuma meta de compreensão está validada.",
-    "Rota e padrão de deep link do índice integral permanecem nulos porque a issue 335 é silente.",
     "Nome público dos itens 09 a 54 não é fixado aqui: a autoridade é a issue 343."
   ]
 }

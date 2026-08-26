@@ -26,7 +26,8 @@ ROOT = Path(__file__).resolve().parents[2]
 ROUTE = "/entregas/"
 CANONICAL = f"https://confenge.com.br{ROUTE}"
 PAGE = ROOT / "entregas" / "index.html"
-CSS = PAGE.with_name("styles.css")
+CSS = PAGE.with_name("catalog.css")
+CATALOG_DATA = PAGE.with_name("catalog-data.js")
 REPORT_ROUTE = "/casos/modelo-relatorio-inteligencia-licitacoes/"
 REPORT = ROOT / REPORT_ROUTE.strip("/") / "index.html"
 # Ascending value ladder, anchored on the published R$ 599 report.
@@ -115,8 +116,12 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
         '<meta content="index,follow,max-image-preview:large,max-snippet:-1,'
         'max-video-preview:-1" name="robots"/>' in html
     )
-    for forbidden in ("<dialog", "<details", ".pdf", "download=", "cadastre"):
+    for forbidden in ("<dialog", ".pdf", "download=", "cadastre"):
         assert forbidden not in lowered
+    # Details are progressive disclosure for dense scope and the alphabetical
+    # index; their summaries are present in the direct HTML and never gate the
+    # published example routes or the terminal capture.
+    assert lowered.count("<details") == lowered.count("<summary")
     # Issue #290 gives the hub a terminal capture. The library still must not be
     # gated: exactly one form, and it opens only after the last published example.
     assert lowered.count("<form") == 1, "the hub takes one terminal capture, not a gate"
@@ -127,10 +132,51 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
     assert html.count("<h1") == 1
 
 
+def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> None:
+    html = _html().casefold()
+    client_data = CATALOG_DATA.read_text(encoding="utf-8").casefold()
+    for forbidden in (
+        "no_match_confirmed",
+        "empresa limpa",
+        "empresa idônea",
+        "empresa idonea",
+        "nada consta",
+    ):
+        assert forbidden not in f"{html}\n{client_data}"
+    assert "data-exclusion=" not in html
+    assert "confenge.public-deliverable-catalog/1.0" in client_data
+    assert "certificado universal, selo ou declaração conclusiva de integridade" in client_data
+
+
+def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
+    css = CSS.read_text(encoding="utf-8")
+    selector = (
+        ".catalog-filter-actions button,.catalog-compare-tray button,"
+        ".catalog-empty button"
+    )
+    rule = re.search(rf"{re.escape(selector)}\{{([^}}]+)\}}", css)
+    assert rule
+    assert "min-height:44px" in rule.group(1)
+
+
+def test_progressive_catalog_css_does_not_block_first_paint() -> None:
+    html = _html()
+    assert '<link data-catalog-css' not in html
+    assert '<noscript><link href="/entregas/catalog.css" rel="stylesheet"/></noscript>' in html
+    assert html.index("/entregas/catalog-bootstrap.js") > html.index("</footer>")
+    assert "/entregas/catalog-data.js" not in html
+    assert '<script defer fetchpriority="low" src="/entregas/catalog.js"' not in html
+    base_css = (PAGE.with_name("styles.css")).read_text(encoding="utf-8")
+    assert ".catalog-framing select,.catalog-framing input" in base_css
+    assert "max-width:100%" in base_css
+    assert "min-height:44px" in base_css
+
+
 def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
-        "8 entregas, de R$ 599 a R$ 3.750",
+        "54 entregas, de R$ 599 a R$ 39.800",
+        "Amostra verificável: 8 exemplos integrais, sem cadastro",
         "Relatório Executivo de Priorização de Licitações",
         "12",
         "3",
