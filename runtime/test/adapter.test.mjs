@@ -151,6 +151,12 @@ test("production startup is refused when critical requirements are absent", asyn
     RUNTIME_PORT: "",
     RUNTIME_RELEASE_SHA: "",
     RUNTIME_BUILD_TIMESTAMP: "",
+  }, {
+    ...process.env,
+    GITHUB_SHA: "a".repeat(40),
+    COMMIT_REF: "b".repeat(40),
+    RELEASE_SHA: "c".repeat(40),
+    BUILD_TIMESTAMP: "2026-08-26T21:00:00Z",
   });
   const config = loadRuntimeConfig({ env, nodeVersion: "v22.23.2" });
   const registry = createFunctionRegistry({

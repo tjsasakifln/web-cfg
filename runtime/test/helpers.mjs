@@ -10,9 +10,15 @@ import { createPortableRuntime } from "../lib/server.mjs";
 export const TEST_ROOT = resolve(fileURLToPath(new URL(".", import.meta.url)));
 export const FIXTURE_FUNCTIONS = resolve(TEST_ROOT, "fixtures/functions");
 
-export function isolatedTestEnv(overrides = {}) {
-  const env = { ...process.env };
+export function isolatedTestEnv(overrides = {}, sourceEnv = process.env) {
+  const env = { ...sourceEnv };
   for (const key of [
+    "BUILD_TIME",
+    "BUILD_TIMESTAMP",
+    "CACHED_COMMIT_REF",
+    "COMMIT_REF",
+    "CONFENGE_STORAGE_BACKEND",
+    "CONFENGE_STORAGE_DIR",
     "CONTEXT",
     "CORRECTION_STORE_DIR",
     "LEAD_STORE_DIR",
@@ -23,6 +29,12 @@ export function isolatedTestEnv(overrides = {}) {
     "NETLIFY_BLOBS_SITE_ID",
     "NETLIFY_BLOBS_TOKEN",
     "NETLIFY_SITE_ID",
+    "GITHUB_SHA",
+    "RELEASE_SHA",
+    "RUNTIME_BUILD_TIMESTAMP",
+    "RUNTIME_PUBLIC_ARTIFACT_HASH",
+    "RUNTIME_RELEASE_BUNDLE_HASH",
+    "RUNTIME_RELEASE_SHA",
     "SITE_ID",
   ]) {
     delete env[key];
