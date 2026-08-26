@@ -840,8 +840,8 @@
   "naming_authority": "#343 é a fonte canônica de public_name_pt_br, linha de valor, aliases e semântica entre 54 entregáveis, 2 contêineres e planos. Em divergência nominal prevalece #343; escopo e preço de #338 permanecem válidos.",
   "money_page_scan": {
     "state": "MEASURED_PASS",
-    "measured_at": "2026-08-24",
-    "measured_against": "origin/main em 12f05ad3",
+    "measured_at": "2026-08-25",
+    "measured_against": "feat/329-public-catalog-surface",
     "method": "Cada página é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Cada ocorrência é classificada como isenta por exceção documentada ou como violação.",
     "gate_rule": "Toda ocorrência viva precisa estar registrada: as isentas em boundaries com contagem exata, as demais em violations. Ocorrência não registrada reprova o portão.",
     "pages": [
@@ -1033,6 +1033,16 @@
           "GX-03": 5
         },
         "evidence": "Cinco citações do instituto como exposição financeira e insumo de caixa (garantia estimada, capacidade financeira, gate econômico) e uma forma de promessa negada (o valor total não equivale a receita garantida)."
+      },
+      {
+        "id": "B-18",
+        "page": "entregas/index.html",
+        "forbidden_id": "FL-08",
+        "occurrences": 7,
+        "by_exemption": {
+          "GX-03": 7
+        },
+        "evidence": "O índice integral e sua navegação alfabética citam o instituto no nome canônico, na pergunta decisória e na descrição de caixa, seguro, caução e garantia contratual do item 30; nenhuma ocorrência promete resultado."
       }
     ],
     "structured_data_check": {

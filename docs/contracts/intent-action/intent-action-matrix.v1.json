@@ -1,9 +1,9 @@
 {
   "schema": "intent-action-matrix/1.0",
-  "version": "1.4.2",
-  "as_of": "2026-08-24",
+  "version": "1.4.3",
+  "as_of": "2026-08-25",
   "owner": "web-cfg/conversion",
-  "sla_policy": "Commercial response SLA is UNKNOWN until Warmbly #55 measures a representative baseline. The owner-authorized Radar delivery clock is a separate contract: up to 48 business hours from persisted parameter submission, never from payment confirmation.",
+  "sla_policy": "Commercial response SLA is UNKNOWN until Warmbly #55 measures a representative baseline. Issue #331 authorizes a distinct Radar delivery clock: 3 business days from a valid persisted parameter submission, never from payment confirmation.",
   "first_canary": {
     "asset_family": "market_answer",
     "market_answer_id": "ma-pavimentacao-valor-tipico-v0",
@@ -490,7 +490,7 @@
       "intent": "contratar relatorio de inteligencia",
       "question_class": "paid_offer_parameter_intake",
       "eligibility": "Visitor asks for one adapted report after reading the public synthetic model and can provide the company CNPJ, operating cut, segments, technical experience and delivery email. CONFENGE sources open tenders in that cut; opportunity count follows published availability and analysis depth is the maximum supported by company-provided information.",
-      "promised_outcome": "Persisted parameter order with a server-issued cfg:{offer_id}:{correlation_id} reference before the owner-operated payment handoff. CONFENGE then sources the available open tenders and prepares one adapted report within 48 business hours from the persisted submission. Direct checkout remains disabled and this is not an approved catalog SKU.",
+      "promised_outcome": "Persisted parameter order with a server-issued cfg:{offer_id}:{correlation_id} reference before the owner-operated payment handoff. CONFENGE then sources the available open tenders and prepares one adapted report within 3 business days from the valid persisted submission. Direct checkout remains disabled and this is not an approved catalog SKU.",
       "minimum_fields": [
         "nome",
         "cnpj",
@@ -503,7 +503,7 @@
       ],
       "owner": "tiago-jun-sasaki",
       "channel": "persisted_web_form_then_owner_payment_handoff",
-      "sla": "delivery_within_48_business_hours_from_persisted_form_submission",
+      "sla": "delivery_within_3_business_days_from_valid_persisted_form_submission",
       "privacy_consent": "Explicit consent covers use of the submitted company, scope and contact data to produce and deliver this Radar order. Analytics receive only normalized non-PII dimensions; no CNPJ, contact, acervo text or autonomous message leaves the lead contract.",
       "fallback": "fail_closed_without_payment_handoff",
       "kill_gate": "Kill if payment instructions open without a persisted server reference, if the visitor is told to supply opportunities, if opportunity count is fixed or negotiated instead of following published availability, if maximum analysis depth is negotiated or artificially capped instead of following company-provided information, if the visible unit price differs from BRL 599, if the delivery clock starts at payment, if direct checkout is enabled, or if analytics receive CNPJ, contact or acervo text.",

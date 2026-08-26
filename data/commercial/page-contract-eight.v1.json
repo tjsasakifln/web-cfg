@@ -1,9 +1,9 @@
 {
   "schema": "confenge.page-contract-eight/1.0",
-  "version": "v1",
+  "version": "v2",
   "issue": 331,
   "parent_issue": 329,
-  "purpose": "Contrato de página das oito entregas atuais: o que cada rota publicada e o hub precisam exibir, com escopo, entrada, saída, SLA e fronteira. Não altera preço nem HTML.",
+  "purpose": "Contrato de página e fonte de renderização das oito entregas atuais: o que cada rota publicada e o hub exibem, com escopo, entrada, saída, SLA e fronteira. Não altera preço.",
   "source_of_truth": "issue 331, seção 'Escopo comercial canônico', 'Entradas comuns' e 'Fronteiras'",
   "nomenclature_authority": "issue 343 é a fonte canônica de public_name_pt_br; em caso de divergência nominal prevalece a 343, e escopo e preço da 331 permanecem válidos",
   "currency": "BRL",
@@ -23,6 +23,10 @@
   "forbidden_limit_rule": "A 331 determina não limitar por contagem de folhas. Qualquer limite de escopo escrito nessa unidade reprova o gate.",
   "unknown_rule": "ausência de dado vira UNKNOWN",
   "human_decision_rule": "classificação automática nunca encerra decisão humana",
+  "public_copy_overrides": {
+    "ausência de dado vira UNKNOWN": "ausência de dado aparece como NÃO INFORMADO",
+    "toda fonte pública é adquirida e versionada pelo extra-cli, não pelo web-cfg": "toda fonte pública tem origem e versão registradas antes da análise"
+  },
   "common_inputs": [
     "CNPJ e decisão que está na mesa",
     "território/raio e tipologias executáveis",
@@ -336,10 +340,25 @@
       "generates_package_credit": true
     }
   ],
+  "public_implementation": {
+    "renderer": "scripts/commercial/render_eight_offer_contracts.mjs",
+    "route_pages": 8,
+    "hub_route": "/entregas/",
+    "capture_fields": [
+      "deliverable_id",
+      "origem",
+      "cnpj",
+      "analysis_cutoff",
+      "opportunity_deadline",
+      "decision_intent"
+    ],
+    "analytics_contains_qualification": false,
+    "checkout_enabled": false
+  },
   "not_delivered_here": {
-    "html_changed": false,
+    "html_changed": true,
     "price_changed": false,
-    "sla_visible_on_route_pages": "NOT_STARTED",
+    "sla_visible_on_route_pages": "DONE",
     "first_sale_evidence": "NOT_STARTED",
     "first_sale_fields": ["horas", "retrabalho", "margem", "outcome"],
     "evidence": []

@@ -10,7 +10,7 @@ const MATRIX_PATH = path.join(
 );
 const AUTHORIZED_ROUTE_SLA = Object.freeze({
   contratar_relatorio_inteligencia_599:
-    "delivery_within_48_business_hours_from_persisted_form_submission",
+    "delivery_within_3_business_days_from_valid_persisted_form_submission",
 });
 
 let _cached = null;
