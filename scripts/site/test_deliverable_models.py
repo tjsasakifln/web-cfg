@@ -1,6 +1,6 @@
 """Public contract for the indexable deliverable models of the value ladder.
 
-Each page models one deliverable of the Diagnóstico B2G de Expansão. They share a
+Each page models one deliverable of the Diagnóstico de Expansão no Mercado Público. They share a
 single synthetic base so the numbers reconcile across the family, exactly as the
 paid deliverables reconcile against one canonical dataset.
 """

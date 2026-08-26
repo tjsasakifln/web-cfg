@@ -94,7 +94,7 @@ PR | TÍTULO | DESTINO | SHA/PR DE DESTINO | ISSUE | ISSUE STATE | BRANCH | OBSE
 | #93 | chore(deps): bump @netlify/blobs from 10.7.12 to 10.7.13 | MERGED_DIRECT | ce5192c550b94e9f5296618612f254e72a76288a | — | n/a | dependabot/npm_and_yarn/netlify/blobs-10.7.13 | live Blobs store; suites + required checks green |
 | #132 | feat(paid-search): prepare no-spend Search Ads canary (#87) | CLOSED_DEFERRED_TO_ISSUE | #87 | #87 | OPEN | issue/87-inrepo-slice | no spend auth; 4400-line prepare-only |
 | #133 | feat(migration): classify SmartLic capabilities without runtime (#63) | CLOSED_DEFERRED_TO_ISSUE | #63 | #63 | OPEN | issue/63-inrepo-slice | JSON unused; policy on issue |
-| #134 | feat(revops): founder-led QCO cycle with UNKNOWN honesty (#64) | CLOSED_WRONG_AUTHORITY | #64 | #64 | OPEN | issue/64-inrepo-slice | extra-cli/Warmbly own account/outcome |
+| #134 | feat(revops): founder-led QCO cycle with UNKNOWN honesty (#64) | CLOSED_WRONG_AUTHORITY | #64 | Warmbly #47/#55 + Governance #65 | CLOSED_MOVED | none | extra-cli/Warmbly own account/outcome; Governance owns supervision |
 | #135 | feat(nurture): prepare-only Market Signals Brief (#90) | CLOSED_DEFERRED_TO_ISSUE | #90 | #90 | OPEN | issue/90-inrepo-slice | DEFER until first #84 + opt-in |
 | #136 | feat(research): defer recurring index until flagship proof (#91) | CLOSED_DEFERRED_TO_ISSUE | #91 | #91 | OPEN | issue/91-inrepo-slice | DEFER until #65 citation/reuse |
 | #138 | feat(funnel): WIP canary registry caps one canary per mechanism (#61) | CLOSED_DEFERRED_TO_ISSUE | #61 | #61 | OPEN | issue/61-inrepo-slice | decorative JSON; rule on issue |

@@ -16,7 +16,7 @@ const ISSUE_URL = "https://github.com/tjsasakifln/web-cfg/issues/251";
 const ISSUE_DECISION_COMMENT = `${ISSUE_URL}#issuecomment-5389755464`;
 const DECISION_DOC = "docs/ops/offers/PILOTO-CHECKOUT-DECISION.md";
 const DEFER_FLAGS_SHA256 = "afa4be12f2b9ceb0693cee5e36253aca161b92df40d93678b019d7ee4e629b08";
-const REASON = "The 24 /piloto/ pages and production checkout code are prepared assets, but the parent offer decision remains VALIDATE, provider mappings are empty, production flags are off and no versioned evidence authorizes a real-money canary. Preserve the reversible asset while founder-led demand and external approvals are proved.";
+const REASON = "The 24 /piloto/ pages and production checkout code are prepared assets, but the parent offer decision remains VALIDATE, provider mappings are empty, production flags are off and no versioned evidence authorizes a real-money canary. Preserve the reversible asset while qualified demand from the Warmbly aggregate and external approvals are proved.";
 const SUNSET_RULE = "If the review does not justify another DEFER or EXECUTE decision, publish a versioned URL-by-URL MIGRATE/REDIRECT/RETIRE plan for all 24 pages. A blanket redirect to the home page is forbidden.";
 const ROLLBACK = "Keep catalog, checkout, webhook and real-money flags false; keep ASAAS_MODE disabled in production. This DEFER schema cannot authorize checkout or rollback receive-only. A later EXECUTE needs a separate reviewed schema and implementation with production_evidence=true, durable cumulative limits and individual authority for every real charge, refund and cancellation. Revert to the last known-good deploy.";
 
@@ -55,7 +55,7 @@ const CRITERIA = Object.freeze([
   }),
   Object.freeze({
     id: "qualified-demand",
-    measure: "Founder-led manual channel records qualified willingness to buy the named offer at approved terms",
+    measure: "A versioned Warmbly aggregate records qualified willingness to buy the named offer at approved terms, with Governance review",
     threshold: ">= 1 qualified commercial opportunity; aggregate record only, no PII in this contract",
   }),
   Object.freeze({

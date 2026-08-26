@@ -19,7 +19,7 @@ O estado, portanto, é `DEFER`. A revisão em 2026-09-20 não ativa nada automat
 Os quatro critérios abaixo são cumulativos:
 
 1. #88 muda para `EXECUTE` em decisão versionada, nomeando uma oferta canário e teto de gasto.
-2. O canal manual founder-led registra pelo menos uma oportunidade comercial qualificada disposta a comprar essa oferta nos termos aprovados. O contrato registra somente evidência agregada, nunca PII.
+2. Um agregado versionado do Warmbly registra pelo menos uma oportunidade comercial qualificada disposta a comprar essa oferta nos termos aprovados, com revisão de Governance/Control Center. O contrato registra somente evidência agregada, nunca PII; `web-cfg` não executa contato, proposta ou cadência.
 3. Aprovações legal, fiscal/NFS-e, capacidade de entrega e segurança têm quatro referências versionadas.
 4. A oferta canário tem mapeamento de provedor preenchido e evidências verdes de sandbox, caminhos negativos e rollback.
 

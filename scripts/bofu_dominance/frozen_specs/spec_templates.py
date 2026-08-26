@@ -569,7 +569,7 @@ TEMPLATES: dict[str, dict[str, Any]] = {
             {
                 "block": "og_title",
                 "before": "og:title = Mapeie onde a frente pública perde tempo, margem e controle.",
-                "after": "og:title = Diagnóstico B2G 360° | CONFENGE (match <title>; keep the sentence as visible lead)",
+                "after": "og:title = Diagnóstico da Operação em Obras Públicas | CONFENGE (match <title>; keep the sentence as visible lead)",
                 "why": "Snippet/social title mismatch. Canonical already present (href-before-rel). Do not touch offer copy.",
             },
             {
@@ -587,7 +587,7 @@ TEMPLATES: dict[str, dict[str, Any]] = {
         ],
         "evidence_proof_needed": [
             "28d GSC vs 1/0 @ 15.0 — n is anecdotal; kill if the og:title change does not produce a click and n stays < 30.",
-            "Do not treat extra-cli national coverage PARTIAL as a 360° proof asset.",
+            "Do not treat extra-cli national coverage PARTIAL as proof of the diagnostic offer.",
             "Qualified conversation from jornada=operacao remains the commercial evidence (#88/#60), not this patch.",
         ],
     },

@@ -1,7 +1,7 @@
 format: frozen_patch_v1
 slug: reequilibrio-obras-publicas
 path: reequilibrio-obras-publicas/index.html
-content_sha256: 0d87ae2a0a8c0c17f353c97ee41aae31d6a2473b7c229808cbf8a201430be202
+content_sha256: 3b4afa9eb474ad6ca0b9be84f1f37c2f64f76e3824e919ed84e61e312707884b
 earliest_safe_action_at: 2026-09-16
 corresponding_issue: 128
 html_mutation_authorized: false

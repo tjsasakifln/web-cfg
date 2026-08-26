@@ -154,7 +154,7 @@ for (const width of widths) {
   if (!metrics.compareScrollFocusable) errors.push("compare_scroll_focus");
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
   // One primary leads to the progressive framing and the other submits the
-  // hand-raise added by #290; neither replaces a priced offer path.
+  // terminal hand-raise added by #290; neither replaces a priced offer path.
   if (metrics.primaries > 2) errors.push(`primary_cta_overuse=${metrics.primaries}`);
   if (metrics.navDeliverables !== "Entregas" || metrics.navCurrent !== "page") errors.push("nav_contract");
   if (metrics.emptyPlaceholders) errors.push("empty_placeholders");
@@ -200,8 +200,24 @@ const catalogBoot = await page.evaluate(() => ({
   filterVisible: !document.querySelector("[data-catalog-filters]")?.hidden,
 }));
 if (!catalogBoot.enhanced || !catalogBoot.filterVisible) catalogErrors.push("catalog_not_enhanced");
-if (catalogBoot.dataSchema !== "confenge.public-deliverable-catalog/1.0" || catalogBoot.dataCount !== 54) {
+if (catalogBoot.dataSchema !== "confenge.public-deliverable-catalog/1.1" || catalogBoot.dataCount !== 54) {
   catalogErrors.push("catalog_data_contract");
+}
+await page.click('details[data-copy-contract-id="CFG-D01"] summary');
+await page.waitForFunction(() => (
+  document.querySelector('details[data-copy-contract-id="CFG-D01"]')?.dataset.copyContractHydrated === "true"
+), { timeout: 5000 });
+const hydratedContract = await page.evaluate(() => {
+  const details = document.querySelector('details[data-copy-contract-id="CFG-D01"]');
+  return {
+    open: details?.open,
+    hydrated: details?.dataset.copyContractHydrated,
+    clauses: details?.querySelectorAll("[data-copy-clause]").length || 0,
+    text: details?.textContent || "",
+  };
+});
+if (!hydratedContract.open || hydratedContract.hydrated !== "true" || hydratedContract.clauses !== 15 || !hydratedContract.text.includes("Compre quando")) {
+  catalogErrors.push("catalog_copy_contract_hydration");
 }
 await page.type("[data-filter-query]", "Radar de Licitações Prioritárias");
 const filtered = await page.evaluate(() => ({
@@ -240,7 +256,7 @@ const progressiveComparison = await page.evaluate(() => ({
 if (progressiveComparison.hidden || progressiveComparison.count !== 2 || progressiveComparison.criteria !== 18 || progressiveComparison.selected !== 2) {
   catalogErrors.push("catalog_comparison_behavior");
 }
-findings.push({ route: "/entregas/", check: "progressive_catalog", catalogLazyBefore, catalogBoot, filtered, recommendation, progressiveComparison, errors: catalogErrors });
+findings.push({ route: "/entregas/", check: "progressive_catalog", catalogLazyBefore, catalogBoot, hydratedContract, filtered, recommendation, progressiveComparison, errors: catalogErrors });
 if (catalogErrors.length) failed += 1;
 
 const noScriptPage = await browser.newPage();
@@ -251,11 +267,11 @@ const noScriptCatalog = await noScriptPage.evaluate(() => ({
   cards: document.querySelectorAll("article.catalog-item").length,
   visibleCards: [...document.querySelectorAll("article.catalog-item")].filter((card) => getComputedStyle(card).display !== "none").length,
   filtersHidden: getComputedStyle(document.querySelector("[data-catalog-filters]")).display === "none",
-  compareControlsHidden: getComputedStyle(document.querySelector(".catalog-item__compare")).display === "none",
+  compareControls: document.querySelectorAll(".catalog-item__compare").length,
 }));
 const noScriptErrors = [];
 if (noScriptCatalog.cards !== 54 || noScriptCatalog.visibleCards !== 54) noScriptErrors.push("catalog_noscript_content");
-if (!noScriptCatalog.filtersHidden || !noScriptCatalog.compareControlsHidden) noScriptErrors.push("catalog_noscript_controls");
+if (!noScriptCatalog.filtersHidden || noScriptCatalog.compareControls !== 0) noScriptErrors.push("catalog_noscript_controls");
 findings.push({ route: "/entregas/", check: "catalog_noscript", noScriptCatalog, errors: noScriptErrors });
 if (noScriptErrors.length) failed += 1;
 await noScriptPage.close();

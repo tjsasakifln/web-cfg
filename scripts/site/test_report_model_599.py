@@ -831,7 +831,7 @@ def test_product_promise_value_and_scope_are_explicit_before_the_example() -> No
     offer = html[:offer_end]
 
     for phrase in (
-        "Relatório Executivo de Priorização de Licitações",
+        "Radar de Licitações Prioritárias",
         "Escolha quais licitações disputar e quais recusar.",
         "12 analisadas",
         "3 priorizadas",

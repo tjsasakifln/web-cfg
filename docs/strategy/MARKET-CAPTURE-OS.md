@@ -1,107 +1,119 @@
 # CONFENGE market-capture operating system
 
-**Status:** authoritative operating thesis  
-**Date:** 2026-08-15
-**Architecture:** [ADR-STRAT-002](../architecture/ADR-STRAT-002-confenge-canonical-public-surface.md)  
-**Executive experiment:** [#64](https://github.com/tjsasakifln/web-cfg/issues/64)
+**Status:** authoritative operating thesis
+
+**Date:** 2026-08-25
+
+**Architecture:** [ADR-STRAT-002](../architecture/ADR-STRAT-002-confenge-canonical-public-surface.md)
+
+**Inbound execution:** [#61](https://github.com/tjsasakifln/web-cfg/issues/61)
 
 ## Corporate thesis and North Star
 
 CONFENGE is a B2G intelligence company applied to engineering that monetizes
-through high-value services. The corporate North Star is **Inbound Qualified
-Pipeline per Month**, not leads, emails, pages, impressions, commits or closed
-issues. Qualified Commercial Opportunities remain the upstream operating unit;
-they are not a substitute for attributable pipeline.
+through high-value services. The corporate North Star is **Qualified Commercial
+Opportunities**, connected to attributable pipeline and revenue — never leads,
+emails, pages, impressions, commits or closed issues in isolation.
 
-A QCO requires a valid account, a specific evidenced problem/opportunity, an
+A QCO requires a valid account, a specific evidenced problem or opportunity, an
 applicable offer, a why-now trigger and a plausible decision unit with a
 defensible route. UNKNOWN remains UNKNOWN; WON requires human or documentary
 evidence.
 
 The category ambition is to make CONFENGE unavoidable to people interested in
-AEC B2G and respected as a technical house, not another consultancy. That must
-be earned through original data, explicit methods, expert authorship/review,
-correction history, permissioned proof and repeated third-party citation. Track
-branded search, qualified mentions, relevant referring domains, dataset/chart
-reuse and direct/returning demand as moat signals, never as vanity substitutes
-for pipeline.
+AEC B2G and respected as a technical house, not another consultancy. That is
+earned through original data, explicit methods, expert authorship/review,
+correction history, permissioned proof and repeated third-party citation.
 
-## Revenue path
+## Two distinct revenue paths
+
+Inbound and outbound share commercial owners after handoff, but they do not
+share acquisition mechanics or gates.
 
 ```text
-public event
-→ extra-cli detects and qualifies commercial intent
-→ QCO/operator pack
-→ named person or decision unit
-→ defensible route
-→ Warmbly cockpit
-→ CALL | ROUTED_CALL | MANUAL_OUTREACH | SEND_EMAIL
-→ founder action
-→ observed outcome or rejection
-→ learning and next action
+INBOUND
+confenge.com.br → tráfego → intenção → lead CONFENGE_WEB
+→ transporte fail-closed → Warmbly → ação → pipeline → receita
+
+OUTBOUND
+dados/eventos públicos → extra-cli adquire, normaliza, identifica e enriquece
+→ cohort/contatos plausíveis → Warmbly enfileira, personaliza, valida e despacha
+→ Governance/Control Center revisa, aprova ou intervém quando aplicável
+→ ação/outcome → aprendizado operacional
 ```
 
-Commercial reachability is not email sendability. `EMAIL_VALIDATED` is required
-only for `SEND_EMAIL`. Calls and defensible manual/routed actions do not wait for
-extra-cli #370 or Warmbly #39/#41/#43.
+Emails funcionais plausíveis podem compor a operação outbound quando não existe
+email pessoal comprovável, sempre sob os controles, compliance e kill switches
+do sistema proprietário. Isso não autoriza envio pelo `web-cfg`.
 
-## Five fronts
+## Autoridade por domínio
 
-1. **REVENUE NOW:** decision unit, defensible route, founder action, outcome.
-2. **INBOUND ENGINE:** `confenge.com.br`, margin-defense vertical, conversion.
-3. **MARKET INTELLIGENCE MOAT:** facts/events/contracts, provenance and recall.
-4. **COMPOUNDING SYSTEM:** outcomes, proof, expansion and partner distribution.
-5. **SCALE / SUNSET:** automate only proven flows and archive SmartLic.
+- **web-cfg:** única superfície pública CONFENGE; aquisição inbound, SEO/BOFU,
+  conteúdo, ofertas, UX/UI, captura, analytics públicos e contrato mínimo de
+  entrega de lead com `source=CONFENGE_WEB`.
+- **extra-cli:** aquisição/normalização de dados públicos, identidade,
+  proveniência, enrichment, matéria-prima comercial e contratos SELECT-only.
+- **Warmbly:** leads, enrichment operacional, cohorts, filas, cadência, estado de
+  contato, SLA, dispatch, ações e outcomes.
+- **Governance / Control Center:** revisão, aprovação, supervisão, observabilidade,
+  exceções, kill switches e decisões humanas.
 
-## Current decisions
+Se uma função comercial continuaria necessária após substituir o site público,
+ela não pertence ao `web-cfg`.
 
-- CONFENGE and `confenge.com.br` are the only public brand/surface.
-- `extra-cli` owns truth, identity, provenance and commercial-intent projection.
-- `web-cfg` owns public acquisition and conversion.
-- Warmbly owns commercial action and observed outcomes.
-- SmartLic is a donor/migration repository with no permanent runtime.
-- The first inbound vertical is margin defense: reajuste, reequilíbrio, BDI and
-  contract events. The quick comparison and evidence are recorded in #60.
-- New adapters wait for extra-cli #346 to rank commercially relevant unique
-  recall per effort. Technical coverage is not a corporate outcome.
-- Founder-led learning precedes bulk, auto-send and channel optimization.
+## Cinco frentes
 
-## Executive measurement
+1. **REVENUE NOW:** cohorts relevantes, decisão unitária ou em lote controlado,
+   ação e outcome no owner comercial.
+2. **INBOUND ENGINE:** `confenge.com.br`, catálogo 54/54, BOFU, prova e conversão.
+3. **MARKET INTELLIGENCE MOAT:** fatos, eventos e contratos com proveniência.
+4. **COMPOUNDING SYSTEM:** outcomes, prova permissionada, expansão e distribuição.
+5. **SCALE / SUNSET:** automatizar fluxos comprovados e retirar legado por URL.
+
+## Decisões atuais
+
+- CONFENGE e `confenge.com.br` são a única marca e superfície pública.
+- O catálogo comercial canônico tem **54 entregáveis e 2 contêineres**; planos e
+  condições de contratação não criam produtos. #343 é a autoridade nominal.
+- A operação outbound é uma esteira `extra-cli → Warmbly → Governance/Control
+  Center`, não um experimento artesanal de um contato e não uma função do site.
+- A operação pode preparar cohorts, enriquecer contatos, personalizar e validar
+  mensagens automaticamente antes da revisão humana quando aplicável.
+- Os controles inbound continuam fail-closed e independentes da evolução
+  outbound.
+- SmartLic é apenas doador/migração, sem marca, CTA ou runtime público.
+- A primeira vertical inbound é defesa de margem: reajuste, reequilíbrio, BDI e
+  eventos contratuais, com prova e conversion gate registrados em #60/#61.
+
+## Medição executiva
 
 - [Market Penetration Ledger: extra-cli #381](https://github.com/tjsasakifln/extra-cli/issues/381)
-  owns the versioned ICP/reachability denominator and joins authoritative
-  Warmbly action stages without creating a CRM.
+  possui o denominador ICP/reachability e combina estágios agregados sem criar
+  outro CRM.
 - [Commercial Latency: Warmbly #55](https://github.com/tjsasakifln/warmbly/issues/55)
-  measures event→detection→QCO→action→conversation→proposal→close. Measure a
-  baseline before setting an SLA.
+  mede evento→detecção→QCO→ação→conversa→proposta→fechamento. SLA e ciclo
+  operacional pertencem ao Warmbly; supervisão e exceções, a Governance.
+- `web-cfg` mede aquisição, intenção, conversão e transporte do lead até o aceite
+  do contrato externo. Não persiste acknowledgment/resolution comercial.
 
-## Compounding lanes
+## Prioridades executáveis por owner
 
-web-cfg #66 has four independent decision lanes:
-
-1. **Earned Distribution:** original asset → reuse/citation → brand demand → lead.
-2. **Proof Engine:** delivery/outcome → permissioned proof → institutional trust.
-3. **Partner Distribution:** one partner → many ICP accounts.
-4. **Customer Expansion:** client → event → next service → renewal/expansion.
-
-Pricing remains VALIDATE and subordinate to offer/outcome evidence. Do not build
-a partner portal, CRM or sophisticated forecast.
-
-## Top 5 execute now
-
-1. [Warmbly #42](https://github.com/tjsasakifln/warmbly/issues/42): perform one real multichannel founder action.
-2. [web-cfg #64](https://github.com/tjsasakifln/web-cfg/issues/64): close the first ICP × trigger × offer learning cycle.
-3. [extra-cli #372](https://github.com/tjsasakifln/extra-cli/issues/372): deliver decision-unit reachability/operator pack.
-4. [web-cfg #60](https://github.com/tjsasakifln/web-cfg/issues/60): ship the margin-defense vertical on `confenge.com.br`.
-5. [Warmbly #67](https://github.com/tjsasakifln/warmbly/issues/67): make manual call/WhatsApp copy safe before its next use.
+1. **web-cfg #60/#61/#267:** prova, conversão e transporte inbound de produção.
+2. **web-cfg #327/#338/#343/#344:** compreensão em três segundos, copy 54/54,
+   nomes e fronteiras comerciais.
+3. **extra-cli:** entregar facts, identidade, proveniência e cohorts por contratos
+   versionados, sem segundo DataLake no site.
+4. **Warmbly #47/#55:** operar ações/outcomes e latência comercial.
+5. **Governance #65:** supervisionar alertas, decisões, exceções e kill switches.
 
 ## Stop doing
 
-- Stop SmartLic product, brand, acquisition, public runtime and deployment work.
-- Stop treating email as the only route or #370 as a corporate Revenue Now blocker.
-- Stop bulk/auto-send before a real winning combination exists.
-- Stop provisional adapters competing as P1 before #346 measures unique relevant recall.
-- Stop preserving implementation issues after code is merged; retain only named
-  RUN, SOAK, VALIDATE_LIVE or reconciliation residuals.
-- Stop choosing a vertical by raw traffic or sunk assets alone.
-- Stop inventing TAM, outcomes, SLA, WON, expansion or causal attribution.
+- Não ressuscitar abordagem founder-led um-a-um como estratégia atual.
+- Não construir CRM, sales-ops, SLA, fila, cadência, dispatch ou Control Center
+  paralelo no `web-cfg`.
+- Não usar evolução outbound para afrouxar a captura inbound fail-closed.
+- Não criar páginas por keyword, dashboards, portais, DataLake, identidade ou
+  orquestração duplicada sem evidência de utilidade e alavancagem.
+- Não preservar trabalho por sunk cost; manter apenas residual real, owner certo
+  e decisão EXECUTE/VALIDATE/DEFER/SUNSET/SUPERSEDED explícita.
+- Não inventar TAM, outcome, SLA, WON, expansão ou atribuição causal.

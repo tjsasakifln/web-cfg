@@ -36,11 +36,13 @@ por `CFG-D01` a `CFG-D54`; chaves livres e texto bruto fazem o gate falhar.
 Se uma sessão for retirada ou inelegível, usar outro participante no mesmo slot
 e papel. Não alterar o bloco de cartões.
 
-## 4. Executar QCOs reais
+## 4. Importar QCOs reais do owner correto
 
-Para cada oportunidade comercial qualificada, recomendar uma única entrega
-principal e usar a versão explícita do preço. Warmbly registra ação, proposta,
-decisão literal, prazo, entrega e outcome. Não registrar contato ou narrativa
+Warmbly registra e executa ação, proposta, decisão, prazo, entrega e outcome;
+Governance/Control Center supervisiona revisões e exceções. Este repositório não
+cria fila, cadência, aprovação, dispatch nem estado operacional de contato.
+Importe somente o contrato agregado e versionado necessário para decidir a
+apresentação e a promoção de uma entrega. Não registrar contato ou narrativa
 individual no repositório.
 
 O export agregado deve declarar `source: CONFENGE_WEB`, intervalo, SHA-256 e
@@ -67,7 +69,7 @@ entrega concluída precisa terminar em outcome observado ou `UNKNOWN`, sem sobra
    artefatos. Depois atualizar manualmente as issues filhas e
    #88, sem palavra-chave de fechamento automático.
 
-Com menos de 20 entrevistas ou oito QCOs P0 com recomendação unitária, o estado
+Com menos de 20 entrevistas ou oito QCOs agregadas com recomendação unitária, o estado
 continua `AMOSTRA_INSUFICIENTE`. Nenhum gate converte zero ou ausência em
 evidência.
 

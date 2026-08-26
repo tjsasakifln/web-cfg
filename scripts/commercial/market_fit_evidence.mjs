@@ -230,7 +230,7 @@ export function validateResearchAggregate(doc, protocol, plan) {
 export function validateQcoAggregate(doc, protocol) {
   const problems = walkKeys(doc);
   const phase3 = protocol.phases.find((phase) => phase.phase === 3);
-  const expectedById = new Map(phase3.founder_led_offers.map((offer) => [offer.deliverable_id, offer.amount_cents]));
+  const expectedById = new Map(phase3.measurement_scope.map((offer) => [offer.deliverable_id, offer.amount_cents]));
   const expectedIds = [...expectedById.keys()];
   const rows = Array.isArray(doc.by_deliverable) ? doc.by_deliverable : [];
   exactKeys(problems, doc, QCO_ROOT_KEYS, "qco");

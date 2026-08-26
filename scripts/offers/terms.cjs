@@ -11,12 +11,12 @@ const TERMS_BODY = [
   "Snapshot CFG-TERMS-B2B-2026-08-17-v1.",
   "Preview comercial. Nao e texto juridico validado por advogado.",
   "Diagnostico: one-time, 10-15 dias uteis apos alinhamento e dados.",
-  "Flex: mensal, sem minimo, aviso de 30 dias.",
-  "180: 6 x R$ 15.000, maxPayments=6, aviso de 30 dias.",
-  "365: 12 x R$ 12.500, maxPayments=12, aviso de 30 dias.",
+  "Plano Mensal: mensal, sem minimo, aviso de 30 dias.",
+  "Compromisso Semestral: 6 x R$ 15.000, maxPayments=6, aviso de 30 dias.",
+  "Compromisso Anual: 12 x R$ 12.500, maxPayments=12, aviso de 30 dias.",
   "Capacidade Full: teto 50 slots, 1 slot padrao, hold 72h, reserva final apos pagamento confirmado.",
   "Inadimplencia (preview): multa 2% + juros simples 1%/mes pro rata die + IPCA; suspensao apos 10 dias e aviso de 2 dias uteis.",
-  "Saida antecipada 180/365 (preview, depende de aprovacao juridica): aviso 30 dias + recomposicao do desconto, com teto.",
+  "Saida antecipada do Compromisso Semestral/Anual (preview, depende de aprovacao juridica): aviso 30 dias + recomposicao do desconto, com teto.",
 ].join("\n");
 
 function termsHash(body = TERMS_BODY) {

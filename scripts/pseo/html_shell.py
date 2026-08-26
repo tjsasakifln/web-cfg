@@ -51,12 +51,12 @@ SITE = "https://confenge.com.br"
 WA_BASE = "https://wa.me/5548988344559"
 
 _ORG_DESC_FALLBACK = (
-    "Diretoria B2G fracionada para construtoras e empresas de engenharia: "
+    "Diretoria Fracionada para o Mercado Público para construtoras e empresas de engenharia: "
     "inteligência de mercado, decisão de participação, proposta, proteção de "
     "margem e riscos em contratos públicos."
 )
 _FOOTER_FALLBACK = (
-    "Diretoria B2G fracionada para construtoras: decisão de participação, "
+    "Diretoria Fracionada para o Mercado Público para construtoras: decisão de participação, "
     "proposta, proteção de margem e gestão de riscos em contratos públicos."
 )
 
@@ -172,9 +172,9 @@ def _build_footer() -> str:
     offer_links = "".join(
         f'<a href="{o.get("url")}">{html.escape(o.get("name") or "")}</a>' for o in offers
     ) or (
-        '<a href="/diagnostico-b2g-360/">Diagnóstico B2G 360°</a>'
-        '<a href="/diretoria-b2g/">Diretoria B2G</a>'
-        '<a href="/bid-room-licitacoes-obras/">Bid Room</a>'
+        '<a href="/diagnostico-b2g-360/">Diagnóstico da Operação em Obras Públicas</a>'
+        '<a href="/diretoria-b2g/">Diretoria Fracionada para o Mercado Público</a>'
+        '<a href="/bid-room-licitacoes-obras/">Operação de Proposta para Licitação Crítica</a>'
         '<a href="/defesa-margem-contratos-publicos/">Defesa de margem</a>'
     )
     return f"""<footer class="site-footer">

@@ -172,7 +172,7 @@ for (const it of items) {
   const namedIn343 = namingById.get(it.deliverable_id);
   assert(`item_${n}_exists_in_naming_343`, Boolean(namedIn343), it.deliverable_id);
   assert(`item_${n}_name_matches_343`, it.public_name_pt_br === namedIn343?.public_name_pt_br, [it.public_name_pt_br, namedIn343?.public_name_pt_br]);
-  assert(`item_${n}_value_line_matches_343`, it.value_line_pt_br === namedIn343?.value_line, [it.value_line_pt_br, namedIn343?.value_line]);
+  assert(`item_${n}_value_line_matches_343`, it.value_line_pt_br === namedIn343?.value_line_pt_br, [it.value_line_pt_br, namedIn343?.value_line_pt_br]);
   assert(`item_${n}_aliases_match_343`, eq(it.name_aliases, namedIn343?.aliases), [it.name_aliases, namedIn343?.aliases]);
 
   // pergunta, gatilho, porta e estado
@@ -390,9 +390,9 @@ const EXPECTED_ROWS = [
   [1, "deliverable", "CFG-D24", "Diagnóstico da Operação em Obras Públicas", "Onde a operação perde tempo, margem e controle?", 690000, "one_time", 1, 690000],
   [2, "container", "CFG-DIAG-EXP-v1", "Diagnóstico de Expansão no Mercado Público", "Em quais compradores, territórios e segmentos concentrar expansão?", 800000, "one_time", 1, 800000],
   [3, "deliverable", "CFG-D25", "Acompanhamento Preventivo do Contrato Público", "Como um contrato ativo deve registrar e decidir antes da crise?", 690000, "subscription_monthly", null, null],
-  [4, "container_plan", "CFG-DIRB2G-FLEX-v1", "Diretoria Fracionada para o Mercado Público Flex", "Como coordenar até quatro oportunidades e um contrato com direção semanal?", 2000000, "subscription_monthly", null, null],
-  [5, "container_plan", "CFG-DIRB2G-180-v1", "Diretoria Fracionada para o Mercado Público 180", null, 1500000, "subscription_monthly", 6, 9000000],
-  [6, "container_plan", "CFG-DIRB2G-365-v1", "Diretoria Fracionada para o Mercado Público 365", null, 1250000, "subscription_monthly", 12, 15000000],
+  [4, "container_plan", "CFG-DIRB2G-FLEX-v1", "Diretoria Fracionada para o Mercado Público: Plano Mensal", "Como coordenar até quatro oportunidades e um contrato com direção semanal?", 2000000, "subscription_monthly", null, null],
+  [5, "container_plan", "CFG-DIRB2G-180-v1", "Diretoria Fracionada para o Mercado Público: Compromisso Semestral", null, 1500000, "subscription_monthly", 6, 9000000],
+  [6, "container_plan", "CFG-DIRB2G-365-v1", "Diretoria Fracionada para o Mercado Público: Compromisso Anual", null, 1250000, "subscription_monthly", 12, 15000000],
 ];
 for (const [order, kind, sourceId, name, question, cents, billing, installments, total] of EXPECTED_ROWS) {
   const row = rows.find((r) => r.order === order);
@@ -414,10 +414,10 @@ for (const [order, kind, sourceId, name, question, cents, billing, installments,
     assert(`row_${order}_total_equals_installments_times_price`, row.installments * row.price_cents === row.total_commitment_cents, [row.installments, row.price_cents, row.total_commitment_cents]);
   }
 }
-// linhas 5 e 6 dizem explicitamente que o escopo é o mesmo da Flex
+// linhas 5 e 6 dizem explicitamente que o escopo é o mesmo do Plano Mensal
 for (const order of [5, 6]) {
   const row = rows.find((r) => r.order === order);
-  assert(`row_${order}_says_same_scope_as_flex`, /Mesmo escopo da Diretoria Fracionada para o Mercado Público Flex/.test(row.question_pt_br), row.question_pt_br);
+  assert(`row_${order}_says_same_scope_as_monthly_plan`, /Mesmo escopo do Plano Mensal/.test(row.question_pt_br), row.question_pt_br);
 }
 assert("row_5_says_6_months", /6 meses/.test(rows.find((r) => r.order === 5).question_pt_br), rows.find((r) => r.order === 5).question_pt_br);
 assert("row_6_says_12_months", /12 meses/.test(rows.find((r) => r.order === 6).question_pt_br), rows.find((r) => r.order === 6).question_pt_br);
