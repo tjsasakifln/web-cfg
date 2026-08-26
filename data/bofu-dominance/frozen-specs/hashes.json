@@ -1,7 +1,7 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "PENDING_NOMINAL_BASELINE_COMMIT",
+  "baseline_commit": "3370a86c518188a5dbd0f1fc38f5369763a46b18",
   "recaptured_at": "2026-08-25",
   "recapture_reason": "Reviewed public-name supersession required by #343. Only visitor-facing offer labels, CTA labels and linked messages changed on the six protected pillars; canonical URLs, indexability, robots, sitemap membership, redirects and measurement claims remain unchanged. The post-deploy 28-day evidence window restarts and #128 remains open.",
   "html_mutation": false,

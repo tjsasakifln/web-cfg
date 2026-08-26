@@ -1,8 +1,11 @@
 # CONFENGE market-capture operating system
 
-**Status:** authoritative operating thesis  
-**Date:** 2026-08-25  
-**Architecture:** [ADR-STRAT-002](../architecture/ADR-STRAT-002-confenge-canonical-public-surface.md)  
+**Status:** authoritative operating thesis
+
+**Date:** 2026-08-25
+
+**Architecture:** [ADR-STRAT-002](../architecture/ADR-STRAT-002-confenge-canonical-public-surface.md)
+
 **Inbound execution:** [#61](https://github.com/tjsasakifln/web-cfg/issues/61)
 
 ## Corporate thesis and North Star
