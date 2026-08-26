@@ -64,6 +64,23 @@ const PUBLIC_SURFACE_PREFIXES = Object.freeze([
  * Artifacts and surfaces are documentation for the report, not a second selector.
  */
 export const SUITE_GRAPH = Object.freeze({
+  "test:host-contract": {
+    producers: [
+      "scripts/migration/netcup/",
+      "scripts/site/test_production_cutover.mjs",
+      "_headers",
+      "_redirects",
+      "netlify.toml",
+      "404.html",
+      "robots.txt",
+      "sitemap*.xml",
+      "sitemap.txt",
+      ".well-known/README.md",
+      "01ce18c7219b7c7dcb2ab06e226c2681.txt",
+    ],
+    artifacts: ["build/netcup-host-contract/"],
+    surfaces: ["/", "/robots.txt", "/sitemap.xml", "/.well-known/"],
+  },
   "pseo:test": {
     producers: [
       "scripts/pseo/",
