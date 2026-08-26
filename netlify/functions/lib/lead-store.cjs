@@ -1,14 +1,20 @@
 /**
  * Durable lead store abstractions.
  * - MemoryStore: tests / local
- * - FileStore: optional LEAD_STORE_DIR for durable local/dev
- * - NetlifyBlobsStore: production on Netlify (when @netlify/blobs available)
+ * - FileStore: host-owned durable adapter (single VPS)
+ * - NetlifyBlobsStore: legacy rollback adapter during migration
  * - Composite: primary + optional mirror webhook for CRM
  */
 const crypto = require("crypto");
-const fs = require("fs");
-const path = require("path");
 const { safeLog } = require("./lead-core.cjs");
+const { HostFileBackend, sha256 } = require("./host-file-store.cjs");
+const {
+  isProductionProfile,
+  resolveStorageConfig,
+  createHostBackend,
+  loadLegacyNetlifyStore,
+  storageReadiness,
+} = require("./storage-config.cjs");
 
 function alreadyExistsError(existing) {
   const err = new Error("already_exists");
@@ -42,7 +48,13 @@ class MemoryStore {
   async update(id, patch) {
     const cur = this.map.get(id);
     if (!cur) return null;
-    const next = { ...cur, ...patch, updated_at: new Date().toISOString() };
+    const next = {
+      ...cur,
+      ...patch,
+      lead_id: cur.lead_id,
+      idempotency_key: cur.idempotency_key,
+      updated_at: new Date().toISOString(),
+    };
     this.map.set(id, next);
     return next;
   }
@@ -64,103 +76,106 @@ class MemoryStore {
 }
 
 class FileStore {
-  constructor(dir) {
+  constructor(dir, options = {}) {
     this.dir = dir;
-    this.idemDir = path.join(dir, "idem");
-    this.systemDir = path.join(dir, "system");
-    fs.mkdirSync(this.idemDir, { recursive: true });
-    fs.mkdirSync(this.systemDir, { recursive: true });
-  }
-  _path(id) {
-    return path.join(this.dir, `${id}.json`);
-  }
-  _idemPath(key) {
-    const h = crypto.createHash("sha256").update(key).digest("hex").slice(0, 40);
-    return path.join(this.idemDir, `${h}.json`);
+    this.namespace = options.namespace || "leads";
+    this.backend = options.backend || new HostFileBackend(dir, {
+      releaseRoot: options.releaseRoot,
+      allowInsideRelease: options.allowInsideRelease,
+    });
+    this.records = this.backend.namespace(this.namespace);
+    this.idempotency = this.backend.namespace(`${this.namespace}-idempotency`);
+    this.system = this.backend.namespace("ops-system");
   }
   async getByIdempotency(key) {
-    try {
-      const p = this._idemPath(key);
-      if (!fs.existsSync(p)) return null;
-      const { lead_id } = JSON.parse(fs.readFileSync(p, "utf8"));
-      return this.get(lead_id);
-    } catch {
-      return null;
+    const indexKey = sha256(String(key));
+    const index = this.idempotency.get(indexKey);
+    if (!index) return null;
+    if (!index.lead_id || index.idempotency_sha256 !== indexKey) {
+      const err = new Error("idempotency_index_corrupt");
+      err.code = "STORE_CORRUPT";
+      throw err;
     }
-  }
-  async get(id) {
-    try {
-      const p = this._path(id);
-      if (!fs.existsSync(p)) return null;
-      return JSON.parse(fs.readFileSync(p, "utf8"));
-    } catch {
-      return null;
-    }
-  }
-  async put(record, { onlyIfNew = false } = {}) {
-    if (onlyIfNew && fs.existsSync(this._path(record.lead_id))) {
-      throw alreadyExistsError(await this.get(record.lead_id));
-    }
-    fs.writeFileSync(this._path(record.lead_id), JSON.stringify(record, null, 0), "utf8");
-    if (record.idempotency_key) {
-      fs.writeFileSync(
-        this._idemPath(record.idempotency_key),
-        JSON.stringify({ lead_id: record.lead_id }),
-        "utf8",
-      );
+    const record = this.records.get(index.lead_id);
+    if (!record) {
+      const err = new Error("idempotency_index_dangling");
+      err.code = "STORE_CORRUPT";
+      throw err;
     }
     return record;
   }
+  async get(id) {
+    return this.records.get(String(id));
+  }
+  async put(record, { onlyIfNew = false } = {}) {
+    if (!record || !record.lead_id) {
+      const err = new Error("lead_id_required");
+      err.code = "STORE_KEY_INVALID";
+      throw err;
+    }
+    return this.backend.withExclusiveLock(() => {
+      const id = String(record.lead_id);
+      const current = this.records.get(id);
+      if (onlyIfNew && current) throw alreadyExistsError(current);
+      const written = this.records._putUnlocked(id, record, { onlyIfNew });
+      if (onlyIfNew && !written.inserted) throw alreadyExistsError(written.value);
+      if (record.idempotency_key) {
+        const indexKey = sha256(String(record.idempotency_key));
+        const index = this.idempotency._putUnlocked(
+          indexKey,
+          { lead_id: id, idempotency_sha256: indexKey },
+          { onlyIfNew: true },
+        );
+        if (!index.inserted && index.value.lead_id !== id) {
+          if (written.inserted) this.records._deleteUnlocked(id);
+          const idempotentExisting = this.records.get(index.value.lead_id);
+          if (!idempotentExisting) {
+            const err = new Error("idempotency_index_dangling");
+            err.code = "STORE_CORRUPT";
+            throw err;
+          }
+          throw alreadyExistsError(idempotentExisting);
+        }
+      }
+      return record;
+    });
+  }
   async update(id, patch) {
-    const cur = await this.get(id);
-    if (!cur) return null;
-    const next = { ...cur, ...patch, updated_at: new Date().toISOString() };
-    return this.put(next);
+    return this.backend.withExclusiveLock(() => {
+      const cur = this.records.get(String(id));
+      if (!cur) return null;
+      const next = {
+        ...cur,
+        ...patch,
+        lead_id: cur.lead_id,
+        idempotency_key: cur.idempotency_key,
+        updated_at: new Date().toISOString(),
+      };
+      this.records._putUnlocked(String(id), next);
+      return next;
+    });
   }
   async delete(id) {
-    const cur = await this.get(id);
-    if (!cur) return false;
-    try {
-      fs.unlinkSync(this._path(id));
-    } catch {
-      /* ignore */
-    }
-    if (cur.idempotency_key) {
-      try {
-        fs.unlinkSync(this._idemPath(cur.idempotency_key));
-      } catch {
-        /* ignore */
+    return this.backend.withExclusiveLock(() => {
+      const cur = this.records.get(String(id));
+      if (!cur) return false;
+      this.records._deleteUnlocked(String(id));
+      if (cur.idempotency_key) {
+        const indexKey = sha256(String(cur.idempotency_key));
+        this.idempotency._deleteUnlocked(indexKey);
       }
-    }
-    return true;
+      return true;
+    });
   }
   async list() {
-    const out = [];
-    let names = [];
-    try {
-      names = fs.readdirSync(this.dir);
-    } catch {
-      return out;
-    }
-    for (const name of names) {
-      if (!name.endsWith(".json") || name.startsWith(".")) continue;
-      const rec = await this.get(name.replace(/\.json$/, ""));
-      if (rec && rec.lead_id) out.push(rec);
-    }
-    return out;
+    return this.records.list().map((row) => row.value);
   }
   async getSystemRecord(id) {
-    try {
-      const p = path.join(this.systemDir, `${encodeURIComponent(id)}.json`);
-      if (!fs.existsSync(p)) return null;
-      return JSON.parse(fs.readFileSync(p, "utf8"));
-    } catch {
-      return null;
-    }
+    return this.system.get(String(id));
   }
-  async putSystemRecord(id, record) {
-    const p = path.join(this.systemDir, `${encodeURIComponent(id)}.json`);
-    fs.writeFileSync(p, JSON.stringify(record), "utf8");
+  async putSystemRecord(id, record, { onlyIfNew = false } = {}) {
+    const result = this.system.put(String(id), record, { onlyIfNew });
+    if (onlyIfNew && !result.inserted) throw alreadyExistsError(result.value);
     return record;
   }
 }
@@ -269,7 +284,13 @@ class NetlifyBlobsStore {
   async update(id, patch) {
     const cur = await this.get(id);
     if (!cur) return null;
-    const next = { ...cur, ...patch, updated_at: new Date().toISOString() };
+    const next = {
+      ...cur,
+      ...patch,
+      lead_id: cur.lead_id,
+      idempotency_key: cur.idempotency_key,
+      updated_at: new Date().toISOString(),
+    };
     return this.put(next);
   }
   async delete(id) {
@@ -380,7 +401,13 @@ class HttpStore {
   }
   async update(id, patch) {
     const cur = (await this.get(id)) || { lead_id: id };
-    const next = { ...cur, ...patch, updated_at: new Date().toISOString() };
+    const next = {
+      ...cur,
+      ...patch,
+      lead_id: cur.lead_id,
+      idempotency_key: cur.idempotency_key,
+      updated_at: new Date().toISOString(),
+    };
     const res = await fetch(`${this.baseUrl}/${encodeURIComponent(id)}`, {
       method: "PUT",
       headers: this._headers(),
@@ -410,14 +437,6 @@ class HttpStore {
  * Production-like profile: Netlify production context or NODE_ENV=production.
  * Memory fallback and LEAD_ALLOW_MEMORY_FALLBACK are forbidden here.
  */
-function isProductionProfile(env = process.env) {
-  const nodeEnv = String(env.NODE_ENV || "").toLowerCase();
-  const context = String(env.CONTEXT || env.NETLIFY_CONTEXT || "").toLowerCase();
-  if (nodeEnv === "production") return true;
-  if (context === "production") return true;
-  return false;
-}
-
 function memoryFallbackAllowed(env = process.env) {
   if (isProductionProfile(env)) return false;
   if (env.LEAD_ALLOW_MEMORY_FALLBACK === "1") return true;
@@ -425,7 +444,7 @@ function memoryFallbackAllowed(env = process.env) {
   return false;
 }
 
-function assertProductionStorePolicy(env = process.env) {
+function assertProductionStorePolicy(env = process.env, event = null) {
   if (!isProductionProfile(env)) return { ok: true };
   if (env.LEAD_ALLOW_MEMORY_FALLBACK === "1") {
     return {
@@ -446,6 +465,14 @@ function assertProductionStorePolicy(env = process.env) {
       ok: false,
       code: "http_store_atomic_create_unproven",
       message: "Generic HTTP lead stores are forbidden in production without atomic create-only semantics",
+    };
+  }
+  const storage = resolveStorageConfig(env, event, { allowTestMemory: false });
+  if (!storage.ok) {
+    return {
+      ok: false,
+      code: storage.code,
+      message: "A durable CONFENGE storage backend must be explicitly configured",
     };
   }
   if (env.LEAD_REQUIRE_ORIGIN !== "1") {
@@ -481,68 +508,54 @@ function assertProductionStorePolicy(env = process.env) {
 
 async function createStore(options = {}) {
   if (options.store) return options.store;
-  const policy = assertProductionStorePolicy(process.env);
+  const env = options.env || process.env;
+  const event = options.event || (options && options.httpMethod ? options : null);
+  const policy = assertProductionStorePolicy(env, event);
   if (!policy.ok) {
     safeLog("error", "store_policy_violation", { code: policy.code });
     return null;
   }
-  if (process.env.LEAD_STORE === "memory" || options.forceMemory) {
-    if (isProductionProfile()) {
+  if (options.forceMemory) {
+    if (isProductionProfile(env)) {
       safeLog("error", "store_memory_blocked_production", {});
       return null;
     }
     return Object.assign(globalMemory, { ephemeral: true });
   }
-  if (process.env.LEAD_STORE_DIR) {
-    return new FileStore(process.env.LEAD_STORE_DIR);
+  const cfg = resolveStorageConfig(env, event, { allowTestMemory: true });
+  if (!cfg.ok) {
+    safeLog("error", "store_configuration_invalid", { code: cfg.code });
+    return null;
   }
-  // Explicit HTTP durable backend (n8n/Airtable/Supabase proxy)
-  if (process.env.LEAD_STORE_HTTP_URL) {
+  if (cfg.backend === "memory") {
+    if (isProductionProfile(env)) return null;
+    return Object.assign(globalMemory, { ephemeral: true });
+  }
+  if (cfg.backend === "filesystem") {
+    const opened = createHostBackend(env, { event, releaseRoot: options.releaseRoot });
+    if (!opened.backend) {
+      safeLog("error", "store_filesystem_unavailable", { code: opened.config.code });
+      return null;
+    }
+    return new FileStore(cfg.root, { backend: opened.backend, namespace: options.namespace || "leads" });
+  }
+  if (cfg.backend === "http") {
     return new HttpStore({
-      baseUrl: process.env.LEAD_STORE_HTTP_URL,
-      token: process.env.LEAD_STORE_HTTP_TOKEN,
-      getUrlTemplate: process.env.LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL || "",
+      baseUrl: env.LEAD_STORE_HTTP_URL,
+      token: env.LEAD_STORE_HTTP_TOKEN,
+      getUrlTemplate: env.LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL || "",
     });
   }
-  // Prefer Netlify Blobs in production (auto context or manual siteID+token)
+  // Legacy rollback adapter. Dependency loading is conditional on selection.
   try {
-    // eslint-disable-next-line import/no-unresolved
-    const blobs = require("@netlify/blobs");
-    const siteID =
-      process.env.NETLIFY_BLOBS_SITE_ID ||
-      process.env.SITE_ID ||
-      process.env.NETLIFY_SITE_ID ||
-      "";
-    const token =
-      process.env.NETLIFY_BLOBS_TOKEN ||
-      process.env.NETLIFY_API_TOKEN ||
-      process.env.NETLIFY_AUTH_TOKEN ||
-      "";
-    let store;
-    if (siteID && token) {
-      // Do not set consistency:"strong" here — production Lambda context is not
-      // always configured for strong reads (BlobsConsistencyError → 503).
-      store = blobs.getStore({
-        name: "confenge-leads",
-        siteID,
-        token,
-      });
-      safeLog("info", "store_blobs_manual_creds", { site_len: siteID.length });
-    } else {
-      // Context from connectLambda(event) / NETLIFY_BLOBS_CONTEXT
-      store = blobs.getStore("confenge-leads");
-    }
+    const store = loadLegacyNetlifyStore("confenge-leads", env, event);
     return new NetlifyBlobsStore(store);
   } catch (err) {
     safeLog("warn", "store_blobs_unavailable", {
       reason: err && err.message ? String(err.message).slice(0, 160) : "unknown",
-      has_context: Boolean(process.env.NETLIFY_BLOBS_CONTEXT),
-      has_site: Boolean(process.env.SITE_ID || process.env.NETLIFY_SITE_ID),
+      has_context: Boolean(env.NETLIFY_BLOBS_CONTEXT),
+      has_site: Boolean(env.SITE_ID || env.NETLIFY_SITE_ID),
     });
-  }
-  // Last resort: memory (ephemeral) — never in production profile
-  if (memoryFallbackAllowed(process.env)) {
-    return Object.assign(globalMemory, { ephemeral: true });
   }
   return null;
 }
@@ -716,4 +729,5 @@ module.exports = {
   isProductionProfile,
   memoryFallbackAllowed,
   assertProductionStorePolicy,
+  storageReadiness,
 };

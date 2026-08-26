@@ -36,31 +36,9 @@ function setStoreForTests(store) {
   _storeOverride = store;
 }
 
-/**
- * Wire Netlify Blobs credentials from the Lambda event (`event.blobs` + site headers).
- * Required on Netlify Functions before getStore() — see @netlify/blobs connectLambda.
- */
-function bindBlobsContext(event) {
-  try {
-    // eslint-disable-next-line import/no-unresolved
-    const { connectLambda } = require("@netlify/blobs");
-    if (event && event.blobs) {
-      connectLambda(event);
-      return true;
-    }
-  } catch (err) {
-    safeLog("warn", "blobs_connect_skip", {
-      reason: err && err.message ? String(err.message).slice(0, 120) : "skip",
-      has_blobs_field: Boolean(event && event.blobs),
-    });
-  }
-  return false;
-}
-
 async function getStore(event) {
   if (_storeOverride) return _storeOverride;
-  bindBlobsContext(event);
-  return createStore();
+  return createStore({ event });
 }
 
 exports.setStoreForTests = setStoreForTests;
@@ -191,7 +169,7 @@ exports.handler = async (event) => {
   // Production profile: never acknowledge success on ephemeral store
   try {
     const { isProductionProfile, assertProductionStorePolicy } = require("./lib/lead-store.cjs");
-    const pol = assertProductionStorePolicy(process.env);
+    const pol = assertProductionStorePolicy(process.env, event);
     if (!pol.ok) {
       safeLog("error", "store_policy_violation", { code: pol.code });
       return {

@@ -1,0 +1,5 @@
+[[redirects]]
+from = "/conditional"
+to = "/target"
+status = 301
+conditions = {Role = ["admin"]}

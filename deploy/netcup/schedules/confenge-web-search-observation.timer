@@ -1,0 +1,12 @@
+[Unit]
+Description=CONFENGE search observation tick (disabled until cutover)
+ConditionPathExists=/opt/confenge-web/shared/schedule-cutover.json
+
+[Timer]
+Unit=confenge-web-schedule@search-observation-tick.service
+OnCalendar=*-*-* 08:30:00 America/Sao_Paulo
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

@@ -6,7 +6,7 @@
 ## Generate
 
 ```bash
-LEAD_STORE_DIR=./.leads node scripts/revops/attribution_cohorts.mjs \
+CONFENGE_STORAGE_BACKEND=filesystem CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/attribution_cohorts.mjs \
   --out data/revops/cohorts/attribution-cohorts-latest.json \
   --kind real
 

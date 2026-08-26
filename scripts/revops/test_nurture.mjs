@@ -20,6 +20,12 @@ process.env.NURTURE_TOKEN_SECRET = "n".repeat(48);
 
 const storeDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-nurture-"));
 process.env.NURTURE_STORE_DIR = storeDir;
+const { HostFileBackend } = require(path.join(root, "netlify/functions/lib/host-file-store.cjs"));
+const nurtureBackend = new HostFileBackend(storeDir);
+const nurtureSubscriptions = nurtureBackend.namespace("nurture-subscriptions");
+const countSubscriptions = () => nurtureSubscriptions.list().length;
+const readSubscription = (id) => nurtureSubscriptions.get(id);
+const writeSubscription = (record) => nurtureSubscriptions.put(record.subscription_id, record);
 
 const core = require(path.join(root, "netlify/functions/lib/nurture-core.cjs"));
 const ratePath = path.join(root, "netlify/functions/lib/nurture-rate-limit.cjs");
@@ -112,7 +118,7 @@ function event(action, { method = "GET", body, qs = {}, headers = {} } = {}) {
 
 // 3b) a foreign browser origin cannot create a subscription.
 {
-  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const before = countSubscriptions();
   const res = await handler(
     event("subscribe", {
       method: "POST",
@@ -120,7 +126,7 @@ function event(action, { method = "GET", body, qs = {}, headers = {} } = {}) {
       headers: { origin: "https://evil.example" },
     })
   );
-  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const after = countSubscriptions();
   if (res.statusCode !== 403 || JSON.parse(res.body).error !== "origin_denied") {
     fail("foreign_origin_denied", { status: res.statusCode, body: res.body });
   } else if (after !== before) fail("foreign_origin_persisted", { before, after });
@@ -131,7 +137,7 @@ function event(action, { method = "GET", body, qs = {}, headers = {} } = {}) {
 {
   const previousNodeEnv = process.env.NODE_ENV;
   process.env.NODE_ENV = "production";
-  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const before = countSubscriptions();
   for (const headers of [
     { origin: "https://confenge.netlify.app" },
     { origin: "http://localhost:8765" },
@@ -153,7 +159,7 @@ function event(action, { method = "GET", body, qs = {}, headers = {} } = {}) {
       fail("noncanonical_production_origin_denied", { headers, response: res });
     }
   }
-  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const after = countSubscriptions();
   process.env.NODE_ENV = previousNodeEnv;
   if (after !== before) fail("noncanonical_production_origin_persisted", { before, after });
   else pass("noncanonical_production_origin_denied");
@@ -165,7 +171,7 @@ let confirmToken;
 let unsubToken;
 {
   const secret = process.env.NURTURE_TOKEN_SECRET;
-  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const before = countSubscriptions();
   delete process.env.NURTURE_TOKEN_SECRET;
   const res = await handler(
     event("subscribe", {
@@ -174,7 +180,7 @@ let unsubToken;
     })
   );
   process.env.NURTURE_TOKEN_SECRET = secret;
-  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const after = countSubscriptions();
   if (res.statusCode !== 503 || JSON.parse(res.body).error !== "nurture_not_configured") {
     fail("token_secret_required", { status: res.statusCode, body: res.body });
   } else if (after !== before) fail("token_secret_failure_persisted", { before, after });
@@ -199,7 +205,7 @@ let unsubToken;
   else pass("subscribe", j.subscription_id);
   subId = j.subscription_id;
   // Raw tokens exist only in the outbound confirmation email, never in the store.
-  const rec = JSON.parse(fs.readFileSync(path.join(storeDir, `${subId}.json`), "utf8"));
+  const rec = readSubscription(subId);
   const confirmationText = sentEmails[0]?.text || "";
   confirmToken = confirmationText.match(/action=confirm[^\s]*[?&]token=([^&\s]+)/)?.[1];
   unsubToken = confirmationText.match(/action=unsubscribe[^\s]*[?&]token=([^&\s]+)/)?.[1];
@@ -225,7 +231,7 @@ let unsubToken;
   const j = JSON.parse(res.body);
   if (!j.ok || j.status !== "active") fail("confirm", j);
   else pass("confirm_active");
-  const rec = JSON.parse(fs.readFileSync(path.join(storeDir, `${subId}.json`), "utf8"));
+  const rec = readSubscription(subId);
   if (rec.messages_sent < 1) fail("first_message_after_confirm", rec.messages_sent);
   else pass("first_message_sent", rec.messages_sent);
   if (core.openToken(rec.unsub_token_sealed, subId, process.env) !== unsubToken) {
@@ -260,9 +266,9 @@ let unsubToken;
 
 // 6) tick advances remaining (day_offset future may skip — force by rewriting confirmed_at)
 {
-  const rec = JSON.parse(fs.readFileSync(path.join(storeDir, `${subId}.json`), "utf8"));
+  const rec = readSubscription(subId);
   rec.confirmed_at = new Date(Date.now() - 30 * 864e5).toISOString();
-  fs.writeFileSync(path.join(storeDir, `${subId}.json`), JSON.stringify(rec));
+  writeSubscription(rec);
   const res = await handler(
     event("tick", {
       method: "POST",
@@ -273,7 +279,7 @@ let unsubToken;
   const j = JSON.parse(res.body);
   if (!j.ok) fail("tick", j);
   else pass("tick", `sent=${j.sent}`);
-  const rec2 = JSON.parse(fs.readFileSync(path.join(storeDir, `${subId}.json`), "utf8"));
+  const rec2 = readSubscription(subId);
   if (rec2.messages_sent < 2) fail("tick_progress", rec2);
   else pass("tick_progress", rec2.messages_sent);
 }
@@ -310,7 +316,7 @@ let unsubToken;
   built.record.status = "active";
   built.record.confirmed_at = new Date().toISOString();
   built.record.lead_id = "lead123";
-  fs.writeFileSync(path.join(storeDir, `${built.record.subscription_id}.json`), JSON.stringify(built.record));
+  writeSubscription(built.record);
   const res = await handler(
     event("stop_commercial", {
       method: "POST",
@@ -411,7 +417,7 @@ let unsubToken;
   process.env.NURTURE_RATE_MAX_FP = "2";
   process.env.NURTURE_RATE_WINDOW_MS = "60000";
   rate._reset();
-  const before = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const before = countSubscriptions();
   for (let i = 0; i < 2; i += 1) {
     const accepted = await handler(
       event("subscribe", {
@@ -429,21 +435,21 @@ let unsubToken;
       headers: { "x-forwarded-for": "203.0.113.201", "user-agent": "rate-probe/1.0" },
     })
   );
-  const after = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const after = countSubscriptions();
   if (limited.statusCode !== 429 || !limited.headers["Retry-After"]) {
     fail("rate_handler_429", { status: limited.statusCode, headers: limited.headers });
   } else if (after !== before + 2) fail("rate_blocked_before_persist", { before, after });
   else pass("rate_handler_429");
 
   rate._reset();
-  const beforeLarge = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const beforeLarge = countSubscriptions();
   const tooLarge = await handler(
     event("subscribe", {
       method: "POST",
       body: { email: "large@example.com", track: "contrato", consent: true, source: "x".repeat(9000) },
     })
   );
-  const afterLarge = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json")).length;
+  const afterLarge = countSubscriptions();
   if (tooLarge.statusCode !== 413 || afterLarge !== beforeLarge) {
     fail("subscribe_payload_limit", { status: tooLarge.statusCode, beforeLarge, afterLarge });
   } else pass("subscribe_payload_limit");

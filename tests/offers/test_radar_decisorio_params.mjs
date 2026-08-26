@@ -44,6 +44,7 @@ function assert(name, cond, detail) {
 const radar = require(path.join(root, "netlify/functions/lib/radar-params.cjs"));
 const policy = require(path.join(root, "scripts/offers/external-reference.cjs"));
 const leadCore = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+const { FileStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
 
 const PAGE_ROUTE = "comercial/radar-decisorio/index.html";
 const page = fs.readFileSync(path.join(root, PAGE_ROUTE), "utf8");
@@ -365,17 +366,7 @@ let happyPathReference = null;
   );
 
   // The durable record carries the parameters and the reference.
-  const stored = fs
-    .readdirSync(dir)
-    .filter((name) => name.endsWith(".json"))
-    .map((name) => {
-      try {
-        return JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"));
-      } catch {
-        return null;
-      }
-    })
-    .filter((rec) => rec && rec.radar_params);
+  const stored = (await new FileStore(dir).list()).filter((rec) => rec && rec.radar_params);
   assert(
     "record_carries_params_and_reference",
     stored.length >= 1 && stored[0].external_reference === happyPathReference

@@ -1,13 +1,17 @@
 /**
  * First-party analytics collector — no PII.
- * Accepts batch of events from the site and stores aggregates/samples in Blobs when available.
+ * Accepts a batch and persists minimized events in the selected durable adapter.
  * Third-party export is deliberately absent; see the versioned #247 decision.
  */
 const crypto = require("crypto");
-const fs = require("fs");
-const path = require("path");
 const { corsHeaders, clientIp, safeLog, ALLOWED_ORIGINS } = require("./lib/lead-core.cjs");
 const { admitEvent, admitBatch, scrubProps } = require("./lib/event-contract.cjs");
+const {
+  resolveStorageConfig,
+  createHostBackend,
+  loadLegacyNetlifyStore,
+  storageReadiness,
+} = require("./lib/storage-config.cjs");
 
 const seenEventIds = new Set();
 const MAX_SEEN_EVENT_IDS = 4000;
@@ -32,9 +36,9 @@ function unavailablePersistenceResult(accepted) {
   }
   return {
     handled: true,
-    accepted: accepted.filter((row) => !row.props?.event_id),
+    accepted: [],
     duplicates: [],
-    failures: accepted.filter((row) => row.props?.event_id),
+    failures: accepted,
   };
 }
 
@@ -79,39 +83,34 @@ function pushRecent(ev) {
   if (recent.length > 200) recent.shift();
 }
 
-/** Local/dev durable sample when LEAD_STORE_DIR is set (same dir as FileStore). */
-function persistAnalyticsLocal(accepted) {
-  const dir = process.env.LEAD_STORE_DIR;
-  if (!dir || !accepted.length) {
+/** Host-owned durable analytics. */
+function persistAnalyticsLocal(accepted, event) {
+  const cfg = resolveStorageConfig(process.env, event);
+  if (!cfg.ok || cfg.backend !== "filesystem" || !accepted.length) {
     return { handled: false, accepted, duplicates: [], failures: [] };
   }
+  const opened = createHostBackend(process.env, { event });
+  if (!opened.backend) return unavailablePersistenceResult(accepted);
+  const store = opened.backend.namespace("analytics-events");
   const day = new Date().toISOString().slice(0, 10);
-  const eventsDir = path.join(dir, "analytics", "events");
   const persisted = [];
   const duplicates = [];
   const failures = [];
   for (const event of accepted) {
     const eventId = String(event.props?.event_id || "").slice(0, 80);
-    const dest = eventId ? path.join(eventsDir, "by-id") : path.join(eventsDir, day);
     const key = eventId
-      ? `id-${crypto.createHash("sha256").update(eventId).digest("hex")}.json`
-      : `${Date.now()}-${crypto.randomBytes(8).toString("hex")}.json`;
+      ? `id:${crypto.createHash("sha256").update(eventId).digest("hex")}`
+      : `day:${day}:${Date.now()}:${crypto.randomBytes(8).toString("hex")}`;
     try {
-      fs.mkdirSync(dest, { recursive: true });
-      fs.writeFileSync(
-        path.join(dest, key),
-        JSON.stringify({ events: [event] }),
-        { encoding: "utf8", flag: eventId ? "wx" : "w" },
-      );
+      const result = store.put(key, { events: [event] }, { onlyIfNew: Boolean(eventId) });
+      if (eventId && !result.inserted) {
+        duplicates.push(event);
+        continue;
+      }
       persisted.push(event);
     } catch (err) {
-      if (eventId && err?.code === "EEXIST") {
-        duplicates.push(event);
-      } else {
-        safeLog("warn", "analytics_local_store_skip", { reason: "write_failed" });
-        if (eventId) failures.push(event);
-        else persisted.push(event);
-      }
+      safeLog("warn", "analytics_local_store_skip", { reason: String(err?.code || "write_failed").slice(0, 64) });
+      failures.push(event);
     }
   }
   return { handled: true, accepted: persisted, duplicates, failures };
@@ -129,9 +128,9 @@ async function persistAnalyticsBlobs(accepted, event) {
     if (blobStoreForTests) {
       store = blobStoreForTests;
     } else {
-      const { getStore, connectLambda } = require("@netlify/blobs");
-      if (event && event.blobs) connectLambda(event);
-      store = getStore({ name: "confenge-analytics" });
+      const cfg = resolveStorageConfig(process.env, event);
+      if (!cfg.ok || cfg.backend !== "netlify-blobs") return unavailablePersistenceResult(accepted);
+      store = loadLegacyNetlifyStore("confenge-analytics", process.env, event);
     }
   } catch {
     safeLog("warn", "analytics_store_skip", { reason: "store_unavailable" });
@@ -185,13 +184,19 @@ exports.handler = async (event) => {
     return { statusCode: 204, headers, body: "" };
   }
   if (event.httpMethod === "GET") {
+    const persistence = storageReadiness(process.env, {
+      event,
+      writeProbe: isProductionProfile(),
+    });
+    const ready = persistence.ok || !isProductionProfile();
     // Health + minimal ops count (no event payloads)
     return {
-      statusCode: 200,
+      statusCode: ready ? 200 : 503,
       headers,
       body: JSON.stringify({
-        ok: true,
+        ok: ready,
         collector: "confenge-first-party",
+        storage: { ok: persistence.ok, backend: persistence.backend || null, code: persistence.code || null },
         recent_buffer: recent.length,
         ts: new Date().toISOString(),
       }),
@@ -284,7 +289,7 @@ exports.handler = async (event) => {
 
   }
 
-  let durable = persistAnalyticsLocal(accepted);
+  let durable = persistAnalyticsLocal(accepted, event);
   if (!durable.handled) durable = await persistAnalyticsBlobs(accepted, event);
   const finalAccepted = durable.accepted;
   for (const duplicate of durable.duplicates) {

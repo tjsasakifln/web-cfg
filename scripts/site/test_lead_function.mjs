@@ -1267,13 +1267,13 @@ _reset();
     const second = await collector.handler(replayEvent);
     const firstBody = JSON.parse(first.body);
     const secondBody = JSON.parse(second.body);
-    const eventDir = path.join(analyticsDir, "analytics", "events", "by-id");
-    const files = fs.existsSync(eventDir) ? fs.readdirSync(eventDir) : [];
+    const { HostFileBackend } = require(path.join(root, "netlify/functions/lib/host-file-store.cjs"));
+    const rows = new HostFileBackend(analyticsDir).namespace("analytics-events").list();
     if (firstBody.accepted !== 1 || secondBody.accepted !== 0 || secondBody.rejected !== 1) {
       fail("collect_durable_replay_response", { firstBody, secondBody });
     }
-    if (files.length !== 1) fail("collect_durable_replay_files", files);
-    pass("collect_durable_replay", { files: files.length });
+    if (rows.length !== 1) fail("collect_durable_replay_records", rows);
+    pass("collect_durable_replay", { records: rows.length });
   } finally {
     if (previousDir == null) delete process.env.LEAD_STORE_DIR;
     else process.env.LEAD_STORE_DIR = previousDir;

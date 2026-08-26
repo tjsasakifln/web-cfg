@@ -2,8 +2,8 @@
 """CLI for commercial lead stages (local file store or remote ops API).
 
 Local:
-  LEAD_STORE_DIR=./.leads python3 scripts/revops/lead_cli.py list
-  LEAD_STORE_DIR=./.leads python3 scripts/revops/lead_cli.py set LEAD_ID contacted --actor tiago
+  CONFENGE_STORAGE_DIR=/var/lib/confenge-web python3 scripts/revops/lead_cli.py list
+  CONFENGE_STORAGE_DIR=/var/lib/confenge-web python3 scripts/revops/lead_cli.py set LEAD_ID contacted --actor tiago
 
 Remote (production):
   OPS_TOKEN=… OPS_BASE=https://confenge.com.br python3 scripts/revops/lead_cli.py list --remote
@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -46,66 +47,50 @@ def remote(action: str, method: str = "GET", body: dict | None = None, qs: str =
         raise SystemExit(f"HTTP {e.code}: {detail}") from e
 
 
-def local_list(store_dir: Path) -> list[dict]:
-    out = []
-    if not store_dir.is_dir():
-        return out
-    for p in store_dir.glob("*.json"):
-        if p.name == "idem" or p.parent.name == "idem":
-            continue
-        try:
-            out.append(json.loads(p.read_text(encoding="utf-8")))
-        except json.JSONDecodeError:
-            continue
-    return out
-
-
-def local_get(store_dir: Path, lead_id: str) -> dict | None:
-    p = store_dir / f"{lead_id}.json"
-    if not p.exists():
-        return None
-    return json.loads(p.read_text(encoding="utf-8"))
-
-
-def local_set(store_dir: Path, lead_id: str, patch: dict) -> dict:
-    # Use Node stages via subprocess to avoid duplicating rules? Prefer import via node -e.
-    # For Python local path, shell out to node applying real module.
-    import subprocess
-    import tempfile
-
-    rec = local_get(store_dir, lead_id)
-    if not rec:
-        raise SystemExit(f"lead not found: {lead_id}")
-    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as f:
-        json.dump({"record": rec, "patch_input": patch}, f)
-        tmp = f.name
+def node_store(store_dir: Path, operation: str, lead_id: str = "", patch: dict | None = None):
+    """Use the authoritative adapter; never interpret hashed envelopes in Python."""
     script = r"""
-const fs = require('fs');
 const path = require('path');
-const root = process.cwd();
-const stages = require(path.join(root, 'netlify/functions/lib/lead-stages.cjs'));
-const payload = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
-const rec = payload.record;
-const inp = payload.patch_input;
-const applied = stages.applyStageChange(rec, inp);
-const next = { ...rec, ...applied, updated_at: new Date().toISOString() };
-fs.writeFileSync(process.argv[2], JSON.stringify(next));
+const { FileStore } = require(path.join(process.cwd(), 'netlify/functions/lib/lead-store.cjs'));
+const { applyStageChange } = require(path.join(process.cwd(), 'netlify/functions/lib/lead-stages.cjs'));
+(async () => {
+  const [dir, operation, leadId, patchJson] = process.argv.slice(1);
+  const store = new FileStore(path.resolve(dir));
+  let value;
+  if (operation === 'list') value = await store.list();
+  else if (operation === 'get') value = await store.get(leadId);
+  else if (operation === 'set') {
+    const current = await store.get(leadId);
+    if (!current) throw new Error('lead_not_found');
+    value = await store.update(leadId, applyStageChange(current, JSON.parse(patchJson)));
+  } else throw new Error('invalid_operation');
+  process.stdout.write(JSON.stringify(value));
+})().catch((error) => {
+  process.stderr.write(String(error && (error.code || error.message) || error));
+  process.exit(1);
+});
 """
-    out_tmp = tmp + ".out"
-    r = subprocess.run(
-        ["node", "-e", script, tmp, out_tmp],
+    proc = subprocess.run(
+        ["node", "-e", script, str(store_dir.resolve()), operation, lead_id, json.dumps(patch or {})],
         cwd=str(Path(__file__).resolve().parents[2]),
         capture_output=True,
         text=True,
     )
-    Path(tmp).unlink(missing_ok=True)
-    if r.returncode != 0:
-        Path(out_tmp).unlink(missing_ok=True)
-        raise SystemExit(r.stderr or r.stdout or "stage apply failed")
-    next_rec = json.loads(Path(out_tmp).read_text(encoding="utf-8"))
-    Path(out_tmp).unlink(missing_ok=True)
-    (store_dir / f"{lead_id}.json").write_text(json.dumps(next_rec, ensure_ascii=False, indent=2), encoding="utf-8")
-    return next_rec
+    if proc.returncode != 0:
+        raise SystemExit((proc.stderr or "local store operation failed")[:300])
+    return json.loads(proc.stdout or "null")
+
+
+def local_list(store_dir: Path) -> list[dict]:
+    return node_store(store_dir, "list")
+
+
+def local_get(store_dir: Path, lead_id: str) -> dict | None:
+    return node_store(store_dir, "get", lead_id)
+
+
+def local_set(store_dir: Path, lead_id: str, patch: dict) -> dict:
+    return node_store(store_dir, "set", lead_id, patch)
 
 
 def main() -> int:
@@ -134,13 +119,16 @@ def main() -> int:
     if "--remote" in argv:
         argv = ["--remote"] + [a for a in argv if a != "--remote"]
     args = ap.parse_args(argv)
-    store_dir = Path(os.environ.get("LEAD_STORE_DIR") or ".leads")
+    store_raw = os.environ.get("CONFENGE_STORAGE_DIR") or os.environ.get("LEAD_STORE_DIR")
+    store_dir = Path(store_raw).resolve() if store_raw else None
 
     if args.cmd == "list":
         if args.remote:
             data = remote("leads", qs="&pii=0")
             print(json.dumps(data, ensure_ascii=False, indent=2))
         else:
+            if store_dir is None:
+                raise SystemExit("set CONFENGE_STORAGE_DIR to the absolute private store root")
             leads = local_list(store_dir)
             print(json.dumps({"count": len(leads), "leads": [
                 {"lead_id": l.get("lead_id"), "commercial_stage": l.get("commercial_stage"), "landing_page": l.get("landing_page")}
@@ -152,6 +140,8 @@ def main() -> int:
         if args.remote:
             print(json.dumps(remote("lead", qs=f"&id={args.lead_id}&pii=1"), ensure_ascii=False, indent=2))
         else:
+            if store_dir is None:
+                raise SystemExit("set CONFENGE_STORAGE_DIR to the absolute private store root")
             print(json.dumps(local_get(store_dir, args.lead_id), ensure_ascii=False, indent=2))
         return 0
 
@@ -170,6 +160,8 @@ def main() -> int:
         if args.remote:
             print(json.dumps(remote("stage", method="POST", body=body), ensure_ascii=False, indent=2))
         else:
+            if store_dir is None:
+                raise SystemExit("set CONFENGE_STORAGE_DIR to the absolute private store root")
             print(json.dumps(local_set(store_dir, args.lead_id, body), ensure_ascii=False, indent=2))
         return 0
 

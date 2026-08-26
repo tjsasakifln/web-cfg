@@ -12,6 +12,8 @@ import { resolveChromePath } from "./resolve_chrome.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const require = createRequire(import.meta.url);
 const storeDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-canary-e2e-"));
+const { FileStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+const fixtureStore = new FileStore(storeDir);
 const base = "http://127.0.0.1:8766";
 const secret = "money-canary-contract-secret";
 const requests = [];
@@ -239,8 +241,8 @@ try {
   responseDelayMs = 0;
   await mobile.click('#lead-form [type="submit"]');
   await mobile.waitForFunction(() => location.pathname === "/obrigado-contrato", { timeout: 5000 });
-  const timeoutRecords = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json") && !name.startsWith("idem"));
-  if (timeoutRecords.length !== 1) fail("timeout_resend_duplicate_record", timeoutRecords);
+  const timeoutRecords = await fixtureStore.list();
+  if (timeoutRecords.length !== 1) fail("timeout_resend_duplicate_record", timeoutRecords.map((r) => r.lead_id));
   pass("timeout_resend_same_receipt", { records: timeoutRecords.length });
 
   const success = await browser.newPage();
@@ -289,8 +291,7 @@ try {
   await openCanary(unavailable);
   await fillAndSubmit(unavailable, "unavailable");
   await unavailable.waitForFunction(() => location.pathname === "/obrigado-contrato", { timeout: 5000 });
-  const files = fs.readdirSync(storeDir).filter((name) => name.endsWith(".json") && !name.startsWith("idem"));
-  const records = files.map((name) => JSON.parse(fs.readFileSync(path.join(storeDir, name), "utf8")));
+  const records = await fixtureStore.list();
   const retryable = records.find((record) => record.email === "canary-unavailable@naoexiste.test.br");
   if (retryable?.handoff?.status !== "RETRYABLE" || !retryable.handoff.next_attempt_at) {
     fail("unavailable_not_retryable", retryable);

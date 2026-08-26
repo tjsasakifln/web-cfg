@@ -3,8 +3,8 @@
  * Story 1.5 — Lead export pipeline (FileStore fixtures + durable store abstraction).
  *
  * Usage:
- *   LEAD_STORE_DIR=./.leads node scripts/revops/export_leads.mjs --out /tmp/leads.jsonl
- *   LEAD_STORE_DIR=./.leads node scripts/revops/export_leads.mjs --kind real --from 2026-01-01 --to 2026-12-31
+ *   CONFENGE_STORAGE_BACKEND=filesystem CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/export_leads.mjs --out /tmp/leads.jsonl
+ *   CONFENGE_STORAGE_BACKEND=filesystem CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/export_leads.mjs --kind real --from 2026-01-01 --to 2026-12-31
  *
  * Default stdout is path-only (no full PII dump). Use --stdout-json for CI fixtures.
  * Never write under public _site/.
@@ -119,20 +119,7 @@ async function loadLeadsFromStore() {
   const store = await createStore();
   if (!store) throw new Error("store_unavailable — set LEAD_STORE_DIR for fixtures");
   if (typeof store.list === "function") return store.list();
-  // FileStore has no list — scan dir
-  const dir = process.env.LEAD_STORE_DIR;
-  if (!dir) throw new Error("store has no list() and LEAD_STORE_DIR unset");
-  const out = [];
-  for (const name of fs.readdirSync(dir)) {
-    if (!name.endsWith(".json")) continue;
-    if (name === "idem" || name.startsWith("idem")) continue;
-    try {
-      out.push(JSON.parse(fs.readFileSync(path.join(dir, name), "utf8")));
-    } catch {
-      /* skip */
-    }
-  }
-  return out;
+  throw new Error("configured store does not support operational listing");
 }
 
 async function main() {

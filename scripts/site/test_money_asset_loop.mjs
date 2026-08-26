@@ -270,10 +270,11 @@ function loadLead() {
 
 const { handler: leadHandler } = loadLead();
 const { FileStore } = require(storePath);
+const fixtureStore = new FileStore(storeDir);
 const origPut = FileStore.prototype.put;
 FileStore.prototype.put = async function putHook(record, opts) {
   if (record && record.lead_id) {
-    const existed = fs.existsSync(this._path(record.lead_id));
+    const existed = Boolean(await this.get(record.lead_id));
     if (!existed) order.push(`persist:${record.lead_id}`);
   }
   return origPut.call(this, record, opts);
@@ -591,7 +592,7 @@ if (JSON.stringify(dataLayer).includes("maria.costa@") || JSON.stringify(dataLay
   fail("analytics_pii", dataLayer);
 }
 
-const pageLead = JSON.parse(fs.readFileSync(path.join(storeDir, `${created.lead_id}.json`), "utf8"));
+const pageLead = await fixtureStore.get(created.lead_id);
 if (pageLead.source !== "CONFENGE_WEB") fail("source", pageLead.source);
 if (pageLead.handoff.status !== "DELIVERED") fail("page_handoff_delivered", pageLead.handoff);
 const persistIdx = order.indexOf(`persist:${created.lead_id}`);
@@ -626,7 +627,7 @@ const synth = await postLead(moneyPayload({
 }), { ip: "203.0.113.92", "Idempotency-Key": "loop-synth-001" });
 const synthBody = JSON.parse(synth.body);
 if (synth.statusCode !== 201 || !synthBody.lead_id) fail("synth_capture", synthBody);
-const synthRec = JSON.parse(fs.readFileSync(path.join(storeDir, `${synthBody.lead_id}.json`), "utf8"));
+const synthRec = await fixtureStore.get(synthBody.lead_id);
 if (synthRec.record_kind === "real") fail("synth_kind", synthRec.record_kind);
 if (!synthRec.handoff || synthRec.handoff.status !== "SKIPPED") fail("synth_skip", synthRec.handoff);
 if (mock.seen.length !== beforeSynth) fail("synth_posted", mock.seen.length - beforeSynth);
@@ -639,7 +640,7 @@ const blocked = await postLead(moneyPayload({
 }), { ip: "203.0.113.93", "Idempotency-Key": "loop-401-001" });
 const blockedBody = JSON.parse(blocked.body);
 if (blocked.statusCode !== 201 || !blockedBody.lead_id) fail("blocked_capture", blockedBody);
-const blockedRec = JSON.parse(fs.readFileSync(path.join(storeDir, `${blockedBody.lead_id}.json`), "utf8"));
+const blockedRec = await fixtureStore.get(blockedBody.lead_id);
 if (blockedRec.handoff.status !== "BLOCKED") fail("blocked_status", blockedRec.handoff);
 pass("dest_401_keeps_capture", { lead_id: blockedBody.lead_id });
 
@@ -650,7 +651,7 @@ const retryable = await postLead(moneyPayload({
 }), { ip: "203.0.113.94", "Idempotency-Key": "loop-5xx-001" });
 const retryableBody = JSON.parse(retryable.body);
 if (retryable.statusCode !== 201 || !retryableBody.lead_id) fail("retryable_capture", retryableBody);
-const retryableRec = JSON.parse(fs.readFileSync(path.join(storeDir, `${retryableBody.lead_id}.json`), "utf8"));
+const retryableRec = await fixtureStore.get(retryableBody.lead_id);
 if (retryableRec.handoff.status !== "RETRYABLE") fail("retryable_status", retryableRec.handoff);
 pass("dest_down_keeps_capture", { lead_id: retryableBody.lead_id });
 mock.setMode("ok");
@@ -666,7 +667,7 @@ const skipped = await postLead(moneyPayload({
 }), { ip: "203.0.113.95", "Idempotency-Key": "loop-unset-001" });
 const skippedBody = JSON.parse(skipped.body);
 if (skipped.statusCode !== 201 || !skippedBody.lead_id) fail("unset_capture", skippedBody);
-const skippedRec = JSON.parse(fs.readFileSync(path.join(storeDir, `${skippedBody.lead_id}.json`), "utf8"));
+const skippedRec = await fixtureStore.get(skippedBody.lead_id);
 if (!skippedRec.handoff || skippedRec.handoff.status !== "SKIPPED") fail("unset_skip", skippedRec.handoff);
 if (mock.seen.length !== beforeUnset) fail("unset_posted", mock.seen.length - beforeUnset);
 pass("unset_inbound_skips_keeps_capture", { lead_id: skippedBody.lead_id });

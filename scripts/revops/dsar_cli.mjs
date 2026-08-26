@@ -3,9 +3,9 @@
  * Story 1.11 — DSAR export/delete + retention purge report (FileStore fixtures).
  *
  * Usage:
- *   LEAD_STORE_DIR=./.leads node scripts/revops/dsar_cli.mjs export --id lead_x --out /tmp/dsar.json
- *   LEAD_STORE_DIR=./.leads node scripts/revops/dsar_cli.mjs delete --id lead_x --dry-run
- *   LEAD_STORE_DIR=./.leads node scripts/revops/dsar_cli.mjs purge --dry-run --out /tmp/purge-report.json
+ *   CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/dsar_cli.mjs export --id lead_x --out /tmp/dsar.json
+ *   CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/dsar_cli.mjs delete --id lead_x --dry-run
+ *   CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/dsar_cli.mjs purge --dry-run --out /tmp/purge-report.json
  *
  * Defaults: delete/purge are dry-run unless --apply is set.
  * Never write under public _site/.
@@ -19,6 +19,8 @@ import { createRequire } from "module";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const require = createRequire(import.meta.url);
+const { FileStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
+const { HostFileBackend } = require(path.join(root, "netlify/functions/lib/host-file-store.cjs"));
 
 const DEFAULT_RETAIN_DAYS = 730;
 
@@ -31,20 +33,8 @@ export function contactHash(email, telefone) {
 
 export function listLeads(dir) {
   if (!dir || !fs.existsSync(dir)) return [];
-  const out = [];
-  for (const name of fs.readdirSync(dir)) {
-    if (!name.endsWith(".json")) continue;
-    if (name.startsWith("idem")) continue;
-    try {
-      out.push({
-        file: path.join(dir, name),
-        record: JSON.parse(fs.readFileSync(path.join(dir, name), "utf8")),
-      });
-    } catch {
-      /* skip */
-    }
-  }
-  return out;
+  const backend = new HostFileBackend(path.resolve(dir));
+  return backend.namespace("leads").list().map(({ key, value }) => ({ key, record: value }));
 }
 
 export function findByIdOrHash(entries, { id, hash } = {}) {
@@ -82,7 +72,7 @@ export function redactedExport(record) {
 export function retentionDue(entries, { now = new Date(), retainDays = DEFAULT_RETAIN_DAYS } = {}) {
   const nowMs = now.getTime();
   const due = [];
-  for (const { file, record } of entries) {
+  for (const { record } of entries) {
     let cutoff = null;
     if (record.delete_after) cutoff = Date.parse(record.delete_after);
     else if (record.received_at) {
@@ -91,7 +81,6 @@ export function retentionDue(entries, { now = new Date(), retainDays = DEFAULT_R
     if (cutoff != null && !Number.isNaN(cutoff) && cutoff <= nowMs) {
       due.push({
         lead_id: record.lead_id,
-        file,
         delete_after: record.delete_after || new Date(cutoff).toISOString(),
         record_kind: record.record_kind || null,
       });
@@ -125,7 +114,9 @@ function parseArgs(argv) {
 }
 
 function storeDir() {
-  return process.env.LEAD_STORE_DIR || path.join(root, ".leads");
+  const configured = process.env.CONFENGE_STORAGE_DIR || process.env.LEAD_STORE_DIR;
+  if (!configured) throw new Error("CONFENGE_STORAGE_DIR is required");
+  return path.resolve(configured);
 }
 
 async function main() {
@@ -137,6 +128,7 @@ async function main() {
     process.exit(2);
   }
   const dir = storeDir();
+  const store = new FileStore(path.resolve(dir));
   const entries = listLeads(dir);
   const now = args.now ? new Date(args.now) : new Date();
 
@@ -172,7 +164,7 @@ async function main() {
     };
     if (!args.dryRun && args.apply) {
       for (const h of hits) {
-        fs.unlinkSync(h.file);
+        await store.delete(h.record.lead_id);
         report.deleted.push(h.record.lead_id);
       }
     }
@@ -209,11 +201,7 @@ async function main() {
     fs.mkdirSync(path.dirname(out), { recursive: true });
     if (!args.dryRun && args.apply) {
       for (const d of due) {
-        try {
-          fs.unlinkSync(d.file);
-        } catch {
-          /* ignore */
-        }
+        await store.delete(d.lead_id);
       }
       report.applied = true;
     }

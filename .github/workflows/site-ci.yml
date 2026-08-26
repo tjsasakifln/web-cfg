@@ -6,6 +6,16 @@ on:
   # Do not filter PRs by base branch. A stacked PR must run the same required
   # gates as a PR opened directly against main (#405).
   pull_request:
+  workflow_call:
+    inputs:
+      export_public_artifact:
+        description: Export the exact gated _site tree to a release workflow
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
 
 jobs:
   gates:
@@ -18,6 +28,9 @@ jobs:
         with:
           # Full history required for package commit_sha ancestor checks (PR merge refs)
           fetch-depth: 0
+      - name: Pin release build clock to the commit
+        if: inputs.export_public_artifact
+        run: echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct HEAD)" >> "$GITHUB_ENV"
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "22"
@@ -98,6 +111,8 @@ jobs:
           npm run test:secrets-scan
           npm run test:cta-whatsapp
           npm run test:release-filters
+          npm run test:runtime
+          python3 -m pytest deploy/netcup/tests -q
           npm run test:pseo-attribution
           npm run test:revops
           npm run test:schedules
@@ -105,6 +120,8 @@ jobs:
           npm run test:nurture
       - name: Build public site
         run: npm run build:site
+      - name: Generated Netcup nginx contract E2E
+        run: npm run host-contract:nginx-test
       - name: Published HTML and FAQ integrity
         run: npm run test:html-integrity:site
       - name: CSS asset integrity after publish
@@ -177,6 +194,15 @@ jobs:
           done
           node scripts/site/playwright_local_checklist.mjs
           kill "$(cat /tmp/site-http.pid)" || true
+      - name: Export exact gated public artifact
+        if: inputs.export_public_artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: site-ci-public-${{ github.sha }}
+          path: _site/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 7
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

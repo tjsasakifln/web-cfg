@@ -4,11 +4,13 @@
  * HELD when Warmbly omits the v1 capability; records are not dropped.
  */
 const { produceFromShippedOverlay, drainHeld } = require("./lib/search-observation.cjs");
+const { resolveStorageConfig, loadLegacyNetlifyStore } = require("./lib/storage-config.cjs");
 
 function bindBlobs(event) {
+  const cfg = resolveStorageConfig(process.env, event);
+  if (!cfg.ok || cfg.backend !== "netlify-blobs") return;
   try {
-    const { connectLambda } = require("@netlify/blobs");
-    if (event && event.blobs) connectLambda(event);
+    loadLegacyNetlifyStore("confenge-leads", process.env, event);
   } catch {
     /* optional */
   }
@@ -16,8 +18,8 @@ function bindBlobs(event) {
 
 exports.handler = async (event) => {
   bindBlobs(event);
-  const produced = await produceFromShippedOverlay({ env: process.env });
-  const drained = await drainHeld({ env: process.env, limit: 20 });
+  const produced = await produceFromShippedOverlay({ env: process.env, event });
+  const drained = await drainHeld({ env: process.env, event, limit: 20 });
   const producedOk = Boolean(produced && produced.ok);
   const drainedOk = Boolean(drained && drained.ok);
   const outbox = (produced && produced.record && produced.record.outbox) || {};
