@@ -21,6 +21,7 @@ delete process.env.NETLIFY_CONTEXT;
 
 const SECRET = "ce-test-secret-not-for-prod";
 const inboundPath = path.join(root, "netlify/functions/lib/commercial-event.cjs");
+const { HostFileBackend } = require(path.join(root, "netlify/functions/lib/host-file-store.cjs"));
 
 function loadMod() {
   delete require.cache[require.resolve(inboundPath)];
@@ -126,10 +127,9 @@ const baseInput = {
   const env = envFor(rx.inbound, rx.health);
   env.CONFENGE_COMMERCIAL_EVENT_ENABLED = "0";
   const out = await ce.produce({ ...baseInput, event_id: "ce-persist-first" }, { env });
-  const recPath = path.join(storeDir, "commercial-event");
-  const files = fs.existsSync(recPath) ? fs.readdirSync(recPath) : [];
+  const records = new HostFileBackend(storeDir).namespace("commercial-events").list();
   if (!out.ok) fail("persist_first", out);
-  else if (!files.length) fail("persist_first_store_empty", { files, recPath });
+  else if (!records.length) fail("persist_first_store_empty", { records: records.length });
   else if (out.record.outbox.status === "DELIVERED") fail("persist_first_not_delivered", out.record.outbox);
   else if (posts.some((p) => p.startsWith("POST") && !p.endsWith("/health"))) {
     fail("persist_first_posted_while_disabled", posts);

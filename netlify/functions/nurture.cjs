@@ -40,6 +40,12 @@ const {
   nurtureFingerprint,
   nurtureIpHash,
 } = require("./lib/nurture-rate-limit.cjs");
+const {
+  resolveStorageConfig,
+  createHostBackend,
+  loadLegacyNetlifyStore,
+  storageReadiness,
+} = require("./lib/storage-config.cjs");
 
 const MAX_SUBSCRIBE_BODY = 8 * 1024;
 
@@ -72,15 +78,6 @@ function subscribeOriginAllowed(event, originCheck, env = process.env) {
   if (!originCheck.ok) return false;
   if (!isProductionProfile(env)) return true;
   return CANONICAL_PUBLIC_ORIGINS.has(productionRequestOrigin(event));
-}
-
-function bindBlobs(event) {
-  try {
-    const { connectLambda } = require("@netlify/blobs");
-    if (event && event.blobs) connectLambda(event);
-  } catch {
-    /* optional */
-  }
 }
 
 function authOps(event) {
@@ -149,74 +146,59 @@ function rawBody(event) {
 }
 
 async function getNurtureStore(event) {
-  bindBlobs(event);
   // Memory for tests
   if (global.__nurtureStore) return global.__nurtureStore;
-  if (process.env.NURTURE_STORE_DIR || process.env.LEAD_STORE_DIR) {
-    const dir = process.env.NURTURE_STORE_DIR || require("path").join(process.env.LEAD_STORE_DIR, "nurture");
-    const fs = require("fs");
-    const path = require("path");
-    fs.mkdirSync(dir, { recursive: true });
-    fs.mkdirSync(path.join(dir, "suppression"), { recursive: true });
+  const cfgEnv = process.env.NURTURE_STORE_DIR && !process.env.CONFENGE_STORAGE_BACKEND
+    ? { ...process.env, LEAD_STORE_DIR: process.env.NURTURE_STORE_DIR }
+    : process.env;
+  const cfg = resolveStorageConfig(cfgEnv, event, { allowTestMemory: true });
+  if (cfg.ok && cfg.backend === "filesystem") {
+    const opened = createHostBackend(cfgEnv, { event });
+    if (!opened.backend) return null;
+    const subscriptions = opened.backend.namespace("nurture-subscriptions");
+    const suppressions = opened.backend.namespace("nurture-suppressions");
     return {
       async get(id) {
-        try {
-          return JSON.parse(fs.readFileSync(path.join(dir, `${id}.json`), "utf8"));
-        } catch {
-          return null;
-        }
+        return subscriptions.get(String(id));
       },
       async put(rec) {
-        fs.writeFileSync(path.join(dir, `${rec.subscription_id}.json`), JSON.stringify(rec));
-        return rec;
+        const retainDays = Number(process.env.NURTURE_RETAIN_DAYS || 730);
+        const stored = rec.delete_after
+          ? rec
+          : { ...rec, delete_after: new Date(Date.now() + retainDays * 864e5).toISOString() };
+        subscriptions.put(String(stored.subscription_id), stored);
+        return stored;
       },
       async list() {
-        return fs
-          .readdirSync(dir)
-          .filter((f) => f.endsWith(".json"))
-          .map((f) => {
-            try {
-              return JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
-            } catch {
-              return null;
-            }
-          })
-          .filter(Boolean);
+        return subscriptions.list().map((row) => row.value);
       },
       async listSuppression() {
-        const sdir = path.join(dir, "suppression");
-        if (!fs.existsSync(sdir)) return [];
-        return fs
-          .readdirSync(sdir)
-          .filter((f) => f.endsWith(".json"))
-          .map((f) => {
-            try {
-              return JSON.parse(fs.readFileSync(path.join(sdir, f), "utf8"));
-            } catch {
-              return null;
-            }
-          })
-          .filter(Boolean);
+        return suppressions.list().map((row) => row.value);
       },
       async putSuppression(row) {
         const h = row.email_hash || crypto.randomBytes(8).toString("hex");
-        fs.writeFileSync(path.join(dir, "suppression", `${h}.json`), JSON.stringify(row));
+        // Suppressions are durable revocations and intentionally have no generic expiry.
+        suppressions.put(String(h), row);
         return row;
       },
     };
   }
-  try {
-    const { getStore } = require("@netlify/blobs");
-    const siteID = process.env.SITE_ID || process.env.NETLIFY_SITE_ID || "";
-    const token =
-      process.env.NETLIFY_BLOBS_TOKEN ||
-      process.env.NETLIFY_API_TOKEN ||
-      process.env.NETLIFY_AUTH_TOKEN ||
-      "";
-    const store =
-      siteID && token
-        ? getStore({ name: "confenge-nurture", siteID, token })
-        : getStore({ name: "confenge-nurture" });
+  if (cfg.ok && cfg.backend === "netlify-blobs") try {
+    const store = loadLegacyNetlifyStore("confenge-nurture", process.env, event);
+    const listPrefix = async (prefix) => {
+      const out = [];
+      let cursor;
+      do {
+        const listed = await store.list({ prefix, cursor });
+        for (const b of listed.blobs || []) {
+          const rec = await store.get(b.key, { type: "json" });
+          if (rec) out.push(rec);
+        }
+        cursor = listed.cursor || listed.next_cursor;
+        if (!listed.truncated) break;
+      } while (cursor);
+      return out;
+    };
     return {
       async get(id) {
         try {
@@ -230,40 +212,10 @@ async function getNurtureStore(event) {
         return rec;
       },
       async list() {
-        const out = [];
-        if (typeof store.list !== "function") return out;
-        try {
-          const listed = await store.list({ prefix: "subs/" });
-          for (const b of listed.blobs || []) {
-            try {
-              const rec = await store.get(b.key, { type: "json" });
-              if (rec) out.push(rec);
-            } catch {
-              /* skip */
-            }
-          }
-        } catch {
-          /* empty */
-        }
-        return out;
+        return typeof store.list === "function" ? listPrefix("subs/") : [];
       },
       async listSuppression() {
-        const out = [];
-        if (typeof store.list !== "function") return out;
-        try {
-          const listed = await store.list({ prefix: "suppression/" });
-          for (const b of listed.blobs || []) {
-            try {
-              const rec = await store.get(b.key, { type: "json" });
-              if (rec) out.push(rec);
-            } catch {
-              /* skip */
-            }
-          }
-        } catch {
-          /* empty */
-        }
-        return out;
+        return typeof store.list === "function" ? listPrefix("suppression/") : [];
       },
       async putSuppression(row) {
         const h = row.email_hash || crypto.randomBytes(8).toString("hex");
@@ -275,7 +227,7 @@ async function getNurtureStore(event) {
     safeLog("warn", "nurture_store_unavailable", {
       reason: err && err.message ? String(err.message).slice(0, 80) : "skip",
     });
-    if (process.env.NODE_ENV === "test" || process.env.LEAD_ALLOW_MEMORY_FALLBACK === "1") {
+    if (process.env.NODE_ENV === "test" && !isProductionProfile()) {
       const mem = new Map();
       const sup = new Map();
       return {
@@ -298,8 +250,19 @@ async function getNurtureStore(event) {
         },
       };
     }
-    return null;
   }
+  if (cfg.ok && cfg.backend === "memory" && !isProductionProfile()) {
+    const mem = new Map();
+    const sup = new Map();
+    return {
+      async get(id) { return mem.get(id) || null; },
+      async put(rec) { mem.set(rec.subscription_id, rec); return rec; },
+      async list() { return [...mem.values()]; },
+      async listSuppression() { return [...sup.values()]; },
+      async putSuppression(row) { sup.set(row.email_hash, row); return row; },
+    };
+  }
+  return null;
 }
 
 exports.handler = async (event) => {
@@ -317,11 +280,14 @@ exports.handler = async (event) => {
   }
 
   if (action === "health") {
+    const persistence = storageReadiness(process.env, { event, writeProbe: isProductionProfile() });
+    const ready = persistence.ok || !isProductionProfile();
     return json(
-      200,
+      ready ? 200 : 503,
       {
-        ok: true,
+        ok: ready,
         service: "confenge-nurture",
+        storage: { ok: persistence.ok, backend: persistence.backend || null, code: persistence.code || null },
         tracks: TRACKS,
         resend_configured: Boolean(process.env.RESEND_API_KEY),
         token_secret_configured: String(process.env.NURTURE_TOKEN_SECRET || "").length >= 32,

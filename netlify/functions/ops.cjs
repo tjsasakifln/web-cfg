@@ -37,6 +37,13 @@ const path = require("path");
 const { corsHeaders, clientIp, safeLog } = require("./lib/lead-core.cjs");
 const { createStore } = require("./lib/lead-store.cjs");
 const {
+  isProductionProfile,
+  resolveStorageConfig,
+  createHostBackend,
+  loadLegacyNetlifyStore,
+  storageReadiness,
+} = require("./lib/storage-config.cjs");
+const {
   applyStageChange,
   publicLeadSummary,
   funnelRates,
@@ -233,9 +240,10 @@ function validateGscInsights(data, { now = Date.now(), allowStale = false } = {}
 }
 
 function bindBlobs(event) {
+  const cfg = resolveStorageConfig(process.env, event);
+  if (!cfg.ok || cfg.backend !== "netlify-blobs") return;
   try {
-    const { connectLambda } = require("@netlify/blobs");
-    if (event && event.blobs) connectLambda(event);
+    loadLegacyNetlifyStore("confenge-leads", process.env, event);
   } catch {
     /* optional */
   }
@@ -308,49 +316,30 @@ async function listLeads(store) {
   return [];
 }
 
-function loadLocalAnalytics() {
-  const dir = process.env.LEAD_STORE_DIR;
-  if (!dir) return [];
-  const rootDir = path.join(dir, "analytics", "events");
-  if (!fs.existsSync(rootDir)) return [];
+function loadLocalAnalytics(event) {
+  const cfg = resolveStorageConfig(process.env, event);
+  if (!cfg.ok || cfg.backend !== "filesystem") return [];
+  const opened = createHostBackend(process.env, { event });
+  if (!opened.backend) return [];
+  const namespace = opened.backend.namespace("analytics-events");
   const events = [];
-  for (let i = 0; i < 14; i++) {
-    const day = new Date(Date.now() - i * 864e5).toISOString().slice(0, 10);
-    const dayDir = path.join(rootDir, day);
-    let names = [];
-    try {
-      names = fs.readdirSync(dayDir);
-    } catch {
-      continue;
-    }
-    for (const name of names.slice(0, 200)) {
-      if (!name.endsWith(".json")) continue;
-      try {
-        const data = JSON.parse(fs.readFileSync(path.join(dayDir, name), "utf8"));
-        if (data && Array.isArray(data.events)) events.push(...data.events);
-      } catch {
-        /* skip file */
-      }
+  const cutoff = Date.now() - 14 * 864e5;
+  for (const row of namespace.list()) {
+    const data = row.value;
+    if (!data || !Array.isArray(data.events)) continue;
+    for (const analyticsEvent of data.events) {
+      if (Date.parse(analyticsEvent.ts || 0) >= cutoff) events.push(analyticsEvent);
     }
   }
   return events;
 }
 
 async function loadRecentAnalytics(event) {
-  const events = loadLocalAnalytics();
+  const events = loadLocalAnalytics(event);
+  const cfg = resolveStorageConfig(process.env, event);
+  if (!cfg.ok || cfg.backend !== "netlify-blobs") return events;
   try {
-    bindBlobs(event);
-    const { getStore } = require("@netlify/blobs");
-    const siteID = process.env.SITE_ID || process.env.NETLIFY_SITE_ID || "";
-    const token =
-      process.env.NETLIFY_BLOBS_TOKEN ||
-      process.env.NETLIFY_API_TOKEN ||
-      process.env.NETLIFY_AUTH_TOKEN ||
-      "";
-    const store =
-      siteID && token
-        ? getStore({ name: "confenge-analytics", siteID, token })
-        : getStore({ name: "confenge-analytics" });
+    const store = loadLegacyNetlifyStore("confenge-analytics", process.env, event);
     if (typeof store.list === "function") {
       // last ~14 days prefixes
       const days = [];
@@ -417,11 +406,17 @@ exports.handler = async (event) => {
   const action = String(qs.action || "health").toLowerCase();
 
   if (action === "health") {
+    const persistence = storageReadiness(process.env, {
+      event,
+      writeProbe: isProductionProfile(process.env),
+    });
+    const ready = persistence.ok || !isProductionProfile(process.env);
     return json(
-      200,
+      ready ? 200 : 503,
       {
-        ok: true,
+        ok: ready,
         service: "confenge-ops",
+        storage: { ok: persistence.ok, backend: persistence.backend || null, code: persistence.code || null },
         stages: STAGES,
         loss_reasons: LOSS_REASONS,
         auth_configured: Boolean(process.env.OPS_TOKEN || process.env.REVOPS_TOKEN),
@@ -1014,21 +1009,14 @@ exports.handler = async (event) => {
       at: new Date().toISOString(),
       entries: candidates.map((c) => ({ lead_id: c.lead_id, previous_kind: c.from, new_kind: c.to, signals: c.signals })),
     };
-    // Persist snapshot for rollback when store supports put of meta keys
+    if (typeof store.putSystemRecord !== "function") {
+      return json(503, { ok: false, error: "snapshot_store_unavailable" }, origin);
+    }
     try {
-      if (typeof store.put === "function") {
-        await store.put({
-          lead_id: `__meta__/${snapshot_id}`,
-          _meta: true,
-          record_kind: "internal",
-          snapshot,
-          received_at: snapshot.at,
-          commercial_stage: "lead_persisted",
-          stage_history: [],
-        });
-      }
-    } catch {
-      /* snapshot best-effort */
+      await store.putSystemRecord(`record-kind:${snapshot_id}`, snapshot, { onlyIfNew: true });
+    } catch (err) {
+      safeLog("error", "record_kind_snapshot_failed", { code: String(err?.code || "write_failed") });
+      return json(503, { ok: false, error: "snapshot_persist_failed" }, origin);
     }
     let applied = 0;
     for (const c of candidates) {
@@ -1075,8 +1063,12 @@ exports.handler = async (event) => {
     const body = parseBody(event) || {};
     const snapshot_id = String(body.snapshot_id || "");
     if (!snapshot_id) return json(400, { ok: false, error: "snapshot_id_required" }, origin);
-    const meta = await store.get(`__meta__/${snapshot_id}`);
-    const entries = (meta && meta.snapshot && meta.snapshot.entries) || body.entries || [];
+    const snapshot = typeof store.getSystemRecord === "function"
+      ? await store.getSystemRecord(`record-kind:${snapshot_id}`)
+      : null;
+    // Legacy body entries remain a manual recovery escape hatch for snapshots
+    // created before system-record persistence was mandatory.
+    const entries = (snapshot && snapshot.entries) || body.entries || [];
     if (!entries.length) return json(404, { ok: false, error: "snapshot_not_found" }, origin);
     let restored = 0;
     for (const e of entries) {
@@ -1268,7 +1260,7 @@ exports.handler = async (event) => {
   }
 
   if (action === "search_observation" && event.httpMethod === "GET") {
-    const obsStore = await createObservationStore(process.env);
+    const obsStore = await createObservationStore(process.env, event);
     if (!obsStore) return json(503, { ok: false, error: "store_unavailable" }, origin);
     const records = typeof obsStore.list === "function" ? await obsStore.list() : [];
     const counters = summarizeObservations(records);
@@ -1285,7 +1277,7 @@ exports.handler = async (event) => {
   }
 
   if (action === "produce_search_observation" && event.httpMethod === "POST") {
-    const result = await produceFromShippedOverlay({ env: process.env });
+    const result = await produceFromShippedOverlay({ env: process.env, event });
     if (!result.ok) {
       const code = result.error === "store_unavailable" ? 503 : 422;
       return json(code, { ok: false, error: result.error, field: result.field }, origin);
@@ -1312,7 +1304,7 @@ exports.handler = async (event) => {
   if (action === "drain_search_observation" && event.httpMethod === "POST") {
     const body = parseBody(event) || {};
     const limit = Math.min(50, Math.max(1, Number(body.limit || 20)));
-    const result = await drainHeld({ env: process.env, limit });
+    const result = await drainHeld({ env: process.env, event, limit });
     if (!result.ok) {
       return json(result.error === "store_unavailable" ? 503 : 422, { ok: false, ...result }, origin);
     }

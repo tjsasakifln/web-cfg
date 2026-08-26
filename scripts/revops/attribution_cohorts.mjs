@@ -4,7 +4,7 @@
  * ADR-007: never join individual GSC query ↔ individual lead identity.
  *
  * Usage:
- *   LEAD_STORE_DIR=./.leads node scripts/revops/attribution_cohorts.mjs --out data/revops/cohorts/latest.json
+ *   CONFENGE_STORAGE_BACKEND=filesystem CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/attribution_cohorts.mjs --out /tmp/confenge-cohorts.json
  *   node scripts/revops/attribution_cohorts.mjs --fixture
  */
 import { createRequire } from "module";
@@ -20,6 +20,7 @@ import {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const require = createRequire(import.meta.url);
+const { createStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
 
 export const COHORT_SCHEMA_VERSION = "1.0.0";
 
@@ -144,8 +145,11 @@ async function main() {
     leads = loadLeadsFromDir(fixDir);
     events = loadAnalyticsEvents(evPath);
   } else {
-    const dir = process.env.LEAD_STORE_DIR;
-    leads = loadLeadsFromDir(dir);
+    const store = await createStore();
+    if (!store || typeof store.list !== "function") {
+      throw new Error("configured store does not support operational listing");
+    }
+    leads = await store.list();
     if (args.events) events = loadAnalyticsEvents(args.events);
   }
   const frozen = process.env.COHORT_NOW || "2026-08-05T12:00:00.000Z";

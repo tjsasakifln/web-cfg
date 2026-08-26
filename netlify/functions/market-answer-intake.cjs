@@ -27,13 +27,7 @@ function setFetchForTests(fn) {
 
 async function getStore(event) {
   if (_storeOverride) return _storeOverride;
-  try {
-    const { connectLambda } = require("@netlify/blobs");
-    if (event && event.blobs) connectLambda(event);
-  } catch {
-    /* local */
-  }
-  return createStore();
+  return createStore({ event });
 }
 
 function json(statusCode, headers, body) {

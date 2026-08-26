@@ -4,8 +4,6 @@
  * Persist-first receipt. Not a CRM. Public response is receipt + prazo UNKNOWN.
  * Extra PII (CPF, RG, date of birth, home address) is rejected before persist.
  */
-const fs = require("fs");
-const path = require("path");
 const crypto = require("crypto");
 const {
   parseBody,
@@ -18,6 +16,13 @@ const {
   loadCurrentPolicyVersion,
 } = require("./lib/correction-core.cjs");
 const { safeLog } = require("./lib/lead-core.cjs");
+const { HostFileBackend } = require("./lib/host-file-store.cjs");
+const {
+  isProductionProfile,
+  resolveStorageConfig,
+  createHostBackend,
+  loadLegacyNetlifyStore,
+} = require("./lib/storage-config.cjs");
 
 let _storeOverride = null;
 function setStoreForTests(store) {
@@ -38,52 +43,40 @@ class MemoryCorrectionStore {
 }
 
 class FileCorrectionStore {
-  constructor(dir) {
+  constructor(dir, options = {}) {
     this.dir = dir;
-    fs.mkdirSync(dir, { recursive: true });
-  }
-  _path(id) {
-    return path.join(this.dir, `${id}.json`);
+    this.backend = options.backend || new HostFileBackend(dir, options);
+    this.records = this.backend.namespace("corrections");
   }
   async put(record) {
-    fs.writeFileSync(this._path(record.receipt_id), JSON.stringify(record), "utf8");
-    return record;
+    const result = this.records.put(String(record.receipt_id), record, { onlyIfNew: true });
+    return result.value;
   }
   async get(id) {
-    try {
-      return JSON.parse(fs.readFileSync(this._path(id), "utf8"));
-    } catch {
-      return null;
-    }
+    return this.records.get(String(id));
   }
-}
-
-function bindBlobsContext(event) {
-  try {
-    // eslint-disable-next-line import/no-unresolved
-    const { connectLambda } = require("@netlify/blobs");
-    if (event && event.blobs) {
-      connectLambda(event);
-      return true;
-    }
-  } catch (err) {
-    safeLog("warn", "correction_blobs_connect_skip", {
-      reason: err && err.message ? String(err.message).slice(0, 120) : "skip",
-    });
+  async list() {
+    return this.records.list().map((row) => row.value);
   }
-  return false;
+  async delete(id) {
+    return this.records.delete(String(id));
+  }
 }
 
 async function getStore(event) {
   if (_storeOverride) return _storeOverride;
-  if (process.env.CORRECTION_STORE_DIR) {
-    return new FileCorrectionStore(process.env.CORRECTION_STORE_DIR);
+  const cfgEnv = process.env.CORRECTION_STORE_DIR && !process.env.CONFENGE_STORAGE_BACKEND
+    ? { ...process.env, LEAD_STORE_DIR: process.env.CORRECTION_STORE_DIR }
+    : process.env;
+  const cfg = resolveStorageConfig(cfgEnv, event, { allowTestMemory: true });
+  if (cfg.ok && cfg.backend === "filesystem") {
+    const opened = createHostBackend(cfgEnv, { event });
+    return opened.backend
+      ? new FileCorrectionStore(cfg.root, { backend: opened.backend })
+      : null;
   }
-  bindBlobsContext(event);
-  try {
-    // eslint-disable-next-line import/no-unresolved
-    const blobs = require("@netlify/blobs");
-    const store = blobs.getStore("confenge-corrections");
+  if (cfg.ok && cfg.backend === "netlify-blobs") try {
+    const store = loadLegacyNetlifyStore("confenge-corrections", process.env, event);
     return {
       async put(record) {
         await store.setJSON(record.receipt_id, record);
@@ -102,7 +95,7 @@ async function getStore(event) {
       reason: err && err.message ? String(err.message).slice(0, 120) : "skip",
     });
   }
-  if (process.env.NODE_ENV === "test") {
+  if (process.env.NODE_ENV === "test" && !isProductionProfile(process.env)) {
     return new MemoryCorrectionStore();
   }
   return null;
@@ -201,6 +194,9 @@ exports.handler = async (event) => {
     policy_version: policyVersion,
     source: "CONFENGE_WEB",
     kind: "correction_request",
+    delete_after: new Date(
+      Date.now() + Number(process.env.CORRECTION_RETAIN_DAYS || 730) * 864e5,
+    ).toISOString(),
   };
 
   try {

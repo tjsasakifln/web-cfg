@@ -12,6 +12,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const require = createRequire(import.meta.url);
 const opsPath = path.join(root, "netlify/functions/ops.cjs");
+const { FileStore } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
 
 const SENSITIVE = [
   "leads",
@@ -69,10 +70,9 @@ function assertNoLeadPii(body) {
 const storeDir = fs.mkdtempSync(path.join(os.tmpdir(), "ops-auth-leads-"));
 process.env.LEAD_STORE_DIR = storeDir;
 process.env.NODE_ENV = "test";
-// seed a lead with PII so a successful list would prove leak if unauth succeeded
-fs.writeFileSync(
-  path.join(storeDir, "lead_seed.json"),
-  JSON.stringify({
+// Seed through the production adapter so fixtures exercise the private hashed layout.
+await new FileStore(storeDir).put(
+  {
     lead_id: "lead_seed",
     nome: "Pessoa Sensivel",
     email: "pii-secret@example.com",
@@ -80,8 +80,8 @@ fs.writeFileSync(
     record_kind: "real",
     commercial_stage: "lead_persisted",
     received_at: new Date().toISOString(),
-  }),
-  "utf8",
+  },
+  { onlyIfNew: true },
 );
 
 let failed = 0;

@@ -45,6 +45,8 @@ function fail(name, detail) {
   if (bad.ok) fail("policy_should_fail_memory_flag");
   const required = {
     NODE_ENV: "production",
+    CONFENGE_STORAGE_BACKEND: "netlify-blobs",
+    NETLIFY_BLOBS_CONTEXT: "test-context",
     LEAD_REQUIRE_ORIGIN: "1",
     LEAD_REQUIRE_TURNSTILE: "1",
     TURNSTILE_SECRET_KEY: "turnstile-secret-24chars",

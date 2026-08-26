@@ -7,19 +7,19 @@
 
 ```bash
 # Export subject package (secured file path; not public)
-LEAD_STORE_DIR=./.leads node scripts/revops/dsar_cli.mjs export \
+CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/dsar_cli.mjs export \
   --id lead_xxx --out /tmp/dsar.json
 
 # Or by contact hash (preferred for argv hygiene)
-LEAD_STORE_DIR=./.leads node scripts/revops/dsar_cli.mjs export \
+CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/dsar_cli.mjs export \
   --hash "$CONTACT_SHA256" --out /tmp/dsar.json
 
 # Delete dry-run (default)
-LEAD_STORE_DIR=./.leads node scripts/revops/dsar_cli.mjs delete \
+CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/dsar_cli.mjs delete \
   --id lead_xxx --dry-run --out /tmp/dsar-delete.json
 
 # Retention purge report (dry-run default)
-LEAD_STORE_DIR=./.leads node scripts/revops/dsar_cli.mjs purge \
+CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/dsar_cli.mjs purge \
   --dry-run --out /tmp/retention-purge.json
 ```
 
@@ -28,8 +28,8 @@ LEAD_STORE_DIR=./.leads node scripts/revops/dsar_cli.mjs purge \
 Only after human confirmation:
 
 ```bash
-LEAD_STORE_DIR=./.leads node scripts/revops/dsar_cli.mjs delete --id lead_xxx --apply
-LEAD_STORE_DIR=./.leads node scripts/revops/dsar_cli.mjs purge --apply --out /tmp/purge-applied.json
+CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/dsar_cli.mjs delete --id lead_xxx --apply
+CONFENGE_STORAGE_DIR=/var/lib/confenge-web node scripts/revops/dsar_cli.mjs purge --apply --out /tmp/purge-applied.json
 ```
 
 ## Evidence
