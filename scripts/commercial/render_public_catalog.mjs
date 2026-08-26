@@ -156,10 +156,6 @@ function contractBody(entry, neighbor) {
   return clauses.join("");
 }
 
-function contractDetails(entry) {
-  return `<details class="catalog-item__contract" data-copy-contract-id="${entry.deliverable_id}"><summary>Ver escopo, aderência e alternativa</summary><div data-copy-contract-body><p>O escopo detalhado requer JavaScript e será exibido ao abrir.</p></div></details>`;
-}
-
 function brl(cents) {
   return `R$ ${Math.round(Number(cents) / 100).toLocaleString("pt-BR")}`;
 }
@@ -254,8 +250,6 @@ function itemCard(entry) {
 ${alias}
 <p class="catalog-item__question">${escapeHtml(entry.decision_question)}</p>
 <dl class="catalog-item__facts"><div><dt>Preço</dt><dd>${priceLabel(entry)}</dd></div><div><dt>Prazo</dt><dd>${escapeHtml(publicText(slaLabel(entry)))}</dd></div><div><dt>Saída principal</dt><dd>${escapeHtml(publicText(entry.included_outputs[0]))}</dd></div></dl>
-${contractDetails(entry)}
-<label class="catalog-item__compare"><input type="checkbox" value="${entry.deliverable_id}" data-compare-item/> Comparar esta entrega</label>
 ${action}
 </article>`;
 }

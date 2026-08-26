@@ -63,6 +63,34 @@
   if (records.size !== cards.length || cards.some((card) => !records.has(card.dataset.deliverableId))) return;
   const recordFor = (card) => records.get(card.dataset.deliverableId);
 
+  function enhanceCard(card) {
+    const record = recordFor(card);
+    const action = card.lastElementChild;
+    if (!record || !action) return;
+
+    const details = document.createElement("details");
+    details.className = "catalog-item__contract";
+    details.dataset.copyContractId = record.id;
+    const summary = document.createElement("summary");
+    summary.textContent = "Ver escopo, aderência e alternativa";
+    const body = document.createElement("div");
+    body.dataset.copyContractBody = "";
+    details.append(summary, body);
+
+    const compare = document.createElement("label");
+    compare.className = "catalog-item__compare";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = record.id;
+    checkbox.dataset.compareItem = "";
+    compare.append(checkbox, " Comparar esta entrega");
+
+    card.insertBefore(details, action);
+    card.insertBefore(compare, action);
+  }
+
+  cards.forEach(enhanceCard);
+
   function hydrateContract(details) {
     if (!details.open || details.dataset.copyContractHydrated === "true") return;
     const card = details.closest("article.catalog-item[data-deliverable-id]");

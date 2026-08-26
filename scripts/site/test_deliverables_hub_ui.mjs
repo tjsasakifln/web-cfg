@@ -264,11 +264,11 @@ const noScriptCatalog = await noScriptPage.evaluate(() => ({
   cards: document.querySelectorAll("article.catalog-item").length,
   visibleCards: [...document.querySelectorAll("article.catalog-item")].filter((card) => getComputedStyle(card).display !== "none").length,
   filtersHidden: getComputedStyle(document.querySelector("[data-catalog-filters]")).display === "none",
-  compareControlsHidden: getComputedStyle(document.querySelector(".catalog-item__compare")).display === "none",
+  compareControls: document.querySelectorAll(".catalog-item__compare").length,
 }));
 const noScriptErrors = [];
 if (noScriptCatalog.cards !== 54 || noScriptCatalog.visibleCards !== 54) noScriptErrors.push("catalog_noscript_content");
-if (!noScriptCatalog.filtersHidden || !noScriptCatalog.compareControlsHidden) noScriptErrors.push("catalog_noscript_controls");
+if (!noScriptCatalog.filtersHidden || noScriptCatalog.compareControls !== 0) noScriptErrors.push("catalog_noscript_controls");
 findings.push({ route: "/entregas/", check: "catalog_noscript", noScriptCatalog, errors: noScriptErrors });
 if (noScriptErrors.length) failed += 1;
 await noScriptPage.close();

@@ -234,14 +234,13 @@ export function auditCopyContract({ contract, registry, taskDoors, familyRegistr
     if (words(entry.public_name_pt_br) > 8) problems.push(`title_over_8_words:${entry.deliverable_id}`);
     if (words(entry.trigger) > 24) problems.push(`trigger_over_24_words:${entry.deliverable_id}`);
     if (!entry.data_contract?.provenance_required || !entry.data_contract?.freshness_required) problems.push(`provenance:${entry.deliverable_id}`);
-    if (!catalogHtml.includes(`data-copy-contract-id="${entry.deliverable_id}"`)) problems.push(`missing_public_contract:${entry.deliverable_id}`);
+    if (!catalogContractsHtml.includes(`data-copy-contract-id="${entry.deliverable_id}"`)) problems.push(`missing_public_contract:${entry.deliverable_id}`);
   }
   for (const clause of clauses) {
     const count = (catalogContractsHtml.match(new RegExp(`data-copy-clause="${clause}"`, "g")) || []).length;
     if (count !== ids.length) problems.push(`clause_coverage:${clause}:${count}`);
   }
-  if ((catalogHtml.match(/data-copy-contract-id=/g) || []).length !== ids.length) problems.push("public_contract_count");
-  if ((catalogContractsHtml.match(/data-copy-contract-id=/g) || []).length !== ids.length) problems.push("public_contract_payload_count");
+  if ((catalogContractsHtml.match(/data-copy-contract-id=/g) || []).length !== ids.length) problems.push("public_contract_count");
   if (!catalogContractsHtml.includes("Compre quando") || catalogContractsHtml.includes(">Saiba mais<")) problems.push("catalog_action_copy");
   const clauseScan = scanClauseDuplicates(catalogContractsHtml, clauses);
   if (clauseScan.observed !== ids.length * clauses.length) problems.push(`clause_scan_count:${clauseScan.observed}`);
