@@ -88,7 +88,8 @@ for (const width of widths) {
   await page.setViewport({ width, height, deviceScaleFactor: 1 });
   const response = await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
   const metrics = await page.evaluate(() => {
-    const heroCta = document.querySelector('.deliverables-hero [href="#comparar"]')?.getBoundingClientRect();
+    const heroCtaElement = document.querySelector('.deliverables-hero [href="#enquadrar"]');
+    const heroCta = heroCtaElement?.getBoundingClientRect();
     const firstReport = document.querySelector('[data-cta-id="deliverables-open-report"]')?.getBoundingClientRect();
     const compare = document.querySelector('#comparar .compare-table');
     const compareRows = document.querySelectorAll('#comparar .compare-table tbody tr').length;
@@ -117,6 +118,8 @@ for (const width of widths) {
       primaries,
       h1Count: document.querySelectorAll("h1").length,
       h1Text: document.querySelector("h1")?.textContent?.replace(/\s+/g, " ").trim() || "",
+      heroCtaHref: heroCtaElement?.getAttribute("href") || "",
+      heroCtaTargetExists: Boolean(document.querySelector("#enquadrar")),
       heroCtaVisible: Boolean(heroCta && heroCta.width > 0 && heroCta.height >= 44),
       heroCtaBottom: heroCta?.bottom || null,
       firstReportVisible: Boolean(firstReport && firstReport.width > 0 && firstReport.height >= 44),
@@ -142,14 +145,15 @@ for (const width of widths) {
   const errors = [];
   if (!response || ![200, 304].includes(response.status())) errors.push(`http=${response?.status()}`);
   if (metrics.overflow) errors.push("document_overflow");
-  if (metrics.h1Count !== 1 || !metrics.h1Text.includes("antes de contratar")) errors.push("hero_clarity");
-  if (!metrics.heroCtaVisible || (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
+  if (metrics.h1Count !== 1 || !metrics.h1Text.includes("54 entregas") || !metrics.h1Text.includes("decisão que cabe agora")) errors.push("hero_clarity");
+  if (!metrics.heroCtaVisible || !metrics.heroCtaTargetExists || metrics.heroCtaHref !== "#enquadrar" ||
+      (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
   if (!metrics.firstReportVisible || metrics.examples !== EXPECTED_EXAMPLES) errors.push("ladder_examples");
   if (!metrics.compareVisible || metrics.compareRows !== EXPECTED_EXAMPLES) errors.push("compare_view");
   if (!metrics.compareAboveExamples) errors.push("compare_before_sections");
   if (!metrics.compareScrollFocusable) errors.push("compare_scroll_focus");
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
-  // One primary leads to comparison and the other submits the terminal
+  // One primary leads to the progressive framing and the other submits the
   // hand-raise added by #290; neither replaces a priced offer path.
   if (metrics.primaries > 2) errors.push(`primary_cta_overuse=${metrics.primaries}`);
   if (metrics.navDeliverables !== "Entregas" || metrics.navCurrent !== "page") errors.push("nav_contract");
@@ -179,6 +183,82 @@ for (const width of widths) {
   findings.push({ route: "/entregas/", width, height, ...metrics, errors });
   if (errors.length) failed += 1;
 }
+
+await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
+const catalogLazyBefore = await page.evaluate(() => performance.getEntriesByType("resource")
+  .map((entry) => entry.name)
+  .filter((name) => name.endsWith("/entregas/catalog.css") || name.endsWith("/entregas/catalog-data.js") || name.endsWith("/entregas/catalog.js")));
+await page.evaluate(() => document.querySelector("#indice-integral")?.scrollIntoView());
+await page.waitForFunction(() => document.body.classList.contains("catalog-enhanced"), { timeout: 10000 });
+const catalogErrors = [];
+if (catalogLazyBefore.length) catalogErrors.push("catalog_not_lazy");
+const catalogBoot = await page.evaluate(() => ({
+  enhanced: document.body.classList.contains("catalog-enhanced"),
+  dataSchema: window.CONFENGE_CATALOG_DATA?.schema || "",
+  dataCount: window.CONFENGE_CATALOG_DATA?.items?.length || 0,
+  filterVisible: !document.querySelector("[data-catalog-filters]")?.hidden,
+}));
+if (!catalogBoot.enhanced || !catalogBoot.filterVisible) catalogErrors.push("catalog_not_enhanced");
+if (catalogBoot.dataSchema !== "confenge.public-deliverable-catalog/1.0" || catalogBoot.dataCount !== 54) {
+  catalogErrors.push("catalog_data_contract");
+}
+await page.type("[data-filter-query]", "Radar de Licitações Prioritárias");
+const filtered = await page.evaluate(() => ({
+  visibleCards: document.querySelectorAll("article.catalog-item:not([hidden])").length,
+  status: document.querySelector("[data-filter-status]")?.textContent?.trim() || "",
+  query: new URL(location.href).searchParams.get("q"),
+}));
+if (filtered.visibleCards !== 1 || !filtered.status.startsWith("1 de 54") || filtered.query !== "Radar de Licitações Prioritárias") {
+  catalogErrors.push("catalog_filter_behavior");
+}
+await page.click("[data-clear-filters]");
+await page.select("[data-frame-task]", "GROW");
+await page.select("[data-frame-object]", "mercado");
+await page.select("[data-frame-input]", "dados");
+await page.click("[data-catalog-recommend]");
+const recommendation = await page.evaluate(() => ({
+  hidden: document.querySelector("[data-catalog-recommendation]")?.hidden,
+  count: document.querySelectorAll("[data-catalog-recommendation] article").length,
+  text: document.querySelector("[data-catalog-recommendation]")?.textContent || "",
+  task: new URL(location.href).searchParams.get("frame_task"),
+}));
+if (recommendation.hidden || recommendation.count < 1 || recommendation.count > 3 || !recommendation.text.includes("R$") || recommendation.task !== "GROW") {
+  catalogErrors.push("catalog_recommendation_behavior");
+}
+await page.evaluate(() => {
+  const boxes = [...document.querySelectorAll("article.catalog-item:not([hidden]) [data-compare-item]")].slice(0, 2);
+  for (const box of boxes) box.click();
+});
+await page.click("[data-compare-open]");
+const progressiveComparison = await page.evaluate(() => ({
+  count: document.querySelectorAll("[data-comparison-items] > article").length,
+  criteria: document.querySelectorAll("[data-comparison-items] dt").length,
+  hidden: document.querySelector("[data-comparison]")?.hidden,
+  selected: new URL(location.href).searchParams.get("compare")?.split(",").length || 0,
+}));
+if (progressiveComparison.hidden || progressiveComparison.count !== 2 || progressiveComparison.criteria !== 18 || progressiveComparison.selected !== 2) {
+  catalogErrors.push("catalog_comparison_behavior");
+}
+findings.push({ route: "/entregas/", check: "progressive_catalog", catalogLazyBefore, catalogBoot, filtered, recommendation, progressiveComparison, errors: catalogErrors });
+if (catalogErrors.length) failed += 1;
+
+const noScriptPage = await browser.newPage();
+await noScriptPage.setJavaScriptEnabled(false);
+await noScriptPage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+await noScriptPage.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
+const noScriptCatalog = await noScriptPage.evaluate(() => ({
+  cards: document.querySelectorAll("article.catalog-item").length,
+  visibleCards: [...document.querySelectorAll("article.catalog-item")].filter((card) => getComputedStyle(card).display !== "none").length,
+  filtersHidden: getComputedStyle(document.querySelector("[data-catalog-filters]")).display === "none",
+  compareControlsHidden: getComputedStyle(document.querySelector(".catalog-item__compare")).display === "none",
+}));
+const noScriptErrors = [];
+if (noScriptCatalog.cards !== 54 || noScriptCatalog.visibleCards !== 54) noScriptErrors.push("catalog_noscript_content");
+if (!noScriptCatalog.filtersHidden || !noScriptCatalog.compareControlsHidden) noScriptErrors.push("catalog_noscript_controls");
+findings.push({ route: "/entregas/", check: "catalog_noscript", noScriptCatalog, errors: noScriptErrors });
+if (noScriptErrors.length) failed += 1;
+await noScriptPage.close();
 
 for (const { route, expectedNav } of [
   ...mutableCanonicalRoutes.map((route) => ({ route, expectedNav: promotedNav })),

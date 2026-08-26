@@ -250,13 +250,13 @@
     },
     {
       "id": "servicos-obras-publicas",
-      "visitor_job": "Triar qual serviço da CONFENGE corresponde ao próprio evento contratual.",
-      "profile": "commercial_content",
-      "terminal_action": "service_transition",
+      "visitor_job": "Comparar a entrega para o evento contratual e registrar o contexto antes da proposta.",
+      "profile": "priced_offer",
+      "terminal_action": "capture_form",
       "match": {"routes": ["/servicos-obras-publicas/"]},
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
-      "declared_at": "2026-08-23",
-      "owner_issue": 290,
+      "declared_at": "2026-08-25",
+      "owner_issue": 333,
       "debt": []
     },
     {
