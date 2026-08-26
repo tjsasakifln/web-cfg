@@ -26,15 +26,18 @@ PR #6 (`lighthouse` 13.4.1) left `pSEO quality gates` red while `site-ci` could 
 |----------|---------------|--------|--------------------|
 | **Yes** | `.github/workflows/site-ci.yml` | `gates` | **`site-ci`** |
 | **Yes** | `.github/workflows/pseo.yml` | `pseo` | **`pSEO quality gates`** |
-| No (soft) | `.github/workflows/codeql.yml` | `analyze` | `Analyze` (matrix) |
+| No (fail-closed advisory) | `.github/workflows/codeql.yml` | `analyze` | `Analyze` (matrix) |
 
-CodeQL uses `continue-on-error: true` until code scanning is enabled under **Settings → Code security**. Do not rely on CodeQL alone as a merge blocker.
+CodeQL failures remain red. Branch protection still uses the two stable product
+contexts above, so CodeQL is an additional fail-closed signal rather than a
+claimed required context. Promote it to required only after its matrix context
+and repository setting are verified together.
 
 ## Repo-controlled guarantees (on `main`)
 
 - Both workflows run on **pull_request** → `main` and **push** → `main`
 - Install is hard **`npm ci`** (no `|| npm install`)
-- No `continue-on-error: true` on site-ci / pSEO central fail paths
+- No `continue-on-error: true` on site-ci, pSEO, or CodeQL central fail paths
 - Shape asserted by `python3 scripts/site/test_workflow_gates.py` / `npm run test:workflow-gates`
 
 ## Controlled red/green proof (local)
@@ -61,7 +64,7 @@ python3 scripts/site/test_workflow_gates.py
 ## What is not claimed
 
 - Screenshot of the GitHub UI (only API read-back was proved in this workstream)
-- CodeQL as a hard required check
+- CodeQL as a hard required branch-protection context
 - That future Dependabot PRs will stay green without Node/engine alignment
 
 
