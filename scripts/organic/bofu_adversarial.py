@@ -237,7 +237,7 @@ def _delivery_sentences(html: str) -> list[str]:
         previous = sentences[index - 1] if index else ""
         delivery_context = bool(
             re.search(
-                r"\b(prazo (?:de entrega|do diagn[oó]stico|contratual)|intervalo contratual|compromisso)\b",
+                r"\b(prazo (?:de entrega|do diagn[oó]stico|contratual)|intervalo contratual|compromisso (?:contratual )?de entrega)\b",
                 sentence,
                 re.I,
             )

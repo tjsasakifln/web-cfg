@@ -213,6 +213,32 @@ def test_sla_guard_requires_catalog_sla_to_be_rendered():
     assert [finding["code"] for finding in findings] == ["SLA_NOT_IN_CATALOG"]
 
 
+def test_sla_guard_ignores_plan_commitments_and_credit_windows():
+    findings = audit_service_sla_claims(
+        "/fixture-svc/",
+        (
+            "<main>"
+            "<p>Compromisso Semestral: aviso de 30 dias.</p>"
+            "<p>Crédito se a Diretoria for contratada em até 60 dias da entrega.</p>"
+            "<p>Prazo contratual de entrega: 10 a 15 dias úteis.</p>"
+            "</main>"
+        ),
+        {"offer_id": "CFG-FIXTURE-v1"},
+        {"CFG-FIXTURE-v1": {"offer_id": "CFG-FIXTURE-v1", "sla_business_days": "10-15"}},
+    )
+    assert findings == []
+
+
+def test_sla_guard_still_checks_explicit_delivery_commitments():
+    findings = audit_service_sla_claims(
+        "/fixture-svc/",
+        "<main><p>Compromisso de entrega: até 15 dias úteis.</p></main>",
+        {"offer_id": "CFG-FIXTURE-v1"},
+        {"CFG-FIXTURE-v1": {"offer_id": "CFG-FIXTURE-v1", "sla_business_days": "10-15"}},
+    )
+    assert [finding["code"] for finding in findings] == ["SLA_NOT_IN_CATALOG"]
+
+
 def test_indexable_bridges_still_full():
     report = evaluate_indexable_bridges(ROOT)
     assert report["ok"], report["fails"]
