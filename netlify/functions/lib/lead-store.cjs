@@ -21,6 +21,7 @@ class MemoryStore {
   constructor() {
     this.map = new Map();
     this.byIdem = new Map();
+    this.system = new Map();
   }
   async getByIdempotency(key) {
     const id = this.byIdem.get(key);
@@ -53,13 +54,22 @@ class MemoryStore {
   async list() {
     return [...this.map.values()];
   }
+  async getSystemRecord(id) {
+    return this.system.get(id) || null;
+  }
+  async putSystemRecord(id, record) {
+    this.system.set(id, record);
+    return record;
+  }
 }
 
 class FileStore {
   constructor(dir) {
     this.dir = dir;
     this.idemDir = path.join(dir, "idem");
+    this.systemDir = path.join(dir, "system");
     fs.mkdirSync(this.idemDir, { recursive: true });
+    fs.mkdirSync(this.systemDir, { recursive: true });
   }
   _path(id) {
     return path.join(this.dir, `${id}.json`);
@@ -138,6 +148,20 @@ class FileStore {
       if (rec && rec.lead_id) out.push(rec);
     }
     return out;
+  }
+  async getSystemRecord(id) {
+    try {
+      const p = path.join(this.systemDir, `${encodeURIComponent(id)}.json`);
+      if (!fs.existsSync(p)) return null;
+      return JSON.parse(fs.readFileSync(p, "utf8"));
+    } catch {
+      return null;
+    }
+  }
+  async putSystemRecord(id, record) {
+    const p = path.join(this.systemDir, `${encodeURIComponent(id)}.json`);
+    fs.writeFileSync(p, JSON.stringify(record), "utf8");
+    return record;
   }
 }
 
@@ -287,6 +311,13 @@ class NetlifyBlobsStore {
       });
     }
     return out;
+  }
+  async getSystemRecord(id) {
+    return this._getJson(`system/${id}`);
+  }
+  async putSystemRecord(id, record) {
+    await this._setJson(`system/${id}`, record);
+    return record;
   }
 }
 

@@ -510,6 +510,7 @@ function fail(name, detail) {
   const { globalMemory, buildLeadRecord: blr } = require(path.join(root, "netlify/functions/lib/lead-store.cjs"));
   globalMemory.map.clear();
   globalMemory.byIdem.clear();
+  globalMemory.system.clear();
 
   const realL = blr({
     lead_id: "ops-real",
@@ -557,6 +558,66 @@ function fail(name, detail) {
   await globalMemory.put(realL);
   await globalMemory.put(synL);
 
+  const currentInsights = {
+    source: "search_analytics_api",
+    as_of: new Date().toISOString().slice(0, 10),
+    generated_at: new Date().toISOString(),
+    ready_for_product_decisions: true,
+    synthetic: false,
+    query_text_redacted: true,
+    raw_query_rows_in_git: false,
+    analyses: [{ query_hash: "sha256:abc123", impressions: 12 }],
+  };
+  const rawQueryRejected = await ops.handler({
+    httpMethod: "POST",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action: "gsc_insights_ingest" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights_ingest",
+    body: JSON.stringify({ insights: { ...currentInsights, query: "raw private term" } }),
+  });
+  if (rawQueryRejected.statusCode !== 422) fail("gsc_ingest_rejects_raw_query", rawQueryRejected.body);
+  else pass("gsc_ingest_rejects_raw_query");
+  const nestedRawRejected = ops._validateGscInsights({
+    ...currentInsights,
+    analyses: [{ raw_query: "private nested term" }],
+  });
+  if (nestedRawRejected.ok) fail("gsc_ingest_rejects_nested_raw_query", nestedRawRejected);
+  else pass("gsc_ingest_rejects_nested_raw_query", nestedRawRejected.error);
+  const dynamicPiiKeyRejected = ops._validateGscInsights({
+    ...currentInsights,
+    analyses: [{ contactPhoneNumber: "redacted" }],
+  });
+  if (dynamicPiiKeyRejected.ok) fail("gsc_ingest_rejects_dynamic_pii_key", dynamicPiiKeyRejected);
+  else pass("gsc_ingest_rejects_dynamic_pii_key", dynamicPiiKeyRejected.error);
+  const phoneValueRejected = ops._validateGscInsights({
+    ...currentInsights,
+    analyses: [{ note: "+55 (48) 99999-0000" }],
+  });
+  if (phoneValueRejected.ok) fail("gsc_ingest_rejects_phone_like_value", phoneValueRejected);
+  else pass("gsc_ingest_rejects_phone_like_value", phoneValueRejected.error);
+  const staleRejected = ops._validateGscInsights({
+    ...currentInsights,
+    as_of: "2025-01-01",
+    generated_at: "2025-01-02T00:00:00Z",
+  });
+  if (staleRejected.ok) fail("gsc_ingest_rejects_stale_snapshot", staleRejected);
+  else pass("gsc_ingest_rejects_stale_snapshot", staleRejected.error);
+
+  const ingested = await ops.handler({
+    httpMethod: "POST",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action: "gsc_insights_ingest" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights_ingest",
+    body: JSON.stringify({ insights: currentInsights }),
+  });
+  const ingestedBody = JSON.parse(ingested.body || "{}");
+  if (ingested.statusCode !== 200 || !ingestedBody.durable || !ingestedBody.content_sha256) {
+    fail("gsc_ingest_durable", ingested.body);
+  } else pass("gsc_ingest_durable", ingestedBody.content_sha256.slice(0, 12));
+  const leadOnlyRecords = await globalMemory.list();
+  if (leadOnlyRecords.length !== 2) fail("gsc_state_separate_from_leads", leadOnlyRecords.length);
+  else pass("gsc_state_separate_from_leads", leadOnlyRecords.length);
+
   const funnelRes = await ops.handler({
     httpMethod: "GET",
     headers: { authorization: "Bearer " + "z".repeat(24) },
@@ -580,6 +641,11 @@ function fail(name, detail) {
   if (gscOk.statusCode !== 200 || !gscBody.ok) fail("gsc_with_auth", gscOk.statusCode + " " + gscOk.body?.slice?.(0, 120));
   else {
     pass("gsc_with_auth");
+    if (
+      gscBody.meta?.delivery_source !== "durable_store" ||
+      gscBody.meta?.content_sha256 !== ingestedBody.content_sha256
+    ) fail("gsc_durable_read_proof", gscBody.meta);
+    else pass("gsc_durable_read_proof", gscBody.meta.content_sha256.slice(0, 12));
     const b = JSON.stringify(gscBody);
     if (/"email"\s*:\s*"[^"]+@/.test(b)) fail("gsc_auth_response_pii", b.slice(0, 200));
     else pass("gsc_auth_response_no_email_pii");
@@ -603,6 +669,7 @@ function fail(name, detail) {
   else process.env.LEAD_STORE = prevStore;
   globalMemory.map.clear();
   globalMemory.byIdem.clear();
+  globalMemory.system.clear();
 }
 
 if (failed) {

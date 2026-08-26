@@ -19,6 +19,7 @@
  *   GET  weekly_report       (real-only)
  *   POST weekly_email        (real-only)
  *   GET  gsc_insights        (auth required)
+ *   POST gsc_insights_ingest { insights } (redacted, durable, auth required)
  *   POST backfill_record_kind { dry_run?, apply_ids? }
  *   POST rollback_record_kind { snapshot_id }
  *   GET  inbound_handoff
@@ -108,16 +109,46 @@ function loadGscInsights() {
   return { ok: false, error: "gsc_insights_missing" };
 }
 
-/** Strip any accidental PII keys from GSC payload (defense in depth). */
+const SAFE_GSC_QUERY_KEYS = new Set([
+  "query_class",
+  "query_count",
+  "query_hash",
+  "query_text_redacted",
+  "raw_query_rows_in_git",
+]);
+
+function isSensitiveGscKey(key) {
+  const normalized = String(key || "")
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+  if (SAFE_GSC_QUERY_KEYS.has(normalized) || /^\d+_emerging_terms$/.test(normalized)) return false;
+  const tokens = new Set(normalized.split("_").filter(Boolean));
+  return [
+    "query", "queries", "term", "terms", "keyword", "keywords", "termo", "termos",
+    "consulta", "consultas", "email", "telefone", "phone", "nome", "name", "cpf",
+    "cnpj", "whatsapp", "pii", "contact", "contato", "person", "pessoa", "customer",
+    "cliente", "user", "usuario", "fullname", "username",
+  ].some((token) => tokens.has(token));
+}
+
+function isSensitiveGscValue(value) {
+  if (typeof value !== "string") return false;
+  return /\b[^\s@]+@[^\s@]+\.[^\s@]+\b/.test(value) ||
+    /(?:\+?\d[\s().-]*){10,15}/.test(value) ||
+    /(?:wa\.me|whatsapp\.com)\//i.test(value);
+}
+
+/** Strip any accidental PII or raw-search keys from GSC payload (defense in depth). */
 function sanitizeGscForOps(data) {
   if (!data || typeof data !== "object") return data;
-  const banned = /email|telefone|phone|nome|name|cpf|cnpj|whatsapp|pii/i;
   function walk(v) {
     if (Array.isArray(v)) return v.map(walk);
     if (v && typeof v === "object") {
       const out = {};
       for (const [k, val] of Object.entries(v)) {
-        if (banned.test(k)) continue;
+        if (isSensitiveGscKey(k)) continue;
         out[k] = walk(val);
       }
       return out;
@@ -125,6 +156,72 @@ function sanitizeGscForOps(data) {
     return v;
   }
   return walk(data);
+}
+
+const GSC_INSIGHTS_STATE_ID = "gsc-insights-latest-v1";
+
+function gscInsightsHash(data) {
+  return crypto.createHash("sha256").update(JSON.stringify(data)).digest("hex");
+}
+
+function validateGscInsights(data, { now = Date.now() } = {}) {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    return { ok: false, error: "gsc_insights_invalid" };
+  }
+  let badKey = null;
+  let sensitiveValue = false;
+  function walk(value) {
+    if (Array.isArray(value)) {
+      for (const item of value) walk(item);
+      return;
+    }
+    if (value && typeof value === "object") {
+      for (const [key, item] of Object.entries(value)) {
+        if (isSensitiveGscKey(key)) badKey = badKey || key;
+        walk(item);
+      }
+      return;
+    }
+    if (isSensitiveGscValue(value)) {
+      sensitiveValue = true;
+    }
+  }
+  walk(data);
+  if (badKey || sensitiveValue) {
+    return { ok: false, error: "gsc_insights_sensitive_field", field: badKey || "sensitive_value" };
+  }
+  if (
+    data.source !== "search_analytics_api" ||
+    data.ready_for_product_decisions !== true ||
+    data.synthetic !== false ||
+    data.query_text_redacted !== true ||
+    data.raw_query_rows_in_git !== false
+  ) {
+    return { ok: false, error: "gsc_insights_not_product_ready" };
+  }
+  const asOf = String(data.as_of || "");
+  const generatedAt = String(data.generated_at || "");
+  const asOfStart = Date.parse(`${asOf}T00:00:00Z`);
+  const generatedAtMs = Date.parse(generatedAt);
+  if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(asOf) ||
+    !Number.isFinite(asOfStart) ||
+    new Date(asOfStart).toISOString().slice(0, 10) !== asOf ||
+    !Number.isFinite(generatedAtMs)
+  ) {
+    return { ok: false, error: "gsc_insights_invalid_freshness" };
+  }
+  const maxAgeMs = 14 * 864e5;
+  const asOfEnd = asOfStart + 864e5 - 1;
+  if (
+    now - generatedAtMs > maxAgeMs ||
+    now - asOfEnd > maxAgeMs ||
+    generatedAtMs > now + 5 * 60_000 ||
+    asOfStart > now + 864e5
+  ) {
+    return { ok: false, error: "gsc_insights_stale" };
+  }
+  return { ok: true };
 }
 
 function bindBlobs(event) {
@@ -341,10 +438,87 @@ exports.handler = async (event) => {
   bindBlobs(event);
   const store = await createStore(event);
 
+  if (action === "gsc_insights_ingest" && event.httpMethod === "POST") {
+    if (!store || typeof store.putSystemRecord !== "function" || typeof store.getSystemRecord !== "function") {
+      return json(503, { ok: false, error: "gsc_insights_store_unavailable" }, origin);
+    }
+    if (Buffer.byteLength(String(event.body || ""), "utf8") > 512 * 1024) {
+      return json(413, { ok: false, error: "gsc_insights_too_large" }, origin);
+    }
+    const body = parseBody(event);
+    if (!body) return json(400, { ok: false, error: "invalid_json" }, origin);
+    const validation = validateGscInsights(body.insights);
+    if (!validation.ok) return json(422, { ok: false, ...validation }, origin);
+
+    const insights = sanitizeGscForOps(body.insights);
+    const contentSha256 = gscInsightsHash(insights);
+    const current = await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
+    const olderAsOf = current?.insights?.as_of && String(current.insights.as_of) > String(insights.as_of);
+    const olderGeneration =
+      current?.insights?.as_of === insights.as_of &&
+      Date.parse(current.insights.generated_at || "") > Date.parse(insights.generated_at || "");
+    if (olderAsOf || olderGeneration) {
+      return json(409, { ok: false, error: "gsc_insights_stale_overwrite" }, origin);
+    }
+    const record = {
+      schema: "confenge_private_gsc_insights_v1",
+      content_sha256: contentSha256,
+      published_at: new Date().toISOString(),
+      insights,
+    };
+    await store.putSystemRecord(GSC_INSIGHTS_STATE_ID, record);
+    const proof = await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
+    if (
+      !proof ||
+      proof.content_sha256 !== contentSha256 ||
+      gscInsightsHash(proof.insights) !== contentSha256
+    ) {
+      return json(503, { ok: false, error: "gsc_insights_persist_verify_miss" }, origin);
+    }
+    safeLog("info", "gsc_insights_ingested", {
+      as_of: insights.as_of,
+      content_sha256: contentSha256.slice(0, 16),
+    });
+    return json(
+      200,
+      {
+        ok: true,
+        durable: true,
+        as_of: insights.as_of,
+        content_sha256: contentSha256,
+        published_at: proof.published_at,
+      },
+      origin
+    );
+  }
+
   if (action === "gsc_insights" && event.httpMethod === "GET") {
-    const loaded = loadGscInsights();
+    let loaded = null;
+    let deliverySource = "packaged_fallback";
+    let durableMeta = {};
+    if (store && typeof store.getSystemRecord === "function") {
+      const durable = await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
+      const durableHash = durable?.insights ? gscInsightsHash(durable.insights) : null;
+      if (
+        durable?.insights &&
+        durable.content_sha256 === durableHash &&
+        validateGscInsights(durable.insights).ok
+      ) {
+        loaded = { ok: true, data: durable.insights };
+        deliverySource = "durable_store";
+        durableMeta = {
+          content_sha256: durableHash,
+          published_at: durable.published_at || null,
+        };
+      }
+    }
+    if (!loaded) loaded = loadGscInsights();
     if (!loaded.ok) {
       return json(404, { ok: false, error: loaded.error || "gsc_insights_missing" }, origin);
+    }
+    const deliveryValidation = validateGscInsights(loaded.data);
+    if (!deliveryValidation.ok) {
+      return json(404, { ok: false, error: deliveryValidation.error }, origin);
     }
     const safe = sanitizeGscForOps(loaded.data);
     const blob = JSON.stringify(safe);
@@ -362,6 +536,8 @@ exports.handler = async (event) => {
           as_of: safe.as_of || null,
           generated_at: safe.generated_at || null,
           source: safe.source || null,
+          delivery_source: deliverySource,
+          ...durableMeta,
           note: "Authenticated ops only. Not a public static file.",
         },
       },
@@ -992,3 +1168,5 @@ exports._authOk = authOk;
 exports._listLeads = listLeads;
 exports._loadGscInsights = loadGscInsights;
 exports._sanitizeGscForOps = sanitizeGscForOps;
+exports._validateGscInsights = validateGscInsights;
+exports._gscInsightsHash = gscInsightsHash;
