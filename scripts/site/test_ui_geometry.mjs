@@ -8,13 +8,15 @@
 import puppeteer from "puppeteer-core";
 import { createServer } from "http";
 import { readFileSync, existsSync, statSync } from "fs";
-import { join, extname, resolve } from "path";
+import { join, extname, resolve, sep } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { resolveChromePath } from "./resolve_chrome.mjs";
+import { resolveSiteRoot } from "./interface_coverage.mjs";
 
 const require = createRequire(import.meta.url);
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
+const SITE_ROOT = resolveSiteRoot(ROOT);
 const CHROME = resolveChromePath();
 const PORT = Number(process.env.UI_TEST_PORT || 8791);
 const BASE = process.argv[2] || `http://127.0.0.1:${PORT}`;
@@ -39,8 +41,8 @@ function startStaticServer() {
       let urlPath = decodeURIComponent((req.url || "/").split("?")[0]);
       if (urlPath.endsWith("/")) urlPath += "index.html";
       if (urlPath === "") urlPath = "/index.html";
-      const filePath = join(ROOT, urlPath);
-      if (!filePath.startsWith(ROOT) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
+      const filePath = join(SITE_ROOT, urlPath);
+      if (!filePath.startsWith(`${SITE_ROOT}${sep}`) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
         res.writeHead(404);
         res.end("not found");
         return;
@@ -67,7 +69,27 @@ function fail(name, err) {
   console.log("FAIL", name, err);
 }
 
+async function assertStableDocumentTop(targetPage, { samples = 6, intervalMs = 50 } = {}) {
+  await targetPage.evaluate(() => {
+    document.documentElement.style.scrollBehavior = "auto";
+    if (document.body) document.body.style.scrollBehavior = "auto";
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  });
+  const positions = [];
+  for (let index = 0; index < samples; index += 1) {
+    await new Promise((done) => setTimeout(done, intervalMs));
+    positions.push(await targetPage.evaluate(() => Math.round(window.scrollY)));
+  }
+  if (positions.some((position) => Math.abs(position) > 1)) {
+    throw new Error(`document top did not remain stable: ${positions.join(",")}`);
+  }
+}
+
 async function main() {
+  if (process.env.PUBLIC_ARTIFACT_REQUIRED === "1" && SITE_ROOT === ROOT) {
+    throw new Error("public artifact required: run npm run build:site before test:ui");
+  }
+  console.log(`UI_GEOMETRY_SITE_ROOT ${SITE_ROOT === ROOT ? "." : "_site"}`);
   let server = null;
   let ownServer = false;
   if (!process.argv[2]) {
@@ -90,6 +112,27 @@ async function main() {
     process.exit(required ? 2 : 0);
   }
   const page = await browser.newPage();
+
+  // Prove the precondition guard catches asynchronous scroll restoration. A
+  // single window.scrollTo(0, 0) would incorrectly pass this fixture (#407).
+  try {
+    const racePage = await browser.newPage();
+    await racePage.setViewport({ width: 320, height: 844, deviceScaleFactor: 1 });
+    await racePage.setContent('<main style="height:9000px"><h1>fixture</h1></main>');
+    await racePage.evaluate(() => setTimeout(() => window.scrollTo(0, 5000), 75));
+    let detected = false;
+    try {
+      await assertStableDocumentTop(racePage);
+    } catch {
+      detected = true;
+    } finally {
+      await racePage.close();
+    }
+    if (!detected) throw new Error("late scroll fixture was not detected");
+    ok("stable_top_guard_detects_late_scroll");
+  } catch (e) {
+    fail("stable_top_guard_detects_late_scroll", e.message || e);
+  }
 
   // 1) overflow 320–1920
   try {
@@ -1248,36 +1291,31 @@ async function main() {
     ];
     const reports = [];
     for (const width of [320, 390, 768, 1024, 1440]) {
-      await page.setViewport({ width, height: 844, deviceScaleFactor: 1 });
       for (const route of routes) {
         const { path, frozen } = route;
-        await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
-        await page.evaluate(async () => {
-          await document.fonts.ready;
-          const cover = document.querySelector(".article-cover img");
-          if (cover && !cover.complete) {
-            await Promise.race([
-              new Promise((resolveImage) => {
-                cover.addEventListener("load", resolveImage, { once: true });
-                cover.addEventListener("error", resolveImage, { once: true });
-              }),
-              new Promise((resolveTimeout) => setTimeout(resolveTimeout, 2000)),
-            ]);
-          }
-        });
-        // Earlier interaction tests intentionally leave this shared page scrolled.
-        // This gate measures a fresh top-of-document arrival, so make that
-        // precondition explicit instead of depending on navigation restoration.
-        await page.evaluate(async () => {
-          document.documentElement.style.setProperty("scroll-behavior", "auto", "important");
-          document.body.style.setProperty("scroll-behavior", "auto", "important");
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0;
-          await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0;
-        });
-        const rep = await page.evaluate(() => {
+        // Navigation history and in-flight smooth scrolling from earlier tests
+        // must not contaminate a fresh visitor arrival. Each route gets an
+        // isolated page and the top position must remain stable over time.
+        const routePage = await browser.newPage();
+        let rep;
+        try {
+          await routePage.setViewport({ width, height: 844, deviceScaleFactor: 1 });
+          await routePage.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+          await routePage.evaluate(async () => {
+            await document.fonts.ready;
+            const cover = document.querySelector(".article-cover img");
+            if (cover && !cover.complete) {
+              await Promise.race([
+                new Promise((resolveImage) => {
+                  cover.addEventListener("load", resolveImage, { once: true });
+                  cover.addEventListener("error", resolveImage, { once: true });
+                }),
+                new Promise((resolveTimeout) => setTimeout(resolveTimeout, 2000)),
+              ]);
+            }
+          });
+          await assertStableDocumentTop(routePage);
+          rep = await routePage.evaluate(() => {
           const h1 = document.querySelector("h1");
           const hero = document.querySelector(".content-hero");
           const answer = document.querySelector("#resposta");
@@ -1312,7 +1350,10 @@ async function main() {
               gridBox.left >= -1 && gridBox.right <= window.innerWidth + 1
             ),
           };
-        });
+          });
+        } finally {
+          if (!routePage.isClosed()) await routePage.close();
+        }
         reports.push(`${path}@${width}:hero=${rep.heroHeight},answer=${rep.answerTop}`);
         if (!rep.h1Visible) {
           throw new Error(
