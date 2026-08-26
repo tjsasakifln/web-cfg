@@ -40,8 +40,22 @@ from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.revops.gsc_history import (  # noqa: E402
+    GSC_READINESS_CONTRACT,
+    HistoryStateError,
+    build_observation,
+    merge_observation,
+    read_history,
+    record_failed_attempt,
+    write_history,
+)
+
 DATA = ROOT / "data" / "revops" / "gsc"
 PRIVATE_DIR = DATA / "private"
+HISTORY_PATH = DATA / "history.json"
 BRAND_CLASSIFICATION_VERSION = "brand-class/v1"
 WINDOW_POLICY_VERSION = "complete-days/v1"
 PROPERTY_TZ = ZoneInfo("America/Sao_Paulo")
@@ -1009,7 +1023,7 @@ def git_safe_aggregate(rows: list[dict[str, Any]]) -> dict[str, Any]:
             {
                 "date": row.get("date"),
                 "query_hash": _row_query_hash(row) or redact_query(_row_query_text(row)),
-                "page": row.get("page"),
+                "page": redact_sensitive_url(row.get("page")),
                 "country": row.get("country"),
                 "device": row.get("device"),
                 "impressions": row.get("impressions"),
@@ -1045,7 +1059,7 @@ def git_safe_live_payload(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def redact_live_query_fields(value: Any) -> Any:
-    """Recursively hash query-valued fields in live derived artifacts."""
+    """Recursively hash queries and strip sensitive URL components."""
     if isinstance(value, list):
         return [redact_live_query_fields(item) for item in value]
     if not isinstance(value, dict):
@@ -1054,9 +1068,36 @@ def redact_live_query_fields(value: Any) -> Any:
     for key, item in value.items():
         if key == "query" and isinstance(item, str):
             out["query_hash"] = redact_query(item)
+        elif key in {
+            "page",
+            "url",
+            "path",
+            "landing_page",
+            "current_landing",
+            "intended_landing",
+        } and isinstance(item, str):
+            out[key] = redact_sensitive_url(item)
         else:
             out[key] = redact_live_query_fields(item)
     return out
+
+
+def redact_sensitive_url(value: Any) -> Any:
+    if not isinstance(value, str):
+        return value
+    raw = value.strip()
+    if not raw:
+        return raw
+    if raw.startswith("/"):
+        return raw.split("?", 1)[0].split("#", 1)[0]
+    parsed = urlparse(raw)
+    if parsed.scheme not in {"http", "https"}:
+        return raw
+    hostname = (parsed.hostname or "").lower()
+    if hostname not in {"confenge.com.br", "www.confenge.com.br"}:
+        return "[external-url-redacted]"
+    path = parsed.path or "/"
+    return f"https://confenge.com.br{path}"
 
 
 def snapshot_manifest(
@@ -1068,10 +1109,21 @@ def snapshot_manifest(
     ready_for_product_decisions: bool,
     synthetic: bool,
 ) -> dict[str, Any]:
+    stable_rows = [
+        {
+            "date": row.get("date"),
+            "query_hash": redact_query(str(row.get("query") or "")),
+            "page": row.get("page"),
+            "country": row.get("country"),
+            "device": row.get("device"),
+            "impressions": row.get("impressions"),
+            "clicks": row.get("clicks"),
+        }
+        for row in rows
+    ]
+    stable_rows.sort(key=lambda row: _canonical_snapshot_row(row))
     payload = json.dumps(
-        [{"date": r.get("date"), "page": r.get("page"), "country": r.get("country"),
-          "device": r.get("device"), "impressions": r.get("impressions"),
-          "clicks": r.get("clicks")} for r in rows],
+        stable_rows,
         ensure_ascii=False,
         sort_keys=True,
         default=str,
@@ -1090,6 +1142,10 @@ def snapshot_manifest(
         "brand_classification_version": BRAND_CLASSIFICATION_VERSION,
         "window_policy_version": WINDOW_POLICY_VERSION,
     }
+
+
+def _canonical_snapshot_row(row: dict[str, Any]) -> str:
+    return json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
 
 
 FIXTURE_MANIFEST_REL = Path("data/revops/gsc/fixtures/last_fixture_manifest.json")
@@ -1618,6 +1674,14 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
         "synthetic": not is_live_gsc_payload(data),
         "fixture": not is_live_gsc_payload(data),
         "ready_for_product_decisions": is_live_gsc_payload(data),
+        "readiness_status": data.get("readiness_status") or "UNKNOWN",
+        "readiness_access_mode": data.get("readiness_access_mode") or "NONE",
+        "readiness_reason_codes": list(data.get("readiness_reasons") or []),
+        "reason_codes": list(data.get("reason_codes") or data.get("readiness_reasons") or []),
+        "readiness_contract_version": data.get("readiness_contract_version"),
+        "history_state_sha256": data.get("history_state_sha256"),
+        "snapshot_sha256": (data.get("manifest") or {}).get("content_sha256")
+        or data.get("manifest_sha256"),
         "live_baseline_invented": False,
         "counts": {
             "queries": len(queries),
@@ -1778,17 +1842,33 @@ def _gsc_credentials():
     }
 
 
-def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000) -> dict[str, Any]:
+def pull_api(
+    days: int = 28,
+    *,
+    reprocess_days: int = 3,
+    row_limit: int = 25000,
+    history_state: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Pull Search Analytics via Google API when credentials exist.
 
     Incremental features:
       - reprocess last N days to absorb GSC lag
       - pagination via startRow
       - dedupe by (date, query, page, country, device)
-      - history under data/revops/gsc/daily/
-      - gap detection vs previous last_sync window
-      - last_sync timestamp written to last_sync.json
+      - versioned/hash-verified history restored from the authenticated store
+      - observed/missing dates derived from the durable 28-day window
+      - gitignored run evidence under data/revops/gsc/
     """
+    if history_state is None:
+        try:
+            history_state = read_history(HISTORY_PATH)
+        except HistoryStateError as exc:
+            return {
+                "ok": False,
+                "error": exc.code,
+                "reason_codes": [exc.code],
+                "ready_for_product_decisions": False,
+            }
     resolved, err = _gsc_credentials()
     if err:
         return err
@@ -1881,34 +1961,58 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         today=today,
         provider_max_date=date.fromisoformat(str(max_date)),
     )
-    # A successful Search Analytics query covers the requested provider window
-    # even when a low-traffic calendar day returns no top rows. Daily files are
-    # window snapshots, not one-file-per-provider-day records.
-    gaps = detect_gsc_gaps(
-        start,
-        end,
-        additional_coverage=[] if truncated else [(start, end)],
-    )
-    readiness_reasons = []
-    if truncated:
-        readiness_reasons.append("top_row_truncation")
-    if gaps:
-        readiness_reasons.append("provider_coverage_gap")
-    ready_for_product_decisions = not readiness_reasons
-    coverage = {
-        "kind": "provider_query_window",
-        "start": start.isoformat(),
-        "end": end.isoformat(),
-        "complete": not truncated,
-    }
     manifest = snapshot_manifest(
         source=source_kind,
         rows=deduped,
         max_date=str(max_date),
         latency_ms=latency_ms,
-        ready_for_product_decisions=ready_for_product_decisions,
+        ready_for_product_decisions=False,
         synthetic=False,
     )
+    run_id = os.environ.get("GSC_RUN_ID") or os.environ.get("GITHUB_RUN_ID") or "local"
+    run_attempt = os.environ.get("GITHUB_RUN_ATTEMPT")
+    if run_attempt:
+        run_id = f"{run_id}:{run_attempt}"
+    if truncated:
+        history_state = record_failed_attempt(
+            history_state,
+            "top_row_truncation",
+            run_id=run_id,
+        )
+        history_result = {
+            "event": "RUN_FAILED",
+            "promote_insights": False,
+            "reason_codes": list(history_state["readiness"]["reason_codes"]),
+            "readiness": history_state["readiness"],
+        }
+    else:
+        observation = build_observation(
+            as_of=end,
+            start=start,
+            end=end,
+            snapshot_sha256=manifest["content_sha256"],
+            observed_at=datetime.fromisoformat(last_sync_at),
+            run_id=run_id,
+            reprocess_days=reprocess_days,
+        )
+        history_state, history_result = merge_observation(history_state, observation)
+    write_history(HISTORY_PATH, history_state)
+    readiness = history_state["readiness"]
+    gaps = list(readiness["missing_dates"])
+    readiness_reasons = list(readiness["reason_codes"])
+    ready_for_product_decisions = readiness["ready_for_product_decisions"] is True
+    manifest["ready_for_product_decisions"] = ready_for_product_decisions
+    manifest["readiness_contract_version"] = GSC_READINESS_CONTRACT
+    manifest["history_state_sha256"] = history_state["state_sha256"]
+    coverage = {
+        "kind": "durable_observed_dates",
+        "start": readiness["window_start"],
+        "end": readiness["window_end"],
+        "complete": not gaps,
+        "observed_dates": len(readiness["observed_dates"]),
+        "missing_dates": len(gaps),
+        "distinct_as_of": readiness["distinct_as_of"],
+    }
     payload = {
         "imported_at": last_sync_at,
         "as_of": end.isoformat(),
@@ -1934,6 +2038,12 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "coverage": coverage,
         "coverage_gaps": gaps,
         "readiness_reasons": readiness_reasons,
+        "reason_codes": readiness_reasons,
+        "readiness_status": readiness["status"],
+        "readiness_access_mode": readiness["access_mode"],
+        "readiness_contract_version": GSC_READINESS_CONTRACT,
+        "history_state_sha256": history_state["state_sha256"],
+        "history_event": history_result["event"],
         "ready_for_product_decisions": ready_for_product_decisions,
         "synthetic": False,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
@@ -1963,6 +2073,13 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "gaps": gaps,
         "coverage": coverage,
         "readiness_reasons": readiness_reasons,
+        "reason_codes": readiness_reasons,
+        "readiness_status": readiness["status"],
+        "readiness_access_mode": readiness["access_mode"],
+        "readiness_contract_version": GSC_READINESS_CONTRACT,
+        "history_state_sha256": history_state["state_sha256"],
+        "history_event": history_result["event"],
+        "promote_insights": history_result["promote_insights"],
         "site": site,
         "source": "search_analytics_api",
         "source_kind": source_kind,
@@ -2003,56 +2120,17 @@ def pull_api(days: int = 28, *, reprocess_days: int = 3, row_limit: int = 25000)
         "truncated": truncated,
         "synthetic": False,
         "readiness_reasons": readiness_reasons,
+        "reason_codes": readiness_reasons,
+        "readiness_status": readiness["status"],
+        "readiness_access_mode": readiness["access_mode"],
+        "readiness_contract_version": GSC_READINESS_CONTRACT,
+        "history_state_sha256": history_state["state_sha256"],
+        "history_event": history_result["event"],
+        "promote_insights": history_result["promote_insights"],
         "ready_for_product_decisions": ready_for_product_decisions,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "manifest_sha256": manifest["content_sha256"],
     }
-
-
-def detect_gsc_gaps(
-    start: date,
-    end: date,
-    *,
-    additional_coverage: list[tuple[date, date]] | None = None,
-) -> list[str]:
-    """List provider dates not covered by a successful query window.
-
-    A file under ``daily/`` represents the whole ``start``/``end`` query
-    window recorded in its payload. Treating its filename as the only covered
-    day produced 27 false gaps for every healthy 28-day pull.
-    """
-    ensure_dirs()
-    daily = DATA / "daily"
-    covered: set[date] = set()
-    windows = list(additional_coverage or [])
-    for path in daily.glob("*.json"):
-        try:
-            payload = json.loads(path.read_text(encoding="utf-8"))
-            if (
-                payload.get("source") != "search_analytics_api"
-                or payload.get("synthetic") is True
-                or payload.get("truncated") is True
-                or payload.get("ready_for_product_decisions") is not True
-            ):
-                continue
-            windows.append(
-                (date.fromisoformat(str(payload["start"])), date.fromisoformat(str(payload["end"])))
-            )
-        except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError):
-            continue
-    for window_start, window_end in windows:
-        cur = max(start, window_start)
-        boundary = min(end, window_end)
-        while cur <= boundary:
-            covered.add(cur)
-            cur += timedelta(days=1)
-    gaps: list[str] = []
-    cur = start
-    while cur <= end:
-        if cur not in covered:
-            gaps.append(cur.isoformat())
-        cur += timedelta(days=1)
-    return gaps
 
 
 def sync_incremental(
@@ -2066,14 +2144,63 @@ def sync_incremental(
     ensure_dirs()
     if use_fixture or os.environ.get("GSC_USE_FIXTURE") == "1":
         return sync_from_fixture()
-    result = pull_api(days=days, reprocess_days=reprocess_days)
-    if result.get("error") == "missing_credentials":
-        # Always persist the blocker so scheduled artifacts exist. Absence is not zero.
+    run_id = os.environ.get("GSC_RUN_ID") or os.environ.get("GITHUB_RUN_ID") or "local"
+    run_attempt = os.environ.get("GITHUB_RUN_ATTEMPT")
+    if run_attempt:
+        run_id = f"{run_id}:{run_attempt}"
+    try:
+        history_state = read_history(HISTORY_PATH)
+    except HistoryStateError as exc:
+        result = {
+            "ok": False,
+            "error": exc.code,
+            "reason_codes": [exc.code],
+            "ready_for_product_decisions": False,
+            "readiness_status": "UNKNOWN",
+            "readiness_access_mode": "NONE",
+        }
         write_blocked_last_sync(result)
         return result
-    if allow_missing_creds:
+
+    if os.environ.get("GSC_DEPENDENCY_UNAVAILABLE") == "1":
+        result = {"ok": False, "error": "dependency_unavailable"}
+    else:
+        try:
+            result = pull_api(
+                days=days,
+                reprocess_days=reprocess_days,
+                history_state=history_state,
+            )
+        except Exception:  # noqa: BLE001 -- never leak provider/credential details to logs
+            result = {"ok": False, "error": "dependency_unavailable"}
+    if result.get("ok"):
         return result
-    return result
+
+    error = str(result.get("error") or "dependency_unavailable")
+    reason_code = {
+        "missing_credentials": "missing_credentials",
+        "oauth_flow_not_automated_here": "credential_failure",
+        "google_api_client_not_installed": "dependency_unavailable",
+    }.get(error, error if error.startswith("gsc_history_") else "dependency_unavailable")
+    history_state = record_failed_attempt(history_state, reason_code, run_id=run_id)
+    write_history(HISTORY_PATH, history_state)
+    readiness = history_state["readiness"]
+    safe_result = {
+        **result,
+        "error": reason_code,
+        "reason_codes": list(readiness["reason_codes"]),
+        "ready_for_product_decisions": False,
+        "readiness_status": readiness["status"],
+        "readiness_access_mode": readiness["access_mode"],
+        "readiness_contract_version": GSC_READINESS_CONTRACT,
+        "history_state_sha256": history_state["state_sha256"],
+        "promote_insights": False,
+    }
+    # Always persist a redacted blocker receipt. Absence is not numeric zero.
+    write_blocked_last_sync(safe_result)
+    if allow_missing_creds and reason_code == "missing_credentials":
+        safe_result["allowed_external_blocker"] = True
+    return safe_result
 
 
 def sync_from_fixture() -> dict[str, Any]:

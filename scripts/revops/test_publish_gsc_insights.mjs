@@ -1,13 +1,18 @@
 #!/usr/bin/env node
 import fs from "fs";
+import { createRequire } from "module";
 import os from "os";
 import path from "path";
 import {
   contentHash,
   publish,
+  restoreHistory,
   validatePublishable,
   validateSyncProvenance,
 } from "./publish_gsc_insights.mjs";
+
+const require = createRequire(import.meta.url);
+const { historyHash, observationHash, validateHistoryState } = require("../../netlify/functions/lib/gsc-history.cjs");
 
 let failed = 0;
 function check(name, condition, detail = "") {
@@ -27,6 +32,73 @@ const insights = {
   "11_emerging_terms": [],
   analyses: [{ query_hash: "sha256:abc123", clicks: 2 }],
 };
+const asOf = insights.as_of;
+const observations = [0, 1, 2].map((offset) => {
+  const observation = {
+    source: "search_analytics_api",
+    synthetic: false,
+    complete: true,
+    as_of: new Date(Date.parse(`${asOf}T00:00:00Z`) - (2 - offset) * 864e5).toISOString().slice(0, 10),
+    start: new Date(Date.parse(`${asOf}T00:00:00Z`) - (29 - offset) * 864e5).toISOString().slice(0, 10),
+    end: new Date(Date.parse(`${asOf}T00:00:00Z`) - (2 - offset) * 864e5).toISOString().slice(0, 10),
+    observed_dates: Array.from({ length: 28 }, (_, day) =>
+      new Date(Date.parse(`${asOf}T00:00:00Z`) - (29 - offset - day) * 864e5).toISOString().slice(0, 10)
+    ),
+    reprocessed_dates: Array.from({ length: 3 }, (_, day) =>
+      new Date(Date.parse(`${asOf}T00:00:00Z`) - (4 - offset - day) * 864e5).toISOString().slice(0, 10)
+    ),
+    snapshot_sha256: String(offset + 1).repeat(64),
+    observed_at: new Date(now.getTime() - (2 - offset) * 864e5).toISOString(),
+    run_id: `run-${offset + 1}`,
+  };
+  observation.observation_id = observationHash(observation);
+  return observation;
+});
+const observedDates = [...new Set(observations.flatMap((observation) => observation.observed_dates))]
+  .filter((day) => day <= asOf)
+  .slice(-28);
+let history = {
+  schema: "confenge_private_gsc_history_v1",
+  contract_version: "gsc-readiness/v2",
+  window_days: 28,
+  minimum_distinct_as_of: 3,
+  max_as_of_lag_days: 14,
+  created_at: observations[0].observed_at,
+  updated_at: observations[2].observed_at,
+  parent_state_sha256: null,
+  observations,
+  last_attempt: {
+    attempted_at: observations[2].observed_at,
+    run_id: "run-3",
+    outcome: "OBSERVATION_MERGED",
+    as_of: asOf,
+    snapshot_sha256: observations[2].snapshot_sha256,
+    reason_codes: [],
+  },
+  last_known_good: {
+    observation_id: observations[2].observation_id,
+    snapshot_sha256: observations[2].snapshot_sha256,
+    as_of: asOf,
+    observed_at: observations[2].observed_at,
+  },
+  readiness: {
+    ready_for_product_decisions: true,
+    status: "READY",
+    access_mode: "READ_WRITE",
+    reason_codes: [],
+    window_start: observedDates[0],
+    window_end: asOf,
+    observed_dates: observedDates,
+    missing_dates: [],
+    distinct_as_of: 3,
+    freshness_as_of: asOf,
+  },
+};
+history.state_sha256 = historyHash(history);
+insights.readiness_contract_version = "gsc-readiness/v2";
+insights.history_state_sha256 = history.state_sha256;
+insights.snapshot_sha256 = history.last_known_good.snapshot_sha256;
+check("history_contract_valid", validateHistoryState(history).ok);
 
 check("publishable_redacted_snapshot", validatePublishable(insights).as_of === insights.as_of);
 const syncState = {
@@ -36,8 +108,11 @@ const syncState = {
   ready_for_product_decisions: true,
   as_of: insights.as_of,
   last_sync_at: insights.generated_at,
+  promote_insights: true,
+  history_state_sha256: history.state_sha256,
+  manifest_sha256: history.last_known_good.snapshot_sha256,
 };
-check("current_sync_provenance", validateSyncProvenance(insights, syncState));
+check("current_sync_provenance", validateSyncProvenance(insights, syncState, history));
 try {
   validatePublishable({ ...insights, query: "private raw query" });
   check("raw_query_rejected", false);
@@ -69,6 +144,15 @@ try {
   check("phone_like_value_rejected", error.message === "gsc_insights_sensitive_field", error.message);
 }
 try {
+  validatePublishable({
+    ...insights,
+    analyses: [{ page: "https://confenge.com.br/path?email=private%40example.com" }],
+  });
+  check("sensitive_url_rejected", false);
+} catch (error) {
+  check("sensitive_url_rejected", error.message === "gsc_insights_sensitive_field", error.message);
+}
+try {
   validatePublishable(
     { ...insights, as_of: "2025-01-01", generated_at: "2025-01-02T00:00:00Z" },
     { now }
@@ -81,17 +165,36 @@ try {
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "gsc-publish-test-"));
 const input = path.join(tmp, "insights.json");
 const statePath = path.join(tmp, "last_sync.json");
+const historyPath = path.join(tmp, "history.json");
 fs.writeFileSync(input, JSON.stringify(insights), "utf8");
 fs.writeFileSync(statePath, JSON.stringify(syncState), "utf8");
+fs.writeFileSync(historyPath, JSON.stringify(history), "utf8");
 const sha = contentHash(insights);
 let posted = false;
+let postedHistory = null;
 const fakeFetch = async (url, options = {}) => {
   if (url.includes("gsc_insights_ingest")) {
     posted = true;
     const body = JSON.parse(options.body);
+    postedHistory = body.history;
     return new Response(
-      JSON.stringify({ ok: true, durable: true, content_sha256: contentHash(body.insights) }),
+      JSON.stringify({
+        ok: true,
+        durable: true,
+        content_sha256: contentHash(body.insights),
+        history_state_sha256: body.history.state_sha256,
+      }),
       { status: 200 }
+    );
+  }
+  if (url.includes("gsc_history")) {
+    return new Response(
+      JSON.stringify({
+        ok: true,
+        history: postedHistory || history,
+        meta: { state_sha256: (postedHistory || history).state_sha256 },
+      }),
+      { status: 200 },
     );
   }
   return new Response(
@@ -101,6 +204,8 @@ const fakeFetch = async (url, options = {}) => {
         as_of: insights.as_of,
         delivery_source: "durable_store",
         content_sha256: sha,
+        history_state_sha256: history.state_sha256,
+        ready_for_product_decisions: true,
         published_at: now.toISOString(),
       },
     }),
@@ -110,12 +215,32 @@ const fakeFetch = async (url, options = {}) => {
 const proof = await publish({
   input,
   syncStatePath: statePath,
+  historyStatePath: historyPath,
   baseUrl: "https://confenge.com.br",
   token: "test-token-at-least-16-chars",
   fetchImpl: fakeFetch,
 });
 check("publisher_posts", posted);
 check("publisher_read_after_write_proof", proof.ok && proof.content_sha256 === sha, proof.content_sha256);
+check("publisher_history_read_after_write", proof.history_state_sha256 === history.state_sha256);
+
+const restoredPath = path.join(tmp, "restored-history.json");
+const restored = await restoreHistory({
+  output: restoredPath,
+  baseUrl: "https://confenge.com.br",
+  token: "test-token-at-least-16-chars",
+  fetchImpl: fakeFetch,
+});
+check("history_restore_hash_verified", restored.state_sha256 === history.state_sha256);
+check("history_restore_written", fs.existsSync(restoredPath));
+
+const emptyRestore = await restoreHistory({
+  output: restoredPath,
+  baseUrl: "https://confenge.com.br",
+  token: "test-token-at-least-16-chars",
+  fetchImpl: async () => new Response(JSON.stringify({ ok: false, error: "gsc_history_empty" }), { status: 404 }),
+});
+check("empty_store_bootstraps_fail_closed", emptyRestore.empty === true && !fs.existsSync(restoredPath));
 fs.rmSync(tmp, { recursive: true, force: true });
 
 if (failed) process.exit(1);
