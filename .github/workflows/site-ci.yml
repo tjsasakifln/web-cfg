@@ -111,6 +111,11 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v2
         id: setup-chrome
+      - name: Enforced CSP browser canary
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          CSP_BROWSER_REQUIRED: "1"
+        run: npm run test:csp-browser
       - name: Money asset canary browser e2e
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}

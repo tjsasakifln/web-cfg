@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import json
 import re
 import sys
 from collections import Counter
@@ -14,6 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 HEADERS = ROOT / "_headers"
 SITE = ROOT / "_site"
+PACKAGE = ROOT / "package.json"
+SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
 DATA_TYPES = frozenset({"application/ld+json", "application/json"})
 
 
@@ -120,6 +123,13 @@ def main() -> int:
         errors.append("script-src must retain 'self'")
     if set(directives.get("script-src-attr", [])) != {"'none'"}:
         errors.append("script-src-attr must remain 'none'")
+
+    package = json.loads(PACKAGE.read_text(encoding="utf-8"))
+    if package.get("scripts", {}).get("test:csp-browser") != "node scripts/site/test_csp_browser.mjs":
+        errors.append("package.json must expose the CSP browser canary")
+    workflow = SITE_CI.read_text(encoding="utf-8")
+    if "npm run test:csp-browser" not in workflow or 'CSP_BROWSER_REQUIRED: "1"' not in workflow:
+        errors.append("site-ci must run the CSP browser canary fail-closed")
 
     observed = executable_inline_hashes()
     authorized = {token for token in script_src if token.startswith("'sha256-")}
