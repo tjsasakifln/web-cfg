@@ -1,6 +1,6 @@
 {
   "schema": "confenge.offer-copy-contract/1.0",
-  "contract_version": "CFG-COPY-2026-08-24-v1",
+  "contract_version": "CFG-COPY-2026-08-25-v2",
   "issue": "#338",
   "parent_issue": "#329",
   "complements_issues": [
@@ -11,7 +11,7 @@
     "#343"
   ],
   "state": "NOT_STARTED",
-  "state_note": "NOT_STARTED significa que a revisão adversarial em oito lentes não foi executada e o protocolo humano não rodou. Esta PR grava o contrato e o portão; não reescreve copy de nenhuma página.",
+  "state_note": "NOT_STARTED significa que a revisão adversarial em oito lentes e o protocolo humano não rodaram. A aplicação pública das 15 cláusulas e os gates derivados do registro estão medidos separadamente; não substituem julgamento humano.",
   "recorded_at": "2026-08-24",
   "operational_definition": {
     "statement": "Impossível de melhorar não é alegação vazia: significa submeter cada oferta a um contrato editorial completo, a uma revisão adversarial e a três tempos de compreensão.",
@@ -227,8 +227,7 @@
       "pattern": "\\bsolucao completa\\b|\\bsolucoes completas\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -241,8 +240,7 @@
       "pattern": "\\binsights? estrategicos?\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -255,8 +253,7 @@
       "pattern": "\\binteligencia de ponta\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -269,8 +266,7 @@
       "pattern": "\\bexcelencias?\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -283,8 +279,7 @@
       "pattern": "\\bpersonalizad[oa]s?\\b|\\bpersonalizacao\\b|\\bpersonalizacoes\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -297,8 +292,7 @@
       "pattern": "360\\s*°",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -311,8 +305,7 @@
       "pattern": "\\btransformador[ae]?s?\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -326,8 +319,7 @@
       "exemption_ids": [
         "GX-01",
         "GX-02",
-        "GX-03",
-        "GX-04"
+        "GX-03"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -340,8 +332,7 @@
       "pattern": "\\brecupere\\b|\\brecuperamos\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -354,8 +345,7 @@
       "pattern": "\\bvenca\\b|\\bvencam\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "false_positive_note": "A comparação usa fronteira de palavra sobre o texto sem acento. Sem fronteira de palavra, invenção viraria falso positivo de vença.",
@@ -369,8 +359,7 @@
       "pattern": "\\bpodera\\b|\\bpoderao\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "rationale": "A issue proíbe excesso de poderá. O scanner conta ocorrências; o julgamento de excesso pertence à revisão adversarial, que não rodou.",
@@ -385,8 +374,7 @@
       "pattern": "\\bimpossivel de melhorar\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Acceptance",
       "rationale": "O site não declara impossível de melhorar; demonstra qualidade por clareza, prova e consistência.",
@@ -400,8 +388,7 @@
       "pattern": "\\bconfie em nos\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Critérios quantitativos de qualidade",
       "rationale": "Zero claim depende de confie em nós.",
@@ -415,8 +402,7 @@
       "pattern": "\\bsaiba mais\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Critérios quantitativos de qualidade",
       "rationale": "Zero oferta termina em saiba mais como único significado. O scanner sinaliza a ocorrência; a reprovação só se confirma quando saiba mais é o único significado do encerramento da oferta.",
@@ -465,10 +451,11 @@
       "claim_pattern": "parágrafo intercambiável entre duas ofertas",
       "machine_checkable": true,
       "checker": "corpus_duplicate_scan",
-      "runnable_in_this_branch": false,
-      "blocked_by": "O registro taxativo e a autoridade nominal existem, mas ainda não existe corpus de parágrafos de copy por oferta para comparar.",
+      "runnable_in_this_branch": true,
+      "implemented_by": "scripts/commercial/copy_contract_audit.mjs",
+      "corpus": "trigger, decisão, saída e as 15 cláusulas publicadas por deliverable_id",
       "source": "#338 Linguagem proibida sem prova imediata",
-      "rationale": "A checagem é de duplicidade de parágrafo entre ofertas, não de termo isolado."
+      "rationale": "O precheck bloqueia assinatura sem título duplicada e corpo normalizado de qualquer uma das 15 cláusulas exatamente duplicado entre ofertas. Similaridade semântica continua humana."
     },
     {
       "id": "FL-20",
@@ -495,7 +482,7 @@
       "id": "GX-01",
       "scope": "exclusão ou negação explícita",
       "rule": "Termo dentro de uma lista de exclusões ou dentro de frase que nega explicitamente é fronteira, não claim. Sem esta exceção documentada, um scanner honesto reprovaria fronteiras corretas, como não prometemos vitória.",
-      "implemented_as": "explicit_negation_window",
+      "implemented_as": "explicit_negation_or_exclusion_structure",
       "window_chars": 60,
       "negation_markers": [
         "sem",
@@ -534,17 +521,16 @@
         "garantidos",
         "garantidas"
       ],
-      "source": "#338 promessa jurídica, regulatória, técnica ou financeira fora da competência"
-    },
-    {
-      "id": "GX-04",
-      "scope": "nome registrado de oferta",
-      "rule": "Termo de categoria dentro do nome registrado de uma oferta é rótulo publicado, não claim isolado. A frase seguinte continua obrigada a provar concretamente o que o termo significa, e essa prova é julgada pela revisão adversarial.",
-      "implemented_as": "registered_public_name_prefix",
-      "registered_public_names": [
-        "Diagnóstico B2G 360°"
+      "market_institute_forms": [
+        "garantia de proposta",
+        "garantias de proposta",
+        "garantia contratual",
+        "garantias contratuais",
+        "garantia financeira",
+        "garantias financeiras",
+        "seguro-garantia"
       ],
-      "source": "#338 Termos de categoria podem existir no nome registrado"
+      "source": "#338 promessa jurídica, regulatória, técnica ou financeira fora da competência"
     }
   ],
   "structured_data_ban": {
@@ -581,7 +567,20 @@
       "remover ofertas"
     ],
     "state": "NOT_STARTED",
-    "scope_note": "O alvo de 54/54 é conferido contra data/commercial/deliverables-registry.v1.json. A execução humana do teste continua NOT_STARTED e nenhuma oferta é declarada diferenciada por este contrato."
+    "scope_note": "O alvo de 54/54 é conferido contra data/commercial/deliverables-registry.v1.json. A execução humana do teste continua NOT_STARTED e nenhuma oferta é declarada compreendida por este precheck.",
+    "machine_precheck": {
+      "state": "MEASURED_PASS",
+      "runner": "scripts/commercial/copy_contract_audit.mjs",
+      "signature_fields": [
+        "trigger",
+        "decision_question",
+        "included_outputs[0]"
+      ],
+      "unique_signatures": 54,
+      "published_clause_bodies_checked": 810,
+      "exact_duplicate_clause_bodies": 0,
+      "human_equivalence_claimed": false
+    }
   },
   "adversarial_lenses": [
     {
@@ -794,7 +793,8 @@
     {
       "id": "AC-01",
       "criterion": "contrato editorial aplicado a 54/54",
-      "state": "NOT_STARTED"
+      "state": "MEASURED_PASS",
+      "evidence": "54 contratos públicos com 15 cláusulas cada, 810 instâncias verificadas pelo runner derivado do registro"
     },
     {
       "id": "AC-02",
@@ -814,7 +814,8 @@
     {
       "id": "AC-05",
       "criterion": "nenhum card ou página usa copy intercambiável",
-      "state": "NOT_STARTED"
+      "state": "MACHINE_PRECHECK_PASS_HUMAN_PENDING",
+      "evidence": "54 assinaturas sem título distintas e 810/810 corpos de cláusula exatos distintos; equivalência semântica e teste humano sem título continuam NOT_STARTED"
     },
     {
       "id": "AC-06",
@@ -829,21 +830,56 @@
     {
       "id": "AC-08",
       "criterion": "tests de copy e design ganham guards derivados do registry, sem allowlist manual",
-      "state": "NOT_STARTED"
+      "state": "MEASURED_PASS",
+      "evidence": "scripts/commercial/copy_contract_audit.mjs deriva 54 ofertas e rotas públicas de registros versionados"
     },
     {
       "id": "AC-09",
       "criterion": "o site não declara impossível de melhorar; demonstra qualidade por clareza, prova e consistência",
-      "state": "NOT_STARTED"
+      "state": "MEASURED_PASS",
+      "evidence": "scanner derivado de rotas precificadas encontra zero ocorrência não isenta"
     }
   ],
   "naming_authority": "#343 é a fonte canônica de public_name_pt_br, linha de valor, aliases e semântica entre 54 entregáveis, 2 contêineres e planos. Em divergência nominal prevalece #343; escopo e preço de #338 permanecem válidos.",
+  "public_implementation": {
+    "state": "MACHINE_GATES_GREEN_HUMAN_REVIEW_PENDING",
+    "catalog_route": "/entregas/",
+    "renderer": "scripts/commercial/render_public_catalog.mjs",
+    "audit_runner": "scripts/commercial/copy_contract_audit.mjs",
+    "offer_source": "data/commercial/deliverables-registry.v1.json",
+    "route_sources": [
+      "data/commercial/deliverables-registry.v1.json#deliverables[].route",
+      "data/commercial/task-doors.v1.json#containers[].route",
+      "data/organic/public-family-registry.json#families[profile=priced_offer]"
+    ],
+    "manual_route_allowlist": false,
+    "deliverables_covered": 54,
+    "clauses_per_deliverable": 15,
+    "clause_instances": 810,
+    "distinct_clause_bodies": 810,
+    "exact_duplicate_clause_bodies": 0,
+    "adversarial_review_package": "docs/research/copy-adversarial-v1",
+    "human_review_state": "NOT_STARTED"
+  },
   "money_page_scan": {
     "state": "MEASURED_PASS",
     "measured_at": "2026-08-25",
-    "measured_against": "feat/329-public-catalog-surface",
-    "method": "Cada página é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Cada ocorrência é classificada como isenta por exceção documentada ou como violação.",
-    "gate_rule": "Toda ocorrência viva precisa estar registrada: as isentas em boundaries com contagem exata, as demais em violations. Ocorrência não registrada reprova o portão.",
+    "measured_against": "feat/343-canonical-offer-names",
+    "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
+    "route_discovery": "registry_and_public_family_derived",
+    "manual_route_allowlist": false,
+    "method": "Cada rota derivada é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Só um instituto de mercado, uma negação na mesma frase ou uma seção estrutural Não inclui pode gerar isenção no texto visível; aliases antigos ficam apenas em metadados de busca, analytics e compatibilidade.",
+    "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. Não existe exceção nominal ou de rota para apresentar nome público aposentado. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
+    "live_measurement": {
+      "routes_derived": 23,
+      "language_boundaries": 85,
+      "language_observations": 0,
+      "language_violations": 0,
+      "structured_social_proof_hits": 0,
+      "clause_bodies_unique": 810,
+      "clause_body_duplicates": 0
+    },
+    "historical_baseline_note": "A lista pages e suas boundaries são o recorte inicial de doze páginas e permanecem apenas como trilha auditável. O portão atual não as consome como allowlist.",
     "pages": [
       "entregas/index.html",
       "servicos-obras-publicas/index.html",
@@ -859,48 +895,8 @@
       "casos/modelo-relatorio-inteligencia-licitacoes/index.html"
     ],
     "violations": [],
-    "violations_note": "Nenhuma violação real encontrada em 2026-08-24. Toda ocorrência viva dos termos verificáveis por máquina cai em exceção documentada, registrada em boundaries.",
+    "violations_note": "Nenhuma violação real encontrada nas 23 rotas derivadas em 2026-08-25. O relatório vivo expõe as isenções e reprova qualquer ocorrência sem exceção documentada; boundaries abaixo é somente o baseline histórico.",
     "boundaries": [
-      {
-        "id": "B-01",
-        "page": "entregas/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-02",
-        "page": "servicos-obras-publicas/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 4,
-        "by_exemption": {
-          "GX-04": 4
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, na trilha de escolha e na navegação."
-      },
-      {
-        "id": "B-03",
-        "page": "problemas-que-resolvemos/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-04",
-        "page": "diagnostico-b2g-expansao/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 6,
-        "by_exemption": {
-          "GX-04": 6
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado, usado sobretudo para negar identidade: não é o Diagnóstico B2G 360°."
-      },
       {
         "id": "B-05",
         "page": "diagnostico-b2g-expansao/index.html",
@@ -911,36 +907,6 @@
           "GX-03": 1
         },
         "evidence": "Duas promessas negadas (sem garantia de vitória, adjudicação, economia ou receita; não há garantia de resultado) e uma citação do instituto (garantia financeira, na lista do que não entra)."
-      },
-      {
-        "id": "B-06",
-        "page": "casos/modelo-apresentacao-executiva-resultados/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-07",
-        "page": "casos/modelo-base-quantitativa-canonica/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-08",
-        "page": "casos/modelo-contratos-vincendos-relicitacao/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
       },
       {
         "id": "B-09",
@@ -954,16 +920,6 @@
         "evidence": "Seis citações do instituto como insumo de caixa e de preparação (garantia negociada, garantia cotada, levantar acervo, equipe, garantia e caixa) e uma forma de promessa negada (sem quantitativo mínimo garantido)."
       },
       {
-        "id": "B-10",
-        "page": "casos/modelo-mapa-compradores-publicos/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
         "id": "B-11",
         "page": "casos/modelo-mapa-compradores-publicos/index.html",
         "forbidden_id": "FL-08",
@@ -974,36 +930,6 @@
         "evidence": "Promessa negada: não é rota garantida nem estimativa de custo de mobilização."
       },
       {
-        "id": "B-12",
-        "page": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-13",
-        "page": "casos/modelo-painel-precos-obras-publicas/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-14",
-        "page": "casos/modelo-relatorio-executivo-consolidado/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
         "id": "B-15",
         "page": "casos/modelo-relatorio-executivo-consolidado/index.html",
         "forbidden_id": "FL-08",
@@ -1012,16 +938,6 @@
           "GX-01": 1
         },
         "evidence": "Promessa negada: nenhuma vitória é garantida, nenhum acesso privilegiado é oferecido e nenhum resultado é prometido."
-      },
-      {
-        "id": "B-16",
-        "page": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
       },
       {
         "id": "B-17",
@@ -1038,11 +954,12 @@
         "id": "B-18",
         "page": "entregas/index.html",
         "forbidden_id": "FL-08",
-        "occurrences": 7,
+        "occurrences": 53,
         "by_exemption": {
-          "GX-03": 7
+          "GX-01": 21,
+          "GX-03": 32
         },
-        "evidence": "O índice integral e sua navegação alfabética citam o instituto no nome canônico, na pergunta decisória e na descrição de caixa, seguro, caução e garantia contratual do item 30; nenhuma ocorrência promete resultado."
+        "evidence": "O índice, sua navegação alfabética, os contratos editoriais e as linhas de valor canônicas da #343 citam garantia como instituto de proposta, contrato, seguro ou exclusão explícita; nenhuma ocorrência promete resultado."
       }
     ],
     "structured_data_check": {
@@ -1052,11 +969,11 @@
         "AggregateRating"
       ],
       "occurrences": 0,
-      "note": "Nenhuma das doze páginas de dinheiro publica Review nem AggregateRating em application/ld+json."
+      "note": "Nenhuma das 23 rotas derivadas publica Review nem AggregateRating em application/ld+json."
     },
     "exemption_precedence": [
-      "GX-04",
       "GX-03",
+      "GX-02",
       "GX-01"
     ],
     "finding_kinds": {
@@ -1064,14 +981,14 @@
       "count_only": "Ocorrência sem exceção documentada de um termo que a issue só proíbe em excesso ou como único significado. Vira observação registrada em observations, não violação."
     },
     "observations": [],
-    "observations_note": "Nenhuma ocorrência de poderá nem de saiba mais nas doze páginas de dinheiro em 2026-08-24."
+    "observations_note": "Nenhuma ocorrência de poderá nem de saiba mais nas 23 rotas derivadas em 2026-08-25."
   },
   "not_delivered_by_this_pr": [
-    "Nenhuma copy de página é reescrita. Esta PR grava o contrato e o portão.",
+    "As 15 cláusulas são publicadas para 54/54 no catálogo, mas não são declaradas compreendidas por pessoas reais.",
     "A revisão adversarial em oito lentes não foi executada: reviews está vazio e state é NOT_STARTED.",
     "O protocolo humano de 20 participantes não rodou: human_protocol.results está vazio.",
     "O teste humano de diferenciação não rodou: o rol taxativo existe e fixa o alvo em 54/54, mas ainda não há resultados humanos.",
-    "FL-19, duplicidade de parágrafo entre ofertas, não é executável nesta branch por falta do corpus de copy por oferta.",
-    "Os critérios QC-01 a QC-09 não são medidos aqui: eles ainda precisam do corpus de copy por oferta."
+    "O precheck rejeita assinaturas ou corpos de cláusula exatamente duplicados; não prova que paráfrases sejam semanticamente distintas nem substitui o revisor que identifica a oferta sem título e preço.",
+    "Os critérios que dependem de julgamento, tela real ou proveniência externa continuam para a revisão humana e os gates especializados."
   ]
 }

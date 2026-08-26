@@ -1,7 +1,7 @@
 {
   "schema": "confenge.icp-trust-session-aggregate.v1",
   "template": true,
-  "protocol_version": "1.0.0",
+  "protocol_version": "1.1.0",
   "run_id": null,
   "executed_at": null,
   "stimulus": {
@@ -10,7 +10,6 @@
     "captured_at": null,
     "home_first_viewport_sha256": null,
     "navigation_tree_sha256": null,
-    "offer_copy_sha256": null,
     "viewport_assignment": {
       "mobile": null,
       "desktop": null
@@ -31,8 +30,6 @@
   "raw_aggregate": null,
   "issue_disposition": {
     "183": "OPEN_BLOCKED_HUMAN_EVIDENCE",
-    "184": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_TRAFFIC_WINDOW",
-    "188": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_CLICK_WINDOW",
-    "297": "OPEN_BLOCKED_HUMAN_PARTICIPANTS"
+    "184": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_TRAFFIC_WINDOW"
   }
 }

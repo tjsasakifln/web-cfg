@@ -212,15 +212,15 @@
         {
           "position": "pillar_bridge",
           "href": "/diagnostico-b2g-360/",
-          "text": "Diagnosticar a operação B2G"
+          "text": "Solicitar diagnóstico da operação"
         }
       ],
       "when_not_to_hire": true,
       "whatsapp_present": true,
       "form_count": 0
     },
-    "content_sha256": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
-    "bytes": 26079,
+    "content_sha256": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
+    "bytes": 26106,
     "noindex": false
   }
 }

@@ -5,7 +5,7 @@
   "experiments": [
     {
       "id": "exp-diretoria-b2g-vs-consultoria-ampla",
-      "hypothesis": "Posicionar a CONFENGE como Diretoria B2G fracionada gera mais cliques qualificados e melhor contexto de lead do que apresentá-la como consultoria ampla de serviços.",
+      "hypothesis": "Posicionar a CONFENGE como Diretoria Fracionada para o Mercado Público gera mais cliques qualificados e melhor contexto de lead do que apresentá-la como consultoria ampla de serviços.",
       "variant": "control_consultoria_ampla",
       "treatment": "diretoria_b2g_fracionada",
       "start": "2026-08-01",

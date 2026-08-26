@@ -1,5 +1,9 @@
 # FINAL-REPORT — CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01
 
+> Registro histórico de uma campanha anterior. Nomes e agrupamentos abaixo não
+> são contrato executável; prevalecem #343 e o catálogo de 54 entregáveis + 2
+> contêineres.
+
 ## 1. Diagnóstico anterior
 
 Posicionamento B2G forte; execução visual de template (cards, grids, monotonia, leaks de governança, jobTitle inválido, ofertas rasas).

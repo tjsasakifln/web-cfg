@@ -41,7 +41,7 @@ JOB_TOKENS = {
     ),
     "diretoria": (
         "uma rotina semanal de decisão sem o custo de montar uma diretoria interna.",
-        "bid room",
+        "operação de proposta",
         "defesa de margem",
         "equipe ilimitada",
     ),
@@ -49,7 +49,7 @@ JOB_TOKENS = {
         "mapa de compradores",
         "pagamento único",
         "expansão",
-        "não é o diagnóstico b2g 360",
+        "não é o diagnóstico da operação em obras públicas",
     ),
 }
 
@@ -102,12 +102,12 @@ def test_diretoria_scope_wip_not_unlimited():
     html = read_html("diretoria")
     text = visible_text(html).lower()
     fold = first_fold(html).lower()
-    assert "bid room" in fold and "defesa de margem" in fold
+    assert "operação de proposta" in fold and "defesa de margem" in fold
     assert "quatro oportunidades" in text
     assert "um contrato" in text or "um contrato ou obra" in text
     assert "não é equipe ilimitada" in text
     assert "não é cota mensal" in text
-    assert "diretoria b2g fracionada" in html.lower()
+    assert "diretoria fracionada para o mercado público" in html.lower()
     assert "uma rotina semanal de decisão sem o custo de montar uma diretoria interna." in html.lower()
 
 
@@ -129,8 +129,8 @@ def test_expansao_one_off_authority_deliverables_not_360():
     ):
         assert item in text, item
     assert 'data-offer-id="diagnostico-b2g-360"' not in html
-    assert "<h1>Diagnóstico B2G 360°" not in html
-    assert "não é o diagnóstico b2g 360" in text
+    assert "<h1>Diagnóstico da Operação em Obras Públicas" not in html
+    assert "não é o diagnóstico da operação em obras públicas" in text
 
 
 def test_required_sections_cta_faq_canonical_jsonld():
@@ -166,7 +166,7 @@ def test_no_extra_leak_and_bid_room_has_no_price():
             assert leak not in html, f"{key} Extra leak {leak!r}"
     bid = read_html("bid-room")
     if "R$" in bid or "r$" in bid.lower():
-        mismatch("Bid Room published a price; registry has no Bid Room SKU")
+        mismatch("Operação de Proposta para Licitação Crítica publicou preço sem SKU correspondente")
 
 
 def test_visible_prices_match_registry_or_mismatch():

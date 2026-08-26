@@ -1,0 +1,12 @@
+{
+  "schema": "confenge.copy-titleless-differentiation/1.0",
+  "template": true,
+  "contract_version": "CFG-COPY-2026-08-25-v2",
+  "reviewed_sha": null,
+  "state": "NOT_STARTED",
+  "target_count": 54,
+  "completed_count": 0,
+  "correct_count": 0,
+  "promise_interpretation_count": 0,
+  "results": []
+}

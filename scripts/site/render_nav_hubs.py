@@ -226,9 +226,9 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <div class="container">
 <header class="section-head">
 <h2 id="hub-next">O problema é outro ou ainda não está delimitado?</h2>
-<p class="section-lead">O Diagnóstico B2G 360° é o degrau de entrada: mapeia onde a frente pública perde tempo, margem e controle e diz qual dos quatro serviços responde ao seu caso.</p>
+<p class="section-lead">O Diagnóstico da Operação em Obras Públicas é uma porta de entrada: mapeia onde a frente pública perde tempo, margem e controle e indica o próximo trabalho aplicável.</p>
 </header>
-<p><a class="button button-secondary" href="/diagnostico-b2g-360/">Começar pelo Diagnóstico B2G 360° <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p><a class="button button-secondary" href="/diagnostico-b2g-360/">Começar pelo Diagnóstico da Operação em Obras Públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="{e(problems["url"])}">Conhecer os problemas que resolvemos <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="/ferramentas/">Usar uma ferramenta antes de falar com a gente <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 </div>

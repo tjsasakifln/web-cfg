@@ -159,6 +159,24 @@
 .catalog-item__facts div{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px}
 .catalog-item__facts dt{color:#435369;font-family:var(--mono);font-size:.62rem;font-weight:800;text-transform:uppercase}
 .catalog-item__facts dd{margin:0;color:#24364a;font-size:.76rem;line-height:1.45}
+.catalog-item__execution{margin:2px 0 14px;padding:12px 13px;color:#34465a;background:#eef5f1;border-left:3px solid #4f806e;border-radius:0 5px 5px 0}
+.catalog-item__execution h6{margin:0 0 6px;color:#0b684f;font-family:var(--mono);font-size:.61rem;font-weight:850;letter-spacing:.02em;text-transform:uppercase}
+.catalog-item__execution p,.catalog-item__execution ul{margin:0;font-size:.76rem;line-height:1.5}
+.catalog-item__execution p+p{margin-top:7px}
+.catalog-item__execution>div+div{margin-top:11px;padding-top:11px;border-top:1px solid #ceddd5}
+.catalog-item__execution ul{display:grid;gap:4px;margin:8px 0;padding:0;list-style:none}
+.catalog-item__execution a{display:flex;gap:7px;color:#075b47;font-weight:760}
+.catalog-item__execution a span{font-family:var(--mono);font-size:.66rem}
+.catalog-item__contract{margin:2px 0 14px;padding:11px 0;border-top:1px solid #dce3df;border-bottom:1px solid #dce3df}
+.catalog-item__contract summary{color:#0b684f;font-size:.75rem;font-weight:850;cursor:pointer}
+.catalog-item__contract>div{display:grid;gap:0;margin-top:12px;background:#f7f9f8;border:1px solid #dfe6e1;border-radius:5px}
+.catalog-item__contract section{padding:12px 13px}
+.catalog-item__contract section+section{border-top:1px solid #dfe6e1}
+.catalog-item__contract h6{margin:0 0 5px;color:#0b684f;font-family:var(--mono);font-size:.61rem;font-weight:850;letter-spacing:.02em;text-transform:uppercase}
+.catalog-item__contract p,.catalog-item__contract ul{margin:0;color:#435369;font-size:.69rem;line-height:1.5}
+.catalog-item__contract p+p{margin-top:5px}
+.catalog-item__contract ul{padding-left:17px}
+.catalog-item__contract li+li{margin-top:3px}
 .catalog-item__compare{display:none}
 .catalog-item .text-link,.catalog-item__unavailable{margin-top:auto;padding-top:6px;font-size:.78rem;font-weight:800}
 .catalog-item__unavailable{color:#704918}

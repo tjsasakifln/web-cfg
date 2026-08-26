@@ -13,5 +13,5 @@ métricas ou resultado. Até existir execução válida, `STATE.json` permanece
 
 Cada pasta contém somente `aggregate.json` e `interpretation.md`; o nome da
 pasta deve ser igual ao `run_id`. O agregado liga SHA/URL/captura, viewports,
-quatro ofertas e sondagens de nomes. A interpretação não aceita placeholders,
+a primeira viewport e a árvore de navegação. A interpretação não aceita placeholders,
 PII, citação individual, blockquote ou linguagem de fechamento automático.

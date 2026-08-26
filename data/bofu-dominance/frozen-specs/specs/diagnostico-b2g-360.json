@@ -137,7 +137,7 @@
     {
       "block": "og_title",
       "before": "og:title = Mapeie onde a frente pública perde tempo, margem e controle.",
-      "after": "og:title = Diagnóstico B2G 360° | CONFENGE (match <title>; keep the sentence as visible lead)",
+      "after": "og:title = Diagnóstico da Operação em Obras Públicas | CONFENGE (match <title>; keep the sentence as visible lead)",
       "why": "Snippet/social title mismatch. Canonical already present (href-before-rel). Do not touch offer copy."
     },
     {
@@ -155,20 +155,20 @@
   ],
   "evidence_proof_needed": [
     "28d GSC vs 1/0 @ 15.0 — n is anecdotal; kill if the og:title change does not produce a click and n stays < 30.",
-    "Do not treat extra-cli national coverage PARTIAL as a 360° proof asset.",
+    "Do not treat extra-cli national coverage PARTIAL as proof of the diagnostic offer.",
     "Qualified conversation from jornada=operacao remains the commercial evidence (#88/#60), not this patch."
   ],
   "snapshot": {
     "slug": "diagnostico-b2g-360",
     "path": "/diagnostico-b2g-360/",
     "html_rel": "diagnostico-b2g-360/index.html",
-    "title": "Diagnóstico B2G 360° | CONFENGE",
+    "title": "Diagnóstico da Operação em Obras Públicas | CONFENGE",
     "meta_description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação B2G. Plano executivo de 90 dias para prioridades e backlog de implantação.",
     "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
     "canonical": "https://confenge.com.br/diagnostico-b2g-360/",
     "og_title": "Mapeie onde a frente pública perde tempo, margem e controle.",
     "og_url": "https://confenge.com.br/diagnostico-b2g-360/",
-    "h1": "Diagnóstico B2G 360°",
+    "h1": "Diagnóstico da Operação em Obras Públicas",
     "schema_types": [
       "Organization",
       "WebPage",
@@ -178,18 +178,18 @@
       "ListItem"
     ],
     "cta": {
-      "hero_text": "Diagnosticar a operação B2G",
+      "hero_text": "Solicitar diagnóstico da operação",
       "hero_href": "/#contato?jornada=operacao",
       "bridges": [
         {
           "position": "offer_hero",
           "href": "/#contato?jornada=operacao",
-          "text": "Diagnosticar a operação B2G"
+          "text": "Solicitar diagnóstico da operação"
         },
         {
           "position": "offer_final",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20B2G%20360%C2%B0%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
-          "text": "Solicitar Diagnóstico B2G"
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+          "text": "Solicitar diagnóstico da operação"
         },
         {
           "position": "pillar_bridge",
@@ -203,7 +203,7 @@
         },
         {
           "position": "float",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20B2G%20360%C2%B0%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
           "text": ""
         }
       ],
@@ -211,8 +211,8 @@
       "whatsapp_present": true,
       "form_count": 0
     },
-    "content_sha256": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
-    "bytes": 20635,
+    "content_sha256": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
+    "bytes": 21322,
     "noindex": false
   }
 }

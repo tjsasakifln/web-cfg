@@ -996,7 +996,7 @@ async function main() {
         const hasSuccess = await page.$("[data-lead-success]");
         if (!hasSuccess) throw new Error(`${path} missing data-lead-success`);
       } else {
-        if (!labels.some((l) => /diagnosticar|falar com a confenge|contato/i.test(l))) {
+        if (!labels.some((l) => /diagnosticar|solicitar diagnóstico|falar com a confenge|contato/i.test(l))) {
           throw new Error(`specialist missing primary family: ${labels.join(" | ")}`);
         }
         if (labels.some((l) => /analisar meu cenário|apresentar uma demanda/i.test(l))) {

@@ -17,6 +17,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const NAME = "page-contract-execucao";
 const DATA_PATH = path.join(root, "data/commercial/page-contract-execucao.v1.json");
+const REGISTRY_PATH = path.join(root, "data/commercial/deliverables-registry.v1.json");
+const NAMING_PATH = path.join(root, "data/commercial/offer-naming.v1.json");
 
 const results = [];
 function pass(name, detail) {
@@ -64,8 +66,84 @@ function walkStrings(node, at, out) {
 const allStrings = walkStrings(data, "$", []);
 const filled = (v) => typeof v === "string" && v.trim().length > 0;
 const filledList = (v, min) => Array.isArray(v) && v.length >= min && v.every(filled);
+const brl = (cents) => `R$ ${Math.round(Number(cents) / 100).toLocaleString("pt-BR")}`;
 const items = Array.isArray(data.items) ? data.items : [];
 const byNumber = new Map(items.map((it) => [it.number, it]));
+const sortedKeys = (value) => Object.keys(value ?? {}).sort();
+function assertExactKeys(name, value, expected) {
+  assert(name, JSON.stringify(sortedKeys(value)) === JSON.stringify([...expected].sort()), sortedKeys(value));
+}
+
+/* ------------------------------------------------------------------ */
+/* 0. schema fechado: nenhum campo paralelo ou dado pessoal escondido */
+/* ------------------------------------------------------------------ */
+
+assertExactKeys("top_level_schema_exact", data, [
+  "checkout_enabled_anywhere", "common_rules", "contract_id", "currency", "decision_state", "evidence",
+  "executive_front", "family_pt_br", "human_validation", "items", "leverage", "naming_authority_issue",
+  "neighbour_offers", "pages_created_by_this_contract", "parent_issue", "price_basis", "price_unit", "priority",
+  "related_issues", "research_state", "routes_owned_by_other_items", "schema_version", "source_issue", "time_to_evidence_days",
+]);
+assertExactKeys("human_validation_schema_exact", data.human_validation, ["collected", "real_proposals_required_before_promoting_price", "state"]);
+for (const [index, neighbour] of (data.neighbour_offers ?? []).entries()) {
+  assertExactKeys(`neighbour_${index}_schema_exact`, neighbour, ["item", "public_name_pt_br", "verb_pt_br"]);
+}
+for (const [index, owned] of (data.routes_owned_by_other_items ?? []).entries()) {
+  assertExactKeys(`owned_route_${index}_schema_exact`, owned, ["owner_item", "owner_public_name_pt_br", "route"]);
+}
+
+const ITEM_KEYS = [
+  "boundary_vs_existing_offers", "checkout_enabled", "credit_rule", "decision_question_pt_br", "deliverable_id",
+  "exclusions_pt_br", "inputs_pt_br", "legal_boundary_pt_br", "number", "outputs_pt_br", "page_exists", "pricing",
+  "prohibitions", "public_name_pt_br", "route", "safe_deadline_gate", "sla_business_days", "value_line_pt_br", "verb_pt_br",
+];
+const BASE_PROHIBITION_KEYS = [
+  "custody_of_digital_certificate", "custody_of_password", "custody_of_token", "files_or_protocols",
+  "operates_client_credential", "promises_victory_or_award", "provides_legal_representation", "signs_for_client", "success_fee",
+];
+for (const item of items) {
+  const itemKeys = item.number === 53 ? [...ITEM_KEYS, "operator_of_record_pt_br", "session_conduct_negatives_pt_br"] : ITEM_KEYS;
+  assertExactKeys(`item_${item.number}_schema_exact`, item, itemKeys);
+  assertExactKeys(`item_${item.number}_pricing_schema_exact`, item.pricing, ["additional_charges", "model", "tiers"]);
+  item.pricing?.tiers?.forEach((tier, index) => assertExactKeys(
+    `item_${item.number}_tier_${index}_schema_exact`, tier, ["name_pt_br", "price_cents", "sla_business_days", "unit_pt_br"],
+  ));
+  item.pricing?.additional_charges?.forEach((charge, index) => assertExactKeys(
+    `item_${item.number}_addition_${index}_schema_exact`, charge, ["exhaustive", "name_pt_br", "price_cents", "unit_pt_br"],
+  ));
+  item.boundary_vs_existing_offers?.forEach((boundary, index) => assertExactKeys(
+    `item_${item.number}_boundary_${index}_schema_exact`, boundary,
+    ["against_item", "against_public_name_pt_br", "our_verb_pt_br", "statement_pt_br", "their_verb_pt_br"],
+  ));
+  const prohibitionKeys = item.number === 53
+    ? [...BASE_PROHIBITION_KEYS, "operates_platform_for_client", "places_bids", "promises_ranking_or_winning_bid", "represents_client_before_agency"]
+    : BASE_PROHIBITION_KEYS;
+  assertExactKeys(`item_${item.number}_prohibitions_schema_exact`, item.prohibitions, prohibitionKeys);
+}
+assertExactKeys("item_51_gate_schema_exact", byNumber.get(51)?.safe_deadline_gate,
+  ["declared_by_issue", "extra_conditions_pt_br", "min_business_days_remaining", "statement_pt_br"]);
+assertExactKeys("item_53_gate_schema_exact", byNumber.get(53)?.safe_deadline_gate,
+  ["declared_by_issue", "extra_conditions_pt_br", "min_business_days_before_session", "statement_pt_br"]);
+assertExactKeys("item_51_credit_schema_exact", byNumber.get(51)?.credit_rule, [
+  "accumulates", "applies_to_items", "cap_basis_pt_br", "cap_cents", "originates_in_paying_item", "source_item",
+  "source_public_name_pt_br", "statement_pt_br", "uses_allowed", "window_days",
+]);
+const forbiddenKey = /(?:^|_)(?:email|e_mail|phone|telefone|celular|whatsapp|cpf|cnpj)(?:_|$)/i;
+function walkKeys(node, at, out) {
+  if (!node || typeof node !== "object") return out;
+  for (const [key, child] of Object.entries(node)) {
+    if (forbiddenKey.test(key)) out.push(`${at}.${key}`);
+    walkKeys(child, `${at}.${key}`, out);
+  }
+  return out;
+}
+assert("no_pii_bearing_keys", walkKeys(data, "$", []).length === 0, walkKeys(data, "$", []));
+assert("no_specific_email_phone_cpf_cnpj_values", allStrings.every(({ value }) =>
+  !/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(value) &&
+  !/(?:\+?55\s*)?(?:\(?\d{2}\)?\s*)?9?\d{4}[-.\s]?\d{4}/.test(value) &&
+  !/\b\d{3}\.\d{3}\.\d{3}-\d{2}\b|\b\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}\b/.test(value)
+), allStrings.filter(({ value }) => /@|\d{3}\.\d{3}/.test(value)));
+assert("no_forbidden_public_brand", allStrings.every(({ value }) => !/smartlic/i.test(value)), "SmartLic");
 
 /* ------------------------------------------------------------------ */
 /* 1. seis itens, 49 a 54, sem lacuna, todos os campos preenchidos      */
@@ -583,6 +661,191 @@ assert(
   items.every((it) => !hub.includes(`/${it.deliverable_id.toLowerCase()}/`)),
   items.map((it) => it.deliverable_id),
 );
+
+/* ------------------------------------------------------------------ */
+/* contrato de página não pode divergir do registro canônico          */
+/* ------------------------------------------------------------------ */
+
+assert("deliverables_registry_exists", fs.existsSync(REGISTRY_PATH), REGISTRY_PATH);
+const registry = JSON.parse(fs.readFileSync(REGISTRY_PATH, "utf8"));
+const canonicalById = new Map((registry.deliverables ?? []).map((entry) => [entry.deliverable_id, entry]));
+assert("offer_naming_contract_exists", fs.existsSync(NAMING_PATH), NAMING_PATH);
+const naming = JSON.parse(fs.readFileSync(NAMING_PATH, "utf8"));
+const namingById = new Map((naming.names ?? []).map((entry) => [entry.deliverable_id, entry]));
+for (const item of items) {
+  const canonical = canonicalById.get(item.deliverable_id);
+  const canonicalName = namingById.get(item.deliverable_id);
+  const n = item.number;
+  assert(`item_${n}_exists_in_canonical_registry`, Boolean(canonical), item.deliverable_id);
+  assert(`item_${n}_catalog_number_matches_registry`, canonical?.catalog_number === String(n), canonical?.catalog_number);
+  assert(`item_${n}_name_matches_registry`, item.public_name_pt_br === canonical?.public_name_pt_br, canonical?.public_name_pt_br);
+  assert(`item_${n}_value_line_matches_naming_authority`, item.value_line_pt_br === canonicalName?.value_line_pt_br, canonicalName?.value_line_pt_br);
+  assert(`item_${n}_source_issue_matches_registry`, canonical?.source_issue === "#344", canonical?.source_issue);
+  assert(`item_${n}_state_matches_registry`, canonical?.public_state === data.decision_state, canonical?.public_state);
+  assert(`item_${n}_route_matches_registry`, item.route === canonical?.route, [item.route, canonical?.route]);
+  assert(`item_${n}_checkout_matches_registry`, item.checkout_enabled === canonical?.checkout_enabled, canonical?.checkout_enabled);
+  assert(`item_${n}_data_owner_is_extra_cli`, canonical?.data_contract?.owner === "extra-cli", canonical?.data_contract);
+  assert(`item_${n}_lead_destination_is_warmbly_confenge_web`, canonical?.lead_destination === "warmbly:CONFENGE_WEB", canonical?.lead_destination);
+
+  const contractBasePrices = item.pricing.tiers.map((tier) => tier.price_cents);
+  const registryBasePrices = canonical?.price?.tiers
+    ? canonical.price.tiers.map((tier) => tier.amount_cents)
+    : [canonical?.price?.amount_cents];
+  assert(`item_${n}_base_prices_match_registry`,
+    JSON.stringify(contractBasePrices) === JSON.stringify(registryBasePrices),
+    { contractBasePrices, registryBasePrices });
+  const contractAdditionPrices = (item.pricing.additional_charges ?? []).map((charge) => charge.price_cents);
+  const registryAdditionPrices = (canonical?.price?.additional_units ?? []).map((charge) => charge.amount_cents);
+  assert(`item_${n}_additional_prices_match_registry`,
+    JSON.stringify(contractAdditionPrices) === JSON.stringify(registryAdditionPrices),
+    { contractAdditionPrices, registryAdditionPrices });
+  assert(`item_${n}_currency_matches_registry`, canonical?.price?.currency === data.currency, canonical?.price?.currency);
+  assert(`item_${n}_billing_is_one_time`, canonical?.price?.billing === "one_time", canonical?.price?.billing);
+
+  const tierSlas = item.pricing.tiers.map((tier) => tier.sla_business_days).filter(Number.isInteger);
+  const expectedMin = tierSlas.length ? Math.min(...tierSlas) : null;
+  const expectedMax = tierSlas.length ? Math.max(...tierSlas) : null;
+  assert(`item_${n}_sla_min_matches_registry`, canonical?.sla?.business_days_min === expectedMin,
+    [canonical?.sla?.business_days_min, expectedMin]);
+  assert(`item_${n}_sla_max_matches_registry`, canonical?.sla?.business_days_max === expectedMax,
+    [canonical?.sla?.business_days_max, expectedMax]);
+  const contractSafeDays = item.safe_deadline_gate?.min_business_days_remaining
+    ?? item.safe_deadline_gate?.min_business_days_before_session
+    ?? null;
+  assert(`item_${n}_safe_deadline_matches_registry`, canonical?.sla?.safe_deadline_business_days === contractSafeDays,
+    [canonical?.sla?.safe_deadline_business_days, contractSafeDays]);
+}
+const canonicalCreditSource = canonicalById.get("CFG-D13");
+assert("credit_source_13_exists_in_registry", Boolean(canonicalCreditSource), canonicalCreditSource);
+assert("credit_source_13_name_matches_contract",
+  canonicalCreditSource?.public_name_pt_br === credit.source_public_name_pt_br, canonicalCreditSource?.public_name_pt_br);
+assert("credit_targets_match_registry",
+  JSON.stringify([...(canonicalCreditSource?.credit_rule?.credits_into ?? [])].sort()) ===
+    JSON.stringify(credit.applies_to_items.map((n) => `CFG-D${n}`).sort()),
+  canonicalCreditSource?.credit_rule?.credits_into);
+assert("credit_window_matches_registry", canonicalCreditSource?.credit_rule?.window_days === credit.window_days,
+  canonicalCreditSource?.credit_rule?.window_days);
+assert("credit_stackability_matches_registry", canonicalCreditSource?.credit_rule?.stackable === credit.accumulates,
+  canonicalCreditSource?.credit_rule?.stackable);
+assert("credit_basis_matches_registry", canonicalCreditSource?.credit_rule?.basis === "highest_single_paid", canonicalCreditSource?.credit_rule?.basis);
+assert("credit_dynamic_cap_cannot_exceed_registry_max",
+  credit.cap_cents === null && canonicalCreditSource?.credit_rule?.max_cents === canonicalCreditSource?.price?.amount_cents,
+  canonicalCreditSource?.credit_rule);
+
+/* ------------------------------------------------------------------ */
+/* publicação progressiva da família no catálogo                       */
+/* ------------------------------------------------------------------ */
+
+const catalogDataScript = fs.readFileSync(path.join(root, "entregas/catalog-data.js"), "utf8");
+const catalogDataMatch = /^window\.CONFENGE_CATALOG_DATA=(\{.*\});\s*$/.exec(catalogDataScript);
+const catalogData = catalogDataMatch ? JSON.parse(catalogDataMatch[1]) : null;
+const catalogIdIndex = catalogData?.fields?.indexOf("id") ?? -1;
+const catalogContractIndex = catalogData?.fields?.indexOf("contractHtml") ?? -1;
+const contractById = new Map((catalogData?.items || []).map((row) => [row[catalogIdIndex], row[catalogContractIndex]]));
+assert("catalog_copy_contract_asset_is_versioned", catalogData?.schema === "confenge.public-deliverable-catalog/1.1", catalogData?.schema);
+assert("catalog_copy_contract_fields_exist", catalogIdIndex >= 0 && catalogContractIndex >= 0, catalogData?.fields);
+
+function articleFor(number) {
+  const idAt = hub.indexOf(`id="entrega-${number}"`);
+  const start = hub.lastIndexOf("<article", idAt);
+  const end = hub.indexOf("</article>", idAt);
+  return idAt >= 0 && start >= 0 && end > idAt ? hub.slice(start, end) : "";
+}
+
+function sectionFor(article, clause) {
+  const marker = `data-copy-clause="${clause}"`;
+  const markerAt = article.indexOf(marker);
+  const start = article.lastIndexOf("<section", markerAt);
+  const end = article.indexOf("</section>", markerAt);
+  return markerAt >= 0 && start >= 0 && end > markerAt ? article.slice(start, end) : "";
+}
+
+function publicHtml(value) {
+  return String(value ?? "")
+    .replace(/\bUNKNOWN\b/g, "DESCONHECIDO")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+for (const item of items) {
+  const article = articleFor(item.number);
+  const canonical = canonicalById.get(item.deliverable_id);
+  const copyContract = contractById.get(item.deliverable_id) || "";
+  const inputSection = sectionFor(copyContract, "client_inputs_and_sla_start");
+  const outputSection = sectionFor(copyContract, "concrete_result_and_artifact_example");
+  assert(`item_${item.number}_is_visible_in_hub`, article.length > 0, item.deliverable_id);
+  assert(`item_${item.number}_canonical_name_is_visible`, article.includes(item.public_name_pt_br), item.public_name_pt_br);
+  assert(`item_${item.number}_value_line_is_visible`, article.includes(item.value_line_pt_br), item.value_line_pt_br);
+  assert(`item_${item.number}_price_is_visible`, item.pricing.tiers.every((tier) => article.includes(brl(tier.price_cents))), item.pricing.tiers);
+  assert(
+    `item_${item.number}_inputs_are_progressively_visible`,
+    canonical?.required_inputs?.length >= 4 &&
+      canonical.required_inputs.every((value) => inputSection.includes(`<li>${publicHtml(value)}</li>`)),
+    canonical?.required_inputs,
+  );
+  assert(
+    `item_${item.number}_outputs_are_progressively_visible`,
+    canonical?.included_outputs?.length >= 4 &&
+      canonical.included_outputs.every((value) => outputSection.includes(`<li>${publicHtml(value)}</li>`)),
+    canonical?.included_outputs,
+  );
+}
+
+const item16 = articleFor(16);
+assert("item_16_shows_execution_composition", item16.includes('data-execution-composition="CFG-D16"'), item16.length);
+assert(
+  "item_16_links_all_six_separate_executions",
+  items.every((item) => item16.includes(`href="#entrega-${item.number}"`) && item16.includes(item.public_name_pt_br)),
+  items.map((item) => item.number),
+);
+assert(
+  "item_16_forbids_silent_double_charging",
+  item16.includes("não soma preços silenciosamente") && item16.includes("proposta discrimina cada item incluído"),
+  "composition disclosure",
+);
+assert(
+  "item_16_shows_item_13_credit_once",
+  item16.includes("maior valor efetivamente pago no item 13") && item16.includes("um único crédito") && item16.includes("em até 30 dias") && item16.includes("sem acúmulo") && item16.includes("limitado ao valor pago"),
+  "credit disclosure",
+);
+
+const item49 = articleFor(49);
+assert(
+  "item_49_visibly_differs_from_item_14",
+  item49.includes('data-execution-boundary="14-49"') && item49.includes("item 14 audita") && item49.includes("item 49 produz"),
+  "audit versus production",
+);
+const item51 = articleFor(51);
+assert(
+  "item_51_visibly_differs_from_item_13",
+  item51.includes('data-execution-boundary="13-51"') && item51.includes("item 13 diagnostica") && item51.includes("item 51 monta"),
+  "diagnosis versus assembly",
+);
+assert(
+  "item_51_visibly_discloses_item_13_credit",
+  item51.includes('data-execution-credit="13-51"') &&
+    item51.includes("maior valor efetivamente pago no item 13") &&
+    item51.includes("um único crédito") &&
+    item51.includes("em até 30 dias") &&
+    item51.includes("sem acúmulo") &&
+    item51.includes("limitado ao valor pago"),
+  "credit visible at the offer where it applies",
+);
+const item53 = articleFor(53);
+assert(
+  "item_53_visibly_keeps_client_as_operator",
+  item53.includes('data-execution-operator="client-only"') &&
+    item53.includes("único operador da plataforma") &&
+    item53.includes("A CONFENGE não dá lance") &&
+    item53.includes("não opera credencial, login, certificado ou plataforma"),
+  "client only operator",
+);
+
+const captureAt = hub.indexOf('id="captura-entregas"');
+assert("execution_items_precede_terminal_capture", items.every((item) => hub.indexOf(`id="entrega-${item.number}"`) < captureAt), captureAt);
+assert("execution_items_use_terminal_capture", items.every((item) => articleFor(item.number).includes('href="#captura-entregas"')), items.map((item) => item.number));
 
 /* ------------------------------------------------------------------ */
 

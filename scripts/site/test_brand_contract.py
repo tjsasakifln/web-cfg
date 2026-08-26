@@ -51,7 +51,7 @@ def test_home_has_canonical_copy():
     hero = brand["hero"]
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     assert hero["h1"] in html or "Contrato rentável, sim" in html
-    assert "Diretoria B2G fracionada" in html
+    assert "Diretoria Fracionada para o Mercado Público" in html
     # Conventional category language first (not only proprietary label)
     assert "Consultoria para licitações e contratos de obras públicas" in html
     assert 'name="diagnostico-b2g"' in html
@@ -61,7 +61,7 @@ def test_home_has_canonical_copy():
     # Three differentiated journey CTAs (client-facing; no Jornada A/B/C labels)
     assert "Enviar documentos para análise" in html
     assert "Enviar edital para triagem" in html
-    assert "Diagnosticar operação B2G" in html or "Diagnosticar a operação B2G" in html
+    assert "Solicitar diagnóstico da operação" in html
     assert "Como podemos ajudar" in html
     assert "Analisar meu caso" in html
     assert "Tenho um contrato sob pressão" in html
@@ -163,7 +163,7 @@ def test_inteligencia_hub_decision_copy():
 
 def test_llms_positioning():
     text = (ROOT / "llms.txt").read_text(encoding="utf-8")
-    assert "Diretoria B2G fracionada" in text
+    assert "Diretoria Fracionada para o Mercado Público" in text
     assert "/diretoria-b2g/" in text
     assert "lance ótimo" not in text.lower() or "não" in text.lower()
     assert "extra-cli" not in text.lower()

@@ -1,5 +1,5 @@
 # CONFENGE
-> Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria B2G fracionada.
+> Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria Fracionada para o Mercado Público.
 
 Site: https://confenge.com.br/
 Contato: tiago.sasaki@confenge.com.br | WhatsApp +55 48 98834-4559
@@ -7,17 +7,17 @@ Responsável técnico: Eng. Tiago Sasaki (EESC-USP)
 Tagline: Licitação vencida não paga a conta. Contrato rentável, sim.
 
 ## Posicionamento
-A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia em licitações e contratos de obras públicas: análise de edital, orçamento, decisão de participar, preparação de proposta e defesa de margem na execução (aditivos, reequilíbrio, medições, glosas e atrasos). Quando a empresa precisa de rotina contínua, o formato se chama Diretoria B2G fracionada.
+A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia em licitações e contratos de obras públicas: análise de edital, orçamento, decisão de participar, preparação de proposta e defesa de margem na execução (aditivos, reequilíbrio, medições, glosas e atrasos). Quando a empresa precisa de rotina contínua, o formato se chama Diretoria Fracionada para o Mercado Público.
 
 ## Jornadas de contato
 - Problema urgente em contrato: Enviar documentos para análise inicial
 - Edital ou proposta em preparação: Enviar edital para triagem
-- Operação B2G recorrente: Diagnosticar a operação B2G
+- Operação recorrente: Solicitar diagnóstico da operação
 
 ## Ofertas principais
-- https://confenge.com.br/diagnostico-b2g-360/ - Diagnóstico B2G 360° (entrada)
-- https://confenge.com.br/diretoria-b2g/ - Diretoria B2G fracionada (operação principal)
-- https://confenge.com.br/bid-room-licitacoes-obras/ - Bid Room / sala de decisão da proposta
+- https://confenge.com.br/diagnostico-b2g-360/ - Diagnóstico da Operação em Obras Públicas
+- https://confenge.com.br/diretoria-b2g/ - Diretoria Fracionada para o Mercado Público
+- https://confenge.com.br/bid-room-licitacoes-obras/ - Operação de Proposta para Licitação Crítica
 - https://confenge.com.br/defesa-margem-contratos-publicos/ - Contract Defense & Margin / defesa técnica e proteção de margem
 
 ## Páginas principais
