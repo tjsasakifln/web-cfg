@@ -184,6 +184,82 @@ for (const width of widths) {
   if (errors.length) failed += 1;
 }
 
+await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
+const catalogLazyBefore = await page.evaluate(() => performance.getEntriesByType("resource")
+  .map((entry) => entry.name)
+  .filter((name) => name.endsWith("/entregas/catalog.css") || name.endsWith("/entregas/catalog-data.js") || name.endsWith("/entregas/catalog.js")));
+await page.evaluate(() => document.querySelector("#indice-integral")?.scrollIntoView());
+await page.waitForFunction(() => document.body.classList.contains("catalog-enhanced"), { timeout: 10000 });
+const catalogErrors = [];
+if (catalogLazyBefore.length) catalogErrors.push("catalog_not_lazy");
+const catalogBoot = await page.evaluate(() => ({
+  enhanced: document.body.classList.contains("catalog-enhanced"),
+  dataSchema: window.CONFENGE_CATALOG_DATA?.schema || "",
+  dataCount: window.CONFENGE_CATALOG_DATA?.items?.length || 0,
+  filterVisible: !document.querySelector("[data-catalog-filters]")?.hidden,
+}));
+if (!catalogBoot.enhanced || !catalogBoot.filterVisible) catalogErrors.push("catalog_not_enhanced");
+if (catalogBoot.dataSchema !== "confenge.public-deliverable-catalog/1.0" || catalogBoot.dataCount !== 54) {
+  catalogErrors.push("catalog_data_contract");
+}
+await page.type("[data-filter-query]", "Radar de Licitações Prioritárias");
+const filtered = await page.evaluate(() => ({
+  visibleCards: document.querySelectorAll("article.catalog-item:not([hidden])").length,
+  status: document.querySelector("[data-filter-status]")?.textContent?.trim() || "",
+  query: new URL(location.href).searchParams.get("q"),
+}));
+if (filtered.visibleCards !== 1 || !filtered.status.startsWith("1 de 54") || filtered.query !== "Radar de Licitações Prioritárias") {
+  catalogErrors.push("catalog_filter_behavior");
+}
+await page.click("[data-clear-filters]");
+await page.select("[data-frame-task]", "GROW");
+await page.select("[data-frame-object]", "mercado");
+await page.select("[data-frame-input]", "dados");
+await page.click("[data-catalog-recommend]");
+const recommendation = await page.evaluate(() => ({
+  hidden: document.querySelector("[data-catalog-recommendation]")?.hidden,
+  count: document.querySelectorAll("[data-catalog-recommendation] article").length,
+  text: document.querySelector("[data-catalog-recommendation]")?.textContent || "",
+  task: new URL(location.href).searchParams.get("frame_task"),
+}));
+if (recommendation.hidden || recommendation.count < 1 || recommendation.count > 3 || !recommendation.text.includes("R$") || recommendation.task !== "GROW") {
+  catalogErrors.push("catalog_recommendation_behavior");
+}
+await page.evaluate(() => {
+  const boxes = [...document.querySelectorAll("article.catalog-item:not([hidden]) [data-compare-item]")].slice(0, 2);
+  for (const box of boxes) box.click();
+});
+await page.click("[data-compare-open]");
+const progressiveComparison = await page.evaluate(() => ({
+  count: document.querySelectorAll("[data-comparison-items] > article").length,
+  criteria: document.querySelectorAll("[data-comparison-items] dt").length,
+  hidden: document.querySelector("[data-comparison]")?.hidden,
+  selected: new URL(location.href).searchParams.get("compare")?.split(",").length || 0,
+}));
+if (progressiveComparison.hidden || progressiveComparison.count !== 2 || progressiveComparison.criteria !== 18 || progressiveComparison.selected !== 2) {
+  catalogErrors.push("catalog_comparison_behavior");
+}
+findings.push({ route: "/entregas/", check: "progressive_catalog", catalogLazyBefore, catalogBoot, filtered, recommendation, progressiveComparison, errors: catalogErrors });
+if (catalogErrors.length) failed += 1;
+
+const noScriptPage = await browser.newPage();
+await noScriptPage.setJavaScriptEnabled(false);
+await noScriptPage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+await noScriptPage.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
+const noScriptCatalog = await noScriptPage.evaluate(() => ({
+  cards: document.querySelectorAll("article.catalog-item").length,
+  visibleCards: [...document.querySelectorAll("article.catalog-item")].filter((card) => getComputedStyle(card).display !== "none").length,
+  filtersHidden: getComputedStyle(document.querySelector("[data-catalog-filters]")).display === "none",
+  compareControlsHidden: getComputedStyle(document.querySelector(".catalog-item__compare")).display === "none",
+}));
+const noScriptErrors = [];
+if (noScriptCatalog.cards !== 54 || noScriptCatalog.visibleCards !== 54) noScriptErrors.push("catalog_noscript_content");
+if (!noScriptCatalog.filtersHidden || !noScriptCatalog.compareControlsHidden) noScriptErrors.push("catalog_noscript_controls");
+findings.push({ route: "/entregas/", check: "catalog_noscript", noScriptCatalog, errors: noScriptErrors });
+if (noScriptErrors.length) failed += 1;
+await noScriptPage.close();
+
 for (const { route, expectedNav } of [
   ...mutableCanonicalRoutes.map((route) => ({ route, expectedNav: promotedNav })),
   ...frozenRoutes.map((route) => ({ route, expectedNav: legacyNav })),

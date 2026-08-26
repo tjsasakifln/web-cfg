@@ -269,12 +269,20 @@ assert("legacy_names_unique", new Set((legacy.items || []).map((i) => i.public_n
 
 /* 12. Superficie progressiva publicada ---------------------------- */
 const catalogScriptPath = path.join(root, "entregas/catalog.js");
+const catalogLoaderPath = path.join(root, "entregas/catalog-bootstrap.js");
+const catalogDataPath = path.join(root, "entregas/catalog-data.js");
 const catalogStylePath = path.join(root, "entregas/styles.css");
+const catalogProgressiveStylePath = path.join(root, "entregas/catalog.css");
 const catalogScript = fs.readFileSync(catalogScriptPath, "utf8");
+const catalogLoader = fs.readFileSync(catalogLoaderPath, "utf8");
+const catalogDataScript = fs.readFileSync(catalogDataPath, "utf8");
+const catalogDataMatch = /^window\.CONFENGE_CATALOG_DATA=(\{.*\});\s*$/.exec(catalogDataScript);
+const catalogData = catalogDataMatch ? JSON.parse(catalogDataMatch[1]) : null;
 const catalogStyle = fs.readFileSync(catalogStylePath, "utf8");
+const catalogProgressiveStyle = fs.readFileSync(catalogProgressiveStylePath, "utf8");
 const implementation = doc.public_implementation || {};
 assert("implementation_route", implementation.route === "/entregas/", implementation.route);
-assert("implementation_artifacts_exist", [implementation.renderer, implementation.client_script, implementation.stylesheet].every((file) => fs.existsSync(path.join(root, file))), implementation);
+assert("implementation_artifacts_exist", [implementation.renderer, implementation.client_loader, implementation.client_script, implementation.client_data_asset, implementation.client_stylesheet, implementation.stylesheet].every((file) => fs.existsSync(path.join(root, file))), implementation);
 assert("implementation_count_and_steps", implementation.index_count === 54 && implementation.framing_steps === 3, implementation);
 assert("implementation_filter_contract", eq(implementation.filter_dimensions, fl.dimensions), implementation.filter_dimensions);
 assert("implementation_comparison_contract", implementation.comparison?.min_selection === 2 && implementation.comparison?.max_selection === 4 && implementation.comparison?.mobile_layout === cp.mobile_layout, implementation.comparison);
@@ -289,16 +297,31 @@ assert("catalog_has_all_filter_dimensions", ["task", "object", "urgency", "price
 assert("catalog_has_comparison_controls", (entregas.match(/data-compare-item/g) || []).length === CATALOG_SIZE && entregas.includes("data-compare-tray") && entregas.includes("data-comparison-items"), "comparison");
 assert("catalog_has_alphabetical_index", (entregas.match(/data-alpha-item=/g) || []).length === CATALOG_SIZE && entregas.includes("data-alpha-view"), "alphabetical");
 assert("catalog_has_empty_result_guidance", entregas.includes("data-catalog-empty") && entregas.includes("Nenhuma entrega combina"), "empty result");
-assert("catalog_cards_expose_comparison_dimensions", ["data-trigger", "data-decision", "data-unit", "data-input", "data-output", "data-sla", "data-price", "data-exclusion", "data-step-up"].every((field) => (entregas.match(new RegExp(field, "g")) || []).length >= CATALOG_SIZE), "comparison dimensions");
-assert("catalog_cards_expose_framing_dimensions", ["data-inputs", "data-input-count", "data-decision-business-days"].every((field) => (entregas.match(new RegExp(field, "g")) || []).length === CATALOG_SIZE), "framing dimensions");
+assert("catalog_has_one_shared_state_legend", (entregas.match(/class="catalog-state-legend"/g) || []).length === 1 && !entregas.includes("catalog-item__evidence") && !entregas.includes("catalog-item__state-note") && ["Publicada", "Em validação", "Indisponível"].every((label) => entregas.includes(`<dt>${label}</dt>`)), "shared evidence/state legend");
+assert("catalog_data_has_exact_schema", catalogData?.schema === "confenge.public-deliverable-catalog/1.0", catalogData?.schema);
+assert("catalog_data_has_declared_fields", eq(catalogData?.fields, ["id", "name", "trigger", "decision", "unit", "input", "inputKinds", "inputCount", "decisionBusinessDays", "output", "sla", "price", "exclusion", "stepUp", "publicState"]), catalogData?.fields);
+assert("catalog_data_has_54_records", catalogData?.items?.length === CATALOG_SIZE, catalogData?.items?.length);
+const catalogRecords = new Map((catalogData?.items || []).map((row) => [row[0], Object.fromEntries(catalogData.fields.map((field, index) => [field, row[index]]))]));
+assert("catalog_data_ids_are_unique", catalogRecords.size === CATALOG_SIZE, catalogRecords.size);
+assert("catalog_cards_have_matching_data", expectedItems.every((item) => catalogRecords.has(`CFG-D${item}`) && entregas.includes(`data-deliverable-id="CFG-D${item}"`)), "card/data join");
+assert("catalog_data_exposes_comparison_dimensions", [...catalogRecords.values()].every((record) => ["trigger", "decision", "unit", "input", "output", "sla", "price", "exclusion", "stepUp"].every((field) => typeof record[field] === "string" && record[field].trim())), "comparison dimensions");
+assert("catalog_data_exposes_framing_dimensions", [...catalogRecords.values()].every((record) => Array.isArray(record.inputKinds) && record.inputKinds.every((kind) => ["edital", "planilha", "documentos", "cronograma", "dados"].includes(kind)) && Number.isInteger(record.inputCount) && record.inputCount > 0 && (record.decisionBusinessDays === "" || (Number.isInteger(record.decisionBusinessDays) && record.decisionBusinessDays > 0))), "framing dimensions");
+assert("catalog_html_avoids_duplicate_long_dimensions", ["data-trigger", "data-decision", "data-unit", "data-input", "data-inputs", "data-input-count", "data-decision-business-days", "data-output", "data-sla", "data-price", "data-exclusion", "data-step-up", "data-search"].every((field) => !new RegExp(`${field}=`).test(entregas)), "compact HTML");
+assert("catalog_loader_is_below_content", entregas.indexOf("/entregas/catalog-bootstrap.js") > entregas.indexOf("</footer>"), "deferred catalog loader");
+assert("catalog_data_and_behavior_are_lazy", !entregas.includes('src="/entregas/catalog-data.js"') && !entregas.includes('src="/entregas/catalog.js"') && catalogLoader.indexOf('data.src = "/entregas/catalog-data.js"') < catalogLoader.indexOf('behavior.src = "/entregas/catalog.js"'), "lazy script order");
+assert("catalog_lazy_load_has_proximity_and_anchor_paths", catalogLoader.includes("IntersectionObserver") && catalogLoader.includes('rootMargin: "1200px 0px"') && catalogLoader.includes('a[href^="#"]') && catalogLoader.includes("location.hash"), "lazy activation");
+assert("catalog_behavior_validates_exact_data_shape", catalogScript.includes("EXPECTED_FIELDS") && catalogScript.includes("payload.fields.length !== EXPECTED_FIELDS.length") && catalogScript.includes("payload.items.length !== cards.length") && catalogScript.includes("records.size !== cards.length"), "fail-closed client data");
+assert("catalog_css_is_lazy_with_noscript_fallback", !entregas.includes('<link data-catalog-css') && entregas.includes('<noscript><link href="/entregas/catalog.css" rel="stylesheet"/></noscript>') && catalogLoader.includes('stylesheet.href = "/entregas/catalog.css"') && catalogLoader.includes("document.head.append(stylesheet)"), "progressive CSS");
 assert("script_preserves_url_state", catalogScript.includes("URLSearchParams") && catalogScript.includes("history.replaceState"), "URL state");
 assert("script_limits_recommendation", catalogScript.includes("MAX_RECOMMENDATIONS = 3") && catalogScript.includes("slice(0, MAX_RECOMMENDATIONS)"), "recommendation cap");
-assert("script_uses_declared_input", catalogScript.includes("matchesInput(card, input)") && catalogScript.includes("INPUT_TERMS") && catalogScript.includes("input === \"apenas a pergunta\""), "input framing");
+assert("script_uses_declared_input", catalogScript.includes("matchesInput(card, input)") && catalogScript.includes("recordFor(card).inputKinds.includes(input)"), "input framing");
 assert("script_enforces_declared_deadline", catalogScript.includes("businessDaysUntil(deadline)") && catalogScript.includes("requiredBusinessDays(card) <= deadlineDays") && catalogScript.includes("não encurta o SLA publicado"), "deadline framing");
 assert("script_limits_comparison", catalogScript.includes("MIN_COMPARE = 2") && catalogScript.includes("MAX_COMPARE = 4"), "comparison cap");
 assert("script_has_no_network_or_analytics_sink", !/(fetch\s*\(|XMLHttpRequest|sendBeacon|dataLayer\.push)/.test(catalogScript), "client script");
-assert("style_progressively_reveals_comparison", catalogStyle.includes(".catalog-enhanced .catalog-item__compare") && catalogStyle.includes(".catalog-item__compare{display:none"), "progressive enhancement");
-assert("style_uses_stacked_mobile_comparison", catalogStyle.includes(".catalog-comparison [data-comparison-items],.catalog-alpha ol{grid-template-columns:1fr}"), "mobile comparison");
+assert("loader_has_no_data_or_analytics_sink", !/(fetch\s*\(|XMLHttpRequest|sendBeacon|dataLayer\.push)/.test(catalogLoader), "client loader");
+assert("style_progressively_reveals_comparison", catalogProgressiveStyle.includes(".catalog-enhanced .catalog-item__compare") && catalogProgressiveStyle.includes(".catalog-item__compare{display:none"), "progressive enhancement");
+assert("style_uses_stacked_mobile_comparison", catalogProgressiveStyle.includes(".catalog-comparison [data-comparison-items],.catalog-alpha ol{grid-template-columns:1fr}"), "mobile comparison");
+assert("base_style_excludes_progressive_catalog", !catalogStyle.includes(".catalog-recommendation__items") && !catalogStyle.includes(".catalog-compare-tray"), "blocking CSS boundary");
 
 /* 13. Conteineres fora da contagem 01 a 54 ------------------------- */
 const containers = doc.containers || [];
