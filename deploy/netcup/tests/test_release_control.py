@@ -1,0 +1,320 @@
+from __future__ import annotations
+
+import functools
+import http.server
+import json
+import os
+import shutil
+import tarfile
+import threading
+import urllib.request
+from pathlib import Path
+from typing import Self
+
+import pytest
+
+from deploy.netcup.lib import release_control as control
+from deploy.netcup.package_release import build_release, sha256_file
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+SHA_A = "a" * 40
+SHA_B = "b" * 40
+SHA_C = "c" * 40
+
+
+class QuietHandler(http.server.SimpleHTTPRequestHandler):
+    def log_message(self, _format: str, *_args: object) -> None:
+        return
+
+
+@pytest.fixture
+def host(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    root = tmp_path / "host"
+    monkeypatch.setenv("CONFENGE_RELEASE_TEST_MODE", "1")
+    monkeypatch.setenv("CONFENGE_RELEASE_ROOT", str(root))
+    monkeypatch.setenv("CONFENGE_ORIGIN_HOST", "confenge.com.br")
+    return root
+
+
+def make_site(tmp_path: Path, sha: str) -> Path:
+    site = tmp_path / f"site-{sha[0]}"
+    well_known = site / ".well-known"
+    well_known.mkdir(parents=True)
+    artifact_hash = sha256_file(Path(__file__))
+    manifest_hash = sha256_file(REPO_ROOT / "deploy" / "netcup" / "package_release.py")
+    (site / "index.html").write_text(
+        "<!doctype html><html lang='pt-BR'><body>CONFENGE</body></html>\n",
+        encoding="utf-8",
+    )
+    identity = {
+        "schema_version": "1.2.0",
+        "commit": sha,
+        "build_time": "2026-08-26T12:00:00Z",
+        "artifact_hash": artifact_hash,
+        "manifest_hash": manifest_hash,
+    }
+    build_manifest = {
+        "schema_version": "1.0.0",
+        "commit": sha,
+        "artifact_hash": artifact_hash,
+        "manifest_hash": manifest_hash,
+    }
+    pseo = {"schema_version": "1.0.0", "web_cfg_sha": sha}
+    release_result = {
+        "commit": sha,
+        "web_cfg_sha": sha,
+        "artifact_hash": artifact_hash,
+        "manifest_hash": manifest_hash,
+        "status": "BUILT",
+    }
+    for name, payload in (
+        ("build-info.json", identity),
+        ("build-manifest.json", build_manifest),
+        ("pseo-build.json", pseo),
+        ("release-result.json", release_result),
+    ):
+        (well_known / name).write_text(
+            json.dumps(payload, sort_keys=True) + "\n", encoding="utf-8"
+        )
+    return site
+
+
+def make_incoming(tmp_path: Path, host: Path, sha: str) -> dict[str, Path]:
+    site = make_site(tmp_path, sha)
+    output = tmp_path / f"package-{sha[0]}"
+    result = build_release(
+        repo_root=REPO_ROOT,
+        site=site,
+        output_dir=output,
+        sha=sha,
+        node_version="v22.19.0",
+        python_version="3.12.10",
+        ci_run_id="1234",
+        ci_run_url="https://github.com/tjsasakifln/web-cfg/actions/runs/1234",
+        source_date_epoch=1787756400,
+    )
+    incoming = host / "incoming" / sha
+    incoming.mkdir(parents=True)
+    for path in result.values():
+        shutil.copy2(path, incoming / path.name)
+    return {key: incoming / path.name for key, path in result.items()}
+
+
+class LiveServer:
+    def __init__(self, root: Path):
+        handler = functools.partial(
+            QuietHandler, directory=str(root / "current" / "_site")
+        )
+        self.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+        self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+
+    def __enter__(self) -> Self:
+        self.thread.start()
+        os.environ["CONFENGE_LOCAL_ORIGIN"] = (
+            f"http://127.0.0.1:{self.server.server_port}"
+        )
+        return self
+
+    def __exit__(self, *_args: object) -> None:
+        self.server.shutdown()
+        self.server.server_close()
+        self.thread.join(timeout=5)
+        os.environ.pop("CONFENGE_LOCAL_ORIGIN", None)
+
+
+def test_stage_valid_and_verify(host: Path, tmp_path: Path) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    manifest = control.stage_release(SHA_A)
+    assert manifest["commit"] == SHA_A
+    verified = control.verify_release(SHA_A)
+    assert verified["artifact"]["sha256"] == manifest["artifact"]["sha256"]
+    assert not os.path.lexists(host / "current")
+
+
+def test_short_sha_is_rejected(host: Path) -> None:
+    with pytest.raises(control.ReleaseError, match="exactly 40"):
+        control.stage_release("abc123")
+
+
+def test_checksum_invalid_is_rejected(host: Path, tmp_path: Path) -> None:
+    incoming = make_incoming(tmp_path, host, SHA_A)
+    with incoming["artifact"].open("ab") as handle:
+        handle.write(b"corruption")
+    with pytest.raises(control.ReleaseError, match="checksum mismatch"):
+        control.stage_release(SHA_A)
+    assert not (host / "releases" / SHA_A).exists()
+
+
+def test_sha_mismatch_is_rejected(host: Path, tmp_path: Path) -> None:
+    incoming = make_incoming(tmp_path, host, SHA_A)
+    manifest = json.loads(incoming["manifest"].read_text(encoding="utf-8"))
+    manifest["commit"] = SHA_B
+    incoming["manifest"].write_text(json.dumps(manifest) + "\n", encoding="utf-8")
+    with pytest.raises(control.ReleaseError, match="repo/SHA mismatch"):
+        control.stage_release(SHA_A)
+
+
+def test_promote_is_atomic_and_live_identity_matches(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    control.stage_release(SHA_A)
+    with LiveServer(host):
+        control.promote_release(SHA_A)
+        assert (host / "current").is_symlink()
+        assert control.read_release_link(host, "current") == SHA_A
+        with urllib.request.urlopen(
+            os.environ["CONFENGE_LOCAL_ORIGIN"] + "/.well-known/build-info.json"
+        ) as response:
+            assert json.load(response)["commit"] == SHA_A
+
+
+def test_concurrent_promote_is_refused_by_host_lock(host: Path) -> None:
+    control.ensure_layout(host)
+    with (
+        control.deploy_lock(host),
+        pytest.raises(control.ReleaseError, match="deploy lock busy"),
+    ):
+        control.promote_release(SHA_A)
+
+
+def test_rollback_and_previous_release_preserved(host: Path, tmp_path: Path) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    make_incoming(tmp_path, host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    with LiveServer(host):
+        control.promote_release(SHA_A)
+        control.promote_release(SHA_B)
+        assert (host / "releases" / SHA_A).is_dir()
+        assert control.read_release_link(host, "rollback") == SHA_A
+        control.rollback_release(SHA_A)
+        assert control.read_release_link(host, "current") == SHA_A
+        assert control.read_release_link(host, "rollback") == SHA_B
+
+
+def test_rollback_to_missing_sha_fails(host: Path) -> None:
+    with pytest.raises(control.ReleaseError, match="does not exist"):
+        control.rollback_release(SHA_C)
+
+
+def test_prune_preserves_current_rollback_and_n_previous(
+    host: Path, tmp_path: Path
+) -> None:
+    shas = [f"{value:040x}" for value in range(1, 7)]
+    for index, sha in enumerate(shas):
+        make_incoming(tmp_path / str(index), host, sha)
+        control.stage_release(sha)
+        os.utime(host / "releases" / sha, ns=(index + 1, index + 1))
+    with LiveServer(host):
+        control.promote_release(shas[0])
+        control.promote_release(shas[1])
+    removed = control.prune_releases(keep=1)
+    assert shas[1] not in removed
+    assert shas[0] not in removed
+    assert shas[-1] not in removed
+    assert (host / "releases" / shas[1]).is_dir()
+    assert (host / "releases" / shas[0]).is_dir()
+    assert len(removed) == 3
+
+
+def test_symlink_escape_is_rejected(host: Path, tmp_path: Path) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    control.stage_release(SHA_A)
+    (host / "outside").mkdir()
+    (host / "current").symlink_to(host / "outside")
+    with pytest.raises(control.ReleaseError, match="escapes"):
+        control.promote_release(SHA_A)
+    assert (host / "current").resolve() == (host / "outside").resolve()
+
+
+def test_interrupted_stage_is_cleaned_and_retried(host: Path, tmp_path: Path) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    interrupted = host / "releases" / f".stage-{SHA_A}-interrupted"
+    interrupted.mkdir(parents=True)
+    (interrupted / "partial").write_text("partial", encoding="utf-8")
+    control.stage_release(SHA_A)
+    assert not interrupted.exists()
+    assert (host / "releases" / SHA_A).is_dir()
+
+
+def test_run_scoped_upload_is_atomically_adopted(host: Path, tmp_path: Path) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    fixed = host / "incoming" / SHA_A
+    upload = host / "incoming" / f".upload-{SHA_A}-1234-1"
+    fixed.rename(upload)
+    control.stage_release(SHA_A, upload)
+    assert fixed.is_dir()
+    assert not upload.exists()
+    assert (host / "releases" / SHA_A).is_dir()
+
+
+def test_preexisting_divergent_release_is_rejected(host: Path, tmp_path: Path) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    control.stage_release(SHA_A)
+    (host / "releases" / SHA_A / "_site" / "index.html").write_text(
+        "divergent", encoding="utf-8"
+    )
+    with pytest.raises(control.ReleaseError, match="checksum mismatch"):
+        control.stage_release(SHA_A)
+
+
+def test_failed_post_swap_check_restores_previous(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    make_incoming(tmp_path, host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    with LiveServer(host):
+        control.promote_release(SHA_A)
+        monkeypatch.setenv("CONFENGE_TEST_LIVE_FAIL_SHA", SHA_B)
+        with pytest.raises(control.ReleaseError, match="previous release restored"):
+            control.promote_release(SHA_B)
+        assert control.read_release_link(host, "current") == SHA_A
+        control.smoke_live(SHA_A)
+
+
+def test_failed_evidence_write_after_swap_restores_previous(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    make_incoming(tmp_path, host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    with LiveServer(host):
+        control.promote_release(SHA_A)
+        original_append = control.append_evidence
+
+        def fail_promoted(root: Path, event: str, sha: str, **details: object) -> None:
+            if event == "PROMOTED" and sha == SHA_B:
+                raise OSError("test-injected evidence write failure")
+            original_append(root, event, sha, **details)
+
+        monkeypatch.setattr(control, "append_evidence", fail_promoted)
+        with pytest.raises(control.ReleaseError, match="previous release restored"):
+            control.promote_release(SHA_B)
+        assert control.read_release_link(host, "current") == SHA_A
+        control.smoke_live(SHA_A)
+
+
+def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
+    site = make_site(tmp_path, SHA_A)
+    kwargs = {
+        "repo_root": REPO_ROOT,
+        "site": site,
+        "sha": SHA_A,
+        "node_version": "v22.19.0",
+        "python_version": "3.12.10",
+        "ci_run_id": "1234",
+        "ci_run_url": "https://github.com/tjsasakifln/web-cfg/actions/runs/1234",
+        "source_date_epoch": 1787756400,
+    }
+    first = build_release(output_dir=tmp_path / "first", **kwargs)
+    second = build_release(output_dir=tmp_path / "second", **kwargs)
+    assert first["artifact"].read_bytes() == second["artifact"].read_bytes()
+    assert sha256_file(first["artifact"]) == sha256_file(second["artifact"])
+    with tarfile.open(first["artifact"], "r:gz") as archive:
+        names = archive.getnames()
+    assert not any("__pycache__" in name or name.endswith(".pyc") for name in names)
+    assert all(not name.startswith((".git", "node_modules")) for name in names)

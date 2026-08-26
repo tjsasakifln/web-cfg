@@ -1,0 +1,249 @@
+name: netcup-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Package only, stage/verify, or manually gated cutover promotion
+        required: true
+        default: package_only
+        type: choice
+        options:
+          - package_only
+          - stage_verify
+          - promote
+
+permissions:
+  contents: read
+
+concurrency:
+  group: netcup-release-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    name: main-only release preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require canonical main SHA
+        env:
+          RELEASE_REF: ${{ github.ref }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$RELEASE_REF" != "refs/heads/main" ]; then
+            echo "NETCUP_RELEASE_BLOCKED: dispatch must target main" >&2
+            exit 1
+          fi
+          if ! [[ "$RELEASE_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "NETCUP_RELEASE_BLOCKED: GitHub did not provide a full commit SHA" >&2
+            exit 1
+          fi
+
+  gates:
+    name: exact SHA through site-ci
+    needs: preflight
+    uses: ./.github/workflows/site-ci.yml
+    with:
+      export_public_artifact: true
+    permissions:
+      contents: read
+
+  package:
+    name: immutable release package and attestation
+    needs: gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.12"
+      - name: Download the exact public artifact exported by site-ci
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: site-ci-public-${{ github.sha }}
+          path: _site
+      - name: Package without rebuilding
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          CI_RUN_ID: ${{ github.run_id }}
+          CI_RUN_ATTEMPT: ${{ github.run_attempt }}
+          CI_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          if [ "$(git rev-parse HEAD)" != "$RELEASE_SHA" ] || \
+             ! git diff --quiet || ! git diff --cached --quiet; then
+            echo "NETCUP_PACKAGE_ERROR: checkout is not the exact clean gated SHA" >&2
+            exit 1
+          fi
+          source_date_epoch=$(git show -s --format=%ct "$RELEASE_SHA")
+          node_version=$(node --version)
+          python_version=$(python3 --version | awk '{print $2}')
+          python3 deploy/netcup/package_release.py \
+            --site _site \
+            --output "dist/netcup/$RELEASE_SHA" \
+            --sha "$RELEASE_SHA" \
+            --node-version "$node_version" \
+            --python-version "$python_version" \
+            --ci-run-id "$CI_RUN_ID" \
+            --ci-run-url "$CI_RUN_URL" \
+            --source-date-epoch "$source_date_epoch"
+          (
+            cd "dist/netcup/$RELEASE_SHA"
+            sha256sum --check "confenge-web-$RELEASE_SHA.tar.gz.sha256"
+          )
+      - name: Attest immutable deploy artifact
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: dist/netcup/${{ github.sha }}/confenge-web-${{ github.sha }}.tar.gz
+      - name: Store release candidate independently of Netlify
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: netcup-release-${{ github.sha }}
+          path: dist/netcup/${{ github.sha }}/
+          if-no-files-found: error
+          retention-days: 30
+
+  stage:
+    name: Netcup stage and host-local verify
+    if: inputs.operation == 'stage_verify' || inputs.operation == 'promote'
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: netcup-stage
+    permissions:
+      contents: read
+    steps:
+      - name: Download attested release bundle
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: netcup-release-${{ github.sha }}
+          path: dist/netcup/${{ github.sha }}
+      - name: Require pinned SSH inputs
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+          NETCUP_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
+          NETCUP_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          if [ -z "$NETCUP_DEPLOY_HOST" ] || [ -z "$NETCUP_DEPLOY_USER" ] || \
+             [ -z "$NETCUP_SSH_PRIVATE_KEY" ] || [ -z "$NETCUP_SSH_KNOWN_HOSTS" ]; then
+            echo "NETCUP_RELEASE_BLOCKED: configure all four NETCUP SSH secrets; no fallback is allowed" >&2
+            exit 1
+          fi
+          if ! [[ "$NETCUP_DEPLOY_HOST" =~ ^[A-Za-z0-9.:-]+$ ]] || \
+             ! [[ "$NETCUP_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]; then
+            echo "NETCUP_RELEASE_BLOCKED: invalid SSH host/user shape" >&2
+            exit 1
+          fi
+          install -d -m 0700 "$RUNNER_TEMP/netcup-ssh"
+          printf '%s\n' "$NETCUP_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/netcup-ssh/id_ed25519"
+          printf '%s\n' "$NETCUP_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/netcup-ssh/known_hosts"
+          chmod 0600 "$RUNNER_TEMP/netcup-ssh/id_ed25519" "$RUNNER_TEMP/netcup-ssh/known_hosts"
+          ssh-keygen -F "$NETCUP_DEPLOY_HOST" -f "$RUNNER_TEMP/netcup-ssh/known_hosts" >/dev/null || {
+            echo "NETCUP_RELEASE_BLOCKED: pinned known_hosts has no entry for NETCUP_DEPLOY_HOST" >&2
+            exit 1
+          }
+      - name: Upload, stage, and verify without changing current
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+          RELEASE_SHA: ${{ github.sha }}
+          CI_RUN_ID: ${{ github.run_id }}
+          CI_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          ssh_options=(
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts"
+            -i "$RUNNER_TEMP/netcup-ssh/id_ed25519"
+          )
+          target="$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST"
+          upload="/opt/confenge-web/incoming/.upload-$RELEASE_SHA-$CI_RUN_ID-$CI_RUN_ATTEMPT"
+          ssh "${ssh_options[@]}" "$target" "install -d -m 0750 '$upload'"
+          rsync -a --delay-updates --chmod=F640,D750 \
+            -e "ssh -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts -i $RUNNER_TEMP/netcup-ssh/id_ed25519" \
+            "dist/netcup/$RELEASE_SHA/" "$target:$upload/"
+          ssh "${ssh_options[@]}" "$target" \
+            "/opt/confenge-web/bin/stage-release '$RELEASE_SHA' --upload-dir '$upload'"
+          ssh "${ssh_options[@]}" "$target" "/opt/confenge-web/bin/verify-release '$RELEASE_SHA'"
+
+  promote:
+    name: Manual cutover-gated atomic promote
+    if: inputs.operation == 'promote'
+    needs: stage
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: netcup-production
+    permissions:
+      contents: read
+    steps:
+      - name: Require an explicit post-ADR cutover authorization
+        env:
+          CUTOVER_AUTHORIZATION: ${{ vars.NETCUP_CUTOVER_AUTHORIZED }}
+        run: |
+          set -euo pipefail
+          if [ "$CUTOVER_AUTHORIZATION" != "CONFENGE_NETCUP_CUTOVER_APPROVED" ]; then
+            echo "NETCUP_PROMOTE_BLOCKED: production cutover is not authorized; stage remains safe" >&2
+            exit 1
+          fi
+      - name: Require pinned SSH inputs
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+          NETCUP_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
+          NETCUP_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          if [ -z "$NETCUP_DEPLOY_HOST" ] || [ -z "$NETCUP_DEPLOY_USER" ] || \
+             [ -z "$NETCUP_SSH_PRIVATE_KEY" ] || [ -z "$NETCUP_SSH_KNOWN_HOSTS" ]; then
+            echo "NETCUP_PROMOTE_BLOCKED: production environment SSH secrets are incomplete" >&2
+            exit 1
+          fi
+          if ! [[ "$NETCUP_DEPLOY_HOST" =~ ^[A-Za-z0-9.:-]+$ ]] || \
+             ! [[ "$NETCUP_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]; then
+            echo "NETCUP_PROMOTE_BLOCKED: invalid SSH host/user shape" >&2
+            exit 1
+          fi
+          install -d -m 0700 "$RUNNER_TEMP/netcup-ssh"
+          printf '%s\n' "$NETCUP_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/netcup-ssh/id_ed25519"
+          printf '%s\n' "$NETCUP_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/netcup-ssh/known_hosts"
+          chmod 0600 "$RUNNER_TEMP/netcup-ssh/id_ed25519" "$RUNNER_TEMP/netcup-ssh/known_hosts"
+          ssh-keygen -F "$NETCUP_DEPLOY_HOST" -f "$RUNNER_TEMP/netcup-ssh/known_hosts" >/dev/null || {
+            echo "NETCUP_PROMOTE_BLOCKED: pinned known_hosts has no entry for NETCUP_DEPLOY_HOST" >&2
+            exit 1
+          }
+      - name: Atomic promote and live identity confirmation
+        env:
+          NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          ssh_options=(
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts"
+            -i "$RUNNER_TEMP/netcup-ssh/id_ed25519"
+          )
+          target="$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST"
+          ssh "${ssh_options[@]}" "$target" \
+            "CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088 /opt/confenge-web/bin/promote-release '$RELEASE_SHA'"
+          ssh "${ssh_options[@]}" "$target" "tail -n 1 /opt/confenge-web/evidence/deploy.ndjson"
