@@ -131,9 +131,9 @@ for (const local of doors.doors) {
 }
 
 /* O protocolo P0 aponta ofertas reais e o preço-base atual do registro. */
-const pricePhase = marketFit.phases.find((phase) => phase.founder_led_offers);
+const pricePhase = marketFit.phases.find((phase) => phase.measurement_scope);
 assert("market_fit_price_phase_exists", Boolean(pricePhase), marketFit.phases.map((phase) => phase.phase));
-for (const offer of pricePhase?.founder_led_offers || []) {
+for (const offer of pricePhase?.measurement_scope || []) {
   const canonical = byId.get(offer.deliverable_id);
   const canonicalBase = canonical?.price.tiers?.[0]?.amount_cents ?? canonical?.price.amount_cents;
   assert(`market_fit_${offer.deliverable_id}_exists`, Boolean(canonical), offer);

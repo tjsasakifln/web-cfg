@@ -287,7 +287,7 @@ def test_the_credit_rule_is_coherent_across_the_eight() -> None:
     assert "Por que abre a biblioteca" in entry
     assert "único sem o crédito de 60 dias" in entry
     assert "Primeiro exemplo publicado" not in html
-    assert "Entrega à parte, fora do Diagnóstico B2G de Expansão" in entry
+    assert "Entrega à parte, fora do Diagnóstico de Expansão no Mercado Público" in entry
 
 
 def test_hub_states_the_bundle_without_replacing_the_unit_prices() -> None:

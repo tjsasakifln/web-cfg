@@ -1,5 +1,14 @@
 # Expansão cumulativa do portfólio: registro de decisão da #329
 
+> **ARQUIVO HISTÓRICO — NÃO EXECUTAR COMO BACKLOG.** Este documento preserva a
+> fotografia adversarial de 2026-08-24. As divergências, contagens intermediárias,
+> nomes pendentes e ofertas founder-led descritas abaixo foram saneadas em
+> 2026-08-25. A semântica executável é: **54 entregáveis + 2 contêineres**;
+> condições de contratação não são produtos; #343 é a autoridade nominal; e
+> operação comercial pertence a Warmbly sob supervisão de Governance/Control
+> Center. Para trabalho atual, use o registro versionado e as issues abertas, não
+> as pendências históricas deste arquivo.
+
 - **Decision state:** P0 / VALIDATE
 - **Fronts:** REVENUE NOW + MARKET INTELLIGENCE MOAT
 - **Leverage:** revenue, data, trust, customer
@@ -451,10 +460,11 @@ O gate **não** confere a conferência de faixas da #341: `registry_cross_check`
 material informativo e não é assertado. Também não confere que a escada cubra
 todos os preços, nem que a #335 e a #338 concordem entre si sobre contagem.
 
-## 7. Divergências abertas que este PR registra sem resolver
+## 7. Divergências existentes na fotografia histórica — saneadas no backlog
 
-Este PR não edita issue nem inventa consenso. Cada divergência abaixo foi
-conferida contra o corpo atual da issue e contra o arquivo correspondente.
+Cada divergência abaixo foi conferida contra o corpo das issues em 2026-08-24.
+Ela permanece somente como trilha histórica; não é acceptance criterion nem
+instrução para um agente futuro.
 
 1. **#335 ainda diz 48 na prosa.** O título, a seção "Arquitetura primária por
    tarefa" e o acceptance dizem 54, e a soma das sete portas fecha em 54. Mas o
@@ -541,7 +551,7 @@ Quem continua dono do quê:
   divergência nominal prevalece a #343; escopo e preço declarados nas issues de
   especificação permanecem válidos.
 
-## 10. Próxima evidência
+## 10. Próxima evidência no snapshot histórico — não executar
 
 A próxima decisão desta família não depende de mais código. Depende de: as
 entrevistas com notas brutas e consentimento sob a amostra que a #336 e o
@@ -551,6 +561,7 @@ recomendação unitária e preço explícito, o primeiro registro de horas, cust
 margem por `deliverable_id`, as oito lentes adversariais executadas com defeito
 classificado, 5 sessões de primeira dobra e uma autorização válida sob a #249.
 
-Até lá, os 54 permanecem `HOLD`, os preços-piloto permanecem hipótese, os 20
-nomes pendentes permanecem pendentes e as oito entregas publicadas permanecem
-exatamente como estão.
+O trecho acima registra o plano da fotografia original. Hoje os nomes públicos
+são os de #343; pesquisa/medição válida permanece P2/WAIT, e qualquer evidência
+comercial operacional deve chegar como agregado versionado do Warmbly, revisado
+por Governance/Control Center. `web-cfg` não executa abordagem, fila ou cadência.

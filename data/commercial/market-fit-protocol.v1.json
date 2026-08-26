@@ -87,9 +87,12 @@
     },
     {
       "phase": 3,
-      "name": "Willingness to pay observada",
+      "name": "Evidência comercial agregada do sistema proprietário",
       "status": "NOT_STARTED",
-      "founder_led_offers": [
+      "system_of_action": "warmbly",
+      "supervision_owner": "governance_control_center",
+      "web_cfg_role": "consumir contrato SELECT-only agregado para decisões de apresentação, preço e promoção; não operar contato, proposta, cadência ou outcome",
+      "measurement_scope": [
         { "rank": 1, "deliverable_id": "CFG-D01", "label": "Radar", "price_brl_label": "R$ 599", "amount_cents": 59900, "matches_published_unit_price": true },
         { "rank": 2, "deliverable_id": "CFG-D12", "label": "decisão de disputar", "price_brl_label": "R$ 1.900", "amount_cents": 190000, "matches_published_unit_price": true },
         { "rank": 3, "deliverable_id": "CFG-D14", "label": "Auditoria de Orçamento/BDI", "price_brl_label": "R$ 5.900", "amount_cents": 590000, "matches_published_unit_price": false },
@@ -109,17 +112,13 @@
       },
       "minimum_qcos_with_unit_recommendation": 8,
       "decision_states": ["ACEITOU", "NEGOCIOU", "RECUSOU", "SEM DECISÃO"],
-      "decision_reason_verbatim_required": true,
+      "individual_decision_reason_in_repository": false,
       "record_fields": [
-        "preço exibido",
-        "proposta enviada",
-        "decisão ACEITOU, NEGOCIOU, RECUSOU ou SEM DECISÃO",
-        "motivo literal",
-        "prazo até decisão",
-        "valor e urgência do problema",
-        "horas reais, retrabalho, margem e qualidade do output",
-        "expansão para outro produto",
-        "outcome ou UNKNOWN"
+        "contagens agregadas por entregável e versão de preço",
+        "propostas e decisões agregadas",
+        "pagamentos, entregas e outcomes agregados ou UNKNOWN",
+        "hash e janela do export do Warmbly",
+        "desvio agregado de horas, margem e claims proibidos"
       ],
       "pricing_discipline": {
         "statement": "sem desconto silencioso; teste de preço usa versões explícitas e sequência registrada, nunca preços diferentes para pessoas equivalentes sem registro",
@@ -132,7 +131,7 @@
     "source": "entregas/index.html",
     "count": 8,
     "cents": [59900, 69000, 89000, 120000, 145000, 190000, 240000, 375000],
-    "change_requires": "decisão posterior com evidência paga registrada nas fases 1 a 3"
+    "change_requires": "decisão posterior com evidência paga agregada do Warmbly e revisão de Governance"
   },
   "score_dimensions": [
     "frequência do trigger",

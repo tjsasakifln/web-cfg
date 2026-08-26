@@ -57,13 +57,13 @@
           "day_offset": 0,
           "subject": "Edital em análise: 5 riscos antes de comprometer capital",
           "preheader": "Não é lista genérica — é filtro de decisão.",
-          "body_md": "Antes de montar a proposta, responda com documentos:\n1. Matriz de riscos e o que a Administração empurrou para o contratado;\n2. Orçamento de referência vs realidade de mercado;\n3. Exequibilidade e desconto em itens sensíveis;\n4. Habilitação/acervo e caminhos de impugnação;\n5. Prazo e cronograma realistas.\n\nLeitura de oferta: Bid Room.\n{{cta_url}}"
+          "body_md": "Antes de montar a proposta, responda com documentos:\n1. Matriz de riscos e o que a Administração empurrou para o contratado;\n2. Orçamento de referência vs realidade de mercado;\n3. Exequibilidade e desconto em itens sensíveis;\n4. Habilitação/acervo e caminhos de impugnação;\n5. Prazo e cronograma realistas.\n\nLeitura de oferta: Operação de Proposta para Licitação Crítica.\n{{cta_url}}"
         },
         {
           "day_offset": 2,
           "subject": "BDI e orçamento: onde a margem morre cedo",
           "preheader": "Desonerado/não desonerado e BDI diferenciado não são detalhe.",
-          "body_md": "Erros frequentes em obra pública:\n• misturar premissas de desoneração;\n• BDI incompatível com o regime;\n• composição própria sem memória;\n• item novo futuro sem regra de desconto da proposta.\n\nConteúdos de partida: BDI e SINAPI desonerado no hub /conteudos/.\n\nSe a licitação for estratégica: Bid Room.\n{{cta_url}}"
+          "body_md": "Erros frequentes em obra pública:\n• misturar premissas de desoneração;\n• BDI incompatível com o regime;\n• composição própria sem memória;\n• item novo futuro sem regra de desconto da proposta.\n\nConteúdos de partida: BDI e SINAPI desonerado no hub /conteudos/.\n\nSe a licitação for estratégica: Operação de Proposta para Licitação Crítica.\n{{cta_url}}"
         },
         {
           "day_offset": 5,
@@ -75,13 +75,13 @@
           "day_offset": 9,
           "subject": "Decisão de participar: critérios, não feeling",
           "preheader": "Capacidade, margem, órgão e risco — nessa ordem.",
-          "body_md": "Um Bid Room sério termina em decisão: participar, participar com ressalva, ou recusar.\n\nCritérios mínimos:\n• capacidade técnica e financeira real;\n• margem após riscos do edital;\n• histórico do órgão/fiscalização quando conhecido;\n• custo de oportunidade vs carteira.\n\nOferta: {{cta_url}}"
+          "body_md": "Uma Operação de Proposta para Licitação Crítica termina em decisão: participar, participar com ressalva ou recusar.\n\nCritérios mínimos:\n• capacidade técnica e financeira real;\n• margem após riscos do edital;\n• histórico do órgão/fiscalização quando conhecido;\n• custo de oportunidade vs carteira.\n\nOferta: {{cta_url}}"
         },
         {
           "day_offset": 14,
           "subject": "Próximo passo se o edital ainda está vivo",
           "preheader": "Análise inicial sem promessa de vitória.",
-          "body_md": "Se o edital ainda está no radar da empresa, o próximo passo é uma leitura crítica com documentos — não mais um PDF genérico.\n\nBid Room: {{cta_url}}\nFormulário: https://confenge.com.br/#contato?jornada=edital\n\nSair da sequência: {{unsubscribe_url}}"
+          "body_md": "Se o edital ainda está no radar da empresa, o próximo passo é uma leitura crítica com documentos — não mais um PDF genérico.\n\nOperação de Proposta para Licitação Crítica: {{cta_url}}\nFormulário: https://confenge.com.br/#contato?jornada=edital\n\nSair da sequência: {{unsubscribe_url}}"
         }
       ]
     },
@@ -98,7 +98,7 @@
           "day_offset": 0,
           "subject": "Operação B2G: volume de editais não é estratégia",
           "preheader": "Filtro de oportunidades com critérios da empresa.",
-          "body_md": "Plataforma de editais encontra oportunidade. Estratégia decide se ela merece capital e equipe.\n\nComece por: capacidade, acervo, órgãos-alvo, faixas de valor, apetite de risco.\n\nDiagnóstico B2G 360°: https://confenge.com.br/diagnostico-b2g-360/\nDiretoria B2G: {{cta_url}}"
+          "body_md": "Plataforma de editais encontra oportunidade. Estratégia decide se ela merece capital e equipe.\n\nComece por: capacidade, acervo, órgãos-alvo, faixas de valor, apetite de risco.\n\nDiagnóstico da Operação em Obras Públicas: https://confenge.com.br/diagnostico-b2g-360/\nDiretoria Fracionada para o Mercado Público: {{cta_url}}"
         },
         {
           "day_offset": 2,
@@ -110,7 +110,7 @@
           "day_offset": 5,
           "subject": "Indicadores que a direção precisa ver",
           "preheader": "Participar/recusar, win-rate honesto, margem pós-contrato.",
-          "body_md": "Rotina B2G útil para a direção:\n• pipeline de editais com critério de prioridade;\n• taxa de participação consciente (não vanity);\n• causas de perda (preço, habilitação, risco);\n• contratos em risco (glosa, aditivo, atraso).\n\nDiretoria B2G fracionada: {{cta_url}}"
+          "body_md": "Rotina útil para a direção:\n• pipeline de editais com critério de prioridade;\n• taxa de participação consciente;\n• causas de perda (preço, habilitação, risco);\n• contratos em risco (glosa, aditivo, atraso).\n\nDiretoria Fracionada para o Mercado Público: {{cta_url}}"
         },
         {
           "day_offset": 9,
@@ -120,9 +120,9 @@
         },
         {
           "day_offset": 14,
-          "subject": "Quando fazer Diagnóstico vs Diretoria B2G",
+          "subject": "Quando fazer diagnóstico ou contratar direção recorrente",
           "preheader": "Um é mapa de 90 dias; a outra é rotina contínua.",
-          "body_md": "Diagnóstico B2G 360°: se a empresa ainda não tem mapa claro de capacidade, mercado e gargalos.\nhttps://confenge.com.br/diagnostico-b2g-360/\n\nDiretoria B2G: se o problema é rotina de decisão e acompanhamento.\n{{cta_url}}\n\nContato: https://confenge.com.br/#contato?jornada=operacao\nDescadastro: {{unsubscribe_url}}"
+          "body_md": "Diagnóstico da Operação em Obras Públicas: se a empresa ainda não tem mapa claro de capacidade, mercado e gargalos.\nhttps://confenge.com.br/diagnostico-b2g-360/\n\nDiretoria Fracionada para o Mercado Público: se o problema é rotina de decisão e acompanhamento.\n{{cta_url}}\n\nContato: https://confenge.com.br/#contato?jornada=operacao\nDescadastro: {{unsubscribe_url}}"
         }
       ]
     }

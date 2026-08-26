@@ -29,7 +29,7 @@ taxonomia ou na copy e qualquer pessoa sem consentimento explícito.
 
 ## Quota e substituição
 
-- Mínimo: cinco conclusões elegíveis e consentidas dos três protocolos.
+- Mínimo: cinco conclusões elegíveis e consentidas dos dois protocolos ativos.
 - Convite, aceite ou sessão incompleta não contam como conclusão.
 - Desistência pode ser substituída, mas a substituição repete triagem e
   consentimento.

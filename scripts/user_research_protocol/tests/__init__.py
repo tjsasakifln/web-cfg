@@ -1,1 +1,1 @@
-"""Tests for the issue #297 operational protocol gate."""
+"""Tests for the active #183/#184 operational protocol gate."""

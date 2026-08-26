@@ -243,12 +243,18 @@ def test_forbidden_drift_reads_committed_baseline(tmp_path):
     assert drift[FORBIDDEN_RELATIVE_PATHS[0]]["baseline"] != drift[FORBIDDEN_RELATIVE_PATHS[0]]["live"]
 
 
-def test_pre_recapture_fixture_names_all_eleven_collateral_drifts(tmp_path):
+def test_pre_recapture_fixture_names_collateral_and_nominal_drifts(tmp_path):
     _copy_forbidden_tree(tmp_path)
     baseline = tmp_path / "data/bofu-dominance/frozen-specs/hashes.json"
     baseline.write_bytes(PRE_RECAPTURE.read_bytes())
 
     expected = {
+        "aditivos-obras-publicas/index.html",
+        "medicoes-glosas-obras-publicas/index.html",
+        "reequilibrio-obras-publicas/index.html",
+        "auditoria-orcamento-licitacao/index.html",
+        "diagnostico-b2g-360/index.html",
+        "diagnostico-pre-licitacao/index.html",
         "script.js",
         "styles.css",
         "styles-tokens.css",

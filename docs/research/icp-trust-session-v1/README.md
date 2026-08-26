@@ -1,6 +1,6 @@
-# Painel ICP de confiança e compreensão — protocolo v1.0.0
+# Painel ICP de confiança e compreensão — protocolo v1.1.0
 
-Este pacote deixa a validação humana de #183, #184 e #188 pronta para execução,
+Este pacote deixa a validação humana de #183 e #184 pronta para execução,
 sem afirmar que ela ocorreu. O estado versionado continua
 `BLOCKED_HUMAN_PARTICIPANTS`: zero pessoas foram recrutadas ou testadas por esta
 mudança, e nenhum resultado foi inferido de gates automatizados.
@@ -32,8 +32,8 @@ Somente a sessão humana decide; esta PR valida apenas a prontidão do instrumen
 - [`PROTOCOL-TREE-TEST.md`](PROTOCOL-TREE-TEST.md): teste de árvore de #183.
 - [`PROTOCOL-FIVE-SECOND.md`](PROTOCOL-FIVE-SECOND.md): teste de cinco segundos
   de #184.
-- [`PROTOCOL-COPY-COMPREHENSION.md`](PROTOCOL-COPY-COMPREHENSION.md): teste de
-  compreensão de #188.
+- [`PROTOCOL-COPY-COMPREHENSION.md`](PROTOCOL-COPY-COMPREHENSION.md): registro
+  não executável da retirada do experimento redundante de #188.
 - [`RUNBOOK.md`](RUNBOOK.md): ordem operacional e registro agregado.
 - [`STATE.json`](STATE.json): residual honesto até a execução humana.
 - [`templates/`](templates/): dado agregado e interpretação separados.
@@ -52,9 +52,9 @@ explicitamente aberto; `READY` significa instrumento pronto, não pesquisa
 concluída.
 
 O v1 também fixa por SHA-256 o protocolo JSON, recrutamento, consentimento, os
-três instrumentos e o runbook. Uma execução precisa ligar SHA e origem HTTPS da
-CONFENGE, hashes dos três estímulos, distribuição mobile/desktop, as quatro
-ofertas congeladas e as três sondagens de nomes. Pasta, `run_id`, data,
+dois instrumentos ativos, o registro de retirada e o runbook. Uma execução
+precisa ligar SHA e origem HTTPS da CONFENGE, hashes da primeira viewport e da
+árvore e distribuição mobile/desktop. Pasta, `run_id`, data,
 `STATE.json` e agregado precisam reconciliar. Arquivo extra, interpretação com
 placeholder/PII/citação/fechamento ou mudança do instrumento sem nova versão
 falha fechado.
@@ -70,7 +70,7 @@ automação de participantes.
 
 ## Residual após esta entrega
 
-#183, #184, #188 e #297 permanecem `OPEN/BLOCKED`. Além do painel, #184 ainda
-precisa de uma janela datada de CTR/scroll e #188 de uma janela de cliques. Uma
+#183 e #184 permanecem `OPEN/BLOCKED`. Além do painel, #184 ainda
+precisa de uma janela datada de CTR/scroll. Uma
 sessão não prova causalidade e este pacote não contém palavra-chave de fechamento
 automático.

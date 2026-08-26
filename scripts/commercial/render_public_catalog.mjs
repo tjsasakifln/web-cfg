@@ -294,22 +294,20 @@ const STATE = {
 function itemCard(entry, executionContract) {
   const state = STATE[entry.public_state];
   const title = escapeHtml(entry.public_name_pt_br);
-  const legacyName = (entry.name_aliases || []).find((name) => name !== entry.public_name_pt_br);
-  const alias = legacyName
-    ? /360\s*°/.test(legacyName)
-      ? '<p class="catalog-item__alias">Nome anterior preservado no histórico do catálogo.</p>'
-      : `<p class="catalog-item__alias">Nome anterior: ${escapeHtml(legacyName)}</p>`
-    : "";
+  // Aliases support search/analytics compatibility without competing with the
+  // canonical visitor-facing name from #343.
+  const searchAliases = escapeHtml(
+    (entry.name_aliases || []).filter((name) => name !== entry.public_name_pt_br).join(" | "),
+  );
   const action = entry.public_state === "PUBLISHED"
     ? `<a class="text-link" data-asset-id="${entry.deliverable_id}" data-cta-id="catalog-open-${entry.catalog_number}" data-cta-position="catalog_index" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Consultar exemplo completo</a>`
     : entry.public_state === "VALIDATE"
       ? `<a class="text-link" data-asset-id="${entry.deliverable_id}" data-cta-id="catalog-fit-${entry.catalog_number}" data-cta-position="catalog_index" data-deliverable-id="${entry.deliverable_id}" data-event-name="cta_click" href="#captura-entregas">Pedir análise de aderência</a>`
       : '<span class="catalog-item__unavailable">Contratação indisponível</span>';
 
-  return `<article class="catalog-item catalog-item--${entry.public_state.toLowerCase()}" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-task-door="${entry.task_door}" data-object="${objectKind(entry)}" data-urgency="${urgencyKind(entry)}" data-price-band="${priceBand(entry)}" data-billing="${entry.price.billing}" id="entrega-${entry.catalog_number}">
+  return `<article class="catalog-item catalog-item--${entry.public_state.toLowerCase()}" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-task-door="${entry.task_door}" data-object="${objectKind(entry)}" data-urgency="${urgencyKind(entry)}" data-price-band="${priceBand(entry)}" data-billing="${entry.price.billing}" data-search-aliases="${searchAliases}" id="entrega-${entry.catalog_number}">
 <header class="catalog-item__head"><span class="catalog-item__number">${entry.catalog_number}</span><span class="catalog-item__state">${state.label}</span></header>
 <h5>${title}</h5>
-${alias}
 <p class="catalog-item__value">${escapeHtml(entry.value_line_pt_br)}</p>
 <p class="catalog-item__question">${escapeHtml(entry.decision_question)}</p>
 <dl class="catalog-item__facts"><div><dt>Preço</dt><dd>${priceLabel(entry)}</dd></div><div><dt>Prazo</dt><dd>${escapeHtml(publicText(slaLabel(entry)))}</dd></div><div><dt>Saída principal</dt><dd>${escapeHtml(publicText(entry.included_outputs[0]))}</dd></div></dl>

@@ -210,18 +210,18 @@
       "match": {"prefix": "/casos/"},
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
-      "owner_issue": 290,
+      "owner_issue": 61,
       "debt": [
         {
           "route": "/casos/aditivo-art125-demonstrativo/",
-          "owner_issue": 290,
-          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
+          "owner_issue": 61,
+          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
           "expires_at": "2026-09-30"
         },
         {
           "route": "/casos/medicao-glosa-demonstrativo/",
-          "owner_issue": 290,
-          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
+          "owner_issue": 61,
+          "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
           "expires_at": "2026-09-30"
         }
       ]
@@ -267,7 +267,7 @@
       "match": {"routes": ["/problemas-que-resolvemos/"]},
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
       "declared_at": "2026-08-23",
-      "owner_issue": 290,
+      "owner_issue": 61,
       "debt": []
     },
     {
@@ -278,7 +278,7 @@
       "match": {"routes": ["/ferramentas/"]},
       "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "none"},
       "declared_at": "2026-08-24",
-      "owner_issue": 290,
+      "owner_issue": 61,
       "debt": []
     },
     {
@@ -289,24 +289,24 @@
       "match": {"prefix": "/ferramentas/"},
       "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "partial"},
       "declared_at": "2026-08-23",
-      "owner_issue": 290,
+      "owner_issue": 61,
       "debt": [
         {
           "route": "/ferramentas/checklist-reequilibrio/",
-          "owner_issue": 290,
-          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+          "owner_issue": 61,
+          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
           "expires_at": "2026-09-30"
         },
         {
           "route": "/ferramentas/limite-acrescimos-supressoes/",
-          "owner_issue": 290,
-          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+          "owner_issue": 61,
+          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
           "expires_at": "2026-09-30"
         },
         {
           "route": "/ferramentas/matriz-atraso-obra/",
-          "owner_issue": 290,
-          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+          "owner_issue": 61,
+          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
           "expires_at": "2026-09-30"
         }
       ]

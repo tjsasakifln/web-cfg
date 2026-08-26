@@ -1,7 +1,7 @@
 {
   "schema": "bofu_frozen_campaign_supersession/v1",
   "campaign": "CONFENGE-WEB-BOFU-CHECKOUT-CONVERGENCE-01",
-  "as_of": "2026-08-20",
+  "as_of": "2026-08-25",
   "supersedes": {
     "earliest_safe_action_at": "2026-09-16",
     "html_edit": false,
@@ -9,7 +9,14 @@
   },
   "html_mutation_this_campaign": true,
   "html_mutation_going_forward": false,
+  "nominal_supersession": {
+    "issue": 343,
+    "date": "2026-08-25",
+    "scope": "visitor-facing offer names and CTA labels only",
+    "measurement_effect": "restart the complete 28-day window after deployment",
+    "evidential_close": false
+  },
   "gsc_live_state": "LIVE_JOB_OK",
   "core_ready_for_product_decisions": false,
-  "note": "Subsequent unprompted pillar HTML remains refused by apply_frozen_patch. GSC evidence window is unchanged. Rank #1 is not claimed."
+  "note": "Subsequent unprompted pillar HTML remains refused by apply_frozen_patch. #343 resets the observation window after deployment but does not open the gate or claim rank #1."
 }

@@ -20,26 +20,15 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PACKAGE = ROOT / "docs" / "research" / "icp-trust-session-v1"
 MINIMUM_SAMPLE = 5
-TRACKED_ISSUES = {"183", "184", "188", "297"}
-PROTOCOL_ISSUES = {183, 184, 188}
-OFFER_SCOPE = {
-    "diagnostico-b2g-360": "/diagnostico-b2g-360/",
-    "diretoria-b2g": "/diretoria-b2g/",
-    "bid-room": "/bid-room-licitacoes-obras/",
-    "contract-defense": "/defesa-margem-contratos-publicos/",
-}
-TERM_PROBES = {"Bid Room", "Contract Defense & Margin", "Diretoria B2G fracionada"}
+TRACKED_ISSUES = {"183", "184"}
+PROTOCOL_ISSUES = {183, 184}
 SUBMINIMUM_DISPOSITION = {
     "183": "OPEN_BLOCKED_HUMAN_EVIDENCE",
     "184": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_TRAFFIC_WINDOW",
-    "188": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_CLICK_WINDOW",
-    "297": "OPEN_BLOCKED_HUMAN_PARTICIPANTS",
 }
 COMPLETED_DISPOSITION = {
     "183": "OPEN_EVIDENCE_READY",
     "184": "OPEN_BLOCKED_TRAFFIC_WINDOW",
-    "188": "OPEN_BLOCKED_CLICK_WINDOW",
-    "297": "OPEN_EVIDENCE_READY",
 }
 STATIC_PACKAGE_FILES = {
     "CONSENT-RETENTION.md",
@@ -57,13 +46,13 @@ STATIC_PACKAGE_FILES = {
     "templates/interpretation.template.md",
 }
 PINNED_INSTRUMENT_SHA256 = {
-    "protocol.json": "ee9cdd1721f9de54d531000131176977e2462d0e65a26e27de3f94f1ac907bed",
-    "RECRUITMENT.md": "c09a6f4b4e84206037763b0210087e4ce51cbd7dba5188024d2e1cbbdd550127",
+    "protocol.json": "a88252b75b5a98593c27f1ffee8bc06e7048588505b0545d4970e547c49fdc3c",
+    "RECRUITMENT.md": "2df1dfe4ffeeafa825a404a11c7b318cd63459df636d7d1ecd5815eca06c984e",
     "CONSENT-RETENTION.md": "aa46cf03a83c4f171243656d2ba1c225e40dce0609567c6929bc1e52a6dd3560",
     "PROTOCOL-TREE-TEST.md": "65f40f409ed45e1095e265d06125346de9b441b8f629c43e6ac1d2d727a3309a",
     "PROTOCOL-FIVE-SECOND.md": "622f9e1938aca95b3708b57035d43f185b892c856816087cb1674c52b570937d",
-    "PROTOCOL-COPY-COMPREHENSION.md": "9775409b8208b93a8e2b492788123c8854cc37abd9d048716302cfb72573d045",
-    "RUNBOOK.md": "9247f7b2352c5b626d76294f1d502c25c18bcf20b33804e3e02697c14f832633",
+    "PROTOCOL-COPY-COMPREHENSION.md": "ff42bf04db067d0ea9496426c8d06b5ffef40040b806ce7138a42a352aa0eb61",
+    "RUNBOOK.md": "ca02a4c09b438e9532f342a4b6a0a2e55bad80e35e99c859310224c69dfa6a24",
 }
 
 FORBIDDEN_PII_KEYS = {
@@ -116,13 +105,12 @@ RUN_ID_RE = re.compile(r"^\d{4}-\d{2}-\d{2}-(?:0[1-9]|[1-9]\d)$")
 SHA_RE = re.compile(r"^[a-f0-9]{40}$")
 DIGEST_RE = re.compile(r"^[a-f0-9]{64}$")
 PREVIEW_HOST_RE = re.compile(r"^deploy-preview-[1-9]\d*--confenge\.netlify\.app$")
-AUTO_CLOSE_RE = re.compile(r"(?i)\b(?:close[sd]?|fixe[sd]?|resolve[sd]?)\s+#(?:183|184|188|297)\b")
+AUTO_CLOSE_RE = re.compile(r"(?i)\b(?:close[sd]?|fixe[sd]?|resolve[sd]?)\s+#(?:183|184)\b")
 FALSE_CLOSE_RE = re.compile(r"(?i)\b(?:CLOSED|ENCERRAD[AO]S?|RESOLVID[AO]S?)\b")
 SAFE_DIGEST_KEYS = {
     "git_sha",
     "home_first_viewport_sha256",
     "navigation_tree_sha256",
-    "offer_copy_sha256",
 }
 SAFE_PII_POLICY_KEYS = {"audiovideorecording"}
 
@@ -232,7 +220,7 @@ def _validate_protocol(protocol: dict[str, Any]) -> None:
         protocol.get("schema") == "confenge.icp-trust-session-protocol.v1",
         "protocol schema mismatch",
     )
-    _require(protocol.get("protocol_version") == "1.0.0", "protocol version mismatch")
+    _require(protocol.get("protocol_version") == "1.1.0", "protocol version mismatch")
     decision = protocol.get("decision") or {}
     _require_exact_keys(decision, {"state", "priority", "executive_front", "leverage", "time_to_evidence"}, "protocol.decision")
     _require(decision.get("state") == "VALIDATE", "decision must remain VALIDATE")
@@ -285,9 +273,9 @@ def _validate_protocol(protocol: dict[str, Any]) -> None:
     _require(privacy.get("dsar_runbook") == "docs/ops/DSAR-RETENTION-RUNBOOK.md", "DSAR runbook not bound")
 
     protocols = protocol.get("protocols") or []
-    _require(isinstance(protocols, list) and len(protocols) == 3, "exactly three protocols are required")
+    _require(isinstance(protocols, list) and len(protocols) == 2, "exactly two protocols are required")
     by_issue = {item.get("issue"): item for item in protocols if isinstance(item, dict)}
-    _require(set(by_issue) == PROTOCOL_ISSUES, "exactly #183, #184 and #188 protocols are required")
+    _require(set(by_issue) == PROTOCOL_ISSUES, "exactly #183 and #184 protocols are required")
     for issue, item in by_issue.items():
         _require(item.get("sample_minimum") == MINIMUM_SAMPLE, f"#{issue} sample must be five")
         _require(item.get("moderator_may_explain") is False, f"#{issue} must forbid moderator explanation")
@@ -309,22 +297,6 @@ def _validate_protocol(protocol: dict[str, Any]) -> None:
     five = by_issue[184]
     _require(five.get("exposure_seconds") == 5, "five-second exposure must be exactly five")
     _require(len(five.get("questions") or []) == 4, "five-second questions incomplete")
-    copy = by_issue[188]
-    _require(
-        set(copy.get("dimensions") or []) == {"audience", "situation", "deliverable", "next_action"},
-        "copy comprehension dimensions incomplete",
-    )
-    _require(
-        set(copy.get("terms_requiring_explicit_probe") or [])
-        == TERM_PROBES,
-        "required offer-name probes incomplete",
-    )
-    offer_scope = copy.get("offer_scope") or []
-    _require(
-        {item.get("id"): item.get("path") for item in offer_scope if isinstance(item, dict)} == OFFER_SCOPE,
-        "copy offer scope drifted",
-    )
-
     policy = protocol.get("issue_policy") or {}
     _require(set(map(str, policy.get("tracked_issues") or [])) == TRACKED_ISSUES, "tracked issues incomplete")
     _require(policy.get("closing_language_forbidden_before_human_evidence") is True, "close guard disabled")
@@ -338,7 +310,7 @@ def _validate_state(state: dict[str, Any]) -> None:
         "state",
     )
     _require(state.get("schema") == "confenge.icp-trust-session-state.v1", "state schema mismatch")
-    _require(state.get("protocol_version") == "1.0.0", "state protocol version mismatch")
+    _require(state.get("protocol_version") == "1.1.0", "state protocol version mismatch")
     _require(state.get("operational_package") == "READY", "operational package not ready")
     _require(state.get("required_eligible_consented_completions") == MINIMUM_SAMPLE, "state sample must be five")
     as_of = _valid_date(state.get("as_of"), "state.as_of")
@@ -352,7 +324,7 @@ def _validate_state(state: dict[str, Any]) -> None:
     claims = state.get("claims") or {}
     _require_exact_keys(
         claims,
-        {"participant_result_proven", "tree_test_success_rate_proven", "five_second_comprehension_proven", "copy_comprehension_proven"},
+        {"participant_result_proven", "tree_test_success_rate_proven", "five_second_comprehension_proven"},
         "state.claims",
     )
     _require(all(isinstance(value, bool) for value in claims.values()), "state claims must be booleans")
@@ -382,12 +354,12 @@ def _expected_result(counts: list[int], completed: int) -> str:
 def _validate_stimulus(stimulus: Any, *, completed: int, executed_at: date, path: Path) -> str:
     stimulus = _require_exact_keys(
         stimulus,
-        {"git_sha", "base_url", "captured_at", "home_first_viewport_sha256", "navigation_tree_sha256", "offer_copy_sha256", "viewport_assignment"},
+        {"git_sha", "base_url", "captured_at", "home_first_viewport_sha256", "navigation_tree_sha256", "viewport_assignment"},
         f"run stimulus: {path}",
     )
     git_sha = str(stimulus.get("git_sha") or "")
     _require(bool(SHA_RE.fullmatch(git_sha)), f"run stimulus git SHA invalid: {path}")
-    for key in ("home_first_viewport_sha256", "navigation_tree_sha256", "offer_copy_sha256"):
+    for key in ("home_first_viewport_sha256", "navigation_tree_sha256"):
         _require(bool(DIGEST_RE.fullmatch(str(stimulus.get(key) or ""))), f"run stimulus digest invalid ({key}): {path}")
 
     parsed = urlsplit(str(stimulus.get("base_url") or ""))
@@ -424,7 +396,7 @@ def _validate_completed_aggregate(payload: dict[str, Any], completed: int, path:
     _require(consent.get("pii_in_analytics") is False, f"PII analytics attestation failed: {path}")
     raw = payload.get("raw_aggregate")
     _require(isinstance(raw, dict), f"completed run aggregate missing: {path}")
-    _require_exact_keys(raw, {"183", "184", "188"}, f"run raw aggregate: {path}")
+    _require_exact_keys(raw, {"183", "184"}, f"run raw aggregate: {path}")
 
     tree = raw.get("183") or {}
     _require_exact_keys(tree, {"task_successes", "result"}, f"run #183 aggregate: {path}")
@@ -438,35 +410,13 @@ def _validate_completed_aggregate(payload: dict[str, Any], completed: int, path:
     _require(set(dimension_counts) == {"audience", "problem", "next_action", "not_software"}, "#184 dimensions incomplete")
     _require(five.get("result") == _expected_result(list(dimension_counts.values()), completed), "#184 result inconsistent")
 
-    copy = raw.get("188") or {}
-    _require_exact_keys(copy, {"offers", "term_probes", "result"}, f"run #188 aggregate: {path}")
-    offers = copy.get("offers")
-    _require(isinstance(offers, dict) and set(offers) == set(OFFER_SCOPE), "#188 exact offer scope required")
-    copy_counts: list[int] = []
-    for offer, dimensions in offers.items():
-        checked = _count_map(dimensions, label=f"#188.{offer}", completed=completed)
-        _require(set(checked) == {"audience", "situation", "deliverable", "next_action"}, f"#188.{offer} dimensions incomplete")
-        copy_counts.extend(checked.values())
-    term_probes = copy.get("term_probes")
-    _require(isinstance(term_probes, dict) and set(term_probes) == TERM_PROBES, "#188 exact term probes required")
-    for term, probe in term_probes.items():
-        probe = _require_exact_keys(probe, {"status", "understood_without_descriptor"}, f"#188 term probe {term}")
-        _require(probe["status"] in {"PRESENT", "NOT_PRESENT_IN_BOUND_SNAPSHOT"}, f"#188 term probe status invalid: {term}")
-        if probe["status"] == "PRESENT":
-            count = probe["understood_without_descriptor"]
-            _require(isinstance(count, int) and 0 <= count <= completed, f"#188 term probe count invalid: {term}")
-            copy_counts.append(count)
-        else:
-            _require(probe["understood_without_descriptor"] is None, f"#188 absent term cannot claim comprehension: {term}")
-    _require(copy.get("result") == _expected_result(copy_counts, completed), "#188 result inconsistent")
-
     disposition = payload.get("issue_disposition") or {}
     _require(disposition == COMPLETED_DISPOSITION, f"completed run issue disposition drifted: {path}")
     interpretation = path.with_name("interpretation.md")
     _assert_interpretation_safe(
         interpretation,
         git_sha=git_sha,
-        expected_results={"183": tree["result"], "184": five["result"], "188": copy["result"]},
+        expected_results={"183": tree["result"], "184": five["result"]},
     )
 
 
@@ -479,7 +429,7 @@ def _validate_run(payload: dict[str, Any], path: Path) -> None:
     )
     _require(payload.get("schema") == "confenge.icp-trust-session-aggregate.v1", f"run schema mismatch: {path}")
     _require(payload.get("template") is False, f"run must set template=false: {path}")
-    _require(payload.get("protocol_version") == "1.0.0", f"run version mismatch: {path}")
+    _require(payload.get("protocol_version") == "1.1.0", f"run version mismatch: {path}")
     run_id = str(payload.get("run_id") or "")
     _require(bool(RUN_ID_RE.fullmatch(run_id)), f"invalid run_id: {path}")
     _require(path.parent.name == run_id, f"run_id must match directory name: {path}")
@@ -596,10 +546,10 @@ def validate_package(package_root: Path = DEFAULT_PACKAGE) -> dict[str, Any]:
     )
     _require(template.get("template") is True, "aggregate template marker missing")
     _require(template.get("schema") == "confenge.icp-trust-session-aggregate.v1", "aggregate template schema mismatch")
-    _require(template.get("protocol_version") == "1.0.0", "aggregate template version mismatch")
+    _require(template.get("protocol_version") == "1.1.0", "aggregate template version mismatch")
     _require_exact_keys(
         template.get("stimulus"),
-        {"git_sha", "base_url", "captured_at", "home_first_viewport_sha256", "navigation_tree_sha256", "offer_copy_sha256", "viewport_assignment"},
+        {"git_sha", "base_url", "captured_at", "home_first_viewport_sha256", "navigation_tree_sha256", "viewport_assignment"},
         "aggregate template stimulus",
     )
     _require_exact_keys(template["stimulus"].get("viewport_assignment"), {"mobile", "desktop"}, "aggregate template viewports")

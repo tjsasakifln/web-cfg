@@ -20,7 +20,7 @@
     "trust",
     "automation"
   ],
-  "reason": "The 24 /piloto/ pages and production checkout code are prepared assets, but the parent offer decision remains VALIDATE, provider mappings are empty, production flags are off and no versioned evidence authorizes a real-money canary. Preserve the reversible asset while founder-led demand and external approvals are proved.",
+  "reason": "The 24 /piloto/ pages and production checkout code are prepared assets, but the parent offer decision remains VALIDATE, provider mappings are empty, production flags are off and no versioned evidence authorizes a real-money canary. Preserve the reversible asset while qualified demand from the Warmbly aggregate and external approvals are proved.",
   "scope": {
     "namespace": "/piloto/",
     "expected_html_pages": 24,
@@ -65,7 +65,7 @@
       },
       {
         "id": "qualified-demand",
-        "measure": "Founder-led manual channel records qualified willingness to buy the named offer at approved terms",
+        "measure": "A versioned Warmbly aggregate records qualified willingness to buy the named offer at approved terms, with Governance review",
         "threshold": ">= 1 qualified commercial opportunity; aggregate record only, no PII in this contract",
         "status": "WAITING",
         "evidence_ref": null

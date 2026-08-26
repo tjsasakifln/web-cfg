@@ -233,20 +233,8 @@
     },
     {
       "rule": "plain_language",
-      "match": "contract defense",
-      "path": "diagnostico-b2g-360/index.html",
-      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
-    },
-    {
-      "rule": "plain_language",
       "match": "\\bcfg-",
       "path": "diagnostico-b2g-360/index.html",
-      "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
-    },
-    {
-      "rule": "brand_forbidden_phrase",
-      "match": "Conhecer a Diretoria B2G",
-      "path": "diagnostico-pre-licitacao/index.html",
       "reason": "Pilar sob trava de hash em data/bofu-dominance/frozen-specs: tests/bofu_dominance/frozen_specs/test_frozen_specs.py compara o content_sha256 do HTML vivo com o spec congelado, e o spec declara authorizes_html_edit=false ate earliest_safe_action_at (2026-09-16). Editar a copy aqui quebraria uma trava editorial deliberada; a correcao entra na janela autorizada, com o spec e o patch regerados juntos."
     },
     {

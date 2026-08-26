@@ -41,15 +41,15 @@
           {
             "position": "pillar_bridge",
             "href": "/diagnostico-b2g-360/",
-            "text": "Diagnosticar a operação B2G"
+            "text": "Solicitar diagnóstico da operação"
           }
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "1a6d163e2a2580fca488253ebd585ae5987eefb4e2ed581bff21eb6b1cdd8961",
-      "bytes": 26079,
+      "content_sha256": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
+      "bytes": 26106,
       "noindex": false
     },
     {
@@ -91,15 +91,15 @@
           {
             "position": "pillar_bridge",
             "href": "/diretoria-b2g/",
-            "text": "Diretoria B2G na execução"
+            "text": "Diretoria Fracionada para o Mercado Público na execução"
           }
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "a137bd04b117a0f8b4983611e1ecb18a3fa9065b68949f522e13d503003d2442",
-      "bytes": 28026,
+      "content_sha256": "9872c48c11cbf4b62d63d37c81593eeae59afcd52775edcc19ec80aebe58ddc2",
+      "bytes": 28077,
       "noindex": false
     },
     {
@@ -141,15 +141,15 @@
           {
             "position": "pillar_bridge",
             "href": "/diretoria-b2g/",
-            "text": "Diretoria B2G"
+            "text": "Diretoria Fracionada para o Mercado Público"
           }
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "0d87ae2a0a8c0c17f353c97ee41aae31d6a2473b7c229808cbf8a201430be202",
-      "bytes": 23966,
+      "content_sha256": "3b4afa9eb474ad6ca0b9be84f1f37c2f64f76e3824e919ed84e61e312707884b",
+      "bytes": 24017,
       "noindex": false
     },
     {
@@ -198,21 +198,21 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "cd391bd30fad6ac0553416b07cf00fea17cb569e83f0acbfdf5868649972fb01",
-      "bytes": 28862,
+      "content_sha256": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
+      "bytes": 28882,
       "noindex": false
     },
     {
       "slug": "diagnostico-b2g-360",
       "path": "/diagnostico-b2g-360/",
       "html_rel": "diagnostico-b2g-360/index.html",
-      "title": "Diagnóstico B2G 360° | CONFENGE",
+      "title": "Diagnóstico da Operação em Obras Públicas | CONFENGE",
       "meta_description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação B2G. Plano executivo de 90 dias para prioridades e backlog de implantação.",
       "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
       "canonical": "https://confenge.com.br/diagnostico-b2g-360/",
       "og_title": "Mapeie onde a frente pública perde tempo, margem e controle.",
       "og_url": "https://confenge.com.br/diagnostico-b2g-360/",
-      "h1": "Diagnóstico B2G 360°",
+      "h1": "Diagnóstico da Operação em Obras Públicas",
       "schema_types": [
         "Organization",
         "WebPage",
@@ -222,18 +222,18 @@
         "ListItem"
       ],
       "cta": {
-        "hero_text": "Diagnosticar a operação B2G",
+        "hero_text": "Solicitar diagnóstico da operação",
         "hero_href": "/#contato?jornada=operacao",
         "bridges": [
           {
             "position": "offer_hero",
             "href": "/#contato?jornada=operacao",
-            "text": "Diagnosticar a operação B2G"
+            "text": "Solicitar diagnóstico da operação"
           },
           {
             "position": "offer_final",
-            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20B2G%20360%C2%B0%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
-            "text": "Solicitar Diagnóstico B2G"
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+            "text": "Solicitar diagnóstico da operação"
           },
           {
             "position": "pillar_bridge",
@@ -247,7 +247,7 @@
           },
           {
             "position": "float",
-            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20B2G%20360%C2%B0%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20o%20Diagn%C3%B3stico%20da%20Opera%C3%A7%C3%A3o%20em%20Obras%20P%C3%BAblicas%20para%20mapear%20oportunidades%2C%20margem%20e%20controle%20da%20nossa%20opera%C3%A7%C3%A3o.",
             "text": ""
           }
         ],
@@ -255,8 +255,8 @@
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
-      "bytes": 20635,
+      "content_sha256": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
+      "bytes": 21322,
       "noindex": false
     },
     {
@@ -292,21 +292,21 @@
         "bridges": [
           {
             "position": "pillar_bridge",
-            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20um%20Bid%20Room%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+            "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
             "text": "Avaliar uma oportunidade"
           },
           {
             "position": "pillar_bridge",
             "href": "/diretoria-b2g/",
-            "text": "Conhecer a Diretoria B2G"
+            "text": "Conhecer a Diretoria Fracionada para o Mercado Público"
           }
         ],
         "when_not_to_hire": true,
         "whatsapp_present": true,
         "form_count": 0
       },
-      "content_sha256": "5f2179d837e1c8d01b8bd505420cab4c549d6d1d5f47e84910da06ca447f7529",
-      "bytes": 22820,
+      "content_sha256": "12d7d0e59003adfac61d03ddebbb3f2a869bc78811f6176f36840647c2ec1a06",
+      "bytes": 22941,
       "noindex": false
     }
   ]
