@@ -165,6 +165,10 @@ if (TOKEN) {
   const breaches = (leads.body.leads || []).filter((l) => l.needs_contact);
   const leadsOk = leads.status === 200 && leads.body.ok === true;
   check("real_leads_sla", leadsOk && breaches.length === 0, `sla_breaches=${breaches.length}`);
+  const alert = await j("/.netlify/functions/ops?action=sla_alert", {
+    method: "POST",
+    body: JSON.stringify({ operation: "evaluate" }),
+  });
   if (breaches.length) {
     const ages = breaches.map((lead) => Number(lead.sla_hours_open || 0));
     const ageBuckets = {
@@ -183,20 +187,33 @@ if (TOKEN) {
       detail: `${breaches.length} real lead(s) need first contact`,
       age_buckets: ageBuckets,
     });
-    const alert = await j("/.netlify/functions/ops?action=sla_alert", {
-      method: "POST",
-      body: "{}",
-    });
     check(
       "real_leads_sla_alert_delivery",
-      alert.status === 200 && alert.body.ok === true && alert.body.alerted === true,
-      `http=${alert.status} routed=${Boolean(alert.body.alerted)}`
+      alert.status === 200 && alert.body.ok === true &&
+        (alert.body.alerted === true || alert.body.deduplicated === true),
+      `http=${alert.status} routed=${Boolean(alert.body.alerted)} deduplicated=${Boolean(alert.body.deduplicated)}`
     );
     out.lead_sla.alert_delivery = {
       ok: alert.body.ok === true,
       http: alert.status,
       alerted: alert.body.alerted === true,
+      deduplicated: alert.body.deduplicated === true,
+      alert_id: alert.body.alert_id || null,
+      state: alert.body.state || null,
       owner_domain: alert.body.owner_domain || null,
+    };
+  } else {
+    check(
+      "real_leads_sla_resolution",
+      alert.status === 200 && alert.body.ok === true && ["clear", "resolved"].includes(alert.body.state),
+      `http=${alert.status} state=${alert.body.state || "missing"}`
+    );
+    out.lead_sla = {
+      breaches: 0,
+      commercial_only: true,
+      state: alert.body.state || null,
+      resolved: alert.body.resolved === true,
+      transition: alert.body.transition || null,
     };
   }
 

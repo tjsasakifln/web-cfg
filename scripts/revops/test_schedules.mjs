@@ -333,8 +333,15 @@ else {
   if (!daily.includes("action=sla_alert") || !daily.includes("real_leads_sla_alert_delivery")) {
     fail("daily_real_lead_sla_routes_owner");
   } else pass("daily_real_lead_sla_routes_owner");
+  if (!daily.includes("deduplicated") || !daily.includes("real_leads_sla_resolution")) {
+    fail("daily_real_lead_sla_tracks_lifecycle");
+  } else pass("daily_real_lead_sla_tracks_lifecycle");
   if (daily.includes("lead_ids:")) fail("daily_real_lead_sla_artifact_contains_ids");
   else pass("daily_real_lead_sla_artifact_is_aggregate");
+  const opsUi = readFileSync(resolve(ROOT, "ops/index.html"), "utf8");
+  if (!opsUi.includes('id="btn-sla-ack"') || !opsUi.includes('operation: "acknowledge"')) {
+    fail("ops_ui_can_acknowledge_sla_alert");
+  } else pass("ops_ui_can_acknowledge_sla_alert");
   const toml = readFileSync(resolve(ROOT, "netlify.toml"), "utf8");
   if (!toml.includes("search-observation-tick") || !toml.includes("schedule")) {
     fail("netlify_search_observation_tick");

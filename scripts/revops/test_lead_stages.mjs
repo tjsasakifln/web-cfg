@@ -589,9 +589,11 @@ function fail(name, detail) {
   const previousResend = process.env.RESEND_API_KEY;
   const previousSlaOwner = process.env.LEAD_SLA_OWNER_EMAIL;
   let outboundEmail = null;
+  let outboundEmailCount = 0;
   process.env.RESEND_API_KEY = "re_test_key";
   process.env.LEAD_SLA_OWNER_EMAIL = "owner@confenge.com.br";
   global.fetch = async (_url, options = {}) => {
+    outboundEmailCount += 1;
     outboundEmail = JSON.parse(options.body || "{}");
     return new Response(JSON.stringify({ id: "resend-test" }), { status: 200 });
   };
@@ -614,6 +616,51 @@ function fail(name, detail) {
   if (slaBody.age_buckets?.h8_24 !== 1 || !emailHtml.includes("atribuir owner")) {
     fail("real_sla_alert_actionable", { body: slaBody, html: emailHtml });
   } else pass("real_sla_alert_actionable", slaBody.age_buckets);
+  const duplicateAlert = await ops.handler({
+    httpMethod: "POST",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action: "sla_alert" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=sla_alert",
+    body: JSON.stringify({ operation: "evaluate" }),
+  });
+  const duplicateBody = JSON.parse(duplicateAlert.body || "{}");
+  if (duplicateAlert.statusCode !== 200 || !duplicateBody.deduplicated || outboundEmailCount !== 1) {
+    fail("real_sla_alert_is_deduplicated", { body: duplicateBody, outboundEmailCount });
+  } else pass("real_sla_alert_is_deduplicated", duplicateBody.alert_id);
+  const acknowledgedAlert = await ops.handler({
+    httpMethod: "POST",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action: "sla_alert" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=sla_alert",
+    body: JSON.stringify({ operation: "acknowledge", alert_id: slaBody.alert_id }),
+  });
+  const acknowledgedBody = JSON.parse(acknowledgedAlert.body || "{}");
+  if (acknowledgedAlert.statusCode !== 200 || !acknowledgedBody.acknowledged || acknowledgedBody.state !== "acknowledged") {
+    fail("real_sla_alert_can_be_acknowledged", acknowledgedBody);
+  } else pass("real_sla_alert_can_be_acknowledged", acknowledgedBody.alert_id);
+  const afterAckAlert = await ops.handler({
+    httpMethod: "POST",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action: "sla_alert" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=sla_alert",
+    body: JSON.stringify({ operation: "evaluate" }),
+  });
+  const afterAckBody = JSON.parse(afterAckAlert.body || "{}");
+  if (!afterAckBody.deduplicated || afterAckBody.state !== "acknowledged" || outboundEmailCount !== 1) {
+    fail("real_sla_acknowledgement_suppresses_repeat", { body: afterAckBody, outboundEmailCount });
+  } else pass("real_sla_acknowledgement_suppresses_repeat");
+  await globalMemory.update("ops-real", { commercial_stage: "contacted", last_contact_at: new Date().toISOString() });
+  const resolvedAlert = await ops.handler({
+    httpMethod: "POST",
+    headers: { authorization: "Bearer " + "z".repeat(24) },
+    queryStringParameters: { action: "sla_alert" },
+    rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=sla_alert",
+    body: JSON.stringify({ operation: "evaluate" }),
+  });
+  const resolvedBody = JSON.parse(resolvedAlert.body || "{}");
+  if (resolvedAlert.statusCode !== 200 || !resolvedBody.resolved || resolvedBody.state !== "resolved" || resolvedBody.breaches !== 0) {
+    fail("real_sla_alert_transitions_to_resolved", resolvedBody);
+  } else pass("real_sla_alert_transitions_to_resolved", resolvedBody.transition);
   global.fetch = previousFetch;
   if (previousResend === undefined) delete process.env.RESEND_API_KEY;
   else process.env.RESEND_API_KEY = previousResend;

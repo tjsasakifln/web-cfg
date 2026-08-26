@@ -18,7 +18,8 @@
  *   GET  analytics_summary
  *   GET  weekly_report       (real-only)
  *   POST weekly_email        (real-only)
- *   POST sla_alert           (aggregate real-lead SLA alert)
+ *   GET  sla_alert           (aggregate real-lead SLA state)
+ *   POST sla_alert           (evaluate/dispatch or acknowledge aggregate alert)
  *   GET  gsc_insights        (auth required)
  *   POST backfill_record_kind { dry_run?, apply_ids? }
  *   POST rollback_record_kind { snapshot_id }
@@ -181,6 +182,68 @@ function parseBody(event) {
   } catch {
     return null;
   }
+}
+
+const SLA_ALERT_META_ID = "__meta__-real-lead-sla-alert";
+
+function slaSeverity(hours) {
+  if (hours >= 24) return "h24_plus";
+  if (hours >= 8) return "h8_24";
+  return "h4_8";
+}
+
+function summarizeSlaBreaches(breaches) {
+  const rows = breaches.map((lead) => ({
+    lead_id: String(lead.lead_id || ""),
+    hours: Math.max(0, Number(lead.sla_hours_open || 0)),
+  }));
+  const age_buckets = {
+    h4_8: rows.filter(({ hours }) => hours < 8).length,
+    h8_24: rows.filter(({ hours }) => hours >= 8 && hours < 24).length,
+    h24_plus: rows.filter(({ hours }) => hours >= 24).length,
+  };
+  const signature = rows.length
+    ? crypto
+      .createHash("sha256")
+      .update(rows.map(({ lead_id, hours }) => `${lead_id}:${slaSeverity(hours)}`).sort().join("\n"))
+      .digest("hex")
+    : null;
+  return {
+    signature,
+    alert_id: signature ? `SLA-${signature.slice(0, 12).toUpperCase()}` : null,
+    breaches: rows.length,
+    age_buckets,
+    max_age_hours: rows.length ? Math.max(...rows.map(({ hours }) => hours)) : 0,
+  };
+}
+
+function publicSlaAlert(state, fallback = {}) {
+  return {
+    state: state?.state || fallback.state || "clear",
+    alert_id: state?.alert_id || fallback.alert_id || null,
+    breaches: fallback.breaches ?? state?.breaches ?? 0,
+    age_buckets: fallback.age_buckets || state?.age_buckets || { h4_8: 0, h8_24: 0, h24_plus: 0 },
+    max_age_hours: fallback.max_age_hours ?? state?.max_age_hours ?? 0,
+    alerted_at: state?.alerted_at || null,
+    acknowledged_at: state?.acknowledged_at || null,
+    resolved_at: state?.resolved_at || null,
+    delivery_status: state?.delivery_status || null,
+    owner_domain: state?.owner_domain || null,
+  };
+}
+
+async function persistSlaAlert(store, state, previous) {
+  const now = new Date().toISOString();
+  return store.put({
+    lead_id: SLA_ALERT_META_ID,
+    _meta: true,
+    record_kind: "internal",
+    commercial_stage: "internal",
+    stage_history: [],
+    received_at: previous?.received_at || now,
+    updated_at: now,
+    sla_alert: state,
+  });
 }
 
 async function listLeads(store) {
@@ -631,71 +694,175 @@ exports.handler = async (event) => {
     return json(200, { ok: true, emailed: true, commercial_only: true, to_domain: to.split("@")[1] || "redacted" }, origin);
   }
 
-  if (action === "sla_alert" && event.httpMethod === "POST") {
+  if (action === "sla_alert" && ["GET", "POST"].includes(event.httpMethod)) {
     if (!store) return json(503, { ok: false, error: "store_unavailable" }, origin);
     const leads = await listLeads(store);
     const breaches = filterCommercialLeads(leads)
       .map((lead) => publicLeadSummary(lead))
       .filter((lead) => lead.needs_contact);
-    if (!breaches.length) {
-      return json(200, { ok: true, alerted: false, breaches: 0, commercial_only: true }, origin);
+    const summary = summarizeSlaBreaches(breaches);
+    const meta = await store.get(SLA_ALERT_META_ID);
+    const previous = meta?.sla_alert || null;
+
+    if (event.httpMethod === "GET") {
+      const currentMatches = previous?.signature === summary.signature &&
+        ["breach", "acknowledged"].includes(previous.state);
+      const state = summary.breaches === 0
+        ? previous?.state === "resolved" ? "resolved" : "clear"
+        : currentMatches ? previous.state : "unrouted";
+      const visibleState = state === "unrouted" ? { state } : { ...previous, state };
+      return json(
+        200,
+        { ok: true, commercial_only: true, ...publicSlaAlert(visibleState, summary) },
+        origin
+      );
     }
+
+    const body = parseBody(event);
+    if (!body) return json(400, { ok: false, error: "invalid_json" }, origin);
+    const operation = String(body.operation || "evaluate").toLowerCase();
+    if (!["evaluate", "acknowledge"].includes(operation)) {
+      return json(400, { ok: false, error: "invalid_sla_alert_operation" }, origin);
+    }
+
+    if (operation === "acknowledge") {
+      const requestedId = String(body.alert_id || "").trim();
+      if (!requestedId) return json(400, { ok: false, error: "alert_id_required" }, origin);
+      if (!previous || previous.alert_id !== requestedId || previous.signature !== summary.signature) {
+        return json(409, { ok: false, error: "sla_alert_changed_or_inactive" }, origin);
+      }
+      if (!["breach", "acknowledged"].includes(previous.state)) {
+        return json(409, { ok: false, error: "sla_alert_not_acknowledgeable" }, origin);
+      }
+      const acknowledged = {
+        ...previous,
+        state: "acknowledged",
+        acknowledged_at: previous.acknowledged_at || new Date().toISOString(),
+      };
+      await persistSlaAlert(store, acknowledged, meta);
+      safeLog("info", "real_lead_sla_acknowledged", { alert_id: acknowledged.alert_id });
+      return json(
+        200,
+        { ok: true, acknowledged: true, commercial_only: true, ...publicSlaAlert(acknowledged, summary) },
+        origin
+      );
+    }
+
+    if (!summary.breaches) {
+      if (previous && ["breach", "acknowledged", "delivery_failed"].includes(previous.state)) {
+        const resolved = {
+          ...previous,
+          state: "resolved",
+          breaches: 0,
+          age_buckets: summary.age_buckets,
+          max_age_hours: 0,
+          resolved_at: new Date().toISOString(),
+          delivery_status: previous.delivery_status,
+        };
+        await persistSlaAlert(store, resolved, meta);
+        safeLog("info", "real_lead_sla_resolved", { alert_id: resolved.alert_id });
+        return json(
+          200,
+          {
+            ok: true,
+            alerted: false,
+            resolved: true,
+            transition: `${previous.state}->resolved`,
+            commercial_only: true,
+            ...publicSlaAlert(resolved, summary),
+          },
+          origin
+        );
+      }
+      return json(
+        200,
+        { ok: true, alerted: false, resolved: false, commercial_only: true, ...publicSlaAlert(previous, summary) },
+        origin
+      );
+    }
+
+    if (previous?.signature === summary.signature && ["breach", "acknowledged"].includes(previous.state)) {
+      return json(
+        200,
+        {
+          ok: true,
+          alerted: false,
+          deduplicated: true,
+          commercial_only: true,
+          ...publicSlaAlert(previous, summary),
+        },
+        origin
+      );
+    }
+
     const to = process.env.LEAD_SLA_OWNER_EMAIL || process.env.OPS_REPORT_EMAIL || process.env.LEAD_NOTIFY_EMAIL;
     if (!to) return json(503, { ok: false, error: "lead_sla_owner_not_configured" }, origin);
     if (!process.env.RESEND_API_KEY) return json(503, { ok: false, error: "resend_not_configured" }, origin);
-    const ages = breaches.map((lead) => Number(lead.sla_hours_open || 0));
-    const ageBuckets = {
-      h4_8: ages.filter((hours) => hours < 8).length,
-      h8_24: ages.filter((hours) => hours >= 8 && hours < 24).length,
-      h24_plus: ages.filter((hours) => hours >= 24).length,
-    };
-    const maxAgeHours = Math.max(...ages);
+    const ownerDomain = to.split("@")[1] || "redacted";
     const html = `
       <h1>CONFENGE — SLA de primeiro contato violado</h1>
-      <p><strong>${breaches.length}</strong> lead(s) real(is) aguardam primeiro contato.</p>
+      <p>Alerta <strong>${summary.alert_id}</strong>.</p>
+      <p><strong>${summary.breaches}</strong> lead(s) real(is) aguardam primeiro contato.</p>
       <ul>
-        <li>4–8h: ${ageBuckets.h4_8}</li>
-        <li>8–24h: ${ageBuckets.h8_24}</li>
-        <li>24h+: ${ageBuckets.h24_plus}</li>
-        <li>Maior espera: ${maxAgeHours}h</li>
+        <li>4–8h: ${summary.age_buckets.h4_8}</li>
+        <li>8–24h: ${summary.age_buckets.h8_24}</li>
+        <li>24h+: ${summary.age_buckets.h24_plus}</li>
+        <li>Maior espera: ${summary.max_age_hours}h</li>
       </ul>
-      <p>Ação: atribuir owner e registrar o próximo contato no dashboard autenticado.</p>
-      <p>Dashboard: https://confenge.com.br/ops/</p>
+      <p>Ação: atribuir owner, registrar o próximo contato e reconhecer ${summary.alert_id} no dashboard autenticado.</p>
+      <p>Dashboard: https://confenge.com.br/ops/?sla_alert=${summary.alert_id}</p>
       <p>Somente contagens de leads reais; probes, QA, spam e PII foram excluídos.</p>
     `;
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: process.env.RESEND_FROM || "CONFENGE Ops <ops@confenge.com.br>",
-        to: [to],
-        subject: `[CONFENGE][AÇÃO] ${breaches.length} lead(s) real(is) fora do SLA`,
-        html,
-      }),
-    });
-    if (!res.ok) {
-      const detail = await res.text().catch(() => "");
-      return json(502, { ok: false, error: "lead_sla_alert_failed", detail: detail.slice(0, 160) }, origin);
+    let res;
+    try {
+      res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: process.env.RESEND_FROM || "CONFENGE Ops <ops@confenge.com.br>",
+          to: [to],
+          subject: `[CONFENGE][AÇÃO][${summary.alert_id}] ${summary.breaches} lead(s) real(is) fora do SLA`,
+          html,
+        }),
+      });
+    } catch {
+      res = null;
     }
+    if (!res?.ok) {
+      const failed = {
+        ...summary,
+        state: "delivery_failed",
+        delivery_status: "failed",
+        failed_at: new Date().toISOString(),
+        acknowledged_at: null,
+        resolved_at: null,
+        owner_domain: ownerDomain,
+      };
+      await persistSlaAlert(store, failed, meta);
+      return json(502, { ok: false, error: "lead_sla_alert_failed", alert_id: summary.alert_id }, origin);
+    }
+    const alerted = {
+      ...summary,
+      state: "breach",
+      delivery_status: "sent",
+      alerted_at: new Date().toISOString(),
+      acknowledged_at: null,
+      resolved_at: null,
+      owner_domain: ownerDomain,
+    };
+    await persistSlaAlert(store, alerted, meta);
     safeLog("warn", "real_lead_sla_alerted", {
-      breaches: breaches.length,
-      max_age_hours: maxAgeHours,
-      owner_domain: to.split("@")[1] || "redacted",
+      alert_id: alerted.alert_id,
+      breaches: alerted.breaches,
+      max_age_hours: alerted.max_age_hours,
+      owner_domain: ownerDomain,
     });
     return json(
       200,
-      {
-        ok: true,
-        alerted: true,
-        commercial_only: true,
-        breaches: breaches.length,
-        age_buckets: ageBuckets,
-        max_age_hours: maxAgeHours,
-        owner_domain: to.split("@")[1] || "redacted",
-      },
+      { ok: true, alerted: true, commercial_only: true, ...publicSlaAlert(alerted, summary) },
       origin
     );
   }

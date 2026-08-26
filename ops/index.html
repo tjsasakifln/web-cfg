@@ -79,6 +79,11 @@
 
  <section id="panel-leads" class="panel">
  <p class="muted">PII só com token. SLA padrão: 4h sem contato em <code>lead_persisted</code> (somente real).</p>
+ <div class="card" style="margin-bottom:1rem">
+ <h2 style="margin-top:0;font-size:1rem">Alerta agregado de SLA</h2>
+ <p id="sla-alert-state" class="muted">Carregue para consultar o estado.</p>
+ <button type="button" id="btn-sla-ack" class="secondary" hidden>Reconhecer alerta</button>
+ </div>
  <div class="card" style="overflow:auto">
  <table>
  <thead><tr><th>ID</th><th>Kind</th><th>Estágio</th><th>Jornada</th><th>Landing</th><th>Cluster</th><th>SLA</th><th>Ação</th></tr></thead>
@@ -205,6 +210,13 @@
  }).join("") || "<tr><td colspan=8 class=muted>Nenhum lead real no store</td></tr>";
  document.querySelectorAll(".pick-lead").forEach((b) => b.addEventListener("click", () => { $("stage-id").value = b.dataset.id; }));
 
+ const slaAlert = await api("sla_alert");
+ const slaButton = $("btn-sla-ack");
+ const slaId = slaAlert.alert_id || "sem alerta ativo";
+ $("sla-alert-state").textContent = `${slaId} · estado=${slaAlert.state} · violações=${slaAlert.breaches} · maior espera=${slaAlert.max_age_hours}h`;
+ slaButton.dataset.alertId = slaAlert.alert_id || "";
+ slaButton.hidden = slaAlert.state !== "breach" || !slaAlert.alert_id;
+
  const an = await api("analytics_summary");
  $("analytics-pre").textContent = JSON.stringify({
  events_loaded: an.events_loaded,
@@ -270,6 +282,14 @@
  try {
  const r = await api("weekly_email", { method: "POST", body: {} });
  alert(JSON.stringify(r));
+ } catch (e) { showErr(String(e.message || e)); }
+ });
+ $("btn-sla-ack").addEventListener("click", async () => {
+ try {
+ const alertId = $("btn-sla-ack").dataset.alertId;
+ if (!alertId) throw new Error("alert_id ausente");
+ await api("sla_alert", { method: "POST", body: { operation: "acknowledge", alert_id: alertId } });
+ await load();
  } catch (e) { showErr(String(e.message || e)); }
  });
  })();
