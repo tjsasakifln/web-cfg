@@ -532,7 +532,7 @@ assert(
     ledger.contains_sensitive_values === false &&
     Array.isArray(ledger.records) && ledger.records.length === 0 &&
     Array.isArray(ledger.rollups) && ledger.rollups.length === 0 &&
-    Array.isArray(ledger.founder_decisions) && ledger.founder_decisions.length === 0,
+    Array.isArray(ledger.governance_decisions) && ledger.governance_decisions.length === 0,
   ledger,
 );
 assert(
@@ -775,8 +775,8 @@ const promotionAggregate = {
   deliveries_at_or_above_margin: promotionEvaluation.deliveries_at_or_above_margin,
   minimum_margin_pct: promotionEvaluation.minimum_margin_pct,
   minimum_deliveries: promotionEvaluation.minimum_deliveries,
-  founder_override: promotionEvaluation.founder_override,
-  founder_decision_id: null,
+  governance_override: promotionEvaluation.governance_override,
+  governance_decision_id: null,
   eligible: promotionEvaluation.eligible,
   comparable: promotionEvaluation.comparable,
   invalid_events: promotionEvaluation.invalid_events,
@@ -833,10 +833,10 @@ assert(
   evaluateUnitEconomicsPromotion(unknownOutcomeEvents, policy, deliverablesRegistry).eligible === false,
   evaluateUnitEconomicsPromotion(unknownOutcomeEvents, policy, deliverablesRegistry),
 );
-const founderDecision = {
+const governanceDecision = {
   explicit: true,
-  decision_id: "FD-CFG-D01-001",
-  decided_by_role: "FOUNDER",
+  decision_id: "GOV-CFG-D01-001",
+  decided_by_role: "GOVERNANCE_APPROVER",
   deliverable_id: "CFG-D01",
   scope_version: "v1",
   price_version: policy.policy_version,
@@ -847,37 +847,37 @@ const founderDecision = {
   rationale: "Reduzir escopo para preservar a capacidade e a qualidade técnica.",
   decided_at: "2026-08-25",
 };
-const founderEvaluation = evaluateUnitEconomicsPromotion([], policy, deliverablesRegistry, founderDecision);
-assert("explicit_founder_decision_can_override", founderEvaluation.eligible === true, founderEvaluation);
-const founderAggregate = {
+const governanceEvaluation = evaluateUnitEconomicsPromotion([], policy, deliverablesRegistry, governanceDecision);
+assert("explicit_governance_decision_can_override", governanceEvaluation.eligible === true, governanceEvaluation);
+const governanceAggregate = {
   ...promotionAggregate,
-  run_id: "UEP-CFG-D01-FOUNDER-001",
+  run_id: "UEP-CFG-D01-GOVERNANCE-001",
   observed_deliveries: 0,
   deliveries_at_or_above_margin: 0,
-  founder_override: true,
-  founder_decision_id: founderDecision.decision_id,
+  governance_override: true,
+  governance_decision_id: governanceDecision.decision_id,
   eligible: true,
   comparable: true,
   invalid_events: 0,
   source_event_hashes: [],
 };
 assert(
-  "founder_aggregate_is_bound_to_decision_scope",
-  validateUnitEconomicsPromotionAggregate(founderAggregate, [], policy, deliverablesRegistry, founderDecision).length === 0,
-  validateUnitEconomicsPromotionAggregate(founderAggregate, [], policy, deliverablesRegistry, founderDecision),
+  "governance_aggregate_is_bound_to_decision_scope",
+  validateUnitEconomicsPromotionAggregate(governanceAggregate, [], policy, deliverablesRegistry, governanceDecision).length === 0,
+  validateUnitEconomicsPromotionAggregate(governanceAggregate, [], policy, deliverablesRegistry, governanceDecision),
 );
-const founderScopeDrift = { ...founderAggregate, deliverable_id: "CFG-D02" };
+const governanceScopeDrift = { ...governanceAggregate, deliverable_id: "CFG-D02" };
 assert(
-  "founder_scope_drift_fails_closed",
-  validateUnitEconomicsPromotionAggregate(founderScopeDrift, [], policy, deliverablesRegistry, founderDecision).includes("promotion_founder_scope"),
-  validateUnitEconomicsPromotionAggregate(founderScopeDrift, [], policy, deliverablesRegistry, founderDecision),
+  "governance_scope_drift_fails_closed",
+  validateUnitEconomicsPromotionAggregate(governanceScopeDrift, [], policy, deliverablesRegistry, governanceDecision).includes("promotion_governance_scope"),
+  validateUnitEconomicsPromotionAggregate(governanceScopeDrift, [], policy, deliverablesRegistry, governanceDecision),
 );
 assert(
-  "weak_founder_note_does_not_override",
+  "weak_governance_note_does_not_override",
   evaluateUnitEconomicsPromotion([], policy, deliverablesRegistry, {
     explicit: true,
-    decision_id: "FD-CFG-D01-002",
-    decided_by_role: "FOUNDER",
+    decision_id: "GOV-CFG-D01-002",
+    decided_by_role: "GOVERNANCE_APPROVER",
     deliverable_id: "CFG-D01",
     scope_version: "v1",
     price_version: policy.policy_version,
