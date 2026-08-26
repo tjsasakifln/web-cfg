@@ -96,12 +96,12 @@ test("HTTPS resolve mode refuses an HTTP URL and never offers insecure evidence"
 
 test("SEO parser ignores tag-shaped script data and preserves canonical entities", () => {
   const html = `<!doctype html><html><head>
-    <link rel="canonical alternate" href="https://confenge.com.br/page/?a=1&amp;b=2">
+    <link rel="canonical alternate" href="https://confenge.com.br/page/?a=1&amp;b=2&amp;literal=&amp;quot;">
     <meta name="robots" content="follow, noindex">
     <script>const bait = '<meta name="robots" content="index">';</script>
     </head><body data-turnstile-sitekey="site-key"></body></html>`;
   const signals = extractSeoSignals(html);
-  assert.deepEqual(signals.canonical, ["https://confenge.com.br/page/?a=1&b=2"]);
+  assert.deepEqual(signals.canonical, ["https://confenge.com.br/page/?a=1&b=2&literal=&quot;"]);
   assert.deepEqual(signals.metaRobots, ["follow,noindex"]);
   assert.deepEqual(signals.turnstileSiteKeys, ["site-key"]);
 });
