@@ -8,13 +8,15 @@
 import puppeteer from "puppeteer-core";
 import { createServer } from "http";
 import { readFileSync, existsSync, statSync } from "fs";
-import { join, extname, resolve } from "path";
+import { join, extname, resolve, sep } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { resolveChromePath } from "./resolve_chrome.mjs";
+import { resolveSiteRoot } from "./interface_coverage.mjs";
 
 const require = createRequire(import.meta.url);
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
+const SITE_ROOT = resolveSiteRoot(ROOT);
 const CHROME = resolveChromePath();
 const PORT = Number(process.env.UI_TEST_PORT || 8791);
 const BASE = process.argv[2] || `http://127.0.0.1:${PORT}`;
@@ -39,8 +41,8 @@ function startStaticServer() {
       let urlPath = decodeURIComponent((req.url || "/").split("?")[0]);
       if (urlPath.endsWith("/")) urlPath += "index.html";
       if (urlPath === "") urlPath = "/index.html";
-      const filePath = join(ROOT, urlPath);
-      if (!filePath.startsWith(ROOT) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
+      const filePath = join(SITE_ROOT, urlPath);
+      if (!filePath.startsWith(`${SITE_ROOT}${sep}`) || !existsSync(filePath) || statSync(filePath).isDirectory()) {
         res.writeHead(404);
         res.end("not found");
         return;
@@ -84,6 +86,10 @@ async function assertStableDocumentTop(targetPage, { samples = 6, intervalMs = 5
 }
 
 async function main() {
+  if (process.env.PUBLIC_ARTIFACT_REQUIRED === "1" && SITE_ROOT === ROOT) {
+    throw new Error("public artifact required: run npm run build:site before test:ui");
+  }
+  console.log(`UI_GEOMETRY_SITE_ROOT ${SITE_ROOT === ROOT ? "." : "_site"}`);
   let server = null;
   let ownServer = false;
   if (!process.argv[2]) {

@@ -2,8 +2,9 @@ name: pSEO quality gates
 on:
   push:
     branches: [main]
+  # Do not filter PRs by base branch. A stacked PR must run the same required
+  # gates as a PR opened directly against main (#405).
   pull_request:
-    branches: [main]
 jobs:
   pseo:
     # Stable GitHub check context — require this name in branch protection
@@ -63,6 +64,7 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           UI_GEOMETRY_REQUIRED: "1"
+          PUBLIC_ARTIFACT_REQUIRED: "1"
         run: npm test
       - name: HTTP smoke on _site artifact
         run: |
