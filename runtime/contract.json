@@ -1,0 +1,18 @@
+{
+  "schema": "confenge.runtime-host-contract/v1",
+  "runtime_contract_version": "confenge-portable-runtime/v2",
+  "storage_contract_version": "confenge-host-file-record/v1",
+  "host_architecture_version": "confenge-nginx-node/v2",
+  "local": {
+    "host": "127.0.0.1",
+    "default_port": 8787
+  },
+  "netcup_production": {
+    "host": "127.0.0.1",
+    "port": 18100,
+    "profile": "netcup-production",
+    "storage_backend": "filesystem"
+  },
+  "identity_path": "/.well-known/runtime-info.json",
+  "readiness_path": "/ready"
+}

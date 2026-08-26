@@ -1,6 +1,6 @@
 [Unit]
 Description=CONFENGE search observation tick (disabled until cutover)
-ConditionPathExists=/opt/confenge-web/shared/CUTOVER_SCHEDULES_AUTHORIZED
+ConditionPathExists=/opt/confenge-web/shared/schedule-cutover.json
 
 [Timer]
 Unit=confenge-web-schedule@search-observation-tick.service

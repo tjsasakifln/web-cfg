@@ -19,13 +19,16 @@ The ignored build directory `build/netcup-host-contract/` contains:
 | `contract.normalized.json` | Host-neutral, versioned normalized model |
 | `contract.sha256` | SHA-256 binding for the normalized model |
 | `headers.generated.conf` | Include once in Nginx `http {}`; defines header maps using the original request URI |
+| `runtime-upstream.generated.conf` | Include once in Nginx `http {}`; defines the 127.0.0.1:18100 runtime upstream |
 | `redirects.generated.conf` | Include in the canonical `server {}`; ordered host/path redirects, rewrites and 410 rules |
+| `runtime-locations.generated.conf` | Include in the canonical `server {}`; exact dynamic-handler/health allowlist, never the scheduled function |
 | `locations.generated.conf` | Include in the same `server {}` after `root`; Pretty URLs, custom 404, scoped content types and headers |
 | `manifest.json` | Source hashes, output hashes, schema and host architecture version |
 
-The infrastructure pack must include all three `.conf` files. It must not copy
-or transcribe their rules. Dynamic `/.netlify/functions/*` routes deliberately
-remain runtime-owned: the renderer never invents an upstream or `proxy_pass`.
+The release pack must include all five `.conf` files. It must not copy or
+transcribe their rules. Dynamic routes are derived from the runtime inventory
+and versioned `runtime/contract.json`; unknown function names and the scheduled
+handler are not proxied.
 
 Any unsupported selector, status, conditional redirect, placeholder, unsafe
 query merge, duplicate or conflict exits with a nominal `HC_*` error. There is
@@ -110,11 +113,11 @@ node scripts/site/test_production_cutover.mjs \
   --resolve "$NETCUP_ORIGIN_IP" \
   --expected-sha "$EXPECTED_SHA" \
   --expected-artifact-hash "$EXPECTED_ARTIFACT_HASH" \
-  --expected-host-architecture-version confenge-static-nginx/v1
+  --expected-host-architecture-version confenge-nginx-node/v2
 ```
 
 In `candidate` and `live`, release SHA, artifact hash and host architecture are
-mandatory. The architecture defaults to `confenge-static-nginx/v1`; the
+mandatory. The Netcup architecture is `confenge-nginx-node/v2`; the
 artifact hash must come from the exact local `_site` build or the explicit
 flag. The candidate pack must expose `host_architecture_version` in
 `/.well-known/build-info.json` (the response-header fallback exists only for

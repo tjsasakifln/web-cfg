@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { mkdirSync, rmSync } from "node:fs";
+import { rmSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import net from "node:net";
 import { resolve } from "node:path";
 import test from "node:test";
@@ -12,6 +13,8 @@ import {
 } from "./helpers.mjs";
 
 const SERVER = resolve("runtime/server.mjs");
+const require = createRequire(import.meta.url);
+const { HostFileBackend } = require("../../netlify/functions/lib/host-file-store.cjs");
 
 function collect(stream) {
   let output = "";
@@ -125,22 +128,20 @@ test("production child exits 78 instead of binding with missing critical config"
 
 test("complete production profile binds privately and reports ready", async (t) => {
   const root = temporaryDirectory("confenge-runtime-production-");
-  const leads = resolve(root, "leads");
-  const corrections = resolve(root, "corrections");
-  mkdirSync(leads);
-  mkdirSync(corrections);
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const port = await freePort();
   const env = isolatedTestEnv({
     NODE_ENV: "production",
     LEAD_STORE: "",
-    LEAD_STORE_DIR: leads,
-    CORRECTION_STORE_DIR: corrections,
+    CONFENGE_STORAGE_BACKEND: "filesystem",
+    CONFENGE_STORAGE_DIR: root,
     RUNTIME_FUNCTIONS_DIR: "",
     RUNTIME_PORT: String(port),
     RUNTIME_RELEASE_SHA: "a".repeat(40),
     RUNTIME_BUILD_TIMESTAMP: "2026-08-26T12:00:00Z",
-    RUNTIME_PROFILE: "netcup-portable",
+    RUNTIME_PROFILE: "portable-production",
+    RUNTIME_PUBLIC_ARTIFACT_HASH: "b".repeat(64),
+    RUNTIME_RELEASE_BUNDLE_HASH: "c".repeat(64),
     LEAD_REQUIRE_ORIGIN: "1",
     LEAD_REQUIRE_TURNSTILE: "1",
     TURNSTILE_SECRET_KEY: "turnstile-production-test",
@@ -165,6 +166,18 @@ test("complete production profile binds privately and reports ready", async (t) 
   const ready = await fetch("http://127.0.0.1:" + port + "/ready");
   assert.equal(ready.status, 200);
   assert.equal((await ready.json()).ok, true);
+  const backend = new HostFileBackend(root);
+  const corrupt = backend.namespace("runtime-corruption-test");
+  corrupt.put("corrupt-after-start", { ok: true });
+  writeFileSync(corrupt.pathForKey("corrupt-after-start"), "{truncated", { mode: 0o600 });
+  const notReady = await fetch("http://127.0.0.1:" + port + "/ready");
+  assert.equal(notReady.status, 503);
+  const notReadyBody = await notReady.json();
+  assert.equal(notReadyBody.ok, false);
+  assert.equal(
+    notReadyBody.checks.some((item) => item.name === "host_owned_storage" && item.code === "STORE_CORRUPT"),
+    true,
+  );
   const exit = childExit(child);
   child.kill("SIGTERM");
   assert.deepEqual(await exit, { code: 0, signal: null });

@@ -1,10 +1,11 @@
-import { accessSync, constants as fsConstants } from "node:fs";
-import { dirname, isAbsolute, resolve } from "node:path";
+import { dirname, resolve } from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import {
   createRuntimeIdentity,
   detectStorageBackend,
+  NETCUP_RUNTIME_PORT,
+  NETCUP_RUNTIME_PROFILE,
   identityValidationCodes,
   isProductionEnvironment,
 } from "./identity.mjs";
@@ -41,15 +42,6 @@ function validIpv4Cidr(value) {
   return match[1].split(".").every((piece) => Number(piece) >= 0 && Number(piece) <= 255);
 }
 
-function pathAccessible(directory) {
-  try {
-    accessSync(directory, fsConstants.R_OK | fsConstants.W_OK | fsConstants.X_OK);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 export function loadRuntimeConfig({
   env = process.env,
   now = new Date(),
@@ -65,6 +57,16 @@ export function loadRuntimeConfig({
     max: 65535,
     allowZero: !production,
   });
+  if (production && !String(env.RUNTIME_PORT || "").trim()) {
+    errors.push("runtime_port_required_in_production");
+  }
+  if (
+    production
+    && String(env.RUNTIME_PROFILE || "").trim().toLowerCase() === NETCUP_RUNTIME_PROFILE
+    && port.value !== NETCUP_RUNTIME_PORT
+  ) {
+    errors.push("netcup_runtime_port_contract_mismatch");
+  }
   const maxBodyBytes = integerSetting(env, "RUNTIME_MAX_BODY_BYTES", 512 * 1024, {
     min: 1024,
     max: 10 * 1024 * 1024,
@@ -179,6 +181,19 @@ function productionStorePolicy(env) {
   }
 }
 
+function durableStorageReadiness(env, { writeProbe }) {
+  try {
+    const require = createRequire(import.meta.url);
+    const module = require(resolve(REPO_ROOT, "netlify/functions/lib/storage-config.cjs"));
+    if (typeof module.storageReadiness !== "function") {
+      return { ok: false, backend: null, code: "storage_readiness_missing" };
+    }
+    return module.storageReadiness(env, { writeProbe });
+  } catch {
+    return { ok: false, backend: null, code: "storage_readiness_unavailable" };
+  }
+}
+
 export function evaluateReadiness(config, registry) {
   const checks = [];
   for (const code of config.errors) checks.push(check("runtime_config", false, code));
@@ -189,22 +204,35 @@ export function evaluateReadiness(config, registry) {
   const identityCodes = identityValidationCodes(config.identity, {
     production: config.production,
   });
-  checks.push(check("runtime_identity", identityCodes.length === 0, identityCodes[0] || "identity_invalid"));
+  if (identityCodes.length === 0) checks.push(check("runtime_identity", true, "ok"));
+  else for (const code of identityCodes) checks.push(check("runtime_identity", false, code));
 
   const storage = detectStorageBackend(config.env);
-  checks.push(check("storage_selected", storage.backend !== "unconfigured" && storage.backend !== "ambiguous", storage.backend === "ambiguous" ? "storage_backend_ambiguous" : "storage_backend_unconfigured"));
+  checks.push(check(
+    "storage_selected",
+    !["unconfigured", "ambiguous", "invalid"].includes(storage.backend),
+    storage.backend === "ambiguous"
+      ? "storage_backend_ambiguous"
+      : storage.backend === "invalid"
+        ? "storage_backend_invalid"
+        : "storage_backend_unconfigured",
+  ));
   if (config.production) {
-    checks.push(check("portable_storage", storage.backend === "file", "portable_file_storage_required"));
+    checks.push(check("portable_storage", storage.backend === "filesystem", "portable_filesystem_storage_required"));
   }
-  if (storage.backend === "file") {
-    const leadDirectory = String(config.env.LEAD_STORE_DIR || "");
-    checks.push(check("lead_store_path", (!config.production || isAbsolute(leadDirectory)) && pathAccessible(leadDirectory), "lead_store_path_unavailable"));
+
+  if (storage.backend === "filesystem" || config.production) {
+    const persistence = durableStorageReadiness(config.env, {
+      writeProbe: config.production,
+    });
+    checks.push(check(
+      "host_owned_storage",
+      persistence.ok === true && (!config.production || persistence.backend === "filesystem"),
+      persistence.code || "host_owned_storage_not_ready",
+    ));
   }
 
   if (config.production) {
-    const correctionDirectory = String(config.env.CORRECTION_STORE_DIR || "");
-    checks.push(check("correction_store_path", Boolean(correctionDirectory) && isAbsolute(correctionDirectory) && pathAccessible(correctionDirectory), "correction_store_path_unavailable"));
-
     const policy = productionStorePolicy(config.env);
     checks.push(check("lead_store_policy", policy.ok === true, policy.code || "lead_store_policy_invalid"));
     checks.push(check("ops_auth", String(config.env.OPS_TOKEN || config.env.REVOPS_TOKEN || "").length >= 16, "ops_token_required"));

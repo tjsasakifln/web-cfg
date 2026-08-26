@@ -284,7 +284,7 @@ export function renderLocations(contract) {
   const lines = [
     BANNER,
     "# Include inside the canonical nginx server block after root is set.",
-    "# Dynamic /.netlify/functions/* locations remain runtime-owned and are intentionally not generated.",
+    "# Dynamic routes are emitted separately in runtime-locations.generated.conf.",
     "error_page 404 /404.html;",
     "error_page 410 /404.html;",
     "",
@@ -326,10 +326,57 @@ export function renderLocations(contract) {
   return `${lines.join("\n").trimEnd()}\n`;
 }
 
+function runtimeProxyDirectives(indent = "  ") {
+  return [
+    `${indent}proxy_pass http://confenge_web_runtime;`,
+    `${indent}proxy_http_version 1.1;`,
+    `${indent}proxy_set_header Host $host;`,
+    `${indent}proxy_set_header X-Forwarded-For $remote_addr;`,
+    `${indent}proxy_set_header X-Real-IP $remote_addr;`,
+    `${indent}proxy_set_header X-Forwarded-Proto $scheme;`,
+    `${indent}proxy_set_header X-Request-Id $request_id;`,
+    `${indent}proxy_set_header Connection "";`,
+    `${indent}proxy_intercept_errors off;`,
+  ];
+}
+
+export function renderRuntimeUpstream(contract) {
+  const { host, port } = contract.runtime.upstream;
+  return `${[
+    BANNER,
+    "# Include in nginx http context. Netcup production has one canonical runtime upstream.",
+    "upstream confenge_web_runtime {",
+    `  server ${host}:${port};`,
+    "  keepalive 16;",
+    "}",
+  ].join("\n")}\n`;
+}
+
+export function renderRuntimeLocations(contract) {
+  const names = contract.runtime.httpFunctions.map(regexEscape).join("|");
+  if (!names) throw new Error("[HC_RUNTIME_ALLOWLIST_EMPTY] no HTTP functions were discovered");
+  const lines = [
+    BANNER,
+    "# Include inside the canonical server block before static locations.",
+    `location ~ ^/(?:\\.netlify/functions|api/web)/(?:${names})$ {`,
+    ...runtimeProxyDirectives(),
+    "}",
+    "",
+  ];
+  for (const path of ["/healthz", "/ready", "/runtime-identity", contract.runtime.identityPath]) {
+    lines.push(`location = ${path} {`);
+    lines.push(...runtimeProxyDirectives());
+    lines.push("}", "");
+  }
+  return `${lines.join("\n").trimEnd()}\n`;
+}
+
 export function renderNginx(contract) {
   return {
     "headers.generated.conf": renderHeaders(contract),
     "redirects.generated.conf": renderRedirects(contract),
+    "runtime-upstream.generated.conf": renderRuntimeUpstream(contract),
+    "runtime-locations.generated.conf": renderRuntimeLocations(contract),
     "locations.generated.conf": renderLocations(contract),
   };
 }

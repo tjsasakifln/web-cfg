@@ -1,12 +1,13 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "default_state": "DISABLED",
-  "activation_gate": "/opt/confenge-web/shared/CUTOVER_SCHEDULES_AUTHORIZED",
-  "single_scheduler_rule": "Do not create the gate or enable a timer while the corresponding Netlify or GitHub scheduler is active.",
+  "activation_gate": "/opt/confenge-web/shared/schedule-cutover.json",
+  "activation_gate_schema": "confenge.schedule-cutover/v1",
+  "single_scheduler_rule": "The gate must bind the current full SHA and evidence legacy_executor.netlify_search_observation_disabled=true before the runner executes.",
   "jobs": [
     {
       "id": "search-observation-tick",
-      "command": "/opt/confenge-web/current/runtime/bin/run-schedule search-observation-tick",
+      "command": "/opt/confenge-web/bin/run-schedule search-observation-tick",
       "timer": "confenge-web-search-observation.timer",
       "legacy_scheduler": "Netlify scheduled function declared in netlify.toml",
       "legacy_active_at_packaging": true,

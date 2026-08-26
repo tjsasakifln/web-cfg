@@ -297,7 +297,7 @@ export function createHttpAdapter({
       const url = new URL(req.url || "/", "http://" + host);
       route = url.pathname;
 
-      if (["/healthz", "/ready", "/runtime-identity"].includes(route)) {
+      if (["/healthz", "/ready", "/runtime-identity", "/.well-known/runtime-info.json"].includes(route)) {
         if (!endpointMethodAllowed(req)) {
           writeJson(res, 405, { ok: false, error: "method_not_allowed" }, requestId, {
             Allow: "GET, HEAD",

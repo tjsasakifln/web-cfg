@@ -38,13 +38,21 @@ try {
 http {
   include /etc/nginx/mime.types;
   include /contract/headers.generated.conf;
+  include /contract/runtime-upstream.generated.conf;
   server {
     listen 8080;
     server_name confenge.com.br confenge.netlify.app;
     root /site;
     add_header X-Confenge-Host-Architecture-Version "${contract.hostArchitectureVersion}" always;
     include /contract/redirects.generated.conf;
+    include /contract/runtime-locations.generated.conf;
     include /contract/locations.generated.conf;
+  }
+  # Test-only loopback runtime stub. The generated upstream must reach this
+  # exact canonical port; the public server still controls the route allowlist.
+  server {
+    listen 18100;
+    location / { return 204; }
   }
 }
 `,
@@ -142,6 +150,15 @@ http {
   assertProbe("missing_asset_404", missingAsset.status === 404, `status=${missingAsset.status}`);
   assertProbe("missing_asset_cache", /max-age=3600/.test(missingAsset.headers["cache-control"] || ""), `cache=${missingAsset.headers["cache-control"]}`);
   assertProbe("missing_asset_not_404_path_noindex", !missingAsset.headers["x-robots-tag"], `x-robots=${missingAsset.headers["x-robots-tag"]}`);
+
+  for (const path of ["/healthz", "/.well-known/runtime-info.json", "/api/web/lead", "/.netlify/functions/lead"]) {
+    const response = await client.request(path);
+    assertProbe(`runtime_allowlist_${path}`, response.status === 204, `status=${response.status}`);
+  }
+  for (const path of ["/api/web/search-observation-tick", "/.netlify/functions/search-observation-tick", "/api/web/not-a-handler"]) {
+    const response = await client.request(path);
+    assertProbe(`runtime_denied_${path}`, response.status === 404, `status=${response.status}`);
+  }
 
   const fragment = await client.request("/servicos?host_contract=1");
   assertProbe("fragment_redirect_301", fragment.status === 301, `status=${fragment.status}`);

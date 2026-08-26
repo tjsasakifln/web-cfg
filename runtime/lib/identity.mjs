@@ -1,9 +1,19 @@
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 
-export const RUNTIME_CONTRACT_VERSION = "confenge-portable-runtime/v1";
+const INTEGRATED_CONTRACT = Object.freeze(
+  JSON.parse(readFileSync(new URL("../contract.json", import.meta.url), "utf8")),
+);
+
+export const RUNTIME_CONTRACT_VERSION = INTEGRATED_CONTRACT.runtime_contract_version;
+export const STORAGE_CONTRACT_VERSION = INTEGRATED_CONTRACT.storage_contract_version;
+export const HOST_ARCHITECTURE_VERSION = INTEGRATED_CONTRACT.host_architecture_version;
+export const NETCUP_RUNTIME_PORT = INTEGRATED_CONTRACT.netcup_production.port;
+export const NETCUP_RUNTIME_PROFILE = INTEGRATED_CONTRACT.netcup_production.profile;
 export const RUNTIME_VERSION = "1.0.0";
 
-const FULL_SHA = /^[a-f0-9]{40}(?:[a-f0-9]{24})?$/i;
+const FULL_SHA = /^[a-f0-9]{40}$/i;
+const SHA_256 = /^[a-f0-9]{64}$/i;
 const SAFE_PROFILE = /^[a-z0-9][a-z0-9_-]{0,63}$/;
 
 export function isProductionEnvironment(env = process.env) {
@@ -11,9 +21,18 @@ export function isProductionEnvironment(env = process.env) {
 }
 
 export function detectStorageBackend(env = process.env) {
+  const explicit = String(env.CONFENGE_STORAGE_BACKEND || "").trim().toLowerCase();
+  if (explicit) {
+    return {
+      backend: ["filesystem", "netlify-blobs", "memory", "http"].includes(explicit)
+        ? explicit
+        : "invalid",
+      selected: [explicit],
+    };
+  }
   const selected = [];
   if (String(env.LEAD_STORE || "").trim().toLowerCase() === "memory") selected.push("memory");
-  if (String(env.LEAD_STORE_DIR || "").trim()) selected.push("file");
+  if (String(env.CONFENGE_STORAGE_DIR || env.LEAD_STORE_DIR || "").trim()) selected.push("filesystem");
   if (String(env.LEAD_STORE_HTTP_URL || "").trim()) selected.push("http");
   if (
     String(env.NETLIFY_BLOBS_CONTEXT || "").trim()
@@ -83,6 +102,11 @@ function profileName(env, production) {
   return SAFE_PROFILE.test(value) ? value : "invalid";
 }
 
+function hashIdentity(env, name) {
+  const value = String(env[name] || "").trim().toLowerCase();
+  return SHA_256.test(value) ? value : "unknown";
+}
+
 export function createRuntimeIdentity({
   env = process.env,
   repoRoot,
@@ -97,6 +121,10 @@ export function createRuntimeIdentity({
     runtime_version: RUNTIME_VERSION,
     node_version: String(nodeVersion || "unknown"),
     storage_backend: storage.backend,
+    storage_contract_version: STORAGE_CONTRACT_VERSION,
+    public_artifact_hash: hashIdentity(env, "RUNTIME_PUBLIC_ARTIFACT_HASH"),
+    release_bundle_hash: hashIdentity(env, "RUNTIME_RELEASE_BUNDLE_HASH"),
+    host_architecture_version: HOST_ARCHITECTURE_VERSION,
     environment: environmentName(env),
     profile: profileName(env, production),
     contract_version: RUNTIME_CONTRACT_VERSION,
@@ -119,6 +147,15 @@ export function identityValidationCodes(identity, { production = false } = {}) {
   }
   if (identity.environment === "invalid") codes.push("environment_invalid");
   if (identity.profile === "invalid") codes.push("profile_invalid");
+  if (production && !SHA_256.test(String(identity.public_artifact_hash || ""))) {
+    codes.push("public_artifact_hash_required");
+  }
+  if (production && !SHA_256.test(String(identity.release_bundle_hash || ""))) {
+    codes.push("release_bundle_hash_required");
+  }
+  if (identity.host_architecture_version !== HOST_ARCHITECTURE_VERSION) {
+    codes.push("host_architecture_version_invalid");
+  }
   return codes;
 }
 

@@ -37,7 +37,7 @@ ADR-authorized cutover.
 ```text
 main
   -> reusable site-ci gates and its single build
-  -> _site artifact named by FULL_SHA
+  -> _site + portable runtime + generated nginx contract named by FULL_SHA
   -> deterministic deploy tar + detached SHA-256 manifest
   -> GitHub build-provenance attestation
   -> SSH upload to /opt/confenge-web/incoming/.upload-FULL_SHA-RUN_ID-ATTEMPT
@@ -49,16 +49,19 @@ main
   -> rollback FULL_SHA
 ```
 
-`/.well-known/build-info.json` remains the only public build identity. The
-detached Netcup manifest references its commit, public artifact hash and
-manifest hash; it does not create another public identity. The deploy tarball's
+`/.well-known/build-info.json` remains the static build identity.
+`/.well-known/runtime-info.json` is the runtime identity and binds the same full
+git SHA, public artifact SHA-256 and detached release-bundle SHA-256 plus the
+runtime, storage and host-architecture contract versions. The deploy tarball's
 SHA-256 is detached because a file cannot contain its own digest without a
 circular hash.
 
-The VPS never runs `npm`, builds the site, edits a release, installs an nginx
-contract, changes DNS, or touches any other vhost. Every release is a real
-directory at `/opt/confenge-web/releases/<FULL_SHA>`. Persistent state lives in
-`shared/`, `state/`, `evidence/`, `locks/` and `incoming/`, outside `releases/`.
+The VPS never runs `npm`, builds the site, edits a release, changes DNS, or
+touches any other vhost. Every release is a real directory at
+`/opt/confenge-web/releases/<FULL_SHA>` containing `_site/`, runtime and handler
+closure, release/file manifests, generated nginx snippets, contract versions
+and stage/verify/promote/rollback scripts. Persistent records live in the
+mode-0700 `/var/lib/confenge-web`; controls and evidence live outside releases.
 
 ## One-time host provisioning (do not run from this PR)
 
@@ -72,12 +75,21 @@ sudo install -d -o confenge-deploy -g confenge-deploy -m 0750 \
   /opt/confenge-web/locks /opt/confenge-web/evidence \
   /opt/confenge-web/state /opt/confenge-web/shared
 sudo install -d -o root -g root -m 0755 /opt/confenge-web/bin /opt/confenge-web/lib
+sudo install -d -o confenge-deploy -g confenge-deploy -m 0700 /var/lib/confenge-web
+sudo install -d -o root -g confenge-deploy -m 0750 /etc/confenge-web
 sudo install -o root -g root -m 0755 deploy/netcup/bin/stage-release /opt/confenge-web/bin/stage-release
 sudo install -o root -g root -m 0755 deploy/netcup/bin/verify-release /opt/confenge-web/bin/verify-release
 sudo install -o root -g root -m 0755 deploy/netcup/bin/promote-release /opt/confenge-web/bin/promote-release
 sudo install -o root -g root -m 0755 deploy/netcup/bin/rollback /opt/confenge-web/bin/rollback
 sudo install -o root -g root -m 0755 deploy/netcup/bin/prune-releases /opt/confenge-web/bin/prune-releases
+sudo install -o root -g root -m 0755 deploy/netcup/bin/run-runtime /opt/confenge-web/bin/run-runtime
+sudo install -o root -g root -m 0755 deploy/netcup/bin/run-schedule /opt/confenge-web/bin/run-schedule
 sudo install -o root -g root -m 0644 deploy/netcup/lib/release_control.py /opt/confenge-web/lib/release_control.py
+sudo install -o root -g root -m 0644 deploy/netcup/lib/runtime_launcher.py /opt/confenge-web/lib/runtime_launcher.py
+sudo install -o root -g root -m 0644 deploy/netcup/lib/schedule_gate.py /opt/confenge-web/lib/schedule_gate.py
+sudo install -o root -g root -m 0644 deploy/netcup/runtime/confenge-web-runtime.service /etc/systemd/system/confenge-web-runtime.service
+sudo install -o root -g confenge-deploy -m 0640 /secure/confenge/netcup-runtime.env /etc/confenge-web/runtime.env
+sudo systemctl daemon-reload
 ```
 
 The control needs only nginx validation. Reload is disabled by default and is
@@ -87,11 +99,14 @@ used only when `CONFENGE_NGINX_RELOAD_ON_PROMOTE=1` is explicitly supplied:
 # /etc/sudoers.d/confenge-web-release (validate with visudo -cf)
 confenge-deploy ALL=(root) NOPASSWD: /usr/sbin/nginx -t
 confenge-deploy ALL=(root) NOPASSWD: /usr/bin/systemctl reload nginx
+confenge-deploy ALL=(root) NOPASSWD: /usr/bin/systemctl restart confenge-web-runtime.service
 ```
 
-The packaged `nginx/confenge-web-origin.conf` is a loopback-only origin
-contract. A human may install it during host preparation after checking the
-existing nginx topology. Release commands never copy it into `/etc/nginx` and
+The packaged `nginx/confenge-web-http.conf` and
+`nginx/confenge-web-origin.conf` are loopback-only wrappers around five
+immutable generated snippets. A human may install the wrappers during host
+preparation after checking the existing nginx topology. Release commands never
+copy a hand-transcribed `_headers`/`_redirects` contract into `/etc/nginx` and
 never edit or reload unrelated vhosts.
 
 Use a dedicated SSH key and pin the server host key after comparing its
@@ -162,10 +177,13 @@ CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088 /opt/confenge-web/bin/rollback <FULL
 ```
 
 Promotion validates manifest, detached package checksum, internal file hashes,
-public identity and a candidate loopback server before swapping `current`.
-After the atomic swap it runs `nginx -t`, performs an optional controlled
-reload only when explicitly requested, and checks the loopback live identity.
-Any failure after the swap restores the previous symlink and validates it.
+public identity, generated host/runtime contracts, Node 22 inventory and a
+candidate loopback server before swapping `current`. After the atomic swap it
+restarts and validates the portable runtime identity, runs `nginx -t`, performs
+an optional controlled reload only when explicitly requested, and checks the
+loopback live identity. Any failure restores the previous symlink, restarts the
+previous runtime and revalidates it. This path is packaged but is not authorized
+or invoked by this convergence goal.
 
 Verify the GitHub attestation after downloading a release candidate:
 
@@ -182,19 +200,21 @@ the change evidence.
 
 The package carries disabled-by-default systemd templates and a schedule
 contract. Packaging does not install a unit, create a cron entry, enable a
-timer, or create `shared/CUTOVER_SCHEDULES_AUTHORIZED`. The existing Netlify
-schedule remains active.
+timer, or create `shared/schedule-cutover.json`. The existing Netlify schedule
+remains active.
 
 Before cutover, both checks must prove the Netcup copy cannot run:
 
 ```sh
-test ! -e /opt/confenge-web/shared/CUTOVER_SCHEDULES_AUTHORIZED
+test ! -e /opt/confenge-web/shared/schedule-cutover.json
 systemctl is-enabled confenge-web-search-observation.timer 2>&1 | grep -Eq 'disabled|not-found'
 ```
 
 Only a later cutover change may first disable and verify the corresponding
-legacy Netlify/GitHub schedule, install the reviewed units from the promoted
-runtime, create the authorization marker, and then run:
+legacy Netlify schedule, install the reviewed units from the promoted runtime,
+and create a reviewed JSON gate that binds the current full SHA, the specific
+job and evidence `legacy_executor.netlify_search_observation_disabled=true`.
+Only then may it run:
 
 ```sh
 sudo systemctl enable --now confenge-web-search-observation.timer

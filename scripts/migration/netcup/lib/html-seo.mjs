@@ -7,7 +7,15 @@ const HTML_ENTITIES = Object.freeze({
 });
 
 function decodeEntities(value) {
-  return value.replace(/&(?:amp|quot|#39|lt|gt);/g, (entity) => HTML_ENTITIES[entity]);
+  const pattern = /&(?:amp|quot|#39|lt|gt);/g;
+  let decoded = "";
+  let cursor = 0;
+  for (const match of value.matchAll(pattern)) {
+    decoded += value.slice(cursor, match.index);
+    decoded += HTML_ENTITIES[match[0]];
+    cursor = match.index + match[0].length;
+  }
+  return decoded + value.slice(cursor);
 }
 function parseAttrs(raw) {
   const attrs = {};

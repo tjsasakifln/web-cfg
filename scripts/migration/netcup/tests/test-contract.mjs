@@ -14,7 +14,15 @@ import {
   sha256,
   stableJson,
 } from "../lib/contract.mjs";
-import { renderHeaders, renderNginx, renderRedirects, writeRenderedContract } from "../lib/nginx.mjs";
+import {
+  renderHeaders,
+  renderNginx,
+  renderRedirects,
+  renderRuntimeLocations,
+  renderRuntimeUpstream,
+  writeRenderedContract,
+} from "../lib/nginx.mjs";
+import { sitemapUrlSet } from "../lib/html-seo.mjs";
 
 const ROOT = resolve(new URL("../../../..", import.meta.url).pathname);
 const FIXTURES = resolve(new URL("fixtures", import.meta.url).pathname);
@@ -66,6 +74,13 @@ test("accepts a long CSP without truncation", () => {
   assert.match(csp, /upgrade-insecure-requests$/);
 });
 
+test("sitemap entity decoding is single-pass", () => {
+  assert.deepEqual(
+    sitemapUrlSet("<urlset><url><loc>https://confenge.com.br/x?a=1&amp;amp;b=2</loc></url></urlset>"),
+    ["https://confenge.com.br/x?a=1&amp;b=2"],
+  );
+});
+
 test("unsupported constructs hard fail with nominal messages", () => {
   expectCode(() => parseRedirects(fixture("unsupported.redirects"), { source: "unsupported" }), "HC_REDIRECT_ARITY_UNSUPPORTED");
   expectCode(() => parseRedirects("/x /y 307\n", { source: "status" }), "HC_REDIRECT_STATUS_UNSUPPORTED");
@@ -96,7 +111,11 @@ test("canonical contract deduplicates identical netlify.toml rule and covers req
   assert.match(contractHash, /^[a-f0-9]{64}$/);
   assert.equal(contract.canonical.origin, "https://confenge.com.br");
   assert.equal(contract.canonical.www.owner, "edge");
-  assert.equal(contract.runtime.nginxProxyGenerated, false);
+  assert.equal(contract.runtime.nginxProxyGenerated, true);
+  assert.equal(contract.runtime.upstream.port, 18100);
+  assert.equal(contract.runtime.storageContractVersion, "confenge-host-file-record/v1");
+  assert.equal(contract.runtime.httpFunctions.includes("ops"), true);
+  assert.equal(contract.runtime.httpFunctions.includes("search-observation-tick"), false);
   assert.equal(contract.resolution.prettyUrls.enabled, true);
   assert.equal(contract.resolution.custom404.status, 404);
   assert.equal(contract.resolution.redirectResponses.applyEffectiveRequestHeaders, true);
@@ -107,7 +126,7 @@ test("canonical contract deduplicates identical netlify.toml rule and covers req
   assert.equal(contract.routes.find((rule) => rule.from.raw === "/vision").action, "gone");
 });
 
-test("nginx output preserves fragments/query and never emits proxy fallback", () => {
+test("nginx output preserves fragments/query and emits only the explicit runtime allowlist", () => {
   const { contract } = buildHostContract(ROOT);
   const rendered = renderNginx(contract);
   const redirects = rendered["redirects.generated.conf"];
@@ -125,6 +144,16 @@ test("nginx output preserves fragments/query and never emits proxy fallback", ()
   assert.match(locations, /error_page 404 \/404\.html;/);
   assert.match(locations, /try_files \$uri \$uri\/ \$uri\.html \$uri\/index\.html =404;/);
   assert.match(rendered["headers.generated.conf"], /map \$request_uri \$confenge_header_content_security_policy/);
+  assert.match(renderRuntimeUpstream(contract), /server 127\.0\.0\.1:18100;/);
+  const runtimeLocations = renderRuntimeLocations(contract);
+  assert.match(runtimeLocations, /\.netlify\/functions\|api\/web/);
+  assert.match(runtimeLocations, /offer-checkout/);
+  assert.match(runtimeLocations, /proxy_pass http:\/\/confenge_web_runtime;/);
+  assert.match(runtimeLocations, /proxy_set_header X-Forwarded-For \$remote_addr;/);
+  assert.match(runtimeLocations, /proxy_set_header X-Real-IP \$remote_addr;/);
+  assert.doesNotMatch(runtimeLocations, /proxy_add_x_forwarded_for/);
+  assert.doesNotMatch(runtimeLocations, /search-observation-tick/);
+  assert.doesNotMatch(runtimeLocations, /location ~ \^\/\.netlify\/functions\/\.\*/);
 });
 
 test("nginx escaping keeps input values inside quoted arguments", () => {

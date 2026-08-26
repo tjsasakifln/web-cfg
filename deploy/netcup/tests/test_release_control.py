@@ -5,6 +5,7 @@ import http.server
 import json
 import os
 import shutil
+import subprocess
 import tarfile
 import threading
 import urllib.request
@@ -14,6 +15,8 @@ from typing import Self
 import pytest
 
 from deploy.netcup.lib import release_control as control
+from deploy.netcup.lib.runtime_launcher import runtime_environment
+from deploy.netcup.lib.schedule_gate import validate_gate
 from deploy.netcup.package_release import build_release, sha256_file
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -79,12 +82,33 @@ def make_site(tmp_path: Path, sha: str) -> Path:
     return site
 
 
+def make_host_contract(tmp_path: Path) -> Path:
+    output = tmp_path / "host-contract"
+    subprocess.run(
+        [
+            "node",
+            "scripts/migration/netcup/render.mjs",
+            "--root",
+            str(REPO_ROOT),
+            "--output",
+            str(output),
+        ],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    return output
+
+
 def make_incoming(tmp_path: Path, host: Path, sha: str) -> dict[str, Path]:
     site = make_site(tmp_path, sha)
     output = tmp_path / f"package-{sha[0]}"
     result = build_release(
         repo_root=REPO_ROOT,
         site=site,
+        host_contract=make_host_contract(tmp_path),
         output_dir=output,
         sha=sha,
         node_version="v22.19.0",
@@ -129,6 +153,53 @@ def test_stage_valid_and_verify(host: Path, tmp_path: Path) -> None:
     verified = control.verify_release(SHA_A)
     assert verified["artifact"]["sha256"] == manifest["artifact"]["sha256"]
     assert not os.path.lexists(host / "current")
+
+
+def test_runtime_identity_is_derived_from_the_current_immutable_release(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    control.stage_release(SHA_A)
+    control.atomic_release_link(host, "current", SHA_A)
+    monkeypatch.setenv("NODE_ENV", "production")
+    monkeypatch.setenv("RUNTIME_PORT", "18100")
+    monkeypatch.setenv("CONFENGE_STORAGE_BACKEND", "filesystem")
+    monkeypatch.setenv("CONFENGE_STORAGE_DIR", "/var/lib/confenge-web")
+    release, env = runtime_environment(host)
+    manifest = json.loads(
+        (release / "metadata" / "release-manifest.json").read_text(encoding="utf-8")
+    )
+    assert env["RUNTIME_RELEASE_SHA"] == SHA_A
+    assert env["RUNTIME_PORT"] == "18100"
+    assert env["RUNTIME_PUBLIC_ARTIFACT_HASH"] == manifest["public_artifact"]["artifact_hash"]
+    assert env["RUNTIME_RELEASE_BUNDLE_HASH"] == manifest["artifact"]["sha256"]
+
+
+def test_schedule_gate_refuses_double_execution_until_legacy_disablement_is_bound(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    control.stage_release(SHA_A)
+    control.atomic_release_link(host, "current", SHA_A)
+    with pytest.raises(control.ReleaseError, match="gate is absent"):
+        validate_gate(host, "search-observation-tick")
+    gate_path = host / "shared" / "schedule-cutover.json"
+    gate = {
+        "schema": "confenge.schedule-cutover/v1",
+        "authorized_release_sha": SHA_A,
+        "legacy_executor": {
+            "netlify_search_observation_disabled": False,
+            "disabled_at": "2026-08-26T12:00:00Z",
+            "evidence": "netlify-config-evidence",
+        },
+        "jobs": {"search-observation-tick": True},
+    }
+    gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
+    with pytest.raises(control.ReleaseError, match="disablement is not proven"):
+        validate_gate(host, "search-observation-tick")
+    gate["legacy_executor"]["netlify_search_observation_disabled"] = True
+    gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
+    assert validate_gate(host, "search-observation-tick")["authorized_release_sha"] == SHA_A
 
 
 def test_short_sha_is_rejected(host: Path) -> None:
@@ -303,6 +374,7 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
     kwargs = {
         "repo_root": REPO_ROOT,
         "site": site,
+        "host_contract": make_host_contract(tmp_path),
         "sha": SHA_A,
         "node_version": "v22.19.0",
         "python_version": "3.12.10",
@@ -318,3 +390,25 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         names = archive.getnames()
     assert not any("__pycache__" in name or name.endswith(".pyc") for name in names)
     assert all(not name.startswith((".git", "node_modules")) for name in names)
+    for required in (
+        "_site/index.html",
+        "runtime/server.mjs",
+        "runtime/contract.json",
+        "netlify/functions/lead.cjs",
+        "data/nurture/tracks.json",
+        "data/site/editorial-policy.json",
+        "data/bofu-dominance/core/gsc-live-overlay.v1.json",
+        "data/offers/flags.json",
+        "data/offers/catalog.snapshot.json",
+        "data/offers/provider-mapping.json",
+        "nginx/generated/headers.generated.conf",
+        "nginx/generated/redirects.generated.conf",
+        "nginx/generated/runtime-upstream.generated.conf",
+        "nginx/generated/runtime-locations.generated.conf",
+        "nginx/generated/locations.generated.conf",
+        "ops/bin/stage-release",
+        "ops/bin/verify-release",
+        "ops/bin/promote-release",
+        "ops/bin/rollback",
+    ):
+        assert required in names

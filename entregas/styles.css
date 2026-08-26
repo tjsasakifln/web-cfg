@@ -165,7 +165,7 @@
 .catalog-item__execution p+p{margin-top:7px}
 .catalog-item__execution>div+div{margin-top:11px;padding-top:11px;border-top:1px solid #ceddd5}
 .catalog-item__execution ul{display:grid;gap:4px;margin:8px 0;padding:0;list-style:none}
-.catalog-item__execution a{display:flex;gap:7px;color:#075b47;font-weight:760}
+.catalog-item__execution a{display:flex;line-height:24px;gap:7px;color:#075b47;font-weight:760}
 .catalog-item__execution a span{font-family:var(--mono);font-size:.66rem}
 .catalog-item__contract{margin:2px 0 14px;padding:11px 0;border-top:1px solid #dce3df;border-bottom:1px solid #dce3df}
 .catalog-item__contract summary{color:#0b684f;font-size:.75rem;font-weight:850;cursor:pointer}

@@ -97,6 +97,18 @@ Checkout/callback cannot emit `payment_received`. Production real-money stays of
 | `COMMIT_REF` / `CACHED_COMMIT_REF` | Injetados pelo Netlify no build |
 | `CONTEXT` | `production` / `deploy-preview` |
 
+## Portable runtime / Netcup
+
+| Nome | Descrição |
+| --- | --- |
+| `RUNTIME_HOST` | `127.0.0.1` na Netcup; bind público é recusado por default |
+| `RUNTIME_PORT` | obrigatório em produção; o profile `netcup-production` exige `18100` |
+| `RUNTIME_PROFILE` | `netcup-production` no service host-owned |
+| `RUNTIME_RELEASE_SHA` | full git SHA; derivado do manifest imutável pelo launcher Netcup |
+| `RUNTIME_BUILD_TIMESTAMP` | timestamp do build; derivado do manifest imutável pelo launcher Netcup |
+| `RUNTIME_PUBLIC_ARTIFACT_HASH` | SHA-256 de `_site`; derivado do manifest, não configurar manualmente na Netcup |
+| `RUNTIME_RELEASE_BUNDLE_HASH` | SHA-256 do tar; derivado do manifest detached, não configurar manualmente na Netcup |
+
 
 ## Ops auth
 

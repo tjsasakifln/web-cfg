@@ -1,11 +1,11 @@
 # CONFENGE portable HTTP runtime
 
-Status: PORTABLE_RUNTIME_READY / STORAGE_AND_EDGE_PENDING
+Status: NETCUP_INTEGRATED_RELEASE_CANDIDATE / PROD_TRAFFIC_UNCHANGED
 
 - Decision state: EXECUTE_NOW
 - Executive front: PORTABILIDADE DO RUNTIME
 - Priority: P0
-- Time to evidence: one independent PR, with local HTTP and process-lifecycle proof
+- Time to evidence: one integrated PR plus package-only release evidence
 - Leverage: automation, trust, distribution and revenue protection
 
 This directory makes the dynamic web-cfg handlers executable as a private Node
@@ -21,7 +21,7 @@ a later, explicit URL-level edge decision is approved and executed.
     confenge.com.br nginx
       |-- static route ----------> immutable _site/
       |
-      |-- dynamic allowlist -----> 127.0.0.1:8787
+      |-- dynamic allowlist -----> 127.0.0.1:18100 (Netcup production)
                                      |
                                      |-- HTTP-to-handler adapter
                                      |-- existing netlify/functions/*.cjs
@@ -84,8 +84,8 @@ The scanner reads every file below netlify/functions, loads every top-level
 handler, finds legacy/canonical route references and direct module consumers,
 then classifies frontend, workflow/schedule, probe/test and ops usage.
 
-Main baseline inventory: 34 files, comprising 14 function entrypoints, 19
-support libraries and one bundled data file.
+Integrated inventory: 36 files, comprising 14 function entrypoints, 21 support
+libraries and one bundled data file.
 
 Function entrypoints:
 
@@ -196,16 +196,20 @@ header, path value, token or secret logging.
 GET /healthz proves only that the process can answer. It does not claim storage,
 Warmbly, Resend, Asaas or any other dependency is healthy.
 
-GET /ready re-evaluates local requirements. In production any failed check
-prevents the process from binding at all. Non-production can bind while
-readiness is false to support diagnosis.
+GET /ready re-evaluates the selected host-owned backend and performs an actual
+write/read/delete probe in production. A missing, unsafe or corrupt filesystem
+backend returns 503 and fails closed. Production never selects MemoryStore.
+Non-production can bind while readiness is false to support diagnosis.
 
-GET /runtime-identity returns only:
+GET /runtime-identity and GET /.well-known/runtime-info.json return the same
+public evidence:
 
 - full release SHA;
 - build timestamp;
 - portable runtime version and Node version;
 - selected storage backend name;
+- public artifact and detached release-bundle SHA-256;
+- storage contract and host architecture versions;
 - environment and profile;
 - runtime contract version.
 
@@ -214,13 +218,12 @@ It never returns environment keys, tokens, credentials, filesystem paths or PII.
 Production startup requires:
 
 - Node 22;
-- a full 40- or 64-character release SHA;
+- the exact full 40-character git release SHA;
 - an explicit valid build timestamp;
 - safe bind configuration;
 - valid transport limits and JSON guard;
-- exactly one storage backend, currently the file backend for portable mode;
-- absolute readable/writable/executable LEAD_STORE_DIR and
-  CORRECTION_STORE_DIR paths;
+- exactly one storage backend: `filesystem` for Netcup production;
+- absolute, pre-created, mode-0700 `CONFENGE_STORAGE_DIR` outside the release;
 - the existing lead production policy to pass;
 - OPS_TOKEN or REVOPS_TOKEN of at least 16 characters;
 - NURTURE_TOKEN_SECRET of at least 32 characters;
@@ -238,10 +241,12 @@ Portable process:
 | Variable | Default | Meaning |
 |---|---|---|
 | RUNTIME_HOST | 127.0.0.1 | bind address |
-| RUNTIME_PORT | 8787 | bind port |
-| RUNTIME_PROFILE | local or portable-production | non-secret identity label |
+| RUNTIME_PORT | 8787 locally; required in production | Netcup production contract requires 18100 |
+| RUNTIME_PROFILE | local or portable-production | Netcup launcher fixes `netcup-production` |
 | RUNTIME_RELEASE_SHA | local git SHA outside production | full release SHA; required in production |
 | RUNTIME_BUILD_TIMESTAMP | process start outside production | ISO timestamp; required in production |
+| RUNTIME_PUBLIC_ARTIFACT_HASH | empty outside production | exact `_site` SHA-256; derived from the immutable release manifest on Netcup |
+| RUNTIME_RELEASE_BUNDLE_HASH | empty outside production | exact release tar SHA-256; derived from the immutable detached manifest on Netcup |
 | RUNTIME_MAX_BODY_BYTES | 524288 | global transport ceiling |
 | RUNTIME_REQUEST_TIMEOUT_MS | 30000 | request receive timeout |
 | RUNTIME_HANDLER_TIMEOUT_MS | 25000 | handler response timeout |
@@ -258,8 +263,8 @@ Existing handler requirements used by portable production:
 | Variable | Purpose |
 |---|---|
 | NODE_ENV=production | activates fail-closed profile |
-| LEAD_STORE_DIR | current non-Netlify durable backend selection |
-| CORRECTION_STORE_DIR | current correction persistence path |
+| CONFENGE_STORAGE_BACKEND=filesystem | mandatory Netcup host-owned backend; memory and HTTP are refused |
+| CONFENGE_STORAGE_DIR | absolute mode-0700 persistent root outside the immutable release |
 | LEAD_REQUIRE_ORIGIN=1 | existing origin guard |
 | LEAD_REQUIRE_TURNSTILE=1 | existing anti-abuse guard |
 | TURNSTILE_SECRET_KEY | existing Turnstile server secret |
@@ -308,10 +313,10 @@ concurrently; enabling/disabling timers belongs to the later edge/infra change.
 Use Node 22. Keep storage outside the repository:
 
     RUNTIME_LOCAL_STORE="$(mktemp -d)"
-    mkdir -p "$RUNTIME_LOCAL_STORE/leads" "$RUNTIME_LOCAL_STORE/corrections"
+    chmod 700 "$RUNTIME_LOCAL_STORE"
     export NODE_ENV=development
-    export LEAD_STORE_DIR="$RUNTIME_LOCAL_STORE/leads"
-    export CORRECTION_STORE_DIR="$RUNTIME_LOCAL_STORE/corrections"
+    export CONFENGE_STORAGE_BACKEND=filesystem
+    export CONFENGE_STORAGE_DIR="$RUNTIME_LOCAL_STORE"
     export LEAD_PROBE_SECRET="local-probe-secret-change-me"
     npm run runtime:start
 
@@ -334,44 +339,13 @@ use a local nginx with the routing contract below.
 
 ## nginx routing contract
 
-Illustrative configuration only; this PR does not edit or deploy Governance or
-host configuration:
-
-    upstream confenge_web_runtime {
-        server 127.0.0.1:8787;
-        keepalive 16;
-    }
-
-    server {
-        listen 127.0.0.1:8080;
-        root /opt/confenge-web/current/_site;
-        client_max_body_size 512k;
-
-        location ~ ^/(healthz|ready|runtime-identity)$ {
-            proxy_pass http://confenge_web_runtime;
-            proxy_set_header Host $host;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-For $remote_addr;
-            proxy_set_header X-Real-IP $remote_addr;
-        }
-
-        location ~ ^/(?:\.netlify/functions|api/web)/[a-z0-9][a-z0-9-]*$ {
-            proxy_pass http://confenge_web_runtime;
-            proxy_http_version 1.1;
-            proxy_set_header Connection "";
-            proxy_set_header Host $host;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-For $remote_addr;
-            proxy_set_header X-Real-IP $remote_addr;
-        }
-
-        location / {
-            try_files $uri $uri/ $uri.html =404;
-        }
-    }
-
-X-Forwarded-For is intentionally replaced with the nginx-observed address
-instead of accepting a visitor-supplied chain.
+The executable source is `runtime/contract.json`. Run
+`npm run host-contract:render`; do not transcribe routes or ports. The generated
+`runtime-upstream.generated.conf` fixes the production upstream at
+127.0.0.1:18100, and `runtime-locations.generated.conf` proxies only the
+discovered non-scheduled handler allowlist plus health/readiness/identity. The
+schedule cannot be reached through the HTTP wildcard because no wildcard is
+generated. X-Forwarded-For is replaced with the nginx-observed address.
 
 ## Tests and parity evidence
 
@@ -405,9 +379,9 @@ It is compared through direct handler and portable schedule-command paths.
 
 Risks:
 
-- the existing file persistence adapters and their concurrency/durability
-  hardening belong to goal 02 and are not changed here;
-- edge TLS, nginx/systemd/container ownership, headers and redirects are pending;
+- host-owned filesystem corruption or unsafe permissions deliberately take
+  readiness down instead of falling back to memory;
+- edge TLS, DNS and public-vhost promotion remain separate cutover authority;
 - activating an external timer before disabling the Netlify schedule would
   duplicate search-observation work;
 - optional checkout/webhook routes retain their existing flag/auth contracts and
@@ -428,17 +402,16 @@ What still depends on Netlify after this PR:
 - current execution of Netlify Functions until a later edge cutover;
 - the current search-observation Netlify schedule until a replacement timer is
   explicitly activated;
-- Netlify Blobs code paths and package remain for current production
-  compatibility, although portable production readiness selects file storage;
-- _headers, _redirects and Netlify build/publication parity;
-- any storage and edge work assigned to goals 02 and 05.
+- Netlify Blobs remains lazy only for the current Netlify rollback window;
+- `_headers` and `_redirects` remain canonical renderer inputs, while the
+  Netcup release consumes their generated nginx snippets.
 
 No claim that Netlify has been removed is made.
 
-## PARALLEL_MERGE_TOUCHPOINTS
+## Integrated release touchpoints
 
-- package.json only: four runtime commands. Workflow wiring is intentionally
-  left to goal 03.
-- No changes to netlify/functions/lib/lead-store.cjs or any persistence adapter.
-- No changes to .github/workflows, _headers, _redirects, public HTML/script.js or
-  Governance files.
+The runtime, host-owned storage, generated host contract and atomic Netcup
+release are bound by versioned contracts and the same full SHA/hashes. The
+release includes `_site/`, runtime, handler closure, generated nginx snippets,
+systemd templates and stage/verify/promote/rollback controls. It does not alter
+DNS, disable Netlify, enable schedules, checkout or money.

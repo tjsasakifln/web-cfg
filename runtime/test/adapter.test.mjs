@@ -127,7 +127,20 @@ test("health, readiness and identity are honest and identity never exposes secre
   const parsed = JSON.parse(identityText);
   assert.match(parsed.release_sha, /^[a-f0-9]{40}$/);
   assert.equal(parsed.storage_backend, "memory");
-  assert.equal(parsed.contract_version, "confenge-portable-runtime/v1");
+  assert.equal(parsed.contract_version, "confenge-portable-runtime/v2");
+  const wellKnown = await fetch(fixture.baseUrl + "/.well-known/runtime-info.json");
+  assert.equal(wellKnown.status, 200);
+  assert.deepEqual(await wellKnown.json(), parsed);
+});
+
+test("Netcup production profile rejects any upstream port except the integrated 18100 contract", () => {
+  const env = isolatedTestEnv({
+    NODE_ENV: "production",
+    RUNTIME_PROFILE: "netcup-production",
+    RUNTIME_PORT: "8787",
+  });
+  const config = loadRuntimeConfig({ env, nodeVersion: "v22.23.2" });
+  assert.ok(config.errors.includes("netcup_runtime_port_contract_mismatch"));
 });
 
 test("production startup is refused when critical requirements are absent", async () => {
@@ -135,7 +148,7 @@ test("production startup is refused when critical requirements are absent", asyn
     NODE_ENV: "production",
     LEAD_STORE: "",
     RUNTIME_FUNCTIONS_DIR: "",
-    RUNTIME_PORT: "8787",
+    RUNTIME_PORT: "",
     RUNTIME_RELEASE_SHA: "",
     RUNTIME_BUILD_TIMESTAMP: "",
   });
@@ -155,7 +168,9 @@ test("production startup is refused when critical requirements are absent", asyn
       assert.equal(error.code, "runtime_startup_refused");
       assert.ok(error.failures.includes("storage_backend_unconfigured"));
       assert.ok(error.failures.includes("release_sha_required"));
-      assert.ok(error.failures.includes("correction_store_path_unavailable"));
+      assert.ok(error.failures.includes("runtime_port_required_in_production"));
+      assert.ok(error.failures.includes("public_artifact_hash_required"));
+      assert.ok(error.failures.includes("release_bundle_hash_required"));
       return true;
     },
   );

@@ -1,12 +1,11 @@
 [Unit]
-Description=CONFENGE portable scheduled command %i
-ConditionPathExists=/opt/confenge-web/shared/schedule-cutover.json
-ConditionPathIsSymbolicLink=/opt/confenge-web/current
+Description=CONFENGE portable inbound runtime
 After=network-online.target
 Wants=network-online.target
+ConditionPathIsSymbolicLink=/opt/confenge-web/current
 
 [Service]
-Type=oneshot
+Type=simple
 User=confenge-deploy
 Group=confenge-deploy
 WorkingDirectory=/opt/confenge-web/current
@@ -17,9 +16,15 @@ Environment=RUNTIME_PORT=18100
 Environment=CONFENGE_STORAGE_BACKEND=filesystem
 Environment=CONFENGE_STORAGE_DIR=/var/lib/confenge-web
 EnvironmentFile=/etc/confenge-web/runtime.env
-ExecStart=/opt/confenge-web/bin/run-schedule %i
+ExecStart=/opt/confenge-web/bin/run-runtime
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=35
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true
 ProtectSystem=strict
-ReadWritePaths=/opt/confenge-web/shared /var/lib/confenge-web
+ReadWritePaths=/var/lib/confenge-web
+
+[Install]
+WantedBy=multi-user.target

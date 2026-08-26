@@ -30,10 +30,22 @@ from typing import Any
 REPO = "tjsasakifln/web-cfg"
 DEFAULT_ROOT = Path("/opt/confenge-web")
 SCHEMA_VERSION = "1.0.0"
-RUNTIME_CONTRACT_VERSION = "confenge-netcup-static-v1"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX_256 = re.compile(r"^[0-9a-f]{64}$")
-ALLOWED_TOP_LEVEL = {"_site", "metadata", "ops", "nginx", "schedules", "runtime"}
+ALLOWED_TOP_LEVEL = {
+    "_site",
+    "metadata",
+    "ops",
+    "nginx",
+    "schedules",
+    "runtime",
+    "netlify",
+    "scripts",
+    "data",
+    "netlify.toml",
+    "package.json",
+    "package-lock.json",
+}
 LOOPBACK_HOSTS = {"127.0.0.1", "localhost", "::1"}
 
 
@@ -164,8 +176,20 @@ def validate_release_manifest(manifest: dict[str, Any], sha: str) -> None:
         raise ReleaseError("unexpected release manifest_type")
     if manifest.get("repo") != REPO or manifest.get("commit") != sha:
         raise ReleaseError("release manifest repo/SHA mismatch")
-    if manifest.get("runtime_contract_version") != RUNTIME_CONTRACT_VERSION:
-        raise ReleaseError("runtime contract version mismatch")
+    contracts = manifest.get("contract_versions")
+    if not isinstance(contracts, dict):
+        raise ReleaseError("release contract_versions are missing")
+    for field in ("integrated", "runtime", "storage", "host_architecture", "http_host_manifest"):
+        if not isinstance(contracts.get(field), str) or not contracts[field]:
+            raise ReleaseError(f"release contract_versions.{field} is missing")
+    host_contract = manifest.get("host_contract")
+    if not isinstance(host_contract, dict):
+        raise ReleaseError("release host_contract identity is missing")
+    for field in ("contract_hash", "manifest_hash"):
+        if not HEX_256.fullmatch(str(host_contract.get(field) or "")):
+            raise ReleaseError(f"release host_contract.{field} is invalid")
+    if host_contract.get("host_architecture_version") != contracts["host_architecture"]:
+        raise ReleaseError("release host architecture identities conflict")
     artifact = manifest.get("artifact")
     if not isinstance(artifact, dict):
         raise ReleaseError("release manifest artifact is missing")
@@ -307,6 +331,35 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
         "metadata/release-source.json",
         "metadata/files.sha256",
         "metadata/release-manifest.json",
+        "runtime/contract.json",
+        "runtime/server.mjs",
+        "runtime/schedule.mjs",
+        "runtime/inventory.mjs",
+        "netlify/functions/lead.cjs",
+        "netlify/functions/lib/storage-config.cjs",
+        "netlify/functions/lib/host-file-store.cjs",
+        "data/nurture/tracks.json",
+        "data/site/editorial-policy.json",
+        "data/bofu-dominance/core/gsc-live-overlay.v1.json",
+        "data/offers/flags.json",
+        "data/offers/catalog.snapshot.json",
+        "data/offers/provider-mapping.json",
+        "data/offers/fixtures/asaas-sandbox/allowlist.json",
+        "netlify.toml",
+        "package.json",
+        "package-lock.json",
+        "nginx/generated/contract.normalized.json",
+        "nginx/generated/manifest.json",
+        "nginx/generated/headers.generated.conf",
+        "nginx/generated/redirects.generated.conf",
+        "nginx/generated/locations.generated.conf",
+        "nginx/generated/runtime-upstream.generated.conf",
+        "nginx/generated/runtime-locations.generated.conf",
+        "ops/bin/run-runtime",
+        "ops/bin/run-schedule",
+        "ops/lib/runtime_launcher.py",
+        "ops/lib/schedule_gate.py",
+        "ops/systemd/confenge-web-runtime.service",
     )
     for rel in required:
         path = release / rel
@@ -336,8 +389,41 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
     if source.get("repo") != REPO or source.get("commit") != sha:
         raise ReleaseError("internal release-source repo/SHA mismatch")
     runtime = source.get("runtime") or {}
-    if runtime.get("contract_version") != RUNTIME_CONTRACT_VERSION:
+    contracts = manifest["contract_versions"]
+    if (
+        runtime.get("contract_version") != contracts["runtime"]
+        or runtime.get("storage_contract_version") != contracts["storage"]
+        or runtime.get("host_architecture_version") != contracts["host_architecture"]
+        or runtime.get("portable_runtime_included") is not True
+    ):
         raise ReleaseError("internal runtime contract mismatch")
+    integrated = load_json(release / "runtime" / "contract.json")
+    if (
+        integrated.get("schema") != contracts["integrated"]
+        or integrated.get("runtime_contract_version") != contracts["runtime"]
+        or integrated.get("storage_contract_version") != contracts["storage"]
+        or integrated.get("host_architecture_version") != contracts["host_architecture"]
+    ):
+        raise ReleaseError("packaged integrated contract mismatch")
+    host_contract = load_json(release / "nginx" / "generated" / "contract.normalized.json")
+    host_manifest = load_json(release / "nginx" / "generated" / "manifest.json")
+    host_identity = manifest["host_contract"]
+    if (
+        sha256_file(release / "nginx" / "generated" / "contract.normalized.json")
+        != host_identity["contract_hash"]
+        or sha256_file(release / "nginx" / "generated" / "manifest.json")
+        != host_identity["manifest_hash"]
+        or host_contract.get("hostArchitectureVersion") != contracts["host_architecture"]
+        or host_manifest.get("hostArchitectureVersion") != contracts["host_architecture"]
+    ):
+        raise ReleaseError("packaged host contract identity mismatch")
+    upstream = (host_contract.get("runtime") or {}).get("upstream") or {}
+    expected_upstream = integrated.get("netcup_production") or {}
+    if any(
+        upstream.get(key) != expected_upstream.get(key)
+        for key in ("host", "port", "profile")
+    ):
+        raise ReleaseError("packaged runtime upstream contract mismatch")
 
     build_info = load_json(release / "_site" / ".well-known" / "build-info.json")
     build_manifest = load_json(
@@ -436,6 +522,31 @@ def smoke_candidate(release: Path, sha: str) -> None:
         thread.join(timeout=5)
 
 
+def verify_portable_runtime(release: Path) -> None:
+    try:
+        version = subprocess.run(
+            ["node", "--version"],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        ).stdout.strip()
+        if not re.fullmatch(r"v22\.\d+\.\d+", version):
+            raise ReleaseError(f"portable runtime requires Node 22, found {version!r}")
+        subprocess.run(
+            ["node", "runtime/inventory.mjs", "--check", "--compact"],
+            cwd=release,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except ReleaseError:
+        raise
+    except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+        raise ReleaseError(f"portable runtime verification failed: {exc}") from exc
+
+
 def _local_origin() -> tuple[str, str]:
     raw = (os.environ.get("CONFENGE_LOCAL_ORIGIN") or "").rstrip("/")
     if not raw:
@@ -470,6 +581,53 @@ def smoke_live(sha: str) -> None:
         raise ReleaseError(
             f"live identity mismatch: expected {sha}, found {identity.get('commit')!r}"
         )
+
+
+def runtime_restart() -> None:
+    if os.environ.get("CONFENGE_RELEASE_TEST_MODE") == "1":
+        if os.environ.get("CONFENGE_TEST_RUNTIME_RESTART_FAIL") == "1":
+            raise ReleaseError("test-injected runtime restart failure")
+        return
+    try:
+        subprocess.run(
+            ["sudo", "-n", "systemctl", "restart", "confenge-web-runtime.service"],
+            check=True,
+            timeout=45,
+        )
+    except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+        raise ReleaseError(f"portable runtime restart failed: {exc}") from exc
+
+
+def smoke_runtime(manifest: dict[str, Any]) -> None:
+    if os.environ.get("CONFENGE_RELEASE_TEST_MODE") == "1":
+        if os.environ.get("CONFENGE_TEST_RUNTIME_SMOKE_FAIL") == "1":
+            raise ReleaseError("test-injected runtime identity failure")
+        return
+    upstream = (manifest.get("host_contract") or {}).get("runtime_upstream") or {}
+    host = upstream.get("host")
+    port = upstream.get("port")
+    if host not in LOOPBACK_HOSTS or not isinstance(port, int):
+        raise ReleaseError("runtime upstream identity is not a loopback host/port")
+    identity = _http_get_json(
+        f"http://{host}:{port}/.well-known/runtime-info.json"
+    )
+    expected = {
+        "release_sha": manifest.get("commit"),
+        "public_artifact_hash": (manifest.get("public_artifact") or {}).get(
+            "artifact_hash"
+        ),
+        "release_bundle_hash": (manifest.get("artifact") or {}).get("sha256"),
+        "host_architecture_version": (manifest.get("contract_versions") or {}).get(
+            "host_architecture"
+        ),
+        "storage_backend": "filesystem",
+    }
+    for field, value in expected.items():
+        if identity.get(field) != value:
+            raise ReleaseError(
+                f"runtime identity mismatch for {field}: expected {value!r}, "
+                f"found {identity.get(field)!r}"
+            )
 
 
 def nginx_test() -> None:
@@ -642,6 +800,7 @@ def verify_release(sha: str) -> dict[str, Any]:
     with deploy_lock(root):
         manifest = verify_release_envelope_and_tree(root, sha)
         smoke_candidate(root / "releases" / sha, sha)
+        verify_portable_runtime(root / "releases" / sha)
         append_evidence(
             root, "VERIFIED", sha, artifact_sha256=manifest["artifact"]["sha256"]
         )
@@ -654,6 +813,10 @@ def _restore_after_failed_switch(root: Path, previous: str | None) -> None:
     else:
         _remove_release_link(root, "current")
     nginx_test()
+    if previous:
+        previous_manifest = verify_release_tree(root, previous)
+        runtime_restart()
+        smoke_runtime(previous_manifest)
     nginx_reload_if_authorized()
     if previous:
         smoke_live(previous)
@@ -676,6 +839,8 @@ def _switch_release(root: Path, sha: str, event: str) -> dict[str, Any]:
     read_release_link(root, "rollback")
     if previous == sha:
         nginx_test()
+        runtime_restart()
+        smoke_runtime(manifest)
         smoke_live(sha)
         append_evidence(root, f"{event}_IDEMPOTENT", sha, previous_sha=previous)
         return manifest
@@ -684,6 +849,8 @@ def _switch_release(root: Path, sha: str, event: str) -> dict[str, Any]:
     reloaded = False
     try:
         nginx_test()
+        runtime_restart()
+        smoke_runtime(manifest)
         reloaded = nginx_reload_if_authorized()
         smoke_live(sha)
         if previous:
@@ -696,6 +863,7 @@ def _switch_release(root: Path, sha: str, event: str) -> dict[str, Any]:
             artifact_sha256=manifest["artifact"]["sha256"],
             nginx_reloaded=reloaded,
             live_identity=sha,
+            runtime_identity=sha,
         )
     except Exception as exc:
         evidence_error = _append_evidence_best_effort(

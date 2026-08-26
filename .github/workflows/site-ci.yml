@@ -111,6 +111,7 @@ jobs:
           npm run test:secrets-scan
           npm run test:cta-whatsapp
           npm run test:release-filters
+          npm run test:runtime
           python3 -m pytest deploy/netcup/tests -q
           npm run test:pseo-attribution
           npm run test:revops
@@ -119,6 +120,8 @@ jobs:
           npm run test:nurture
       - name: Build public site
         run: npm run build:site
+      - name: Generated Netcup nginx contract E2E
+        run: npm run host-contract:nginx-test
       - name: Published HTML and FAQ integrity
         run: npm run test:html-integrity:site
       - name: CSS asset integrity after publish

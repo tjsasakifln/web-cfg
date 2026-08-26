@@ -92,8 +92,12 @@ jobs:
           source_date_epoch=$(git show -s --format=%ct "$RELEASE_SHA")
           node_version=$(node --version)
           python_version=$(python3 --version | awk '{print $2}')
+          node scripts/migration/netcup/render.mjs \
+            --root . \
+            --output build/netcup-host-contract
           python3 deploy/netcup/package_release.py \
             --site _site \
+            --host-contract build/netcup-host-contract \
             --output "dist/netcup/$RELEASE_SHA" \
             --sha "$RELEASE_SHA" \
             --node-version "$node_version" \

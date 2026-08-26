@@ -25,7 +25,6 @@ from typing import Any
 
 REPO = "tjsasakifln/web-cfg"
 SCHEMA_VERSION = "1.0.0"
-RUNTIME_CONTRACT_VERSION = "confenge-netcup-static-v1"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX_256 = re.compile(r"^[0-9a-f]{64}$")
 FORBIDDEN_PATH_PARTS = {".git", "node_modules", "__pycache__", ".pytest_cache"}
@@ -221,10 +220,60 @@ def validate_public_identity(site: Path, sha: str) -> dict[str, Any]:
     }
 
 
+def validate_host_contract(host_contract: Path, integrated: dict[str, Any]) -> dict[str, Any]:
+    assert_regular_tree(host_contract, "generated host contract")
+    manifest_path = host_contract / "manifest.json"
+    contract_path = host_contract / "contract.normalized.json"
+    manifest = load_json(manifest_path)
+    contract = load_json(contract_path)
+    if manifest.get("schema") != "confenge.http-host-contract-manifest/v1":
+        raise PackageError("generated host contract manifest schema mismatch")
+    expected_architecture = integrated.get("host_architecture_version")
+    if (
+        manifest.get("hostArchitectureVersion") != expected_architecture
+        or contract.get("hostArchitectureVersion") != expected_architecture
+    ):
+        raise PackageError("host architecture version diverges from runtime/contract.json")
+    runtime = contract.get("runtime") or {}
+    upstream = runtime.get("upstream") or {}
+    expected_netcup = integrated.get("netcup_production") or {}
+    if (
+        runtime.get("contractVersion") != integrated.get("runtime_contract_version")
+        or runtime.get("storageContractVersion") != integrated.get("storage_contract_version")
+        or upstream.get("host") != expected_netcup.get("host")
+        or upstream.get("port") != expected_netcup.get("port")
+        or runtime.get("nginxProxyGenerated") is not True
+    ):
+        raise PackageError("generated host/runtime contract is not the integrated Netcup contract")
+    outputs = manifest.get("outputs")
+    if not isinstance(outputs, list) or not outputs:
+        raise PackageError("generated host contract has no checksummed outputs")
+    for record in outputs:
+        name = str(record.get("path") or "") if isinstance(record, dict) else ""
+        if not name or Path(name).name != name:
+            raise PackageError("generated host contract output path is unsafe")
+        target = host_contract / name
+        if not target.is_file() or target.is_symlink():
+            raise PackageError(f"generated host contract output is missing: {name}")
+        if record.get("sha256") != sha256_file(target):
+            raise PackageError(f"generated host contract output hash mismatch: {name}")
+    contract_hash = sha256_file(contract_path)
+    if contract_hash != manifest.get("contractHash"):
+        raise PackageError("generated normalized contract hash mismatch")
+    return {
+        "schema": manifest.get("schema"),
+        "contract_hash": contract_hash,
+        "manifest_hash": sha256_file(manifest_path),
+        "host_architecture_version": expected_architecture,
+        "runtime_upstream": upstream,
+    }
+
+
 def build_release(
     *,
     repo_root: Path,
     site: Path,
+    host_contract: Path,
     output_dir: Path,
     sha: str,
     node_version: str,
@@ -242,9 +291,14 @@ def build_release(
 
     repo_root = repo_root.resolve()
     site = site.resolve()
+    host_contract = host_contract.resolve()
     output_dir = output_dir.resolve()
     assert_regular_tree(site, "_site")
     public_identity = validate_public_identity(site, sha)
+    integrated_contract = load_json(repo_root / "runtime" / "contract.json")
+    if integrated_contract.get("schema") != "confenge.runtime-host-contract/v1":
+        raise PackageError("unsupported integrated runtime/host contract schema")
+    host_contract_identity = validate_host_contract(host_contract, integrated_contract)
 
     package_name = f"confenge-web-{sha}.tar.gz"
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -266,15 +320,54 @@ def build_release(
         for source_name, target_name in (
             ("nginx", "nginx"),
             ("schedules", "schedules"),
+            ("runtime", "ops/systemd"),
         ):
             source = control_root / source_name
             if source.is_dir():
                 copy_tree(source, payload / target_name)
 
-        runtime_source = repo_root / "runtime" / "portable"
-        runtime_included = runtime_source.is_dir()
-        if runtime_included:
-            copy_tree(runtime_source, payload / "runtime")
+        runtime_source = repo_root / "runtime"
+        functions_source = repo_root / "netlify" / "functions"
+        for required, label in (
+            (runtime_source, "runtime"),
+            (functions_source, "netlify/functions"),
+        ):
+            if not required.is_dir() or required.is_symlink():
+                raise PackageError(f"required portable {label} tree is missing")
+        copy_tree(runtime_source, payload / "runtime")
+        copy_tree(functions_source, payload / "netlify" / "functions")
+        for source, destination in (
+            (repo_root / "scripts" / "conversion", payload / "scripts" / "conversion"),
+            (repo_root / "scripts" / "offers", payload / "scripts" / "offers"),
+            (repo_root / "data" / "commercial", payload / "data" / "commercial"),
+            (repo_root / "data" / "conversion", payload / "data" / "conversion"),
+        ):
+            copy_tree(source, destination)
+        copy_tree(
+            repo_root / "data" / "offers" / "fixtures",
+            payload / "data" / "offers" / "fixtures",
+        )
+        for relative in (
+            "data/revops/inbound-backlog-decision.v1.json",
+            "data/nurture/tracks.json",
+            "data/site/editorial-policy.json",
+            "data/bofu-dominance/core/gsc-live-overlay.v1.json",
+            "data/offers/flags.json",
+            "data/offers/catalog.snapshot.json",
+            "data/offers/provider-mapping.json",
+        ):
+            source = repo_root / relative
+            destination = payload / relative
+            if not source.is_file() or source.is_symlink():
+                raise PackageError(f"required runtime data file is missing: {relative}")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
+        for name in ("netlify.toml", "package.json", "package-lock.json"):
+            source = repo_root / name
+            if not source.is_file() or source.is_symlink():
+                raise PackageError(f"required runtime file is missing: {name}")
+            shutil.copy2(source, payload / name)
+        copy_tree(host_contract, payload / "nginx" / "generated")
 
         built_at = public_identity.get("built_at") or datetime.fromtimestamp(
             source_date_epoch, tz=timezone.utc
@@ -286,19 +379,38 @@ def build_release(
             "built_at": built_at,
             "public_artifact": public_identity,
             "runtime": {
-                "contract_version": RUNTIME_CONTRACT_VERSION,
-                "portable_runtime_included": runtime_included,
-                "portable_runtime_source": "runtime/portable"
-                if runtime_included
-                else None,
+                "contract_version": integrated_contract["runtime_contract_version"],
+                "storage_contract_version": integrated_contract["storage_contract_version"],
+                "host_architecture_version": integrated_contract["host_architecture_version"],
+                "portable_runtime_included": True,
+                "portable_runtime_source": "runtime/",
+                "functions_source": "netlify/functions/",
+                "netcup": integrated_contract["netcup_production"],
             },
+            "host_contract": host_contract_identity,
             "package_layout": [
                 "_site/",
                 "metadata/",
                 "ops/",
                 "nginx/",
                 "schedules/",
-                *(["runtime/"] if runtime_included else []),
+                "runtime/",
+                "netlify/functions/",
+                "scripts/conversion/",
+                "scripts/offers/",
+                "data/commercial/",
+                "data/conversion/",
+                "data/nurture/tracks.json",
+                "data/site/editorial-policy.json",
+                "data/bofu-dominance/core/gsc-live-overlay.v1.json",
+                "data/offers/flags.json",
+                "data/offers/catalog.snapshot.json",
+                "data/offers/provider-mapping.json",
+                "data/offers/fixtures/",
+                "data/revops/inbound-backlog-decision.v1.json",
+                "netlify.toml",
+                "package.json",
+                "package-lock.json",
             ],
         }
         write_json(payload / "metadata" / "release-source.json", source_metadata)
@@ -326,7 +438,14 @@ def build_release(
             "checksum_filename": checksum_path.name,
         },
         "public_artifact": public_identity,
-        "runtime_contract_version": RUNTIME_CONTRACT_VERSION,
+        "contract_versions": {
+            "integrated": integrated_contract["schema"],
+            "runtime": integrated_contract["runtime_contract_version"],
+            "storage": integrated_contract["storage_contract_version"],
+            "host_architecture": integrated_contract["host_architecture_version"],
+            "http_host_manifest": host_contract_identity["schema"],
+        },
+        "host_contract": host_contract_identity,
         "identity_contract": {
             "canonical_public_path": "/.well-known/build-info.json",
             "rule": "release manifest references, but never replaces, the public build identity",
@@ -345,6 +464,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--site", type=Path, required=True)
+    parser.add_argument("--host-contract", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--sha", required=True)
     parser.add_argument("--node-version", required=True)
@@ -361,6 +481,7 @@ def main() -> int:
         outputs = build_release(
             repo_root=args.repo_root,
             site=args.site,
+            host_contract=args.host_contract,
             output_dir=args.output,
             sha=args.sha,
             node_version=args.node_version,

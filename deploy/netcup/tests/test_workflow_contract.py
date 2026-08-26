@@ -8,6 +8,7 @@ WORKFLOW = ROOT / ".github" / "workflows" / "netcup-release.yml"
 SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
 README = ROOT / "deploy" / "netcup" / "README.md"
 NGINX = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-origin.conf"
+NGINX_HTTP = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-http.conf"
 SCHEDULE = ROOT / "deploy" / "netcup" / "schedules" / "schedule-contract.json"
 
 
@@ -81,19 +82,29 @@ def test_stage_is_not_promotion_and_public_traffic_is_untouched() -> None:
     assert "netlify.toml" not in text
 
 
-def test_nginx_contract_is_loopback_only_and_does_not_touch_other_vhosts() -> None:
+def test_nginx_contract_is_loopback_only_and_consumes_only_generated_behavior() -> None:
     text = NGINX.read_text(encoding="utf-8")
+    http = NGINX_HTTP.read_text(encoding="utf-8")
     assert "listen 127.0.0.1:8088" in text
     assert "server_name confenge.com.br" in text
-    assert "api" not in text.lower()
-    assert "ops" not in text.lower()
-    assert "auth.ops" not in text.lower()
+    for generated in (
+        "headers.generated.conf",
+        "runtime-upstream.generated.conf",
+        "redirects.generated.conf",
+        "runtime-locations.generated.conf",
+        "locations.generated.conf",
+    ):
+        assert generated in text + http
+    assert "proxy_pass" not in text + http
+    assert "_headers" not in text + http and "_redirects" not in text + http
 
 
 def test_scheduler_is_disabled_and_double_run_gate_is_explicit() -> None:
     text = SCHEDULE.read_text(encoding="utf-8")
     assert '"default_state": "DISABLED"' in text
-    assert "CUTOVER_SCHEDULES_AUTHORIZED" in text
+    assert "schedule-cutover.json" in text
+    assert "confenge.schedule-cutover/v1" in text
+    assert "netlify_search_observation_disabled=true" in text
     assert '"legacy_active_at_packaging": true' in text
     assert '"netcup_enabled": false' in text
     workflow = WORKFLOW.read_text(encoding="utf-8")

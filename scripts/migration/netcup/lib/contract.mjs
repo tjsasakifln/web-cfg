@@ -3,13 +3,19 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { discoverFunctionDefinitions } from "../../../../runtime/lib/functions.mjs";
+
 export const CONTRACT_SCHEMA = "confenge.http-host-contract/v1";
-export const CONTRACT_VERSION = 1;
-export const HOST_ARCHITECTURE_VERSION = "confenge-static-nginx/v1";
+export const CONTRACT_VERSION = 2;
 export const CANONICAL_HOST = "confenge.com.br";
 export const DYNAMIC_ROUTE_PREFIX = "/.netlify/functions/";
 
 const MODULE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..");
+const INTEGRATED_RUNTIME_CONTRACT = Object.freeze(
+  JSON.parse(readFileSync(resolve(MODULE_ROOT, "runtime/contract.json"), "utf8")),
+);
+export const HOST_ARCHITECTURE_VERSION = INTEGRATED_RUNTIME_CONTRACT.host_architecture_version;
+export const RUNTIME_UPSTREAM_PORT = INTEGRATED_RUNTIME_CONTRACT.netcup_production.port;
 const HEADER_NAME = /^[A-Za-z][0-9A-Za-z-]*$/;
 const STATUS = /^(200|301|302|410)(!)?$/;
 const CONTROL = /[\u0000-\u001f\u007f]/;
@@ -507,11 +513,22 @@ function validateRequiredSemantics(root, headers, routes) {
   }
 }
 
+function runtimeHttpFunctions(root, netlifyPath) {
+  const functionsDir = resolve(root, "netlify/functions");
+  return discoverFunctionDefinitions({ functionsDir, netlifyTomlPath: netlifyPath })
+    .filter((definition) => !definition.schedule)
+    .map((definition) => definition.name);
+}
+
 export function buildHostContract(root = MODULE_ROOT) {
   const resolvedRoot = resolve(root);
   const headersPath = resolve(resolvedRoot, "_headers");
   const redirectsPath = resolve(resolvedRoot, "_redirects");
   const netlifyPath = resolve(resolvedRoot, "netlify.toml");
+  const netlifyToml = readFileSync(netlifyPath, "utf8");
+  const httpFunctions = runtimeHttpFunctions(resolvedRoot, netlifyPath);
+  const runtimeFunctionPaths = httpFunctions.map((name) =>
+    resolve(resolvedRoot, "netlify/functions", `${name}.cjs`));
   const sitemapPaths = readdirSync(resolvedRoot)
     .filter((name) => /^sitemap(?:-[a-z0-9-]+)?\.(?:xml|txt)$/i.test(name))
     .sort()
@@ -527,12 +544,14 @@ export function buildHostContract(root = MODULE_ROOT) {
     resolve(resolvedRoot, "404.html"),
     resolve(resolvedRoot, "robots.txt"),
     resolve(resolvedRoot, ".well-known/README.md"),
+    resolve(resolvedRoot, "runtime/contract.json"),
+    ...runtimeFunctionPaths,
     ...sitemapPaths,
     ...verificationPaths,
   ].map((path) => sourceRecord(resolvedRoot, path));
   const headers = parseHeaders(readFileSync(headersPath, "utf8"), { source: "_headers" });
   const primary = parseRedirects(readFileSync(redirectsPath, "utf8"), { source: "_redirects" });
-  const netlify = parseNetlifyRedirects(readFileSync(netlifyPath, "utf8"), {
+  const netlify = parseNetlifyRedirects(netlifyToml, {
     source: "netlify.toml",
     orderOffset: primary.length,
   });
@@ -570,10 +589,20 @@ export function buildHostContract(root = MODULE_ROOT) {
       },
     },
     runtime: {
-      routePrefix: DYNAMIC_ROUTE_PREFIX,
-      translation: "external-runtime-required",
-      nginxProxyGenerated: false,
-      parity: "probe-when-candidate-runtime-is-available",
+      contractVersion: INTEGRATED_RUNTIME_CONTRACT.runtime_contract_version,
+      storageContractVersion: INTEGRATED_RUNTIME_CONTRACT.storage_contract_version,
+      routePrefixes: [DYNAMIC_ROUTE_PREFIX, "/api/web/"],
+      identityPath: INTEGRATED_RUNTIME_CONTRACT.identity_path,
+      readinessPath: INTEGRATED_RUNTIME_CONTRACT.readiness_path,
+      httpFunctions,
+      upstream: {
+        host: INTEGRATED_RUNTIME_CONTRACT.netcup_production.host,
+        port: RUNTIME_UPSTREAM_PORT,
+        profile: INTEGRATED_RUNTIME_CONTRACT.netcup_production.profile,
+      },
+      translation: "generated-explicit-allowlist",
+      nginxProxyGenerated: true,
+      parity: "runtime-and-handler-aliases-required-before-stage",
     },
     seo: {
       robots: sources.find((source) => source.path === "robots.txt"),
