@@ -204,6 +204,9 @@ if (catalogBoot.dataSchema !== "confenge.public-deliverable-catalog/1.1" || cata
   catalogErrors.push("catalog_data_contract");
 }
 await page.click('details[data-copy-contract-id="CFG-D01"] summary');
+await page.waitForFunction(() => (
+  document.querySelector('details[data-copy-contract-id="CFG-D01"]')?.dataset.copyContractHydrated === "true"
+), { timeout: 5000 });
 const hydratedContract = await page.evaluate(() => {
   const details = document.querySelector('details[data-copy-contract-id="CFG-D01"]');
   return {
