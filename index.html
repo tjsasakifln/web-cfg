@@ -13,7 +13,24 @@
 <link href="/manifest.webmanifest" rel="manifest"/>
 <script>document.documentElement.classList.replace('no-js','js');</script>
 <link href="/styles.css" rel="stylesheet"/>
-<link href="/entregas/styles.css" rel="stylesheet"/>
+<style data-home-deliverables-critical="">
+.home-deliverables{display:grid;grid-template-columns:minmax(0,.95fr) minmax(310px,.65fr);gap:clamp(34px,6vw,82px);align-items:center;margin-top:52px;padding:clamp(30px,4.3vw,54px);color:#dce5ed;background:linear-gradient(135deg,#071b34,#041426);border:1px solid #123452;border-radius:4px}
+.home-deliverables .eyebrow{color:var(--lime)}
+.home-deliverables h3{max-width:15ch;margin:0 0 16px;color:#fff;font-size:clamp(2rem,3.3vw,3.35rem);letter-spacing:-.045em}
+.home-deliverables-copy>p:not(.eyebrow){max-width:670px;margin:0;color:#bdc9d4;font-size:.93rem;line-height:1.7}
+.home-deliverables-result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 20px;border-top:1px solid rgba(255,255,255,.15);border-bottom:1px solid rgba(255,255,255,.15)}
+.home-deliverables-result>div{padding:16px 8px 16px 0}
+.home-deliverables-result>div+div{padding-left:12px;border-left:1px solid rgba(255,255,255,.15)}
+.home-deliverables-result dt{color:#91a3b3;font-size:.62rem;font-weight:760;text-transform:uppercase}
+.home-deliverables-result dd{margin:3px 0 0;color:#fff;font-size:1.35rem;font-weight:780}
+.home-deliverables-example>span{display:block;margin-bottom:6px;color:var(--lime);font-family:var(--mono);font-size:.65rem;font-weight:800;letter-spacing:.08em}
+.home-deliverables-example>strong{display:block;margin-bottom:18px;color:#fff;font-size:1rem;line-height:1.4}
+.home-deliverables-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px}
+.home-deliverables .button-light{min-height:48px}
+.home-deliverables .text-link{color:#fff}
+@media(max-width:900px){.home-deliverables{grid-template-columns:1fr;gap:32px}}
+@media(max-width:620px){.home-deliverables{margin-top:38px;padding:28px 22px}.home-deliverables h3{font-size:2.2rem}.home-deliverables-actions{display:grid;align-items:stretch}.home-deliverables-actions .button{width:100%}.home-deliverables-actions .text-link{justify-content:center}}
+</style>
 <script defer="" src="/script.js?v=fortune04"></script>
 <meta content="website" property="og:type"/>
 <meta content="pt_BR" property="og:locale"/>

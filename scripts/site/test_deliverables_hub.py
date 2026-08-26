@@ -356,7 +356,9 @@ def test_schema_describes_the_full_collection_and_breadcrumb() -> None:
 
 def test_home_discovery_is_inside_the_existing_commercial_section() -> None:
     home = _html(ROOT / "index.html")
-    assert '<link href="/entregas/styles.css" rel="stylesheet"/>' in home
+    assert '<link href="/entregas/styles.css" rel="stylesheet"/>' not in home
+    assert 'data-home-deliverables-critical=""' in home
+    assert ".home-deliverables{" in home
     assert "Conheça nossas entregas" in home
     assert 'href="/entregas/"' in home
     assert f'href="{REPORT_ROUTE}"' in home
