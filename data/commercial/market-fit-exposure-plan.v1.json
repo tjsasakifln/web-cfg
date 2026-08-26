@@ -1,0 +1,1330 @@
+{
+  "schema": "confenge.market-fit-exposure-plan/1.0",
+  "plan_version": "CFG-MARKET-FIT-EXPOSURE-2026-08-25-v1",
+  "protocol_version": "CFG-MARKET-FIT-2026-08-25-v2",
+  "issue": "#336",
+  "seed": "confenge-market-fit-336-v1",
+  "source_contracts": [
+    "data/commercial/market-fit-protocol.v1.json",
+    "data/commercial/task-doors.v1.json"
+  ],
+  "frozen_before_sessions": true,
+  "mutable_after_first_session": false,
+  "contains_participant_identity": false,
+  "catalogue_size": 54,
+  "participant_slot_count": 20,
+  "cards_per_participant": 18,
+  "boundary_cards_per_participant": 4,
+  "critical_boundaries": [
+    {
+      "boundary_id": "disputar_habilitar",
+      "deliverable_ids": [
+        "CFG-D12",
+        "CFG-D13"
+      ]
+    },
+    {
+      "boundary_id": "habilitar_orcamento",
+      "deliverable_ids": [
+        "CFG-D13",
+        "CFG-D14"
+      ]
+    },
+    {
+      "boundary_id": "orcamento_proposta",
+      "deliverable_ids": [
+        "CFG-D14",
+        "CFG-D16"
+      ]
+    },
+    {
+      "boundary_id": "risco_margem_medicao",
+      "deliverable_ids": [
+        "CFG-D17",
+        "CFG-D18"
+      ]
+    },
+    {
+      "boundary_id": "medicao_atraso",
+      "deliverable_ids": [
+        "CFG-D18",
+        "CFG-D19"
+      ]
+    },
+    {
+      "boundary_id": "medicao_reequilibrio",
+      "deliverable_ids": [
+        "CFG-D18",
+        "CFG-D22"
+      ]
+    },
+    {
+      "boundary_id": "reequilibrio_aditivo",
+      "deliverable_ids": [
+        "CFG-D22",
+        "CFG-D23"
+      ]
+    },
+    {
+      "boundary_id": "mobilizacao_matriz",
+      "deliverable_ids": [
+        "CFG-D33",
+        "CFG-D34"
+      ]
+    },
+    {
+      "boundary_id": "encerramento_acervo",
+      "deliverable_ids": [
+        "CFG-D36",
+        "CFG-D37"
+      ]
+    },
+    {
+      "boundary_id": "orcamento_habilitacao",
+      "deliverable_ids": [
+        "CFG-D49",
+        "CFG-D51"
+      ]
+    },
+    {
+      "boundary_id": "habilitacao_proposta_tecnica",
+      "deliverable_ids": [
+        "CFG-D51",
+        "CFG-D52"
+      ]
+    },
+    {
+      "boundary_id": "proposta_tecnica_revisao",
+      "deliverable_ids": [
+        "CFG-D52",
+        "CFG-D53"
+      ]
+    },
+    {
+      "boundary_id": "revisao_sessao",
+      "deliverable_ids": [
+        "CFG-D53",
+        "CFG-D54"
+      ]
+    }
+  ],
+  "participant_slots": [
+    {
+      "slot_id": "MF-P01",
+      "role_id": "direcao",
+      "role_label_pt_br": "dono, sócio ou diretor",
+      "role_slot": 1,
+      "focus_doors": [
+        "GROW",
+        "QUALIFY",
+        "CLOSE"
+      ],
+      "cards": [
+        "CFG-D01",
+        "CFG-D02",
+        "CFG-D03",
+        "CFG-D04",
+        "CFG-D05",
+        "CFG-D06",
+        "CFG-D07",
+        "CFG-D08",
+        "CFG-D09",
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D12",
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D15",
+        "CFG-D16",
+        "CFG-D17",
+        "CFG-D18"
+      ],
+      "boundary_cards": [
+        "CFG-D17",
+        "CFG-D16",
+        "CFG-D18",
+        "CFG-D14"
+      ],
+      "display_order": [
+        "CFG-D09",
+        "CFG-D17",
+        "CFG-D11",
+        "CFG-D16",
+        "CFG-D05",
+        "CFG-D03",
+        "CFG-D18",
+        "CFG-D06",
+        "CFG-D14",
+        "CFG-D13",
+        "CFG-D08",
+        "CFG-D04",
+        "CFG-D02",
+        "CFG-D01",
+        "CFG-D15",
+        "CFG-D10",
+        "CFG-D12",
+        "CFG-D07"
+      ]
+    },
+    {
+      "slot_id": "MF-P02",
+      "role_id": "direcao",
+      "role_label_pt_br": "dono, sócio ou diretor",
+      "role_slot": 2,
+      "focus_doors": [
+        "GROW",
+        "QUALIFY",
+        "CLOSE"
+      ],
+      "cards": [
+        "CFG-D04",
+        "CFG-D05",
+        "CFG-D06",
+        "CFG-D07",
+        "CFG-D08",
+        "CFG-D09",
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D12",
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D15",
+        "CFG-D16",
+        "CFG-D17",
+        "CFG-D18",
+        "CFG-D19",
+        "CFG-D20",
+        "CFG-D21"
+      ],
+      "boundary_cards": [
+        "CFG-D17",
+        "CFG-D13",
+        "CFG-D12",
+        "CFG-D16"
+      ],
+      "display_order": [
+        "CFG-D10",
+        "CFG-D20",
+        "CFG-D06",
+        "CFG-D08",
+        "CFG-D17",
+        "CFG-D13",
+        "CFG-D12",
+        "CFG-D16",
+        "CFG-D09",
+        "CFG-D15",
+        "CFG-D05",
+        "CFG-D04",
+        "CFG-D21",
+        "CFG-D18",
+        "CFG-D14",
+        "CFG-D11",
+        "CFG-D19",
+        "CFG-D07"
+      ]
+    },
+    {
+      "slot_id": "MF-P03",
+      "role_id": "direcao",
+      "role_label_pt_br": "dono, sócio ou diretor",
+      "role_slot": 3,
+      "focus_doors": [
+        "GROW",
+        "QUALIFY",
+        "CLOSE"
+      ],
+      "cards": [
+        "CFG-D07",
+        "CFG-D08",
+        "CFG-D09",
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D12",
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D15",
+        "CFG-D16",
+        "CFG-D17",
+        "CFG-D18",
+        "CFG-D19",
+        "CFG-D20",
+        "CFG-D21",
+        "CFG-D22",
+        "CFG-D23",
+        "CFG-D24"
+      ],
+      "boundary_cards": [
+        "CFG-D14",
+        "CFG-D18",
+        "CFG-D17",
+        "CFG-D12"
+      ],
+      "display_order": [
+        "CFG-D14",
+        "CFG-D09",
+        "CFG-D21",
+        "CFG-D15",
+        "CFG-D18",
+        "CFG-D17",
+        "CFG-D12",
+        "CFG-D19",
+        "CFG-D20",
+        "CFG-D13",
+        "CFG-D24",
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D23",
+        "CFG-D08",
+        "CFG-D07",
+        "CFG-D16",
+        "CFG-D22"
+      ]
+    },
+    {
+      "slot_id": "MF-P04",
+      "role_id": "direcao",
+      "role_label_pt_br": "dono, sócio ou diretor",
+      "role_slot": 4,
+      "focus_doors": [
+        "GROW",
+        "QUALIFY",
+        "CLOSE"
+      ],
+      "cards": [
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D12",
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D15",
+        "CFG-D16",
+        "CFG-D17",
+        "CFG-D18",
+        "CFG-D19",
+        "CFG-D20",
+        "CFG-D21",
+        "CFG-D22",
+        "CFG-D23",
+        "CFG-D24",
+        "CFG-D25",
+        "CFG-D26",
+        "CFG-D27"
+      ],
+      "boundary_cards": [
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D12",
+        "CFG-D19"
+      ],
+      "display_order": [
+        "CFG-D24",
+        "CFG-D15",
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D21",
+        "CFG-D12",
+        "CFG-D20",
+        "CFG-D19",
+        "CFG-D11",
+        "CFG-D25",
+        "CFG-D27",
+        "CFG-D17",
+        "CFG-D22",
+        "CFG-D10",
+        "CFG-D16",
+        "CFG-D18",
+        "CFG-D23",
+        "CFG-D26"
+      ]
+    },
+    {
+      "slot_id": "MF-P05",
+      "role_id": "engenharia_proposta",
+      "role_label_pt_br": "engenharia de proposta ou orçamento",
+      "role_slot": 1,
+      "focus_doors": [
+        "QUALIFY",
+        "PROPOSE",
+        "START"
+      ],
+      "cards": [
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D15",
+        "CFG-D16",
+        "CFG-D17",
+        "CFG-D18",
+        "CFG-D19",
+        "CFG-D20",
+        "CFG-D21",
+        "CFG-D22",
+        "CFG-D23",
+        "CFG-D24",
+        "CFG-D25",
+        "CFG-D26",
+        "CFG-D27",
+        "CFG-D28",
+        "CFG-D29",
+        "CFG-D30"
+      ],
+      "boundary_cards": [
+        "CFG-D19",
+        "CFG-D23",
+        "CFG-D14",
+        "CFG-D17"
+      ],
+      "display_order": [
+        "CFG-D21",
+        "CFG-D19",
+        "CFG-D28",
+        "CFG-D23",
+        "CFG-D14",
+        "CFG-D20",
+        "CFG-D17",
+        "CFG-D24",
+        "CFG-D25",
+        "CFG-D27",
+        "CFG-D16",
+        "CFG-D30",
+        "CFG-D29",
+        "CFG-D22",
+        "CFG-D15",
+        "CFG-D26",
+        "CFG-D13",
+        "CFG-D18"
+      ]
+    },
+    {
+      "slot_id": "MF-P06",
+      "role_id": "contratos_obra_financeiro",
+      "role_label_pt_br": "contratos, obra ou financeiro",
+      "role_slot": 1,
+      "focus_doors": [
+        "START",
+        "PROTECT",
+        "CLOSE"
+      ],
+      "cards": [
+        "CFG-D16",
+        "CFG-D17",
+        "CFG-D18",
+        "CFG-D19",
+        "CFG-D20",
+        "CFG-D21",
+        "CFG-D22",
+        "CFG-D23",
+        "CFG-D24",
+        "CFG-D25",
+        "CFG-D26",
+        "CFG-D27",
+        "CFG-D28",
+        "CFG-D29",
+        "CFG-D30",
+        "CFG-D31",
+        "CFG-D32",
+        "CFG-D33"
+      ],
+      "boundary_cards": [
+        "CFG-D22",
+        "CFG-D17",
+        "CFG-D23",
+        "CFG-D19"
+      ],
+      "display_order": [
+        "CFG-D22",
+        "CFG-D17",
+        "CFG-D32",
+        "CFG-D30",
+        "CFG-D21",
+        "CFG-D20",
+        "CFG-D23",
+        "CFG-D24",
+        "CFG-D31",
+        "CFG-D19",
+        "CFG-D18",
+        "CFG-D29",
+        "CFG-D16",
+        "CFG-D25",
+        "CFG-D27",
+        "CFG-D33",
+        "CFG-D28",
+        "CFG-D26"
+      ]
+    },
+    {
+      "slot_id": "MF-P07",
+      "role_id": "contratos_obra_financeiro",
+      "role_label_pt_br": "contratos, obra ou financeiro",
+      "role_slot": 2,
+      "focus_doors": [
+        "START",
+        "PROTECT",
+        "CLOSE"
+      ],
+      "cards": [
+        "CFG-D19",
+        "CFG-D20",
+        "CFG-D21",
+        "CFG-D22",
+        "CFG-D23",
+        "CFG-D24",
+        "CFG-D25",
+        "CFG-D26",
+        "CFG-D27",
+        "CFG-D28",
+        "CFG-D29",
+        "CFG-D30",
+        "CFG-D31",
+        "CFG-D32",
+        "CFG-D33",
+        "CFG-D34",
+        "CFG-D35",
+        "CFG-D36"
+      ],
+      "boundary_cards": [
+        "CFG-D19",
+        "CFG-D36",
+        "CFG-D33",
+        "CFG-D23"
+      ],
+      "display_order": [
+        "CFG-D19",
+        "CFG-D36",
+        "CFG-D31",
+        "CFG-D21",
+        "CFG-D26",
+        "CFG-D29",
+        "CFG-D33",
+        "CFG-D30",
+        "CFG-D32",
+        "CFG-D28",
+        "CFG-D20",
+        "CFG-D25",
+        "CFG-D35",
+        "CFG-D27",
+        "CFG-D23",
+        "CFG-D34",
+        "CFG-D24",
+        "CFG-D22"
+      ]
+    },
+    {
+      "slot_id": "MF-P08",
+      "role_id": "engenharia_proposta",
+      "role_label_pt_br": "engenharia de proposta ou orçamento",
+      "role_slot": 2,
+      "focus_doors": [
+        "QUALIFY",
+        "PROPOSE",
+        "START"
+      ],
+      "cards": [
+        "CFG-D22",
+        "CFG-D23",
+        "CFG-D24",
+        "CFG-D25",
+        "CFG-D26",
+        "CFG-D27",
+        "CFG-D28",
+        "CFG-D29",
+        "CFG-D30",
+        "CFG-D31",
+        "CFG-D32",
+        "CFG-D33",
+        "CFG-D34",
+        "CFG-D35",
+        "CFG-D36",
+        "CFG-D37",
+        "CFG-D38",
+        "CFG-D39"
+      ],
+      "boundary_cards": [
+        "CFG-D22",
+        "CFG-D36",
+        "CFG-D34",
+        "CFG-D33"
+      ],
+      "display_order": [
+        "CFG-D22",
+        "CFG-D32",
+        "CFG-D29",
+        "CFG-D36",
+        "CFG-D35",
+        "CFG-D39",
+        "CFG-D25",
+        "CFG-D30",
+        "CFG-D34",
+        "CFG-D31",
+        "CFG-D38",
+        "CFG-D33",
+        "CFG-D37",
+        "CFG-D26",
+        "CFG-D24",
+        "CFG-D27",
+        "CFG-D28",
+        "CFG-D23"
+      ]
+    },
+    {
+      "slot_id": "MF-P09",
+      "role_id": "contratos_obra_financeiro",
+      "role_label_pt_br": "contratos, obra ou financeiro",
+      "role_slot": 3,
+      "focus_doors": [
+        "START",
+        "PROTECT",
+        "CLOSE"
+      ],
+      "cards": [
+        "CFG-D25",
+        "CFG-D26",
+        "CFG-D27",
+        "CFG-D28",
+        "CFG-D29",
+        "CFG-D30",
+        "CFG-D31",
+        "CFG-D32",
+        "CFG-D33",
+        "CFG-D34",
+        "CFG-D35",
+        "CFG-D36",
+        "CFG-D37",
+        "CFG-D38",
+        "CFG-D39",
+        "CFG-D40",
+        "CFG-D41",
+        "CFG-D42"
+      ],
+      "boundary_cards": [
+        "CFG-D33",
+        "CFG-D34",
+        "CFG-D36",
+        "CFG-D37"
+      ],
+      "display_order": [
+        "CFG-D33",
+        "CFG-D25",
+        "CFG-D40",
+        "CFG-D30",
+        "CFG-D42",
+        "CFG-D29",
+        "CFG-D35",
+        "CFG-D31",
+        "CFG-D38",
+        "CFG-D41",
+        "CFG-D27",
+        "CFG-D28",
+        "CFG-D39",
+        "CFG-D34",
+        "CFG-D26",
+        "CFG-D32",
+        "CFG-D36",
+        "CFG-D37"
+      ]
+    },
+    {
+      "slot_id": "MF-P10",
+      "role_id": "engenharia_proposta",
+      "role_label_pt_br": "engenharia de proposta ou orçamento",
+      "role_slot": 3,
+      "focus_doors": [
+        "QUALIFY",
+        "PROPOSE",
+        "START"
+      ],
+      "cards": [
+        "CFG-D28",
+        "CFG-D29",
+        "CFG-D30",
+        "CFG-D31",
+        "CFG-D32",
+        "CFG-D33",
+        "CFG-D34",
+        "CFG-D35",
+        "CFG-D36",
+        "CFG-D37",
+        "CFG-D38",
+        "CFG-D39",
+        "CFG-D40",
+        "CFG-D41",
+        "CFG-D42",
+        "CFG-D43",
+        "CFG-D44",
+        "CFG-D45"
+      ],
+      "boundary_cards": [
+        "CFG-D34",
+        "CFG-D33",
+        "CFG-D37",
+        "CFG-D36"
+      ],
+      "display_order": [
+        "CFG-D38",
+        "CFG-D32",
+        "CFG-D34",
+        "CFG-D33",
+        "CFG-D40",
+        "CFG-D37",
+        "CFG-D44",
+        "CFG-D30",
+        "CFG-D29",
+        "CFG-D45",
+        "CFG-D31",
+        "CFG-D36",
+        "CFG-D28",
+        "CFG-D42",
+        "CFG-D41",
+        "CFG-D43",
+        "CFG-D35",
+        "CFG-D39"
+      ]
+    },
+    {
+      "slot_id": "MF-P11",
+      "role_id": "contratos_obra_financeiro",
+      "role_label_pt_br": "contratos, obra ou financeiro",
+      "role_slot": 4,
+      "focus_doors": [
+        "START",
+        "PROTECT",
+        "CLOSE"
+      ],
+      "cards": [
+        "CFG-D31",
+        "CFG-D32",
+        "CFG-D33",
+        "CFG-D34",
+        "CFG-D35",
+        "CFG-D36",
+        "CFG-D37",
+        "CFG-D38",
+        "CFG-D39",
+        "CFG-D40",
+        "CFG-D41",
+        "CFG-D42",
+        "CFG-D43",
+        "CFG-D44",
+        "CFG-D45",
+        "CFG-D46",
+        "CFG-D47",
+        "CFG-D48"
+      ],
+      "boundary_cards": [
+        "CFG-D36",
+        "CFG-D37",
+        "CFG-D33",
+        "CFG-D34"
+      ],
+      "display_order": [
+        "CFG-D46",
+        "CFG-D45",
+        "CFG-D40",
+        "CFG-D32",
+        "CFG-D43",
+        "CFG-D42",
+        "CFG-D41",
+        "CFG-D36",
+        "CFG-D39",
+        "CFG-D48",
+        "CFG-D31",
+        "CFG-D47",
+        "CFG-D37",
+        "CFG-D35",
+        "CFG-D38",
+        "CFG-D33",
+        "CFG-D34",
+        "CFG-D44"
+      ]
+    },
+    {
+      "slot_id": "MF-P12",
+      "role_id": "engenharia_proposta",
+      "role_label_pt_br": "engenharia de proposta ou orçamento",
+      "role_slot": 4,
+      "focus_doors": [
+        "QUALIFY",
+        "PROPOSE",
+        "START"
+      ],
+      "cards": [
+        "CFG-D34",
+        "CFG-D35",
+        "CFG-D36",
+        "CFG-D37",
+        "CFG-D38",
+        "CFG-D39",
+        "CFG-D40",
+        "CFG-D41",
+        "CFG-D42",
+        "CFG-D43",
+        "CFG-D44",
+        "CFG-D45",
+        "CFG-D46",
+        "CFG-D47",
+        "CFG-D48",
+        "CFG-D49",
+        "CFG-D50",
+        "CFG-D51"
+      ],
+      "boundary_cards": [
+        "CFG-D51",
+        "CFG-D49",
+        "CFG-D34",
+        "CFG-D37"
+      ],
+      "display_order": [
+        "CFG-D51",
+        "CFG-D38",
+        "CFG-D49",
+        "CFG-D44",
+        "CFG-D46",
+        "CFG-D50",
+        "CFG-D39",
+        "CFG-D41",
+        "CFG-D34",
+        "CFG-D43",
+        "CFG-D40",
+        "CFG-D37",
+        "CFG-D47",
+        "CFG-D36",
+        "CFG-D48",
+        "CFG-D42",
+        "CFG-D35",
+        "CFG-D45"
+      ]
+    },
+    {
+      "slot_id": "MF-P13",
+      "role_id": "engenharia_proposta",
+      "role_label_pt_br": "engenharia de proposta ou orçamento",
+      "role_slot": 5,
+      "focus_doors": [
+        "QUALIFY",
+        "PROPOSE",
+        "START"
+      ],
+      "cards": [
+        "CFG-D37",
+        "CFG-D38",
+        "CFG-D39",
+        "CFG-D40",
+        "CFG-D41",
+        "CFG-D42",
+        "CFG-D43",
+        "CFG-D44",
+        "CFG-D45",
+        "CFG-D46",
+        "CFG-D47",
+        "CFG-D48",
+        "CFG-D49",
+        "CFG-D50",
+        "CFG-D51",
+        "CFG-D52",
+        "CFG-D53",
+        "CFG-D54"
+      ],
+      "boundary_cards": [
+        "CFG-D53",
+        "CFG-D52",
+        "CFG-D37",
+        "CFG-D54"
+      ],
+      "display_order": [
+        "CFG-D44",
+        "CFG-D53",
+        "CFG-D47",
+        "CFG-D52",
+        "CFG-D50",
+        "CFG-D45",
+        "CFG-D43",
+        "CFG-D38",
+        "CFG-D37",
+        "CFG-D48",
+        "CFG-D42",
+        "CFG-D54",
+        "CFG-D49",
+        "CFG-D51",
+        "CFG-D40",
+        "CFG-D39",
+        "CFG-D41",
+        "CFG-D46"
+      ]
+    },
+    {
+      "slot_id": "MF-P14",
+      "role_id": "licitacoes_comercial",
+      "role_label_pt_br": "líder de licitações ou comercial",
+      "role_slot": 1,
+      "focus_doors": [
+        "GROW",
+        "QUALIFY",
+        "PROPOSE"
+      ],
+      "cards": [
+        "CFG-D40",
+        "CFG-D41",
+        "CFG-D42",
+        "CFG-D43",
+        "CFG-D44",
+        "CFG-D45",
+        "CFG-D46",
+        "CFG-D47",
+        "CFG-D48",
+        "CFG-D49",
+        "CFG-D50",
+        "CFG-D51",
+        "CFG-D52",
+        "CFG-D53",
+        "CFG-D54",
+        "CFG-D01",
+        "CFG-D02",
+        "CFG-D03"
+      ],
+      "boundary_cards": [
+        "CFG-D51",
+        "CFG-D49",
+        "CFG-D54",
+        "CFG-D52"
+      ],
+      "display_order": [
+        "CFG-D47",
+        "CFG-D48",
+        "CFG-D44",
+        "CFG-D03",
+        "CFG-D50",
+        "CFG-D43",
+        "CFG-D51",
+        "CFG-D45",
+        "CFG-D40",
+        "CFG-D49",
+        "CFG-D01",
+        "CFG-D46",
+        "CFG-D54",
+        "CFG-D42",
+        "CFG-D52",
+        "CFG-D53",
+        "CFG-D41",
+        "CFG-D02"
+      ]
+    },
+    {
+      "slot_id": "MF-P15",
+      "role_id": "licitacoes_comercial",
+      "role_label_pt_br": "líder de licitações ou comercial",
+      "role_slot": 2,
+      "focus_doors": [
+        "GROW",
+        "QUALIFY",
+        "PROPOSE"
+      ],
+      "cards": [
+        "CFG-D43",
+        "CFG-D44",
+        "CFG-D45",
+        "CFG-D46",
+        "CFG-D47",
+        "CFG-D48",
+        "CFG-D49",
+        "CFG-D50",
+        "CFG-D51",
+        "CFG-D52",
+        "CFG-D53",
+        "CFG-D54",
+        "CFG-D01",
+        "CFG-D02",
+        "CFG-D03",
+        "CFG-D04",
+        "CFG-D05",
+        "CFG-D06"
+      ],
+      "boundary_cards": [
+        "CFG-D54",
+        "CFG-D52",
+        "CFG-D53",
+        "CFG-D51"
+      ],
+      "display_order": [
+        "CFG-D54",
+        "CFG-D52",
+        "CFG-D46",
+        "CFG-D01",
+        "CFG-D53",
+        "CFG-D44",
+        "CFG-D45",
+        "CFG-D02",
+        "CFG-D05",
+        "CFG-D51",
+        "CFG-D50",
+        "CFG-D03",
+        "CFG-D04",
+        "CFG-D43",
+        "CFG-D48",
+        "CFG-D47",
+        "CFG-D49",
+        "CFG-D06"
+      ]
+    },
+    {
+      "slot_id": "MF-P16",
+      "role_id": "licitacoes_comercial",
+      "role_label_pt_br": "líder de licitações ou comercial",
+      "role_slot": 3,
+      "focus_doors": [
+        "GROW",
+        "QUALIFY",
+        "PROPOSE"
+      ],
+      "cards": [
+        "CFG-D46",
+        "CFG-D47",
+        "CFG-D48",
+        "CFG-D49",
+        "CFG-D50",
+        "CFG-D51",
+        "CFG-D52",
+        "CFG-D53",
+        "CFG-D54",
+        "CFG-D01",
+        "CFG-D02",
+        "CFG-D03",
+        "CFG-D04",
+        "CFG-D05",
+        "CFG-D06",
+        "CFG-D07",
+        "CFG-D08",
+        "CFG-D09"
+      ],
+      "boundary_cards": [
+        "CFG-D52",
+        "CFG-D54",
+        "CFG-D51",
+        "CFG-D49"
+      ],
+      "display_order": [
+        "CFG-D52",
+        "CFG-D47",
+        "CFG-D07",
+        "CFG-D54",
+        "CFG-D48",
+        "CFG-D51",
+        "CFG-D08",
+        "CFG-D04",
+        "CFG-D50",
+        "CFG-D05",
+        "CFG-D02",
+        "CFG-D03",
+        "CFG-D46",
+        "CFG-D09",
+        "CFG-D01",
+        "CFG-D49",
+        "CFG-D06",
+        "CFG-D53"
+      ]
+    },
+    {
+      "slot_id": "MF-P17",
+      "role_id": "licitacoes_comercial",
+      "role_label_pt_br": "líder de licitações ou comercial",
+      "role_slot": 4,
+      "focus_doors": [
+        "GROW",
+        "QUALIFY",
+        "PROPOSE"
+      ],
+      "cards": [
+        "CFG-D49",
+        "CFG-D50",
+        "CFG-D51",
+        "CFG-D52",
+        "CFG-D53",
+        "CFG-D54",
+        "CFG-D01",
+        "CFG-D02",
+        "CFG-D03",
+        "CFG-D04",
+        "CFG-D05",
+        "CFG-D06",
+        "CFG-D07",
+        "CFG-D08",
+        "CFG-D09",
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D12"
+      ],
+      "boundary_cards": [
+        "CFG-D51",
+        "CFG-D12",
+        "CFG-D53",
+        "CFG-D54"
+      ],
+      "display_order": [
+        "CFG-D08",
+        "CFG-D51",
+        "CFG-D09",
+        "CFG-D06",
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D50",
+        "CFG-D12",
+        "CFG-D03",
+        "CFG-D53",
+        "CFG-D05",
+        "CFG-D54",
+        "CFG-D52",
+        "CFG-D02",
+        "CFG-D01",
+        "CFG-D04",
+        "CFG-D49",
+        "CFG-D07"
+      ]
+    },
+    {
+      "slot_id": "MF-P18",
+      "role_id": "licitacoes_comercial",
+      "role_label_pt_br": "líder de licitações ou comercial",
+      "role_slot": 5,
+      "focus_doors": [
+        "GROW",
+        "QUALIFY",
+        "PROPOSE"
+      ],
+      "cards": [
+        "CFG-D52",
+        "CFG-D53",
+        "CFG-D54",
+        "CFG-D01",
+        "CFG-D02",
+        "CFG-D03",
+        "CFG-D04",
+        "CFG-D05",
+        "CFG-D06",
+        "CFG-D07",
+        "CFG-D08",
+        "CFG-D09",
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D12",
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D15"
+      ],
+      "boundary_cards": [
+        "CFG-D54",
+        "CFG-D52",
+        "CFG-D13",
+        "CFG-D14"
+      ],
+      "display_order": [
+        "CFG-D01",
+        "CFG-D06",
+        "CFG-D02",
+        "CFG-D54",
+        "CFG-D15",
+        "CFG-D52",
+        "CFG-D09",
+        "CFG-D13",
+        "CFG-D04",
+        "CFG-D05",
+        "CFG-D14",
+        "CFG-D07",
+        "CFG-D12",
+        "CFG-D08",
+        "CFG-D03",
+        "CFG-D53",
+        "CFG-D10",
+        "CFG-D11"
+      ]
+    },
+    {
+      "slot_id": "MF-P19",
+      "role_id": "direcao",
+      "role_label_pt_br": "dono, sócio ou diretor",
+      "role_slot": 5,
+      "focus_doors": [
+        "GROW",
+        "QUALIFY",
+        "CLOSE"
+      ],
+      "cards": [
+        "CFG-D02",
+        "CFG-D03",
+        "CFG-D04",
+        "CFG-D05",
+        "CFG-D06",
+        "CFG-D07",
+        "CFG-D08",
+        "CFG-D09",
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D12",
+        "CFG-D13",
+        "CFG-D14",
+        "CFG-D15",
+        "CFG-D16",
+        "CFG-D17",
+        "CFG-D18",
+        "CFG-D19"
+      ],
+      "boundary_cards": [
+        "CFG-D17",
+        "CFG-D14",
+        "CFG-D19",
+        "CFG-D18"
+      ],
+      "display_order": [
+        "CFG-D02",
+        "CFG-D17",
+        "CFG-D14",
+        "CFG-D03",
+        "CFG-D05",
+        "CFG-D07",
+        "CFG-D08",
+        "CFG-D19",
+        "CFG-D18",
+        "CFG-D13",
+        "CFG-D16",
+        "CFG-D06",
+        "CFG-D12",
+        "CFG-D10",
+        "CFG-D11",
+        "CFG-D09",
+        "CFG-D15",
+        "CFG-D04"
+      ]
+    },
+    {
+      "slot_id": "MF-P20",
+      "role_id": "contratos_obra_financeiro",
+      "role_label_pt_br": "contratos, obra ou financeiro",
+      "role_slot": 5,
+      "focus_doors": [
+        "START",
+        "PROTECT",
+        "CLOSE"
+      ],
+      "cards": [
+        "CFG-D29",
+        "CFG-D30",
+        "CFG-D31",
+        "CFG-D32",
+        "CFG-D33",
+        "CFG-D34",
+        "CFG-D35",
+        "CFG-D36",
+        "CFG-D37",
+        "CFG-D38",
+        "CFG-D39",
+        "CFG-D40",
+        "CFG-D41",
+        "CFG-D42",
+        "CFG-D43",
+        "CFG-D44",
+        "CFG-D45",
+        "CFG-D46"
+      ],
+      "boundary_cards": [
+        "CFG-D33",
+        "CFG-D37",
+        "CFG-D36",
+        "CFG-D34"
+      ],
+      "display_order": [
+        "CFG-D39",
+        "CFG-D31",
+        "CFG-D30",
+        "CFG-D32",
+        "CFG-D33",
+        "CFG-D35",
+        "CFG-D40",
+        "CFG-D38",
+        "CFG-D29",
+        "CFG-D37",
+        "CFG-D44",
+        "CFG-D46",
+        "CFG-D42",
+        "CFG-D43",
+        "CFG-D41",
+        "CFG-D45",
+        "CFG-D36",
+        "CFG-D34"
+      ]
+    }
+  ],
+  "coverage": {
+    "minimum_item_exposures_required": 6,
+    "minimum_item_exposures_observed": 6,
+    "item_exposure_counts": {
+      "CFG-D01": 6,
+      "CFG-D02": 7,
+      "CFG-D03": 7,
+      "CFG-D04": 7,
+      "CFG-D05": 7,
+      "CFG-D06": 7,
+      "CFG-D07": 7,
+      "CFG-D08": 7,
+      "CFG-D09": 7,
+      "CFG-D10": 7,
+      "CFG-D11": 7,
+      "CFG-D12": 7,
+      "CFG-D13": 7,
+      "CFG-D14": 7,
+      "CFG-D15": 7,
+      "CFG-D16": 7,
+      "CFG-D17": 7,
+      "CFG-D18": 7,
+      "CFG-D19": 7,
+      "CFG-D20": 6,
+      "CFG-D21": 6,
+      "CFG-D22": 6,
+      "CFG-D23": 6,
+      "CFG-D24": 6,
+      "CFG-D25": 6,
+      "CFG-D26": 6,
+      "CFG-D27": 6,
+      "CFG-D28": 6,
+      "CFG-D29": 7,
+      "CFG-D30": 7,
+      "CFG-D31": 7,
+      "CFG-D32": 7,
+      "CFG-D33": 7,
+      "CFG-D34": 7,
+      "CFG-D35": 7,
+      "CFG-D36": 7,
+      "CFG-D37": 7,
+      "CFG-D38": 7,
+      "CFG-D39": 7,
+      "CFG-D40": 7,
+      "CFG-D41": 7,
+      "CFG-D42": 7,
+      "CFG-D43": 7,
+      "CFG-D44": 7,
+      "CFG-D45": 7,
+      "CFG-D46": 7,
+      "CFG-D47": 6,
+      "CFG-D48": 6,
+      "CFG-D49": 6,
+      "CFG-D50": 6,
+      "CFG-D51": 6,
+      "CFG-D52": 6,
+      "CFG-D53": 6,
+      "CFG-D54": 6
+    },
+    "minimum_joint_boundary_exposures_required": 3,
+    "minimum_joint_boundary_exposures_observed": 4,
+    "boundary_joint_counts": {
+      "disputar_habilitar": 6,
+      "habilitar_orcamento": 7,
+      "orcamento_proposta": 6,
+      "risco_margem_medicao": 7,
+      "medicao_atraso": 6,
+      "medicao_reequilibrio": 4,
+      "reequilibrio_aditivo": 6,
+      "mobilizacao_matriz": 6,
+      "encerramento_acervo": 6,
+      "orcamento_habilitacao": 6,
+      "habilitacao_proposta_tecnica": 5,
+      "proposta_tecnica_revisao": 6,
+      "revisao_sessao": 6
+    }
+  }
+}
