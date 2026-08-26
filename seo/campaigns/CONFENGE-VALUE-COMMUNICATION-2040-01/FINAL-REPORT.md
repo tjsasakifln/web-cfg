@@ -1,5 +1,9 @@
 # FINAL REPORT — CONFENGE-VALUE-COMMUNICATION-2040-01
 
+> Registro histórico de uma campanha anterior. Nomes e agrupamentos abaixo não
+> são contrato executável; prevalecem #343 e o catálogo de 54 entregáveis + 2
+> contêineres.
+
 ## Terminal status
 
 **IMPLEMENTED_DEPLOY_BLOCKED**
