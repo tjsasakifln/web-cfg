@@ -1,6 +1,6 @@
 {
   "schema": "confenge.icp-trust-session-state.v1",
-  "protocol_version": "1.0.0",
+  "protocol_version": "1.1.0",
   "as_of": "2026-08-24",
   "owner_role": "CONFENGE founder / research moderator",
   "next_review_at": "2026-09-13",
@@ -16,14 +16,11 @@
   "claims": {
     "participant_result_proven": false,
     "tree_test_success_rate_proven": false,
-    "five_second_comprehension_proven": false,
-    "copy_comprehension_proven": false
+    "five_second_comprehension_proven": false
   },
   "residuals": {
     "183": "OPEN_BLOCKED_HUMAN_EVIDENCE",
-    "184": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_TRAFFIC_WINDOW",
-    "188": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_CLICK_WINDOW",
-    "297": "OPEN_BLOCKED_HUMAN_PARTICIPANTS"
+    "184": "OPEN_BLOCKED_HUMAN_EVIDENCE_AND_TRAFFIC_WINDOW"
   },
-  "next_action": "Recruit five eligible people from the named source, record consent privately, execute the three frozen protocols, then commit only aggregate no-PII evidence and a separate interpretation."
+  "next_action": "Recruit five eligible people from the named source, record consent privately, execute the two active protocols, then commit only aggregate no-PII evidence and a separate interpretation."
 }

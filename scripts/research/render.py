@@ -234,7 +234,7 @@ preview `noindex` até quality gate humano.
 - Bloco 1: funil de cobertura (C4).
 - Bloco 2: valor por mercado (C1) + tickets (C3).
 - Bloco 3: metodologia e limitações.
-- CTA discreto: Bid Room / auditoria / aditivos / defesa de margem, depois dos fatos.
+- CTA discreto: Operação de Proposta para Licitação Crítica / auditoria / aditivos / defesa de margem, depois dos fatos.
 
 ## Relatório futuro
 
@@ -264,7 +264,7 @@ nacional nem evolução anual.
   machine-readable + metodologia. Pedido: crítica do denominator, não republicação
   do número como "Brasil".
 - ABM (diretor de contrato / orçamentista): recorte do ticket P25–P75 da UF
-  em que a empresa opera + oferta Bid Room / auditoria, sem score comercial.
+  em que a empresa opera + Operação de Proposta para Licitação Crítica / auditoria, sem score comercial.
 
 ## Vídeos curtos (45s)
 
@@ -358,7 +358,7 @@ def render_distribution_json(pack: dict[str, Any]) -> Path:
         ),
         "emails": {
             "editorial": "Pack + metodologia para crítica do denominator.",
-            "abm": "Ticket P25–P75 da UF da empresa + Bid Room / auditoria.",
+            "abm": "Ticket P25–P75 da UF da empresa + Operação de Proposta para Licitação Crítica / auditoria.",
         },
         "videos": [
             "Funil de cobertura; encerrar com o recorte de 4 UFs.",

@@ -3,7 +3,7 @@
   "html_mutation_authorized": false,
   "earliest_safe_action_at": "2026-09-16",
   "corresponding_issue": 128,
-  "campaign_supersession": "CONFENGE-WEB-BOFU-CHECKOUT-CONVERGENCE-01 applied criterion-1 HTML on 2026-08-20. Remaining replacements stay PREPARE-ONLY.",
+  "campaign_supersession": "CONFENGE-WEB-BOFU-CHECKOUT-CONVERGENCE-01 applied criterion-1 HTML on 2026-08-20; #343 then superseded visitor-facing names on 2026-08-25. Remaining replacements stay PREPARE-ONLY.",
   "pillars": {
     "aditivos-obras-publicas": [
       {
@@ -37,7 +37,7 @@
       {
         "block": "og_title",
         "before": "<meta content=\"Mapeie onde a frente pública perde tempo, margem e controle.\" property=\"og:title\"/>",
-        "after": "<meta content=\"Diagnóstico B2G 360° | CONFENGE\" property=\"og:title\"/>"
+        "after": "<meta content=\"Diagnóstico da Operação em Obras Públicas | CONFENGE\" property=\"og:title\"/>"
       }
     ],
     "diagnostico-pre-licitacao": [

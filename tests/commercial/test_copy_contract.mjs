@@ -381,7 +381,7 @@ if (triggerSections.length >= 2) {
 /* ---------- 5. excecoes de portao documentadas no proprio arquivo ---------- */
 const exceptions = contract.gate_exceptions || [];
 const exceptionById = new Map(exceptions.map((e) => [e.id, e]));
-assert("gate_exceptions_present", exceptions.length >= 4, exceptions.length);
+assert("gate_exceptions_present", exceptions.length === 3, exceptions.length);
 for (const e of exceptions) {
   assert(`gate_exception_has_rule_${e.id}`, typeof e.rule === "string" && e.rule.length > 20, e);
   assert(`gate_exception_has_scope_${e.id}`, typeof e.scope === "string" && e.scope.length > 0, e);
@@ -423,39 +423,29 @@ assert(
     guarantee.market_institute_forms.includes("garantia contratual"),
   guarantee,
 );
-const registered = exceptionById.get("GX-04");
 const fl360 = termEntries.find((entry) => entry.id === "FL-06");
 assert(
-  "gx04_registered_public_name",
-  registered &&
-    registered.implemented_as === "registered_public_name_prefix" &&
-    Array.isArray(registered.registered_public_names) &&
-    registered.registered_public_names.length > 0,
-  registered,
+  "retired_360_name_has_no_public_exception",
+  !exceptionById.has("GX-04") && !(fl360.exemption_ids || []).includes("GX-04"),
+  fl360.exemption_ids,
 );
-const frozenRoute = exceptionById.get("GX-05");
 const frozenHtml = fs.readFileSync(path.join(root, "diagnostico-b2g-360/index.html"), "utf8");
 assert(
-  "gx05_is_exact_hash_pinned_frozen_route",
-  frozenRoute &&
-    frozenRoute.implemented_as === "hash_pinned_frozen_route_occurrence" &&
-    frozenRoute.route === "/diagnostico-b2g-360/" &&
-    frozenRoute.forbidden_id === "FL-06" &&
-    frozenRouteExemption(fl360, frozenRoute.route, frozenHtml, contract) === "hash_pinned_frozen_route" &&
-    frozenRouteExemption(fl360, frozenRoute.route, `${frozenHtml}\n`, contract) === null,
-  frozenRoute,
+  "retired_360_name_absent_from_canonical_page",
+  !/360\s*°/.test(visibleText(frozenHtml)),
+  visibleText(frozenHtml).match(/.{0,20}360\s*°.{0,20}/g),
 );
 const registeredLeakText = normalize("Diagnóstico B2G 360° é o nome. Nesta página, 360° resolve tudo.");
 const registeredLeakIndex = registeredLeakText.lastIndexOf("360°");
 assert(
-  "gx04_does_not_exempt_term_elsewhere_on_registered_route",
+  "retired_name_does_not_exempt_360_anywhere",
   classifyOccurrence(
     fl360,
     registeredLeakText,
     registeredLeakIndex,
     "360°",
     contract,
-    auditRegisteredNameRanges(registeredLeakText, registered.registered_public_names),
+    [],
   ) === null,
   registeredLeakText,
 );
@@ -492,7 +482,8 @@ for (const entry of termEntries) {
 const precedence = contract.money_page_scan?.exemption_precedence || [];
 assert(
   "exemption_precedence_declared",
-  precedence.length === 4 && precedence.every((id) => exceptionById.has(id)),
+  JSON.stringify(precedence) === JSON.stringify(["GX-03", "GX-02", "GX-01"]) &&
+    precedence.every((id) => exceptionById.has(id)),
   precedence,
 );
 
@@ -519,7 +510,7 @@ const negationMarkers = negation?.negation_markers || [];
 const negationWindow = negation?.window_chars || 0;
 const negationRe = new RegExp(`\\b(${negationMarkers.map((m) => m.replace(/\s/g, "\\s")).join("|")})\\b`);
 const promiseForms = guarantee?.promise_forms || [];
-const registeredNames = (registered?.registered_public_names || []).map(normalize);
+const registeredNames = [];
 
 function registeredNameRanges(normText) {
   const ranges = [];
@@ -535,7 +526,6 @@ function registeredNameRanges(normText) {
 
 function classify(entry, normText, index, matched, ranges) {
   const exemptionIds = entry.exemption_ids || [];
-  if (exemptionIds.includes("GX-04") && ranges.some(([a, b]) => index >= a && index < b)) return "GX-04";
   if (exemptionIds.includes("GX-03")) {
     const tail = normText.slice(index, index + matched.length + 4);
     const instituteTail = normText.slice(index, index + matched.length + 24);

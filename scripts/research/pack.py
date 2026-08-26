@@ -416,7 +416,7 @@ def build_pack(
             "paths": WEDGE["commercial_fit"],
             "note": (
                 "Ofertas CONFENGE entram só como próximo passo operacional "
-                "( Bid Room, auditoria de orçamento, aditivos, defesa de margem ), "
+                "( Operação de Proposta para Licitação Crítica, auditoria de orçamento, aditivos, defesa de margem ), "
                 "depois dos fatos do recorte. Sem CTA de ranking nacional."
             ),
         },

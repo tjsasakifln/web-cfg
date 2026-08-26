@@ -227,8 +227,7 @@
       "pattern": "\\bsolucao completa\\b|\\bsolucoes completas\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -241,8 +240,7 @@
       "pattern": "\\binsights? estrategicos?\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -255,8 +253,7 @@
       "pattern": "\\binteligencia de ponta\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -269,8 +266,7 @@
       "pattern": "\\bexcelencias?\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -283,8 +279,7 @@
       "pattern": "\\bpersonalizad[oa]s?\\b|\\bpersonalizacao\\b|\\bpersonalizacoes\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -297,9 +292,7 @@
       "pattern": "360\\s*°",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04",
-        "GX-05"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -312,8 +305,7 @@
       "pattern": "\\btransformador[ae]?s?\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -327,8 +319,7 @@
       "exemption_ids": [
         "GX-01",
         "GX-02",
-        "GX-03",
-        "GX-04"
+        "GX-03"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -341,8 +332,7 @@
       "pattern": "\\brecupere\\b|\\brecuperamos\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "finding_kind": "violation"
@@ -355,8 +345,7 @@
       "pattern": "\\bvenca\\b|\\bvencam\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "false_positive_note": "A comparação usa fronteira de palavra sobre o texto sem acento. Sem fronteira de palavra, invenção viraria falso positivo de vença.",
@@ -370,8 +359,7 @@
       "pattern": "\\bpodera\\b|\\bpoderao\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Linguagem proibida sem prova imediata",
       "rationale": "A issue proíbe excesso de poderá. O scanner conta ocorrências; o julgamento de excesso pertence à revisão adversarial, que não rodou.",
@@ -386,8 +374,7 @@
       "pattern": "\\bimpossivel de melhorar\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Acceptance",
       "rationale": "O site não declara impossível de melhorar; demonstra qualidade por clareza, prova e consistência.",
@@ -401,8 +388,7 @@
       "pattern": "\\bconfie em nos\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Critérios quantitativos de qualidade",
       "rationale": "Zero claim depende de confie em nós.",
@@ -416,8 +402,7 @@
       "pattern": "\\bsaiba mais\\b",
       "exemption_ids": [
         "GX-01",
-        "GX-02",
-        "GX-04"
+        "GX-02"
       ],
       "source": "#338 Critérios quantitativos de qualidade",
       "rationale": "Zero oferta termina em saiba mais como único significado. O scanner sinaliza a ocorrência; a reprovação só se confirma quando saiba mais é o único significado do encerramento da oferta.",
@@ -546,26 +531,6 @@
         "seguro-garantia"
       ],
       "source": "#338 promessa jurídica, regulatória, técnica ou financeira fora da competência"
-    },
-    {
-      "id": "GX-04",
-      "scope": "nome registrado de oferta",
-      "rule": "Termo de categoria dentro do nome registrado de uma oferta é rótulo publicado, não claim isolado. A frase seguinte continua obrigada a provar concretamente o que o termo significa, e essa prova é julgada pela revisão adversarial.",
-      "implemented_as": "registered_public_name_prefix",
-      "registered_public_names": [
-        "Diagnóstico B2G 360°"
-      ],
-      "source": "#338 Termos de categoria podem existir no nome registrado"
-    },
-    {
-      "id": "GX-05",
-      "scope": "ocorrência legada em rota pública congelada por hash",
-      "rule": "A ocorrência de 360° fora do nome registrado só permanece enquanto /diagnostico-b2g-360/ conservar exatamente o hash congelado. Qualquer alteração de byte invalida a exceção e reprova o portão.",
-      "implemented_as": "hash_pinned_frozen_route_occurrence",
-      "route": "/diagnostico-b2g-360/",
-      "forbidden_id": "FL-06",
-      "content_sha256": "51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12",
-      "source": "data/bofu-dominance/frozen-specs/hashes.json"
     }
   ],
   "structured_data_ban": {
@@ -606,7 +571,11 @@
     "machine_precheck": {
       "state": "MEASURED_PASS",
       "runner": "scripts/commercial/copy_contract_audit.mjs",
-      "signature_fields": ["trigger", "decision_question", "included_outputs[0]"],
+      "signature_fields": [
+        "trigger",
+        "decision_question",
+        "included_outputs[0]"
+      ],
       "unique_signatures": 54,
       "published_clause_bodies_checked": 810,
       "exact_duplicate_clause_bodies": 0,
@@ -899,11 +868,11 @@
     "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
     "route_discovery": "registry_and_public_family_derived",
     "manual_route_allowlist": false,
-    "method": "Cada rota derivada é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Só o nome registrado exato, um instituto de mercado, uma negação na mesma frase, uma seção estrutural Não inclui ou a rota congelada com hash exato pode gerar isenção.",
-    "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. A única exceção legada de rota é vinculada ao hash congelado e falha com qualquer alteração de byte. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
+    "method": "Cada rota derivada é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Só um instituto de mercado, uma negação na mesma frase ou uma seção estrutural Não inclui pode gerar isenção no texto visível; aliases antigos ficam apenas em metadados de busca, analytics e compatibilidade.",
+    "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. Não existe exceção nominal ou de rota para apresentar nome público aposentado. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
     "live_measurement": {
       "routes_derived": 23,
-      "language_boundaries": 119,
+      "language_boundaries": 85,
       "language_observations": 0,
       "language_violations": 0,
       "structured_social_proof_hits": 0,
@@ -929,46 +898,6 @@
     "violations_note": "Nenhuma violação real encontrada nas 23 rotas derivadas em 2026-08-25. O relatório vivo expõe as isenções e reprova qualquer ocorrência sem exceção documentada; boundaries abaixo é somente o baseline histórico.",
     "boundaries": [
       {
-        "id": "B-01",
-        "page": "entregas/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-02",
-        "page": "servicos-obras-publicas/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 4,
-        "by_exemption": {
-          "GX-04": 4
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, na trilha de escolha e na navegação."
-      },
-      {
-        "id": "B-03",
-        "page": "problemas-que-resolvemos/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-04",
-        "page": "diagnostico-b2g-expansao/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 6,
-        "by_exemption": {
-          "GX-04": 6
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado, usado sobretudo para negar identidade: não é o Diagnóstico B2G 360°."
-      },
-      {
         "id": "B-05",
         "page": "diagnostico-b2g-expansao/index.html",
         "forbidden_id": "FL-08",
@@ -978,36 +907,6 @@
           "GX-03": 1
         },
         "evidence": "Duas promessas negadas (sem garantia de vitória, adjudicação, economia ou receita; não há garantia de resultado) e uma citação do instituto (garantia financeira, na lista do que não entra)."
-      },
-      {
-        "id": "B-06",
-        "page": "casos/modelo-apresentacao-executiva-resultados/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-07",
-        "page": "casos/modelo-base-quantitativa-canonica/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-08",
-        "page": "casos/modelo-contratos-vincendos-relicitacao/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
       },
       {
         "id": "B-09",
@@ -1021,16 +920,6 @@
         "evidence": "Seis citações do instituto como insumo de caixa e de preparação (garantia negociada, garantia cotada, levantar acervo, equipe, garantia e caixa) e uma forma de promessa negada (sem quantitativo mínimo garantido)."
       },
       {
-        "id": "B-10",
-        "page": "casos/modelo-mapa-compradores-publicos/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
         "id": "B-11",
         "page": "casos/modelo-mapa-compradores-publicos/index.html",
         "forbidden_id": "FL-08",
@@ -1041,36 +930,6 @@
         "evidence": "Promessa negada: não é rota garantida nem estimativa de custo de mobilização."
       },
       {
-        "id": "B-12",
-        "page": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-13",
-        "page": "casos/modelo-painel-precos-obras-publicas/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
-        "id": "B-14",
-        "page": "casos/modelo-relatorio-executivo-consolidado/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
-      },
-      {
         "id": "B-15",
         "page": "casos/modelo-relatorio-executivo-consolidado/index.html",
         "forbidden_id": "FL-08",
@@ -1079,16 +938,6 @@
           "GX-01": 1
         },
         "evidence": "Promessa negada: nenhuma vitória é garantida, nenhum acesso privilegiado é oferecido e nenhum resultado é prometido."
-      },
-      {
-        "id": "B-16",
-        "page": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
-        "forbidden_id": "FL-06",
-        "occurrences": 1,
-        "by_exemption": {
-          "GX-04": 1
-        },
-        "evidence": "Diagnóstico B2G 360°, nome registrado da oferta de entrada, citado na navegação."
       },
       {
         "id": "B-17",
@@ -1123,10 +972,9 @@
       "note": "Nenhuma das 23 rotas derivadas publica Review nem AggregateRating em application/ld+json."
     },
     "exemption_precedence": [
-      "GX-04",
       "GX-03",
-      "GX-01",
-      "GX-05"
+      "GX-02",
+      "GX-01"
     ],
     "finding_kinds": {
       "violation": "Ocorrência sem exceção documentada. Reprova o portão enquanto não estiver registrada em violations com state MEASURED_FAIL.",

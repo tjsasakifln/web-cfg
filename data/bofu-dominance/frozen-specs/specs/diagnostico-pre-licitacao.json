@@ -193,21 +193,21 @@
       "bridges": [
         {
           "position": "pillar_bridge",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20um%20Bid%20Room%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
           "text": "Avaliar uma oportunidade"
         },
         {
           "position": "pillar_bridge",
           "href": "/diretoria-b2g/",
-          "text": "Conhecer a Diretoria B2G"
+          "text": "Conhecer a Diretoria Fracionada para o Mercado Público"
         }
       ],
       "when_not_to_hire": true,
       "whatsapp_present": true,
       "form_count": 0
     },
-    "content_sha256": "5f2179d837e1c8d01b8bd505420cab4c549d6d1d5f47e84910da06ca447f7529",
-    "bytes": 22820,
+    "content_sha256": "12d7d0e59003adfac61d03ddebbb3f2a869bc78811f6176f36840647c2ec1a06",
+    "bytes": 22941,
     "noindex": false
   }
 }

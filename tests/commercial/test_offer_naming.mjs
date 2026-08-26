@@ -374,7 +374,7 @@ const primaryOfferPages = [
 for (const [page, canonicalName, legacyName] of primaryOfferPages) {
   const html = fs.readFileSync(path.join(root, page), "utf8");
   assert(`primary_page_h1_${page}`, html.includes(`<h1>${canonicalName}</h1>`), canonicalName);
-  assert(`primary_page_alias_${page}`, html.includes(`Nome anterior: ${legacyName}.`), legacyName);
+  assert(`primary_page_legacy_name_not_visible_${page}`, !html.includes(`Nome anterior: ${legacyName}`), legacyName);
 }
 const diretoriaHtml = fs.readFileSync(path.join(root, "diretoria-b2g/index.html"), "utf8");
 assert(

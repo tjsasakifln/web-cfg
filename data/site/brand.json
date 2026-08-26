@@ -8,11 +8,11 @@
   },
   "positioning": {
     "short": "Consultoria para licitações e contratos de obras públicas que ajuda construtoras a selecionar melhor, precificar com disciplina e proteger a margem na execução.",
-    "long": "A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia em licitações e contratos de obras públicas: análise de edital, orçamento, decisão de participar, preparação de proposta e defesa de margem na execução (aditivos, reequilíbrio, medições, glosas e atrasos). O modelo proprietário de rotina contínua chama-se Diretoria B2G fracionada.",
+    "long": "A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia em licitações e contratos de obras públicas: análise de edital, orçamento, decisão de participar, preparação de proposta e defesa de margem na execução (aditivos, reequilíbrio, medições, glosas e atrasos). O modelo proprietário de rotina contínua chama-se Diretoria Fracionada para o Mercado Público.",
     "tagline": "Licitação vencida não paga a conta. Contrato rentável, sim.",
     "label": "Consultoria para licitações e contratos de obras públicas",
     "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.",
-    "footer_blurb": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria B2G fracionada."
+    "footer_blurb": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina contínua: Diretoria Fracionada para o Mercado Público."
   },
   "contact": {
     "email": "tiago.sasaki@confenge.com.br",
@@ -68,7 +68,7 @@
       "obrigado": "/obrigado-edital",
       "wa_message": "Olá, Tiago. Tenho um edital em análise e quero enviar para triagem.",
       "response_sla": "Triagem inicial em até 2 dias úteis após o recebimento do edital e dados essenciais.",
-      "next_step": "Indicamos se o caso pede leitura rápida, Bid Room (sala de decisão da proposta) ou recusa fundamentada."
+      "next_step": "Indicamos se o caso pede leitura rápida, Operação de Proposta para Licitação Crítica ou recusa fundamentada."
     },
     {
       "id": "operacao",
@@ -76,12 +76,12 @@
       "label": "Preciso organizar minha operação B2G",
       "need": "seleção de oportunidades, rotina comercial, orçamento, indicadores, responsabilidades e governança",
       "complement": "Mapeamos gargalos e definimos prioridades práticas para os próximos 90 dias.",
-      "cta": "Diagnosticar a operação B2G",
+      "cta": "Solicitar diagnóstico da operação",
       "cta_secondary": "Conhecer a atuação",
       "href": "/#contato",
       "href_params": "jornada=operacao",
       "obrigado": "/obrigado-operacao",
-      "wa_message": "Olá, Tiago. Quero diagnosticar a operação B2G da minha empresa e entender se a Diretoria B2G fracionada encaixa.",
+      "wa_message": "Olá, Tiago. Quero solicitar o Diagnóstico da Operação em Obras Públicas e entender se a Diretoria Fracionada para o Mercado Público se encaixa.",
       "response_sla": "Agendamento ou retorno de enquadramento em até 2 dias úteis.",
       "next_step": "Conversamos com quem decide a frente pública. Você recebe o enquadramento do formato (diagnóstico pontual ou rotina contínua)."
     }
@@ -122,9 +122,9 @@
         "label": "Serviços",
         "url": "/servicos-obras-publicas/",
         "title": "Serviços para licitações e contratos de obras públicas",
-        "description": "Os quatro serviços da CONFENGE para construtoras: diagnóstico da operação, rotina de decisão, sala de decisão da proposta e defesa de margem em contrato público.",
+        "description": "Portas comerciais da CONFENGE para construtoras: diagnóstico da operação, direção recorrente, operação de proposta crítica e defesa de margem em contrato público.",
         "h1": "Serviços para licitações e contratos de obras públicas",
-        "lead": "Quatro formas de contratar a CONFENGE, da rotina contínua ao caso urgente. Escolha pelo momento em que sua empresa está."
+        "lead": "Escolha a porta de entrada pelo momento da empresa e consulte o catálogo taxativo de 54 entregáveis para comparar o escopo."
       },
       "problems": {
         "label": "Problemas que resolvemos",
@@ -140,41 +140,41 @@
     {
       "id": "diagnostico-b2g-360",
       "label": "Entrada",
-      "name": "Diagnóstico B2G 360°",
+      "name": "Diagnóstico da Operação em Obras Públicas",
       "plain_name": "Diagnóstico da operação de licitações e contratos públicos",
       "url": "/diagnostico-b2g-360/",
       "headline": "Mapeie onde a frente pública perde tempo, margem e controle.",
       "description": "Mapeamento da capacidade da empresa, mercado, acervo, carteira de oportunidades, processo decisório, riscos e gargalos. Termina com um plano executivo de 90 dias.",
       "result": "Prioridades claras e backlog de implantação.",
-      "cta": "Diagnosticar a operação B2G",
-      "wa_message": "Olá, Tiago. Quero solicitar o Diagnóstico B2G 360° para mapear oportunidades, margem e controle da nossa operação.",
-      "schema_service_type": "Diagnóstico da operação B2G de construtoras"
+      "cta": "Solicitar diagnóstico da operação",
+      "wa_message": "Olá, Tiago. Quero solicitar o Diagnóstico da Operação em Obras Públicas para mapear oportunidades, margem e controle.",
+      "schema_service_type": "Diagnóstico da Operação em Obras Públicas"
     },
     {
       "id": "diretoria-b2g",
       "label": "Operação principal",
-      "name": "Diretoria B2G fracionada",
+      "name": "Diretoria Fracionada para o Mercado Público",
       "plain_name": "Rotina contínua de decisão em licitações e contratos públicos",
       "url": "/diretoria-b2g/",
       "headline": "Uma rotina semanal de decisão sem o custo de montar uma diretoria interna.",
       "description": "Oportunidades priorizadas com critérios, decisão de participar ou recusar, coordenação das frentes prioritárias, indicadores, riscos, responsáveis, reuniões executivas e memória de decisões e resultados.",
       "result": "A frente B2G deixa de depender de improviso e passa a operar com método.",
-      "cta": "Diagnosticar encaixe da Diretoria B2G",
-      "wa_message": "Olá, Tiago. Quero conhecer a Diretoria B2G fracionada e entender se encaixa na nossa operação.",
-      "schema_service_type": "Diretoria B2G fracionada"
+      "cta": "Avaliar encaixe da Diretoria Fracionada",
+      "wa_message": "Olá, Tiago. Quero conhecer a Diretoria Fracionada para o Mercado Público e entender se ela se encaixa na nossa operação.",
+      "schema_service_type": "Diretoria Fracionada para o Mercado Público"
     },
     {
       "id": "bid-room",
       "label": "Oportunidade crítica",
-      "name": "Bid Room",
+      "name": "Operação de Proposta para Licitação Crítica",
       "plain_name": "Sala de decisão da proposta em licitação de obras",
       "url": "/bid-room-licitacoes-obras/",
       "headline": "Para o edital que exige coordenação da proposta, não improviso.",
       "description": "Leitura crítica, estratégia, habilitação, acervo, orçamento, cronograma, responsabilidades, revisão crítica independente e controle final da proposta.",
       "result": "Uma decisão consciente de participar e uma proposta coerente com a capacidade da empresa.",
       "cta": "Enviar edital para triagem",
-      "wa_message": "Olá, Tiago. Tenho um edital crítico e quero enviar para triagem / Bid Room (sala de decisão da proposta).",
-      "schema_service_type": "Sala de decisão da proposta para licitações de obras"
+      "wa_message": "Olá, Tiago. Tenho um edital crítico e quero enviar para triagem da Operação de Proposta para Licitação Crítica.",
+      "schema_service_type": "Operação de Proposta para Licitação Crítica"
     },
     {
       "id": "contract-defense",
@@ -191,7 +191,7 @@
     }
   ],
   "ctas": {
-    "home_primary": "Diagnosticar a operação B2G",
+    "home_primary": "Solicitar diagnóstico da operação",
     "home_secondary": "Problema urgente no contrato",
     "header": "Falar com a CONFENGE",
     "final_primary": "Enviar solicitação",

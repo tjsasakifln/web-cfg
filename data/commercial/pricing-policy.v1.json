@@ -363,7 +363,7 @@
         "billing_mode": "one_time",
         "ladder_status": "BETWEEN_TIERS",
         "ladder_tier_id": null,
-        "note": "O Diagnóstico B2G de Expansão custa R$ 8.000 e cai no vão entre o teto de R$ 7.900 do dossiê crítico e o piso de R$ 9.800 da faixa de oportunidade ou problema complexo. O preço permanece como está. O vão fica declarado."
+        "note": "O Diagnóstico de Expansão no Mercado Público custa R$ 8.000 e cai no vão entre o teto de R$ 7.900 do dossiê crítico e o piso de R$ 9.800 da faixa de oportunidade ou problema complexo. O preço permanece como está. O vão fica declarado."
       },
       {
         "offer_id": "CFG-DIRB2G-FLEX-v1",

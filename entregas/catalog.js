@@ -188,7 +188,8 @@
     const query = normalize(queryInput?.value);
     let visible = 0;
     for (const card of cards) {
-      const matchesQuery = !query || normalize(card.textContent).includes(query);
+      const searchable = `${card.textContent} ${card.dataset.searchAliases || ""}`;
+      const matchesQuery = !query || normalize(searchable).includes(query);
       const matchesDimensions = FILTER_KEYS.every((key) => {
         const value = filters[key]?.value || "";
         if (!value) return true;

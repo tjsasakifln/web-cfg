@@ -101,26 +101,26 @@ function writePages() {
   const details = {
     "CFG-DIAG-EXP-v1": {
       slug: "diagnostico-expansao",
-      scope: "Mapa de compradores, 15 concorrentes, painel de precos, contratos a vencer, avisos triados, recomendacoes, PDF executivo, planilhas, reuniao inicial e apresentacao final. Credito nao cumulativo de R$ 2.000 no primeiro mes Flex/180/365 se contratado em 60 dias.",
+      scope: "Mapa de compradores, 15 concorrentes, painel de precos, contratos a vencer, avisos triados, recomendacoes, PDF executivo, planilhas, reuniao inicial e apresentacao final. Credito nao cumulativo de R$ 2.000 no primeiro mes do Plano Mensal, Compromisso Semestral ou Compromisso Anual se contratado em 60 dias.",
       exclusions: "Nao inclui execucao de obra, garantia financeira, orcamento completo do zero nem quadro dedicado.",
       prazo: "10 a 15 dias uteis apos alinhamento e dados.",
     },
     "CFG-DIRB2G-FLEX-v1": {
       slug: "diretoria-flex",
-      scope: "Defesa de um contrato/obra ativo + Bid Room com ate 4 oportunidades aceitas em andamento. Reuniao inicial <=90 min, uma reuniao executiva mensal <=90 min, ate duas taticas de 30 min, canal assincrono.",
+      scope: "Defesa de um contrato/obra ativo + Operacao de Proposta para Licitacao Critica com ate 4 oportunidades aceitas em andamento. Reuniao inicial <=90 min, uma reuniao executiva mensal <=90 min, ate duas taticas de 30 min, canal assincrono.",
       exclusions: "Quinto item simultaneo, segundo contrato, urgencia abaixo de 5 dias uteis, juridico de foro, ART/RRT, vistoria fisica e equipe full-time exigem aditivo.",
       prazo: "Sem minimo. Aviso de 30 dias.",
     },
     "CFG-DIRB2G-180-v1": {
       slug: "diretoria-180",
-      scope: "Mesmo escopo da Diretoria B2G Fracionada, compromisso de 6 meses.",
-      exclusions: "Mesmas exclusoes da Flex. Saida antecipada so com formula aprovada.",
+      scope: "Mesmo escopo do Plano Mensal, com compromisso de 6 meses.",
+      exclusions: "Mesmas exclusoes do Plano Mensal. Saida antecipada so com formula aprovada.",
       prazo: "6 meses. Aviso de 30 dias.",
     },
     "CFG-DIRB2G-365-v1": {
       slug: "diretoria-365",
-      scope: "Mesmo escopo da Diretoria B2G Fracionada, compromisso de 12 meses.",
-      exclusions: "Mesmas exclusoes da Flex. Sem renovacao silenciosa ao fim de maxPayments.",
+      scope: "Mesmo escopo do Plano Mensal, com compromisso de 12 meses.",
+      exclusions: "Mesmas exclusoes do Plano Mensal. Sem renovacao silenciosa ao fim do compromisso.",
       prazo: "12 meses. Aviso de 30 dias.",
     },
   };
@@ -167,9 +167,9 @@ function writePages() {
 <dt>Como funciona a capacidade?</dt>
 <dd>Teto de 50 vagas Full, uma vaga padrao, reserva provisoria de 72 horas, reserva final so apos pagamento confirmado.</dd>
 <dt>Aviso e cancelamento</dt>
-<dd>Flex: aviso de 30 dias. 180/365: compromisso minimo; saida antecipada depende de texto juridico ainda nao validado.</dd>
+<dd>Plano Mensal: aviso de 30 dias. Compromisso Semestral e Compromisso Anual: compromisso minimo; saida antecipada depende de texto juridico ainda nao validado.</dd>
 <dt>Diagnostico e credito</dt>
-<dd>Diagnostico e avulso. Ha credito de R$ 2.000 no primeiro mes Flex/180/365 se contratado em 60 dias da entrega. Nao e cumulativo.</dd>
+<dd>Diagnostico e avulso. Ha credito de R$ 2.000 no primeiro mes do Plano Mensal, Compromisso Semestral ou Compromisso Anual se contratado em 60 dias da entrega. Nao e cumulativo.</dd>
 </dl>
 <p><a class="button button-primary" href="/piloto/ofertas/contratar/">Solicitar contratacao</a></p>`,
     }),

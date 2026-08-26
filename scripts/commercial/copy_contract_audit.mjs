@@ -122,7 +122,7 @@ function scanLanguage(routes, contract, extraSurfaces = []) {
   const violations = [];
   const observations = [];
   const boundaries = [];
-  const registeredNames = contract.gate_exceptions.find((item) => item.id === "GX-04").registered_public_names;
+  const registeredNames = contract.gate_exceptions.find((item) => item.id === "GX-04")?.registered_public_names || [];
   const terms = contract.forbidden_language_without_immediate_proof.filter((item) => item.checker === "term_scan");
   const surfaces = [
     ...routes.map((route) => ({ route, html: fs.readFileSync(routePath(route), "utf8") })),

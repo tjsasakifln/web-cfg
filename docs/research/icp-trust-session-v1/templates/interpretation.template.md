@@ -7,7 +7,7 @@ individuais.
 
 ## Vínculo
 
-- Protocol version: `1.0.0`
+- Protocol version: `1.1.0`
 - Git SHA do estímulo: `PREENCHER`
 - Aggregate: `aggregate.json`
 - Data da leitura: `PREENCHER`
@@ -27,15 +27,8 @@ individuais.
 - Alternativa a validar se reprovado: manter, mover depois do hero ou substituir
 - Residual independente: CTR e scroll continuam `OPEN_BLOCKED_TRAFFIC_WINDOW`
 
-## #188 — compreensão da copy
-
-- Resultado: `APPROVED` ou `REPROVADO`
-- Oferta/dimensão com menor compreensão: `PREENCHER`
-- Termo inglês/híbrido que exige descrição imediata: `PREENCHER`
-- Residual independente: comparação de cliques continua `OPEN_BLOCKED_CLICK_WINDOW`
-
 ## Limites
 
 Não atribua causalidade a uma sessão. Não declare fechamento de issue neste
-arquivo. A sessão informa decisão de copy/taxonomia; métricas de tráfego exigem
+arquivo. A sessão informa decisão de navegação e compreensão; métricas de tráfego exigem
 janela própria e datada.

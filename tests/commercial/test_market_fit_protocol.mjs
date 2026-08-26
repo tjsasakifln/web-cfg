@@ -130,7 +130,7 @@ assert("critical_boundary_ids_unique", new Set(p2.critical_boundaries.map((bound
 assert("critical_boundaries_are_pairs", p2.critical_boundaries.every((boundary) => boundary.deliverable_ids.length === 2 && new Set(boundary.deliverable_ids).size === 2), p2.critical_boundaries);
 
 /* ---------------------------------------------------------------- 4. fase 3, decisão unitária */
-const offers = p3.founder_led_offers;
+const offers = p3.measurement_scope;
 assert("offers_eight", Array.isArray(offers) && offers.length === 8, offers && offers.length);
 assert("offer_ids_unique", new Set(offers.map((o) => o.deliverable_id)).size === offers.length, offers.map((o) => o.deliverable_id));
 assert("offer_ids_shaped", offers.every((o) => /^CFG-D\d{2}$/.test(o.deliverable_id)), offers.map((o) => o.deliverable_id));
@@ -151,10 +151,12 @@ assert(
   same(p3.decision_states, ["ACEITOU", "NEGOCIOU", "RECUSOU", "SEM DECISÃO"]),
   p3.decision_states,
 );
-assert("verbatim_reason_required", p3.decision_reason_verbatim_required === true, p3);
-assert("record_fields_include_verbatim_reason", p3.record_fields.includes("motivo literal"), p3.record_fields);
+assert("external_system_of_action", p3.system_of_action === "warmbly", p3.system_of_action);
+assert("governance_supervision", p3.supervision_owner === "governance_control_center", p3.supervision_owner);
+assert("web_role_is_select_only", /SELECT-only/.test(p3.web_cfg_role) && /não operar/.test(p3.web_cfg_role), p3.web_cfg_role);
+assert("no_individual_reason_in_repo", p3.individual_decision_reason_in_repository === false, p3);
 assert("record_fields_include_outcome_unknown", p3.record_fields.some((f) => /UNKNOWN/.test(f)), p3.record_fields);
-assert("record_fields_nine", p3.record_fields.length === 9, p3.record_fields.length);
+assert("record_fields_five", p3.record_fields.length === 5, p3.record_fields.length);
 assert("no_silent_discount", p3.pricing_discipline.silent_discount_allowed === false && p3.pricing_discipline.price_versions_must_be_explicit === true, p3.pricing_discipline);
 
 /* ---------------------------------------------------------------- 5. preços */

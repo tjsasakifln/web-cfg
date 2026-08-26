@@ -46,7 +46,7 @@ Detailed asset evidence, dependencies, defensibility and migrate/adapt/retire de
 
 ## Sequence
 
-- **Now:** first margin-defense vertical, conversion/attribution contract, safe founder-led action and critical Search Console instrumentation.
+- **Now:** first margin-defense vertical, conversion/attribution contract, safe inbound handoff and critical Search Console instrumentation.
 - **Next:** contract/price explorer, one flagship research edition, entity/editorial authority and migration map execution.
 - **Then:** profiles, observatory, indices, radar and tender hub after reuse, differentiation and quality gates are proven.
 
