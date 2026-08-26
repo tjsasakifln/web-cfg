@@ -489,6 +489,12 @@ async function main() {
     for (const j of ["contrato", "edital", "operacao"]) {
       await page.select("#estagio", j === "contrato" ? "estruturando a operação B2G" : "problema urgente em contrato");
       await page.click(`[data-set-journey="${j}"]`);
+      await page.waitForFunction((expectedJourney) => {
+        const form = document.querySelector("#formulario-contato");
+        return document.querySelector("#jornada-hidden")?.value === expectedJourney &&
+          document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey === expectedJourney &&
+          form?.getAttribute("action")?.includes(expectedJourney);
+      }, {}, j);
       const state = await page.evaluate(() => ({
         journey: document.querySelector("#jornada-hidden")?.value || "",
         stageJourney: document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey || "",
@@ -1251,11 +1257,32 @@ async function main() {
       await page.setViewport({ width, height: 844, deviceScaleFactor: 1 });
       for (const route of routes) {
         const { path, frozen } = route;
-        await page.goto(`${BASE}${path}`, { waitUntil: "networkidle0", timeout: 30000 });
+        await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+        await page.evaluate(async () => {
+          await document.fonts.ready;
+          const cover = document.querySelector(".article-cover img");
+          if (cover && !cover.complete) {
+            await Promise.race([
+              new Promise((resolveImage) => {
+                cover.addEventListener("load", resolveImage, { once: true });
+                cover.addEventListener("error", resolveImage, { once: true });
+              }),
+              new Promise((resolveTimeout) => setTimeout(resolveTimeout, 2000)),
+            ]);
+          }
+        });
         // Earlier interaction tests intentionally leave this shared page scrolled.
         // This gate measures a fresh top-of-document arrival, so make that
         // precondition explicit instead of depending on navigation restoration.
-        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.evaluate(async () => {
+          document.documentElement.style.setProperty("scroll-behavior", "auto", "important");
+          document.body.style.setProperty("scroll-behavior", "auto", "important");
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        });
         const rep = await page.evaluate(() => {
           const h1 = document.querySelector("h1");
           const hero = document.querySelector(".content-hero");

@@ -70,7 +70,7 @@ Vocabulário de segmentos: `edificacoes-publicas`,
    sem `external_reference`. A etapa de pagamento na página só abre a partir de
    um `external_reference` devolvido pelo servidor. É preferível perder a venda
    a receber sem saber o que entregar.
-4. **Relógio de entrega.** Até 48 horas úteis, contadas do envio do formulário.
+4. **Relógio de entrega.** 3 dias úteis, contados do envio válido do formulário, conforme #331.
    Nunca da confirmação do pagamento. O texto público diz isso antes do
    pagamento.
 5. **Quantidade não prometida.** A quantidade de oportunidades decorre dos
