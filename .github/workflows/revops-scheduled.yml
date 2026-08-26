@@ -44,18 +44,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "22"
           cache: npm
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.12"
       - name: Install
         run: |
           npm ci --engine-strict
-          pip install google-api-python-client google-auth || true
+          python -m pip install --disable-pip-version-check -r requirements-ci.txt
       - name: Daily scheduled run
         env:
           BASE_URL: https://confenge.com.br
@@ -68,7 +68,7 @@ jobs:
         run: node scripts/revops/scheduled_daily.mjs
       - name: Upload daily report artifact
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: revops-daily-${{ github.run_id }}
           path: |
@@ -83,8 +83,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "22"
       - name: Read-only authenticated inbound counters proof
@@ -94,7 +94,7 @@ jobs:
         run: node scripts/revops/inbound_counters_proof.mjs
       - name: Upload inbound counters proof
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: inbound-counters-proof-${{ github.run_id }}
           path: data/revops/inbound-proof-runs/
@@ -108,8 +108,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "22"
       - name: Nurture tick
@@ -127,7 +127,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Restore durable GSC state
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
@@ -137,7 +137,7 @@ jobs:
           key: ${{ runner.os }}-gsc-state-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             ${{ runner.os }}-gsc-state-
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.12"
       - name: GSC incremental sync
@@ -147,7 +147,7 @@ jobs:
           GSC_CLIENT_SECRETS_JSON: ${{ secrets.GSC_CLIENT_SECRETS_JSON }}
           GSC_TOKEN_JSON: ${{ secrets.GSC_TOKEN_JSON }}
         run: |
-          pip install google-api-python-client google-auth
+          python -m pip install --disable-pip-version-check -r requirements-ci.txt
           # Write service account file if secret is JSON content
           if [ -n "$GSC_CREDENTIALS_JSON" ] && [ "${GSC_CREDENTIALS_JSON:0:1}" = "{" ]; then
             echo "$GSC_CREDENTIALS_JSON" > /tmp/gsc-sa.json
@@ -163,7 +163,7 @@ jobs:
           key: ${{ runner.os }}-gsc-state-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Upload GSC state
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: gsc-sync-${{ github.run_id }}
           path: |
@@ -179,8 +179,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "22"
       - name: Weekly real-only report + email

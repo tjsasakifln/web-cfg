@@ -3,8 +3,9 @@ name: site-ci
 on:
   push:
     branches: [main]
+  # Do not filter PRs by base branch. A stacked PR must run the same required
+  # gates as a PR opened directly against main (#405).
   pull_request:
-    branches: [main]
 
 jobs:
   gates:
@@ -13,15 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           # Full history required for package commit_sha ancestor checks (PR merge refs)
           fetch-depth: 0
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "22"
           cache: npm
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.12"
       - name: Install dependencies (two clean installs)
@@ -36,7 +37,7 @@ jobs:
           npm ci --engine-strict
           rm -rf node_modules
           npm ci --engine-strict
-          pip install pytest
+          python -m pip install --disable-pip-version-check -r requirements-ci.txt
       - name: Workflow gate shape
         run: npm run test:workflow-gates
       - name: Unit and brand/copy/design gates
@@ -109,7 +110,7 @@ jobs:
       - name: CSS asset integrity after publish
         run: python3 scripts/site/test_fingerprint_css.py
       - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v2
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: setup-chrome
       - name: Money asset canary browser e2e
         env:
@@ -119,6 +120,7 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           UI_GEOMETRY_REQUIRED: "1"
+          PUBLIC_ARTIFACT_REQUIRED: "1"
         run: npm run test:ui
       - name: Sitewide layout geometry
         env:
@@ -152,6 +154,7 @@ jobs:
       - name: Tools UI/UX E2E
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          PUBLIC_ARTIFACT_REQUIRED: "1"
         run: npm run test:tools-uiux-e2e
       - name: Install Playwright Chromium
         run: |
@@ -171,7 +174,7 @@ jobs:
           kill "$(cat /tmp/site-http.pid)" || true
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: site-ci-reports
           path: |
