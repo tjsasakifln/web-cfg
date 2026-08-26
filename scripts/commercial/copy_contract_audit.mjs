@@ -118,14 +118,17 @@ export function frozenRouteExemption(entry, route, html, contract) {
   return digest === frozen.content_sha256 ? "hash_pinned_frozen_route" : null;
 }
 
-function scanLanguage(routes, contract) {
+function scanLanguage(routes, contract, extraSurfaces = []) {
   const violations = [];
   const observations = [];
   const boundaries = [];
   const registeredNames = contract.gate_exceptions.find((item) => item.id === "GX-04").registered_public_names;
   const terms = contract.forbidden_language_without_immediate_proof.filter((item) => item.checker === "term_scan");
-  for (const route of routes) {
-    const html = fs.readFileSync(routePath(route), "utf8");
+  const surfaces = [
+    ...routes.map((route) => ({ route, html: fs.readFileSync(routePath(route), "utf8") })),
+    ...extraSurfaces,
+  ];
+  for (const { route, html } of surfaces) {
     const text = normalize(visibleText(html));
     const ranges = registeredNameRanges(text, registeredNames);
     const exclusionRanges = explicitExclusionRanges(html, text);
@@ -197,7 +200,26 @@ function scanClauseDuplicates(catalogHtml, expectedClauses) {
   return { duplicates, observed, unique: signatures.size };
 }
 
-export function auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml }) {
+export function catalogContractsFromClientData(script) {
+  const match = /^window\.CONFENGE_CATALOG_DATA=(\{.*\});\s*$/.exec(String(script));
+  if (!match) throw new Error("invalid public catalog data asset");
+  const payload = JSON.parse(match[1]);
+  const idIndex = payload.fields?.indexOf("id") ?? -1;
+  const contractIndex = payload.fields?.indexOf("contractHtml") ?? -1;
+  if (idIndex < 0 || contractIndex < 0 || !Array.isArray(payload.items)) {
+    throw new Error("public catalog data omits copy-contract fields");
+  }
+  return payload.items.map((row) => {
+    const id = row?.[idIndex];
+    const contractHtml = row?.[contractIndex];
+    if (typeof id !== "string" || typeof contractHtml !== "string") {
+      throw new Error("invalid copy-contract row in public catalog data");
+    }
+    return `<details data-copy-contract-id="${id}"><div>${contractHtml}</div></details>`;
+  }).join("\n");
+}
+
+export function auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml, catalogContractsHtml = catalogHtml }) {
   const problems = [];
   const clauses = contract.per_offer_contract.map((clause) => clause.key);
   const routes = deriveMoneyRoutes(registry, taskDoors, familyRegistry);
@@ -212,19 +234,22 @@ export function auditCopyContract({ contract, registry, taskDoors, familyRegistr
     if (words(entry.public_name_pt_br) > 8) problems.push(`title_over_8_words:${entry.deliverable_id}`);
     if (words(entry.trigger) > 24) problems.push(`trigger_over_24_words:${entry.deliverable_id}`);
     if (!entry.data_contract?.provenance_required || !entry.data_contract?.freshness_required) problems.push(`provenance:${entry.deliverable_id}`);
-    if (!catalogHtml.includes(`data-copy-contract-id="${entry.deliverable_id}"`)) problems.push(`missing_public_contract:${entry.deliverable_id}`);
+    if (!catalogContractsHtml.includes(`data-copy-contract-id="${entry.deliverable_id}"`)) problems.push(`missing_public_contract:${entry.deliverable_id}`);
   }
   for (const clause of clauses) {
-    const count = (catalogHtml.match(new RegExp(`data-copy-clause="${clause}"`, "g")) || []).length;
+    const count = (catalogContractsHtml.match(new RegExp(`data-copy-clause="${clause}"`, "g")) || []).length;
     if (count !== ids.length) problems.push(`clause_coverage:${clause}:${count}`);
   }
-  if ((catalogHtml.match(/data-copy-contract-id=/g) || []).length !== ids.length) problems.push("public_contract_count");
-  if (!catalogHtml.includes("Compre quando") || catalogHtml.includes(">Saiba mais<")) problems.push("catalog_action_copy");
-  const clauseScan = scanClauseDuplicates(catalogHtml, clauses);
+  if ((catalogContractsHtml.match(/data-copy-contract-id=/g) || []).length !== ids.length) problems.push("public_contract_count");
+  if (!catalogContractsHtml.includes("Compre quando") || catalogContractsHtml.includes(">Saiba mais<")) problems.push("catalog_action_copy");
+  const clauseScan = scanClauseDuplicates(catalogContractsHtml, clauses);
   if (clauseScan.observed !== ids.length * clauses.length) problems.push(`clause_scan_count:${clauseScan.observed}`);
   clauseScan.duplicates.forEach((finding) => problems.push(`duplicate_copy_clause:${finding.clause}:${finding.deliverable_id}:${finding.duplicates}`));
 
-  const language = scanLanguage(routes, contract);
+  const extraSurfaces = catalogContractsHtml === catalogHtml
+    ? []
+    : [{ route: "/entregas/catalog-data.js", html: catalogContractsHtml }];
+  const language = scanLanguage(routes, contract, extraSurfaces);
   language.violations.forEach((finding) => problems.push(`forbidden_language:${finding.route}:${finding.forbidden_id}`));
   const structuredDataHits = scanStructuredData(routes, contract);
   structuredDataHits.forEach((finding) => problems.push(`structured_social_proof:${finding.route}:${finding.type}`));
@@ -257,7 +282,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const taskDoors = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/task-doors.v1.json"), "utf8"));
   const familyRegistry = JSON.parse(fs.readFileSync(path.join(root, "data/organic/public-family-registry.json"), "utf8"));
   const catalogHtml = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
-  const report = auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml });
+  const catalogContractsHtml = catalogContractsFromClientData(fs.readFileSync(path.join(root, "entregas/catalog-data.js"), "utf8"));
+  const report = auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml, catalogContractsHtml });
   if (!report.ok) {
     console.error(JSON.stringify(report, null, 2));
     process.exit(1);

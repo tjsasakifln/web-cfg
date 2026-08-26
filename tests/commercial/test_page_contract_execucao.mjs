@@ -736,6 +736,15 @@ assert("credit_dynamic_cap_cannot_exceed_registry_max",
 /* publicação progressiva da família no catálogo                       */
 /* ------------------------------------------------------------------ */
 
+const catalogDataScript = fs.readFileSync(path.join(root, "entregas/catalog-data.js"), "utf8");
+const catalogDataMatch = /^window\.CONFENGE_CATALOG_DATA=(\{.*\});\s*$/.exec(catalogDataScript);
+const catalogData = catalogDataMatch ? JSON.parse(catalogDataMatch[1]) : null;
+const catalogIdIndex = catalogData?.fields?.indexOf("id") ?? -1;
+const catalogContractIndex = catalogData?.fields?.indexOf("contractHtml") ?? -1;
+const contractById = new Map((catalogData?.items || []).map((row) => [row[catalogIdIndex], row[catalogContractIndex]]));
+assert("catalog_copy_contract_asset_is_versioned", catalogData?.schema === "confenge.public-deliverable-catalog/1.1", catalogData?.schema);
+assert("catalog_copy_contract_fields_exist", catalogIdIndex >= 0 && catalogContractIndex >= 0, catalogData?.fields);
+
 function articleFor(number) {
   const idAt = hub.indexOf(`id="entrega-${number}"`);
   const start = hub.lastIndexOf("<article", idAt);
@@ -763,8 +772,9 @@ function publicHtml(value) {
 for (const item of items) {
   const article = articleFor(item.number);
   const canonical = canonicalById.get(item.deliverable_id);
-  const inputSection = sectionFor(article, "client_inputs_and_sla_start");
-  const outputSection = sectionFor(article, "concrete_result_and_artifact_example");
+  const copyContract = contractById.get(item.deliverable_id) || "";
+  const inputSection = sectionFor(copyContract, "client_inputs_and_sla_start");
+  const outputSection = sectionFor(copyContract, "concrete_result_and_artifact_example");
   assert(`item_${item.number}_is_visible_in_hub`, article.length > 0, item.deliverable_id);
   assert(`item_${item.number}_canonical_name_is_visible`, article.includes(item.public_name_pt_br), item.public_name_pt_br);
   assert(`item_${item.number}_value_line_is_visible`, article.includes(item.value_line_pt_br), item.value_line_pt_br);

@@ -144,7 +144,7 @@ def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> N
     ):
         assert forbidden not in f"{html}\n{client_data}"
     assert "data-exclusion=" not in html
-    assert "confenge.public-deliverable-catalog/1.0" in client_data
+    assert "confenge.public-deliverable-catalog/1.1" in client_data
     assert "certificado, selo ou declaração" in client_data
     assert "universal" in client_data
 
