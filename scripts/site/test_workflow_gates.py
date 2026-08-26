@@ -72,6 +72,34 @@ def _has_main_pr_and_push(text: str) -> list[str]:
     return errors
 
 
+def _event_block(text: str, event: str) -> str:
+    """Return one event entry from the top-level ``on`` mapping.
+
+    GitHub evaluates ``pull_request.branches`` against the PR base branch. A
+    branch filter therefore suppresses required checks on stacked PRs; an
+    empty ``pull_request:`` entry is deliberate and means every PR base.
+    """
+    match = re.search(rf"(?m)^  {re.escape(event)}:\s*(?:\{{\}})?\s*$", text)
+    if not match:
+        return ""
+    rest = text[match.end() :]
+    boundary = re.search(r"(?m)^(?:  [A-Za-z0-9_-]+:|jobs:)\s*", rest)
+    end = match.end() + (boundary.start() if boundary else len(rest))
+    return text[match.start() : end]
+
+
+def _assert_unfiltered_pull_request(path: Path, label: str) -> None:
+    text = _read(path)
+    block = _event_block(text, "pull_request")
+    if not block:
+        raise AssertionError(f"{label} must run on pull_request")
+    if re.search(r"(?m)^\s+branches(?:-ignore)?:", block):
+        raise AssertionError(
+            f"{label} pull_request must not filter base branches; "
+            "stacked PRs require the same gates as main PRs"
+        )
+
+
 def test_site_ci_shape():
     text = _read(SITE_CI)
     errors: list[str] = []
@@ -185,7 +213,7 @@ def test_pseo_shape():
     if "pull_request" not in text:
         errors.append("pseo must run on pull_request")
     if "branches: [main]" not in text and "- main" not in text:
-        errors.append("pseo must scope push/PR to main (branches: [main])")
+        errors.append("pseo push must remain scoped to main")
 
     if "npm ci" not in text:
         errors.append("pseo must run npm ci")
@@ -370,6 +398,12 @@ def test_merge_workflows_have_no_path_skip():
             )
 
 
+def test_merge_workflows_cover_every_pr_base():
+    """Required checks must not disappear when a PR targets a feature branch."""
+    _assert_unfiltered_pull_request(SITE_CI, "site-ci")
+    _assert_unfiltered_pull_request(PSEO, "pseo")
+
+
 def test_pseo_still_requires_full_npm_test():
     text = _read(PSEO)
     if "npm test" not in text:
@@ -487,6 +521,7 @@ def main() -> int:
         test_node_pin_is_single_source,
         test_revops_scheduled_install_keeps_the_runtime_floor_fail_closed,
         test_merge_workflows_have_no_path_skip,
+        test_merge_workflows_cover_every_pr_base,
         test_pseo_still_requires_full_npm_test,
         test_post_build_browser_gates_use_public_artifact,
         test_lighthouse_covers_article_cover_regression_routes,
