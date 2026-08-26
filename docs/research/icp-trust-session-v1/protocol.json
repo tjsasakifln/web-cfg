@@ -1,6 +1,6 @@
 {
   "schema": "confenge.icp-trust-session-protocol.v1",
-  "protocol_version": "1.0.0",
+  "protocol_version": "1.1.0",
   "decision": {
     "state": "VALIDATE",
     "priority": "P2",
@@ -23,7 +23,7 @@
       "works in company direction, bids/proposals, engineering, contracts or public-works delivery",
       "company bids for or executes public works",
       "has participated in an edital, measurement, glosa, amendment or rebalancing decision in the last 24 months",
-      "can complete all three protocols without coaching"
+      "can complete both protocols without coaching"
     ],
     "exclusions_any_of": [
       "CONFENGE team member or implementation contributor",
@@ -88,39 +88,12 @@
       ],
       "approval_rule": "At least 80% identify the ICP, problem and plausible next action, and at least 80% do not misclassify the evidence panel as software/product; at the minimum sample this is four of five.",
       "rejection_rule": "Any dimension below 80% success is REPROVADO; record the observed confusion before considering move-after-hero or replacement."
-    },
-    {
-      "id": "copy-comprehension-v1",
-      "issue": 188,
-      "sample_minimum": 5,
-      "moderator_may_explain": false,
-      "dimensions": [
-        "audience",
-        "situation",
-        "deliverable",
-        "next_action"
-      ],
-      "offer_scope": [
-        {"id": "diagnostico-b2g-360", "path": "/diagnostico-b2g-360/"},
-        {"id": "diretoria-b2g", "path": "/diretoria-b2g/"},
-        {"id": "bid-room", "path": "/bid-room-licitacoes-obras/"},
-        {"id": "contract-defense", "path": "/defesa-margem-contratos-publicos/"}
-      ],
-      "terms_requiring_explicit_probe": [
-        "Bid Room",
-        "Contract Defense & Margin",
-        "Diretoria B2G fracionada"
-      ],
-      "approval_rule": "For every offer tested, at least 80% identify all four dimensions without moderator explanation; hybrid or English names need the same threshold without an added Portuguese descriptor. At the minimum sample this is four of five.",
-      "rejection_rule": "Any offer/dimension below 80% success is REPROVADO; changes must preserve BDI, SINAPI, glosa and reequilíbrio where those terms are accurate."
     }
   ],
   "issue_policy": {
     "tracked_issues": [
       183,
-      184,
-      188,
-      297
+      184
     ],
     "default_disposition": "OPEN_BLOCKED_HUMAN_EVIDENCE",
     "closing_language_forbidden_before_human_evidence": true,

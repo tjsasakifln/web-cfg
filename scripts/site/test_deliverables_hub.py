@@ -144,8 +144,9 @@ def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> N
     ):
         assert forbidden not in f"{html}\n{client_data}"
     assert "data-exclusion=" not in html
-    assert "confenge.public-deliverable-catalog/1.0" in client_data
-    assert "certificado universal, selo ou declaração conclusiva de integridade" in client_data
+    assert "confenge.public-deliverable-catalog/1.1" in client_data
+    assert "certificado, selo ou declaração" in client_data
+    assert "universal" in client_data
 
 
 def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
@@ -177,7 +178,7 @@ def test_hub_is_honest_about_every_published_example() -> None:
     for phrase in (
         "54 entregas, de R$ 599 a R$ 39.800",
         "Amostra verificável: 8 exemplos integrais, sem cadastro",
-        "Relatório Executivo de Priorização de Licitações",
+        "Radar de Licitações Prioritárias",
         "12",
         "3",
         "7",
@@ -219,10 +220,10 @@ def test_the_library_has_one_name_across_its_own_surfaces() -> None:
     assert "entregas" in h1.casefold()
     assert "Entregas" in breadcrumb
     assert "Exemplos de entregas da CONFENGE" not in html
-    # The entry example carries the same name here, on its own page and in JSON-LD.
+    # The entry example carries the canonical #343 name here, on its own page and in JSON-LD.
     report = _html(REPORT)
     for surface in (html, report):
-        assert "Relatório Executivo de Priorização de Licitações" in surface
+        assert "Radar de Licitações Prioritárias" in surface
     assert "Modelo de relatório de inteligência" not in report
 
 
@@ -286,7 +287,7 @@ def test_the_credit_rule_is_coherent_across_the_eight() -> None:
     assert "Por que abre a biblioteca" in entry
     assert "único sem o crédito de 60 dias" in entry
     assert "Primeiro exemplo publicado" not in html
-    assert "Entrega à parte, fora do Diagnóstico B2G de Expansão" in entry
+    assert "Entrega à parte, fora do Diagnóstico de Expansão no Mercado Público" in entry
 
 
 def test_hub_states_the_bundle_without_replacing_the_unit_prices() -> None:
@@ -355,7 +356,9 @@ def test_schema_describes_the_full_collection_and_breadcrumb() -> None:
 
 def test_home_discovery_is_inside_the_existing_commercial_section() -> None:
     home = _html(ROOT / "index.html")
-    assert '<link href="/entregas/styles.css" rel="stylesheet"/>' in home
+    assert '<link href="/entregas/styles.css" rel="stylesheet"/>' not in home
+    assert 'data-home-deliverables-critical=""' in home
+    assert ".home-deliverables{" in home
     assert "Conheça nossas entregas" in home
     assert 'href="/entregas/"' in home
     assert f'href="{REPORT_ROUTE}"' in home

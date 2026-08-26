@@ -14,15 +14,15 @@ Mapear onde a operação B2G de obras perde tempo, margem e controle, e sair com
 
 | Field | Value |
 |---|---|
-| title | Diagnóstico B2G 360° | CONFENGE |
+| title | Diagnóstico da Operação em Obras Públicas | CONFENGE |
 | meta | Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação B2G. Plano executivo de 90 dias para prioridades e backlog de implantação. |
-| H1 | Diagnóstico B2G 360° |
+| H1 | Diagnóstico da Operação em Obras Públicas |
 | canonical | https://confenge.com.br/diagnostico-b2g-360/ |
 | robots | index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1 |
 | schema | Organization, WebPage, Service, Country, BreadcrumbList, ListItem |
 | og:title | Mapeie onde a frente pública perde tempo, margem e controle. |
-| content_sha256 | `51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12` |
-| hero CTA | Diagnosticar a operação B2G → `/#contato?jornada=operacao` |
+| content_sha256 | `1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02` |
+| hero CTA | Solicitar diagnóstico da operação → `/#contato?jornada=operacao` |
 | when-not-to-hire | True |
 
 ## Demand-control / #128 / extra-cli
@@ -80,7 +80,7 @@ Exact replacements: `data/bofu-dominance/frozen-specs/patches/diagnostico-b2g-36
 ## Evidence / proof needed
 
 - 28d GSC vs 1/0 @ 15.0 — n is anecdotal; kill if the og:title change does not produce a click and n stays < 30.
-- Do not treat extra-cli national coverage PARTIAL as a 360° proof asset.
+- Do not treat extra-cli national coverage PARTIAL as proof of the diagnostic offer.
 - Qualified conversation from jornada=operacao remains the commercial evidence (#88/#60), not this patch.
 
 ## Success / kill / revert

@@ -106,17 +106,17 @@ def test_microcopy_preferences():
     assert "analisar meu caso" in lower
     assert "enviar documentos para análise" in lower
     assert "enviar edital para triagem" in lower
-    assert "diagnosticar operação b2g" in lower or "diagnosticar a operação b2g" in lower
+    assert "solicitar diagnóstico da operação" in lower
     # Visible labels "Jornada A/B/C" must not appear (data-journey attrs OK)
     assert not re.search(r">\s*Jornada\s+[ABC]\s*<", home), "visible Jornada A/B/C label"
     assert "risco de não agir" not in lower
-    # English offer terms explained in Portuguese on first commercial exposure
-    assert "sala de decisão" in lower or "bid room" in lower
+    # A oferta de proposta usa o nome canônico em português.
+    assert "operação de proposta para licitação crítica" in lower
     assert "defesa técnica" in lower or "proteção de margem" in lower
 
 def test_llms_consistent():
     text = (ROOT / "llms.txt").read_text(encoding="utf-8")
-    assert "Diretoria B2G fracionada" in text
+    assert "Diretoria Fracionada para o Mercado Público" in text
     assert "/diretoria-b2g/" in text
     assert "Engenheiro Civil e Diretoria B2G fracionada" not in text
 
@@ -323,18 +323,18 @@ def test_public_surfaces_have_no_prose_em_dashes():
         assert "data-lead-success" in t
         assert "Prazo" in t or "prazo" in t
         assert "wa.me" in t
-    assert "Diagnosticar a operação B2G" in home or "Diagnosticar operação B2G" in home
+    assert "Solicitar diagnóstico da operação" in home
     assert "Enviar documentos para análise" in home
     # Thank-you pages must not expose journey letter labels to visitors
     for name in ("obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         ty = (ROOT / name).read_text(encoding="utf-8")
         assert not re.search(r"Jornada\s+[ABC]", ty), f"{name}: visible Jornada letter"
     # Journey-aligned CTA family on offer pages
-    assert "Diagnosticar a operação B2G" in (ROOT / "diagnostico-b2g-360" / "index.html").read_text(encoding="utf-8")
+    assert "Solicitar diagnóstico da operação" in (ROOT / "diagnostico-b2g-360" / "index.html").read_text(encoding="utf-8")
     assert "Enviar edital para triagem" in (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
     defesa = (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
     assert "Enviar documentos para análise" in defesa
-    assert "Diagnosticar a operação B2G" in (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
+    assert "Diagnosticar encaixe da Diretoria Fracionada para o Mercado Público" in (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
 
 
 def test_whatsapp_float_in_landmark():

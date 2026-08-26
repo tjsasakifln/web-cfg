@@ -456,6 +456,11 @@ export const SUITE_GRAPH = Object.freeze({
     producers: [
       "tests/commercial/test_copy_contract.mjs",
       "data/commercial/copy-contract.v1.json",
+      "data/commercial/deliverables-registry.v1.json",
+      "data/commercial/task-doors.v1.json",
+      "data/organic/public-family-registry.json",
+      "scripts/commercial/copy_contract_audit.mjs",
+      "scripts/commercial/render_public_catalog.mjs",
       "entregas/index.html",
       "servicos-obras-publicas/index.html",
       "problemas-que-resolvemos/index.html",

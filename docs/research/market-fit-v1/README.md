@@ -47,9 +47,9 @@ revisados de pesquisa e Warmbly do mesmo ciclo.
 
 ## Estado decisório
 
-- Prioridade: P0.
-- Estado: EXECUTE_NOW, com instrumento pronto e evidência humana pendente.
-- Frente: REVENUE NOW.
+- Prioridade: P2.
+- Estado: MEASUREMENT_WAIT_VALID, com instrumento pronto e evidência humana/comercial pendente.
+- Frente: INBOUND ENGINE.
 - Tempo para evidência: 30 dias.
 - Alavancas: customer, revenue, data e trust.
 - North Star: oportunidades comerciais qualificadas, nunca volume de sessões,
@@ -57,4 +57,6 @@ revisados de pesquisa e Warmbly do mesmo ciclo.
 
 Em 100 repetições, o desenho melhora o sistema apenas quando acumula evidência
 comparável sobre decisão, preço, entrega e outcome. Repetir entrevista sem QCO,
-proposta e retorno decisório cria trabalho, não valida market fit.
+proposta e retorno decisório cria trabalho, não valida market fit. Warmbly executa
+a operação comercial e Governance/Control Center supervisiona; `web-cfg` apenas
+consome o agregado versionado, sem fila, cadência, aprovação ou estado de contato.

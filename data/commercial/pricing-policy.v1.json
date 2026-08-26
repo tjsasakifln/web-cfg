@@ -1,6 +1,6 @@
 {
   "schema": "confenge.pricing-policy/1.0",
-  "policy_version": "CFG-PRICING-2026-08-24-v1",
+  "policy_version": "CFG-PRICING-2026-08-25-v2",
   "issue": "#341",
   "parent_issue": "#329",
   "related_issues": [
@@ -206,10 +206,31 @@
     "valor do ativo reutilizável produzido"
   ],
   "unit_economics_disclosure_rule": "Registrar sem expor dado interno sensível na página.",
+  "unit_economics_implementation": {
+    "status": "INSTRUMENT_READY_OBSERVED_DELIVERIES_PENDING",
+    "ledger": "data/commercial/unit-economics-ledger.v1.json",
+    "calculator": "scripts/commercial/unit_economics.mjs",
+    "event_template": "docs/commercial/unit-economics-v1/event.template.json",
+    "promotion_template": "docs/commercial/unit-economics-v1/promotion-aggregate.template.json",
+    "storage_authority": "private_finance_store",
+    "commercial_decision_owner": "warmbly",
+    "terms_authority": "data/offers/governance-authority-pin.json#terms_version",
+    "source": "CONFENGE_WEB",
+    "public_surface": false,
+    "sensitive_values_in_repository": false,
+    "promotion_automation": false
+  },
   "promotion_gate": {
     "metric": "margem de contribuição direta observada",
     "min_pct": 55,
     "min_deliveries": 3,
+    "event_requirements": [
+      "eventos válidos e com hashes distintos",
+      "mesmo deliverable_id, scope_version, price_version, terms_version e price_tier",
+      "pagamento reconciliado como PAID",
+      "QA em PASS ou PASS_WITH_NOTES",
+      "outcome em OBSERVED"
+    ],
     "alternative": "decisão explícita do fundador sobre preço ou escopo",
     "note": "A meta é guardrail de capacidade, não alegação pública."
   },
@@ -342,7 +363,7 @@
         "billing_mode": "one_time",
         "ladder_status": "BETWEEN_TIERS",
         "ladder_tier_id": null,
-        "note": "O Diagnóstico B2G de Expansão custa R$ 8.000 e cai no vão entre o teto de R$ 7.900 do dossiê crítico e o piso de R$ 9.800 da faixa de oportunidade ou problema complexo. O preço permanece como está. O vão fica declarado."
+        "note": "O Diagnóstico de Expansão no Mercado Público custa R$ 8.000 e cai no vão entre o teto de R$ 7.900 do dossiê crítico e o piso de R$ 9.800 da faixa de oportunidade ou problema complexo. O preço permanece como está. O vão fica declarado."
       },
       {
         "offer_id": "CFG-DIRB2G-FLEX-v1",

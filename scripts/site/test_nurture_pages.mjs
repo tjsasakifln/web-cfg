@@ -87,9 +87,9 @@ const nurture = readFileSync(resolve(ROOT, "nurture/index.html"), "utf8");
 const valueMarkers = [
   ["art. 125", "track_contrato_art125"],
   ["Glosa", "track_contrato_glosa"],
-  ["Bid Room", "track_edital_bidroom"],
+  ["Operação de Proposta para Licitação Crítica", "track_edital_offer"],
   ["Decisão de participar", "track_edital_decidir"],
-  ["Diretoria B2G", "track_operacao_diretoria"],
+  ["Diretoria Fracionada para o Mercado Público", "track_operacao_diretoria"],
   ["double opt-in", "double_opt_in"],
   ["nurture-form", "subscribe_form"],
 ];

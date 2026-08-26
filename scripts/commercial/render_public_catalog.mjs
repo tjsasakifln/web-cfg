@@ -15,6 +15,8 @@ import { fileURLToPath } from "url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const registryPath = path.join(root, "data/commercial/deliverables-registry.v1.json");
 const doorsPath = path.join(root, "data/commercial/task-doors.v1.json");
+const namingPath = path.join(root, "data/commercial/offer-naming.v1.json");
+const executionPath = path.join(root, "data/commercial/page-contract-execucao.v1.json");
 const pagePath = path.join(root, "entregas/index.html");
 const clientDataPath = path.join(root, "entregas/catalog-data.js");
 
@@ -22,7 +24,7 @@ const CATALOG_START = "<!-- GENERATED:PUBLIC-CATALOG:START -->";
 const CATALOG_END = "<!-- GENERATED:PUBLIC-CATALOG:END -->";
 const SELECT_START = "<!-- GENERATED:DELIVERABLE-SELECT:START -->";
 const SELECT_END = "<!-- GENERATED:DELIVERABLE-SELECT:END -->";
-const CLIENT_DATA_SCHEMA = "confenge.public-deliverable-catalog/1.0";
+const CLIENT_DATA_SCHEMA = "confenge.public-deliverable-catalog/1.1";
 const CLIENT_DATA_FIELDS = [
   "id",
   "name",
@@ -39,6 +41,7 @@ const CLIENT_DATA_FIELDS = [
   "exclusion",
   "stepUp",
   "publicState",
+  "contractHtml",
 ];
 
 function escapeHtml(value) {
@@ -57,6 +60,11 @@ function publicText(value) {
     .replace(/\bUNKNOWN\b/g, "DESCONHECIDO")
     .replace(/\binputs\b/gi, "insumos")
     .replace(/\bextra-cli\b/gi, "fonte versionada de dados públicos")
+    .replace(/\bDataLake\b/gi, "base paralela de dados")
+    .replace(/fale conosco/gi, "atendimento genérico")
+    .replace(/\bcheckout\b/gi, "contratação automática")
+    .replace(/\bkickoff\b/gi, "início")
+    .replace(/\s*\(CFG-D\d{2}\)/g, "")
     // The public integrity gate rejects these phrases even inside negative
     // attributes: they can be detached from their context by search engines,
     // analytics or client-side comparison. Keep the private contract exact and
@@ -101,6 +109,112 @@ function stepUpLabel(entry) {
     return "Diretoria Fracionada para o Mercado Público";
   }
   return "entrega pontual";
+}
+
+function lowerFirst(value) {
+  const text = String(value || "").trim();
+  return text ? `${text[0].toLocaleLowerCase("pt-BR")}${text.slice(1)}` : text;
+}
+
+function publicList(values, prefix = "") {
+  return `<ul>${values.map((value) => `<li>${escapeHtml(prefix)}${escapeHtml(publicText(value))}</li>`).join("")}</ul>`;
+}
+
+function copyClause(key, title, content) {
+  return `<section data-copy-clause="${key}"><h6>${title}</h6>${content}</section>`;
+}
+
+function boundaryAgainst(item, number) {
+  return item?.boundary_vs_existing_offers?.find((boundary) => boundary.against_item === number);
+}
+
+function executionCreditDisclosure(credit) {
+  return `O maior valor efetivamente pago no item ${credit.source_item} gera um único crédito para o item 51 ou para o item 16 em até ${credit.window_days} dias, sem acúmulo e limitado ao valor pago.`;
+}
+
+function executionCallout(entry, executionContract) {
+  if (!Array.isArray(executionContract?.items)) {
+    throw new Error("PUBLIC_EXECUTION_CONTRACT_MISSING: data/commercial/page-contract-execucao.v1.json is required");
+  }
+  const byNumber = new Map(executionContract.items.map((item) => [item.number, item]));
+
+  if (entry.deliverable_id === "CFG-D16") {
+    const executionItems = executionContract.items.map((item) =>
+      `<li><a href="#entrega-${item.number}"><span>${item.number}</span>${escapeHtml(item.public_name_pt_br)}</a></li>`
+    ).join("");
+    const credit = byNumber.get(51).credit_rule;
+    return `<section class="catalog-item__execution" data-execution-composition="CFG-D16" aria-labelledby="execution-composition-title">
+<h6 id="execution-composition-title">Coordenação ou execução avulsa?</h6>
+<p>O item 16 coordena a oportunidade inteira. As seis execuções abaixo continuam compráveis separadamente:</p>
+<ul>${executionItems}</ul>
+<p data-execution-no-double-charge>Quando alguma execução compõe o item 16, a proposta discrimina cada item incluído e não soma preços silenciosamente.</p>
+<p data-execution-credit>${executionCreditDisclosure(credit)}</p>
+</section>`;
+  }
+
+  const executionItem = executionContract.items.find((item) => item.deliverable_id === entry.deliverable_id);
+  if (!executionItem) return "";
+  const tierLines = executionItem.pricing.tiers.map((tier) => {
+    const sla = Number.isInteger(tier.sla_business_days) ? ` · ${tier.sla_business_days} dias úteis` : "";
+    return `<li><strong>${escapeHtml(tier.name_pt_br)}: ${brl(tier.price_cents)}</strong>${sla}<br/>${escapeHtml(tier.unit_pt_br)}</li>`;
+  });
+  const additionLines = (executionItem.pricing.additional_charges || []).map((charge) =>
+    `<li><strong>${escapeHtml(charge.name_pt_br)}: ${brl(charge.price_cents)}</strong><br/>${escapeHtml(charge.unit_pt_br)}</li>`
+  );
+  const sections = [
+    `<div data-execution-pricing="${entry.deliverable_id}"><h6>Faixas publicadas</h6><ul>${[...tierLines, ...additionLines].join("")}</ul></div>`,
+  ];
+
+  if (entry.deliverable_id === "CFG-D49") {
+    const boundary = boundaryAgainst(executionItem, 14);
+    sections.push(`<div data-execution-boundary="14-49"><h6>Auditar ou produzir?</h6><p>${escapeHtml(boundary.statement_pt_br)}</p></div>`);
+  }
+
+  if (entry.deliverable_id === "CFG-D51") {
+    const boundary = boundaryAgainst(executionItem, 13);
+    sections.push(`<div data-execution-boundary="13-51"><h6>Diagnosticar ou montar?</h6><p>${escapeHtml(boundary.statement_pt_br)}</p></div>`);
+    sections.push(`<div data-execution-credit="13-51"><h6>Crédito do diagnóstico</h6><p>${escapeHtml(executionCreditDisclosure(executionItem.credit_rule))}</p></div>`);
+  }
+
+  if (entry.deliverable_id === "CFG-D53") {
+    sections.push(`<div data-execution-operator="client-only"><h6>Quem opera a sessão</h6><p>${escapeHtml(executionItem.operator_of_record_pt_br)} A CONFENGE não dá lance e não opera credencial, login, certificado ou plataforma pelo cliente.</p></div>`);
+  }
+
+  return `<aside class="catalog-item__execution" data-execution-offer="${entry.deliverable_id}">${sections.join("")}</aside>`;
+}
+
+function contractBody(entry, neighbor) {
+  const state = STATE[entry.public_state];
+  const proof = entry.public_state === "PUBLISHED"
+    ? `Em ${entry.public_name_pt_br}, a amostra sintética integral mostra ${publicText(lowerFirst(entry.included_outputs[0]))}, com método, fonte, data e cobertura visíveis. Nenhum caso real é insinuado.`
+    : `Em ${entry.public_name_pt_br}, a prova disponível é a estrutura verificável de ${publicText(lowerFirst(entry.included_outputs[0]))}. Caso real não publicado.`;
+  const actionExpectation = entry.public_state === "PUBLISHED"
+    ? `Consultar o exemplo de ${entry.public_name_pt_br} abre a amostra no navegador. Contratação, escopo e prazo continuam sujeitos a confirmação.`
+    : entry.public_state === "VALIDATE"
+      ? `Pedir aderência para ${entry.public_name_pt_br} leva à captura terminal. Uma pessoa revisa contexto, capacidade e prazo antes de qualquer proposta.`
+      : `${entry.public_name_pt_br} está indisponível. O estado só muda depois que cobertura e proveniência cumprirem o gate.`;
+  const neighborCopy = neighbor
+    ? `Compare com ${neighbor.public_name_pt_br} quando a pergunta for: ${neighbor.decision_question} Esta entrega cabe quando a pergunta for: ${entry.decision_question}`
+    : `Não há alternativa vizinha na mesma tarefa. Próximo passo comercial: ${stepUpLabel(entry)}.`;
+  const grades = entry.data_contract.evidence_grades.map((grade) => publicText(grade).toLocaleLowerCase("pt-BR"));
+  const clauses = [
+    copyClause("decision_oriented_name", "Decisão orientadora", `<p>${escapeHtml(entry.public_name_pt_br)} responde: ${escapeHtml(entry.decision_question)}</p>`),
+    copyClause("observable_trigger", "Compre quando", `<p>${escapeHtml(publicText(lowerFirst(entry.trigger)))}</p>`),
+    copyClause("cost_of_inaction", "Custo de não agir", `<p>Sem esta análise, a pergunta “${escapeHtml(entry.decision_question)}” segue sem critério documentado.</p>`),
+    copyClause("decision_that_changes", "Decisão antes e depois", `<p>Antes: ${escapeHtml(entry.decision_question)} Depois: ${escapeHtml(publicText(entry.included_outputs[0]))}.</p>`),
+    copyClause("concrete_result_and_artifact_example", "Resultado e artefato", publicList(entry.included_outputs)),
+    copyClause("scope_in", "O que entra", `<p>${escapeHtml(publicText(entry.scope.unit))}.</p>${publicList(entry.scope.limits)}`),
+    copyClause("client_inputs_and_sla_start", "Insumos e início do prazo", `${publicList(entry.required_inputs)}<p>O prazo começa após ${escapeHtml(publicText(entry.sla.starts_after))}.</p>`),
+    copyClause("method_and_provenance", "Método e proveniência", `<p>Em ${escapeHtml(entry.public_name_pt_br)}, a decisão “${escapeHtml(entry.decision_question)}” usa fonte, data, método e cobertura, com afirmações marcadas como ${escapeHtml(grades.join(", "))}.</p>`),
+    copyClause("price_and_sla_same_block", "Preço e prazo", `<p>${escapeHtml(entry.public_name_pt_br)}: <strong>${escapeHtml(priceLabel(entry))}</strong> · ${escapeHtml(publicText(slaLabel(entry)))}</p>`),
+    copyClause("exclusions_and_third_party", "Não inclui", publicList(entry.exclusions, "Não inclui: ")),
+    copyClause("fit_and_misfit", "Serve e não serve", `<p>Serve quando ${escapeHtml(publicText(lowerFirst(entry.trigger)))}</p><p>Não serve para ${escapeHtml(publicText(entry.exclusions[0]))}.</p>`),
+    copyClause("proof_matching_real_state", "Prova disponível", `<p>${escapeHtml(proof)}</p>`),
+    copyClause("specific_objections", "Objeção que precisa ser resolvida", `<p>Em ${escapeHtml(entry.public_name_pt_br)}, sem ${escapeHtml(publicText(entry.required_inputs[0]))}, o SLA não começa e a decisão “${escapeHtml(entry.decision_question)}” permanece em revisão.</p>`),
+    copyClause("cta_with_post_click_expectation", "Próxima ação", `<p>${escapeHtml(actionExpectation)}</p><p>Estado atual: ${escapeHtml(state.label)}.</p>`),
+    copyClause("neighbor_alternative_and_step_up", "Alternativa e próximo nível", `<p>${escapeHtml(neighborCopy)}</p><p>Próximo nível: ${escapeHtml(stepUpLabel(entry))}.</p>`),
+  ];
+  return clauses.join("");
 }
 
 function brl(cents) {
@@ -177,51 +291,67 @@ const STATE = {
   },
 };
 
-function itemCard(entry) {
+function itemCard(entry, executionContract) {
   const state = STATE[entry.public_state];
   const title = escapeHtml(entry.public_name_pt_br);
-  const alias = entry.public_name !== entry.public_name_pt_br
-    ? /360\s*°/.test(entry.public_name)
-      ? '<p class="catalog-item__alias">Nome anterior preservado no histórico do catálogo.</p>'
-      : `<p class="catalog-item__alias">Também publicado como: ${escapeHtml(entry.public_name)}</p>`
-    : "";
+  // Aliases support search/analytics compatibility without competing with the
+  // canonical visitor-facing name from #343.
+  const searchAliases = escapeHtml(
+    (entry.name_aliases || []).filter((name) => name !== entry.public_name_pt_br).join(" | "),
+  );
   const action = entry.public_state === "PUBLISHED"
     ? `<a class="text-link" data-asset-id="${entry.deliverable_id}" data-cta-id="catalog-open-${entry.catalog_number}" data-cta-position="catalog_index" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Consultar exemplo completo</a>`
     : entry.public_state === "VALIDATE"
       ? `<a class="text-link" data-asset-id="${entry.deliverable_id}" data-cta-id="catalog-fit-${entry.catalog_number}" data-cta-position="catalog_index" data-deliverable-id="${entry.deliverable_id}" data-event-name="cta_click" href="#captura-entregas">Pedir análise de aderência</a>`
       : '<span class="catalog-item__unavailable">Contratação indisponível</span>';
 
-  return `<article class="catalog-item catalog-item--${entry.public_state.toLowerCase()}" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-task-door="${entry.task_door}" data-object="${objectKind(entry)}" data-urgency="${urgencyKind(entry)}" data-price-band="${priceBand(entry)}" data-billing="${entry.price.billing}" id="entrega-${entry.catalog_number}">
+  return `<article class="catalog-item catalog-item--${entry.public_state.toLowerCase()}" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-task-door="${entry.task_door}" data-object="${objectKind(entry)}" data-urgency="${urgencyKind(entry)}" data-price-band="${priceBand(entry)}" data-billing="${entry.price.billing}" data-search-aliases="${searchAliases}" id="entrega-${entry.catalog_number}">
 <header class="catalog-item__head"><span class="catalog-item__number">${entry.catalog_number}</span><span class="catalog-item__state">${state.label}</span></header>
 <h5>${title}</h5>
-${alias}
+<p class="catalog-item__value">${escapeHtml(entry.value_line_pt_br)}</p>
 <p class="catalog-item__question">${escapeHtml(entry.decision_question)}</p>
 <dl class="catalog-item__facts"><div><dt>Preço</dt><dd>${priceLabel(entry)}</dd></div><div><dt>Prazo</dt><dd>${escapeHtml(publicText(slaLabel(entry)))}</dd></div><div><dt>Saída principal</dt><dd>${escapeHtml(publicText(entry.included_outputs[0]))}</dd></div></dl>
-<label class="catalog-item__compare"><input type="checkbox" value="${entry.deliverable_id}" data-compare-item/> Comparar esta entrega</label>
+${executionCallout(entry, executionContract)}
 ${action}
 </article>`;
 }
 
 export function renderClientData(registry) {
-  const items = registry.deliverables.map((entry) => [
-    entry.deliverable_id,
-    publicText(entry.public_name_pt_br),
-    publicText(entry.trigger),
-    publicText(entry.decision_question),
-    publicText(entry.scope.unit),
-    publicText(entry.required_inputs[0]),
-    inputKinds(entry),
-    entry.required_inputs.length,
-    decisionBusinessDays(entry),
-    publicText(entry.included_outputs[0]),
-    publicText(slaLabel(entry)),
-    priceLabel(entry),
-    publicText(entry.exclusions[0]),
-    stepUpLabel(entry),
-    entry.public_state,
-  ]);
+  const byTask = new Map();
+  for (const entry of registry.deliverables) {
+    if (!byTask.has(entry.task_door)) byTask.set(entry.task_door, []);
+    byTask.get(entry.task_door).push(entry);
+  }
+  const items = registry.deliverables.map((entry) => {
+    const taskEntries = byTask.get(entry.task_door) || [];
+    const ownIndex = taskEntries.findIndex((candidate) => candidate.deliverable_id === entry.deliverable_id);
+    const neighbor = taskEntries.length > 1
+      ? taskEntries[ownIndex === taskEntries.length - 1 ? ownIndex - 1 : ownIndex + 1]
+      : null;
+    return [
+      entry.deliverable_id,
+      publicText(entry.public_name_pt_br),
+      publicText(entry.trigger),
+      publicText(entry.decision_question),
+      publicText(entry.scope.unit),
+      publicText(entry.required_inputs[0]),
+      inputKinds(entry),
+      entry.required_inputs.length,
+      decisionBusinessDays(entry),
+      publicText(entry.included_outputs[0]),
+      publicText(slaLabel(entry)),
+      priceLabel(entry),
+      publicText(entry.exclusions[0]),
+      stepUpLabel(entry),
+      entry.public_state,
+      contractBody(entry, neighbor),
+    ];
+  });
   const payload = { schema: CLIENT_DATA_SCHEMA, fields: CLIENT_DATA_FIELDS, items };
   const rendered = `window.CONFENGE_CATALOG_DATA=${JSON.stringify(payload)};\n`;
+  if (/<(?:script|iframe|object|embed)\b|\son[a-z]+\s*=|javascript:/i.test(rendered)) {
+    throw new Error("active markup is forbidden in public catalog data");
+  }
   for (const forbidden of ["NO_MATCH_CONFIRMED", "empresa limpa", "empresa idônea", "empresa idonea", "nada consta"]) {
     if (rendered.toLocaleLowerCase("pt-BR").includes(forbidden.toLocaleLowerCase("pt-BR"))) {
       throw new Error(`forbidden public catalog conclusion: ${forbidden}`);
@@ -230,21 +360,21 @@ export function renderClientData(registry) {
   return rendered;
 }
 
-function subgroupMarkup(door, subgroup, byNumber) {
+function subgroupMarkup(door, subgroup, byNumber, executionContract) {
   const entries = subgroup.items.map((number) => byNumber.get(number));
   return `<section class="catalog-subgroup" aria-labelledby="subgrupo-${subgroup.subgroup_id}">
 <header><h4 id="subgrupo-${subgroup.subgroup_id}">${escapeHtml(subgroup.label_pt_br)}</h4><p>${escapeHtml(subgroup.decisive_difference_pt_br)}</p></header>
-<div class="catalog-items">${entries.map(itemCard).join("\n")}</div>
+<div class="catalog-items">${entries.map((entry) => itemCard(entry, executionContract)).join("\n")}</div>
 </section>`;
 }
 
-function doorMarkup(door, byNumber) {
+function doorMarkup(door, byNumber, executionContract) {
   const progressive = door.progressive_disclosure;
   let content;
   if (progressive?.required) {
-    content = progressive.subgroups.map((subgroup) => subgroupMarkup(door, subgroup, byNumber)).join("\n");
+    content = progressive.subgroups.map((subgroup) => subgroupMarkup(door, subgroup, byNumber, executionContract)).join("\n");
   } else {
-    content = `<section class="catalog-subgroup" aria-label="Opções para ${escapeHtml(door.public_label_pt_br)}"><h4 class="catalog-subgroup__title catalog-subgroup__title--plain">Opções para esta tarefa</h4><div class="catalog-items">${door.members.map(({ item }) => itemCard(byNumber.get(item))).join("\n")}</div></section>`;
+    content = `<section class="catalog-subgroup" aria-label="Opções para ${escapeHtml(door.public_label_pt_br)}"><h4 class="catalog-subgroup__title catalog-subgroup__title--plain">Opções para esta tarefa</h4><div class="catalog-items">${door.members.map(({ item }) => itemCard(byNumber.get(item), executionContract)).join("\n")}</div></section>`;
   }
   return `<section class="catalog-door" data-task-door="${door.door}" id="porta-${door.door.toLowerCase()}" aria-labelledby="porta-${door.door.toLowerCase()}-title">
 <header class="catalog-door__head"><p class="eyebrow">Tarefa ${String(door.order).padStart(2, "0")}</p><h3 id="porta-${door.door.toLowerCase()}-title">${escapeHtml(door.public_label_pt_br)}</h3><p>${escapeHtml(door.decision_question_pt_br)}</p><span>${door.member_count} entregáveis</span></header>
@@ -252,10 +382,10 @@ ${content}
 </section>`;
 }
 
-export function renderCatalog(registry, taskDoors) {
+export function renderCatalog(registry, taskDoors, executionContract) {
   const byNumber = new Map(registry.deliverables.map((entry) => [entry.catalog_number, entry]));
   const nav = taskDoors.doors.map((door) => `<a href="#porta-${door.door.toLowerCase()}"><span>${door.order}</span>${escapeHtml(door.public_label_pt_br)} <small>${door.member_count}</small></a>`).join("\n");
-  const doors = taskDoors.doors.map((door) => doorMarkup(door, byNumber)).join("\n");
+  const doors = taskDoors.doors.map((door) => doorMarkup(door, byNumber, executionContract)).join("\n");
   const taskOptions = taskDoors.doors.map((door) => `<option value="${door.door}">${escapeHtml(door.public_label_pt_br)}</option>`).join("");
   const inputOptions = taskDoors.interaction_rules.framing_steps[2].options_pt_br.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("");
   const alphabetical = [...registry.deliverables]
@@ -298,8 +428,8 @@ function replaceBlock(html, start, end, rendered) {
   return `${html.slice(0, from)}${rendered}${html.slice(to + end.length)}`;
 }
 
-export function renderPage(html, registry, taskDoors) {
-  let next = replaceBlock(html, CATALOG_START, CATALOG_END, renderCatalog(registry, taskDoors));
+export function renderPage(html, registry, taskDoors, executionContract) {
+  let next = replaceBlock(html, CATALOG_START, CATALOG_END, renderCatalog(registry, taskDoors, executionContract));
   next = replaceBlock(next, SELECT_START, SELECT_END, renderSelect(registry));
   return next;
 }
@@ -307,9 +437,19 @@ export function renderPage(html, registry, taskDoors) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
   const taskDoors = JSON.parse(fs.readFileSync(doorsPath, "utf8"));
+  const naming = JSON.parse(fs.readFileSync(namingPath, "utf8"));
+  const executionContract = JSON.parse(fs.readFileSync(executionPath, "utf8"));
+  const valueById = new Map(naming.names.map((entry) => [entry.deliverable_id, entry.value_line_pt_br]));
+  const renderedRegistry = {
+    ...registry,
+    deliverables: registry.deliverables.map((entry) => ({
+      ...entry,
+      value_line_pt_br: valueById.get(entry.deliverable_id),
+    })),
+  };
   const current = fs.readFileSync(pagePath, "utf8");
-  const rendered = renderPage(current, registry, taskDoors);
-  const clientData = renderClientData(registry);
+  const rendered = renderPage(current, renderedRegistry, taskDoors, executionContract);
+  const clientData = renderClientData(renderedRegistry);
   const currentClientData = fs.existsSync(clientDataPath)
     ? fs.readFileSync(clientDataPath, "utf8")
     : "";

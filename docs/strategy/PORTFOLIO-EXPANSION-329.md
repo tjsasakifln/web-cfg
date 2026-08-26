@@ -1,5 +1,14 @@
 # Expansão cumulativa do portfólio: registro de decisão da #329
 
+> **ARQUIVO HISTÓRICO — NÃO EXECUTAR COMO BACKLOG.** Este documento preserva a
+> fotografia adversarial de 2026-08-24. As divergências, contagens intermediárias,
+> nomes pendentes e ofertas founder-led descritas abaixo foram saneadas em
+> 2026-08-25. A semântica executável é: **54 entregáveis + 2 contêineres**;
+> condições de contratação não são produtos; #343 é a autoridade nominal; e
+> operação comercial pertence a Warmbly sob supervisão de Governance/Control
+> Center. Para trabalho atual, use o registro versionado e as issues abertas, não
+> as pendências históricas deste arquivo.
+
 - **Decision state:** P0 / VALIDATE
 - **Fronts:** REVENUE NOW + MARKET INTELLIGENCE MOAT
 - **Leverage:** revenue, data, trust, customer
@@ -154,13 +163,13 @@ de escondidas no código, com quatro registros:
 
 ### 2.6 Protocolo de market fit da #336
 
-`data/commercial/market-fit-protocol.v1.json` fixa as três fases (entrevistas de
-problema, card sort e willingness to pay observada), as dez dimensões de score,
-as cinco classes de evidência (`problem`, `solution`, `price`, `delivery`,
-`outcome`) e os gates `PROMOTE`, `ADJUST` e `HOLD`. O protocolo existe como
-contrato; nenhuma rodada foi executada e `runs` está vazio. A amostra e a lista
-de ofertas founder-led registradas no arquivo divergem da versão atual da #336;
-a divergência está na seção 7.
+`data/commercial/market-fit-protocol.v1.json` fixa pesquisa de problema,
+compreensão e disposição a pagar, as dez dimensões de score, as cinco classes de
+evidência (`problem`, `solution`, `price`, `delivery`, `outcome`) e os gates
+`PROMOTE`, `ADJUST` e `HOLD`. O protocolo existe como contrato; nenhuma rodada
+foi executada e `runs` está vazio. A fase comercial consome somente resultado
+agregado/SELECT-only do Warmbly, sob supervisão de Governance/Control Center;
+não mantém contato, fila, aprovação ou ação comercial neste repositório.
 
 ### 2.7 Censo de primeira dobra da #327
 
@@ -201,13 +210,12 @@ fabricada por código, modelo de linguagem ou screenshot test.
 
 - **As entrevistas ICP e o card sort da #336.** Nenhum participante foi
   recrutado. `state` permanece `NOT_STARTED`.
-- **A willingness to pay observada.** As ofertas founder-led da fase 3 não foram
-  executadas. Nenhuma proposta, aceite, negociação ou recusa foi registrada. Os
-  54 entregáveis estão em `market_fit.state = HOLD` com as cinco classes de
-  evidência em zero.
-- **A renomeação pública da #343.** Vinte entregáveis e os dois contêineres
-  seguem com o nome antigo. Nenhum HTML, slug, redirect, canonical, sitemap ou
-  mapeamento de analytics foi alterado.
+- **A willingness to pay observada.** Nenhuma proposta, aceite, negociação ou
+  recusa foi registrada no owner operacional. Os 54 entregáveis permanecem em
+  `market_fit.state = HOLD` até evidência agregada válida do Warmbly.
+- **A validação humana da #343.** A renomeação pública foi implementada no PR
+  #403, preservando aliases apenas para compatibilidade. Publicação não prova
+  compreensão; a evidência humana continua pendente.
 - **As oito lentes adversariais da #338 e o teste sem título.** Zero revisão
   executada, zero defeito classificado como bloqueante, material ou cosmético.
 - **O unit economics da #341.** Zero registro de horas, retrabalho, custo direto,
@@ -246,8 +254,8 @@ CONFENGE comprará esta embalagem, neste preço e agora.
 | #331 | `CFG-D01` a `CFG-D08` com preço congelado, aritmética do pacote (R$ 12.280 avulso, R$ 8.000 no pacote) e janela de crédito de 60 dias travadas em código | O endurecimento de objeto, entrada, saída e SLA ainda não aparece no HTML das oito rotas e do hub; a cláusula de nome desta issue foi superada pela #343 quanto ao nome-alvo |
 | #333 | `CFG-D17` a `CFG-D23` declarados, com o crédito de até R$ 2.900 do 17 para um único dossiê 18 a 23 em 30 dias | Fronteira jurídica, documento mínimo e prazo seguro precisam ficar visíveis nas seis rotas; nenhuma venda registrou esforço, margem ou outcome |
 | #335 | Sete portas por tarefa no registro, com 12, 8, 11, 3, 11, 5 e 4 membros, cada item exatamente uma vez, e `requires_progressive_disclosure` obrigatório acima de seis opções | Navegação, índice integral numerado, filtros sem JavaScript, comparação de 2 a 4 e deep links não foram construídos; as metas humanas dependem da amostra da #336 |
-| #336 | Protocolo de três fases, score de dez dimensões, cinco classes de evidência e gates gravados como contrato versionado, com `evaluatePromotion` recusando promoção para os 54 | Zero entrevista, zero card sort, zero oferta founder-led; a amostra registrada no arquivo é a anterior à reescrita da issue (seção 7) |
-| #338 | Contrato editorial de 15 pontos, oito lentes, 21 termos de linguagem proibida, quatro exceções documentadas e scanner ligado ao registro | Nenhuma lente executada, nenhum teste sem título, nenhuma página reescrita; a contagem interna da issue ainda oscila entre 48 e 54 |
+| #336 | Protocolo de três fases, score de dez dimensões, cinco classes de evidência e gates gravados como contrato versionado, com `evaluatePromotion` recusando promoção para os 54 | Pesquisa humana e evidência comercial agregada continuam `NOT_STARTED`; operação pertence ao Warmbly/Governance |
+| #338 | Contrato editorial de 15 pontos, oito lentes, linguagem proibida e scanner ligado ao registro | Implementação 54/54 está no PR #401; revisão e pesquisa humana continuam pendentes |
 | #341 | Escada de sete faixas, âncoras públicas marcadas como não sendo verdade de mercado, campos obrigatórios de unit economics e regras taxativas de preço | `records` vazio: nenhuma hora, custo, margem ou outcome observado. A escada tem vãos e um contêiner fora de qualquer faixa (seção 7) |
 | #343 | 54 nomes canônicos em português mais dois contêineres, com linha de valor, aliases e `name_state` conferido item a item contra o registro | A renomeação pública não foi executada: 20 entregáveis e 2 contêineres seguem `RENAME_PENDING`. Dois dos seis anglicismos que a issue manda remover seguem em nome publicado: Go/No-Go no 12 e Bid Room no 16 |
 | #344 | `CFG-D49` a `CFG-D54` com faixas, SLA, unidade, insumos, saídas, exclusões e o crédito de 13 para 51 | Nenhuma das seis rotas existe; as distinções 13 contra 51 e 14 contra 49 ainda não passaram por teste humano |
@@ -432,9 +440,9 @@ Apenas afirmações que o teste realmente executa.
    GX-01 e GX-02, o `public_name` legado por GX-04 e "garantia" só reprova como
    promessa por GX-03.
 9. **Protocolo e promoção.** `state = NOT_STARTED`, `runs` vazio, quotas somando
-   a amostra mínima declarada, preços das ofertas founder-led idênticos aos do
-   registro, funil exatamente nos dez passos, sem PII em analytics e sem tratar o
-   `web-cfg` como CRM. `evaluatePromotion` é aplicado aos 54: quem não está
+   a amostra mínima declarada e evidência comercial somente agregada/SELECT-only
+   do Warmbly, sem PII em analytics e sem tratar o `web-cfg` como CRM.
+   `evaluatePromotion` é aplicado aos 54: quem não está
    `PROMOTE` precisa ser inelegível, e com `problem`, `solution`, `price` e
    `delivery` em zero nenhum item é elegível.
 10. **Preço, copy, primeira dobra e prova real.** Preço: `NOT_STARTED`, `records`
@@ -451,26 +459,22 @@ O gate **não** confere a conferência de faixas da #341: `registry_cross_check`
 material informativo e não é assertado. Também não confere que a escada cubra
 todos os preços, nem que a #335 e a #338 concordem entre si sobre contagem.
 
-## 7. Divergências abertas que este PR registra sem resolver
+## 7. Divergências existentes na fotografia histórica — saneadas no backlog
 
-Este PR não edita issue nem inventa consenso. Cada divergência abaixo foi
-conferida contra o corpo atual da issue e contra o arquivo correspondente.
+Cada divergência abaixo foi conferida contra o corpo das issues em 2026-08-24.
+Ela permanece somente como trilha histórica; não é acceptance criterion nem
+instrução para um agente futuro.
 
-1. **#335 ainda diz 48 na prosa.** O título, a seção "Arquitetura primária por
-   tarefa" e o acceptance dizem 54, e a soma das sete portas fecha em 54. Mas o
-   texto do problema fala em "exibir 48 cards", "todos os 48 itens" e "processar
-   48 opções". O registro seguiu o título, a arquitetura e o acceptance.
-2. **#338 ainda diz 48 no contrato de comunicação.** A frase "cada uma das 48
-   precisa ter" convive com um teste de diferenciação cuja meta é 54/54 e com um
-   acceptance que exige o contrato editorial aplicado a 54/54. O arquivo de copy
-   registra os dois números no campo `scope_note` do teste de diferenciação, mas
-   esse mesmo campo ainda descreve o registro como tendo "25 entregáveis e 4
-   contêineres", o que era verdade antes desta reconstrução e não é mais.
-3. **#329 ainda fala em quatro contêineres em um trecho.** A seção E encerra com
-   "não confundir os quatro contêineres comerciais", enquanto o título da própria
-   issue, a #343 e o registro dizem 2 contêineres com 3 planos. A mesma seção
-   também usa "Flex" como nome de plano, uso que a #343 restringe a alias
-   interno.
+1. **Contagens e contêineres foram reconciliados.** #329, #335 e #338 agora usam
+   exclusivamente **54 entregáveis + 2 contêineres**. Contagens anteriores são
+   apenas proveniência desta fotografia e não podem alimentar código ou backlog.
+2. **Nomes foram reconciliados.** #343 é a autoridade nominal; Plano Mensal,
+   Compromisso Semestral e Compromisso Anual são condições, não produtos. Aliases
+   antigos só podem existir para busca, SEO, redirects, analytics ou
+   compatibilidade.
+3. **Ownership comercial foi reconciliado.** A operação de teste comercial não
+   vive no `web-cfg`: Warmbly opera e Governance/Control Center supervisiona;
+   este repositório consome somente evidência agregada.
 4. **A escada da #341 tem vãos declarados e um contêiner fora de faixa.** O
    Diagnóstico de Expansão a R$ 8.000 cai entre o teto do dossiê crítico
    (R$ 7.900) e o piso de oportunidade ou problema complexo (R$ 9.800). Nenhuma
@@ -485,13 +489,10 @@ conferida contra o corpo atual da issue e contra o arquivo correspondente.
    passaram a ter item, pela faixa estratégica do 48 e pela assinatura do 45.
    Nenhum preço foi movido para caber em faixa.
 6. **A amostra do protocolo de market fit foi reconciliada com a #336 atual.** O
-   arquivo passa a registrar 20 participantes, quotas de 5, 5, 5 e 5, pelo menos
-   14 de 20 com licitação ou contrato ativo nos últimos 12 meses, 18 cartões por
-   participante com matriz de exposição, e oito ofertas founder-led, incluindo o
-   49 a R$ 9.800 e o 51 a R$ 4.900. O gate deixou de fixar o tamanho da amostra
-   em código: ele confere que as quotas somam exatamente o que o protocolo
-   declara e que os cartões por participante são menores que o rol. Nenhuma
-   entrevista foi feita.
+   arquivo registra 20 participantes, quotas de 5, 5, 5 e 5, pelo menos 14 de 20
+   com licitação ou contrato ativo nos últimos 12 meses e matriz de exposição.
+   O gate confere a amostra declarada; nenhuma entrevista foi feita e nenhuma
+   ação comercial é executada neste repositório.
 7. **A #340 não define regra de crédito para os itens 26 a 39.** Os catorze
    ficam com `credit_rule = null`. Nenhuma janela, teto ou destino foi inventado
    para preencher o silêncio da issue.
@@ -541,7 +542,7 @@ Quem continua dono do quê:
   divergência nominal prevalece a #343; escopo e preço declarados nas issues de
   especificação permanecem válidos.
 
-## 10. Próxima evidência
+## 10. Próxima evidência no snapshot histórico — não executar
 
 A próxima decisão desta família não depende de mais código. Depende de: as
 entrevistas com notas brutas e consentimento sob a amostra que a #336 e o
@@ -551,6 +552,7 @@ recomendação unitária e preço explícito, o primeiro registro de horas, cust
 margem por `deliverable_id`, as oito lentes adversariais executadas com defeito
 classificado, 5 sessões de primeira dobra e uma autorização válida sob a #249.
 
-Até lá, os 54 permanecem `HOLD`, os preços-piloto permanecem hipótese, os 20
-nomes pendentes permanecem pendentes e as oito entregas publicadas permanecem
-exatamente como estão.
+O trecho acima registra o plano da fotografia original. Hoje os nomes públicos
+são os de #343; pesquisa/medição válida permanece P2/WAIT, e qualquer evidência
+comercial operacional deve chegar como agregado versionado do Warmbly, revisado
+por Governance/Control Center. `web-cfg` não executa abordagem, fila ou cadência.

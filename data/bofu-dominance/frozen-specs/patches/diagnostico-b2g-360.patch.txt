@@ -1,7 +1,7 @@
 format: frozen_patch_v1
 slug: diagnostico-b2g-360
 path: diagnostico-b2g-360/index.html
-content_sha256: 51bf9c3b10449ebdaac0bde2f05dab757a7f5d32c9a3f0bc6629b531980f3e12
+content_sha256: 1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02
 earliest_safe_action_at: 2026-09-16
 corresponding_issue: 128
 html_mutation_authorized: false
@@ -11,4 +11,4 @@ do_not_git_apply: true
 <<<BEFORE
 <meta content="Mapeie onde a frente pública perde tempo, margem e controle." property="og:title"/>
 ===AFTER
-<meta content="Diagnóstico B2G 360° | CONFENGE" property="og:title"/>
+<meta content="Diagnóstico da Operação em Obras Públicas | CONFENGE" property="og:title"/>

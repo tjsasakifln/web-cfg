@@ -45,7 +45,7 @@ const OFFERS = Object.freeze({
   "CFG-DIAG-EXP-v1": baseOffer({
     offer_id: "CFG-DIAG-EXP-v1",
     offer_version: "v1",
-    public_name: "CONFENGE - Diagnóstico B2G de Expansão",
+    public_name: "CONFENGE - Diagnóstico de Expansão no Mercado Público",
     internal_code: "CFG-DIAG-EXP",
     amount_cents: 800000,
     billing_mode: "one_time",
@@ -64,7 +64,7 @@ const OFFERS = Object.freeze({
   "CFG-DIRB2G-FLEX-v1": baseOffer({
     offer_id: "CFG-DIRB2G-FLEX-v1",
     offer_version: "v1",
-    public_name: "CONFENGE - Diretoria B2G Fracionada - Flex",
+    public_name: "CONFENGE - Diretoria Fracionada para o Mercado Público - Plano Mensal",
     internal_code: "CFG-DIRB2G-FLEX",
     amount_cents: 2000000,
     billing_mode: "subscription",
@@ -80,7 +80,7 @@ const OFFERS = Object.freeze({
   "CFG-DIRB2G-180-v1": baseOffer({
     offer_id: "CFG-DIRB2G-180-v1",
     offer_version: "v1",
-    public_name: "CONFENGE - Diretoria B2G Fracionada - 180",
+    public_name: "CONFENGE - Diretoria Fracionada para o Mercado Público - Compromisso Semestral",
     internal_code: "CFG-DIRB2G-180",
     amount_cents: 1500000,
     billing_mode: "subscription",
@@ -96,7 +96,7 @@ const OFFERS = Object.freeze({
   "CFG-DIRB2G-365-v1": baseOffer({
     offer_id: "CFG-DIRB2G-365-v1",
     offer_version: "v1",
-    public_name: "CONFENGE - Diretoria B2G Fracionada - 365",
+    public_name: "CONFENGE - Diretoria Fracionada para o Mercado Público - Compromisso Anual",
     internal_code: "CFG-DIRB2G-365",
     amount_cents: 1250000,
     billing_mode: "subscription",

@@ -1538,8 +1538,8 @@ def render_hub(
             "<p>Quando houver recortes publicáveis, eles aparecem aqui com data, fonte e limites. "
             "Até lá, o próximo passo é aplicar os dados à sua operação B2G.</p>"
             '<div class="hero-actions">'
-            '<a class="button button-primary" href="/diretoria-b2g/">Como funciona a Diretoria B2G</a>'
-            '<a class="button button-secondary" href="/diagnostico-b2g-360/">Solicitar diagnóstico B2G</a>'
+            '<a class="button button-primary" href="/diretoria-b2g/">Como funciona a Diretoria Fracionada para o Mercado Público</a>'
+            '<a class="button button-secondary" href="/diagnostico-b2g-360/">Solicitar diagnóstico da operação</a>'
             "</div></div>"
 )
     back = (

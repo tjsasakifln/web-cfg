@@ -255,8 +255,8 @@ def test_home_card_grid_limit():
     # Dominant offer hierarchy
     assert "offer-dominant" in html
     assert "offer-paths" in html
-    assert html.find("offer-dominant") < html.find("offer-paths") or "Diretoria B2G" in html
-    assert "Diretoria B2G fracionada" in html
+    assert html.find("offer-dominant") < html.find("offer-paths") or "Diretoria Fracionada" in html
+    assert "Diretoria Fracionada para o Mercado Público" in html
     assert "Licitação vencida não paga a conta" in html
     assert "Contrato rentável, sim" in html
     # Seven-block narrative: hero risk offers method authority fit conversion
@@ -357,12 +357,12 @@ def test_journey_accessible_without_js():
 def test_trace_matrix_and_tension_present():
     """Home must show three buyer journeys; legacy tension/trace optional if fused."""
     html = HOME.read_text(encoding="utf-8")
-    assert "Diretoria B2G" in html
+    assert "Diretoria Fracionada para o Mercado Público" in html
     assert "Arquitetura de ofertas" not in html
     # Three differentiated conversion paths (required by conversion architecture)
     assert "Avaliar o Dossiê de Medição, Glosa e Pagamento" in html
     assert "Enviar edital para triagem" in html
-    assert "Diagnosticar operação B2G" in html or "Diagnosticar a operação B2G" in html
+    assert "Solicitar diagnóstico da operação" in html
     assert 'data-journey="contrato"' in html
     assert 'data-journey="edital"' in html
     assert 'data-journey="operacao"' in html
@@ -395,7 +395,7 @@ def test_primary_cta_not_spam():
     assert primary <= 4, f"too many primary CTAs on home: {primary}"
     # Dominant CTA family (article optional)
     assert "Analisar meu caso" in html
-    assert "Diagnosticar a operação B2G" in html or "Diagnosticar operação B2G" in html
+    assert "Solicitar diagnóstico da operação" in html
     # Secondary path must not share primary button class in hero
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
@@ -411,12 +411,12 @@ def test_home_five_second_clarity():
     html = HOME.read_text(encoding="utf-8")
     lower = html.lower()
     assert "consultoria para licitações" in lower or "licitações e contratos" in lower
-    assert "diretoria b2g" in lower
+    assert "diretoria fracionada para o mercado público" in lower
     assert "construtor" in lower
     assert "margem" in lower
     assert "eesc-usp" in lower or "usp" in lower
     assert "#contato" in html or 'id="contato"' in html
-    assert "analisar meu caso" in lower or ("diagnosticar" in lower and "b2g" in lower)
+    assert "analisar meu caso" in lower or "solicitar diagnóstico da operação" in lower
 
 
 def test_form_qualification_minimal():
@@ -1008,7 +1008,7 @@ def test_thankyou_specialist_cta_family():
         assert "wa.me" in text
         assert "Prazo" in text or "prazo" in text
     specialist = (ROOT / "especialista" / "tiago-jun-sasaki" / "index.html").read_text(encoding="utf-8")
-    assert "Diagnosticar" in specialist
+    assert "Solicitar diagnóstico" in specialist
     lower = specialist.lower()
     assert "analisar meu cenário" not in lower
     assert "apresentar uma demanda" not in lower

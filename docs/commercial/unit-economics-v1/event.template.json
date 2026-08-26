@@ -1,0 +1,91 @@
+{
+  "schema": "confenge.unit-economics-event/1.0",
+  "template": true,
+  "state": "NOT_STARTED",
+  "event_id": null,
+  "deliverable_id": null,
+  "scope_version": null,
+  "price_version": null,
+  "terms_version": null,
+  "source": "CONFENGE_WEB",
+  "source_record_hash": null,
+  "delivered_at": null,
+  "pricing": {
+    "currency": null,
+    "price_tier": null,
+    "list_price_cents": null,
+    "displayed_price_cents": null,
+    "accepted_price_cents": null,
+    "recognized_revenue_cents": null,
+    "accepted_at": null,
+    "payment_state": null,
+    "paid_at": null,
+    "urgency": {
+      "applied": false,
+      "capacity_confirmed": false,
+      "technically_safe": false,
+      "disclosed_before_charge": false
+    },
+    "predefined_alternative": null
+  },
+  "hours_by_seniority": [],
+  "activity_hours": {
+    "acquisition_cleaning_data": {
+      "estimated_hours": null,
+      "actual_hours": null
+    },
+    "analysis": {
+      "estimated_hours": null,
+      "actual_hours": null
+    },
+    "technical_review_qa": {
+      "estimated_hours": null,
+      "actual_hours": null
+    },
+    "management_meetings_revisions": {
+      "estimated_hours": null,
+      "actual_hours": null
+    },
+    "rework": {
+      "estimated_hours": null,
+      "actual_hours": null
+    },
+    "urgency_capacity": {
+      "estimated_hours": null,
+      "actual_hours": null
+    },
+    "idle_capacity": {
+      "estimated_hours": null,
+      "actual_hours": null
+    }
+  },
+  "direct_costs": {
+    "data_sources_and_cleaning_cents": null,
+    "attributable_commercial_acquisition_cents": null,
+    "other_direct_cents": null
+  },
+  "calculated": {
+    "estimated_hours_total": null,
+    "actual_hours_total": null,
+    "labor_cost_cents": null,
+    "non_labor_direct_cost_cents": null,
+    "direct_cost_total_cents": null,
+    "contribution_cents": null,
+    "contribution_margin_pct": null,
+    "days_to_cash": null
+  },
+  "delivery_quality": {
+    "rework_hours": null,
+    "qa_state": null
+  },
+  "reusable_asset": {
+    "kind": null,
+    "observed_reuse_count": null,
+    "observed_hours_saved": null
+  },
+  "outcome": {
+    "state": "UNKNOWN",
+    "category": "UNKNOWN",
+    "observed_at": null
+  }
+}
