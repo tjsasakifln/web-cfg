@@ -444,6 +444,194 @@ _reset();
   pass("hub_forms_persisted_attribution", { routes: hubs.map(({ route }) => route) });
 }
 
+// 5e) The public catalogue captures a canonical deliverable selection without
+// opening checkout. Unknown and blocked IDs fail before persistence.
+{
+  const html = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
+  const options = [...html.matchAll(/<option value="(CFG-D\d{2})"( disabled)?/g)]
+    .map((match) => ({ id: match[1], disabled: Boolean(match[2]) }));
+  if (options.length !== 54 || new Set(options.map(({ id }) => id)).size !== 54) {
+    fail("catalog_deliverable_select_census", options);
+  }
+  for (const blocked of ["CFG-D11", "CFG-D43"]) {
+    if (!options.some(({ id, disabled }) => id === blocked && disabled)) {
+      fail("catalog_blocked_option_disabled", blocked);
+    }
+  }
+
+  const base = {
+    nome: "QA Catálogo",
+    email: "qa-catalogo@example.com",
+    estagio: "entregas-exemplos-hub",
+    jornada: "operacao",
+    consentimento: "1",
+    offer_id: "",
+    terms_id: "",
+    origem: "entregas",
+    landing_page: "https://confenge.com.br/entregas/",
+    route_family: "entregas",
+    asset_id: "entregas-exemplos-hub",
+    cta_id: "entregas-hub-handraise",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  for (const [deliverable_id, error] of [
+    ["CFG-D99", "deliverable_id_unknown"],
+    ["CFG-D11", "deliverable_unavailable"],
+  ]) {
+    const before = mem.map.size;
+    const res = await handler(event({ ...base, deliverable_id }, "POST", { ip: "192.0.2.90" }));
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 422 || data.error !== error || mem.map.size !== before) {
+      fail("catalog_deliverable_fail_closed", { deliverable_id, status: res.statusCode, data });
+    }
+  }
+
+  const res = await handler(event({
+    ...base,
+    deliverable_id: "CFG-D49",
+    idempotency_key: "qa-catalog-deliverable-49",
+  }, "POST", { ip: "192.0.2.91" }));
+  const data = JSON.parse(res.body);
+  const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+  if (res.statusCode !== 201 || !stored || stored.deliverable_id !== "CFG-D49") {
+    fail("catalog_deliverable_persisted", { status: res.statusCode, data, stored });
+  }
+  if (stored.offer_id || stored.terms_id || stored.asset_id !== "entregas-exemplos-hub") {
+    fail("catalog_deliverable_does_not_invent_checkout", stored);
+  }
+  pass("catalog_deliverable_selection_persisted", stored.deliverable_id);
+}
+
+// The generic catalogue hand-raise may name a specialised deliverable without
+// pretending to be its full product questionnaire.
+{
+  for (const [index, deliverableId] of ["CFG-D14", "CFG-D01", "CFG-D17"].entries()) {
+    const before = mem.map.size;
+    const res = await handler(event({
+      nome: "QA Catálogo Especializado",
+      email: "qa-catalogo-especializado@example.com",
+      estagio: "entregas-exemplos-hub",
+      jornada: "edital",
+      consentimento: "1",
+      origem: "entregas",
+      landing_page: "https://confenge.com.br/entregas/",
+      route_family: "entregas",
+      asset_id: "entregas-exemplos-hub",
+      cta_id: "entregas-hub-handraise",
+      deliverable_id: deliverableId,
+      record_kind: "qa",
+      test_mode: true,
+    }, "POST", { ip: `192.0.2.${91 + index}` }));
+    const data = JSON.parse(res.body);
+    const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+    if (res.statusCode !== 201 || mem.map.size !== before + 1 || stored?.deliverable_id !== deliverableId) {
+      fail("catalog_specialised_deliverable_handraise", { deliverableId, status: res.statusCode, data, stored });
+    }
+    pass("catalog_specialised_deliverable_handraise", stored.deliverable_id);
+  }
+}
+
+// 5f) The five #330 units have a prepared structured qualification contract,
+// while the protected dedicated route remains dormant under the #291 freeze.
+// Invalid context fails before persistence; valid context stays on the lead.
+{
+  const html = fs.readFileSync(path.join(root, "diagnostico-pre-licitacao/index.html"), "utf8");
+  const licitacaoContract = JSON.parse(fs.readFileSync(
+    path.join(root, "data/commercial/page-contract-licitacao.v1.json"),
+    "utf8",
+  ));
+  const qualificationDeadline = new Date(Date.now() + 45 * 86400000).toISOString().slice(0, 10);
+  for (const field of [
+    "deliverable_id",
+    "public_contract_id",
+    "opportunity_deadline",
+    "contract_value_band",
+    "lot_count",
+    "execution_regime",
+    "decision_intent",
+  ]) {
+    if (!licitacaoContract.public_implementation.prepared_capture_fields.includes(field)) {
+      fail("licitacao_prepared_qualification_field", field);
+    }
+  }
+  if (html.includes("GENERATED:LICITACAO-PRODUCTS") || html.includes('id="captura-licitacao"')) {
+    fail("licitacao_protected_route_must_remain_dormant");
+  }
+
+  const base = {
+    nome: "QA Licitação",
+    email: "qa-licitacao@example.com",
+    estagio: "licitacao-produto",
+    jornada: "edital",
+    consentimento: "1",
+    origem: "diagnostico-pre-licitacao",
+    landing_page: "https://confenge.com.br/diagnostico-pre-licitacao/",
+    route_family: "diagnostico-pre-licitacao",
+    asset_id: "licitacao-products",
+    cta_id: "licitacao-products-handraise",
+    deliverable_id: "CFG-D14",
+    public_contract_id: "EDITAL-DEMO-2026-001",
+    opportunity_deadline: qualificationDeadline,
+    contract_value_band: "20m_100m",
+    lot_count: "2",
+    execution_regime: "empreitada_preco_unitario",
+    decision_intent: "avaliar_disputa",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  for (const invalid of [
+    { opportunity_deadline: "2026-99-99" },
+    { contract_value_band: "valor_livre" },
+    { lot_count: "0" },
+    { execution_regime: "regime_livre" },
+    { decision_intent: "decisao_livre" },
+    { public_contract_id: "" },
+  ]) {
+    const before = mem.map.size;
+    const res = await handler(event({ ...base, ...invalid }, "POST", { ip: "192.0.2.92" }));
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 422 || data.error !== "licitacao_qualification_invalid" || mem.map.size !== before) {
+      fail("licitacao_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    }
+  }
+
+  for (const [index, deliverableId] of ["CFG-D12", "CFG-D13", "CFG-D14", "CFG-D15", "CFG-D16"].entries()) {
+    const unsafeDeadline = await handler(event({
+      ...base,
+      deliverable_id: deliverableId,
+      opportunity_deadline: new Date().toISOString().slice(0, 10),
+    }, "POST", { ip: `192.0.2.${94 + index}` }));
+    if (
+      unsafeDeadline.statusCode !== 422 ||
+      JSON.parse(unsafeDeadline.body).error !== "licitacao_qualification_invalid"
+    ) {
+      fail("licitacao_safe_deadline_fail_closed", { deliverableId, response: unsafeDeadline });
+    }
+  }
+
+  const res = await handler(event({
+    ...base,
+    idempotency_key: "qa-licitacao-d14",
+  }, "POST", { ip: "192.0.2.93" }));
+  const data = JSON.parse(res.body);
+  const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+  if (
+    res.statusCode !== 201 ||
+    !stored ||
+    stored.deliverable_id !== "CFG-D14" ||
+    stored.public_contract_id !== "EDITAL-DEMO-2026-001" ||
+    stored.opportunity_deadline !== qualificationDeadline ||
+    stored.contract_value_band !== "20m_100m" ||
+    stored.lot_count !== 2 ||
+    stored.execution_regime !== "empreitada_preco_unitario" ||
+    stored.decision_intent !== "avaliar_disputa"
+  ) {
+    fail("licitacao_qualification_persisted", { status: res.statusCode, data, stored });
+  }
+  pass("licitacao_qualification_persisted", stored?.deliverable_id);
+}
+
 // 5d) Every priced model form reaches the real persistence path. Static markup
 // is insufficient: receipts must be distinct and retain the shipped attribution.
 {
@@ -452,6 +640,8 @@ _reset();
     .map((entry) => entry.name)
     .sort();
   if (modelSlugs.length !== 8) fail("priced_model_census", modelSlugs);
+  const analysisCutoff = new Date().toISOString().slice(0, 10);
+  const opportunityDeadline = new Date(Date.now() + 45 * 86400000).toISOString().slice(0, 10);
 
   const ids = new Set();
   for (let i = 0; i < modelSlugs.length; i += 1) {
@@ -479,6 +669,7 @@ _reset();
       route_family: dataValue("route-family"),
       jornada: hiddenValue("jornada"),
       estagio: slug,
+      deliverable_id: hiddenValue("deliverable_id"),
     };
     for (const [name, value] of Object.entries(expected)) {
       if (!value || hiddenValue(name) !== value) {
@@ -487,6 +678,9 @@ _reset();
     }
     if (hiddenValue("offer_id") !== "" || hiddenValue("terms_id") !== "" || hiddenValue("amount_cents")) {
       fail("priced_model_form_invented_checkout", slug);
+    }
+    for (const field of ["cnpj", "analysis_cutoff", "opportunity_deadline", "decision_intent"]) {
+      if (!form.includes(`name="${field}"`)) fail("priced_model_form_qualification_field", { slug, field });
     }
 
     const res = await handler(
@@ -504,6 +698,11 @@ _reset();
           route_family: expected.route_family,
           asset_id: expected.asset_id,
           cta_id: expected.cta_id,
+          deliverable_id: expected.deliverable_id,
+          cnpj: "52407089000109",
+          analysis_cutoff: analysisCutoff,
+          opportunity_deadline: opportunityDeadline,
+          decision_intent: "validar_mercado",
           record_kind: "qa",
           test_mode: true,
           idempotency_key: `qa-priced-model-${i + 1}`,
@@ -521,7 +720,10 @@ _reset();
       !stored || stored.source !== "CONFENGE_WEB" ||
       stored.origem !== expected.origem || stored.landing_page !== expected.landing_page ||
       stored.route_family !== expected.route_family || stored.asset_id !== expected.asset_id ||
-      stored.cta_id !== expected.cta_id || stored.jornada !== expected.jornada
+      stored.cta_id !== expected.cta_id || stored.jornada !== expected.jornada ||
+      stored.deliverable_id !== expected.deliverable_id || stored.cnpj !== "52407089000109" ||
+      stored.analysis_cutoff !== analysisCutoff || stored.opportunity_deadline !== opportunityDeadline ||
+      stored.decision_intent !== "validar_mercado"
     ) {
       fail("priced_model_form_attribution", { slug, stored, expected });
     }
@@ -531,7 +733,96 @@ _reset();
     ids.add(data.lead_id);
   }
   if (ids.size !== modelSlugs.length) fail("priced_model_form_distinct_receipts", [...ids]);
+
+  const invalidBase = {
+    nome: "QA Escopo",
+    email: "qa-escopo@example.com",
+    estagio: "modelo-relatorio-inteligencia-licitacoes",
+    jornada: "edital",
+    consentimento: "1",
+    origem: "/casos/modelo-relatorio-inteligencia-licitacoes/",
+    deliverable_id: "CFG-D01",
+    cnpj: "52407089000109",
+    analysis_cutoff: analysisCutoff,
+    opportunity_deadline: opportunityDeadline,
+    decision_intent: "priorizar_oportunidades",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  for (const invalid of [
+    { cnpj: "123" },
+    { cnpj: "11111111111111" },
+    { analysis_cutoff: "2026-99-99" },
+    { opportunity_deadline: analysisCutoff },
+    { decision_intent: "decisao_livre" },
+  ]) {
+    const before = mem.map.size;
+    const res = await handler(event({ ...invalidBase, ...invalid }, "POST", { ip: "203.0.113.99" }));
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 422 || data.error !== "expansion_qualification_invalid" || mem.map.size !== before) {
+      fail("priced_model_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    }
+  }
   pass("priced_model_forms_persisted_attribution", { routes: modelSlugs });
+}
+
+// 5h) The #333 contract products require contract, event, safe deadline and
+// stage. All seven IDs share one fail-closed server contract; the hub captures
+// the unrouted reajuste item as well.
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const deadline = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10);
+  const base = {
+    nome: "QA Contratos",
+    email: "qa-contratos@example.com",
+    estagio: "contract-defense-products",
+    jornada: "contrato",
+    consentimento: "1",
+    origem: "servicos-obras-publicas",
+    public_contract_id: "CONTRATO-DEMO-2026-01",
+    contract_event: "medicao_glosa_pagamento",
+    opportunity_deadline: deadline,
+    contract_stage: "documentando",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  for (let number = 17; number <= 23; number += 1) {
+    const check = core.validateAndNormalize({ ...base, deliverable_id: `CFG-D${number}` });
+    if (!check.ok || check.lead.deliverable_id !== `CFG-D${number}`) {
+      fail("contract_product_server_contract", { number, check });
+    }
+  }
+  for (const invalid of [
+    { public_contract_id: "" },
+    { contract_event: "evento_livre" },
+    { opportunity_deadline: "2026-99-99" },
+    { contract_stage: "estagio_livre" },
+  ]) {
+    const before = mem.map.size;
+    const res = await handler(event({ ...base, deliverable_id: "CFG-D18", ...invalid }, "POST", { ip: "203.0.113.98" }));
+    const data = JSON.parse(res.body);
+    if (res.statusCode !== 422 || data.error !== "contract_qualification_invalid" || mem.map.size !== before) {
+      fail("contract_product_qualification_fail_closed", { invalid, status: res.statusCode, data });
+    }
+  }
+  const res = await handler(event({
+    ...base,
+    deliverable_id: "CFG-D21",
+    contract_event: "reajuste",
+    contract_stage: "quantificando",
+    idempotency_key: "qa-contract-product-21",
+  }, "POST", { ip: "203.0.113.97" }));
+  const data = JSON.parse(res.body);
+  const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+  if (res.statusCode !== 201 || !stored || stored.deliverable_id !== "CFG-D21" ||
+      stored.public_contract_id !== base.public_contract_id || stored.contract_event !== "reajuste" ||
+      stored.opportunity_deadline !== deadline || stored.contract_stage !== "quantificando") {
+    fail("contract_product_qualification_persisted", { status: res.statusCode, data, stored });
+  }
+  if (stored.offer_id || stored.terms_id || stored.source !== "CONFENGE_WEB") {
+    fail("contract_product_no_checkout", stored);
+  }
+  pass("contract_products_fail_closed_and_persisted", { ids: 7, lead_id: data.lead_id });
 }
 
 // 6) idempotency — second submit same payload returns same lead_id + HTTP 200 + idempotent

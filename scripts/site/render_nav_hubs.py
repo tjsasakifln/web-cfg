@@ -36,6 +36,13 @@ from scripts.site.shell_nav import (  # noqa: E402
 
 SITE = "https://confenge.com.br"
 SCRIPT_SRC = "/script.js"
+MANAGED_EXTENSIONS = [
+    (
+        "<!-- GENERATED:CONTRACT-DEFENSE-HUB:START -->",
+        "<!-- GENERATED:CONTRACT-DEFENSE-HUB:END -->",
+        '<link href="/styles-offers.css" rel="stylesheet"/>',
+    ),
+]
 
 
 def e(value: Any) -> str:
@@ -146,6 +153,35 @@ def _document(
 """
     # One shell source: the same normalizer that keeps every shipped page aligned.
     return sync_text(document, load_brand(), url)
+
+
+def _preserve_managed_extensions(rendered: str, current: str | None) -> str:
+    """Keep independently rendered public blocks without hiding broken markers."""
+    if current is None:
+        return rendered
+    next_document = rendered
+    for start, end, stylesheet in MANAGED_EXTENSIONS:
+        start_count = current.count(start)
+        end_count = current.count(end)
+        if start_count != end_count:
+            raise ValueError(
+                f"managed extension marker mismatch: {start}={start_count}, {end}={end_count}"
+            )
+        if start_count == 0:
+            continue
+        if start_count != 1:
+            raise ValueError(f"managed extension must be unique: {start}={start_count}")
+        block_start = current.index(start)
+        block_end = current.index(end, block_start) + len(end)
+        block = current[block_start:block_end]
+        if "</main>" not in next_document:
+            raise ValueError("managed extension insertion point missing: </main>")
+        next_document = next_document.replace("</main>", f"{block}\n</main>", 1)
+        if stylesheet and stylesheet not in next_document:
+            if "</head>" not in next_document:
+                raise ValueError("managed extension stylesheet insertion point missing: </head>")
+            next_document = next_document.replace("</head>", f"{stylesheet}\n</head>", 1)
+    return next_document
 
 
 def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
@@ -290,6 +326,7 @@ def run(write: bool) -> int:
     for url, text in pages.items():
         path = ROOT / url.strip("/") / "index.html"
         current = path.read_text(encoding="utf-8") if path.exists() else None
+        text = _preserve_managed_extensions(text, current)
         if current == text:
             continue
         drift.append(url)

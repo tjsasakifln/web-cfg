@@ -1,0 +1,39 @@
+{
+  "schema": "confenge.market-fit-research-aggregate/1.0",
+  "template": true,
+  "protocol_version": "CFG-MARKET-FIT-2026-08-25-v2",
+  "plan_version": "CFG-MARKET-FIT-EXPOSURE-2026-08-25-v1",
+  "run_id": null,
+  "executed_at": null,
+  "exposure_plan_sha256": null,
+  "status": "NOT_STARTED",
+  "participant_counts": {
+    "screened": null,
+    "eligible": null,
+    "consented": null,
+    "completed": 0,
+    "active_public_contract_last_12_months": 0
+  },
+  "completed_by_role": {
+    "direcao": 0,
+    "licitacoes_comercial": 0,
+    "engenharia_proposta": 0,
+    "contratos_obra_financeiro": 0
+  },
+  "consent_attestation": {
+    "private_records_verified": false,
+    "pii_in_repository": false,
+    "pii_in_analytics": false,
+    "raw_notes_in_repository": false
+  },
+  "exposure_counts_by_deliverable": null,
+  "joint_counts_by_critical_boundary": null,
+  "problem_evidence_aggregate": null,
+  "card_sort_aggregate": null,
+  "review": {
+    "operator_role": null,
+    "second_reviewer_role": null,
+    "reviewed_at": null
+  }
+}
+
