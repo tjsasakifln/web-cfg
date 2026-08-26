@@ -12,6 +12,7 @@
  */
 
 import { createRequire } from "module";
+import { spawnSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -132,6 +133,40 @@ assert("unit01_not_in_package", !expansion.composes_deliverables.includes("CFG-D
 // ------------------------------------------------------- published HTML parity
 
 const entregasHtml = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
+const publicIds = [...entregasHtml.matchAll(/<article\b[^>]*\bid="entrega-(\d{2})"/g)].map((match) => match[1]);
+assert("public_index_has_54_items", publicIds.length === entries.length, publicIds.length);
+assert(
+  "public_index_numbers_are_canonical",
+  JSON.stringify([...publicIds].sort()) === JSON.stringify(expectedNumbers),
+  publicIds,
+);
+for (const entry of entries) {
+  const card = entregasHtml.match(
+    new RegExp(`<article\\b[^>]*\\bid="entrega-${entry.catalog_number}"[\\s\\S]*?<\\/article>`),
+  )?.[0] || "";
+  assert(`public_card_${entry.deliverable_id}`, Boolean(card), entry.deliverable_id);
+  assert(`public_name_${entry.deliverable_id}`, card.includes(entry.public_name_pt_br), entry.public_name_pt_br);
+  assert(`public_price_${entry.deliverable_id}`, card.includes(brl(lib.entryAmountCents(entry))), brl(lib.entryAmountCents(entry)));
+  assert(`public_state_${entry.deliverable_id}`, card.includes(`data-public-state="${entry.public_state}"`), entry.public_state);
+  assert(`public_deep_link_${entry.deliverable_id}`, entregasHtml.includes(`href="#entrega-${entry.catalog_number}"`) || card.includes(`id="entrega-${entry.catalog_number}"`));
+  if (entry.public_state === "BLOCKED") {
+    assert(`public_blocked_not_buyable_${entry.deliverable_id}`, !card.includes("Pedir análise de aderência"), card);
+  }
+}
+assert("public_catalog_has_one_terminal_form", (entregasHtml.match(/<form\b/g) || []).length === 1);
+assert("public_catalog_captures_deliverable_id", entregasHtml.includes('name="deliverable_id"'));
+assert("public_catalog_captures_terms_id", entregasHtml.includes('name="terms_id"'));
+assert("public_catalog_renderer_is_declared", entregasHtml.includes("GENERATED:PUBLIC-CATALOG:START"));
+assert("public_catalog_has_no_nullish_copy", !/\b(?:null|undefined|NaN)\b/.test(entregasHtml));
+const rendererCheck = spawnSync(
+  process.execPath,
+  [path.join(root, "scripts/commercial/render_public_catalog.mjs"), "--check"],
+  { cwd: root, encoding: "utf8" },
+);
+assert("public_catalog_renderer_has_no_drift", rendererCheck.status === 0, {
+  stdout: rendererCheck.stdout,
+  stderr: rendererCheck.stderr,
+});
 for (const [id, cents] of Object.entries(lib.FROZEN_PUBLISHED_PRICES_CENTS)) {
   assert(`html_price_${id}`, entregasHtml.includes(brl(cents)), brl(cents));
   // The published page still carries the name the registry records as current.
