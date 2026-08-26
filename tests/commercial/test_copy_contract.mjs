@@ -19,6 +19,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import {
   auditCopyContract,
+  catalogContractsFromClientData,
   classifyOccurrence,
   deriveMoneyRoutes,
   explicitExclusionRanges,
@@ -341,8 +342,11 @@ assert("differentiation_machine_precheck_54", contract.differentiation_test?.mac
 const taskDoors = JSON.parse(fs.readFileSync(path.join(root, "data/commercial/task-doors.v1.json"), "utf8"));
 const familyRegistry = JSON.parse(fs.readFileSync(path.join(root, "data/organic/public-family-registry.json"), "utf8"));
 const catalogHtml = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
+const catalogContractsHtml = catalogContractsFromClientData(
+  fs.readFileSync(path.join(root, "entregas/catalog-data.js"), "utf8"),
+);
 const derivedRoutes = deriveMoneyRoutes(registry, taskDoors, familyRegistry);
-const derivedAudit = auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml });
+const derivedAudit = auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml, catalogContractsHtml });
 assert("copy_audit_is_registry_derived", contract.public_implementation?.manual_route_allowlist === false && contract.money_page_scan?.manual_route_allowlist === false, contract.public_implementation);
 assert("copy_audit_covers_54", derivedAudit.metrics.deliverables === 54 && derivedAudit.metrics.titleless_unique === 54, derivedAudit.metrics);
 assert("copy_audit_covers_810_clauses", derivedAudit.metrics.clauses_per_deliverable === 15 && derivedAudit.metrics.clause_instances === 810, derivedAudit.metrics);
@@ -361,12 +365,12 @@ assert(
 assert("copy_audit_runner_exists", fs.existsSync(path.join(root, contract.public_implementation.audit_runner)), contract.public_implementation.audit_runner);
 assert("copy_review_package_exists", fs.existsSync(path.join(root, contract.public_implementation.adversarial_review_package, "review.template.json")) && fs.existsSync(path.join(root, contract.public_implementation.adversarial_review_package, "differentiation.template.json")), contract.public_implementation.adversarial_review_package);
 
-const triggerSections = [...catalogHtml.matchAll(/(<section[^>]+data-copy-clause="observable_trigger"[^>]*>)([\s\S]*?)(<\/section>)/g)];
+const triggerSections = [...catalogContractsHtml.matchAll(/(<section[^>]+data-copy-clause="observable_trigger"[^>]*>)([\s\S]*?)(<\/section>)/g)];
 assert("duplicate_mutation_has_two_targets", triggerSections.length >= 2, triggerSections.length);
 if (triggerSections.length >= 2) {
   const second = triggerSections[1];
-  const mutatedCatalog = `${catalogHtml.slice(0, second.index)}${second[1]}${triggerSections[0][2]}${second[3]}${catalogHtml.slice(second.index + second[0].length)}`;
-  const mutatedAudit = auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml: mutatedCatalog });
+  const mutatedCatalogContracts = `${catalogContractsHtml.slice(0, second.index)}${second[1]}${triggerSections[0][2]}${second[3]}${catalogContractsHtml.slice(second.index + second[0].length)}`;
+  const mutatedAudit = auditCopyContract({ contract, registry, taskDoors, familyRegistry, catalogHtml, catalogContractsHtml: mutatedCatalogContracts });
   assert(
     "duplicate_clause_mutation_fails_closed",
     !mutatedAudit.ok && mutatedAudit.problems.some((problem) => problem.startsWith("duplicate_copy_clause:observable_trigger:")),
