@@ -30,12 +30,9 @@ for (const needle of [
     process.exit(1);
   }
 }
-// Journey operacao CTA (article optional: "a operação" vs "operação")
-if (
-  !home.includes("Diagnosticar operação B2G") &&
-  !home.includes("Diagnosticar a operação B2G")
-) {
-  console.error("FAIL: home missing Diagnosticar (a) operação B2G");
+// Journey operacao CTA uses the canonical visitor-facing label.
+if (!home.includes("Solicitar diagnóstico da operação")) {
+  console.error("FAIL: home missing Solicitar diagnóstico da operação");
   process.exit(1);
 }
 // No visitor-facing marketing metalinguage on the conversion surface
