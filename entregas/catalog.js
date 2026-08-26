@@ -20,11 +20,24 @@
   const EXPECTED_FIELDS = [
     "id", "name", "trigger", "decision", "unit", "input", "inputKinds",
     "inputCount", "decisionBusinessDays", "output", "sla", "price",
-    "exclusion", "stepUp", "publicState",
+    "exclusion", "stepUp", "publicState", "contractHtml",
   ];
+  const EXPECTED_CONTRACT_CLAUSES = [
+    "decision_oriented_name", "observable_trigger", "cost_of_inaction",
+    "decision_that_changes", "concrete_result_and_artifact_example", "scope_in",
+    "client_inputs_and_sla_start", "method_and_provenance", "price_and_sla_same_block",
+    "exclusions_and_third_party", "fit_and_misfit", "proof_matching_real_state",
+    "specific_objections", "cta_with_post_click_expectation", "neighbor_alternative_and_step_up",
+  ];
+  const hasExactContract = (value) => {
+    if (typeof value !== "string" || /<(?:script|iframe|object|embed)\b|\son[a-z]+\s*=|javascript:/i.test(value)) return false;
+    const clauses = [...value.matchAll(/data-copy-clause="([^"]+)"/g)].map((match) => match[1]);
+    return clauses.length === EXPECTED_CONTRACT_CLAUSES.length &&
+      clauses.every((clause, index) => clause === EXPECTED_CONTRACT_CLAUSES[index]);
+  };
   const payload = window.CONFENGE_CATALOG_DATA;
   if (
-    payload?.schema !== "confenge.public-deliverable-catalog/1.0" ||
+    payload?.schema !== "confenge.public-deliverable-catalog/1.1" ||
     !Array.isArray(payload.fields) ||
     payload.fields.length !== EXPECTED_FIELDS.length ||
     !payload.fields.every((field, index) => field === EXPECTED_FIELDS[index]) ||
@@ -39,7 +52,8 @@
       Number.isInteger(row[7]) && row[7] > 0 &&
       (row[8] === "" || (Number.isInteger(row[8]) && row[8] > 0)) &&
       row.slice(9, 14).every((value) => typeof value === "string") &&
-      ["PUBLISHED", "VALIDATE", "BLOCKED"].includes(row[14])
+      ["PUBLISHED", "VALIDATE", "BLOCKED"].includes(row[14]) &&
+      hasExactContract(row[15])
     ))
   ) return;
   const records = new Map(payload.items.map((row) => {
@@ -48,6 +62,52 @@
   }));
   if (records.size !== cards.length || cards.some((card) => !records.has(card.dataset.deliverableId))) return;
   const recordFor = (card) => records.get(card.dataset.deliverableId);
+
+  function enhanceCard(card) {
+    const record = recordFor(card);
+    const action = card.lastElementChild;
+    if (!record || !action) return;
+
+    const details = document.createElement("details");
+    details.className = "catalog-item__contract";
+    details.dataset.copyContractId = record.id;
+    const summary = document.createElement("summary");
+    summary.textContent = "Ver escopo, aderência e alternativa";
+    const body = document.createElement("div");
+    body.dataset.copyContractBody = "";
+    details.append(summary, body);
+
+    const compare = document.createElement("label");
+    compare.className = "catalog-item__compare";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = record.id;
+    checkbox.dataset.compareItem = "";
+    compare.append(checkbox, " Comparar esta entrega");
+
+    card.insertBefore(details, action);
+    card.insertBefore(compare, action);
+  }
+
+  cards.forEach(enhanceCard);
+
+  function hydrateContract(details) {
+    if (!details.open || details.dataset.copyContractHydrated === "true") return;
+    const card = details.closest("article.catalog-item[data-deliverable-id]");
+    const body = details.querySelector("[data-copy-contract-body]");
+    const contractHtml = card ? recordFor(card)?.contractHtml : "";
+    if (!body || !contractHtml) return;
+    // `contractHtml` is generated from the versioned registry with every
+    // registry value escaped before this trusted local asset is committed.
+    body.innerHTML = contractHtml;
+    details.dataset.copyContractHydrated = "true";
+  }
+
+  document.addEventListener("toggle", (event) => {
+    const details = event.target.closest?.("details[data-copy-contract-id]");
+    if (details) hydrateContract(details);
+  }, true);
+  document.querySelectorAll("details[data-copy-contract-id][open]").forEach(hydrateContract);
 
   const MAX_COMPARE = 4;
   const MIN_COMPARE = 2;
