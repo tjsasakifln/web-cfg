@@ -52,12 +52,12 @@ const CALCULATED_KEYS = [
 const PROMOTION_KEYS = [
   "schema", "template", "state", "run_id", "deliverable_id", "scope_version", "price_version",
   "terms_version", "price_tier", "observed_deliveries", "deliveries_at_or_above_margin",
-  "minimum_margin_pct", "minimum_deliveries", "founder_override", "founder_decision_id", "eligible",
+  "minimum_margin_pct", "minimum_deliveries", "governance_override", "governance_decision_id", "eligible",
   "comparable", "invalid_events", "generated_at", "source_event_hashes",
 ];
 const LEDGER_KEYS = [
   "schema", "ledger_version", "issue", "state", "storage_authority", "repository_role",
-  "public_surface", "contains_sensitive_values", "source", "records", "rollups", "founder_decisions", "records_note",
+  "public_surface", "contains_sensitive_values", "source", "records", "rollups", "governance_decisions", "records_note",
 ];
 
 const roundMoney = (value) => Math.round(Number(value));
@@ -264,7 +264,7 @@ export function validateUnitEconomicsEvent(event, policy, registry) {
   return [...new Set(problems)];
 }
 
-export function evaluateUnitEconomicsPromotion(events, policy, registry, founderDecision = null) {
+export function evaluateUnitEconomicsPromotion(events, policy, registry, governanceDecision = null) {
   const candidates = (events || []).filter((event) => event.template !== true);
   const duplicateEventIds = candidates.map((event) => event.event_id).filter((id, index, ids) => ids.indexOf(id) !== index);
   const duplicateSourceHashes = candidates.map((event) => event.source_record_hash).filter((hash, index, hashes) => hashes.indexOf(hash) !== index);
@@ -277,28 +277,28 @@ export function evaluateUnitEconomicsPromotion(events, policy, registry, founder
     event.pricing.payment_state === "PAID" && event.outcome.state === "OBSERVED" &&
     finite(event.calculated?.contribution_margin_pct) &&
     event.calculated.contribution_margin_pct >= policy.promotion_gate.min_pct);
-  const target = founderDecision || {};
+  const target = governanceDecision || {};
   const targetDeliverable = registry.deliverables.find((entry) => entry.deliverable_id === target.deliverable_id);
-  const founderKeys = ["explicit", "decision_id", "decided_by_role", "deliverable_id", "scope_version", "price_version", "terms_version", "price_tier", "subject", "action", "rationale", "decided_at"];
-  const founderShapeValid = !founderDecision || JSON.stringify(Object.keys(founderDecision).sort()) === JSON.stringify(founderKeys.sort());
-  const founderOverride = founderDecision && founderShapeValid && founderDecision.explicit === true &&
-    /^FD-[A-Z0-9-]+$/.test(founderDecision.decision_id || "") &&
-    founderDecision.decided_by_role === "FOUNDER" &&
-    ["PRICE", "SCOPE"].includes(founderDecision.subject) &&
-    ["KEEP", "RAISE_PRICE", "LOWER_PRICE", "CHANGE_SCOPE", "PAUSE"].includes(founderDecision.action) &&
-    targetDeliverable && founderDecision.scope_version === targetDeliverable.version &&
-    founderDecision.price_version === policy.policy_version &&
-    founderDecision.terms_version === TERMS_VERSION &&
-    allowedBasePrices(targetDeliverable).has(founderDecision.price_tier) &&
-    typeof founderDecision.rationale === "string" && founderDecision.rationale.trim().length >= 20 &&
-    isoDate(founderDecision.decided_at) && walkKeys(founderDecision).length === 0 && walkSensitiveValues(founderDecision).length === 0;
+  const governanceKeys = ["explicit", "decision_id", "decided_by_role", "deliverable_id", "scope_version", "price_version", "terms_version", "price_tier", "subject", "action", "rationale", "decided_at"];
+  const governanceShapeValid = !governanceDecision || JSON.stringify(Object.keys(governanceDecision).sort()) === JSON.stringify(governanceKeys.sort());
+  const governanceOverride = governanceDecision && governanceShapeValid && governanceDecision.explicit === true &&
+    /^GOV-[A-Z0-9-]+$/.test(governanceDecision.decision_id || "") &&
+    governanceDecision.decided_by_role === "GOVERNANCE_APPROVER" &&
+    ["PRICE", "SCOPE"].includes(governanceDecision.subject) &&
+    ["KEEP", "RAISE_PRICE", "LOWER_PRICE", "CHANGE_SCOPE", "PAUSE"].includes(governanceDecision.action) &&
+    targetDeliverable && governanceDecision.scope_version === targetDeliverable.version &&
+    governanceDecision.price_version === policy.policy_version &&
+    governanceDecision.terms_version === TERMS_VERSION &&
+    allowedBasePrices(targetDeliverable).has(governanceDecision.price_tier) &&
+    typeof governanceDecision.rationale === "string" && governanceDecision.rationale.trim().length >= 20 &&
+    isoDate(governanceDecision.decided_at) && walkKeys(governanceDecision).length === 0 && walkSensitiveValues(governanceDecision).length === 0;
   return {
-    eligible: (comparable && qualifying.length >= policy.promotion_gate.min_deliveries) || Boolean(founderOverride),
+    eligible: (comparable && qualifying.length >= policy.promotion_gate.min_deliveries) || Boolean(governanceOverride),
     observed_deliveries: delivered.length,
     deliveries_at_or_above_margin: qualifying.length,
     minimum_margin_pct: policy.promotion_gate.min_pct,
     minimum_deliveries: policy.promotion_gate.min_deliveries,
-    founder_override: Boolean(founderOverride),
+    governance_override: Boolean(governanceOverride),
     comparable,
     comparison_key: comparisonKeys.size === 1 ? [...comparisonKeys][0] : null,
     invalid_events: candidates.length - valid.length,
@@ -307,18 +307,18 @@ export function evaluateUnitEconomicsPromotion(events, policy, registry, founder
   };
 }
 
-export function validateUnitEconomicsPromotionAggregate(aggregate, events, policy, registry, founderDecision = null) {
+export function validateUnitEconomicsPromotionAggregate(aggregate, events, policy, registry, governanceDecision = null) {
   const problems = [...walkKeys(aggregate), ...walkSensitiveValues(aggregate)];
   exactKeys(aggregate, PROMOTION_KEYS, "promotion", problems);
   if (aggregate.schema !== "confenge.unit-economics-promotion-aggregate/1.0") problems.push("promotion_schema");
   if (aggregate.template === true) {
     const nullable = [
       aggregate.run_id, aggregate.deliverable_id, aggregate.scope_version, aggregate.price_version,
-      aggregate.terms_version, aggregate.price_tier, aggregate.founder_decision_id, aggregate.generated_at,
+      aggregate.terms_version, aggregate.price_tier, aggregate.governance_decision_id, aggregate.generated_at,
     ];
     if (aggregate.state !== "NOT_STARTED" || nullable.some((value) => value !== null) ||
       aggregate.observed_deliveries !== 0 || aggregate.deliveries_at_or_above_margin !== 0 ||
-      aggregate.founder_override !== false || aggregate.eligible !== false || aggregate.comparable !== false ||
+      aggregate.governance_override !== false || aggregate.eligible !== false || aggregate.comparable !== false ||
       aggregate.invalid_events !== 0 || (aggregate.source_event_hashes || []).length !== 0 ||
       aggregate.minimum_margin_pct !== policy.promotion_gate.min_pct || aggregate.minimum_deliveries !== policy.promotion_gate.min_deliveries) {
       problems.push("promotion_template_claims_execution");
@@ -335,7 +335,7 @@ export function validateUnitEconomicsPromotionAggregate(aggregate, events, polic
   if (!deliverable || !allowedBasePrices(deliverable).has(aggregate.price_tier)) problems.push("promotion_price_tier");
   if (!isoDate(aggregate.generated_at)) problems.push("promotion_generated_at");
 
-  const evaluation = evaluateUnitEconomicsPromotion(events, policy, registry, founderDecision);
+  const evaluation = evaluateUnitEconomicsPromotion(events, policy, registry, governanceDecision);
   const expectedHashes = (events || []).map((event) => event.source_record_hash).sort();
   const recordedHashes = Array.isArray(aggregate.source_event_hashes) ? [...aggregate.source_event_hashes].sort() : [];
   if (expectedHashes.length !== new Set(expectedHashes).size || JSON.stringify(expectedHashes) !== JSON.stringify(recordedHashes)) problems.push("promotion_source_event_hashes");
@@ -344,14 +344,14 @@ export function validateUnitEconomicsPromotionAggregate(aggregate, events, polic
     event.price_version !== aggregate.price_version || event.terms_version !== aggregate.terms_version ||
     event.pricing?.price_tier !== aggregate.price_tier)) problems.push("promotion_event_scope");
   if (evaluation.invalid_events !== 0 || !evaluation.comparable) problems.push("promotion_invalid_or_incomparable_events");
-  for (const key of ["observed_deliveries", "deliveries_at_or_above_margin", "minimum_margin_pct", "minimum_deliveries", "founder_override", "eligible", "comparable", "invalid_events"]) {
+  for (const key of ["observed_deliveries", "deliveries_at_or_above_margin", "minimum_margin_pct", "minimum_deliveries", "governance_override", "eligible", "comparable", "invalid_events"]) {
     if (aggregate[key] !== evaluation[key]) problems.push(`promotion_drift:${key}`);
   }
-  const expectedFounderId = evaluation.founder_override ? founderDecision.decision_id : null;
-  if (aggregate.founder_decision_id !== expectedFounderId) problems.push("promotion_founder_decision_id");
-  if (evaluation.founder_override && (founderDecision.deliverable_id !== aggregate.deliverable_id ||
-    founderDecision.scope_version !== aggregate.scope_version || founderDecision.price_version !== aggregate.price_version ||
-    founderDecision.terms_version !== aggregate.terms_version || founderDecision.price_tier !== aggregate.price_tier)) problems.push("promotion_founder_scope");
+  const expectedGovernanceId = evaluation.governance_override ? governanceDecision.decision_id : null;
+  if (aggregate.governance_decision_id !== expectedGovernanceId) problems.push("promotion_governance_decision_id");
+  if (evaluation.governance_override && (governanceDecision.deliverable_id !== aggregate.deliverable_id ||
+    governanceDecision.scope_version !== aggregate.scope_version || governanceDecision.price_version !== aggregate.price_version ||
+    governanceDecision.terms_version !== aggregate.terms_version || governanceDecision.price_tier !== aggregate.price_tier)) problems.push("promotion_governance_scope");
   return [...new Set(problems)];
 }
 
@@ -364,7 +364,7 @@ export function validateRepositoryUnitEconomicsLedger(ledger) {
     ledger.repository_role !== "schema_templates_and_aggregate_hashes_only" || ledger.public_surface !== false ||
     ledger.contains_sensitive_values !== false || ledger.source !== "CONFENGE_WEB") problems.push("ledger_authority");
   if (!Array.isArray(ledger.records) || ledger.records.length !== 0 || !Array.isArray(ledger.rollups) || ledger.rollups.length !== 0 ||
-    !Array.isArray(ledger.founder_decisions) || ledger.founder_decisions.length !== 0) problems.push("ledger_contains_observations");
+    !Array.isArray(ledger.governance_decisions) || ledger.governance_decisions.length !== 0) problems.push("ledger_contains_observations");
   if (typeof ledger.records_note !== "string" || ledger.records_note.length < 40) problems.push("ledger_records_note");
   return [...new Set(problems)];
 }
