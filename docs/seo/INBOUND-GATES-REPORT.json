@@ -14,7 +14,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 76
+        "sitemap_locs": 75
       }
     },
     "brand_shell": {
@@ -61,7 +61,7 @@
           "gate": "conversion",
           "path": "metodologia-inteligencia/index.html",
           "reason": "terminal_action_debt",
-          "excerpt": "/metodologia-inteligencia/ required=capture_form_or_whatsapp issue=#74 expires_at=2026-10-31",
+          "excerpt": "/metodologia-inteligencia/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-10-31",
           "severity": "warn"
         },
         {
@@ -108,14 +108,7 @@
         },
         {
           "gate": "conversion",
-          "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/ required=capture_form_or_whatsapp issue=#83 expires_at=2026-10-31",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+          "path": "especialista/tiago-jun-sasaki/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
@@ -124,7 +117,7 @@
           "gate": "conversion",
           "path": "ferramentas/matriz-atraso-obra/index.html",
           "reason": "terminal_action_debt",
-          "excerpt": "/ferramentas/matriz-atraso-obra/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
+          "excerpt": "/ferramentas/matriz-atraso-obra/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
           "severity": "warn"
         },
         {
@@ -138,7 +131,7 @@
           "gate": "conversion",
           "path": "ferramentas/checklist-reequilibrio/index.html",
           "reason": "terminal_action_debt",
-          "excerpt": "/ferramentas/checklist-reequilibrio/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
+          "excerpt": "/ferramentas/checklist-reequilibrio/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
           "severity": "warn"
         },
         {
@@ -152,7 +145,7 @@
           "gate": "conversion",
           "path": "ferramentas/limite-acrescimos-supressoes/index.html",
           "reason": "terminal_action_debt",
-          "excerpt": "/ferramentas/limite-acrescimos-supressoes/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
+          "excerpt": "/ferramentas/limite-acrescimos-supressoes/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
           "severity": "warn"
         },
         {
@@ -166,14 +159,14 @@
           "gate": "conversion",
           "path": "casos/aditivo-art125-demonstrativo/index.html",
           "reason": "terminal_action_debt",
-          "excerpt": "/casos/aditivo-art125-demonstrativo/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
+          "excerpt": "/casos/aditivo-art125-demonstrativo/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
           "severity": "warn"
         },
         {
           "gate": "conversion",
           "path": "casos/medicao-glosa-demonstrativo/index.html",
           "reason": "terminal_action_debt",
-          "excerpt": "/casos/medicao-glosa-demonstrativo/ required=capture_form_or_whatsapp issue=#290 expires_at=2026-09-30",
+          "excerpt": "/casos/medicao-glosa-demonstrativo/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
           "severity": "warn"
         },
         {
@@ -185,7 +178,7 @@
         }
       ],
       "stats": {
-        "scanned": 76,
+        "scanned": 75,
         "onpage_capture_scanned": 5,
         "journeys": [
           "contrato",
@@ -194,16 +187,16 @@
         ],
         "profiles": {
           "service_pillar": 13,
-          "priced_offer": 9,
-          "commercial_content": 45,
+          "priced_offer": 10,
+          "commercial_content": 43,
           "trust_or_legal": 9
         },
         "main_cta": {
-          "covered": 67,
-          "total": 67,
+          "covered": 66,
+          "total": 66,
           "coverage": 1.0,
           "exempt": 9,
-          "public_scanned": 76
+          "public_scanned": 75
         },
         "on_page_capture": {
           "covered": 7,
@@ -211,41 +204,31 @@
           "coverage": 0.5385
         },
         "priced_offer_capture": {
-          "covered": 9,
-          "total": 9,
+          "covered": 10,
+          "total": 10,
           "coverage": 1.0
         },
         "family_registry": {
           "path": "data/organic/public-family-registry.json",
           "schema_version": "public-family-registry-v1",
-          "families": 20,
+          "families": 21,
           "fail_closed": true,
           "undeclared_routes": 0
         },
         "terminal_action": {
           "covered": 54,
-          "total": 67,
-          "coverage": 0.806,
+          "total": 66,
+          "coverage": 0.8182,
           "exempt_trust_or_legal": 9,
-          "registered_debt": 7
+          "registered_debt": 6
         },
         "exemptions": [
-          {
-            "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
-            "family": "analises-contratos-publicos",
-            "kind": "debt",
-            "reason": "Canário de análise técnica publicado sob gate editorial de #83, sem ação terminal no <main>. A ação terminal do canário é decisão de #83, que controla o gate editorial da família; alterar o HTML aqui furaria aquele gate.",
-            "owner_issue": 83,
-            "expires_at": "2026-10-31",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
           {
             "route": "/casos/aditivo-art125-demonstrativo/",
             "family": "casos",
             "kind": "debt",
-            "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
-            "owner_issue": 290,
+            "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
+            "owner_issue": 61,
             "expires_at": "2026-09-30",
             "required_terminal_action": "capture_form_or_whatsapp",
             "expired": false
@@ -254,8 +237,8 @@
             "route": "/casos/medicao-glosa-demonstrativo/",
             "family": "casos",
             "kind": "debt",
-            "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>, mesmo defeito do hub. Será corrigido junto com a família em #290.",
-            "owner_issue": 290,
+            "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
+            "owner_issue": 61,
             "expires_at": "2026-09-30",
             "required_terminal_action": "capture_form_or_whatsapp",
             "expired": false
@@ -264,8 +247,8 @@
             "route": "/ferramentas/checklist-reequilibrio/",
             "family": "ferramentas",
             "kind": "debt",
-            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
-            "owner_issue": 290,
+            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+            "owner_issue": 61,
             "expires_at": "2026-09-30",
             "required_terminal_action": "capture_form_or_whatsapp",
             "expired": false
@@ -274,8 +257,8 @@
             "route": "/ferramentas/limite-acrescimos-supressoes/",
             "family": "ferramentas",
             "kind": "debt",
-            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
-            "owner_issue": 290,
+            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+            "owner_issue": 61,
             "expires_at": "2026-09-30",
             "required_terminal_action": "capture_form_or_whatsapp",
             "expired": false
@@ -284,8 +267,8 @@
             "route": "/ferramentas/matriz-atraso-obra/",
             "family": "ferramentas",
             "kind": "debt",
-            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. #290 define onde fica a ação terminal do resultado da ferramenta; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
-            "owner_issue": 290,
+            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
+            "owner_issue": 61,
             "expires_at": "2026-09-30",
             "required_terminal_action": "capture_form_or_whatsapp",
             "expired": false
@@ -294,8 +277,8 @@
             "route": "/metodologia-inteligencia/",
             "family": "metodologia-inteligencia",
             "kind": "debt",
-            "reason": "Página de método publicada antes deste gate existir: hoje encerra sem captura e sem WhatsApp no <main>. A ação terminal pertence ao trabalho de autoridade de #74; corrigir o HTML aqui invadiria o escopo daquela issue.",
-            "owner_issue": 74,
+            "reason": "Página de método publicada antes deste gate existir: hoje encerra sem captura e sem WhatsApp no <main>. #74 foi superseded; o épico operacional #61 mantém este débito nominal até a data de expiração, sem reativar a iniciativa histórica.",
+            "owner_issue": 61,
             "expires_at": "2026-10-31",
             "required_terminal_action": "capture_form_or_whatsapp",
             "expired": false
@@ -386,7 +369,7 @@
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 22
+        "warnings": 21
       }
     },
     "legacy_entity": {
@@ -411,6 +394,67 @@
         "pages": 21,
         "pairs": 210,
         "threshold": 0.55
+      }
+    },
+    "semantic_query_ownership": {
+      "ok": true,
+      "findings": [
+        {
+          "gate": "semantic_query_ownership",
+          "path": "broad_glosa_historical_content_winner",
+          "reason": "declared_query_conflict_controlled",
+          "excerpt": "Keep both supporting routes noindex under the current human/freeze windows; do not 301 them to the pillar.",
+          "severity": "warn"
+        },
+        {
+          "gate": "semantic_query_ownership",
+          "path": "medicao_rejeitada_historical_content_winner",
+          "reason": "declared_query_conflict_controlled",
+          "excerpt": "Preserve #127 HUMAN_RESEARCH_WAIT and use the route only as declared supporting content.",
+          "severity": "warn"
+        },
+        {
+          "gate": "semantic_query_ownership",
+          "path": "parcela_incontroversa_duplicate_explainers",
+          "reason": "declared_query_conflict_controlled",
+          "excerpt": "Keep both outside the index and do not create or redirect a keyword variant.",
+          "severity": "warn"
+        },
+        {
+          "gate": "semantic_query_ownership",
+          "path": "criterion_variants_compete_with_event_owner",
+          "reason": "declared_query_conflict_controlled",
+          "excerpt": "Retain the current index boundary until distinct Brazilian demand is observed.",
+          "severity": "warn"
+        },
+        {
+          "gate": "semantic_query_ownership",
+          "path": "payment_delay_edge_variants",
+          "reason": "declared_query_conflict_controlled",
+          "excerpt": "Keep one indexable owner and treat juros/certidão as supporting edge cases.",
+          "severity": "warn"
+        }
+      ],
+      "stats": {
+        "contract": "data/organic/medicoes-glosas-query-ownership.v1.json",
+        "cluster": "medicoes-pagamentos",
+        "discovered_routes": 19,
+        "classified_routes": 19,
+        "coverage": 1.0,
+        "indexable": 8,
+        "retain_noindex": 11,
+        "intents": 8,
+        "declared_conflicts": 5,
+        "overlaps": [
+          "aditivos",
+          "atrasos-prorrogacao",
+          "defesa-margem",
+          "orcamento-bdi",
+          "reequilibrio"
+        ],
+        "automatic_public_mutation": false,
+        "errors": 0,
+        "warnings": 5
       }
     }
   }
