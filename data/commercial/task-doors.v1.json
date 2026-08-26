@@ -453,7 +453,10 @@
   "public_implementation": {
     "route": "/entregas/",
     "renderer": "scripts/commercial/render_public_catalog.mjs",
+    "client_loader": "entregas/catalog-bootstrap.js",
     "client_script": "entregas/catalog.js",
+    "client_data_asset": "entregas/catalog-data.js",
+    "client_stylesheet": "entregas/catalog.css",
     "stylesheet": "entregas/styles.css",
     "index_count": 54,
     "framing_steps": 3,
