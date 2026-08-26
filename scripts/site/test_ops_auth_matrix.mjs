@@ -18,6 +18,7 @@ const SENSITIVE = [
   "lead",
   "stage",
   "funnel",
+  "gsc_history",
   "gsc_insights",
   "gsc_insights_ingest",
   "backfill_record_kind",

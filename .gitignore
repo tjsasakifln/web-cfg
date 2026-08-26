@@ -44,6 +44,7 @@ C:/
 data/revops/schedule-runs/
 data/discovery/receipts/*.json
 data/revops/gsc/last_sync.json
+data/revops/gsc/history.json
 data/revops/gsc/latest_import.json
 # Keep the already-tracked historical snapshot visible to rg/audit.
 !data/revops/gsc/latest_import.json
