@@ -1,6 +1,8 @@
 (() => {
   "use strict";
 
+  document.querySelector("link[data-catalog-css]")?.setAttribute("media", "all");
+
   const cards = [...document.querySelectorAll("article.catalog-item[data-deliverable-id]")];
   const terminalSelect = document.querySelector('#captura-entregas select[name="deliverable_id"]');
 
@@ -14,6 +16,38 @@
   });
 
   if (!cards.length) return;
+
+  const EXPECTED_FIELDS = [
+    "id", "name", "trigger", "decision", "unit", "input", "inputKinds",
+    "inputCount", "decisionBusinessDays", "output", "sla", "price",
+    "exclusion", "stepUp", "publicState",
+  ];
+  const payload = window.CONFENGE_CATALOG_DATA;
+  if (
+    payload?.schema !== "confenge.public-deliverable-catalog/1.0" ||
+    !Array.isArray(payload.fields) ||
+    payload.fields.length !== EXPECTED_FIELDS.length ||
+    !payload.fields.every((field, index) => field === EXPECTED_FIELDS[index]) ||
+    !Array.isArray(payload.items) ||
+    payload.items.length !== cards.length ||
+    !payload.items.every((row) => (
+      Array.isArray(row) &&
+      row.length === EXPECTED_FIELDS.length &&
+      row.slice(0, 6).every((value) => typeof value === "string") &&
+      Array.isArray(row[6]) &&
+      row[6].every((value) => typeof value === "string") &&
+      Number.isInteger(row[7]) && row[7] > 0 &&
+      (row[8] === "" || (Number.isInteger(row[8]) && row[8] > 0)) &&
+      row.slice(9, 14).every((value) => typeof value === "string") &&
+      ["PUBLISHED", "VALIDATE", "BLOCKED"].includes(row[14])
+    ))
+  ) return;
+  const records = new Map(payload.items.map((row) => {
+    const record = Object.fromEntries(payload.fields.map((field, index) => [field, row[index]]));
+    return [record.id, record];
+  }));
+  if (records.size !== cards.length || cards.some((card) => !records.has(card.dataset.deliverableId))) return;
+  const recordFor = (card) => records.get(card.dataset.deliverableId);
 
   const MAX_COMPARE = 4;
   const MIN_COMPARE = 2;
@@ -97,7 +131,7 @@
     const query = normalize(queryInput?.value);
     let visible = 0;
     for (const card of cards) {
-      const matchesQuery = !query || normalize(card.dataset.search).includes(query);
+      const matchesQuery = !query || normalize(card.textContent).includes(query);
       const matchesDimensions = FILTER_KEYS.every((key) => {
         const value = filters[key]?.value || "";
         if (!value) return true;
@@ -141,18 +175,8 @@
     return element;
   };
 
-  const INPUT_TERMS = {
-    edital: ["edital"],
-    planilha: ["planilha", "orcamento", "curva abc", "bdi"],
-    documentos: ["documento", "anexo", "contrato", "atestado", "protocolo"],
-    cronograma: ["cronograma"],
-    dados: ["dado", "base", "fonte", "historico", "serie", "cnpj"],
-  };
-
   function matchesInput(card, input) {
-    const terms = INPUT_TERMS[input] || [];
-    const inputs = normalize(card.dataset.inputs);
-    return terms.some((term) => inputs.includes(term));
+    return recordFor(card).inputKinds.includes(input);
   }
 
   function businessDaysUntil(value) {
@@ -176,7 +200,7 @@
   }
 
   function requiredBusinessDays(card) {
-    const parsed = Number.parseInt(card.dataset.decisionBusinessDays || "", 10);
+    const parsed = Number.parseInt(recordFor(card).decisionBusinessDays || "", 10);
     return Number.isInteger(parsed) ? parsed : Number.POSITIVE_INFINITY;
   }
 
@@ -196,20 +220,21 @@
     const list = document.createElement("div");
     list.className = "catalog-recommendation__items";
     matches.forEach((card, index) => {
+      const record = recordFor(card);
       const item = document.createElement("article");
       appendText(item, "p", index === 0 ? "Caminho principal" : "Alternativa");
-      appendText(item, "h5", card.dataset.name);
-      appendText(item, "p", `Motivo: ${card.dataset.trigger}`);
-      appendText(item, "p", `${card.dataset.price} · ${card.dataset.sla} · ${card.dataset.publicState === "PUBLISHED" ? "publicada" : "em validação"}`);
+      appendText(item, "h5", record.name);
+      appendText(item, "p", `Motivo: ${record.trigger}`);
+      appendText(item, "p", `${record.price} · ${record.sla} · ${record.publicState === "PUBLISHED" ? "publicada" : "em validação"}`);
       if (context.input === "apenas a pergunta") {
-        appendText(item, "p", `Você ainda precisará reunir: ${card.dataset.input}.`);
+        appendText(item, "p", `Você ainda precisará reunir: ${record.input}.`);
       } else if (context.input) {
         const inputNote = matchesInput(card, context.input)
           ? `O insumo informado (${context.input}) aparece nas entradas publicadas.`
-          : `Além de ${context.input}, este caminho ainda exige: ${card.dataset.input}.`;
+          : `Além de ${context.input}, este caminho ainda exige: ${record.input}.`;
         appendText(item, "p", inputNote);
       } else {
-        appendText(item, "p", `Insumo inicial: ${card.dataset.input}`);
+        appendText(item, "p", `Insumo inicial: ${record.input}`);
       }
       if (context.deadline) {
         appendText(item, "p", `Prazo: requer até ${requiredBusinessDays(card)} dias úteis e cabe nos ${context.deadlineDays} dias úteis informados.`);
@@ -244,7 +269,7 @@
       .filter((card) => deadlineDays === null || requiredBusinessDays(card) <= deadlineDays)
       .sort((left, right) => {
         if (input === "apenas a pergunta") {
-          return Number(left.dataset.inputCount || 0) - Number(right.dataset.inputCount || 0);
+          return Number(recordFor(left).inputCount || 0) - Number(recordFor(right).inputCount || 0);
         }
         if (!input) return 0;
         return Number(matchesInput(right, input)) - Number(matchesInput(left, input));
@@ -297,17 +322,18 @@
     for (const id of selected) {
       const card = cardById(id);
       if (!card) continue;
+      const record = recordFor(card);
       const block = document.createElement("article");
       block.className = "catalog-comparison__item";
       const header = document.createElement("header");
-      appendText(header, "h4", card.dataset.name);
-      appendText(header, "strong", card.dataset.price);
+      appendText(header, "h4", record.name);
+      appendText(header, "strong", record.price);
       block.append(header);
       const facts = document.createElement("dl");
       for (const [key, label] of CRITERIA) {
         const row = document.createElement("div");
         appendText(row, "dt", label);
-        appendText(row, "dd", card.dataset[key]);
+        appendText(row, "dd", record[key]);
         facts.append(row);
       }
       block.append(facts);
