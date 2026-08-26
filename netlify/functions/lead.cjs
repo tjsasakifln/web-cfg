@@ -260,7 +260,7 @@ exports.handler = async (event) => {
       radarPublic = {
         correlation_id: correlationId,
         external_reference: ref.external_reference,
-        delivery_business_hours: radar.DELIVERY_CLOCK.business_hours,
+        delivery_business_days: radar.DELIVERY_CLOCK.business_days,
       };
       safeLog("info", "radar_params_correlated", {
         offer_id: lead.radar_params.offer_id,
@@ -306,8 +306,8 @@ exports.handler = async (event) => {
         // Correlation comes from the stored record, never from the request.
         correlation_id: rec.radar_params ? rec.radar_params.correlation_id : undefined,
         external_reference: rec.radar_params ? rec.external_reference : undefined,
-        delivery_business_hours: rec.radar_params
-          ? rec.radar_params.delivery_clock && rec.radar_params.delivery_clock.business_hours
+        delivery_business_days: rec.radar_params
+          ? rec.radar_params.delivery_clock && rec.radar_params.delivery_clock.business_days
           : undefined,
       }),
     ),

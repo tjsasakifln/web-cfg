@@ -10,7 +10,7 @@
  *    `cfg:{offer_id}:{correlation_id}` in Asaas `externalReference`;
  *  - a persistence failure BLOCKS progression to payment (fail-closed);
  *  - no personal datum reaches analytics or the public response;
- *  - the public copy states the 48 business-hour clock and refuses to promise
+ *  - the public copy states the 3 business-day clock and refuses to promise
  *    a number of opportunities, before payment.
  */
 import { createRequire } from "module";
@@ -234,7 +234,7 @@ for (const [name, patch, expected] of NEGATIVES) {
   );
   assert(
     "delivery_clock_starts_at_form_submit",
-    ok.lead.radar_params.delivery_clock.business_hours === 48
+    ok.lead.radar_params.delivery_clock.business_days === 3
       && ok.lead.radar_params.delivery_clock.starts_at === "form_submitted"
       && ok.lead.radar_params.delivery_clock.never_starts_at === "payment_confirmed",
     ok.lead.radar_params.delivery_clock,
@@ -337,8 +337,8 @@ let happyPathReference = null;
     body,
   );
   assert(
-    "e2e_announces_48_business_hours",
-    body.delivery_business_hours === 48 && body.delivery_clock_starts_at === "form_submitted",
+    "e2e_announces_3_business_days",
+    body.delivery_business_days === 3 && body.delivery_clock_starts_at === "form_submitted",
     body,
   );
   happyPathReference = body.external_reference;
@@ -458,10 +458,10 @@ let happyPathReference = null;
   }
   pass("page_uses_published_segment_vocabulary");
 
-  assert("page_states_48_business_hours", page.includes("48 horas úteis"), "48h copy");
+  assert("page_states_3_business_days", page.includes("3 dias úteis"), "3-day copy");
   assert(
     "page_states_clock_starts_at_form",
-    page.includes("começa no envio deste formulário"),
+    page.includes("começa no envio válido deste formulário"),
     "clock origin copy",
   );
   assert(
