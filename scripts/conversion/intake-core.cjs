@@ -241,7 +241,7 @@ async function handleXrayRequest({ store, body, env, fetchFn, timeoutMs, now } =
   };
 }
 
-async function handleHandraise({ store, body, env, fetchFn, timeoutMs, now } = {}) {
+async function handleHandraise({ store, body, env, fetchFn, timeoutMs, now, authenticatedProbe = false } = {}) {
   const trace = createTrace();
   const logs = [];
   const data = body && typeof body === "object" ? body : {};
@@ -321,6 +321,27 @@ async function handleHandraise({ store, body, env, fetchFn, timeoutMs, now } = {
     status: "persisted",
     attribution,
   });
+  if (authenticatedProbe) {
+    record.record_kind = "synthetic";
+    record.record_kind_signals = [
+      ...new Set([...(record.record_kind_signals || []), "authenticated_probe"]),
+    ];
+    record.record_kind_classified_at = received_at;
+    record.synthetic_probe_authenticated = true;
+    record.next_action = "exclude_from_commercial";
+    record.audit = [
+      ...(record.audit || []),
+      {
+        at: received_at,
+        event: "record_kind",
+        from: null,
+        to: "synthetic",
+        signals: ["authenticated_probe"],
+        actor: "system",
+        note: "server_authenticated_probe",
+      },
+    ];
+  }
   record.handoff = adapter.inbound.initialHandoff(env || process.env, record);
   record.auto_send = false;
 

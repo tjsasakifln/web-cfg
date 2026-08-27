@@ -278,6 +278,18 @@ function endpointMethodAllowed(req) {
   return req.method === "GET" || req.method === "HEAD";
 }
 
+function routeForLog(pathname) {
+  const value = String(pathname || "/");
+  if (["/healthz", "/ready", "/runtime-identity", "/.well-known/runtime-info.json"].includes(value)) {
+    return value;
+  }
+  const match = value.match(ROUTE);
+  if (!match) return "unmatched";
+  return value.startsWith("/api/web/")
+    ? `/api/web/${match[1]}`
+    : `/.netlify/functions/${match[1]}`;
+}
+
 export function createHttpAdapter({
   config,
   registry,
@@ -289,15 +301,16 @@ export function createHttpAdapter({
   return async function handleHttp(req, res) {
     const started = Date.now();
     const requestId = requestIdFrom(req);
-    let route = "/";
+    let route = "unmatched";
     let functionName = null;
     let status = 500;
     try {
       const host = String((req.headers && req.headers.host) || "localhost").replace(/[\r\n]/g, "");
       const url = new URL(req.url || "/", "http://" + host);
-      route = url.pathname;
+      const requestPath = url.pathname;
+      route = routeForLog(requestPath);
 
-      if (["/healthz", "/ready", "/runtime-identity", "/.well-known/runtime-info.json"].includes(route)) {
+      if (["/healthz", "/ready", "/runtime-identity", "/.well-known/runtime-info.json"].includes(requestPath)) {
         if (!endpointMethodAllowed(req)) {
           writeJson(res, 405, { ok: false, error: "method_not_allowed" }, requestId, {
             Allow: "GET, HEAD",
@@ -305,7 +318,7 @@ export function createHttpAdapter({
           status = 405;
           return;
         }
-        if (route === "/healthz") {
+        if (requestPath === "/healthz") {
           writeJson(res, 200, {
             ok: true,
             status: "live",
@@ -314,7 +327,7 @@ export function createHttpAdapter({
           status = 200;
           return;
         }
-        if (route === "/ready") {
+        if (requestPath === "/ready") {
           const current = readiness();
           status = current.ok ? 200 : 503;
           writeJson(res, status, current, requestId);
@@ -325,7 +338,7 @@ export function createHttpAdapter({
         return;
       }
 
-      const match = route.match(ROUTE);
+      const match = requestPath.match(ROUTE);
       if (!match) {
         writeJson(res, 404, { ok: false, error: "not_found" }, requestId);
         status = 404;

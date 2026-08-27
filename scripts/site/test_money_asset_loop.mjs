@@ -225,7 +225,7 @@ function startMock({ mode = "ok", secret = SECRET } = {}) {
       res.writeHead(duplicate ? 200 : 201, { "Content-Type": "application/json" });
       res.end(JSON.stringify({
         data: {
-          lead: { id: `wb-${body.lead_id}` },
+          lead: { id: `wb-${body.lead_id}`, receipt_id: body.receipt_id || body.lead_id },
           action: { id: `act-${body.lead_id}` },
           duplicate,
           next_action: "INBOUND_NOW",
@@ -718,7 +718,7 @@ if (
   exactReceipt.source !== "CONFENGE_WEB" ||
   exactReceipt.asset_id !== "diagnostico-defesa-margem" ||
   exactReceipt.handoff?.status !== "DELIVERED" ||
-  exactReceipt.handoff?.downstream?.downstream_receipt !== `wb-${created.lead_id}`
+  exactReceipt.handoff?.downstream?.downstream_receipt !== created.lead_id
 ) {
   fail("ops_exact_receipt_reconciliation", exactReceipt);
 }

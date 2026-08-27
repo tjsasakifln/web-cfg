@@ -9,7 +9,7 @@
  * HMAC secret is env-only. No PII on the URL. No browser path.
  */
 const crypto = require("crypto");
-const { safeLog } = require("./lead-core.cjs");
+const { safeLog, redactSensitiveText } = require("./lead-core.cjs");
 const { isProductionProfile } = require("./lead-store.cjs");
 const {
   authorizeInboundBacklogReplay,
@@ -143,6 +143,14 @@ function mapLeadToInboundV1(record) {
 
   // Analytics/store stay CONFENGE_WEB; Warmbly receives the same canonical source.
   body.source = SOURCE_WARMBLY;
+
+  // Warmbly's current confenge.inbound.v1 consumer persists record_kind and
+  // excludes synthetic receipts from INBOUND NOW/include_synthetic=0. Only a
+  // server-authenticated probe may use this producer path (guarded below).
+  if (record.synthetic_probe_authenticated === true && record.record_kind === "synthetic") {
+    body.record_kind = "synthetic";
+    body.synthetic = true;
+  }
 
   const routeFamily = clampText(record.route_family, 80);
   if (routeFamily) body.route_family = routeFamily;
@@ -314,6 +322,9 @@ function resolveInboundConfig(env = process.env) {
   if (!secret) {
     return { ok: false, blocked: true, reason: "secret_missing", timeoutMs, maxAttempts };
   }
+  if (prodLike && secret.length < 32) {
+    return { ok: false, blocked: true, reason: "secret_too_short", timeoutMs, maxAttempts };
+  }
 
   return {
     ok: true,
@@ -326,10 +337,7 @@ function resolveInboundConfig(env = process.env) {
 
 function sanitizeError(err) {
   const raw = err && err.message ? String(err.message) : String(err || "error");
-  return raw
-    .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, "[redacted]")
-    .replace(/\b\d{10,15}\b/g, "[redacted]")
-    .replace(/t=\d+,v1=[a-f0-9]+/gi, "t=…,v1=[redacted]")
+  return redactSensitiveText(raw)
     .replace(/CONFENGE_INBOUND_WEBHOOK_SECRET=\S+/g, "CONFENGE_INBOUND_WEBHOOK_SECRET=[redacted]")
     .slice(0, 120);
 }
@@ -357,6 +365,20 @@ function isCommercialRecord(record) {
   const kind = record && record.record_kind;
   if (!kind || kind === "real") return true;
   return false;
+}
+
+function isAuthenticatedSyntheticProbe(record) {
+  return Boolean(
+    record &&
+      record.synthetic_probe_authenticated === true &&
+      String(record.record_kind || "").toLowerCase() === "synthetic" &&
+      Array.isArray(record.record_kind_signals) &&
+      record.record_kind_signals.includes("authenticated_probe"),
+  );
+}
+
+function isHandoffTransportableRecord(record) {
+  return isCommercialRecord(record) || isAuthenticatedSyntheticProbe(record);
 }
 
 function hasExplicitConsent(record) {
@@ -682,7 +704,7 @@ async function requeueEligibleHandoffs(
 }
 
 function initialHandoff(env = process.env, record = null) {
-  if (record && !isCommercialRecord(record)) {
+  if (record && !isHandoffTransportableRecord(record)) {
     return {
       target: "warmbly_inbound",
       status: STATUS.SKIPPED,
@@ -732,7 +754,7 @@ function isDue(handoff, now = new Date()) {
 }
 
 async function postInbound(record, { now = new Date(), env = process.env } = {}) {
-  if (!isCommercialRecord(record)) {
+  if (!isHandoffTransportableRecord(record)) {
     return { status: STATUS.SKIPPED, reason: "non_real", attemptsDelta: 0 };
   }
   const cfg = resolveInboundConfig(env);
@@ -765,25 +787,37 @@ async function postInbound(record, { now = new Date(), env = process.env } = {})
       signal: controller ? controller.signal : undefined,
     });
     const latency_ms = Date.now() - started;
-    const classified = classifyHttp(res.status);
+    let classified = classifyHttp(res.status);
     let downstream = null;
     if (classified === STATUS.DELIVERED) {
       const data = await res.json().catch(() => ({}));
       const inner = data && data.data ? data.data : data;
       const actionId = inner && inner.action && (inner.action.id || inner.action.ID);
-      const receipt = inner && (inner.receipt_id || (inner.lead && (inner.lead.id || inner.lead.lead_id)));
+      const receipt = inner && (
+        inner.receipt_id ||
+        (inner.lead && (inner.lead.receipt_id || inner.lead.lead_id))
+      );
       downstream = {
         http: res.status,
         duplicate: Boolean(inner && inner.duplicate),
         action_id: actionId ? String(actionId).slice(0, 80) : undefined,
         downstream_receipt: receipt ? String(receipt).slice(0, 80) : undefined,
       };
+      const expectedReceipt = String(payload.receipt_id || payload.lead_id || "");
+      if (!receipt || String(receipt) !== expectedReceipt) {
+        classified = STATUS.RETRYABLE;
+        downstream = null;
+      }
     }
     return {
       status: classified,
       http: res.status,
       latency_ms,
-      last_error: classified === STATUS.DELIVERED ? null : `webhook_http_${res.status}`,
+      last_error: classified === STATUS.DELIVERED
+        ? null
+        : res.status === 200 || res.status === 201
+          ? "downstream_receipt_invalid"
+          : `webhook_http_${res.status}`,
       downstream,
       attemptsDelta: 1,
     };
@@ -1030,6 +1064,8 @@ module.exports = {
   REQUEUE_CLASS,
   PII_QUERY_KEYS,
   mapLeadToInboundV1,
+  isAuthenticatedSyntheticProbe,
+  isHandoffTransportableRecord,
   signWarmblyInbound,
   verifyWarmblyInbound,
   inboundDestinationFingerprint,

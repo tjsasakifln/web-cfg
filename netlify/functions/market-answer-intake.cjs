@@ -5,11 +5,15 @@
  */
 const {
   parseBody,
+  clientIp,
+  technicalFingerprint,
   originAllowed,
   corsHeaders,
   publicErrorBody,
   safeLog,
 } = require("./lib/lead-core.cjs");
+const { rateLimit } = require("./lib/lead-rate-limit.cjs");
+const { verifyTurnstile } = require("./lib/lead-delivery.cjs");
 const { createStore } = require("./lib/lead-store.cjs");
 const { handleXrayRequest, handleHandraise } = require("../../scripts/conversion/intake-core.cjs");
 const { safeFields } = require("../../scripts/conversion/minimize.cjs");
@@ -72,6 +76,30 @@ exports.handler = async (event, context) => {
   const headerIdem = event.headers && (event.headers["idempotency-key"] || event.headers["Idempotency-Key"]);
   if (headerIdem && !data.idempotency_key) data.idempotency_key = headerIdem;
 
+  const action = String(data.action || "xray").toLowerCase();
+  if (action === "handraise") {
+    const ip = clientIp(event);
+    const fingerprint = technicalFingerprint(event, data);
+    const rl = rateLimit({ ip, fingerprint });
+    if (!rl.allowed) {
+      safeLog("warn", "conversion_rate_limited", { reason: rl.reason, fp: fingerprint });
+      return json(429, { ...headers, "Retry-After": String(rl.retryAfter || 60) }, publicErrorBody({
+        error: "rate_limited",
+        message: "Muitas tentativas. Aguarde um momento e tente novamente.",
+      }));
+    }
+    const turnstile = originCheck.probe
+      ? { ok: true, skipped: true, reason: "synthetic_probe" }
+      : await verifyTurnstile(data.turnstile_token || data["cf-turnstile-response"], ip);
+    if (!turnstile.ok) {
+      safeLog("warn", "conversion_turnstile_rejected", { error: turnstile.error });
+      return json(403, headers, publicErrorBody({
+        error: "anti_abuse",
+        message: "Falha na verificacao antiabuso. Recarregue a pagina e tente novamente.",
+      }));
+    }
+  }
+
   const store = await getStore(event);
   if (!store) {
     safeLog("error", "conversion_store_unavailable", {});
@@ -81,13 +109,13 @@ exports.handler = async (event, context) => {
     }));
   }
 
-  const action = String(data.action || "xray").toLowerCase();
   const opts = {
     store,
     body: data,
     env: process.env,
     fetchFn: _fetchOverride || (context && context.fetchFn) || undefined,
     now: new Date(),
+    authenticatedProbe: originCheck.probe === true,
   };
 
   try {

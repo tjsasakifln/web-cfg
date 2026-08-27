@@ -174,7 +174,26 @@ async function postExtendedInbound(record, opts = {}) {
     });
     const latency_ms = Date.now() - started;
     let status = inbound.STATUS.RETRYABLE;
-    if (res.status === 200 || res.status === 201) status = inbound.STATUS.DELIVERED;
+    let downstream = null;
+    if (res.status === 200 || res.status === 201) {
+      const data = await res.json().catch(() => ({}));
+      const inner = data && data.data ? data.data : data;
+      const receipt = inner && (
+        inner.receipt_id ||
+        (inner.lead && (inner.lead.receipt_id || inner.lead.lead_id))
+      );
+      const actionId = inner && inner.action && (inner.action.id || inner.action.ID);
+      const expectedReceipt = String(payload.receipt_id || payload.lead_id || "");
+      if (receipt && String(receipt) === expectedReceipt) {
+        status = inbound.STATUS.DELIVERED;
+        downstream = {
+          http: res.status,
+          duplicate: Boolean(inner && inner.duplicate),
+          downstream_receipt: String(receipt).slice(0, 80),
+          action_id: actionId ? String(actionId).slice(0, 80) : undefined,
+        };
+      }
+    }
     else if (res.status === 401 || res.status === 403) status = inbound.STATUS.BLOCKED;
     else if (res.status >= 400 && res.status < 500 && res.status !== 408 && res.status !== 429) {
       status = inbound.STATUS.DEAD;
@@ -183,9 +202,14 @@ async function postExtendedInbound(record, opts = {}) {
       status,
       http: res.status,
       latency_ms,
-      last_error: status === inbound.STATUS.DELIVERED ? null : `webhook_http_${res.status}`,
+      last_error: status === inbound.STATUS.DELIVERED
+        ? null
+        : res.status === 200 || res.status === 201
+          ? "downstream_receipt_invalid"
+          : `webhook_http_${res.status}`,
       attemptsDelta: 1,
       payload,
+      downstream,
     };
   } catch (err) {
     const aborted = err && (err.name === "AbortError" || /aborted|timeout/i.test(String(err.message || "")));

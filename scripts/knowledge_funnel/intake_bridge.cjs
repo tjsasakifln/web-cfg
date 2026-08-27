@@ -55,10 +55,24 @@ function fetchFor(mode) {
       throw err;
     };
   }
-  return async () => ({
-    status: 201,
-    json: async () => ({ ok: true, data: { receipt_id: "wb-fixture", action: { id: "act-fixture" } } }),
-  });
+  return async (_url, init = {}) => {
+    let payload = {};
+    try {
+      payload = JSON.parse(init.body || "{}");
+    } catch (_) {
+      // The shipped adapter must reject a malformed fixture response below.
+    }
+    return {
+      status: 201,
+      json: async () => ({
+        ok: true,
+        data: {
+          receipt_id: payload.receipt_id || payload.lead_id || null,
+          action: { id: "act-fixture" },
+        },
+      }),
+    };
+  };
 }
 
 function semanticTrace(trace) {

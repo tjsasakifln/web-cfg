@@ -143,6 +143,31 @@ test("Netcup production profile rejects any upstream port except the integrated 
   assert.ok(config.errors.includes("netcup_runtime_port_contract_mismatch"));
 });
 
+test("Netcup production adapter normalizes CONTEXT before loading handlers", () => {
+  const env = isolatedTestEnv({
+    NODE_ENV: "production",
+    RUNTIME_PROFILE: "netcup-production",
+    RUNTIME_PORT: "18100",
+    CONTEXT: "",
+  });
+  const config = loadRuntimeConfig({ env, nodeVersion: "v22.23.2" });
+  assert.equal(config.env.CONTEXT, "production");
+});
+
+test("runtime logs never echo PII embedded in an unmatched URL path", async (t) => {
+  const fixture = await startFixtureRuntime();
+  t.after(() => fixture.runtime.shutdown("test"));
+  const encodedEmail = encodeURIComponent("private.person@example.com");
+  const encodedPhone = encodeURIComponent("+55 (11) 98888-7766");
+  const response = await fetch(`${fixture.baseUrl}/missing/${encodedEmail}/${encodedPhone}`);
+  assert.equal(response.status, 404);
+  const logs = fixture.logs.join("\n");
+  assert.equal(logs.includes("private.person@example.com"), false);
+  assert.equal(logs.includes("98888"), false);
+  const requestLog = fixture.logs.map((line) => JSON.parse(line)).find((row) => row.event === "runtime_request");
+  assert.equal(requestLog.route, "unmatched");
+});
+
 test("production startup is refused when critical requirements are absent", async () => {
   const env = isolatedTestEnv({
     NODE_ENV: "production",

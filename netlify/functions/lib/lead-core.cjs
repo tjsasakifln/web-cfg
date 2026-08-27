@@ -862,7 +862,9 @@ function probeAuthorized(event, env = process.env) {
   const h = (event && event.headers) || {};
   const provided = String(h["x-confenge-probe"] || h["X-Confenge-Probe"] || "");
   const expected = String(env.LEAD_PROBE_SECRET || "");
-  if (!provided || expected.length < 16) return false;
+  // This credential bypasses the human-only Turnstile challenge, so keep the
+  // implementation aligned with the documented 32+ character requirement.
+  if (!provided || expected.length < 32) return false;
   const a = Buffer.from(provided);
   const b = Buffer.from(expected);
   return a.length === b.length && crypto.timingSafeEqual(a, b);
@@ -956,13 +958,47 @@ function publicErrorBody({ error, message }) {
   };
 }
 
-/** Structured log line — no PII fields. */
+const SENSITIVE_LOG_KEY = /(?:^|_)(?:authorization|bearer|cnpj|cpf|email|ip|mail|message|mensagem|name|nome|phone|secret|tel|token|whatsapp)(?:_|$)/i;
+
+function redactSensitiveText(value) {
+  let text = String(value == null ? "" : value);
+  try {
+    text = decodeURIComponent(text);
+  } catch {
+    // Keep malformed percent-encoding printable, then apply the same guards.
+  }
+  return text
+    .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, "[redacted]")
+    .replace(/\b\d{3}[.-]?\d{3}[.-]?\d{3}-?\d{2}\b/g, "[redacted]")
+    .replace(/\b\d{2}[.\s]?\d{3}[.\s]?\d{3}[\/]?\d{4}-?\d{2}\b/g, "[redacted]")
+    .replace(/(?<![A-Za-z0-9])\+?\s*\(?(?:\d[\s().-]*){10,15}(?![A-Za-z0-9])/g, "[redacted]")
+    .replace(/\b(?:Bearer\s+|Basic\s+)[A-Za-z0-9._~+/=-]+/gi, "[redacted]")
+    .replace(/t=\d+,v1=[a-f0-9]+/gi, "t=…,v1=[redacted]")
+    .replace(/((?:secret|token|password|authorization)[=:]\s*)[^\s,;&]+/gi, "$1[redacted]")
+    .slice(0, 160);
+}
+
+function sanitizeLogFields(fields) {
+  const safe = {};
+  for (const [key, value] of Object.entries(fields && typeof fields === "object" ? fields : {})) {
+    if (SENSITIVE_LOG_KEY.test(key)) {
+      safe[key] = typeof value === "boolean" ? value : "[redacted]";
+      continue;
+    }
+    if (typeof value === "string") safe[key] = redactSensitiveText(value);
+    else if (typeof value === "number" || typeof value === "boolean" || value == null) safe[key] = value;
+    else safe[key] = "[redacted]";
+  }
+  return safe;
+}
+
+/** Structured log line — defense-in-depth redaction even if a caller errs. */
 function safeLog(level, event, fields) {
   const line = JSON.stringify({
     ts: new Date().toISOString(),
     level,
     event,
-    ...fields,
+    ...sanitizeLogFields(fields),
   });
   if (level === "error") console.error(line);
   else console.log(line);
@@ -1004,6 +1040,8 @@ module.exports = {
   corsHeaders,
   publicSuccessBody,
   publicErrorBody,
+  redactSensitiveText,
+  sanitizeLogFields,
   safeLog,
   retentionPolicy,
   clamp,

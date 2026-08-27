@@ -87,22 +87,49 @@ class FileStore {
     this.idempotency = this.backend.namespace(`${this.namespace}-idempotency`);
     this.system = this.backend.namespace("ops-system");
   }
-  async getByIdempotency(key) {
+  _findByIdempotencyUnlocked(key, { repair = true } = {}) {
     const indexKey = sha256(String(key));
     const index = this.idempotency.get(indexKey);
-    if (!index) return null;
-    if (!index.lead_id || index.idempotency_sha256 !== indexKey) {
+    if (index) {
+      if (!index.lead_id || index.idempotency_sha256 !== indexKey) {
+        const err = new Error("idempotency_index_corrupt");
+        err.code = "STORE_CORRUPT";
+        throw err;
+      }
+      const record = this.records.get(index.lead_id);
+      if (!record || sha256(String(record.idempotency_key || "")) !== indexKey) {
+        const err = new Error("idempotency_index_dangling");
+        err.code = "STORE_CORRUPT";
+        throw err;
+      }
+      return record;
+    }
+
+    // The record is the source of truth. A crash can happen after the atomic
+    // record rename and before the derived idempotency index rename; recover
+    // that single-record state under the global writer lock.
+    const matches = this.records.list()
+      .map((row) => row.value)
+      .filter((record) => record && String(record.idempotency_key || "") === String(key));
+    if (matches.length > 1) {
       const err = new Error("idempotency_index_corrupt");
       err.code = "STORE_CORRUPT";
       throw err;
     }
-    const record = this.records.get(index.lead_id);
-    if (!record) {
-      const err = new Error("idempotency_index_dangling");
-      err.code = "STORE_CORRUPT";
-      throw err;
+    if (matches.length === 1) {
+      const record = matches[0];
+      if (repair) {
+        this.idempotency._putUnlocked(indexKey, {
+          lead_id: String(record.lead_id),
+          idempotency_sha256: indexKey,
+        }, { onlyIfNew: true });
+      }
+      return record;
     }
-    return record;
+    return null;
+  }
+  async getByIdempotency(key) {
+    return this.backend.withExclusiveLock(() => this._findByIdempotencyUnlocked(key));
   }
   async get(id) {
     return this.records.get(String(id));
@@ -115,6 +142,12 @@ class FileStore {
     }
     return this.backend.withExclusiveLock(() => {
       const id = String(record.lead_id);
+      if (record.idempotency_key) {
+        const idempotentExisting = this._findByIdempotencyUnlocked(record.idempotency_key);
+        if (idempotentExisting && (onlyIfNew || String(idempotentExisting.lead_id) !== id)) {
+          throw alreadyExistsError(idempotentExisting);
+        }
+      }
       const current = this.records.get(id);
       if (onlyIfNew && current) throw alreadyExistsError(current);
       const written = this.records._putUnlocked(id, record, { onlyIfNew });
@@ -127,7 +160,6 @@ class FileStore {
           { onlyIfNew: true },
         );
         if (!index.inserted && index.value.lead_id !== id) {
-          if (written.inserted) this.records._deleteUnlocked(id);
           const idempotentExisting = this.records.get(index.value.lead_id);
           if (!idempotentExisting) {
             const err = new Error("idempotency_index_dangling");
