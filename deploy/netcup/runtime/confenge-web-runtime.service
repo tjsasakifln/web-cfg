@@ -7,7 +7,7 @@ ConditionPathIsSymbolicLink=/opt/confenge-web/current
 [Service]
 Type=simple
 User=confenge-deploy
-Group=confenge-deploy
+Group=confenge-web
 WorkingDirectory=/opt/confenge-web/current
 Environment=NODE_ENV=production
 Environment=RUNTIME_PROFILE=netcup-production

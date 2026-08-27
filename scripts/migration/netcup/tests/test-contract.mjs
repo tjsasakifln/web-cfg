@@ -16,6 +16,7 @@ import {
 } from "../lib/contract.mjs";
 import {
   renderHeaders,
+  renderLocations,
   renderNginx,
   renderRedirects,
   renderRuntimeLocations,
@@ -215,3 +216,24 @@ test("production cutover keeps valuable checks and adds host-neutral identities"
   const originClient = readFileSync(resolve(ROOT, "scripts/migration/netcup/lib/origin-client.mjs"), "utf8");
   assert.doesNotMatch(originClient, /args\.push\([^\n]*(?:--insecure|["']-k["'])/);
 });
+
+// A default_type carrying "; charset=utf-8" is compared whole against gzip_types,
+// so sitemaps, feeds and JSON indexes were served uncompressed on the Netcup
+// origin while Netlify gzipped them. The public Content-Type must not change.
+{
+  const rendered = renderLocations({
+    routes: [],
+    hostArchitectureVersion: "confenge-nginx-node/v2",
+    headers: [
+      { match: "exact", path: "/sitemap.xml", headers: [{ name: "Content-Type", value: "application/xml; charset=utf-8" }] },
+      { match: "exact", path: "/content-index.json", headers: [{ name: "Content-Type", value: "application/json; charset=utf-8" }] },
+      { match: "exact", path: "/DEPLOY-CHECKLIST.txt", headers: [{ name: "Content-Type", value: "text/plain" }] },
+    ],
+  });
+  assert.match(rendered, /default_type "application\/xml";\n\s+charset utf-8;\n\s+charset_types application\/xml;/);
+  assert.match(rendered, /default_type "application\/json";\n\s+charset utf-8;\n\s+charset_types application\/json;/);
+  assert.doesNotMatch(rendered, /default_type "[^"]*charset/, "charset must never stay inside default_type");
+  // A type with no charset parameter emits no charset directives at all.
+  assert.match(rendered, /default_type "text\/plain";\n\s+try_files/);
+  console.log("PASS default_type_charset_split_keeps_gzip_matchable");
+}

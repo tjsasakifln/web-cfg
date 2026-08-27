@@ -279,6 +279,16 @@ export function renderRedirects(contract) {
   return `${lines.join("\n").trimEnd()}\n`;
 }
 
+/** Split "application/xml; charset=utf-8" into ["application/xml", "utf-8"]. */
+function splitContentType(value) {
+  const [type, ...params] = String(value).split(";");
+  const charsetParam = params
+    .map((part) => part.trim())
+    .find((part) => /^charset=/i.test(part));
+  const charset = charsetParam ? charsetParam.slice("charset=".length).trim().replace(/^"|"$/g, "") : "";
+  return [type.trim(), charset];
+}
+
 export function renderLocations(contract) {
   const pathRoutes = contract.routes.filter((rule) => rule.from.kind === "path");
   const lines = [
@@ -314,8 +324,19 @@ export function renderLocations(contract) {
       const base = selectorBase(headerRule.path);
       lines.push(`location ${quoted(`${base}/`)} {`);
     }
+    // Keep the charset out of default_type. nginx only strips MIME parameters
+    // when matching gzip_types for types it resolved from a `types` map; a
+    // default_type carrying "; charset=utf-8" is compared whole, so sitemaps,
+    // feeds and JSON indexes were served uncompressed while Netlify gzipped
+    // them. Emitting the bare type plus `charset` reproduces the exact same
+    // public Content-Type and lets compression apply.
+    const [baseType, charset] = splitContentType(contentType.value);
     lines.push("  types {}");
-    lines.push(`  default_type ${quoted(contentType.value)};`);
+    lines.push(`  default_type ${quoted(baseType)};`);
+    if (charset) {
+      lines.push(`  charset ${charset};`);
+      lines.push(`  charset_types ${baseType};`);
+    }
     lines.push("  try_files $uri $uri/ $uri.html $uri/index.html =404;");
     lines.push("}", "");
   }

@@ -5,6 +5,7 @@
  *   node scripts/site/run_lighthouse.mjs https://confenge.com.br
  */
 import { createServer } from "http";
+import { gzipSync } from "zlib";
 import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync } from "fs";
 import { join, resolve, extname, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -39,6 +40,9 @@ for (const [name, configuredPages] of [
     throw new Error(`${name} must be included in derived Lighthouse pages: ${missingPages.join(", ")}`);
   }
 }
+// Kept in step with gzip_types/gzip_min_length in the packaged nginx http wrapper.
+const COMPRESSIBLE = /^(?:text\/|application\/(?:javascript|json|manifest\+json|xml|xml\+rss|rss\+xml)|image\/svg\+xml)/;
+const GZIP_MIN_LENGTH = 1024;
 const PORT = 8766;
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -67,8 +71,27 @@ if (!BASE) {
       res.end("not found");
       return;
     }
-    res.writeHead(200, { "Content-Type": MIME[extname(filePath)] || "application/octet-stream" });
-    res.end(readFileSync(filePath));
+    // Model the delivery contract both production hosts implement. Netlify and
+    // the Netcup origin (deploy/netcup/nginx/confenge-web-http.conf) gzip every
+    // text response; serving this fixture uncompressed measured a cost that no
+    // visitor pays and pushed the score of text-heavy pages down by hundreds of
+    // milliseconds of imaginary transfer. Thresholds are unchanged — only the
+    // transport now matches production.
+    const contentType = MIME[extname(filePath)] || "application/octet-stream";
+    const body = readFileSync(filePath);
+    const acceptsGzip = /\bgzip\b/.test(String(req.headers["accept-encoding"] || ""));
+    if (acceptsGzip && COMPRESSIBLE.test(contentType) && body.length >= GZIP_MIN_LENGTH) {
+      const compressed = gzipSync(body, { level: 6 });
+      res.writeHead(200, {
+        "Content-Type": contentType,
+        "Content-Encoding": "gzip",
+        Vary: "Accept-Encoding",
+      });
+      res.end(compressed);
+      return;
+    }
+    res.writeHead(200, { "Content-Type": contentType, Vary: "Accept-Encoding" });
+    res.end(body);
   });
   await new Promise((r) => server.listen(PORT, "127.0.0.1", r));
   BASE = `http://127.0.0.1:${PORT}`;
