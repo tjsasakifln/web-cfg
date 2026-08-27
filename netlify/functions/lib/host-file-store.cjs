@@ -288,10 +288,15 @@ class HostFileBackend {
   }
 
   validate({ writeProbe = true } = {}) {
-    this.withExclusiveLock(() => {
+    const validate = () => {
       this._validateUnlocked();
       this._validateLeadIdempotencyUnlocked({ repair: writeProbe });
-    });
+    };
+    // Audits explicitly requesting a read-only check must not create the
+    // writer lock. Concurrent atomic commits may make this conservative check
+    // fail closed for one sample, but it must never mutate host-owned storage.
+    if (writeProbe) this.withExclusiveLock(validate);
+    else validate();
     if (writeProbe) {
       const probe = this.namespace("readiness-probes");
       const key = `probe:${process.pid}:${crypto.randomBytes(8).toString("hex")}`;
