@@ -1,0 +1,566 @@
+{
+  "schema_version": "organic-post-cutover-campaign/v1",
+  "campaign": "WEB-CFG-SEO-GSC-MARKET-CAPTURE-POST-CUTOVER-20260827",
+  "generated_at": "2026-08-27T15:50:00Z",
+  "as_of": "2026-08-27",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "INBOUND ENGINE",
+  "time_to_evidence": "same-day live/build census plus one post-cutover GSC workflow dispatch",
+  "leverage": [
+    "revenue",
+    "distribution",
+    "data",
+    "automation",
+    "trust"
+  ],
+  "visitor_job": "Find the single trustworthy CONFENGE answer for a live public-works contract problem and reach the appropriate next action without indexation or ownership drift.",
+  "acquisition_conversion_hypothesis": "Preserving canonical/indexable parity through the host cutover and acting only on evidenced query owners should protect qualified discovery while avoiding duplicate pages and premature rewrites.",
+  "north_star": "Inbound Qualified Pipeline per Month",
+  "go_gate": "GO:ORGANIC_MARKET_CAPTURE",
+  "terminal_state": "DEGRADED:GSC_DURABLE_HISTORY_EMPTY_AND_INGEST_REJECTED",
+  "base": {
+    "branch": "campaign/organic-market-capture-post-cutover-20260827",
+    "live_and_build_observed_sha": "55c21bc80f8d3eeb71c05eac1dafea386bf0a6ed",
+    "origin_main_sha_at_start": "55c21bc80f8d3eeb71c05eac1dafea386bf0a6ed",
+    "origin_main_sha_before_merge": "d74675ef356b6668e9d95a172ec8e327845a8d70",
+    "final_rebase_delta": "deploy/netcup-only change from #435; no public SEO/GSC surface or campaign-owned file overlap",
+    "public_surface": "https://confenge.com.br",
+    "observed_architecture": "confenge-nginx-node/v2",
+    "observed_server": "nginx"
+  },
+  "data_owner": {
+    "public_acquisition_and_query_ownership": "web-cfg",
+    "search_performance_source": "Google Search Console read-only Search Analytics",
+    "canonical_facts_identity_and_provenance": "extra-cli versioned SELECT-only contracts",
+    "commercial_action": "warmbly with normalized source CONFENGE_WEB",
+    "analytics_policy": "aggregate and redacted; no query-to-lead claim and no PII"
+  },
+  "live_build_census": {
+    "source": {
+      "public_html": 262,
+      "indexable": 75,
+      "noindex": 187,
+      "indexable_without_canonical": 0,
+      "noindex_utility_without_canonical": 9,
+      "pages_with_json_ld": 219,
+      "json_ld_blocks": 226,
+      "invalid_json_ld_blocks": 0
+    },
+    "live": {
+      "paths_checked": 262,
+      "status_200": 261,
+      "status_301": 1,
+      "indexable_200": 75,
+      "noindex_200": 186,
+      "indexability_drift_vs_source": 0,
+      "pages_with_json_ld": 218,
+      "json_ld_blocks": 225,
+      "invalid_json_ld_blocks": 0,
+      "redirected_source": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
+      "redirect_target": "/lei-14133-obras/preco-item-novo-desconto-proposta/"
+    },
+    "sitemaps": {
+      "robots_status": 200,
+      "robots_declares_canonical_index": true,
+      "index_status": 200,
+      "members": {
+        "sitemap.xml": 70,
+        "sitemap-editorial.xml": 5
+      },
+      "declared_locs": 75,
+      "unique_locs": 75,
+      "duplicates": 0,
+      "status_200": 75,
+      "exact_final_url": 75,
+      "single_self_canonical": 75,
+      "noindex": 0,
+      "live_byte_equal_to_head": true
+    },
+    "structured_data_on_indexables": {
+      "with_json_ld": 69,
+      "without_json_ld": 6,
+      "without_json_ld_paths": [
+        "/comercial/privacidade-leads/",
+        "/comercial/termos-diagnostico-b2g/",
+        "/imprensa/",
+        "/nurture/",
+        "/privacidade/",
+        "/termos-de-uso/"
+      ],
+      "classification": "pre_cutover_non_parity_debt_not_automatic_schema_requirement"
+    },
+    "status_and_redirects": {
+      "rules_checked": 37,
+      "rules_conformant": 37,
+      "status_distribution": {
+        "301": 18,
+        "200_rewrite": 4,
+        "410": 13,
+        "302": 2
+      },
+      "slash_variants_checked": 74,
+      "slash_variants_exact_301": 74,
+      "http_www_and_legacy_host_variants_checked": 225,
+      "canonical_redirects_preserving_path_and_query": 225,
+      "unknown_path_status": 404,
+      "retired_path_status": 410,
+      "blanket_home_redirect_detected": false
+    }
+  },
+  "host_migration": {
+    "seo_parity_state": "GO:HOST_MIGRATION_SEO_PARITY",
+    "indexability_loss_attributable_to_cutover": false,
+    "canonical_loss_attributable_to_cutover": false,
+    "public_surface_diff_from_last_pre_netcup_main": false,
+    "pre_netcup_reference_sha": "91f2f0181901c929f635fae07bfb179b8f35fc73",
+    "cutover_gate_artifact_sha256_prefix": "351dffde",
+    "evidence": [
+      "docs/evidence/netcup-http-seo-parity/HTTP-SEO-PARITY-GATE.md",
+      "data/organic/sitemap-hygiene.json",
+      "_redirects",
+      "_headers"
+    ],
+    "governance_degradation": "DEGRADED:RUNTIME_AUTHORITY_STALE",
+    "governance_handoff": "docs/architecture/RUNTIME-AUTHORITY.md still names Netlify and is outside campaign ownership"
+  },
+  "gsc_durable_state": {
+    "state": "DEGRADED:GSC_DURABLE_HISTORY_EMPTY_AND_INGEST_REJECTED",
+    "post_cutover_run": {
+      "run_id": 33087674413,
+      "url": "https://github.com/tjsasakifln/web-cfg/actions/runs/33087674413",
+      "head_sha": "55c21bc80f8d3eeb71c05eac1dafea386bf0a6ed",
+      "event": "workflow_dispatch",
+      "conclusion": "failure",
+      "restore": "GSC_HISTORY_RESTORED status=EMPTY",
+      "provider_pull_ok": true,
+      "rows_returned": 71,
+      "returned_set_impressions": 74,
+      "returned_set_clicks": 0,
+      "as_of": "2026-08-24",
+      "window_start": "2026-07-28",
+      "window_end": "2026-08-24",
+      "observed_dates": 28,
+      "missing_dates": 0,
+      "distinct_as_of": 1,
+      "minimum_distinct_as_of": 3,
+      "readiness_status": "UNKNOWN",
+      "access_mode": "NONE",
+      "ready_for_product_decisions": false,
+      "reason_codes": [
+        "history_store_empty",
+        "insufficient_distinct_runs"
+      ],
+      "persist_status": 422,
+      "persist_error": "gsc_history_sensitive_field"
+    },
+    "durable_readback": false,
+    "durable_namespace_record_count": 0,
+    "history_readback": "404 gsc_history_empty",
+    "insights_readback": "404 gsc_insights_sensitive_field",
+    "last_known_good": null,
+    "read_only_fallback_available": false,
+    "automatic_post_cutover_cron_observed": false,
+    "scheduler_runner_provider_access_post_cutover": true,
+    "root_cause": {
+      "classification": "production_shape_false_positive_in_pii_value_guard",
+      "runtime_owner_paths": [
+        "netlify/functions/ops.cjs",
+        "scripts/revops/publish_gsc_insights.mjs",
+        "scripts/revops/test_publish_gsc_insights.mjs"
+      ],
+      "reproduced_sensitive_paths": [
+        "$.observations[0].run_id",
+        "timestamp_microsecond_suffix"
+      ],
+      "detail": "The current phone-like regex classifies numeric GitHub run IDs and Python microsecond timestamp suffixes as PII; packaged fallback also rejects aggregate key counts.queries.",
+      "in_campaign_fix_allowed": false
+    },
+    "freshness_policy": {
+      "provider_set_is_top_rows_not_property_universe": true,
+      "absence_is_zero": false,
+      "product_decisions_authorized": false
+    },
+    "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/413"
+  },
+  "query_ownership_and_cannibalization": {
+    "cluster": "medicoes-pagamentos",
+    "contract": "data/organic/medicoes-glosas-query-ownership.v1.json",
+    "routes_discovered": 19,
+    "routes_classified": 19,
+    "indexable": 8,
+    "retain_noindex": 11,
+    "declared_conflicts": 5,
+    "uncontrolled_conflicts": 0,
+    "automatic_public_mutation": false,
+    "indexable_content_bridge_coverage": 1.0,
+    "service_to_supporting_content_coverage": 1.0,
+    "current_cross_url_hash": {
+      "returned_set_impressions": 48,
+      "country": "esp",
+      "guide_impressions": 28,
+      "pillar_impressions": 20,
+      "combined_position": 70.48,
+      "decision": "technical_overlap_observed_but_not_brazilian_icp_demand",
+      "authorizes_edit": false
+    }
+  },
+  "internal_link_graph": {
+    "indexable_urls": 75,
+    "local_edges_including_self": 1597,
+    "live_edges_excluding_self": 1572,
+    "reachable_from_home": 74,
+    "orphans": [
+      "/imprensa/"
+    ],
+    "zero_indegree": [
+      "/imprensa/"
+    ],
+    "broken_internal_links": 0,
+    "max_depth": 5,
+    "depth_distribution_live": {
+      "0": 1,
+      "1": 25,
+      "2": 40,
+      "3": 4,
+      "4": 2,
+      "5": 2
+    },
+    "depth_gt_3": [
+      "/guias-contratos-obras/",
+      "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "/lei-14133-obras/",
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/"
+    ],
+    "pre_cutover_debt": true,
+    "in_campaign_fix_allowed": false,
+    "handoff_issues": [
+      "https://github.com/tjsasakifln/web-cfg/issues/61",
+      "https://github.com/tjsasakifln/web-cfg/issues/244"
+    ]
+  },
+  "priority_formula": {
+    "expression": "demand_observed * commercial_intent * ranking_proximity * conversion_capacity / effort",
+    "demand_observed": "page impressions from the comparable 2026-08-09 seven-day export; current 2026-08-24 redacted rows are corroboration only and are not added across dimensions",
+    "commercial_intent": {
+      "bofu": 1.0,
+      "commercial_investigation": 0.8
+    },
+    "ranking_proximity": "1 / observed_position",
+    "conversion_capacity": {
+      "commercial_owner_with_capture": 1.0,
+      "indexable_content_with_bridge": 0.8,
+      "noindex_without_authorized_bridge": 0.4
+    },
+    "effort": {
+      "measure_or_preserve": 1,
+      "reversible_snippet": 2,
+      "human_rewrite": 3
+    }
+  },
+  "top_10_opportunities": [
+    {
+      "rank": 1,
+      "id": "sinapi-desonerado-ctr",
+      "title": "Measure the shipped SINAPI desonerado versus nao desonerado snippet",
+      "existing_url": "/conteudos/sinapi-desonerado-nao-desonerado/",
+      "decision_state": "VALIDATE",
+      "action": "OBSERVE_ONLY",
+      "executive_front": "INBOUND ENGINE",
+      "leverage": ["distribution", "revenue"],
+      "score_inputs": {
+        "demand_observed": 89,
+        "commercial_intent": 0.8,
+        "ranking_proximity": 0.1375515818431912,
+        "conversion_capacity": 0.8,
+        "effort": 1
+      },
+      "priority_score": 7.83,
+      "evidence": ["seo/gsc-2026-08-09/Paginas.csv", "data/organic/demand-control-queue.json"],
+      "baseline": "89 impressions, 1 click, 1.12% CTR, position 7.27; current returned-set absence is UNKNOWN, not zero",
+      "time_to_evidence": "initial diagnostic 2026-09-04; conservative mature decision 2026-09-20",
+      "repetition_100x": "Comparable measurement windows compound learning; 100 snippet rewrites do not.",
+      "decision_criteria": "At least 30 impressions for the dominant query with stable position before comparing CTR.",
+      "kill_criteria": "If CTR does not improve at the mature window, close or revert the hypothesis; no third change now.",
+      "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/126"
+    },
+    {
+      "rank": 2,
+      "id": "fiscal-nao-assina-medicao-preserve",
+      "title": "Preserve and measure the fiscal-nao-assina-medicao owner",
+      "existing_url": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+      "decision_state": "VALIDATE",
+      "action": "PRESERVE",
+      "executive_front": "INBOUND ENGINE",
+      "leverage": ["customer", "revenue", "trust"],
+      "score_inputs": {
+        "demand_observed": 12,
+        "commercial_intent": 0.8,
+        "ranking_proximity": 0.15384615384615385,
+        "conversion_capacity": 0.8,
+        "effort": 1
+      },
+      "priority_score": 1.18,
+      "evidence": ["seo/gsc-2026-08-09/Paginas.csv", "data/organic/medicoes-glosas-query-ownership.v1.json"],
+      "baseline": "12 impressions, 1 click, position 6.5; indexable owner with commercial bridge",
+      "time_to_evidence": "28 complete days after the contemporary deployment",
+      "repetition_100x": "Stable owner and outcome measurement compound; rewriting a winning page does not.",
+      "decision_criteria": "Two comparable windows with Brazilian top-10 impressions and next-action evidence.",
+      "kill_criteria": "Adjust only if two windows show neither top-10 Brazilian demand nor qualified next-action evidence.",
+      "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/387"
+    },
+    {
+      "rank": 3,
+      "id": "bdi-diferenciado-benchmark",
+      "title": "Preserve BDI diferenciado as an organic benchmark",
+      "existing_url": "/conteudos/bdi-diferenciado-obra-publica/",
+      "decision_state": "DEFER",
+      "action": "PRESERVE_BENCHMARK",
+      "executive_front": "INBOUND ENGINE",
+      "leverage": ["trust", "revenue"],
+      "score_inputs": {
+        "demand_observed": 11,
+        "commercial_intent": 0.8,
+        "ranking_proximity": 0.1594896331738437,
+        "conversion_capacity": 0.8,
+        "effort": 1
+      },
+      "priority_score": 1.12,
+      "evidence": ["seo/gsc-2026-08-09/Paginas.csv", "seo/gsc-2026-08-24/search-analytics-redacted.json"],
+      "baseline": "11 impressions, 2 clicks, position 6.27; current non-comparable BR signal is 2 impressions at position 20",
+      "time_to_evidence": "one comparable 28-day window",
+      "repetition_100x": "Repeated benchmark windows improve diagnosis; repeated rewrites destroy the control.",
+      "decision_criteria": "At least 30 comparable impressions and persistent position/CTR movement.",
+      "kill_criteria": "Do not open a rewrite hypothesis below the sample threshold or on a single-window decline.",
+      "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/61"
+    },
+    {
+      "rank": 4,
+      "id": "medicoes-glosas-commercial-owner",
+      "title": "Measure the broad Medicoes and Glosas commercial owner",
+      "existing_url": "/medicoes-glosas-obras-publicas/",
+      "decision_state": "VALIDATE",
+      "action": "MEASUREMENT_WAIT",
+      "executive_front": "INBOUND ENGINE",
+      "leverage": ["revenue", "data"],
+      "score_inputs": {
+        "demand_observed": 8,
+        "commercial_intent": 1.0,
+        "ranking_proximity": 0.12690355329949238,
+        "conversion_capacity": 1.0,
+        "effort": 1
+      },
+      "priority_score": 1.02,
+      "evidence": ["seo/gsc-2026-08-09/Paginas.csv", "data/organic/medicoes-glosas-query-ownership.v1.json"],
+      "baseline": "Service owner 8 impressions, 0 clicks, position 7.88; supporting glosa and rejected-measurement pages historically received clicks",
+      "time_to_evidence": "28 complete post-deploy days; kill decision after two windows",
+      "repetition_100x": "An owner ledger compounds; 100 bridges or duplicate pages create 100 units of work.",
+      "decision_criteria": "Commercial-owner click share rises without supporting-page ownership drift.",
+      "kill_criteria": "If service clicks remain zero while supporting content retains clicks, reject the transfer hypothesis and create no page.",
+      "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/387"
+    },
+    {
+      "rank": 5,
+      "id": "chuva-prorrogacao-human-canary",
+      "title": "Run at most one human-reviewed chuva/prorrogacao canary",
+      "existing_url": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "decision_state": "VALIDATE",
+      "action": "HUMAN_REVIEW_REQUIRED",
+      "executive_front": "INBOUND ENGINE",
+      "leverage": ["distribution", "trust"],
+      "score_inputs": {
+        "demand_observed": 17,
+        "commercial_intent": 0.8,
+        "ranking_proximity": 0.29850746268656714,
+        "conversion_capacity": 0.4,
+        "effort": 3
+      },
+      "priority_score": 0.54,
+      "evidence": ["seo/gsc-2026-08-09/Paginas.csv", "data/organic/demand-control-queue.json"],
+      "baseline": "17 impressions, 0 clicks, position 3.35; currently noindex,follow",
+      "time_to_evidence": "human rewrite and factual approval before indexing, then 28 complete days",
+      "repetition_100x": "Fails the 100x test; execute exactly one canary, not a library-wide rewrite.",
+      "decision_criteria": "Named human approves distinct utility and INDEXABLE for this exact URL.",
+      "kill_criteria": "Without CTR/owner lift, revert this URL exactly and do not promote a sibling.",
+      "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/127"
+    },
+    {
+      "rank": 6,
+      "id": "reequilibrio-commercial-owner",
+      "title": "Measure the broad reequilibrio commercial owner",
+      "existing_url": "/reequilibrio-obras-publicas/",
+      "decision_state": "VALIDATE",
+      "action": "MEASUREMENT_WAIT",
+      "executive_front": "INBOUND ENGINE",
+      "leverage": ["revenue", "data"],
+      "score_inputs": {
+        "demand_observed": 4,
+        "commercial_intent": 1.0,
+        "ranking_proximity": 0.12903225806451613,
+        "conversion_capacity": 1.0,
+        "effort": 1
+      },
+      "priority_score": 0.52,
+      "evidence": ["seo/gsc-2026-08-09/Paginas.csv", "data/organic/bofu-intent-matrix.json"],
+      "baseline": "Service owner 4 impressions, 0 clicks, position 7.75; Curva ABC supporting content had 7 impressions and 1 click at position 4.43",
+      "time_to_evidence": "28 complete days after contemporary deployment observation",
+      "repetition_100x": "Owner windows compound the ledger; additional pages do not.",
+      "decision_criteria": "Service click share rises without Curva ABC capturing the broad commercial job.",
+      "kill_criteria": "If service remains clickless while support retains the signal, reject transfer rather than expand.",
+      "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/128"
+    },
+    {
+      "rank": 7,
+      "id": "aditivo-qualitativo-quantitativo-defer",
+      "title": "Keep aditivo qualitativo versus quantitativo behind the human gate",
+      "existing_url": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "decision_state": "DEFER",
+      "action": "RETAIN_NOINDEX",
+      "executive_front": "INBOUND ENGINE",
+      "leverage": ["data", "trust"],
+      "score_inputs": {
+        "demand_observed": 22,
+        "commercial_intent": 0.8,
+        "ranking_proximity": 0.16420361247947454,
+        "conversion_capacity": 0.4,
+        "effort": 3
+      },
+      "priority_score": 0.39,
+      "evidence": ["seo/gsc-2026-08-09/Paginas.csv", "seo/gsc-2026-08-24/search-analytics-redacted.json"],
+      "baseline": "22 historical impressions at position 6.09; current BR returned-set confirms 5 impressions at position 6.6; still noindex,follow",
+      "time_to_evidence": "only after the first #127 canary and a new named human decision",
+      "repetition_100x": "Fails the 100x test; bulk flips create units of work rather than learning.",
+      "decision_criteria": "Distinct qualified demand plus the first canary result and human approval.",
+      "kill_criteria": "No automatic promotion; preserve noindex when the selected canary fails.",
+      "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/127"
+    },
+    {
+      "rank": 8,
+      "id": "prazo-vigencia-execucao-defer",
+      "title": "Keep prazo de vigencia versus execucao behind the human gate",
+      "existing_url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "decision_state": "DEFER",
+      "action": "RETAIN_NOINDEX",
+      "executive_front": "INBOUND ENGINE",
+      "leverage": ["distribution", "trust"],
+      "score_inputs": {
+        "demand_observed": 18,
+        "commercial_intent": 0.8,
+        "ranking_proximity": 0.14285714285714285,
+        "conversion_capacity": 0.4,
+        "effort": 3
+      },
+      "priority_score": 0.27,
+      "evidence": ["seo/gsc-2026-08-09/Paginas.csv", "data/organic/demand-control-queue.json"],
+      "baseline": "18 impressions, 0 clicks, position 7; currently noindex,follow",
+      "time_to_evidence": "after the selected chuva canary completes its window",
+      "repetition_100x": "Fails while another canary is active; parallel rewrites erase causality.",
+      "decision_criteria": "Distinct demand and a successful first canary before a second URL is considered.",
+      "kill_criteria": "Do not promote a second URL without evidence from the first test.",
+      "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/127"
+    },
+    {
+      "rank": 9,
+      "id": "sinapi-sicro-preserve",
+      "title": "Preserve the unambiguous SINAPI versus SICRO owner",
+      "existing_url": "/conteudos/sinapi-ou-sicro-obra-publica/",
+      "decision_state": "DEFER",
+      "action": "PRESERVE",
+      "executive_front": "INBOUND ENGINE",
+      "leverage": ["trust", "distribution"],
+      "score_inputs": {
+        "demand_observed": 8,
+        "commercial_intent": 0.8,
+        "ranking_proximity": 0.10204081632653061,
+        "conversion_capacity": 0.8,
+        "effort": 2
+      },
+      "priority_score": 0.26,
+      "evidence": ["seo/gsc-2026-08-09/Paginas.csv", "data/organic/content-service-map.json"],
+      "baseline": "8 impressions, 0 clicks, position 9.8; indexable owner with coherent canonical and bridge",
+      "time_to_evidence": "28 days and at least 30 impressions before a snippet decision",
+      "repetition_100x": "Taxonomy and owner evidence compound; repeated microcopy changes do not.",
+      "decision_criteria": "At least 30 comparable impressions with stable query ownership.",
+      "kill_criteria": "Below-threshold or commercially unqualified evidence leaves the page unchanged.",
+      "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/61"
+    },
+    {
+      "rank": 10,
+      "id": "empreitada-global-unitaria-preserve",
+      "title": "Preserve the empreitada global versus unitaria owner",
+      "existing_url": "/conteudos/empreitada-preco-global-preco-unitario/",
+      "decision_state": "VALIDATE",
+      "action": "PRESERVE",
+      "executive_front": "INBOUND ENGINE",
+      "leverage": ["trust", "distribution"],
+      "score_inputs": {
+        "demand_observed": 1,
+        "commercial_intent": 0.8,
+        "ranking_proximity": 0.3333333333333333,
+        "conversion_capacity": 0.8,
+        "effort": 1
+      },
+      "priority_score": 0.21,
+      "evidence": ["seo/gsc-2026-08-24/search-analytics-redacted.json", "data/organic/content-service-map.json"],
+      "baseline": "1 current Brazilian returned-set impression at position 3; prior absence was UNKNOWN",
+      "time_to_evidence": "one 28-day window and at least 30 impressions",
+      "repetition_100x": "Measuring a stable owner can compound; editing at n=1 cannot.",
+      "decision_criteria": "Reach the sample threshold with the same owner and qualified geography.",
+      "kill_criteria": "No title or meta change while the sample remains below threshold.",
+      "existing_issue": "https://github.com/tjsasakifln/web-cfg/issues/61"
+    }
+  ],
+  "mutations": {
+    "new_public_pages": 0,
+    "html_edits": 0,
+    "semantic_owner_proven": true,
+    "diagnostic_scripts_added": 1,
+    "seo_gsc_tests_added": 1,
+    "organic_evidence_contracts_added": 1,
+    "reason_no_on_page_edit": "Every high-return candidate is either under an explicit measurement/human freeze or below the minimum sample; editing now would violate owner and causal gates."
+  },
+  "handoffs": [
+    {
+      "issue": "https://github.com/tjsasakifln/web-cfg/issues/413",
+      "owner_scope": "runtime GSC ingest and durable consumer",
+      "exit_criteria": "Accept production-shaped history, prove filesystem read-after-write, accumulate two more distinct as_of observations, then expose authenticated READ_WRITE/LKG without weakening PII guards."
+    },
+    {
+      "issue": "https://github.com/tjsasakifln/web-cfg/issues/61",
+      "owner_scope": "public navigation and crawl-depth debt outside conteudos",
+      "exit_criteria": "Resolve /imprensa/ orphan and the four depth>3 routes without creating duplicate keyword targets."
+    },
+    {
+      "issue": "https://github.com/tjsasakifln/web-cfg/issues/387",
+      "owner_scope": "on-page Medicoes/Glosas measurement",
+      "exit_criteria": "Preserve 19/19 ownership and wait for comparable 28-day evidence before any mutation."
+    }
+  ],
+  "quality_gates": [
+    {
+      "command": "python3 -m pytest scripts/organic/tests -q",
+      "result": "210 passed"
+    },
+    {
+      "command": "python3 -m pytest tests/bofu_dominance/core tests/bofu_dominance/safe_execution tests/bofu_dominance/safe_strategy -q",
+      "result": "63 passed"
+    },
+    {
+      "command": "python3 -m scripts.organic sitemap-audit --out /tmp/confenge-organic-sitemap-audit.json",
+      "result": "ok=true; issues=0; unique_paths=75"
+    },
+    {
+      "command": "node scripts/site/test_redirects.mjs https://confenge.com.br",
+      "result": "all redirect gates passed"
+    },
+    {
+      "command": "python3 -m scripts.organic.post_cutover_audit live-census",
+      "result": "ok=true; 75/75 indexable parity; six pre-existing indexables without JSON-LD reported"
+    },
+    {
+      "command": "python3 -m scripts.organic.post_cutover_audit link-census",
+      "result": "74/75 reachable; one pre-existing orphan and four pre-existing routes deeper than 3"
+    }
+  ],
+  "rollback": "Revert only the campaign evidence, diagnostic and dedicated test commit; it changes no public HTML, runtime, DNS, scheduler, store, lead handler, registry, price or offer.",
+  "affected_adr": "ADR-STRAT-002 read and preserved; no architectural boundary changed"
+}
