@@ -18,6 +18,7 @@ import subprocess
 import sys
 import tarfile
 import threading
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -598,6 +599,44 @@ def runtime_restart() -> None:
         raise ReleaseError(f"portable runtime restart failed: {exc}") from exc
 
 
+# systemd returns from `restart` as soon as it has spawned a Type=simple unit,
+# so the runtime has not bound its socket yet. Asserting identity immediately
+# made every promote a race: the first connection was refused, the switch was
+# declared failed, and the automatic rollback then failed the same way against
+# the same not-yet-listening process. Wait for the socket, then assert.
+RUNTIME_READY_TIMEOUT_SECONDS = 30.0
+RUNTIME_READY_POLL_SECONDS = 0.25
+
+
+def _await_runtime_identity(
+    host: str,
+    port: int,
+    timeout: float = RUNTIME_READY_TIMEOUT_SECONDS,
+) -> dict[str, Any]:
+    """Return the runtime identity once it answers, or raise after the deadline.
+
+    Only connection-level failures are retried. A runtime that answers with the
+    wrong identity, a non-200 or invalid JSON is a real failure and must not be
+    masked by waiting longer.
+    """
+    url = f"http://{host}:{port}/.well-known/runtime-info.json"
+    deadline = time.monotonic() + timeout
+    last: ReleaseError | None = None
+    while True:
+        try:
+            return _http_get_json(url)
+        except ReleaseError as exc:
+            cause = exc.__cause__
+            if not isinstance(cause, (urllib.error.URLError, TimeoutError, OSError)):
+                raise
+            last = exc
+        if time.monotonic() >= deadline:
+            raise ReleaseError(
+                f"runtime did not become reachable within {timeout:.0f}s: {last}"
+            )
+        time.sleep(RUNTIME_READY_POLL_SECONDS)
+
+
 def smoke_runtime(manifest: dict[str, Any]) -> None:
     if os.environ.get("CONFENGE_RELEASE_TEST_MODE") == "1":
         if os.environ.get("CONFENGE_TEST_RUNTIME_SMOKE_FAIL") == "1":
@@ -608,9 +647,7 @@ def smoke_runtime(manifest: dict[str, Any]) -> None:
     port = upstream.get("port")
     if host not in LOOPBACK_HOSTS or not isinstance(port, int):
         raise ReleaseError("runtime upstream identity is not a loopback host/port")
-    identity = _http_get_json(
-        f"http://{host}:{port}/.well-known/runtime-info.json"
-    )
+    identity = _await_runtime_identity(host, port)
     expected = {
         "release_sha": manifest.get("commit"),
         "public_artifact_hash": (manifest.get("public_artifact") or {}).get(

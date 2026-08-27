@@ -48,9 +48,14 @@ def live_zone() -> list[dict]:
     ]
 
 
+def _written(plan) -> list[dict]:
+    """Every record the plan will write: created outright or replaced in place."""
+    return [*plan["create"], *(plan.get("update") or [])]
+
+
 def test_plan_moves_only_the_two_public_web_names():
     plan = build_plan(live_zone(), "netcup")
-    touched = {row["name"] for row in [*plan["delete"], *plan["create"]]}
+    touched = {row["name"] for row in [*plan["delete"], *_written(plan)]}
     assert touched == {"confenge.com.br", "www.confenge.com.br"}
 
 
@@ -72,10 +77,11 @@ def test_sibling_services_on_the_same_host_are_untouched():
 
 def test_plan_points_the_public_surface_at_the_netcup_origin():
     plan = build_plan(live_zone(), "netcup")
-    creates = {(row["name"], row["type"], row["content"]) for row in plan["create"]}
-    assert ("confenge.com.br", "A", "159.195.18.88") in creates
-    assert ("www.confenge.com.br", "CNAME", "confenge.com.br") in creates
-    assert len(plan["delete"]) == 3, "both Netlify apex records and the www CNAME are replaced"
+    written = {(row["name"], row["type"], row["content"]) for row in _written(plan)}
+    assert ("confenge.com.br", "A", "159.195.18.88") in written
+    assert ("www.confenge.com.br", "CNAME", "confenge.com.br") in written
+    # The www CNAME is replaced in place, so only the two apex records are deleted.
+    assert len(plan["delete"]) == 2
 
 
 def test_rollback_is_declared_with_the_pre_change_records():
@@ -94,10 +100,10 @@ def test_rolling_back_restores_netlify_exactly():
         *[r for r in live_zone() if r["id"] not in {"apex-a1", "apex-a2", "www"}],
     ]
     plan = build_plan(after_cutover, "netlify")
-    creates = {(row["name"], row["type"], row["content"]) for row in plan["create"]}
-    assert ("confenge.com.br", "A", "75.2.60.5") in creates
-    assert ("confenge.com.br", "A", "99.83.231.61") in creates
-    assert ("www.confenge.com.br", "CNAME", "confenge.netlify.app") in creates
+    written = {(row["name"], row["type"], row["content"]) for row in _written(plan)}
+    assert ("confenge.com.br", "A", "75.2.60.5") in written
+    assert ("confenge.com.br", "A", "99.83.231.61") in written
+    assert ("www.confenge.com.br", "CNAME", "confenge.netlify.app") in written
 
 
 def test_replanning_an_already_cut_zone_is_a_no_op():
@@ -109,6 +115,7 @@ def test_replanning_an_already_cut_zone_is_a_no_op():
     plan = build_plan(already, "netcup")
     assert plan["delete"] == []
     assert plan["create"] == []
+    assert (plan.get("update") or []) == []
 
 
 def test_a_target_outside_the_public_surface_is_refused():
@@ -132,3 +139,42 @@ def test_an_unknown_destination_is_refused():
 
 def test_cutover_ttl_bounds_the_rollback():
     assert CUTOVER_TTL == 300, "an explicit low TTL bounds how long a rollback takes to propagate"
+
+
+# Cloudflare refuses a second CNAME on a name that already holds one (81053).
+# Create-then-delete therefore cannot replace the www CNAME: the create fails,
+# the plan aborts having already rewritten the apex, and the zone is left split
+# between two hosts. Observed live during the cutover.
+
+def test_replacing_a_cname_is_an_in_place_update_not_a_second_create():
+    plan = build_plan(live_zone(), "netcup")
+    updates = plan.get("update") or []
+    assert len(updates) == 1, f"expected one in-place replacement, got {updates}"
+    assert updates[0]["name"] == "www.confenge.com.br"
+    assert updates[0]["type"] == "CNAME"
+    assert updates[0]["content"] == "confenge.com.br"
+    assert updates[0]["id"] == "www", "the existing record is replaced, not duplicated"
+    assert all(row["name"] != "www.confenge.com.br" for row in plan["create"])
+    assert all(row["name"] != "www.confenge.com.br" for row in plan["delete"])
+
+
+def test_apex_a_records_still_use_create_before_delete():
+    plan = build_plan(live_zone(), "netcup")
+    created_apex = [r for r in plan["create"] if r["name"] == "confenge.com.br"]
+    deleted_apex = [r for r in plan["delete"] if r["name"] == "confenge.com.br"]
+    assert len(created_apex) == 1, "a name that holds only A records may be added to first"
+    assert len(deleted_apex) == 2
+    assert all(row["type"] == "A" for row in created_apex + deleted_apex)
+
+
+def test_a_half_applied_zone_converges_on_replan():
+    """The live failure left the apex with three A records and the old www CNAME.
+    Re-planning from that state must finish the job, not compound it."""
+    half = [
+        _record("new-apex", "A", "confenge.com.br", "159.195.18.88"),
+        *live_zone(),
+    ]
+    plan = build_plan(half, "netcup")
+    assert plan["create"] == [], "the apex target already exists"
+    assert len(plan["update"]) == 1 and plan["update"][0]["type"] == "CNAME"
+    assert sorted(r["content"] for r in plan["delete"]) == ["75.2.60.5", "99.83.231.61"]

@@ -412,3 +412,58 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "ops/bin/rollback",
     ):
         assert required in names
+
+
+# systemd returns from `restart` as soon as it has spawned a Type=simple unit, so
+# the runtime has not bound its socket yet. Asserting identity immediately made
+# every promote a race: the first connection was refused, the switch was declared
+# failed, and the automatic rollback then failed the same way against the same
+# not-yet-listening process. Observed in production:
+#   PROMOTED_FAILED_AFTER_SWAP  ... Connection refused
+#   AUTO_ROLLBACK_FAILED
+# while the runtime logged runtime_listening 300ms later and served 200s.
+
+def test_runtime_readiness_waits_through_connection_refused(monkeypatch):
+    attempts = {"n": 0}
+
+    def flaky(url, host_header=None):
+        attempts["n"] += 1
+        if attempts["n"] < 3:
+            err = control.ReleaseError(f"smoke request failed for {url}: refused")
+            raise err from ConnectionRefusedError(111, "Connection refused")
+        return {"release_sha": "abc"}
+
+    monkeypatch.setattr(control, "_http_get_json", flaky)
+    monkeypatch.setattr(control, "RUNTIME_READY_POLL_SECONDS", 0)
+    identity = control._await_runtime_identity("127.0.0.1", 18100, timeout=5)
+    assert identity == {"release_sha": "abc"}
+    assert attempts["n"] == 3
+
+
+def test_runtime_readiness_gives_up_at_the_deadline(monkeypatch):
+    def always_refused(url, host_header=None):
+        raise control.ReleaseError("smoke request failed") from ConnectionRefusedError(111, "refused")
+
+    monkeypatch.setattr(control, "_http_get_json", always_refused)
+    monkeypatch.setattr(control, "RUNTIME_READY_POLL_SECONDS", 0)
+    with pytest.raises(control.ReleaseError, match="did not become reachable"):
+        control._await_runtime_identity("127.0.0.1", 18100, timeout=0.01)
+
+
+def test_a_wrong_identity_is_never_masked_by_waiting(monkeypatch):
+    """Only connection-level failures are retried.
+
+    A runtime that answers with a bad status or invalid JSON is a real failure;
+    waiting longer would only delay the truth.
+    """
+    calls = {"n": 0}
+
+    def bad_status(url, host_header=None):
+        calls["n"] += 1
+        raise control.ReleaseError("smoke returned HTTP 500: " + url)
+
+    monkeypatch.setattr(control, "_http_get_json", bad_status)
+    monkeypatch.setattr(control, "RUNTIME_READY_POLL_SECONDS", 0)
+    with pytest.raises(control.ReleaseError, match="HTTP 500"):
+        control._await_runtime_identity("127.0.0.1", 18100, timeout=5)
+    assert calls["n"] == 1, "a non-connection failure must not be retried"
