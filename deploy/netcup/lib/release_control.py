@@ -627,7 +627,14 @@ def _await_runtime_identity(
             return _http_get_json(url)
         except ReleaseError as exc:
             cause = exc.__cause__
-            if not isinstance(cause, (urllib.error.URLError, TimeoutError, OSError)):
+            # HTTPError is a URLError subclass, but it proves that the runtime
+            # accepted the connection and answered. Retrying it would mask a
+            # bad runtime status until the readiness deadline (and could even
+            # accept a later answer), rather than failing closed on the first
+            # invalid response.
+            if isinstance(cause, urllib.error.HTTPError) or not isinstance(
+                cause, (urllib.error.URLError, TimeoutError, OSError)
+            ):
                 raise
             last = exc
         if time.monotonic() >= deadline:
@@ -678,21 +685,23 @@ def nginx_test() -> None:
         raise ReleaseError(f"nginx -t failed: {exc}") from exc
 
 
-def nginx_reload_if_authorized() -> bool:
-    raw = os.environ.get("CONFENGE_NGINX_RELOAD_ON_PROMOTE", "0")
-    if raw not in {"0", "1"}:
-        raise ReleaseError("CONFENGE_NGINX_RELOAD_ON_PROMOTE must be 0 or 1")
-    if raw == "0":
-        return False
+def nginx_reload() -> None:
+    """Apply the generated contract selected by ``current``.
+
+    Nginx resolves ``include`` files while loading its configuration, not for
+    each request. A symlink swap changes the static root immediately but cannot
+    apply a new headers/redirects/locations contract until reload. Promotion,
+    rollback and automatic restoration therefore make this controlled reload
+    mandatory instead of relying on an operator-only environment flag.
+    """
     if os.environ.get("CONFENGE_RELEASE_TEST_MODE") == "1":
-        return True
+        return
     try:
         subprocess.run(
             ["sudo", "-n", "systemctl", "reload", "nginx"], check=True, timeout=30
         )
     except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
         raise ReleaseError(f"controlled nginx reload failed: {exc}") from exc
-    return True
 
 
 def read_release_link(root: Path, name: str) -> str | None:
@@ -854,7 +863,7 @@ def _restore_after_failed_switch(root: Path, previous: str | None) -> None:
         previous_manifest = verify_release_tree(root, previous)
         runtime_restart()
         smoke_runtime(previous_manifest)
-    nginx_reload_if_authorized()
+    nginx_reload()
     if previous:
         smoke_live(previous)
 
@@ -878,17 +887,23 @@ def _switch_release(root: Path, sha: str, event: str) -> dict[str, Any]:
         nginx_test()
         runtime_restart()
         smoke_runtime(manifest)
+        nginx_reload()
         smoke_live(sha)
-        append_evidence(root, f"{event}_IDEMPOTENT", sha, previous_sha=previous)
+        append_evidence(
+            root,
+            f"{event}_IDEMPOTENT",
+            sha,
+            previous_sha=previous,
+            nginx_reloaded=True,
+        )
         return manifest
 
     atomic_release_link(root, "current", sha)
-    reloaded = False
     try:
         nginx_test()
         runtime_restart()
         smoke_runtime(manifest)
-        reloaded = nginx_reload_if_authorized()
+        nginx_reload()
         smoke_live(sha)
         if previous:
             atomic_release_link(root, "rollback", previous)
@@ -898,7 +913,7 @@ def _switch_release(root: Path, sha: str, event: str) -> dict[str, Any]:
             sha,
             previous_sha=previous,
             artifact_sha256=manifest["artifact"]["sha256"],
-            nginx_reloaded=reloaded,
+            nginx_reloaded=True,
             live_identity=sha,
             runtime_identity=sha,
         )

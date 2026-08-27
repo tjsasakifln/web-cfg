@@ -92,8 +92,11 @@ sudo install -o root -g confenge-deploy -m 0640 /secure/confenge/netcup-runtime.
 sudo systemctl daemon-reload
 ```
 
-The control needs only nginx validation. Reload is disabled by default and is
-used only when `CONFENGE_NGINX_RELOAD_ON_PROMOTE=1` is explicitly supplied:
+The control uses only nginx validation and a controlled reload. Reload is
+mandatory after every promote, rollback and automatic restoration because
+nginx parses the generated header/redirect/location includes at configuration
+load time; swapping `current` alone changes the static root but not those parsed
+policies:
 
 ```text
 # /etc/sudoers.d/confenge-web-release (validate with visudo -cf)
@@ -180,10 +183,10 @@ Promotion validates manifest, detached package checksum, internal file hashes,
 public identity, generated host/runtime contracts, Node 22 inventory and a
 candidate loopback server before swapping `current`. After the atomic swap it
 restarts and validates the portable runtime identity, runs `nginx -t`, performs
-an optional controlled reload only when explicitly requested, and checks the
+the controlled nginx reload, and checks the
 loopback live identity. Any failure restores the previous symlink, restarts the
-previous runtime and revalidates it. This path is packaged but is not authorized
-or invoked by this convergence goal.
+previous runtime, reloads its generated contract and revalidates it. No promote
+or rollback requires a manual nginx edit.
 
 Verify the GitHub attestation after downloading a release candidate:
 

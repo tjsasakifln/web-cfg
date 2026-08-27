@@ -49,10 +49,6 @@ PROTECTED_NAMES = (
 )
 PROTECTED_TYPES = ("MX", "TXT", "SRV", "CAA", "NS", "SOA")
 
-# Filled from the pre-change inventory so verification asserts the exact set of
-# protected names this zone published before the cutover, not a wish list.
-EXPECTED_PROTECTED: set[str] = set()
-
 TARGETS: dict[str, dict[str, Any]] = {
     "netcup": {
         "confenge.com.br": [{"type": "A", "content": "159.195.18.88"}],
@@ -124,7 +120,7 @@ def records(token: str, zone: str) -> list[dict]:
 
 
 def _slim(record: dict) -> dict:
-    return {
+    value = {
         "id": record["id"],
         "type": record["type"],
         "name": record["name"],
@@ -132,6 +128,34 @@ def _slim(record: dict) -> dict:
         "ttl": record["ttl"],
         "proxied": record.get("proxied", False),
     }
+    # These fields carry the effective contract for MX/SRV-style records and
+    # must be part of a protected before/after comparison when Cloudflare
+    # returns them. Volatile API metadata and timestamps are deliberately not.
+    for field in ("priority", "data"):
+        if field in record:
+            value[field] = record[field]
+    return value
+
+
+def _protected_snapshot(current: list[dict]) -> list[dict]:
+    """Return every record the public-web cutover is forbidden to change."""
+    protected = [
+        _slim(record)
+        for record in current
+        if not (
+            record["name"] in PUBLIC_WEB_NAMES
+            and record["type"] in ("A", "AAAA", "CNAME")
+        )
+    ]
+    return sorted(
+        protected,
+        key=lambda record: (
+            record["name"],
+            record["type"],
+            record["content"],
+            record["id"],
+        ),
+    )
 
 
 def build_plan(current: list[dict], destination: str) -> dict[str, Any]:
@@ -149,7 +173,7 @@ def build_plan(current: list[dict], destination: str) -> dict[str, Any]:
             f"(unexpected={extra} missing={missing})"
         )
 
-    protected = [_slim(r) for r in current if r["name"] in PROTECTED_NAMES or r["type"] in PROTECTED_TYPES]
+    protected = _protected_snapshot(current)
 
     deletes: list[dict] = []
     creates: list[dict] = []
@@ -253,12 +277,14 @@ def apply_plan(token: str, zone: str, plan: dict) -> dict:
     return applied
 
 
-def verify(token: str, zone: str, destination: str, expected_protected: set[str] | None = None) -> dict:
+def verify(
+    token: str,
+    zone: str,
+    destination: str,
+    expected_protected: list[dict] | None = None,
+) -> dict:
     target = TARGETS[destination]
     current = records(token, zone)
-    global EXPECTED_PROTECTED
-    if expected_protected is not None:
-        EXPECTED_PROTECTED = expected_protected
     problems: list[str] = []
     for name in PUBLIC_WEB_NAMES:
         have = sorted(
@@ -269,16 +295,38 @@ def verify(token: str, zone: str, destination: str, expected_protected: set[str]
         want = sorted((w["type"], w["content"]) for w in target[name])
         if have != want:
             problems.append(f"{name}: have={have} want={want}")
-    present = {r["name"] for r in current}
-    for name in PROTECTED_NAMES:
-        # Only names this zone actually publishes are asserted; the list is a
-        # superset so a future service can be added without editing two places.
-        if name in EXPECTED_PROTECTED and name not in present:
-            problems.append(f"{name}: protected record disappeared")
+    protected_unchanged: bool | None = None
+    if expected_protected is not None:
+        before = _protected_snapshot(expected_protected)
+        after = _protected_snapshot(current)
+        protected_unchanged = before == after
+        if not protected_unchanged:
+            before_by_id = {record["id"]: record for record in before}
+            after_by_id = {record["id"]: record for record in after}
+            missing = sorted(
+                f"{record['name']}/{record['type']}"
+                for rid, record in before_by_id.items()
+                if rid not in after_by_id
+            )
+            added = sorted(
+                f"{record['name']}/{record['type']}"
+                for rid, record in after_by_id.items()
+                if rid not in before_by_id
+            )
+            modified = sorted(
+                f"{before_by_id[rid]['name']}/{before_by_id[rid]['type']}"
+                for rid in before_by_id.keys() & after_by_id.keys()
+                if before_by_id[rid] != after_by_id[rid]
+            )
+            problems.append(
+                "protected DNS changed: "
+                f"missing={missing} added={added} modified={modified}"
+            )
     return {
         "schema": "confenge.dns_cutover_verification/v1",
         "destination": destination,
         "ok": not problems,
+        "protected_unchanged": protected_unchanged,
         "problems": problems,
     }
 
@@ -311,7 +359,7 @@ def main(argv: list[str] | None = None) -> int:
                 if not args.confirm:
                     raise CutoverError("apply requires --confirm")
                 before = records(token, zone)
-                expected_protected = {r["name"] for r in before if r["name"] in PROTECTED_NAMES}
+                expected_protected = _protected_snapshot(before)
                 out = {
                     "plan": plan,
                     "applied": apply_plan(token, zone, plan),

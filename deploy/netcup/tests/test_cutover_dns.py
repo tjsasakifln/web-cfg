@@ -21,6 +21,9 @@ _NAMESPACE: dict = {"__name__": "cutover_dns", "__file__": str(_MODULE_PATH)}
 exec(compile(_MODULE_PATH.read_text(encoding="utf-8"), str(_MODULE_PATH), "exec"), _NAMESPACE)  # noqa: S102
 
 build_plan = _NAMESPACE["build_plan"]
+apply_plan = _NAMESPACE["apply_plan"]
+verify = _NAMESPACE["verify"]
+protected_snapshot = _NAMESPACE["_protected_snapshot"]
 CutoverError = _NAMESPACE["CutoverError"]
 CUTOVER_TTL = _NAMESPACE["CUTOVER_TTL"]
 
@@ -43,6 +46,8 @@ def live_zone() -> list[dict]:
         _record("spf", "TXT", "confenge.com.br", '"v=spf1 include:_spf.mail.hostinger.com ~all"'),
         _record("dmarc", "TXT", "_dmarc.confenge.com.br", '"v=DMARC1; p=none"'),
         _record("dkim-a", "CNAME", "hostingermail-a._domainkey.confenge.com.br", "hostingermail-a.dkim.mail.hostinger.com"),
+        _record("dkim-b", "CNAME", "hostingermail-b._domainkey.confenge.com.br", "hostingermail-b.dkim.mail.hostinger.com"),
+        _record("dkim-c", "CNAME", "hostingermail-c._domainkey.confenge.com.br", "hostingermail-c.dkim.mail.hostinger.com"),
         _record("sendmx", "MX", "send.confenge.com.br", "feedback-smtp.sa-east-1.amazonses.com"),
         _record("sendspf", "TXT", "send.confenge.com.br", '"v=spf1 include:amazonses.com ~all"'),
     ]
@@ -62,9 +67,12 @@ def test_plan_moves_only_the_two_public_web_names():
 def test_apex_mail_survives_the_cutover():
     plan = build_plan(live_zone(), "netcup")
     touched_ids = {row.get("id") for row in plan["delete"]}
-    for mail_id in ("mx1", "mx2", "spf", "dmarc", "dkim-a", "sendmx", "sendspf"):
+    for mail_id in (
+        "mx1", "mx2", "spf", "dmarc", "dkim-a", "dkim-b", "dkim-c",
+        "sendmx", "sendspf",
+    ):
         assert mail_id not in touched_ids, f"{mail_id} must never be rewritten by a web cutover"
-    touched_types = {row["type"] for row in [*plan["delete"], *plan["create"]]}
+    touched_types = {row["type"] for row in [*plan["delete"], *_written(plan)]}
     assert touched_types <= {"A", "AAAA", "CNAME"}
 
 
@@ -158,6 +166,29 @@ def test_replacing_a_cname_is_an_in_place_update_not_a_second_create():
     assert all(row["name"] != "www.confenge.com.br" for row in plan["delete"])
 
 
+def test_apply_replaces_the_singleton_cname_with_put_before_apex_changes(monkeypatch):
+    calls = []
+
+    def fake_call(token, method, path, payload=None):
+        calls.append((method, path, payload))
+        if method in {"PUT", "POST"}:
+            result = {"id": path.rsplit("/", 1)[-1], **payload}
+            return {"success": True, "result": result}
+        return {"success": True, "result": {}}
+
+    monkeypatch.setitem(_NAMESPACE, "_call", fake_call)
+    applied = apply_plan("sanitized-token", "zone", build_plan(live_zone(), "netcup"))
+    assert [method for method, _, _ in calls] == ["PUT", "POST", "DELETE", "DELETE"]
+    assert calls[0][1].endswith("/dns_records/www")
+    assert calls[0][2]["name"] == "www.confenge.com.br"
+    assert calls[0][2]["content"] == "confenge.com.br"
+    assert all(
+        payload is None or payload["name"] in {"confenge.com.br", "www.confenge.com.br"}
+        for _, _, payload in calls
+    )
+    assert len(applied["updated"]) == 1
+
+
 def test_apex_a_records_still_use_create_before_delete():
     plan = build_plan(live_zone(), "netcup")
     created_apex = [r for r in plan["create"] if r["name"] == "confenge.com.br"]
@@ -178,3 +209,35 @@ def test_a_half_applied_zone_converges_on_replan():
     assert plan["create"] == [], "the apex target already exists"
     assert len(plan["update"]) == 1 and plan["update"][0]["type"] == "CNAME"
     assert sorted(r["content"] for r in plan["delete"]) == ["75.2.60.5", "99.83.231.61"]
+
+
+def test_post_apply_verification_requires_the_exact_protected_snapshot(monkeypatch):
+    before = live_zone()
+    after = [
+        _record("new-apex", "A", "confenge.com.br", "159.195.18.88"),
+        _record("www", "CNAME", "www.confenge.com.br", "confenge.com.br"),
+        *[r for r in before if r["id"] not in {"apex-a1", "apex-a2", "www"}],
+    ]
+    monkeypatch.setitem(_NAMESPACE, "records", lambda token, zone: after)
+    result = verify("sanitized-token", "zone", "netcup", protected_snapshot(before))
+    assert result["ok"] is True
+    assert result["protected_unchanged"] is True
+
+
+def test_post_apply_verification_fails_if_mail_or_a_sibling_changes(monkeypatch):
+    before = live_zone()
+    after = [
+        _record("new-apex", "A", "confenge.com.br", "159.195.18.88"),
+        _record("www", "CNAME", "www.confenge.com.br", "confenge.com.br"),
+        *[
+            r for r in before
+            if r["id"] not in {
+                "apex-a1", "apex-a2", "www", "mx1", "dkim-b", "sendspf", "api"
+            }
+        ],
+    ]
+    monkeypatch.setitem(_NAMESPACE, "records", lambda token, zone: after)
+    result = verify("sanitized-token", "zone", "netcup", protected_snapshot(before))
+    assert result["ok"] is False
+    assert result["protected_unchanged"] is False
+    assert "protected DNS changed" in result["problems"][0]
