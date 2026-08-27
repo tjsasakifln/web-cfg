@@ -1373,6 +1373,95 @@ _reset();
   }
 }
 
+// Turnstile is mandatory in the production profile, which locked out the only
+// non-fabricating way to exercise inbound plumbing in production. A synthetic
+// probe proves itself with a server-side secret; Turnstile proves a human
+// browser solved a challenge, which a probe is not and cannot be.
+{
+  const previous = {
+    secret: process.env.TURNSTILE_SECRET_KEY,
+    require: process.env.LEAD_REQUIRE_TURNSTILE,
+    probe: process.env.LEAD_PROBE_SECRET,
+    origin: process.env.LEAD_REQUIRE_ORIGIN,
+  };
+  const probeSecret = "probe-secret-with-at-least-32-characters";
+  try {
+    process.env.TURNSTILE_SECRET_KEY = "turnstile-secret-fixture-value";
+    process.env.LEAD_REQUIRE_TURNSTILE = "1";
+    process.env.LEAD_REQUIRE_ORIGIN = "1";
+    process.env.LEAD_PROBE_SECRET = probeSecret;
+    const reloaded = loadHandler();
+    reloaded.setStoreForTests(mem);
+    _reset();
+
+    const payload = {
+      nome: "SYNTHETIC-PROBE",
+      email: "probe-turnstile-exemption@example.com",
+      estagio: "synthetic probe — discard",
+      jornada: "operacao",
+      consentimento: "true",
+      origem: "/synthetic-probe",
+      utm_source: "synthetic",
+      utm_medium: "probe",
+      utm_campaign: "turnstile-exemption",
+    };
+
+    // A browser post with no Turnstile token is still refused.
+    const noToken = await reloaded.handler(
+      event({ ...payload }, "POST", { ip: "203.0.113.90" }),
+    );
+    if (noToken.statusCode !== 403 || JSON.parse(noToken.body).error !== "anti_abuse") {
+      fail("turnstile_still_required_without_probe", noToken);
+    }
+    pass("turnstile_still_required_without_probe");
+
+    // A wrong probe secret earns no exemption.
+    _reset();
+    const wrongSecret = await reloaded.handler(
+      event({ ...payload }, "POST", {
+        ip: "203.0.113.91",
+        "x-confenge-probe": "wrong-secret-with-at-least-32-chars-here",
+      }),
+    );
+    if (wrongSecret.statusCode !== 403 || JSON.parse(wrongSecret.body).error !== "anti_abuse") {
+      fail("wrong_probe_secret_earns_no_exemption", wrongSecret);
+    }
+    pass("wrong_probe_secret_earns_no_exemption");
+
+    // The authenticated probe passes and persists, with no Turnstile token and
+    // no browser Origin at all.
+    _reset();
+    const probed = await reloaded.handler({
+      httpMethod: "POST",
+      headers: {
+        "content-type": "application/json",
+        "user-agent": "confenge-synthetic-probe/1.0",
+        "x-forwarded-for": "203.0.113.92",
+        "x-confenge-probe": probeSecret,
+      },
+      body: JSON.stringify({ ...payload }),
+    });
+    // 201 on first persist, 200 on an idempotent replay; both prove the probe
+    // reached the store instead of being refused at the anti-abuse gate.
+    if (![200, 201].includes(probed.statusCode)) fail("authenticated_probe_persists", probed);
+    const probedBody = JSON.parse(probed.body);
+    if (probedBody.ok !== true || !probedBody.lead_id) fail("authenticated_probe_body", probedBody);
+    if (probedBody.status !== "persisted") fail("authenticated_probe_not_persisted", probedBody);
+    pass("authenticated_probe_skips_turnstile_and_persists", { lead_id: probedBody.lead_id });
+  } finally {
+    for (const [key, value] of [
+      ["TURNSTILE_SECRET_KEY", previous.secret],
+      ["LEAD_REQUIRE_TURNSTILE", previous.require],
+      ["LEAD_PROBE_SECRET", previous.probe],
+      ["LEAD_REQUIRE_ORIGIN", previous.origin],
+    ]) {
+      if (value == null) delete process.env[key];
+      else process.env[key] = value;
+    }
+    loadHandler();
+  }
+}
+
 console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
 // cleanup store dir
 try {

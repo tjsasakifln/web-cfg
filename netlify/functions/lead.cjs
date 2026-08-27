@@ -136,7 +136,18 @@ exports.handler = async (event) => {
     };
   }
 
-  const turnstile = await verifyTurnstile(lead.turnstile_token, ip);
+  // A synthetic probe proves itself with LEAD_PROBE_SECRET: a 32+ character
+  // server-side secret, compared in constant time, that no browser ever holds.
+  // Turnstile proves the opposite thing — that a human browser solved a
+  // challenge — which a probe by definition is not and cannot be. Requiring it
+  // of the probe made the only non-fabricating way to exercise inbound
+  // plumbing in production impossible, so first-touch persistence and the
+  // Warmbly handoff could no longer be verified without inventing a real lead.
+  // Probe records are already tagged SYNTHETIC-PROBE and never reach commercial
+  // totals.
+  const turnstile = originCheck.probe
+    ? { ok: true, skipped: true, reason: "synthetic_probe" }
+    : await verifyTurnstile(lead.turnstile_token, ip);
   if (!turnstile.ok) {
     safeLog("warn", "turnstile_rejected", { error: turnstile.error });
     return {
