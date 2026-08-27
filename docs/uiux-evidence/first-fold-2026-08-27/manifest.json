@@ -1,0 +1,19 @@
+{
+  "captured_at": "2026-08-27T23:16:01.351Z",
+  "commit_sha": "28dcf20d3c04589b4cb46510973b2586dad51c8e",
+  "base_url": "http://127.0.0.1:8792",
+  "routes": [
+    "/servicos-obras-publicas/",
+    "/problemas-que-resolvemos/"
+  ],
+  "viewports": [
+    "1366x768",
+    "390x844"
+  ],
+  "files": [
+    "servicos-obras-publicas-1366x768.png",
+    "servicos-obras-publicas-390x844.png",
+    "problemas-que-resolvemos-1366x768.png",
+    "problemas-que-resolvemos-390x844.png"
+  ]
+}

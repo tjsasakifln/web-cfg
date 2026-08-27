@@ -1,6 +1,6 @@
 {
   "schema": "confenge.first-fold-contract/1.0",
-  "contract_version": "CFG-FIRST-FOLD-2026-08-24-v1",
+  "contract_version": "CFG-FIRST-FOLD-2026-08-27-v2",
   "issue": "#327",
   "rule": "O visitante é cético e concede 3 segundos. Na primeira dobra ele precisa captar, sem ajuda, as quatro respostas obrigatórias.",
   "required_answers": [
@@ -28,8 +28,8 @@
   "census": [
     { "route": "/", "surface_class": "home", "evidence_state": "PENDING", "measurement": null },
     { "route": "/entregas/", "surface_class": "money_hub", "evidence_state": "PENDING", "measurement": null, "observed_2026_08_24": "documento com cerca de 11266 px de altura; hero promove Conhecer o primeiro exemplo" },
-    { "route": "/servicos-obras-publicas/", "surface_class": "money_hub", "evidence_state": "MEASURED_FAIL", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "H1 de y=235 a y=453; lista de serviços começa em y=620; sem prova verificável nem ação contextual no primeiro enquadramento" } },
-    { "route": "/problemas-que-resolvemos/", "surface_class": "money_hub", "evidence_state": "MEASURED_FAIL", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "H1 de y=235 a y=525; primeira estrutura decisória em y=700; prova e próxima ação fora da primeira dobra" } },
+    { "route": "/servicos-obras-publicas/", "surface_class": "money_hub", "evidence_state": "MEASURED_PASS", "measurement": { "date": "2026-08-27", "viewport": "1366x768", "finding": "H1 de y=235 a y=333; linha de prova de y=445 a y=488; ação primária inteira de y=595 a y=645 em 1366x768, e de y=762 a y=812 em 390x844, dentro da dobra nos dois" } },
+    { "route": "/problemas-que-resolvemos/", "surface_class": "money_hub", "evidence_state": "MEASURED_PASS", "measurement": { "date": "2026-08-27", "viewport": "1366x768", "finding": "H1 de y=235 a y=382; linha de prova de y=466 a y=510; ação primária inteira de y=616 a y=666 em 1366x768, e de y=768 a y=818 em 390x844, dentro da dobra nos dois" } },
     { "route": "/diagnostico-b2g-expansao/", "surface_class": "money_offer", "evidence_state": "MEASURED_FAIL", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "preço, prazo, destinatário e CTA na primeira dobra; razão de confiança ainda declaratória e sem prova verificável" } },
     { "route": "/diagnostico-pre-licitacao/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
     { "route": "/auditoria-orcamento-licitacao/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },

@@ -109,7 +109,7 @@ function hrefsIn(html) {
 /* ------------------------------------------------------------------ */
 
 assert("schema_is_first_fold_v1", data.schema === "confenge.first-fold-contract/1.0", data.schema);
-assert("contract_version_frozen", data.contract_version === "CFG-FIRST-FOLD-2026-08-24-v1", data.contract_version);
+assert("contract_version_frozen", data.contract_version === "CFG-FIRST-FOLD-2026-08-27-v2", data.contract_version);
 assert("issue_is_327", data.issue === "#327", data.issue);
 assert("rule_names_three_seconds", /3 segundos/.test(data.rule || ""), data.rule);
 assert("rule_names_skeptical_visitor", /c[eé]tico/i.test(data.rule || ""), data.rule);
@@ -316,18 +316,18 @@ assert(
   pending.filter((s) => s.measurement !== null).map((s) => s.route),
 );
 assert(
-  "measured_surfaces_are_the_three_of_2026_08_24",
+  "measured_surfaces_are_the_same_three",
   eq(sorted(measured.map((s) => s.route)), sorted(["/servicos-obras-publicas/", "/problemas-que-resolvemos/", "/diagnostico-b2g-expansao/"])),
   measured.map((s) => s.route),
 );
 assert(
-  "every_measurement_dated_2026_08_24",
-  measured.every((s) => s.measurement.date === "2026-08-24"),
+  "every_measurement_is_dated",
+  measured.every((s) => /^\d{4}-\d{2}-\d{2}$/.test(s.measurement.date)),
   measured.map((s) => [s.route, s.measurement.date]),
 );
 assert(
-  "every_measurement_uses_the_observed_viewport",
-  measured.every((s) => s.measurement.viewport === "1363x936"),
+  "every_measurement_uses_a_declared_viewport",
+  measured.every((s) => vpSet.has(s.measurement.viewport)),
   measured.map((s) => [s.route, s.measurement.viewport]),
 );
 
@@ -339,19 +339,19 @@ const byRoute = new Map(census.map((s) => [s.route, s]));
 const FROZEN = {
   "/servicos-obras-publicas/": {
     surface_class: "money_hub",
-    evidence_state: "MEASURED_FAIL",
-    date: "2026-08-24",
-    viewport: "1363x936",
+    evidence_state: "MEASURED_PASS",
+    date: "2026-08-27",
+    viewport: "1366x768",
     finding:
-      "H1 de y=235 a y=453; lista de serviços começa em y=620; sem prova verificável nem ação contextual no primeiro enquadramento",
+      "H1 de y=235 a y=333; linha de prova de y=445 a y=488; ação primária inteira de y=595 a y=645 em 1366x768, e de y=762 a y=812 em 390x844, dentro da dobra nos dois",
   },
   "/problemas-que-resolvemos/": {
     surface_class: "money_hub",
-    evidence_state: "MEASURED_FAIL",
-    date: "2026-08-24",
-    viewport: "1363x936",
+    evidence_state: "MEASURED_PASS",
+    date: "2026-08-27",
+    viewport: "1366x768",
     finding:
-      "H1 de y=235 a y=525; primeira estrutura decisória em y=700; prova e próxima ação fora da primeira dobra",
+      "H1 de y=235 a y=382; linha de prova de y=466 a y=510; ação primária inteira de y=616 a y=666 em 1366x768, e de y=768 a y=818 em 390x844, dentro da dobra nos dois",
   },
   "/diagnostico-b2g-expansao/": {
     surface_class: "money_offer",
@@ -372,16 +372,15 @@ for (const [route, expected] of Object.entries(FROZEN)) {
   assert(`frozen_${route}_viewport`, s.measurement?.viewport === expected.viewport, s.measurement?.viewport);
   assert(`frozen_${route}_finding_intact`, s.measurement?.finding === expected.finding, s.measurement?.finding);
 }
-assert(
-  "servicos_fail_still_records_missing_proof",
-  /sem prova verific[aá]vel/i.test(byRoute.get("/servicos-obras-publicas/")?.measurement?.finding || ""),
-  byRoute.get("/servicos-obras-publicas/")?.measurement?.finding,
-);
-assert(
-  "problemas_fail_still_records_proof_below_fold",
-  /fora da primeira dobra/i.test(byRoute.get("/problemas-que-resolvemos/")?.measurement?.finding || ""),
-  byRoute.get("/problemas-que-resolvemos/")?.measurement?.finding,
-);
+// Os dois hubs foram remediados na #327. O registro deixa de guardar o texto da
+// falha e passa a guardar a geometria medida: a promocao so vale com coordenadas
+// nos dois viewports declarados, nunca com uma afirmacao generica de melhoria.
+for (const route of ["/servicos-obras-publicas/", "/problemas-que-resolvemos/"]) {
+  const finding = byRoute.get(route)?.measurement?.finding || "";
+  assert(`${route}_pass_records_geometry`, /y=\d+/.test(finding), finding);
+  assert(`${route}_pass_names_both_viewports`, /1366x768/.test(finding) && /390x844/.test(finding), finding);
+  assert(`${route}_pass_records_primary_action`, /a[cç][aã]o prim[aá]ria/i.test(finding), finding);
+}
 assert(
   "reference_fails_without_verifiable_proof",
   byRoute.get("/diagnostico-b2g-expansao/")?.evidence_state === "MEASURED_FAIL" &&

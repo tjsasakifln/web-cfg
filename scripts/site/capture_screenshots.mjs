@@ -3,7 +3,8 @@
  * Usage: node scripts/site/capture_screenshots.mjs [outDir] [baseUrl]
  */
 import puppeteer from "puppeteer-core";
-import { mkdirSync } from "fs";
+import { mkdirSync, writeFileSync } from "fs";
+import { execFileSync } from "child_process";
 import { join, resolve } from "path";
 import { createServer } from "http";
 import { readFileSync, existsSync, statSync } from "fs";
@@ -15,7 +16,7 @@ const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const OUT = resolve(process.argv[2] || join(ROOT, "docs/uiux-evidence/after"));
 const PORT = 8792;
 const CHROME = resolveChromePath();
-const VIEWPORTS = [
+const DEFAULT_VIEWPORTS = [
   [320, 568],
   [360, 800],
   [390, 844],
@@ -24,6 +25,20 @@ const VIEWPORTS = [
   [1440, 1000],
   [1920, 1080],
 ];
+// CAPTURE_VIEWPORTS="1366x768,390x844" narrows the sweep to the viewports a
+// contract actually declares. The first-fold contract (#327) measures two, and
+// the default sweep does not include its 1366x768 laptop.
+const VIEWPORTS = String(process.env.CAPTURE_VIEWPORTS || "")
+  .split(",")
+  .map((pair) => pair.trim())
+  .filter(Boolean)
+  .map((pair) => pair.split("x").map((n) => Number.parseInt(n, 10)));
+if (!VIEWPORTS.length) VIEWPORTS.push(...DEFAULT_VIEWPORTS);
+for (const [w, h] of VIEWPORTS) {
+  if (!Number.isInteger(w) || !Number.isInteger(h) || w < 1 || h < 1) {
+    throw new Error(`CAPTURE_VIEWPORTS holds an unusable pair: ${w}x${h}`);
+  }
+}
 const DEFAULT_PATHS = ["/", "/diretoria-b2g/", "/diagnostico-b2g-360/", "/bid-room-licitacoes-obras/", "/defesa-margem-contratos-publicos/", "/conteudos/", "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/", "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/"];
 const PATHS = String(process.env.CAPTURE_PATHS || "")
   .split(",")
@@ -77,6 +92,7 @@ const browser = await puppeteer.launch({
   args: ["--no-sandbox", "--disable-gpu"],
 });
 const page = await browser.newPage();
+const written = [];
 for (const path of PATHS) {
   const slug = path === "/" ? "home" : path.replace(/\//g, "").slice(0, 40);
   for (const [w, h] of VIEWPORTS) {
@@ -89,6 +105,7 @@ for (const path of PATHS) {
     });
     const file = join(OUT, `${slug}-${w}x${h}.png`);
     await page.screenshot({ path: file, fullPage: false });
+    written.push(`${slug}-${w}x${h}.png`);
     console.log("wrote", file);
     for (const [index, selector] of (COMPONENTS[path] || []).entries()) {
       // Some shared primitives intentionally live inside a disclosure. Open
@@ -125,4 +142,23 @@ for (const path of PATHS) {
 }
 await browser.close();
 if (server) server.close();
+
+// Evidence is only evidence if it says which commit and which day produced it.
+const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).trim();
+writeFileSync(
+  join(OUT, "manifest.json"),
+  `${JSON.stringify(
+    {
+      captured_at: new Date().toISOString(),
+      commit_sha: commit,
+      base_url: BASE,
+      routes: PATHS,
+      viewports: VIEWPORTS.map(([w, h]) => `${w}x${h}`),
+      files: written,
+    },
+    null,
+    2,
+  )}\n`,
+  "utf8",
+);
 console.log("done", OUT);
