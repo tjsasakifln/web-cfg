@@ -146,6 +146,8 @@ test("complete production profile binds privately and reports ready", async (t) 
     LEAD_REQUIRE_TURNSTILE: "1",
     TURNSTILE_SECRET_KEY: "turnstile-production-test",
     IP_HASH_SALT: "p".repeat(40),
+    CONFENGE_INBOUND_WEBHOOK_URL: "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound",
+    CONFENGE_INBOUND_WEBHOOK_SECRET: "i".repeat(40),
     OPS_TOKEN: "ops-production-test-token",
     NURTURE_TOKEN_SECRET: "n".repeat(40),
     RESEND_API_KEY: "re_production_test",
