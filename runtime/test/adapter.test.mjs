@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { loadRuntimeConfig } from "../lib/config.mjs";
+import { evaluateReadiness, loadRuntimeConfig } from "../lib/config.mjs";
 import { createFunctionRegistry } from "../lib/functions.mjs";
 import { createPortableRuntime } from "../lib/server.mjs";
 import {
@@ -152,6 +152,27 @@ test("Netcup production adapter normalizes CONTEXT before loading handlers", () 
   });
   const config = loadRuntimeConfig({ env, nodeVersion: "v22.23.2" });
   assert.equal(config.env.CONTEXT, "production");
+});
+
+test("production readiness fails closed on an invalid inbound handoff secret", () => {
+  const env = isolatedTestEnv({
+    NODE_ENV: "production",
+    RUNTIME_PROFILE: "netcup-production",
+    RUNTIME_PORT: "18100",
+    CONFENGE_INBOUND_WEBHOOK_URL: "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound",
+    CONFENGE_INBOUND_WEBHOOK_SECRET: "too-short",
+  });
+  const config = loadRuntimeConfig({ env, nodeVersion: "v22.23.2" });
+  const readiness = evaluateReadiness(config, {
+    definitions: [{}],
+    loadedCount: 1,
+    errors: [],
+  });
+  assert.deepEqual(
+    readiness.checks.find((item) => item.name === "inbound_handoff_config"),
+    { name: "inbound_handoff_config", ok: false, code: "secret_too_short" },
+  );
+  assert.equal(readiness.ok, false);
 });
 
 test("runtime logs never echo PII embedded in an unmatched URL path", async (t) => {

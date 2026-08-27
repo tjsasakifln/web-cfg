@@ -25,6 +25,7 @@ delete process.env.NTFY_URL;
 
 const { FileStore } = require("../../netlify/functions/lib/lead-store.cjs");
 const intake = require("../../netlify/functions/market-answer-intake.cjs");
+const previewEligibility = require("../../netlify/functions/offer-eligibility.cjs");
 const { _reset } = require("../../netlify/functions/lib/lead-rate-limit.cjs");
 const { safeLog, redactSensitiveText } = require("../../netlify/functions/lib/lead-core.cjs");
 const store = new FileStore(root);
@@ -75,6 +76,21 @@ assert.equal(persisted.record_kind, "synthetic");
 assert.equal(persisted.synthetic_probe_authenticated, true);
 assert.equal(persisted.next_action, "exclude_from_commercial");
 
+const beforePreview = (await store.list()).length;
+const preview = await previewEligibility.handler({
+  httpMethod: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({
+    cnpj: "12.345.678/0001-90",
+    representante: "Must Not Persist",
+    offer_id: "preview-offer",
+    accept_terms: true,
+  }),
+});
+assert.equal(preview.statusCode, 403);
+assert.equal(JSON.parse(preview.body).error, "preview_intake_disabled");
+assert.equal((await store.list()).length, beforePreview);
+
 const originalLog = console.log;
 const originalError = console.error;
 const lines = [];
@@ -105,5 +121,6 @@ process.stdout.write(JSON.stringify({
   authenticated_probe_http: correct.statusCode,
   record_kind: persisted.record_kind,
   commercial_next_action: persisted.next_action,
+  production_preview_intake_http: preview.statusCode,
   pii_log_redaction: "PASS",
 }) + "\n");

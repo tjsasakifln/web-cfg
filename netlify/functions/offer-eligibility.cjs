@@ -4,9 +4,15 @@
 const { loadFlags } = require("../../scripts/offers/flags.cjs");
 const { submitEligibility, acceptOfferTerms } = require("../../scripts/offers/journey.cjs");
 const { emptyInventory } = require("../../scripts/offers/capacity.cjs");
-const { createStore } = require("./lib/lead-store.cjs");
+const { createStore, isProductionProfile } = require("./lib/lead-store.cjs");
 
 exports.handler = async (event) => {
+  // This endpoint backs a flag-off preview that has no production anti-abuse
+  // controls. Keep direct requests fail-closed until the public form can ship
+  // the same origin, consent and Turnstile contract as the canonical intake.
+  if (isProductionProfile(process.env)) {
+    return { statusCode: 403, body: JSON.stringify({ ok: false, error: "preview_intake_disabled" }) };
+  }
   const flags = loadFlags(process.env);
   if (flags.production_checkout_enabled || flags.real_money_mutation_enabled) {
     return { statusCode: 403, body: JSON.stringify({ ok: false, error: "money_path_disabled" }) };

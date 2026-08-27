@@ -204,6 +204,23 @@ function durableStorageReadiness(env, { writeProbe }) {
   }
 }
 
+function inboundHandoffReadiness(env) {
+  try {
+    const require = createRequire(import.meta.url);
+    const module = require(resolve(REPO_ROOT, "netlify/functions/lib/inbound-handoff.cjs"));
+    if (typeof module.resolveInboundConfig !== "function") {
+      return { ok: false, code: "inbound_handoff_config_check_missing" };
+    }
+    const result = module.resolveInboundConfig(env);
+    return {
+      ok: result.ok === true && result.blocked !== true && result.skip !== true,
+      code: result.reason || "inbound_handoff_config_invalid",
+    };
+  } catch {
+    return { ok: false, code: "inbound_handoff_config_check_unavailable" };
+  }
+}
+
 export function evaluateReadiness(config, registry) {
   const checks = [];
   for (const code of config.errors) checks.push(check("runtime_config", false, code));
@@ -245,6 +262,8 @@ export function evaluateReadiness(config, registry) {
   if (config.production) {
     const policy = productionStorePolicy(config.env);
     checks.push(check("lead_store_policy", policy.ok === true, policy.code || "lead_store_policy_invalid"));
+    const inbound = inboundHandoffReadiness(config.env);
+    checks.push(check("inbound_handoff_config", inbound.ok === true, inbound.code));
     checks.push(check("ops_auth", String(config.env.OPS_TOKEN || config.env.REVOPS_TOKEN || "").length >= 16, "ops_token_required"));
     checks.push(check("nurture_token", String(config.env.NURTURE_TOKEN_SECRET || "").length >= 32, "nurture_token_secret_required"));
     checks.push(check("nurture_delivery", String(config.env.RESEND_API_KEY || "").length >= 8, "resend_api_key_required"));
