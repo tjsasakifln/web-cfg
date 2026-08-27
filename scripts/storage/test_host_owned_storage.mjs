@@ -102,6 +102,34 @@ try {
   assert((fs.statSync(recordFile).mode & 0o777) === FILE_MODE, "record mode is not 0600");
   const restarted = await execFileAsync(process.execPath, [fileURLToPath(import.meta.url), "--worker-read", storeRoot, lead.lead_id]);
   assert(restarted.stdout.trim() === "found", "restart did not retain data");
+  // A read-only audit must not acquire/create the writer lock. This makes the
+  // production store inspectable without changing its evidence timestamps.
+  const writerLock = path.join(store.backend.layoutDir, ".writer-lock");
+  const originalOpenSync = fs.openSync;
+  let writerLockCreateAttempts = 0;
+  fs.openSync = function auditedOpenSync(target, flags, ...args) {
+    if (target === writerLock && (Number(flags) & fs.constants.O_CREAT) !== 0) {
+      writerLockCreateAttempts += 1;
+      const err = new Error("read_only_audit_attempted_writer_lock");
+      err.code = "EROFS";
+      throw err;
+    }
+    return originalOpenSync.call(fs, target, flags, ...args);
+  };
+  let readOnlyReady;
+  try {
+    readOnlyReady = storageReadiness({
+      CONFENGE_STORAGE_BACKEND: "filesystem",
+      CONFENGE_STORAGE_DIR: storeRoot,
+    }, { writeProbe: false });
+  } finally {
+    fs.openSync = originalOpenSync;
+  }
+  assert(readOnlyReady.ok, "read-only readiness failed", readOnlyReady);
+  assert(writerLockCreateAttempts === 0 && !fs.existsSync(writerLock), "read-only readiness mutated the writer lock", {
+    writerLockCreateAttempts,
+    writerLockExists: fs.existsSync(writerLock),
+  });
   assert(await store.delete(lead.lead_id), "delete failed");
   assert(await store.get(lead.lead_id) === null && await store.getByIdempotency(lead.idempotency_key) === null, "delete left record or index");
 
