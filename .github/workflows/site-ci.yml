@@ -119,6 +119,13 @@ jobs:
           npm run test:tools
           npm run test:nurture
       - name: Build public site
+        env:
+          # The release artifact must carry the production identity it will be
+          # served under: build-info records this as `environment`, and
+          # configure_turnstile_site_key refuses to publish a production
+          # artifact whose form has no widget.
+          CONTEXT: ${{ inputs.export_public_artifact && 'production' || '' }}
+          TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
         run: npm run build:site
       - name: Generated Netcup nginx contract E2E
         run: npm run host-contract:nginx-test
@@ -194,6 +201,26 @@ jobs:
           done
           node scripts/site/playwright_local_checklist.mjs
           kill "$(cat /tmp/site-http.pid)" || true
+      - name: Release artifact carries a usable anti-abuse widget
+        if: inputs.export_public_artifact
+        run: |
+          set -euo pipefail
+          # The production lead endpoint refuses every submission when Turnstile
+          # is unconfigured, so an artifact whose form has no site key is a page
+          # that cannot convert. This was silent: the key existed as a repository
+          # variable and simply was not wired into the build, so the release
+          # shipped `data-turnstile-sitekey=""` and `environment: local`.
+          if grep -q 'data-turnstile-sitekey=""' _site/index.html; then
+            echo "RELEASE_BLOCKED: the exported artifact has an empty Turnstile site key" >&2
+            exit 1
+          fi
+          environment=$(python3 -c "import json;print(json.load(open('_site/.well-known/build-info.json'))['environment'])")
+          if [ "$environment" != "production" ]; then
+            echo "RELEASE_BLOCKED: exported artifact identity is '$environment', expected production" >&2
+            exit 1
+          fi
+          echo "RELEASE_ARTIFACT_IDENTITY_OK environment=$environment turnstile=configured"
+
       - name: Export exact gated public artifact
         if: inputs.export_public_artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
