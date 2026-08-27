@@ -1,0 +1,309 @@
+#!/usr/bin/env python3
+"""Move only the public web records of confenge.com.br between hosts.
+
+DNS is the one step of this cutover that is globally visible and not
+transactional, so it is scripted rather than typed: the blast radius is declared
+in code, the before-state is captured as the rollback plan, and everything the
+zone holds that is not the public web surface is refused rather than trusted.
+
+Explicitly out of scope, and asserted as such at runtime: api, ops and auth.ops
+(other services on the same host), MX, SPF, DKIM, DMARC and every other mail
+record. A cutover that quietly rewrites a DKIM record is worse than one that
+does not happen.
+
+  cutover-dns inventory
+  cutover-dns plan    --to netcup|netlify
+  cutover-dns apply   --to netcup|netlify --confirm
+  cutover-dns verify  --to netcup|netlify
+
+The API token is read from CF_API_TOKEN or --token-file; it is never printed,
+logged or written to the evidence file.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+import urllib.error
+import urllib.request
+from pathlib import Path
+from typing import Any
+
+API = "https://api.cloudflare.com/client/v4"
+ZONE_NAME = "confenge.com.br"
+
+# The complete public web surface. Nothing outside this set is ever written.
+PUBLIC_WEB_NAMES = ("confenge.com.br", "www.confenge.com.br")
+
+# Names that share this zone and must survive the cutover untouched. Listed so a
+# mistake is a loud assertion instead of a silent overwrite.
+PROTECTED_NAMES = (
+    "api.confenge.com.br",
+    "ops.confenge.com.br",
+    "auth.ops.confenge.com.br",
+    "send.confenge.com.br",
+    "autoconfig.confenge.com.br",
+    "autodiscover.confenge.com.br",
+)
+PROTECTED_TYPES = ("MX", "TXT", "SRV", "CAA", "NS", "SOA")
+
+# Filled from the pre-change inventory so verification asserts the exact set of
+# protected names this zone published before the cutover, not a wish list.
+EXPECTED_PROTECTED: set[str] = set()
+
+TARGETS: dict[str, dict[str, Any]] = {
+    "netcup": {
+        "confenge.com.br": [{"type": "A", "content": "159.195.18.88"}],
+        # www keeps a single hop to the apex; the origin serves the 301 itself.
+        "www.confenge.com.br": [{"type": "CNAME", "content": "confenge.com.br"}],
+    },
+    "netlify": {
+        "confenge.com.br": [
+            {"type": "A", "content": "75.2.60.5"},
+            {"type": "A", "content": "99.83.231.61"},
+        ],
+        "www.confenge.com.br": [{"type": "CNAME", "content": "confenge.netlify.app"}],
+    },
+}
+
+# 300s is Cloudflare's minimum explicit TTL. It bounds how long a rollback takes
+# to reach a resolver that already cached the new answer.
+CUTOVER_TTL = 300
+
+
+class CutoverError(RuntimeError):
+    """Refused before any record was written."""
+
+
+def _token(args: argparse.Namespace) -> str:
+    if args.token_file:
+        token = Path(args.token_file).read_text(encoding="utf-8").strip()
+    else:
+        token = os.environ.get("CF_API_TOKEN", "").strip()
+    if not token:
+        raise CutoverError("CF_API_TOKEN or --token-file is required")
+    return token
+
+
+def _call(token: str, method: str, path: str, payload: dict | None = None) -> dict:
+    request = urllib.request.Request(
+        f"{API}{path}",
+        method=method,
+        data=json.dumps(payload).encode() if payload is not None else None,
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            body = json.load(response)
+    except urllib.error.HTTPError as exc:
+        raise CutoverError(f"{method} {path} failed: HTTP {exc.code} {exc.read()[:300].decode()}") from exc
+    if not body.get("success"):
+        raise CutoverError(f"{method} {path} refused: {body.get('errors')}")
+    return body
+
+
+def zone_id(token: str) -> str:
+    result = _call(token, "GET", f"/zones?name={ZONE_NAME}")["result"]
+    if len(result) != 1:
+        raise CutoverError(f"expected exactly one zone named {ZONE_NAME}, found {len(result)}")
+    return result[0]["id"]
+
+
+def records(token: str, zone: str) -> list[dict]:
+    out: list[dict] = []
+    page = 1
+    while True:
+        body = _call(token, "GET", f"/zones/{zone}/dns_records?per_page=100&page={page}")
+        out.extend(body["result"])
+        info = body.get("result_info") or {}
+        if page >= int(info.get("total_pages") or 1):
+            return out
+        page += 1
+
+
+def _slim(record: dict) -> dict:
+    return {
+        "id": record["id"],
+        "type": record["type"],
+        "name": record["name"],
+        "content": record["content"],
+        "ttl": record["ttl"],
+        "proxied": record.get("proxied", False),
+    }
+
+
+def build_plan(current: list[dict], destination: str) -> dict[str, Any]:
+    if destination not in TARGETS:
+        raise CutoverError(f"unknown destination {destination!r}")
+    target = TARGETS[destination]
+    # A target naming anything outside the public web surface must fail, not be
+    # quietly skipped: silently ignoring a declared record would leave the
+    # operator believing a name was moved when it never was.
+    if set(target) != set(PUBLIC_WEB_NAMES):
+        extra = sorted(set(target) - set(PUBLIC_WEB_NAMES))
+        missing = sorted(set(PUBLIC_WEB_NAMES) - set(target))
+        raise CutoverError(
+            f"refusing: destination {destination!r} is not the public web surface "
+            f"(unexpected={extra} missing={missing})"
+        )
+
+    protected = [_slim(r) for r in current if r["name"] in PROTECTED_NAMES or r["type"] in PROTECTED_TYPES]
+
+    deletes: list[dict] = []
+    creates: list[dict] = []
+    for name in PUBLIC_WEB_NAMES:
+        existing = [r for r in current if r["name"] == name and r["type"] in ("A", "AAAA", "CNAME")]
+        wanted = target[name]
+        # A record is kept only when type and content already match exactly;
+        # everything else is replaced so the end state is the declared one.
+        keep = []
+        for want in wanted:
+            match = next(
+                (r for r in existing if r["type"] == want["type"] and r["content"].rstrip(".") == want["content"]),
+                None,
+            )
+            if match:
+                keep.append(match["id"])
+            else:
+                creates.append({"name": name, **want})
+        deletes.extend(_slim(r) for r in existing if r["id"] not in keep)
+
+    # Assert the blast radius on the computed plan, not on the inventory. The
+    # apex legitimately carries MX and SPF alongside its A records; what must be
+    # impossible is a plan that writes them. Checking the inventory instead
+    # refused every cutover for the mail records it was meant to protect.
+    for row in [*deletes, *creates]:
+        if row["name"] not in PUBLIC_WEB_NAMES:
+            raise CutoverError(f"refusing: plan touches {row['name']}, which is not the public web surface")
+        if row["type"] not in ("A", "AAAA", "CNAME"):
+            raise CutoverError(f"refusing: plan touches a {row['type']} record on {row['name']}")
+
+    return {
+        "schema": "confenge.dns_cutover_plan/v1",
+        "zone": ZONE_NAME,
+        "destination": destination,
+        "ttl": CUTOVER_TTL,
+        "delete": deletes,
+        "create": creates,
+        "rollback": {
+            "restore": [_slim(r) for r in current if r["name"] in PUBLIC_WEB_NAMES and r["type"] in ("A", "AAAA", "CNAME")],
+            "command": f"cutover-dns apply --to {'netlify' if destination == 'netcup' else 'netcup'} --confirm",
+        },
+        "untouched": sorted({r["name"] + "/" + r["type"] for r in protected}),
+    }
+
+
+def apply_plan(token: str, zone: str, plan: dict) -> dict:
+    applied: dict[str, list] = {"created": [], "deleted": []}
+    # Create before delete: an overlapping moment is far safer than a gap with
+    # no answer at all for the apex.
+    for want in plan["create"]:
+        body = _call(
+            token,
+            "POST",
+            f"/zones/{zone}/dns_records",
+            {
+                "type": want["type"],
+                "name": want["name"],
+                "content": want["content"],
+                "ttl": plan["ttl"],
+                # DNS-only: this origin terminates its own TLS with Let's Encrypt.
+                "proxied": False,
+            },
+        )
+        applied["created"].append(_slim(body["result"]))
+    for old in plan["delete"]:
+        _call(token, "DELETE", f"/zones/{zone}/dns_records/{old['id']}")
+        applied["deleted"].append(old)
+    return applied
+
+
+def verify(token: str, zone: str, destination: str, expected_protected: set[str] | None = None) -> dict:
+    target = TARGETS[destination]
+    current = records(token, zone)
+    global EXPECTED_PROTECTED
+    if expected_protected is not None:
+        EXPECTED_PROTECTED = expected_protected
+    problems: list[str] = []
+    for name in PUBLIC_WEB_NAMES:
+        have = sorted(
+            (r["type"], r["content"].rstrip("."))
+            for r in current
+            if r["name"] == name and r["type"] in ("A", "AAAA", "CNAME")
+        )
+        want = sorted((w["type"], w["content"]) for w in target[name])
+        if have != want:
+            problems.append(f"{name}: have={have} want={want}")
+    present = {r["name"] for r in current}
+    for name in PROTECTED_NAMES:
+        # Only names this zone actually publishes are asserted; the list is a
+        # superset so a future service can be added without editing two places.
+        if name in EXPECTED_PROTECTED and name not in present:
+            problems.append(f"{name}: protected record disappeared")
+    return {
+        "schema": "confenge.dns_cutover_verification/v1",
+        "destination": destination,
+        "ok": not problems,
+        "problems": problems,
+    }
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("command", choices=("inventory", "plan", "apply", "verify"))
+    parser.add_argument("--to", choices=tuple(TARGETS), help="destination host")
+    parser.add_argument("--confirm", action="store_true", help="required by apply")
+    parser.add_argument("--token-file")
+    parser.add_argument("--evidence", type=Path, help="append the result as one NDJSON line")
+    args = parser.parse_args(argv)
+
+    try:
+        token = _token(args)
+        zone = zone_id(token)
+        if args.command == "inventory":
+            out = {
+                "schema": "confenge.dns_inventory/v1",
+                "zone": ZONE_NAME,
+                "records": sorted((_slim(r) for r in records(token, zone)), key=lambda r: (r["type"], r["name"])),
+            }
+        elif args.command in ("plan", "apply"):
+            if not args.to:
+                raise CutoverError("--to is required")
+            plan = build_plan(records(token, zone), args.to)
+            if args.command == "plan":
+                out = plan
+            else:
+                if not args.confirm:
+                    raise CutoverError("apply requires --confirm")
+                before = records(token, zone)
+                expected_protected = {r["name"] for r in before if r["name"] in PROTECTED_NAMES}
+                out = {
+                    "plan": plan,
+                    "applied": apply_plan(token, zone, plan),
+                    "verification": verify(token, zone, args.to, expected_protected),
+                }
+        else:
+            if not args.to:
+                raise CutoverError("--to is required")
+            out = verify(token, zone, args.to)
+    except CutoverError as exc:
+        print(json.dumps({"ok": False, "error": str(exc)}), file=sys.stderr)
+        return 1
+
+    rendered = json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True)
+    print(rendered)
+    if args.evidence:
+        with args.evidence.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(out, ensure_ascii=False, sort_keys=True) + "\n")
+    verification = out.get("verification") if isinstance(out, dict) else None
+    if isinstance(verification, dict) and verification.get("ok") is False:
+        return 2
+    if isinstance(out, dict) and out.get("ok") is False:
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
