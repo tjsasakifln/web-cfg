@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import tarfile
 import threading
+import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import Self
@@ -264,6 +265,27 @@ def test_rollback_and_previous_release_preserved(host: Path, tmp_path: Path) -> 
         assert control.read_release_link(host, "rollback") == SHA_B
 
 
+def test_promote_rollback_and_idempotent_switch_always_reload_nginx(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    make_incoming(tmp_path, host, SHA_B)
+    control.stage_release(SHA_A)
+    control.stage_release(SHA_B)
+    reloads = {"n": 0}
+
+    def reload_nginx() -> None:
+        reloads["n"] += 1
+
+    monkeypatch.setattr(control, "nginx_reload", reload_nginx)
+    with LiveServer(host):
+        control.promote_release(SHA_A)
+        control.promote_release(SHA_B)
+        control.rollback_release(SHA_A)
+        control.promote_release(SHA_A)
+    assert reloads["n"] == 4
+
+
 def test_rollback_to_missing_sha_fails(host: Path) -> None:
     with pytest.raises(control.ReleaseError, match="does not exist"):
         control.rollback_release(SHA_C)
@@ -412,3 +434,111 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "ops/bin/rollback",
     ):
         assert required in names
+
+
+# systemd returns from `restart` as soon as it has spawned a Type=simple unit, so
+# the runtime has not bound its socket yet. Asserting identity immediately made
+# every promote a race: the first connection was refused, the switch was declared
+# failed, and the automatic rollback then failed the same way against the same
+# not-yet-listening process. Observed in production:
+#   PROMOTED_FAILED_AFTER_SWAP  ... Connection refused
+#   AUTO_ROLLBACK_FAILED
+# while the runtime logged runtime_listening 300ms later and served 200s.
+
+def test_runtime_readiness_waits_through_connection_refused(monkeypatch):
+    attempts = {"n": 0}
+
+    def flaky(url, host_header=None):
+        attempts["n"] += 1
+        if attempts["n"] < 3:
+            err = control.ReleaseError(f"smoke request failed for {url}: refused")
+            raise err from ConnectionRefusedError(111, "Connection refused")
+        return {"release_sha": "abc"}
+
+    monkeypatch.setattr(control, "_http_get_json", flaky)
+    monkeypatch.setattr(control, "RUNTIME_READY_POLL_SECONDS", 0)
+    identity = control._await_runtime_identity("127.0.0.1", 18100, timeout=5)
+    assert identity == {"release_sha": "abc"}
+    assert attempts["n"] == 3
+
+
+def test_runtime_readiness_gives_up_at_the_deadline(monkeypatch):
+    def always_refused(url, host_header=None):
+        raise control.ReleaseError("smoke request failed") from ConnectionRefusedError(111, "refused")
+
+    monkeypatch.setattr(control, "_http_get_json", always_refused)
+    monkeypatch.setattr(control, "RUNTIME_READY_POLL_SECONDS", 0)
+    with pytest.raises(control.ReleaseError, match="did not become reachable"):
+        control._await_runtime_identity("127.0.0.1", 18100, timeout=0.01)
+
+
+def test_an_http_error_is_never_masked_by_waiting(monkeypatch):
+    """HTTPError is a URLError subclass, but it is an answered request."""
+    calls = {"n": 0}
+
+    def bad_status(url, host_header=None):
+        calls["n"] += 1
+        error = urllib.error.HTTPError(url, 503, "unavailable", {}, None)
+        raise control.ReleaseError("smoke request failed: HTTP 503") from error
+
+    monkeypatch.setattr(control, "_http_get_json", bad_status)
+    monkeypatch.setattr(control, "RUNTIME_READY_POLL_SECONDS", 0)
+    with pytest.raises(control.ReleaseError, match="HTTP 503"):
+        control._await_runtime_identity("127.0.0.1", 18100, timeout=5)
+    assert calls["n"] == 1, "an answered non-200 response must not be retried"
+
+
+@pytest.mark.parametrize(
+    ("message", "cause"),
+    [
+        ("smoke returned invalid JSON", json.JSONDecodeError("invalid", "{", 1)),
+        ("smoke returned non-object JSON", None),
+    ],
+)
+def test_an_invalid_runtime_body_is_never_masked_by_waiting(
+    monkeypatch, message, cause
+):
+    calls = {"n": 0}
+
+    def invalid_body(url, host_header=None):
+        calls["n"] += 1
+        error = control.ReleaseError(message)
+        if cause is None:
+            raise error
+        raise error from cause
+
+    monkeypatch.setattr(control, "_http_get_json", invalid_body)
+    monkeypatch.setattr(control, "RUNTIME_READY_POLL_SECONDS", 0)
+    with pytest.raises(control.ReleaseError, match=message):
+        control._await_runtime_identity("127.0.0.1", 18100, timeout=5)
+    assert calls["n"] == 1, "an answered invalid body must not be retried"
+
+
+def test_a_wrong_runtime_identity_is_never_masked_by_waiting(monkeypatch):
+    calls = {"n": 0}
+
+    def wrong_identity(url, host_header=None):
+        calls["n"] += 1
+        return {
+            "release_sha": "wrong",
+            "public_artifact_hash": "public",
+            "release_bundle_hash": "bundle",
+            "host_architecture_version": "architecture",
+            "storage_backend": "filesystem",
+        }
+
+    manifest = {
+        "commit": "expected",
+        "host_contract": {
+            "runtime_upstream": {"host": "127.0.0.1", "port": 18100}
+        },
+        "public_artifact": {"artifact_hash": "public"},
+        "artifact": {"sha256": "bundle"},
+        "contract_versions": {"host_architecture": "architecture"},
+    }
+    monkeypatch.delenv("CONFENGE_RELEASE_TEST_MODE", raising=False)
+    monkeypatch.setattr(control, "_http_get_json", wrong_identity)
+    monkeypatch.setattr(control, "RUNTIME_READY_POLL_SECONDS", 0)
+    with pytest.raises(control.ReleaseError, match="runtime identity mismatch"):
+        control.smoke_runtime(manifest)
+    assert calls["n"] == 1, "a reachable runtime with wrong identity must fail once"
