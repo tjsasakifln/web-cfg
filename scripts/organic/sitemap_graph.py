@@ -37,6 +37,8 @@ DEFAULT_MEMBERS = (
 PUBLIC_HTML_SKIP_DIRS = frozenset(
     {
         ".git",
+        ".claude",
+        ".worktrees",
         ".netlify",
         ".cache",
         "_site",

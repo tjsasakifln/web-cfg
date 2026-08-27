@@ -27,6 +27,7 @@ SKIP_PARTS = {
     "node_modules",
     "_site",
     ".git",
+    ".claude",  # local agent worktrees, never shipped
     ".worktrees",
     ".pytest_cache",
     "supabase",

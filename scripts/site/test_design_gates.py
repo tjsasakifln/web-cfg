@@ -548,7 +548,10 @@ def test_raster_title_covers_are_og_only_outside_frozen_bofu_routes():
     frozen_candidates: set[str] = set()
     for path in ROOT.rglob("index.html"):
         relative_parts = path.relative_to(ROOT).parts
-        if any(part in {".git", ".worktrees", "_site", "node_modules"} for part in relative_parts):
+        if any(
+            part in {".git", ".claude", ".worktrees", "_site", "node_modules"}
+            for part in relative_parts
+        ):
             continue
         html = path.read_text(encoding="utf-8")
         meta = _meta_properties(html)
@@ -694,7 +697,20 @@ def test_shipped_pages_defer_the_main_script():
     Scope is derived from the pages that reference the script, so a new page is covered
     without editing this list.
     """
-    skip = {"node_modules", "_site", "docs", "scripts", "tests", "netlify", "seo", "data", "supabase"}
+    skip = {
+        ".claude",
+        ".git",
+        ".worktrees",
+        "node_modules",
+        "_site",
+        "docs",
+        "scripts",
+        "tests",
+        "netlify",
+        "seo",
+        "data",
+        "supabase",
+    }
     offenders: list[str] = []
     tags = 0
 
@@ -784,7 +800,20 @@ def test_shipped_pages_use_versioned_proportional_logos():
     from scripts.bofu_dominance.frozen_specs.constants import FORBIDDEN_RELATIVE_PATHS
 
     frozen = {rel for rel in FORBIDDEN_RELATIVE_PATHS if rel.endswith(".html")}
-    skip = {"node_modules", "_site", "docs", "scripts", "tests", "netlify", "seo", "data", "supabase"}
+    skip = {
+        ".claude",
+        ".git",
+        ".worktrees",
+        "node_modules",
+        "_site",
+        "docs",
+        "scripts",
+        "tests",
+        "netlify",
+        "seo",
+        "data",
+        "supabase",
+    }
     offenders: list[str] = []
     frozen_seen: set[str] = set()
     pages = 0

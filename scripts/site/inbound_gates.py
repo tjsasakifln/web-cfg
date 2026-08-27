@@ -196,6 +196,7 @@ def public_html_files() -> list[Path]:
         ".netlify",
         ".playwright-mcp",
         "netlify",
+        ".claude",  # local agent worktrees, never shipped
         ".worktrees",
     }
     # Always include these trees
@@ -1503,6 +1504,8 @@ def _conversion_files(base: Path) -> list[Path]:
         "tests",
         "node_modules",
         ".git",
+        ".claude",
+        ".worktrees",
         ".netlify",
         "_site",
     }

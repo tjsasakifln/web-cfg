@@ -24,6 +24,7 @@ warnings: list[str] = []
 SKIP_DIRS = frozenset(
     {
         ".git",
+        ".claude",
         "seo",
         ".playwright-mcp",
         "node_modules",

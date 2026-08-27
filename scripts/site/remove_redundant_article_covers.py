@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-EXCLUDED_PARTS = {".git", ".worktrees", "_site", "node_modules"}
+EXCLUDED_PARTS = {".git", ".claude", ".worktrees", "_site", "node_modules"}
 MIN_EXPECTED_ROUTES = 128
 FROZEN_BOFU_PATHS = {
     "aditivos-obras-publicas/index.html",
