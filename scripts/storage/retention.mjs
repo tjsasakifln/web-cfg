@@ -37,10 +37,16 @@ const POLICIES = {
 
 function eventTimestamp(value) {
   if (value && Array.isArray(value.events)) {
-    const times = value.events.map((row) => Date.parse(row.ts || 0)).filter(Number.isFinite);
+    const times = value.events.map((row) => parseTimestamp(row && row.ts));
+    if (times.some((timestamp) => !Number.isFinite(timestamp))) return NaN;
     return times.length ? Math.max(...times) : NaN;
   }
   return NaN;
+}
+
+function parseTimestamp(value) {
+  if (typeof value !== "string" || !value.trim()) return NaN;
+  return Date.parse(value);
 }
 
 function expiryFor(namespace, value) {
@@ -51,7 +57,9 @@ function expiryFor(namespace, value) {
     return Number.isFinite(ts) ? ts + policy.days * 864e5 : NaN;
   }
   for (const field of policy.fields) {
-    const timestamp = Date.parse(value && value[field] || 0);
+    const raw = value && value[field];
+    if (raw != null && String(raw).trim() && !Number.isFinite(parseTimestamp(raw))) return NaN;
+    const timestamp = parseTimestamp(raw);
     if (!Number.isFinite(timestamp)) continue;
     return field === "delete_after" || field === "expires_at"
       ? timestamp
@@ -66,6 +74,7 @@ async function main() {
   const backend = new HostFileBackend(root);
   const leads = new FileStore(root, { backend });
   const report = { dry_run: !options.apply, scanned: 0, expired: 0, deleted: 0, malformed_retention: 0, by_namespace: {} };
+  const pendingDeletes = [];
   for (const namespace of Object.keys(POLICIES)) {
     const rows = backend.namespace(namespace).list();
     const stats = { scanned: rows.length, expired: 0, deleted: 0, malformed_retention: 0 };
@@ -80,16 +89,28 @@ async function main() {
       if (expiry > options.now.getTime()) continue;
       stats.expired += 1;
       report.expired += 1;
-      if (options.apply) {
-        if (namespace === "leads") await leads.delete(row.key);
-        else backend.namespace(namespace).delete(row.key);
-        stats.deleted += 1;
-        report.deleted += 1;
-      }
+      pendingDeletes.push({ namespace, key: row.key });
     }
     report.by_namespace[namespace] = stats;
   }
   report.suppressions_preserved = backend.namespace("nurture-suppressions").list().length;
+  if (options.apply && report.malformed_retention > 0) {
+    report.ok = false;
+    report.blocked = true;
+    report.reason = "malformed_retention";
+    process.stdout.write(JSON.stringify(report) + "\n");
+    process.exitCode = 2;
+    return;
+  }
+  if (options.apply) {
+    for (const item of pendingDeletes) {
+      if (item.namespace === "leads") await leads.delete(item.key);
+      else backend.namespace(item.namespace).delete(item.key);
+      report.by_namespace[item.namespace].deleted += 1;
+      report.deleted += 1;
+    }
+  }
+  report.ok = true;
   process.stdout.write(JSON.stringify(report) + "\n");
 }
 

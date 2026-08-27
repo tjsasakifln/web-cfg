@@ -345,6 +345,31 @@ exports.handler = async (event) => {
     status: "persisted",
     headers: event.headers || {},
   });
+  // Probe identity is established by the constant-time server credential, not
+  // by user-controlled names, emails or record_kind fields. Force the durable
+  // classification so even a human-looking probe payload can never enter the
+  // commercial queue. This marker is intentionally store/server-only.
+  if (originCheck.probe) {
+    record.record_kind = "synthetic";
+    record.record_kind_signals = [
+      ...new Set([...(record.record_kind_signals || []), "authenticated_probe"]),
+    ];
+    record.record_kind_classified_at = received_at;
+    record.synthetic_probe_authenticated = true;
+    record.next_action = "exclude_from_commercial";
+    record.audit = [
+      ...(record.audit || []),
+      {
+        at: received_at,
+        event: "record_kind",
+        from: null,
+        to: "synthetic",
+        signals: ["authenticated_probe"],
+        actor: "system",
+        note: "server_authenticated_probe",
+      },
+    ];
+  }
   record.retention = retentionPolicy();
   record.handoff = initialHandoff(process.env, record);
   // Safe operational log: kind only, never PII
@@ -447,13 +472,26 @@ exports.handler = async (event) => {
 
   // Warmbly inbound after persist + outbox row. Failures never drop the lead
   // or change the visitor capture response.
-  try {
-    await attemptInboundHandoff(store, record);
-  } catch (err) {
-    safeLog("error", "inbound_handoff_unexpected", {
-      lead_id,
-      code: err && err.message ? String(err.message).slice(0, 80) : "error",
-    });
+  const persistOnlyProbe = Boolean(
+    originCheck.probe &&
+      event.headers &&
+      String(
+        event.headers["x-confenge-probe-persist-only"] ||
+          event.headers["X-Confenge-Probe-Persist-Only"] ||
+          "",
+      ) === "1",
+  );
+  if (persistOnlyProbe) {
+    safeLog("info", "synthetic_probe_persist_only", { lead_id });
+  } else {
+    try {
+      await attemptInboundHandoff(store, record);
+    } catch (err) {
+      safeLog("error", "inbound_handoff_unexpected", {
+        lead_id,
+        code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      });
+    }
   }
 
   // Delivery after persist — failures update status, never drop the lead

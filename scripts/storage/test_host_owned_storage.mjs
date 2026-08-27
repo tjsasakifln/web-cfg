@@ -105,6 +105,36 @@ try {
   assert(await store.delete(lead.lead_id), "delete failed");
   assert(await store.get(lead.lead_id) === null && await store.getByIdempotency(lead.idempotency_key) === null, "delete left record or index");
 
+  // Crash between the atomic record commit and derived index commit never
+  // loses the durable receipt or admits a duplicate. Read-only readiness fails
+  // closed until an authorized read/write process repairs the derived index.
+  const interruptedRoot = privateDir("confenge-interrupted-index-");
+  cleanup.push(interruptedRoot);
+  const interruptedStore = new FileStore(interruptedRoot);
+  const interruptedLead = sampleLead("lead_interrupted", "idem_interrupted");
+  const originalIndexPut = interruptedStore.idempotency._putUnlocked.bind(interruptedStore.idempotency);
+  interruptedStore.idempotency._putUnlocked = () => {
+    const error = new Error("injected_index_commit_failure");
+    error.code = "STORE_WRITE_FAILED";
+    throw error;
+  };
+  let interruptedCode = null;
+  try { await interruptedStore.put(interruptedLead, { onlyIfNew: true }); } catch (err) { interruptedCode = err.code; }
+  assert(interruptedCode === "STORE_WRITE_FAILED", "index interruption was not injected", interruptedCode);
+  assert((await interruptedStore.get(interruptedLead.lead_id)).lead_id === interruptedLead.lead_id, "committed receipt was rolled back");
+  interruptedStore.idempotency._putUnlocked = originalIndexPut;
+  const missingIndexReady = storageReadiness({
+    CONFENGE_STORAGE_BACKEND: "filesystem",
+    CONFENGE_STORAGE_DIR: interruptedRoot,
+  }, { writeProbe: false });
+  assert(!missingIndexReady.ok && missingIndexReady.code === "STORE_INDEX_MISSING", "missing derived index did not fail closed", missingIndexReady);
+  const repairStore = new FileStore(interruptedRoot);
+  assert((await repairStore.getByIdempotency(interruptedLead.idempotency_key)).lead_id === interruptedLead.lead_id, "derived index did not self-heal");
+  let replayCode = null;
+  try { await repairStore.put({ ...interruptedLead, lead_id: "lead_interrupted_duplicate" }, { onlyIfNew: true }); } catch (err) { replayCode = err.code; }
+  assert(replayCode === "ALREADY_EXISTS", "interrupted retry admitted a duplicate", replayCode);
+  assert(storageReadiness({ CONFENGE_STORAGE_BACKEND: "filesystem", CONFENGE_STORAGE_DIR: interruptedRoot }, { writeProbe: false }).ok, "repaired index remained unready");
+
   // 64 independent processes racing on the same deterministic receipt.
   const raceIds = ["lead_race_same_receipt_a", "lead_race_same_receipt_b"];
   const raceIdem = "idem-race-same-request";
@@ -284,6 +314,28 @@ try {
   const appliedRetention = JSON.parse((await execFileAsync(process.execPath, [retentionScript, "--store", importRoot, "--now", "2026-08-26T00:00:00Z", "--apply"])).stdout);
   assert(appliedRetention.deleted >= 1 && await importStore.get("lead_expired") === null && await importStore.getByIdempotency("idem_expired") === null, "retention apply failed");
   assert(appliedRetention.suppressions_preserved === 1, "retention removed suppression");
+
+  // Apply is all-or-nothing when any governed record has no valid timestamp.
+  const malformedRetentionRoot = privateDir("confenge-retention-malformed-");
+  cleanup.push(malformedRetentionRoot);
+  const malformedRetentionStore = new FileStore(malformedRetentionRoot);
+  await malformedRetentionStore.put({ ...sampleLead("lead_retention_expired", "idem_retention_expired"), delete_after: "2020-01-01T00:00:00Z" }, { onlyIfNew: true });
+  await malformedRetentionStore.put({ ...sampleLead("lead_retention_missing", "idem_retention_missing"), delete_after: undefined, received_at: undefined }, { onlyIfNew: true });
+  await malformedRetentionStore.put({ ...sampleLead("lead_retention_invalid", "idem_retention_invalid"), delete_after: "not-a-date" }, { onlyIfNew: true });
+  let blockedRetention;
+  try {
+    await execFileAsync(process.execPath, [retentionScript, "--store", malformedRetentionRoot, "--now", "2026-08-26T00:00:00Z", "--apply"]);
+  } catch (err) {
+    blockedRetention = JSON.parse(err.stdout);
+  }
+  assert(
+    blockedRetention?.blocked === true && blockedRetention.reason === "malformed_retention" && blockedRetention.deleted === 0,
+    "malformed retention did not block the whole apply",
+    blockedRetention,
+  );
+  assert(await malformedRetentionStore.get("lead_retention_expired"), "blocked retention partially deleted expired data");
+  assert(await malformedRetentionStore.get("lead_retention_missing"), "missing timestamp was silently deleted");
+  assert(await malformedRetentionStore.get("lead_retention_invalid"), "invalid timestamp was silently deleted");
 
   // Consistent snapshot/checksum and restore only into a new directory.
   const backupRoot = privateDir("confenge-backups-");

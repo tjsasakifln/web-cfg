@@ -8,6 +8,7 @@
  */
 const base = (process.argv[2] || "https://confenge.com.br").replace(/\/$/, "");
 const probeSecret = process.argv[3] || process.env.LEAD_PROBE_SECRET || "";
+const opsToken = process.env.OPS_TOKEN || process.env.REVOPS_TOKEN || "";
 const stamp = Date.now();
 const idem = `synthetic-probe-${stamp}`;
 
@@ -76,6 +77,29 @@ const deliveryOk =
   allowedSt.test(String(first.data.notify_status || "")) &&
   allowedSt.test(String(first.data.email_status || ""));
 
+let ops = null;
+if (opsToken && first.data.lead_id) {
+  const response = await fetch(
+    `${base}/.netlify/functions/ops?action=inbound_handoff&lead_id=${encodeURIComponent(first.data.lead_id)}`,
+    { headers: { Authorization: `Bearer ${opsToken}`, Accept: "application/json" } },
+  );
+  const data = await response.json().catch(() => ({}));
+  ops = { http: response.status, data };
+}
+const opsReceipt = ops && ops.data && ops.data.receipt;
+const opsContractOk = !opsToken || Boolean(
+  ops && ops.http === 200 && ops.data.ok === true &&
+  ops.data.configuration?.contract === "READY" &&
+  ops.data.configuration?.destination_fingerprint === "WARMBLY_PRODUCTION_V1" &&
+  opsReceipt?.lead_id === first.data.lead_id &&
+  opsReceipt?.record_kind === "synthetic" &&
+  opsReceipt?.source === "CONFENGE_WEB" &&
+  opsReceipt?.handoff?.status === "DELIVERED" &&
+  opsReceipt?.handoff?.attempts === 1 &&
+  opsReceipt?.handoff?.downstream?.downstream_receipt === first.data.lead_id &&
+  !opsReceipt?.handoff?.downstream?.action_id
+);
+
 const ok =
   (first.res.status === 201 || first.res.status === 200) &&
   first.data.ok === true &&
@@ -83,7 +107,8 @@ const ok =
   leaks.length === 0 &&
   secondIsIdempotent &&
   no5xx &&
-  deliveryOk;
+  deliveryOk &&
+  opsContractOk;
 
 const out = {
   ok,
@@ -98,6 +123,17 @@ const out = {
   second_idempotent_flag: second.data.idempotent === true,
   notify_status: first.data.notify_status || null,
   email_status: first.data.email_status || null,
+  inbound: ops ? {
+    http: ops.http,
+    contract: ops.data.configuration?.contract || null,
+    destination_fingerprint: ops.data.configuration?.destination_fingerprint || null,
+    record_kind: opsReceipt?.record_kind || null,
+    source: opsReceipt?.source || null,
+    handoff_status: opsReceipt?.handoff?.status || null,
+    handoff_attempts: opsReceipt?.handoff?.attempts ?? null,
+    downstream_receipt_matches: opsReceipt?.handoff?.downstream?.downstream_receipt === first.data.lead_id,
+    downstream_action_absent: !opsReceipt?.handoff?.downstream?.action_id,
+  } : { status: "OPS_TOKEN_NOT_PROVIDED" },
   base,
   ts: new Date().toISOString(),
   checks: {
@@ -110,6 +146,7 @@ const out = {
     second_post_idempotent_true: second.data.idempotent === true,
     no_http_5xx: no5xx,
     delivery_status_present: deliveryOk,
+    ops_receipt_contract: opsContractOk,
   },
 };
 console.log(JSON.stringify(out));

@@ -47,6 +47,16 @@ export function loadRuntimeConfig({
   now = new Date(),
   nodeVersion = process.version,
 } = {}) {
+  // Netcup does not provide Netlify's CONTEXT variable. Normalize the portable
+  // production adapter before handlers are loaded so every fail-closed inbound
+  // check observes the same canonical production context.
+  if (
+    String(env.NODE_ENV || "").trim().toLowerCase() === "production"
+    && String(env.RUNTIME_PROFILE || "").trim().toLowerCase() === NETCUP_RUNTIME_PROFILE
+    && !String(env.CONTEXT || "").trim()
+  ) {
+    env.CONTEXT = "production";
+  }
   const production = isProductionEnvironment(env);
   const errors = [];
   const host = safeHost(env.RUNTIME_HOST);

@@ -255,6 +255,15 @@ const inbound = loadInbound();
     CONFENGE_INBOUND_WEBHOOK_URL: "https://ops.example/api/v1/webhooks/confenge/inbound",
   });
   if (noSecret.ok || !noSecret.blocked) fail("fail_closed_secret", noSecret);
+  const shortProductionSecret = inbound.resolveInboundConfig({
+    NODE_ENV: "production",
+    CONTEXT: "production",
+    CONFENGE_INBOUND_WEBHOOK_URL: "https://api.confenge.com.br/api/v1/webhooks/confenge/inbound",
+    CONFENGE_INBOUND_WEBHOOK_SECRET: "too-short-for-production",
+  });
+  if (shortProductionSecret.ok || shortProductionSecret.reason !== "secret_too_short") {
+    fail("fail_closed_short_production_secret", shortProductionSecret);
+  }
   const piiUrl = inbound.resolveInboundConfig({
     CONFENGE_INBOUND_WEBHOOK_URL:
       "https://ops.example/api/v1/webhooks/confenge/inbound?email=a@b.com",
@@ -461,13 +470,18 @@ function startMock({ mode = "ok", secret = SECRET } = {}) {
       if (mode === "timeout") {
         return; // never respond
       }
+      if (mode === "malformed-success") {
+        res.writeHead(201, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true }));
+        return;
+      }
       const duplicate = seen.filter((s) => s.body && s.body.lead_id === body.lead_id).length > 1;
       res.writeHead(duplicate ? 200 : 201, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
           data: {
-            lead: { id: `wb-${body.lead_id}` },
-            action: { id: `act-${body.lead_id}` },
+            lead: { id: `wb-${body.lead_id}`, receipt_id: body.receipt_id || body.lead_id },
+            action: body.synthetic === true ? undefined : { id: `act-${body.lead_id}` },
             duplicate,
             next_action: "INBOUND_NOW",
             dispatch_attempted: false,
@@ -1128,6 +1142,75 @@ try {
     if (!stored.handoff || stored.handoff.status !== "SKIPPED") fail("synth_handoff", stored.handoff);
     if (mock.seen.length !== before) fail("synth_posted_to_warmbly", mock.seen.length - before);
     pass("non_real_skipped");
+  }
+
+  // Only a server-authenticated probe may traverse the synthetic transport.
+  // The persist-only hook simulates process death at the exact outbox boundary;
+  // reopening the file store proves convergence after restart.
+  {
+    const probeSecret = "probe-secret-32-characters-minimum-2026";
+    process.env.LEAD_PROBE_SECRET = probeSecret;
+    const restartDir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-restart-"));
+    const firstProcessStore = new FileStore(restartDir);
+    setStoreForTests(firstProcessStore);
+    _reset();
+    const before = mock.seen.length;
+    const res = await handler(
+      event(moneyPayload({
+        nome: "Human Looking Payload",
+        email: "looks-human@example.com",
+        idempotency_key: "authenticated-probe-restart-001",
+        utm_source: "campaign-looking-value",
+      }), {
+        "Idempotency-Key": "authenticated-probe-restart-001",
+        "X-Confenge-Probe": probeSecret,
+        "X-Confenge-Probe-Persist-Only": "1",
+        ip: "203.0.113.222",
+      }),
+    );
+    const data = JSON.parse(res.body);
+    const persisted = await firstProcessStore.get(data.lead_id);
+    if (res.statusCode !== 201 || !persisted) fail("probe_restart_persist", { status: res.statusCode, data });
+    if (
+      persisted.record_kind !== "synthetic" ||
+      persisted.synthetic_probe_authenticated !== true ||
+      persisted.next_action !== "exclude_from_commercial"
+    ) fail("probe_server_classification", persisted);
+    if (persisted.handoff.status !== "PENDING" || mock.seen.length !== before) {
+      fail("probe_restart_boundary", { handoff: persisted.handoff, posts: mock.seen.length - before });
+    }
+
+    const restartedStore = new FileStore(restartDir);
+    const firstDrain = await inbound.drainPendingHandoffs(restartedStore, { now: new Date(), env: process.env });
+    const after = await restartedStore.get(data.lead_id);
+    const probePosts = mock.seen.filter((row) => row.body && row.body.lead_id === data.lead_id);
+    if (firstDrain.delivered !== 1 || after.handoff.status !== "DELIVERED" || probePosts.length !== 1) {
+      fail("probe_restart_convergence", { firstDrain, handoff: after.handoff, posts: probePosts.length });
+    }
+    if (
+      probePosts[0].body.source !== "CONFENGE_WEB" ||
+      probePosts[0].body.record_kind !== "synthetic" ||
+      probePosts[0].body.synthetic !== true ||
+      after.handoff.downstream.downstream_receipt !== data.lead_id ||
+      after.handoff.downstream.action_id
+    ) fail("probe_warmbly_contract", { body: probePosts[0].body, downstream: after.handoff.downstream });
+    const secondDrain = await inbound.drainPendingHandoffs(new FileStore(restartDir), { now: new Date(), env: process.env });
+    if (secondDrain.attempted !== 0 || mock.seen.filter((row) => row.body && row.body.lead_id === data.lead_id).length !== 1) {
+      fail("probe_exactly_one_receipt", secondDrain);
+    }
+
+    mock.setMode("malformed-success");
+    const invalidReceipt = await inbound.postInbound({
+      ...after,
+      lead_id: "malformedreceipt000000001",
+      receipt_id: "malformedreceipt000000001",
+    }, { now: new Date(), env: process.env });
+    mock.setMode("ok");
+    if (invalidReceipt.status !== "RETRYABLE" || invalidReceipt.last_error !== "downstream_receipt_invalid") {
+      fail("downstream_receipt_fail_closed", invalidReceipt);
+    }
+    setStoreForTests(mem);
+    pass("authenticated_probe_restart_exactly_one_receipt", { lead_id: data.lead_id, posts: probePosts.length });
   }
 
   // money-asset HTML carries public IDs already available; does not invent entity/CNPJ

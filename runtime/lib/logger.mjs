@@ -23,8 +23,18 @@ const ALLOWED_FIELDS = new Set([
 function safeScalar(value) {
   if (typeof value === "boolean" || typeof value === "number") return value;
   if (value == null) return null;
-  return String(value)
+  let text = String(value);
+  try {
+    text = decodeURIComponent(text);
+  } catch {
+    // Malformed encoding is still passed through the redaction guards below.
+  }
+  return text
     .replace(/[\u0000-\u001f\u007f]/g, "")
+    .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, "[redacted]")
+    .replace(/(?<![A-Za-z0-9])\+?\s*\(?(?:\d[\s().-]*){10,15}(?![A-Za-z0-9])/g, "[redacted]")
+    .replace(/\b(?:Bearer\s+|Basic\s+)[A-Za-z0-9._~+/=-]+/gi, "[redacted]")
+    .replace(/((?:secret|token|password|authorization)[=:]\s*)[^\s,;&]+/gi, "$1[redacted]")
     .slice(0, 160);
 }
 

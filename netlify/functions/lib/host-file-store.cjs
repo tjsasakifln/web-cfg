@@ -252,8 +252,46 @@ class HostFileBackend {
     }
   }
 
+  _validateLeadIdempotencyUnlocked({ repair = false } = {}) {
+    const records = this.namespace("leads");
+    const indexes = this.namespace("leads-idempotency");
+    const expected = new Map();
+    for (const row of records.list({ rejectTemps: true })) {
+      const value = row.value;
+      if (!value || !value.idempotency_key) continue;
+      const digest = sha256(String(value.idempotency_key));
+      if (expected.has(digest) && expected.get(digest).lead_id !== value.lead_id) {
+        fail("STORE_CORRUPT", "duplicate durable idempotency key");
+      }
+      expected.set(digest, value);
+    }
+    const seen = new Set();
+    for (const row of indexes.list({ rejectTemps: true })) {
+      const value = row.value;
+      const record = value && value.lead_id ? records.get(String(value.lead_id)) : null;
+      if (
+        !value || value.idempotency_sha256 !== row.key || !record
+        || sha256(String(record.idempotency_key || "")) !== row.key
+      ) {
+        fail("STORE_CORRUPT", "idempotency index is corrupt or dangling");
+      }
+      seen.add(row.key);
+    }
+    for (const [digest, record] of expected) {
+      if (seen.has(digest)) continue;
+      if (!repair) fail("STORE_INDEX_MISSING", "durable idempotency index is missing");
+      indexes._putUnlocked(digest, {
+        lead_id: String(record.lead_id),
+        idempotency_sha256: digest,
+      }, { onlyIfNew: true });
+    }
+  }
+
   validate({ writeProbe = true } = {}) {
-    this.withExclusiveLock(() => this._validateUnlocked());
+    this.withExclusiveLock(() => {
+      this._validateUnlocked();
+      this._validateLeadIdempotencyUnlocked({ repair: writeProbe });
+    });
     if (writeProbe) {
       const probe = this.namespace("readiness-probes");
       const key = `probe:${process.pid}:${crypto.randomBytes(8).toString("hex")}`;
