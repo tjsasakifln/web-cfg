@@ -1,0 +1,10 @@
+{
+  "mode": "from-authority",
+  "mutate": {
+    "http.server": "Netlify"
+  },
+  "expected": {
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "environment": "production"
+  }
+}

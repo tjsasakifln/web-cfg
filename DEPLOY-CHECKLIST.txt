@@ -1,24 +1,30 @@
-CONFENGE — CHECKLIST DE PUBLICAÇÃO (SEO inbound 2026-07-30)
+CONFENGE — CHECKLIST DE PUBLICAÇÃO
 
-1. Publique este diretório na Netlify (drag-and-drop ou repo GitHub web-cfg).
-2. Confirme no navegador:
+Produção é nginx/Netcup. Autoridade: docs/architecture/RUNTIME-AUTHORITY.md
+Rollback: docs/ops/ROLLBACK.md
+
+1. Merge em main com site-ci e pSEO quality gates verdes.
+2. Release: gh workflow run netcup-release.yml --ref main
+   -f operation=package_only | stage_verify | promote (promote é gated).
+3. Confirme no navegador:
    https://confenge.com.br/sitemap.xml
    https://confenge.com.br/robots.txt
    https://confenge.com.br/llms.txt
-   https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/
-3. Teste redirects legados (fonte: _redirects na raiz):
+   https://confenge.com.br/.well-known/build-info.json
+   Header X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2
+4. Teste redirects legados (fonte: _redirects na raiz):
    301: /servicos /blog /privacy-policy /politica-de-privacidade /contato /terms-and-conditions→/termos-de-uso/
    410: /vision /nexgen /avcbclcb  (não soft-404 para /)
-   host: https://confenge.netlify.app/* → https://confenge.com.br/:splat
-   No Deploy summary: "Redirect rules processed" deve ser > 0
+   leftover: https://confenge.netlify.app/* → https://confenge.com.br/:splat
    npm run audit:migration -- --base=https://confenge.com.br
-4. No Search Console:
+5. No Search Console:
    - Envie/atualize apenas sitemap.xml
-   - Solicite indexação das 5 URLs Tier S reescritas
+   - Solicite indexação das URLs reescritas
    - Monitore queda de impressões em URLs fantasma
-5. Netlify Forms: confirme que o form "diagnostico-confenge" recebe o campo "origem".
-6. (Opcional) Configure analytics — ver seo/ANALYTICS.md
-7. Alternativa de diagnóstico de sitemap:
+6. Captura: POST /.netlify/functions/lead no runtime portátil (filesystem host-owned).
+7. (Opcional) Configure analytics — ver seo/ANALYTICS.md
+8. Alternativa de diagnóstico de sitemap:
    https://confenge.com.br/sitemap.txt
 
 O sitemap.xml permanece mínimo: loc + lastmod (sem extensões de imagem).
+Não publicar este diretório na Netlify como produção.

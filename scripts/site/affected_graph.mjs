@@ -81,6 +81,28 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["build/netcup-host-contract/"],
     surfaces: ["/", "/robots.txt", "/sitemap.xml", "/.well-known/"],
   },
+  "test:runtime-authority": {
+    producers: [
+      "scripts/site/runtime_authority.mjs",
+      "scripts/site/test_runtime_authority.mjs",
+      "scripts/site/fixtures/runtime-authority/",
+      "docs/architecture/RUNTIME-AUTHORITY.md",
+      "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+      "deploy/netcup/README.md",
+      "runtime/README.md",
+      "docs/ops/ROLLBACK.md",
+      "docs/ops/ENV-VARS.md",
+      "docs/ops/LEAD-HANDLING.md",
+      "docs/ops/HOST-OWNED-STORAGE.md",
+      "docs/ops/HOST-OWNED-STORAGE-RUNBOOK.md",
+      "docs/ops/EXTERNAL-ACTIONS.md",
+      "docs/ops/SLO-MONITORING.md",
+      "DEPLOY-CHECKLIST.txt",
+      "docs/migration/smartlic-confenge/ROLLBACK.md",
+    ],
+    artifacts: [],
+    surfaces: ["/", "/.well-known/build-info.json", "/.well-known/runtime-info.json"],
+  },
   "pseo:test": {
     producers: [
       "scripts/pseo/",

@@ -46,7 +46,7 @@ Optional host aliases (`www.smartlic.tech`, `http://`) must 301 → the same `ht
 
 | Item | Required | Status 2026-08-16 |
 |---|---|---|
-| Target origin | `https://confenge.com.br` (Netlify) | live 200 observed on the 11 ready pages (in-repo artifact + prior live GET) |
+| Target origin | `https://confenge.com.br` (nginx/Netcup) | live 200; architecture `confenge-nginx-node/v2` |
 | Bridge hostname | `smartlic.tech` (+ www if it still receives traffic) | apex → Railway `69.46.46.88` fallback **404**; www TLS **SAN mismatch** |
 | Reverse proxy | static 301 map of the 11 rows; default 410; HOLD fail-closed | **not authorized / not deployed** |
 | TLS | certificate covering `smartlic.tech` and `www.smartlic.tech` | apex Railway cert; www **fails** |
@@ -77,7 +77,7 @@ Optional host aliases (`www.smartlic.tech`, `http://`) must 301 → the same `ht
 - ≥1 ready CONFENGE target 5xx for > 15 minutes.
 - Lead persist path down on CONFENGE (`/.netlify/functions/lead`) during the window.
 
-Rollback restores the **last functional CONFENGE Netlify publish** and the **previous DNS/proxy** of `smartlic.tech`. It does **not** redeploy SmartLic as a product.
+Rollback restores the **last verified CONFENGE nginx/Netcup SHA** (`docs/ops/ROLLBACK.md`) and the **previous DNS/proxy** of `smartlic.tech`. It does **not** redeploy SmartLic as a product.
 
 ## Expiry and removal trigger
 

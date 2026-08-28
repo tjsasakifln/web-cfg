@@ -1,24 +1,29 @@
-# Netcup atomic release preparation
+# Netcup atomic release (public production)
 
-Status: `NETCUP_RELEASE_PIPELINE_READY / PROD_TRAFFIC_UNCHANGED`
+Status: `PRODUCTION_PUBLIC_RUNTIME / NETCUP_NGINX_NODE_V2`
 
-This directory prepares a Netcup release path without changing DNS, replacing
-Netlify, enabling a public vhost, or authorizing cutover. The authoritative
-public runtime remains the one declared in `RUNTIME-AUTHORITY.md` until a later
-ADR-authorized cutover.
+This directory is the production release path for `confenge.com.br`. Public
+traffic already answers on this VPS (`Server: nginx`,
+`X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2`). The
+authoritative record is `docs/architecture/RUNTIME-AUTHORITY.md`.
+
+Stage (`stage_verify`) still does not swap `current`. Promote remains behind
+the GitHub environment `netcup-production` and
+`NETCUP_CUTOVER_AUTHORIZED=CONFENGE_NETCUP_CUTOVER_APPROVED`. This README does
+not create that variable, does not change DNS, and does not dispatch a release.
 
 ## Decision and operating evidence
 
 - Decision: `EXECUTE_NOW` (P0).
 - Executive front: INBOUND ENGINE / SCALE-SUNSET.
 - Leverage: automation and trust.
-- Time to evidence: the first manual `package_only` run proves one gated,
-  attested artifact; `stage_verify` proves host readiness without traffic.
-- Visitor job: receive the exact approved CONFENGE public artifact reliably;
-  there is no visitor-visible change in this PR.
+- Time to evidence: a matching fixture of the runtime-authority gate plus
+  read-only live identity (`build-info` SHA versus `origin/main`).
+- Visitor job: receive the approved CONFENGE public artifact from the host that
+  already serves production.
 - Acquisition/conversion hypothesis: release integrity removes deployment
-  drift and makes conversion availability recoverable; no funnel, analytics,
-  CTA, public data, or attribution contract changes here.
+  drift and makes conversion availability recoverable without a second public
+  host.
 - Data owner/contract: unchanged. `extra-cli` remains the SELECT-only fact and
   provenance owner; Warmbly remains the commercial-action owner.
 - Analytics: none added; evidence contains SHA, artifact hash, CI URL and
@@ -26,11 +31,10 @@ ADR-authorized cutover.
 - After 100 repetitions: packaging, verification, evidence and rollback stay
   constant-time; the system gains a release history instead of 100 manual
   deployment procedures.
-- ADR affected: ADR-STRAT-002 and RUNTIME-AUTHORITY were read and remain
-  unchanged because Netlify is still the public authority. They must be updated
-  before setting the cutover authorization variable.
-- Rollback: atomic `current` symlink restoration; before cutover, Netlify is
-  also still the public known-good runtime.
+- ADR affected: ADR-STRAT-002 remains the canonical-surface decision;
+  RUNTIME-AUTHORITY records the production host as nginx/Netcup.
+- Rollback: atomic `current` symlink restoration via
+  `/opt/confenge-web/bin/rollback <FULL_SHA>`. See `docs/ops/ROLLBACK.md`.
 
 ## Chain and invariants
 
@@ -43,7 +47,7 @@ main
   -> SSH upload to /opt/confenge-web/incoming/.upload-FULL_SHA-RUN_ID-ATTEMPT
   -> checksum validation + atomic adoption as incoming/FULL_SHA
   -> stage-release + verify-release (no current change)
-  -> explicit cutover gate
+  -> explicit promote gate
   -> promote-release (atomic current swap)
   -> /opt/confenge-web/evidence/deploy.ndjson
   -> rollback FULL_SHA
@@ -63,7 +67,7 @@ closure, release/file manifests, generated nginx snippets, contract versions
 and stage/verify/promote/rollback scripts. Persistent records live in the
 mode-0700 `/var/lib/confenge-web`; controls and evidence live outside releases.
 
-## One-time host provisioning (do not run from this PR)
+## One-time host provisioning (do not run from a docs PR)
 
 Review paths on the target first. The dedicated account owns release data, not
 the root-owned control scripts:
@@ -107,10 +111,12 @@ confenge-deploy ALL=(root) NOPASSWD: /usr/bin/systemctl restart confenge-web-run
 
 The packaged `nginx/confenge-web-http.conf` and
 `nginx/confenge-web-origin.conf` are loopback-only wrappers around five
-immutable generated snippets. A human may install the wrappers during host
-preparation after checking the existing nginx topology. Release commands never
-copy a hand-transcribed `_headers`/`_redirects` contract into `/etc/nginx` and
-never edit or reload unrelated vhosts.
+immutable generated snippets. The public vhost
+`nginx/confenge-web-public.conf` listens on 80/443 for
+`confenge.com.br` and `www.confenge.com.br` and follows
+`/opt/confenge-web/current`. Release commands never copy a hand-transcribed
+`_headers`/`_redirects` contract into `/etc/nginx` and never edit or reload
+unrelated vhosts.
 
 Use a dedicated SSH key and pin the server host key after comparing its
 fingerprint through an independent trusted channel. Never accept `ssh-keyscan`
@@ -137,10 +143,8 @@ gh secret set NETCUP_SSH_PRIVATE_KEY --repo tjsasakifln/web-cfg --env netcup-pro
 gh secret set NETCUP_SSH_KNOWN_HOSTS --repo tjsasakifln/web-cfg --env netcup-production < /secure/confenge/netcup-known-hosts
 ```
 
-Add required reviewers to `netcup-production`. Do **not** create the following
-variable in this PR. Only after the runtime ADR, origin, TLS, public vhost,
-rollback drill and explicit cutover approval are complete may an authorized
-operator run:
+Add required reviewers to `netcup-production`. Promote stays gated. Only an
+authorized operator may set:
 
 ```sh
 gh variable set NETCUP_CUTOVER_AUTHORIZED \
@@ -158,7 +162,7 @@ known-host or hostname fallback and never uses `StrictHostKeyChecking=no`.
 
 ## Operation
 
-Initial safe runs:
+Safe runs that do not swap public `current`:
 
 ```sh
 gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=package_only
@@ -166,8 +170,8 @@ gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f oper
 ```
 
 `stage_verify` uploads and validates but does not modify `current`; therefore it
-cannot change production traffic. A future, explicitly authorized dispatch may
-choose `operation=promote`. The workflow and host both serialize deploys.
+cannot change production traffic. An authorized dispatch may choose
+`operation=promote`. The workflow and host both serialize deploys.
 
 Host commands (full SHA only):
 
@@ -199,22 +203,26 @@ Evidence is append-only at `/opt/confenge-web/evidence/deploy.ndjson`. Keep the
 GitHub run URL, attestation and the final `PROMOTED` or `ROLLED_BACK` record in
 the change evidence.
 
-## Schedules: disabled until the same cutover
+## Schedules
 
 The package carries disabled-by-default systemd templates and a schedule
 contract. Packaging does not install a unit, create a cron entry, enable a
-timer, or create `shared/schedule-cutover.json`. The existing Netlify schedule
-remains active.
+timer, or create `shared/schedule-cutover.json`.
 
-Before cutover, both checks must prove the Netcup copy cannot run:
+Production HTTP is `confenge-web-runtime.service`. RevOps jobs that already hit
+live HTTPS (`revops-scheduled.yml`) remain the operational GitHub scheduler.
+
+The leftover Netlify scheduled function declared in `netlify.toml` is not the
+public production plane. Do not enable the host timer while that leftover
+executor cannot be proven disabled:
 
 ```sh
 test ! -e /opt/confenge-web/shared/schedule-cutover.json
 systemctl is-enabled confenge-web-search-observation.timer 2>&1 | grep -Eq 'disabled|not-found'
 ```
 
-Only a later cutover change may first disable and verify the corresponding
-legacy Netlify schedule, install the reviewed units from the promoted runtime,
+Only an authorized later change may first disable and verify the corresponding
+leftover Netlify schedule, install the reviewed units from the promoted runtime,
 and create a reviewed JSON gate that binds the current full SHA, the specific
 job and evidence `legacy_executor.netlify_search_observation_disabled=true`.
 Only then may it run:
@@ -223,8 +231,8 @@ Only then may it run:
 sudo systemctl enable --now confenge-web-search-observation.timer
 ```
 
-If the old scheduler cannot be proven disabled, stop: the activation gate must
-remain absent. This is the explicit proof against double execution.
+If the leftover scheduler cannot be proven disabled, stop: the activation gate
+must remain absent. This is the explicit proof against double execution.
 
 ## Rollback and pruning
 
@@ -233,4 +241,4 @@ smoke, atomic swap, nginx validation and live identity check as promotion. A
 failed rollback restores the link it found. `prune-releases --keep 5` preserves
 `current`, `rollback` and five additional newest releases; it never removes the
 current release during deploy. Incoming packages and persistent data are not
-pruned by this command.
+pruned by this command. Lead recovery is documented in `docs/ops/ROLLBACK.md`.

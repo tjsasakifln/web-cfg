@@ -1,0 +1,10 @@
+{
+  "mode": "from-authority",
+  "mutate": {
+    "dns.apex_a": ["75.2.60.5", "99.83.231.61"]
+  },
+  "expected": {
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "environment": "production"
+  }
+}

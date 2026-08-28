@@ -12,7 +12,7 @@ This file is the CONFENGE-side pin and validation runbook. Live DNS/TLS/ACME com
 
 | Surface | State |
 |---|---|
-| `confenge.com.br` | Netlify production. 11 ready targets HTTPS 200, canonical host `confenge.com.br`. |
+| `confenge.com.br` | nginx/Netcup production (`confenge-nginx-node/v2`). Canonical host `confenge.com.br`. |
 | `smartlic.tech` A | `69.46.46.88` (Railway) TTL 60 → fallback 404 |
 | `www.smartlic.tech` | CNAME `app.smartlic.tech.` → TLS SAN mismatch `*.up.railway.app` |
 | Bridge process | not deployed |
