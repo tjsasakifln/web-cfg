@@ -424,11 +424,11 @@
 <div class="form-progress" aria-hidden="true"><span class="form-progress-step is-active" data-step-indicator="1">1</span><span class="form-progress-bar"></span><span class="form-progress-step" data-step-indicator="2">2</span></div>
 
 <fieldset class="form-step is-active" data-form-step="1" id="form-step-1">
-<legend class="form-step-legend">Etapa 1 de 2 · Contato essencial</legend>
+<legend class="form-step-legend" data-step-heading>Etapa 1 de 2 · Contato essencial</legend>
 <div class="field"><label for="nome">Nome</label><input autocomplete="name" id="nome" name="nome" required="" type="text"/></div>
-<div class="form-row">
-<div class="field"><label for="telefone">WhatsApp</label><input autocomplete="tel" id="telefone" inputmode="tel" name="telefone" type="tel"/></div>
-<div class="field"><label for="email">E-mail</label><input autocomplete="email" id="email" name="email" type="email"/></div>
+<div class="form-row" role="group" aria-describedby="contato-hint">
+<div class="field"><label for="telefone">WhatsApp</label><input autocomplete="tel" aria-describedby="contato-hint" id="telefone" inputmode="tel" name="telefone" type="tel"/></div>
+<div class="field"><label for="email">E-mail</label><input autocomplete="email" aria-describedby="contato-hint" id="email" name="email" type="email"/></div>
 </div>
 <p class="form-hint" id="contato-hint">Informe WhatsApp ou e-mail para retorno.</p>
 <div class="field">
@@ -448,7 +448,7 @@
 </fieldset>
 
 <fieldset class="form-step" data-form-step="2" id="form-step-2">
-<legend class="form-step-legend">Etapa 2 de 2 · Contexto (pode completar depois)</legend>
+<legend class="form-step-legend" data-step-heading>Etapa 2 de 2 · Contexto (pode completar depois)</legend>
 <div class="field"><label for="empresa">Empresa <span class="optional-mark">opcional</span></label><input autocomplete="organization" id="empresa" name="empresa" type="text"/></div>
 <div class="field">
 <label for="urgencia">Urgência <span class="optional-mark">opcional</span></label>
@@ -473,7 +473,7 @@
 </div>
 <p class="form-note">Retorno direto. Sem lista de e-mails ou compartilhamento comercial dos dados.</p>
 </fieldset>
-<div class="form-status" role="status" aria-live="polite" hidden></div>
+<div class="form-status" id="form-status" role="status" aria-live="polite" hidden></div>
 </form>
 </div>
 </section>
