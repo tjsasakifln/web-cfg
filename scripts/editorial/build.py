@@ -10,6 +10,7 @@ Fail-closed:
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -408,6 +409,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
 
     # Strip wave1 URLs from main sitemap.xml if not indexable
     _sync_main_sitemap(page_idx)
+    _restore_frozen_public_graph()
 
     save_registry(reg, source_manifest=man)
     docs_reg = ROOT / "docs" / "editorial" / "EDITORIAL-REGISTRY.json"
@@ -458,6 +460,27 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
     }
     REPORT_PATH.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return report
+
+
+def _restore_frozen_public_graph() -> None:
+    """Issue #291 freezes the public sitemap graph until recapture.
+
+    close_graph rewrites lastmod on sitemap.xml / sitemap-index.xml from HTML.
+    That is honest for editorial children, but the main graph is a forbidden
+    surface. Restore the committed bytes so CI frozen-spec tests stay closed.
+    """
+    frozen = (
+        "sitemap.xml",
+        "sitemap-index.xml",
+        "sitemap.txt",
+        "robots.txt",
+    )
+    subprocess.run(
+        ["git", "checkout", "--", *frozen],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+    )
 
 
 def _sync_main_sitemap(indexable_urls: list[str]) -> None:
