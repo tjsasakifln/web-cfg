@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
+OFFER_FIT_MATRIX = ROOT / "data/commercial/offer-fit-matrix.v1.json"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
@@ -47,6 +48,16 @@ MANAGED_EXTENSIONS = [
 
 def e(value: Any) -> str:
     return html_lib.escape("" if value is None else str(value), quote=True)
+
+
+def _offer_fit_copy(route_key: str) -> dict[str, str]:
+    payload = json.loads(OFFER_FIT_MATRIX.read_text(encoding="utf-8"))
+    copy = (payload.get("route_copy") or {}).get(route_key) or {}
+    headline = copy.get("headline")
+    body = copy.get("body")
+    if not headline or not body:
+        raise ValueError(f"offer-fit route_copy missing for {route_key}")
+    return {"headline": str(headline), "body": str(body)}
 
 
 def _breadcrumbs(current: str) -> str:
@@ -247,6 +258,7 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
     services = hub(brand, "services")
     clusters = problem_clusters(brand)
     stages = problem_stages(brand)
+    fit = _offer_fit_copy("problemas-que-resolvemos")
     blocks = []
     items = []
     for stage in stages:
@@ -289,6 +301,13 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 </section>
 <h2 class="hub-section-title" id="hub-stages">Onde você está no ciclo do contrato?</h2>
 <div class="problem-stages" aria-labelledby="hub-stages">{stages_html}</div>
+</div>
+</section>
+<section class="section" id="fit-economico" data-offer-fit="1">
+<div class="container narrow">
+<p class="eyebrow">Fit econômico</p>
+<h2>{e(fit["headline"])}</h2>
+<p>{e(fit["body"])}</p>
 </div>
 </section>
 <section aria-labelledby="hub-next" class="section section--default">
