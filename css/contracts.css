@@ -27,3 +27,12 @@ table{overflow-wrap:anywhere}
 .button,.button-primary,.button-secondary,.header-cta,.text-link{min-height:var(--touch-min)}
 img,video,iframe{max-width:100%}
 img,video{height:auto}
+/* CFG10X-01: lone action-list child must occupy the prose column, not the 42px marker. */
+.action-list{min-width:0;list-style:decimal;counter-reset:action-item}
+.action-list>li{display:grid;grid-template-columns:42px minmax(0,1fr);gap:18px;min-width:0;counter-increment:action-item}
+.action-list>li::before{content:counter(action-item);color:var(--green-700);font-size:var(--text-micro);font-weight:850;letter-spacing:.1em;line-height:1.4}
+.action-list>li>:only-child{grid-column:2;min-width:0;max-width:100%;overflow-wrap:normal;word-break:normal}
+.action-list>li>span:first-child{grid-column:1}
+.action-list>li>span:first-child+*{grid-column:2;min-width:0;max-width:100%}
+.action-list>li:has(>span:first-child)::before{content:none;display:none}
+@media (max-width:520px){.action-list>li{grid-template-columns:32px minmax(0,1fr);gap:12px}}
