@@ -3,11 +3,16 @@ from pathlib import Path
 
 import pytest
 
-from scripts.pseo.build_site import configure_turnstile_site_key
+from scripts.pseo.build_site import (
+    _capture_form_bounds,
+    configure_turnstile_site_key,
+    is_lead_capture_html,
+)
 
 ROOT = Path(__file__).resolve().parents[3]
 
-FORM = '<div id="turnstile-slot" hidden data-turnstile-sitekey=""></div>\n'
+SLOT = '<div id="turnstile-slot" hidden data-turnstile-sitekey=""><div class="cf-turnstile"></div></div>\n'
+FORM = '<form id="formulario-contato" action="/obrigado">' + SLOT + "</form>\n"
 CAPTURE_FORM = (
     '<form method="post" action="/.netlify/functions/lead">'
     "<input name=\"nome\"/><button type=\"submit\">Enviar</button></form>\n"
@@ -52,8 +57,11 @@ def test_site_key_is_injected_only_into_publish_artifact(tmp_path: Path) -> None
 
 
 def test_malformed_or_ambiguous_marker_fails_closed(tmp_path: Path) -> None:
-    write_form(tmp_path, FORM + FORM)
-    with pytest.raises(RuntimeError, match="exactly once"):
+    write_form(
+        tmp_path,
+        '<form action="/.netlify/functions/lead">' + SLOT + SLOT + "</form>",
+    )
+    with pytest.raises(RuntimeError, match="expected exactly one"):
         configure_turnstile_site_key(
             tmp_path,
             {"CONTEXT": "production", "TURNSTILE_SITE_KEY": "0x-public-site-key-fixture"},
@@ -100,31 +108,75 @@ def test_capture_form_without_close_tag_fails_closed(tmp_path: Path) -> None:
         configure_turnstile_site_key(tmp_path, PROD)
 
 
+def test_existing_turnstile_outside_capture_form_fails_closed(tmp_path: Path) -> None:
+    write_form(tmp_path, SLOT + CAPTURE_FORM)
+    with pytest.raises(RuntimeError, match="turnstile_slot_outside_capture_form"):
+        configure_turnstile_site_key(tmp_path, PROD)
+
+
+def test_single_quoted_turnstile_slot_inside_capture_form_is_not_duplicated(
+    tmp_path: Path,
+) -> None:
+    write_form(
+        tmp_path,
+        '<form action="/.netlify/functions/lead">'
+        "<div id='turnstile-slot' data-turnstile-sitekey=''>"
+        "<div class='cf-turnstile'></div></div></form>",
+    )
+
+    configure_turnstile_site_key(tmp_path, PROD)
+
+    html = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert html.count("turnstile-slot") == 1
+    assert html.count("cf-turnstile") == 1
+    assert f"data-turnstile-sitekey='{SITEKEY}'" in html
+
+
 def _tracked_capture_html() -> list[tuple[str, str]]:
     listed = subprocess.check_output(
         ["git", "-C", str(ROOT), "ls-files", "*.html"],
         text=True,
     ).splitlines()
     rows = []
-    capture = (
-        "action=\"/.netlify/functions/lead\"",
-        "action='/.netlify/functions/lead'",
-        'id="formulario-contato"',
-        "id='formulario-contato'",
-    )
     for rel in listed:
         if rel.startswith(".claude/") or rel.startswith(".worktrees/"):
             continue
         text = (ROOT / rel).read_text(encoding="utf-8")
-        if any(token in text for token in capture):
+        if is_lead_capture_html(text):
             rows.append((rel, text))
     return rows
+
+
+ISSUE_440_CAPTURE_ROUTES = {
+    "acompanhamento-contratos-obras/index.html",
+    "atrasos-prorrogacao-obras-publicas/index.html",
+    "bid-room-licitacoes-obras/index.html",
+    "casos/index.html",
+    "casos/modelo-apresentacao-executiva-resultados/index.html",
+    "casos/modelo-base-quantitativa-canonica/index.html",
+    "casos/modelo-contratos-vincendos-relicitacao/index.html",
+    "casos/modelo-mapa-compradores-publicos/index.html",
+    "casos/modelo-mapeamento-concorrentes-publicos/index.html",
+    "casos/modelo-painel-precos-obras-publicas/index.html",
+    "casos/modelo-relatorio-executivo-consolidado/index.html",
+    "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+    "comercial/radar-decisorio/index.html",
+    "defesa-margem-contratos-publicos/index.html",
+    "defesa-tecnica-contratos-publicos/index.html",
+    "diagnostico-b2g-expansao/index.html",
+    "diretoria-b2g/index.html",
+    "entregas/index.html",
+    "ferramentas/diagnostico-defesa-margem/index.html",
+    "index.html",
+    "inteligencia/valor-tipico-contratos-pavimentacao/index.html",
+    "servicos-obras-publicas/index.html",
+}
 
 
 def test_issue_440_every_tracked_capture_route_receives_turnstile(tmp_path: Path) -> None:
     """Issue #440: every lead-capture HTML, not just home, ships widget + sitekey."""
     rows = _tracked_capture_html()
-    assert len(rows) >= 22, f"capture surface shrank below the #440 census: {len(rows)}"
+    assert {rel for rel, _ in rows} == ISSUE_440_CAPTURE_ROUTES
     for rel, text in rows:
         dest = tmp_path / rel
         dest.parent.mkdir(parents=True, exist_ok=True)
@@ -137,9 +189,12 @@ def test_issue_440_every_tracked_capture_route_receives_turnstile(tmp_path: Path
     missing = []
     for rel, _ in rows:
         html = (tmp_path / rel).read_text(encoding="utf-8")
-        keyed = f'data-turnstile-sitekey="{SITEKEY}"' in html
-        widget = "cf-turnstile" in html
-        if keyed and widget:
+        form_start, form_end, _ = _capture_form_bounds(html)
+        capture_form = html[form_start:form_end]
+        keyed = f'data-turnstile-sitekey="{SITEKEY}"' in capture_form
+        widget = "cf-turnstile" in capture_form
+        script_loader = 'src="/script.js' in html or "src='/script.js" in html
+        if keyed and widget and script_loader:
             ready += 1
         else:
             missing.append(rel)

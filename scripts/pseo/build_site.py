@@ -190,7 +190,6 @@ def run_node_gate(script: str) -> dict:
     }
 
 
-TURNSTILE_MARKER = 'data-turnstile-sitekey=""'
 TURNSTILE_SLOT = (
     '<div class="field turnstile-slot" id="turnstile-slot" hidden '
     'data-turnstile-sitekey="">'
@@ -204,6 +203,15 @@ _CAPTURE_FORM_RE = re.compile(
     r'))[^>]*>'
 )
 _CLOSE_FORM_RE = re.compile(r"(?is)</form>")
+_TURNSTILE_MARKER_RE = re.compile(
+    r"(?i)\bdata-turnstile-sitekey\s*=\s*(?P<quote>[\"'])\s*(?P=quote)"
+)
+_TURNSTILE_SLOT_ID_RE = re.compile(
+    r"(?i)\bid\s*=\s*[\"']turnstile-slot[\"']"
+)
+_TURNSTILE_WIDGET_RE = re.compile(
+    r"(?i)\bclass\s*=\s*[\"'][^\"']*\bcf-turnstile\b[^\"']*[\"']"
+)
 
 
 def is_lead_capture_html(html: str) -> bool:
@@ -211,16 +219,61 @@ def is_lead_capture_html(html: str) -> bool:
     return bool(_CAPTURE_FORM_RE.search(html))
 
 
-def _insert_turnstile_slot(html: str) -> str:
-    if TURNSTILE_MARKER in html or 'id="turnstile-slot"' in html:
-        return html
-    opening = _CAPTURE_FORM_RE.search(html)
-    if opening is None:
+def _capture_form_bounds(html: str) -> tuple[int, int, int]:
+    openings = list(_CAPTURE_FORM_RE.finditer(html))
+    if not openings:
         raise RuntimeError("turnstile_slot_insert_failed: capture form not found")
+    if len(openings) != 1:
+        raise RuntimeError("turnstile_slot_insert_failed: multiple capture forms")
+    opening = openings[0]
     closing = _CLOSE_FORM_RE.search(html, opening.end())
     if closing is None:
         raise RuntimeError("turnstile_slot_insert_failed: missing </form>")
-    return html[: closing.start()] + TURNSTILE_SLOT + html[closing.start() :]
+    return opening.end(), closing.start(), closing.end()
+
+
+def _ensure_turnstile_slot(html: str) -> str:
+    form_start, form_end, _ = _capture_form_bounds(html)
+    marker_matches = list(_TURNSTILE_MARKER_RE.finditer(html))
+    slot_matches = list(_TURNSTILE_SLOT_ID_RE.finditer(html))
+    widget_matches = list(_TURNSTILE_WIDGET_RE.finditer(html))
+
+    def inside_form(match: re.Match[str]) -> bool:
+        return form_start <= match.start() < form_end
+
+    marker_inside = [match for match in marker_matches if inside_form(match)]
+    slot_inside = [match for match in slot_matches if inside_form(match)]
+    widget_inside = [match for match in widget_matches if inside_form(match)]
+
+    if marker_matches and len(marker_inside) != len(marker_matches):
+        raise RuntimeError("turnstile_slot_outside_capture_form")
+    if slot_matches and len(slot_inside) != len(slot_matches):
+        raise RuntimeError("turnstile_slot_outside_capture_form")
+    if widget_matches and len(widget_inside) != len(widget_matches):
+        raise RuntimeError("turnstile_slot_outside_capture_form")
+
+    counts = (len(marker_inside), len(slot_inside), len(widget_inside))
+    if counts == (0, 0, 0):
+        return html[:form_end] + TURNSTILE_SLOT + html[form_end:]
+    if counts != (1, 1, 1):
+        raise RuntimeError(
+            "turnstile_slot_insert_failed: expected exactly one marker, slot and widget "
+            "inside the capture form"
+        )
+    return html
+
+
+def _inject_turnstile_site_key(html: str, site_key: str) -> str:
+    matches = list(_TURNSTILE_MARKER_RE.finditer(html))
+    if len(matches) != 1:
+        raise RuntimeError("Turnstile site-key marker must occur exactly once")
+    escaped = escape(site_key, quote=True)
+
+    def keyed_marker(match: re.Match[str]) -> str:
+        quote = match.group("quote")
+        return f"data-turnstile-sitekey={quote}{escaped}{quote}"
+
+    return _TURNSTILE_MARKER_RE.sub(keyed_marker, html, count=1)
 
 
 def configure_turnstile_site_key(public_root: Path, env: dict[str, str] | None = None) -> dict:
@@ -233,17 +286,12 @@ def configure_turnstile_site_key(public_root: Path, env: dict[str, str] | None =
     resolved_env = os.environ if env is None else env
     context = (resolved_env.get("CONTEXT") or resolved_env.get("NETLIFY_CONTEXT") or "").strip().lower()
     site_key = (resolved_env.get("TURNSTILE_SITE_KEY") or "").strip()
-    marker = TURNSTILE_MARKER
-
     if not site_key:
         if context == "production":
             raise RuntimeError("TURNSTILE_SITE_KEY is required for the production publish artifact")
     elif len(site_key) < 10 or len(site_key) > 200 or re.search(r"[\x00-\x1f\x7f]", site_key):
         raise RuntimeError("TURNSTILE_SITE_KEY is malformed")
 
-    keyed = (
-        f'data-turnstile-sitekey="{escape(site_key, quote=True)}"' if site_key else ""
-    )
     capture_files = 0
     injected_files = 0
     html_files = sorted(path for path in public_root.rglob("*.html") if path.is_file())
@@ -254,19 +302,24 @@ def configure_turnstile_site_key(public_root: Path, env: dict[str, str] | None =
         capture = is_lead_capture_html(html)
         if capture:
             capture_files += 1
-            html = _insert_turnstile_slot(html)
-        marker_count = html.count(marker)
-        if marker_count > 1:
-            raise RuntimeError("Turnstile site-key marker must occur exactly once")
-        if capture and marker_count != 1:
-            raise RuntimeError("turnstile_slot_insert_failed: marker missing after insert")
-        if site_key and marker_count == 1:
-            html = html.replace(marker, keyed, 1)
+            html = _ensure_turnstile_slot(html)
+        elif (
+            _TURNSTILE_MARKER_RE.search(html)
+            or _TURNSTILE_SLOT_ID_RE.search(html)
+            or _TURNSTILE_WIDGET_RE.search(html)
+        ):
+            raise RuntimeError("turnstile_slot_without_capture_form")
+        if site_key and capture:
+            html = _inject_turnstile_site_key(html, site_key)
             injected_files += 1
         if html != raw:
             path.write_text(html, encoding="utf-8")
 
-    configured = bool(site_key) and injected_files > 0
+    if site_key and capture_files == 0:
+        raise RuntimeError("turnstile_capture_form_missing: production artifact has no lead form")
+    if site_key and injected_files != capture_files:
+        raise RuntimeError("turnstile_injection_incomplete")
+    configured = bool(site_key) and capture_files > 0 and injected_files == capture_files
     return {
         "configured": configured,
         "context": context or "local",
