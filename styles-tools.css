@@ -120,12 +120,6 @@
   line-height: 1.55;
   max-width: 62ch;
 }
-.tool-hub-situations .lead-inline-copy h2 {
-  margin-bottom: 0.5rem;
-  color: #fff;
-  font-size: 1.2rem;
-  letter-spacing: -0.02em;
-}
 
 /* Legacy card list kept only if residual markup exists */
 .tool-card-list {
