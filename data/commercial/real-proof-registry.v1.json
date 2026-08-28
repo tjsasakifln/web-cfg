@@ -25,7 +25,10 @@
     "resultado não verificável é declarado UNKNOWN, nunca preenchido com copy",
     "revogação retira conteúdo visível, schema, cache, sitemap e referências internas"
   ],
-  "forbidden_schema_types_on_public_pages": ["Review", "AggregateRating"],
+  "forbidden_schema_types_on_public_pages": [
+    "Review",
+    "AggregateRating"
+  ],
   "kill_rules": [
     "sem consentimento: não publicar",
     "consentimento ambíguo: não publicar",
@@ -38,9 +41,18 @@
     "fail_closed": true,
     "purpose_pt_br": "Impedir que prova comercial fabricada entre no site antes de existir uma autorização real de titular, e impedir que o registro seja preenchido de forma desonesta.",
     "blocked_state_rule_pt_br": "Enquanto o estado for BLOCKED_EXTERNAL, a lista de entradas permanece vazia; qualquer entrada presente reprova o gate.",
-    "entries_must_be_empty_while_state_is": ["BLOCKED_EXTERNAL"],
-    "allowed_registry_states": ["BLOCKED_EXTERNAL", "PREPARE_ONLY", "AUTHORIZED"],
-    "pre_authorization_entry_states": ["DRAFT", "PENDING_CLIENT_APPROVAL"],
+    "entries_must_be_empty_while_state_is": [
+      "BLOCKED_EXTERNAL"
+    ],
+    "allowed_registry_states": [
+      "BLOCKED_EXTERNAL",
+      "PREPARE_ONLY",
+      "AUTHORIZED"
+    ],
+    "pre_authorization_entry_states": [
+      "DRAFT",
+      "PENDING_CLIENT_APPROVAL"
+    ],
     "authorized_registry_state": "AUTHORIZED"
   },
   "entry_schema": {
@@ -78,12 +90,30 @@
       "binding_kind",
       "binding_value"
     ],
-    "allowed_final_approval_binding_kinds": ["material_hash", "material_version"],
-    "required_verifiable_evidence_fields": ["kind", "reference", "within_authorized_scope"],
-    "allowed_verifiable_evidence_kinds": ["trecho", "captura_redigida", "checksum"],
-    "required_claim_fields": ["statement_pt_br", "evidence_grade", "source_pt_br"],
+    "allowed_final_approval_binding_kinds": [
+      "material_hash",
+      "material_version"
+    ],
+    "required_verifiable_evidence_fields": [
+      "kind",
+      "reference",
+      "within_authorized_scope"
+    ],
+    "allowed_verifiable_evidence_kinds": [
+      "trecho",
+      "captura_redigida",
+      "checksum"
+    ],
+    "required_claim_fields": [
+      "statement_pt_br",
+      "evidence_grade",
+      "source_pt_br"
+    ],
     "calculation_method_field": "calculation_pt_br",
-    "required_revocation_fields": ["channel", "removes"],
+    "required_revocation_fields": [
+      "channel",
+      "removes"
+    ],
     "revocation_must_remove": [
       "conteudo_visivel",
       "schema",
@@ -95,7 +125,12 @@
     "rule_pt_br": "Toda entrada é validada pela mesma função do gate; campo ausente, vazio ou fora do vocabulário reprova a entrada inteira."
   },
   "evidence_vocabulary": {
-    "grades": ["FACT", "CALCULATION", "INFERENCE", "UNKNOWN"],
+    "grades": [
+      "FACT",
+      "CALCULATION",
+      "INFERENCE",
+      "UNKNOWN"
+    ],
     "unverifiable_result_grade": "UNKNOWN",
     "definitions_pt_br": {
       "FACT": "afirmação verificável na evidência autorizada, sem cálculo nem interpretação",
@@ -107,7 +142,11 @@
   },
   "measurement_funnel": {
     "state": "NOT_STARTED",
-    "steps": ["view", "proof engagement", "qualified action"],
+    "steps": [
+      "view",
+      "proof engagement",
+      "qualified action"
+    ],
     "observed": {
       "view": null,
       "proof_engagement": null,
@@ -154,15 +193,19 @@
     "testimonial-carousel"
   ],
   "public_scan_scope": {
-    "included_extensions": [".html"],
+    "included_extensions": [
+      ".html"
+    ],
     "excluded_path_prefixes": [
+      ".claude/",
       ".git/",
       ".github/",
+      ".worktrees/",
+      "_site/",
       "docs/",
       "node_modules/",
       "scripts/",
-      "tests/",
-      "_site/"
+      "tests/"
     ],
     "minimum_pages_expected": 200,
     "expected_review_schema_hits": 0,
@@ -187,7 +230,11 @@
   "non_duplication": {
     "consent_contract_issue": "#249",
     "executed_by_issue": "#328",
-    "not_restated_issues": ["#83", "#243", "#184"],
+    "not_restated_issues": [
+      "#83",
+      "#243",
+      "#184"
+    ],
     "reason_pt_br": "Este registro trata apenas de prova comercial de uma entrega contratada. Análise técnica editorial de contrato público, credenciais profissionais e percepção do painel da home pertencem a outras issues e não são redeclaradas aqui."
   }
 }

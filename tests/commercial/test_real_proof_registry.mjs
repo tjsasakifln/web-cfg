@@ -980,7 +980,10 @@ assert("registry_shape_valid_today", validateRegistryShape(data).length === 0, v
 const scanScope = data.public_scan_scope ?? {};
 const EXCLUDED = scanScope.excluded_path_prefixes ?? [];
 assert("scan_scope_excludes_declared", filledList(EXCLUDED, 5), EXCLUDED);
-for (const prefix of [".git/", "docs/", "node_modules/", "scripts/", "tests/", "_site/"]) {
+// `.claude/` and `.worktrees/` hold agent worktrees and sibling checkouts. They
+// are not published, and treating them as public pages made this gate reprove
+// 299 times locally while CI, which clones fresh, stayed green.
+for (const prefix of [".git/", "docs/", "node_modules/", "scripts/", "tests/", "_site/", ".claude/", ".worktrees/"]) {
   assert(`scan_scope_excludes_${prefix.replace(/[^a-zA-Z]+/g, "_")}`, EXCLUDED.includes(prefix), prefix);
 }
 
