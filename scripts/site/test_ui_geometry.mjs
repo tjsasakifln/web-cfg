@@ -1747,7 +1747,7 @@ async function main() {
     const fixturePage = await browser.newPage();
     await fixturePage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
     const fixtureHtml = readFileSync(
-      join(ROOT, "scripts/site/fixtures/type-floor/historical-prova-collapse.html"),
+      join(ROOT, "tests/fixtures/type-floor/historical-prova-collapse.html"),
       "utf8",
     );
     await fixturePage.setContent(fixtureHtml, { waitUntil: "domcontentloaded" });
