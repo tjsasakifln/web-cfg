@@ -73,6 +73,11 @@ def test_new_third_party_host_fails() -> None:
     assert any("unexpected third-party" in item for item in errors), errors
 
 
+def test_apply_script_src_hashes_is_noop_without_csp() -> None:
+    stub = "/*\n  X-Robots-Tag: all\n"
+    assert apply_script_src_hashes(stub, ["'sha256-aaa='"]) == stub
+
+
 def test_apply_script_src_hashes_round_trip() -> None:
     original = _headers_with_script_src("'self' 'sha256-oldhash==' https://challenges.cloudflare.com")
     updated = apply_script_src_hashes(original, ["'sha256-aaa='", "'sha256-bbb='"])
