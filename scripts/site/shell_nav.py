@@ -36,11 +36,18 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts.pseo.html_shell import breadcrumbs_html  # noqa: E402
 from scripts.site.public_ia import (  # noqa: E402
     active_header_href as ia_active_header_href,
+    align_breadcrumb_trail,
+    breadcrumb_trail,
+    current_breadcrumb_label,
     footer_columns_html,
     header_cta as ia_header_cta,
     header_items as ia_header_items,
+    parse_jsonld_breadcrumb_trail,
+    parse_visible_breadcrumb_trail,
+    rewrite_breadcrumb_list_jsonld,
 )
 
 BRAND_PATH = ROOT / "data" / "site" / "brand.json"
@@ -110,6 +117,10 @@ HEADER_CTA_RE = re.compile(
 FOOTER_NAV_COL_RE = re.compile(
     r'(<div class="footer-links"><strong>Navegação</strong>)(.*?)(</div>)',
     re.S,
+)
+BREADCRUMB_NAV_RE = re.compile(
+    r'<nav\b(?=[^>]*\bbreadcrumbs\b)[^>]*>.*?</nav>',
+    re.S | re.I,
 )
 FOOTER_TOP_RE = re.compile(
     r'(<div class="container footer-top">\s*<div class="footer-brand">.*?</div>)'
@@ -282,8 +293,33 @@ def _header_cta(match: re.Match[str], brand: dict[str, Any]) -> str:
     return desktop_cta(brand)
 
 
+def _aligned_crumbs(
+    text: str, current: str | None
+) -> list[tuple[str, str | None]] | None:
+    if not current:
+        return None
+    existing = parse_visible_breadcrumb_trail(text)
+    if not existing and "BreadcrumbList" not in text:
+        return None
+    label = current_breadcrumb_label(text)
+    trail = breadcrumb_trail(current, current_label=label)
+    return align_breadcrumb_trail(existing, trail)
+
+
+def sync_breadcrumbs(text: str, current: str | None) -> str:
+    """Rewrite visible crumbs and BreadcrumbList from the IA parent chain."""
+    aligned = _aligned_crumbs(text, current)
+    if not aligned or not current:
+        return text
+    if parse_visible_breadcrumb_trail(text) != aligned and BREADCRUMB_NAV_RE.search(text):
+        text = BREADCRUMB_NAV_RE.sub(breadcrumbs_html(aligned), text, count=1)
+    if parse_jsonld_breadcrumb_trail(text, current) != aligned:
+        text = rewrite_breadcrumb_list_jsonld(text, aligned, current)
+    return text
+
+
 def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
-    """Idempotently align one page's header/footer navigation with brand.json."""
+    """Idempotently align one page's header/footer/breadcrumbs with the IA map."""
     if 'class="desktop-nav"' not in text and 'class="mobile-nav"' not in text:
         return text
 
@@ -308,6 +344,8 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
         text = FOOTER_NAV_COL_RE.sub(
             lambda m: f"{m.group(1)}{links}{m.group(3)}", text, count=1
         )
+
+    text = sync_breadcrumbs(text, current)
 
     # Any remaining home-anchor pointer (footer, inline links) follows the label.
     for legacy, target in LEGACY_ANCHOR_HREFS.items():

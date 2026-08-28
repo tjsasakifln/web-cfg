@@ -1,8 +1,8 @@
 """Public information architecture: map, chrome, breadcrumbs, route census.
 
-The JSON contract at data/site/public-ia-map.json is the source. This module
-does not parse or rewrite HTML; generators and tests import the pure map and
-the materialized route table independently.
+The JSON contract at data/site/public-ia-map.json is the source. Generators
+rewrite chrome from this module; tests parse shipped HTML against the same
+helpers so they cannot drift into a parallel breadcrumb model.
 """
 
 from __future__ import annotations
@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import re
 from collections import deque
-from html import escape
+from html import escape, unescape
 from pathlib import Path
 from typing import Any
 
@@ -69,6 +69,20 @@ _ROBOTS_RE = re.compile(
 )
 _ROBOTS_RE_ALT = re.compile(
     r'content=["\']([^"\']+)["\'][^>]*name=["\']robots["\']', re.I
+)
+SITE_ORIGIN = "https://confenge.com.br"
+_CRUMB_NAV_RE = re.compile(
+    r'<nav\b(?=[^>]*\bbreadcrumbs\b)[^>]*>(.*?)</nav>',
+    re.S | re.I,
+)
+_CRUMB_LI_RE = re.compile(r"<li\b([^>]*)>(.*?)</li>", re.S | re.I)
+_CRUMB_A_RE = re.compile(
+    r'<a\b[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+    re.S | re.I,
+)
+_LD_SCRIPT_RE = re.compile(
+    r'(<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>)(.*?)(</script>)',
+    re.S | re.I,
 )
 
 
@@ -190,6 +204,198 @@ def breadcrumb_trail(
     elif crumbs and current_label:
         crumbs[-1] = (current_label, None)
     return crumbs
+
+
+def _plain_text(chunk: str) -> str:
+    text = unescape(re.sub(r"<[^>]+>", " ", chunk or ""))
+    return re.sub(r"\s+", " ", text).strip(" /")
+
+
+def href_to_route(href: str | None, current_route: str | None = None) -> str | None:
+    """Normalize a visible or JSON-LD href to a public route; current page → None."""
+    if not href:
+        return None
+    raw = str(href).strip()
+    if raw.startswith(SITE_ORIGIN):
+        raw = raw[len(SITE_ORIGIN) :] or "/"
+    path = _path_with_slash(_normalize_route(raw.split("#", 1)[0].split("?", 1)[0]))
+    if not path:
+        return None
+    if current_route:
+        current = _path_with_slash(_normalize_route(current_route))
+        if current and path == current:
+            return None
+    return path
+
+
+def parse_visible_breadcrumb_trail(html: str) -> list[tuple[str, str | None]]:
+    """Read the visible breadcrumb ol from shipped HTML."""
+    nav = _CRUMB_NAV_RE.search(html or "")
+    if not nav:
+        return []
+    crumbs: list[tuple[str, str | None]] = []
+    for attrs, inner in _CRUMB_LI_RE.findall(nav.group(1)):
+        current = "aria-current" in attrs.lower()
+        link = _CRUMB_A_RE.search(inner)
+        if link and not current:
+            name = _plain_text(link.group(2))
+            crumbs.append((name, href_to_route(link.group(1))))
+        else:
+            name = _plain_text(link.group(2) if link else inner)
+            crumbs.append((name, None))
+    return crumbs
+
+
+def _ld_nodes(data: Any) -> list[dict[str, Any]]:
+    nodes: list[dict[str, Any]] = []
+    if isinstance(data, list):
+        for item in data:
+            nodes.extend(_ld_nodes(item))
+        return nodes
+    if not isinstance(data, dict):
+        return nodes
+    graph = data.get("@graph")
+    if graph is not None:
+        nodes.extend(_ld_nodes(graph))
+    nodes.append(data)
+    return nodes
+
+
+def _ld_types(node: dict[str, Any]) -> set[str]:
+    raw = node.get("@type")
+    if isinstance(raw, list):
+        return {str(item) for item in raw}
+    if raw:
+        return {str(raw)}
+    return set()
+
+
+def _ld_item_href(value: Any) -> str | None:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, dict):
+        return str(value.get("@id") or value.get("id") or value.get("url") or "") or None
+    return None
+
+
+def parse_jsonld_breadcrumb_trail(
+    html: str,
+    current_route: str | None = None,
+) -> list[tuple[str, str | None]]:
+    """Read BreadcrumbList names/hrefs from shipped JSON-LD."""
+    for match in _LD_SCRIPT_RE.finditer(html or ""):
+        try:
+            data = json.loads(match.group(2))
+        except json.JSONDecodeError:
+            continue
+        for node in _ld_nodes(data):
+            if "BreadcrumbList" not in _ld_types(node):
+                continue
+            elements = node.get("itemListElement") or []
+            if isinstance(elements, dict):
+                elements = [elements]
+            crumbs: list[tuple[str, str | None]] = []
+            for element in elements:
+                if not isinstance(element, dict):
+                    continue
+                name = str(element.get("name") or "").strip()
+                href = href_to_route(_ld_item_href(element.get("item")), current_route)
+                if name:
+                    crumbs.append((name, href))
+            if crumbs:
+                return crumbs
+    return []
+
+
+def align_breadcrumb_trail(
+    existing: list[tuple[str, str | None]],
+    trail: list[tuple[str, str | None]],
+) -> list[tuple[str, str | None]]:
+    """Keep extra editorial levels; insert the IA parent chain when it is missing."""
+    if not trail:
+        return existing
+    current_label = existing[-1][0] if existing else trail[-1][0]
+    ancestors = list(trail[:-1])
+    if not existing:
+        return ancestors + [(current_label, None)]
+    existing_hrefs = [href for _, href in existing[:-1] if href]
+    ancestor_hrefs = [href for _, href in ancestors if href]
+    cursor = 0
+    missing = False
+    for href in ancestor_hrefs:
+        try:
+            cursor = existing_hrefs.index(href, cursor) + 1
+        except ValueError:
+            missing = True
+            break
+    labels = {href: name for name, href in ancestors if href}
+    if not missing:
+        aligned: list[tuple[str, str | None]] = []
+        for name, href in existing[:-1]:
+            aligned.append((labels.get(href, name) if href else name, href))
+        aligned.append((current_label, None))
+        return aligned
+    extras = [
+        (name, href)
+        for name, href in existing[:-1]
+        if href and href not in labels and href != "/"
+    ]
+    return ancestors + extras + [(current_label, None)]
+
+
+def current_breadcrumb_label(html: str, fallback: str | None = None) -> str | None:
+    visible = parse_visible_breadcrumb_trail(html)
+    if visible:
+        return visible[-1][0]
+    return fallback
+
+
+def breadcrumb_list_elements(
+    trail: list[tuple[str, str | None]],
+    current_route: str,
+) -> list[dict[str, Any]]:
+    """JSON-LD itemListElement for a trail. Last item carries the current URL."""
+    current = _path_with_slash(_normalize_route(current_route))
+    elements: list[dict[str, Any]] = []
+    for index, (name, href) in enumerate(trail, start=1):
+        item: dict[str, Any] = {"@type": "ListItem", "position": index, "name": name}
+        url = href
+        if url is None and index == len(trail) and current:
+            url = current
+        if url:
+            item["item"] = url if str(url).startswith("http") else f"{SITE_ORIGIN}{url}"
+        elements.append(item)
+    return elements
+
+
+def rewrite_breadcrumb_list_jsonld(
+    html: str,
+    trail: list[tuple[str, str | None]],
+    current_route: str,
+) -> str:
+    """Replace BreadcrumbList itemListElement in existing JSON-LD scripts."""
+    elements = breadcrumb_list_elements(trail, current_route)
+
+    def sub(match: re.Match[str]) -> str:
+        try:
+            data = json.loads(match.group(2))
+        except json.JSONDecodeError:
+            return match.group(0)
+        changed = False
+        for node in _ld_nodes(data):
+            if "BreadcrumbList" not in _ld_types(node):
+                continue
+            if node.get("itemListElement") == elements:
+                continue
+            node["itemListElement"] = elements
+            changed = True
+        if not changed:
+            return match.group(0)
+        dumped = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+        dumped = dumped.replace("<", "\\u003c")
+        return f"{match.group(1)}{dumped}{match.group(3)}"
+
+    return _LD_SCRIPT_RE.sub(sub, html)
 
 
 def _label_index(ia: dict[str, Any]) -> dict[str, str]:
