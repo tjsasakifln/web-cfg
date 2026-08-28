@@ -3,7 +3,7 @@
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
   "baseline_commit": "f3b859c77b4bd21110b5b5c22a1bc61cd98d62d6",
   "recaptured_at": "2026-08-28",
-  "recapture_reason": "CFG10X-10 technical SEO. Frozen pillar HTML is byte-identical. robots.txt drops the mixed Allow of the noindex contract-analysis canary so robots, X-Robots-Tag, sitemap and canonical are one family decision. _redirects sends /servicos and /servicos.html to /servicos-obras-publicas/ in one hop; /nexgen and /vision stay 410. script.js rebuilds from js/modules/nav.js to persist data-* attribution on click into sessionStorage; frozen-pillar markup, CSS and layout are unchanged. sitemap.xml, sitemap.txt and sitemap-index.xml hashes are unchanged. This recapture is reviewed with the PR; html_mutation remains false.",
+  "recapture_reason": "CFG10X-10 technical SEO. Frozen pillar HTML is byte-identical. robots.txt drops the mixed Allow of the noindex contract-analysis canary so robots, X-Robots-Tag, sitemap and canonical are one family decision. _redirects sends /servicos and /servicos.html to /servicos-obras-publicas/ in one hop; /nexgen and /vision stay 410. script.js rebuilds from js/modules/nav.js so data-journey/jornada, tema and snap persist through writeStoredPseo into the home form; frozen-pillar markup, CSS and layout are unchanged. sitemap.xml, sitemap.txt and sitemap-index.xml hashes are unchanged. This recapture is reviewed with the PR; html_mutation remains false.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -20,7 +20,7 @@
     "auditoria-orcamento-licitacao/index.html": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "12d7d0e59003adfac61d03ddebbb3f2a869bc78811f6176f36840647c2ec1a06",
-    "script.js": "794d0d991ba456202f192ad1835677b594dcff7beb55b7ec48d03048a8bdd8f7",
+    "script.js": "c2b54540d89984b3e94ae3c7e8a9bf62318fe6f75de80c01d243fca66302b402",
     "styles.css": "0319e4dc4f099d055bb96fb8219cb737b57ec4c0d51a7b4fb8007a1ef577f0de",
     "styles-tokens.css": "5b0d33f5fccc801ba5b4d7b8d407dd3d800d25b296a79ff1eb33d8bc98ce4237",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",

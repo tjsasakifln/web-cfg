@@ -151,6 +151,7 @@
       'route_family', 'cta_id', 'asset_id', 'correlation_id', 'referrer',
       'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
       'analysis_id', 'evidence_pack_version', 'asset_family', 'query_class',
+      'jornada', 'tema', 'snap',
     ];
     const ROUTE_FAMILY_BY_PREFIX = [
       ['/defesa-margem-contratos-publicos/', 'margin-defense'],
@@ -211,7 +212,7 @@
       try {
         const clean = {};
         Object.keys(obj || {}).forEach((k) => {
-          if (!PSEO_ATTR_KEYS.includes(k) && k !== 'tema' && k !== 'saved_at') return;
+          if (!PSEO_ATTR_KEYS.includes(k) && k !== 'saved_at') return;
           const v = sanitizeAttr(obj[k], k);
           if (v) clean[k] = v;
         });
@@ -237,6 +238,11 @@
     if (tema) {
       const t = sanitizeAttr(tema, 'tema');
       if (t) fromUrl.tema = t;
+    }
+    const jornada = searchParams.get('jornada') || hashParams.get('jornada');
+    if (jornada) {
+      const j = sanitizeAttr(jornada, 'jornada');
+      if (j) fromUrl.jornada = j;
     }
     const bodyDs = (document.body && document.body.dataset) || {};
     const pathFamily = routeFamilyFromPath(window.location.pathname || '/');
