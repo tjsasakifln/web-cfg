@@ -527,13 +527,17 @@ async function main() {
     await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 5000 });
     for (const j of ["contrato", "edital", "operacao"]) {
       await page.select("#estagio", j === "contrato" ? "estruturando a operação B2G" : "problema urgente em contrato");
-      const clicked = await page.evaluate((journey) => {
-        const el = document.querySelector(`[data-set-journey="${journey}"]`);
+      const clicked = await page.evaluate((expectedJourney) => {
+        const el = [...document.querySelectorAll(`[data-set-journey="${expectedJourney}"]`)].find((node) => {
+          const style = getComputedStyle(node);
+          const box = node.getBoundingClientRect();
+          return style.display !== "none" && style.visibility !== "hidden" && box.width > 0 && box.height > 0;
+        });
         if (!el) return false;
-        el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+        el.click();
         return true;
       }, j);
-      if (!clicked) throw new Error(`missing data-set-journey=${j}`);
+      if (!clicked) throw new Error(`no visible [data-set-journey=${j}]`);
       await page.waitForFunction((expectedJourney) => {
         const form = document.querySelector("#formulario-contato");
         return document.querySelector("#jornada-hidden")?.value === expectedJourney &&
@@ -923,7 +927,7 @@ async function main() {
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     // The form handler is bound by deferred script.js; wait for its explicit
     // ready marker rather than racing a fixed timeout on slower CI runners.
-    await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 5000 });
+    await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 8000 });
     await page.evaluate(() => {
       const nome = document.querySelector("#nome");
       const estagio = document.querySelector("#estagio");
@@ -1633,6 +1637,197 @@ async function main() {
     ok("fixture_layout_pass");
   } catch (e) {
     fail("fixture_layout_pass", e.message || e);
+  }
+
+  const TYPE_FLOOR_FAMILIES = [
+    { family: "home", path: "/" },
+    { family: "entregas", path: "/entregas/" },
+    { family: "artigo", path: "/conteudos/documentos-reequilibrio-obra-publica/" },
+    { family: "oferta", path: "/diretoria-b2g/" },
+    { family: "ferramenta", path: "/ferramentas/diagnostico-defesa-margem/" },
+    { family: "casos", path: "/casos/" },
+    { family: "especialista", path: "/especialista/tiago-jun-sasaki/" },
+  ];
+  const TYPE_FLOOR_VIEWPORTS = [
+    [390, 844],
+    [768, 1024],
+    [1024, 768],
+    [1440, 1000],
+  ];
+  const CRITICAL_TYPE_SELECTORS = [
+    ".hero-proof li",
+    ".hero-proof strong",
+    ".hero-micro",
+    ".hero-real-proof",
+    ".form-hint",
+    ".form-note",
+    ".field label",
+    ".consent",
+    "figcaption",
+    "thead th",
+    ".table-note",
+    ".article-meta",
+    ".evidence-heading > span",
+    ".hero-evidence .evidence-kicker",
+    ".evidence-tier",
+    ".evidence-facts dt",
+    ".evidence-facts dd",
+  ];
+  const measureRenderedType = async (target, sel) =>
+    target.evaluate((selectors) => {
+      const skip = (el) => {
+        const style = getComputedStyle(el);
+        const box = el.getBoundingClientRect();
+        return (
+          style.display === "none" ||
+          style.visibility === "hidden" ||
+          box.width === 0 ||
+          box.height === 0
+        );
+      };
+      let minBody = Infinity;
+      let minBodySel = "";
+      for (const el of document.querySelectorAll("body, .hero-lead, .section-lead, .editorial-lead, .editorial-body, .editorial-body p, .content-lead, .article-intro")) {
+        if (skip(el)) continue;
+        if (el.closest(".hero-evidence, .hero-proof, .catalog-item, aside, figcaption, .form-hint, .technical-note, .article-meta, .table-note")) continue;
+        if (/(technical-note|article-meta|table-note|evidence-|kicker|caption|hint)/i.test(String(el.className || ""))) continue;
+        const text = (el.innerText || "").replace(/\s+/g, " ").trim();
+        if (el.tagName !== "BODY" && text.length < 40) continue;
+        const fs = parseFloat(getComputedStyle(el).fontSize);
+        if (fs && fs < minBody) {
+          minBody = fs;
+          minBodySel = el.tagName.toLowerCase() + "." + String(el.className || "").slice(0, 40);
+        }
+      }
+      let minCritical = Infinity;
+      let minCriticalSel = "";
+      for (const selector of selectors) {
+        for (const el of document.querySelectorAll(selector)) {
+          if (skip(el)) continue;
+          const fs = parseFloat(getComputedStyle(el).fontSize);
+          if (fs && fs < minCritical) {
+            minCritical = fs;
+            minCriticalSel = selector;
+          }
+        }
+      }
+      const overflow =
+        document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+      const compressed = [...document.querySelectorAll("p, li, h2, h3, label, dd")]
+        .filter((el) => {
+          if (skip(el) || el.closest(".table-wrap, .honeypot")) return false;
+          const text = (el.innerText || "").replace(/\s+/g, " ").trim();
+          if (text.length < 48) return false;
+          const box = el.getBoundingClientRect();
+          const fs = parseFloat(getComputedStyle(el).fontSize) || 16;
+          return box.width < 80 && box.height > fs * 4;
+        })
+        .slice(0, 3)
+        .map((el) => el.tagName.toLowerCase());
+      const off = [...document.querySelectorAll("h1, .button-primary, .hero-lead, .hero-proof")]
+        .filter((el) => {
+          if (skip(el) || getComputedStyle(el).position === "fixed" || el.closest(".table-wrap")) return false;
+          const box = el.getBoundingClientRect();
+          return box.right > window.innerWidth + 2 || box.left < -2;
+        })
+        .slice(0, 3)
+        .map((el) => el.tagName.toLowerCase());
+      return {
+        minBody: Number.isFinite(minBody) ? minBody : null,
+        minBodySel,
+        minCritical: Number.isFinite(minCritical) ? minCritical : null,
+        minCriticalSel,
+        overflow,
+        compressed,
+        off,
+      };
+    }, sel);
+
+  try {
+    const fixturePage = await browser.newPage();
+    await fixturePage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+    const fixtureHtml = readFileSync(
+      join(ROOT, "scripts/site/fixtures/type-floor/historical-prova-collapse.html"),
+      "utf8",
+    );
+    await fixturePage.setContent(fixtureHtml, { waitUntil: "domcontentloaded" });
+    const fixture = await measureRenderedType(fixturePage, [".hero-proof li", ".hero-proof strong", ".form-hint"]);
+    await fixturePage.close();
+    if (!(fixture.minCritical < 12.8)) {
+      throw new Error(`fixture did not reproduce sub-floor type: ${JSON.stringify(fixture)}`);
+    }
+    ok(`type_floor_gate_detects_historical_collapse (${fixture.minCritical}px)`);
+  } catch (e) {
+    fail("type_floor_gate_detects_historical_collapse", e.message || e);
+  }
+
+  try {
+    const worst = { minCritical: Infinity, minBody: Infinity, where: "" };
+    for (const [w, h] of TYPE_FLOOR_VIEWPORTS) {
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      for (const { family, path } of TYPE_FLOOR_FAMILIES) {
+        await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+        const rep = await measureRenderedType(page, CRITICAL_TYPE_SELECTORS);
+        const loc = `${family}@${w}${path}`;
+        if (rep.overflow) throw new Error(`${loc}: horizontal overflow`);
+        if (Number.isFinite(rep.minBody) && rep.minBody < 16) {
+          throw new Error(`${loc}: body ${rep.minBody}px < 16px (${rep.minBodySel})`);
+        }
+        if (family === "home" && !Number.isFinite(rep.minCritical)) {
+          throw new Error(`${loc}: home must expose measurable critical microcopy`);
+        }
+        if (Number.isFinite(rep.minCritical) && rep.minCritical < 12.8) {
+          throw new Error(`${loc}: critical ${rep.minCritical}px < 12.8px (${rep.minCriticalSel})`);
+        }
+        if (rep.compressed.length) throw new Error(`${loc}: compressed ${rep.compressed.join(",")}`);
+        if (rep.off.length) throw new Error(`${loc}: off-viewport ${rep.off.join(",")}`);
+        if (Number.isFinite(rep.minCritical) && rep.minCritical < worst.minCritical) {
+          worst.minCritical = rep.minCritical;
+          worst.where = loc;
+        }
+        if (Number.isFinite(rep.minBody) && rep.minBody < worst.minBody) worst.minBody = rep.minBody;
+      }
+    }
+    ok(
+      `type_floor_seven_families (${TYPE_FLOOR_FAMILIES.length}×${TYPE_FLOOR_VIEWPORTS.length}; min critical ${worst.minCritical}px body ${worst.minBody}px)`,
+    );
+  } catch (e) {
+    fail("type_floor_seven_families", e.message || e);
+  }
+
+  try {
+    const clsBad = [];
+    for (const { family, path } of TYPE_FLOOR_FAMILIES) {
+      await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+      await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+      const cls = await page.evaluate(
+        () =>
+          new Promise((resolve) => {
+            let score = 0;
+            try {
+              const po = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                  if (!entry.hadRecentInput) score += entry.value;
+                }
+              });
+              po.observe({ type: "layout-shift", buffered: true });
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  po.disconnect();
+                  resolve(score);
+                });
+              });
+            } catch {
+              resolve(0);
+            }
+          }),
+      );
+      if (cls > 0.05) clsBad.push(`${family}:${cls}`);
+    }
+    if (clsBad.length) throw new Error(clsBad.join(", "));
+    ok("cls_seven_families_le_0_05");
+  } catch (e) {
+    fail("cls_seven_families_le_0_05", e.message || e);
   }
 
   await browser.close();

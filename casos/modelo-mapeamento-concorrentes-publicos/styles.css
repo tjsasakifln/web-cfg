@@ -44,7 +44,7 @@
 .report-epistemic li > span {
   color: var(--r-green);
   font-family: var(--r-mono);
-  font-size: .72rem;
+  font-size: .8rem;
   font-weight: 900;
   letter-spacing: .08em;
 }
@@ -69,7 +69,7 @@
 .report-disclaimer .case-badge {
   color: var(--r-green);
   font-family: var(--r-mono);
-  font-size: .7rem;
+  font-size: .8rem;
   font-weight: 900;
   letter-spacing: .07em;
   margin: 12px 0 0;

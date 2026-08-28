@@ -59,7 +59,7 @@ Excluindo header/footer, a home pública deve ter **no máximo sete** seções n
 **CTA primário:** `Analisar meu caso` (≤4 ocorrências `button-primary`).  
 **CTA secundário:** WhatsApp com contexto, peso visual menor.
 
-Gates falham se: >7 seções; três arquétipos idênticos consecutivos; >4 primários; linguagem interna; texto funcional &lt;14px.
+Gates falham se: >7 seções; três arquétipos idênticos consecutivos; >4 primários; linguagem interna; texto funcional &lt;14px; microcopy crítica &lt;12,8px; corpo &lt;16px.
 
 ## Quando usar card
 
@@ -142,10 +142,11 @@ Entrada sutil, foco de etapa, revelação de linha. Sem parallax exagerado, cont
 
 ## Manutenção
 
-- Cor, raio, sombra, escala tipográfica e ritmo de seção vivem em `styles-tokens.css` e espelham este JSON. O `styles.css` mantém dois `:root` com tokens de layout e leitura (`--page-max`, `--read-measure`, `--text-body-*`, `--focus-ring`, `--section-*`, famílias) que não têm contraparte aqui; não recriar nele os tokens acima.
+- Cor, raio, sombra, escala tipográfica, ritmo de seção e tokens de leitura (`--page-max`, `--read-measure`, `--text-body-*`, `--text-micro`, `--focus-ring`, `--section-*`, famílias) vivem em `styles-tokens.css` e espelham este JSON.
+- Contratos de layout e o piso tipográfico (corpo ≥16px, microcopy crítica ≥12.8px) saem de `css/contracts.css` e `css/type-floor.css`, concatenados no fim de `styles.css` por `python3 scripts/site/build_css.py`.
 - Escala tipográfica: `--text-display`, `--text-h1` e `--text-h2` são a fonte única. O `h1` e o `h2` globais consomem os tokens; não recriar um segundo par de clamps em media query.
 - A escala de espaçamento é em rem. Ela esteve declarada em px no JSON e em rem no CSS, com o mesmo token valendo coisas diferentes conforme a folha carregada; o JSON passou a registrar a escala real.
-- Gates em `scripts/site/test_design_gates.py` leem HTML real e este JSON.
+- Gates em `scripts/site/test_design_gates.py` leem HTML/CSS reais e este JSON. A geometria renderizada (`npm run test:ui`) mede o `font-size` computado; um regex no CSS-fonte não basta.
 - Ofertas: profundidade mínima e ritmo de seções distintos entre as quatro páginas.
 
 

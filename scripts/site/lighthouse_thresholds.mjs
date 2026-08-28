@@ -37,6 +37,9 @@ export function evaluateLighthouseResults(results, options = {}) {
     if (row.path !== "/" && row.performance < thresholds.performance) {
       errors.push(`${row.path}: performance ${row.performance} < ${thresholds.performance}`);
     }
+    if (Number.isFinite(row.cls) && row.cls > (options.clsMax ?? 0.05)) {
+      errors.push(`${row.path}: CLS ${row.cls} > ${options.clsMax ?? 0.05}`);
+    }
     if (
       imageGatePages.has(row.path)
       && (row.image_aspect_ratio !== 1 || row.image_size_responsive !== 1)
@@ -57,6 +60,22 @@ export function evaluateLighthouseResults(results, options = {}) {
   };
   if (home.length !== homeRuns) {
     errors.push(`home: expected ${homeRuns} Lighthouse runs, observed ${home.length}`);
+  }
+  const criticalPerfMin = options.criticalPerfMin ?? 95;
+  const criticalPaths = options.criticalPaths || new Set([
+    "/",
+    "/entregas/",
+    "/conteudos/documentos-reequilibrio-obra-publica/",
+    "/diretoria-b2g/",
+    "/ferramentas/diagnostico-defesa-margem/",
+    "/casos/",
+    "/especialista/tiago-jun-sasaki/",
+  ]);
+  for (const row of results) {
+    if (row.error) continue;
+    if (criticalPaths.has(row.path) && row.performance < criticalPerfMin) {
+      errors.push(`${row.path}: critical performance ${row.performance} < ${criticalPerfMin}`);
+    }
   }
   if (homeGate.minimum_performance == null || homeGate.minimum_performance < 95) {
     errors.push(`home: minimum performance ${homeGate.minimum_performance} < 95`);

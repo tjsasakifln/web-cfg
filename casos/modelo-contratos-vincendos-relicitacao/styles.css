@@ -24,7 +24,7 @@
 .vinc-null span {
   color: var(--r-lime);
   font-family: var(--r-mono);
-  font-size: .74rem;
+  font-size: .8rem;
   font-weight: 850;
   letter-spacing: .08em;
 }
@@ -38,7 +38,7 @@
   border-bottom: 2px solid var(--r-green);
   color: var(--r-green);
   font-family: var(--r-mono);
-  font-size: .72rem;
+  font-size: .8rem;
   letter-spacing: .08em;
   padding: 0 14px 10px 0;
   text-align: left;
@@ -94,7 +94,7 @@
 
 .vinc-claims p { color: var(--r-text); line-height: 1.6; margin: 0 0 14px; }
 .vinc-claims p:last-child { margin-bottom: 0; }
-.vinc-claims strong { color: var(--r-green); font-family: var(--r-mono); font-size: .76rem; letter-spacing: .06em; }
+.vinc-claims strong { color: var(--r-green); font-family: var(--r-mono); font-size: .8rem; letter-spacing: .06em; }
 
 .vinc-limitation {
   background: #fff;
@@ -104,14 +104,14 @@
   margin: 34px 0 0;
   padding: 22px 25px;
 }
-.vinc-limitation strong { color: var(--r-green); font-family: var(--r-mono); font-size: .78rem; letter-spacing: .06em; }
+.vinc-limitation strong { color: var(--r-green); font-family: var(--r-mono); font-size: .8rem; letter-spacing: .06em; }
 
 .case-badge {
   background: #fef3c7;
   border-radius: 4px;
   color: #92400e;
   display: inline-block;
-  font-size: .74rem;
+  font-size: .8rem;
   font-weight: 800;
   letter-spacing: .04em;
   margin: 14px 0 0;

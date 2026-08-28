@@ -31,6 +31,30 @@ assert.deepEqual(evaluateLighthouseResults(passing, { homeRuns: 3 }), {
   },
 });
 
+const criticalPage = (path, performance, cls) => ({
+  path,
+  run: 1,
+  performance,
+  accessibility: 100,
+  best_practices: 100,
+  seo: 100,
+  tbt_ms: 40,
+  longest_own_task_ms: 40,
+  cls,
+  image_aspect_ratio: 1,
+  image_size_responsive: 1,
+});
+assert.equal(
+  evaluateLighthouseResults([...passing, criticalPage("/entregas/", 99, 0.06)], { homeRuns: 3 }).ok,
+  false,
+  "CLS above 0.05 must fail closed",
+);
+assert.equal(
+  evaluateLighthouseResults([...passing, criticalPage("/entregas/", 94, 0)], { homeRuns: 3 }).ok,
+  false,
+  "critical route performance below 95 must fail closed",
+);
+
 for (const [name, rows] of [
   ["missing repetition", passing.slice(0, 2)],
   ["performance regression", [home(1, 97, 55, 138), home(2, 94, 80, 150), home(3, 97, 42, 136)]],

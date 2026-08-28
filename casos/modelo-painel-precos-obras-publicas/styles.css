@@ -6,7 +6,7 @@
   border-radius: 4px;
   color: #92400e;
   display: inline-block;
-  font-size: .72rem;
+  font-size: .8rem;
   font-weight: 800;
   letter-spacing: .04em;
   margin: 12px 0 0;
@@ -38,7 +38,7 @@
 .panel-typology-head > span {
   color: var(--r-green);
   font-family: var(--r-mono);
-  font-size: .73rem;
+  font-size: .8rem;
   font-weight: 850;
   letter-spacing: .1em;
 }

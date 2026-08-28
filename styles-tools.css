@@ -60,7 +60,7 @@
 }
 .tool-situation-badge {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: .8rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -853,7 +853,7 @@ a.tool-card:focus-visible {
   gap: 0.25rem;
 }
 .tool-result-stat-label {
-  font-size: 0.78rem;
+  font-size: .8rem;
   color: var(--tool-muted);
   font-weight: 650;
   text-transform: uppercase;

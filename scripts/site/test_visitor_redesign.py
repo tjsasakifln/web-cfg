@@ -1176,8 +1176,9 @@ def test_form_no_contingency_copy():
 
 def test_css_visitor_tokens():
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    tokens = (ROOT / "styles-tokens.css").read_text(encoding="utf-8")
     tools = (ROOT / "styles-tools.css").read_text(encoding="utf-8")
-    assert "--read-measure" in css
+    assert "--read-measure" in css or "--read-measure" in tokens
     assert "journey-row" in css
     assert "problem-stage" in css
     assert "featured-lead" in css

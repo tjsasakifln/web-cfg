@@ -53,14 +53,32 @@ def test_design_system_complete():
     assert (ROOT / "docs" / "DESIGN-SYSTEM.md").exists()
     assert len(ds["section_archetypes"]) >= 8
     assert ds["component_usage_rules"]["max_card_grids_per_page"] <= 2
+    floors = ds["typography"]["floors_px"]
+    assert floors["body"] >= 16
+    assert floors["critical_microcopy"] >= 12.8
+    assert floors["functional"] >= 14
+    assert "0.8rem" in ds["typography"]["scale"]["micro"]
+
+
+def shipped_css() -> str:
+    """Tokens + concatenated styles.css — the cascade the visitor actually loads."""
+    return (ROOT / "styles-tokens.css").read_text(encoding="utf-8") + "\n" + (
+        ROOT / "styles.css"
+    ).read_text(encoding="utf-8")
 
 
 def test_css_tokens_mirror_system():
-    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    css = shipped_css()
     for token in ("--navy-950", "--green-700", "--ink", "--serif", "--mono", "section--tight", "section--loose"):
         assert token in css, f"CSS missing {token}"
     # green-100 must not be the only soft surface story
     assert "var(--soft)" in css or "--soft" in css
+    tokens = (ROOT / "styles-tokens.css").read_text(encoding="utf-8")
+    compact = re.sub(r"\s+", "", tokens)
+    assert "--text-micro:.8rem" in compact
+    assert "--text-body-mobile:1rem" in compact
+    assert "--navy-950:#031020" in compact
+    assert "--green-700:#2d6f2d" in compact
 
 
 def test_home_archetypes_diverse():
@@ -460,6 +478,54 @@ def test_mobile_matrix_composition():
     assert "journey-paths" in css or ".journey-path" in css or "journey-list" in css or "journey-row" in css
     # Hero visual suppressed on narrow viewports
     assert "hero-visual{display:none}" in css.replace(" ", "") or ".hero-visual{display:none}" in css.replace(" ", "")
+
+
+def test_css_modules_are_concatenated_without_a_framework():
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    manifest = json.loads((ROOT / "css" / "manifest.json").read_text(encoding="utf-8"))
+    assert "BEGIN css-modules:cfg10x-12" in css
+    assert "END css-modules:cfg10x-12" in css
+    assert manifest.get("framework") in (None, "")
+    lowered = css.lower()
+    for forbidden in ("@tailwind", "tailwindcss", "bootstrap.min", "cdn.jsdelivr.net/npm/bootstrap"):
+        assert forbidden not in lowered, forbidden
+    from scripts.site.build_css import assemble, load_manifest, module_blob
+
+    assembled = assemble(css, module_blob(load_manifest()))
+    assert assembled == css, "styles.css is stale; run python3 scripts/site/build_css.py"
+
+
+def test_type_floor_parser_fails_historical_prova_collapse():
+    """The 9.76px prova/disclaimer collapse must be detected on a real CSS snippet."""
+    from scripts.site.css_type_floor import critical_font_violations
+
+    fixture = (
+        ROOT / "scripts" / "site" / "fixtures" / "type-floor" / "historical-prova-collapse.css"
+    ).read_text(encoding="utf-8")
+    bad = critical_font_violations(fixture)
+    assert bad, "parser missed the historical 9.76px prova collapse"
+    assert min(item["px"] for item in bad) < 12.8
+    assert any(".61rem" in item["value"] for item in bad)
+
+
+def test_shipped_css_respects_type_floor():
+    from scripts.site.css_type_floor import critical_font_violations, public_css_paths
+
+    for path in public_css_paths(ROOT):
+        bad = critical_font_violations(path.read_text(encoding="utf-8"))
+        assert not bad, f"{path.relative_to(ROOT)}: {bad[:4]}"
+
+
+def test_layout_contracts_ship_on_cascade():
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    assert "module:css/contracts.css" in css or "BEGIN css-modules:cfg10x-12" in css
+    for needle in (
+        ".hero-proof li",
+        ".table-wrap{max-width:100%;overflow-x:auto",
+        "min-height:var(--touch-min)",
+        "overflow-wrap:anywhere",
+    ):
+        assert needle in css, needle
 
 
 def test_functional_type_floor_in_css():
