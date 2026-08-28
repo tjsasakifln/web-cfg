@@ -45,7 +45,7 @@ EXPIRY_RETENTION = (
 )
 
 ROLLBACK = (
-    "Restore previous CONFENGE Netlify publish SHA and this inventory hash. "
+    "Roll the public plane back with /opt/confenge-web/bin/rollback FULL_SHA and restore this inventory hash. "
     "Do not reactivate SmartLic as a product, SaaS, brand or public runtime. "
     "Bridge rollback is SmartLic#2115 (DNS/proxy to last non-destructive state)."
 )

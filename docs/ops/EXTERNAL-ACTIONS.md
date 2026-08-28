@@ -26,7 +26,7 @@ Não usar a UI da Netlify como autoridade de env público.
 | `CONFENGE_INBOUND_WEBHOOK_URL` | HTTPS `…/api/v1/webhooks/confenge/inbound` | Handoff `confenge.inbound.v1` (Warmbly PR #71) | Synthetic persist → handoff **SKIPPED**. Real lead + live inbound env → `inbound_handoff` delivered. A 201 is not INBOUND NOW. |
 | `CONFENGE_INBOUND_WEBHOOK_SECRET` | mesmo valor no Warmbly | HMAC `X-Warmbly-Signature` | Destino 201; 401 se secreto divergir |
 
-**Status 2026-08-02:** `RESEND_API_KEY`, `LEAD_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`, `IP_HASH_SALT` set via Netlify CLI (production). Redeploy `6a6f7027381c29f8c55c70d1` live. E-mail lead **Delivered** (Resend UI). Ainda OPEN: `OPS_WEBHOOK_*`, Turnstile, probe secret.
+**Status 2026-08-02 (registro historico, plano Netlify de entao; nao executar):** `RESEND_API_KEY`, `LEAD_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`, `IP_HASH_SALT` foram definidos pelo CLI legado e o redeploy `6a6f7027381c29f8c55c70d1` ficou live. Hoje o env authority e `/etc/confenge-web/runtime.env`. E-mail lead **Delivered** (Resend UI). Ainda OPEN: `OPS_WEBHOOK_*`, Turnstile, probe secret.
 
 **Depois de salvar env:** `sudo systemctl restart confenge-web-runtime.service` e validar `/ready`. Não republicar na Netlify.
 

@@ -366,7 +366,7 @@ The parity exception is nominal and intentional: search-observation-tick has no
 HTTP path. It is compared through direct handler and portable schedule-command
 paths.
 
-## Risks, rollback and leftover Netlify surface
+## Risks, rollback and the leftover Netlify preview surface
 
 Risks:
 

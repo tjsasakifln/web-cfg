@@ -15,7 +15,7 @@ Implemented steps when valid human approvals exist:
 
 Not automated here (require human/CI deploy):
   - merge of the PR
-  - production publish (Netlify on main)
+  - production release (main artifact promoted onto the nginx/Netcup plane)
   - live production verify (use npm run test:prod-build-info after merge)
 
 When zero valid approvals: exit 0 with blocked reason (noop) — not a failure.
