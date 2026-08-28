@@ -24,6 +24,17 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts.site.public_ia import (  # noqa: E402
+    HUB_ROLES,
+    audit_orphans,
+    audit_primary_nav_hygiene,
+    first_viewport_names_journey,
+    footer_problem_cluster_dump,
+    hubs,
+    materialize_route_map,
+    parent_of,
+    validate_contract,
+)
 from scripts.site.shell_nav import (  # noqa: E402
     FROZEN_SHELL_FILES,
     HEADER_CTA_RE,
@@ -38,9 +49,9 @@ from scripts.site.shell_nav import (  # noqa: E402
     shipped_html_files,
 )
 
-# Four visitor tasks named in the issue, with the destination each must reach.
+# Four visitor tasks: one header interaction, then at most one hub click.
 TASKS = {
-    "edital": "/diagnostico-pre-licitacao/",
+    "edital": "/bid-room-licitacoes-obras/",
     "glosa": "/medicoes-glosas-obras-publicas/",
     "reequilibrio": "/reequilibrio-obras-publicas/",
     "ferramenta": "/ferramentas/",
@@ -132,7 +143,6 @@ def main() -> int:
 
     # --- 2. Desktop / mobile / footer carry the same taxonomy ---------------
     expected = [(i["href"], i["label"]) for i in nav_items(brand)]
-    expected_labels = [label for _, label in expected]
     expected_cta = nav_cta(brand)
     expected_desktop_cta = desktop_cta(brand)
     expected_mobile_cta = mobile_cta(brand)
@@ -168,14 +178,19 @@ def main() -> int:
                 f"{rel}: mobile CTA is not navigation.cta "
                 f"{expected_cta['label']!r} -> {expected_cta['href']!r}"
             )
-        footer = re.search(
-            r'<div class="footer-links"><strong>Navegação</strong>(.*?)</div>', html, re.S
+        footer_top = re.search(
+            r'<div class="container footer-top">(.*?)<div class="container footer-bottom">',
+            html,
+            re.S,
         )
-        if footer:
-            labels = re.findall(r"<a[^>]*>([^<]+)</a>", footer.group(1))
-            missing = [lbl for lbl in expected_labels if lbl not in labels]
+        if footer_top:
+            missing = [
+                href
+                for href, _ in expected
+                if f'href="{href}"' not in footer_top.group(1)
+            ]
             if missing:
-                failures.append(f"{rel}: footer nav missing {missing}")
+                failures.append(f"{rel}: footer missing header hrefs {missing}")
         # Keyboard + touch: plain anchors plus a real button for the mobile menu.
         if "menu-toggle" in html:
             if not re.search(
@@ -214,13 +229,12 @@ def main() -> int:
 
     # --- 3. Active state is visible and inherited by descendant/task routes -
     active_cases = {
-        services["url"]: services["url"],
         problems["url"]: problems["url"],
-        "/bid-room-licitacoes-obras/": services["url"],
+        "/bid-room-licitacoes-obras/": "/bid-room-licitacoes-obras/",
+        "/diretoria-b2g/": "/diretoria-b2g/",
         "/defesa-tecnica-contratos-publicos/": problems["url"],
         "/conteudos/ata-reuniao-ordem-servico-obra-publica/": "/conteudos/",
         "/ferramentas/limite-acrescimos-supressoes/": "/ferramentas/",
-        "/especialista/tiago-jun-sasaki/": "/especialista/tiago-jun-sasaki/",
     }
     for current, active in active_cases.items():
         path = ROOT / current.strip("/") / "index.html"
@@ -286,6 +300,61 @@ def main() -> int:
     if successes != attempts:
         failures.append(
             f"static reachability {successes}/{attempts}; unreachable tasks: {misses}"
+        )
+
+    # --- 5. CFG10X-11 IA contract on shipped HTML --------------------------------
+    contract_errors = validate_contract()
+    failures.extend(f"ia contract: {err}" for err in contract_errors)
+    if len(expected) > 5:
+        failures.append(f"header has {len(expected)} destinations; max is 5")
+    home = (ROOT / "index.html").read_text(encoding="utf-8")
+    if not first_viewport_names_journey(home):
+        failures.append("home header does not name a purchase situation without B2G")
+    for hub_row in hubs():
+        role = hub_row.get("role")
+        if role not in HUB_ROLES:
+            failures.append(f"hub {hub_row.get('route')} role {role!r} not in {sorted(HUB_ROLES)}")
+    routes = materialize_route_map(ROOT)
+    if not routes:
+        failures.append("route map is empty")
+    for route, rec in routes.items():
+        if rec.get("parent") is None and route != "/":
+            failures.append(f"route {route} has no parent")
+        if "job" not in rec or "next_action" not in rec or "index_state" not in rec:
+            failures.append(f"route {route} missing job/next_action/index_state")
+        if rec.get("index_state") == "index" and rec.get("parent"):
+            parent = rec["parent"]
+            if parent not in routes and parent != "/":
+                failures.append(f"indexable {route} parent {parent} is not a public route")
+    for path in (
+        ROOT / "problemas-que-resolvemos" / "index.html",
+        ROOT / "servicos-obras-publicas" / "index.html",
+        ROOT / "bid-room-licitacoes-obras" / "index.html",
+        ROOT / "diretoria-b2g" / "index.html",
+    ):
+        html = path.read_text(encoding="utf-8")
+        route = "/" + path.parent.relative_to(ROOT).as_posix() + "/"
+        parent = parent_of(route)
+        crumb = re.search(
+            r'<nav aria-label="Navegação estrutural"[^>]*>(.*?)</nav>', html, re.S
+        )
+        schema = re.search(
+            r'"@type":"BreadcrumbList".*?"itemListElement":(\[.*?\])', html, re.S
+        )
+        if not crumb:
+            failures.append(f"{route}: missing visible breadcrumbs")
+        elif parent == "/" and 'href="/"' not in crumb.group(1):
+            failures.append(f"{route}: breadcrumbs missing Início")
+        if not schema:
+            failures.append(f"{route}: missing BreadcrumbList")
+    clusters = [c["url"] for c in brand.get("problem_clusters") or [] if c.get("url")]
+    if footer_problem_cluster_dump(home, clusters):
+        failures.append("home footer dumps the full problem-cluster taxonomy")
+    failures.extend(f"nav hygiene: {err}" for err in audit_primary_nav_hygiene(ROOT))
+    graph = audit_orphans(ROOT)
+    if graph["orphan_count"] != 0:
+        failures.append(
+            f"indexable orphans={graph['orphan_count']}: {graph['orphans'][:12]}"
         )
 
     if failures:

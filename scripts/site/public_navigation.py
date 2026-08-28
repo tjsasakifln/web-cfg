@@ -114,7 +114,8 @@ def _canonical_anchor(
     position = "header_nav" if kind == "desktop" else "mobile_nav"
     return (
         f'<a data-cta-position="{position}"{aria} '
-        f'href="{escape(href, quote=True)}">{escape(label)}</a>'
+        f'href="{escape(href, quote=True)}" style="min-height:44px">'
+        f"{escape(label)}</a>"
     )
 
 
