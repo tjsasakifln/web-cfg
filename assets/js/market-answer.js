@@ -8,7 +8,6 @@
     "xray_start",
     "cta_view",
     "cta_click",
-    "lead_receipt_correlated",
     "correction_open",
   ];
   const PII = new Set([
@@ -29,8 +28,6 @@
     source: "CONFENGE_WEB",
   };
   const correlation = `ma-${Date.now().toString(36)}`;
-  const corrField = document.getElementById("ma-correlation");
-  if (corrField) corrField.value = correlation;
 
   const emit = (name, extra) => {
     const props = { ...base, correlation_id: correlation, ...(extra || {}) };

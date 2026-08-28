@@ -148,13 +148,6 @@
 <a class="button" data-ma-event="cta_click" data-cta-id="analise-contrato" href="/ferramentas/diagnostico-defesa-margem/">Analise um contrato / peça segunda leitura</a>
 </p>
 <p class="ma-note">Atribuição: source <code>CONFENGE_WEB</code>, asset <code>valor-tipico-contratos-pavimentacao</code>, família <code>market-answer</code>. Correção: <a data-ma-event="correction_open" href="/correcoes/">pedir correção</a>.</p>
-<form id="ma-next" class="tool-form" method="post" action="/.netlify/functions/lead" hidden>
-<input type="hidden" name="asset_id" value="valor-tipico-contratos-pavimentacao"/>
-<input type="hidden" name="asset_family" value="market-answer"/>
-<input type="hidden" name="route_family" value="market-answer"/>
-<input type="hidden" name="cta_id" value="market-answer-next"/>
-<input type="hidden" name="correlation_id" id="ma-correlation" value=""/>
-</form>
 </section>
 
 <section id="dataset" data-dataset="valor-tipico-contratos-pavimentacao-sc" aria-labelledby="fontes-titulo">
@@ -174,7 +167,7 @@
 <footer class="site-footer">
 <div class="container footer-bottom"><span>© 2026 CONFENGE.</span><a href="/privacidade/">Política de Privacidade</a></div>
 </footer>
-<script id="ma-event-catalog" type="application/json">{"source": "CONFENGE_WEB", "asset_id": "valor-tipico-contratos-pavimentacao", "asset_family": "market-answer", "route_family": "market-answer", "asset_version": "1.0", "content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d", "events": [{"name": "answer_view", "layer": "impression", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "method_open", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "evidence_drilldown", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "analysis_click", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "xray_start", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "cta_view", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "cta_click", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "lead_receipt_correlated", "layer": "lead", "pii": false, "is_lead": true, "is_page_view": false}, {"name": "correction_open", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}], "notes": {"page_view_is_not_lead": true, "answer_view_is_impression_only": true, "lead_join": "correlation_id on lead receipt; never PII in analytics"}}</script>
+<script id="ma-event-catalog" type="application/json">{"source": "CONFENGE_WEB", "asset_id": "valor-tipico-contratos-pavimentacao", "asset_family": "market-answer", "route_family": "market-answer", "asset_version": "1.0", "content_hash": "568880b7eacf30e2adaf7481945fa50cfc77039be10b27ffc6af0959bf6c6d9d", "events": [{"name": "answer_view", "layer": "impression", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "method_open", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "evidence_drilldown", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "analysis_click", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "xray_start", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "cta_view", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "cta_click", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}, {"name": "correction_open", "layer": "engagement", "pii": false, "is_lead": false, "is_page_view": false}], "notes": {"page_view_is_not_lead": true, "answer_view_is_impression_only": true, "lead_join": "UNAVAILABLE_ON_CANARY; downstream capture owns receipt analytics"}}</script>
 <script defer src="/script.js"></script>
 <script defer src="/assets/js/market-answer.js"></script>
 </body>

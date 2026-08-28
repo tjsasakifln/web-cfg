@@ -28,6 +28,13 @@ EVENT_NAMES = (
     "correction_open",
 )
 
+# The browser canary has no local capture form and therefore cannot truthfully
+# emit a receipt event. The internal event remains available to receipt-owning
+# producers, but is not advertised by this public surface.
+BROWSER_EVENT_NAMES = tuple(
+    name for name in EVENT_NAMES if name != "lead_receipt_correlated"
+)
+
 EVENT_LAYER = {
     "answer_view": "impression",
     "method_open": "engagement",
@@ -80,12 +87,12 @@ def catalog(*, asset_version: str, content_hash: str) -> dict[str, Any]:
                 "is_lead": name == "lead_receipt_correlated",
                 "is_page_view": False,
             }
-            for name in EVENT_NAMES
+            for name in BROWSER_EVENT_NAMES
         ],
         "notes": {
             "page_view_is_not_lead": True,
             "answer_view_is_impression_only": True,
-            "lead_join": "correlation_id on lead receipt; never PII in analytics",
+            "lead_join": "UNAVAILABLE_ON_CANARY; downstream capture owns receipt analytics",
         },
     }
 

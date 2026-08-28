@@ -39,6 +39,7 @@ const CRITICAL_ROUTES = [
   "/diagnostico-b2g-360/",
   "/diagnostico-b2g-expansao/",
   "/diretoria-b2g/",
+  "/ferramentas/",
   "/ferramentas/diagnostico-defesa-margem/",
   "/conteudos/documentos-reequilibrio-obra-publica/",
   "/conteudos/",

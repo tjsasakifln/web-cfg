@@ -77,6 +77,13 @@ def test_no_lead_gate_on_first_fold():
     assert "Analise um contrato" in html
 
 
+def test_renderer_does_not_claim_a_dead_capture_form():
+    html = _html()
+    assert 'id="ma-next"' not in html
+    assert 'id="ma-correlation"' not in html
+    assert 'action="/.netlify/functions/lead"' not in html
+
+
 def test_canonical_noindex_and_no_combinatorial_paths():
     html = _html()
     assert 'rel="canonical" href="https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"' in html
