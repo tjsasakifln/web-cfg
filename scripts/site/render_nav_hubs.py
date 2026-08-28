@@ -216,14 +216,14 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <p class="section-lead">{e(meta["lead"])}</p>
 <p class="section-proof">{e(meta["proof"])}</p>
 </header>
-<aside class="lead-inline" data-commercial-route="medicoes-glosas" aria-label="Rota para medição, glosa e pagamento">
+<section class="lead-inline" data-commercial-route="medicoes-glosas" aria-label="Rota para medição, glosa e pagamento">
 <div class="lead-inline-copy"><span>Medição ou glosa sob pressão</span>
 <strong>Dossiê de Medição, Glosa e Pagamento</strong>
 <p>Uma medição ou glosa do mesmo período, organizada em fatos, cálculo, provas e lacunas. Prazo-piloto de 5 dias úteis após os documentos mínimos. Não é petição jurídica nem promessa de recebimento.</p></div>
 <div class="lead-inline-actions">
 <a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Avaliar o Dossiê de Medição, Glosa e Pagamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
-</aside>
+</section>
 <div class="related-grid">{grid}</div>
 </div>
 </section>
@@ -279,14 +279,14 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <p class="section-lead">{e(meta["lead"])}</p>
 <p class="section-proof">{e(meta["proof"])}</p>
 </header>
-<aside class="lead-inline" data-commercial-route="defesa-margem" aria-label="Rota para contrato em execução">
+<section class="lead-inline" data-commercial-route="defesa-margem" aria-label="Rota para contrato em execução">
 <div class="lead-inline-copy"><span>O prazo já está correndo</span>
 <strong>Defesa de margem em contrato público</strong>
 <p>Enquanto a obra avança, é o registro contemporâneo que sustenta o pedido. A defesa de margem organiza evento, documento e cálculo antes que a posição enfraqueça.</p></div>
 <div class="lead-inline-actions">
 <a class="button button-primary" data-asset-family="hub" data-asset-id="problemas-que-resolvemos" data-cta-id="hub-problemas-defesa-margem" data-cta-position="hub_problems" data-journey="contrato" data-route-family="problemas-que-resolvemos" href="/defesa-margem-contratos-publicos/">Abrir a defesa de margem em contrato <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
-</aside>
+</section>
 <h2 class="hub-section-title" id="hub-stages">Onde você está no ciclo do contrato?</h2>
 <div class="problem-stages" aria-labelledby="hub-stages">{stages_html}</div>
 </div>
