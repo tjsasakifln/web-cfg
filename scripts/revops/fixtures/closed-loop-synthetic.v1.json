@@ -1,0 +1,209 @@
+{
+  "schema": "confenge.closed-loop-fixture/1.0",
+  "schema_version": "1.0.0",
+  "id": "scripts/revops/fixtures/closed-loop-synthetic.v1.json",
+  "kind": "synthetic",
+  "record_kind": "synthetic",
+  "official_live": false,
+  "source": "CONFENGE_WEB",
+  "commercial_owner": "warmbly",
+  "seed": "closed-loop-synthetic-v1",
+  "ids": {
+    "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+    "lead_id": "lead-764fdf3765f48a03257979638b8",
+    "opportunity_id": "opp-3ab889d636156d5b1e14191919ff",
+    "proposal_id": "prop-a67f956e315c13d1adf8941b154",
+    "sale_id": "sale-e6cc712d3d19a26cc9e30e2f3e3"
+  },
+  "attribution": {
+    "landing": "/diagnostico-pre-licitacao/",
+    "route_family": "diagnostico-pre-licitacao",
+    "asset_id": "diagnostico-pre-licitacao",
+    "cta_id": "hero-diagnostico",
+    "journey": "edital",
+    "offer_id": "diagnostico-pre-licitacao",
+    "origem": "organic"
+  },
+  "won": {
+    "revenue": 18000,
+    "currency": "BRL"
+  },
+  "events": [
+    {
+      "event": "page_view",
+      "path": "/diagnostico-pre-licitacao/",
+      "sid": "sess-8e0bdd75a33225d8ec95d98843f",
+      "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+      "ts": "2026-08-01T10:00:00.000Z",
+      "props": {
+        "event_id": "evt-cl-view-0001",
+        "page_path": "/diagnostico-pre-licitacao/",
+        "route_family": "diagnostico-pre-licitacao",
+        "asset_id": "diagnostico-pre-licitacao",
+        "journey": "edital",
+        "offer_id": "diagnostico-pre-licitacao",
+        "origem": "organic",
+        "session_id": "sess-8e0bdd75a33225d8ec95d98843f"
+      }
+    },
+    {
+      "event": "cta_click",
+      "path": "/diagnostico-pre-licitacao/",
+      "sid": "sess-8e0bdd75a33225d8ec95d98843f",
+      "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+      "ts": "2026-08-01T10:01:00.000Z",
+      "props": {
+        "event_id": "evt-cl-cta-0001",
+        "page_path": "/diagnostico-pre-licitacao/",
+        "route_family": "diagnostico-pre-licitacao",
+        "asset_id": "diagnostico-pre-licitacao",
+        "cta_id": "hero-diagnostico",
+        "cta_position": "hero",
+        "journey": "edital",
+        "offer_id": "diagnostico-pre-licitacao",
+        "origem": "organic",
+        "session_id": "sess-8e0bdd75a33225d8ec95d98843f"
+      }
+    },
+    {
+      "event": "lead_form_start",
+      "path": "/diagnostico-pre-licitacao/",
+      "sid": "sess-8e0bdd75a33225d8ec95d98843f",
+      "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+      "ts": "2026-08-01T10:02:00.000Z",
+      "props": {
+        "event_id": "evt-cl-start-0001",
+        "page_path": "/diagnostico-pre-licitacao/",
+        "route_family": "diagnostico-pre-licitacao",
+        "asset_id": "diagnostico-pre-licitacao",
+        "cta_id": "hero-diagnostico",
+        "journey": "edital",
+        "offer_id": "diagnostico-pre-licitacao",
+        "origem": "organic",
+        "form_step": 1,
+        "session_id": "sess-8e0bdd75a33225d8ec95d98843f"
+      }
+    },
+    {
+      "event": "lead_form_step",
+      "path": "/diagnostico-pre-licitacao/",
+      "sid": "sess-8e0bdd75a33225d8ec95d98843f",
+      "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+      "ts": "2026-08-01T10:03:00.000Z",
+      "props": {
+        "event_id": "evt-cl-step2-0001",
+        "page_path": "/diagnostico-pre-licitacao/",
+        "route_family": "diagnostico-pre-licitacao",
+        "asset_id": "diagnostico-pre-licitacao",
+        "cta_id": "hero-diagnostico",
+        "journey": "edital",
+        "offer_id": "diagnostico-pre-licitacao",
+        "origem": "organic",
+        "form_step": 2,
+        "session_id": "sess-8e0bdd75a33225d8ec95d98843f"
+      }
+    },
+    {
+      "event": "lead_persisted",
+      "path": "/diagnostico-pre-licitacao/",
+      "sid": "sess-8e0bdd75a33225d8ec95d98843f",
+      "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+      "ts": "2026-08-01T10:04:00.000Z",
+      "props": {
+        "event_id": "evt-cl-persisted-0001",
+        "page_path": "/diagnostico-pre-licitacao/",
+        "route_family": "diagnostico-pre-licitacao",
+        "asset_id": "diagnostico-pre-licitacao",
+        "cta_id": "hero-diagnostico",
+        "journey": "edital",
+        "offer_id": "diagnostico-pre-licitacao",
+        "origem": "organic",
+        "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+        "lead_id": "lead-764fdf3765f48a03257979638b8",
+        "correlation_id": "c-closedloop01",
+        "idempotency_key": "idk:closed-loop-synthetic-v1"
+      }
+    }
+  ],
+  "lead": {
+    "lead_id": "lead-764fdf3765f48a03257979638b8",
+    "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+    "status": "persisted",
+    "record_kind": "synthetic",
+    "commercial_stage": "lead_persisted",
+    "stage_history": [
+      {
+        "at": "2026-08-01T10:04:00.000Z",
+        "from": "form_started",
+        "to": "lead_persisted",
+        "actor": "system",
+        "note": "form_submit"
+      }
+    ],
+    "received_at": "2026-08-01T10:04:00.000Z",
+    "updated_at": "2026-08-01T10:04:00.000Z",
+    "delete_after": "2028-08-01T10:04:00.000Z",
+    "jornada": "edital",
+    "estagio": "edital",
+    "origem": "organic",
+    "landing_page": "/diagnostico-pre-licitacao/",
+    "landing_url": "/diagnostico-pre-licitacao/",
+    "referrer": "/",
+    "utm_source": "google",
+    "utm_medium": "organic",
+    "utm_campaign": null,
+    "route_family": "diagnostico-pre-licitacao",
+    "asset_id": "diagnostico-pre-licitacao",
+    "cta_id": "hero-diagnostico",
+    "offer_id": "diagnostico-pre-licitacao",
+    "correlation_id": "c-closedloop01",
+    "idempotency_key": "idk:closed-loop-synthetic-v1",
+    "source": "CONFENGE_WEB",
+    "consentimento": true,
+    "next_action": "exclude_from_commercial",
+    "owner": null,
+    "opportunity_id": null,
+    "proposal_id": null,
+    "sale_id": null,
+    "proposal_value": null,
+    "contract_value": null,
+    "revenue_received": null,
+    "loss_reason": null
+  },
+  "observations": [
+    {
+      "stage": "qualified",
+      "owner": "warmbly",
+      "actor": "warmbly",
+      "lead_id": "lead-764fdf3765f48a03257979638b8",
+      "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+      "opportunity_id": "opp-3ab889d636156d5b1e14191919ff",
+      "accept_reason": "edital_window",
+      "at": "2026-08-01T11:04:00.000Z"
+    },
+    {
+      "stage": "proposal",
+      "owner": "warmbly",
+      "actor": "warmbly",
+      "lead_id": "lead-764fdf3765f48a03257979638b8",
+      "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+      "opportunity_id": "opp-3ab889d636156d5b1e14191919ff",
+      "proposal_id": "prop-a67f956e315c13d1adf8941b154",
+      "amount": 18000,
+      "at": "2026-08-01T14:00:00.000Z"
+    },
+    {
+      "stage": "won",
+      "owner": "warmbly",
+      "actor": "warmbly",
+      "lead_id": "lead-764fdf3765f48a03257979638b8",
+      "session_id": "sess-8e0bdd75a33225d8ec95d98843f",
+      "opportunity_id": "opp-3ab889d636156d5b1e14191919ff",
+      "proposal_id": "prop-a67f956e315c13d1adf8941b154",
+      "sale_id": "sale-e6cc712d3d19a26cc9e30e2f3e3",
+      "revenue": 18000,
+      "contract_value": 18000,
+      "at": "2026-08-08T10:00:00.000Z"
+    }
+  ]
+}

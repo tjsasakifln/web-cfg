@@ -83,6 +83,7 @@ const MAX_FIELD = {
   terms_id: 80,
   amount_cents: 16,
   document_intent: 40,
+  session_id: 32,
 };
 
 /** Query/body keys that may persist as attribution. Everything else is dropped. */
@@ -102,6 +103,7 @@ const ATTR_ALLOWLIST = [
   "cta_id",
   "asset_id",
   "correlation_id",
+  "session_id",
   "tema",
   "pseo_page_id",
   "page_type",
@@ -392,9 +394,10 @@ function looksLikePii(value, key) {
   const s = String(value || "");
   if (!s) return false;
   if (/@/.test(s)) return true;
-  if (key === "correlation_id") return false;
+  if (key === "correlation_id" || key === "session_id" || key === "lead_id") return false;
   if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return false;
   if (s.startsWith("c-")) return false;
+  if (/^(sess|lead|opp|prop|sale|evt)-/.test(s)) return false;
   const compact = s.replace(/[\s()-]/g, "");
   return /^\+?\d{10,15}$/.test(compact);
 }
@@ -875,6 +878,7 @@ function validateAndNormalize(data) {
     cta_id: sanitizeAttributionValue(data.cta_id, MAX_FIELD.cta_id, "cta_id") || null,
     asset_id: sanitizeAttributionValue(data.asset_id, MAX_FIELD.asset_id, "asset_id") || null,
     correlation_id: sanitizeAttributionValue(data.correlation_id, MAX_FIELD.correlation_id, "correlation_id") || null,
+    session_id: sanitizeAttributionValue(data.session_id || data.sid, MAX_FIELD.session_id, "session_id") || null,
     analysis_id: sanitizeAttributionValue(data.analysis_id, MAX_FIELD.analysis_id, "analysis_id") || null,
     evidence_pack_version: sanitizeAttributionValue(
       data.evidence_pack_version,

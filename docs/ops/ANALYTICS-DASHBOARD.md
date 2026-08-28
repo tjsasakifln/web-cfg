@@ -17,6 +17,8 @@
 | Problema contratual | form success journey=`contrato` | lead_id |
 | Diagnóstico B2G | form success journey=`operacao` | lead_id |
 
+Closed-loop fixture report (visit → qualified opportunity → revenue): [docs/revops/CLOSED-LOOP.md](../revops/CLOSED-LOOP.md). Production qualified/proposal/won stay Warmbly-observed; the CI report never reads production.
+
 ## Métricas do painel
 
 - sessões, origem (utm_source/medium/campaign), landing pages

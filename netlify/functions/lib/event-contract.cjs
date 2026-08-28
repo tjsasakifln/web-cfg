@@ -16,7 +16,17 @@ const DENOMINATORS = Object.freeze([...(REGISTRY.denominators || [])]);
 const ENVELOPE_FIELDS = Object.freeze([...(REGISTRY.envelope_fields || [])]);
 const CTA_KIND_FROM_ALIAS = REGISTRY.cta_kind_from_alias || {};
 // Envelope identifiers may contain Date.now() / UUID digits. Match lead-core.cjs:82.
-const ENVELOPE_ID_KEYS = new Set(["correlation_id", "idempotency_key", "event_id"]);
+const ENVELOPE_ID_KEYS = new Set([
+  "correlation_id",
+  "idempotency_key",
+  "event_id",
+  "session_id",
+  "sid",
+  "lead_id",
+  "opportunity_id",
+  "proposal_id",
+  "sale_id",
+]);
 
 const LAYER_RANK = Object.freeze({
   session: 0,
@@ -115,6 +125,7 @@ function looksLikePiiValue(value, key) {
   if (ENVELOPE_ID_KEYS.has(k)) return false;
   if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return false;
   if (s.startsWith("c-")) return false;
+  if (/^(sess|lead|opp|prop|sale|evt)-/.test(s)) return false;
   if (/@|\+?\d{8,}/.test(s)) return true;
   const compact = s.replace(/[\s()-]/g, "");
   if (/^\+?\d{10,15}$/.test(compact)) return true;
