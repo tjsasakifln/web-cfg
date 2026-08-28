@@ -115,6 +115,7 @@ jobs:
           python3 -m pytest deploy/netcup/tests -q
           npm run test:pseo-attribution
           npm run test:revops
+          npm run test:privacy
           npm run test:schedules
           npm run test:tools
           npm run test:nurture

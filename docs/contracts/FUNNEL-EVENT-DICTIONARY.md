@@ -23,10 +23,12 @@ Every admitted event carries:
 | `cta_id` / `cta_position` | When the event is a CTA |
 | `offer_id` / `next_action_id` | Versioned commercial identity and next action when known; never free text |
 | `correlation_id` / `idempotency_key` / `event_id` | When the producer has them. `event_id` dedupes one physical click |
+| `session_id` / `lead_id` / `opportunity_id` / `proposal_id` / `sale_id` | Stable non-PII join keys for the closed-loop fixture. Prefixes `sess-` `lead-` `opp-` `prop-` `sale-`. Never email, phone or free text |
+| `journey` | Versioned journey token when known |
 | `consent` | `not_required` on aggregate events |
 | `pii_policy` | `aggregate_allowlist_empty` |
 
-The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query text and PII-like values are never admitted. Envelope identifiers (`correlation_id`, `idempotency_key`) follow the lead-core rule: UUID, `c-` prefix and timestamp keys are not treated as phone/CNPJ. `@` still fails on every field.
+The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query text and PII-like values are never admitted. Envelope identifiers (`correlation_id`, `idempotency_key`, `event_id`, `session_id`, `lead_id`, `opportunity_id`, `proposal_id`, `sale_id`) follow the lead-core rule: UUID, `c-` / `sess-` / `lead-` / `opp-` / `prop-` / `sale-` / `evt-` prefixes and timestamp keys are not treated as phone/CNPJ. `@` still fails on every field.
 
 ## Layers (denominators)
 
@@ -76,4 +78,4 @@ Material aliases:
 
 ## Tests
 
-`npm run test:event-dictionary` drives the shipped registry, `collect` handler and `confengeTrack`.
+`npm run test:event-dictionary` drives the shipped registry, `collect` handler and `confengeTrack`. Closed-loop join (session → lead → opportunity → proposal → sale) is `npm run test:revops` via `scripts/revops/test_closed_loop.mjs`. The CI report never derives `qualified_lead` / pipeline / won from collect events.

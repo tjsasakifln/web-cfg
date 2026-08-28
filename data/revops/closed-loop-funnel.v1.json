@@ -1,0 +1,139 @@
+{
+  "schema": "confenge.closed-loop-funnel/1.0",
+  "schema_version": "1.0.0",
+  "source": "CONFENGE_WEB",
+  "commercial_owner": "warmbly",
+  "pii_policy": "aggregate_allowlist_empty",
+  "official_live": false,
+  "ids": {
+    "session": {
+      "kind": "session",
+      "prefix": "sess-",
+      "max_length": 32,
+      "pattern": "^sess-[0-9a-f]{27}$"
+    },
+    "lead": {
+      "kind": "lead",
+      "prefix": "lead-",
+      "max_length": 32,
+      "pattern": "^lead-[0-9a-f]{27}$",
+      "legacy_pattern": "^[0-9a-f]{24}$"
+    },
+    "opportunity": {
+      "kind": "opportunity",
+      "prefix": "opp-",
+      "max_length": 32,
+      "pattern": "^opp-[0-9a-f]{28}$"
+    },
+    "proposal": {
+      "kind": "proposal",
+      "prefix": "prop-",
+      "max_length": 32,
+      "pattern": "^prop-[0-9a-f]{27}$"
+    },
+    "sale": {
+      "kind": "sale",
+      "prefix": "sale-",
+      "max_length": 32,
+      "pattern": "^sale-[0-9a-f]{27}$"
+    }
+  },
+  "visitor_stages": [
+    "view",
+    "cta",
+    "form_start",
+    "step1",
+    "step2",
+    "persisted"
+  ],
+  "commercial_stages": [
+    "qualified",
+    "proposal",
+    "won",
+    "lost"
+  ],
+  "stage_owners": {
+    "view": "web-cfg",
+    "cta": "web-cfg",
+    "form_start": "web-cfg",
+    "step1": "web-cfg",
+    "step2": "web-cfg",
+    "persisted": "web-cfg",
+    "qualified": "warmbly",
+    "proposal": "warmbly",
+    "won": "warmbly",
+    "lost": "warmbly"
+  },
+  "visitor_event_map": {
+    "page_view": "view",
+    "service_page_view": "view",
+    "offer_view": "view",
+    "asset_view": "view",
+    "editorial_page_view": "view",
+    "organic_landing": "view",
+    "cta_click": "cta",
+    "whatsapp_click": "cta",
+    "lead_form_start": "form_start",
+    "lead_form_step": "step2",
+    "lead_form_success": "persisted",
+    "lead_persisted": "persisted"
+  },
+  "commercial_transitions": {
+    "persisted": ["qualified", "lost"],
+    "qualified": ["proposal", "lost"],
+    "proposal": ["won", "lost"],
+    "won": [],
+    "lost": ["qualified"]
+  },
+  "accept_reasons": [
+    "icp_fit",
+    "urgency_contract",
+    "edital_window",
+    "budget_qualified",
+    "decision_maker",
+    "referred",
+    "other"
+  ],
+  "reject_reasons": [
+    "no_response",
+    "out_of_icp",
+    "timing",
+    "budget",
+    "competitor",
+    "self_serve",
+    "not_a_fit",
+    "duplicate",
+    "spam",
+    "other"
+  ],
+  "sla": {
+    "version": "1.0.0",
+    "first_response_hours": 4,
+    "qualification_hours": 24,
+    "proposal_hours": 72,
+    "retention_days": 730
+  },
+  "rates": [
+    "view_to_cta",
+    "cta_to_start",
+    "step1_to_step2",
+    "step2_to_persisted",
+    "persisted_to_qualified",
+    "qualified_to_proposal",
+    "proposal_to_won"
+  ],
+  "attribution_fields": [
+    "landing",
+    "route_family",
+    "asset_id",
+    "cta_id",
+    "journey",
+    "offer_id",
+    "origem"
+  ],
+  "notes_pt_br": {
+    "raw_vs_qualified": "Mensagem ou lead persistido não é oportunidade qualificada. Qualificação, proposta e venda são observações Warmbly unidas por IDs estáveis.",
+    "pii": "Eventos analíticos admitidos nunca carregam e-mail, telefone ou texto livre.",
+    "ci": "O relatório de CI lê apenas a fixture sintética. Não POSTa lead real e não lê produção."
+  }
+}

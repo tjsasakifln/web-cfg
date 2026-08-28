@@ -23,6 +23,8 @@ Proof harness (synthetic only): `npm run probe:money-asset:prod`. INBOUND NOW st
 
 Handoff (campo `handoff.status`, independente do status de captura): `PENDING` → `DELIVERED` / `RETRYABLE` / `DEAD` / `BLOCKED` / `SKIPPED`.
 
+Closed-loop measurement (raw lead is not a qualified opportunity): [CLOSED-LOOP.md](../revops/CLOSED-LOOP.md).
+
 ## Qualificação e prioridade
 
 | Jornada | Prioridade | SLA 1º contato | Responsável default |
