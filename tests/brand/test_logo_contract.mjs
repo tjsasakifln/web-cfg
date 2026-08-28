@@ -159,7 +159,7 @@ const observation = contract.current_surface_observation ?? {};
 assert("legacy_retained", observation.state === "LEGACY_RASTER_RETAINED", observation.state);
 assert("legacy_primary_exact", observation.header_primary === "/assets/logo-confenge-500-f8a83f6d.png" && observation.footer_primary === "/assets/logo-confenge-white-500-1677038e.png", observation);
 assert("legacy_ratio", observation.intrinsic_ratio === "50:13", observation.intrinsic_ratio);
-assert("observed_html_count", observation.source_html_files_scanned === 276, observation.source_html_files_scanned);
+assert("observed_html_count", observation.source_html_files_scanned === 287, observation.source_html_files_scanned);
 assert("observed_logo_count", observation.logo_image_occurrences === 462, observation.logo_image_occurrences);
 assert("observed_header_count", observation.header_lockup_occurrences === 238, observation.header_lockup_occurrences);
 assert("observed_footer_count", observation.footer_lockup_occurrences === 224, observation.footer_lockup_occurrences);
