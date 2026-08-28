@@ -190,38 +190,90 @@ def run_node_gate(script: str) -> dict:
     }
 
 
-def configure_turnstile_site_key(public_root: Path, env: dict[str, str] | None = None) -> dict:
-    """Inject the public Turnstile site key into the publish artifact only.
+TURNSTILE_MARKER = 'data-turnstile-sitekey=""'
+TURNSTILE_SLOT = (
+    '<div class="field turnstile-slot" id="turnstile-slot" hidden '
+    'data-turnstile-sitekey="">'
+    '<div class="cf-turnstile" data-theme="light" data-size="normal"></div>'
+    "</div>"
+)
+_CAPTURE_FORM_RE = re.compile(
+    r'(?is)<form\b(?=[^>]*\b(?:'
+    r'action\s*=\s*["\'](?:/\.netlify/functions/lead|/api/web/lead)["\']'
+    r'|id\s*=\s*["\']formulario-contato["\']'
+    r'))[^>]*>'
+)
+_CLOSE_FORM_RE = re.compile(r"(?is)</form>")
 
-    Production builds fail closed without the public key so the function-side
-    mandatory Turnstile policy cannot publish a form that has no widget.
-    Source HTML keeps an empty marker and never receives an environment value.
+
+def is_lead_capture_html(html: str) -> bool:
+    """True when the document posts a public lead (home id or lead endpoint)."""
+    return bool(_CAPTURE_FORM_RE.search(html))
+
+
+def _insert_turnstile_slot(html: str) -> str:
+    if TURNSTILE_MARKER in html or 'id="turnstile-slot"' in html:
+        return html
+    opening = _CAPTURE_FORM_RE.search(html)
+    if opening is None:
+        raise RuntimeError("turnstile_slot_insert_failed: capture form not found")
+    closing = _CLOSE_FORM_RE.search(html, opening.end())
+    if closing is None:
+        raise RuntimeError("turnstile_slot_insert_failed: missing </form>")
+    return html[: closing.start()] + TURNSTILE_SLOT + html[closing.start() :]
+
+
+def configure_turnstile_site_key(public_root: Path, env: dict[str, str] | None = None) -> dict:
+    """Ensure every capture form in the publish artifact has a Turnstile widget.
+
+    Source HTML may omit the slot. The assembled tree receives one shared slot
+    per capture document, then the public site key. Production fails closed
+    without that key so a form cannot ship without a widget the backend requires.
     """
     resolved_env = os.environ if env is None else env
     context = (resolved_env.get("CONTEXT") or resolved_env.get("NETLIFY_CONTEXT") or "").strip().lower()
     site_key = (resolved_env.get("TURNSTILE_SITE_KEY") or "").strip()
-    target = public_root / "index.html"
-    marker = 'data-turnstile-sitekey=""'
+    marker = TURNSTILE_MARKER
 
     if not site_key:
         if context == "production":
             raise RuntimeError("TURNSTILE_SITE_KEY is required for the production publish artifact")
-        return {"configured": False, "context": context or "local", "target": "index.html"}
-    if len(site_key) < 10 or len(site_key) > 200 or re.search(r"[\x00-\x1f\x7f]", site_key):
+    elif len(site_key) < 10 or len(site_key) > 200 or re.search(r"[\x00-\x1f\x7f]", site_key):
         raise RuntimeError("TURNSTILE_SITE_KEY is malformed")
-    if not target.exists():
-        raise RuntimeError("public index.html is missing for Turnstile injection")
 
-    raw = target.read_text(encoding="utf-8")
-    if raw.count(marker) != 1:
-        raise RuntimeError("Turnstile site-key marker must occur exactly once")
-    rendered = raw.replace(
-        marker,
-        f'data-turnstile-sitekey="{escape(site_key, quote=True)}"',
-        1,
+    keyed = (
+        f'data-turnstile-sitekey="{escape(site_key, quote=True)}"' if site_key else ""
     )
-    target.write_text(rendered, encoding="utf-8")
-    return {"configured": True, "context": context or "local", "target": "index.html"}
+    capture_files = 0
+    injected_files = 0
+    html_files = sorted(path for path in public_root.rglob("*.html") if path.is_file())
+
+    for path in html_files:
+        raw = path.read_text(encoding="utf-8")
+        html = raw
+        capture = is_lead_capture_html(html)
+        if capture:
+            capture_files += 1
+            html = _insert_turnstile_slot(html)
+        marker_count = html.count(marker)
+        if marker_count > 1:
+            raise RuntimeError("Turnstile site-key marker must occur exactly once")
+        if capture and marker_count != 1:
+            raise RuntimeError("turnstile_slot_insert_failed: marker missing after insert")
+        if site_key and marker_count == 1:
+            html = html.replace(marker, keyed, 1)
+            injected_files += 1
+        if html != raw:
+            path.write_text(html, encoding="utf-8")
+
+    configured = bool(site_key) and injected_files > 0
+    return {
+        "configured": configured,
+        "context": context or "local",
+        "target": "index.html",
+        "capture_files": capture_files,
+        "injected_files": injected_files,
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
