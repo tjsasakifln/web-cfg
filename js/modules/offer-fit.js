@@ -19,16 +19,41 @@
           if (value === "planejamento") return 1;
           return 0;
         };
+        const ceilingOf = (riskId) => {
+          const found = (((matrix.dimensions || {}).risk_band || {}).values || []).find((item) => item.id === riskId);
+          if (!found || riskId === "unknown") return null;
+          if (typeof found.max_cents === "number") return found.max_cents;
+          if (typeof found.max_cents_exclusive === "number") return found.max_cents_exclusive - 1;
+          if (typeof found.min_cents_exclusive === "number") return Infinity;
+          return null;
+        };
+        const floorOf = (step) => {
+          const offer = offerOf(step);
+          if (!offer || !offer.ladder_tier_id) return 0;
+          const band = Object.values(matrix.cited_bands || {}).find((item) => item.tier_id === offer.ladder_tier_id);
+          return band && typeof band.min_cents === "number" ? band.min_cents : 0;
+        };
+        const clamp = (step) => {
+          const ceiling = ceilingOf(risk);
+          if (ceiling == null || floorOf(step) <= ceiling) return step;
+          const ladder = ["diretoria", "projeto_critico", "diagnostico", "entrega_entrada", "conteudo_ferramenta"];
+          const start = Math.max(0, ladder.indexOf(step));
+          for (let i = start; i < ladder.length; i += 1) {
+            if (floorOf(ladder[i]) <= ceiling) return ladder[i];
+          }
+          return "conteudo_ferramenta";
+        };
         const finish = (nextStep) => {
-          const offer = offerOf(nextStep);
+          const affordable = clamp(nextStep);
+          const offer = offerOf(affordable);
           return {
-            next_step: nextStep,
-            next_step_label: (matrix.next_step_labels && matrix.next_step_labels[nextStep]) || nextStep,
-            offer_id: offer ? offer.offer_id : nextStep,
+            next_step: affordable,
+            next_step_label: (matrix.next_step_labels && matrix.next_step_labels[affordable]) || affordable,
+            offer_id: offer ? offer.offer_id : affordable,
             fit: offer ? offer.fit : "",
             not_fit: offer ? offer.not_fit : "",
             public_next: offer ? offer.public_next : "",
-            economically_indicated: nextStep !== "nao_indicado" && nextStep !== "conteudo_ferramenta",
+            economically_indicated: affordable !== "nao_indicado" && affordable !== "conteudo_ferramenta",
           };
         };
         const lowRisk = risk === "abaixo_entrada";
@@ -46,7 +71,7 @@
         }
         if (
           frequency === "recorrente" &&
-          (ticket === "acima_1m" || risk === "acima_dossie" || risk === "faixa_dossie") &&
+          risk === "acima_dossie" &&
           (capacity === "limitada" || capacity === "inexistente")
         ) {
           return finish("diretoria");
