@@ -15,6 +15,8 @@ import {
   illustrationEconomics,
   loadOfferFitMatrix,
   loadPricingPolicy,
+  paidStepFloorCents,
+  riskBandCeilingCents,
   routeSituation,
 } from "../../scripts/commercial/offer_fit.mjs";
 
@@ -130,6 +132,105 @@ checkRoute(
   { ticket_band: "acima_1m", risk_band: "acima_dossie", frequency: "pontual", document_maturity: "parcial" },
   "projeto_critico",
 );
+
+const recorrenteEntrada = checkRoute(
+  "recorrente_risk_faixa_entrada_not_diretoria",
+  {
+    ticket_band: "acima_1m",
+    risk_band: "faixa_entrada",
+    frequency: "recorrente",
+    internal_capacity: "limitada",
+  },
+  "entrega_entrada",
+);
+assert(
+  "recorrente_faixa_entrada_not_lideranca",
+  !recorrenteEntrada.cited_price_bands.includes("lideranca_fracionada"),
+  recorrenteEntrada.cited_price_bands,
+);
+assert(
+  "recorrente_faixa_entrada_floor_within_risk",
+  paidStepFloorCents(recorrenteEntrada.next_step, matrix) <= riskBandCeilingCents("faixa_entrada", matrix),
+  {
+    step: recorrenteEntrada.next_step,
+    floor: paidStepFloorCents(recorrenteEntrada.next_step, matrix),
+    ceiling: riskBandCeilingCents("faixa_entrada", matrix),
+  },
+);
+
+const recorrenteAbaixo = checkRoute(
+  "recorrente_risk_abaixo_entrada_not_paid",
+  {
+    ticket_band: "acima_1m",
+    risk_band: "abaixo_entrada",
+    frequency: "recorrente",
+    internal_capacity: "limitada",
+  },
+  "conteudo_ferramenta",
+);
+assert("recorrente_abaixo_entrada_not_indicated", recorrenteAbaixo.economically_indicated === false, recorrenteAbaixo);
+
+const recFloor = matrix.cited_bands.recorrencia_gerenciada.min_cents;
+const leadFloor = matrix.cited_bands.lideranca_fracionada.min_cents;
+assert("recorrencia_floor_below_lideranca", recFloor < leadFloor, { recFloor, leadFloor });
+
+const entradaCeiling = riskBandCeilingCents("faixa_entrada", matrix);
+assert("faixa_entrada_below_recorrencia_floor", entradaCeiling < recFloor, { entradaCeiling, recFloor });
+assert("faixa_entrada_below_lideranca_floor", entradaCeiling < leadFloor, { entradaCeiling, leadFloor });
+
+const diagnosticoCeiling = riskBandCeilingCents("faixa_diagnostico", matrix);
+assert(
+  "faixa_diagnostico_below_lideranca_floor",
+  diagnosticoCeiling < leadFloor,
+  { diagnosticoCeiling, leadFloor },
+);
+
+const recorrenteDiagnostico = checkRoute(
+  "recorrente_risk_below_lideranca_floor",
+  {
+    ticket_band: "acima_1m",
+    risk_band: "faixa_diagnostico",
+    frequency: "recorrente",
+    internal_capacity: "limitada",
+  },
+  "diagnostico",
+);
+assert(
+  "recorrente_diagnostico_not_diretoria",
+  recorrenteDiagnostico.next_step !== "diretoria",
+  recorrenteDiagnostico,
+);
+assert(
+  "recorrente_diagnostico_floor_within_risk",
+  paidStepFloorCents(recorrenteDiagnostico.next_step, matrix) <= diagnosticoCeiling,
+  {
+    step: recorrenteDiagnostico.next_step,
+    floor: paidStepFloorCents(recorrenteDiagnostico.next_step, matrix),
+    ceiling: diagnosticoCeiling,
+  },
+);
+
+for (const risk of dimensionIds.risk_band.filter((id) => id !== "unknown")) {
+  const input = {
+    ticket_band: "acima_1m",
+    risk_band: risk,
+    frequency: "recorrente",
+    internal_capacity: "limitada",
+  };
+  const routed = routeSituation(input, matrix);
+  const again = routeSituation(input, matrix);
+  const ceiling = riskBandCeilingCents(risk, matrix);
+  const floor = paidStepFloorCents(routed.next_step, matrix);
+  assert(`recorrente_${risk}_deterministic`, JSON.stringify(routed) === JSON.stringify(again), risk);
+  assert(`recorrente_${risk}_floor_within_risk`, floor <= ceiling, {
+    step: routed.next_step,
+    floor,
+    ceiling,
+  });
+  if (ceiling < recFloor || ceiling < leadFloor) {
+    assert(`recorrente_${risk}_not_diretoria`, routed.next_step !== "diretoria", routed);
+  }
+}
 
 checkRoute(
   "urgencia_projeto",
