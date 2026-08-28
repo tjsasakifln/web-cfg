@@ -10,8 +10,6 @@
  * Later transitions require authenticated ops (OPS_TOKEN).
  */
 
-const FUNNEL = require("../../../data/revops/closed-loop-funnel.v1.json");
-
 const STAGES = Object.freeze([
   "visitor",
   "cta_triggered",
@@ -47,14 +45,33 @@ const ALLOWED = Object.freeze({
   lost: ["contacted", "qualified"], // reopen with reason
 });
 
-const LOSS_REASONS = Object.freeze([...(FUNNEL.reject_reasons || [])]);
-const ACCEPT_REASONS = Object.freeze([...(FUNNEL.accept_reasons || [])]);
+const LOSS_REASONS = Object.freeze([
+  "no_response",
+  "out_of_icp",
+  "timing",
+  "budget",
+  "competitor",
+  "self_serve",
+  "not_a_fit",
+  "duplicate",
+  "spam",
+  "other",
+]);
+const ACCEPT_REASONS = Object.freeze([
+  "icp_fit",
+  "urgency_contract",
+  "edital_window",
+  "budget_qualified",
+  "decision_maker",
+  "referred",
+  "other",
+]);
 const SLA = Object.freeze({
-  version: (FUNNEL.sla && FUNNEL.sla.version) || "1.0.0",
-  first_response_hours: Number((FUNNEL.sla && FUNNEL.sla.first_response_hours) || 4),
-  qualification_hours: Number((FUNNEL.sla && FUNNEL.sla.qualification_hours) || 24),
-  proposal_hours: Number((FUNNEL.sla && FUNNEL.sla.proposal_hours) || 72),
-  retention_days: Number((FUNNEL.sla && FUNNEL.sla.retention_days) || 730),
+  version: "1.0.0",
+  first_response_hours: 4,
+  qualification_hours: 24,
+  proposal_hours: 72,
+  retention_days: 730,
 });
 
 function isValidStage(stage) {
