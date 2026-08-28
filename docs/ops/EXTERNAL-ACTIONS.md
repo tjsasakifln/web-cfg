@@ -7,9 +7,10 @@ Legenda: **DONE** = comprovado nesta entrega · **OPEN** = só o owner ·
 
 ---
 
-## 1. Netlify — variáveis de ambiente (produção) — **PARTIAL**
+## 1. Ambiente de produção (VPS EnvironmentFile) — **PARTIAL**
 
-**Plataforma:** Netlify UI → Site `confenge` → Site configuration → Environment variables → Production  
+**Plataforma:** `/etc/confenge-web/runtime.env` no host de produção (nginx/Netcup).
+Não usar a UI da Netlify como autoridade de env público.
 
 | Variável | Valor esperado | Razão | Validação pós-set |
 | --- | --- | --- | --- |
@@ -25,11 +26,11 @@ Legenda: **DONE** = comprovado nesta entrega · **OPEN** = só o owner ·
 | `CONFENGE_INBOUND_WEBHOOK_URL` | HTTPS `…/api/v1/webhooks/confenge/inbound` | Handoff `confenge.inbound.v1` (Warmbly PR #71) | Synthetic persist → handoff **SKIPPED**. Real lead + live inbound env → `inbound_handoff` delivered. A 201 is not INBOUND NOW. |
 | `CONFENGE_INBOUND_WEBHOOK_SECRET` | mesmo valor no Warmbly | HMAC `X-Warmbly-Signature` | Destino 201; 401 se secreto divergir |
 
-**Status 2026-08-02:** `RESEND_API_KEY`, `LEAD_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`, `IP_HASH_SALT` set via Netlify CLI (production). Redeploy `6a6f7027381c29f8c55c70d1` live. E-mail lead **Delivered** (Resend UI). Ainda OPEN: `OPS_WEBHOOK_*`, Turnstile, probe secret.
+**Status 2026-08-02 (registro historico, plano Netlify de entao; nao executar):** `RESEND_API_KEY`, `LEAD_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`, `IP_HASH_SALT` foram definidos pelo CLI legado e o redeploy `6a6f7027381c29f8c55c70d1` ficou live. Hoje o env authority e `/etc/confenge-web/runtime.env`. E-mail lead **Delivered** (Resend UI). Ainda OPEN: `OPS_WEBHOOK_*`, Turnstile, probe secret.
 
-**Depois de salvar env:** Deploys → Trigger deploy (clear cache) ou empty commit para recarregar functions.
+**Depois de salvar env:** `sudo systemctl restart confenge-web-runtime.service` e validar `/ready`. Não republicar na Netlify.
 
-**Rotação ntfy (obrigatória — OPEN):**  
+**Rotação ntfy (obrigatória — OPEN):**
 No app ntfy (ou API), **apagar/revogar** o tópico historicamente exposto `confenge-prod-leads-b2g-9f3c2a1e7d4b6e80`. Não reutilizar o nome. Código de produção **já não usa** esse tópico.
 
 **Consequência se OPEN:** lead persiste (201) mas ops pode não receber e-mail/webhook; Turnstile não forçado.
@@ -40,7 +41,7 @@ No app ntfy (ou API), **apagar/revogar** o tópico historicamente exposto `confe
 
 **Plataforma:** DNS do registrador do domínio (MX atual: Hostinger `mx1/mx2.hostinger.com` — DoH 2026-08-02)
 
-**Estado observado (Cloudflare DoH):** sem TXT SPF em `@`; sem `_dmarc`; MX Hostinger apenas.  
+**Estado observado (Cloudflare DoH):** sem TXT SPF em `@`; sem `_dmarc`; MX Hostinger apenas.
 Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
 
 | Registro | Host | Valor esperado | Validação |
@@ -55,38 +56,38 @@ Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
 
 ## 3. Resend — domínio e API — **DONE**
 
-**Plataforma:** [resend.com](https://resend.com) → Domains → Add `confenge.com.br` → copiar DNS → API Keys → Create  
+**Plataforma:** [resend.com](https://resend.com) → Domains → Add `confenge.com.br` → copiar DNS → API Keys → Create
 
 | Campo | Valor |
 | --- | --- |
 | Domain | `confenge.com.br` |
-| API key | colar em Netlify `RESEND_API_KEY` |
+| API key | colar em `/etc/confenge-web/runtime.env` como `RESEND_API_KEY` |
 | From | `leads@confenge.com.br` (ou subdomínio verificado) |
 
-**Validação:**  
+**Validação:**
 `npm run probe:lead:prod` → 201 → checar inbox `LEAD_NOTIFY_EMAIL` com subject contendo o `lead_id`. Export/screenshot **sem** colar PII no git.
 
 ---
 
 ## 4. Cloudflare Turnstile — **OPEN**
 
-**Plataforma:** [dash.cloudflare.com](https://dash.cloudflare.com) → Turnstile → Add widget  
+**Plataforma:** [dash.cloudflare.com](https://dash.cloudflare.com) → Turnstile → Add widget
 
 | Campo | Valor |
 | --- | --- |
 | Domain | `confenge.com.br` |
 | Widget mode | Managed |
-| Site key (pública) | Netlify `TURNSTILE_SITE_KEY` (build scope); `build:site` injeta em `_site/index.html` |
-| Secret key | Netlify `TURNSTILE_SECRET_KEY` |
+| Site key (pública) | `TURNSTILE_SITE_KEY` no build de `main`; `build:site` injeta em `_site/index.html` |
+| Secret key | `TURNSTILE_SECRET_KEY` no EnvironmentFile do VPS |
 
 Depois: set `LEAD_REQUIRE_TURNSTILE=1`, `LEAD_REQUIRE_ORIGIN=1` e um
 `IP_HASH_SALT` privado de 32+ caracteres, então redeploy. Build de produção sem
-site key falha antes de publicar; o secret nunca entra no HTML.  
+site key falha antes de publicar; o secret nunca entra no HTML.
 
-**Validação:**  
-- Form carrega widget  
-- POST lead sem token → **403** `anti_abuse`  
-- POST com token válido → **201**  
+**Validação:**
+- Form carrega widget
+- POST lead sem token → **403** `anti_abuse`
+- POST com token válido → **201**
 
 CSP já permite `challenges.cloudflare.com` em `_headers`. Script carrega **só** se sitekey presente.
 
@@ -104,7 +105,7 @@ Aplicado via API (`gh`) neste ambiente:
 | allow_force_pushes | false |
 | required_conversation_resolution | true |
 
-**Evidência:** `docs/evidence/inbound-10/branch-protection.json`  
+**Evidência:** `docs/evidence/inbound-10/branch-protection.json`
 
 **Validação owner (opcional reforço):** Settings → Branches → confirmar UI; elevar `required_approving_review_count` se houver segundo revisor; adicionar check `Analyze` (CodeQL) quando estável.
 
@@ -122,7 +123,7 @@ Aplicado via API (`gh`) neste ambiente:
 | `https://confenge.com.br/.well-known/build-info.json` | 200 JSON |
 | `https://confenge.com.br/.netlify/functions/collect` | 200 GET |
 
-Alerta por e-mail/SMS **diferente** do canal de leads.  
+Alerta por e-mail/SMS **diferente** do canal de leads.
 Probe periódico de lead: `npm run probe:lead:prod` (cron owner) com `LEAD_PROBE_SECRET` se configurado.
 
 ---
@@ -158,28 +159,29 @@ com o runtime revisado e ter autorização não expirada.
 
 ---
 
-## 8. Netlify Blobs — **DONE** (produção)
+## 8. Persistência host-owned — **DONE** (produção)
 
-Persistência comprovada: HTTP **201** + `lead_id` + read-back no tip funcional.  
-Não exige ação adicional salvo migração para HTTP store.
+Produção usa filesystem em `/var/lib/confenge-web`. Health ops reporta
+`storage.backend=filesystem`. Blobs da Netlify não são o store público.
 
 ---
 
-## 9. Rollback live click — **OPEN (Netlify UI)**
+## 9. Rollback live — **documentado (nginx/Netcup)**
 
-Procedimento + SHAs: `docs/ops/ROLLBACK.md`, `docs/evidence/inbound-10/rollback-evidence.md`.  
-Owner: Netlify → Deploys → Publish deploy anterior → validar probe → republicar tip.
+Procedimento + SHA: `docs/ops/ROLLBACK.md`.
+Owner: `/opt/confenge-web/bin/rollback <FULL_SHA>` → validar probe → evidência
+`ROLLED_BACK`. Não usar a UI da Netlify.
 
 ---
 
 ## Ordem recomendada de execução (owner, ~45–90 min)
 
-1. Resend domain + DNS §2–3  
-2. Netlify env §1 (Resend + webhook + salt) → redeploy  
-3. `npm run probe:lead:prod` + confirmar inbox + webhook  
-4. Turnstile §4 → sitekey HTML + secret + `LEAD_REQUIRE_TURNSTILE=1` → redeploy  
-5. Uptime §6  
-6. Revogar ntfy antigo §1  
+1. Resend domain + DNS §2–3
+2. EnvironmentFile do VPS §1 (Resend + webhook + salt) → restart runtime
+3. `npm run probe:lead:prod` + confirmar inbox + webhook
+4. Turnstile §4 → sitekey HTML + secret + `LEAD_REQUIRE_TURNSTILE=1` → redeploy
+5. Uptime §6
+6. Revogar ntfy antigo §1
 7. Rollback drill click §9 (opcional mas fecha 10 em release ops)
 
 ## Após executar

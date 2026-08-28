@@ -1,10 +1,10 @@
 # Persistência portátil — contrato e inventário
 
-**Estado desta entrega:** `HOST_OWNED_STORAGE_READY / LIVE_DATA_MIGRATION_NOT_YET_EXECUTED`
+**Estado desta entrega:** `HOST_OWNED_STORAGE_PRODUCTION / FILESYSTEM_LIVE`
 **Decisão:** `EXECUTE_NOW` (P0)
 **Frente executiva:** SCALE / SUNSET
 **Alavancas:** automação, dados, confiança e receita
-**Tempo para evidência:** testes herméticos nesta PR; evidência live somente no cutover autorizado.
+**Tempo para evidência:** `/.well-known/runtime-info.json` `storage_backend=filesystem` e ops health no mesmo backend.
 
 O backend escolhido é filesystem host-owned em um diretório durável dedicado,
 bind-mounted fora do release. Os contratos e o volume de uma única VPS não
@@ -58,9 +58,8 @@ cem operações manuais nem usa volume de registros como North Star.
 
 | ambiente | configuração | comportamento |
 | --- | --- | --- |
-| Netcup | `CONFENGE_STORAGE_BACKEND=filesystem` + root explícito | nenhuma resolução de `@netlify/blobs`; persistência sobrevive restart/deploy |
-| Netlify durante rollback | `CONFENGE_STORAGE_BACKEND=netlify-blobs` | adapter legado lazy, mesmos stores atuais |
-| Netlify atual ainda não reconfigurado | contexto Blobs presente | inferência legada temporária, **sem** fallback para memory |
+| Produção Netcup | `CONFENGE_STORAGE_BACKEND=filesystem` + root explícito | nenhuma resolução de `@netlify/blobs`; persistência sobrevive restart e rollback de `current` |
+| Legacy leftover | `CONFENGE_STORAGE_BACKEND=netlify-blobs` | adapter legado lazy; **não** é o store de produção |
 | teste/local | backend explícito ou aliases legados | memory somente test/non-production |
 | qualquer production sem backend | ausente/inválido | readiness false e intake 503 |
 
@@ -79,19 +78,17 @@ servidor HTTP independente.
   `extra-cli` não é replicado.
 - **Analytics:** contrato first-party e proibição de PII permanecem; só o adapter
   durável muda.
-- **Rollback:** manter tráfego Netlify no adapter legado ou publicar o deploy
-  conhecido anterior. Após um futuro cutover com escrita na Netcup, reconcile e
-  sync create-only reverso são obrigatórios antes de devolver tráfego à Netlify.
-- **ADR afetado:** nenhuma fronteira de ADR é alterada. A mudança implementa
-  portabilidade do plano público; DNS/runtime authority só muda em goal próprio.
+- **Rollback:** `/opt/confenge-web/bin/rollback <FULL_SHA>`. O store em
+  `/var/lib/confenge-web` sobrevive ao symlink. Não republicar deploy Netlify.
+- **ADR afetado:** ADR-STRAT-002 (superfície canônica) e RUNTIME-AUTHORITY
+  (host nginx/Netcup).
 
 ## Residual exato
 
-1. Nenhum dado live foi exportado, importado, removido ou migrado nesta PR.
-2. O contexto Netlify legado permanece aceito para não quebrar produção antes do
-   cutover; removê-lo e retirar `@netlify/blobs` do npm exige janela encerrada e
-   rollback sem dependência de Blobs.
-3. O goal 01 deve consumir `storageReadiness()` em `/ready` quando seu servidor
-   entrar na base comum.
-4. A ativação host, bind mount, backup schedule, export inicial/delta, drain e
-   reconcile live continuam ações externas deliberadamente não executadas.
+1. Produção já responde `storage_backend=filesystem`. Export histórico de Blobs
+   permanece leftover, não o caminho público.
+2. Remover `@netlify/blobs` do npm exige janela encerrada e prova de que nenhum
+   rollback depende do adapter legado.
+3. `/ready` já consome `storageReadiness()`.
+4. Backup, retenção e restore continuam comandos `--apply` no host, fora deste
+   arquivo.

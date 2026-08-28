@@ -33,8 +33,8 @@
 
 | Store | Type | Used by | Durability |
 |-------|------|---------|------------|
-| Netlify Blobs (leads) | KV object store | `lead`, `ops`, `nurture` | Durable (platform) |
-| Netlify Blobs `confenge-analytics` | KV | `collect`, `ops` | Durable |
+| Host file store `/var/lib/confenge-web` (leads) | file records `confenge-host-file-record/v1` | `lead`, `ops`, `nurture` | Durable; survives release rollback |
+| Host file store `confenge-analytics` namespace | file records | `collect`, `ops` | Durable |
 | FileStore | JSON files on disk | Local/dev via `LEAD_STORE_DIR` | Local only |
 | MemoryStore | In-process Map | Tests (`LEAD_STORE=memory`) | Ephemeral |
 | HTTP store | External API | Optional mirror/CRM | External |
@@ -234,7 +234,7 @@ Path: `data/editorial/EDITORIAL-REGISTRY.json` (+ `pages/*.json`)
 
 1. Change JS validators / builders in `netlify/functions/lib/*`  
 2. Update tests (`test:lead-function`, revops tests)  
-3. Deploy functions via Netlify  
+3. Release the handler tree with the public production plane (`site-ci` artifact → `netcup-release.yml`)  
 4. For git JSON: update schema + run editorial/pseo/revops validators  
 5. No migration runner — **backward compatibility is manual**
 

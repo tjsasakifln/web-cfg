@@ -27,7 +27,7 @@ quality_gate_tools: ["test:report-model", "test:report-model-ui", "test:design",
 7. O CTA principal entra no formulário persistido e fail-closed do Radar, mantém o contrato versionado de analytics sem PII e aparece no hero, após a principal prova e no fechamento; a ação móvel fixa só aparece depois que o hero deixa o viewport e nunca cobre conteúdo.
 8. A página mantém canonical, `index,follow`, JSON-LD `WebPage` + `Report` + `BreadcrumbList`, acesso integral em HTML e as rotas internas/sitemap existentes.
 9. Os gates automatizados provam anonimização, reconciliação dos 12 valores, clareza da promessa, entregáveis, escopo honesto, rastreabilidade, ausência de fricção, geometria móvel, WCAG AA, design, copy, SEO, analytics e artefato público.
-10. Revisão visual cobre 320, 390, 768, 1024 e 1440 px; após CI verde, merge em `main` e deploy Netlify, a URL pública responde 200 e o build marker corresponde ao SHA integrado.
+10. Revisão visual cobre 320, 390, 768, 1024 e 1440 px; após CI verde, merge em `main` e release do plano público, a URL pública responde 200 e o build marker corresponde ao SHA integrado.
 
 ## Market-Capture Gate
 

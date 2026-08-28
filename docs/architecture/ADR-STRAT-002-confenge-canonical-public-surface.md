@@ -43,6 +43,7 @@ Priority is assessed with a shared model: `(demand × commercial relevance × re
 - Programmatic SEO expansion is blocked without unique utility, editorial/data gates, canonical hygiene, provenance and monitoring.
 - Legacy URLs are mapped individually to migrate, redirect or retire; blanket redirects to the home page are prohibited.
 - Existing implementation role names may remain temporarily for compatibility but do not define architectural ownership.
+- The public runtime host for `confenge.com.br` is the nginx/Netcup VPS plane recorded in [RUNTIME-AUTHORITY.md](RUNTIME-AUTHORITY.md) (`confenge-nginx-node/v2`). Netlify is a leftover/preview plane, not production.
 
 ## Rejected alternatives
 

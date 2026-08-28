@@ -10,7 +10,7 @@ Auditoria: `npm run audit:migration -- --base=https://confenge.com.br`
 
 ## Deploy summary (obrigatório)
 
-No deploy Netlify, o resumo deve mostrar:
+No relatório de release do plano público, o resumo deve mostrar:
 
 ```text
 Redirect rules processed

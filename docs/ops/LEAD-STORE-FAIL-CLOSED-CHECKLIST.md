@@ -9,10 +9,10 @@
 |----------|------------------|
 | `LEAD_ALLOW_MEMORY_FALLBACK` | **unset** (must not be `1`) |
 | `LEAD_STORE` | **unset** (must not be `memory`) |
-| `CONFENGE_STORAGE_BACKEND` | `filesystem` na Netcup; `netlify-blobs` na janela de rollback Netlify |
-| `CONFENGE_STORAGE_DIR` | absoluto, `0700`, fora do release quando backend é `filesystem` |
+| `CONFENGE_STORAGE_BACKEND` | `filesystem` (produção Netcup). `netlify-blobs` não é o store público |
+| `CONFENGE_STORAGE_DIR` | absoluto, `0700`, fora do release |
 | `LEAD_STORE_DIR` | alias legado; não usar na nova produção |
-| Blobs | somente adapter legado; carregamento lazy e contexto obrigatório quando selecionado |
+| Adapter leftover | `netlify-blobs` permanece no código só como fallback não-produção |
 
 ## Local / CI
 

@@ -5,7 +5,7 @@
 | Indicador | Meta | Medição |
 | --- | --- | --- |
 | Disponibilidade homepage | ≥ 99,5% mensal | HTTP 200 sintético 5 min |
-| Latência lead p95 | ≤ 3 s | Função Netlify |
+| Latência lead p95 | ≤ 3 s | handler portátil via nginx (`/.netlify/functions/lead`) |
 | Taxa sucesso captura (valid lead → 201) | ≥ 99% | logs função |
 | Taxa sucesso persistência | 100% dos 201 | contrato da API |
 | Taxa entrega notify (quando configurado) | ≥ 95% | delivery.status |
@@ -39,4 +39,4 @@ Métricas no coletor 1ª parte + dataLayer:
 - lead_persisted, confirmation_view  
 - conversões por journey  
 
-Export: buffer recente GET collect (contagem) + Blobs `confenge-analytics/events/YYYY-MM-DD/*` quando disponível.
+Export: buffer recente GET collect (contagem) + filesystem host-owned `analytics-events` em `/var/lib/confenge-web`.

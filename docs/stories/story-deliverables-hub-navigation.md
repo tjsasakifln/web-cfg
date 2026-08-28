@@ -27,7 +27,7 @@ quality_gate_tools: ["test:deliverables-hub", "test:deliverables-hub-ui", "test:
 7. O hub possui canonical próprio, `index,follow`, Open Graph e JSON-LD `CollectionPage` + `ItemList` + `BreadcrumbList`; a URL consta nos sitemaps e no artefato público allowlisted.
 8. A home, o hub e o relatório formam uma navegação bidirecional coerente; o relatório usa `Entregas` em seu breadcrumb e menu sem alterar preço, escopo, CTA ou contrato comercial vigente.
 9. Analytics e links usam identificadores sem PII. O clique principal emite exatamente um `cta_click` com `cta_id=deliverables-open-report`, `asset_id=entregas-exemplos-hub` e `source=CONFENGE_WEB`; testes de runtime e browser cobrem essa emissão, descoberta, navegação efetiva, HTML direto, claims honestos, schema, sitemap, artefato público, ausência de fricção e regressões do relatório.
-10. A experiência passa em 320, 390, 768, 1024 e 1440 px, sem overflow e sem violações Axe sérias/críticas; após CI verde, merge em `main` e deploy Netlify, `/entregas/`, a home e o relatório respondem corretamente e o build marker corresponde ao SHA integrado.
+10. A experiência passa em 320, 390, 768, 1024 e 1440 px, sem overflow e sem violações Axe sérias/críticas; após CI verde, merge em `main` e release do plano público, `/entregas/`, a home e o relatório respondem corretamente e o build marker corresponde ao SHA integrado.
 
 ## Market-Capture Gate
 
@@ -59,7 +59,7 @@ quality_gate_tools: ["test:deliverables-hub", "test:deliverables-hub-ui", "test:
 ## Dev Notes
 
 - `confenge.com.br` é a única superfície pública; novas páginas e jornadas públicas pertencem a este repositório. [Source: `docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md#decision`]
-- O deploy canônico ocorre de `main` para Netlify por `npm run build:site`; rollback usa um deploy Netlify conhecido. [Source: `docs/architecture/RUNTIME-AUTHORITY.md#confenge-runtime-authority`]
+- O deploy canônico sai de `main` pelo caminho de release do plano público (`npm run build:site` → artefato do `site-ci` → `netcup-release.yml`); rollback usa `/opt/confenge-web/bin/rollback FULL_SHA`. [Source: `docs/architecture/RUNTIME-AUTHORITY.md#confenge-runtime-authority`]
 - Inteligência pública deve entregar utilidade, método, próximo passo e aprendizagem mensurável; volume de páginas não é sucesso. [Source: `docs/strategy/MARKET-CAPTURE-OS.md#corporate-thesis-and-north-star`]
 - A home aceita no máximo sete grandes blocos narrativos; a prévia deve ser incorporada ao bloco `offer_dominant`. [Source: `scripts/site/test_design_gates.py#test_home_archetypes_diverse`]
 - O conceito visual é `engenharia editorial premium`, com hierarquia, contraste, WCAG AA e limite de card grids. [Source: `docs/DESIGN-SYSTEM.md#conceito`]
