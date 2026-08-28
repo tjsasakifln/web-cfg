@@ -8,19 +8,19 @@
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
     "medicoes-glosas-obras-publicas": "9872c48c11cbf4b62d63d37c81593eeae59afcd52775edcc19ec80aebe58ddc2",
-    "reequilibrio-obras-publicas": "814797cf141bff5f5104e02e411e19d6a49a2753a4d2b5922a6ce279e1ba60d5",
+    "reequilibrio-obras-publicas": "d7bcec301f3dafc38c01168dffd9af507823f91f0da648a4cef380af802149a3",
     "auditoria-orcamento-licitacao": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
     "diagnostico-b2g-360": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
-    "diagnostico-pre-licitacao": "c36d37aa12c91cd4e0d4a052aeee7bba75ffac5f1c9188eff8ffca5394afecc1"
+    "diagnostico-pre-licitacao": "b5828ec2e88ff6df78dbd2677b33816fa56ab1b5a13377e36d71616112056432"
   },
   "forbidden": {
     "aditivos-obras-publicas/index.html": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
     "medicoes-glosas-obras-publicas/index.html": "9872c48c11cbf4b62d63d37c81593eeae59afcd52775edcc19ec80aebe58ddc2",
-    "reequilibrio-obras-publicas/index.html": "814797cf141bff5f5104e02e411e19d6a49a2753a4d2b5922a6ce279e1ba60d5",
+    "reequilibrio-obras-publicas/index.html": "d7bcec301f3dafc38c01168dffd9af507823f91f0da648a4cef380af802149a3",
     "auditoria-orcamento-licitacao/index.html": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
-    "diagnostico-pre-licitacao/index.html": "c36d37aa12c91cd4e0d4a052aeee7bba75ffac5f1c9188eff8ffca5394afecc1",
-    "script.js": "779f438cb2ac8d39f8ca511544cb8fc5db66489aa183b200bcc527cf70d33c7f",
+    "diagnostico-pre-licitacao/index.html": "b5828ec2e88ff6df78dbd2677b33816fa56ab1b5a13377e36d71616112056432",
+    "script.js": "b623e5e246701f2f56fb09a5dd5866dc4ec70eda880079a23755c85db95270c1",
     "styles.css": "0319e4dc4f099d055bb96fb8219cb737b57ec4c0d51a7b4fb8007a1ef577f0de",
     "styles-tokens.css": "5b0d33f5fccc801ba5b4d7b8d407dd3d800d25b296a79ff1eb33d8bc98ce4237",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",
