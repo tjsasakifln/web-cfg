@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "3370a86c518188a5dbd0f1fc38f5369763a46b18",
-  "recaptured_at": "2026-08-25",
-  "recapture_reason": "Reviewed public-name supersession required by #343. Only visitor-facing offer labels, CTA labels and linked messages changed on the six protected pillars; canonical URLs, indexability, robots, sitemap membership, redirects and measurement claims remain unchanged. The post-deploy 28-day evidence window restarts and #128 remains open.",
+  "baseline_commit": "0b6f43ba7cd0405f3d7f896043074645bfd26872",
+  "recaptured_at": "2026-08-27",
+  "recapture_reason": "Reviewed design-system reconciliation. Only styles.css and styles-tokens.css changed; the six protected pillars keep byte-identical HTML, so html_mutation stays false and the #291 unlock plan remains DEFER_UNTIL_DATE for the planned HTML replacements. Rendering does change on the pillars: the top navigation labels stop wrapping to two lines, headings follow the scale declared in data/site/design-system.json, and section rhythm, soft surface, radii and shadow follow the same declaration. Canonical URLs, indexability, robots, sitemap membership, redirects and measurement claims are unchanged. The post-deploy 28-day evidence window restarts and #128 remains open.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -21,8 +21,8 @@
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "12d7d0e59003adfac61d03ddebbb3f2a869bc78811f6176f36840647c2ec1a06",
     "script.js": "933d694b5422363fed2ba3c0704eaa0703b5a1a0e2cc3e410b253390f27eb03e",
-    "styles.css": "c533be6395bad714566d7c8b1d36a607d6b19cb44b5e9dc3bbadc422aaedfbbe",
-    "styles-tokens.css": "a25a9603d5c0a7abec5471d9730eec7506ce3950c29c428a6d86d130b41a2e1c",
+    "styles.css": "ab5e0a0b00b62411bb480ace3496d14a9a96fa4c36a20f33dddc610e40f1e96e",
+    "styles-tokens.css": "2591d982a5d06561f7b76bf00ff64e42d5c006ad873bb57dd9ba31c79b2878aa",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",
     "robots.txt": "2be984de9b51eb6d201b8210d727353f014cf52bea1058eabf3abedb9cad6f57",
     "sitemap.xml": "cc0d344da46ba03b51fa7517030b153a98e05957f76baedd946d12d6e6d7058f",
