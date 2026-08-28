@@ -67,6 +67,25 @@ agent or CI run cannot turn a review decision into a publication claim.
 Commercial-contact consent, payment, delivery acceptance, a public contract or
 silence never counts as consent to publish proof.
 
+## Evidence record
+
+From `CONSENT_CAPTURED` onward, a record must name:
+
+- fonte
+- autorizacao
+- escopo_permitido
+- anonimizacao
+- baseline
+- intervencao
+- resultado_observavel
+- limitacoes
+- revisor
+- expiracao (UTC seconds)
+
+Missing authorization, expired authorization or missing fonte fail closed as
+`authorization_absent`, `authorization_expired` and `fonte_absent`. Operator
+templates live in `docs/ops/proof-collection-kit/` and are not public cases.
+
 ## Consent record
 
 A record may move beyond `DRAFT` only with:

@@ -58,7 +58,8 @@
           "/conflitos/",
           "/uso-de-ia/",
           "/imprensa/",
-          "/correcoes/"
+          "/correcoes/",
+          "/confianca/"
         ]
       },
       "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
@@ -204,7 +205,7 @@
     },
     {
       "id": "casos",
-      "visitor_job": "Ver o artefato que a CONFENGE entrega em um caso real antes de contratar.",
+      "visitor_job": "Distinguir exemplos de entrega (demonstrativos) de resultados de clientes, hoje em zero, antes de contratar.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"prefix": "/casos/"},

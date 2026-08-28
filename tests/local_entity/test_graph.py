@@ -7,6 +7,7 @@ from pathlib import Path
 from scripts.local_entity.classify import classify_graph, remap_proof_status
 from scripts.local_entity.constants import CLAIM_STATUSES, GRAPH_FIELDS, ORG_ID, PERSON_ID
 from scripts.local_entity.graph import extract_entity_graph
+from scripts.local_entity.verified_sources import public_identity_errors
 from scripts.site.brand import load_brand, load_proof
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -43,7 +44,12 @@ def test_real_specialist_graph_has_required_fields() -> None:
     assert crea["status"] == "NOT_PUBLIC"
     same_as = [c for c in classified["claims"] if c["field"] == "sameAs"]
     assert same_as
-    assert all(c["status"] == "UNKNOWN" for c in same_as)
+    person_same = next(c for c in same_as if c["id"] == "person-sameAs")
+    assert person_same["status"] == "SELF_DECLARED"
+    assert person_same["third_party_verified"] is False
+    assert "https://github.com/tjsasakifln" in str(person_same["value"])
+    org_same = next(c for c in same_as if c["id"] == "org-sameAs")
+    assert org_same["status"] == "UNKNOWN"
     street = next(c for c in classified["claims"] if c["id"] == "org-streetAddress")
     assert street["status"] == "NOT_PUBLIC"
     assert street["value"] in (None, "")
@@ -87,3 +93,18 @@ def test_third_party_flag_is_the_only_verified_upgrade() -> None:
         }
     )
     assert circular == "SELF_DECLARED"
+
+
+def test_public_legalname_taxid_sameas_match_verified_sources() -> None:
+    specialist = SPECIALIST.read_text(encoding="utf-8")
+    assert public_identity_errors(specialist) == []
+    trust = (ROOT / "confianca" / "index.html").read_text(encoding="utf-8")
+    assert public_identity_errors(trust) == []
+    invented = specialist.replace(
+        "https://github.com/tjsasakifln",
+        "https://linkedin.com/in/invented-profile",
+    )
+    errors = public_identity_errors(invented)
+    assert any(code.startswith("sameAs_not_verified:") for code in errors)
+    crea = specialist.replace("EESC-USP", "CREA-SP 000000")
+    assert "crea_published_without_verification" in public_identity_errors(crea)

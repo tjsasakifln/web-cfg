@@ -1,0 +1,33 @@
+{
+  "schema": "confenge.verified-sources/1.0",
+  "updated_at": "2026-08-28",
+  "rule_pt_br": "legalName, taxID e sameAs publicos so repetem valores deste registro. CREA, endereco de rua e vinculo nao validado permanecem fora. Formacao autodeclarada nao sobe a verificacao de terceiro.",
+  "organization": {
+    "legalName": {
+      "value": "CONFENGE",
+      "status": "SELF_DECLARED",
+      "source": "data/site/brand.json e rodape publico com CNPJ"
+    },
+    "taxID": {
+      "value": "52.407.089/0001-09",
+      "status": "SELF_DECLARED",
+      "source": "CNPJ publicado no rodape, JSON-LD e brand.json"
+    },
+    "sameAs": []
+  },
+  "person": {
+    "sameAs": [
+      {
+        "value": "https://github.com/tjsasakifln",
+        "status": "SELF_DECLARED",
+        "source": "especialista/tiago-jun-sasaki JSON-LD e texto visivel"
+      }
+    ]
+  },
+  "unpublished_until_third_party_evidence": [
+    "CREA",
+    "streetAddress",
+    "hasCredential",
+    "organization.sameAs"
+  ]
+}

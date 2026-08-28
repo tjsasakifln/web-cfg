@@ -125,8 +125,31 @@
     "revocation",
     "approval",
     "publication",
-    "lifecycle"
+    "lifecycle",
+    "evidence"
   ],
+  "evidence_record": {
+    "required_fields": [
+      "fonte",
+      "autorizacao",
+      "escopo_permitido",
+      "anonimizacao",
+      "baseline",
+      "intervencao",
+      "resultado_observavel",
+      "limitacoes",
+      "revisor",
+      "expiracao"
+    ],
+    "expiracao_format": "utc_seconds",
+    "required_for_states_from": "CONSENT_CAPTURED",
+    "fail_closed_codes": [
+      "authorization_absent",
+      "authorization_expired",
+      "fonte_absent"
+    ],
+    "rule": "A published client-proof record names source, authorization, allowed scope, anonymization, baseline, intervention, observable result, limitations, reviewer and expiration. Missing authorization, expired authorization or missing source fail closed."
+  },
   "consent": {
     "active_state": "ACTIVE",
     "required_fields": [

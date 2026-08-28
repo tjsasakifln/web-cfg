@@ -336,6 +336,7 @@ export const SUITE_GRAPH = Object.freeze({
   "test:real-proof-registry": {
     producers: [
       "tests/commercial/test_real_proof_registry.mjs",
+      "scripts/commercial/real_proof_registry.mjs",
       "data/commercial/real-proof-registry.v1.json",
       "index.html",
       "entregas/index.html",
@@ -714,13 +715,14 @@ export const SUITE_GRAPH = Object.freeze({
       "scripts/site/render_authority_pages.py",
       "scripts/site/patch_authority_footers.py",
       "docs/contracts/permissioned-proof/",
+      "docs/ops/proof-collection-kit/",
       "data/site/authority-governance.json",
       "data/site/authority-matrix.json",
       "data/site/authority-signals-baseline-2026-08-15.json",
       "data/site/permissioned-proof-registry.json",
     ],
     artifacts: [],
-    surfaces: ["/especialista/", "/metodologia-inteligencia/", "/lei-14133-obras/"],
+    surfaces: ["/especialista/", "/metodologia-inteligencia/", "/lei-14133-obras/", "/confianca/", "/casos/"],
   },
   "test:design": {
     producers: [

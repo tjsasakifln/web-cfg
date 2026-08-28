@@ -198,26 +198,40 @@ def classify_graph(
         )
     )
 
+    from scripts.local_entity.verified_sources import GITHUB_SAME_AS, allowed_same_as, load_verified_sources
+
+    allowed = allowed_same_as(load_verified_sources())
+    org_same = snap.get("sameAs_org")
+    org_urls = org_same if isinstance(org_same, list) else ([org_same] if org_same else [])
+    org_urls = [str(url).strip() for url in org_urls if str(url).strip()]
     claims.append(
         _claim(
             cid="org-sameAs",
             entity="Organization",
             field="sameAs",
-            value=snap.get("sameAs_org"),
+            value=None if not org_urls else org_urls,
             status="UNKNOWN",
-            basis="absent_jsonld",
-            notes="No public sameAs profiles are classified in-repo. Do not invent LinkedIn, CREA directory, or social URLs.",
+            basis="absent_jsonld" if not org_urls else "jsonld_without_verified_source",
+            notes="No public Organization sameAs profiles are classified in-repo. Do not invent LinkedIn, CREA directory, or social URLs.",
         )
     )
+    person_same = snap.get("sameAs_person")
+    person_urls = person_same if isinstance(person_same, list) else ([person_same] if person_same else [])
+    person_urls = [str(url).strip() for url in person_urls if str(url).strip()]
+    github_only = person_urls == [GITHUB_SAME_AS] and GITHUB_SAME_AS in allowed
     claims.append(
         _claim(
             cid="person-sameAs",
             entity="Person",
             field="sameAs",
-            value=snap.get("sameAs_person"),
-            status="UNKNOWN",
-            basis="absent_jsonld",
-            notes="No public Person sameAs profiles are classified. Do not invent.",
+            value=person_urls if github_only else (None if not person_urls else person_urls),
+            status="SELF_DECLARED" if github_only else "UNKNOWN",
+            basis="specialist JSON-LD sameAs + verified-sources.json" if github_only else "absent_jsonld",
+            notes=(
+                "GitHub is the committed verified-source sameAs. Not a third-party identity badge."
+                if github_only
+                else "No public Person sameAs profiles are classified beyond the verified-source registry. Do not invent."
+            ),
         )
     )
 
