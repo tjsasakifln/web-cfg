@@ -4,7 +4,7 @@ Fonte de verdade: `data/site/design-system.json`.
 
 ## Por que este sistema existe
 
-A campanha de posicionamento (Diretoria B2G fracionada) acertou a tese comercial, mas a interface ainda parecia **template de consultoria**: seções iguais, grades de cards, bordas verdes, ícones genéricos e pouco contraste compositivo.
+A campanha de posicionamento (Diretoria Fracionada para o Mercado Público) acertou a tese comercial, mas a interface ainda parecia **template de consultoria**: seções iguais, grades de cards, bordas verdes, ícones genéricos e pouco contraste compositivo.
 
 Este sistema obriga forma, conteúdo e interação a comunicarem **competência técnica, responsabilidade e alto valor econômico** — não “página bonita”.
 
@@ -50,14 +50,14 @@ Excluindo header/footer, a home pública deve ter **no máximo sete** seções n
 
 1. `hero_split` — tese, um CTA primário, prova, visual estrutural (não dashboard)
 2. `tension_sequence` — três momentos de erosão de margem
-3. `offer_dominant` — Diretoria B2G + rotas situacionais
+3. `offer_dominant` — Diretoria Fracionada + rotas situacionais
 4. `journey_rail` — quatro macrofases + rastros (tabela desktop / cards mobile)
 5. `authority_editorial` — credenciais verificáveis
 6. `icp_contrast` — adequação + objeções (FAQ curto)
 7. `cta_formal` — conversão (form)
 
-**CTA primário:** `Diagnosticar operação B2G` (≤4 ocorrências `button-primary`).  
-**CTA secundário:** `Enviar decisão crítica` (WhatsApp, peso visual menor).
+**CTA primário:** `Analisar meu caso` (≤4 ocorrências `button-primary`).  
+**CTA secundário:** WhatsApp com contexto, peso visual menor.
 
 Gates falham se: >7 seções; três arquétipos idênticos consecutivos; >4 primários; linguagem interna; texto funcional &lt;14px.
 
@@ -125,7 +125,7 @@ Microcopy preferida:
 
 ## jobTitle
 
-Proibido: `Engenheiro Civil e Diretoria B2G fracionada`.  
+Proibido: `Engenheiro Civil e Diretoria Fracionada para o Mercado Público`.  
 Permitido: `Engenheiro Civil e consultor B2G` ou `Engenheiro Civil e diretor da CONFENGE`.
 
 ## Movimento
@@ -142,7 +142,9 @@ Entrada sutil, foco de etapa, revelação de linha. Sem parallax exagerado, cont
 
 ## Manutenção
 
-- Tokens em CSS (`:root` em `styles.css`) devem espelhar este JSON.
+- Tokens em CSS vivem em `styles-tokens.css`, não num `:root` do `styles.css`, e espelham este JSON.
+- Escala tipográfica: `--text-display`, `--text-h1` e `--text-h2` são a fonte única. O `h1` e o `h2` globais consomem os tokens; não recriar um segundo par de clamps em media query.
+- A escala de espaçamento é em rem. Ela esteve declarada em px no JSON e em rem no CSS, com o mesmo token valendo coisas diferentes conforme a folha carregada; o JSON passou a registrar a escala real.
 - Gates em `scripts/site/test_design_gates.py` leem HTML real e este JSON.
 - Ofertas: profundidade mínima e ritmo de seções distintos entre as quatro páginas.
 

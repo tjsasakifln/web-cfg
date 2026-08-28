@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "campaign": "CONFENGE-PREMIUM-DESIGN-AND-CONVERSION-REMEDIATION-01",
-  "updated_at": "2026-08-25",
+  "updated_at": "2026-08-27",
   "concept": "engenharia editorial premium",
   "design_principles": [
     "Cards are the exception, not the default section structure",
@@ -58,17 +58,18 @@
     "section_loose": "104px 0",
     "container": "1200px",
     "scale": {
-      "1": "4px",
-      "2": "8px",
-      "3": "12px",
-      "4": "16px",
-      "5": "20px",
-      "6": "24px",
-      "8": "32px",
-      "10": "40px",
-      "12": "48px"
+      "1": ".25rem",
+      "2": ".5rem",
+      "3": ".75rem",
+      "4": "1rem",
+      "5": "1.5rem",
+      "6": "2rem",
+      "8": "4rem",
+      "10": "2.5rem",
+      "12": "3rem"
     },
-    "rule": "Never apply the same vertical padding to every consecutive section; alternate tight/default/loose and surface contrast"
+    "rule": "Never apply the same vertical padding to every consecutive section; alternate tight/default/loose and surface contrast",
+    "scale_note": "Escala em rem, que é a que os componentes usam. Antes desta versão o JSON declarava px (5=20, 6=24, 8=32) enquanto styles.css resolvia para rem (5=24, 6=32, 8=64), e o mesmo token valia coisas diferentes conforme a folha carregada. Os painéis foram desenhados contra a escala rem, então ela é a registrada; 10 e 12 seguem em rem equivalente aos 40px e 48px anteriores."
   },
   "radii": {
     "sm": "8px",
