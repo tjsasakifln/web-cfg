@@ -11,6 +11,34 @@
       const estagioEl = form.querySelector('#estagio');
       const urgenciaEl = form.querySelector('#urgencia');
       const nomeEl = form.querySelector('#nome');
+      const faixaContratoEl = form.querySelector('#faixa_contrato');
+      const riscoEmJogoEl = form.querySelector('#risco_em_jogo');
+      const frequenciaEl = form.querySelector('#frequencia');
+      const maturidadeEl = form.querySelector('#maturidade_documental');
+      const capacidadeEl = form.querySelector('#capacidade_interna');
+      const offerFitHintEl = form.querySelector('[data-offer-fit-hint]');
+      const urgencyToBand = (raw) => {
+        const v = (raw || '').trim();
+        if (v === 'até 48 horas') return 'ate_48h';
+        if (v === 'até 7 dias') return 'ate_7d';
+        if (v === 'até 30 dias') return 'ate_30d';
+        if (v === 'planejamento sem prazo imediato') return 'planejamento';
+        return 'unknown';
+      };
+      const readOfferFitInput = () => ({
+        ticket_band: (faixaContratoEl?.value || '').trim() || 'unknown',
+        risk_band: (riscoEmJogoEl?.value || '').trim() || 'unknown',
+        frequency: (frequenciaEl?.value || '').trim() || 'unknown',
+        urgency: urgencyToBand(urgenciaEl?.value),
+        document_maturity: (maturidadeEl?.value || '').trim() || 'unknown',
+        internal_capacity: (capacidadeEl?.value || '').trim() || 'unknown',
+      });
+      const updateOfferFitHint = () => {
+        if (!offerFitHintEl || typeof window.confengeRouteOfferFit !== 'function') return;
+        const routed = window.confengeRouteOfferFit(readOfferFitInput());
+        if (!routed || !routed.public_next) return;
+        offerFitHintEl.textContent = routed.public_next;
+      };
       const receiptRequired = form.getAttribute('data-receipt-required') === 'true';
 
       const receiptStorageKey = () => {
@@ -189,6 +217,10 @@
           urgency_category: v,
           journey: form.querySelector('#jornada-hidden')?.value || '',
         });
+        updateOfferFitHint();
+      });
+      [faixaContratoEl, riscoEmJogoEl, frequenciaEl, maturidadeEl, capacidadeEl].forEach((el) => {
+        el?.addEventListener('change', updateOfferFitHint);
       });
       emailEl?.addEventListener('input', () => { clearContactValidity(); showFormStatus('', ''); });
       phoneEl?.addEventListener('input', () => { clearContactValidity(); showFormStatus('', ''); });
@@ -251,6 +283,9 @@
         const routeFamily = (form.querySelector('[name="route_family"]')?.value || '').slice(0, 80);
         const publicSlug = (form.querySelector('[name="public_id_slug"]')?.value || '').slice(0, 80);
         const ctaId = (form.querySelector('[name="cta_id"]')?.value || '').slice(0, 80);
+        const routed = typeof window.confengeRouteOfferFit === 'function'
+          ? window.confengeRouteOfferFit(readOfferFitInput())
+          : null;
         track('lead_form_submit', {
           page_path: pagePath,
           content_cluster: defaultCluster,
@@ -263,6 +298,12 @@
           route_family: routeFamily,
           asset_id: assetId,
           cta_id: ctaId,
+          ticket_band_category: (faixaContratoEl?.value || '').slice(0, 40),
+          risk_band_category: (riscoEmJogoEl?.value || '').slice(0, 40),
+          frequency_category: (frequenciaEl?.value || '').slice(0, 40),
+          docs_category: (maturidadeEl?.value || '').slice(0, 40),
+          capacity_category: (capacidadeEl?.value || '').slice(0, 40),
+          next_step_category: (routed?.next_step || '').slice(0, 40),
         });
         if (assetId) {
           track('cta_click', {

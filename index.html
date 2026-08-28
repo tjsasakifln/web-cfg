@@ -119,9 +119,9 @@
 <p class="evidence-case-title">Ampliação e pavimentação de dependências públicas</p>
 <dl class="evidence-facts">
 <div><dt>Valor contratado</dt><dd>R$ 179.737,67</dd></div>
-<div><dt>1% do valor</dt><dd>R$ 1.797,38</dd></div>
 <div><dt>Vigência</dt><dd>180 dias</dd></div>
 </dl>
+<p class="evidence-illustration" data-economics-illustration="1">Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 1.797,38. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: sem risco de caixa ou margem pelo menos no piso de diagnóstico (R$ 2.900), a CONFENGE não é economicamente indicada neste porte.</p>
 <div class="evidence-exposure">
 <span>O porte muda. O cuidado com a margem, não.</span>
 <strong>Um serviço não previsto pode consumir o resultado de uma obra local.</strong>
@@ -137,9 +137,9 @@
 <p class="evidence-case-title">Pavimentação de 4.710 m² de vias</p>
 <dl class="evidence-facts">
 <div><dt>Valor contratado</dt><dd>R$ 719.177,48</dd></div>
-<div><dt>1% do valor</dt><dd>R$ 7.191,77</dd></div>
 <div><dt>Vigência</dt><dd>365 dias</dd></div>
 </dl>
+<p class="evidence-illustration" data-economics-illustration="1">Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 7.191,77, na altura do teto de um dossiê crítico. Custo publicado do dossiê: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: o percentual não é economia observada; só indica projeto crítico se o risco identificado cobrir esse custo e os documentos existirem.</p>
 <div class="evidence-exposure">
 <span>Mais frentes, mais interfaces para documentar.</span>
 <strong>Projeto, orçamento, diário e medição precisam contar a mesma história.</strong>
@@ -155,9 +155,9 @@
 <p class="evidence-case-title">Estrutura e instalações de hospital público</p>
 <dl class="evidence-facts">
 <div><dt>Valor contratado</dt><dd>R$ 18.293.629,80</dd></div>
-<div><dt>1% do valor</dt><dd>R$ 182.936,30</dd></div>
 <div><dt>Vigência</dt><dd>900 dias</dd></div>
 </dl>
+<p class="evidence-illustration" data-economics-illustration="1">Conta ilustrativa, não é economia observada. 1% deste valor contratado resulta em R$ 182.936,30. Custo publicado de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Recorrência da diretoria: R$ 12.500 a R$ 20.000 por mês. Limite: contrato grande não autoriza percentual como economia; o enquadramento depende de risco identificado, documentos e se a necessidade é pontual ou recorrente.</p>
 <div class="evidence-exposure">
 <span>Quanto maior a exposição, mais cara é a falta de registro.</span>
 <strong>Causa, efeito no prazo e custo precisam ser demonstrados antes da decisão.</strong>
@@ -460,6 +460,58 @@
 <option>planejamento sem prazo imediato</option>
 </select>
 </div>
+<div class="field">
+<label for="faixa_contrato">Faixa de contrato ou carteira <span class="optional-mark">opcional</span></label>
+<select id="faixa_contrato" name="faixa_contrato">
+<option selected="" value="">Selecione se souber</option>
+<option value="ate_250k">Até R$ 250 mil</option>
+<option value="250k_1m">R$ 250 mil a R$ 1 milhão</option>
+<option value="acima_1m">Acima de R$ 1 milhão</option>
+<option value="unknown">Ainda não sei</option>
+</select>
+</div>
+<div class="field">
+<label for="risco_em_jogo">Caixa ou margem em risco <span class="optional-mark">opcional</span></label>
+<select id="risco_em_jogo" name="risco_em_jogo">
+<option selected="" value="">Selecione se souber</option>
+<option value="abaixo_entrada">Abaixo de R$ 599</option>
+<option value="faixa_entrada">R$ 599 a R$ 2.400</option>
+<option value="faixa_diagnostico">R$ 2.900 a R$ 5.900</option>
+<option value="faixa_dossie">R$ 6.900 a R$ 7.900</option>
+<option value="acima_dossie">Acima de R$ 7.900</option>
+<option value="unknown">Ainda não sei</option>
+</select>
+</div>
+<div class="field">
+<label for="frequencia">Frequência <span class="optional-mark">opcional</span></label>
+<select id="frequencia" name="frequencia">
+<option selected="" value="">Selecione se souber</option>
+<option value="pontual">Pontual, um evento</option>
+<option value="recorrente">Recorrente, rotina</option>
+<option value="unknown">Ainda não sei</option>
+</select>
+</div>
+<div class="field">
+<label for="maturidade_documental">Documentos disponíveis <span class="optional-mark">opcional</span></label>
+<select id="maturidade_documental" name="maturidade_documental">
+<option selected="" value="">Selecione se souber</option>
+<option value="forte">Organizados</option>
+<option value="parcial">Parciais</option>
+<option value="fraca">Fracos ou ausentes</option>
+<option value="unknown">Ainda não sei</option>
+</select>
+</div>
+<div class="field">
+<label for="capacidade_interna">Capacidade interna <span class="optional-mark">opcional</span></label>
+<select id="capacidade_interna" name="capacidade_interna">
+<option selected="" value="">Selecione se souber</option>
+<option value="suficiente">Equipe dá conta</option>
+<option value="limitada">Equipe limitada</option>
+<option value="inexistente">Sem equipe para isso</option>
+<option value="unknown">Ainda não sei</option>
+</select>
+</div>
+<p class="form-hint" id="offer-fit-hint" data-offer-fit-hint role="status">Faixas opcionais. Sem CNPJ, CPF, contrato completo ou upload nesta etapa. O retorno indica conteúdo, entrada, diagnóstico, projeto crítico, diretoria ou quando a CONFENGE não é economicamente indicada.</p>
 <div class="field"><label for="mensagem">Contexto em poucas linhas <span class="optional-mark">opcional</span></label><textarea id="mensagem" name="mensagem" placeholder="Edital, contrato, glosa, notificação ou o que precisa ser decidido. Não cole dados sensíveis desnecessários." rows="3"></textarea></div>
 <p class="form-hint">Anexos e dossiês: após o primeiro retorno, orientamos o envio seguro (WhatsApp ou canal combinado). Upload multiarquivo não está ativo neste formulário.</p>
 <label class="consent" for="consentimento"><input id="consentimento" name="consentimento" required="" type="checkbox"/><span>Autorizo o uso destes dados para retorno sobre a solicitação, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span></label>
