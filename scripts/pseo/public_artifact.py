@@ -330,6 +330,15 @@ def finalize_public_artifact(dest: Path) -> dict[str, Any]:
     from scripts.site.fingerprint_css import fingerprint_published_css
 
     css_assets = fingerprint_published_css(dest)
+    headers_path = Path(dest) / "_headers"
+    if headers_path.is_file() and (Path(dest) / "index.html").is_file():
+        from scripts.site.csp_contract import apply_script_src_hashes, executable_inline_hashes
+
+        hashes = list(executable_inline_hashes(Path(dest)))
+        headers_path.write_text(
+            apply_script_src_hashes(headers_path.read_text(encoding="utf-8"), hashes),
+            encoding="utf-8",
+        )
     return {
         "scrubbed_html_files": scrubbed,
         "promoted_navigation_files": promoted_navigation_files,

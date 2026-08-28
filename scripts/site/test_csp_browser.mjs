@@ -48,6 +48,7 @@ function startServer() {
     ".png": "image/png",
     ".svg": "image/svg+xml",
     ".webp": "image/webp",
+    ".avif": "image/avif",
   };
   return new Promise((resolve) => {
     const server = createServer((request, response) => {

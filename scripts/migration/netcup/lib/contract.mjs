@@ -520,6 +520,41 @@ function runtimeHttpFunctions(root, netlifyPath) {
     .map((definition) => definition.name);
 }
 
+function mergeHashedCssCacheRules(root, headers) {
+  const manPath = resolve(root, "_site/.well-known/css-assets.json");
+  if (!existsSync(manPath)) return headers;
+  let manifest;
+  try {
+    manifest = JSON.parse(readFileSync(manPath, "utf8"));
+  } catch {
+    return headers;
+  }
+  const files = manifest && typeof manifest.files === "object" ? manifest.files : {};
+  const existing = new Set(headers.map((rule) => normalizedSelectorIdentity(rule.path, rule.match)));
+  for (const file of Object.values(files)) {
+    const href = file && file.href;
+    if (typeof href !== "string" || !href.startsWith("/assets/css/")) continue;
+    const identity = normalizedSelectorIdentity(href, "exact");
+    if (existing.has(identity)) continue;
+    headers.push({
+      order: headers.length,
+      path: href,
+      match: "exact",
+      headers: [
+        {
+          name: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+          semantic: "cache-control",
+          line: 0,
+        },
+      ],
+      provenance: [{ source: "_site/.well-known/css-assets.json", line: 0 }],
+    });
+    existing.add(identity);
+  }
+  return headers;
+}
+
 export function buildHostContract(root = MODULE_ROOT) {
   const resolvedRoot = resolve(root);
   const headersPath = resolve(resolvedRoot, "_headers");
@@ -549,7 +584,10 @@ export function buildHostContract(root = MODULE_ROOT) {
     ...sitemapPaths,
     ...verificationPaths,
   ].map((path) => sourceRecord(resolvedRoot, path));
-  const headers = parseHeaders(readFileSync(headersPath, "utf8"), { source: "_headers" });
+  const headers = mergeHashedCssCacheRules(
+    resolvedRoot,
+    parseHeaders(readFileSync(headersPath, "utf8"), { source: "_headers" }),
+  );
   const primary = parseRedirects(readFileSync(redirectsPath, "utf8"), { source: "_redirects" });
   const netlify = parseNetlifyRedirects(netlifyToml, {
     source: "netlify.toml",

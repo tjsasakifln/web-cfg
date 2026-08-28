@@ -10,7 +10,8 @@ This writes a 560x700 variant (same 4:5 aspect ratio, area-averaged) that covers
 a 2x device pixel ratio at the 273 CSS px the portrait occupies on the 390 px
 viewport Lighthouse measures, and 1x at every width above it. The
 master stays on disk: JSON-LD and social cards still reference the
-full-resolution image, and the <img> keeps it as the widest srcset candidate.
+full-resolution PNG. Visible markup uses a <picture> with AVIF/WebP siblings
+plus the PNG fallback; the master remains the widest srcset candidate.
 
 Usage:
     python3 scripts/site/optimize_authority_portrait.py --report

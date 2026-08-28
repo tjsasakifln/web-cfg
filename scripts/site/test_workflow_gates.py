@@ -190,7 +190,7 @@ def test_site_ci_shape():
         errors.append("site-ci must execute the full sitewide layout audit claimed by #293")
     if 'LH_HOME_RUNS: "3"' not in text:
         errors.append("site-ci must run the #185 home Lighthouse gate three times")
-    for needle in ("npm run audit:accessibility", "npm run test:lighthouse-gates"):
+    for needle in ("npm run audit:accessibility", "npm run test:lighthouse-gates", "npm run audit:performance"):
         if needle not in text:
             errors.append(f"site-ci missing adversarial UI gate: {needle}")
 

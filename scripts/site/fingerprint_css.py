@@ -147,6 +147,22 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
         "files": files,
         "html_rewritten": html_rewritten,
     }
+    hrefs = [info["href"] for info in files.values() if info.get("href")]
+    headers_path = dest / "_headers"
+    if hrefs and headers_path.is_file():
+        from scripts.site.cache_contract import upsert_hashed_cache_block
+
+        headers_path.write_text(
+            upsert_hashed_cache_block(
+                headers_path.read_text(encoding="utf-8"),
+                hrefs,
+                begin="# BEGIN hashed-css-cache",
+                end="# END hashed-css-cache",
+            ),
+            encoding="utf-8",
+        )
+        manifest["hashed_cache_rules"] = len(hrefs)
+
     man_path = dest / MANIFEST_REL
     man_path.parent.mkdir(parents=True, exist_ok=True)
     man_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

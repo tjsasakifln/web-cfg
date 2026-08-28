@@ -363,7 +363,16 @@ def table_html(headers: list[str], rows: list[list[Any]], caption: str | None = 
 
 
 def author_box() -> str:
-    return """<section class="author-box"><div class="author-photo"><img src="/assets/tiago-sasaki-avatar-v11-sem-fundo.png" width="512" height="512" alt="Engº Tiago Sasaki" loading="lazy" decoding="async"/></div><div><span>Autor e responsável técnico pelo conteúdo</span><h2><a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a></h2><p>Engenheiro Civil formado pela EESC-USP, com experiência na iniciativa privada e na Administração Pública, atuando em fiscalização, gestão de contratos, orçamentação e decisões técnicas em obras públicas.</p><a class="text-link" href="/especialista/tiago-jun-sasaki/">Conhecer a experiência <svg class="icon"><use href="#i-arrow"></use></svg></a></div></section>"""
+    from scripts.site.responsive_raster import AUTHOR_PICTURE
+
+    return (
+        '<section class="author-box"><div class="author-photo">'
+        f"{AUTHOR_PICTURE}"
+        "</div><div><span>Autor e responsável técnico pelo conteúdo</span>"
+        '<h2><a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a></h2>'
+        "<p>Engenheiro Civil formado pela EESC-USP, com experiência na iniciativa privada e na Administração Pública, atuando em fiscalização, gestão de contratos, orçamentação e decisões técnicas em obras públicas.</p>"
+        '<a class="text-link" href="/especialista/tiago-jun-sasaki/">Conhecer a experiência <svg class="icon"><use href="#i-arrow"></use></svg></a></div></section>'
+    )
 
 
 def cta_block(meta: dict[str, Any], label: str, wa_message: str, tema: str) -> str:
