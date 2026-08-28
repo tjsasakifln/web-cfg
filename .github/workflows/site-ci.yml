@@ -96,6 +96,7 @@ jobs:
           npm run test:copy-contract
           npm run test:page-contract-integridade
           npm run test:commercial-contract-consistency
+          npm run test:public-offer-truth
           npm run test:radar-params
           npm run test:bofu-dominance
           npm run test:local-entity
