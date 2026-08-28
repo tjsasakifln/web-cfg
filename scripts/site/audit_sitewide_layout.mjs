@@ -387,7 +387,12 @@ async function auditWorker() {
             return box.width > 0 && box.width < 80 && box.height > fs * 4;
           })
           .slice(0, 3)
-          .map((element) => `${element.tagName.toLowerCase()}.${String(element.className || "").slice(0, 40)}`);
+          .map((element) => ({
+            tag: element.tagName.toLowerCase(),
+            class: String(element.className || "").slice(0, 60),
+            width: Math.round(element.getBoundingClientRect().width),
+            text: (element.innerText || "").replace(/\s+/g, " ").trim().slice(0, 80),
+          }));
         if (compressed.length) problems.push({ code: "compressed_useful_content", detail: compressed });
 
         const offViewport = [...document.querySelectorAll("h1, h2, .button-primary, .hero-lead, .hero-proof, form")]

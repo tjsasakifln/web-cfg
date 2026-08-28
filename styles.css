@@ -1468,6 +1468,9 @@ html.no-js body[data-content-cluster="home"] .site-header{position:static}
 .hero-actions .button,.hero .button-primary{min-height:var(--touch-min)}
 .related-card,.aside-card,.n-card,.offer-path,.cluster-card,.featured-content,.catalog-item,.simple-card,.criterion-card,.macro-phase,.journey-path,.trace-card{min-width:0;overflow-wrap:anywhere}
 .article-layout,.contact-grid,.offer-layout,.authority-layout,.faq-grid,.content-hero-grid,.hub-hero-grid,.profile-grid,.related-grid,.featured-grid,.cluster-grid,.pillar-overview-grid,.directory-head,.form-row,.macro-phases,.icp-contrast,.offer-context{min-width:0}
+.lead-inline{min-width:0;grid-template-columns:minmax(0,1fr)}
+.lead-inline-copy,.lead-inline-actions{min-width:0;overflow-wrap:anywhere}
+@media (min-width:761px){.lead-inline:has(>.lead-inline-copy):has(>.lead-inline-actions){grid-template-columns:minmax(0,1.2fr) minmax(220px,auto)}}
 .article-aside,aside{min-width:0;overflow-wrap:anywhere}
 ul:not([class]),ol:not([class]){padding-inline-start:1.25em}
 li,dd,figcaption,caption,th,td,label,small{overflow-wrap:anywhere}
