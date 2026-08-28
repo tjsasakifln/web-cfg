@@ -10,7 +10,7 @@ import { minify } from "terser";
 import { fileURLToPath } from "url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-const names = ["analytics", "nav", "form"];
+const names = ["analytics", "nav", "offer-fit", "form"];
 const mods = names.map((n) => {
   const p = path.join(root, "js/modules", `${n}.js`);
   if (!fs.existsSync(p)) {
@@ -23,7 +23,8 @@ const mods = names.map((n) => {
 const needles = {
   analytics: ["PII_PARAM_KEYS", "track(", "no PII"],
   nav: ["menu-toggle", "menu-open"],
-  form: ["data-form-next", "setStep", "lead_form_step", "firstInvalid"],
+  "offer-fit": ["confengeRouteOfferFit", "CONFENGE_OFFER_FIT_MATRIX"],
+  form: ["data-form-next", "setStep", "lead_form_step", "firstInvalid", "readOfferFitInput"],
 };
 
 let failed = 0;
@@ -49,14 +50,14 @@ if (failed) {
 }
 
 const header = `/* CONFENGE public site JS — modular assembly (SYS-03).
- * Source modules: js/modules/analytics.js, nav.js, form.js
+ * Source modules: js/modules/analytics.js, nav.js, offer-fit.js, form.js
  * Rebuild: node scripts/site/build_script_modules.mjs --write
  */
 `;
 const bodies = mods.map((m) => m.text.replace(/^\/\* MODULE[\s\S]*?\*\/\n/, ""));
 const result = await minify(header + bodies.join("\n"), {
   compress: { passes: 2 },
-  mangle: { reserved: ["PII_PARAM_KEYS", "firstInvalid", "applyJourneyToForm"] },
+  mangle: { reserved: ["PII_PARAM_KEYS", "firstInvalid", "applyJourneyToForm", "confengeRouteOfferFit"] },
   format: { comments: /CONFENGE public site JS|EVENT_CONTRACT_CLIENT_/ },
 });
 if (!result.code) {
