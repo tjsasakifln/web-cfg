@@ -16,7 +16,7 @@ const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
-  "Enviar documentos para análise",
+  "Solicitar canal seguro",
   "Enviar edital para triagem",
   'data-set-journey="contrato"',
   'data-set-journey="edital"',
