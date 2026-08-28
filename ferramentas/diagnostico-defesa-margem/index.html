@@ -44,11 +44,13 @@
 <p class="eyebrow">Contratos públicos · leitura factual</p>
 <h1>Diagnóstico de Defesa de Margem em Contratos Públicos</h1>
 <p class="content-lead">Informe um contrato, CNPJ público, identificador PNCP ou contexto já publicado. A leitura separa fato oficial, derivado e UNKNOWN. Não conclui direito, crédito ou tese jurídica.</p>
+<p class="tool-job" data-tool-job>O que esta ferramenta resolve: ler o que o recorte público já mostra sobre um contrato e o que continua sem informação.</p>
+<p class="tool-decision" data-tool-decision>Decisão apoiada: separar fato oficial, derivado e desconhecido antes de pedir segunda leitura humana.</p>
 </div></header> <div class="container tool-shell">
 <section class="tool-method" aria-labelledby="metodo-diagnostico">
 <p class="eyebrow">Método e limites</p>
 <h2 id="metodo-diagnostico">Como esta leitura é feita</h2>
-<p>O diagnóstico consome um recorte público versionado de contratos oficiais (contrato public-read-margin-defense/1.0). Cada campo leva fonte, data de revisão e classificação. Campo ausente permanece UNKNOWN. Ausência não é prova de que o evento não ocorreu.</p>
+<p>O diagnóstico consome um recorte público versionado de contratos oficiais (contrato public-read-margin-defense/1.0). Cada campo leva fonte, data de revisão e classificação. Campo ausente permanece UNKNOWN. Ausência não é prova de que o evento não ocorreu. A leitura separa <strong>fato</strong> oficial, <strong>cálculo</strong> (esta página não calcula valor a receber), <strong>inferência</strong> derivada e o que permanece <strong>desconhecido</strong>.</p>
 <ul class="tool-evidence-list">
 <li><strong>Fonte oficial consultada no recorte:</strong> PNCP (contratos de fornecedor publicados no portal nacional).</li>
 <li><strong>Método:</strong> projeção SELECT-only; fatos oficiais não se misturam com derivados. Aniversário contratual é o único derivado: mês-dia da data de assinatura oficial.</li>
@@ -63,9 +65,23 @@
 </div>
 <div class="tool-actions">
 <button class="button button-primary tool-run" type="submit">Ler este contrato</button>
+<button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Limpar busca</button>
 </div>
 <p class="form-status" id="lookup-status" hidden></p>
-</form> <section id="identificacao" aria-labelledby="h-identificacao">
+</form>
+<section class="tool-layers" id="camadas-diagnostico" aria-labelledby="h-camadas">
+<h2 id="h-camadas">Fato, cálculo, inferência e desconhecido</h2>
+<p data-layer="fato"><strong>Fato.</strong> Identificador, órgão, contratado, objeto, valor nominal assinado e vigência estão no recorte oficial deste contrato.</p>
+<p data-layer="calculo"><strong>Cálculo.</strong> Esta leitura não calcula valor a receber, saldo de aditivo nem prazo. Só projeta o recorte público versionado.</p>
+<p data-layer="inferencia"><strong>Inferência.</strong> Aniversário contratual (08-13) é derivado da data oficial de assinatura, não um fato novo da fonte.</p>
+<p data-layer="unknown"><strong>Desconhecido.</strong> Aditivos, reajuste, medições e pagamentos permanecem UNKNOWN. Ausência no recorte não prova que o evento não ocorreu.</p>
+</section>
+<div class="tool-actions" id="ra">
+<button type="button" class="button button-secondary" id="btn-copy" data-tool-copy>Copiar leitura</button>
+<button type="button" class="button button-secondary" id="btn-dl" data-tool-download>Baixar (.txt)</button>
+<button type="button" class="button button-secondary" id="btn-print">Imprimir</button>
+</div>
+<section id="identificacao" aria-labelledby="h-identificacao" data-layer="fato">
 <h2 id="h-identificacao">Identificação do contrato</h2>
 <dl class="stage-meta" id="out-identificacao">
 <dt>Identificador público</dt><dd>83102277000152-2-000626/2026</dd>
@@ -115,7 +131,7 @@
 </section> <section id="limites-unknown" aria-labelledby="h-unknown">
 <h2 id="h-unknown">Limites e UNKNOWN</h2>
 <p id="out-unknown">Identidade, objeto, órgão, contratado, valor nominal assinado e vigência estão no recorte oficial. Aditivos, reajuste, medições e pagamentos permanecem UNKNOWN com reason_code do produtor. Esta página não fabrica direito nem trata silêncio da fonte como evidência.</p>
-</section> <section id="segunda-leitura" class="tool-cta-contextual" aria-labelledby="h-cta" data-cta-id="segunda-leitura-contrato">
+</section> <section id="segunda-leitura" class="tool-cta-contextual" aria-labelledby="h-cta" data-cta-id="segunda-leitura-contrato" data-tool-to-offer="defesa-margem-contratos-publicos">
 <h2 id="h-cta">Segunda leitura deste contrato</h2>
 <p>A leitura acima permanece útil sem enviar nada. Se quiser uma conferência humana da CONFENGE sobre <strong>este</strong> contrato, use o pedido abaixo.</p>
 <form action="/.netlify/functions/lead" class="contact-form" data-ajax="true" data-receipt-required="true" data-success-destination="/obrigado-contrato" data-submit-timeout-ms="15000" method="POST" name="diagnostico-b2g" id="lead-form">
@@ -153,14 +169,20 @@
 </section>
 </div>
 </main>
+<script src="/assets/js/tool-persist.js"></script>
+<script src="/assets/js/tools-common.js"></script>
 <script src="/assets/js/diagnose-margin.js"></script>
 <script src="/script.js" defer></script>
 <script>
 (function(){
   var D = window.ConfengeDiagnoseMargin;
+  var T = window.ConfengeTools;
   var statusEl = document.getElementById("lookup-status");
   var SNAP = "/ferramentas/diagnostico-defesa-margem/snapshot.json";
   var snapshot = null;
+  var lastText = "";
+  var TOOL = "diagnostico-defesa-margem";
+  if (T && T.bindToolLifecycle) T.bindToolLifecycle({ tool: TOOL, startSelectors: "#qid, button.tool-run" });
   function showStatus(msg, kind){
     statusEl.hidden = !msg;
     statusEl.textContent = msg || "";
@@ -199,6 +221,37 @@
     document.getElementById("out-fontes").innerHTML = fontes.join("");
     document.getElementById("out-conferencia").innerHTML = diagnosis.o_que_merece_conferencia.map(function(l){ return "<li>" + l + "</li>"; }).join("");
     document.getElementById("out-unknown").textContent = "UNKNOWN preservado em " + diagnosis.unknown_count + " campos ou famílias. Completeness: " + diagnosis.completeness + ". Esta página não fabrica direito nem trata silêncio da fonte como evidência.";
+    var layers = diagnosis.layers || (D.explainDiagnosis ? D.explainDiagnosis(diagnosis).layers : null);
+    if (layers) {
+      var esc = (T && T.escapeHtml) ? T.escapeHtml : function(s){ return String(s == null ? "" : s); };
+      var box = document.getElementById("camadas-diagnostico");
+      if (box) {
+        box.innerHTML = "<h2 id=\"h-camadas\">Fato, cálculo, inferência e desconhecido</h2>" +
+          '<p data-layer="fato"><strong>Fato.</strong> ' + esc(layers.fato) + "</p>" +
+          '<p data-layer="calculo"><strong>Cálculo.</strong> ' + esc(layers.calculo) + "</p>" +
+          '<p data-layer="inferencia"><strong>Inferência.</strong> ' + esc(layers.inferencia) + "</p>" +
+          '<p data-layer="unknown"><strong>Desconhecido.</strong> ' + esc(layers.unknown) + "</p>";
+      }
+    }
+    lastText = (T && T.buildReport)
+      ? T.buildReport([
+          { title: "CONFENGE: diagnóstico de defesa de margem", body: (diagnosis.resumo_executivo || []).join("\n") },
+          { title: "Fato", body: layers && layers.fato },
+          { title: "Cálculo", body: layers && layers.calculo },
+          { title: "Inferência", body: layers && layers.inferencia },
+          { title: "Desconhecido", body: layers && layers.unknown },
+          { title: "Slug público", body: diagnosis.public_id_slug || "" },
+          { title: "Aviso", body: "Não é parecer jurídico. Dados do recorte público, sem cadastro para ver o resultado." }
+        ])
+      : (diagnosis.resumo_executivo || []).join("\n");
+    if (T && T.track) {
+      T.track("tool_complete", {
+        tool: TOOL,
+        unknown_count: diagnosis.unknown_count,
+        official_count: diagnosis.official_count,
+        public_id_slug: diagnosis.public_id_slug || ""
+      });
+    }
     if (typeof window.confengeTrack === "function") {
       window.confengeTrack("contract_analyzed", {
         page_path: "/ferramentas/diagnostico-defesa-margem/",
@@ -234,6 +287,19 @@
     e.preventDefault();
     analyze(document.getElementById("qid").value);
   });
+  var btnCopy = document.getElementById("btn-copy");
+  var btnDl = document.getElementById("btn-dl");
+  var btnPrint = document.getElementById("btn-print");
+  var btnReset = document.getElementById("btn-reset");
+  if (btnCopy) btnCopy.onclick = function(){ if (T && T.copyText) T.copyText(lastText); };
+  if (btnDl) btnDl.onclick = function(){ if (T && T.downloadText) T.downloadText("confenge-diagnostico-defesa-margem.txt", lastText); };
+  if (btnPrint) btnPrint.onclick = function(){ window.print(); };
+  if (btnReset) btnReset.onclick = function(){
+    document.getElementById("qid").value = "";
+    showStatus("", "");
+    lastText = "";
+    if (T && T.clearState) T.clearState(TOOL);
+  };
   function moneyAssetProps(){
     return {
       page_path: "/ferramentas/diagnostico-defesa-margem/",

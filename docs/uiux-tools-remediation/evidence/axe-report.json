@@ -45,6 +45,17 @@
       "violations": []
     },
     {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "id": "diagnostico",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
       "path": "/guias-contratos-obras/checklist-pedido-aditivo/",
       "id": "aditivo",
       "counts": {

@@ -2,9 +2,19 @@
 (function () {
   "use strict";
   var P = "confenge.tool.", TTL = 864e5 * 30;
-  function emit(name, props) {
+  var PII_KEYS = ["email","phone","valor","valorinicial","valorInicial","raw","nome","cnpj","cpf","q","query","qid","mensagem","message","causa","observacao","telefone","tel","whatsapp","name","empresa","documento","identificador","contrato","freetext","free_text","search_query","edital"];
+  function sensitiveKey(k) {
+    var s = String(k || "").toLowerCase();
+    if (PII_KEYS.indexOf(k) >= 0 || PII_KEYS.indexOf(s) >= 0) return true;
+    return /email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|cnpj|document|valor|causa|observ|qid|query|raw|identificador/.test(s);
+  }
+  function scrubProps(props) {
     var safe = props && typeof props === "object" ? Object.assign({}, props) : {};
-    ["email","phone","valor","valorInicial","raw","nome"].forEach(function (k) { delete safe[k]; });
+    Object.keys(safe).forEach(function (k) { if (sensitiveKey(k)) delete safe[k]; });
+    return safe;
+  }
+  function emit(name, props) {
+    var safe = scrubProps(props);
     try {
       if (typeof window.confengeTrack === "function") return void window.confengeTrack(name, safe);
       if (typeof window.track === "function") return void window.track(name, safe);
@@ -50,7 +60,7 @@
       .replace(/'/g, "&#39;");
   }
   window.ConfengeTools = {
-    track: emit, emit: emit, bindToolLifecycle: bindToolLifecycle, parseMoney: parseMoney, setFieldError: setFieldError,
+    track: emit, emit: emit, scrubProps: scrubProps, bindToolLifecycle: bindToolLifecycle, parseMoney: parseMoney, setFieldError: setFieldError,
     escapeHtml: escapeHtml,
     moneyFromField: function (el) { return el ? parseMoney(el.value) : { ok: false, error: "vazio" }; },
     num: function (el) { var p = el ? parseMoney(el.value) : { ok: false }; return p.ok ? p.value : 0; },

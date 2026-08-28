@@ -15,6 +15,7 @@
     'document', 'documento', 'edital', 'email', 'empresa', 'endereco',
     'file', 'full_name', 'mensagem', 'message', 'message_body', 'name',
     'nome', 'phone', 'q', 'query', 'search_query', 'tel', 'telefone', 'whatsapp',
+    'valor', 'valorinicial', 'causa', 'observacao', 'raw', 'qid', 'identificador',
   ]);
   const UNKNOWN_SERVICE = 'UNKNOWN_SERVICE';
   const CANONICAL_DESTINATIONS = {
