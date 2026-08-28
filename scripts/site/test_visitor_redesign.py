@@ -728,8 +728,12 @@ def test_home_nav_and_hierarchy():
     assert home.count("button-primary") <= 4
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
-    assert "journey-row--dominant" in home or "journey-path--core" in home
-    assert "evidence-matrix" in home or "hero-evidence" in home
+    assert "journey-row" in home or "journey-path" in home
+    assert "Edital ou proposta crítica" in home
+    assert "Contrato sob pressão" in home
+    assert "Operação recorrente" in home
+    assert "data-evidence-selector" in home
+    assert "data-evidence-selector" not in hero.group(0)
 
 
 # ---------------------------------------------------------------------------
@@ -1093,22 +1097,18 @@ def test_home_form_anchor_reveals_fields():
         r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
-    # #182 keeps edital/operacao on the fields. #390 makes the contract path
-    # cross the canonical Medicoes/Glosas service page before capture.
+    # Three doors: each primary door CTA lands on the single capture form.
+    # The Medicoes/Glosas commercial route stays as a destination-named alt link.
     for match in re.finditer(
         r'<a\b[^>]*data-cta-position="(journey_[abc])"[^>]*>', html
     ):
         tag = match.group(0)
         href = re.search(r'href="([^"]+)"', tag)
-        if match.group(1) == "journey_a":
-            assert href and href.group(1) == "/medicoes-glosas-obras-publicas/", (
-                f"journey_a CTA must target the canonical commercial route, got {href and href.group(1)!r}"
-            )
-            assert 'data-cta-id="home-medicoes-glosas-dossie"' in tag
-        else:
-            assert href and "#formulario-contato" in href.group(1), (
-                f'{match.group(1)} CTA must target #formulario-contato, got {href and href.group(1)!r}'
-            )
+        assert href and "#formulario-contato" in href.group(1), (
+            f'{match.group(1)} CTA must target #formulario-contato, got {href and href.group(1)!r}'
+        )
+    assert 'href="/medicoes-glosas-obras-publicas/"' in html
+    assert 'data-cta-id="home-medicoes-glosas-dossie"' in html
     # The shipped script must realign the landing: deferred section sizes (#185)
     # move the target while the jump runs.
     nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")

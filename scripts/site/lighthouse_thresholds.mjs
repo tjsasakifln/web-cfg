@@ -98,6 +98,10 @@ export function evaluateLighthouseResults(results, options = {}) {
   if (homeGate.minimum_performance == null || homeGate.minimum_performance < 95) {
     errors.push(`home: minimum performance ${homeGate.minimum_performance} < 95`);
   }
+  const homeCls = home.map((row) => row.cls).filter((value) => Number.isFinite(value));
+  if (homeCls.length && Math.max(...homeCls) > 0.05) {
+    errors.push(`home: maximum CLS ${Math.max(...homeCls)} must be <= 0.05`);
+  }
   if (homeGate.p75_tbt_ms == null || homeGate.p75_tbt_ms >= 200) {
     errors.push(`home: p75 TBT ${homeGate.p75_tbt_ms}ms must be < 200ms`);
   }
