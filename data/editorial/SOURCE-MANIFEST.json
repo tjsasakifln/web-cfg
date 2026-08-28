@@ -219,6 +219,66 @@
       "themes": ["sicro", "orcamento"]
     },
     {
+      "source_id": "lei-14133-art46",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — art. 46 (regimes de execução; medição por etapas e metas de resultado)",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-28",
+      "device": "art. 46, caput e § 9º",
+      "limitations": "O § 9º aplica-se aos regimes de preço global, empreitada integral, tarefa, contratação integrada e semi-integrada. Não transplante para empreitada por preço unitário nem para a Lei 8.666/1993.",
+      "themes": ["medicao", "empreitada", "preco-global"]
+    },
+    {
+      "source_id": "lei-14133-art145",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — art. 145 (vedação de pagamento antecipado de parcelas de obra)",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-28",
+      "device": "art. 145, caput e §§ 1º a 3º",
+      "limitations": "Antecipação é pagar parcela ainda não executada. Não confundir com pagamento proporcional de etapa já executada em parte.",
+      "themes": ["pagamento", "antecipacao", "medicao"]
+    },
+    {
+      "source_id": "tcu-criterios-medicao-pagamento",
+      "type": "tcu_guidance",
+      "body": "Tribunal de Contas da União",
+      "title": "TCU — Licitações e Contratos, item 4.3.7, critérios de medição e de pagamento",
+      "url": "https://licitacoesecontratos.tcu.gov.br/4-3-7-criterios-de-medicao-e-de-pagamento-2/",
+      "accessed_at": "2026-08-28",
+      "device": "item 4.3.7, inclusive referência ao Acórdão 8920/2017-Segunda Câmara",
+      "limitations": "Orientação do portal Licitações e Contratos do TCU; o acórdão específico deve ser lido na íntegra na Pesquisa Integrada.",
+      "themes": ["medicao", "pagamento", "ateste"]
+    },
+    {
+      "source_id": "tcu-pagamento-liquidacao",
+      "type": "tcu_guidance",
+      "body": "Tribunal de Contas da União",
+      "title": "TCU — Licitações e Contratos, item 6.1.7, pagamento",
+      "url": "https://licitacoesecontratos.tcu.gov.br/6-1-7-pagamento/",
+      "accessed_at": "2026-08-28",
+      "device": "item 6.1.7 (liquidação, ordem cronológica, parcela incontroversa, art. 137)",
+      "themes": ["pagamento", "liquidacao", "suspensao"]
+    },
+    {
+      "source_id": "in-seges-77-2022",
+      "type": "regulation",
+      "body": "Ministério da Economia / Seges",
+      "title": "Instrução Normativa Seges/ME nº 77, de 4 de novembro de 2022 (ordem cronológica de pagamento)",
+      "number": "IN Seges/ME 77/2022",
+      "date": "2022-11-04",
+      "url": "https://www.gov.br/compras/pt-br/acesso-a-informacao/legislacao/instrucoes-normativas/instrucao-normativa-seges-me-no-77-de-4-de-novembro-de-2022",
+      "accessed_at": "2026-08-28",
+      "device": "arts. 5º, 7º e 11",
+      "limitations": "Âmbito da Administração Pública federal direta, autárquica e fundacional. Não se aplica automaticamente a Estados, Municípios ou empresas estatais.",
+      "themes": ["pagamento", "liquidacao", "ordem-cronologica"]
+    },
+    {
       "source_id": "pncp",
       "type": "pncp_data",
       "body": "Governo Federal",
