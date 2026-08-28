@@ -50,9 +50,13 @@
         if (!statusEl.id) statusEl.id = 'form-status';
         statusEl.hidden = !msg;
         statusEl.textContent = msg || '';
-        statusEl.classList.toggle('is-error', kind === 'error');
-        statusEl.classList.toggle('is-ok', kind === 'ok');
-        statusEl.setAttribute('role', kind === 'error' && msg ? 'alert' : 'status');
+        if (statusEl.classList && typeof statusEl.classList.toggle === 'function') {
+          statusEl.classList.toggle('is-error', kind === 'error');
+          statusEl.classList.toggle('is-ok', kind === 'ok');
+        }
+        if (typeof statusEl.setAttribute === 'function') {
+          statusEl.setAttribute('role', kind === 'error' && msg ? 'alert' : 'status');
+        }
       };
       const safeSuccessDestination = (candidate) => {
         switch (candidate) {
@@ -79,9 +83,18 @@
 
       const setControlInvalid = (el, invalid, message) => {
         if (!el) return;
-        el.classList.toggle('is-invalid', !!invalid);
-        if (invalid) el.setAttribute('aria-invalid', 'true');
-        else el.removeAttribute('aria-invalid');
+        if (el.classList && typeof el.classList.toggle === 'function') {
+          el.classList.toggle('is-invalid', !!invalid);
+        } else if (invalid) {
+          el.classList?.add?.('is-invalid');
+        } else {
+          el.classList?.remove?.('is-invalid');
+        }
+        if (invalid) {
+          if (typeof el.setAttribute === 'function') el.setAttribute('aria-invalid', 'true');
+        } else if (typeof el.removeAttribute === 'function') {
+          el.removeAttribute('aria-invalid');
+        }
         if (typeof el.setCustomValidity === 'function') {
           el.setCustomValidity(invalid && message ? message : '');
         }
@@ -95,8 +108,8 @@
         const value = ids.join(' ');
         [emailEl, phoneEl].forEach((el) => {
           if (!el) return;
-          if (value) el.setAttribute('aria-describedby', value);
-          else el.removeAttribute('aria-describedby');
+          if (value && typeof el.setAttribute === 'function') el.setAttribute('aria-describedby', value);
+          else if (!value && typeof el.removeAttribute === 'function') el.removeAttribute('aria-describedby');
         });
       };
       const isVisibleBox = (el) => {
@@ -114,9 +127,10 @@
       };
       const withInstantScroll = (fn) => {
         const root = document.documentElement;
-        const prev = root.style.scrollBehavior;
-        root.style.scrollBehavior = 'auto';
-        try { fn(); } finally { root.style.scrollBehavior = prev; }
+        const style = root && root.style;
+        const prev = style ? style.scrollBehavior : '';
+        if (style) style.scrollBehavior = 'auto';
+        try { fn(); } finally { if (style) style.scrollBehavior = prev; }
       };
       const revealStep = (n) => {
         const panel = form.querySelector(`[data-form-step="${n}"]`);
