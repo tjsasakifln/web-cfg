@@ -82,7 +82,8 @@
           { "label": "Conteúdos", "href": "/conteudos/" },
           { "label": "Ferramentas", "href": "/ferramentas/" },
           { "label": "Entregas", "href": "/entregas/" },
-          { "label": "Casos", "href": "/casos/" }
+          { "label": "Casos", "href": "/casos/" },
+          { "label": "Reequilíbrio", "href": "/reequilibrio-obras-publicas/" }
         ]
       },
       {
