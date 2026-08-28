@@ -99,10 +99,10 @@ def test_microcopy_preferences():
         assert phrase not in lower, f"public leak: {phrase}"
     # Client-facing journey section (not briefing metalinguage)
     assert "como podemos ajudar" in lower
-    assert "qual situação sua empresa precisa resolver agora" in lower
-    assert "tenho um contrato sob pressão" in lower
-    assert "estou analisando uma licitação" in lower
-    assert "preciso organizar minha operação no mercado público" in lower
+    assert "qual decisão precisa sair agora" in lower
+    assert "contrato sob pressão" in lower
+    assert "edital ou proposta crítica" in lower
+    assert "operação recorrente" in lower
     assert "analisar meu caso" in lower
     assert "solicitar canal seguro para envio" in lower
     assert "enviar edital para triagem" in lower

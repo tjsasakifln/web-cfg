@@ -42,10 +42,19 @@ body[data-content-cluster="home"] .hero-micro{
   font-size:.875rem;
   line-height:1.5;
 }
-body[data-content-cluster="home"] .hero-proof-line{
+body[data-content-cluster="home"] .hero-proof{
+  grid-template-columns:1fr 1fr;
+  gap:8px 16px;
   margin:0;
-  padding-top:12px;
-  border-top:1px solid var(--line);
+  padding:10px 0 0;
+}
+body[data-content-cluster="home"] .hero-proof li{
+  font-size:.875rem;
+}
+body[data-content-cluster="home"] .hero-proof-line{
+  margin:8px 0 0;
+  padding:0;
+  border:0;
   color:#314256;
   font-size:.875rem;
   line-height:1.5;

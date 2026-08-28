@@ -580,8 +580,8 @@ async function main() {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 5000 });
-    for (const j of ["contrato", "edital", "operacao"]) {
-      await page.select("#estagio", j === "contrato" ? "estruturando a operação B2G" : "problema urgente em contrato");
+    for (const j of ["edital", "operacao"]) {
+      await page.select("#estagio", "problema urgente em contrato");
       const trigger = await page.$(`[data-set-journey="${j}"]`);
       if (!trigger) throw new Error(`missing data-set-journey=${j}`);
       await trigger.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));

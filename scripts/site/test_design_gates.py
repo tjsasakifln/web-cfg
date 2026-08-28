@@ -379,6 +379,7 @@ def test_trace_matrix_and_tension_present():
     assert "Solicitar canal seguro para envio" in html
     assert "enviar documentos para análise" not in html.lower()
     assert "Solicitar diagnóstico da operação" in html
+    assert "Avaliar o Dossiê de Medição, Glosa e Pagamento" in html
     assert 'data-journey="contrato"' in html
     assert 'data-journey="edital"' in html
     assert 'data-journey="operacao"' in html

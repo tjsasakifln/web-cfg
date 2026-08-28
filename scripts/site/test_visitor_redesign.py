@@ -1097,18 +1097,22 @@ def test_home_form_anchor_reveals_fields():
         r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
-    # Three doors: each primary door CTA lands on the single capture form.
-    # The Medicoes/Glosas commercial route stays as a destination-named alt link.
+    # Edital/operacao land on the form. Contrato stays the single commercial
+    # transfer to Medicoes/Glosas (#390) — no second destination in that row.
     for match in re.finditer(
         r'<a\b[^>]*data-cta-position="(journey_[abc])"[^>]*>', html
     ):
         tag = match.group(0)
         href = re.search(r'href="([^"]+)"', tag)
-        assert href and "#formulario-contato" in href.group(1), (
-            f'{match.group(1)} CTA must target #formulario-contato, got {href and href.group(1)!r}'
-        )
-    assert 'href="/medicoes-glosas-obras-publicas/"' in html
-    assert 'data-cta-id="home-medicoes-glosas-dossie"' in html
+        if match.group(1) == "journey_a":
+            assert href and href.group(1) == "/medicoes-glosas-obras-publicas/", (
+                f"journey_a CTA must target the canonical commercial route, got {href and href.group(1)!r}"
+            )
+            assert 'data-cta-id="home-medicoes-glosas-dossie"' in tag
+        else:
+            assert href and "#formulario-contato" in href.group(1), (
+                f'{match.group(1)} CTA must target #formulario-contato, got {href and href.group(1)!r}'
+            )
     # The shipped script must realign the landing: deferred section sizes (#185)
     # move the target while the jump runs.
     nav_js = (ROOT / "js" / "modules" / "nav.js").read_text(encoding="utf-8")
