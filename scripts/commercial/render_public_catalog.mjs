@@ -365,7 +365,7 @@ function vitrineCard(entry) {
     : `<article class="vitrine-item" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-search-aliases="${searchAliases(entry)}" id="entrega-${entry.catalog_number}">`;
   const close = entry.catalog_number === "01" ? "</article></section>" : "</article>";
   return `${open}
-<header class="vitrine-item__head"><span>${entry.catalog_number}</span><h2 id="${headingId}">${escapeHtml(entry.public_name_pt_br)}</h2><strong>${escapeHtml(priceLabel(entry))}</strong></header>
+<header class="vitrine-item__head"><span>${entry.catalog_number}</span><span>DADOS SINTÉTICOS</span><h2 id="${headingId}">${escapeHtml(entry.public_name_pt_br)}</h2><strong>${escapeHtml(priceLabel(entry))}</strong></header>
 <p class="vitrine-item__value">${escapeHtml(entry.value_line_pt_br)}</p>
 <dl class="vitrine-item__facts">
 <div><dt>Situação</dt><dd>${escapeHtml(publicText(entry.trigger))}</dd></div>
