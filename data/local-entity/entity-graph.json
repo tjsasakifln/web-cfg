@@ -191,9 +191,9 @@
         "https://github.com/tjsasakifln"
       ],
       "status": "SELF_DECLARED",
-      "basis": "specialist JSON-LD sameAs + verified-sources.json",
+      "basis": "self-published JSON-LD; no third-party verification",
       "third_party_verified": false,
-      "notes": "GitHub is the committed verified-source sameAs. Not a third-party identity badge.",
+      "notes": "GitHub profile is owned and published by the subject. Self-declared, never a third-party identity verification.",
       "as_of": "2026-08-19"
     },
     {

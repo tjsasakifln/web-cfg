@@ -270,3 +270,177 @@ export function validateRegistryShape(reg, options = {}) {
   });
   return problems;
 }
+
+/* ------------------------------------------------------------------ */
+/* Rendered-surface contract                                           */
+/*                                                                     */
+/* The gate has to be honest in three directions, not one:             */
+/*   - zero published proofs is a legitimate state, but only while the */
+/*     public surface actually renders the "no published proof" state; */
+/*   - N valid proofs is a legitimate state, and each one has to be    */
+/*     rendered on the surface the registry says it is published on;   */
+/*   - an expired or unauthorized proof fails, in any registry state.  */
+/*                                                                     */
+/* Everything below is pure: it takes a page map, never the disk, so   */
+/* the three states can be exercised without committing a fixture.     */
+/* ------------------------------------------------------------------ */
+
+export const SYNTHETIC_LABEL = "DADOS SINTÉTICOS";
+export const DEMONSTRATIVE_LABEL = "DEMONSTRATIVO";
+export const DEMONSTRATIVE_PERMISSION_ATTR = 'data-permission-class="demonstrativo"';
+export const CONSENTED_PERMISSION_ATTR = 'data-permission-class="consented"';
+export const REAL_PROOF_ID_ATTR = "data-real-proof-id";
+export const PROOF_STATE_NONE = "none";
+export const PROOF_STATE_PUBLISHED = "published";
+export const PROOF_STATE_SURFACE = "casos/index.html";
+
+const NOT_A_CLIENT_RESULT =
+  /N[ÃA]O [ÉE] (?:RESULTADO DE CLIENTE|CASE|CASO CONFENGE)/i;
+const SYNTHETIC_PROSE = /sint[ée]tic/i;
+const HYPOTHETICAL_PROSE = /hipot[ée]tic/i;
+const PROOF_STATE_BLOCK = /<section[^>]*\bdata-proof-state="([^"]*)"[^>]*>([\s\S]*?)<\/section>/i;
+const NO_PROOF_YET = /\b(?:zero|nenhum[a]?)\b/i;
+
+export function surfaceToRelPath(surface) {
+  const slug = String(surface ?? "").replace(/^\/+|\/+$/g, "");
+  return slug ? `${slug}/index.html` : "index.html";
+}
+
+function carriesRealProofMarker(html, markers) {
+  return markers.some((mk) => String(html).includes(mk));
+}
+
+/**
+ * A demonstrative or synthetic artifact must never be readable as a real
+ * engagement. `kind` is "model" (synthetic dataset page), "demonstrative"
+ * (method page with hypothetical numbers) or "real" (an authorized client
+ * proof). Losing the label is a failure, not a cosmetic regression.
+ */
+export function labelIntegrityProblems(html, kind, options = {}) {
+  const { markers = [] } = options;
+  const problems = [];
+  const P = (code) => problems.push(code);
+  const page = String(html ?? "");
+  if (!page.trim()) return ["page_empty"];
+  const hasSynthetic = page.includes(SYNTHETIC_LABEL);
+  const hasDemonstrative = page.includes(DEMONSTRATIVE_LABEL);
+  const hasDemonstrativeClass = page.includes(DEMONSTRATIVE_PERMISSION_ATTR);
+  const hasConsentedClass = page.includes(CONSENTED_PERMISSION_ATTR);
+  const hasRealMarker = carriesRealProofMarker(page, markers);
+
+  if (kind === "model") {
+    if (!hasSynthetic) P("synthetic_label_absent");
+    if (!SYNTHETIC_PROSE.test(page)) P("synthetic_prose_absent");
+    if (!hasDemonstrative) P("demonstrative_label_absent");
+    if (!hasDemonstrativeClass) P("demonstrative_permission_class_absent");
+    if (!NOT_A_CLIENT_RESULT.test(page)) P("client_result_disclaimer_absent");
+    if (hasRealMarker) P("synthetic_page_carries_real_proof_marker");
+    if (hasConsentedClass) P("synthetic_page_declares_consented_class");
+    return problems;
+  }
+  if (kind === "demonstrative") {
+    if (!hasDemonstrative) P("demonstrative_label_absent");
+    if (!hasDemonstrativeClass) P("demonstrative_permission_class_absent");
+    if (!NOT_A_CLIENT_RESULT.test(page)) P("client_result_disclaimer_absent");
+    if (!SYNTHETIC_PROSE.test(page) && !HYPOTHETICAL_PROSE.test(page)) P("hypothetical_prose_absent");
+    if (hasRealMarker) P("demonstrative_page_carries_real_proof_marker");
+    if (hasConsentedClass) P("demonstrative_page_declares_consented_class");
+    return problems;
+  }
+  if (kind === "real") {
+    if (!hasConsentedClass) P("consented_permission_class_absent");
+    if (!page.includes(REAL_PROOF_ID_ATTR)) P("real_proof_id_absent");
+    if (hasSynthetic) P("real_proof_mixed_with_synthetic_label");
+    if (hasDemonstrativeClass) P("real_proof_mixed_with_demonstrative_class");
+    return problems;
+  }
+  return ["unknown_label_kind"];
+}
+
+function asPageMap(pages) {
+  if (pages instanceof Map) return pages;
+  return new Map(Object.entries(pages ?? {}));
+}
+
+/**
+ * Full gate: registry shape, per-entry validity, and the rendered surface.
+ * Returns [] only when the registry and the HTML tell the reader the same
+ * story: zero published proof and an honest zero state, or N valid proofs
+ * each rendered where the registry says it is published.
+ */
+export function evaluateProofGate(options = {}) {
+  const { registry, pages, now = Date.now(), ...entryOptions } = options;
+  const problems = [];
+  const P = (code, detail) => problems.push(detail === undefined ? code : `${code}:${detail}`);
+
+  for (const p of validateRegistryShape(registry ?? {}, { ...entryOptions, now })) P("registry", p);
+
+  const entries = Array.isArray(registry?.entries) ? registry.entries : [];
+  const markers = registry?.real_proof_block_markers ?? [];
+  const pageMap = asPageMap(pages);
+
+  const evaluated = entries.map((entry) => ({
+    entry,
+    id: entry && typeof entry === "object" ? String(entry.entry_id ?? "") : "",
+    problems: validateEntry(entry, { ...entryOptions, now }),
+  }));
+
+  for (const row of evaluated) {
+    if (row.problems.length === 0) continue;
+    const label = row.id || "(sem entry_id)";
+    if (row.problems.includes("authorization_expired")) P("proof_expired", label);
+    if (row.problems.includes("authorization_absent")) P("proof_unauthorized", label);
+    if (row.problems.includes("fonte_absent")) P("proof_without_source", label);
+    P("proof_invalid", label);
+  }
+
+  const valid = evaluated.filter((row) => row.problems.length === 0);
+  const published = valid.filter((row) => row.entry?.state === "PUBLISHED");
+  const publishedIds = new Set(published.map((row) => row.id));
+
+  const declaredSurfaces = new Map();
+  for (const row of published) {
+    for (const surface of row.entry?.distribution?.surfaces ?? []) {
+      declaredSurfaces.set(surfaceToRelPath(surface), row.id);
+    }
+  }
+
+  for (const [rel, id] of declaredSurfaces) {
+    const html = pageMap.get(rel);
+    if (html === undefined) {
+      P("published_proof_surface_missing", rel);
+      continue;
+    }
+    if (!html.includes(`${REAL_PROOF_ID_ATTR}="${id}"`)) P("published_proof_not_rendered", `${rel}|${id}`);
+    for (const code of labelIntegrityProblems(html, "real", { markers })) P("published_proof_label", `${rel}|${code}`);
+  }
+
+  for (const [rel, html] of pageMap) {
+    const idOnPage = /data-real-proof-id="([^"]*)"/.exec(html)?.[1];
+    const marked = carriesRealProofMarker(html, markers);
+    if (marked && !declaredSurfaces.has(rel)) P("real_proof_block_without_valid_entry", rel);
+    if (idOnPage !== undefined && !publishedIds.has(idOnPage)) P("real_proof_id_not_published", `${rel}|${idOnPage}`);
+    if (marked && (html.includes(SYNTHETIC_LABEL) || html.includes(DEMONSTRATIVE_PERMISSION_ATTR))) {
+      P("real_proof_mixed_with_synthetic", rel);
+    }
+  }
+
+  const surfaceHtml = pageMap.get(PROOF_STATE_SURFACE);
+  if (surfaceHtml === undefined) {
+    P("proof_state_surface_missing", PROOF_STATE_SURFACE);
+  } else {
+    const block = PROOF_STATE_BLOCK.exec(surfaceHtml);
+    if (!block) P("proof_state_block_missing", PROOF_STATE_SURFACE);
+    else {
+      const [, state, body] = block;
+      if (published.length === 0) {
+        if (state !== PROOF_STATE_NONE) P("zero_proof_state_not_declared", state);
+        else if (!NO_PROOF_YET.test(body)) P("zero_proof_state_not_rendered", PROOF_STATE_SURFACE);
+      } else if (state !== PROOF_STATE_PUBLISHED) {
+        P("published_proof_state_not_declared", state);
+      }
+    }
+  }
+
+  return problems;
+}

@@ -53,7 +53,19 @@
       "DRAFT",
       "PENDING_CLIENT_APPROVAL"
     ],
-    "authorized_registry_state": "AUTHORIZED"
+    "authorized_registry_state": "AUTHORIZED",
+    "honest_states_pt_br": {
+      "zero": "Zero prova valida passa no gate, desde que /casos/ declare data-proof-state=\"none\" e renderize o estado zero visivel.",
+      "many": "N provas validas passam no gate, desde que cada superficie declarada renderize o bloco com data-real-proof-id e a classe consented, e /casos/ declare data-proof-state=\"published\".",
+      "invalid": "Prova vencida, sem autorizacao ou sem fonte reprova o gate em qualquer estado do registro."
+    },
+    "rendered_state_surface": "casos/index.html",
+    "rendered_state_attribute": "data-proof-state",
+    "rendered_state_values": [
+      "none",
+      "published"
+    ],
+    "not_a_freeze_pt_br": "O gate nao congela o zero. Ele exige que o registro e o HTML publicado contem a mesma historia, seja ela zero prova ou N provas validas."
   },
   "entry_schema": {
     "required_entry_fields": [

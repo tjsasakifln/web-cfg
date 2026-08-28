@@ -226,9 +226,9 @@ def classify_graph(
             field="sameAs",
             value=person_urls if github_only else (None if not person_urls else person_urls),
             status="SELF_DECLARED" if github_only else "UNKNOWN",
-            basis="specialist JSON-LD sameAs + verified-sources.json" if github_only else "absent_jsonld",
+            basis="self-published JSON-LD; no third-party verification" if github_only else "absent_jsonld",
             notes=(
-                "GitHub is the committed verified-source sameAs. Not a third-party identity badge."
+                "GitHub profile is owned and published by the subject. Self-declared, never a third-party identity verification."
                 if github_only
                 else "No public Person sameAs profiles are classified beyond the verified-source registry. Do not invent."
             ),
