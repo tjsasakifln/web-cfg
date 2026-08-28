@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "10e66d9b14bd169fbdd809894660e731462c73f4",
+  "baseline_commit": "29044d150aa013b6bfad6baf7d547d5330eee69c",
   "recaptured_at": "2026-08-28",
-  "recapture_reason": "CFG10X merge-train composition: keep #461 non-rendering sitemap lastmods (three truthful article dates) and recapture rendering collateral from CFG10X-12 type floor (styles.css, styles-tokens.css, styles-tools.css). Six protected pillar HTML files stay byte-identical; html_mutation false; #291 remains DEFER_UNTIL_DATE.",
+  "recapture_reason": "CFG10X merge-train: CFG10X-12 type floor plus lead-inline contract. Preserve #461 sitemap lastmods. Pillar HTML byte-identical; html_mutation false.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -21,7 +21,7 @@
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "12d7d0e59003adfac61d03ddebbb3f2a869bc78811f6176f36840647c2ec1a06",
     "script.js": "933d694b5422363fed2ba3c0704eaa0703b5a1a0e2cc3e410b253390f27eb03e",
-    "styles.css": "2b57b8bc3374545e80444755f65028ec7bbba65ae70efc5e8a2cd197447ae181",
+    "styles.css": "12a7e8c8cbb17da4baf5e82118496a8f12be952e0375b67be40f7e6034adfd9e",
     "styles-tokens.css": "8908187527c8120731dc8584eb11c36ae41e66f5cf411dcd431251e1b52cb01d",
     "styles-tools.css": "cfe5e81785c54e8a18601c2a97308dfaf744d0b60596d2acc34ec3ad7e015162",
     "robots.txt": "2be984de9b51eb6d201b8210d727353f014cf52bea1058eabf3abedb9cad6f57",
