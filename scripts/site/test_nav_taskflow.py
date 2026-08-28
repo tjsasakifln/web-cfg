@@ -28,11 +28,14 @@ from scripts.site.public_ia import (  # noqa: E402
     HUB_ROLES,
     audit_orphans,
     audit_primary_nav_hygiene,
+    breadcrumb_trail,
     first_viewport_names_journey,
     footer_problem_cluster_dump,
     hubs,
     materialize_route_map,
     parent_of,
+    parse_jsonld_breadcrumb_trail,
+    parse_visible_breadcrumb_trail,
     validate_contract,
 )
 from scripts.site.shell_nav import (  # noqa: E402
@@ -347,6 +350,33 @@ def main() -> int:
             failures.append(f"{route}: breadcrumbs missing Início")
         if not schema:
             failures.append(f"{route}: missing BreadcrumbList")
+    hub_routes = {hub["route"] for hub in hubs()}
+    for route in (
+        "/defesa-margem-contratos-publicos/",
+        "/atrasos-prorrogacao-obras-publicas/",
+        "/acompanhamento-contratos-obras/",
+        "/defesa-tecnica-contratos-publicos/",
+    ):
+        rec = routes.get(route)
+        if not rec:
+            failures.append(f"{route}: missing from route map")
+            continue
+        if rec.get("file") in FROZEN_SHELL_FILES:
+            failures.append(f"{route}: probe is frozen; pick a live child")
+            continue
+        if route in hub_routes or rec.get("parent") in (None, "/"):
+            failures.append(f"{route}: probe must be a non-hub child")
+            continue
+        html = (ROOT / rec["file"]).read_text(encoding="utf-8")
+        visible = parse_visible_breadcrumb_trail(html)
+        schema_trail = parse_jsonld_breadcrumb_trail(html, route)
+        expected = breadcrumb_trail(
+            route, current_label=visible[-1][0] if visible else None
+        )
+        if visible != expected:
+            failures.append(f"{route}: visible crumbs {visible} != {expected}")
+        if schema_trail != expected:
+            failures.append(f"{route}: BreadcrumbList {schema_trail} != {expected}")
     clusters = [c["url"] for c in brand.get("problem_clusters") or [] if c.get("url")]
     if footer_problem_cluster_dump(home, clusters):
         failures.append("home footer dumps the full problem-cluster taxonomy")

@@ -22,9 +22,11 @@ from scripts.site.public_ia import (
     load_ia_map,
     materialize_route_map,
     parent_of,
+    parse_jsonld_breadcrumb_trail,
+    parse_visible_breadcrumb_trail,
     validate_contract,
 )
-from scripts.site.shell_nav import load_brand, nav_items
+from scripts.site.shell_nav import FROZEN_SHELL_FILES, load_brand, nav_items, sync_text
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -82,6 +84,55 @@ def test_parent_chain_matches_breadcrumb_helper():
     assert trail[-1][1] is None
     assert parent_of("/medicoes-glosas-obras-publicas/") == "/problemas-que-resolvemos/"
     assert parent_of("/bid-room-licitacoes-obras/") == "/"
+
+
+CHILD_CRUMB_PROBES = (
+    "/defesa-margem-contratos-publicos/",
+    "/atrasos-prorrogacao-obras-publicas/",
+    "/acompanhamento-contratos-obras/",
+    "/defesa-tecnica-contratos-publicos/",
+)
+
+
+def test_shipped_child_crumbs_match_map_parent_chain():
+    """Visible crumbs + BreadcrumbList on a non-hub child equal breadcrumb_trail()."""
+    table = materialize_route_map(ROOT)
+    hub_routes = {hub["route"] for hub in hubs()}
+    checked = 0
+    for route in CHILD_CRUMB_PROBES:
+        rec = table.get(route)
+        assert rec, route
+        assert rec["parent"] not in (None, "/")
+        assert route not in hub_routes
+        assert rec["file"] not in FROZEN_SHELL_FILES
+        html = (ROOT / rec["file"]).read_text(encoding="utf-8")
+        visible = parse_visible_breadcrumb_trail(html)
+        assert visible, route
+        trail = breadcrumb_trail(route, current_label=visible[-1][0])
+        assert visible == trail, (route, visible, trail)
+        schema = parse_jsonld_breadcrumb_trail(html, route)
+        assert schema == trail, (route, schema, trail)
+        assert trail[1][1] == rec["parent"]
+        checked += 1
+    assert checked == len(CHILD_CRUMB_PROBES)
+
+
+def test_sync_text_inserts_missing_parent_into_crumbs_and_jsonld():
+    brand = load_brand()
+    route = "/defesa-margem-contratos-publicos/"
+    html = """<!DOCTYPE html><html><head>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://confenge.com.br/"},{"@type":"ListItem","position":2,"name":"Defesa de margem","item":"https://confenge.com.br/defesa-margem-contratos-publicos/"}]}]}</script>
+</head><body>
+<header class="site-header"><nav class="desktop-nav"></nav></header>
+<main id="conteudo">
+<nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Defesa de margem</li></ol></nav>
+</main></body></html>"""
+    updated = sync_text(html, brand, route)
+    trail = breadcrumb_trail(route, current_label="Defesa de margem")
+    assert parse_visible_breadcrumb_trail(updated) == trail
+    assert parse_jsonld_breadcrumb_trail(updated, route) == trail
+    assert trail[1][1] == "/problemas-que-resolvemos/"
+    assert sync_text(updated, brand, route) == updated
 
 
 def test_shipped_home_header_names_a_journey():
