@@ -329,6 +329,18 @@ const frozen360 = read("diagnostico-b2g-360/index.html");
 assert("frozen_360_has_no_offer_price", jsonLdServicesAndOffers(frozen360).offers.every((item) => item.price == null), jsonLdServicesAndOffers(frozen360).offers);
 assert("frozen_360_name", visibleText(frozen360).includes("Diagnóstico da Operação em Obras Públicas"));
 
+const pkg = JSON.parse(read("package.json"));
+assert(
+  "npm_script_registered",
+  pkg.scripts?.["test:public-offer-truth"] === "node tests/commercial/test_public_offer_truth.mjs",
+  pkg.scripts?.["test:public-offer-truth"],
+);
+assert("npm_test_runs_this_gate", /npm run test:public-offer-truth/.test(pkg.scripts?.test || ""), "npm test");
+const workflow = read(".github/workflows/site-ci.yml");
+assert("site_ci_runs_this_gate", workflow.includes("npm run test:public-offer-truth"), "site-ci.yml");
+const graph = read("scripts/site/affected_graph.mjs");
+assert("affected_graph_declares_this_gate", graph.includes('"test:public-offer-truth"'), "affected_graph.mjs");
+
 const failed = results.filter((item) => !item.ok);
 console.log(`public-offer-truth: ${results.length - failed.length}/${results.length} checks passed`);
 if (failed.length) process.exit(1);
