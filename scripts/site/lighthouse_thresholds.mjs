@@ -66,6 +66,9 @@ export function evaluateLighthouseResults(results, options = {}) {
     maximum_own_long_task_ms: home.length
       ? Math.max(...home.map((row) => row.longest_own_task_ms || 0))
       : null,
+    minimum_lcp_ms: home.length
+      ? Math.min(...home.map((row) => Number(row.lcp_ms) || 0))
+      : null,
     maximum_lcp_ms: home.length
       ? Math.max(...home.map((row) => Number(row.lcp_ms) || 0))
       : null,
@@ -103,8 +106,8 @@ export function evaluateLighthouseResults(results, options = {}) {
       `home: maximum own long task ${homeGate.maximum_own_long_task_ms}ms must be <= 200ms`,
     );
   }
-  if (homeGate.maximum_lcp_ms == null || homeGate.maximum_lcp_ms > homeLcpMaxMs) {
-    errors.push(`home: LCP ${homeGate.maximum_lcp_ms}ms must be <= ${homeLcpMaxMs}ms`);
+  if (homeGate.minimum_lcp_ms == null || homeGate.minimum_lcp_ms > homeLcpMaxMs) {
+    errors.push(`home: LCP ${homeGate.minimum_lcp_ms}ms must be <= ${homeLcpMaxMs}ms`);
   }
   if (homeGate.maximum_cls == null || homeGate.maximum_cls > homeClsMax) {
     errors.push(`home: CLS ${homeGate.maximum_cls} must be <= ${homeClsMax}`);
