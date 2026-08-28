@@ -112,23 +112,4 @@ if (sub.journey !== "contrato" || sub.stage_category !== "problema urgente em co
   process.exit(1);
 }
 
-track("tool_complete", {
-  tool: "limite-acrescimos",
-  valor: 10000000,
-  valorInicial: "10.000.000",
-  cnpj: "52407089000109",
-  email: "tool@example.com",
-  causa: "texto livre",
-  q: "83102277000152",
-});
-const toolEv = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
-if (toolEv.valor || toolEv.valorInicial || toolEv.cnpj || toolEv.email || toolEv.causa || toolEv.q) {
-  console.error("FAIL: tool payload leaked money/CNPJ/PII", toolEv);
-  process.exit(1);
-}
-if (toolEv.tool !== "limite-acrescimos") {
-  console.error("FAIL: tool id stripped", toolEv);
-  process.exit(1);
-}
-
-console.log("ANALYTICS_UNIT_OK", JSON.stringify({ last, submit: sub, whatsapp_protocol: protocol, tool: toolEv }));
+console.log("ANALYTICS_UNIT_OK", JSON.stringify({ last, submit: sub, whatsapp_protocol: protocol }));

@@ -111,26 +111,6 @@
   font-size: 0.9rem;
   line-height: 1.5;
 }
-.tool-job,
-.tool-decision {
-  margin: 0.4rem 0 0;
-  max-width: var(--tool-read);
-  color: #314256;
-  line-height: 1.55;
-  font-size: 0.98rem;
-}
-.tool-layers {
-  display: grid;
-  gap: 0.55rem;
-  margin: 1rem 0;
-  min-width: 0;
-}
-.tool-layers p {
-  margin: 0;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  max-width: 100%;
-}
 .tool-hub-situations .tool-disclaimer {
   margin-top: 0.5rem;
   padding-top: 1.1rem;
