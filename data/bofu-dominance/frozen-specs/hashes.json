@@ -1,7 +1,7 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "0f1d922eb6d2840400823b819e48df2f481d4e28",
+  "baseline_commit": "72d9bc8f9305f014505330c9540e69a67e829c1c",
   "recaptured_at": "2026-08-28",
   "recapture_reason": "CFG10X-17: fit economico explicito. diagnostico-pre-licitacao e reequilibrio-obras-publicas recebem um paragrafo de custo, risco, recorrencia e limite derivado da escada publicada; title, H1, canonical e schema permanecem. medicoes-glosas-obras-publicas permanece byte-identical por ser frozen sibling da issue 389. script.js recapturado porque o modulo offer-fit e a qualificacao do formulario foram montados. analytics.js, styles e sitemaps inalterados. Premissas, nao WTP. Recaptura revisada do baseline de hashes.",
   "html_mutation": true,
