@@ -1,19 +1,18 @@
 # Visible parity
 
 - ok: `True`
-- pages: `76`
+- pages: `75`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/web-cfg-293-current/_site`
+- site_root: `/home/tjsasakifln/code/confenge/web-cfg/.worktrees/cfg10x-10-technical-seo/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
 | https://confenge.com.br/ | True | — | Organization,Person | Licitação vencida não paga a conta. Contrato rentável, sim. |
 | https://confenge.com.br/acompanhamento-contratos-obras/ | True | — | Organization,Person,BreadcrumbList | Acompanhamento de contratos de obras públicas: rotina preventiva e recorrente |
 | https://confenge.com.br/aditivos-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Aditivos e serviços extras em obras públicas: documentar, precificar e decidir |
-| https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/ | True | — | Organization,Person,BreadcrumbList,Article; Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo | Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo |
 | https://confenge.com.br/atrasos-prorrogacao-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Atrasos e prorrogações: causa, responsabilidade, caminho crítico e registro contemporâneo |
 | https://confenge.com.br/auditoria-orcamento-licitacao/ | True | — | Organization,Person,BreadcrumbList | Auditoria de orçamento, BDI, SINAPI e preço |
-| https://confenge.com.br/bid-room-licitacoes-obras/ | True | — | Organization,BreadcrumbList,Person | Bid Room |
+| https://confenge.com.br/bid-room-licitacoes-obras/ | True | — | Organization,BreadcrumbList,Person | Operação de Proposta para Licitação Crítica |
 | https://confenge.com.br/casos/ | True | — | Organization,Person,BreadcrumbList | Casos técnicos demonstrativos |
 | https://confenge.com.br/casos/aditivo-art125-demonstrativo/ | True | — | Organization,Person,BreadcrumbList | Aditivo: verificar saldos do art. 125 antes de protocolar |
 | https://confenge.com.br/casos/medicao-glosa-demonstrativo/ | True | — | Organization,Person,BreadcrumbList | Medição glosada: do apontamento ao pedido certo |
@@ -26,12 +25,12 @@
 | https://confenge.com.br/casos/modelo-relatorio-executivo-consolidado/ | True | — | Organization,Person,BreadcrumbList | Decida onde alocar equipe, acervo e caixa nos próximos 90 dias. |
 | https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/ | True | — | Organization,Person,BreadcrumbList | Escolha quais licitações disputar e quais recusar. |
 | https://confenge.com.br/comercial/privacidade-leads/ | True | — |  | Aviso de privacidade - leads e contratação |
-| https://confenge.com.br/comercial/termos-diagnostico-b2g/ | True | — |  | Termos B2B - Diagnóstico B2G de Expansão |
+| https://confenge.com.br/comercial/termos-diagnostico-b2g/ | True | — |  | Termos B2B - Diagnóstico de Expansão no Mercado Público |
 | https://confenge.com.br/conflitos/ | True | — | Organization,Person,BreadcrumbList | Conflitos e interesses comerciais |
 | https://confenge.com.br/conteudos/ | True | — | Organization,Person,BreadcrumbList | Qual problema de licitação ou contrato você precisa resolver? |
 | https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/ | True | — | Organization,Person,Article,BreadcrumbList; Aditivo em empreitada global: quando a construtora tem direito | Aditivo em empreitada global: quando cabe |
 | https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Administração local: custo direto, BDI ou planilha? | Administração local no orçamento: direto, BDI ou planilha? |
-| https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Atraso na medição: como proteger o fluxo de caixa | Atraso na medição: como proteger o caixa |
+| https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Atraso na medição de obra pública: o que fazer | Atraso na medição de obra pública: onde o processo travou? |
 | https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/ | True | — | Organization,Person,Article,BreadcrumbList; Atraso por culpa da Administração: como provar e proteger | Atraso por culpa da Administração: como provar |
 | https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/ | True | — | Organization,Person,Article,BreadcrumbList; Atraso de pagamento: pode suspender a obra pública? | Atraso de pagamento: pode suspender a obra pública? |
 | https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; BDI diferenciado em materiais e equipamentos: quando usar | BDI diferenciado em materiais e equipamentos: quando usar |
@@ -53,11 +52,11 @@
 | https://confenge.com.br/correcoes/ | True | — | Organization,Person,BreadcrumbList | Como contestar e corrigir |
 | https://confenge.com.br/defesa-margem-contratos-publicos/ | True | — | Organization,BreadcrumbList,Person | Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão |
 | https://confenge.com.br/defesa-tecnica-contratos-publicos/ | True | — | Organization,Person,BreadcrumbList | Defesa técnica em contratos públicos: subsídio técnico, não advocacia |
-| https://confenge.com.br/diagnostico-b2g-360/ | True | — | Organization,BreadcrumbList | Diagnóstico B2G 360° |
-| https://confenge.com.br/diagnostico-b2g-expansao/ | True | — | Organization,BreadcrumbList,Person | Diagnóstico B2G de Expansão |
+| https://confenge.com.br/diagnostico-b2g-360/ | True | — | Organization,BreadcrumbList | Diagnóstico da Operação em Obras Públicas |
+| https://confenge.com.br/diagnostico-b2g-expansao/ | True | — | Organization,BreadcrumbList,Person | Diagnóstico de Expansão no Mercado Público |
 | https://confenge.com.br/diagnostico-pre-licitacao/ | True | — | Organization,Person,BreadcrumbList | Diagnóstico pré-licitação para obras públicas |
-| https://confenge.com.br/diretoria-b2g/ | True | — | Organization,Person,BreadcrumbList | Diretoria B2G fracionada |
-| https://confenge.com.br/entregas/ | True | — | Organization,BreadcrumbList | Oito entregas, lado a lado, antes de contratar. |
+| https://confenge.com.br/diretoria-b2g/ | True | — | Organization,Person,BreadcrumbList | Diretoria Fracionada para o Mercado Público |
+| https://confenge.com.br/entregas/ | True | — | Organization,BreadcrumbList | Encontre, entre 54 entregas, a decisão que cabe agora. |
 | https://confenge.com.br/especialista/tiago-jun-sasaki/ | True | — | Organization,Person,BreadcrumbList | Engº Tiago Sasaki |
 | https://confenge.com.br/ferramentas/ | True | — |  | O que você precisa resolver agora? |
 | https://confenge.com.br/ferramentas/checklist-reequilibrio/ | True | — | Organization | Checklist de documentação para reequilíbrio |

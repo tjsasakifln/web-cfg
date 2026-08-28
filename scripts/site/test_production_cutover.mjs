@@ -323,8 +323,8 @@ ok(
   `status=${serv.status} loc=${loc}`
 );
 ok(
-  "servicos_target_fragment",
-  /como-atuamos/.test(loc) || /como-atuamos/.test(serv.body),
+  "servicos_target_hub",
+  /servicos-obras-publicas/.test(loc),
   `loc=${loc}`
 );
 ok("fragment_como_atuamos", home.body.includes('id="como-atuamos"'), "missing id");

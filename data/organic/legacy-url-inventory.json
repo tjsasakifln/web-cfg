@@ -96,8 +96,8 @@
       "legacy_url": "https://confenge.com.br/servicos",
       "status": "301_redirect",
       "current_action": "301",
-      "destination": "/#como-atuamos",
-      "canonical": "https://confenge.com.br/",
+      "destination": "/servicos-obras-publicas/",
+      "canonical": "https://confenge.com.br/servicos-obras-publicas/",
       "sitemap_membership": false,
       "action": "keep_301"
     },

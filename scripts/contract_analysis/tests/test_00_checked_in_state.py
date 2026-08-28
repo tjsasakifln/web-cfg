@@ -72,9 +72,10 @@ def test_checked_in_canary_matches_current_approval_decision() -> None:
     )
 
     assert sitemap_exists is decision.indexable
-    # The previously indexable canary must stay crawlable while noindex is
-    # being observed. Blocking it in robots.txt would prevent deindexation.
-    assert robots_allows is True
+    # robots, X-Robots-Tag, sitemap and canonical are one decision. A noindex
+    # family is Disallow'd; recrawl of a previously indexed URL is a GSC
+    # manifesto action, not a robots Allow vs header noindex split.
+    assert robots_allows is decision.indexable
     assert header_override is decision.indexable
     if sitemap_exists:
         assert slug in (ROOT / "sitemap-analises-contratos.xml").read_text(

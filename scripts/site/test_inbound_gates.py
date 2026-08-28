@@ -1171,6 +1171,25 @@ def test_public_scan_fails_closed_when_the_walk_collapses():
             ig.ROOT = real_root
 
 
+def test_featured_link_to_noindex_is_empty_on_shipped_indexable_pages():
+    from scripts.site.inbound_gates import _featured_noindex_from_indexable
+
+    findings = _featured_noindex_from_indexable()
+    assert findings == [], [f"{f.path}:{f.excerpt}" for f in findings]
+
+
+def test_parameterized_internal_hrefs_only_documented_exceptions():
+    from pathlib import Path
+
+    from scripts.organic.canonical_hrefs import scan_public_parameterized_hrefs
+
+    hits = scan_public_parameterized_hrefs(Path(__file__).resolve().parents[2])
+    open_hits = [h for h in hits if not h.get("exception")]
+    assert open_hits == [], open_hits
+    allowed = {h["exception"] for h in hits}
+    assert allowed <= {"frozen_html", "hash_bound_render"}
+
+
 if __name__ == "__main__":
     # simple runner
     failed = 0

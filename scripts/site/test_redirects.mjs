@@ -117,8 +117,20 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
   ok(failures, "redirects_file_nonempty", rules.length >= 5, `count=${rules.length}`);
 
   const byFrom = Object.fromEntries(rules.map((r) => [r.from, r]));
-  ok(failures, "servicos_rule", byFrom["/servicos"]?.to?.includes("como-atuamos"), JSON.stringify(byFrom["/servicos"]));
+  ok(
+    failures,
+    "servicos_rule",
+    byFrom["/servicos"]?.to === "/servicos-obras-publicas/" || byFrom["/servicos"]?.to === "/servicos-obras-publicas",
+    JSON.stringify(byFrom["/servicos"])
+  );
   ok(failures, "servicos_301", byFrom["/servicos"]?.status === "301", byFrom["/servicos"]?.status);
+  ok(
+    failures,
+    "servicos_html_rule",
+    byFrom["/servicos.html"]?.to === "/servicos-obras-publicas/" || byFrom["/servicos.html"]?.to === "/servicos-obras-publicas",
+    JSON.stringify(byFrom["/servicos.html"])
+  );
+  ok(failures, "servicos_html_301", byFrom["/servicos.html"]?.status === "301", byFrom["/servicos.html"]?.status);
   ok(failures, "vision_410", byFrom["/vision"]?.status === "410", JSON.stringify(byFrom["/vision"]));
   ok(failures, "nexgen_410", byFrom["/nexgen"]?.status === "410", JSON.stringify(byFrom["/nexgen"]));
   ok(failures, "avcbclcb_410", byFrom["/avcbclcb"]?.status === "410", JSON.stringify(byFrom["/avcbclcb"]));
@@ -158,6 +170,27 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
       failures.push(`loop_rule: ${r.raw}`);
       log.error("FAIL loop_rule", r.raw);
     }
+  }
+
+  const hopTarget = (to) => (to || "").split("#")[0].replace(/\/$/, "") || "/";
+  const redirectSources = new Set(rules.map((r) => r.from.replace(/\/$/, "") || "/"));
+  for (const r of rules) {
+    if (!["301", "302", "308"].includes(r.status)) continue;
+    const dest = hopTarget(r.to);
+    if (dest.startsWith("http")) continue;
+    if (redirectSources.has(dest) && dest !== (r.from.replace(/\/$/, "") || "/")) {
+      failures.push(`redirect_chain: ${r.from} → ${r.to} is also a redirect source`);
+      log.error("FAIL redirect_chain", r.raw);
+    }
+  }
+  for (const abandoned of ["/nexgen", "/vision"]) {
+    const r = byFrom[abandoned];
+    ok(
+      failures,
+      `abandoned_not_301_home:${abandoned}`,
+      r?.status === "410",
+      JSON.stringify(r)
+    );
   }
 
   for (const src of sources) {
@@ -225,7 +258,7 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
     log.log("SKIP live probes (no base URL)");
   } else {
     const probes = [
-      { path: "/servicos", expectStatus: [301, 302, 308], locIncludes: "como-atuamos" },
+      { path: "/servicos", expectStatus: [301, 302, 308], locIncludes: "servicos-obras-publicas" },
       { path: "/vision", expectStatus: [410] },
       { path: "/nexgen", expectStatus: [410] },
       { path: "/avcbclcb", expectStatus: [410] },

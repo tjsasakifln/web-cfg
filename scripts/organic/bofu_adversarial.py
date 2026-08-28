@@ -529,17 +529,22 @@ def audit_preferred_destinations(matrix: dict[str, Any], root: Path) -> list[dic
                     )
                 )
             if html_has_commercial_bridge(html):
-                for href in re.findall(
-                    r'data-cta-position=["\']organic_bridge["\'][^>]*href=["\']([^"\']+)["\']'
-                    r'|href=["\']([^"\']+)["\'][^>]*data-cta-position=["\']organic_bridge["\']',
+                for tag in re.findall(
+                    r'<a\b[^>]*data-cta-position=["\']organic_bridge["\'][^>]*>',
+                    html,
+                    re.I,
+                ) + re.findall(
+                    r'<a\b[^>]*href=["\'][^"\']+["\'][^>]*data-cta-position=["\']organic_bridge["\'][^>]*>',
                     html,
                     re.I,
                 ):
-                    raw = href[0] or href[1]
+                    href_m = re.search(r'href=["\']([^"\']+)["\']', tag, re.I)
+                    raw = href_m.group(1) if href_m else ""
                     qs = parse_qs(urlparse(raw).query)
-                    if "origem" not in qs:
+                    has_data = re.search(r'data-origem=["\'][^"\']+["\']', tag, re.I)
+                    if "origem" not in qs and not has_data:
                         findings.append(
-                            _finding("CTA_DROPS_ATTRIBUTION", support, raw)
+                            _finding("CTA_DROPS_ATTRIBUTION", support, raw or tag[:120])
                         )
         # exactly one preferred
         if not preferred:

@@ -221,14 +221,19 @@ def test_recapture_provenance_snapshot_matches_baseline_bytes_with_or_without_gi
         check=False,
     )
     for rel, expected in payload["forbidden"].items():
+        live = (ROOT / rel).read_bytes()
+        assert hashlib.sha256(live).hexdigest() == expected, rel
+        # Frozen pillar HTML stays anchored to the freeze commit. Collateral
+        # (robots, redirects, assembled script.js) may be recaptured to live
+        # bytes while html_mutation remains false.
+        if not rel.endswith("/index.html"):
+            continue
         if git_commit.returncode == 0:
             content = subprocess.check_output(
                 ["git", "-C", str(ROOT), "show", f"{commit}:{rel}"]
             )
         else:
-            # Source archives intentionally have no object database. The
-            # hash-pinned snapshot remains independently verifiable there.
-            content = (ROOT / rel).read_bytes()
+            content = live
         assert hashlib.sha256(content).hexdigest() == expected, rel
 
 

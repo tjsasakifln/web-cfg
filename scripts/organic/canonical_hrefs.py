@@ -1,0 +1,296 @@
+"""Canonical internal hrefs: attribution lives on data-* / session, not query strings.
+
+Public HTML must emit a clean canonical path. Query keys that used to ride on
+internal `href`s (origem, tema, jornada, pSEO context) become `data-*` attributes
+so `pickAttribution` / sessionStorage still see them. External `wa.me?text=` and
+`mailto:?subject=` are not internal.
+
+Frozen BOFU pillar HTML (#291, until 2026-09-16) is not rewritten here. Those
+files are a documented, tested exception in the parameterized-href gate.
+"""
+
+from __future__ import annotations
+
+import re
+from html import unescape
+from pathlib import Path
+from typing import Any
+from urllib.parse import parse_qsl, unquote, urlparse
+
+SITE_HOSTS = frozenset({"confenge.com.br", "www.confenge.com.br"})
+
+# Query key → HTML data-* attribute. Unknown attribution keys become data-{key}.
+QUERY_TO_DATA = {
+    "tema": "data-tema",
+    "origem": "data-origem",
+    "jornada": "data-journey",
+    "pseo_page_id": "data-pseo-page-id",
+    "page_type": "data-page-type",
+    "segment_key": "data-segment-key",
+    "segment": "data-segment",
+    "region": "data-region",
+    "agency_id": "data-agency-id",
+    "intent": "data-intent",
+    "origin_url": "data-origin-url",
+    "landing_url": "data-landing-url",
+    "route_family": "data-route-family",
+    "cta_id": "data-cta-id",
+    "asset_id": "data-asset-id",
+    "correlation_id": "data-correlation-id",
+    "referrer": "data-referrer",
+    "utm_source": "data-utm-source",
+    "utm_medium": "data-utm-medium",
+    "utm_campaign": "data-utm-campaign",
+    "utm_content": "data-utm-content",
+    "utm_term": "data-utm-term",
+    "analysis_id": "data-analysis-id",
+    "evidence_pack_version": "data-evidence-pack-version",
+    "asset_family": "data-asset-family",
+    "query_class": "data-query-class",
+    "cta_position": "data-cta-position",
+    "snap": "data-snap",
+    "archetype": "data-segment-key",
+}
+
+# #291 freeze: HTML mutation of these six pillars is not authorized until 2026-09-16.
+FROZEN_HTML_REL = frozenset(
+    {
+        "aditivos-obras-publicas/index.html",
+        "medicoes-glosas-obras-publicas/index.html",
+        "reequilibrio-obras-publicas/index.html",
+        "auditoria-orcamento-licitacao/index.html",
+        "diagnostico-b2g-360/index.html",
+        "diagnostico-pre-licitacao/index.html",
+    }
+)
+
+# Hash-bound contract-analysis family: rewrite via scripts.contract_analysis.render, not bulk HTML.
+HASH_BOUND_PREFIXES = (
+    "analises-contratos-publicos/",
+)
+
+_A_OPEN = re.compile(r"<a\b([^>]*?)>", re.I)
+_HREF = re.compile(r"""\bhref\s*=\s*(['"])(.*?)\1""", re.I | re.S)
+_ATTR = re.compile(r"""([^\s=]+)(?:\s*=\s*(['"])(.*?)\2)?""", re.I | re.S)
+
+
+def _esc_attr(value: str) -> str:
+    return (
+        value.replace("&", "&amp;")
+        .replace('"', "&quot;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+
+
+def is_external_href(href: str) -> bool:
+    raw = (href or "").strip()
+    if not raw:
+        return False
+    lower = raw.lower()
+    if lower.startswith(("mailto:", "tel:", "javascript:", "data:")):
+        return True
+    if lower.startswith("//"):
+        raw = "https:" + raw
+    if lower.startswith(("http://", "https://")):
+        host = (urlparse(raw).hostname or "").lower()
+        return host not in SITE_HOSTS
+    return False
+
+
+def _data_attr_for_query(key: str) -> str:
+    mapped = QUERY_TO_DATA.get(key)
+    if mapped:
+        return mapped
+    slug = re.sub(r"[^a-z0-9]+", "-", key.lower()).strip("-")
+    return f"data-{slug}" if slug else "data-attr"
+
+
+def canonicalize_href(href: str) -> tuple[str, dict[str, str]]:
+    """Return (clean href, data-* attrs to add). External hrefs are unchanged."""
+    raw = unescape((href or "").strip())
+    if not raw or is_external_href(raw):
+        return raw, {}
+    if raw.startswith("#") and "?" not in raw:
+        return raw, {}
+
+    path = ""
+    query = ""
+    fragment = ""
+    if raw.startswith("#"):
+        rest = raw[1:]
+        if "?" in rest:
+            fragment, query = rest.split("?", 1)
+        else:
+            fragment = rest
+    else:
+        parsed = urlparse(raw)
+        path = parsed.path or "/"
+        query = parsed.query
+        fragment = parsed.fragment
+        if fragment and "?" in fragment:
+            fragment, extra = fragment.split("?", 1)
+            query = f"{query}&{extra}" if query else extra
+
+    if "?" not in raw and not query:
+        return raw, {}
+
+    attrs: dict[str, str] = {}
+    for key, value in parse_qsl(query, keep_blank_values=True):
+        attr = _data_attr_for_query(key)
+        if value:
+            attrs[attr] = unquote(value)
+
+    if path in {"", "/"} and fragment:
+        clean = f"/#{fragment}"
+    elif path == "/" and not fragment:
+        clean = "/"
+    else:
+        clean = path or "/"
+        if fragment:
+            clean = f"{clean}#{fragment}"
+    return clean, attrs
+
+
+def _existing_attr_names(inner: str) -> set[str]:
+    names: set[str] = set()
+    for match in _ATTR.finditer(inner):
+        names.add(match.group(1).lower())
+    return names
+
+
+def rewrite_open_anchor(tag: str) -> str:
+    """Rewrite one `<a ...>` open tag. Leaves non-anchors and externals alone."""
+    if not tag.lower().startswith("<a"):
+        return tag
+    href_m = _HREF.search(tag)
+    if not href_m:
+        return tag
+    original = href_m.group(2)
+    clean, attrs = canonicalize_href(original)
+    if clean == unescape(original) and not attrs:
+        return tag
+    quote = href_m.group(1)
+    new_href = _esc_attr(clean)
+    rewritten = tag[: href_m.start(2)] + new_href + tag[href_m.end(2) :]
+    inner_start = rewritten.find(" ")
+    inner = rewritten[inner_start:-1] if inner_start != -1 else ""
+    existing = _existing_attr_names(inner)
+    extras = ""
+    for name, value in attrs.items():
+        if name.lower() in existing:
+            continue
+        extras += f" {name}={quote}{_esc_attr(value)}{quote}"
+        existing.add(name.lower())
+    if extras:
+        rewritten = rewritten[:-1] + extras + ">"
+    return rewritten
+
+
+def rewrite_html(html: str) -> str:
+    return _A_OPEN.sub(lambda m: rewrite_open_anchor(m.group(0)), html)
+
+
+def parameterized_internal_hrefs(html: str) -> list[str]:
+    """Internal href values that still carry a query string."""
+    found: list[str] = []
+    for match in _HREF.finditer(html or ""):
+        href = unescape(match.group(2).strip())
+        if not href or is_external_href(href):
+            continue
+        path_part = href.split("#")[0]
+        frag = href.split("#", 1)[1] if "#" in href else ""
+        if "?" in path_part or "?" in frag:
+            found.append(href)
+    return found
+
+
+def is_frozen_html_rel(rel: str) -> bool:
+    return rel.replace("\\", "/") in FROZEN_HTML_REL
+
+
+def is_hash_bound_rel(rel: str) -> bool:
+    normalized = rel.replace("\\", "/")
+    return any(normalized.startswith(prefix) for prefix in HASH_BOUND_PREFIXES)
+
+
+def scan_public_parameterized_hrefs(
+    root: Path,
+    *,
+    html_files: list[Path] | None = None,
+) -> list[dict[str, Any]]:
+    """Scan public HTML. Frozen #291 pillars are reported with `exception=frozen_html`."""
+    hits: list[dict[str, Any]] = []
+    files = html_files if html_files is not None else list(_iter_public_html(root))
+    for path in files:
+        try:
+            rel = path.relative_to(root).as_posix()
+        except ValueError:
+            rel = path.as_posix()
+        html = path.read_text(encoding="utf-8", errors="replace")
+        hrefs = parameterized_internal_hrefs(html)
+        if not hrefs:
+            continue
+        exception = None
+        if is_frozen_html_rel(rel):
+            exception = "frozen_html"
+        elif is_hash_bound_rel(rel):
+            exception = "hash_bound_render"
+        for href in hrefs:
+            hits.append({"path": rel, "href": href, "exception": exception})
+    return hits
+
+
+def _iter_public_html(root: Path) -> list[Path]:
+    skip = {
+        ".git",
+        ".claude",
+        ".worktrees",
+        ".netlify",
+        ".cache",
+        "_site",
+        "data",
+        "docs",
+        "netlify",
+        "node_modules",
+        "scripts",
+        "seo",
+        "tests",
+    }
+    out: list[Path] = []
+    for page in root.rglob("*.html"):
+        try:
+            rel = page.relative_to(root)
+        except ValueError:
+            continue
+        if any(part in skip for part in rel.parts):
+            continue
+        out.append(page)
+    return out
+
+
+def rewrite_public_html(
+    root: Path,
+    *,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Rewrite non-frozen public HTML. Returns counts; does not touch #291 pillars."""
+    changed: list[str] = []
+    skipped_frozen: list[str] = []
+    for path in _iter_public_html(root):
+        rel = path.relative_to(root).as_posix()
+        if is_frozen_html_rel(rel) or is_hash_bound_rel(rel):
+            skipped_frozen.append(rel)
+            continue
+        original = path.read_text(encoding="utf-8")
+        rewritten = rewrite_html(original)
+        if rewritten == original:
+            continue
+        if not dry_run:
+            path.write_text(rewritten, encoding="utf-8")
+        changed.append(rel)
+    return {
+        "changed": changed,
+        "skipped_frozen": skipped_frozen,
+        "dry_run": dry_run,
+    }

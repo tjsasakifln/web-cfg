@@ -431,7 +431,7 @@ def test_withdraw_rebuild_noindex_no_ghost_loc(tmp_path, monkeypatch):
     sync_family_crawler_rules([(rec, rolled)], root=tmp_path)
     robots_after = robots.read_text(encoding="utf-8")
     headers_after = headers.read_text(encoding="utf-8")
-    assert f"Allow: /analises-contratos-publicos/{rec['slug']}/" in robots_after
+    assert f"Allow: /analises-contratos-publicos/{rec['slug']}/" not in robots_after
     assert "X-Robots-Tag: index, follow" not in headers_after
     if family_map.exists():
         assert rec["slug"] not in family_map.read_text(encoding="utf-8")

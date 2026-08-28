@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 76,
+  "page_count": 75,
   "pages": [
     {
       "claimed": {
@@ -166,82 +166,6 @@
     },
     {
       "claimed": {
-        "authors": [
-          "Engº Tiago Sasaki"
-        ],
-        "breadcrumbs": [
-          "Início",
-          "Análise técnica de contrato público",
-          "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo"
-        ],
-        "dataset_names": [],
-        "dates": [
-          "2026-08-18",
-          "2026-08-20"
-        ],
-        "descriptions": [
-          "O contrato público PNCP 14862788000150-2-000069/2026 publica pavimentação em paralelepípedo de 4.710,00 m² no município de São Gonçalo do Piauí – PI, valor global 719177.48 BRL e vigência 2026-07-08 a 2027-07-08. A unidade listada no JSON oficial traz município Teresina. São duas strings publicadas; esta análise não reconcilia qual descreve a execução.\n\nO PDF oficial (SHA-256 64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604), páginas 14–15, não trata o reajuste como aniversário da vigência. A cláusula 12.1 fixa preços por um ano contado da data do orçamento estimado. A cláusula 12.2 autoriza reajuste após o interregno de um ano contado da data do orçamento a que a proposta se referir, com fórmula Io/I pro rata dia. A cláusula 12.3 nomeia o Índice Nacional da Construção Civil – Coluna 35, FGV, revista Conjuntura Econômica, salvo indicação diversa na Parte Específica. A página 46 marca 12.3 com (x) no mesmo índice.\n\nA divisão 719177.48 / 4710.00 = 152.6916 BRL/m² é apenas valor global publicado ÷ área publicada no objeto. Não é custo completo, preço de referência, SINAPI/SICRO, custo/km nem prova de economicidade.\n\nEsta página é ANÁLISE TÉCNICA DE CONTRATO PÚBLICO. Não é um caso CONFENGE. Não implica relação comercial da CONFENGE com o órgão ou o contratado. publication_authorization=false e index_authorization=false permanecem falsos."
-        ],
-        "downloads": [],
-        "has_dataset_type": false,
-        "has_false_case_type": false,
-        "headlines": [
-          "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo"
-        ],
-        "licenses": [],
-        "organizations": [
-          "CONFENGE"
-        ],
-        "people": [
-          "Engº Tiago Sasaki",
-          "Revisão editorial/técnica do responsável técnico, em engenharia e gestão contratual; revisão jurídica externa ausente"
-        ],
-        "reviewers": [
-          "Revisão editorial/técnica do responsável técnico, em engenharia e gestão contratual; revisão jurídica externa ausente"
-        ],
-        "types": [
-          "Organization",
-          "Person",
-          "BreadcrumbList",
-          "Article"
-        ],
-        "versions": []
-      },
-      "defects": [],
-      "fixture_only": false,
-      "index_intent": true,
-      "ok": true,
-      "url": "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
-      "visible": {
-        "authors": [
-          "Engº Tiago Sasaki"
-        ],
-        "breadcrumb_names": [
-          "Início",
-          "Análise técnica de contrato público",
-          "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo"
-        ],
-        "canonical": "https://confenge.com.br/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
-        "dates": [
-          "2026-07-08",
-          "2026-08-18",
-          "2026-08-20",
-          "2027-07-08"
-        ],
-        "description": "O instrumento oficial separa vigência, orçamento estimado e orçamento da proposta. A listagem não publica as duas datas de orçamento. Não é caso CONFENGE.",
-        "h1": "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo",
-        "has_dataset_surface": false,
-        "licenses": [],
-        "permission_class": null,
-        "reviewers": [
-          "Revisão editorial/técnica do responsável técnico, em engenharia e gestão contratual; revisão jurídica externa ausente"
-        ],
-        "title": "Três relógios de reajuste no mesmo instrumento de pavimentação em paralelepípedo | CONFENGE",
-        "versions": []
-      }
-    },
-    {
-      "claimed": {
         "authors": [],
         "breadcrumbs": [
           "Início",
@@ -286,11 +210,13 @@
         "dates": [
           "2026-08-15"
         ],
-        "description": "Causa, responsabilidade, caminho crítico e registro contemporâneo de atraso, paralisação e prorrogação em obra pública. Não é o artigo de chuva nem o dossiê de defesa de margem.",
+        "description": "Causa, nexo, caminho crítico e registro contemporâneo de atraso e prorrogação em obra pública. Distinto do artigo de chuva e da defesa de margem.",
         "h1": "Atrasos e prorrogações: causa, responsabilidade, caminho crítico e registro contemporâneo",
         "has_dataset_surface": false,
-        "licenses": [],
-        "permission_class": null,
+        "licenses": [
+          "license-token-visible"
+        ],
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Atrasos e prorrogações em obras públicas: causa, responsabilidade, caminho crítico e registro contemporâneo | CONFENGE",
         "versions": []
@@ -359,7 +285,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Bid Room"
+          "Operação de Proposta para Licitação Crítica"
         ],
         "dataset_names": [],
         "dates": [],
@@ -394,19 +320,19 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Bid Room"
+          "Operação de Proposta para Licitação Crítica"
         ],
         "canonical": "https://confenge.com.br/bid-room-licitacoes-obras/",
         "dates": [
           "2026-08-19"
         ],
         "description": "Coordenação de propostas para licitações de obras: leitura do edital, habilitação, acervo, orçamento, cronograma e revisão crítica antes do envio.",
-        "h1": "Bid Room",
+        "h1": "Operação de Proposta para Licitação Crítica",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Bid Room: operação recorrente de propostas em obras | CONFENGE",
+        "title": "Operação de Proposta para Licitação Crítica | CONFENGE",
         "versions": []
       }
     },
@@ -634,7 +560,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Apresentação Executiva de Resultados | Modelo CONFENGE",
+        "title": "Síntese Executiva de Expansão | Modelo CONFENGE",
         "versions": []
       }
     },
@@ -690,7 +616,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Base Quantitativa Canônica | Modelo CONFENGE",
+        "title": "Base de Mercado para Expansão | Modelo CONFENGE",
         "versions": []
       }
     },
@@ -748,7 +674,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Contratos Vincendos e Recontratação | Modelo CONFENGE",
+        "title": "Radar de Contratos Próximos da Renovação | Modelo CONFENGE",
         "versions": []
       }
     },
@@ -804,7 +730,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Mapa de Compradores Públicos | Modelo CONFENGE",
+        "title": "Mapa de Órgãos com Maior Potencial | Modelo CONFENGE",
         "versions": []
       }
     },
@@ -860,7 +786,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Mapeamento de Concorrentes | Modelo CONFENGE",
+        "title": "Mapa de Concorrentes Relevantes | Modelo CONFENGE",
         "versions": []
       }
     },
@@ -916,7 +842,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Painel de Preços de Obras Públicas | Modelo CONFENGE",
+        "title": "Referências de Preços de Obras Públicas | Modelo CONFENGE",
         "versions": []
       }
     },
@@ -974,7 +900,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Relatório Executivo Consolidado | Modelo CONFENGE",
+        "title": "Plano Executivo de Expansão | Modelo CONFENGE",
         "versions": []
       }
     },
@@ -984,7 +910,7 @@
         "breadcrumbs": [
           "Início",
           "Entregas",
-          "Relatório Executivo de Priorização de Licitações"
+          "Radar de Licitações Prioritárias"
         ],
         "dataset_names": [],
         "dates": [],
@@ -1018,13 +944,13 @@
         "breadcrumb_names": [
           "Início",
           "Entregas",
-          "Relatório Executivo de Priorização de Licitações"
+          "Radar de Licitações Prioritárias"
         ],
         "canonical": "https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/",
         "dates": [
           "2026-08-23"
         ],
-        "description": "Veja como a CONFENGE transforma editais e a realidade da construtora em decisões de participar, condicionar ou recusar. Modelo integral; relatório adaptado por R$ 599.",
+        "description": "Como a CONFENGE transforma editais e a realidade da construtora em participar, condicionar ou recusar. Modelo integral; relatório adaptado por R$ 599.",
         "h1": "Escolha quais licitações disputar e quais recusar.",
         "has_dataset_surface": false,
         "licenses": [],
@@ -1100,8 +1026,8 @@
         "breadcrumb_names": [],
         "canonical": "https://confenge.com.br/comercial/termos-diagnostico-b2g/",
         "dates": [],
-        "description": "Termos B2B do Diagnóstico B2G de Expansão da CONFENGE. R$ 8.000, pagamento único. Obrigação de meio. Não é serviço jurídico.",
-        "h1": "Termos B2B - Diagnóstico B2G de Expansão",
+        "description": "Termos B2B do Diagnóstico de Expansão no Mercado Público da CONFENGE. R$ 8.000, pagamento único. Obrigação de meio. Não é serviço jurídico.",
+        "h1": "Termos B2B - Diagnóstico de Expansão no Mercado Público",
         "has_dataset_surface": true,
         "licenses": [],
         "permission_class": "confidential",
@@ -1367,21 +1293,21 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "Atraso na medição da obra pública: como proteger o fluxo de caixa"
+          "Atraso na medição de obra pública"
         ],
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-25"
         ],
         "descriptions": [
-          "Atraso na medição: como proteger o fluxo de caixa: critérios técnicos, documentos e riscos para a construtora. Análise CONFENGE."
+          "Como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir processamento da medição, glosa e pagamento."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Atraso na medição: como proteger o fluxo de caixa"
+          "Atraso na medição de obra pública: o que fazer"
         ],
         "licenses": [],
         "organizations": [
@@ -1413,20 +1339,20 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "Atraso na medição da obra pública: como proteger o fluxo de caixa"
+          "Atraso na medição de obra pública"
         ],
         "canonical": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-25"
         ],
-        "description": "Atraso na medição de obra pública: como protocolar, tratar glosa e proteger o fluxo de caixa do serviço já executado.",
-        "h1": "Atraso na medição: como proteger o caixa",
+        "description": "A medição da obra pública atrasou? Veja como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir medição com pagamento.",
+        "h1": "Atraso na medição de obra pública: onde o processo travou?",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Atraso na medição: como proteger o caixa | CONFENGE",
+        "title": "Atraso na medição de obra pública: o que fazer | CONFENGE",
         "versions": []
       }
     },
@@ -1916,7 +1842,7 @@
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Empreitada global ou unitária: qual regime é mais arriscado? | CONFENGE",
+        "title": "Empreitada global ou unitária: o risco do regime | CONFENGE",
         "versions": []
       }
     },
@@ -2075,7 +2001,7 @@
           "2026-08-18"
         ],
         "descriptions": [
-          "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo e supressão, alteração quantitativa ou qualitativa e por que o caso concreto precisa ser analisado."
+          "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo, supressão e a diferença entre alteração quantitativa e qualitativa."
         ],
         "downloads": [],
         "has_dataset_type": false,
@@ -2121,7 +2047,7 @@
           "2026-08-17",
           "2026-08-18"
         ],
-        "description": "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo e supressão, alteração quantitativa ou qualitativa e por que o caso concreto precisa ser analisado.",
+        "description": "Limite de 25% e 50% no aditivo de obra pública: base de cálculo, acréscimo, supressão e a diferença entre alteração quantitativa e qualitativa.",
         "h1": "Limite de aditivo 25% e 50% em obra pública: o que conta",
         "has_dataset_surface": false,
         "licenses": [],
@@ -2477,7 +2403,7 @@
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
+        "title": "Prorrogação de prazo em obra pública: documentos | CONFENGE",
         "versions": []
       }
     },
@@ -2547,7 +2473,7 @@
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Notificação de atraso em obra pública: resposta técnica passo a passo | CONFENGE",
+        "title": "Notificação de atraso em obra pública: resposta técnica | CONFENGE",
         "versions": []
       }
     },
@@ -2798,7 +2724,7 @@
         "h1": "Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Proteção de margem em contratos públicos: detecção, documentação, cálculo e decisão | CONFENGE",
         "versions": []
@@ -2854,7 +2780,7 @@
         "h1": "Defesa técnica em contratos públicos: subsídio técnico, não advocacia",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Defesa técnica em contratos públicos: subsídio técnico, não advocacia | CONFENGE",
         "versions": []
@@ -2865,7 +2791,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Diagnóstico B2G 360°"
+          "Diagnóstico da Operação em Obras Públicas"
         ],
         "dataset_names": [],
         "dates": [],
@@ -2897,19 +2823,19 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Diagnóstico B2G 360°"
+          "Diagnóstico da Operação em Obras Públicas"
         ],
         "canonical": "https://confenge.com.br/diagnostico-b2g-360/",
         "dates": [
           "2026-08-01"
         ],
         "description": "Mapeie capacidade, mercado, acervo, carteira de oportunidades e riscos da operação B2G. Plano executivo de 90 dias para prioridades e backlog de implantação.",
-        "h1": "Diagnóstico B2G 360°",
+        "h1": "Diagnóstico da Operação em Obras Públicas",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Diagnóstico B2G 360° | CONFENGE",
+        "title": "Diagnóstico da Operação em Obras Públicas | CONFENGE",
         "versions": []
       }
     },
@@ -2918,7 +2844,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Diagnóstico B2G de Expansão"
+          "Diagnóstico de Expansão no Mercado Público"
         ],
         "dataset_names": [],
         "dates": [],
@@ -2953,7 +2879,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Diagnóstico B2G de Expansão"
+          "Diagnóstico de Expansão no Mercado Público"
         ],
         "canonical": "https://confenge.com.br/diagnostico-b2g-expansao/",
         "dates": [
@@ -2962,12 +2888,12 @@
           "2026-08-22"
         ],
         "description": "Diagnóstico B2G pontual por R$ 8.000: mapa de compradores, até 15 concorrentes, painel de preços públicos e recomendações para decidir onde crescer.",
-        "h1": "Diagnóstico B2G de Expansão",
+        "h1": "Diagnóstico de Expansão no Mercado Público",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Diagnóstico B2G de Expansão - R$ 8.000 | CONFENGE",
+        "title": "Diagnóstico de Expansão no Mercado Público - R$ 8.000 | CONFENGE",
         "versions": []
       }
     },
@@ -3034,7 +2960,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Diretoria B2G fracionada"
+          "Diretoria Fracionada para o Mercado Público"
         ],
         "dataset_names": [],
         "dates": [],
@@ -3069,20 +2995,20 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Diretoria B2G fracionada"
+          "Diretoria Fracionada para o Mercado Público"
         ],
         "canonical": "https://confenge.com.br/diretoria-b2g/",
         "dates": [
           "2026-08-17",
           "2026-08-19"
         ],
-        "description": "Direção semanal para construtoras com licitações e contratos públicos: até quatro propostas aceitas e um contrato ativo, com prioridades, responsáveis e decisões registradas.",
-        "h1": "Diretoria B2G fracionada",
+        "description": "Direção semanal para construtoras no mercado público: até quatro propostas e um contrato ativo, com prioridades, responsáveis e decisões registradas.",
+        "h1": "Diretoria Fracionada para o Mercado Público",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Diretoria B2G fracionada | Rotina de licitações e contratos | CONFENGE",
+        "title": "Diretoria Fracionada para o mercado público | CONFENGE",
         "versions": []
       }
     },
@@ -3127,10 +3053,12 @@
         "dates": [
           "2026-08-23"
         ],
-        "description": "Compare as oito entregas da CONFENGE: preço de R$ 599 a R$ 3.750, a pergunta que cada uma responde e como sete delas formam o Diagnóstico B2G de Expansão de R$ 8.000.",
-        "h1": "Oito entregas, lado a lado, antes de contratar.",
+        "description": "Oito entregas comparáveis da CONFENGE: de R$ 599 a R$ 3.750, a pergunta de cada uma e o encaixe no Diagnóstico de Expansão de R$ 8.000.",
+        "h1": "Encontre, entre 54 entregas, a decisão que cabe agora.",
         "has_dataset_surface": false,
-        "licenses": [],
+        "licenses": [
+          "license-token-visible"
+        ],
         "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Entregas da CONFENGE | Compare as oito antes de contratar",
@@ -4147,7 +4075,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Problemas que resolvemos em licitações e contratos de obras"
+          "Problemas que resolvemos"
         ],
         "dataset_names": [],
         "dates": [],
@@ -4176,7 +4104,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Problemas que resolvemos em licitações e contratos de obras"
+          "Problemas que resolvemos"
         ],
         "canonical": "https://confenge.com.br/problemas-que-resolvemos/",
         "dates": [],
@@ -4240,7 +4168,7 @@
           "2026-07-30",
           "2026-08-03"
         ],
-        "description": "Metodologia e recorte aberto do Radar CONFENGE: demanda orgânica verificada, limitações e linha de análise de contratos públicos para construtoras. Sem estatística inventada.",
+        "description": "Metodologia e recorte do Radar CONFENGE: demanda verificada, limitações e linha de análise de contratos públicos. Sem estatística inventada.",
         "h1": "Radar Nacional de Obras Públicas e Margem Contratual",
         "has_dataset_surface": true,
         "licenses": [
@@ -4316,7 +4244,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Serviços para licitações e contratos de obras públicas"
+          "Serviços"
         ],
         "dataset_names": [],
         "dates": [],
@@ -4345,11 +4273,11 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Serviços para licitações e contratos de obras públicas"
+          "Serviços"
         ],
         "canonical": "https://confenge.com.br/servicos-obras-publicas/",
         "dates": [],
-        "description": "Os quatro serviços da CONFENGE para construtoras: diagnóstico da operação, rotina de decisão, sala de decisão da proposta e defesa de margem em contrato público.",
+        "description": "Serviços da CONFENGE para construtoras em licitação e contrato de obra pública: diagnóstico, diretoria fracionada, proposta crítica e defesa de margem.",
         "h1": "Serviços para licitações e contratos de obras públicas",
         "has_dataset_surface": false,
         "licenses": [],
@@ -4457,5 +4385,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/web-cfg-293-current/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/web-cfg/.worktrees/cfg10x-10-technical-seo/_site"
 }

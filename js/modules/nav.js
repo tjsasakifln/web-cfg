@@ -279,6 +279,51 @@
       try { fromUrl.referrer = sanitizeAttr(document.referrer || '', 'referrer'); } catch (_) { /* ignore */ }
     }
     writeStoredPseo({ ...storedPrior, ...fromUrl });
+    const DATASET_TO_ATTR = {
+      tema: 'tema',
+      origem: 'origem',
+      journey: 'jornada',
+      pseoPageId: 'pseo_page_id',
+      pageType: 'page_type',
+      segmentKey: 'segment_key',
+      segment: 'segment',
+      region: 'region',
+      agencyId: 'agency_id',
+      intent: 'intent',
+      originUrl: 'origin_url',
+      landingUrl: 'landing_url',
+      routeFamily: 'route_family',
+      ctaId: 'cta_id',
+      assetId: 'asset_id',
+      correlationId: 'correlation_id',
+      utmSource: 'utm_source',
+      utmMedium: 'utm_medium',
+      utmCampaign: 'utm_campaign',
+      utmContent: 'utm_content',
+      utmTerm: 'utm_term',
+      analysisId: 'analysis_id',
+      evidencePackVersion: 'evidence_pack_version',
+      assetFamily: 'asset_family',
+      queryClass: 'query_class',
+      ctaPosition: 'cta_position',
+      snap: 'snap',
+    };
+    document.addEventListener('click', (event) => {
+      const a = event.target && event.target.closest && event.target.closest('a[href]');
+      if (!a || !a.dataset) return;
+      const next = { ...readStoredPseo() };
+      let wrote = false;
+      Object.keys(DATASET_TO_ATTR).forEach((camel) => {
+        const raw = a.dataset[camel];
+        if (!raw) return;
+        const key = DATASET_TO_ATTR[camel];
+        const s = sanitizeAttr(raw, key);
+        if (!s) return;
+        next[key] = s;
+        wrote = true;
+      });
+      if (wrote) writeStoredPseo(next);
+    }, true);
     window.confengeAttribution = {
       ALLOWLIST: PSEO_ATTR_KEYS.slice(),
       sanitize: sanitizeAttr,
@@ -360,7 +405,8 @@
         const val = fromUrl[name] || storedPseo[name];
         if (val) ensureHidden(name, val);
       });
-      const journeyParam = searchParams.get('jornada') || hashParams.get('jornada');
+      const journeyParam = searchParams.get('jornada') || hashParams.get('jornada')
+        || storedPseo.jornada || storedPseo.journey;
       if (journeyParam) applyJourneyToForm(journeyParam);
     }
     if (mensagem && (tema || storedPseo.tema) && !mensagem.value) {
