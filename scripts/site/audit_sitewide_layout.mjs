@@ -13,7 +13,16 @@ import { dirname, extname, join, resolve } from "path";
 import { fileURLToPath } from "url";
 import { mkdirSync } from "fs";
 import { resolveChromePath } from "./resolve_chrome.mjs";
-import { loadManifestRoutes, resolveSiteRoot } from "./interface_coverage.mjs";
+import {
+  hasCaptureForm,
+  loadBofuServiceRoutes,
+  loadManifestRoutes,
+  loadPublicFamilyRegistry,
+  publicFamilyForRoute,
+  resolveSiteRoot,
+  routeToFile,
+} from "./interface_coverage.mjs";
+import { renderedLayoutFindings } from "./rendered_layout_truth.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const PORT = Number(process.env.LAYOUT_AUDIT_PORT || 8796);
@@ -89,6 +98,26 @@ const reportArg = process.env.LAYOUT_AUDIT_REPORT || process.argv[3] || "";
 const server = baseArg ? null : await startStaticServer(SITE_ROOT);
 const BASE = (baseArg || `http://127.0.0.1:${PORT}`).replace(/\/$/, "");
 const routes = publicRoutes();
+const registry = loadPublicFamilyRegistry();
+const bofuRoutes = loadBofuServiceRoutes();
+// Public contracts are route invariants. Resolve them before expanding the
+// census across viewports so registry/BOFU/HTML are each read only once.
+const routeContracts = new Map(routes.map((route) => {
+  try {
+    const html = readFileSync(routeToFile(SITE_ROOT, route), "utf8");
+    return [route, {
+      family: publicFamilyForRoute(route, registry, bofuRoutes),
+      hasCapture: hasCaptureForm(html),
+      error: null,
+    }];
+  } catch (error) {
+    return [route, {
+      family: null,
+      hasCapture: false,
+      error: String(error?.message || error),
+    }];
+  }
+}));
 const report = {
   generated_at: new Date().toISOString(),
   base_url: BASE,
@@ -303,6 +332,22 @@ async function auditWorker() {
         return problems;
       }, width);
       issues.push(...rendered);
+      const contract = routeContracts.get(route);
+      if (!contract || contract.error) {
+        throw new Error(`public contract unavailable for ${route}: ${contract?.error || "missing census entry"}`);
+      }
+      const truthful = await renderedLayoutFindings(page, {
+        // The family contract requires a terminal action, not a floating one.
+        // Conversion gates validate inline form/WhatsApp/service transitions;
+        // here we measure sticky CTA geometry when present without inventing a
+        // second, stricter commercial contract.
+        requireStickyCta: false,
+        // Priced offers are unconditionally fail-closed. Service pillars retain
+        // their explicit frozen/debt handling in inbound_gates.py; an existing
+        // capture form is still checked here for rendered integrity.
+        requireCaptureForm: contract.hasCapture || contract.family?.profile === "priced_offer",
+      });
+      issues.push(...truthful.map((detail) => ({ code: "layout_truth", detail })));
     } catch (error) {
       issues.push({ code: "navigation_or_evaluation", detail: String(error?.message || error) });
     }

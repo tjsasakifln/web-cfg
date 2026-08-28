@@ -11,11 +11,22 @@ from __future__ import annotations
 import json
 import re
 import sys
+from html import unescape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.site.public_copy_scope import (  # noqa: E402
+    indexable_visitor_html_files,
+    visible_text,
+)
+
 REGISTRY_REL = "data/commercial/deliverables-registry.v1.json"
 HUB_REL = "entregas/index.html"
+CANONICAL_CATALOG_COUNT = 54
+CANONICAL_PUBLISHED_COUNT = 8
 
 WORD_NUMBERS = {
     "um": 1,
@@ -39,12 +50,14 @@ CLAIM_RE = re.compile(
     + r")\s+(entreg[aá]veis|entregas)(\s+publicadas)?\b",
     re.I,
 )
-PRICE_RE = re.compile(
-    r"R\$\s*([\d.]+)\s*a\s*R\$\s*([\d.]+)",
+CONTAINER_CLAIM_RE = re.compile(
+    r"\b((?:\d{1,3})|"
+    + "|".join(WORD_NUMBERS)
+    + r")\s+cont[eê]ineres(?:\s+comerciais)?\b",
     re.I,
 )
-STATUS_RE = re.compile(
-    r"\b(publicada|publicadas|em valida[cç][aã]o|indispon[ií]vel|indispon[ií]veis)\b",
+PRICE_RE = re.compile(
+    r"R\$\s*([\d.]+)\s*a\s*R\$\s*([\d.]+)",
     re.I,
 )
 TITLE_RE = re.compile(r"<title>([^<]+)</title>", re.I)
@@ -68,6 +81,13 @@ LD_JSON_RE = re.compile(
     r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
     re.I | re.S,
 )
+CATALOG_ITEM_RE = re.compile(r"<article\b([^>]*)>(.*?)</article>", re.I | re.S)
+ATTR_RE = re.compile(r'''\b([\w:-]+)\s*=\s*(["'])(.*?)\2''', re.S)
+STATUS_LABELS = {
+    "PUBLISHED": "Publicada",
+    "VALIDATE": "Em validação",
+    "BLOCKED": "Indisponível",
+}
 
 
 def load_registry(root: Path | None = None) -> dict:
@@ -104,6 +124,77 @@ def registry_price_bands(registry: dict) -> dict[str, tuple[int, int]]:
     }
 
 
+def _registry_findings(registry: dict) -> list[str]:
+    rows = [row for row in registry.get("deliverables") or [] if isinstance(row, dict)]
+    declared_catalog = int(registry.get("catalog_count") or 0)
+    published_count = sum(row.get("public_state") == "PUBLISHED" for row in rows)
+    findings: list[str] = []
+    if declared_catalog != CANONICAL_CATALOG_COUNT:
+        findings.append(
+            f"registry: catalog_count {declared_catalog} != canonical {CANONICAL_CATALOG_COUNT}"
+        )
+    if len(rows) != CANONICAL_CATALOG_COUNT:
+        findings.append(
+            f"registry: deliverable rows {len(rows)} != canonical {CANONICAL_CATALOG_COUNT}"
+        )
+    if declared_catalog != len(rows):
+        findings.append(
+            f"registry: catalog_count {declared_catalog} != deliverable rows {len(rows)}"
+        )
+    if published_count != CANONICAL_PUBLISHED_COUNT:
+        findings.append(
+            f"registry: published count {published_count} != canonical {CANONICAL_PUBLISHED_COUNT}"
+        )
+
+    containers = [row for row in registry.get("containers") or [] if isinstance(row, dict)]
+    declared_containers = int(registry.get("container_count") or 0)
+    if declared_containers != len(containers):
+        findings.append(
+            f"registry: container_count {declared_containers} != container rows {len(containers)}"
+        )
+    containers_by_id = {
+        str(row.get("container_id")): row
+        for row in containers
+        if row.get("container_id")
+    }
+    deliverables_by_id = {
+        str(row.get("deliverable_id")): row
+        for row in rows
+        if row.get("deliverable_id")
+    }
+    composed_by: dict[str, list[str]] = {}
+    for container_id, container in containers_by_id.items():
+        for deliverable_id in container.get("composes_deliverables") or []:
+            deliverable_id = str(deliverable_id)
+            composed_by.setdefault(deliverable_id, []).append(container_id)
+            item = deliverables_by_id.get(deliverable_id)
+            if item is None:
+                findings.append(
+                    f"registry: {container_id} composes unknown deliverable {deliverable_id}"
+                )
+                continue
+            actual_container = str(item.get("offer_container") or "none")
+            if actual_container != container_id:
+                findings.append(
+                    f"registry: {deliverable_id}: offer_container {actual_container} "
+                    f"!= composed by {container_id}"
+                )
+    for deliverable_id, row in deliverables_by_id.items():
+        container_id = str(row.get("offer_container") or "none")
+        if container_id == "none":
+            continue
+        if container_id not in containers_by_id:
+            findings.append(
+                f"registry: {deliverable_id}: unknown offer_container {container_id}"
+            )
+        elif container_id not in composed_by.get(deliverable_id, []):
+            findings.append(
+                f"registry: {deliverable_id}: offer_container {container_id} "
+                "does not compose deliverable"
+            )
+    return findings
+
+
 def _parse_number(token: str) -> int | None:
     raw = token.strip().lower()
     if raw.isdigit():
@@ -135,6 +226,8 @@ def extract_claims(text: str) -> list[dict]:
                 "noun": noun,
                 "kind": kind,
                 "span": match.group(0),
+                "start": match.start(),
+                "end": match.end(),
             }
         )
     return claims
@@ -176,16 +269,11 @@ def extract_surfaces(html: str) -> dict[str, str]:
                 if isinstance(value, str):
                     schema_bits.append(value)
             count = node.get("numberOfItems")
-            if isinstance(count, int):
+            node_context = " ".join(
+                str(node.get(key) or "") for key in ("name", "description", "@id")
+            )
+            if isinstance(count, int) and re.search(r"\bentreg[aá]", node_context, re.I):
                 number_of_items.append(count)
-    catalog = ""
-    catalog_match = re.search(
-        r'<section\b[^>]*class="[^"]*deliverables-catalog[^"]*"[^>]*>(.*?)</section>',
-        html,
-        re.I | re.S,
-    )
-    if catalog_match:
-        catalog = re.sub(r"\s+", " ", _strip_tags(catalog_match.group(1)))
     return {
         "title": title,
         "meta": meta,
@@ -193,8 +281,10 @@ def extract_surfaces(html: str) -> dict[str, str]:
         "og:description": og_desc,
         "h1": h1,
         "schema": " ".join(schema_bits),
-        "catalog": catalog,
-        "visible": re.sub(r"\s+", " ", _strip_tags(re.sub(r"<script[\s\S]*?</script>", " ", html, flags=re.I))),
+        # Body-level claims must be perceptible to a visitor. Test fixtures,
+        # templates, scripts and hidden subtrees cannot make a public route
+        # commercially contradictory (or make the gate fail spuriously).
+        "visible": visible_text(html),
         "numberOfItems": number_of_items,
     }
 
@@ -202,6 +292,130 @@ def extract_surfaces(html: str) -> dict[str, str]:
 def _brl_to_cents(raw: str) -> int:
     digits = re.sub(r"[^\d]", "", raw)
     return int(digits) * 100 if digits else 0
+
+
+def _attributes(raw: str) -> dict[str, str]:
+    return {
+        match.group(1).lower(): unescape(match.group(3))
+        for match in ATTR_RE.finditer(raw)
+    }
+
+
+def _registry_item_prices(row: dict) -> tuple[int, ...]:
+    price = row.get("price") if isinstance(row.get("price"), dict) else {}
+    if price.get("amount_cents") is not None:
+        return (int(price["amount_cents"]),)
+    tiers = price.get("tiers") if isinstance(price.get("tiers"), list) else []
+    amounts = sorted(
+        {
+            int(tier["amount_cents"])
+            for tier in tiers
+            if isinstance(tier, dict) and tier.get("amount_cents") is not None
+        }
+    )
+    if len(amounts) > 1:
+        return (amounts[0], amounts[-1])
+    return tuple(amounts)
+
+
+def _format_brl(cents: int) -> str:
+    return f"R$ {cents // 100:,}".replace(",", ".")
+
+
+def _catalog_item_findings(html: str, registry: dict) -> list[str]:
+    by_id = {
+        str(row.get("deliverable_id")): row
+        for row in registry.get("deliverables") or []
+        if isinstance(row, dict) and row.get("deliverable_id")
+    }
+    findings: list[str] = []
+    seen_ids: list[str] = []
+    for attrs_raw, body in CATALOG_ITEM_RE.findall(html):
+        attrs = _attributes(attrs_raw)
+        classes = set(attrs.get("class", "").split())
+        if "catalog-item" not in classes:
+            continue
+        deliverable_id = attrs.get("data-deliverable-id", "").strip()
+        if not deliverable_id:
+            findings.append("catalog item missing data-deliverable-id")
+            continue
+        seen_ids.append(deliverable_id)
+        row = by_id.get(deliverable_id)
+        if row is None:
+            findings.append(f"{deliverable_id}: unknown deliverable id")
+            continue
+
+        actual_state = attrs.get("data-public-state", "").strip()
+        expected_state = str(row.get("public_state") or "")
+        if actual_state != expected_state:
+            findings.append(
+                f"{deliverable_id}: public_state {actual_state or '<missing>'} "
+                f"!= registry {expected_state or '<missing>'}"
+            )
+
+        status_match = re.search(
+            r'<[^>]*class=["\'][^"\']*\bcatalog-item__state\b[^"\']*["\'][^>]*>(.*?)</[^>]+>',
+            body,
+            re.I | re.S,
+        )
+        actual_status = (
+            re.sub(
+                r"\s+", " ", unescape(_strip_tags(status_match.group(1)))
+            ).strip()
+            if status_match
+            else ""
+        )
+        expected_status = STATUS_LABELS.get(expected_state, "")
+        if actual_status != expected_status:
+            findings.append(
+                f"{deliverable_id}: status {actual_status or '<missing>'!r} "
+                f"!= registry {expected_status or '<missing>'!r}"
+            )
+
+        price_match = re.search(
+            r"<dt\b[^>]*>\s*Preço\s*</dt>\s*<dd\b[^>]*>(.*?)</dd>",
+            body,
+            re.I | re.S,
+        )
+        actual_prices = tuple(
+            _brl_to_cents(raw)
+            for raw in re.findall(
+                r"R\$\s*([\d.]+)",
+                price_match.group(1) if price_match else "",
+                re.I,
+            )
+        )
+        expected_prices = _registry_item_prices(row)
+        if actual_prices != expected_prices:
+            actual_label = (
+                " a ".join(_format_brl(value) for value in actual_prices)
+                or "<missing>"
+            )
+            expected_label = (
+                " a ".join(_format_brl(value) for value in expected_prices)
+                or "<missing>"
+            )
+            findings.append(
+                f"{deliverable_id}: price {actual_label} != registry {expected_label}"
+            )
+
+    is_integral_catalog = bool(
+        re.search(
+            r'<section\b[^>]*class=["\'][^"\']*\bdeliverables-catalog\b',
+            html,
+            re.I,
+        )
+    )
+    if is_integral_catalog:
+        for deliverable_id in sorted(by_id):
+            count = seen_ids.count(deliverable_id)
+            if count == 0:
+                findings.append(f"{deliverable_id}: missing from integral catalog")
+            elif count > 1:
+                findings.append(
+                    f"{deliverable_id}: duplicated in integral catalog ({count} items)"
+                )
+    return findings
 
 
 def evaluate_commercial_html(html: str, registry: dict | None = None) -> list[str]:
@@ -241,6 +455,30 @@ def evaluate_commercial_html(html: str, registry: dict | None = None) -> list[st
                     f"{name}: {kind} count {number} != registry {expected} in {claim['span']!r}"
                 )
 
+    # Body copy contains legitimate subgroup counts (for example, a task door
+    # with 12 deliverables), so only globally impossible or canonically
+    # inverted claims fail here. Headline surfaces remain strict above.
+    for claim in extract_claims(surfaces.get("visible") or ""):
+        number = claim["number"]
+        kind = claim["kind"]
+        if number > counts["catalog"]:
+            findings.append(
+                f"visible: {kind} count {number} exceeds registry catalog={counts['catalog']} "
+                f"in {claim['span']!r}"
+            )
+        elif number == counts["catalog"] and kind == "published":
+            findings.append(
+                f"visible: 8↔54 contradiction {claim['span']!r} "
+                f"(catalog={counts['catalog']} labeled as published entregas)"
+            )
+    for match in CONTAINER_CLAIM_RE.finditer(surfaces.get("visible") or ""):
+        number = _parse_number(match.group(1))
+        if number is not None and number != counts["containers"]:
+            findings.append(
+                f"visible: container count {number} != registry {counts['containers']} "
+                f"in {match.group(0)!r}"
+            )
+
     for count in surfaces.get("numberOfItems") or []:
         if count not in (counts["published"], counts["catalog"]):
             findings.append(
@@ -253,14 +491,22 @@ def evaluate_commercial_html(html: str, registry: dict | None = None) -> list[st
     for name in headline_surfaces:
         text = surfaces.get(name) or ""
         claims = extract_claims(text)
-        uses_catalog = any(c["kind"] == "catalog" for c in claims)
-        uses_published = any(c["kind"] == "published" for c in claims)
-        if uses_catalog and uses_published:
-            continue
-        target = catalog_band if uses_catalog else published_band if uses_published else None
-        if not target:
-            continue
         for match in PRICE_RE.finditer(text):
+            prior_claims = [claim for claim in claims if claim["end"] <= match.start()]
+            if prior_claims:
+                target_kind = prior_claims[-1]["kind"]
+            else:
+                claim_kinds = {claim["kind"] for claim in claims}
+                target_kind = next(iter(claim_kinds)) if len(claim_kinds) == 1 else None
+            target = (
+                catalog_band
+                if target_kind == "catalog"
+                else published_band
+                if target_kind == "published"
+                else None
+            )
+            if not target:
+                continue
             low = _brl_to_cents(match.group(1))
             high = _brl_to_cents(match.group(2))
             if (low, high) != target:
@@ -269,17 +515,35 @@ def evaluate_commercial_html(html: str, registry: dict | None = None) -> list[st
                     f"!= registry {(target[0] // 100, target[1] // 100)}"
                 )
 
+    findings.extend(_catalog_item_findings(html, registry))
+
     return findings
 
 
 def evaluate_hub(root: Path | None = None) -> list[str]:
     base = root or ROOT
     html = (base / HUB_REL).read_text(encoding="utf-8")
-    return evaluate_commercial_html(html, load_registry(base))
+    registry = load_registry(base)
+    return _registry_findings(registry) + evaluate_commercial_html(html, registry)
+
+
+def evaluate_commercial_site(root: Path | None = None) -> list[str]:
+    """Cross-check every indexable visitor page against commercial truth."""
+    base = root or ROOT
+    registry = load_registry(base)
+    findings = _registry_findings(registry)
+    for path in indexable_visitor_html_files(base):
+        html = path.read_text(encoding="utf-8", errors="replace")
+        rel = path.relative_to(base).as_posix()
+        findings.extend(
+            f"{rel}: {finding}"
+            for finding in evaluate_commercial_html(html, registry)
+        )
+    return findings
 
 
 def main() -> int:
-    findings = evaluate_hub()
+    findings = evaluate_commercial_site()
     if findings:
         print("FAIL commercial surface truth")
         for row in findings:

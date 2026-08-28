@@ -230,6 +230,8 @@
     "wide": 1728
   },
   "performance_budget": {
+    "css_raw_kb_max": 250,
+    "own_js_raw_kb_max": 120,
     "own_js_gzip_kb_max": 40,
     "css_gzip_kb_max": 80,
     "no_framework_runtime": true,

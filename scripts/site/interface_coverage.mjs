@@ -87,7 +87,8 @@ export function isNoindex(html) {
   return /\bcontent=["'][^"']*\bnoindex\b[^"']*["']/i.test(robots);
 }
 
-function serviceRoutes() {
+/** Load the canonical BOFU service-route set once for callers doing a census. */
+export function loadBofuServiceRoutes() {
   const matrix = JSON.parse(readFileSync(BOFU_MATRIX_PATH, "utf8"));
   return new Set((matrix.rows || []).map((row) => row.canonical_service_route));
 }
@@ -115,6 +116,15 @@ function canonicalFamilyFor(route, families, bofuRoutes) {
     }
   }
   return best;
+}
+
+/** Resolve the canonical family contract for one public route. */
+export function publicFamilyForRoute(
+  route,
+  registry = loadPublicFamilyRegistry(),
+  bofuRoutes = loadBofuServiceRoutes(),
+) {
+  return canonicalFamilyFor(route, registry.families, bofuRoutes);
 }
 
 function supplementalFamilyFor(route, families) {
@@ -168,7 +178,7 @@ export function deriveCoverage(options = {}) {
   validatePolicyShape(policy, registry);
 
   const routeSet = new Set(routes);
-  const bofuRoutes = serviceRoutes();
+  const bofuRoutes = loadBofuServiceRoutes();
   const representativeById = new Map(
     policy.lighthouse.canonical_representatives.map((entry) => [entry.family_id, entry]),
   );

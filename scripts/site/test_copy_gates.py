@@ -474,6 +474,51 @@ def evaluate_copy_html(html: str, rel: str = "fixture.html") -> list[str]:
     return scan_backstage_html(html, rel) + scan_brand_html(html, rel)
 
 
+def test_copy_scanners_ignore_non_perceptible_subtrees():
+    """Hidden implementation copy is not visitor-facing brand/backstage copy."""
+    html = """
+    <main>
+      <template><p>extra-cli</p></template>
+      <section hidden><p>fale conosco</p></section>
+      <section aria-hidden="true"><p>excelência</p></section>
+      <section inert><p>alta intenção</p></section>
+      <section style="color: red; display: none !important"><p>inovação</p></section>
+    </main>
+    """
+    assert evaluate_copy_html(html) == []
+
+
+def test_brand_scanner_keeps_public_copy_channels_only():
+    html = """
+    <html>
+      <head>
+        <title>tecnologia de ponta</title>
+        <meta name="description" content="potencialize seus resultados">
+        <meta property="og:title" content="maximize oportunidades">
+        <meta name="keywords" content="conte conosco">
+      </head>
+      <body class="conte conosco" data-internal-copy="conte conosco">
+        <p>soluções personalizadas</p>
+        <img alt="solução completa" data-caption="conte conosco">
+        <button aria-label="excelência"></button>
+        <input placeholder="inovação" data-help="conte conosco">
+      </body>
+    </html>
+    """
+    failures = scan_brand_html(html)
+    for phrase in (
+        "soluções personalizadas",
+        "solução completa",
+        "excelência",
+        "inovação",
+        "tecnologia de ponta",
+        "potencialize seus resultados",
+        "maximize oportunidades",
+    ):
+        assert any(repr(phrase) in finding for finding in failures), phrase
+    assert not any(repr("conte conosco") in finding for finding in failures)
+
+
 def test_public_backstage_language_absent():
     """No visitor-facing backstage / conversion-objective jargon on public HTML."""
     failures: list[str] = []

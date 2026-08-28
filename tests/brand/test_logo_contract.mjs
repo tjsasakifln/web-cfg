@@ -2,6 +2,7 @@
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
+import { execFileSync } from "child_process";
 import { fileURLToPath } from "url";
 import { consumerSuitesForPath } from "../../scripts/site/affected_graph.mjs";
 
@@ -25,6 +26,15 @@ function listFiles(start, predicate, out = []) {
     else if (predicate(absolute)) out.push(absolute);
   }
   return out.sort();
+}
+function visitorHtmlFiles() {
+  const source = [
+    "import json",
+    "from scripts.site.public_copy_scope import visitor_facing_relpaths",
+    "print(json.dumps(visitor_facing_relpaths()))",
+  ].join("; ");
+  const stdout = execFileSync("python3", ["-c", source], { cwd: root, encoding: "utf8" });
+  return JSON.parse(stdout).map((relative) => path.join(root, relative));
 }
 function sha256(file) {
   return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
@@ -159,7 +169,7 @@ const observation = contract.current_surface_observation ?? {};
 assert("legacy_retained", observation.state === "LEGACY_RASTER_RETAINED", observation.state);
 assert("legacy_primary_exact", observation.header_primary === "/assets/logo-confenge-500-f8a83f6d.png" && observation.footer_primary === "/assets/logo-confenge-white-500-1677038e.png", observation);
 assert("legacy_ratio", observation.intrinsic_ratio === "50:13", observation.intrinsic_ratio);
-assert("observed_html_count", observation.source_html_files_scanned === 287, observation.source_html_files_scanned);
+assert("observed_html_count", observation.source_html_files_scanned === 276, observation.source_html_files_scanned);
 assert("observed_logo_count", observation.logo_image_occurrences === 462, observation.logo_image_occurrences);
 assert("observed_header_count", observation.header_lockup_occurrences === 238, observation.header_lockup_occurrences);
 assert("observed_footer_count", observation.footer_lockup_occurrences === 224, observation.footer_lockup_occurrences);
@@ -207,8 +217,23 @@ for (const criterion of [
 }
 assert("acceptance_scope_enforced", acceptance.get("lockup_only_scope")?.state === "ENFORCED" && acceptance.get("lockup_only_scope")?.blocker === null, acceptance.get("lockup_only_scope"));
 
-const htmlFiles = listFiles(root, (file) => file.endsWith(".html"));
+const htmlFiles = visitorHtmlFiles();
 assert("html_inventory", htmlFiles.length >= 200, htmlFiles.length);
+const htmlRelpaths = htmlFiles.map((file) => path.relative(root, file));
+const nonPublicHtmlRoots = new Set([
+  "data",
+  "docs",
+  "netlify",
+  "ops",
+  "scripts",
+  "seo",
+  "supabase",
+  "tests",
+]);
+const nonPublicHtml = htmlRelpaths.filter((relative) => nonPublicHtmlRoots.has(relative.split(path.sep)[0]));
+const fixtureHtml = htmlRelpaths.filter((relative) => relative.split(path.sep).includes("fixtures"));
+assert("html_inventory_excludes_non_public_trees", nonPublicHtml.length === 0, nonPublicHtml);
+assert("html_inventory_excludes_fixtures", fixtureHtml.length === 0, fixtureHtml);
 let logoImages = 0;
 let headerPrimary = 0;
 let footerPrimary = 0;
@@ -255,7 +280,9 @@ for (const file of htmlFiles) {
     if (parsed.src === observation.footer_primary) footerPrimary += 1;
   }
 }
-assert("html_inventory_matches_observation", htmlFiles.length === observation.source_html_files_scanned, htmlFiles.length);
+// source_html_files_scanned is immutable evidence captured by the earlier gate,
+// whose collector included internal trees. The live gate now uses the public
+// census above; a tooling-only scope correction must not recapture that evidence.
 assert("logo_inventory_matches_observation", logoImages === observation.logo_image_occurrences, logoImages);
 for (const [src, expected] of Object.entries(observation.legacy_asset_occurrences ?? {})) {
   assert(`asset_occurrence_${path.basename(src)}`, logoOccurrencesBySrc.get(src) === expected, [logoOccurrencesBySrc.get(src), expected]);

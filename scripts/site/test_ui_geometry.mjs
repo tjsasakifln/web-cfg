@@ -13,6 +13,7 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 import { resolveSiteRoot } from "./interface_coverage.mjs";
+import { renderedLayoutFindings } from "./rendered_layout_truth.mjs";
 
 const require = createRequire(import.meta.url);
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
@@ -840,6 +841,19 @@ async function main() {
     if (!(first.cls.includes("skip-link") || first.href === "#conteudo" || /pular/i.test(first.text))) {
       throw new Error(`first focusable not skip-link: ${JSON.stringify(first)}`);
     }
+    await page.keyboard.press("Tab");
+    const focusedSkip = await page.evaluate(() => {
+      const active = document.activeElement;
+      const box = active?.getBoundingClientRect();
+      return {
+        isSkip: Boolean(active?.classList.contains("skip-link")),
+        intersectsViewport: Boolean(box && box.right > 0 && box.left < window.innerWidth
+          && box.bottom > 0 && box.top < window.innerHeight),
+      };
+    });
+    if (!focusedSkip.isSkip || !focusedSkip.intersectsViewport) {
+      throw new Error(`focused skip link is not visible: ${JSON.stringify(focusedSkip)}`);
+    }
     ok(`tab_order_starts_with_skip (${order.length} early focusables)`);
   } catch (e) {
     fail("tab_order_starts_with_skip", e.message || e);
@@ -1468,45 +1482,7 @@ async function main() {
     try {
       await tab.setViewport({ ...viewport, deviceScaleFactor: 1 });
       await tab.setContent(html, { waitUntil: "domcontentloaded" });
-      return tab.evaluate(() => {
-        const findings = [];
-        const root = document.documentElement;
-        if (root.scrollWidth > root.clientWidth + 1) {
-          findings.push(`horizontal_overflow ${root.scrollWidth}>${root.clientWidth}`);
-        }
-        for (const el of document.querySelectorAll("a[href], button, input, select, textarea, summary")) {
-          const style = getComputedStyle(el);
-          if (style.display === "none" || style.visibility === "hidden") continue;
-          const box = el.getBoundingClientRect();
-          const offscreen = box.right < -20 || box.left > window.innerWidth + 20
-            || box.bottom < -20 || box.top > window.innerHeight + 20;
-          if (offscreen && el.tabIndex >= 0) findings.push("focus_offscreen");
-        }
-        for (const el of document.querySelectorAll("p, li, h1, h2, h3")) {
-          const box = el.getBoundingClientRect();
-          if (box.width > 0 && box.width <= 42) findings.push(`text_width_${Math.round(box.width)}px`);
-        }
-        for (const el of document.querySelectorAll("a[href]")) {
-          if (el.classList.contains("skip-link")) continue;
-          const href = el.getAttribute("href") || "";
-          const text = (el.textContent || "").trim().toLowerCase();
-          if (href === "" || href === "#") findings.push("useless_anchor");
-          if (["clique aqui", "click here", "saiba mais", "leia mais"].includes(text)) {
-            findings.push("useless_anchor_text");
-          }
-        }
-        if (!document.querySelector(".contact-float, .whatsapp-float")) {
-          findings.push("missing_sticky_cta");
-        }
-        const form = document.querySelector("form");
-        if (!form) findings.push("missing_form");
-        else {
-          const action = form.getAttribute("action") || "";
-          const hasControl = form.querySelector("input, select, textarea");
-          if (!hasControl || !action.includes("/.netlify/functions/")) findings.push("broken_form");
-        }
-        return findings;
-      });
+      return await renderedLayoutFindings(tab);
     } finally {
       await tab.close();
     }
@@ -1522,6 +1498,23 @@ async function main() {
     ok("fixture_focus_offscreen_fails");
   } catch (e) {
     fail("fixture_focus_offscreen_fails", e.message || e);
+  }
+
+  try {
+    const verticallyOffscreen = await layoutFindingsFromHtml(`<!doctype html>
+      <html lang="pt-BR"><body><main>
+      <a href="/contato/" style="position:fixed;top:-9999px;left:0">Analisar meu caso</a>
+      <form method="post" action="/.netlify/functions/lead" data-capture-form>
+      <label>Nome <input name="nome"></label><button type="submit">Enviar</button>
+      </form>
+      <aside class="contact-float"><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+      </main></body></html>`);
+    if (!verticallyOffscreen.some((row) => row.includes("focus_offscreen"))) {
+      throw new Error(`expected vertical focus_offscreen, got ${verticallyOffscreen.join(",")}`);
+    }
+    ok("fixture_focus_vertically_offscreen_fails");
+  } catch (e) {
+    fail("fixture_focus_vertically_offscreen_fails", e.message || e);
   }
 
   try {
@@ -1585,11 +1578,58 @@ async function main() {
   }
 
   try {
+    const hiddenForm = await layoutFindingsFromHtml(`<!doctype html>
+      <html lang="pt-BR"><body><main>
+      <form method="post" action="/.netlify/functions/lead" data-capture-form hidden>
+      <label>Nome <input name="nome"></label><button type="submit">Enviar</button>
+      </form>
+      <aside class="contact-float"><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+      </main></body></html>`);
+    if (!hiddenForm.includes("broken_form")) {
+      throw new Error(`expected hidden broken_form, got ${hiddenForm.join(",")}`);
+    }
+    ok("fixture_hidden_capture_form_fails");
+  } catch (e) {
+    fail("fixture_hidden_capture_form_fails", e.message || e);
+  }
+
+  try {
+    const hiddenOnlyForm = await layoutFindingsFromHtml(`<!doctype html>
+      <html lang="pt-BR"><body><main>
+      <form method="post" action="/.netlify/functions/lead" data-capture-form>
+      <input type="hidden" name="origem" value="fixture"><button type="submit">Enviar</button>
+      </form>
+      <aside class="contact-float"><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+      </main></body></html>`);
+    if (!hiddenOnlyForm.includes("broken_form")) {
+      throw new Error(`expected hidden-only broken_form, got ${hiddenOnlyForm.join(",")}`);
+    }
+    ok("fixture_hidden_only_capture_form_fails");
+  } catch (e) {
+    fail("fixture_hidden_only_capture_form_fails", e.message || e);
+  }
+
+  try {
+    const hiddenSticky = await layoutFindingsFromHtml(`<!doctype html>
+      <html lang="pt-BR"><body><main>
+      <form method="post" action="/.netlify/functions/lead" data-capture-form>
+      <label>Nome <input name="nome"></label><button type="submit">Enviar</button>
+      </form>
+      <aside class="contact-float" hidden><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+      </main></body></html>`);
+    if (!hiddenSticky.includes("missing_sticky_cta")) {
+      throw new Error(`expected hidden missing_sticky_cta, got ${hiddenSticky.join(",")}`);
+    }
+    ok("fixture_hidden_sticky_cta_fails");
+  } catch (e) {
+    fail("fixture_hidden_sticky_cta_fails", e.message || e);
+  }
+
+  try {
     const passed = await layoutFindingsFromHtml(
       readFileSync(join(fixtureDir, "pass-layout.html"), "utf8"),
     );
-    const unexpected = passed.filter((row) => row !== "horizontal_overflow");
-    if (unexpected.length) throw new Error(unexpected.join(","));
+    if (passed.length) throw new Error(passed.join(","));
     ok("fixture_layout_pass");
   } catch (e) {
     fail("fixture_layout_pass", e.message || e);

@@ -1,6 +1,10 @@
 /* Acentos da página modelo Base Quantitativa Canônica.
    O kit compartilhado vive em /assets/report-model.css e não é alterado aqui. */
 
+/* Tabelas largas rolam dentro do wrapper; não podem aumentar a faixa inteira
+   e empurrar links de texto para fora do alcance do teclado no mobile. */
+.report-section-content { min-width: 0; }
+
 .case-badge {
   background: #fef3c7;
   border-radius: 4px;

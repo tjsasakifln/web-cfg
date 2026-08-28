@@ -22,6 +22,7 @@ from __future__ import annotations
 import json
 import re
 from functools import lru_cache
+from html import escape
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -64,39 +65,115 @@ MANIFEST_ROUTE_EXEMPT = {
 }
 
 
-class _VisibleText(HTMLParser):
-    """Text nodes only: script/style/template content is not visitor copy."""
+_NON_COPY_TAGS = {"script", "style", "template"}
+_VOID_TAGS = {
+    "area",
+    "base",
+    "br",
+    "col",
+    "embed",
+    "hr",
+    "img",
+    "input",
+    "link",
+    "meta",
+    "param",
+    "source",
+    "track",
+    "wbr",
+}
+_DISPLAY_NONE = re.compile(
+    r"(?:^|;)\s*display\s*:\s*none(?:\s*!important)?\s*(?:;|$)",
+    re.I,
+)
+_PUBLIC_COPY_ATTRIBUTES = {"alt", "aria-label", "placeholder"}
+
+
+class _PublicCopy(HTMLParser):
+    """Collect copy only from HTML nodes that a visitor can perceive."""
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self._hidden = 0
-        self.parts: list[str] = []
+        self._stack: list[tuple[str, bool]] = []
+        self.text_parts: list[str] = []
+        self.markup_parts: list[str] = []
+
+    @staticmethod
+    def _starts_hidden(tag: str, attrs) -> bool:  # noqa: ANN001
+        values = {str(name).lower(): value for name, value in attrs}
+        style = str(values.get("style") or "")
+        return (
+            tag in _NON_COPY_TAGS
+            or "hidden" in values
+            or "inert" in values
+            or str(values.get("aria-hidden") or "").strip().lower() == "true"
+            or bool(_DISPLAY_NONE.search(style))
+        )
+
+    @staticmethod
+    def _public_starttag(tag: str, attrs, *, closed: bool = False) -> str:  # noqa: ANN001
+        """Serialize structure plus only attributes a visitor can read."""
+        normalized = [(str(name).lower(), value) for name, value in attrs]
+        if tag == "meta":
+            values = dict(normalized)
+            kind = str(values.get("name") or values.get("property") or "").lower()
+            if kind != "description" and not kind.startswith("og:"):
+                return ""
+            allowed = {"name", "property", "content"}
+        else:
+            allowed = _PUBLIC_COPY_ATTRIBUTES
+        rendered = "".join(
+            f' {name}="{escape(str(value or ""), quote=True)}"'
+            for name, value in normalized
+            if name in allowed
+        )
+        suffix = " /" if closed else ""
+        return f"<{tag}{rendered}{suffix}>"
 
     def handle_starttag(self, tag: str, attrs) -> None:  # noqa: ANN001
-        if tag in {"script", "style", "template"}:
-            self._hidden += 1
+        tag = tag.lower()
+        starts_hidden = self._starts_hidden(tag, attrs)
+        if tag not in _VOID_TAGS:
+            if starts_hidden:
+                self._hidden += 1
+            self._stack.append((tag, starts_hidden))
+        if not self._hidden and not starts_hidden:
+            self.markup_parts.append(self._public_starttag(tag, attrs))
+
+    def handle_startendtag(self, tag: str, attrs) -> None:  # noqa: ANN001
+        tag = tag.lower()
+        if not self._hidden and not self._starts_hidden(tag, attrs):
+            self.markup_parts.append(self._public_starttag(tag, attrs, closed=True))
 
     def handle_endtag(self, tag: str) -> None:
-        if tag in {"script", "style", "template"} and self._hidden:
+        tag = tag.lower()
+        if not self._hidden:
+            self.markup_parts.append(f"</{tag}>")
+        if not self._stack:
+            return
+        _open_tag, started_hidden = self._stack.pop()
+        if started_hidden:
             self._hidden -= 1
 
     def handle_data(self, data: str) -> None:
         if not self._hidden:
-            self.parts.append(data)
+            self.text_parts.append(data)
+            self.markup_parts.append(data)
 
 
 def visible_text(html: str) -> str:
     """Visitor-visible text of an HTML document, whitespace-collapsed."""
-    parser = _VisibleText()
+    parser = _PublicCopy()
     parser.feed(html)
-    return " ".join(" ".join(parser.parts).split())
+    return " ".join(" ".join(parser.text_parts).split())
 
 
 def visible_markup(html: str) -> str:
-    """Markup with script/style/comments removed (keeps tags and attributes)."""
-    work = re.sub(r"<script[\s\S]*?</script>", " ", html, flags=re.I)
-    work = re.sub(r"<style[\s\S]*?</style>", " ", work, flags=re.I)
-    return re.sub(r"<!--[\s\S]*?-->", " ", work)
+    """Markup and public-copy attributes from perceptible HTML nodes only."""
+    parser = _PublicCopy()
+    parser.feed(html)
+    return "".join(parser.markup_parts)
 
 
 def visitor_facing_html_files(root: Path | None = None) -> list[Path]:
