@@ -24,7 +24,7 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "d9273cbd246b6120e9c75c562b927c7b10da73087f67317e4abc8cafbf1e593a"
+    "after_sha256": "d7826a3355840e57c122a407a2915bfcbb6743648efb054f69918b2fd4db758a"
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -73,7 +73,7 @@
     "membership_changed": false,
     "new_sitemap_created": false,
     "lastmod_before": "2026-07-30",
-    "lastmod_after": "2026-08-25",
+    "lastmod_after": "2026-08-28",
     "recapture_registry": "data/bofu-dominance/frozen-specs/hashes.json",
     "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente; os seis pilares protegidos e a composição dos sitemaps permanecem inalterados."
   },
@@ -126,7 +126,7 @@
     },
     {
       "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
-      "sha256": "4a15f6415d8b02171270b020106e5c0c2c35742d35db19a983b4b28c2832b05c"
+      "sha256": "ad04ab5898651318531264495294984c8bccfaad6927145079c3ac8119169ed6"
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
