@@ -255,20 +255,19 @@ for (const offerId of truth.hub.cited_offer_ids) {
   assert(`hub_jsonld_lists_${offerId}`, hubList.includes(offer.public_name), hubList);
 }
 
-/* Catalog: VALIDATE stays VALIDATE; published names and prices match registry. */
+/* Public vitrine shows PUBLISHED only. VALIDATE stays in catalog-data.js, never as a card. */
 const catalogHtml = read("entregas/index.html");
 const catalogData = read("entregas/catalog-data.js");
+assert("public_vitrine_has_8_cards", (catalogHtml.match(/<article class="vitrine-item/g) || []).length === 8);
 for (const offerId of ["CFG-D16", "CFG-D17", "CFG-D24"]) {
   const offer = truth.byId.get(offerId);
-  const cardRe = new RegExp(`data-deliverable-id="${offerId}"[^>]*data-public-state="([^"]+)"`);
-  const state = catalogHtml.match(cardRe)?.[1];
-  assert(`catalog_state_${offerId}`, state === offer.public_state, { state, expected: offer.public_state });
+  assert(`catalog_omits_validate_card_${offerId}`, !catalogHtml.includes(`data-deliverable-id="${offerId}"`), offerId);
   assert(`catalog_data_has_${offerId}`, catalogData.includes(`"${offerId}"`), offerId);
-  assert(`catalog_name_${offerId}`, catalogHtml.includes(offer.public_name), offer.public_name);
   assert(`catalog_not_buy_cta_${offerId}`, !new RegExp(`data-deliverable-id="${offerId}"[\\s\\S]{0,800}comprar agora`, "i").test(catalogHtml));
+  assert(`catalog_name_not_sold_as_published_${offerId}`, offer.public_state === "VALIDATE", offer.public_state);
 }
 assert("catalog_expansion_price", catalogHtml.includes("R$ 8.000"), "expansion");
-assert("catalog_validate_legend", /Em validação/.test(catalogHtml) && /Não há compra imediata/.test(catalogHtml));
+assert("catalog_omits_validate_legend", !/Em validação/.test(catalogHtml) && !/as 54 entregáveis/.test(catalogHtml));
 
 /* Deliberate mismatch must fail: hub vs catalog vs JSON-LD on D16 name. */
 {
