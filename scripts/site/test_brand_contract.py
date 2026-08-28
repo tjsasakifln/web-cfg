@@ -59,7 +59,7 @@ def test_home_has_canonical_copy():
     assert 'id="urgencia"' in html
     assert 'data-form-multistep="true"' in html
     # Three differentiated journey CTAs (client-facing; no Jornada A/B/C labels)
-    assert "Solicitar canal seguro" in html
+    assert "Solicitar canal seguro para envio" in html
     assert "Enviar edital para triagem" in html
     assert "Solicitar diagnóstico da operação" in html
     assert "Como podemos ajudar" in html

@@ -16,7 +16,7 @@ const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
-  "Solicitar canal seguro",
+  "Solicitar canal seguro para envio",
   "Enviar edital para triagem",
   'data-set-journey="contrato"',
   'data-set-journey="edital"',
@@ -81,6 +81,25 @@ for (const f of ["obrigado-contrato.html", "obrigado-edital.html", "obrigado-ope
     console.error("FAIL: confirmation page incomplete", f);
     process.exit(1);
   }
+}
+for (const f of ["obrigado-contrato.html", "obrigado-edital.html"]) {
+  const t = fs.readFileSync(path.join(root, f), "utf8");
+  if (!t.includes("id=\"receipt-id\"") || !t.includes("canal escolhido posteriormente") || !t.includes("Solicitar canal seguro para envio")) {
+    console.error("FAIL: confirmation missing persisted protocol or B SLA", f);
+    process.exit(1);
+  }
+  if (/type\s*=\s*['"]file['"]/i.test(t)) {
+    console.error("FAIL: confirmation has file input", f);
+    process.exit(1);
+  }
+}
+if (!home.includes('id="canal_seguro"') || !home.includes('name="document_intent"')) {
+  console.error("FAIL: home form missing secure-channel fields");
+  process.exit(1);
+}
+if (/type\s*=\s*['"]file['"]/i.test(home)) {
+  console.error("FAIL: home capture form has type=file");
+  process.exit(1);
 }
 
 // Unit: track() redacts PII (real shipped function)

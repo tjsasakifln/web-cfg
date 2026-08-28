@@ -80,7 +80,11 @@ exports.handler = async (event) => {
           message:
             parsed.error === "payload_too_large"
               ? "Payload muito grande."
-              : "Requisição inválida.",
+              : parsed.error === "file_payload_rejected"
+                ? "O site não recebe arquivo. Solicite um canal seguro para envio."
+                : parsed.error === "unsupported_media_type"
+                  ? "Tipo de conteúdo não suportado."
+                : "Requisição inválida.",
         }),
       ),
     };
@@ -292,6 +296,7 @@ exports.handler = async (event) => {
         notify_status: rec.delivery?.notify?.status,
         email_status: rec.delivery?.email?.status,
         idempotent: true,
+        document_intent: rec.document_intent,
         // Correlation comes from the stored record, never from the request.
         correlation_id: rec.radar_params ? rec.radar_params.correlation_id : undefined,
         external_reference: rec.radar_params ? rec.external_reference : undefined,
@@ -429,6 +434,7 @@ exports.handler = async (event) => {
             notify_status: "pending",
             email_status: "pending",
             idempotent: true,
+            document_intent: record.document_intent,
             ...(radarPublic || {}),
           }),
         ),
@@ -559,6 +565,7 @@ exports.handler = async (event) => {
           notify_status === "ok" || email_status === "ok" ? "persisted_notified" : "persisted",
         notify_status,
         email_status,
+        document_intent: record.document_intent,
         // Fail-closed contract: the visitor only ever learns the payment
         // correlation on this path, after the record is durably stored.
         ...(radarPublic || {}),

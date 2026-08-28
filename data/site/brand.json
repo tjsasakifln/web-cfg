@@ -46,14 +46,14 @@
       "section_title": "Qual situação sua empresa precisa resolver agora?",
       "need": "glosa, medição retida, atraso de pagamento, notificação, multa, aditivo, reequilíbrio, paralisação ou divergência de projeto e orçamento",
       "complement": "Organizamos fatos, cronologia, documentos e cálculos para sustentar a decisão técnica.",
-      "cta": "Solicitar canal seguro",
+      "cta": "Solicitar canal seguro para envio",
       "cta_secondary": "Falar pelo WhatsApp",
       "href": "/#contato",
       "href_params": "jornada=contrato",
       "obrigado": "/obrigado-contrato",
-      "wa_message": "Olá, Tiago. Tenho um problema urgente em contrato público e quero solicitar um canal seguro para a análise.",
-      "response_sla": "Retorno inicial em até 1 dia útil nos casos urgentes; demais em até 2 dias úteis.",
-      "next_step": "Enquadramos o risco, a urgência e os documentos necessários. Sem promessa de deferimento ou recuperação."
+      "wa_message": "Olá, Tiago. Tenho um problema urgente em contrato público e quero solicitar um canal seguro para envio.",
+      "response_sla": "Retorno inicial em até 1 dia útil nos casos urgentes; demais em até 2 dias úteis. O canal de envio é escolhido posteriormente.",
+      "next_step": "Registramos o pedido de canal seguro. O site não recebe arquivo; o canal é escolhido posteriormente. Sem promessa de deferimento ou recuperação."
     },
     {
       "id": "edital",
@@ -61,14 +61,14 @@
       "label": "Estou analisando uma licitação",
       "need": "leitura crítica do edital, habilitação, acervo, orçamento, cronograma, riscos e decisão de participar ou recusar",
       "complement": "A triagem deve respeitar o prazo real da licitação e a capacidade de execução da empresa.",
-      "cta": "Enviar edital para triagem",
+      "cta": "Solicitar canal seguro para envio",
       "cta_secondary": "Falar pelo WhatsApp",
       "href": "/#contato",
       "href_params": "jornada=edital",
       "obrigado": "/obrigado-edital",
-      "wa_message": "Olá, Tiago. Tenho um edital em análise e quero enviar para triagem.",
-      "response_sla": "Triagem inicial em até 2 dias úteis após o recebimento do edital e dados essenciais.",
-      "next_step": "Indicamos se o caso pede leitura rápida, Operação de Proposta para Licitação Crítica ou recusa fundamentada."
+      "wa_message": "Olá, Tiago. Tenho um edital em análise e quero solicitar um canal seguro para envio.",
+      "response_sla": "Triagem inicial em até 2 dias úteis após dados essenciais. O canal de envio é escolhido posteriormente.",
+      "next_step": "Registramos o pedido de canal seguro. O site não recebe arquivo; o canal é escolhido posteriormente. Indicamos se o caso pede leitura rápida, Operação de Proposta para Licitação Crítica ou recusa fundamentada."
     },
     {
       "id": "operacao",
@@ -174,8 +174,8 @@
       "headline": "Para o edital que exige coordenação da proposta, não improviso.",
       "description": "Leitura crítica, estratégia, habilitação, acervo, orçamento, cronograma, responsabilidades, revisão crítica independente e controle final da proposta.",
       "result": "Uma decisão consciente de participar e uma proposta coerente com a capacidade da empresa.",
-      "cta": "Enviar edital para triagem",
-      "wa_message": "Olá, Tiago. Tenho um edital crítico e quero enviar para triagem da Operação de Proposta para Licitação Crítica.",
+      "cta": "Solicitar canal seguro para envio",
+      "wa_message": "Olá, Tiago. Tenho um edital crítico e quero solicitar um canal seguro para envio.",
       "schema_service_type": "Operação de Proposta para Licitação Crítica"
     },
     {
@@ -187,7 +187,7 @@
       "headline": "Quando cada dia sem registro enfraquece sua posição.",
       "description": "Organização de cronologia, causalidade, cálculos, evidências, notificações, aditivos, reequilíbrio, defesa técnica e proteção de margem.",
       "result": "Posição técnica organizada para decisão da direção e atuação coordenada com jurídico e engenharia.",
-      "cta": "Solicitar canal seguro",
+      "cta": "Solicitar canal seguro para envio",
       "wa_message": "Olá, Tiago. Preciso enquadrar um risco contratual e proteger a margem de um contrato público.",
       "schema_service_type": "Defesa de margem em contratos públicos"
     }

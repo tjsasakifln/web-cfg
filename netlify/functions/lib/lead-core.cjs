@@ -6,6 +6,32 @@ const crypto = require("crypto");
 const { validateCnpj } = require("../../../scripts/conversion/cnpj.cjs");
 
 const MAX_BODY_BYTES = 24 * 1024;
+// Standard antivirus fixture. Rejected as bytes, never persisted. Not a real sample.
+const EICAR_SIGNATURE = "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*";
+const FILE_FIELD_KEYS = new Set([
+  "file",
+  "files",
+  "arquivo",
+  "arquivos",
+  "anexo",
+  "anexos",
+  "attachment",
+  "attachments",
+  "document",
+  "documents",
+  "documento",
+  "documentos",
+  "upload",
+  "uploads",
+  "filename",
+  "file_name",
+  "filedata",
+  "file_data",
+  "blob",
+  "binary",
+  "octet",
+]);
+const DOCUMENT_INTENT_ALLOWED = new Set(["secure_channel_request"]);
 const MAX_FIELD = {
   nome: 120,
   telefone: 40,
@@ -56,6 +82,7 @@ const MAX_FIELD = {
   offer_id: 80,
   terms_id: 80,
   amount_cents: 16,
+  document_intent: 40,
 };
 
 /** Query/body keys that may persist as attribution. Everything else is dropped. */
@@ -473,6 +500,91 @@ function normalizeJourney(raw, estagio) {
   return "operacao";
 }
 
+function looksLikeBinaryPayload(raw) {
+  if (raw == null) return false;
+  const text = typeof raw === "string" ? raw : String(raw);
+  if (!text) return false;
+  if (text.includes("\0")) return true;
+  if (text.includes(EICAR_SIGNATURE)) return true;
+  if (text.startsWith("%PDF") || text.startsWith("PK\u0003\u0004") || text.startsWith("MZ")) return true;
+  if (/^data:[^;]+;base64,/i.test(text.slice(0, 96))) return true;
+  return false;
+}
+
+function contentTypeRejectsFiles(contentType) {
+  const ct = String(contentType || "").toLowerCase();
+  if (!ct) return false;
+  if (ct.includes("multipart/")) return true;
+  if (ct.includes("application/octet-stream")) return true;
+  if (ct.includes("application/pdf") || ct.includes("application/zip")) return true;
+  if (ct.startsWith("image/") || ct.startsWith("audio/") || ct.startsWith("video/")) return true;
+  if (ct.includes("application/vnd")) return true;
+  return false;
+}
+
+function isBufferLike(value) {
+  return (
+    Buffer.isBuffer(value) ||
+    (value && typeof value === "object" && value.type === "Buffer" && Array.isArray(value.data))
+  );
+}
+
+function rejectFileShape(raw, contentType, data) {
+  if (contentTypeRejectsFiles(contentType)) {
+    return { ok: false, error: "file_payload_rejected", status: 415 };
+  }
+  if (looksLikeBinaryPayload(raw)) {
+    return { ok: false, error: "file_payload_rejected", status: 415 };
+  }
+  if (data && typeof data === "object") {
+    for (const key of Object.keys(data)) {
+      const lower = String(key).toLowerCase();
+      if (FILE_FIELD_KEYS.has(lower) || /\.(pdf|xlsx?|docx?|zip|exe|bin)$/i.test(lower)) {
+        return { ok: false, error: "file_payload_rejected", status: 415 };
+      }
+      const value = data[key];
+      if (isBufferLike(value)) {
+        return { ok: false, error: "file_payload_rejected", status: 415 };
+      }
+      if (typeof value === "string" && looksLikeBinaryPayload(value)) {
+        return { ok: false, error: "file_payload_rejected", status: 415 };
+      }
+    }
+  }
+  return null;
+}
+
+function leadHasFilePayload(record) {
+  if (!record || typeof record !== "object") return false;
+  return Boolean(rejectFileShape("", "", record));
+}
+
+function titularExport(record) {
+  if (leadHasFilePayload(record)) {
+    const err = new Error("file_payload_forbidden");
+    err.code = "file_payload_forbidden";
+    throw err;
+  }
+  const exported = {
+    lead_id: record.lead_id || null,
+    received_at: record.received_at || null,
+    jornada: record.jornada || null,
+    estagio: record.estagio || null,
+    document_intent: record.document_intent || null,
+    canal_seguro: Boolean(record.canal_seguro),
+    channel_status: record.document_intent ? "canal escolhido posteriormente" : null,
+    source: record.source || "CONFENGE_WEB",
+  };
+  for (const key of Object.keys(exported)) {
+    if (FILE_FIELD_KEYS.has(key.toLowerCase())) {
+      const err = new Error("file_payload_forbidden");
+      err.code = "file_payload_forbidden";
+      throw err;
+    }
+  }
+  return exported;
+}
+
 function parseBody(event) {
   if (!event || event.body == null) return { ok: true, data: {} };
   let raw = event.isBase64Encoded
@@ -483,30 +595,41 @@ function parseBody(event) {
   }
   const headers = event.headers || {};
   const ct = String(headers["content-type"] || headers["Content-Type"] || "").toLowerCase();
+  const early = rejectFileShape(raw, ct, null);
+  if (early) return early;
+
+  let data;
   if (ct.includes("application/json")) {
     try {
-      const data = JSON.parse(raw || "{}");
-      if (data && typeof data === "object" && !Array.isArray(data)) {
-        return { ok: true, data };
+      const parsed = JSON.parse(raw || "{}");
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        data = parsed;
+      } else {
+        return { ok: false, error: "invalid_json", status: 400 };
       }
-      return { ok: false, error: "invalid_json", status: 400 };
     } catch {
       return { ok: false, error: "invalid_json", status: 400 };
     }
-  }
-  const out = {};
-  for (const part of raw.split("&")) {
-    if (!part) continue;
-    const eq = part.indexOf("=");
-    const k = eq === -1 ? part : part.slice(0, eq);
-    const v = eq === -1 ? "" : part.slice(eq + 1);
-    try {
-      out[decodeURIComponent(k.replace(/\+/g, " "))] = decodeURIComponent(v.replace(/\+/g, " "));
-    } catch {
-      /* skip bad pair */
+  } else if (!ct || ct.includes("application/x-www-form-urlencoded") || ct.includes("text/plain")) {
+    const out = {};
+    for (const part of raw.split("&")) {
+      if (!part) continue;
+      const eq = part.indexOf("=");
+      const k = eq === -1 ? part : part.slice(0, eq);
+      const v = eq === -1 ? "" : part.slice(eq + 1);
+      try {
+        out[decodeURIComponent(k.replace(/\+/g, " "))] = decodeURIComponent(v.replace(/\+/g, " "));
+      } catch {
+        /* skip bad pair */
+      }
     }
+    data = out;
+  } else {
+    return { ok: false, error: "unsupported_media_type", status: 415 };
   }
-  return { ok: true, data: out };
+  const after = rejectFileShape(raw, ct, data);
+  if (after) return after;
+  return { ok: true, data };
 }
 
 function isHoneypot(data) {
@@ -784,6 +907,17 @@ function validateAndNormalize(data) {
     terms_id: offerCheck.terms_id || null,
     radar_params: radarParams,
     source: "CONFENGE_WEB",
+    document_intent: DOCUMENT_INTENT_ALLOWED.has(clamp(data.document_intent, MAX_FIELD.document_intent))
+      ? clamp(data.document_intent, MAX_FIELD.document_intent)
+      : null,
+    canal_seguro:
+      data.canal_seguro === true ||
+      data.canal_seguro === "true" ||
+      data.canal_seguro === "on" ||
+      data.canal_seguro === "1" ||
+      data.canal_seguro === "yes" ||
+      data.canal_seguro === "sim" ||
+      clamp(data.document_intent, MAX_FIELD.document_intent) === "secure_channel_request",
   };
 
   return { ok: true, honeypot: false, lead };
@@ -952,6 +1086,7 @@ function publicSuccessBody({
   correlation_id,
   external_reference,
   delivery_business_days,
+  document_intent,
 }) {
   const body = {
     ok: true,
@@ -962,6 +1097,10 @@ function publicSuccessBody({
     stage_category: stage_category ? String(stage_category).slice(0, 80) : undefined,
     status: status || "persisted",
   };
+  if (document_intent === "secure_channel_request") {
+    body.document_intent = "secure_channel_request";
+    body.channel_status = "canal escolhido posteriormente";
+  }
   // Payment correlation for paid parameter orders. Never PII: an offer id and a
   // digest. Emitted only after the durable persist succeeded.
   if (correlation_id) body.correlation_id = String(correlation_id).slice(0, 60);
@@ -985,7 +1124,7 @@ function publicErrorBody({ error, message }) {
   };
 }
 
-const SENSITIVE_LOG_KEY = /(?:^|_)(?:authorization|bearer|cnpj|cpf|email|ip|mail|message|mensagem|name|nome|phone|secret|tel|token|whatsapp)(?:_|$)/i;
+const SENSITIVE_LOG_KEY = /(?:^|_)(?:authorization|bearer|cnpj|cpf|email|ip|mail|message|mensagem|name|nome|phone|secret|tel|token|whatsapp|file|arquivo|anexo|document|upload|eicar)(?:_|$)/i;
 
 function redactSensitiveText(value) {
   let text = String(value == null ? "" : value);
@@ -995,6 +1134,7 @@ function redactSensitiveText(value) {
     // Keep malformed percent-encoding printable, then apply the same guards.
   }
   return text
+    .replaceAll(EICAR_SIGNATURE, "[redacted]")
     .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, "[redacted]")
     .replace(/\b\d{3}[.-]?\d{3}[.-]?\d{3}-?\d{2}\b/g, "[redacted]")
     .replace(/\b\d{2}[.\s]?\d{3}[.\s]?\d{3}[\/]?\d{4}-?\d{2}\b/g, "[redacted]")
@@ -1050,6 +1190,12 @@ module.exports = {
   sanitizeAttributionLocation,
   pickAttribution,
   parseBody,
+  looksLikeBinaryPayload,
+  rejectFileShape,
+  leadHasFilePayload,
+  titularExport,
+  EICAR_SIGNATURE,
+  FILE_FIELD_KEYS,
   isHoneypot,
   nonCatalogAction,
   assertOfferTermsAndPrice,
