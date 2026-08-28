@@ -222,7 +222,7 @@ assert("value_line_promises_no_outcome", promisingLines.length === 0, promisingL
 const entregasHtml = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
 const publishedSurface = data.published_surface || {};
 const legacyPublishedNames = publishedSurface.legacy_names_before_2026_08_25 || [];
-assert("published_surface_declares_54_names", publishedSurface.published_deliverable_count === 54, publishedSurface);
+assert("published_surface_declares_8_public_names", publishedSurface.published_deliverable_count === 8, publishedSurface);
 assert(
   "published_surface_path_is_entregas",
   publishedSurface.path === "entregas/index.html" && publishedSurface.canonical_names_source === "names[].public_name_pt_br",
@@ -235,10 +235,14 @@ assert(
 );
 assert("legacy_surface_declares_8_names", legacyPublishedNames.length === 8, legacyPublishedNames.length);
 
-const missingCanonicalOnPage = names.filter((offer) => !entregasHtml.includes(offer.public_name_pt_br));
-assert("canonical_names_visible_54_of_54", missingCanonicalOnPage.length === 0, missingCanonicalOnPage.map((offer) => offer.deliverable_id));
-const missingValueLinesOnPage = names.filter((offer) => !entregasHtml.includes(offer.value_line_pt_br));
-assert("value_lines_visible_54_of_54", missingValueLinesOnPage.length === 0, missingValueLinesOnPage.map((offer) => offer.deliverable_id));
+const publishedNames = names.filter((offer) => publishedSurface.primary_comparison_ids.includes(offer.deliverable_id));
+const missingCanonicalOnPage = publishedNames.filter((offer) => !entregasHtml.includes(offer.public_name_pt_br));
+assert("canonical_names_visible_8_of_8", missingCanonicalOnPage.length === 0, missingCanonicalOnPage.map((offer) => offer.deliverable_id));
+const missingValueLinesOnPage = publishedNames.filter((offer) => !entregasHtml.includes(offer.value_line_pt_br));
+assert("value_lines_visible_8_of_8", missingValueLinesOnPage.length === 0, missingValueLinesOnPage.map((offer) => offer.deliverable_id));
+const vitrineHtml = (entregasHtml.match(/<!-- GENERATED:PUBLIC-CATALOG:START -->[\s\S]*?<!-- GENERATED:PUBLIC-CATALOG:END -->/) || [""])[0];
+const backlogNamesOnPage = names.filter((offer) => !publishedSurface.primary_comparison_ids.includes(offer.deliverable_id) && vitrineHtml.includes(offer.public_name_pt_br));
+assert("backlog_names_not_sold_on_vitrine", backlogNamesOnPage.length === 0, backlogNamesOnPage.map((offer) => offer.deliverable_id));
 const compareBody = entregasHtml.match(/<table class="compare-table">[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/)?.[1] || "";
 const primaryNames = names.slice(0, 8).map((offer) => offer.public_name_pt_br);
 assert("primary_comparison_uses_canonical_names", primaryNames.every((name) => compareBody.includes(name)), primaryNames.filter((name) => !compareBody.includes(name)));
@@ -280,9 +284,9 @@ const normalizedAliasShadows = allOffers.flatMap((offer) => (offer.aliases || []
   .map((alias) => `${offer.deliverable_id || offer.container_id}:${alias}`));
 assert("aliases_do_not_shadow_canonical_names_normalized", normalizedAliasShadows.length === 0, normalizedAliasShadows);
 assert(
-  "all_aliases_searchable_in_catalog_or_primary_page",
-  names.every((offer) => (offer.aliases || []).every((alias) => entregasHtml.toLocaleLowerCase("pt-BR").includes(alias.toLocaleLowerCase("pt-BR")))),
-  names.filter((offer) => (offer.aliases || []).some((alias) => !entregasHtml.toLocaleLowerCase("pt-BR").includes(alias.toLocaleLowerCase("pt-BR")))).map((offer) => offer.deliverable_id),
+  "published_aliases_searchable_in_vitrine",
+  publishedNames.every((offer) => (offer.aliases || []).every((alias) => entregasHtml.toLocaleLowerCase("pt-BR").includes(alias.toLocaleLowerCase("pt-BR")))),
+  publishedNames.filter((offer) => (offer.aliases || []).some((alias) => !entregasHtml.toLocaleLowerCase("pt-BR").includes(alias.toLocaleLowerCase("pt-BR")))).map((offer) => offer.deliverable_id),
 );
 
 // as oito ofertas publicadas são exatamente CFG-D01..CFG-D08 (a trilha de expansão)

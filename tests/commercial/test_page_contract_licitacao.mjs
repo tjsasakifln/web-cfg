@@ -484,15 +484,12 @@ assert(
 );
 
 const catalogPage = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
+const catalogData = fs.readFileSync(path.join(root, "entregas/catalog-data.js"), "utf8");
 for (const item of items) {
-  assert(`catalog_product_anchor_${item.item}`, catalogPage.includes(`id="entrega-${item.item}"`), item.item);
-  assert(`catalog_product_id_${item.item}`, catalogPage.includes(`data-deliverable-id="${item.deliverable_id}"`), item.deliverable_id);
-  assert(`catalog_product_name_${item.item}`, catalogPage.includes(item.public_name_pt_br), item.public_name_pt_br);
-  const catalogPriceVisible = (item.price.tiers || []).length
-    ? [item.price.tiers[0], item.price.tiers.at(-1)].every((tier) => catalogPage.includes(tier.display_pt_br))
-    : catalogPage.includes(item.price.display_pt_br);
-  assert(`catalog_product_price_${item.item}`, catalogPriceVisible, item.price.display_pt_br);
-  assert(`catalog_product_handraise_${item.item}`, catalogPage.includes(`data-cta-id="catalog-fit-${item.item}"`), item.item);
+  assert(`catalog_product_not_sold_on_vitrine_${item.item}`, !catalogPage.includes(`id="entrega-${item.item}"`), item.item);
+  assert(`catalog_product_kept_in_internal_data_${item.item}`, catalogData.includes(`"${item.deliverable_id}"`) && catalogData.includes(item.public_name_pt_br), item.deliverable_id);
+  const vitrineHtml = (catalogPage.match(/<!-- GENERATED:PUBLIC-CATALOG:START -->[\s\S]*?<!-- GENERATED:PUBLIC-CATALOG:END -->/) || [""])[0];
+  assert(`catalog_product_name_not_on_vitrine_${item.item}`, !vitrineHtml.includes(item.public_name_pt_br), item.public_name_pt_br);
 }
 assert("catalog_capture_present", catalogPage.includes('id="captura-entregas"'));
 assert("catalog_capture_persisted", catalogPage.includes('action="/.netlify/functions/lead"'));

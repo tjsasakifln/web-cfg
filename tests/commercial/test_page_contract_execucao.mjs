@@ -775,10 +775,9 @@ for (const item of items) {
   const copyContract = contractById.get(item.deliverable_id) || "";
   const inputSection = sectionFor(copyContract, "client_inputs_and_sla_start");
   const outputSection = sectionFor(copyContract, "concrete_result_and_artifact_example");
-  assert(`item_${item.number}_is_visible_in_hub`, article.length > 0, item.deliverable_id);
-  assert(`item_${item.number}_canonical_name_is_visible`, article.includes(item.public_name_pt_br), item.public_name_pt_br);
-  assert(`item_${item.number}_value_line_is_visible`, article.includes(item.value_line_pt_br), item.value_line_pt_br);
-  assert(`item_${item.number}_price_is_visible`, item.pricing.tiers.every((tier) => article.includes(brl(tier.price_cents))), item.pricing.tiers);
+  assert(`item_${item.number}_is_not_sold_on_vitrine`, article.length === 0 && !hub.includes(`id="entrega-${item.number}"`), item.deliverable_id);
+  assert(`item_${item.number}_kept_in_internal_copy_contract`, copyContract.includes(item.public_name_pt_br), item.public_name_pt_br);
+  assert(`item_${item.number}_value_line_kept_internally`, namingById.get(item.deliverable_id)?.value_line_pt_br === item.value_line_pt_br, item.value_line_pt_br);
   assert(
     `item_${item.number}_inputs_are_progressively_visible`,
     canonical?.required_inputs?.length >= 4 &&
@@ -793,7 +792,7 @@ for (const item of items) {
   );
 }
 
-const item16 = articleFor(16);
+const item16 = contractById.get("CFG-D16") || "";
 assert("item_16_shows_execution_composition", item16.includes('data-execution-composition="CFG-D16"'), item16.length);
 assert(
   "item_16_links_all_six_separate_executions",
@@ -811,13 +810,13 @@ assert(
   "credit disclosure",
 );
 
-const item49 = articleFor(49);
+const item49 = contractById.get("CFG-D49") || "";
 assert(
   "item_49_visibly_differs_from_item_14",
   item49.includes('data-execution-boundary="14-49"') && item49.includes("item 14 audita") && item49.includes("item 49 produz"),
   "audit versus production",
 );
-const item51 = articleFor(51);
+const item51 = contractById.get("CFG-D51") || "";
 assert(
   "item_51_visibly_differs_from_item_13",
   item51.includes('data-execution-boundary="13-51"') && item51.includes("item 13 diagnostica") && item51.includes("item 51 monta"),
@@ -833,7 +832,7 @@ assert(
     item51.includes("limitado ao valor pago"),
   "credit visible at the offer where it applies",
 );
-const item53 = articleFor(53);
+const item53 = contractById.get("CFG-D53") || "";
 assert(
   "item_53_visibly_keeps_client_as_operator",
   item53.includes('data-execution-operator="client-only"') &&
@@ -843,9 +842,8 @@ assert(
   "client only operator",
 );
 
-const captureAt = hub.indexOf('id="captura-entregas"');
-assert("execution_items_precede_terminal_capture", items.every((item) => hub.indexOf(`id="entrega-${item.number}"`) < captureAt), captureAt);
-assert("execution_items_use_terminal_capture", items.every((item) => articleFor(item.number).includes('href="#captura-entregas"')), items.map((item) => item.number));
+assert("execution_items_are_not_public_vitrine", items.every((item) => !hub.includes(`id="entrega-${item.number}"`)), items.map((item) => item.number));
+assert("terminal_capture_still_present", hub.includes('id="captura-entregas"'), "capture");
 
 /* ------------------------------------------------------------------ */
 

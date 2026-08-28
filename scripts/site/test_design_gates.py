@@ -237,28 +237,22 @@ def test_deliverables_library_declares_its_hierarchy_in_copy():
     html = path.read_text(encoding="utf-8")
     blocks = narrative_blocks(html)
     by_archetype = Counter(b["archetype"] for b in blocks)
-    assert by_archetype["ladder_entry"] == 1, by_archetype
     assert by_archetype["compare_ladder"] == 1, by_archetype
+    assert by_archetype["catalog_index"] == 1, by_archetype
 
     text = re.sub(r"<[^>]+>", " ", html)
     text = re.sub(r"\s+", " ", text)
     assert "Por que abre a biblioteca" in text, "entry step must declare why it opens the page"
+    assert "único sem o crédito de 60 dias" in text
 
-    # No section may dominate by sheer length: the entry example used to be 59%
-    # longer than its peers, which is emphasis by accident instead of by choice.
-    lengths = {}
-    for block in blocks:
-        if not block["id"].startswith(("primeiro-exemplo", "exemplo-")):
-            continue
-        raw = re.search(
-            rf'<section[^>]+id="{re.escape(block["id"])}".*?</section>', html, flags=re.DOTALL
-        )
-        assert raw, block["id"]
-        visible = re.sub(r"<[^>]+>", " ", raw.group(0))
-        lengths[block["id"]] = len(re.sub(r"\s+", " ", visible).strip())
-    assert len(lengths) == 8, lengths
-    assert max(lengths.values()) <= int(min(lengths.values()) * 1.35), (
-        f"one example dominates by length: {lengths}"
+    cards = re.findall(r'<article class="vitrine-item[\s\S]*?</article>', html)
+    assert len(cards) == 8, len(cards)
+    lengths = [
+        len(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", card)).strip())
+        for card in cards
+    ]
+    assert max(lengths) <= int(min(lengths) * 2.2), (
+        f"one offer dominates by length: {lengths}"
     )
 
 

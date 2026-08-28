@@ -183,7 +183,7 @@ function executionCallout(entry, executionContract) {
   return `<aside class="catalog-item__execution" data-execution-offer="${entry.deliverable_id}">${sections.join("")}</aside>`;
 }
 
-function contractBody(entry, neighbor) {
+function contractBody(entry, neighbor, executionContract) {
   const state = STATE[entry.public_state];
   const proof = entry.public_state === "PUBLISHED"
     ? `Em ${entry.public_name_pt_br}, a amostra sintética integral mostra ${publicText(lowerFirst(entry.included_outputs[0]))}, com método, fonte, data e cobertura visíveis. Nenhum caso real é insinuado.`
@@ -214,7 +214,7 @@ function contractBody(entry, neighbor) {
     copyClause("cta_with_post_click_expectation", "Próxima ação", `<p>${escapeHtml(actionExpectation)}</p><p>Estado atual: ${escapeHtml(state.label)}.</p>`),
     copyClause("neighbor_alternative_and_step_up", "Alternativa e próximo nível", `<p>${escapeHtml(neighborCopy)}</p><p>Próximo nível: ${escapeHtml(stepUpLabel(entry))}.</p>`),
   ];
-  return clauses.join("");
+  return `${clauses.join("")}${executionCallout(entry, executionContract)}`;
 }
 
 function brl(cents) {
@@ -291,32 +291,143 @@ const STATE = {
   },
 };
 
-function itemCard(entry, executionContract) {
-  const state = STATE[entry.public_state];
-  const title = escapeHtml(entry.public_name_pt_br);
-  // Aliases support search/analytics compatibility without competing with the
-  // canonical visitor-facing name from #343.
-  const searchAliases = escapeHtml(
-    (entry.name_aliases || []).filter((name) => name !== entry.public_name_pt_br).join(" | "),
-  );
-  const action = entry.public_state === "PUBLISHED"
-    ? `<a class="text-link" data-asset-id="${entry.deliverable_id}" data-cta-id="catalog-open-${entry.catalog_number}" data-cta-position="catalog_index" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Consultar exemplo completo</a>`
-    : entry.public_state === "VALIDATE"
-      ? `<a class="text-link" data-asset-id="${entry.deliverable_id}" data-cta-id="catalog-fit-${entry.catalog_number}" data-cta-position="catalog_index" data-deliverable-id="${entry.deliverable_id}" data-event-name="cta_click" href="#captura-entregas">Pedir análise de aderência</a>`
-      : '<span class="catalog-item__unavailable">Contratação indisponível</span>';
+const VITRINE_HEADING_IDS = {
+  "01": "first-deliverable-title",
+  "02": "deliverable-base-quantitativa-title",
+  "03": "deliverable-apresentacao-executiva-title",
+  "04": "deliverable-mapa-compradores-title",
+  "05": "deliverable-contratos-vincendos-title",
+  "06": "deliverable-mapeamento-concorrentes-title",
+  "07": "deliverable-painel-precos-title",
+  "08": "deliverable-relatorio-executivo-title",
+};
+const VITRINE_CTA_SLUGS = {
+  "01": "priorizacao",
+  "02": "base-quantitativa",
+  "03": "apresentacao-executiva",
+  "04": "mapa-compradores",
+  "05": "contratos-vincendos",
+  "06": "mapeamento-concorrentes",
+  "07": "painel-precos",
+  "08": "relatorio-executivo",
+};
 
-  return `<article class="catalog-item catalog-item--${entry.public_state.toLowerCase()}" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-task-door="${entry.task_door}" data-object="${objectKind(entry)}" data-urgency="${urgencyKind(entry)}" data-price-band="${priceBand(entry)}" data-billing="${entry.price.billing}" data-search-aliases="${searchAliases}" id="entrega-${entry.catalog_number}">
-<header class="catalog-item__head"><span class="catalog-item__number">${entry.catalog_number}</span><span class="catalog-item__state">${state.label}</span></header>
-<h5>${title}</h5>
-<p class="catalog-item__value">${escapeHtml(entry.value_line_pt_br)}</p>
-<p class="catalog-item__question">${escapeHtml(entry.decision_question)}</p>
-<dl class="catalog-item__facts"><div><dt>Preço</dt><dd>${priceLabel(entry)}</dd></div><div><dt>Prazo</dt><dd>${escapeHtml(publicText(slaLabel(entry)))}</dd></div><div><dt>Saída principal</dt><dd>${escapeHtml(publicText(entry.included_outputs[0]))}</dd></div></dl>
-${executionCallout(entry, executionContract)}
-${action}
-</article>`;
+export function publishedVitrine(registry) {
+  const items = (registry.deliverables || []).filter((entry) => entry.public_state === "PUBLISHED");
+  if (items.length !== 8) throw new Error(`PUBLIC_VITRINE_COUNT: expected 8 published entregas, got ${items.length}`);
+  const numbers = items.map((entry) => entry.catalog_number);
+  if (JSON.stringify(numbers) !== JSON.stringify(["01", "02", "03", "04", "05", "06", "07", "08"])) {
+    throw new Error(`PUBLIC_VITRINE_ORDER: expected CFG-D01..CFG-D08, got ${numbers.join(",")}`);
+  }
+  return items;
 }
 
-export function renderClientData(registry) {
+function fitLabel(entry) {
+  if (entry.offer_container === "expansion_package") {
+    return "Unidade do Diagnóstico. Crédito em até 60 dias, sem acúmulo.";
+  }
+  return "À parte, fora do pacote. Sem crédito.";
+}
+
+function searchAliases(entry) {
+  return escapeHtml((entry.name_aliases || []).filter((name) => name !== entry.public_name_pt_br).join(" | "));
+}
+
+function comparisonRow(entry) {
+  const slug = VITRINE_CTA_SLUGS[entry.catalog_number];
+  const creditCell = entry.offer_container === "expansion_package"
+    ? "Sim, em até 60 dias"
+    : "Não. Entrega à parte, fora do pacote";
+  const creditClass = entry.offer_container === "expansion_package" ? "" : ' class="compare-credit-off"';
+  return `<tr>
+<th scope="row"><span class="compare-index">${entry.catalog_number}</span><a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-table-${slug}" data-cta-position="ladder_table" data-event-name="cta_click" href="${escapeHtml(entry.route)}">${escapeHtml(entry.public_name_pt_br)}</a></th>
+<td data-label="Situação">${escapeHtml(publicText(entry.trigger))}</td>
+<td data-label="Decisão">${escapeHtml(entry.decision_question)}</td>
+<td data-label="Saída">${escapeHtml(publicText(entry.included_outputs[0]))}</td>
+<td data-label="Prazo">${escapeHtml(publicText(slaLabel(entry)))}</td>
+<td data-label="Preço"><strong>${escapeHtml(priceLabel(entry))}</strong></td>
+<td data-label="Fit"${creditClass}>${creditCell}</td>
+</tr>`;
+}
+
+function vitrineCard(entry) {
+  const headingId = VITRINE_HEADING_IDS[entry.catalog_number];
+  const slug = VITRINE_CTA_SLUGS[entry.catalog_number];
+  const exampleCtaId = entry.catalog_number === "01" ? "deliverables-open-report" : `deliverables-open-${slug}`;
+  const scopeCtaId = entry.catalog_number === "01" ? "deliverables-understand-scope" : `deliverables-scope-${slug}`;
+  const examplePosition = entry.catalog_number === "01" ? "example_01_open" : `example_${entry.catalog_number}_open`;
+  const scopePosition = entry.catalog_number === "01" ? "example_01_scope" : `example_${entry.catalog_number}_scope`;
+  const bundle = entry.offer_container === "expansion_package"
+    ? `<p class="vitrine-item__credit">O valor é abatido do <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> se ele for contratado em até 60 dias, sem acúmulo com outros créditos.</p>`
+    : `<p class="vitrine-item__credit">Por que abre a biblioteca: é o degrau mais barato e o único sem o crédito de 60 dias. Entrega à parte, fora do Diagnóstico de Expansão no Mercado Público. Relatório adaptado: R$ 599 por unidade. A CONFENGE busca os editais abertos no raio informado. A quantidade depende das licitações publicadas, e a profundidade é a máxima permitida pelas informações da empresa. Bases da análise: editais abertos localizados pela CONFENGE e realidade da construtora. Compare com o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a>.</p>`;
+  const open = entry.catalog_number === "01"
+    ? `<section id="primeiro-exemplo" data-section-archetype="ladder_entry" aria-labelledby="${headingId}"><article class="vitrine-item vitrine-item--anchor" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-search-aliases="${searchAliases(entry)}" id="entrega-${entry.catalog_number}">`
+    : `<article class="vitrine-item" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-search-aliases="${searchAliases(entry)}" id="entrega-${entry.catalog_number}">`;
+  const close = entry.catalog_number === "01" ? "</article></section>" : "</article>";
+  return `${open}
+<header class="vitrine-item__head"><span>${entry.catalog_number}</span><h2 id="${headingId}">${escapeHtml(entry.public_name_pt_br)}</h2><strong>${escapeHtml(priceLabel(entry))}</strong></header>
+<p class="vitrine-item__value">${escapeHtml(entry.value_line_pt_br)}</p>
+<dl class="vitrine-item__facts">
+<div><dt>Situação</dt><dd>${escapeHtml(publicText(entry.trigger))}</dd></div>
+<div><dt>Decisão</dt><dd>${escapeHtml(entry.decision_question)}</dd></div>
+<div><dt>Saída</dt><dd>${escapeHtml(publicText(entry.included_outputs[0]))}</dd></div>
+<div><dt>Prazo</dt><dd>${escapeHtml(publicText(slaLabel(entry)))}</dd></div>
+<div><dt>Preço</dt><dd>${escapeHtml(priceLabel(entry))}</dd></div>
+<div><dt>Fit</dt><dd>${escapeHtml(fitLabel(entry))}</dd></div>
+</dl>
+${bundle}
+<div class="vitrine-item__actions">
+<a class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Ver o exemplo de ${escapeHtml(entry.public_name_pt_br)} <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="text-link" data-asset-id="entregas-exemplos-hub" data-cta-id="${scopeCtaId}" data-cta-position="${scopePosition}" data-event-name="cta_click" href="#captura-entregas">Pedir análise de ${escapeHtml(entry.public_name_pt_br)}</a>
+</div>
+${close}`;
+}
+
+function renderComparison(published) {
+  return `<section class="deliverable-compare" id="comparar" data-section-archetype="compare_ladder" aria-labelledby="compare-title">
+<div class="container">
+<div class="compare-head">
+<div>
+<p class="eyebrow">As oito, lado a lado</p>
+<h2 id="compare-title">Escolha pela pergunta que você precisa responder.</h2>
+</div>
+<p class="compare-lead">Sete das oito são unidades avulsas do <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-ladder-table" data-cta-position="ladder_table_summary" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> e devolvem o valor pago se o pacote for contratado em até 60 dias. A primeira é contratada à parte e por isso não entra nessa regra.</p>
+</div>
+<div class="compare-scroll" role="region" aria-label="Tabela comparativa das oito entregas" tabindex="0">
+<table class="compare-table">
+<caption class="compare-caption">Entregas publicadas, com situação, decisão, saída, prazo, preço e encaixe no pacote de R$ 8.000.</caption>
+<thead><tr><th scope="col">Entrega</th><th scope="col">Situação</th><th scope="col">Decisão</th><th scope="col">Saída</th><th scope="col">Prazo</th><th scope="col">Preço</th><th scope="col">Fit</th></tr></thead>
+<tbody>
+${published.map(comparisonRow).join("\n")}
+</tbody>
+</table>
+</div>
+<dl class="compare-ladder-figures">
+<div><dt>Faixa por unidade</dt><dd>R$ 599 a R$ 3.750</dd></div>
+<div><dt>As sete unidades, uma a uma</dt><dd>R$ 12.280</dd></div>
+<div><dt>Diagnóstico de Expansão no Mercado Público</dt><dd>R$ 8.000</dd></div>
+</dl>
+<p class="compare-note">A diferença entre R$ 12.280 e R$ 8.000 é R$ 4.280. Todos os exemplos usam a mesma base sintética. Empresa, órgãos, concorrentes, valores e decisões são demonstrativos e não representam cliente real.</p>
+</div>
+</section>`;
+}
+
+function renderFraming(published) {
+  const items = published.map((entry) =>
+    `<li><a href="#entrega-${entry.catalog_number}">${escapeHtml(entry.decision_question)}</a></li>`
+  ).join("");
+  return `<section class="deliverable-frame" id="enquadrar" data-section-archetype="reading_method" aria-labelledby="catalog-framing-title">
+<div class="container">
+<p class="eyebrow">Enquadramento</p>
+<h2 id="catalog-framing-title">Qual pergunta está na mesa?</h2>
+<p>As oito ofertas publicadas cabem em uma tela. Escolha a pergunta; o próximo passo é o exemplo integral ou o pedido de análise desta unidade.</p>
+<ol class="deliverable-frame__list">${items}</ol>
+<a class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-frame-capture" data-cta-position="framing" data-event-name="cta_click" href="#captura-entregas">Se a pergunta não está na lista, registrar o caso</a>
+</div>
+</section>`;
+}
+
+export function renderClientData(registry, executionContract) {
   const byTask = new Map();
   for (const entry of registry.deliverables) {
     if (!byTask.has(entry.task_door)) byTask.set(entry.task_door, []);
@@ -344,7 +455,7 @@ export function renderClientData(registry) {
       publicText(entry.exclusions[0]),
       stepUpLabel(entry),
       entry.public_state,
-      contractBody(entry, neighbor),
+      contractBody(entry, neighbor, executionContract),
     ];
   });
   const payload = { schema: CLIENT_DATA_SCHEMA, fields: CLIENT_DATA_FIELDS, items };
@@ -360,62 +471,24 @@ export function renderClientData(registry) {
   return rendered;
 }
 
-function subgroupMarkup(door, subgroup, byNumber, executionContract) {
-  const entries = subgroup.items.map((number) => byNumber.get(number));
-  return `<section class="catalog-subgroup" aria-labelledby="subgrupo-${subgroup.subgroup_id}">
-<header><h4 id="subgrupo-${subgroup.subgroup_id}">${escapeHtml(subgroup.label_pt_br)}</h4><p>${escapeHtml(subgroup.decisive_difference_pt_br)}</p></header>
-<div class="catalog-items">${entries.map((entry) => itemCard(entry, executionContract)).join("\n")}</div>
-</section>`;
-}
-
-function doorMarkup(door, byNumber, executionContract) {
-  const progressive = door.progressive_disclosure;
-  let content;
-  if (progressive?.required) {
-    content = progressive.subgroups.map((subgroup) => subgroupMarkup(door, subgroup, byNumber, executionContract)).join("\n");
-  } else {
-    content = `<section class="catalog-subgroup" aria-label="Opções para ${escapeHtml(door.public_label_pt_br)}"><h4 class="catalog-subgroup__title catalog-subgroup__title--plain">Opções para esta tarefa</h4><div class="catalog-items">${door.members.map(({ item }) => itemCard(byNumber.get(item), executionContract)).join("\n")}</div></section>`;
-  }
-  return `<section class="catalog-door" data-task-door="${door.door}" id="porta-${door.door.toLowerCase()}" aria-labelledby="porta-${door.door.toLowerCase()}-title">
-<header class="catalog-door__head"><p class="eyebrow">Tarefa ${String(door.order).padStart(2, "0")}</p><h3 id="porta-${door.door.toLowerCase()}-title">${escapeHtml(door.public_label_pt_br)}</h3><p>${escapeHtml(door.decision_question_pt_br)}</p><span>${door.member_count} entregáveis</span></header>
-${content}
-</section>`;
-}
-
-export function renderCatalog(registry, taskDoors, executionContract) {
-  const byNumber = new Map(registry.deliverables.map((entry) => [entry.catalog_number, entry]));
-  const nav = taskDoors.doors.map((door) => `<a href="#porta-${door.door.toLowerCase()}"><span>${door.order}</span>${escapeHtml(door.public_label_pt_br)} <small>${door.member_count}</small></a>`).join("\n");
-  const doors = taskDoors.doors.map((door) => doorMarkup(door, byNumber, executionContract)).join("\n");
-  const taskOptions = taskDoors.doors.map((door) => `<option value="${door.door}">${escapeHtml(door.public_label_pt_br)}</option>`).join("");
-  const inputOptions = taskDoors.interaction_rules.framing_steps[2].options_pt_br.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("");
-  const alphabetical = [...registry.deliverables]
-    .sort((a, b) => a.public_name_pt_br.localeCompare(b.public_name_pt_br, "pt-BR"))
-    .map((entry) => `<li data-alpha-item="${entry.deliverable_id}"><a href="#entrega-${entry.catalog_number}"><span>${entry.catalog_number}</span>${escapeHtml(entry.public_name_pt_br)}<small>${priceLabel(entry)} · ${STATE[entry.public_state].label}</small></a></li>`)
-    .join("\n");
+export function renderCatalog(registry) {
+  const published = publishedVitrine(registry);
   return `${CATALOG_START}
-<section class="deliverables-catalog" id="indice-integral" data-section-archetype="catalog_index" aria-labelledby="catalog-title">
+${renderFraming(published)}
+${renderComparison(published)}
+<section class="deliverables-vitrine" id="indice-integral" data-section-archetype="catalog_index" aria-labelledby="catalog-title">
 <div class="container">
-<header class="deliverables-catalog__intro"><p class="eyebrow">Índice integral</p><h2 id="catalog-title">54 entregáveis, organizados pela decisão na mesa.</h2><p>As oito entregas publicadas continuam disponíveis por inteiro. As demais aparecem com preço-piloto e estado explícito: estar no catálogo não significa compra imediata nem preço validado.</p><p><strong>Faixa:</strong> R$ 599 a R$ 39.800, com recorrências identificadas como mensais. São 54 entregáveis e 2 contêineres comerciais; planos não inflam a contagem.</p></header>
-<aside class="catalog-state-legend" aria-labelledby="catalog-state-legend-title"><h3 id="catalog-state-legend-title">Como ler evidência e disponibilidade</h3><p>Em todos os itens, dados públicos carregam fonte, data, método e cobertura; cada afirmação é marcada como fato, cálculo, inferência ou desconhecido.</p><p>Urgência abaixo do SLA só entra com capacidade confirmada e adicional de 50 por cento sobre o preço-piloto ou preço publicado daquela entrega, pago antes da cobrança. Exemplo: Diagnóstico de Riscos à Margem a R$ 2.900 em 5 dias úteis; se a capacidade aceitar 2 dias úteis, o adicional é R$ 1.450 e o total fica R$ 4.350. A capacidade pode recusar a urgência.</p><dl><div><dt>${STATE.PUBLISHED.label}</dt><dd>${STATE.PUBLISHED.explanation}</dd></div><div><dt>${STATE.VALIDATE.label}</dt><dd>${STATE.VALIDATE.explanation}</dd></div><div><dt>${STATE.BLOCKED.label}</dt><dd>${STATE.BLOCKED.explanation}</dd></div></dl></aside>
-<section class="catalog-framing" id="enquadrar" aria-labelledby="catalog-framing-title"><header><p class="eyebrow">Enquadramento em três passos</p><h3 id="catalog-framing-title">Comece pela situação, não pelo nome do produto.</h3></header><div class="catalog-framing__steps"><label><span>1</span> O que está acontecendo agora?<select data-frame-task><option value="">Escolha uma tarefa</option>${taskOptions}</select></label><label><span>2</span> Qual é o objeto e o prazo?<select data-frame-object><option value="">Escolha o objeto</option><option value="edital">Edital ou lote</option><option value="contrato">Contrato ou evento</option><option value="mercado">Carteira ou mercado</option><option value="equipe">Equipe ou operação</option></select><input type="date" data-frame-deadline aria-label="Prazo da decisão"/></label><label><span>3</span> O que você já tem?<select data-frame-input><option value="">Escolha o insumo</option>${inputOptions}</select></label></div><a class="button button-secondary" href="#indice-integral" data-catalog-recommend>Mostrar até três caminhos</a><p>${escapeHtml(taskDoors.interaction_rules.recommendation_output.disclaimer_pt_br)}</p><div class="catalog-recommendation" data-catalog-recommendation hidden aria-live="polite"></div></section>
-<section class="catalog-filters" data-catalog-filters hidden aria-labelledby="catalog-filter-title"><div><p class="eyebrow">Busca e filtros</p><h3 id="catalog-filter-title">Reduza o rol sem esconder o que existe.</h3></div><label>Buscar por nome, situação ou decisão <input type="search" data-filter-query autocomplete="off"/></label><label>Tarefa <select data-filter="task"><option value="">Todas</option>${taskOptions}</select></label><label>Objeto <select data-filter="object"><option value="">Todos</option><option value="edital">Edital ou lote</option><option value="contrato">Contrato ou evento</option><option value="mercado">Carteira ou mercado</option><option value="equipe">Equipe ou operação</option></select></label><label>Urgência segura <select data-filter="urgency"><option value="">Todas</option><option value="prazo-processual">Prazo processual</option><option value="ate-3">Até 3 dias úteis</option><option value="ate-7">Até 7 dias úteis</option><option value="planejada">Planejada ou recorrente</option></select></label><label>Preço <select data-filter="price"><option value="">Todos</option><option value="ate-2000">Até R$ 2.000</option><option value="2001-5000">R$ 2.001 a R$ 5.000</option><option value="5001-10000">R$ 5.001 a R$ 10.000</option><option value="acima-10000">Acima de R$ 10.000</option></select></label><label>Contratação <select data-filter="billing"><option value="">Todas</option><option value="one_time">Pontual</option><option value="subscription_monthly">Recorrente</option></select></label><label>Estado <select data-filter="state"><option value="">Todos</option><option value="PUBLISHED">Publicada</option><option value="VALIDATE">Em validação</option><option value="BLOCKED">Indisponível</option></select></label><div class="catalog-filter-actions"><button type="button" data-view="task" aria-pressed="true">Por tarefa</button><button type="button" data-view="alpha" aria-pressed="false">Ordem alfabética</button><button type="button" data-clear-filters>Limpar filtros</button></div><p class="catalog-filter-status" data-filter-status role="status" aria-live="polite">54 entregáveis encontrados.</p></section>
-<aside class="catalog-compare-tray" data-compare-tray hidden aria-live="polite"><p><strong data-compare-count>0</strong> selecionadas · escolha de 2 a 4</p><button type="button" data-compare-open disabled>Comparar seleção</button><button type="button" data-compare-clear>Limpar comparação</button></aside><section class="catalog-comparison" data-comparison hidden aria-labelledby="catalog-comparison-title"><header><p class="eyebrow">Comparação selecionada</p><h3 id="catalog-comparison-title">Diferenças que mudam a compra.</h3></header><div data-comparison-items></div></section>
-<nav class="catalog-door-nav" aria-label="Escolher entregáveis pela tarefa">${nav}</nav>
-<div data-task-view>${doors}</div>
-<details class="catalog-alpha" data-alpha-view><summary>Ver índice em ordem alfabética</summary><ol>${alphabetical}</ol></details>
-<div class="catalog-empty" data-catalog-empty hidden><h3>Nenhuma entrega combina com todos os filtros.</h3><p>Limpe um filtro, aumente o prazo ou registre a pergunta no item 48. Um resultado vazio não transforma uma oferta bloqueada em disponível.</p><button type="button" data-clear-filters>Limpar filtros</button></div>
-<aside class="catalog-boundary"><h3>Se o pedido não cabe no rol</h3><p>Ele só pode seguir para o item 48, Estudo Sob Medida com Dados Públicos, quando houver objeto e fronteira verificáveis. Caso contrário, a demanda é recusada. Não existe serviço oculto em atendimento genérico.</p></aside>
+<header class="deliverables-vitrine__intro"><p class="eyebrow">Oito ofertas contratáveis</p><h2 id="catalog-title">Cada entrega responde uma pergunta, com preço e prazo visíveis.</h2><p>A vitrine pública mostra só as oito unidades publicadas, de R$ 599 a R$ 3.750. O restante do rol interno permanece registro, não produto.</p></header>
+<div class="vitrine-items">${published.map(vitrineCard).join("\n")}</div>
 </div>
 </section>
 ${CATALOG_END}`;
 }
 
 export function renderSelect(registry) {
-  const options = registry.deliverables.map((entry) => {
-    const disabled = entry.public_state === "BLOCKED" ? " disabled" : "";
-    const suffix = entry.public_state === "BLOCKED" ? " (indisponível)" : "";
-    return `<option value="${entry.deliverable_id}"${disabled}>${entry.catalog_number} · ${escapeHtml(entry.public_name_pt_br)}${suffix}</option>`;
-  }).join("\n");
+  const options = publishedVitrine(registry).map((entry) =>
+    `<option value="${entry.deliverable_id}">${entry.catalog_number} · ${escapeHtml(entry.public_name_pt_br)}</option>`
+  ).join("\n");
   return `${SELECT_START}
 <label>Entrega relacionada <select id="deliverable-id" name="deliverable_id"><option value="">Ainda não sei qual entrega escolher</option>${options}</select></label>
 ${SELECT_END}`;
@@ -428,8 +501,8 @@ function replaceBlock(html, start, end, rendered) {
   return `${html.slice(0, from)}${rendered}${html.slice(to + end.length)}`;
 }
 
-export function renderPage(html, registry, taskDoors, executionContract) {
-  let next = replaceBlock(html, CATALOG_START, CATALOG_END, renderCatalog(registry, taskDoors, executionContract));
+export function renderPage(html, registry) {
+  let next = replaceBlock(html, CATALOG_START, CATALOG_END, renderCatalog(registry));
   next = replaceBlock(next, SELECT_START, SELECT_END, renderSelect(registry));
   return next;
 }
@@ -448,8 +521,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     })),
   };
   const current = fs.readFileSync(pagePath, "utf8");
-  const rendered = renderPage(current, renderedRegistry, taskDoors, executionContract);
-  const clientData = renderClientData(renderedRegistry);
+  const rendered = renderPage(current, renderedRegistry);
+  const clientData = renderClientData(renderedRegistry, executionContract);
   const currentClientData = fs.existsSync(clientDataPath)
     ? fs.readFileSync(clientDataPath, "utf8")
     : "";
@@ -461,11 +534,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       console.error(`PUBLIC_CATALOG_DRIFT: ${drift.join(", ")}; run node scripts/commercial/render_public_catalog.mjs --write`);
       process.exit(1);
     }
-    console.log(`PUBLIC_CATALOG_OK items=${registry.deliverables.length} doors=${taskDoors.doors.length}`);
+    console.log(`PUBLIC_CATALOG_OK internal=${registry.deliverables.length} public=${publishedVitrine(renderedRegistry).length}`);
   } else if (process.argv.includes("--write")) {
     fs.writeFileSync(pagePath, rendered);
     fs.writeFileSync(clientDataPath, clientData);
-    console.log(`PUBLIC_CATALOG_WRITTEN items=${registry.deliverables.length} doors=${taskDoors.doors.length}`);
+    console.log(`PUBLIC_CATALOG_WRITTEN internal=${registry.deliverables.length} public=${publishedVitrine(renderedRegistry).length}`);
   } else {
     console.error("usage: render_public_catalog.mjs --check|--write");
     process.exit(2);

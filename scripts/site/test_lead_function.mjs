@@ -450,13 +450,12 @@ _reset();
   const html = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
   const options = [...html.matchAll(/<option value="(CFG-D\d{2})"( disabled)?/g)]
     .map((match) => ({ id: match[1], disabled: Boolean(match[2]) }));
-  if (options.length !== 54 || new Set(options.map(({ id }) => id)).size !== 54) {
+  const published = ["CFG-D01", "CFG-D02", "CFG-D03", "CFG-D04", "CFG-D05", "CFG-D06", "CFG-D07", "CFG-D08"];
+  if (options.length !== 8 || JSON.stringify(options.map(({ id }) => id)) !== JSON.stringify(published)) {
     fail("catalog_deliverable_select_census", options);
   }
-  for (const blocked of ["CFG-D11", "CFG-D43"]) {
-    if (!options.some(({ id, disabled }) => id === blocked && disabled)) {
-      fail("catalog_blocked_option_disabled", blocked);
-    }
+  if (options.some(({ disabled }) => disabled) || options.some(({ id }) => ["CFG-D11", "CFG-D43"].includes(id))) {
+    fail("catalog_blocked_option_not_offered", options);
   }
 
   const base = {
