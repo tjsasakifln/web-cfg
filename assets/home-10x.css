@@ -93,8 +93,7 @@ body[data-content-cluster="home"] .contact-section{
   padding:48px 0 72px;
 }
 @supports (content-visibility:auto){
-  html.js body[data-content-cluster="home"] main>section.journeys-section,
-  html.js body[data-content-cluster="home"] main>section.contact-section{
+  html.js body[data-content-cluster="home"] main>section:not(.hero){
     content-visibility:visible;
     contain-intrinsic-size:none;
   }
