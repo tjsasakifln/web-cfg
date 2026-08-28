@@ -362,6 +362,21 @@ def test_schema_describes_the_full_collection_and_breadcrumb() -> None:
     for route in LADDER_ROUTES:
         assert any(url.endswith(route) for url in listed), route
     assert breadcrumb["itemListElement"][-1]["item"] == CANONICAL
+    schema_day = str(collection["dateModified"])[:10]
+    rewrite_day = "2026-08-28"
+    assert schema_day >= rewrite_day, (
+        f"CollectionPage.dateModified {schema_day} is older than the eight-offer rewrite {rewrite_day}"
+    )
+    sitemap_xml = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+    sitemap_match = re.search(
+        r"<loc>https://confenge.com.br/entregas/</loc>\s*<lastmod>([^<]+)</lastmod>",
+        sitemap_xml,
+    )
+    assert sitemap_match, "/entregas/ missing lastmod in sitemap.xml"
+    sitemap_day = sitemap_match.group(1)[:10]
+    assert schema_day == sitemap_day, (
+        f"CollectionPage.dateModified {schema_day} != sitemap /entregas/ lastmod {sitemap_day}"
+    )
 
 
 def test_home_discovery_is_inside_the_existing_commercial_section() -> None:
