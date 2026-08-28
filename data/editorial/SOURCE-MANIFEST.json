@@ -55,16 +55,30 @@
       "themes": ["aditivos", "equilibrio", "precos"]
     },
     {
-      "source_id": "lei-14133-art115",
+      "source_id": "lei-14133-art111",
       "type": "statute",
       "body": "Presidência da República",
-      "title": "Lei nº 14.133/2021 — art. 115 (execução fiel; proibição de retardo imotivado)",
+      "title": "Lei nº 14.133/2021 — art. 111 (vigência em contrato por escopo)",
       "number": "14.133/2021",
       "date": "2021-04-01",
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
-      "accessed_at": "2026-08-02",
-      "device": "art. 115, caput e § 1º",
-      "themes": ["atraso", "execucao"]
+      "accessed_at": "2026-08-28",
+      "device": "art. 111, caput e parágrafo único",
+      "limitations": "Aplica-se a contratação que prevê conclusão de escopo predefinido. A prorrogação automática da vigência não apaga mora nem sanção quando a não conclusão decorrer de culpa do contratado. Contrato, edital e regulamento local podem detalhar o rito de apostila ou termo.",
+      "themes": ["prazo", "vigencia", "escopo", "atraso"]
+    },
+    {
+      "source_id": "lei-14133-art115",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — art. 115 (execução fiel; retardo imotivado; impedimento e suspensão)",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-28",
+      "device": "art. 115, caput, § 1º e § 5º",
+      "limitations": "Texto federal da Lei nº 14.133/2021. O § 5º trata de prorrogação automática do cronograma de execução por apostila em caso de impedimento, ordem de paralisação ou suspensão; não se confunde com a vigência do art. 111. Culpa e nexo dependem da prova do caso concreto, do contrato e da matriz de riscos.",
+      "themes": ["atraso", "execucao", "impedimento", "suspensao"]
     },
     {
       "source_id": "lei-14133-art130-131",
@@ -98,9 +112,23 @@
       "number": "14.133/2021",
       "date": "2021-04-01",
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
-      "accessed_at": "2026-08-02",
-      "device": "art. 137",
+      "accessed_at": "2026-08-28",
+      "device": "art. 137, caput, §§ 2º e 3º",
+      "limitations": "Texto federal. Hipóteses de extinção e de opção do contratado pela suspensão até a normalização não são automáticas: exigem enquadramento no inciso, prova e observância do § 3º (calamidade, grave perturbação, guerra, ou fato a que o contratado tenha dado causa). Regulamento e contrato podem particularizar o rito.",
       "themes": ["extincao", "suspensao"]
+    },
+    {
+      "source_id": "decreto-11246-2022",
+      "type": "regulation",
+      "body": "Presidência da República",
+      "title": "Decreto nº 11.246, de 27 de outubro de 2022 (gestão e fiscalização de contratos da União)",
+      "number": "11.246/2022",
+      "date": "2022-10-27",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2022/decreto/d11246.htm",
+      "accessed_at": "2026-08-28",
+      "device": "Decreto nº 11.246/2022",
+      "limitations": "Regulamenta fiscais e gestores de contratos no âmbito da União, a partir do art. 8º da Lei nº 14.133/2021. Não vincula automaticamente Estados, Distrito Federal e Municípios, que podem ter regulamento próprio. Não cria direito a prazo, custo ou arquivamento de sanção.",
+      "themes": ["fiscalizacao", "notificacao", "gestao-contratual"]
     },
     {
       "source_id": "lei-14133-art141-143",
