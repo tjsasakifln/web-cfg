@@ -163,7 +163,7 @@ If those variables are absent: do not ask, do not create, do not search files. R
 ## Rotate a secret without recording it
 
 1. Generate the new Sandbox API key or webhook token in the Asaas Sandbox console. Do not paste it into git, fixtures, tickets, PR bodies or chat.
-2. Write the new value only into the function environment (Netlify UI / secret store). Overwrite the old name in place.
+2. Write the new value only into the host EnvironmentFile (`/etc/confenge-web/runtime.env`) or the local secret store. Overwrite the old name in place. Do not use the leftover Netlify UI as production env.
 3. Confirm rotation by invoking the hermetic suite (injected token) or a single admin checkout that returns 201/401 — never by printing the secret.
 4. Logs and HTTP responses run through `redactProviderPayload`. If a log line would contain `$aact_` or the raw token, treat it as an incident; do not copy the line into the PR.
 5. Old token is invalid immediately. In-flight Sandbox webhooks with the old header receive 401 and Asaas retries after you update the Sandbox webhook config to the new token.

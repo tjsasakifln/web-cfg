@@ -129,4 +129,8 @@ def test_runbook_contains_secret_commands_and_operational_evidence() -> None:
         "prune-releases --keep 5",
     ):
         assert command in text
-    assert "PROD_TRAFFIC_UNCHANGED" in text
+    assert "PRODUCTION_PUBLIC_RUNTIME" in text
+    assert "PROD_TRAFFIC_UNCHANGED" not in text
+    assert "NETCUP_NGINX_NODE_V2" in text
+    assert "docs/architecture/RUNTIME-AUTHORITY.md" in text
+    assert "docs/ops/ROLLBACK.md" in text

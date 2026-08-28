@@ -41,6 +41,6 @@ Fluxo recomendado quando CI tiver acesso read-only ao datalake:
 2. Artifact assinado (checksums no manifest).
 3. PR automático no `web-cfg` copiando para `data/pseo/` **ou** download no build local de quem publica.
 4. `npm run pseo:build && npm run pseo:validate && npm run pseo:audit`.
-5. Deploy Netlify só do estático — zero DSN.
+5. Release do estático pelo caminho de produção do RUNTIME-AUTHORITY (artefato do `site-ci` → `netcup-release.yml`) — zero DSN.
 
 Até lá, o snapshot sanitizado versionado no repositório é a fonte de verdade do site.

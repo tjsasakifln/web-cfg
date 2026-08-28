@@ -1,0 +1,7 @@
+{
+  "mode": "from-authority",
+  "expected": {
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "environment": "production"
+  }
+}

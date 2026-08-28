@@ -1,8 +1,9 @@
 # Runbook — storage host-owned, migração e restore
 
-Este runbook prepara a Netcup sem trocar DNS, editar nginx/edge, desligar
-Netlify ou migrar dados live. Todos os comandos de mutação exigem `--apply`; sem
-ele, as ferramentas fazem dry-run. Payload sensível nunca é impresso.
+Este runbook opera o store host-owned de produção (`/var/lib/confenge-web`).
+Não troca DNS, não edita nginx e não dispara rollback de release. Todos os
+comandos de mutação exigem `--apply`; sem ele, as ferramentas fazem dry-run.
+Payload sensível nunca é impresso.
 
 ## 1. Provisionar fora do release
 
@@ -41,7 +42,7 @@ O runtime do goal 01 deve usar o mesmo helper em `/ready`: `ok:false` precisa
 retornar readiness não saudável e impedir ingestão. Nunca configure
 `CONFENGE_STORAGE_BACKEND=memory` em production.
 
-## 3. Export Netlify (não executado nesta PR)
+## 3. Export histórico Netlify (leftover; não é o store de produção)
 
 Credenciais de leitura são uma ação externa. Sem elas, a ferramenta responde
 `EXTERNAL_EXPORT_REQUIRED`. Não grave tokens no shell history ou no repositório.
@@ -123,12 +124,10 @@ corrupto ou data de retenção malformada não é apagado silenciosamente.
 
 ## 7. Rollback e coexistência
 
-- Antes do cutover, Netlify continua no adapter `netlify-blobs`; Netcup usa
-  `filesystem`. Nenhuma troca de DNS é parte deste runbook.
-- Se Netcup ainda não recebeu tráfego, rollback é selecionar/deployar a versão
-  Netlify conhecida.
-- Se Netcup já recebeu leads, pare o retorno de tráfego, exporte/reconcile o
-  delta host-owned e faça sync reverso create-only antes de reabrir Netlify.
-  Nunca aceite rollback que deixe um lead apenas no backend abandonado.
-- Não apague Blobs nem remova `@netlify/blobs` até encerrar formalmente a janela
-  de rollback e verificar counts/hashes/receipts.
+- Produção usa `filesystem` em `/var/lib/confenge-web`. Rollback de release
+  (`docs/ops/ROLLBACK.md`) não apaga esse diretório.
+- Não devolver tráfego canônico à Netlify. Leftover `confenge.netlify.app` não
+  é o plano público.
+- Nunca aceite um procedimento que deixe um lead apenas num backend abandonado.
+- Não apague leftovers de Blobs nem remova `@netlify/blobs` do lockfile sem
+  janela encerrada e counts/hashes/receipts conferidos.

@@ -81,6 +81,31 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["build/netcup-host-contract/"],
     surfaces: ["/", "/robots.txt", "/sitemap.xml", "/.well-known/"],
   },
+  "test:runtime-authority": {
+    // The scan inventory is derived from `git ls-files`, so any tracked text
+    // surface can carry a production instruction. Listing individual documents
+    // here would recreate the allowlist the gate exists to replace.
+    producers: [
+      "scripts/site/runtime_authority.mjs",
+      "scripts/site/test_runtime_authority.mjs",
+      "scripts/site/fixtures/runtime-authority/",
+      "data/ops/runtime-authority-scan.json",
+      "docs/",
+      "deploy/",
+      "runtime/",
+      "seo/",
+      "supabase/docs/",
+      "scripts/",
+      "data/",
+      "DEPLOY-CHECKLIST.txt",
+      "FINAL-INBOUND-10-10.md",
+      "AGENTS.md",
+      "netlify.toml",
+      "package.json",
+    ],
+    artifacts: [],
+    surfaces: ["/", "/.well-known/build-info.json", "/.well-known/runtime-info.json"],
+  },
   "pseo:test": {
     producers: [
       "scripts/pseo/",

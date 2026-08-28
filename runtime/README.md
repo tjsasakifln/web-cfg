@@ -1,17 +1,18 @@
 # CONFENGE portable HTTP runtime
 
-Status: NETCUP_INTEGRATED_RELEASE_CANDIDATE / PROD_TRAFFIC_UNCHANGED
+Status: PRODUCTION_PUBLIC_RUNTIME / NETCUP_NGINX_NODE_V2
 
 - Decision state: EXECUTE_NOW
 - Executive front: PORTABILIDADE DO RUNTIME
 - Priority: P0
-- Time to evidence: one integrated PR plus package-only release evidence
+- Time to evidence: live `/.well-known/runtime-info.json` plus the hermetic
+  runtime-authority gate
 - Leverage: automation, trust, distribution and revenue protection
 
-This directory makes the dynamic web-cfg handlers executable as a private Node
-22 HTTP process without Netlify CLI or the Netlify Functions hosting runtime.
-It does not perform a cutover. Netlify remains the current public authority until
-a later, explicit URL-level edge decision is approved and executed.
+This directory is the production HTTP process behind nginx on the Netcup VPS.
+Handlers still live under `netlify/functions` as a source-compatible tree; the
+Netlify Functions hosting runtime is not the public production plane. The
+authority record is `docs/architecture/RUNTIME-AUTHORITY.md`.
 
 ## Architectural outcome
 
@@ -64,10 +65,8 @@ Data owner and contract:
 - Governance remains owner of internal intervention and infrastructure;
 - source remains CONFENGE_WEB and this adapter adds no analytics payload.
 
-Affected decisions: ADR-STRAT-002, RUNTIME-AUTHORITY and MARKET-CAPTURE-OS are
-respected but not changed. This PR creates a reversible target capability; it
-does not change the recorded public host, DNS, service manager or cutover
-authority.
+Affected decisions: ADR-STRAT-002 remains the canonical-surface decision.
+RUNTIME-AUTHORITY records production as nginx/Netcup (`confenge-nginx-node/v2`).
 
 If repeated 100 times, new compatible handlers are discovered and routed by the
 same adapter and the same gates. This improves the system instead of creating
@@ -157,9 +156,9 @@ date. It can be removed only after the automatic inventory reports zero
 consumers and a separate edge/parity PR approves the URL-level decision.
 No script.js or HTML route is changed in this PR.
 
-search-observation-tick is intentionally absent from HTTP routing. Netlify
-documents scheduled functions as schedule/manual-invoke only rather than a
-production URL contract. Its portable entrypoint is:
+search-observation-tick is intentionally absent from HTTP routing. The leftover
+Netlify schedule declaration is not a production URL contract. Its portable
+entrypoint is:
 
     node runtime/schedule.mjs search-observation-tick
 
@@ -285,28 +284,20 @@ Production refuses an override.
 
 ## Scheduled execution
 
-The only schedule declared by Netlify on main is:
+Operational schedulers in production:
 
-| Function | Existing cron | Existing timezone | Portable equivalent |
-|---|---|---|---|
-| search-observation-tick | 30 11 * * * | UTC | same cron, scheduler timezone explicitly UTC, command below |
+| Job | Executor | Notes |
+|---|---|---|
+| RevOps daily/weekly/nurture | GitHub Actions `revops-scheduled.yml` | Hits live HTTPS through nginx |
+| search-observation-tick | portable `runtime/schedule.mjs` | Host timer stays gated by `schedule-cutover.json`; leftover Netlify schedule in `netlify.toml` is not the public plane |
 
     cd /opt/confenge-web/current
     /usr/bin/env node runtime/schedule.mjs search-observation-tick
 
-Netlify's official schedule documentation states that its cron expressions run
-in UTC:
-https://docs.netlify.com/build/functions/scheduled-functions/
-
 Manual and scheduled execution use that same command and call the same shipped
 handler. The command emits only status/aggregate metadata and exits nonzero when
-the handler fails.
-
-The existing GitHub Actions daily 15 11 * * * UTC, weekly 0 12 * * 1 UTC and
-nurture jobs are not Netlify schedules. They call the current legacy HTTP URLs,
-which remain valid through nginx, so no workflow change is required in this PR.
-At cutover time, the Netlify schedule and any replacement timer must never run
-concurrently; enabling/disabling timers belongs to the later edge/infra change.
+the handler fails. The host timer and any leftover Netlify schedule must never
+run concurrently; see `deploy/netcup/README.md`.
 
 ## Local commands without Netlify CLI
 
@@ -372,46 +363,40 @@ The Node built-in test suite proves:
   forced exit when the configured grace period is exhausted.
 
 The parity exception is nominal and intentional: search-observation-tick has no
-HTTP path because the existing Netlify schedule has no public production URL.
-It is compared through direct handler and portable schedule-command paths.
+HTTP path. It is compared through direct handler and portable schedule-command
+paths.
 
-## Risks, rollback and remaining Netlify dependencies
+## Risks, rollback and the leftover Netlify preview surface
 
 Risks:
 
 - host-owned filesystem corruption or unsafe permissions deliberately take
   readiness down instead of falling back to memory;
-- edge TLS, DNS and public-vhost promotion remain separate cutover authority;
-- activating an external timer before disabling the Netlify schedule would
-  duplicate search-observation work;
+- activating the host timer before proving the leftover Netlify schedule is
+  disabled would duplicate search-observation work;
 - optional checkout/webhook routes retain their existing flag/auth contracts and
   must not be enabled merely because they are portable;
 - handler work cannot be forcibly cancelled safely after an HTTP timeout; it is
   tracked and drained during graceful shutdown until the configured deadline.
 
-Rollback before cutover: revert this PR or stop the unused private process.
-Existing functions, URLs, static artifact and Netlify deployment are untouched.
-
-Rollback after a future cutover: restore the prior exact nginx locations and
-known-good deployment target. Never blanket-redirect dynamic or legacy URLs to
+Production rollback: `/opt/confenge-web/bin/rollback <FULL_SHA>` as documented
+in `docs/ops/ROLLBACK.md`. Never blanket-redirect dynamic or legacy URLs to
 the home page.
 
-What still depends on Netlify after this PR:
+What remains of the Netlify tree after production moved to this host:
 
-- current production hosting and DNS authority;
-- current execution of Netlify Functions until a later edge cutover;
-- the current search-observation Netlify schedule until a replacement timer is
-  explicitly activated;
-- Netlify Blobs remains lazy only for the current Netlify rollback window;
-- `_headers` and `_redirects` remain canonical renderer inputs, while the
-  Netcup release consumes their generated nginx snippets.
-
-No claim that Netlify has been removed is made.
+- `netlify/functions` source, executed by this portable process;
+- leftover hostname `confenge.netlify.app` (not canonical);
+- leftover scheduled-function declaration in `netlify.toml` until an authorized
+  schedule cutover proves it disabled;
+- `_headers` and `_redirects` as renderer inputs; the Netcup release consumes
+  their generated nginx snippets;
+- `netlify-blobs` adapter only as a non-production fallback, not the live store.
 
 ## Integrated release touchpoints
 
 The runtime, host-owned storage, generated host contract and atomic Netcup
 release are bound by versioned contracts and the same full SHA/hashes. The
 release includes `_site/`, runtime, handler closure, generated nginx snippets,
-systemd templates and stage/verify/promote/rollback controls. It does not alter
-DNS, disable Netlify, enable schedules, checkout or money.
+systemd templates and stage/verify/promote/rollback controls. Packaging does
+not alter DNS, enable schedules, checkout or money.

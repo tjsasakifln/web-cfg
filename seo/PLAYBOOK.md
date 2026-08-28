@@ -36,7 +36,7 @@ Rotina para transformar impressões do Google Search Console em cliques e leads.
 
 ## Deploy
 
-1. Publicar pasta na Netlify (ou conectar repo `web-cfg`).
+1. Publicar pelo caminho de produção do RUNTIME-AUTHORITY: `main` → artefato do `site-ci` → `netcup-release.yml`.
 2. GSC → Sitemaps → `https://confenge.com.br/sitemap.xml`.
 3. Solicitar indexação das 5 URLs reescritas (Tier S).
 4. Remover sitemaps antigos com erro, se houver.

@@ -4,7 +4,7 @@ Canonical copy: [docs/migrations/smartlic/HANDOFF-2115.md](../../migrations/smar
 
 **Pinned inventory:** `data/migrations/smartlic-url-map/inventory.v2.json`  
 **Byte-identical projection:** `data/migration/smartlic-confenge/manifesto.v1.json`  
-**SHA-256:** `9c47b1b26e1dfb83cb8ea476091d9893931d17ce434ca54e7b6af933b85433fa`
+**SHA-256:** `35aca764cc455fea3031286700e0310315c9bff34fcf41b883cb53e8f9277698`
 **Version:** `v2`  
 **web-cfg issue:** https://github.com/tjsasakifln/web-cfg/issues/62  
 **Execute issue:** https://github.com/tjsasakifln/SmartLic/issues/2115  
@@ -57,7 +57,7 @@ Optional host aliases (`www.smartlic.tech`, `http://`) must 301 → the same `ht
 
 ### Post-#68 revalidation (2026-08-15)
 
-`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18` carried v1 pin `c2cee836…`. This branch re-pins v2 `9c47b1b26e1dfb83cb8ea476091d9893931d17ce434ca54e7b6af933b85433fa` (11 ready 301s; HOLD fail-closed; WEB-017 remapped payment-delay blog off the work-delay pillar).
+`origin/main` at merge SHA `648b88796a50d331558fab9ac6ebea41c9615e18` carried v1 pin `c2cee836…`. This branch re-pins v2 `35aca764cc455fea3031286700e0310315c9bff34fcf41b883cb53e8f9277698` (11 ready 301s; HOLD fail-closed; WEB-017 remapped payment-delay blog off the work-delay pillar).
 
 Live GET of the 11 ready CONFENGE destinations (twice): 11/11 HTTP 200, canonical host `confenge.com.br`, indexable, no SmartLic brand, no redirect chain, no soft-404. SmartLic production 301s / DNS / TLS / Cloudflare / Railway were **not** changed and were **not** observed. Cutover remains unobserved. #62 stays OPEN. Counterpart SmartLic#2115 / PR #2133 may start the bridge against this pin; web-cfg does not own that deploy.
 
@@ -83,7 +83,7 @@ Live GET of the 11 ready CONFENGE destinations (twice): 11/11 HTTP 200, canonica
 - ≥1 ready CONFENGE target 5xx for > 15 minutes.
 - Lead persist path down on CONFENGE (`/.netlify/functions/lead`) during the window.
 
-Rollback restores the **last functional CONFENGE Netlify publish** and the **previous DNS/proxy** of `smartlic.tech`. It does **not** redeploy SmartLic as a product.
+Rollback restores the **last functional CONFENGE release** with `/opt/confenge-web/bin/rollback FULL_SHA` and the **previous DNS/proxy** of `smartlic.tech`. It does **not** redeploy SmartLic as a product.
 
 ## Expiry and removal trigger
 
@@ -93,8 +93,8 @@ Rollback restores the **last functional CONFENGE Netlify publish** and the **pre
 
 ## Rollback procedure (CONFENGE side)
 
-1. Note current Netlify production SHA (`netlify status` / deploy UI) before any later publish. Pre-PR production SHA was **UNKNOWN** from public headers.
-2. `git revert` of the merge commit of this PR, or redeploy the previous Netlify deploy.
+1. Note current production SHA from `https://confenge.com.br/.well-known/build-info.json` before any later publish.
+2. `git revert` of the merge commit of this PR, or `/opt/confenge-web/bin/rollback <FULL_SHA>` per `docs/ops/ROLLBACK.md`.
 3. Do not add SmartLic brand, CTAs or runtime back onto confenge.com.br.
 
 ## What SmartLic#2115 must not do

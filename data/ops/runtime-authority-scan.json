@@ -1,0 +1,340 @@
+{
+  "version": 1,
+  "decision": "ADR-STRAT-002",
+  "purpose": "Repository-derived inventory of operator-executable production instructions. The scanner enumerates every tracked text surface; this file holds the detection rules and the minimal, justified exception register. It is not an allowlist of files to scan.",
+  "inventory": {
+    "source": "git ls-files",
+    "text_extensions": [
+      ".md",
+      ".txt",
+      ".json",
+      ".yml",
+      ".yaml",
+      ".toml",
+      ".conf",
+      ".sh",
+      ".py",
+      ".mjs",
+      ".cjs",
+      ".js",
+      ".csv",
+      ".ndjson"
+    ],
+    "extensionless_uppercase_docs": true,
+    "excluded_prefixes": [
+      "node_modules/",
+      "_site/",
+      "dist/",
+      "build/",
+      ".venv/",
+      "package-lock.json",
+      ".reversa/",
+      ".aiox/"
+    ],
+    "prefilter": "netlify|PROD_TRAFFIC_UNCHANGED",
+    "excluded_prefixes_reason": {
+      ".reversa/": "Generated agent-context snapshots of the repository, not an operator surface. Regenerated wholesale by tooling; editing them by hand would be a lie about what the tool observed.",
+      ".aiox/": "Same: brownfield-discovery tool state, never executed by an operator."
+    },
+    "prefilter_note": "An optimisation only, and it must stay a superset of every rule trigger: the candidate set is every tracked text surface, and enumerateScannedFiles({prefilter:false}) returns it whole. A file is skipped only when it cannot possibly match any rule."
+  },
+  "benign_contexts": [
+    {
+      "name": "runtime_compatible_function_path",
+      "re": "/\\.netlify/functions/",
+      "reason": "The nginx/Netcup runtime serves the same /.netlify/functions/* paths; the path shape is a public contract, not a host instruction."
+    },
+    {
+      "name": "repository_artifact_name",
+      "re": "netlify\\.toml|netlify/functions|@netlify/|netlify-cli|netlify-blobs|netlify_search_observation|NETLIFY_[A-Z_]+|`netlify|functions\\s*=\\s*`?netlify",
+      "reason": "Names a file, package or variable that exists in this repository."
+    },
+    {
+      "name": "legacy_or_preview_qualified",
+      "re": "(legacy|Legacy|preview|Preview|superseded|Superseded|historical|hist[oó]ric[oa]|pre-cutover|deixou de|former|until the cutover|at[eé] o cutover|was the|foi a)",
+      "reason": "The sentence already labels Netlify as preview/legacy/historical rather than as current production authority."
+    },
+    {
+      "name": "legacy_host_name",
+      "re": "confenge\\.netlify\\.app",
+      "reason": "The legacy origin hostname appears in canonicalization/redirect rules that exist to retire it."
+    }
+  ],
+  "rules": [
+    {
+      "name": "yaml_host_netlify",
+      "re": "^\\s*host:\\s*Netlify\\s*$",
+      "multiline": true,
+      "detail": "an authority record naming Netlify as the production host"
+    },
+    {
+      "name": "authority_claim",
+      "re": "Netlify[^.\\n]{0,60}\\b(is|remains|stays|continues|[ée]|permanece|continua)\\b[^.\\n]{0,60}\\b(production|produ[cç][aã]o|public authority|the authority|autoridade)\\b|\\b(production|public|canonical)[^.\\n]{0,40}\\bauthority\\b[^.\\n]{0,40}\\bNetlify\\b",
+      "detail": "a claim that Netlify is the current production/public authority"
+    },
+    {
+      "name": "production_env_instruction",
+      "re": "Netlify[^\\n]{0,40}\\b(production|produ[cç][aã]o)\\b[^\\n]{0,60}\\b(env|environment|ambiente|variable|vari[aá]vel|token|secret|segredo|key|chave|deploy|operator)\\b|\\b(production|produ[cç][aã]o)\\b[^\\n]{0,40}\\bNetlify\\b[^\\n]{0,60}\\b(env|environment|ambiente|variable|vari[aá]vel|token|secret|segredo|key|chave)\\b",
+      "detail": "an instruction that points production environment/secret authority at Netlify"
+    },
+    {
+      "name": "imperative_netlify_step",
+      "re": "\\b(set|unset|configure|configurar|defina|definir|publish|publique|publicar|deploy|redeploy|republish|restore|restaure|rollback|reverta|promote|promova|enable|habilite)\\b[^.\\n]{0,120}\\bNetlify\\b",
+      "detail": "an imperative operator step executed on Netlify"
+    },
+    {
+      "name": "netlify_console_step",
+      "re": "\\bNetlify\\b[^\\n]{0,40}\\b(UI|dashboard|painel|console|Site configuration|Site →|Site >|Deploys)\\b",
+      "detail": "a click-path through the Netlify console"
+    },
+    {
+      "name": "netlify_durable_authority",
+      "re": "Netlify Blobs[^\\n]{0,80}\\b(authority|durable|production|store of record|fonte)\\b|\\b(only|durable|operational)\\b[^\\n]{0,60}\\bNetlify Blobs\\b",
+      "detail": "Netlify Blobs named as the durable operational store"
+    },
+    {
+      "name": "netlify_triggered_release",
+      "re": "\\b(merge|push|main)\\b[^.\\n]{0,60}\\btriggers?\\b[^.\\n]{0,40}\\bNetlify\\b|\\bNetlify\\b[^.\\n]{0,40}\\bbuild\\b[^.\\n]{0,40}\\b(production|produ[cç][aã]o)\\b",
+      "detail": "a release path that claims main deploys through Netlify"
+    },
+    {
+      "name": "prod_traffic_unchanged_marker",
+      "re": "PROD_TRAFFIC_UNCHANGED",
+      "detail": "the retired marker that declared the cutover a no-op for production traffic"
+    },
+    {
+      "name": "where_to_set_netlify",
+      "re": "\\b(WHERE_TO_SET|OWNER|onde definir)\\b[^\\n]{0,20}\\n?[^\\n]{0,80}\\bNetlify\\b",
+      "detail": "an external-action contract that sends the operator to Netlify",
+      "window": true
+    }
+  ],
+  "exceptions": [
+    {
+      "path": "scripts/site/runtime_authority.mjs",
+      "kind": "detector_self_reference",
+      "reason": "The gate's own module loads and applies the rules; it cannot be its own subject without making the rule set unwritable.",
+      "owner": "tjsasakifln"
+    },
+    {
+      "path": "scripts/site/test_runtime_authority.mjs",
+      "kind": "detector_self_reference",
+      "reason": "The regression test must contain the exact strings the gate has to reject.",
+      "owner": "tjsasakifln"
+    },
+    {
+      "path": "data/ops/runtime-authority-scan.json",
+      "kind": "detector_self_reference",
+      "reason": "This file is the rule set; the patterns it declares necessarily match itself.",
+      "owner": "tjsasakifln"
+    },
+    {
+      "path": "FINAL-INBOUND-10-10.md",
+      "kind": "historical_record",
+      "reason": "Dated inbound closure report from the Netlify era, including the rollback surface available then.",
+      "owner": "tjsasakifln",
+      "sha256": "ddd801562b7f6833219e148bc68b26040ad1cf0d1dfe9ca369ea1a9edfdc2f8b"
+    },
+    {
+      "path": "docs/DEPLOY-VERIFICATION.md",
+      "kind": "historical_record",
+      "reason": "Deploy verification dated 2026-08-02, when the deploy trigger really was GitHub → Netlify.",
+      "owner": "tjsasakifln",
+      "sha256": "baeab049d9e4607ba4ea1bc2dd6cb8268c60bbfbf20b9e68f7d8ee671fb32200"
+    },
+    {
+      "path": "docs/FORTUNE-CONVERSION-RESULT.md",
+      "kind": "historical_record",
+      "reason": "Conversion campaign result record naming the environment surface used for the run.",
+      "owner": "tjsasakifln",
+      "sha256": "2efabdbc6b98f208e8f080900715b900a5cf0b4c36d5c759523f45695688ff73"
+    },
+    {
+      "path": "docs/evidence/BOFU-LIVE-HANDOFF-ACTIVATION-2026-08-22.json",
+      "kind": "historical_record",
+      "reason": "Frozen 2026-08-22 handoff-activation evidence.",
+      "owner": "tjsasakifln",
+      "sha256": "38b346cb198b3c6235327a4d729ddeb52382ba99930b2dc4654eb23cf2f3c3b4"
+    },
+    {
+      "path": "docs/evidence/BOFU-LIVE-HANDOFF-ACTIVATION-2026-08-22.md",
+      "kind": "historical_record",
+      "reason": "Narrative of the same 2026-08-22 activation attempt.",
+      "owner": "tjsasakifln",
+      "sha256": "aea5c7b00074668a2c3001faa8768c5b13e81237d5f68e5458c12b271676307c"
+    },
+    {
+      "path": "docs/evidence/BOFU-PRODUCTION-CLOSURE-2026-08-22.md",
+      "kind": "historical_record",
+      "reason": "Dated closure record whose external-action contract pointed at the Netlify env of the time.",
+      "owner": "tjsasakifln",
+      "sha256": "1e40afa0b893ac93ca00ee88c788097dcb530c9b793720f586de4ee01b182939"
+    },
+    {
+      "path": "docs/evidence/BOFU-REVENUE-CONVERGENCE-2026-08-22.md",
+      "kind": "historical_record",
+      "reason": "Dated revenue-convergence record from the same session.",
+      "owner": "tjsasakifln",
+      "sha256": "4f6cad00055f1ce8d15d4127e87dcb7958a94b4272b85a62e70dc1e791c1ef75"
+    },
+    {
+      "path": "docs/evidence/commercial-dod/loops.v1.json",
+      "kind": "historical_record",
+      "reason": "Frozen output of scripts/money_asset/commercial_dod.mjs from before the cutover; the generator now emits the EnvironmentFile command.",
+      "owner": "tjsasakifln",
+      "sha256": "a49b12308749c2a965d1e4741d58577c249734e451a90723eaa51ea96a04dc86"
+    },
+    {
+      "path": "docs/evidence/inbound-10/rollback-evidence.md",
+      "kind": "historical_record",
+      "reason": "Rollback rehearsal performed on the Netlify plane; the click path is the evidence.",
+      "owner": "tjsasakifln",
+      "sha256": "dcd012e482630b9c94a0eacc0d6382864d5a72c9f63c77c4a6dd82e68abfaec2"
+    },
+    {
+      "path": "docs/evidence/netcup-http-seo-parity/HTTP-SEO-PARITY-GATE.md",
+      "kind": "historical_record",
+      "reason": "Pre-cutover parity gate whose subject was comparing Netlify behaviour with the generated nginx contract.",
+      "owner": "tjsasakifln",
+      "sha256": "89eb6a12c66ed7e0c7e6f04cbbfc6686ce6894439b899fe7a28988e49da5d1ef"
+    },
+    {
+      "path": "docs/evidence/web-011/review.json",
+      "kind": "historical_record",
+      "reason": "Frozen WEB-011 review output from the same pre-cutover generator run.",
+      "owner": "tjsasakifln",
+      "sha256": "4d27a48d17da9f699724e9f3dc7ede49d38b78261f8551ec7695e52facb1f771"
+    },
+    {
+      "path": "docs/ops/CONFENGE-INBOUND-RELEASE-CONVERGENCE-01.md",
+      "kind": "historical_record",
+      "reason": "Dated 2026-08-19 release-convergence log, including the deploy and rollback identifiers used that day.",
+      "owner": "tjsasakifln",
+      "sha256": "7c184e2af2698d11d3df3aa5f79a8577c0f7793999aebc22d5c785c6ded45f75"
+    },
+    {
+      "path": "docs/ops/campaigns/CONFENGE-LEGAL-RISK-ACCEPTANCE-ASAAS-PRODUCTION-01/FOUNDER_ACTION_REQUIRED_ASAAS_PRODUCTION.txt",
+      "kind": "historical_record",
+      "reason": "Founder-action request exactly as it was issued, including where the value had to be set at the time.",
+      "owner": "tjsasakifln",
+      "sha256": "087cca6485f8f57f5be59f45d2ccc3b010fe9353982a28f8c67f1ae2129485fd"
+    },
+    {
+      "path": "docs/ops/campaigns/CONFENGE-WEB-PRODUCTION-CONVERGENCE-04/DEPLOY-EVIDENCE.json",
+      "kind": "historical_record",
+      "reason": "Deploy evidence pinned to the console URL that produced it; the URL is the proof.",
+      "owner": "tjsasakifln",
+      "sha256": "acfaddae721379569b7d71a26de50e083474721b6dbce42259b6b415ac8d6d16"
+    },
+    {
+      "path": "docs/reviews/db-specialist-review.md",
+      "kind": "historical_record",
+      "reason": "Specialist review of the storage design as it stood, including the console path it assessed.",
+      "owner": "tjsasakifln",
+      "sha256": "2bfeb390002673001277c50a1a89279ca6a006c18b0d985f3f378653d4b19a98"
+    },
+    {
+      "path": "seo/GO-LIVE-PSEO-2026-07-31.md",
+      "kind": "historical_record",
+      "reason": "Dated pSEO go-live record from 2026-07-31; it documents the publish path that was in force on that day.",
+      "owner": "tjsasakifln",
+      "sha256": "bc2818e4b10291f9ee1046389cab908e6523923639afaad6df1045b3a8bc8d7d"
+    },
+    {
+      "path": "seo/PLAYWRIGHT-POST-DEPLOY.md",
+      "kind": "historical_record",
+      "reason": "Dated post-deploy Playwright run; the deploy it verified was a Netlify publish and the report names it.",
+      "owner": "tjsasakifln",
+      "sha256": "8ff46699678108d23dba8f8e4494b823dcb2391e09447a9f487e1231fd48990e"
+    },
+    {
+      "path": "seo/PLAYWRIGHT-POST-PUSH.md",
+      "kind": "historical_record",
+      "reason": "Dated post-push Playwright run against the deploy produced by the publish path of the time.",
+      "owner": "tjsasakifln",
+      "sha256": "0e235a6733d1467d39a5349e251fefb1a41b5c4919118a04a3c3581b64fde945"
+    },
+    {
+      "path": "seo/PLAYWRIGHT-REPORT.md",
+      "kind": "historical_record",
+      "reason": "Dated Playwright report describing the checks and the deploy surface they ran against.",
+      "owner": "tjsasakifln",
+      "sha256": "2d374be0ae92207a595b5b90a6ef5a4ca3df04f4c976884a9993fde0edfe3078"
+    },
+    {
+      "path": "seo/PSEO-OPERATIONAL-INBOUND-FINAL.md",
+      "kind": "historical_record",
+      "reason": "Dated pSEO operational-inbound closure recording the console steps taken to reach it.",
+      "owner": "tjsasakifln",
+      "sha256": "75cecd110960030512539a1a33c972cddf2942bea8ea5050c655b1a9ed9e1e16"
+    },
+    {
+      "path": "seo/PSEO-WAVE0-FINAL-ACTIVATION-03.md",
+      "kind": "historical_record",
+      "reason": "Dated wave-0 activation record listing the publish action that activated it.",
+      "owner": "tjsasakifln",
+      "sha256": "94ab84b5f3cf00a83c6c4482ad0aee4ed2737a2451718694e91ff05fa00a3270"
+    },
+    {
+      "path": "seo/RELATORIO-AUDITORIA-CRITICA-2026-07-30.md",
+      "kind": "historical_record",
+      "reason": "Critical audit dated 2026-07-30, describing the deploy surface it audited.",
+      "owner": "tjsasakifln",
+      "sha256": "126dfc033590e27d47bbd300b550fab3143c327ebe18c2c48bb8e67524c55d20"
+    },
+    {
+      "path": "seo/RELATORIO-FINAL-SEO-2026-07-30.md",
+      "kind": "historical_record",
+      "reason": "Final SEO report dated 2026-07-30, describing the deploy surface it measured.",
+      "owner": "tjsasakifln",
+      "sha256": "a1b8226895145c523c8bf25266352a257fc86c22048c4dc72de80b84d89c88a5"
+    },
+    {
+      "path": "seo/campaigns/CONFENGE-VALUE-COMMUNICATION-2040-01/DEPLOY-EVIDENCE.md",
+      "kind": "historical_record",
+      "reason": "Campaign deploy evidence naming the deploy that carried the campaign live.",
+      "owner": "tjsasakifln",
+      "sha256": "f77485f1a1519ef7c72cac15b5087a8fee20660b8341841d382e57b1d7be5f23"
+    },
+    {
+      "path": "seo/campaigns/CONFENGE-VALUE-COMMUNICATION-2040-01/result.json",
+      "kind": "historical_record",
+      "reason": "Campaign result record naming the environment the campaign was measured on.",
+      "owner": "tjsasakifln",
+      "sha256": "175a269fc31fc4777dbd088a8ca0e4e27f0d574bf953943959af4af2faa7a2f1"
+    },
+    {
+      "path": "seo/editorial-evidence/EXTERNAL-ACTIONS-UNLOCK.md",
+      "kind": "historical_record",
+      "reason": "External-actions unlock record listing the console steps the founder performed.",
+      "owner": "tjsasakifln",
+      "sha256": "a4c85dff5e6e21d357933c056b0567e0bc4c8de65f8e0ba2b857108ac4613945"
+    },
+    {
+      "path": "seo/editorial-evidence/FINAL-EDITORIAL-PSEO-INBOUND.md",
+      "kind": "historical_record",
+      "reason": "Final editorial/pSEO inbound record with the external-action contract as it was issued.",
+      "owner": "tjsasakifln",
+      "sha256": "f141519ed6667d17bcaccbee45c60fd3ae5e8c4ed3fddb930a780fd1e718270b"
+    },
+    {
+      "path": "seo/evidence-audit-2026-07-30/audit-matrix.md",
+      "kind": "historical_record",
+      "reason": "Evidence audit matrix dated 2026-07-30, describing the surfaces audited that day.",
+      "owner": "tjsasakifln",
+      "sha256": "5f48eb851d8ae290830da9ac64a0f5d0273937d559fc9008fc8861bb9cf9dcf9"
+    }
+  ],
+  "negation_guard": {
+    "re": "\\b(n[ãa]o|nem|nunca|jamais|never|do not|don't|does not|doesn't|must not|may not|cannot|can't|no longer|deixou de|sem |without |not )",
+    "lookbehind": 90,
+    "reason": "A prohibition or a negative assertion that names Netlify is what this gate wants to see, not what it should report. The guard excuses a hit only when the negation sits inside the matched span, in the 90 characters before it, or in the 12 characters immediately after it (the `assert \"X\" not in text` shape). A negation further along the line belongs to a different clause and must not excuse anything.",
+    "lookahead": 12,
+    "carry_previous_line": "only when the line continues the previous clause: previous line non-empty and unterminated, current line is not a new list/table/heading item nor an UPPERCASE label record, and the match starts within the first 24 characters",
+    "clause_boundary": "The lookbehind is cut at the last sentence or semicolon boundary, so a prohibition in a previous clause cannot excuse an instruction in the next one."
+  },
+  "exception_kinds": {
+    "detector_self_reference": "The gate's own module, its regression test and this rule file necessarily contain the strings the gate rejects. No content pin: these files are meant to change whenever the rules change.",
+    "historical_record": "A dated record of a past observation, release or decision. Its value is that it says what was true then, so rewriting it would falsify the record. Honoured only for the exact reviewed bytes (sha256); any edit re-arms the gate on that file."
+  }
+}

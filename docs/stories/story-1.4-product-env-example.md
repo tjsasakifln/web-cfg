@@ -73,7 +73,7 @@ Reduces misconfiguration risk (wrong secrets, phantom Supabase vars) and aligns 
 | `_reversa_sdd/permissions.md` | Product secrets: OPS_TOKEN, Turnstile, Resend, Blobs — not multi-tenant SaaS |
 | `_reversa_sdd/architecture.md` | Stack is static+functions Netlify; no public Supabase in Netlify build |
 | `_reversa_sdd/lead-intake/requirements.md` | Env-driven store/rate-limit/Turnstile flags |
-| `_reversa_sdd/deployment.md` | Deploy/env model for Netlify |
+| `_reversa_sdd/deployment.md` | Deploy/env model of the legacy plane |
 
 **No invention:** Only documents env already used by product + ops docs; epic OUT excludes Supabase on public Netlify build.
 
