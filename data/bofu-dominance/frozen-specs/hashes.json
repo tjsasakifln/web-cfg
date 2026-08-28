@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "f3b859c77b4bd21110b5b5c22a1bc61cd98d62d6",
-  "recaptured_at": "2026-08-27",
-  "recapture_reason": "Reviewed design-system reconciliation. Only styles.css and styles-tokens.css changed; the six protected pillars keep byte-identical HTML, verified against origin/main before writing, so html_mutation stays false and the #291 unlock plan remains DEFER_UNTIL_DATE for the planned HTML replacements. Rendering does change on the pillars: the top navigation labels stop wrapping to two lines, headings follow the scale declared in data/site/design-system.json, and section rhythm, soft surface, radii and shadow follow the same declaration. This recapture supersedes the one first committed for this branch: an adversarial review found that the menu compaction never applied, because padding-inline was reset by a later shorthand of equal specificity, and the resulting header deficit was absorbed by the brand wordmark, which rendered at 72x19px at 1121px. styles.css now carries that fix, measured in Chromium and guarded by header_brand_and_nav_fit in scripts/site/test_ui_geometry.mjs. styles-tokens.css additionally raises --muted from #647182 to #5d6a7a, which cleared AA on the --soft surface by 0.012 and now clears it by 0.5; the declared system in data/site/design-system.json carries the same value. Per-pillar rendering evidence at both declared viewports is committed under docs/uiux-evidence/bofu-pillars-2026-08-27/. Canonical URLs, indexability, robots, sitemap membership, redirects and measurement claims are unchanged.",
+  "baseline_commit": "a183a5e42481f5e2e0199ac13e8eefd9e7ee9f5f",
+  "recaptured_at": "2026-08-28",
+  "recapture_reason": "CFG10X-09: 301 de /lei-14133-obras/limite-25-50-aditivo-obra/ para /conteudos/limite-aditivo-25-50-obra-publica/ e exclus\u00e3o do donor dos sitemaps. styles.css, tokens, tools, robots, script.js e os seis HTML de pilar permanecem byte-id\u00eanticos ao recapture anterior. html_mutation permanece false.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -25,10 +25,10 @@
     "styles-tokens.css": "5b0d33f5fccc801ba5b4d7b8d407dd3d800d25b296a79ff1eb33d8bc98ce4237",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",
     "robots.txt": "2be984de9b51eb6d201b8210d727353f014cf52bea1058eabf3abedb9cad6f57",
-    "sitemap.xml": "cc0d344da46ba03b51fa7517030b153a98e05957f76baedd946d12d6e6d7058f",
-    "sitemap.txt": "ff1ad0d1f8635b8dccbf8fde975c2d893acd7ca0511910e1c1dd70c14b8a9472",
-    "sitemap-index.xml": "f384334fb9756a51d5212068c19f187775153743bacd68ac8c50d036c20e893d",
-    "_redirects": "402f730e21b73c73574290bc572bf63fd36a713e1143b30a8df989b80f200a05",
+    "sitemap.xml": "d2865605799469d80dd544f125c203a229099f8abef718865309db8ab5737b3a",
+    "sitemap.txt": "50410389d8b64e739559e62f331f34f5f7f92487dc76ef23ad24ea1ef5a18c8e",
+    "sitemap-index.xml": "5d1757594cdecabd2146c5c94651ee6fc044dc83e0925fff1a8c9bdb4fe31b9c",
+    "_redirects": "71898fd3479e067e1cd629bab49cb82b58321ea805f4a22cda36ffa1c6beb211",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "2bb200bf12345d1fd2cf95571082511214d7a2f86c42faf2192a4001d19028a2"
   }
