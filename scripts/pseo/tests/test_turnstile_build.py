@@ -71,6 +71,7 @@ def test_malformed_or_ambiguous_marker_fails_closed(tmp_path: Path) -> None:
 def _assert_widget_ready(html: str) -> None:
     assert 'id="turnstile-slot"' in html
     assert "cf-turnstile" in html
+    assert 'data-size="compact"' in html
     assert f'data-turnstile-sitekey="{SITEKEY}"' in html
     assert 'data-turnstile-sitekey=""' not in html
 

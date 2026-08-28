@@ -193,7 +193,7 @@ def run_node_gate(script: str) -> dict:
 TURNSTILE_SLOT = (
     '<div class="field turnstile-slot" id="turnstile-slot" hidden '
     'data-turnstile-sitekey="">'
-    '<div class="cf-turnstile" data-theme="light" data-size="normal"></div>'
+    '<div class="cf-turnstile" data-theme="light" data-size="compact"></div>'
     "</div>"
 )
 _CAPTURE_FORM_RE = re.compile(
