@@ -1,0 +1,30 @@
+/* List layout for owned aditivo pages. Not in frozen styles.css (CFG10X-01).
+   Numbered 42px column only when the item has a leading number span. */
+.action-list li{
+  grid-template-columns:minmax(0,1fr);
+  gap:12px;
+}
+.action-list li > div{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+.action-list li:has(> span:first-child){
+  grid-template-columns:42px minmax(0,1fr);
+  gap:18px;
+}
+.action-list li:has(> span:first-child) > div{
+  grid-column:auto;
+}
+.document-list{
+  grid-template-columns:1fr;
+}
+.document-list li{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+@media (max-width:520px){
+  .action-list li:has(> span:first-child){
+    grid-template-columns:32px minmax(0,1fr);
+    gap:12px;
+  }
+}

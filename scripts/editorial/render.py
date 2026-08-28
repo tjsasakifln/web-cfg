@@ -514,6 +514,7 @@ def render_page(page: dict[str, Any]) -> str:
             '<meta name="editorial-material-hash" content="'
             + e(current_material_hash)
             + '"/><link href="/assets/editorial-a11y-v293.css" rel="stylesheet"/>'
+            '<link href="/assets/cfg10x-09-list-layout.css" rel="stylesheet"/>'
         ),
     )
 

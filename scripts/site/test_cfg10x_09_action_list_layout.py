@@ -25,6 +25,9 @@ PAGES = (
 
 
 def _css() -> str:
+    scoped = ROOT / "assets" / "cfg10x-09-list-layout.css"
+    if scoped.is_file():
+        return scoped.read_text(encoding="utf-8") + "\n" + (ROOT / "styles.css").read_text(encoding="utf-8")
     return (ROOT / "styles.css").read_text(encoding="utf-8")
 
 
@@ -46,6 +49,7 @@ def test_owned_indexable_lists_have_usable_markup():
         html = (ROOT / rel).read_text(encoding="utf-8", errors="replace")
         docs = re.findall(r'<ul class="document-list">(.*?)</ul>', html, flags=re.S)
         actions = re.findall(r'<ol class="action-list">(.*?)</ol>', html, flags=re.S)
+        assert 'href="/assets/cfg10x-09-list-layout.css"' in html, f"{rel}: missing scoped list CSS"
         assert docs, f"{rel}: missing document-list"
         assert actions, f"{rel}: missing action-list"
         for block in docs:

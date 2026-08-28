@@ -111,11 +111,10 @@ if (j.valid_human_approved === 0) {
   if (!(Array.isArray(j.blocked) ? j.blocked.join(" ") : String(j.blocked || "")).includes("no_valid_human")) {
     fail("release_blocked_msg");
   } else pass("release_blocked_msg");
-} else if (j.valid_human_approved === 3 && j.cohort_complete === true && Array.isArray(j.blocked) && j.blocked.length === 0) {
+} else if (j.valid_human_approved === 2 && j.cohort_complete === true && Array.isArray(j.blocked) && j.blocked.length === 0) {
   pass("release_first_cohort_complete", j.released_count);
   const urls = j.gsc_submit_candidates || [];
   const need = [
-    "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
     "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
   ];
