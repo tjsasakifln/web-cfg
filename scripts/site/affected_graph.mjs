@@ -903,6 +903,7 @@ export const SUITE_GRAPH = Object.freeze({
       "scripts/site/render_nav_hubs.py",
       "scripts/site/test_nav_taskflow.py",
       "data/site/brand.json",
+      "data/commercial/offer-fit-matrix.v1.json",
       "scripts/pseo/html_shell.py",
       "servicos-obras-publicas/",
       "problemas-que-resolvemos/",
