@@ -201,7 +201,7 @@
     "test:nurture-pages": "node scripts/site/test_nurture_pages.mjs",
     "test:ferramentas-footer": "python3 scripts/site/test_ferramentas_brand_footer.py",
     "test:hub-truth": "node scripts/site/test_hub_truth.mjs",
-    "test:nav": "python3 scripts/site/shell_nav.py --check && python3 scripts/site/render_nav_hubs.py --check && python3 scripts/site/test_nav_taskflow.py",
+    "test:nav": "python3 scripts/site/shell_nav.py --check && python3 scripts/site/render_nav_hubs.py --check && python3 scripts/site/test_nav_taskflow.py && python3 -m pytest scripts/site/test_public_ia.py -q",
     "test:tool-compute": "node scripts/site/test_tool_compute.mjs",
     "test:wave1-fields": "node scripts/site/test_wave1_review_fields.mjs",
     "revops:daily": "node scripts/revops/revenue_daily.mjs",

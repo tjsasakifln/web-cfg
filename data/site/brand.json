@@ -89,16 +89,16 @@
   "navigation": {
     "desktop": [
       {
-        "label": "Serviços",
-        "href": "/servicos-obras-publicas/"
+        "label": "Edital e proposta",
+        "href": "/bid-room-licitacoes-obras/"
       },
       {
-        "label": "Problemas que resolvemos",
+        "label": "Contrato sob pressão",
         "href": "/problemas-que-resolvemos/"
       },
       {
-        "label": "Entregas",
-        "href": "/entregas/"
+        "label": "Operação recorrente",
+        "href": "/diretoria-b2g/"
       },
       {
         "label": "Conteúdos",
@@ -107,10 +107,6 @@
       {
         "label": "Ferramentas",
         "href": "/ferramentas/"
-      },
-      {
-        "label": "Especialista",
-        "href": "/especialista/tiago-jun-sasaki/"
       }
     ],
     "cta": {
