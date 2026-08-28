@@ -64,6 +64,7 @@
       "final_approval",
       "verifiable_evidence",
       "claims",
+      "evidence",
       "distribution",
       "revocation"
     ],
@@ -108,6 +109,35 @@
       "statement_pt_br",
       "evidence_grade",
       "source_pt_br"
+    ],
+    "required_evidence_fields": [
+      "fonte",
+      "autorizacao",
+      "escopo_permitido",
+      "anonimizacao",
+      "baseline",
+      "intervencao",
+      "resultado_observavel",
+      "limitacoes",
+      "revisor",
+      "expiracao"
+    ],
+    "evidence_field_shapes": {
+      "fonte": "non_empty_string",
+      "autorizacao": "non_empty_string",
+      "escopo_permitido": "non_empty_string",
+      "anonimizacao": "non_empty_string",
+      "baseline": "non_empty_string",
+      "intervencao": "non_empty_string",
+      "resultado_observavel": "non_empty_string",
+      "limitacoes": "non_empty_string",
+      "revisor": "non_empty_string",
+      "expiracao": "utc_or_calendar_date_in_the_future"
+    },
+    "evidence_fail_closed": [
+      "authorization_absent",
+      "authorization_expired",
+      "fonte_absent"
     ],
     "calculation_method_field": "calculation_pt_br",
     "required_revocation_fields": [

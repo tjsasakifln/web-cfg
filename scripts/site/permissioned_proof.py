@@ -29,7 +29,7 @@ CASES_PATH = ROOT / "data" / "site" / "cases.json"
 
 POLICY_SCHEMA = "confenge.permissioned-proof-policy/1.0"
 REGISTRY_SCHEMA = "confenge.permissioned-proof-registry/1.0"
-POLICY_CANONICAL_SHA256 = "40826fc66837b5e4751f65f903550909815d54d8e0933a540f4ab9c394122e98"
+POLICY_CANONICAL_SHA256 = "f90fdbd26a1ef26edac116fe8fc233b398051c64a192e7da61a75ca828692b42"
 STATES = (
     "DRAFT",
     "CONSENT_CAPTURED",
@@ -85,8 +85,23 @@ UTC_SECONDS = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 EMAIL_VALUE = re.compile(r"(?<![\w.+-])[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}(?![\w.-])")
 PHONE_VALUE = re.compile(r"(?<!\d)(?:\+?55[\s().-]*)?(?:\(?\d{2}\)?[\s.-]*)9?\d{4}[\s.-]*\d{4}(?!\d)")
 TAX_ID_VALUE = re.compile(r"\b(?:\d{3}[.-]){2}\d{3}-\d{2}\b|\b\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\b")
+EVIDENCE_KEYS = frozenset(
+    {
+        "fonte",
+        "autorizacao",
+        "escopo_permitido",
+        "anonimizacao",
+        "baseline",
+        "intervencao",
+        "resultado_observavel",
+        "limitacoes",
+        "revisor",
+        "expiracao",
+    }
+)
+EMPTY_EVIDENCE = {key: None for key in EVIDENCE_KEYS}
 RECORD_KEYS = frozenset(
-    {"proof_id", "policy_version", "state", "permission_class", "consent", "retention", "revocation", "approval", "publication", "lifecycle"}
+    {"proof_id", "policy_version", "state", "permission_class", "consent", "retention", "revocation", "approval", "publication", "lifecycle", "evidence"}
 )
 CONSENT_KEYS = frozenset({"status", "captured_at", "scope", "scope_hash", "receipt_ref"})
 RETENTION_KEYS = frozenset({"policy_days", "delete_after", "private_material_location"})
@@ -347,6 +362,17 @@ def validate_policy(policy: dict[str, Any] | None = None) -> list[str]:
         errors.append("lifecycle_human_actor_invalid")
     if lifecycle.get("current_state_must_be_last") is not True:
         errors.append("lifecycle_current_state_not_required")
+    evidence_record = _object(p.get("evidence_record"))
+    if _string_set(evidence_record.get("required_fields")) != set(EVIDENCE_KEYS):
+        errors.append("evidence_record_fields_invalid")
+    if evidence_record.get("expiracao_format") != "utc_seconds":
+        errors.append("evidence_record_expiracao_format_invalid")
+    if _string_set(evidence_record.get("fail_closed_codes")) != {
+        "authorization_absent",
+        "authorization_expired",
+        "fonte_absent",
+    }:
+        errors.append("evidence_record_fail_closed_codes_invalid")
     if _canonical_sha256(p) != POLICY_CANONICAL_SHA256:
         errors.append("policy_contract_digest_mismatch")
     return _dedupe(errors)
@@ -430,6 +456,50 @@ def _publication_identity_errors(
     return errors
 
 
+def validate_evidence_record(
+    evidence: Any,
+    *,
+    required: bool,
+    now: datetime | None = None,
+) -> list[str]:
+    """Fail closed on missing authorization, expired authorization, or missing fonte."""
+    errors: list[str] = []
+    clock = now or datetime.now(timezone.utc)
+    if not required:
+        if evidence != EMPTY_EVIDENCE and evidence is not None:
+            if not isinstance(evidence, dict):
+                return ["object_required:record.evidence"]
+            if evidence != EMPTY_EVIDENCE:
+                errors.append("evidence_present_without_lifecycle")
+        elif evidence is None:
+            errors.append("object_required:record.evidence")
+        else:
+            errors.extend(_exact_keys(evidence, EVIDENCE_KEYS, "record.evidence"))
+        return _dedupe(errors)
+
+    errors.extend(_exact_keys(evidence, EVIDENCE_KEYS, "record.evidence"))
+    payload = evidence if isinstance(evidence, dict) else {}
+    fonte = payload.get("fonte")
+    autorizacao = payload.get("autorizacao")
+    if not isinstance(fonte, str) or not fonte.strip():
+        errors.append("fonte_absent")
+    if not isinstance(autorizacao, str) or not autorizacao.strip():
+        errors.append("authorization_absent")
+    for field in EVIDENCE_KEYS:
+        if field in {"fonte", "autorizacao", "expiracao"}:
+            continue
+        value = payload.get(field)
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"evidence_field_empty:{field}")
+    expires = _utc_datetime(payload.get("expiracao"))
+    if expires is None:
+        errors.append("evidence_expiracao_invalid")
+        errors.append("authorization_expired")
+    elif expires <= clock:
+        errors.append("authorization_expired")
+    return _dedupe(errors)
+
+
 def validate_record(
     record: dict[str, Any],
     *,
@@ -469,6 +539,7 @@ def validate_record(
     raw_revocation = record.get("revocation")
     raw_approval = record.get("approval")
     raw_publication = record.get("publication")
+    raw_evidence = record.get("evidence")
     consent = raw_consent if isinstance(raw_consent, dict) else {}
     retention = raw_retention if isinstance(raw_retention, dict) else {}
     revocation = raw_revocation if isinstance(raw_revocation, dict) else {}
@@ -484,11 +555,6 @@ def validate_record(
     lifecycle_errors, lifecycle_times = _validate_lifecycle(record, p)
     errors.extend(lifecycle_errors)
 
-    captured_at: datetime | None = None
-    approved_at: datetime | None = None
-    published_at: datetime | None = None
-    delete_after: datetime | None = None
-
     consent_required_states = {
         "CONSENT_CAPTURED",
         "HUMAN_REVIEW_REQUIRED",
@@ -497,6 +563,14 @@ def validate_record(
         "REVOKED",
     }
     consent_was_captured = "CONSENT_CAPTURED" in lifecycle_times
+    evidence_required = (isinstance(state, str) and state in consent_required_states) or consent_was_captured
+    errors.extend(validate_evidence_record(raw_evidence, required=evidence_required))
+
+    captured_at: datetime | None = None
+    approved_at: datetime | None = None
+    published_at: datetime | None = None
+    delete_after: datetime | None = None
+
     if (isinstance(state, str) and state in consent_required_states) or consent_was_captured:
         expected_consent = "REVOKED" if state == "REVOKED" else "EXPIRED" if state == "RETENTION_EXPIRED" else "ACTIVE"
         if consent.get("status") != expected_consent:

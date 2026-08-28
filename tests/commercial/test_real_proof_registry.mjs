@@ -17,6 +17,11 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { consumerSuitesForPath } from "../../scripts/site/affected_graph.mjs";
+import {
+  REQUIRED_EVIDENCE_FIELDS,
+  validateEntry as shippedValidateEntry,
+  validateRegistryShape as shippedValidateRegistryShape,
+} from "../../scripts/commercial/real_proof_registry.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -183,6 +188,7 @@ const REQUIRED_ENTRY_FIELDS = [
   "final_approval",
   "verifiable_evidence",
   "claims",
+  "evidence",
   "distribution",
   "revocation",
 ];
@@ -231,6 +237,23 @@ assert(
   "claim_fields_declared",
   JSON.stringify(schema.required_claim_fields) === JSON.stringify(["statement_pt_br", "evidence_grade", "source_pt_br"]),
   schema.required_claim_fields,
+);
+assert(
+  "evidence_fields_declared",
+  JSON.stringify(schema.required_evidence_fields) === JSON.stringify(REQUIRED_EVIDENCE_FIELDS),
+  schema.required_evidence_fields,
+);
+for (const f of REQUIRED_EVIDENCE_FIELDS) {
+  assert(`entry_schema_requires_evidence_${f}`, (schema.required_evidence_fields ?? []).includes(f), f);
+}
+assert(
+  "evidence_fail_closed_codes_declared",
+  JSON.stringify(schema.evidence_fail_closed) === JSON.stringify([
+    "authorization_absent",
+    "authorization_expired",
+    "fonte_absent",
+  ]),
+  schema.evidence_fail_closed,
 );
 assert("calculation_method_field_declared", schema.calculation_method_field === "calculation_pt_br", schema.calculation_method_field);
 assert(
@@ -431,172 +454,24 @@ assert(
 /* ------------------------------------------------------------------ */
 
 function validateEntry(entry) {
-  const problems = [];
-  const P = (code, detail) => problems.push(detail === undefined ? code : `${code}:${detail}`);
-  if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
-    P("entry_not_object");
-    return problems;
-  }
-  for (const f of REQUIRED_ENTRY_FIELDS) {
-    if (!(f in entry)) P("missing_field", f);
-  }
-  if (!filled(entry.entry_id)) P("empty_entry_id");
-  if (!schema.allowed_entry_states.includes(entry.state)) P("bad_state", String(entry.state));
-  if (!filled(entry.delivery_reference)) P("empty_delivery_reference");
-
-  const consent = entry.consent;
-  if (!consent || typeof consent !== "object" || Array.isArray(consent)) {
-    P("consent_not_object");
-  } else {
-    for (const f of CONSENT_FIELDS) {
-      if (!(f in consent)) P("consent_missing", f);
-      else {
-        if (!filledDeep(consent[f])) P("consent_empty", f);
-        const shape = schema.required_consent_field_shapes?.[f];
-        if (shape === "non_empty_string" && !filled(consent[f])) P("consent_wrong_shape", f);
-        if (shape === "non_empty_string_list" && !filledList(consent[f], 1)) P("consent_wrong_shape", f);
-      }
-    }
-    for (const k of Object.keys(consent)) {
-      if (!CONSENT_FIELDS.includes(k)) P("consent_unknown_field", k);
-    }
-  }
-
-  const fa = entry.final_approval;
-  if (!fa || typeof fa !== "object" || Array.isArray(fa)) {
-    P("final_approval_not_object");
-  } else {
-    for (const f of schema.required_final_approval_fields) {
-      if (!(f in fa)) P("final_approval_missing", f);
-      else if (!filled(fa[f])) P("final_approval_empty", f);
-    }
-    if (!schema.allowed_final_approval_binding_kinds.includes(fa.binding_kind)) {
-      P("final_approval_binding_kind", String(fa.binding_kind));
-    }
-    if (filled(fa.binding_value) && fa.binding_value.trim().length < 8) P("final_approval_binding_value_too_short");
-    if (filled(fa.approved_at)) {
-      const parsed = new Date(`${fa.approved_at}T00:00:00Z`);
-      const isCalendarDate = /^\d{4}-\d{2}-\d{2}$/.test(fa.approved_at) &&
-        !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === fa.approved_at;
-      if (!isCalendarDate) P("final_approval_invalid_date");
-      else if (parsed.valueOf() > Date.now()) P("final_approval_future_date");
-    }
-    if (fa.binding_kind === "material_hash" && !/^sha256:[a-f0-9]{64}$/i.test(String(fa.binding_value ?? ""))) {
-      P("final_approval_invalid_sha256");
-    }
-    if (fa.binding_kind === "material_version" && !/^[A-Za-z0-9][A-Za-z0-9._:-]{7,}$/.test(String(fa.binding_value ?? ""))) {
-      P("final_approval_invalid_version");
-    }
-    if (/\b(bot|ci|agent|automation|claude|robo)\b/i.test(String(fa.approver_name ?? ""))) {
-      P("final_approval_non_human_approver");
-    }
-  }
-
-  const ev = entry.verifiable_evidence;
-  if (!Array.isArray(ev) || ev.length < 1) {
-    P("verifiable_evidence_missing");
-  } else {
-    ev.forEach((e, i) => {
-      if (!e || typeof e !== "object") {
-        P(`evidence_${i}_not_object`);
-        return;
-      }
-      for (const f of schema.required_verifiable_evidence_fields) {
-        if (!(f in e)) P(`evidence_${i}_missing`, f);
-      }
-      if (!schema.allowed_verifiable_evidence_kinds.includes(e.kind)) P(`evidence_${i}_bad_kind`, String(e.kind));
-      if (!filled(e.reference)) P(`evidence_${i}_empty_reference`);
-      if (e.within_authorized_scope !== true) P(`evidence_${i}_out_of_scope`);
-    });
-  }
-
-  const claims = entry.claims;
-  const outcomeClaim = /\b(melhoria|economia|receita|recupera[cç][aã]o|vit[oó]ria|satisfa[cç][aã]o)\b/i;
-  const unknownMarker = /\b(UNKNOWN|desconhecid[oa]|n[aã]o (?:foi|[ée]|pode ser) verificad[oa]?|n[aã]o pode ser medid[oa]|sem medi[cç][aã]o|sem evid[eê]ncia)\b/i;
-  if (!Array.isArray(claims) || claims.length < 1) {
-    P("claims_missing");
-  } else {
-    claims.forEach((c, i) => {
-      if (!c || typeof c !== "object") {
-        P(`claim_${i}_not_object`);
-        return;
-      }
-      for (const f of schema.required_claim_fields) {
-        if (!(f in c)) P(`claim_${i}_missing`, f);
-      }
-      if (!GRADES.includes(c.evidence_grade)) P(`claim_${i}_bad_grade`, String(c.evidence_grade));
-      if (!filled(c.statement_pt_br)) P(`claim_${i}_empty_statement`);
-      if (!filled(c.source_pt_br)) P(`claim_${i}_empty_source`);
-      if (outcomeClaim.test(String(c.statement_pt_br ?? "")) && !["FACT", "CALCULATION"].includes(c.evidence_grade)) {
-        P(`claim_${i}_outcome_requires_fact_or_calculation`);
-      }
-      if (c.evidence_grade === "CALCULATION" && !filled(c[schema.calculation_method_field])) {
-        P(`claim_${i}_calculation_method_missing`);
-      }
-      if (c.evidence_grade === "INFERENCE" && !/\b(infer[eê]ncia|interpreta[cç][aã]o)\b/i.test(String(c.statement_pt_br ?? ""))) {
-        P(`claim_${i}_inference_not_labelled`);
-      }
-      if (c.evidence_grade === "UNKNOWN") {
-        if (/\d/.test(String(c.statement_pt_br ?? ""))) P(`claim_${i}_unknown_filled_with_number`);
-        if (!unknownMarker.test(String(c.statement_pt_br ?? ""))) P(`claim_${i}_unknown_not_labelled`);
-      }
-    });
-  }
-
-  const dist = entry.distribution;
-  if (!dist || typeof dist !== "object" || Array.isArray(dist)) {
-    P("distribution_not_object");
-  } else {
-    if (dist.canary !== true) P("distribution_not_canary");
-    if (!Array.isArray(dist.surfaces) || dist.surfaces.length < 1) P("distribution_no_surfaces");
-    else for (const surface of dist.surfaces) {
-      if (!/^\/(?:[a-z0-9-]+\/)*$/.test(String(surface))) P("distribution_bad_surface", String(surface));
-      const slug = String(surface).replace(/^\/+|\/+$/g, "");
-      const file = slug ? path.join(root, slug, "index.html") : path.join(root, "index.html");
-      if (!fs.existsSync(file)) P("distribution_surface_missing", String(surface));
-    }
-    if (dist.logo_carousel === true) P("distribution_logo_carousel");
-    if (dist.aggregate_rating === true) P("distribution_aggregate_rating");
-    if (dist.review_schema === true) P("distribution_review_schema");
-  }
-
-  const rev = entry.revocation;
-  if (!rev || typeof rev !== "object" || Array.isArray(rev)) {
-    P("revocation_not_object");
-  } else {
-    for (const f of schema.required_revocation_fields) {
-      if (!(f in rev)) P("revocation_missing", f);
-    }
-    if (!filled(rev.channel)) P("revocation_empty_channel");
-    const removes = Array.isArray(rev.removes) ? rev.removes : [];
-    for (const t of REVOCATION_TARGETS) {
-      if (!removes.includes(t)) P("revocation_incomplete", t);
-    }
-  }
-  return problems;
+  return shippedValidateEntry(entry, {
+    schema,
+    consentFields: CONSENT_FIELDS,
+    grades: GRADES,
+    revocationTargets: REVOCATION_TARGETS,
+    root,
+  });
 }
 
 function validateRegistryShape(reg) {
-  const problems = [];
-  const entries = Array.isArray(reg.entries) ? reg.entries : null;
-  if (entries === null) return ["entries_not_array"];
-  const allowedRegistryStates = data.gate?.allowed_registry_states ?? [];
-  if (!allowedRegistryStates.includes(reg.state)) problems.push("bad_registry_state");
-  const blockedStates = data.gate?.entries_must_be_empty_while_state_is ?? [];
-  if (blockedStates.includes(reg.state) && entries.length > 0) problems.push("entries_present_while_blocked");
-  const authorizedState = data.gate?.authorized_registry_state;
-  const preAuthorizationStates = data.gate?.pre_authorization_entry_states ?? [];
-  if (reg.state !== authorizedState && entries.some((entry) => entry && !preAuthorizationStates.includes(entry.state))) {
-    problems.push("entry_state_requires_authorized_registry");
-  }
-  const published = entries.filter((e) => e && e.state === "PUBLISHED");
-  if (published.length > schema.max_published_entries) problems.push("more_than_one_canary");
-  const ids = entries.map((e) => e && e.entry_id);
-  if (new Set(ids).size !== ids.length) problems.push("duplicate_entry_id");
-  entries.forEach((e, i) => {
-    for (const p of validateEntry(e)) problems.push(`entry_${i}.${p}`);
+  return shippedValidateRegistryShape(reg, {
+    schema,
+    consentFields: CONSENT_FIELDS,
+    grades: GRADES,
+    revocationTargets: REVOCATION_TARGETS,
+    gate: data.gate,
+    root,
   });
-  return problems;
 }
 
 /* fixture bem formada, sintetica, viva apenas dentro deste teste */
@@ -626,6 +501,18 @@ const WELL_FORMED = Object.freeze({
     { statement_pt_br: "o material sintetico foi entregue na data da fixture", evidence_grade: "FACT", source_pt_br: "protocolo sintetico" },
     { statement_pt_br: "o efeito comercial nao pode ser medido nesta fixture", evidence_grade: "UNKNOWN", source_pt_br: "sem medicao" },
   ],
+  evidence: {
+    fonte: "protocolo sintetico de entrega registrado em canal privado",
+    autorizacao: "autorizacao sintetica de fixture, registrada em recibo privado",
+    escopo_permitido: "setor e problema, sem nome nem logotipo",
+    anonimizacao: "identidade e valores comerciais omitidos",
+    baseline: "situacao anterior declarada no recibo privado da fixture",
+    intervencao: "leitura tecnica documentada no material sintetico",
+    resultado_observavel: "material sintetico entregue na data da fixture",
+    limitacoes: "fixture de teste; nao e cliente, contrato ou resultado real",
+    revisor: "Aprovadora Sintetica de Fixture",
+    expiracao: "2028-08-24T00:00:00Z",
+  },
   distribution: {
     canary: true,
     surfaces: ["/entregas/"],
@@ -642,6 +529,30 @@ const WELL_FORMED = Object.freeze({
 const clone = (o) => structuredClone(o);
 
 assert("fixture_well_formed_entry_passes", validateEntry(clone(WELL_FORMED)).length === 0, validateEntry(clone(WELL_FORMED)));
+
+{
+  const missingAuth = clone(WELL_FORMED);
+  missingAuth.evidence.autorizacao = "";
+  const missingAuthProblems = validateEntry(missingAuth);
+  assert("fixture_missing_authorization_fails", missingAuthProblems.includes("authorization_absent"), missingAuthProblems);
+
+  const expired = clone(WELL_FORMED);
+  expired.evidence.expiracao = "2020-01-01T00:00:00Z";
+  const expiredProblems = validateEntry(expired);
+  assert("fixture_expired_authorization_fails", expiredProblems.includes("authorization_expired"), expiredProblems);
+
+  const missingFonte = clone(WELL_FORMED);
+  missingFonte.evidence.fonte = "";
+  const missingFonteProblems = validateEntry(missingFonte);
+  assert("fixture_missing_fonte_fails", missingFonteProblems.includes("fonte_absent"), missingFonteProblems);
+
+  const absentEvidence = clone(WELL_FORMED);
+  delete absentEvidence.evidence;
+  const absentProblems = validateEntry(absentEvidence);
+  assert("fixture_absent_evidence_fails", absentProblems.includes("missing_field:evidence"), absentProblems);
+  assert("fixture_absent_evidence_reports_authorization_absent", absentProblems.includes("authorization_absent"), absentProblems);
+  assert("fixture_absent_evidence_reports_fonte_absent", absentProblems.includes("fonte_absent"), absentProblems);
+}
 
 /* fixture malformada canonica: objeto vazio reprova em bloco */
 const EMPTY_ENTRY_PROBLEMS = validateEntry({});
@@ -1253,6 +1164,15 @@ assert("library_index_has_no_real_proof_marker", !REAL_PROOF_MARKERS.some((mk) =
 
 const DEMO_PAGES = synth.demonstrative_pages ?? [];
 assert("demonstrative_pages_declared", filledList(DEMO_PAGES, 3), DEMO_PAGES);
+{
+  const hub = pageText.get("casos/index.html") ?? "";
+  assert("casos_hub_splits_exemplos_de_entrega", /Exemplos de entrega/i.test(hub), "Exemplos de entrega");
+  assert("casos_hub_splits_resultados_de_clientes", /Resultados de clientes/i.test(hub), "Resultados de clientes");
+  assert("casos_hub_h1_labelled_demonstrativo", /<h1>[^<]*demonstrativo/i.test(hub), hub.slice(0, 400));
+  const trust = pageText.get("confianca/index.html") ?? fs.readFileSync(path.join(root, "confianca/index.html"), "utf8");
+  assert("trust_surface_exists", trust.length > 0, "confianca/index.html");
+  assert("trust_surface_has_no_review_schema", !/"Review"|"AggregateRating"/.test(trust), "trust");
+}
 for (const rel of DEMO_PAGES) {
   const abs = path.join(root, rel);
   assert(`demonstrative_page_exists_${rel}`, fs.existsSync(abs), rel);
@@ -1306,7 +1226,13 @@ assert("site_ci_places_gate_after_market_fit", ciMarketFit >= 0 && ciAfter > ciM
 const graph = fs.readFileSync(path.join(root, "scripts/site/affected_graph.mjs"), "utf8");
 assert("affected_graph_declares_gate", graph.includes('"test:real-proof-registry"'), "affected_graph.mjs");
 assert("affected_graph_declares_registry_producer", graph.includes("data/commercial/real-proof-registry.v1.json"), "producer");
+assert("affected_graph_declares_shipped_validator_producer", graph.includes("scripts/commercial/real_proof_registry.mjs"), "producer");
 assert("affected_graph_declares_test_producer", graph.includes("tests/commercial/test_real_proof_registry.mjs"), "producer");
+assert(
+  "test_drives_shipped_validator",
+  selfRaw.includes('from "../../scripts/commercial/real_proof_registry.mjs"'),
+  "import",
+);
 assert(
   "affected_public_html_selects_real_proof_gate",
   consumerSuitesForPath("conteudos/fixture-public-surface/index.html").some((entry) => entry.id === "test:real-proof-registry"),
