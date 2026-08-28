@@ -10,7 +10,7 @@ Tagline: Licitação vencida não paga a conta. Contrato rentável, sim.
 A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia em licitações e contratos de obras públicas: análise de edital, orçamento, decisão de participar, preparação de proposta e defesa de margem na execução (aditivos, reequilíbrio, medições, glosas e atrasos). Quando a empresa precisa de rotina contínua, o formato se chama Diretoria Fracionada para o Mercado Público.
 
 ## Jornadas de contato
-- Problema urgente em contrato: Enviar documentos para análise inicial
+- Problema urgente em contrato: Solicitar canal seguro
 - Edital ou proposta em preparação: Enviar edital para triagem
 - Operação recorrente: Solicitar diagnóstico da operação
 
@@ -18,7 +18,7 @@ A CONFENGE presta consultoria técnica a construtoras e empresas de engenharia e
 - https://confenge.com.br/diagnostico-b2g-360/ - Diagnóstico da Operação em Obras Públicas
 - https://confenge.com.br/diretoria-b2g/ - Diretoria Fracionada para o Mercado Público
 - https://confenge.com.br/bid-room-licitacoes-obras/ - Operação de Proposta para Licitação Crítica
-- https://confenge.com.br/defesa-margem-contratos-publicos/ - Contract Defense & Margin / defesa técnica e proteção de margem
+- https://confenge.com.br/defesa-margem-contratos-publicos/ - Diagnóstico de Riscos à Margem
 
 ## Páginas principais
 - https://confenge.com.br/
