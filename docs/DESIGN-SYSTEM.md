@@ -142,7 +142,7 @@ Entrada sutil, foco de etapa, revelação de linha. Sem parallax exagerado, cont
 
 ## Manutenção
 
-- Tokens em CSS vivem em `styles-tokens.css`, não num `:root` do `styles.css`, e espelham este JSON.
+- Cor, raio, sombra, escala tipográfica e ritmo de seção vivem em `styles-tokens.css` e espelham este JSON. O `styles.css` mantém dois `:root` com tokens de layout e leitura (`--page-max`, `--read-measure`, `--text-body-*`, `--focus-ring`, `--section-*`, famílias) que não têm contraparte aqui; não recriar nele os tokens acima.
 - Escala tipográfica: `--text-display`, `--text-h1` e `--text-h2` são a fonte única. O `h1` e o `h2` globais consomem os tokens; não recriar um segundo par de clamps em media query.
 - A escala de espaçamento é em rem. Ela esteve declarada em px no JSON e em rem no CSS, com o mesmo token valendo coisas diferentes conforme a folha carregada; o JSON passou a registrar a escala real.
 - Gates em `scripts/site/test_design_gates.py` leem HTML real e este JSON.
