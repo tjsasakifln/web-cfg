@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "72d9bc8f9305f014505330c9540e69a67e829c1c",
+  "baseline_commit": "8887bb5fef1c49e1af3cd7f9912874c244f53a7d",
   "recaptured_at": "2026-08-28",
-  "recapture_reason": "CFG10X-17: fit economico explicito. diagnostico-pre-licitacao e reequilibrio-obras-publicas recebem um paragrafo de custo, risco, recorrencia e limite derivado da escada publicada; title, H1, canonical e schema permanecem. medicoes-glosas-obras-publicas permanece byte-identical por ser frozen sibling da issue 389. script.js recapturado porque o modulo offer-fit e a qualificacao do formulario foram montados. analytics.js, styles e sitemaps inalterados. Premissas, nao WTP. Recaptura revisada do baseline de hashes.",
+  "recapture_reason": "CFG10X-17: recaptura de script.js apos o router de fit deixar de encaminhar para faixa paga cujo piso publicado supera o teto de risk_band. Pillars HTML, analytics.js, styles e sitemaps inalterados nesta recaptura. Premissas, nao WTP.",
   "html_mutation": true,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -20,7 +20,7 @@
     "auditoria-orcamento-licitacao/index.html": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "b5828ec2e88ff6df78dbd2677b33816fa56ab1b5a13377e36d71616112056432",
-    "script.js": "b623e5e246701f2f56fb09a5dd5866dc4ec70eda880079a23755c85db95270c1",
+    "script.js": "ac5c2a6a1b8f682993708f8f7701c064696a0c35ec617c7aa40e1577ef740aa9",
     "styles.css": "0319e4dc4f099d055bb96fb8219cb737b57ec4c0d51a7b4fb8007a1ef577f0de",
     "styles-tokens.css": "5b0d33f5fccc801ba5b4d7b8d407dd3d800d25b296a79ff1eb33d8bc98ce4237",
     "styles-tools.css": "0e95af7a66e63715f9c2cf3af0daa0f31fdca881988435e628377f100f033998",
