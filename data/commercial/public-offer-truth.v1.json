@@ -1,0 +1,190 @@
+{
+  "schema": "confenge.public-offer-truth/1.0",
+  "truth_version": "CFG-OFFER-TRUTH-2026-08-28-v1",
+  "issue": "CFG10X-04",
+  "decision_state": "EXECUTE_NOW",
+  "front": "REVENUE NOW",
+  "leverage": ["revenue", "trust"],
+  "note": "Projection over catalog.snapshot.json (#88) and deliverables-registry.v1.json (#329/#343). This file does not mint prices, checkout IDs or capacity. Amounts are always read from those sources.",
+  "sources": {
+    "checkout_catalog": "data/offers/catalog.snapshot.json",
+    "deliverables": "data/commercial/deliverables-registry.v1.json",
+    "naming": "data/commercial/offer-naming.v1.json",
+    "pricing_policy": "data/commercial/pricing-policy.v1.json"
+  },
+  "forbidden": {
+    "invented_amounts": true,
+    "second_price_table": true,
+    "treat_VALIDATE_as_buyable": true,
+    "cta_label_with_two_destination_types": true,
+    "upload_promise_without_upload": true,
+    "percent_without_denominator": true
+  },
+  "cta_labels": [
+    {
+      "label": "Solicitar canal seguro",
+      "destination_type": "form"
+    },
+    {
+      "label": "Enviar edital para triagem",
+      "destination_type": "form"
+    },
+    {
+      "label": "Solicitar diagnóstico da operação",
+      "destination_type": "form"
+    },
+    {
+      "label": "Solicitar o diagnóstico",
+      "destination_type": "form"
+    },
+    {
+      "label": "Prefiro WhatsApp",
+      "destination_type": "whatsapp"
+    },
+    {
+      "label": "Falar sobre minha operação",
+      "destination_type": "whatsapp"
+    },
+    {
+      "label": "Analisar meu caso",
+      "destination_type": "form"
+    },
+    {
+      "label": "Enviar dados pelo formulário",
+      "destination_type": "form"
+    },
+    {
+      "label": "Enviar para análise",
+      "destination_type": "form"
+    },
+    {
+      "label": "Enviar para triagem",
+      "destination_type": "form"
+    },
+    {
+      "label": "Enviar pedido de enquadramento",
+      "destination_type": "form"
+    }
+  ],
+  "urgency": {
+    "percent_source": "deliverables.common_rules.urgency_surcharge_pct",
+    "denominator": "preço-piloto ou preço publicado daquela entrega",
+    "condition": "prazo inferior ao SLA, capacidade confirmada e adicional pago antes de começar; a capacidade pode recusar",
+    "example": {
+      "offer_id": "CFG-D17",
+      "from_sla_business_days": 5,
+      "to_sla_business_days": 2
+    }
+  },
+  "hub": {
+    "route": "/servicos-obras-publicas/",
+    "page_file": "servicos-obras-publicas/index.html",
+    "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde a triagem ainda decide o enquadramento, a página diz o que a triagem fecha. Exemplos completos você consulta sem cadastro.",
+    "cited_offer_ids": [
+      "CFG-D24",
+      "diretoria_fracionada",
+      "CFG-D16",
+      "CFG-D17"
+    ]
+  },
+  "offers": [
+    {
+      "offer_id": "CFG-DIAG-EXP-v1",
+      "source": "checkout_catalog",
+      "route": "/diagnostico-b2g-expansao/",
+      "page_file": "diagnostico-b2g-expansao/index.html",
+      "slug_aliases": ["diagnostico-b2g-expansao"],
+      "frozen": false,
+      "commercial_mode": "PUBLISHED_FIRM",
+      "public_state": "PUBLISHED",
+      "buyable": false,
+      "buyable_note": "Preço e prazo publicados; a contratação só fecha depois do aceite da demanda. Checkout automático não está ativo.",
+      "page_publishes_price": true,
+      "jsonld_offer_price": true,
+      "cta_label": "Solicitar o diagnóstico",
+      "cta_href": "#pedido-diagnostico",
+      "cta_destination_type": "form",
+      "visible_aliases_forbidden": ["Diagnóstico B2G de Expansão", "Bid Room"]
+    },
+    {
+      "offer_id": "diretoria_fracionada",
+      "source": "deliverables.containers",
+      "plan_offer_ids": [
+        "CFG-DIRB2G-FLEX-v1",
+        "CFG-DIRB2G-180-v1",
+        "CFG-DIRB2G-365-v1"
+      ],
+      "route": "/diretoria-b2g/",
+      "page_file": "diretoria-b2g/index.html",
+      "slug_aliases": ["diretoria-b2g"],
+      "frozen": false,
+      "commercial_mode": "PUBLISHED_FIRM",
+      "public_state": "PUBLISHED",
+      "buyable": false,
+      "buyable_note": "Faixa publicada; a contratação depende de capacidade confirmada e não fecha no site.",
+      "page_publishes_price": true,
+      "jsonld_offer_price": true,
+      "cta_label": "Falar sobre minha operação",
+      "cta_href_type": "whatsapp",
+      "cta_destination_type": "whatsapp",
+      "visible_aliases_forbidden": ["Diretoria B2G", "Flex", "Bid Room"]
+    },
+    {
+      "offer_id": "CFG-D24",
+      "source": "deliverables",
+      "route": "/diagnostico-b2g-360/",
+      "page_file": "diagnostico-b2g-360/index.html",
+      "slug_aliases": ["diagnostico-b2g-360"],
+      "frozen": true,
+      "frozen_until": "2026-09-16",
+      "commercial_mode": "PILOT_NOT_BUYABLE",
+      "public_state": "VALIDATE",
+      "buyable": false,
+      "buyable_note": "Hipótese de piloto. Não há compra imediata. A página congelada não publica o número; o catálogo mostra o preço-piloto com estado Em validação.",
+      "page_publishes_price": false,
+      "jsonld_offer_price": false,
+      "cta_label": "Solicitar diagnóstico da operação",
+      "cta_destination_type": "form",
+      "cta_residual_until_unlock": true,
+      "visible_aliases_forbidden": ["Diagnóstico B2G 360°", "Bid Room"]
+    },
+    {
+      "offer_id": "CFG-D16",
+      "source": "deliverables",
+      "route": "/bid-room-licitacoes-obras/",
+      "page_file": "bid-room-licitacoes-obras/index.html",
+      "slug_aliases": ["bid-room", "bid-room-licitacoes-obras"],
+      "frozen": false,
+      "commercial_mode": "QUOTE_AFTER_SCREENING",
+      "public_state": "VALIDATE",
+      "buyable": false,
+      "buyable_note": "A triagem escolhe o nível essencial, complexa ou especial já publicado no catálogo, confirma prazo e capacidade, e só então informa o preço aplicável. Sem triagem, não há proposta.",
+      "page_publishes_price": false,
+      "page_price_as": "screening_condition",
+      "jsonld_offer_price": false,
+      "cta_label": "Enviar edital para triagem",
+      "cta_href": "#captura-pilar",
+      "cta_destination_type": "form",
+      "visible_aliases_forbidden": ["Bid Room", "Go/No-Go"]
+    },
+    {
+      "offer_id": "CFG-D17",
+      "source": "deliverables",
+      "route": "/defesa-margem-contratos-publicos/",
+      "page_file": "defesa-margem-contratos-publicos/index.html",
+      "slug_aliases": ["contract-defense", "defesa-margem-contratos-publicos"],
+      "frozen": false,
+      "commercial_mode": "PILOT_NOT_BUYABLE",
+      "public_state": "VALIDATE",
+      "buyable": false,
+      "buyable_note": "Preço-piloto do registro. Não há compra imediata; o envio abre análise de aderência e capacidade.",
+      "page_publishes_price": true,
+      "page_price_as": "pilot",
+      "jsonld_offer_price": false,
+      "cta_label": "Solicitar canal seguro",
+      "cta_href": "#captura-pilar",
+      "cta_destination_type": "form",
+      "visible_aliases_forbidden": ["Bid Room"]
+    }
+  ]
+}

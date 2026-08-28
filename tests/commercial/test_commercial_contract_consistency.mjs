@@ -166,6 +166,23 @@ assert("copy_machine_acceptance_has_evidence", ["AC-01", "AC-08", "AC-09"].every
 }), copy.acceptance);
 assert("copy_has_no_review_evidence", copy.reviews.length === 0 && copy.human_protocol.results.length === 0, [copy.reviews, copy.human_protocol.results]);
 
+const truthOverlay = load("public-offer-truth.v1.json");
+const snapshot = JSON.parse(fs.readFileSync(path.join(root, "data/offers/catalog.snapshot.json"), "utf8"));
+const snapshotIds = new Set((snapshot.offers || []).map((item) => item.offer_id));
+const containerIds = new Set((registry.containers || []).map((item) => item.container_id));
+assert("truth_overlay_has_no_amount_key", !/"amount_cents"\s*:/.test(JSON.stringify(truthOverlay)));
+for (const offer of truthOverlay.offers || []) {
+  if (offer.source === "checkout_catalog") {
+    assert(`truth_${offer.offer_id}_in_snapshot`, snapshotIds.has(offer.offer_id), offer.offer_id);
+  } else if (offer.source === "deliverables") {
+    assert(`truth_${offer.offer_id}_in_registry`, byId.has(offer.offer_id), offer.offer_id);
+    assert(`truth_${offer.offer_id}_route_matches`, byId.get(offer.offer_id)?.route === offer.route, [byId.get(offer.offer_id)?.route, offer.route]);
+  } else if (offer.source === "deliverables.containers") {
+    assert(`truth_${offer.offer_id}_in_containers`, containerIds.has(offer.offer_id), offer.offer_id);
+  }
+  assert(`truth_${offer.offer_id}_validate_not_buyable`, offer.public_state !== "VALIDATE" || offer.buyable === false, offer);
+}
+
 const failed = results.filter((result) => !result.ok);
 console.log(`commercial-contract-consistency: ${results.length - failed.length}/${results.length} checks passed`);
 if (failed.length) process.exit(1);

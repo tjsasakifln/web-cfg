@@ -102,9 +102,9 @@ def test_microcopy_preferences():
     assert "qual situação sua empresa precisa resolver agora" in lower
     assert "tenho um contrato sob pressão" in lower
     assert "estou analisando uma licitação" in lower
-    assert "preciso organizar minha operação b2g" in lower
+    assert "preciso organizar minha operação no mercado público" in lower
     assert "analisar meu caso" in lower
-    assert "enviar documentos para análise" in lower
+    assert "solicitar canal seguro" in lower
     assert "enviar edital para triagem" in lower
     assert "solicitar diagnóstico da operação" in lower
     # Visible labels "Jornada A/B/C" must not appear (data-journey attrs OK)
@@ -324,7 +324,8 @@ def test_public_surfaces_have_no_prose_em_dashes():
         assert "Prazo" in t or "prazo" in t
         assert "wa.me" in t
     assert "Solicitar diagnóstico da operação" in home
-    assert "Enviar documentos para análise" in home
+    assert "Solicitar canal seguro" in home
+    assert "enviar documentos para análise" not in home.lower()
     # Thank-you pages must not expose journey letter labels to visitors
     for name in ("obrigado-contrato.html", "obrigado-edital.html", "obrigado-operacao.html"):
         ty = (ROOT / name).read_text(encoding="utf-8")
@@ -333,7 +334,8 @@ def test_public_surfaces_have_no_prose_em_dashes():
     assert "Solicitar diagnóstico da operação" in (ROOT / "diagnostico-b2g-360" / "index.html").read_text(encoding="utf-8")
     assert "Enviar edital para triagem" in (ROOT / "bid-room-licitacoes-obras" / "index.html").read_text(encoding="utf-8")
     defesa = (ROOT / "defesa-margem-contratos-publicos" / "index.html").read_text(encoding="utf-8")
-    assert "Enviar documentos para análise" in defesa
+    assert "Solicitar canal seguro" in defesa
+    assert "enviar documentos para análise" not in defesa.lower()
     assert "Diagnosticar encaixe da Diretoria Fracionada para o Mercado Público" in (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
 
 

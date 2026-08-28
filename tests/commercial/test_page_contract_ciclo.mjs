@@ -619,11 +619,6 @@ assert("rule_urgency_requires_capacity", cr.urgency_below_sla_requires_capacity 
 assert("rule_urgency_surcharge_is_50", cr.urgency_surcharge_percent === 50, cr.urgency_surcharge_percent);
 assert("rule_urgency_disclosed_before_contracting", cr.urgency_disclosed_before_contracting === true, cr.urgency_disclosed_before_contracting);
 assert(
-  "every_item_scope_limit_repeats_urgency_rule",
-  items.every((it) => it.scope_limits_pt_br.some((l) => /urgência abaixo do SLA/i.test(l) && /50%/.test(l))),
-  items.filter((it) => !it.scope_limits_pt_br.some((l) => /urgência abaixo do SLA/i.test(l))).map((it) => it.number),
-);
-assert(
   "every_item_requires_capacity",
   items.every((it) => it.capacity_required === true),
   items.filter((it) => it.capacity_required !== true).map((it) => it.number),
@@ -647,6 +642,17 @@ assert(
 
 // as seis regras também aparecem como frases
 const statements = cr.statements_pt_br ?? [];
+assert(
+  "canonical_urgency_rule_has_denominator_condition_example",
+  statements.some((s) =>
+    /50 por cento/.test(s) &&
+    /preço-piloto ou preço publicado daquela entrega/.test(s) &&
+    /confirmação de capacidade/.test(s) &&
+    /R\$ 2\.900/.test(s) &&
+    /R\$ 4\.350/.test(s),
+  ),
+  statements,
+);
 assert("rule_statements_are_six", statements.length === 6, statements.length);
 assert("rule_statements_filled", filledList(statements, 6), statements);
 assert(

@@ -724,7 +724,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
             count=1,
 )
     # Soft-replace generic "Quer validar este cenário" lead with journey-aware next step
-    cta = j.get("cta") or "Enviar documentos para análise"
+    cta = j.get("cta") or "Solicitar canal seguro"
     next_step = j.get("next_step") or ""
     wa = wa_url(j.get("wa_message") or "Olá, Tiago. Preciso de apoio em contrato público.")
     form = f"/?{j.get('href_params') or 'jornada='+journey_id}&tema={quote(topic)}&origem={quote(origem)}#contato"
