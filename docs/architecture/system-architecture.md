@@ -179,7 +179,8 @@ Source HTML/JSON ──► pseo/editorial/site scripts ──► validate gates
 
 | Integration | Direction | Purpose | Status (from docs) |
 |-------------|-----------|---------|---------------------|
-| Netlify Blobs | R/W | Leads, analytics, nurture | Production path |
+| Host-owned file store `/var/lib/confenge-web` | R/W | Leads, analytics, nurture | Production path (survives release rollback) |
+| `netlify-blobs` adapter | R/W | same records under the legacy plane | Not the production store; kept for source compatibility |
 | ntfy | Out | Lead notify | Verified delivered |
 | Resend | Out | Email notify | Config-dependent |
 | FormSubmit | Out | Legacy email path | **PENDING** (403 activation) |

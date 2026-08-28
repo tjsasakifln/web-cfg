@@ -36,7 +36,7 @@ def test_install_git_filters_is_noop():
 
 
 def test_deploy_commit_prefers_env(monkeypatch=None):
-    """COMMIT_REF wins over git when set (Netlify)."""
+    """COMMIT_REF wins over git when set (release packager, and the legacy preview builder)."""
     fake = "abcdef0123456789abcdef0123456789abcdef01"
     old = os.environ.get("COMMIT_REF")
     os.environ["COMMIT_REF"] = fake

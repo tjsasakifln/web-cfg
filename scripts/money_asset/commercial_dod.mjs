@@ -72,7 +72,7 @@ export function validateCommercialLoopRegistry(registry = {}) {
 export function buildNextCommand(loop = {}) {
   const actionPath = loop.capture_contract?.page_path || loop.asset_path || "<registered-loop-path>";
   return [
-    "# Netlify production",
+    "# Production EnvironmentFile /etc/confenge-web/runtime.env",
     `CONFENGE_INBOUND_WEBHOOK_URL=${CANONICAL_INBOUND_URL}`,
     "CONFENGE_INBOUND_WEBHOOK_SECRET=<shared>",
     "# Warmbly",
@@ -363,7 +363,7 @@ export function classifyRealLoop(facts = {}, loopConfig = {}) {
     missing.push({
       prerequisite: "CONFENGE_INBOUND_WEBHOOK_URL",
       status: missingState(facts, "inbound_url_set", "inbound_url_state", "UNSET"),
-      note: `Set on Netlify production to ${CANONICAL_INBOUND_URL}`,
+      note: `Set in /etc/confenge-web/runtime.env to ${CANONICAL_INBOUND_URL}`,
     });
   }
   if (!configured(facts, "inbound_secret_set", "inbound_secret_state")) {

@@ -5,8 +5,9 @@
 
 ## Authority and flow
 
-The only durable operational authority is Netlify Blobs record
-`system/gsc-insights-latest-v1`, accessed through authenticated `ops` actions.
+The only durable operational authority is the host-owned filesystem record
+`system/gsc-insights-latest-v1` under `CONFENGE_STORAGE_DIR` (namespace
+`ops-system`), accessed through authenticated `ops` actions.
 It contains the versioned/hash-verified `confenge_private_gsc_history_v1` state
 and the last-known-good redacted insights. GitHub Actions cache is not a data
 plane.

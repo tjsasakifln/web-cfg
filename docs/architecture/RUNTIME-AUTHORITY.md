@@ -1,27 +1,83 @@
 # CONFENGE runtime authority
 
 This file is both the human map and the machine-readable authority record.
+Operators and `scripts/site/runtime_authority.mjs` parse the YAML block below.
+There is one public production plane. Stage and legacy are named separately so
+they cannot be mistaken for it.
+
+Observed 2026-08-28 (read-only): `https://confenge.com.br/` serves
+`Server: nginx`, `X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2`,
+and `/.well-known/build-info.json` matching `origin/main`. Public DNS for the
+apex is `159.195.18.88`; `www` is a CNAME to the apex. That is production.
 
 ```yaml
-authority_version: 1
-effective_at: 2026-08-14
+authority_version: 2
+effective_at: 2026-08-28
 decision: ADR-STRAT-002
+compare_gate: scripts/site/runtime_authority.mjs
 public_canonical:
+  plane: production
   domain: confenge.com.br
   repository: tjsasakifln/web-cfg
-  host: Netlify
-  deployment: GitHub main push -> Netlify build (npm run build:site)
+  host: Netcup VPS nginx reverse proxy plus Node 22 portable runtime
+  host_kind: nginx-netcup
+  host_architecture_version: confenge-nginx-node/v2
+  expected_server_header: nginx
+  expected_environment: production
+  expected_profile: netcup-production
+  deployment: GitHub main through site-ci public artifact then netcup-release.yml package_only or stage_verify or promote; host adopts an immutable SHA under /opt/confenge-web/releases and swaps the current symlink
   dns:
-    apex_a: [75.2.60.5, 99.83.231.61]
-    www_cname: confenge.netlify.app
-  service_manager: Netlify
-  env_authority: Netlify site production environment
+    nameservers:
+      - grannbo.ns.cloudflare.com
+      - kai.ns.cloudflare.com
+    apex_a:
+      - 159.195.18.88
+    apex_aaaa: []
+    www_cname: confenge.com.br
+  process: systemd unit confenge-web-runtime.service bound to 127.0.0.1:18100; public vhost nginx confenge.com.br
+  service_manager: systemd and nginx
+  env_authority: root-owned /etc/confenge-web/runtime.env mode 0640
+  storage:
+    backend: filesystem
+    root: /var/lib/confenge-web
+    contract_version: confenge-host-file-record/v1
+    survives_release_rollback: true
+  scheduler:
+    http_process: systemd confenge-web-runtime.service
+    revops: GitHub Actions workflow revops-scheduled.yml against live HTTPS
+    search_observation_host_timer: packaged disabled until /opt/confenge-web/shared/schedule-cutover.json
+    netlify_scheduled_functions: leftover declaration in netlify.toml; not the public production plane
   health:
-    public: /.well-known/build-info.json
-    authenticated_ops: /.netlify/functions/ops?action=health
-  rollback: publish previous known-good Netlify deploy
+    public_identity: /.well-known/build-info.json
+    runtime_identity: /.well-known/runtime-info.json
+    live: /healthz
+    ready: /ready
+    ops: /.netlify/functions/ops?action=health
+    ops_alias: /api/web/ops?action=health
+  rollback: /opt/confenge-web/bin/rollback FULL_SHA
+  release_root: /opt/confenge-web
+  current_symlink: /opt/confenge-web/current
   purpose: public acquisition, utility, lead capture and conversion
+stage:
+  plane: stage
+  host: same Netcup VPS
+  github_environment: netcup-stage
+  traffic: none
+  path: /opt/confenge-web/releases/FULL_SHA after stage-release
+  loopback_origin: http://127.0.0.1:8088
+  dns: none
+  purpose: verify a candidate without swapping current
+legacy:
+  plane: legacy
+  host: Netlify leftover
+  public_canonical: false
+  leftover_hostname: confenge.netlify.app
+  functions_source: netlify/functions
+  blobs: netlify-blobs adapter is not the production store
+  dns: not authoritative for confenge.com.br
+  purpose: leftover preview hostname and source-compatible handler tree executed by the portable runtime
 truth_data:
+  plane: extra-cli
   repository: tjsasakifln/extra-cli
   host: Netcup 159.195.18.88 (ssh ec-prod)
   deployment: versioned release under /opt/extra-consultoria
@@ -32,6 +88,7 @@ truth_data:
   rollback: previous approved release SHA plus database-safe migration procedure
   purpose: canonical facts, identity, provenance and commercial intelligence
 commercial_action:
+  plane: warmbly
   repository: tjsasakifln/warmbly
   host: Netcup 159.195.18.88 (CONFENGE execution plane)
   deployment: deploy/confenge-vps Docker Compose overlay
@@ -65,9 +122,20 @@ ambiguous_repositories:
   dev-br: independent development tooling; never a CONFENGE public/runtime destination
 ```
 
+## Planes
+
+| Plane | What it is | What it is not |
+|---|---|---|
+| Production | `confenge.com.br` on this VPS: nginx, portable Node 22, host-owned filesystem | Netlify CDN, Netlify Functions hosting, Netlify Blobs |
+| Stage | SHA unpacked under `releases/` and checked on loopback `127.0.0.1:8088` | Public DNS, `current` symlink, visitor traffic |
+| Legacy | `netlify/functions` source, portable URL aliases, leftover `confenge.netlify.app` | Canonical public host, production env, production rollback |
+
 ## Rules
 
-- New public capabilities deploy only from `web-cfg` to the Netlify authority.
+- New public capabilities deploy only from `web-cfg` onto the production plane
+  recorded above.
+- Do not instruct Netlify UI publish, Netlify env, or Netlify rollback as the
+  production path.
 - Netcup hosts data/action planes because those services need to exist; it is not
   a destination for rebuilding SmartLic.
 - `smartlic.tech` may point only to a minimal URL-specific migration/redirect
@@ -75,3 +143,23 @@ ambiguous_repositories:
   the target, reverse proxy, TLS, rollback and removal trigger are verified.
 - Railway/Supabase unavailability accelerates retirement. It never creates a
   request for a token, usage-limit increase or product redeploy.
+
+## Operator path
+
+Release, atomicity, verification, rollback, lead recovery and the authorized
+drill checklist live in [`docs/ops/ROLLBACK.md`](../ops/ROLLBACK.md). Host
+packaging lives in [`deploy/netcup/README.md`](../../deploy/netcup/README.md).
+Compare live or fixture observations with:
+
+```sh
+npm run test:runtime-authority
+node scripts/site/runtime_authority.mjs --fixture matching
+node scripts/site/runtime_authority.mjs --fixture divergent-host
+```
+
+Live compare (read-only; SHA versus `origin/main`, never versus an unpublished
+PR HEAD):
+
+```sh
+node scripts/site/runtime_authority.mjs --live
+```

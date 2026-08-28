@@ -1,6 +1,9 @@
 # Variáveis de ambiente (somente nomes)
 
-Configurar no Netlify → Site configuration → Environment variables (production + deploy previews conforme necessidade).
+Produção: EnvironmentFile root-owned `/etc/confenge-web/runtime.env` no VPS
+(ver `docs/architecture/RUNTIME-AUTHORITY.md`). Local: `.env` a partir de
+`.env.example`. Preview leftover Netlify, se ainda existir, não é o plano
+público.
 
 ## Leads (obrigatórias para produção completa)
 
@@ -36,7 +39,7 @@ Configurar no Netlify → Site configuration → Environment variables (producti
 | `NTFY_URL` | opcional | URL completa de tópico **privado** |
 | `NTFY_TOKEN` | se NTFY_URL | Bearer token ntfy |
 | `NTFY_ALLOWED_HOSTS` | com ntfy em produção | Allowlist exata de hosts HTTPS (vírgula); obrigatória porque o body contém contato |
-| `CONFENGE_STORAGE_BACKEND` | produção dinâmica | `filesystem` na Netcup; `netlify-blobs` somente durante rollback Netlify; `memory` é proibido em produção |
+| `CONFENGE_STORAGE_BACKEND` | produção dinâmica | `filesystem` na Netcup; `netlify-blobs` não é o store de produção; `memory` é proibido em produção |
 | `CONFENGE_STORAGE_DIR` | com `filesystem` | Caminho absoluto, preexistente, `0700`, fora da árvore de release (ex.: `/var/lib/confenge-web`) |
 | `LEAD_STORE_DIR` | legado local/dev | Alias de compatibilidade do FileStore; não usar em nova produção |
 | `LEAD_STORE` | teste | `memory` para testes |
@@ -94,8 +97,9 @@ Checkout/callback cannot emit `payment_received`. Production real-money stays of
 
 | Nome | Descrição |
 | --- | --- |
-| `COMMIT_REF` / `CACHED_COMMIT_REF` | Injetados pelo Netlify no build |
-| `CONTEXT` | `production` / `deploy-preview` |
+| `RUNTIME_RELEASE_SHA` | SHA completo do release; o launcher Netcup deriva do manifest imutável |
+| `COMMIT_REF` / `CACHED_COMMIT_REF` | Nomes legado de build; produção usa o SHA do release, não injeção Netlify |
+| `CONTEXT` | Legado de preview; produção usa `NODE_ENV=production` + `RUNTIME_PROFILE=netcup-production` |
 
 ## Portable runtime / Netcup
 

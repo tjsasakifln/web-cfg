@@ -3,7 +3,7 @@
 **Owner (map):** web-cfg#62 / `@dev`  
 **Owner (bridge/DNS):** SmartLic#2115 operator (Gage / @devops)  
 **Cost:** UNKNOWN  
-**Exact SHA:** `9c47b1b26e1dfb83cb8ea476091d9893931d17ce434ca54e7b6af933b85433fa`
+**Exact SHA:** `35aca764cc455fea3031286700e0310315c9bff34fcf41b883cb53e8f9277698`
 **Observation window:** 28 days after the first production 301 of this hash — **not started** as of 2026-08-16.
 
 This file is the CONFENGE-side pin and validation runbook. Live DNS/TLS/ACME commands are in the SmartLic counterpart `bridge/docs/CUTOVER.md` and `bridge/docs/RUNBOOK.md`. They are **not** executed from this checkout.
@@ -12,7 +12,7 @@ This file is the CONFENGE-side pin and validation runbook. Live DNS/TLS/ACME com
 
 | Surface | State |
 |---|---|
-| `confenge.com.br` | Netlify production. 11 ready targets HTTPS 200, canonical host `confenge.com.br`. |
+| `confenge.com.br` | nginx/Netcup production (`confenge-nginx-node/v2`). Canonical host `confenge.com.br`. |
 | `smartlic.tech` A | `69.46.46.88` (Railway) TTL 60 → fallback 404 |
 | `www.smartlic.tech` | CNAME `app.smartlic.tech.` → TLS SAN mismatch `*.up.railway.app` |
 | Bridge process | not deployed |

@@ -2,7 +2,7 @@
 
 ## Entrada
 
-1. Formulário → `POST /.netlify/functions/lead` → persistência Blobs → `lead_id` / `receipt_id`
+1. Formulário → `POST /.netlify/functions/lead` (alias `/api/web/lead`) → persistência filesystem host-owned (`/var/lib/confenge-web`) → `lead_id` / `receipt_id`
 2. Outbox inbound `PENDING` e POST `confenge.inbound.v1` para Warmbly (HMAC server-side). Warmbly fora **não** falha a captura.
 3. Notificação ops Slack-style (`OPS_WEBHOOK_URL`) e/ou e-mail Resend
 4. Clique WhatsApp / mailto (sem persistência automática — conversão distinta)
@@ -38,7 +38,7 @@ entrada → qualificação (jornada + urgência) → prioridade → 1º contato 
 
 ## CRM mínimo
 
-Enquanto não houver CRM dedicado: exportar do store Blobs / e-mails de notificação para planilha operacional com colunas: lead_id, received_at, journey, stage, source, first_touch_at, outcome, loss_reason.
+Enquanto não houver CRM dedicado: exportar do store filesystem (`npm run revops:export-leads` / `docs/ops/LEAD-EXPORT-RUNBOOK.md`) ou dos e-mails de notificação para planilha operacional com colunas: lead_id, received_at, journey, stage, source, first_touch_at, outcome, loss_reason. Rollback de release não apaga esse store.
 
 ## Eliminação de teste
 

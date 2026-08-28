@@ -124,7 +124,7 @@ Submissão humana no GSC:
 
 ## 8. Smoke de produção
 
-Após deploy (merge + Netlify production):
+Após deploy (merge em `main` + promote Netcup):
 
 ```bash
 npm run test:redirects:prod

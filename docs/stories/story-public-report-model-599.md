@@ -27,7 +27,7 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 7. A URL possui canonical próprio, `index,follow`, Open Graph e JSON-LD `WebPage` + `Report`, consta no sitemap canônico e é alcançável por links no hub de casos, na página de Bid Room e na Diretoria B2G.
 8. Analytics usam apenas eventos e atributos sem PII, com `source=CONFENGE_WEB`, `asset_id=relatorio-inteligencia-licitacoes-demonstrativo` e posições de CTA distinguíveis.
 9. Testes automatizados cobrem conteúdo, anonimização, preço/CTA, indexabilidade, sitemap, artefato público e regressões dos gates existentes; revisão visual cobre 320, 390, 768, 1024 e 1440 px.
-10. Após CI verde e merge em `main`, o deploy Netlify responde HTTP 200 na URL canônica, o `/.well-known/build-info.json` informa o SHA integrado e o CTA é verificado em produção.
+10. Após CI verde e merge em `main`, o release do plano público responde HTTP 200 na URL canônica, o `/.well-known/build-info.json` informa o SHA integrado e o CTA é verificado em produção.
 
 ## Market-Capture Gate
 
@@ -59,7 +59,7 @@ quality_gate_tools: ["test:design", "test:copy", "test:ui", "visual-review"]
 ## Dev Notes
 
 - `confenge.com.br` é a única superfície pública; páginas públicas pertencem a `web-cfg`, enquanto `extra-cli` permanece dono de dados e proveniência. [Source: `docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md#decision`]
-- O deploy canônico é `main` do GitHub para Netlify via `npm run build:site`; rollback usa deploy Netlify conhecido. [Source: `docs/architecture/RUNTIME-AUTHORITY.md#confenge-runtime-authority`]
+- O deploy canônico sai de `main` pelo caminho de release do plano público (`npm run build:site` → artefato do `site-ci` → `netcup-release.yml`); rollback usa `/opt/confenge-web/bin/rollback FULL_SHA`. [Source: `docs/architecture/RUNTIME-AUTHORITY.md#confenge-runtime-authority`]
 - Inteligência pública precisa de utilidade, fonte/metodologia visível, próximo passo e aprendizagem mensurável. [Source: `docs/strategy/MARKET-CAPTURE-OS.md#corporate-thesis-and-north-star`]
 - O design deve comunicar precisão técnica, responsabilidade e alto valor econômico, usando tokens, contraste editorial e artefatos de método, não card soup ou dashboard SaaS. [Source: `docs/DESIGN-SYSTEM.md#conceito`]
 - A página vive sob `casos/`, diretório já permitido no artefato público. O build deve copiar somente arquivos allowlisted. [Source: `scripts/pseo/public_artifact.py`]

@@ -2,7 +2,7 @@
 
 Exact sequence. Do not invert. Do not merge or apply DNS from the implementer checkout.
 
-1. **web-cfg pin.** Commit `data/migrations/smartlic-url-map/inventory.v2.json` (and the byte-identical `data/migration/smartlic-confenge/manifesto.v1.json`) on `feat/smartlic-equity-migration-62`. Record SHA-256 `9c47b1b26e1dfb83cb8ea476091d9893931d17ce434ca54e7b6af933b85433fa`.
+1. **web-cfg pin.** Commit `data/migrations/smartlic-url-map/inventory.v2.json` (and the byte-identical `data/migration/smartlic-confenge/manifesto.v1.json`) on `feat/smartlic-equity-migration-62`. Record SHA-256 `35aca764cc455fea3031286700e0310315c9bff34fcf41b883cb53e8f9277698`.
 2. **SmartLic consume.** On `chore/redirect-bridge-2115`, copy those bytes to `bridge/manifest/manifesto.v1.json`, set `PINNED_SHA256` to that digest, set `PINNED_COMMIT` to the web-cfg commit that carries the file, regenerate `bridge/generated/`. Prior consume of `3c5a5b7a…` (PR #2135) is stale after the WEB-017 remapping.
 3. **Human accept.** Review the 11 ready 301s and the HOLD fail-closed list. #62 and #2115 stay OPEN.
 4. **Owner cutover.** Only after a named host (`$BRIDGE_PUBLIC_IPV4`) and ACME email exist. Commands live in `SmartLic/bridge/docs/CUTOVER.md`. This goal does not run them.

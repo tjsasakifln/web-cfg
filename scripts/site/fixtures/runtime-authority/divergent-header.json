@@ -1,0 +1,10 @@
+{
+  "mode": "from-authority",
+  "mutate": {
+    "http.architecture_header": "netlify-edge/v1"
+  },
+  "expected": {
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "environment": "production"
+  }
+}

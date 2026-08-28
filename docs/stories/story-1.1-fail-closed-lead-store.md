@@ -44,7 +44,7 @@ Prevents silent lead loss and dishonest HTTP 200s when Blobs/store is misconfigu
 ## Dependencies
 
 - None (P0 first story)  
-- Netlify Blobs access for production verification (ops)
+- Production store access for verification (ops)
 
 ## Risks
 
