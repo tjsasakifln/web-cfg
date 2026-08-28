@@ -128,11 +128,11 @@
   color: #92400e;
   display: block;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: .72rem;
+  font-size: .62rem;
   font-weight: 800;
   letter-spacing: .1em;
-  line-height: 1.2;
-  margin: 0 0 .45rem;
+  line-height: 1;
+  margin: 0 0 .15rem;
   text-transform: uppercase;
 }
 
