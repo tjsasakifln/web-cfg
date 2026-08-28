@@ -36,6 +36,7 @@ PUBLIC_TOP_DIRS = frozenset(
         "termos-de-uso",
         "politica-editorial",
         "correcoes",
+        "confianca",
         "uso-de-ia",
         "conflitos",
         "acompanhamento-contratos-obras",

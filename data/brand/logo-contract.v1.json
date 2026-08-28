@@ -131,15 +131,15 @@
     "state": "LEGACY_RASTER_RETAINED",
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
-    "source_html_files_scanned": 276,
-    "logo_image_occurrences": 462,
-    "header_lockup_occurrences": 238,
-    "footer_lockup_occurrences": 224,
+    "source_html_files_scanned": 277,
+    "logo_image_occurrences": 464,
+    "header_lockup_occurrences": 239,
+    "footer_lockup_occurrences": 225,
     "legacy_asset_occurrences": {
       "/assets/logo-confenge.png": 6,
-      "/assets/logo-confenge-500-f8a83f6d.png": 232,
+      "/assets/logo-confenge-500-f8a83f6d.png": 233,
       "/assets/logo-confenge-white.png": 6,
-      "/assets/logo-confenge-white-500-1677038e.png": 218
+      "/assets/logo-confenge-white-500-1677038e.png": 219
     },
     "intrinsic_ratio": "50:13",
     "header_black_on_white": "NON_COMPLIANT",
