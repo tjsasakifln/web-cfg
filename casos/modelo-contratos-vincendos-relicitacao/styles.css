@@ -31,7 +31,8 @@
 .vinc-null strong { color: #fff; font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -.03em; }
 .vinc-null p { color: #d1dce5; grid-column: 1 / -1; line-height: 1.6; margin: 4px 0 0; max-width: 78ch; }
 
-.vinc-table-wrap { margin-top: 40px; overflow-x: auto; }
+.vinc-table-wrap { margin-top: 40px; overflow-x: auto; outline: 3px solid transparent; outline-offset: 4px; }
+.vinc-table-wrap:focus-visible { outline-color: var(--r-green, #3d8238); }
 .vinc-rules { border-collapse: collapse; min-width: 520px; width: 100%; }
 .vinc-rules caption { color: var(--r-muted); font-size: .82rem; padding-bottom: 12px; text-align: left; }
 .vinc-rules thead th {
