@@ -37,8 +37,10 @@ def test_canonicalize_strips_attribution_query_and_hash_query():
 def test_market_answer_stratum_is_documented_functional_exception():
     href = "/inteligencia/valor-tipico-contratos-pavimentacao/?stratum=sc-municipal"
     assert is_functional_query_href(href) is True
+    assert is_functional_query_href("/piloto/ofertas/contratar/?plano=CFG-DIAG-EXP-v1") is True
     assert is_functional_query_href("/conteudos/x/?origem=/y/") is False
     assert is_functional_query_href("/inteligencia/valor-tipico-contratos-pavimentacao/?stratum=sc-municipal&origem=/x/") is False
+    assert is_functional_query_href("/conteudos/x/?plano=CFG-DIAG-EXP-v1") is False
 
 
 def test_external_wa_and_mailto_are_untouched():

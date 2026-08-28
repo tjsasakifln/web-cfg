@@ -74,7 +74,7 @@ function writePages() {
 <td><a href="${href}">${offer.public_name}</a></td>
 <td>${priceLine(offer)}</td>
 <td>${offer.checkout_mode}</td>
-<td><a class="button" href="/piloto/ofertas/contratar/?plano=${encodeURIComponent(offer.offer_id)}">Verificar capacidade</a></td>
+<td><a class="button" href="/piloto/ofertas/contratar/" data-plano="${offer.offer_id}">Verificar capacidade</a></td>
 </tr>`;
   }).join("");
 
@@ -142,7 +142,7 @@ function writePages() {
 <h2>Exclusoes</h2><p>${meta.exclusions}</p>
 <h2>Prazo e compromisso</h2><p>${meta.prazo}</p>
 <p class="ma-cta">
-<a class="button button-primary" href="/piloto/ofertas/contratar/?plano=${encodeURIComponent(offer.offer_id)}">Verificar capacidade</a>
+<a class="button button-primary" href="/piloto/ofertas/contratar/" data-plano="${offer.offer_id}">Verificar capacidade</a>
 <a class="button" href="/piloto/ofertas/">Voltar a comparacao</a>
 </p>
 <p>Nao ha link generico de pagamento. O pagamento so existe depois de capacidade APPROVED e aceite de termos.</p>`,
