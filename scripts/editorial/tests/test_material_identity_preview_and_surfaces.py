@@ -63,7 +63,7 @@ def _manifest() -> dict:
     }
 
 
-def _page(page_id: str = "lei-limite-25-50") -> dict:
+def _page(page_id: str = "lei-item-novo-desconto") -> dict:
     return {
         "page_id": page_id,
         "url": "/lei-14133-obras/teste-identidade/",
@@ -249,7 +249,7 @@ def _write(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
 
 
-def _surface_fixture(tmp_path: Path, monkeypatch, *, page_id: str = "lei-limite-25-50", approved: bool = True):
+def _surface_fixture(tmp_path: Path, monkeypatch, *, page_id: str = "lei-item-novo-desconto", approved: bool = True):
     monkeypatch.setattr(truth, "ROOT", tmp_path)
     manifest = _manifest()
     page = _page(page_id)
@@ -301,7 +301,7 @@ def test_surface_audit_detects_required_matrix(tmp_path, monkeypatch, case, expe
     page_id = {
         "backlog_indexable": "lei-art124-alteracao-obra",
         "rejected_indexable": "jur-sumula-260-art",
-    }.get(case, "lei-limite-25-50")
+    }.get(case, "lei-item-novo-desconto")
     approved = case not in {"unapproved_sitemap", "hub_unapproved"}
     registry, manifest, page = _surface_fixture(tmp_path, monkeypatch, page_id=page_id, approved=approved)
     sitemap = tmp_path / "sitemap-editorial.xml"
@@ -349,7 +349,7 @@ def test_preview_reconfirmation_cannot_create_or_revive_approval():
     with pytest.raises(ValueError, match="approval_not_current_for_preview_reconfirmation"):
         reconfirm_approval_preview(
             registry,
-            page_id="lei-limite-25-50",
+            page_id="lei-item-novo-desconto",
             expected_head="a" * 40,
         )
     assert registry["pages"][0]["status"] == "EDITORIAL_REVIEWED"

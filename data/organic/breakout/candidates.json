@@ -173,7 +173,7 @@
         {"href": "/aditivos-obras-publicas/", "label": "Hub de aditivos e serviços extras"},
         {"href": "/ferramentas/limite-acrescimos-supressoes/", "label": "Verificador de acréscimos e supressões"},
         {"href": "/ferramentas/diagnostico-defesa-margem/", "label": "Diagnóstico de defesa de margem"},
-        {"href": "/lei-14133-obras/limite-25-50-aditivo-obra/", "label": "Artigo 125 na trilha da Lei 14.133"}
+        {"href": "/lei-14133-obras/art-124-alteracao-contratual-obra/", "label": "Art. 124: alteração unilateral ou acordo"}
       ],
       "demand_claim": "historical_labeled",
       "publication_requires_live_demand": false,

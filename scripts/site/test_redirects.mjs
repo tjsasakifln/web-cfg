@@ -214,6 +214,25 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
     "intranet HTML page must not exist"
   );
 
+  // CFG10X-09: lei 25/50 URL consolidates onto the conteudos owner. Force 301,
+  // destination is not itself a from-path (no chain), from ≠ to (no loop).
+  const limitDonor = "/lei-14133-obras/limite-25-50-aditivo-obra/";
+  const limitOwner = "/conteudos/limite-aditivo-25-50-obra-publica/";
+  const limitRule = byFrom[limitDonor];
+  ok(
+    failures,
+    "cfg10x09_limit_301",
+    limitRule?.to === limitOwner && (limitRule?.status === "301") && limitRule?.force === true,
+    JSON.stringify(limitRule)
+  );
+  ok(failures, "cfg10x09_limit_no_loop", limitDonor !== limitOwner, `${limitDonor} -> ${limitOwner}`);
+  ok(
+    failures,
+    "cfg10x09_limit_no_chain",
+    !byFrom[limitOwner],
+    `owner is itself a from-path: ${JSON.stringify(byFrom[limitOwner])}`
+  );
+
   const tomlPath = resolve(root, "netlify.toml");
   if (existsSync(tomlPath)) {
     const toml = readFileSync(tomlPath, "utf8");

@@ -54,8 +54,10 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 /inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/*  /inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/:splat  301
 
 # --- Editorial canonical consolidation (301, direct; no chain) ---
-# /conteudos/limite-aditivo-25-50-obra-publica/ is self-canonical again
-# (organic-striking-distance-cro-01). Do not restore this 301.
+# /conteudos/limite-aditivo-25-50-obra-publica/ owns the general 25%/50% query
+# (GSC + organic-striking-distance-cro-01). The Lei 14.133 sibling answered the
+# same consulta with a near-equivalent H1; 301 preserves equity, no chain/loop.
+/lei-14133-obras/limite-25-50-aditivo-obra/  /conteudos/limite-aditivo-25-50-obra-publica/  301!
 /conteudos/desconto-da-proposta-em-item-novo-aditivo/  /lei-14133-obras/preco-item-novo-desconto-proposta/  301!
 
 # --- Intranet gateway (302 only; not a page, not a 200 proxy, not 301) ---

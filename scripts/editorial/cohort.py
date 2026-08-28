@@ -9,8 +9,10 @@ from __future__ import annotations
 
 
 # The only URLs that may be made indexable by this release policy.
+# lei-limite-25-50 was consolidated (301) onto
+# /conteudos/limite-aditivo-25-50-obra-publica/ (CFG10X-09). It remains in
+# WAVE1_IDS as EDITORIAL_REVIEWED / noindex so the JSON can still be tested.
 FIRST_COHORT_IDS = (
-    "lei-limite-25-50",
     "guia-checklist-aditivo",
     "lei-item-novo-desconto",
 )

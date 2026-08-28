@@ -1032,6 +1032,38 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 .authority-policy-nav a{font-size:.9rem;text-decoration:underline;text-underline-offset:2px}
 .policy-version-disclosure{margin:1rem 0 0;font-size:.95rem;color:var(--muted,#475569)}
 .policy-version-disclosure a{text-decoration:underline;text-underline-offset:2px}
+
+/* Action lists: numbered column only when a leading number span exists.
+   Editorial markdown emits <li><div>…</div></li> without that span; the 42px
+   first column would otherwise collapse the copy. Independent of CFG10X-01. */
+.action-list li{
+  grid-template-columns:minmax(0,1fr);
+  gap:12px;
+}
+.action-list li > div{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+.action-list li:has(> span:first-child){
+  grid-template-columns:42px minmax(0,1fr);
+  gap:18px;
+}
+.action-list li:has(> span:first-child) > div{
+  grid-column:auto;
+}
+.document-list{
+  grid-template-columns:1fr;
+}
+.document-list li{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+@media (max-width:520px){
+  .action-list li:has(> span:first-child){
+    grid-template-columns:32px minmax(0,1fr);
+    gap:12px;
+  }
+}
 .breakout-chassis{margin:28px 0;padding:22px 22px 8px;border:1px solid var(--line);border-radius:12px;background:#f7faf7}
 .breakout-job{margin:0 0 16px;color:#314256}
 .breakout-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;margin:0 0 22px}
