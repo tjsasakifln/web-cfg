@@ -11,6 +11,7 @@ build-gate failure, not a warning.
 
 from __future__ import annotations
 
+import difflib
 import json
 import re
 import xml.etree.ElementTree as ET
@@ -926,17 +927,19 @@ def drop_index_member(root: Path, filename: str) -> None:
         index_path.write_text(render_sitemap_index(rows), encoding="utf-8")
 
 
-def close_graph(
+def plan_graph(
     root: Path,
     *,
     as_of: date | None = None,
     market_answer_indexable: bool | None = None,
-) -> dict[str, Any]:
-    """Rewrite lastmod honestly, sitemap.txt from the same loc set, index from children.
+) -> dict[str, str]:
+    """Compute the public sitemap graph without touching a single file.
 
-    Does not create pages or flip indexability. Removes the Market Answer loc when
-    the consumed #151 gate says it is not INDEX. Drops noindex / X-Robots noindex
-    members rather than leaving them in any child or sitemap.txt.
+    Returns ``{relative path: expected file content}``. This is the single source
+    of truth for what the graph should be; :func:`close_graph` only writes what
+    this function decides, and :func:`graph_drift` only compares against it. A
+    caller that wants to verify the committed graph must never have to run the
+    writer first, and must never need to put files back afterwards.
     """
     as_of = as_of or utc_today()
     ma_flag = (
@@ -961,6 +964,7 @@ def close_graph(
             if (root / name).is_file()
         ]
 
+    planned: dict[str, str] = {}
     rewritten: list[tuple[str, str | None]] = []
     all_locs: list[str] = []
     for member in members:
@@ -982,7 +986,7 @@ def close_graph(
             lastmod = substantial_lastmod_from_html(html, as_of=as_of)
             kept.append((loc, lastmod))
         kept.sort(key=lambda item: loc_key(item[0]))
-        child_path.write_text(render_urlset(kept), encoding="utf-8")
+        planned[member.filename] = render_urlset(kept)
         all_locs.extend(loc for loc, _ in kept)
         # Empty family sitemaps must not remain referenced by the public index.
         if kept:
@@ -990,14 +994,70 @@ def close_graph(
                 (member.loc, child_lastmod((lm for _, lm in kept), as_of=as_of))
             )
 
-    index_path.write_text(render_sitemap_index(rewritten), encoding="utf-8")
-    (root / TXT_NAME).write_text(render_sitemap_txt(all_locs), encoding="utf-8")
+    planned[INDEX_NAME] = render_sitemap_index(rewritten)
+    planned[TXT_NAME] = render_sitemap_txt(all_locs)
     robots_path = root / "robots.txt"
     if robots_path.is_file():
-        robots_path.write_text(
-            robots_with_index_only(robots_path.read_text(encoding="utf-8")),
-            encoding="utf-8",
+        planned["robots.txt"] = robots_with_index_only(
+            robots_path.read_text(encoding="utf-8")
         )
+    return planned
+
+
+def graph_drift(
+    root: Path,
+    *,
+    as_of: date | None = None,
+    market_answer_indexable: bool | None = None,
+) -> dict[str, str]:
+    """Readable unified diff per committed graph file that the build would change.
+
+    Compare-only. Nothing on disk is written, reverted or restored: a gate that
+    silently repaired the tree would make its own green meaningless.
+    """
+    planned = plan_graph(
+        root, as_of=as_of, market_answer_indexable=market_answer_indexable
+    )
+    drift: dict[str, str] = {}
+    for name, expected in sorted(planned.items()):
+        path = root / name
+        committed = path.read_text(encoding="utf-8") if path.is_file() else ""
+        if committed == expected:
+            continue
+        drift[name] = "".join(
+            difflib.unified_diff(
+                committed.splitlines(keepends=True),
+                expected.splitlines(keepends=True),
+                fromfile=f"committed/{name}",
+                tofile=f"generated/{name}",
+                n=2,
+            )
+        )
+    return drift
+
+
+def close_graph(
+    root: Path,
+    *,
+    as_of: date | None = None,
+    market_answer_indexable: bool | None = None,
+) -> dict[str, Any]:
+    """Write the planned graph, then audit it.
+
+    Does not create pages or flip indexability. Removes the Market Answer loc when
+    the consumed #151 gate says it is not INDEX. Drops noindex / X-Robots noindex
+    members rather than leaving them in any child or sitemap.txt.
+    """
+    as_of = as_of or utc_today()
+    ma_flag = (
+        market_answer_indexable
+        if market_answer_indexable is not None
+        else consumed_market_answer_indexable()
+    )
+    for name, content in plan_graph(
+        root, as_of=as_of, market_answer_indexable=ma_flag
+    ).items():
+        (root / name).write_text(content, encoding="utf-8")
     report = audit_graph(root, as_of=as_of, market_answer_indexable=ma_flag)
     hygiene_path = root / "data" / "organic" / "sitemap-hygiene.json"
     if hygiene_path.parent.is_dir() or (root / "data").is_dir():

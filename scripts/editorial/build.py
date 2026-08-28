@@ -10,7 +10,6 @@ Fail-closed:
 from __future__ import annotations
 
 import json
-import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -47,6 +46,30 @@ SITE = "https://confenge.com.br"
 
 def _now_date() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+
+def _record_rejection(page: dict[str, Any], reason: str) -> None:
+    """Append a rejection to the audit trail once, not once per build.
+
+    The verdict is unchanged - the page stays REJECTED. Only the history entry
+    is deduplicated, so that re-running the build from a clean tree produces a
+    byte-identical registry instead of an ever-growing log of the same fact.
+    """
+    history = page.setdefault("history", [])
+    last = history[-1] if history else None
+    if (
+        isinstance(last, dict)
+        and last.get("event") == "REJECTED"
+        and last.get("reason") == reason
+    ):
+        return
+    history.append(
+        {
+            "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "event": "REJECTED",
+            "reason": reason,
+        }
+    )
 
 
 def load_page_defs() -> list[dict[str, Any]]:
@@ -196,13 +219,7 @@ def _auto_progress_to_editorial_reviewed(
                 or url.endswith("jurisprudencia/")
 ):
                 stored["status"] = "REJECTED"
-                stored.setdefault("history", []).append(
-                    {
-                        "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                        "event": "REJECTED",
-                        "reason": "jurisprudence_source_incomplete",
-                    }
-)
+                _record_rejection(stored, "jurisprudence_source_incomplete")
                 return "REJECTED"
 
     actor = "editorial-build-gates"
@@ -262,13 +279,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             sp = get_page(reg, merged["page_id"])
             if sp:
                 sp["status"] = "REJECTED"
-                sp.setdefault("history", []).append(
-                    {
-                        "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                        "event": "REJECTED",
-                        "reason": "official_sumula_text_date_url_not_verified",
-                    }
-)
+                _record_rejection(sp, "official_sumula_text_date_url_not_verified")
 
         # This release has one explicit cohort. A valid approval outside it may
         # remain HUMAN_APPROVED for a later release, but it cannot render/index now.
@@ -409,7 +420,6 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
 
     # Strip wave1 URLs from main sitemap.xml if not indexable
     _sync_main_sitemap(page_idx)
-    _restore_frozen_public_graph()
 
     save_registry(reg, source_manifest=man)
     docs_reg = ROOT / "docs" / "editorial" / "EDITORIAL-REGISTRY.json"
@@ -460,27 +470,6 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
     }
     REPORT_PATH.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return report
-
-
-def _restore_frozen_public_graph() -> None:
-    """Issue #291 freezes the public sitemap graph until recapture.
-
-    close_graph rewrites lastmod on sitemap.xml / sitemap-index.xml from HTML.
-    That is honest for editorial children, but the main graph is a forbidden
-    surface. Restore the committed bytes so CI frozen-spec tests stay closed.
-    """
-    frozen = (
-        "sitemap.xml",
-        "sitemap-index.xml",
-        "sitemap.txt",
-        "robots.txt",
-    )
-    subprocess.run(
-        ["git", "checkout", "--", *frozen],
-        cwd=ROOT,
-        check=False,
-        capture_output=True,
-    )
 
 
 def _sync_main_sitemap(indexable_urls: list[str]) -> None:

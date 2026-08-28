@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-28T14:07:58Z",
+  "generated_at": "2026-08-28T16:20:41Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
@@ -521,7 +521,7 @@
         "art.155"
       ],
       "date_published": "2026-08-02",
-      "date_modified": "2026-08-02",
+      "date_modified": "2026-08-28",
       "author_public": "Biblioteca técnica CONFENGE",
       "author_is_tiago": false,
       "meta_description": "Roteiro para responder notificação de atraso em contrato de obra: prazos, provas, culpa da Administração e pedidos.",
@@ -551,7 +551,7 @@
       ],
       "body_markdown": "## Primeiras horas\n\n1. Registrar data/hora da ciência  \n2. Ler o prazo e o que exatamente é imputado  \n3. Congelar versões de cronograma e diários  \n4. Definir responsável interno pela resposta  \n\n## Estrutura da resposta\n\n### 1. Endereçamento e objeto\n\nIdentifique contrato, notificação e pedidos da Administração.\n\n### 2. Síntese da posição\n\nEm um parágrafo: o que se admite, o que se contesta, o que se pede.\n\n### 3. Cronologia\n\nTabela mental em texto: data → fato → documento anexo.\n\n### 4. Causas\n\n- Próprias (se houver, com mitigação)  \n- Da Administração (frente, projeto, decisão) com prova  \n- Externas previstas na matriz  \n\n### 5. Impacto no caminho crítico\n\nMostre que o atraso alegado não corresponde ao atraso real do objeto, se for o caso.\n\n### 6. Pedidos\n\n- Afastamento de sanção  \n- Prorrogação  \n- Reunião  \n- Produção de prova  \n\n## Anexos prioritários\n\n- Notificação recebida  \n- Cronogramas  \n- Diários  \n- Protocolos de pedido de liberação/frente  \n- Respostas da fiscalização  \n- Fotos e relatórios de interferência  \n\n## Tom\n\nObjetivo, técnico, sem agressão. Frases longas de “estranhamos veementemente” não substituem data e documento.\n\n## Ressalva\n\nSanções administrativas têm rito próprio. Esta resposta à notificação não encerra eventual processo sancionador, mas molda o dossiê desde o início.\n\n## Ressalva técnica\n\nO checklist reduz omissão documental. Não cria direito inexistente nem substitui a leitura do contrato, do edital e da Lei nº 14.133/2021 no caso concreto. Hipóteses locais de rito, prazos e formulários do órgão prevalecem quando mais específicos.\n\n## Quando o checklist não basta\n\nProcure análise especializada se o valor em disputa é material para a margem, se há notificação sancionadora em curso, se o saldo de aditivos está no limite ou se a prova contemporânea do evento é fraca. Nesses cenários, organizar o dossiê cedo evita reconstrução tardia de fatos.\n\n\n## Contexto de uso na construtora\n\nQuem costuma montar o dossiê: orçamento, engenharia de contrato e, em empresas menores, o próprio diretor técnico. O ponto de falha mais comum é dividir a tarefa sem dono: cada um anexa um PDF e ninguém escreve o nexo. Defina um responsável único pelo índice de anexos e pela memória de cálculo antes de protocolar.\n\n## O que não escrever\n\n- Acusações pessoais ao fiscal  \n- Promessas de prazo irreais para “acalmar”  \n- Admissão genérica de culpa sem quantificar  \n- Cópia de cláusulas sem fatos  \n\n## Contexto de uso na construtora\n\nA resposta à notificação é também peça de compliance interno: mostre à diretoria o risco de sanção (arts. 155 e 156) e o plano de recuperação de prazo. Se a causa for da Administração, o mesmo dossiê alimenta pedido de dilação e, se cabível, de custo.\n",
       "_source_file": "data/editorial/pages/guia-notificacao-atraso.json",
-      "material_hash": "91e670a31173f66b0085fa19d1ef23689f9c2bf0801530ead7b0899f0e7c0ca0",
+      "material_hash": "e3e50977dc1657874a6da906324fec6fb76a3be84c8c8a004e631d4ecf1f91dd",
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
@@ -660,246 +660,6 @@
         },
         {
           "at": "2026-08-03T21:43:39Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-03T21:44:14Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T12:59:46Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T13:15:57Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T14:29:41Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T14:34:35Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T14:35:21Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T14:36:06Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T14:36:35Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T14:37:40Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T14:44:15Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T19:48:32Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T19:50:46Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T19:51:55Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T19:52:33Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T19:55:09Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T21:46:54Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T21:51:26Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T21:55:57Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T21:56:24Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T22:55:59Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T22:58:57Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T23:00:29Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T23:28:31Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T23:28:35Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T23:29:53Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-04T23:29:58Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-05T01:08:29Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-05T01:10:01Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-05T01:12:40Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-05T01:13:01Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-05T01:17:28Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-05T01:19:01Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-05T02:08:06Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-09T17:19:58Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-09T17:31:11Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-09T17:32:09Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-09T17:41:05Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-22T23:38:55Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-24T02:23:32Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-24T02:24:29Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-24T02:25:26Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-24T02:27:35Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-24T02:28:30Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-24T02:30:45Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-24T02:30:54Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-24T02:33:08Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-28T13:59:40Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-28T14:07:55Z",
           "event": "REJECTED",
           "reason": "official_sumula_text_date_url_not_verified"
         }
