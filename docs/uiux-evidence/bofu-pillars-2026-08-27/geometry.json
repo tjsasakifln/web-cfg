@@ -1,0 +1,388 @@
+{
+  "schema": "bofu_pillar_rendering_evidence/v1",
+  "purpose": "Rendering delta on the six frozen BOFU pillars for the #291 hash recapture. The freeze classes styles.css as rendering collateral, so the recapture needs a measured before/after, not prose.",
+  "captured_at": "2026-08-27",
+  "before_commit": "1b172e094a3f236f109b629c070557a6514c40a3",
+  "after_commit": "622abd0c00e2bd1a1807d9074d120bdbcd53ea63",
+  "measured_with": "Chromium headless over the source tree, both viewports declared by the first-fold contract",
+  "viewports": [
+    "1366x768",
+    "390x844"
+  ],
+  "html_mutation": false,
+  "pillar_html_identical_to_before": true,
+  "routes": {
+    "/aditivos-obras-publicas/": {
+      "1366x768": {
+        "h1px": {
+          "before": 61,
+          "after": 61
+        },
+        "h2px": {
+          "before": 49,
+          "after": 44
+        },
+        "logoW": {
+          "before": 224,
+          "after": 224
+        },
+        "navH": {
+          "before": 47,
+          "after": 47
+        },
+        "hdrH": {
+          "before": 82,
+          "after": 82
+        },
+        "docH": {
+          "before": 7272,
+          "after": 7252
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      },
+      "390x844": {
+        "h1px": {
+          "before": 39,
+          "after": 39
+        },
+        "h2px": {
+          "before": 39,
+          "after": 30
+        },
+        "logoW": {
+          "before": 160,
+          "after": 160
+        },
+        "navH": {
+          "before": 0,
+          "after": 0
+        },
+        "hdrH": {
+          "before": 60,
+          "after": 60
+        },
+        "docH": {
+          "before": 11078,
+          "after": 10677
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      }
+    },
+    "/medicoes-glosas-obras-publicas/": {
+      "1366x768": {
+        "h1px": {
+          "before": 61,
+          "after": 61
+        },
+        "h2px": {
+          "before": 49,
+          "after": 44
+        },
+        "logoW": {
+          "before": 224,
+          "after": 224
+        },
+        "navH": {
+          "before": 47,
+          "after": 47
+        },
+        "hdrH": {
+          "before": 82,
+          "after": 82
+        },
+        "docH": {
+          "before": 6755,
+          "after": 6730
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      },
+      "390x844": {
+        "h1px": {
+          "before": 39,
+          "after": 39
+        },
+        "h2px": {
+          "before": 39,
+          "after": 30
+        },
+        "logoW": {
+          "before": 160,
+          "after": 160
+        },
+        "navH": {
+          "before": 0,
+          "after": 0
+        },
+        "hdrH": {
+          "before": 60,
+          "after": 60
+        },
+        "docH": {
+          "before": 10157,
+          "after": 9843
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      }
+    },
+    "/reequilibrio-obras-publicas/": {
+      "1366x768": {
+        "h1px": {
+          "before": 61,
+          "after": 61
+        },
+        "h2px": {
+          "before": 49,
+          "after": 44
+        },
+        "logoW": {
+          "before": 224,
+          "after": 224
+        },
+        "navH": {
+          "before": 47,
+          "after": 47
+        },
+        "hdrH": {
+          "before": 82,
+          "after": 82
+        },
+        "docH": {
+          "before": 6582,
+          "after": 6598
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      },
+      "390x844": {
+        "h1px": {
+          "before": 39,
+          "after": 39
+        },
+        "h2px": {
+          "before": 39,
+          "after": 30
+        },
+        "logoW": {
+          "before": 160,
+          "after": 160
+        },
+        "navH": {
+          "before": 0,
+          "after": 0
+        },
+        "hdrH": {
+          "before": 60,
+          "after": 60
+        },
+        "docH": {
+          "before": 10301,
+          "after": 9828
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      }
+    },
+    "/auditoria-orcamento-licitacao/": {
+      "1366x768": {
+        "h1px": {
+          "before": 61,
+          "after": 61
+        },
+        "h2px": {
+          "before": 49,
+          "after": 44
+        },
+        "logoW": {
+          "before": 224,
+          "after": 224
+        },
+        "navH": {
+          "before": 47,
+          "after": 47
+        },
+        "hdrH": {
+          "before": 82,
+          "after": 82
+        },
+        "docH": {
+          "before": 7382,
+          "after": 7325
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      },
+      "390x844": {
+        "h1px": {
+          "before": 39,
+          "after": 39
+        },
+        "h2px": {
+          "before": 39,
+          "after": 30
+        },
+        "logoW": {
+          "before": 160,
+          "after": 160
+        },
+        "navH": {
+          "before": 0,
+          "after": 0
+        },
+        "hdrH": {
+          "before": 60,
+          "after": 60
+        },
+        "docH": {
+          "before": 11098,
+          "after": 10735
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      }
+    },
+    "/diagnostico-b2g-360/": {
+      "1366x768": {
+        "h1px": {
+          "before": 61,
+          "after": 61
+        },
+        "h2px": {
+          "before": 49,
+          "after": 44
+        },
+        "logoW": {
+          "before": 224,
+          "after": 224
+        },
+        "navH": {
+          "before": 47,
+          "after": 47
+        },
+        "hdrH": {
+          "before": 82,
+          "after": 82
+        },
+        "docH": {
+          "before": 8563,
+          "after": 8596
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      },
+      "390x844": {
+        "h1px": {
+          "before": 39,
+          "after": 39
+        },
+        "h2px": {
+          "before": 39,
+          "after": 30
+        },
+        "logoW": {
+          "before": 160,
+          "after": 160
+        },
+        "navH": {
+          "before": 0,
+          "after": 0
+        },
+        "hdrH": {
+          "before": 60,
+          "after": 60
+        },
+        "docH": {
+          "before": 12382,
+          "after": 12042
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      }
+    },
+    "/diagnostico-pre-licitacao/": {
+      "1366x768": {
+        "h1px": {
+          "before": 61,
+          "after": 61
+        },
+        "h2px": {
+          "before": 49,
+          "after": 44
+        },
+        "logoW": {
+          "before": 224,
+          "after": 224
+        },
+        "navH": {
+          "before": 47,
+          "after": 47
+        },
+        "hdrH": {
+          "before": 82,
+          "after": 82
+        },
+        "docH": {
+          "before": 6139,
+          "after": 6114
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      },
+      "390x844": {
+        "h1px": {
+          "before": 39,
+          "after": 39
+        },
+        "h2px": {
+          "before": 39,
+          "after": 30
+        },
+        "logoW": {
+          "before": 160,
+          "after": 160
+        },
+        "navH": {
+          "before": 0,
+          "after": 0
+        },
+        "hdrH": {
+          "before": 60,
+          "after": 60
+        },
+        "docH": {
+          "before": 9240,
+          "after": 8862
+        },
+        "overflow": {
+          "before": false,
+          "after": false
+        }
+      }
+    }
+  }
+}

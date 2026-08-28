@@ -1,0 +1,31 @@
+{
+  "captured_at": "2026-08-28T01:21:44.524Z",
+  "commit_sha": "622abd0c00e2bd1a1807d9074d120bdbcd53ea63",
+  "base_url": "http://127.0.0.1:8792",
+  "routes": [
+    "/aditivos-obras-publicas/",
+    "/medicoes-glosas-obras-publicas/",
+    "/reequilibrio-obras-publicas/",
+    "/auditoria-orcamento-licitacao/",
+    "/diagnostico-b2g-360/",
+    "/diagnostico-pre-licitacao/"
+  ],
+  "viewports": [
+    "1366x768",
+    "390x844"
+  ],
+  "files": [
+    "aditivos-obras-publicas-1366x768.png",
+    "aditivos-obras-publicas-390x844.png",
+    "medicoes-glosas-obras-publicas-1366x768.png",
+    "medicoes-glosas-obras-publicas-390x844.png",
+    "reequilibrio-obras-publicas-1366x768.png",
+    "reequilibrio-obras-publicas-390x844.png",
+    "auditoria-orcamento-licitacao-1366x768.png",
+    "auditoria-orcamento-licitacao-390x844.png",
+    "diagnostico-b2g-360-1366x768.png",
+    "diagnostico-b2g-360-390x844.png",
+    "diagnostico-pre-licitacao-1366x768.png",
+    "diagnostico-pre-licitacao-390x844.png"
+  ]
+}

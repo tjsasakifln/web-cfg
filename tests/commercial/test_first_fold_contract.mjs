@@ -343,7 +343,7 @@ const FROZEN = {
     date: "2026-08-27",
     viewport: "1366x768",
     finding:
-      "H1 de y=235 a y=333; linha de prova de y=445 a y=488; ação primária inteira de y=595 a y=645 em 1366x768, e de y=762 a y=812 em 390x844, dentro da dobra nos dois",
+      "H1 de y=243 a y=341; linha de prova de y=453 a y=496; ação primária inteira de y=603 a y=653 em 1366x768, e de y=762 a y=812 em 390x844, dentro da dobra nos dois",
   },
   "/problemas-que-resolvemos/": {
     surface_class: "money_hub",
@@ -351,7 +351,7 @@ const FROZEN = {
     date: "2026-08-27",
     viewport: "1366x768",
     finding:
-      "H1 de y=235 a y=382; linha de prova de y=466 a y=510; ação primária inteira de y=616 a y=666 em 1366x768, e de y=768 a y=818 em 390x844, dentro da dobra nos dois",
+      "H1 de y=243 a y=390; linha de prova de y=474 a y=518; ação primária inteira de y=624 a y=674 em 1366x768, e de y=768 a y=818 em 390x844, dentro da dobra nos dois",
   },
   "/diagnostico-b2g-expansao/": {
     surface_class: "money_offer",
@@ -373,13 +373,43 @@ for (const [route, expected] of Object.entries(FROZEN)) {
   assert(`frozen_${route}_finding_intact`, s.measurement?.finding === expected.finding, s.measurement?.finding);
 }
 // Os dois hubs foram remediados na #327. O registro deixa de guardar o texto da
-// falha e passa a guardar a geometria medida: a promocao so vale com coordenadas
-// nos dois viewports declarados, nunca com uma afirmacao generica de melhoria.
+// falha e passa a guardar a geometria medida. Conferir o formato nao basta: um
+// registro afirmando "acao primaria inteira de y=99999 a y=99999 ... dentro da
+// dobra nos dois" passava por todas as checagens, porque nada comparava a
+// coordenada com a altura do viewport. Agora compara.
+const ACTION_RE =
+  /a[cç][aã]o prim[aá]ria inteira de y=(\d+) a y=(\d+) em (\d+)x(\d+), e de y=(\d+) a y=(\d+) em (\d+)x(\d+)/i;
+const HEAD_RE = /H1 de y=(\d+) a y=(\d+); linha de prova de y=(\d+) a y=(\d+)/i;
+
 for (const route of ["/servicos-obras-publicas/", "/problemas-que-resolvemos/"]) {
   const finding = byRoute.get(route)?.measurement?.finding || "";
-  assert(`${route}_pass_records_geometry`, /y=\d+/.test(finding), finding);
-  assert(`${route}_pass_names_both_viewports`, /1366x768/.test(finding) && /390x844/.test(finding), finding);
-  assert(`${route}_pass_records_primary_action`, /a[cç][aã]o prim[aá]ria/i.test(finding), finding);
+  const m = finding.match(ACTION_RE);
+  const h = finding.match(HEAD_RE);
+  assert(`${route}_pass_records_primary_action_geometry`, Boolean(m), finding);
+  assert(`${route}_pass_records_head_geometry`, Boolean(h), finding);
+  if (!m || !h) continue;
+
+  const [, aTop1, aBot1, w1, h1v, aTop2, aBot2, w2, h2v] = m.map(Number);
+  const [, h1Top, h1Bot, pTop, pBot] = h.map(Number);
+
+  // Os dois viewports citados sao os declarados pelo proprio contrato.
+  assert(`${route}_pass_names_declared_viewports`, vpSet.has(`${w1}x${h1v}`) && vpSet.has(`${w2}x${h2v}`), [
+    `${w1}x${h1v}`,
+    `${w2}x${h2v}`,
+  ]);
+  assert(`${route}_pass_names_both_viewports`, `${w1}x${h1v}` !== `${w2}x${h2v}`, [w1, w2]);
+
+  // A afirmacao "dentro da dobra nos dois" precisa ser verdadeira nos dois.
+  assert(`${route}_action_within_fold_at_${w1}x${h1v}`, aBot1 <= h1v, [aBot1, h1v]);
+  assert(`${route}_action_within_fold_at_${w2}x${h2v}`, aBot2 <= h2v, [aBot2, h2v]);
+
+  // Coordenadas coerentes: caixas com altura positiva e na ordem que a pagina le.
+  assert(`${route}_action_boxes_have_height`, aBot1 > aTop1 && aBot2 > aTop2, [aTop1, aBot1, aTop2, aBot2]);
+  assert(`${route}_head_boxes_have_height`, h1Bot > h1Top && pBot > pTop, [h1Top, h1Bot, pTop, pBot]);
+  assert(`${route}_reading_order_is_h1_then_proof_then_action`, h1Top < pTop && pTop < aTop1, [h1Top, pTop, aTop1]);
+
+  // O H1 e a prova tambem precisam caber na dobra do viewport de desktop citado.
+  assert(`${route}_head_within_fold_at_${w1}x${h1v}`, pBot <= h1v && h1Bot <= h1v, [h1Bot, pBot, h1v]);
 }
 assert(
   "reference_fails_without_verifiable_proof",

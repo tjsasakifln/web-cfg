@@ -12,20 +12,35 @@
   --lime:#ced62a;
   --ink:#071a31;
   --text:#26374a;
-  --muted:#647182;
+  --muted:#5d6a7a;
   --line:#dce3e8;
-  --soft:#f5f7f6;
+  --soft:#f3f4f5;
   --white:#fff;
   --container:1200px;
-  --radius:18px;
-  --shadow:0 24px 70px rgba(3,16,32,.12);
-  --space-1:4px;
-  --space-2:8px;
-  --space-3:12px;
-  --space-4:16px;
-  --space-5:20px;
-  --space-6:24px;
-  --space-8:32px;
-  --space-10:40px;
-  --space-12:48px;
+  --radius-sm:8px;
+  --radius-md:12px;
+  --radius-lg:16px;
+  --radius:var(--radius-lg);
+  --shadow:0 20px 50px rgba(3,16,32,.10);
+  /* Typographic scale. Mirrors data/site/design-system.json → typography.scale,
+   * which docs/DESIGN-SYSTEM.md declares the source of truth. Before this, the
+   * global h1 ran at 5.5vw (79px at 1440px) and h2 at 3.6vw, both a step above
+   * the declared scale, and the clamps carried their own mobile overrides. */
+  --text-display:clamp(2.75rem,5.2vw,4.75rem);
+  --text-h1:clamp(2.65rem,4.6vw,4.5rem);
+  --text-h2:clamp(1.85rem,3.2vw,3.15rem);
+  /* Spacing scale. Values are the ones the site actually rendered before this
+   * file absorbed the duplicate :root that styles.css declared: 1-4 already
+   * agreed, 5/6/8 followed styles.css, 10/12 followed this file. Consolidated
+   * without changing a single computed pixel. --space-7 had no consumer.
+   */
+  --space-1:.25rem;
+  --space-2:.5rem;
+  --space-3:.75rem;
+  --space-4:1rem;
+  --space-5:1.5rem;
+  --space-6:2rem;
+  --space-8:4rem;
+  --space-10:2.5rem;
+  --space-12:3rem;
 }
