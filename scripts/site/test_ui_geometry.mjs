@@ -1390,6 +1390,49 @@ async function main() {
     fail("editorial_cover_scope_geometry", e.message || e);
   }
 
+  // The header is a fixed-width brand next to a nowrap nav inside a capped
+  // container. When the row runs over budget the deficit is absorbed silently by
+  // the only shrinkable box — the wordmark — instead of overflowing the page, so
+  // the sitewide overflow audit cannot see it. Sample the band where the CTA
+  // returns but the container has not yet reached its cap.
+  try {
+    const headerPage = await browser.newPage();
+    const reports = [];
+    for (const width of [901, 1000, 1121, 1180, 1240, 1280, 1366, 1440, 1920]) {
+      await headerPage.setViewport({ width, height: 900 });
+      await headerPage.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
+      const rep = await headerPage.evaluate(() => {
+        const img = document.querySelector(".brand img");
+        const nav = document.querySelector(".desktop-nav");
+        const navVisible = nav && getComputedStyle(nav).display !== "none";
+        return {
+          logoWidth: img ? Math.round(img.getBoundingClientRect().width) : 0,
+          declaredWidth: img ? Math.round(parseFloat(getComputedStyle(img).width)) : 0,
+          navVisible,
+          navHeight: nav ? Math.round(nav.getBoundingClientRect().height) : 0,
+          overflow: document.documentElement.scrollWidth > window.innerWidth,
+        };
+      });
+      if (rep.overflow) {
+        throw new Error(`header@${width}: page overflows horizontally`);
+      }
+      // 160px is the narrowest wordmark the sheet ever declares on purpose.
+      if (rep.logoWidth < 160) {
+        throw new Error(
+          `header@${width}: wordmark squeezed to ${rep.logoWidth}px — the brand is absorbing the header deficit`,
+        );
+      }
+      if (rep.navVisible && width > 1120 && rep.navHeight > 60) {
+        throw new Error(`header@${width}: nav wrapped to ${rep.navHeight}px`);
+      }
+      reports.push(`${width}:${rep.logoWidth}px/${rep.navHeight}px`);
+    }
+    await headerPage.close();
+    ok(`header_brand_and_nav_fit (${reports.join(", ")})`);
+  } catch (e) {
+    fail("header_brand_and_nav_fit", e.message || e);
+  }
+
   await browser.close();
   if (ownServer && server) server.close();
   if (failed) {
