@@ -94,6 +94,7 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
         or (dest / "styles.css").is_file()
         or (dest / "styles-tools.css").is_file()
         or (dest / "styles-offers.css").is_file()
+        or (dest / "styles-hubs.css").is_file()
     ):
         css_dir.mkdir(parents=True, exist_ok=True)
 

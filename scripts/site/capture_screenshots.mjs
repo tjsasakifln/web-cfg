@@ -145,12 +145,22 @@ if (server) server.close();
 
 // Evidence is only evidence if it says which commit and which day produced it.
 const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).trim();
+// A named commit whose tree is not what rendered is not evidence. Refuse rather
+// than record a SHA the screenshots do not show.
+const dirty = execFileSync("git", ["status", "--porcelain"], { cwd: ROOT, encoding: "utf8" }).trim();
+if (dirty && process.env.CAPTURE_ALLOW_DIRTY !== "1") {
+  throw new Error(
+    `CAPTURE_TREE_DIRTY: refusing to stamp ${commit} on screenshots of an uncommitted tree.\n` +
+      `Commit first, or set CAPTURE_ALLOW_DIRTY=1 to record it as provisional.\n${dirty}`,
+  );
+}
 writeFileSync(
   join(OUT, "manifest.json"),
   `${JSON.stringify(
     {
       captured_at: new Date().toISOString(),
       commit_sha: commit,
+      tree_dirty: Boolean(dirty),
       base_url: BASE,
       routes: PATHS,
       viewports: VIEWPORTS.map(([w, h]) => `${w}x${h}`),
