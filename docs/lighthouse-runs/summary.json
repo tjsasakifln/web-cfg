@@ -2087,6 +2087,7 @@
       "minimum_performance": 99,
       "p75_tbt_ms": 112,
       "maximum_own_long_task_ms": 162,
+      "minimum_lcp_ms": 1504.1394,
       "maximum_lcp_ms": 1506.7209,
       "maximum_cls": 0
     }
