@@ -1,0 +1,55 @@
+/* CONFENGE hub surfaces — /servicos-obras-publicas/ and /problemas-que-resolvemos/.
+ *
+ * Loaded only by the two generated hubs. These rules belong in styles.css, but the
+ * six BOFU pillars are hash-frozen until 2026-09-16 (issue #291, decision_state
+ * DEFER_UNTIL_DATE) and styles.css is declared rendering collateral of that freeze.
+ * Keeping them here changes nothing on a frozen page, because a frozen page never
+ * loads this file. Fold them into styles.css when the freeze lifts.
+ *
+ * Rendered geometry these rules exist to hold, measured at the two viewports the
+ * first-fold contract declares: h1, lead, proof line and the whole primary action
+ * visible without scrolling.
+ */
+
+/* A hub title is a page title, not display type. Without this rule the h1 inside
+ * .section-head falls through to the home hero step, clamp(3.3rem,5.5vw,5.8rem),
+ * which is 75px at 1366px and 325px tall, pushing proof and action off the fold.
+ * Uses the h2 step of data/site/design-system.json. */
+.section-head h1 {
+  max-width: 22ch;
+  margin: 0 0 16px;
+  font-size: clamp(1.85rem, 3.2vw, 3.15rem);
+  line-height: 1.12;
+  letter-spacing: -.03em;
+}
+
+/* Section headings sit below the page title. The global h2 renders at 3.6vw, which
+ * is 49px at 1366px and larger than the h1 above it. */
+.hub-section-title {
+  font-size: clamp(1.6rem, 2.6vw, 2.15rem);
+  line-height: 1.18;
+}
+
+/* The verifiable reason to believe, which the first-fold contract asks for and the
+ * hubs did not answer. Small and factual, never another line of positioning. */
+.section-proof {
+  max-width: 52ch;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: .875rem;
+  line-height: 1.55;
+}
+
+/* When the action block is the first thing after the hub header it is the dominant
+ * next step, not a mid-page interruption. */
+.section-head + .lead-inline {
+  margin-top: var(--space-6);
+}
+
+@media (max-width: 760px) {
+  /* Reclaims the last pixels that kept the action button crossing the 844px fold. */
+  .lead-inline {
+    gap: 14px;
+    padding: 18px;
+  }
+}

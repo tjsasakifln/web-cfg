@@ -37,6 +37,8 @@ REQUIRED_OVERLAPS = {
 }
 SKIP_DISCOVERY_PARTS = {
     ".git",
+    ".claude",
+    ".worktrees",
     ".netlify",
     ".pytest_cache",
     "_site",

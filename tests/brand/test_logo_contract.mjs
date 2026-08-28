@@ -17,7 +17,7 @@ function filled(value) {
   return typeof value === "string" && value.trim().length > 0;
 }
 function listFiles(start, predicate, out = []) {
-  const excluded = new Set([".git", ".claude", "node_modules", "_site", "tests", "docs", ".github"]);
+  const excluded = new Set([".git", ".claude", ".worktrees", "node_modules", "_site", "tests", "docs", ".github"]);
   for (const entry of fs.readdirSync(start, { withFileTypes: true })) {
     if (excluded.has(entry.name)) continue;
     const absolute = path.join(start, entry.name);

@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-EXCLUDED_PARTS = {".git", ".worktrees", "_site", "node_modules"}
+EXCLUDED_PARTS = {".git", ".claude", ".worktrees", "_site", "node_modules"}
 MIN_EXPECTED_ROUTES = 128
 FROZEN_BOFU_PATHS = {
     "aditivos-obras-publicas/index.html",
@@ -55,10 +55,18 @@ def _og_image(html: str) -> str | None:
     return None
 
 
+def _relative_parts(path: Path) -> tuple[str, ...]:
+    """Path parts relative to the checkout root, so ancestors are never matched."""
+    try:
+        return path.resolve().relative_to(ROOT.resolve()).parts
+    except ValueError:
+        return path.parts
+
+
 def _candidate_files() -> list[Path]:
     candidates: list[Path] = []
     for path in ROOT.rglob("index.html"):
-        if any(part in EXCLUDED_PARTS for part in path.parts):
+        if any(part in EXCLUDED_PARTS for part in _relative_parts(path)):
             continue
         html = path.read_text(encoding="utf-8")
         og_image = _og_image(html)

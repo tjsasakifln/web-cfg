@@ -20,7 +20,7 @@ ASSET_DIR = "assets/css"
 MANIFEST_REL = ".well-known/css-assets.json"
 
 STYLESHEET_HREF_RE = re.compile(
-    r"""(href\s*=\s*["'])(/styles(?:-tokens|-tools|-offers)?\.css)(["'])"""
+    r"""(href\s*=\s*["'])(/styles(?:-tokens|-tools|-offers|-hubs)?\.css)(["'])"""
 )
 IMPORT_RE = re.compile(
     r"""(@import\s+url\(\s*["']?)(/styles-tokens\.css)(["']?\s*\))"""
@@ -64,6 +64,7 @@ def html_uses_unversioned_styles(html: str) -> bool:
             "/styles-tokens.css",
             "/styles-tools.css",
             "/styles-offers.css",
+            "/styles-hubs.css",
         }:
             return True
     return False
@@ -93,6 +94,7 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
         or (dest / "styles.css").is_file()
         or (dest / "styles-tools.css").is_file()
         or (dest / "styles-offers.css").is_file()
+        or (dest / "styles-hubs.css").is_file()
     ):
         css_dir.mkdir(parents=True, exist_ok=True)
 
@@ -105,7 +107,7 @@ def fingerprint_published_css(dest: Path) -> dict[str, Any]:
             "href": token_href,
         }
 
-    for name in ("styles.css", "styles-tools.css", "styles-offers.css"):
+    for name in ("styles.css", "styles-tools.css", "styles-offers.css", "styles-hubs.css"):
         path = dest / name
         if not path.is_file():
             continue

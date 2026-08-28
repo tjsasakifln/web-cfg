@@ -8,6 +8,7 @@ export const DECISION_PATH = "data/ops/third-party-conversion-decision.v1.json";
 
 const EXCLUDED_DIRS = new Set([
   ".git",
+  ".claude",
   ".worktrees",
   "node_modules",
   "docs",

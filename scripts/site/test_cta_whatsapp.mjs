@@ -96,7 +96,7 @@ for (const key of [
 
 if (catalog.number_e164 !== NUMBER) issues.push({ error: "catalog_number" });
 
-const SKIP_DIRS = new Set(["node_modules", "_site", ".git", ".venv", "venv", ".worktrees"]);
+const SKIP_DIRS = new Set(["node_modules", "_site", ".git", ".claude", ".venv", "venv", ".worktrees"]);
 // Fixture pages carry deliberately broken path data; they are graded by the
 // fixture harness below, never by the site-wide scan.
 const SVG_FIXTURE_DIR = "scripts/site/fixtures/svg_path";

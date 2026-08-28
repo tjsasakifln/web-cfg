@@ -124,7 +124,8 @@
         "title": "Serviços para licitações e contratos de obras públicas",
         "description": "Serviços da CONFENGE para construtoras: Diagnóstico da Operação em Obras Públicas, Diretoria Fracionada para o Mercado Público, Operação de Proposta para Licitação Crítica e defesa de margem.",
         "h1": "Serviços para licitações e contratos de obras públicas",
-        "lead": "Escolha a porta de entrada pelo momento da empresa e consulte o catálogo taxativo de 54 entregáveis para comparar o escopo."
+        "lead": "A CONFENGE instala o ciclo que decide onde disputar, com que preço entrar e o que registrar durante a obra. Cada trabalho abaixo é uma peça desse ciclo.",
+        "proof": "Preço e prazo publicados em cada trabalho, e exemplos completos que você consulta sem cadastro."
       },
       "problems": {
         "label": "Problemas que resolvemos",
@@ -132,7 +133,8 @@
         "title": "Problemas que resolvemos em licitações e contratos de obras",
         "description": "Edital e orçamento, medição e glosa, aditivo, atraso, reequilíbrio e defesa técnica: escolha o problema do seu contrato e veja o caminho técnico.",
         "h1": "Problemas que resolvemos em licitações e contratos de obras",
-        "lead": "Escolha pelo problema que está na sua mesa hoje. Cada frente reúne o método, os documentos e a próxima decisão."
+        "lead": "Cada problema abaixo tem um caminho técnico definido: o que registrar, com qual documento e qual decisão vem depois.",
+        "proof": "Quatro ferramentas públicas calculam limite de aditivo, atraso, reequilíbrio e risco de margem sem cadastro."
       }
     }
   },

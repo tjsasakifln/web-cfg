@@ -58,7 +58,9 @@ def _breadcrumbs(current: str) -> str:
     )
 
 
-def _jsonld(url: str, title: str, description: str, items: list[dict[str, str]]) -> str:
+def _jsonld(
+    url: str, title: str, description: str, crumb: str, items: list[dict[str, str]]
+) -> str:
     graph = [
         {
             "@type": "WebPage",
@@ -82,7 +84,7 @@ def _jsonld(url: str, title: str, description: str, items: list[dict[str, str]])
                 {
                     "@type": "ListItem",
                     "position": 2,
-                    "name": title.split(" | ")[0],
+                    "name": crumb,
                     "item": f"{SITE}{url}",
                 },
             ],
@@ -116,6 +118,7 @@ def _document(
     title: str,
     description: str,
     body: str,
+    crumb: str,
     items: list[dict[str, str]],
     cluster: str,
 ) -> str:
@@ -135,16 +138,17 @@ def _document(
 <meta content="{SITE}{url}" property="og:url"/>
 <script>document.documentElement.classList.replace('no-js','js');</script>
 <link href="/styles.css" rel="stylesheet"/>
+<link href="/styles-hubs.css" rel="stylesheet"/>
 <script defer="" src="{SCRIPT_SRC}"></script>
 <meta content="Engº Tiago Sasaki" name="author"/>
-{_jsonld(url, title, description, items)}
+{_jsonld(url, title, description, crumb, items)}
 </head>
 <body data-content-cluster="{e(cluster)}">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 {SVG_SPRITE}
 {HEADER}
 <main id="conteudo">
-{_breadcrumbs(title.split(" | ")[0])}
+{_breadcrumbs(crumb)}
 {body}
 </main>
 {FOOTER}
@@ -210,11 +214,12 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <p class="eyebrow">Serviços</p>
 <h1 id="hub-title">{e(meta["h1"])}</h1>
 <p class="section-lead">{e(meta["lead"])}</p>
+<p class="section-proof">{e(meta["proof"])}</p>
 </header>
 <aside class="lead-inline" data-commercial-route="medicoes-glosas" aria-label="Rota para medição, glosa e pagamento">
 <div class="lead-inline-copy"><span>Medição ou glosa sob pressão</span>
 <strong>Dossiê de Medição, Glosa e Pagamento</strong>
-<p>Uma medição ou glosa do mesmo período, organizada em fatos, cálculo, controvérsias, provas e lacunas. Prazo-piloto de 5 dias úteis após os documentos mínimos. Não é petição jurídica nem promessa de recebimento.</p></div>
+<p>Uma medição ou glosa do mesmo período, organizada em fatos, cálculo, provas e lacunas. Prazo-piloto de 5 dias úteis após os documentos mínimos. Não é petição jurídica nem promessa de recebimento.</p></div>
 <div class="lead-inline-actions">
 <a class="button button-primary" data-asset-family="hub" data-asset-id="servicos-obras-publicas" data-cta-id="hub-servicos-medicoes-glosas" data-cta-position="hub_services" data-journey="contrato" data-route-family="medicoes-glosas" href="/medicoes-glosas-obras-publicas/">Avaliar o Dossiê de Medição, Glosa e Pagamento <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
@@ -225,7 +230,7 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <section aria-labelledby="hub-next" class="section section--default">
 <div class="container">
 <header class="section-head">
-<h2 id="hub-next">O problema é outro ou ainda não está delimitado?</h2>
+<h2 class="hub-section-title" id="hub-next">O problema é outro ou ainda não está delimitado?</h2>
 <p class="section-lead">O Diagnóstico da Operação em Obras Públicas é uma porta de entrada: mapeia onde a frente pública perde tempo, margem e controle e indica o próximo trabalho aplicável.</p>
 </header>
 <p><a class="button button-secondary" href="/diagnostico-b2g-360/">Começar pelo Diagnóstico da Operação em Obras Públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
@@ -272,20 +277,28 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <p class="eyebrow">Problemas que resolvemos</p>
 <h1 id="hub-title">{e(meta["h1"])}</h1>
 <p class="section-lead">{e(meta["lead"])}</p>
+<p class="section-proof">{e(meta["proof"])}</p>
 </header>
-<h2 id="hub-stages">Onde você está no ciclo do contrato?</h2>
+<aside class="lead-inline" data-commercial-route="defesa-margem" aria-label="Rota para contrato em execução">
+<div class="lead-inline-copy"><span>O prazo já está correndo</span>
+<strong>Defesa de margem em contrato público</strong>
+<p>Enquanto a obra avança, é o registro contemporâneo que sustenta o pedido. A defesa de margem organiza evento, documento e cálculo antes que a posição enfraqueça.</p></div>
+<div class="lead-inline-actions">
+<a class="button button-primary" data-asset-family="hub" data-asset-id="problemas-que-resolvemos" data-cta-id="hub-problemas-defesa-margem" data-cta-position="hub_problems" data-journey="contrato" data-route-family="problemas-que-resolvemos" href="/defesa-margem-contratos-publicos/">Abrir a defesa de margem em contrato <svg class="icon"><use href="#i-arrow"></use></svg></a>
+</div>
+</aside>
+<h2 class="hub-section-title" id="hub-stages">Onde você está no ciclo do contrato?</h2>
 <div class="problem-stages" aria-labelledby="hub-stages">{stages_html}</div>
 </div>
 </section>
 <section aria-labelledby="hub-next" class="section section--default">
 <div class="container">
 <header class="section-head">
-<h2 id="hub-next">O problema já está dentro de um contrato em execução?</h2>
-<p class="section-lead">Enquanto o prazo corre, é o registro que sustenta o pedido. A defesa de margem organiza evento, documento e pedido antes que a posição enfraqueça.</p>
+<h2 class="hub-section-title" id="hub-next">Ainda não sabe em qual frente o seu caso entra?</h2>
+<p class="section-lead">A escolha muda conforme o contrato já esteja assinado, a obra em andamento ou o prazo de resposta correndo. Os serviços mostram como cada frente é conduzida.</p>
 </header>
-<p><a class="button button-primary" data-asset-family="hub" data-asset-id="problemas-que-resolvemos" data-cta-id="hub-problemas-defesa-margem" data-cta-position="hub_problems" data-journey="contrato" data-route-family="problemas-que-resolvemos" href="/defesa-margem-contratos-publicos/">Abrir a defesa de margem em contrato <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="{e(services["url"])}">Conhecer os serviços <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
-<p><a class="text-link" href="/ferramentas/">Usar uma ferramenta antes de falar com a gente <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
+<p><a class="text-link" href="/ferramentas/">Calcular o seu caso nas ferramentas públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 </div>
 </section>""",
         items,
@@ -303,6 +316,7 @@ def render_pages() -> dict[str, str]:
         title=f"{services_meta['title']} | CONFENGE",
         description=services_meta["description"],
         body=body,
+        crumb=services_meta["label"],
         items=items,
         cluster="servicos",
     )
@@ -314,6 +328,7 @@ def render_pages() -> dict[str, str]:
         title=f"{problems_meta['title']} | CONFENGE",
         description=problems_meta["description"],
         body=body,
+        crumb=problems_meta["label"],
         items=items,
         cluster="problemas",
     )
