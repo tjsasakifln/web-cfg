@@ -3,7 +3,7 @@
   "purpose": "Rendering delta on the six frozen BOFU pillars for the #291 hash recapture. The freeze classes styles.css as rendering collateral, so the recapture needs a measured before/after, not prose.",
   "captured_at": "2026-08-27",
   "before_commit": "1b172e094a3f236f109b629c070557a6514c40a3",
-  "after_commit": "82304624df5119d4f81d6d78e17c5c6f4af0f25a",
+  "after_commit": "622abd0c00e2bd1a1807d9074d120bdbcd53ea63",
   "measured_with": "Chromium headless over the source tree, both viewports declared by the first-fold contract",
   "viewports": [
     "1366x768",
