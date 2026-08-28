@@ -227,7 +227,7 @@ if (opsToken) {
 } else {
   report.steps.ops_counters = step("BLOCKED", {
     reason: "OPS_TOKEN unset in this environment",
-    next: "export OPS_TOKEN='<netlify production token>' && node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br",
+    next: "export OPS_TOKEN='<production ops token>' && node scripts/site/money_asset_prod_proof.mjs https://confenge.com.br",
   });
 }
 
@@ -244,13 +244,13 @@ report.steps.warmbly_auto_send_off = step(autoSendOff ? "PROVEN" : "UNKNOWN", {
 
 if (inboundUrl && inboundSecret) {
   report.steps.inbound_env_local = step("PROVEN", {
-    note: "Local process has URL+secret. Production Netlify env is a different surface.",
+    note: "Local process has URL+secret. Production EnvironmentFile is a different surface.",
   });
 } else {
   report.steps.inbound_env_local = step("BLOCKED", {
     reason: "CONFENGE_INBOUND_WEBHOOK_URL and/or CONFENGE_INBOUND_WEBHOOK_SECRET unset here",
     next:
-      "Set both on Netlify production (HTTPS …/api/v1/webhooks/confenge/inbound + shared HMAC). Unset = capture still works, handoff SKIPPED.",
+      "Set both in /etc/confenge-web/runtime.env (HTTPS …/api/v1/webhooks/confenge/inbound + shared HMAC) and restart confenge-web-runtime.service. Unset = capture still works, handoff SKIPPED.",
   });
 }
 
@@ -266,7 +266,7 @@ report.steps.commercial_send = step("PROVEN", {
 });
 
 report.remaining_commands = [
-  "Netlify production: set CONFENGE_INBOUND_WEBHOOK_URL + CONFENGE_INBOUND_WEBHOOK_SECRET (HTTPS inbound path, no query PII).",
+  "Production EnvironmentFile: set CONFENGE_INBOUND_WEBHOOK_URL + CONFENGE_INBOUND_WEBHOOK_SECRET (HTTPS inbound path, no query PII) and restart confenge-web-runtime.service.",
   "Warmbly: deploy inbound ingest, set the same secret, CONFENGE_AUTO_SEND_ENABLED=false.",
   "export OPS_TOKEN='<production ops token>'",
   "export CONFENGE_AUTO_SEND_EVIDENCE=OFF",

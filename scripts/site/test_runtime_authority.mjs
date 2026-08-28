@@ -15,6 +15,7 @@ import {
   CURRENT_OPERATOR_DOCS,
   ROOT,
   compareRuntimeAuthority,
+  findForbiddenProductionInstructions,
   loadAuthorityFromRepo,
   loadFixture,
   observationFromAuthority,
@@ -135,13 +136,42 @@ test("runCompare matching path is the same function the CLI uses", async () => {
 test("operator docs no longer instruct Netlify as production", () => {
   const scan = scanOperatorDocs();
   assert.equal(scan.ok, true, JSON.stringify(scan.hits, null, 2));
-  for (const rel of CURRENT_OPERATOR_DOCS) {
-    assert.ok(rel.length > 0);
+  for (const rel of [
+    "docs/ops/WARMBLY-INBOUND.md",
+    "docs/ops/LEAD-STORE-FAIL-CLOSED-CHECKLIST.md",
+    "docs/ops/GSC-INSIGHTS-SINGLE-SOURCE.md",
+    "scripts/site/money_asset_prod_proof.mjs",
+  ]) {
+    assert.ok(CURRENT_OPERATOR_DOCS.includes(rel), `scan allowlist missing ${rel}`);
   }
   const authority = loadAuthorityFromRepo();
   const observed = observationFromAuthority(authority);
   assert.equal(observed.http.server, "nginx");
   assert.notEqual(observed.http.server.toLowerCase(), "netlify");
+});
+
+test("scan fails closed on Unset-in-Netlify and Netlify-production env steps", () => {
+  const unsetHits = findForbiddenProductionInstructions(
+    "1. Unset CONFENGE_INBOUND_WEBHOOK_URL and/or CONFENGE_INBOUND_WEBHOOK_SECRET in Netlify.",
+  );
+  assert.ok(
+    unsetHits.some((hit) => hit.rule === "unset_in_netlify" || hit.detail.includes("in Netlify.")),
+    JSON.stringify(unsetHits),
+  );
+  const setHits = findForbiddenProductionInstructions(
+    "Set both on Netlify production (HTTPS inbound + shared HMAC).",
+  );
+  assert.ok(
+    setHits.some((hit) => hit.rule === "set_on_netlify_production" || hit.detail.includes("on Netlify production")),
+    JSON.stringify(setHits),
+  );
+  const blobsHits = findForbiddenProductionInstructions(
+    "The only durable operational authority is Netlify Blobs record system/gsc-insights-latest-v1.",
+  );
+  assert.ok(
+    blobsHits.some((hit) => String(hit.detail).includes("Netlify Blobs")),
+    JSON.stringify(blobsHits),
+  );
 });
 
 test("compare refuses a Netlify production host_kind on the record itself", () => {

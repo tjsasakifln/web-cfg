@@ -215,7 +215,7 @@ def main() -> int:
                     "--title",
                     "release: editorial HUMAN_APPROVED indexable",
                     "--body",
-                    "Automated release PR from editorial:release-approved. Merge triggers Netlify production.",
+                    "Automated release PR from editorial:release-approved. Merge to main is the Netcup release SHA; promote is the public path.",
                 ],
                 cwd=str(ROOT),
                 capture_output=True,

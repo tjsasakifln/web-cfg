@@ -44,7 +44,7 @@ Missing snapshot facts stay absent. CNPJ is never derived from a `public_id` pre
 See [ENV-VARS.md](./ENV-VARS.md). Required on both sides for a live handoff:
 
 - `CONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound`
-- `CONFENGE_INBOUND_WEBHOOK_SECRET` — shared HMAC secret (Netlify env + Warmbly env)
+- `CONFENGE_INBOUND_WEBHOOK_SECRET` — shared HMAC secret (`/etc/confenge-web/runtime.env` + Warmbly env)
 - Warmbly: `CONFENGE_AUTO_SEND_ENABLED=false`
 
 Optional: `CONFENGE_INBOUND_ALLOWED_HOSTS`, `CONFENGE_INBOUND_MAX_ATTEMPTS` (8), `CONFENGE_INBOUND_TIMEOUT_MS` (8000).
@@ -76,8 +76,8 @@ Non-real records (`synthetic` / `qa` / `spam` / `internal`) persist locally and 
 The authenticated response reports only `SET | UNSET` for the webhook URL and
 secret, plus the resolved contract state `READY | UNSET | BLOCKED`. It never
 returns either value. A committed value or a local shell variable is not proof
-of the Netlify production environment; use this response after the production
-deploy.
+of the production EnvironmentFile; use this response after restarting
+`confenge-web-runtime.service`.
 
 States: `PENDING | DELIVERED | RETRYABLE | DEAD | BLOCKED | SKIPPED`.
 
@@ -137,12 +137,12 @@ retry cannot create a second commercial action.
 
 ## Rollback
 
-1. Unset `CONFENGE_INBOUND_WEBHOOK_URL` and/or `CONFENGE_INBOUND_WEBHOOK_SECRET` in Netlify.
-2. Redeploy is not required for skip: missing URL → no POST.
+1. Unset `CONFENGE_INBOUND_WEBHOOK_URL` and/or `CONFENGE_INBOUND_WEBHOOK_SECRET` in `/etc/confenge-web/runtime.env` and restart `confenge-web-runtime.service`.
+2. Restart is enough for skip: missing URL → no POST. Do not republish a leftover Netlify deploy.
 3. Lead capture continues (persist-first).
 4. Do not point `OPS_WEBHOOK_URL` at the Warmbly inbound path.
 
-Site-static rollback: [ROLLBACK.md](./ROLLBACK.md). Blobs of persisted leads are not deleted.
+Site-static rollback: [ROLLBACK.md](./ROLLBACK.md). Host-owned filesystem leads are not deleted.
 
 ## Synthetic
 
@@ -166,7 +166,7 @@ Warmbly receipt/action while auto-send is off.
 If env is missing here:
 
 ```text
-# Netlify production
+# Production EnvironmentFile /etc/confenge-web/runtime.env
 CONFENGE_INBOUND_WEBHOOK_URL=https://api.confenge.com.br/api/v1/webhooks/confenge/inbound
 CONFENGE_INBOUND_WEBHOOK_SECRET=<shared>
 # Warmbly

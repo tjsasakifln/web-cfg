@@ -26,10 +26,18 @@ export const CURRENT_OPERATOR_DOCS = Object.freeze([
   "docs/ops/HOST-OWNED-STORAGE-RUNBOOK.md",
   "docs/ops/EXTERNAL-ACTIONS.md",
   "docs/ops/SLO-MONITORING.md",
+  "docs/ops/WARMBLY-INBOUND.md",
+  "docs/ops/LEAD-STORE-FAIL-CLOSED-CHECKLIST.md",
+  "docs/ops/GSC-INSIGHTS-SINGLE-SOURCE.md",
   "DEPLOY-CHECKLIST.txt",
   "docs/migration/smartlic-confenge/ROLLBACK.md",
+  "docs/migration/smartlic-confenge/HANDOFF-SMARTLIC-2115.md",
   "docs/migrations/smartlic/RUNBOOK.md",
   "docs/migrations/smartlic/HANDOFF-2115.md",
+  "docs/editorial/WAVE1-POST-APPROVAL-RUNBOOK.md",
+  "scripts/site/money_asset_prod_proof.mjs",
+  "scripts/money_asset/commercial_dod.mjs",
+  "scripts/editorial/release_approved.py",
 ]);
 
 export const FORBIDDEN_PRODUCTION_PHRASES = Object.freeze([
@@ -43,6 +51,24 @@ export const FORBIDDEN_PRODUCTION_PHRASES = Object.freeze([
   "Netlify UI → Site → Deploys",
   "Configurar no Netlify → Site configuration",
   "restore previous production deploy in Netlify UI",
+  "in Netlify.",
+  "on Netlify production",
+  "Set both on Netlify production",
+  "# Netlify production",
+  "Netlify production:",
+  "janela de rollback Netlify",
+  "only durable operational authority is Netlify Blobs",
+  "Production Netlify env is a different surface",
+  "<netlify production token>",
+  "shared HMAC secret (Netlify env",
+  "Merge triggers Netlify production",
+  "or redeploy the previous Netlify deploy",
+]);
+
+export const FORBIDDEN_PRODUCTION_PATTERNS = Object.freeze([
+  { name: "unset_in_netlify", re: /Unset[\s\S]{0,200}\bin Netlify\b/i },
+  { name: "set_on_netlify_production", re: /\b[Ss]et\b[\s\S]{0,80}\bon Netlify production\b/ },
+  { name: "netlify_production_env_instruction", re: /(?:#\s*)?Netlify production(?:\s*:|\s+env|\s+environment|\s+token)/i },
 ]);
 
 const YAML_FENCE = /```yaml\n([\s\S]*?)\n```/;
@@ -291,17 +317,27 @@ export function compareRuntimeAuthority({ authority, observed, expected = {} }) 
   };
 }
 
+export function findForbiddenProductionInstructions(text, file = "<text>") {
+  const hits = [];
+  if (/^\s*host:\s*Netlify\s*$/m.test(text)) {
+    hits.push({ file, rule: "yaml_host_netlify", detail: "host: Netlify" });
+  }
+  for (const phrase of FORBIDDEN_PRODUCTION_PHRASES) {
+    if (text.includes(phrase)) hits.push({ file, rule: "forbidden_phrase", detail: phrase });
+  }
+  for (const pattern of FORBIDDEN_PRODUCTION_PATTERNS) {
+    const match = text.match(pattern.re);
+    if (match) hits.push({ file, rule: pattern.name, detail: match[0].slice(0, 120) });
+  }
+  return hits;
+}
+
 export function scanOperatorDocs({ root = ROOT, files = CURRENT_OPERATOR_DOCS } = {}) {
   const hits = [];
   for (const rel of files) {
     const path = join(root, rel);
     const text = readFileSync(path, "utf8");
-    if (/^\s*host:\s*Netlify\s*$/m.test(text)) {
-      hits.push({ file: rel, rule: "yaml_host_netlify", detail: "host: Netlify" });
-    }
-    for (const phrase of FORBIDDEN_PRODUCTION_PHRASES) {
-      if (text.includes(phrase)) hits.push({ file: rel, rule: "forbidden_phrase", detail: phrase });
-    }
+    hits.push(...findForbiddenProductionInstructions(text, rel));
   }
   return { ok: hits.length === 0, hits };
 }

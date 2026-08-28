@@ -93,8 +93,8 @@ Rollback restores the **last functional CONFENGE Netlify publish** and the **pre
 
 ## Rollback procedure (CONFENGE side)
 
-1. Note current Netlify production SHA (`netlify status` / deploy UI) before any later publish. Pre-PR production SHA was **UNKNOWN** from public headers.
-2. `git revert` of the merge commit of this PR, or redeploy the previous Netlify deploy.
+1. Note current production SHA from `https://confenge.com.br/.well-known/build-info.json` before any later publish.
+2. `git revert` of the merge commit of this PR, or `/opt/confenge-web/bin/rollback <FULL_SHA>` per `docs/ops/ROLLBACK.md`.
 3. Do not add SmartLic brand, CTAs or runtime back onto confenge.com.br.
 
 ## What SmartLic#2115 must not do
