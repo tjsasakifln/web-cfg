@@ -115,3 +115,21 @@ def test_ia_map_file_is_the_source():
     raw = json.loads((ROOT / "data/site/public-ia-map.json").read_text(encoding="utf-8"))
     assert data["schema_version"] == raw["schema_version"]
     assert data["header"] == raw["header"]
+
+
+def test_page_shell_output_is_idempotent_with_shell_nav():
+    from scripts.pseo.html_shell import page_shell
+    from scripts.site.shell_nav import sync_text
+
+    html = page_shell(
+        title="Guia",
+        description="Guia",
+        canonical_path="/guias-contratos-obras/",
+        robots="index,follow",
+        jsonld_graph=[],
+        body_main="<p>x</p>",
+        wa_message="Olá",
+    )
+    assert 'class="desktop-nav"' in html
+    assert "Edital e proposta" in html
+    assert sync_text(html, load_brand(), "/guias-contratos-obras/") == html
