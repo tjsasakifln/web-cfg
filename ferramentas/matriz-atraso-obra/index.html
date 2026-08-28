@@ -37,11 +37,13 @@
 <p class="eyebrow">Atrasos e prorrogação</p>
 <h1>Matriz de atraso de obra</h1>
 <p class="content-lead">Adicione eventos com período, prova, duração e possível concorrência. A ferramenta devolve hipóteses preliminares, nunca um veredito por contagem.</p>
+<p class="tool-job" data-tool-job>O que esta ferramenta resolve: registrar eventos de atraso e ver hipóteses preliminares e lacunas de prova.</p>
+<p class="tool-decision" data-tool-decision>Decisão apoiada: completar prova e período, ou enquadrar cronograma e nexo antes de pedir prazo ou custo.</p>
 </div></header>
 <div class="container tool-shell">
 <details class="tool-premises"><summary>Premissas</summary>
 <div class="tool-premises-body">
-<p>Matriz orientativa. Força maior e fato da Administração não se presumem: demonstram-se. A ferramenta não soma dias automaticamente nem emite laudo pericial.</p>
+<p>Matriz orientativa. Força maior e fato da Administração não se presumem: demonstram-se. A ferramenta não soma dias automaticamente nem emite laudo pericial. O resultado separa <strong>fato</strong>, <strong>cálculo</strong> (sem soma de dias), <strong>inferência</strong> (hipótese) e o que permanece <strong>desconhecido</strong>.</p>
 </div></details>
 <form id="f" class="tool-form">
 <div id="events" class="tool-event-list"></div>
@@ -162,6 +164,7 @@
       out.innerHTML="<p>Adicione ao menos um evento com descrição da causa.</p>";
       return;
     }
+    var expl=C.explainMatriz(r);
     var s=r.summary;
     var rows=(r.events||[]).map(function(ev){
       return "<li><strong>"+esc(ev.causa)+"</strong><br/>"+
@@ -182,13 +185,23 @@
       "<li>Sem período definido: "+s.semPeriodoDefinido+"</li>"+
       "<li>Sem vínculo crítico claro: "+s.semVinculoCritico+"</li>"+
       "<li>Possíveis sobreposições: "+s.possiveisSobreposicoes+"</li>"+
-      "<li>Matriz de riscos no contrato: "+esc(document.getElementById("tem_matriz").value)+"</li></ul>"+
+      "<li>Matriz de riscos no contrato: "+esc(document.getElementById("tem_matriz").value)+"</li>"+
+      "<li>Sobreposições por data: "+(s.sobrepostosPorData||0)+"</li></ul>"+
+      '<section class="tool-layers" aria-labelledby="camadas-matriz"><h3 id="camadas-matriz">Como ler este resultado</h3>'+
+      '<p data-layer="fato"><strong>Fato.</strong> '+esc(expl.layers.fato)+'</p>'+
+      '<p data-layer="calculo"><strong>Cálculo.</strong> '+esc(expl.layers.calculo)+'</p>'+
+      '<p data-layer="inferencia"><strong>Inferência.</strong> '+esc(expl.layers.inferencia)+'</p>'+
+      '<p data-layer="unknown"><strong>Desconhecido.</strong> '+esc(expl.layers.unknown)+'</p></section>'+
       "<h3>Por evento</h3><ul class=\"tool-next-actions\">"+rows+"</ul>"+
       (s.proximosRegistros&&s.proximosRegistros.length?"<h3>Próximos registros</h3><ul class=\"tool-next-actions\">"+s.proximosRegistros.map(function(x){return "<li>"+esc(x)+"</li>";}).join("")+"</ul>":"")+
       '<p class="tool-disclaimer">'+esc(r.disclaimer||"Resultado orientativo.")+"</p>"+
       '<p class="tool-privacy-note">Gerado em '+T.localNow()+".</p>";
     lastText=T.buildReport([
       {title:"CONFENGE: matriz de atraso de obra", body:r.synthesis},
+      {title:"Fato", body:expl.layers.fato},
+      {title:"Cálculo", body:expl.layers.calculo},
+      {title:"Inferência", body:expl.layers.inferencia},
+      {title:"Desconhecido", body:expl.layers.unknown},
       {title:"Resumo", lines:[
         "Eventos: "+s.totalEventos,
         "Sem prova: "+s.semProvaContemporanea,
@@ -211,9 +224,9 @@
     cta.hidden=false;
     var needs=(s.semProvaContemporanea||0)+(s.semPeriodoDefinido||0);
     cta.innerHTML=needs
-      ? '<p>Há eventos sem prova contemporânea ou período definido. Enquadre cronograma, causa e comunicações.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-lacunas" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" href="/atrasos-prorrogacao-obras-publicas/">Enquadrar cronograma e prova</a></div>'
-      : '<p>A matriz está mais consistente; valide o nexo antes de pedir prazo ou custo.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-completa" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" href="/atrasos-prorrogacao-obras-publicas/">Validar causa e caminho crítico</a><a class="button button-secondary" data-tool-to-content href="/conteudos/como-provar-atraso-obra-publica/">Como provar atraso</a></div>';
-    T.track("tool_complete",{tool:TOOL,events:s.totalEventos,sem_prova:s.semProvaContemporanea,level:"hypothesis"});
+      ? '<p>Há eventos sem prova contemporânea ou período definido. Enquadre cronograma, causa e comunicações.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-lacunas" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" data-tool-to-offer="atrasos-prorrogacao-obras-publicas" href="/atrasos-prorrogacao-obras-publicas/">Enquadrar cronograma e prova</a></div>'
+      : '<p>A matriz está mais consistente; valide o nexo antes de pedir prazo ou custo.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-completa" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" data-tool-to-offer="atrasos-prorrogacao-obras-publicas" href="/atrasos-prorrogacao-obras-publicas/">Validar causa e caminho crítico</a><a class="button button-secondary" data-tool-to-content href="/conteudos/como-provar-atraso-obra-publica/">Como provar atraso</a></div>';
+    T.track("tool_complete",{tool:TOOL,events:s.totalEventos,sem_prova:s.semProvaContemporanea,level:"hypothesis",cta_branch:expl.cta.branch});
     persist();
   });
   root.addEventListener("change", persist);

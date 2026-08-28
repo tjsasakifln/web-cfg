@@ -19,6 +19,7 @@ import { join, resolve, extname, sep } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { resolveSiteRoot } from "./interface_coverage.mjs";
+import { resolveChromePath } from "./resolve_chrome.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const SITE_ROOT = resolveSiteRoot(ROOT);
@@ -26,7 +27,7 @@ const OUT = resolve(
   process.argv[2] || join(ROOT, "docs/uiux-tools-remediation/evidence")
 );
 const PORT = 8795;
-const CHROME = process.env.CHROME_PATH || "/usr/bin/google-chrome";
+const CHROME = resolveChromePath() || process.env.CHROME_PATH || "/usr/bin/google-chrome";
 const require = createRequire(import.meta.url);
 
 const VIEWPORTS = [
@@ -62,6 +63,12 @@ const PILOTS = [
     path: "/ferramentas/matriz-atraso-obra/",
     expect: ["tool-form", "tool-event", "hipótese"],
     flow: "matriz",
+  },
+  {
+    id: "diagnostico",
+    path: "/ferramentas/diagnostico-defesa-margem/",
+    expect: ["Identificação do contrato", "tool-form", "UNKNOWN", "btn-copy", "data-tool-job"],
+    flow: "diagnostico",
   },
   {
     id: "aditivo",
@@ -121,17 +128,9 @@ try {
 mkdirSync(join(OUT, "screenshots"), { recursive: true });
 mkdirSync(join(OUT, "screenshots", "after"), { recursive: true });
 
-const server = await startServer();
-const BASE = `http://127.0.0.1:${PORT}`;
-const browser = await puppeteer.launch({
-  executablePath: CHROME,
-  headless: true,
-  args: ["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage"],
-});
-
 const report = {
   generated_at: new Date().toISOString(),
-  base: BASE,
+  base: null,
   site_root: SITE_ROOT === ROOT ? "." : "_site",
   viewports: VIEWPORTS.map(([w, h]) => `${w}x${h}`),
   results: [],
@@ -150,9 +149,7 @@ function pass(msg) {
   console.log("PASS", msg);
 }
 
-const page = await browser.newPage();
-
-// --- Static source checks first ---
+// --- Static source checks first (no browser) ---
 for (const pilot of PILOTS) {
   const rel = pilot.path === "/" ? "index.html" : pilot.path.replace(/^\//, "") + (pilot.path.endsWith("/") ? "index.html" : "");
   const fp = join(ROOT, rel.replace(/\/index\.html$/, "/index.html"));
@@ -177,6 +174,28 @@ for (const pilot of PILOTS) {
     fail("hub_webapp_only");
   }
 }
+
+const server = await startServer();
+const BASE = `http://127.0.0.1:${PORT}`;
+report.base = BASE;
+let browser;
+try {
+  browser = await puppeteer.launch({
+    executablePath: CHROME,
+    headless: true,
+    args: ["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage"],
+  });
+} catch (err) {
+  const logPath = join(OUT, "chrome-unavailable.log");
+  writeFileSync(logPath, String((err && err.stack) || err));
+  console.error("CHROME_UNAVAILABLE", logPath);
+  server.close();
+  if (report.failed > 0) process.exit(1);
+  console.log("ALL tools UIUX e2e static checks passed (chrome unavailable)");
+  process.exit(0);
+}
+
+const page = await browser.newPage();
 
 // --- Screenshots + overflow at each viewport ---
 for (const pilot of PILOTS) {
@@ -273,6 +292,26 @@ await page.setViewport({ width: 1440, height: 1000 });
   else pass("limite_wording");
   if (!lim.hasSteps) fail("limite_steps");
   else pass("limite_steps");
+  const matchCompute = await page.evaluate(() => {
+    const C = window.ConfengeToolCompute;
+    const r = C.computeLimiteAditivo({
+      valorInicial: 1e7, tipo: "geral", acrescimosPrevios: 1.8e6,
+      supressoesPrevias: 0, acrescimoProposto: 9e5, supressaoProposta: 0,
+    });
+    const t = document.getElementById("resultado") ? document.getElementById("resultado").innerText : "";
+    return {
+      ok: r.ok,
+      withinAc: r.withinAc,
+      textHasStatus: t.includes(r.acrescimos.labelStatus),
+      textNonEmpty: t.trim().length > 40,
+      hasLayers: /Fato\.|Cálculo\.|Inferência\.|Desconhecido/i.test(t),
+    };
+  });
+  if (!matchCompute.ok || matchCompute.withinAc !== false || !matchCompute.textHasStatus || !matchCompute.textNonEmpty) {
+    fail("limite_result_matches_compute " + JSON.stringify(matchCompute));
+  } else pass("limite_result_matches_compute");
+  if (!matchCompute.hasLayers) fail("limite_layers_visible");
+  else pass("limite_layers_visible");
   report.flows.push({ flow: "limite", ...lim });
   await page.screenshot({
     path: join(OUT, "screenshots", "after", "limite-result-1440.png"),
@@ -343,6 +382,52 @@ await page.setViewport({ width: 1440, height: 1000 });
   report.flows.push({ flow: "matriz", ...mx });
   await page.screenshot({
     path: join(OUT, "screenshots", "after", "matriz-result-1440.png"),
+    fullPage: true,
+  });
+}
+
+// Diagnostico: lookup → result content (no cadastro) + export controls
+{
+  await page.goto(`${BASE}/ferramentas/diagnostico-defesa-margem/`, {
+    waitUntil: "networkidle0",
+    timeout: 60000,
+  });
+  await page.waitForSelector("#qid", { timeout: 10000 });
+  const beforeLead = await page.evaluate(() => {
+    const id = document.getElementById("identificacao");
+    const form = document.getElementById("lead-form");
+    const idTop = id ? id.getBoundingClientRect().top : 1e9;
+    const formTop = form ? form.getBoundingClientRect().top : 1e9;
+    return {
+      hasId: !!(id && /itaj/i.test(id.innerText)),
+      resultBeforeLead: idTop < formTop,
+      hasCopy: !!document.getElementById("btn-copy"),
+      hasDl: !!document.getElementById("btn-dl"),
+      hasPrint: !!document.getElementById("btn-print"),
+      hasReset: !!document.getElementById("btn-reset"),
+      layers: !!document.querySelector("[data-layer='fato']"),
+    };
+  });
+  if (!beforeLead.hasId || !beforeLead.resultBeforeLead) fail("diagnostico_result_before_cadastro " + JSON.stringify(beforeLead));
+  else pass("diagnostico_result_before_cadastro");
+  if (!beforeLead.hasCopy || !beforeLead.hasDl || !beforeLead.hasPrint || !beforeLead.hasReset) fail("diagnostico_export");
+  else pass("diagnostico_export");
+  if (!beforeLead.layers) fail("diagnostico_layers");
+  else pass("diagnostico_layers");
+  await page.click("#qid", { clickCount: 3 });
+  await page.type("#qid", "itajai");
+  await page.click("button.tool-run");
+  await new Promise((r) => setTimeout(r, 600));
+  const dx = await page.evaluate(() => {
+    const id = document.getElementById("identificacao");
+    const t = id ? id.innerText : "";
+    return { t: t.slice(0, 400), hasItajai: /itaj/i.test(t), nonEmpty: t.trim().length > 20 };
+  });
+  if (!dx.hasItajai || !dx.nonEmpty) fail("diagnostico_lookup_result " + JSON.stringify(dx));
+  else pass("diagnostico_lookup_result");
+  report.flows.push({ flow: "diagnostico", ...dx, ...beforeLead });
+  await page.screenshot({
+    path: join(OUT, "screenshots", "after", "diagnostico-result-1440.png"),
     fullPage: true,
   });
 }
@@ -435,6 +520,30 @@ await page.setViewport({ width: 1440, height: 1000 });
   if (!reached) fail("keyboard_reach_form");
   else pass("keyboard_reach_form");
   report.keyboard.push({ page: "limite", reached_interactive: reached });
+}
+
+{
+  await page.goto(`${BASE}/ferramentas/diagnostico-defesa-margem/`, {
+    waitUntil: "domcontentloaded",
+    timeout: 60000,
+  });
+  await page.focus("body");
+  let reached = false;
+  for (let i = 0; i < 40; i++) {
+    await page.keyboard.press("Tab");
+    const info = await page.evaluate(() => {
+      const el = document.activeElement;
+      if (!el) return { id: null, tag: null };
+      return { id: el.id, tag: el.tagName, type: el.getAttribute("type") };
+    });
+    if (info.id === "qid" || (info.tag === "BUTTON" && info.type === "submit") || info.id === "btn-copy") {
+      reached = true;
+      break;
+    }
+  }
+  if (!reached) fail("keyboard_reach_diagnostico");
+  else pass("keyboard_reach_diagnostico");
+  report.keyboard.push({ page: "diagnostico", reached_interactive: reached });
   // focus-visible: ensure outline style exists for :focus-visible (from site CSS)
   const hasFocusStyle = await page.evaluate(() => {
     const sheets = [...document.styleSheets];

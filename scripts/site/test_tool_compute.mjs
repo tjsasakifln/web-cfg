@@ -1,7 +1,9 @@
 /**
  * Pure unit tests for ConfengeToolCompute + ConfengeToolPersist — shipped modules only.
+ * Drives assets/js/tool-compute.cjs (twin of the browser module). No reimplementation.
  */
 import { createRequire } from "module";
+import { readFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -9,34 +11,131 @@ const require = createRequire(import.meta.url);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const C = require(path.join(root, "assets/js/tool-compute.cjs"));
 const P = require(path.join(root, "assets/js/tool-persist.cjs"));
+const fixtures = JSON.parse(
+  readFileSync(path.join(root, "scripts/site/fixtures/tools/tool-compute.json"), "utf8")
+);
 
 let failed = 0;
 const pass = (n, d = "") => console.log("PASS", n, d);
 const fail = (n, d) => { console.error("FAIL", n, d); failed++; };
 const almost = (a, b, e = 0.01) => Math.abs(a - b) <= e;
 
-// --- parseBRL ---
-for (const [raw, exp] of [["10000000", 1e7], ["10000000,50", 1e7 + 0.5], ["10.000.000", 1e7], ["10.000.000,50", 1e7 + 0.5]]) {
-  const r = C.parseBRL(raw);
-  if (!r.ok || !almost(r.value, exp)) fail("parse_" + raw, r);
-  else pass("parse_" + raw, r.value);
+function assertFinite(label, obj) {
+  const bad = C.nonFinitePaths(obj);
+  if (bad.length) fail(label + "_nonfinite", bad);
+  else pass(label + "_finite");
 }
-if (C.parseBRL("abc").ok) fail("parse_invalid"); else pass("parse_invalid");
-if (C.parseBRL("").ok) fail("parse_empty"); else pass("parse_empty");
 
-// --- Limite ---
+function assertNoSilentZero(label, result) {
+  if (result && result.ok) fail(label + "_silent_ok", result);
+  else pass(label + "_rejected");
+}
+
+// --- twins ---
 {
-  const r = C.computeLimiteAditivo({ valorInicial: 1e7, tipo: "geral", acrescimosPrevios: 1.8e6, supressoesPrevias: 0, acrescimoProposto: 9e5, supressaoProposta: 0 });
-  if (!r.ok || r.withinAc !== false || r.level !== "bad") fail("over", r); else pass("over");
+  const js = readFileSync(path.join(root, "assets/js/tool-compute.js"), "utf8");
+  const cjs = readFileSync(path.join(root, "assets/js/tool-compute.cjs"), "utf8");
+  if (js !== cjs) fail("twins_identical");
+  else pass("twins_identical");
+}
+
+// --- parseBRL from fixtures ---
+for (const row of fixtures.parseBRL) {
+  const r = C.parseBRL(row.raw);
+  if (!r.ok || !almost(r.value, row.value)) fail("parse_" + row.raw, r);
+  else pass("parse_" + row.raw, r.value);
+}
+for (const raw of fixtures.parseBRL_invalid) {
+  if (C.parseBRL(raw).ok) fail("parse_invalid_" + JSON.stringify(raw));
+  else pass("parse_invalid_" + JSON.stringify(raw));
+}
+
+// --- Limite fixtures ---
+for (const [name, case_] of Object.entries(fixtures.limite)) {
+  const r = C.computeLimiteAditivo(case_.input);
+  const exp = case_.expect;
+  if (exp.ok === false) {
+    if (r.ok) fail("fx_" + name + "_should_fail", r);
+    else pass("fx_" + name + "_rejected", r.error);
+    continue;
+  }
+  if (!r.ok) { fail("fx_" + name + "_ok", r); continue; }
+  let ok = true;
+  for (const [k, v] of Object.entries(exp)) {
+    if (k === "ok" || k === "roundedContains") continue;
+    if (r[k] !== v && !almost(r[k], v)) { fail("fx_" + name + "_" + k, { got: r[k], exp: v }); ok = false; }
+  }
+  if (exp.roundedContains && !(r.roundedFields || []).includes(exp.roundedContains)) {
+    fail("fx_" + name + "_rounded", r.roundedFields); ok = false;
+  }
+  if (ok) pass("fx_" + name);
+  assertFinite("fx_" + name, r);
+}
+
+{
+  const r = C.computeLimiteAditivo(fixtures.limite.geral_25_over.input);
   if (!String(r.acrescimos.labelStatus).includes("limite numérico")) fail("wording"); else pass("wording");
 }
+
+// silent 0-coercion: invalid extra axis must not become 0 with ok:true
+assertNoSilentZero("coerce_abc", C.computeLimiteAditivo({ valorInicial: 1e6, tipo: "geral", acrescimosPrevios: "abc" }));
+assertNoSilentZero("coerce_nan", C.computeLimiteAditivo({ valorInicial: 1e6, tipo: "geral", acrescimosPrevios: Number.NaN }));
+assertNoSilentZero("coerce_inf", C.computeLimiteAditivo({ valorInicial: 1e6, tipo: "geral", acrescimoProposto: Number.POSITIVE_INFINITY }));
+assertNoSilentZero("coerce_neg_base", C.computeLimiteAditivo({ valorInicial: -1000, tipo: "geral" }));
+
 {
-  const r = C.computeLimiteAditivo({ valorInicial: 1e6, tipo: "reforma", acrescimosPrevios: 0, supressoesPrevias: 0, acrescimoProposto: 4e5, supressaoProposta: 0 });
-  if (r.limAc !== 0.5 || !r.withinAc) fail("reforma"); else pass("reforma");
+  const r = C.readMoney("abc", "x");
+  if (r.ok) fail("readMoney_abc"); else pass("readMoney_abc", r.error);
 }
+
+// property: random-but-deterministic bases, cents arithmetic, no NaN
 {
-  const r = C.computeLimiteAditivo({ valorInicial: 1e6, tipo: "geral", acrescimosPrevios: 3e5, supressoesPrevias: 0, acrescimoProposto: 0, supressaoProposta: 5e4 });
-  if (r.withinAc !== false || r.withinSu !== true) fail("indep"); else pass("indep");
+  let props = 0;
+  for (let i = 0; i < 80; i++) {
+    const V = 10_000 + i * 12_345.67;
+    const tipo = i % 2 ? "reforma" : "geral";
+    const acPrev = (i * 111.11) % (V * 0.2);
+    const suPrev = (i * 77.7) % (V * 0.1);
+    const acNow = (i * 33.3) % (V * 0.15);
+    const suNow = (i * 9.9) % (V * 0.05);
+    const r = C.computeLimiteAditivo({
+      valorInicial: V, tipo, acrescimosPrevios: acPrev, supressoesPrevias: suPrev,
+      acrescimoProposto: acNow, supressaoProposta: suNow
+    });
+    if (!r.ok) { fail("prop_ok_" + i, r); break; }
+    const bad = C.nonFinitePaths(r);
+    if (bad.length) { fail("prop_finite_" + i, bad); break; }
+    const limAc = tipo === "reforma" ? 0.5 : 0.25;
+    if (r.limAc !== limAc) { fail("prop_lim_" + i, r.limAc); break; }
+    const V2 = C.roundBRL(V);
+    const maxAc = C.roundBRL(V2 * limAc);
+    if (!almost(r.maxAc, maxAc, 0.011)) { fail("prop_max_" + i, { got: r.maxAc, exp: maxAc }); break; }
+    const total = C.roundBRL(C.roundBRL(acPrev) + C.roundBRL(acNow));
+    if (!almost(r.acTotal, total, 0.011)) { fail("prop_total_" + i, { got: r.acTotal, exp: total }); break; }
+    const within = total <= maxAc + 0.0001;
+    if (r.withinAc !== within) { fail("prop_within_" + i, { within, got: r.withinAc, total, maxAc }); break; }
+    const expl = C.explainLimite(r);
+    if (!expl.layers.fato || !expl.layers.calculo || !expl.layers.inferencia || !expl.layers.unknown) {
+      fail("prop_explain_" + i, expl); break;
+    }
+    if (/parecer jurídico vinculante|tem direito|deve protocolar/i.test(JSON.stringify(expl))) {
+      fail("prop_legal_" + i); break;
+    }
+    const cta = expl.cta.branch;
+    const expectBranch = (!r.withinAc || !r.withinSu) ? "excedido" : "dentro";
+    if (cta !== expectBranch) { fail("prop_cta_" + i, { cta, expectBranch }); break; }
+    props += 1;
+  }
+  if (props === 80) pass("property_limite_80");
+}
+
+// explainLimite both branches
+{
+  const over = C.explainLimite(C.computeLimiteAditivo(fixtures.limite.geral_25_over.input));
+  if (over.cta.branch !== "excedido") fail("cta_over", over.cta); else pass("cta_over");
+  const ok = C.explainLimite(C.computeLimiteAditivo(fixtures.limite.reforma_50_ok.input));
+  if (ok.cta.branch !== "dentro") fail("cta_ok", ok.cta); else pass("cta_ok");
+  if (!ok.premises.some((p) => /art\. 125/i.test(p))) fail("premise_art125"); else pass("premise_art125");
 }
 
 // --- Reequilibrio with N/A, blockers, urgency order, ressalvas ---
@@ -47,14 +146,20 @@ if (C.parseBRL("").ok) fail("parse_empty"); else pass("parse_empty");
   if (high.readiness !== "alta") fail("reeq_high", high); else pass("reeq_high");
   if (!Array.isArray(high.naKeys) || high.naKeys.length !== 0) fail("reeq_naKeys_empty", high.naKeys);
   else pass("reeq_naKeys_empty");
+  assertFinite("reeq_high", high);
+  const explHigh = C.explainReequilibrio(high);
+  if (explHigh.cta.branch !== "pronto") fail("reeq_cta_high", explHigh.cta); else pass("reeq_cta_high");
 
   const blocked = C.computeReequilibrio({ ...all, fato_gerador: "missing" });
   if (blocked.readiness === "alta" || !blocked.hasCentralBlocker) fail("reeq_block", blocked);
   else pass("reeq_block", blocked.readiness);
   if (!blocked.ressalvas || !blocked.ressalvas.some((s) => /bloqueador/i.test(s))) fail("reeq_ressalvas", blocked.ressalvas);
   else pass("reeq_ressalvas");
+  const explB = C.explainReequilibrio(blocked);
+  if (explB.cta.branch !== "bloqueado") fail("reeq_cta_block"); else pass("reeq_cta_block");
+  if (!explB.layers.unknown || /tem direito/i.test(JSON.stringify(explB))) fail("reeq_no_right");
+  else pass("reeq_no_right");
 
-  // N/A must be returned in naKeys and not force missing / false blockers
   const withNa = { ...all, indices: "na", series: "na" };
   const naR = C.computeReequilibrio(withNa);
   if (!naR.ok) fail("reeq_na");
@@ -64,7 +169,6 @@ if (C.parseBRL("").ok) fail("parse_empty"); else pass("parse_empty");
   if (naR.hasCentralBlocker) fail("reeq_na_false_blocker");
   else pass("reeq_na_no_blocker");
 
-  // Urgency must reorder correction actions (alta ≠ baixa key sequence)
   const partial = {
     ...all,
     fato_gerador: "missing",
@@ -81,7 +185,6 @@ if (C.parseBRL("").ok) fail("parse_empty"); else pass("parse_empty");
   else if (altaKeys === baixaKeys) fail("reeq_urgency_order_same", altaKeys);
   else pass("reeq_urgency_order_diff", "alta=" + altaKeys + " | baixa=" + baixaKeys);
 
-  // alta: blockers by criticality (fato_gerador before contrato), then economic, then process
   const altaReasons = (alta.correctionOrder || []).map((o) => o.reason);
   if (!altaReasons.some((r) => /urgente/.test(r))) fail("reeq_alta_reason", altaReasons);
   else pass("reeq_alta_reason");
@@ -93,7 +196,6 @@ if (C.parseBRL("").ok) fail("parse_empty"); else pass("parse_empty");
     fail("reeq_alta_criticality", { iFato, iContrato, iPlanilha, iPedido, keys: altaKeys });
   } else pass("reeq_alta_criticality");
 
-  // baixa: process before economic after blockers
   const iPedidoB = baixa.correctionOrder.findIndex((o) => o.key === "pedido");
   const iPlanilhaB = baixa.correctionOrder.findIndex((o) => o.key === "planilha");
   if (!(iPedidoB < iPlanilhaB)) fail("reeq_baixa_process_before_econ", { iPedidoB, iPlanilhaB, keys: baixaKeys });
@@ -111,12 +213,44 @@ if (C.parseBRL("").ok) fail("parse_empty"); else pass("parse_empty");
   ]);
   if (!r.ok || r.level !== "hypothesis") fail("mx", r); else pass("mx_hypothesis");
   if (r.summary.possiveisSobreposicoes < 1) fail("mx_concurrent"); else pass("mx_concurrent", r.summary.possiveisSobreposicoes);
+  if ((r.summary.sobrepostosPorData || 0) < 2) fail("mx_date_overlap", r.summary); else pass("mx_date_overlap", r.summary.sobrepostosPorData);
   if (r.summary.semProvaContemporanea < 1) fail("mx_no_evidence"); else pass("mx_no_evidence");
   const ev0 = r.events[0];
   if (!ev0.documentosFaltantes || !ev0.documentosFaltantes.length) fail("mx_docs_missing"); else pass("mx_docs_missing");
-  if (!ev0.precisaImpactoCritico && ev0.impactoCaminhoCritico !== "sim") pass("mx_crit_flag");
-  else pass("mx_crit");
+  if (!ev0.precisaImpactoCritico) fail("mx_crit_needs_activity"); else pass("mx_crit_needs_activity");
+  const expl = C.explainMatriz(r);
+  if (expl.cta.branch !== "lacunas") fail("mx_cta_lacunas", expl.cta); else pass("mx_cta_lacunas");
+  if (!/hipótese/i.test(expl.layers.inferencia)) fail("mx_inferencia"); else pass("mx_inferencia");
+  assertFinite("mx", r);
 }
+
+{
+  const disjoint = C.computeMatrizEventos([
+    { causa: "A", parte: "administracao", comunicacaoContemporanea: true, documentoDisponivel: true, atividadeAfetada: "fundação", impactoCaminhoCritico: "nao", dataInicio: "2026-01-01", dataFim: "2026-01-05" },
+    { causa: "B", parte: "contratado", comunicacaoContemporanea: true, documentoDisponivel: true, atividadeAfetada: "revestimento", impactoCaminhoCritico: "nao", dataInicio: "2026-02-01", dataFim: "2026-02-05" },
+  ]);
+  if (!disjoint.ok) fail("mx_disjoint_ok", disjoint);
+  else if (disjoint.summary.sobrepostosPorData !== 0) fail("mx_no_overlap", disjoint.summary);
+  else pass("mx_no_overlap");
+  if (disjoint.level !== "hypothesis") fail("mx_still_hypothesis"); else pass("mx_still_hypothesis");
+  const expl = C.explainMatriz(disjoint);
+  if (expl.cta.branch !== "completa") fail("mx_cta_completa", expl.cta); else pass("mx_cta_completa");
+}
+
+{
+  const zeroDur = C.computeMatrizEventos([
+    { causa: "Parada zero", parte: "indefinida", duracaoDias: 0, dataInicio: "2026-03-01" }
+  ]);
+  if (!zeroDur.ok) fail("mx_zero_dur", zeroDur);
+  else if (zeroDur.events[0].duracaoDias !== 0) fail("mx_zero_kept", zeroDur.events[0]);
+  else pass("mx_zero_dur_kept");
+}
+
+{
+  const badDur = C.computeMatrizEventos([{ causa: "X", duracaoDias: -3 }]);
+  if (badDur.ok) fail("mx_neg_dur"); else pass("mx_neg_dur", badDur.error);
+}
+
 {
   const r = C.computeMatrizAtraso(["projeto", "pagamento"], 10, "sim");
   if (r.level === "ok" || r.level === "bad") fail("legacy_verdict", r.level);
@@ -168,7 +302,12 @@ if (C.parseBRL("").ok) fail("parse_empty"); else pass("parse_empty");
   if (!text.includes("Gerado em:") || !text.includes("navegador")) fail("report_footer");
   else pass("report_footer");
   if (text.length < 40) fail("report_empty"); else pass("report_nonempty", text.length);
+  if (/\b(cpf|cnpj|email|telefone|whatsapp)\s*[:=]/i.test(text)) fail("report_pii_fields");
+  else pass("report_no_pii_fields");
 }
+
+if (!C.TOOL_JOBS.limite.job || !C.TOOL_JOBS.diagnostico.decision) fail("tool_jobs");
+else pass("tool_jobs");
 
 if (failed) {
   console.error(failed + " failures");

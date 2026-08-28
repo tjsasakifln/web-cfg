@@ -120,6 +120,7 @@ jobs:
           npm run test:revops
           npm run test:schedules
           npm run test:tools
+          npm run test:tool-compute
           npm run test:nurture
       - name: Build public site
         env:

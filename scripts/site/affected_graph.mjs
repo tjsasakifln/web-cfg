@@ -990,6 +990,8 @@ export const SUITE_GRAPH = Object.freeze({
   "test:tool-compute": {
     producers: [
       "scripts/site/test_tool_compute.mjs",
+      "scripts/site/fixtures/tools/tool-compute.json",
+      "assets/js/tool-compute.js",
       "assets/js/tool-compute.cjs",
       "assets/js/tool-persist.cjs",
     ],
