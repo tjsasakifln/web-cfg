@@ -24,7 +24,7 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "e42a11be4e5ab6a7cc263657f07c1097d0abb68ad028b6149fa1caa7941f7cfa"
+    "after_sha256": "0733ef0d06b2b3e09b0ebcb52ada2613c8da3cf45178cd84599711a258430e4b"
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -118,15 +118,15 @@
   "frozen_siblings": [
     {
       "path": "conteudos/glosa-de-medicao-obra-publica/index.html",
-      "sha256": "d224271c43a2bb928ef7d044884fcaefd81a541496b0dc29542fded43bbdaacf"
+      "sha256": "9598b814ef91c602a02036fa742ed033bb53f29c3477495381620775876a1943"
     },
     {
       "path": "conteudos/medicao-de-obra-publica-rejeitada/index.html",
-      "sha256": "9b593a6e716d45e3570fa326e29bb53fdf8af548d0db92912d88a729eab46b74"
+      "sha256": "fb5eb3b520580657e71dd2f4b6e0cb6b316caedd606df42ffe15e8d906a2a65d"
     },
     {
       "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
-      "sha256": "b008ee48db45eef5b1216c2ffde9a639e5d88e3417235aaa024363da3522c61b"
+      "sha256": "626fd1e908a621ec63efba2548fc841f5ee53365ecfa9744c3ed49e3bd9d22d1"
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
