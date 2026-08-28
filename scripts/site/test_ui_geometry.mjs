@@ -1840,6 +1840,7 @@ async function main() {
     ok("cls_seven_families_le_0_05");
   } catch (e) {
     fail("cls_seven_families_le_0_05", e.message || e);
+  }
 
   // Perceived-result gates for editorial action-list geometry (CFG10X-01).
   // Measure the useful text box, not class/token presence. Floors: 240px at
