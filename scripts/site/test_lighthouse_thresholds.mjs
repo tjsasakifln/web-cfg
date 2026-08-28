@@ -87,6 +87,7 @@ for (const [name, rows] of [
   ["TBT regression", [home(1, 97, 30, 120), home(2, 97, 200, 150), home(3, 97, 220, 180)]],
   ["long-task regression", [home(1, 97, 30, 120), home(2, 97, 40, 201), home(3, 97, 35, 140)]],
   ["LCP regression", [home(1, 97, 55, 138, { lcp_ms: 2001 }), home(2, 95, 135, 185, { lcp_ms: 2100 }), home(3, 97, 42, 136, { lcp_ms: 2200 })]],
+  ["LCP mixed max-of-3", [home(1, 97, 55, 138, { lcp_ms: 1500 }), home(2, 95, 135, 185, { lcp_ms: 2000 }), home(3, 97, 42, 136, { lcp_ms: 2300 })]],
   ["CLS regression", [home(1, 97, 55, 138, { cls: 0.06 }), home(2, 95, 135, 185), home(3, 97, 42, 136)]],
 ]) {
   assert.equal(
