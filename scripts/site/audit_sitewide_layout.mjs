@@ -380,6 +380,8 @@ async function auditWorker() {
           .filter((element) => {
             const text = (element.innerText || "").replace(/\s+/g, " ").trim();
             if (text.length < 48) return false;
+            if (element.closest(".honeypot, .table-wrap, .case-badge")) return false;
+            if (/(badge|eyebrow|kicker)/i.test(String(element.className || ""))) return false;
             const style = getComputedStyle(element);
             if (style.display === "none" || style.visibility === "hidden") return false;
             const box = element.getBoundingClientRect();
