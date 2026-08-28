@@ -1,4 +1,9 @@
-"""Fail-closed match of public legalName, taxID and sameAs to committed sources."""
+"""Fail-closed match of public legalName, taxID and sameAs to the committed identity registry.
+
+Nothing in that registry is independently verified: every row is self-declared by
+CONFENGE and carries third_party_verified false. This module only stops the site
+from publishing an identity value that is not in the registry at all.
+"""
 
 from __future__ import annotations
 
@@ -83,4 +88,40 @@ def public_identity_errors(html: str, sources: dict[str, Any] | None = None) -> 
             if "PostalAddress" in type_set or "LocalBusiness" in type_set or node.get("streetAddress"):
                 errors.append("street_or_local_business_published")
                 break
+    return list(dict.fromkeys(errors))
+
+
+def _identity_rows(data: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]:
+    rows: list[tuple[str, dict[str, Any]]] = []
+    org = data.get("organization") or {}
+    for key in ("legalName", "taxID"):
+        row = org.get(key)
+        if isinstance(row, dict):
+            rows.append((f"organization.{key}", row))
+    for scope in ("organization", "person"):
+        for index, row in enumerate((data.get(scope) or {}).get("sameAs") or []):
+            if isinstance(row, dict):
+                rows.append((f"{scope}.sameAs[{index}]", row))
+    return rows
+
+
+def identity_registry_errors(sources: dict[str, Any] | None = None) -> list[str]:
+    """Reject any identity row that presents a CONFENGE-owned value as verified.
+
+    The registry is a publication allowlist, not evidence. Every row must stay
+    SELF_DECLARED with third_party_verified false until an actual independent
+    source exists, and the registry must say so at the top level.
+    """
+    data = sources or load_verified_sources()
+    errors: list[str] = []
+    if data.get("independent_verification") != "NONE":
+        errors.append("independent_verification_not_declared_none")
+    rows = _identity_rows(data)
+    if not rows:
+        errors.append("identity_registry_empty")
+    for at, row in rows:
+        if row.get("status") != "SELF_DECLARED":
+            errors.append(f"status_not_self_declared:{at}")
+        if row.get("third_party_verified") is not False:
+            errors.append(f"third_party_verified_not_false:{at}")
     return list(dict.fromkeys(errors))

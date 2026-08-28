@@ -4,21 +4,33 @@
  * O teste e autossuficiente: le o proprio JSON com fs, varre o HTML publicado do
  * repositorio e so cruza com artefatos que ja existem em main.
  *
- * Ele prova cinco pontos, hoje, antes de existir qualquer autorizacao real:
+ * Ele prova seis pontos:
  *
- *   A. enquanto o estado for BLOCKED_EXTERNAL, "entries" fica vazio;
+ *   A. o registro e o HTML publicado contam a mesma historia: zero prova
+ *      publicada com o estado zero renderizado, ou N provas validas cada uma
+ *      renderizada na superficie que o registro declara;
  *   B. a funcao que valida uma entrada e exercitada por fixtures sinteticas,
  *      dentro do proprio teste, sem colocar dado falso no arquivo do registro;
  *   C. nenhuma pagina publica carrega Review, AggregateRating ou microdata de nota;
- *   D. os exemplos sinteticos continuam rotulados e nao se misturam a prova real;
- *   E. a auditoria declarada e a varredura real do disco concordam em zero.
+ *   D. os exemplos sinteticos continuam rotulados e nao se misturam a prova real,
+ *      e o gate reprova se um rotulo sintetico for removido;
+ *   E. a auditoria declarada e a varredura real do disco concordam;
+ *   F. o gate aceita zero prova valida, aceita N provas validas e reprova prova
+ *      vencida ou sem autorizacao. Os tres estados sao testados aqui.
+ *
+ * O gate nao congela o zero: ele congela a coerencia entre registro e HTML.
  */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { consumerSuitesForPath } from "../../scripts/site/affected_graph.mjs";
 import {
+  DEMONSTRATIVE_LABEL,
   REQUIRED_EVIDENCE_FIELDS,
+  SYNTHETIC_LABEL,
+  evaluateProofGate as shippedEvaluateProofGate,
+  labelIntegrityProblems,
+  surfaceToRelPath,
   validateEntry as shippedValidateEntry,
   validateRegistryShape as shippedValidateRegistryShape,
 } from "../../scripts/commercial/real_proof_registry.mjs";
@@ -120,10 +132,19 @@ const allKeys = walkKeys(data, []);
 assert("schema_is_real_proof_registry_1_0", data.schema === "confenge.real-proof-registry/1.0", data.schema);
 assert("registry_version_frozen", data.registry_version === "CFG-REAL-PROOF-2026-08-24-v1", data.registry_version);
 assert("issue_is_328", data.issue === "#328", data.issue);
-assert("state_is_blocked_external", data.state === "BLOCKED_EXTERNAL", data.state);
+assert(
+  "state_is_an_allowed_registry_state",
+  (data.gate?.allowed_registry_states ?? []).includes(data.state),
+  data.state,
+);
 assert("consent_contract_is_249", data.consent_contract === "#249", data.consent_contract);
 assert("entries_is_array", Array.isArray(data.entries), typeof data.entries);
-assert("entries_is_empty_while_blocked", Array.isArray(data.entries) && data.entries.length === 0, data.entries);
+assert(
+  "entries_empty_only_while_state_requires_it",
+  !(data.gate?.entries_must_be_empty_while_state_is ?? []).includes(data.state) ||
+    (Array.isArray(data.entries) && data.entries.length === 0),
+  [data.state, (data.entries ?? []).length],
+);
 assert(
   "blocked_state_listed_as_entries_must_be_empty",
   Array.isArray(data.gate?.entries_must_be_empty_while_state_is) &&
@@ -135,8 +156,20 @@ assert("gate_id_matches_npm_script", data.gate?.id === "test:real-proof-registry
 assert("gate_command_matches_npm_script", data.gate?.command === "npm run test:real-proof-registry", data.gate?.command);
 assert("gate_purpose_filled", filled(data.gate?.purpose_pt_br), data.gate?.purpose_pt_br);
 assert("gate_blocked_state_rule_filled", filled(data.gate?.blocked_state_rule_pt_br), data.gate?.blocked_state_rule_pt_br);
+assert("gate_declares_zero_state_rule", filled(data.gate?.honest_states_pt_br?.zero), data.gate?.honest_states_pt_br?.zero);
+assert("gate_declares_many_state_rule", filled(data.gate?.honest_states_pt_br?.many), data.gate?.honest_states_pt_br?.many);
+assert("gate_declares_invalid_state_rule", filled(data.gate?.honest_states_pt_br?.invalid), data.gate?.honest_states_pt_br?.invalid);
+assert("gate_declares_rendered_state_surface", data.gate?.rendered_state_surface === "casos/index.html", data.gate?.rendered_state_surface);
+assert("gate_declares_rendered_state_attribute", data.gate?.rendered_state_attribute === "data-proof-state", data.gate?.rendered_state_attribute);
+assert(
+  "gate_declares_rendered_state_values",
+  JSON.stringify(data.gate?.rendered_state_values) === JSON.stringify(["none", "published"]),
+  data.gate?.rendered_state_values,
+);
+assert("gate_declares_it_is_not_a_freeze", filled(data.gate?.not_a_freeze_pt_br), data.gate?.not_a_freeze_pt_br);
 
-/* nenhuma chave de entrada aparece no registro enquanto ele esta vazio */
+/* nenhuma chave de PII de cliente ou de prova social entra no registro, em
+   qualquer estado: a autorizacao e o material vivem em armazenamento privado */
 for (const forbidden of ["client_name", "cliente", "logo", "depoimento", "testimonial", "rating", "nota_do_cliente"]) {
   assert(`registry_has_no_key_${forbidden}`, !allKeys.includes(forbidden), forbidden);
 }
@@ -473,6 +506,34 @@ function validateRegistryShape(reg) {
     root,
   });
 }
+
+function evaluateProofGate(registry, pages, now) {
+  return shippedEvaluateProofGate({
+    registry,
+    pages,
+    schema,
+    consentFields: CONSENT_FIELDS,
+    grades: GRADES,
+    revocationTargets: REVOCATION_TARGETS,
+    gate: data.gate,
+    root,
+    ...(now === undefined ? {} : { now }),
+  });
+}
+
+/* Uma prova valida e uma entrada que passa inteira no validador enviado:
+   autorizada, com fonte, nao vencida. Tudo abaixo e derivado do registro
+   committado, nunca de uma constante congelada em zero. */
+const VALID_ENTRIES = (data.entries ?? []).filter((entry) => validateEntry(entry).length === 0);
+const PUBLISHED_ENTRIES = VALID_ENTRIES.filter((entry) => entry.state === "PUBLISHED");
+const PUBLISHED_SURFACES = new Set(
+  PUBLISHED_ENTRIES.flatMap((entry) => (entry.distribution?.surfaces ?? []).map(surfaceToRelPath)),
+);
+assert(
+  "every_committed_entry_is_valid",
+  VALID_ENTRIES.length === (data.entries ?? []).length,
+  (data.entries ?? []).filter((e) => validateEntry(e).length > 0).map((e) => [e?.entry_id, validateEntry(e)]),
+);
 
 /* fixture bem formada, sintetica, viva apenas dentro deste teste */
 const WELL_FORMED = Object.freeze({
@@ -1023,9 +1084,13 @@ for (const rel of publicPages) {
   const marker = REAL_PROOF_MARKERS.find((mk) => html.includes(mk));
   if (marker) {
     scan.real_proof_markers += 1;
-    offenders.push([rel, `real proof marker ${marker}`]);
+    if (!PUBLISHED_SURFACES.has(rel)) offenders.push([rel, `real proof marker ${marker} without a valid published entry`]);
   }
-  assert(`no_real_proof_block_while_blocked_${rel}`, marker === undefined, marker ?? rel);
+  assert(
+    `real_proof_block_only_on_published_surface_${rel}`,
+    marker === undefined || PUBLISHED_SURFACES.has(rel),
+    marker ?? rel,
+  );
 
   if (/logo-carousel|carrossel-de-logos|client-logo-wall/i.test(html)) {
     scan.logo_walls += 1;
@@ -1046,7 +1111,11 @@ assert("scan_zero_rating_value_keys", scan.rating_value_keys === 0, scan.rating_
 assert("scan_zero_rating_microdata", scan.rating_microdata === 0, scan.rating_microdata);
 assert("scan_zero_logo_walls", scan.logo_walls === 0, scan.logo_walls);
 assert("scan_zero_testimonial_blocks", scan.testimonial_blocks === 0, scan.testimonial_blocks);
-assert("scan_zero_real_proof_markers_while_blocked", scan.real_proof_markers === 0, scan.real_proof_markers);
+assert(
+  "scan_real_proof_markers_match_published_entries",
+  scan.real_proof_markers === PUBLISHED_SURFACES.size,
+  [scan.real_proof_markers, PUBLISHED_SURFACES.size],
+);
 assert("scan_reports_no_offender", offenders.length === 0, offenders.slice(0, 10));
 
 assert("forbidden_markers_declared", filledList(FORBIDDEN_MARKERS, 5), FORBIDDEN_MARKERS);
@@ -1056,8 +1125,8 @@ for (const mk of FORBIDDEN_MARKERS) {
 }
 assert("real_proof_markers_declared", filledList(REAL_PROOF_MARKERS, 4), REAL_PROOF_MARKERS);
 for (const mk of REAL_PROOF_MARKERS) {
-  const hits = publicPages.filter((rel) => pageText.get(rel).includes(mk));
-  assert(`real_proof_marker_absent_${mk.replace(/[^a-zA-Z]+/g, "_")}`, hits.length === 0, hits.slice(0, 5));
+  const hits = publicPages.filter((rel) => pageText.get(rel).includes(mk) && !PUBLISHED_SURFACES.has(rel));
+  assert(`real_proof_marker_only_on_published_surface_${mk.replace(/[^a-zA-Z]+/g, "_")}`, hits.length === 0, hits.slice(0, 5));
 }
 
 /* ------------------------------------------------------------------ */
@@ -1067,7 +1136,13 @@ for (const mk of REAL_PROOF_MARKERS) {
 const audit = data.audit_2026_08_24 ?? {};
 for (const key of ["reviews", "aggregate_ratings", "client_logos", "testimonials", "approved_client_cases"]) {
   assert(`audit_declares_${key}`, key in audit, key);
-  assert(`audit_${key}_is_zero`, audit[key] === 0, audit[key]);
+  assert(`audit_${key}_is_a_count`, Number.isInteger(audit[key]) && audit[key] >= 0, audit[key]);
+}
+/* review, rating agregado, mural de logos e depoimento continuam proibidos por
+   politica em qualquer estado do registro; isto nao e um congelamento do zero,
+   e a proibicao estrutural declarada em forbidden_schema_types_on_public_pages */
+for (const key of ["reviews", "aggregate_ratings", "client_logos", "testimonials"]) {
+  assert(`audit_${key}_is_zero_by_policy`, audit[key] === 0, audit[key]);
 }
 assert("audit_reviews_agrees_with_scan", audit.reviews === scan.review_types + scan.review_property_keys, [audit.reviews, scan.review_types, scan.review_property_keys]);
 assert(
@@ -1099,18 +1174,39 @@ const permPath = path.join(root, cross.permissioned_proof_registry ?? "");
 assert("permissioned_proof_registry_exists", fs.existsSync(permPath), permPath);
 if (fs.existsSync(permPath)) {
   const perm = JSON.parse(fs.readFileSync(permPath, "utf8"));
-  assert("permissioned_registry_state_no_approved_proof", perm.state === "NO_APPROVED_CLIENT_PROOF", perm.state);
-  assert("permissioned_registry_zero_approved", perm.approved_public_proof_count === 0, perm.approved_public_proof_count);
-  assert("permissioned_registry_no_records", Array.isArray(perm.records) && perm.records.length === 0, perm.records);
+  const permPublished = (perm.records ?? []).filter((r) => r && r.state === "PUBLISHED");
+  assert(
+    "permissioned_registry_count_matches_its_records",
+    perm.approved_public_proof_count === permPublished.length,
+    [perm.approved_public_proof_count, permPublished.length],
+  );
+  assert(
+    "permissioned_registry_state_matches_its_count",
+    (perm.state === "NO_APPROVED_CLIENT_PROOF") === (permPublished.length === 0),
+    [perm.state, permPublished.length],
+  );
+  assert(
+    "permissioned_registry_agrees_with_real_proof_registry",
+    permPublished.length === PUBLISHED_ENTRIES.length,
+    [permPublished.length, PUBLISHED_ENTRIES.length],
+  );
 }
 const casesPath = path.join(root, cross.cases_registry ?? "");
 assert("cases_registry_exists", fs.existsSync(casesPath), casesPath);
 if (fs.existsSync(casesPath)) {
   const cases = JSON.parse(fs.readFileSync(casesPath, "utf8"));
-  assert("cases_registry_has_no_case", Array.isArray(cases.cases) && cases.cases.length === 0, cases.cases);
   assert(
-    "cases_registry_surfaces_all_demonstrative",
-    (cases.published_surfaces ?? []).every((s) => s.permission_class === "demonstrativo" && s.client_authorized === false),
+    "cases_registry_agrees_with_real_proof_registry",
+    Array.isArray(cases.cases) && cases.cases.length === PUBLISHED_ENTRIES.length,
+    [(cases.cases ?? []).length, PUBLISHED_ENTRIES.length],
+  );
+  assert(
+    "cases_registry_surfaces_demonstrative_unless_published",
+    (cases.published_surfaces ?? []).every(
+      (s) =>
+        (s.permission_class === "demonstrativo" && s.client_authorized === false) ||
+        (s.permission_class === "consented" && s.client_authorized === true && PUBLISHED_SURFACES.has(surfaceToRelPath(s.path))),
+    ),
     cases.published_surfaces,
   );
 }
@@ -1183,14 +1279,262 @@ for (const rel of DEMO_PAGES) {
   assert(`demonstrative_page_has_no_real_proof_marker_${rel}`, !REAL_PROOF_MARKERS.some((mk) => html.includes(mk)), rel);
 }
 
-/* nenhuma pagina publica declara outra classe de permissao enquanto o estado e BLOCKED_EXTERNAL */
+/* "consented" so aparece numa superficie que uma entrada valida e publicada
+   declara; qualquer outra pagina publica segue restrita a "demonstrativo" */
 for (const rel of publicPages) {
   const html = pageText.get(rel);
   const classes = [...html.matchAll(/data-permission-class="([^"]*)"/g)].map((mm) => mm[1]);
   assert(
-    `permission_class_is_demonstrative_only_${rel}`,
-    classes.every((c) => c === "demonstrativo"),
+    `permission_class_matches_registry_${rel}`,
+    classes.every((c) => c === "demonstrativo" || (c === "consented" && PUBLISHED_SURFACES.has(rel))),
     classes,
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* 12b. integridade de rotulo: perder o rotulo reprova                  */
+/*                                                                     */
+/* Nao basta o rotulo existir hoje. O teste abaixo remove o rotulo de   */
+/* cada artefato sintetico e demonstrativo e exige que o gate reprove;  */
+/* se o gate ficar verde com o rotulo removido, ele nao protege nada.   */
+/* ------------------------------------------------------------------ */
+
+const LABEL_OPTS = { markers: REAL_PROOF_MARKERS };
+
+for (const rel of MODEL_PAGES) {
+  const html = pageText.get(rel);
+  if (html === undefined) continue;
+  assert(`label_integrity_model_${rel}`, labelIntegrityProblems(html, "model", LABEL_OPTS).length === 0, labelIntegrityProblems(html, "model", LABEL_OPTS));
+  assert(
+    `label_integrity_model_fails_without_synthetic_label_${rel}`,
+    labelIntegrityProblems(html.split(SYNTHETIC_LABEL).join(""), "model", LABEL_OPTS).includes("synthetic_label_absent"),
+    rel,
+  );
+  assert(
+    `label_integrity_model_fails_without_permission_class_${rel}`,
+    labelIntegrityProblems(html.split('data-permission-class="demonstrativo"').join(""), "model", LABEL_OPTS).includes(
+      "demonstrative_permission_class_absent",
+    ),
+    rel,
+  );
+  assert(
+    `label_integrity_model_fails_when_marked_as_real_${rel}`,
+    labelIntegrityProblems(`${html}<div data-real-proof-id="x"></div>`, "model", LABEL_OPTS).includes(
+      "synthetic_page_carries_real_proof_marker",
+    ),
+    rel,
+  );
+}
+
+for (const rel of DEMO_PAGES) {
+  const html = pageText.get(rel);
+  if (html === undefined) continue;
+  assert(
+    `label_integrity_demonstrative_${rel}`,
+    labelIntegrityProblems(html, "demonstrative", LABEL_OPTS).length === 0,
+    labelIntegrityProblems(html, "demonstrative", LABEL_OPTS),
+  );
+  assert(
+    `label_integrity_demonstrative_fails_without_label_${rel}`,
+    labelIntegrityProblems(html.split(DEMONSTRATIVE_LABEL).join("Exemplo"), "demonstrative", LABEL_OPTS).includes(
+      "demonstrative_label_absent",
+    ),
+    rel,
+  );
+  assert(
+    `label_integrity_demonstrative_fails_without_disclaimer_${rel}`,
+    labelIntegrityProblems(
+      html.replace(/N[ÃA]O [ÉE] (?:RESULTADO DE CLIENTE|CASE|CASO CONFENGE)/gi, "exemplo"),
+      "demonstrative",
+      LABEL_OPTS,
+    ).includes("client_result_disclaimer_absent"),
+    rel,
+  );
+  assert(
+    `label_integrity_demonstrative_fails_when_consented_${rel}`,
+    labelIntegrityProblems(`${html}<div data-permission-class="consented"></div>`, "demonstrative", LABEL_OPTS).includes(
+      "demonstrative_page_declares_consented_class",
+    ),
+    rel,
+  );
+}
+
+/* um bloco de prova real nao pode carregar rotulo sintetico */
+assert(
+  "label_integrity_real_rejects_synthetic_mix",
+  labelIntegrityProblems(
+    `<div data-permission-class="consented" data-real-proof-id="p1">${SYNTHETIC_LABEL}</div>`,
+    "real",
+    LABEL_OPTS,
+  ).includes("real_proof_mixed_with_synthetic_label"),
+  "mixed",
+);
+assert(
+  "label_integrity_real_requires_consented_class",
+  labelIntegrityProblems('<div data-real-proof-id="p1">prova</div>', "real", LABEL_OPTS).includes(
+    "consented_permission_class_absent",
+  ),
+  "no class",
+);
+
+/* ------------------------------------------------------------------ */
+/* 12c. os tres estados honestos do gate de prova                      */
+/*                                                                     */
+/*   (a) zero prova valida, com o estado zero renderizado    -> PASSA   */
+/*   (b) N provas validas, cada uma renderizada na superficie -> PASSA  */
+/*   (c) prova vencida ou sem autorizacao                     -> REPROVA*/
+/*                                                                     */
+/* As fixturas vivem so aqui dentro. Nenhum cliente, prova, fonte ou   */
+/* resultado falso entra em arquivo committado.                        */
+/* ------------------------------------------------------------------ */
+
+const livePages = new Map(pageText);
+
+/* (a) zero: o registro committado, contra o HTML committado */
+assert("gate_state_a_zero_proof_passes", evaluateProofGate(data, livePages).length === 0, evaluateProofGate(data, livePages));
+assert(
+  "gate_state_a_zero_proof_has_no_published_entry",
+  PUBLISHED_ENTRIES.length === 0 || PUBLISHED_SURFACES.size > 0,
+  [PUBLISHED_ENTRIES.length, PUBLISHED_SURFACES.size],
+);
+{
+  const hubWithoutState = new Map(livePages);
+  hubWithoutState.set("casos/index.html", (livePages.get("casos/index.html") ?? "").replace(/ data-proof-state="[^"]*"/, ""));
+  assert(
+    "gate_state_a_fails_without_declared_zero_state",
+    evaluateProofGate(data, hubWithoutState).includes("proof_state_block_missing:casos/index.html"),
+    evaluateProofGate(data, hubWithoutState),
+  );
+  const hubWithoutCopy = new Map(livePages);
+  hubWithoutCopy.set(
+    "casos/index.html",
+    (livePages.get("casos/index.html") ?? "").replace(
+      /(<section[^>]*data-proof-state="none"[^>]*>)[\s\S]*?(<\/section>)/i,
+      "$1<h2 id=\"resultados-clientes\">Resultados de clientes</h2>$2",
+    ),
+  );
+  assert(
+    "gate_state_a_fails_without_visible_zero_copy",
+    evaluateProofGate(data, hubWithoutCopy).includes("zero_proof_state_not_rendered:casos/index.html"),
+    evaluateProofGate(data, hubWithoutCopy),
+  );
+  const orphan = new Map(livePages);
+  orphan.set("entregas/index.html", `${livePages.get("entregas/index.html") ?? ""}<div data-real-proof-id="inventado"></div>`);
+  const orphanProblems = evaluateProofGate(data, orphan);
+  assert("gate_state_a_fails_on_orphan_proof_block", orphanProblems.includes("real_proof_block_without_valid_entry:entregas/index.html"), orphanProblems);
+  assert(
+    "gate_state_a_fails_on_proof_id_not_in_registry",
+    orphanProblems.includes("real_proof_id_not_published:entregas/index.html|inventado"),
+    orphanProblems,
+  );
+}
+
+/* (b) N provas validas: uma publicada no canario e outras aprovadas */
+const PROOF_SURFACE = "/confianca/";
+const PROOF_SURFACE_REL = surfaceToRelPath(PROOF_SURFACE);
+function proofFixture(id, state, surfaces) {
+  const entry = clone(WELL_FORMED);
+  entry.entry_id = id;
+  entry.state = state;
+  entry.distribution.surfaces = surfaces;
+  return entry;
+}
+function renderProofBlock(id) {
+  return `<section data-proof-class="real" data-permission-class="consented" data-real-proof-id="${id}"><h2>Resultado de cliente autorizado</h2><p>Fixture de teste.</p></section>`;
+}
+function hubWithPublishedProof(ids) {
+  const hub = livePages.get("casos/index.html") ?? "";
+  return hub.replace(
+    /(<section[^>]*)data-proof-state="none"([^>]*>)([\s\S]*?)(<\/section>)/i,
+    (_all, head, tail, body, close) =>
+      `${head}data-proof-state="published"${tail}<h2 id="resultados-clientes">Resultados de clientes</h2><p>${ids.length} prova(s) publicada(s).</p>${close}`,
+  );
+}
+{
+  const published = proofFixture("fixture-prova-publicada", "PUBLISHED", [PROOF_SURFACE]);
+  const approvedA = proofFixture("fixture-prova-aprovada-a", "APPROVED", ["/entregas/"]);
+  const approvedB = proofFixture("fixture-prova-aprovada-b", "APPROVED", ["/entregas/"]);
+  const registryN = { ...data, state: "AUTHORIZED", entries: [published, approvedA, approvedB] };
+  const pagesN = new Map(livePages);
+  pagesN.set(PROOF_SURFACE_REL, `<html><body>${renderProofBlock(published.entry_id)}</body></html>`);
+  pagesN.set("casos/index.html", hubWithPublishedProof([published.entry_id]));
+  assert("gate_state_b_three_valid_proofs_pass", evaluateProofGate(registryN, pagesN).length === 0, evaluateProofGate(registryN, pagesN));
+
+  const oneRegistry = { ...data, state: "AUTHORIZED", entries: [published] };
+  assert("gate_state_b_one_valid_proof_passes", evaluateProofGate(oneRegistry, pagesN).length === 0, evaluateProofGate(oneRegistry, pagesN));
+
+  const notRendered = new Map(pagesN);
+  notRendered.set(PROOF_SURFACE_REL, "<html><body><p>sem bloco de prova</p></body></html>");
+  assert(
+    "gate_state_b_fails_when_published_proof_is_not_rendered",
+    evaluateProofGate(oneRegistry, notRendered).some((p) => p.startsWith("published_proof_not_rendered:")),
+    evaluateProofGate(oneRegistry, notRendered),
+  );
+
+  const stillZero = new Map(pagesN);
+  stillZero.set("casos/index.html", livePages.get("casos/index.html") ?? "");
+  assert(
+    "gate_state_b_fails_when_surface_still_declares_zero",
+    evaluateProofGate(oneRegistry, stillZero).includes("published_proof_state_not_declared:none"),
+    evaluateProofGate(oneRegistry, stillZero),
+  );
+
+  const mixed = new Map(pagesN);
+  mixed.set(PROOF_SURFACE_REL, `<html><body>${SYNTHETIC_LABEL}${renderProofBlock(published.entry_id)}</body></html>`);
+  assert(
+    "gate_state_b_fails_when_real_proof_mixes_with_synthetic",
+    evaluateProofGate(oneRegistry, mixed).includes(`real_proof_mixed_with_synthetic:${PROOF_SURFACE_REL}`),
+    evaluateProofGate(oneRegistry, mixed),
+  );
+
+  /* (c) prova vencida e prova sem autorizacao reprovam em qualquer estado */
+  const expired = proofFixture("fixture-prova-vencida", "PUBLISHED", [PROOF_SURFACE]);
+  expired.evidence.expiracao = "2020-01-01T00:00:00Z";
+  const expiredPages = new Map(pagesN);
+  expiredPages.set(PROOF_SURFACE_REL, `<html><body>${renderProofBlock(expired.entry_id)}</body></html>`);
+  const expiredProblems = evaluateProofGate({ ...data, state: "AUTHORIZED", entries: [expired] }, expiredPages);
+  assert("gate_state_c_expired_proof_fails", expiredProblems.includes("proof_expired:fixture-prova-vencida"), expiredProblems);
+  assert(
+    "gate_state_c_expired_proof_is_not_treated_as_published",
+    expiredProblems.includes("real_proof_id_not_published:confianca/index.html|fixture-prova-vencida"),
+    expiredProblems,
+  );
+
+  const unauthorized = proofFixture("fixture-prova-sem-autorizacao", "PUBLISHED", [PROOF_SURFACE]);
+  unauthorized.evidence.autorizacao = "";
+  const unauthorizedPages = new Map(pagesN);
+  unauthorizedPages.set(PROOF_SURFACE_REL, `<html><body>${renderProofBlock(unauthorized.entry_id)}</body></html>`);
+  const unauthorizedProblems = evaluateProofGate({ ...data, state: "AUTHORIZED", entries: [unauthorized] }, unauthorizedPages);
+  assert(
+    "gate_state_c_unauthorized_proof_fails",
+    unauthorizedProblems.includes("proof_unauthorized:fixture-prova-sem-autorizacao"),
+    unauthorizedProblems,
+  );
+
+  const sourceless = proofFixture("fixture-prova-sem-fonte", "PUBLISHED", [PROOF_SURFACE]);
+  sourceless.evidence.fonte = "";
+  const sourcelessProblems = evaluateProofGate({ ...data, state: "AUTHORIZED", entries: [sourceless] }, pagesN);
+  assert(
+    "gate_state_c_sourceless_proof_fails",
+    sourcelessProblems.includes("proof_without_source:fixture-prova-sem-fonte"),
+    sourcelessProblems,
+  );
+
+  /* uma prova valida hoje reprova depois de vencer: o relogio e um argumento */
+  const nearExpiry = proofFixture("fixture-prova-que-vence", "PUBLISHED", [PROOF_SURFACE]);
+  nearExpiry.evidence.expiracao = "2027-01-01T00:00:00Z";
+  const nearPages = new Map(pagesN);
+  nearPages.set(PROOF_SURFACE_REL, `<html><body>${renderProofBlock(nearExpiry.entry_id)}</body></html>`);
+  const nearRegistry = { ...data, state: "AUTHORIZED", entries: [nearExpiry] };
+  assert(
+    "gate_clock_before_expiry_passes",
+    evaluateProofGate(nearRegistry, nearPages, Date.parse("2026-12-01T00:00:00Z")).length === 0,
+    evaluateProofGate(nearRegistry, nearPages, Date.parse("2026-12-01T00:00:00Z")),
+  );
+  assert(
+    "gate_clock_after_expiry_fails",
+    evaluateProofGate(nearRegistry, nearPages, Date.parse("2027-06-01T00:00:00Z")).includes("proof_expired:fixture-prova-que-vence"),
+    evaluateProofGate(nearRegistry, nearPages, Date.parse("2027-06-01T00:00:00Z")),
   );
 }
 

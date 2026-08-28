@@ -1,17 +1,22 @@
 {
-  "schema": "confenge.verified-sources/1.0",
+  "schema": "confenge.published-identity-sources/1.0",
   "updated_at": "2026-08-28",
-  "rule_pt_br": "legalName, taxID e sameAs publicos so repetem valores deste registro. CREA, endereco de rua e vinculo nao validado permanecem fora. Formacao autodeclarada nao sobe a verificacao de terceiro.",
+  "independent_verification": "NONE",
+  "rule_pt_br": "legalName, taxID e sameAs publicos so repetem valores deste registro. Nada aqui e verificacao independente: todo item e autodeclarado pela propria CONFENGE e marcado third_party_verified false. CREA, endereco de rua e vinculo nao validado permanecem fora. Formacao autodeclarada nao sobe a verificacao de terceiro.",
+  "primary_public_source_pt_br": "O unico dado desta lista com fonte primaria publica conferivel por terceiro e o CNPJ, na consulta publica da Receita Federal em https://solucoes.receita.fazenda.gov.br/servicos/cnpjreva/cnpjreva_solicitacao.asp. Este site nao e a fonte primaria e nao publica o resultado da consulta.",
   "organization": {
     "legalName": {
       "value": "CONFENGE",
       "status": "SELF_DECLARED",
+      "third_party_verified": false,
       "source": "data/site/brand.json e rodape publico com CNPJ"
     },
     "taxID": {
       "value": "52.407.089/0001-09",
       "status": "SELF_DECLARED",
-      "source": "CNPJ publicado no rodape, JSON-LD e brand.json"
+      "third_party_verified": false,
+      "source": "CNPJ publicado no rodape, JSON-LD e brand.json",
+      "primary_public_lookup": "https://solucoes.receita.fazenda.gov.br/servicos/cnpjreva/cnpjreva_solicitacao.asp"
     },
     "sameAs": []
   },
@@ -20,11 +25,13 @@
       {
         "value": "https://github.com/tjsasakifln",
         "status": "SELF_DECLARED",
-        "source": "especialista/tiago-jun-sasaki JSON-LD e texto visivel"
+        "third_party_verified": false,
+        "source": "especialista/tiago-jun-sasaki JSON-LD e texto visivel",
+        "note": "Perfil mantido pelo proprio titular. Nao e cadastro, diretorio nem selo de identidade de terceiro."
       }
     ]
   },
-  "unpublished_until_third_party_evidence": [
+  "withheld_until_independent_evidence": [
     "CREA",
     "streetAddress",
     "hasCredential",
