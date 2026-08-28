@@ -312,7 +312,7 @@ def page_shell(
         ensure_ascii=False,
         separators=(",", ":"),
     ).replace("<", "\\u003c")
-    return f"""<!DOCTYPE html>
+    document = f"""<!DOCTYPE html>
 <html class="no-js" lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
@@ -352,6 +352,12 @@ def page_shell(
 </body>
 </html>
 """
+    try:
+        from scripts.site.shell_nav import load_brand, sync_text  # noqa: PLC0415
+
+        return sync_text(document, load_brand(), canonical_path)
+    except Exception:  # noqa: BLE001
+        return document
 
 
 def indicators_html(items: list[tuple[str, str, str | None]]) -> str:
