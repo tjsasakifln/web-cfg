@@ -102,6 +102,18 @@ BODY_REPLACEMENTS: tuple[tuple[str, str], ...] = (
         "Solicite um canal seguro para envio. O site não recebe arquivo; o canal é escolhido posteriormente.",
     ),
     (
+        "Envie o edital e a planilha para verificar a referência de preço.",
+        "Solicitar canal seguro para envio",
+    ),
+    (
+        "Envie trechos do edital (SINAPI/data-base/BDI), planilha e, se tiver, memória de encargos. O primeiro retorno organiza o que está coerente, o que está em risco e o próximo passo, sem exigir arquivo perfeito.",
+        "O site não recebe arquivo. Tipos, trechos de edital e planilha só seguem pelo canal escolhido posteriormente, após a confirmação com protocolo.",
+    ),
+    (
+        "WhatsApp: conferir base SINAPI",
+        "Solicitar canal seguro para envio",
+    ),
+    (
         "Envie o edital, a planilha ou a notificação. Retornamos com enquadramento técnico e próximos passos, sem cadastro em lista.",
         "Solicite um canal seguro para envio. O site não recebe arquivo; o canal é escolhido posteriormente.",
     ),
@@ -138,6 +150,8 @@ DISHONEST_VISIBLE = (
     "Enviar documentos para análise no WhatsApp",
     "Enviar edital para triagem no WhatsApp",
     "Envie o edital, a planilha",
+    "Envie o edital e a planilha",
+    "Envie trechos do edital",
     "quero enviar documentos para análise",
     "quero enviar para triagem",
     "posso encaminhar documentos",

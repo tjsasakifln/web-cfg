@@ -44,6 +44,38 @@ def test_confirmation_persists_protocol_and_b_sla() -> None:
         assert 'data-lead-success' in html, name
 
 
+def test_dishonest_detector_catches_sinapi_conjunction_variants() -> None:
+    """The honesty scan must fail on 'edital e a planilha' and 'trechos do edital', not only the comma form."""
+    assert "Envie o edital e a planilha" in dishonest_hits(
+        "Envie o edital e a planilha para verificar a referência de preço."
+    )
+    assert "Envie trechos do edital" in dishonest_hits(
+        "Envie trechos do edital (SINAPI/data-base/BDI), planilha e, se tiver, memória de encargos."
+    )
+    assert "Envie o edital, a planilha" in dishonest_hits(
+        "Envie o edital, a planilha, a notificação ou a medição."
+    )
+
+
+def test_sinapi_breakout_uses_honest_cta() -> None:
+    """Shipped SINAPI article cannot tell the visitor to send edital/planilha to the site."""
+    rel = "conteudos/sinapi-desonerado-nao-desonerado/index.html"
+    html = (ROOT / rel).read_text(encoding="utf-8")
+    assert HONEST_CTA in html
+    for lie in (
+        "Envie o edital e a planilha",
+        "Envie trechos do edital",
+        "WhatsApp: conferir base SINAPI",
+    ):
+        assert lie not in html, f"{rel} still claims file send: {lie}"
+    pos_resposta = html[html.find('id="cta-pos-resposta"') : html.find('id="cta-pos-documentos"')]
+    pos_docs = html[html.find('id="cta-pos-documentos"') : html.find('id="diagnostico-confenge"')]
+    assert HONEST_CTA in pos_resposta
+    assert HONEST_CTA in pos_docs
+    assert CHANNEL_SLA in pos_docs or "não recebe arquivo" in pos_docs
+    assert not capture_forms_with_file_input(html)
+
+
 def test_home_form_is_text_only_and_labeled() -> None:
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     assert 'id="formulario-contato"' in html
@@ -89,6 +121,8 @@ if __name__ == "__main__":
     for t in (
         test_honest_cta_on_former_document_surfaces,
         test_confirmation_persists_protocol_and_b_sla,
+        test_dishonest_detector_catches_sinapi_conjunction_variants,
+        test_sinapi_breakout_uses_honest_cta,
         test_home_form_is_text_only_and_labeled,
         test_mutable_visitor_html_does_not_claim_file_upload,
         test_privacy_describes_request_not_a_file_store,
