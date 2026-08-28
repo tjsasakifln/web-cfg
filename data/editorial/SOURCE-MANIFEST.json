@@ -127,6 +127,58 @@
       "themes": ["matriz-riscos", "contrato"]
     },
     {
+      "source_id": "lei-14133-art23",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — art. 23 (valor estimado; SINAPI e SICRO)",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-28",
+      "device": "art. 23, caput e § 2º",
+      "limitations": "Ordem de parâmetros para orçamento de referência da Administração; não é preço de proposta nem índice de reajuste.",
+      "themes": ["orcamento", "sinapi", "sicro"]
+    },
+    {
+      "source_id": "lei-14133-art25-s7",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — art. 25 § 7º (índice de reajustamento e data-base do orçamento estimado)",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-28",
+      "device": "art. 25, § 7º",
+      "limitations": "Obriga previsão de índice e data-base no edital; não publica o índice vigente nem substitui a cláusula do contrato.",
+      "themes": ["reajuste", "data-base"]
+    },
+    {
+      "source_id": "lei-14133-art59",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — art. 59 (desclassificação, exequibilidade, 75% e garantia adicional de 85%)",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-28",
+      "device": "art. 59, caput, §§ 2º, 4º e 5º",
+      "limitations": "Presunção legal de inexequibilidade em obras e serviços de engenharia; o edital pode detalhar aceitabilidade de unitários. Não substitui diligência do caso.",
+      "themes": ["exequibilidade", "proposta"]
+    },
+    {
+      "source_id": "lei-14133-art103",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — art. 103 (matriz de alocação de riscos e equilíbrio inicial)",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-28",
+      "device": "art. 103, caput e §§ 4º e 5º",
+      "limitations": "A matriz define o equilíbrio inicial em relação a eventos supervenientes; não apaga alteração unilateral (art. 124, I) nem tributo superveniente.",
+      "themes": ["matriz-riscos", "reequilibrio"]
+    },
+    {
       "source_id": "lei-14133-art59-matriz",
       "type": "statute",
       "body": "Presidência da República",
