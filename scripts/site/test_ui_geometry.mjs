@@ -1047,7 +1047,7 @@ async function main() {
       );
       if (path.includes("obrigado")) {
         const okLabel = labels.some((l) =>
-          /whatsapp|voltar|falar com a confenge|diagnosticar|edital|documentos|agilizar/i.test(l)
+          /whatsapp|voltar|falar com a confenge|diagnosticar|edital|documentos|agilizar|canal seguro/i.test(l)
         );
         if (!okLabel) throw new Error(`obrigado CTAs: ${labels.join(" | ")}`);
         const hasSuccess = await page.$("[data-lead-success]");
