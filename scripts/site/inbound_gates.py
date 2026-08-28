@@ -1780,6 +1780,7 @@ def gate_conversion(
                 )
         # Journey hint: data-journey or known CTA phrases
         journey_signals = (
+            "Solicitar canal seguro",
             "Enviar documentos para análise",
             "Enviar edital para triagem",
             "Diagnosticar",

@@ -354,7 +354,7 @@ const rulesText = (cr.statements_pt_br ?? []).join(" ");
 for (const [key, re] of [
   ["01_48", /01 a 48/],
   ["pages", /nunca por número de páginas/i],
-  ["urgency", /50 por cento/],
+  ["urgency", /50 por cento sobre o preço-piloto ou preço publicado daquela entrega/],
   ["item16", /item 16/],
   ["extra_cli", /extra-cli/],
   ["no_success_fee", /comissão de êxito/i],

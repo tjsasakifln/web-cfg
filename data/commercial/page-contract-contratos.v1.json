@@ -52,7 +52,7 @@
       "requires_confirmed_capacity": true,
       "surcharge_percent": 50,
       "surcharge_prepaid": true,
-      "statement_pt_br": "Urgência inferior ao SLA só é aceita com capacidade confirmada e adicional de 50 por cento pago previamente."
+      "statement_pt_br": "Urgência abaixo do SLA só entra com capacidade confirmada e adicional de 50 por cento sobre o preço-piloto ou preço publicado daquela entrega, pago antes da cobrança. Exemplo: Diagnóstico de Riscos à Margem a R$ 2.900 em 5 dias úteis; se a capacidade aceitar 2 dias úteis, o adicional é R$ 1.450 e o total fica R$ 4.350. A capacidade pode recusar a urgência."
     },
     "public_sources_rule": {
       "complements": true,

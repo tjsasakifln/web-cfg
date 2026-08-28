@@ -348,7 +348,10 @@ assert(
   "urgency_statement_complete",
   /50 por cento/i.test(urgency.statement_pt_br || "") &&
     /antes da cobran/i.test(urgency.statement_pt_br || "") &&
-    /pode recusar/i.test(urgency.statement_pt_br || ""),
+    /pode recusar/i.test(urgency.statement_pt_br || "") &&
+    /preço-piloto ou preço publicado daquela entrega/i.test(urgency.statement_pt_br || "") &&
+    /R\$ 2\.900/.test(urgency.statement_pt_br || "") &&
+    /R\$ 4\.350/.test(urgency.statement_pt_br || ""),
   urgency.statement_pt_br,
 );
 assert(

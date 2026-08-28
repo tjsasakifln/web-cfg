@@ -46,12 +46,12 @@
       "section_title": "Qual situação sua empresa precisa resolver agora?",
       "need": "glosa, medição retida, atraso de pagamento, notificação, multa, aditivo, reequilíbrio, paralisação ou divergência de projeto e orçamento",
       "complement": "Organizamos fatos, cronologia, documentos e cálculos para sustentar a decisão técnica.",
-      "cta": "Enviar documentos para análise",
+      "cta": "Solicitar canal seguro",
       "cta_secondary": "Falar pelo WhatsApp",
       "href": "/#contato",
       "href_params": "jornada=contrato",
       "obrigado": "/obrigado-contrato",
-      "wa_message": "Olá, Tiago. Tenho um problema urgente em contrato público e quero enviar documentos para análise.",
+      "wa_message": "Olá, Tiago. Tenho um problema urgente em contrato público e quero solicitar um canal seguro para a análise.",
       "response_sla": "Retorno inicial em até 1 dia útil nos casos urgentes; demais em até 2 dias úteis.",
       "next_step": "Enquadramos o risco, a urgência e os documentos necessários. Sem promessa de deferimento ou recuperação."
     },
@@ -73,7 +73,7 @@
     {
       "id": "operacao",
       "code": "C",
-      "label": "Preciso organizar minha operação B2G",
+      "label": "Preciso organizar minha operação no mercado público",
       "need": "seleção de oportunidades, rotina comercial, orçamento, indicadores, responsabilidades e governança",
       "complement": "Mapeamos gargalos e definimos prioridades práticas para os próximos 90 dias.",
       "cta": "Solicitar diagnóstico da operação",
@@ -125,7 +125,7 @@
         "description": "Serviços da CONFENGE para construtoras: Diagnóstico da Operação em Obras Públicas, Diretoria Fracionada para o Mercado Público, Operação de Proposta para Licitação Crítica e defesa de margem.",
         "h1": "Serviços para licitações e contratos de obras públicas",
         "lead": "A CONFENGE instala o ciclo que decide onde disputar, com que preço entrar e o que registrar durante a obra. Cada trabalho abaixo é uma peça desse ciclo.",
-        "proof": "Preço e prazo publicados em cada trabalho, e exemplos completos que você consulta sem cadastro."
+        "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde a triagem ainda decide o enquadramento, a página diz o que a triagem fecha. Exemplos completos você consulta sem cadastro."
       },
       "problems": {
         "label": "Problemas que resolvemos",
@@ -160,7 +160,7 @@
       "url": "/diretoria-b2g/",
       "headline": "Uma rotina semanal de decisão sem o custo de montar uma diretoria interna.",
       "description": "Oportunidades priorizadas com critérios, decisão de participar ou recusar, coordenação das frentes prioritárias, indicadores, riscos, responsáveis, reuniões executivas e memória de decisões e resultados.",
-      "result": "A frente B2G deixa de depender de improviso e passa a operar com método.",
+      "result": "A frente pública deixa de depender de improviso e passa a operar com método.",
       "cta": "Avaliar encaixe da Diretoria Fracionada",
       "wa_message": "Olá, Tiago. Quero conhecer a Diretoria Fracionada para o Mercado Público e entender se ela se encaixa na nossa operação.",
       "schema_service_type": "Diretoria Fracionada para o Mercado Público"
@@ -181,13 +181,13 @@
     {
       "id": "contract-defense",
       "label": "Contrato crítico",
-      "name": "Defesa de margem",
+      "name": "Diagnóstico de Riscos à Margem",
       "plain_name": "Defesa técnica e proteção de margem em contratos públicos",
       "url": "/defesa-margem-contratos-publicos/",
       "headline": "Quando cada dia sem registro enfraquece sua posição.",
       "description": "Organização de cronologia, causalidade, cálculos, evidências, notificações, aditivos, reequilíbrio, defesa técnica e proteção de margem.",
       "result": "Posição técnica organizada para decisão da direção e atuação coordenada com jurídico e engenharia.",
-      "cta": "Enviar documentos para análise inicial",
+      "cta": "Solicitar canal seguro",
       "wa_message": "Olá, Tiago. Preciso enquadrar um risco contratual e proteger a margem de um contrato público.",
       "schema_service_type": "Defesa de margem em contratos públicos"
     }
