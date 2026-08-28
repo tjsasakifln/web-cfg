@@ -29,7 +29,7 @@ HOME_PICTURE = (
     f'<source type="image/avif" srcset="{PORTRAIT_560_PNG.replace(".png", ".avif")}"/>'
     f'<source type="image/webp" srcset="{PORTRAIT_560_PNG.replace(".png", ".webp")}"/>'
     f'<img src="{PORTRAIT_560_PNG}" width="560" height="700" '
-    'alt="Engº Tiago Sasaki, responsável técnico da CONFENGE" loading="lazy" decoding="async"/>'
+    'alt="Engº Tiago Sasaki, responsável técnico da CONFENGE" loading="lazy" decoding="async" fetchpriority="low"/>'
     "</picture>"
 )
 

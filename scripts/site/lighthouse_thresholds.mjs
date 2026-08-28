@@ -106,8 +106,8 @@ export function evaluateLighthouseResults(results, options = {}) {
       `home: maximum own long task ${homeGate.maximum_own_long_task_ms}ms must be <= 200ms`,
     );
   }
-  if (homeGate.minimum_lcp_ms == null || homeGate.minimum_lcp_ms > homeLcpMaxMs) {
-    errors.push(`home: LCP ${homeGate.minimum_lcp_ms}ms must be <= ${homeLcpMaxMs}ms`);
+  if (homeGate.maximum_lcp_ms == null || homeGate.maximum_lcp_ms > homeLcpMaxMs) {
+    errors.push(`home: LCP ${homeGate.maximum_lcp_ms}ms must be <= ${homeLcpMaxMs}ms`);
   }
   if (homeGate.maximum_cls == null || homeGate.maximum_cls > homeClsMax) {
     errors.push(`home: CLS ${homeGate.maximum_cls} must be <= ${homeClsMax}`);
