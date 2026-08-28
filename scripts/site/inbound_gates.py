@@ -17,6 +17,8 @@ from typing import Any, Iterable
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[2]
+# Fail closed when the walk collapses: a real checkout ships far more than this.
+MIN_PUBLIC_HTML_FILES = 100
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
@@ -180,8 +182,21 @@ def path_to_url(path: Path) -> str:
     return "/" + rel
 
 
-def public_html_files() -> list[Path]:
-    """HTML under publish roots, excluding tooling and intelligence bulk if huge."""
+def _relative_parts(path: Path) -> tuple[str, ...]:
+    """Path parts relative to the checkout root.
+
+    Skip rules describe directories inside the repository, not ancestors of it.
+    A checkout at `.claude/worktrees/<agent>` or `repo/.worktrees/<name>` must
+    still see every public HTML file, otherwise the gate silently scans nothing.
+    """
+    try:
+        return path.resolve().relative_to(ROOT.resolve()).parts
+    except ValueError:
+        return path.parts
+
+
+def _public_scan_files() -> list[Path]:
+    """The raw walk, without the volume floor, so scope can be unit-tested."""
     out: list[Path] = []
     skip_dirs = {
         "node_modules",
@@ -243,11 +258,26 @@ def public_html_files() -> list[Path]:
                     out.append(p)
             continue
         for p in base.rglob("*.html"):
-            if any(part in skip_dirs for part in p.parts):
+            if any(part in skip_dirs for part in _relative_parts(p)):
                 continue
             if p not in seen:
                 seen.add(p)
                 out.append(p)
+    return out
+
+
+def public_html_files() -> list[Path]:
+    """HTML under publish roots, excluding tooling and intelligence bulk if huge.
+
+    Fails closed: a walk that collapses to a handful of files means the scan root
+    was misread, and every downstream gate would report ok on an empty census.
+    """
+    out = _public_scan_files()
+    if len(out) < MIN_PUBLIC_HTML_FILES:
+        raise SystemExit(
+            f"INBOUND_GATE_SCOPE_COLLAPSED scanned={len(out)} "
+            f"expected_at_least={MIN_PUBLIC_HTML_FILES} root={ROOT}"
+        )
     return out
 
 

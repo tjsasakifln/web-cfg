@@ -1121,6 +1121,56 @@ def test_semantic_query_ownership_is_complete_and_non_mutating():
     }
 
 
+def test_public_scan_survives_a_checkout_under_an_excluded_directory_name():
+    """The skip list names directories inside the repo, never ancestors of it.
+
+    Agent worktrees live at `.claude/worktrees/<agent>` and sibling checkouts at
+    `../.worktrees/<name>`. Matching those names against the absolute path made
+    the walk return almost nothing while every gate still reported ok, so the
+    local loop could not reproduce the CI it is supposed to mirror.
+    """
+    import scripts.site.inbound_gates as ig
+
+    real_root = ig.ROOT
+    baseline = len(ig.public_html_files())
+    assert baseline >= ig.MIN_PUBLIC_HTML_FILES
+
+    with tempfile.TemporaryDirectory() as tmp:
+        for ancestor in (".claude", ".worktrees", "node_modules", "_site"):
+            nest = Path(tmp) / ancestor / "checkout"
+            nest.mkdir(parents=True)
+            for name in ("index.html", "conteudos/guia/index.html"):
+                target = nest / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text("<html><body>ok</body></html>", encoding="utf-8")
+            try:
+                ig.ROOT = nest
+                found = {p.relative_to(nest).as_posix() for p in ig._public_scan_files()}
+            finally:
+                ig.ROOT = real_root
+            assert "conteudos/guia/index.html" in found, (
+                f"a checkout under {ancestor}/ lost its public HTML: {sorted(found)}"
+            )
+
+
+def test_public_scan_fails_closed_when_the_walk_collapses():
+    """A collapsed scope must stop the run, never pass with an empty census."""
+    import scripts.site.inbound_gates as ig
+
+    real_root = ig.ROOT
+    with tempfile.TemporaryDirectory() as tmp:
+        try:
+            ig.ROOT = Path(tmp)
+            try:
+                ig.public_html_files()
+            except SystemExit as exc:
+                assert "INBOUND_GATE_SCOPE_COLLAPSED" in str(exc)
+            else:
+                raise AssertionError("empty checkout did not fail closed")
+        finally:
+            ig.ROOT = real_root
+
+
 if __name__ == "__main__":
     # simple runner
     failed = 0
