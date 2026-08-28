@@ -7,6 +7,7 @@ from pathlib import Path
 from scripts.organic.canonical_hrefs import (
     FROZEN_HTML_REL,
     canonicalize_href,
+    is_functional_query_href,
     parameterized_internal_hrefs,
     rewrite_html,
     rewrite_public_html,
@@ -31,6 +32,13 @@ def test_canonicalize_strips_attribution_query_and_hash_query():
     )
     assert clean3 == "/diagnostico-pre-licitacao/"
     assert attrs3["data-origem"] == "/conteudos/empreitada-preco-global-preco-unitario"
+
+
+def test_market_answer_stratum_is_documented_functional_exception():
+    href = "/inteligencia/valor-tipico-contratos-pavimentacao/?stratum=sc-municipal"
+    assert is_functional_query_href(href) is True
+    assert is_functional_query_href("/conteudos/x/?origem=/y/") is False
+    assert is_functional_query_href("/inteligencia/valor-tipico-contratos-pavimentacao/?stratum=sc-municipal&origem=/x/") is False
 
 
 def test_external_wa_and_mailto_are_untouched():

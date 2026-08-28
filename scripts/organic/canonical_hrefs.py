@@ -69,6 +69,13 @@ HASH_BOUND_PREFIXES = (
     "analises-contratos-publicos/",
 )
 
+# Functional in-page filters (not attribution). Shareable Market Answer stratum
+# drill-down: /inteligencia/valor-tipico-contratos-pavimentacao/?stratum=
+FUNCTIONAL_QUERY_KEYS = frozenset({"stratum"})
+FUNCTIONAL_QUERY_PATH_PREFIXES = (
+    "/inteligencia/valor-tipico-contratos-pavimentacao/",
+)
+
 _A_OPEN = re.compile(r"<a\b([^>]*?)>", re.I)
 _HREF = re.compile(r"""\bhref\s*=\s*(['"])(.*?)\1""", re.I | re.S)
 _ATTR = re.compile(r"""([^\s=]+)(?:\s*=\s*(['"])(.*?)\2)?""", re.I | re.S)
@@ -205,6 +212,31 @@ def parameterized_internal_hrefs(html: str) -> list[str]:
     return found
 
 
+def _query_keys(href: str) -> set[str]:
+    raw = unescape(href)
+    parsed = urlparse(raw)
+    query = parsed.query
+    fragment = parsed.fragment
+    if fragment and "?" in fragment:
+        fragment, extra = fragment.split("?", 1)
+        query = f"{query}&{extra}" if query else extra
+    if raw.startswith("#") and "?" in raw:
+        query = raw.split("?", 1)[1]
+    return {key for key, _ in parse_qsl(query, keep_blank_values=True)}
+
+
+def is_functional_query_href(href: str) -> bool:
+    """True when the only query keys are documented in-page filters."""
+    keys = _query_keys(href)
+    if not keys or not keys <= FUNCTIONAL_QUERY_KEYS:
+        return False
+    parsed = urlparse(unescape(href))
+    path = parsed.path or "/"
+    if path != "/" and not path.endswith("/"):
+        path = path + "/"
+    return any(path.startswith(prefix) for prefix in FUNCTIONAL_QUERY_PATH_PREFIXES)
+
+
 def is_frozen_html_rel(rel: str) -> bool:
     return rel.replace("\\", "/") in FROZEN_HTML_REL
 
@@ -231,12 +263,14 @@ def scan_public_parameterized_hrefs(
         hrefs = parameterized_internal_hrefs(html)
         if not hrefs:
             continue
-        exception = None
-        if is_frozen_html_rel(rel):
-            exception = "frozen_html"
-        elif is_hash_bound_rel(rel):
-            exception = "hash_bound_render"
         for href in hrefs:
+            exception = None
+            if is_frozen_html_rel(rel):
+                exception = "frozen_html"
+            elif is_hash_bound_rel(rel):
+                exception = "hash_bound_render"
+            elif is_functional_query_href(href):
+                exception = "functional_stratum"
             hits.append({"path": rel, "href": href, "exception": exception})
     return hits
 

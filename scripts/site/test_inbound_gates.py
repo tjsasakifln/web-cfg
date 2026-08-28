@@ -1187,7 +1187,7 @@ def test_parameterized_internal_hrefs_only_documented_exceptions():
     open_hits = [h for h in hits if not h.get("exception")]
     assert open_hits == [], open_hits
     allowed = {h["exception"] for h in hits}
-    assert allowed <= {"frozen_html", "hash_bound_render"}
+    assert allowed <= {"frozen_html", "hash_bound_render", "functional_stratum"}
 
 
 if __name__ == "__main__":
