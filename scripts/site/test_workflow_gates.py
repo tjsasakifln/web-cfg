@@ -563,15 +563,27 @@ def test_copy_ci_is_check_not_write():
     """
     pkg = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
     copy = pkg["scripts"]["test:copy"]
-    if "scrub_em_dashes.py --write" in copy:
+    expanded = copy
+    for _ in range(6):
+        nxt = re.sub(
+            r"npm run ([A-Za-z0-9:_-]+)",
+            lambda m: pkg["scripts"].get(m.group(1), m.group(0)),
+            expanded,
+        )
+        if nxt == expanded:
+            break
+        expanded = nxt
+    if "scrub_em_dashes.py --write" in expanded:
         raise AssertionError(
             "test:copy must not run scrub_em_dashes.py --write "
             "(CI/check cannot mutate tracked files)"
         )
-    if "scrub_em_dashes.py --check" not in copy:
+    if "scrub_em_dashes.py --check" not in expanded:
         raise AssertionError("test:copy must keep scrub_em_dashes.py --check")
-    if "test_copy_gates.py" not in copy:
+    if "test_copy_gates.py" not in expanded:
         raise AssertionError("test:copy must keep test_copy_gates.py")
+    if "test_truthful_gates.py" not in expanded:
+        raise AssertionError("test:copy must keep test_truthful_gates.py")
     fixer = pkg["scripts"].get("scrub:em-dashes", "")
     if "scrub_em_dashes.py --write" not in fixer:
         raise AssertionError("scrub:em-dashes fixer must keep --write")

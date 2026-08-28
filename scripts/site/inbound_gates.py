@@ -196,74 +196,15 @@ def _relative_parts(path: Path) -> tuple[str, ...]:
 
 
 def _public_scan_files() -> list[Path]:
-    """The raw walk, without the volume floor, so scope can be unit-tested."""
-    out: list[Path] = []
-    skip_dirs = {
-        "node_modules",
-        ".git",
-        "_site",
-        "docs",
-        "scripts",
-        "data",
-        "seo",
-        ".pytest_cache",
-        ".benchmarks",
-        ".netlify",
-        ".playwright-mcp",
-        "netlify",
-        ".claude",  # local agent worktrees, never shipped
-        ".worktrees",
-    }
-    # Always include these trees
-    roots = [
-        ROOT,
-        ROOT / "conteudos",
-        ROOT / "guias-contratos-obras",
-        ROOT / "lei-14133-obras",
-        ROOT / "jurisprudencia-contratos-obras",
-        ROOT / "bid-room-licitacoes-obras",
-        ROOT / "defesa-margem-contratos-publicos",
-        ROOT / "diretoria-b2g",
-        ROOT / "diagnostico-b2g-360",
-        ROOT / "medicoes-glosas-obras-publicas",
-        ROOT / "aditivos-obras-publicas",
-        ROOT / "reequilibrio-obras-publicas",
-        ROOT / "atrasos-prorrogacao-obras-publicas",
-        ROOT / "defesa-tecnica-contratos-publicos",
-        ROOT / "auditoria-orcamento-licitacao",
-        ROOT / "diagnostico-pre-licitacao",
-        ROOT / "acompanhamento-contratos-obras",
-        ROOT / "metodologia-inteligencia",
-        ROOT / "especialista",
-        ROOT / "radar",
-        ROOT / "privacidade",
-        ROOT / "termos-de-uso",
-        ROOT / "inteligencia",  # hubs only scanned shallowly below
-    ]
-    seen: set[Path] = set()
-    for base in roots:
-        if not base.exists():
-            continue
-        if base == ROOT:
-            for p in base.glob("*.html"):
-                if p not in seen:
-                    seen.add(p)
-                    out.append(p)
-            continue
-        if base.name == "inteligencia":
-            # hubs + one level only (avoid 1k+ org pages in every gate run)
-            for p in list(base.glob("index.html")) + list(base.glob("*/index.html")):
-                if p not in seen:
-                    seen.add(p)
-                    out.append(p)
-            continue
-        for p in base.rglob("*.html"):
-            if any(part in skip_dirs for part in _relative_parts(p)):
-                continue
-            if p not in seen:
-                seen.add(p)
-                out.append(p)
-    return out
+    """The raw walk, without the volume floor, so scope can be unit-tested.
+
+    Scope is the published visitor census. Skip names apply to directories
+    inside the checkout, never to ancestor path parts — a worktree living
+    under `.worktrees/` still sees every public HTML file.
+    """
+    from scripts.site.public_copy_scope import visitor_facing_html_files
+
+    return list(visitor_facing_html_files(ROOT))
 
 
 def public_html_files() -> list[Path]:
@@ -1242,30 +1183,20 @@ def _match_family(
     return best
 
 
-def _a11y_census() -> set[str]:
+def _a11y_census(root: Path | None = None) -> set[str]:
     """Routes actually audited by scripts/site/audit_accessibility.py."""
-    from scripts.site.audit_accessibility import PAGES
+    from scripts.site.audit_accessibility import accessibility_pages
+    from scripts.site.public_copy_scope import relpath, route_for
 
-    census = set()
-    for page in PAGES:
-        rel = page.relative_to(ROOT).as_posix()
-        census.add("/" if rel == "index.html" else "/" + rel.removesuffix("index.html"))
-    return census
+    base = root or ROOT
+    return {route_for(relpath(page, base)) for page in accessibility_pages(base)}
 
 
 def _copy_lint_census(root: Path | None = None) -> set[str]:
-    """Routes actually linted by scripts/site/lint_editorial_copy.py."""
-    base = root or ROOT
-    census = set()
-    for page in sorted((base / "data/editorial/pages").glob("*.json")):
-        payload = json.loads(page.read_text(encoding="utf-8"))
-        url = payload.get("url")
-        if isinstance(url, str) and url.startswith("/"):
-            census.add(url)
-    for page in sorted((base / "ferramentas").rglob("index.html")):
-        rel = page.relative_to(base).as_posix()
-        census.add("/" + rel.removesuffix("index.html"))
-    return census
+    """Routes actually linted by the published-route copy census."""
+    from scripts.site.public_copy_scope import published_gate_census
+
+    return published_gate_census(root or ROOT)["copy"]
 
 
 def _coverage_level(matched: set[str], census: set[str]) -> str:
@@ -1523,27 +1454,10 @@ def _conversion_profile(
 
 
 def _conversion_files(base: Path) -> list[Path]:
-    # Conversion is a public-surface invariant. Do not reuse the smaller
-    # editorial/naturalness census above: newly added public families must be
-    # audited automatically instead of waiting for another hardcoded root.
-    skip = {
-        "docs",
-        "scripts",
-        "data",
-        "seo",
-        "tests",
-        "node_modules",
-        ".git",
-        ".claude",
-        ".worktrees",
-        ".netlify",
-        "_site",
-    }
-    return [
-        page
-        for page in base.rglob("*.html")
-        if not any(part in skip for part in page.relative_to(base).parts)
-    ]
+    """Conversion walks the same published visitor census as copy/SEO/a11y."""
+    from scripts.site.public_copy_scope import visitor_facing_html_files
+
+    return list(visitor_facing_html_files(base))
 
 
 def gate_conversion(

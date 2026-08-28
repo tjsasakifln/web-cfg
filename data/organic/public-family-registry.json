@@ -28,7 +28,7 @@
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"routes": ["/"]},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "full"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 300,
       "debt": []
@@ -39,7 +39,7 @@
       "profile": "service_pillar",
       "terminal_action": "capture_form",
       "match": {"source": "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "partial"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 227,
       "note": "A cobertura de captura destes pilares é auditada pela regra dedicada missing_on_page_form, que honra o congelamento EARLIEST_SAFE_ACTION_AT de #291. Esta declaração não afrouxa aquela regra.",
@@ -61,7 +61,7 @@
           "/correcoes/"
         ]
       },
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 300,
       "debt": []
@@ -78,7 +78,7 @@
           "reason": "O preço aparece como referência contratual do Diagnóstico B2G dentro das condições, não como oferta. A superfície de oferta é /diagnostico-b2g-expansao/, que já captura com formulário persistido no <main>."
         }
       ],
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 88,
       "debt": []
@@ -90,7 +90,7 @@
       "terminal_action": "none",
       "exemption_reason": "Registro editorial versionado. Existe para ser citado e auditado; ação comercial no corpo contaminaria a prova de independência editorial.",
       "match": {"prefix": "/politica-editorial/"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 300,
       "debt": []
@@ -101,7 +101,7 @@
       "profile": "commercial_content",
       "terminal_action": "service_transition",
       "match": {"routes": ["/conteudos/atraso-na-medicao-obra-publica/"]},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-25",
       "owner_issue": 389,
       "note": "Exceção route-exact: exige uma única ponte plenamente atribuída para /medicoes-glosas-obras-publicas/. Não altera a ação terminal da família /conteudos/.",
@@ -113,7 +113,7 @@
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"prefix": "/conteudos/"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 245,
       "debt": []
@@ -124,7 +124,7 @@
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"prefix": "/guias-contratos-obras/"},
-      "gate_coverage": {"conversion": "full", "copy": "partial", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 245,
       "debt": []
@@ -135,7 +135,7 @@
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"prefix": "/lei-14133-obras/"},
-      "gate_coverage": {"conversion": "full", "copy": "partial", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 245,
       "debt": []
@@ -146,7 +146,7 @@
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"prefix": "/especialista/"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 243,
       "debt": []
@@ -157,7 +157,7 @@
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"prefix": "/nurture/"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 88,
       "debt": []
@@ -168,7 +168,7 @@
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"routes": ["/metodologia-inteligencia/"]},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": [
@@ -186,7 +186,7 @@
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"prefix": "/radar/"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 266,
       "debt": []
@@ -208,7 +208,7 @@
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"prefix": "/casos/"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": [
@@ -232,7 +232,7 @@
       "profile": "priced_offer",
       "terminal_action": "capture_form",
       "match": {"prefix": "/casos/modelo-"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 289,
       "debt": []
@@ -243,7 +243,7 @@
       "profile": "priced_offer",
       "terminal_action": "capture_form",
       "match": {"routes": ["/entregas/"]},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 295,
       "debt": []
@@ -254,7 +254,7 @@
       "profile": "priced_offer",
       "terminal_action": "capture_form",
       "match": {"routes": ["/servicos-obras-publicas/"]},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-25",
       "owner_issue": 333,
       "debt": []
@@ -265,7 +265,7 @@
       "profile": "commercial_content",
       "terminal_action": "service_transition",
       "match": {"routes": ["/problemas-que-resolvemos/"]},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": []
@@ -276,7 +276,7 @@
       "profile": "commercial_content",
       "terminal_action": "service_transition",
       "match": {"routes": ["/ferramentas/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "none"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-24",
       "owner_issue": 61,
       "debt": []
@@ -287,7 +287,7 @@
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {"prefix": "/ferramentas/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "partial"},
+      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": [

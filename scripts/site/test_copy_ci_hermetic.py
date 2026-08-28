@@ -11,6 +11,7 @@ Do not mock the scrubber. Do not hard-code the mutated-file list.
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -28,12 +29,28 @@ def _porcelain() -> str:
     )
 
 
+def _expand_npm_script(pkg: dict, name: str, depth: int = 0) -> str:
+    scripts = pkg.get("scripts") or {}
+    cmd = scripts.get(name) or ""
+    if depth > 6:
+        return cmd
+
+    def repl(match: re.Match[str]) -> str:
+        child = match.group(1)
+        if child in scripts:
+            return _expand_npm_script(pkg, child, depth + 1)
+        return match.group(0)
+
+    return re.sub(r"npm run ([A-Za-z0-9:_-]+)", repl, cmd)
+
+
 def test_shipped_copy_script_is_check_only():
     pkg = json.loads(PKG.read_text(encoding="utf-8"))
-    copy = pkg["scripts"]["test:copy"]
+    copy = _expand_npm_script(pkg, "test:copy")
     assert "scrub_em_dashes.py --write" not in copy, copy
     assert "scrub_em_dashes.py --check" in copy, copy
     assert "test_copy_gates.py" in copy
+    assert "test_truthful_gates.py" in copy
     assert "test_public_internal_marketing_labels.py" in copy
     assert "test_public_plain_language.py" in copy
     assert "lint_editorial_copy.py" in copy

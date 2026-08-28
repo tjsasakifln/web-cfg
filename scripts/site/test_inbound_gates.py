@@ -1098,7 +1098,7 @@ def test_declared_gate_coverage_is_verified_against_the_real_censuses():
 
     overclaimed = json.loads(json.dumps(registry))
     family = next(f for f in overclaimed["families"] if f["id"] == "editorial-library")
-    family["gate_coverage"]["accessibility"] = "full"
+    family["gate_coverage"]["copy"] = "none"
     reasons = {
         f.reason for f in _validate_family_registry(overclaimed, service_routes, routes)
     }

@@ -45,6 +45,10 @@ SKIP_PARTS = {
     ".claude",  # agent worktrees and local config
     ".github",  # workflow definitions
     ".pytest_cache",  # test cache
+    ".benchmarks",  # pytest-benchmark cache
+    ".netlify",  # local Netlify CLI state
+    ".cache",  # tool caches
+    ".playwright-mcp",  # local browser traces
     "supabase",  # database project files
     "ops",  # authenticated internal operations console, not a visitor surface
 }
@@ -123,6 +127,52 @@ def route_for(rel: str) -> str:
     if rel.endswith("/index.html"):
         return "/" + rel[: -len("index.html")]
     return "/" + rel
+
+
+def is_indexable_html(html: str) -> bool:
+    """Crawlers treat a missing robots meta as indexable; noindex is fail-closed."""
+    match = re.search(
+        r'<meta\b[^>]*\bname=["\']robots["\'][^>]*>',
+        html,
+        re.I,
+    )
+    if not match:
+        return True
+    tag = match.group(0)
+    content = re.search(r'\bcontent=["\']([^"\']*)["\']', tag, re.I)
+    value = (content.group(1) if content else "").lower()
+    return "noindex" not in value
+
+
+def visitor_facing_routes(root: Path | None = None) -> list[str]:
+    """Published visitor routes derived from shipped HTML, never a handwritten list."""
+    base = root or ROOT
+    return [route_for(relpath(p, base)) for p in visitor_facing_html_files(base)]
+
+
+def indexable_visitor_html_files(root: Path | None = None) -> list[Path]:
+    out: list[Path] = []
+    for path in visitor_facing_html_files(root):
+        html = path.read_text(encoding="utf-8", errors="replace")
+        if is_indexable_html(html):
+            out.append(path)
+    return out
+
+
+def published_gate_census(root: Path | None = None) -> dict[str, set[str]]:
+    """One census for copy, SEO, accessibility and conversion.
+
+    A new indexable family enters every applicable gate the moment its HTML
+    lands. Coverage is derived from this set; family-registry `gate_coverage`
+    is verified against it and cannot stay at `none` while the gate scans.
+    """
+    routes = set(visitor_facing_routes(root))
+    return {
+        "copy": set(routes),
+        "seo": set(routes),
+        "accessibility": set(routes),
+        "conversion": set(routes),
+    }
 
 
 @lru_cache(maxsize=1)

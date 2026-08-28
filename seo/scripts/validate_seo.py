@@ -16,29 +16,18 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+from scripts.site.public_copy_scope import (  # noqa: E402
+    SKIP_PARTS,
+    is_indexable_html,
+    visitor_facing_html_files,
+)
+
 errors: list[str] = []
 warnings: list[str] = []
 
-# Internal trees are not public pages. `data/` holds fixtures (Data Desk embed
-# fragments, JSON packs) and must not be treated as crawlable HTML.
-SKIP_DIRS = frozenset(
-    {
-        ".git",
-        ".claude",
-        "seo",
-        ".playwright-mcp",
-        "node_modules",
-        "_site",
-        "docs",
-        ".netlify",
-        ".cache",
-        "data",
-        "scripts",
-        "tests",
-        "netlify",
-        ".worktrees",
-    }
-)
+# Internal trees are not public pages. Kept as an alias of the published-route
+# census skip set so callers (and tests) can still inspect the contract.
+SKIP_DIRS = frozenset(SKIP_PARTS)
 
 
 def _relative_parts(path: Path, base: Path) -> tuple[str, ...]:
@@ -54,14 +43,12 @@ def _relative_parts(path: Path, base: Path) -> tuple[str, ...]:
 
 
 def iter_seo_html_pages(root: Path | None = None) -> list[Path]:
-    """HTML files the SEO gate treats as public/candidate pages."""
-    base = (root or ROOT).resolve()
-    out: list[Path] = []
-    for p in base.rglob("*.html"):
-        if any(part in SKIP_DIRS for part in _relative_parts(p, base)):
-            continue
-        out.append(p)
-    return out
+    """HTML files the SEO gate treats as public/candidate pages.
+
+    Derived from the published visitor census. A new indexable family is in
+    scope the moment its HTML lands; skip names apply inside the checkout.
+    """
+    return visitor_facing_html_files(root or ROOT)
 
 
 def page_path(p: Path) -> str:
@@ -501,21 +488,12 @@ def main() -> int:
         slug = p.parent.name
         # Literal fingerprints: hard-fail on priority pages; bulk HEAD may still carry
         # pre-existing de4cbef shells (declared partial — no mass rewrite of 100+ guides).
-        for bp in old_bp:
-            if bp in t:
-                msg = f"boilerplate residual {slug}: {bp!r}"
-                if slug in PRIORITY_SLUGS:
-                    errors.append(msg)
-                else:
-                    warnings.append(msg)
+        from scripts.site.seo_molds import editorial_mold_findings
+
+        mold = editorial_mold_findings(t, slug, indexable=is_indexable_html(t))
+        errors.extend(mold["errors"])
         if re.search(r"\?\.", t):
             errors.append(f"double punctuation ?. in {slug}")
-        if slug_answer.search(t):
-            msg = f"slug-stuffed answer mold {slug}"
-            if slug in PRIORITY_SLUGS:
-                errors.append(msg)
-            else:
-                warnings.append(msg)
         m = re.search(r"O risco prático a evitar é ([^.<]{5,70})", t)
         if m:
             frag = m.group(1).strip()
@@ -704,6 +682,10 @@ def main() -> int:
 
     for hit in intranet_indexable_hits(ROOT):
         errors.append(f"intranet must not be indexable: {hit}")
+
+    from scripts.site.commercial_surface_truth import evaluate_hub
+
+    errors.extend(evaluate_hub(ROOT))
 
     print(f"pages={len(html_pages)} sitemap={len(sm_urls)} indexable={len(indexable)}")
     print(f"errors={len(errors)} warnings={len(warnings)}")
