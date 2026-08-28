@@ -97,6 +97,8 @@ def load_budget(ds_path: Path = DS_PATH) -> dict[str, float]:
     return {
         "css_gzip_budget_kb": float(budget.get("css_gzip_kb_max", CSS_GZIP_CAP_KB)),
         "js_gzip_budget_kb": float(budget.get("own_js_gzip_kb_max", JS_GZIP_CAP_KB)),
+        "css_raw_budget_kb": float(budget.get("css_raw_kb_max", 250)),
+        "js_raw_budget_kb": float(budget.get("own_js_raw_kb_max", 120)),
     }
 
 
@@ -111,13 +113,33 @@ def audit_tree(root: Path = ROOT, ds_path: Path = DS_PATH) -> dict[str, Any]:
         js_raw=len(js),
         js_gzip=gzip_len(js),
         js_brotli=brotli_len(js),
-        **budget,
+        css_gzip_budget_kb=budget["css_gzip_budget_kb"],
+        js_gzip_budget_kb=budget["js_gzip_budget_kb"],
     )
+    report["css_raw_budget_kb"] = budget["css_raw_budget_kb"]
+    report["js_raw_budget_kb"] = budget["js_raw_budget_kb"]
+    report["css_budget_kb"] = budget["css_gzip_budget_kb"]
+    report["js_budget_kb"] = budget["js_gzip_budget_kb"]
+    report["css_budget_unit"] = "gzip"
+    report["js_budget_unit"] = "gzip"
+    report["compared_unit"] = "gzip+raw"
+    report["multiplier_fudge"] = False
     report["note"] = (
         "Hard fail is gzip vs the declared gzip contract. Raw and brotli are "
         "reported separately and never used as a fudge for the gzip gate."
     )
     return report
+
+
+def evaluate_performance(root: Path | None = None, *, budget: dict | None = None) -> dict[str, Any]:
+    """Shipped gzip-honest report used by truthful-gates and the CLI."""
+    ds_path = DS_PATH
+    if budget is not None:
+        report = audit_tree(root or ROOT, ds_path)
+        report["css_budget_kb"] = float(budget.get("css_gzip_kb_max", report["css_budget_kb"]))
+        report["js_budget_kb"] = float(budget.get("own_js_gzip_kb_max", report["js_budget_kb"]))
+        return report
+    return audit_tree(root or ROOT, ds_path)
 
 
 def main() -> int:
