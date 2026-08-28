@@ -266,23 +266,23 @@
   "route_copy": {
     "problemas-que-resolvemos": {
       "headline": "O formato segue o risco, não o percentual do contrato",
-      "body": "Custo, risco, recorrência e limite cabem na mesma conta. Ferramenta pública quando o risco fica abaixo de R$ 599. Diagnóstico (R$ 2.900 a R$ 5.900) quando a lacuna ainda é o problema. Projeto crítico (R$ 6.900 a R$ 7.900, pontual) quando o evento já pressiona caixa. Diretoria (R$ 12.500 a R$ 20.000 por mês) quando a carteira é recorrente. Se o risco não cobre o piso publicado, a CONFENGE não é economicamente indicada."
+      "body": "Custo, risco, recorrência e limite cabem na mesma conta. Ferramenta pública quando o risco fica abaixo do piso de entrada. Diagnóstico quando a lacuna ainda é o problema. Projeto crítico pontual quando o evento já pressiona caixa. Diretoria quando a carteira é recorrente. Se o risco não cobre o piso publicado, a CONFENGE não é economicamente indicada. As faixas estão em Entregas."
     },
     "diagnostico-pre-licitacao": {
       "headline": "Quando o diagnóstico cabe, e quando não",
-      "body": "Custo do diagnóstico delimitado: R$ 2.900 a R$ 5.900, pontual. Risco em jogo precisa cobrir esse piso. Recorrência de carteira pede diretoria, não um diagnóstico isolado. Limite: edital simples, risco abaixo de R$ 599 e equipe já confiante segue em conteúdo ou ferramenta; a CONFENGE não é economicamente indicada nesse caso."
+      "body": "Custo do diagnóstico delimitado segue o piso publicado dessa faixa, pontual. Risco em jogo precisa cobrir esse piso. Recorrência de carteira pede diretoria, não um diagnóstico isolado. Limite: edital simples, risco abaixo do piso de entrada e equipe já confiante segue em conteúdo ou ferramenta; a CONFENGE não é economicamente indicada nesse caso."
     },
     "medicoes-glosas-obras-publicas": {
       "headline": "Quando o dossiê de medição cabe, e quando não",
-      "body": "Custo de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Risco de caixa retido precisa cobrir esse piso. Recorrência de glosas na carteira pede rotina ou diretoria, não um único dossiê. Limite: divergência pontual já esclarecida com o fiscal e risco abaixo do piso não justifica a contratação."
+      "body": "Custo de um dossiê crítico segue o piso pontual publicado dessa faixa. Risco de caixa retido precisa cobrir esse piso. Recorrência de glosas na carteira pede rotina ou diretoria, não um único dossiê. Limite: divergência pontual já esclarecida com o fiscal e risco abaixo do piso não justifica a contratação."
     },
     "reequilibrio-obras-publicas": {
       "headline": "Quando o dossiê de reequilíbrio cabe, e quando não",
-      "body": "Custo de um dossiê crítico: R$ 6.900 a R$ 7.900, pontual. Risco de margem desequilibrada precisa cobrir esse piso. Recorrência de eventos na carteira pede diretoria. Limite: sem ruptura documentável da equação original, o próximo passo é registro interno ou diagnóstico, não o pleito; a CONFENGE não é economicamente indicada só para narrar aumento de custo."
+      "body": "Custo de um dossiê crítico segue o piso pontual publicado dessa faixa. Risco de margem desequilibrada precisa cobrir esse piso. Recorrência de eventos na carteira pede diretoria. Limite: sem ruptura documentável da equação original, o próximo passo é registro interno ou diagnóstico, não o pleito; a CONFENGE não é economicamente indicada só para narrar aumento de custo."
     },
     "acompanhamento-contratos-obras": {
       "headline": "Quando a rotina cabe, e quando não",
-      "body": "Custo da recorrência gerenciada: R$ 4.900 ou R$ 6.900 por mês. Diretoria: R$ 12.500 a R$ 20.000 por mês. Risco e carteira precisam cobrir o piso mensal. Recorrência é a premissa: um evento pontual de glosa ou reequilíbrio pede projeto crítico, não cadência. Limite: equipe interna já suficiente e risco abaixo de R$ 4.900 ao mês tornam a CONFENGE não economicamente indicada nesta frente."
+      "body": "Custo da rotina é o piso mensal publicado da recorrência gerenciada, não um percentual do contrato. Risco e carteira precisam cobrir esse piso. Recorrência é a premissa: um evento pontual de glosa ou reequilíbrio pede projeto crítico, não cadência. Limite: equipe interna já suficiente e risco abaixo do piso mensal tornam a CONFENGE não economicamente indicada nesta frente. As faixas estão em Entregas."
     }
   },
   "analytics": {
