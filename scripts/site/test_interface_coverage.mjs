@@ -60,7 +60,7 @@ assert(coverage.axe.routes.every((entry) =>
   && entry.reasons.every((reason) => reason === "price" || reason === "capture_form")
 ), "axe routes must derive only from declared visitor risk");
 assert.equal(coverage.axe.price_route_count, 62);
-assert.equal(coverage.axe.capture_form_route_count, 26);
+assert.equal(coverage.axe.capture_form_route_count, 25);
 assert.equal(coverage.axe.route_count, 69);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));

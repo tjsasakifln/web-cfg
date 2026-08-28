@@ -7,17 +7,37 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-PAGES = [
-    ROOT / "index.html",
-    ROOT / "diretoria-b2g" / "index.html",
-    ROOT / "diagnostico-b2g-360" / "index.html",
-    ROOT / "bid-room-licitacoes-obras" / "index.html",
-    ROOT / "defesa-margem-contratos-publicos" / "index.html",
-    ROOT / "atrasos-prorrogacao-obras-publicas" / "index.html",
-    ROOT / "defesa-tecnica-contratos-publicos" / "index.html",
-    ROOT / "acompanhamento-contratos-obras" / "index.html",
-    ROOT / "ferramentas" / "diagnostico-defesa-margem" / "index.html",
-]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.site.public_copy_scope import visitor_facing_html_files  # noqa: E402
+
+
+# Same justified non-visitor published trees as the skip-link gate. They stay
+# fully noindex; a page that becomes indexable under one of these prefixes
+# fails that gate and must join the visitor census here.
+NON_VISITOR_PUBLISHED_PREFIXES = (
+    "piloto/",
+    "assets/data-desk/",
+)
+
+
+def accessibility_pages(root: Path | None = None) -> list[Path]:
+    """Every visitor HTML file except declared non-visitor published trees."""
+    from scripts.site.public_copy_scope import relpath
+
+    base = root or ROOT
+    out: list[Path] = []
+    for path in visitor_facing_html_files(base):
+        rel = relpath(path, base)
+        if any(rel.startswith(prefix) for prefix in NON_VISITOR_PUBLISHED_PREFIXES):
+            continue
+        out.append(path)
+    return out
+
+
+# Backward-compatible alias: previously a handwritten list of nine commercial pages.
+PAGES = accessibility_pages()
 
 
 def find_form_field(html: str, field_id: str) -> re.Match[str] | None:
@@ -90,7 +110,10 @@ def main() -> int:
         failures.append("css: missing prefers-reduced-motion")
     if ":focus-visible" not in css and ":focus" not in css:
         failures.append("css: missing focus styles")
-    for p in PAGES:
+    pages = accessibility_pages(ROOT)
+    if len(pages) < 100:
+        failures.append(f"accessibility census collapsed: {len(pages)}")
+    for p in pages:
         errs = check_page(p)
         for e in errs:
             failures.append(f"{p.relative_to(ROOT)}: {e}")

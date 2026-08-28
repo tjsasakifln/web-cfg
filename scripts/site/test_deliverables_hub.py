@@ -176,7 +176,7 @@ def test_progressive_catalog_css_does_not_block_first_paint() -> None:
 def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
-        "54 entregas, de R$ 599 a R$ 39.800",
+        "54 entregáveis, de R$ 599 a R$ 39.800",
         "Amostra verificável: 8 exemplos integrais, sem cadastro",
         "Radar de Licitações Prioritárias",
         "12",

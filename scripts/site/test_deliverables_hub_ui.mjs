@@ -145,7 +145,7 @@ for (const width of widths) {
   const errors = [];
   if (!response || ![200, 304].includes(response.status())) errors.push(`http=${response?.status()}`);
   if (metrics.overflow) errors.push("document_overflow");
-  if (metrics.h1Count !== 1 || !metrics.h1Text.includes("54 entregas") || !metrics.h1Text.includes("decisão que cabe agora")) errors.push("hero_clarity");
+  if (metrics.h1Count !== 1 || !metrics.h1Text.includes("54 entregáveis") || !metrics.h1Text.includes("decisão que cabe agora") || !/entregas/i.test(metrics.h1Text)) errors.push("hero_clarity");
   if (!metrics.heroCtaVisible || !metrics.heroCtaTargetExists || metrics.heroCtaHref !== "#enquadrar" ||
       (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
   if (!metrics.firstReportVisible || metrics.examples !== EXPECTED_EXAMPLES) errors.push("ladder_examples");

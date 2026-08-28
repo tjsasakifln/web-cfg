@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from scripts.market_answers.events import (
+    BROWSER_EVENT_NAMES,
     EVENT_LAYER,
     EVENT_NAMES,
     assert_no_pii,
@@ -18,10 +19,12 @@ JS = Path(__file__).resolve().parents[2] / "assets/js/market-answer.js"
 def test_catalog_separates_layers_and_declares_required_events():
     cat = catalog(asset_version="1.0", content_hash="abc")
     names = {item["name"] for item in cat["events"]}
-    for required in EVENT_NAMES:
+    for required in BROWSER_EVENT_NAMES:
         assert required in names
+    assert "lead_receipt_correlated" not in names
     assert cat["source"] == "CONFENGE_WEB"
     assert cat["notes"]["page_view_is_not_lead"] is True
+    assert cat["notes"]["lead_join"].startswith("UNAVAILABLE_ON_CANARY")
     assert EVENT_LAYER["answer_view"] == "impression"
     assert EVENT_LAYER["lead_receipt_correlated"] == "lead"
     assert EVENT_LAYER["cta_click"] == "engagement"
@@ -51,8 +54,9 @@ def test_build_event_strips_pii_keys_and_values():
 
 def test_shipped_js_does_not_send_pii_fields():
     source = JS.read_text(encoding="utf-8")
-    for name in EVENT_NAMES:
+    for name in BROWSER_EVENT_NAMES:
         assert name in source
+    assert '"lead_receipt_correlated"' not in source
     assert "CONFENGE_WEB" in source
     # The denylist exists; emit() deletes those keys.
     assert "delete props[key]" in source

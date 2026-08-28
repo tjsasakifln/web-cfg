@@ -16,29 +16,18 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+from scripts.site.public_copy_scope import (  # noqa: E402
+    SKIP_PARTS,
+    is_indexable_html,
+    visitor_facing_html_files,
+)
+
 errors: list[str] = []
 warnings: list[str] = []
 
-# Internal trees are not public pages. `data/` holds fixtures (Data Desk embed
-# fragments, JSON packs) and must not be treated as crawlable HTML.
-SKIP_DIRS = frozenset(
-    {
-        ".git",
-        ".claude",
-        "seo",
-        ".playwright-mcp",
-        "node_modules",
-        "_site",
-        "docs",
-        ".netlify",
-        ".cache",
-        "data",
-        "scripts",
-        "tests",
-        "netlify",
-        ".worktrees",
-    }
-)
+# Internal trees are not public pages. Kept as an alias of the published-route
+# census skip set so callers (and tests) can still inspect the contract.
+SKIP_DIRS = frozenset(SKIP_PARTS)
 
 
 def _relative_parts(path: Path, base: Path) -> tuple[str, ...]:
@@ -54,14 +43,12 @@ def _relative_parts(path: Path, base: Path) -> tuple[str, ...]:
 
 
 def iter_seo_html_pages(root: Path | None = None) -> list[Path]:
-    """HTML files the SEO gate treats as public/candidate pages."""
-    base = (root or ROOT).resolve()
-    out: list[Path] = []
-    for p in base.rglob("*.html"):
-        if any(part in SKIP_DIRS for part in _relative_parts(p, base)):
-            continue
-        out.append(p)
-    return out
+    """HTML files the SEO gate treats as public/candidate pages.
+
+    Derived from the published visitor census. A new indexable family is in
+    scope the moment its HTML lands; skip names apply inside the checkout.
+    """
+    return visitor_facing_html_files(root or ROOT)
 
 
 def page_path(p: Path) -> str:
@@ -70,6 +57,19 @@ def page_path(p: Path) -> str:
             return "/"
         return "/" + str(p.parent.relative_to(ROOT)).replace("\\", "/") + "/"
     return "/" + str(p.relative_to(ROOT)).replace("\\", "/")
+
+
+def editorial_corpus_from_indexable(
+    paths_info: dict[str, Path],
+    indexable: set[str],
+) -> list[tuple[str, str]]:
+    """Build the editorial corpus from the SEO gate's complete indexable census."""
+    corpus: list[tuple[str, str]] = []
+    for route in sorted(indexable):
+        path = paths_info[route]
+        slug = route.strip("/") or "home"
+        corpus.append((slug, path.read_text(encoding="utf-8", errors="replace")))
+    return corpus
 
 
 INTRANET_PATH_RE = re.compile(r"(?:^|/)intranet(?:/|$|\?|#)", re.I)
@@ -496,26 +496,21 @@ def main() -> int:
         "mobilizacao-desmobilizacao-orcamento-obra",
         "empreitada-preco-global-preco-unitario",
     }
+    from scripts.site.seo_molds import editorial_corpus_findings, editorial_mold_findings
+
+    corpus_pages = editorial_corpus_from_indexable(paths_info, indexable)
+    # Literal mold detection follows the same complete indexable census as the
+    # near-duplicate detector. Directory placement must not let a newly
+    # published family bypass the SEO/editorial gate.
+    for slug, page_html in corpus_pages:
+        mold = editorial_mold_findings(page_html, slug, indexable=True)
+        errors.extend(mold["errors"])
+
     for p in (ROOT / "conteudos").glob("*/index.html"):
         t = p.read_text(encoding="utf-8")
         slug = p.parent.name
-        # Literal fingerprints: hard-fail on priority pages; bulk HEAD may still carry
-        # pre-existing de4cbef shells (declared partial — no mass rewrite of 100+ guides).
-        for bp in old_bp:
-            if bp in t:
-                msg = f"boilerplate residual {slug}: {bp!r}"
-                if slug in PRIORITY_SLUGS:
-                    errors.append(msg)
-                else:
-                    warnings.append(msg)
         if re.search(r"\?\.", t):
             errors.append(f"double punctuation ?. in {slug}")
-        if slug_answer.search(t):
-            msg = f"slug-stuffed answer mold {slug}"
-            if slug in PRIORITY_SLUGS:
-                errors.append(msg)
-            else:
-                warnings.append(msg)
         m = re.search(r"O risco prático a evitar é ([^.<]{5,70})", t)
         if m:
             frag = m.group(1).strip()
@@ -649,6 +644,8 @@ def main() -> int:
                                 f"orphan criterion-card outside .criteria-grid in #diagnostico of {slug}"
                             )
 
+    errors.extend(editorial_corpus_findings(corpus_pages))
+
     for start, count in mold_answer_starts.items():
         if count > 15:
             errors.append(f"answer start duplicated {count}x: {start!r}")
@@ -704,6 +701,10 @@ def main() -> int:
 
     for hit in intranet_indexable_hits(ROOT):
         errors.append(f"intranet must not be indexable: {hit}")
+
+    from scripts.site.commercial_surface_truth import evaluate_commercial_site
+
+    errors.extend(evaluate_commercial_site(ROOT))
 
     print(f"pages={len(html_pages)} sitemap={len(sm_urls)} indexable={len(indexable)}")
     print(f"errors={len(errors)} warnings={len(warnings)}")

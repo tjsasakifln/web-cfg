@@ -13,6 +13,7 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 import { resolveSiteRoot } from "./interface_coverage.mjs";
+import { renderedLayoutFindings } from "./rendered_layout_truth.mjs";
 
 const require = createRequire(import.meta.url);
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
@@ -523,15 +524,22 @@ async function main() {
   try {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+    await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 5000 });
     for (const j of ["contrato", "edital", "operacao"]) {
       await page.select("#estagio", j === "contrato" ? "estruturando a operação B2G" : "problema urgente em contrato");
-      await page.click(`[data-set-journey="${j}"]`);
+      const clicked = await page.evaluate((journey) => {
+        const el = document.querySelector(`[data-set-journey="${journey}"]`);
+        if (!el) return false;
+        el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+        return true;
+      }, j);
+      if (!clicked) throw new Error(`missing data-set-journey=${j}`);
       await page.waitForFunction((expectedJourney) => {
         const form = document.querySelector("#formulario-contato");
         return document.querySelector("#jornada-hidden")?.value === expectedJourney &&
           document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey === expectedJourney &&
           form?.getAttribute("action")?.includes(expectedJourney);
-      }, {}, j);
+      }, { timeout: 8000 }, j);
       const state = await page.evaluate(() => ({
         journey: document.querySelector("#jornada-hidden")?.value || "",
         stageJourney: document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey || "",
@@ -833,6 +841,19 @@ async function main() {
     if (!(first.cls.includes("skip-link") || first.href === "#conteudo" || /pular/i.test(first.text))) {
       throw new Error(`first focusable not skip-link: ${JSON.stringify(first)}`);
     }
+    await page.keyboard.press("Tab");
+    const focusedSkip = await page.evaluate(() => {
+      const active = document.activeElement;
+      const box = active?.getBoundingClientRect();
+      return {
+        isSkip: Boolean(active?.classList.contains("skip-link")),
+        intersectsViewport: Boolean(box && box.right > 0 && box.left < window.innerWidth
+          && box.bottom > 0 && box.top < window.innerHeight),
+      };
+    });
+    if (!focusedSkip.isSkip || !focusedSkip.intersectsViewport) {
+      throw new Error(`focused skip link is not visible: ${JSON.stringify(focusedSkip)}`);
+    }
     ok(`tab_order_starts_with_skip (${order.length} early focusables)`);
   } catch (e) {
     fail("tab_order_starts_with_skip", e.message || e);
@@ -899,15 +920,35 @@ async function main() {
   // 18) form error by text (not only color) when missing contact
   try {
     await page.setViewport({ width: 1024, height: 900 });
-    await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
+    await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     // The form handler is bound by deferred script.js; wait for its explicit
     // ready marker rather than racing a fixed timeout on slower CI runners.
-    await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 3000 });
-    await page.type("#nome", "Teste UI");
-    // leave email and phone empty; select a real step-1 option
-    await page.select("#estagio", "problema urgente em contrato");
-    await page.click("[data-form-next]");
-    await new Promise((r) => setTimeout(r, 150));
+    await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 5000 });
+    await page.evaluate(() => {
+      const nome = document.querySelector("#nome");
+      const estagio = document.querySelector("#estagio");
+      const email = document.querySelector("#email");
+      const phone = document.querySelector("#telefone");
+      if (nome) nome.value = "Teste UI";
+      if (estagio) {
+        estagio.value = "problema urgente em contrato";
+        estagio.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      if (email) email.value = "";
+      if (phone) phone.value = "";
+      document.querySelector("[data-form-next]")?.click();
+    });
+    await page.waitForFunction(() => {
+      const status = document.querySelector(".form-status");
+      const email = document.querySelector("#email");
+      const phone = document.querySelector("#telefone");
+      const msg = status && !status.hidden ? status.textContent : "";
+      const validity = email ? email.validationMessage : "";
+      const phoneVal = phone ? phone.validationMessage : "";
+      const text = `${msg || ""} ${validity || ""} ${phoneVal || ""}`.toLowerCase();
+      const invalid = email?.classList.contains("is-invalid") || phone?.classList.contains("is-invalid");
+      return invalid || /(e-mail|email|whatsapp|retorno|preencha|informe)/i.test(text);
+    }, { timeout: 3000 }).catch(() => {});
     const err = await page.evaluate(() => {
       const status = document.querySelector(".form-status");
       const email = document.querySelector("#email");
@@ -1431,6 +1472,167 @@ async function main() {
     ok(`header_brand_and_nav_fit (${reports.join(", ")})`);
   } catch (e) {
     fail("header_brand_and_nav_fit", e.message || e);
+  }
+
+  // Truthful-gates fixtures: foco offscreen, texto em 42 px, overflow,
+  // useless anchor, missing sticky CTA, broken form. Same browser engine.
+  const fixtureDir = join(ROOT, "scripts/site/fixtures/truthful_gates");
+  async function layoutFindingsFromHtml(html, viewport = { width: 390, height: 844 }) {
+    const tab = await browser.newPage();
+    try {
+      await tab.setViewport({ ...viewport, deviceScaleFactor: 1 });
+      await tab.setContent(html, { waitUntil: "domcontentloaded" });
+      return await renderedLayoutFindings(tab);
+    } finally {
+      await tab.close();
+    }
+  }
+
+  try {
+    const offscreen = await layoutFindingsFromHtml(
+      readFileSync(join(fixtureDir, "focus-offscreen.html"), "utf8"),
+    );
+    if (!offscreen.some((row) => row.includes("focus_offscreen"))) {
+      throw new Error(`expected focus_offscreen, got ${offscreen.join(",")}`);
+    }
+    ok("fixture_focus_offscreen_fails");
+  } catch (e) {
+    fail("fixture_focus_offscreen_fails", e.message || e);
+  }
+
+  try {
+    const verticallyOffscreen = await layoutFindingsFromHtml(`<!doctype html>
+      <html lang="pt-BR"><body><main>
+      <a href="/contato/" style="position:fixed;top:-9999px;left:0">Analisar meu caso</a>
+      <form method="post" action="/.netlify/functions/lead" data-capture-form>
+      <label>Nome <input name="nome"></label><button type="submit">Enviar</button>
+      </form>
+      <aside class="contact-float"><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+      </main></body></html>`);
+    if (!verticallyOffscreen.some((row) => row.includes("focus_offscreen"))) {
+      throw new Error(`expected vertical focus_offscreen, got ${verticallyOffscreen.join(",")}`);
+    }
+    ok("fixture_focus_vertically_offscreen_fails");
+  } catch (e) {
+    fail("fixture_focus_vertically_offscreen_fails", e.message || e);
+  }
+
+  try {
+    const narrow = await layoutFindingsFromHtml(
+      readFileSync(join(fixtureDir, "text-42px.html"), "utf8"),
+    );
+    if (!narrow.some((row) => row.includes("text_width_42px") || /text_width_4\dpx/.test(row))) {
+      throw new Error(`expected text_width_42px, got ${narrow.join(",")}`);
+    }
+    ok("fixture_text_42px_fails");
+  } catch (e) {
+    fail("fixture_text_42px_fails", e.message || e);
+  }
+
+  try {
+    const overflow = await layoutFindingsFromHtml(
+      readFileSync(join(fixtureDir, "overflow.html"), "utf8"),
+    );
+    if (!overflow.some((row) => row.includes("horizontal_overflow"))) {
+      throw new Error(`expected horizontal_overflow, got ${overflow.join(",")}`);
+    }
+    ok("fixture_overflow_fails");
+  } catch (e) {
+    fail("fixture_overflow_fails", e.message || e);
+  }
+
+  try {
+    const anchor = await layoutFindingsFromHtml(
+      readFileSync(join(fixtureDir, "useless-anchor.html"), "utf8"),
+    );
+    if (!anchor.some((row) => row.includes("useless_anchor"))) {
+      throw new Error(`expected useless_anchor, got ${anchor.join(",")}`);
+    }
+    ok("fixture_useless_anchor_fails");
+  } catch (e) {
+    fail("fixture_useless_anchor_fails", e.message || e);
+  }
+
+  try {
+    const sticky = await layoutFindingsFromHtml(
+      readFileSync(join(fixtureDir, "missing-sticky-cta.html"), "utf8"),
+    );
+    if (!sticky.includes("missing_sticky_cta")) {
+      throw new Error(`expected missing_sticky_cta, got ${sticky.join(",")}`);
+    }
+    ok("fixture_missing_sticky_cta_fails");
+  } catch (e) {
+    fail("fixture_missing_sticky_cta_fails", e.message || e);
+  }
+
+  try {
+    const form = await layoutFindingsFromHtml(
+      readFileSync(join(fixtureDir, "broken-form.html"), "utf8"),
+    );
+    if (!form.includes("broken_form")) {
+      throw new Error(`expected broken_form, got ${form.join(",")}`);
+    }
+    ok("fixture_broken_form_fails");
+  } catch (e) {
+    fail("fixture_broken_form_fails", e.message || e);
+  }
+
+  try {
+    const hiddenForm = await layoutFindingsFromHtml(`<!doctype html>
+      <html lang="pt-BR"><body><main>
+      <form method="post" action="/.netlify/functions/lead" data-capture-form hidden>
+      <label>Nome <input name="nome"></label><button type="submit">Enviar</button>
+      </form>
+      <aside class="contact-float"><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+      </main></body></html>`);
+    if (!hiddenForm.includes("broken_form")) {
+      throw new Error(`expected hidden broken_form, got ${hiddenForm.join(",")}`);
+    }
+    ok("fixture_hidden_capture_form_fails");
+  } catch (e) {
+    fail("fixture_hidden_capture_form_fails", e.message || e);
+  }
+
+  try {
+    const hiddenOnlyForm = await layoutFindingsFromHtml(`<!doctype html>
+      <html lang="pt-BR"><body><main>
+      <form method="post" action="/.netlify/functions/lead" data-capture-form>
+      <input type="hidden" name="origem" value="fixture"><button type="submit">Enviar</button>
+      </form>
+      <aside class="contact-float"><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+      </main></body></html>`);
+    if (!hiddenOnlyForm.includes("broken_form")) {
+      throw new Error(`expected hidden-only broken_form, got ${hiddenOnlyForm.join(",")}`);
+    }
+    ok("fixture_hidden_only_capture_form_fails");
+  } catch (e) {
+    fail("fixture_hidden_only_capture_form_fails", e.message || e);
+  }
+
+  try {
+    const hiddenSticky = await layoutFindingsFromHtml(`<!doctype html>
+      <html lang="pt-BR"><body><main>
+      <form method="post" action="/.netlify/functions/lead" data-capture-form>
+      <label>Nome <input name="nome"></label><button type="submit">Enviar</button>
+      </form>
+      <aside class="contact-float" hidden><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+      </main></body></html>`);
+    if (!hiddenSticky.includes("missing_sticky_cta")) {
+      throw new Error(`expected hidden missing_sticky_cta, got ${hiddenSticky.join(",")}`);
+    }
+    ok("fixture_hidden_sticky_cta_fails");
+  } catch (e) {
+    fail("fixture_hidden_sticky_cta_fails", e.message || e);
+  }
+
+  try {
+    const passed = await layoutFindingsFromHtml(
+      readFileSync(join(fixtureDir, "pass-layout.html"), "utf8"),
+    );
+    if (passed.length) throw new Error(passed.join(","));
+    ok("fixture_layout_pass");
+  } catch (e) {
+    fail("fixture_layout_pass", e.message || e);
   }
 
   await browser.close();

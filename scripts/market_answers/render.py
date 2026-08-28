@@ -279,11 +279,12 @@ def render_html(
 <nav aria-label="Navegação principal" class="desktop-nav">
 <a data-cta-position="header_nav" href="/servicos-obras-publicas/">Serviços</a>
 <a data-cta-position="header_nav" href="/problemas-que-resolvemos/">Problemas que resolvemos</a>
+<a data-cta-position="header_nav" href="/entregas/">Entregas</a>
 <a data-cta-position="header_nav" href="/conteudos/">Conteúdos</a>
 <a data-cta-position="header_nav" href="/ferramentas/">Ferramentas</a>
 <a data-cta-position="header_nav" href="/especialista/tiago-jun-sasaki/">Especialista</a>
 </nav>
-<a class="button button-primary header-cta" href="#cta">Ver próximo passo</a>
+<a class="button button-primary header-cta" href="/#formulario-contato">Analisar meu caso</a>
 </div>
 </header>
 <main id="conteudo">
@@ -373,13 +374,6 @@ def render_html(
 <a class="button" data-ma-event="cta_click" data-cta-id="analise-contrato" href="/ferramentas/diagnostico-defesa-margem/">Analise um contrato / peça segunda leitura</a>
 </p>
 <p class="ma-note">Atribuição: source <code>CONFENGE_WEB</code>, asset <code>{ASSET_ID}</code>, família <code>{ASSET_FAMILY}</code>. Correção: <a data-ma-event="correction_open" href="/correcoes/">pedir correção</a>.</p>
-<form id="ma-next" class="tool-form" method="post" action="/.netlify/functions/lead" hidden>
-<input type="hidden" name="asset_id" value="{ASSET_ID}"/>
-<input type="hidden" name="asset_family" value="{ASSET_FAMILY}"/>
-<input type="hidden" name="route_family" value="{ROUTE_FAMILY}"/>
-<input type="hidden" name="cta_id" value="market-answer-next"/>
-<input type="hidden" name="correlation_id" id="ma-correlation" value=""/>
-</form>
 </section>
 
 <section id="dataset" data-dataset="valor-tipico-contratos-pavimentacao-sc" aria-labelledby="fontes-titulo">

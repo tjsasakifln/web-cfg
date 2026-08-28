@@ -506,7 +506,7 @@
       "layer": "lead",
       "owner": "web-cfg",
       "schema_version": "1.0.0",
-      "producers": ["assets/js/market-answer.js", "scripts/market_answers/events.py"],
+      "producers": ["scripts/market_answers/events.py"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
       "semantic": "Lead receipt joined by correlation_id. Lead; not pipeline."
     },

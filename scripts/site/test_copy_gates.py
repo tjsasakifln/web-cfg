@@ -444,23 +444,87 @@ def test_hero_proof_credentials_list_still_present():
     assert "<dt>Trigger</dt>" not in diretoria
 
 
+def scan_backstage_html(html: str, rel: str = "fixture.html") -> list[str]:
+    """Visitor-visible backstage leaks. Fixtures and shipped pages share this."""
+    vis = visible_markup(html)
+    lower = vis.lower()
+    failures: list[str] = []
+    for phrase in PUBLIC_BACKSTAGE_PHRASES:
+        if phrase.lower() in lower and not is_excepted(BACKSTAGE_EXCEPTION_RULE, phrase, rel):
+            failures.append(f"{rel}: {phrase!r}")
+    for cre in PUBLIC_BACKSTAGE_PATTERNS:
+        if cre.search(vis) and not is_excepted(BACKSTAGE_EXCEPTION_RULE, cre.pattern, rel):
+            failures.append(f"{rel}: pattern {cre.pattern!r}")
+    return failures
+
+
+def scan_brand_html(html: str, rel: str = "fixture.html") -> list[str]:
+    """Brand forbidden phrases on one HTML blob. Same function the sitewide scan uses."""
+    brand = load_brand()
+    phrases = brand["forbidden_phrases"]
+    lower = visible_markup(html).lower()
+    failures: list[str] = []
+    for phrase in phrases:
+        if phrase.lower() in lower and not is_excepted(BRAND_EXCEPTION_RULE, phrase, rel):
+            failures.append(f"{rel}: {phrase!r}")
+    return failures
+
+
+def evaluate_copy_html(html: str, rel: str = "fixture.html") -> list[str]:
+    return scan_backstage_html(html, rel) + scan_brand_html(html, rel)
+
+
+def test_copy_scanners_ignore_non_perceptible_subtrees():
+    """Hidden implementation copy is not visitor-facing brand/backstage copy."""
+    html = """
+    <main>
+      <template><p>extra-cli</p></template>
+      <section hidden><p>fale conosco</p></section>
+      <section aria-hidden="true"><p>excelência</p></section>
+      <section inert><p>alta intenção</p></section>
+      <section style="color: red; display: none !important"><p>inovação</p></section>
+    </main>
+    """
+    assert evaluate_copy_html(html) == []
+
+
+def test_brand_scanner_keeps_public_copy_channels_only():
+    html = """
+    <html>
+      <head>
+        <title>tecnologia de ponta</title>
+        <meta name="description" content="potencialize seus resultados">
+        <meta property="og:title" content="maximize oportunidades">
+        <meta name="keywords" content="conte conosco">
+      </head>
+      <body class="conte conosco" data-internal-copy="conte conosco">
+        <p>soluções personalizadas</p>
+        <img alt="solução completa" data-caption="conte conosco">
+        <button aria-label="excelência"></button>
+        <input placeholder="inovação" data-help="conte conosco">
+      </body>
+    </html>
+    """
+    failures = scan_brand_html(html)
+    for phrase in (
+        "soluções personalizadas",
+        "solução completa",
+        "excelência",
+        "inovação",
+        "tecnologia de ponta",
+        "potencialize seus resultados",
+        "maximize oportunidades",
+    ):
+        assert any(repr(phrase) in finding for finding in failures), phrase
+    assert not any(repr("conte conosco") in finding for finding in failures)
+
+
 def test_public_backstage_language_absent():
     """No visitor-facing backstage / conversion-objective jargon on public HTML."""
     failures: list[str] = []
     for path in _public_html_surfaces():
-        text = path.read_text(encoding="utf-8")
-        # Strip scripts/styles/comments — banlist is about visitor-visible chrome + body
-        vis = re.sub(r"<script[\s\S]*?</script>", " ", text, flags=re.I)
-        vis = re.sub(r"<style[\s\S]*?</style>", " ", vis, flags=re.I)
-        vis = re.sub(r"<!--[\s\S]*?-->", " ", vis)
-        lower = vis.lower()
         rel = relpath(path, ROOT)
-        for phrase in PUBLIC_BACKSTAGE_PHRASES:
-            if phrase.lower() in lower and not is_excepted(BACKSTAGE_EXCEPTION_RULE, phrase, rel):
-                failures.append(f"{rel}: {phrase!r}")
-        for cre in PUBLIC_BACKSTAGE_PATTERNS:
-            if cre.search(vis) and not is_excepted(BACKSTAGE_EXCEPTION_RULE, cre.pattern, rel):
-                failures.append(f"{rel}: pattern {cre.pattern!r}")
+        failures.extend(scan_backstage_html(path.read_text(encoding="utf-8"), rel))
     assert not failures, failures
 
 
@@ -547,8 +611,13 @@ def test_banlist_includes_conversion_eyebrow():
 
 def test_gate_bites_on_reintroduction():
     """Prove the public banlist would catch reintroduced conversion / pipeline leaks."""
+    fixture = ROOT / "scripts" / "site" / "fixtures" / "truthful_gates" / "forbidden-phrase.html"
+    html = fixture.read_text(encoding="utf-8")
+    hits = evaluate_copy_html(html, "scripts/site/fixtures/truthful_gates/forbidden-phrase.html")
+    assert hits, "adversarial fixture must fail the shipped copy scanner"
+    assert any("Conversão com utilidade real" in hit for hit in hits)
     synthetic = '<p class="eyebrow">Conversão com utilidade real</p>'
-    assert any(p.lower() in synthetic.lower() for p in PUBLIC_BACKSTAGE_PHRASES)
+    assert scan_backstage_html(synthetic)
     assert any(cre.search('<div class="aside-card"><span>CTA</span><h2>X</h2>') for cre in PUBLIC_BACKSTAGE_PATTERNS)
     assert any(cre.search("Números só com lineage.") for cre in PUBLIC_BACKSTAGE_PATTERNS)
     assert "este cluster" in "Este cluster trata do edital".lower()

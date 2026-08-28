@@ -288,7 +288,7 @@ assert("implementation_filter_contract", eq(implementation.filter_dimensions, fl
 assert("implementation_comparison_contract", implementation.comparison?.min_selection === 2 && implementation.comparison?.max_selection === 4 && implementation.comparison?.mobile_layout === cp.mobile_layout, implementation.comparison);
 assert("implementation_fail_closed", implementation.terminal_capture === true && implementation.human_validation === "NOT_STARTED", implementation);
 assert("implementation_no_new_analytics_dimensions", implementation.new_analytics_dimensions === false, implementation.new_analytics_dimensions);
-assert("hero_decision_h1", entregas.includes("Encontre, entre 54 entregas") && entregas.includes("a decisão que cabe agora"), "hero");
+assert("hero_decision_h1", entregas.includes("entre 54 entregáveis") && entregas.includes("a decisão que cabe agora"), "hero");
 assert("hero_price_range_and_recurrence", entregas.includes("R$ 599 a R$ 39.800") && /recorr/i.test(entregas), "price range");
 assert("hero_primary_and_secondary_access", entregas.includes(">Encontrar a entrega certa ") && entregas.includes(">Ver as 54 entregáveis</a>"), "hero actions");
 assert("catalog_has_54_static_cards", (entregas.match(/<article class="catalog-item /g) || []).length === CATALOG_SIZE, (entregas.match(/<article class="catalog-item /g) || []).length);
