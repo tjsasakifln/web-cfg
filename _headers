@@ -9,6 +9,9 @@
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   Cache-Control: no-cache, max-age=0, must-revalidate
 
+/.well-known/build-info.json
+  Cache-Control: no-cache, max-age=0, must-revalidate
+
 /assets/*
   # Safe default also applies to a missing /assets/ path, so a 404 can recover
   # on a later deploy instead of being poisoned for one year (#411).
@@ -89,3 +92,16 @@
   X-Robots-Tag: noindex, nofollow, noarchive
 
 # Market-panorama family — end
+
+/radar/nacional-obras-publicas/radar-nacional.pdf
+  Content-Type: application/pdf
+  Content-Disposition: attachment; filename="radar-nacional.pdf"
+
+/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif
+  Content-Type: image/avif
+
+/assets/tiago-sasaki-foto-v11-sem-fundo.avif
+  Content-Type: image/avif
+
+/assets/tiago-sasaki-avatar-v11-sem-fundo.avif
+  Content-Type: image/avif

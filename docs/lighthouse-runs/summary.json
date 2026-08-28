@@ -8,7 +8,7 @@
     "families": [
       {
         "id": "home",
-        "label": "Entender em 10 segundos o que a CONFENGE resolve em contrato de obra pública e escolher a próxima ação.",
+        "label": "Entender em 10 segundos o que a CONFENGE resolve em contrato de obra p\u00fablica e escolher a pr\u00f3xima a\u00e7\u00e3o.",
         "kind": "canonical",
         "route_count": 1,
         "lighthouse_representative": "/",
@@ -19,7 +19,7 @@
       },
       {
         "id": "service-pillars",
-        "label": "Resolver um evento contratual específico (aditivo, glosa, reequilíbrio, atraso) com a CONFENGE.",
+        "label": "Resolver um evento contratual espec\u00edfico (aditivo, glosa, reequil\u00edbrio, atraso) com a CONFENGE.",
         "kind": "canonical",
         "route_count": 13,
         "lighthouse_representative": "/acompanhamento-contratos-obras/",
@@ -30,7 +30,7 @@
       },
       {
         "id": "legal-and-trust",
-        "label": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+        "label": "Conferir termos, privacidade, pol\u00edtica de conflitos, uso de IA, corre\u00e7\u00f5es e contato de imprensa antes de confiar na CONFENGE.",
         "kind": "canonical",
         "route_count": 6,
         "lighthouse_representative": "/termos-de-uso/",
@@ -41,7 +41,7 @@
       },
       {
         "id": "comercial-condicoes",
-        "label": "Ler as condições comerciais e a política de leads antes de aceitar um diagnóstico pago.",
+        "label": "Ler as condi\u00e7\u00f5es comerciais e a pol\u00edtica de leads antes de aceitar um diagn\u00f3stico pago.",
         "kind": "canonical",
         "route_count": 3,
         "lighthouse_representative": "/comercial/privacidade-leads/",
@@ -52,7 +52,7 @@
       },
       {
         "id": "politica-editorial",
-        "label": "Auditar a política editorial vigente e o seu histórico versionado.",
+        "label": "Auditar a pol\u00edtica editorial vigente e o seu hist\u00f3rico versionado.",
         "kind": "canonical",
         "route_count": 3,
         "lighthouse_representative": "/politica-editorial/",
@@ -63,7 +63,7 @@
       },
       {
         "id": "measurement-delay-canary",
-        "label": "Entender por que o processamento da medição parou e avançar para uma segunda leitura técnica quando houver documentos suficientes.",
+        "label": "Entender por que o processamento da medi\u00e7\u00e3o parou e avan\u00e7ar para uma segunda leitura t\u00e9cnica quando houver documentos suficientes.",
         "kind": "canonical",
         "route_count": 1,
         "lighthouse_representative": "/conteudos/atraso-na-medicao-obra-publica/",
@@ -74,7 +74,7 @@
       },
       {
         "id": "editorial-library",
-        "label": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+        "label": "Entender um problema contratual concreto de obra p\u00fablica antes de decidir pedir ajuda.",
         "kind": "canonical",
         "route_count": 120,
         "lighthouse_representative": "/conteudos/",
@@ -85,7 +85,7 @@
       },
       {
         "id": "guias-contratos-obras",
-        "label": "Executar um passo a passo documental (aditivo, glosa, reequilíbrio, notificação) dentro do prazo contratual.",
+        "label": "Executar um passo a passo documental (aditivo, glosa, reequil\u00edbrio, notifica\u00e7\u00e3o) dentro do prazo contratual.",
         "kind": "canonical",
         "route_count": 5,
         "lighthouse_representative": "/guias-contratos-obras/",
@@ -96,7 +96,7 @@
       },
       {
         "id": "lei-14133-obras",
-        "label": "Encontrar o dispositivo da Lei 14.133 que sustenta um pleito de obra pública.",
+        "label": "Encontrar o dispositivo da Lei 14.133 que sustenta um pleito de obra p\u00fablica.",
         "kind": "canonical",
         "route_count": 8,
         "lighthouse_representative": "/lei-14133-obras/",
@@ -118,7 +118,7 @@
       },
       {
         "id": "nurture",
-        "label": "Retomar uma conversa comercial já iniciada a partir de um material enviado.",
+        "label": "Retomar uma conversa comercial j\u00e1 iniciada a partir de um material enviado.",
         "kind": "canonical",
         "route_count": 2,
         "lighthouse_representative": "/nurture/",
@@ -129,7 +129,7 @@
       },
       {
         "id": "metodologia-inteligencia",
-        "label": "Auditar como a CONFENGE produz a inteligência pública que publica.",
+        "label": "Auditar como a CONFENGE produz a intelig\u00eancia p\u00fablica que publica.",
         "kind": "canonical",
         "route_count": 1,
         "lighthouse_representative": "/metodologia-inteligencia/",
@@ -140,7 +140,7 @@
       },
       {
         "id": "radar",
-        "label": "Ler o radar nacional de obras públicas e decidir se quer o recorte aplicado ao próprio mercado.",
+        "label": "Ler o radar nacional de obras p\u00fablicas e decidir se quer o recorte aplicado ao pr\u00f3prio mercado.",
         "kind": "canonical",
         "route_count": 10,
         "lighthouse_representative": "/radar/nacional-obras-publicas/",
@@ -151,7 +151,7 @@
       },
       {
         "id": "analises-contratos-publicos",
-        "label": "Ler uma análise contratual desidentificada e reconhecer o próprio caso nela.",
+        "label": "Ler uma an\u00e1lise contratual desidentificada e reconhecer o pr\u00f3prio caso nela.",
         "kind": "canonical",
         "route_count": 7,
         "lighthouse_representative": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
@@ -173,7 +173,7 @@
       },
       {
         "id": "casos-modelos-precificados",
-        "label": "Comparar modelos de entrega com preço público (R$ 599 a R$ 3.750) e comprar o que resolve o próprio problema.",
+        "label": "Comparar modelos de entrega com pre\u00e7o p\u00fablico (R$ 599 a R$ 3.750) e comprar o que resolve o pr\u00f3prio problema.",
         "kind": "canonical",
         "route_count": 8,
         "lighthouse_representative": "/casos/modelo-relatorio-inteligencia-licitacoes/",
@@ -184,7 +184,7 @@
       },
       {
         "id": "entregas",
-        "label": "Comparar a profundidade das entregas com preço antes de escolher o que contratar.",
+        "label": "Comparar a profundidade das entregas com pre\u00e7o antes de escolher o que contratar.",
         "kind": "canonical",
         "route_count": 1,
         "lighthouse_representative": "/entregas/",
@@ -206,7 +206,7 @@
       },
       {
         "id": "problemas-que-resolvemos",
-        "label": "Reconhecer o próprio problema contratual na lista e ir para quem o resolve.",
+        "label": "Reconhecer o pr\u00f3prio problema contratual na lista e ir para quem o resolve.",
         "kind": "canonical",
         "route_count": 1,
         "lighthouse_representative": "/problemas-que-resolvemos/",
@@ -217,7 +217,7 @@
       },
       {
         "id": "ferramentas-hub",
-        "label": "Escolher o cálculo aplicável e avançar para o diagnóstico de carteira quando a decisão ultrapassa uma ferramenta isolada.",
+        "label": "Escolher o c\u00e1lculo aplic\u00e1vel e avan\u00e7ar para o diagn\u00f3stico de carteira quando a decis\u00e3o ultrapassa uma ferramenta isolada.",
         "kind": "canonical",
         "route_count": 1,
         "lighthouse_representative": "/ferramentas/",
@@ -228,7 +228,7 @@
       },
       {
         "id": "ferramentas",
-        "label": "Calcular um limite, prazo ou risco contratual e sair com um número defensável.",
+        "label": "Calcular um limite, prazo ou risco contratual e sair com um n\u00famero defens\u00e1vel.",
         "kind": "canonical",
         "route_count": 4,
         "lighthouse_representative": "/ferramentas/diagnostico-defesa-margem/",
@@ -2086,7 +2086,9 @@
       "observed_runs": 3,
       "minimum_performance": 99,
       "p75_tbt_ms": 112,
-      "maximum_own_long_task_ms": 162
+      "maximum_own_long_task_ms": 162,
+      "maximum_lcp_ms": 1506.7209,
+      "maximum_cls": 0
     }
   }
 }

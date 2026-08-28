@@ -43,13 +43,15 @@ for (const [name, configuredPages] of [
 // Kept in step with gzip_types/gzip_min_length in the packaged nginx http wrapper.
 const COMPRESSIBLE = /^(?:text\/|application\/(?:javascript|json|manifest\+json|xml|xml\+rss|rss\+xml)|image\/svg\+xml)/;
 const GZIP_MIN_LENGTH = 1024;
-const PORT = 8766;
+const PORT = Number(process.env.LH_PORT || 8766);
 const MIME = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css",
   ".js": "application/javascript",
   ".png": "image/png",
   ".jpg": "image/jpeg",
+  ".webp": "image/webp",
+  ".avif": "image/avif",
   ".json": "application/json",
   ".webmanifest": "application/manifest+json",
   ".xml": "application/xml",
