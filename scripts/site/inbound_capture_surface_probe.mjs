@@ -6,6 +6,7 @@ import fs from "node:fs";
 const base = new URL(process.argv[2] || "https://confenge.com.br");
 assert.equal(base.protocol, "https:", "production capture probe requires HTTPS");
 assert.equal(base.hostname, "confenge.com.br", "canonical public host required");
+const EXPECTED_ACTIVE_CAPTURE_ROUTES = 21;
 
 const sitemapResponse = await fetch(new URL("/sitemap.xml", base), { redirect: "error" });
 assert.equal(sitemapResponse.status, 200, "sitemap unavailable");
@@ -31,7 +32,10 @@ for (const file of trackedHtml) {
 }
 
 const capture = /(?:<form\b[^>]*\baction=["'](?:\/\.netlify\/functions\/lead|\/api\/web\/lead)["'][^>]*>|<form\b[^>]*\bid=["']formulario-contato["'][^>]*>)/i;
-const hasSlot = (html) => /\bdata-turnstile-sitekey\b/i.test(html);
+const hasUsableSiteKey = (html) => {
+  const value = html.match(/\bdata-turnstile-sitekey=["']([^"']+)["']/i)?.[1] || "";
+  return value.length >= 16 && !/fixture|placeholder|replace|example/i.test(value);
+};
 const hasWidget = (html) => /\b(?:class=["'][^"']*cf-turnstile|id=["']cf-turnstile)[^>]*>/i.test(html);
 const findings = [];
 
@@ -42,16 +46,22 @@ for (let offset = 0; offset < urls.length; offset += 8) {
     if (response.status !== 200 || !String(response.headers.get("content-type") || "").includes("text/html")) return null;
     const html = await response.text();
     if (!capture.test(html)) return null;
+    const directTarget = html.match(/<form\b[^>]*\baction=["'](\/\.netlify\/functions\/lead|\/api\/web\/lead)["'][^>]*>/i)?.[1] || null;
+    const ajaxTarget = /<form\b[^>]*\bid=["']formulario-contato["'][^>]*\bdata-ajax=["']true["'][^>]*>/i.test(html)
+      || /<form\b[^>]*\bdata-ajax=["']true["'][^>]*\bid=["']formulario-contato["'][^>]*>/i.test(html);
+    const scriptBound = /<script\b[^>]*\bsrc=["']\/script\.js(?:\?[^"']*)?["'][^>]*>/i.test(html);
     return {
       route: url.pathname,
-      turnstile_sitekey: hasSlot(html),
+      turnstile_sitekey: hasUsableSiteKey(html),
       turnstile_widget: hasWidget(html),
+      submit_target: directTarget || (ajaxTarget && scriptBound ? "/.netlify/functions/lead (script.js)" : null),
+      script_bound: scriptBound,
     };
   }));
   findings.push(...rows.filter(Boolean));
 }
 
-const missing = findings.filter((row) => !row.turnstile_sitekey || !row.turnstile_widget);
+const missing = findings.filter((row) => !row.turnstile_sitekey || !row.turnstile_widget || !row.submit_target);
 const homeResponse = await fetch(base, { redirect: "error" });
 const homeHtml = await homeResponse.text();
 const scriptPath = homeHtml.match(/<script\b[^>]*\bsrc=["']([^"']*script\.js[^"']*)["']/i)?.[1] || "";
@@ -67,14 +77,27 @@ const humanWidgetContract = {
   lead_endpoint_bound: scriptText.includes("/.netlify/functions/lead"),
 };
 const humanWidgetReady = Object.values(humanWidgetContract).every(Boolean);
+const routes = findings
+  .map((row) => ({
+    ...row,
+    ready: Boolean(row.turnstile_sitekey && row.turnstile_widget && row.submit_target),
+  }))
+  .sort((a, b) => a.route.localeCompare(b.route));
 const report = {
-  ok: missing.length === 0 && humanWidgetReady,
+  ok: findings.length === EXPECTED_ACTIVE_CAPTURE_ROUTES && missing.length === 0 && humanWidgetReady,
   canonical_host: base.hostname,
+  expected_active_capture_routes: EXPECTED_ACTIVE_CAPTURE_ROUTES,
   sitemap_routes_scanned: urls.length,
   opportunity_capture_routes: findings.length,
   turnstile_ready_routes: findings.length - missing.length,
   human_widget_contract: humanWidgetContract,
-  missing_turnstile_routes: missing.map((row) => row.route).sort(),
+  route_blockers: missing.map((row) => ({
+    route: row.route,
+    turnstile_sitekey: row.turnstile_sitekey,
+    turnstile_widget: row.turnstile_widget,
+    submit_target: row.submit_target,
+  })),
+  routes,
 };
 process.stdout.write(JSON.stringify(report, null, 2) + "\n");
 if (!report.ok) process.exitCode = 2;
