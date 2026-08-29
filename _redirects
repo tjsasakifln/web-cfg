@@ -1,7 +1,7 @@
-# CONFENGE redirects — single source of truth for Netlify edge.
-# Lives in publish root (.) so Deploy summary must report N redirect rules processed.
-# Do NOT add trailing-slash-only rules: Netlify normalizes slashes before matching
-# (Pretty URLs). One rule matches both /path and /path/.
+# CONFENGE redirects — canonical manifest consumed by the Netcup/nginx renderer;
+# the legacy preview also reads the same publish-root file. Production authority
+# remains nginx/Netcup. Do not add trailing-slash-only rules: the renderers
+# normalize them, so one rule covers both /path and /path/.
 
 # --- Host canonization (force so existing files do not shadow) ---
 https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
@@ -21,7 +21,7 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 /terms-and-conditions      /termos-de-uso/   301
 /blog                      /conteudos/       301
 /contato                   /#contato         301
-/servicos                  /#como-atuamos    301
+/servicos                  /servicos-obras-publicas/    301
 /trabalhe-conosco          /404.html         410
 
 # --- Abandoned products (410 Gone + custom body; never soft-404 to home) ---
@@ -33,7 +33,7 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 # Do not add a catch-all rewrite to index.html (SPA-style status 200).
 
 # --- Extended legacy disposition (entity cleanup) ---
-/servicos.html  /#como-atuamos  301
+/servicos.html  /servicos-obras-publicas/  301
 /contato.html  /#contato  301
 /blog.html  /conteudos/  301
 /avaliacoes  /404.html  410
@@ -48,7 +48,7 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 /sobre  /especialista/tiago-jun-sasaki/  301
 /sobre-nos  /especialista/tiago-jun-sasaki/  301
 /about  /especialista/tiago-jun-sasaki/  301
-/services  /#como-atuamos  301
+/services  /servicos-obras-publicas/  301
 /contact  /#contato  301
 # pSEO legacy slug (ingestion prefix stripped)
 /inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/*  /inteligencia/orgaos/prefeitura-municipal-de-caxias-do-sul-rs/:splat  301

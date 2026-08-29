@@ -210,7 +210,7 @@ def lead_inline_html(wa_url: str, topic: str, form_path: str) -> str:
         f'<div class="lead-inline-actions">'
         f'<a class="button button-primary" href="{wa_url}" rel="noopener" target="_blank">'
         f"WhatsApp sobre {topic[:42]}</a>"
-        f'<a class="button button-secondary" href="/#contato?tema={quote(topic)}&amp;origem={quote(form_path)}">'
+        f'<a class="button button-secondary" href="/#contato" data-tema="{topic}" data-origem="{form_path}">'
         f"Preferir formulário</a>"
         f"</div></section>"
     )

@@ -727,7 +727,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
     cta = j.get("cta") or "Solicitar canal seguro para envio"
     next_step = j.get("next_step") or ""
     wa = wa_url(j.get("wa_message") or "Olá, Tiago. Quero solicitar um canal seguro para envio.")
-    form = f"/?{j.get('href_params') or 'jornada='+journey_id}&tema={quote(topic)}&origem={quote(origem)}#contato"
+    form = "/#contato"
 
     new_lead = (
         f'<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo" '
@@ -740,6 +740,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
         f'<a class="button button-primary" data-cta-position="inline" data-journey="{journey_id}" '
         f'href="{wa}" rel="noopener" target="_blank">{html_lib.escape(cta)} no WhatsApp</a>'
         f'<a class="button button-secondary" data-cta-position="form" data-journey="{journey_id}" '
+        f'data-tema="{html_lib.escape(topic, quote=True)}" data-origem="{html_lib.escape(origem, quote=True)}" '
         f'href="{form}">Continuar pelo formulário</a>'
         f"</div></section>"
 )

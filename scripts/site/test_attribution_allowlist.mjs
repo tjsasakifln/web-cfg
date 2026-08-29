@@ -195,8 +195,9 @@ const hopSession = {
 };
 const GENERATED_UUID = "00000000-0000-4000-8000-000000000099";
 
-function loadShippedScript({ pathname, search, hash, dataset, withForm }) {
+function loadShippedScript({ pathname, search, hash, dataset, withForm, session = hopSession }) {
   const hidden = {};
+  const formAttrs = {};
   const form = withForm
     ? {
         querySelector(sel) {
@@ -207,9 +208,15 @@ function loadShippedScript({ pathname, search, hash, dataset, withForm }) {
         appendChild(el) {
           if (el && el.name) hidden[el.name] = el;
         },
-        setAttribute() {},
+        getAttribute(name) {
+          return formAttrs[name];
+        },
+        setAttribute(name, value) {
+          formAttrs[name] = value;
+        },
       }
     : null;
+  const docListeners = [];
   const document = {
     readyState: "complete",
     querySelector: (sel) => {
@@ -220,7 +227,9 @@ function loadShippedScript({ pathname, search, hash, dataset, withForm }) {
     getElementById: () => null,
     createElement: (tag) => ({ tagName: String(tag).toUpperCase(), type: "", name: "", value: "" }),
     documentElement: { scrollHeight: 2000 },
-    addEventListener: () => {},
+    addEventListener: (type, fn, opts) => {
+      docListeners.push({ type, fn, opts });
+    },
     body: {
       classList: { remove() {}, add() {} },
       dataset: dataset || {},
@@ -235,14 +244,14 @@ function loadShippedScript({ pathname, search, hash, dataset, withForm }) {
     addEventListener: () => {},
     innerHeight: 800,
     scrollY: 0,
-    sessionStorage: hopSession,
+    sessionStorage: session,
     crypto: { randomUUID: () => GENERATED_UUID },
   };
   windowObj.window = windowObj;
-  const sandbox = { window: windowObj, document, console, URLSearchParams, sessionStorage: hopSession };
+  const sandbox = { window: windowObj, document, console, URLSearchParams, sessionStorage: session };
   vm.createContext(sandbox);
   vm.runInContext(script, sandbox);
-  return { sandbox, hidden, windowObj };
+  return { sandbox, hidden, windowObj, formAttrs, docListeners, session };
 }
 
 const first = loadShippedScript({
@@ -298,5 +307,89 @@ if (!hid.cta_id || hid.cta_id.value !== "pillar_hero") {
   fail("hop2_form_cta_id", hid.cta_id);
 }
 pass("hop2_home_form_keeps_first_touch");
+
+// --- click interceptor: <a data-origem data-tema data-journey href="/#contato"> → session → form ---
+const clickStore = {};
+const clickSession = {
+  getItem: (k) => clickStore[k] || null,
+  setItem: (k, v) => {
+    clickStore[k] = String(v);
+  },
+  removeItem: (k) => {
+    delete clickStore[k];
+  },
+};
+const articlePage = loadShippedScript({
+  pathname: "/conteudos/sinapi-desonerado-nao-desonerado/",
+  search: "",
+  hash: "",
+  dataset: {},
+  withForm: false,
+  session: clickSession,
+});
+const clickFns = articlePage.docListeners.filter((l) => l.type === "click").map((l) => l.fn);
+if (!clickFns.length) fail("click_interceptor_not_registered", articlePage.docListeners);
+const anchor = {
+  href: "/#contato",
+  dataset: {
+    origem: "/conteudos/sinapi-desonerado-nao-desonerado/",
+    tema: "SINAPI desonerado",
+    journey: "edital",
+    segmentKey: "pavimentacao-infraestrutura-viaria",
+  },
+  closest(sel) {
+    return String(sel).includes("a[href]") ? this : null;
+  },
+};
+clickFns.forEach((fn) => fn({ target: anchor }));
+const afterClick = JSON.parse(clickStore.confenge_pseo_attribution || "{}");
+if (afterClick.origem !== "/conteudos/sinapi-desonerado-nao-desonerado/") {
+  fail("click_origem", afterClick);
+}
+if (afterClick.tema !== "SINAPI desonerado") fail("click_tema", afterClick);
+if (afterClick.jornada !== "edital") fail("click_jornada_dropped_by_writeStoredPseo", afterClick);
+if (afterClick.archetype !== "pavimentacao-infraestrutura-viaria") {
+  fail("click_segment_key_dropped_instead_of_mapping_to_archetype", afterClick);
+}
+pass("click_stores_origem_tema_jornada", {
+  origem: afterClick.origem,
+  tema: afterClick.tema,
+  jornada: afterClick.jornada,
+});
+
+const homeAfterClick = loadShippedScript({
+  pathname: "/",
+  search: "",
+  hash: "#contato",
+  dataset: {},
+  withForm: true,
+  session: clickSession,
+});
+const homeSession = JSON.parse(clickStore.confenge_pseo_attribution || "{}");
+if (homeSession.jornada !== "edital") fail("home_session_jornada_wiped", homeSession);
+if (homeSession.origem !== "/conteudos/sinapi-desonerado-nao-desonerado/") {
+  fail("home_session_origem_wiped", homeSession);
+}
+if (homeSession.tema !== "SINAPI desonerado") fail("home_session_tema_wiped", homeSession);
+if (homeSession.archetype !== "pavimentacao-infraestrutura-viaria") {
+  fail("home_session_archetype_wiped", homeSession);
+}
+const clickHid = homeAfterClick.hidden;
+if (!clickHid.origem || clickHid.origem.value !== "/conteudos/sinapi-desonerado-nao-desonerado/") {
+  fail("click_form_origem", clickHid.origem);
+}
+if (!clickHid.jornada || clickHid.jornada.value !== "edital") {
+  fail("click_form_jornada", clickHid.jornada);
+}
+if (!clickHid.tema || clickHid.tema.value !== "SINAPI desonerado") {
+  fail("click_form_tema", clickHid.tema);
+}
+if (!clickHid.archetype || clickHid.archetype.value !== "pavimentacao-infraestrutura-viaria") {
+  fail("click_form_archetype", clickHid.archetype);
+}
+if (homeAfterClick.formAttrs.action !== "/obrigado-edital") {
+  fail("click_form_action_not_edital", homeAfterClick.formAttrs);
+}
+pass("click_anchor_reaches_home_form_hiddens");
 
 console.log("OK attribution-allowlist");

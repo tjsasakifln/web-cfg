@@ -16,7 +16,7 @@
       "sitemap_membership": false,
       "internal_backlinks": "n/a (host)",
       "external_backlinks_known": "unknown",
-      "action": "keep_https_force_via_netlify_host_rules",
+      "action": "keep_https_force_via_nginx_host_contract",
       "gsc_signal": "7 impressions residual on http host row"
     },
     {
@@ -96,8 +96,8 @@
       "legacy_url": "https://confenge.com.br/servicos",
       "status": "301_redirect",
       "current_action": "301",
-      "destination": "/#como-atuamos",
-      "canonical": "https://confenge.com.br/",
+      "destination": "/servicos-obras-publicas/",
+      "canonical": "https://confenge.com.br/servicos-obras-publicas/",
       "sitemap_membership": false,
       "action": "keep_301"
     },
