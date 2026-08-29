@@ -500,7 +500,7 @@ async function shippedFetch(url, opts = {}) {
   if (href.includes("snapshot.json")) {
     return { ok: true, json: async () => snapshot };
   }
-  if (href.includes("/.netlify/functions/lead")) {
+  if (href.includes("/.netlify/functions/lead") || href.includes("/api/web/lead")) {
     const body = JSON.parse(opts.body || "{}");
     const res = await leadHandler(leadEvent(body, {
       "Idempotency-Key": (opts.headers && (opts.headers["Idempotency-Key"] || opts.headers["idempotency-key"])) || body.idempotency_key,
@@ -513,7 +513,7 @@ async function shippedFetch(url, opts = {}) {
       json: async () => JSON.parse(res.body),
     };
   }
-  if (href.includes("/.netlify/functions/collect")) {
+  if (href.includes("/.netlify/functions/collect") || href.includes("/api/web/collect")) {
     const res = await collect.handler({
       httpMethod: "POST",
       headers: { "content-type": "application/json", origin: "https://confenge.com.br" },
