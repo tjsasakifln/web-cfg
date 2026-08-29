@@ -157,6 +157,7 @@ def test_site_ci_shape():
     # Central scripts must appear
     for needle in (
         "npm run build:site",
+        "npm run test:cluster-medicao-published",
         "npm run test:html-integrity:site",
         "npm run pseo:validate",
         "npm run pseo:audit",
@@ -170,6 +171,11 @@ def test_site_ci_shape():
     ):
         if needle not in text:
             errors.append(f"site-ci missing required step command: {needle}")
+
+    if text.find("npm run test:cluster-medicao-published") < text.find(
+        "npm run build:site"
+    ):
+        errors.append("site-ci must audit cluster originality after build:site")
 
     # Node pin aligned with Netlify (issue #149 migrated the whole set to 22)
     if 'node-version: "22"' not in text and "node-version: '22'" not in text:
@@ -236,6 +242,7 @@ def test_pseo_shape():
 
     for needle in (
         "npm run build:site",
+        "npm run test:cluster-medicao-published",
         "npm run test:html-integrity:site",
         "npm run audit:public-artifact",
         "npm run pseo:validate",
@@ -244,6 +251,11 @@ def test_pseo_shape():
     ):
         if needle not in text:
             errors.append(f"pseo missing required step command: {needle}")
+
+    if text.find("npm run test:cluster-medicao-published") < text.find(
+        "npm run build:site"
+    ):
+        errors.append("pseo must audit cluster originality after build:site")
 
     if 'node-version: "22"' not in text and "node-version: '22'" not in text:
         errors.append('pseo must pin node-version: "22" (Node 22 + Lighthouse 13 runtime)')

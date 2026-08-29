@@ -26,10 +26,26 @@ verify = _NAMESPACE["verify"]
 protected_snapshot = _NAMESPACE["_protected_snapshot"]
 CutoverError = _NAMESPACE["CutoverError"]
 CUTOVER_TTL = _NAMESPACE["CUTOVER_TTL"]
+PROXIED_TTL = _NAMESPACE["PROXIED_TTL"]
 
 
-def _record(rid: str, rtype: str, name: str, content: str) -> dict:
-    return {"id": rid, "type": rtype, "name": name, "content": content, "ttl": 1, "proxied": False}
+def _record(
+    rid: str,
+    rtype: str,
+    name: str,
+    content: str,
+    *,
+    ttl: int = CUTOVER_TTL,
+    proxied: bool = False,
+) -> dict:
+    return {
+        "id": rid,
+        "type": rtype,
+        "name": name,
+        "content": content,
+        "ttl": ttl,
+        "proxied": proxied,
+    }
 
 
 def live_zone() -> list[dict]:
@@ -88,6 +104,10 @@ def test_plan_points_the_public_surface_at_the_netcup_origin():
     written = {(row["name"], row["type"], row["content"]) for row in _written(plan)}
     assert ("confenge.com.br", "A", "159.195.18.88") in written
     assert ("www.confenge.com.br", "CNAME", "confenge.com.br") in written
+    assert plan["proxied"] is True
+    assert plan["ttl"] == PROXIED_TTL
+    assert all(row["proxied"] is True for row in _written(plan))
+    assert all(row["ttl"] == PROXIED_TTL for row in _written(plan))
     # The www CNAME is replaced in place, so only the two apex records are deleted.
     assert len(plan["delete"]) == 2
 
@@ -103,8 +123,22 @@ def test_rollback_is_declared_with_the_pre_change_records():
 
 def test_rolling_back_restores_netlify_exactly():
     after_cutover = [
-        _record("new-apex", "A", "confenge.com.br", "159.195.18.88"),
-        _record("new-www", "CNAME", "www.confenge.com.br", "confenge.com.br"),
+        _record(
+            "new-apex",
+            "A",
+            "confenge.com.br",
+            "159.195.18.88",
+            ttl=PROXIED_TTL,
+            proxied=True,
+        ),
+        _record(
+            "new-www",
+            "CNAME",
+            "www.confenge.com.br",
+            "confenge.com.br",
+            ttl=PROXIED_TTL,
+            proxied=True,
+        ),
         *[r for r in live_zone() if r["id"] not in {"apex-a1", "apex-a2", "www"}],
     ]
     plan = build_plan(after_cutover, "netlify")
@@ -112,12 +146,30 @@ def test_rolling_back_restores_netlify_exactly():
     assert ("confenge.com.br", "A", "75.2.60.5") in written
     assert ("confenge.com.br", "A", "99.83.231.61") in written
     assert ("www.confenge.com.br", "CNAME", "confenge.netlify.app") in written
+    assert plan["proxied"] is False
+    assert plan["ttl"] == CUTOVER_TTL
+    assert all(row["proxied"] is False for row in _written(plan))
+    assert all(row["ttl"] == CUTOVER_TTL for row in _written(plan))
 
 
 def test_replanning_an_already_cut_zone_is_a_no_op():
     already = [
-        _record("new-apex", "A", "confenge.com.br", "159.195.18.88"),
-        _record("new-www", "CNAME", "www.confenge.com.br", "confenge.com.br"),
+        _record(
+            "new-apex",
+            "A",
+            "confenge.com.br",
+            "159.195.18.88",
+            ttl=PROXIED_TTL,
+            proxied=True,
+        ),
+        _record(
+            "new-www",
+            "CNAME",
+            "www.confenge.com.br",
+            "confenge.com.br",
+            ttl=PROXIED_TTL,
+            proxied=True,
+        ),
         *[r for r in live_zone() if r["id"] not in {"apex-a1", "apex-a2", "www"}],
     ]
     plan = build_plan(already, "netcup")
@@ -126,12 +178,74 @@ def test_replanning_an_already_cut_zone_is_a_no_op():
     assert (plan.get("update") or []) == []
 
 
+def test_replanning_dns_only_netcup_records_updates_edge_state_in_place():
+    dns_only = [
+        _record("new-apex", "A", "confenge.com.br", "159.195.18.88"),
+        _record("new-www", "CNAME", "www.confenge.com.br", "confenge.com.br"),
+        *[r for r in live_zone() if r["id"] not in {"apex-a1", "apex-a2", "www"}],
+    ]
+    plan = build_plan(dns_only, "netcup")
+    assert plan["create"] == []
+    assert plan["delete"] == []
+    assert {row["id"] for row in plan["update"]} == {"new-apex", "new-www"}
+    assert all(row["proxied"] is True for row in plan["update"])
+    assert all(row["ttl"] == PROXIED_TTL for row in plan["update"])
+
+
+def test_replanning_proxied_netcup_records_with_explicit_ttl_repairs_ttl_in_place():
+    wrong_ttl = [
+        _record(
+            "new-apex",
+            "A",
+            "confenge.com.br",
+            "159.195.18.88",
+            ttl=CUTOVER_TTL,
+            proxied=True,
+        ),
+        _record(
+            "new-www",
+            "CNAME",
+            "www.confenge.com.br",
+            "confenge.com.br",
+            ttl=CUTOVER_TTL,
+            proxied=True,
+        ),
+        *[r for r in live_zone() if r["id"] not in {"apex-a1", "apex-a2", "www"}],
+    ]
+    plan = build_plan(wrong_ttl, "netcup")
+    assert plan["create"] == []
+    assert plan["delete"] == []
+    assert {row["id"] for row in plan["update"]} == {"new-apex", "new-www"}
+    assert all(row["ttl"] == PROXIED_TTL for row in plan["update"])
+
+
 def test_a_target_outside_the_public_surface_is_refused():
     namespace_targets = _NAMESPACE["TARGETS"]
     namespace_targets["rogue"] = {
-        "confenge.com.br": [{"type": "A", "content": "203.0.113.1"}],
-        "www.confenge.com.br": [{"type": "CNAME", "content": "confenge.com.br"}],
-        "api.confenge.com.br": [{"type": "A", "content": "203.0.113.1"}],
+        "confenge.com.br": [
+            {
+                "type": "A",
+                "content": "203.0.113.1",
+                "ttl": CUTOVER_TTL,
+                "proxied": False,
+            }
+        ],
+        "www.confenge.com.br": [
+            {
+                "type": "CNAME",
+                "content": "confenge.com.br",
+                "ttl": CUTOVER_TTL,
+                "proxied": False,
+            }
+        ],
+        "api.confenge.com.br": [
+            {
+                "type": "A",
+                "content": "203.0.113.1",
+                "ttl": CUTOVER_TTL,
+                "proxied": False,
+            }
+        ],
     }
     try:
         with pytest.raises(CutoverError, match="not the public web surface"):
@@ -147,6 +261,7 @@ def test_an_unknown_destination_is_refused():
 
 def test_cutover_ttl_bounds_the_rollback():
     assert CUTOVER_TTL == 300, "an explicit low TTL bounds how long a rollback takes to propagate"
+    assert PROXIED_TTL == 1, "Cloudflare-proxied records must use automatic TTL"
 
 
 # Cloudflare refuses a second CNAME on a name that already holds one (81053).
@@ -182,6 +297,10 @@ def test_apply_replaces_the_singleton_cname_with_put_before_apex_changes(monkeyp
     assert calls[0][1].endswith("/dns_records/www")
     assert calls[0][2]["name"] == "www.confenge.com.br"
     assert calls[0][2]["content"] == "confenge.com.br"
+    assert calls[0][2]["proxied"] is True
+    assert calls[0][2]["ttl"] == PROXIED_TTL
+    assert calls[1][2]["proxied"] is True
+    assert calls[1][2]["ttl"] == PROXIED_TTL
     assert all(
         payload is None or payload["name"] in {"confenge.com.br", "www.confenge.com.br"}
         for _, _, payload in calls
@@ -202,7 +321,14 @@ def test_a_half_applied_zone_converges_on_replan():
     """The live failure left the apex with three A records and the old www CNAME.
     Re-planning from that state must finish the job, not compound it."""
     half = [
-        _record("new-apex", "A", "confenge.com.br", "159.195.18.88"),
+        _record(
+            "new-apex",
+            "A",
+            "confenge.com.br",
+            "159.195.18.88",
+            ttl=PROXIED_TTL,
+            proxied=True,
+        ),
         *live_zone(),
     ]
     plan = build_plan(half, "netcup")
@@ -211,11 +337,57 @@ def test_a_half_applied_zone_converges_on_replan():
     assert sorted(r["content"] for r in plan["delete"]) == ["75.2.60.5", "99.83.231.61"]
 
 
+@pytest.mark.parametrize(
+    ("ttl", "proxied"),
+    [
+        pytest.param(CUTOVER_TTL, True, id="explicit-ttl-instead-of-auto"),
+        pytest.param(PROXIED_TTL, False, id="dns-only-instead-of-proxied"),
+    ],
+)
+def test_verification_rejects_netcup_edge_policy_drift(monkeypatch, ttl, proxied):
+    current = [
+        _record(
+            "new-apex",
+            "A",
+            "confenge.com.br",
+            "159.195.18.88",
+            ttl=ttl,
+            proxied=proxied,
+        ),
+        _record(
+            "new-www",
+            "CNAME",
+            "www.confenge.com.br",
+            "confenge.com.br",
+            ttl=PROXIED_TTL,
+            proxied=True,
+        ),
+    ]
+    monkeypatch.setitem(_NAMESPACE, "records", lambda token, zone: current)
+    result = verify("sanitized-token", "zone", "netcup")
+    assert result["ok"] is False
+    assert any(problem.startswith("confenge.com.br:") for problem in result["problems"])
+
+
 def test_post_apply_verification_requires_the_exact_protected_snapshot(monkeypatch):
     before = live_zone()
     after = [
-        _record("new-apex", "A", "confenge.com.br", "159.195.18.88"),
-        _record("www", "CNAME", "www.confenge.com.br", "confenge.com.br"),
+        _record(
+            "new-apex",
+            "A",
+            "confenge.com.br",
+            "159.195.18.88",
+            ttl=PROXIED_TTL,
+            proxied=True,
+        ),
+        _record(
+            "www",
+            "CNAME",
+            "www.confenge.com.br",
+            "confenge.com.br",
+            ttl=PROXIED_TTL,
+            proxied=True,
+        ),
         *[r for r in before if r["id"] not in {"apex-a1", "apex-a2", "www"}],
     ]
     monkeypatch.setitem(_NAMESPACE, "records", lambda token, zone: after)
@@ -227,8 +399,22 @@ def test_post_apply_verification_requires_the_exact_protected_snapshot(monkeypat
 def test_post_apply_verification_fails_if_mail_or_a_sibling_changes(monkeypatch):
     before = live_zone()
     after = [
-        _record("new-apex", "A", "confenge.com.br", "159.195.18.88"),
-        _record("www", "CNAME", "www.confenge.com.br", "confenge.com.br"),
+        _record(
+            "new-apex",
+            "A",
+            "confenge.com.br",
+            "159.195.18.88",
+            ttl=PROXIED_TTL,
+            proxied=True,
+        ),
+        _record(
+            "www",
+            "CNAME",
+            "www.confenge.com.br",
+            "confenge.com.br",
+            ttl=PROXIED_TTL,
+            proxied=True,
+        ),
         *[
             r for r in before
             if r["id"] not in {
