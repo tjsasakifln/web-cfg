@@ -244,7 +244,7 @@ export function scanOperatorDocs({ root = ROOT, policy = loadScanPolicy(root) } 
   };
 }
 
-const YAML_FENCE = /```yaml\n([\s\S]*?)\n```/;
+const YAML_FENCE = /```yaml\r?\n([\s\S]*?)\r?\n```/;
 
 export function parseScalar(raw) {
   const value = String(raw).trim();
@@ -374,6 +374,15 @@ function sameSet(left, right) {
   return a.length === b.length && a.every((item, i) => item === b[i]);
 }
 
+function overlaps(left, right) {
+  const wanted = new Set(asList(right));
+  return asList(left).some((item) => wanted.has(item));
+}
+
+function isCloudflareProxy(dns) {
+  return String(dns.proxy || "").trim().toLowerCase() === "cloudflare";
+}
+
 function fail(failures, code, detail) {
   failures.push({ code, detail });
 }
@@ -381,10 +390,14 @@ function fail(failures, code, detail) {
 export function observationFromAuthority(authority) {
   const prod = authority.public_canonical || {};
   const dns = prod.dns || {};
+  const proxied = isCloudflareProxy(dns);
   return {
     dns: {
-      apex_a: [...(dns.apex_a || [])],
-      www_cname: dns.www_cname || "",
+      // Proxied A answers are deliberately examples, not authority. They prove
+      // fixtures and callers do not pin Cloudflare's dynamic anycast addresses.
+      apex_a: proxied ? ["104.16.0.1"] : [...(dns.apex_a || [])],
+      www_a: proxied ? ["172.64.0.1"] : [],
+      www_cname: proxied ? "" : dns.www_cname || "",
       nameservers: [...(dns.nameservers || [])],
     },
     http: {
@@ -439,18 +452,50 @@ export function compareRuntimeAuthority({ authority, observed, expected = {} }) 
   if (/^netlify$/i.test(String(prod.host || "").trim()) || prod.host_kind === "netlify") {
     fail(failures, "netlify_named_as_production_host", String(prod.host));
   }
-  if (!sameSet(obsDns.apex_a, dns.apex_a)) {
-    fail(
-      failures,
-      "dns_apex_mismatch",
-      `observed=${JSON.stringify(obsDns.apex_a)} expected=${JSON.stringify(dns.apex_a)}`,
-    );
+  if (isCloudflareProxy(dns)) {
+    const originA = asList(dns.origin_apex_a);
+    const apexA = asList(obsDns.apex_a);
+    const wwwA = asList(obsDns.www_a);
+    if (originA.length === 0) {
+      fail(failures, "dns_origin_authority_missing", "proxied DNS must declare origin_apex_a");
+    }
+    if (apexA.length === 0 || overlaps(apexA, originA)) {
+      fail(
+        failures,
+        "dns_apex_mismatch",
+        `proxied apex must have an A answer and hide origin=${JSON.stringify(originA)}; observed=${JSON.stringify(apexA)}`,
+      );
+    }
+    if (wwwA.length === 0 || overlaps(wwwA, originA)) {
+      fail(
+        failures,
+        "dns_www_mismatch",
+        `proxied www must have an A answer and hide origin=${JSON.stringify(originA)}; observed=${JSON.stringify(wwwA)}`,
+      );
+    }
+  } else {
+    // Preserve the original exact-address contract for a deliberately
+    // non-proxied authority record.
+    if (!sameSet(obsDns.apex_a, dns.apex_a)) {
+      fail(
+        failures,
+        "dns_apex_mismatch",
+        `observed=${JSON.stringify(obsDns.apex_a)} expected=${JSON.stringify(dns.apex_a)}`,
+      );
+    }
+    if (normalizeCname(obsDns.www_cname) !== normalizeCname(dns.www_cname)) {
+      fail(
+        failures,
+        "dns_www_mismatch",
+        `observed=${obsDns.www_cname} expected=${dns.www_cname}`,
+      );
+    }
   }
-  if (normalizeCname(obsDns.www_cname) !== normalizeCname(dns.www_cname)) {
+  if (!sameSet(obsDns.nameservers, dns.nameservers)) {
     fail(
       failures,
-      "dns_www_mismatch",
-      `observed=${obsDns.www_cname} expected=${dns.www_cname}`,
+      "dns_nameserver_mismatch",
+      `observed=${JSON.stringify(obsDns.nameservers)} expected=${JSON.stringify(dns.nameservers)}`,
     );
   }
   if (String(obsHttp.server || "").toLowerCase() !== String(prod.expected_server_header || "").toLowerCase()) {
@@ -473,6 +518,13 @@ export function compareRuntimeAuthority({ authority, observed, expected = {} }) 
       failures,
       "environment_mismatch",
       `observed=${obsHttp.environment} expected=${expectedEnvironment}`,
+    );
+  }
+  if (prod.expected_profile && obsHttp.profile !== prod.expected_profile) {
+    fail(
+      failures,
+      "profile_mismatch",
+      `observed=${obsHttp.profile} expected=${prod.expected_profile}`,
     );
   }
   if (expected.sha) {
@@ -554,14 +606,16 @@ export async function observeLive({ origin = "https://confenge.com.br" } = {}) {
   });
   const build = await fetchJson(`${origin.replace(/\/$/, "")}/.well-known/build-info.json`);
   const runtime = await fetchJson(`${origin.replace(/\/$/, "")}/.well-known/runtime-info.json`);
-  const [apexA, wwwCname, nameservers] = await Promise.all([
+  const [apexA, wwwA, wwwCname, nameservers] = await Promise.all([
     doh(apex, "A"),
+    doh(www, "A"),
     doh(www, "CNAME"),
     doh(apex, "NS"),
   ]);
   return {
     dns: {
       apex_a: apexA,
+      www_a: wwwA,
       www_cname: wwwCname[0] || "",
       nameservers,
     },
@@ -598,7 +652,7 @@ export async function runCompare(argv = process.argv.slice(2)) {
     else if (arg === "--help" || arg === "-h") {
       return {
         ok: true,
-        usage: "node scripts/site/runtime_authority.mjs --fixture matching|divergent-host|divergent-dns|divergent-header | --live",
+        usage: "node scripts/site/runtime_authority.mjs --fixture matching|divergent-host|divergent-dns|divergent-www-dns|divergent-header | --live",
       };
     } else {
       throw new Error(`unknown_argument:${arg}`);

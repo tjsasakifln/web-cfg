@@ -52,10 +52,12 @@ test("parses the shipped authority yaml from RUNTIME-AUTHORITY.md", () => {
   assert.equal(record.authority_version, 2);
   assert.equal(record.public_canonical.plane, "production");
   assert.equal(record.public_canonical.host_kind, "nginx-netcup");
-  assert.equal(record.public_canonical.expected_server_header, "nginx");
+  assert.equal(record.public_canonical.expected_server_header, "cloudflare");
   assert.equal(record.public_canonical.host_architecture_version, "confenge-nginx-node/v2");
   assert.equal(record.public_canonical.expected_environment, "production");
-  assert.deepEqual(record.public_canonical.dns.apex_a, ["159.195.18.88"]);
+  assert.equal(record.public_canonical.dns.proxy, "cloudflare");
+  assert.deepEqual(record.public_canonical.dns.origin_apex_a, ["159.195.18.88"]);
+  assert.equal(record.public_canonical.dns.apex_a, undefined);
   assert.equal(record.public_canonical.dns.www_cname, "confenge.com.br");
   assert.equal(record.public_canonical.rollback, "/opt/confenge-web/bin/rollback FULL_SHA");
   assert.equal(record.public_canonical.storage.backend, "filesystem");
@@ -93,6 +95,7 @@ test("matching fixture passes through the shipped compare function", () => {
 for (const [name, code] of [
   ["divergent-host", "server_header_mismatch"],
   ["divergent-dns", "dns_apex_mismatch"],
+  ["divergent-www-dns", "dns_www_mismatch"],
   ["divergent-header", "architecture_header_mismatch"],
 ]) {
   test(`${name} fixture fails closed with ${code}`, () => {
@@ -114,13 +117,84 @@ test("CLI matching fixture exits 0", () => {
 });
 
 test("CLI divergent host/dns/header fixtures exit 1", () => {
-  for (const name of ["divergent-host", "divergent-dns", "divergent-header"]) {
+  for (const name of ["divergent-host", "divergent-dns", "divergent-www-dns", "divergent-header"]) {
     const ran = runCli(["--fixture", name]);
     assert.equal(ran.status, 1, `${name}: ${ran.stdout}\n${ran.stderr}`);
     const payload = JSON.parse(ran.stdout);
     assert.equal(payload.ok, false, name);
     assert.ok(payload.failures.length > 0, name);
   }
+});
+
+test("Cloudflare anycast A changes are accepted without weakening origin protection", () => {
+  const loaded = loadFixture("matching");
+  loaded.observed.dns.apex_a = ["104.18.20.10", "172.64.155.246"];
+  loaded.observed.dns.www_a = ["104.18.21.10"];
+  const result = compareRuntimeAuthority(loaded);
+  assert.equal(result.ok, true, JSON.stringify(result.failures));
+});
+
+test("Cloudflare proxy fails closed when either public name exposes the origin", () => {
+  const authority = loadAuthorityFromRepo();
+  for (const field of ["apex_a", "www_a"]) {
+    const observed = observationFromAuthority(authority);
+    observed.dns[field] = [...authority.public_canonical.dns.origin_apex_a];
+    const result = compareRuntimeAuthority({
+      authority,
+      observed,
+      expected: { sha: observed.http.commit, environment: "production" },
+    });
+    assert.equal(result.ok, false, field);
+    assert.ok(
+      result.failures.some((item) => item.code === (field === "apex_a" ? "dns_apex_mismatch" : "dns_www_mismatch")),
+      JSON.stringify(result.failures),
+    );
+  }
+});
+
+test("nameserver authority remains an exact set under the proxy", () => {
+  const loaded = loadFixture("matching");
+  loaded.observed.dns.nameservers = ["ns1.example.invalid"];
+  const result = compareRuntimeAuthority(loaded);
+  assert.equal(result.ok, false);
+  assert.ok(result.failures.some((item) => item.code === "dns_nameserver_mismatch"));
+});
+
+test("origin header, build, and runtime identity checks remain fail closed", () => {
+  for (const [path, value, code] of [
+    ["architecture_header", "unexpected-origin/v1", "architecture_header_mismatch"],
+    ["commit", "b".repeat(40), "build_sha_mismatch"],
+    ["profile", "unexpected-profile", "profile_mismatch"],
+  ]) {
+    const loaded = loadFixture("matching");
+    loaded.observed.http[path] = value;
+    const result = compareRuntimeAuthority(loaded);
+    assert.equal(result.ok, false, path);
+    assert.ok(result.failures.some((item) => item.code === code), JSON.stringify(result.failures));
+  }
+});
+
+test("non-proxied authority records retain exact A and CNAME comparison", () => {
+  const authority = structuredClone(loadAuthorityFromRepo());
+  const dns = authority.public_canonical.dns;
+  delete dns.proxy;
+  dns.apex_a = [...dns.origin_apex_a];
+  delete dns.origin_apex_a;
+  const observed = observationFromAuthority(authority);
+  const matching = compareRuntimeAuthority({
+    authority,
+    observed,
+    expected: { sha: observed.http.commit, environment: "production" },
+  });
+  assert.equal(matching.ok, true, JSON.stringify(matching.failures));
+
+  observed.dns.apex_a = ["203.0.113.9"];
+  const divergent = compareRuntimeAuthority({
+    authority,
+    observed,
+    expected: { sha: observed.http.commit, environment: "production" },
+  });
+  assert.ok(divergent.failures.some((item) => item.code === "dns_apex_mismatch"));
 });
 
 test("runCompare matching path is the same function the CLI uses", async () => {

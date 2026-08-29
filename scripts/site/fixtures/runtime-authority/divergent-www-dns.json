@@ -1,0 +1,10 @@
+{
+  "mode": "from-authority",
+  "mutate": {
+    "dns.www_a": ["159.195.18.88"]
+  },
+  "expected": {
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "environment": "production"
+  }
+}
