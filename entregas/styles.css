@@ -229,7 +229,7 @@
 .capability-item--blocked .capability-item__maturity{border-left-color:#8b3e32}
 @media(max-width:900px){
   .deliverables-vitrine__intro,.capability-roll__intro{grid-template-columns:1fr;align-items:start}
-  .offer-decision-nav ol{grid-template-columns:1fr 1fr}
+  .offer-decision-nav ol{grid-template-columns:repeat(2,minmax(0,1fr))}
   .published-offers__common{grid-template-columns:1fr}
   .vitrine-item__facts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .capability-group>summary{grid-template-columns:42px minmax(0,1fr)}
@@ -245,7 +245,7 @@
   .deliverables-vitrine,.capability-roll{padding:30px 0 36px}
   .deliverables-vitrine__intro h2,.capability-roll__intro h2{font-size:2rem}
   .offer-decision-nav{padding:14px}
-  .offer-decision-nav ol{grid-template-columns:1fr 1fr}
+  .offer-decision-nav ol{grid-template-columns:repeat(2,minmax(0,1fr))}
   .published-offers__common{padding:18px;gap:16px}
   .vitrine-items{gap:8px}
   .vitrine-item{padding:12px}
@@ -274,4 +274,7 @@
   .deliverables-next{padding:32px 0}
   .deliverables-next h2{font-size:1.6rem}
   .deliverables-page .pillar-capture{padding:20px 0}
+}
+@media(max-width:360px){
+  .offer-decision-nav ol{grid-template-columns:minmax(0,1fr)}
 }
