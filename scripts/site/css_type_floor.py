@@ -22,7 +22,7 @@ CRITICAL_SELECTOR = re.compile(
     r"table-note|technical-note|content-badge|item-meta|author-box span|"
     r"aside-card>span|lead-inline-copy span|directory-search label|"
     r"breakout-meta dt|compare-table thead|trace-matrix thead|"
-    r"catalog-item__facts dt|deliverable-section-head|operating-marker)",
+    r"catalog-item__facts dt|vitrine-item__facts dt|deliverable-section-head|operating-marker)",
     re.I,
 )
 
