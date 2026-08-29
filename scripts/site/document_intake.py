@@ -28,9 +28,7 @@ CTA_REPLACEMENTS: tuple[tuple[str, str], ...] = (
     ("Enviar documentos para análise no WhatsApp", f"{HONEST_CTA} no WhatsApp"),
     ("Enviar documentos agora pelo WhatsApp", HONEST_CTA),
     ("Enviar documentos para análise", HONEST_CTA),
-    ("Enviar edital para triagem no WhatsApp", f"{HONEST_CTA} no WhatsApp"),
     ("Enviar o edital agora pelo WhatsApp", HONEST_CTA),
-    ("Enviar edital para triagem", HONEST_CTA),
     ("Enviar edital e planilha", HONEST_CTA),
 )
 
@@ -140,15 +138,15 @@ BODY_REPLACEMENTS: tuple[tuple[str, str], ...] = (
 )
 
 # Visible visitor claims that the site receives a file. Used by the honesty gate.
+# "Enviar edital para triagem" is the edital journey CTA (job name), not a
+# claim that this form stores a file.
 DISHONEST_VISIBLE = (
     "Enviar documentos para análise",
     "Enviar documentos para análise inicial",
-    "Enviar edital para triagem",
     "Enviar documentos agora pelo WhatsApp",
     "Enviar o edital agora pelo WhatsApp",
     "Enviar edital e planilha",
     "Enviar documentos para análise no WhatsApp",
-    "Enviar edital para triagem no WhatsApp",
     "Envie o edital, a planilha",
     "Envie o edital e a planilha",
     "Envie trechos do edital",
