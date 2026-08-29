@@ -83,6 +83,10 @@ assert.ok(!serialized.includes("pode ter direito"));
 assert.ok(!serialized.includes("tese jurídica"));
 assert.ok(!serialized.includes("has_right"));
 assert.ok(!serialized.includes("should_adjust"));
+assert.ok(first.layers && first.layers.fato && first.layers.calculo && first.layers.inferencia && first.layers.unknown);
+assert.match(first.layers.calculo, /não calcula valor a receber/i);
+assert.equal(first.cta.branch, "segunda_leitura");
+assert.ok(!FORBIDDEN_CONCLUSION_FIELDS.some((key) => Object.prototype.hasOwnProperty.call(first, key)));
 
 const second = snapshot.records.find((row) => row.canonical_contract_id === "83102277000152-2-000626/2026") || snapshot.records[1];
 const secondDx = diagnoseMargin(second, snapshot);
