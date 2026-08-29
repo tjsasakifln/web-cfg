@@ -7,6 +7,7 @@ import {
   contentHash,
   publish,
   restoreHistory,
+  rollback,
   validatePublishable,
   validateSyncProvenance,
 } from "./publish_gsc_insights.mjs";
@@ -24,9 +25,11 @@ const now = new Date();
 const insights = {
   source: "search_analytics_api",
   as_of: now.toISOString().slice(0, 10),
-  generated_at: now.toISOString(),
+  generated_at: now.toISOString().replace(/\.(\d{3})Z$/, ".$1000+00:00"),
   ready_for_product_decisions: true,
   synthetic: false,
+  fixture: false,
+  live_baseline_invented: false,
   query_text_redacted: true,
   raw_query_rows_in_git: false,
   "11_emerging_terms": [],
@@ -48,7 +51,9 @@ const observations = [0, 1, 2].map((offset) => {
       new Date(Date.parse(`${asOf}T00:00:00Z`) - (4 - offset - day) * 864e5).toISOString().slice(0, 10)
     ),
     snapshot_sha256: String(offset + 1).repeat(64),
-    observed_at: new Date(now.getTime() - (2 - offset) * 864e5).toISOString(),
+    observed_at: new Date(now.getTime() - (2 - offset) * 864e5)
+      .toISOString()
+      .replace(/\.(\d{3})Z$/, ".$1000+00:00"),
     run_id: `run-${offset + 1}`,
   };
   observation.observation_id = observationHash(observation);
@@ -102,8 +107,12 @@ check("history_contract_valid", validateHistoryState(history).ok);
 
 check("publishable_redacted_snapshot", validatePublishable(insights).as_of === insights.as_of);
 const syncState = {
+  schema_version: "gsc-sync-state/v1",
+  manifest_schema_version: "gsc_snapshot_manifest_v1",
   source: "search_analytics_api",
   synthetic: false,
+  fixture: false,
+  live_baseline_invented: false,
   truncated: false,
   ready_for_product_decisions: true,
   as_of: insights.as_of,
@@ -113,6 +122,23 @@ const syncState = {
   manifest_sha256: history.last_known_good.snapshot_sha256,
 };
 check("current_sync_provenance", validateSyncProvenance(insights, syncState, history));
+for (const [name, patch] of [
+  ["fixture_snapshot_rejected", { fixture: true }],
+  ["invented_baseline_rejected", { live_baseline_invented: true }],
+]) {
+  try {
+    validatePublishable({ ...insights, ...patch });
+    check(name, false);
+  } catch (error) {
+    check(name, error.message === "gsc_insights_not_product_ready", error.message);
+  }
+}
+try {
+  validateSyncProvenance(insights, { ...syncState, fixture: true }, history);
+  check("fixture_sync_provenance_rejected", false);
+} catch (error) {
+  check("fixture_sync_provenance_rejected", error.message === "gsc_insights_sync_provenance_invalid", error.message);
+}
 try {
   validatePublishable({ ...insights, query: "private raw query" });
   check("raw_query_rejected", false);
@@ -172,17 +198,22 @@ fs.writeFileSync(historyPath, JSON.stringify(history), "utf8");
 const sha = contentHash(insights);
 let posted = false;
 let postedHistory = null;
+let postedProducer = null;
 const fakeFetch = async (url, options = {}) => {
   if (url.includes("gsc_insights_ingest")) {
     posted = true;
     const body = JSON.parse(options.body);
     postedHistory = body.history;
+    postedProducer = body.producer;
     return new Response(
       JSON.stringify({
         ok: true,
         durable: true,
+        status: "CURRENT",
         content_sha256: contentHash(body.insights),
         history_state_sha256: body.history.state_sha256,
+        producer_manifest_sha256: body.producer.manifest_sha256,
+        consumer_manifest_sha256: body.producer.manifest_sha256,
       }),
       { status: 200 }
     );
@@ -192,7 +223,12 @@ const fakeFetch = async (url, options = {}) => {
       JSON.stringify({
         ok: true,
         history: postedHistory || history,
-        meta: { state_sha256: (postedHistory || history).state_sha256 },
+        meta: {
+          state_sha256: (postedHistory || history).state_sha256,
+          manifest_sha256: postedProducer?.manifest_sha256 || syncState.manifest_sha256,
+          as_of: postedProducer?.as_of || syncState.as_of,
+          delivery_source: "durable_store",
+        },
       }),
       { status: 200 },
     );
@@ -200,12 +236,24 @@ const fakeFetch = async (url, options = {}) => {
   return new Response(
     JSON.stringify({
       ok: true,
+      status: "CURRENT",
       meta: {
         as_of: insights.as_of,
         delivery_source: "durable_store",
         content_sha256: sha,
+        snapshot_content_sha256: sha,
         history_state_sha256: history.state_sha256,
         ready_for_product_decisions: true,
+        producer_manifest_sha256: syncState.manifest_sha256,
+        consumer_manifest_sha256: syncState.manifest_sha256,
+        latest_attempt_manifest_sha256: syncState.manifest_sha256,
+        latest_attempt_as_of: syncState.as_of,
+        latest_attempt_produced_at: syncState.last_sync_at,
+        latest_attempt_ingested_at: now.toISOString(),
+        latest_attempt_source_freshness: { status: "CURRENT", reason_codes: [] },
+        producer_as_of: insights.as_of,
+        consumer_as_of: insights.as_of,
+        source_freshness: { status: "CURRENT", reason_codes: [] },
         published_at: now.toISOString(),
       },
     }),
@@ -221,8 +269,158 @@ const proof = await publish({
   fetchImpl: fakeFetch,
 });
 check("publisher_posts", posted);
-check("publisher_read_after_write_proof", proof.ok && proof.content_sha256 === sha, proof.content_sha256);
+check("publisher_posts_versioned_producer", postedProducer?.schema_version === "gsc-sync-state/v1");
+check("publisher_read_after_write_proof", proof.ok && proof.status === "CURRENT" && proof.content_sha256 === sha, proof.content_sha256);
 check("publisher_history_read_after_write", proof.history_state_sha256 === history.state_sha256);
+check("publisher_manifest_hash_parity", proof.producer_manifest_sha256 === proof.consumer_manifest_sha256 && proof.consumer_manifest_sha256 === syncState.manifest_sha256);
+check("publisher_as_of_parity", proof.producer_as_of === proof.consumer_as_of && proof.consumer_as_of === syncState.as_of);
+
+const firstObservation = structuredClone(observations[0]);
+let preThresholdHistory = {
+  schema: "confenge_private_gsc_history_v1",
+  contract_version: "gsc-readiness/v2",
+  window_days: 28,
+  minimum_distinct_as_of: 3,
+  max_as_of_lag_days: 14,
+  created_at: firstObservation.observed_at,
+  updated_at: firstObservation.observed_at,
+  parent_state_sha256: null,
+  observations: [firstObservation],
+  last_attempt: {
+    attempted_at: firstObservation.observed_at,
+    run_id: firstObservation.run_id,
+    outcome: "OBSERVATION_MERGED",
+    as_of: firstObservation.as_of,
+    snapshot_sha256: firstObservation.snapshot_sha256,
+    reason_codes: ["history_store_empty", "minimum_distinct_as_of"],
+  },
+  last_known_good: null,
+  readiness: {
+    ready_for_product_decisions: false,
+    status: "UNKNOWN",
+    access_mode: "NONE",
+    reason_codes: ["minimum_distinct_as_of"],
+    window_start: firstObservation.start,
+    window_end: firstObservation.as_of,
+    observed_dates: firstObservation.observed_dates,
+    missing_dates: [],
+    distinct_as_of: 1,
+    freshness_as_of: firstObservation.as_of,
+  },
+};
+preThresholdHistory.state_sha256 = historyHash(preThresholdHistory);
+const preThresholdSync = {
+  ...syncState,
+  as_of: firstObservation.as_of,
+  last_sync_at: firstObservation.observed_at,
+  ready_for_product_decisions: false,
+  promote_insights: false,
+  history_state_sha256: preThresholdHistory.state_sha256,
+  manifest_sha256: firstObservation.snapshot_sha256,
+};
+const preThresholdStatePath = path.join(tmp, "last_sync_pre_threshold.json");
+const preThresholdHistoryPath = path.join(tmp, "history_pre_threshold.json");
+fs.writeFileSync(preThresholdStatePath, JSON.stringify(preThresholdSync), "utf8");
+fs.writeFileSync(preThresholdHistoryPath, JSON.stringify(preThresholdHistory), "utf8");
+let preThresholdPosted = null;
+const preThresholdSnapshotSha = "f".repeat(64);
+const preThresholdProof = await publish({
+  input,
+  syncStatePath: preThresholdStatePath,
+  historyStatePath: preThresholdHistoryPath,
+  baseUrl: "https://confenge.com.br",
+  token: "test-token-at-least-16-chars",
+  fetchImpl: async (url, options = {}) => {
+    if (url.includes("gsc_insights_ingest")) {
+      preThresholdPosted = JSON.parse(options.body);
+      return new Response(JSON.stringify({
+        ok: true,
+        durable: true,
+        status: "UNKNOWN",
+        content_sha256: null,
+        history_state_sha256: preThresholdHistory.state_sha256,
+        snapshot_sha256: preThresholdSnapshotSha,
+        producer_manifest_sha256: preThresholdPosted.producer.manifest_sha256,
+        consumer_manifest_sha256: preThresholdPosted.producer.manifest_sha256,
+        as_of: preThresholdPosted.producer.as_of,
+      }), { status: 200 });
+    }
+    if (url.includes("gsc_history")) {
+      return new Response(JSON.stringify({
+        ok: true,
+        status: "UNKNOWN",
+        history: preThresholdHistory,
+        meta: {
+          state_sha256: preThresholdHistory.state_sha256,
+          manifest_sha256: preThresholdSync.manifest_sha256,
+          as_of: preThresholdSync.as_of,
+          delivery_source: "durable_store",
+        },
+      }), { status: 200 });
+    }
+    return new Response(JSON.stringify({
+      ok: false,
+      status: "UNKNOWN",
+      access_mode: "NONE",
+      meta: {
+        as_of: preThresholdSync.as_of,
+        delivery_source: "durable_store",
+        history_state_sha256: preThresholdHistory.state_sha256,
+        ready_for_product_decisions: false,
+        latest_attempt_snapshot_sha256: preThresholdSnapshotSha,
+        latest_attempt_manifest_sha256: preThresholdSync.manifest_sha256,
+        latest_attempt_as_of: preThresholdSync.as_of,
+        latest_attempt_produced_at: preThresholdSync.last_sync_at,
+        latest_attempt_ingested_at: now.toISOString(),
+        latest_attempt_source_freshness: { status: "CURRENT", reason_codes: [] },
+        source_freshness: { status: "CURRENT", reason_codes: [] },
+      },
+    }), { status: 200 });
+  },
+});
+check(
+  "pre_threshold_publisher_keeps_producer_manifest",
+  preThresholdPosted?.producer?.manifest_sha256 === preThresholdSync.manifest_sha256 &&
+    preThresholdPosted?.producer?.as_of === preThresholdSync.as_of &&
+    preThresholdPosted?.insights === undefined,
+);
+check(
+  "pre_threshold_publisher_proves_durable_unknown",
+  preThresholdProof.status === "UNKNOWN" &&
+    preThresholdProof.durable === true &&
+    preThresholdProof.promoted === false &&
+    preThresholdProof.snapshot_sha256 === preThresholdSnapshotSha &&
+    preThresholdProof.producer_manifest_sha256 === preThresholdSync.manifest_sha256 &&
+    preThresholdProof.source_freshness?.status === "CURRENT",
+);
+
+const mismatchedPreThresholdStatePath = path.join(tmp, "last_sync_pre_threshold_mismatch.json");
+fs.writeFileSync(
+  mismatchedPreThresholdStatePath,
+  JSON.stringify({ ...preThresholdSync, manifest_sha256: "e".repeat(64) }),
+  "utf8",
+);
+let mismatchedPreThresholdFetches = 0;
+try {
+  await publish({
+    input,
+    syncStatePath: mismatchedPreThresholdStatePath,
+    historyStatePath: preThresholdHistoryPath,
+    baseUrl: "https://confenge.com.br",
+    token: "test-token-at-least-16-chars",
+    fetchImpl: async () => {
+      mismatchedPreThresholdFetches += 1;
+      throw new Error("unexpected_fetch");
+    },
+  });
+  check("pre_threshold_publisher_rejects_history_mismatch", false);
+} catch (error) {
+  check(
+    "pre_threshold_publisher_rejects_history_mismatch",
+    error.message === "gsc_sync_producer_history_mismatch" && mismatchedPreThresholdFetches === 0,
+    error.message,
+  );
+}
 
 const restoredPath = path.join(tmp, "restored-history.json");
 const restored = await restoreHistory({
@@ -241,6 +439,43 @@ const emptyRestore = await restoreHistory({
   fetchImpl: async () => new Response(JSON.stringify({ ok: false, error: "gsc_history_empty" }), { status: 404 }),
 });
 check("empty_store_bootstraps_fail_closed", emptyRestore.empty === true && !fs.existsSync(restoredPath));
+
+const rollbackTarget = "d".repeat(64);
+let rollbackMethod = null;
+const rollbackReceipt = await rollback({
+  snapshotSha256: rollbackTarget,
+  reason: "operator_selected_known_good",
+  baseUrl: "https://confenge.com.br",
+  token: "test-token-at-least-16-chars",
+  fetchImpl: async (url, options = {}) => {
+    if (url.includes("gsc_insights_rollback")) {
+      rollbackMethod = options.method;
+      const body = JSON.parse(options.body);
+      return new Response(JSON.stringify({
+        ok: true,
+        durable: true,
+        status: "STALE",
+        rolled_back_to_snapshot_sha256: body.snapshot_sha256,
+        producer_manifest_sha256: syncState.manifest_sha256,
+        consumer_manifest_sha256: syncState.manifest_sha256,
+      }), { status: 200 });
+    }
+    return new Response(JSON.stringify({
+      ok: false,
+      status: "STALE",
+      access_mode: "READ_ONLY",
+      meta: {
+        delivery_source: "durable_store",
+        snapshot_sha256: rollbackTarget,
+        producer_manifest_sha256: syncState.manifest_sha256,
+        consumer_manifest_sha256: syncState.manifest_sha256,
+      },
+    }), { status: 200 });
+  },
+});
+check("rollback_uses_authenticated_post", rollbackMethod === "POST");
+check("rollback_selects_exact_snapshot", rollbackReceipt.rolled_back_to_snapshot_sha256 === rollbackTarget);
+check("rollback_preserves_stale_signal", rollbackReceipt.status === "STALE");
 fs.rmSync(tmp, { recursive: true, force: true });
 
 if (failed) process.exit(1);
