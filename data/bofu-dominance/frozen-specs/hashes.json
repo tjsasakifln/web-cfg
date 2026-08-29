@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "b6ccea62f5050d5edd8879f5650e116b725fb135",
+  "baseline_commit": "6e8e8d167f6943044107624c876a6793928a4835",
   "recaptured_at": "2026-08-29",
-  "recapture_reason": "Baseline re-pinned to b6ccea62f5050d5edd8879f5650e116b725fb135, the commit on main whose protected-path bytes these hashes attest. The previous value pointed at a pull-request merge commit that squash-merge discards, so it was not an ancestor of main and the provenance gate failed closed on main. Hashes are recomputed from that commit's bytes; this commit changes no protected path, so the attestation stays true. html_mutation remains false and the #291 unlock plan is untouched.",
+  "recapture_reason": "PR #484 merge recapture onto origin/main 0cd62834a0f3b4408a2b2a06e808c85e0f0a2bbd. Hashes recomputed from the merged tree, not copied from either side of the conflict; baseline_commit pins 6e8e8d167f6943044107624c876a6793928a4835, the merge commit whose protected-path bytes these hashes attest. The six protected BOFU pillar HTML files and all rendering collateral are byte-identical to origin/main, verified by recomputed sha256. html_mutation remains false and the #291 unlock plan is untouched.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
