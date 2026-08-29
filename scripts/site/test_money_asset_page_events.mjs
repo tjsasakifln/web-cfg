@@ -66,6 +66,9 @@ function makeEl(init = {}) {
     setAttribute(name, value) {
       attrs[name] = String(value);
     },
+    removeAttribute(name) {
+      delete attrs[name];
+    },
     addEventListener(type, fn) {
       (listeners[type] = listeners[type] || []).push(fn);
     },

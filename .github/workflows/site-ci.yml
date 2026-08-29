@@ -67,6 +67,7 @@ jobs:
           npm run audit:accessibility
           npm run test:skip-link
           npm run test:lighthouse-gates
+          npm run audit:performance
           npm run pseo:test
           npm run organic:test
           npm run test:diagnose-margin

@@ -46,6 +46,9 @@ const CRITICAL_ROUTES = [
   "/inteligencia/",
   "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
   "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
+  "/entregas/",
+  "/casos/",
+  "/especialista/tiago-jun-sasaki/",
 ];
 
 const MIME = {
@@ -330,6 +333,82 @@ async function auditWorker() {
             }));
           if (undersized.length) problems.push({ code: "touch_target_height", detail: undersized });
         }
+
+        const typeSelectors = [
+          "body",
+          ".hero-lead",
+          ".hero-proof li",
+          ".hero-proof strong",
+          ".hero-micro",
+          ".form-hint",
+          ".form-note",
+          ".field label",
+          ".consent",
+          "figcaption",
+          "thead th",
+          ".table-note",
+          ".article-meta",
+          ".evidence-heading > span",
+          ".hero-evidence .evidence-kicker",
+        ];
+        let minBody = Infinity;
+        let minCritical = Infinity;
+        let minCriticalSel = "";
+        for (const selector of typeSelectors) {
+          for (const element of document.querySelectorAll(selector)) {
+            const style = getComputedStyle(element);
+            const box = element.getBoundingClientRect();
+            if (style.display === "none" || style.visibility === "hidden" || box.width === 0 || box.height === 0) continue;
+            const fs = parseFloat(style.fontSize);
+            if (!fs) continue;
+            if (selector === "body" || selector === ".hero-lead") {
+              if (fs < minBody) minBody = fs;
+            } else if (fs < minCritical) {
+              minCritical = fs;
+              minCriticalSel = selector;
+            }
+          }
+        }
+        if (Number.isFinite(minBody) && minBody < 16) {
+          problems.push({ code: "body_type_below_16px", detail: minBody });
+        }
+        if (Number.isFinite(minCritical) && minCritical < 12.8) {
+          problems.push({ code: "critical_type_below_12_8px", selector: minCriticalSel, detail: minCritical });
+        }
+
+        const compressed = [...document.querySelectorAll("p, li, h2, h3, label, dd")]
+          .filter((element) => {
+            const text = (element.innerText || "").replace(/\s+/g, " ").trim();
+            if (text.length < 48) return false;
+            if (element.closest(".honeypot, .table-wrap, .case-badge")) return false;
+            if (/(badge|eyebrow|kicker)/i.test(String(element.className || ""))) return false;
+            const style = getComputedStyle(element);
+            if (style.display === "none" || style.visibility === "hidden") return false;
+            const box = element.getBoundingClientRect();
+            const fs = parseFloat(style.fontSize) || 16;
+            return box.width > 0 && box.width < 80 && box.height > fs * 4;
+          })
+          .slice(0, 3)
+          .map((element) => ({
+            tag: element.tagName.toLowerCase(),
+            class: String(element.className || "").slice(0, 60),
+            width: Math.round(element.getBoundingClientRect().width),
+            text: (element.innerText || "").replace(/\s+/g, " ").trim().slice(0, 80),
+          }));
+        if (compressed.length) problems.push({ code: "compressed_useful_content", detail: compressed });
+
+        const offViewport = [...document.querySelectorAll("h1, h2, .button-primary, .hero-lead, .hero-proof, form")]
+          .filter((element) => {
+            const style = getComputedStyle(element);
+            if (style.display === "none" || style.visibility === "hidden" || style.position === "fixed") return false;
+            if (element.closest(".table-wrap")) return false;
+            const box = element.getBoundingClientRect();
+            return box.width > 0 && (box.right > window.innerWidth + 2 || box.left < -2);
+          })
+          .slice(0, 3)
+          .map((element) => element.tagName.toLowerCase());
+        if (offViewport.length) problems.push({ code: "useful_element_outside_viewport", detail: offViewport });
+
         return problems;
       }, width);
       issues.push(...rendered);

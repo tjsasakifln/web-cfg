@@ -1,0 +1,35 @@
+{
+  "captured_at": "2026-08-28T14:22:10.622Z",
+  "commit_sha": "f74e8d6d499bca6acb826117130427e60b6bbdf7",
+  "tree_dirty": false,
+  "base_url": "http://127.0.0.1:8792",
+  "routes": [
+    "/",
+    "/entregas/",
+    "/conteudos/documentos-reequilibrio-obra-publica/",
+    "/diretoria-b2g/",
+    "/ferramentas/diagnostico-defesa-margem/",
+    "/casos/",
+    "/especialista/tiago-jun-sasaki/"
+  ],
+  "viewports": [
+    "390x844",
+    "1440x1000"
+  ],
+  "files": [
+    "home-390x844.png",
+    "home-1440x1000.png",
+    "entregas-390x844.png",
+    "entregas-1440x1000.png",
+    "conteudosdocumentos-reequilibrio-obra-pu-390x844.png",
+    "conteudosdocumentos-reequilibrio-obra-pu-1440x1000.png",
+    "diretoria-b2g-390x844.png",
+    "diretoria-b2g-1440x1000.png",
+    "ferramentasdiagnostico-defesa-margem-390x844.png",
+    "ferramentasdiagnostico-defesa-margem-1440x1000.png",
+    "casos-390x844.png",
+    "casos-1440x1000.png",
+    "especialistatiago-jun-sasaki-390x844.png",
+    "especialistatiago-jun-sasaki-1440x1000.png"
+  ]
+}

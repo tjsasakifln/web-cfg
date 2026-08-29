@@ -24,21 +24,22 @@
 .vinc-null span {
   color: var(--r-lime);
   font-family: var(--r-mono);
-  font-size: .74rem;
+  font-size: .8rem;
   font-weight: 850;
   letter-spacing: .08em;
 }
 .vinc-null strong { color: #fff; font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -.03em; }
 .vinc-null p { color: #d1dce5; grid-column: 1 / -1; line-height: 1.6; margin: 4px 0 0; max-width: 78ch; }
 
-.vinc-table-wrap { margin-top: 40px; overflow-x: auto; }
+.vinc-table-wrap { margin-top: 40px; overflow-x: auto; outline: 3px solid transparent; outline-offset: 4px; }
+.vinc-table-wrap:focus-visible { outline-color: var(--r-green, #3d8238); }
 .vinc-rules { border-collapse: collapse; min-width: 520px; width: 100%; }
 .vinc-rules caption { color: var(--r-muted); font-size: .82rem; padding-bottom: 12px; text-align: left; }
 .vinc-rules thead th {
   border-bottom: 2px solid var(--r-green);
   color: var(--r-green);
   font-family: var(--r-mono);
-  font-size: .72rem;
+  font-size: .8rem;
   letter-spacing: .08em;
   padding: 0 14px 10px 0;
   text-align: left;
@@ -94,7 +95,7 @@
 
 .vinc-claims p { color: var(--r-text); line-height: 1.6; margin: 0 0 14px; }
 .vinc-claims p:last-child { margin-bottom: 0; }
-.vinc-claims strong { color: var(--r-green); font-family: var(--r-mono); font-size: .76rem; letter-spacing: .06em; }
+.vinc-claims strong { color: var(--r-green); font-family: var(--r-mono); font-size: .8rem; letter-spacing: .06em; }
 
 .vinc-limitation {
   background: #fff;
@@ -104,14 +105,14 @@
   margin: 34px 0 0;
   padding: 22px 25px;
 }
-.vinc-limitation strong { color: var(--r-green); font-family: var(--r-mono); font-size: .78rem; letter-spacing: .06em; }
+.vinc-limitation strong { color: var(--r-green); font-family: var(--r-mono); font-size: .8rem; letter-spacing: .06em; }
 
 .case-badge {
   background: #fef3c7;
   border-radius: 4px;
   color: #92400e;
   display: inline-block;
-  font-size: .74rem;
+  font-size: .8rem;
   font-weight: 800;
   letter-spacing: .04em;
   margin: 14px 0 0;

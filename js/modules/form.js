@@ -47,10 +47,16 @@
 
       const showFormStatus = (msg, kind) => {
         if (!statusEl) return;
+        if (!statusEl.id) statusEl.id = 'form-status';
         statusEl.hidden = !msg;
         statusEl.textContent = msg || '';
-        statusEl.classList.toggle('is-error', kind === 'error');
-        statusEl.classList.toggle('is-ok', kind === 'ok');
+        if (statusEl.classList && typeof statusEl.classList.toggle === 'function') {
+          statusEl.classList.toggle('is-error', kind === 'error');
+          statusEl.classList.toggle('is-ok', kind === 'ok');
+        }
+        if (typeof statusEl.setAttribute === 'function') {
+          statusEl.setAttribute('role', kind === 'error' && msg ? 'alert' : 'status');
+        }
       };
       const safeSuccessDestination = (candidate) => {
         switch (candidate) {
@@ -75,6 +81,94 @@
         el.addEventListener('focus', markStart, { once: true });
       });
 
+      const setControlInvalid = (el, invalid, message) => {
+        if (!el) return;
+        if (el.classList && typeof el.classList.toggle === 'function') {
+          el.classList.toggle('is-invalid', !!invalid);
+        } else if (invalid) {
+          el.classList?.add?.('is-invalid');
+        } else {
+          el.classList?.remove?.('is-invalid');
+        }
+        if (invalid) {
+          if (typeof el.setAttribute === 'function') el.setAttribute('aria-invalid', 'true');
+        } else if (typeof el.removeAttribute === 'function') {
+          el.removeAttribute('aria-invalid');
+        }
+        if (typeof el.setCustomValidity === 'function') {
+          el.setCustomValidity(invalid && message ? message : '');
+        }
+      };
+      const contactHintEl = form.querySelector('#contato-hint');
+      if (statusEl && !statusEl.id) statusEl.id = 'form-status';
+      const applyContactDescribedBy = (invalid) => {
+        const ids = [];
+        if (contactHintEl?.id) ids.push(contactHintEl.id);
+        if (invalid && statusEl?.id) ids.push(statusEl.id);
+        const value = ids.join(' ');
+        [emailEl, phoneEl].forEach((el) => {
+          if (!el) return;
+          if (value && typeof el.setAttribute === 'function') el.setAttribute('aria-describedby', value);
+          else if (!value && typeof el.removeAttribute === 'function') el.removeAttribute('aria-describedby');
+        });
+      };
+      const isVisibleBox = (el) => {
+        if (!el || typeof el.getBoundingClientRect !== 'function') return false;
+        const r = el.getBoundingClientRect();
+        const cs = typeof getComputedStyle === 'function' ? getComputedStyle(el) : null;
+        if (cs && (cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) === 0)) return false;
+        return r.width > 0 && r.height > 0;
+      };
+      const boxFullyInViewport = (el) => {
+        const r = el.getBoundingClientRect();
+        const vh = window.innerHeight || 0;
+        const vw = window.innerWidth || 0;
+        return r.top >= -1 && r.left >= -1 && r.bottom <= vh + 1 && r.right <= vw + 1;
+      };
+      const withInstantScroll = (fn) => {
+        const root = document.documentElement;
+        const style = root && root.style;
+        const prev = style ? style.scrollBehavior : '';
+        if (style) style.scrollBehavior = 'auto';
+        try { fn(); } finally { if (style) style.scrollBehavior = prev; }
+      };
+      const revealStep = (n) => {
+        const panel = form.querySelector(`[data-form-step="${n}"]`);
+        if (!panel || !panel.classList.contains('is-active')) return;
+        const heading = panel.querySelector('legend, h2, h3, [data-step-heading]');
+        const scrollTarget = heading || panel;
+        withInstantScroll(() => {
+          if (scrollTarget && typeof scrollTarget.scrollIntoView === 'function') {
+            try { scrollTarget.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' }); }
+            catch (_) { scrollTarget.scrollIntoView(true); }
+          }
+        });
+        if (heading && !heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1');
+        const visibleControl = [...panel.querySelectorAll('input:not([type="hidden"]):not([tabindex="-1"]), select, textarea, button')]
+          .find((el) => isVisibleBox(el) && !el.disabled && el.getAttribute('aria-hidden') !== 'true');
+        const focusTarget = (heading && isVisibleBox(heading)) ? heading : (visibleControl || heading);
+        if (focusTarget && typeof focusTarget.focus === 'function') {
+          try { focusTarget.focus({ preventScroll: true }); } catch (_) { focusTarget.focus(); }
+          if (!boxFullyInViewport(focusTarget)) {
+            withInstantScroll(() => {
+              try { focusTarget.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }); }
+              catch (_) { focusTarget.scrollIntoView(true); }
+            });
+          }
+        }
+      };
+      const afterLayout = (fn) => {
+        void form.offsetHeight;
+        const run = () => {
+          void form.offsetHeight;
+          fn();
+        };
+        if (typeof requestAnimationFrame === 'function') {
+          requestAnimationFrame(() => requestAnimationFrame(run));
+        } else {
+          setTimeout(run, 0);
+        }
+      };
       const setStep = (n) => {
         formStep = n;
         if (step1) step1.classList.toggle('is-active', n === 1);
@@ -84,73 +178,62 @@
           ind.classList.toggle('is-active', sn === n);
           ind.classList.toggle('is-done', sn < n);
         });
-        const stepHeading = form.querySelector(`[data-form-step="${n}"] h2, [data-form-step="${n}"] h3, [data-form-step="${n}"] [data-step-heading]`);
-        const focusTarget = stepHeading
-          || (n === 2
-            ? form.querySelector('#empresa') || form.querySelector('#urgencia')
-            : nomeEl);
-        if (focusTarget) {
-          if (stepHeading && !focusTarget.hasAttribute('tabindex')) focusTarget.setAttribute('tabindex', '-1');
-          try { focusTarget.focus({ preventScroll: false }); } catch (_) { focusTarget.focus(); }
-        }
+        afterLayout(() => revealStep(n));
       };
 
       const clearContactValidity = () => {
-        emailEl?.setCustomValidity('');
-        phoneEl?.setCustomValidity('');
-        emailEl?.classList.remove('is-invalid');
-        phoneEl?.classList.remove('is-invalid');
+        // Empty optional channel must not stay aria-invalid after the group is satisfied.
+        setControlInvalid(emailEl, false);
+        setControlInvalid(phoneEl, false);
+        applyContactDescribedBy(false);
       };
       const requireEmailOrPhone = () => {
-        clearContactValidity();
         const email = (emailEl?.value || '').trim();
         const phone = (phoneEl?.value || '').trim();
-        if (email || phone) return true;
+        if (email || phone) {
+          clearContactValidity();
+          return true;
+        }
         const msg = 'Informe e-mail ou WhatsApp para retorno.';
-        if (emailEl) {
-          emailEl.setCustomValidity(msg);
-          emailEl.classList.add('is-invalid');
-        }
-        if (phoneEl) {
-          phoneEl.setCustomValidity(msg);
-          phoneEl.classList.add('is-invalid');
-        }
+        // One validity group, one summary — not two native field errors.
+        setControlInvalid(emailEl, true);
+        setControlInvalid(phoneEl, true);
         showFormStatus(msg, 'error');
+        applyContactDescribedBy(true);
         return false;
       };
       const validateStep1 = () => {
         markStart();
         let ok = true;
         if (nomeEl && !(nomeEl.value || '').trim()) {
-          nomeEl.setCustomValidity('Informe seu nome.');
-          nomeEl.classList.add('is-invalid');
+          setControlInvalid(nomeEl, true, 'Informe seu nome.');
           ok = false;
         } else {
-          nomeEl?.setCustomValidity('');
-          nomeEl?.classList.remove('is-invalid');
+          setControlInvalid(nomeEl, false);
         }
         if (!requireEmailOrPhone()) ok = false;
         if (estagioEl && !estagioEl.value) {
-          estagioEl.setCustomValidity('Selecione o tipo de necessidade.');
-          estagioEl.classList.add('is-invalid');
+          setControlInvalid(estagioEl, true, 'Selecione o tipo de necessidade.');
           ok = false;
         } else {
-          estagioEl?.setCustomValidity('');
-          estagioEl?.classList.remove('is-invalid');
+          setControlInvalid(estagioEl, false);
         }
         if (!ok) {
           form.reportValidity();
           const firstInvalid = form.querySelector('.is-invalid, :invalid');
           const errSummary = form.querySelector('[data-form-error-summary], #form-status, [role="alert"]');
-          if (firstInvalid && typeof firstInvalid.focus === 'function') {
-            try { firstInvalid.focus({ preventScroll: false }); } catch (_) { firstInvalid.focus(); }
-            if (typeof firstInvalid.scrollIntoView === 'function') {
-              firstInvalid.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          withInstantScroll(() => {
+            if (firstInvalid && typeof firstInvalid.focus === 'function') {
+              try { firstInvalid.focus({ preventScroll: true }); } catch (_) { firstInvalid.focus(); }
+              if (typeof firstInvalid.scrollIntoView === 'function') {
+                try { firstInvalid.scrollIntoView({ block: 'nearest', behavior: 'instant' }); }
+                catch (_) { firstInvalid.scrollIntoView(true); }
+              }
+            } else if (errSummary && typeof errSummary.focus === 'function') {
+              if (!errSummary.hasAttribute('tabindex')) errSummary.setAttribute('tabindex', '-1');
+              try { errSummary.focus({ preventScroll: true }); } catch (_) { errSummary.focus(); }
             }
-          } else if (errSummary && typeof errSummary.focus === 'function') {
-            if (!errSummary.hasAttribute('tabindex')) errSummary.setAttribute('tabindex', '-1');
-            try { errSummary.focus({ preventScroll: false }); } catch (_) { errSummary.focus(); }
-          }
+          });
           track('lead_form_error', {
             page_path: pagePath,
             content_cluster: defaultCluster,
@@ -548,6 +631,7 @@
   /** Optional Cloudflare Turnstile — only loads when a public sitekey is present. */
   const initTurnstile = () => {
     try {
+      if (document.querySelector('script[data-confenge-turnstile]')) return;
       const slot = document.getElementById('turnstile-slot');
       if (!slot) return;
       const key = (
@@ -560,7 +644,6 @@
       slot.hidden = false;
       const widget = slot.querySelector('.cf-turnstile');
       if (widget) widget.setAttribute('data-sitekey', key);
-      if (document.querySelector('script[data-confenge-turnstile]')) return;
       const s = document.createElement('script');
       s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
       s.async = true;
@@ -570,10 +653,31 @@
     } catch (_) { /* optional anti-abuse */ }
   };
 
+  /** Load the challenge when the visitor can submit, not on first paint. */
+  const scheduleTurnstile = () => {
+    const slot = document.getElementById('turnstile-slot');
+    if (!slot) return;
+    const form = slot.closest('form');
+    const start = () => initTurnstile();
+    if (form) {
+      form.addEventListener('focusin', start, { once: true });
+      form.addEventListener('pointerdown', start, { once: true });
+    }
+    if (typeof IntersectionObserver === 'function') {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          io.disconnect();
+          start();
+        }
+      }, { rootMargin: '320px 0px' });
+      io.observe(form || slot);
+    }
+  };
+
   const safeInit = () => {
     try {
       init();
-      initTurnstile();
+      scheduleTurnstile();
       // Session + page view (no PII)
       try {
         const path = window.location.pathname || '/';

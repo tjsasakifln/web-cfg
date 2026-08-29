@@ -60,6 +60,10 @@ def test_fingerprint_rewrites_html_to_hashed_css():
             '@import url("/styles-tokens.css");\n.offer-detail-disclosure{color:blue}\n',
             encoding="utf-8",
         )
+        (dest / "_headers").write_text(
+            "/*\n  Cache-Control: no-cache, max-age=0, must-revalidate\n",
+            encoding="utf-8",
+        )
         page = dest / "diretoria-b2g" / "index.html"
         page.parent.mkdir(parents=True)
         page.write_text(
@@ -109,6 +113,10 @@ def test_fingerprint_rewrites_html_to_hashed_css():
 
         # Unversioned fallback still exists for leftover clients.
         assert (dest / "styles.css").is_file()
+        published_headers = (dest / "_headers").read_text(encoding="utf-8")
+        assert hrefs[0] in published_headers
+        assert "max-age=31536000, immutable" in published_headers
+        assert "# BEGIN hashed-css-cache" in published_headers
 
 
 def test_source_html_may_keep_unversioned_href_for_local_dev():

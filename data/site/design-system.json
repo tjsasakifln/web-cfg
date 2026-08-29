@@ -42,14 +42,21 @@
       "h1_hero": "clamp(2.65rem, 4.6vw, 4.5rem)",
       "h2": "clamp(1.85rem, 3.2vw, 3.15rem)",
       "h3": "1.05rem–1.35rem",
-      "body": "1rem / 1.7",
-      "small": "0.8rem–0.88rem",
-      "data": "0.72rem mono uppercase tracking"
+      "body": "1rem / 1.65 mobile; 1.125rem / 1.65 from 768px",
+      "small": "0.875rem (14px functional)",
+      "micro": "0.8rem (12.8px floor)",
+      "data": "0.8rem mono uppercase tracking"
+    },
+    "floors_px": {
+      "body": 16,
+      "critical_microcopy": 12.8,
+      "functional": 14
     },
     "rules": [
       "Strategic claims may use serif-display class for one line per section max",
       "Do not rely only on Inter size changes for hierarchy",
-      "Measure body copy ~58–72ch on desktop"
+      "Measure body copy ~58–72ch on desktop",
+      "No critical text below 12.8px; body copy stays at or above 16px"
     ]
   },
   "spacing": {

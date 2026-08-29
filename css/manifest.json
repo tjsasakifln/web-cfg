@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "bundle": "styles.css",
+  "marker_begin": "BEGIN css-modules:cfg10x-12",
+  "marker_end": "END css-modules:cfg10x-12",
+  "modules": [
+    "css/contracts.css",
+    "css/type-floor.css"
+  ],
+  "tokens": "styles-tokens.css",
+  "framework": null,
+  "note": "Concatenated last into styles.css by scripts/site/build_css.py. No Tailwind/Bootstrap. Hash publish stays in fingerprint_css.py."
+}

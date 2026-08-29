@@ -1,0 +1,8 @@
+/* Historical mobile collapse: prova/disclaimer at 9.76px. The type-floor
+ * parser and Chromium geometry suite must FAIL this snippet. Do not ship. */
+.hero-proof li{font-size:.72rem;line-height:1.45}
+.hero-proof strong{font-size:.61rem}
+.hero-evidence .evidence-kicker{font-size:.72rem}
+.evidence-heading>span{font-size:.61rem}
+.form-hint{font-size:.7rem}
+.compare-table thead th{font-size:.66rem}

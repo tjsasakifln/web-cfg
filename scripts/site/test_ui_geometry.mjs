@@ -70,6 +70,18 @@ function fail(name, err) {
   console.log("FAIL", name, err);
 }
 
+async function waitForActiveStepFocus(targetPage, step) {
+  await targetPage.waitForFunction((n) => {
+    const panel = document.querySelector(`[data-form-step="${n}"].is-active`);
+    if (!panel) return false;
+    const active = document.activeElement;
+    return Boolean(active) && panel.contains(active) && active !== document.body;
+  }, { timeout: 4000 }, step);
+  await targetPage.evaluate(
+    () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+  );
+}
+
 async function assertStableDocumentTop(targetPage, { samples = 6, intervalMs = 50 } = {}) {
   await targetPage.evaluate(() => {
     document.documentElement.style.scrollBehavior = "auto";
@@ -527,13 +539,17 @@ async function main() {
     await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 5000 });
     for (const j of ["contrato", "edital", "operacao"]) {
       await page.select("#estagio", j === "contrato" ? "estruturando a operação B2G" : "problema urgente em contrato");
-      const clicked = await page.evaluate((journey) => {
-        const el = document.querySelector(`[data-set-journey="${journey}"]`);
+      const clicked = await page.evaluate((expectedJourney) => {
+        const el = [...document.querySelectorAll(`[data-set-journey="${expectedJourney}"]`)].find((node) => {
+          const style = getComputedStyle(node);
+          const box = node.getBoundingClientRect();
+          return style.display !== "none" && style.visibility !== "hidden" && box.width > 0 && box.height > 0;
+        });
         if (!el) return false;
-        el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+        el.click();
         return true;
       }, j);
-      if (!clicked) throw new Error(`missing data-set-journey=${j}`);
+      if (!clicked) throw new Error(`no visible [data-set-journey=${j}]`);
       await page.waitForFunction((expectedJourney) => {
         const form = document.querySelector("#formulario-contato");
         return document.querySelector("#jornada-hidden")?.value === expectedJourney &&
@@ -923,7 +939,7 @@ async function main() {
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     // The form handler is bound by deferred script.js; wait for its explicit
     // ready marker rather than racing a fixed timeout on slower CI runners.
-    await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 5000 });
+    await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 8000 });
     await page.evaluate(() => {
       const nome = document.querySelector("#nome");
       const estagio = document.querySelector("#estagio");
@@ -1633,6 +1649,520 @@ async function main() {
     ok("fixture_layout_pass");
   } catch (e) {
     fail("fixture_layout_pass", e.message || e);
+  }
+
+  const TYPE_FLOOR_FAMILIES = [
+    { family: "home", path: "/" },
+    { family: "entregas", path: "/entregas/" },
+    { family: "artigo", path: "/conteudos/documentos-reequilibrio-obra-publica/" },
+    { family: "oferta", path: "/diretoria-b2g/" },
+    { family: "ferramenta", path: "/ferramentas/diagnostico-defesa-margem/" },
+    { family: "casos", path: "/casos/" },
+    { family: "especialista", path: "/especialista/tiago-jun-sasaki/" },
+  ];
+  const TYPE_FLOOR_VIEWPORTS = [
+    [390, 844],
+    [768, 1024],
+    [1024, 768],
+    [1440, 1000],
+  ];
+  const CRITICAL_TYPE_SELECTORS = [
+    ".hero-proof li",
+    ".hero-proof strong",
+    ".hero-micro",
+    ".hero-real-proof",
+    ".form-hint",
+    ".form-note",
+    ".field label",
+    ".consent",
+    "figcaption",
+    "thead th",
+    ".table-note",
+    ".article-meta",
+    ".evidence-heading > span",
+    ".hero-evidence .evidence-kicker",
+    ".evidence-tier",
+    ".evidence-facts dt",
+    ".evidence-facts dd",
+  ];
+  const measureRenderedType = async (target, sel) =>
+    target.evaluate((selectors) => {
+      const skip = (el) => {
+        const style = getComputedStyle(el);
+        const box = el.getBoundingClientRect();
+        return (
+          style.display === "none" ||
+          style.visibility === "hidden" ||
+          box.width === 0 ||
+          box.height === 0
+        );
+      };
+      let minBody = Infinity;
+      let minBodySel = "";
+      for (const el of document.querySelectorAll("body, .hero-lead, .section-lead, .editorial-lead, .editorial-body, .editorial-body p, .content-lead, .article-intro")) {
+        if (skip(el)) continue;
+        if (el.closest(".hero-evidence, .hero-proof, .catalog-item, aside, figcaption, .form-hint, .technical-note, .article-meta, .table-note")) continue;
+        if (/(technical-note|article-meta|table-note|evidence-|kicker|caption|hint)/i.test(String(el.className || ""))) continue;
+        const text = (el.innerText || "").replace(/\s+/g, " ").trim();
+        if (el.tagName !== "BODY" && text.length < 40) continue;
+        const fs = parseFloat(getComputedStyle(el).fontSize);
+        if (fs && fs < minBody) {
+          minBody = fs;
+          minBodySel = el.tagName.toLowerCase() + "." + String(el.className || "").slice(0, 40);
+        }
+      }
+      let minCritical = Infinity;
+      let minCriticalSel = "";
+      for (const selector of selectors) {
+        for (const el of document.querySelectorAll(selector)) {
+          if (skip(el)) continue;
+          const fs = parseFloat(getComputedStyle(el).fontSize);
+          if (fs && fs < minCritical) {
+            minCritical = fs;
+            minCriticalSel = selector;
+          }
+        }
+      }
+      const overflow =
+        document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+      const compressed = [...document.querySelectorAll("p, li, h2, h3, label, dd")]
+        .filter((el) => {
+          if (skip(el) || el.closest(".table-wrap, .honeypot")) return false;
+          const text = (el.innerText || "").replace(/\s+/g, " ").trim();
+          if (text.length < 48) return false;
+          const box = el.getBoundingClientRect();
+          const fs = parseFloat(getComputedStyle(el).fontSize) || 16;
+          return box.width < 80 && box.height > fs * 4;
+        })
+        .slice(0, 3)
+        .map((el) => el.tagName.toLowerCase());
+      const off = [...document.querySelectorAll("h1, .button-primary, .hero-lead, .hero-proof")]
+        .filter((el) => {
+          if (skip(el) || getComputedStyle(el).position === "fixed" || el.closest(".table-wrap")) return false;
+          const box = el.getBoundingClientRect();
+          return box.right > window.innerWidth + 2 || box.left < -2;
+        })
+        .slice(0, 3)
+        .map((el) => el.tagName.toLowerCase());
+      return {
+        minBody: Number.isFinite(minBody) ? minBody : null,
+        minBodySel,
+        minCritical: Number.isFinite(minCritical) ? minCritical : null,
+        minCriticalSel,
+        overflow,
+        compressed,
+        off,
+      };
+    }, sel);
+
+  try {
+    const fixturePage = await browser.newPage();
+    await fixturePage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+    const fixtureHtml = readFileSync(
+      join(ROOT, "tests/fixtures/type-floor/historical-prova-collapse.html"),
+      "utf8",
+    );
+    await fixturePage.setContent(fixtureHtml, { waitUntil: "domcontentloaded" });
+    const fixture = await measureRenderedType(fixturePage, [".hero-proof li", ".hero-proof strong", ".form-hint"]);
+    await fixturePage.close();
+    if (!(fixture.minCritical < 12.8)) {
+      throw new Error(`fixture did not reproduce sub-floor type: ${JSON.stringify(fixture)}`);
+    }
+    ok(`type_floor_gate_detects_historical_collapse (${fixture.minCritical}px)`);
+  } catch (e) {
+    fail("type_floor_gate_detects_historical_collapse", e.message || e);
+  }
+
+  try {
+    const worst = { minCritical: Infinity, minBody: Infinity, where: "" };
+    for (const [w, h] of TYPE_FLOOR_VIEWPORTS) {
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      for (const { family, path } of TYPE_FLOOR_FAMILIES) {
+        await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+        const rep = await measureRenderedType(page, CRITICAL_TYPE_SELECTORS);
+        const loc = `${family}@${w}${path}`;
+        if (rep.overflow) throw new Error(`${loc}: horizontal overflow`);
+        if (Number.isFinite(rep.minBody) && rep.minBody < 16) {
+          throw new Error(`${loc}: body ${rep.minBody}px < 16px (${rep.minBodySel})`);
+        }
+        if (family === "home" && !Number.isFinite(rep.minCritical)) {
+          throw new Error(`${loc}: home must expose measurable critical microcopy`);
+        }
+        if (Number.isFinite(rep.minCritical) && rep.minCritical < 12.8) {
+          throw new Error(`${loc}: critical ${rep.minCritical}px < 12.8px (${rep.minCriticalSel})`);
+        }
+        if (rep.compressed.length) throw new Error(`${loc}: compressed ${rep.compressed.join(",")}`);
+        if (rep.off.length) throw new Error(`${loc}: off-viewport ${rep.off.join(",")}`);
+        if (Number.isFinite(rep.minCritical) && rep.minCritical < worst.minCritical) {
+          worst.minCritical = rep.minCritical;
+          worst.where = loc;
+        }
+        if (Number.isFinite(rep.minBody) && rep.minBody < worst.minBody) worst.minBody = rep.minBody;
+      }
+    }
+    ok(
+      `type_floor_seven_families (${TYPE_FLOOR_FAMILIES.length}×${TYPE_FLOOR_VIEWPORTS.length}; min critical ${worst.minCritical}px body ${worst.minBody}px)`,
+    );
+  } catch (e) {
+    fail("type_floor_seven_families", e.message || e);
+  }
+
+  try {
+    const clsBad = [];
+    for (const { family, path } of TYPE_FLOOR_FAMILIES) {
+      await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+      await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+      const cls = await page.evaluate(
+        () =>
+          new Promise((resolve) => {
+            let score = 0;
+            try {
+              const po = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                  if (!entry.hadRecentInput) score += entry.value;
+                }
+              });
+              po.observe({ type: "layout-shift", buffered: true });
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  po.disconnect();
+                  resolve(score);
+                });
+              });
+            } catch {
+              resolve(0);
+            }
+          }),
+      );
+      if (cls > 0.05) clsBad.push(`${family}:${cls}`);
+    }
+    if (clsBad.length) throw new Error(clsBad.join(", "));
+    ok("cls_seven_families_le_0_05");
+  } catch (e) {
+    fail("cls_seven_families_le_0_05", e.message || e);
+  }
+
+  // Perceived-result gates for editorial action-list geometry (CFG10X-01).
+  // Measure the useful text box, not class/token presence. Floors: 240px at
+  // 390 and 500px at 1440 when that space exists. Fail on word-by-word wrap
+  // of “Contrato e planilha inicial” and on horizontal overflow.
+  try {
+    const path = "/lei-14133-obras/limite-25-50-aditivo-obra/";
+    const viewports = [
+      [390, 844, 240],
+      [768, 1024, 240],
+      [1024, 768, 240],
+      [1440, 900, 500],
+    ];
+    const reports = [];
+    for (const [w, h, floor] of viewports) {
+      await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+      await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+      const geo = await page.evaluate((minWidth) => {
+        const issues = [];
+        const overflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+        if (overflow) {
+          issues.push(`overflow:${document.documentElement.scrollWidth}>${document.documentElement.clientWidth}`);
+        }
+        const lists = [...document.querySelectorAll("ol.action-list")];
+        if (!lists.length) issues.push("missing-ol.action-list");
+        for (const ol of lists) {
+          const cs = getComputedStyle(ol);
+          if (cs.listStyleType !== "decimal") {
+            issues.push(`list-style-type:${cs.listStyleType}`);
+          }
+        }
+        const items = [...document.querySelectorAll(".action-list li")];
+        if (!items.length) issues.push("no-items");
+        const widths = [];
+        for (const li of items) {
+          const prose = li.querySelector(":scope > :not(span)") || li.querySelector("div") || li;
+          const r = prose.getBoundingClientRect();
+          widths.push(Math.round(r.width * 10) / 10);
+          if (r.width + 0.5 < minWidth) {
+            issues.push(`narrow:${Math.round(r.width)}<${minWidth}:"${(prose.innerText || "").replace(/\s+/g, " ").trim().slice(0, 48)}"`);
+          }
+        }
+        const phrase = "Contrato e planilha inicial";
+        const host = items.find((li) => (li.innerText || "").includes(phrase));
+        let tower = null;
+        if (host) {
+          const walker = document.createTreeWalker(host, NodeFilter.SHOW_TEXT);
+          let node = walker.nextNode();
+          while (node) {
+            const idx = node.data.indexOf(phrase);
+            if (idx >= 0) {
+              const words = phrase.split(/\s+/);
+              let cursor = idx;
+              const tops = [];
+              for (const word of words) {
+                const start = node.data.indexOf(word, cursor);
+                const range = document.createRange();
+                range.setStart(node, start);
+                range.setEnd(node, start + word.length);
+                tops.push(Math.round(range.getBoundingClientRect().top));
+                cursor = start + word.length;
+              }
+              tower = { words: words.length, uniqueTops: new Set(tops).size, tops };
+              break;
+            }
+            node = walker.nextNode();
+          }
+          if (tower && tower.words >= 3 && tower.uniqueTops >= tower.words) {
+            issues.push(`word-tower:${tower.tops.join("/")}`);
+          }
+        } else {
+          issues.push("missing-phrase");
+        }
+        return { issues, widths, overflow, listStyle: lists[0] ? getComputedStyle(lists[0]).listStyleType : null };
+      }, floor);
+      reports.push(`${w}x${h}:min=${Math.min(...geo.widths)}:${geo.listStyle}`);
+      if (geo.issues.length) throw new Error(`${w}x${h}: ${geo.issues.join("; ")}`);
+    }
+    ok(`action_list_usable_width (${reports.join("; ")})`);
+  } catch (e) {
+    fail("action_list_usable_width", e.message || e);
+  }
+
+  // Two-child library pattern must keep prose in the remaining column.
+  try {
+    await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+    await page.goto(`${BASE}/conteudos/preco-de-item-novo-aditivo-obra-publica/`, {
+      waitUntil: "domcontentloaded",
+      timeout: 30000,
+    });
+    const lib = await page.evaluate(() => {
+      const items = [...document.querySelectorAll(".action-list li")];
+      const measured = items.map((li) => {
+        const span = li.querySelector(":scope > span:first-child");
+        const prose = span ? span.nextElementSibling : (li.querySelector("div") || li);
+        return {
+          children: li.children.length,
+          hasSpan: Boolean(span),
+          proseW: prose ? Math.round(prose.getBoundingClientRect().width) : 0,
+        };
+      });
+      const two = measured.filter((m) => m.hasSpan && m.children >= 2);
+      const narrow = two.filter((m) => m.proseW < 240);
+      const overflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+      return { two: two.length, narrow: narrow.length, min: two.length ? Math.min(...two.map((m) => m.proseW)) : 0, overflow };
+    });
+    if (!lib.two) throw new Error("no two-child action-list items on library page");
+    if (lib.overflow) throw new Error("library action-list page overflows horizontally");
+    if (lib.narrow) throw new Error(`two-child prose collapsed: min=${lib.min}px`);
+    ok(`action_list_two_child_prose_column (n=${lib.two} min=${lib.min}px)`);
+  } catch (e) {
+    fail("action_list_two_child_prose_column", e.message || e);
+  }
+
+  // Home form: after Continuar/Voltar the focused element must sit fully in
+  // the viewport, and the visible step heading/fieldset must be in view.
+  // Drive the real click without Puppeteer auto-scrolling the control.
+  const productionPosts = [];
+  try {
+    const formPage = await browser.newPage();
+    await formPage.setRequestInterception(true);
+    formPage.on("request", (req) => {
+      const url = req.url();
+      const prodLead = req.method() === "POST" && (
+        /https?:\/\/([^/]*\.)?confenge\.com\.br/i.test(url)
+        || /\/\.netlify\/functions\/lead(?:\?|$)/i.test(url)
+      );
+      if (prodLead) {
+        productionPosts.push(`${req.method()} ${url}`);
+        req.abort("blockedbyclient").catch(() => {});
+        return;
+      }
+      req.continue().catch(() => {});
+    });
+    await formPage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+    await formPage.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
+    await formPage.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 4000 });
+    await formPage.evaluate(() => {
+      document.documentElement.style.scrollBehavior = "auto";
+      if (document.body) document.body.style.scrollBehavior = "auto";
+    });
+    await formPage.type("#nome", "Maria Silva");
+    await formPage.type("#email", "maria@example.com");
+    await formPage.select("#estagio", "problema urgente em contrato");
+
+    const parkAndClick = async (selector) => {
+      await formPage.evaluate((sel) => {
+        document.documentElement.style.scrollBehavior = "auto";
+        const btn = document.querySelector(sel);
+        if (!btn) throw new Error(`missing ${sel}`);
+        btn.scrollIntoView({ block: "end", behavior: "instant" });
+        const r = btn.getBoundingClientRect();
+        window.scrollBy(0, r.bottom - window.innerHeight + 8);
+      }, selector);
+      await formPage.evaluate((sel) => {
+        const btn = document.querySelector(sel);
+        btn.click();
+      }, selector);
+    };
+
+    const readFocus = () => formPage.evaluate(() => {
+      const el = document.activeElement;
+      const r = el ? el.getBoundingClientRect() : null;
+      const panel = document.querySelector(".form-step.is-active");
+      const heading = panel
+        ? panel.querySelector("legend, h2, h3, [data-step-heading]")
+        : null;
+      const hr = heading ? heading.getBoundingClientRect() : null;
+      const pr = panel ? panel.getBoundingClientRect() : null;
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      const fully = (box) => Boolean(
+        box
+        && box.top >= -1
+        && box.left >= -1
+        && box.bottom <= vh + 1
+        && box.right <= vw + 1,
+      );
+      const intersects = (box) => Boolean(box && box.top < vh && box.bottom > 0 && box.left < vw && box.right > 0);
+      return {
+        id: el && (el.id || el.tagName.toLowerCase()),
+        inPanel: Boolean(panel && el && panel.contains(el)),
+        fully: fully(r),
+        headingFully: fully(hr),
+        headingInView: intersects(hr),
+        panelInView: intersects(pr),
+        top: r ? Math.round(r.top) : null,
+        bottom: r ? Math.round(r.bottom) : null,
+        vh,
+        vw,
+      };
+    });
+
+    await parkAndClick("[data-form-next]");
+    await waitForActiveStepFocus(formPage, 2);
+    const afterNext = await readFocus();
+    if (!afterNext.inPanel) throw new Error(`continuar focus not in step 2: ${JSON.stringify(afterNext)}`);
+    if (!afterNext.fully) throw new Error(`continuar focused element outside viewport: ${JSON.stringify(afterNext)}`);
+    if (!afterNext.headingInView || !afterNext.panelInView) {
+      throw new Error(`continuar heading/fieldset not in view: ${JSON.stringify(afterNext)}`);
+    }
+
+    await parkAndClick("[data-form-back]");
+    await waitForActiveStepFocus(formPage, 1);
+    const afterBack = await readFocus();
+    if (!afterBack.inPanel) throw new Error(`voltar focus not in step 1: ${JSON.stringify(afterBack)}`);
+    if (!afterBack.fully) throw new Error(`voltar focused element outside viewport: ${JSON.stringify(afterBack)}`);
+    if (!afterBack.headingInView || !afterBack.panelInView) {
+      throw new Error(`voltar heading/fieldset not in view: ${JSON.stringify(afterBack)}`);
+    }
+    await formPage.close();
+    ok(`form_step_focus_in_viewport (next=${afterNext.id}@${afterNext.top} back=${afterBack.id}@${afterBack.top})`);
+  } catch (e) {
+    fail("form_step_focus_in_viewport", e.message || e);
+  }
+
+  // “e-mail ou WhatsApp” is one validity group: shared describedby, one
+  // summary, aria-invalid on the empty controls; filling either channel
+  // clears the group without invalidating the remaining empty optional field.
+  try {
+    const ariaPage = await browser.newPage();
+    await ariaPage.setRequestInterception(true);
+    ariaPage.on("request", (req) => {
+      const url = req.url();
+      const prodLead = req.method() === "POST" && (
+        /https?:\/\/([^/]*\.)?confenge\.com\.br/i.test(url)
+        || /\/\.netlify\/functions\/lead(?:\?|$)/i.test(url)
+      );
+      if (prodLead) {
+        productionPosts.push(`${req.method()} ${url}`);
+        req.abort("blockedbyclient").catch(() => {});
+        return;
+      }
+      req.continue().catch(() => {});
+    });
+    await ariaPage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+    await ariaPage.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
+    await ariaPage.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 4000 });
+    await ariaPage.type("#nome", "Maria Silva");
+    await ariaPage.select("#estagio", "problema urgente em contrato");
+    await ariaPage.evaluate(() => {
+      document.documentElement.style.scrollBehavior = "auto";
+      document.querySelector("[data-form-next]").click();
+    });
+    await new Promise((r) => setTimeout(r, 80));
+    const emptyGroup = await ariaPage.evaluate(() => {
+      const email = document.querySelector("#email");
+      const phone = document.querySelector("#telefone");
+      const hint = document.querySelector("#contato-hint");
+      const status = document.querySelector("#form-status, .form-status, [role='alert']");
+      const describedEmail = (email?.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+      const describedPhone = (phone?.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+      const idsExist = (ids) => ids.every((id) => document.getElementById(id));
+      const statusText = status && !status.hidden ? (status.textContent || "").trim() : "";
+      const hintText = hint ? (hint.textContent || "").trim() : "";
+      return {
+        emailInvalid: email?.getAttribute("aria-invalid") === "true",
+        phoneInvalid: phone?.getAttribute("aria-invalid") === "true",
+        emailClass: email?.classList.contains("is-invalid") || false,
+        phoneClass: phone?.classList.contains("is-invalid") || false,
+        describedEmail,
+        describedPhone,
+        idsExist: idsExist(describedEmail) && idsExist(describedPhone),
+        hintId: hint?.id || "",
+        statusId: status?.id || "",
+        statusText,
+        hintText,
+        emailNative: email?.validationMessage || "",
+        phoneNative: phone?.validationMessage || "",
+        stillStep1: Boolean(document.querySelector('[data-form-step="1"].is-active')),
+      };
+    });
+    if (!emptyGroup.stillStep1) throw new Error(`empty channels advanced the step: ${JSON.stringify(emptyGroup)}`);
+    if (!emptyGroup.emailInvalid || !emptyGroup.phoneInvalid) {
+      throw new Error(`missing aria-invalid on contact group: ${JSON.stringify(emptyGroup)}`);
+    }
+    if (!emptyGroup.hintId || !emptyGroup.describedEmail.includes(emptyGroup.hintId) || !emptyGroup.describedPhone.includes(emptyGroup.hintId)) {
+      throw new Error(`aria-describedby does not share contato-hint: ${JSON.stringify(emptyGroup)}`);
+    }
+    const shared = emptyGroup.describedEmail.filter((id) => emptyGroup.describedPhone.includes(id));
+    if (!shared.length) throw new Error(`no shared describedby: ${JSON.stringify(emptyGroup)}`);
+    if (!emptyGroup.idsExist) throw new Error(`describedby ids missing from document: ${JSON.stringify(emptyGroup)}`);
+    if (!/(e-mail|email).*(whatsapp)|whatsapp.*(e-mail|email)/i.test(`${emptyGroup.statusText} ${emptyGroup.hintText}`)) {
+      throw new Error(`group summary missing e-mail/WhatsApp: ${JSON.stringify(emptyGroup)}`);
+    }
+    if (emptyGroup.emailNative && emptyGroup.phoneNative && emptyGroup.emailNative === emptyGroup.phoneNative) {
+      throw new Error(`two independent native field errors: ${JSON.stringify(emptyGroup)}`);
+    }
+    if (emptyGroup.emailNative && emptyGroup.phoneNative) {
+      throw new Error(`two native validation messages: ${JSON.stringify(emptyGroup)}`);
+    }
+
+    await ariaPage.type("#email", "maria@example.com");
+    await new Promise((r) => setTimeout(r, 50));
+    const filled = await ariaPage.evaluate(() => {
+      const email = document.querySelector("#email");
+      const phone = document.querySelector("#telefone");
+      const status = document.querySelector("#form-status, .form-status");
+      return {
+        emailInvalid: email?.getAttribute("aria-invalid") === "true",
+        phoneInvalid: phone?.getAttribute("aria-invalid") === "true",
+        emailClass: email?.classList.contains("is-invalid") || false,
+        phoneClass: phone?.classList.contains("is-invalid") || false,
+        phoneValue: (phone?.value || "").trim(),
+        statusText: status && !status.hidden ? (status.textContent || "").trim() : "",
+      };
+    });
+    if (filled.emailInvalid || filled.phoneInvalid || filled.emailClass || filled.phoneClass) {
+      throw new Error(`group did not clear after one channel: ${JSON.stringify(filled)}`);
+    }
+    if (filled.phoneValue !== "") throw new Error("expected empty optional WhatsApp");
+    if (filled.statusText) throw new Error(`status still showing after group clear: ${filled.statusText}`);
+    await ariaPage.close();
+    ok("form_contact_group_aria");
+  } catch (e) {
+    fail("form_contact_group_aria", e.message || e);
+  }
+
+  if (productionPosts.length) {
+    fail("form_no_production_post", productionPosts.join(" | "));
+  } else {
+    ok("form_no_production_post");
   }
 
   await browser.close();

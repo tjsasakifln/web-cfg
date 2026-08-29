@@ -8,6 +8,7 @@
 <meta content="#061a33" name="theme-color"/>
 <meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/>
 <link href="https://confenge.com.br/" rel="canonical"/>
+<link rel="preload" as="image" href="/assets/logo-confenge-500-f8a83f6d.png" fetchpriority="high"/>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="/manifest.webmanifest" rel="manifest"/>
@@ -60,7 +61,7 @@
 
 <header class="site-header" id="inicio">
 <div class="container header-inner">
-<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
+<a aria-label="CONFENGE, página inicial" class="brand" href="/"><img alt="CONFENGE Inteligência Técnica" decoding="async" fetchpriority="high" height="58" src="/assets/logo-confenge-500-f8a83f6d.png" width="224"/></a>
 <nav aria-label="Navegação principal" class="desktop-nav">
 <a data-cta-position="header_nav" href="/servicos-obras-publicas/">Serviços</a>
 <a data-cta-position="header_nav" href="/problemas-que-resolvemos/">Problemas que resolvemos</a>
@@ -335,7 +336,7 @@
 <section aria-labelledby="authority-title" class="section section--loose authority-section" data-section-archetype="authority_editorial" id="autoridade">
 <div class="container authority-layout">
 <figure class="authority-photo">
-<img src="/assets/tiago-sasaki-foto-v11-sem-fundo.png" width="640" height="800" alt="Engº Tiago Sasaki, responsável técnico da CONFENGE" loading="lazy" decoding="async"/>
+<picture><source type="image/avif" srcset="/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif"/><source type="image/webp" srcset="/assets/tiago-sasaki-foto-v11-sem-fundo-560.webp"/><img src="/assets/tiago-sasaki-foto-v11-sem-fundo-560.png" width="560" height="700" alt="Engº Tiago Sasaki, responsável técnico da CONFENGE" loading="lazy" decoding="async" fetchpriority="low"/></picture>
 <figcaption class="type-mono">Engº Tiago Sasaki · EESC-USP</figcaption>
 </figure>
 <div class="authority-copy">
@@ -424,11 +425,11 @@
 <div class="form-progress" aria-hidden="true"><span class="form-progress-step is-active" data-step-indicator="1">1</span><span class="form-progress-bar"></span><span class="form-progress-step" data-step-indicator="2">2</span></div>
 
 <fieldset class="form-step is-active" data-form-step="1" id="form-step-1">
-<legend class="form-step-legend">Etapa 1 de 2 · Contato essencial</legend>
+<legend class="form-step-legend" data-step-heading>Etapa 1 de 2 · Contato essencial</legend>
 <div class="field"><label for="nome">Nome</label><input autocomplete="name" id="nome" name="nome" required="" type="text"/></div>
-<div class="form-row">
-<div class="field"><label for="telefone">WhatsApp</label><input autocomplete="tel" id="telefone" inputmode="tel" name="telefone" type="tel"/></div>
-<div class="field"><label for="email">E-mail</label><input autocomplete="email" id="email" name="email" type="email"/></div>
+<div class="form-row" role="group" aria-describedby="contato-hint">
+<div class="field"><label for="telefone">WhatsApp</label><input autocomplete="tel" aria-describedby="contato-hint" id="telefone" inputmode="tel" name="telefone" type="tel"/></div>
+<div class="field"><label for="email">E-mail</label><input autocomplete="email" aria-describedby="contato-hint" id="email" name="email" type="email"/></div>
 </div>
 <p class="form-hint" id="contato-hint">Informe WhatsApp ou e-mail para retorno.</p>
 <div class="field">
@@ -448,7 +449,7 @@
 </fieldset>
 
 <fieldset class="form-step" data-form-step="2" id="form-step-2">
-<legend class="form-step-legend">Etapa 2 de 2 · Contexto (pode completar depois)</legend>
+<legend class="form-step-legend" data-step-heading>Etapa 2 de 2 · Contexto (pode completar depois)</legend>
 <div class="field"><label for="empresa">Empresa <span class="optional-mark">opcional</span></label><input autocomplete="organization" id="empresa" name="empresa" type="text"/></div>
 <div class="field">
 <label for="urgencia">Urgência <span class="optional-mark">opcional</span></label>
@@ -473,7 +474,7 @@
 </div>
 <p class="form-note">Retorno direto. Sem lista de e-mails ou compartilhamento comercial dos dados.</p>
 </fieldset>
-<div class="form-status" role="status" aria-live="polite" hidden></div>
+<div class="form-status" id="form-status" role="status" aria-live="polite" hidden></div>
 </form>
 </div>
 </section>
