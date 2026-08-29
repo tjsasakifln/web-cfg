@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "276fa651ec589d8474f2640a4a7590b956d83fca",
+  "baseline_commit": "8fef76ae54e106ae4a1cad1470af3f9f51ab2824",
   "recaptured_at": "2026-08-29",
-  "recapture_reason": "PR #475 merge recapture onto origin/main 5174555fa0040ac9d9c1dc50de9da51869f5c79f. Hashes recomputed from the merged tree, not copied from either side of the conflict; baseline_commit pins 276fa651ec589d8474f2640a4a7590b956d83fca, the merge commit whose protected-path bytes these hashes attest. The six protected BOFU pillar HTML files and all rendering collateral are byte-identical to origin/main, verified by recomputed sha256. html_mutation remains false and the #291 unlock plan is untouched.",
+  "recapture_reason": "Merge recapture pinned to 8fef76ae54e106ae4a1cad1470af3f9f51ab2824, the commit whose protected-path bytes these hashes attest. Hashes recomputed from the merged tree, not copied from either side of the conflict. Drifted non-rendering collateral: _redirects, sitemap.txt, sitemap.xml. The six protected BOFU pillar HTML files and all rendering collateral are byte-identical to origin/main, verified by recomputed sha256. html_mutation remains false and the #291 unlock plan is untouched.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -25,10 +25,10 @@
     "styles-tokens.css": "8908187527c8120731dc8584eb11c36ae41e66f5cf411dcd431251e1b52cb01d",
     "styles-tools.css": "cfe5e81785c54e8a18601c2a97308dfaf744d0b60596d2acc34ec3ad7e015162",
     "robots.txt": "2be984de9b51eb6d201b8210d727353f014cf52bea1058eabf3abedb9cad6f57",
-    "sitemap.xml": "b9cc0f075ca94f72dd41c745a4b6100e89532f67ee34b7eefe90d1e5fdc5b0dd",
-    "sitemap.txt": "22c2f915867fa779ebbbd8f645deb2d38e8900ee6aee179ca5b397004c272759",
+    "sitemap.xml": "5c66c99111d0370d02ea53e6fb4ac1a668a80d935efc38a4d784378e63133ae5",
+    "sitemap.txt": "aae5549eccf8b58ad0fb7ab93c9d3fe0923044d08109df881c249399552a1ede",
     "sitemap-index.xml": "865a4c2b7330b2081eb3473a540d862ad169b7300e1f3d93d5edc9d9742e9244",
-    "_redirects": "402f730e21b73c73574290bc572bf63fd36a713e1143b30a8df989b80f200a05",
+    "_redirects": "71898fd3479e067e1cd629bab49cb82b58321ea805f4a22cda36ffa1c6beb211",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "2bb200bf12345d1fd2cf95571082511214d7a2f86c42faf2192a4001d19028a2"
   }

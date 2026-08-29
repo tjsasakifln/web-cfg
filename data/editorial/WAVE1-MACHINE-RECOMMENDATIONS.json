@@ -1,18 +1,19 @@
 {
-  "generated_at": "2026-08-04T14:29:42.343272+00:00",
+  "generated_at": "2026-08-29T15:05:29.107061+00:00",
   "human_approved_count": 0,
   "indexable_count": 0,
   "note": "RECOMMEND_* is not HUMAN_APPROVED. Named human must run approve_cli.py.",
   "counts": {
-    "RECOMMEND_APPROVE": 11,
-    "RECOMMEND_REJECT": 1
+    "RECOMMEND_APPROVE": 10,
+    "RECOMMEND_REJECT": 1,
+    "RECOMMEND_CONSOLIDATE": 1
   },
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
       "url": "/guias-contratos-obras/checklist-pedido-aditivo/",
       "title": "Checklist de pedido de aditivo em obra pública | CONFENGE",
-      "registry_status": "EDITORIAL_REVIEWED",
+      "registry_status": "INDEXABLE",
       "recommendation": "RECOMMEND_APPROVE",
       "reasons": [
         "machine_checks_passed"
@@ -92,8 +93,8 @@
     {
       "page_id": "lei-item-novo-desconto",
       "url": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "title": "Item novo no aditivo: como formar preço e preservar o desconto da proposta | CONFENGE",
-      "registry_status": "EDITORIAL_REVIEWED",
+      "title": "Item novo no aditivo: preço e relação proposta/orçamento-base | CONFENGE",
+      "registry_status": "INDEXABLE",
       "recommendation": "RECOMMEND_APPROVE",
       "reasons": [
         "machine_checks_passed"
@@ -104,14 +105,12 @@
     {
       "page_id": "lei-limite-25-50",
       "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "title": "Limite de 25% e 50% no art. 125: o que conta no aditivo de obra | CONFENGE",
-      "registry_status": "EDITORIAL_REVIEWED",
-      "recommendation": "RECOMMEND_APPROVE",
+      "registry_status": "MIGRATED",
+      "recommendation": "RECOMMEND_CONSOLIDATE",
       "reasons": [
-        "machine_checks_passed"
+        "terminal_migration_to_declared_canonical_owner"
       ],
-      "risk": "low",
-      "note": "Machine recommendation only — not human approval."
+      "risk": "low"
     },
     {
       "page_id": "lei-parcela-incontroversa",

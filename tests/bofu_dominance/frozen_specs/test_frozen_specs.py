@@ -220,6 +220,19 @@ def test_recapture_provenance_snapshot_matches_baseline_bytes_with_or_without_gi
         capture_output=True,
         check=False,
     )
+    git_checkout = (ROOT / ".git").exists()
+    if git_checkout:
+        assert git_commit.returncode == 0, (
+            f"baseline_commit must resolve in a Git checkout: {commit}"
+        )
+        ancestor = subprocess.run(
+            ["git", "-C", str(ROOT), "merge-base", "--is-ancestor", commit, "HEAD"],
+            capture_output=True,
+            check=False,
+        )
+        assert ancestor.returncode == 0, (
+            f"baseline_commit must be an ancestor of HEAD: {commit}"
+        )
     for rel, expected in payload["forbidden"].items():
         if git_commit.returncode == 0:
             content = subprocess.check_output(
@@ -228,6 +241,7 @@ def test_recapture_provenance_snapshot_matches_baseline_bytes_with_or_without_gi
         else:
             # Source archives intentionally have no object database. The
             # hash-pinned snapshot remains independently verifiable there.
+            assert not git_checkout
             content = (ROOT / rel).read_bytes()
         assert hashlib.sha256(content).hexdigest() == expected, rel
 

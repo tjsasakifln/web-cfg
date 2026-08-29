@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 76,
-  "unique_paths": 76,
+  "url_count": 75,
+  "unique_paths": 75,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -78,12 +78,11 @@
     "https://confenge.com.br/guias-contratos-obras/",
     "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
     "https://confenge.com.br/lei-14133-obras/",
-    "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/"
   ],
   "families": {
     "core": 71,
-    "editorial": 5
+    "editorial": 4
   },
   "member_sitemaps": [
     "https://confenge.com.br/sitemap.xml",

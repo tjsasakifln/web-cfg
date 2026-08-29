@@ -97,8 +97,37 @@ CLUSTER_OFFER = {
 
 # Versioned public stage classification (generation-time; never runtime title guesswork).
 STAGE_CLASSIFICATION_PATH = ROOT / "data" / "site" / "content-stage-classification.json"
+LEGACY_URL_INVENTORY_PATH = ROOT / "data" / "organic" / "legacy-url-inventory.json"
 ALLOWED_STAGES = frozenset({"antes", "durante", "conflito"})
 _STAGE_CLASSIFICATION_CACHE: dict[str, Any] | None = None
+
+
+def _public_path(value: str) -> str:
+    """Normalize an inventory URL to the public path used by the registry."""
+    value = value.strip()
+    if value.startswith(SITE):
+        value = value[len(SITE):]
+    if not value.startswith("/"):
+        raise ValueError(f"Public URL must be internal to {SITE}: {value!r}")
+    if value != "/" and not value.endswith("/") and "." not in value.rsplit("/", 1)[-1]:
+        value += "/"
+    return value
+
+
+def load_terminal_migrations() -> dict[str, dict[str, Any]]:
+    """Load explicit 301 decisions from the canonical legacy URL inventory."""
+    if not LEGACY_URL_INVENTORY_PATH.exists():
+        raise FileNotFoundError(
+            f"Missing canonical legacy inventory: {LEGACY_URL_INVENTORY_PATH}"
+        )
+    inventory = json.loads(LEGACY_URL_INVENTORY_PATH.read_text(encoding="utf-8"))
+    migrations: dict[str, dict[str, Any]] = {}
+    for item in inventory.get("items") or []:
+        if item.get("status") != "301_redirect":
+            continue
+        source = _public_path(str(item.get("legacy_url") or ""))
+        migrations[source] = item
+    return migrations
 
 
 def load_stage_classification() -> dict[str, Any]:
@@ -1770,6 +1799,7 @@ def fix_radar(brand: dict[str, Any]) -> None:
 def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
     """Full disposition inventory for known public URLs."""
     idx_map = indexable_map()
+    terminal_migrations = load_terminal_migrations()
     rows: list[dict[str, Any]] = []
 
     def add(
@@ -1905,6 +1935,31 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
             elif status == "REJECTED":
                 disp = "BLOCKED_MISSING_EVIDENCE"
                 human = "REJECTED"
+            elif status == "MIGRATED":
+                source = _public_path(url)
+                migration = terminal_migrations.get(source)
+                if migration is None:
+                    raise ValueError(
+                        f"MIGRATED editorial URL lacks a 301 inventory decision: {source}"
+                    )
+                canonical_path = _public_path(str(page.get("canonical_path") or ""))
+                inventory_destination = _public_path(
+                    str(migration.get("destination") or "")
+                )
+                if canonical_path == source or canonical_path != inventory_destination:
+                    raise ValueError(
+                        "MIGRATED editorial canonical and 301 destination disagree: "
+                        f"{source} -> registry={canonical_path}, "
+                        f"inventory={inventory_destination}"
+                    )
+                expected_canonical = f"{SITE}{canonical_path}"
+                if migration.get("canonical") != expected_canonical:
+                    raise ValueError(
+                        "MIGRATED editorial inventory canonical disagrees with destination: "
+                        f"{source} -> {migration.get('canonical')!r}"
+                    )
+                disp = "REDIRECT_301"
+                human = "NOT_APPLICABLE_TERMINAL_MIGRATION"
             else:
                 disp = "BLOCKED_HUMAN_REVIEW"
                 human = status
@@ -1915,7 +1970,11 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 "search_intent": page.get("primary_keyword") or "",
                 "cluster": page.get("theme") or "",
                 "http_status_production": "UNVERIFIED",
-                "canonical": f"{SITE}{url}",
+                "canonical": (
+                    f"{SITE}{canonical_path}"
+                    if status == "MIGRATED"
+                    else f"{SITE}{url}"
+                ),
                 "robots": "index,follow" if status == "INDEXABLE" else "noindex,follow",
                 "in_sitemap": status == "INDEXABLE",
                 "in_hub": False,
@@ -1930,7 +1989,11 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 "similarity_notes": "",
                 "disposition": disp,
                 "journey": "contrato" if page.get("journey") == "execucao" else page.get("journey") or "contrato",
-                "notes": "Wave 1: approval path is Tiago-only (PR #10)",
+                "notes": (
+                    f"Terminal migration to {canonical_path}; explicit 301 inventory decision"
+                    if status == "MIGRATED"
+                    else "Wave 1: approval path is Tiago-only (PR #10)"
+                ),
                 "path": "",
             }
             rows.append(row)
