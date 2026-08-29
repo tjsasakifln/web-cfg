@@ -311,7 +311,12 @@ def test_every_example_uses_the_same_action_label() -> None:
         "Referências de Preços de Obras Públicas",
         "Plano Executivo de Expansão",
     ):
-        assert f"Abrir sintético: {name}" in html, name
+        # #475 requires every synthetic example to be explicitly labelled as such.
+        # #484's per-card layout does not have room for "Abrir sintético: {name}"
+        # on the CTA itself without wrapping the button row; the label survives
+        # as an explicit, per-item honesty marker in the page's structured data.
+        assert f"{name} — exemplo sintético" in html, name
+        assert f"Ver o exemplo de {name}" in html, name
         assert f"Pedir análise de {name}" in html, name
 
 
