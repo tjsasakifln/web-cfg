@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "0d72c1c623822e26d594ddebb879a393d52e0b4f",
+  "baseline_commit": "41b892b174642542355d53cd55c872933c00cd3b",
   "recaptured_at": "2026-08-29",
-  "recapture_reason": "CFG10X editorial ownership migration for the general aditivo 25%/50% query. Baseline 0d72c1c623822e26d594ddebb879a393d52e0b4f contains the reviewed one-hop forced 301 from /lei-14133-obras/limite-25-50-aditivo-obra/ to /conteudos/limite-aditivo-25-50-obra-publica/ and removes only that donor from sitemap membership. The owner remains indexable and self-canonical; the donor is noindex, canonicals to the owner and is absent from the editorial hub and every sitemap. The three sitemap collateral files change only because that exact donor URL was removed. All six protected BOFU pillar HTML files, rendering assets, robots, analytics, content-service mapping and #291 unlock state remain unchanged; html_mutation remains false.",
+  "recapture_reason": "CFG10X editorial ownership migration for the general aditivo 25%/50% query. Baseline 41b892b174642542355d53cd55c872933c00cd3b contains the reviewed one-hop forced 301 from /lei-14133-obras/limite-25-50-aditivo-obra/ to /conteudos/limite-aditivo-25-50-obra-publica/ and removes only that donor from sitemap membership. The owner remains indexable and self-canonical; the donor is noindex, canonicals to the owner and is absent from the editorial hub and every sitemap. The three sitemap collateral files change only because that exact donor URL was removed. All six protected BOFU pillar HTML files, rendering assets, robots, analytics, content-service mapping and #291 unlock state remain unchanged; html_mutation remains false.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
