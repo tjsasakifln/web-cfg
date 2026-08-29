@@ -287,6 +287,7 @@ def test_revalidated_primary_urls_and_methodology_limits_are_shipped():
     sinapi = read_shipped_html("sinapi-desonerado-nao-desonerado")
     assert "transição parcial de 2025 a 2027" in sinapi
     assert "Livro_SINAPI_Calculos_Parametros.pdf" in sinapi
+    assert "R$&nbsp;34,80/h" in sinapi
 
 
 def test_validate_seo_log_has_no_cluster_boilerplate(tmp_path):

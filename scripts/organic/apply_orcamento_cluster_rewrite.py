@@ -1140,7 +1140,7 @@ SINAPI_EXAMPLE = example_section(
     fonte_url=CAIXA_CALC,
     source_reference="Livro de Cálculos e Parâmetros, 8ª ed., 2026",
     title="185 horas na mesma composição, duas bases de encargo",
-    intro="Taxas horárias ilustrativas de mão de obra: 34,80 BRL na base não desonerada e 27,60 BRL na desonerada. Não são valores SINAPI de um mês publicado. Mostram o vão de encargo, não um fator nacional de conversão.",
+    intro="Taxas horárias, ambas premissas sintéticas: R$&nbsp;34,80/h na base não desonerada e R$&nbsp;27,60/h na desonerada. Não são valores SINAPI de um mês publicado. Mostram o vão de encargo, não um fator nacional de conversão.",
     inputs=[
         ("labor_hours", "Horas de mão de obra da composição", "185", "h"),
         ("rate_nao_deson", "Taxa horária ilustrativa não desonerada", "34.80", "BRL/h"),
