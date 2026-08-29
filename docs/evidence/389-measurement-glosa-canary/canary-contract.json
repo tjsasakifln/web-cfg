@@ -118,15 +118,15 @@
   "frozen_siblings": [
     {
       "path": "conteudos/glosa-de-medicao-obra-publica/index.html",
-      "sha256": "0d994e11ceb9c98defcde4fab4b82b8785fec7ecc4526c2555222f06ab39025e"
+      "sha256": "6a18932fda1907fcd629c0b6bd5ac61ee8e2bca571ebed8a3d4b6f62e4225972"
     },
     {
       "path": "conteudos/medicao-de-obra-publica-rejeitada/index.html",
-      "sha256": "375b9c35c61e432ffe7d94e7e7338be2f8d46895880e97858f519fba2428c8a4"
+      "sha256": "c9fcf44b842186e4ccce12add9d6b83cc379dd8a0cf2751da4d442390c0f9666"
     },
     {
       "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
-      "sha256": "4a15f6415d8b02171270b020106e5c0c2c35742d35db19a983b4b28c2832b05c"
+      "sha256": "194ac87c8c2e10c05de2fa353231ffa74835cfcc21d6b65d0030a0f83bf057c9"
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",
