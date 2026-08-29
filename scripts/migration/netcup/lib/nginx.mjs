@@ -14,6 +14,11 @@ const BANNER = [
   `# Host architecture: ${HOST_ARCHITECTURE_VERSION}`,
 ].join("\n");
 
+// nginx's configuration lexer rejects a single quoted parameter around 4 KiB.
+// Keep generated map values comfortably below that boundary and concatenate
+// variables at response time so the public header remains byte-identical.
+const NGINX_MAP_VALUE_CHUNK_BYTES = 3000;
+
 function escapeLiteral(value) {
   return value.replaceAll("\\", "\\\\").replaceAll('"', '\\"').replaceAll("$", "\\$");
 }
@@ -28,6 +33,48 @@ function regexEscape(value) {
 
 function variableName(name) {
   return `$confenge_header_${name.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "")}`;
+}
+
+function splitHeaderValue(value) {
+  const chunks = [""];
+  let escapedBytes = 0;
+  for (const character of String(value)) {
+    const characterBytes = Buffer.byteLength(escapeLiteral(character));
+    if (escapedBytes + characterBytes > NGINX_MAP_VALUE_CHUNK_BYTES && chunks.at(-1)) {
+      chunks.push("");
+      escapedBytes = 0;
+    }
+    chunks[chunks.length - 1] += character;
+    escapedBytes += characterBytes;
+  }
+  return chunks;
+}
+
+function headerChunkCount(contract, lowerName) {
+  let count = 1;
+  for (const rule of contract.headers) {
+    for (const header of rule.headers) {
+      if (header.name.toLowerCase() === lowerName) {
+        count = Math.max(count, splitHeaderValue(header.value).length);
+      }
+    }
+  }
+  return count;
+}
+
+function headerChunkVariable(name, index) {
+  const base = variableName(name);
+  return index === 0 ? base : `${base}_part_${index}`;
+}
+
+function headerValueExpression(contract, lowerName, name) {
+  const count = headerChunkCount(contract, lowerName);
+  if (count === 1) return variableName(name);
+  const variables = Array.from(
+    { length: count },
+    (_, index) => headerChunkVariable(name, index),
+  ).join("");
+  return `"${variables}"`;
 }
 
 function normalizedExact(path) {
@@ -179,14 +226,19 @@ export function renderHeaders(contract) {
     );
   for (const { lower, name } of allHeaderNames(contract)) {
     const defaultValue = global.headers.find((header) => header.name.toLowerCase() === lower)?.value || "";
-    lines.push(`map $request_uri ${variableName(name)} {`);
-    lines.push(`  default ${quoted(defaultValue)};`);
-    for (const selector of scoped) {
-      const value = headerValueForSelector(contract, selector, lower);
-      if (value === undefined || value === defaultValue) continue;
-      lines.push(`  ${requestUriRegex(selector)} ${quoted(value)};`);
+    const chunkCount = headerChunkCount(contract, lower);
+    const defaultChunks = splitHeaderValue(defaultValue);
+    for (let index = 0; index < chunkCount; index += 1) {
+      lines.push(`map $request_uri ${headerChunkVariable(name, index)} {`);
+      lines.push(`  default ${quoted(defaultChunks[index] || "")};`);
+      for (const selector of scoped) {
+        const value = headerValueForSelector(contract, selector, lower);
+        if (value === undefined || value === defaultValue) continue;
+        const chunks = splitHeaderValue(value);
+        lines.push(`  ${requestUriRegex(selector)} ${quoted(chunks[index] || "")};`);
+      }
+      lines.push("}", "");
     }
-    lines.push("}", "");
   }
   return `${lines.join("\n").trimEnd()}\n`;
 }
@@ -197,8 +249,8 @@ function redirectResponseDirectives(contract, indent = "  ") {
     `${indent}types {}`,
     `${indent}default_type ${quoted(policy.contentType)};`,
   ];
-  for (const { name } of allHeaderNames(contract)) {
-    lines.push(`${indent}add_header ${name} ${variableName(name)} always;`);
+  for (const { lower, name } of allHeaderNames(contract)) {
+    lines.push(`${indent}add_header ${name} ${headerValueExpression(contract, lower, name)} always;`);
   }
   return lines;
 }
@@ -300,8 +352,8 @@ export function renderLocations(contract) {
     "",
   ];
 
-  for (const { name } of allHeaderNames(contract)) {
-    lines.push(`add_header ${name} ${variableName(name)} always;`);
+  for (const { lower, name } of allHeaderNames(contract)) {
+    lines.push(`add_header ${name} ${headerValueExpression(contract, lower, name)} always;`);
   }
   lines.push("");
 

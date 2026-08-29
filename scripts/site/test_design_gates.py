@@ -986,6 +986,21 @@ def test_accessibility_label_gate_rejects_id_only_fields():
     assert has_accessible_label('<label>E-mail <input name="email" type="email"></label>', "email")
 
 
+def test_canonical_palette_keeps_aa_contrast_margin():
+    """Token pairings stay at least 0.5:1 above normal-text WCAG AA."""
+    from scripts.site.audit_accessibility import (
+        AA_CONTRAST_WITH_MARGIN,
+        contrast_contract,
+        contrast_ratio,
+    )
+
+    failures, evidence = contrast_contract(ROOT)
+    assert not failures, failures
+    assert len(evidence) >= 7, evidence
+    assert AA_CONTRAST_WITH_MARGIN == 5.0
+    assert contrast_ratio("#777777", "#ffffff") < AA_CONTRAST_WITH_MARGIN
+
+
 def _srgb_channel(value: float) -> float:
     return value / 12.92 if value <= 0.04045 else ((value + 0.055) / 1.055) ** 2.4
 

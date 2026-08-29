@@ -318,20 +318,23 @@ async function auditWorker() {
 
         if (viewportWidth <= 390) {
           const undersized = [...document.querySelectorAll(
-            ".button,button,summary,input:not([type='hidden']):not([type='checkbox']):not([type='radio']),select,textarea",
+            ".button,button,summary,label.consent,input:not([type='hidden']):not([type='checkbox']):not([type='radio']):not([tabindex='-1']),select,textarea",
           )]
             .filter((element) => {
               const style = getComputedStyle(element);
               const box = element.getBoundingClientRect();
-              return style.display !== "none" && style.visibility !== "hidden" && box.width > 0 && box.height > 0 && box.height < 44;
+              return style.display !== "none" && style.visibility !== "hidden" && box.width > 0 && box.height > 0 && (box.width < 44 || box.height < 44);
             })
             .slice(0, 5)
             .map((element) => ({
               tag: element.tagName.toLowerCase(),
+              id: element.id,
+              type: element.getAttribute("type") || "",
               class: String(element.className || "").slice(0, 80),
+              width: Math.round(element.getBoundingClientRect().width),
               height: Math.round(element.getBoundingClientRect().height),
             }));
-          if (undersized.length) problems.push({ code: "touch_target_height", detail: undersized });
+          if (undersized.length) problems.push({ code: "touch_target_size", detail: undersized });
         }
 
         const typeSelectors = [

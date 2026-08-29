@@ -332,11 +332,10 @@ def finalize_public_artifact(dest: Path) -> dict[str, Any]:
     css_assets = fingerprint_published_css(dest)
     headers_path = Path(dest) / "_headers"
     if headers_path.is_file() and (Path(dest) / "index.html").is_file():
-        from scripts.site.csp_contract import apply_script_src_hashes, executable_inline_hashes
+        from scripts.site.csp_contract import apply_artifact_csp_hashes
 
-        hashes = list(executable_inline_hashes(Path(dest)))
         headers_path.write_text(
-            apply_script_src_hashes(headers_path.read_text(encoding="utf-8"), hashes),
+            apply_artifact_csp_hashes(headers_path.read_text(encoding="utf-8"), Path(dest)),
             encoding="utf-8",
         )
     return {

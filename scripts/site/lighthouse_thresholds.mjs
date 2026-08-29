@@ -7,6 +7,17 @@ export function percentile75(values) {
   return ordered[Math.ceil(ordered.length * 0.75) - 1];
 }
 
+export const CRITICAL_MONEY_PATHS = new Set([
+  "/",
+  "/entregas/",
+  "/conteudos/documentos-reequilibrio-obra-publica/",
+  "/diretoria-b2g/",
+  "/ferramentas/diagnostico-defesa-margem/",
+  "/diagnostico-b2g-expansao/",
+  "/casos/",
+  "/especialista/tiago-jun-sasaki/",
+]);
+
 export function evaluateLighthouseResults(results, options = {}) {
   const homeRuns = Number(options.homeRuns || 1);
   const imageGatePages = options.imageGatePages || new Set();
@@ -80,19 +91,41 @@ export function evaluateLighthouseResults(results, options = {}) {
     errors.push(`home: expected ${homeRuns} Lighthouse runs, observed ${home.length}`);
   }
   const criticalPerfMin = options.criticalPerfMin ?? 95;
-  const criticalPaths = options.criticalPaths || new Set([
-    "/",
-    "/entregas/",
-    "/conteudos/documentos-reequilibrio-obra-publica/",
-    "/diretoria-b2g/",
-    "/ferramentas/diagnostico-defesa-margem/",
-    "/casos/",
-    "/especialista/tiago-jun-sasaki/",
-  ]);
+  const criticalPaths = options.criticalPaths || CRITICAL_MONEY_PATHS;
+  const criticalRuns = Number(options.criticalRuns || 1);
+  const criticalLcpMaxMs = options.criticalLcpMaxMs ?? 2000;
+  const criticalTbtMaxMs = options.criticalTbtMaxMs ?? 200;
+  const criticalDomMax = options.criticalDomMax ?? 800;
+  const criticalByteWeightMax = options.criticalByteWeightMax ?? 150 * 1024;
+  for (const path of criticalPaths) {
+    const observed = results.filter((row) => row.path === path && !row.error).length;
+    const expected = path === "/" ? homeRuns : criticalRuns;
+    if (observed > 0 && observed !== expected) {
+      errors.push(`${path}: expected ${expected} critical runs, observed ${observed}`);
+    }
+  }
   for (const row of results) {
     if (row.error) continue;
-    if (criticalPaths.has(row.path) && row.performance < criticalPerfMin) {
+    if (!criticalPaths.has(row.path)) continue;
+    if (row.performance < criticalPerfMin) {
       errors.push(`${row.path}: critical performance ${row.performance} < ${criticalPerfMin}`);
+    }
+    if (!Number.isFinite(row.lcp_ms) || row.lcp_ms > criticalLcpMaxMs) {
+      errors.push(`${row.path}: critical LCP ${row.lcp_ms}ms > ${criticalLcpMaxMs}ms`);
+    }
+    if (!Number.isFinite(row.tbt_ms) || row.tbt_ms > criticalTbtMaxMs) {
+      errors.push(`${row.path}: critical TBT ${row.tbt_ms}ms > ${criticalTbtMaxMs}ms`);
+    }
+    if (!Number.isFinite(row.dom_elements) || row.dom_elements > criticalDomMax) {
+      errors.push(`${row.path}: critical DOM ${row.dom_elements} > ${criticalDomMax} elements`);
+    }
+    if (!Number.isFinite(row.total_byte_weight) || row.total_byte_weight > criticalByteWeightMax) {
+      errors.push(
+        `${row.path}: critical payload ${row.total_byte_weight} > ${criticalByteWeightMax} bytes`,
+      );
+    }
+    if (row.font_display_score !== 1) {
+      errors.push(`${row.path}: font-display score ${row.font_display_score} must equal 1`);
     }
   }
   if (homeGate.minimum_performance == null || homeGate.minimum_performance < 95) {
