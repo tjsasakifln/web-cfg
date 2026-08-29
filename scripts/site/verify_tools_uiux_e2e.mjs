@@ -1,7 +1,7 @@
 /**
  * E2E verification for tools + editorial pilot pages (puppeteer-core + system Chrome).
- * Viewports: 1440, 1024, 768, 390, 360, 320
- * Flows: nav, fill/run, result, overflow, keyboard focus, axe WCAG 2.2 AA
+ * Viewports: 1440, 1024, 768, 430, 390, 360, 320
+ * Flows: nav, fill/run, result, overflow, keyboard-only completion, JS-off, axe WCAG 2.2 AA
  *
  * Usage: node scripts/site/verify_tools_uiux_e2e.mjs [outDir]
  * Evidence: outDir/e2e-report.json, outDir/axe-report.json, outDir/screenshots/*.png
@@ -15,10 +15,11 @@ import {
   writeFileSync,
   mkdirSync,
 } from "fs";
-import { join, resolve, extname, sep } from "path";
+import { join, resolve, relative, extname, sep } from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { resolveSiteRoot } from "./interface_coverage.mjs";
+import { resolveChromePath } from "./resolve_chrome.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const SITE_ROOT = resolveSiteRoot(ROOT);
@@ -26,13 +27,14 @@ const OUT = resolve(
   process.argv[2] || join(ROOT, "docs/uiux-tools-remediation/evidence")
 );
 const PORT = 8795;
-const CHROME = process.env.CHROME_PATH || "/usr/bin/google-chrome";
+const CHROME = resolveChromePath() || process.env.CHROME_PATH || "/usr/bin/google-chrome";
 const require = createRequire(import.meta.url);
 
 const VIEWPORTS = [
   [1440, 1000],
   [1024, 768],
   [768, 1024],
+  [430, 932],
   [390, 844],
   [360, 800],
   [320, 568],
@@ -62,6 +64,12 @@ const PILOTS = [
     path: "/ferramentas/matriz-atraso-obra/",
     expect: ["tool-form", "tool-event", "hipótese"],
     flow: "matriz",
+  },
+  {
+    id: "diagnostico",
+    path: "/ferramentas/diagnostico-defesa-margem/",
+    expect: ["Identificação do contrato", "tool-form", "UNKNOWN", "btn-copy", "data-tool-job"],
+    flow: "diagnostico",
   },
   {
     id: "aditivo",
@@ -121,17 +129,9 @@ try {
 mkdirSync(join(OUT, "screenshots"), { recursive: true });
 mkdirSync(join(OUT, "screenshots", "after"), { recursive: true });
 
-const server = await startServer();
-const BASE = `http://127.0.0.1:${PORT}`;
-const browser = await puppeteer.launch({
-  executablePath: CHROME,
-  headless: true,
-  args: ["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage"],
-});
-
 const report = {
   generated_at: new Date().toISOString(),
-  base: BASE,
+  base: null,
   site_root: SITE_ROOT === ROOT ? "." : "_site",
   viewports: VIEWPORTS.map(([w, h]) => `${w}x${h}`),
   results: [],
@@ -150,9 +150,7 @@ function pass(msg) {
   console.log("PASS", msg);
 }
 
-const page = await browser.newPage();
-
-// --- Static source checks first ---
+// --- Static source checks first (no browser) ---
 for (const pilot of PILOTS) {
   const rel = pilot.path === "/" ? "index.html" : pilot.path.replace(/^\//, "") + (pilot.path.endsWith("/") ? "index.html" : "");
   const fp = join(ROOT, rel.replace(/\/index\.html$/, "/index.html"));
@@ -176,6 +174,60 @@ for (const pilot of PILOTS) {
   if (pilot.id === "hub" && /WebApplication/.test(html) && !/CollectionPage|ItemList/.test(html)) {
     fail("hub_webapp_only");
   }
+}
+
+const server = await startServer();
+const BASE = `http://127.0.0.1:${PORT}`;
+report.base = BASE;
+let browser;
+try {
+  browser = await puppeteer.launch({
+    executablePath: CHROME,
+    headless: true,
+    args: ["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage"],
+  });
+} catch (err) {
+  const logPath = join(OUT, "chrome-unavailable.log");
+  writeFileSync(logPath, String((err && err.stack) || err));
+  console.error("CHROME_UNAVAILABLE", logPath);
+  server.close();
+  process.exit(1);
+}
+
+const page = await browser.newPage();
+
+async function tabToSelector(browserPage, selector, maxTabs = 80) {
+  for (let i = 0; i < maxTabs; i++) {
+    await browserPage.keyboard.press("Tab");
+    const reached = await browserPage.evaluate((sel) => {
+      const active = document.activeElement;
+      return !!(active && typeof active.matches === "function" && active.matches(sel));
+    }, selector);
+    if (reached) return true;
+  }
+  return false;
+}
+
+async function runAxeAudit(browserPage, id, path) {
+  await browserPage.addScriptTag({ content: axeSource });
+  const results = await browserPage.evaluate(async () => {
+    // eslint-disable-next-line no-undef
+    return await axe.run(document, {
+      runOnly: {
+        type: "tag",
+        values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"],
+      },
+    });
+  });
+  const counts = { critical: 0, serious: 0, moderate: 0, minor: 0 };
+  const violations = (results.violations || []).map((v) => {
+    counts[v.impact] = (counts[v.impact] || 0) + 1;
+    report.axe[v.impact] = (report.axe[v.impact] || 0) + 1;
+    return { id: v.id, impact: v.impact, description: v.description, nodes: v.nodes.length };
+  });
+  report.axe.pages.push({ path, id, counts, violations });
+  if (counts.critical > 0 || counts.serious > 0) fail(`axe ${id} critical=${counts.critical} serious=${counts.serious}`);
+  else pass(`axe ${id} critical=0 serious=0 (mod=${counts.moderate})`);
 }
 
 // --- Screenshots + overflow at each viewport ---
@@ -213,7 +265,7 @@ for (const pilot of PILOTS) {
       overflow,
       scrollWidth: metrics.scrollWidth,
       clientWidth: metrics.clientWidth,
-      shot,
+      shot: relative(ROOT, shot),
     };
     report.results.push(entry);
     if (overflow) {
@@ -273,11 +325,32 @@ await page.setViewport({ width: 1440, height: 1000 });
   else pass("limite_wording");
   if (!lim.hasSteps) fail("limite_steps");
   else pass("limite_steps");
+  const matchCompute = await page.evaluate(() => {
+    const C = window.ConfengeToolCompute;
+    const r = C.computeLimiteAditivo({
+      valorInicial: 1e7, tipo: "geral", acrescimosPrevios: 1.8e6,
+      supressoesPrevias: 0, acrescimoProposto: 9e5, supressaoProposta: 0,
+    });
+    const t = document.getElementById("resultado") ? document.getElementById("resultado").innerText : "";
+    return {
+      ok: r.ok,
+      withinAc: r.withinAc,
+      textHasStatus: t.includes(r.acrescimos.labelStatus),
+      textNonEmpty: t.trim().length > 40,
+      hasLayers: /Fato\.|Cálculo\.|Inferência\.|Desconhecido/i.test(t),
+    };
+  });
+  if (!matchCompute.ok || matchCompute.withinAc !== false || !matchCompute.textHasStatus || !matchCompute.textNonEmpty) {
+    fail("limite_result_matches_compute " + JSON.stringify(matchCompute));
+  } else pass("limite_result_matches_compute");
+  if (!matchCompute.hasLayers) fail("limite_layers_visible");
+  else pass("limite_layers_visible");
   report.flows.push({ flow: "limite", ...lim });
   await page.screenshot({
     path: join(OUT, "screenshots", "after", "limite-result-1440.png"),
     fullPage: true,
   });
+  await runAxeAudit(page, "limite-result", "/ferramentas/limite-acrescimos-supressoes/#resultado");
 }
 
 // Reequilibrio flow - mark blockers missing
@@ -309,6 +382,7 @@ await page.setViewport({ width: 1440, height: 1000 });
     path: join(OUT, "screenshots", "after", "reeq-result-1440.png"),
     fullPage: true,
   });
+  await runAxeAudit(page, "reequilibrio-result", "/ferramentas/checklist-reequilibrio/#out");
 }
 
 // Matriz flow
@@ -345,6 +419,98 @@ await page.setViewport({ width: 1440, height: 1000 });
     path: join(OUT, "screenshots", "after", "matriz-result-1440.png"),
     fullPage: true,
   });
+  await runAxeAudit(page, "matriz-result", "/ferramentas/matriz-atraso-obra/#out");
+}
+
+// Diagnostico: lookup → result content (no cadastro) + export controls
+{
+  await page.evaluateOnNewDocument(() => { window.dataLayer = []; });
+  await page.goto(`${BASE}/ferramentas/diagnostico-defesa-margem/`, {
+    waitUntil: "networkidle0",
+    timeout: 60000,
+  });
+  await page.waitForSelector("#qid", { timeout: 10000 });
+  const beforeLead = await page.evaluate(() => {
+    const id = document.getElementById("identificacao");
+    const form = document.getElementById("lead-form");
+    const idTop = id ? id.getBoundingClientRect().top : 1e9;
+    const formTop = form ? form.getBoundingClientRect().top : 1e9;
+    return {
+      hasId: !!(id && /itaj/i.test(id.innerText)),
+      resultBeforeLead: idTop < formTop,
+      hasCopy: !!document.getElementById("btn-copy"),
+      hasDl: !!document.getElementById("btn-dl"),
+      hasPrint: !!document.getElementById("btn-print"),
+      hasReset: !!document.getElementById("btn-reset"),
+      layers: !!document.querySelector("[data-layer='fato']"),
+    };
+  });
+  if (!beforeLead.hasId || !beforeLead.resultBeforeLead) fail("diagnostico_result_before_cadastro " + JSON.stringify(beforeLead));
+  else pass("diagnostico_result_before_cadastro");
+  if (!beforeLead.hasCopy || !beforeLead.hasDl || !beforeLead.hasPrint || !beforeLead.hasReset) fail("diagnostico_export");
+  else pass("diagnostico_export");
+  if (!beforeLead.layers) fail("diagnostico_layers");
+  else pass("diagnostico_layers");
+  await page.click("#qid", { clickCount: 3 });
+  await page.type("#qid", "itajai");
+  await page.click("button.tool-run");
+  await new Promise((r) => setTimeout(r, 600));
+  const dx = await page.evaluate(() => {
+    const id = document.getElementById("identificacao");
+    const t = id ? id.innerText : "";
+    return { t: t.slice(0, 400), hasItajai: /itaj/i.test(t), nonEmpty: t.trim().length > 20 };
+  });
+  if (!dx.hasItajai || !dx.nonEmpty) fail("diagnostico_lookup_result " + JSON.stringify(dx));
+  else pass("diagnostico_lookup_result");
+  const analyticsPrivacy = await page.evaluate(() => {
+    const relevant = (window.dataLayer || []).filter((item) =>
+      ["tool_complete", "contract_selected", "contract_analyzed"].includes(item && item.event)
+    );
+    const forbidden = relevant.flatMap((item) => Object.keys(item || {}).filter((key) =>
+      /public_id|public_contract|\bqid\b|\bquery\b/i.test(key)
+    ));
+    return { count: relevant.length, forbidden };
+  });
+  if (analyticsPrivacy.forbidden.length) fail("diagnostico_identifier_analytics " + JSON.stringify(analyticsPrivacy));
+  else pass("diagnostico_identifier_analytics_zero");
+
+  await page.click("#qid", { clickCount: 3 });
+  await page.type("#qid", "contrato-que-nao-existe");
+  await page.click("#lookup button.tool-run");
+  await new Promise((r) => setTimeout(r, 200));
+  const invalid = await page.evaluate(() => ({
+    resultHidden: document.getElementById("diagnostic-result").hidden,
+    contractId: document.getElementById("public-contract-id").value,
+    slug: document.getElementById("public-id-slug").value,
+    status: document.getElementById("lookup-status").innerText,
+  }));
+  if (!invalid.resultHidden || invalid.contractId || invalid.slug || !/UNKNOWN|não foi possível/i.test(invalid.status)) {
+    fail("diagnostico_invalid_clears_stale " + JSON.stringify(invalid));
+  } else pass("diagnostico_invalid_clears_stale");
+
+  await page.click("#qid", { clickCount: 3 });
+  await page.type("#qid", "itajai");
+  await page.click("#lookup button.tool-run");
+  await new Promise((r) => setTimeout(r, 200));
+  await page.click("#btn-reset");
+  const cleared = await page.evaluate(() => ({
+    query: document.getElementById("qid").value,
+    resultHidden: document.getElementById("diagnostic-result").hidden,
+    contractId: document.getElementById("public-contract-id").value,
+    slug: document.getElementById("public-id-slug").value,
+  }));
+  if (cleared.query || !cleared.resultHidden || cleared.contractId || cleared.slug) fail("diagnostico_clear " + JSON.stringify(cleared));
+  else pass("diagnostico_clear");
+
+  await page.type("#qid", "itajai");
+  await page.click("#lookup button.tool-run");
+  await new Promise((r) => setTimeout(r, 200));
+  report.flows.push({ flow: "diagnostico", ...dx, ...beforeLead });
+  await page.screenshot({
+    path: join(OUT, "screenshots", "after", "diagnostico-result-1440.png"),
+    fullPage: true,
+  });
+  await runAxeAudit(page, "diagnostico-result", "/ferramentas/diagnostico-defesa-margem/#diagnostic-result");
 }
 
 // Aditivo checklist - mark one essential + one blocker
@@ -403,46 +569,103 @@ await page.setViewport({ width: 1440, height: 1000 });
   });
 }
 
-// --- Keyboard: tab to primary action on limite ---
+// --- Keyboard-only: complete every public tool flow and reach its result ---
 {
-  await page.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, {
-    waitUntil: "domcontentloaded",
-    timeout: 60000,
+  await page.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await page.evaluate(() => localStorage.removeItem("confenge.tool.limite-acrescimos"));
+  await page.reload({ waitUntil: "networkidle0", timeout: 60000 });
+  await page.focus("#valor_inicial");
+  await page.keyboard.type("1000000");
+  const step1 = await tabToSelector(page, '[data-limite-step="1"] [data-limite-next]');
+  if (step1) await page.keyboard.press("Enter");
+  const step2 = await tabToSelector(page, '[data-limite-step="2"] [data-limite-next]');
+  if (step2) await page.keyboard.press("Enter");
+  const submit = await tabToSelector(page, '[data-limite-step="3"] button.tool-run');
+  if (submit) await page.keyboard.press("Enter");
+  await page.waitForSelector("#resultado:not([hidden])", { timeout: 5000 }).catch(() => null);
+  const completed = await page.evaluate(() => {
+    const out = document.getElementById("resultado");
+    return !!(out && !out.hidden && out.innerText.trim().length > 40 && document.activeElement === out);
   });
-  await page.focus("body");
-  let reached = false;
-  for (let i = 0; i < 40; i++) {
-    await page.keyboard.press("Tab");
-    const info = await page.evaluate(() => {
-      const el = document.activeElement;
-      if (!el) return { tag: null };
-      return {
-        tag: el.tagName,
-        type: el.getAttribute("type"),
-        text: (el.innerText || el.value || "").slice(0, 40),
-        cls: el.className,
-      };
-    });
-    if (
-      (info.tag === "BUTTON" && /calcular|submit/i.test(info.text + info.type)) ||
-      (info.tag === "BUTTON" && info.type === "submit") ||
-      (info.tag === "INPUT" && info.type !== "hidden")
-    ) {
-      reached = true;
-      break;
-    }
-  }
-  if (!reached) fail("keyboard_reach_form");
-  else pass("keyboard_reach_form");
-  report.keyboard.push({ page: "limite", reached_interactive: reached });
-  // focus-visible: ensure outline style exists for :focus-visible (from site CSS)
-  const hasFocusStyle = await page.evaluate(() => {
-    const sheets = [...document.styleSheets];
-    // presence of focus-visible in styles.css is enough for structural check
-    return !!document.querySelector('link[href*="styles"]');
+  if (!step1 || !step2 || !submit || !completed) fail(`keyboard_complete_limite ${JSON.stringify({ step1, step2, submit, completed })}`);
+  else pass("keyboard_complete_limite");
+  report.keyboard.push({ page: "limite", completed });
+}
+
+{
+  await page.goto(`${BASE}/ferramentas/checklist-reequilibrio/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await page.focus('#root input[type="radio"]');
+  await page.keyboard.press("Space");
+  const submit = await tabToSelector(page, '#f button.tool-run');
+  if (submit) await page.keyboard.press("Enter");
+  await page.waitForSelector("#out:not([hidden])", { timeout: 5000 }).catch(() => null);
+  const completed = await page.evaluate(() => {
+    const out = document.getElementById("out");
+    return !!(out && !out.hidden && out.innerText.trim().length > 40 && document.activeElement === out);
   });
+  if (!submit || !completed) fail(`keyboard_complete_reequilibrio ${JSON.stringify({ submit, completed })}`);
+  else pass("keyboard_complete_reequilibrio");
+  report.keyboard.push({ page: "reequilibrio", completed });
+}
+
+{
+  await page.goto(`${BASE}/ferramentas/matriz-atraso-obra/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await page.focus('[data-f="causa"]');
+  await page.keyboard.type("Projeto liberado com atraso");
+  const submit = await tabToSelector(page, '#f button.tool-run');
+  if (submit) await page.keyboard.press("Enter");
+  await page.waitForSelector("#out:not([hidden])", { timeout: 5000 }).catch(() => null);
+  const completed = await page.evaluate(() => {
+    const out = document.getElementById("out");
+    return !!(out && !out.hidden && /hipótese/i.test(out.innerText) && document.activeElement === out);
+  });
+  if (!submit || !completed) fail(`keyboard_complete_matriz ${JSON.stringify({ submit, completed })}`);
+  else pass("keyboard_complete_matriz");
+  report.keyboard.push({ page: "matriz", completed });
+}
+
+{
+  await page.goto(`${BASE}/ferramentas/diagnostico-defesa-margem/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await page.focus("#qid");
+  await page.keyboard.type("itajai");
+  const submit = await tabToSelector(page, '#lookup button.tool-run');
+  if (submit) await page.keyboard.press("Enter");
+  await new Promise((resolveWait) => setTimeout(resolveWait, 300));
+  const completed = await page.evaluate(() => {
+    const out = document.getElementById("diagnostic-result");
+    return !!(out && !out.hidden && /itaj/i.test(out.innerText) && document.activeElement === out);
+  });
+  if (!submit || !completed) fail(`keyboard_complete_diagnostico ${JSON.stringify({ submit, completed })}`);
+  else pass("keyboard_complete_diagnostico");
+  report.keyboard.push({ page: "diagnostico", completed });
+
+  const hasFocusStyle = await page.evaluate(() => !!document.querySelector('link[href*="styles"]'));
   if (!hasFocusStyle) fail("focus_css_link");
   else pass("focus_css_link");
+}
+
+// JS-off: controls stay disabled, the explanatory state is visible and no URL input can be submitted.
+{
+  const jsOff = await browser.newPage();
+  await jsOff.setJavaScriptEnabled(false);
+  for (const pilot of PILOTS.filter((item) => ["limite", "reequilibrio", "matriz", "diagnostico"].includes(item.id))) {
+    await jsOff.goto(`${BASE}${pilot.path}`, { waitUntil: "domcontentloaded", timeout: 60000 });
+    const state = await jsOff.evaluate(() => {
+      const form = document.querySelector('form[id="limite-form"], form[id="f"], form[id="lookup"]');
+      const runtime = document.querySelector("[data-tool-runtime-status]");
+      const fields = form && form.querySelector("[data-tool-runtime-fields]");
+      return {
+        method: form && form.method,
+        runtimeVisible: !!(runtime && !runtime.hidden && runtime.innerText.trim()),
+        fieldsDisabled: !!(fields && fields.disabled),
+        search: window.location.search,
+      };
+    });
+    if (state.method !== "post" || !state.runtimeVisible || !state.fieldsDisabled || state.search) {
+      fail(`js_off_${pilot.id} ${JSON.stringify(state)}`);
+    } else pass(`js_off_${pilot.id}`);
+  }
+  await jsOff.close();
 }
 
 
@@ -658,6 +881,22 @@ await page.setViewport({ width: 1440, height: 1000 });
   const reRestored = await page.evaluate(() => localStorage.getItem("confenge.tool.checklist-reequilibrio"));
   if (!reRestored) fail("reeq_persist_after_reload");
   else pass("reeq_persist_after_reload");
+
+  await page.evaluate(() => {
+    document.querySelectorAll('input[data-req][value="na"]').forEach((input) => input.click());
+    document.querySelector('#f button.tool-run').click();
+  });
+  const allNa = await page.evaluate(() => {
+    const out = document.getElementById("out");
+    return {
+      text: out ? out.innerText : "",
+      ctaHidden: document.getElementById("cta").hidden,
+      actionsHidden: document.getElementById("ra").hidden,
+    };
+  });
+  if (!/não foi possível medir|não há base/i.test(allNa.text) || !allNa.ctaHidden || !allNa.actionsHidden) {
+    fail("reeq_all_na_ui " + JSON.stringify(allNa));
+  } else pass("reeq_all_na_ui");
 }
 
 {
@@ -690,6 +929,20 @@ await page.setViewport({ width: 1440, height: 1000 });
   if (!mxFull.conc && !/concorr/i.test(mxFull.t)) fail("matriz_result_conc"); else pass("matriz_result_conc");
   const mxStore = await page.evaluate(() => localStorage.getItem("confenge.tool.matriz-atraso"));
   if (!mxStore) fail("matriz_persist"); else pass("matriz_persist");
+
+  await page.evaluate(() => {
+    document.querySelector('[data-f="dataInicio"]').value = "2026-05-10";
+    document.querySelector('[data-f="dataFim"]').value = "2026-05-01";
+    document.querySelector('#f button.tool-run').click();
+  });
+  const invalidPeriod = await page.evaluate(() => ({
+    text: document.getElementById("out").innerText,
+    ctaHidden: document.getElementById("cta").hidden,
+    actionsHidden: document.getElementById("ra").hidden,
+  }));
+  if (!/data final anterior|período.*invertido/i.test(invalidPeriod.text) || !invalidPeriod.ctaHidden || !invalidPeriod.actionsHidden) {
+    fail("matriz_invalid_period_ui " + JSON.stringify(invalidPeriod));
+  } else pass("matriz_invalid_period_ui");
 
   // XSS: inject payload via localStorage restore + result HTML
   await page.evaluate(() => {
@@ -766,38 +1019,7 @@ for (const pilot of PILOTS) {
     waitUntil: "networkidle0",
     timeout: 60000,
   });
-  await page.addScriptTag({ content: axeSource });
-  const results = await page.evaluate(async () => {
-    // eslint-disable-next-line no-undef
-    return await axe.run(document, {
-      runOnly: {
-        type: "tag",
-        values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"],
-      },
-    });
-  });
-  const counts = { critical: 0, serious: 0, moderate: 0, minor: 0 };
-  const violations = (results.violations || []).map((v) => {
-    counts[v.impact] = (counts[v.impact] || 0) + 1;
-    report.axe[v.impact] = (report.axe[v.impact] || 0) + 1;
-    return {
-      id: v.id,
-      impact: v.impact,
-      description: v.description,
-      nodes: v.nodes.length,
-    };
-  });
-  report.axe.pages.push({
-    path: pilot.path,
-    id: pilot.id,
-    counts,
-    violations,
-  });
-  if (counts.critical > 0 || counts.serious > 0) {
-    fail(`axe ${pilot.id} critical=${counts.critical} serious=${counts.serious}`);
-  } else {
-    pass(`axe ${pilot.id} critical=0 serious=0 (mod=${counts.moderate})`);
-  }
+  await runAxeAudit(page, pilot.id, pilot.path);
 }
 
 await browser.close();
@@ -816,7 +1038,7 @@ writeFileSync(
     `axe_critical=${report.axe.critical}`,
     `axe_serious=${report.axe.serious}`,
     `axe_moderate=${report.axe.moderate}`,
-    `screenshots=${join(OUT, "screenshots/after")}`,
+    `screenshots=${relative(ROOT, join(OUT, "screenshots/after"))}`,
     `generated=${report.generated_at}`,
   ].join("\n") + "\n"
 );
