@@ -1,12 +1,11 @@
 {
   "ok": true,
-  "generated_at": "2026-08-24T12:10:52Z",
+  "generated_at": "2026-08-29T14:51:55Z",
   "page_defs": 12,
-  "indexable_count": 3,
+  "indexable_count": 2,
   "indexable_urls": [
     "/guias-contratos-obras/checklist-pedido-aditivo/",
-    "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-    "/lei-14133-obras/limite-25-50-aditivo-obra/"
+    "/lei-14133-obras/preco-item-novo-desconto-proposta/"
   ],
   "revoked_non_human_approvals": 0,
   "results": [
@@ -69,7 +68,7 @@
     {
       "page_id": "lei-limite-25-50",
       "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "status": "INDEXABLE",
+      "status": "EDITORIAL_REVIEWED",
       "gate_ok": true,
       "issues": []
     },
@@ -96,7 +95,7 @@
     }
   ],
   "sitemap_counts": {
-    "editorial": 5,
+    "editorial": 4,
     "jurisprudencia": 0,
     "inteligencia_segment": 0
   },
@@ -108,6 +107,7 @@
     "/guias-contratos-obras/responder-notificacao-atraso/",
     "/lei-14133-obras/art-124-alteracao-contratual-obra/",
     "/lei-14133-obras/atraso-imputavel-administracao/",
+    "/lei-14133-obras/limite-25-50-aditivo-obra/",
     "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
     "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
     "/lei-14133-obras/servico-executado-sem-termo-aditivo/"

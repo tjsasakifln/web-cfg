@@ -31,6 +31,9 @@ NEW_LIMIT = "/lei-14133-obras/limite-25-50-aditivo-obra/"
 OLD_ITEM = "/conteudos/desconto-da-proposta-em-item-novo-aditivo/"
 NEW_ITEM = "/lei-14133-obras/preco-item-novo-desconto-proposta/"
 ERROR_PROJECT = "/conteudos/erro-de-projeto-gera-aditivo-obra-publica/"
+# CFG10X-09: conteudos owns the general 25%/50% query; lei URL 301s to it.
+LIMIT_OWNER = OLD_LIMIT
+LIMIT_DONOR = NEW_LIMIT
 
 
 def page(page_id: str) -> dict:
@@ -72,14 +75,16 @@ def public_surface_paths() -> list[Path]:
 
 def test_superseded_urls_redirect_permanently_and_directly():
     rules = redirect_rules()
-    # OLD_LIMIT is self-canonical again (organic-striking-distance-cro-01).
-    assert OLD_LIMIT not in rules
+    # CFG10X-09: the conteudos URL owns the general 25%/50% query.
+    assert LIMIT_OWNER not in rules
+    assert rules[LIMIT_DONOR] == (LIMIT_OWNER, "301!")
     assert rules[OLD_ITEM] == (NEW_ITEM, "301!")
-    for old, (destination, status) in rules.items():
-        if old == OLD_ITEM:
-            assert status.startswith("301")
-            assert destination not in rules, f"redirect_chain:{old}->{destination}"
-            assert destination not in {OLD_LIMIT, OLD_ITEM}
+    for old in (OLD_ITEM, LIMIT_DONOR):
+        destination, status = rules[old]
+        assert status.startswith("301")
+        assert destination not in rules, f"redirect_chain:{old}->{destination}"
+        assert destination != old
+        assert destination not in {OLD_ITEM}
     assert ERROR_PROJECT not in rules
     assert SUPERSEDED_URLS == {OLD_ITEM}
 
@@ -138,7 +143,7 @@ def test_remediate_feed_strips_superseded_urls(tmp_path, monkeypatch):
     assert "/conteudos/atraso-na-medicao-obra-publica/" in text
 
 
-def test_new_pages_render_with_their_own_canonical():
+def test_editorial_pages_render_with_their_declared_canonical():
     for page_id in ("lei-limite-25-50", "lei-item-novo-desconto", "guia-checklist-aditivo"):
         definition = page(page_id)
         html = render_page({**definition, "status": "EDITORIAL_REVIEWED"})
@@ -151,8 +156,11 @@ def test_new_pages_render_with_their_own_canonical():
             html,
             re.I,
         )
-        assert canonical and canonical.group(1) == f"https://confenge.com.br{definition['url']}"
+        expected_path = definition.get("canonical_path") or definition["url"]
+        assert canonical and canonical.group(1) == f"https://confenge.com.br{expected_path}"
         for old in (OLD_LIMIT, OLD_ITEM):
+            if page_id == "lei-limite-25-50" and old == LIMIT_OWNER:
+                continue
             assert old not in html
 
 

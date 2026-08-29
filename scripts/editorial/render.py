@@ -248,8 +248,11 @@ def _cta_block(page: dict[str, Any], position: str) -> str:
         "Solicite um canal seguro para envio. O site não recebe arquivo; "
         "o canal é escolhido posteriormente."
     )
+    landmark_label = (
+        "Próximo passo no conteúdo" if position == "mid" else "Próximo passo ao final"
+    )
     return f"""
-<section class="editorial-cta" id="cta-{e(position)}" aria-label="Próximo passo" data-cta-position="{e(position)}">
+<section class="editorial-cta" id="cta-{e(position)}" aria-label="{e(landmark_label)}" data-cta-position="{e(position)}">
 <div class="editorial-cta-inner">
 <div class="editorial-cta-copy">
 <span class="editorial-cta-kicker">Próximo passo</span>
@@ -296,6 +299,7 @@ def _hub_label(archetype: str) -> tuple[str, str]:
 def render_page(page: dict[str, Any]) -> str:
     archetype = page.get("archetype") or "guia"
     hub_name, hub_url = _hub_label(archetype)
+    canonical_path = page.get("canonical_path") or page["url"]
     title = page["title"]
     if "CONFENGE" not in title:
         full_title = f"{title} | CONFENGE"
@@ -357,8 +361,8 @@ def render_page(page: dict[str, Any]) -> str:
 
     article_ld: dict[str, Any] = {
         "@type": "Article",
-        "@id": f"{SITE}{page['url']}#article",
-        "mainEntityOfPage": {"@type": "WebPage", "@id": f"{SITE}{page['url']}"},
+        "@id": f"{SITE}{canonical_path}#article",
+        "mainEntityOfPage": {"@type": "WebPage", "@id": f"{SITE}{canonical_path}"},
         "headline": title,
         "description": desc,
         "datePublished": published,
@@ -497,7 +501,7 @@ def render_page(page: dict[str, Any]) -> str:
     return page_shell(
         title=full_title,
         description=desc,
-        canonical_path=page["url"],
+        canonical_path=canonical_path,
         robots=robots,
         jsonld_graph=graph,
         body_main=main,

@@ -70,13 +70,6 @@ SEGMENT_FILES = (
 )
 
 FIRST_COHORT_CONTEXT: dict[str, dict[str, str]] = {
-    "lei-limite-25-50": {
-        "search_intent": "Limite de 25% e 50% no art. 125 em aditivo de obra",
-        "demand_evidence": "Peer /conteudos/limite-aditivo-25-50-obra-publica/ teve 24 impressões, 0 cliques e posição 17 no export GSC de 2026-07-30; a query relacionada 'aditivos obra pública' teve 5 impressões.",
-        "objective": "Explicar o teto do art. 125 sem tratá-lo como crédito automático e levar a uma validação do saldo contratual.",
-        "internal_competitor": "/conteudos/limite-aditivo-25-50-obra-publica/",
-        "cannibalization_risk": "alto: definir uma única canônica antes de indexar; 301 ou noindex do peer somente após decisão humana.",
-    },
     "guia-checklist-aditivo": {
         "search_intent": "Checklist operacional para protocolar pedido de aditivo de obra",
         "demand_evidence": "A query 'aditivos obra pública' teve 5 impressões; o peer /conteudos/erro-de-projeto-gera-aditivo-obra-publica/ teve 3 impressões e posição 2,33 no export GSC de 2026-07-30.",
