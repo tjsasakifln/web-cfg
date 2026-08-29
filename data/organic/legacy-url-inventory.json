@@ -1,6 +1,6 @@
 {
   "schema_version": "legacy-url-inventory-v1",
-  "as_of": "2026-08-09",
+  "as_of": "2026-08-29",
   "rule": "301 only to true semantic equivalent; 404/410 when permanently gone; never soft-home topical content just to preserve SEO.",
   "notes": [
     "GSC may still show residual impressions for redirected or gone URLs; residual ≠ indexation failure.",
@@ -109,6 +109,18 @@
       "canonical": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
       "sitemap_membership": false,
       "action": "keep_301_to_specialist"
+    },
+    {
+      "legacy_url": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
+      "status": "301_redirect",
+      "current_action": "301!",
+      "destination": "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "sitemap_membership": false,
+      "internal_backlinks": "zero on indexable public pages",
+      "external_backlinks_known": "unknown; preserve through exact one-hop migration",
+      "action": "migrate_legal_donor_to_general_query_owner",
+      "rationale": "The content URL has existing Search Analytics evidence and remains the selected organic owner. The legal donor is noindex and canonicals to this exact semantic equivalent."
     },
     {
       "legacy_url": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",

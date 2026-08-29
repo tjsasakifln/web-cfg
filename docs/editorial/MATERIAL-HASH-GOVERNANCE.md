@@ -18,6 +18,6 @@ Quando o material de uma página aprovada muda, `upsert_page` muda o estado para
 
 ## Coorte de release
 
-Nesta release, somente `lei-limite-25-50`, `guia-checklist-aditivo` e `lei-item-novo-desconto` podem alcançar `INDEXABLE`. A fila restante fica noindex até uma coorte futura explicitamente definida.
+Nesta release, somente `guia-checklist-aditivo` e `lei-item-novo-desconto` podem alcançar `INDEXABLE`. `lei-limite-25-50` está terminalmente `MIGRATED`; a fila restante fica noindex até uma coorte futura explicitamente definida.
 
 Para atualizar um pacote após mudança material, rode `npm run editorial:build` e `npm run editorial:truth:write`, confira o diff do pacote e então abra o PR. Um commit docs-only posterior não exige nenhuma atualização do pacote.

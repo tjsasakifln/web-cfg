@@ -12,12 +12,15 @@ import sys
 from itertools import combinations
 from pathlib import Path
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.editorial.naturalness import jaccard_similarity  # noqa: E402
+from scripts.editorial.registry import approve_human, load_registry  # noqa: E402
 from scripts.site.inbound_gates import is_indexable_html, strip_html  # noqa: E402
 
 
@@ -163,6 +166,74 @@ def test_donor_cta_landmarks_have_unique_names():
     )
     assert len(labels) == 2
     assert len(set(labels)) == len(labels)
+
+
+def test_indexable_public_pages_do_not_link_through_donor_redirect():
+    for loc in _sitemap_locs():
+        if not loc.startswith(SITE):
+            continue
+        route = loc.removeprefix(SITE).strip("/")
+        path = ROOT / route / "index.html" if route else ROOT / "index.html"
+        if not path.is_file():
+            continue
+        html = path.read_text(encoding="utf-8", errors="replace")
+        assert f'href="{DONOR}"' not in html, loc
+
+
+def test_legacy_inventory_records_exact_donor_to_owner_migration():
+    inventory = json.loads(
+        (ROOT / "data" / "organic" / "legacy-url-inventory.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    items = {item["legacy_url"]: item for item in inventory["items"]}
+    donor = items[f"{SITE}{DONOR}"]
+    assert donor["current_action"] == "301!"
+    assert donor["destination"] == OWNER
+    assert donor["canonical"] == f"{SITE}{OWNER}"
+    assert donor["sitemap_membership"] is False
+    owner = items[f"{SITE}{OWNER}"]
+    assert owner["current_action"] == "KEEP"
+    assert owner["destination"] == OWNER
+    assert owner["sitemap_membership"] is True
+
+
+def test_donor_is_terminally_migrated_and_not_approvable():
+    registry = load_registry()
+    donor = next(page for page in registry["pages"] if page["page_id"] == "lei-limite-25-50")
+    assert donor["status"] == "MIGRATED"
+    assert not donor.get("approval")
+    with pytest.raises(ValueError, match="requires_EDITORIAL_REVIEWED"):
+        approve_human(
+            registry,
+            donor["page_id"],
+            reviewer="Human reviewer",
+            notes="A sufficiently long review note for the negative migration test.",
+            sources_verified=list(donor.get("sources") or []),
+        )
+
+
+def test_active_submission_and_approval_docs_never_reactivate_donor():
+    submit = json.loads(
+        (ROOT / "docs" / "editorial" / "GSC-SUBMIT-CANDIDATES.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert f"{SITE}{DONOR}" not in submit["urls"]
+    assert f"{SITE}{OWNER}" in submit["urls"]
+    for relative in (
+        "docs/editorial/WAVE1-FIRST-COHORT.md",
+        "docs/editorial/WAVE1-POST-APPROVAL-RUNBOOK.md",
+        "docs/editorial/MATERIAL-HASH-GOVERNANCE.md",
+        "docs/editorial/EXTERNAL-ACTIONS-UNLOCK.md",
+    ):
+        text = (ROOT / relative).read_text(encoding="utf-8")
+        assert "`lei-limite-25-50`" not in text or "MIGRATED" in text
+    archived_packet = (
+        ROOT / "docs" / "editorial" / "WAVE1-HUMAN-REVIEW-PACKET.md"
+    ).read_text(encoding="utf-8")
+    assert "SUPERSEDED_EVIDENCE" in archived_packet
+    assert "MIGRATED" in archived_packet.split("## Páginas", 1)[0]
 
 
 def test_existing_ownership_is_pinned_to_current_gsc_and_organic_selection():

@@ -29,6 +29,7 @@ SITE = "https://confenge.com.br"
 from scripts.editorial.cohort import (  # noqa: E402
     FIRST_COHORT_IDS,
     FIRST_COHORT_SET,
+    MIGRATED_IDS,
     REJECTED_IDS,
     WAVE1_IDS,
 )
@@ -219,7 +220,9 @@ def audit_governed_surfaces(
     manifest = source_manifest or load_manifest()
     pages = list(registry.get("pages") or [])
     by_id = {page.get("page_id"): page for page in pages if page.get("page_id")}
-    governed_ids = set(FIRST_COHORT_IDS) | set(WAVE1_IDS) | set(REJECTED_IDS)
+    governed_ids = (
+        set(FIRST_COHORT_IDS) | set(WAVE1_IDS) | set(MIGRATED_IDS) | set(REJECTED_IDS)
+    )
     governed = [by_id[page_id] for page_id in sorted(governed_ids) if page_id in by_id]
     valid = indexable_pages(
         registry, allowed_page_ids=FIRST_COHORT_SET, source_manifest=manifest
@@ -305,6 +308,12 @@ def audit_governed_surfaces(
                 contradictions.append(f"hub_lists_unapproved:{page_id}")
             if page_id in REJECTED_IDS and page.get("status") != "REJECTED":
                 contradictions.append(f"rejected_status_incoherent:{page_id}")
+            if page_id in MIGRATED_IDS:
+                if page.get("status") != "MIGRATED":
+                    contradictions.append(f"migrated_status_incoherent:{page_id}")
+                declared_canonical = str(page.get("canonical_path") or "")
+                if not declared_canonical or canonical != f"{SITE}{declared_canonical}":
+                    contradictions.append(f"migrated_wrong_canonical:{page_id}")
             if page_id in (WAVE1_IDS - FIRST_COHORT_SET) and page.get("status") != "EDITORIAL_REVIEWED":
                 contradictions.append(f"backlog_status_incoherent:{page_id}")
 
@@ -375,6 +384,9 @@ def derive_editorial_truth(reg: dict[str, Any] | None = None) -> dict[str, Any]:
     rejected = [
         page for page in pages if page.get("page_id") in REJECTED_IDS or page.get("status") == "REJECTED"
     ]
+    migrated = [
+        page for page in pages if page.get("page_id") in MIGRATED_IDS or page.get("status") == "MIGRATED"
+    ]
     valid_indexable = indexable_pages(
         registry, allowed_page_ids=FIRST_COHORT_SET, source_manifest=manifest
     )
@@ -425,6 +437,7 @@ def derive_editorial_truth(reg: dict[str, Any] | None = None) -> dict[str, Any]:
         "wave1": first,
         "editorial_backlog": backlog_summary,
         "rejected": {"count": len(rejected), "page_ids": [page.get("page_id") for page in rejected]},
+        "migrated": {"count": len(migrated), "page_ids": [page.get("page_id") for page in migrated]},
         "release": {
             "approved_count": first["human_approved"],
             "released_count": len(released_ids),

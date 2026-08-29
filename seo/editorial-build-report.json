@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "generated_at": "2026-08-29T14:51:55Z",
+  "generated_at": "2026-08-29T15:12:10Z",
   "page_defs": 12,
   "indexable_count": 2,
   "indexable_urls": [
@@ -68,7 +68,7 @@
     {
       "page_id": "lei-limite-25-50",
       "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "status": "EDITORIAL_REVIEWED",
+      "status": "MIGRATED",
       "gate_ok": true,
       "issues": []
     },
@@ -107,13 +107,15 @@
     "/guias-contratos-obras/responder-notificacao-atraso/",
     "/lei-14133-obras/art-124-alteracao-contratual-obra/",
     "/lei-14133-obras/atraso-imputavel-administracao/",
-    "/lei-14133-obras/limite-25-50-aditivo-obra/",
     "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
     "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
     "/lei-14133-obras/servico-executado-sem-termo-aditivo/"
   ],
   "rejected": [
     "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/"
+  ],
+  "migrated": [
+    "/lei-14133-obras/limite-25-50-aditivo-obra/"
   ],
   "terminal_hint": "PARTIAL_INDEXABLE",
   "fail_closed_intelligence_publishable": true,

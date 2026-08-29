@@ -1,5 +1,7 @@
 # Wave 1 — Pacote de revisão humana
 
+> **SUPERSEDED_EVIDENCE:** este snapshot histórico não é uma superfície de aprovação. Use `WAVE1-HUMAN-REVIEW-PACKET.json`; `lei-limite-25-50` está terminalmente `MIGRATED` para `/conteudos/limite-aditivo-25-50-obra-publica/`.
+
 **Status terminal:** `READY_FOR_NAMED_HUMAN_APPROVAL`  
 **Commit:** `4003f94de0148a46765c1a0d6b0bcea646129736`  
 **Aguardando aprovação:** 11  

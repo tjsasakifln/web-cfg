@@ -158,10 +158,9 @@ def test_editorial_pages_render_with_their_declared_canonical():
         )
         expected_path = definition.get("canonical_path") or definition["url"]
         assert canonical and canonical.group(1) == f"https://confenge.com.br{expected_path}"
-        for old in (OLD_LIMIT, OLD_ITEM):
-            if page_id == "lei-limite-25-50" and old == LIMIT_OWNER:
-                continue
-            assert old not in html
+        assert OLD_ITEM not in html
+        if page_id != "lei-limite-25-50":
+            assert LIMIT_DONOR not in html
 
 
 def test_error_project_page_is_not_redirected_and_stays_noindex_when_present():

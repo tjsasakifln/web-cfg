@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import json
 import re
+from functools import lru_cache
+from pathlib import Path
 from typing import Any
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 from scripts.pseo.html_shell import (
     ORG_JSONLD,
@@ -19,6 +22,32 @@ from scripts.pseo.html_shell import (
 from scripts.editorial.sources import load_manifest
 from scripts.editorial.checklist_ui import render_structured_checklist
 from scripts.editorial.registry import material_hash
+
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+@lru_cache(maxsize=1)
+def _legacy_redirect_destinations() -> dict[str, str]:
+    """Resolve internal editorial links from the canonical migration inventory."""
+    inventory = json.loads(
+        (ROOT / "data" / "organic" / "legacy-url-inventory.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    destinations: dict[str, str] = {}
+    for item in inventory.get("items") or []:
+        if item.get("current_action") not in {"301", "301!"}:
+            continue
+        source = urlsplit(str(item.get("legacy_url") or "")).path
+        destination = str(item.get("destination") or "")
+        if source.startswith("/") and destination.startswith("/"):
+            destinations[source] = destination
+    return destinations
+
+
+def _resolved_internal_url(url: str) -> str:
+    return _legacy_redirect_destinations().get(url, url)
 
 
 def _md_inline(text: str) -> str:
@@ -248,9 +277,12 @@ def _cta_block(page: dict[str, Any], position: str) -> str:
         "Solicite um canal seguro para envio. O site não recebe arquivo; "
         "o canal é escolhido posteriormente."
     )
-    landmark_label = (
-        "Próximo passo no conteúdo" if position == "mid" else "Próximo passo ao final"
-    )
+    if page.get("page_id") == "lei-limite-25-50":
+        landmark_label = (
+            "Próximo passo no conteúdo" if position == "mid" else "Próximo passo ao final"
+        )
+    else:
+        landmark_label = "Próximo passo"
     return f"""
 <section class="editorial-cta" id="cta-{e(position)}" aria-label="{e(landmark_label)}" data-cta-position="{e(position)}">
 <div class="editorial-cta-inner">
@@ -276,7 +308,7 @@ def _related_html(page: dict[str, Any]) -> str:
     cards = []
     for r in rel[:6]:
         cards.append(
-            f'<a class="related-card" href="{e(r["url"])}">'
+            f'<a class="related-card" href="{e(_resolved_internal_url(r["url"]))}">'
             f'<span>{e(r.get("cluster") or "Relacionado")}</span>'
             f'<strong>{e(r["title"])}</strong>'
             f'<small>{e(r.get("kind") or "Guia")}</small></a>'

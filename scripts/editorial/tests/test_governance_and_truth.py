@@ -308,6 +308,10 @@ def test_live_registry_first_cohort_indexable_only():
         if pid == "jur-sumula-260-art":
             assert p.get("status") == "REJECTED"
             continue
+        if pid == "lei-limite-25-50":
+            assert p.get("status") == "MIGRATED"
+            assert not p.get("approval"), pid
+            continue
         if pid in FIRST_COHORT_SET:
             assert p.get("status") == "INDEXABLE", pid
             appr = p.get("approval") or {}
@@ -428,8 +432,8 @@ def test_first_cohort_is_exact_and_backlog_stays_noindex():
     assert truth["first_cohort"]["total"] == 2
     assert truth["first_cohort"]["indexable"] == 2
     assert truth["first_cohort"]["human_approved"] == 2
-    # lei-limite-25-50 returned to the Wave 1 backlog after CFG10X-09 301.
-    assert truth["editorial_backlog"]["editorial_reviewed"] == 9
+    assert truth["editorial_backlog"]["editorial_reviewed"] == 8
+    assert truth["migrated"] == {"count": 1, "page_ids": ["lei-limite-25-50"]}
 
 
 def test_packet_is_material_bound_not_head_bound():

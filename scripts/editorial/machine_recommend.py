@@ -42,6 +42,15 @@ def recommend_page(page: dict) -> dict:
             "reasons": ["already_rejected_or_jurisprudence_blocked"],
             "risk": "high",
         }
+    if status == "MIGRATED":
+        return {
+            "page_id": pid,
+            "url": url,
+            "registry_status": status,
+            "recommendation": "RECOMMEND_CONSOLIDATE",
+            "reasons": ["terminal_migration_to_declared_canonical_owner"],
+            "risk": "low",
+        }
 
     reasons: list[str] = []
     risk = "low"

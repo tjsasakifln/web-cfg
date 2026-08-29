@@ -4,7 +4,7 @@ Executar **somente após** aprovação humana individual (`approve_cli.py` com c
 Não usar CI, bot, tester ou agente como revisor. Não fazer approve em lote.
 
 Coorte preparada: `docs/editorial/WAVE1-FIRST-COHORT.md`  
-(`lei-limite-25-50`, `guia-checklist-aditivo`, `lei-item-novo-desconto`)
+(`guia-checklist-aditivo`, `lei-item-novo-desconto`)
 
 ## Pré-condições
 
@@ -46,12 +46,13 @@ Esperado: `INDEXABLE` / `HUMAN_APPROVED=true` / reviewer = nome humano real (nun
 
 | page_id | Peer | Decisão típica |
 |---------|------|----------------|
-| `lei-limite-25-50` | `/conteudos/limite-aditivo-25-50-obra-publica/` | 301 peer → Wave 1 **ou** noindex peer |
 | `guia-checklist-aditivo` | `/conteudos/erro-de-projeto-gera-aditivo-obra-publica/` | Diferenciar; manter peer se intenção distinta |
 | `lei-item-novo-desconto` | `/conteudos/desconto-da-proposta-em-item-novo-aditivo/` | 301 ou noindex peer; **proibido dual-index** |
 
-Implementar redirects em `_redirects` / regras Netlify **só** quando a decisão humana estiver documentada na nota de approve.  
+Implementar redirects em `_redirects` e no contrato nginx/Netcup **só** quando a decisão humana estiver documentada na nota de approve.
 Não inventar 301 “por padrão” sem escolha explícita.
+
+`lei-limite-25-50` não pertence mais à coorte: o estado `MIGRATED` e o inventário legado fixam o 301 direto para a owner em `/conteudos/limite-aditivo-25-50-obra-publica/`.
 
 ## 3. Reconstruir o site
 
