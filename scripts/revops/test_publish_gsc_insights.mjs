@@ -25,7 +25,7 @@ const now = new Date();
 const insights = {
   source: "search_analytics_api",
   as_of: now.toISOString().slice(0, 10),
-  generated_at: now.toISOString(),
+  generated_at: now.toISOString().replace(/\.(\d{3})Z$/, ".$1000+00:00"),
   ready_for_product_decisions: true,
   synthetic: false,
   fixture: false,
@@ -51,7 +51,9 @@ const observations = [0, 1, 2].map((offset) => {
       new Date(Date.parse(`${asOf}T00:00:00Z`) - (4 - offset - day) * 864e5).toISOString().slice(0, 10)
     ),
     snapshot_sha256: String(offset + 1).repeat(64),
-    observed_at: new Date(now.getTime() - (2 - offset) * 864e5).toISOString(),
+    observed_at: new Date(now.getTime() - (2 - offset) * 864e5)
+      .toISOString()
+      .replace(/\.(\d{3})Z$/, ".$1000+00:00"),
     run_id: `run-${offset + 1}`,
   };
   observation.observation_id = observationHash(observation);

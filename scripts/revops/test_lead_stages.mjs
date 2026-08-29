@@ -44,7 +44,9 @@ function readyGscHistory(asOf, nowIso) {
       observed_dates: observedDates,
       reprocessed_dates: observedDates.slice(-3),
       snapshot_sha256: String(offset + 1).repeat(64),
-      observed_at: new Date(Date.parse(nowIso) - (2 - offset) * 1000).toISOString(),
+      observed_at: new Date(Date.parse(nowIso) - (2 - offset) * 1000)
+        .toISOString()
+        .replace(/\.(\d{3})Z$/, ".$1000+00:00"),
       run_id: `run-${offset + 1}`,
     };
     observation.observation_id = observationHash(observation);
@@ -628,7 +630,9 @@ function readyGscHistory(asOf, nowIso) {
   const currentInsights = {
     source: "search_analytics_api",
     as_of: new Date().toISOString().slice(0, 10),
-    generated_at: new Date().toISOString(),
+    // Python's datetime.isoformat() emits a valid RFC3339 UTC offset. The
+    // authenticated consumer must not confuse that suffix with a phone number.
+    generated_at: new Date().toISOString().replace(/\.(\d{3})Z$/, ".$1000+00:00"),
     ready_for_product_decisions: true,
     synthetic: false,
     fixture: false,

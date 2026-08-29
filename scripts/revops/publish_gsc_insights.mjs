@@ -40,6 +40,10 @@ function isSensitiveGscKey(key) {
 function isSensitiveGscValue(value) {
   if (typeof value !== "string") return false;
   if (/^(?:sha256:)?[a-f0-9]{16,64}$/i.test(value)) return false;
+  if (
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/.test(value) &&
+    Number.isFinite(Date.parse(value))
+  ) return false;
   if (/^(?:https?:\/\/|\/)[^\s]*[?#]/i.test(value)) return true;
   return /\b[^\s@]+@[^\s@]+\.[^\s@]+\b/.test(value) ||
     /(?:\+?\d[\s().-]*){10,15}/.test(value) ||
