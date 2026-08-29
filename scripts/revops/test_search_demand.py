@@ -536,6 +536,23 @@ def main() -> int:
             "ctr_none_insufficient",
             sdo.ctr_optimization_decision(None)["decision"] == "INSUFFICIENT_EVIDENCE",
         )
+        ok(
+            "github_actions_run_id_is_hashed",
+            sdo.operational_run_id(
+                {"GITHUB_RUN_ID": "33260693783", "GITHUB_RUN_ATTEMPT": "1"}
+            )
+            == "sha256:f765a77132602fc3f875cccefc67fcf4a0122195bc39bfc984b8ea441eac47b4",
+        )
+        dependency_receipt = sdo.write_blocked_last_sync(
+            {"ok": False, "error": "dependency_unavailable"}
+        )
+        ok(
+            "dependency_receipt_has_explicit_non_fixture_provenance",
+            dependency_receipt.get("source") == "search_analytics_api"
+            and dependency_receipt.get("synthetic") is False
+            and dependency_receipt.get("fixture") is False
+            and dependency_receipt.get("live_baseline_invented") is False,
+        )
 
         before_latest = (ROOT / "data/revops/gsc/latest_import.json").read_bytes()
         fixture_payload = sdo.sync_from_fixture()

@@ -44,6 +44,8 @@ The consumer is `CURRENT` only when all of these remain true at read time:
 - producer and consumer manifest SHA-256 values are present and identical;
 - producer, consumer and insight `as_of` values are present and identical;
 - schema versions and source are recognized;
+- the durable history contains at least three distinct observed `as_of` dates
+  with no gap in the derived 28-day window;
 - producer, GSC `as_of` and ingest timestamps are no more than 14 days old;
 - `gsc-readiness/v2` is product-ready and query text is redacted;
 - the value came from `delivery_source=durable_store`.
@@ -60,11 +62,19 @@ publishes, probes storage with a write or otherwise mutates the data plane.
 ## Privacy and GitHub artifacts
 
 Raw and individual GSC queries stay in the ignored ephemeral private tree. The
-repository, public site, analytics and CI logs may contain only aggregates,
-redacted insight fields and non-reversible query hashes. The scheduled artifact
-is limited to `last_sync.json`, versioned history and the hash-only publish
-receipt; `daily/` and `private/` are excluded. GitHub Actions cache/artifacts are
-evidence, never a restore source or data plane.
+repository may contain aggregates and explicitly pseudonymous query hashes,
+never plaintext query text. Those hashes are potentially dictionary-guessable,
+so they are not anonymity proof. The public site, analytics, CI logs and
+scheduled artifact exclude them; the artifact is limited to `last_sync.json`,
+versioned history and the hash-only publish receipt, with `daily/` and
+`private/` excluded. GitHub Actions cache/artifacts are evidence, never a
+restore source or data plane.
+
+Operational provenance stores `sha256:<digest>` in `run_id`, derived from the
+CI provider, run ID and attempt. It remains correlatable by an operator who
+already knows those public inputs, without storing a phone-like numeric value.
+The privacy scanner therefore needs no exception: phone, email, raw-query and
+sensitive-URL checks remain unchanged, including for an untyped `run_id`.
 
 The old copies below remain compatibility inputs for parity/retirement work and
 can never satisfy the consumer gate:
@@ -94,6 +104,33 @@ node scripts/revops/verify_gsc_freshness.mjs --fixture stale \
 node scripts/revops/verify_gsc_freshness.mjs --fixture unknown \
   --now 2026-08-29T12:00:00Z
 ```
+
+## Contemporary failure evidence
+
+On 2026-08-29, scheduled run
+[`33260693783`](https://github.com/tjsasakifln/web-cfg/actions/runs/33260693783)
+reached the authenticated handoff on production SHA
+`72ed3831ba28c9400627cdc9599aa54e9329e178`, then failed closed with
+`422 gsc_history_sensitive_field`. The minimal reproduction showed that the
+generic phone detector interpreted the numeric `GITHUB_RUN_ID` prefix as a
+phone. The hashed provenance contract above fixes that false positive at the
+producer while the regression suite keeps phone-like values red.
+
+The same run proved `GSC_HISTORY_RESTORED status=EMPTY`, then produced its first
+valid observation with `promote_insights=false`. Because readiness requires
+three distinct daily `as_of` values, an empty production store cannot become
+`CURRENT` on the deployment day or through repeated same-day dispatches. After
+the protected deploy, the expected evidence window is three successful daily
+producer observations (normally at 11:15 UTC), followed by the read-only
+freshness probe. Each pre-threshold handoff must persist `UNKNOWN` rather than
+remain ephemeral or turn green. A valid pre-threshold snapshot keeps its real
+manifest hash, `as_of`, source freshness, producer time and ingest time, but has
+no insights payload; the publisher writes a safe receipt only after reading
+those fields back from durable storage. The manifest, `as_of` and producer time
+must identify the same sealed history attempt and observation; shape-only or
+idempotent mismatches are rejected before storage mutation. Attempts with no
+valid source snapshot keep manifest and `as_of` null while preserving the prior
+known-good consumer as `STALE`/`READ_ONLY` when one exists.
 
 ## Exact rollback
 

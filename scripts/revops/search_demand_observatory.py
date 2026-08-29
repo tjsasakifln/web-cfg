@@ -36,7 +36,7 @@ import time
 from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
@@ -192,6 +192,25 @@ def env_nonempty(name: str) -> str | None:
     return stripped or None
 
 
+def operational_run_id(environ: Mapping[str, str] | None = None) -> str:
+    """Preserve CI provenance as a hashed, non-plaintext ID safe for private history."""
+    env = os.environ if environ is None else environ
+    explicit = str(env.get("GSC_RUN_ID") or "").strip()
+    attempt = str(env.get("GITHUB_RUN_ATTEMPT") or "").strip()
+    if explicit:
+        material = f"gsc-run:{explicit}:{attempt}" if attempt else f"gsc-run:{explicit}"
+        return f"sha256:{hashlib.sha256(material.encode('utf-8')).hexdigest()}"
+    github_run = str(env.get("GITHUB_RUN_ID") or "").strip()
+    if not github_run:
+        return "local"
+    if not re.fullmatch(r"[1-9][0-9]{5,19}", github_run) or not re.fullmatch(
+        r"[1-9][0-9]{0,5}", attempt
+    ):
+        raise ValueError("gsc_run_id_invalid")
+    material = f"github-actions:{github_run}:{attempt}"
+    return f"sha256:{hashlib.sha256(material.encode('utf-8')).hexdigest()}"
+
+
 def property_today() -> date:
     return datetime.now(PROPERTY_TZ).date()
 
@@ -334,6 +353,9 @@ def write_blocked_last_sync(record: dict[str, Any] | None = None) -> dict[str, A
             "manifest_schema_version": "gsc_snapshot_manifest_v1",
             "last_sync_at": attempted_at,
             "source": "search_analytics_api",
+            "synthetic": bool(payload.get("synthetic", False)),
+            "fixture": bool(payload.get("fixture", False)),
+            "live_baseline_invented": False,
             "source_freshness": {
                 "status": "UNKNOWN",
                 "as_of": payload.get("as_of"),
@@ -2004,10 +2026,7 @@ def pull_api(
         ready_for_product_decisions=False,
         synthetic=False,
     )
-    run_id = os.environ.get("GSC_RUN_ID") or os.environ.get("GITHUB_RUN_ID") or "local"
-    run_attempt = os.environ.get("GITHUB_RUN_ATTEMPT")
-    if run_attempt:
-        run_id = f"{run_id}:{run_attempt}"
+    run_id = operational_run_id()
     if truncated:
         history_state = record_failed_attempt(
             history_state,
@@ -2104,7 +2123,7 @@ def pull_api(
         "schema_version": "gsc-sync-state/v1",
         "manifest_schema_version": manifest["schema"],
         "last_sync_at": last_sync_at,
-        "as_of": end.isoformat(),
+        "as_of": None if truncated else end.isoformat(),
         "start": start.isoformat(),
         "end": end.isoformat(),
         "rows": len(deduped),
@@ -2131,10 +2150,10 @@ def pull_api(
         "fixture": False,
         "live_baseline_invented": False,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
-        "manifest_sha256": manifest["content_sha256"],
+        "manifest_sha256": None if truncated else manifest["content_sha256"],
         "source_freshness": {
             "status": "CURRENT" if ready_for_product_decisions else readiness["status"],
-            "as_of": end.isoformat(),
+            "as_of": None if truncated else end.isoformat(),
             "evaluated_at": last_sync_at,
             "max_age_days": 14,
         },
@@ -2193,10 +2212,7 @@ def sync_incremental(
     ensure_dirs()
     if use_fixture or os.environ.get("GSC_USE_FIXTURE") == "1":
         return sync_from_fixture()
-    run_id = os.environ.get("GSC_RUN_ID") or os.environ.get("GITHUB_RUN_ID") or "local"
-    run_attempt = os.environ.get("GITHUB_RUN_ATTEMPT")
-    if run_attempt:
-        run_id = f"{run_id}:{run_attempt}"
+    run_id = operational_run_id()
     try:
         history_state = read_history(HISTORY_PATH)
     except HistoryStateError as exc:

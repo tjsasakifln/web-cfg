@@ -186,6 +186,14 @@ export async function publish({
   if (!historyValidation.ok || syncState.history_state_sha256 !== history.state_sha256) {
     throw new Error(historyValidation.error || "gsc_history_sync_hash_mismatch");
   }
+  if (
+    syncState.source !== "search_analytics_api" ||
+    syncState.synthetic !== false ||
+    syncState.fixture !== false ||
+    syncState.live_baseline_invented !== false
+  ) {
+    throw new Error("gsc_sync_state_not_publishable");
+  }
   const promoteInsights = syncState.promote_insights === true;
   let insights = null;
   let expected = null;
@@ -194,11 +202,32 @@ export async function publish({
     expected = validatePublishable(insights);
     validateSyncProvenance(insights, syncState, history);
   }
+  const hasProducerSnapshot = /^[a-f0-9]{64}$/.test(String(syncState.manifest_sha256 || "")) &&
+    /^\d{4}-\d{2}-\d{2}$/.test(String(syncState.as_of || ""));
+  const hasPartialProducerSnapshot = Boolean(syncState.manifest_sha256) !== Boolean(syncState.as_of);
+  if (hasPartialProducerSnapshot || ((!hasProducerSnapshot) && (syncState.manifest_sha256 || syncState.as_of))) {
+    throw new Error("gsc_sync_producer_manifest_invalid");
+  }
+  const matchingObservation = hasProducerSnapshot && history.observations.some((observation) =>
+    observation.snapshot_sha256 === syncState.manifest_sha256 &&
+    observation.as_of === syncState.as_of &&
+    observation.observed_at === syncState.last_sync_at
+  );
+  if (
+    (hasProducerSnapshot &&
+      (history.last_attempt?.snapshot_sha256 !== syncState.manifest_sha256 ||
+        history.last_attempt?.as_of !== syncState.as_of ||
+        !matchingObservation)) ||
+    (!hasProducerSnapshot &&
+      (history.last_attempt?.snapshot_sha256 != null || history.last_attempt?.as_of != null))
+  ) {
+    throw new Error("gsc_sync_producer_history_mismatch");
+  }
   const producer = {
     schema_version: syncState.schema_version,
     manifest_schema_version: syncState.manifest_schema_version,
-    manifest_sha256: promoteInsights ? syncState.manifest_sha256 : null,
-    as_of: promoteInsights ? syncState.as_of : null,
+    manifest_sha256: hasProducerSnapshot ? syncState.manifest_sha256 : null,
+    as_of: hasProducerSnapshot ? syncState.as_of : null,
     produced_at: syncState.last_sync_at,
     source: "search_analytics_api",
   };
@@ -214,6 +243,9 @@ export async function publish({
     !post.ok ||
     posted.ok !== true ||
     posted.history_state_sha256 !== history.state_sha256 ||
+    (hasProducerSnapshot &&
+      (posted.producer_manifest_sha256 !== producer.manifest_sha256 ||
+        posted.consumer_manifest_sha256 !== producer.manifest_sha256)) ||
     (expected &&
       (posted.status !== "CURRENT" ||
         posted.content_sha256 !== expected.content_sha256 ||
@@ -228,20 +260,29 @@ export async function publish({
     !historyGet.ok ||
     historyRead.ok !== true ||
     historyRead.meta?.state_sha256 !== history.state_sha256 ||
-    historyRead.history?.state_sha256 !== history.state_sha256
+    historyRead.history?.state_sha256 !== history.state_sha256 ||
+    (hasProducerSnapshot &&
+      (historyRead.meta?.manifest_sha256 !== producer.manifest_sha256 ||
+        historyRead.meta?.as_of !== producer.as_of))
   ) {
     throw new Error(`gsc_history_read_proof_failed:${historyGet.status}`);
   }
   const get = await fetchImpl(`${endpoint}?action=gsc_insights`, { headers });
   const read = await responseJson(get);
+  const expectedStatus = expected ? "CURRENT" : history.readiness.status;
   if (
     !get.ok ||
-    read.ok !== true ||
-    read.status !== "CURRENT" ||
+    read.ok !== (expectedStatus === "CURRENT") ||
+    read.status !== expectedStatus ||
     read.meta?.delivery_source !== "durable_store" ||
     read.meta?.history_state_sha256 !== history.state_sha256 ||
     read.meta?.ready_for_product_decisions !== history.readiness.ready_for_product_decisions ||
-    read.meta?.source_freshness?.status !== "CURRENT" ||
+    (hasProducerSnapshot &&
+      (read.meta?.latest_attempt_manifest_sha256 !== producer.manifest_sha256 ||
+        read.meta?.latest_attempt_as_of !== producer.as_of ||
+        read.meta?.latest_attempt_produced_at !== producer.produced_at ||
+        !Number.isFinite(Date.parse(read.meta?.latest_attempt_ingested_at || "")) ||
+        !["CURRENT", "STALE"].includes(read.meta?.latest_attempt_source_freshness?.status))) ||
     (expected &&
       (read.meta?.snapshot_content_sha256 !== expected.content_sha256 ||
         read.meta?.as_of !== expected.as_of ||
@@ -253,18 +294,24 @@ export async function publish({
     throw new Error(`gsc_insights_read_proof_failed:${get.status}`);
   }
   return {
-    ok: true,
+    ok: read.status === "CURRENT",
     status: read.status,
     durable: true,
     promoted: Boolean(expected),
     as_of: read.meta?.as_of || history.readiness.freshness_as_of || null,
     content_sha256: read.meta?.snapshot_content_sha256 || null,
     history_state_sha256: history.state_sha256,
-    snapshot_sha256: read.meta?.snapshot_sha256 || null,
-    producer_manifest_sha256: read.meta?.producer_manifest_sha256 || null,
-    consumer_manifest_sha256: read.meta?.consumer_manifest_sha256 || null,
-    producer_as_of: read.meta?.producer_as_of || null,
+    snapshot_sha256:
+      posted.snapshot_sha256 ||
+      read.meta?.latest_attempt_snapshot_sha256 ||
+      read.meta?.snapshot_sha256 ||
+      null,
+    producer_manifest_sha256: posted.producer_manifest_sha256 || null,
+    consumer_manifest_sha256: posted.consumer_manifest_sha256 || null,
+    producer_as_of: producer.as_of,
     consumer_as_of: read.meta?.consumer_as_of || null,
+    source_freshness: read.meta?.latest_attempt_source_freshness || null,
+    ingested_at: posted.ingested_at || read.meta?.latest_attempt_ingested_at || null,
     readiness_status: history.readiness.status,
     published_at: read.meta.published_at || posted.published_at || null,
   };

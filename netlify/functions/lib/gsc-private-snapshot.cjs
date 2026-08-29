@@ -73,6 +73,24 @@ function validatePointer(pointer) {
   return { ok: true };
 }
 
+function matchesHistoryProvenance({ manifestSha256, asOf, producedAt }, history) {
+  const hasSnapshot = SHA256_RE.test(String(manifestSha256 || "")) &&
+    /^\d{4}-\d{2}-\d{2}$/.test(String(asOf || ""));
+  const hasNoSnapshot = manifestSha256 == null && asOf == null;
+  if (!hasSnapshot && !hasNoSnapshot) return false;
+  const lastAttempt = history?.last_attempt;
+  if (hasNoSnapshot) {
+    return lastAttempt?.snapshot_sha256 == null && lastAttempt?.as_of == null;
+  }
+  return lastAttempt?.snapshot_sha256 === manifestSha256 &&
+    lastAttempt?.as_of === asOf &&
+    history.observations.some((observation) =>
+      observation.snapshot_sha256 === manifestSha256 &&
+      observation.as_of === asOf &&
+      observation.observed_at === producedAt
+    );
+}
+
 function validateSnapshot(snapshot, { now = new Date() } = {}) {
   if (
     !snapshot ||
@@ -91,6 +109,13 @@ function validateSnapshot(snapshot, { now = new Date() } = {}) {
   if (!historyValidation.ok || snapshot.history.state_sha256 !== snapshot.history_state_sha256) {
     return { ok: false, status: "UNKNOWN", error: historyValidation.error || "gsc_private_history_mismatch" };
   }
+  if (!matchesHistoryProvenance({
+    manifestSha256: snapshot.manifest_sha256,
+    asOf: snapshot.as_of,
+    producedAt: snapshot.produced_at,
+  }, snapshot.history)) {
+    return { ok: false, status: "UNKNOWN", error: "gsc_private_snapshot_provenance_mismatch" };
+  }
   const freshness = classifyFreshness(
     { asOf: snapshot.as_of, producedAt: snapshot.produced_at, ingestedAt: snapshot.ingested_at },
     now,
@@ -98,7 +123,12 @@ function validateSnapshot(snapshot, { now = new Date() } = {}) {
   if (!snapshot.insights) {
     if (
       snapshot.content_sha256 !== null ||
-      snapshot.history.readiness?.ready_for_product_decisions === true
+      snapshot.history.readiness?.ready_for_product_decisions === true ||
+      !(
+        (snapshot.manifest_sha256 === null && snapshot.as_of === null) ||
+        (SHA256_RE.test(String(snapshot.manifest_sha256 || "")) &&
+          /^\d{4}-\d{2}-\d{2}$/.test(String(snapshot.as_of || "")))
+      )
     ) {
       return { ok: false, status: "UNKNOWN", error: "gsc_private_partial_snapshot_invalid" };
     }
@@ -144,6 +174,13 @@ function buildSnapshot({ producer, history, insights }, { now }) {
     throw new Error("gsc_private_producer_consumer_mismatch");
   }
   const containsInsights = insights != null;
+  if (!matchesHistoryProvenance({
+    manifestSha256: producer.manifest_sha256,
+    asOf: producer.as_of,
+    producedAt: producer.produced_at,
+  }, history)) {
+    throw new Error("gsc_private_producer_consumer_mismatch");
+  }
   if (
     containsInsights &&
     (!SHA256_RE.test(String(producer.manifest_sha256 || "")) ||
@@ -157,7 +194,7 @@ function buildSnapshot({ producer, history, insights }, { now }) {
   if (!containsInsights && history.readiness?.ready_for_product_decisions === true) {
     throw new Error("gsc_private_partial_snapshot_invalid");
   }
-  const asOf = producer.as_of || history.readiness?.freshness_as_of || null;
+  const asOf = producer.as_of || null;
   const snapshot = {
     schema_version: SNAPSHOT_SCHEMA_VERSION,
     manifest_schema_version: producer.manifest_schema_version,
@@ -202,28 +239,46 @@ async function putImmutable(store, snapshot) {
 
 async function persistPrivateGscSnapshot(store, input, { now = new Date() } = {}) {
   const previousPointer = await store.getSystemRecord(CURRENT_POINTER_ID);
-  if (validatePointer(previousPointer).ok) {
+  const previousPointerValidation = validatePointer(previousPointer);
+  if (previousPointer && !previousPointerValidation.ok) {
+    throw new Error(previousPointerValidation.error);
+  }
+  const snapshot = buildSnapshot(input, { now });
+  if (previousPointerValidation.ok) {
     const latest = await store.getSystemRecord(versionId(previousPointer.latest_snapshot_sha256));
-    const expectedContentSha256 = input.insights ? sha256(JSON.stringify(input.insights)) : null;
+    const latestValidation = validateSnapshot(latest, { now });
+    if (!latestValidation.ok) {
+      throw new Error(latestValidation.error);
+    }
     if (
-      latest &&
-      latest.history_state_sha256 === input.history?.state_sha256 &&
-      latest.manifest_sha256 === (input.producer?.manifest_sha256 || null) &&
-      latest.content_sha256 === expectedContentSha256 &&
-      latest.produced_at === input.producer?.produced_at
+      latest.schema_version === snapshot.schema_version &&
+      latest.manifest_schema_version === snapshot.manifest_schema_version &&
+      latest.manifest_sha256 === snapshot.manifest_sha256 &&
+      latest.as_of === snapshot.as_of &&
+      latest.source === snapshot.source &&
+      latest.produced_at === snapshot.produced_at &&
+      latest.content_sha256 === snapshot.content_sha256 &&
+      latest.history_state_sha256 === snapshot.history_state_sha256
     ) {
       const read = await readPrivateGscSnapshot(store, { now });
+      if (
+        !read.meta ||
+        read.status !== latestValidation.status ||
+        read.meta.latest_attempt_snapshot_sha256 !== latest.snapshot_sha256
+      ) {
+        throw new Error(read.error || "gsc_private_read_after_write_failed");
+      }
       return {
-        ok: read.status === "CURRENT",
+        ok: true,
         status: read.status,
         promoted: false,
         contains_insights: Boolean(input.insights),
         idempotent: true,
         schema_version: SNAPSHOT_SCHEMA_VERSION,
         snapshot_sha256: latest.snapshot_sha256,
-        producer_manifest_sha256: read.meta?.producer_manifest_sha256 || null,
-        consumer_manifest_sha256: read.meta?.consumer_manifest_sha256 || null,
-        as_of: read.meta?.as_of || latest.as_of,
+        producer_manifest_sha256: latest.manifest_sha256,
+        consumer_manifest_sha256: latest.manifest_sha256,
+        as_of: latest.as_of,
         ingested_at: latest.ingested_at,
         published_at: read.meta?.ingested_at || null,
         content_sha256: latest.content_sha256,
@@ -231,7 +286,6 @@ async function persistPrivateGscSnapshot(store, input, { now = new Date() } = {}
       };
     }
   }
-  const snapshot = buildSnapshot(input, { now });
   const snapshotValidation = validateSnapshot(snapshot, { now });
   await putImmutable(store, snapshot);
   const promoted = snapshotValidation.status === "CURRENT";
@@ -259,9 +313,9 @@ async function persistPrivateGscSnapshot(store, input, { now = new Date() } = {}
     contains_insights: Boolean(snapshot.insights),
     schema_version: SNAPSHOT_SCHEMA_VERSION,
     snapshot_sha256: snapshot.snapshot_sha256,
-    producer_manifest_sha256: read.meta?.producer_manifest_sha256 || null,
-    consumer_manifest_sha256: read.meta?.consumer_manifest_sha256 || null,
-    as_of: read.meta?.as_of || snapshot.as_of,
+    producer_manifest_sha256: snapshot.manifest_sha256,
+    consumer_manifest_sha256: snapshot.manifest_sha256,
+    as_of: snapshot.as_of,
     ingested_at: snapshot.ingested_at,
     published_at: read.meta?.ingested_at || null,
     content_sha256: snapshot.content_sha256,
@@ -311,6 +365,11 @@ async function readPrivateGscSnapshot(store, { now = new Date() } = {}) {
       manifest_schema_version: snapshot?.manifest_schema_version || latest.manifest_schema_version,
       snapshot_sha256: snapshot?.snapshot_sha256 || null,
       latest_attempt_snapshot_sha256: latest.snapshot_sha256,
+      latest_attempt_manifest_sha256: latest.manifest_sha256,
+      latest_attempt_as_of: latest.as_of,
+      latest_attempt_produced_at: latest.produced_at,
+      latest_attempt_ingested_at: latest.ingested_at,
+      latest_attempt_source_freshness: latestValidation.freshness,
       producer_manifest_sha256: manifestSha256,
       consumer_manifest_sha256: manifestSha256,
       as_of: snapshot?.as_of || latest.as_of,
@@ -349,6 +408,12 @@ async function readPrivateGscHistory(store, { now = new Date() } = {}) {
       state_sha256: latest.history_state_sha256,
       stored_at: latest.ingested_at,
       snapshot_sha256: latest.snapshot_sha256,
+      manifest_sha256: latest.manifest_sha256,
+      as_of: latest.as_of,
+      produced_at: latest.produced_at,
+      source: latest.source,
+      source_freshness: validation.freshness,
+      delivery_source: "durable_store",
       schema_version: latest.schema_version,
     },
   };

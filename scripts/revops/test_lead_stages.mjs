@@ -63,7 +63,8 @@ function readyGscHistory(asOf, nowIso) {
     observations,
     last_attempt: {
       attempted_at: latest.observed_at,
-      run_id: latest.run_id,
+      // The producer preserves CI provenance only as a non-plaintext digest.
+      run_id: "sha256:f765a77132602fc3f875cccefc67fcf4a0122195bc39bfc984b8ea441eac47b4",
       outcome: "OBSERVATION_MERGED",
       as_of: latest.as_of,
       snapshot_sha256: latest.snapshot_sha256,
@@ -675,6 +676,12 @@ function readyGscHistory(asOf, nowIso) {
   });
   if (phoneValueRejected.ok) fail("gsc_ingest_rejects_phone_like_value", phoneValueRejected);
   else pass("gsc_ingest_rejects_phone_like_value", phoneValueRejected.error);
+  const phoneAsRunIdRejected = ops._validateGscInsights({
+    ...currentInsights,
+    run_id: "+55 (48) 99999-0000",
+  });
+  if (phoneAsRunIdRejected.ok) fail("gsc_run_id_does_not_bypass_phone_guard", phoneAsRunIdRejected);
+  else pass("gsc_run_id_does_not_bypass_phone_guard", phoneAsRunIdRejected.error);
   const staleRejected = ops._validateGscInsights({
     ...currentInsights,
     as_of: "2025-01-01",

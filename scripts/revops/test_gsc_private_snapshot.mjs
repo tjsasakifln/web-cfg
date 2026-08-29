@@ -129,16 +129,173 @@ function validInsights(history) {
   };
 }
 
+function preThresholdHistory() {
+  const current = validHistory();
+  const first = structuredClone(current.observations[0]);
+  const history = {
+    ...current,
+    created_at: first.observed_at,
+    updated_at: first.observed_at,
+    parent_state_sha256: null,
+    observations: [first],
+    last_attempt: {
+      attempted_at: first.observed_at,
+      run_id: first.run_id,
+      outcome: "OBSERVATION_MERGED",
+      as_of: first.as_of,
+      snapshot_sha256: first.snapshot_sha256,
+      reason_codes: ["history_store_empty", "minimum_distinct_as_of"],
+    },
+    last_known_good: null,
+    readiness: {
+      ready_for_product_decisions: false,
+      status: "UNKNOWN",
+      access_mode: "NONE",
+      reason_codes: ["minimum_distinct_as_of"],
+      window_start: first.start,
+      window_end: first.as_of,
+      observed_dates: first.observed_dates,
+      missing_dates: [],
+      distinct_as_of: 1,
+      freshness_as_of: first.as_of,
+    },
+  };
+  history.state_sha256 = historyHash(history);
+  return history;
+}
+
 function producer() {
   return {
     schema_version: "gsc-sync-state/v1",
     manifest_schema_version: "gsc_snapshot_manifest_v1",
     manifest_sha256: MANIFEST_SHA256,
     as_of: AS_OF,
-    produced_at: "2026-08-29T11:55:00Z",
+    produced_at: NOW.toISOString(),
     source: "search_analytics_api",
   };
 }
+
+test("a valid pre-threshold observation persists its manifest while remaining UNKNOWN", async () => {
+  const records = new Map();
+  const store = new MemorySystemStore(records);
+  const history = preThresholdHistory();
+  const observation = history.observations[0];
+  const preThresholdProducer = {
+    ...producer(),
+    manifest_sha256: observation.snapshot_sha256,
+    as_of: observation.as_of,
+    produced_at: observation.observed_at,
+  };
+
+  const written = await persistPrivateGscSnapshot(
+    store,
+    { producer: preThresholdProducer, history, insights: null },
+    { now: NOW },
+  );
+  assert.equal(written.ok, true);
+  assert.equal(written.status, "UNKNOWN");
+  assert.equal(written.promoted, false);
+  assert.equal(written.producer_manifest_sha256, observation.snapshot_sha256);
+  assert.equal(written.consumer_manifest_sha256, observation.snapshot_sha256);
+  assert.equal(written.as_of, observation.as_of);
+
+  const stored = [...records.values()].find(
+    (record) => record?.schema_version === "confenge-private-gsc-snapshot/v1",
+  );
+  assert.equal(stored.manifest_sha256, observation.snapshot_sha256);
+  assert.equal(stored.as_of, observation.as_of);
+  assert.equal(stored.insights, null);
+
+  const consumed = await readPrivateGscSnapshot(store, { now: NOW });
+  assert.equal(consumed.ok, false);
+  assert.equal(consumed.status, "UNKNOWN");
+  assert.equal(consumed.meta.latest_attempt_manifest_sha256, observation.snapshot_sha256);
+  assert.equal(consumed.meta.latest_attempt_as_of, observation.as_of);
+  assert.equal(consumed.meta.latest_attempt_produced_at, observation.observed_at);
+  assert.equal(consumed.meta.latest_attempt_ingested_at, NOW.toISOString());
+  assert.equal(consumed.meta.latest_attempt_source_freshness.status, "CURRENT");
+
+  const repeated = await persistPrivateGscSnapshot(
+    store,
+    { producer: preThresholdProducer, history, insights: null },
+    { now: NOW },
+  );
+  assert.equal(repeated.ok, true);
+  assert.equal(repeated.idempotent, true);
+  assert.equal(repeated.status, "UNKNOWN");
+});
+
+test("pre-threshold provenance must match the durable history attempt", async () => {
+  const records = new Map();
+  const history = preThresholdHistory();
+  const observation = history.observations[0];
+  await assert.rejects(
+    persistPrivateGscSnapshot(
+      new MemorySystemStore(records),
+      {
+        producer: {
+          ...producer(),
+          manifest_sha256: "c".repeat(64),
+          as_of: observation.as_of,
+          produced_at: observation.observed_at,
+        },
+        history,
+        insights: null,
+      },
+      { now: NOW },
+    ),
+    /gsc_private_producer_consumer_mismatch/,
+  );
+  assert.equal(records.size, 0);
+});
+
+test("idempotent replay rejects a divergent producer as_of", async () => {
+  const records = new Map();
+  const store = new MemorySystemStore(records);
+  const history = preThresholdHistory();
+  const observation = history.observations[0];
+  const validProducer = {
+    ...producer(),
+    manifest_sha256: observation.snapshot_sha256,
+    as_of: observation.as_of,
+    produced_at: observation.observed_at,
+  };
+  await persistPrivateGscSnapshot(store, { producer: validProducer, history, insights: null }, { now: NOW });
+  const recordCount = records.size;
+
+  await assert.rejects(
+    persistPrivateGscSnapshot(
+      store,
+      { producer: { ...validProducer, as_of: "2026-08-25" }, history, insights: null },
+      { now: NOW },
+    ),
+    /gsc_private_producer_consumer_mismatch/,
+  );
+  assert.equal(records.size, recordCount);
+});
+
+test("idempotent replay fails closed on a corrupt pointer", async () => {
+  const records = new Map();
+  const store = new MemorySystemStore(records);
+  const history = preThresholdHistory();
+  const observation = history.observations[0];
+  const validProducer = {
+    ...producer(),
+    manifest_sha256: observation.snapshot_sha256,
+    as_of: observation.as_of,
+    produced_at: observation.observed_at,
+  };
+  await persistPrivateGscSnapshot(store, { producer: validProducer, history, insights: null }, { now: NOW });
+  const corruptPointer = records.get("gsc-private-current-v1");
+  corruptPointer.pointer_sha256 = "0".repeat(64);
+  records.set("gsc-private-current-v1", corruptPointer);
+
+  await assert.rejects(
+    persistPrivateGscSnapshot(store, { producer: validProducer, history, insights: null }, { now: NOW }),
+    /gsc_private_pointer_hash_mismatch/,
+  );
+  assert.equal(records.get("gsc-private-current-v1").pointer_sha256, "0".repeat(64));
+});
 
 function failedHistory(current) {
   const failed = structuredClone(current);
