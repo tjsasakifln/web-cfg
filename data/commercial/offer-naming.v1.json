@@ -92,9 +92,9 @@
   ],
   "published_surface": {
     "path": "entregas/index.html",
-    "policy": "Os 54 nomes canônicos aparecem no catálogo; os oito primeiros também substituem aliases na comparação principal. Alias anteriores seguem pesquisáveis e rastreáveis, sem mudar URL, preço ou escopo.",
+    "policy": "Os 54 nomes canônicos permanecem no registro. A vitrine pública de /entregas/ mostra as oito unidades PUBLISHED; aliases das oito seguem pesquisáveis e rastreáveis, sem mudar URL, preço ou escopo.",
     "canonical_names_source": "names[].public_name_pt_br",
-    "published_deliverable_count": 54,
+    "published_deliverable_count": 8,
     "primary_comparison_ids": [
       "CFG-D01",
       "CFG-D02",

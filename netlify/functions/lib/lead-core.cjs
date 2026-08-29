@@ -48,6 +48,11 @@ const MAX_FIELD = {
   lot_count: 4,
   execution_regime: 40,
   decision_intent: 32,
+  faixa_contrato: 24,
+  risco_em_jogo: 24,
+  frequencia: 24,
+  maturidade_documental: 24,
+  capacidade_interna: 24,
   offer_id: 80,
   terms_id: 80,
   amount_cents: 16,
@@ -176,6 +181,23 @@ const LICITACAO_DECISION_INTENTS = new Set([
   "recusar",
   "UNKNOWN",
 ]);
+const ICP_TICKET_BANDS = new Set(["ate_250k", "250k_1m", "acima_1m", "unknown"]);
+const ICP_RISK_BANDS = new Set([
+  "abaixo_entrada",
+  "faixa_entrada",
+  "faixa_diagnostico",
+  "faixa_dossie",
+  "acima_dossie",
+  "unknown",
+]);
+const ICP_FREQUENCY = new Set(["pontual", "recorrente", "unknown"]);
+const ICP_DOCS = new Set(["forte", "parcial", "fraca", "unknown"]);
+const ICP_CAPACITY = new Set(["suficiente", "limitada", "inexistente", "unknown"]);
+
+function pickEnum(value, allowed, maxLen) {
+  const raw = clamp(value, maxLen);
+  return allowed.has(raw) ? raw : null;
+}
 
 function isCanonicalIsoDate(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
@@ -747,6 +769,11 @@ function validateAndNormalize(data) {
     lot_count: productQualification?.lot_count || null,
     execution_regime: productQualification?.execution_regime || null,
     decision_intent: productQualification?.decision_intent || null,
+    faixa_contrato: pickEnum(data.faixa_contrato, ICP_TICKET_BANDS, MAX_FIELD.faixa_contrato),
+    risco_em_jogo: pickEnum(data.risco_em_jogo, ICP_RISK_BANDS, MAX_FIELD.risco_em_jogo),
+    frequencia: pickEnum(data.frequencia, ICP_FREQUENCY, MAX_FIELD.frequencia),
+    maturidade_documental: pickEnum(data.maturidade_documental, ICP_DOCS, MAX_FIELD.maturidade_documental),
+    capacidade_interna: pickEnum(data.capacidade_interna, ICP_CAPACITY, MAX_FIELD.capacidade_interna),
     turnstile_token: clamp(data["cf-turnstile-response"] || data.turnstile_token, MAX_FIELD.turnstile_token) || null,
     idempotency_key: clamp(data.idempotency_key || data.idempotencyKey, MAX_FIELD.idempotency_key) || null,
     public_contract_id: productQualification?.public_contract_id || clamp(data.public_contract_id, MAX_FIELD.public_contract_id) || null,

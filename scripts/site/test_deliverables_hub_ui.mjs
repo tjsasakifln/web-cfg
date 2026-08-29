@@ -123,7 +123,11 @@ for (const width of widths) {
       heroCtaVisible: Boolean(heroCta && heroCta.width > 0 && heroCta.height >= 44),
       heroCtaBottom: heroCta?.bottom || null,
       firstReportVisible: Boolean(firstReport && firstReport.width > 0 && firstReport.height >= 44),
-      examples: document.querySelectorAll(".deliverable-feature").length,
+      examples: document.querySelectorAll("article.vitrine-item").length,
+      documentHeight: Math.round(document.documentElement.scrollHeight),
+      firstOfferTop: Math.round((document.querySelector("#comparar")?.getBoundingClientRect().top || 0) + window.scrollY),
+      mainLinks: document.querySelectorAll("main a").length,
+      compareColumns: [...document.querySelectorAll("#comparar .compare-table thead th")].map((th) => th.textContent.trim()),
       navDeliverables: desktopDeliverables?.textContent?.trim() || "",
       navCurrent: desktopDeliverables?.getAttribute("aria-current") || "",
       emptyPlaceholders: document.querySelectorAll("[data-placeholder], .placeholder").length,
@@ -145,13 +149,18 @@ for (const width of widths) {
   const errors = [];
   if (!response || ![200, 304].includes(response.status())) errors.push(`http=${response?.status()}`);
   if (metrics.overflow) errors.push("document_overflow");
-  if (metrics.h1Count !== 1 || !metrics.h1Text.includes("54 entregáveis") || !metrics.h1Text.includes("decisão que cabe agora") || !/entregas/i.test(metrics.h1Text)) errors.push("hero_clarity");
+  if (metrics.h1Count !== 1 || !metrics.h1Text.includes("oito entregas") || !metrics.h1Text.includes("decisão que cabe agora")) errors.push("hero_clarity");
   if (!metrics.heroCtaVisible || !metrics.heroCtaTargetExists || metrics.heroCtaHref !== "#enquadrar" ||
       (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
   if (!metrics.firstReportVisible || metrics.examples !== EXPECTED_EXAMPLES) errors.push("ladder_examples");
   if (!metrics.compareVisible || metrics.compareRows !== EXPECTED_EXAMPLES) errors.push("compare_view");
   if (!metrics.compareAboveExamples) errors.push("compare_before_sections");
   if (!metrics.compareScrollFocusable) errors.push("compare_scroll_focus");
+  const requiredColumns = ["Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"];
+  if (!requiredColumns.every((label) => metrics.compareColumns.includes(label))) errors.push("compare_columns");
+  if (width === 390 && metrics.documentHeight > 12000) errors.push(`document_height=${metrics.documentHeight}`);
+  if (width === 390 && metrics.firstOfferTop > 1688) errors.push(`first_offer_top=${metrics.firstOfferTop}`);
+  if (metrics.mainLinks > 80) errors.push(`main_links=${metrics.mainLinks}`);
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
   // One primary leads to the progressive framing and the other submits the
   // terminal hand-raise added by #290; neither replaces a priced offer path.
@@ -189,74 +198,25 @@ await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000
 const catalogLazyBefore = await page.evaluate(() => performance.getEntriesByType("resource")
   .map((entry) => entry.name)
   .filter((name) => name.endsWith("/entregas/catalog.css") || name.endsWith("/entregas/catalog-data.js") || name.endsWith("/entregas/catalog.js")));
-await page.evaluate(() => document.querySelector("#indice-integral")?.scrollIntoView());
-await page.waitForFunction(() => document.body.classList.contains("catalog-enhanced"), { timeout: 10000 });
 const catalogErrors = [];
-if (catalogLazyBefore.length) catalogErrors.push("catalog_not_lazy");
+if (catalogLazyBefore.length) catalogErrors.push("catalog_scripts_loaded");
 const catalogBoot = await page.evaluate(() => ({
   enhanced: document.body.classList.contains("catalog-enhanced"),
   dataSchema: window.CONFENGE_CATALOG_DATA?.schema || "",
   dataCount: window.CONFENGE_CATALOG_DATA?.items?.length || 0,
-  filterVisible: !document.querySelector("[data-catalog-filters]")?.hidden,
+  filterPresent: Boolean(document.querySelector("[data-catalog-filters]")),
+  cards: document.querySelectorAll("article.vitrine-item").length,
+  backlogCards: document.querySelectorAll("article.catalog-item").length,
 }));
-if (!catalogBoot.enhanced || !catalogBoot.filterVisible) catalogErrors.push("catalog_not_enhanced");
-if (catalogBoot.dataSchema !== "confenge.public-deliverable-catalog/1.1" || catalogBoot.dataCount !== 54) {
-  catalogErrors.push("catalog_data_contract");
-}
-await page.click('details[data-copy-contract-id="CFG-D01"] summary');
-await page.waitForFunction(() => (
-  document.querySelector('details[data-copy-contract-id="CFG-D01"]')?.dataset.copyContractHydrated === "true"
-), { timeout: 5000 });
-const hydratedContract = await page.evaluate(() => {
-  const details = document.querySelector('details[data-copy-contract-id="CFG-D01"]');
-  return {
-    open: details?.open,
-    hydrated: details?.dataset.copyContractHydrated,
-    clauses: details?.querySelectorAll("[data-copy-clause]").length || 0,
-    text: details?.textContent || "",
-  };
+if (catalogBoot.enhanced || catalogBoot.filterPresent || catalogBoot.dataCount) catalogErrors.push("catalog_not_retired");
+if (catalogBoot.cards !== EXPECTED_EXAMPLES || catalogBoot.backlogCards !== 0) catalogErrors.push("catalog_data_contract");
+const frameKeyboard = await page.evaluate(() => {
+  const first = document.querySelector(".deliverable-frame__list a");
+  first?.focus();
+  return { href: first?.getAttribute("href") || "", active: document.activeElement === first };
 });
-if (!hydratedContract.open || hydratedContract.hydrated !== "true" || hydratedContract.clauses !== 15 || !hydratedContract.text.includes("Compre quando")) {
-  catalogErrors.push("catalog_copy_contract_hydration");
-}
-await page.type("[data-filter-query]", "Radar de Licitações Prioritárias");
-const filtered = await page.evaluate(() => ({
-  visibleCards: document.querySelectorAll("article.catalog-item:not([hidden])").length,
-  status: document.querySelector("[data-filter-status]")?.textContent?.trim() || "",
-  query: new URL(location.href).searchParams.get("q"),
-}));
-if (filtered.visibleCards !== 1 || !filtered.status.startsWith("1 de 54") || filtered.query !== "Radar de Licitações Prioritárias") {
-  catalogErrors.push("catalog_filter_behavior");
-}
-await page.click("[data-clear-filters]");
-await page.select("[data-frame-task]", "GROW");
-await page.select("[data-frame-object]", "mercado");
-await page.select("[data-frame-input]", "dados");
-await page.click("[data-catalog-recommend]");
-const recommendation = await page.evaluate(() => ({
-  hidden: document.querySelector("[data-catalog-recommendation]")?.hidden,
-  count: document.querySelectorAll("[data-catalog-recommendation] article").length,
-  text: document.querySelector("[data-catalog-recommendation]")?.textContent || "",
-  task: new URL(location.href).searchParams.get("frame_task"),
-}));
-if (recommendation.hidden || recommendation.count < 1 || recommendation.count > 3 || !recommendation.text.includes("R$") || recommendation.task !== "GROW") {
-  catalogErrors.push("catalog_recommendation_behavior");
-}
-await page.evaluate(() => {
-  const boxes = [...document.querySelectorAll("article.catalog-item:not([hidden]) [data-compare-item]")].slice(0, 2);
-  for (const box of boxes) box.click();
-});
-await page.click("[data-compare-open]");
-const progressiveComparison = await page.evaluate(() => ({
-  count: document.querySelectorAll("[data-comparison-items] > article").length,
-  criteria: document.querySelectorAll("[data-comparison-items] dt").length,
-  hidden: document.querySelector("[data-comparison]")?.hidden,
-  selected: new URL(location.href).searchParams.get("compare")?.split(",").length || 0,
-}));
-if (progressiveComparison.hidden || progressiveComparison.count !== 2 || progressiveComparison.criteria !== 18 || progressiveComparison.selected !== 2) {
-  catalogErrors.push("catalog_comparison_behavior");
-}
-findings.push({ route: "/entregas/", check: "progressive_catalog", catalogLazyBefore, catalogBoot, hydratedContract, filtered, recommendation, progressiveComparison, errors: catalogErrors });
+if (frameKeyboard.href !== "#entrega-01" || !frameKeyboard.active) catalogErrors.push("frame_keyboard");
+findings.push({ route: "/entregas/", check: "public_vitrine", catalogLazyBefore, catalogBoot, frameKeyboard, errors: catalogErrors });
 if (catalogErrors.length) failed += 1;
 
 const noScriptPage = await browser.newPage();
@@ -264,14 +224,21 @@ await noScriptPage.setJavaScriptEnabled(false);
 await noScriptPage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
 await noScriptPage.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
 const noScriptCatalog = await noScriptPage.evaluate(() => ({
-  cards: document.querySelectorAll("article.catalog-item").length,
-  visibleCards: [...document.querySelectorAll("article.catalog-item")].filter((card) => getComputedStyle(card).display !== "none").length,
-  filtersHidden: getComputedStyle(document.querySelector("[data-catalog-filters]")).display === "none",
-  compareControls: document.querySelectorAll(".catalog-item__compare").length,
+  cards: document.querySelectorAll("article.vitrine-item").length,
+  visibleCards: [...document.querySelectorAll("article.vitrine-item")].filter((card) => getComputedStyle(card).display !== "none").length,
+  backlogCards: document.querySelectorAll("article.catalog-item").length,
+  compareTable: Boolean(document.querySelector("#comparar .compare-table")),
+  compareColumns: [...document.querySelectorAll("#comparar .compare-table thead th")].map((th) => th.textContent.trim()),
+  filters: Boolean(document.querySelector("[data-catalog-filters]")),
 }));
 const noScriptErrors = [];
-if (noScriptCatalog.cards !== 54 || noScriptCatalog.visibleCards !== 54) noScriptErrors.push("catalog_noscript_content");
-if (!noScriptCatalog.filtersHidden || noScriptCatalog.compareControls !== 0) noScriptErrors.push("catalog_noscript_controls");
+if (noScriptCatalog.cards !== EXPECTED_EXAMPLES || noScriptCatalog.visibleCards !== EXPECTED_EXAMPLES || noScriptCatalog.backlogCards !== 0) {
+  noScriptErrors.push("catalog_noscript_content");
+}
+if (!noScriptCatalog.compareTable || !["Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"].every((label) => noScriptCatalog.compareColumns.includes(label))) {
+  noScriptErrors.push("catalog_noscript_comparison");
+}
+if (noScriptCatalog.filters) noScriptErrors.push("catalog_noscript_controls");
 findings.push({ route: "/entregas/", check: "catalog_noscript", noScriptCatalog, errors: noScriptErrors });
 if (noScriptErrors.length) failed += 1;
 await noScriptPage.close();

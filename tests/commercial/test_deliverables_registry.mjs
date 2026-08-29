@@ -134,13 +134,21 @@ assert("unit01_not_in_package", !expansion.composes_deliverables.includes("CFG-D
 
 const entregasHtml = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
 const publicIds = [...entregasHtml.matchAll(/<article\b[^>]*\bid="entrega-(\d{2})"/g)].map((match) => match[1]);
-assert("public_index_has_54_items", publicIds.length === entries.length, publicIds.length);
+const published = entries.filter((entry) => entry.public_state === "PUBLISHED");
+const publishedNumbers = published.map((entry) => entry.catalog_number);
+assert("internal_registry_has_54_items", entries.length === 54, entries.length);
+assert("internal_catalog_count_is_54", registry.catalog_count === 54, registry.catalog_count);
+assert("public_vitrine_has_8_published_items", publicIds.length === published.length && publicIds.length === 8, publicIds.length);
 assert(
-  "public_index_numbers_are_canonical",
-  JSON.stringify([...publicIds].sort()) === JSON.stringify(expectedNumbers),
+  "public_vitrine_numbers_are_the_published_eight",
+  JSON.stringify(publicIds) === JSON.stringify(publishedNumbers),
   publicIds,
 );
-for (const entry of entries) {
+assert("public_vitrine_omits_validate_and_blocked_cards", !/data-public-state="(?:VALIDATE|BLOCKED)"/.test(entregasHtml), "internal states leaked");
+assert("public_vitrine_omits_backlog_count", !/as 54 entreg[áa]veis/i.test(entregasHtml) && !/entre 54 entregas/i.test(entregasHtml), "54 leaked");
+assert("public_vitrine_omits_internal_price_ceiling", !entregasHtml.includes("R$ 39.800"), "R$ 39.800 leaked");
+assert("public_vitrine_omits_internal_state_labels", !entregasHtml.includes("Em validação") && !entregasHtml.includes("Indisponível"), "state labels leaked");
+for (const entry of published) {
   const card = entregasHtml.match(
     new RegExp(`<article\\b[^>]*\\bid="entrega-${entry.catalog_number}"[\\s\\S]*?<\\/article>`),
   )?.[0] || "";
@@ -148,10 +156,13 @@ for (const entry of entries) {
   assert(`public_name_${entry.deliverable_id}`, card.includes(entry.public_name_pt_br), entry.public_name_pt_br);
   assert(`public_price_${entry.deliverable_id}`, card.includes(brl(lib.entryAmountCents(entry))), brl(lib.entryAmountCents(entry)));
   assert(`public_state_${entry.deliverable_id}`, card.includes(`data-public-state="${entry.public_state}"`), entry.public_state);
-  assert(`public_deep_link_${entry.deliverable_id}`, entregasHtml.includes(`href="#entrega-${entry.catalog_number}"`) || card.includes(`id="entrega-${entry.catalog_number}"`));
-  if (entry.public_state === "BLOCKED") {
-    assert(`public_blocked_not_buyable_${entry.deliverable_id}`, !card.includes("Pedir análise de aderência"), card);
-  }
+  assert(`public_deep_link_${entry.deliverable_id}`, entregasHtml.includes(`id="entrega-${entry.catalog_number}"`));
+  assert(`public_comparison_fields_${entry.deliverable_id}`, ["Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"].every((label) => card.includes(`<dt>${label}</dt>`)), entry.deliverable_id);
+}
+const vitrineHtml = (entregasHtml.match(/<!-- GENERATED:PUBLIC-CATALOG:START -->[\s\S]*?<!-- GENERATED:PUBLIC-CATALOG:END -->/) || [""])[0];
+for (const entry of entries.filter((item) => item.public_state !== "PUBLISHED")) {
+  assert(`internal_not_on_vitrine_${entry.deliverable_id}`, !vitrineHtml.includes(`id="entrega-${entry.catalog_number}"`), entry.deliverable_id);
+  assert(`internal_name_not_sold_as_product_${entry.deliverable_id}`, !vitrineHtml.includes(entry.public_name_pt_br), entry.public_name_pt_br);
 }
 assert("public_catalog_has_one_terminal_form", (entregasHtml.match(/<form\b/g) || []).length === 1);
 assert("public_catalog_captures_deliverable_id", entregasHtml.includes('name="deliverable_id"'));

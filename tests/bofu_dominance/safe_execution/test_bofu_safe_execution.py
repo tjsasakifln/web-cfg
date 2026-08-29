@@ -551,7 +551,8 @@ def test_pillars_keep_commercial_bridge_and_defesa_margem_required_copy():
     defesa = shipped_html("defesa-margem-contratos-publicos")
     assert "Defesa de margem" in defesa
     assert "Contract Defense" not in defesa
-    assert "Enviar documentos para análise" in defesa
+    assert "Solicitar canal seguro" in defesa
+    assert "enviar documentos para análise" not in defesa.lower()
     assert "proteção de margem" in defesa.lower() or "Defesa técnica" in defesa
     assert len(re.findall(r'data-offer-section="([^"]+)"', defesa)) >= 4
     assert "—" not in defesa

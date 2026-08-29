@@ -126,10 +126,13 @@ def test_hub_is_direct_indexable_html_without_friction() -> None:
     # gated: exactly one form, and it opens only after the last published example.
     assert lowered.count("<form") == 1, "the hub takes one terminal capture, not a gate"
     form_at = lowered.index("<form")
-    last_feature_at = lowered.rindex('class="deliverable-feature"')
-    assert form_at > last_feature_at, "capture must not sit above the published examples"
+    last_offer_at = lowered.rindex('id="entrega-08"')
+    assert form_at > last_offer_at, "capture must not sit above the published examples"
     assert 'action="/.netlify/functions/lead"' in lowered
     assert html.count("<h1") == 1
+    assert html.count('class="vitrine-item') >= 8
+    assert "54 entregas" not in html
+    assert "R$ 39.800" not in html
 
 
 def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> None:
@@ -150,12 +153,9 @@ def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> N
 
 
 def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
-    css = CSS.read_text(encoding="utf-8")
-    selector = (
-        ".catalog-filter-actions button,.catalog-compare-tray button,"
-        ".catalog-empty button"
-    )
-    rule = re.search(rf"{re.escape(selector)}\{{([^}}]+)\}}", css)
+    css = (PAGE.with_name("styles.css")).read_text(encoding="utf-8")
+    assert ".deliverable-frame__list a{" in css
+    rule = re.search(r"\.deliverable-frame__list a\{([^}]+)\}", css)
     assert rule
     assert "min-height:44px" in rule.group(1)
 
@@ -163,52 +163,56 @@ def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
 def test_progressive_catalog_css_does_not_block_first_paint() -> None:
     html = _html()
     assert '<link data-catalog-css' not in html
-    assert '<noscript><link href="/entregas/catalog.css" rel="stylesheet"/></noscript>' in html
-    assert html.index("/entregas/catalog-bootstrap.js") > html.index("</footer>")
+    assert "/entregas/catalog.css" not in html
+    assert "/entregas/catalog-bootstrap.js" not in html
     assert "/entregas/catalog-data.js" not in html
-    assert '<script defer fetchpriority="low" src="/entregas/catalog.js"' not in html
+    assert "/entregas/catalog.js" not in html
     base_css = (PAGE.with_name("styles.css")).read_text(encoding="utf-8")
-    assert ".catalog-framing select,.catalog-framing input" in base_css
-    assert "max-width:100%" in base_css
+    assert ".deliverable-frame__list a" in base_css
     assert "min-height:44px" in base_css
 
 
 def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
-        "54 entregáveis, de R$ 599 a R$ 39.800",
-        "Amostra verificável: 8 exemplos integrais, sem cadastro",
+        "8 entregas, de R$ 599 a R$ 3.750",
+        "Oito exemplos integrais, sem cadastro",
         "Radar de Licitações Prioritárias",
-        "12",
-        "3",
-        "7",
-        "integralmente sintéticos",
         "R$ 599 por unidade",
+        "R$ 599 a R$ 3.750",
     ):
         assert phrase in html
     for route in LADDER_ROUTES:
         assert f'href="{route}"' in html, route
-    # "No placeholder" is a claim about the published library, not about the
-    # input hints of the terminal capture form (#290).
     library = re.sub(r"(?is)<form\b.*?</form>", "", html).casefold()
     assert "em breve" not in library
-    assert "placeholder" not in library
-    features = re.findall(r'class="deliverable-feature(?:["\s])', html)
-    assert len(features) == len(LADDER_ROUTES)
+    assert "as 54 entregáveis" not in library
+    assert "r$ 39.800" not in library
+    assert "em validação" not in library
+    cards = re.findall(r'<article class="vitrine-item', html)
+    assert len(cards) == 8
     for number in range(1, 9):
-        assert f"EXEMPLO 0{number}" in html
-    assert "EXEMPLO 09" not in html
-    assert html.count("DADOS SINTÉTICOS") == len(LADDER_ROUTES)
-    assert "Marcações de outlier</dt><dd>17" in html
-    assert "<dt>Outliers</dt><dd>17" not in html
+        assert f'id="entrega-0{number}"' in html
+    assert 'id="entrega-09"' not in html
 
 
 def test_every_example_uses_the_same_action_label() -> None:
-    """One label for the same action; the entry step is not a special case."""
+    """Each offer CTA names the unit; identical uncontextual copy is forbidden."""
     html = _html()
-    assert html.count("Consultar o exemplo completo") == len(LADDER_ROUTES)
+    assert html.count("Consultar o exemplo completo") == 0
     assert "Consultar o relatório completo" not in html
-    assert html.count("Ver o que a entrega inclui") == len(LADDER_ROUTES)
+    for name in (
+        "Radar de Licitações Prioritárias",
+        "Base de Mercado para Expansão",
+        "Síntese Executiva de Expansão",
+        "Mapa de Órgãos com Maior Potencial",
+        "Radar de Contratos Próximos da Renovação",
+        "Mapa de Concorrentes Relevantes",
+        "Referências de Preços de Obras Públicas",
+        "Plano Executivo de Expansão",
+    ):
+        assert f"Ver o exemplo de {name}" in html, name
+        assert f"Pedir análise de {name}" in html, name
 
 
 def test_the_library_has_one_name_across_its_own_surfaces() -> None:
@@ -241,10 +245,10 @@ def test_the_eight_are_comparable_before_the_long_sections() -> None:
     for route in LADDER_ROUTES:
         assert f'href="{route}"' in table, route
     assert table.count("<tr>") == len(LADDER_ROUTES) + 1
-    # Credit rule is legible per row, including the declared exception.
+    for column in ("Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"):
+        assert f">{column}</th>" in table, column
     assert table.count("Sim, em até 60 dias") == len(LADDER_ROUTES) - 1
     assert "Não. Entrega à parte, fora do pacote" in table
-    # The mobile equivalent is the same table inside a focusable scroll region.
     assert 'class="compare-scroll" role="region"' in table
     assert 'tabindex="0"' in table
 
@@ -315,13 +319,19 @@ def test_hub_and_report_share_the_versioned_delivery_scope() -> None:
     # The scope linter below owns the wording of the published eight examples.
     # Catalogue numbers 01..54 and the matching form select are identifiers, not
     # promises about how many opportunities a report will contain.
+    full_html = _html()
     hub_scope_html = re.sub(
         r"(?s)<!-- GENERATED:PUBLIC-CATALOG:START -->.*?<!-- GENERATED:PUBLIC-CATALOG:END -->",
         "",
-        _html(),
+        full_html,
     )
     hub_scope_html = re.sub(r"(?is)<form\b.*?</form>", "", hub_scope_html)
-    hub_text = _visible_text(hub_scope_html)
+    d01_credit = re.search(
+        r'id="entrega-01"[\s\S]*?class="vitrine-item__credit">(.*?)</p>',
+        full_html,
+    )
+    assert d01_credit, "D01 scope disclosure missing"
+    hub_text = _visible_text(hub_scope_html + d01_credit.group(1))
     report_text = _visible_text(_html(REPORT))
 
     for phrase in (
@@ -352,6 +362,21 @@ def test_schema_describes_the_full_collection_and_breadcrumb() -> None:
     for route in LADDER_ROUTES:
         assert any(url.endswith(route) for url in listed), route
     assert breadcrumb["itemListElement"][-1]["item"] == CANONICAL
+    schema_day = str(collection["dateModified"])[:10]
+    rewrite_day = "2026-08-28"
+    assert schema_day >= rewrite_day, (
+        f"CollectionPage.dateModified {schema_day} is older than the eight-offer rewrite {rewrite_day}"
+    )
+    sitemap_xml = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+    sitemap_match = re.search(
+        r"<loc>https://confenge.com.br/entregas/</loc>\s*<lastmod>([^<]+)</lastmod>",
+        sitemap_xml,
+    )
+    assert sitemap_match, "/entregas/ missing lastmod in sitemap.xml"
+    sitemap_day = sitemap_match.group(1)[:10]
+    assert schema_day == sitemap_day, (
+        f"CollectionPage.dateModified {schema_day} != sitemap /entregas/ lastmod {sitemap_day}"
+    )
 
 
 def test_home_discovery_is_inside_the_existing_commercial_section() -> None:

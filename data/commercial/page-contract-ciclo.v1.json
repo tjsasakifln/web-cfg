@@ -89,7 +89,7 @@
       "Se os insumos mínimos não existirem, a proposta diz não iniciar ou converte o trabalho em diagnóstico de lacunas, e nunca preenche o silêncio com inferência.",
       "Os preços não incluem deslocamento, ART ou RRT, parecer jurídico, projeto de engenharia, emissão de documento por terceiros nem taxa pública.",
       "O prazo começa após o aceite de escopo e o recebimento íntegro dos insumos.",
-      "Urgência abaixo do SLA só é aceita após confirmação de capacidade, com adicional de 50 por cento informado antes da contratação.",
+      "Urgência abaixo do SLA só entra após confirmação de capacidade, com adicional de 50 por cento sobre o preço-piloto ou preço publicado daquela entrega, informado antes da contratação. Exemplo: Diagnóstico de Riscos à Margem a R$ 2.900 em 5 dias úteis; se a capacidade aceitar 2 dias úteis, o adicional é R$ 1.450 e o total fica R$ 4.350.",
       "Dados públicos e modelos residem no plano de verdade do extra-cli; o web-cfg apenas publica e captura, e o Warmbly registra ação e outcome."
     ]
   },

@@ -5554,7 +5554,7 @@
   ],
   "common_rules": {
     "urgency_surcharge_pct": 50,
-    "urgency_rule": "Prazo inferior ao seguro só é aceito após confirmação de capacidade, com adicional de 50 por cento informado antes da cobrança. A capacidade pode recusar a urgência.",
+    "urgency_rule": "Urgência abaixo do SLA só entra com capacidade confirmada e adicional de 50 por cento sobre o preço-piloto ou preço publicado daquela entrega, pago antes da cobrança. Exemplo: Diagnóstico de Riscos à Margem a R$ 2.900 em 5 dias úteis; se a capacidade aceitar 2 dias úteis, o adicional é R$ 1.450 e o total fica R$ 4.350. A capacidade pode recusar a urgência.",
     "success_fee_allowed": false,
     "credit_stacking_allowed": false,
     "scope_limited_by_pages": false,

@@ -57,13 +57,23 @@
     "elements_pt_br": [
       "H1 orientado à decisão",
       "ICP e situação em linguagem comum",
-      "faixa geral de preço com recorrências explicitadas",
+      "faixa pública de preço das oito unidades",
       "uma prova verificável ou amostra",
       "CTA dominante",
-      "acesso secundário ao rol completo"
+      "acesso secundário à captura da decisão"
     ],
     "cta_primary_label_pt_br": "Encontrar a entrega certa",
-    "secondary_access_label_pt_br": "Ver as 54 entregáveis"
+    "secondary_access_label_pt_br": "Registrar a decisão na mesa"
+  },
+  "public_vitrine": {
+    "count": 8,
+    "public_state": "PUBLISHED",
+    "price_band_display_pt_br": "R$ 599 a R$ 3.750",
+    "min_brl": 599,
+    "max_brl": 3750,
+    "filters": false,
+    "comparison_columns_pt_br": ["situação", "decisão", "saída", "prazo", "preço", "fit"],
+    "note_pt_br": "A superfície pública de /entregas/ mostra só as oito unidades PUBLISHED. O rol interno permanece 54."
   },
   "doors": [
     {
@@ -382,9 +392,9 @@
       "pattern_note_pt_br": "Cada item de 01 a 54 tem fragmento estável na superfície canônica."
     },
     "secondary_access": {
-      "label_pt_br": "Ver as 54 entregáveis",
+      "label_pt_br": "Registrar a decisão na mesa",
       "location": "primeira_dobra",
-      "target": "indice_integral",
+      "target": "captura_entregas",
       "requires_javascript": false
     },
     "unmapped_request": {
@@ -458,11 +468,11 @@
     "client_data_asset": "entregas/catalog-data.js",
     "client_stylesheet": "entregas/catalog.css",
     "stylesheet": "entregas/styles.css",
-    "index_count": 54,
-    "framing_steps": 3,
-    "filter_dimensions": ["tarefa", "objeto", "urgencia_segura", "preco", "contratacao", "estado"],
-    "url_state": true,
-    "alphabetical_view": true,
+    "index_count": 8,
+    "framing_steps": 1,
+    "filter_dimensions": [],
+    "url_state": false,
+    "alphabetical_view": false,
     "comparison": {
       "min_selection": 2,
       "max_selection": 4,

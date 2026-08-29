@@ -7,6 +7,7 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { NEXT_STEPS, loadOfferFitMatrix, routeSituation } from "../../scripts/commercial/offer_fit.mjs";
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -144,6 +145,18 @@ const VALID = "11222333000181";
   if (unknownIds.includes("pedir_segunda_leitura")) fail("unknown_must_not_get_segunda_leitura", unknownIds);
   if (unknownIds.includes("dados_defasados")) fail("unknown_must_not_be_promoted", unknownIds);
   else pass("stale_honesty", staleIds.join(","));
+}
+
+// --- offer-fit qualification (same embedded function as commercial copy) ---
+{
+  const fitMatrix = loadOfferFitMatrix(root);
+  const routed = routeSituation(
+    { risk_band: "abaixo_entrada", frequency: "pontual", document_maturity: "forte", internal_capacity: "suficiente" },
+    fitMatrix,
+  );
+  if (!NEXT_STEPS.includes(routed.next_step)) fail("offer_fit_next_step_enum", routed.next_step);
+  else if (routed.next_step !== "nao_indicado") fail("offer_fit_honest_non_fit", routed);
+  else pass("offer_fit_honest_non_fit", routed.next_step);
 }
 
 // --- copy / trust ---

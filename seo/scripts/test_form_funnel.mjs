@@ -16,7 +16,7 @@ const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
 for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
-  "Enviar documentos para análise",
+  "Solicitar canal seguro",
   "Enviar edital para triagem",
   'data-set-journey="contrato"',
   'data-set-journey="edital"',
@@ -24,6 +24,13 @@ for (const needle of [
   'id="estagio"',
   'data-form-step="1"',
   'data-form-step="2"',
+  'id="faixa_contrato"',
+  'id="risco_em_jogo"',
+  'id="frequencia"',
+  'id="maturidade_documental"',
+  'id="capacidade_interna"',
+  'name="consentimento"',
+  'data-offer-fit-hint',
 ]) {
   if (!home.includes(needle)) {
     console.error("FAIL: home missing", needle);
@@ -33,6 +40,32 @@ for (const needle of [
 // Journey operacao CTA uses the canonical visitor-facing label.
 if (!home.includes("Solicitar diagnóstico da operação")) {
   console.error("FAIL: home missing Solicitar diagnóstico da operação");
+  process.exit(1);
+}
+const formMatch = home.match(/<form\b[^>]*id="formulario-contato"[\s\S]*?<\/form>/);
+if (!formMatch) {
+  console.error("FAIL: home form missing");
+  process.exit(1);
+}
+const step1 = formMatch[0].match(/data-form-step="1"[\s\S]*?<\/fieldset>/);
+if (!step1) {
+  console.error("FAIL: form step 1 missing");
+  process.exit(1);
+}
+for (const bad of ["cnpj", "cpf", 'type="file"', "faixa_contrato", "risco_em_jogo"]) {
+  if (step1[0].includes(bad === "cnpj" || bad === "cpf" ? bad : bad)) {
+    if (["cnpj", "cpf", 'type="file"'].includes(bad) && step1[0].includes(bad)) {
+      console.error("FAIL: sensitive field in step 1", bad);
+      process.exit(1);
+    }
+  }
+}
+if (/name="(cnpj|cpf)"/i.test(step1[0]) || /type="file"/i.test(step1[0])) {
+  console.error("FAIL: step 1 asks sensitive data");
+  process.exit(1);
+}
+if (step1[0].includes("faixa_contrato") || step1[0].includes("risco_em_jogo")) {
+  console.error("FAIL: ICP fields must stay off step 1");
   process.exit(1);
 }
 // No visitor-facing marketing metalinguage on the conversion surface

@@ -212,6 +212,11 @@ function mapLeadToInboundV1(record) {
     ["decisão", record.decision_intent],
     ["data de corte", record.analysis_cutoff],
     ["faixa de valor", record.contract_value_band],
+    ["faixa de contrato", record.faixa_contrato],
+    ["risco em jogo", record.risco_em_jogo],
+    ["frequencia", record.frequencia],
+    ["documentos", record.maturidade_documental],
+    ["capacidade", record.capacidade_interna],
     ["lotes", record.lot_count],
     ["regime", record.execution_regime],
   ]

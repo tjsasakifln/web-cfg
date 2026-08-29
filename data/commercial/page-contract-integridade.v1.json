@@ -136,7 +136,7 @@
     "statements_pt_br": [
       "Os preços desta família vêm do registro canônico, permanecem hipótese de preço-piloto e não são alterados por este contrato.",
       "O escopo é limitado por grupo econômico, CNPJ, empreendimento, território, órgão executor e consulta, nunca por número de páginas.",
-      "Urgência é aceita apenas com capacidade confirmada, com adicional de 50 por cento informado antes de qualquer cobrança.",
+      "Urgência abaixo do SLA só entra com capacidade confirmada e adicional de 50 por cento sobre o preço-piloto ou preço publicado daquela entrega, informado antes de qualquer cobrança. Exemplo: Diagnóstico de Riscos à Margem a R$ 2.900 em 5 dias úteis; se a capacidade aceitar 2 dias úteis, o adicional é R$ 1.450 e o total fica R$ 4.350. A capacidade pode recusar a urgência.",
       "Nenhum dado e nenhuma identidade nascem no web-cfg: verdade e proveniência permanecem no extra-cli, em contratos versionados SELECT-only.",
       "Nenhum item desta família tem comissão de êxito, promete habilitação ou adjudicação, nem guarda token, certificado digital ou senha do cliente.",
       "“Não localizado” nunca significa “inexistente”, e cada fato entregue traz entidade, fonte, consulta ou corte, data e cobertura.",

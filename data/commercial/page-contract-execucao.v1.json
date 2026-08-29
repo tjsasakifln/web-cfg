@@ -43,7 +43,7 @@
     "statements_pt_br": [
       "Os preços desta família são pilotos do estado VALIDATE e não alteram nenhum preço dos itens 01 a 48.",
       "O escopo é limitado por objeto, item, atividade, lote, sistema, revisão e evento, nunca por número de páginas.",
-      "Urgência é aceita apenas com capacidade confirmada, com adicional de 50 por cento informado antes de qualquer cobrança.",
+      "Urgência abaixo do SLA só entra com capacidade confirmada e adicional de 50 por cento sobre o preço-piloto ou preço publicado daquela entrega, informado antes de qualquer cobrança. Exemplo: Diagnóstico de Riscos à Margem a R$ 2.900 em 5 dias úteis; se a capacidade aceitar 2 dias úteis, o adicional é R$ 1.450 e o total fica R$ 4.350. A capacidade pode recusar a urgência.",
       "Os itens 49 a 54 podem compor o item 16 e continuam compráveis separadamente, com a composição discriminada na proposta.",
       "Nenhum dado, planilha ou identidade nasce no web-cfg: verdade e proveniência permanecem no extra-cli.",
       "Nenhum item desta família tem comissão de êxito, promete vitória ou adjudicação, nem guarda token, certificado digital ou senha do cliente."
