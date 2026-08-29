@@ -198,6 +198,9 @@ def test_legacy_inventory_records_exact_donor_to_owner_migration():
     assert owner["current_action"] == "KEEP"
     assert owner["destination"] == OWNER
     assert owner["sitemap_membership"] is True
+    host = items["http://confenge.com.br/"]
+    assert host["action"] == "keep_https_force_via_netcup_nginx_edge"
+    assert "netlify" not in json.dumps(inventory, ensure_ascii=False).lower()
 
 
 def test_inventory_backed_related_link_resolution_is_explicitly_non_material():

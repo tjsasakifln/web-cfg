@@ -16,7 +16,7 @@
       "sitemap_membership": false,
       "internal_backlinks": "n/a (host)",
       "external_backlinks_known": "unknown",
-      "action": "keep_https_force_via_netlify_host_rules",
+      "action": "keep_https_force_via_netcup_nginx_edge",
       "gsc_signal": "7 impressions residual on http host row"
     },
     {
