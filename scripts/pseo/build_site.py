@@ -196,13 +196,27 @@ TURNSTILE_SLOT = (
     '<div class="cf-turnstile" data-theme="light" data-size="compact"></div>'
     "</div>"
 )
-_CAPTURE_FORM_RE = re.compile(
+_LEAD_FORM_OPEN_RE = re.compile(
     r'(?is)<form\b(?=[^>]*\b(?:'
     r'action\s*=\s*["\'](?:/\.netlify/functions/lead|/api/web/lead)["\']'
     r'|id\s*=\s*["\']formulario-contato["\']'
     r'))[^>]*>'
 )
+# The market-answer canary (#482) shares one endpoint, `conversion-intake`,
+# across two actions on the same page: `xray` (public, unprotected) and
+# `handraise` (backend-verified via Turnstile, see
+# netlify/functions/market-answer-intake.cjs). Matching the action URL alone
+# would either miss the protected form or, worse, tag both forms on the page
+# and trip the "multiple capture forms" fail-closed check below. So this
+# shape additionally requires the hidden `action=handraise` marker inside the
+# form body, ahead of the closing `</form>` tag, before it counts as capture.
+_CONVERSION_INTAKE_FORM_OPEN_RE = re.compile(
+    r'(?is)<form\b(?=[^>]*\baction\s*=\s*["\'][^"\']*'
+    r'/\.netlify/functions/conversion-intake(?:\?[^"\']*)?["\'])[^>]*>'
+)
 _CLOSE_FORM_RE = re.compile(r"(?is)</form>")
+_ACTION_INPUT_RE = re.compile(r'(?is)<input\b[^>]*\bname\s*=\s*["\']action["\'][^>]*/?>')
+_ACTION_VALUE_RE = re.compile(r'(?is)\bvalue\s*=\s*["\'](?P<value>[^"\']+)["\']')
 _TURNSTILE_MARKER_RE = re.compile(
     r"(?i)\bdata-turnstile-sitekey\s*=\s*(?P<quote>[\"'])\s*(?P=quote)"
 )
@@ -214,13 +228,33 @@ _TURNSTILE_WIDGET_RE = re.compile(
 )
 
 
+def _is_handraise_body(body: str) -> bool:
+    for tag in _ACTION_INPUT_RE.finditer(body):
+        value_match = _ACTION_VALUE_RE.search(tag.group(0))
+        if value_match and value_match.group("value").casefold() == "handraise":
+            return True
+    return False
+
+
+def _capture_form_openings(html: str) -> list["re.Match[str]"]:
+    """Opening `<form ...>` tags that must ship a Turnstile widget."""
+    openings = list(_LEAD_FORM_OPEN_RE.finditer(html))
+    for opening in _CONVERSION_INTAKE_FORM_OPEN_RE.finditer(html):
+        closing = _CLOSE_FORM_RE.search(html, opening.end())
+        if closing is not None and _is_handraise_body(html[opening.end() : closing.start()]):
+            openings.append(opening)
+    openings.sort(key=lambda match: match.start())
+    return openings
+
+
 def is_lead_capture_html(html: str) -> bool:
-    """True when the document posts a public lead (home id or lead endpoint)."""
-    return bool(_CAPTURE_FORM_RE.search(html))
+    """True when the document posts a public lead (home id, lead endpoint, or
+    the backend-verified `handraise` action on the conversion-intake endpoint)."""
+    return bool(_capture_form_openings(html))
 
 
 def _capture_form_bounds(html: str) -> tuple[int, int, int]:
-    openings = list(_CAPTURE_FORM_RE.finditer(html))
+    openings = _capture_form_openings(html)
     if not openings:
         raise RuntimeError("turnstile_slot_insert_failed: capture form not found")
     if len(openings) != 1:
