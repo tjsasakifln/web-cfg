@@ -71,6 +71,7 @@ function createHostBackend(env = process.env, options = {}) {
       backend: new HostFileBackend(cfg.root, {
         releaseRoot: options.releaseRoot,
         allowInsideRelease: options.allowInsideRelease,
+        readOnly: options.readOnly,
       }),
     };
   } catch (err) {
@@ -86,7 +87,7 @@ function createHostBackend(env = process.env, options = {}) {
 }
 
 function loadLegacyNetlifyStore(name, env = process.env, event = null) {
-  // This is the only shared production dependency load. Filesystem startup never
+  // Legacy rollback/preview adapter only. Filesystem production startup never
   // resolves @netlify/blobs, so Netcup remains independent of its context/package.
   // eslint-disable-next-line import/no-unresolved
   const blobs = require("@netlify/blobs");
@@ -108,12 +109,13 @@ function storageReadiness(env = process.env, options = {}) {
     return { ok: false, backend: cfg.backend, code: "storage_not_durable" };
   }
   if (cfg.backend === "filesystem") {
-    const opened = createHostBackend(env, options);
+    const writeProbe = options.writeProbe !== false;
+    const opened = createHostBackend(env, { ...options, readOnly: !writeProbe });
     if (!opened.backend) {
       return { ok: false, backend: "filesystem", code: opened.config.code };
     }
     try {
-      opened.backend.validate({ writeProbe: options.writeProbe !== false });
+      opened.backend.validate({ writeProbe });
       return { ok: true, backend: "filesystem", legacy: cfg.legacy };
     } catch (err) {
       return {

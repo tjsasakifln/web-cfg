@@ -165,11 +165,25 @@ class HostFileBackend {
       fail("STORE_PATH_INSIDE_RELEASE", "storage directory must be outside the release tree");
     }
     this.maxBytes = Number(options.maxBytes || DEFAULT_MAX_BYTES);
+    this.readOnly = options.readOnly === true;
     checkDirectory(this.root);
     const real = fs.realpathSync.native(this.root);
     if (real !== this.root) fail("STORE_SYMLINK", "storage root must resolve to itself");
     this.layoutDir = path.join(this.root, LAYOUT);
-    ensurePrivateDirectory(this.layoutDir);
+    this.layoutExists = true;
+    if (this.readOnly) {
+      try {
+        checkDirectory(this.layoutDir);
+      } catch (err) {
+        if (err instanceof StorageError && err.code === "STORE_ROOT_MISSING") {
+          this.layoutExists = false;
+        } else {
+          throw err;
+        }
+      }
+    } else {
+      ensurePrivateDirectory(this.layoutDir);
+    }
     this.lockPath = path.join(this.layoutDir, ".writer-lock");
   }
 
@@ -230,6 +244,7 @@ class HostFileBackend {
   }
 
   withExclusiveLock(fn) {
+    if (this.readOnly) fail("STORE_READ_ONLY", "read-only storage cannot acquire a writer lock");
     this._acquireLock();
     try {
       return fn();
@@ -240,6 +255,7 @@ class HostFileBackend {
 
   _validateUnlocked() {
     checkDirectory(this.root);
+    if (!this.layoutExists) return;
     checkDirectory(this.layoutDir);
     const namespaces = fs.readdirSync(this.layoutDir, { withFileTypes: true });
     for (const entry of namespaces) {
@@ -290,6 +306,7 @@ class HostFileBackend {
   validate({ writeProbe = true } = {}) {
     const validate = () => {
       this._validateUnlocked();
+      if (!this.layoutExists) return;
       this._validateLeadIdempotencyUnlocked({ repair: writeProbe });
     };
     // Audits explicitly requesting a read-only check must not create the
@@ -316,7 +333,20 @@ class DurableJsonNamespace {
     this.backend = backend;
     this.name = value;
     this.dir = path.join(backend.layoutDir, value);
-    ensurePrivateDirectory(this.dir);
+    this.exists = true;
+    if (backend.readOnly) {
+      try {
+        checkDirectory(this.dir);
+      } catch (err) {
+        if (err instanceof StorageError && err.code === "STORE_ROOT_MISSING") {
+          this.exists = false;
+        } else {
+          throw err;
+        }
+      }
+    } else {
+      ensurePrivateDirectory(this.dir);
+    }
   }
 
   _digest(key) {
@@ -429,6 +459,7 @@ class DurableJsonNamespace {
   }
 
   put(key, value, options = {}) {
+    if (this.backend.readOnly) fail("STORE_READ_ONLY", "read-only storage cannot be mutated");
     return this.backend.withExclusiveLock(() => this._putUnlocked(key, value, options));
   }
 
@@ -446,10 +477,12 @@ class DurableJsonNamespace {
   }
 
   delete(key) {
+    if (this.backend.readOnly) fail("STORE_READ_ONLY", "read-only storage cannot be mutated");
     return this.backend.withExclusiveLock(() => this._deleteUnlocked(key));
   }
 
   list({ prefix = "", rejectTemps = false } = {}) {
+    if (!this.exists) return [];
     checkDirectory(this.dir);
     const out = [];
     let names;

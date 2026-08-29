@@ -131,6 +131,22 @@ export function evaluateLighthouseResults(results, options = {}) {
   if (homeGate.minimum_performance == null || homeGate.minimum_performance < 95) {
     errors.push(`home: minimum performance ${homeGate.minimum_performance} < 95`);
   }
+  const minimumHomeAccessibility = home.length
+    ? Math.min(...home.map((row) => row.accessibility))
+    : null;
+  const minimumHomeBestPractices = home.length
+    ? Math.min(...home.map((row) => row.best_practices))
+    : null;
+  const minimumHomeSeo = home.length ? Math.min(...home.map((row) => row.seo)) : null;
+  if (minimumHomeAccessibility == null || minimumHomeAccessibility < 97) {
+    errors.push(`home: minimum accessibility ${minimumHomeAccessibility} < 97`);
+  }
+  if (minimumHomeBestPractices == null || minimumHomeBestPractices < 100) {
+    errors.push(`home: minimum best-practices ${minimumHomeBestPractices} < 100`);
+  }
+  if (minimumHomeSeo == null || minimumHomeSeo < 100) {
+    errors.push(`home: minimum SEO ${minimumHomeSeo} < 100`);
+  }
   if (homeGate.p75_tbt_ms == null || homeGate.p75_tbt_ms >= 200) {
     errors.push(`home: p75 TBT ${homeGate.p75_tbt_ms}ms must be < 200ms`);
   }

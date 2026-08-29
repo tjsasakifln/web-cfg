@@ -222,7 +222,7 @@ async function main() {
     });
     if (!hero.h1 || !hero.lead || !hero.cta) throw new Error(`hero missing first-viewport: ${JSON.stringify(hero)}`);
     if (hero.primaryCount !== 1) throw new Error(`hero primary count ${hero.primaryCount}`);
-    if (!hero.secondaryIsNotPrimary) throw new Error("secondary WhatsApp uses primary style");
+    if (!hero.secondaryIsNotPrimary) throw new Error("secondary uses primary style");
     ok("hero_first_viewport_desktop");
   } catch (e) {
     fail("hero_first_viewport_desktop", e.message || e);
@@ -246,12 +246,50 @@ async function main() {
       };
     });
     if (!mob.ctaInFirstScreen) throw new Error(`CTA not in first screen: top=${mob.ctaTop}`);
-    if (mob.visualDisplay !== "none" && !mob.visualIsEvidence) {
-      throw new Error(`non-evidence hero visual still shown on mobile: ${mob.visualDisplay}`);
+    if (mob.visualDisplay !== "none") {
+      throw new Error(`hero visual still shown on mobile: ${mob.visualDisplay}`);
     }
     ok("mobile_hero_cta_without_decor_panel");
   } catch (e) {
     fail("mobile_hero_cta_without_decor_panel", e.message || e);
+  }
+
+  // 4b) CFG10X-02: at 390x844 the hero is ≤1.25 viewport and the primary CTA is fully on screen
+  try {
+    const viewports = [
+      { w: 390, h: 844, heroCap: 1.25 },
+      { w: 768, h: 1024, heroCap: null },
+      { w: 1440, h: 900, heroCap: null },
+    ];
+    for (const vp of viewports) {
+      await page.setViewport({ width: vp.w, height: vp.h, deviceScaleFactor: 1 });
+      await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
+      const fold = await page.evaluate(() => {
+        const vh = window.innerHeight;
+        const hero = document.querySelector(".hero");
+        const cta = document.querySelector(".hero .button-primary");
+        const hr = hero.getBoundingClientRect();
+        const cr = cta.getBoundingClientRect();
+        return {
+          vh,
+          heroHeight: Math.round(hr.height),
+          ratio: hr.height / vh,
+          ctaTop: Math.round(cr.top),
+          ctaBottom: Math.round(cr.bottom),
+          overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+        };
+      });
+      if (vp.heroCap && fold.ratio > vp.heroCap) {
+        throw new Error(`${vp.w}x${vp.h}: hero ${fold.heroHeight}px > ${vp.heroCap}×${fold.vh}`);
+      }
+      if (vp.w === 390 && (fold.ctaTop < 0 || fold.ctaBottom > fold.vh)) {
+        throw new Error(`primary CTA not fully in first screen: ${JSON.stringify(fold)}`);
+      }
+      if (fold.overflow) throw new Error(`horizontal overflow at ${vp.w}x${vp.h}`);
+    }
+    ok("home_hero_fold_390_768_1440");
+  } catch (e) {
+    fail("home_hero_fold_390_768_1440", e.message || e);
   }
 
   // 5) functional text ≥ 14px on home + commercial surfaces (footer, breadcrumbs, profile, related)
@@ -260,6 +298,7 @@ async function main() {
     const fontSel = [
       ".hero-lead",
       ".hero-proof li",
+      ".hero-proof-line",
       ".hero-micro",
       ".button",
       ".hero-secondary",
@@ -410,6 +449,10 @@ async function main() {
     });
     if (matrix.cardCount < 3) throw new Error(`expected ≥3 journey paths, got ${matrix.cardCount}`);
     if (matrix.gridDisplay === "none") throw new Error("journey paths hidden on mobile");
+    const expected = ["Edital ou proposta crítica", "Contrato sob pressão", "Operação recorrente"];
+    for (const label of expected) {
+      if (!matrix.labels.includes(label)) throw new Error(`missing door ${label}: ${JSON.stringify(matrix.labels)}`);
+    }
     ok("matrix_mobile_stacked_records");
   } catch (e) {
     fail("matrix_mobile_stacked_records", e.message || e);
@@ -458,7 +501,7 @@ async function main() {
     if (hit.length) throw new Error(hit.join(", "));
     if (/>\s*Jornada\s+[ABC]\s*</.test(html)) throw new Error("visible Jornada A/B/C label");
     if (!/como podemos ajudar/i.test(html)) throw new Error("missing client journey eyebrow");
-    if (!/qual situação sua empresa precisa resolver agora/i.test(html)) throw new Error("missing client journey title");
+    if (!/qual decisão precisa sair agora/i.test(html)) throw new Error("missing client journey title");
     ok("no_internal_language_home");
   } catch (e) {
     fail("no_internal_language_home", e.message || e);
@@ -538,7 +581,12 @@ async function main() {
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 5000 });
     for (const j of ["contrato", "edital", "operacao"]) {
-      await page.select("#estagio", j === "contrato" ? "estruturando a operação B2G" : "problema urgente em contrato");
+      await page.select(
+        "#estagio",
+        j === "contrato"
+          ? "estruturando a operação no mercado público"
+          : "problema urgente em contrato",
+      );
       const clicked = await page.evaluate((expectedJourney) => {
         const el = [...document.querySelectorAll(`[data-set-journey="${expectedJourney}"]`)].find((node) => {
           const style = getComputedStyle(node);
@@ -546,6 +594,9 @@ async function main() {
           return style.display !== "none" && style.visibility !== "hidden" && box.width > 0 && box.height > 0;
         });
         if (!el) return false;
+        // The contract binder lives on the secure-channel WhatsApp link in this
+        // layout. Exercise the real click listener without opening an external tab.
+        el.addEventListener("click", (event) => event.preventDefault(), { once: true });
         el.click();
         return true;
       }, j);
