@@ -114,8 +114,8 @@ export function labelIntegrityProblems(html, kind, explicitLabelPattern) {
 
 function visibleText(html) {
   return stripMarkup(String(html ?? "")
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, " ")
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, " ")
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, " ")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style\b[^>]*>/gi, " ")
     .replace(/<\/(?:address|article|aside|blockquote|dd|div|dl|dt|figcaption|figure|footer|form|h[1-6]|header|li|main|nav|ol|p|section|table|td|th|tr|ul)>/gi, ". ")
     .replace(/<br\s*\/?>/gi, ". "));
 }
