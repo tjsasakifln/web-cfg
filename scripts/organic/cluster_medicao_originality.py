@@ -494,7 +494,7 @@ REVISION_BODY_SHA256: dict[str, str] = {
     "atraso-na-medicao-obra-publica": "ec6f1034dedc7014d9af5a9676e83a316a74072004c64a25e84f4068fb2abf34",
     "fiscal-nao-assina-medicao-obra-publica": "64023e36c2d84ecd7976394e07ab30eb94c72656b33efa3ce757b736e5fd6233",
     "glosa-por-qualidade-obra-publica": "9b60d1b4fa9854388fa3bf4198ca39a8ac5439253069773d5e714dc2b838e8bd",
-    "medicao-por-evento-obra-publica": "a6e2155a32477441f236decd9a5348d223dfc33d95d01cde7e2df7a336077b95",
+    "medicao-por-evento-obra-publica": "c48afaf7fb4f91568c782505fcb3ed49aeda1ccd2c858b75c88ce7457bbb18cd",
     "pagamento-parcial-etapa-empreitada-global": "66ea9fd5a7acd013227502ed89a583138798f2ef6ab415d023518c3daea208eb",
     "atraso-pagamento-contrato-publico-suspender": "860cb2aded60d9dfb60ed723a7a5f4320e52e2db51ef510ff13559ae9d545bc1",
 }
