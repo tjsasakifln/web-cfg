@@ -29,8 +29,9 @@ Anotar:
 
 | Campo | Fonte | Esperado em produção |
 | --- | --- | --- |
-| `Server` | homepage | `nginx` |
+| `Server` | homepage | `cloudflare` |
 | `X-Confenge-Host-Architecture-Version` | homepage | `confenge-nginx-node/v2` |
+| `cf-cache-status` | homepage pública aquecida | `HIT`; health/runtime/ops ficam `DYNAMIC` |
 | `commit` / `release_sha` | build-info e runtime-info | 40 hex; iguais entre si |
 | `environment` | build-info e runtime-info | `production` |
 | `profile` | runtime-info | `netcup-production` |
@@ -117,7 +118,8 @@ CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088 /opt/confenge-web/bin/rollback <FULL
 1. `build-info.json` `commit` = SHA alvo
 2. `runtime-info.json` `release_sha` = SHA alvo e
    `host_architecture_version=confenge-nginx-node/v2`
-3. Homepage 200, `Server: nginx`
+3. Homepage 200, `Server: cloudflare` e
+   `X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2`
 4. `/healthz` live, `/ready` ok
 5. `POST /.netlify/functions/lead` com payload sintético (ou 503 se store/env
    incompatível — documentar; não tratar 503 como sucesso)
@@ -139,6 +141,12 @@ CONFENGE_LOCAL_ORIGIN=http://127.0.0.1:8088 /opt/confenge-web/bin/rollback <FULL
 
 Não usar a UI da Netlify, `netlify api restoreSiteDeploy`, nem republicar um
 deploy Netlify para restaurar `confenge.com.br`.
+
+Rollback de release não altera DNS nem a regra de cache do edge. O A do apex e
+o CNAME `www` devem continuar **Proxied** na Cloudflare. Torná-los DNS-only
+expõe o IP de origem e reintroduz a latência regional. HTML público pode ficar
+no edge por no máximo 5 minutos; `build-info`, `runtime-info`, `/healthz`,
+`/ready`, `/ops/`, `/intranet/`, `/.netlify/` e `/api/` não entram nessa regra.
 
 ## 6. Recuperação de lead
 

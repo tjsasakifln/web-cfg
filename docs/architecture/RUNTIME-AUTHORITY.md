@@ -5,32 +5,36 @@ Operators and `scripts/site/runtime_authority.mjs` parse the YAML block below.
 There is one public production plane. Stage and legacy are named separately so
 they cannot be mistaken for it.
 
-Observed 2026-08-28 (read-only): `https://confenge.com.br/` serves
-`Server: nginx`, `X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2`,
-and `/.well-known/build-info.json` matching `origin/main`. Public DNS for the
-apex is `159.195.18.88`; `www` is a CNAME to the apex. That is production.
+Observed 2026-08-29: `https://confenge.com.br/` is proxied through Cloudflare
+and serves `Server: cloudflare` while preserving
+`X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2` from the Netcup
+origin. `/.well-known/build-info.json` must match `origin/main`. Public apex and
+`www` A answers are dynamic Cloudflare anycast addresses and must never expose
+the authoritative origin address `159.195.18.88`. Cloudflare is the public edge;
+the Netcup nginx/Node runtime remains the one production origin.
 
 ```yaml
 authority_version: 2
-effective_at: 2026-08-28
+effective_at: 2026-08-29
 decision: ADR-STRAT-002
 compare_gate: scripts/site/runtime_authority.mjs
 public_canonical:
   plane: production
   domain: confenge.com.br
   repository: tjsasakifln/web-cfg
-  host: Netcup VPS nginx reverse proxy plus Node 22 portable runtime
+  host: Cloudflare proxy in front of Netcup VPS nginx reverse proxy plus Node 22 portable runtime
   host_kind: nginx-netcup
   host_architecture_version: confenge-nginx-node/v2
-  expected_server_header: nginx
+  expected_server_header: cloudflare
   expected_environment: production
   expected_profile: netcup-production
   deployment: every successful GitHub push to protected main runs site-ci, packages the exact public artifact, stages and verifies it on Netcup, then atomically promotes that immutable SHA under /opt/confenge-web/releases; SHA-pinned manual package_only, stage_verify and promote remain available for recovery
   dns:
+    proxy: cloudflare
     nameservers:
       - grannbo.ns.cloudflare.com
       - kai.ns.cloudflare.com
-    apex_a:
+    origin_apex_a:
       - 159.195.18.88
     apex_aaaa: []
     www_cname: confenge.com.br
@@ -42,6 +46,13 @@ public_canonical:
     root: /var/lib/confenge-web
     contract_version: confenge-host-file-record/v1
     survives_release_rollback: true
+    gsc_private_snapshot:
+      namespace: ops-system
+      snapshot_schema: confenge-private-gsc-snapshot/v1
+      pointer_schema: confenge-private-gsc-pointer/v1
+      consumer: authenticated ops gsc_insights
+      freshness_probe: market-answer-freshness.yml read-only GET
+      packaged_fallback_can_be_current: false
   scheduler:
     http_process: systemd confenge-web-runtime.service
     revops: GitHub Actions workflow revops-scheduled.yml against live HTTPS
@@ -126,7 +137,7 @@ ambiguous_repositories:
 
 | Plane | What it is | What it is not |
 |---|---|---|
-| Production | `confenge.com.br` on this VPS: nginx, portable Node 22, host-owned filesystem | Netlify CDN, Netlify Functions hosting, Netlify Blobs |
+| Production | `confenge.com.br` through the Cloudflare edge to this VPS: nginx, portable Node 22, host-owned filesystem | Netlify CDN, Netlify Functions hosting, Netlify Blobs |
 | Stage | SHA unpacked under `releases/` and checked on loopback `127.0.0.1:8088` | Public DNS, `current` symlink, visitor traffic |
 | Legacy | `netlify/functions` source, portable URL aliases, leftover `confenge.netlify.app` | Canonical public host, production env, production rollback |
 
@@ -134,8 +145,14 @@ ambiguous_repositories:
 
 - New public capabilities deploy only from `web-cfg` onto the production plane
   recorded above.
+- Cloudflare proxying is part of the production ingress contract, not a second
+  runtime plane. The public A answers may change, but neither apex nor `www` may
+  expose an address listed under `origin_apex_a`.
 - Do not instruct Netlify UI publish, Netlify env, or Netlify rollback as the
   production path.
+- Private GSC state is authoritative only after a versioned snapshot and its
+  pointer have been durably read back from `/var/lib/confenge-web`. Packaged JSON,
+  an Actions workspace and an Actions artifact can never satisfy `CURRENT`.
 - Netcup hosts data/action planes because those services need to exist; it is not
   a destination for rebuilding SmartLic.
 - `smartlic.tech` may point only to a minimal URL-specific migration/redirect

@@ -798,11 +798,21 @@ try {
     ) {
       fail("ops_inbound_configuration", data.configuration);
     }
+    if (
+      !data.safety_gate ||
+      data.safety_gate.ok !== true ||
+      data.safety_gate.contract !== "READY" ||
+      data.safety_gate.auto_send_off !== true ||
+      data.safety_gate.dispatch_attempted !== false
+    ) {
+      fail("ops_inbound_safety_gate", data.safety_gate);
+    }
     const s = JSON.stringify(data);
     if (s.includes("maria.costa@") || s.includes("Maria Costa") || s.includes(SECRET) || s.includes(mock.url)) {
       fail("ops_counters_pii_or_secret", data);
     }
     pass("ops_inbound_configuration", data.configuration);
+    pass("ops_inbound_safety_gate", data.safety_gate);
     pass("ops_counters", data.counters);
 
     const receiptRes = await ops.handler({
