@@ -22,7 +22,13 @@
    - `https://confenge.com.br/robots.txt`  
    - `https://confenge.com.br/.well-known/build-info.json`  
    - `GET https://confenge.com.br/.netlify/functions/collect` → 200
-2. **Probe sintético de lead** (sem PII real): POST com nome `SYNTHETIC-PROBE`, e-mail `probe@example.com`, header `X-Confenge-Probe: $LEAD_PROBE_SECRET`, consentimento on — esperar 201 + lead_id; depois eliminar registro.
+2. **Probe sintético autenticado** (sem PII humano): executar somente com
+   `LEAD_PROBE_SECRET` e `OPS_TOKEN`, depois de observar Warmbly `READY`,
+   `auto_send=false` e `dispatch_attempted=false`; esperar 201, retry 200 com o
+   mesmo receipt, `record_kind=synthetic`, notification/email `skipped` e zero
+   variação nos totais comerciais. O registro permanece sob a retenção
+   sintética para provar idempotência; nunca reclassificar, reprocessar como real
+   ou usar como evidência de consentimento humano.
 3. **Certificado / domínio**: alerta 30 dias antes (monitor DNS/TLS).
 4. **Headers / indexabilidade**: job semanal `npm run test:redirects:prod` + smoke SEO.
 5. **Alertas**: e-mail ops separado do canal de leads; não usar apenas ntfy de lead.

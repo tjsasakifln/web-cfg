@@ -23,7 +23,7 @@ Não usar a UI da Netlify como autoridade de env público.
 | `TURNSTILE_SECRET_KEY` | secret Cloudflare | Antiabuso primário | ver §4 |
 | `LEAD_REQUIRE_TURNSTILE` | `1` **somente após** sitekey no HTML | Força verify | POST sem token → **403** |
 | `LEAD_PROBE_SECRET` | random | Smoke sintético | `X-Confenge-Probe` header |
-| `CONFENGE_INBOUND_WEBHOOK_URL` | HTTPS `…/api/v1/webhooks/confenge/inbound` | Handoff `confenge.inbound.v1` (Warmbly PR #71) | Synthetic persist → handoff **SKIPPED**. Real lead + live inbound env → `inbound_handoff` delivered. A 201 is not INBOUND NOW. |
+| `CONFENGE_INBOUND_WEBHOOK_URL` | HTTPS `…/api/v1/webhooks/confenge/inbound` | Handoff `confenge.inbound.v1` (Warmbly PR #71) | Probe autenticado → receipt sintético idempotente, sem action; demais não-real → **SKIPPED**. A 201 sintética não é INBOUND NOW. |
 | `CONFENGE_INBOUND_WEBHOOK_SECRET` | mesmo valor no Warmbly | HMAC `X-Warmbly-Signature` | Destino 201; 401 se secreto divergir |
 
 **Status 2026-08-02 (registro historico, plano Netlify de entao; nao executar):** `RESEND_API_KEY`, `LEAD_FROM_EMAIL`, `LEAD_NOTIFY_EMAIL`, `IP_HASH_SALT` foram definidos pelo CLI legado e o redeploy `6a6f7027381c29f8c55c70d1` ficou live. Hoje o env authority e `/etc/confenge-web/runtime.env`. E-mail lead **Delivered** (Resend UI). Ainda OPEN: `OPS_WEBHOOK_*`, Turnstile, probe secret.
@@ -64,12 +64,14 @@ Evidência: `docs/evidence/inbound-10/dns-email-auth-status.json`
 | API key | colar em `/etc/confenge-web/runtime.env` como `RESEND_API_KEY` |
 | From | `leads@confenge.com.br` (ou subdomínio verificado) |
 
-**Validação:**
-`npm run probe:lead:prod` → 201 → checar inbox `LEAD_NOTIFY_EMAIL` com subject contendo o `lead_id`. Export/screenshot **sem** colar PII no git.
+**Validação:** probe sintético deve retornar `email_status=skipped` e não pode
+ser usado para testar inbox. Entrega transacional real só pode ser observada a
+partir de uma submissão humana genuína, consentida e não fabricada, preservando
+o protocolo fora do git.
 
 ---
 
-## 4. Cloudflare Turnstile — **OPEN**
+## 4. Cloudflare Turnstile — **DONE** (produção Netcup, 2026-08-29)
 
 **Plataforma:** [dash.cloudflare.com](https://dash.cloudflare.com) → Turnstile → Add widget
 
@@ -85,7 +87,7 @@ Depois: set `LEAD_REQUIRE_TURNSTILE=1`, `LEAD_REQUIRE_ORIGIN=1` e um
 site key falha antes de publicar; o secret nunca entra no HTML.
 
 **Validação:**
-- Form carrega widget
+- censo contemporâneo 21/21 rotas de captura carrega widget e site key pública
 - POST lead sem token → **403** `anti_abuse`
 - POST com token válido → **201**
 
@@ -124,7 +126,9 @@ Aplicado via API (`gh`) neste ambiente:
 | `https://confenge.com.br/.netlify/functions/collect` | 200 GET |
 
 Alerta por e-mail/SMS **diferente** do canal de leads.
-Probe periódico de lead: `npm run probe:lead:prod` (cron owner) com `LEAD_PROBE_SECRET` se configurado.
+Probe periódico de lead: `npm run probe:lead:prod` somente com
+`LEAD_PROBE_SECRET`, `OPS_TOKEN` e safety gate Warmbly verde. O comando falha
+antes do POST quando qualquer precondição está ausente.
 
 ---
 
@@ -176,13 +180,11 @@ Owner: `/opt/confenge-web/bin/rollback <FULL_SHA>` → validar probe → evidên
 
 ## Ordem recomendada de execução (owner, ~45–90 min)
 
-1. Resend domain + DNS §2–3
-2. EnvironmentFile do VPS §1 (Resend + webhook + salt) → restart runtime
-3. `npm run probe:lead:prod` + confirmar inbox + webhook
-4. Turnstile §4 → sitekey HTML + secret + `LEAD_REQUIRE_TURNSTILE=1` → redeploy
-5. Uptime §6
-6. Revogar ntfy antigo §1
-7. Rollback drill click §9 (opcional mas fecha 10 em release ops)
+1. Confirmar EnvironmentFile do VPS e `/ready`
+2. Rodar o probe autenticado com envio local `skipped` e Warmbly sem dispatch
+3. Uptime §6
+4. Revogar ntfy antigo §1
+5. Rollback drill §9 sem usar Netlify
 
 ## Após executar
 

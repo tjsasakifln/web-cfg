@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "status": "STALE",
+  "access_mode": "READ_ONLY",
+  "insights": null,
+  "meta": {
+    "schema_version": "confenge-private-gsc-snapshot/v1",
+    "delivery_source": "durable_store",
+    "producer_manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "consumer_manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "as_of": "2026-08-01",
+    "ready_for_product_decisions": false,
+    "reason_codes": [
+      "snapshot_stale"
+    ]
+  }
+}

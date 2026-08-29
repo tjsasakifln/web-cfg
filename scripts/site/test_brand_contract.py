@@ -60,13 +60,13 @@ def test_home_has_canonical_copy():
     assert 'data-form-multistep="true"' in html
     # Three differentiated journey CTAs (client-facing; no Jornada A/B/C labels)
     assert "Solicitar canal seguro para envio" in html
-    assert "Enviar edital para triagem" in html
+    assert "Solicitar triagem do edital" in html
     assert "Solicitar diagnóstico da operação" in html
     assert "Como podemos ajudar" in html
     assert "Analisar meu caso" in html
-    assert "Tenho um contrato sob pressão" in html
-    assert "Estou analisando uma licitação" in html
-    assert "Preciso organizar minha operação no mercado público" in html
+    assert "Contrato sob pressão" in html
+    assert "Edital ou proposta crítica" in html
+    assert "Operação recorrente" in html
     assert "enviar documentos para análise" not in html.lower()
     assert "Sem CTA genérico" not in html
     for j in brand.get("journeys") or []:

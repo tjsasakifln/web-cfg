@@ -5,7 +5,8 @@
 | Operador | Finalidade | Dados | Base | Transferência | Status config |
 | --- | --- | --- | --- | --- | --- |
 | CONFENGE (controlador) | Atendimento comercial B2G | Lead completo | Consentimento / procedimentos preliminares | BR | ativo |
-| Netlify (hospedagem + Functions + Blobs) | Servir site, executar intake, persistir leads e amostras de eventos | Lead; telemetria sem PII; logs técnicos | Contrato de operação / legítimo interesse segurança | Pode ser EUA/UE conforme Netlify | ativo em produção |
+| Netcup / VPS controlado pela CONFENGE (nginx + Node + filesystem privado) | Servir site, executar intake, persistir leads e amostras de eventos | Lead; telemetria sem PII; logs técnicos | Contrato de operação / legítimo interesse segurança | Conforme contrato/DPA da infraestrutura | ativo em produção |
+| Netlify (adapter/preview legado) | Compatibilidade temporária de código; não é host, storage ou rollback de produção | Nenhum dado novo deve ser persistido pelo plano canônico | N/A no plano canônico | N/A no plano canônico | legado, não autoritativo |
 | Resend (e-mail transacional) | Notificar ops de novo lead | Nome, contato, jornada, protocolo | Consentimento / operação | Conforme Resend | **requer** `RESEND_API_KEY` + DNS |
 | Webhook ops autenticado | Notificar canal privado | Payload operacional do lead | Operação | Conforme destino | **requer** `OPS_WEBHOOK_URL` (+ secret) |
 | ntfy autenticado (opcional) | Notificação push ops | Resumo lead | Operação | Conforme host ntfy | **requer** `NTFY_URL` + `NTFY_TOKEN` — sem tópico público |
@@ -16,8 +17,8 @@
 ## Retenção
 
 - Leads: padrão 730 dias (`LEAD_RETAIN_DAYS`), depois eliminação elegível.
-- Analytics samples: operacional curto (Blobs diários).
-- Logs de função: política da plataforma Netlify.
+- Analytics samples: operacional curto no filesystem privado host-owned.
+- Logs de runtime: retenção operacional do nginx/systemd no host Netcup.
 
 ## Direitos do titular
 
