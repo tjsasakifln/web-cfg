@@ -486,7 +486,10 @@ def unwrap_opaque_tokens(html: str) -> str:
     while previous != html:
         previous = html
         html = _OPAQUE_TOKEN_SPAN.sub(r"\1", html)
-    return html
+    # The same pass glues currency and units with a non-breaking space so they
+    # never split across lines. That is presentation too: the reader sees one
+    # space, so the gate must compare against one space.
+    return html.replace("&nbsp;", " ").replace("&#160;", " ").replace("\u00a0", " ")
 
 
 def content_fingerprint(html: str) -> str:
