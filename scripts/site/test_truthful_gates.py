@@ -403,9 +403,11 @@ def test_editorial_corpus_includes_indexable_pages_outside_conteudos():
 
 def test_rewritten_articles_publish_current_review_metadata_and_faithful_word_count():
     relpaths = (
+        "conteudos/atraso-obra-culpa-administracao/index.html",
         "conteudos/comprovacao-exequibilidade-proposta-obra/index.html",
         "conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/index.html",
         "conteudos/prorrogacao-prazo-obra-publica-documentos/index.html",
+        "conteudos/resposta-notificacao-atraso-obra-publica/index.html",
     )
     for relpath in relpaths:
         html = (ROOT / relpath).read_text(encoding="utf-8")

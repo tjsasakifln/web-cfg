@@ -335,16 +335,16 @@ NATURAL_FAQ: dict[str, list[tuple[str, str]]] = {
     ],
     "atraso-obra-culpa-administracao": [
         (
-            "Como provar que o atraso é da Administração?",
-            "Ligue o evento (projeto, desapropriação, frente não liberada, pagamento etc.) ao caminho crítico com cronograma, diário, comunicações e impacto de prazo. Sem nexo, a tese não sustenta prorrogação nem custo.",
+            "O que diferencia culpa da Administração de atraso da obra?",
+            "Atraso da obra é o desvio frente ao cronograma. Culpa da Administração exige dever do órgão, evento contemporâneo e nexo com o caminho crítico. Sem os três, a causa não fica atribuída à Administração no processo.",
 ),
         (
-            "O que reunir antes de pedir prazo ou custo?",
-            "Cronograma contratual e atualizado, registros contemporâneos do evento, notificações, medições afetadas e memória de cálculo do impacto. Formalize o pedido antes do vencimento cego do prazo.",
+            "Frente não liberada basta como prova?",
+            "Não. Precisa da data em que a equipe estava apta, do obstáculo específico, de quem deveria removê-lo e do efeito nas atividades sucessoras. Diário genérico de 'aguardando liberação' não fecha o nexo.",
 ),
         (
-            "Qual o erro mais caro neste cenário?",
-            "Aceitar multa ou absorver atraso sem protestar a causa. Depois a narrativa da Administração fica unilateral e a empresa perde margem e prazo.",
+            "Atraso de pagamento entra na mesma cadeia de nexo?",
+            "Só se a falta de pagamento tiver interrompido a frente e isso estiver registrado. Pagamento atrasado com equipe produzindo prova outro pedido; não substitui o nexo físico do atraso.",
 ),
     ],
     "aditivo-empreitada-por-preco-global": [
@@ -517,30 +517,30 @@ NATURAL_FAQ: dict[str, list[tuple[str, str]]] = {
     ],
     "prorrogacao-prazo-obra-publica-documentos": [
         (
-            "Quais documentos não podem faltar no pedido de prazo?",
-            "Cronograma, nexo causal do evento, diário, comunicações e impacto no caminho crítico. Pedido genérico de 'mais prazo' costuma ser indeferido.",
+            "Vigência e prazo de execução pedem o mesmo instrumento?",
+            "Em regra, não. Vigência de contrato por escopo segue o art. 111. Cronograma de execução, em impedimento, paralisação ou suspensão, segue o art. 115, § 5º, por apostila. O requerimento deve dizer qual dos dois está vencendo.",
 ),
         (
-            "Quando protocolar?",
-            "Antes do vencimento do prazo e assim que o evento impactante estiver caracterizado. Demora da empresa enfraquece a tese.",
+            "Protocolar depois do vencimento ainda organiza o pedido?",
+            "O dossiê pode ser montado, mas a posição enfraquece. O calendário do protocolo começa quando o evento se caracteriza, não quando o prazo já acabou. A Lei não promete convalidação tardia.",
 ),
         (
-            "Prazo e custo andam juntos?",
-            "Muitas vezes sim, mas são pedidos com provas distintas. Organize a memória de custo à parte se houver ociosidade ou prolongamento de indiretos.",
+            "A memória de custo vai no mesmo requerimento de prazo?",
+            "Pode ir em anexo separado. Prazo e custo usam provas distintas. Juntar ociosidade sem série de custos mistura o pedido e atrasa a análise do órgão.",
 ),
     ],
     "resposta-notificacao-atraso-obra-publica": [
         (
-            "Como estruturar a resposta à notificação de atraso?",
-            "Admita fatos corretos, conteste incorretos, apresente cronologia, causas e pedidos objetivos (prazo, exclusão de multa, etc.). Tom agressivo sem prova piora a posição.",
+            "Silêncio em notificação informal conta como confissão?",
+            "Trate o recebimento como formal. Responda no canal do contrato. Silêncio não é peça jurídica de confissão, mas vira narrativa unilateral do órgão e piora a dosimetria.",
 ),
         (
-            "O que anexar?",
-            "Cronograma, diário, comunicações à Administração, evidências de fatos externos e memória de impacto. Respeite o prazo da notificação.",
+            "Posso pedir dilação e exclusão de multa na mesma peça?",
+            "Sim, como pedidos principal e subsidiário, cada um com anexo. Dilação sem nexo e exclusão sem cronologia costumam cair juntas. Numere os pedidos.",
 ),
         (
-            "Posso ignorar notificação informal?",
-            "Não trate como irrelevante. Formalize o recebimento e responda no canal adequado. Silêncio vira confissão prática.",
+            "O que não escrever na resposta?",
+            "Não admita 'atraso nosso' para parecer cooperativo. Não agrida o fiscal. Não anexe dossiê de custo como se fosse defesa. Não deixe parágrafo imputado sem resposta.",
 ),
     ],
     "sinapi-ou-sicro-obra-publica": [
