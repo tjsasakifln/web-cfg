@@ -143,9 +143,9 @@ function buildSnapshot({ producer, history, insights }, { now }) {
   ) {
     throw new Error("gsc_private_producer_consumer_mismatch");
   }
-  const promoted = insights != null;
+  const containsInsights = insights != null;
   if (
-    promoted &&
+    containsInsights &&
     (!SHA256_RE.test(String(producer.manifest_sha256 || "")) ||
       producer.manifest_sha256 !== insights.snapshot_sha256 ||
       producer.manifest_sha256 !== history.last_known_good?.snapshot_sha256 ||
@@ -154,7 +154,7 @@ function buildSnapshot({ producer, history, insights }, { now }) {
   ) {
     throw new Error("gsc_private_producer_consumer_mismatch");
   }
-  if (!promoted && history.readiness?.ready_for_product_decisions === true) {
+  if (!containsInsights && history.readiness?.ready_for_product_decisions === true) {
     throw new Error("gsc_private_partial_snapshot_invalid");
   }
   const asOf = producer.as_of || history.readiness?.freshness_as_of || null;

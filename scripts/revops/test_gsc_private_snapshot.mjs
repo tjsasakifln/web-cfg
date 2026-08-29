@@ -267,12 +267,12 @@ test("storage and scheduled verifier share freshness boundary vectors", async ()
   const firstStale = new Date("2026-09-10T00:00:00.000Z");
   const staleRead = await readPrivateGscSnapshot(store, { now: firstStale });
   assert.equal(staleRead.status, "STALE");
-  assert.equal(evaluateConsumerPayload(staleRead, { now: firstStale }).status, "STALE");
+  assert.equal(evaluateConsumerPayload(currentRead, { now: firstStale }).status, "STALE");
 
   const beyondFutureSkew = new Date("2026-08-29T11:49:59.000Z");
   const futureRead = await readPrivateGscSnapshot(store, { now: beyondFutureSkew });
   assert.equal(futureRead.status, "UNKNOWN");
-  assert.equal(evaluateConsumerPayload(futureRead, { now: beyondFutureSkew }).status, "UNKNOWN");
+  assert.equal(evaluateConsumerPayload(currentRead, { now: beyondFutureSkew }).status, "UNKNOWN");
 });
 
 test("a failed producer attempt makes the consumer UNKNOWN without discarding its LKG", async () => {

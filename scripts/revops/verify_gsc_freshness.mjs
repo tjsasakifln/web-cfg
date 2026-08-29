@@ -101,12 +101,13 @@ export function evaluateConsumerPayload(payload, { now = new Date() } = {}) {
   if (![nowMs, asOfStart, producedAt, ingestedAt].every(Number.isFinite)) {
     return unknown("freshness_unreadable");
   }
+  if (producedAt > nowMs + 5 * 60_000 || ingestedAt > nowMs + 5 * 60_000) {
+    return unknown("freshness_unreadable");
+  }
   if (
     nowMs - asOfEnd > MAX_AGE_MS ||
     nowMs - producedAt > MAX_AGE_MS ||
-    nowMs - ingestedAt > MAX_AGE_MS ||
-    producedAt > nowMs + 5 * 60_000 ||
-    ingestedAt > nowMs + 5 * 60_000
+    nowMs - ingestedAt > MAX_AGE_MS
   ) {
     return {
       ...unknown("snapshot_stale"),
