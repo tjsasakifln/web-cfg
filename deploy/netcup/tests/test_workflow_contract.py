@@ -15,6 +15,8 @@ SCHEDULE = ROOT / "deploy" / "netcup" / "schedules" / "schedule-contract.json"
 def test_release_reuses_site_ci_and_never_rebuilds() -> None:
     text = WORKFLOW.read_text(encoding="utf-8")
     assert "uses: ./.github/workflows/site-ci.yml" in text
+    assert "uses: ./.github/workflows/pseo.yml" in text
+    assert "needs: [gates, pseo_gates]" in text
     assert "export_public_artifact: true" in text
     site_ci = SITE_CI.read_text(encoding="utf-8")
     assert "name: site-ci-public-${{ github.sha }}" in site_ci
@@ -36,11 +38,13 @@ def test_release_tracks_main_automatically_and_manual_dispatch_is_sha_pinned() -
     assert '"refs/heads/main"' in text
     assert '"$EXPECTED_SHA" != "$RELEASE_SHA"' in text
     assert "github.event_name == 'push'" in text
-    assert "group: netcup-release-${{ github.repository }}" in text
+    assert "github.event_name == 'push' && 'automatic' || 'manual'" in text
     assert "cancel-in-progress: false" in text
     assert "environment: netcup-production" in text
     assert "CONFENGE_NETCUP_CUTOVER_APPROVED" in text
     assert "package_only" in text and "stage_verify" in text and "promote" in text
+    assert 'gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main"' in text
+    assert '"$current_main_sha" != "$RELEASE_SHA"' in text
 
 
 def test_ssh_is_fail_closed_and_known_hosts_is_pinned() -> None:

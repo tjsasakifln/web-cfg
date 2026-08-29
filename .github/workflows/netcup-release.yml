@@ -24,7 +24,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: netcup-release-${{ github.repository }}
+  group: netcup-release-${{ github.repository }}-${{ github.event_name == 'push' && 'automatic' || 'manual' }}
   cancel-in-progress: false
 
 jobs:
@@ -72,9 +72,16 @@ jobs:
     permissions:
       contents: read
 
+  pseo_gates:
+    name: exact SHA through pSEO
+    needs: preflight
+    uses: ./.github/workflows/pseo.yml
+    permissions:
+      contents: read
+
   package:
     name: immutable release package and attestation
-    needs: gates
+    needs: [gates, pseo_gates]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -275,12 +282,20 @@ jobs:
           }
       - name: Atomic promote and live identity confirmation
         env:
+          GH_TOKEN: ${{ github.token }}
           NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
           NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
           NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
           RELEASE_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
+          current_main_sha="$(
+            gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha
+          )"
+          if [ "$current_main_sha" != "$RELEASE_SHA" ]; then
+            echo "NETCUP_PROMOTE_BLOCKED: release SHA is no longer the tip of main" >&2
+            exit 1
+          fi
           ssh_options=(
             -o BatchMode=yes
             -o IdentitiesOnly=yes

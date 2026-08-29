@@ -1,5 +1,6 @@
 name: pSEO quality gates
 on:
+  workflow_call:
   push:
     branches: [main]
   # Do not filter PRs by base branch. A stacked PR must run the same required
