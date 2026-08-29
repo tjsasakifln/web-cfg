@@ -11,6 +11,7 @@ import json
 import os
 import re
 import unicodedata
+from decimal import Decimal
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any
@@ -161,7 +162,7 @@ def extract_example(html: str) -> dict[str, Any]:
     if not open_tag:
         raise ValueError("worked example opening tag missing")
     tag = open_tag.group(0)
-    inputs: dict[str, float] = {}
+    inputs: dict[str, Decimal] = {}
     for m in re.finditer(
         r'<[^>]*\bdata-input=["\']([^"\']+)["\'][^>]*\bdata-value=["\']([^"\']+)["\'][^>]*>'
         r'|<[^>]*\bdata-value=["\']([^"\']+)["\'][^>]*\bdata-input=["\']([^"\']+)["\'][^>]*>',
@@ -170,7 +171,7 @@ def extract_example(html: str) -> dict[str, Any]:
     ):
         key = m.group(1) or m.group(4)
         raw = m.group(2) or m.group(3)
-        inputs[key] = float(raw.replace(",", "."))
+        inputs[key] = Decimal(raw.replace(",", "."))
     result_raw = _attr(tag, "data-result")
     if result_raw == "":
         raise ValueError("data-result missing")
@@ -178,7 +179,7 @@ def extract_example(html: str) -> dict[str, Any]:
         "id": _attr(tag, "data-example-id"),
         "formula": _attr(tag, "data-formula"),
         "unit": _attr(tag, "data-unit"),
-        "result": float(result_raw.replace(",", ".")),
+        "result": Decimal(result_raw.replace(",", ".")),
         "fonte_url": _attr(tag, "data-fonte-url"),
         "source_reference": _attr(tag, "data-source-reference"),
         "accessed_at": _attr(tag, "data-source-accessed-at"),
@@ -217,6 +218,10 @@ class _FormulaGuard(ast.NodeVisitor):
             return super().visit(node)
         raise ValueError(f"disallowed formula node: {type(node).__name__}")
 
+    def visit_Constant(self, node: ast.Constant) -> None:
+        if type(node.value) is not int:
+            raise ValueError("formula literals must be integers; decimal values belong in inputs")
+
     def visit_Call(self, node: ast.Call) -> None:
         if not isinstance(node.func, ast.Name) or node.func.id not in _SAFE_FUNCS:
             raise ValueError("disallowed function in formula")
@@ -224,7 +229,7 @@ class _FormulaGuard(ast.NodeVisitor):
             self.visit(arg)
 
 
-def recompute_formula(formula: str, inputs: dict[str, float]) -> float:
+def recompute_formula(formula: str, inputs: dict[str, Decimal]) -> Decimal:
     tree = ast.parse(formula, mode="eval")
     _FormulaGuard().visit(tree)
     names = {node.id for node in ast.walk(tree) if isinstance(node, ast.Name)}
@@ -237,7 +242,7 @@ def recompute_formula(formula: str, inputs: dict[str, float]) -> float:
             raise ValueError(f"illegal input name: {key}")
     compiled = compile(tree, "<formula>", "eval")
     value = eval(compiled, {"__builtins__": {}}, {**_SAFE_FUNCS, **inputs})  # noqa: S307
-    return float(value)
+    return value if isinstance(value, Decimal) else Decimal(value)
 
 
 def parse_title(html: str) -> str:

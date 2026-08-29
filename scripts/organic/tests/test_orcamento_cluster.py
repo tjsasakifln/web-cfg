@@ -8,8 +8,6 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
-import pytest
-
 ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
@@ -144,7 +142,7 @@ def test_exclusive_examples_recompute_from_shipped_html():
         assert "competência oficial, localidade e base oficial de encargos não se aplicam" in example["html"]
         assert '<p class="example-limit"><strong>Limite.</strong>' in example["html"]
         recomputed = recompute_formula(example["formula"], example["inputs"])
-        assert recomputed == pytest.approx(example["result"], rel=1e-9, abs=1e-6), (
+        assert recomputed == example["result"], (
             slug,
             example["formula"],
             example["inputs"],
@@ -156,7 +154,7 @@ def test_exclusive_examples_recompute_from_shipped_html():
         key = (
             example["formula"],
             tuple(sorted(example["inputs"].items())),
-            round(example["result"], 6),
+            example["result"],
         )
         assert key not in seen_payloads, key
         seen_payloads.add(key)
@@ -165,9 +163,12 @@ def test_exclusive_examples_recompute_from_shipped_html():
                 "page": f"/conteudos/{slug}/",
                 "id": example["id"],
                 "formula": example["formula"],
-                "inputs": example["inputs"],
-                "recomputed": recomputed,
-                "stated_result": example["result"],
+                "inputs": {
+                    name: format(value, "f")
+                    for name, value in example["inputs"].items()
+                },
+                "recomputed": format(recomputed, "f"),
+                "stated_result": format(example["result"], "f"),
                 "unit": example["unit"],
                 "fonte_url": example["fonte_url"],
                 "source_reference": example["source_reference"],
