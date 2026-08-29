@@ -179,7 +179,6 @@ HASH_BOUND_LIE_PATHS = {
     "guias-contratos-obras/documentos-pedido-reequilibrio/index.html",
     "guias-contratos-obras/responder-notificacao-atraso/index.html",
     "jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/index.html",
-    "lei-14133-obras/atraso-imputavel-administracao/index.html",
     "lei-14133-obras/limite-25-50-aditivo-obra/index.html",
     "lei-14133-obras/parcela-incontroversa-medicao-pagamento/index.html",
     "lei-14133-obras/preco-item-novo-desconto-proposta/index.html",

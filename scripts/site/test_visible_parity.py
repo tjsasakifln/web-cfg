@@ -213,7 +213,10 @@ def test_correction_same_render_updates_visible_and_jsonld():
     assert "Biblioteca técnica CONFENGE" not in after
     assert "2026-08-04" not in after
 
-    parity = compare_visible_parity(after, url="https://confenge.com.br" + src["url"])
+    parity = compare_visible_parity(
+        after,
+        url="https://confenge.com.br" + (src.get("canonical_path") or src["url"]),
+    )
     assert parity["ok"], parity["defects"]
     vis = parity["visible"]
     claimed = parity["claimed"]

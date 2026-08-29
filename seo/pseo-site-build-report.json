@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "ce7883a1f192405e473fc128e9af3749ee98ff4b",
+  "web_cfg_sha": "1ff99aeec41038cad7f1606f1bdbca433b4317af",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "bfe8e90c5a76b8c5195ce5076ecd67a576c96dc8d91eb86b08df93f7fd145cdf",
-  "manifest_hash": "d20ce5e73048ffa9b488acc16caa1089340ea63b92df12e3f1832d6088d3e235",
+  "public_artifact_hash": "f02faeaf4b9e4712253a2d4805849e35f0ab680213bdd3c2f37e357125683311",
+  "manifest_hash": "df7773f99fac0c0e3cd9fe07b1b22a63bce3f0f3474c7009a9fed51642ff9b92",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -17,14 +17,13 @@
   },
   "editorial_wave": {
     "ok": true,
-    "indexable_count": 3,
+    "indexable_count": 2,
     "indexable_urls": [
       "/guias-contratos-obras/checklist-pedido-aditivo/",
-      "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "/lei-14133-obras/limite-25-50-aditivo-obra/"
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/"
     ],
     "sitemap_counts": {
-      "editorial": 5,
+      "editorial": 4,
       "jurisprudencia": 0,
       "inteligencia_segment": 0
     }
@@ -35,13 +34,26 @@
   },
   "visible_parity": {
     "ok": true,
-    "page_count": 76,
+    "page_count": 75,
     "defect_count": 0
+  },
+  "turnstile": {
+    "configured": false,
+    "context": "local",
+    "target": "index.html",
+    "capture_files": 21,
+    "injected_files": 0
+  },
+  "responsive_html": {
+    "files": 263,
+    "currency_files": 61,
+    "opaque_token_files": 238,
+    "marker_files": 54
   },
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 476,
+    "file_count": 494,
     "finding_count": 0
   },
   "errors": []

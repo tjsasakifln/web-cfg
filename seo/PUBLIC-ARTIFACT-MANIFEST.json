@@ -11,6 +11,7 @@
     "bid-room-licitacoes-obras/",
     "casos/",
     "comercial/",
+    "confianca/",
     "conflitos/",
     "conteudos/",
     "correcoes/",
@@ -65,12 +66,13 @@
     "sitemap-jurisprudencia.xml",
     "sitemap.txt",
     "sitemap.xml",
+    "styles-hubs.css",
     "styles-offers.css",
     "styles-tokens.css",
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 256,
+  "html_route_count": 257,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -100,6 +102,7 @@
     "/comercial/privacidade-leads/",
     "/comercial/radar-decisorio/",
     "/comercial/termos-diagnostico-b2g/",
+    "/confianca/",
     "/conflitos/",
     "/conteudos/aceleracao-obra-publica-custo-adicional/",
     "/conteudos/aditivo-empreitada-por-preco-global/",
@@ -329,8 +332,8 @@
     "/termos-de-uso/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-08-24T13:25:45Z",
-  "public_artifact_hash": "fccbf5cd44c2c3a92d6445ca7fc62f14a694ca61ebe222d8a8d6039848a81a06",
+  "generated_at": "2026-08-29T23:04:32Z",
+  "public_artifact_hash": "40fb8f0084e7669f9d58df28ebe809e5ee95feb8b06e12570087198339650305",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -342,6 +345,7 @@
     "bid-room-licitacoes-obras/",
     "casos/",
     "comercial/",
+    "confianca/",
     "conflitos/",
     "conteudos/",
     "correcoes/",
@@ -396,15 +400,21 @@
     "sitemap-jurisprudencia.xml",
     "sitemap.txt",
     "sitemap.xml",
+    "styles-hubs.css",
     "styles-offers.css",
     "styles-tokens.css",
     "styles-tools.css",
     "styles.css"
   ],
-  "promoted_navigation_files": 222,
+  "promoted_navigation_files": 223,
   "navigation_audit": {
-    "audited_files": 223,
-    "audited_blocks": 445,
+    "audited_files": 224,
+    "audited_blocks": 447,
     "frozen_files": 6
+  },
+  "structured_identity": {
+    "html_scanned": 263,
+    "html_rewritten": 211,
+    "fields_removed": 897
   }
 }

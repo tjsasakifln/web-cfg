@@ -1,0 +1,132 @@
+{
+  "schema": "confenge-inbound-live-proof/1.0",
+  "captured_at": "2026-08-29T15:18:52Z",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "INBOUND_ENGINE",
+  "leverage": ["revenue", "distribution", "automation", "trust"],
+  "time_to_evidence": "same-day",
+  "base_sha": "72ed3831ba28c9400627cdc9599aa54e9329e178",
+  "live": {
+    "canonical_host": "confenge.com.br",
+    "server": "nginx",
+    "host_architecture_version": "confenge-nginx-node/v2",
+    "release_sha": "72ed3831ba28c9400627cdc9599aa54e9329e178",
+    "environment": "production",
+    "profile": "netcup-production",
+    "storage_backend": "filesystem",
+    "storage_contract_version": "confenge-host-file-record/v1",
+    "ready": true,
+    "release_workflow_run": 33256417759
+  },
+  "capture_census": {
+    "historical_issue_465_routes_audited": 22,
+    "active_capture_contract_after_issue_461": 21,
+    "active_ready": 21,
+    "route_blockers": [],
+    "ready_routes": [
+      "/",
+      "/acompanhamento-contratos-obras/",
+      "/atrasos-prorrogacao-obras-publicas/",
+      "/bid-room-licitacoes-obras/",
+      "/casos/",
+      "/casos/modelo-apresentacao-executiva-resultados/",
+      "/casos/modelo-base-quantitativa-canonica/",
+      "/casos/modelo-contratos-vincendos-relicitacao/",
+      "/casos/modelo-mapa-compradores-publicos/",
+      "/casos/modelo-mapeamento-concorrentes-publicos/",
+      "/casos/modelo-painel-precos-obras-publicas/",
+      "/casos/modelo-relatorio-executivo-consolidado/",
+      "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "/comercial/radar-decisorio/",
+      "/defesa-margem-contratos-publicos/",
+      "/defesa-tecnica-contratos-publicos/",
+      "/diagnostico-b2g-expansao/",
+      "/diretoria-b2g/",
+      "/entregas/",
+      "/ferramentas/diagnostico-defesa-margem/",
+      "/servicos-obras-publicas/"
+    ],
+    "route_contract": {
+      "usable_nonempty_site_key": true,
+      "turnstile_widget": true,
+      "submit_target": "/.netlify/functions/lead",
+      "client_token_forwarded": true
+    },
+    "superseded_route": {
+      "route": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+      "state": "SUPERSEDED_NOT_CAPTURE",
+      "capture": false,
+      "decision_sha": "b5dcf7a32",
+      "decision_issue": 461,
+      "reason": "The former hidden metadata-only form was not a usable visitor capture path; the page now links to a real capture surface and is not counted to inflate the census."
+    }
+  },
+  "synthetic_probe": {
+    "authenticated": true,
+    "contains_human_pii": false,
+    "durable_record_kind": "synthetic",
+    "server_marker": "authenticated_probe",
+    "next_action": "exclude_from_commercial",
+    "source": "CONFENGE_WEB",
+    "receipt_sha256": "1af65417b594aa2696fbab2fb67b01b44ad8206ff1844bfa0a03291cba3b504f",
+    "first_post_http": 201,
+    "retry_http": 200,
+    "retry_idempotent": true,
+    "same_receipt": true,
+    "persisted_exactly_once": true,
+    "notification_status": "skipped",
+    "email_status": "skipped",
+    "handoff": {
+      "destination_fingerprint": "WARMBLY_PRODUCTION_V1",
+      "contract": "READY",
+      "status": "DELIVERED",
+      "attempts": 1,
+      "downstream_http": 201,
+      "downstream_duplicate": false,
+      "downstream_receipt_matches": true,
+      "downstream_action_present": false
+    },
+    "warmbly_safety": {
+      "status": "READY",
+      "auto_send": false,
+      "dispatch_attempted": false
+    }
+  },
+  "isolation": {
+    "synthetic_records_before": 5,
+    "synthetic_records_after": 6,
+    "commercial_leads_before": 0,
+    "commercial_leads_after": 0,
+    "pipeline_before": 0,
+    "pipeline_after": 0,
+    "revenue_before": 0,
+    "revenue_after": 0,
+    "weekly_excluded_non_real_before": 5,
+    "weekly_excluded_non_real_after": 6,
+    "commercial_metrics_unchanged": true
+  },
+  "external_communications": {
+    "email_sent": false,
+    "whatsapp_sent": false,
+    "outbound_sent": false,
+    "commercial_queue_created": false,
+    "auto_send": false,
+    "dispatch_attempted": false
+  },
+  "final_state": {
+    "transport": "TRANSPORT_READY",
+    "human_canary": "REAL_CONSENTED_CANARY_MISSING",
+    "issue_state": "READY_MISSING_HUMAN_CANARY",
+    "pass_10_10": false
+  },
+  "data_owners": {
+    "capture_and_persistence": "web-cfg",
+    "commercial_action_and_outcome": "warmbly",
+    "market_truth_identity_and_provenance": "extra-cli SELECT-only",
+    "approval_and_exception": "Governance/Control Center"
+  },
+  "rollback": {
+    "public_release": "/opt/confenge-web/bin/rollback FULL_SHA",
+    "probe_record": "Retained under the synthetic record-kind and retention contract; never convert, reclassify or replay as real."
+  }
+}

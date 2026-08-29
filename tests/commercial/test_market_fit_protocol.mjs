@@ -173,7 +173,7 @@ assert(
 );
 
 const entregasHtml = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
-const publishedCents = [...entregasHtml.matchAll(/<td[^>]*><strong>R\$\s*([\d.,]+)<\/strong><\/td>/g)].map((m) => labelToCents(m[1]));
+const publishedCents = [...entregasHtml.matchAll(/<p class="vitrine-item__price"><span>Preço<\/span><strong>R\$\s*([\d.,]+)<\/strong><\/p>/g)].map((m) => labelToCents(m[1]));
 assert("entregas_publishes_eight_prices", publishedCents.length === 8, publishedCents);
 assert(
   "declared_published_prices_match_page",

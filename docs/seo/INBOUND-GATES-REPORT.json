@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 45,
+        "scanned": 75,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -21,7 +21,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 29,
+        "scanned": 28,
         "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, or",
         "footer": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina cont"
       }
@@ -34,6 +34,55 @@
           "path": "aditivos-obras-publicas/index.html",
           "reason": "missing_on_page_form",
           "excerpt": "profile=service_pillar route=/aditivos-obras-publicas/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "auditoria-orcamento-licitacao/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/auditoria-orcamento-licitacao/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "casos/aditivo-art125-demonstrativo/index.html",
+          "reason": "terminal_action_debt",
+          "excerpt": "/casos/aditivo-art125-demonstrativo/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "casos/medicao-glosa-demonstrativo/index.html",
+          "reason": "terminal_action_debt",
+          "excerpt": "/casos/medicao-glosa-demonstrativo/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "casos/medicao-glosa-demonstrativo/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "comercial/privacidade-leads/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "comercial/termos-diagnostico-b2g/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "diagnostico-b2g-360/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/diagnostico-b2g-360/",
           "severity": "warn"
         },
         {
@@ -52,77 +101,7 @@
         },
         {
           "gate": "conversion",
-          "path": "diagnostico-b2g-360/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/diagnostico-b2g-360/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "metodologia-inteligencia/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/metodologia-inteligencia/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-10-31",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "metodologia-inteligencia/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "medicoes-glosas-obras-publicas/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/medicoes-glosas-obras-publicas/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "auditoria-orcamento-licitacao/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/auditoria-orcamento-licitacao/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "reequilibrio-obras-publicas/index.html",
-          "reason": "missing_on_page_form",
-          "excerpt": "profile=service_pillar route=/reequilibrio-obras-publicas/",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "comercial/termos-diagnostico-b2g/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "comercial/privacidade-leads/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
           "path": "especialista/tiago-jun-sasaki/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "ferramentas/matriz-atraso-obra/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/ferramentas/matriz-atraso-obra/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "ferramentas/matriz-atraso-obra/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
           "severity": "warn"
@@ -157,23 +136,44 @@
         },
         {
           "gate": "conversion",
-          "path": "casos/aditivo-art125-demonstrativo/index.html",
+          "path": "ferramentas/matriz-atraso-obra/index.html",
           "reason": "terminal_action_debt",
-          "excerpt": "/casos/aditivo-art125-demonstrativo/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
+          "excerpt": "/ferramentas/matriz-atraso-obra/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
           "severity": "warn"
         },
         {
           "gate": "conversion",
-          "path": "casos/medicao-glosa-demonstrativo/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/casos/medicao-glosa-demonstrativo/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "casos/medicao-glosa-demonstrativo/index.html",
+          "path": "ferramentas/matriz-atraso-obra/index.html",
           "reason": "missing_journey_signal",
           "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "medicoes-glosas-obras-publicas/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/medicoes-glosas-obras-publicas/",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "metodologia-inteligencia/index.html",
+          "reason": "terminal_action_debt",
+          "excerpt": "/metodologia-inteligencia/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-10-31",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "metodologia-inteligencia/index.html",
+          "reason": "missing_journey_signal",
+          "excerpt": "",
+          "severity": "warn"
+        },
+        {
+          "gate": "conversion",
+          "path": "reequilibrio-obras-publicas/index.html",
+          "reason": "missing_on_page_form",
+          "excerpt": "profile=service_pillar route=/reequilibrio-obras-publicas/",
           "severity": "warn"
         }
       ],
@@ -188,14 +188,14 @@
         "profiles": {
           "service_pillar": 13,
           "priced_offer": 10,
-          "commercial_content": 43,
-          "trust_or_legal": 9
+          "commercial_content": 42,
+          "trust_or_legal": 10
         },
         "main_cta": {
-          "covered": 66,
-          "total": 66,
+          "covered": 65,
+          "total": 65,
           "coverage": 1.0,
-          "exempt": 9,
+          "exempt": 10,
           "public_scanned": 75
         },
         "on_page_capture": {
@@ -216,10 +216,10 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 54,
-          "total": 66,
-          "coverage": 0.8182,
-          "exempt_trust_or_legal": 9,
+          "covered": 53,
+          "total": 65,
+          "coverage": 0.8154,
+          "exempt_trust_or_legal": 10,
           "registered_debt": 6
         },
         "exemptions": [
@@ -289,6 +289,14 @@
             "kind": "priced_reference",
             "reason": "O preço aparece como referência contratual do Diagnóstico B2G dentro das condições, não como oferta. A superfície de oferta é /diagnostico-b2g-expansao/, que já captura com formulário persistido no <main>.",
             "owner_issue": 88,
+            "expires_at": null
+          },
+          {
+            "route": "/confianca/",
+            "family": "legal-and-trust",
+            "kind": "trust_or_legal",
+            "reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
+            "owner_issue": 300,
             "expires_at": null
           },
           {
@@ -381,15 +389,7 @@
     },
     "similarity": {
       "ok": true,
-      "findings": [
-        {
-          "gate": "similarity",
-          "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
-          "reason": "similar_to:conteudos/pagamento-parcial-etapa-empreitada-global/index.html",
-          "excerpt": "jaccard6=0.561",
-          "severity": "warn"
-        }
-      ],
+      "findings": [],
       "stats": {
         "pages": 21,
         "pairs": 210,

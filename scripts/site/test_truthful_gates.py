@@ -159,7 +159,7 @@ def test_integral_catalog_has_each_registry_deliverable_exactly_once():
     assert any("CFG-D02: duplicated in integral catalog" in row for row in findings), findings
 
 
-def test_public_entregas_is_eight_offer_vitrine_not_integral_catalog():
+def test_public_entregas_separates_eight_offer_vitrine_from_taxative_roll():
     html = (ROOT / "entregas" / "index.html").read_text(encoding="utf-8")
     cards = re.findall(
         r"<article\b[^>]*class=[\"'][^\"']*\bvitrine-item\b[^\"']*[\"'][^>]*>",
@@ -170,10 +170,21 @@ def test_public_entregas_is_eight_offer_vitrine_not_integral_catalog():
     states = re.findall(r"<article\b[^>]*data-public-state=[\"']([^\"']+)[\"']", html, flags=re.I)
     assert "deliverables-catalog" not in html
     assert "catalog-item catalog-item--published" not in html
-    assert "Em validação" not in html
     assert len(cards) == 8, len(cards)
     assert ids == [f"CFG-D0{i}" for i in range(1, 9)], ids
     assert states == ["PUBLISHED"] * 8, states
+    capability_rows = re.findall(
+        r'<li class="capability-item[^>]*data-capability-id="([^"]+)"'
+        r'[^>]*data-public-state="([^"]+)"',
+        html,
+        flags=re.I,
+    )
+    assert len(capability_rows) == 54, len(capability_rows)
+    assert sum(state == "PUBLISHED" for _, state in capability_rows) == 8
+    assert sum(state == "VALIDATE" for _, state in capability_rows) == 44
+    assert sum(state == "BLOCKED" for _, state in capability_rows) == 2
+    assert "não afirma que existem 54 ofertas prontas" in html
+    assert "Capacidade em validação. Ainda não é oferta pronta para contratação." in html
     findings = evaluate_commercial_html(html, load_registry())
     assert not any("missing from integral catalog" in row for row in findings), findings
     assert not any("8↔54" in row for row in findings), findings
@@ -402,12 +413,14 @@ def test_editorial_corpus_includes_indexable_pages_outside_conteudos():
 
 
 def test_rewritten_articles_publish_current_review_metadata_and_faithful_word_count():
-    relpaths = (
-        "conteudos/comprovacao-exequibilidade-proposta-obra/index.html",
-        "conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/index.html",
-        "conteudos/prorrogacao-prazo-obra-publica-documentos/index.html",
-    )
-    for relpath in relpaths:
+    relpaths = {
+        "conteudos/atraso-obra-culpa-administracao/index.html": ("2026-08-28", "28 de agosto de 2026"),
+        "conteudos/comprovacao-exequibilidade-proposta-obra/index.html": ("2026-08-29", "29 de agosto de 2026"),
+        "conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/index.html": ("2026-08-29", "29 de agosto de 2026"),
+        "conteudos/prorrogacao-prazo-obra-publica-documentos/index.html": ("2026-08-28", "28 de agosto de 2026"),
+        "conteudos/resposta-notificacao-atraso-obra-publica/index.html": ("2026-08-28", "28 de agosto de 2026"),
+    }
+    for relpath, (expected_date, expected_label) in relpaths.items():
         html = (ROOT / relpath).read_text(encoding="utf-8")
         article_html = re.search(r"<article\b.*?</article>", html, re.I | re.S)
         assert article_html, relpath
@@ -421,9 +434,9 @@ def test_rewritten_articles_publish_current_review_metadata_and_faithful_word_co
         graph = json.loads(jsonld.group(1))["@graph"]
         article = next(node for node in graph if node.get("@type") == "Article")
 
-        assert 'content="2026-08-28" property="article:modified_time"' in html
-        assert 'Revisado em <time datetime="2026-08-28">28 de agosto de 2026</time>' in html
-        assert article["dateModified"] == "2026-08-28"
+        assert f'content="{expected_date}" property="article:modified_time"' in html
+        assert f'Revisado em <time datetime="{expected_date}">{expected_label}</time>' in html
+        assert article["dateModified"] == expected_date
         assert article["wordCount"] == actual_words, (relpath, article["wordCount"], actual_words)
 
 

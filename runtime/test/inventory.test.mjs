@@ -22,7 +22,7 @@ const INVENTORY = buildFunctionInventory();
 
 test("inventory discovers every current file and every top-level handler automatically", () => {
   const inventory = INVENTORY;
-  assert.equal(inventory.file_count, 36);
+  assert.equal(inventory.file_count, 37);
   assert.equal(inventory.function_count, 14);
   assert.equal(inventory.validation.ok, true);
   assert.equal(inventory.validation.loaded_handlers, 14);
@@ -32,7 +32,12 @@ test("inventory discovers every current file and every top-level handler automat
   );
   assert.equal(
     inventory.files.filter((entry) => entry.role === "support_library").length,
-    21,
+    22,
+  );
+  assert.ok(
+    inventory.files.some((entry) =>
+      entry.path === "netlify/functions/lib/gsc-private-snapshot.cjs"
+      && entry.role === "support_library"),
   );
   assert.equal(
     inventory.files.filter((entry) => entry.role === "bundled_data").length,

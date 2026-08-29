@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-24T13:56:30.836Z",
+  "generated_at": "2026-08-29T15:53:24.665Z",
   "issue": 293,
-  "base": "http://127.0.0.1:8793",
+  "base": "http://127.0.0.1:8873",
   "site_root": "_site",
   "policy_path": "data/quality/interface-coverage-policy.json",
   "coverage": {
     "public_route_count": 261,
-    "audited_route_count": 67,
+    "audited_route_count": 69,
     "viewports": [
       {
         "id": "mobile",
@@ -25,8 +25,8 @@
         "has_touch": false
       }
     ],
-    "page_loads": 134,
-    "price_route_count": 57,
+    "page_loads": 138,
+    "price_route_count": 62,
     "capture_form_route_count": 25,
     "sampling": {
       "enabled": false,
@@ -53,6 +53,7 @@
         "route": "/atrasos-prorrogacao-obras-publicas/",
         "family": "service-pillars",
         "reasons": [
+          "price",
           "capture_form"
         ]
       },
@@ -157,6 +158,13 @@
         ]
       },
       {
+        "route": "/conteudos/atraso-na-medicao-obra-publica/",
+        "family": "measurement-delay-canary",
+        "reasons": [
+          "price"
+        ]
+      },
+      {
         "route": "/conteudos/limite-aditivo-25-50-obra-publica/",
         "family": "editorial-library",
         "reasons": [
@@ -181,6 +189,7 @@
         "route": "/defesa-margem-contratos-publicos/",
         "family": "service-pillars",
         "reasons": [
+          "price",
           "capture_form"
         ]
       },
@@ -188,6 +197,7 @@
         "route": "/defesa-tecnica-contratos-publicos/",
         "family": "service-pillars",
         "reasons": [
+          "price",
           "capture_form"
         ]
       },
@@ -303,8 +313,7 @@
         "route": "/inteligencia/valor-tipico-contratos-pavimentacao/",
         "family": "intelligence-drafts-noindex",
         "reasons": [
-          "price",
-          "capture_form"
+          "price"
         ]
       },
       {
@@ -517,9 +526,17 @@
         "reasons": [
           "price"
         ]
+      },
+      {
+        "route": "/servicos-obras-publicas/",
+        "family": "servicos-obras-publicas",
+        "reasons": [
+          "price",
+          "capture_form"
+        ]
       }
     ],
-    "not_audited_count": 194,
+    "not_audited_count": 192,
     "not_audited": [
       {
         "route": "/404.html",
@@ -649,12 +666,6 @@
       },
       {
         "route": "/conteudos/ata-reuniao-ordem-servico-obra-publica/",
-        "family": "editorial-library",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
-        "route": "/conteudos/atraso-na-medicao-obra-publica/",
         "family": "editorial-library",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
@@ -1668,12 +1679,6 @@
         "matched_by": []
       },
       {
-        "route": "/servicos-obras-publicas/",
-        "family": "servicos-obras-publicas",
-        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
-        "matched_by": []
-      },
-      {
         "route": "/termos-de-uso/",
         "family": "legal-and-trust",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
@@ -1726,6 +1731,7 @@
       "viewport": "mobile",
       "family": "service-pillars",
       "selected_by": [
+        "price",
         "capture_form"
       ],
       "counts": {
@@ -1955,6 +1961,22 @@
       "violations": []
     },
     {
+      "path": "/conteudos/atraso-na-medicao-obra-publica/",
+      "viewport": "mobile",
+      "family": "measurement-delay-canary",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
       "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
       "viewport": "mobile",
       "family": "editorial-library",
@@ -2007,6 +2029,7 @@
       "viewport": "mobile",
       "family": "service-pillars",
       "selected_by": [
+        "price",
         "capture_form"
       ],
       "counts": {
@@ -2023,6 +2046,7 @@
       "viewport": "mobile",
       "family": "service-pillars",
       "selected_by": [
+        "price",
         "capture_form"
       ],
       "counts": {
@@ -2079,23 +2103,11 @@
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
       "blocking": 0,
-      "violations": [
-        {
-          "id": "landmark-unique",
-          "impact": "moderate",
-          "description": "Ensure landmarks are unique",
-          "nodes": 1,
-          "targets": [
-            [
-              "#exemplo-base-quantitativa > .container > .deliverable-feature > .deliverable-result[aria-label=\"Síntese do exemplo\"]"
-            ]
-          ]
-        }
-      ]
+      "violations": []
     },
     {
       "path": "/ferramentas/diagnostico-defesa-margem/",
@@ -2294,8 +2306,7 @@
       "viewport": "mobile",
       "family": "intelligence-drafts-noindex",
       "selected_by": [
-        "price",
-        "capture_form"
+        "price"
       ],
       "counts": {
         "critical": 0,
@@ -2316,23 +2327,11 @@
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
       "blocking": 0,
-      "violations": [
-        {
-          "id": "landmark-unique",
-          "impact": "moderate",
-          "description": "Ensure landmarks are unique",
-          "nodes": 1,
-          "targets": [
-            [
-              "#cta-mid"
-            ]
-          ]
-        }
-      ]
+      "violations": []
     },
     {
       "path": "/nurture/",
@@ -2789,6 +2788,23 @@
       "family": "radar",
       "selected_by": [
         "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
+      "path": "/servicos-obras-publicas/",
+      "viewport": "mobile",
+      "family": "servicos-obras-publicas",
+      "selected_by": [
+        "price",
+        "capture_form"
       ],
       "counts": {
         "critical": 0,
@@ -2837,6 +2853,7 @@
       "viewport": "desktop",
       "family": "service-pillars",
       "selected_by": [
+        "price",
         "capture_form"
       ],
       "counts": {
@@ -3066,6 +3083,22 @@
       "violations": []
     },
     {
+      "path": "/conteudos/atraso-na-medicao-obra-publica/",
+      "viewport": "desktop",
+      "family": "measurement-delay-canary",
+      "selected_by": [
+        "price"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
+    },
+    {
       "path": "/conteudos/limite-aditivo-25-50-obra-publica/",
       "viewport": "desktop",
       "family": "editorial-library",
@@ -3118,6 +3151,7 @@
       "viewport": "desktop",
       "family": "service-pillars",
       "selected_by": [
+        "price",
         "capture_form"
       ],
       "counts": {
@@ -3134,6 +3168,7 @@
       "viewport": "desktop",
       "family": "service-pillars",
       "selected_by": [
+        "price",
         "capture_form"
       ],
       "counts": {
@@ -3190,23 +3225,11 @@
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
       "blocking": 0,
-      "violations": [
-        {
-          "id": "landmark-unique",
-          "impact": "moderate",
-          "description": "Ensure landmarks are unique",
-          "nodes": 1,
-          "targets": [
-            [
-              "#exemplo-base-quantitativa > .container > .deliverable-feature > .deliverable-result[aria-label=\"Síntese do exemplo\"]"
-            ]
-          ]
-        }
-      ]
+      "violations": []
     },
     {
       "path": "/ferramentas/diagnostico-defesa-margem/",
@@ -3405,8 +3428,7 @@
       "viewport": "desktop",
       "family": "intelligence-drafts-noindex",
       "selected_by": [
-        "price",
-        "capture_form"
+        "price"
       ],
       "counts": {
         "critical": 0,
@@ -3427,23 +3449,11 @@
       "counts": {
         "critical": 0,
         "serious": 0,
-        "moderate": 1,
+        "moderate": 0,
         "minor": 0
       },
       "blocking": 0,
-      "violations": [
-        {
-          "id": "landmark-unique",
-          "impact": "moderate",
-          "description": "Ensure landmarks are unique",
-          "nodes": 1,
-          "targets": [
-            [
-              "#cta-mid"
-            ]
-          ]
-        }
-      ]
+      "violations": []
     },
     {
       "path": "/nurture/",
@@ -3909,11 +3919,28 @@
       },
       "blocking": 0,
       "violations": []
+    },
+    {
+      "path": "/servicos-obras-publicas/",
+      "viewport": "desktop",
+      "family": "servicos-obras-publicas",
+      "selected_by": [
+        "price",
+        "capture_form"
+      ],
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "blocking": 0,
+      "violations": []
     }
   ],
   "critical": 0,
   "serious": 0,
-  "moderate": 4,
+  "moderate": 0,
   "minor": 0,
-  "duration_seconds": 187
+  "duration_seconds": 259
 }

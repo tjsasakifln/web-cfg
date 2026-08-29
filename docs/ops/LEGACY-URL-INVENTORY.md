@@ -19,7 +19,8 @@ Redirects: `_redirects`
 | `/avcb`, `/avcbclcb`, `/vision`, `/nexgen` | 410 | `/404.html` |
 | `/contato`, `/servicos` | 301 | âncoras da home |
 | `/sobre` | 301 | `/especialista/tiago-jun-sasaki/` |
-| `/conteudos/limite-aditivo-25-50-obra-publica/` | 301! | `/lei-14133-obras/limite-25-50-aditivo-obra/` |
+| `/lei-14133-obras/limite-25-50-aditivo-obra/` | 301! | `/conteudos/limite-aditivo-25-50-obra-publica/` |
+| `/conteudos/limite-aditivo-25-50-obra-publica/` | manter | self-canonical owner da consulta geral 25%/50% |
 | `/conteudos/desconto-da-proposta-em-item-novo-aditivo/` | 301! | `/lei-14133-obras/preco-item-novo-desconto-proposta/` |
 
 ## Sinais GSC residuais

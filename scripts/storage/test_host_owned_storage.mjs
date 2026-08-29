@@ -26,6 +26,7 @@ const { FileOfferStore } = require("../offers/stores/sandbox-store.cjs");
 const { createCommercialStore } = require("../../netlify/functions/lib/commercial-event.cjs");
 const { createObservationStore } = require("../../netlify/functions/lib/search-observation.cjs");
 const { resolveStorageConfig } = require("../../netlify/functions/lib/storage-config.cjs");
+const ops = require("../../netlify/functions/ops.cjs");
 const {
   buildMigrationBundle,
   importMigrationBundle,
@@ -80,6 +81,84 @@ if (process.argv[2] === "--worker-read") {
 
 const cleanup = [];
 try {
+  // A read-only readiness call against a provisioned-but-empty host root must
+  // observe it without creating the layout, namespaces, locks or probe files.
+  const untouchedRoot = privateDir("confenge-read-only-empty-");
+  cleanup.push(untouchedRoot);
+  const untouchedBefore = fs.readdirSync(untouchedRoot);
+  const untouchedReady = storageReadiness({
+    NODE_ENV: "production",
+    CONFENGE_STORAGE_BACKEND: "filesystem",
+    CONFENGE_STORAGE_DIR: untouchedRoot,
+  }, { writeProbe: false });
+  assert(untouchedReady.ok, "empty provisioned root is not read-only ready", untouchedReady);
+  assert(
+    JSON.stringify(fs.readdirSync(untouchedRoot)) === JSON.stringify(untouchedBefore),
+    "read-only readiness created storage state",
+    fs.readdirSync(untouchedRoot),
+  );
+
+  const initializedEmptyRoot = privateDir("confenge-read-only-layout-");
+  cleanup.push(initializedEmptyRoot);
+  const initializedLayout = path.join(initializedEmptyRoot, "v1");
+  fs.mkdirSync(initializedLayout, { mode: 0o700 });
+  const initializedBefore = fs.readdirSync(initializedLayout);
+  const initializedReady = storageReadiness({
+    NODE_ENV: "production",
+    CONFENGE_STORAGE_BACKEND: "filesystem",
+    CONFENGE_STORAGE_DIR: initializedEmptyRoot,
+  }, { writeProbe: false });
+  assert(initializedReady.ok, "initialized empty root is not read-only ready", initializedReady);
+  assert(
+    JSON.stringify(fs.readdirSync(initializedLayout)) === JSON.stringify(initializedBefore),
+    "read-only readiness created namespaces",
+    fs.readdirSync(initializedLayout),
+  );
+
+  // The scheduled consumer calls this authenticated GET. Opening the actual
+  // ops store for that route must be just as non-mutating as readiness itself.
+  const readOnlyOpsRoot = privateDir("confenge-read-only-ops-");
+  cleanup.push(readOnlyOpsRoot);
+  const envKeys = [
+    "NODE_ENV", "CONFENGE_STORAGE_BACKEND", "CONFENGE_STORAGE_DIR",
+    "LEAD_REQUIRE_ORIGIN", "LEAD_REQUIRE_TURNSTILE", "TURNSTILE_SECRET_KEY",
+    "IP_HASH_SALT", "OPS_TOKEN", "LEAD_STORE", "LEAD_STORE_DIR",
+  ];
+  const savedEnv = Object.fromEntries(envKeys.map((key) => [key, process.env[key]]));
+  Object.assign(process.env, {
+    NODE_ENV: "production",
+    CONFENGE_STORAGE_BACKEND: "filesystem",
+    CONFENGE_STORAGE_DIR: readOnlyOpsRoot,
+    LEAD_REQUIRE_ORIGIN: "1",
+    LEAD_REQUIRE_TURNSTILE: "1",
+    TURNSTILE_SECRET_KEY: "test-turnstile-secret-123456",
+    IP_HASH_SALT: "test-private-ip-hash-salt-32-characters",
+    OPS_TOKEN: "test-ops-token-at-least-16-chars",
+  });
+  delete process.env.LEAD_STORE;
+  delete process.env.LEAD_STORE_DIR;
+  try {
+    const beforeOpsGet = fs.readdirSync(readOnlyOpsRoot);
+    const response = await ops.handler({
+      httpMethod: "GET",
+      headers: { authorization: "Bearer test-ops-token-at-least-16-chars" },
+      queryStringParameters: { action: "gsc_insights" },
+      rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights",
+    });
+    const body = JSON.parse(response.body);
+    assert(response.statusCode === 200 && body.status === "UNKNOWN", "empty GSC consumer did not fail closed", body);
+    assert(
+      JSON.stringify(fs.readdirSync(readOnlyOpsRoot)) === JSON.stringify(beforeOpsGet),
+      "authenticated GSC GET initialized storage",
+      fs.readdirSync(readOnlyOpsRoot),
+    );
+  } finally {
+    for (const [key, value] of Object.entries(savedEnv)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+
   // CRUD/list/system/idempotency, modes and restart durability.
   const storeRoot = privateDir("confenge-host-store-");
   cleanup.push(storeRoot);

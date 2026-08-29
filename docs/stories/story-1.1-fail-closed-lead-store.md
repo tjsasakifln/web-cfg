@@ -1,5 +1,11 @@
 # Story 1.1 — Fail-closed lead store + CI production profile
 
+> **Historical Netlify-era record (2026-08-05):** preserve the acceptance
+> evidence below as written; do not execute its deployment/storage directions.
+> Current production uses the host-owned filesystem at `/var/lib/confenge-web`
+> under [`RUNTIME-AUTHORITY.md`](../architecture/RUNTIME-AUTHORITY.md). Netlify
+> Blobs is not production storage or rollback.
+
 **Epic:** EPIC-TD-001  
 **Status:** Done  
 **Priority:** P0  
@@ -113,4 +119,3 @@ Prevents silent lead loss and dishonest HTTP 200s when Blobs/store is misconfigu
 **Reviewer:** Quinn (@qa)  
 **Date:** 2026-08-05  
 **Notes:** Automated gates for story ACs green; no HIGH/CRITICAL open. Production Playwright optional evidence in composite scorecard.
-

@@ -127,7 +127,7 @@ function keyLooksPii(key) {
   const k = String(key || "").toLowerCase();
   if (PII_KEYS.has(k)) return true;
   if (AGGREGATE_PII_ALLOWLIST.includes(k)) return false;
-  return /email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|cnpj|document/.test(k);
+  return /email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|cnpj|document|valor|causa|observacao|qid/.test(k);
 }
 
 function minimizeProps(props) {
