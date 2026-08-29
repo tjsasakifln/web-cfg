@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 WORKFLOW = ROOT / ".github" / "workflows" / "netcup-release.yml"
 SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
+PSEO = ROOT / ".github" / "workflows" / "pseo.yml"
 README = ROOT / "deploy" / "netcup" / "README.md"
 NGINX = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-origin.conf"
 NGINX_HTTP = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-http.conf"
@@ -17,6 +18,8 @@ def test_release_reuses_site_ci_and_never_rebuilds() -> None:
     assert "uses: ./.github/workflows/site-ci.yml" in text
     assert "uses: ./.github/workflows/pseo.yml" in text
     assert "needs: [gates, pseo_gates]" in text
+    pseo = PSEO.read_text(encoding="utf-8")
+    assert "workflow_call:" in pseo.split("jobs:", 1)[0]
     assert "export_public_artifact: true" in text
     site_ci = SITE_CI.read_text(encoding="utf-8")
     assert "name: site-ci-public-${{ github.sha }}" in site_ci
