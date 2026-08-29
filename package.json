@@ -240,6 +240,7 @@
     "organic:sitemap-audit": "python3 -m scripts.organic sitemap-audit",
     "organic:demand-engine": "python3 -m scripts.organic demand-engine",
     "organic:test": "python3 -m pytest scripts/organic/tests -q",
+    "test:cluster-medicao-published": "python3 -m scripts.organic.cluster_medicao_originality --root _site --require-artifact",
     "scrub:em-dashes": "python3 scripts/site/scrub_em_dashes.py --write",
     "scrub:em-dashes:check": "python3 scripts/site/scrub_em_dashes.py --check",
     "test:public-offer-truth": "node tests/commercial/test_public_offer_truth.mjs",
