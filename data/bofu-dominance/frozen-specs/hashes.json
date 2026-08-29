@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "f9ceff5a440d25f9a0d126b35b313cf10c115e45",
+  "baseline_commit": "410ce3107ea234d2ad769ae81bb45b7975a5e5ba",
   "recaptured_at": "2026-08-29",
-  "recapture_reason": "TRUST 10/10 permissioned-proof infrastructure: reviewed non-rendering sitemap recapture against implementation commit f9ceff5a440d25f9a0d126b35b313cf10c115e45. The canonical sitemap adds the new /confianca/ trust-policy route and refreshes lastmod only for /casos/ and /entregas/, whose copy now labels synthetic examples and reports zero authorized customer results honestly. sitemap.txt mirrors the one added canonical URL and sitemap-index.xml advances only the canonical sitemap lastmod. All six protected pillar HTML files, shared rendering assets, redirects, robots, canonical ownership and existing URL membership are byte-identical to the previous baseline; html_mutation remains false and the #291 unlock plan is untouched. Rollback is the normal protected-main revert of this goal, removing /confianca/ from the sitemap and restoring the three reviewed sitemap files together.",
+  "recapture_reason": "TRUST 10/10 permissioned-proof infrastructure: reviewed non-rendering sitemap recapture against rebased implementation commit 410ce3107ea234d2ad769ae81bb45b7975a5e5ba. The canonical sitemap adds the new /confianca/ trust-policy route and refreshes lastmod only for /casos/ and /entregas/, whose copy now labels synthetic examples and reports zero authorized customer results honestly. sitemap.txt mirrors the one added canonical URL and sitemap-index.xml advances only the canonical sitemap lastmod. All six protected pillar HTML files, shared rendering assets, redirects, robots, canonical ownership and existing URL membership are byte-identical to the previous baseline; html_mutation remains false and the #291 unlock plan is untouched. Rollback is the normal protected-main revert of this goal, removing /confianca/ from the sitemap and restoring the three reviewed sitemap files together.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
