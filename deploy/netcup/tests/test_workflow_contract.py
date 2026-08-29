@@ -137,6 +137,9 @@ def test_runbook_contains_secret_commands_and_operational_evidence() -> None:
         assert f"gh secret set {name}" in text
     assert "gh variable set NETCUP_DEPLOY_PORT" in text
     assert "Every successful push to `main`" in text
+    assert "groupadd --system confenge-web" in text
+    assert "--gid confenge-web" in text
+    assert "-g confenge-deploy" not in text
     for command in (
         "stage-release <FULL_SHA>",
         "verify-release <FULL_SHA>",

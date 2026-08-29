@@ -82,13 +82,13 @@ the root-owned control scripts:
 sudo groupadd --system confenge-web
 sudo useradd --system --gid confenge-web --home-dir /opt/confenge-web \
   --create-home --shell /bin/bash confenge-deploy
-sudo install -d -o confenge-deploy -g confenge-deploy -m 0750 \
+sudo install -d -o confenge-deploy -g confenge-web -m 0750 \
   /opt/confenge-web /opt/confenge-web/incoming /opt/confenge-web/releases \
   /opt/confenge-web/locks /opt/confenge-web/evidence \
   /opt/confenge-web/state /opt/confenge-web/shared
 sudo install -d -o root -g root -m 0755 /opt/confenge-web/bin /opt/confenge-web/lib
-sudo install -d -o confenge-deploy -g confenge-deploy -m 0700 /var/lib/confenge-web
-sudo install -d -o root -g confenge-deploy -m 0750 /etc/confenge-web
+sudo install -d -o confenge-deploy -g confenge-web -m 0700 /var/lib/confenge-web
+sudo install -d -o root -g confenge-web -m 0750 /etc/confenge-web
 sudo install -d -o confenge-deploy -g confenge-web -m 0700 /opt/confenge-web/.ssh
 sudo install -o confenge-deploy -g confenge-web -m 0600 \
   /secure/confenge/netcup-deploy-key.pub /opt/confenge-web/.ssh/authorized_keys
@@ -103,7 +103,7 @@ sudo install -o root -g root -m 0644 deploy/netcup/lib/release_control.py /opt/c
 sudo install -o root -g root -m 0644 deploy/netcup/lib/runtime_launcher.py /opt/confenge-web/lib/runtime_launcher.py
 sudo install -o root -g root -m 0644 deploy/netcup/lib/schedule_gate.py /opt/confenge-web/lib/schedule_gate.py
 sudo install -o root -g root -m 0644 deploy/netcup/runtime/confenge-web-runtime.service /etc/systemd/system/confenge-web-runtime.service
-sudo install -o root -g confenge-deploy -m 0640 /secure/confenge/netcup-runtime.env /etc/confenge-web/runtime.env
+sudo install -o root -g confenge-web -m 0640 /secure/confenge/netcup-runtime.env /etc/confenge-web/runtime.env
 sudo systemctl daemon-reload
 sudo systemctl enable confenge-web-runtime.service
 ```
