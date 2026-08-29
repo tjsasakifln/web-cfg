@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 WORKFLOW = ROOT / ".github" / "workflows" / "netcup-release.yml"
 SITE_CI = ROOT / ".github" / "workflows" / "site-ci.yml"
+PSEO = ROOT / ".github" / "workflows" / "pseo.yml"
 README = ROOT / "deploy" / "netcup" / "README.md"
 NGINX = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-origin.conf"
 NGINX_HTTP = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-http.conf"
@@ -15,6 +16,10 @@ SCHEDULE = ROOT / "deploy" / "netcup" / "schedules" / "schedule-contract.json"
 def test_release_reuses_site_ci_and_never_rebuilds() -> None:
     text = WORKFLOW.read_text(encoding="utf-8")
     assert "uses: ./.github/workflows/site-ci.yml" in text
+    assert "uses: ./.github/workflows/pseo.yml" in text
+    assert "needs: [gates, pseo_gates]" in text
+    pseo = PSEO.read_text(encoding="utf-8")
+    assert "workflow_call:" in pseo.split("jobs:", 1)[0]
     assert "export_public_artifact: true" in text
     site_ci = SITE_CI.read_text(encoding="utf-8")
     assert "name: site-ci-public-${{ github.sha }}" in site_ci
@@ -26,17 +31,23 @@ def test_release_reuses_site_ci_and_never_rebuilds() -> None:
     assert "git diff --quiet" in text and "git diff --cached --quiet" in text
 
 
-def test_release_is_manual_main_only_and_serialized() -> None:
+def test_release_tracks_main_automatically_and_manual_dispatch_is_sha_pinned() -> None:
     text = WORKFLOW.read_text(encoding="utf-8")
     on_block = text.split("permissions:", 1)[0]
+    assert re.search(r"(?m)^  push:\n    branches:\n      - main$", on_block)
     assert "workflow_dispatch:" in on_block
-    assert not re.search(r"(?m)^  push:", on_block)
+    assert "expected_sha:" in on_block
+    assert "required: true" in on_block
     assert '"refs/heads/main"' in text
-    assert "group: netcup-release-${{ github.repository }}" in text
+    assert '"$EXPECTED_SHA" != "$RELEASE_SHA"' in text
+    assert "github.event_name == 'push'" in text
+    assert "github.event_name == 'push' && 'automatic' || 'manual'" in text
     assert "cancel-in-progress: false" in text
     assert "environment: netcup-production" in text
     assert "CONFENGE_NETCUP_CUTOVER_APPROVED" in text
     assert "package_only" in text and "stage_verify" in text and "promote" in text
+    assert 'gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main"' in text
+    assert '"$current_main_sha" != "$RELEASE_SHA"' in text
 
 
 def test_ssh_is_fail_closed_and_known_hosts_is_pinned() -> None:
@@ -48,6 +59,9 @@ def test_ssh_is_fail_closed_and_known_hosts_is_pinned() -> None:
         "NETCUP_SSH_KNOWN_HOSTS",
     ):
         assert f"secrets.{name}" in text
+    assert "vars.NETCUP_DEPLOY_PORT" in text
+    assert 'known_host="[$NETCUP_DEPLOY_HOST]:$NETCUP_DEPLOY_PORT"' in text
+    assert '-p "$NETCUP_DEPLOY_PORT"' in text
     assert "StrictHostKeyChecking=yes" in text
     assert "StrictHostKeyChecking=no" not in text
     assert "ssh-keygen -F" in text
@@ -121,6 +135,11 @@ def test_runbook_contains_secret_commands_and_operational_evidence() -> None:
         "NETCUP_SSH_KNOWN_HOSTS",
     ):
         assert f"gh secret set {name}" in text
+    assert "gh variable set NETCUP_DEPLOY_PORT" in text
+    assert "Every successful push to `main`" in text
+    assert "groupadd --system confenge-web" in text
+    assert "--gid confenge-web" in text
+    assert "-g confenge-deploy" not in text
     for command in (
         "stage-release <FULL_SHA>",
         "verify-release <FULL_SHA>",

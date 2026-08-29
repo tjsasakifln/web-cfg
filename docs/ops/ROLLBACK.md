@@ -73,15 +73,19 @@ main
   -> evidência append-only em /opt/confenge-web/evidence/deploy.ndjson
 ```
 
-Dispatch (não executado por esta documentação; produção já responde neste host):
+Cada push em `main` executa automaticamente a cadeia completa até a promoção.
+Dispatch manual é apenas o caminho de diagnóstico/recuperação e exige o SHA
+exato observado antes do disparo:
 
 ```bash
-gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=package_only
-gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=stage_verify
-gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=promote
+sha=$(gh api repos/tjsasakifln/web-cfg/git/ref/heads/main --jq .object.sha)
+gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=package_only -f expected_sha="$sha"
+gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=stage_verify -f expected_sha="$sha"
+gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=promote -f expected_sha="$sha"
 ```
 
-`promote` continua atrás do ambiente GitHub `netcup-production` e da variável
+Promoção automática e manual continuam atrás do ambiente GitHub
+`netcup-production` e da variável
 `NETCUP_CUTOVER_AUTHORIZED=CONFENGE_NETCUP_CUTOVER_APPROVED`. Esta documentação
 não cria essa variável e não dispara o workflow.
 
@@ -203,5 +207,6 @@ qualquer passo exigir edição de DNS/nginx manual.
 
 - Rollback de release não reverte o EnvironmentFile.
 - Rollback de release não apaga nem restaura leads; isso é o store host-owned.
-- O workflow `netcup-release.yml` não altera DNS e não instala timers.
+- O workflow `netcup-release.yml` sincroniza pushes de `main`, não altera DNS e
+  não instala timers.
 - `confenge.netlify.app` é leftover; 301 para o canônico não o torna produção.

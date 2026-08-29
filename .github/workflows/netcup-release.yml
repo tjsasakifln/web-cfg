@@ -1,6 +1,9 @@
 name: netcup-release
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       operation:
@@ -12,24 +15,30 @@ on:
           - package_only
           - stage_verify
           - promote
+      expected_sha:
+        description: Full main SHA observed by the operator before dispatch
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: netcup-release-${{ github.repository }}
+  group: netcup-release-${{ github.repository }}-${{ github.event_name == 'push' && 'automatic' || 'manual' }}
   cancel-in-progress: false
 
 jobs:
   preflight:
-    name: main-only release preflight
+    name: exact main release preflight
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
       - name: Require canonical main SHA
         env:
+          RELEASE_EVENT: ${{ github.event_name }}
           RELEASE_REF: ${{ github.ref }}
           RELEASE_SHA: ${{ github.sha }}
+          EXPECTED_SHA: ${{ inputs.expected_sha || '' }}
         run: |
           set -euo pipefail
           if [ "$RELEASE_REF" != "refs/heads/main" ]; then
@@ -38,6 +47,19 @@ jobs:
           fi
           if ! [[ "$RELEASE_SHA" =~ ^[0-9a-f]{40}$ ]]; then
             echo "NETCUP_RELEASE_BLOCKED: GitHub did not provide a full commit SHA" >&2
+            exit 1
+          fi
+          if [ "$RELEASE_EVENT" = "workflow_dispatch" ]; then
+            if ! [[ "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "NETCUP_RELEASE_BLOCKED: manual dispatch requires the full expected main SHA" >&2
+              exit 1
+            fi
+            if [ "$EXPECTED_SHA" != "$RELEASE_SHA" ]; then
+              echo "NETCUP_RELEASE_BLOCKED: expected SHA no longer matches main" >&2
+              exit 1
+            fi
+          elif [ "$RELEASE_EVENT" != "push" ]; then
+            echo "NETCUP_RELEASE_BLOCKED: unsupported release event" >&2
             exit 1
           fi
 
@@ -50,9 +72,16 @@ jobs:
     permissions:
       contents: read
 
+  pseo_gates:
+    name: exact SHA through pSEO
+    needs: preflight
+    uses: ./.github/workflows/pseo.yml
+    permissions:
+      contents: read
+
   package:
     name: immutable release package and attestation
-    needs: gates
+    needs: [gates, pseo_gates]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -123,7 +152,7 @@ jobs:
 
   stage:
     name: Netcup stage and host-local verify
-    if: inputs.operation == 'stage_verify' || inputs.operation == 'promote'
+    if: github.event_name == 'push' || inputs.operation == 'stage_verify' || inputs.operation == 'promote'
     needs: package
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -139,46 +168,42 @@ jobs:
       - name: Require pinned SSH inputs
         env:
           NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
           NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
           NETCUP_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
           NETCUP_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
-          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
         run: |
           set -euo pipefail
-          if [ -z "$NETCUP_DEPLOY_HOST" ] || [ -z "$NETCUP_DEPLOY_USER" ] || \
+          if [ -z "$NETCUP_DEPLOY_HOST" ] || [ -z "$NETCUP_DEPLOY_PORT" ] || \
+             [ -z "$NETCUP_DEPLOY_USER" ] || \
              [ -z "$NETCUP_SSH_PRIVATE_KEY" ] || [ -z "$NETCUP_SSH_KNOWN_HOSTS" ]; then
-            echo "NETCUP_RELEASE_BLOCKED: configure all four NETCUP SSH secrets; no fallback is allowed" >&2
+            echo "NETCUP_RELEASE_BLOCKED: configure the SSH host, port, user, key and pinned host keys; no fallback is allowed" >&2
             exit 1
           fi
           if ! [[ "$NETCUP_DEPLOY_HOST" =~ ^[A-Za-z0-9.:-]+$ ]] || \
-             ! [[ "$NETCUP_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]; then
-            echo "NETCUP_RELEASE_BLOCKED: invalid SSH host/user shape" >&2
+             ! [[ "$NETCUP_DEPLOY_PORT" =~ ^[1-9][0-9]{0,4}$ ]] || \
+             ! [[ "$NETCUP_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]] || \
+             (( NETCUP_DEPLOY_PORT > 65535 )); then
+            echo "NETCUP_RELEASE_BLOCKED: invalid SSH host/port/user shape" >&2
             exit 1
           fi
-          NETCUP_DEPLOY_PORT="${NETCUP_DEPLOY_PORT:-22}"
-          if ! [[ "$NETCUP_DEPLOY_PORT" =~ ^[0-9]{1,5}$ ]] || \
-             [ "$NETCUP_DEPLOY_PORT" -lt 1 ] || [ "$NETCUP_DEPLOY_PORT" -gt 65535 ]; then
-            echo "NETCUP_RELEASE_BLOCKED: invalid SSH port shape" >&2
-            exit 1
-          fi
-          echo "NETCUP_DEPLOY_PORT=$NETCUP_DEPLOY_PORT" >> "$GITHUB_ENV"
           install -d -m 0700 "$RUNNER_TEMP/netcup-ssh"
           printf '%s\n' "$NETCUP_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/netcup-ssh/id_ed25519"
           printf '%s\n' "$NETCUP_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/netcup-ssh/known_hosts"
           chmod 0600 "$RUNNER_TEMP/netcup-ssh/id_ed25519" "$RUNNER_TEMP/netcup-ssh/known_hosts"
-          host_key_id="$NETCUP_DEPLOY_HOST"
+          known_host="$NETCUP_DEPLOY_HOST"
           if [ "$NETCUP_DEPLOY_PORT" != "22" ]; then
-            host_key_id="[$NETCUP_DEPLOY_HOST]:$NETCUP_DEPLOY_PORT"
+            known_host="[$NETCUP_DEPLOY_HOST]:$NETCUP_DEPLOY_PORT"
           fi
-          ssh-keygen -F "$host_key_id" -f "$RUNNER_TEMP/netcup-ssh/known_hosts" >/dev/null || {
-            echo "NETCUP_RELEASE_BLOCKED: pinned known_hosts has no entry for $host_key_id" >&2
+          ssh-keygen -F "$known_host" -f "$RUNNER_TEMP/netcup-ssh/known_hosts" >/dev/null || {
+            echo "NETCUP_RELEASE_BLOCKED: pinned known_hosts has no entry for NETCUP_DEPLOY_HOST:NETCUP_DEPLOY_PORT" >&2
             exit 1
           }
       - name: Upload, stage, and verify without changing current
         env:
           NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
-          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
           NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
           RELEASE_SHA: ${{ github.sha }}
           CI_RUN_ID: ${{ github.run_id }}
           CI_RUN_ATTEMPT: ${{ github.run_attempt }}
@@ -189,22 +214,22 @@ jobs:
             -o IdentitiesOnly=yes
             -o StrictHostKeyChecking=yes
             -o "UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts"
+            -p "$NETCUP_DEPLOY_PORT"
             -i "$RUNNER_TEMP/netcup-ssh/id_ed25519"
-            -p "${NETCUP_DEPLOY_PORT:-22}"
           )
           target="$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST"
           upload="/opt/confenge-web/incoming/.upload-$RELEASE_SHA-$CI_RUN_ID-$CI_RUN_ATTEMPT"
           ssh "${ssh_options[@]}" "$target" "install -d -m 0750 '$upload'"
           rsync -a --delay-updates --chmod=F640,D750 \
-            -e "ssh -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts -i $RUNNER_TEMP/netcup-ssh/id_ed25519 -p ${NETCUP_DEPLOY_PORT:-22}" \
+            -e "ssh -p $NETCUP_DEPLOY_PORT -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts -i $RUNNER_TEMP/netcup-ssh/id_ed25519" \
             "dist/netcup/$RELEASE_SHA/" "$target:$upload/"
           ssh "${ssh_options[@]}" "$target" \
             "/opt/confenge-web/bin/stage-release '$RELEASE_SHA' --upload-dir '$upload'"
           ssh "${ssh_options[@]}" "$target" "/opt/confenge-web/bin/verify-release '$RELEASE_SHA'"
 
   promote:
-    name: Manual cutover-gated atomic promote
-    if: inputs.operation == 'promote'
+    name: Authorized atomic promote
+    if: github.event_name == 'push' || inputs.operation == 'promote'
     needs: stage
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -224,56 +249,60 @@ jobs:
       - name: Require pinned SSH inputs
         env:
           NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
+          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
           NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
           NETCUP_SSH_PRIVATE_KEY: ${{ secrets.NETCUP_SSH_PRIVATE_KEY }}
           NETCUP_SSH_KNOWN_HOSTS: ${{ secrets.NETCUP_SSH_KNOWN_HOSTS }}
-          NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
         run: |
           set -euo pipefail
-          if [ -z "$NETCUP_DEPLOY_HOST" ] || [ -z "$NETCUP_DEPLOY_USER" ] || \
+          if [ -z "$NETCUP_DEPLOY_HOST" ] || [ -z "$NETCUP_DEPLOY_PORT" ] || \
+             [ -z "$NETCUP_DEPLOY_USER" ] || \
              [ -z "$NETCUP_SSH_PRIVATE_KEY" ] || [ -z "$NETCUP_SSH_KNOWN_HOSTS" ]; then
             echo "NETCUP_PROMOTE_BLOCKED: production environment SSH secrets are incomplete" >&2
             exit 1
           fi
           if ! [[ "$NETCUP_DEPLOY_HOST" =~ ^[A-Za-z0-9.:-]+$ ]] || \
-             ! [[ "$NETCUP_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]; then
-            echo "NETCUP_PROMOTE_BLOCKED: invalid SSH host/user shape" >&2
+             ! [[ "$NETCUP_DEPLOY_PORT" =~ ^[1-9][0-9]{0,4}$ ]] || \
+             ! [[ "$NETCUP_DEPLOY_USER" =~ ^[a-z_][a-z0-9_-]*$ ]] || \
+             (( NETCUP_DEPLOY_PORT > 65535 )); then
+            echo "NETCUP_PROMOTE_BLOCKED: invalid SSH host/port/user shape" >&2
             exit 1
           fi
-          NETCUP_DEPLOY_PORT="${NETCUP_DEPLOY_PORT:-22}"
-          if ! [[ "$NETCUP_DEPLOY_PORT" =~ ^[0-9]{1,5}$ ]] || \
-             [ "$NETCUP_DEPLOY_PORT" -lt 1 ] || [ "$NETCUP_DEPLOY_PORT" -gt 65535 ]; then
-            echo "NETCUP_PROMOTE_BLOCKED: invalid SSH port shape" >&2
-            exit 1
-          fi
-          echo "NETCUP_DEPLOY_PORT=$NETCUP_DEPLOY_PORT" >> "$GITHUB_ENV"
           install -d -m 0700 "$RUNNER_TEMP/netcup-ssh"
           printf '%s\n' "$NETCUP_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/netcup-ssh/id_ed25519"
           printf '%s\n' "$NETCUP_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/netcup-ssh/known_hosts"
           chmod 0600 "$RUNNER_TEMP/netcup-ssh/id_ed25519" "$RUNNER_TEMP/netcup-ssh/known_hosts"
-          host_key_id="$NETCUP_DEPLOY_HOST"
+          known_host="$NETCUP_DEPLOY_HOST"
           if [ "$NETCUP_DEPLOY_PORT" != "22" ]; then
-            host_key_id="[$NETCUP_DEPLOY_HOST]:$NETCUP_DEPLOY_PORT"
+            known_host="[$NETCUP_DEPLOY_HOST]:$NETCUP_DEPLOY_PORT"
           fi
-          ssh-keygen -F "$host_key_id" -f "$RUNNER_TEMP/netcup-ssh/known_hosts" >/dev/null || {
-            echo "NETCUP_PROMOTE_BLOCKED: pinned known_hosts has no entry for $host_key_id" >&2
+          ssh-keygen -F "$known_host" -f "$RUNNER_TEMP/netcup-ssh/known_hosts" >/dev/null || {
+            echo "NETCUP_PROMOTE_BLOCKED: pinned known_hosts has no entry for NETCUP_DEPLOY_HOST:NETCUP_DEPLOY_PORT" >&2
             exit 1
           }
       - name: Atomic promote and live identity confirmation
         env:
+          GH_TOKEN: ${{ github.token }}
           NETCUP_DEPLOY_HOST: ${{ secrets.NETCUP_DEPLOY_HOST }}
-          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
           NETCUP_DEPLOY_PORT: ${{ vars.NETCUP_DEPLOY_PORT }}
+          NETCUP_DEPLOY_USER: ${{ secrets.NETCUP_DEPLOY_USER }}
           RELEASE_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
+          current_main_sha="$(
+            gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha
+          )"
+          if [ "$current_main_sha" != "$RELEASE_SHA" ]; then
+            echo "NETCUP_PROMOTE_BLOCKED: release SHA is no longer the tip of main" >&2
+            exit 1
+          fi
           ssh_options=(
             -o BatchMode=yes
             -o IdentitiesOnly=yes
             -o StrictHostKeyChecking=yes
             -o "UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts"
+            -p "$NETCUP_DEPLOY_PORT"
             -i "$RUNNER_TEMP/netcup-ssh/id_ed25519"
-            -p "${NETCUP_DEPLOY_PORT:-22}"
           )
           target="$NETCUP_DEPLOY_USER@$NETCUP_DEPLOY_HOST"
           ssh "${ssh_options[@]}" "$target" \
