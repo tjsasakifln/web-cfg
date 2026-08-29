@@ -20,7 +20,8 @@
  *   POST weekly_email        (real-only)
  *   GET  gsc_history         (auth required, versioned/hash-verified)
  *   GET  gsc_insights        (auth required)
- *   POST gsc_insights_ingest { history, insights? } (redacted, durable, auth required)
+ *   POST gsc_insights_ingest { producer, history, insights? } (redacted, durable, auth required)
+ *   POST gsc_insights_rollback { snapshot_sha256, reason } (exact version, auth required)
  *   POST backfill_record_kind { dry_run?, apply_ids? }
  *   POST rollback_record_kind { snapshot_id }
  *   GET  inbound_handoff
@@ -32,8 +33,6 @@
  *   POST drain_search_observation
  */
 const crypto = require("crypto");
-const fs = require("fs");
-const path = require("path");
 const { corsHeaders, clientIp, safeLog } = require("./lib/lead-core.cjs");
 const { createStore } = require("./lib/lead-store.cjs");
 const {
@@ -62,6 +61,12 @@ const {
 const { aggregateEvents, attributeLeads, summarizeMoneyAssetLoop } = require("./lib/analytics-agg.cjs");
 const { deliverResendEmail } = require("./lib/lead-delivery.cjs");
 const { validateHistoryState } = require("./lib/gsc-history.cjs");
+const {
+  persistPrivateGscSnapshot,
+  readPrivateGscHistory,
+  readPrivateGscSnapshot,
+  rollbackPrivateGscSnapshot,
+} = require("./lib/gsc-private-snapshot.cjs");
 const {
   drainPendingHandoffs,
   resolveInboundConfig,
@@ -99,25 +104,6 @@ function opsRateLimit(event, { limit = 120, windowMs = 60_000 } = {}) {
   return { ok: true };
 }
 
-function loadGscInsights() {
-  const candidates = [
-    path.join(__dirname, "data", "gsc-insights.json"),
-    path.join(process.cwd(), "data", "ops", "gsc-insights.json"),
-    path.join(process.cwd(), "netlify", "functions", "data", "gsc-insights.json"),
-  ];
-  for (const p of candidates) {
-    try {
-      if (fs.existsSync(p)) {
-        const raw = fs.readFileSync(p, "utf8");
-        return { ok: true, path: p, data: JSON.parse(raw) };
-      }
-    } catch (err) {
-      return { ok: false, error: "gsc_read_failed", detail: String(err.message || err).slice(0, 80) };
-    }
-  }
-  return { ok: false, error: "gsc_insights_missing" };
-}
-
 const SAFE_GSC_QUERY_KEYS = new Set([
   "query_class",
   "query_count",
@@ -145,6 +131,10 @@ function isSensitiveGscKey(key) {
 function isSensitiveGscValue(value) {
   if (typeof value !== "string") return false;
   if (/^(?:sha256:)?[a-f0-9]{16,64}$/i.test(value)) return false;
+  if (
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/.test(value) &&
+    Number.isFinite(Date.parse(value))
+  ) return false;
   if (/^(?:https?:\/\/|\/)[^\s]*[?#]/i.test(value)) return true;
   return /\b[^\s@]+@[^\s@]+\.[^\s@]+\b/.test(value) ||
     /(?:\+?\d[\s().-]*){10,15}/.test(value) ||
@@ -170,10 +160,6 @@ function sanitizeGscForOps(data) {
 }
 
 const GSC_INSIGHTS_STATE_ID = "gsc-insights-latest-v1";
-
-function gscInsightsHash(data) {
-  return crypto.createHash("sha256").update(JSON.stringify(data)).digest("hex");
-}
 
 function findSensitiveGscData(data) {
   let badKey = null;
@@ -208,6 +194,8 @@ function validateGscInsights(data, { now = Date.now(), allowStale = false } = {}
     data.source !== "search_analytics_api" ||
     data.ready_for_product_decisions !== true ||
     data.synthetic !== false ||
+    data.fixture !== false ||
+    data.live_baseline_invented !== false ||
     data.query_text_redacted !== true ||
     data.raw_query_rows_in_git !== false
   ) {
@@ -439,33 +427,44 @@ exports.handler = async (event) => {
   }
 
   bindBlobs(event);
-  const store = await createStore(event);
+  const gscReadOnly = event.httpMethod === "GET" && ["gsc_history", "gsc_insights"].includes(action);
+  const store = await createStore({ event, readOnly: gscReadOnly });
 
   if (action === "gsc_history" && event.httpMethod === "GET") {
     if (!store || typeof store.getSystemRecord !== "function") {
       return json(503, { ok: false, error: "gsc_history_store_unavailable" }, origin);
     }
-    const current = await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
-    if (!current?.history) {
-      return json(404, { ok: false, error: "gsc_history_empty" }, origin);
-    }
-    const validation = validateHistoryState(current.history);
-    const sensitive = findSensitiveGscData(current.history);
-    if (!validation.ok || sensitive.badKey || sensitive.sensitiveValue) {
-      return json(409, { ok: false, error: validation.error || "gsc_history_sensitive_field" }, origin);
-    }
-    return json(
-      200,
-      {
+    const current = await readPrivateGscHistory(store);
+    if (!current.ok) {
+      // One-way bootstrap compatibility: an old unversioned state may seed the
+      // next producer run, but it can never satisfy the CURRENT consumer gate.
+      const legacy = await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
+      if (!legacy?.history) {
+        const missing = current.error === "gsc_private_pointer_missing";
+        return json(missing ? 404 : 409, {
+          ok: false,
+          status: "UNKNOWN",
+          error: missing ? "gsc_history_empty" : current.error,
+        }, origin);
+      }
+      const validation = validateHistoryState(legacy.history);
+      const sensitive = findSensitiveGscData(legacy.history);
+      if (!validation.ok || sensitive.badKey || sensitive.sensitiveValue) {
+        return json(409, { ok: false, status: "UNKNOWN", error: validation.error || "gsc_history_sensitive_field" }, origin);
+      }
+      return json(200, {
         ok: true,
-        history: current.history,
+        status: "UNKNOWN",
+        history: legacy.history,
         meta: {
-          state_sha256: current.history.state_sha256,
-          stored_at: current.state_published_at || null,
+          state_sha256: legacy.history.state_sha256,
+          stored_at: legacy.state_published_at || null,
+          schema_version: "legacy-unversioned/v2",
+          reason_codes: ["legacy_unversioned_state"],
         },
-      },
-      origin,
-    );
+      }, origin);
+    }
+    return json(200, current, origin);
   }
 
   if (action === "gsc_insights_ingest" && event.httpMethod === "POST") {
@@ -489,19 +488,19 @@ exports.handler = async (event) => {
         origin,
       );
     }
-    const current = await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
-    if (current?.history) {
-      const currentHistoryValidation = validateHistoryState(current.history);
-      if (!currentHistoryValidation.ok) {
-        return json(409, { ok: false, error: "gsc_history_store_corrupt" }, origin);
-      }
+    const durableHistory = await readPrivateGscHistory(store);
+    const legacyCurrent = durableHistory.ok ? null : await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
+    const currentHistory = durableHistory.ok ? durableHistory.history : legacyCurrent?.history || null;
+    if (currentHistory) {
+      const currentHistoryValidation = validateHistoryState(currentHistory);
+      if (!currentHistoryValidation.ok) return json(409, { ok: false, error: "gsc_history_store_corrupt" }, origin);
       if (
-        body.history.state_sha256 !== current.history.state_sha256 &&
-        body.history.parent_state_sha256 !== current.history.state_sha256
+        body.history.state_sha256 !== currentHistory.state_sha256 &&
+        body.history.parent_state_sha256 !== currentHistory.state_sha256
       ) {
         return json(409, { ok: false, error: "gsc_history_write_conflict" }, origin);
       }
-      const currentEnd = String(current.history.readiness?.window_end || "");
+      const currentEnd = String(currentHistory.readiness?.window_end || "");
       const incomingEnd = String(body.history.readiness?.window_end || "");
       if (currentEnd && (!incomingEnd || currentEnd > incomingEnd)) {
         return json(409, { ok: false, error: "gsc_history_stale_overwrite" }, origin);
@@ -509,7 +508,6 @@ exports.handler = async (event) => {
     }
 
     let insights = null;
-    let contentSha256 = null;
     if (body.insights != null) {
       const validation = validateGscInsights(body.insights);
       if (!validation.ok) return json(422, { ok: false, ...validation }, origin);
@@ -523,190 +521,86 @@ exports.handler = async (event) => {
         return json(422, { ok: false, error: "gsc_insights_history_provenance_invalid" }, origin);
       }
       insights = sanitizeGscForOps(body.insights);
-      contentSha256 = gscInsightsHash(insights);
-      const olderAsOf = current?.insights?.as_of && String(current.insights.as_of) > String(insights.as_of);
-      const olderGeneration =
-        current?.insights?.as_of === insights.as_of &&
-        Date.parse(current.insights.generated_at || "") > Date.parse(insights.generated_at || "");
+      const currentRead = durableHistory.ok ? await readPrivateGscSnapshot(store) : null;
+      const currentInsights = currentRead?.insights || legacyCurrent?.insights || null;
+      const olderAsOf = currentInsights?.as_of && String(currentInsights.as_of) > String(insights.as_of);
+      const olderGeneration = currentInsights?.as_of === insights.as_of &&
+        Date.parse(currentInsights.generated_at || "") > Date.parse(insights.generated_at || "");
       if (olderAsOf || olderGeneration) {
         return json(409, { ok: false, error: "gsc_insights_stale_overwrite" }, origin);
       }
     }
-
-    if (
-      current?.history?.state_sha256 === body.history.state_sha256 &&
-      (!insights || current?.content_sha256 === contentSha256)
-    ) {
-      return json(
-        200,
-        {
-          ok: true,
-          durable: true,
-          idempotent: true,
-          promoted: Boolean(insights),
-          as_of: current?.insights?.as_of || body.history.readiness?.freshness_as_of || null,
-          content_sha256: current?.content_sha256 || null,
-          history_state_sha256: body.history.state_sha256,
-          published_at: current?.published_at || null,
-        },
-        origin,
-      );
-    }
-
-    const statePublishedAt = new Date().toISOString();
-    const record = {
-      ...(current || {}),
-      schema: "confenge_private_gsc_operational_state_v2",
-      history: body.history,
-      history_state_sha256: body.history.state_sha256,
-      state_published_at: statePublishedAt,
-    };
-    if (insights) {
-      record.content_sha256 = contentSha256;
-      record.published_at = statePublishedAt;
-      record.insights = insights;
-    }
-    await store.putSystemRecord(GSC_INSIGHTS_STATE_ID, record);
-    const proof = await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
-    if (
-      !proof ||
-      proof.history_state_sha256 !== body.history.state_sha256 ||
-      validateHistoryState(proof.history).ok !== true ||
-      (insights &&
-        (proof.content_sha256 !== contentSha256 || gscInsightsHash(proof.insights) !== contentSha256))
-    ) {
-      return json(503, { ok: false, error: "gsc_insights_persist_verify_miss" }, origin);
+    let receipt;
+    try {
+      receipt = await persistPrivateGscSnapshot(store, {
+        producer: body.producer,
+        history: body.history,
+        insights,
+      });
+    } catch (error) {
+      const code = String(error.message || error);
+      const status = /conflict|overwrite/.test(code) ? 409 : /invalid|mismatch|stale|partial/.test(code) ? 422 : 503;
+      return json(status, { ok: false, status: "UNKNOWN", error: code }, origin);
     }
     safeLog("info", "gsc_insights_ingested", {
-      as_of: insights?.as_of || body.history.readiness?.freshness_as_of || null,
-      content_sha256: contentSha256 ? contentSha256.slice(0, 16) : null,
-      history_state_sha256: body.history.state_sha256.slice(0, 16),
-      promoted: Boolean(insights),
+      status: receipt.status,
+      as_of: receipt.as_of,
+      manifest_sha256: receipt.consumer_manifest_sha256?.slice(0, 16) || null,
+      history_state_sha256: receipt.history_state_sha256.slice(0, 16),
+      promoted: receipt.promoted,
     });
-    return json(
-      200,
-      {
-        ok: true,
-        durable: true,
-        promoted: Boolean(insights),
-        as_of: proof.insights?.as_of || body.history.readiness?.freshness_as_of || null,
-        content_sha256: proof.content_sha256 || null,
-        history_state_sha256: body.history.state_sha256,
-        published_at: proof.published_at || null,
-      },
-      origin
-    );
+    return json(200, {
+      ...receipt,
+      durable: true,
+      published_at: receipt.published_at,
+    }, origin);
   }
 
   if (action === "gsc_insights" && event.httpMethod === "GET") {
-    let loaded = null;
-    let deliverySource = "durable_store";
-    let durableMeta = {};
-    let history = null;
-    if (store && typeof store.getSystemRecord === "function") {
-      const durable = await store.getSystemRecord(GSC_INSIGHTS_STATE_ID);
-      if (durable?.history) {
-        const historyValidation = validateHistoryState(durable.history);
-        if (!historyValidation.ok) {
-          return json(409, { ok: false, error: "gsc_history_store_corrupt" }, origin);
-        }
-        history = durable.history;
-      }
-      const durableHash = durable?.insights ? gscInsightsHash(durable.insights) : null;
-      if (
-        durable?.insights &&
-        durable.content_sha256 === durableHash &&
-        validateGscInsights(durable.insights, { allowStale: true }).ok
-      ) {
-        loaded = { ok: true, data: durable.insights };
-        durableMeta = {
-          content_sha256: durableHash,
-          published_at: durable.published_at || null,
-        };
-      }
+    if (!store || typeof store.getSystemRecord !== "function") {
+      return json(503, { ok: false, status: "UNKNOWN", error: "gsc_insights_store_unavailable" }, origin);
     }
-    if (!loaded && !history) {
-      loaded = loadGscInsights();
-      deliverySource = "packaged_fallback";
-    }
-    if (!loaded && history) {
-      return json(
-        200,
-        {
-          ok: true,
-          status: history.readiness.status,
-          access_mode: history.readiness.access_mode,
-          insights: null,
-          meta: {
-            as_of: history.readiness.freshness_as_of || null,
-            generated_at: null,
-            source: "search_analytics_api",
-            delivery_source: deliverySource,
-            content_sha256: null,
-            published_at: null,
-            history_state_sha256: history.state_sha256,
-            ready_for_product_decisions: false,
-            reason_codes: history.readiness.reason_codes,
-            note: "Authenticated ops only. No last-known-good insight is available.",
-          },
-        },
-        origin,
-      );
-    }
-    if (!loaded.ok) {
-      return json(404, { ok: false, error: loaded.error || "gsc_insights_missing" }, origin);
-    }
-    const deliveryValidation = validateGscInsights(loaded.data, { allowStale: true });
-    if (!deliveryValidation.ok) {
-      return json(404, { ok: false, error: deliveryValidation.error }, origin);
-    }
-    const historyReady = history?.readiness?.ready_for_product_decisions === true;
-    const effectiveReady = historyReady && !deliveryValidation.stale;
-    const status = effectiveReady
-      ? "READY"
-      : history?.last_known_good || loaded.data
-        ? "STALE"
-        : "UNKNOWN";
-    const reasonCodes = effectiveReady
-      ? []
-      : [
-          ...(history?.readiness?.reason_codes || ["history_store_empty"]),
-          ...(deliveryValidation.stale ? ["snapshot_stale"] : []),
-        ].filter((value, index, values) => values.indexOf(value) === index);
-    const safe = {
-      ...sanitizeGscForOps(loaded.data),
-      ready_for_product_decisions: effectiveReady,
-      readiness_status: status,
-      readiness_access_mode: effectiveReady ? "READ_WRITE" : "READ_ONLY",
-      readiness_reason_codes: reasonCodes,
-    };
-    const blob = JSON.stringify(safe);
-    // Assert no PII patterns in payload
-    if (/@|telefone|whatsapp|\b\d{3}\.\d{3}\.\d{3}-\d{2}\b/i.test(blob) && /email|telefone|cpf/i.test(blob)) {
-      safeLog("warn", "gsc_pii_scrub", {});
-    }
-    safeLog("info", "gsc_insights_served", { bytes: blob.length });
-    return json(
-      200,
-      {
-        ok: true,
-        status,
-        access_mode: effectiveReady ? "READ_WRITE" : "READ_ONLY",
-        insights: safe,
+    const consumed = await readPrivateGscSnapshot(store);
+    if (!consumed.meta) {
+      return json(200, {
+        ok: false,
+        status: "UNKNOWN",
+        access_mode: "NONE",
+        insights: null,
         meta: {
-          as_of: safe.as_of || null,
-          generated_at: safe.generated_at || null,
-          source: safe.source || null,
-          delivery_source: deliverySource,
-          ...durableMeta,
-          history_state_sha256: history?.state_sha256 || null,
-          ready_for_product_decisions: effectiveReady,
-          reason_codes: reasonCodes,
-          note: "Authenticated ops only. Not a public static file.",
+          delivery_source: "durable_store",
+          ready_for_product_decisions: false,
+          reason_codes: [consumed.error || "snapshot_absent"],
+          note: "Authenticated ops only. No versioned durable snapshot is CURRENT.",
         },
+      }, origin);
+    }
+    safeLog("info", "gsc_insights_served", {
+      status: consumed.status,
+      manifest_sha256: consumed.meta.consumer_manifest_sha256?.slice(0, 16) || null,
+    });
+    return json(200, {
+      ...consumed,
+      meta: {
+        ...consumed.meta,
+        published_at: consumed.meta.ingested_at,
+        note: "Authenticated ops only. Versioned host-owned durable snapshot.",
       },
-      origin
-    );
+    }, origin);
+  }
+
+  if (action === "gsc_insights_rollback" && event.httpMethod === "POST") {
+    if (!store || typeof store.getSystemRecord !== "function" || typeof store.putSystemRecord !== "function") {
+      return json(503, { ok: false, status: "UNKNOWN", error: "gsc_insights_store_unavailable" }, origin);
+    }
+    const body = parseBody(event);
+    if (!body) return json(400, { ok: false, error: "invalid_json" }, origin);
+    try {
+      const receipt = await rollbackPrivateGscSnapshot(store, body);
+      return json(200, { ...receipt, durable: true }, origin);
+    } catch (error) {
+      return json(422, { ok: false, status: "UNKNOWN", error: String(error.message || error) }, origin);
+    }
   }
 
   if (action === "leads" && event.httpMethod === "GET") {
@@ -1327,7 +1221,5 @@ exports.handler = async (event) => {
 // test helpers
 exports._authOk = authOk;
 exports._listLeads = listLeads;
-exports._loadGscInsights = loadGscInsights;
 exports._sanitizeGscForOps = sanitizeGscForOps;
 exports._validateGscInsights = validateGscInsights;
-exports._gscInsightsHash = gscInsightsHash;

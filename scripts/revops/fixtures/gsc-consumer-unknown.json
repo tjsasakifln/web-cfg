@@ -1,0 +1,13 @@
+{
+  "ok": false,
+  "status": "UNKNOWN",
+  "access_mode": "NONE",
+  "insights": null,
+  "meta": {
+    "delivery_source": "durable_store",
+    "ready_for_product_decisions": false,
+    "reason_codes": [
+      "snapshot_absent"
+    ]
+  }
+}
