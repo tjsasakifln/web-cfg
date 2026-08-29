@@ -1,10 +1,12 @@
 {
-  "generated_at": "2026-08-05T11:59:13.087Z",
+  "generated_at": "2026-08-29T16:25:59.064Z",
   "base": "http://127.0.0.1:8795",
+  "site_root": "_site",
   "viewports": [
     "1440x1000",
     "1024x768",
     "768x1024",
+    "430x932",
     "390x844",
     "360x800",
     "320x568"
@@ -16,7 +18,7 @@
       "overflow": false,
       "scrollWidth": 1440,
       "clientWidth": 1440,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/hub-1440x1000.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/hub-1440x1000.png"
     },
     {
       "pilot": "hub",
@@ -24,7 +26,7 @@
       "overflow": false,
       "scrollWidth": 1024,
       "clientWidth": 1024,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/hub-1024x768.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/hub-1024x768.png"
     },
     {
       "pilot": "hub",
@@ -32,7 +34,15 @@
       "overflow": false,
       "scrollWidth": 768,
       "clientWidth": 768,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/hub-768x1024.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/hub-768x1024.png"
+    },
+    {
+      "pilot": "hub",
+      "viewport": "430x932",
+      "overflow": false,
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/hub-430x932.png"
     },
     {
       "pilot": "hub",
@@ -40,7 +50,7 @@
       "overflow": false,
       "scrollWidth": 390,
       "clientWidth": 390,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/hub-390x844.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/hub-390x844.png"
     },
     {
       "pilot": "hub",
@@ -48,7 +58,7 @@
       "overflow": false,
       "scrollWidth": 360,
       "clientWidth": 360,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/hub-360x800.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/hub-360x800.png"
     },
     {
       "pilot": "hub",
@@ -56,7 +66,7 @@
       "overflow": false,
       "scrollWidth": 320,
       "clientWidth": 320,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/hub-320x568.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/hub-320x568.png"
     },
     {
       "pilot": "limite",
@@ -64,7 +74,7 @@
       "overflow": false,
       "scrollWidth": 1440,
       "clientWidth": 1440,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/limite-1440x1000.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/limite-1440x1000.png"
     },
     {
       "pilot": "limite",
@@ -72,7 +82,7 @@
       "overflow": false,
       "scrollWidth": 1024,
       "clientWidth": 1024,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/limite-1024x768.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/limite-1024x768.png"
     },
     {
       "pilot": "limite",
@@ -80,7 +90,15 @@
       "overflow": false,
       "scrollWidth": 768,
       "clientWidth": 768,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/limite-768x1024.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/limite-768x1024.png"
+    },
+    {
+      "pilot": "limite",
+      "viewport": "430x932",
+      "overflow": false,
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/limite-430x932.png"
     },
     {
       "pilot": "limite",
@@ -88,7 +106,7 @@
       "overflow": false,
       "scrollWidth": 390,
       "clientWidth": 390,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/limite-390x844.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/limite-390x844.png"
     },
     {
       "pilot": "limite",
@@ -96,7 +114,7 @@
       "overflow": false,
       "scrollWidth": 360,
       "clientWidth": 360,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/limite-360x800.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/limite-360x800.png"
     },
     {
       "pilot": "limite",
@@ -104,7 +122,7 @@
       "overflow": false,
       "scrollWidth": 320,
       "clientWidth": 320,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/limite-320x568.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/limite-320x568.png"
     },
     {
       "pilot": "reequilibrio",
@@ -112,7 +130,7 @@
       "overflow": false,
       "scrollWidth": 1440,
       "clientWidth": 1440,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-1440x1000.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-1440x1000.png"
     },
     {
       "pilot": "reequilibrio",
@@ -120,7 +138,7 @@
       "overflow": false,
       "scrollWidth": 1024,
       "clientWidth": 1024,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-1024x768.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-1024x768.png"
     },
     {
       "pilot": "reequilibrio",
@@ -128,7 +146,15 @@
       "overflow": false,
       "scrollWidth": 768,
       "clientWidth": 768,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-768x1024.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-768x1024.png"
+    },
+    {
+      "pilot": "reequilibrio",
+      "viewport": "430x932",
+      "overflow": false,
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-430x932.png"
     },
     {
       "pilot": "reequilibrio",
@@ -136,7 +162,7 @@
       "overflow": false,
       "scrollWidth": 390,
       "clientWidth": 390,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-390x844.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-390x844.png"
     },
     {
       "pilot": "reequilibrio",
@@ -144,7 +170,7 @@
       "overflow": false,
       "scrollWidth": 360,
       "clientWidth": 360,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-360x800.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-360x800.png"
     },
     {
       "pilot": "reequilibrio",
@@ -152,7 +178,7 @@
       "overflow": false,
       "scrollWidth": 320,
       "clientWidth": 320,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-320x568.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/reequilibrio-320x568.png"
     },
     {
       "pilot": "matriz",
@@ -160,7 +186,7 @@
       "overflow": false,
       "scrollWidth": 1440,
       "clientWidth": 1440,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/matriz-1440x1000.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/matriz-1440x1000.png"
     },
     {
       "pilot": "matriz",
@@ -168,7 +194,7 @@
       "overflow": false,
       "scrollWidth": 1024,
       "clientWidth": 1024,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/matriz-1024x768.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/matriz-1024x768.png"
     },
     {
       "pilot": "matriz",
@@ -176,7 +202,15 @@
       "overflow": false,
       "scrollWidth": 768,
       "clientWidth": 768,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/matriz-768x1024.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/matriz-768x1024.png"
+    },
+    {
+      "pilot": "matriz",
+      "viewport": "430x932",
+      "overflow": false,
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/matriz-430x932.png"
     },
     {
       "pilot": "matriz",
@@ -184,7 +218,7 @@
       "overflow": false,
       "scrollWidth": 390,
       "clientWidth": 390,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/matriz-390x844.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/matriz-390x844.png"
     },
     {
       "pilot": "matriz",
@@ -192,7 +226,7 @@
       "overflow": false,
       "scrollWidth": 360,
       "clientWidth": 360,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/matriz-360x800.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/matriz-360x800.png"
     },
     {
       "pilot": "matriz",
@@ -200,7 +234,63 @@
       "overflow": false,
       "scrollWidth": 320,
       "clientWidth": 320,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/matriz-320x568.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/matriz-320x568.png"
+    },
+    {
+      "pilot": "diagnostico",
+      "viewport": "1440x1000",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/diagnostico-1440x1000.png"
+    },
+    {
+      "pilot": "diagnostico",
+      "viewport": "1024x768",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/diagnostico-1024x768.png"
+    },
+    {
+      "pilot": "diagnostico",
+      "viewport": "768x1024",
+      "overflow": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/diagnostico-768x1024.png"
+    },
+    {
+      "pilot": "diagnostico",
+      "viewport": "430x932",
+      "overflow": false,
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/diagnostico-430x932.png"
+    },
+    {
+      "pilot": "diagnostico",
+      "viewport": "390x844",
+      "overflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/diagnostico-390x844.png"
+    },
+    {
+      "pilot": "diagnostico",
+      "viewport": "360x800",
+      "overflow": false,
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/diagnostico-360x800.png"
+    },
+    {
+      "pilot": "diagnostico",
+      "viewport": "320x568",
+      "overflow": false,
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/diagnostico-320x568.png"
     },
     {
       "pilot": "aditivo",
@@ -208,7 +298,7 @@
       "overflow": false,
       "scrollWidth": 1440,
       "clientWidth": 1440,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-1440x1000.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-1440x1000.png"
     },
     {
       "pilot": "aditivo",
@@ -216,7 +306,7 @@
       "overflow": false,
       "scrollWidth": 1024,
       "clientWidth": 1024,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-1024x768.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-1024x768.png"
     },
     {
       "pilot": "aditivo",
@@ -224,7 +314,15 @@
       "overflow": false,
       "scrollWidth": 768,
       "clientWidth": 768,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-768x1024.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-768x1024.png"
+    },
+    {
+      "pilot": "aditivo",
+      "viewport": "430x932",
+      "overflow": false,
+      "scrollWidth": 430,
+      "clientWidth": 430,
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-430x932.png"
     },
     {
       "pilot": "aditivo",
@@ -232,7 +330,7 @@
       "overflow": false,
       "scrollWidth": 390,
       "clientWidth": 390,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-390x844.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-390x844.png"
     },
     {
       "pilot": "aditivo",
@@ -240,7 +338,7 @@
       "overflow": false,
       "scrollWidth": 360,
       "clientWidth": 360,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-360x800.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-360x800.png"
     },
     {
       "pilot": "aditivo",
@@ -248,12 +346,56 @@
       "overflow": false,
       "scrollWidth": 320,
       "clientWidth": 320,
-      "shot": "/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-320x568.png"
+      "shot": "docs/uiux-tools-remediation/evidence/screenshots/after/aditivo-320x568.png"
     }
   ],
   "overflows": [],
   "axe": {
     "pages": [
+      {
+        "path": "/ferramentas/limite-acrescimos-supressoes/#resultado",
+        "id": "limite-result",
+        "counts": {
+          "critical": 0,
+          "serious": 0,
+          "moderate": 0,
+          "minor": 0
+        },
+        "violations": []
+      },
+      {
+        "path": "/ferramentas/checklist-reequilibrio/#out",
+        "id": "reequilibrio-result",
+        "counts": {
+          "critical": 0,
+          "serious": 0,
+          "moderate": 0,
+          "minor": 0
+        },
+        "violations": []
+      },
+      {
+        "path": "/ferramentas/matriz-atraso-obra/#out",
+        "id": "matriz-result",
+        "counts": {
+          "critical": 0,
+          "serious": 0,
+          "moderate": 0,
+          "minor": 0
+        },
+        "violations": []
+      },
+      {
+        "path": "/ferramentas/diagnostico-defesa-margem/#diagnostic-result",
+        "id": "diagnostico-result",
+        "counts": {
+          "critical": 0,
+          "serious": 0,
+          "moderate": 0,
+          "minor": 0
+        },
+        "violations": []
+      },
       {
         "path": "/ferramentas/",
         "id": "hub",
@@ -299,6 +441,17 @@
         "violations": []
       },
       {
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "id": "diagnostico",
+        "counts": {
+          "critical": 0,
+          "serious": 0,
+          "moderate": 0,
+          "minor": 0
+        },
+        "violations": []
+      },
+      {
         "path": "/guias-contratos-obras/checklist-pedido-aditivo/",
         "id": "aditivo",
         "counts": {
@@ -318,7 +471,19 @@
   "keyboard": [
     {
       "page": "limite",
-      "reached_interactive": true
+      "completed": true
+    },
+    {
+      "page": "reequilibrio",
+      "completed": true
+    },
+    {
+      "page": "matriz",
+      "completed": true
+    },
+    {
+      "page": "diagnostico",
+      "completed": true
     }
   ],
   "flows": [
@@ -333,15 +498,28 @@
     {
       "flow": "reequilibrio",
       "hidden": false,
-      "text": "Prontidão documental baixa\nO dossiê ainda não está pronto para protocolar com segurança documental. Bloqueadores em aberto: Fato gerador definido, Cronologia, Nexo causal, Comunicação tempestiva, Memória de cálculo, Cláusulas contratuais e matriz de riscos.\n\nCobertura ponderada: 0%\nBloqueadores: 6\nSuporte econômico pendente: 5\nOrganização pendente: 4\nNão aplicáveis: 0\nRessalvas\nHá bloqueador(es) central(is) em aberto.\nOrdem recomendada de correção\nFato gerador definido (bloqueador)\nCronologia (bloqueador)\nNexo causal (bloqueador)\nComunicação tempestiva (bloqueador)\nMemória de cálculo (bloquead",
+      "text": "Prontidão documental baixa\nO dossiê ainda não está pronto para protocolar com segurança documental. Bloqueadores em aberto: Fato gerador definido, Cronologia, Nexo causal, Comunicação tempestiva, Memória de cálculo, Cláusulas contratuais e matriz de riscos.\n\nCobertura ponderada: 0%\nBloqueadores: 6\nSuporte econômico pendente: 5\nOrganização pendente: 4\nNão aplicáveis: 0\nComo ler este resultado\n\nFato. Cobertura ponderada 0%. Bloqueadores: 6. Suporte econômico pendente: 5. Organização pendente: 4. Não aplicáveis: 0.\n\nCálculo. O escore pondera bloqueadores (55%), suporte econômico (30%) e organizaç",
       "hasBlock": true
     },
     {
       "flow": "matriz",
       "hidden": false,
-      "text": "Hipóteses preliminares por evento\nForam analisados 1 evento(s). As imputações abaixo são hipóteses preliminares e tendências que dependem de prova. Não há veredito de responsabilidade nem soma automática de dias.\n\nResumo geral\nEventos: 1\nSem prova contemporânea suficiente: 1\nSem período definido: 1\nSem vínculo crítico claro: 1\nPossíveis sobreposições: 0\nMatriz de riscos no contrato: sim\nPor evento\nProjeto incompleto da Administração\nHipótese: hipótese preliminar de imputação à Administração (depende de prova)\nDocumentos faltantes: comunicação contemporânea do evento; documento de suporte local",
+      "text": "Hipóteses preliminares por evento\nForam analisados 1 evento(s). As imputações abaixo são hipóteses preliminares e tendências que dependem de prova. Não há veredito de responsabilidade nem soma automática de dias.\n\nResumo geral\nEventos: 1\nSem prova contemporânea suficiente: 1\nSem período definido: 1\nSem vínculo crítico claro: 1\nPossíveis sobreposições: 0\nMatriz de riscos no contrato: sim\nSobreposições por data: 0\nComo ler este resultado\n\nFato. Eventos: 1. Sem prova contemporânea: 1. Sem período: 1. Sobreposições por data: 0.\n\nCálculo. Não há soma automática de dias nem teto legal aplicado. Sobr",
       "hypothesis": true,
       "noFavorable": true
+    },
+    {
+      "flow": "diagnostico",
+      "t": "Identificação do contrato\nIDENTIFICADOR PÚBLICO\n83102277000152-2-000626/2026\nÓRGÃO\nPREFEITURA MUNICIPAL DE ITAJAÍ - SC\nOBJETO\nCONTRATAÇÃO DE EMPRESA PARA PRESTAÇÃO DE SERVIÇOS DE ENGENHARIA COMUM PARA EXECUÇÃO DA REFORMA DO AUDITÓRIO DO PRÉDIO DA PREFEITURA MUNICIPAL, COMPREENDENDO REFORMA DO TELHADO E REFORMA INTERNA DO AUDITÓRIO, COM FORNECIMENTO DE MATERIAIS, MÃO DE OBRA, EQUIPAMENTOS E DEMAIS ",
+      "hasItajai": true,
+      "nonEmpty": true,
+      "hasId": true,
+      "resultBeforeLead": true,
+      "hasCopy": true,
+      "hasDl": true,
+      "hasPrint": true,
+      "hasReset": true,
+      "layers": true
     },
     {
       "flow": "aditivo",

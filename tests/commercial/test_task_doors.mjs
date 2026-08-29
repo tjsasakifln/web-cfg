@@ -295,6 +295,7 @@ assert("implementation_has_one_complete_primary_card", implementation.comparison
 assert("implementation_fail_closed", implementation.terminal_capture === true && implementation.human_validation === "NOT_STARTED", implementation);
 assert("implementation_no_new_analytics_dimensions", implementation.new_analytics_dimensions === false, implementation.new_analytics_dimensions);
 assert("hero_decision_h1", entregas.includes("8 ofertas publicadas") && entregas.includes("Escolha pela decisão que está na mesa"), "hero");
+assert("hero_synthetic_disclosure", entregas.includes("exemplos sintéticos de resultados de clientes"), "synthetic disclosure");
 assert("hero_public_price_band", entregas.includes("R$ 599 a R$ 3.750") && !entregas.includes("R$ 39.800"), "price range");
 assert("hero_primary_and_secondary_access", entregas.includes(">Encontrar a entrega certa ") && entregas.includes(">Registrar a decisão na mesa</a>"), "hero actions");
 assert("public_vitrine_has_8_cards", (entregas.match(/<article class="vitrine-item/g) || []).length === 8, (entregas.match(/<article class="vitrine-item/g) || []).length);

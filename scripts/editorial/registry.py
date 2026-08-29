@@ -32,6 +32,7 @@ STATES = (
     "HUMAN_APPROVED",
     "INDEXABLE",
     "PUBLISHED",
+    "MIGRATED",
     "REVIEW_REQUIRED",
     "REJECTED",
 )
@@ -444,9 +445,9 @@ def approval_is_current(
 
 
 def can_advance(current: str, target: str) -> bool:
-    if target in {"REJECTED", "REVIEW_REQUIRED"}:
+    if target in {"REJECTED", "REVIEW_REQUIRED", "MIGRATED"}:
         return True
-    if current == "REJECTED":
+    if current in {"REJECTED", "MIGRATED"}:
         return False
     if current == "REVIEW_REQUIRED":
         return target in {"DRAFT", "LEGAL_SOURCE_VALIDATED", "REJECTED"}

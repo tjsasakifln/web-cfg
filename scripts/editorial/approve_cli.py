@@ -9,9 +9,9 @@ preview evidence in the approval record.
 Example (run only by the named human after reviewing the preview):
   ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \\
     --reviewer "Tiago Sasaki" \\
-    --page-id lei-limite-25-50 \\
+    --page-id guia-checklist-aditivo \\
     --notes "Fontes, limites, CTAs e decisão de canibalização conferidos no preview." \\
-    --sources lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024 \\
+    --sources lei-14133-art124,lei-14133-art125,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024 \\
     --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \\
     --material-hash <hash-do-pacote> --confirm --indexable
 """
@@ -80,7 +80,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.indexable and args.page_id not in FIRST_COHORT_SET:
         print(
             "ERROR: outside_first_cohort_not_indexable — this release permits only "
-            "lei-limite-25-50, guia-checklist-aditivo and lei-item-novo-desconto",
+            "guia-checklist-aditivo and lei-item-novo-desconto",
             file=sys.stderr,
         )
         return 3
@@ -162,4 +162,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -311,7 +311,7 @@ def test_every_example_uses_the_same_action_label() -> None:
         "Referências de Preços de Obras Públicas",
         "Plano Executivo de Expansão",
     ):
-        assert f"Ver o exemplo de {name}" in html, name
+        assert f"Abrir sintético: {name}" in html, name
         assert f"Pedir análise de {name}" in html, name
 
 

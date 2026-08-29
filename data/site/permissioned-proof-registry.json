@@ -7,7 +7,8 @@
   "records": [],
   "next_test": {
     "id": "first-real-delivery-permissioned-proof",
-    "status": "WAIT_FIRST_REAL_DELIVERY",
+    "status": "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF",
+    "blocker": "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF",
     "owner": {
       "id": "tiago-jun-sasaki",
       "name": "Engº Tiago Sasaki"
