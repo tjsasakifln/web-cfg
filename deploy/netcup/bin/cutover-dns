@@ -49,24 +49,58 @@ PROTECTED_NAMES = (
 )
 PROTECTED_TYPES = ("MX", "TXT", "SRV", "CAA", "NS", "SOA")
 
+# DNS-only records keep an explicit five-minute TTL so a rollback reaches
+# resolvers quickly. Proxied records must use Cloudflare's automatic TTL (`1`)
+# because visitors resolve Cloudflare anycast addresses rather than the origin.
+CUTOVER_TTL = 300
+PROXIED_TTL = 1
+
 TARGETS: dict[str, dict[str, Any]] = {
     "netcup": {
-        "confenge.com.br": [{"type": "A", "content": "159.195.18.88"}],
-        # www keeps a single hop to the apex; the origin serves the 301 itself.
-        "www.confenge.com.br": [{"type": "CNAME", "content": "confenge.com.br"}],
+        "confenge.com.br": [
+            {
+                "type": "A",
+                "content": "159.195.18.88",
+                "ttl": PROXIED_TTL,
+                "proxied": True,
+            }
+        ],
+        # www remains a single hop to the apex at the origin, while Cloudflare
+        # proxies and flattens the public CNAME at the edge.
+        "www.confenge.com.br": [
+            {
+                "type": "CNAME",
+                "content": "confenge.com.br",
+                "ttl": PROXIED_TTL,
+                "proxied": True,
+            }
+        ],
     },
     "netlify": {
         "confenge.com.br": [
-            {"type": "A", "content": "75.2.60.5"},
-            {"type": "A", "content": "99.83.231.61"},
+            {
+                "type": "A",
+                "content": "75.2.60.5",
+                "ttl": CUTOVER_TTL,
+                "proxied": False,
+            },
+            {
+                "type": "A",
+                "content": "99.83.231.61",
+                "ttl": CUTOVER_TTL,
+                "proxied": False,
+            },
         ],
-        "www.confenge.com.br": [{"type": "CNAME", "content": "confenge.netlify.app"}],
+        "www.confenge.com.br": [
+            {
+                "type": "CNAME",
+                "content": "confenge.netlify.app",
+                "ttl": CUTOVER_TTL,
+                "proxied": False,
+            }
+        ],
     },
 }
-
-# 300s is Cloudflare's minimum explicit TTL. It bounds how long a rollback takes
-# to reach a resolver that already cached the new answer.
-CUTOVER_TTL = 300
 
 
 class CutoverError(RuntimeError):
@@ -137,6 +171,20 @@ def _slim(record: dict) -> dict:
     return value
 
 
+def _record_identity(record: dict) -> tuple[str, str]:
+    """Return the DNS value identity, independent of edge delivery state."""
+    return record["type"], record["content"].rstrip(".")
+
+
+def _record_contract(record: dict) -> tuple[str, str, bool, int]:
+    """Return every public DNS field that must converge to the target."""
+    return (
+        *_record_identity(record),
+        bool(record.get("proxied", False)),
+        int(record.get("ttl") or 0),
+    )
+
+
 def _protected_snapshot(current: list[dict]) -> list[dict]:
     """Return every record the public-web cutover is forbidden to change."""
     protected = [
@@ -173,6 +221,15 @@ def build_plan(current: list[dict], destination: str) -> dict[str, Any]:
             f"(unexpected={extra} missing={missing})"
         )
 
+    desired_ttls = {int(want["ttl"]) for records_for_name in target.values() for want in records_for_name}
+    desired_proxy_states = {
+        bool(want["proxied"])
+        for records_for_name in target.values()
+        for want in records_for_name
+    }
+    if len(desired_ttls) != 1 or len(desired_proxy_states) != 1:
+        raise CutoverError(f"refusing: destination {destination!r} has inconsistent edge policy")
+
     protected = _protected_snapshot(current)
 
     deletes: list[dict] = []
@@ -181,20 +238,29 @@ def build_plan(current: list[dict], destination: str) -> dict[str, Any]:
     for name in PUBLIC_WEB_NAMES:
         existing = [r for r in current if r["name"] == name and r["type"] in ("A", "AAAA", "CNAME")]
         wanted = target[name]
-        # A record is kept only when type and content already match exactly;
-        # everything else is replaced so the end state is the declared one.
-        keep = []
+        # Proxy state and TTL are part of the desired record. If only either of
+        # those fields drifted, update the existing record in place rather than
+        # briefly creating a duplicate or exposing the origin during a delete.
+        remaining = list(existing)
         missing = []
         for want in wanted:
-            match = next(
-                (r for r in existing if r["type"] == want["type"] and r["content"].rstrip(".") == want["content"]),
+            exact = next(
+                (r for r in remaining if _record_contract(r) == _record_contract(want)),
                 None,
             )
-            if match:
-                keep.append(match["id"])
-            else:
-                missing.append(want)
-        surplus = [r for r in existing if r["id"] not in keep]
+            if exact:
+                remaining.remove(exact)
+                continue
+            same_value = next(
+                (r for r in remaining if _record_identity(r) == _record_identity(want)),
+                None,
+            )
+            if same_value:
+                updates.append({"id": same_value["id"], "name": name, **want})
+                remaining.remove(same_value)
+                continue
+            missing.append(want)
+        surplus = remaining
 
         # A name that holds a CNAME can hold nothing else, so create-then-delete
         # is impossible there: Cloudflare rejects the create with code 81053 and
@@ -224,7 +290,8 @@ def build_plan(current: list[dict], destination: str) -> dict[str, Any]:
         "schema": "confenge.dns_cutover_plan/v1",
         "zone": ZONE_NAME,
         "destination": destination,
-        "ttl": CUTOVER_TTL,
+        "ttl": next(iter(desired_ttls)),
+        "proxied": next(iter(desired_proxy_states)),
         "delete": deletes,
         "create": creates,
         "update": updates,
@@ -249,8 +316,8 @@ def apply_plan(token: str, zone: str, plan: dict) -> dict:
                 "type": want["type"],
                 "name": want["name"],
                 "content": want["content"],
-                "ttl": plan["ttl"],
-                "proxied": False,
+                "ttl": want["ttl"],
+                "proxied": want["proxied"],
             },
         )
         applied["updated"].append(_slim(body["result"]))
@@ -265,9 +332,8 @@ def apply_plan(token: str, zone: str, plan: dict) -> dict:
                 "type": want["type"],
                 "name": want["name"],
                 "content": want["content"],
-                "ttl": plan["ttl"],
-                # DNS-only: this origin terminates its own TLS with Let's Encrypt.
-                "proxied": False,
+                "ttl": want["ttl"],
+                "proxied": want["proxied"],
             },
         )
         applied["created"].append(_slim(body["result"]))
@@ -288,11 +354,11 @@ def verify(
     problems: list[str] = []
     for name in PUBLIC_WEB_NAMES:
         have = sorted(
-            (r["type"], r["content"].rstrip("."))
+            _record_contract(r)
             for r in current
             if r["name"] == name and r["type"] in ("A", "AAAA", "CNAME")
         )
-        want = sorted((w["type"], w["content"]) for w in target[name])
+        want = sorted(_record_contract(w) for w in target[name])
         if have != want:
             problems.append(f"{name}: have={have} want={want}")
     protected_unchanged: bool | None = None
