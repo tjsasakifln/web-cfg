@@ -121,7 +121,7 @@
         "description": "Serviços da CONFENGE para construtoras: Diagnóstico da Operação em Obras Públicas, Diretoria Fracionada para o Mercado Público, Operação de Proposta para Licitação Crítica e defesa de margem.",
         "h1": "Serviços para licitações e contratos de obras públicas",
         "lead": "A CONFENGE instala o ciclo que decide onde disputar, com que preço entrar e o que registrar durante a obra. Cada trabalho abaixo é uma peça desse ciclo.",
-        "proof": "Preço e prazo publicados em cada trabalho, e exemplos completos que você consulta sem cadastro."
+        "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde a triagem ainda decide o enquadramento, a página diz o que a triagem fecha. Exemplos completos você consulta sem cadastro."
       },
       "problems": {
         "label": "Problemas que resolvemos",
@@ -156,7 +156,7 @@
       "url": "/diretoria-b2g/",
       "headline": "Uma rotina semanal de decisão sem o custo de montar uma diretoria interna.",
       "description": "Oportunidades priorizadas com critérios, decisão de participar ou recusar, coordenação das frentes prioritárias, indicadores, riscos, responsáveis, reuniões executivas e memória de decisões e resultados.",
-      "result": "A frente B2G deixa de depender de improviso e passa a operar com método.",
+      "result": "A frente pública deixa de depender de improviso e passa a operar com método.",
       "cta": "Avaliar encaixe da Diretoria Fracionada",
       "wa_message": "Olá, Tiago. Quero conhecer a Diretoria Fracionada para o Mercado Público e entender se ela se encaixa na nossa operação.",
       "schema_service_type": "Diretoria Fracionada para o Mercado Público"
@@ -177,7 +177,7 @@
     {
       "id": "contract-defense",
       "label": "Contrato crítico",
-      "name": "Defesa de margem",
+      "name": "Diagnóstico de Riscos à Margem",
       "plain_name": "Defesa técnica e proteção de margem em contratos públicos",
       "url": "/defesa-margem-contratos-publicos/",
       "headline": "Quando cada dia sem registro enfraquece sua posição.",
