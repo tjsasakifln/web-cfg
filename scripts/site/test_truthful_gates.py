@@ -140,18 +140,43 @@ def test_catalog_item_state_status_and_price_match_deliverable_registry():
 
 
 def test_integral_catalog_has_each_registry_deliverable_exactly_once():
-    html = (ROOT / "entregas" / "index.html").read_text(encoding="utf-8")
-    broken = html.replace(
-        'class="catalog-item catalog-item--published" data-deliverable-id="CFG-D01"',
-        'class="catalog-item catalog-item--published" data-deliverable-id="CFG-D02"',
-        1,
+    item = (
+        '<article class="catalog-item catalog-item--published" '
+        'data-deliverable-id="{id}" data-public-state="PUBLISHED">'
+        '<span class="catalog-item__state">Publicada</span>'
+        "</article>"
     )
-    assert broken != html
+    html = (
+        "<html><head><title>Catálogo</title></head><body>"
+        '<section class="deliverables-catalog">'
+        f"{item.format(id='CFG-D02')}{item.format(id='CFG-D02')}"
+        "</section></body></html>"
+    )
 
-    findings = evaluate_commercial_html(broken, load_registry())
+    findings = evaluate_commercial_html(html, load_registry())
 
     assert any("CFG-D01: missing from integral catalog" in row for row in findings), findings
     assert any("CFG-D02: duplicated in integral catalog" in row for row in findings), findings
+
+
+def test_public_entregas_is_eight_offer_vitrine_not_integral_catalog():
+    html = (ROOT / "entregas" / "index.html").read_text(encoding="utf-8")
+    cards = re.findall(
+        r"<article\b[^>]*class=[\"'][^\"']*\bvitrine-item\b[^\"']*[\"'][^>]*>",
+        html,
+        flags=re.I,
+    )
+    ids = re.findall(r"<article\b[^>]*data-deliverable-id=[\"']([^\"']+)[\"']", html, flags=re.I)
+    states = re.findall(r"<article\b[^>]*data-public-state=[\"']([^\"']+)[\"']", html, flags=re.I)
+    assert "deliverables-catalog" not in html
+    assert "catalog-item catalog-item--published" not in html
+    assert "Em validação" not in html
+    assert len(cards) == 8, len(cards)
+    assert ids == [f"CFG-D0{i}" for i in range(1, 9)], ids
+    assert states == ["PUBLISHED"] * 8, states
+    findings = evaluate_commercial_html(html, load_registry())
+    assert not any("missing from integral catalog" in row for row in findings), findings
+    assert not any("8↔54" in row for row in findings), findings
 
 
 def test_commercial_registry_keeps_canonical_54_catalog_and_8_published():
