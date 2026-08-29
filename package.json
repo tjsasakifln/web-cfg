@@ -31,7 +31,7 @@
     "test:attribution": "node tests/attribution/test_source_to_service.mjs",
     "test:event-dictionary": "node seo/scripts/test_event_dictionary.mjs",
     "test:form-funnel": "node seo/scripts/test_form_funnel.mjs",
-    "test:lead-function": "node scripts/site/test_lead_function.mjs",
+    "test:lead-function": "node scripts/site/test_lead_function.mjs && node scripts/site/test_synthetic_lead_probe.mjs",
     "test:inbound-handoff": "node scripts/site/test_inbound_handoff.mjs",
     "test:search-observation": "node scripts/site/test_search_observation.mjs",
     "test:commercial-event": "node scripts/site/test_commercial_event.mjs",

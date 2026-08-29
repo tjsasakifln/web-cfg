@@ -995,6 +995,11 @@ exports.handler = async (event) => {
     const events = await loadRecentAnalytics(event);
     const money_asset = summarizeMoneyAssetLoop(events, leads);
     const inboundConfig = resolveInboundConfig(process.env);
+    // Read-only destination safety proof. This is deliberately evaluated by the
+    // server, where the canonical destination is configured, so callers never
+    // receive a URL, credential or signed request. A synthetic live proof must
+    // observe these controls before it is allowed to create its flagged row.
+    const destinationSafety = await probeInboundDestinationHealth({ env: process.env });
     const requestedLeadId = String(event.queryStringParameters?.lead_id || "").trim();
     const requestedLead = /^[A-Za-z0-9][A-Za-z0-9._:-]{7,159}$/.test(requestedLeadId)
       ? await store.get(requestedLeadId)
@@ -1015,12 +1020,22 @@ exports.handler = async (event) => {
         counters,
         money_asset,
         configuration,
+        safety_gate: {
+          ok: destinationSafety.ok === true,
+          contract: destinationSafety.contract || "BLOCKED",
+          auto_send_off: destinationSafety.auto_send_off === true,
+          status: destinationSafety.status || "UNKNOWN",
+          dispatch_attempted: destinationSafety.dispatch_attempted === true,
+          reason: destinationSafety.reason || null,
+        },
         receipt: requestedLead
           ? {
               lead_id: requestedLead.lead_id,
               receipt_id: requestedLead.receipt_id || requestedLead.lead_id,
               record_kind: requestedLead.record_kind || "real",
+              authenticated_probe: requestedLead.synthetic_probe_authenticated === true,
               source: requestedLead.source || "CONFENGE_WEB",
+              next_action: requestedLead.next_action || null,
               asset_id: requestedLead.asset_id || null,
               route_family: requestedLead.route_family || null,
               cta_id: requestedLead.cta_id || null,
@@ -1032,6 +1047,12 @@ exports.handler = async (event) => {
                     downstream: requestedLead.handoff.downstream || null,
                     last_error: requestedLead.handoff.last_error || null,
                     next_attempt_at: requestedLead.handoff.next_attempt_at || null,
+                  }
+                : null,
+              delivery: requestedLead.delivery
+                ? {
+                    notify_status: requestedLead.delivery.notify?.status || null,
+                    email_status: requestedLead.delivery.email?.status || null,
                   }
                 : null,
             }
