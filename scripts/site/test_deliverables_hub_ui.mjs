@@ -21,6 +21,7 @@ const siteRoot = !externalBase && fs.existsSync(path.join(artifactRoot, "index.h
 const port = 8795;
 const widths = [320, 360, 390, 768, 900, 901, 1024, 1200, 1366, 1440, 1661];
 const screenshotDir = String(process.env.DELIVERABLES_SCREENSHOT_DIR || "").trim();
+const reportPath = String(process.env.DELIVERABLES_HUB_REPORT || "").trim();
 const required = process.env.UI_GEOMETRY_REQUIRED === "1" || Boolean(process.env.CI);
 const promotedNav = ["Serviços", "Problemas que resolvemos", "Entregas", "Conteúdos", "Ferramentas", "Especialista"];
 const legacyNav = ["Serviços", "Problemas que resolvemos", "Conteúdos", "Ferramentas", "Especialista"];
@@ -479,5 +480,11 @@ if (hardAxe.length) failed += 1;
 
 await browser.close();
 if (server) server.close();
-console.log("DELIVERABLES_HUB_UI", JSON.stringify({ ok: failed === 0, findings, axe, hardAxe }));
+const report = { ok: failed === 0, generated_at: new Date().toISOString(), findings, axe, hardAxe };
+if (reportPath) {
+  const output = path.resolve(reportPath);
+  fs.mkdirSync(path.dirname(output), { recursive: true });
+  fs.writeFileSync(output, `${JSON.stringify(report, null, 2)}\n`, "utf8");
+}
+console.log("DELIVERABLES_HUB_UI", JSON.stringify(report));
 if (failed) process.exit(1);

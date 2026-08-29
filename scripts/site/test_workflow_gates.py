@@ -592,6 +592,44 @@ def test_copy_ci_is_check_not_write():
         raise AssertionError("site-ci must run npm run test:copy")
 
 
+def test_site_excellence_precedes_the_netcup_release_artifact():
+    """#468 perceptual evidence and the scorecard must gate the exact release SHA."""
+    workflow = _read(SITE_CI)
+    browser = _read(ROOT / "scripts" / "site" / "test_deliverables_hub_ui.mjs")
+    netcup = _read(WORKFLOWS_DIR / "netcup-release.yml")
+    chrome_at = workflow.find("browser-actions/setup-chrome")
+    perceptual_at = workflow.find("npm run test:deliverables-hub-ui")
+    scorecard_at = workflow.find("npm run quality:site-excellence")
+    export_at = workflow.find("Export exact gated public artifact")
+    if not (0 <= chrome_at < perceptual_at < scorecard_at < export_at):
+        raise AssertionError(
+            "site-ci must run Chrome -> #468 perceptual probe -> excellence scorecard "
+            "before exporting the release artifact"
+        )
+    for needle in (
+        'UI_GEOMETRY_REQUIRED: "1"',
+        'PUBLIC_ARTIFACT_REQUIRED: "1"',
+        "DELIVERABLES_HUB_REPORT: build/reports/deliverables-hub-ui.json",
+        "AXE_REPORT_PATH: build/reports/axe-report.json",
+        "build/reports/site-excellence.json",
+        "build/reports/site-excellence.md",
+    ):
+        if needle not in workflow:
+            raise AssertionError(f"site-ci excellence path missing {needle}")
+    if "DELIVERABLES_HUB_REPORT" not in browser or "writeFileSync" not in browser:
+        raise AssertionError("#468 browser probe must emit structured route/viewport evidence")
+    axe = _read(ROOT / "scripts" / "site" / "audit_axe.mjs")
+    if "AXE_REPORT_PATH" not in axe:
+        raise AssertionError("axe audit must emit a private scorecard artifact")
+    scorecard = _read(ROOT / "scripts" / "site" / "site_excellence.py")
+    if 'reports_dir / "axe-report.json"' not in scorecard:
+        raise AssertionError("scorecard must consume the current private axe evidence")
+    if "uses: ./.github/workflows/site-ci.yml" not in netcup:
+        raise AssertionError("Netcup release must continue to reuse the exact site-ci gate")
+    if "needs: [gates, pseo_gates]" not in netcup:
+        raise AssertionError("Netcup package must wait for site-ci and pSEO on the exact SHA")
+
+
 def test_deliberate_force_fail_env():
     """Controlled negative path: env forces red so CI can prove the test blocks."""
     if os.environ.get("WORKFLOW_GATE_FORCE_FAIL") == "1":
@@ -616,6 +654,7 @@ def main() -> int:
         test_lighthouse_covers_article_cover_regression_routes,
         test_codeql_is_fail_closed,
         test_copy_ci_is_check_not_write,
+        test_site_excellence_precedes_the_netcup_release_artifact,
         test_deliberate_force_fail_env,
     ]
     failed = 0

@@ -12,7 +12,7 @@
 import puppeteer from "puppeteer-core";
 import { createServer } from "http";
 import { readFileSync, existsSync, statSync, writeFileSync, mkdirSync } from "fs";
-import { join, extname } from "path";
+import { dirname, join, extname, resolve } from "path";
 import { createRequire } from "module";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 import {
@@ -174,9 +174,11 @@ await browser.close();
 if (server) server.close();
 
 report.duration_seconds = Math.round((Date.now() - startedAt) / 1000);
-const outDir = join(ROOT, "docs/uiux-evidence");
+const outFile = process.env.AXE_REPORT_PATH
+  ? resolve(ROOT, process.env.AXE_REPORT_PATH)
+  : join(ROOT, "docs/uiux-evidence/axe-report.json");
+const outDir = dirname(outFile);
 mkdirSync(outDir, { recursive: true });
-const outFile = join(outDir, "axe-report.json");
 writeFileSync(outFile, JSON.stringify(report, null, 2));
 console.log("wrote", outFile);
 console.log(
