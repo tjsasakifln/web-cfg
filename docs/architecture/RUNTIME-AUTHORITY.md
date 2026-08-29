@@ -25,7 +25,7 @@ public_canonical:
   expected_server_header: nginx
   expected_environment: production
   expected_profile: netcup-production
-  deployment: GitHub main through site-ci public artifact then netcup-release.yml package_only or stage_verify or promote; host adopts an immutable SHA under /opt/confenge-web/releases and swaps the current symlink
+  deployment: every successful GitHub push to protected main runs site-ci, packages the exact public artifact, stages and verifies it on Netcup, then atomically promotes that immutable SHA under /opt/confenge-web/releases; SHA-pinned manual package_only, stage_verify and promote remain available for recovery
   dns:
     nameservers:
       - grannbo.ns.cloudflare.com

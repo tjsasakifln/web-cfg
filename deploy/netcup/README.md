@@ -7,7 +7,13 @@ traffic already answers on this VPS (`Server: nginx`,
 `X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2`). The
 authoritative record is `docs/architecture/RUNTIME-AUTHORITY.md`.
 
-Stage (`stage_verify`) still does not swap `current`. Promote remains behind
+Every successful push to `main` now runs the full release chain automatically:
+site gates, immutable package, stage verification and atomic promotion. Manual
+`package_only`, `stage_verify` and `promote` dispatches remain available for
+diagnosis and recovery, and require the exact observed `main` SHA to prevent a
+moving-branch race.
+
+Stage (`stage_verify`) still does not swap `current`. Promotion remains behind
 the GitHub environment `netcup-production` and
 `NETCUP_CUTOVER_AUTHORIZED=CONFENGE_NETCUP_CUTOVER_APPROVED`. This README does
 not create that variable, does not change DNS, and does not dispatch a release.
@@ -39,7 +45,7 @@ not create that variable, does not change DNS, and does not dispatch a release.
 ## Chain and invariants
 
 ```text
-main
+push to main (or exact-SHA manual dispatch)
   -> reusable site-ci gates and its single build
   -> _site + portable runtime + generated nginx contract named by FULL_SHA
   -> deterministic deploy tar + detached SHA-256 manifest
@@ -129,22 +135,33 @@ not enter shell history. These are the exact commands; the referenced files are
 not part of this repository:
 
 ```sh
-gh api --method PUT repos/tjsasakifln/web-cfg/environments/netcup-stage
-gh api --method PUT repos/tjsasakifln/web-cfg/environments/netcup-production
+gh api --method PUT repos/tjsasakifln/web-cfg/environments/netcup-stage \
+  -F 'deployment_branch_policy[protected_branches]=true' \
+  -F 'deployment_branch_policy[custom_branch_policies]=false'
+gh api --method PUT repos/tjsasakifln/web-cfg/environments/netcup-production \
+  -F 'deployment_branch_policy[protected_branches]=true' \
+  -F 'deployment_branch_policy[custom_branch_policies]=false'
 
 gh secret set NETCUP_DEPLOY_HOST --repo tjsasakifln/web-cfg --env netcup-stage < /secure/confenge/netcup-host.txt
 gh secret set NETCUP_DEPLOY_USER --repo tjsasakifln/web-cfg --env netcup-stage < /secure/confenge/netcup-user.txt
 gh secret set NETCUP_SSH_PRIVATE_KEY --repo tjsasakifln/web-cfg --env netcup-stage < /secure/confenge/netcup-deploy-key
 gh secret set NETCUP_SSH_KNOWN_HOSTS --repo tjsasakifln/web-cfg --env netcup-stage < /secure/confenge/netcup-known-hosts
+gh variable set NETCUP_DEPLOY_PORT --repo tjsasakifln/web-cfg --env netcup-stage --body 2222
 
 gh secret set NETCUP_DEPLOY_HOST --repo tjsasakifln/web-cfg --env netcup-production < /secure/confenge/netcup-host.txt
 gh secret set NETCUP_DEPLOY_USER --repo tjsasakifln/web-cfg --env netcup-production < /secure/confenge/netcup-user.txt
 gh secret set NETCUP_SSH_PRIVATE_KEY --repo tjsasakifln/web-cfg --env netcup-production < /secure/confenge/netcup-deploy-key
 gh secret set NETCUP_SSH_KNOWN_HOSTS --repo tjsasakifln/web-cfg --env netcup-production < /secure/confenge/netcup-known-hosts
+gh variable set NETCUP_DEPLOY_PORT --repo tjsasakifln/web-cfg --env netcup-production --body 2222
 ```
 
-Add required reviewers to `netcup-production`. Promote stays gated. Only an
-authorized operator may set:
+Restrict both environments to protected branches. With `main` protected by its
+required checks, this lets the repository synchronize automatically without
+granting a deploy credential to contributors or agents. Adding an environment
+reviewer intentionally changes the flow from automatic to approval-paused.
+
+Promotion also stays behind a repository-owner kill switch. Only an authorized
+operator may set:
 
 ```sh
 gh variable set NETCUP_CUTOVER_AUTHORIZED \
@@ -165,13 +182,16 @@ known-host or hostname fallback and never uses `StrictHostKeyChecking=no`.
 Safe runs that do not swap public `current`:
 
 ```sh
-gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=package_only
-gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=stage_verify
+sha=$(gh api repos/tjsasakifln/web-cfg/git/ref/heads/main --jq .object.sha)
+gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=package_only -f expected_sha="$sha"
+gh workflow run netcup-release.yml --repo tjsasakifln/web-cfg --ref main -f operation=stage_verify -f expected_sha="$sha"
 ```
 
 `stage_verify` uploads and validates but does not modify `current`; therefore it
 cannot change production traffic. An authorized dispatch may choose
-`operation=promote`. The workflow and host both serialize deploys.
+`operation=promote` with the same `expected_sha`. Under normal operation no
+dispatch is needed: a push to protected `main` promotes that event's exact SHA.
+The workflow and host both serialize deploys.
 
 Host commands (full SHA only):
 

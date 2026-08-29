@@ -4,8 +4,8 @@ Produção é nginx/Netcup. Autoridade: docs/architecture/RUNTIME-AUTHORITY.md
 Rollback: docs/ops/ROLLBACK.md
 
 1. Merge em main com site-ci e pSEO quality gates verdes.
-2. Release: gh workflow run netcup-release.yml --ref main
-   -f operation=package_only | stage_verify | promote (promote é gated).
+2. O push em main dispara automaticamente package -> stage/verify -> promote.
+   Dispatch manual é só diagnóstico/recuperação e exige -f expected_sha=<FULL_SHA>.
 3. Confirme no navegador:
    https://confenge.com.br/sitemap.xml
    https://confenge.com.br/robots.txt
