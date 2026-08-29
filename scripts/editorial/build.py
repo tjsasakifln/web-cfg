@@ -13,13 +13,14 @@ import json
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from scripts.pseo.reproducible import build_timestamp
 from typing import Any
 from xml.sax.saxutils import escape as xml_escape
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+from scripts.pseo.reproducible import build_timestamp  # noqa: E402
 
 from scripts.editorial.gates import evaluate_page, sitemap_membership_ok # noqa: E402
 from scripts.editorial.registry import (# noqa: E402

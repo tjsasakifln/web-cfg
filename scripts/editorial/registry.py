@@ -13,10 +13,15 @@ import re
 import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
-from scripts.pseo.reproducible import build_timestamp
 from typing import Any
 
+import sys
+
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.pseo.reproducible import build_timestamp  # noqa: E402
 REGISTRY_PATH = ROOT / "data" / "editorial" / "EDITORIAL-REGISTRY.json"
 
 STATES = (

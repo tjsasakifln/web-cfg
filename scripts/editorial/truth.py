@@ -16,13 +16,14 @@ import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from scripts.pseo.reproducible import build_timestamp
 from typing import Any
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+from scripts.pseo.reproducible import build_timestamp  # noqa: E402
 SITE = "https://confenge.com.br"
 
 from scripts.editorial.cohort import (  # noqa: E402
