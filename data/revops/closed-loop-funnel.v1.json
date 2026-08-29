@@ -9,6 +9,7 @@
     "access": "read_only",
     "transport": "operator_supplied_snapshot",
     "snapshot_schema": "confenge.closed-loop-snapshot/1.0",
+    "producer_contract": "warmbly.closed-loop-observations/1.0",
     "snapshot_cli": "npm run revops:closed-loop -- --snapshot /private/path/warmbly-snapshot.json",
     "input_grain": "one_non_pii_stage_transition_per_entity",
     "analytics_shape": "aggregated_non_pii",
@@ -25,6 +26,23 @@
       "lost"
     ],
     "commercial_stage_assertion": "warmbly_only",
+    "official_live_gate": {
+      "kind": "warmbly_aggregate_snapshot",
+      "completeness": "complete",
+      "required_coverage": [
+        "window_start",
+        "window_end",
+        "complete_through"
+      ],
+      "required_provenance": [
+        "producer_contract",
+        "artifact_id",
+        "payload_sha256"
+      ],
+      "approved_payload_pin_env": "WARMBLY_SNAPSHOT_APPROVED_SHA256",
+      "approval_owner": "governance-control-center",
+      "missing_or_partial": "UNKNOWN"
+    },
     "web_cfg_authority_terminal": "persisted_receipt",
     "pii_policy": "no_direct_identifiers_or_free_text",
     "actor_enum": [
@@ -125,41 +143,6 @@
     "lead_form_step": "step2",
     "lead_form_success": "persisted",
     "lead_persisted": "persisted"
-  },
-  "commercial_transitions": {
-    "persisted": ["qualified", "lost"],
-    "qualified": ["proposal", "lost"],
-    "proposal": ["won", "lost"],
-    "won": [],
-    "lost": ["qualified"]
-  },
-  "accept_reasons": [
-    "icp_fit",
-    "urgency_contract",
-    "edital_window",
-    "budget_qualified",
-    "decision_maker",
-    "referred",
-    "other"
-  ],
-  "reject_reasons": [
-    "no_response",
-    "out_of_icp",
-    "timing",
-    "budget",
-    "competitor",
-    "self_serve",
-    "not_a_fit",
-    "duplicate",
-    "spam",
-    "other"
-  ],
-  "sla": {
-    "version": "1.0.0",
-    "first_response_hours": 4,
-    "qualification_hours": 24,
-    "proposal_hours": 72,
-    "retention_days": 730
   },
   "rates": [
     "view_to_cta",

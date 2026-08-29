@@ -131,7 +131,7 @@ const app = http.createServer((req, res) => {
     });
     return;
   }
-  if (req.method === "POST" && url.pathname === "/.netlify/functions/collect") {
+  if (req.method === "POST" && url.pathname === "/api/web/collect") {
     req.resume();
     res.writeHead(202, { "Content-Type": "application/json" });
     res.end('{"ok":true}');

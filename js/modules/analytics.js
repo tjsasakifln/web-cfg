@@ -13,8 +13,9 @@
   const PII_PARAM_KEYS = new Set([
     'address', 'arquivo', 'attachment', 'cnpj', 'company', 'cpf',
     'document', 'documento', 'edital', 'email', 'empresa', 'endereco',
-    'file', 'full_name', 'mensagem', 'message', 'message_body', 'name',
-    'nome', 'phone', 'q', 'query', 'search_query', 'tel', 'telefone', 'whatsapp',
+    'comment', 'description', 'file', 'free_text', 'full_name', 'mensagem',
+    'message', 'message_body', 'name', 'nome', 'note', 'phone', 'q', 'query',
+    'search_query', 'tel', 'telefone', 'whatsapp',
   ]);
   const UNKNOWN_SERVICE = 'UNKNOWN_SERVICE';
   const CANONICAL_DESTINATIONS = {
@@ -112,6 +113,14 @@
     proposal_id: 1,
     sale_id: 1,
   };
+  const ENTITY_ID_PATTERNS = {
+    session_id: /^sess-[0-9a-f]{27}$/i,
+    sid: /^sess-[0-9a-f]{27}$/i,
+    lead_id: /^(?:lead-[0-9a-f]{27}|[0-9a-f]{24})$/i,
+    opportunity_id: /^opp-[0-9a-f]{28}$/i,
+    proposal_id: /^prop-[0-9a-f]{27}$/i,
+    sale_id: /^sale-[0-9a-f]{27}$/i,
+  };
   // EVENT_CONTRACT_CLIENT_END
   window.__CONFENGE_EVENT_CONTRACT = {
     schema_version: EVENT_CONTRACT_SCHEMA_VERSION,
@@ -185,7 +194,7 @@
         sid: getSessionId(),
       })),
     });
-    const url = '/.netlify/functions/collect';
+    const url = '/api/web/collect';
     try {
       if (navigator.sendBeacon) {
         const blob = new Blob([body], { type: 'application/json' });
@@ -247,21 +256,28 @@
       if (!resolved.ok) {
         if (window.CONFENGE_DEBUG_ANALYTICS) {
           // eslint-disable-next-line no-console
-          console.info('[confenge:analytics:reject]', eventName, resolved.reason);
+          console.info('[confenge:analytics:reject]', resolved.reason);
         }
         return;
       }
       if (AGGREGATE_PII_ALLOWLIST.length) return;
       const safe = {};
+      let invalidEntityId = false;
       Object.keys(params || {}).forEach((key) => {
         const val = params[key];
         if (val == null || val === '') return;
         // Drop known PII field names even if caller passes them by mistake
         if (PII_PARAM_KEYS.has(String(key).toLowerCase())) return;
+        const entityPattern = ENTITY_ID_PATTERNS[String(key).toLowerCase()];
+        if (entityPattern && (typeof val !== 'string' || !entityPattern.test(val))) {
+          invalidEntityId = true;
+          return;
+        }
         if (typeof val === 'string' && val.length > 180) return;
         if (looksLikePiiValue(val, key)) return;
         safe[key] = val;
       });
+      if (invalidEntityId) return;
       safe.page_path = safe.page_path || (window.location.pathname || '/');
       safe.session_id = getSessionId();
       safe.source = EVENT_SOURCE;

@@ -25,22 +25,18 @@ const ID_FIELD = Object.freeze({
 
 const VISITOR_STAGE_SET = new Set(CONTRACT.visitor_stages);
 const COMMERCIAL_STAGE_SET = new Set(CONTRACT.commercial_stages);
-const ACCEPT_REASONS = Object.freeze([...(CONTRACT.accept_reasons || [])]);
-const REJECT_REASONS = Object.freeze([...(CONTRACT.reject_reasons || [])]);
-const SLA = Object.freeze({ ...(CONTRACT.sla || {}) });
 const RATE_NAMES = Object.freeze([...(CONTRACT.rates || [])]);
 const RATE_DIMENSIONS = Object.freeze({
-  view_to_cta: Object.freeze(["cta", "view"]),
-  cta_to_start: Object.freeze(["form_start", "cta"]),
-  step1_to_step2: Object.freeze(["step2", "step1"]),
-  step2_to_persisted: Object.freeze(["persisted", "step2"]),
-  persisted_to_qualified: Object.freeze(["qualified", "persisted"]),
-  qualified_to_proposal: Object.freeze(["proposal", "qualified"]),
-  proposal_to_won: Object.freeze(["won", "proposal"]),
+  view_to_cta: Object.freeze({ numerator: "cta", denominator: "view", unit: "sessions" }),
+  cta_to_start: Object.freeze({ numerator: "form_start", denominator: "cta", unit: "sessions" }),
+  step1_to_step2: Object.freeze({ numerator: "step2", denominator: "step1", unit: "sessions" }),
+  step2_to_persisted: Object.freeze({ numerator: "persisted_after_step2_sessions", denominator: "step2", unit: "sessions" }),
+  persisted_to_qualified: Object.freeze({ numerator: "qualified_leads", denominator: "persisted_leads", unit: "leads" }),
+  qualified_to_proposal: Object.freeze({ numerator: "proposal_leads", denominator: "qualified_leads", unit: "leads" }),
+  proposal_to_won: Object.freeze({ numerator: "won_leads", denominator: "proposal_leads", unit: "leads" }),
 });
 const ATTR_FIELDS = Object.freeze([...(CONTRACT.attribution_fields || [])]);
 const VISITOR_EVENT_MAP = Object.freeze({ ...(CONTRACT.visitor_event_map || {}) });
-const COMMERCIAL_TRANSITIONS = Object.freeze({ ...(CONTRACT.commercial_transitions || {}) });
 const OBSERVATION_FIELDS = new Set([
   ...((CONTRACT.warmbly_observation_contract || {}).allowed_fields || []),
 ]);
@@ -50,12 +46,15 @@ const OBSERVATION_ACTORS = new Set([
 const SNAPSHOT_FIELDS = new Set([
   "schema", "schema_version", "kind", "official_live", "source",
   "commercial_owner", "generated_at", "events", "leads", "observations",
+  "producer_contract", "artifact_id", "payload_sha256", "completeness",
+  "window_start", "window_end", "complete_through",
 ]);
 const SNAPSHOT_LEAD_FIELDS = new Set([
-  "lead_id", "session_id", "received_at", "landing_page", "landing_url",
+  "record_kind", "lead_id", "session_id", "received_at", "landing_page", "landing_url",
   "route_family", "asset_id", "cta_id", "jornada", "offer_id", "origem",
   "utm_source", "utm_medium", "utm_campaign",
 ]);
+const LIVE_EVIDENCE = Symbol("verified_warmbly_snapshot");
 
 const DEFAULT_TIMEOUT_MS = Number(process.env.CLOSED_LOOP_TIMEOUT_MS || 8000);
 
@@ -121,7 +120,7 @@ function visitorStageOf(canonical, props) {
 function assertAnalyticsNoPii(payload) {
   const blob = typeof payload === "string" ? payload : JSON.stringify(payload);
   if (/@/.test(blob)) throw codedError("pii_value", "analytics_email_or_at");
-  if (/"mensagem"\s*:|"message_body"\s*:|"message"\s*:/i.test(blob)) {
+  if (/"(?:mensagem|message_body|message|free_text|description|note|comment)"\s*:/i.test(blob)) {
     throw codedError("pii_value", "analytics_free_text");
   }
   if (/"email"\s*:|"telefone"\s*:|"phone"\s*:|"whatsapp"\s*:/i.test(blob)) {
@@ -169,6 +168,9 @@ function assertWarmblyObservationEnvelope(observation) {
   for (const kind of ID_KINDS) {
     const field = ID_FIELD[kind];
     if (observation[field] != null) assertStableId(kind, observation[field]);
+  }
+  for (const field of ["accept_reason", "reject_reason", "loss_reason"]) {
+    if (observation[field] != null) assertSafeToken(observation[field], field, 80);
   }
   scanObjectForPii(observation, "warmbly_observation");
   assertAnalyticsNoPii(observation);
@@ -270,6 +272,48 @@ function timestampMs(value, field) {
   return parsed;
 }
 
+function assertSafeToken(value, field, maxLength = 120) {
+  const raw = String(value || "");
+  if (!raw || raw.length > maxLength || !/^[a-z0-9][a-z0-9._:/+-]*$/i.test(raw)) {
+    throw codedError("invalid_token", `invalid_token:${field}`, { field });
+  }
+  return raw;
+}
+
+function assertAttributionValue(field, value) {
+  if (value == null || value === "") return null;
+  const raw = String(value);
+  if (field === "landing" || field === "landing_page" || field === "landing_url") {
+    let pathname = raw;
+    if (/^https?:\/\//i.test(raw)) {
+      let parsed;
+      try {
+        parsed = new URL(raw);
+      } catch (_) {
+        throw codedError("invalid_attribution", `invalid_attribution:${field}`, { field });
+      }
+      if (parsed.protocol !== "https:" || parsed.hostname !== "confenge.com.br" || parsed.username || parsed.password) {
+        throw codedError("invalid_attribution", `invalid_attribution:${field}`, { field });
+      }
+      pathname = parsed.pathname;
+    }
+    if (
+      pathname.length > 180
+      || !/^\/[a-z0-9/_.,~+-]*$/i.test(pathname)
+      || pathname.includes("//")
+      || /@|%40/i.test(pathname)
+    ) {
+      throw codedError("invalid_attribution", `invalid_attribution:${field}`, { field });
+    }
+    return pathname;
+  }
+  try {
+    return assertSafeToken(raw, field, 80);
+  } catch (_) {
+    throw codedError("invalid_attribution", `invalid_attribution:${field}`, { field });
+  }
+}
+
 function applyObservation(state, observation) {
   if (!observation || typeof observation !== "object") {
     throw codedError("invalid_observation", "invalid_observation");
@@ -295,17 +339,13 @@ function applyObservation(state, observation) {
     });
   }
   const from = commercialPeak(state) || "persisted";
-  const allowed = COMMERCIAL_TRANSITIONS[from] || [];
   const sameEntity =
     (to === "qualified" && state.opportunity && observation.opportunity_id === state.opportunity.opportunity_id) ||
     (to === "proposal" && state.proposal && observation.proposal_id === state.proposal.proposal_id) ||
     (to === "won" && state.sale && observation.sale_id === state.sale.sale_id) ||
     (to === "lost" && state.lead.commercial_stage === "lost");
-  if (from === to || sameEntity) {
+  if (sameEntity || (to === "lost" && state.lead.commercial_stage === "lost")) {
     return { ...state, duplicated: true };
-  }
-  if (!allowed.includes(to)) {
-    throw codedError("invalid_transition", `invalid_transition:${from}->${to}`, { from, to });
   }
 
   const at = String(observation.at || "");
@@ -328,29 +368,28 @@ function applyObservation(state, observation) {
   };
 
   if (to === "qualified") {
-    if (!observation.accept_reason || !ACCEPT_REASONS.includes(observation.accept_reason)) {
-      throw codedError("accept_reason_required", "accept_reason_required", {
-        reason: observation.accept_reason || null,
-      });
-    }
-    const opportunity_id = assertStableId("opportunity", observation.opportunity_id);
-    if (state.opportunity && state.opportunity.opportunity_id !== opportunity_id) {
+    if (state.opportunity || state.proposal || state.sale) {
       throw codedError("duplicate_entity", "lead_already_has_opportunity");
     }
+    const acceptReason = observation.accept_reason == null
+      ? null
+      : assertSafeToken(observation.accept_reason, "accept_reason", 80);
+    const opportunity_id = assertStableId("opportunity", observation.opportunity_id);
     next.opportunity = {
       opportunity_id,
       lead_id: state.lead.lead_id,
       session_id: state.lead.session_id,
       stage: "qualified",
-      accept_reason: observation.accept_reason,
+      accept_reason: acceptReason,
       at,
       owner: "warmbly",
     };
     next.lead.opportunity_id = opportunity_id;
-    next.lead.accept_reason = observation.accept_reason;
+    if (acceptReason) next.lead.accept_reason = acceptReason;
     next.lead.commercial_stage = "qualified";
   } else if (to === "proposal") {
     if (!state.opportunity) throw codedError("invalid_transition", "proposal_without_opportunity");
+    if (state.proposal || state.sale) throw codedError("duplicate_entity", "opportunity_already_has_proposal");
     if (observation.opportunity_id !== state.opportunity.opportunity_id) {
       throw codedError("orphan_observation", "proposal_opportunity_mismatch", {
         expected: state.opportunity.opportunity_id,
@@ -377,6 +416,7 @@ function applyObservation(state, observation) {
     next.lead.commercial_stage = "proposal";
   } else if (to === "won") {
     if (!state.proposal) throw codedError("invalid_transition", "won_without_proposal");
+    if (state.sale) throw codedError("duplicate_entity", "proposal_already_has_sale");
     if (
       observation.opportunity_id !== state.opportunity.opportunity_id
       || observation.proposal_id !== state.proposal.proposal_id
@@ -405,10 +445,7 @@ function applyObservation(state, observation) {
     next.lead.commercial_stage = "won";
   } else if (to === "lost") {
     const reason = observation.reject_reason || observation.loss_reason;
-    if (!reason || !REJECT_REASONS.includes(reason)) {
-      throw codedError("loss_reason_required", "loss_reason_required");
-    }
-    next.lead.loss_reason = reason;
+    if (reason) next.lead.loss_reason = assertSafeToken(reason, "loss_reason", 80);
     next.lead.commercial_stage = "lost";
   }
 
@@ -449,7 +486,10 @@ function pickAttribution(lead, events, explicit) {
   };
   const out = {};
   for (const field of ATTR_FIELDS) {
-    out[field] = (explicit && explicit[field]) || fromLead[field] || fromEvents[field] || null;
+    out[field] = assertAttributionValue(
+      field,
+      (explicit && explicit[field]) || fromLead[field] || fromEvents[field] || null,
+    );
   }
   return out;
 }
@@ -472,6 +512,26 @@ function secondsBetween(fromIso, toIso) {
   return Math.round((b - a) / 1000);
 }
 
+function roundedMean(values) {
+  if (!values.length) return null;
+  return Math.round((values.reduce((sum, value) => sum + value, 0) / values.length) * 1000) / 1000;
+}
+
+function median(values) {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  if (sorted.length % 2) return sorted[middle];
+  return Math.round(((sorted[middle - 1] + sorted[middle]) / 2) * 1000) / 1000;
+}
+
+function percentileNearestRank(values, percentile) {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const index = Math.max(0, Math.ceil(percentile * sorted.length) - 1);
+  return sorted[index];
+}
+
 function bucketKey(attr, field) {
   return String((attr && attr[field]) || "UNKNOWN");
 }
@@ -488,6 +548,10 @@ function reconcileClosedLoop(input) {
   const events = Array.isArray(input && input.events) ? input.events : [];
   const leads = Array.isArray(input && input.leads) ? input.leads : [];
   const observations = Array.isArray(input && input.observations) ? input.observations : [];
+  const officialLive = !!(input && input.official_live === true && input[LIVE_EVIDENCE] === true);
+  if (input && input.official_live === true && !officialLive) {
+    throw codedError("snapshot_not_approved", "official_snapshot_requires_governance_pin");
+  }
 
   const leadsById = new Map(leads.map((l) => [l.lead_id, l]));
   const leadsBySession = new Map();
@@ -561,6 +625,11 @@ function reconcileClosedLoop(input) {
     }
   }
 
+  const persistedSessionIds = new Set(
+    leads.map((lead) => String(lead.session_id || "")).filter(Boolean),
+  );
+  const persistedAfterStep2SessionIds = new Set();
+
   const counts = {
     view: 0,
     cta: 0,
@@ -569,9 +638,15 @@ function reconcileClosedLoop(input) {
     step2: 0,
     persisted: leads.length,
     raw_leads: leads.length,
+    persisted_leads: leads.length,
+    persisted_sessions: persistedSessionIds.size,
+    persisted_after_step2_sessions: 0,
     qualified: opportunities.length,
+    qualified_leads: opportunities.length,
     proposal: proposals.length,
+    proposal_leads: proposals.length,
     won: sales.length,
+    won_leads: sales.length,
   };
   for (const row of sessions.values()) {
     if (row.stages.has("view")) counts.view += 1;
@@ -579,7 +654,11 @@ function reconcileClosedLoop(input) {
     if (row.stages.has("form_start")) counts.form_start += 1;
     if (row.stages.has("step1") || row.stages.has("form_start")) counts.step1 += 1;
     if (row.stages.has("step2")) counts.step2 += 1;
+    if (row.stages.has("step2") && persistedSessionIds.has(row.session_id)) {
+      persistedAfterStep2SessionIds.add(row.session_id);
+    }
   }
+  counts.persisted_after_step2_sessions = persistedAfterStep2SessionIds.size;
 
   if (counts.qualified > counts.persisted) {
     throw codedError("invalid_transition", "qualified_exceeds_persisted");
@@ -595,29 +674,47 @@ function reconcileClosedLoop(input) {
     view_to_cta: rate(counts.cta, counts.view),
     cta_to_start: rate(counts.form_start, counts.cta),
     step1_to_step2: rate(counts.step2, counts.step1),
-    step2_to_persisted: rate(counts.persisted, counts.step2),
-    persisted_to_qualified: rate(counts.qualified, counts.persisted),
-    qualified_to_proposal: rate(counts.proposal, counts.qualified),
-    proposal_to_won: rate(counts.won, counts.proposal),
+    step2_to_persisted: rate(counts.persisted_after_step2_sessions, counts.step2),
+    persisted_to_qualified: rate(counts.qualified_leads, counts.persisted_leads),
+    qualified_to_proposal: rate(counts.proposal_leads, counts.qualified_leads),
+    proposal_to_won: rate(counts.won_leads, counts.proposal_leads),
   };
   const denominators = Object.fromEntries(
     RATE_NAMES.map((name) => {
-      const [numerator, denominator] = RATE_DIMENSIONS[name] || [];
+      const dimension = RATE_DIMENSIONS[name] || {};
+      const { numerator, denominator, unit } = dimension;
       if (!numerator || !denominator) {
         throw codedError("unknown_rate_dimension", `unknown_rate_dimension:${name}`);
       }
       return [name, {
         numerator,
         numerator_count: counts[numerator],
+        numerator_unit: unit,
         denominator,
         denominator_count: counts[denominator],
+        denominator_unit: unit,
       }];
     }),
   );
 
-  const persistedAt = leads[0] && leads[0].received_at;
-  const qualifiedAt = (opportunities[0] && opportunities[0].at) || (observations.find((o) => o.stage === "qualified") || {}).at;
-  const tempo = secondsBetween(persistedAt, qualifiedAt);
+  const responseSamples = opportunities.map((opportunity) => {
+    const lead = leadsById.get(opportunity.lead_id);
+    if (!lead) return null;
+    return secondsBetween(lead.received_at, opportunity.at);
+  }).filter((value) => value != null);
+  const responseTime = {
+    from_stage: "persisted",
+    to_stage: "qualified",
+    unit: "seconds",
+    denominator: "qualified_leads",
+    denominator_count: opportunities.length,
+    observed_count: responseSamples.length,
+    missing_count: opportunities.length - responseSamples.length,
+    mean_seconds: roundedMean(responseSamples),
+    median_seconds: median(responseSamples),
+    p95_seconds: percentileNearestRank(responseSamples, 0.95),
+  };
+  const tempo = responseTime.median_seconds;
 
   const revenue = sales.reduce((sum, s) => sum + Number(s.revenue || 0), 0);
 
@@ -693,15 +790,43 @@ function reconcileClosedLoop(input) {
     schema: "confenge.closed-loop-report/1.0",
     schema_version: CONTRACT.schema_version,
     kind: (input.kind || "synthetic"),
-    official_live: input && input.official_live === true,
+    official_live: officialLive,
+    measurement_status: officialLive ? "OBSERVED" : "SYNTHETIC",
     snapshot_generated_at: (input && input.generated_at) || null,
+    evidence: {
+      producer_contract: (input && input.producer_contract) || null,
+      artifact_id: (input && input.artifact_id) || null,
+      payload_sha256: (input && input.payload_sha256) || null,
+      completeness: (input && input.completeness) || null,
+      window_start: (input && input.window_start) || null,
+      window_end: (input && input.window_end) || null,
+      complete_through: (input && input.complete_through) || null,
+    },
     source: CONTRACT.source,
     commercial_owner: CONTRACT.commercial_owner,
-    sla: { ...SLA },
     counts,
+    count_units: {
+      view: "sessions",
+      cta: "sessions",
+      form_start: "sessions",
+      step1: "sessions",
+      step2: "sessions",
+      persisted_sessions: "sessions",
+      persisted_after_step2_sessions: "sessions",
+      persisted: "leads",
+      raw_leads: "leads",
+      persisted_leads: "leads",
+      qualified: "leads",
+      qualified_leads: "leads",
+      proposal: "leads",
+      proposal_leads: "leads",
+      won: "leads",
+      won_leads: "leads",
+    },
     rates,
     denominators,
     tempo_de_resposta_seconds: tempo,
+    response_time: responseTime,
     revenue,
     entities: {
       session_id: (firstLead && firstLead.session_id) || (events[0] && sessionIdOf(events[0])) || null,
@@ -758,13 +883,34 @@ function loadFixture(filePath) {
   if (!raw || raw.schema !== "confenge.closed-loop-fixture/1.0") {
     throw codedError("invalid_fixture", "invalid_fixture_schema");
   }
-  if (raw.official_live === true) {
+  if (
+    raw.official_live === true
+    || raw.kind !== "synthetic"
+    || raw.record_kind !== "synthetic"
+    || (raw.lead && raw.lead.record_kind !== "synthetic")
+  ) {
     throw codedError("fixture_or_synthetic", "ci_fixture_must_not_be_official_live");
   }
   return raw;
 }
 
-function loadSnapshot(snapshot) {
+function canonicalSnapshotValue(value) {
+  if (Array.isArray(value)) return value.map(canonicalSnapshotValue);
+  if (!value || typeof value !== "object") return value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .filter((key) => key !== "payload_sha256")
+      .sort()
+      .map((key) => [key, canonicalSnapshotValue(value[key])]),
+  );
+}
+
+function computeSnapshotPayloadSha256(snapshot) {
+  const canonical = JSON.stringify(canonicalSnapshotValue(snapshot));
+  return crypto.createHash("sha256").update(canonical).digest("hex");
+}
+
+function loadSnapshot(snapshot, options = {}) {
   const raw = typeof snapshot === "string"
     ? JSON.parse(fs.readFileSync(path.resolve(snapshot), "utf8"))
     : snapshot;
@@ -785,9 +931,43 @@ function loadSnapshot(snapshot) {
   if (typeof raw.official_live !== "boolean") {
     throw codedError("invalid_snapshot", "snapshot_official_live_required");
   }
-  timestampMs(raw.generated_at, "snapshot.generated_at");
+  const generatedAt = timestampMs(raw.generated_at, "snapshot.generated_at");
   if (!Array.isArray(raw.events) || !Array.isArray(raw.leads) || !Array.isArray(raw.observations)) {
     throw codedError("invalid_snapshot", "snapshot_arrays_required");
+  }
+  const liveGate = CONTRACT.warmbly_observation_contract.official_live_gate || {};
+  if (raw.official_live === true) {
+    if (raw.kind !== liveGate.kind) {
+      throw codedError("invalid_snapshot", "official_snapshot_kind_mismatch");
+    }
+    if (raw.completeness !== liveGate.completeness) {
+      throw codedError("snapshot_incomplete", "official_snapshot_coverage_incomplete");
+    }
+    if (raw.producer_contract !== CONTRACT.warmbly_observation_contract.producer_contract) {
+      throw codedError("invalid_snapshot", "snapshot_producer_contract_mismatch");
+    }
+    assertSafeToken(raw.artifact_id, "artifact_id", 120);
+    if (!/^[0-9a-f]{64}$/i.test(String(raw.payload_sha256 || ""))) {
+      throw codedError("invalid_snapshot", "snapshot_payload_sha256_required");
+    }
+    const start = timestampMs(raw.window_start, "snapshot.window_start");
+    const end = timestampMs(raw.window_end, "snapshot.window_end");
+    const completeThrough = timestampMs(raw.complete_through, "snapshot.complete_through");
+    if (start > end || end > completeThrough || completeThrough > generatedAt) {
+      throw codedError("snapshot_incomplete", "snapshot_coverage_window_invalid");
+    }
+    const computed = computeSnapshotPayloadSha256(raw);
+    if (computed !== String(raw.payload_sha256).toLowerCase()) {
+      throw codedError("snapshot_hash_mismatch", "snapshot_payload_hash_mismatch");
+    }
+    const approved = String(
+      options.approvedPayloadSha256 || process.env.WARMBLY_SNAPSHOT_APPROVED_SHA256 || "",
+    ).toLowerCase();
+    if (!approved || approved !== computed) {
+      throw codedError("snapshot_not_approved", "official_snapshot_requires_governance_pin");
+    }
+  } else if (raw.kind !== "synthetic_warmbly_snapshot") {
+    throw codedError("invalid_snapshot", "non_live_snapshot_must_be_synthetic");
   }
   for (const lead of raw.leads) {
     if (!lead || typeof lead !== "object" || Array.isArray(lead)) {
@@ -802,13 +982,24 @@ function loadSnapshot(snapshot) {
     assertStableId("lead", lead.lead_id);
     assertStableId("session", lead.session_id);
     timestampMs(lead.received_at, "snapshot.lead.received_at");
+    if (raw.official_live === true && lead.record_kind !== "real") {
+      throw codedError("fixture_or_synthetic", "official_snapshot_contains_non_real_lead");
+    }
+    if (raw.official_live === false && !new Set(["synthetic", "qa", "fixture"]).has(lead.record_kind)) {
+      throw codedError("fixture_or_synthetic", "synthetic_snapshot_record_kind_required");
+    }
+    for (const [field, value] of Object.entries(lead)) {
+      if (["record_kind", "lead_id", "session_id", "received_at"].includes(field)) continue;
+      assertAttributionValue(field, value);
+    }
     scanObjectForPii(lead, "snapshot.lead");
   }
+  for (const observation of raw.observations) assertWarmblyObservationEnvelope(observation);
   return raw;
 }
 
-function runSnapshot(snapshot) {
-  const bundle = loadSnapshot(snapshot);
+function runSnapshot(snapshot, options = {}) {
+  const bundle = loadSnapshot(snapshot, options);
   const admitted = admitVisitorEvents(bundle.events, { requireStableSession: true });
   const reconciled = reconcileClosedLoop({
     events: admitted.admitted,
@@ -817,6 +1008,14 @@ function runSnapshot(snapshot) {
     kind: bundle.kind,
     official_live: bundle.official_live,
     generated_at: bundle.generated_at,
+    producer_contract: bundle.producer_contract,
+    artifact_id: bundle.artifact_id,
+    payload_sha256: bundle.payload_sha256,
+    completeness: bundle.completeness,
+    window_start: bundle.window_start,
+    window_end: bundle.window_end,
+    complete_through: bundle.complete_through,
+    [LIVE_EVIDENCE]: bundle.official_live === true,
   });
   const report = reportClosedLoop(reconciled);
   const body = `${JSON.stringify(report, null, 2)}\n`;
@@ -830,7 +1029,13 @@ function defaultFixturePath() {
 
 async function runFixture(fixture, store, options = {}) {
   const bundle = typeof fixture === "string" ? loadFixture(fixture) : fixture;
-  if (!bundle || bundle.kind === "real") {
+  if (
+    !bundle
+    || bundle.kind !== "synthetic"
+    || bundle.record_kind !== "synthetic"
+    || !bundle.lead
+    || bundle.lead.record_kind !== "synthetic"
+  ) {
     throw codedError("fixture_or_synthetic", "runFixture_rejects_real_leads");
   }
   const timeoutMs = options.timeoutMs != null ? options.timeoutMs : DEFAULT_TIMEOUT_MS;
@@ -883,14 +1088,10 @@ module.exports = {
   CONTRACT_PATH,
   ID_KINDS,
   ID_FIELD,
-  ACCEPT_REASONS,
-  REJECT_REASONS,
-  SLA,
   RATE_NAMES,
   RATE_DIMENSIONS,
   ATTR_FIELDS,
   VISITOR_EVENT_MAP,
-  COMMERCIAL_TRANSITIONS,
   DEFAULT_TIMEOUT_MS,
   getContract,
   isStableId,
@@ -909,6 +1110,7 @@ module.exports = {
   withTimeout,
   loadFixture,
   loadSnapshot,
+  computeSnapshotPayloadSha256,
   defaultFixturePath,
   runFixture,
   runSnapshot,

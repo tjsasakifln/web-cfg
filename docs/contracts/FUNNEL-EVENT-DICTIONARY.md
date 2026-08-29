@@ -28,7 +28,7 @@ Every admitted event carries:
 | `consent` | `not_required` on aggregate events |
 | `pii_policy` | `aggregate_allowlist_empty` |
 
-The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query text and PII-like values are never admitted. Envelope identifiers (`correlation_id`, `idempotency_key`, `event_id`, `session_id`, `lead_id`, `opportunity_id`, `proposal_id`, `sale_id`) follow the lead-core rule: UUID, `c-` / `sess-` / `lead-` / `opp-` / `prop-` / `sale-` / `evt-` prefixes and timestamp keys are not treated as phone/CNPJ. `@` still fails on every field.
+The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query text, description/note/comment/free-text fields and PII-like values are never admitted. Join identifiers are validated against their complete declared patterns: `sess-`, `lead-` (plus the rollback-compatible legacy 24-hex lead id), `opp-`, `prop-` and `sale-`. `correlation_id`, `idempotency_key` and `event_id` remain non-PII technical tokens; `@` still fails on every field.
 
 ## Layers (denominators)
 

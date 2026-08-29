@@ -27,6 +27,14 @@ const ENVELOPE_ID_KEYS = new Set([
   "proposal_id",
   "sale_id",
 ]);
+const ENTITY_ID_PATTERNS = Object.freeze({
+  session_id: /^sess-[0-9a-f]{27}$/i,
+  sid: /^sess-[0-9a-f]{27}$/i,
+  lead_id: /^(?:lead-[0-9a-f]{27}|[0-9a-f]{24})$/i,
+  opportunity_id: /^opp-[0-9a-f]{28}$/i,
+  proposal_id: /^prop-[0-9a-f]{27}$/i,
+  sale_id: /^sale-[0-9a-f]{27}$/i,
+});
 
 const LAYER_RANK = Object.freeze({
   session: 0,
@@ -152,20 +160,30 @@ function keyLooksPii(key) {
   const k = String(key || "").toLowerCase();
   if (PII_KEYS.has(k)) return true;
   if (AGGREGATE_PII_ALLOWLIST.includes(k)) return false;
-  return /email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|cnpj|document/.test(k);
+  return /email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|cnpj|document|free.?text|description|note|comment|observa/.test(k);
+}
+
+function isValidEntityId(field, value) {
+  const pattern = ENTITY_ID_PATTERNS[String(field || "").toLowerCase()];
+  return !pattern || (typeof value === "string" && pattern.test(value));
 }
 
 function minimizeProps(props) {
   const out = {};
   const dropped = [];
+  const invalidEntityFields = [];
   if (!props || typeof props !== "object" || Array.isArray(props)) {
-    return { props: out, dropped, tainted: false };
+    return { props: out, dropped, invalidEntityFields, tainted: false };
   }
   let tainted = false;
   for (const [k, v] of Object.entries(props)) {
     if (v == null || v === "") continue;
     if (keyLooksPii(k)) {
       dropped.push(k);
+      continue;
+    }
+    if (!isValidEntityId(k, v)) {
+      invalidEntityFields.push(k);
       continue;
     }
     if (typeof v === "string") {
@@ -179,7 +197,7 @@ function minimizeProps(props) {
       out[k] = v;
     }
   }
-  return { props: out, dropped, tainted };
+  return { props: out, dropped, invalidEntityFields, tainted };
 }
 
 function applyEnvelope(canonical, props, meta = {}) {
@@ -202,7 +220,7 @@ function admitEvent(raw) {
     return {
       ok: false,
       reason: classified.reason || "retired",
-      original,
+      original: classified.prefix ? "custom_*" : original,
       classification: classified.classification,
     };
   }
@@ -210,7 +228,7 @@ function admitEvent(raw) {
     return {
       ok: false,
       reason: classified.reason || "unknown_event",
-      original,
+      original: "",
       classification: classified.classification,
     };
   }
@@ -236,6 +254,16 @@ function admitEvent(raw) {
         Object.entries(input).filter(([k]) => !["event", "name", "props", "path", "sid", "session_id", "ts"].includes(k)),
       );
   const minimized = minimizeProps(rawProps);
+  if (minimized.invalidEntityFields.length) {
+    return {
+      ok: false,
+      reason: "invalid_entity_id",
+      original,
+      canonical,
+      classification: classified.classification,
+      fields: minimized.invalidEntityFields,
+    };
+  }
   if (minimized.tainted) {
     return {
       ok: false,
@@ -250,6 +278,15 @@ function admitEvent(raw) {
     return { ok: false, reason: "pii_allowlist_not_empty", original, canonical };
   }
   const sid = String(input.sid || input.session_id || "").slice(0, 32);
+  if (sid && !isValidEntityId("sid", sid)) {
+    return {
+      ok: false,
+      reason: "invalid_entity_id",
+      original,
+      canonical,
+      classification: classified.classification,
+    };
+  }
   if (looksLikePiiValue(sid, "sid")) {
     return {
       ok: false,
@@ -310,7 +347,7 @@ function admitBatch(events, seen) {
     const result = admitEvent(ev);
     if (!result.ok) {
       rejected.push({
-        event: ev && (ev.event || ev.name),
+        event: result.original || result.canonical || "REJECTED",
         reason: result.reason,
       });
       continue;

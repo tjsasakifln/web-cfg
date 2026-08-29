@@ -11,6 +11,12 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const code = fs.readFileSync(path.join(root, "script.js"), "utf8");
+const analyticsSource = fs.readFileSync(path.join(root, "js/modules/analytics.js"), "utf8");
+
+if (!analyticsSource.includes("'/api/web/collect'") || analyticsSource.includes("'/.netlify/functions/collect'")) {
+  console.error("FAIL: browser analytics must use the canonical Netcup collector route");
+  process.exit(1);
+}
 
 const dataLayer = [];
 const sessionValues = new Map();
@@ -177,6 +183,17 @@ track("lead_persisted", {
 const taintedId = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
 if (taintedId.lead_id) {
   console.error("FAIL: PII-like value leaked through an identifier field", taintedId);
+  process.exit(1);
+}
+
+const beforeMalformed = sandbox.window.dataLayer.length;
+track("lead_persisted", {
+  page_path: "/",
+  lead_id: "Joao Silva",
+  free_text: "detalhes confidenciais",
+});
+if (sandbox.window.dataLayer.length !== beforeMalformed) {
+  console.error("FAIL: malformed entity id event must fail closed", sandbox.window.dataLayer.at(-1));
   process.exit(1);
 }
 

@@ -75,9 +75,12 @@ function expectedCount(stage) {
     if (!closedLoop.RATE_NAMES.includes(name)) fail("rate_named", name);
   }
   pass("named_rates", FUNNEL.rates.join(","));
-  if (!FUNNEL.accept_reasons.length || !FUNNEL.reject_reasons.length) {
-    fail("reason_contract_empty");
-  } else pass("commercial_reasons_versioned");
+  for (const forbiddenPolicy of ["commercial_transitions", "accept_reasons", "reject_reasons", "sla"]) {
+    if (Object.prototype.hasOwnProperty.call(FUNNEL, forbiddenPolicy)) {
+      fail("warmbly_policy_duplicated", forbiddenPolicy);
+    }
+  }
+  pass("warmbly_policy_not_redeclared");
   const minted = closedLoop.mintStableId("session", fixture.seed);
   if (minted !== fixture.ids.session_id) fail("mint_session", { minted, expected: fixture.ids.session_id });
   else pass("mint_session_deterministic", minted);
@@ -119,6 +122,14 @@ const walk = await closedLoop.runFixture(fixture, store);
     fail("tempo", { got: report.tempo_de_resposta_seconds, expected: expectedTempo() });
   } else pass("tempo_de_resposta_seconds", report.tempo_de_resposta_seconds);
   if (typeof report.tempo_de_resposta_seconds !== "number") fail("tempo_not_numeric");
+  if (
+    report.response_time?.observed_count !== 1
+    || report.response_time?.median_seconds !== expectedTempo()
+    || report.response_time?.p95_seconds !== expectedTempo()
+    || report.response_time?.unit !== "seconds"
+  ) {
+    fail("response_time_aggregate", report.response_time);
+  } else pass("response_time_joined_by_lead", JSON.stringify(report.response_time));
   for (const name of FUNNEL.rates) {
     if (!(name in report.rates)) fail("missing_rate", name);
     const value = report.rates[name];
@@ -128,10 +139,10 @@ const walk = await closedLoop.runFixture(fixture, store);
     view_to_cta: ["cta", "view"],
     cta_to_start: ["form_start", "cta"],
     step1_to_step2: ["step2", "step1"],
-    step2_to_persisted: ["persisted", "step2"],
-    persisted_to_qualified: ["qualified", "persisted"],
-    qualified_to_proposal: ["proposal", "qualified"],
-    proposal_to_won: ["won", "proposal"],
+    step2_to_persisted: ["persisted_after_step2_sessions", "step2"],
+    persisted_to_qualified: ["qualified_leads", "persisted_leads"],
+    qualified_to_proposal: ["proposal_leads", "qualified_leads"],
+    proposal_to_won: ["won_leads", "proposal_leads"],
   };
   for (const [name, [numerator, denominator]] of Object.entries(expectedDenominators)) {
     const declared = report.denominators && report.denominators[name];
@@ -141,6 +152,7 @@ const walk = await closedLoop.runFixture(fixture, store);
       || declared.denominator !== denominator
       || declared.numerator_count !== report.counts[numerator]
       || declared.denominator_count !== report.counts[denominator]
+      || declared.numerator_unit !== declared.denominator_unit
     ) {
       fail("denominator_contract", { name, declared, numerator, denominator });
     }
@@ -189,6 +201,7 @@ const walk = await closedLoop.runFixture(fixture, store);
     generated_at: "2026-08-08T11:00:00.000Z",
     events: fixture.events,
     leads: [{
+      record_kind: "synthetic",
       lead_id: fixture.lead.lead_id,
       session_id: fixture.lead.session_id,
       received_at: fixture.lead.received_at,
@@ -241,6 +254,92 @@ const walk = await closedLoop.runFixture(fixture, store);
       pass("warmbly_snapshot_pii_rejected", err.code);
     } else fail("warmbly_snapshot_pii_code", err.code || err.message);
   }
+  for (const [name, candidate, expectedCode] of [
+    [
+      "fixture_flip_cannot_self_assert_live",
+      {
+        ...snapshot,
+        kind: "synthetic",
+        official_live: true,
+        leads: snapshot.leads.map((lead) => ({ ...lead, record_kind: "real" })),
+      },
+      "invalid_snapshot",
+    ],
+    [
+      "partial_live_snapshot_stays_unknown",
+      {
+        ...snapshot,
+        kind: "warmbly_aggregate_snapshot",
+        official_live: true,
+        producer_contract: "warmbly.closed-loop-observations/1.0",
+        artifact_id: "warmbly-export-20260808-01",
+        payload_sha256: "a".repeat(64),
+        completeness: "partial",
+        window_start: "2026-08-01T00:00:00.000Z",
+        window_end: "2026-08-08T00:00:00.000Z",
+        complete_through: "2026-08-07T00:00:00.000Z",
+        leads: snapshot.leads.map((lead) => ({ ...lead, record_kind: "real" })),
+      },
+      "snapshot_incomplete",
+    ],
+  ]) {
+    try {
+      closedLoop.runSnapshot(candidate);
+      fail(name);
+    } catch (err) {
+      if (err.code === expectedCode) pass(name, err.code);
+      else fail(`${name}_code`, err.code || err.message);
+    }
+  }
+  const official = {
+    ...snapshot,
+    kind: "warmbly_aggregate_snapshot",
+    official_live: true,
+    producer_contract: "warmbly.closed-loop-observations/1.0",
+    artifact_id: "warmbly-export-20260808-01",
+    completeness: "complete",
+    window_start: "2026-08-01T00:00:00.000Z",
+    window_end: "2026-08-08T10:00:00.000Z",
+    complete_through: "2026-08-08T10:30:00.000Z",
+    leads: snapshot.leads.map((lead) => ({ ...lead, record_kind: "real" })),
+  };
+  official.payload_sha256 = closedLoop.computeSnapshotPayloadSha256(official);
+  try {
+    closedLoop.runSnapshot(official);
+    fail("unpinned_live_snapshot_accepted");
+  } catch (err) {
+    if (err.code === "snapshot_not_approved") pass("unpinned_live_snapshot_stays_unknown", err.code);
+    else fail("unpinned_live_snapshot_code", err.code || err.message);
+  }
+  try {
+    const observed = closedLoop.runSnapshot(official, {
+      approvedPayloadSha256: official.payload_sha256,
+    });
+    if (!observed.report.official_live || observed.report.measurement_status !== "OBSERVED") {
+      fail("pinned_live_snapshot_not_observed", observed.report);
+    } else pass("pinned_complete_live_snapshot_observed");
+  } catch (err) {
+    fail("pinned_live_snapshot", err.code || err.message);
+  }
+  for (const field of [
+    "landing_page", "landing_url", "route_family", "asset_id", "cta_id", "jornada",
+    "offer_id", "origem", "utm_source", "utm_medium", "utm_campaign",
+  ]) {
+    const sensitive = field.startsWith("landing") ? "https://evil.example/cliente" : "Nome Cliente";
+    try {
+      closedLoop.runSnapshot({
+        ...snapshot,
+        leads: [{ ...snapshot.leads[0], [field]: sensitive }],
+      });
+      fail("snapshot_attribution_text_admitted", field);
+    } catch (err) {
+      const serialized = JSON.stringify(err);
+      if (err.code !== "invalid_attribution" || serialized.includes(sensitive)) {
+        fail("snapshot_attribution_error", { field, code: err.code, serialized });
+      }
+    }
+  }
+  pass("snapshot_attribution_allowlist_fail_closed");
 }
 
 // --- route/offer/origin breakdowns stay cohort-local with multiple sessions ---
@@ -276,7 +375,7 @@ const walk = await closedLoop.runFixture(fixture, store);
   const admitted = closedLoop.admitVisitorEvents([...fixture.events, ...secondEvents]).admitted;
   const report = closedLoop.reconcileClosedLoop({
     events: admitted,
-    leads: [fixture.lead, secondLead],
+    leads: [secondLead, fixture.lead],
     observations: fixture.observations,
     kind: "synthetic",
   }).report;
@@ -294,6 +393,35 @@ const walk = await closedLoop.runFixture(fixture, store);
       by_origem: report.by_origem,
     });
   } else pass("cohort_breakdowns_are_local");
+  if (report.response_time.median_seconds !== expectedTempo() || report.response_time.observed_count !== 1) {
+    fail("response_time_reordered_join", report.response_time);
+  } else pass("response_time_reordered_join_by_lead");
+}
+
+// --- duplicate leads in one session do not mix session and lead units ---
+{
+  const duplicateLead = {
+    ...fixture.lead,
+    lead_id: closedLoop.mintStableId("lead", "same-session-second-lead"),
+    received_at: "2026-08-01T10:05:00.000Z",
+  };
+  const admitted = closedLoop.admitVisitorEvents(fixture.events).admitted;
+  const report = closedLoop.reconcileClosedLoop({
+    events: admitted,
+    leads: [fixture.lead, duplicateLead],
+    observations: fixture.observations,
+    kind: "synthetic",
+  }).report;
+  if (
+    report.counts.persisted_leads !== 2
+    || report.counts.persisted_sessions !== 1
+    || report.counts.persisted_after_step2_sessions !== 1
+    || report.rates.step2_to_persisted > 1
+    || report.denominators.step2_to_persisted.denominator_unit !== "sessions"
+    || report.denominators.persisted_to_qualified.denominator_unit !== "leads"
+  ) {
+    fail("coherent_count_units", { counts: report.counts, denominators: report.denominators });
+  } else pass("coherent_count_units");
 }
 
 // --- CLI report twice, identical ---
@@ -334,6 +462,35 @@ const walk = await closedLoop.runFixture(fixture, store);
     if (err.code === "pii_value" || err.code === "pii_key_admitted") pass("pii_email_rejected", err.code);
     else fail("pii_email_code", err.code || err.message);
   }
+  for (const [field, value] of [
+    ["lead_id", "Joao Silva"],
+    ["opportunity_id", "cliente importante"],
+    ["proposal_id", "proposta do cliente"],
+    ["sale_id", "venda para Maria"],
+  ]) {
+    const admitted = contract.admitEvent({
+      event: "lead_persisted",
+      path: "/",
+      sid: fixture.ids.session_id,
+      props: { event_id: `evt-invalid-${field}`, [field]: value },
+    });
+    if (admitted.ok || admitted.reason !== "invalid_entity_id") {
+      fail("malformed_entity_id_admitted", { field, admitted });
+    }
+  }
+  pass("malformed_entity_ids_fail_closed");
+  for (const field of ["free_text", "description", "note", "comment"]) {
+    const admitted = contract.admitEvent({
+      event: "page_view",
+      path: "/",
+      sid: fixture.ids.session_id,
+      props: { event_id: `evt-free-${field}`, [field]: "detalhes confidenciais" },
+    });
+    if (!admitted.ok || admitted.event.props[field]) {
+      fail("free_text_key_admitted", { field, admitted });
+    }
+  }
+  pass("free_text_keys_removed");
   try {
     closedLoop.admitVisitorEvents([
       {

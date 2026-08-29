@@ -266,12 +266,12 @@ function readyGscHistory(asOf, nowIso) {
 // 7) analytics aggregation
 {
   const events = [
-    { event: "page_view", path: "/conteudos/bdi-obra-publica/", sid: "s1", ts: "2026-08-01T10:00:00Z" },
-    { event: "cta_click", path: "/conteudos/bdi-obra-publica/", sid: "s1", ts: "2026-08-01T10:01:00Z", props: { cta_id: "inline" } },
-    { event: "lead_form_start", path: "/", sid: "s1", ts: "2026-08-01T10:02:00Z" },
-    { event: "lead_form_success", path: "/", sid: "s1", ts: "2026-08-01T10:03:00Z" },
-    { event: "web_vital", path: "/", sid: "s1", ts: "2026-08-01T10:00:05Z", props: { metric: "lcp", value: 1800 } },
-    { event: "web_vital", path: "/", sid: "s1", ts: "2026-08-01T10:00:06Z", props: { metric: "cls", value: 0.02 } },
+    { event: "page_view", path: "/conteudos/bdi-obra-publica/", sid: "sess-111111111111111111111111111", ts: "2026-08-01T10:00:00Z" },
+    { event: "cta_click", path: "/conteudos/bdi-obra-publica/", sid: "sess-111111111111111111111111111", ts: "2026-08-01T10:01:00Z", props: { cta_id: "inline" } },
+    { event: "lead_form_start", path: "/", sid: "sess-111111111111111111111111111", ts: "2026-08-01T10:02:00Z" },
+    { event: "lead_form_success", path: "/", sid: "sess-111111111111111111111111111", ts: "2026-08-01T10:03:00Z" },
+    { event: "web_vital", path: "/", sid: "sess-111111111111111111111111111", ts: "2026-08-01T10:00:05Z", props: { metric: "lcp", value: 1800 } },
+    { event: "web_vital", path: "/", sid: "sess-111111111111111111111111111", ts: "2026-08-01T10:00:06Z", props: { metric: "cls", value: 0.02 } },
   ];
   const agg = aggregateEvents(events);
   if (!agg.daily.length) fail("agg_daily");
@@ -279,7 +279,7 @@ function readyGscHistory(asOf, nowIso) {
   if (!agg.web_vitals.lcp || agg.web_vitals.lcp.n !== 1) fail("agg_lcp", agg.web_vitals);
   else pass("agg_lcp", agg.web_vitals.lcp.p75);
   const attr = attributeLeads(
-    [{ lead_id: "L1", session_id: "s1", received_at: "2026-08-01T10:03:00Z", landing_page: "/", commercial_stage: "lead_persisted" }],
+    [{ lead_id: "L1", session_id: "sess-111111111111111111111111111", received_at: "2026-08-01T10:03:00Z", landing_page: "/", commercial_stage: "lead_persisted" }],
     events
   );
   if (attr[0].first_touch_path !== "/conteudos/bdi-obra-publica/") fail("attr_first", attr[0]);

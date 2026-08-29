@@ -22,6 +22,11 @@ assert(
 );
 
 const base = structuredClone(repo.decision);
+assert.equal(
+  base.first_party_baseline.collector,
+  "/api/web/collect",
+  "first-party baseline must name the canonical Netcup route",
+);
 const injected = detectExternalAnalytics([
   ["index.html", '<script src="https://www.googletagmanager.com/gtag/js?id=G-TEST"></script>'],
 ]);

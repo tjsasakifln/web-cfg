@@ -30,7 +30,7 @@ function fail(name, detail) {
   failed += 1;
 }
 
-const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body|"(?:nome|name|full_name|cnpj|cpf|telefone|phone)"\s*:/i;
+const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body|"(?:nome|name|full_name|cnpj|cpf|telefone|phone|free_text|description|note|comment)"\s*:/i;
 
 // --- admitEvent strips PII keys; closed-loop walk fail-closes on them ---
 {
@@ -119,9 +119,29 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body|"(?:nome|name|full_name|cn
     ],
   ]) {
     const admitted = contract.admitEvent(event);
-    if (admitted.ok || admitted.reason !== "pii_value") fail(`${name}_admitted`, admitted);
+    if (admitted.ok || !["pii_value", "invalid_entity_id"].includes(admitted.reason)) fail(`${name}_admitted`, admitted);
     else pass(`${name}_rejected`, admitted.reason);
   }
+  for (const field of ["session_id", "lead_id", "opportunity_id", "proposal_id", "sale_id"]) {
+    const admitted = contract.admitEvent({
+      event: "lead_persisted",
+      path: "/",
+      sid: "sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      props: { event_id: `evt-priv-${field}`, [field]: "Joao Silva" },
+    });
+    if (admitted.ok || admitted.reason !== "invalid_entity_id") {
+      fail("malformed_join_id_admitted", { field, admitted });
+    }
+  }
+  pass("malformed_join_ids_rejected_without_echo");
+  const rejectedName = contract.admitBatch([{
+    event: "alice@example.com",
+    path: "/",
+    props: { event_id: "evt-priv-name" },
+  }]);
+  if (JSON.stringify(rejectedName.rejected).includes("alice@example.com")) {
+    fail("rejected_event_name_leaked", rejectedName.rejected);
+  } else pass("rejected_event_name_redacted");
 }
 
 // --- fixture report never contains PII ---
@@ -255,7 +275,7 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body|"(?:nome|name|full_name|cn
 {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "confenge-privacy-dsar-"));
   const store = new FileStore(dir);
-  const retainDays = closedLoop.SLA.retention_days;
+  const retainDays = Number(process.env.LEAD_RETAIN_DAYS || 730);
   const old = {
     lead_id: "lead-oldprivacy000000000000000",
     record_kind: "real",

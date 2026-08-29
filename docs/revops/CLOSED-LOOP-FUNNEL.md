@@ -40,4 +40,6 @@ Join keys (prefixes, never email / phone / free text):
 | proposal | `prop-` | `proposal_id` |
 | sale | `sale-` | `sale_id` |
 
-CI proof: `scripts/revops/fixtures/closed-loop-synthetic.v1.json` and `npm run revops:closed-loop`. Replay output is byte-identical. Production counts stay out of this fixture report and remain `UNKNOWN` without a conforming Warmbly snapshot. An operator can render that local read-only snapshot with `npm run revops:closed-loop -- --snapshot /private/path/warmbly-snapshot.json`; the command performs no network call or write.
+CI proof: `scripts/revops/fixtures/closed-loop-synthetic.v1.json` and `npm run revops:closed-loop`. Replay output is byte-identical. Production counts stay out of this fixture report and remain `UNKNOWN` without a complete Warmbly snapshot whose canonical payload hash is separately pinned by Governance/Control Center. An operator can render that local read-only snapshot with `WARMBLY_SNAPSHOT_APPROVED_SHA256=<sha256> npm run revops:closed-loop -- --snapshot /private/path/warmbly-snapshot.json`; the command performs no network call or write.
+
+Rate units are explicit. View/CTA/start/steps are unique sessions; step2→persisted uses the intersection of step-2 sessions and persisted sessions. Persisted→qualified→proposal→won uses leads. Response time joins each opportunity back to its own `lead_id` and reports sample count, mean, median and p95.

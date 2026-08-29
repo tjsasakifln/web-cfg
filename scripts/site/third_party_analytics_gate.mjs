@@ -143,7 +143,7 @@ export function validateDecision(decision, hits, options = {}) {
     errors.push("decision review_at cannot precede decided_at");
   }
   const baseline = decision.first_party_baseline || {};
-  if (baseline.required !== true || baseline.collector !== "/.netlify/functions/collect") {
+  if (baseline.required !== true || baseline.collector !== "/api/web/collect") {
     errors.push("first-party collector must remain required");
   }
   if (baseline.source !== "CONFENGE_WEB" || baseline.pii_policy !== "aggregate_allowlist_empty") {
@@ -279,7 +279,7 @@ export function runGate(root = ROOT) {
 
   const browser = fs.readFileSync(path.join(root, "js/modules/analytics.js"), "utf8");
   const collector = fs.readFileSync(path.join(root, "netlify/functions/collect.cjs"), "utf8");
-  if (!browser.includes("/.netlify/functions/collect")) {
+  if (!browser.includes("/api/web/collect")) {
     errors.push("browser analytics no longer targets the first-party collector");
   }
   if (!collector.includes('collector: "confenge-first-party"')) {

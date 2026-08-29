@@ -198,7 +198,7 @@ async function collectPair() {
         idempotency_key: "idk-test-1",
       },
       path: "/",
-      sid: "sid-test-1",
+      sid: "sess-111111111111111111111111111",
     },
   ]);
   const acceptBody = JSON.parse(acceptRes.body);
@@ -497,12 +497,16 @@ const piiValue = contract.admitEvent({
   event: "page_view",
   props: { page_path: "/", note: "alice@example.com" },
 });
-if (piiValue.ok) fail("pii_like_value_admitted", piiValue);
+if (!piiValue.ok || piiValue.event.props.note != null || !piiValue.dropped.includes("note")) {
+  fail("pii_like_value_admitted", piiValue);
+}
 const cnpjValue = contract.admitEvent({
   event: "internal_search",
   props: { page_path: "/", note: "12345678000199" },
 });
-if (cnpjValue.ok) fail("cnpj_like_value_admitted", cnpjValue);
+if (!cnpjValue.ok || cnpjValue.event.props.note != null || !cnpjValue.dropped.includes("note")) {
+  fail("cnpj_like_value_admitted", cnpjValue);
+}
 
 const collectPii = await postCollect([
   {
