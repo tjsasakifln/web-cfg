@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "26f4f6600b9bb7c4b047fe933004bb6d25d0c545",
+  "baseline_commit": "182aedb7f3dbff96aeeaf6331044269ed97ee3e2",
   "recaptured_at": "2026-08-29",
-  "recapture_reason": "PR #476 merge recapture onto origin/main 26f4f6600b9bb7c4b047fe933004bb6d25d0c545. Hashes recomputed from the merged tree, not copied from either side of the conflict. Drifted non-rendering collateral: _redirects, sitemap.txt, sitemap.xml. The six protected BOFU pillar HTML files and all rendering collateral (script.js, styles*.css) are byte-identical to origin/main, verified by recomputed sha256. html_mutation remains false and the #291 unlock plan is untouched.",
+  "recapture_reason": "PR #476 merge recapture onto origin/main 26f4f6600b9bb7c4b047fe933004bb6d25d0c545. Hashes recomputed from the merged tree, not copied from either side of the conflict; baseline_commit pins 182aedb7f3dbff96aeeaf6331044269ed97ee3e2, the merge commit whose protected-path bytes these hashes attest. The six protected BOFU pillar HTML files and all rendering collateral are byte-identical to origin/main, verified by recomputed sha256. html_mutation remains false and the #291 unlock plan is untouched.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
