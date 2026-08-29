@@ -54,7 +54,12 @@ signed inbound request to browser code.
 
 Empty URL: capture still works; handoff `SKIPPED`. Non-HTTPS in staging/prod, PII on the query, missing secret, or host off the allowlist is `BLOCKED` (no POST).
 
-Non-real records (`synthetic` / `qa` / `spam` / `internal`) persist locally and skip Warmbly so probes never manufacture a commercial action.
+Non-real records (`qa` / `spam` / `internal` and unauthenticated synthetic
+signals) persist locally and skip Warmbly. The sole exception is a
+server-authenticated probe: it crosses the transport with
+`record_kind=synthetic`, Warmbly stores an idempotent receipt, excludes it from
+`INBOUND NOW/include_synthetic=0`, and creates no action. This proves transport
+without manufacturing a commercial opportunity.
 
 ## Ops
 
@@ -146,9 +151,16 @@ Site-static rollback: [ROLLBACK.md](./ROLLBACK.md). Host-owned filesystem leads 
 
 ## Synthetic
 
-Only when the inbound URL is reachable, the shared secret is set on both sides, and Warmbly auto-send is proven off. Use a clearly labeled synthetic (`SYNTHETIC-INBOUND`, `@example.com`). Do not generate a real contact. If any precondition is missing, record the exact blocker — do not fake INBOUND NOW.
+Only when the inbound URL is reachable, the shared secret is set on both sides,
+the server-only probe credential is configured, and Warmbly auto-send and
+dispatch are proven off. Use the authenticated, clearly labeled synthetic
+fixture (`SYNTHETIC-PROBE`, `@example.com`). Do not generate a real contact. If
+any precondition is missing, fail before POST and record the exact blocker — do
+not fake INBOUND NOW.
 
-Non-real records persist and **SKIP** Warmbly. A synthetic `201` proves capture only; it cannot prove the commercial handoff or close #230.
+The authenticated synthetic record may reach Warmbly only as
+`record_kind=synthetic`; its 201 plus an idempotent retry proves capture and
+transport, but never proves a real commercial action, human consent or QCO.
 
 ### Money-asset proof harness
 

@@ -4,8 +4,8 @@
 
 **Workflow:** brownfield-discovery · Phase 1  
 **Agent:** @architect (Aria) via Orion YOLO orchestration  
-**Date:** 2026-08-05  
-**Branch analyzed:** `feat/visitor-experience-redesign` @ `948554b0`  
+**Original discovery:** 2026-08-05 (`feat/visitor-experience-redesign` @ `948554b0`)
+**Runtime correction:** 2026-08-29; current authority is `RUNTIME-AUTHORITY.md`
 **Production:** https://confenge.com.br  
 
 ---
@@ -16,16 +16,16 @@ CONFENGE is a **static marketing + editorial + tools site** for B2G (business-to
 
 It is **not** a SPA framework app. The product is:
 
-1. **Public static HTML** generated/assembled into `_site/` and published on Netlify  
-2. **Serverless functions** for lead capture, nurture, analytics collect, and authenticated ops  
+1. **Public static HTML** generated/assembled into `_site/` and served by nginx on Netcup
+2. **Portable Node handlers** for lead capture, nurture, analytics collect, and authenticated ops
 3. **Python + Node pipelines** for pSEO, editorial governance, RevOps/GSC, design gates, and release evidence  
 
 | Dimension | Reality |
 |-----------|---------|
 | Product type | Content + conversion site (inbound) |
-| Runtime public | Static files + Netlify Functions |
+| Runtime public | nginx + portable Node 22 runtime on Netcup |
 | Primary languages | HTML/CSS/JS, Python 3.12, Node 20 |
-| Database RDBMS | **None** (Netlify Blobs + JSON artifacts) |
+| Database RDBMS | **None** (host-owned private filesystem + public JSON build inputs) |
 | Package name | `confenge-site` v1.0.0 |
 
 ---
@@ -45,8 +45,9 @@ It is **not** a SPA framework app. The product is:
                      │                     │                  │
                      └──────────┬──────────┴──────────────────┘
                                 ▼
-                     Netlify Blobs stores
-                     (leads, analytics, nurture)
+                     Host-owned filesystem
+                     /var/lib/confenge-web
+                 (leads, analytics, nurture, GSC)
                                 │
               ┌─────────────────┼─────────────────┐
               ▼                 ▼                 ▼
@@ -54,7 +55,9 @@ It is **not** a SPA framework app. The product is:
          (notify)         (product analytics) (search demand)
 ```
 
-**External systems:** Netlify (host + functions + blobs), ntfy, Resend, Cloudflare Turnstile, Google Search Console (import/API), optional Plausible, WhatsApp (handoff off-platform).
+**External systems:** Netcup VPS/nginx, ntfy, Resend, Cloudflare Turnstile,
+Google Search Console (private import/API), optional Plausible, and Warmbly for
+commercial action/outcomes. Netlify remains only a legacy adapter/preview plane.
 
 ---
 
@@ -64,8 +67,8 @@ It is **not** a SPA framework app. The product is:
 |-----------|------|----------------|
 | Public static site | HTML + `styles.css` + `styles-tools.css` + `script.js` + `assets/js/*` | SEO pages, hubs, offers, tools UI |
 | Build pipeline | Python (`scripts/pseo`, `scripts/editorial`, `scripts/site`) | Generate pages, sitemaps, gates, `_site` assembly |
-| Lead API | `netlify/functions/lead.cjs` + `lib/lead-*.cjs` | Intake, validate, rate-limit, persist, notify |
-| Collect API | `netlify/functions/collect.cjs` | First-party analytics events → Blobs |
+| Lead API | `netlify/functions/lead.cjs` + `lib/lead-*.cjs` | Portable intake handler: validate, rate-limit, persist, notify |
+| Collect API | `netlify/functions/collect.cjs` | First-party analytics events → host-owned namespace |
 | Nurture API | `netlify/functions/nurture.cjs` | Post-lead nurture sequences |
 | Ops API | `netlify/functions/ops.cjs` | Authenticated health, leads list, GSC insights |
 | Data plane (files) | `data/**` JSON registries | Editorial registry, design tokens, GSC, pSEO schema/snapshots |
@@ -79,9 +82,9 @@ It is **not** a SPA framework app. The product is:
 
 | Layer | Choice | Notes |
 |-------|--------|-------|
-| Host | Netlify | `publish = "_site"`, functions = `netlify/functions` |
+| Host | Netcup VPS | nginx serves `_site`; portable Node 22 executes source-compatible handlers |
 | Build | `npm run build:site` → `python3 scripts/pseo/build_site.py` | Single deterministic public artifact |
-| Node | 20 | Functions via esbuild; `@netlify/blobs` externalized |
+| Node | 22 | systemd runtime bound to loopback; nginx reverse proxy |
 | Python | 3.12 | Editorial/pSEO/gates |
 | CDN / redirects | `_redirects` + `netlify.toml` | Host canonization `confenge.netlify.app` → `confenge.com.br`; unpublished `/intranet` 302 gateway to `ops.confenge.com.br` (see `docs/ops/INTRANET-GATEWAY.md`) |
 
@@ -98,19 +101,21 @@ It is **not** a SPA framework app. The product is:
 
 **No React/Vue/Vite app shell.** UI is multi-page HTML with progressive enhancement.
 
-### 4.3 Backend (serverless)
+### 4.3 Backend (portable handlers)
 
 | Function | Lines | Store |
 |----------|-------|-------|
-| `lead.cjs` | ~441 | Host-owned filesystem; Blobs somente adapter legado; memory test-only |
-| `nurture.cjs` | ~559 | Namespace host-owned + adapter Blobs legado |
-| `ops.cjs` | ~720 | Store host-owned + fallback GSC empacotado |
-| `collect.cjs` | ~241 | Namespace host-owned `analytics-events` + rollback Blobs |
+| `lead.cjs` | ~441 | Host-owned filesystem; Blobs only as legacy adapter; memory test-only |
+| `nurture.cjs` | ~559 | Host-owned namespace + legacy Blobs adapter |
+| `ops.cjs` | ~720 | Host-owned store; GSC requires versioned durable snapshot |
+| `collect.cjs` | ~241 | Host-owned `analytics-events` namespace + legacy adapter |
 | `lib/*` | ~2500 | Core lead/nurture/analytics modules |
 
 ### 4.4 Dependencies (`package.json`)
 
-**Production npm:** `@netlify/blobs` permanece temporariamente somente para rollback Netlify; o perfil filesystem não o carrega.
+**Production npm:** `@netlify/blobs` remains temporarily for source compatibility;
+the filesystem production profile never loads it. It is not a production
+storage or rollback dependency.
 **Dev:** `axe-core`, `chrome-launcher`, `lighthouse`, `puppeteer-core`  
 
 Heavy logic lives in **first-party Python/Node scripts**, not npm frameworks.
@@ -160,18 +165,21 @@ Source HTML/JSON ──► pseo/editorial/site scripts ──► validate gates
                      assemble isolated _site/
                               │
                               ▼
-              Netlify publish (_site) + Functions deploy
+       immutable artifact → stage Netcup → atomic promote
                               │
                               ▼
                   /.well-known/build-info.json identity
 ```
 
-**Rules (from `netlify.toml`):**
+**Current rules:**
 
-- Netlify must **not** call private DBs; publish **only** public artifact  
-- Every push to `main` builds; `build.ignore = "exit 1"` overrides Netlify's
-  default skip detector, and the workflow gate forbids any path-based variant.
-- Redirects live in `_redirects` (copied into `_site`)
+- Every successful protected-`main` pipeline builds and gates one immutable
+  artifact, stages it on Netcup and atomically promotes that exact SHA.
+- Private host state lives outside `/opt/confenge-web/releases` and survives
+  release rollback.
+- `netlify.toml` and `netlify/functions` are retained for source compatibility,
+  not as executable production deployment instructions.
+- Redirects live in `_redirects` and are copied into `_site`.
 
 ---
 
@@ -203,7 +211,8 @@ Source HTML/JSON ──► pseo/editorial/site scripts ──► validate gates
 
 **Gaps / risks:**
 
-- Durable store is **key-value Blobs**, not relational with RLS — access control is API-layer only  
+- Durable store is a private host-owned key-value filesystem, not relational
+  with RLS; access control remains API and host-permission based.
 - Memory fallback env (`LEAD_ALLOW_MEMORY_FALLBACK`) is dangerous if mis-set in production  
 - `.env.example` is AIOX-generic (includes unused Supabase/Vercel/Railway) — confuses operators  
 - Large generated tree + dual source vs `_site` increases risk of shipping stale/wrong artifact if gates skipped  
@@ -252,7 +261,7 @@ Extensive **gate-oriented** test suite (npm scripts):
 | SYS-06 | Overlay AIOX/Reversa pesado no monorepo (muitos dirs de agentes) | Médio | Cognitive load, clone size | S–M |
 | SYS-07 | Email FormSubmit path ainda PENDING (403) — dependência de canal | Médio | Ops redundancy | S (owner action) |
 | SYS-08 | Field Core Web Vitals (CrUX) não claimable — só lab Lighthouse | Baixo–Médio | Product confidence | Observability |
-| SYS-09 | Store de leads sem modelo relacional/query-first — ops via list/scan Blobs | **Alto** | RevOps scale, reporting | L |
+| SYS-09 | Store de leads sem modelo relacional/query-first — ops via host-owned key/value scan | **Alto** | RevOps scale, reporting | L |
 | SYS-10 | Governança editorial/pSEO altamente procedural (muitos CLIs) — curva operacional | Médio | Bus factor | M |
 | SYS-11 | Artefatos de release (`.well-known`, registries) frequentemente dirty no working tree | Médio | Release hygiene | S |
 | SYS-12 | Sem TypeScript/build-time types nas functions — só CJS | Baixo–Médio | Refactor safety | M |
@@ -283,6 +292,10 @@ Extensive **gate-oriented** test suite (npm scripts):
 
 ## 14. Summary for downstream phases
 
-CONFENGE is a **high-maturity static inbound engine** with strong gates and conversion plumbing, running on **Netlify + Blobs + JSON data**. Primary technical debt is **scale/ops of content + data model for leads**, not missing modern SPA frameworks.
+CONFENGE is a **high-maturity static inbound engine** with strong gates and
+conversion plumbing, running on **Netcup nginx + portable Node + host-owned
+storage**. Primary technical debt is **scale/ops of content + data model for
+leads**, not missing modern SPA frameworks.
 
-**Next (Phase 2):** Document the actual data plane (Blobs schema + JSON artifacts) as stand-in for RDBMS audit.
+**Next (Phase 2):** Maintain the host-owned record contract and private/public
+JSON boundary as the stand-in for an RDBMS audit.
