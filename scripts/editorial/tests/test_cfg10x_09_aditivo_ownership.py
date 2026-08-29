@@ -263,6 +263,18 @@ def test_active_submission_and_approval_docs_never_reactivate_donor():
     assert "MIGRATED" in archived_packet.split("## Páginas", 1)[0]
 
 
+def test_active_release_runbook_uses_owner_and_netcup_smoke_contract():
+    runbook = (
+        ROOT / "docs/editorial/WAVE1-POST-APPROVAL-RUNBOOK.md"
+    ).read_text(encoding="utf-8")
+    assert "após 3 aprovações" not in runbook
+    assert "(ou Netlify)" not in runbook
+    assert "nginx/Netcup" in runbook
+    assert f"https://confenge.com.br{OWNER}" in runbook
+    assert f"HTTP 301 na donor, com `Location: {OWNER}`" in runbook
+    assert "Nunca solicitar indexação da donor" in runbook
+
+
 def test_existing_ownership_is_pinned_to_current_gsc_and_organic_selection():
     """The migration decision must remain evidence-led, not branch inertia.
 

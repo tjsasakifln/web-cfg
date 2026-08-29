@@ -97,7 +97,7 @@ grep -R "name=\"robots\"" lei-14133-obras guias-contratos-obras jurisprudencia-c
 
 Para cada peer com 301:
 
-- regra em `_redirects` (ou Netlify) ativa no artefato `_site`
+- regra em `_redirects` consumida pelo build e validada no contrato nginx/Netcup do artefato `_site`
 - URL antiga não permanece `index,follow` sem canonical/redirect
 
 Para peer com noindex:
@@ -107,15 +107,16 @@ Para peer com noindex:
 
 ## 7. Lista exata para Google Search Console
 
-Gerar lista de URLs canônicas aprovadas nesta coorte (exemplo após 3 aprovações):
+Gerar a lista das duas URLs aprovadas na coorte e da owner canônica da migração:
 
 ```
-https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/
 https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/
 https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/
+https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/
 ```
 
 Ajustar à lista **real** pós-approve (`npm run editorial:release-approved` imprime `gsc_submit_candidates` quando houver aprovações válidas).
+Nunca solicitar indexação da donor `/lei-14133-obras/limite-25-50-aditivo-obra/`; ela deve responder 301 direto para a owner.
 
 Submissão humana no GSC:
 
@@ -132,13 +133,15 @@ npm run test:redirects:prod
 npm run test:prod-build-info
 # opcional, com token/ambiente seguro:
 # npm run probe:lead:prod
+curl -sI "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/" | head
 curl -sI "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/" | head
 curl -s "https://confenge.com.br/.well-known/build-info.json"
 ```
 
 Conferir:
 
-- HTTP 200 nas canônicas
+- HTTP 200 na owner e nas duas páginas aprovadas
+- HTTP 301 na donor, com `Location: /conteudos/limite-aditivo-25-50-obra-publica/` em um único hop
 - `build-info.json` commit = deploy
 - redirects de peers (se aplicados)
 

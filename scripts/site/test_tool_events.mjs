@@ -120,7 +120,8 @@ if (j.valid_human_approved === 0) {
     "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
   ];
   const donor = "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/";
-  if (need.every((u) => urls.includes(u)) && !urls.includes(donor)) pass("release_gsc_candidates");
+  const urlSet = new Set(urls);
+  if (need.every((u) => urlSet.has(u)) && !urlSet.has(donor)) pass("release_gsc_candidates");
   else fail("release_gsc_candidates", urls);
 } else {
   fail("release_unexpected_state", JSON.stringify({

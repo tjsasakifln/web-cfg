@@ -1,6 +1,6 @@
 {
   "schema": "margin-defense-cluster-inventory/1.0",
-  "as_of": "2026-08-15",
+  "as_of": "2026-08-29",
   "refresh_owner": "CONFENGE editorial + extra-cli public-read-margin-defense/1.0",
   "money_asset": "/ferramentas/diagnostico-defesa-margem/",
   "commercial_hub": "/defesa-margem-contratos-publicos/",
@@ -33,9 +33,9 @@
       "canonical": "/aditivos-obras-publicas/",
       "supporting": [
         "/ferramentas/limite-acrescimos-supressoes/",
-        "/lei-14133-obras/limite-25-50-aditivo-obra/"
+        "/conteudos/limite-aditivo-25-50-obra-publica/"
       ],
-      "notes": "Keep pillar + limit calculator.",
+      "notes": "Keep pillar + limit calculator + the canonical 25%/50% query owner.",
       "refresh_owner": "CONFENGE editorial"
     },
     {
