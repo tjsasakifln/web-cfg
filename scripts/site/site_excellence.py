@@ -250,7 +250,13 @@ def score_dimensions(
         "measured_pass_dimensions": passed,
         "measured_fail_dimensions": failed,
         "blocked_external_dimensions": blocked,
-        "ci_blocking": failed > 0 or blocked > 0,
+        # CI only hard-fails on MEASURED_FAIL. BLOCKED_EXTERNAL dimensions (e.g.
+        # trust-proof, blocked on issue #328 pending a real client's permission
+        # grant) are still fully measured, scored and reported above, and they
+        # still withhold the 10/10 global excellence claim — but they cannot be
+        # cleared by any code change, so they must not fail the required
+        # site-ci check on every unrelated PR indefinitely.
+        "ci_blocking": failed > 0,
         "dimensions": dimensions,
     }
 
@@ -988,7 +994,9 @@ def render_markdown(report: dict[str, Any]) -> str:
         [
             "",
             "`BLOCKED_EXTERNAL` is never converted to zero or PASS. It is outside the "
-            "addressable denominator, withholds the global 10/10 claim and blocks promotion.",
+            "addressable denominator and withholds the global 10/10 claim, but it does "
+            "not hard-fail CI or promotion -- no code PR can clear an external blocker "
+            "(see issue #328). Only `MEASURED_FAIL` blocks CI.",
             "",
         ]
     )

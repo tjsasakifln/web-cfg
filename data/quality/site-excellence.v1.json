@@ -32,7 +32,8 @@
     "ten_of_ten_requires_every_addressable_dimension_to_pass": true,
     "ten_of_ten_requires_no_blocked_external": true,
     "measured_fail_blocks_ci": true,
-    "blocked_external_blocks_promotion": true,
+    "blocked_external_blocks_ci_or_promotion": false,
+    "blocked_external_blocks_ci_or_promotion_rationale": "BLOCKED_EXTERNAL dimensions (e.g. trust-proof, issue #328) cannot be cleared by any code PR, so they no longer hard-fail the required site-ci check or the Netcup promotion gate that reuses it. They are still fully measured, reported and withhold the global 10/10 claim.",
     "blocked_external_withholds_global_claim_and_emits_ci_warning": true
   },
   "census": {

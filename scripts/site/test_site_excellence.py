@@ -60,7 +60,11 @@ def test_contract_declares_every_required_dimension_without_subjective_weights()
     assert "weights" not in json.dumps(payload).casefold()
     assert payload["scoring"]["blocked_external_excluded_from_addressable_denominator"] is True
     assert payload["scoring"]["ten_of_ten_requires_no_blocked_external"] is True
-    assert payload["scoring"]["blocked_external_blocks_promotion"] is True
+    # BLOCKED_EXTERNAL cannot be cleared by any code PR (issue #328), so it no
+    # longer hard-fails the required site-ci check or the Netcup promotion
+    # gate that reuses it -- only MEASURED_FAIL does.
+    assert payload["scoring"]["blocked_external_blocks_ci_or_promotion"] is False
+    assert payload["scoring"]["measured_fail_blocks_ci"] is True
     assert {
         "name",
         "nome",
@@ -136,7 +140,10 @@ def test_blocked_external_is_separate_from_the_addressable_score_and_withholds_t
     assert score["blocked_external_dimensions"] == 1
     assert score["overall_status"] == "BLOCKED_EXTERNAL"
     assert score["global_excellence_claim"] == "WITHHELD"
-    assert score["ci_blocking"] is True
+    # BLOCKED_EXTERNAL is fully measured, scored and reported, and it still
+    # withholds the 10/10 claim above -- but it cannot be cleared by any code
+    # PR (see issue #328), so it must not fail the required site-ci check.
+    assert score["ci_blocking"] is False
     assert "::warning" in "\n".join(render_ci_annotations(score))
 
 
@@ -157,6 +164,8 @@ def test_measured_failure_blocks_ci_and_missing_metric_fails_closed() -> None:
 
     assert failed["overall_status"] == "MEASURED_FAIL"
     assert failed["addressable_score"] < 10
+    # Unlike BLOCKED_EXTERNAL, a MEASURED_FAIL is addressable by a code PR, so
+    # it must still fail the required site-ci check.
     assert failed["ci_blocking"] is True
     assert missing["overall_status"] == "MEASURED_FAIL"
     assert all(
