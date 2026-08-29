@@ -1,0 +1,17 @@
+{
+  "captured_at": "2026-08-29T15:21:13.102Z",
+  "commit_sha": "b82bdc7946d89926c5c2b81240943aa4fffabdb8",
+  "tree_dirty": false,
+  "base_url": "http://127.0.0.1:8792",
+  "routes": [
+    "/"
+  ],
+  "viewports": [
+    "390x844",
+    "1366x768"
+  ],
+  "files": [
+    "home-390x844.png",
+    "home-1366x768.png"
+  ]
+}
