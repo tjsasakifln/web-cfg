@@ -190,7 +190,7 @@ def test_public_ia_separates_published_offers_from_taxative_capabilities() -> No
     og_description = re.search(
         r'<meta content="([^"]+)" property="og:description"/>', html
     ).group(1)
-    assert title == "8 ofertas publicadas e 54 capacidades | CONFENGE"
+    assert title == "8 ofertas publicadas e 54 capacidades, exemplos sintéticos | CONFENGE"
     for surface in (description, og_title, og_description):
         assert "8" in surface
         assert "54" in surface or "rol taxativo completo" in surface
@@ -249,7 +249,7 @@ def test_each_published_offer_has_one_primary_representation_with_essential_term
         ):
             assert label in visible, label
         assert "oferta publicada · published" in visible
-        assert 'aria-label="Ver o exemplo de ' in card
+        assert 'aria-label="Ver o demonstrativo sintético de ' in card
         assert 'aria-label="Pedir análise de ' in card
 
 def test_progressive_catalog_css_does_not_block_first_paint() -> None:
@@ -316,7 +316,7 @@ def test_every_example_uses_the_same_action_label() -> None:
         # on the CTA itself without wrapping the button row; the label survives
         # as an explicit, per-item honesty marker in the page's structured data.
         assert f"{name} — exemplo sintético" in html, name
-        assert f"Ver o exemplo de {name}" in html, name
+        assert f"Ver o demonstrativo sintético de {name}" in html, name
         assert f"Pedir análise de {name}" in html, name
 
 

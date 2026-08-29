@@ -379,7 +379,7 @@ function vitrineCard(entry, contractItem) {
 </dl>
 ${bundle}
 <div class="vitrine-item__actions">
-<a aria-label="Ver o exemplo de ${escapeHtml(entry.public_name_pt_br)}" class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Ver exemplo <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a aria-label="Ver o demonstrativo sintético de ${escapeHtml(entry.public_name_pt_br)}" class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Ver demonstrativo <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <a aria-label="Pedir análise de ${escapeHtml(entry.public_name_pt_br)}" class="text-link" data-asset-id="entregas-exemplos-hub" data-cta-id="${scopeCtaId}" data-cta-position="${scopePosition}" data-event-name="cta_click" href="#captura-entregas">Pedir análise</a>
 </div>
 ${close}`;
