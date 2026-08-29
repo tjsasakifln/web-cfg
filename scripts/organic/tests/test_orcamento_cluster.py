@@ -6,7 +6,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 import pytest
 
@@ -37,6 +37,7 @@ from scripts.organic.service_map import (  # noqa: E402
     map_content_to_service,
 )
 from scripts.organic.sinapi_snippet import evaluate_sinapi_snippet  # noqa: E402
+from scripts.site.public_copy_scope import visible_text  # noqa: E402
 
 PRIMARY_HOSTS = (
     "planalto.gov.br",
@@ -55,6 +56,17 @@ BOILERPLATE_NEEDLES = (
     "slug-stuffed answer mold",
     "WA slug-stuffed label",
 )
+REVALIDATED_SOURCE_IDS = {
+    "lei-14133-art23",
+    "lei-14133-art25-s7",
+    "lei-14133-art59",
+    "lei-14133-art103",
+    "lei-14133-orcamento-cluster-20260829",
+    "sinapi-caixa-metodologia-20260829",
+    "sinapi-caixa-calculos-parametros-20260829",
+    "sicro-dnit-metodologia-20260829",
+    "tcu-sumula-253-20260829",
+}
 
 
 def _inventory_rows() -> dict[str, dict]:
@@ -66,6 +78,10 @@ def _inventory_rows() -> dict[str, dict]:
 
 def test_inventory_covers_nine_keep_urls():
     rows = _inventory_rows()
+    source_manifest = json.loads(
+        (ROOT / "data" / "editorial" / "SOURCE-MANIFEST.json").read_text(encoding="utf-8")
+    )
+    sources = {row["source_id"]: row for row in source_manifest["sources"]}
     report = []
     for slug, row in rows.items():
         assert row["disposition"] == "KEEP"
@@ -75,9 +91,21 @@ def test_inventory_covers_nine_keep_urls():
         assert row["query"].strip()
         assert row["funnel_stage"] in {"TOFU", "MOFU", "BOFU"}
         assert row["owns_concept"] in CONCEPT_MARKERS
+        assert row["source_ids"]
+        assert set(row["source_ids"]) <= REVALIDATED_SOURCE_IDS
         html = read_shipped_html(slug)
         robots = parse_meta(html, "robots").lower()
         assert "noindex" not in robots
+        linked_hosts = {
+            urlparse(url).netloc.lower()
+            for url in re.findall(r'href=["\'](https?://[^"\']+)', html)
+        }
+        for source_id in row["source_ids"]:
+            assert source_id in sources
+            assert urlparse(sources[source_id]["url"]).netloc.lower() in linked_hosts, (
+                slug,
+                source_id,
+            )
         report.append(row)
     dump_json("cluster-inventory.json", {"urls": report, "disposition": "KEEP_ALL"})
 
@@ -105,7 +133,16 @@ def test_exclusive_examples_recompute_from_shipped_html():
         assert example["fonte_url"]
         host = urlparse(example["fonte_url"]).netloc.lower()
         assert any(host == allowed or host.endswith("." + allowed) for allowed in PRIMARY_HOSTS), host
-        assert re.match(r"\d{4}-\d{2}-\d{2}$", example["fonte_date"]), example["fonte_date"]
+        assert example["source_reference"], slug
+        assert example["accessed_at"] == "2026-08-29", (slug, example["accessed_at"])
+        assert example["premise_kind"] == "synthetic", slug
+        assert example["official_competence"] == "not-applicable", slug
+        assert example["locality"] == "not-applicable", slug
+        assert example["charges_basis"] == "not-applicable", slug
+        assert "Premissa" in example["html"]
+        assert "premissas sintéticas" in example["html"]
+        assert "competência oficial, localidade e base oficial de encargos não se aplicam" in example["html"]
+        assert '<p class="example-limit"><strong>Limite.</strong>' in example["html"]
         recomputed = recompute_formula(example["formula"], example["inputs"])
         assert recomputed == pytest.approx(example["result"], rel=1e-9, abs=1e-6), (
             slug,
@@ -133,7 +170,8 @@ def test_exclusive_examples_recompute_from_shipped_html():
                 "stated_result": example["result"],
                 "unit": example["unit"],
                 "fonte_url": example["fonte_url"],
-                "fonte_date": example["fonte_date"],
+                "source_reference": example["source_reference"],
+                "accessed_at": example["accessed_at"],
             }
         )
     dump_json("cluster-calculations.json", {"examples": report})
@@ -173,12 +211,81 @@ def test_metadata_canonical_schema_and_cta():
         body = strip_shell(html).lower()
         for concept, markers in CONCEPT_MARKERS.items():
             assert any(marker in body for marker in markers), (slug, concept)
+        assert 'property="article:modified_time"' in html
+        modified_meta = re.search(
+            r'<meta\b(?=[^>]*property=["\']article:modified_time["\'])(?=[^>]*content=["\']([^"\']+)["\'])[^>]*>',
+            html,
+            flags=re.I,
+        )
+        assert modified_meta and modified_meta.group(1) == "2026-08-29", slug
+        assert '"dateModified":"2026-08-29"' in html or '"dateModified": "2026-08-29"' in html
+        assert 'datetime="2026-08-29">29 de agosto de 2026</time>' in html
+        assert re.search(
+            r'<p class="sources-reviewed">.*?datetime="2026-08-29".*?</p>',
+            html,
+            flags=re.S,
+        ), slug
+        article_html = re.search(r"<article\b.*?</article>", html, flags=re.I | re.S)
+        primary_jsonld = re.search(
+            r'<script type="application/ld\+json">(.*?)</script>', html, flags=re.S
+        )
+        assert article_html and primary_jsonld
+        graph = json.loads(primary_jsonld.group(1))["@graph"]
+        article_schema = next(node for node in graph if node.get("@type") == "Article")
+        assert article_schema["wordCount"] == len(visible_text(article_html.group(0)).split()), slug
+
+        cta = re.search(
+            r'<section class="lead-inline" id="diagnostico-confenge".*?</section>',
+            html,
+            flags=re.S,
+        )
+        assert cta, slug
+        decoded_cta = unquote(cta.group(0))
+        assert "Solicitar canal seguro para envio" in decoded_cta, slug
+        assert "Não anexe arquivo nesta mensagem" in decoded_cta, slug
+        assert not re.search(
+            r">Enviar (?:planilha|minuta|matriz|cláusula|diligência)[^<]*<",
+            decoded_cta,
+            flags=re.I,
+        ), slug
+
+
+def test_revalidated_source_manifest_has_freshness_and_limitations():
+    manifest = json.loads(
+        (ROOT / "data" / "editorial" / "SOURCE-MANIFEST.json").read_text(encoding="utf-8")
+    )
+    by_id = {row["source_id"]: row for row in manifest["sources"]}
+    assert REVALIDATED_SOURCE_IDS <= set(by_id)
+    for source_id in REVALIDATED_SOURCE_IDS:
+        source = by_id[source_id]
+        assert source["accessed_at"] == "2026-08-29", source_id
+        assert source.get("limitations"), source_id
 
 
 def test_sinapi_snippet_contract_stays_green():
     html = read_shipped_html("sinapi-desonerado-nao-desonerado")
     report = evaluate_sinapi_snippet(html)
     assert report["ok"], report["fails"]
+
+
+def test_revalidated_primary_urls_and_methodology_limits_are_shipped():
+    sicro = read_shipped_html("sinapi-ou-sicro-obra-publica")
+    assert "/custos-referenciais/sistemas-de-custos/sicro" in sicro
+    assert "/custos-e-pagamentos/custos-e-pagamentos-dnit/" not in sicro
+    assert "Sistema de Custos Referenciais de Obras" in sicro
+
+    admin = read_shipped_html("administracao-local-orcamento-obra-publica")
+    mobilizacao = read_shipped_html("mobilizacao-desmobilizacao-orcamento-obra")
+    bdi = read_shipped_html("bdi-diferenciado-obra-publica")
+    assert "valorado em item próprio, separado do BDI" in admin
+    assert "valorados em itens próprios, separados do BDI" in mobilizacao
+    assert "requisitos cumulativos da Súmula TCU 253" in bdi
+    assert "Administração local e mobilização são casas de custo direto" not in bdi
+    assert "NUMERO%253A253" in bdi
+
+    sinapi = read_shipped_html("sinapi-desonerado-nao-desonerado")
+    assert "transição parcial de 2025 a 2027" in sinapi
+    assert "Livro_SINAPI_Calculos_Parametros.pdf" in sinapi
 
 
 def test_validate_seo_log_has_no_cluster_boilerplate(tmp_path):

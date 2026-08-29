@@ -2,7 +2,7 @@
   "schema": "orcamento-cluster-inventory/1.0",
   "goal": "CFG10X-08",
   "decision_state": "EXECUTE_NOW",
-  "inventoried_at": "2026-08-28",
+  "inventoried_at": "2026-08-29",
   "disposition_rule": "KEEP when the URL has its own visitor problem; URL-exact MIGRATE/REDIRECT/RETIRE otherwise. Never blanket-redirect to /.",
   "concept_jobs": [
     "orcamento_de_referencia",
@@ -17,24 +17,26 @@
       "path": "/conteudos/administracao-local-orcamento-obra-publica/",
       "slug": "administracao-local-orcamento-obra-publica",
       "disposition": "KEEP",
-      "intent": "Classificar administração local como item de planilha, parcela de BDI ou os dois, sem duplicar nem omitir equipe de canteiro.",
+      "intent": "Verificar se o edital mantém administração local em item próprio separado do BDI, como na metodologia CAIXA, e detectar divergência ou duplicidade.",
       "query": "administração local orçamento obra pública BDI ou planilha",
       "funnel_stage": "MOFU",
       "owns_concept": "orcamento_de_referencia",
       "cluster_id": "orcamento-bdi",
       "service_path": "/auditoria-orcamento-licitacao/",
+      "source_ids": ["lei-14133-art23", "sinapi-caixa-metodologia-20260829"],
       "distinct_problem": true
     },
     {
       "path": "/conteudos/bdi-diferenciado-obra-publica/",
       "slug": "bdi-diferenciado-obra-publica",
       "disposition": "KEEP",
-      "intent": "Decidir quando BDI distinto em material ou equipamento é defensável e quando é maquiagem de margem.",
+      "intent": "Testar cumulativamente os requisitos da Súmula TCU 253 antes de aplicar BDI reduzido a material ou equipamento.",
       "query": "BDI diferenciado materiais equipamentos obra pública",
       "funnel_stage": "MOFU",
       "owns_concept": "proposta",
       "cluster_id": "orcamento-bdi",
       "service_path": "/auditoria-orcamento-licitacao/",
+      "source_ids": ["sinapi-caixa-metodologia-20260829", "tcu-sumula-253-20260829"],
       "distinct_problem": true
     },
     {
@@ -47,6 +49,7 @@
       "owns_concept": "exequibilidade",
       "cluster_id": "edital-proposta",
       "service_path": "/diagnostico-pre-licitacao/",
+      "source_ids": ["lei-14133-art59", "lei-14133-orcamento-cluster-20260829"],
       "distinct_problem": true
     },
     {
@@ -59,6 +62,7 @@
       "owns_concept": "reajuste",
       "cluster_id": "orcamento-bdi",
       "service_path": "/auditoria-orcamento-licitacao/",
+      "source_ids": ["lei-14133-art25-s7", "lei-14133-orcamento-cluster-20260829"],
       "distinct_problem": true
     },
     {
@@ -71,6 +75,7 @@
       "owns_concept": "execucao",
       "cluster_id": "edital-proposta",
       "service_path": "/diagnostico-pre-licitacao/",
+      "source_ids": ["lei-14133-orcamento-cluster-20260829"],
       "distinct_problem": true
     },
     {
@@ -83,6 +88,7 @@
       "owns_concept": "reequilibrio",
       "cluster_id": "reequilibrio",
       "service_path": "/reequilibrio-obras-publicas/",
+      "source_ids": ["lei-14133-art103", "lei-14133-orcamento-cluster-20260829"],
       "distinct_problem": true
     },
     {
@@ -95,6 +101,7 @@
       "owns_concept": "proposta",
       "cluster_id": "orcamento-bdi",
       "service_path": "/auditoria-orcamento-licitacao/",
+      "source_ids": ["lei-14133-art23", "sinapi-caixa-metodologia-20260829"],
       "distinct_problem": true
     },
     {
@@ -107,6 +114,7 @@
       "owns_concept": "orcamento_de_referencia",
       "cluster_id": "orcamento-bdi",
       "service_path": "/auditoria-orcamento-licitacao/",
+      "source_ids": ["sinapi-caixa-calculos-parametros-20260829"],
       "distinct_problem": true,
       "snippet_contract": "#126 CANONICAL_TITLE and evaluate_sinapi_snippet must stay green"
     },
@@ -120,6 +128,7 @@
       "owns_concept": "orcamento_de_referencia",
       "cluster_id": "orcamento-bdi",
       "service_path": "/auditoria-orcamento-licitacao/",
+      "source_ids": ["lei-14133-art23", "sinapi-caixa-metodologia-20260829", "sicro-dnit-metodologia-20260829"],
       "distinct_problem": true
     }
   ]

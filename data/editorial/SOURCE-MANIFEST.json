@@ -134,9 +134,9 @@
       "number": "14.133/2021",
       "date": "2021-04-01",
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
-      "accessed_at": "2026-08-28",
-      "device": "art. 23, caput e § 2º",
-      "limitations": "Ordem de parâmetros para orçamento de referência da Administração; não é preço de proposta nem índice de reajuste.",
+      "accessed_at": "2026-08-29",
+      "device": "art. 23, caput, § 2º e § 3º",
+      "limitations": "Ordem de parâmetros para orçamento de referência da Administração; o inciso I usa custos menores ou iguais à mediana e os incisos II a IV trazem referências seguintes. Não é preço de proposta nem índice de reajuste.",
       "themes": ["orcamento", "sinapi", "sicro"]
     },
     {
@@ -147,7 +147,7 @@
       "number": "14.133/2021",
       "date": "2021-04-01",
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
-      "accessed_at": "2026-08-28",
+      "accessed_at": "2026-08-29",
       "device": "art. 25, § 7º",
       "limitations": "Obriga previsão de índice e data-base no edital; não publica o índice vigente nem substitui a cláusula do contrato.",
       "themes": ["reajuste", "data-base"]
@@ -160,9 +160,9 @@
       "number": "14.133/2021",
       "date": "2021-04-01",
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
-      "accessed_at": "2026-08-28",
-      "device": "art. 59, caput, §§ 2º, 4º e 5º",
-      "limitations": "Presunção legal de inexequibilidade em obras e serviços de engenharia; o edital pode detalhar aceitabilidade de unitários. Não substitui diligência do caso.",
+      "accessed_at": "2026-08-29",
+      "device": "art. 59, caput e §§ 2º a 5º",
+      "limitations": "O § 4º diz que valores inferiores a 75% serão considerados inexequíveis; não qualifica o corte como presunção relativa. O § 3º obriga critérios de aceitabilidade unitário e global no edital; eventual leitura jurisprudencial exige fonte oficial própria.",
       "themes": ["exequibilidade", "proposta"]
     },
     {
@@ -173,9 +173,9 @@
       "number": "14.133/2021",
       "date": "2021-04-01",
       "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
-      "accessed_at": "2026-08-28",
-      "device": "art. 103, caput e §§ 4º e 5º",
-      "limitations": "A matriz define o equilíbrio inicial em relação a eventos supervenientes; não apaga alteração unilateral (art. 124, I) nem tributo superveniente.",
+      "accessed_at": "2026-08-29",
+      "device": "art. 103, caput e §§ 3º a 5º",
+      "limitations": "A matriz define o equilíbrio inicial para eventos supervenientes. O § 5º ressalva alteração unilateral e aumento ou redução, por legislação superveniente, de tributos diretamente pagos pelo contratado em decorrência do contrato.",
       "themes": ["matriz-riscos", "reequilibrio"]
     },
     {
@@ -253,6 +253,20 @@
       "themes": ["fiscalizacao", "art", "responsabilidade-tecnica"]
     },
     {
+      "source_id": "tcu-sumula-253-20260829",
+      "type": "tcu_decision",
+      "body": "Tribunal de Contas da União",
+      "court": "TCU",
+      "title": "Súmula TCU nº 253/2010 (BDI reduzido em fornecimentos específicos)",
+      "number": "Súmula 253/2010",
+      "date": "2010-03-31",
+      "url": "https://pesquisa.apps.tcu.gov.br/resultado/sumula/%2A/NUMERO%253A253/sinonimos%253Dtrue",
+      "accessed_at": "2026-08-29",
+      "device": "requisitos cumulativos para BDI reduzido em materiais e equipamentos de natureza específica",
+      "limitations": "A redução não se aplica indistintamente: exige inviabilidade técnico-econômica de parcelamento, natureza específica, fornecedor de especialidade própria e diversa e participação significativa no preço global. A súmula não publica taxa universal.",
+      "themes": ["bdi", "equipamentos", "materiais", "parcelamento"]
+    },
+    {
       "source_id": "sinapi-caixa",
       "type": "official_cost_reference",
       "body": "Caixa Econômica Federal",
@@ -269,6 +283,52 @@
       "url": "https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/custos-e-pagamentos/custos-e-pagamentos-dnit/sistemas-de-custos/sicro",
       "accessed_at": "2026-08-02",
       "themes": ["sicro", "orcamento"]
+    },
+    {
+      "source_id": "lei-14133-orcamento-cluster-20260829",
+      "type": "statute",
+      "body": "Presidência da República",
+      "title": "Lei nº 14.133/2021 — dispositivos do cluster orçamento, proposta e execução",
+      "number": "14.133/2021",
+      "date": "2021-04-01",
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14133.htm",
+      "accessed_at": "2026-08-29",
+      "device": "arts. 6º, 23, 25 § 7º, 46, 59, 92, 103, 124, 130 e 136",
+      "limitations": "Texto federal consolidado; o edital, o contrato, o regulamento do ente e a prova do caso particularizam a aplicação. Não publica preço ou índice vigente.",
+      "themes": ["orcamento", "proposta", "execucao", "reajuste", "reequilibrio", "exequibilidade"]
+    },
+    {
+      "source_id": "sinapi-caixa-metodologia-20260829",
+      "type": "official_cost_reference",
+      "body": "Caixa Econômica Federal",
+      "title": "SINAPI — Livro de Metodologias e Conceitos, 11ª edição, 2026",
+      "url": "https://www.caixa.gov.br/Downloads/sinapi-metodologia/Livro_SINAPI_Metodologias_Conceitos.pdf",
+      "accessed_at": "2026-08-29",
+      "device": "metodologia, composições e tratamento separado de administração local, mobilização/desmobilização e BDI",
+      "limitations": "Metodologia não é relatório mensal de preços. Não torna nenhum valor ilustrativo desta biblioteca um preço SINAPI vigente e recomenda preservar a edição efetivamente usada no orçamento.",
+      "themes": ["sinapi", "orcamento", "encargos"]
+    },
+    {
+      "source_id": "sinapi-caixa-calculos-parametros-20260829",
+      "type": "official_cost_reference",
+      "body": "Caixa Econômica Federal",
+      "title": "SINAPI — Livro de Cálculos e Parâmetros, 8ª edição, 2026",
+      "url": "https://www.caixa.gov.br/Downloads/sinapi-metodologia/Livro_SINAPI_Calculos_Parametros.pdf",
+      "accessed_at": "2026-08-29",
+      "device": "encargos sociais e complementares, bases desonerada e sem desoneração e transição parcial de 2025 a 2027",
+      "limitations": "Exemplos e parâmetros metodológicos não substituem relatório mensal, competência, localidade, base de encargos nem enquadramento tributário do caso.",
+      "themes": ["sinapi", "orcamento", "encargos", "desoneracao"]
+    },
+    {
+      "source_id": "sicro-dnit-metodologia-20260829",
+      "type": "official_cost_reference",
+      "body": "Departamento Nacional de Infraestrutura de Transportes",
+      "title": "SICRO — Sistema de Custos Referenciais de Obras",
+      "url": "https://www.gov.br/dnit/pt-br/assuntos/planejamento-e-pesquisa/custos-referenciais/sistemas-de-custos/sicro",
+      "accessed_at": "2026-08-29",
+      "device": "metodologia e relatórios de custos por competência",
+      "limitations": "Portal oficial de metodologia e publicações por competência; não fornece fator universal de conversão SINAPI–SICRO nem valida os unitários ilustrativos desta biblioteca.",
+      "themes": ["sicro", "orcamento", "transportes"]
     },
     {
       "source_id": "pncp",

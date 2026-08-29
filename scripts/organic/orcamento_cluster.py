@@ -180,7 +180,12 @@ def extract_example(html: str) -> dict[str, Any]:
         "unit": _attr(tag, "data-unit"),
         "result": float(result_raw.replace(",", ".")),
         "fonte_url": _attr(tag, "data-fonte-url"),
-        "fonte_date": _attr(tag, "data-fonte-date"),
+        "source_reference": _attr(tag, "data-source-reference"),
+        "accessed_at": _attr(tag, "data-source-accessed-at"),
+        "premise_kind": _attr(tag, "data-premise-kind"),
+        "official_competence": _attr(tag, "data-official-competence"),
+        "locality": _attr(tag, "data-locality"),
+        "charges_basis": _attr(tag, "data-charges-basis"),
         "inputs": inputs,
         "html": block.group(0),
     }
