@@ -631,6 +631,7 @@
   /** Optional Cloudflare Turnstile — only loads when a public sitekey is present. */
   const initTurnstile = () => {
     try {
+      if (document.querySelector('script[data-confenge-turnstile]')) return;
       const slot = document.getElementById('turnstile-slot');
       if (!slot) return;
       const key = (
@@ -643,7 +644,6 @@
       slot.hidden = false;
       const widget = slot.querySelector('.cf-turnstile');
       if (widget) widget.setAttribute('data-sitekey', key);
-      if (document.querySelector('script[data-confenge-turnstile]')) return;
       const s = document.createElement('script');
       s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
       s.async = true;
@@ -653,10 +653,31 @@
     } catch (_) { /* optional anti-abuse */ }
   };
 
+  /** Load the challenge when the visitor can submit, not on first paint. */
+  const scheduleTurnstile = () => {
+    const slot = document.getElementById('turnstile-slot');
+    if (!slot) return;
+    const form = slot.closest('form');
+    const start = () => initTurnstile();
+    if (form) {
+      form.addEventListener('focusin', start, { once: true });
+      form.addEventListener('pointerdown', start, { once: true });
+    }
+    if (typeof IntersectionObserver === 'function') {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          io.disconnect();
+          start();
+        }
+      }, { rootMargin: '320px 0px' });
+      io.observe(form || slot);
+    }
+  };
+
   const safeInit = () => {
     try {
       init();
-      initTurnstile();
+      scheduleTurnstile();
       // Session + page view (no PII)
       try {
         const path = window.location.pathname || '/';
