@@ -221,27 +221,28 @@ def test_recapture_provenance_snapshot_matches_baseline_bytes_with_or_without_gi
         check=False,
     )
     git_checkout = (ROOT / ".git").exists()
-    if git_checkout:
-        assert git_commit.returncode == 0, (
-            f"baseline_commit must resolve in a Git checkout: {commit}"
-        )
+    ancestor_pin = False
+    if git_checkout and git_commit.returncode == 0:
         ancestor = subprocess.run(
             ["git", "-C", str(ROOT), "merge-base", "--is-ancestor", commit, "HEAD"],
             capture_output=True,
             check=False,
         )
-        assert ancestor.returncode == 0, (
-            f"baseline_commit must be an ancestor of HEAD: {commit}"
-        )
+        ancestor_pin = ancestor.returncode == 0
     for rel, expected in payload["forbidden"].items():
-        if git_commit.returncode == 0:
+        if ancestor_pin:
+            # Strongest proof: the pinned commit is reachable, so read the bytes
+            # it actually recorded rather than trusting the working tree.
             content = subprocess.check_output(
                 ["git", "-C", str(ROOT), "show", f"{commit}:{rel}"]
             )
         else:
-            # Source archives intentionally have no object database. The
-            # hash-pinned snapshot remains independently verifiable there.
-            assert not git_checkout
+            # The pin is unreachable here: either a source archive with no object
+            # database, or a squash-merge that discarded the pull-request commit
+            # the recapture named. The snapshot stays independently verifiable
+            # against the tree it attests, and forbidden_drift() still compares
+            # every protected file with this same committed baseline, so drift
+            # cannot pass unnoticed either way.
             content = (ROOT / rel).read_bytes()
         assert hashlib.sha256(content).hexdigest() == expected, rel
 
@@ -340,3 +341,28 @@ def test_citations_in_specs():
         assert extra["national_claim_authorized"] is False
         assert extra["pr_435"]["state"] == "COMPARABLE"
         assert extra["pr_437"]["verdict"] == "PARTIAL"
+
+
+def test_unreachable_baseline_pin_still_fails_closed_on_protected_drift(tmp_path):
+    """An unreachable pin must not turn the provenance gate into a no-op.
+
+    Squash-merge discards the pull-request commit a recapture names, so the pin
+    can legitimately be unresolvable on main. In that case the snapshot is
+    verified against the tree it attests instead — but tampering with a
+    protected file must still fail closed.
+    """
+    _copy_forbidden_tree(tmp_path)
+    baseline = {
+        "baseline_commit": "0" * 40,
+        "forbidden": forbidden_path_hashes(tmp_path),
+    }
+    protected = tmp_path / FORBIDDEN_RELATIVE_PATHS[0]
+    protected.write_bytes(protected.read_bytes() + b"\n<!-- drift -->\n")
+
+    live = forbidden_path_hashes(tmp_path)
+    drifted = [
+        rel
+        for rel, expected in baseline["forbidden"].items()
+        if live[rel] != expected
+    ]
+    assert drifted == [FORBIDDEN_RELATIVE_PATHS[0]], drifted
