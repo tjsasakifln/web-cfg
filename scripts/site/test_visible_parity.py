@@ -170,6 +170,19 @@ def test_invisible_faq_schema_fails_closed():
     assert any("schema_faq_" in defect["claimed"] for defect in parity["defects"])
 
 
+def test_atomic_currency_entity_remains_visible_to_schema_parity():
+    html = """<!doctype html><html><head><title>Teste</title>
+    <meta name="robots" content="index,follow"><link rel="canonical" href="https://confenge.com.br/teste/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Quanto custa?","acceptedAnswer":{"@type":"Answer","text":"Custa R$ 8.000, pagamento único."}}]}</script>
+    </head><body data-visible-schema-parity="true"><main><h1>Teste</h1>
+    <h2>Quanto custa?</h2><p>Custa R$&nbsp;8.000, pagamento único.</p>
+    </main></body></html>"""
+
+    parity = compare_visible_parity(html, url="https://confenge.com.br/teste/")
+
+    assert parity["ok"], parity["defects"]
+
+
 def test_correction_same_render_updates_visible_and_jsonld():
     src = json.loads(
         (ROOT / "data" / "editorial" / "pages" / "lei-limite-25-50.json").read_text(

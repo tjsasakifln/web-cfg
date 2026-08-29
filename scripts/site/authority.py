@@ -228,7 +228,7 @@ def _strip_tags(html: str) -> str:
     text = re.sub(r"<script\b[^>]*>.*?</script>", " ", html or "", flags=re.I | re.S)
     text = re.sub(r"<style\b[^>]*>.*?</style>", " ", text, flags=re.I | re.S)
     text = re.sub(r"<[^>]+>", " ", text)
-    return re.sub(r"\s+", " ", text)
+    return re.sub(r"\s+", " ", unescape(text))
 
 
 class _JSONLDCollector(HTMLParser):
