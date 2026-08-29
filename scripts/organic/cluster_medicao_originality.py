@@ -13,19 +13,155 @@ import itertools
 import json
 import re
 import unicodedata
+from dataclasses import dataclass
 from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-CLUSTER_SLUGS: tuple[str, ...] = (
-    "atraso-na-medicao-obra-publica",
-    "fiscal-nao-assina-medicao-obra-publica",
-    "glosa-por-qualidade-obra-publica",
-    "medicao-por-evento-obra-publica",
-    "pagamento-parcial-etapa-empreitada-global",
-    "atraso-pagamento-contrato-publico-suspender",
+@dataclass(frozen=True)
+class ClusterPageContract:
+    """One URL's decision, evidence artifact, action and primary sources."""
+
+    slug: str
+    artifact: str
+    artifact_kind: str
+    artifact_heading: str
+    artifact_aria_label: str
+    artifact_decision_output: str
+    decision_question: str
+    next_action: str
+    cta_family: str
+    source_ids: tuple[str, ...]
+
+
+CLUSTER_PAGE_CONTRACTS: tuple[ClusterPageContract, ...] = (
+    ClusterPageContract(
+        slug="atraso-na-medicao-obra-publica",
+        artifact="650 m²",
+        artifact_kind="calculo_parcela_incontroversa",
+        artifact_heading="Como separar o valor aceito do valor em discussão",
+        artifact_aria_label=(
+            "Cálculo demonstrativo da parcela aceita e da parcela discutida"
+        ),
+        artifact_decision_output="R$ 78.000,00 sem controvérsia no exemplo",
+        decision_question="Qual etapa está parada?",
+        next_action="Avaliar o Dossiê de Medição, Glosa e Pagamento",
+        cta_family="dossie",
+        source_ids=(
+            "lei-14133-art92-medicao",
+            "lei-14133-art137-suspensao",
+            "lei-14133-art141-143-medicao",
+            "tcu-criterios-medicao-pagamento",
+            "tcu-pagamento-liquidacao",
+        ),
+    ),
+    ClusterPageContract(
+        slug="fiscal-nao-assina-medicao-obra-publica",
+        artifact="SEI 23456.000781/2026-44",
+        artifact_kind="cronologia_documental_48h",
+        artifact_heading="Como a linha do tempo do SEI substitui o recado do grupo",
+        artifact_aria_label=(
+            "Linha do tempo hipotética das primeiras 48 horas após a recusa de ateste"
+        ),
+        artifact_decision_output="Fim das 48 horas",
+        decision_question="O que falta para o ateste?",
+        next_action="Abrir o dossiê depois das 48 horas da recusa",
+        cta_family="dossie",
+        source_ids=(
+            "lei-14133-art92-medicao",
+            "lei-14133-art141-143-medicao",
+            "tcu-criterios-medicao-pagamento",
+            "tcu-acordao-8920-2017",
+            "tcu-pagamento-liquidacao",
+        ),
+    ),
+    ClusterPageContract(
+        slug="glosa-por-qualidade-obra-publica",
+        artifact="CP-04/lab 1,8 MPa",
+        artifact_kind="matriz_nexo_ensaio_trecho",
+        artifact_heading="Como o fck de um trecho não arrasta o meio-fio inteiro",
+        artifact_aria_label=(
+            "Cálculo hipotético da glosa localizada versus o corte da linha inteira"
+        ),
+        artifact_decision_output="Restante sem apontamento de ensaio",
+        decision_question="O corte tem nexo com o ensaio?",
+        next_action="Abrir o dossiê do corte sem nexo com o ensaio",
+        cta_family="dossie",
+        source_ids=(
+            "lei-14133-art92-medicao",
+            "lei-14133-art141-143-medicao",
+            "tcu-criterios-medicao-pagamento",
+            "tcu-pagamento-liquidacao",
+        ),
+    ),
+    ClusterPageContract(
+        slug="medicao-por-evento-obra-publica",
+        artifact="Evento E-04",
+        artifact_kind="comparacao_evento_quantitativo",
+        artifact_heading="O que o Evento E-04 paga e o que o m³ pagaria",
+        artifact_aria_label=(
+            "Comparação hipotética entre crédito do Evento E-04 e crédito por quantitativo"
+        ),
+        artifact_decision_output="Evento E-04 fechado",
+        decision_question="Qual é o gatilho do crédito?",
+        next_action="Ver o serviço de medições e o critério do contrato",
+        cta_family="conteudo",
+        source_ids=(
+            "lei-14133-art46",
+            "lei-14133-art92-medicao",
+            "tcu-criterios-medicao-pagamento",
+            "tcu-pagamento-liquidacao",
+        ),
+    ),
+    ClusterPageContract(
+        slug="pagamento-parcial-etapa-empreitada-global",
+        artifact="Etapa 3-cobertura",
+        artifact_kind="cenario_gatilho_sem_submarco",
+        artifact_heading="O que a Etapa 3-cobertura paga e o que 70% não paga",
+        artifact_aria_label=(
+            "Cálculo hipotético da Etapa 3-cobertura versus o pedido de 70%"
+        ),
+        artifact_decision_output="0,00 reais no eventograma deste exemplo",
+        decision_question="O eventograma recortou o marco?",
+        next_action="Abrir o dossiê da etapa sem submarco escrito",
+        cta_family="triagem",
+        source_ids=(
+            "lei-14133-art46",
+            "lei-14133-art92-medicao",
+            "lei-14133-art141-143-medicao",
+            "lei-14133-art145",
+            "tcu-criterios-medicao-pagamento",
+            "in-seges-77-2022",
+        ),
+    ),
+    ClusterPageContract(
+        slug="atraso-pagamento-contrato-publico-suspender",
+        artifact="NF-e 1847",
+        artifact_kind="cronologia_limiar_dois_meses",
+        artifact_heading="Como a NF-e 1847 marca o relógio dos dois meses",
+        artifact_aria_label=(
+            "Contagem hipotética do prazo de dois meses a partir da NF-e 1847"
+        ),
+        artifact_decision_output=(
+            "A opção de extinguir ou de suspender já é discutível; não é automática"
+        ),
+        decision_question="A nota fiscal já tem dois meses?",
+        next_action="Abrir o dossiê do crédito já faturado",
+        cta_family="triagem",
+        source_ids=(
+            "lei-14133-art137-suspensao",
+            "lei-14133-art141-143-medicao",
+            "tcu-pagamento-liquidacao",
+            "in-seges-77-2022",
+        ),
+    ),
 )
+
+PAGE_CONTRACTS: dict[str, ClusterPageContract] = {
+    contract.slug: contract for contract in CLUSTER_PAGE_CONTRACTS
+}
+CLUSTER_SLUGS: tuple[str, ...] = tuple(PAGE_CONTRACTS)
 
 REQUIRED_SECTION_IDS: tuple[str, ...] = (
     "resposta",
@@ -39,45 +175,18 @@ REQUIRED_SECTION_IDS: tuple[str, ...] = (
     "fontes",
 )
 
-# One exclusive numeric or documentary string per remaining URL.
-EXCLUSIVE_ARTIFACTS: dict[str, str] = {
-    "atraso-na-medicao-obra-publica": "650 m²",
-    "fiscal-nao-assina-medicao-obra-publica": "SEI 23456.000781/2026-44",
-    "glosa-por-qualidade-obra-publica": "CP-04/lab 1,8 MPa",
-    "medicao-por-evento-obra-publica": "Evento E-04",
-    "pagamento-parcial-etapa-empreitada-global": "Etapa 3-cobertura",
-    "atraso-pagamento-contrato-publico-suspender": "NF-e 1847",
+# Compatibility views for tests and reports. PAGE_CONTRACTS is the authority.
+EXCLUSIVE_ARTIFACTS = {
+    slug: contract.artifact for slug, contract in PAGE_CONTRACTS.items()
 }
-
-# One decision question per URL: the single choice the reader arrives to make.
-# Rendered as the "Antes de escalar" aside heading. Must be exclusive.
-DECISION_QUESTIONS: dict[str, str] = {
-    "atraso-na-medicao-obra-publica": "Qual etapa está parada?",
-    "fiscal-nao-assina-medicao-obra-publica": "O que falta para o ateste?",
-    "glosa-por-qualidade-obra-publica": "O corte tem nexo com o ensaio?",
-    "medicao-por-evento-obra-publica": "Qual é o gatilho do crédito?",
-    "pagamento-parcial-etapa-empreitada-global": "O eventograma recortou o marco?",
-    "atraso-pagamento-contrato-publico-suspender": "A nota fiscal já tem dois meses?",
+DECISION_QUESTIONS = {
+    slug: contract.decision_question for slug, contract in PAGE_CONTRACTS.items()
 }
-
-# One next action per URL: the anchor text of the single in-article link to the
-# pillar. Two URLs offering the same next action are the same page commercially.
-NEXT_ACTIONS: dict[str, str] = {
-    "atraso-na-medicao-obra-publica": "Avaliar o Dossiê de Medição, Glosa e Pagamento",
-    "fiscal-nao-assina-medicao-obra-publica": "Abrir o dossiê depois das 48 horas da recusa",
-    "glosa-por-qualidade-obra-publica": "Abrir o dossiê do corte sem nexo com o ensaio",
-    "medicao-por-evento-obra-publica": "Ver o serviço de medições e o critério do contrato",
-    "pagamento-parcial-etapa-empreitada-global": "Abrir o dossiê da etapa sem submarco escrito",
-    "atraso-pagamento-contrato-publico-suspender": "Abrir o dossiê do crédito já faturado",
+NEXT_ACTIONS = {
+    slug: contract.next_action for slug, contract in PAGE_CONTRACTS.items()
 }
-
-CTA_FAMILIES: dict[str, str] = {
-    "atraso-na-medicao-obra-publica": "dossie",
-    "fiscal-nao-assina-medicao-obra-publica": "dossie",
-    "glosa-por-qualidade-obra-publica": "dossie",
-    "medicao-por-evento-obra-publica": "conteudo",
-    "pagamento-parcial-etapa-empreitada-global": "triagem",
-    "atraso-pagamento-contrato-publico-suspender": "triagem",
+CTA_FAMILIES = {
+    slug: contract.cta_family for slug, contract in PAGE_CONTRACTS.items()
 }
 
 GENERIC_CTA_MOLD = "enviar documentos para análise"
@@ -95,6 +204,10 @@ _SKIP_CLASS = {
     "sources-section",
     "author-box",
     "technical-note",
+    "lead-inline",
+    "editorial-bridge",
+    "commercial-bridge",
+    "related-section",
 }
 _SKIP_ID = {"fontes"}
 _BLOCK_TAGS = {"p", "li", "dd", "dt", "td", "th", "summary"}
@@ -286,7 +399,7 @@ def load_jsonld(html: str) -> list[dict]:
 # changed, not a build clock: REVISION_BODY_SHA256 below pins the date-masked
 # body of each page, so editing the prose without moving this date fails the
 # gate, and moving this date without editing the prose fails it too.
-CLUSTER_REVISION = "2026-08-28"
+CLUSTER_REVISION = "2026-08-29"
 
 REVISION_SURFACES: tuple[str, ...] = (
     "meta_modified_time",
@@ -304,7 +417,7 @@ _ISO_DATE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
 
 
 def format_date_br(iso: str) -> str:
-    """2026-08-28 -> '28 de agosto de 2026'. Matches the rendered <time> text."""
+    """2026-08-29 -> '29 de agosto de 2026'. Matches the rendered <time> text."""
     year, month, day = (int(part) for part in iso.split("-"))
     return f"{day} de {_PT_MONTHS[month - 1]} de {year}"
 
@@ -378,12 +491,12 @@ def content_fingerprint(html: str) -> str:
 # only together with a new CLUSTER_REVISION, because a changed body is a
 # changed revision date by definition.
 REVISION_BODY_SHA256: dict[str, str] = {
-    "atraso-na-medicao-obra-publica": "b14cb3200b68caa9bef7f0268eb08cc3fdbac92a5c31d12c8235a2499a7f4f8d",
-    "fiscal-nao-assina-medicao-obra-publica": "f7fc17ab44c1483645c59b7cc946e122ce22cea2312d354e9fd2b988e433d2de",
-    "glosa-por-qualidade-obra-publica": "79f3d38350d01fda70b69c0973aca0493f3d0056856a5dfe5e245017fc0f867f",
-    "medicao-por-evento-obra-publica": "a87903e6e0338b1adae8f9fc6866ba1b3c814679ff5e093b0bdc57a022348ffd",
-    "pagamento-parcial-etapa-empreitada-global": "874e300ef9ad0b5483e492df9d808e99b71a7d48fcb6127d49b5d301ad2c64dc",
-    "atraso-pagamento-contrato-publico-suspender": "24a974daf5ba333fc9d468e143f615c5c2d95ff7c57790c8c9aaf7ed40f4ab05",
+    "atraso-na-medicao-obra-publica": "ec6f1034dedc7014d9af5a9676e83a316a74072004c64a25e84f4068fb2abf34",
+    "fiscal-nao-assina-medicao-obra-publica": "64023e36c2d84ecd7976394e07ab30eb94c72656b33efa3ce757b736e5fd6233",
+    "glosa-por-qualidade-obra-publica": "9b60d1b4fa9854388fa3bf4198ca39a8ac5439253069773d5e714dc2b838e8bd",
+    "medicao-por-evento-obra-publica": "a6e2155a32477441f236decd9a5348d223dfc33d95d01cde7e2df7a336077b95",
+    "pagamento-parcial-etapa-empreitada-global": "66ea9fd5a7acd013227502ed89a583138798f2ef6ab415d023518c3daea208eb",
+    "atraso-pagamento-contrato-publico-suspender": "860cb2aded60d9dfb60ed723a7a5f4320e52e2db51ef510ff13559ae9d545bc1",
 }
 
 
@@ -538,9 +651,44 @@ def intent_overlap(a_tokens: list[str], b_tokens: list[str]) -> dict[str, float]
     }
 
 
+def section_html(html: str, section_id: str) -> str:
+    match = re.search(
+        rf'<section\b[^>]*\bid=["\']{re.escape(section_id)}["\'][^>]*>.*?</section>',
+        html,
+        re.I | re.S,
+    )
+    return match.group(0) if match else ""
+
+
+def artifact_evidence(html: str, contract: ClusterPageContract) -> dict[str, bool]:
+    """Require the whole decision artifact inside #exemplo, not in the shell."""
+    example = section_html(html, "exemplo")
+    return {
+        "section_present": bool(example),
+        "artifact_present": contract.artifact in example,
+        "heading_present": contract.artifact_heading in example,
+        "aria_label_present": contract.artifact_aria_label in example,
+        "decision_output_present": contract.artifact_decision_output in example,
+    }
+
+
+def source_records() -> dict[str, dict]:
+    manifest = json.loads(
+        (ROOT / "data" / "editorial" / "SOURCE-MANIFEST.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    return {
+        record["source_id"]: record
+        for record in manifest.get("sources", [])
+        if isinstance(record, dict) and record.get("source_id")
+    }
+
+
 def inspect_page(root: Path, slug: str) -> dict:
     path = article_path(root, slug)
     html = path.read_text(encoding="utf-8")
+    contract = PAGE_CONTRACTS[slug]
     parsed = parse_article(html)
     title_m = re.search(r"<title>([^<]*)</title>", html)
     desc_tag = re.search(r"<meta\b[^>]*name=[\"']description[\"'][^>]*>", html)
@@ -569,8 +717,9 @@ def inspect_page(root: Path, slug: str) -> dict:
     cta = parsed.cta_text.casefold()
     visible = _WS.sub(" ", _TAG.sub(" ", html))
     signature = intent_signature(html)
-    next_action = NEXT_ACTIONS[slug]
-    question = DECISION_QUESTIONS[slug]
+    next_action = contract.next_action
+    question = contract.decision_question
+    evidence = artifact_evidence(html, contract)
     pillar_anchors = re.findall(
         r'<a\b[^>]*href="/medicoes-glosas-obras-publicas/[^"]*"[^>]*>(.*?)</a>',
         re.search(r'<article class="article-main".*?</article>', html, re.S).group(0)
@@ -604,7 +753,7 @@ def inspect_page(root: Path, slug: str) -> dict:
         "section_ids": parsed.section_ids,
         "paragraphs": paras,
         "cta_text": parsed.cta_text,
-        "cta_family": CTA_FAMILIES[slug],
+        "cta_family": contract.cta_family,
         "has_generic_cta_mold": GENERIC_CTA_MOLD in cta,
         "has_receipt_guarantee": bool(RECEIPT_GUARANTEE.search(visible)),
         "claims_legal_advice": bool(LEGAL_ADVICE_CLAIM.search(visible)),
@@ -612,10 +761,57 @@ def inspect_page(root: Path, slug: str) -> dict:
         or "não substitui" in visible.casefold(),
         "jsonld_types": types,
         "headings_skip": headings_skip(html),
-        "artifact": EXCLUSIVE_ARTIFACTS[slug],
-        "artifact_present": EXCLUSIVE_ARTIFACTS[slug] in html,
+        "artifact": contract.artifact,
+        "artifact_kind": contract.artifact_kind,
+        "artifact_evidence": evidence,
+        "artifact_present": evidence["artifact_present"],
+        "sources_html": section_html(html, "fontes"),
+        "source_ids": contract.source_ids,
         "pillar_bridge": "/medicoes-glosas-obras-publicas/" in html,
     }
+
+
+def artifact_failures(slug: str, page: dict) -> list[str]:
+    evidence = page["artifact_evidence"]
+    labels = {
+        "section_present": "section #exemplo",
+        "artifact_present": "exclusive marker",
+        "heading_present": "exclusive heading",
+        "aria_label_present": "artifact accessibility label",
+        "decision_output_present": "decision output",
+    }
+    return [
+        f"{slug}: artifact contract missing {labels[key]}"
+        for key, present in evidence.items()
+        if not present
+    ]
+
+
+def source_provenance_failures(
+    slug: str, page: dict, records: dict[str, dict]
+) -> list[str]:
+    """Pin source identity, consultation date, device and application limits."""
+    out: list[str] = []
+    sources_html = page["sources_html"].casefold()
+    for source_id in page["source_ids"]:
+        record = records.get(source_id)
+        if not record:
+            out.append(f"{slug}: source {source_id!r} absent from SOURCE-MANIFEST")
+            continue
+        if record.get("accessed_at") != CLUSTER_REVISION:
+            out.append(
+                f"{slug}: source {source_id!r} accessed_at "
+                f"{record.get('accessed_at')!r}, expected {CLUSTER_REVISION!r}"
+            )
+        for field in ("body", "device", "limitations", "url"):
+            if not record.get(field):
+                out.append(f"{slug}: source {source_id!r} missing {field}")
+        url = str(record.get("url") or "").casefold()
+        if url and url not in sources_html:
+            out.append(
+                f"{slug}: source {source_id!r} is not linked from #fontes"
+            )
+    return out
 
 
 def revision_failures(slug: str, page: dict) -> list[str]:
@@ -700,6 +896,7 @@ def pairwise_table(pages: dict[str, dict]) -> list[dict]:
 def evaluate_cluster(root: Path | None = None) -> dict:
     base = root or ROOT
     pages = {slug: inspect_page(base, slug) for slug in CLUSTER_SLUGS}
+    records = source_records()
     rows = pairwise_table(pages)
     failures: list[str] = []
     for slug, page in pages.items():
@@ -713,8 +910,8 @@ def evaluate_cluster(root: Path | None = None) -> dict:
             failures.append(f"{slug}: canonical {page['canonical']!r}")
         if page["headings_skip"]:
             failures.append(f"{slug}: heading level skip")
-        if not page["artifact_present"]:
-            failures.append(f"{slug}: missing exclusive artifact {page['artifact']!r}")
+        failures.extend(artifact_failures(slug, page))
+        failures.extend(source_provenance_failures(slug, page, records))
         failures.extend(revision_failures(slug, page))
         if not page["decision_question_present"]:
             failures.append(
@@ -821,8 +1018,11 @@ def evaluate_cluster(root: Path | None = None) -> dict:
                 "paragraph_count": len(pages[slug]["paragraphs"]),
                 "cta_family": pages[slug]["cta_family"],
                 "artifact": pages[slug]["artifact"],
+                "artifact_kind": pages[slug]["artifact_kind"],
+                "artifact_evidence": pages[slug]["artifact_evidence"],
                 "decision_question": pages[slug]["decision_question"],
                 "next_action": pages[slug]["next_action"],
+                "source_ids": pages[slug]["source_ids"],
                 "revision": {
                     key: pages[slug]["revision"][key] for key in REVISION_SURFACES
                 },
@@ -833,21 +1033,47 @@ def evaluate_cluster(root: Path | None = None) -> dict:
     }
 
 
-def _recapture() -> int:
+def _recapture(root: Path = ROOT) -> int:
     """Print a REVISION_BODY_SHA256 block for the current shipped bodies."""
     print("REVISION_BODY_SHA256: dict[str, str] = {")
     for slug in CLUSTER_SLUGS:
-        html = article_path(ROOT, slug).read_text(encoding="utf-8")
+        html = article_path(root, slug).read_text(encoding="utf-8")
         print(f'    "{slug}": "{content_fingerprint(html)}",')
     print("}")
     return 0
 
 
 if __name__ == "__main__":  # pragma: no cover - operator entry point
-    import sys as _sys
+    import argparse
 
-    if "--recapture" in _sys.argv[1:]:
-        raise SystemExit(_recapture())
-    report = evaluate_cluster()
+    parser = argparse.ArgumentParser(
+        description="Audit decision ownership in the medição/glosa cluster"
+    )
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=ROOT,
+        help="public tree to inspect (repository source by default)",
+    )
+    parser.add_argument("--recapture", action="store_true")
+    parser.add_argument(
+        "--require-artifact",
+        action="store_true",
+        help="fail unless --root is a completed build:site artifact",
+    )
+    args = parser.parse_args()
+    audit_root = args.root.resolve()
+    if args.require_artifact:
+        build_record = audit_root / ".well-known" / "pseo-build.json"
+        if not audit_root.is_dir() or not build_record.is_file():
+            parser.error(
+                f"{audit_root} is not a completed public artifact; "
+                "run npm run build:site first"
+            )
+    if args.recapture:
+        raise SystemExit(_recapture(audit_root))
+    report = evaluate_cluster(audit_root)
+    report["audited_root"] = str(audit_root)
+    report["surface"] = "artifact" if args.require_artifact else "source"
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     raise SystemExit(0 if report["ok"] else 1)

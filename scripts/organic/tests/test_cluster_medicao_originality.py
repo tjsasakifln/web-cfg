@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import itertools
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -24,9 +25,12 @@ from scripts.organic.cluster_medicao_originality import (  # noqa: E402
     INTENT_SHINGLE_JACCARD_MAX,
     INTENT_TOKEN_JACCARD_MAX,
     NEXT_ACTIONS,
+    PAGE_CONTRACTS,
     REQUIRED_SECTION_IDS,
     REVISION_BODY_SHA256,
     REVISION_SURFACES,
+    artifact_evidence,
+    artifact_failures,
     content_fingerprint,
     evaluate_cluster,
     extract_body_paragraphs,
@@ -42,6 +46,8 @@ from scripts.organic.cluster_medicao_originality import (  # noqa: E402
     revision_surfaces,
     shingles,
     sitemap_lastmod,
+    source_provenance_failures,
+    source_records,
     stem,
 )
 
@@ -299,6 +305,60 @@ def test_each_url_owns_a_distinct_question_artifact_and_next_action():
         assert page["decision_question_present"], slug
         assert page["next_action_present"], (slug, page["pillar_anchor_texts"])
         assert page["artifact_present"], slug
+
+
+def test_artifact_marker_outside_example_cannot_satisfy_the_gate():
+    """Regression: the old gate accepted a marker anywhere in the HTML."""
+    for slug, contract in PAGE_CONTRACTS.items():
+        html = (ROOT / "conteudos" / slug / "index.html").read_text(
+            encoding="utf-8"
+        )
+        example = re.search(r'<section id="exemplo">.*?</section>', html, re.S)
+        assert example, slug
+        emptied = example.group(0)
+        for marker in (
+            contract.artifact,
+            contract.artifact_heading,
+            contract.artifact_aria_label,
+            contract.artifact_decision_output,
+        ):
+            emptied = emptied.replace(marker, "REMOVIDO")
+        moved_to_shell = html.replace(example.group(0), emptied) + contract.artifact
+        evidence = artifact_evidence(moved_to_shell, contract)
+        assert not evidence["artifact_present"], slug
+        page = {"artifact_evidence": evidence}
+        assert artifact_failures(slug, page), slug
+
+
+def test_artifact_contract_proves_structure_and_decision_output():
+    for slug, contract in PAGE_CONTRACTS.items():
+        page = inspect_page(ROOT, slug)
+        assert not artifact_failures(slug, page), slug
+        assert page["artifact_kind"] == contract.artifact_kind
+        assert all(page["artifact_evidence"].values()), slug
+
+
+def test_revalidated_primary_sources_have_provenance_date_and_limits():
+    records = source_records()
+    for slug in CLUSTER_SLUGS:
+        page = inspect_page(ROOT, slug)
+        assert not source_provenance_failures(slug, page, records), slug
+
+
+def test_similarity_excludes_conversion_and_related_shell():
+    html = """
+    <article class="article-main">
+      <p>Parágrafo substantivo exclusivo com conteúdo decisório suficiente.</p>
+      <aside class="lead-inline"><p>Texto compartilhado do formulário comercial.</p></aside>
+      <section class="editorial-bridge commercial-bridge">
+        <p>Texto compartilhado da ponte comercial.</p>
+      </section>
+      <section class="related-section"><p>Texto compartilhado de relacionados.</p></section>
+    </article>
+    """
+    assert extract_body_paragraphs(html) == [
+        "parágrafo substantivo exclusivo com conteúdo decisório suficiente."
+    ]
 
 
 def test_no_ownership_marker_leaks_into_a_sibling_url():
