@@ -326,7 +326,22 @@ def credential_blocker_record(*, site: str | None = None) -> dict[str, Any]:
 
 def write_blocked_last_sync(record: dict[str, Any] | None = None) -> dict[str, Any]:
     ensure_dirs()
-    payload = record or credential_blocker_record()
+    payload = dict(record or credential_blocker_record())
+    attempted_at = payload.get("last_sync_at") or payload.get("recorded_at") or datetime.now(timezone.utc).isoformat()
+    payload.update(
+        {
+            "schema_version": "gsc-sync-state/v1",
+            "manifest_schema_version": "gsc_snapshot_manifest_v1",
+            "last_sync_at": attempted_at,
+            "source": "search_analytics_api",
+            "source_freshness": {
+                "status": "UNKNOWN",
+                "as_of": payload.get("as_of"),
+                "evaluated_at": attempted_at,
+                "max_age_days": 14,
+            },
+        }
+    )
     (DATA / "last_sync.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
@@ -2066,6 +2081,8 @@ def pull_api(
         "history_event": history_result["event"],
         "ready_for_product_decisions": ready_for_product_decisions,
         "synthetic": False,
+        "fixture": False,
+        "live_baseline_invented": False,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "note": "API pull is current. July CSV snapshot is historical only.",
     }
@@ -2084,6 +2101,8 @@ def pull_api(
     )
 
     last_sync = {
+        "schema_version": "gsc-sync-state/v1",
+        "manifest_schema_version": manifest["schema"],
         "last_sync_at": last_sync_at,
         "as_of": end.isoformat(),
         "start": start.isoformat(),
@@ -2109,8 +2128,16 @@ def pull_api(
         "latency_ms": latency_ms,
         "ready_for_product_decisions": ready_for_product_decisions,
         "synthetic": False,
+        "fixture": False,
+        "live_baseline_invented": False,
         "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
         "manifest_sha256": manifest["content_sha256"],
+        "source_freshness": {
+            "status": "CURRENT" if ready_for_product_decisions else readiness["status"],
+            "as_of": end.isoformat(),
+            "evaluated_at": last_sync_at,
+            "max_age_days": 14,
+        },
     }
     (DATA / "last_sync.json").write_text(json.dumps(last_sync, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -2139,6 +2166,8 @@ def pull_api(
         "source_kind": source_kind,
         "truncated": truncated,
         "synthetic": False,
+        "fixture": False,
+        "live_baseline_invented": False,
         "readiness_reasons": readiness_reasons,
         "reason_codes": readiness_reasons,
         "readiness_status": readiness["status"],
@@ -2286,6 +2315,8 @@ def sync_from_fixture() -> dict[str, Any]:
     (DATA / "last_sync.json").write_text(
         json.dumps(
             {
+                "schema_version": "gsc-sync-state/v1",
+                "manifest_schema_version": manifest["schema"],
                 "last_sync_at": last_sync_at,
                 "as_of": as_of,
                 "rows": len(classified),
@@ -2299,6 +2330,12 @@ def sync_from_fixture() -> dict[str, Any]:
                 "gaps": [],
                 "search_analytics_limitation": SEARCH_ANALYTICS_LIMITATION,
                 "manifest_sha256": manifest["content_sha256"],
+                "source_freshness": {
+                    "status": "UNKNOWN",
+                    "as_of": as_of,
+                    "evaluated_at": last_sync_at,
+                    "max_age_days": 14,
+                },
             },
             ensure_ascii=False,
             indent=2,

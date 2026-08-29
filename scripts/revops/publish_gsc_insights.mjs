@@ -75,6 +75,8 @@ export function validatePublishable(insights, { now = new Date() } = {}) {
     insights.source !== "search_analytics_api" ||
     insights.ready_for_product_decisions !== true ||
     insights.synthetic !== false ||
+    insights.fixture !== false ||
+    insights.live_baseline_invented !== false ||
     insights.query_text_redacted !== true ||
     insights.raw_query_rows_in_git !== false ||
     insights.readiness_contract_version !== "gsc-readiness/v2" ||
@@ -103,8 +105,12 @@ export function validatePublishable(insights, { now = new Date() } = {}) {
 export function validateSyncProvenance(insights, syncState, history) {
   if (
     !syncState ||
+    syncState.schema_version !== "gsc-sync-state/v1" ||
+    syncState.manifest_schema_version !== "gsc_snapshot_manifest_v1" ||
     syncState.source !== "search_analytics_api" ||
     syncState.synthetic !== false ||
+    syncState.fixture !== false ||
+    syncState.live_baseline_invented !== false ||
     syncState.truncated === true ||
     syncState.ready_for_product_decisions !== true ||
     syncState.promote_insights !== true ||
@@ -188,19 +194,31 @@ export async function publish({
     expected = validatePublishable(insights);
     validateSyncProvenance(insights, syncState, history);
   }
+  const producer = {
+    schema_version: syncState.schema_version,
+    manifest_schema_version: syncState.manifest_schema_version,
+    manifest_sha256: promoteInsights ? syncState.manifest_sha256 : null,
+    as_of: promoteInsights ? syncState.as_of : null,
+    produced_at: syncState.last_sync_at,
+    source: "search_analytics_api",
+  };
   const endpoint = `${baseUrl.replace(/\/$/, "")}/.netlify/functions/ops`;
   const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
   const post = await fetchImpl(`${endpoint}?action=gsc_insights_ingest`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ history, ...(insights ? { insights } : {}) }),
+    body: JSON.stringify({ producer, history, ...(insights ? { insights } : {}) }),
   });
   const posted = await responseJson(post);
   if (
     !post.ok ||
     posted.ok !== true ||
     posted.history_state_sha256 !== history.state_sha256 ||
-    (expected && posted.content_sha256 !== expected.content_sha256)
+    (expected &&
+      (posted.status !== "CURRENT" ||
+        posted.content_sha256 !== expected.content_sha256 ||
+        posted.producer_manifest_sha256 !== producer.manifest_sha256 ||
+        posted.consumer_manifest_sha256 !== producer.manifest_sha256))
   ) {
     throw new Error(`gsc_insights_ingest_failed:${post.status}:${posted.error || "hash_mismatch"}`);
   }
@@ -219,24 +237,84 @@ export async function publish({
   if (
     !get.ok ||
     read.ok !== true ||
+    read.status !== "CURRENT" ||
     read.meta?.delivery_source !== "durable_store" ||
     read.meta?.history_state_sha256 !== history.state_sha256 ||
     read.meta?.ready_for_product_decisions !== history.readiness.ready_for_product_decisions ||
+    read.meta?.source_freshness?.status !== "CURRENT" ||
     (expected &&
-      (read.meta?.content_sha256 !== expected.content_sha256 || read.meta?.as_of !== expected.as_of))
+      (read.meta?.snapshot_content_sha256 !== expected.content_sha256 ||
+        read.meta?.as_of !== expected.as_of ||
+        read.meta?.producer_as_of !== expected.as_of ||
+        read.meta?.consumer_as_of !== expected.as_of ||
+        read.meta?.producer_manifest_sha256 !== producer.manifest_sha256 ||
+        read.meta?.consumer_manifest_sha256 !== producer.manifest_sha256))
   ) {
     throw new Error(`gsc_insights_read_proof_failed:${get.status}`);
   }
   return {
     ok: true,
+    status: read.status,
     durable: true,
     promoted: Boolean(expected),
     as_of: read.meta?.as_of || history.readiness.freshness_as_of || null,
-    content_sha256: read.meta?.content_sha256 || null,
+    content_sha256: read.meta?.snapshot_content_sha256 || null,
     history_state_sha256: history.state_sha256,
+    snapshot_sha256: read.meta?.snapshot_sha256 || null,
+    producer_manifest_sha256: read.meta?.producer_manifest_sha256 || null,
+    consumer_manifest_sha256: read.meta?.consumer_manifest_sha256 || null,
+    producer_as_of: read.meta?.producer_as_of || null,
+    consumer_as_of: read.meta?.consumer_as_of || null,
     readiness_status: history.readiness.status,
     published_at: read.meta.published_at || posted.published_at || null,
   };
+}
+
+export async function rollback({
+  snapshotSha256,
+  reason,
+  baseUrl,
+  token,
+  fetchImpl = fetch,
+}) {
+  if (!baseUrl || !/^https:\/\//.test(baseUrl)) throw new Error("BASE_URL_https_required");
+  if (!token || token.length < 16) throw new Error("OPS_TOKEN_required");
+  if (!/^[a-f0-9]{64}$/.test(String(snapshotSha256 || ""))) {
+    throw new Error("gsc_private_rollback_snapshot_invalid");
+  }
+  if (!/^[a-z0-9][a-z0-9_:-]{2,79}$/.test(String(reason || ""))) {
+    throw new Error("gsc_private_rollback_reason_invalid");
+  }
+  const endpoint = `${baseUrl.replace(/\/$/, "")}/.netlify/functions/ops`;
+  const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+  const postedResponse = await fetchImpl(`${endpoint}?action=gsc_insights_rollback`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ snapshot_sha256: snapshotSha256, reason }),
+  });
+  const posted = await responseJson(postedResponse);
+  if (
+    !postedResponse.ok ||
+    posted.ok !== true ||
+    posted.durable !== true ||
+    posted.rolled_back_to_snapshot_sha256 !== snapshotSha256 ||
+    posted.producer_manifest_sha256 !== posted.consumer_manifest_sha256
+  ) {
+    throw new Error(`gsc_private_rollback_failed:${postedResponse.status}:${posted.error || "proof_mismatch"}`);
+  }
+  const readResponse = await fetchImpl(`${endpoint}?action=gsc_insights`, { method: "GET", headers });
+  const read = await responseJson(readResponse);
+  if (
+    !readResponse.ok ||
+    read.status !== posted.status ||
+    read.meta?.delivery_source !== "durable_store" ||
+    read.meta?.snapshot_sha256 !== snapshotSha256 ||
+    read.meta?.producer_manifest_sha256 !== posted.producer_manifest_sha256 ||
+    read.meta?.consumer_manifest_sha256 !== posted.consumer_manifest_sha256
+  ) {
+    throw new Error(`gsc_private_rollback_read_proof_failed:${readResponse.status}`);
+  }
+  return posted;
 }
 
 async function main() {
@@ -251,6 +329,20 @@ async function main() {
     );
     return;
   }
+  const rollbackAt = process.argv.indexOf("--rollback");
+  if (rollbackAt >= 0) {
+    const reasonAt = process.argv.indexOf("--reason");
+    const receipt = await rollback({
+      snapshotSha256: process.argv[rollbackAt + 1],
+      reason: reasonAt >= 0 ? process.argv[reasonAt + 1] : "operator_selected_known_good",
+      baseUrl,
+      token,
+    });
+    console.log(
+      `GSC_STATE_ROLLED_BACK status=${receipt.status} snapshot_sha256=${receipt.rolled_back_to_snapshot_sha256} producer_manifest_sha256=${receipt.producer_manifest_sha256} consumer_manifest_sha256=${receipt.consumer_manifest_sha256}`,
+    );
+    return;
+  }
   const inputArg = process.argv.indexOf("--input");
   const input = inputArg >= 0 ? path.resolve(process.argv[inputArg + 1]) : DEFAULT_INPUT;
   const receipt = await publish({
@@ -262,7 +354,7 @@ async function main() {
   fs.mkdirSync(path.dirname(receiptPath), { recursive: true });
   fs.writeFileSync(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`, "utf8");
   console.log(
-    `GSC_STATE_PUBLISHED as_of=${receipt.as_of || "none"} insights_sha256=${receipt.content_sha256 || "none"} history_sha256=${receipt.history_state_sha256} readiness=${receipt.readiness_status}`,
+    `GSC_STATE_PUBLISHED status=${receipt.status} producer_as_of=${receipt.producer_as_of || "none"} consumer_as_of=${receipt.consumer_as_of || "none"} producer_manifest_sha256=${receipt.producer_manifest_sha256 || "none"} consumer_manifest_sha256=${receipt.consumer_manifest_sha256 || "none"} snapshot_sha256=${receipt.snapshot_sha256 || "none"} history_sha256=${receipt.history_state_sha256}`,
   );
 }
 

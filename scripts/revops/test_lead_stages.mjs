@@ -537,18 +537,9 @@ function readyGscHistory(asOf, nowIso) {
   if (denied.ok) fail("gsc_auth_required_helper");
   else pass("gsc_auth_fail_without_token", denied.reason);
 
-  const loaded = ops._loadGscInsights();
-  if (!loaded.ok) {
-    // Fixture must exist under netlify/functions/data after PR1
-    fail("gsc_insights_file_present", loaded.error);
-  } else {
-    pass("gsc_insights_file_present");
-    const safe = ops._sanitizeGscForOps(loaded.data);
-    const blob = JSON.stringify(safe);
-    if (/@example\.com|telefone|whatsapp/i.test(blob) && /"email"\s*:/i.test(blob)) {
-      fail("gsc_pii_in_payload", blob.slice(0, 200));
-    } else pass("gsc_sanitize_no_pii_keys");
-  }
+  const safe = ops._sanitizeGscForOps({ aggregate: 3, email: "private@example.invalid" });
+  if (Object.hasOwn(safe, "email")) fail("gsc_pii_in_payload", safe);
+  else pass("gsc_sanitize_no_pii_keys");
   if (prev === undefined) delete process.env.OPS_TOKEN;
   else process.env.OPS_TOKEN = prev;
 }
@@ -639,6 +630,8 @@ function readyGscHistory(asOf, nowIso) {
     generated_at: new Date().toISOString(),
     ready_for_product_decisions: true,
     synthetic: false,
+    fixture: false,
+    live_baseline_invented: false,
     query_text_redacted: true,
     raw_query_rows_in_git: false,
     analyses: [{ query_hash: "sha256:abc123", impressions: 12 }],
@@ -647,12 +640,20 @@ function readyGscHistory(asOf, nowIso) {
   currentInsights.readiness_contract_version = "gsc-readiness/v2";
   currentInsights.history_state_sha256 = currentHistory.state_sha256;
   currentInsights.snapshot_sha256 = currentHistory.last_known_good.snapshot_sha256;
+  const currentProducer = {
+    schema_version: "gsc-sync-state/v1",
+    manifest_schema_version: "gsc_snapshot_manifest_v1",
+    manifest_sha256: currentInsights.snapshot_sha256,
+    as_of: currentInsights.as_of,
+    produced_at: currentInsights.generated_at,
+    source: "search_analytics_api",
+  };
   const rawQueryRejected = await ops.handler({
     httpMethod: "POST",
     headers: { authorization: "Bearer " + "z".repeat(24) },
     queryStringParameters: { action: "gsc_insights_ingest" },
     rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights_ingest",
-    body: JSON.stringify({ history: currentHistory, insights: { ...currentInsights, query: "raw private term" } }),
+    body: JSON.stringify({ producer: currentProducer, history: currentHistory, insights: { ...currentInsights, query: "raw private term" } }),
   });
   if (rawQueryRejected.statusCode !== 422) fail("gsc_ingest_rejects_raw_query", rawQueryRejected.body);
   else pass("gsc_ingest_rejects_raw_query");
@@ -687,10 +688,17 @@ function readyGscHistory(asOf, nowIso) {
     headers: { authorization: "Bearer " + "z".repeat(24) },
     queryStringParameters: { action: "gsc_insights_ingest" },
     rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights_ingest",
-    body: JSON.stringify({ history: currentHistory, insights: currentInsights }),
+    body: JSON.stringify({ producer: currentProducer, history: currentHistory, insights: currentInsights }),
   });
   const ingestedBody = JSON.parse(ingested.body || "{}");
-  if (ingested.statusCode !== 200 || !ingestedBody.durable || !ingestedBody.content_sha256) {
+  if (
+    ingested.statusCode !== 200 ||
+    !ingestedBody.durable ||
+    !ingestedBody.content_sha256 ||
+    ingestedBody.status !== "CURRENT" ||
+    ingestedBody.producer_manifest_sha256 !== currentInsights.snapshot_sha256 ||
+    ingestedBody.consumer_manifest_sha256 !== currentInsights.snapshot_sha256
+  ) {
     fail("gsc_ingest_durable", ingested.body);
   } else pass("gsc_ingest_durable", ingestedBody.content_sha256.slice(0, 12));
   if (ingestedBody.history_state_sha256 !== currentHistory.state_sha256) {
@@ -738,11 +746,11 @@ function readyGscHistory(asOf, nowIso) {
     pass("gsc_with_auth");
     if (
       gscBody.meta?.delivery_source !== "durable_store" ||
-      gscBody.meta?.content_sha256 !== ingestedBody.content_sha256 ||
+      gscBody.meta?.snapshot_content_sha256 !== ingestedBody.content_sha256 ||
       gscBody.meta?.history_state_sha256 !== currentHistory.state_sha256 ||
       gscBody.meta?.ready_for_product_decisions !== true
     ) fail("gsc_durable_read_proof", gscBody.meta);
-    else pass("gsc_durable_read_proof", gscBody.meta.content_sha256.slice(0, 12));
+    else pass("gsc_durable_read_proof", gscBody.meta.snapshot_content_sha256.slice(0, 12));
     const b = JSON.stringify(gscBody);
     if (/"email"\s*:\s*"[^"]+@/.test(b)) fail("gsc_auth_response_pii", b.slice(0, 200));
     else pass("gsc_auth_response_no_email_pii");
@@ -770,12 +778,20 @@ function readyGscHistory(asOf, nowIso) {
     },
   };
   failedHistory.state_sha256 = historyHash(failedHistory);
+  const failedProducer = {
+    schema_version: "gsc-sync-state/v1",
+    manifest_schema_version: "gsc_snapshot_manifest_v1",
+    manifest_sha256: null,
+    as_of: null,
+    produced_at: failedHistory.updated_at,
+    source: "search_analytics_api",
+  };
   const stateOnly = await ops.handler({
     httpMethod: "POST",
     headers: { authorization: "Bearer " + "z".repeat(24) },
     queryStringParameters: { action: "gsc_insights_ingest" },
     rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights_ingest",
-    body: JSON.stringify({ history: failedHistory }),
+    body: JSON.stringify({ producer: failedProducer, history: failedHistory }),
   });
   const stateOnlyBody = JSON.parse(stateOnly.body || "{}");
   if (stateOnly.statusCode !== 200 || stateOnlyBody.promoted !== false) {
@@ -792,7 +808,7 @@ function readyGscHistory(asOf, nowIso) {
     readOnly.statusCode !== 200 ||
     readOnlyBody.meta?.ready_for_product_decisions !== false ||
     readOnlyBody.access_mode !== "READ_ONLY" ||
-    readOnlyBody.meta?.content_sha256 !== ingestedBody.content_sha256 ||
+    readOnlyBody.meta?.snapshot_content_sha256 !== ingestedBody.content_sha256 ||
     readOnlyBody.meta?.published_at !== publishedAtBeforeFailure
   ) fail("gsc_last_known_good_read_only", readOnlyBody);
   else pass("gsc_last_known_good_read_only");
@@ -802,7 +818,7 @@ function readyGscHistory(asOf, nowIso) {
     headers: { authorization: "Bearer " + "z".repeat(24) },
     queryStringParameters: { action: "gsc_insights_ingest" },
     rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights_ingest",
-    body: JSON.stringify({ history: failedHistory }),
+    body: JSON.stringify({ producer: failedProducer, history: failedHistory }),
   });
   const repeatedStateBody = JSON.parse(repeatedState.body || "{}");
   if (!repeatedStateBody.idempotent || repeatedStateBody.published_at !== publishedAtBeforeFailure) {
@@ -825,7 +841,7 @@ function readyGscHistory(asOf, nowIso) {
     headers: { authorization: "Bearer " + "z".repeat(24) },
     queryStringParameters: { action: "gsc_insights_ingest" },
     rawUrl: "https://confenge.com.br/.netlify/functions/ops?action=gsc_insights_ingest",
-    body: JSON.stringify({ history: olderHistory }),
+    body: JSON.stringify({ producer: failedProducer, history: olderHistory }),
   });
   const afterStaleAttempt = await ops.handler({
     httpMethod: "GET",
@@ -840,8 +856,13 @@ function readyGscHistory(asOf, nowIso) {
   ) fail("gsc_out_of_order_store_protected", staleOverwrite.body);
   else pass("gsc_out_of_order_store_protected");
 
-  const durableRecord = globalMemory.system.get("gsc-insights-latest-v1");
-  globalMemory.system.set("gsc-insights-latest-v1", {
+  const pointerRecord = [...globalMemory.system.values()].find(
+    (value) => value?.schema_version === "confenge-private-gsc-pointer/v1",
+  );
+  const [durableId, durableRecord] = [...globalMemory.system.entries()].find(
+    ([, value]) => value?.snapshot_sha256 === pointerRecord.latest_snapshot_sha256,
+  );
+  globalMemory.system.set(durableId, {
     ...durableRecord,
     history: { ...durableRecord.history, updated_at: "tampered" },
   });
@@ -853,7 +874,7 @@ function readyGscHistory(asOf, nowIso) {
   });
   if (corruptRead.statusCode !== 409) fail("gsc_corrupt_store_rejected", corruptRead.body);
   else pass("gsc_corrupt_store_rejected");
-  globalMemory.system.set("gsc-insights-latest-v1", durableRecord);
+  globalMemory.system.set(durableId, durableRecord);
 
   const week = await ops.handler({
     httpMethod: "GET",

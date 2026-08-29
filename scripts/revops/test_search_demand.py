@@ -541,6 +541,16 @@ def main() -> int:
         fixture_payload = sdo.sync_from_fixture()
         ok("fixture_source_kind", fixture_payload.get("source_kind") == "fixture")
         ok("fixture_not_live_kind", sdo.is_live_gsc_payload(fixture_payload) is False)
+        fixture_sync_state = json.loads((ROOT / "data/revops/gsc/last_sync.json").read_text())
+        ok("sync_state_schema_versioned", fixture_sync_state.get("schema_version") == "gsc-sync-state/v1")
+        ok(
+            "sync_state_manifest_schema_versioned",
+            fixture_sync_state.get("manifest_schema_version") == "gsc_snapshot_manifest_v1",
+        )
+        ok(
+            "fixture_source_freshness_unknown",
+            (fixture_sync_state.get("source_freshness") or {}).get("status") == "UNKNOWN",
+        )
         after_latest = (ROOT / "data/revops/gsc/latest_import.json").read_bytes()
         ok("fixture_does_not_overwrite_latest_import", before_latest == after_latest)
         csv_labeled = sdo.stamp_non_live_snapshot({"source": "csv_export", "queries": []})
@@ -576,6 +586,14 @@ def main() -> int:
             "gsc_workflow_fail_closed",
             "--allow-missing-creds" not in gsc_job and "|| true" not in gsc_job,
         )
+        ok(
+            "gsc_workflow_serializes_private_producer",
+            "group: gsc-private-snapshot-producer" in gsc_job
+            and "cancel-in-progress: false" in gsc_job,
+        )
+        artifact_paths = gsc_job.split("path: |", 1)[1] if "path: |" in gsc_job else ""
+        ok("gsc_artifact_excludes_individual_rows", "data/revops/gsc/daily/" not in artifact_paths)
+        ok("gsc_artifact_excludes_private_tree", "data/revops/gsc/private/" not in artifact_paths)
 
         hist_rows = [
             {

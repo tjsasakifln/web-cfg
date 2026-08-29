@@ -46,6 +46,13 @@ public_canonical:
     root: /var/lib/confenge-web
     contract_version: confenge-host-file-record/v1
     survives_release_rollback: true
+    gsc_private_snapshot:
+      namespace: ops-system
+      snapshot_schema: confenge-private-gsc-snapshot/v1
+      pointer_schema: confenge-private-gsc-pointer/v1
+      consumer: authenticated ops gsc_insights
+      freshness_probe: market-answer-freshness.yml read-only GET
+      packaged_fallback_can_be_current: false
   scheduler:
     http_process: systemd confenge-web-runtime.service
     revops: GitHub Actions workflow revops-scheduled.yml against live HTTPS
@@ -143,6 +150,9 @@ ambiguous_repositories:
   expose an address listed under `origin_apex_a`.
 - Do not instruct Netlify UI publish, Netlify env, or Netlify rollback as the
   production path.
+- Private GSC state is authoritative only after a versioned snapshot and its
+  pointer have been durably read back from `/var/lib/confenge-web`. Packaged JSON,
+  an Actions workspace and an Actions artifact can never satisfy `CURRENT`.
 - Netcup hosts data/action planes because those services need to exist; it is not
   a destination for rebuilding SmartLic.
 - `smartlic.tech` may point only to a minimal URL-specific migration/redirect

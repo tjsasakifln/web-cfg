@@ -1,4 +1,4 @@
-"""Dedicated Market Answer freshness workflow shape — not RevOps."""
+"""Dedicated read-only freshness proof for the private market-intelligence consumer."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ WORKFLOW = ROOT / ".github/workflows/market-answer-freshness.yml"
 REVOPS = ROOT / ".github/workflows/revops-scheduled.yml"
 
 
-def test_market_answer_freshness_workflow_exists_and_is_exclusive():
+def test_market_answer_freshness_workflow_probes_the_private_consumer_read_only():
     assert WORKFLOW.is_file()
     text = WORKFLOW.read_text(encoding="utf-8")
     assert "on:" in text
@@ -31,14 +31,16 @@ def test_market_answer_freshness_workflow_exists_and_is_exclusive():
             assert 0 < interval_m < 48 * 60, expr
         else:
             raise AssertionError(f"schedule is not more frequent than 48h: {expr}")
-    assert "python3 -m scripts.market_answers" in text
-    assert "validate" in text
-    assert "--fail-on-stale" in text
-    assert "build" in text
-    assert "--report-only" in text
-    assert "revops-scheduled" not in text
-    assert "scripts/revops" not in text
+    assert "node scripts/revops/verify_gsc_freshness.mjs" in text
+    assert "OPS_TOKEN: ${{ secrets.OPS_TOKEN }}" in text
+    assert "BASE_URL: https://confenge.com.br" in text
+    assert "name: revops-scheduled" not in text
     assert "scheduled_daily.mjs" not in text
+    assert "search_demand_observatory.py sync" not in text
+    assert "publish_gsc_insights.mjs" not in text
+    assert "gsc_insights_ingest" not in text
+    assert "method: POST" not in text
+    assert "upload-artifact" not in text
     assert "git commit" not in text
     assert "git push" not in text
 
@@ -50,4 +52,5 @@ def test_freshness_workflow_is_not_revops_scheduled():
     assert "name: revops-scheduled" in revops
     assert "name: market-answer-freshness" in market
     assert market != revops
-    assert "python3 -m scripts.market_answers" not in revops
+    assert "verify_gsc_freshness.mjs" not in revops
+    assert "publish_gsc_insights.mjs" in revops
