@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "c2809e692cd4f766cb9b68839e427b4c28262884",
+  "baseline_commit": "d85fcf85f10882793de5e36843cba9478cb8e007",
   "recaptured_at": "2026-08-29",
-  "recapture_reason": "REVOPS closed-loop authority/privacy change: recapture script.js and js/modules/analytics.js only after adding stable non-PII session/receipt joins, fail-closed identifier scrubbing and storage-blocked session isolation. Base origin/main is 72ed3831ba28c9400627cdc9599aa54e9329e178; implementation baseline is c2809e692cd4f766cb9b68839e427b4c28262884. All six protected pillar HTML files, styles, URL membership, canonical ownership, redirects, robots and indexability remain unchanged; html_mutation remains false and the #291 unlock plan is untouched. The freeze stays active at the new reviewed hashes.",
+  "recapture_reason": "REVOPS closed-loop authority/privacy change: recapture script.js and js/modules/analytics.js only after enforcing exact non-PII entity IDs, denying free-text fields, redacting rejected names and moving new browser collection to the canonical Netcup /api/web/collect route. Base origin/main is 72ed3831ba28c9400627cdc9599aa54e9329e178; reviewed implementation baseline is d85fcf85f10882793de5e36843cba9478cb8e007. All six protected pillar HTML files, styles, URL membership, canonical ownership, redirects, robots and indexability remain unchanged; html_mutation remains false and the #291 unlock plan is untouched. The freeze stays active at the new reviewed hashes.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -20,7 +20,7 @@
     "auditoria-orcamento-licitacao/index.html": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "b5828ec2e88ff6df78dbd2677b33816fa56ab1b5a13377e36d71616112056432",
-    "script.js": "7548c489433ffe20c9b5a8507d44370ed514251590795e83e7b65a8ea6c4308a",
+    "script.js": "17ec463824f5dc9b71e2ce7149a2905360c508a34b4efe19ba61e092532aef20",
     "styles.css": "a6e324b6133853721609f203b9bb3d954eb0f49c55ad5274a1eccbeb1a20c48b",
     "styles-tokens.css": "8908187527c8120731dc8584eb11c36ae41e66f5cf411dcd431251e1b52cb01d",
     "styles-tools.css": "cfe5e81785c54e8a18601c2a97308dfaf744d0b60596d2acc34ec3ad7e015162",
@@ -30,6 +30,6 @@
     "sitemap-index.xml": "5d1757594cdecabd2146c5c94651ee6fc044dc83e0925fff1a8c9bdb4fe31b9c",
     "_redirects": "402f730e21b73c73574290bc572bf63fd36a713e1143b30a8df989b80f200a05",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "cfcd81c52bf9c46a6d81248b84887435bdb28b4e55a6dcdead08ec8adde74589"
+    "js/modules/analytics.js": "5fd78c3d9c3c8b9d135e6cc4cb02a11ee276c09018cf3f81e6a1a641f8029698"
   }
 }
