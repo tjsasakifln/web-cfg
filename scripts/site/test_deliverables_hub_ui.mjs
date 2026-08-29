@@ -285,7 +285,7 @@ for (const width of widths) {
   // One primary leads to the progressive framing and the other submits the
   // terminal hand-raise added by #290; neither replaces a priced offer path.
   if (metrics.primaries > 2) errors.push(`primary_cta_overuse=${metrics.primaries}`);
-  if (metrics.navDeliverables !== "Conteúdos" || metrics.footerDeliverables !== "Entregas") errors.push("nav_contract");
+  if (metrics.navDeliverables !== "Biblioteca" || metrics.footerDeliverables !== "Entregas") errors.push("nav_contract");
   if (metrics.emptyPlaceholders) errors.push("empty_placeholders");
 
   if (width <= 900) {
@@ -299,7 +299,7 @@ for (const width of widths) {
         linkText: link?.textContent?.trim() || "",
       };
     });
-    if (mobile.expanded !== "true" || !mobile.linkVisible || mobile.linkText !== "Conteúdos") {
+    if (mobile.expanded !== "true" || !mobile.linkVisible || mobile.linkText !== "Biblioteca") {
       errors.push("mobile_nav");
     }
     await page.click(".menu-toggle");
@@ -421,7 +421,7 @@ for (const { route, expectedNav } of [
   }
   if (expectedNav === promotedNav) {
     if (metrics.nav.filter(({ href }) => href === "/conteudos/").length !== 1) errors.push("contents_nav_missing");
-    if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("tools_nav_missing");
+    if (metrics.nav.some(({ href }) => href === "/ferramentas/")) errors.push("tools_nav_not_consolidated");
     if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("entregas_still_in_header");
   } else {
     if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("frozen_nav_mutated");

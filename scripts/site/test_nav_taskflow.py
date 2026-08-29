@@ -237,7 +237,7 @@ def main() -> int:
         "/diretoria-b2g/": "/diretoria-b2g/",
         "/defesa-tecnica-contratos-publicos/": problems["url"],
         "/conteudos/ata-reuniao-ordem-servico-obra-publica/": "/conteudos/",
-        "/ferramentas/limite-acrescimos-supressoes/": "/ferramentas/",
+        "/ferramentas/limite-acrescimos-supressoes/": "/conteudos/",
     }
     for current, active in active_cases.items():
         path = ROOT / current.strip("/") / "index.html"

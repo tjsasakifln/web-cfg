@@ -14,6 +14,7 @@ from html import escape, unescape
 from pathlib import Path
 
 from scripts.bofu_dominance.frozen_specs.constants import PILLARS
+from scripts.site.public_ia import active_header_href
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -98,7 +99,10 @@ def _current_hrefs(anchors: list[str], relative_path: str) -> set[str]:
     if public_path.endswith("index.html"):
         public_path = public_path[: -len("index.html")]
     canonical_hrefs = {href for _, href in CANONICAL_NAV_ITEMS}
-    if public_path in canonical_hrefs:
+    mapped = active_header_href(public_path)
+    if mapped in canonical_hrefs:
+        current.add(mapped)
+    elif public_path in canonical_hrefs:
         current.add(public_path)
     return current & canonical_hrefs
 

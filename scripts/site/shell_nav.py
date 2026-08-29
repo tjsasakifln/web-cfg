@@ -13,8 +13,8 @@ Usage:
     python3 scripts/site/shell_nav.py --write    # regenerate shipped HTML
 
 Design notes (CFG10X-11 / issue #183):
-  * Header names the three purchase situations in visitor language, plus
-    Conteúdos and Ferramentas. Destinations are real pages, never home anchors.
+  * Header names the three purchase situations in visitor language, plus one
+    essential Biblioteca. Destinations are real pages, never home anchors.
   * `aria-current="page"` marks the active branch on internal pages.
   * Desktop and mobile carry the same links in the same order; the footer is a
     short discovery set derived from the IA map, not a taxonomy dump.

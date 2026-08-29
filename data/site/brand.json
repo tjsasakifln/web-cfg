@@ -101,12 +101,8 @@
         "href": "/diretoria-b2g/"
       },
       {
-        "label": "Conteúdos",
+        "label": "Biblioteca",
         "href": "/conteudos/"
-      },
-      {
-        "label": "Ferramentas",
-        "href": "/ferramentas/"
       }
     ],
     "cta": {

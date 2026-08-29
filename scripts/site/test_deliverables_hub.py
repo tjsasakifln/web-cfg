@@ -456,7 +456,7 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
             anchor for anchor in navigation if 'aria-current="page"' in anchor
         ]
         assert len(current) == 1
-        assert 'href="/ferramentas/"' in current[0]
+        assert 'href="/conteudos/"' in current[0]
         if index == 1:
             assert "Analisar meu caso" in block
 

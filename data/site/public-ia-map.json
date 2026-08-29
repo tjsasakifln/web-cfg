@@ -59,14 +59,9 @@
         "journey": "operacao"
       },
       {
-        "label": "Conteúdos",
+        "label": "Biblioteca",
         "href": "/conteudos/",
         "hub": "conteudos"
-      },
-      {
-        "label": "Ferramentas",
-        "href": "/ferramentas/",
-        "hub": "ferramentas"
       }
     ],
     "cta": {
@@ -293,7 +288,7 @@
     { "prefix": "/guias-contratos-obras/", "href": "/conteudos/" },
     { "prefix": "/lei-14133-obras/", "href": "/conteudos/" },
     { "prefix": "/jurisprudencia-contratos-obras/", "href": "/conteudos/" },
-    { "prefix": "/ferramentas/", "href": "/ferramentas/" }
+    { "prefix": "/ferramentas/", "href": "/conteudos/" }
   ],
   "removed_from_primary_nav": [
     {

@@ -136,8 +136,7 @@ def _build_header() -> str:
         {"label": "Edital e proposta", "href": "/bid-room-licitacoes-obras/"},
         {"label": "Contrato sob pressão", "href": "/problemas-que-resolvemos/"},
         {"label": "Operação recorrente", "href": "/diretoria-b2g/"},
-        {"label": "Conteúdos", "href": "/conteudos/"},
-        {"label": "Ferramentas", "href": "/ferramentas/"},
+        {"label": "Biblioteca", "href": "/conteudos/"},
     ]
     cta = (brand.get("navigation") or {}).get("cta") or {
         "label": "Analisar meu caso",
