@@ -63,15 +63,6 @@ body[data-content-cluster="home"] .hero-proof-line a{
 body[data-content-cluster="home"] .journeys-section{
   padding:40px 0 48px;
 }
-body[data-content-cluster="home"] .door-kicker{
-  margin:0 0 .2rem;
-  color:var(--green-700);
-  font-family:var(--mono);
-  font-size:.8rem;
-  font-weight:700;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-}
 body[data-content-cluster="home"] .journey-row-body h3{
   margin:0 0 .45rem;
   font-size:1.2rem;
