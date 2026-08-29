@@ -116,17 +116,23 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             f'<span class="checklist-text">{_md_inline(text)}</span></label></li>'
         )
 
-    def heading_html(level: str, raw_title: str) -> str:
+    def heading_html(level: str, raw_title: str) -> tuple[str, str]:
         title = raw_title.strip()
+        hid = ""
+        m_id = re.search(r"\s*\{#([a-z0-9-]+)\}\s*$", title)
+        if m_id:
+            hid = m_id.group(1)
+            title = title[: m_id.start()].strip()
         m = re.match(r"^(\d+)\.\s+(.+)$", title)
         if m:
             num, rest = m.group(1), m.group(2)
-            return (
+            html = (
                 f"<{level} class=\"editorial-heading editorial-heading--numbered\">"
                 f'<span class="editorial-heading-num" aria-hidden="true">{num}</span>'
                 f'<span class="editorial-heading-label">{_md_inline(rest)}</span></{level}>'
             )
-        return f"<{level} class=\"editorial-heading\">{_md_inline(title)}</{level}>"
+            return html, hid
+        return f"<{level} class=\"editorial-heading\">{_md_inline(title)}</{level}>", hid
 
     for raw in lines:
         line = raw.rstrip()
@@ -135,13 +141,16 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             continue
         if line.startswith("### "):
             close_lists()
-            out.append(heading_html("h3", line[4:]))
+            html, _hid = heading_html("h3", line[4:])
+            out.append(html)
         elif line.startswith("## ") or line.startswith("# "):
             title = line[3:] if line.startswith("## ") else line[2:]
             close_section()
-            out.append('<section class="editorial-section">')
+            html, hid = heading_html("h2", title)
+            sid = f' id="{hid}"' if hid else ""
+            out.append(f'<section class="editorial-section"{sid}>')
             in_section = True
-            out.append(heading_html("h2", title))
+            out.append(html)
         elif re.match(r"^\d+\.\s+", line):
             if not in_ol:
                 close_lists()
@@ -203,8 +212,38 @@ def _sources_html(page: dict[str, Any]) -> str:
         url = src.get("url") or "#"
         organ = src.get("organ") or src.get("issuer") or src.get("authority") or ""
         device = src.get("device") or src.get("article") or src.get("legal_device") or ""
-        consulted = src.get("accessed") or src.get("date_consulted") or src.get("retrieved") or ""
-        meta_bits = [b for b in (organ, device, consulted and f"Consulta: {consulted}") if b]
+        if not page.get("source_context_required"):
+            consulted = (
+                src.get("accessed")
+                or src.get("date_consulted")
+                or src.get("retrieved")
+                or ""
+            )
+            meta_bits = [
+                b for b in (organ, device, consulted and f"Consulta: {consulted}") if b
+            ]
+        else:
+            consulted_raw = (
+                src.get("accessed")
+                or src.get("accessed_at")
+                or src.get("date_consulted")
+                or src.get("retrieved")
+                or ""
+            )
+            consulted = format_date_br(consulted_raw) if consulted_raw else ""
+            limit = src.get("limitations") or src.get("application_limit") or ""
+            if limit and len(limit) > 180:
+                limit = limit[:177].rstrip() + "..."
+            meta_bits = [
+                b
+                for b in (
+                    organ,
+                    device,
+                    consulted and f"Consulta: {consulted}",
+                    limit and f"Limite: {limit}",
+                )
+                if b
+            ]
         meta = (
             f'<span class="sources-meta">{e(" · ".join(meta_bits))}</span>'
             if meta_bits

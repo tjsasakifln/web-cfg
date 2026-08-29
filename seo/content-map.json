@@ -245,7 +245,7 @@
   "resposta-notificacao-atraso-obra-publica": {
     "order": 28,
     "id": "V061",
-    "title": "Construtora notificada por atraso: como montar a resposta técnica",
+    "title": "Resposta à notificação de atraso em obra pública",
     "url": "/conteudos/resposta-notificacao-atraso-obra-publica/",
     "cluster": "Sanções, defesa e extinção",
     "pillar": "/defesa-tecnica-contratos-publicos/",
@@ -479,7 +479,7 @@
   "prorrogacao-prazo-obra-publica-documentos": {
     "order": 54,
     "id": "V048",
-    "title": "Prorrogação de prazo em obra pública: documentos que não podem faltar",
+    "title": "Dossiê do pedido de prorrogação de prazo",
     "url": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
     "cluster": "Atrasos, prorrogação e paralisação",
     "pillar": "/atrasos-prorrogacao-obras-publicas/",
@@ -587,7 +587,7 @@
   "atraso-obra-culpa-administracao": {
     "order": 66,
     "id": "V046",
-    "title": "Obra atrasada por culpa da Administração: como proteger a construtora",
+    "title": "Prova de culpa da Administração no atraso da obra",
     "url": "/conteudos/atraso-obra-culpa-administracao/",
     "cluster": "Atrasos, prorrogação e paralisação",
     "pillar": "/atrasos-prorrogacao-obras-publicas/",
