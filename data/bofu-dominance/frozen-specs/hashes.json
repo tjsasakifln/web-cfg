@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "035b3dad24818ec37facf75c0983ca6b9cfb330b",
+  "baseline_commit": "f676be85fbd7cbad4358601144e8b8d648271753",
   "recaptured_at": "2026-08-29",
-  "recapture_reason": "CFG10X UI regression fix: recapture styles.css after restoring honest word wrapping and the tablet header CTA. Baseline 035b3dad24818ec37facf75c0983ca6b9cfb330b. `table{overflow-wrap:anywhere}` participates in intrinsic min-content sizing, so auto table layout and flex rows could starve a column below a single word and split headers letter by letter (ADMIN/ISTRA/CAO, QUANTIDA/DE); the reset is scoped to .compare-table cells and .pillar-docs labels so opaque tokens still wrap anywhere. The header CTA was hidden from 1240px down while the menu toggle only appeared at 900px, leaving 901-1240px with navigation and no commercial path; below 1000px the nav now collapses into the existing mobile menu. This is reviewed rendering collateral on shared chrome: all six protected pillar HTML files are byte-identical to the previous baseline, URL membership, canonical ownership, redirects, robots and indexability are unchanged, html_mutation remains false and the #291 unlock plan is untouched.",
+  "recapture_reason": "CFG10X P0 responsive geometry gate: recapture styles.css from implementation baseline f676be85fbd7cbad4358601144e8b8d648271753 after auditing merged PR #468 against origin/main 72ed3831ba28c9400627cdc9599aa54e9329e178, eliminating the remaining systemic regressions and rebasing the reviewed implementation onto final protected origin/main 83bcce42cdd742a98583d14ce69c581b472137fa. Shared chrome now fully occludes scrolled content with an opaque sticky header; natural-language copy wraps only at word boundaries while code and explicitly marked opaque identifiers retain anywhere wrapping; JS-off mobile navigation preserves a >=44px commercial CTA; narrow breakout metadata uses zero-minimum grid tracks; and mobile headings scale without starving columns. The rendered gate is green across 12 public route families at 320/360/390/430/768/900/901/960/1000/1024/1120/1240/1366/1440/1661/1920, including prices, menu/CTA, sticky collision and JS-off geometry. All six protected pillar HTML files remain byte-identical to this baseline; URL membership, canonical ownership, redirects, robots, schema and indexability are unchanged, html_mutation remains false and the #291 unlock plan is untouched. Rollback is the implementation plus this reviewed hash recapture in the same revert.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -21,7 +21,7 @@
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "b5828ec2e88ff6df78dbd2677b33816fa56ab1b5a13377e36d71616112056432",
     "script.js": "7afa197849b48d40eed8fc3dcd3a013ef019a12f180e000907a559cd5fb687fc",
-    "styles.css": "a6e324b6133853721609f203b9bb3d954eb0f49c55ad5274a1eccbeb1a20c48b",
+    "styles.css": "24003f14e953846a991d1537abeb2d31f2c6fc07e3862b2c9b4eda775d49e3be",
     "styles-tokens.css": "8908187527c8120731dc8584eb11c36ae41e66f5cf411dcd431251e1b52cb01d",
     "styles-tools.css": "cfe5e81785c54e8a18601c2a97308dfaf744d0b60596d2acc34ec3ad7e015162",
     "robots.txt": "2be984de9b51eb6d201b8210d727353f014cf52bea1058eabf3abedb9cad6f57",
