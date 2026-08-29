@@ -35,7 +35,7 @@ def test_first_fold_answers_the_four_skeptical_questions() -> None:
     assert "proteger a margem" in hero
     assert "Engenharia Civil pela EESC-USP" in hero
     assert "Iniciativa privada e Administração Pública" in hero
-    assert "Ver um relatório publicado" in hero
+    assert "Ver exemplo demonstrativo de relatório" in hero
     assert 'href="#formulario-contato"' in hero
     assert hero.count("button-primary") == 1
 
@@ -52,6 +52,10 @@ def test_pncp_is_market_context_after_decision_and_capture() -> None:
     assert "Contexto de mercado · PNCP" in market
     assert "não são clientes da CONFENGE" in market
     assert "Não provam resultado da CONFENGE" in market
+    assert 'data-event-name="proof_expand"' not in market
+    assert 'data-cta-position="hero_proof"' not in market
+    assert market.count('data-event-name="evidence_drilldown"') == 3
+    assert market.count('data-cta-position="market_context"') == 6
 
 
 def test_three_icp_doors_lead_to_one_honest_intake() -> None:
@@ -66,6 +70,13 @@ def test_three_icp_doors_lead_to_one_honest_intake() -> None:
     assert 'type="file"' not in html.lower()
     assert "O site não recebe arquivo" in html
     assert "enviar documentos para análise" not in html.lower()
+    contract_door = re.search(
+        r'<li\b[^>]*id="jornada-contrato"[^>]*>[\s\S]*?</li>', html, re.IGNORECASE
+    )
+    assert contract_door
+    assert "Documentos sensíveis:" in contract_door.group(0)
+    assert "solicite o canal seguro no formulário logo abaixo" in contract_door.group(0)
+    assert 'aria-describedby="contrato-canal-seguro"' in contract_door.group(0)
     cta_texts = [
         re.sub(r"<[^>]+>", " ", cta).lower()
         for cta in re.findall(r"<(?:a|button)\b[^>]*>[\s\S]*?</(?:a|button)>", html)
