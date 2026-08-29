@@ -37,13 +37,17 @@
 <p class="eyebrow">Atrasos e prorrogação</p>
 <h1>Matriz de atraso de obra</h1>
 <p class="content-lead">Adicione eventos com período, prova, duração e possível concorrência. A ferramenta devolve hipóteses preliminares, nunca um veredito por contagem.</p>
+<p class="tool-job" data-tool-job>O que esta ferramenta resolve: registrar eventos de atraso e ver hipóteses preliminares e lacunas de prova.</p>
+<p class="tool-decision" data-tool-decision>Decisão apoiada: completar prova e período, ou enquadrar cronograma e nexo antes de pedir prazo ou custo.</p>
 </div></header>
 <div class="container tool-shell">
 <details class="tool-premises"><summary>Premissas</summary>
 <div class="tool-premises-body">
-<p>Matriz orientativa. Força maior e fato da Administração não se presumem: demonstram-se. A ferramenta não soma dias automaticamente nem emite laudo pericial.</p>
+<p>Matriz orientativa. Força maior e fato da Administração não se presumem: demonstram-se. A ferramenta não soma dias automaticamente nem emite laudo pericial. O resultado separa <strong>fato</strong>, <strong>cálculo</strong> (sem soma de dias), <strong>inferência</strong> (hipótese) e o que permanece <strong>desconhecido</strong>.</p>
 </div></details>
-<form id="f" class="tool-form">
+<p class="tool-runtime-status" id="matriz-runtime-status" data-tool-runtime-status role="status" style="border-inline-start:4px solid var(--green-600, #3d8238);margin-block:1rem;padding:.75rem 1rem">Ative o JavaScript para montar hipóteses no navegador. O formulário está bloqueado para não enviar eventos pela URL ou ao servidor.</p>
+<form id="f" class="tool-form" method="post" action="/ferramentas/matriz-atraso-obra/">
+<fieldset class="tool-runtime-fields" data-tool-runtime-fields disabled style="border:0;margin:0;min-inline-size:0;padding:0">
 <div id="events" class="tool-event-list"></div>
 <div class="tool-actions"><button type="button" class="button button-secondary" id="btn-add">Adicionar evento</button></div>
 <div class="tool-field" style="margin-top:1rem">
@@ -52,9 +56,10 @@
 </div>
 <p class="tool-privacy-note">Respostas só neste navegador e não são enviadas à CONFENGE.</p>
 <div class="tool-actions">
-<button class="button button-primary tool-run" type="submit">Montar hipóteses</button>
+<button class="button button-primary tool-run" type="submit" disabled aria-describedby="matriz-runtime-status">Montar hipóteses</button>
 <button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Apagar respostas</button>
 </div>
+</fieldset>
 </form>
 <div id="out" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
 <div class="tool-actions" id="ra" hidden>
@@ -74,9 +79,37 @@
 (function(){
   var T=window.ConfengeTools, C=window.ConfengeToolCompute;
   var TOOL="matriz-atraso", SCHEMA=4, n=0, lastText="", root=document.getElementById("events");
+  var runtimeStatus=document.getElementById("matriz-runtime-status"), form=document.getElementById("f");
+  if(!T||!C||!root||!form) return;
+  if(runtimeStatus) runtimeStatus.hidden=true;
+  var runtimeFields=form.querySelector("[data-tool-runtime-fields]"); if(runtimeFields) runtimeFields.disabled=false;
+  var runButton=form.querySelector("button.tool-run"); if(runButton) runButton.disabled=false;
   if(T.bindToolLifecycle) T.bindToolLifecycle({tool:TOOL});
 
-  function esc(s){ return (T.escapeHtml||function(x){return String(x==null?"":x);})(s); }
+  function clearNode(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+  function addElement(parent, tag, className, text){
+    var el=document.createElement(tag);
+    if(className) el.className=className;
+    if(text!=null) el.textContent=String(text);
+    parent.appendChild(el);
+    return el;
+  }
+  function addStrongText(parent, strongText, text){
+    addElement(parent,"strong","",strongText);
+    parent.appendChild(document.createTextNode(String(text==null?"":text)));
+  }
+  function addLayer(parent, key, label, text){
+    var p=addElement(parent,"p");
+    p.setAttribute("data-layer",key);
+    addStrongText(p,label+". ",text);
+  }
+  function addListItem(parent, label, value){
+    addElement(parent,"li","",label+String(value==null?"":value));
+  }
+  function addLine(parent, text){
+    parent.appendChild(document.createTextNode(String(text==null?"":text)));
+    parent.appendChild(document.createElement("br"));
+  }
   function card(d){
     n++; var id=(d&&d.id)||("ev-"+n); var el=document.createElement("div");
     el.className="tool-event-card"; el.setAttribute("data-event-id", id);
@@ -158,37 +191,75 @@
     var r=C.computeMatrizEventos(events, { temMatriz: document.getElementById("tem_matriz").value });
     var out=document.getElementById("out");
     if(!r.ok){
-      out.hidden=false; out.className="tool-result-panel warn";
-      out.innerHTML="<p>Adicione ao menos um evento com descrição da causa.</p>";
+      var explInvalid=C.explainMatriz(r);
+      out.hidden=false; out.className="tool-result-panel bad";
+      clearNode(out);
+      var invalidSummary=addElement(out,"p","tool-result-summary");
+      addStrongText(invalidSummary,"Não foi possível montar as hipóteses."," "+explInvalid.layers.fato);
+      var invalidLayers=addElement(out,"section","tool-layers");
+      invalidLayers.setAttribute("aria-labelledby","camadas-matriz-erro");
+      var invalidHeading=addElement(invalidLayers,"h3","","Como ler este estado");
+      invalidHeading.id="camadas-matriz-erro";
+      addLayer(invalidLayers,"fato","Fato",explInvalid.layers.fato);
+      addLayer(invalidLayers,"calculo","Cálculo",explInvalid.layers.calculo);
+      addLayer(invalidLayers,"inferencia","Inferência",explInvalid.layers.inferencia);
+      addLayer(invalidLayers,"unknown","Desconhecido",explInvalid.layers.unknown);
+      addElement(out,"p","tool-disclaimer",explInvalid.legalDisclaimer);
+      document.getElementById("ra").hidden=true;
+      document.getElementById("cta").hidden=true;
+      lastText=""; T.focusResult(out);
       return;
     }
+    var expl=C.explainMatriz(r);
     var s=r.summary;
-    var rows=(r.events||[]).map(function(ev){
-      return "<li><strong>"+esc(ev.causa)+"</strong><br/>"+
-        "Hipótese: "+esc(ev.hipotese)+"<br/>"+
-        (ev.documentosExistentes&&ev.documentosExistentes.length?"Documentos existentes: "+esc(ev.documentosExistentes.join("; "))+"<br/>":"")+
-        (ev.documentosFaltantes&&ev.documentosFaltantes.length?"Documentos faltantes: "+esc(ev.documentosFaltantes.join("; "))+"<br/>":"")+
-        (ev.precisaNexoTemporal?"Necessita demonstrar nexo temporal.<br/>":"")+
-        (ev.precisaImpactoCritico?"Necessita demonstrar impacto no caminho crítico.<br/>":"")+
-        (ev.possivelConcorrencia?"Possível concorrência de causas / sobreposição.<br/>":"")+
-        (ev.observacao?"Observação: "+esc(ev.observacao)+"<br/>":"")+
-        "</li>";
-    }).join("");
     out.hidden=false; out.className="tool-result-panel hypothesis";
-    out.innerHTML='<p class="tool-result-summary"><strong>Hipóteses preliminares por evento</strong>'+esc(r.synthesis)+"</p>"+
-      '<h3>Resumo geral</h3><ul class="tool-evidence-list">'+
-      "<li>Eventos: "+s.totalEventos+"</li>"+
-      "<li>Sem prova contemporânea suficiente: "+s.semProvaContemporanea+"</li>"+
-      "<li>Sem período definido: "+s.semPeriodoDefinido+"</li>"+
-      "<li>Sem vínculo crítico claro: "+s.semVinculoCritico+"</li>"+
-      "<li>Possíveis sobreposições: "+s.possiveisSobreposicoes+"</li>"+
-      "<li>Matriz de riscos no contrato: "+esc(document.getElementById("tem_matriz").value)+"</li></ul>"+
-      "<h3>Por evento</h3><ul class=\"tool-next-actions\">"+rows+"</ul>"+
-      (s.proximosRegistros&&s.proximosRegistros.length?"<h3>Próximos registros</h3><ul class=\"tool-next-actions\">"+s.proximosRegistros.map(function(x){return "<li>"+esc(x)+"</li>";}).join("")+"</ul>":"")+
-      '<p class="tool-disclaimer">'+esc(r.disclaimer||"Resultado orientativo.")+"</p>"+
-      '<p class="tool-privacy-note">Gerado em '+T.localNow()+".</p>";
+    clearNode(out);
+    var summary=addElement(out,"p","tool-result-summary");
+    addStrongText(summary,"Hipóteses preliminares por evento"," "+r.synthesis);
+    addElement(out,"h3","","Resumo geral");
+    var evidence=addElement(out,"ul","tool-evidence-list");
+    addListItem(evidence,"Eventos: ",s.totalEventos);
+    addListItem(evidence,"Sem prova contemporânea suficiente: ",s.semProvaContemporanea);
+    addListItem(evidence,"Sem período definido: ",s.semPeriodoDefinido);
+    addListItem(evidence,"Sem vínculo crítico claro: ",s.semVinculoCritico);
+    addListItem(evidence,"Possíveis sobreposições: ",s.possiveisSobreposicoes);
+    addListItem(evidence,"Matriz de riscos no contrato: ",document.getElementById("tem_matriz").value);
+    addListItem(evidence,"Sobreposições por data: ",s.sobrepostosPorData||0);
+    var layers=addElement(out,"section","tool-layers");
+    layers.setAttribute("aria-labelledby","camadas-matriz");
+    var layersHeading=addElement(layers,"h3","","Como ler este resultado");
+    layersHeading.id="camadas-matriz";
+    addLayer(layers,"fato","Fato",expl.layers.fato);
+    addLayer(layers,"calculo","Cálculo",expl.layers.calculo);
+    addLayer(layers,"inferencia","Inferência",expl.layers.inferencia);
+    addLayer(layers,"unknown","Desconhecido",expl.layers.unknown);
+    addElement(out,"h3","","Por evento");
+    var eventList=addElement(out,"ul","tool-next-actions");
+    (r.events||[]).forEach(function(ev){
+      var li=addElement(eventList,"li");
+      addElement(li,"strong","",ev.causa);
+      li.appendChild(document.createElement("br"));
+      addLine(li,"Hipótese: "+ev.hipotese);
+      if(ev.documentosExistentes&&ev.documentosExistentes.length) addLine(li,"Documentos existentes: "+ev.documentosExistentes.join("; "));
+      if(ev.documentosFaltantes&&ev.documentosFaltantes.length) addLine(li,"Documentos faltantes: "+ev.documentosFaltantes.join("; "));
+      if(ev.precisaNexoTemporal) addLine(li,"Necessita demonstrar nexo temporal.");
+      if(ev.precisaImpactoCritico) addLine(li,"Necessita demonstrar impacto no caminho crítico.");
+      if(ev.possivelConcorrencia) addLine(li,"Possível concorrência de causas / sobreposição.");
+      if(ev.observacao) addLine(li,"Observação: "+ev.observacao);
+    });
+    if(s.proximosRegistros&&s.proximosRegistros.length){
+      addElement(out,"h3","","Próximos registros");
+      var nextList=addElement(out,"ul","tool-next-actions");
+      s.proximosRegistros.forEach(function(x){ addElement(nextList,"li","",x); });
+    }
+    addElement(out,"p","tool-disclaimer",r.disclaimer||"Resultado orientativo.");
+    addElement(out,"p","tool-privacy-note","Gerado em "+T.localNow()+".");
     lastText=T.buildReport([
       {title:"CONFENGE: matriz de atraso de obra", body:r.synthesis},
+      {title:"Fato", body:expl.layers.fato},
+      {title:"Cálculo", body:expl.layers.calculo},
+      {title:"Inferência", body:expl.layers.inferencia},
+      {title:"Desconhecido", body:expl.layers.unknown},
       {title:"Resumo", lines:[
         "Eventos: "+s.totalEventos,
         "Sem prova: "+s.semProvaContemporanea,
@@ -211,9 +282,9 @@
     cta.hidden=false;
     var needs=(s.semProvaContemporanea||0)+(s.semPeriodoDefinido||0);
     cta.innerHTML=needs
-      ? '<p>Há eventos sem prova contemporânea ou período definido. Enquadre cronograma, causa e comunicações.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-lacunas" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" href="/atrasos-prorrogacao-obras-publicas/">Enquadrar cronograma e prova</a></div>'
-      : '<p>A matriz está mais consistente; valide o nexo antes de pedir prazo ou custo.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-completa" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" href="/atrasos-prorrogacao-obras-publicas/">Validar causa e caminho crítico</a><a class="button button-secondary" data-tool-to-content href="/conteudos/como-provar-atraso-obra-publica/">Como provar atraso</a></div>';
-    T.track("tool_complete",{tool:TOOL,events:s.totalEventos,sem_prova:s.semProvaContemporanea,level:"hypothesis"});
+      ? '<p>Há eventos sem prova contemporânea ou período definido. Enquadre cronograma, causa e comunicações.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-lacunas" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" data-tool-to-offer="atrasos-prorrogacao-obras-publicas" href="/atrasos-prorrogacao-obras-publicas/">Enquadrar cronograma e prova</a></div>'
+      : '<p>A matriz está mais consistente; valide o nexo antes de pedir prazo ou custo.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="matriz-atraso-completa" data-route-family="atrasos" data-asset-id="matriz-atraso-obra" data-tool-to-offer="atrasos-prorrogacao-obras-publicas" href="/atrasos-prorrogacao-obras-publicas/">Validar causa e caminho crítico</a><a class="button button-secondary" data-tool-to-content href="/conteudos/como-provar-atraso-obra-publica/">Como provar atraso</a></div>';
+    T.track("tool_complete",{tool:TOOL,events:s.totalEventos,sem_prova:s.semProvaContemporanea,level:"hypothesis",cta_branch:expl.cta.branch});
     persist();
   });
   root.addEventListener("change", persist);

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-29T15:12:10Z",
+  "generated_at": "2026-08-29T20:53:52Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
@@ -892,41 +892,6 @@
           "at": "2026-08-24T02:33:08Z",
           "event": "REJECTED",
           "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-28T13:58:12Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-29T14:29:33Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-29T14:31:51Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-29T14:42:56Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-29T14:52:01Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-29T15:05:21Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
-        },
-        {
-          "at": "2026-08-29T15:12:08Z",
-          "event": "REJECTED",
-          "reason": "official_sumula_text_date_url_not_verified"
         }
       ],
       "publication_hold": true,
@@ -1039,59 +1004,54 @@
       "page_id": "lei-atraso-administracao",
       "archetype": "lei_14133",
       "url": "/lei-14133-obras/atraso-imputavel-administracao/",
-      "title": "Atraso imputável à Administração na Lei 14.133: prova e efeitos na obra",
+      "title": "Atraso imputável à Administração na Lei 14.133: vigência, execução e culpa",
       "theme": "atraso administração obra pública",
       "journey": "prazo",
       "primary_keyword": "atraso imputavel administracao",
       "legal_devices": [
+        "art.111",
         "art.115",
-        "art.124",
-        "art.130"
+        "art.137"
       ],
-      "law_version": "Lei nº 14.133/2021 (texto Planalto verificado em 2026-08-02)",
+      "law_version": "Lei nº 14.133/2021 (texto Planalto verificado em 2026-08-28)",
       "date_published": "2026-08-02",
-      "date_modified": "2026-08-02",
+      "date_modified": "2026-08-28",
       "author_public": "Biblioteca técnica CONFENGE",
       "author_is_tiago": false,
-      "meta_description": "Art. 115 da Lei 14.133 e atraso da Administração em obras: retardo imotivado, documentação, prorrogação e custos adicionais.",
-      "lead": "A obra para por falta de frente, projeto ou decisão. Sem prova contemporânea, a sanção por atraso cai no colo da construtora.",
-      "direct_answer": "O art. 115 da Lei nº 14.133/2021 impõe execução fiel do contrato e, no § 1º, proíbe a Administração de retardar imotivadamente a execução de obra ou serviço, ou de suas parcelas. Na vida da obra, isso se traduz em frentes não liberadas, projetos incompletos, demora decisória e interferências. O direito a prazo e a eventual custo adicional não nasce do mero desconforto: nasce de nexo causal, cronologia e documentos. Sem diário, protocolo e comunicação formal, o atraso “da Administração” vira atraso “da obra”.",
+      "meta_description": "Art. 111, 115 e 137 da Lei 14.133: vigência, cronograma de execução, suspensão, impedimento e culpa no atraso imputável à Administração.",
+      "lead": "Cinco palavras do contrato de obra não são sinônimos. Vigência, execução, suspensão, impedimento e culpa abrem efeitos distintos na Lei 14.133.",
+      "direct_answer": "Na Lei nº 14.133/2021, atraso imputável à Administração não é um instituto único. O art. 111 prorroga a vigência do contrato por escopo quando o objeto não termina no período; culpa do contratado não impede essa prorrogação, mas mantém mora, sanções e possível extinção. O art. 115 separa execução fiel (caput), retardo imotivado (§ 1º) e prorrogação automática do cronograma por apostila em impedimento, paralisação ou suspensão (§ 5º). O art. 137 trata de extinção e, apenas nos incisos abrangidos pelo § 3º, da opção de suspender obrigações. O rótulo “obra parada” não completa esses requisitos.",
       "sources": [
-        "lei-14133-art115",
-        "lei-14133-planalto",
-        "lei-14133-art130-131"
+        "lei-14133-art115-prazo",
+        "lei-14133-art111",
+        "lei-14133-art137-prazo",
+        "lei-14133-planalto"
       ],
-      "cta_whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre atraso imputável à Administração (art. 115). Preciso organizar prova e próximos passos no contrato de obra. Origem: /lei-14133-obras/atraso-imputavel-administracao/",
-      "cta_email_subject": "Análise inicial: atraso da Administração em obra",
-      "cta_email_body": "Olá, Tiago.\n\nLi /lei-14133-obras/atraso-imputavel-administracao/ e quero avaliar um atraso com possível culpa da Administração.\n\nPosso enviar cronograma, diário de obra e notificações.\n",
-      "cta_offer": "Organizar a prova do atraso e o pedido de prazo/custo",
+      "cta_whatsapp": "Olá, Tiago. Li a análise da CONFENGE sobre atraso imputável à Administração (arts. 111, 115 e 137). Quero solicitar um canal seguro para enquadrar vigência, execução e culpa no contrato de obra. O site não recebe arquivo; o canal é escolhido posteriormente. Origem: /lei-14133-obras/atraso-imputavel-administracao/",
+      "cta_email_subject": "Enquadramento: atraso imputável à Administração",
+      "cta_email_body": "Olá, Tiago.\n\nLi /lei-14133-obras/atraso-imputavel-administracao/ e quero enquadrar vigência, execução, suspensão, impedimento e culpa no meu contrato.\n\nQuero solicitar um canal seguro para envio. O site não recebe arquivo; não anexarei documentos nesta mensagem.\n",
+      "cta_offer": "Enquadrar vigência, execução e culpa no contrato",
       "related": [
         {
-          "url": "/guias-contratos-obras/responder-notificacao-atraso/",
-          "title": "Como responder notificação por atraso",
-          "cluster": "Guias",
-          "kind": "Checklist"
-        },
-        {
-          "url": "/conteudos/atraso-obra-culpa-administracao/",
-          "title": "Atraso por culpa da Administração",
+          "url": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+          "title": "Prazo de vigência e prazo de execução",
           "cluster": "Conteúdos",
-          "kind": "Guia"
+          "kind": "Distinção operacional"
         }
       ],
       "faq": [
         {
-          "q": "Só o diário de obra basta?",
-          "a": "Diário é peça central, mas raramente suficiente sozinho. Some protocolos, e-mails oficiais, atas, registros fotográficos datados e o cronograma contratual impactado."
+          "q": "Prorrogar vigência e prorrogar cronograma são o mesmo ato?",
+          "a": "Não. O art. 111 cuida da vigência do contrato por escopo. O art. 115, § 5º, cuida do cronograma de execução quando há impedimento, ordem de paralisação ou suspensão, anotado por apostila. Um termo pode não cobrir o outro."
         },
         {
-          "q": "Posso parar a obra por conta própria?",
-          "a": "Suspensão e extinção têm hipóteses e riscos próprios. Decisão unilateral sem base contratual e legal pode gerar sanção. Documente e busque enquadramento antes de paralisar."
+          "q": "O art. 115, § 1º, gera sozinho direito a custo adicional?",
+          "a": "Não. O dispositivo proíbe retardo imotivado da Administração. Custo, reequilíbrio ou indenização exigem base contratual, nexo e quantificação no caso concreto. A página não afirma reembolso automático."
         }
       ],
-      "body_markdown": "## O § 1º do art. 115 em linguagem de canteiro\n\nA Lei diz que a Administração **não pode retardar imotivadamente** a execução da obra ou de suas parcelas. Exemplos recorrentes:\n\n- Projeto executivo incompleto ou contraditório\n- Frente de serviço não liberada (desapropriação, remoção de interferência, autorização de acesso)\n- Demora em aprovar amostra, memória de cálculo ou medição\n- Ordem para esperar decisão política ou troca de gestão\n\nTexto: art. 115, caput e § 1º. Lei nº 14.133/2021, Planalto (02/08/2026).\n\n## Separar causas\n\nNem todo atraso é da Administração. Chuva extrema, falha de fornecedor da contratada, retrabalho por execução deficiente e greve interna têm caminhos distintos. A matriz de riscos e o contrato dizem quem carrega o quê.\n\n## Prova contemporânea (o que costuma faltar)\n\n1. Data em que a contratada estava apta a executar  \n2. Obstáculo específico e quem deveria removê-lo  \n3. Comunicação formal com pedido de providência e prazo  \n4. Impacto no caminho crítico do cronograma  \n5. Custos de administração local, canteiro e remobilização (se houver)  \n6. Resposta (ou silêncio) da fiscalização  \n\n## Efeitos possíveis (sempre caso a caso)\n\n- Prorrogação de prazo sem sanção  \n- Reprogramação físico-financeira  \n- Discussão de custos adicionais e reequilíbrio (art. 130 quando houver alteração unilateral com encargos)  \n- Defesa em notificação de atraso  \n\nNada disso é automático.\n\n## Erros frequentes\n\n- Registrar “aguardando liberação” no diário sem detalhar o quê e desde quando  \n- Aceitar notificação de atraso em silêncio  \n- Medir custo só no final, sem série histórica  \n- Misturar atraso próprio com atraso alheio na mesma narrativa  \n\n## Roteiro\n\n1. Linha do tempo do obstáculo.  \n2. Evidências de prontidão da contratada.  \n3. Comunicações oficiais.  \n4. Atualização de cronograma.  \n5. Pedido de prazo e, se cabível, de custo.  \n6. Preparação de resposta a sanção.  \n\n## Ressalva\n\nCulpa e nexo são matérias de prova. Esta página não afirma responsabilidade em caso genérico.\n\n## Custos de prorrogação: o que documentar além do prazo\n\nPrazo sem custo é só metade da conversa. Administração local prolongada, canteiro, vigilância, equipamentos parados e remobilização precisam de série de custos e nexo com o período do obstáculo. O art. 130 entra quando há alteração unilateral com aumento de encargos; fora disso, a tese de custo adicional exige base contratual e prova robusta. Não prometa reembolso automático só porque o atraso “foi do órgão”.\n\n## Defesa em notificação\n\nRecebeu notificação de atraso? Anexe a linha do tempo do obstáculo da Administração como peça central da resposta, não como anexo escondido. Peça dilação e afastamento de sanção com base nos fatos .  e cite o art. 115, § 1º, quando o retardo for imotivado e documentado.\n",
+      "body_markdown": "## Ordem de leitura do dispositivo {#cronologia}\n\nLeia o contrato nesta sequência, sem pular etapa. Primeiro, isole vigência e execução no instrumento (marcos de início, dias corridos, ordem de serviço). Depois, classifique o evento: impedimento, ordem de paralisação, suspensão formal ou simples lentidão. Em seguida, decida se o art. 115, § 5º, pede apostila do cronograma. Só então pergunte se a vigência do escopo (art. 111) está ameaçada. Culpa entra depois do fato, nunca antes. Extinção ou opção de suspender (art. 137) é a última pergunta, porque exige inciso completo e prova.\n\n## Cinco institutos que a obra mistura\n\nConstrutora e fiscal costumam falar em \"atraso da Administração\" como se a Lei nº 14.133/2021 tivesse um único botão. O texto federal, conferido no Planalto em 28/08/2026, espalha o tema em dispositivos diferentes. Vigência é a vida jurídica do instrumento. Execução é o ritmo físico e financeiro do objeto. Impedimento e suspensão descrevem obstáculos ou ordens que param a prestação. Culpa descreve a quem se imputa a inexecução. Trocar um pelo outro muda o pedido, o rito e o risco de sanção.\n\nLimite de aplicação: a leitura abaixo vale para contratos sob a Lei nº 14.133/2021. Edital, cláusula de prazo, matriz de riscos e regulamento do ente podem particularizar o rito. Esta página não transporta entendimento da Lei nº 8.666/1993 nem afirma o desfecho de um processo concreto.\n\n## Vigência do contrato por escopo (art. 111)\n\nO art. 111 diz que, na contratação que prever a conclusão de escopo predefinido, o prazo de vigência será automaticamente prorrogado quando o objeto não for concluído no período firmado. O parágrafo único reserva o outro lado: se a não conclusão decorrer de culpa do contratado, ele é constituído em mora, cabem sanções, e a Administração pode extinguir o contrato.\n\nO dispositivo não declara que todo atraso de canteiro estende a vigência. Ele trata do instrumento que ainda precisa existir para o objeto terminar. Pedir \"mais prazo\" sem dizer se o que vence é a vigência ou o cronograma de execução deixa o gestor sem enquadramento.\n\n## Cronograma de execução, impedimento e suspensão (art. 115 §§ 1º e 5º)\n\nO art. 115, caput, determina execução fiel e responde cada parte pelas consequências da inexecução total ou parcial. O § 1º proíbe a Administração de retardar imotivadamente a execução de obra ou serviço, ou de suas parcelas, inclusive na posse de novo chefe do Executivo ou de novo titular do órgão.\n\nO § 5º opera em registro distinto. Havendo impedimento, ordem de paralisação ou suspensão do contrato, o cronograma de execução é prorrogado automaticamente pelo tempo correspondente, anotado por simples apostila. Impedimento é o obstáculo que trava a prestação. Ordem de paralisação é comando escrito da Administração. Suspensão é a interrupção formal da execução. Os três alimentam o § 5º; nenhum deles, sozinho, prova culpa.\n\nO § 6º, nas obras paralisadas por mais de um mês na hipótese do § 5º, impõe aviso público de obra paralisada. É dever de transparência da Administração, não substituto da prova de nexo da contratada.\n\n## Culpa e inexecução (art. 115 caput)\n\nCulpa, no arranjo da Lei, não é um rótulo de canteiro. O caput do art. 115 distribui consequências da inexecução. Atribuir o atraso à Administração exige fato, dever da Administração (frente, projeto, decisão, licença, desapropriação, pagamento) e nexo com o caminho crítico. Atribuir à contratada exige o mesmo rigor no outro sentido: retrabalho, desmobilização voluntária, fornecedor próprio, produtividade abaixo da linha de base.\n\nMisturar chuva ordinária, interferência de concessionária e demora de amostra no mesmo parágrafo dissolve a imputação. O fiscal lê um atraso da obra. O órgão de controle lê ausência de nexo.\n\n## Extinção e opção de suspender (art. 137)\n\nO art. 137 lista motivos de extinção, com contraditório e ampla defesa. O § 2º abre hipóteses em que o contratado tem direito à extinção: entre elas, suspensão por ordem escrita superior a três meses; suspensões repetidas que totalizem 90 dias úteis; atraso de pagamento superior a dois meses; não liberação de área, local ou objeto nos prazos contratuais.\n\nO § 3º, II, nas hipóteses dos incisos II, III e IV do § 2º, assegura ao contratado optar pela suspensão das obrigações até a normalização, admitido o restabelecimento do equilíbrio na forma do art. 124, II, \"d\". O mesmo § 3º, I, fecha a porta em calamidade, grave perturbação da ordem, guerra, ou quando o fato for imputável ao contratado.\n\nSuspender execução por conta própria, sem enquadramento e sem comunicação, não é o mesmo que exercer a opção do § 3º. A Lei não autoriza paralisar primeiro e procurar o inciso depois.\n\n## Matriz evento, responsabilidade e impacto no dispositivo {#matriz}\n\nFrente lacrada por desapropriação pendente: dever típico da Administração; impacto no caminho crítico se a atividade sucessora não tem folga; dispositivo candidato é o art. 115, § 1º (retardo) somado ao § 5º (impedimento com apostila do cronograma), e, se a vigência do escopo ameaçar vencer, o art. 111.\n\nOrdem escrita de paralisar por 40 dias: responsabilidade da Administração na ordem; impacto é o tempo da ordem mais remobilização se o contrato a prever; o § 5º anota o cronograma; o art. 137, § 2º, II, só entra se a suspensão ultrapassar três meses.\n\nRetrabalho por execução fora da especificação: responsabilidade da contratada; a prorrogação da vigência do art. 111 não apaga a mora, as sanções nem a possível extinção previstas no parágrafo único; a inexecução também se submete ao caput do art. 115.\n\nAtraso de medição sem paralisar a frente: pode ser inexecução da Administração no pagamento, com caminho próprio no art. 137, § 2º, IV, se superar dois meses da nota. Não converte automaticamente o cronograma físico se a equipe continuou produzindo.\n\n## Exemplo de enquadramento: recapeamento com rede não relocada {#exemplo-tecnico}\n\nContrato de recapeamento por escopo, 180 dias de vigência e 150 dias de execução. No dia 40 a frente da Avenida Central permanece fechada porque a concessionária de água não relocateu a rede, obrigação que o projeto básico atribuiu à Administração. A contratada está mobilizada, o diário registra a espera, e não há ordem de paralisação escrita.\n\nLeitura do dispositivo, não do mérito do caso: o obstáculo se parece com impedimento (art. 115, § 5º) e, se imotivado, com retardo da Administração (art. 115, § 1º). A vigência do art. 111 só entra se o objeto não couber no período firmado. Extinção pelo art. 137, § 2º, V, exigiria não liberação de área nos prazos contratuais, com prova. Custo de ociosidade não nasce desses artigos; nasce de cláusula, matriz e quantificação. O exemplo é didático. Não decide o contrato alheio.\n\n## Checklist de leitura do dispositivo no contrato {#checklist}\n\n1. Localizar no instrumento o prazo de vigência e o prazo de execução, com marcos de início.  \n2. Conferir se o objeto é escopo predefinido para o art. 111.  \n3. Classificar o evento como impedimento, ordem de paralisação, suspensão formal ou mera lentidão.  \n4. Ver se já existe apostila do cronograma (art. 115, § 5º) ou só conversa de reunião.  \n5. Separar o que é mora da contratada (parágrafo único do art. 111) do que é retardo da Administração (§ 1º do art. 115).  \n6. Só então perguntar se algum inciso do art. 137 está completo.  \n7. Registrar a ressalva: dispositivo apontado não é deferimento de prazo nem de custo.\n\n## O que esta página não decide\n\nA página explica o mapa legal. Não substitui o pedido de prorrogação, a prova de nexo nem a resposta a notificação. Culpa continua sendo matéria de prova. Hipótese, contrato e documentação do caso concreto prevalecem sobre qualquer leitura geral da Lei.\n",
       "_source_file": "data/editorial/pages/lei-atraso-administracao.json",
-      "material_hash": "d8ad9744cb5051b461ed9bacd3ea725f1572856e5824a7b40189dd0499ab94ca",
+      "material_hash": "c806fc858036b79694dc262833b6033f363b37adbb503bedda42e9ac2b23124b",
       "status": "EDITORIAL_REVIEWED",
       "history": [
         {
@@ -1125,7 +1085,11 @@
           "notes": "prior automated HUMAN_APPROVED stamps revoked 2026-08-02; not valid for index"
         }
       ],
-      "interaction_type": "article"
+      "interaction_type": "article",
+      "cta_blurb": "Na triagem, separamos vigência, cronograma, impedimento e culpa. Se documentos forem necessários, o canal é escolhido posteriormente; o site não recebe arquivo. Sem promessa de prazo, custo ou afastamento de sanção.",
+      "cta_wa_label": "Solicitar canal seguro para o enquadramento",
+      "cta_email_label": "Solicitar canal seguro por e-mail",
+      "source_context_required": true
     },
     {
       "page_id": "lei-item-novo-desconto",
@@ -1373,16 +1337,17 @@
           "event": "INDEXABLE"
         },
         {
-          "at": "2026-08-28T13:57:08Z",
-          "event": "CFG10X09_CONSOLIDATED_301",
+          "at": "2026-08-29T20:53:51Z",
+          "event": "material_hash_invalidated_approval",
           "from": "INDEXABLE",
-          "to": "EDITORIAL_REVIEWED",
-          "notes": "Consulta geral 25%/50% consolidada em /conteudos/limite-aditivo-25-50-obra-publica/ com 301. Página sai da coorte indexável."
+          "to": "REVIEW_REQUIRED",
+          "previous_material_hash": "52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5",
+          "material_hash": "c6f30576a98700d40f9ab2f313a1cc2f8e4a321962a293928b45bad3022ce880"
         },
         {
-          "at": "2026-08-29T15:05:21Z",
+          "at": "2026-08-29T20:53:51Z",
           "event": "MIGRATED",
-          "from": "EDITORIAL_REVIEWED",
+          "from": "REVIEW_REQUIRED",
           "destination": "/conteudos/limite-aditivo-25-50-obra-publica/",
           "reason": "canonical_query_owner_consolidation"
         }

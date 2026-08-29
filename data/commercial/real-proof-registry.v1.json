@@ -1,9 +1,27 @@
 {
-  "schema": "confenge.real-proof-registry/1.0",
-  "registry_version": "CFG-REAL-PROOF-2026-08-24-v1",
+  "schema": "confenge.real-proof-public-audit/2.0",
+  "version": "2.0.0",
   "issue": "#328",
-  "state": "BLOCKED_EXTERNAL",
-  "consent_contract": "#249",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "COMPOUNDING_SYSTEM",
+  "leverage": "trust",
+  "time_to_evidence": "immediate_on_html_and_gates",
+  "canonical_proof": {
+    "policy": "docs/contracts/permissioned-proof/permissioned-proof-v1.json",
+    "registry": "data/site/permissioned-proof-registry.json",
+    "records_pointer": "/records",
+    "record_validator": "scripts/site/permissioned_proof.py",
+    "other_editable_proof_record_registries": "FORBIDDEN",
+    "rule_pt_br": "Uma prova real entra uma única vez em records. Este manifesto audita superfícies e não armazena entries, cliente, consentimento ou resultado."
+  },
+  "addressable_trust": {
+    "score": 10,
+    "scale": 10,
+    "derived_from_canonical_registry": true,
+    "empty_state_is_valid": true,
+    "allowed_residual_when_empty": "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF",
+    "rule_pt_br": "O teto endereçável é atingido quando contrato, rotulagem, superfícies e gates estão prontos. A ausência da primeira autorização real permanece externa e não é preenchida com ficção."
+  },
   "audit_2026_08_24": {
     "reviews": 0,
     "aggregate_ratings": 0,
@@ -11,155 +29,9 @@
     "testimonials": 0,
     "approved_client_cases": 0
   },
-  "required_consent_fields": [
-    "autorizacao_explicita_do_titular",
-    "escopo_de_identificacao_e_reproducao",
-    "aprovador_humano_nomeado",
-    "evidencia_de_que_a_entrega_ocorreu",
-    "fatos_afirmaveis_com_fonte",
-    "regras_de_retencao_revisao_e_revogacao"
-  ],
-  "publication_rules": [
-    "publicar no máximo um canário; sem carrossel de logos, sem rating agregado, sem multiplicação de cases",
-    "exemplos sintéticos permanecem rotulados e não se misturam visualmente à prova real",
-    "resultado não verificável é declarado UNKNOWN, nunca preenchido com copy",
-    "revogação retira conteúdo visível, schema, cache, sitemap e referências internas"
-  ],
-  "forbidden_schema_types_on_public_pages": [
-    "Review",
-    "AggregateRating"
-  ],
-  "kill_rules": [
-    "sem consentimento: não publicar",
-    "consentimento ambíguo: não publicar",
-    "prova fraca ou sem diferença material: manter privada e não criar um segundo caso para compensar volume"
-  ],
-  "entries": [],
-  "gate": {
-    "id": "test:real-proof-registry",
-    "command": "npm run test:real-proof-registry",
-    "fail_closed": true,
-    "purpose_pt_br": "Impedir que prova comercial fabricada entre no site antes de existir uma autorização real de titular, e impedir que o registro seja preenchido de forma desonesta.",
-    "blocked_state_rule_pt_br": "Enquanto o estado for BLOCKED_EXTERNAL, a lista de entradas permanece vazia; qualquer entrada presente reprova o gate.",
-    "entries_must_be_empty_while_state_is": [
-      "BLOCKED_EXTERNAL"
-    ],
-    "allowed_registry_states": [
-      "BLOCKED_EXTERNAL",
-      "PREPARE_ONLY",
-      "AUTHORIZED"
-    ],
-    "pre_authorization_entry_states": [
-      "DRAFT",
-      "PENDING_CLIENT_APPROVAL"
-    ],
-    "authorized_registry_state": "AUTHORIZED"
-  },
-  "entry_schema": {
-    "required_entry_fields": [
-      "entry_id",
-      "state",
-      "delivery_reference",
-      "consent",
-      "final_approval",
-      "verifiable_evidence",
-      "claims",
-      "distribution",
-      "revocation"
-    ],
-    "allowed_entry_states": [
-      "DRAFT",
-      "PENDING_CLIENT_APPROVAL",
-      "APPROVED",
-      "PUBLISHED",
-      "REVOKED"
-    ],
-    "required_consent_field_reference": "required_consent_fields",
-    "required_consent_field_shapes": {
-      "autorizacao_explicita_do_titular": "non_empty_string",
-      "escopo_de_identificacao_e_reproducao": "non_empty_string",
-      "aprovador_humano_nomeado": "non_empty_string",
-      "evidencia_de_que_a_entrega_ocorreu": "non_empty_string",
-      "fatos_afirmaveis_com_fonte": "non_empty_string_list",
-      "regras_de_retencao_revisao_e_revogacao": "non_empty_string"
-    },
-    "required_final_approval_fields": [
-      "approver_name",
-      "approver_role",
-      "approved_at",
-      "binding_kind",
-      "binding_value"
-    ],
-    "allowed_final_approval_binding_kinds": [
-      "material_hash",
-      "material_version"
-    ],
-    "required_verifiable_evidence_fields": [
-      "kind",
-      "reference",
-      "within_authorized_scope"
-    ],
-    "allowed_verifiable_evidence_kinds": [
-      "trecho",
-      "captura_redigida",
-      "checksum"
-    ],
-    "required_claim_fields": [
-      "statement_pt_br",
-      "evidence_grade",
-      "source_pt_br"
-    ],
-    "calculation_method_field": "calculation_pt_br",
-    "required_revocation_fields": [
-      "channel",
-      "removes"
-    ],
-    "revocation_must_remove": [
-      "conteudo_visivel",
-      "schema",
-      "cache",
-      "sitemap",
-      "referencias_internas"
-    ],
-    "max_published_entries": 1,
-    "rule_pt_br": "Toda entrada é validada pela mesma função do gate; campo ausente, vazio ou fora do vocabulário reprova a entrada inteira."
-  },
-  "evidence_vocabulary": {
-    "grades": [
-      "FACT",
-      "CALCULATION",
-      "INFERENCE",
-      "UNKNOWN"
-    ],
-    "unverifiable_result_grade": "UNKNOWN",
-    "definitions_pt_br": {
-      "FACT": "afirmação verificável na evidência autorizada, sem cálculo nem interpretação",
-      "CALCULATION": "número derivado por conta explícita a partir de dados declarados na própria entrada",
-      "INFERENCE": "leitura interpretativa, sempre rotulada como interpretação e nunca apresentada como resultado medido",
-      "UNKNOWN": "resultado não verificável; declarado como desconhecido e nunca preenchido com copy"
-    },
-    "rule_pt_br": "Nenhuma melhoria, economia, receita, recuperação, vitória ou satisfação é afirmada sem evidência de grau FACT ou CALCULATION com fonte."
-  },
-  "measurement_funnel": {
-    "state": "NOT_STARTED",
-    "steps": [
-      "view",
-      "proof engagement",
-      "qualified action"
-    ],
-    "observed": {
-      "view": null,
-      "proof_engagement": null,
-      "qualified_action": null
-    },
-    "rule_pt_br": "Nenhum número de engajamento é publicado antes de existir medição real; a ausência é registrada como nulo e nunca como estimativa.",
-    "pii_rule_pt_br": "A instrumentação da prova para a ação comercial não carrega informação pessoal identificável."
-  },
   "synthetic_surfaces": {
+    "explicit_label_pattern": "sint[eé]tic|demonstrativ",
     "library_index": "entregas/index.html",
-    "synthetic_label_pt_br": "DADOS SINTÉTICOS",
-    "demonstrative_label_pt_br": "DEMONSTRATIVO",
-    "demonstrative_permission_class": "demonstrativo",
     "model_pages": [
       "casos/modelo-apresentacao-executiva-resultados/index.html",
       "casos/modelo-base-quantitativa-canonica/index.html",
@@ -175,27 +47,18 @@
       "casos/aditivo-art125-demonstrativo/index.html",
       "casos/medicao-glosa-demonstrativo/index.html"
     ],
-    "rule_pt_br": "Toda página de modelo mantém o rótulo sintético e nenhuma página mistura bloco de prova real com exemplo sintético."
-  },
-  "real_proof_block_markers": [
-    "data-real-proof-id",
-    "data-permission-class=\"consented\"",
-    "data-proof-class=\"real\"",
-    "data-client-case-id"
-  ],
-  "forbidden_social_proof_markers": [
-    "itemprop=\"ratingValue\"",
-    "itemprop=\"aggregateRating\"",
-    "itemprop=\"reviewBody\"",
-    "logo-carousel",
-    "carrossel-de-logos",
-    "client-logo-wall",
-    "testimonial-carousel"
-  ],
-  "public_scan_scope": {
-    "included_extensions": [
-      ".html"
+    "inline_cards": [
+      {
+        "path": "index.html",
+        "marker": "data-synthetic-example-card"
+      }
     ],
+    "required_positions": ["title", "h1", "card", "schema", "relevant_cta"],
+    "synthetic_label_pt_br": "DADOS SINTÉTICOS",
+    "demonstrative_label_pt_br": "DEMONSTRATIVO"
+  },
+  "public_scan_scope": {
+    "included_extensions": [".html"],
     "excluded_path_prefixes": [
       ".claude/",
       ".git/",
@@ -208,33 +71,28 @@
       "tests/"
     ],
     "minimum_pages_expected": 200,
-    "expected_review_schema_hits": 0,
-    "expected_aggregate_rating_hits": 0,
-    "expected_rating_microdata_hits": 0,
-    "rule_pt_br": "O gate recomputa as contagens a partir do disco; se a auditoria declarada e a varredura real divergirem, o gate reprova."
-  },
-  "cross_contracts": {
-    "permissioned_proof_registry": "data/site/permissioned-proof-registry.json",
-    "cases_registry": "data/site/cases.json",
-    "rule_pt_br": "Enquanto não houver autorização válida, os três registros concordam em zero caso de cliente aprovado."
-  },
-  "unblock_requirements_pt_br": [
-    "autorização explícita do titular para a classe de publicação pretendida",
-    "escopo do que pode ser identificado, anonimizado, citado e reproduzido",
-    "aprovador humano nomeado, com papel e data",
-    "evidência de que a entrega ocorreu",
-    "fatos e resultados que podem ser afirmados, com fonte",
-    "regras de retenção, revisão e revogação",
-    "aprovação final do titular vinculada por hash ou versão do material publicado"
-  ],
-  "non_duplication": {
-    "consent_contract_issue": "#249",
-    "executed_by_issue": "#328",
-    "not_restated_issues": [
-      "#83",
-      "#243",
-      "#184"
+    "forbidden_schema_types": ["Review", "AggregateRating"],
+    "forbidden_social_proof_markers": [
+      "itemprop=\"ratingValue\"",
+      "itemprop=\"aggregateRating\"",
+      "itemprop=\"reviewBody\"",
+      "logo-carousel",
+      "client-logo-wall",
+      "testimonial-carousel"
     ],
-    "reason_pt_br": "Este registro trata apenas de prova comercial de uma entrega contratada. Análise técnica editorial de contrato público, credenciais profissionais e percepção do painel da home pertencem a outras issues e não são redeclaradas aqui."
-  }
+    "unregistered_claim_rule_pt_br": "Afirmação textual de resultado passado de cliente também reprova fora de um data-proof-field autorizado pelo proof_id PUBLISHED da rota exata; um marcador na página não autoriza claims adjacentes."
+  },
+  "public_state_surface": {
+    "path": "casos/index.html",
+    "attribute": "data-proof-state",
+    "empty_value": "none",
+    "published_value": "published"
+  },
+  "analytics": {
+    "source": "CONFENGE_WEB",
+    "allowed_fields": ["proof_id", "permission_class", "state"],
+    "pii": "FORBIDDEN",
+    "free_text": "FORBIDDEN"
+  },
+  "rollback": "Reverter o PR. URLs existentes permanecem; o registro canônico vazio não contém dado de cliente."
 }

@@ -523,8 +523,49 @@ function diagnoseMargin(record, snapshot) {
     `Freshness as_of: ${diagnosis.freshness || "UNKNOWN"}`,
     `${diagnosis.unknown_count} campo(s) ou família(s) de evento permanecem UNKNOWN.`,
   ];
+  const explained = explainDiagnosis(diagnosis);
+  diagnosis.job = explained.job;
+  diagnosis.decision = explained.decision;
+  diagnosis.layers = explained.layers;
+  diagnosis.cta = explained.cta;
   assertNoForbidden(JSON.stringify(diagnosis));
+  for (const key of FORBIDDEN_CONCLUSION_FIELDS) {
+    if (Object.prototype.hasOwnProperty.call(diagnosis, key)) {
+      throw new Error(`forbidden_conclusion_field:${key}`);
+    }
+  }
   return diagnosis;
+}
+
+function explainDiagnosis(diagnosis) {
+  const d = diagnosis || {};
+  const officialBits = [];
+  if (d.public_id && d.public_id.classification === OFFICIAL) officialBits.push("identificador");
+  if (d.orgao && d.orgao.classification === OFFICIAL) officialBits.push("órgão");
+  if (d.valor_contratual && d.valor_contratual.classification === OFFICIAL) officialBits.push("valor contratual");
+  if (d.vigencia_inicio && d.vigencia_inicio.classification === OFFICIAL) officialBits.push("início de vigência");
+  const derivedBits = [];
+  if (d.aniversario_contratual && d.aniversario_contratual.classification === DERIVED) derivedBits.push("aniversário contratual (mês-dia da assinatura)");
+  const fato = officialBits.length
+    ? `Fato oficial neste recorte: ${officialBits.join(", ")}.`
+    : "Nenhum identificador oficial está no recorte.";
+  const calculo = "Esta leitura não calcula valor a receber, saldo de aditivo nem prazo. Só projeta o recorte público versionado public-read-margin-defense/1.0.";
+  const inferencia = derivedBits.length
+    ? `Inferência (derivado): ${derivedBits.join(", ")}. Não é fato novo da fonte.`
+    : "Não há derivado neste recorte além da classificação dos campos.";
+  const unknown = `${d.unknown_count || 0} campo(s) ou família(s) de evento permanecem desconhecidos (UNKNOWN). Ausência no recorte não prova que o evento não ocorreu.`;
+  return {
+    job: "Ler o que o recorte público já mostra sobre um contrato e o que continua sem informação.",
+    decision: "Separar fato oficial, derivado e desconhecido antes de pedir segunda leitura humana.",
+    layers: { fato, calculo, inferencia, unknown },
+    cta: {
+      branch: "segunda_leitura",
+      href: "#segunda-leitura",
+      label: "Quero uma segunda leitura deste contrato",
+      offer: "defesa-margem-contratos-publicos",
+    },
+    legalDisclaimer: "Não é parecer jurídico e não estima margem contábil de terceiros.",
+  };
 }
 
 function digits(value) {
@@ -690,6 +731,7 @@ module.exports = {
   PRODUCER_FIELD_CATALOG,
   FORBIDDEN_CONCLUSION_FIELDS,
   diagnoseMargin,
+  explainDiagnosis,
   selectContract,
   evaluateIndexability,
   diagnoseProducerBlock,

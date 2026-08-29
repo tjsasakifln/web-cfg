@@ -50,6 +50,21 @@ def _now_date() -> str:
     return build_timestamp()[:10]
 
 
+def _record_rejection(page: dict[str, Any], reason: str) -> None:
+    """Record a rejection fact once, rather than once per identical build."""
+    history = page.setdefault("history", [])
+    last = history[-1] if history else None
+    if (
+        isinstance(last, dict)
+        and last.get("event") == "REJECTED"
+        and last.get("reason") == reason
+    ):
+        return
+    history.append(
+        {"at": build_timestamp(), "event": "REJECTED", "reason": reason}
+    )
+
+
 def load_page_defs() -> list[dict[str, Any]]:
     pages = []
     if not PAGES_DIR.exists():
@@ -197,13 +212,7 @@ def _auto_progress_to_editorial_reviewed(
                 or url.endswith("jurisprudencia/")
 ):
                 stored["status"] = "REJECTED"
-                stored.setdefault("history", []).append(
-                    {
-                        "at": build_timestamp(),
-                        "event": "REJECTED",
-                        "reason": "jurisprudence_source_incomplete",
-                    }
-)
+                _record_rejection(stored, "jurisprudence_source_incomplete")
                 return "REJECTED"
 
     actor = "editorial-build-gates"
@@ -263,13 +272,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             sp = get_page(reg, merged["page_id"])
             if sp:
                 sp["status"] = "REJECTED"
-                sp.setdefault("history", []).append(
-                    {
-                        "at": build_timestamp(),
-                        "event": "REJECTED",
-                        "reason": "official_sumula_text_date_url_not_verified",
-                    }
-                )
+                _record_rejection(sp, "official_sumula_text_date_url_not_verified")
 
         if merged.get("page_id") in MIGRATED_IDS:
             migrated = get_page(reg, merged["page_id"])

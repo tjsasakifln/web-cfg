@@ -314,23 +314,27 @@
   .deliverables-status ul,.deliverables-status small{display:none}
   .deliverable-frame{padding:18px 0 16px}
   .deliverable-compare{padding:24px 0 28px}
-  .deliverables-vitrine{padding:24px 0 28px}
+  .deliverables-vitrine{padding:16px 0 20px}
+  .deliverables-vitrine__intro{margin-bottom:20px}
+  .vitrine-items{gap:8px}
   .vitrine-item{padding:12px 14px}
-  .eight-hub{padding:20px 0}
+  .eight-hub{padding:16px 0}
   .eight-hub>div>header{margin-bottom:12px;gap:8px}
   .eight-hub>div>header h2{font-size:1.45rem}
   .eight-hub>div>header>p:last-child{display:none}
-  .eight-hub__common{grid-template-columns:minmax(0,1fr)}
-  .eight-hub__item{grid-template-columns:minmax(0,1fr);padding:12px;gap:10px}
+  .eight-hub__common{grid-template-columns:minmax(0,1fr);margin-bottom:12px}
+  .eight-hub__list{gap:6px}
+  .eight-hub__item{grid-template-columns:minmax(0,1fr);padding:10px;gap:8px}
   .eight-hub__item-head{grid-template-columns:auto minmax(0,1fr)}
-  .eight-hub__item dl{grid-template-columns:minmax(0,1fr)}
+  .eight-hub__item dl{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .eight-hub__item dl>div:last-child{grid-column:1/-1}
   .eight-hub__item>a{grid-column:1/-1;justify-self:start;font-size:.8rem}
-  .eight-hub__item dl{gap:6px}
-  .eight-hub__item dl>div{padding-top:6px}
+  .eight-hub__item dl{gap:4px}
+  .eight-hub__item dl>div{padding-top:5px}
   .eight-hub__item dd{font-size:.72rem;line-height:1.42}
   .eight-hub__common section{padding:12px}
   .eight-hub__common ul{font-size:.7rem;line-height:1.42}
-  .vitrine-item{padding:8px 12px}
+  .vitrine-item{padding:6px 10px}
   .deliverables-next{padding:32px 0}
   .deliverables-next h2{font-size:1.6rem}
   .deliverables-page .pillar-capture{padding:20px 0}

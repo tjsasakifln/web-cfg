@@ -29,7 +29,7 @@ CASES_PATH = ROOT / "data" / "site" / "cases.json"
 
 POLICY_SCHEMA = "confenge.permissioned-proof-policy/1.0"
 REGISTRY_SCHEMA = "confenge.permissioned-proof-registry/1.0"
-POLICY_CANONICAL_SHA256 = "40826fc66837b5e4751f65f903550909815d54d8e0933a540f4ab9c394122e98"
+POLICY_CANONICAL_SHA256 = "2eceb0b2af2ae7a1da9433c19dfad22622da7cdb7f2ddaf7a125d0ff3b8f056f"
 STATES = (
     "DRAFT",
     "CONSENT_CAPTURED",
@@ -85,8 +85,23 @@ UTC_SECONDS = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 EMAIL_VALUE = re.compile(r"(?<![\w.+-])[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}(?![\w.-])")
 PHONE_VALUE = re.compile(r"(?<!\d)(?:\+?55[\s().-]*)?(?:\(?\d{2}\)?[\s.-]*)9?\d{4}[\s.-]*\d{4}(?!\d)")
 TAX_ID_VALUE = re.compile(r"\b(?:\d{3}[.-]){2}\d{3}-\d{2}\b|\b\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}\b")
+EVIDENCE_KEYS = frozenset(
+    {
+        "fonte",
+        "autorizacao",
+        "escopo_permitido",
+        "anonimizacao",
+        "baseline",
+        "intervencao",
+        "resultado_observavel",
+        "limitacoes",
+        "revisor",
+        "expiracao",
+    }
+)
+EMPTY_EVIDENCE = {key: None for key in EVIDENCE_KEYS}
 RECORD_KEYS = frozenset(
-    {"proof_id", "policy_version", "state", "permission_class", "consent", "retention", "revocation", "approval", "publication", "lifecycle"}
+    {"proof_id", "policy_version", "state", "permission_class", "consent", "retention", "revocation", "approval", "publication", "lifecycle", "evidence"}
 )
 CONSENT_KEYS = frozenset({"status", "captured_at", "scope", "scope_hash", "receipt_ref"})
 RETENTION_KEYS = frozenset({"policy_days", "delete_after", "private_material_location"})
@@ -99,7 +114,7 @@ REGISTRY_KEYS = frozenset(
     {"schema", "policy", "updated_at", "state", "approved_public_proof_count", "records", "next_test"}
 )
 NEXT_TEST_KEYS = frozenset(
-    {"id", "status", "owner", "trigger", "required_result", "forbidden_shortcuts"}
+    {"id", "status", "blocker", "owner", "trigger", "required_result", "forbidden_shortcuts"}
 )
 NEXT_TEST_OWNER_KEYS = frozenset({"id", "name"})
 FORBIDDEN_SHORTCUTS = frozenset(
@@ -231,6 +246,10 @@ def validate_policy(policy: dict[str, Any] | None = None) -> list[str]:
         errors.append("observed_outcome_owner_invalid")
     if authority.get("canonical_public_domain") != "confenge.com.br":
         errors.append("canonical_domain_invalid")
+    if authority.get("canonical_record_registry") != "data/site/permissioned-proof-registry.json#records":
+        errors.append("canonical_record_registry_invalid")
+    if authority.get("other_editable_proof_record_registries") != "FORBIDDEN":
+        errors.append("duplicate_proof_record_registry_not_forbidden")
     if authority.get("public_client_pii") != "FORBIDDEN":
         errors.append("public_client_pii_not_forbidden")
     if not approver.get("id") or not approver.get("name") or approver.get("human_required") is not True:
@@ -347,6 +366,17 @@ def validate_policy(policy: dict[str, Any] | None = None) -> list[str]:
         errors.append("lifecycle_human_actor_invalid")
     if lifecycle.get("current_state_must_be_last") is not True:
         errors.append("lifecycle_current_state_not_required")
+    evidence_record = _object(p.get("evidence_record"))
+    if _string_set(evidence_record.get("required_fields")) != set(EVIDENCE_KEYS):
+        errors.append("evidence_record_fields_invalid")
+    if evidence_record.get("expiracao_format") != "utc_seconds":
+        errors.append("evidence_record_expiracao_format_invalid")
+    if _string_set(evidence_record.get("fail_closed_codes")) != {
+        "authorization_absent",
+        "authorization_expired",
+        "fonte_absent",
+    }:
+        errors.append("evidence_record_fail_closed_codes_invalid")
     if _canonical_sha256(p) != POLICY_CANONICAL_SHA256:
         errors.append("policy_contract_digest_mismatch")
     return _dedupe(errors)
@@ -430,6 +460,50 @@ def _publication_identity_errors(
     return errors
 
 
+def validate_evidence_record(
+    evidence: Any,
+    *,
+    required: bool,
+    now: datetime | None = None,
+) -> list[str]:
+    """Fail closed on missing authorization, expired authorization, or missing fonte."""
+    errors: list[str] = []
+    clock = now or datetime.now(timezone.utc)
+    if not required:
+        if evidence != EMPTY_EVIDENCE and evidence is not None:
+            if not isinstance(evidence, dict):
+                return ["object_required:record.evidence"]
+            if evidence != EMPTY_EVIDENCE:
+                errors.append("evidence_present_without_lifecycle")
+        elif evidence is None:
+            errors.append("object_required:record.evidence")
+        else:
+            errors.extend(_exact_keys(evidence, EVIDENCE_KEYS, "record.evidence"))
+        return _dedupe(errors)
+
+    errors.extend(_exact_keys(evidence, EVIDENCE_KEYS, "record.evidence"))
+    payload = evidence if isinstance(evidence, dict) else {}
+    fonte = payload.get("fonte")
+    autorizacao = payload.get("autorizacao")
+    if not isinstance(fonte, str) or not fonte.strip():
+        errors.append("fonte_absent")
+    if not isinstance(autorizacao, str) or not autorizacao.strip():
+        errors.append("authorization_absent")
+    for field in EVIDENCE_KEYS:
+        if field in {"fonte", "autorizacao", "expiracao"}:
+            continue
+        value = payload.get(field)
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"evidence_field_empty:{field}")
+    expires = _utc_datetime(payload.get("expiracao"))
+    if expires is None:
+        errors.append("evidence_expiracao_invalid")
+        errors.append("authorization_expired")
+    elif expires <= clock:
+        errors.append("authorization_expired")
+    return _dedupe(errors)
+
+
 def validate_record(
     record: dict[str, Any],
     *,
@@ -469,6 +543,7 @@ def validate_record(
     raw_revocation = record.get("revocation")
     raw_approval = record.get("approval")
     raw_publication = record.get("publication")
+    raw_evidence = record.get("evidence")
     consent = raw_consent if isinstance(raw_consent, dict) else {}
     retention = raw_retention if isinstance(raw_retention, dict) else {}
     revocation = raw_revocation if isinstance(raw_revocation, dict) else {}
@@ -484,11 +559,6 @@ def validate_record(
     lifecycle_errors, lifecycle_times = _validate_lifecycle(record, p)
     errors.extend(lifecycle_errors)
 
-    captured_at: datetime | None = None
-    approved_at: datetime | None = None
-    published_at: datetime | None = None
-    delete_after: datetime | None = None
-
     consent_required_states = {
         "CONSENT_CAPTURED",
         "HUMAN_REVIEW_REQUIRED",
@@ -497,6 +567,14 @@ def validate_record(
         "REVOKED",
     }
     consent_was_captured = "CONSENT_CAPTURED" in lifecycle_times
+    evidence_required = (isinstance(state, str) and state in consent_required_states) or consent_was_captured
+    errors.extend(validate_evidence_record(raw_evidence, required=evidence_required))
+
+    captured_at: datetime | None = None
+    approved_at: datetime | None = None
+    published_at: datetime | None = None
+    delete_after: datetime | None = None
+
     if (isinstance(state, str) and state in consent_required_states) or consent_was_captured:
         expected_consent = "REVOKED" if state == "REVOKED" else "EXPIRED" if state == "RETENTION_EXPIRED" else "ACTIVE"
         if consent.get("status") != expected_consent:
@@ -861,11 +939,18 @@ def validate_registry(
     next_test = raw_next_test if isinstance(raw_next_test, dict) else {}
     errors.extend(_exact_keys(raw_next_test, NEXT_TEST_KEYS, "registry.next_test"))
     approver = _object(_object(p.get("authority")).get("publication_approver"))
-    expected_next_status = "FIRST_REAL_DELIVERY_PROOF_COMPLETE" if published else "WAIT_FIRST_REAL_DELIVERY"
+    expected_next_status = (
+        "COMPLETE:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+        if published
+        else "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+    )
     if next_test.get("id") != "first-real-delivery-permissioned-proof":
         errors.append("first_real_delivery_next_test_id_invalid")
     if next_test.get("status") != expected_next_status:
         errors.append("first_real_delivery_next_test_absent")
+    expected_blocker = None if published else "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+    if next_test.get("blocker") != expected_blocker:
+        errors.append("first_real_delivery_blocker_invalid")
     raw_owner = next_test.get("owner")
     owner = raw_owner if isinstance(raw_owner, dict) else {}
     errors.extend(_exact_keys(raw_owner, NEXT_TEST_OWNER_KEYS, "registry.next_test.owner"))
@@ -884,76 +969,34 @@ def validate_cases_alignment(
     registry: dict[str, Any] | None = None,
     cases: dict[str, Any] | None = None,
 ) -> list[str]:
-    """The older cases registry cannot bypass permissioned-proof approval."""
+    """The older cases registry cannot carry a second client-proof record."""
     r = registry if registry is not None else load_registry()
     c = cases if cases is not None else _load(CASES_PATH)
-    registry_rows = r.get("records") if isinstance(r.get("records"), list) else []
     case_rows = c.get("cases") if isinstance(c.get("cases"), list) else []
     surface_rows = c.get("published_surfaces") if isinstance(c.get("published_surfaces"), list) else []
-    records = {
-        row.get("proof_id"): row
-        for row in registry_rows
-        if isinstance(row, dict) and isinstance(row.get("proof_id"), str) and row.get("proof_id")
-    }
-    approved_cases = {
-        row.get("case_id"): row
+    approved_cases = [
+        row
         for row in case_rows
         if (
             isinstance(row, dict)
             and isinstance(row.get("case_id"), str)
             and row.get("public_status") == "APPROVED"
         )
-    }
+    ]
     errors: list[str] = []
-    for case_id, case in approved_cases.items():
-        record = records.get(case_id)
-        if not record or record.get("state") != "PUBLISHED":
-            errors.append(f"approved_case_without_permissioned_proof:{case_id}")
-            continue
-        if record.get("permission_class") != case.get("permission_class"):
-            errors.append(f"approved_case_permission_class_mismatch:{case_id}")
-        if case.get("client_authorized") is not True:
-            errors.append(f"approved_case_not_client_authorized:{case_id}")
-    for proof_id, record in records.items():
-        if record.get("state") == "PUBLISHED" and proof_id not in approved_cases:
-            errors.append(f"published_proof_not_registered_case:{proof_id}")
-
-    approved_paths = {
-        row.get("path")
+    for case in approved_cases:
+        errors.append(f"legacy_cases_registry_real_proof_forbidden:{case.get('case_id')}")
+    approved_surfaces = [
+        row
         for row in surface_rows
         if (
             isinstance(row, dict)
             and isinstance(row.get("path"), str)
             and row.get("public_status") == "APPROVED"
         )
-    }
-    approved_surface_rows = {
-        row.get("path"): row
-        for row in surface_rows
-        if (
-            isinstance(row, dict)
-            and isinstance(row.get("path"), str)
-            and row.get("public_status") == "APPROVED"
-        )
-    }
-    proof_paths = {
-        urlparse(str((row.get("publication") or {}).get("public_url") or "")).path
-        for row in records.values()
-        if row.get("state") == "PUBLISHED"
-    }
-    for path in sorted((approved_paths - proof_paths) - {None}):
-        errors.append(f"approved_surface_without_permissioned_proof:{path}")
-    for path in sorted((proof_paths - approved_paths) - {""}):
-        errors.append(f"published_proof_surface_not_approved:{path}")
-    for proof_id, record in records.items():
-        if record.get("state") != "PUBLISHED":
-            continue
-        path = urlparse(str((record.get("publication") or {}).get("public_url") or "")).path
-        surface = approved_surface_rows.get(path) or {}
-        if surface.get("permission_class") != record.get("permission_class"):
-            errors.append(f"approved_surface_permission_class_mismatch:{path}")
-        if surface.get("client_authorized") is not True:
-            errors.append(f"approved_surface_not_client_authorized:{path}")
+    ]
+    for surface in approved_surfaces:
+        errors.append(f"legacy_cases_registry_real_proof_surface_forbidden:{surface.get('path')}")
     return _dedupe(errors)
 
 

@@ -340,7 +340,7 @@ function comparisonRow(entry) {
     : "Não. Entrega à parte, fora do pacote";
   const creditClass = entry.offer_container === "expansion_package" ? "" : ' class="compare-credit-off"';
   return `<tr>
-<th scope="row"><span class="compare-index">${entry.catalog_number}</span><a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-table-${slug}" data-cta-position="ladder_table" data-event-name="cta_click" href="${escapeHtml(entry.route)}">${escapeHtml(entry.public_name_pt_br)}</a></th>
+<th scope="row"><span class="compare-index">${entry.catalog_number}</span><a aria-label="Abrir sintético: ${escapeHtml(entry.public_name_pt_br)}" data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-table-${slug}" data-cta-position="ladder_table" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Sintético: ${escapeHtml(entry.public_name_pt_br)}</a></th>
 <td data-label="Situação">${escapeHtml(publicText(entry.trigger))}</td>
 <td data-label="Decisão">${escapeHtml(entry.decision_question)}</td>
 <td data-label="Saída">${escapeHtml(publicText(entry.included_outputs[0]))}</td>
@@ -377,7 +377,7 @@ function vitrineCard(entry) {
 </dl>
 ${bundle}
 <div class="vitrine-item__actions">
-<a class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Ver o exemplo de ${escapeHtml(entry.public_name_pt_br)} <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Abrir sintético: ${escapeHtml(entry.public_name_pt_br)} <svg class="icon"><use href="#i-arrow"></use></svg></a>
 <a class="text-link" data-asset-id="entregas-exemplos-hub" data-cta-id="${scopeCtaId}" data-cta-position="${scopePosition}" data-event-name="cta_click" href="#captura-entregas">Pedir análise de ${escapeHtml(entry.public_name_pt_br)}</a>
 </div>
 ${close}`;

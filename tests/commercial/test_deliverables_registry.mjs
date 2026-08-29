@@ -32,6 +32,8 @@ function assert(name, cond, detail) {
 const registry = lib.loadRegistry();
 const firstFold = lib.loadFirstFoldContract();
 const realProof = lib.loadRealProofRegistry();
+const permissionedProof = require(path.join(root, "data/site/permissioned-proof-registry.json"));
+const permissionedPolicy = require(path.join(root, "docs/contracts/permissioned-proof/permissioned-proof-v1.json"));
 const offerSnapshot = lib.loadOfferSnapshot();
 
 const entries = registry.deliverables;
@@ -438,13 +440,19 @@ for (const container of registry.containers) {
 
 // ------------------------------------------------------- real proof gate #328
 
-assert("real_proof_blocked", realProof.state === "BLOCKED_EXTERNAL", realProof.state);
-assert("real_proof_no_entries", realProof.entries.length === 0, realProof.entries.length);
-assert("real_proof_consent_fields", realProof.required_consent_fields.length === 6, realProof.required_consent_fields);
-for (const entry of realProof.entries) {
-  const missing = realProof.required_consent_fields.filter((field) => !entry[field]);
-  assert(`real_proof_consent_${entry.id || "unnamed"}`, missing.length === 0, missing);
-}
+const externalBlocker = "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF";
+assert("real_proof_audit_only", realProof.schema === "confenge.real-proof-public-audit/2.0", realProof.schema);
+assert("real_proof_no_duplicate_entries", !Object.hasOwn(realProof, "entries"), Object.keys(realProof));
+assert(
+  "real_proof_canonical_pointer",
+  realProof.canonical_proof.registry === "data/site/permissioned-proof-registry.json"
+    && realProof.canonical_proof.other_editable_proof_record_registries === "FORBIDDEN",
+  realProof.canonical_proof,
+);
+assert("real_proof_blocked", permissionedProof.next_test.status === externalBlocker, permissionedProof.next_test);
+assert("real_proof_no_entries", permissionedProof.records.length === 0, permissionedProof.records.length);
+assert("real_proof_evidence_fields", permissionedPolicy.evidence_record.required_fields.length === 10, permissionedPolicy.evidence_record.required_fields);
+assert("real_proof_consent_fields", permissionedPolicy.consent.required_fields.length === 5, permissionedPolicy.consent.required_fields);
 
 // No money surface may carry review or rating markup while zero real cases exist.
 const reviewPattern = /"@type"\s*:\s*"(Review|AggregateRating)"/;
