@@ -1,0 +1,157 @@
+{
+  "campaign": "CONFENGE_INBOUND_STRIKING_DISTANCE_CHUVA_REWRITE_INDEX_20260829",
+  "checked_at": "2026-08-29",
+  "route": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+  "site_root": "_site",
+  "checks": [
+    {
+      "kind": "responsive",
+      "width": 320,
+      "height": 568,
+      "document_overflow": false,
+      "h1_visible": true,
+      "answer_visible": true,
+      "h1_count": 1,
+      "table_present": true,
+      "table_overflow_x": "auto",
+      "table_scroll_width": 1019,
+      "table_client_width": 278,
+      "table_focusable": true,
+      "table_role": "group",
+      "main_width": 320,
+      "status": "PASS"
+    },
+    {
+      "kind": "responsive",
+      "width": 390,
+      "height": 844,
+      "document_overflow": false,
+      "h1_visible": true,
+      "answer_visible": true,
+      "h1_count": 1,
+      "table_present": true,
+      "table_overflow_x": "auto",
+      "table_scroll_width": 1019,
+      "table_client_width": 348,
+      "table_focusable": true,
+      "table_role": "group",
+      "main_width": 390,
+      "status": "PASS"
+    },
+    {
+      "kind": "responsive",
+      "width": 768,
+      "height": 1024,
+      "document_overflow": false,
+      "h1_visible": true,
+      "answer_visible": true,
+      "h1_count": 1,
+      "table_present": true,
+      "table_overflow_x": "auto",
+      "table_scroll_width": 1043,
+      "table_client_width": 728,
+      "table_focusable": true,
+      "table_role": "group",
+      "main_width": 768,
+      "status": "PASS"
+    },
+    {
+      "kind": "responsive",
+      "width": 1024,
+      "height": 768,
+      "document_overflow": false,
+      "h1_visible": true,
+      "answer_visible": true,
+      "h1_count": 1,
+      "table_present": true,
+      "table_overflow_x": "auto",
+      "table_scroll_width": 1043,
+      "table_client_width": 734,
+      "table_focusable": true,
+      "table_role": "group",
+      "main_width": 1024,
+      "status": "PASS"
+    },
+    {
+      "kind": "responsive",
+      "width": 1440,
+      "height": 1000,
+      "document_overflow": false,
+      "h1_visible": true,
+      "answer_visible": true,
+      "h1_count": 1,
+      "table_present": true,
+      "table_overflow_x": "auto",
+      "table_scroll_width": 1043,
+      "table_client_width": 670,
+      "table_focusable": true,
+      "table_role": "group",
+      "main_width": 1440,
+      "status": "PASS"
+    },
+    {
+      "kind": "responsive",
+      "width": 1920,
+      "height": 1080,
+      "document_overflow": false,
+      "h1_visible": true,
+      "answer_visible": true,
+      "h1_count": 1,
+      "table_present": true,
+      "table_overflow_x": "auto",
+      "table_scroll_width": 1043,
+      "table_client_width": 670,
+      "table_focusable": true,
+      "table_role": "group",
+      "main_width": 1920,
+      "status": "PASS"
+    },
+    {
+      "kind": "keyboard",
+      "first_focus": {
+        "className": "skip-link",
+        "href": "#conteudo"
+      },
+      "skip_link_activated": true,
+      "matrix_reached_by_tab": true,
+      "matrix_scroll_left_after_arrows": 67,
+      "faq_opened_by_enter": true,
+      "status": "PASS"
+    },
+    {
+      "kind": "js_off",
+      "html_class": "no-js",
+      "h1": "Chuva na obra pública: quando o prazo é tecnicamente impactado",
+      "answer": "Resposta direta“Choveu” não prova nexo nem direito a prorrogação. O evento ganha relevância técnica para o prazo quando o dado meteorológico é rastreável, a atividade prevista foi realmente afetada, o cronograma mostra consumo de folga ou deslocamento do caminho crítico, e os registros contemporâneos permitem separar mitigação, recuperação e causas concorrentes. O efeito contratual ainda depende do edital, do contrato e da matriz de riscos.",
+      "matrix_rows": 2,
+      "cta_href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20um%20canal%20seguro%20para%20validar%20a%20cadeia%20t%C3%A9cnica%20de%20um%20evento%20clim%C3%A1tico%3A%20dado%20oficial%2C%20atividade%2C%20caminho%20cr%C3%ADtico%2C%20registros%20e%20mitiga%C3%A7%C3%A3o.%20O%20site%20n%C3%A3o%20recebe%20arquivo%3B%20o%20canal%20%C3%A9%20escolhido%20posteriormente.%20Origem%3A%20%2Fconteudos%2Fchuva-prorrogacao-prazo-obra-publica%2F",
+      "document_overflow": false,
+      "status": "PASS"
+    }
+  ],
+  "axe": [
+    {
+      "width": 390,
+      "violations": [],
+      "blocking": 0,
+      "status": "PASS"
+    },
+    {
+      "width": 1440,
+      "violations": [],
+      "blocking": 0,
+      "status": "PASS"
+    }
+  ],
+  "screenshots": [
+    "screenshots/chuva-320x568.png",
+    "screenshots/chuva-390x844.png",
+    "screenshots/chuva-matriz-inicio-390.png",
+    "screenshots/chuva-matriz-fim-390.png",
+    "screenshots/chuva-768x1024.png",
+    "screenshots/chuva-1024x768.png",
+    "screenshots/chuva-1440x1000.png",
+    "screenshots/chuva-matriz-inicio-1440.png",
+    "screenshots/chuva-1920x1080.png"
+  ]
+}

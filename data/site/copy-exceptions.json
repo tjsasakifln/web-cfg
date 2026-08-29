@@ -11,6 +11,12 @@
   "exceptions": [
     {
       "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
+      "reason": "A issue #127 e a autorizacao desta campanha exigem que dias efetivamente impactados permaneçam literalmente UNKNOWN quando evento, atividade, caminho critico, mitigacao ou causas concorrentes nao fecham o nexo. A pagina explica o termo em portugues como ausencia de evidencia suficiente; a excecao e route-exact e nao libera jargao em outra superficie."
+    },
+    {
+      "rule": "plain_language",
       "match": "\\bfact\\b",
       "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
       "reason": "A issue #389 exige os quatro rotulos epistemicos visiveis FACT, CALCULATION, INFERENCE e UNKNOWN. Eles reproduzem o vocabulario publicado na politica editorial 1.1.0 e aparecem aqui somente ao lado da explicacao em portugues; a excecao e route-exact e nao autoriza jargao em outra pagina."

@@ -452,7 +452,10 @@ def derive_editorial_truth(reg: dict[str, Any] | None = None) -> dict[str, Any]:
             "first_cohort_awaiting_approval": first["editorial_reviewed"],
             "first_cohort_published": first["indexable"],
             "editorial_backlog_awaiting_approval": backlog_summary["editorial_reviewed"],
-            "note": "Only FIRST_COHORT_IDS may become indexable in this release.",
+            "note": (
+                "Only FIRST_COHORT_IDS may become indexable through this registry. "
+                "A legacy /conteudos/ canary requires its own fail-closed approval gate."
+            ),
         },
         "sitemaps": {
             "editorial_locs": len(sitemap_audit["locs"].get("sitemap-editorial.xml", [])),

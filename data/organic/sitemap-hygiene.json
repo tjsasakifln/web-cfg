@@ -1,8 +1,8 @@
 {
   "ok": true,
   "issues": [],
-  "url_count": 75,
-  "unique_paths": 75,
+  "url_count": 76,
+  "unique_paths": 76,
   "locs": [
     "https://confenge.com.br/",
     "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -32,6 +32,7 @@
     "https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/",
     "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/",
     "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
+    "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
     "https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/",
     "https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/",
     "https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/",
@@ -81,7 +82,7 @@
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/"
   ],
   "families": {
-    "core": 71,
+    "core": 72,
     "editorial": 4
   },
   "member_sitemaps": [

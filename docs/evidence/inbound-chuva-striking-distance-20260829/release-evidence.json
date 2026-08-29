@@ -1,0 +1,65 @@
+{
+  "schema_version": "confenge-inbound-canary-evidence/v1",
+  "campaign": "CONFENGE_INBOUND_STRIKING_DISTANCE_CHUVA_REWRITE_INDEX_20260829",
+  "issue": 127,
+  "decision_state": "VALIDATE",
+  "base_sha": "dbd7e3a073354f9c746e499d380fd438c088ee3d",
+  "route": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+  "before": {
+    "robots": "noindex,follow",
+    "canonical": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+    "sitemap_xml_membership": 0,
+    "main_whitespace_tokens": 1118
+  },
+  "after": {
+    "robots": "index,follow",
+    "canonical": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+    "sitemap_xml_membership": 1,
+    "sitemap_txt_membership": 1,
+    "main_whitespace_tokens": 1849,
+    "date_modified": "2026-08-29",
+    "lastmod": "2026-08-29"
+  },
+  "siblings": [
+    {
+      "route": "/conteudos/aditivo-qualitativo-quantitativo/",
+      "robots": "noindex,follow",
+      "sitemap_membership": 0
+    },
+    {
+      "route": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+      "robots": "noindex,follow",
+      "sitemap_membership": 0
+    }
+  ],
+  "approval": {
+    "approval_type": "OWNER_DELEGATED_APPROVAL",
+    "decision_authority": "owner / Tiago Sasaki",
+    "reviewer_executor": "agente desta campanha / CONFENGE_INBOUND_STRIKING_DISTANCE_CHUVA_REWRITE_INDEX_20260829",
+    "approval_basis": "owner-delegated review 2026-08-29",
+    "manual_human_review": false,
+    "material_hash": "sha256:664b5f729fe9e8a8e1cd571302e0b1959cb95174e196cd5483cde32de6765e90",
+    "approval_hash": "sha256:529b8b68e7eac956923a2153ddf6cc677f700369189a27174ebb4261f4cd3bf4"
+  },
+  "quality": {
+    "factual_legal_adversarial": "PASS_WITH_LIMITS",
+    "originality_anti_doorway": "PASS",
+    "query_ownership_cannibalization": "PASS",
+    "skeptical_visitor_copy_ux": "PASS",
+    "responsive_js_off_keyboard_accessibility": "PASS",
+    "cluster_max_overlap": 0.01,
+    "rain_page_max_overlap": 0.0055,
+    "build_public_artifact_hash": "01b0432dd23021b439b8b059f1229b5069ed4e628346f8e4f6056b80efd2ff20"
+  },
+  "wide_layout_audit": {
+    "rain_route_findings": 0,
+    "preexisting_out_of_scope_findings": 3,
+    "out_of_scope_routes": [
+      "/comercial/termos-diagnostico-b2g/",
+      "/piloto/ofertas/contratar/",
+      "/termos-de-uso/"
+    ]
+  },
+  "merge_authorized": false,
+  "auto_merge_authorized": false
+}
