@@ -863,6 +863,8 @@ export const SUITE_GRAPH = Object.freeze({
   "test:ui": {
     producers: [
       "scripts/site/test_ui_geometry.mjs",
+      "scripts/site/test_home_conversion_contract.py",
+      "scripts/site/test_home_first_fold.mjs",
       "scripts/site/audit_sitewide_layout.mjs",
       "scripts/site/resolve_chrome.mjs",
       "scripts/site/fixtures/type-floor/",
@@ -870,6 +872,7 @@ export const SUITE_GRAPH = Object.freeze({
       "css/",
       "styles.css",
       "styles-tokens.css",
+      "assets/home-10x.css",
       ".github/workflows/site-ci.yml",
     ],
     artifacts: [],

@@ -1,0 +1,46 @@
+{
+  "ok": true,
+  "status": "CURRENT",
+  "access_mode": "READ_WRITE",
+  "insights": {
+    "source": "search_analytics_api",
+    "as_of": "2026-08-26",
+    "generated_at": "2026-08-29T11:55:00Z",
+    "ready_for_product_decisions": true,
+    "synthetic": false,
+    "fixture": false,
+    "live_baseline_invented": false,
+    "query_text_redacted": true,
+    "raw_query_rows_in_git": false,
+    "readiness_contract_version": "gsc-readiness/v2",
+    "history_state_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "snapshot_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "readiness_status": "CURRENT",
+    "readiness_access_mode": "READ_WRITE",
+    "readiness_reason_codes": []
+  },
+  "meta": {
+    "schema_version": "confenge-private-gsc-snapshot/v1",
+    "manifest_schema_version": "gsc_snapshot_manifest_v1",
+    "snapshot_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "latest_attempt_snapshot_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "producer_manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "consumer_manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "as_of": "2026-08-26",
+    "producer_as_of": "2026-08-26",
+    "consumer_as_of": "2026-08-26",
+    "produced_at": "2026-08-29T11:55:00Z",
+    "ingested_at": "2026-08-29T12:00:00Z",
+    "source": "search_analytics_api",
+    "source_freshness": {
+      "status": "CURRENT",
+      "reason_codes": []
+    },
+    "delivery_source": "durable_store",
+    "content_sha256": "c1b882940386b64efb06a9d9a649823ac9423297fccc5ba269092e8a5a78c29e",
+    "snapshot_content_sha256": "0240404228d843a90739d71bfd8de80474f9a7cc44305a112bad2a8abfede6e0",
+    "history_state_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "ready_for_product_decisions": true,
+    "reason_codes": []
+  }
+}
