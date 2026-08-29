@@ -339,7 +339,7 @@ main { overflow: clip; }
   .report-hero-grid { display: block; min-height: 0; padding-bottom: 30px; padding-top: 29px; }
   .report-hero-copy { max-width: none; }
   .report-kicker { font-size: .8rem; margin-bottom: 10px; }
-  .report-hero h1 { font-size: clamp(2rem, 10.2vw, 2.5rem); line-height: 1.01; margin-bottom: 14px; }
+  .report-hero h1 { font-size: clamp(2rem, 8.8vw, 2.25rem); line-height: 1.01; margin-bottom: 14px; }
   .report-lead { font-size: .96rem; line-height: 1.48; }
   .report-hero-result { margin-top: 17px; padding: 10px 0; }
   .report-hero-result div { padding: 0 11px; }

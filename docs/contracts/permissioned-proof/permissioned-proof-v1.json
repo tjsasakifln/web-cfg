@@ -9,6 +9,8 @@
     "public_contract_owner": "web-cfg",
     "observed_outcome_owner": "warmbly",
     "canonical_public_domain": "confenge.com.br",
+    "canonical_record_registry": "data/site/permissioned-proof-registry.json#records",
+    "other_editable_proof_record_registries": "FORBIDDEN",
     "private_consent_receipt_store": "OWNER_CONTROLLED_PRIVATE_STORE",
     "public_client_pii": "FORBIDDEN",
     "publication_approver": {
@@ -125,8 +127,31 @@
     "revocation",
     "approval",
     "publication",
-    "lifecycle"
+    "lifecycle",
+    "evidence"
   ],
+  "evidence_record": {
+    "required_fields": [
+      "fonte",
+      "autorizacao",
+      "escopo_permitido",
+      "anonimizacao",
+      "baseline",
+      "intervencao",
+      "resultado_observavel",
+      "limitacoes",
+      "revisor",
+      "expiracao"
+    ],
+    "expiracao_format": "utc_seconds",
+    "required_for_states_from": "CONSENT_CAPTURED",
+    "fail_closed_codes": [
+      "authorization_absent",
+      "authorization_expired",
+      "fonte_absent"
+    ],
+    "rule": "A published client-proof record names source, authorization, allowed scope, anonymization, baseline, intervention, observable result, limitations, reviewer and expiration. Missing authorization, expired authorization or missing source fail closed."
+  },
   "consent": {
     "active_state": "ACTIVE",
     "required_fields": [
