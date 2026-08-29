@@ -160,7 +160,9 @@ function keyLooksPii(key) {
   const k = String(key || "").toLowerCase();
   if (PII_KEYS.has(k)) return true;
   if (AGGREGATE_PII_ALLOWLIST.includes(k)) return false;
-  return /email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|cnpj|document|free.?text|description|note|comment|observa/.test(k);
+  // Union of both denylists: this is a PII guard, so wider always wins.
+  // "observa" already covers "observacao".
+  return /email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|cnpj|document|free.?text|description|note|comment|observa|valor|causa|qid/.test(k);
 }
 
 function isValidEntityId(field, value) {

@@ -4,7 +4,7 @@ Executar **somente após** aprovação humana individual (`approve_cli.py` com c
 Não usar CI, bot, tester ou agente como revisor. Não fazer approve em lote.
 
 Coorte preparada: `docs/editorial/WAVE1-FIRST-COHORT.md`  
-(`lei-limite-25-50`, `guia-checklist-aditivo`, `lei-item-novo-desconto`)
+(`guia-checklist-aditivo`, `lei-item-novo-desconto`)
 
 ## Pré-condições
 
@@ -46,12 +46,13 @@ Esperado: `INDEXABLE` / `HUMAN_APPROVED=true` / reviewer = nome humano real (nun
 
 | page_id | Peer | Decisão típica |
 |---------|------|----------------|
-| `lei-limite-25-50` | `/conteudos/limite-aditivo-25-50-obra-publica/` | 301 peer → Wave 1 **ou** noindex peer |
 | `guia-checklist-aditivo` | `/conteudos/erro-de-projeto-gera-aditivo-obra-publica/` | Diferenciar; manter peer se intenção distinta |
 | `lei-item-novo-desconto` | `/conteudos/desconto-da-proposta-em-item-novo-aditivo/` | 301 ou noindex peer; **proibido dual-index** |
 
-Implementar redirects em `_redirects` / regras Netlify **só** quando a decisão humana estiver documentada na nota de approve.  
+Implementar redirects em `_redirects` e no contrato nginx/Netcup **só** quando a decisão humana estiver documentada na nota de approve.
 Não inventar 301 “por padrão” sem escolha explícita.
+
+`lei-limite-25-50` não pertence mais à coorte: o estado `MIGRATED` e o inventário legado fixam o 301 direto para a owner em `/conteudos/limite-aditivo-25-50-obra-publica/`.
 
 ## 3. Reconstruir o site
 
@@ -96,7 +97,7 @@ grep -R "name=\"robots\"" lei-14133-obras guias-contratos-obras jurisprudencia-c
 
 Para cada peer com 301:
 
-- regra em `_redirects` (ou Netlify) ativa no artefato `_site`
+- regra em `_redirects` consumida pelo build e validada no contrato nginx/Netcup do artefato `_site`
 - URL antiga não permanece `index,follow` sem canonical/redirect
 
 Para peer com noindex:
@@ -106,15 +107,16 @@ Para peer com noindex:
 
 ## 7. Lista exata para Google Search Console
 
-Gerar lista de URLs canônicas aprovadas nesta coorte (exemplo após 3 aprovações):
+Gerar a lista das duas URLs aprovadas na coorte e da owner canônica da migração:
 
 ```
-https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/
 https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/
 https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/
+https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/
 ```
 
 Ajustar à lista **real** pós-approve (`npm run editorial:release-approved` imprime `gsc_submit_candidates` quando houver aprovações válidas).
+Nunca solicitar indexação da donor `/lei-14133-obras/limite-25-50-aditivo-obra/`; ela deve responder 301 direto para a owner.
 
 Submissão humana no GSC:
 
@@ -131,13 +133,15 @@ npm run test:redirects:prod
 npm run test:prod-build-info
 # opcional, com token/ambiente seguro:
 # npm run probe:lead:prod
+curl -sI "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/" | head
 curl -sI "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/" | head
 curl -s "https://confenge.com.br/.well-known/build-info.json"
 ```
 
 Conferir:
 
-- HTTP 200 nas canônicas
+- HTTP 200 na owner e nas duas páginas aprovadas
+- HTTP 301 na donor, com `Location: /conteudos/limite-aditivo-25-50-obra-publica/` em um único hop
 - `build-info.json` commit = deploy
 - redirects de peers (se aplicados)
 

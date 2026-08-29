@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 import puppeteer from "puppeteer-core";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 
-// One .deliverable-feature per published example in the value ladder.
+// One primary card per published offer; the 54-item roll is reference-only.
 const EXPECTED_EXAMPLES = 8;
 
 const require = createRequire(import.meta.url);
@@ -88,26 +88,34 @@ for (const width of widths) {
   await page.setViewport({ width, height, deviceScaleFactor: 1 });
   const response = await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
   const metrics = await page.evaluate(() => {
+    const lineCount = (element) => {
+      if (!element) return 0;
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const tops = [...range.getClientRects()]
+        .filter((rect) => rect.width > 0.5 && rect.height > 0.5)
+        .map((rect) => Math.round(rect.top));
+      return new Set(tops).size;
+    };
+    const visible = (element) => Boolean(
+      element
+      && getComputedStyle(element).display !== "none"
+      && element.getBoundingClientRect().width > 0
+      && element.getBoundingClientRect().height > 0,
+    );
     const heroCtaElement = document.querySelector('.deliverables-hero [href="#enquadrar"]');
     const heroCta = heroCtaElement?.getBoundingClientRect();
     const firstReport = document.querySelector('[data-cta-id="deliverables-open-report"]')?.getBoundingClientRect();
-    const compare = document.querySelector('#comparar .compare-table');
-    const compareRows = document.querySelectorAll('#comparar .compare-table tbody tr').length;
-    const compareScroll = document.querySelector('#comparar .compare-scroll');
+    const decisionNav = document.querySelector(".offer-decision-nav");
+    const firstOffer = document.querySelector("#entrega-01");
     const archetypes = [...document.querySelectorAll('main > [data-section-archetype]')]
       .map((element) => element.getAttribute('data-section-archetype'));
     const primaries = document.querySelectorAll('main .button-primary').length;
     const desktopDeliverables = document.querySelector('.desktop-nav a[href="/entregas/"]');
+    const offerCards = [...document.querySelectorAll('article.vitrine-item[data-primary-offer="true"]')];
+    const capabilityRows = [...document.querySelectorAll(".capability-item")];
     return {
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
-      compareVisible: Boolean(compare && compare.getBoundingClientRect().height > 0),
-      compareRows,
-      compareAboveExamples: Boolean(
-        compare && document.querySelector("#primeiro-exemplo")
-        && compare.getBoundingClientRect().top
-          < document.querySelector("#primeiro-exemplo").getBoundingClientRect().top,
-      ),
-      compareScrollFocusable: compareScroll?.getAttribute("tabindex") === "0",
       longestArchetypeRun: archetypes.reduce(
         (state, value) => {
           const run = value === state.previous ? state.run + 1 : 1;
@@ -123,89 +131,45 @@ for (const width of widths) {
       heroCtaVisible: Boolean(heroCta && heroCta.width > 0 && heroCta.height >= 44),
       heroCtaBottom: heroCta?.bottom || null,
       firstReportVisible: Boolean(firstReport && firstReport.width > 0 && firstReport.height >= 44),
-      examples: document.querySelectorAll("article.vitrine-item").length,
       documentHeight: Math.round(document.documentElement.scrollHeight),
-      firstOfferTop: Math.round((document.querySelector("#comparar")?.getBoundingClientRect().top || 0) + window.scrollY),
+      decisionNavTop: Math.round((decisionNav?.getBoundingClientRect().top || 0) + window.scrollY),
+      firstOfferTop: Math.round((firstOffer?.getBoundingClientRect().top || 0) + window.scrollY),
       mainLinks: document.querySelectorAll("main a").length,
-      compareColumns: [...document.querySelectorAll("#comparar .compare-table thead th")].map((th) => th.textContent.trim()),
-      // Real geometry of the price column. styles.css applies `table{overflow-wrap:anywhere}`
-      // sitewide, and `anywhere` participates in intrinsic min-content sizing, so auto table
-      // layout could crush this column until "R$ 1.200" wrapped mid-number. Count actual line
-      // boxes via a Range over the text — element.getClientRects() on a th returns the border
-      // box, not the wrapped lines, so it cannot see this defect.
-      // The eight-hub row is the mobile view of the same eight offers. An auto-sized
-      // link column once took 254px of a 360px row, leaving the offer name 5px wide
-      // across four line boxes, and the facts below it were hidden outright.
-      hubGeometry: (() => {
-        const lineCount = (element) => {
-          if (!element) return 0;
-          const range = document.createRange();
-          range.selectNodeContents(element);
-          const tops = [...range.getClientRects()]
-            .filter((rect) => rect.width > 0.5 && rect.height > 0.5)
-            .map((rect) => Math.round(rect.top));
-          return new Set(tops).size;
-        };
+      offers: offerCards.map((card) => {
+        const name = card.querySelector("h2");
+        const price = card.querySelector(".vitrine-item__price strong");
+        const facts = [...card.querySelectorAll(".vitrine-item__facts>div")];
+        const essential = [
+          card.querySelector(".vitrine-item__facts"),
+          card.querySelector(".vitrine-item__credit"),
+          card.querySelector(".vitrine-item__actions"),
+          ...facts,
+        ];
         return {
-          // The eight-hub is the mobile carrier of objeto, saida and SLA; it must
-          // never be hidden. The vitrine repeats the same offers and may collapse.
-          hiddenFactBlocks: [...document.querySelectorAll(".eight-hub__item dl, .eight-hub__common")]
-            .filter((element) => getComputedStyle(element).display === "none").length,
-          rows: [...document.querySelectorAll(".eight-hub__item")].map((item) => {
-            const name = item.querySelector(".eight-hub__item-head strong");
-            const price = item.querySelector(".eight-hub__item-head em");
-            const link = item.querySelector(":scope > a");
-            const nameRect = name ? name.getBoundingClientRect() : null;
-            const linkRect = link ? link.getBoundingClientRect() : null;
-            return {
-              nameWidth: nameRect ? Math.round(nameRect.width) : 0,
-              priceText: price ? price.textContent.replace(/\s+/g, " ").trim() : "",
-              priceLines: price ? lineCount(price) : 0,
-              // true when the action link paints over the offer name
-              collides: Boolean(nameRect && linkRect && !(
-                linkRect.left >= nameRect.right - 1 || linkRect.right <= nameRect.left + 1 ||
-                linkRect.top >= nameRect.bottom - 1 || linkRect.bottom <= nameRect.top + 1)),
-            };
-          }),
+          id: card.getAttribute("data-deliverable-id") || "",
+          state: card.getAttribute("data-public-state") || "",
+          visible: visible(card),
+          hiddenEssential: essential.filter((element) => !visible(element)).length,
+          factLabels: facts.map((fact) => fact.querySelector("dt")?.textContent?.trim() || ""),
+          nameWidth: Math.round(name?.getBoundingClientRect().width || 0),
+          priceText: price?.textContent?.replace(/\s+/g, " ").trim() || "",
+          priceLines: lineCount(price),
+          exampleCtaHeight: Math.round(card.querySelector(".button")?.getBoundingClientRect().height || 0),
+          analysisCtaHeight: Math.round(card.querySelector(".text-link")?.getBoundingClientRect().height || 0),
         };
-      })(),
-      priceGeometry: (() => {
-        const lineCount = (element) => {
-          if (!element) return 0;
-          const range = document.createRange();
-          range.selectNodeContents(element);
-          const tops = [...range.getClientRects()]
-            .filter((rect) => rect.width > 0.5 && rect.height > 0.5)
-            .map((rect) => Math.round(rect.top));
-          return new Set(tops).size;
-        };
-        const header = [...document.querySelectorAll("#comparar .compare-table thead th")]
-          .find((th) => th.textContent.trim() === "Preço") || null;
-        const scroller = document.querySelector("#comparar .compare-scroll");
-        const table = document.querySelector("#comparar .compare-table");
-        return {
-          headerLines: lineCount(header),
-          headerWidth: header ? Math.round(header.getBoundingClientRect().width) : 0,
-          scrollerOverflow: scroller ? scroller.scrollWidth - scroller.clientWidth : 0,
-          tableWidth: table ? Math.round(table.getBoundingClientRect().width) : 0,
-          scrollerWidth: scroller ? Math.round(scroller.clientWidth) : 0,
-          values: [...document.querySelectorAll('#comparar .compare-table tbody td[data-label="Preço"]')]
-            .map((cell) => {
-              const value = cell.querySelector("strong");
-              const cellRect = cell.getBoundingClientRect();
-              const valueRect = value ? value.getBoundingClientRect() : null;
-              const padRight = parseFloat(getComputedStyle(cell).paddingRight) || 0;
-              return {
-                text: value ? value.textContent.replace(/\s+/g, " ").trim() : "",
-                lines: lineCount(value),
-                width: valueRect ? Math.round(valueRect.width) : 0,
-                cellWidth: Math.round(cellRect.width),
-                // true when the value paints past its own cell's content box
-                spills: Boolean(valueRect && valueRect.right > cellRect.right - padRight + 1),
-              };
-            }),
-        };
-      })(),
+      }),
+      capabilityRoll: {
+        rowCount: capabilityRows.length,
+        stateCounts: capabilityRows.reduce((counts, row) => {
+          const state = row.getAttribute("data-public-state") || "";
+          counts[state] = (counts[state] || 0) + 1;
+          return counts;
+        }, {}),
+        groups: document.querySelectorAll(".capability-group").length,
+        openGroups: document.querySelectorAll(".capability-group[open]").length,
+        shortSummaries: [...document.querySelectorAll(".capability-group>summary")]
+          .filter((summary) => summary.getBoundingClientRect().height < 44).length,
+      },
       navDeliverables: desktopDeliverables?.textContent?.trim() || "",
       navCurrent: desktopDeliverables?.getAttribute("aria-current") || "",
       emptyPlaceholders: document.querySelectorAll("[data-placeholder], .placeholder").length,
@@ -213,8 +177,8 @@ for (const width of widths) {
         .filter((element) => {
           const rect = element.getBoundingClientRect();
           const style = getComputedStyle(element);
-          return style.display !== "none" && style.position !== "fixed" &&
-            (rect.left < -1 || rect.right > window.innerWidth + 1);
+          return style.display !== "none" && style.position !== "fixed"
+            && (rect.left < -1 || rect.right > window.innerWidth + 1);
         })
         .slice(0, 8)
         .map((element) => ({
@@ -227,57 +191,40 @@ for (const width of widths) {
   const errors = [];
   if (!response || ![200, 304].includes(response.status())) errors.push(`http=${response?.status()}`);
   if (metrics.overflow) errors.push("document_overflow");
-  if (metrics.h1Count !== 1 || !metrics.h1Text.includes("oito entregas") || !metrics.h1Text.includes("decisão que cabe agora")) errors.push("hero_clarity");
+  const h1 = metrics.h1Text.toLocaleLowerCase("pt-BR");
+  if (metrics.h1Count !== 1 || !h1.includes("8 ofertas publicadas") || !h1.includes("decisão")) errors.push("hero_clarity");
   if (!metrics.heroCtaVisible || !metrics.heroCtaTargetExists || metrics.heroCtaHref !== "#enquadrar" ||
       (width <= 390 && metrics.heroCtaBottom > height)) errors.push("hero_cta");
-  if (!metrics.firstReportVisible || metrics.examples !== EXPECTED_EXAMPLES) errors.push("ladder_examples");
-  if (!metrics.compareVisible || metrics.compareRows !== EXPECTED_EXAMPLES) errors.push("compare_view");
-  if (!metrics.compareAboveExamples) errors.push("compare_before_sections");
-  if (!metrics.compareScrollFocusable) errors.push("compare_scroll_focus");
-  // Mobile must keep the same commercial substance the desktop table shows.
-  const hub = metrics.hubGeometry;
-  if (hub.rows.length !== EXPECTED_EXAMPLES) errors.push(`hub_rows=${hub.rows.length}`);
-  if (hub.hiddenFactBlocks) errors.push(`hub_facts_hidden=${hub.hiddenFactBlocks}`);
-  const hubWrappedPrice = hub.rows.filter((row) => row.priceLines !== 1);
-  if (hubWrappedPrice.length) errors.push(`hub_price_wrapped=${hubWrappedPrice.map((r) => `${r.priceText}/${r.priceLines}L`).join(",")}`);
-  if (hub.rows.some((row) => row.collides)) errors.push("hub_link_overlaps_name");
-  // The offer name must get real width, never be starved to a sliver by a sibling column.
-  const starvedName = hub.rows.filter((row) => row.nameWidth < 120);
-  if (starvedName.length) errors.push(`hub_name_starved=${starvedName.map((r) => r.nameWidth).join(",")}`);
-
-  // Price integrity is a trust surface: a number broken across lines reads as a broken site.
-  const price = metrics.priceGeometry;
-  const priceShape = /^R\$ \d{1,3}(\.\d{3})*$/;
-  const wrappedPrices = price.values.filter((entry) => entry.lines !== 1);
-  const brokenPrices = price.values.filter((entry) => !priceShape.test(entry.text));
-  const spilledPrices = price.values.filter((entry) => entry.spills);
-  if (price.values.length !== EXPECTED_EXAMPLES) errors.push(`price_cells=${price.values.length}`);
-  if (wrappedPrices.length) errors.push(`price_wrapped=${wrappedPrices.map((e) => `${e.text}/${e.lines}L`).join(",")}`);
-  if (brokenPrices.length) errors.push(`price_text_corrupt=${brokenPrices.map((e) => e.text).join(",")}`);
-  if (spilledPrices.length) errors.push(`price_spills_cell=${spilledPrices.map((e) => e.text).join(",")}`);
-  if (width >= 901) {
-    // Desktop keeps a real table: header on one line, every price column wide enough to
-    // hold its own value, and no column starved below the widest price it must show.
-    if (price.headerLines !== 1) errors.push(`price_header_wrapped=${price.headerLines}`);
-    const widestPrice = price.values.reduce((max, entry) => Math.max(max, entry.width), 0);
-    const narrowestCell = price.values.reduce((min, entry) => Math.min(min, entry.cellWidth), Infinity);
-    if (narrowestCell < widestPrice + 8) errors.push(`price_cell_starved=${narrowestCell}<${widestPrice}`);
-    // A wide desktop must lay the table out in the space it has, not hide it behind a scrollbar.
-    if (width >= 1248 && price.scrollerOverflow > 1) errors.push(`compare_scroll_on_wide=${price.scrollerOverflow}`);
-  } else {
-    // Card mode: rows stack, and the table must not force the viewport to scroll sideways.
-    if (price.tableWidth > price.scrollerWidth + 1) errors.push(`compare_cards_overflow=${price.tableWidth}>${price.scrollerWidth}`);
+  if (!metrics.firstReportVisible || metrics.offers.length !== EXPECTED_EXAMPLES) errors.push("published_offers");
+  const expectedIds = Array.from({ length: EXPECTED_EXAMPLES }, (_, index) => `CFG-D${String(index + 1).padStart(2, "0")}`);
+  if (JSON.stringify(metrics.offers.map(({ id }) => id)) !== JSON.stringify(expectedIds)) errors.push("published_offer_order");
+  if (metrics.offers.some(({ state }) => state !== "PUBLISHED")) errors.push("published_offer_state");
+  if (metrics.offers.some((offer) => !offer.visible || offer.hiddenEssential)) errors.push("published_offer_substance_hidden");
+  const requiredFacts = ["Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"];
+  if (metrics.offers.some(({ factLabels }) => !requiredFacts.every((label) => factLabels.includes(label)))) errors.push("published_offer_facts");
+  const starvedName = metrics.offers.filter(({ nameWidth }) => nameWidth < 120);
+  if (starvedName.length) errors.push(`offer_name_starved=${starvedName.map(({ nameWidth }) => nameWidth).join(",")}`);
+  if (metrics.offers.some(({ exampleCtaHeight, analysisCtaHeight }) => exampleCtaHeight < 44 || analysisCtaHeight < 44)) {
+    errors.push("published_offer_touch_targets");
   }
-  const requiredColumns = ["Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"];
-  if (!requiredColumns.every((label) => metrics.compareColumns.includes(label))) errors.push("compare_columns");
-  // Budget re-baselined from 12000. The 12000 figure landed in cf33385d4, the same
-  // commit that hid objeto, saída, SLA, entradas and limitações below 620px — it was
-  // calibrated against a page that bought its shortness by hiding commercial
-  // substance. That content is now shown, and the duplicate vitrine rows were
-  // compacted to pay for part of it (13590 -> 13098). Still fails on real bloat.
-  if (width === 390 && metrics.documentHeight > 13400) errors.push(`document_height=${metrics.documentHeight}`);
-  if (width === 390 && metrics.firstOfferTop > 1688) errors.push(`first_offer_top=${metrics.firstOfferTop}`);
-  if (metrics.mainLinks > 80) errors.push(`main_links=${metrics.mainLinks}`);
+  // Price integrity remains a trust surface in the single primary representation.
+  const priceShape = /^R\$ \d{1,3}(\.\d{3})*$/;
+  const wrappedPrices = metrics.offers.filter(({ priceLines }) => priceLines !== 1);
+  const brokenPrices = metrics.offers.filter(({ priceText }) => !priceShape.test(priceText));
+  if (wrappedPrices.length) errors.push(`price_wrapped=${wrappedPrices.map(({ priceText, priceLines }) => `${priceText}/${priceLines}L`).join(",")}`);
+  if (brokenPrices.length) errors.push(`price_text_corrupt=${brokenPrices.map(({ priceText }) => priceText).join(",")}`);
+  const roll = metrics.capabilityRoll;
+  if (roll.rowCount !== 54 || roll.groups !== 7) errors.push(`capability_roll=${roll.rowCount}/${roll.groups}`);
+  if (JSON.stringify(roll.stateCounts) !== JSON.stringify({ PUBLISHED: 8, VALIDATE: 44, BLOCKED: 2 })) {
+    errors.push(`capability_states=${JSON.stringify(roll.stateCounts)}`);
+  }
+  if (roll.openGroups !== 0 || roll.shortSummaries) errors.push("capability_progressive_disclosure");
+  // #468 measured 13,098 px at 390 px with the same eight offers rendered three
+  // times. The new budget is lower while retaining every essential fact and adding
+  // the complete 54-capability roll behind native disclosure.
+  if (width === 390 && metrics.documentHeight > 12500) errors.push(`document_height=${metrics.documentHeight}`);
+  if (width === 390 && metrics.decisionNavTop > 1800) errors.push(`decision_nav_top=${metrics.decisionNavTop}`);
+  if (metrics.mainLinks > 50) errors.push(`main_links=${metrics.mainLinks}`);
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
   // One primary leads to the progressive framing and the other submits the
   // terminal hand-raise added by #290; neither replaces a priced offer path.
@@ -304,7 +251,10 @@ for (const width of widths) {
   if (screenshotDir) {
     fs.mkdirSync(screenshotDir, { recursive: true });
     await page.mouse.move(1, 1);
-    await page.screenshot({ path: path.join(screenshotDir, `deliverables-${width}.png`), fullPage: width === 1440 });
+    await page.screenshot({
+      path: path.join(screenshotDir, `deliverables-${width}.png`),
+      fullPage: width === 390 || width === 1440,
+    });
   }
   findings.push({ route: "/entregas/", width, height, ...metrics, errors });
   if (errors.length) failed += 1;
@@ -324,11 +274,18 @@ const catalogBoot = await page.evaluate(() => ({
   filterPresent: Boolean(document.querySelector("[data-catalog-filters]")),
   cards: document.querySelectorAll("article.vitrine-item").length,
   backlogCards: document.querySelectorAll("article.catalog-item").length,
+  capabilityRows: document.querySelectorAll(".capability-item").length,
+  capabilityGroups: document.querySelectorAll(".capability-group").length,
 }));
 if (catalogBoot.enhanced || catalogBoot.filterPresent || catalogBoot.dataCount) catalogErrors.push("catalog_not_retired");
-if (catalogBoot.cards !== EXPECTED_EXAMPLES || catalogBoot.backlogCards !== 0) catalogErrors.push("catalog_data_contract");
+if (
+  catalogBoot.cards !== EXPECTED_EXAMPLES
+  || catalogBoot.backlogCards !== 0
+  || catalogBoot.capabilityRows !== 54
+  || catalogBoot.capabilityGroups !== 7
+) catalogErrors.push("catalog_data_contract");
 const frameKeyboard = await page.evaluate(() => {
-  const first = document.querySelector(".deliverable-frame__list a");
+  const first = document.querySelector(".offer-decision-nav a");
   first?.focus();
   return { href: first?.getAttribute("href") || "", active: document.activeElement === first };
 });
@@ -344,16 +301,29 @@ const noScriptCatalog = await noScriptPage.evaluate(() => ({
   cards: document.querySelectorAll("article.vitrine-item").length,
   visibleCards: [...document.querySelectorAll("article.vitrine-item")].filter((card) => getComputedStyle(card).display !== "none").length,
   backlogCards: document.querySelectorAll("article.catalog-item").length,
-  compareTable: Boolean(document.querySelector("#comparar .compare-table")),
-  compareColumns: [...document.querySelectorAll("#comparar .compare-table thead th")].map((th) => th.textContent.trim()),
+  capabilityRows: document.querySelectorAll(".capability-item").length,
+  capabilityGroups: document.querySelectorAll(".capability-group").length,
+  decisionNav: Boolean(document.querySelector(".offer-decision-nav")),
+  essentialFactSets: [...document.querySelectorAll("article.vitrine-item")]
+    .map((card) => [...card.querySelectorAll(".vitrine-item__facts dt")].map((dt) => dt.textContent.trim())),
   filters: Boolean(document.querySelector("[data-catalog-filters]")),
 }));
 const noScriptErrors = [];
-if (noScriptCatalog.cards !== EXPECTED_EXAMPLES || noScriptCatalog.visibleCards !== EXPECTED_EXAMPLES || noScriptCatalog.backlogCards !== 0) {
+if (
+  noScriptCatalog.cards !== EXPECTED_EXAMPLES
+  || noScriptCatalog.visibleCards !== EXPECTED_EXAMPLES
+  || noScriptCatalog.backlogCards !== 0
+  || noScriptCatalog.capabilityRows !== 54
+  || noScriptCatalog.capabilityGroups !== 7
+) {
   noScriptErrors.push("catalog_noscript_content");
 }
-if (!noScriptCatalog.compareTable || !["Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"].every((label) => noScriptCatalog.compareColumns.includes(label))) {
-  noScriptErrors.push("catalog_noscript_comparison");
+const noScriptFactLabels = ["Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"];
+if (
+  !noScriptCatalog.decisionNav
+  || noScriptCatalog.essentialFactSets.some((labels) => !noScriptFactLabels.every((label) => labels.includes(label)))
+) {
+  noScriptErrors.push("catalog_noscript_decision_content");
 }
 if (noScriptCatalog.filters) noScriptErrors.push("catalog_noscript_controls");
 findings.push({ route: "/entregas/", check: "catalog_noscript", noScriptCatalog, errors: noScriptErrors });

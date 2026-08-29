@@ -832,7 +832,7 @@ def test_product_promise_value_and_scope_are_explicit_before_the_example() -> No
 
     for phrase in (
         "Radar de Licitações Prioritárias",
-        "Escolha quais licitações disputar e quais recusar.",
+        "Modelo sintético: licitações a disputar ou recusar.",
         "12 analisadas",
         "3 priorizadas",
         "7 recusadas",
@@ -859,7 +859,7 @@ def test_product_promise_value_and_scope_are_explicit_before_the_example() -> No
     ):
         assert deliverable in offer
 
-    assert offer.index("O que você recebe") < offer.index("CONSULTE O EXEMPLO")
+    assert offer.index("O que você recebe") < offer.index("CONSULTE O DEMONSTRATIVO")
     assert "garante vitória" not in offer.casefold()
     assert "entrega em" not in offer.casefold()
 

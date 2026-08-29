@@ -583,10 +583,10 @@ def chassis_html(record: dict[str, Any]) -> str:
         f'<div><dt>Fonte</dt><dd>{_esc(method.get("source"))}</dd></div>\n'
         f'<div><dt>Período</dt><dd>{_esc(record.get("period"))}</dd></div>\n'
         f'<div><dt>Geografia</dt><dd>{_esc(record.get("geography"))}</dd></div>\n'
-        f'<div><dt>Grão</dt><dd>{_esc(record.get("grain"))}</dd></div>\n'
+        f'<div><dt>Grão</dt><dd><code data-opaque-token>{_esc(record.get("grain"))}</code></dd></div>\n'
         f'<div><dt>Autoria / revisão</dt><dd>{_esc(record.get("author"))} · {_esc(record.get("reviewer"))}</dd></div>\n'
         f'<div><dt>Refresh</dt><dd>{_esc(record.get("refresh_owner"))}</dd></div>\n'
-        f'<div><dt>Hash</dt><dd><code>{digest}</code></dd></div>\n'
+        f'<div><dt>Hash</dt><dd><code data-opaque-token>{digest}</code></dd></div>\n'
         f"</dl>\n"
         f'{visual}\n'
         f'<div class="breakout-limits" data-breakout-limitations="true">\n'

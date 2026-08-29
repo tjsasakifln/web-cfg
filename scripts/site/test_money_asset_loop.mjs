@@ -113,6 +113,7 @@ const snapshot = JSON.parse(
   fs.readFileSync(path.join(root, "ferramentas/diagnostico-defesa-margem/snapshot.json"), "utf8"),
 );
 const diagnoseSrc = fs.readFileSync(path.join(root, "assets/js/diagnose-margin.js"), "utf8");
+const toolsCommonSrc = fs.readFileSync(path.join(root, "assets/js/tools-common.js"), "utf8");
 const scriptSrc = fs.readFileSync(path.join(root, "script.js"), "utf8");
 const inlineMatch = pageHtml.match(/<script>\s*(\(function\(\)\{[\s\S]*?\}\)\(\);)\s*<\/script>/);
 if (!inlineMatch) fail("inline_script_missing");
@@ -142,6 +143,9 @@ function makeEl(init = {}) {
     },
     setAttribute(name, value) {
       attrs[name] = String(value);
+    },
+    hasAttribute(name) {
+      return Object.prototype.hasOwnProperty.call(attrs, name);
     },
     addEventListener(type, fn) {
       (listeners[type] = listeners[type] || []).push(fn);
@@ -338,6 +342,8 @@ const hidden = [
 ];
 const fields = {
   "lookup-status": makeEl({ id: "lookup-status" }),
+  "diagnostico-runtime-status": makeEl({ id: "diagnostico-runtime-status" }),
+  "diagnostic-result": makeEl({ id: "diagnostic-result" }),
   lookup: makeEl({ id: "lookup", tagName: "FORM" }),
   qid: makeEl({ id: "qid", name: "q", value: "83102277000152-2-000626/2026" }),
   "public-contract-id": makeEl({
@@ -539,6 +545,7 @@ const sandbox = {
 };
 vm.createContext(sandbox);
 vm.runInContext(diagnoseSrc, sandbox);
+vm.runInContext(toolsCommonSrc, sandbox);
 vm.runInContext(inlineMatch[1], sandbox);
 vm.runInContext(scriptSrc, sandbox);
 document.readyState = "complete";

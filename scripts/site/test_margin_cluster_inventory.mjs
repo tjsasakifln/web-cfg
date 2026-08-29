@@ -19,6 +19,8 @@ for (const intent of required) {
   assert.ok(byIntent[intent].canonical.startsWith("/"));
 }
 assert.equal(inventory.intents.filter((row) => row.disposition === "CREATE").length, 0);
+assert.ok(byIntent.aditivos.supporting.includes("/conteudos/limite-aditivo-25-50-obra-publica/"));
+assert.ok(!JSON.stringify(inventory).includes("/lei-14133-obras/limite-25-50-aditivo-obra/"));
 function assertAuthority(html, path) {
   assert.ok(/Método:/.test(html), `${path} missing Método`);
   assert.ok(/Fonte:/.test(html), `${path} missing Fonte`);

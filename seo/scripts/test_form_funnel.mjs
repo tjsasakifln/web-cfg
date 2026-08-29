@@ -28,7 +28,7 @@ for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
   "Solicitar canal seguro para envio",
-  "Enviar edital para triagem",
+  "Solicitar triagem do edital",
   'data-set-journey="contrato"',
   'data-set-journey="edital"',
   'data-set-journey="operacao"',

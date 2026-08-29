@@ -19,5 +19,10 @@ def test_interaction_type_not_prefix_only():
     assert _is_checklist_page({"page_id": "guia-checklist-aditivo", "interaction_type": "checklist"})
 
 def test_cta_block_premium_structure():
-    html = _cta_block({"cta_whatsapp":"Oi","cta_email_subject":"Assunto","cta_email_body":"Corpo","cta_offer":"Oferta"}, "mid")
-    assert 'class="editorial-cta"' in html
+    page = {"cta_whatsapp":"Oi","cta_email_subject":"Assunto","cta_email_body":"Corpo","cta_offer":"Oferta"}
+    mid = _cta_block(page, "mid")
+    footer = _cta_block(page, "footer")
+    assert 'class="editorial-cta"' in mid
+    assert 'aria-label="Próximo passo no conteúdo"' in mid
+    assert 'aria-label="Próximo passo ao final"' in footer
+    assert 'aria-label="Próximo passo"' not in mid + footer

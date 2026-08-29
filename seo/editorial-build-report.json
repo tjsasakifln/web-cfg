@@ -1,12 +1,11 @@
 {
   "ok": true,
-  "generated_at": "2026-08-24T12:10:52Z",
+  "generated_at": "2026-08-29T23:19:36Z",
   "page_defs": 12,
-  "indexable_count": 3,
+  "indexable_count": 2,
   "indexable_urls": [
     "/guias-contratos-obras/checklist-pedido-aditivo/",
-    "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-    "/lei-14133-obras/limite-25-50-aditivo-obra/"
+    "/lei-14133-obras/preco-item-novo-desconto-proposta/"
   ],
   "revoked_non_human_approvals": 0,
   "results": [
@@ -69,7 +68,7 @@
     {
       "page_id": "lei-limite-25-50",
       "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "status": "INDEXABLE",
+      "status": "MIGRATED",
       "gate_ok": true,
       "issues": []
     },
@@ -96,7 +95,7 @@
     }
   ],
   "sitemap_counts": {
-    "editorial": 5,
+    "editorial": 4,
     "jurisprudencia": 0,
     "inteligencia_segment": 0
   },
@@ -114,6 +113,9 @@
   ],
   "rejected": [
     "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/"
+  ],
+  "migrated": [
+    "/lei-14133-obras/limite-25-50-aditivo-obra/"
   ],
   "terminal_hint": "PARTIAL_INDEXABLE",
   "fail_closed_intelligence_publishable": true,

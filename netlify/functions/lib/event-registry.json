@@ -702,7 +702,14 @@
     "full_name",
     "search_query",
     "q",
-    "query"
+    "query",
+    "valor",
+    "valorinicial",
+    "causa",
+    "observacao",
+    "raw",
+    "qid",
+    "identificador"
   ],
   "cta_kind_from_alias": {
     "service_cta": "service",

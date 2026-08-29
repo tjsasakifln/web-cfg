@@ -40,6 +40,13 @@ def test_related_assets_only_existing_paths():
         assert "/live-sul" not in item["href"]
 
 
+def test_aditivo_related_asset_links_directly_to_canonical_limit_owner():
+    rec = complete_live_record(intent="aditivo", angle="aditivos_valor")
+    hrefs = {item["href"] for item in related_assets(rec, root=ROOT)}
+    assert "/conteudos/limite-aditivo-25-50-obra-publica/" in hrefs
+    assert "/lei-14133-obras/limite-25-50-aditivo-obra/" not in hrefs
+
+
 def test_invented_entity_page_is_not_emitted():
     rec = complete_live_record()
     urls = public_urls_from_graph(rec, root=ROOT)

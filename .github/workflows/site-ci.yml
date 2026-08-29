@@ -121,6 +121,7 @@ jobs:
           npm run test:privacy
           npm run test:schedules
           npm run test:tools
+          npm run test:tool-compute
           npm run test:nurture
       - name: Build public site
         env:
@@ -131,6 +132,8 @@ jobs:
           CONTEXT: ${{ inputs.export_public_artifact && 'production' || '' }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
         run: npm run build:site
+      - name: Published medição cluster originality
+        run: npm run test:cluster-medicao-published
       - name: Generated Netcup nginx contract E2E
         run: npm run host-contract:nginx-test
       - name: Published HTML and FAQ integrity
