@@ -1,0 +1,267 @@
+/* Home 10x — first-viewport decision path. Do not load on other routes. */
+body[data-content-cluster="home"]{
+  overflow-x:clip;
+}
+body[data-content-cluster="home"] .hero{
+  padding:22px 0 28px;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+}
+body[data-content-cluster="home"] .home-hero-grid{
+  display:block;
+  max-width:40rem;
+}
+body[data-content-cluster="home"] .hero-copy{
+  padding:4px 0 0;
+}
+body[data-content-cluster="home"] .hero-copy h1{
+  max-width:16ch;
+  margin:0 0 14px;
+  font-size:clamp(1.85rem,4.2vw,3.1rem);
+  letter-spacing:-.04em;
+  line-height:1.08;
+}
+body[data-content-cluster="home"] .hero-lead{
+  max-width:42ch;
+  margin:0 0 18px;
+  color:#314256;
+  font-size:1.05rem;
+  line-height:1.6;
+}
+body[data-content-cluster="home"] .hero-actions{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px 22px;
+  margin:0 0 14px;
+}
+body[data-content-cluster="home"] .hero-proof{
+  grid-template-columns:1fr 1fr;
+  gap:8px 16px;
+  margin:0;
+  padding:10px 0 0;
+}
+body[data-content-cluster="home"] .hero-proof li{
+  font-size:.875rem;
+}
+body[data-content-cluster="home"] .hero-proof-line{
+  margin:8px 0 0;
+  padding:0;
+  border:0;
+  color:#314256;
+  font-size:.875rem;
+  line-height:1.5;
+}
+body[data-content-cluster="home"] .hero-proof-line a{
+  color:var(--green-700);
+  font-weight:750;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+
+/* Three doors */
+body[data-content-cluster="home"] .journeys-section{
+  padding:40px 0 48px;
+}
+body[data-content-cluster="home"] .door-kicker{
+  margin:0 0 .2rem;
+  color:var(--green-700);
+  font-family:var(--mono);
+  font-size:.8rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+body[data-content-cluster="home"] .journey-row-body h3{
+  margin:0 0 .45rem;
+  font-size:1.2rem;
+}
+body[data-content-cluster="home"] .journey-row-body>p{
+  font-size:1rem;
+}
+
+/* Capture sits after the doors — keep doors + form in the layout so
+   anchors, keyboard and tests hit real boxes, not deferred placeholders. */
+body[data-content-cluster="home"] .contact-section{
+  padding:48px 0 72px;
+}
+@supports (content-visibility:auto){
+  html.js body[data-content-cluster="home"] main>section:not(.hero){
+    content-visibility:visible;
+    contain-intrinsic-size:none;
+  }
+}
+
+/* Offer + received artifact */
+body[data-content-cluster="home"] .offers-section{
+  padding:52px 0;
+}
+body[data-content-cluster="home"] .home-method-strip{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin:28px 0 0;
+  padding:0;
+  list-style:none;
+}
+body[data-content-cluster="home"] .home-method-strip .macro-phase{
+  padding:16px 14px;
+}
+body[data-content-cluster="home"] .home-method-strip h3{
+  font-size:1rem;
+}
+body[data-content-cluster="home"] .home-method-strip p{
+  margin:0;
+  color:var(--muted);
+  font-size:.875rem;
+  line-height:1.5;
+}
+body[data-content-cluster="home"] .home-deliverables{
+  margin-top:36px;
+}
+body[data-content-cluster="home"] .home-deliverables-result dt{
+  font-size:.8rem;
+}
+body[data-content-cluster="home"] .home-deliverables-example>span{
+  font-size:.8rem;
+}
+
+/* PNCP = market context, never client proof */
+body[data-content-cluster="home"] .market-context{
+  padding:48px 0 56px;
+  background:var(--soft);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+body[data-content-cluster="home"] .market-context-grid{
+  display:grid;
+  grid-template-columns:minmax(0,.9fr) minmax(280px,1.1fr);
+  gap:36px;
+  align-items:start;
+}
+body[data-content-cluster="home"] .market-context-copy h2{
+  max-width:18ch;
+}
+body[data-content-cluster="home"] .market-context-copy p{
+  max-width:48ch;
+  color:#314256;
+  font-size:1rem;
+  line-height:1.65;
+}
+body[data-content-cluster="home"] .market-disclaimer{
+  margin:16px 0 0;
+  padding:12px 14px;
+  color:#314256;
+  background:#fff;
+  border-left:3px solid var(--green-700);
+  font-size:.875rem;
+  line-height:1.5;
+}
+body[data-content-cluster="home"] .market-evidence{
+  min-height:0;
+  padding:1.25rem 1.3rem;
+  color:#e8eef4;
+  background:#071a31;
+  border:1px solid #0a294b;
+  border-radius:var(--radius-sm);
+}
+body[data-content-cluster="home"] .market-evidence .evidence-kicker,
+body[data-content-cluster="home"] .market-evidence .evidence-tier,
+body[data-content-cluster="home"] .market-evidence .evidence-facts dt,
+body[data-content-cluster="home"] .market-evidence .evidence-heading>span,
+body[data-content-cluster="home"] .market-evidence .evidence-source p{
+  font-size:.8rem;
+  line-height:1.4;
+}
+body[data-content-cluster="home"] .market-evidence .evidence-title{
+  max-width:22ch;
+  margin:0 0 .4rem;
+  color:#fff;
+  font-size:clamp(1.15rem,1.8vw,1.45rem);
+  line-height:1.2;
+}
+body[data-content-cluster="home"] .market-evidence .evidence-context,
+body[data-content-cluster="home"] .market-evidence .evidence-case-title,
+body[data-content-cluster="home"] .market-evidence .evidence-facts dd,
+body[data-content-cluster="home"] .market-evidence .evidence-tab,
+body[data-content-cluster="home"] .market-evidence .evidence-source-link,
+body[data-content-cluster="home"] .market-evidence .evidence-exposure{
+  font-size:.875rem;
+}
+body[data-content-cluster="home"] .market-evidence .evidence-actions{
+  display:none;
+}
+
+@media (min-width:901px){
+  body[data-content-cluster="home"] .hero{
+    padding:36px 0 44px;
+  }
+  body[data-content-cluster="home"] .home-hero-grid{
+    max-width:44rem;
+  }
+}
+
+@media (max-width:900px){
+  body[data-content-cluster="home"] .market-context-grid,
+  body[data-content-cluster="home"] .home-method-strip{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width:700px){
+  body[data-content-cluster="home"] .hero{
+    padding:16px 0 20px;
+  }
+  body[data-content-cluster="home"] .hero-copy h1{
+    max-width:none;
+    margin-bottom:12px;
+    font-size:clamp(1.7rem,7.2vw,2.15rem);
+  }
+  body[data-content-cluster="home"] .hero-lead{
+    margin-bottom:14px;
+    font-size:1rem;
+  }
+  body[data-content-cluster="home"] .hero-actions{
+    display:grid;
+    align-items:stretch;
+    gap:8px;
+    margin-bottom:10px;
+  }
+  body[data-content-cluster="home"] .hero-actions .button{
+    width:100%;
+  }
+  body[data-content-cluster="home"] .hero-secondary{
+    justify-content:center;
+  }
+  body[data-content-cluster="home"] .journeys-section,
+  body[data-content-cluster="home"] .contact-section,
+  body[data-content-cluster="home"] .offers-section,
+  body[data-content-cluster="home"] .market-context,
+  body[data-content-cluster="home"] .authority-section,
+  body[data-content-cluster="home"] .fit-section{
+    padding:40px 0;
+  }
+}
+
+body[data-content-cluster="home"] .fit-faq summary{
+  color:#06121f;
+  font-size:1rem;
+}
+body[data-content-cluster="home"] .fit-faq summary::after{
+  color:#1a4a1c;
+  border-color:#1a4a1c;
+}
+body[data-content-cluster="home"] .footer-links a,
+body[data-content-cluster="home"] .footer-bottom a,
+body[data-content-cluster="home"] .footer-authority a{
+  min-height:24px;
+  display:inline-flex;
+  align-items:center;
+  padding:6px 0;
+}
+
+@media (prefers-reduced-motion:reduce){
+  body[data-content-cluster="home"] *{
+    scroll-behavior:auto!important;
+  }
+}
