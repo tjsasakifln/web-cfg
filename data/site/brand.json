@@ -61,7 +61,7 @@
       "label": "Estou analisando uma licitação",
       "need": "leitura crítica do edital, habilitação, acervo, orçamento, cronograma, riscos e decisão de participar ou recusar",
       "complement": "A triagem deve respeitar o prazo real da licitação e a capacidade de execução da empresa.",
-      "cta": "Solicitar canal seguro para envio",
+      "cta": "Enviar edital para triagem",
       "cta_secondary": "Falar pelo WhatsApp",
       "href": "/#contato",
       "href_params": "jornada=edital",
