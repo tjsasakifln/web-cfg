@@ -114,7 +114,7 @@
       },
       "skip_link_activated": true,
       "matrix_reached_by_tab": true,
-      "matrix_scroll_left_after_arrows": 67,
+      "matrix_scroll_left_after_arrows": 69,
       "faq_opened_by_enter": true,
       "status": "PASS"
     },

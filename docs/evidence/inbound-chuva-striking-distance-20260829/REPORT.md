@@ -5,7 +5,8 @@
 - decisão: `VALIDATE`
 - frente executiva: Inbound Engine / aquisição orgânica
 - alavancas: distribuição, confiança, dados e automação
-- SHA-base: `dbd7e3a073354f9c746e499d380fd438c088ee3d`
+- SHA-base inicial: `dbd7e3a073354f9c746e499d380fd438c088ee3d`
+- main revalidado e incorporado antes do PR: `0cd62834a0f3b4408a2b2a06e808c85e0f0a2bbd`
 - URL: `/conteudos/chuva-prorrogacao-prazo-obra-publica/`
 - pergunta proprietária: quando um evento pluviométrico ou climático deixa de ser mero risco ordinário e passa a ter relevância técnica demonstrável para o prazo?
 
@@ -20,7 +21,7 @@ O teste de 100 repetições é positivo apenas como sistema: a matriz, o ownersh
 | Estado | Robots | Sitemap XML | Canonical | H1 | Palavras visíveis em `<main>` |
 |---|---|---:|---|---|---:|
 | `origin/main` no SHA-base | `noindex,follow` | 0 | self-canonical | Chuva justifica prorrogação de prazo em obra pública? | 1.118 |
-| branch final | `index,follow` | 1 | self-canonical | Chuva na obra pública: quando o prazo é tecnicamente impactado | 1.849 |
+| branch final | `index,follow` | 1 | self-canonical | Chuva na obra pública: quando o prazo é tecnicamente impactado | 1.899 |
 
 O espelho `sitemap.txt` também contém a URL uma vez. A inclusão em `/conteudos/` é a entrada única exigida pelo contrato de igualdade entre política, HTML indexável e diretório; nenhuma navegação global foi alterada.
 
@@ -59,10 +60,12 @@ Conclusões adversariais:
 - `reviewer_executor`: `agente desta campanha / CONFENGE_INBOUND_STRIKING_DISTANCE_CHUVA_REWRITE_INDEX_20260829`
 - `approval_basis`: `owner-delegated review 2026-08-29`
 - `manual_human_review`: `false`
-- material hash: `sha256:664b5f729fe9e8a8e1cd571302e0b1959cb95174e196cd5483cde32de6765e90`
-- approval hash: `sha256:529b8b68e7eac956923a2153ddf6cc677f700369189a27174ebb4261f4cd3bf4`
+- material hash: `sha256:a588953e8df4fd59555afbad2ce331cb2c02d866ba06301850b804c882d7696d`
+- approval hash: `sha256:373456323ef34f6002961bc1c7a2263d52f1fa9dde74b6168db296564e18d94f`
 
 O gate normaliza somente o estado de release da meta robots; qualquer outra mudança no HTML invalida a aprovação. Os cinco resultados substantivos exigidos estão `true`. Não houve revisão humana manual nem segundo revisor independente.
+
+O freeze BOFU classificou a alteração autorizada dos dois sitemaps como collateral não renderizante e exigiu recaptura. O baseline foi vinculado ao commit `cf822b030ee34d3b5cfc0ce5ab4477f8021212db`, que contém os bytes revisados; somente os hashes de `sitemap.xml` e `sitemap.txt` mudaram. Os seis HTMLs congelados, assets de renderização, `robots.txt`, redirects e o plano de unlock #291 permaneceram intactos.
 
 ## SEO, structured data e conversão
 
@@ -70,7 +73,7 @@ O gate normaliza somente o estado de release da meta robots; qualquer outra muda
 - canonical permaneceu na URL existente; nenhuma URL nova foi criada;
 - `dateModified` e `lastmod` são `2026-08-29`; `datePublished` foi preservada;
 - FAQ visível e `FAQPage` têm três pares idênticos e úteis;
-- artefato público: 77 URLs indexáveis, 77 URLs em sitemap, 0 erro, 0 warning;
+- artefato público: 76 URLs indexáveis, 76 URLs em sitemap, 0 erro, 0 warning;
 - `/conteudos/` declara e lista 22 itens, igual à política e ao conjunto indexável;
 - CTA contextual solicita canal seguro e declara que o site não recebe arquivo;
 - analytics usa somente atributos estáticos e o contrato existente `CONFENGE_WEB`; nenhuma PII foi adicionada ao payload;
@@ -80,21 +83,21 @@ O gate normaliza somente o estado de release da meta robots; qualquer outra muda
 
 | Gate | Resultado |
 |---|---|
-| `npm run editorial:test` | PASS, 126 testes |
+| `npm run editorial:test` | PASS, 143 testes |
 | testes específicos de chuva/striking/cluster | PASS, 27 testes |
 | `npm run test:copy` | PASS |
-| `npm run validate:seo` | PASS, 261 páginas, sitemap/indexável 77/77 |
+| `npm run validate:seo` | PASS, 261 páginas, sitemap/indexável 76/76 |
 | `npm run test:inbound-gates` | PASS |
 | `npm run test:html-integrity` e `:site` | PASS, 263 HTML, 426 FAQs |
-| `npm run build:site` | PASS, `public_artifact_hash=01b0432dd23021b439b8b059f1229b5069ed4e628346f8e4f6056b80efd2ff20` |
-| visible parity do build | PASS, 77 páginas, 0 defeitos |
+| `npm run build:site` | PASS, `public_artifact_hash=cc817d558e2a6336fb5dc1f562e739d64fa8672e61a1bce5e4768bbad4ac9332` |
+| visible parity do build | PASS, 76 páginas, 0 defeitos |
 | `npm run test:sitemap-graph` | PASS, 21 testes |
 | `npm run test:hub-truth` | PASS, política/live/hub 22/22/22 |
 | `npm run audit:accessibility` | PASS |
 | browser exato da URL | PASS, 6 viewports, JS-off, teclado e axe 390/1440 |
 | `npm run audit:axe` | PASS, 138 auditorias, 0 crítico/sério |
 | `npm run test:ui` | PASS, incluindo layout crítico 114/114 |
-| BOFU dominance/adversarial | PASS, 83 + 17 testes |
+| BOFU dominance/adversarial | PASS, 84 + 17 testes |
 | analytics/PII, lead-function e inbound-handoff | PASS |
 
 O audit sitewide adicional percorreu 1.572 combinações e encontrou três dívidas preexistentes em rotas fora do diff, todas a 360 px: `/comercial/termos-diagnostico-b2g/`, `/piloto/ofertas/contratar/` e `/termos-de-uso/`. A URL de chuva teve zero ocorrência; o gate exato e o layout crítico passaram. Nenhuma dessas dívidas foi alterada nesta campanha.

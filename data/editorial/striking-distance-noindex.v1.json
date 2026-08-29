@@ -27,7 +27,7 @@
         "approval_basis": "owner-delegated review 2026-08-29",
         "approved_at": "2026-08-29",
         "manual_human_review": false,
-        "material_hash": "sha256:664b5f729fe9e8a8e1cd571302e0b1959cb95174e196cd5483cde32de6765e90",
+        "material_hash": "sha256:a588953e8df4fd59555afbad2ce331cb2c02d866ba06301850b804c882d7696d",
         "review_results": {
           "factual_legal_adversarial": true,
           "originality_anti_doorway": true,
@@ -36,7 +36,7 @@
           "responsive_js_off_keyboard_accessibility": true
         },
         "notes": "Owner authority was explicitly delegated to this campaign. The campaign agent executed the reviews; no manual human review or second independent reviewer occurred.",
-        "approval_hash": "sha256:529b8b68e7eac956923a2153ddf6cc677f700369189a27174ebb4261f4cd3bf4"
+        "approval_hash": "sha256:373456323ef34f6002961bc1c7a2263d52f1fa9dde74b6168db296564e18d94f"
       }
     },
     {

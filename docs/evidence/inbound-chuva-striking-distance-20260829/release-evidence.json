@@ -4,6 +4,7 @@
   "issue": 127,
   "decision_state": "VALIDATE",
   "base_sha": "dbd7e3a073354f9c746e499d380fd438c088ee3d",
+  "rebased_onto_sha": "0cd62834a0f3b4408a2b2a06e808c85e0f0a2bbd",
   "route": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
   "before": {
     "robots": "noindex,follow",
@@ -16,7 +17,7 @@
     "canonical": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
     "sitemap_xml_membership": 1,
     "sitemap_txt_membership": 1,
-    "main_whitespace_tokens": 1849,
+    "main_whitespace_tokens": 1899,
     "date_modified": "2026-08-29",
     "lastmod": "2026-08-29"
   },
@@ -38,8 +39,8 @@
     "reviewer_executor": "agente desta campanha / CONFENGE_INBOUND_STRIKING_DISTANCE_CHUVA_REWRITE_INDEX_20260829",
     "approval_basis": "owner-delegated review 2026-08-29",
     "manual_human_review": false,
-    "material_hash": "sha256:664b5f729fe9e8a8e1cd571302e0b1959cb95174e196cd5483cde32de6765e90",
-    "approval_hash": "sha256:529b8b68e7eac956923a2153ddf6cc677f700369189a27174ebb4261f4cd3bf4"
+    "material_hash": "sha256:a588953e8df4fd59555afbad2ce331cb2c02d866ba06301850b804c882d7696d",
+    "approval_hash": "sha256:373456323ef34f6002961bc1c7a2263d52f1fa9dde74b6168db296564e18d94f"
   },
   "quality": {
     "factual_legal_adversarial": "PASS_WITH_LIMITS",
@@ -49,7 +50,7 @@
     "responsive_js_off_keyboard_accessibility": "PASS",
     "cluster_max_overlap": 0.01,
     "rain_page_max_overlap": 0.0055,
-    "build_public_artifact_hash": "01b0432dd23021b439b8b059f1229b5069ed4e628346f8e4f6056b80efd2ff20"
+    "build_public_artifact_hash": "cc817d558e2a6336fb5dc1f562e739d64fa8672e61a1bce5e4768bbad4ac9332"
   },
   "wide_layout_audit": {
     "rain_route_findings": 0,
