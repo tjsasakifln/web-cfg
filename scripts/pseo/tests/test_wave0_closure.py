@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -27,44 +26,45 @@ class TestPublicArtifact(unittest.TestCase):
         self.assertGreater(inv["html_route_count"], 10)
         self.assertEqual(inv["public_directory"], "_site")
 
-        # assemble uses real root — only if build already produced pages; still works
-        rep = assemble_public_artifact(ROOT)
-        self.assertTrue(rep.get("ok"), rep)
-        self.assertEqual(rep["public_directory"], PUBLIC_DIR_NAME)
-        site = ROOT / "_site"
-        self.assertTrue(site.is_dir())
-        self.assertTrue((site / "index.html").exists())
-        self.assertFalse((site / "data").exists())
-        self.assertFalse((site / "seo").exists())
-        self.assertFalse((site / "scripts").exists())
-        self.assertFalse((site / "package.json").exists())
+        # Exercise the real source tree without replacing the production-built
+        # _site that later browser gates consume in this same npm test process.
+        with tempfile.TemporaryDirectory() as td:
+            dest_name = str(Path(td) / "public-artifact")
+            rep = assemble_public_artifact(ROOT, dest_name=dest_name)
+            self.assertTrue(rep.get("ok"), rep)
+            self.assertEqual(PUBLIC_DIR_NAME, "_site")
+            self.assertEqual(rep["public_directory"], dest_name)
+            site = Path(dest_name)
+            self.assertTrue(site.is_dir())
+            self.assertTrue((site / "index.html").exists())
+            self.assertFalse((site / "data").exists())
+            self.assertFalse((site / "seo").exists())
+            self.assertFalse((site / "scripts").exists())
+            self.assertFalse((site / "package.json").exists())
 
-        audit = audit_public_artifact(ROOT)
-        # May fail if HTML still has internal phrases before rebuild — accept structural
-        self.assertIn("public_artifact_hash", audit)
-        self.assertFalse((site / "data" / "pseo").exists())
+            audit = audit_public_artifact(ROOT, dest_name=dest_name)
+            # May fail if HTML still has internal phrases before rebuild — accept structural
+            self.assertIn("public_artifact_hash", audit)
+            self.assertFalse((site / "data" / "pseo").exists())
 
     def test_audit_fails_on_forbidden_injection(self):
         from scripts.pseo.public_artifact import assemble_public_artifact, audit_public_artifact
 
-        assemble_public_artifact(ROOT)
-        site = ROOT / "_site"
-        poison = site / "data" / "pseo"
-        poison.mkdir(parents=True, exist_ok=True)
-        (poison / "manifest.json").write_text("{}", encoding="utf-8")
-        (site / "leak.py").write_text("print(1)\n", encoding="utf-8")
-        audit = audit_public_artifact(ROOT)
-        self.assertFalse(audit["ok"])
-        codes = {f["code"] for f in audit["findings"]}
-        self.assertTrue(
-            codes & {"forbidden_path_prefix", "forbidden_extension", "forbidden_dir", "not_allowlisted_dir"},
-            codes,
-        )
-        # cleanup poison for other tests
-        if (site / "leak.py").exists():
-            (site / "leak.py").unlink()
-        if (site / "data").exists():
-            shutil.rmtree(site / "data")
+        with tempfile.TemporaryDirectory() as td:
+            dest_name = str(Path(td) / "public-artifact")
+            assemble_public_artifact(ROOT, dest_name=dest_name)
+            site = Path(dest_name)
+            poison = site / "data" / "pseo"
+            poison.mkdir(parents=True, exist_ok=True)
+            (poison / "manifest.json").write_text("{}", encoding="utf-8")
+            (site / "leak.py").write_text("print(1)\n", encoding="utf-8")
+            audit = audit_public_artifact(ROOT, dest_name=dest_name)
+            self.assertFalse(audit["ok"])
+            codes = {f["code"] for f in audit["findings"]}
+            self.assertTrue(
+                codes & {"forbidden_path_prefix", "forbidden_extension", "forbidden_dir", "not_allowlisted_dir"},
+                codes,
+            )
 
 
 class TestGscGate(unittest.TestCase):
