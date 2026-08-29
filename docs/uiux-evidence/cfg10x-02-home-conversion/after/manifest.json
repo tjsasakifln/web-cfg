@@ -1,7 +1,7 @@
 {
-  "captured_at": "2026-08-29T15:01:25.049Z",
-  "commit_sha": "52d0127f2f1577b3472cd0ce524f2f153e6f13e8",
-  "tree_dirty": true,
+  "captured_at": "2026-08-29T15:10:03.233Z",
+  "commit_sha": "67400aec60bafa1124effeb7fdeab8153a06e38b",
+  "tree_dirty": false,
   "base_url": "http://127.0.0.1:8792",
   "routes": [
     "/"
