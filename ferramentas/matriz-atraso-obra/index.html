@@ -86,7 +86,30 @@
   var runButton=form.querySelector("button.tool-run"); if(runButton) runButton.disabled=false;
   if(T.bindToolLifecycle) T.bindToolLifecycle({tool:TOOL});
 
-  function esc(s){ return (T.escapeHtml||function(x){return String(x==null?"":x);})(s); }
+  function clearNode(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+  function addElement(parent, tag, className, text){
+    var el=document.createElement(tag);
+    if(className) el.className=className;
+    if(text!=null) el.textContent=String(text);
+    parent.appendChild(el);
+    return el;
+  }
+  function addStrongText(parent, strongText, text){
+    addElement(parent,"strong","",strongText);
+    parent.appendChild(document.createTextNode(String(text==null?"":text)));
+  }
+  function addLayer(parent, key, label, text){
+    var p=addElement(parent,"p");
+    p.setAttribute("data-layer",key);
+    addStrongText(p,label+". ",text);
+  }
+  function addListItem(parent, label, value){
+    addElement(parent,"li","",label+String(value==null?"":value));
+  }
+  function addLine(parent, text){
+    parent.appendChild(document.createTextNode(String(text==null?"":text)));
+    parent.appendChild(document.createElement("br"));
+  }
   function card(d){
     n++; var id=(d&&d.id)||("ev-"+n); var el=document.createElement("div");
     el.className="tool-event-card"; el.setAttribute("data-event-id", id);
@@ -170,13 +193,18 @@
     if(!r.ok){
       var explInvalid=C.explainMatriz(r);
       out.hidden=false; out.className="tool-result-panel bad";
-      out.innerHTML='<p class="tool-result-summary"><strong>Não foi possível montar as hipóteses.</strong> '+esc(explInvalid.layers.fato)+'</p>'+
-        '<section class="tool-layers" aria-labelledby="camadas-matriz-erro"><h3 id="camadas-matriz-erro">Como ler este estado</h3>'+
-        '<p data-layer="fato"><strong>Fato.</strong> '+esc(explInvalid.layers.fato)+'</p>'+
-        '<p data-layer="calculo"><strong>Cálculo.</strong> '+esc(explInvalid.layers.calculo)+'</p>'+
-        '<p data-layer="inferencia"><strong>Inferência.</strong> '+esc(explInvalid.layers.inferencia)+'</p>'+
-        '<p data-layer="unknown"><strong>Desconhecido.</strong> '+esc(explInvalid.layers.unknown)+'</p></section>'+
-        '<p class="tool-disclaimer">'+esc(explInvalid.legalDisclaimer)+'</p>';
+      clearNode(out);
+      var invalidSummary=addElement(out,"p","tool-result-summary");
+      addStrongText(invalidSummary,"Não foi possível montar as hipóteses."," "+explInvalid.layers.fato);
+      var invalidLayers=addElement(out,"section","tool-layers");
+      invalidLayers.setAttribute("aria-labelledby","camadas-matriz-erro");
+      var invalidHeading=addElement(invalidLayers,"h3","","Como ler este estado");
+      invalidHeading.id="camadas-matriz-erro";
+      addLayer(invalidLayers,"fato","Fato",explInvalid.layers.fato);
+      addLayer(invalidLayers,"calculo","Cálculo",explInvalid.layers.calculo);
+      addLayer(invalidLayers,"inferencia","Inferência",explInvalid.layers.inferencia);
+      addLayer(invalidLayers,"unknown","Desconhecido",explInvalid.layers.unknown);
+      addElement(out,"p","tool-disclaimer",explInvalid.legalDisclaimer);
       document.getElementById("ra").hidden=true;
       document.getElementById("cta").hidden=true;
       lastText=""; T.focusResult(out);
@@ -184,36 +212,48 @@
     }
     var expl=C.explainMatriz(r);
     var s=r.summary;
-    var rows=(r.events||[]).map(function(ev){
-      return "<li><strong>"+esc(ev.causa)+"</strong><br/>"+
-        "Hipótese: "+esc(ev.hipotese)+"<br/>"+
-        (ev.documentosExistentes&&ev.documentosExistentes.length?"Documentos existentes: "+esc(ev.documentosExistentes.join("; "))+"<br/>":"")+
-        (ev.documentosFaltantes&&ev.documentosFaltantes.length?"Documentos faltantes: "+esc(ev.documentosFaltantes.join("; "))+"<br/>":"")+
-        (ev.precisaNexoTemporal?"Necessita demonstrar nexo temporal.<br/>":"")+
-        (ev.precisaImpactoCritico?"Necessita demonstrar impacto no caminho crítico.<br/>":"")+
-        (ev.possivelConcorrencia?"Possível concorrência de causas / sobreposição.<br/>":"")+
-        (ev.observacao?"Observação: "+esc(ev.observacao)+"<br/>":"")+
-        "</li>";
-    }).join("");
     out.hidden=false; out.className="tool-result-panel hypothesis";
-    out.innerHTML='<p class="tool-result-summary"><strong>Hipóteses preliminares por evento</strong>'+esc(r.synthesis)+"</p>"+
-      '<h3>Resumo geral</h3><ul class="tool-evidence-list">'+
-      "<li>Eventos: "+s.totalEventos+"</li>"+
-      "<li>Sem prova contemporânea suficiente: "+s.semProvaContemporanea+"</li>"+
-      "<li>Sem período definido: "+s.semPeriodoDefinido+"</li>"+
-      "<li>Sem vínculo crítico claro: "+s.semVinculoCritico+"</li>"+
-      "<li>Possíveis sobreposições: "+s.possiveisSobreposicoes+"</li>"+
-      "<li>Matriz de riscos no contrato: "+esc(document.getElementById("tem_matriz").value)+"</li>"+
-      "<li>Sobreposições por data: "+(s.sobrepostosPorData||0)+"</li></ul>"+
-      '<section class="tool-layers" aria-labelledby="camadas-matriz"><h3 id="camadas-matriz">Como ler este resultado</h3>'+
-      '<p data-layer="fato"><strong>Fato.</strong> '+esc(expl.layers.fato)+'</p>'+
-      '<p data-layer="calculo"><strong>Cálculo.</strong> '+esc(expl.layers.calculo)+'</p>'+
-      '<p data-layer="inferencia"><strong>Inferência.</strong> '+esc(expl.layers.inferencia)+'</p>'+
-      '<p data-layer="unknown"><strong>Desconhecido.</strong> '+esc(expl.layers.unknown)+'</p></section>'+
-      "<h3>Por evento</h3><ul class=\"tool-next-actions\">"+rows+"</ul>"+
-      (s.proximosRegistros&&s.proximosRegistros.length?"<h3>Próximos registros</h3><ul class=\"tool-next-actions\">"+s.proximosRegistros.map(function(x){return "<li>"+esc(x)+"</li>";}).join("")+"</ul>":"")+
-      '<p class="tool-disclaimer">'+esc(r.disclaimer||"Resultado orientativo.")+"</p>"+
-      '<p class="tool-privacy-note">Gerado em '+T.localNow()+".</p>";
+    clearNode(out);
+    var summary=addElement(out,"p","tool-result-summary");
+    addStrongText(summary,"Hipóteses preliminares por evento"," "+r.synthesis);
+    addElement(out,"h3","","Resumo geral");
+    var evidence=addElement(out,"ul","tool-evidence-list");
+    addListItem(evidence,"Eventos: ",s.totalEventos);
+    addListItem(evidence,"Sem prova contemporânea suficiente: ",s.semProvaContemporanea);
+    addListItem(evidence,"Sem período definido: ",s.semPeriodoDefinido);
+    addListItem(evidence,"Sem vínculo crítico claro: ",s.semVinculoCritico);
+    addListItem(evidence,"Possíveis sobreposições: ",s.possiveisSobreposicoes);
+    addListItem(evidence,"Matriz de riscos no contrato: ",document.getElementById("tem_matriz").value);
+    addListItem(evidence,"Sobreposições por data: ",s.sobrepostosPorData||0);
+    var layers=addElement(out,"section","tool-layers");
+    layers.setAttribute("aria-labelledby","camadas-matriz");
+    var layersHeading=addElement(layers,"h3","","Como ler este resultado");
+    layersHeading.id="camadas-matriz";
+    addLayer(layers,"fato","Fato",expl.layers.fato);
+    addLayer(layers,"calculo","Cálculo",expl.layers.calculo);
+    addLayer(layers,"inferencia","Inferência",expl.layers.inferencia);
+    addLayer(layers,"unknown","Desconhecido",expl.layers.unknown);
+    addElement(out,"h3","","Por evento");
+    var eventList=addElement(out,"ul","tool-next-actions");
+    (r.events||[]).forEach(function(ev){
+      var li=addElement(eventList,"li");
+      addElement(li,"strong","",ev.causa);
+      li.appendChild(document.createElement("br"));
+      addLine(li,"Hipótese: "+ev.hipotese);
+      if(ev.documentosExistentes&&ev.documentosExistentes.length) addLine(li,"Documentos existentes: "+ev.documentosExistentes.join("; "));
+      if(ev.documentosFaltantes&&ev.documentosFaltantes.length) addLine(li,"Documentos faltantes: "+ev.documentosFaltantes.join("; "));
+      if(ev.precisaNexoTemporal) addLine(li,"Necessita demonstrar nexo temporal.");
+      if(ev.precisaImpactoCritico) addLine(li,"Necessita demonstrar impacto no caminho crítico.");
+      if(ev.possivelConcorrencia) addLine(li,"Possível concorrência de causas / sobreposição.");
+      if(ev.observacao) addLine(li,"Observação: "+ev.observacao);
+    });
+    if(s.proximosRegistros&&s.proximosRegistros.length){
+      addElement(out,"h3","","Próximos registros");
+      var nextList=addElement(out,"ul","tool-next-actions");
+      s.proximosRegistros.forEach(function(x){ addElement(nextList,"li","",x); });
+    }
+    addElement(out,"p","tool-disclaimer",r.disclaimer||"Resultado orientativo.");
+    addElement(out,"p","tool-privacy-note","Gerado em "+T.localNow()+".");
     lastText=T.buildReport([
       {title:"CONFENGE: matriz de atraso de obra", body:r.synthesis},
       {title:"Fato", body:expl.layers.fato},
