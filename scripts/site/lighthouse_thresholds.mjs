@@ -62,9 +62,6 @@ export function evaluateLighthouseResults(results, options = {}) {
     expected_runs: homeRuns,
     observed_runs: home.length,
     minimum_performance: home.length ? Math.min(...home.map((row) => row.performance)) : null,
-    minimum_accessibility: home.length ? Math.min(...home.map((row) => row.accessibility)) : null,
-    minimum_best_practices: home.length ? Math.min(...home.map((row) => row.best_practices)) : null,
-    minimum_seo: home.length ? Math.min(...home.map((row) => row.seo)) : null,
     p75_tbt_ms: percentile75(home.map((row) => row.tbt_ms)),
     maximum_own_long_task_ms: home.length
       ? Math.max(...home.map((row) => row.longest_own_task_ms || 0))
@@ -101,14 +98,21 @@ export function evaluateLighthouseResults(results, options = {}) {
   if (homeGate.minimum_performance == null || homeGate.minimum_performance < 95) {
     errors.push(`home: minimum performance ${homeGate.minimum_performance} < 95`);
   }
-  if (homeGate.minimum_accessibility == null || homeGate.minimum_accessibility < 97) {
-    errors.push(`home: minimum accessibility ${homeGate.minimum_accessibility} < 97`);
+  const minimumHomeAccessibility = home.length
+    ? Math.min(...home.map((row) => row.accessibility))
+    : null;
+  const minimumHomeBestPractices = home.length
+    ? Math.min(...home.map((row) => row.best_practices))
+    : null;
+  const minimumHomeSeo = home.length ? Math.min(...home.map((row) => row.seo)) : null;
+  if (minimumHomeAccessibility == null || minimumHomeAccessibility < 97) {
+    errors.push(`home: minimum accessibility ${minimumHomeAccessibility} < 97`);
   }
-  if (homeGate.minimum_best_practices == null || homeGate.minimum_best_practices < 100) {
-    errors.push(`home: minimum best-practices ${homeGate.minimum_best_practices} < 100`);
+  if (minimumHomeBestPractices == null || minimumHomeBestPractices < 100) {
+    errors.push(`home: minimum best-practices ${minimumHomeBestPractices} < 100`);
   }
-  if (homeGate.minimum_seo == null || homeGate.minimum_seo < 100) {
-    errors.push(`home: minimum SEO ${homeGate.minimum_seo} < 100`);
+  if (minimumHomeSeo == null || minimumHomeSeo < 100) {
+    errors.push(`home: minimum SEO ${minimumHomeSeo} < 100`);
   }
   if (homeGate.p75_tbt_ms == null || homeGate.p75_tbt_ms >= 200) {
     errors.push(`home: p75 TBT ${homeGate.p75_tbt_ms}ms must be < 200ms`);

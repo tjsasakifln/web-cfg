@@ -80,16 +80,9 @@ body[data-content-cluster="home"] .journey-row-body>p{
   font-size:1rem;
 }
 
-/* Capture sits after the doors — keep doors + form in the layout so
-   anchors, keyboard and tests hit real boxes, not deferred placeholders. */
+/* Capture sits immediately after the doors. */
 body[data-content-cluster="home"] .contact-section{
   padding:48px 0 72px;
-}
-@supports (content-visibility:auto){
-  html.js body[data-content-cluster="home"] main>section:not(.hero){
-    content-visibility:visible;
-    contain-intrinsic-size:none;
-  }
 }
 
 /* Offer + received artifact */
@@ -245,6 +238,7 @@ body[data-content-cluster="home"] .market-evidence .evidence-actions{
 
 body[data-content-cluster="home"] .fit-faq summary{
   color:#06121f;
+  background:#fff;
   font-size:1rem;
 }
 body[data-content-cluster="home"] .fit-faq summary::after{
