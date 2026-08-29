@@ -275,6 +275,17 @@ def test_active_release_runbook_uses_owner_and_netcup_smoke_contract():
     assert "Nunca solicitar indexação da donor" in runbook
 
 
+def test_dated_cannibalization_snapshot_is_explicitly_superseded():
+    report = (
+        ROOT / "docs/editorial/CONTENT-CANNIBALIZATION-REPORT.md"
+    ).read_text(encoding="utf-8")
+    preface = report.split("## Matrix", 1)[0]
+    assert "SUPERSEDED_EVIDENCE" in preface
+    assert OWNER in preface
+    assert DONOR in preface
+    assert "MIGRATED" in preface
+
+
 def test_existing_ownership_is_pinned_to_current_gsc_and_organic_selection():
     """The migration decision must remain evidence-led, not branch inertia.
 
