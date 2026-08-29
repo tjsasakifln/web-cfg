@@ -402,14 +402,14 @@ def test_editorial_corpus_includes_indexable_pages_outside_conteudos():
 
 
 def test_rewritten_articles_publish_current_review_metadata_and_faithful_word_count():
-    relpaths = (
-        "conteudos/atraso-obra-culpa-administracao/index.html",
-        "conteudos/comprovacao-exequibilidade-proposta-obra/index.html",
-        "conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/index.html",
-        "conteudos/prorrogacao-prazo-obra-publica-documentos/index.html",
-        "conteudos/resposta-notificacao-atraso-obra-publica/index.html",
-    )
-    for relpath in relpaths:
+    relpaths = {
+        "conteudos/atraso-obra-culpa-administracao/index.html": ("2026-08-28", "28 de agosto de 2026"),
+        "conteudos/comprovacao-exequibilidade-proposta-obra/index.html": ("2026-08-29", "29 de agosto de 2026"),
+        "conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/index.html": ("2026-08-29", "29 de agosto de 2026"),
+        "conteudos/prorrogacao-prazo-obra-publica-documentos/index.html": ("2026-08-28", "28 de agosto de 2026"),
+        "conteudos/resposta-notificacao-atraso-obra-publica/index.html": ("2026-08-28", "28 de agosto de 2026"),
+    }
+    for relpath, (expected_date, expected_label) in relpaths.items():
         html = (ROOT / relpath).read_text(encoding="utf-8")
         article_html = re.search(r"<article\b.*?</article>", html, re.I | re.S)
         assert article_html, relpath
@@ -423,9 +423,9 @@ def test_rewritten_articles_publish_current_review_metadata_and_faithful_word_co
         graph = json.loads(jsonld.group(1))["@graph"]
         article = next(node for node in graph if node.get("@type") == "Article")
 
-        assert 'content="2026-08-28" property="article:modified_time"' in html
-        assert 'Revisado em <time datetime="2026-08-28">28 de agosto de 2026</time>' in html
-        assert article["dateModified"] == "2026-08-28"
+        assert f'content="{expected_date}" property="article:modified_time"' in html
+        assert f'Revisado em <time datetime="{expected_date}">{expected_label}</time>' in html
+        assert article["dateModified"] == expected_date
         assert article["wordCount"] == actual_words, (relpath, article["wordCount"], actual_words)
 
 
