@@ -1,7 +1,8 @@
 /**
  * Injected Sandbox store: put-if-absent, get, append event, mark processed.
- * Memory/file for tests. Netlify Blobs for function runtime. Never process memory
- * as the serverless dedupe guarantee.
+ * Memory/file for tests. The public runtime uses the host-owned filesystem adapter.
+ * The Netlify Blobs adapter is legacy preview compatibility. Never process memory
+ * as a runtime dedupe guarantee.
  */
 const crypto = require("crypto");
 const { HostFileBackend } = require("../../../netlify/functions/lib/host-file-store.cjs");

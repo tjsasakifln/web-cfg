@@ -2,7 +2,7 @@
  * Durable lead store abstractions.
  * - MemoryStore: tests / local
  * - FileStore: host-owned durable adapter (single VPS)
- * - NetlifyBlobsStore: legacy rollback adapter during migration
+ * - NetlifyBlobsStore: legacy preview adapter during migration
  * - Composite: primary + optional mirror webhook for CRM
  */
 const crypto = require("crypto");
@@ -564,7 +564,11 @@ async function createStore(options = {}) {
     return Object.assign(globalMemory, { ephemeral: true });
   }
   if (cfg.backend === "filesystem") {
-    const opened = createHostBackend(env, { event, releaseRoot: options.releaseRoot });
+    const opened = createHostBackend(env, {
+      event,
+      releaseRoot: options.releaseRoot,
+      readOnly: options.readOnly === true,
+    });
     if (!opened.backend) {
       safeLog("error", "store_filesystem_unavailable", { code: opened.config.code });
       return null;
@@ -578,7 +582,7 @@ async function createStore(options = {}) {
       getUrlTemplate: env.LEAD_STORE_HTTP_GET_IDEMPOTENCY_URL || "",
     });
   }
-  // Legacy rollback adapter. Dependency loading is conditional on selection.
+  // Legacy preview adapter. Dependency loading is conditional on selection.
   try {
     const store = loadLegacyNetlifyStore("confenge-leads", env, event);
     return new NetlifyBlobsStore(store);

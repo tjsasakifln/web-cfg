@@ -536,11 +536,38 @@ def main() -> int:
             "ctr_none_insufficient",
             sdo.ctr_optimization_decision(None)["decision"] == "INSUFFICIENT_EVIDENCE",
         )
+        ok(
+            "github_actions_run_id_is_hashed",
+            sdo.operational_run_id(
+                {"GITHUB_RUN_ID": "33260693783", "GITHUB_RUN_ATTEMPT": "1"}
+            )
+            == "sha256:f765a77132602fc3f875cccefc67fcf4a0122195bc39bfc984b8ea441eac47b4",
+        )
+        dependency_receipt = sdo.write_blocked_last_sync(
+            {"ok": False, "error": "dependency_unavailable"}
+        )
+        ok(
+            "dependency_receipt_has_explicit_non_fixture_provenance",
+            dependency_receipt.get("source") == "search_analytics_api"
+            and dependency_receipt.get("synthetic") is False
+            and dependency_receipt.get("fixture") is False
+            and dependency_receipt.get("live_baseline_invented") is False,
+        )
 
         before_latest = (ROOT / "data/revops/gsc/latest_import.json").read_bytes()
         fixture_payload = sdo.sync_from_fixture()
         ok("fixture_source_kind", fixture_payload.get("source_kind") == "fixture")
         ok("fixture_not_live_kind", sdo.is_live_gsc_payload(fixture_payload) is False)
+        fixture_sync_state = json.loads((ROOT / "data/revops/gsc/last_sync.json").read_text())
+        ok("sync_state_schema_versioned", fixture_sync_state.get("schema_version") == "gsc-sync-state/v1")
+        ok(
+            "sync_state_manifest_schema_versioned",
+            fixture_sync_state.get("manifest_schema_version") == "gsc_snapshot_manifest_v1",
+        )
+        ok(
+            "fixture_source_freshness_unknown",
+            (fixture_sync_state.get("source_freshness") or {}).get("status") == "UNKNOWN",
+        )
         after_latest = (ROOT / "data/revops/gsc/latest_import.json").read_bytes()
         ok("fixture_does_not_overwrite_latest_import", before_latest == after_latest)
         csv_labeled = sdo.stamp_non_live_snapshot({"source": "csv_export", "queries": []})
@@ -576,6 +603,14 @@ def main() -> int:
             "gsc_workflow_fail_closed",
             "--allow-missing-creds" not in gsc_job and "|| true" not in gsc_job,
         )
+        ok(
+            "gsc_workflow_serializes_private_producer",
+            "group: gsc-private-snapshot-producer" in gsc_job
+            and "cancel-in-progress: false" in gsc_job,
+        )
+        artifact_paths = gsc_job.split("path: |", 1)[1] if "path: |" in gsc_job else ""
+        ok("gsc_artifact_excludes_individual_rows", "data/revops/gsc/daily/" not in artifact_paths)
+        ok("gsc_artifact_excludes_private_tree", "data/revops/gsc/private/" not in artifact_paths)
 
         hist_rows = [
             {

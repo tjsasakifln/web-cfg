@@ -11,7 +11,7 @@ python3 -m scripts.market_answers validate --fail-on-stale
 python3 -m pytest tests/market_answers -q
 ```
 
-Freshness uses a real UTC clock (`datetime.now(timezone.utc)`). Tests and replay inject `--now` / `MARKET_ANSWER_NOW`. Classes: `CURRENT | EXPIRING | STALE | UNKNOWN`. Operational re-evaluation: `.github/workflows/market-answer-freshness.yml`. See `docs/editorial/MARKET_ANSWER_FRESHNESS.md`.
+Freshness uses a real UTC clock (`datetime.now(timezone.utc)`). Tests and replay inject `--now` / `MARKET_ANSWER_NOW`. Classes: `CURRENT | EXPIRING | STALE | UNKNOWN`. The public canary is re-evaluated by build/CI; `.github/workflows/market-answer-freshness.yml` is the separate, authenticated and read-only durable GSC consumer probe. See `docs/editorial/MARKET_ANSWER_FRESHNESS.md`.
 
 - Adapter: `consume.py` (Goal 03 schema, fixture vs official_live)
 - Score: `score.py` (`MARKET_ANSWER_VALUE_SCORE/1.0`)

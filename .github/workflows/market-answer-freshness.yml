@@ -1,34 +1,36 @@
-# Operational re-evaluation of the Market Answer canary (#151).
-# Re-runs the shipped gate against a real UTC clock before max_age_hours
-# (48h) elapses. Does not commit content. Does not use RevOps.
-#
-# STALE or UNKNOWN is an observable non-success: the job fails and must
-# not be reported as current / PUBLISHABLE_INDEX.
-#
-# Manual: Actions → market-answer-freshness → Run workflow
+# Read-only proof of the private market-intelligence consumer (#413).
+# The producer runs in revops-scheduled. This workflow never syncs, publishes,
+# restores or mutates storage: it only accepts a versioned host-owned snapshot
+# when the authenticated consumer reports CURRENT with exact manifest parity.
 name: market-answer-freshness
 
 on:
   schedule:
-    # Every 6 hours — strictly more frequent than max_age_hours=48.
+    # Every 6 hours bounds detection latency; private GSC max_age_days is 14.
     - cron: "0 */6 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 concurrency:
   group: market-answer-freshness
   cancel-in-progress: false
 
 jobs:
-  reevaluate:
-    name: reevaluate-canary
+  verify-private-consumer:
+    name: verify-private-consumer
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          python-version: "3.12"
-      - name: Report-only evaluation (no content commit)
-        run: python3 -m scripts.market_answers build --report-only
-      - name: Fail closed on STALE or UNKNOWN
-        run: python3 -m scripts.market_answers validate --fail-on-stale
+          node-version: "22"
+      - name: Prove fixture polarity
+        run: node --test scripts/revops/test_gsc_freshness_probe.mjs
+      - name: Read authenticated durable consumer
+        env:
+          BASE_URL: https://confenge.com.br
+          OPS_TOKEN: ${{ secrets.OPS_TOKEN }}
+        run: node scripts/revops/verify_gsc_freshness.mjs
