@@ -832,7 +832,7 @@ def test_product_promise_value_and_scope_are_explicit_before_the_example() -> No
 
     for phrase in (
         "Radar de Licitações Prioritárias",
-        "Escolha quais licitações disputar e quais recusar.",
+        "Modelo sintético: licitações a disputar ou recusar.",
         "12 analisadas",
         "3 priorizadas",
         "7 recusadas",

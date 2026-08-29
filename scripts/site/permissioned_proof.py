@@ -29,7 +29,7 @@ CASES_PATH = ROOT / "data" / "site" / "cases.json"
 
 POLICY_SCHEMA = "confenge.permissioned-proof-policy/1.0"
 REGISTRY_SCHEMA = "confenge.permissioned-proof-registry/1.0"
-POLICY_CANONICAL_SHA256 = "f90fdbd26a1ef26edac116fe8fc233b398051c64a192e7da61a75ca828692b42"
+POLICY_CANONICAL_SHA256 = "2eceb0b2af2ae7a1da9433c19dfad22622da7cdb7f2ddaf7a125d0ff3b8f056f"
 STATES = (
     "DRAFT",
     "CONSENT_CAPTURED",
@@ -114,7 +114,7 @@ REGISTRY_KEYS = frozenset(
     {"schema", "policy", "updated_at", "state", "approved_public_proof_count", "records", "next_test"}
 )
 NEXT_TEST_KEYS = frozenset(
-    {"id", "status", "owner", "trigger", "required_result", "forbidden_shortcuts"}
+    {"id", "status", "blocker", "owner", "trigger", "required_result", "forbidden_shortcuts"}
 )
 NEXT_TEST_OWNER_KEYS = frozenset({"id", "name"})
 FORBIDDEN_SHORTCUTS = frozenset(
@@ -246,6 +246,10 @@ def validate_policy(policy: dict[str, Any] | None = None) -> list[str]:
         errors.append("observed_outcome_owner_invalid")
     if authority.get("canonical_public_domain") != "confenge.com.br":
         errors.append("canonical_domain_invalid")
+    if authority.get("canonical_record_registry") != "data/site/permissioned-proof-registry.json#records":
+        errors.append("canonical_record_registry_invalid")
+    if authority.get("other_editable_proof_record_registries") != "FORBIDDEN":
+        errors.append("duplicate_proof_record_registry_not_forbidden")
     if authority.get("public_client_pii") != "FORBIDDEN":
         errors.append("public_client_pii_not_forbidden")
     if not approver.get("id") or not approver.get("name") or approver.get("human_required") is not True:
@@ -935,11 +939,18 @@ def validate_registry(
     next_test = raw_next_test if isinstance(raw_next_test, dict) else {}
     errors.extend(_exact_keys(raw_next_test, NEXT_TEST_KEYS, "registry.next_test"))
     approver = _object(_object(p.get("authority")).get("publication_approver"))
-    expected_next_status = "FIRST_REAL_DELIVERY_PROOF_COMPLETE" if published else "WAIT_FIRST_REAL_DELIVERY"
+    expected_next_status = (
+        "COMPLETE:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+        if published
+        else "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+    )
     if next_test.get("id") != "first-real-delivery-permissioned-proof":
         errors.append("first_real_delivery_next_test_id_invalid")
     if next_test.get("status") != expected_next_status:
         errors.append("first_real_delivery_next_test_absent")
+    expected_blocker = None if published else "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+    if next_test.get("blocker") != expected_blocker:
+        errors.append("first_real_delivery_blocker_invalid")
     raw_owner = next_test.get("owner")
     owner = raw_owner if isinstance(raw_owner, dict) else {}
     errors.extend(_exact_keys(raw_owner, NEXT_TEST_OWNER_KEYS, "registry.next_test.owner"))
@@ -958,76 +969,34 @@ def validate_cases_alignment(
     registry: dict[str, Any] | None = None,
     cases: dict[str, Any] | None = None,
 ) -> list[str]:
-    """The older cases registry cannot bypass permissioned-proof approval."""
+    """The older cases registry cannot carry a second client-proof record."""
     r = registry if registry is not None else load_registry()
     c = cases if cases is not None else _load(CASES_PATH)
-    registry_rows = r.get("records") if isinstance(r.get("records"), list) else []
     case_rows = c.get("cases") if isinstance(c.get("cases"), list) else []
     surface_rows = c.get("published_surfaces") if isinstance(c.get("published_surfaces"), list) else []
-    records = {
-        row.get("proof_id"): row
-        for row in registry_rows
-        if isinstance(row, dict) and isinstance(row.get("proof_id"), str) and row.get("proof_id")
-    }
-    approved_cases = {
-        row.get("case_id"): row
+    approved_cases = [
+        row
         for row in case_rows
         if (
             isinstance(row, dict)
             and isinstance(row.get("case_id"), str)
             and row.get("public_status") == "APPROVED"
         )
-    }
+    ]
     errors: list[str] = []
-    for case_id, case in approved_cases.items():
-        record = records.get(case_id)
-        if not record or record.get("state") != "PUBLISHED":
-            errors.append(f"approved_case_without_permissioned_proof:{case_id}")
-            continue
-        if record.get("permission_class") != case.get("permission_class"):
-            errors.append(f"approved_case_permission_class_mismatch:{case_id}")
-        if case.get("client_authorized") is not True:
-            errors.append(f"approved_case_not_client_authorized:{case_id}")
-    for proof_id, record in records.items():
-        if record.get("state") == "PUBLISHED" and proof_id not in approved_cases:
-            errors.append(f"published_proof_not_registered_case:{proof_id}")
-
-    approved_paths = {
-        row.get("path")
+    for case in approved_cases:
+        errors.append(f"legacy_cases_registry_real_proof_forbidden:{case.get('case_id')}")
+    approved_surfaces = [
+        row
         for row in surface_rows
         if (
             isinstance(row, dict)
             and isinstance(row.get("path"), str)
             and row.get("public_status") == "APPROVED"
         )
-    }
-    approved_surface_rows = {
-        row.get("path"): row
-        for row in surface_rows
-        if (
-            isinstance(row, dict)
-            and isinstance(row.get("path"), str)
-            and row.get("public_status") == "APPROVED"
-        )
-    }
-    proof_paths = {
-        urlparse(str((row.get("publication") or {}).get("public_url") or "")).path
-        for row in records.values()
-        if row.get("state") == "PUBLISHED"
-    }
-    for path in sorted((approved_paths - proof_paths) - {None}):
-        errors.append(f"approved_surface_without_permissioned_proof:{path}")
-    for path in sorted((proof_paths - approved_paths) - {""}):
-        errors.append(f"published_proof_surface_not_approved:{path}")
-    for proof_id, record in records.items():
-        if record.get("state") != "PUBLISHED":
-            continue
-        path = urlparse(str((record.get("publication") or {}).get("public_url") or "")).path
-        surface = approved_surface_rows.get(path) or {}
-        if surface.get("permission_class") != record.get("permission_class"):
-            errors.append(f"approved_surface_permission_class_mismatch:{path}")
-        if surface.get("client_authorized") is not True:
-            errors.append(f"approved_surface_not_client_authorized:{path}")
+    ]
+    for surface in approved_surfaces:
+        errors.append(f"legacy_cases_registry_real_proof_surface_forbidden:{surface.get('path')}")
     return _dedupe(errors)
 
 

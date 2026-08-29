@@ -130,7 +130,7 @@ def test_versioned_policy_and_empty_registry_are_valid():
     result = audit()
     assert result["ok"] is True
     assert result["approved_public_proof_count"] == 0
-    assert result["next_test"] == "WAIT_FIRST_REAL_DELIVERY"
+    assert result["next_test"] == "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF"
     assert registry["records"] == []
     assert registry["state"] == "NO_APPROVED_CLIENT_PROOF"
 
@@ -142,7 +142,8 @@ def test_first_real_delivery_is_named_next_test_not_fabricated_proof():
         "id": "tiago-jun-sasaki",
         "name": "Engº Tiago Sasaki",
     }
-    assert next_test["status"] == "WAIT_FIRST_REAL_DELIVERY"
+    assert next_test["status"] == "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+    assert next_test["blocker"] == "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF"
     assert "fabricated_delivery" in next_test["forbidden_shortcuts"]
     assert "approval_by_agent_ci_or_bot" in next_test["forbidden_shortcuts"]
     assert "raw_consent_or_client_pii_committed" in next_test["forbidden_shortcuts"]
@@ -392,7 +393,8 @@ def test_registry_rejects_copied_private_refs_and_public_urls():
     registry["records"] = [first, second]
     registry["approved_public_proof_count"] = 2
     registry["state"] = "HAS_APPROVED_CLIENT_PROOF"
-    registry["next_test"]["status"] = "FIRST_REAL_DELIVERY_PROOF_COMPLETE"
+    registry["next_test"]["status"] = "COMPLETE:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+    registry["next_test"]["blocker"] = None
     errors = validate_registry(registry)
     assert any(code.startswith("registry_duplicate_receipt_ref:") for code in errors)
     assert any(code.startswith("registry_duplicate_approval_ref:") for code in errors)
@@ -440,8 +442,20 @@ def test_existing_cases_registry_cannot_bypass_permissioned_proof():
         ],
     }
     errors = validate_cases_alignment(load_registry(), fake_cases)
-    assert "approved_case_without_permissioned_proof:case-without-proof" in errors
-    assert "approved_surface_without_permissioned_proof:/casos/case-without-proof/" in errors
+    assert "legacy_cases_registry_real_proof_forbidden:case-without-proof" in errors
+    assert "legacy_cases_registry_real_proof_surface_forbidden:/casos/case-without-proof/" in errors
+
+
+def test_published_proof_has_one_record_entrypoint_not_three() -> None:
+    record, _html = _synthetic_publishable()
+    registry = load_registry()
+    registry["records"] = [record]
+    registry["approved_public_proof_count"] = 1
+    registry["state"] = "HAS_APPROVED_CLIENT_PROOF"
+    registry["next_test"]["status"] = "COMPLETE:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+    registry["next_test"]["blocker"] = None
+    legacy = {"cases": [], "published_surfaces": []}
+    assert validate_cases_alignment(registry, legacy) == []
 
 
 def test_evidence_record_rejects_missing_authorization_expired_authorization_and_missing_fonte():
@@ -508,25 +522,31 @@ def test_collection_kit_exists_as_operator_templates_not_public_cases():
     assert kit_routes == []
 
 
-def test_casos_pages_label_demonstrativo_in_title_h1_schema_and_cta():
+def test_casos_pages_label_synthetic_or_demonstrative_in_title_h1_schema_and_cta():
     hub = (ROOT / "casos" / "index.html").read_text(encoding="utf-8")
     assert "Exemplos de entrega" in hub
     assert "Resultados de clientes" in hub
     assert "<h1>Exemplos de entrega (demonstrativos)</h1>" in hub
     assert "demonstrativo" in hub.lower()
     pages = list((ROOT / "casos").glob("*/index.html")) + [ROOT / "casos" / "index.html"]
+    audit_config = json.loads(
+        (ROOT / "data" / "commercial" / "real-proof-registry.v1.json").read_text(encoding="utf-8")
+    )
+    explicit_label = re.compile(
+        audit_config["synthetic_surfaces"]["explicit_label_pattern"], flags=re.I
+    )
     for page in pages:
         html = page.read_text(encoding="utf-8")
         title = re.search(r"<title>(.*?)</title>", html, flags=re.I | re.S)
         h1 = re.search(r"<h1>(.*?)</h1>", html, flags=re.I | re.S)
-        assert title and "demonstrativo" in title.group(1).lower(), page
-        assert h1 and "demonstrativo" in re.sub(r"<[^>]+>", "", h1.group(1)).lower(), page
-        assert "demonstrativo" in html.lower()
+        assert title and explicit_label.search(title.group(1)), page
+        assert h1 and explicit_label.search(re.sub(r"<[^>]+>", "", h1.group(1))), page
+        assert explicit_label.search(html)
         ld = re.search(r'<script type="application/ld\+json">(.*?)</script>', html, flags=re.I | re.S)
-        assert ld and "demonstrativ" in ld.group(1).lower(), page
+        assert ld and explicit_label.search(ld.group(1)), page
         main = re.search(r"<main\b[^>]*>(.*?)</main>", html, flags=re.I | re.S)
         assert main, page
-        assert re.search(r"demonstrativo", main.group(1), flags=re.I), page
+        assert explicit_label.search(main.group(1)), page
         types = set()
         for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, flags=re.I | re.S):
             payload = json.loads(block)

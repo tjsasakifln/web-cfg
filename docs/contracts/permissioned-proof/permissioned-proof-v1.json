@@ -9,6 +9,8 @@
     "public_contract_owner": "web-cfg",
     "observed_outcome_owner": "warmbly",
     "canonical_public_domain": "confenge.com.br",
+    "canonical_record_registry": "data/site/permissioned-proof-registry.json#records",
+    "other_editable_proof_record_registries": "FORBIDDEN",
     "private_consent_receipt_store": "OWNER_CONTROLLED_PRIVATE_STORE",
     "public_client_pii": "FORBIDDEN",
     "publication_approver": {

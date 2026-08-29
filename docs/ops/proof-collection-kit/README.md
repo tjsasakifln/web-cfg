@@ -4,9 +4,11 @@ Pacote operacional, não página pública. Estes modelos preparam a primeira
 autorização real de um titular. Nenhum deles é case de cliente, review,
 logo ou resultado publicado.
 
-Enquanto `data/commercial/real-proof-registry.v1.json` permanecer
-`BLOCKED_EXTERNAL` e `data/site/permissioned-proof-registry.json`
-`NO_APPROVED_CLIENT_PROOF`, o site publica zero prova de cliente.
+`data/site/permissioned-proof-registry.json#records` é o único ponto de
+entrada de uma prova real. O manifesto comercial apenas audita essa fonte e
+nunca recebe uma segunda cópia. Enquanto o registro estiver vazio, o residual
+é `BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF` e o site publica zero
+prova de cliente.
 
 ## Conteúdo
 
@@ -25,3 +27,5 @@ Enquanto `data/commercial/real-proof-registry.v1.json` permanecer
   expiração.
 - Sem autorização ativa, sem fonte ou com autorização vencida, o gate
   reprova. Não preencher com sintético.
+- Não iniciar outreach nem solicitar depoimento automaticamente. Este kit só é
+  usado depois que uma autorização real chegar por processo humano.

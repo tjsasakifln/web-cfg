@@ -187,13 +187,11 @@
       "id": "person-sameAs",
       "entity": "Person",
       "field": "sameAs",
-      "value": [
-        "https://github.com/tjsasakifln"
-      ],
-      "status": "SELF_DECLARED",
-      "basis": "self-published JSON-LD; no third-party verification",
+      "value": null,
+      "status": "UNKNOWN",
+      "basis": "absent_jsonld",
       "third_party_verified": false,
-      "notes": "GitHub profile is owned and published by the subject. Self-declared, never a third-party identity verification.",
+      "notes": "No public Person sameAs profiles are classified. Do not invent.",
       "as_of": "2026-08-19"
     },
     {

@@ -131,7 +131,7 @@ for (const width of widths) {
   if (metrics.documentOverflow) errors.push("document_overflow");
   if (!metrics.heroCtaVisible || metrics.heroCtaBottom > height) errors.push("hero_cta_below_fold");
   if (!metrics.heroResultVisible || metrics.heroResultBottom > height) errors.push("hero_result_below_fold");
-  if (metrics.h1Text !== "Demonstrativo. Escolha quais licitações disputar e quais recusar.") errors.push("hero_promise");
+  if (metrics.h1Text !== "Modelo sintético: licitações a disputar ou recusar.") errors.push("hero_promise");
   if (!metrics.deliverablesBeforeExample) errors.push("offer_before_example");
   if (metrics.h1Count !== 1 || metrics.reportSections < 8) errors.push("report_structure");
   if (metrics.orderEntryCtas !== 5 || metrics.whatsappCtas !== 0) errors.push("order_entry_ctas");

@@ -15,7 +15,8 @@ Esta autorização:
 - não cobre contato comercial, pagamento ou aceite de entrega;
 - não autoriza Review, AggregateRating, logotipo, depoimento ou nota;
 - pode ser revogada a qualquer momento pelo canal privado abaixo;
-- expira em [AAAA-MM-DD], salvo revogação anterior.
+- expira em [AAAA-MM-DDTHH:MM:SSZ], salvo revogação anterior. Data sem hora ou
+  sem `Z` não satisfaz o contrato.
 
 ## Escopo permitido
 
@@ -28,7 +29,7 @@ Esta autorização:
 
 - Aprovador humano: [nome]
 - Papel: [papel]
-- Data: [AAAA-MM-DD]
+- Data: [AAAA-MM-DDTHH:MM:SSZ]
 - Material aprovado: hash SHA-256 ou versão [preencher só no estoque privado]
 
 Assinatura / aceite: [estoque privado]
