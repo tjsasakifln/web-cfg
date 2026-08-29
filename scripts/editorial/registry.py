@@ -13,6 +13,7 @@ import re
 import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
+from scripts.pseo.reproducible import build_timestamp
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -119,7 +120,7 @@ BLOCKED_REVIEWER_PATTERNS = (
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return build_timestamp()
 
 
 def _normalise(value: Any) -> Any:

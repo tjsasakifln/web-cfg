@@ -16,6 +16,7 @@ import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
+from scripts.pseo.reproducible import build_timestamp
 from typing import Any
 from urllib.parse import urlparse
 
@@ -93,7 +94,7 @@ FIRST_COHORT_CONTEXT: dict[str, dict[str, str]] = {
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return build_timestamp()
 
 
 def _git_sha() -> str:

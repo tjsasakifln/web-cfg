@@ -13,6 +13,7 @@ import json
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from scripts.pseo.reproducible import build_timestamp
 from typing import Any
 from xml.sax.saxutils import escape as xml_escape
 
@@ -45,7 +46,7 @@ SITE = "https://confenge.com.br"
 
 
 def _now_date() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    return build_timestamp()[:10]
 
 
 def load_page_defs() -> list[dict[str, Any]]:
@@ -197,7 +198,7 @@ def _auto_progress_to_editorial_reviewed(
                 stored["status"] = "REJECTED"
                 stored.setdefault("history", []).append(
                     {
-                        "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "at": build_timestamp(),
                         "event": "REJECTED",
                         "reason": "jurisprudence_source_incomplete",
                     }
@@ -263,7 +264,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
                 sp["status"] = "REJECTED"
                 sp.setdefault("history", []).append(
                     {
-                        "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "at": build_timestamp(),
                         "event": "REJECTED",
                         "reason": "official_sumula_text_date_url_not_verified",
                     }
@@ -281,7 +282,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
 )
                 stored_outside.setdefault("history", []).append(
                     {
-                        "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "at": build_timestamp(),
                         "event": "outside_first_cohort_indexing_blocked",
                         "to": stored_outside["status"],
                     }
@@ -421,7 +422,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
 
     report = {
         "ok": not sm_issues,
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at": build_timestamp(),
         "page_defs": len(defs),
         "indexable_count": len(indexable),
         "indexable_urls": page_idx,
