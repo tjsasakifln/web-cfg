@@ -20,7 +20,7 @@
   },
   "first_party_baseline": {
     "required": true,
-    "collector": "/.netlify/functions/collect",
+    "collector": "/api/web/collect",
     "source": "CONFENGE_WEB",
     "pii_policy": "aggregate_allowlist_empty",
     "third_party_cookie_required": false

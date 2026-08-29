@@ -229,24 +229,24 @@ assert(
   publishedSurface,
 );
 assert(
-  "primary_comparison_is_d01_d08",
-  JSON.stringify(publishedSurface.primary_comparison_ids) === JSON.stringify(expectedIds.slice(0, 8)),
-  publishedSurface.primary_comparison_ids,
+  "primary_offers_are_d01_d08",
+  JSON.stringify(publishedSurface.primary_offer_ids) === JSON.stringify(expectedIds.slice(0, 8)),
+  publishedSurface.primary_offer_ids,
 );
 assert("legacy_surface_declares_8_names", legacyPublishedNames.length === 8, legacyPublishedNames.length);
 
-const publishedNames = names.filter((offer) => publishedSurface.primary_comparison_ids.includes(offer.deliverable_id));
-const missingCanonicalOnPage = publishedNames.filter((offer) => !entregasHtml.includes(offer.public_name_pt_br));
-assert("canonical_names_visible_8_of_8", missingCanonicalOnPage.length === 0, missingCanonicalOnPage.map((offer) => offer.deliverable_id));
-const missingValueLinesOnPage = publishedNames.filter((offer) => !entregasHtml.includes(offer.value_line_pt_br));
-assert("value_lines_visible_8_of_8", missingValueLinesOnPage.length === 0, missingValueLinesOnPage.map((offer) => offer.deliverable_id));
-const vitrineHtml = (entregasHtml.match(/<!-- GENERATED:PUBLIC-CATALOG:START -->[\s\S]*?<!-- GENERATED:PUBLIC-CATALOG:END -->/) || [""])[0];
-const backlogNamesOnPage = names.filter((offer) => !publishedSurface.primary_comparison_ids.includes(offer.deliverable_id) && vitrineHtml.includes(offer.public_name_pt_br));
-assert("backlog_names_not_sold_on_vitrine", backlogNamesOnPage.length === 0, backlogNamesOnPage.map((offer) => offer.deliverable_id));
-const compareBody = entregasHtml.match(/<table class="compare-table">[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/)?.[1] || "";
+const publishedNames = names.filter((offer) => publishedSurface.primary_offer_ids.includes(offer.deliverable_id));
+const primaryBody = entregasHtml.match(/<div class="vitrine-items">([\s\S]*?)<dl class="compare-ladder-figures">/)?.[1] || "";
+const missingCanonicalOnPrimarySurface = publishedNames.filter((offer) => !primaryBody.includes(offer.public_name_pt_br));
+assert("canonical_names_on_primary_surface_8_of_8", missingCanonicalOnPrimarySurface.length === 0, missingCanonicalOnPrimarySurface.map((offer) => offer.deliverable_id));
+const backlogNamesOnPrimarySurface = names.filter((offer) => !publishedSurface.primary_offer_ids.includes(offer.deliverable_id) && primaryBody.includes(offer.public_name_pt_br));
+assert("backlog_names_not_sold_on_vitrine", backlogNamesOnPrimarySurface.length === 0, backlogNamesOnPrimarySurface.map((offer) => offer.deliverable_id));
+const capabilityRoll = entregasHtml.match(/<section class="capability-roll"[\s\S]*?<\/section>/)?.[0] || "";
+assert("all_54_canonical_names_findable_in_taxative_roll", names.every((offer) => capabilityRoll.includes(offer.public_name_pt_br)), names.filter((offer) => !capabilityRoll.includes(offer.public_name_pt_br)).map((offer) => offer.deliverable_id));
 const primaryNames = names.slice(0, 8).map((offer) => offer.public_name_pt_br);
-assert("primary_comparison_uses_canonical_names", primaryNames.every((name) => compareBody.includes(name)), primaryNames.filter((name) => !compareBody.includes(name)));
-assert("legacy_names_are_not_primary_labels", legacyPublishedNames.every((name) => !compareBody.includes(name)), legacyPublishedNames.filter((name) => compareBody.includes(name)));
+const primaryHeadings = [...primaryBody.matchAll(/<h2[^>]*>([^<]+)<\/h2>/g)].map((match) => match[1]);
+assert("primary_cards_use_canonical_names", primaryNames.every((name) => primaryHeadings.includes(name)), primaryNames.filter((name) => !primaryHeadings.includes(name)));
+assert("legacy_names_are_not_primary_labels", legacyPublishedNames.every((name) => !primaryHeadings.includes(name)), legacyPublishedNames.filter((name) => primaryHeadings.includes(name)));
 
 // e cada nome publicado é alcançável pelo registry, como canônico ou como alias
 const aliasIndex = new Map();

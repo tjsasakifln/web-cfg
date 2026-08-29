@@ -23,6 +23,7 @@ from scripts.site.authority import (  # noqa: E402
     load_governance,
     write_sealed_editorial_policy,
 )
+from scripts.site.responsive_text import escape_prose_with_opaque_tokens  # noqa: E402
 
 UPDATED_BR = {
     "2026-08-15": "15 de agosto de 2026",
@@ -217,7 +218,7 @@ def _historico_body(policy: dict) -> str:
             "<li>"
             f'<a href="{_esc(href)}">Versão {_esc(ver)}</a>'
             f" · vigente em {_esc(entry.get('effective_at') or '')}. "
-            f"{_esc(entry.get('summary') or '')}"
+            f"{escape_prose_with_opaque_tokens(entry.get('summary') or '')}"
             "</li>"
         )
     return (

@@ -293,7 +293,12 @@ print(out.read_text(encoding="utf-8")[:200])
             if (ROOT / "inteligencia" / "index.html").exists():
                 from scripts.pseo.public_artifact import assemble_public_artifact
 
-                rep = assemble_public_artifact(ROOT)
+                # Keep the exact production-built _site intact for the browser
+                # gates that run later in the same npm test process.
+                rep = assemble_public_artifact(
+                    ROOT,
+                    dest_name=str(td_path / "public-artifact"),
+                )
                 self.assertTrue(rep.get("ok"), rep)
 
             # Record whether full validate_snapshot on fixture export succeeded

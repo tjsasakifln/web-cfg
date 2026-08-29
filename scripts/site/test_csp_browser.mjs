@@ -11,7 +11,16 @@ import { resolveChromePath } from "./resolve_chrome.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const site = path.join(root, "_site");
 const headers = fs.readFileSync(path.join(root, "_headers"), "utf8");
-const csp = headers.match(/^\s*Content-Security-Policy:\s*(.+)$/mi)?.[1]?.trim() || "";
+const requestedBase = String(process.argv[2] || "").trim();
+const liveBase = requestedBase ? new URL(requestedBase).origin : "";
+if (liveBase && liveBase !== "https://confenge.com.br") {
+  console.error("CSP_BROWSER_INVALID_LIVE_ORIGIN", liveBase);
+  process.exit(1);
+}
+const liveResponse = liveBase ? await fetch(`${liveBase}/`, { redirect: "error" }) : null;
+const csp = liveResponse
+  ? String(liveResponse.headers.get("content-security-policy") || "").trim()
+  : headers.match(/^\s*Content-Security-Policy:\s*(.+)$/mi)?.[1]?.trim() || "";
 // The canary server is loopback HTTP. Exercise every enforcement directive
 // except the production-only HTTP→HTTPS upgrade, which would make local asset
 // URLs unreachable before script-src itself can be tested.
@@ -20,6 +29,13 @@ const browserCsp = csp
   .map((part) => part.trim())
   .filter((part) => part.toLowerCase() !== "upgrade-insecure-requests")
   .join("; ");
+const directiveSources = (name) => {
+  const directive = csp
+    .split(";")
+    .map((part) => part.trim().split(/\s+/))
+    .find((tokens) => tokens[0]?.toLowerCase() === name);
+  return new Set(directive?.slice(1) || []);
+};
 const required = process.env.CSP_BROWSER_REQUIRED === "1" || Boolean(process.env.CI);
 const routes = [
   "/",
@@ -77,27 +93,29 @@ function startServer() {
   });
 }
 
-if (!csp || csp.includes("script-src 'self' 'unsafe-inline'")) {
+const scriptUnsafeInline = directiveSources("script-src").has("'unsafe-inline'");
+const styleUnsafeInline = directiveSources("style-src").has("'unsafe-inline'");
+if (!csp || scriptUnsafeInline || (!liveBase && styleUnsafeInline)) {
   console.error("CSP_BROWSER_INVALID_HEADER");
   process.exit(1);
 }
-if (!fs.existsSync(path.join(site, "index.html"))) {
+if (!liveBase && !fs.existsSync(path.join(site, "index.html"))) {
   console.error("CSP_BROWSER_ARTIFACT_MISSING run npm run build:site first");
   process.exit(1);
 }
 
-const server = await startServer();
-const address = server.address();
-const base = `http://127.0.0.1:${address.port}`;
+const server = liveBase ? null : await startServer();
+const address = server?.address();
+const base = liveBase || `http://127.0.0.1:${address.port}`;
 let browser;
 try {
   browser = await puppeteer.launch({
     executablePath: resolveChromePath(),
     headless: true,
-    args: ["--no-sandbox", "--disable-gpu"],
+    args: ["--no-sandbox", "--disable-gpu", "--disable-quic"],
   });
 } catch (error) {
-  server.close();
+  server?.close();
   console.error("CSP_BROWSER_UNAVAILABLE", String(error?.message || error).slice(0, 200));
   process.exit(required ? 2 : 0);
 }
@@ -148,11 +166,15 @@ try {
   }
 } finally {
   await browser.close();
-  server.close();
+  server?.close();
 }
 
 if (failures.length) {
   failures.forEach((failure) => console.error("CSP_BROWSER_FAIL", failure));
   process.exit(1);
 }
-console.log(`CSP_BROWSER_OK routes=${routes.length} violations=0 turnstile=allowed youtube_nocookie=allowed`);
+console.log(
+  `CSP_BROWSER_OK mode=${liveBase ? "live" : "artifact"} routes=${routes.length} `
+  + `violations=0 style_inline=${styleUnsafeInline ? "allowed" : "blocked"} `
+  + "turnstile=allowed youtube_nocookie=allowed",
+);

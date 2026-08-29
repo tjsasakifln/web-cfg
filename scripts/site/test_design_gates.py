@@ -231,22 +231,28 @@ def test_section_archetype_gate_covers_more_than_the_home():
         assert primaries <= 4, f"{relative}: {primaries} primary CTAs"
 
 
-def test_deliverables_library_declares_its_hierarchy_in_copy():
-    """The most promoted item must be explained, not merely enlarged."""
+def test_deliverables_library_declares_offer_and_capability_hierarchy_in_copy():
+    """Eight buying units and the 54-item reference roll must remain distinct."""
     path = ROOT / "entregas" / "index.html"
     html = path.read_text(encoding="utf-8")
     blocks = narrative_blocks(html)
     by_archetype = Counter(b["archetype"] for b in blocks)
-    assert by_archetype["compare_ladder"] == 1, by_archetype
     assert by_archetype["catalog_index"] == 1, by_archetype
+    assert by_archetype["reading_method"] == 1, by_archetype
 
     text = re.sub(r"<[^>]+>", " ", html)
     text = re.sub(r"\s+", " ", text)
-    assert "Por que abre a biblioteca" in text, "entry step must declare why it opens the page"
-    assert "único sem o crédito de 60 dias" in text
+    assert "8 ofertas publicadas" in text
+    assert "54 capacidades do rol taxativo" in text
+    assert "não afirma que existem 54 ofertas prontas" in text
+    assert "Cada card reúne situação, entrada, limite, saída, crédito e próxima ação sem repetir a oferta em outra tabela" in text
 
     cards = re.findall(r'<article class="vitrine-item[\s\S]*?</article>', html)
     assert len(cards) == 8, len(cards)
+    assert all(
+        all(f"<dt>{label}</dt>" in card for label in ("Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"))
+        for card in cards
+    )
     lengths = [
         len(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", card)).strip())
         for card in cards
@@ -1026,6 +1032,21 @@ def test_accessibility_label_gate_rejects_id_only_fields():
     )
     assert has_accessible_label('<input id="email" aria-label="E-mail" type="email">', "email")
     assert has_accessible_label('<label>E-mail <input name="email" type="email"></label>', "email")
+
+
+def test_canonical_palette_keeps_aa_contrast_margin():
+    """Token pairings stay at least 0.5:1 above normal-text WCAG AA."""
+    from scripts.site.audit_accessibility import (
+        AA_CONTRAST_WITH_MARGIN,
+        contrast_contract,
+        contrast_ratio,
+    )
+
+    failures, evidence = contrast_contract(ROOT)
+    assert not failures, failures
+    assert len(evidence) >= 7, evidence
+    assert AA_CONTRAST_WITH_MARGIN == 5.0
+    assert contrast_ratio("#777777", "#ffffff") < AA_CONTRAST_WITH_MARGIN
 
 
 def _srgb_channel(value: float) -> float:

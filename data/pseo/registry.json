@@ -12,7 +12,7 @@
     "reject": 18
   },
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-  "generated_at": "2026-08-24",
+  "generated_at": "2026-08-29",
   "human_review_policy": {
     "indexable_states": [
       "APPROVED",
@@ -73,7 +73,7 @@
       "indexability_score": 77,
       "indexability_score_alias": 77,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "contracts<15"
       ],
@@ -183,7 +183,7 @@
       "indexability_score": 71,
       "indexability_score_alias": 71,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "contracts<15"
       ],
@@ -295,7 +295,7 @@
       "indexability_score": 75,
       "indexability_score_alias": 75,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "contracts<15"
       ],
@@ -405,7 +405,7 @@
       "indexability_score": 75,
       "indexability_score_alias": 75,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "contracts<15"
       ],
@@ -531,7 +531,7 @@
       "indexability_score": 83,
       "indexability_score_alias": 83,
       "intent": "avaliar_orgao_comprador",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "agency_name_ingestion_prefix",
         "suppliers<3",
@@ -646,7 +646,7 @@
       "indexability_score": 75,
       "indexability_score_alias": 75,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "buyers<3",
         "temporal_span_days<90",
@@ -762,7 +762,7 @@
       "indexability_score": 73,
       "indexability_score_alias": 73,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "temporal_span_days<90",
         "no_comparison_group"
@@ -874,7 +874,7 @@
       "indexability_score": 72,
       "indexability_score_alias": 72,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "obs<15",
         "primary_contracts<15",
@@ -991,7 +991,7 @@
       "indexability_score": 71,
       "indexability_score_alias": 71,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "obs<15",
         "primary_contracts<15",
@@ -1105,7 +1105,7 @@
       "indexability_score": 71,
       "indexability_score_alias": 71,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "obs<15",
         "primary_contracts<15",
@@ -1217,7 +1217,7 @@
       "indexability_score": 73,
       "indexability_score_alias": 73,
       "intent": "compreender_concorrencia",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "suppliers<3"
       ],
@@ -1324,7 +1324,7 @@
       "indexability_score": 77,
       "indexability_score_alias": 77,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "duplicate_items=1",
         "duplicate_rate>0",
@@ -1453,7 +1453,7 @@
       "indexability_score": 70,
       "indexability_score_alias": 70,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "duplicate_items=2",
         "duplicate_rate>0",
@@ -1568,7 +1568,7 @@
       "indexability_score": 65,
       "indexability_score_alias": 65,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "contract_url_as_opportunity=2",
         "radar_stale_hours>72"
@@ -1672,7 +1672,7 @@
       "indexability_score": 62,
       "indexability_score_alias": 62,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "contract_url_as_opportunity=2",
         "radar_stale_hours>72"
@@ -1781,7 +1781,7 @@
       "indexability_score": 62,
       "indexability_score_alias": 62,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "contract_url_as_opportunity=2",
         "radar_stale_hours>72"
@@ -1891,7 +1891,7 @@
       "indexability_score": 62,
       "indexability_score_alias": 62,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "contract_url_as_opportunity=4",
         "radar_stale_hours>72"
@@ -2000,7 +2000,7 @@
       "indexability_score": 59,
       "indexability_score_alias": 59,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [
         "contract_url_as_opportunity=1",
         "radar_stale_hours>72"
@@ -2119,7 +2119,7 @@
       "indexability_score": 86,
       "indexability_score_alias": 86,
       "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-orcamento-edital",
@@ -2253,7 +2253,7 @@
       "indexability_score": 86,
       "indexability_score_alias": 86,
       "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-sinapi-sicro",
@@ -2376,7 +2376,7 @@
       "indexability_score": 76,
       "indexability_score_alias": 76,
       "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [],
       "observation_count": 22,
       "page_id": "prob-medicao-glosa",
@@ -2493,7 +2493,7 @@
       "indexability_score": 86,
       "indexability_score_alias": 86,
       "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [],
       "observation_count": 48,
       "page_id": "prob-aditivos-margem",
@@ -2615,7 +2615,7 @@
       "indexability_score": 78,
       "indexability_score_alias": 78,
       "intent": "proteger_margem_proposta_contrato",
-      "last_material_change": "2026-08-24",
+      "last_material_change": "2026-08-29",
       "mandatory_fail": [],
       "observation_count": 28,
       "page_id": "prob-reequilibrio",
