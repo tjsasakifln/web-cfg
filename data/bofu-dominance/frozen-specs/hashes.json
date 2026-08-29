@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "2884142553bb0c97bc427e53f878b3156535479f",
+  "baseline_commit": "e7a701a1eb3ffc9b3da14b6546814db62edb1335",
   "recaptured_at": "2026-08-29",
-  "recapture_reason": "Merge recapture pinned to 2884142553bb0c97bc427e53f878b3156535479f, the commit whose protected-path bytes these hashes attest. Hashes recomputed from the merged tree, not copied from either side of the conflict. Drifted non-rendering collateral: none. The six protected BOFU pillar HTML files and all rendering collateral are byte-identical to origin/main, verified by recomputed sha256. html_mutation remains false and the #291 unlock plan is untouched.",
+  "recapture_reason": "Merge recapture pinned to e7a701a1eb3ffc9b3da14b6546814db62edb1335, the commit whose protected-path bytes these hashes attest. Hashes recomputed from the merged tree, not copied from either side of the conflict. Drifted collateral: styles.css. Rendering collateral recaptured: styles.css; every frozen pillar HTML is byte-identical to origin/main, so no frozen page changes how it renders. The six protected BOFU pillar HTML files are byte-identical to origin/main, verified by recomputed sha256. html_mutation remains false and the #291 unlock plan is untouched.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -21,7 +21,7 @@
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "b5828ec2e88ff6df78dbd2677b33816fa56ab1b5a13377e36d71616112056432",
     "script.js": "7afa197849b48d40eed8fc3dcd3a013ef019a12f180e000907a559cd5fb687fc",
-    "styles.css": "a6e324b6133853721609f203b9bb3d954eb0f49c55ad5274a1eccbeb1a20c48b",
+    "styles.css": "24003f14e953846a991d1537abeb2d31f2c6fc07e3862b2c9b4eda775d49e3be",
     "styles-tokens.css": "8908187527c8120731dc8584eb11c36ae41e66f5cf411dcd431251e1b52cb01d",
     "styles-tools.css": "cfe5e81785c54e8a18601c2a97308dfaf744d0b60596d2acc34ec3ad7e015162",
     "robots.txt": "2be984de9b51eb6d201b8210d727353f014cf52bea1058eabf3abedb9cad6f57",

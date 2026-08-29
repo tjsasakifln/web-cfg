@@ -58,6 +58,22 @@ def test_empty_sections_are_omitted():
     assert 'id="fatos"' in html
 
 
+def test_prose_marks_only_opaque_contract_tokens_for_safe_wrapping():
+    digest = "64a238e6094f4d093f1ee970820fd277bcd34a66457d776a59225219b8e77604"
+    rec = complete_live_record(
+        body=(
+            "A Superintendencia publicou https://pncp.gov.br/api/contratos/2026/69 "
+            f"com SHA-256 {digest} e publication_authorization=false."
+        )
+    )
+    _, _, html = _html(rec)
+
+    assert '<span data-opaque-token>https://pncp.gov.br/api/contratos/2026/69</span>' in html
+    assert f'<span data-opaque-token>{digest}</span>' in html
+    assert '<span data-opaque-token>publication_authorization=false</span>' in html
+    assert '<span data-opaque-token>Superintendencia</span>' not in html
+
+
 def test_schema_is_article_not_casestudy_or_review():
     rec, decision, html = _html()
     blob = json.dumps(extract_jsonld_blocks(html), ensure_ascii=False)

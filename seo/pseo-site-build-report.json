@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "79fe890ae419fac5d70d1cd1147fbf439497184c",
+  "web_cfg_sha": "76371802973753eee4574b4b4912cc7e8730a513",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "cf8a9a5237f0c57fcd5fcf7eb98c99eba7a2084a28c06c9b19363858b0179380",
-  "manifest_hash": "fcffbfb4dfbcf502bd9a82a158144f09be4e5899d8019358c23b65a9b295c5b4",
+  "public_artifact_hash": "eb7f521cc5c10e600c605996763ad386b0e0576a15d4d01466fa641b541ba821",
+  "manifest_hash": "9830b77044eabcfcb8183fbd48588fa7fd26377fc80ecc0f530f7e148fef18e0",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -43,6 +43,12 @@
     "target": "index.html",
     "capture_files": 21,
     "injected_files": 0
+  },
+  "responsive_html": {
+    "files": 263,
+    "currency_files": 61,
+    "opaque_token_files": 238,
+    "marker_files": 54
   },
   "public_artifact": {
     "assembled": true,

@@ -470,6 +470,28 @@ def revision_surfaces(html: str, *, root: Path, slug: str) -> dict[str, str]:
     }
 
 
+_OPAQUE_TOKEN_SPAN = re.compile(
+    r'<span[^>]*\bdata-opaque-token\b[^>]*>(.*?)</span>', re.S
+)
+
+
+def unwrap_opaque_tokens(html: str) -> str:
+    """Drop the presentational wrapper the responsive build adds.
+
+    The build wraps unbreakable tokens in <span data-opaque-token> so they can
+    wrap on narrow screens. That is presentation, not prose, so it must not
+    read as a content change nor hide a decision artifact from this gate.
+    """
+    previous = None
+    while previous != html:
+        previous = html
+        html = _OPAQUE_TOKEN_SPAN.sub(r"\1", html)
+    # The same pass glues currency and units with a non-breaking space so they
+    # never split across lines. That is presentation too: the reader sees one
+    # space, so the gate must compare against one space.
+    return html.replace("&nbsp;", " ").replace("&#160;", " ").replace("\u00a0", " ")
+
+
 def content_fingerprint(html: str) -> str:
     """SHA-256 of the article body with every date token masked.
 
@@ -477,6 +499,7 @@ def content_fingerprint(html: str) -> str:
     five surfaces never moves it, so the gate can tell "the prose changed"
     apart from "the date was restamped".
     """
+    html = unwrap_opaque_tokens(html)
     match = re.search(r'<article class="article-main".*?</article>', html, re.S)
     body = match.group(0) if match else html
     body = _ISO_DATE.sub("@DATE@", body)
@@ -662,7 +685,7 @@ def section_html(html: str, section_id: str) -> str:
 
 def artifact_evidence(html: str, contract: ClusterPageContract) -> dict[str, bool]:
     """Require the whole decision artifact inside #exemplo, not in the shell."""
-    example = section_html(html, "exemplo")
+    example = unwrap_opaque_tokens(section_html(html, "exemplo"))
     return {
         "section_present": bool(example),
         "artifact_present": contract.artifact in example,

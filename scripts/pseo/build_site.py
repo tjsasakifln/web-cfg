@@ -43,6 +43,7 @@ from scripts.pseo.reproducible import (  # noqa: E402
 )
 from scripts.pseo.schema import SnapshotError, validate_snapshot  # noqa: E402
 from scripts.pseo.validate import validate_all  # noqa: E402
+from scripts.site.responsive_text import mark_opaque_tokens_in_html_text  # noqa: E402
 
 
 def _deploy_commit() -> str:
@@ -212,6 +213,166 @@ _TURNSTILE_SLOT_ID_RE = re.compile(
 _TURNSTILE_WIDGET_RE = re.compile(
     r"(?i)\bclass\s*=\s*[\"'][^\"']*\bcf-turnstile\b[^\"']*[\"']"
 )
+_CURRENCY_BREAKABLE_GAP_RE = re.compile(r"R\$[\t\r\n ]+(?=\d)")
+_NO_JS_BOOTSTRAP = "<script>document.documentElement.classList.replace('no-js','js');</script>"
+
+
+def _html_tag_end(html: str, start: int) -> int:
+    """Return the byte-preserving end of one HTML tag, respecting quotes."""
+    quote = ""
+    cursor = start + 1
+    while cursor < len(html):
+        char = html[cursor]
+        if quote:
+            if char == quote:
+                quote = ""
+        elif char in ("'", '"'):
+            quote = char
+        elif char == ">":
+            return cursor + 1
+        cursor += 1
+    return len(html)
+
+
+def _map_visible_html_text(html: str, transform, *, skip_opaque: bool = False) -> str:
+    """Transform text nodes while preserving tags and raw script/style bytes."""
+    output: list[str] = []
+    lower = html.lower()
+    cursor = 0
+    element_stack: list[tuple[str, bool]] = []
+    opaque_depth = 0
+    void_elements = {
+        "area", "base", "br", "col", "embed", "hr", "img", "input",
+        "link", "meta", "param", "source", "track", "wbr",
+    }
+
+    def mapped(text: str) -> str:
+        return text if skip_opaque and opaque_depth else transform(text)
+
+    while cursor < len(html):
+        tag_start = html.find("<", cursor)
+        if tag_start < 0:
+            output.append(mapped(html[cursor:]))
+            break
+        output.append(mapped(html[cursor:tag_start]))
+        if lower.startswith("<!--", tag_start):
+            comment_end = html.find("-->", tag_start + 4)
+            tag_end = len(html) if comment_end < 0 else comment_end + 3
+            output.append(html[tag_start:tag_end])
+            cursor = tag_end
+            continue
+        tag_end = _html_tag_end(html, tag_start)
+        tag = html[tag_start:tag_end]
+        raw_match = re.match(r"(?is)<\s*(script|style)\b", tag)
+        if raw_match:
+            raw_name = raw_match.group(1).lower()
+            close_start = lower.find(f"</{raw_name}", tag_end)
+            if close_start < 0:
+                output.append(html[tag_start:])
+                break
+            close_end = _html_tag_end(html, close_start)
+            output.append(html[tag_start:close_end])
+            cursor = close_end
+            continue
+        output.append(tag)
+        if skip_opaque:
+            closing = re.match(r"(?is)<\s*/\s*([a-z][\w:-]*)", tag)
+            opening = re.match(r"(?is)<\s*([a-z][\w:-]*)", tag)
+            if closing:
+                closing_name = closing.group(1).lower()
+                while element_stack:
+                    name, was_opaque = element_stack.pop()
+                    if was_opaque:
+                        opaque_depth -= 1
+                    if name == closing_name:
+                        break
+            elif opening:
+                opening_name = opening.group(1).lower()
+                is_void = opening_name in void_elements or bool(re.search(r"/\s*>$", tag))
+                if not is_void:
+                    is_opaque = (
+                        opening_name in {"code", "pre", "kbd", "samp"}
+                        or bool(re.search(r"(?is)\bdata-opaque-token(?:\s*=|\s|>)", tag))
+                        or bool(re.search(r"(?is)\bclass\s*=\s*([\"'])[^\"']*\bopaque-token\b", tag))
+                    )
+                    element_stack.append((opening_name, is_opaque))
+                    if is_opaque:
+                        opaque_depth += 1
+        cursor = tag_end
+    return "".join(output)
+
+
+def atomize_visible_currency(html: str) -> str:
+    """Bind `R$` to its number in visible copy without changing source data."""
+    return _map_visible_html_text(
+        html,
+        lambda text: _CURRENCY_BREAKABLE_GAP_RE.sub("R$&nbsp;", text),
+    )
+
+
+def mark_visible_opaque_tokens(html: str) -> str:
+    """Opt machine-like visible tokens into safe mid-token wrapping."""
+    return _map_visible_html_text(
+        html,
+        mark_opaque_tokens_in_html_text,
+        skip_opaque=True,
+    )
+
+
+def ensure_progressive_enhancement_marker(html: str) -> str:
+    """Give every shell a deterministic JS-on and useful JS-off state."""
+    html_match = re.search(r"(?is)<html\b[^>]*>", html)
+    if html_match is None:
+        raise RuntimeError("responsive_html_missing_html_element")
+    html_tag = html_match.group(0)
+    class_match = re.search(r"(?is)\bclass\s*=\s*([\"'])(.*?)\1", html_tag)
+    if class_match:
+        classes = class_match.group(2).split()
+        if "no-js" not in classes:
+            classes.append("no-js")
+            replacement = (
+                html_tag[:class_match.start(2)]
+                + " ".join(classes)
+                + html_tag[class_match.end(2):]
+            )
+            html = html[:html_match.start()] + replacement + html[html_match.end():]
+    else:
+        replacement = html_tag[:-1] + ' class="no-js">'
+        html = html[:html_match.start()] + replacement + html[html_match.end():]
+    if _NO_JS_BOOTSTRAP not in html:
+        head_match = re.search(r"(?is)<head\b[^>]*>", html)
+        if head_match is None:
+            raise RuntimeError("responsive_html_missing_head_element")
+        html = html[:head_match.end()] + "\n" + _NO_JS_BOOTSTRAP + html[head_match.end():]
+    return html
+
+
+def normalize_responsive_public_html(public_root: Path) -> dict[str, int]:
+    """Apply reversible, text-only responsive invariants before artifact hash."""
+    files = 0
+    currency_files = 0
+    opaque_token_files = 0
+    marker_files = 0
+    for path in sorted(public_root.rglob("*.html")):
+        raw = path.read_text(encoding="utf-8")
+        with_currency = atomize_visible_currency(raw)
+        with_opaque_tokens = mark_visible_opaque_tokens(with_currency)
+        normalized = ensure_progressive_enhancement_marker(with_opaque_tokens)
+        files += 1
+        if with_currency != raw:
+            currency_files += 1
+        if with_opaque_tokens != with_currency:
+            opaque_token_files += 1
+        if normalized != with_opaque_tokens:
+            marker_files += 1
+        if normalized != raw:
+            path.write_text(normalized, encoding="utf-8")
+    return {
+        "files": files,
+        "currency_files": currency_files,
+        "opaque_token_files": opaque_token_files,
+        "marker_files": marker_files,
+    }
 
 
 def is_lead_capture_html(html: str) -> bool:
@@ -400,6 +561,12 @@ def main(argv: list[str] | None = None) -> int:
     if not artifact.get("ok"):
         errors.extend(artifact.get("errors") or ["assemble_public_artifact failed"])
 
+    responsive_html: dict[str, int] = {}
+    try:
+        responsive_html = normalize_responsive_public_html(ROOT / PUBLIC_DIR_NAME)
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"responsive_public_html_failed:{exc}")
+
     turnstile_config: dict = {}
     try:
         turnstile_config = configure_turnstile_site_key(ROOT / PUBLIC_DIR_NAME)
@@ -503,6 +670,7 @@ def main(argv: list[str] | None = None) -> int:
         "validate": {"ok": v.get("ok"), "error_count": len(v.get("errors") or [])},
         "visible_parity": parity_summary,
         "turnstile": turnstile_config,
+        "responsive_html": responsive_html,
         "public_artifact": {
             "assembled": True,
             "audit_ok": audit.get("ok"),
