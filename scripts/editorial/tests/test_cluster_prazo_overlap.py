@@ -11,6 +11,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
@@ -86,8 +87,14 @@ def test_one_owner_decision_and_titles_not_near_equivalent():
         for needle in spec["h1_needles"]:
             assert needle.lower() in title.lower(), (route, needle, title)
         if spec.get("robots_must_include"):
-            assert spec["robots_must_include"] in page.robots.lower()
-            assert "follow" in page.robots.lower()
+            directives = {
+                directive.strip().lower()
+                for directive in page.robots.split(",")
+                if directive.strip()
+            }
+            assert spec["robots_must_include"] in directives
+            assert "follow" in directives
+            assert "nofollow" not in directives
         html = html_path_for(route).read_text(encoding="utf-8")
         article = re.search(r"<article[\s\S]*?</article>", html)
         ctas = re.findall(r'<section class="editorial-cta"[\s\S]*?</section>', html)
@@ -118,6 +125,19 @@ def test_stage_links_are_not_two_way_loops():
     assert loops == [], loops
 
 
+def test_legal_effects_are_not_collapsed_into_one_generic_prazo_or_sanction():
+    proof = html_path_for(OWNED_ROUTES[0]).read_text(encoding="utf-8")
+    request = html_path_for(OWNED_ROUTES[1]).read_text(encoding="utf-8")
+    response = html_path_for(OWNED_ROUTES[2]).read_text(encoding="utf-8")
+
+    assert "a causa não fica atribuída à Administração no processo" in proof
+    assert "o atraso continua sendo da obra" not in proof
+    assert "registro da prorrogação automática da vigência" in request
+    assert "Peça apostila" not in request
+    assert "os arts. 156 a 158 disciplinam a sanção e o processo" in response
+    assert "o art. 137 não substitui esse rito" in response
+
+
 def test_sources_show_consulta_date_and_application_limit():
     for route in OWNED_ROUTES:
         html = html_path_for(route).read_text(encoding="utf-8")
@@ -140,6 +160,19 @@ def test_stage_ctas_request_secure_channel_without_fake_upload():
         assert "site não recebe arquivo" in html.lower(), route
         assert not capture_forms_with_file_input(html), route
         assert dishonest_hits(html) == [], (route, dishonest_hits(html))
+        main = re.search(r"<main\b[\s\S]*?</main>", html, re.I)
+        assert main, route
+        communication_ctas = re.findall(
+            r'<a[^>]+href="((?:https://wa\.me/|mailto:)[^"]+)"[^>]*>([^<]+)</a>',
+            main.group(0),
+            re.I,
+        )
+        assert communication_ctas, route
+        for href, label in communication_ctas:
+            assert "canal seguro" in label.lower(), (route, label)
+            decoded_href = unquote(href).lower()
+            assert "canal seguro" in decoded_href, (route, href)
+            assert "site não recebe arquivo" in decoded_href, (route, href)
         for claim in (
             "Enviar a prova de causa",
             "Enviar o dossiê de prorrogação",

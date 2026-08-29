@@ -336,7 +336,7 @@ NATURAL_FAQ: dict[str, list[tuple[str, str]]] = {
     "atraso-obra-culpa-administracao": [
         (
             "O que diferencia culpa da Administração de atraso da obra?",
-            "Atraso da obra é o desvio frente ao cronograma. Culpa da Administração exige dever do órgão, evento contemporâneo e nexo com o caminho crítico. Sem os três, o desvio continua sendo da obra, não do ente.",
+            "Atraso da obra é o desvio frente ao cronograma. Culpa da Administração exige dever do órgão, evento contemporâneo e nexo com o caminho crítico. Sem os três, a causa não fica atribuída à Administração no processo.",
 ),
         (
             "Frente não liberada basta como prova?",

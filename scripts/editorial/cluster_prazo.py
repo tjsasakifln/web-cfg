@@ -107,38 +107,37 @@ class _ArticleText(HTMLParser):
         return bool(self.skip_stack)
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        ad = {k: (v or "") for k, v in attrs}
-        classes = ad.get("class", "")
-        eid = ad.get("id", "")
+        attributes = {key: (value or "") for key, value in attrs}
+        classes = attributes.get("class", "")
+        element_id = attributes.get("id", "")
         if tag == "title":
             self.in_title = True
         if tag == "h1":
             self.in_h1 = True
-        if tag == "link" and "canonical" in ad.get("rel", "").split():
-            self.canonical = ad.get("href", "")
+        if tag == "link" and "canonical" in attributes.get("rel", "").split():
+            self.canonical = attributes.get("href", "")
         if tag == "meta":
-            meta_name = ad.get("name", "").lower()
+            meta_name = attributes.get("name", "").lower()
             if meta_name == "robots":
-                self.robots = ad.get("content", "")
+                self.robots = attributes.get("content", "")
             elif meta_name == "description":
-                self.description = ad.get("content", "")
-        if tag == "a" and ad.get("href"):
-            self.hrefs.append(ad["href"])
+                self.description = attributes.get("content", "")
+        if tag == "a" and attributes.get("href"):
+            self.hrefs.append(attributes["href"])
         shell = (
             tag in _SHELL_TAGS
             or bool(_SHELL_CLASS_RE.search(classes))
-            or bool(_SHELL_CLASS_RE.search(eid))
+            or bool(_SHELL_CLASS_RE.search(element_id))
         )
-        if shell or self._skipping():
-            if shell and not self._skipping():
-                self.skip_stack.append(tag)
-            elif shell and self._skipping():
-                self.skip_stack.append(tag)
+        if shell:
+            self.skip_stack.append(tag)
+            return
+        if self._skipping():
             return
         if tag == "article":
             self.in_article += 1
-        if eid in {"cronologia", "matriz", "exemplo-tecnico", "checklist"}:
-            self.current_id = eid
+        if element_id in {"cronologia", "matriz", "exemplo-tecnico", "checklist"}:
+            self.current_id = element_id
 
     def handle_endtag(self, tag: str) -> None:
         if tag == "title":
@@ -197,10 +196,6 @@ def parse_page(route: str, root: Path | None = None) -> _ArticleText:
     parser.feed(html)
     parser._flush()
     return parser
-
-
-def paragraph_set(parser: _ArticleText) -> set[str]:
-    return {b for b in parser.blocks if b}
 
 
 def substantive_shingles(parser: _ArticleText, size: int = 5) -> set[str]:
@@ -275,3 +270,9 @@ def two_way_loops(root: Path | None = None) -> list[tuple[str, str]]:
             if a_to_b and b_to_a:
                 loops.append((ra, rb))
     return loops
+
+
+if __name__ == "__main__":
+    report = measure_cluster()
+    report["two_way_loops"] = two_way_loops()
+    print(json.dumps(report, ensure_ascii=False, indent=2))
