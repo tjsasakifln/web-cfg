@@ -1,7 +1,7 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "72ed3831ba28c9400627cdc9599aa54e9329e178",
+  "baseline_commit": "90e4503c0b9dbfa7de60ff492b849b7ccffe4336",
   "recaptured_at": "2026-08-29",
   "recapture_reason": "Technical SEO recapture against origin/main 72ed3831ba28c9400627cdc9599aa54e9329e178. script.js is regenerated from js/modules/nav.js and only persists allowlisted data-* attribution on click before clean internal navigation; it changes no layout, copy, canonical or indexability on the protected pillars. robots.txt removes the contradictory analysis-canary Allow while keeping the family noindex/disallowed, and _redirects makes only the legacy services aliases one-hop to their existing canonical hub. The six protected pillar HTML files remain byte-identical, their URL membership and canonicals are unchanged, UI geometry/keyboard/JS-off/CSP checks are green, html_mutation remains false and the #291 unlock plan remains refused and untouched. Rollback is a normal revert of this technical SEO change through protected main.",
   "html_mutation": false,
