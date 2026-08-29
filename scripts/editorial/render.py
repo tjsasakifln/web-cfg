@@ -47,6 +47,9 @@ def _legacy_redirect_destinations() -> dict[str, str]:
 
 
 def _resolved_internal_url(url: str) -> str:
+    # URL transport is a documented non-material operation only for an exact,
+    # inventory-backed canonical migration. The reviewed anchor and context do
+    # not change; redirect/canonical gates own destination equivalence.
     return _legacy_redirect_destinations().get(url, url)
 
 

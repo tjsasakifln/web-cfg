@@ -12,6 +12,8 @@ O `material_hash` cobre os campos editoriais materialmente revisáveis: URL, tí
 
 Mudanças em documentação operacional, relatórios, screenshots, CI, merge commits e código sem efeito material sobre a página não alteram `material_hash`. `commit_sha` pode constar em relatórios para rastreabilidade, mas é informativo: não é comparado ao HEAD e não demanda commit de “pin”.
 
+Uma troca de transporte entre URLs semanticamente equivalentes também não invalida a revisão quando, e somente quando, todas estas condições forem satisfeitas: a URL antiga tiver decisão exata `301`/`301!` no inventário canônico `data/organic/legacy-url-inventory.json`; o destino for interno, de um único hop e for a canonical declarada; título, contexto e posição do link permanecerem iguais; e os gates confirmarem zero backlink interno para o donor nas páginas indexáveis. O renderer pode resolver esse `href` no build sem alterar a identidade editorial. Qualquer mudança de âncora, contexto, intenção, destino sem equivalência registrada ou conteúdo continua material e exige nova revisão.
+
 ## O que invalida
 
 Quando o material de uma página aprovada muda, `upsert_page` muda o estado para `REVIEW_REQUIRED`, remove a aprovação anterior e a exclui de sitemaps/indexação. `mark_indexable` e `indexable_pages` recusam uma aprovação sem schema, hash, revisor humano ou timestamp compatíveis.

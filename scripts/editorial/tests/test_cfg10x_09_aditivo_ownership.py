@@ -20,8 +20,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.editorial.naturalness import jaccard_similarity  # noqa: E402
-from scripts.editorial.registry import approve_human, load_registry  # noqa: E402
+from scripts.editorial.registry import approve_human, load_registry, material_hash  # noqa: E402
+from scripts.editorial.render import _resolved_internal_url  # noqa: E402
 from scripts.site.inbound_gates import is_indexable_html, strip_html  # noqa: E402
+from scripts.site.public_copy_scope import visible_text  # noqa: E402
 
 
 SITE = "https://confenge.com.br"
@@ -198,6 +200,28 @@ def test_legacy_inventory_records_exact_donor_to_owner_migration():
     assert owner["sitemap_membership"] is True
 
 
+def test_inventory_backed_related_link_resolution_is_explicitly_non_material():
+    registry = load_registry()
+    affected = {
+        page["page_id"]: page
+        for page in registry["pages"]
+        if page.get("page_id") in {"guia-checklist-aditivo", "lei-item-novo-desconto"}
+    }
+    assert set(affected) == {"guia-checklist-aditivo", "lei-item-novo-desconto"}
+    for page_id, page in affected.items():
+        before = material_hash(page)
+        related_urls = {item["url"] for item in page.get("related") or []}
+        assert DONOR in related_urls, page_id
+        assert _resolved_internal_url(DONOR) == OWNER
+        assert material_hash(page) == before, page_id
+
+    policy = (ROOT / "docs/editorial/MATERIAL-HASH-GOVERNANCE.md").read_text(
+        encoding="utf-8"
+    )
+    assert "troca de transporte entre URLs semanticamente equivalentes" in policy
+    assert "Qualquer mudança de âncora, contexto, intenção" in policy
+
+
 def test_donor_is_terminally_migrated_and_not_approvable():
     registry = load_registry()
     donor = next(page for page in registry["pages"] if page["page_id"] == "lei-limite-25-50")
@@ -344,3 +368,26 @@ def test_preco_global_and_demolicao_have_exclusive_decision_sections():
     # Scenario exclusivity: each page names a fact pattern the other does not.
     assert "galeria" in preco.lower() or "bueiro" in preco.lower() or "projeto básico" in preco.lower()
     assert "escola" in demo.lower() or "alvenaria" in demo.lower() or "entulho" in demo.lower()
+
+
+@pytest.mark.parametrize("url", (OWNER, PRECO_GLOBAL, DEMOLICAO))
+def test_article_schema_matches_published_article_and_visible_citations(url: str):
+    html = _html(url)
+    article_html = re.search(r"<article\b.*?</article>", html, flags=re.I | re.S)
+    assert article_html, url
+    actual_words = len(visible_text(article_html.group(0)).split())
+    jsonld = re.search(
+        r'<script type="application/ld\+json">(.*?)</script>',
+        html,
+        flags=re.S,
+    )
+    assert jsonld, url
+    graph = json.loads(jsonld.group(1))["@graph"]
+    article = next(node for node in graph if node.get("@type") == "Article")
+    assert article["wordCount"] == actual_words, (
+        url,
+        article["wordCount"],
+        actual_words,
+    )
+    for citation in article.get("citation") or []:
+        assert f'href="{citation}"' in html, (url, citation)
