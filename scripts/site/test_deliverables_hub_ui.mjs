@@ -19,7 +19,7 @@ const siteRoot = !externalBase && fs.existsSync(path.join(artifactRoot, "index.h
   ? artifactRoot
   : root;
 const port = 8795;
-const widths = [320, 390, 768, 1024, 1440];
+const widths = [320, 360, 390, 768, 900, 901, 1024, 1200, 1366, 1440, 1661];
 const screenshotDir = String(process.env.DELIVERABLES_SCREENSHOT_DIR || "").trim();
 const required = process.env.UI_GEOMETRY_REQUIRED === "1" || Boolean(process.env.CI);
 const promotedNav = ["Serviços", "Problemas que resolvemos", "Entregas", "Conteúdos", "Ferramentas", "Especialista"];
@@ -84,7 +84,7 @@ let failed = 0;
 const page = await browser.newPage();
 
 for (const width of widths) {
-  const height = width <= 390 ? 844 : width === 768 ? 1024 : 900;
+  const height = width <= 390 ? 844 : width === 768 ? 1024 : width === 1661 ? 939 : width === 1024 ? 768 : width === 1366 ? 768 : width === 1200 ? 800 : 900;
   await page.setViewport({ width, height, deviceScaleFactor: 1 });
   const response = await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
   const metrics = await page.evaluate(() => {
@@ -128,6 +128,48 @@ for (const width of widths) {
       firstOfferTop: Math.round((document.querySelector("#comparar")?.getBoundingClientRect().top || 0) + window.scrollY),
       mainLinks: document.querySelectorAll("main a").length,
       compareColumns: [...document.querySelectorAll("#comparar .compare-table thead th")].map((th) => th.textContent.trim()),
+      // Real geometry of the price column. styles.css applies `table{overflow-wrap:anywhere}`
+      // sitewide, and `anywhere` participates in intrinsic min-content sizing, so auto table
+      // layout could crush this column until "R$ 1.200" wrapped mid-number. Count actual line
+      // boxes via a Range over the text — element.getClientRects() on a th returns the border
+      // box, not the wrapped lines, so it cannot see this defect.
+      priceGeometry: (() => {
+        const lineCount = (element) => {
+          if (!element) return 0;
+          const range = document.createRange();
+          range.selectNodeContents(element);
+          const tops = [...range.getClientRects()]
+            .filter((rect) => rect.width > 0.5 && rect.height > 0.5)
+            .map((rect) => Math.round(rect.top));
+          return new Set(tops).size;
+        };
+        const header = [...document.querySelectorAll("#comparar .compare-table thead th")]
+          .find((th) => th.textContent.trim() === "Preço") || null;
+        const scroller = document.querySelector("#comparar .compare-scroll");
+        const table = document.querySelector("#comparar .compare-table");
+        return {
+          headerLines: lineCount(header),
+          headerWidth: header ? Math.round(header.getBoundingClientRect().width) : 0,
+          scrollerOverflow: scroller ? scroller.scrollWidth - scroller.clientWidth : 0,
+          tableWidth: table ? Math.round(table.getBoundingClientRect().width) : 0,
+          scrollerWidth: scroller ? Math.round(scroller.clientWidth) : 0,
+          values: [...document.querySelectorAll('#comparar .compare-table tbody td[data-label="Preço"]')]
+            .map((cell) => {
+              const value = cell.querySelector("strong");
+              const cellRect = cell.getBoundingClientRect();
+              const valueRect = value ? value.getBoundingClientRect() : null;
+              const padRight = parseFloat(getComputedStyle(cell).paddingRight) || 0;
+              return {
+                text: value ? value.textContent.replace(/\s+/g, " ").trim() : "",
+                lines: lineCount(value),
+                width: valueRect ? Math.round(valueRect.width) : 0,
+                cellWidth: Math.round(cellRect.width),
+                // true when the value paints past its own cell's content box
+                spills: Boolean(valueRect && valueRect.right > cellRect.right - padRight + 1),
+              };
+            }),
+        };
+      })(),
       navDeliverables: desktopDeliverables?.textContent?.trim() || "",
       navCurrent: desktopDeliverables?.getAttribute("aria-current") || "",
       emptyPlaceholders: document.querySelectorAll("[data-placeholder], .placeholder").length,
@@ -156,6 +198,29 @@ for (const width of widths) {
   if (!metrics.compareVisible || metrics.compareRows !== EXPECTED_EXAMPLES) errors.push("compare_view");
   if (!metrics.compareAboveExamples) errors.push("compare_before_sections");
   if (!metrics.compareScrollFocusable) errors.push("compare_scroll_focus");
+  // Price integrity is a trust surface: a number broken across lines reads as a broken site.
+  const price = metrics.priceGeometry;
+  const priceShape = /^R\$ \d{1,3}(\.\d{3})*$/;
+  const wrappedPrices = price.values.filter((entry) => entry.lines !== 1);
+  const brokenPrices = price.values.filter((entry) => !priceShape.test(entry.text));
+  const spilledPrices = price.values.filter((entry) => entry.spills);
+  if (price.values.length !== EXPECTED_EXAMPLES) errors.push(`price_cells=${price.values.length}`);
+  if (wrappedPrices.length) errors.push(`price_wrapped=${wrappedPrices.map((e) => `${e.text}/${e.lines}L`).join(",")}`);
+  if (brokenPrices.length) errors.push(`price_text_corrupt=${brokenPrices.map((e) => e.text).join(",")}`);
+  if (spilledPrices.length) errors.push(`price_spills_cell=${spilledPrices.map((e) => e.text).join(",")}`);
+  if (width >= 901) {
+    // Desktop keeps a real table: header on one line, every price column wide enough to
+    // hold its own value, and no column starved below the widest price it must show.
+    if (price.headerLines !== 1) errors.push(`price_header_wrapped=${price.headerLines}`);
+    const widestPrice = price.values.reduce((max, entry) => Math.max(max, entry.width), 0);
+    const narrowestCell = price.values.reduce((min, entry) => Math.min(min, entry.cellWidth), Infinity);
+    if (narrowestCell < widestPrice + 8) errors.push(`price_cell_starved=${narrowestCell}<${widestPrice}`);
+    // A wide desktop must lay the table out in the space it has, not hide it behind a scrollbar.
+    if (width >= 1248 && price.scrollerOverflow > 1) errors.push(`compare_scroll_on_wide=${price.scrollerOverflow}`);
+  } else {
+    // Card mode: rows stack, and the table must not force the viewport to scroll sideways.
+    if (price.tableWidth > price.scrollerWidth + 1) errors.push(`compare_cards_overflow=${price.tableWidth}>${price.scrollerWidth}`);
+  }
   const requiredColumns = ["Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"];
   if (!requiredColumns.every((label) => metrics.compareColumns.includes(label))) errors.push("compare_columns");
   if (width === 390 && metrics.documentHeight > 12000) errors.push(`document_height=${metrics.documentHeight}`);
