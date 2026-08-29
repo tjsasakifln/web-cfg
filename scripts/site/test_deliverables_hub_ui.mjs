@@ -22,7 +22,8 @@ const port = 8795;
 const widths = [320, 360, 390, 768, 900, 901, 1024, 1200, 1366, 1440, 1661];
 const screenshotDir = String(process.env.DELIVERABLES_SCREENSHOT_DIR || "").trim();
 const required = process.env.UI_GEOMETRY_REQUIRED === "1" || Boolean(process.env.CI);
-const promotedNav = ["Serviços", "Problemas que resolvemos", "Entregas", "Conteúdos", "Ferramentas", "Especialista"];
+const brand = JSON.parse(fs.readFileSync(path.join(root, "data/site/brand.json"), "utf8"));
+const promotedNav = (brand.navigation?.desktop || []).map((item) => item.label);
 const legacyNav = ["Serviços", "Problemas que resolvemos", "Conteúdos", "Ferramentas", "Especialista"];
 const frozenRoutes = [
   "/aditivos-obras-publicas/",
@@ -97,7 +98,8 @@ for (const width of widths) {
     const archetypes = [...document.querySelectorAll('main > [data-section-archetype]')]
       .map((element) => element.getAttribute('data-section-archetype'));
     const primaries = document.querySelectorAll('main .button-primary').length;
-    const desktopDeliverables = document.querySelector('.desktop-nav a[href="/entregas/"]');
+    const desktopDeliverables = document.querySelector('.desktop-nav a[href="/conteudos/"]');
+    const footerDeliverables = document.querySelector('footer a[href="/entregas/"]');
     return {
       overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       compareVisible: Boolean(compare && compare.getBoundingClientRect().height > 0),
@@ -208,6 +210,7 @@ for (const width of widths) {
       })(),
       navDeliverables: desktopDeliverables?.textContent?.trim() || "",
       navCurrent: desktopDeliverables?.getAttribute("aria-current") || "",
+      footerDeliverables: footerDeliverables?.textContent?.trim() || "",
       emptyPlaceholders: document.querySelectorAll("[data-placeholder], .placeholder").length,
       overflowOffenders: [...document.querySelectorAll("body *")]
         .filter((element) => {
@@ -282,21 +285,21 @@ for (const width of widths) {
   // One primary leads to the progressive framing and the other submits the
   // terminal hand-raise added by #290; neither replaces a priced offer path.
   if (metrics.primaries > 2) errors.push(`primary_cta_overuse=${metrics.primaries}`);
-  if (metrics.navDeliverables !== "Entregas" || metrics.navCurrent !== "page") errors.push("nav_contract");
+  if (metrics.navDeliverables !== "Conteúdos" || metrics.footerDeliverables !== "Entregas") errors.push("nav_contract");
   if (metrics.emptyPlaceholders) errors.push("empty_placeholders");
 
   if (width <= 900) {
     await page.click(".menu-toggle");
     const mobile = await page.evaluate(() => {
       const menu = document.querySelector(".mobile-nav");
-      const link = menu?.querySelector('a[href="/entregas/"]');
+      const link = menu?.querySelector('a[href="/conteudos/"]');
       return {
         expanded: document.querySelector(".menu-toggle")?.getAttribute("aria-expanded"),
         linkVisible: Boolean(link && link.getBoundingClientRect().height >= 44),
         linkText: link?.textContent?.trim() || "",
       };
     });
-    if (mobile.expanded !== "true" || !mobile.linkVisible || mobile.linkText !== "Entregas") {
+    if (mobile.expanded !== "true" || !mobile.linkVisible || mobile.linkText !== "Conteúdos") {
       errors.push("mobile_nav");
     }
     await page.click(".menu-toggle");
@@ -417,8 +420,9 @@ for (const { route, expectedNav } of [
     errors.push(`nav_order=${JSON.stringify(metrics.navLabels)}`);
   }
   if (expectedNav === promotedNav) {
-    if (metrics.nav.filter(({ href }) => href === "/entregas/").length !== 1) errors.push("deliverables_nav_missing");
+    if (metrics.nav.filter(({ href }) => href === "/conteudos/").length !== 1) errors.push("contents_nav_missing");
     if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("tools_nav_missing");
+    if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("entregas_still_in_header");
   } else {
     if (metrics.nav.some(({ text }) => text === "Entregas")) errors.push("frozen_nav_mutated");
     if (metrics.nav.filter(({ href }) => href === "/ferramentas/").length !== 1) errors.push("frozen_tools_missing");
