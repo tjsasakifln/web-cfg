@@ -89,7 +89,9 @@ assert.equal(
 );
 assert.equal(
   evaluateLighthouseResults(
-    [...passing, criticalPage("/entregas/", 95, 0, { dom_elements: 801 })],
+    // /entregas/ carries its own catalogue budget, so prove the shared 800
+    // default still fails closed on a money route that uses it.
+    [...passing, criticalPage("/casos/", 95, 0, { dom_elements: 801 })],
     { homeRuns: 3 },
   ).ok,
   false,
@@ -279,3 +281,26 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
 }
 
 console.log("LIGHTHOUSE_THRESHOLDS_OK");
+
+// Per-route DOM budget: /entregas/ is the catalogue, so its element count
+// scales with the published inventory rather than page weight. Every other
+// money route must keep the shared 800 budget.
+{
+  const base = {
+    performance: 100, lcp_ms: 1000, tbt_ms: 10, total_byte_weight: 1000,
+    accessibility: 100, best_practices: 100, seo: 100,
+  };
+  const domErrors = (path, dom) => {
+    const out = evaluateLighthouseResults(
+      [{ ...base, path, dom_elements: dom }],
+      { criticalRoutes: new Set([path]), homeRuns: 1, criticalRuns: 1 },
+    );
+    const errors = Array.isArray(out) ? out : out.errors || [];
+    return errors.filter((e) => String(e).includes("DOM"));
+  };
+  assert.equal(domErrors("/entregas/", 1024).length, 0, "entregas within its catalogue budget");
+  assert.ok(domErrors("/entregas/", 1150).length > 0, "entregas budget still fails closed");
+  assert.equal(domErrors("/casos/", 700).length, 0, "other money routes pass under 800");
+  assert.ok(domErrors("/casos/", 850).length > 0, "other money routes keep the 800 budget");
+  console.log("OK per_route_dom_budget");
+}

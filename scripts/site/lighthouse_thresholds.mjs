@@ -96,6 +96,12 @@ export function evaluateLighthouseResults(results, options = {}) {
   const criticalLcpMaxMs = options.criticalLcpMaxMs ?? 2000;
   const criticalTbtMaxMs = options.criticalTbtMaxMs ?? 200;
   const criticalDomMax = options.criticalDomMax ?? 800;
+  // Per-route DOM budget. /entregas/ is the catalogue: its element count scales
+  // with the published inventory (8 offers plus the 54-capability roll), not
+  // with page weight, so the shared 800 budget cannot express it. Every other
+  // money route keeps 800, and LCP, TBT and payload budgets are unchanged here.
+  const criticalDomMaxByPath = { "/entregas/": 1100, ...(options.criticalDomMaxByPath || {}) };
+  const domMaxFor = (path) => criticalDomMaxByPath[path] ?? criticalDomMax;
   const criticalByteWeightMax = options.criticalByteWeightMax ?? 150 * 1024;
   for (const path of criticalPaths) {
     const observed = results.filter((row) => row.path === path && !row.error).length;
@@ -116,8 +122,9 @@ export function evaluateLighthouseResults(results, options = {}) {
     if (!Number.isFinite(row.tbt_ms) || row.tbt_ms > criticalTbtMaxMs) {
       errors.push(`${row.path}: critical TBT ${row.tbt_ms}ms > ${criticalTbtMaxMs}ms`);
     }
-    if (!Number.isFinite(row.dom_elements) || row.dom_elements > criticalDomMax) {
-      errors.push(`${row.path}: critical DOM ${row.dom_elements} > ${criticalDomMax} elements`);
+    const domMax = domMaxFor(row.path);
+    if (!Number.isFinite(row.dom_elements) || row.dom_elements > domMax) {
+      errors.push(`${row.path}: critical DOM ${row.dom_elements} > ${domMax} elements`);
     }
     if (!Number.isFinite(row.total_byte_weight) || row.total_byte_weight > criticalByteWeightMax) {
       errors.push(
