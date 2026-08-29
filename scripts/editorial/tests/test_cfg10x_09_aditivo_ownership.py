@@ -199,7 +199,10 @@ def test_legacy_inventory_records_exact_donor_to_owner_migration():
     assert owner["destination"] == OWNER
     assert owner["sitemap_membership"] is True
     host = items["http://confenge.com.br/"]
-    assert host["action"] == "keep_https_force_via_netcup_nginx_edge"
+    assert (
+        host["action"]
+        == "keep_https_force_via_cloudflare_edge_to_netcup_nginx_origin"
+    )
     assert "netlify" not in json.dumps(inventory, ensure_ascii=False).lower()
 
 
