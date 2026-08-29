@@ -22,15 +22,15 @@ def test_market_answer_freshness_workflow_probes_the_private_consumer_read_only(
         parts = expr.split()
         assert len(parts) == 5, expr
         minute, hour, *_rest = parts
-        # Must re-evaluate more often than max_age_hours (48h).
+        # Probe cadence bounds detection latency well inside the 14-day max age.
         if hour.startswith("*/"):
             interval_h = int(hour[2:])
-            assert 0 < interval_h < 48, expr
+            assert 0 < interval_h <= 6, expr
         elif hour.isdigit() and minute.startswith("*/"):
             interval_m = int(minute[2:])
-            assert 0 < interval_m < 48 * 60, expr
+            assert 0 < interval_m <= 6 * 60, expr
         else:
-            raise AssertionError(f"schedule is not more frequent than 48h: {expr}")
+            raise AssertionError(f"schedule does not bound detection latency to 6h: {expr}")
     assert "node scripts/revops/verify_gsc_freshness.mjs" in text
     assert "OPS_TOKEN: ${{ secrets.OPS_TOKEN }}" in text
     assert "BASE_URL: https://confenge.com.br" in text

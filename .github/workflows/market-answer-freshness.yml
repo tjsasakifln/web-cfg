@@ -6,7 +6,7 @@ name: market-answer-freshness
 
 on:
   schedule:
-    # Every 6 hours — strictly more frequent than max_age_hours=48.
+    # Every 6 hours bounds detection latency; private GSC max_age_days is 14.
     - cron: "0 */6 * * *"
   workflow_dispatch:
 
