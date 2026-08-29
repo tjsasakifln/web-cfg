@@ -7,9 +7,9 @@ const html = readFileSync(resolve(ROOT, "ops/wave1-review.html"), "utf8");
 const human = readFileSync(resolve(ROOT, "docs/editorial/HUMAN-ACTION-NOW.md"), "utf8");
 let fail = 0;
 function ok(n,c,d=""){ if(c) console.log("PASS",n); else { console.error("FAIL",n,d); fail++; } }
-const expected = ["lei-limite-25-50", "guia-checklist-aditivo", "lei-item-novo-desconto"];
+const expected = ["guia-checklist-aditivo", "lei-item-novo-desconto"];
 const pages = pkt.pages || [];
-ok("first_cohort_exactly_three", pages.length === 3, String(pages.length));
+ok("first_cohort_exactly_two", pages.length === 2, String(pages.length));
 ok("first_cohort_order", pages.map((p) => p.page_id).join(",") === expected.join(","));
 ok("commit_sha_informational", pkt.commit_sha_role === "informational_only");
 const reviewTarget = pkt.review_target || {};

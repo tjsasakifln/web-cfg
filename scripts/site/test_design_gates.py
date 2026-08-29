@@ -231,22 +231,28 @@ def test_section_archetype_gate_covers_more_than_the_home():
         assert primaries <= 4, f"{relative}: {primaries} primary CTAs"
 
 
-def test_deliverables_library_declares_its_hierarchy_in_copy():
-    """The most promoted item must be explained, not merely enlarged."""
+def test_deliverables_library_declares_offer_and_capability_hierarchy_in_copy():
+    """Eight buying units and the 54-item reference roll must remain distinct."""
     path = ROOT / "entregas" / "index.html"
     html = path.read_text(encoding="utf-8")
     blocks = narrative_blocks(html)
     by_archetype = Counter(b["archetype"] for b in blocks)
-    assert by_archetype["compare_ladder"] == 1, by_archetype
     assert by_archetype["catalog_index"] == 1, by_archetype
+    assert by_archetype["reading_method"] == 1, by_archetype
 
     text = re.sub(r"<[^>]+>", " ", html)
     text = re.sub(r"\s+", " ", text)
-    assert "Por que abre a biblioteca" in text, "entry step must declare why it opens the page"
-    assert "único sem o crédito de 60 dias" in text
+    assert "8 ofertas publicadas" in text
+    assert "54 capacidades do rol taxativo" in text
+    assert "não afirma que existem 54 ofertas prontas" in text
+    assert "Cada card reúne situação, entrada, limite, saída, crédito e próxima ação sem repetir a oferta em outra tabela" in text
 
     cards = re.findall(r'<article class="vitrine-item[\s\S]*?</article>', html)
     assert len(cards) == 8, len(cards)
+    assert all(
+        all(f"<dt>{label}</dt>" in card for label in ("Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"))
+        for card in cards
+    )
     lengths = [
         len(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", card)).strip())
         for card in cards

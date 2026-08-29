@@ -4,6 +4,7 @@
 import { readFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
+import vm from "vm";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 let failed = 0;
@@ -42,6 +43,7 @@ const tools = [
   "ferramentas/limite-acrescimos-supressoes/index.html",
   "ferramentas/checklist-reequilibrio/index.html",
   "ferramentas/matriz-atraso-obra/index.html",
+  "ferramentas/diagnostico-defesa-margem/index.html",
 ];
 for (const rel of tools) {
   const t = readFileSync(resolve(ROOT, rel), "utf8");
@@ -50,6 +52,71 @@ for (const rel of tools) {
   if (!t.includes("tool_complete")) fail("complete_" + rel);
   else pass("complete_" + rel);
   if (!existsSync(resolve(ROOT, rel))) fail("exists_" + rel);
+}
+
+{
+  const src = readFileSync(resolve(ROOT, "assets/js/tools-common.js"), "utf8");
+  const dataLayer = [];
+  const documentListeners = {};
+  const sandbox = {
+    window: { dataLayer, confengeTrack(name, props) { dataLayer.push({ event: name, ...props }); } },
+    document: {
+      querySelectorAll() { return []; },
+      addEventListener(name, fn) { documentListeners[name] = fn; },
+    },
+    console,
+  };
+  sandbox.window.window = sandbox.window;
+  vm.createContext(sandbox);
+  vm.runInContext(src, sandbox);
+  const T = sandbox.window.ConfengeTools;
+  if (!T || typeof T.scrubProps !== "function") fail("scrubProps_exported");
+  else pass("scrubProps_exported");
+  const dirty = T.scrubProps({
+    tool: "limite-acrescimos",
+    level: "bad",
+    email: "a@b.c",
+    phone: "48999999999",
+    nome: "Alice",
+    cnpj: "52.407.089/0001-09",
+    valor: "10000000",
+    valorInicial: "10.000.000",
+    q: "83102277000152",
+    query: "itajai",
+    causa: "texto livre do evento",
+    observacao: "nota sensível",
+    mensagem: "livre",
+  });
+  const leaked = ["email","phone","nome","cnpj","valor","valorInicial","q","query","causa","observacao","mensagem"]
+    .filter((k) => Object.prototype.hasOwnProperty.call(dirty, k));
+  if (leaked.length) fail("scrub_leaked", leaked);
+  else pass("scrub_no_money_cnpj_pii");
+  if (dirty.tool !== "limite-acrescimos" || dirty.level !== "bad") fail("scrub_kept_safe", dirty);
+  else pass("scrub_kept_safe");
+  const disguised = T.scrubProps({
+    tool: "limite-acrescimos",
+    level: "texto livre alice@example.com",
+    custom_metric: "R$ 1.000.000,00",
+  });
+  if (Object.prototype.hasOwnProperty.call(disguised, "level") || Object.prototype.hasOwnProperty.call(disguised, "custom_metric")) {
+    fail("scrub_disguised_free_text_money", disguised);
+  } else pass("scrub_disguised_free_text_money");
+  T.track("tool_complete", { tool: "x", email: "should@not", valor: 123, cnpj: "00" });
+  const last = dataLayer[dataLayer.length - 1];
+  if (last.email || last.valor || last.cnpj) fail("emit_leaked", last);
+  else pass("emit_scrubs_before_track");
+
+  T.bindToolLifecycle({ tool: "dynamic-tool" });
+  const offer = { getAttribute(name) { return name === "data-tool-to-offer" ? "aditivos-obras-publicas" : ""; } };
+  const target = { closest(selector) { return selector === "[data-tool-to-offer]" ? offer : null; } };
+  if (typeof documentListeners.click !== "function") fail("dynamic_cta_delegation_missing");
+  else {
+    documentListeners.click({ target });
+    const delegated = dataLayer[dataLayer.length - 1];
+    if (delegated.event !== "tool_to_offer" || delegated.offer !== "aditivos-obras-publicas") {
+      fail("dynamic_cta_delegation", delegated);
+    } else pass("dynamic_cta_delegation");
+  }
 }
 
 // Content improvements cohort
@@ -111,15 +178,17 @@ if (j.valid_human_approved === 0) {
   if (!(Array.isArray(j.blocked) ? j.blocked.join(" ") : String(j.blocked || "")).includes("no_valid_human")) {
     fail("release_blocked_msg");
   } else pass("release_blocked_msg");
-} else if (j.valid_human_approved === 3 && j.cohort_complete === true && Array.isArray(j.blocked) && j.blocked.length === 0) {
+} else if (j.valid_human_approved === 2 && j.cohort_complete === true && Array.isArray(j.blocked) && j.blocked.length === 0) {
   pass("release_first_cohort_complete", j.released_count);
   const urls = j.gsc_submit_candidates || [];
   const need = [
-    "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
     "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
     "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
+    "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
   ];
-  if (need.every((u) => urls.includes(u))) pass("release_gsc_candidates");
+  const donor = "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/";
+  const urlSet = new Set(urls);
+  if (need.every((u) => urlSet.has(u)) && !urlSet.has(donor)) pass("release_gsc_candidates");
   else fail("release_gsc_candidates", urls);
 } else {
   fail("release_unexpected_state", JSON.stringify({

@@ -10,7 +10,6 @@ from __future__ import annotations
 
 # The only URLs that may be made indexable by this release policy.
 FIRST_COHORT_IDS = (
-    "lei-limite-25-50",
     "guia-checklist-aditivo",
     "lei-item-novo-desconto",
 )
@@ -26,11 +25,10 @@ WAVE1_IDS = frozenset(
         "lei-art124-alteracao-obra",
         "lei-atraso-administracao",
         "lei-item-novo-desconto",
-        "lei-limite-25-50",
         "lei-parcela-incontroversa",
         "lei-reequilibrio-reajuste",
         "lei-servico-sem-aditivo",
     }
 )
+MIGRATED_IDS = frozenset({"lei-limite-25-50"})
 REJECTED_IDS = frozenset({"jur-sumula-260-art"})
-

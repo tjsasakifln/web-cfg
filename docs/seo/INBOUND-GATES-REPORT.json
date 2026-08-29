@@ -21,7 +21,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 29,
+        "scanned": 28,
         "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, or",
         "footer": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina cont"
       }
@@ -188,14 +188,14 @@
         "profiles": {
           "service_pillar": 13,
           "priced_offer": 10,
-          "commercial_content": 43,
-          "trust_or_legal": 9
+          "commercial_content": 42,
+          "trust_or_legal": 10
         },
         "main_cta": {
-          "covered": 66,
-          "total": 66,
+          "covered": 65,
+          "total": 65,
           "coverage": 1.0,
-          "exempt": 9,
+          "exempt": 10,
           "public_scanned": 75
         },
         "on_page_capture": {
@@ -216,10 +216,10 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 54,
-          "total": 66,
-          "coverage": 0.8182,
-          "exempt_trust_or_legal": 9,
+          "covered": 53,
+          "total": 65,
+          "coverage": 0.8154,
+          "exempt_trust_or_legal": 10,
           "registered_debt": 6
         },
         "exemptions": [
@@ -289,6 +289,14 @@
             "kind": "priced_reference",
             "reason": "O preço aparece como referência contratual do Diagnóstico B2G dentro das condições, não como oferta. A superfície de oferta é /diagnostico-b2g-expansao/, que já captura com formulário persistido no <main>.",
             "owner_issue": 88,
+            "expires_at": null
+          },
+          {
+            "route": "/confianca/",
+            "family": "legal-and-trust",
+            "kind": "trust_or_legal",
+            "reason": "Páginas legais e de confiança existem para ser lidas, não para converter. Cobrar ação terminal aqui degradaria a leitura do documento e criaria CTA em superfície de compliance.",
+            "owner_issue": 300,
             "expires_at": null
           },
           {

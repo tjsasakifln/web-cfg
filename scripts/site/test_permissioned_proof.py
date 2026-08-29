@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -22,6 +23,7 @@ from scripts.site.permissioned_proof import (  # noqa: E402
     material_hash,
     transition_allowed,
     validate_cases_alignment,
+    validate_evidence_record,
     validate_policy,
     validate_record,
     validate_registry,
@@ -101,6 +103,18 @@ def _synthetic_publishable() -> tuple[dict, str]:
             {"state": "APPROVED", "at": "2026-08-24T00:30:00Z", "actor": "HUMAN_TIAGO_JUN_SASAKI"},
             {"state": "PUBLISHED", "at": "2026-08-24T01:00:00Z", "actor": "OWNER_CONFENGE"},
         ],
+        "evidence": {
+            "fonte": "recibo privado de entrega da fixture de gate",
+            "autorizacao": "autorizacao sintetica ativa registrada em recibo privado",
+            "escopo_permitido": "problem, intervention, outcome em confenge.com.br",
+            "anonimizacao": "identidade do titular e valores comerciais omitidos",
+            "baseline": "situacao anterior documentada no recibo privado",
+            "intervencao": "leitura tecnica documentada no material publicado",
+            "resultado_observavel": "material sintetico do gate, sem resultado comercial",
+            "limitacoes": "fixture de teste; nao e cliente, contrato ou resultado real",
+            "revisor": "tiago-jun-sasaki",
+            "expiracao": "2028-08-24T00:00:00Z",
+        },
     }
     return record, html
 
@@ -116,7 +130,7 @@ def test_versioned_policy_and_empty_registry_are_valid():
     result = audit()
     assert result["ok"] is True
     assert result["approved_public_proof_count"] == 0
-    assert result["next_test"] == "WAIT_FIRST_REAL_DELIVERY"
+    assert result["next_test"] == "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF"
     assert registry["records"] == []
     assert registry["state"] == "NO_APPROVED_CLIENT_PROOF"
 
@@ -128,7 +142,8 @@ def test_first_real_delivery_is_named_next_test_not_fabricated_proof():
         "id": "tiago-jun-sasaki",
         "name": "Engº Tiago Sasaki",
     }
-    assert next_test["status"] == "WAIT_FIRST_REAL_DELIVERY"
+    assert next_test["status"] == "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+    assert next_test["blocker"] == "BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF"
     assert "fabricated_delivery" in next_test["forbidden_shortcuts"]
     assert "approval_by_agent_ci_or_bot" in next_test["forbidden_shortcuts"]
     assert "raw_consent_or_client_pii_committed" in next_test["forbidden_shortcuts"]
@@ -378,7 +393,8 @@ def test_registry_rejects_copied_private_refs_and_public_urls():
     registry["records"] = [first, second]
     registry["approved_public_proof_count"] = 2
     registry["state"] = "HAS_APPROVED_CLIENT_PROOF"
-    registry["next_test"]["status"] = "FIRST_REAL_DELIVERY_PROOF_COMPLETE"
+    registry["next_test"]["status"] = "COMPLETE:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+    registry["next_test"]["blocker"] = None
     errors = validate_registry(registry)
     assert any(code.startswith("registry_duplicate_receipt_ref:") for code in errors)
     assert any(code.startswith("registry_duplicate_approval_ref:") for code in errors)
@@ -426,8 +442,148 @@ def test_existing_cases_registry_cannot_bypass_permissioned_proof():
         ],
     }
     errors = validate_cases_alignment(load_registry(), fake_cases)
-    assert "approved_case_without_permissioned_proof:case-without-proof" in errors
-    assert "approved_surface_without_permissioned_proof:/casos/case-without-proof/" in errors
+    assert "legacy_cases_registry_real_proof_forbidden:case-without-proof" in errors
+    assert "legacy_cases_registry_real_proof_surface_forbidden:/casos/case-without-proof/" in errors
+
+
+def test_published_proof_has_one_record_entrypoint_not_three() -> None:
+    record, _html = _synthetic_publishable()
+    registry = load_registry()
+    registry["records"] = [record]
+    registry["approved_public_proof_count"] = 1
+    registry["state"] = "HAS_APPROVED_CLIENT_PROOF"
+    registry["next_test"]["status"] = "COMPLETE:FIRST_PERMISSIONED_CUSTOMER_PROOF"
+    registry["next_test"]["blocker"] = None
+    legacy = {"cases": [], "published_surfaces": []}
+    assert validate_cases_alignment(registry, legacy) == []
+
+
+def test_evidence_record_rejects_missing_authorization_expired_authorization_and_missing_fonte():
+    complete = {
+        "fonte": "recibo privado de entrega da fixture de gate",
+        "autorizacao": "autorizacao sintetica ativa registrada em recibo privado",
+        "escopo_permitido": "problem, intervention, outcome em confenge.com.br",
+        "anonimizacao": "identidade do titular e valores comerciais omitidos",
+        "baseline": "situacao anterior documentada no recibo privado",
+        "intervencao": "leitura tecnica documentada no material publicado",
+        "resultado_observavel": "material sintetico do gate, sem resultado comercial",
+        "limitacoes": "fixture de teste; nao e cliente, contrato ou resultado real",
+        "revisor": "tiago-jun-sasaki",
+        "expiracao": "2028-08-24T00:00:00Z",
+    }
+    assert validate_evidence_record(complete, required=True) == []
+
+    missing_auth = copy.deepcopy(complete)
+    missing_auth["autorizacao"] = ""
+    assert "authorization_absent" in validate_evidence_record(missing_auth, required=True)
+
+    expired = copy.deepcopy(complete)
+    expired["expiracao"] = "2020-01-01T00:00:00Z"
+    assert "authorization_expired" in validate_evidence_record(expired, required=True)
+
+    missing_fonte = copy.deepcopy(complete)
+    missing_fonte["fonte"] = ""
+    assert "fonte_absent" in validate_evidence_record(missing_fonte, required=True)
+
+    record, html = _synthetic_publishable()
+    record["evidence"]["autorizacao"] = ""
+    assert "authorization_absent" in validate_record(record, html=html)
+    record, html = _synthetic_publishable()
+    record["evidence"]["expiracao"] = "2020-08-24T00:00:00Z"
+    assert "authorization_expired" in validate_record(record, html=html)
+    record, html = _synthetic_publishable()
+    record["evidence"]["fonte"] = ""
+    assert "fonte_absent" in validate_record(record, html=html)
+
+
+def test_collection_kit_exists_as_operator_templates_not_public_cases():
+    kit = ROOT / "docs" / "ops" / "proof-collection-kit"
+    expected = [
+        "README.md",
+        "questionario.md",
+        "autorizacao.md",
+        "redaction-checklist.md",
+        "case-template.md",
+    ]
+    for name in expected:
+        path = kit / name
+        assert path.is_file(), name
+        assert path.stat().st_size > 200, name
+    readme = (kit / "README.md").read_text(encoding="utf-8")
+    assert "Pacote operacional" in readme
+    assert "não é case de cliente" in readme or "Nenhum deles é case de cliente" in readme
+    public_html = (ROOT / "docs" / "ops" / "proof-collection-kit" / "index.html")
+    assert not public_html.exists()
+    family = json.loads((ROOT / "data" / "organic" / "public-family-registry.json").read_text(encoding="utf-8"))
+    kit_routes = []
+    for fam in family["families"]:
+        routes = (fam.get("match") or {}).get("routes") or []
+        kit_routes.extend(r for r in routes if "proof-collection-kit" in r or r.startswith("/docs/"))
+    assert kit_routes == []
+
+
+def test_casos_pages_label_synthetic_or_demonstrative_in_title_h1_schema_and_cta():
+    hub = (ROOT / "casos" / "index.html").read_text(encoding="utf-8")
+    assert "Exemplos de entrega" in hub
+    assert "Resultados de clientes" in hub
+    assert "<h1>Exemplos de entrega (demonstrativos)</h1>" in hub
+    assert "demonstrativo" in hub.lower()
+    pages = list((ROOT / "casos").glob("*/index.html")) + [ROOT / "casos" / "index.html"]
+    audit_config = json.loads(
+        (ROOT / "data" / "commercial" / "real-proof-registry.v1.json").read_text(encoding="utf-8")
+    )
+    explicit_label = re.compile(
+        audit_config["synthetic_surfaces"]["explicit_label_pattern"], flags=re.I
+    )
+    for page in pages:
+        html = page.read_text(encoding="utf-8")
+        title = re.search(r"<title>(.*?)</title>", html, flags=re.I | re.S)
+        h1 = re.search(r"<h1>(.*?)</h1>", html, flags=re.I | re.S)
+        assert title and explicit_label.search(title.group(1)), page
+        assert h1 and explicit_label.search(re.sub(r"<[^>]+>", "", h1.group(1))), page
+        assert explicit_label.search(html)
+        ld = re.search(r'<script type="application/ld\+json">(.*?)</script>', html, flags=re.I | re.S)
+        assert ld and explicit_label.search(ld.group(1)), page
+        main = re.search(r"<main\b[^>]*>(.*?)</main>", html, flags=re.I | re.S)
+        assert main, page
+        assert explicit_label.search(main.group(1)), page
+        types = set()
+        for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, flags=re.I | re.S):
+            payload = json.loads(block)
+            nodes = payload.get("@graph", payload if isinstance(payload, list) else [payload])
+            for node in nodes:
+                if isinstance(node, dict):
+                    t = node.get("@type")
+                    if isinstance(t, str):
+                        types.add(t)
+                    elif isinstance(t, list):
+                        types.update(str(x) for x in t)
+        assert "Review" not in types and "AggregateRating" not in types, (page, types)
+
+
+def test_trust_surface_states_executor_correction_evidence_and_method_split():
+    path = ROOT / "confianca" / "index.html"
+    html = path.read_text(encoding="utf-8")
+    assert path.is_file()
+    for needle in (
+        "Quem executa",
+        "Como corrigir",
+        "Política de evidência",
+        "Método e resultado",
+        "Exemplos de entrega",
+        "Resultados de clientes",
+        "52.407.089/0001-09",
+        "https://github.com/tjsasakifln",
+    ):
+        assert needle in html, needle
+    assert "CREA" not in html
+    assert '"Review"' not in html
+    assert '"AggregateRating"' not in html
+    assert "R$" not in html
+    family = json.loads((ROOT / "data" / "organic" / "public-family-registry.json").read_text(encoding="utf-8"))
+    legal = next(fam for fam in family["families"] if fam["id"] == "legal-and-trust")
+    assert "/confianca/" in legal["match"]["routes"]
+    assert legal["profile"] == "trust_or_legal"
 
 
 def test_existing_false_case_study_still_fails_closed():

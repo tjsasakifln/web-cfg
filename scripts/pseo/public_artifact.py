@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Assemble and audit the isolated public site artifact (_site).
 
-Production Netlify publish must equal PUBLIC_DIR. Only allowlisted public
-paths are copied; internal trees (data/, seo/, scripts/, .git/, …) never
-enter the artifact.
+The nginx/Netcup production release consumes this immutable artifact. Only
+allowlisted public paths are copied; internal trees (data/, seo/, scripts/,
+.git/, …) never enter the artifact.
 """
 
 from __future__ import annotations
@@ -38,6 +38,7 @@ PUBLIC_TOP_DIRS = frozenset(
         "correcoes",
         "uso-de-ia",
         "conflitos",
+        "confianca",
         "acompanhamento-contratos-obras",
         "aditivos-obras-publicas",
         "atrasos-prorrogacao-obras-publicas",
@@ -309,6 +310,7 @@ def finalize_public_artifact(dest: Path) -> dict[str, Any]:
     insertion and CSS fingerprinting, not to an earlier source-page snapshot.
     """
     from scripts.site.scrub_em_dashes import scrub_html
+    from scripts.site.structured_identity import sanitize_tree
 
     scrubbed = 0
     for html_path in sorted(Path(dest).rglob("*.html")):
@@ -317,6 +319,8 @@ def finalize_public_artifact(dest: Path) -> dict[str, Any]:
         if cleaned != raw:
             html_path.write_text(cleaned, encoding="utf-8")
             scrubbed += 1
+
+    structured_identity = sanitize_tree(Path(dest))
 
     from scripts.site.public_navigation import (
         audit_public_navigation_tree,
@@ -340,6 +344,7 @@ def finalize_public_artifact(dest: Path) -> dict[str, Any]:
         )
     return {
         "scrubbed_html_files": scrubbed,
+        "structured_identity": structured_identity,
         "promoted_navigation_files": promoted_navigation_files,
         "navigation_audit": navigation_audit,
         "footer_scripture": footer_scripture,
@@ -472,6 +477,7 @@ def assemble_public_artifact(
         "navigation_audit": navigation_audit,
         "footer_scripture": footer_scripture,
         "scrubbed_html_files": finalized["scrubbed_html_files"],
+        "structured_identity": finalized["structured_identity"],
     }
 
     # Private inventory (not published)
@@ -484,6 +490,7 @@ def assemble_public_artifact(
         "copied_files": copied_files,
         "promoted_navigation_files": promoted_navigation_files,
         "navigation_audit": navigation_audit,
+        "structured_identity": finalized["structured_identity"],
     }
     man_path.write_text(
         json.dumps(man_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -652,6 +659,7 @@ def audit_public_artifact(
             )
 
     from scripts.site.fingerprint_css import html_uses_unversioned_styles, stylesheet_hrefs
+    from scripts.site.structured_identity import audit_html as audit_structured_identity_html
 
     for html_path in sorted(dest.rglob("*.html")):
         rel = html_path.relative_to(dest).as_posix()
@@ -660,6 +668,14 @@ def audit_public_artifact(
         except OSError as exc:
             findings.append({"code": "read_error", "path": rel, "detail": str(exc)})
             continue
+        for detail in audit_structured_identity_html(html):
+            findings.append(
+                {
+                    "code": "unsupported_structured_identity",
+                    "path": rel,
+                    "detail": detail,
+                }
+            )
         footers = FOOTER_BLOCK_RE.findall(html)
         markers_in_footers = sum(
             footer.count(FOOTER_SCRIPTURE_HTML) for footer in footers

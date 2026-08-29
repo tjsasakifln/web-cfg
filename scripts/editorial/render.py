@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import json
 import re
+from functools import lru_cache
+from pathlib import Path
 from typing import Any
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 from scripts.pseo.html_shell import (
     ORG_JSONLD,
@@ -19,6 +22,35 @@ from scripts.pseo.html_shell import (
 from scripts.editorial.sources import load_manifest
 from scripts.editorial.checklist_ui import render_structured_checklist
 from scripts.editorial.registry import material_hash
+
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+@lru_cache(maxsize=1)
+def _legacy_redirect_destinations() -> dict[str, str]:
+    """Resolve internal editorial links from the canonical migration inventory."""
+    inventory = json.loads(
+        (ROOT / "data" / "organic" / "legacy-url-inventory.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    destinations: dict[str, str] = {}
+    for item in inventory.get("items") or []:
+        if item.get("current_action") not in {"301", "301!"}:
+            continue
+        source = urlsplit(str(item.get("legacy_url") or "")).path
+        destination = str(item.get("destination") or "")
+        if source.startswith("/") and destination.startswith("/"):
+            destinations[source] = destination
+    return destinations
+
+
+def _resolved_internal_url(url: str) -> str:
+    # URL transport is a documented non-material operation only for an exact,
+    # inventory-backed canonical migration. The reviewed anchor and context do
+    # not change; redirect/canonical gates own destination equivalence.
+    return _legacy_redirect_destinations().get(url, url)
 
 
 def _md_inline(text: str) -> str:
@@ -116,17 +148,23 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             f'<span class="checklist-text">{_md_inline(text)}</span></label></li>'
         )
 
-    def heading_html(level: str, raw_title: str) -> str:
+    def heading_html(level: str, raw_title: str) -> tuple[str, str]:
         title = raw_title.strip()
+        hid = ""
+        m_id = re.search(r"\s*\{#([a-z0-9-]+)\}\s*$", title)
+        if m_id:
+            hid = m_id.group(1)
+            title = title[: m_id.start()].strip()
         m = re.match(r"^(\d+)\.\s+(.+)$", title)
         if m:
             num, rest = m.group(1), m.group(2)
-            return (
+            html = (
                 f"<{level} class=\"editorial-heading editorial-heading--numbered\">"
                 f'<span class="editorial-heading-num" aria-hidden="true">{num}</span>'
                 f'<span class="editorial-heading-label">{_md_inline(rest)}</span></{level}>'
             )
-        return f"<{level} class=\"editorial-heading\">{_md_inline(title)}</{level}>"
+            return html, hid
+        return f"<{level} class=\"editorial-heading\">{_md_inline(title)}</{level}>", hid
 
     for raw in lines:
         line = raw.rstrip()
@@ -135,13 +173,16 @@ def markdown_to_html(md: str, *, checklist: bool = False) -> str:
             continue
         if line.startswith("### "):
             close_lists()
-            out.append(heading_html("h3", line[4:]))
+            html, _hid = heading_html("h3", line[4:])
+            out.append(html)
         elif line.startswith("## ") or line.startswith("# "):
             title = line[3:] if line.startswith("## ") else line[2:]
             close_section()
-            out.append('<section class="editorial-section">')
+            html, hid = heading_html("h2", title)
+            sid = f' id="{hid}"' if hid else ""
+            out.append(f'<section class="editorial-section"{sid}>')
             in_section = True
-            out.append(heading_html("h2", title))
+            out.append(html)
         elif re.match(r"^\d+\.\s+", line):
             if not in_ol:
                 close_lists()
@@ -203,8 +244,38 @@ def _sources_html(page: dict[str, Any]) -> str:
         url = src.get("url") or "#"
         organ = src.get("organ") or src.get("issuer") or src.get("authority") or ""
         device = src.get("device") or src.get("article") or src.get("legal_device") or ""
-        consulted = src.get("accessed") or src.get("date_consulted") or src.get("retrieved") or ""
-        meta_bits = [b for b in (organ, device, consulted and f"Consulta: {consulted}") if b]
+        if not page.get("source_context_required"):
+            consulted = (
+                src.get("accessed")
+                or src.get("date_consulted")
+                or src.get("retrieved")
+                or ""
+            )
+            meta_bits = [
+                b for b in (organ, device, consulted and f"Consulta: {consulted}") if b
+            ]
+        else:
+            consulted_raw = (
+                src.get("accessed")
+                or src.get("accessed_at")
+                or src.get("date_consulted")
+                or src.get("retrieved")
+                or ""
+            )
+            consulted = format_date_br(consulted_raw) if consulted_raw else ""
+            limit = src.get("limitations") or src.get("application_limit") or ""
+            if limit and len(limit) > 180:
+                limit = limit[:177].rstrip() + "..."
+            meta_bits = [
+                b
+                for b in (
+                    organ,
+                    device,
+                    consulted and f"Consulta: {consulted}",
+                    limit and f"Limite: {limit}",
+                )
+                if b
+            ]
         meta = (
             f'<span class="sources-meta">{e(" · ".join(meta_bits))}</span>'
             if meta_bits
@@ -274,7 +345,7 @@ def _related_html(page: dict[str, Any]) -> str:
     cards = []
     for r in rel[:6]:
         cards.append(
-            f'<a class="related-card" href="{e(r["url"])}">'
+            f'<a class="related-card" href="{e(_resolved_internal_url(r["url"]))}">'
             f'<span>{e(r.get("cluster") or "Relacionado")}</span>'
             f'<strong>{e(r["title"])}</strong>'
             f'<small>{e(r.get("kind") or "Guia")}</small></a>'
@@ -297,6 +368,7 @@ def _hub_label(archetype: str) -> tuple[str, str]:
 def render_page(page: dict[str, Any]) -> str:
     archetype = page.get("archetype") or "guia"
     hub_name, hub_url = _hub_label(archetype)
+    canonical_path = page.get("canonical_path") or page["url"]
     title = page["title"]
     if "CONFENGE" not in title:
         full_title = f"{title} | CONFENGE"
@@ -358,8 +430,8 @@ def render_page(page: dict[str, Any]) -> str:
 
     article_ld: dict[str, Any] = {
         "@type": "Article",
-        "@id": f"{SITE}{page['url']}#article",
-        "mainEntityOfPage": {"@type": "WebPage", "@id": f"{SITE}{page['url']}"},
+        "@id": f"{SITE}{canonical_path}#article",
+        "mainEntityOfPage": {"@type": "WebPage", "@id": f"{SITE}{canonical_path}"},
         "headline": title,
         "description": desc,
         "datePublished": published,
@@ -483,8 +555,8 @@ def render_page(page: dict[str, Any]) -> str:
 <h2 class="aside-title">{e(page.get('aside_title') or 'Aplicar este enquadramento ao seu contrato')}</h2>
 <p class="aside-text">{e(page.get('aside_blurb') or 'Organize documentos, riscos e próximos passos com base no cenário real da obra.')}</p>
 <div class="aside-actions">
-<a class="button button-primary" data-cta-position="aside" data-cta-channel="whatsapp" href="{e(wa_link(page.get('cta_whatsapp') or ''))}" rel="noopener" target="_blank">Conversar pelo WhatsApp</a>
-<a class="button button-secondary" data-cta-position="aside" data-cta-channel="email" href="{e(mailto_href(page.get('contact_email') or 'tiago.sasaki@confenge.com.br', page.get('cta_email_subject') or title, page.get('cta_email_body') or ''))}">Enviar por e-mail</a>
+<a class="button button-primary" data-cta-position="aside" data-cta-channel="whatsapp" href="{e(wa_link(page.get('cta_whatsapp') or ''))}" rel="noopener" target="_blank">{e(page.get('cta_wa_label') or 'Conversar pelo WhatsApp')}</a>
+<a class="button button-secondary" data-cta-position="aside" data-cta-channel="email" href="{e(mailto_href(page.get('contact_email') or 'tiago.sasaki@confenge.com.br', page.get('cta_email_subject') or title, page.get('cta_email_body') or ''))}">{e(page.get('cta_email_label') or 'Enviar por e-mail')}</a>
 </div>
 </div>
 <div class="aside-card aside-compact">
@@ -498,7 +570,7 @@ def render_page(page: dict[str, Any]) -> str:
     return page_shell(
         title=full_title,
         description=desc,
-        canonical_path=page["url"],
+        canonical_path=canonical_path,
         robots=robots,
         jsonld_graph=graph,
         body_main=main,

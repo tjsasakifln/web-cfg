@@ -31,6 +31,7 @@ const snapshot = JSON.parse(
   fs.readFileSync(path.join(root, "ferramentas/diagnostico-defesa-margem/snapshot.json"), "utf8"),
 );
 const diagnoseSrc = fs.readFileSync(path.join(root, "assets/js/diagnose-margin.js"), "utf8");
+const toolsCommonSrc = fs.readFileSync(path.join(root, "assets/js/tools-common.js"), "utf8");
 const scriptSrc = fs.readFileSync(path.join(root, "script.js"), "utf8");
 
 function makeEl(init = {}) {
@@ -65,6 +66,9 @@ function makeEl(init = {}) {
     },
     setAttribute(name, value) {
       attrs[name] = String(value);
+    },
+    hasAttribute(name) {
+      return Object.prototype.hasOwnProperty.call(attrs, name);
     },
     removeAttribute(name) {
       delete attrs[name];
@@ -121,6 +125,8 @@ function makeEl(init = {}) {
 const byId = {};
 const fields = {
   "lookup-status": makeEl({ id: "lookup-status" }),
+  "diagnostico-runtime-status": makeEl({ id: "diagnostico-runtime-status" }),
+  "diagnostic-result": makeEl({ id: "diagnostic-result" }),
   lookup: makeEl({ id: "lookup", tagName: "FORM" }),
   qid: makeEl({ id: "qid", name: "q" }),
   "public-contract-id": makeEl({
@@ -310,8 +316,14 @@ if (typeof sandbox.window.ConfengeDiagnoseMargin?.diagnoseMargin !== "function")
   console.error("FAIL: diagnose-margin.js did not export");
   process.exit(1);
 }
+vm.runInContext(toolsCommonSrc, sandbox);
+if (typeof sandbox.window.ConfengeTools?.bindToolLifecycle !== "function") {
+  console.error("FAIL: tools-common.js did not export");
+  process.exit(1);
+}
 
-// Honest order: inline page script runs before deferred script.js.
+// Honest shipped order: diagnostic + common helpers, then inline page script,
+// while deferred script.js still becomes available only afterwards.
 vm.runInContext(inlineMatch[1], sandbox);
 const before = dataLayer.map((e) => e.event);
 if (before.includes("asset_view") || before.includes("organic_landing")) {
