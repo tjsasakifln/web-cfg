@@ -286,6 +286,19 @@
   function computeReequilibrio(states, opts) {
     opts = opts || {};
     var urgencia = opts.urgencia || "media", materialidade = opts.materialidade || "nao_informada", statesMap = states || {};
+    var allowedStates = { met: true, missing: true, na: true };
+    var invalidStates = [];
+    Object.keys(REEQ_CATEGORIES).forEach(function (catId) {
+      REEQ_CATEGORIES[catId].items.forEach(function (item) {
+        var raw = statesMap[item.key];
+        if (raw !== undefined && raw !== "" && !allowedStates[raw]) {
+          invalidStates.push({ key: item.key, value: String(raw) });
+        }
+      });
+    });
+    if (invalidStates.length) return { ok: false, error: "estado_invalido", invalid: invalidStates };
+    if (["baixa", "media", "alta"].indexOf(urgencia) < 0) return { ok: false, error: "urgencia_invalida" };
+    if (["nao_informada", "baixa", "media", "alta"].indexOf(materialidade) < 0) return { ok: false, error: "materialidade_invalida" };
     var missingBlockers = [], missingImportant = [], missingProcess = [], naKeys = [], weighted = 0, weightDenom = 0;
     Object.keys(REEQ_CATEGORIES).forEach(function (catId) {
       var cat = REEQ_CATEGORIES[catId], met = 0, applicable = 0;
@@ -306,6 +319,9 @@
       var ratio = applicable ? met / applicable : 1;
       if (applicable > 0) { weighted += ratio * cat.weight; weightDenom += cat.weight; }
     });
+    if (weightDenom === 0) {
+      return { ok: false, error: "sem_itens_aplicaveis", naKeys: naKeys };
+    }
     var score = weightDenom ? weighted / weightDenom : 0;
     if (!Number.isFinite(score)) score = 0;
     var hasCentralBlocker = missingBlockers.length > 0;
@@ -372,11 +388,14 @@
     var job = "Ver se o dossiê documental do pedido de reequilíbrio está pronto ou se há bloqueadores centrais.";
     var decision = "Corrigir lacunas na ordem indicada, ou avançar para leitura contratual se a prontidão documental já for alta.";
     if (!r || !r.ok) {
+      var invalidReason = r && r.error === "sem_itens_aplicaveis"
+        ? "Todos os requisitos foram marcados como não aplicáveis; não há base para medir prontidão."
+        : "Há marcações ou faixas que a ferramenta não conseguiu interpretar.";
       return {
         job: job, decision: "Não diagnosticar com estados ilegíveis.",
         premises: ["Marcações em aberto entram como pendentes. N/A não conta como bloqueio."],
         layers: {
-          fato: "Não foi possível ler as marcações do checklist.",
+          fato: invalidReason,
           calculo: "Nenhum escore foi aplicado.",
           inferencia: "Sem inferência.",
           unknown: "A ferramenta não lê o processo real nem julga se existe direito ao reequilíbrio."
@@ -421,9 +440,14 @@
   }
 
   function parseISODate(s) {
-    if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(String(s))) return null;
-    var t = Date.parse(String(s) + "T00:00:00Z");
-    return Number.isFinite(t) ? t : null;
+    var raw = String(s || "");
+    var match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
+    if (!match) return null;
+    var year = Number(match[1]), month = Number(match[2]), day = Number(match[3]);
+    var t = Date.UTC(year, month - 1, day);
+    var d = new Date(t);
+    if (d.getUTCFullYear() !== year || d.getUTCMonth() !== month - 1 || d.getUTCDate() !== day) return null;
+    return t;
   }
 
   function readDuration(raw) {
@@ -460,8 +484,12 @@
       if (parte === "administracao") hipotese = "hipótese preliminar de imputação à Administração (depende de prova)";
       else if (parte === "contratado") hipotese = "hipótese preliminar de imputação ao contratado (depende de prova)";
       else if (parte === "compartilhado") hipotese = "possível concorrência de causas / responsabilidade compartilhada";
-      var precisaNexo = !start || (!end && dur.value == null);
+      var precisaNexo = start == null || (end == null && dur.value == null);
       var precisaCritico = crit === "incerto" || !ev.atividadeAfetada;
+      var estimatedEnd = end;
+      if (estimatedEnd == null && start != null && dur.ok && dur.value != null) {
+        estimatedEnd = start + (dur.value * 86400000);
+      }
       return {
         id: ev.id || "ev-" + (idx + 1), causa: causa, parte: parte, hipotese: hipotese,
         documentosExistentes: temDoc ? ["documento indicado"] : [], documentosFaltantes: missingDocs,
@@ -470,7 +498,7 @@
         possivelConcorrencia: conc || parte === "compartilhado",
         impactoCaminhoCritico: crit, atividadeAfetada: ev.atividadeAfetada || "",
         dataInicio: ev.dataInicio || "", dataFim: ev.dataFim || "",
-        startMs: start, endMs: end != null ? end : start,
+        startMs: start, endMs: estimatedEnd != null ? estimatedEnd : start,
         duracaoDias: dur.ok ? dur.value : null, observacao: ev.observacao || ""
       };
     });
@@ -560,11 +588,23 @@
     var job = "Registrar eventos de atraso e ver hipóteses preliminares e lacunas de prova.";
     var decision = "Completar prova e período, ou enquadrar cronograma e nexo antes de pedir prazo ou custo.";
     if (!r || !r.ok) {
+      var invalidEvents = r && Array.isArray(r.invalid) ? r.invalid : [];
+      var errorLabels = {
+        duracao_invalida: "duração ilegível",
+        duracao_negativa: "duração negativa",
+        duracao_overflow: "duração acima do limite de 36.500 dias",
+        data_inicio_invalida: "data inicial inexistente ou inválida",
+        data_fim_invalida: "data final inexistente ou inválida",
+        periodo_invertido: "data final anterior à data inicial"
+      };
+      var fatoInvalido = r && r.error === "evento_invalido"
+        ? "Há evento(s) inválido(s): " + invalidEvents.map(function (x) { return (x.id || "evento") + " — " + (errorLabels[x.error] || x.error); }).join("; ") + "."
+        : "Nenhum evento válido foi registrado.";
       return {
         job: job, decision: "Adicionar ao menos um evento com causa.",
         premises: ["Sem evento descrito não há hipótese."],
         layers: {
-          fato: "Nenhum evento válido foi registrado.",
+          fato: fatoInvalido,
           calculo: "A ferramenta não soma dias.",
           inferencia: "Sem hipótese.",
           unknown: "Não há diário de obra nem processo nesta leitura."
@@ -624,14 +664,6 @@
     return { ok: true, level: level, readiness: readiness, readinessLabel: readinessLabel, analyzed: analyzed, essentialMet: essentialMet, essentialPending: essentialPending, essentialTotal: essentialTotal, essentialNa: essentialNa, supportPending: supportPending, finalPending: finalPending, blockersHit: blockersHit.map(function (b) { return b.id; }), blockerLabels: blockerLabels, progressPct: essentialTotal > 0 ? Math.round((essentialMet / essentialTotal) * 100) : 0, synthesis: synthesis };
   }
 
-  var TOOL_JOBS = {
-    hub: { job: "Escolher o recorte certo para a decisão do contrato agora.", decision: "Não misturar limite numérico, prontidão documental, hipótese de atraso e fato público." },
-    limite: { job: "Conferir se o próximo acréscimo ou a próxima supressão ainda cabe no limite numérico do art. 125.", decision: "Seguir no recorte numérico ou enquadrar o excesso." },
-    reequilibrio: { job: "Ver se o dossiê documental do pedido de reequilíbrio está pronto ou se há bloqueadores centrais.", decision: "Corrigir lacunas na ordem indicada, sem tratar escore como direito." },
-    matriz: { job: "Registrar eventos de atraso e ver hipóteses preliminares e lacunas de prova.", decision: "Completar prova e período antes de pedir prazo ou custo." },
-    diagnostico: { job: "Ler o que o recorte público já mostra sobre um contrato e o que continua sem informação.", decision: "Separar fato oficial, derivado e desconhecido antes de pedir segunda leitura humana." }
-  };
-
   var api = {
     parseBRL: parseBRL, readMoney: readMoney, roundBRL: roundBRL, formatBRL: formatBRL,
     nonFinitePaths: nonFinitePaths, MAX_BRL: MAX_BRL,
@@ -640,7 +672,7 @@
     explainReequilibrio: explainReequilibrio, computeMatrizAtraso: computeMatrizAtraso,
     computeMatrizEventos: computeMatrizEventos, explainMatriz: explainMatriz,
     computeAditivoReadiness: computeAditivoReadiness,
-    REEQ_CATEGORIES: REEQ_CATEGORIES, ATRASO_MAP: ATRASO_MAP, TOOL_JOBS: TOOL_JOBS,
+    REEQ_CATEGORIES: REEQ_CATEGORIES, ATRASO_MAP: ATRASO_MAP,
     ART125_AC_GERAL: ART125_AC_GERAL, ART125_AC_REFORMA: ART125_AC_REFORMA, ART125_SU: ART125_SU
   };
   root.ConfengeToolCompute = api;

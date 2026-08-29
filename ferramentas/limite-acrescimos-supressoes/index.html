@@ -55,7 +55,9 @@
 <p>Cálculo orientativo do art. 125 da Lei nº 14.133/2021: acréscimo de 25% do valor inicial atualizado (50% em reforma de edifício ou equipamento) e supressão de 25%. Os eixos são independentes. O resultado separa <strong>fato</strong>, <strong>cálculo</strong>, <strong>inferência</strong> e o que permanece <strong>desconhecido</strong>. Não é parecer jurídico.</p>
 <p><a href="https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm" rel="external noopener" target="_blank">Consultar a Lei nº 14.133/2021</a></p>
 </section>
-<form id="limite-form" class="tool-form tool-workflow" novalidate data-tool-workflow
+<p class="tool-runtime-status" id="limite-runtime-status" data-tool-runtime-status role="status">Ative o JavaScript para calcular no navegador. O formulário está bloqueado para não enviar valores pela URL ou ao servidor.</p>
+<form id="limite-form" class="tool-form tool-workflow" method="post" action="/ferramentas/limite-acrescimos-supressoes/" novalidate data-tool-workflow>
+<fieldset class="tool-runtime-fields" data-tool-runtime-fields disabled>
 
 <div class="tool-progress-panel" data-limite-progress role="status" aria-live="polite">
 <p class="tool-step-status" data-limite-step-status>Etapa 1 de 3  -  Base do contrato</p>
@@ -123,12 +125,13 @@
 <div class="tool-precalc-summary" data-precalc-summary aria-live="polite"></div>
 <div class="tool-step-nav">
 <button type="button" class="button button-secondary" data-limite-prev>Anterior</button>
-<button class="button button-primary tool-run" type="submit">Calcular saldos</button>
+<button class="button button-primary tool-run" type="submit" disabled aria-describedby="limite-runtime-status">Calcular saldos</button>
 </div>
 </section>
 
 <p class="tool-privacy-note">Os valores ficam apenas neste navegador e não são enviados à CONFENGE.</p>
 <p class="tool-text-actions"><button type="button" class="tool-text-action" id="btn-reset" data-tool-reset>Apagar respostas</button></p>
+</fieldset>
 </form>
 
 <div id="resultado" class="tool-result-panel tool-result-dominant" hidden tabindex="-1" aria-live="polite"></div>
@@ -153,6 +156,12 @@
   var root = document.querySelector("[data-limite-workflow]");
   var form = document.getElementById("limite-form");
   var current = 1;
+  var runtimeStatus = document.getElementById("limite-runtime-status");
+  var runButton = form && form.querySelector("button.tool-run");
+  if (!T || !C || !form) return;
+  if (runtimeStatus) runtimeStatus.hidden = true;
+  var runtimeFields = form.querySelector("[data-tool-runtime-fields]"); if (runtimeFields) runtimeFields.disabled = false;
+  if (runButton) runButton.disabled = false;
   if (T && T.bindToolLifecycle) T.bindToolLifecycle({ tool: TOOL });
 
   function money(id, required) {

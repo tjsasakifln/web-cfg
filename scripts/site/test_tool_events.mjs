@@ -57,10 +57,12 @@ for (const rel of tools) {
 {
   const src = readFileSync(resolve(ROOT, "assets/js/tools-common.js"), "utf8");
   const dataLayer = [];
+  const documentListeners = {};
   const sandbox = {
     window: { dataLayer, confengeTrack(name, props) { dataLayer.push({ event: name, ...props }); } },
     document: {
       querySelectorAll() { return []; },
+      addEventListener(name, fn) { documentListeners[name] = fn; },
     },
     console,
   };
@@ -91,10 +93,30 @@ for (const rel of tools) {
   else pass("scrub_no_money_cnpj_pii");
   if (dirty.tool !== "limite-acrescimos" || dirty.level !== "bad") fail("scrub_kept_safe", dirty);
   else pass("scrub_kept_safe");
+  const disguised = T.scrubProps({
+    tool: "limite-acrescimos",
+    level: "texto livre alice@example.com",
+    custom_metric: "R$ 1.000.000,00",
+  });
+  if (Object.prototype.hasOwnProperty.call(disguised, "level") || Object.prototype.hasOwnProperty.call(disguised, "custom_metric")) {
+    fail("scrub_disguised_free_text_money", disguised);
+  } else pass("scrub_disguised_free_text_money");
   T.track("tool_complete", { tool: "x", email: "should@not", valor: 123, cnpj: "00" });
   const last = dataLayer[dataLayer.length - 1];
   if (last.email || last.valor || last.cnpj) fail("emit_leaked", last);
   else pass("emit_scrubs_before_track");
+
+  T.bindToolLifecycle({ tool: "dynamic-tool" });
+  const offer = { getAttribute(name) { return name === "data-tool-to-offer" ? "aditivos-obras-publicas" : ""; } };
+  const target = { closest(selector) { return selector === "[data-tool-to-offer]" ? offer : null; } };
+  if (typeof documentListeners.click !== "function") fail("dynamic_cta_delegation_missing");
+  else {
+    documentListeners.click({ target });
+    const delegated = dataLayer[dataLayer.length - 1];
+    if (delegated.event !== "tool_to_offer" || delegated.offer !== "aditivos-obras-publicas") {
+      fail("dynamic_cta_delegation", delegated);
+    } else pass("dynamic_cta_delegation");
+  }
 }
 
 // Content improvements cohort

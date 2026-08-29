@@ -3,5 +3,5 @@ overflows=0
 axe_critical=0
 axe_serious=0
 axe_moderate=0
-screenshots=/home/tjsasakifln/code/confenge/web-cfg/.worktrees/cfg10x-18-tools-product/docs/uiux-tools-remediation/evidence/screenshots/after
-generated=2026-08-28T14:09:11.958Z
+screenshots=docs/uiux-tools-remediation/evidence/screenshots/after
+generated=2026-08-29T15:48:20.104Z

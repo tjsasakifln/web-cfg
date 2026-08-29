@@ -3,14 +3,24 @@
   "use strict";
   var P = "confenge.tool.", TTL = 864e5 * 30;
   var PII_KEYS = ["email","phone","valor","valorinicial","valorInicial","raw","nome","cnpj","cpf","q","query","qid","mensagem","message","causa","observacao","telefone","tel","whatsapp","name","empresa","documento","identificador","contrato","freetext","free_text","search_query","edital"];
+  var SAFE_STRING_KEYS = ["tool","level","offer","tipo","cta_branch","readiness","urgencia","materialidade"];
+  var SAFE_NUMBER_KEYS = ["events","sem_prova","blockers","unknown_count","official_count"];
+  var SAFE_BOOLEAN_KEYS = ["within_ac","within_su"];
   function sensitiveKey(k) {
     var s = String(k || "").toLowerCase();
     if (PII_KEYS.indexOf(k) >= 0 || PII_KEYS.indexOf(s) >= 0) return true;
     return /email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|cnpj|document|valor|causa|observ|qid|query|raw|identificador/.test(s);
   }
   function scrubProps(props) {
-    var safe = props && typeof props === "object" ? Object.assign({}, props) : {};
-    Object.keys(safe).forEach(function (k) { if (sensitiveKey(k)) delete safe[k]; });
+    var input = props && typeof props === "object" ? props : {};
+    var safe = {};
+    Object.keys(input).forEach(function (k) {
+      if (sensitiveKey(k)) return;
+      var value = input[k];
+      if (SAFE_STRING_KEYS.indexOf(k) >= 0 && typeof value === "string" && /^[a-z0-9][a-z0-9._:/-]{0,79}$/i.test(value)) safe[k] = value;
+      else if (SAFE_NUMBER_KEYS.indexOf(k) >= 0 && Number.isSafeInteger(value) && value >= 0 && value <= 100000) safe[k] = value;
+      else if (SAFE_BOOLEAN_KEYS.indexOf(k) >= 0 && typeof value === "boolean") safe[k] = value;
+    });
     return safe;
   }
   function emit(name, props) {
@@ -46,10 +56,15 @@
     document.querySelectorAll("[data-tool-download]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_download", { tool: tool }); }); });
     document.querySelectorAll("[data-tool-copy]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_copy", { tool: tool }); }); });
     document.querySelectorAll("[data-tool-reset]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_reset", { tool: tool }); }); });
-    document.querySelectorAll("[data-tool-to-whatsapp], a[href*='wa.me']").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_whatsapp", { tool: tool }); }); });
-    document.querySelectorAll("[data-tool-to-form], a[href*='#contato']").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_form", { tool: tool }); }); });
-    document.querySelectorAll("[data-tool-to-offer]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_offer", { tool: tool, offer: el.getAttribute("data-tool-to-offer") || "" }); }); });
-    document.querySelectorAll("[data-tool-to-content]").forEach(function (el) { el.addEventListener("click", function () { emit("tool_to_content", { tool: tool }); }); });
+    document.addEventListener("click", function (event) {
+      var target = event && event.target;
+      if (!target || typeof target.closest !== "function") return;
+      var offer = target.closest("[data-tool-to-offer]");
+      if (offer) { emit("tool_to_offer", { tool: tool, offer: offer.getAttribute("data-tool-to-offer") || "" }); return; }
+      if (target.closest("[data-tool-to-whatsapp], a[href*='wa.me']")) { emit("tool_to_whatsapp", { tool: tool }); return; }
+      if (target.closest("[data-tool-to-form], a[href*='#contato']")) { emit("tool_to_form", { tool: tool }); return; }
+      if (target.closest("[data-tool-to-content]")) emit("tool_to_content", { tool: tool });
+    });
   }
   function escapeHtml(s) {
     return String(s == null ? "" : s)

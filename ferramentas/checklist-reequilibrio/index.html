@@ -53,7 +53,9 @@
 </ul>
 <p><a href="https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm" rel="external noopener" target="_blank">Consultar a Lei nº 14.133/2021</a> · <a href="https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/" rel="external noopener" target="_blank">Consultar o manual do TCU</a></p>
 </section>
-<form id="f" class="tool-form">
+<p class="tool-runtime-status" id="reeq-runtime-status" data-tool-runtime-status role="status">Ative o JavaScript para avaliar no navegador. O formulário está bloqueado para não enviar respostas pela URL ou ao servidor.</p>
+<form id="f" class="tool-form" method="post" action="/ferramentas/checklist-reequilibrio/">
+<fieldset class="tool-runtime-fields" data-tool-runtime-fields disabled>
 <div id="root"></div>
 <div class="tool-grid" style="margin-top:1rem">
 <div class="tool-field"><label for="urg">Urgência</label>
@@ -65,9 +67,10 @@
 </div>
 <p class="tool-privacy-note">Respostas só neste navegador e não são enviadas à CONFENGE.</p>
 <div class="tool-actions">
-<button class="button button-primary tool-run" type="submit">Gerar diagnóstico</button>
+<button class="button button-primary tool-run" type="submit" disabled aria-describedby="reeq-runtime-status">Gerar diagnóstico</button>
 <button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Apagar respostas</button>
 </div>
+</fieldset>
 </form>
 <div id="out" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
 <div class="tool-actions" id="ra" hidden>
@@ -87,6 +90,11 @@
 (function(){
   var T=window.ConfengeTools, C=window.ConfengeToolCompute;
   var TOOL="checklist-reequilibrio", SCHEMA=4, lastText="";
+  var runtimeStatus=document.getElementById("reeq-runtime-status"), form=document.getElementById("f");
+  if(!T||!C||!form) return;
+  if(runtimeStatus) runtimeStatus.hidden=true;
+  var runtimeFields=form.querySelector("[data-tool-runtime-fields]"); if(runtimeFields) runtimeFields.disabled=false;
+  var runButton=form.querySelector("button.tool-run"); if(runButton) runButton.disabled=false;
   if(T.bindToolLifecycle) T.bindToolLifecycle({tool:TOOL});
   var root=document.getElementById("root"), h="";
   Object.keys(C.REEQ_CATEGORIES).forEach(function(cid){
@@ -142,6 +150,20 @@
     });
     var expl=C.explainReequilibrio(r);
     var out=document.getElementById("out");
+    if(!r.ok){
+      var escInvalid=T.escapeHtml||function(s){return String(s==null?"":s);};
+      out.hidden=false; out.className="tool-result-panel bad";
+      out.innerHTML='<p class="tool-result-summary"><strong>Não foi possível medir a prontidão.</strong> '+escInvalid(expl.layers.fato)+'</p>'+
+        '<section class="tool-layers" aria-labelledby="camadas-reeq-erro"><h3 id="camadas-reeq-erro">Como ler este estado</h3>'+
+        '<p data-layer="fato"><strong>Fato.</strong> '+escInvalid(expl.layers.fato)+'</p>'+
+        '<p data-layer="calculo"><strong>Cálculo.</strong> '+escInvalid(expl.layers.calculo)+'</p>'+
+        '<p data-layer="inferencia"><strong>Inferência.</strong> '+escInvalid(expl.layers.inferencia)+'</p>'+
+        '<p data-layer="unknown"><strong>Desconhecido.</strong> '+escInvalid(expl.layers.unknown)+'</p></section>'+
+        '<p class="tool-disclaimer">'+escInvalid(expl.legalDisclaimer)+'</p>';
+      document.getElementById("ra").hidden=true;
+      document.getElementById("cta").hidden=true;
+      lastText=""; T.focusResult(out); persist(); return;
+    }
     out.hidden=false; out.className="tool-result-panel "+r.level;
     var esc=T.escapeHtml||function(s){return String(s==null?"":s);};
     var order=(r.correctionOrder||[]).map(function(o){ return "<li><strong>"+esc(o.label)+"</strong> ("+esc(o.reason)+")</li>"; }).join("");

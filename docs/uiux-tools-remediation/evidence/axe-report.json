@@ -1,6 +1,50 @@
 {
   "pages": [
     {
+      "path": "/ferramentas/limite-acrescimos-supressoes/#resultado",
+      "id": "limite-result",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/checklist-reequilibrio/#out",
+      "id": "reequilibrio-result",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/matriz-atraso-obra/#out",
+      "id": "matriz-result",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
+      "path": "/ferramentas/diagnostico-defesa-margem/#diagnostic-result",
+      "id": "diagnostico-result",
+      "counts": {
+        "critical": 0,
+        "serious": 0,
+        "moderate": 0,
+        "minor": 0
+      },
+      "violations": []
+    },
+    {
       "path": "/ferramentas/",
       "id": "hub",
       "counts": {

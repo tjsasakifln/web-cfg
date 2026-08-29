@@ -57,18 +57,23 @@
 <li><strong>Revisão:</strong> recorte com <time datetime="2026-08-14">14 de agosto de 2026</time>; página revista em <time datetime="2026-08-15">15 de agosto de 2026</time>.</li>
 <li><strong>Identidade:</strong> CONFENGE, consultoria de engenharia para contratos de obras públicas. Esta página não é parecer jurídico.</li>
 </ul>
-</section> <form id="lookup" class="tool-form" role="search">
+</section>
+<p class="tool-runtime-status" id="diagnostico-runtime-status" data-tool-runtime-status role="status">Carregando o recorte público. A busca fica bloqueada até a leitura estar pronta e nunca envia o identificador pela URL.</p>
+<form id="lookup" class="tool-form" role="search" method="post" action="/ferramentas/diagnostico-defesa-margem/">
+<fieldset class="tool-runtime-fields" data-tool-runtime-fields disabled>
 <div class="tool-field">
 <label for="qid">Contrato, CNPJ, identificador ou contexto público</label>
 <input id="qid" name="q" type="search" autocomplete="off" placeholder="Ex.: 83102277000152-2-000626/2026 ou Itajaí"/>
 <p class="tool-field-hint">A busca ocorre neste recorte público. Não envia o identificador para analytics.</p>
 </div>
 <div class="tool-actions">
-<button class="button button-primary tool-run" type="submit">Ler este contrato</button>
+<button class="button button-primary tool-run" type="submit" disabled aria-describedby="diagnostico-runtime-status">Ler este contrato</button>
 <button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Limpar busca</button>
 </div>
 <p class="form-status" id="lookup-status" hidden></p>
+</fieldset>
 </form>
+<div id="diagnostic-result" data-tool-result>
 <section class="tool-layers" id="camadas-diagnostico" aria-labelledby="h-camadas">
 <h2 id="h-camadas">Fato, cálculo, inferência e desconhecido</h2>
 <p data-layer="fato"><strong>Fato.</strong> Identificador, órgão, contratado, objeto, valor nominal assinado e vigência estão no recorte oficial deste contrato.</p>
@@ -131,7 +136,7 @@
 </section> <section id="limites-unknown" aria-labelledby="h-unknown">
 <h2 id="h-unknown">Limites e UNKNOWN</h2>
 <p id="out-unknown">Identidade, objeto, órgão, contratado, valor nominal assinado e vigência estão no recorte oficial. Aditivos, reajuste, medições e pagamentos permanecem UNKNOWN com reason_code do produtor. Esta página não fabrica direito nem trata silêncio da fonte como evidência.</p>
-</section> <section id="segunda-leitura" class="tool-cta-contextual" aria-labelledby="h-cta" data-cta-id="segunda-leitura-contrato" data-tool-to-offer="defesa-margem-contratos-publicos">
+</section> <section id="segunda-leitura" class="tool-cta-contextual" aria-labelledby="h-cta" data-cta-id="segunda-leitura-contrato">
 <h2 id="h-cta">Segunda leitura deste contrato</h2>
 <p>A leitura acima permanece útil sem enviar nada. Se quiser uma conferência humana da CONFENGE sobre <strong>este</strong> contrato, use o pedido abaixo.</p>
 <form action="/.netlify/functions/lead" class="contact-form" data-ajax="true" data-receipt-required="true" data-success-destination="/obrigado-contrato" data-submit-timeout-ms="15000" method="POST" name="diagnostico-b2g" id="lead-form">
@@ -155,9 +160,11 @@
 <div class="field"><label for="mensagem">Contexto em poucas linhas <span class="optional-mark">opcional</span></label><textarea id="mensagem" name="mensagem" rows="3" placeholder="O que precisa ser conferido neste contrato. Não cole dados pessoais desnecessários."></textarea></div>
 <label class="consent" for="consentimento"><input id="consentimento" name="consentimento" required="" type="checkbox"/><span>Autorizo o uso destes dados para retorno sobre a solicitação, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span></label>
 <p class="form-status" role="status" aria-live="polite" aria-atomic="true" hidden></p>
-<button class="button button-primary button-lg form-submit" type="submit" data-cta-position="money-asset" data-event-name="cta_click" data-asset-id="diagnostico-defesa-margem" data-route-family="defesa-margem-diagnostico" data-cta-id="segunda-leitura-contrato">Quero uma segunda leitura deste contrato</button>
+<button class="button button-primary button-lg form-submit" type="submit" data-tool-to-form data-cta-position="money-asset" data-event-name="cta_click" data-asset-id="diagnostico-defesa-margem" data-route-family="defesa-margem-diagnostico" data-cta-id="segunda-leitura-contrato">Quero uma segunda leitura deste contrato</button>
 </form>
-</section> <section id="conteudo-canonico" aria-labelledby="h-relacionado">
+</section>
+</div>
+<section id="conteudo-canonico" aria-labelledby="h-relacionado">
 <h2 id="h-relacionado">Conteúdo canônico relacionado</h2>
 <ul>
 <li><a href="/defesa-margem-contratos-publicos/">Defesa técnica e proteção de margem</a>, oferta de segunda leitura humana.</li>
@@ -178,22 +185,35 @@
   var D = window.ConfengeDiagnoseMargin;
   var T = window.ConfengeTools;
   var statusEl = document.getElementById("lookup-status");
+  var runtimeStatus = document.getElementById("diagnostico-runtime-status");
+  var lookupForm = document.getElementById("lookup");
+  var lookupButton = lookupForm && lookupForm.querySelector("button.tool-run");
+  var resultEl = document.getElementById("diagnostic-result");
   var SNAP = "/ferramentas/diagnostico-defesa-margem/snapshot.json";
   var snapshot = null;
   var lastText = "";
   var TOOL = "diagnostico-defesa-margem";
+  if (!D || !T || !lookupForm || !resultEl) return;
   if (T && T.bindToolLifecycle) T.bindToolLifecycle({ tool: TOOL, startSelectors: "#qid, button.tool-run" });
   function showStatus(msg, kind){
     statusEl.hidden = !msg;
     statusEl.textContent = msg || "";
     statusEl.classList.toggle("is-error", kind === "error");
   }
+  function esc(value){ return T.escapeHtml ? T.escapeHtml(value) : String(value == null ? "" : value); }
+  function safeExternalUrl(value){
+    try {
+      var url = new URL(String(value || ""));
+      return (url.protocol === "https:" || url.protocol === "http:") ? url.href : "";
+    } catch (_) { return ""; }
+  }
   function fmt(fact){
     if (!fact || fact.classification === "UNKNOWN") return "UNKNOWN";
     var label = fact.classification === "OFFICIAL" ? "" : " [" + fact.classification + "]";
-    return String(fact.value) + label;
+    return esc(String(fact.value) + label);
   }
   function render(diagnosis){
+    resultEl.hidden = false;
     document.getElementById("public-contract-id").value = diagnosis.public_id.value || "";
     var slugEl = document.getElementById("public-id-slug");
     if (slugEl) slugEl.value = diagnosis.public_id_slug || "";
@@ -202,28 +222,28 @@
       "<dt>Órgão</dt><dd>" + fmt(diagnosis.orgao) + "</dd>" +
       "<dt>Objeto</dt><dd>" + fmt(diagnosis.titulo) + "</dd>" +
       "<dt>Fornecedor</dt><dd>" + fmt(diagnosis.fornecedor) + "</dd>";
-    document.getElementById("out-resumo").innerHTML = diagnosis.resumo_executivo.map(function(l){ return "<li>" + l + "</li>"; }).join("");
+    document.getElementById("out-resumo").innerHTML = diagnosis.resumo_executivo.map(function(l){ return "<li>" + esc(l) + "</li>"; }).join("");
     var timeline = [];
-    if (diagnosis.as_of.classification === "OFFICIAL") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">as_of</span><h3>" + diagnosis.as_of.value + "</h3><p>Revisão do recorte público.</p></li>");
+    if (diagnosis.as_of.classification === "OFFICIAL") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">as_of</span><h3>" + esc(diagnosis.as_of.value) + "</h3><p>Revisão do recorte público.</p></li>");
     if (diagnosis.vigencia_inicio.classification !== "UNKNOWN") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">início</span><h3>" + fmt(diagnosis.vigencia_inicio) + "</h3></li>");
     if (diagnosis.vigencia_fim.classification !== "UNKNOWN") timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">fim</span><h3>" + fmt(diagnosis.vigencia_fim) + "</h3></li>");
     if (!timeline.length) timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">UNKNOWN</span><h3>Sem datas oficiais de vigência neste recorte</h3></li>");
     document.getElementById("out-timeline").innerHTML = timeline.join("");
     document.getElementById("out-eventos").innerHTML = diagnosis.eventos_defesa_margem.map(function(e){
-      return "<li>" + e.family + ": " + e.classification + (e.reason ? " (" + e.reason + ")" : "") + "</li>";
+      return "<li>" + esc(e.family) + ": " + esc(e.classification) + (e.reason ? " (" + esc(e.reason) + ")" : "") + "</li>";
     }).join("");
     var fontes = [];
-    if (diagnosis.fontes.classification === "OFFICIAL" && /https?:/.test(String(diagnosis.fontes.value || ""))) {
-      fontes.push("<li><a href=\"" + diagnosis.fontes.value + "\" rel=\"external noopener\" target=\"_blank\">Fonte oficial</a> · as_of " + (diagnosis.freshness || "UNKNOWN") + "</li>");
+    var officialUrl = diagnosis.fontes.classification === "OFFICIAL" ? safeExternalUrl(diagnosis.fontes.value) : "";
+    if (officialUrl) {
+      fontes.push("<li><a href=\"" + esc(officialUrl) + "\" rel=\"external noopener\" target=\"_blank\">Fonte oficial</a> · as_of " + esc(diagnosis.freshness || "UNKNOWN") + "</li>");
     } else {
       fontes.push("<li>Fonte: " + fmt(diagnosis.fontes) + "</li>");
     }
     document.getElementById("out-fontes").innerHTML = fontes.join("");
-    document.getElementById("out-conferencia").innerHTML = diagnosis.o_que_merece_conferencia.map(function(l){ return "<li>" + l + "</li>"; }).join("");
+    document.getElementById("out-conferencia").innerHTML = diagnosis.o_que_merece_conferencia.map(function(l){ return "<li>" + esc(l) + "</li>"; }).join("");
     document.getElementById("out-unknown").textContent = "UNKNOWN preservado em " + diagnosis.unknown_count + " campos ou famílias. Completeness: " + diagnosis.completeness + ". Esta página não fabrica direito nem trata silêncio da fonte como evidência.";
     var layers = diagnosis.layers || (D.explainDiagnosis ? D.explainDiagnosis(diagnosis).layers : null);
     if (layers) {
-      var esc = (T && T.escapeHtml) ? T.escapeHtml : function(s){ return String(s == null ? "" : s); };
       var box = document.getElementById("camadas-diagnostico");
       if (box) {
         box.innerHTML = "<h2 id=\"h-camadas\">Fato, cálculo, inferência e desconhecido</h2>" +
@@ -248,8 +268,7 @@
       T.track("tool_complete", {
         tool: TOOL,
         unknown_count: diagnosis.unknown_count,
-        official_count: diagnosis.official_count,
-        public_id_slug: diagnosis.public_id_slug || ""
+        official_count: diagnosis.official_count
       });
     }
     if (typeof window.confengeTrack === "function") {
@@ -257,16 +276,17 @@
         page_path: "/ferramentas/diagnostico-defesa-margem/",
         route_family: "defesa-margem-diagnostico",
         asset_id: "diagnostico-defesa-margem",
-        public_id_slug: diagnosis.public_id_slug || "",
         unknown_count: diagnosis.unknown_count,
         official_count: diagnosis.official_count
       });
     }
+    T.focusResult(resultEl);
   }
   function analyze(query){
     if (!D || !snapshot) return;
     var hit = D.selectContract(snapshot, query);
     if (!hit.ok) {
+      clearDiagnosisUi();
       showStatus(hit.reason === "not_in_snapshot"
         ? "Este identificador não está no recorte público atual. UNKNOWN — não inventamos o contrato."
         : "Não foi possível escolher um único contrato neste recorte.", "error");
@@ -277,13 +297,12 @@
       window.confengeTrack("contract_selected", {
         page_path: "/ferramentas/diagnostico-defesa-margem/",
         route_family: "defesa-margem-diagnostico",
-        asset_id: "diagnostico-defesa-margem",
-        public_id_slug: hit.record.public_id_slug || ""
+        asset_id: "diagnostico-defesa-margem"
       });
     }
     render(D.diagnoseMargin(hit.record, snapshot));
   }
-  document.getElementById("lookup").addEventListener("submit", function(e){
+  lookupForm.addEventListener("submit", function(e){
     e.preventDefault();
     analyze(document.getElementById("qid").value);
   });
@@ -294,10 +313,17 @@
   if (btnCopy) btnCopy.onclick = function(){ if (T && T.copyText) T.copyText(lastText); };
   if (btnDl) btnDl.onclick = function(){ if (T && T.downloadText) T.downloadText("confenge-diagnostico-defesa-margem.txt", lastText); };
   if (btnPrint) btnPrint.onclick = function(){ window.print(); };
+  function clearDiagnosisUi(){
+    resultEl.hidden = true;
+    document.getElementById("public-contract-id").value = "";
+    var publicSlug = document.getElementById("public-id-slug");
+    if (publicSlug) publicSlug.value = "";
+    lastText = "";
+  }
   if (btnReset) btnReset.onclick = function(){
     document.getElementById("qid").value = "";
     showStatus("", "");
-    lastText = "";
+    clearDiagnosisUi();
     if (T && T.clearState) T.clearState(TOOL);
   };
   function moneyAssetProps(){
@@ -337,10 +363,13 @@
   });
   fetch(SNAP, { credentials: "same-origin" }).then(function(r){ return r.json(); }).then(function(data){
     snapshot = data;
-    var params = new URLSearchParams(window.location.search);
-    var preset = params.get("id");
-    if (preset) analyze(preset);
-  }).catch(function(){ showStatus("Não foi possível carregar o recorte público.", "error"); });
+    if (runtimeStatus) runtimeStatus.hidden = true;
+    var runtimeFields = lookupForm.querySelector("[data-tool-runtime-fields]"); if (runtimeFields) runtimeFields.disabled = false;
+    if (lookupButton) lookupButton.disabled = false;
+  }).catch(function(){
+    if (runtimeStatus) runtimeStatus.textContent = "Não foi possível carregar o recorte público. Tente novamente mais tarde; nenhum identificador foi enviado.";
+    showStatus("Não foi possível carregar o recorte público.", "error");
+  });
 })();
 </script>
 <section class="authority-method container" id="metodo" data-surface-type="ferramenta" aria-label="Método e limitações">

@@ -45,7 +45,9 @@
 <div class="tool-premises-body">
 <p>Matriz orientativa. Força maior e fato da Administração não se presumem: demonstram-se. A ferramenta não soma dias automaticamente nem emite laudo pericial. O resultado separa <strong>fato</strong>, <strong>cálculo</strong> (sem soma de dias), <strong>inferência</strong> (hipótese) e o que permanece <strong>desconhecido</strong>.</p>
 </div></details>
-<form id="f" class="tool-form">
+<p class="tool-runtime-status" id="matriz-runtime-status" data-tool-runtime-status role="status">Ative o JavaScript para montar hipóteses no navegador. O formulário está bloqueado para não enviar eventos pela URL ou ao servidor.</p>
+<form id="f" class="tool-form" method="post" action="/ferramentas/matriz-atraso-obra/">
+<fieldset class="tool-runtime-fields" data-tool-runtime-fields disabled>
 <div id="events" class="tool-event-list"></div>
 <div class="tool-actions"><button type="button" class="button button-secondary" id="btn-add">Adicionar evento</button></div>
 <div class="tool-field" style="margin-top:1rem">
@@ -54,9 +56,10 @@
 </div>
 <p class="tool-privacy-note">Respostas só neste navegador e não são enviadas à CONFENGE.</p>
 <div class="tool-actions">
-<button class="button button-primary tool-run" type="submit">Montar hipóteses</button>
+<button class="button button-primary tool-run" type="submit" disabled aria-describedby="matriz-runtime-status">Montar hipóteses</button>
 <button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Apagar respostas</button>
 </div>
+</fieldset>
 </form>
 <div id="out" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
 <div class="tool-actions" id="ra" hidden>
@@ -76,6 +79,11 @@
 (function(){
   var T=window.ConfengeTools, C=window.ConfengeToolCompute;
   var TOOL="matriz-atraso", SCHEMA=4, n=0, lastText="", root=document.getElementById("events");
+  var runtimeStatus=document.getElementById("matriz-runtime-status"), form=document.getElementById("f");
+  if(!T||!C||!root||!form) return;
+  if(runtimeStatus) runtimeStatus.hidden=true;
+  var runtimeFields=form.querySelector("[data-tool-runtime-fields]"); if(runtimeFields) runtimeFields.disabled=false;
+  var runButton=form.querySelector("button.tool-run"); if(runButton) runButton.disabled=false;
   if(T.bindToolLifecycle) T.bindToolLifecycle({tool:TOOL});
 
   function esc(s){ return (T.escapeHtml||function(x){return String(x==null?"":x);})(s); }
@@ -160,8 +168,18 @@
     var r=C.computeMatrizEventos(events, { temMatriz: document.getElementById("tem_matriz").value });
     var out=document.getElementById("out");
     if(!r.ok){
-      out.hidden=false; out.className="tool-result-panel warn";
-      out.innerHTML="<p>Adicione ao menos um evento com descrição da causa.</p>";
+      var explInvalid=C.explainMatriz(r);
+      out.hidden=false; out.className="tool-result-panel bad";
+      out.innerHTML='<p class="tool-result-summary"><strong>Não foi possível montar as hipóteses.</strong> '+esc(explInvalid.layers.fato)+'</p>'+
+        '<section class="tool-layers" aria-labelledby="camadas-matriz-erro"><h3 id="camadas-matriz-erro">Como ler este estado</h3>'+
+        '<p data-layer="fato"><strong>Fato.</strong> '+esc(explInvalid.layers.fato)+'</p>'+
+        '<p data-layer="calculo"><strong>Cálculo.</strong> '+esc(explInvalid.layers.calculo)+'</p>'+
+        '<p data-layer="inferencia"><strong>Inferência.</strong> '+esc(explInvalid.layers.inferencia)+'</p>'+
+        '<p data-layer="unknown"><strong>Desconhecido.</strong> '+esc(explInvalid.layers.unknown)+'</p></section>'+
+        '<p class="tool-disclaimer">'+esc(explInvalid.legalDisclaimer)+'</p>';
+      document.getElementById("ra").hidden=true;
+      document.getElementById("cta").hidden=true;
+      lastText=""; T.focusResult(out);
       return;
     }
     var expl=C.explainMatriz(r);

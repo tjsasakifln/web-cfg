@@ -18,6 +18,17 @@ for(const rel of pages){
   if(!lower.includes("fato") || !lower.includes("cálculo") || !lower.includes("inferência") || !(lower.includes("desconhecido") || lower.includes("unknown"))){
     console.error("FAIL layers_language",rel); fail++;
   } else console.log("PASS layers_language",rel);
+
+  if (rel !== "ferramentas/index.html") {
+    const clientForm = html.match(/<form\b[^>]*\b(id="(?:limite-form|f|lookup)")[^>]*>/i);
+    if (!clientForm || !/\bmethod="post"/i.test(clientForm[0])) {
+      console.error("FAIL client_form_post_no_url_leak", rel); fail++;
+    } else console.log("PASS client_form_post_no_url_leak", rel);
+    if (!html.includes("data-tool-runtime-status") || !/<button\b[^>]*\btool-run[^>]*\bdisabled\b/i.test(html) ||
+        !/<fieldset\b[^>]*data-tool-runtime-fields[^>]*\bdisabled\b/i.test(html)) {
+      console.error("FAIL js_error_state", rel); fail++;
+    } else console.log("PASS js_error_state", rel);
+  }
 }
 const hub=readFileSync(resolve(ROOT,"ferramentas/index.html"),"utf8");
 if(!/CollectionPage|ItemList/.test(hub)){console.error("FAIL schema");fail++;}else console.log("PASS schema");
@@ -43,6 +54,14 @@ if(!money.includes("btn-copy")||!money.includes("btn-dl")||!money.includes("btn-
 if(!money.includes("bindToolLifecycle")||!money.includes("tool_complete")){
   console.error("FAIL money_events"); fail++;
 } else console.log("PASS money_events");
+if (/<section\b[^>]*data-tool-to-offer/i.test(money)) {
+  console.error("FAIL money_section_false_offer_attribution"); fail++;
+} else console.log("PASS money_offer_attribution_click_only");
+const analyticsCalls = [...money.matchAll(/(?:T\.track|window\.confengeTrack)\([\s\S]*?\}\);/g)]
+  .map((m) => m[0]).join("\n");
+if (/public_id_slug|public_contract_id|\bqid\b|\bquery\b/.test(analyticsCalls)) {
+  console.error("FAIL money_identifier_in_analytics"); fail++;
+} else console.log("PASS money_identifier_not_in_analytics");
 const resultRoutes = new Map([
   ["ferramentas/checklist-reequilibrio/index.html", "/reequilibrio-obras-publicas/"],
   ["ferramentas/limite-acrescimos-supressoes/index.html", "/aditivos-obras-publicas/"],

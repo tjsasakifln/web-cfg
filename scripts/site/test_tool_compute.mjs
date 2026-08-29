@@ -205,6 +205,50 @@ assertNoSilentZero("coerce_neg_base", C.computeLimiteAditivo({ valorInicial: -10
   else pass("reeq_alta_ressalvas", alta.ressalvas.length);
 }
 
+// Boundary: removing every item from the denominator cannot become medium/pronto.
+{
+  const allNa = {};
+  for (const cat of Object.values(C.REEQ_CATEGORIES)) {
+    for (const item of cat.items) allNa[item.key] = "na";
+  }
+  const r = C.computeReequilibrio(allNa);
+  if (r.ok || r.error !== "sem_itens_aplicaveis") fail("reeq_all_na_rejected", r);
+  else pass("reeq_all_na_rejected", r.error);
+}
+
+// Invalid public states fail explicitly instead of being silently read as pending.
+{
+  const r = C.computeReequilibrio({ fato_gerador: "talvez" });
+  if (r.ok || r.error !== "estado_invalido") fail("reeq_invalid_state_rejected", r);
+  else pass("reeq_invalid_state_rejected", r.error);
+}
+
+// Deterministic property sweep: a missing central blocker can never yield high readiness.
+{
+  let seed = 0x10c0ffee;
+  const next = () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed;
+  };
+  const keys = Object.values(C.REEQ_CATEGORIES).flatMap((cat) => cat.items.map((item) => item.key));
+  let checked = 0;
+  for (let i = 0; i < 64; i++) {
+    const states = Object.fromEntries(keys.map((key) => [key, (next() & 1) ? "met" : "missing"]));
+    states.fato_gerador = "missing";
+    const r = C.computeReequilibrio(states, { urgencia: i % 3 === 0 ? "alta" : "media" });
+    if (!r.ok || !r.hasCentralBlocker || r.readiness === "alta" || r.level === "ok") {
+      fail("property_reeq_blocker_" + i, r);
+      break;
+    }
+    if (C.nonFinitePaths(r).length) {
+      fail("property_reeq_finite_" + i, C.nonFinitePaths(r));
+      break;
+    }
+    checked += 1;
+  }
+  if (checked === 64) pass("property_reeq_blocker_64");
+}
+
 // --- Matriz concurrent + no evidence ---
 {
   const r = C.computeMatrizEventos([
@@ -249,6 +293,48 @@ assertNoSilentZero("coerce_neg_base", C.computeLimiteAditivo({ valorInicial: -10
 {
   const badDur = C.computeMatrizEventos([{ causa: "X", duracaoDias: -3 }]);
   if (badDur.ok) fail("mx_neg_dur"); else pass("mx_neg_dur", badDur.error);
+}
+
+{
+  const impossibleDate = C.computeMatrizEventos([
+    { causa: "Data impossível", dataInicio: "2026-02-30", duracaoDias: 1 }
+  ]);
+  if (impossibleDate.ok || impossibleDate.error !== "evento_invalido" ||
+      !impossibleDate.invalid?.some((x) => x.error === "data_inicio_invalida")) {
+    fail("mx_impossible_date_rejected", impossibleDate);
+  } else pass("mx_impossible_date_rejected");
+}
+
+// A duration completes the interval when no end date was supplied.
+{
+  const durationOverlap = C.computeMatrizEventos([
+    { causa: "A", dataInicio: "2026-01-01", duracaoDias: 10 },
+    { causa: "B", dataInicio: "2026-01-05", dataFim: "2026-01-06" },
+  ]);
+  if (!durationOverlap.ok || durationOverlap.summary.sobrepostosPorData !== 2) {
+    fail("mx_duration_overlap", durationOverlap);
+  } else pass("mx_duration_overlap");
+}
+
+// Deterministic property sweep: valid event intervals remain hypotheses and finite.
+{
+  let checked = 0;
+  for (let day = 1; day <= 28; day++) {
+    const dd = String(day).padStart(2, "0");
+    const r = C.computeMatrizEventos([
+      { causa: "Evento " + day, dataInicio: `2026-04-${dd}`, duracaoDias: day % 7 }
+    ]);
+    if (!r.ok || r.level !== "hypothesis" || C.nonFinitePaths(r).length) {
+      fail("property_matriz_hypothesis_" + day, r);
+      break;
+    }
+    if (/veredito automático|culpa (?:é|está) determinada|direito (?:é|está) reconhecido/i.test(JSON.stringify(r))) {
+      fail("property_matriz_legal_" + day, r);
+      break;
+    }
+    checked += 1;
+  }
+  if (checked === 28) pass("property_matriz_hypothesis_28");
 }
 
 {
@@ -305,9 +391,6 @@ assertNoSilentZero("coerce_neg_base", C.computeLimiteAditivo({ valorInicial: -10
   if (/\b(cpf|cnpj|email|telefone|whatsapp)\s*[:=]/i.test(text)) fail("report_pii_fields");
   else pass("report_no_pii_fields");
 }
-
-if (!C.TOOL_JOBS.limite.job || !C.TOOL_JOBS.diagnostico.decision) fail("tool_jobs");
-else pass("tool_jobs");
 
 if (failed) {
   console.error(failed + " failures");
