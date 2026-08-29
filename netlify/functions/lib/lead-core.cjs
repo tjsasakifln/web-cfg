@@ -438,6 +438,11 @@ function sanitizeAttributionLocation(val, maxLen, key) {
   }
 }
 
+function normalizeSessionId(value) {
+  const sessionId = String(value || "").slice(0, MAX_FIELD.session_id);
+  return /^sess-[0-9a-f]{27}$/i.test(sessionId) ? sessionId.toLowerCase() : "";
+}
+
 /**
  * Keep only allowlisted attribution keys. Drops arbitrary query params and PII.
  */
@@ -447,9 +452,11 @@ function pickAttribution(data) {
   for (const key of ATTR_ALLOWLIST) {
     if (!Object.prototype.hasOwnProperty.call(src, key)) continue;
     const max = MAX_FIELD[key] || 180;
-    const v = ATTR_LOCATION_KEYS.has(key)
-      ? sanitizeAttributionLocation(src[key], max, key)
-      : sanitizeAttributionValue(src[key], max, key);
+    const v = key === "session_id"
+      ? normalizeSessionId(src[key])
+      : ATTR_LOCATION_KEYS.has(key)
+        ? sanitizeAttributionLocation(src[key], max, key)
+        : sanitizeAttributionValue(src[key], max, key);
     if (v) out[key] = v;
   }
   return out;
@@ -878,7 +885,7 @@ function validateAndNormalize(data) {
     cta_id: sanitizeAttributionValue(data.cta_id, MAX_FIELD.cta_id, "cta_id") || null,
     asset_id: sanitizeAttributionValue(data.asset_id, MAX_FIELD.asset_id, "asset_id") || null,
     correlation_id: sanitizeAttributionValue(data.correlation_id, MAX_FIELD.correlation_id, "correlation_id") || null,
-    session_id: sanitizeAttributionValue(data.session_id || data.sid, MAX_FIELD.session_id, "session_id") || null,
+    session_id: normalizeSessionId(data.session_id || data.sid) || null,
     analysis_id: sanitizeAttributionValue(data.analysis_id, MAX_FIELD.analysis_id, "analysis_id") || null,
     evidence_pack_version: sanitizeAttributionValue(
       data.evidence_pack_version,
@@ -930,22 +937,23 @@ function validateAndNormalize(data) {
 /**
  * Lead id generation.
  * When `deterministic: true` (preferred for explicit idempotency keys), same seed
- * always yields the same id — critical for Netlify Blobs eventual-consistency races.
+ * always yields the same id across retries and concurrent durable-store writes.
  */
 function generateLeadId(seedMaterial, options = {}) {
   if (options && options.deterministic) {
-    return crypto
+    const digest = crypto
       .createHash("sha256")
       .update(String(seedMaterial || "empty"))
-      .digest("hex")
-      .slice(0, 24);
+      .digest("hex");
+    return `lead-${digest.slice(0, 27)}`;
   }
   const material = [
     seedMaterial || "",
     String(Date.now()),
     crypto.randomBytes(16).toString("hex"),
   ].join("|");
-  return crypto.createHash("sha256").update(material).digest("hex").slice(0, 24);
+  const digest = crypto.createHash("sha256").update(material).digest("hex");
+  return `lead-${digest.slice(0, 27)}`;
 }
 
 function idempotencyKeyFor(lead, explicit) {

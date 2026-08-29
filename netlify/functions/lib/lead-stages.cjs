@@ -10,8 +10,6 @@
  * Later transitions require authenticated ops (OPS_TOKEN).
  */
 
-const FUNNEL = require("../../../data/revops/closed-loop-funnel.v1.json");
-
 const STAGES = Object.freeze([
   "visitor",
   "cta_triggered",
@@ -47,15 +45,18 @@ const ALLOWED = Object.freeze({
   lost: ["contacted", "qualified"], // reopen with reason
 });
 
-const LOSS_REASONS = Object.freeze([...(FUNNEL.reject_reasons || [])]);
-const ACCEPT_REASONS = Object.freeze([...(FUNNEL.accept_reasons || [])]);
-const SLA = Object.freeze({
-  version: (FUNNEL.sla && FUNNEL.sla.version) || "1.0.0",
-  first_response_hours: Number((FUNNEL.sla && FUNNEL.sla.first_response_hours) || 4),
-  qualification_hours: Number((FUNNEL.sla && FUNNEL.sla.qualification_hours) || 24),
-  proposal_hours: Number((FUNNEL.sla && FUNNEL.sla.proposal_hours) || 72),
-  retention_days: Number((FUNNEL.sla && FUNNEL.sla.retention_days) || 730),
-});
+const LOSS_REASONS = Object.freeze([
+  "no_response",
+  "out_of_icp",
+  "timing",
+  "budget",
+  "competitor",
+  "self_serve",
+  "not_a_fit",
+  "duplicate",
+  "spam",
+  "other",
+]);
 
 function isValidStage(stage) {
   return STAGE_SET.has(String(stage || ""));
@@ -74,7 +75,7 @@ function canTransition(from, to) {
  * Apply a stage change; returns patch for store.update or throws.
  * Never mutates PII beyond commercial fields.
  */
-function applyStageChange(record, { stage, actor, note, loss_reason, accept_reason, next_action, owner, proposal_value, contract_value, revenue_received, opportunity_id, proposal_id, sale_id }) {
+function applyStageChange(record, { stage, actor, note, loss_reason, next_action, owner, proposal_value, contract_value, revenue_received }) {
   if (!record || !record.lead_id) {
     const err = new Error("lead_not_found");
     err.code = "lead_not_found";
@@ -102,11 +103,6 @@ function applyStageChange(record, { stage, actor, note, loss_reason, accept_reas
     err.code = "invalid_loss_reason";
     throw err;
   }
-  if (accept_reason && !ACCEPT_REASONS.includes(accept_reason)) {
-    const err = new Error("invalid_accept_reason");
-    err.code = "invalid_accept_reason";
-    throw err;
-  }
 
   const now = new Date().toISOString();
   const history = Array.isArray(record.stage_history) ? record.stage_history.slice() : [];
@@ -130,10 +126,6 @@ function applyStageChange(record, { stage, actor, note, loss_reason, accept_reas
     updated_at: now,
   };
   if (loss_reason) patch.loss_reason = loss_reason;
-  if (accept_reason) patch.accept_reason = accept_reason;
-  if (opportunity_id) patch.opportunity_id = String(opportunity_id).slice(0, 32);
-  if (proposal_id) patch.proposal_id = String(proposal_id).slice(0, 32);
-  if (sale_id) patch.sale_id = String(sale_id).slice(0, 32);
   if (next_action !== undefined) patch.next_action = next_action ? String(next_action).slice(0, 400) : null;
   if (owner !== undefined) patch.owner = owner ? String(owner).slice(0, 80) : null;
   if (note) {
@@ -215,16 +207,11 @@ function publicLeadSummary(record) {
         }))
       : [],
     sla_hours_open: hoursSince(record.received_at),
-    sla_version: SLA.version,
-    opportunity_id: record.opportunity_id || null,
-    proposal_id: record.proposal_id || null,
-    sale_id: record.sale_id || null,
-    accept_reason: record.accept_reason || null,
     // SLA only applies to commercial (real) leads
     needs_contact:
       isReal &&
       (record.commercial_stage || "lead_persisted") === "lead_persisted" &&
-      hoursSince(record.received_at) >= Number(process.env.LEAD_SLA_HOURS || SLA.first_response_hours),
+      hoursSince(record.received_at) >= Number(process.env.LEAD_SLA_HOURS || 4),
     // Non-PII delivery statuses for probe/ops verification
     delivery: record.delivery
       ? {
@@ -380,10 +367,6 @@ function commercialDefaults(received_at) {
     previous_page: null,
     cta_id: null,
     offer_id: null,
-    opportunity_id: null,
-    proposal_id: null,
-    sale_id: null,
-    accept_reason: null,
   };
 }
 
@@ -427,8 +410,6 @@ function systemHealth(leads) {
 module.exports = {
   STAGES,
   LOSS_REASONS,
-  ACCEPT_REASONS,
-  SLA,
   TERMINAL,
   ALLOWED,
   isValidStage,

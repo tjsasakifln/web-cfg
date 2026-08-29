@@ -415,16 +415,28 @@ for (const [from, to] of [
 
 const withWarmbly = contract.reconcileFunnel({
   events: sample,
-  warmbly: { qualified_lead: 1, pipeline: 1 },
+  warmbly: { owner: "warmbly", qualified_lead: 1, pipeline: 1 },
 });
 if (withWarmbly.denominators.qualified_lead !== 1 || withWarmbly.denominators.pipeline !== 1) {
   fail("warmbly_observed", withWarmbly);
 }
 if (withWarmbly.derived_qualified_lead !== false) fail("warmbly_marked_derived");
 
+const withoutWarmblyOwner = contract.reconcileFunnel({
+  events: sample,
+  warmbly: { qualified_lead: 1, pipeline: 1 },
+});
+if (
+  withoutWarmblyOwner.denominators.qualified_lead !== 0
+  || withoutWarmblyOwner.denominators.pipeline !== 0
+  || withoutWarmblyOwner.observation_reason !== "wrong_owner"
+) {
+  fail("warmbly_owner_must_be_explicit", withoutWarmblyOwner);
+}
+
 const fixtureWarmbly = contract.reconcileFunnel({
   events: sample,
-  warmbly: { qualified_lead: 3, pipeline: 2, kind: "synthetic" },
+  warmbly: { owner: "warmbly", qualified_lead: 3, pipeline: 2, kind: "synthetic" },
 });
 if (fixtureWarmbly.denominators.qualified_lead !== 0 || fixtureWarmbly.denominators.pipeline !== 0) {
   fail("fixture_promoted_stage", fixtureWarmbly);

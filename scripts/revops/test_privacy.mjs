@@ -30,7 +30,7 @@ function fail(name, detail) {
   failed += 1;
 }
 
-const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body/i;
+const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body|"(?:nome|name|full_name|cnpj|cpf|telefone|phone)"\s*:/i;
 
 // --- admitEvent strips PII keys; closed-loop walk fail-closes on them ---
 {
@@ -97,6 +97,31 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body/i;
   if (!ok.ok) fail("admit_safe", ok);
   else if (PII_SCAN.test(JSON.stringify(ok.event))) fail("admit_safe_payload", ok.event);
   else pass("admit_keeps_non_pii");
+
+  for (const [name, event] of [
+    [
+      "lead_id_phone",
+      {
+        event: "lead_persisted",
+        path: "/",
+        sid: "sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        props: { event_id: "evt-priv-lead-id-phone", lead_id: "48999990000" },
+      },
+    ],
+    [
+      "sid_cnpj",
+      {
+        event: "page_view",
+        path: "/",
+        sid: "52407089000109",
+        props: { event_id: "evt-priv-sid-cnpj" },
+      },
+    ],
+  ]) {
+    const admitted = contract.admitEvent(event);
+    if (admitted.ok || admitted.reason !== "pii_value") fail(`${name}_admitted`, admitted);
+    else pass(`${name}_rejected`, admitted.reason);
+  }
 }
 
 // --- fixture report never contains PII ---
@@ -110,6 +135,19 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body/i;
   } catch (err) {
     fail("report_assert", err.message);
   }
+  for (const [key, value] of [
+    ["nome", "Pessoa"],
+    ["name", "Person"],
+    ["cnpj", "52407089000109"],
+  ]) {
+    try {
+      closedLoop.assertAnalyticsNoPii({ event: "page_view", [key]: value });
+      fail(`report_assert_${key}_accepted`);
+    } catch (err) {
+      if (err.code === "pii_value") pass(`report_assert_${key}_rejected`, err.message);
+      else fail(`report_assert_${key}_code`, err.code || err.message);
+    }
+  }
   const fixtureRaw = fs.readFileSync(
     path.join(root, "scripts/revops/fixtures/closed-loop-synthetic.v1.json"),
     "utf8",
@@ -117,6 +155,24 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body/i;
   const eventsOnly = JSON.stringify(JSON.parse(fixtureRaw).events);
   if (PII_SCAN.test(eventsOnly)) fail("fixture_events_pii", eventsOnly.slice(0, 200));
   else pass("fixture_events_no_pii");
+
+  for (const [name, invoke, needle] of [
+    ["invalid_id_error", () => closedLoop.assertStableId("session", "private@example.com"), "private@example.com"],
+    [
+      "wrong_owner_error",
+      () => closedLoop.assertWarmblyObservationEnvelope({ owner: "private@example.com" }),
+      "private@example.com",
+    ],
+  ]) {
+    try {
+      invoke();
+      fail(`${name}_accepted`);
+    } catch (err) {
+      const serialized = JSON.stringify(err);
+      if (serialized.includes(needle)) fail(`${name}_leaked`, serialized);
+      else pass(`${name}_redacted`);
+    }
+  }
 }
 
 // --- public lead summary redacts contact ---
@@ -162,6 +218,18 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body/i;
     fail("core_session_id", accepted.lead);
   } else pass("core_keeps_session_id", accepted.lead.session_id);
 
+  const taintedSession = leadCore.validateAndNormalize({
+    nome: "QA",
+    telefone: "48999990000",
+    estagio: "edital",
+    jornada: "edital",
+    consentimento: "true",
+    session_id: "52407089000109",
+  });
+  if (!taintedSession.ok) fail("core_tainted_session_fixture", taintedSession);
+  else if (taintedSession.lead.session_id) fail("core_tainted_session_kept", taintedSession.lead.session_id);
+  else pass("core_tainted_session_dropped");
+
   const picked = leadCore.pickAttribution({
     session_id: "sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa",
     email: "leak@example.com",
@@ -172,6 +240,15 @@ const PII_SCAN = /@|\+\d{10,15}|mensagem|message_body/i;
   if (picked.email || picked.nome || picked.mensagem) fail("pick_pii", picked);
   else if (picked.session_id !== "sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa") fail("pick_session", picked);
   else pass("pick_session_drops_pii");
+  const pickedTaintedSession = leadCore.pickAttribution({ session_id: "48999990000" });
+  if (pickedTaintedSession.session_id) fail("pick_tainted_session", pickedTaintedSession);
+  else pass("pick_tainted_session_dropped");
+
+  const leadId = leadCore.generateLeadId("idem|privacy-fixture", { deterministic: true });
+  const replayedLeadId = leadCore.generateLeadId("idem|privacy-fixture", { deterministic: true });
+  if (!/^lead-[0-9a-f]{27}$/.test(leadId) || replayedLeadId !== leadId) {
+    fail("core_stable_lead_id", { leadId, replayedLeadId });
+  } else pass("core_stable_lead_id", leadId);
 }
 
 // --- DSAR export / delete dry-run / retention ---

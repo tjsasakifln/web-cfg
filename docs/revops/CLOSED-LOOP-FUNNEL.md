@@ -1,6 +1,6 @@
 # Funil fechado visita → oportunidade → receita
 
-Visitor analytics and Warmbly commercial stages stay two layers, joined only by stable non-PII ids. Qualified / proposal / won are observed inputs. They are never derived from `page_view`, CTA, form or `lead_persisted`.
+Visitor analytics and Warmbly commercial stages stay two layers, joined only by stable non-PII ids. `web-cfg` ends at persisted receipt. Qualified / proposal / won are explicit Warmbly-owned read-only observations and are never derived from `page_view`, CTA, form or `lead_persisted`.
 
 ```mermaid
 flowchart LR
@@ -40,4 +40,4 @@ Join keys (prefixes, never email / phone / free text):
 | proposal | `prop-` | `proposal_id` |
 | sale | `sale-` | `sale_id` |
 
-CI proof: `scripts/revops/fixtures/closed-loop-synthetic.v1.json` and `npm run revops:closed-loop`. Production counts stay out of this fixture report.
+CI proof: `scripts/revops/fixtures/closed-loop-synthetic.v1.json` and `npm run revops:closed-loop`. Replay output is byte-identical. Production counts stay out of this fixture report and remain `UNKNOWN` without a conforming Warmbly snapshot. An operator can render that local read-only snapshot with `npm run revops:closed-loop -- --snapshot /private/path/warmbly-snapshot.json`; the command performs no network call or write.

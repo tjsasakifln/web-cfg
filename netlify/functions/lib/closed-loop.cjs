@@ -29,9 +29,33 @@ const ACCEPT_REASONS = Object.freeze([...(CONTRACT.accept_reasons || [])]);
 const REJECT_REASONS = Object.freeze([...(CONTRACT.reject_reasons || [])]);
 const SLA = Object.freeze({ ...(CONTRACT.sla || {}) });
 const RATE_NAMES = Object.freeze([...(CONTRACT.rates || [])]);
+const RATE_DIMENSIONS = Object.freeze({
+  view_to_cta: Object.freeze(["cta", "view"]),
+  cta_to_start: Object.freeze(["form_start", "cta"]),
+  step1_to_step2: Object.freeze(["step2", "step1"]),
+  step2_to_persisted: Object.freeze(["persisted", "step2"]),
+  persisted_to_qualified: Object.freeze(["qualified", "persisted"]),
+  qualified_to_proposal: Object.freeze(["proposal", "qualified"]),
+  proposal_to_won: Object.freeze(["won", "proposal"]),
+});
 const ATTR_FIELDS = Object.freeze([...(CONTRACT.attribution_fields || [])]);
 const VISITOR_EVENT_MAP = Object.freeze({ ...(CONTRACT.visitor_event_map || {}) });
 const COMMERCIAL_TRANSITIONS = Object.freeze({ ...(CONTRACT.commercial_transitions || {}) });
+const OBSERVATION_FIELDS = new Set([
+  ...((CONTRACT.warmbly_observation_contract || {}).allowed_fields || []),
+]);
+const OBSERVATION_ACTORS = new Set([
+  ...((CONTRACT.warmbly_observation_contract || {}).actor_enum || []),
+]);
+const SNAPSHOT_FIELDS = new Set([
+  "schema", "schema_version", "kind", "official_live", "source",
+  "commercial_owner", "generated_at", "events", "leads", "observations",
+]);
+const SNAPSHOT_LEAD_FIELDS = new Set([
+  "lead_id", "session_id", "received_at", "landing_page", "landing_url",
+  "route_family", "asset_id", "cta_id", "jornada", "offer_id", "origem",
+  "utm_source", "utm_medium", "utm_campaign",
+]);
 
 const DEFAULT_TIMEOUT_MS = Number(process.env.CLOSED_LOOP_TIMEOUT_MS || 8000);
 
@@ -58,7 +82,7 @@ function isStableId(kind, id) {
 
 function assertStableId(kind, id) {
   if (!isStableId(kind, id)) {
-    throw codedError("invalid_entity_id", `invalid_entity_id:${kind}`, { kind, id: String(id || "").slice(0, 40) });
+    throw codedError("invalid_entity_id", `invalid_entity_id:${kind}`, { kind });
   }
   return String(id);
 }
@@ -103,6 +127,9 @@ function assertAnalyticsNoPii(payload) {
   if (/"email"\s*:|"telefone"\s*:|"phone"\s*:|"whatsapp"\s*:/i.test(blob)) {
     throw codedError("pii_value", "analytics_contact_key");
   }
+  if (/"(?:nome|name|full_name|cnpj|cpf|empresa|company)"\s*:/i.test(blob)) {
+    throw codedError("pii_value", "analytics_identity_key");
+  }
   const compact = blob.replace(/[\s()-]/g, "");
   if (/\+\d{10,15}/.test(compact)) throw codedError("pii_value", "analytics_phone");
   return true;
@@ -119,6 +146,33 @@ function scanObjectForPii(obj, trail) {
     }
     if (v && typeof v === "object") scanObjectForPii(v, `${trail}.${k}`);
   }
+}
+
+function assertWarmblyObservationEnvelope(observation) {
+  const owner = String((observation && observation.owner) || "").toLowerCase();
+  if (owner !== CONTRACT.commercial_owner) {
+    throw codedError("wrong_owner", "commercial_observation_requires_warmbly");
+  }
+  for (const key of ["note", "message", "mensagem", "description", "free_text"]) {
+    if (Object.prototype.hasOwnProperty.call(observation, key)) {
+      throw codedError("pii_key_admitted", `commercial_observation_free_text:${key}`, { key });
+    }
+  }
+  for (const key of Object.keys(observation || {})) {
+    if (!OBSERVATION_FIELDS.has(key)) {
+      throw codedError("unsupported_observation_field", `unsupported_observation_field:${key}`, { key });
+    }
+  }
+  if (observation.actor != null && !OBSERVATION_ACTORS.has(String(observation.actor).toLowerCase())) {
+    throw codedError("unsupported_actor", "commercial_observation_actor_must_be_warmbly");
+  }
+  for (const kind of ID_KINDS) {
+    const field = ID_FIELD[kind];
+    if (observation[field] != null) assertStableId(kind, observation[field]);
+  }
+  scanObjectForPii(observation, "warmbly_observation");
+  assertAnalyticsNoPii(observation);
+  return observation;
 }
 
 /**
@@ -155,7 +209,7 @@ function admitVisitorEvents(events, options = {}) {
     const sid = sessionIdOf({ ...result.event, session_id: ev.session_id || ev.sid });
     if (!sid) throw codedError("missing_session_id", "missing_session_id", { event: result.canonical });
     if (options.requireStableSession !== false && !isStableId("session", sid)) {
-      throw codedError("invalid_entity_id", "invalid_session_id", { sid });
+      throw codedError("invalid_entity_id", "invalid_session_id", { kind: "session" });
     }
     const ts = String(ev.ts || ev.at || (result.event.props && result.event.props.ts) || "");
     const row = {
@@ -207,14 +261,20 @@ function commercialPeak(entities) {
   return null;
 }
 
+function timestampMs(value, field) {
+  const raw = String(value || "");
+  const parsed = Date.parse(raw);
+  if (!raw || !Number.isFinite(parsed)) {
+    throw codedError("invalid_timestamp", `invalid_timestamp:${field}`, { field });
+  }
+  return parsed;
+}
+
 function applyObservation(state, observation) {
   if (!observation || typeof observation !== "object") {
     throw codedError("invalid_observation", "invalid_observation");
   }
-  const owner = String(observation.owner || CONTRACT.commercial_owner).toLowerCase();
-  if (owner !== "warmbly") {
-    throw codedError("wrong_owner", "commercial_observation_requires_warmbly", { owner });
-  }
+  assertWarmblyObservationEnvelope(observation);
   const to = String(observation.stage || observation.to || "");
   if (!COMMERCIAL_STAGE_SET.has(to)) {
     throw codedError("invalid_stage", `invalid_stage:${to}`, { stage: to });
@@ -222,10 +282,16 @@ function applyObservation(state, observation) {
   if (!state || !state.lead || !state.lead.lead_id) {
     throw codedError("orphan_observation", "observation_without_persisted_lead");
   }
-  if (observation.lead_id && observation.lead_id !== state.lead.lead_id) {
+  if (!observation.lead_id || observation.lead_id !== state.lead.lead_id) {
     throw codedError("orphan_observation", "observation_lead_mismatch", {
       expected: state.lead.lead_id,
-      got: observation.lead_id,
+      got: observation.lead_id || null,
+    });
+  }
+  if (observation.session_id && observation.session_id !== state.lead.session_id) {
+    throw codedError("orphan_observation", "observation_session_mismatch", {
+      expected: state.lead.session_id || null,
+      got: observation.session_id,
     });
   }
   const from = commercialPeak(state) || "persisted";
@@ -243,6 +309,18 @@ function applyObservation(state, observation) {
   }
 
   const at = String(observation.at || "");
+  const observedAtMs = timestampMs(at, "observation.at");
+  const previousAt =
+    (state.sale && state.sale.at)
+    || (state.proposal && state.proposal.at)
+    || (state.opportunity && state.opportunity.at)
+    || state.lead.received_at;
+  if (previousAt && observedAtMs < timestampMs(previousAt, "previous_stage.at")) {
+    throw codedError("non_monotonic_timestamp", `non_monotonic_timestamp:${from}->${to}`, {
+      from,
+      to,
+    });
+  }
   const next = {
     ...state,
     duplicated: false,
@@ -273,6 +351,12 @@ function applyObservation(state, observation) {
     next.lead.commercial_stage = "qualified";
   } else if (to === "proposal") {
     if (!state.opportunity) throw codedError("invalid_transition", "proposal_without_opportunity");
+    if (observation.opportunity_id !== state.opportunity.opportunity_id) {
+      throw codedError("orphan_observation", "proposal_opportunity_mismatch", {
+        expected: state.opportunity.opportunity_id,
+        got: observation.opportunity_id || null,
+      });
+    }
     const proposal_id = assertStableId("proposal", observation.proposal_id);
     const amount = Number(observation.amount ?? observation.proposal_value);
     if (!Number.isFinite(amount) || amount < 0) {
@@ -293,6 +377,12 @@ function applyObservation(state, observation) {
     next.lead.commercial_stage = "proposal";
   } else if (to === "won") {
     if (!state.proposal) throw codedError("invalid_transition", "won_without_proposal");
+    if (
+      observation.opportunity_id !== state.opportunity.opportunity_id
+      || observation.proposal_id !== state.proposal.proposal_id
+    ) {
+      throw codedError("orphan_observation", "sale_commercial_chain_mismatch");
+    }
     const sale_id = assertStableId("sale", observation.sale_id);
     const revenue = Number(observation.revenue ?? observation.revenue_received ?? state.proposal.amount);
     if (!Number.isFinite(revenue) || revenue < 0) {
@@ -327,8 +417,7 @@ function applyObservation(state, observation) {
     at: at || undefined,
     from,
     to,
-    actor: String(observation.actor || "warmbly").slice(0, 80),
-    note: observation.note ? String(observation.note).slice(0, 120) : undefined,
+    actor: "warmbly",
   });
   next.lead.stage_history = history;
   next.lead.updated_at = at || next.lead.updated_at;
@@ -371,9 +460,15 @@ function rate(num, den) {
 }
 
 function secondsBetween(fromIso, toIso) {
+  if (!fromIso || !toIso) return null;
   const a = Date.parse(fromIso);
   const b = Date.parse(toIso);
-  if (!Number.isFinite(a) || !Number.isFinite(b)) return null;
+  if (!Number.isFinite(a) || !Number.isFinite(b)) {
+    throw codedError("invalid_timestamp", "invalid_response_time_timestamp");
+  }
+  if (b < a) {
+    throw codedError("non_monotonic_timestamp", "qualified_before_persisted");
+  }
   return Math.round((b - a) / 1000);
 }
 
@@ -393,7 +488,6 @@ function reconcileClosedLoop(input) {
   const events = Array.isArray(input && input.events) ? input.events : [];
   const leads = Array.isArray(input && input.leads) ? input.leads : [];
   const observations = Array.isArray(input && input.observations) ? input.observations : [];
-  const entities = input && input.entities ? input.entities : {};
 
   const leadsById = new Map(leads.map((l) => [l.lead_id, l]));
   const leadsBySession = new Map();
@@ -404,42 +498,23 @@ function reconcileClosedLoop(input) {
   const opportunities = [];
   const proposals = [];
   const sales = [];
-  if (entities.opportunity) opportunities.push(entities.opportunity);
-  if (entities.proposal) proposals.push(entities.proposal);
-  if (entities.sale) sales.push(entities.sale);
-  for (const obs of observations) {
-    if (obs.opportunity_id && obs.stage === "qualified") {
-      if (!opportunities.some((o) => o.opportunity_id === obs.opportunity_id)) {
-        opportunities.push({
-          opportunity_id: obs.opportunity_id,
-          lead_id: obs.lead_id,
-          session_id: obs.session_id,
-          at: obs.at,
-        });
-      }
+  const statesByLead = new Map(
+    leads.map((lead) => [lead.lead_id, { lead, opportunity: null, proposal: null, sale: null }]),
+  );
+  for (const observation of observations) {
+    assertWarmblyObservationEnvelope(observation);
+    const current = statesByLead.get(observation.lead_id);
+    if (!current) {
+      throw codedError("orphan_observation", "observation_lead_not_persisted", {
+        lead_id: observation.lead_id || null,
+      });
     }
-    if (obs.proposal_id && obs.stage === "proposal") {
-      if (!proposals.some((p) => p.proposal_id === obs.proposal_id)) {
-        proposals.push({
-          proposal_id: obs.proposal_id,
-          opportunity_id: obs.opportunity_id,
-          lead_id: obs.lead_id,
-          amount: obs.amount,
-          at: obs.at,
-        });
-      }
-    }
-    if (obs.sale_id && obs.stage === "won") {
-      if (!sales.some((s) => s.sale_id === obs.sale_id)) {
-        sales.push({
-          sale_id: obs.sale_id,
-          proposal_id: obs.proposal_id,
-          lead_id: obs.lead_id,
-          revenue: obs.revenue,
-          at: obs.at,
-        });
-      }
-    }
+    statesByLead.set(observation.lead_id, applyObservation(current, observation));
+  }
+  for (const state of statesByLead.values()) {
+    if (state.opportunity) opportunities.push(state.opportunity);
+    if (state.proposal) proposals.push(state.proposal);
+    if (state.sale) sales.push(state.sale);
   }
 
   const oppById = new Map(opportunities.map((o) => [o.opportunity_id, o]));
@@ -462,18 +537,6 @@ function reconcileClosedLoop(input) {
     }
     if (props.sale_id && !saleById.has(props.sale_id)) {
       throw codedError("orphan_event", "event_sale_id_unknown", { sale_id: props.sale_id });
-    }
-  }
-
-  for (const obs of observations) {
-    if (obs.lead_id && !leadsById.has(obs.lead_id)) {
-      throw codedError("orphan_observation", "observation_lead_not_persisted", { lead_id: obs.lead_id });
-    }
-  }
-
-  for (const lead of leads) {
-    if (lead.opportunity_id && !oppById.has(lead.opportunity_id) && lead.commercial_stage !== "lead_persisted") {
-      throw codedError("orphan_observation", "lead_opportunity_id_unknown", { opportunity_id: lead.opportunity_id });
     }
   }
 
@@ -537,6 +600,20 @@ function reconcileClosedLoop(input) {
     qualified_to_proposal: rate(counts.proposal, counts.qualified),
     proposal_to_won: rate(counts.won, counts.proposal),
   };
+  const denominators = Object.fromEntries(
+    RATE_NAMES.map((name) => {
+      const [numerator, denominator] = RATE_DIMENSIONS[name] || [];
+      if (!numerator || !denominator) {
+        throw codedError("unknown_rate_dimension", `unknown_rate_dimension:${name}`);
+      }
+      return [name, {
+        numerator,
+        numerator_count: counts[numerator],
+        denominator,
+        denominator_count: counts[denominator],
+      }];
+    }),
+  );
 
   const persistedAt = leads[0] && leads[0].received_at;
   const qualifiedAt = (opportunities[0] && opportunities[0].at) || (observations.find((o) => o.stage === "qualified") || {}).at;
@@ -553,32 +630,77 @@ function reconcileClosedLoop(input) {
   const byRoute = new Map();
   const byOffer = new Map();
   const byOrigem = new Map();
-  const attrFields = {
-    view: counts.view,
-    cta: counts.cta,
-    form_start: counts.form_start,
-    step1: counts.step1,
-    step2: counts.step2,
-    persisted: counts.persisted,
-    qualified: counts.qualified,
-    proposal: counts.proposal,
-    won: counts.won,
-    revenue,
+  const opportunitiesByLead = new Map();
+  const proposalsByLead = new Map();
+  const salesByLead = new Map();
+  for (const opportunity of opportunities) {
+    const key = String(opportunity.lead_id || "");
+    if (key) opportunitiesByLead.set(key, (opportunitiesByLead.get(key) || 0) + 1);
+  }
+  for (const proposal of proposals) {
+    const key = String(proposal.lead_id || "");
+    if (key) proposalsByLead.set(key, (proposalsByLead.get(key) || 0) + 1);
+  }
+  for (const sale of sales) {
+    const key = String(sale.lead_id || "");
+    if (!key) continue;
+    const current = salesByLead.get(key) || { count: 0, revenue: 0 };
+    current.count += 1;
+    current.revenue += Number(sale.revenue || 0);
+    salesByLead.set(key, current);
+  }
+
+  const cohortExplicitAttribution = sessions.size <= 1 && leads.length <= 1
+    ? input.attribution
+    : null;
+  const attributedLeadIds = new Set();
+  const addCohort = (lead, cohortEvents, cohortStages) => {
+    const leadId = String((lead && lead.lead_id) || "");
+    if (leadId) attributedLeadIds.add(leadId);
+    const attr = pickAttribution(lead, cohortEvents, cohortExplicitAttribution);
+    const sale = salesByLead.get(leadId) || { count: 0, revenue: 0 };
+    const fields = {
+      view: cohortStages.has("view") ? 1 : 0,
+      cta: cohortStages.has("cta") ? 1 : 0,
+      form_start: cohortStages.has("form_start") ? 1 : 0,
+      step1: cohortStages.has("step1") || cohortStages.has("form_start") ? 1 : 0,
+      step2: cohortStages.has("step2") ? 1 : 0,
+      persisted: lead ? 1 : 0,
+      qualified: opportunitiesByLead.get(leadId) || 0,
+      proposal: proposalsByLead.get(leadId) || 0,
+      won: sale.count,
+      revenue: sale.revenue,
+    };
+    const routeKey = String(attr.landing || attr.route_family || "UNKNOWN");
+    incrementNamed(byRoute, routeKey, fields);
+    incrementNamed(byOffer, bucketKey(attr, "offer_id"), fields);
+    incrementNamed(byOrigem, bucketKey(attr, "origem"), fields);
   };
-  incrementNamed(byRoute, bucketKey(attribution, "landing") || bucketKey(attribution, "route_family"), attrFields);
-  incrementNamed(byOffer, bucketKey(attribution, "offer_id"), attrFields);
-  incrementNamed(byOrigem, bucketKey(attribution, "origem"), attrFields);
+
+  for (const session of sessions.values()) {
+    const lead = (session.lead_id && leadsById.get(session.lead_id))
+      || leadsBySession.get(session.session_id)
+      || null;
+    addCohort(lead, session.events, session.stages);
+  }
+  for (const lead of leads) {
+    if (!attributedLeadIds.has(String(lead.lead_id || ""))) {
+      addCohort(lead, [], new Set(["persisted"]));
+    }
+  }
 
   const report = {
     schema: "confenge.closed-loop-report/1.0",
     schema_version: CONTRACT.schema_version,
     kind: (input.kind || "synthetic"),
-    official_live: false,
+    official_live: input && input.official_live === true,
+    snapshot_generated_at: (input && input.generated_at) || null,
     source: CONTRACT.source,
     commercial_owner: CONTRACT.commercial_owner,
     sla: { ...SLA },
     counts,
     rates,
+    denominators,
     tempo_de_resposta_seconds: tempo,
     revenue,
     entities: {
@@ -642,6 +764,66 @@ function loadFixture(filePath) {
   return raw;
 }
 
+function loadSnapshot(snapshot) {
+  const raw = typeof snapshot === "string"
+    ? JSON.parse(fs.readFileSync(path.resolve(snapshot), "utf8"))
+    : snapshot;
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    throw codedError("invalid_snapshot", "invalid_snapshot");
+  }
+  for (const key of Object.keys(raw)) {
+    if (!SNAPSHOT_FIELDS.has(key)) {
+      throw codedError("unsupported_snapshot_field", `unsupported_snapshot_field:${key}`, { key });
+    }
+  }
+  if (raw.schema !== "confenge.closed-loop-snapshot/1.0" || raw.schema_version !== "1.0.0") {
+    throw codedError("invalid_snapshot", "invalid_snapshot_schema");
+  }
+  if (raw.source !== CONTRACT.source || raw.commercial_owner !== CONTRACT.commercial_owner) {
+    throw codedError("invalid_snapshot", "snapshot_authority_mismatch");
+  }
+  if (typeof raw.official_live !== "boolean") {
+    throw codedError("invalid_snapshot", "snapshot_official_live_required");
+  }
+  timestampMs(raw.generated_at, "snapshot.generated_at");
+  if (!Array.isArray(raw.events) || !Array.isArray(raw.leads) || !Array.isArray(raw.observations)) {
+    throw codedError("invalid_snapshot", "snapshot_arrays_required");
+  }
+  for (const lead of raw.leads) {
+    if (!lead || typeof lead !== "object" || Array.isArray(lead)) {
+      throw codedError("invalid_snapshot", "snapshot_lead_invalid");
+    }
+    for (const key of Object.keys(lead)) {
+      if (keyLooksPii(key)) throw codedError("pii_key_admitted", `pii_key:${key}`, { key });
+      if (!SNAPSHOT_LEAD_FIELDS.has(key)) {
+        throw codedError("unsupported_snapshot_field", `unsupported_snapshot_lead_field:${key}`, { key });
+      }
+    }
+    assertStableId("lead", lead.lead_id);
+    assertStableId("session", lead.session_id);
+    timestampMs(lead.received_at, "snapshot.lead.received_at");
+    scanObjectForPii(lead, "snapshot.lead");
+  }
+  return raw;
+}
+
+function runSnapshot(snapshot) {
+  const bundle = loadSnapshot(snapshot);
+  const admitted = admitVisitorEvents(bundle.events, { requireStableSession: true });
+  const reconciled = reconcileClosedLoop({
+    events: admitted.admitted,
+    leads: bundle.leads,
+    observations: bundle.observations,
+    kind: bundle.kind,
+    official_live: bundle.official_live,
+    generated_at: bundle.generated_at,
+  });
+  const report = reportClosedLoop(reconciled);
+  const body = `${JSON.stringify(report, null, 2)}\n`;
+  assertAnalyticsNoPii(body);
+  return { ok: true, report, body, admitted: admitted.admitted, duplicates: admitted.duplicates };
+}
+
 function defaultFixturePath() {
   return DEFAULT_FIXTURE_REL;
 }
@@ -658,30 +840,9 @@ async function runFixture(fixture, store, options = {}) {
   const persist = await withTimeout(persistLeadOnce(store, bundle.lead), timeoutMs, "timeout");
   let state = {
     lead: persist.record,
-    opportunity: persist.record.opportunity_id
-      ? {
-          opportunity_id: persist.record.opportunity_id,
-          lead_id: persist.record.lead_id,
-          session_id: persist.record.session_id,
-          at: persist.record.received_at,
-        }
-      : null,
-    proposal: persist.record.proposal_id
-      ? {
-          proposal_id: persist.record.proposal_id,
-          lead_id: persist.record.lead_id,
-          amount: persist.record.proposal_value,
-          at: persist.record.updated_at,
-        }
-      : null,
-    sale: persist.record.sale_id
-      ? {
-          sale_id: persist.record.sale_id,
-          lead_id: persist.record.lead_id,
-          revenue: persist.record.revenue_received,
-          at: persist.record.updated_at,
-        }
-      : null,
+    opportunity: null,
+    proposal: null,
+    sale: null,
   };
   for (const obs of bundle.observations || []) {
     state = applyObservation(state, obs);
@@ -726,6 +887,7 @@ module.exports = {
   REJECT_REASONS,
   SLA,
   RATE_NAMES,
+  RATE_DIMENSIONS,
   ATTR_FIELDS,
   VISITOR_EVENT_MAP,
   COMMERCIAL_TRANSITIONS,
@@ -738,6 +900,7 @@ module.exports = {
   leadIdOf,
   visitorStageOf,
   assertAnalyticsNoPii,
+  assertWarmblyObservationEnvelope,
   admitVisitorEvents,
   persistLeadOnce,
   applyObservation,
@@ -745,8 +908,10 @@ module.exports = {
   reportClosedLoop,
   withTimeout,
   loadFixture,
+  loadSnapshot,
   defaultFixturePath,
   runFixture,
+  runSnapshot,
   isRawLeadQualified,
   pickAttribution,
 };

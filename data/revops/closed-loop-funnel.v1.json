@@ -3,6 +3,54 @@
   "schema_version": "1.0.0",
   "source": "CONFENGE_WEB",
   "commercial_owner": "warmbly",
+  "warmbly_observation_contract": {
+    "schema": "confenge.warmbly-commercial-observation/1.0",
+    "owner": "warmbly",
+    "access": "read_only",
+    "transport": "operator_supplied_snapshot",
+    "snapshot_schema": "confenge.closed-loop-snapshot/1.0",
+    "snapshot_cli": "npm run revops:closed-loop -- --snapshot /private/path/warmbly-snapshot.json",
+    "input_grain": "one_non_pii_stage_transition_per_entity",
+    "analytics_shape": "aggregated_non_pii",
+    "join_keys": [
+      "lead_id",
+      "opportunity_id",
+      "proposal_id",
+      "sale_id"
+    ],
+    "commercial_stages": [
+      "qualified",
+      "proposal",
+      "won",
+      "lost"
+    ],
+    "commercial_stage_assertion": "warmbly_only",
+    "web_cfg_authority_terminal": "persisted_receipt",
+    "pii_policy": "no_direct_identifiers_or_free_text",
+    "actor_enum": [
+      "warmbly"
+    ],
+    "allowed_fields": [
+      "owner",
+      "actor",
+      "stage",
+      "to",
+      "at",
+      "lead_id",
+      "session_id",
+      "opportunity_id",
+      "proposal_id",
+      "sale_id",
+      "accept_reason",
+      "reject_reason",
+      "loss_reason",
+      "amount",
+      "proposal_value",
+      "revenue",
+      "revenue_received",
+      "contract_value"
+    ]
+  },
   "pii_policy": "aggregate_allowlist_empty",
   "official_live": false,
   "ids": {

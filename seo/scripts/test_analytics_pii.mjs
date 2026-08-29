@@ -13,6 +13,11 @@ const root = path.resolve(__dirname, "../..");
 const code = fs.readFileSync(path.join(root, "script.js"), "utf8");
 
 const dataLayer = [];
+const sessionValues = new Map();
+const sessionStorage = {
+  getItem: (key) => sessionValues.get(key) || null,
+  setItem: (key, value) => sessionValues.set(key, String(value)),
+};
 const document = {
   readyState: "complete",
   querySelector: () => null,
@@ -34,17 +39,66 @@ const windowObj = {
   addEventListener: () => {},
   innerHeight: 800,
   scrollY: 0,
+  sessionStorage,
+  crypto: { randomUUID: () => "8e0bdd75-a332-45d8-8ec9-5d98843f0000" },
   CONFENGE_DEBUG_ANALYTICS: false,
 };
 windowObj.window = windowObj;
 
-const sandbox = { window: windowObj, document, console, URLSearchParams };
+const sandbox = { window: windowObj, document, console, URLSearchParams, sessionStorage };
 vm.createContext(sandbox);
 vm.runInContext(code, sandbox);
 
 const track = sandbox.window.confengeTrack;
 if (typeof track !== "function") {
   console.error("FAIL: confengeTrack not exported");
+  process.exit(1);
+}
+const sessionId = sandbox.window.confengeSessionId;
+if (typeof sessionId !== "function") {
+  console.error("FAIL: confengeSessionId not exported");
+  process.exit(1);
+}
+const firstSessionId = sessionId();
+if (!/^sess-[0-9a-f]{27}$/.test(firstSessionId) || sessionId() !== firstSessionId) {
+  console.error("FAIL: stable non-PII session id", firstSessionId, sessionId());
+  process.exit(1);
+}
+
+const runWithBlockedSessionStorage = (uuid) => {
+  const blockedStorage = {
+    getItem: () => { throw new Error("storage blocked"); },
+    setItem: () => { throw new Error("storage blocked"); },
+  };
+  const isolatedWindow = {
+    ...windowObj,
+    dataLayer: [],
+    sessionStorage: blockedStorage,
+    crypto: { randomUUID: () => uuid },
+  };
+  isolatedWindow.window = isolatedWindow;
+  const isolatedSandbox = {
+    window: isolatedWindow,
+    document,
+    console,
+    URLSearchParams,
+    sessionStorage: blockedStorage,
+  };
+  vm.createContext(isolatedSandbox);
+  vm.runInContext(code, isolatedSandbox);
+  return [isolatedWindow.confengeSessionId(), isolatedWindow.confengeSessionId()];
+};
+const blockedSessionA = runWithBlockedSessionStorage("8e0bdd75-a332-45d8-8ec9-5d98843f0001");
+const blockedSessionB = runWithBlockedSessionStorage("8e0bdd75-a332-45d8-8ec9-5d98843f0002");
+if (
+  blockedSessionA[0] !== blockedSessionA[1]
+  || blockedSessionB[0] !== blockedSessionB[1]
+  || blockedSessionA[0] === blockedSessionB[0]
+) {
+  console.error("FAIL: storage-blocked sessions must stay page-stable without becoming global constants", {
+    blockedSessionA,
+    blockedSessionB,
+  });
   process.exit(1);
 }
 
@@ -91,6 +145,10 @@ if (last.cta_label !== "ok" || last.page_path !== "/x") {
   console.error("FAIL: safe params missing", last);
   process.exit(1);
 }
+if (last.session_id !== firstSessionId) {
+  console.error("FAIL: analytics event missing stable session id", last);
+  process.exit(1);
+}
 
 track("lead_form_submit", {
   page_path: "/",
@@ -109,6 +167,16 @@ if (sub.nome || sub.email || sub.telefone || sub.mensagem || sub.empresa) {
 }
 if (sub.journey !== "contrato" || sub.stage_category !== "problema urgente em contrato") {
   console.error("FAIL: safe enums missing", sub);
+  process.exit(1);
+}
+
+track("lead_persisted", {
+  page_path: "/",
+  lead_id: "48999990000",
+});
+const taintedId = sandbox.window.dataLayer[sandbox.window.dataLayer.length - 1];
+if (taintedId.lead_id) {
+  console.error("FAIL: PII-like value leaked through an identifier field", taintedId);
   process.exit(1);
 }
 

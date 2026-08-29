@@ -2,7 +2,7 @@
 
 ## Entrada
 
-1. Formulário → `POST /.netlify/functions/lead` (alias `/api/web/lead`) → persistência filesystem host-owned (`/var/lib/confenge-web`) → `lead_id` / `receipt_id`
+1. Formulário → `POST /api/web/lead` no runtime portátil Netcup/nginx (`/.netlify/functions/lead` é alias compatível) → persistência filesystem host-owned (`/var/lib/confenge-web`) → `lead_id` / `receipt_id`
 2. Outbox inbound `PENDING` e POST `confenge.inbound.v1` para Warmbly (HMAC server-side). Warmbly fora **não** falha a captura.
 3. Notificação ops Slack-style (`OPS_WEBHOOK_URL`) e/ou e-mail Resend
 4. Clique WhatsApp / mailto (sem persistência automática — conversão distinta)
@@ -25,22 +25,19 @@ Handoff (campo `handoff.status`, independente do status de captura): `PENDING` �
 
 Closed-loop measurement (raw lead is not a qualified opportunity): [CLOSED-LOOP.md](../revops/CLOSED-LOOP.md).
 
-## Qualificação e prioridade
+## Limite de autoridade
 
-| Jornada | Prioridade | SLA 1º contato | Responsável default |
-| --- | --- | --- | --- |
-| contrato | P1 | 1 dia útil (urgente) / 2 dias úteis | Tiago |
-| edital | P2 | 2 dias úteis | Tiago |
-| operacao | P2 | 2 dias úteis | Tiago |
-| conteudo/pseo | P3 | 2–3 dias úteis | Tiago |
+`web-cfg` registra somente persist/receipt e o estado técnico do handoff. Qualificação, prioridade comercial, proposta, ganho/perda, SLA comercial e next action pertencem ao Warmbly. O relatório fechado consome apenas observações Warmbly explícitas, read-only e sem PII; clique, mensagem ou lead persistido nunca afirmam `qualified`.
 
 ## Fluxo
 
-entrada → qualificação (jornada + urgência) → prioridade → 1º contato → follow-up → proposta → ganho/perdido (motivo) → origem/receita atribuída (planilha ou CRM externo)
+`web-cfg`: entrada → persist/receipt → handoff `CONFENGE_WEB`
 
-## CRM mínimo
+`warmbly`: qualificação → next action → proposta → ganho/perdido → observação agregada read-only
 
-Enquanto não houver CRM dedicado: exportar do store filesystem (`npm run revops:export-leads` / `docs/ops/LEAD-EXPORT-RUNBOOK.md`) ou dos e-mails de notificação para planilha operacional com colunas: lead_id, received_at, journey, stage, source, first_touch_at, outcome, loss_reason. Rollback de release não apaga esse store.
+## Recuperação e privacidade
+
+O export do store filesystem (`npm run revops:export-leads` / `docs/ops/LEAD-EXPORT-RUNBOOK.md`) serve recuperação, DSAR e auditoria do receipt, não um CRM paralelo. Rollback de release não apaga o store host-owned. Outcomes não são escritos de volta em `web-cfg`.
 
 ## Eliminação de teste
 

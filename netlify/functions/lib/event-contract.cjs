@@ -122,7 +122,21 @@ function looksLikePiiValue(value, key) {
   if (!s) return false;
   if (/@/.test(s)) return true;
   const k = String(key || "").toLowerCase();
-  if (ENVELOPE_ID_KEYS.has(k)) return false;
+  if (ENVELOPE_ID_KEYS.has(k)) {
+    if (/^sess-[0-9a-f]{27}$/i.test(s)) return false;
+    if (/^(?:lead-[0-9a-f]{27}|[0-9a-f]{24})$/i.test(s)) return false;
+    if (/^opp-[0-9a-f]{28}$/i.test(s)) return false;
+    if (/^(?:prop|sale)-[0-9a-f]{27}$/i.test(s)) return false;
+    const direct = s.replace(/^(?:sess|lead|opp|prop|sale|evt)-/i, "");
+    const compact = direct.replace(/[\s().-]/g, "");
+    if (!/^\+?\d+$/.test(compact)) return false;
+    const digits = compact.replace(/^\+/, "");
+    if (digits.length === 10 || digits.length === 11 || digits.length === 14) return true;
+    if ((compact.startsWith("+") || digits.startsWith("55")) && (digits.length === 12 || digits.length === 13)) {
+      return true;
+    }
+    return false;
+  }
   if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return false;
   if (s.startsWith("c-")) return false;
   if (/^(sess|lead|opp|prop|sale|evt)-/.test(s)) return false;
@@ -235,6 +249,16 @@ function admitEvent(raw) {
   if (AGGREGATE_PII_ALLOWLIST.length !== 0) {
     return { ok: false, reason: "pii_allowlist_not_empty", original, canonical };
   }
+  const sid = String(input.sid || input.session_id || "").slice(0, 32);
+  if (looksLikePiiValue(sid, "sid")) {
+    return {
+      ok: false,
+      reason: "pii_value",
+      original,
+      canonical,
+      classification: classified.classification,
+    };
+  }
   for (const key of Object.keys(minimized.props)) {
     if (keyLooksPii(key)) {
       return {
@@ -273,7 +297,7 @@ function admitEvent(raw) {
       alias_from: classified.classification === "alias" ? original : undefined,
       props,
       path: safePath,
-      sid: String(input.sid || input.session_id || "").slice(0, 32),
+      sid,
     },
   };
 }
@@ -400,7 +424,7 @@ function acceptWarmblyObservation(warmbly) {
   if (!warmbly || typeof warmbly !== "object" || Array.isArray(warmbly)) {
     return { ...unknown, reason: null };
   }
-  const owner = String(warmbly.owner || "warmbly").toLowerCase();
+  const owner = String(warmbly.owner || "").toLowerCase();
   if (owner !== "warmbly") {
     return { ...unknown, reason: "wrong_owner" };
   }

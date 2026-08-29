@@ -23,7 +23,7 @@ Every admitted event carries:
 | `cta_id` / `cta_position` | When the event is a CTA |
 | `offer_id` / `next_action_id` | Versioned commercial identity and next action when known; never free text |
 | `correlation_id` / `idempotency_key` / `event_id` | When the producer has them. `event_id` dedupes one physical click |
-| `session_id` / `lead_id` / `opportunity_id` / `proposal_id` / `sale_id` | Stable non-PII join keys for the closed-loop fixture. Prefixes `sess-` `lead-` `opp-` `prop-` `sale-`. Never email, phone or free text |
+| `session_id` / `lead_id` / `opportunity_id` / `proposal_id` / `sale_id` | Stable non-PII join keys for the closed loop. Public browser→receipt uses `sess-` / `lead-`; `opp-` / `prop-` / `sale-` arrive only in Warmbly observations. Never email, phone or free text |
 | `journey` | Versioned journey token when known |
 | `consent` | `not_required` on aggregate events |
 | `pii_policy` | `aggregate_allowlist_empty` |
@@ -38,7 +38,7 @@ The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query t
 | `engagement` | Interaction, including form start/submit and CTA | No |
 | `completion` | Tool / analysis / X-Ray finished | No |
 | `lead` | Persist / receipt / hand-raise | No |
-| `qualified_lead` | Observed Warmbly/operator qualification only | — |
+| `qualified_lead` | Observed Warmbly qualification only | — |
 | `pipeline` | Observed Warmbly commercial outcome only | — |
 
 `session_start` is a session marker. It is not a page view.

@@ -59,18 +59,25 @@ function expectedCount(stage) {
   else pass("contract_schema", FUNNEL.schema_version);
   if (FUNNEL.commercial_owner !== "warmbly") fail("commercial_owner", FUNNEL.commercial_owner);
   else pass("commercial_owner");
+  const observationContract = FUNNEL.warmbly_observation_contract || {};
+  if (
+    observationContract.access !== "read_only"
+    || observationContract.owner !== "warmbly"
+    || observationContract.analytics_shape !== "aggregated_non_pii"
+  ) {
+    fail("warmbly_observation_contract", observationContract);
+  } else pass("warmbly_observation_contract_read_only");
+  const observationBlob = JSON.stringify(observationContract);
+  if (/email|phone|telefone|nome|name|cnpj|cpf|mensagem|message_body/i.test(observationBlob)) {
+    fail("warmbly_observation_contract_pii", observationContract);
+  } else pass("warmbly_observation_contract_no_pii");
   for (const name of FUNNEL.rates) {
     if (!closedLoop.RATE_NAMES.includes(name)) fail("rate_named", name);
   }
   pass("named_rates", FUNNEL.rates.join(","));
-  if (JSON.stringify(stages.LOSS_REASONS) !== JSON.stringify(FUNNEL.reject_reasons)) {
-    fail("reject_reasons_mismatch", stages.LOSS_REASONS);
-  } else pass("reject_reasons_versioned");
-  if (JSON.stringify(stages.ACCEPT_REASONS) !== JSON.stringify(FUNNEL.accept_reasons)) {
-    fail("accept_reasons_mismatch", stages.ACCEPT_REASONS);
-  } else pass("accept_reasons_versioned");
-  if (stages.SLA.version !== FUNNEL.sla.version) fail("sla_version", stages.SLA);
-  else pass("sla_versioned", stages.SLA.version);
+  if (!FUNNEL.accept_reasons.length || !FUNNEL.reject_reasons.length) {
+    fail("reason_contract_empty");
+  } else pass("commercial_reasons_versioned");
   const minted = closedLoop.mintStableId("session", fixture.seed);
   if (minted !== fixture.ids.session_id) fail("mint_session", { minted, expected: fixture.ids.session_id });
   else pass("mint_session_deterministic", minted);
@@ -117,6 +124,28 @@ const walk = await closedLoop.runFixture(fixture, store);
     const value = report.rates[name];
     if (value == null || typeof value !== "number") fail("rate_not_numeric", { name, value });
   }
+  const expectedDenominators = {
+    view_to_cta: ["cta", "view"],
+    cta_to_start: ["form_start", "cta"],
+    step1_to_step2: ["step2", "step1"],
+    step2_to_persisted: ["persisted", "step2"],
+    persisted_to_qualified: ["qualified", "persisted"],
+    qualified_to_proposal: ["proposal", "qualified"],
+    proposal_to_won: ["won", "proposal"],
+  };
+  for (const [name, [numerator, denominator]] of Object.entries(expectedDenominators)) {
+    const declared = report.denominators && report.denominators[name];
+    if (
+      !declared
+      || declared.numerator !== numerator
+      || declared.denominator !== denominator
+      || declared.numerator_count !== report.counts[numerator]
+      || declared.denominator_count !== report.counts[denominator]
+    ) {
+      fail("denominator_contract", { name, declared, numerator, denominator });
+    }
+  }
+  pass("denominators_explicit");
   pass("closed_rates", JSON.stringify(report.rates));
   if (report.raw_lead_is_qualified !== false) fail("raw_flag", report.raw_lead_is_qualified);
   else pass("raw_lead_not_counted_as_qualified");
@@ -146,6 +175,125 @@ const walk = await closedLoop.runFixture(fixture, store);
   const listed = await store.list();
   if (listed.length !== 1) fail("replay_duplicated_lead", listed.length);
   else pass("replay_no_duplicate_lead", listed.length);
+}
+
+// --- private read-only Warmbly snapshot produces the same aggregate report ---
+{
+  const snapshot = {
+    schema: "confenge.closed-loop-snapshot/1.0",
+    schema_version: "1.0.0",
+    kind: "synthetic_warmbly_snapshot",
+    official_live: false,
+    source: "CONFENGE_WEB",
+    commercial_owner: "warmbly",
+    generated_at: "2026-08-08T11:00:00.000Z",
+    events: fixture.events,
+    leads: [{
+      lead_id: fixture.lead.lead_id,
+      session_id: fixture.lead.session_id,
+      received_at: fixture.lead.received_at,
+      landing_page: fixture.lead.landing_page,
+      route_family: fixture.lead.route_family,
+      asset_id: fixture.lead.asset_id,
+      cta_id: fixture.lead.cta_id,
+      jornada: fixture.lead.jornada,
+      offer_id: fixture.lead.offer_id,
+      origem: fixture.lead.origem,
+      utm_source: fixture.lead.utm_source,
+    }],
+    observations: fixture.observations,
+  };
+  try {
+    const first = closedLoop.runSnapshot(snapshot);
+    const second = closedLoop.runSnapshot(snapshot);
+    if (first.body !== second.body) fail("snapshot_replay_drift");
+    else if (first.report.official_live !== false) fail("synthetic_snapshot_marked_live");
+    else if (first.report.counts.won !== 1) fail("snapshot_won_count", first.report.counts);
+    else pass("warmbly_snapshot_replay_identical");
+
+    const rendered = await renderClosedLoopReport({ snapshot });
+    if (rendered.body !== first.body) fail("private_snapshot_report_drift");
+    else pass("private_snapshot_report_matches_module");
+
+    const snapshotDir = fs.mkdtempSync(path.join(process.env.TMPDIR || "/tmp", "confenge-closed-loop-"));
+    const snapshotPath = path.join(snapshotDir, "warmbly-synthetic.json");
+    fs.writeFileSync(snapshotPath, `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
+    const cli = spawnSync(
+      process.execPath,
+      [path.join(root, "scripts/revops/closed_loop_report.mjs"), "--snapshot", snapshotPath],
+      { encoding: "utf8", cwd: root },
+    );
+    fs.rmSync(snapshotDir, { recursive: true, force: true });
+    if (cli.status !== 0) fail("private_snapshot_cli_status", cli.stderr);
+    else if (cli.stdout !== first.body) fail("private_snapshot_cli_drift");
+    else pass("private_snapshot_cli_read_only");
+  } catch (err) {
+    fail("warmbly_snapshot_runner", err.code || err.message);
+  }
+  try {
+    closedLoop.runSnapshot({
+      ...snapshot,
+      leads: [{ ...snapshot.leads[0], email: "lead@example.com" }],
+    });
+    fail("warmbly_snapshot_pii_allowed");
+  } catch (err) {
+    if (err.code === "pii_key_admitted" || err.code === "unsupported_snapshot_field") {
+      pass("warmbly_snapshot_pii_rejected", err.code);
+    } else fail("warmbly_snapshot_pii_code", err.code || err.message);
+  }
+}
+
+// --- route/offer/origin breakdowns stay cohort-local with multiple sessions ---
+{
+  const secondSessionId = closedLoop.mintStableId("session", "closed-loop-second-session");
+  const secondLeadId = closedLoop.mintStableId("lead", "closed-loop-second-lead");
+  const secondEvents = fixture.events.map((event, index) => ({
+    ...event,
+    path: "/segunda-rota/",
+    sid: secondSessionId,
+    session_id: secondSessionId,
+    props: {
+      ...event.props,
+      event_id: `evt-second-${index}`,
+      page_path: "/segunda-rota/",
+      session_id: secondSessionId,
+      lead_id: event.visitor_stage === "persisted" || event.event === "lead_persisted" ? secondLeadId : undefined,
+      route_family: "segunda-rota",
+      offer_id: "segunda-oferta",
+      origem: "referral",
+    },
+  }));
+  const secondLead = {
+    ...fixture.lead,
+    lead_id: secondLeadId,
+    session_id: secondSessionId,
+    received_at: "2026-08-01T10:05:00.000Z",
+    landing_page: "/segunda-rota/",
+    route_family: "segunda-rota",
+    offer_id: "segunda-oferta",
+    origem: "referral",
+  };
+  const admitted = closedLoop.admitVisitorEvents([...fixture.events, ...secondEvents]).admitted;
+  const report = closedLoop.reconcileClosedLoop({
+    events: admitted,
+    leads: [fixture.lead, secondLead],
+    observations: fixture.observations,
+    kind: "synthetic",
+  }).report;
+  const firstRoute = report.by_route.find((row) => row.key === "/diagnostico-pre-licitacao/");
+  const secondRoute = report.by_route.find((row) => row.key === "/segunda-rota/");
+  if (!firstRoute || firstRoute.view !== 1 || firstRoute.persisted !== 1 || firstRoute.qualified !== 1) {
+    fail("first_route_breakdown", firstRoute || report.by_route);
+  }
+  if (!secondRoute || secondRoute.view !== 1 || secondRoute.persisted !== 1 || secondRoute.qualified !== 0) {
+    fail("second_route_breakdown", secondRoute || report.by_route);
+  }
+  if (report.by_offer.length !== 2 || report.by_origem.length !== 2) {
+    fail("cohort_breakdown_dimensions", {
+      by_offer: report.by_offer,
+      by_origem: report.by_origem,
+    });
+  } else pass("cohort_breakdowns_are_local");
 }
 
 // --- CLI report twice, identical ---
@@ -320,6 +468,70 @@ const walk = await closedLoop.runFixture(fixture, store);
   else pass("helper_raw_not_qualified");
 }
 
+// --- local lead fields/entities can never substitute Warmbly observations ---
+{
+  const localOutcomeLead = {
+    ...fixture.lead,
+    commercial_stage: "won",
+    opportunity_id: fixture.ids.opportunity_id,
+    proposal_id: fixture.ids.proposal_id,
+    sale_id: fixture.ids.sale_id,
+    revenue_received: expectedWonRevenue(),
+  };
+  const localBundle = {
+    ...fixture,
+    id: "closed-loop-local-outcome-fields",
+    lead: localOutcomeLead,
+    observations: [],
+  };
+  const localWalk = await closedLoop.runFixture(localBundle, new MemoryStore());
+  if (
+    localWalk.report.counts.qualified !== 0
+    || localWalk.report.counts.proposal !== 0
+    || localWalk.report.counts.won !== 0
+  ) {
+    fail("local_lead_outcome_fields_counted", localWalk.report.counts);
+  } else pass("local_lead_outcome_fields_ignored");
+
+  const directEntities = closedLoop.reconcileClosedLoop({
+    events: closedLoop.admitVisitorEvents(fixture.events).admitted,
+    leads: [localOutcomeLead],
+    observations: [],
+    entities: {
+      opportunity: fixture.observations[0],
+      proposal: fixture.observations[1],
+      sale: fixture.observations[2],
+    },
+    kind: "synthetic",
+  });
+  if (
+    directEntities.report.counts.qualified !== 0
+    || directEntities.report.counts.proposal !== 0
+    || directEntities.report.counts.won !== 0
+  ) {
+    fail("direct_entities_bypassed_warmbly_contract", directEntities.report.counts);
+  } else pass("commercial_entities_require_observations");
+
+  try {
+    closedLoop.reconcileClosedLoop({
+      events: closedLoop.admitVisitorEvents(fixture.events).admitted,
+      leads: [fixture.lead],
+      observations: [
+        fixture.observations[0],
+        {
+          ...fixture.observations[1],
+          opportunity_id: closedLoop.mintStableId("opportunity", "wrong-link"),
+        },
+      ],
+      kind: "synthetic",
+    });
+    fail("proposal_cross_entity_link_allowed");
+  } catch (err) {
+    if (err.code === "orphan_observation") pass("commercial_entity_links_verified", err.code);
+    else fail("proposal_cross_entity_link_code", err.code || err.message);
+  }
+}
+
 // --- observation without persist ---
 {
   try {
@@ -358,6 +570,112 @@ const walk = await closedLoop.runFixture(fixture, store);
   } catch (err) {
     if (err.code === "wrong_owner") pass("warmbly_owner_required", err.code);
     else fail("wrong_owner_code", err.code || err.message);
+  }
+  try {
+    closedLoop.applyObservation(
+      { lead: { ...fixture.lead } },
+      {
+        stage: "qualified",
+        accept_reason: "icp_fit",
+        opportunity_id: fixture.ids.opportunity_id,
+        lead_id: fixture.ids.lead_id,
+        at: "2026-08-01T11:04:00.000Z",
+      },
+    );
+    fail("missing_warmbly_owner_allowed");
+  } catch (err) {
+    if (err.code === "wrong_owner") pass("explicit_warmbly_owner_required", err.code);
+    else fail("missing_owner_code", err.code || err.message);
+  }
+  try {
+    closedLoop.reconcileClosedLoop({
+      events: closedLoop.admitVisitorEvents(fixture.events).admitted,
+      leads: [fixture.lead],
+      observations: [{ ...fixture.observations[0], owner: "web-cfg" }],
+      kind: "synthetic",
+    });
+    fail("reconcile_wrong_owner_allowed");
+  } catch (err) {
+    if (err.code === "wrong_owner") pass("reconcile_warmbly_owner_required", err.code);
+    else fail("reconcile_owner_code", err.code || err.message);
+  }
+  try {
+    closedLoop.applyObservation(
+      { lead: { ...fixture.lead } },
+      { ...fixture.observations[0], note: "Nome e detalhes livres do lead" },
+    );
+    fail("warmbly_free_text_allowed");
+  } catch (err) {
+    if (err.code === "pii_key_admitted") pass("warmbly_free_text_rejected", err.code);
+    else fail("warmbly_free_text_code", err.code || err.message);
+  }
+  try {
+    closedLoop.applyObservation(
+      { lead: { ...fixture.lead } },
+      { ...fixture.observations[0], comment: "detalhes comerciais livres" },
+    );
+    fail("warmbly_unknown_free_text_allowed");
+  } catch (err) {
+    if (err.code === "unsupported_observation_field") pass("warmbly_observation_allowlist", err.code);
+    else fail("warmbly_unknown_free_text_code", err.code || err.message);
+  }
+  try {
+    closedLoop.applyObservation(
+      { lead: { ...fixture.lead } },
+      { ...fixture.observations[0], actor: "Nome do vendedor" },
+    );
+    fail("warmbly_actor_identity_allowed");
+  } catch (err) {
+    if (err.code === "unsupported_actor") pass("warmbly_actor_enum_only", err.code);
+    else fail("warmbly_actor_identity_code", err.code || err.message);
+  }
+  try {
+    closedLoop.applyObservation(
+      { lead: { ...fixture.lead } },
+      { ...fixture.observations[0], session_id: "session-does-not-match-contract" },
+    );
+    fail("warmbly_malformed_session_allowed");
+  } catch (err) {
+    if (err.code === "invalid_entity_id") pass("warmbly_ids_are_contract_validated", err.code);
+    else fail("warmbly_malformed_session_code", err.code || err.message);
+  }
+}
+
+// --- Warmbly timestamps must be valid and monotonic after persistence ---
+{
+  try {
+    closedLoop.applyObservation(
+      { lead: { ...fixture.lead } },
+      {
+        stage: "qualified",
+        owner: "warmbly",
+        accept_reason: "icp_fit",
+        opportunity_id: fixture.ids.opportunity_id,
+        lead_id: fixture.ids.lead_id,
+        at: "2026-08-01T09:59:59.000Z",
+      },
+    );
+    fail("qualified_before_persisted_allowed");
+  } catch (err) {
+    if (err.code === "non_monotonic_timestamp") pass("qualified_after_persisted_required", err.code);
+    else fail("qualified_timestamp_code", err.code || err.message);
+  }
+  try {
+    closedLoop.applyObservation(
+      { lead: { ...fixture.lead } },
+      {
+        stage: "qualified",
+        owner: "warmbly",
+        accept_reason: "icp_fit",
+        opportunity_id: fixture.ids.opportunity_id,
+        lead_id: fixture.ids.lead_id,
+        at: "not-a-timestamp",
+      },
+    );
+    fail("invalid_observation_timestamp_allowed");
+  } catch (err) {
+    if (err.code === "invalid_timestamp") pass("observation_timestamp_required", err.code);
+    else fail("invalid_timestamp_code", err.code || err.message);
   }
 }
 
