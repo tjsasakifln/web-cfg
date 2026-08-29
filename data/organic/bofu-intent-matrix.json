@@ -214,7 +214,7 @@
       "intent_cluster": "bid-room",
       "canonical_service_route": "/bid-room-licitacoes-obras/",
       "supporting_indexable_routes": [],
-      "cta": "Enviar edital para triagem",
+      "cta": "Solicitar canal seguro para envio",
       "destination_service_id": "bid-room-licitacoes-obras",
       "offer_class": "recurring_wip",
       "offer_id": null,

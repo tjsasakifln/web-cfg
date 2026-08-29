@@ -234,9 +234,9 @@ def _cta_block(page: dict[str, Any], position: str) -> str:
     wa = page.get("cta_whatsapp") or ""
     subject = page.get("cta_email_subject") or f"Análise inicial: {page.get('theme') or page.get('title')}"
     body = page.get("cta_email_body") or (
-        f"Olá, Tiago.\n\nLi a página {page.get('url')} e gostaria de avaliar documentos "
-        f"relacionados a {page.get('theme') or 'contrato de obra pública'}.\n\n"
-        "Posso enviar: contrato, planilha, medições e notificações relevantes.\n"
+        f"Olá, Tiago.\n\nLi a página {page.get('url')} e gostaria de avaliar "
+        f"{page.get('theme') or 'contrato de obra pública'}.\n\n"
+        "Quero solicitar um canal seguro para envio. Não anexe arquivo nesta mensagem.\n"
     )
     email = page.get("contact_email") or "tiago.sasaki@confenge.com.br"
     wa_href = wa_link(wa)
@@ -245,8 +245,8 @@ def _cta_block(page: dict[str, Any], position: str) -> str:
     label_em = page.get("cta_email_label") or "Solicitar análise inicial por e-mail"
     offer = page.get("cta_offer") or "Avaliar os documentos deste caso"
     blurb = page.get("cta_blurb") or (
-        "Envie o edital, a planilha, a notificação ou a medição. "
-        "Retorno com enquadramento técnico e próximos passos."
+        "Solicite um canal seguro para envio. O site não recebe arquivo; "
+        "o canal é escolhido posteriormente."
     )
     return f"""
 <section class="editorial-cta" id="cta-{e(position)}" aria-label="Próximo passo" data-cta-position="{e(position)}">

@@ -744,6 +744,8 @@ function buildLeadRecord({ lead_id, lead, received_at, ip_hash, fingerprint, sta
     // never rendered into analytics, fixtures or git.
     radar_params: lead.radar_params || null,
     external_reference: lead.external_reference || null,
+    document_intent: lead.document_intent || null,
+    canal_seguro: Boolean(lead.canal_seguro),
     source: "CONFENGE_WEB",
     idempotency_key: lead.idempotency_key,
     ip_hash,

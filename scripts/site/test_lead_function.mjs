@@ -1461,6 +1461,178 @@ _reset();
   }
 }
 
+// Option B document intake: JSON channel-request succeeds; files never persist.
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const eicar = core.EICAR_SIGNATURE;
+  const before = (await mem.list()).length;
+
+  const channelReq = await handler(
+    event({
+      nome: "QA Canal Seguro",
+      email: "qa-canal@example.com",
+      estagio: "problema urgente em contrato",
+      jornada: "contrato",
+      consentimento: "on",
+      document_intent: "secure_channel_request",
+      canal_seguro: "1",
+      origem: "/",
+      mensagem: "Quero solicitar um canal seguro para envio.",
+      idempotency_key: "qa-secure-channel-1",
+    }),
+  );
+  const channelBody = JSON.parse(channelReq.body);
+  if (channelReq.statusCode !== 201 || !channelBody.ok || !channelBody.lead_id) {
+    fail("secure_channel_json_persist", channelBody);
+  }
+  if (channelBody.document_intent !== "secure_channel_request" || channelBody.channel_status !== "canal escolhido posteriormente") {
+    fail("secure_channel_receipt_sla", channelBody);
+  }
+  const storedChannel = await mem.get(channelBody.lead_id);
+  if (!storedChannel || storedChannel.document_intent !== "secure_channel_request" || storedChannel.canal_seguro !== true) {
+    fail("secure_channel_store_flags", storedChannel);
+  }
+  if (core.leadHasFilePayload(storedChannel)) fail("secure_channel_store_has_file", storedChannel);
+  const exported = core.titularExport(storedChannel);
+  if (exported.lead_id !== storedChannel.lead_id || exported.channel_status !== "canal escolhido posteriormente") {
+    fail("titular_export_receipt", exported);
+  }
+  if (JSON.stringify(exported).includes(eicar) || Object.keys(exported).some((k) => core.FILE_FIELD_KEYS.has(k))) {
+    fail("titular_export_file_bytes", exported);
+  }
+  pass("secure_channel_json_success", { lead_id: channelBody.lead_id });
+
+  const replay = await handler(
+    event({
+      nome: "QA Canal Seguro",
+      email: "qa-canal@example.com",
+      estagio: "problema urgente em contrato",
+      jornada: "contrato",
+      consentimento: "on",
+      document_intent: "secure_channel_request",
+      canal_seguro: "1",
+      origem: "/",
+      mensagem: "Quero solicitar um canal seguro para envio.",
+      idempotency_key: "qa-secure-channel-1",
+    }),
+  );
+  const replayBody = JSON.parse(replay.body);
+  if (replay.statusCode !== 200 || replayBody.idempotent !== true || replayBody.lead_id !== channelBody.lead_id) {
+    fail("secure_channel_duplicate", replayBody);
+  }
+  if ((await mem.list()).filter((r) => r.idempotency_key && String(r.idempotency_key).includes("qa-secure-channel-1")).length !== 1) {
+    fail("secure_channel_duplicate_persisted_extra");
+  }
+  pass("secure_channel_duplicate_idempotent");
+
+  const multipart = await handler({
+    httpMethod: "POST",
+    headers: {
+      "content-type": "multipart/form-data; boundary=----CfgTest",
+      origin: "https://confenge.com.br",
+      "user-agent": "confenge-lead-test/1.0",
+      "x-forwarded-for": "203.0.113.60",
+    },
+    body: "------CfgTest\r\nContent-Disposition: form-data; name=\"file\"; filename=\"edital.pdf\"\r\nContent-Type: application/pdf\r\n\r\n%PDF-1.4 fake\r\n------CfgTest--",
+  });
+  const multipartBody = JSON.parse(multipart.body);
+  if (multipart.statusCode !== 415 || multipartBody.error !== "file_payload_rejected") {
+    fail("multipart_rejected", { status: multipart.statusCode, body: multipartBody });
+  }
+  if ((await mem.list()).length !== before + 1) fail("multipart_persisted");
+  pass("multipart_rejected");
+
+  const oversize = "x".repeat(core.MAX_BODY_BYTES + 8);
+  const oversizeRes = await handler({
+    httpMethod: "POST",
+    headers: {
+      "content-type": "application/json",
+      origin: "https://confenge.com.br",
+      "user-agent": "confenge-lead-test/1.0",
+      "x-forwarded-for": "203.0.113.61",
+    },
+    body: oversize,
+  });
+  const oversizeBody = JSON.parse(oversizeRes.body);
+  if (oversizeRes.statusCode !== 413 || oversizeBody.error !== "payload_too_large") {
+    fail("oversize_413", { status: oversizeRes.statusCode, body: oversizeBody });
+  }
+  if ((await mem.list()).length !== before + 1) fail("oversize_persisted");
+  pass("oversize_413");
+
+  const spoof = await handler({
+    httpMethod: "POST",
+    headers: {
+      "content-type": "application/json",
+      origin: "https://confenge.com.br",
+      "user-agent": "confenge-lead-test/1.0",
+      "x-forwarded-for": "203.0.113.62",
+    },
+    body: "%PDF-1.4 spoofed as json",
+  });
+  const spoofBody = JSON.parse(spoof.body);
+  if (spoof.statusCode !== 415 || spoofBody.error !== "file_payload_rejected") {
+    fail("mime_spoof_rejected", { status: spoof.statusCode, body: spoofBody });
+  }
+  pass("mime_spoof_rejected");
+
+  const fileKey = await handler(
+    event({
+      nome: "QA File Key",
+      email: "qa-file@example.com",
+      estagio: "problema urgente em contrato",
+      consentimento: "on",
+      file: "edital.pdf",
+    }),
+  );
+  const fileKeyBody = JSON.parse(fileKey.body);
+  if (fileKey.statusCode !== 415 || fileKeyBody.error !== "file_payload_rejected") {
+    fail("file_field_rejected", { status: fileKey.statusCode, body: fileKeyBody });
+  }
+  pass("file_field_rejected");
+
+  const eicarRes = await handler(
+    event({
+      nome: "QA Eicar",
+      email: "qa-eicar@example.com",
+      estagio: "problema urgente em contrato",
+      consentimento: "on",
+      mensagem: eicar,
+    }),
+  );
+  const eicarBody = JSON.parse(eicarRes.body);
+  if (eicarRes.statusCode !== 415 || eicarBody.error !== "file_payload_rejected") {
+    fail("eicar_rejected", { status: eicarRes.statusCode, body: eicarBody });
+  }
+  const listed = JSON.stringify(await mem.list());
+  if (listed.includes(eicar)) fail("eicar_persisted", "fixture bytes in store");
+  pass("eicar_fixture_rejected_not_persisted");
+
+  const timeoutLike = await handler({
+    httpMethod: "POST",
+    headers: {
+      "content-type": "multipart/form-data; boundary=----Abort",
+      origin: "https://confenge.com.br",
+      "user-agent": "confenge-lead-test/1.0",
+      "x-forwarded-for": "203.0.113.63",
+    },
+    body: "------Abort\r\nContent-Disposition: form-data; name=\"file\"; filename=\"cut.bin\"\r\n\r\ntruncated",
+  });
+  if (timeoutLike.statusCode !== 415) fail("timeout_truncated_multipart", timeoutLike);
+  if ((await mem.list()).length !== before + 1) fail("timeout_stored_file");
+  pass("timeout_truncated_multipart_no_file");
+
+  const deleted = await mem.delete(channelBody.lead_id);
+  if (!deleted || (await mem.get(channelBody.lead_id))) fail("request_deletion_left_record");
+  try {
+    core.titularExport({ lead_id: channelBody.lead_id, file: eicar, mensagem: eicar });
+    fail("titular_export_allowed_file");
+  } catch (err) {
+    if (!err || err.code !== "file_payload_forbidden") fail("titular_export_error_code", err);
+  }
+  pass("request_deletion_and_export_file_free");
+}
+
 console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
 // cleanup store dir
 try {

@@ -373,7 +373,7 @@ def test_trace_matrix_and_tension_present():
     assert "Arquitetura de ofertas" not in html
     # Three differentiated conversion paths (required by conversion architecture)
     assert "Avaliar o Dossiê de Medição, Glosa e Pagamento" in html
-    assert "Enviar edital para triagem" in html
+    assert "Solicitar canal seguro para envio" in html
     assert "Solicitar diagnóstico da operação" in html
     assert 'data-journey="contrato"' in html
     assert 'data-journey="edital"' in html

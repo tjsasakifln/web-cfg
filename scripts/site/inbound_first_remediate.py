@@ -724,9 +724,9 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
             count=1,
 )
     # Soft-replace generic "Quer validar este cenário" lead with journey-aware next step
-    cta = j.get("cta") or "Solicitar canal seguro"
+    cta = j.get("cta") or "Solicitar canal seguro para envio"
     next_step = j.get("next_step") or ""
-    wa = wa_url(j.get("wa_message") or "Olá, Tiago. Preciso de apoio em contrato público.")
+    wa = wa_url(j.get("wa_message") or "Olá, Tiago. Quero solicitar um canal seguro para envio.")
     form = f"/?{j.get('href_params') or 'jornada='+journey_id}&tema={quote(topic)}&origem={quote(origem)}#contato"
 
     new_lead = (
@@ -734,7 +734,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
         f'data-journey="{journey_id}">'
         f'<div class="lead-inline-copy"><span>Próximo passo</span>'
         f"<strong>{html_lib.escape(cta)}</strong>"
-        f"<p>{html_lib.escape(next_step or 'Envie os documentos essenciais. Retorno com enquadramento técnico, sem promessa de resultado.')}</p>"
+        f"<p>{html_lib.escape(next_step or 'Registramos o pedido de canal seguro. O site não recebe arquivo; o canal é escolhido posteriormente.')}</p>"
         f"</div>"
         f'<div class="lead-inline-actions">'
         f'<a class="button button-primary" data-cta-position="inline" data-journey="{journey_id}" '
