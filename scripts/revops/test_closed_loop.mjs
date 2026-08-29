@@ -325,7 +325,18 @@ const walk = await closedLoop.runFixture(fixture, store);
     "landing_page", "landing_url", "route_family", "asset_id", "cta_id", "jornada",
     "offer_id", "origem", "utm_source", "utm_medium", "utm_campaign",
   ]) {
-    const sensitive = field.startsWith("landing") ? "https://evil.example/cliente" : "Nome Cliente";
+    // Injected value stays realistic (a real URL for landing fields), but the
+    // leak check below asserts on `leakSentinel` — a non-URL-shaped token
+    // embedded in it — not the URL literal itself. This is a no-leak
+    // assertion on an error object, not a URL allowlist/substring sanitizer;
+    // comparing against a bare URL literal reads to static analysis as the
+    // latter (js/incomplete-url-substring-sanitization), so the sentinel
+    // keeps the check's semantics honest while still catching a full or
+    // partial leak of the sensitive value (the sentinel is a substring of it).
+    const leakSentinel = field.startsWith("landing") ? "cliente-nao-vaza-9f21ac" : "Nome Cliente";
+    const sensitive = field.startsWith("landing")
+      ? `https://evil.example/${leakSentinel}`
+      : leakSentinel;
     try {
       closedLoop.runSnapshot({
         ...snapshot,
@@ -334,7 +345,7 @@ const walk = await closedLoop.runFixture(fixture, store);
       fail("snapshot_attribution_text_admitted", field);
     } catch (err) {
       const serialized = JSON.stringify(err);
-      if (err.code !== "invalid_attribution" || serialized.includes(sensitive)) {
+      if (err.code !== "invalid_attribution" || serialized.indexOf(leakSentinel) !== -1) {
         fail("snapshot_attribution_error", { field, code: err.code, serialized });
       }
     }

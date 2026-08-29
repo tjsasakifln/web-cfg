@@ -265,7 +265,9 @@ const windowObj = {
     return {
       ok: true,
       status: 201,
-      json: async () => ({ ok: true, lead_id: "lead-page-test-001" }),
+      // Realistic shape: generateLeadId() in netlify/functions/lib/lead-core.cjs
+      // always mints `lead-` + 27 lowercase hex chars (sha256 digest slice).
+      json: async () => ({ ok: true, lead_id: "lead-0123456789abcdef0123456789a" }),
     };
   },
   CONFENGE_DEBUG_ANALYTICS: false,
