@@ -219,7 +219,7 @@ const vitrine = doc.public_vitrine || {};
 assert("public_vitrine_count_8", vitrine.count === 8, vitrine.count);
 assert("public_vitrine_band_599_3750", vitrine.min_brl === 599 && vitrine.max_brl === 3750 && vitrine.price_band_display_pt_br === "R$ 599 a R$ 3.750", vitrine);
 assert("public_vitrine_has_no_filters", vitrine.filters === false, vitrine.filters);
-assert("public_vitrine_comparison_columns", eq(vitrine.comparison_columns_pt_br, ["situação", "decisão", "saída", "prazo", "preço", "fit"]), vitrine.comparison_columns_pt_br);
+assert("public_vitrine_primary_fields", eq(vitrine.primary_card_fields_pt_br, ["situação", "decisão", "entrada", "objeto e limite", "saída", "SLA", "preço", "pacote e crédito"]), vitrine.primary_card_fields_pt_br);
 
 /* 10. Enquadramento, recomendacao, filtros e comparacao ------------ */
 const ir = doc.interaction_rules;
@@ -288,19 +288,23 @@ const catalogProgressiveStyle = fs.readFileSync(catalogProgressiveStylePath, "ut
 const implementation = doc.public_implementation || {};
 assert("implementation_route", implementation.route === "/entregas/", implementation.route);
 assert("implementation_artifacts_exist", [implementation.renderer, implementation.client_loader, implementation.client_script, implementation.client_data_asset, implementation.client_stylesheet, implementation.stylesheet].every((file) => fs.existsSync(path.join(root, file))), implementation);
-assert("implementation_count_and_steps", implementation.index_count === 8 && implementation.framing_steps === 1, implementation);
+assert("implementation_counts_and_steps", implementation.published_offer_count === 8 && implementation.capability_roll_count === 54 && implementation.capability_group_count === 7 && implementation.primary_representation_per_offer === 1 && implementation.framing_steps === 1, implementation);
 assert("implementation_has_no_public_filters", eq(implementation.filter_dimensions, []) && implementation.alphabetical_view === false, implementation.filter_dimensions);
+assert("implementation_uses_native_progressive_disclosure", implementation.progressive_disclosure === "native_details_by_task", implementation.progressive_disclosure);
+assert("implementation_has_one_complete_primary_card", implementation.comparison?.mode === "single_primary_card" && implementation.comparison?.duplicated_representation === false && implementation.comparison?.mobile_hides_essential_fields === false, implementation.comparison);
 assert("implementation_fail_closed", implementation.terminal_capture === true && implementation.human_validation === "NOT_STARTED", implementation);
 assert("implementation_no_new_analytics_dimensions", implementation.new_analytics_dimensions === false, implementation.new_analytics_dimensions);
-assert("hero_decision_h1", entregas.includes("Compare as oito entregas") && entregas.includes("a decisão que cabe agora"), "hero");
+assert("hero_decision_h1", entregas.includes("8 ofertas publicadas") && entregas.includes("Escolha pela decisão que está na mesa"), "hero");
 assert("hero_public_price_band", entregas.includes("R$ 599 a R$ 3.750") && !entregas.includes("R$ 39.800"), "price range");
 assert("hero_primary_and_secondary_access", entregas.includes(">Encontrar a entrega certa ") && entregas.includes(">Registrar a decisão na mesa</a>"), "hero actions");
 assert("public_vitrine_has_8_cards", (entregas.match(/<article class="vitrine-item/g) || []).length === 8, (entregas.match(/<article class="vitrine-item/g) || []).length);
 assert("public_vitrine_has_published_deep_links", ["01","02","03","04","05","06","07","08"].every((item) => entregas.includes(`id="entrega-${item}"`)), "deep links");
 assert("public_vitrine_omits_backlog_deep_links", expectedItems.slice(8).every((item) => !entregas.includes(`id="entrega-${item}"`)), "backlog deep links");
 assert("public_page_has_no_filter_chrome", !entregas.includes("data-filter=") && !entregas.includes("data-catalog-filters"), "filters");
-assert("public_page_has_static_comparison", entregas.includes('id="comparar"') && ["Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"].every((label) => entregas.includes(`>${label}</th>`)), "comparison");
-assert("public_page_omits_internal_states", !entregas.includes("Em validação") && !entregas.includes("Indisponível") && !entregas.includes("as 54 entregáveis"), "internal states");
+const primaryOfferHtml = entregas.match(/<div class="vitrine-items">([\s\S]*?)<dl class="compare-ladder-figures">/)?.[1] || "";
+assert("public_page_has_one_complete_primary_representation", !entregas.includes('id="comparar"') && (primaryOfferHtml.match(/data-primary-offer="true"/g) || []).length === 8 && ["Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"].every((label) => (primaryOfferHtml.match(new RegExp(`<dt>${label}<\\/dt>`, "g")) || []).length === 8), "primary cards");
+assert("public_page_separates_capability_states", entregas.includes("54 capacidades do rol taxativo") && entregas.includes("44 em validação") && entregas.includes("2 bloqueadas") && !primaryOfferHtml.includes("Em validação"), "state separation");
+assert("public_role_has_exact_census", (entregas.match(/data-capability-id="CFG-D\d{2}"/g) || []).length === 54 && (entregas.match(/class="capability-item capability-item--validate"/g) || []).length === 44 && (entregas.match(/class="capability-item capability-item--blocked"/g) || []).length === 2, "capability census");
 assert("catalog_data_has_exact_schema", catalogData?.schema === "confenge.public-deliverable-catalog/1.1", catalogData?.schema);
 assert("catalog_data_has_declared_fields", eq(catalogData?.fields, ["id", "name", "trigger", "decision", "unit", "input", "inputKinds", "inputCount", "decisionBusinessDays", "output", "sla", "price", "exclusion", "stepUp", "publicState", "contractHtml"]), catalogData?.fields);
 assert("catalog_data_has_54_records", catalogData?.items?.length === CATALOG_SIZE, catalogData?.items?.length);

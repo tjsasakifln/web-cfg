@@ -144,10 +144,11 @@ assert(
   JSON.stringify(publicIds) === JSON.stringify(publishedNumbers),
   publicIds,
 );
-assert("public_vitrine_omits_validate_and_blocked_cards", !/data-public-state="(?:VALIDATE|BLOCKED)"/.test(entregasHtml), "internal states leaked");
-assert("public_vitrine_omits_backlog_count", !/as 54 entreg[áa]veis/i.test(entregasHtml) && !/entre 54 entregas/i.test(entregasHtml), "54 leaked");
+const primaryShowcase = entregasHtml.match(/<div class="vitrine-items">([\s\S]*?)<dl class="compare-ladder-figures">/)?.[1] || "";
+assert("public_vitrine_omits_validate_and_blocked_cards", !/data-public-state="(?:VALIDATE|BLOCKED)"/.test(primaryShowcase), "non-published state in buying showcase");
+assert("public_page_distinguishes_capability_roll", /54 capacidades do rol taxativo/i.test(entregasHtml) && /não afirma que existem 54 ofertas prontas/i.test(entregasHtml), "54-capability distinction missing");
 assert("public_vitrine_omits_internal_price_ceiling", !entregasHtml.includes("R$ 39.800"), "R$ 39.800 leaked");
-assert("public_vitrine_omits_internal_state_labels", !entregasHtml.includes("Em validação") && !entregasHtml.includes("Indisponível"), "state labels leaked");
+assert("public_roll_labels_non_buyable_states", entregasHtml.includes("44 em validação") && entregasHtml.includes("2 bloqueadas") && !primaryShowcase.includes("Em validação"), "state separation missing");
 for (const entry of published) {
   const card = entregasHtml.match(
     new RegExp(`<article\\b[^>]*\\bid="entrega-${entry.catalog_number}"[\\s\\S]*?<\\/article>`),
@@ -157,13 +158,16 @@ for (const entry of published) {
   assert(`public_price_${entry.deliverable_id}`, card.includes(brl(lib.entryAmountCents(entry))), brl(lib.entryAmountCents(entry)));
   assert(`public_state_${entry.deliverable_id}`, card.includes(`data-public-state="${entry.public_state}"`), entry.public_state);
   assert(`public_deep_link_${entry.deliverable_id}`, entregasHtml.includes(`id="entrega-${entry.catalog_number}"`));
-  assert(`public_comparison_fields_${entry.deliverable_id}`, ["Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"].every((label) => card.includes(`<dt>${label}</dt>`)), entry.deliverable_id);
+  assert(`public_decision_fields_${entry.deliverable_id}`, ["Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"].every((label) => card.includes(`<dt>${label}</dt>`)) && card.includes("Pacote e crédito"), entry.deliverable_id);
 }
 const vitrineHtml = (entregasHtml.match(/<!-- GENERATED:PUBLIC-CATALOG:START -->[\s\S]*?<!-- GENERATED:PUBLIC-CATALOG:END -->/) || [""])[0];
 for (const entry of entries.filter((item) => item.public_state !== "PUBLISHED")) {
   assert(`internal_not_on_vitrine_${entry.deliverable_id}`, !vitrineHtml.includes(`id="entrega-${entry.catalog_number}"`), entry.deliverable_id);
-  assert(`internal_name_not_sold_as_product_${entry.deliverable_id}`, !vitrineHtml.includes(entry.public_name_pt_br), entry.public_name_pt_br);
+  assert(`internal_name_not_sold_as_product_${entry.deliverable_id}`, !primaryShowcase.includes(entry.public_name_pt_br), entry.public_name_pt_br);
 }
+const capabilityRows = [...entregasHtml.matchAll(/<li class="capability-item[^>]*data-capability-id="([^"]+)"[^>]*data-public-state="([^"]+)"/g)];
+assert("public_roll_has_54_capabilities", capabilityRows.length === 54, capabilityRows.length);
+assert("public_roll_state_census", ["PUBLISHED", "VALIDATE", "BLOCKED"].every((state) => capabilityRows.filter((row) => row[2] === state).length === ({ PUBLISHED: 8, VALIDATE: 44, BLOCKED: 2 })[state]), capabilityRows.map((row) => row[2]));
 assert("public_catalog_has_one_terminal_form", (entregasHtml.match(/<form\b/g) || []).length === 1);
 assert("public_catalog_captures_deliverable_id", entregasHtml.includes('name="deliverable_id"'));
 assert("public_catalog_captures_terms_id", entregasHtml.includes('name="terms_id"'));

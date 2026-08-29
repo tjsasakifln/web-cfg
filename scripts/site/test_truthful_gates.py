@@ -159,7 +159,7 @@ def test_integral_catalog_has_each_registry_deliverable_exactly_once():
     assert any("CFG-D02: duplicated in integral catalog" in row for row in findings), findings
 
 
-def test_public_entregas_is_eight_offer_vitrine_not_integral_catalog():
+def test_public_entregas_separates_eight_offer_vitrine_from_taxative_roll():
     html = (ROOT / "entregas" / "index.html").read_text(encoding="utf-8")
     cards = re.findall(
         r"<article\b[^>]*class=[\"'][^\"']*\bvitrine-item\b[^\"']*[\"'][^>]*>",
@@ -170,10 +170,21 @@ def test_public_entregas_is_eight_offer_vitrine_not_integral_catalog():
     states = re.findall(r"<article\b[^>]*data-public-state=[\"']([^\"']+)[\"']", html, flags=re.I)
     assert "deliverables-catalog" not in html
     assert "catalog-item catalog-item--published" not in html
-    assert "Em validação" not in html
     assert len(cards) == 8, len(cards)
     assert ids == [f"CFG-D0{i}" for i in range(1, 9)], ids
     assert states == ["PUBLISHED"] * 8, states
+    capability_rows = re.findall(
+        r'<li class="capability-item[^>]*data-capability-id="([^"]+)"'
+        r'[^>]*data-public-state="([^"]+)"',
+        html,
+        flags=re.I,
+    )
+    assert len(capability_rows) == 54, len(capability_rows)
+    assert sum(state == "PUBLISHED" for _, state in capability_rows) == 8
+    assert sum(state == "VALIDATE" for _, state in capability_rows) == 44
+    assert sum(state == "BLOCKED" for _, state in capability_rows) == 2
+    assert "não afirma que existem 54 ofertas prontas" in html
+    assert "Capacidade em validação. Ainda não é oferta pronta para contratação." in html
     findings = evaluate_commercial_html(html, load_registry())
     assert not any("missing from integral catalog" in row for row in findings), findings
     assert not any("8↔54" in row for row in findings), findings
