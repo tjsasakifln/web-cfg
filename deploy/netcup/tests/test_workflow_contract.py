@@ -50,6 +50,7 @@ def test_ssh_is_fail_closed_and_known_hosts_is_pinned() -> None:
         assert f"secrets.{name}" in text
     assert "StrictHostKeyChecking=yes" in text
     assert "StrictHostKeyChecking=no" not in text
+    assert "-p 2222" in text
     assert "ssh-keygen -F" in text
     assert (
         "/opt/confenge-web/incoming/.upload-$RELEASE_SHA-$CI_RUN_ID-$CI_RUN_ATTEMPT"

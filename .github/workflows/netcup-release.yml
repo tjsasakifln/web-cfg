@@ -158,8 +158,9 @@ jobs:
           printf '%s\n' "$NETCUP_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/netcup-ssh/id_ed25519"
           printf '%s\n' "$NETCUP_SSH_KNOWN_HOSTS" > "$RUNNER_TEMP/netcup-ssh/known_hosts"
           chmod 0600 "$RUNNER_TEMP/netcup-ssh/id_ed25519" "$RUNNER_TEMP/netcup-ssh/known_hosts"
+          ssh-keygen -F "[$NETCUP_DEPLOY_HOST]:2222" -f "$RUNNER_TEMP/netcup-ssh/known_hosts" >/dev/null || \
           ssh-keygen -F "$NETCUP_DEPLOY_HOST" -f "$RUNNER_TEMP/netcup-ssh/known_hosts" >/dev/null || {
-            echo "NETCUP_RELEASE_BLOCKED: pinned known_hosts has no entry for NETCUP_DEPLOY_HOST" >&2
+            echo "NETCUP_RELEASE_BLOCKED: pinned known_hosts has no entry for NETCUP_DEPLOY_HOST:2222" >&2
             exit 1
           }
       - name: Upload, stage, and verify without changing current
@@ -172,6 +173,7 @@ jobs:
         run: |
           set -euo pipefail
           ssh_options=(
+            -p 2222
             -o BatchMode=yes
             -o IdentitiesOnly=yes
             -o StrictHostKeyChecking=yes
@@ -182,7 +184,7 @@ jobs:
           upload="/opt/confenge-web/incoming/.upload-$RELEASE_SHA-$CI_RUN_ID-$CI_RUN_ATTEMPT"
           ssh "${ssh_options[@]}" "$target" "install -d -m 0750 '$upload'"
           rsync -a --delay-updates --chmod=F640,D750 \
-            -e "ssh -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts -i $RUNNER_TEMP/netcup-ssh/id_ed25519" \
+            -e "ssh -p 2222 -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts -i $RUNNER_TEMP/netcup-ssh/id_ed25519" \
             "dist/netcup/$RELEASE_SHA/" "$target:$upload/"
           ssh "${ssh_options[@]}" "$target" \
             "/opt/confenge-web/bin/stage-release '$RELEASE_SHA' --upload-dir '$upload'"
@@ -241,6 +243,7 @@ jobs:
         run: |
           set -euo pipefail
           ssh_options=(
+            -p 2222
             -o BatchMode=yes
             -o IdentitiesOnly=yes
             -o StrictHostKeyChecking=yes
