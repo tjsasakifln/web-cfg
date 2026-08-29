@@ -100,6 +100,14 @@ assert.ok(unregisteredClientClaimProblems("<p>A cliente recuperou R$ 50 mil.</p>
 assert.ok(unregisteredClientClaimProblems("<p>A cliente teve economia de 20%.</p>", "fixture.html").length > 0);
 assert.ok(unregisteredClientClaimProblems("<p>A empresa ficou com margem 15% maior.</p>", "fixture.html").length > 0);
 assert.deepEqual(unregisteredClientClaimProblems("<p>Não há resultado de cliente publicado.</p>", "fixture.html"), []);
+assert.deepEqual(
+  unregisteredClientClaimProblems(
+    "<script>A empresa ficou com margem 15% maior.</script >",
+    "fixture.html",
+  ),
+  [],
+  "script content with whitespace in the closing tag is not visitor-visible copy",
+);
 
 const injectedDemoClaim = new Map(pages);
 const demoRel = modelPages[1];
