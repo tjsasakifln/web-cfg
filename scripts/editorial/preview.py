@@ -23,6 +23,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.editorial.cohort import FIRST_COHORT_IDS
+from scripts.pseo.reproducible import build_timestamp
 from scripts.editorial.registry import (
     REVIEW_PREVIEW_BASE_URL,
     approval_is_current,
@@ -35,7 +36,7 @@ from scripts.editorial.registry import (
 from scripts.editorial.sources import load_manifest
 
 def _now() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return build_timestamp()
 
 
 def deploy_commit() -> str:

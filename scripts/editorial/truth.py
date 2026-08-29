@@ -22,6 +22,8 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+from scripts.pseo.reproducible import build_timestamp  # noqa: E402
 SITE = "https://confenge.com.br"
 
 from scripts.editorial.cohort import (  # noqa: E402
@@ -93,7 +95,7 @@ FIRST_COHORT_CONTEXT: dict[str, dict[str, str]] = {
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return build_timestamp()
 
 
 def _git_sha() -> str:

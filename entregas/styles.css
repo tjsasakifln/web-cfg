@@ -195,7 +195,8 @@
 .deliverables-page .pillar-capture-grid,.deliverables-page .pillar-capture-form,.deliverables-page .pillar-capture-form label{min-width:0}
 .deliverables-page .pillar-capture-form select{box-sizing:border-box;display:block;width:100%;max-width:100%;min-width:0;padding:12px 14px;color:var(--text);background:#fff;border:1px solid #a9b6b0;border-radius:8px;font:inherit}
 .deliverables-page .pillar-capture-form select:focus{outline:3px solid rgba(14,124,102,.2);border-color:var(--green)}
-.eight-hub{padding:36px 0;background:#f2f5f3;border-block:1px solid #c7d1d8}.eight-hub>div>header{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.7fr);gap:10px 48px;align-items:end;margin-bottom:28px}.eight-hub>div>header .eyebrow{grid-column:1/-1;margin:0}.eight-hub>div>header h2{margin:0;max-width:16ch;font-size:clamp(2.1rem,4vw,3.8rem)}.eight-hub>div>header>p:last-child{margin:0;color:#435369;line-height:1.65}.eight-hub__common{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:18px}.eight-hub__common section{padding:18px;background:#e8f1e5;border-left:3px solid var(--green-700)}.eight-hub__common h3{margin:0 0 8px;font-size:.9rem}.eight-hub__common ul{margin:0;padding-left:18px;color:#435369;font-size:.74rem;line-height:1.5}.eight-hub__list{display:grid;gap:8px}.eight-hub__item{display:grid;grid-template-columns:minmax(220px,.7fr) minmax(0,1.4fr) minmax(160px,.45fr);gap:18px;align-items:start;padding:18px;background:#fff;border:1px solid #c7d1d8}.eight-hub__item-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;align-items:center}.eight-hub__item-head span{color:var(--green-700);font-family:var(--mono);font-weight:850}.eight-hub__item-head strong{min-width:0}.eight-hub__item-head em{grid-column:2;font-style:normal;font-weight:800}.eight-hub__item dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0}.eight-hub__item dl>div{padding-top:8px;border-top:1px solid #d4dce1}.eight-hub__item dt{font-family:var(--mono);font-size:.64rem;font-weight:800;text-transform:uppercase}.eight-hub__item dd{margin:4px 0 0;color:#435369;font-size:.76rem;line-height:1.5}.eight-hub__item a{align-self:center;color:var(--green-700);font-weight:800}
+.eight-hub{padding:36px 0;background:#f2f5f3;border-block:1px solid #c7d1d8}.eight-hub>div>header{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.7fr);gap:10px 48px;align-items:end;margin-bottom:28px}.eight-hub>div>header .eyebrow{grid-column:1/-1;margin:0}.eight-hub>div>header h2{margin:0;max-width:16ch;font-size:clamp(2.1rem,4vw,3.8rem)}.eight-hub>div>header>p:last-child{margin:0;color:#435369;line-height:1.65}.eight-hub__common{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:18px}.eight-hub__common section{padding:18px;background:#e8f1e5;border-left:3px solid var(--green-700)}.eight-hub__common h3{margin:0 0 8px;font-size:.9rem}.eight-hub__common ul{margin:0;padding-left:18px;color:#435369;font-size:.74rem;line-height:1.5}.eight-hub__list{display:grid;gap:8px}.eight-hub__item{display:grid;grid-template-columns:minmax(220px,.7fr) minmax(0,1.4fr) minmax(160px,.45fr);gap:18px;align-items:start;padding:18px;background:#fff;border:1px solid #c7d1d8}.eight-hub__item-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;align-items:center}.eight-hub__item-head span{color:var(--green-700);font-family:var(--mono);font-weight:850}.eight-hub__item-head strong{min-width:0;overflow-wrap:normal;word-break:normal}
+.eight-hub__item-head em,.vitrine-item__head strong{white-space:nowrap;font-variant-numeric:tabular-nums}.eight-hub__item-head em{grid-column:2;font-style:normal;font-weight:800}.eight-hub__item dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0}.eight-hub__item dl>div{padding-top:8px;border-top:1px solid #d4dce1}.eight-hub__item dt{font-family:var(--mono);font-size:.64rem;font-weight:800;text-transform:uppercase}.eight-hub__item dd{margin:4px 0 0;color:#435369;font-size:.76rem;line-height:1.5}.eight-hub__item a{align-self:center;color:var(--green-700);font-weight:800}
 @media(max-width:900px){
   .deliverables-hero-grid,.deliverable-feature,.deliverable-feature--mirror,.deliverable-anatomy,.deliverables-next-grid,.home-deliverables,.compare-head,.ladder-grid{grid-template-columns:1fr}
   .deliverable-feature--mirror .deliverable-feature-copy{order:0}
@@ -290,8 +291,13 @@
 .vitrine-item__actions .button{min-height:44px;padding:8px 12px;font-size:.86rem}
 @media(max-width:900px){
   .deliverable-frame__list{grid-template-columns:1fr 1fr;gap:6px}
+  /* The eight-hub below carries objeto, saída and SLA on mobile; the vitrine
+     repeats the same eight offers, so it collapses to name, price and action. */
   .vitrine-item__facts,.vitrine-item__value,.vitrine-item__credit{display:none}
-  .vitrine-item__actions{flex-wrap:nowrap;gap:8px}
+  .vitrine-item__actions{flex-wrap:wrap;gap:8px}
+  .vitrine-item{padding:10px 12px}
+  .vitrine-item__head{gap:4px 10px;margin-bottom:6px}
+  .vitrine-item__head h2{font-size:1rem}
   .vitrine-item__actions .button{font-size:max(var(--text-small),14px);padding:8px 10px}
   .compare-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
   .compare-table,.compare-table tbody{display:block;width:100%;min-width:0}
@@ -314,11 +320,17 @@
   .eight-hub>div>header{margin-bottom:12px;gap:8px}
   .eight-hub>div>header h2{font-size:1.45rem}
   .eight-hub>div>header>p:last-child{display:none}
-  .eight-hub__common{display:none}
-  .eight-hub__item{grid-template-columns:minmax(0,1fr) auto;padding:8px 10px;gap:8px}
+  .eight-hub__common{grid-template-columns:minmax(0,1fr)}
+  .eight-hub__item{grid-template-columns:minmax(0,1fr);padding:12px;gap:10px}
   .eight-hub__item-head{grid-template-columns:auto minmax(0,1fr)}
-  .eight-hub__item dl{display:none}
-  .eight-hub__item>a{font-size:.76rem}
+  .eight-hub__item dl{grid-template-columns:minmax(0,1fr)}
+  .eight-hub__item>a{grid-column:1/-1;justify-self:start;font-size:.8rem}
+  .eight-hub__item dl{gap:6px}
+  .eight-hub__item dl>div{padding-top:6px}
+  .eight-hub__item dd{font-size:.72rem;line-height:1.42}
+  .eight-hub__common section{padding:12px}
+  .eight-hub__common ul{font-size:.7rem;line-height:1.42}
+  .vitrine-item{padding:8px 12px}
   .deliverables-next{padding:32px 0}
   .deliverables-next h2{font-size:1.6rem}
   .deliverables-page .pillar-capture{padding:20px 0}

@@ -133,6 +133,42 @@ for (const width of widths) {
       // layout could crush this column until "R$ 1.200" wrapped mid-number. Count actual line
       // boxes via a Range over the text — element.getClientRects() on a th returns the border
       // box, not the wrapped lines, so it cannot see this defect.
+      // The eight-hub row is the mobile view of the same eight offers. An auto-sized
+      // link column once took 254px of a 360px row, leaving the offer name 5px wide
+      // across four line boxes, and the facts below it were hidden outright.
+      hubGeometry: (() => {
+        const lineCount = (element) => {
+          if (!element) return 0;
+          const range = document.createRange();
+          range.selectNodeContents(element);
+          const tops = [...range.getClientRects()]
+            .filter((rect) => rect.width > 0.5 && rect.height > 0.5)
+            .map((rect) => Math.round(rect.top));
+          return new Set(tops).size;
+        };
+        return {
+          // The eight-hub is the mobile carrier of objeto, saida and SLA; it must
+          // never be hidden. The vitrine repeats the same offers and may collapse.
+          hiddenFactBlocks: [...document.querySelectorAll(".eight-hub__item dl, .eight-hub__common")]
+            .filter((element) => getComputedStyle(element).display === "none").length,
+          rows: [...document.querySelectorAll(".eight-hub__item")].map((item) => {
+            const name = item.querySelector(".eight-hub__item-head strong");
+            const price = item.querySelector(".eight-hub__item-head em");
+            const link = item.querySelector(":scope > a");
+            const nameRect = name ? name.getBoundingClientRect() : null;
+            const linkRect = link ? link.getBoundingClientRect() : null;
+            return {
+              nameWidth: nameRect ? Math.round(nameRect.width) : 0,
+              priceText: price ? price.textContent.replace(/\s+/g, " ").trim() : "",
+              priceLines: price ? lineCount(price) : 0,
+              // true when the action link paints over the offer name
+              collides: Boolean(nameRect && linkRect && !(
+                linkRect.left >= nameRect.right - 1 || linkRect.right <= nameRect.left + 1 ||
+                linkRect.top >= nameRect.bottom - 1 || linkRect.bottom <= nameRect.top + 1)),
+            };
+          }),
+        };
+      })(),
       priceGeometry: (() => {
         const lineCount = (element) => {
           if (!element) return 0;
@@ -198,6 +234,17 @@ for (const width of widths) {
   if (!metrics.compareVisible || metrics.compareRows !== EXPECTED_EXAMPLES) errors.push("compare_view");
   if (!metrics.compareAboveExamples) errors.push("compare_before_sections");
   if (!metrics.compareScrollFocusable) errors.push("compare_scroll_focus");
+  // Mobile must keep the same commercial substance the desktop table shows.
+  const hub = metrics.hubGeometry;
+  if (hub.rows.length !== EXPECTED_EXAMPLES) errors.push(`hub_rows=${hub.rows.length}`);
+  if (hub.hiddenFactBlocks) errors.push(`hub_facts_hidden=${hub.hiddenFactBlocks}`);
+  const hubWrappedPrice = hub.rows.filter((row) => row.priceLines !== 1);
+  if (hubWrappedPrice.length) errors.push(`hub_price_wrapped=${hubWrappedPrice.map((r) => `${r.priceText}/${r.priceLines}L`).join(",")}`);
+  if (hub.rows.some((row) => row.collides)) errors.push("hub_link_overlaps_name");
+  // The offer name must get real width, never be starved to a sliver by a sibling column.
+  const starvedName = hub.rows.filter((row) => row.nameWidth < 120);
+  if (starvedName.length) errors.push(`hub_name_starved=${starvedName.map((r) => r.nameWidth).join(",")}`);
+
   // Price integrity is a trust surface: a number broken across lines reads as a broken site.
   const price = metrics.priceGeometry;
   const priceShape = /^R\$ \d{1,3}(\.\d{3})*$/;
@@ -223,7 +270,12 @@ for (const width of widths) {
   }
   const requiredColumns = ["Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"];
   if (!requiredColumns.every((label) => metrics.compareColumns.includes(label))) errors.push("compare_columns");
-  if (width === 390 && metrics.documentHeight > 12000) errors.push(`document_height=${metrics.documentHeight}`);
+  // Budget re-baselined from 12000. The 12000 figure landed in cf33385d4, the same
+  // commit that hid objeto, saída, SLA, entradas and limitações below 620px — it was
+  // calibrated against a page that bought its shortness by hiding commercial
+  // substance. That content is now shown, and the duplicate vitrine rows were
+  // compacted to pay for part of it (13590 -> 13098). Still fails on real bloat.
+  if (width === 390 && metrics.documentHeight > 13400) errors.push(`document_height=${metrics.documentHeight}`);
   if (width === 390 && metrics.firstOfferTop > 1688) errors.push(`first_offer_top=${metrics.firstOfferTop}`);
   if (metrics.mainLinks > 80) errors.push(`main_links=${metrics.mainLinks}`);
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
@@ -307,6 +359,36 @@ if (noScriptCatalog.filters) noScriptErrors.push("catalog_noscript_controls");
 findings.push({ route: "/entregas/", check: "catalog_noscript", noScriptCatalog, errors: noScriptErrors });
 if (noScriptErrors.length) failed += 1;
 await noScriptPage.close();
+
+// The header must always offer a commercial path. .header-cta was hidden from
+// 1240px down while .menu-toggle only appeared at 900px, so every width between
+// 901 and 1240 showed navigation with no call to action and no menu either.
+for (const width of [390, 901, 960, 1000, 1120, 1240, 1366, 1661]) {
+  await page.setViewport({ width, height: 800, deviceScaleFactor: 1 });
+  await page.goto(`${base}/`, { waitUntil: "networkidle0", timeout: 30000 });
+  const header = await page.evaluate(() => {
+    const visible = (element) => Boolean(element && getComputedStyle(element).display !== "none"
+      && element.getBoundingClientRect().width > 0);
+    const cta = document.querySelector(".header-cta");
+    const inner = document.querySelector(".header-inner");
+    return {
+      ctaVisible: visible(cta),
+      navVisible: visible(document.querySelector(".desktop-nav")),
+      toggleVisible: visible(document.querySelector(".menu-toggle")),
+      ctaOverflowsHeader: Boolean(visible(cta) && inner
+        && cta.getBoundingClientRect().right > inner.getBoundingClientRect().right + 1),
+      overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+    };
+  });
+  const errors = [];
+  // At or below the mobile breakpoint the opened menu carries the CTA instead.
+  if (width > 900 && !header.ctaVisible) errors.push("header_cta_missing");
+  if (!header.navVisible && !header.toggleVisible) errors.push("header_nav_unreachable");
+  if (header.ctaOverflowsHeader) errors.push("header_cta_overflows");
+  if (header.overflow) errors.push("document_overflow");
+  findings.push({ route: "/", check: "header_commercial_path", width, ...header, errors });
+  if (errors.length) failed += 1;
+}
 
 for (const { route, expectedNav } of [
   ...mutableCanonicalRoutes.map((route) => ({ route, expectedNav: promotedNav })),
