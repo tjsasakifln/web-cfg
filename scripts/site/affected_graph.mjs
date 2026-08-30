@@ -316,7 +316,11 @@ export const SUITE_GRAPH = Object.freeze({
   "test:first-fold-contract": {
     producers: [
       "tests/commercial/test_first_fold_contract.mjs",
+      "scripts/site/first_fold_rules.mjs",
+      "scripts/site/measure_first_fold.mjs",
       "data/commercial/first-fold-contract.v1.json",
+      "data/commercial/first-fold-measurements.v1.json",
+      "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
       "data/organic/public-family-registry.json",
       "data/organic/bofu-intent-matrix.json",
       "index.html",

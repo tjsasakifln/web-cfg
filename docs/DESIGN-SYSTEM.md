@@ -111,6 +111,23 @@ Rotular é declaração, não disfarce: se duas seções são estruturalmente ig
 mudar de composição, não de nome. Para incluir uma página nova, acrescente o caminho relativo a
 `archetype_gated_surfaces`.
 
+### Rollout escalonado da cobertura
+
+`data/site/archetype-gate-rollout.json` é o inventário das 260 rotas públicas com `<main>`: o
+estado de cada rota, o motivo medido de quem ainda não entra no gate, o plano por família, os
+bloqueios de composição e as exceções datadas. Regras do rollout (issue #509):
+
+1. uma família por PR, começando pela menor;
+2. a anotação `data-section-archetype` entra na fonte que gera a página, nunca no artefato;
+3. o caminho entra em `archetype_gated_surfaces` no mesmo PR da anotação;
+4. o que não couber no ciclo vira exceção route-exact, datada, com dono, motivo e `expires_at`
+   — nunca um glob, nunca um diretório.
+
+A maior cohorte fora do gate hoje não é falta de anotação: nas rotas com
+`<div class="container article-layout">` o corpo editorial é neto de `<main>`, então o scanner
+enxerga um único bloco narrativo e a rota reprova por contagem antes de qualquer arquétipo.
+Resolver isso é decisão de composição, registrada como bloqueio no arquivo de rollout.
+
 ## Copy pública
 
 O comprador não vê processo editorial. Remover do HTML público: “Arquitetura de ofertas”, “Sem cases fabricados”, “owners”, “red team” sem tradução, “post-mortem”, “pipeline editorial”, etc.

@@ -37,6 +37,42 @@ from scripts.site.responsive_text import escape_prose_with_opaque_tokens
 
 PUBLIC_DIR = Path(FAMILY_SLUG)
 SITEMAP_NAME = "sitemap-analises-contratos.xml"
+
+# One archetype per top-level narrative block of an analysis page. The label
+# names the editorial job the block performs, so the archetype and skeleton
+# drift gate (data/site/design-system.json → archetype_gated_surfaces) can run
+# on this family. Every value here must exist in section_archetypes; a section
+# that repeats a neighbour's job changes composition, never its label.
+ARCHETYPE_BY_SECTION_ID = {
+    "masthead": "analysis_masthead",
+    "resumo": "analysis_abstract",
+    "por-que": "analysis_relevance",
+    "analise": "analysis_argument",
+    "ficha": "evidence_record",
+    "timeline": "evidence_timeline",
+    "fatos": "evidence_claims",
+    "calculos": "evidence_calculation",
+    "comparacoes": "evidence_comparables",
+    "interpretacao": "editorial_interpretation",
+    "nao-concluir": "epistemic_boundary",
+    "fontes": "source_ledger",
+    "metodologia": "method_disclosure",
+    "limitacoes": "limitation_notice",
+    "manutencao": "maintenance_owner",
+    "historico": "update_log",
+    "relacionados": "related_assets",
+    "proximo-passo": "contextual_next_action",
+    "hashes": "provenance_hashes",
+    "correcao": "correction_channel",
+    "author-box": "author_identity",
+}
+
+
+def archetype_attr(section_id: str) -> str:
+    """Rendered ``data-section-archetype`` attribute for a declared section."""
+    return f' data-section-archetype="{ARCHETYPE_BY_SECTION_ID[section_id]}"'
+
+
 # Visible meta and CollectionPage must share this string so discovery
 # structured_data_matches_visible does not fail when the hub file exists.
 HUB_DESCRIPTION = (
@@ -184,7 +220,7 @@ def _kind_items(items: list[Any], heading: str, section_id: str) -> str:
     if not lis:
         return ""
     return (
-        f'<section class="section" id="{e(section_id)}">'
+        f'<section class="section" id="{e(section_id)}"{archetype_attr(section_id)}>'
         f"<h2>{e(heading)}</h2><ul class=\"ca-list\">{''.join(lis)}</ul></section>"
     )
 
@@ -212,7 +248,7 @@ def _ficha_html(ficha: dict[str, Any]) -> str:
     if not rows:
         return ""
     return (
-        '<section class="section" id="ficha"><h2>Ficha do contrato</h2>'
+        f'<section class="section" id="ficha"{archetype_attr("ficha")}><h2>Ficha do contrato</h2>'
         '<div class="table-wrap" role="group" tabindex="0" aria-label="Ficha do contrato"><table class="data-table">'
         f"<tbody>{''.join(rows)}</tbody></table></div>"
         "<p><small>Identificadores vêm da fonte pública. A ficha não afirma "
@@ -235,7 +271,7 @@ def _timeline_html(items: list[Any]) -> str:
     if not rows:
         return ""
     return (
-        '<section class="section" id="timeline"><h2>Linha do tempo</h2>'
+        f'<section class="section" id="timeline"{archetype_attr("timeline")}><h2>Linha do tempo</h2>'
         f'<div class="table-wrap" role="group" tabindex="0" aria-label="Linha do tempo"><table class="data-table"><tbody>{"".join(rows)}</tbody></table></div></section>'
     )
 
@@ -265,7 +301,7 @@ def _sources_html(sources: list[Any]) -> str:
     if not lis:
         return ""
     return (
-        '<section class="section" id="fontes"><h2>Fontes</h2>'
+        f'<section class="section" id="fontes"{archetype_attr("fontes")}><h2>Fontes</h2>'
         f"<ul>{''.join(lis)}</ul></section>"
     )
 
@@ -285,7 +321,7 @@ def _history_html(items: list[Any]) -> str:
     if not lis:
         return ""
     return (
-        '<section class="section" id="historico"><h2>Histórico de atualização e correção</h2>'
+        f'<section class="section" id="historico"{archetype_attr("historico")}><h2>Histórico de atualização e correção</h2>'
         f"<ul>{''.join(lis)}</ul></section>"
     )
 
@@ -310,7 +346,7 @@ def _cta_html(record: dict[str, Any]) -> str:
     )
     href_attr = f"{href}{sep}{query}" if query else href
     return (
-        '<section class="section lead-inline" id="proximo-passo" aria-label="Próximo passo">'
+        f'<section class="section lead-inline" id="proximo-passo"{archetype_attr("proximo-passo")} aria-label="Próximo passo">'
         f"<p>{e(text) if text else 'Se a sua empresa enfrenta um problema semelhante, o caminho é o serviço correspondente — não este contrato.'}</p>"
         f'<p><a class="button button-primary" href="{e(href_attr)}" '
         f'data-analysis-id="{e(attr.get("analysis_id") or "")}" '
@@ -331,7 +367,7 @@ def _related_html(record: dict[str, Any]) -> str:
         return ""
     lis = "".join(f'<li><a href="{e(item["href"])}">{e(item["label"])}</a></li>' for item in items)
     return (
-        '<section class="section" id="relacionados"><h2>Ativos úteis relacionados</h2>'
+        f'<section class="section" id="relacionados"{archetype_attr("relacionados")}><h2>Ativos úteis relacionados</h2>'
         f"<ul>{lis}</ul>"
         "<p><small>Ligações só apontam para páginas já existentes. "
         "Empresa, órgão ou município não geram URL automática.</small></p></section>"
@@ -369,7 +405,8 @@ def _comparisons_html(items: list[Any], record: dict[str, Any] | None = None) ->
         return inner
     if policy and not inner:
         return (
-            f'<section class="section" id="comparacoes"><h2>{e(heading)}</h2>{policy}</section>'
+            f'<section class="section" id="comparacoes"{archetype_attr("comparacoes")}>'
+            f"<h2>{e(heading)}</h2>{policy}</section>"
         )
     return inner
 
@@ -482,7 +519,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             "</p>"
         )
     sections.append(
-        '<header class="article-hero container">'
+        f'<header class="article-hero container"{archetype_attr("masthead")}>'
         f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)}</p>'
         f"<h1>{e(title)}</h1>"
         f'<p class="ca-disclaimer">{e(DISCLAIMER_PT)}</p>'
@@ -525,17 +562,17 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
 
     if _text(record.get("executive_summary")):
         sections.append(
-            '<section class="section" id="resumo"><h2>Resumo executivo</h2>'
+            f'<section class="section" id="resumo"{archetype_attr("resumo")}><h2>Resumo executivo</h2>'
             f'{_paragraphs(record["executive_summary"])}</section>'
         )
     if _text(record.get("why_analysis")):
         sections.append(
-            '<section class="section" id="por-que"><h2>Por que merece análise</h2>'
+            f'<section class="section" id="por-que"{archetype_attr("por-que")}><h2>Por que merece análise</h2>'
             f'{_paragraphs(record["why_analysis"])}</section>'
         )
     if _text(record.get("body")):
         sections.append(
-            '<section class="section" id="analise"><h2>Análise</h2>'
+            f'<section class="section" id="analise"{archetype_attr("analise")}><h2>Análise</h2>'
             f'{_paragraphs(record["body"])}</section>'
         )
     sections.append(_ficha_html(record.get("ficha") if isinstance(record.get("ficha"), dict) else {}))
@@ -548,26 +585,26 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
     )
     if _text(record.get("cannot_conclude")):
         sections.append(
-            '<section class="section" id="nao-concluir"><h2>O que não é possível concluir</h2>'
+            f'<section class="section" id="nao-concluir"{archetype_attr("nao-concluir")}><h2>O que não é possível concluir</h2>'
             f'{_paragraphs(record["cannot_conclude"])}</section>'
         )
     sections.append(_sources_html(_items(record.get("sources"))))
     if _text(record.get("methodology")):
         sections.append(
-            '<section class="section authority-method" id="metodologia"><h2>Metodologia</h2>'
+            f'<section class="section authority-method" id="metodologia"{archetype_attr("metodologia")}><h2>Metodologia</h2>'
             f'{_paragraphs(record["methodology"])}'
             f"<p><small>Gate {e(GATE_VERSION)}. Fatos de exportação pública versionada; interpretação editorial CONFENGE.</small></p>"
             "</section>"
         )
     if _text(record.get("limitations")):
         sections.append(
-            '<section class="section" id="limitacoes"><h2>Limitações</h2>'
+            f'<section class="section" id="limitacoes"{archetype_attr("limitacoes")}><h2>Limitações</h2>'
             f'{_paragraphs(record["limitations"])}</section>'
         )
     owner = _text(record.get("maintenance_owner"))
     if owner:
         sections.append(
-            '<section class="section" id="manutencao"><h2>Manutenção</h2>'
+            f'<section class="section" id="manutencao"{archetype_attr("manutencao")}><h2>Manutenção</h2>'
             f"<p>Responsável pela atualização: {e(owner)}.</p></section>"
         )
     sections.append(_history_html(_items(record.get("update_history"))))
@@ -587,7 +624,7 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             hash_rows.append(f"<tr><th scope='row'>{e(label)}</th><td><code>{e(val)}</code></td></tr>")
     if hash_rows:
         sections.append(
-            '<section class="section" id="hashes"><h2>Hashes e proveniência</h2>'
+            f'<section class="section" id="hashes"{archetype_attr("hashes")}><h2>Hashes e proveniência</h2>'
             '<div class="table-wrap" role="group" tabindex="0" aria-label="Hashes e proveniência"><table class="data-table">'
             f"<tbody>{''.join(hash_rows)}</tbody></table></div>"
             "<p>publication_authorization e index_authorization do produtor permanecem "
@@ -601,12 +638,12 @@ def render_analysis_html(record: dict[str, Any], decision: PublicationDecision) 
             + "</p></section>"
         )
     sections.append(
-        '<section class="section" id="correcao"><h2>Correção e contestação</h2>'
+        f'<section class="section" id="correcao"{archetype_attr("correcao")}><h2>Correção e contestação</h2>'
         "<p>Erro material, contestação de fato público ou pedido de correção "
         'segue a <a href="/correcoes/">política pública de correções</a> e a '
         '<a href="/politica-editorial/">política editorial</a>.</p></section>'
     )
-    sections.append(author_box())
+    sections.append(author_box(archetype=ARCHETYPE_BY_SECTION_ID["author-box"]))
 
     body = "".join(s for s in sections if s)
     schema = build_schema(record, decision)
@@ -673,7 +710,7 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
             f"({len(drafts)}). Eles não entram nesta listagem como publicados.</p>"
         )
     body = (
-        '<header class="article-hero container">'
+        f'<header class="article-hero container"{archetype_attr("masthead")}>'
         f'<p class="eyebrow">{e(ANALYSIS_LABEL_PT)}</p>'
         "<h1>Análises técnicas de contratos públicos</h1>"
         f'<p class="ca-disclaimer">{e(DISCLAIMER_PT)}</p>'
@@ -689,7 +726,7 @@ def render_hub_html(items: list[tuple[dict[str, Any], PublicationDecision]], *, 
         f"{e(GATE_VERSION)} concede <code>PUBLISHABLE_INDEX</code>.</p>"
         f"{HUB_METHOD_HTML}"
         f"{listing}</div>"
-        + author_box()
+        + author_box(archetype=ARCHETYPE_BY_SECTION_ID["author-box"])
     )
     schema = [
         dict(ORG_JSONLD),

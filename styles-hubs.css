@@ -47,9 +47,34 @@
 }
 
 @media (max-width: 760px) {
-  /* Reclaims the last pixels that kept the action button crossing the 844px fold. */
+  /* Reclaims the last pixels that kept the action button crossing the 844px fold.
+   * Measured at 390x844 on 2026-08-30: the whole primary action ended at y=850,
+   * six pixels past the fold, so the visitor met the hub without meeting its
+   * next step. These four rules move it back inside without cutting a word. */
   .lead-inline {
     gap: 14px;
     padding: 18px;
+  }
+  .section-head h1 {
+    margin-bottom: 12px;
+  }
+  .section-proof {
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+  .section-head + .lead-inline {
+    margin-top: var(--space-5);
+  }
+  .lead-inline-copy p {
+    line-height: 1.5;
+  }
+  .section-head .eyebrow {
+    margin-bottom: 8px;
+  }
+  .lead-inline-copy span {
+    margin-bottom: 6px;
+  }
+  .lead-inline-copy strong {
+    margin-bottom: 6px;
   }
 }

@@ -4,21 +4,38 @@
  * O contrato `data/commercial/first-fold-contract.v1.json` ja existia em main,
  * mas nada impedia que alguem promovesse uma rota para MEASURED_PASS por
  * opiniao, inventasse uma sessao humana ou publicasse uma superficie comercial
- * nova sem linha de censo. Este gate fecha as quatro portas:
+ * nova sem linha de censo. Este gate fecha as portas:
  *
- *   1. estado medido exige registro de medicao; PENDING exige medicao nula;
- *   2. nenhuma alegacao de compreensao pode nascer de automacao;
- *   3. o censo e derivado do registro publico de familias, nao mantido a mao;
- *   4. as quatro respostas, os viewports e as duas falhas medidas ficam presos.
+ *   1. nenhuma rota obrigada pode ficar sem medicao;
+ *   2. o estado de cada rota e refeito a partir do registro bruto de
+ *      `data/commercial/first-fold-measurements.v1.json`, com as mesmas funcoes
+ *      de `scripts/site/first_fold_rules.mjs` que o medidor usou, entao editar o
+ *      censo a mao reprova;
+ *   3. nenhuma alegacao de compreensao pode nascer de automacao;
+ *   4. o censo e derivado do registro publico de familias, nao mantido a mao;
+ *   5. uma falha medida precisa nomear dono e data, e so e aceita numa rota que
+ *      a #291 realmente congelou.
  *
- * A automacao aqui verifica presenca, ordem, viewport e regressao de contrato.
- * Ela nunca declara compreensao humana: isso depende do protocolo de 3 segundos
- * que #183, #184 e #188 possuem e que segue NOT_STARTED.
+ * A automacao aqui verifica caixa renderizada, contagem de acao, repeticao
+ * lexical, viewport e regressao de contrato. Ela nunca declara compreensao
+ * humana: isso depende do protocolo de 3 segundos que #183, #184 e #188
+ * possuem e que segue NOT_STARTED.
  */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { consumerSuitesForPath } from "../../scripts/site/affected_graph.mjs";
+import {
+  DESKTOP_VIEWPORT,
+  FIRST_FOLD_ROLES,
+  MOBILE_VIEWPORT,
+  ROLE_SELECTORS,
+  blockerText,
+  categoryRepetition,
+  foldProblems,
+  frozenRoutes,
+  measurementRecord,
+} from "../../scripts/site/first_fold_rules.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
@@ -27,6 +44,8 @@ const NAME = "first-fold-contract";
 const DATA_PATH = path.join(root, "data/commercial/first-fold-contract.v1.json");
 const FAMILY_REGISTRY_PATH = path.join(root, "data/organic/public-family-registry.json");
 const BOFU_PATH = path.join(root, "data/organic/bofu-intent-matrix.json");
+const EVIDENCE_PATH = path.join(root, "data/commercial/first-fold-measurements.v1.json");
+const UNLOCK_PLAN_PATH = path.join(root, "data/bofu-dominance/frozen-specs/unlock-plan.v1.json");
 const SELF_PATH = path.join(__dirname, "test_first_fold_contract.mjs");
 
 const results = [];
@@ -109,7 +128,7 @@ function hrefsIn(html) {
 /* ------------------------------------------------------------------ */
 
 assert("schema_is_first_fold_v1", data.schema === "confenge.first-fold-contract/1.0", data.schema);
-assert("contract_version_frozen", data.contract_version === "CFG-FIRST-FOLD-2026-08-27-v2", data.contract_version);
+assert("contract_version_frozen", data.contract_version === "CFG-FIRST-FOLD-2026-08-30-v3", data.contract_version);
 assert("issue_is_327", data.issue === "#327", data.issue);
 assert("rule_names_three_seconds", /3 segundos/.test(data.rule || ""), data.rule);
 assert("rule_names_skeptical_visitor", /c[eé]tico/i.test(data.rule || ""), data.rule);
@@ -266,7 +285,7 @@ assert(
 
 const census = Array.isArray(data.census) ? data.census : [];
 const CENSUS_KEYS = ["route", "surface_class", "evidence_state", "measurement", "observed_2026_08_24"];
-const MEASUREMENT_KEYS = ["date", "viewport", "finding"];
+const MEASUREMENT_KEYS = ["date", "viewport", "finding", "blocker"];
 const OBLIGATED_CLASSES = ["home", "money_hub", "money_offer", "money_example"];
 
 assert("census_is_array", Array.isArray(data.census), typeof data.census);
@@ -304,7 +323,11 @@ for (const surface of census) {
 
 const measured = census.filter((s) => s.evidence_state !== "PENDING");
 const pending = census.filter((s) => s.evidence_state === "PENDING");
-assert("census_has_pending_surfaces", pending.length > 0, pending.length);
+// A #327 fechou as pendencias medindo, nao apagando a linha. O gate agora
+// recusa qualquer rota obrigada que volte a nao ter medicao: uma superficie
+// comercial nova entra no censo ja medida ou reprova.
+assert("census_has_no_pending_surface", pending.length === 0, pending.map((s) => s.route));
+assert("every_obligated_surface_is_measured", measured.length === census.length, [measured.length, census.length]);
 assert(
   "no_measured_surface_without_record",
   measured.every((s) => s.measurement && s.measurement.date && s.measurement.viewport && s.measurement.finding),
@@ -316,8 +339,8 @@ assert(
   pending.filter((s) => s.measurement !== null).map((s) => s.route),
 );
 assert(
-  "measured_surfaces_are_the_same_three",
-  eq(sorted(measured.map((s) => s.route)), sorted(["/servicos-obras-publicas/", "/problemas-que-resolvemos/", "/diagnostico-b2g-expansao/"])),
+  "measured_set_is_the_whole_census",
+  eq(sorted(measured.map((s) => s.route)), sorted(census.map((s) => s.route))),
   measured.map((s) => s.route),
 );
 assert(
@@ -332,97 +355,238 @@ assert(
 );
 
 /* ------------------------------------------------------------------ */
-/* 7. as duas falhas documentadas continuam documentadas                */
+/* 7. o censo e derivado da medicao, nao digitado                       */
 /* ------------------------------------------------------------------ */
 
 const byRoute = new Map(census.map((s) => [s.route, s]));
-const FROZEN = {
-  "/servicos-obras-publicas/": {
-    surface_class: "money_hub",
-    evidence_state: "MEASURED_PASS",
-    date: "2026-08-27",
-    viewport: "1366x768",
-    finding:
-      "H1 de y=243 a y=341; linha de prova de y=453 a y=496; ação primária inteira de y=603 a y=653 em 1366x768, e de y=762 a y=812 em 390x844, dentro da dobra nos dois",
-  },
-  "/problemas-que-resolvemos/": {
-    surface_class: "money_hub",
-    evidence_state: "MEASURED_PASS",
-    date: "2026-08-27",
-    viewport: "1366x768",
-    finding:
-      "H1 de y=243 a y=390; linha de prova de y=474 a y=518; ação primária inteira de y=624 a y=674 em 1366x768, e de y=768 a y=818 em 390x844, dentro da dobra nos dois",
-  },
-  "/diagnostico-b2g-expansao/": {
-    surface_class: "money_offer",
-    evidence_state: "MEASURED_FAIL",
-    date: "2026-08-24",
-    viewport: "1363x936",
-    finding: "preço, prazo, destinatário e CTA na primeira dobra; razão de confiança ainda declaratória e sem prova verificável",
-  },
-};
-for (const [route, expected] of Object.entries(FROZEN)) {
-  const s = byRoute.get(route);
-  assert(`frozen_${route}_in_census`, Boolean(s), route);
-  if (!s) continue;
-  assert(`frozen_${route}_class`, s.surface_class === expected.surface_class, s.surface_class);
-  assert(`frozen_${route}_state`, s.evidence_state === expected.evidence_state, s.evidence_state);
-  assert(`frozen_${route}_measurement_present`, Boolean(s.measurement), s.measurement);
-  assert(`frozen_${route}_date`, s.measurement?.date === expected.date, s.measurement?.date);
-  assert(`frozen_${route}_viewport`, s.measurement?.viewport === expected.viewport, s.measurement?.viewport);
-  assert(`frozen_${route}_finding_intact`, s.measurement?.finding === expected.finding, s.measurement?.finding);
+
+// A #327 mediu as 25 rotas em Chrome headless, nos dois viewports obrigados.
+// O registro bruto vive num arquivo proprio, e este gate refaz o veredito a
+// partir dele com as mesmas funcoes que o medidor usou. Promover uma rota
+// editando o censo a mao passa a reprovar, porque o texto do registro e
+// derivado das coordenadas e nao pode ser escrito por opiniao.
+assert("measurement_evidence_exists", fs.existsSync(EVIDENCE_PATH), EVIDENCE_PATH);
+assert("unlock_plan_exists", fs.existsSync(UNLOCK_PLAN_PATH), UNLOCK_PLAN_PATH);
+if (!fs.existsSync(EVIDENCE_PATH) || !fs.existsSync(UNLOCK_PLAN_PATH)) bail();
+
+let evidence = null;
+try {
+  evidence = JSON.parse(fs.readFileSync(EVIDENCE_PATH, "utf8"));
+  pass("measurement_evidence_parses");
+} catch (err) {
+  fail("measurement_evidence_parses", String(err));
+  bail();
 }
-// Os dois hubs foram remediados na #327. O registro deixa de guardar o texto da
-// falha e passa a guardar a geometria medida. Conferir o formato nao basta: um
-// registro afirmando "acao primaria inteira de y=99999 a y=99999 ... dentro da
-// dobra nos dois" passava por todas as checagens, porque nada comparava a
-// coordenada com a altura do viewport. Agora compara.
+const unlockPlan = JSON.parse(fs.readFileSync(UNLOCK_PLAN_PATH, "utf8"));
+const FROZEN_ROUTES = frozenRoutes(unlockPlan);
+const BLOCKER = blockerText(unlockPlan);
+
+assert("evidence_schema_is_measurements_v1", evidence.schema === "confenge.first-fold-measurements/1.0", evidence.schema);
+assert("evidence_belongs_to_issue_327", evidence.issue === "#327", evidence.issue);
+assert("evidence_names_the_shared_rules_module", evidence.rules === "scripts/site/first_fold_rules.mjs", evidence.rules);
+assert(
+  "evidence_rules_module_exists_on_disk",
+  fs.existsSync(path.join(root, evidence.rules || "___missing___")),
+  evidence.rules,
+);
+assert("evidence_measures_both_mandated_viewports", eq(evidence.viewports, [DESKTOP_VIEWPORT, MOBILE_VIEWPORT]), evidence.viewports);
+assert(
+  "evidence_viewports_are_declared_by_the_contract",
+  (evidence.viewports || []).every((v) => vpSet.has(v)),
+  evidence.viewports,
+);
+assert("evidence_records_a_commit_sha", /^[0-9a-f]{40}$/.test(evidence.commit_sha || ""), evidence.commit_sha);
+assert("evidence_records_a_measurement_date", /^\d{4}-\d{2}-\d{2}$/.test(evidence.measured_on || ""), evidence.measured_on);
+assert("evidence_role_selectors_match_the_rules", eq(evidence.role_selectors, ROLE_SELECTORS), Object.keys(evidence.role_selectors || {}));
+assert(
+  "unlock_plan_still_refuses_html_mutation",
+  unlockPlan.html_mutation_authorized === false,
+  unlockPlan.html_mutation_authorized,
+);
+assert("unlock_plan_protects_six_pillars", FROZEN_ROUTES.size === 6, [...FROZEN_ROUTES]);
+
+const measuredByRoute = new Map((evidence.routes || []).map((row) => [row.route, row]));
+assert(
+  "evidence_covers_exactly_the_census",
+  eq(sorted([...measuredByRoute.keys()]), sorted(census.map((s) => s.route))),
+  {
+    missing: census.map((s) => s.route).filter((r) => !measuredByRoute.has(r)),
+    extra: [...measuredByRoute.keys()].filter((r) => !byRoute.has(r)),
+  },
+);
+
 const ACTION_RE =
   /a[cç][aã]o prim[aá]ria inteira de y=(\d+) a y=(\d+) em (\d+)x(\d+), e de y=(\d+) a y=(\d+) em (\d+)x(\d+)/i;
 const HEAD_RE = /H1 de y=(\d+) a y=(\d+); linha de prova de y=(\d+) a y=(\d+)/i;
 
-for (const route of ["/servicos-obras-publicas/", "/problemas-que-resolvemos/"]) {
-  const finding = byRoute.get(route)?.measurement?.finding || "";
-  const m = finding.match(ACTION_RE);
-  const h = finding.match(HEAD_RE);
-  assert(`${route}_pass_records_primary_action_geometry`, Boolean(m), finding);
-  assert(`${route}_pass_records_head_geometry`, Boolean(h), finding);
-  if (!m || !h) continue;
+for (const surface of census) {
+  const route = surface.route;
+  const row = measuredByRoute.get(route);
+  assert(`evidence_${route}_present`, Boolean(row), route);
+  if (!row) continue;
 
-  const [, aTop1, aBot1, w1, h1v, aTop2, aBot2, w2, h2v] = m.map(Number);
-  const [, h1Top, h1Bot, pTop, pBot] = h.map(Number);
-
-  // Os dois viewports citados sao os declarados pelo proprio contrato.
-  assert(`${route}_pass_names_declared_viewports`, vpSet.has(`${w1}x${h1v}`) && vpSet.has(`${w2}x${h2v}`), [
-    `${w1}x${h1v}`,
-    `${w2}x${h2v}`,
+  // O veredito nao e opiniao: e a lista de problemas geometricos da medicao.
+  const derived = measurementRecord(row, BLOCKER);
+  assert(`census_${route}_state_matches_the_measurement`, surface.evidence_state === derived.state, [
+    surface.evidence_state,
+    derived.state,
+    foldProblems(row),
   ]);
-  assert(`${route}_pass_names_both_viewports`, `${w1}x${h1v}` !== `${w2}x${h2v}`, [w1, w2]);
+  assert(`census_${route}_record_is_derived_from_the_measurement`, eq(surface.measurement, derived.record), [
+    surface.measurement,
+    derived.record,
+  ]);
+  assert(`census_${route}_date_matches_the_measurement`, surface.measurement?.date === evidence.measured_on, [
+    surface.measurement?.date,
+    evidence.measured_on,
+  ]);
 
-  // A afirmacao "dentro da dobra nos dois" precisa ser verdadeira nos dois.
-  assert(`${route}_action_within_fold_at_${w1}x${h1v}`, aBot1 <= h1v, [aBot1, h1v]);
-  assert(`${route}_action_within_fold_at_${w2}x${h2v}`, aBot2 <= h2v, [aBot2, h2v]);
+  // A repeticao de categoria tambem e refeita a partir do texto medido, para
+  // que o invariante nao possa ser declarado sem o texto que o sustenta.
+  const desktop = row.viewports?.[DESKTOP_VIEWPORT];
+  const repetition = categoryRepetition({
+    eyebrow: desktop?.roles?.eyebrow?.text,
+    h1: desktop?.roles?.h1?.text,
+    lead: desktop?.roles?.lead?.text,
+  });
+  assert(`evidence_${route}_repetition_is_reproducible`, eq(row.category_repetition, repetition), [
+    row.category_repetition,
+    repetition,
+  ]);
 
-  // Coordenadas coerentes: caixas com altura positiva e na ordem que a pagina le.
-  assert(`${route}_action_boxes_have_height`, aBot1 > aTop1 && aBot2 > aTop2, [aTop1, aBot1, aTop2, aBot2]);
-  assert(`${route}_head_boxes_have_height`, h1Bot > h1Top && pBot > pTop, [h1Top, h1Bot, pTop, pBot]);
-  assert(`${route}_reading_order_is_h1_then_proof_then_action`, h1Top < pTop && pTop < aTop1, [h1Top, pTop, aTop1]);
+  for (const viewport of [DESKTOP_VIEWPORT, MOBILE_VIEWPORT]) {
+    const view = row.viewports?.[viewport];
+    assert(`evidence_${route}_${viewport}_present`, Boolean(view), viewport);
+    if (!view) continue;
+    assert(`evidence_${route}_${viewport}_reports_its_own_viewport`, view.viewport === viewport, view.viewport);
+    if (surface.evidence_state !== "MEASURED_PASS") continue;
+    const height = Number(viewport.split("x")[1]);
+    for (const role of FIRST_FOLD_ROLES) {
+      const box = view.roles?.[role]?.box;
+      assert(
+        `pass_${route}_${viewport}_${role}_inside_the_fold`,
+        Boolean(box) && box.top >= 0 && box.bottom <= height && box.bottom > box.top,
+        [role, box, height],
+      );
+    }
+    assert(
+      `pass_${route}_${viewport}_has_one_primary_action`,
+      (view.primary_actions_in_fold || []).length === 1,
+      (view.primary_actions_in_fold || []).map((a) => a.text),
+    );
+    assert(`pass_${route}_${viewport}_has_no_horizontal_overflow`, view.horizontal_overflow === false, view.horizontal_overflow);
+  }
 
-  // O H1 e a prova tambem precisam caber na dobra do viewport de desktop citado.
-  assert(`${route}_head_within_fold_at_${w1}x${h1v}`, pBot <= h1v && h1Bot <= h1v, [h1Bot, pBot, h1v]);
+  if (surface.evidence_state === "MEASURED_PASS") {
+    assert(`pass_${route}_repetition_is_clean`, row.category_repetition?.ok === true, row.category_repetition);
+
+    // Razao de confianca conferivel: a linha de prova precisa levar a um
+    // destino publico que existe no disco e abre sem cadastro. Uma frase de
+    // posicionamento sem destino nao e prova, e foi exatamente o defeito
+    // medido em /diagnostico-b2g-expansao/ em 2026-08-24.
+    const proofLink = desktop?.verifiable_proof;
+    assert(`pass_${route}_proof_links_a_public_destination`, Boolean(proofLink?.href), proofLink);
+    if (proofLink?.href) {
+      assert(`pass_${route}_proof_destination_is_internal`, proofLink.href.startsWith("/"), proofLink.href);
+      assert(
+        `pass_${route}_proof_destination_is_published`,
+        fs.existsSync(routeToFile(proofLink.href.split("#")[0].split("?")[0])),
+        proofLink.href,
+      );
+    }
+
+    // O texto do registro precisa citar a geometria e bater com ela.
+    const finding = surface.measurement?.finding || "";
+    const action = finding.match(ACTION_RE);
+    const head = finding.match(HEAD_RE);
+    assert(`pass_${route}_records_primary_action_geometry`, Boolean(action), finding);
+    assert(`pass_${route}_records_head_geometry`, Boolean(head), finding);
+    if (!action || !head) continue;
+    const [, actionTopDesktop, actionBottomDesktop, w1, h1v, actionTopMobile, actionBottomMobile, w2, h2v] = action.map(Number);
+    const [, h1Top, h1Bottom, proofTop, proofBottom] = head.map(Number);
+
+    assert(`pass_${route}_names_declared_viewports`, vpSet.has(`${w1}x${h1v}`) && vpSet.has(`${w2}x${h2v}`), [
+      `${w1}x${h1v}`,
+      `${w2}x${h2v}`,
+    ]);
+    assert(`pass_${route}_names_two_distinct_viewports`, `${w1}x${h1v}` !== `${w2}x${h2v}`, [w1, w2]);
+    assert(`pass_${route}_action_within_fold_at_${w1}x${h1v}`, actionBottomDesktop <= h1v, [actionBottomDesktop, h1v]);
+    assert(`pass_${route}_action_within_fold_at_${w2}x${h2v}`, actionBottomMobile <= h2v, [actionBottomMobile, h2v]);
+    assert(`pass_${route}_action_boxes_have_height`, actionBottomDesktop > actionTopDesktop && actionBottomMobile > actionTopMobile, [
+      actionTopDesktop,
+      actionBottomDesktop,
+      actionTopMobile,
+      actionBottomMobile,
+    ]);
+    assert(`pass_${route}_head_boxes_have_height`, h1Bottom > h1Top && proofBottom > proofTop, [h1Top, h1Bottom, proofTop, proofBottom]);
+    assert(`pass_${route}_head_within_fold_at_${w1}x${h1v}`, proofBottom <= h1v && h1Bottom <= h1v, [h1Bottom, proofBottom, h1v]);
+    assert(`pass_${route}_title_is_read_before_the_proof`, h1Top < proofTop, [h1Top, proofTop]);
+
+    // As coordenadas citadas sao as coordenadas medidas, nao numeros redondos.
+    const measuredH1 = row.viewports[DESKTOP_VIEWPORT].roles.h1.box;
+    const measuredProof = row.viewports[DESKTOP_VIEWPORT].roles.proof.box;
+    const measuredActionDesktop = row.viewports[DESKTOP_VIEWPORT].roles.primary_action.box;
+    const measuredActionMobile = row.viewports[MOBILE_VIEWPORT].roles.primary_action.box;
+    assert(`pass_${route}_h1_coordinates_match_the_measurement`, h1Top === measuredH1.top && h1Bottom === measuredH1.bottom, [
+      [h1Top, h1Bottom],
+      measuredH1,
+    ]);
+    assert(
+      `pass_${route}_proof_coordinates_match_the_measurement`,
+      proofTop === measuredProof.top && proofBottom === measuredProof.bottom,
+      [[proofTop, proofBottom], measuredProof],
+    );
+    assert(
+      `pass_${route}_action_coordinates_match_the_measurement`,
+      actionTopDesktop === measuredActionDesktop.top &&
+        actionBottomDesktop === measuredActionDesktop.bottom &&
+        actionTopMobile === measuredActionMobile.top &&
+        actionBottomMobile === measuredActionMobile.bottom,
+      [[actionTopDesktop, actionBottomDesktop, actionTopMobile, actionBottomMobile], measuredActionDesktop, measuredActionMobile],
+    );
+  }
+
+  if (surface.evidence_state === "MEASURED_FAIL") {
+    // Uma falha honesta nomeia dono e data. Falha sem bloqueio declarado, ou
+    // numa rota que ninguem congelou, e divida escondida e reprova aqui.
+    assert(`fail_${route}_records_coordinates`, /y=\d+/.test(surface.measurement?.finding || ""), surface.measurement?.finding);
+    assert(`fail_${route}_names_a_blocking_issue`, /#\d+/.test(surface.measurement?.blocker || ""), surface.measurement?.blocker);
+    assert(`fail_${route}_blocker_is_the_declared_one`, surface.measurement?.blocker === BLOCKER, surface.measurement?.blocker);
+    assert(`fail_${route}_is_a_frozen_pillar`, FROZEN_ROUTES.has(route), route);
+    assert(`fail_${route}_has_measured_problems`, foldProblems(row).length > 0, foldProblems(row));
+  }
 }
+
+// Toda rota que a #291 congela esta no censo e continua reprovando enquanto o
+// HTML dela nao puder ser tocado. Quando a data chegar, remediar e remedir.
+for (const route of FROZEN_ROUTES) {
+  assert(`frozen_pillar_${route}_is_in_the_census`, byRoute.has(route), route);
+  assert(
+    `frozen_pillar_${route}_is_not_promoted_while_frozen`,
+    byRoute.get(route)?.evidence_state === "MEASURED_FAIL",
+    byRoute.get(route)?.evidence_state,
+  );
+}
+const failures = census.filter((s) => s.evidence_state === "MEASURED_FAIL");
 assert(
-  "reference_fails_without_verifiable_proof",
-  byRoute.get("/diagnostico-b2g-expansao/")?.evidence_state === "MEASURED_FAIL" &&
-    /declarat[oó]ria/i.test(byRoute.get("/diagnostico-b2g-expansao/")?.measurement?.finding || "") &&
-    /sem prova verific[aá]vel/i.test(byRoute.get("/diagnostico-b2g-expansao/")?.measurement?.finding || ""),
-  byRoute.get("/diagnostico-b2g-expansao/")?.measurement?.finding,
+  "every_measured_failure_is_a_frozen_pillar",
+  failures.every((s) => FROZEN_ROUTES.has(s.route)),
+  failures.map((s) => s.route),
+);
+assert(
+  "the_reference_offer_no_longer_lacks_verifiable_proof",
+  byRoute.get("/diagnostico-b2g-expansao/")?.evidence_state === "MEASURED_PASS" &&
+    Boolean(measuredByRoute.get("/diagnostico-b2g-expansao/")?.viewports?.[DESKTOP_VIEWPORT]?.verifiable_proof?.href),
+  [
+    byRoute.get("/diagnostico-b2g-expansao/")?.evidence_state,
+    measuredByRoute.get("/diagnostico-b2g-expansao/")?.viewports?.[DESKTOP_VIEWPORT]?.verifiable_proof,
+  ],
 );
 
 const entregas = byRoute.get("/entregas/");
 assert("entregas_in_census", Boolean(entregas), "/entregas/");
-assert("entregas_still_pending", entregas?.evidence_state === "PENDING", entregas?.evidence_state);
-assert("entregas_measurement_null", entregas?.measurement === null, entregas?.measurement);
+assert("entregas_is_measured", entregas?.evidence_state === "MEASURED_PASS", entregas?.evidence_state);
+assert("entregas_has_a_measurement_record", Boolean(entregas?.measurement?.finding), entregas?.measurement);
 assert(
   "entregas_observed_note_intact",
   entregas?.observed_2026_08_24 ===
@@ -430,10 +594,14 @@ assert(
   entregas?.observed_2026_08_24,
 );
 assert("entregas_observed_note_keeps_height", /11266 px/.test(entregas?.observed_2026_08_24 || ""), entregas?.observed_2026_08_24);
+// Uma nota de observacao nunca foi medicao e continua nao sendo: a linha que a
+// carrega precisa carregar tambem um registro com coordenadas.
 assert(
   "observed_note_is_not_a_measurement",
-  census.filter((s) => "observed_2026_08_24" in s).every((s) => s.evidence_state === "PENDING"),
-  census.filter((s) => "observed_2026_08_24" in s).map((s) => [s.route, s.evidence_state]),
+  census
+    .filter((s) => "observed_2026_08_24" in s)
+    .every((s) => s.evidence_state !== "PENDING" && /y=\d+/.test(s.measurement?.finding || "")),
+  census.filter((s) => "observed_2026_08_24" in s).map((s) => [s.route, s.evidence_state, s.measurement?.finding]),
 );
 
 /* ------------------------------------------------------------------ */
@@ -590,15 +758,96 @@ assert("single_primary_action_max_is_one", spa.max_primary_actions === 1, spa.ma
 assert("single_primary_action_secondary_needs_distinct_function", spa.secondary_requires_distinct_function === true, spa.secondary_requires_distinct_function);
 assert("single_primary_action_rule_written", filled(spa.rule_pt_br), spa.rule_pt_br);
 assert("single_primary_action_rule_forbids_competing", /concorrente/i.test(spa.rule_pt_br || ""), spa.rule_pt_br);
-assert("single_primary_action_state_declared_not_measured", spa.state === "DECLARED_NOT_MEASURED", spa.state);
-assert("single_primary_action_no_fabricated_measurement", Array.isArray(spa.measured_surfaces) && spa.measured_surfaces.length === 0, spa.measured_surfaces);
+// O invariante deixou de ser declaratorio. Cada linha vem da contagem de acoes
+// primarias inteiramente dentro da dobra, medida nos dois viewports, e o gate
+// refaz a contagem contra o registro bruto antes de aceitar o numero.
+assert("single_primary_action_state_measured", spa.state === "MEASURED", spa.state);
+assert("single_primary_action_measured_on", /^\d{4}-\d{2}-\d{2}$/.test(spa.measured_at || ""), spa.measured_at);
+assert(
+  "single_primary_action_covers_the_whole_census",
+  Array.isArray(spa.measured_surfaces) &&
+    eq(sorted(spa.measured_surfaces.map((s) => s.route)), sorted(census.map((s) => s.route))),
+  (spa.measured_surfaces || []).map((s) => s.route),
+);
+for (const entry of spa.measured_surfaces || []) {
+  const row = measuredByRoute.get(entry.route);
+  const counted = {
+    [DESKTOP_VIEWPORT]: (row?.viewports?.[DESKTOP_VIEWPORT]?.primary_actions_in_fold || []).length,
+    [MOBILE_VIEWPORT]: (row?.viewports?.[MOBILE_VIEWPORT]?.primary_actions_in_fold || []).length,
+  };
+  assert(
+    `single_primary_action_count_matches_measurement_${entry.route}`,
+    eq(entry.primary_actions_in_fold, counted),
+    [entry.primary_actions_in_fold, counted],
+  );
+  for (const [viewport, count] of Object.entries(entry.primary_actions_in_fold || {})) {
+    assert(
+      `single_primary_action_no_competing_action_${entry.route}_${viewport}`,
+      count <= spa.max_primary_actions,
+      [viewport, count],
+    );
+  }
+  if (byRoute.get(entry.route)?.evidence_state === "MEASURED_PASS") {
+    assert(
+      `single_primary_action_is_dominant_${entry.route}`,
+      Object.values(entry.primary_actions_in_fold || {}).every((count) => count === 1),
+      entry.primary_actions_in_fold,
+    );
+  }
+  // Acao secundaria so vale quando cumpre funcao distinta, ou seja, quando o
+  // destino difere do destino da primaria.
+  for (const viewport of [DESKTOP_VIEWPORT, MOBILE_VIEWPORT]) {
+    const view = row?.viewports?.[viewport];
+    const primaryHrefs = new Set((view?.primary_actions_in_fold || []).map((a) => a.href));
+    const collisions = (view?.secondary_actions_in_fold || []).filter((a) => primaryHrefs.has(a.href));
+    assert(
+      `secondary_action_has_distinct_function_${entry.route}_${viewport}`,
+      spa.secondary_requires_distinct_function !== true || collisions.length === 0,
+      collisions,
+    );
+  }
+}
 
 const rep = inv.category_repetition || {};
 assert("category_repetition_fields", eq(rep.fields, ["eyebrow", "h1", "lead"]), rep.fields);
 assert("category_repetition_rule_written", filled(rep.rule_pt_br), rep.rule_pt_br);
 assert("category_repetition_rule_requires_new_information", /sem acrescentar informa[cç][aã]o/i.test(rep.rule_pt_br || ""), rep.rule_pt_br);
-assert("category_repetition_state_declared_not_measured", rep.state === "DECLARED_NOT_MEASURED", rep.state);
-assert("category_repetition_no_fabricated_measurement", Array.isArray(rep.measured_surfaces) && rep.measured_surfaces.length === 0, rep.measured_surfaces);
+// Idem para a repeticao de categoria: o estado vem do texto medido de eyebrow,
+// H1 e lead, e o gate reproduz o calculo antes de aceitar a linha.
+assert("category_repetition_state_measured", rep.state === "MEASURED", rep.state);
+assert("category_repetition_measured_on", /^\d{4}-\d{2}-\d{2}$/.test(rep.measured_at || ""), rep.measured_at);
+assert("category_repetition_method_written", filled(rep.method_pt_br), rep.method_pt_br);
+assert(
+  "category_repetition_covers_the_whole_census",
+  Array.isArray(rep.measured_surfaces) &&
+    eq(sorted(rep.measured_surfaces.map((s) => s.route)), sorted(census.map((s) => s.route))),
+  (rep.measured_surfaces || []).map((s) => s.route),
+);
+for (const entry of rep.measured_surfaces || []) {
+  const row = measuredByRoute.get(entry.route);
+  const desktop = row?.viewports?.[DESKTOP_VIEWPORT];
+  const recomputed = categoryRepetition({
+    eyebrow: desktop?.roles?.eyebrow?.text,
+    h1: desktop?.roles?.h1?.text,
+    lead: desktop?.roles?.lead?.text,
+  });
+  assert(`category_repetition_ok_matches_measurement_${entry.route}`, entry.ok === recomputed.ok, [entry.ok, recomputed]);
+  assert(
+    `category_repetition_words_match_measurement_${entry.route}`,
+    eq(entry.eyebrow_adds, recomputed.eyebrow_new.slice(0, 4)) && eq(entry.lead_adds, recomputed.lead_new.slice(0, 4)),
+    [entry, recomputed],
+  );
+  if (byRoute.get(entry.route)?.evidence_state === "MEASURED_PASS") {
+    assert(`category_repetition_clean_on_pass_${entry.route}`, entry.ok === true, entry);
+  }
+}
+// A remediacao nao apaga o defeito registrado em 2026-08-24. Ela fica ao lado
+// dele, e a rota que o carregava precisa aparecer medida e limpa agora.
+assert(
+  "category_repetition_recorded_finding_route_is_now_clean",
+  (rep.measured_surfaces || []).find((s) => s.route === "/problemas-que-resolvemos/")?.ok === true,
+  (rep.measured_surfaces || []).find((s) => s.route === "/problemas-que-resolvemos/"),
+);
 const repFindings = Array.isArray(rep.recorded_findings) ? rep.recorded_findings : [];
 assert("category_repetition_has_the_recorded_finding", repFindings.length === 1, repFindings.length);
 assert("category_repetition_finding_route", repFindings[0]?.route === "/problemas-que-resolvemos/", repFindings[0]?.route);
@@ -710,7 +959,10 @@ console.log(`  derivado=${derivedRoutes.length} censo=${censusRoutes.length} dif
   missing_from_census: derivedRoutes.filter((r) => !censusRoutes.includes(r)),
   not_derived: censusRoutes.filter((r) => !derivedRoutes.includes(r)),
 })}`);
-console.log(`  medidas=${measured.length} pendentes=${pending.length} sessoes_icp=${hv.completed_icp_sessions}/${hv.minimum_icp_sessions} estado_humano=${hv.state}`);
+const passing = census.filter((s) => s.evidence_state === "MEASURED_PASS");
+console.log(`  medidas=${measured.length} aprovadas=${passing.length} reprovadas=${failures.length} pendentes=${pending.length}`);
+for (const s of failures) console.log(`  reprovada ${s.route}: ${s.measurement.finding}`);
+console.log(`  sessoes_icp=${hv.completed_icp_sessions}/${hv.minimum_icp_sessions} estado_humano=${hv.state} evidencia=${evidence.commit_sha.slice(0, 12)}`);
 
 /* ------------------------------------------------------------------ */
 
