@@ -83,3 +83,24 @@ sozinha, não autoriza: o dono da janela precisa liberar explicitamente.
    Todo o resto da seção de mercado já foi reescrito: o H2 deixou de ser uma
    negação sobre a própria CONFENGE, e a honestidade passou a ser provada por
    procedência (fonte e data de corte) em vez de autodesqualificação.
+
+5. **A mensagem de erro do formulário.** `js/modules/form.js` mostra, quando o
+   registro falha, a frase:
+
+   > "Não foi possível registrar no servidor. Use o WhatsApp para não perder o
+   > contato — o protocolo só aparece após gravação confirmada."
+
+   Dois problemas. Ela abre pelo que falhou em vez de pelo que o visitante faz
+   agora, e usa travessão, que a regra editorial da casa proíbe. O
+   `scrub_em_dashes.py` não pega porque varre HTML público, não JavaScript, o
+   que também é uma lacuna do próprio gate.
+
+   **Por que não entrou agora.** `form.js` é compilado para `script.js`, que
+   está congelado pela janela de medição.
+
+   **Ação em 2026-09-13:** trocar por "O registro não foi concluído agora. Fale
+   pelo WhatsApp para garantir o atendimento: o protocolo é emitido assim que a
+   gravação confirma.", rodar `node scripts/site/build_script_modules.mjs --write`,
+   recapturar a baseline e estender `scrub_em_dashes.py` para varrer também
+   `js/modules/*.js`, para que a próxima travessão em copy de interface reprove
+   sozinha.
