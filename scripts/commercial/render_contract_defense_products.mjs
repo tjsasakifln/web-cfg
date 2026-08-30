@@ -42,8 +42,14 @@ function ensureCss(html) {
   const link = '<link href="/styles-offers.css" rel="stylesheet"/>';
   const legacy = '<link href="/assets/contract-defense-products.css" rel="stylesheet"/>';
   const retired = '<link href="/styles-contract-defense-products.css" rel="stylesheet"/>';
-  const next = html.replaceAll(legacy, "").replaceAll(retired, "");
-  return next.includes(link) ? next : next.replace("</head>", `${link}\n</head>`);
+  let found = false;
+  const offerLink = /<link\b(?=[^>]*\bhref\s*=\s*["']\/styles-offers\.css["'])[^>]*>\s*/gi;
+  const next = html.replaceAll(legacy, "").replaceAll(retired, "").replace(offerLink, (tag) => {
+    if (found) return "";
+    found = true;
+    return tag;
+  });
+  return found ? next : next.replace("</head>", `${link}\n</head>`);
 }
 
 function isHeldProtected(item, current) {

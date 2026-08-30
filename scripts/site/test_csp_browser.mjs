@@ -43,6 +43,7 @@ const routes = [
   "/diagnostico-b2g-360/",
   "/ferramentas/",
   "/ferramentas/limite-acrescimos-supressoes/",
+  "/ferramentas/matriz-atraso-obra/",
   "/ops/",
 ];
 
@@ -155,6 +156,15 @@ try {
     if (route === "/ops/") {
       const token = await page.$eval("#token", (element) => element.value);
       if (token !== "csp-browser-canary-token") failures.push("/ops/ inline bootstrap did not execute");
+    }
+    if (route === "/ferramentas/matriz-atraso-obra/") {
+      const fullWidthFields = await page.$$eval(".tool-field--full", (elements) => elements.map((element) => {
+        const style = getComputedStyle(element);
+        return { start: style.gridColumnStart, end: style.gridColumnEnd };
+      }));
+      if (fullWidthFields.length < 2 || fullWidthFields.some(({ start, end }) => start !== "1" || end !== "-1")) {
+        failures.push(`/ferramentas/matriz-atraso-obra/ dynamic fields lost full grid span: ${JSON.stringify(fullWidthFields)}`);
+      }
     }
     const violations = await page.evaluate(() => window.__cspViolations || []);
     for (const violation of violations) {

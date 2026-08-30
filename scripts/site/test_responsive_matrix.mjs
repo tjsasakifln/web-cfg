@@ -186,6 +186,7 @@ async function renderedGeometry(page, route, width) {
           || parent.closest("code,pre,kbd,samp,[data-opaque-token],.opaque-token,.honeypot")) continue;
       const style = getComputedStyle(parent);
       const permitsMidWord = style.overflowWrap === "anywhere"
+        || style.overflowWrap === "break-word"
         || style.wordBreak === "break-all"
         || style.wordBreak === "break-word";
       if (!permitsMidWord) continue;
@@ -438,8 +439,15 @@ try {
     await noJsPage.setJavaScriptEnabled(false);
     await noJsPage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
     try {
-      const response = await noJsPage.goto(`${BASE}${route.path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
-      const stylesReady = await waitForStyles(noJsPage);
+      let response = await noJsPage.goto(`${BASE}${route.path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+      let stylesReady = await waitForStyles(noJsPage);
+      // A fresh JS-disabled Chrome occasionally loses one localhost CSS request
+      // after the preceding 192 navigations. Retry the whole document once;
+      // the second miss still fails closed as a real stylesheet outage.
+      if (!stylesReady && response && response.status() < 400) {
+        response = await noJsPage.reload({ waitUntil: "domcontentloaded", timeout: 30000 });
+        stylesReady = await waitForStyles(noJsPage);
+      }
       if (!stylesReady) {
         failures.push({ family: route.family, route: route.path, width: 390, mode: "js-off", code: "stylesheet_unavailable", detail: route.path });
         continue;

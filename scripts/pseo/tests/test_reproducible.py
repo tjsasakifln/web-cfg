@@ -245,7 +245,10 @@ class TestAssembleWipesStale(unittest.TestCase):
     def test_assemble_wipes_planted_junk_and_audit_forbids_internal(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            _write(root / "index.html", "<html>home</html>\n")
+            _write(
+                root / "index.html",
+                '<html><head><link rel="stylesheet" href="/styles.css"></head><body>home</body></html>\n',
+            )
             _write(root / "404.html", "<html>404</html>\n")
             _write(root / "robots.txt", "User-agent: *\nDisallow:\n")
             _write(root / "_redirects", "/old /new 301\n")
@@ -393,10 +396,27 @@ class TestCliAuditEntrypoint(unittest.TestCase):
             )
             _write(site / "robots.txt", "User-agent: *\nDisallow:\n")
             _write(site / "_redirects", "/old /new 301\n")
-            _write(site / "styles.css", "body{}\n")
+            css = "body{}\n"
+            _write(site / "styles.css", css)
+            css_sha256 = sha256_file(site / "styles.css")
+            css_digest = css_sha256[:12]
+            css_href = f"/assets/css/styles.{css_digest}.css"
+            _write(site / css_href.lstrip("/"), css)
             _write(site / "script.js", "console.log(1)\n")
             _json(site / ".well-known" / "pseo-build.json", {"schema_version": "1.1.0"})
-            _json(site / ".well-known" / "css-assets.json", {"schema_version": "1.0.0", "files": {}})
+            _json(
+                site / ".well-known" / "css-assets.json",
+                {
+                    "schema_version": "1.0.0",
+                    "files": {
+                        "styles.css": {
+                            "sha256": css_sha256,
+                            "hash": css_digest,
+                            "href": css_href,
+                        }
+                    },
+                },
+            )
             env = os.environ.copy()
             env.pop("PYTHONPATH", None)
             proc = subprocess.run(

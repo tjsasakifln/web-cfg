@@ -159,6 +159,8 @@ def test_site_ci_shape():
         "npm run build:site",
         "npm run test:cluster-medicao-published",
         "npm run test:html-integrity:site",
+        "python3 scripts/site/test_fingerprint_css.py",
+        "python3 scripts/site/test_cache_contract.py",
         "npm run pseo:validate",
         "npm run pseo:audit",
         "npm run audit:public-artifact",
@@ -176,6 +178,14 @@ def test_site_ci_shape():
         "npm run build:site"
     ):
         errors.append("site-ci must audit cluster originality after build:site")
+    build_at = text.find("npm run build:site")
+    fingerprint_at = text.find("python3 scripts/site/test_fingerprint_css.py")
+    cache_at = text.find("python3 scripts/site/test_cache_contract.py")
+    upload_at = text.find("actions/upload-artifact")
+    if not (build_at < fingerprint_at and (upload_at < 0 or fingerprint_at < upload_at)):
+        errors.append("site-ci must fingerprint/audit every local CSS after build and before upload")
+    if not (build_at < cache_at and (upload_at < 0 or cache_at < upload_at)):
+        errors.append("site-ci must validate the published CSS/cache contract after build and before upload")
 
     # Node pin aligned with Netlify (issue #149 migrated the whole set to 22)
     if 'node-version: "22"' not in text and "node-version: '22'" not in text:
@@ -183,11 +193,16 @@ def test_site_ci_shape():
 
     chrome_at = text.find("browser-actions/setup-chrome")
     ui_at = text.find("npm run test:ui")
+    deliverables_ui_at = text.find("npm run test:deliverables-hub-ui")
     axe_at = text.find("npm run audit:axe")
     if chrome_at < 0:
         errors.append("site-ci must install Chrome via browser-actions/setup-chrome")
     if chrome_at >= 0 and ui_at >= 0 and chrome_at > ui_at:
         errors.append("site-ci must install Chrome before npm run test:ui")
+    if deliverables_ui_at < 0:
+        errors.append("site-ci must execute the /entregas narrow-breakpoint UI gate")
+    elif chrome_at >= 0 and chrome_at > deliverables_ui_at:
+        errors.append("site-ci must install Chrome before npm run test:deliverables-hub-ui")
     if chrome_at >= 0 and axe_at >= 0 and chrome_at > axe_at:
         errors.append("site-ci must install Chrome before npm run audit:axe")
     if 'UI_GEOMETRY_REQUIRED: "1"' not in text:

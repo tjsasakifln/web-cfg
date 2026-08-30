@@ -138,8 +138,10 @@ jobs:
         run: npm run host-contract:nginx-test
       - name: Published HTML and FAQ integrity
         run: npm run test:html-integrity:site
-      - name: CSS asset integrity after publish
-        run: python3 scripts/site/test_fingerprint_css.py
+      - name: All first-party CSS fingerprint and cache integrity
+        run: |
+          python3 scripts/site/test_fingerprint_css.py
+          python3 scripts/site/test_cache_contract.py
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2
         id: setup-chrome
@@ -152,7 +154,7 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: npm run test:money-asset-canary-e2e
-      - name: UI geometry
+      - name: UI geometry, narrow breakpoints and computed cascade
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           UI_GEOMETRY_REQUIRED: "1"
