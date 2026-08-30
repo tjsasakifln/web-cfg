@@ -1,0 +1,1662 @@
+{
+  "schema": "confenge.design-direction-probe/1.0",
+  "issue": 494,
+  "measured_at": "2026-08-30",
+  "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
+  "tree_dirty": true,
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1366x768",
+    "1363x936",
+    "1440x1000"
+  ],
+  "fixed_content": "docs/design-audit/prototypes/fixed-content.json",
+  "summary": {
+    "a": {
+      "slug": "a-trilho-de-memoria",
+      "M1_provenance_fields_lost_under_ablation": 2,
+      "M1_per_job": {
+        "comercial": 2,
+        "leitura": 3,
+        "instrumento": 3
+      },
+      "M2_worst_proof_proximity_folds": 0.2403,
+      "M3_font_gzip_kb": 0,
+      "M3_font_files": 0,
+      "M3_cls_delta_vs_current": 0,
+      "G1_min_slots_in_first_fold": 3,
+      "G1_renders_intact_without_domain_fields": false,
+      "G2_extractable_set_changes": true,
+      "G4_system_stack": {
+        "sans": {
+          "family": "system-ui, -apple-system, \"Segoe UI\", Roboto, Arial, sans-serif",
+          "ones": 30.5390625,
+          "zeros": 30.5390625,
+          "tabular": true,
+          "zero_vs_O": 0.8083126550868487
+        },
+        "mono": {
+          "family": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+          "ones": 28.8984375,
+          "zeros": 28.8984375,
+          "tabular": true,
+          "zero_vs_O": 1
+        },
+        "serif": {
+          "family": "ui-serif, \"Iowan Old Style\", \"Palatino Linotype\", Palatino, Georgia, serif",
+          "ones": 30.5390625,
+          "zeros": 30.5390625,
+          "tabular": true,
+          "zero_vs_O": 0.7760571768910065
+        },
+        "condensed": {
+          "family": "\"Arial Narrow\", \"Liberation Sans Narrow\", sans-serif",
+          "ones": 30.5390625,
+          "zeros": 30.5390625,
+          "tabular": true,
+          "zero_vs_O": 0.8083126550868487
+        },
+        "condensed_resolved": false,
+        "condensed_ratio": 1,
+        "font_face_rules_in_document": 0
+      },
+      "G7_budget": {
+        "font_files_max": 0,
+        "font_total_gzip_kb_max": 0,
+        "cls_max": 0.05,
+        "within_budget": true
+      },
+      "G8_worst_hover_top_delta_px": 0,
+      "worst_horizontal_overflow_px": 0
+    },
+    "b": {
+      "slug": "b-estado-de-revisao",
+      "M1_provenance_fields_lost_under_ablation": 1,
+      "M1_per_job": {
+        "comercial": 1,
+        "leitura": 1,
+        "instrumento": 1
+      },
+      "M2_worst_proof_proximity_folds": 0.2153,
+      "M3_font_gzip_kb": 0,
+      "M3_font_files": 0,
+      "M3_cls_delta_vs_current": 0,
+      "G1_min_slots_in_first_fold": 3,
+      "G1_renders_intact_without_domain_fields": false,
+      "G2_extractable_set_changes": true,
+      "G4_system_stack": {
+        "sans": {
+          "family": "system-ui, -apple-system, \"Segoe UI\", Roboto, Arial, sans-serif",
+          "ones": 30.5390625,
+          "zeros": 30.5390625,
+          "tabular": true,
+          "zero_vs_O": 0.8083126550868487
+        },
+        "mono": {
+          "family": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+          "ones": 28.8984375,
+          "zeros": 28.8984375,
+          "tabular": true,
+          "zero_vs_O": 1
+        },
+        "serif": {
+          "family": "ui-serif, \"Iowan Old Style\", \"Palatino Linotype\", Palatino, Georgia, serif",
+          "ones": 30.5390625,
+          "zeros": 30.5390625,
+          "tabular": true,
+          "zero_vs_O": 0.7760571768910065
+        },
+        "condensed": {
+          "family": "\"Arial Narrow\", \"Liberation Sans Narrow\", sans-serif",
+          "ones": 30.5390625,
+          "zeros": 30.5390625,
+          "tabular": true,
+          "zero_vs_O": 0.8083126550868487
+        },
+        "condensed_resolved": false,
+        "condensed_ratio": 1,
+        "font_face_rules_in_document": 0
+      },
+      "G7_budget": {
+        "font_files_max": 0,
+        "font_total_gzip_kb_max": 0,
+        "cls_max": 0.05,
+        "within_budget": true
+      },
+      "G8_worst_hover_top_delta_px": 0,
+      "worst_horizontal_overflow_px": 0
+    }
+  },
+  "detail": {
+    "a": {
+      "slug": "a-trilho-de-memoria",
+      "nome": "A — Trilho de memória",
+      "jobs": {
+        "comercial": {
+          "url": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+          "ablation": {
+            "m1_fields_disappeared": 2,
+            "g2_set_changed": true,
+            "per_field": {
+              "fonte": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "data_de_corte": {
+                "declared": 2,
+                "reachable_before": 2,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "unidade": {
+                "declared": 2,
+                "reachable_before": 2,
+                "reachable_after": 2,
+                "disappears": false
+              },
+              "responsavel": {
+                "declared": 1,
+                "reachable_before": 1,
+                "reachable_after": 1,
+                "disappears": false
+              },
+              "versao": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 1,
+                "disappears": false
+              }
+            },
+            "ax_chars_before": 7385,
+            "ax_chars_after": 6123
+          },
+          "viewports": {
+            "390x844": {
+              "proximity": {
+                "worst_claim_folds": 0.24033619668246445,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.13929206161137442
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.17056057464454977
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.17056057464454977
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.24033619668246445
+                  }
+                ],
+                "price_to_capture_folds": 3.318849970379147,
+                "conversion_area_px": 230401.125,
+                "document_area_px": 2010840,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 3,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7428,
+                "ax_chars_nulled": 6908
+              }
+            },
+            "768x1024": {
+              "proximity": {
+                "worst_claim_folds": 0.13043212890625,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.0697021484375
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.09869384765625
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.09869384765625
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.13043212890625
+                  }
+                ],
+                "price_to_capture_folds": 2.17327880859375,
+                "conversion_area_px": 341898.75,
+                "document_area_px": 3061248,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 3,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7386,
+                "ax_chars_nulled": 6872
+              }
+            },
+            "1366x768": {
+              "proximity": {
+                "worst_claim_folds": 0.131591796875,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.09293619791666667
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.131591796875
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.131591796875
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.03790283203125
+                  }
+                ],
+                "price_to_capture_folds": 2.0205485026041665,
+                "conversion_area_px": 351244.5,
+                "document_area_px": 4633472,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 3,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7406,
+                "ax_chars_nulled": 6888
+              }
+            },
+            "1363x936": {
+              "proximity": {
+                "worst_claim_folds": 0.10797275641025642,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.07625534188034189
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.10797275641025642
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.10797275641025642
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.031099759615384616
+                  }
+                ],
+                "price_to_capture_folds": 1.6577524038461537,
+                "conversion_area_px": 351244.5,
+                "document_area_px": 4621933,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 3,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7406,
+                "ax_chars_nulled": 6888
+              }
+            },
+            "1440x1000": {
+              "proximity": {
+                "worst_claim_folds": 0.1010625,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.071375
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.1010625
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.1010625
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.029109375
+                  }
+                ],
+                "price_to_capture_folds": 1.554421875,
+                "conversion_area_px": 351244.5,
+                "document_area_px": 4913280,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 3,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7406,
+                "ax_chars_nulled": 6888
+              }
+            }
+          }
+        },
+        "leitura": {
+          "url": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+          "ablation": {
+            "m1_fields_disappeared": 3,
+            "g2_set_changed": true,
+            "per_field": {
+              "fonte": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "data_de_corte": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "unidade": {
+                "declared": 1,
+                "reachable_before": 1,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "responsavel": {
+                "declared": 1,
+                "reachable_before": 1,
+                "reachable_after": 1,
+                "disappears": false
+              },
+              "versao": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 1,
+                "disappears": false
+              }
+            },
+            "ax_chars_before": 7097,
+            "ax_chars_after": 5747
+          },
+          "viewports": {
+            "390x844": {
+              "proximity": {
+                "worst_claim_folds": 0.24033619668246445,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.13929206161137442
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.13929206161137442
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.13929206161137442
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.24033619668246445
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 58140,
+                "document_area_px": 1804920,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "fonte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 3,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7111,
+                "ax_chars_nulled": 6320
+              }
+            },
+            "768x1024": {
+              "proximity": {
+                "worst_claim_folds": 0.13043212890625,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.0697021484375
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.0697021484375
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.09869384765625
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.13043212890625
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 79200,
+                "document_area_px": 2836224,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 5,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7076,
+                "ax_chars_nulled": 6292
+              }
+            },
+            "1366x768": {
+              "proximity": {
+                "worst_claim_folds": 0.131591796875,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.09293619791666667
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.131591796875
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.131591796875
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.03790283203125
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4391690,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "fonte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 3,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7097,
+                "ax_chars_nulled": 6307
+              }
+            },
+            "1363x936": {
+              "proximity": {
+                "worst_claim_folds": 0.10797275641025642,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.07625534188034189
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.10797275641025642
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.10797275641025642
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.031099759615384616
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4380682,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 5,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7097,
+                "ax_chars_nulled": 6307
+              }
+            },
+            "1440x1000": {
+              "proximity": {
+                "worst_claim_folds": 0.1010625,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.071375
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.1010625
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.1010625
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.029109375
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4656960,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 6,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7097,
+                "ax_chars_nulled": 6307
+              }
+            }
+          }
+        },
+        "instrumento": {
+          "url": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+          "ablation": {
+            "m1_fields_disappeared": 3,
+            "g2_set_changed": true,
+            "per_field": {
+              "fonte": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "data_de_corte": {
+                "declared": 2,
+                "reachable_before": 2,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "unidade": {
+                "declared": 2,
+                "reachable_before": 2,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "responsavel": {
+                "declared": 1,
+                "reachable_before": 1,
+                "reachable_after": 1,
+                "disappears": false
+              },
+              "versao": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 1,
+                "disappears": false
+              }
+            },
+            "ax_chars_before": 6418,
+            "ax_chars_after": 5108
+          },
+          "viewports": {
+            "390x844": {
+              "proximity": {
+                "worst_claim_folds": 0.24033619668246445,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.10802354857819906
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.13929206161137442
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.17056057464454977
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.24033619668246445
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 58140,
+                "document_area_px": 1702350,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 3,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6432,
+                "ax_chars_nulled": 6193
+              }
+            },
+            "768x1024": {
+              "proximity": {
+                "worst_claim_folds": 0.13043212890625,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.0697021484375
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.0697021484375
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.0697021484375
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.13043212890625
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 79200,
+                "document_area_px": 2664192,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 6,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6399,
+                "ax_chars_nulled": 6164
+              }
+            },
+            "1366x768": {
+              "proximity": {
+                "worst_claim_folds": 0.09293619791666667,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.09293619791666667
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.09293619791666667
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.09293619791666667
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.03790283203125
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4182692,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "fonte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6418,
+                "ax_chars_nulled": 6178
+              }
+            },
+            "1363x936": {
+              "proximity": {
+                "worst_claim_folds": 0.07625534188034189,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.07625534188034189
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.07625534188034189
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.07625534188034189
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.031099759615384616
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4173506,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 6,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6418,
+                "ax_chars_nulled": 6178
+              }
+            },
+            "1440x1000": {
+              "proximity": {
+                "worst_claim_folds": 0.071375,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.071375
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.071375
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.071375
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.029109375
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4428000,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 6,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6418,
+                "ax_chars_nulled": 6178
+              }
+            }
+          }
+        },
+        "__hover": {
+          "worst_top_delta_px": 0,
+          "offenders": []
+        },
+        "__font": {
+          "sans": {
+            "family": "system-ui, -apple-system, \"Segoe UI\", Roboto, Arial, sans-serif",
+            "ones": 30.5390625,
+            "zeros": 30.5390625,
+            "tabular": true,
+            "zero_vs_O": 0.8083126550868487
+          },
+          "mono": {
+            "family": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+            "ones": 28.8984375,
+            "zeros": 28.8984375,
+            "tabular": true,
+            "zero_vs_O": 1
+          },
+          "serif": {
+            "family": "ui-serif, \"Iowan Old Style\", \"Palatino Linotype\", Palatino, Georgia, serif",
+            "ones": 30.5390625,
+            "zeros": 30.5390625,
+            "tabular": true,
+            "zero_vs_O": 0.7760571768910065
+          },
+          "condensed": {
+            "family": "\"Arial Narrow\", \"Liberation Sans Narrow\", sans-serif",
+            "ones": 30.5390625,
+            "zeros": 30.5390625,
+            "tabular": true,
+            "zero_vs_O": 0.8083126550868487
+          },
+          "condensed_resolved": false,
+          "condensed_ratio": 1,
+          "font_face_rules_in_document": 0
+        },
+        "__cost": {
+          "font_files": 0,
+          "font_face_rules": 0,
+          "font_total_gzip_kb": 0,
+          "css_gzip_kb": 3.08
+        }
+      }
+    },
+    "b": {
+      "slug": "b-estado-de-revisao",
+      "nome": "B — Estado de revisão",
+      "jobs": {
+        "comercial": {
+          "url": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+          "ablation": {
+            "m1_fields_disappeared": 1,
+            "g2_set_changed": true,
+            "per_field": {
+              "fonte": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 3,
+                "disappears": false
+              },
+              "data_de_corte": {
+                "declared": 2,
+                "reachable_before": 2,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "unidade": {
+                "declared": 2,
+                "reachable_before": 2,
+                "reachable_after": 2,
+                "disappears": false
+              },
+              "responsavel": {
+                "declared": 1,
+                "reachable_before": 1,
+                "reachable_after": 1,
+                "disappears": false
+              },
+              "versao": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 1,
+                "disappears": false
+              }
+            },
+            "ax_chars_before": 7080,
+            "ax_chars_after": 5915
+          },
+          "viewports": {
+            "390x844": {
+              "proximity": {
+                "worst_claim_folds": 0.21528806279620852,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.18531546208530805
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.18531546208530805
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.21528806279620852
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.21528806279620852
+                  }
+                ],
+                "price_to_capture_folds": 2.881886848341232,
+                "conversion_area_px": 230401.125,
+                "document_area_px": 1939860,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "data_de_corte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 3,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7133,
+                "ax_chars_nulled": 6005
+              }
+            },
+            "768x1024": {
+              "proximity": {
+                "worst_claim_folds": 0.1378021240234375,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.1329193115234375
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.11309814453125
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.1378021240234375
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.1378021240234375
+                  }
+                ],
+                "price_to_capture_folds": 1.7512664794921875,
+                "conversion_area_px": 341898.75,
+                "document_area_px": 2820096,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "data_de_corte",
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7086,
+                "ax_chars_nulled": 5967
+              }
+            },
+            "1366x768": {
+              "proximity": {
+                "worst_claim_folds": 0.15730794270833334,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.15079752604166666
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.15079752604166666
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.15730794270833334
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.15730794270833334
+                  }
+                ],
+                "price_to_capture_folds": 2.03363037109375,
+                "conversion_area_px": 351244.5,
+                "document_area_px": 4776902,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "data_de_corte",
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7080,
+                "ax_chars_nulled": 5961
+              }
+            },
+            "1363x936": {
+              "proximity": {
+                "worst_claim_folds": 0.12907318376068377,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.12373130341880342
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.12373130341880342
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.12907318376068377
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.12907318376068377
+                  }
+                ],
+                "price_to_capture_folds": 1.6684862446581197,
+                "conversion_area_px": 351244.5,
+                "document_area_px": 4765048,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "data_de_corte",
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7080,
+                "ax_chars_nulled": 5961
+              }
+            },
+            "1440x1000": {
+              "proximity": {
+                "worst_claim_folds": 0.1208125,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.1158125
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.1158125
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.1208125
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.1208125
+                  }
+                ],
+                "price_to_capture_folds": 1.56446875,
+                "conversion_area_px": 351244.5,
+                "document_area_px": 5063040,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "data_de_corte",
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 7080,
+                "ax_chars_nulled": 5961
+              }
+            }
+          }
+        },
+        "leitura": {
+          "url": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+          "ablation": {
+            "m1_fields_disappeared": 1,
+            "g2_set_changed": true,
+            "per_field": {
+              "fonte": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 3,
+                "disappears": false
+              },
+              "data_de_corte": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "unidade": {
+                "declared": 1,
+                "reachable_before": 1,
+                "reachable_after": 1,
+                "disappears": false
+              },
+              "responsavel": {
+                "declared": 1,
+                "reachable_before": 1,
+                "reachable_after": 1,
+                "disappears": false
+              },
+              "versao": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 1,
+                "disappears": false
+              }
+            },
+            "ax_chars_before": 6472,
+            "ax_chars_after": 5307
+          },
+          "viewports": {
+            "390x844": {
+              "proximity": {
+                "worst_claim_folds": 0.21528806279620852,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.18531546208530805
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.18531546208530805
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.21528806279620852
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.21528806279620852
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 58140,
+                "document_area_px": 1703910,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "data_de_corte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 3,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6519,
+                "ax_chars_nulled": 5379
+              }
+            },
+            "768x1024": {
+              "proximity": {
+                "worst_claim_folds": 0.1378021240234375,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.1329193115234375
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.11309814453125
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.1378021240234375
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.1378021240234375
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 79200,
+                "document_area_px": 2526720,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 5,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6479,
+                "ax_chars_nulled": 5348
+              }
+            },
+            "1366x768": {
+              "proximity": {
+                "worst_claim_folds": 0.15730794270833334,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.15079752604166666
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.15079752604166666
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.15730794270833334
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.15730794270833334
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4429938,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6472,
+                "ax_chars_nulled": 5341
+              }
+            },
+            "1363x936": {
+              "proximity": {
+                "worst_claim_folds": 0.12907318376068377,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.12373130341880342
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.12373130341880342
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.12907318376068377
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.12907318376068377
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4418846,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6472,
+                "ax_chars_nulled": 5341
+              }
+            },
+            "1440x1000": {
+              "proximity": {
+                "worst_claim_folds": 0.1208125,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.1158125
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.1158125
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.1208125
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.1208125
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4697280,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6472,
+                "ax_chars_nulled": 5341
+              }
+            }
+          }
+        },
+        "instrumento": {
+          "url": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+          "ablation": {
+            "m1_fields_disappeared": 1,
+            "g2_set_changed": true,
+            "per_field": {
+              "fonte": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 3,
+                "disappears": false
+              },
+              "data_de_corte": {
+                "declared": 2,
+                "reachable_before": 2,
+                "reachable_after": 0,
+                "disappears": true
+              },
+              "unidade": {
+                "declared": 2,
+                "reachable_before": 2,
+                "reachable_after": 2,
+                "disappears": false
+              },
+              "responsavel": {
+                "declared": 1,
+                "reachable_before": 1,
+                "reachable_after": 1,
+                "disappears": false
+              },
+              "versao": {
+                "declared": 3,
+                "reachable_before": 3,
+                "reachable_after": 1,
+                "disappears": false
+              }
+            },
+            "ax_chars_before": 6369,
+            "ax_chars_after": 5204
+          },
+          "viewports": {
+            "390x844": {
+              "proximity": {
+                "worst_claim_folds": 0.21528806279620852,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.18531546208530805
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.18531546208530805
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.21528806279620852
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.21528806279620852
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 58140,
+                "document_area_px": 1672320,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6415,
+                "ax_chars_nulled": 5291
+              }
+            },
+            "768x1024": {
+              "proximity": {
+                "worst_claim_folds": 0.1378021240234375,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.1329193115234375
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.11309814453125
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.1378021240234375
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.1378021240234375
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 79200,
+                "document_area_px": 2485248,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "fonte",
+                  "protocolo",
+                  "responsavel",
+                  "unidade"
+                ],
+                "slots_in_first_fold_count": 6,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6376,
+                "ax_chars_nulled": 5259
+              }
+            },
+            "1366x768": {
+              "proximity": {
+                "worst_claim_folds": 0.15730794270833334,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.15079752604166666
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.15079752604166666
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.15730794270833334
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.15730794270833334
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4304266,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6369,
+                "ax_chars_nulled": 5252
+              }
+            },
+            "1363x936": {
+              "proximity": {
+                "worst_claim_folds": 0.12907318376068377,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.12373130341880342
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.12373130341880342
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.12907318376068377
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.12907318376068377
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4293450,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6369,
+                "ax_chars_nulled": 5252
+              }
+            },
+            "1440x1000": {
+              "proximity": {
+                "worst_claim_folds": 0.1208125,
+                "per_claim": [
+                  {
+                    "claim": "c1",
+                    "folds": 0.1158125
+                  },
+                  {
+                    "claim": "c2",
+                    "folds": 0.1158125
+                  },
+                  {
+                    "claim": "c3",
+                    "folds": 0.1208125
+                  },
+                  {
+                    "claim": "c4",
+                    "folds": 0.1208125
+                  }
+                ],
+                "price_to_capture_folds": null,
+                "conversion_area_px": 121440,
+                "document_area_px": 4554720,
+                "horizontal_overflow_px": 0
+              },
+              "domain_slots": {
+                "slots_in_first_fold": [
+                  "artigo",
+                  "data_de_corte",
+                  "protocolo",
+                  "responsavel"
+                ],
+                "slots_in_first_fold_count": 4,
+                "renders_intact_without_domain_fields": false,
+                "ax_chars_full": 6369,
+                "ax_chars_nulled": 5252
+              }
+            }
+          }
+        },
+        "__hover": {
+          "worst_top_delta_px": 0,
+          "offenders": []
+        },
+        "__font": {
+          "sans": {
+            "family": "system-ui, -apple-system, \"Segoe UI\", Roboto, Arial, sans-serif",
+            "ones": 30.5390625,
+            "zeros": 30.5390625,
+            "tabular": true,
+            "zero_vs_O": 0.8083126550868487
+          },
+          "mono": {
+            "family": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+            "ones": 28.8984375,
+            "zeros": 28.8984375,
+            "tabular": true,
+            "zero_vs_O": 1
+          },
+          "serif": {
+            "family": "ui-serif, \"Iowan Old Style\", \"Palatino Linotype\", Palatino, Georgia, serif",
+            "ones": 30.5390625,
+            "zeros": 30.5390625,
+            "tabular": true,
+            "zero_vs_O": 0.7760571768910065
+          },
+          "condensed": {
+            "family": "\"Arial Narrow\", \"Liberation Sans Narrow\", sans-serif",
+            "ones": 30.5390625,
+            "zeros": 30.5390625,
+            "tabular": true,
+            "zero_vs_O": 0.8083126550868487
+          },
+          "condensed_resolved": false,
+          "condensed_ratio": 1,
+          "font_face_rules_in_document": 0
+        },
+        "__cost": {
+          "font_files": 0,
+          "font_face_rules": 0,
+          "font_total_gzip_kb": 0,
+          "css_gzip_kb": 3.3
+        }
+      }
+    }
+  }
+}

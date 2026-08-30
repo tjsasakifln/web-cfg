@@ -1,0 +1,108 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T09:08:23.655Z",
+  "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
+  "tree_dirty": true,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "docs/design-audit/evidence/capture/a-trilho-de-memoria/comercial",
+  "state": {
+    "id": "fullpage_js-off_motion-reduced",
+    "fullpage": true,
+    "javascript": "off",
+    "motion": "reduced"
+  },
+  "routes": [
+    "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/"
+  ],
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1366x768",
+    "1363x936",
+    "1440x1000"
+  ],
+  "files": [
+    "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png"
+  ],
+  "captures": [
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 360760,
+      "sha256": "f62d4da58dd2bbdecee838aad53e76408fe38cd284c90dbae68cc45deb66af45"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 378089,
+      "sha256": "91b21e239241a526eea340a6908342c9e7904a29f6ba409dc900b01fa73bbd1f"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 414413,
+      "sha256": "28c40dcde248e05c50b4c063dc161c275bd4331bfdfb714f75cd67b67f2ae181"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1363x936",
+      "width": 1363,
+      "height": 936,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 413012,
+      "sha256": "f629b7265cb4b3be6a0864b8f8df85ca2c927ec144f758b17f1fec89b4f722fc"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 417046,
+      "sha256": "9362964f059b074e4ce76ef2b76cfa2090118e9e4d2476f6960e49f5b21767b8"
+    }
+  ]
+}

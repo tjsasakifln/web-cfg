@@ -1,0 +1,108 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T09:09:09.556Z",
+  "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
+  "tree_dirty": true,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "docs/design-audit/evidence/capture/b-estado-de-revisao/specimen",
+  "state": {
+    "id": "fullpage_js-off_motion-reduced",
+    "fullpage": true,
+    "javascript": "off",
+    "motion": "reduced"
+  },
+  "routes": [
+    "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/"
+  ],
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1366x768",
+    "1363x936",
+    "1440x1000"
+  ],
+  "files": [
+    "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png"
+  ],
+  "captures": [
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 370901,
+      "sha256": "f5e6f566f13da7c7406cf944ae3e13735d705c91ce0cb164db80add22cf56623"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 379625,
+      "sha256": "153108829293cfc19f08f029b72f3eb82403ad837132270c5fa9ad058f131f64"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 461097,
+      "sha256": "3eb58e1c74593b6966c2a2f7ea5403afeaa8f0e061d3cbfe5016247b2e637293"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1363x936",
+      "width": 1363,
+      "height": 936,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 451379,
+      "sha256": "e79b56de5c2cc1faa8361b28d2998aeead3a7a771f5149d83fd0a4ba398618f5"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 468340,
+      "sha256": "c73f69defb9e97f8cac4a6ae43ee6e4e588e5a5ac70841f38ecd052200358743"
+    }
+  ]
+}

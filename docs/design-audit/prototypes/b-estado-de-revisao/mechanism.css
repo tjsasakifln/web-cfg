@@ -1,0 +1,48 @@
+/* Mecanismo B — estado de revisão. Um único movimento memorável.
+ * Proibido por projeto: caixa de quatro lados, texto rotacionado, bloco de
+ * canto e grade de células de legenda de prancha. O estado é linha de status
+ * e fio de borda inicial, e diz o estado em palavra antes de dizer em cor.
+ */
+.estado,.estado-pagina{
+  display:flex;gap:var(--space-3);align-items:baseline;
+  margin:0 0 var(--space-4);
+  padding:var(--space-3) 0 var(--space-3) var(--space-4);
+  border-inline-start:4px solid var(--line);
+  font-size:var(--text-small);
+  line-height:var(--lh-micro);
+}
+.estado-pagina{margin:var(--space-5) 0 0;font-size:var(--text-body-mobile)}
+.estado__glifo{font-family:var(--mono);font-weight:700;min-width:1ch}
+.estado--valida{border-inline-start-color:var(--green-700);color:var(--muted)}
+.estado--vencida{border-inline-start-color:var(--caution-700);color:var(--caution-700);font-weight:700}
+.estado--sem-data{border-inline-start-color:var(--ink);color:var(--ink);font-weight:700}
+.estado--degradada{border-inline-start-color:var(--caution-700);color:var(--caution-700);font-weight:700}
+
+/* Renderização degradada: o valor deixa de ter peso de afirmação corrente e
+ * passa a ser apresentado como valor fora da validade, em palavra. */
+.claim[data-revision-state="vencida"] .claim__numero,
+.claim[data-revision-state="sem-data"] .claim__numero{
+  color:var(--muted);
+  font-weight:400;
+}
+.claim[data-revision-state="vencida"] .claim__numero::after{
+  content:" fora da validade";
+  font-family:system-ui,sans-serif;
+  font-size:var(--text-micro);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.claim[data-revision-state="sem-data"] .claim__numero::after{
+  content:" sem data de corte";
+  font-family:system-ui,sans-serif;
+  font-size:var(--text-micro);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.claim[data-revision-state="vencida"],
+.claim[data-revision-state="sem-data"]{
+  padding-inline-start:var(--space-4);
+  border-inline-start:1px solid var(--line);
+}
+.claim__fonte--ausente{color:var(--caution-700);font-weight:700}
+.claim__fonte--ausente::before{content:"× ";}

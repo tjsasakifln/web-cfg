@@ -1,0 +1,272 @@
+{
+  "schema": "confenge.design-direction-palette/1.0",
+  "issue": 494,
+  "reuse": {
+    "--ink": "#071a31",
+    "--text": "#26374a",
+    "--muted": "#5d6a7a",
+    "--green-700": "#2d6f2d",
+    "--navy-950": "#031020",
+    "--navy-900": "#061a33",
+    "--navy-800": "#0a294b",
+    "--line": "#dce3e8",
+    "--soft": "#f3f4f5",
+    "--white": "#ffffff"
+  },
+  "addition": {
+    "token": "--caution-700",
+    "hex": "#8A5F00",
+    "contrast_on_white": 5.65,
+    "aa_normal_text": true,
+    "rejected_v1": {
+      "hex": "#9A6B00",
+      "contrast_on_white": 4.69,
+      "aa_normal_text": true
+    }
+  },
+  "role_contrast_on_white": {
+    "decisao": 6.13,
+    "ressalva": 5.65,
+    "metadado_neutro": 5.51,
+    "estrutura": 17.48
+  },
+  "role_pairs": [
+    {
+      "pair": "decisao x ressalva",
+      "hex": [
+        "#2d6f2d",
+        "#8A5F00"
+      ],
+      "grayscale_hex": [
+        "#626262",
+        "#676767"
+      ],
+      "luminance_ratio": 1.09,
+      "separated_by_luminance": false,
+      "non_chromatic_carriers": {
+        "decisao": [
+          "a palavra “valida”",
+          "glifo ·",
+          "posicao: linha de status no inicio do bloco"
+        ],
+        "ressalva": [
+          "a palavra “vencida” ou “sem …”",
+          "glifo × ou !",
+          "peso 700",
+          "fio de borda inicial de 4px"
+        ]
+      }
+    },
+    {
+      "pair": "decisao x metadado_neutro",
+      "hex": [
+        "#2d6f2d",
+        "#5d6a7a"
+      ],
+      "grayscale_hex": [
+        "#626262",
+        "#686868"
+      ],
+      "luminance_ratio": 1.11,
+      "separated_by_luminance": false,
+      "non_chromatic_carriers": {
+        "decisao": [
+          "a palavra “valida”",
+          "glifo ·",
+          "posicao: linha de status no inicio do bloco"
+        ],
+        "metadado_neutro": [
+          "rotulo em caixa alta na coluna fixa do trilho",
+          "corpo >=12,8px"
+        ]
+      }
+    },
+    {
+      "pair": "decisao x estrutura",
+      "hex": [
+        "#2d6f2d",
+        "#071a31"
+      ],
+      "grayscale_hex": [
+        "#626262",
+        "#202020"
+      ],
+      "luminance_ratio": 2.85,
+      "separated_by_luminance": false,
+      "non_chromatic_carriers": {
+        "decisao": [
+          "a palavra “valida”",
+          "glifo ·",
+          "posicao: linha de status no inicio do bloco"
+        ],
+        "estrutura": [
+          "peso 700",
+          "posicao: coluna do numero"
+        ]
+      }
+    },
+    {
+      "pair": "ressalva x metadado_neutro",
+      "hex": [
+        "#8A5F00",
+        "#5d6a7a"
+      ],
+      "grayscale_hex": [
+        "#676767",
+        "#686868"
+      ],
+      "luminance_ratio": 1.02,
+      "separated_by_luminance": false,
+      "non_chromatic_carriers": {
+        "ressalva": [
+          "a palavra “vencida” ou “sem …”",
+          "glifo × ou !",
+          "peso 700",
+          "fio de borda inicial de 4px"
+        ],
+        "metadado_neutro": [
+          "rotulo em caixa alta na coluna fixa do trilho",
+          "corpo >=12,8px"
+        ]
+      }
+    },
+    {
+      "pair": "ressalva x estrutura",
+      "hex": [
+        "#8A5F00",
+        "#071a31"
+      ],
+      "grayscale_hex": [
+        "#676767",
+        "#202020"
+      ],
+      "luminance_ratio": 3.1,
+      "separated_by_luminance": true,
+      "non_chromatic_carriers": {
+        "ressalva": [
+          "a palavra “vencida” ou “sem …”",
+          "glifo × ou !",
+          "peso 700",
+          "fio de borda inicial de 4px"
+        ],
+        "estrutura": [
+          "peso 700",
+          "posicao: coluna do numero"
+        ]
+      }
+    },
+    {
+      "pair": "metadado_neutro x estrutura",
+      "hex": [
+        "#5d6a7a",
+        "#071a31"
+      ],
+      "grayscale_hex": [
+        "#686868",
+        "#202020"
+      ],
+      "luminance_ratio": 3.17,
+      "separated_by_luminance": true,
+      "non_chromatic_carriers": {
+        "metadado_neutro": [
+          "rotulo em caixa alta na coluna fixa do trilho",
+          "corpo >=12,8px"
+        ],
+        "estrutura": [
+          "peso 700",
+          "posicao: coluna do numero"
+        ]
+      }
+    }
+  ],
+  "g3_pass": true,
+  "g3_failures": [],
+  "lime": {
+    "hex": "#ced62a",
+    "contrast_on_white": 1.58,
+    "contrast_on_navy_950": 12.08,
+    "call_sites": [
+      {
+        "line": 3,
+        "selector": "",
+        "text": ".desktop-nav a{position:relative;padding:12px 9px;white-space:nowrap;color:#3e4e61;font-size:.875rem;font-weight:700;border-radius:8px;transition:color .2s ease"
+      },
+      {
+        "line": 9,
+        "selector": "",
+        "text": "}.breadcrumbs{padding-top:18px;padding-bottom:2px}.breadcrumbs ol{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none;colo"
+      },
+      {
+        "line": 11,
+        "selector": "",
+        "text": "}.hero-micro{max-width:560px;margin:-18px 0 28px;color:#4a5b6e;font-size:.875rem;line-height:1.55}.hero-proof{grid-template-columns:repeat(2,minmax(0,1fr));gap:"
+      },
+      {
+        "line": 14,
+        "selector": "",
+        "text": ".section-lead{max-width:58ch;margin:14px 0 0;color:var(--muted);font-size:1rem;line-height:1.7}.eyebrow-dot{display:inline-block;width:7px;height:7px;margin-rig"
+      },
+      {
+        "line": 664,
+        "selector": ".hero-evidence .evidence-kicker",
+        "text": "color:var(--lime);font-weight:750;"
+      },
+      {
+        "line": 675,
+        "selector": ".hero-evidence .evidence-title",
+        "text": ".evidence-tab.is-active,.evidence-tab[aria-selected=\"true\"]{color:#071a31;background:var(--lime);border-color:var(--lime)}"
+      },
+      {
+        "line": 679,
+        "selector": ".hero-evidence .evidence-title",
+        "text": ".evidence-tier{margin:0 0 .18rem;color:var(--lime);font-size:.8rem;font-weight:750;letter-spacing:.05em;text-transform:uppercase}"
+      },
+      {
+        "line": 686,
+        "selector": ".hero-evidence .evidence-title",
+        "text": ".evidence-exposure{margin:0 0 1rem;padding:.85rem .9rem;background:rgba(206,214,42,.075);border-left:3px solid var(--lime)}"
+      },
+      {
+        "line": 694,
+        "selector": ".hero-evidence .evidence-title",
+        "text": ".evidence-cta{min-height:44px;padding:0 .8rem;color:#071a31;background:var(--lime);border-color:var(--lime);font-size:.875rem;box-shadow:none}"
+      },
+      {
+        "line": 702,
+        "selector": ".hero-evidence .evidence-title",
+        "text": ".evidence-method li>span{padding-top:.05rem;color:var(--lime);font-family:var(--mono);font-size:.8rem;font-weight:700}"
+      },
+      {
+        "line": 894,
+        "selector": ".pillar-evidence",
+        "text": ".pillar-evidence .pillar-evidence-count strong{color:var(--lime);font-size:1.75rem;margin-right:.35rem}"
+      },
+      {
+        "line": 1205,
+        "selector": ".pillar-docs li:not(:has(.icon))",
+        "text": ".operating-marker{position:relative;z-index:1;display:grid;place-items:center;width:44px;height:44px;color:var(--lime);background:#0b2949;border:1px solid rgba("
+      },
+      {
+        "line": 1249,
+        "selector": ".content-feature",
+        "text": ".content-feature .type-mono{display:block;color:var(--lime);font-size:.875rem}"
+      },
+      {
+        "line": 1287,
+        "selector": ".compare-split",
+        "text": ".compare-human{color:#fff;background:var(--navy-900);border-top-color:var(--lime)}"
+      },
+      {
+        "line": 1289,
+        "selector": ".compare-split",
+        "text": ".compare-human>.type-mono{color:var(--lime)}"
+      },
+      {
+        "line": 1311,
+        "selector": ".decision-map",
+        "text": ".dm-node.is-core>.type-mono{color:var(--lime)}"
+      }
+    ],
+    "call_site_count": 16
+  }
+}
