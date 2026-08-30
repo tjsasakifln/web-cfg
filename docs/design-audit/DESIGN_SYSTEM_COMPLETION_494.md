@@ -2,7 +2,7 @@
 
 **Issue:** #494 · **Parent:** #493 · **Data:** 2026-08-30
 **Desfecho da comparação:** `KEEP_CURRENT` — registrado em [DECISION_RULE_494_PRE_REGISTERED §7](DECISION_RULE_494_PRE_REGISTERED.md#7-resultado--apurado-em-2026-08-30)
-**Baseline:** `6941d6698d771fe582be6601b3ee642cc01aca3e`
+**Baseline:** `b1691840f29e599146161d8ee43cfb95d3570ec3`
 **Escopo:** especificação. **Zero byte alterado em rota pública, em token, em CSS servido ou em runtime.**
 
 ---
@@ -53,15 +53,15 @@ Não decidir é depreciar em silêncio, então a decisão é explícita.
 
 **Regra:** `--lime` é permitido **exclusivamente** sobre superfície de autoridade escura (`--navy-950/900/800` e os `#071a31`/`#0b2949` já servidos), onde é o **único valor da paleta que funciona como acento** — `--green-700` mede 3,12:1 sobre `--navy-950` e 2,39:1 sobre `--navy-800`, ou seja, reprova como texto nas duas. Sobre branco, `--soft` ou o gradiente do hero, `--lime` é **proibido**, em qualquer papel, inclusive decorativo.
 
-**Superfície de migração — 16 linhas de `styles.css`, 25 ocorrências, enumeradas por `npm run design:palette`:**
+**Superfície de migração — 15 linhas de `styles.css`, 23 ocorrências, enumeradas por `npm run design:palette` sobre o arquivo servido, nunca de memória:**
 
 | Situação | Ocorrências | Ação |
 |---|---|---|
-| Sobre fundo navy/ink (`.article-callout > .icon`, `.pillar-stat strong`, `.lead-inline-copy span`, `.final-cta-section .eyebrow`, `.decision-spine li.is-core .type-mono`, `.offer-dominant .offer-label`, `.offer-dominant-link .icon`, `.contact-channels .icon` ×2, `.model-section .eyebrow`, `.hero-evidence .evidence-kicker`, `.evidence-tab.is-active` fundo+borda, `.evidence-tier`, `.evidence-cta` fundo+borda, `.evidence-method li > span`, `.pillar-evidence .pillar-evidence-count strong`, `.pillar-docs li:not(:has(.icon))`, `.content-feature .type-mono`, `.compare-human` borda + `.compare-human > .type-mono`, `.dm-node.is-core > .type-mono`) | 23 | **mantém** — todas ≥9,27:1 |
+| Sobre fundo navy/ink (`.article-callout > .icon`, `.pillar-stat strong`, `.lead-inline-copy span`, `.final-cta-section .eyebrow`, `.decision-spine li.is-core .type-mono`, `.offer-dominant .offer-label`, `.offer-dominant-link .icon`, `.contact-channels .icon` ×2, `.model-section .eyebrow`, `.evidence-tab.is-active` fundo+borda, `.evidence-tier`, `.evidence-cta` fundo+borda, `.evidence-method li > span`, `.pillar-evidence .pillar-evidence-count strong`, `.pillar-docs li:not(:has(.icon))`, `.content-feature .type-mono`, `.compare-human` borda + `.compare-human > .type-mono`, `.dm-node.is-core > .type-mono`) | 21 | **mantém** — todas ≥9,27:1 |
 | `.hero-eyebrow > span` — ponto de 7 px sobre o gradiente claro do hero | 1 | **remove** — 1,48:1, não carrega significado, é ornamento |
 | `.evidence-exposure` — fio de 3 px sobre `rgba(206,214,42,.075)` | 1 | **substitui** por `--caution-700` ou `--ink`, conforme o papel; hoje é o único diferenciador do bloco a ~1,5:1 |
 
-Duas ocorrências, não dezesseis. O custo da decisão é pequeno e agora é conhecido, que era a questão.
+Duas ocorrências, não quinze. O custo da decisão é pequeno e agora é conhecido, que era a questão.
 
 ### 1.4 Regra dura: cor nunca é o único portador
 
@@ -359,7 +359,7 @@ A Definition of Done pede a matriz. Ela é do **sistema existente**, apurada nes
 | `concept: "engenharia editorial premium"` | cravado em `test_design_gates.py:52` | **KEEP** | alterar exige ADR antes |
 | Paleta atual (`--ink`, `--muted`, `--green-700`, navies, `--line`, `--white`, `--soft`) | shippa e mede | **KEEP** | — |
 | `--caution-700:#8A5F00` | não existe | **ADD** (única adição, 5,65:1) | entra quando um papel de ressalva for implementado; hoje só vive no protótipo |
-| `--lime` sobre navy (23 ocorrências) | 9,27–12,08:1 | **KEEP** | — |
+| `--lime` sobre navy (21 ocorrências) | 9,27–12,08:1 | **KEEP** | — |
 | `--lime` em `.hero-eyebrow > span` | 1,48:1, ornamento | **REMOVE** | #493 ou issue de a11y |
 | `--lime` em `.evidence-exposure` | ~1,5:1, único diferenciador | **REPLACE** por `--caution-700` ou `--ink` | idem |
 | `--focus-ring` | corrigido por #513, 13,48–19,11:1 | **KEEP** | nenhuma candidata pode regredi-lo |

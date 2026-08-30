@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0.0",
-  "captured_at": "2026-08-30T10:37:29.575Z",
-  "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+  "captured_at": "2026-08-30T11:00:57.225Z",
+  "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
   "tree_dirty": false,
   "base_url": "http://127.0.0.1:8792",
   "output_dir": "../../../../../../.cache/confenge/design-direction-494/baseline",
@@ -248,8 +248,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 1277477,
-      "sha256": "029642db16f5b5870f32b47410f359a77203183fb12faa6ba93c1235eeba2401"
+      "bytes": 1272005,
+      "sha256": "70a2aad239df08087d888794bafd3a369a3ad370f161233f39034fd95f362a6e"
     },
     {
       "file": "conteudosdocumentos-reequilibrio-obra-pu-1363x936--fullpage_js-off_motion-reduced.png",

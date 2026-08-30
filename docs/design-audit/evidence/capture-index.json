@@ -2,7 +2,7 @@
   "schema": "confenge.design-direction-capture-index/1.0",
   "issue": 494,
   "indexed_at": "2026-08-30",
-  "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+  "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
   "protocol": {
     "viewports": [
       "390x844",
@@ -22,8 +22,8 @@
     {
       "group": "a-trilho-de-memoria/comercial",
       "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/comercial/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T10:37:36.193Z",
-      "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+      "captured_at": "2026-08-30T11:01:03.891Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
       "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
@@ -87,8 +87,8 @@
     {
       "group": "a-trilho-de-memoria/instrumento",
       "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/instrumento/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T10:37:49.273Z",
-      "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+      "captured_at": "2026-08-30T11:01:16.836Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
       "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
@@ -152,8 +152,8 @@
     {
       "group": "a-trilho-de-memoria/leitura",
       "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/leitura/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T10:37:42.691Z",
-      "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+      "captured_at": "2026-08-30T11:01:10.390Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
       "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
@@ -217,8 +217,8 @@
     {
       "group": "a-trilho-de-memoria/specimen",
       "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/specimen/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T10:37:56.037Z",
-      "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+      "captured_at": "2026-08-30T11:01:23.514Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
       "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
@@ -282,8 +282,8 @@
     {
       "group": "b-estado-de-revisao/comercial",
       "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/comercial/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T10:38:02.736Z",
-      "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+      "captured_at": "2026-08-30T11:01:30.083Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
       "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
@@ -347,8 +347,8 @@
     {
       "group": "b-estado-de-revisao/instrumento",
       "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/instrumento/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T10:38:15.799Z",
-      "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+      "captured_at": "2026-08-30T11:01:43.100Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
       "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
@@ -412,8 +412,8 @@
     {
       "group": "b-estado-de-revisao/leitura",
       "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/leitura/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T10:38:09.342Z",
-      "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+      "captured_at": "2026-08-30T11:01:36.613Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
       "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
@@ -477,8 +477,8 @@
     {
       "group": "b-estado-de-revisao/specimen",
       "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/specimen/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T10:38:22.511Z",
-      "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+      "captured_at": "2026-08-30T11:01:49.771Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
       "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
@@ -542,8 +542,8 @@
     {
       "group": "baseline",
       "manifest": "docs/design-audit/evidence/capture/baseline/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T10:37:29.575Z",
-      "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+      "captured_at": "2026-08-30T11:00:57.225Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
       "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
@@ -625,8 +625,8 @@
           "route": "/conteudos/documentos-reequilibrio-obra-publica/",
           "viewport": "1366x768",
           "state": "fullpage_js-off_motion-reduced",
-          "bytes": 1277477,
-          "sha256": "029642db16f5b5870f32b47410f359a77203183fb12faa6ba93c1235eeba2401"
+          "bytes": 1272005,
+          "sha256": "70a2aad239df08087d888794bafd3a369a3ad370f161233f39034fd95f362a6e"
         },
         {
           "file": "conteudosdocumentos-reequilibrio-obra-pu-1363x936--fullpage_js-off_motion-reduced.png",

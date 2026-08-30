@@ -2,7 +2,7 @@
   "schema": "confenge.design-direction-probe/1.0",
   "issue": 494,
   "measured_at": "2026-08-30",
-  "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
+  "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
   "tree_dirty": false,
   "viewports": [
     "390x844",
