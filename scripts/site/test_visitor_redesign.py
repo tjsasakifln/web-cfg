@@ -19,20 +19,14 @@ from scripts.site.inbound_first_remediate import (  # noqa: E402
     load_stage_classification,
     resolve_content_stage,
 )
+from scripts.site.public_ia import header_items  # noqa: E402
 from scripts.site.public_navigation import (  # noqa: E402
     FROZEN_NAV_HTML_PATHS,
     audit_public_navigation_tree,
 )
 
 ALLOWED = frozenset(ALLOWED_STAGES)
-EXPECTED_NAV = [
-    "Serviços",
-    "Problemas que resolvemos",
-    "Entregas",
-    "Conteúdos",
-    "Ferramentas",
-    "Especialista",
-]
+EXPECTED_NAV = [item["label"] for item in header_items()]
 LEGACY_NAV = [
     "Serviços",
     "Problemas que resolvemos",
@@ -721,8 +715,9 @@ def test_hub_problem_first_structure():
 def test_home_nav_and_hierarchy():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Analisar meu caso" in home
-    assert "Serviços" in home
-    assert "Problemas que resolvemos" in home
+    assert "Edital e proposta" in home
+    assert "Contrato sob pressão" in home
+    assert "Operação recorrente" in home
     assert "Conteúdos" in home
     assert "Ferramentas" in home
     assert "Conteúdos e ferramentas" not in home

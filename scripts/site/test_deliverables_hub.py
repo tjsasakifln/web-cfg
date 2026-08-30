@@ -11,6 +11,7 @@ from pathlib import Path
 import pytest
 
 from scripts.bofu_dominance.frozen_specs.constants import PILLARS
+from scripts.site.public_ia import header_items
 from scripts.site.public_navigation import (
     CANONICAL_NAV_ITEMS,
     audit_public_navigation_tree,
@@ -41,14 +42,7 @@ LADDER_ROUTES = [
     "/casos/modelo-painel-precos-obras-publicas/",
     "/casos/modelo-relatorio-executivo-consolidado/",
 ]
-EXPECTED_NAV = [
-    "Serviços",
-    "Problemas que resolvemos",
-    "Entregas",
-    "Conteúdos",
-    "Ferramentas",
-    "Especialista",
-]
+EXPECTED_NAV = [item["label"] for item in header_items()]
 LEGACY_NAV = [
     "Serviços",
     "Problemas que resolvemos",
@@ -570,7 +564,7 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
             anchor for anchor in navigation if 'aria-current="page"' in anchor
         ]
         assert len(current) == 1
-        assert 'href="/ferramentas/"' in current[0]
+        assert 'href="/conteudos/"' in current[0]
         if index == 1:
             assert "Analisar meu caso" in block
 

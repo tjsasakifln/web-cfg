@@ -26,7 +26,14 @@ OFFER_FIT_MATRIX = ROOT / "data/commercial/offer-fit-matrix.v1.json"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.pseo.html_shell import FOOTER, HEADER, SVG_SPRITE  # noqa: E402
+from scripts.pseo.html_shell import (  # noqa: E402
+    FOOTER,
+    HEADER,
+    SVG_SPRITE,
+    breadcrumb_jsonld,
+    breadcrumbs_html,
+)
+from scripts.site.public_ia import breadcrumb_trail  # noqa: E402
 from scripts.site.shell_nav import (  # noqa: E402
     hub,
     load_brand,
@@ -60,13 +67,8 @@ def _offer_fit_copy(route_key: str) -> dict[str, str]:
     return {"headline": str(headline), "body": str(body)}
 
 
-def _breadcrumbs(current: str) -> str:
-    return (
-        '<nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol>'
-        '<li><a href="/">Início</a><span aria-hidden="true">/</span></li>'
-        f'<li aria-current="page">{e(current)}</li>'
-        "</ol></nav>"
-    )
+def _breadcrumbs(url: str, current: str) -> str:
+    return breadcrumbs_html(breadcrumb_trail(url, current_label=current))
 
 
 def _jsonld(
@@ -83,22 +85,8 @@ def _jsonld(
             "publisher": {"@id": f"{SITE}/#organization"},
         },
         {
-            "@type": "BreadcrumbList",
+            **breadcrumb_jsonld(breadcrumb_trail(url, current_label=crumb)),
             "@id": f"{SITE}{url}#breadcrumb",
-            "itemListElement": [
-                {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Início",
-                    "item": f"{SITE}/",
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": crumb,
-                    "item": f"{SITE}{url}",
-                },
-            ],
         },
         {
             "@type": "ItemList",
@@ -159,7 +147,7 @@ def _document(
 {SVG_SPRITE}
 {HEADER}
 <main id="conteudo">
-{_breadcrumbs(crumb)}
+{_breadcrumbs(url, crumb)}
 {body}
 </main>
 {FOOTER}
