@@ -58,7 +58,7 @@
     {
       "id": "edital",
       "code": "B",
-      "label": "Edital ou proposta crítica",
+      "label": "Edital e proposta",
       "need": "leitura crítica do edital, habilitação, acervo, orçamento, cronograma, riscos e decisão de participar ou recusar",
       "complement": "A triagem deve respeitar o prazo real da licitação e a capacidade de execução da empresa.",
       "cta": "Solicitar triagem do edital",
@@ -218,8 +218,8 @@
       "a": "Atuação complementar. O jurídico trabalha melhor com cronologia, fatos, cálculos e tese técnica organizados."
     },
     {
-      "q": "A CONFENGE assegura vitória ou recuperação?",
-      "a": "Não. Melhoramos a qualidade da decisão e da posição técnica, sem prometer resultado que a empresa não controla."
+      "q": "Que resultado a CONFENGE assume?",
+      "a": "A CONFENGE assume a análise técnica, o cálculo e a recomendação fundamentada, com responsável nomeado e data. As decisões administrativas, contratuais e judiciais permanecem com as autoridades competentes; o trabalho é levar a essas mesas uma posição sustentada em documento."
     }
   ],
   "form": {
