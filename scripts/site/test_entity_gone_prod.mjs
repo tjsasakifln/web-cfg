@@ -26,7 +26,7 @@ const GONE_410 = [
 /** Legacy with semantic substitute — single hop 301, never to bare home unless fragment offer. */
 const REDIRECT_OK = [
   { from: "/blog", allow: ["/conteudos"] },
-  { from: "/servicos", allow: ["#como-atuamos", "/#como-atuamos"] },
+  { from: "/servicos", allow: ["/servicos-obras-publicas", "/servicos-obras-publicas/"] },
   { from: "/contato", allow: ["#contato", "/#contato"] },
   { from: "/privacy-policy", allow: ["/privacidade"] },
 ];

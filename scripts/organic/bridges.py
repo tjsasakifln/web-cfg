@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 from typing import Any
-from urllib.parse import quote, parse_qsl, urlencode
+
 
 from scripts.organic.service_map import map_content_to_service
 
@@ -22,34 +22,22 @@ def _esc(s: str) -> str:
 
 
 def with_origem(service: str, source_path: str) -> str:
-    """Append origem= attribution without breaking query, fragment, or encoding.
+    """Return a clean canonical href. Attribution is data-origem, not a query.
 
-    - percent-encodes the path value
-    - preserves existing query params
-    - keeps fragment after query
-    - does not invent absolute hosts
+    source_path is accepted so call sites keep a single (service, origin) pair;
+    emit `origem_data_attr(source_path)` next to the href.
     """
+    del source_path
+    from scripts.organic.canonical_hrefs import canonicalize_href
+
     raw = (service or "").strip() or "/#contato"
-    origin = quote((source_path or "").rstrip("/") or "/", safe="/")
+    clean, _attrs = canonicalize_href(raw)
+    return clean or "/#contato"
 
-    # Relative path with optional query/fragment
-    if raw.startswith("#"):
-        return f"?origem={origin}{raw}"
 
-    # Split fragment first
-    frag = ""
-    if "#" in raw:
-        raw, frag = raw.split("#", 1)
-        frag = "#" + frag
-
-    # Existing query
-    if "?" in raw:
-        base, qs = raw.split("?", 1)
-        pairs = [(k, v) for k, v in parse_qsl(qs, keep_blank_values=True) if k != "origem"]
-        pairs.append(("origem", (source_path or "").rstrip("/") or "/"))
-        return f"{base}?{urlencode(pairs)}{frag}"
-
-    return f"{raw}?origem={origin}{frag}"
+def origem_data_attr(source_path: str) -> str:
+    origin = (source_path or "").rstrip("/") or "/"
+    return f'data-origem="{_esc(origin)}"'
 
 
 def has_commercial_article_aside(html: str, service_path: str | None = None) -> bool:
@@ -109,6 +97,7 @@ def render_bridge_html(
     cta = fit.get("cta_label") or "Ver serviço relacionado"
     service = fit.get("service_path") or "/#contato"
     href = with_origem(service, source_path)
+    origem_attr = origem_data_attr(source_path)
 
     tools = fit.get("tools") or []
     tool_html = ""
@@ -123,7 +112,7 @@ def render_bridge_html(
         # Soft bridge: no second button; single text-link to service for attribution
         actions = (
             f'<p class="bridge-soft-link">'
-            f'<a class="text-link" data-cta-position="organic_bridge" href="{_esc(href)}">'
+            f'<a class="text-link" data-cta-position="organic_bridge" {origem_attr} href="{_esc(href)}">'
             f"{_esc(str(cta))}</a></p>"
         )
         soft_attr = ' data-bridge-mode="soft"'
@@ -131,7 +120,7 @@ def render_bridge_html(
         actions = (
             f'<div class="bridge-actions">'
             f'<a class="button button-secondary" data-cta-position="organic_bridge" '
-            f'href="{_esc(href)}">{_esc(str(cta))}</a>'
+            f'{origem_attr} href="{_esc(href)}">{_esc(str(cta))}</a>'
             f"{tool_html}"
             f"</div>"
         )

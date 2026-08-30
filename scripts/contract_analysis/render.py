@@ -852,7 +852,9 @@ def sync_family_crawler_rules(
     """Allow only INDEX slugs; keep the rest of the family Disallow / X-Robots noindex.
 
     Netlify last-match wins for X-Robots-Tag on overlapping paths, so the INDEX
-    override is written after the family noindex block.
+    override is written after the family noindex block. A noindex URL is never
+    Allowed: robots, X-Robots-Tag, sitemap and canonical are one decision.
+    Recrawl of a previously indexed noindex URL is a GSC manifesto action.
     """
     root = root or _root()
     slugs = _index_slugs(pairs)
@@ -860,10 +862,6 @@ def sync_family_crawler_rules(
     if robots_path.is_file():
         robots = robots_path.read_text(encoding="utf-8")
         crawlable_paths = {f"{FAMILY_PATH}{slug}/" for slug in slugs}
-        # The authorized canary was previously INDEX. Keep it crawlable while
-        # meta/header noindex is observed; robots blocking would strand it in
-        # search as a URL-only result.
-        crawlable_paths.add(AUTHORIZED_CANONICAL_PATH)
         allow_lines = "".join(f"Allow: {path}\n" for path in sorted(crawlable_paths))
         block = f"{ROBOTS_FAMILY_BEGIN}\n{allow_lines}Disallow: {FAMILY_PATH}\n"
         robots = _replace_or_append_block(

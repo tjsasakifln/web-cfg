@@ -95,6 +95,9 @@
   "robots_sitemaps": [
     "https://confenge.com.br/sitemap-index.xml"
   ],
+  "broken": 0,
+  "orphan_indexable": 0,
+  "noindex_in_sitemap": 0,
   "market_answer_indexable": false,
   "market_answer_in_graph": false
 }

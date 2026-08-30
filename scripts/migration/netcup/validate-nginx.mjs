@@ -160,9 +160,16 @@ http {
     assertProbe(`runtime_denied_${path}`, response.status === 404, `status=${response.status}`);
   }
 
-  const fragment = await client.request("/servicos?host_contract=1");
+  const fragment = await client.request("/contato?host_contract=1");
   assertProbe("fragment_redirect_301", fragment.status === 301, `status=${fragment.status}`);
-  assertProbe("fragment_query_before_hash", fragment.headers.location === "/?host_contract=1#como-atuamos", `location=${fragment.headers.location}`);
+  assertProbe("fragment_query_before_hash", fragment.headers.location === "/?host_contract=1#contato", `location=${fragment.headers.location}`);
+  const servicos = await client.request("/servicos");
+  assertProbe("servicos_hub_301", servicos.status === 301, `status=${servicos.status}`);
+  assertProbe(
+    "servicos_hub_target",
+    /servicos-obras-publicas/.test(servicos.headers.location || ""),
+    `location=${servicos.headers.location}`
+  );
 
   const pretty = await client.request("/diretoria-b2g");
   assertProbe("pretty_url", pretty.status === 301 && /\/diretoria-b2g\/$/.test(pretty.headers.location || ""), `status=${pretty.status} location=${pretty.headers.location}`);

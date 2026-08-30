@@ -592,7 +592,8 @@ def chassis_html(record: dict[str, Any]) -> str:
         f'<div class="breakout-limits" data-breakout-limitations="true">\n'
         f"<h2>O que esta página não pode concluir</h2>\n<ul>{limits}</ul>\n</div>\n"
         f'<p class="breakout-correction">Encontrou erro de fato? Use a '
-        f'<a href="{_esc(record.get("correction_route"))}">rota de correção</a>.</p>\n'
+        f'<a href="{_esc(record.get("correction_route"))}" '
+        f'data-asset-id="{_esc(record.get("asset_id"))}">rota de correção</a>.</p>\n'
         f'<p><a class="button button-primary" href="{_esc(cta.get("path"))}" '
         f'data-cta-id="{_esc(cta.get("id"))}" data-asset-id="{_esc(cta.get("asset_id"))}" '
         f'data-route-family="{_esc(cta.get("route_family"))}" data-source="{SOURCE}">'

@@ -161,10 +161,13 @@ def intranet_indexable_hits(root: Path | None = None) -> list[str]:
 
 def main() -> int:
     html_pages = iter_seo_html_pages(ROOT)
+    from scripts.organic.canonical_hrefs import scan_public_parameterized_hrefs
     from scripts.organic.sitemap_graph import (
         load_graph_locs,
         load_index_members,
         meta_robots_noindex,
+        missing_referenced_sitemap_issues,
+        published_route_inventory,
     )
 
     sm_urls = load_graph_locs(ROOT)
@@ -174,6 +177,8 @@ def main() -> int:
     for member in load_index_members(ROOT):
         if not (ROOT / member.filename).is_file():
             errors.append(f"sitemap-index member inaccessible: {member.filename}")
+    for issue in missing_referenced_sitemap_issues(ROOT):
+        errors.append(f"{issue.code}: {issue.detail or issue.url}")
 
     titles: dict[str, list[str]] = defaultdict(list)
     descs: dict[str, list[str]] = defaultdict(list)
@@ -701,6 +706,38 @@ def main() -> int:
 
     for hit in intranet_indexable_hits(ROOT):
         errors.append(f"intranet must not be indexable: {hit}")
+
+    inventory = published_route_inventory(ROOT)
+    if inventory["only_indexable"] or inventory["only_sitemap"]:
+        errors.append(
+            "published-route inventory drifted from sitemap: "
+            f"only_indexable={inventory['only_indexable']} "
+            f"only_sitemap={inventory['only_sitemap']}"
+        )
+    for page in inventory["pages"]:
+        path = page["path"]
+        if page.get("status_equivalent") != 200:
+            errors.append(f"inventory route is also a redirect source {path}")
+        if not page.get("title"):
+            errors.append(f"inventory missing title {path}")
+        if not page.get("canonical_self"):
+            errors.append(f"inventory canonical is not a clean self URL {path} -> {page.get('canonical')}")
+        if page.get("h1_count") != 1 or not page.get("h1_nonempty"):
+            errors.append(f"inventory invalid h1 {path}")
+        if not page.get("robots_allowed"):
+            errors.append(f"inventory indexable route blocked by robots {path}")
+        if not page.get("has_description"):
+            warnings.append(f"inventory no description {path}")
+        if page.get("schema_count", 0) < 1:
+            errors.append(f"inventory missing schema {path}")
+        elif not page.get("jsonld_parseable"):
+            errors.append(f"inventory jsonld unparseable {path}")
+        elif not page.get("jsonld_valid"):
+            errors.append(f"inventory non-schema JSON-LD {path}")
+
+    for hit in scan_public_parameterized_hrefs(ROOT):
+        if not hit.get("exception"):
+            errors.append(f"parameterized internal href {hit['path']} -> {hit['href']}")
 
     from scripts.site.commercial_surface_truth import evaluate_commercial_site
 

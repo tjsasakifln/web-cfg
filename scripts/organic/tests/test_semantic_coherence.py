@@ -240,7 +240,7 @@ def test_bridge_render_uses_registry_service_for_regressions():
         fit = map_content_to_service(path)
         html = render_bridge_html(fit, source_path=path, soft=True)
         assert service.rstrip("/") in html
-        assert "origem=" in html
+        assert "data-origem=" in html
         assert "popup" not in html.lower()
 
 

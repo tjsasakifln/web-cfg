@@ -151,6 +151,7 @@
       'route_family', 'cta_id', 'asset_id', 'correlation_id', 'referrer',
       'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
       'analysis_id', 'evidence_pack_version', 'asset_family', 'query_class',
+      'jornada', 'tema', 'snap',
     ];
     const ROUTE_FAMILY_BY_PREFIX = [
       ['/defesa-margem-contratos-publicos/', 'margin-defense'],
@@ -211,7 +212,7 @@
       try {
         const clean = {};
         Object.keys(obj || {}).forEach((k) => {
-          if (!PSEO_ATTR_KEYS.includes(k) && k !== 'tema' && k !== 'saved_at') return;
+          if (!PSEO_ATTR_KEYS.includes(k) && k !== 'saved_at') return;
           const v = sanitizeAttr(obj[k], k);
           if (v) clean[k] = v;
         });
@@ -237,6 +238,11 @@
     if (tema) {
       const t = sanitizeAttr(tema, 'tema');
       if (t) fromUrl.tema = t;
+    }
+    const jornada = searchParams.get('jornada') || hashParams.get('jornada');
+    if (jornada) {
+      const j = sanitizeAttr(jornada, 'jornada');
+      if (j) fromUrl.jornada = j;
     }
     const bodyDs = (document.body && document.body.dataset) || {};
     const pathFamily = routeFamilyFromPath(window.location.pathname || '/');
@@ -279,6 +285,54 @@
       try { fromUrl.referrer = sanitizeAttr(document.referrer || '', 'referrer'); } catch (_) { /* ignore */ }
     }
     writeStoredPseo({ ...storedPrior, ...fromUrl });
+    const DATASET_TO_ATTR = {
+      tema: 'tema',
+      origem: 'origem',
+      journey: 'jornada',
+      pseoPageId: 'pseo_page_id',
+      pageType: 'page_type',
+      // Public CTAs expose the internal archetype as data-segment-key. Keep the
+      // accepted lead contract key (`archetype`) instead of inventing a second
+      // field that lead-core would drop.
+      segmentKey: 'archetype',
+      segment: 'segment',
+      region: 'region',
+      agencyId: 'agency_id',
+      intent: 'intent',
+      originUrl: 'origin_url',
+      landingUrl: 'landing_url',
+      routeFamily: 'route_family',
+      ctaId: 'cta_id',
+      assetId: 'asset_id',
+      correlationId: 'correlation_id',
+      utmSource: 'utm_source',
+      utmMedium: 'utm_medium',
+      utmCampaign: 'utm_campaign',
+      utmContent: 'utm_content',
+      utmTerm: 'utm_term',
+      analysisId: 'analysis_id',
+      evidencePackVersion: 'evidence_pack_version',
+      assetFamily: 'asset_family',
+      queryClass: 'query_class',
+      ctaPosition: 'cta_position',
+      snap: 'snap',
+    };
+    document.addEventListener('click', (event) => {
+      const a = event.target && event.target.closest && event.target.closest('a[href]');
+      if (!a || !a.dataset) return;
+      const next = { ...readStoredPseo() };
+      let wrote = false;
+      Object.keys(DATASET_TO_ATTR).forEach((camel) => {
+        const raw = a.dataset[camel];
+        if (!raw) return;
+        const key = DATASET_TO_ATTR[camel];
+        const s = sanitizeAttr(raw, key);
+        if (!s) return;
+        next[key] = s;
+        wrote = true;
+      });
+      if (wrote) writeStoredPseo(next);
+    }, true);
     window.confengeAttribution = {
       ALLOWLIST: PSEO_ATTR_KEYS.slice(),
       sanitize: sanitizeAttr,
@@ -364,7 +418,8 @@
         const val = fromUrl[name] || storedPseo[name];
         if (val) ensureHidden(name, val);
       });
-      const journeyParam = searchParams.get('jornada') || hashParams.get('jornada');
+      const journeyParam = searchParams.get('jornada') || hashParams.get('jornada')
+        || storedPseo.jornada || storedPseo.journey;
       if (journeyParam) applyJourneyToForm(journeyParam);
     }
     if (mensagem && (tema || storedPseo.tema) && !mensagem.value) {

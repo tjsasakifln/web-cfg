@@ -132,7 +132,8 @@ test("nginx output preserves fragments/query and emits only the explicit runtime
   const rendered = renderNginx(contract);
   const redirects = rendered["redirects.generated.conf"];
   const locations = rendered["locations.generated.conf"];
-  assert.match(redirects, /add_header Location "\/\$is_args\$args#como-atuamos" always;/);
+  assert.match(redirects, /add_header Location "\/\$is_args\$args#contato" always;/);
+  assert.match(redirects, /servicos-obras-publicas/);
   assert.match(redirects, /add_header Location "https:\/\/ops\.confenge\.com\.br\/\$is_args\$args" always;/);
   assert.match(redirects, /return 410;/);
   assert.match(redirects, /rewrite \^ "\/obrigado\.html" break;/);
