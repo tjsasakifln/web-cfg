@@ -242,7 +242,14 @@
   .deliverables-hero-copy h1{font-size:clamp(1.85rem,9vw,2.4rem);margin-bottom:12px}
   .deliverables-status{padding:14px 14px}
   .deliverables-status>strong{font-size:1.15rem;margin-bottom:8px}
-  .deliverables-vitrine,.capability-roll{padding:30px 0 36px}
+  /* A linha de prova da primeira dobra (#327) custa altura no mobile, e o teto
+     de 12.500px por documento da #468 e um limite real. Estes quatro ajustes
+     devolvem a altura no espaco entre blocos, sem tirar nenhum fato da pagina. */
+  .deliverables-lead{margin-bottom:18px}
+  .deliverables-hero-copy .offer-proof-line{margin-top:10px;margin-bottom:14px}
+  .deliverables-status ul{gap:8px;margin-bottom:12px;padding:12px 0}
+  .deliverables-status>p{margin-bottom:6px}
+  .deliverables-vitrine,.capability-roll{padding:20px 0 24px}
   .deliverables-vitrine__intro h2,.capability-roll__intro h2{font-size:2rem}
   .offer-decision-nav{padding:14px}
   .offer-decision-nav ol{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
@@ -296,7 +303,7 @@
    A 1366x768 o h1 ocupava 444px sozinho e empurrava lead, prova e acao para
    fora da dobra: a acao dominante terminava em y=925. A regra so vale em tela
    baixa e larga, entao o desenho de monitor alto continua igual. */
-@media (min-width:901px) and (max-height:860px){
+@media (min-width:901px) and (max-height:960px){
   .deliverables-hero{padding:26px 0 26px}
   .deliverables-hero-grid{gap:clamp(32px,4vw,64px)}
   .deliverables-hero-copy h1{max-width:20ch;margin-bottom:16px;font-size:clamp(2.1rem,3vw,2.85rem)}

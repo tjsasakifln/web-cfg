@@ -1,10 +1,10 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-08-30T06:24:13.609Z",
+  "measured_at": "2026-08-30T08:43:43.263Z",
   "measured_on": "2026-08-30",
-  "commit_sha": "bf13e3fd596aa77c529262ee8fc7166e7a3b894f",
-  "tree_dirty": false,
+  "commit_sha": "a6051789adddfc03b7d774b3b7a774c032918366",
+  "tree_dirty": true,
   "viewports": [
     "1366x768",
     "390x844"
@@ -307,7 +307,7 @@
                 "width": 570,
                 "height": 43
               },
-              "text": "Você confere antes de decidir: os exemplos sintéticos publicados e as quatro ferramentas públicas abrem sem cadastro."
+              "text": "Abrem sem cadastro: exemplos sintéticos publicados e quatro ferramentas públicas."
             },
             "primary_action": {
               "selector": "a.button-primary",
@@ -390,20 +390,20 @@
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 589,
-                "bottom": 652,
+                "top": 575,
+                "bottom": 617,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 63
+                "height": 42
               },
-              "text": "Você confere antes de decidir: os exemplos sintéticos publicados e as quatro ferramentas públicas abrem sem cadastro."
+              "text": "Abrem sem cadastro: exemplos sintéticos publicados e quatro ferramentas públicas."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 652,
-                "bottom": 696,
+                "top": 631,
+                "bottom": 675,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -417,8 +417,8 @@
               "text": "Encontrar a entrega certa",
               "href": "#enquadrar",
               "box": {
-                "top": 652,
-                "bottom": 696,
+                "top": 631,
+                "bottom": 675,
                 "left": 20,
                 "right": 370,
                 "width": 350,
