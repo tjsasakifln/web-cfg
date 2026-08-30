@@ -66,6 +66,13 @@ function publicEvidence(value) {
     .replace(/\bUNKNOWN\b/g, "não informado");
 }
 
+function stylesheetHrefCount(html, href) {
+  return [...html.matchAll(/<link\b[^>]*>/gi)].filter((match) => {
+    const value = match[0].match(/\bhref\s*=\s*["']([^"']+)["']/i)?.[1];
+    return value === href;
+  }).length;
+}
+
 for (const number of EXPECTED_NUMBERS) {
   const it = byItem.get(number);
   if (!it) {
@@ -397,7 +404,7 @@ assert("capture_fields_exact", JSON.stringify(implementation.capture_fields) ===
 for (const item of ACTIVE_ITEMS.map((number) => byItem.get(number))) {
   const html = fs.readFileSync(path.join(root, item.page_file), "utf8");
   assert(`public_contract_block_${item.item}`, html.includes("GENERATED:CONTRACT-DEFENSE-PRODUCT:START"), item.page_file);
-  assert(`public_css_${item.item}`, html.includes('/styles-offers.css'), item.page_file);
+  assert(`public_css_${item.item}`, stylesheetHrefCount(html, "/styles-offers.css") === 1, item.page_file);
   for (const value of [
     item.public_name_pt_br,
     `R$ ${new Intl.NumberFormat("pt-BR").format(item.pilot_price_cents / 100)}`,
@@ -436,7 +443,7 @@ for (const item of items) {
   const expectedHref = ACTIVE_ITEMS.includes(item.item) ? item.route : "#captura-contrato";
   assert(`hub_action_${item.item}`, card.includes(`href="${expectedHref}"`), { item: item.item, expectedHref });
 }
-assert("hub_css_contract", hubHtml.includes('/styles-offers.css'));
+assert("hub_css_contract", stylesheetHrefCount(hubHtml, "/styles-offers.css") === 1);
 assert("hub_has_capture", requiredCapture.every((field) => hubHtml.includes(`name="${field}"`)), requiredCapture);
 for (const rule of [
   doc.common_rules.credit_rule.statement_pt_br,

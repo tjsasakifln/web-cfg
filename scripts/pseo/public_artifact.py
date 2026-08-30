@@ -17,6 +17,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -658,8 +659,33 @@ def audit_public_artifact(
                 }
             )
 
-    from scripts.site.fingerprint_css import html_uses_unversioned_styles, stylesheet_hrefs
+    from scripts.site.fingerprint_css import (
+        duplicate_stylesheet_hrefs,
+        html_uses_unversioned_styles,
+        is_fingerprinted_stylesheet_href,
+        stylesheet_hrefs,
+        validate_css_asset_manifest,
+    )
     from scripts.site.structured_identity import audit_html as audit_structured_identity_html
+
+    manifest_hrefs: set[str] = set()
+    manifest_valid = False
+    try:
+        css_manifest = validate_css_asset_manifest(dest)
+    except (FileNotFoundError, ValueError) as exc:
+        findings.append(
+            {
+                "code": "invalid_css_asset_manifest",
+                "path": ".well-known/css-assets.json",
+                "detail": str(exc),
+            }
+        )
+    else:
+        manifest_hrefs = {
+            info["href"]
+            for info in css_manifest["files"].values()
+        }
+        manifest_valid = True
 
     for html_path in sorted(dest.rglob("*.html")):
         rel = html_path.relative_to(dest).as_posix()
@@ -688,16 +714,68 @@ def audit_public_artifact(
                     "detail": f'every published page must contain exactly one "{FOOTER_SCRIPTURE_REFERENCE}" ARC marker inside a footer',
                 }
             )
-        if not stylesheet_hrefs(html):
+        try:
+            hrefs = stylesheet_hrefs(html)
+        except ValueError as exc:
+            findings.append(
+                {
+                    "code": "invalid_stylesheet_link",
+                    "path": rel,
+                    "detail": str(exc),
+                }
+            )
             continue
-        if html_uses_unversioned_styles(html):
+        if not hrefs:
+            continue
+        try:
+            has_unversioned_styles = html_uses_unversioned_styles(html)
+            duplicates = duplicate_stylesheet_hrefs(html)
+        except ValueError as exc:
+            findings.append(
+                {
+                    "code": "invalid_stylesheet_link",
+                    "path": rel,
+                    "detail": str(exc),
+                }
+            )
+            continue
+        if has_unversioned_styles:
             findings.append(
                 {
                     "code": "unversioned_stylesheet",
                     "path": rel,
-                    "detail": "HTML of this build still points at /styles.css (or tokens/tools); CDN may serve CSS N-1",
+                    "detail": "HTML of this build still points at a mutable local stylesheet; a browser may serve CSS N-1",
                 }
             )
+        if duplicates:
+            findings.append(
+                {
+                    "code": "duplicate_stylesheet",
+                    "path": rel,
+                    "detail": f"duplicate stylesheet hrefs: {duplicates}",
+                }
+            )
+        if manifest_valid:
+            for href in hrefs:
+                try:
+                    fingerprinted = is_fingerprinted_stylesheet_href(href)
+                except ValueError as exc:
+                    findings.append(
+                        {
+                            "code": "invalid_stylesheet_link",
+                            "path": rel,
+                            "detail": str(exc),
+                        }
+                    )
+                    continue
+                if fingerprinted and urlsplit(href.strip()).path not in manifest_hrefs:
+                    findings.append(
+                        {
+                            "code": "unmanifested_stylesheet",
+                            "path": rel,
+                            "detail": f"fingerprinted stylesheet is absent from css-assets.json: {href}",
+                        }
+                    )
 
     ok = len(findings) == 0
     return {

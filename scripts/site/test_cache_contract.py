@@ -3,8 +3,13 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 import sys
+import tempfile
 from pathlib import Path
+from typing import Any
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -13,8 +18,12 @@ if str(ROOT) not in sys.path:
 from scripts.site.cache_contract import (  # noqa: E402
     HASHED_DASH,
     evaluate_cache_contract,
-    is_hashed_asset_name,
     parse_header_rules,
+)
+from scripts.site.fingerprint_css import (  # noqa: E402
+    is_fingerprinted_stylesheet_href,
+    stylesheet_hrefs,
+    validate_css_asset_manifest,
 )
 
 HEADERS = ROOT / "_headers"
@@ -30,15 +39,183 @@ def hashed_source_assets() -> set[str]:
     }
 
 
-def hashed_published_assets() -> set[str]:
-    css_dir = SITE / "assets" / "css"
-    if not css_dir.is_dir():
+def hashed_published_assets(site: Path = SITE) -> set[str]:
+    if not site.is_dir():
         return set()
-    return {
-        "/" + path.relative_to(SITE).as_posix()
-        for path in css_dir.glob("*")
-        if path.is_file() and is_hashed_asset_name(path.name)
+    try:
+        payload = validate_css_asset_manifest(site)
+    except (FileNotFoundError, ValueError) as exc:
+        raise AssertionError(str(exc)) from exc
+    hrefs = {info["href"] for info in payload["files"].values()}
+    for html_path in sorted(site.rglob("*.html")):
+        try:
+            linked = stylesheet_hrefs(html_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            rel = html_path.relative_to(site).as_posix()
+            raise AssertionError(f"cannot audit stylesheet links in {rel}: {exc}") from exc
+        for href in linked:
+            try:
+                fingerprinted = is_fingerprinted_stylesheet_href(href)
+            except ValueError as exc:
+                rel = html_path.relative_to(site).as_posix()
+                raise AssertionError(f"invalid stylesheet link in {rel}: {exc}") from exc
+            if fingerprinted and urlsplit(href.strip()).path not in hrefs:
+                rel = html_path.relative_to(site).as_posix()
+                raise AssertionError(
+                    f"{rel}: fingerprinted stylesheet is absent from css-assets.json: {href}"
+                )
+    return hrefs
+
+
+def _write_valid_css_manifest_fixture(site: Path) -> tuple[dict[str, Any], str]:
+    data = b"body{}\n"
+    sha256 = hashlib.sha256(data).hexdigest()
+    digest = sha256[:12]
+    href = f"/assets/css/styles.{digest}.css"
+    (site / "assets" / "css").mkdir(parents=True, exist_ok=True)
+    (site / ".well-known").mkdir(parents=True, exist_ok=True)
+    (site / "styles.css").write_bytes(data)
+    (site / href.lstrip("/")).write_bytes(data)
+    (site / "index.html").write_text(
+        f'<link rel="stylesheet" href="{href}">\n',
+        encoding="utf-8",
+    )
+    payload: dict[str, Any] = {
+        "schema_version": "1.0.0",
+        "source": "scripts.site.fingerprint_css",
+        "files": {
+            "styles.css": {
+                "sha256": sha256,
+                "hash": digest,
+                "href": href,
+            }
+        },
     }
+    (site / ".well-known" / "css-assets.json").write_text(
+        json.dumps(payload), encoding="utf-8"
+    )
+    return payload, href
+
+
+def _write_css_manifest(site: Path, payload: object) -> None:
+    (site / ".well-known").mkdir(parents=True, exist_ok=True)
+    (site / ".well-known" / "css-assets.json").write_text(
+        json.dumps(payload), encoding="utf-8"
+    )
+
+
+def _expect_manifest_rejection(site: Path, detail: str) -> None:
+    try:
+        hashed_published_assets(site)
+    except AssertionError as exc:
+        assert detail in str(exc), (detail, str(exc))
+    else:
+        raise AssertionError(f"invalid CSS manifest was accepted; expected {detail!r}")
+
+
+def test_published_css_manifest_fails_closed_when_missing_empty_or_invalid() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        base = Path(td)
+
+        missing = base / "missing"
+        missing.mkdir()
+        _expect_manifest_rejection(missing, "manifest is missing")
+
+        invalid_json = base / "invalid-json"
+        (invalid_json / ".well-known").mkdir(parents=True)
+        (invalid_json / ".well-known" / "css-assets.json").write_text(
+            "{not json", encoding="utf-8"
+        )
+        _expect_manifest_rejection(invalid_json, "unreadable or invalid")
+
+        for index, payload in enumerate(({}, {"files": {}}, {"files": []})):
+            empty = base / f"empty-{index}"
+            _write_css_manifest(empty, payload)
+            _expect_manifest_rejection(empty, "at least one file")
+
+
+def test_published_css_manifest_rejects_missing_or_tampered_asset() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        missing = Path(td) / "missing-asset"
+        _payload, href = _write_valid_css_manifest_fixture(missing)
+        (missing / href.lstrip("/")).unlink()
+        _expect_manifest_rejection(missing, "asset is absent")
+
+        tampered = Path(td) / "tampered-asset"
+        _payload, href = _write_valid_css_manifest_fixture(tampered)
+        (tampered / href.lstrip("/")).write_text("body{color:red}\n", encoding="utf-8")
+        _expect_manifest_rejection(tampered, "sha256 disagrees with asset bytes")
+
+
+def test_published_css_manifest_rejects_hash_and_basename_divergence() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        short_hash = Path(td) / "short-hash"
+        payload, _href = _write_valid_css_manifest_fixture(short_hash)
+        payload["files"]["styles.css"]["hash"] = "abc"
+        _write_css_manifest(short_hash, payload)
+        _expect_manifest_rejection(short_hash, "short hash is invalid")
+
+        sha_divergence = Path(td) / "sha-divergence"
+        payload, _href = _write_valid_css_manifest_fixture(sha_divergence)
+        payload["files"]["styles.css"]["hash"] = "0" * 12
+        _write_css_manifest(sha_divergence, payload)
+        _expect_manifest_rejection(sha_divergence, "short hash disagrees with sha256")
+
+        basename_divergence = Path(td) / "basename-divergence"
+        payload, href = _write_valid_css_manifest_fixture(basename_divergence)
+        payload["files"]["styles.css"]["href"] = href.replace(
+            payload["files"]["styles.css"]["hash"], "0" * 12
+        )
+        _write_css_manifest(basename_divergence, payload)
+        _expect_manifest_rejection(
+            basename_divergence, "basename hash disagrees with sha256"
+        )
+
+
+def test_published_css_manifest_rejects_path_escape() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        source_escape = Path(td) / "source-escape"
+        payload, _href = _write_valid_css_manifest_fixture(source_escape)
+        payload["files"]["../styles.css"] = payload["files"].pop("styles.css")
+        _write_css_manifest(source_escape, payload)
+        _expect_manifest_rejection(source_escape, "confined relative path")
+
+        href_escape = Path(td) / "href-escape"
+        payload, href = _write_valid_css_manifest_fixture(href_escape)
+        payload["files"]["styles.css"]["href"] = href.replace(
+            "/assets/css/", "/assets/css/../"
+        )
+        _write_css_manifest(href_escape, payload)
+        _expect_manifest_rejection(href_escape, "does not preserve the source path")
+
+
+def test_hashed_stylesheet_link_must_belong_to_manifest() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        site = root / "_site"
+        _payload, _href = _write_valid_css_manifest_fixture(site)
+        rogue = "/assets/css/rogue.000000000000.css"
+        (site / "index.html").write_text(
+            f'<link rel="stylesheet" href="{rogue}">\n', encoding="utf-8"
+        )
+        _expect_manifest_rejection(site, "absent from css-assets.json")
+
+        from scripts.pseo.public_artifact import audit_public_artifact
+
+        report = audit_public_artifact(root)
+        assert any(
+            finding["code"] == "unmanifested_stylesheet"
+            and finding["path"] == "index.html"
+            for finding in report["findings"]
+        ), report
+
+        _write_css_manifest(site, {"files": {}})
+        report = audit_public_artifact(root)
+        assert any(
+            finding["code"] == "invalid_css_asset_manifest"
+            and finding["path"] == ".well-known/css-assets.json"
+            for finding in report["findings"]
+        ), report
 
 
 def _headers(body: str) -> str:
@@ -178,7 +355,7 @@ def evaluate_live() -> list[str]:
     return evaluate_cache_contract(
         headers_text=HEADERS.read_text(encoding="utf-8"),
         hashed_source_assets=hashed_source_assets(),
-        hashed_published_assets=hashed_published or None,
+        hashed_published_assets=hashed_published if SITE.is_dir() else None,
         published_headers_text=published.read_text(encoding="utf-8") if published.is_file() else None,
         downloadable_paths=DOWNLOADABLE,
     )

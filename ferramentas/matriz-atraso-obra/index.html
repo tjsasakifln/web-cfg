@@ -119,7 +119,7 @@
     // Shell only (no user text in attribute/HTML injection surface)
     el.innerHTML='<header><h3>Evento</h3><button type="button" class="button button-secondary tool-event-remove" data-rm>Remover</button></header>'+
       '<div class="tool-grid">'+
-      '<div class="tool-field" style="grid-column:1/-1"><label for="'+id+'-causa">Causa ou evento</label><input id="'+id+'-causa" data-f="causa" required/></div>'+
+      '<div class="tool-field tool-field--full"><label for="'+id+'-causa">Causa ou evento</label><input id="'+id+'-causa" data-f="causa" required/></div>'+
       '<div class="tool-field"><label for="'+id+'-di">Data inicial</label><input id="'+id+'-di" type="date" data-f="dataInicio"/></div>'+
       '<div class="tool-field"><label for="'+id+'-df">Data final</label><input id="'+id+'-df" type="date" data-f="dataFim"/></div>'+
       '<div class="tool-field"><label for="'+id+'-dur">Duração estimada (dias)</label><input id="'+id+'-dur" type="number" min="0" data-f="duracaoDias"/></div>'+
@@ -131,7 +131,7 @@
       '<div class="tool-field"><label for="'+id+'-atv">Atividade afetada</label><input id="'+id+'-atv" data-f="atividadeAfetada"/></div>'+
       '<div class="tool-field"><label for="'+id+'-crit">Impacto no caminho crítico</label><select id="'+id+'-crit" data-f="impactoCaminhoCritico"><option value="incerto">Incerto</option><option value="sim">Sim (alegado)</option><option value="nao">Não</option></select></div>'+
       '<div class="tool-field"><label for="'+id+'-conc">Concorrência com outro evento?</label><select id="'+id+'-conc" data-f="concorrencia"><option value="nao">Não / não avaliado</option><option value="sim">Sim, possível sobreposição</option></select></div>'+
-      '<div class="tool-field" style="grid-column:1/-1"><label for="'+id+'-obs">Observação</label><textarea id="'+id+'-obs" data-f="observacao" rows="2"></textarea></div>'+
+      '<div class="tool-field tool-field--full"><label for="'+id+'-obs">Observação</label><textarea id="'+id+'-obs" data-f="observacao" rows="2"></textarea></div>'+
       '</div>';
     // Assign user-controlled values via properties (never attribute string concat)
     el.querySelector('[data-f="causa"]').value = d.causa || "";

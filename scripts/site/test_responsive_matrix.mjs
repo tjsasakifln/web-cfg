@@ -179,6 +179,11 @@ async function renderedGeometry(page, route, width) {
     const normalWordBreaks = [];
     let wordCandidates = 0;
     const main = document.querySelector("main") || document.body;
+    const proseProbe = document.createElement("p");
+    proseProbe.textContent = "responsabilidades";
+    main.appendChild(proseProbe);
+    const proseOverflowWrap = getComputedStyle(proseProbe).overflowWrap;
+    proseProbe.remove();
     const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
     for (let node = walker.nextNode(); node && normalWordBreaks.length < 5; node = walker.nextNode()) {
       const parent = node.parentElement;
@@ -186,6 +191,7 @@ async function renderedGeometry(page, route, width) {
           || parent.closest("code,pre,kbd,samp,[data-opaque-token],.opaque-token,.honeypot")) continue;
       const style = getComputedStyle(parent);
       const permitsMidWord = style.overflowWrap === "anywhere"
+        || style.overflowWrap === "break-word"
         || style.wordBreak === "break-all"
         || style.wordBreak === "break-word";
       if (!permitsMidWord) continue;
@@ -246,6 +252,7 @@ async function renderedGeometry(page, route, width) {
       overflowOffenders,
       starved,
       normalWordBreaks,
+      proseOverflowWrap,
       wordCandidates,
       prices,
       wrappedPrices: prices.filter(({ lines }) => lines !== 1),
@@ -267,6 +274,9 @@ async function renderedGeometry(page, route, width) {
   if (metrics.documentOverflow) errors.push({ code: "document_overflow", detail: metrics.overflowOffenders });
   if (metrics.starved.length) errors.push({ code: "column_starvation", detail: metrics.starved });
   if (metrics.normalWordBreaks.length) errors.push({ code: "normal_word_broken", detail: metrics.normalWordBreaks });
+  if (metrics.proseOverflowWrap !== "break-word") {
+    errors.push({ code: "prose_wrap_contract", detail: metrics.proseOverflowWrap });
+  }
   if (metrics.wrappedPrices.length) errors.push({ code: "price_not_atomic", detail: metrics.wrappedPrices });
   if (route.family === "deliverables" && metrics.hiddenDeliverableFacts) {
     errors.push({ code: "deliverable_substance_hidden", detail: metrics.hiddenDeliverableFacts });
@@ -438,8 +448,15 @@ try {
     await noJsPage.setJavaScriptEnabled(false);
     await noJsPage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
     try {
-      const response = await noJsPage.goto(`${BASE}${route.path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
-      const stylesReady = await waitForStyles(noJsPage);
+      let response = await noJsPage.goto(`${BASE}${route.path}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+      let stylesReady = await waitForStyles(noJsPage);
+      // A fresh JS-disabled Chrome occasionally loses one localhost CSS request
+      // after the preceding 192 navigations. Retry the whole document once;
+      // the second miss still fails closed as a real stylesheet outage.
+      if (!stylesReady && response && response.status() < 400) {
+        response = await noJsPage.reload({ waitUntil: "domcontentloaded", timeout: 30000 });
+        stylesReady = await waitForStyles(noJsPage);
+      }
       if (!stylesReady) {
         failures.push({ family: route.family, route: route.path, width: 390, mode: "js-off", code: "stylesheet_unavailable", detail: route.path });
         continue;

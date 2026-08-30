@@ -109,6 +109,25 @@ for (const width of widths) {
     const heroCta = heroCtaElement?.getBoundingClientRect();
     const firstReport = document.querySelector('[data-cta-id="deliverables-open-report"]')?.getBoundingClientRect();
     const decisionNav = document.querySelector(".offer-decision-nav");
+    const decisionNavList = decisionNav?.querySelector("ol");
+    const decisionNavBrokenWords = [];
+    for (const link of decisionNav?.querySelectorAll("a") || []) {
+      const walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        // Include terminal punctuation in the measured range. Otherwise a
+        // question mark can be stranded on its own visual line while the word
+        // itself appears intact and the regression slips through the gate.
+        for (const match of node.data.matchAll(/\p{L}{4,}[?!…]?/gu)) {
+          const range = document.createRange();
+          range.setStart(node, match.index);
+          range.setEnd(node, match.index + match[0].length);
+          const tops = new Set([...range.getClientRects()]
+            .filter((rect) => rect.width > 0.5 && rect.height > 0.5)
+            .map((rect) => Math.round(rect.top * 2) / 2));
+          if (tops.size > 1) decisionNavBrokenWords.push(match[0]);
+        }
+      }
+    }
     const firstOffer = document.querySelector("#entrega-01");
     const archetypes = [...document.querySelectorAll('main > [data-section-archetype]')]
       .map((element) => element.getAttribute('data-section-archetype'));
@@ -136,6 +155,11 @@ for (const width of widths) {
       firstReportVisible: Boolean(firstReport && firstReport.width > 0 && firstReport.height >= 44),
       documentHeight: Math.round(document.documentElement.scrollHeight),
       decisionNavTop: Math.round((decisionNav?.getBoundingClientRect().top || 0) + window.scrollY),
+      decisionNavHeight: Math.round(decisionNav?.getBoundingClientRect().height || 0),
+      decisionNavColumns: decisionNavList
+        ? getComputedStyle(decisionNavList).gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
+        : 0,
+      decisionNavBrokenWords,
       firstOfferTop: Math.round((firstOffer?.getBoundingClientRect().top || 0) + window.scrollY),
       mainLinks: document.querySelectorAll("main a").length,
       offers: offerCards.map((card) => {
@@ -228,6 +252,13 @@ for (const width of widths) {
   // the complete 54-capability roll behind native disclosure.
   if (width === 390 && metrics.documentHeight > 12500) errors.push(`document_height=${metrics.documentHeight}`);
   if (width === 390 && metrics.decisionNavTop > 1800) errors.push(`decision_nav_top=${metrics.decisionNavTop}`);
+  if (width <= 360 && metrics.decisionNavColumns !== 2) {
+    errors.push(`decision_nav_columns=${metrics.decisionNavColumns}`);
+  }
+  if (width <= 360 && metrics.decisionNavHeight > 330) errors.push(`decision_nav_height=${metrics.decisionNavHeight}`);
+  if (metrics.decisionNavBrokenWords.length) {
+    errors.push(`decision_nav_broken_words=${metrics.decisionNavBrokenWords.join(",")}`);
+  }
   if (metrics.mainLinks > 50) errors.push(`main_links=${metrics.mainLinks}`);
   if (metrics.longestArchetypeRun > 2) errors.push(`archetype_run=${metrics.longestArchetypeRun}`);
   // One primary leads to the progressive framing and the other submits the

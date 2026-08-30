@@ -48,6 +48,9 @@ const matriz=readFileSync(resolve(ROOT,"ferramentas/matriz-atraso-obra/index.htm
 if (/\bout\.innerHTML\s*=/.test(matriz)) {
   console.error("FAIL matriz_result_dom_html_sink"); fail++;
 } else console.log("PASS matriz_result_dom_text_only");
+if (/style=["']grid-column\s*:\s*1\s*\/\s*-1/i.test(matriz) || !matriz.includes("tool-field--full")) {
+  console.error("FAIL matriz_dynamic_inline_grid_style"); fail++;
+} else console.log("PASS matriz_dynamic_grid_class");
 const money=readFileSync(resolve(ROOT,"ferramentas/diagnostico-defesa-margem/index.html"),"utf8");
 if(!money.includes("Identificação do contrato")||!money.includes("Resumo executivo factual")||!money.includes("Timeline")||!money.includes("Eventos de defesa de margem")||!money.includes("Evidências e fontes")||!money.includes("O que merece conferência")||!money.includes("Limites e UNKNOWN")||!money.includes("Quero uma segunda leitura deste contrato")){console.error("FAIL money_asset_sections");fail++;}else console.log("PASS money_asset_sections");
 if(money.includes("pode ter direito")||/\btem direito\b/i.test(money)){console.error("FAIL money_asset_claims");fail++;}else console.log("PASS money_asset_claims");
