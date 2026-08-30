@@ -937,7 +937,13 @@ def sync_family_crawler_rules(
 
 
 def _legacy_block_close(lines: list[str], start: int) -> int:
-    """Return the inclusive end of a pre-terminator generated block."""
+    """Return the inclusive end of a pre-terminator generated block.
+
+    Comments inside that owned region are replaced with the generated block,
+    not moved outside it: legacy policy prose can become false when the set of
+    generated ``Allow`` rules changes. Everything from the first unrelated
+    boundary onward remains byte-for-byte outside the replacement.
+    """
     def is_family_rule(line: str) -> bool:
         return (
             line.startswith(f"Allow: {FAMILY_PATH}")
@@ -999,17 +1005,8 @@ def _replace_or_append_block(
     replaced = False
     while index < len(lines):
         if any(lines[index].startswith(marker) for marker in begin_markers):
-            next_begin = next(
-                (
-                    candidate
-                    for candidate in range(index + 1, len(lines))
-                    if any(
-                        lines[candidate].startswith(marker)
-                        for marker in begin_markers
-                    )
-                ),
-                None,
-            )
+            legacy_close = _legacy_block_close(lines, index)
+            first_boundary = legacy_close + 1
             close = next(
                 (
                     candidate
@@ -1018,14 +1015,19 @@ def _replace_or_append_block(
                 ),
                 None,
             )
-            if close is None or (next_begin is not None and next_begin < close):
-                close = _legacy_block_close(lines, index)
+            if close is None or (
+                first_boundary < len(lines) and first_boundary < close
+            ):
+                close = legacy_close
             if not replaced:
                 kept.append(new_block)
                 replaced = True
             index = close + 1
             while index < len(lines) and not lines[index].strip():
                 index += 1
+            continue
+        if lines[index].startswith(end_marker):
+            index += 1
             continue
         if lines[index].startswith((f"Allow: {FAMILY_PATH}", f"Disallow: {FAMILY_PATH}")):
             index += 1
