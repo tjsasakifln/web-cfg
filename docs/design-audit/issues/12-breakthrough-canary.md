@@ -83,7 +83,7 @@ Nenhum score. Nenhuma média ponderada. Nenhum empate declarado por trade-off.
 
 ## 5. Delta de custo declarado
 
-O primeiro webfont do site sobe o orçamento em `data/site/design-system.json` de `font_files_max: 0 / font_total_gzip_kb_max: 0` para `1 / 64`, com o arquivo medido em **63,7 KB gzip**, servido de `assets/archivo-var-latin-fa9c0ffd.woff2` e carregado **só na home**. Isso é exatamente o que a nota do próprio orçamento previa: *"O primeiro webfont deve elevar estes dois números neste arquivo, para que apareça como delta revisado em vez de ser absorvido em silêncio."*
+O primeiro webfont do site sobe o orçamento em `data/site/design-system.json` de `font_files_max: 0 / font_total_gzip_kb_max: 0` para `1 / 60`, com o arquivo medido em **58,7 KB gzip**, servido de `assets/archivo-var-latin-bf6e041e.woff2` e carregado **só na home**. Isso é exatamente o que a nota do próprio orçamento previa: *"O primeiro webfont deve elevar estes dois números neste arquivo, para que apareça como delta revisado em vez de ser absorvido em silêncio."*
 
 Os tetos do módulo **não se movem**: `FONT_FILES_CAP = 6` e `FONT_GZIP_CAP_KB = 120` continuam em `scripts/site/audit_performance.py`, e um segundo webfont não declarado continua reprovando. A baseline em `docs/performance/PERFORMANCE-BUDGET-BASELINE.json` foi reancorada no mesmo commit, porque ela é o anchor do delta.
 

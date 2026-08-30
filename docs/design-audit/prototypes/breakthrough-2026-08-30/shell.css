@@ -1,7 +1,7 @@
 @font-face{
   font-family:"Archivo Var";
-  src:url("/assets/archivo-var-latin-fa9c0ffd.woff2") format("woff2-variations");
-  font-weight:100 900;font-stretch:62% 125%;font-style:normal;font-display:swap;
+  src:url("/assets/archivo-var-latin-bf6e041e.woff2") format("woff2-variations");
+  font-weight:100 900;font-stretch:66% 110%;font-style:normal;font-display:swap;
 }
 :root{
   --navy-950:#031020;--navy-900:#061a33;--navy-800:#0a294b;

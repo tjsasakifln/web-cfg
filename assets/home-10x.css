@@ -14,13 +14,13 @@
  */
 
 /* Archivo v2.001 · Omnibus-Type · SIL OFL 1.1 · assets/archivo-OFL.txt
- * Subconjunto latino pt-BR com dois eixos (wght 100–900, wdth 62–125) e
+ * Subconjunto latino pt-BR com dois eixos (wght 100–900, wdth 66–110) e
  * tnum + zero ligados: uma família cobre display, texto e dado tabular. */
 @font-face{
   font-family:"Archivo Var";
-  src:url("/assets/archivo-var-latin-fa9c0ffd.woff2") format("woff2-variations");
+  src:url("/assets/archivo-var-latin-bf6e041e.woff2") format("woff2-variations");
   font-weight:100 900;
-  font-stretch:62% 125%;
+  font-stretch:66% 110%;
   font-style:normal;
   font-display:swap;
 }
@@ -159,7 +159,10 @@ body[data-content-cluster="home"] .header-inner{
   padding-inline:var(--page-gutter);
 }
 body[data-content-cluster="home"] .brand{margin-right:auto}
-body[data-content-cluster="home"] .brand img{width:auto;height:44px}
+/* O bundle limita a marca a 160px no mobile; com height:44px fixo isso
+ * espremia a proporção de 3,846 para 3,636 e derrubava o best-practices do
+ * Lighthouse de 100 para 96 (imagem exibida fora da proporção natural). */
+body[data-content-cluster="home"] .brand img{width:auto;height:44px;max-width:none}
 body[data-content-cluster="home"] .desktop-nav{
   display:flex;
   flex-wrap:nowrap;
