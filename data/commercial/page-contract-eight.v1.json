@@ -1,8 +1,9 @@
 {
   "schema": "confenge.page-contract-eight/1.0",
-  "version": "v2",
+  "version": "v3",
   "issue": 331,
   "parent_issue": 329,
+  "value_first_issue": 530,
   "purpose": "Contrato de página e fonte de renderização das oito entregas atuais: o que cada rota publicada e o hub exibem, com escopo, entrada, saída, SLA e fronteira. Não altera preço.",
   "source_of_truth": "issue 331, seção 'Escopo comercial canônico', 'Entradas comuns' e 'Fronteiras'",
   "nomenclature_authority": "issue 343 é a fonte canônica de public_name_pt_br; em caso de divergência nominal prevalece a 343, e escopo e preço da 331 permanecem válidos",
@@ -85,6 +86,19 @@
         "data de corte"
       ],
       "saida_minima": "AVANÇAR / CONDICIONAR / INVESTIGAR / RECUSAR, justificativa, responsável e ponto de revalidação",
+      "value_first": {
+        "current_value": "O card permite comparar situação, decisão, entrada, limite, saída, preço e SLA.",
+        "actual_contract_value": "Concentrar a leitura nas oportunidades abertas que merecem decisão e deixar justificativa, responsável e ponto de revalidação.",
+        "diagnosed_gap": "A decisão e a saída existiam, mas o trabalho manual comprimido e o uso da priorização não estavam explícitos antes das fronteiras comuns.",
+        "implemented_direction": "Abrir pela alocação da equipe, explicar busca, leitura e comparação comprimidas e mostrar a priorização como artefato de decisão.",
+        "work_removed": "Buscar, ler e ordenar oportunidades abertas sem uma fila comparável.",
+        "artifact_use": "Levar a lista AVANÇAR, CONDICIONAR, INVESTIGAR ou RECUSAR para distribuir responsáveis e marcar revalidação.",
+        "price_anchor": "O preço remunera o recorte, a comparação das oportunidades, a justificativa vinculada e o ponto de revalidação, não uma lista bruta de editais.",
+        "proof_statement": "O modelo integral permite inspecionar critérios, fonte, data e o estado decisório antes do pedido.",
+        "cta_inspect": "Examinar a priorização",
+        "cta_configure": "Configurar esta priorização",
+        "retained_boundary_destination": "Status sintético junto do modelo; cobertura e ausência de garantia junto da leitura do resultado."
+      },
       "sla": {
         "text": "3 dias úteis após inputs válidos",
         "business_days": 3,
@@ -119,6 +133,19 @@
         "data de corte"
       ],
       "saida_minima": "dados reconciliados, dicionário, fórmulas, memória de cálculo, checks e ressalvas",
+      "value_first": {
+        "current_value": "O card informa que a entrega é uma base e lista dados, fórmulas e memória de cálculo.",
+        "actual_contract_value": "Permitir que a direção rastreie cada número até fonte, campo e fórmula antes de usá-lo.",
+        "diagnosed_gap": "O formato estava visível, mas o custo de reconciliar fontes e a utilidade da trilha para revisar números ficavam implícitos.",
+        "implemented_direction": "Abrir pela auditabilidade do número e ligar reconciliação, dicionário, fórmula e ressalva à revisão decisória.",
+        "work_removed": "Reunir fontes, normalizar campos e reconstruir manualmente a origem de cada número.",
+        "artifact_use": "Usar base, dicionário e memória de cálculo para conferir premissas antes de apresentar o número à direção.",
+        "price_anchor": "O preço remunera reconciliação, dicionário, fórmulas, checks e ressalvas rastreáveis, não a simples entrega de uma planilha.",
+        "proof_statement": "O modelo integral expõe dados, fórmulas, checks, cobertura e ressalvas para inspeção.",
+        "cta_inspect": "Examinar a trilha dos números",
+        "cta_configure": "Configurar esta base",
+        "retained_boundary_destination": "Status sintético junto dos dados; cobertura e UNKNOWN junto da fonte e da fórmula."
+      },
       "sla": {
         "text": "5 dias úteis",
         "business_days": 5,
@@ -153,6 +180,19 @@
         "data de corte"
       ],
       "saida_minima": "narrativa executiva, evidências vinculadas e até quatro decisões assináveis",
+      "value_first": {
+        "current_value": "O card mostra que uma análise reconciliada vira narrativa, evidências e decisões assináveis.",
+        "actual_contract_value": "Transformar análise já reconciliada em uma reunião que termina com decisões, responsáveis e registro.",
+        "diagnosed_gap": "A saída estava nomeada, mas o trabalho de síntese retirado da equipe e o uso na reunião não apareciam antes do limite de nova pesquisa.",
+        "implemented_direction": "Abrir pela decisão da reunião e mostrar como a síntese encadeia evidência e até quatro decisões assináveis.",
+        "work_removed": "Remontar a análise em slides e reorganizar evidências durante a reunião de direção.",
+        "artifact_use": "Conduzir a reunião com narrativa, evidências vinculadas e até quatro decisões assináveis.",
+        "price_anchor": "O preço remunera a síntese de uma análise já reconciliada em narrativa e decisões utilizáveis, sem embutir nova pesquisa.",
+        "proof_statement": "O modelo integral mostra a sequência narrativa, a evidência vinculada e a forma das decisões.",
+        "cta_inspect": "Examinar a síntese decisória",
+        "cta_configure": "Configurar esta síntese",
+        "retained_boundary_destination": "Status sintético junto do modelo; ausência de nova pesquisa junto do objeto incluído."
+      },
       "sla": {
         "text": "3 dias úteis após análise-base",
         "business_days": 3,
@@ -187,6 +227,19 @@
         "data de corte"
       ],
       "saida_minima": "até 20 órgãos priorizados, recorrência, concentração, calendário e cobertura",
+      "value_first": {
+        "current_value": "O card lista órgãos, recorrência, concentração, calendário e cobertura.",
+        "actual_contract_value": "Escolher onde concentrar desenvolvimento de mercado a partir de compradores públicos observados e comparáveis.",
+        "diagnosed_gap": "A lista de conteúdos não explicitava quanto trabalho de busca e comparação substitui nem como a direção usa a priorização.",
+        "implemented_direction": "Abrir pela escolha de território e comprador, depois mostrar pesquisa comprimida, mapa priorizado e uso na alocação da equipe.",
+        "work_removed": "Pesquisar órgão por órgão e comparar recorrência, concentração e calendário em fontes dispersas.",
+        "artifact_use": "Escolher quais órgãos entram na agenda de exploração e quais lacunas precisam de nova verificação.",
+        "price_anchor": "O preço remunera o recorte de 36 meses, a reconciliação e a priorização de até 20 órgãos com cobertura declarada.",
+        "proof_statement": "O modelo integral mostra critérios, recorrência, concentração, calendário, fonte e cobertura.",
+        "cta_inspect": "Examinar o mapa priorizado",
+        "cta_configure": "Configurar este mapa",
+        "retained_boundary_destination": "Status sintético junto do mapa; limites de cobertura e inferência junto dos campos correspondentes."
+      },
       "sla": {
         "text": "6 dias úteis",
         "business_days": 6,
@@ -221,6 +274,19 @@
         "data de corte"
       ],
       "saida_minima": "até 30 sinais candidatos, estágio, confiança, falso positivo e próxima observação",
+      "value_first": {
+        "current_value": "O card apresenta sinais de renovação com estágio, confiança, falso positivo e próxima observação.",
+        "actual_contract_value": "Priorizar contratos que merecem acompanhamento antes da renovação sem tratar vigência como edital futuro.",
+        "diagnosed_gap": "O valor de antecipar a observação e reduzir a triagem manual ficava atrás das qualificações sobre previsão.",
+        "implemented_direction": "Abrir pela agenda antecipada, mostrar busca e revalidação comprimidas e posicionar o radar como fila de observação.",
+        "work_removed": "Acompanhar vigências e revalidar manualmente sinais espalhados por órgão e contrato.",
+        "artifact_use": "Distribuir os sinais candidatos por estágio, confiança e próxima observação antes de mobilizar esforço comercial.",
+        "price_anchor": "O preço remunera recorte, verificação de vigência e qualificação de até 30 sinais, inclusive falso positivo e próxima observação.",
+        "proof_statement": "O modelo integral permite conferir vigência, estágio, confiança, fonte e motivo do falso positivo.",
+        "cta_inspect": "Examinar a fila de renovação",
+        "cta_configure": "Configurar este radar",
+        "retained_boundary_destination": "Status sintético junto dos sinais; ausência de previsão garantida junto do estágio e da próxima observação."
+      },
       "sla": {
         "text": "6 dias úteis",
         "business_days": 6,
@@ -255,6 +321,19 @@
         "data de corte"
       ],
       "saida_minima": "concentração por comprador, faixa de contrato, exposição ativa e resposta sugerida",
+      "value_first": {
+        "current_value": "O card lista concentração, faixa de contrato, exposição ativa e resposta sugerida.",
+        "actual_contract_value": "Escolher como se posicionar diante de concorrentes observados por comprador, faixa e exposição.",
+        "diagnosed_gap": "A análise parecia um mapa descritivo porque o trabalho de comparação e o uso na resposta comercial não estavam explícitos.",
+        "implemented_direction": "Abrir pela decisão de posicionamento e demonstrar a cadeia contratos observados, comparação, exposição e resposta sugerida.",
+        "work_removed": "Levantar contratos por fornecedor e recompor concentração, faixa e exposição em fontes dispersas.",
+        "artifact_use": "Preparar posicionamento e diligências por comprador sem inferir dado privado ou conduta ilícita.",
+        "price_anchor": "O preço remunera o recorte de 36 meses, a comparação de até 15 concorrentes observados e a resposta explicada.",
+        "proof_statement": "O modelo integral mostra contratos observados, concentração, faixa, exposição, fonte e resposta sugerida.",
+        "cta_inspect": "Examinar o mapa competitivo",
+        "cta_configure": "Configurar este mapa competitivo",
+        "retained_boundary_destination": "Status sintético junto do mapa; limites contra conluio e dado privado junto da interpretação competitiva."
+      },
       "sla": {
         "text": "7 dias úteis",
         "business_days": 7,
@@ -289,6 +368,19 @@
         "data de corte"
       ],
       "saida_minima": "P25, mediana, P75, dispersão, evolução e outliers; nunca preço unitário sem normalização",
+      "value_first": {
+        "current_value": "O card mostra percentis, dispersão, evolução e outliers do recorte.",
+        "actual_contract_value": "Dimensionar a escala observada de contratos comparáveis antes de comprometer proposta e capacidade.",
+        "diagnosed_gap": "As estatísticas estavam visíveis, mas a normalização removida da equipe e seu uso na decisão de escala ficavam implícitos.",
+        "implemented_direction": "Abrir pela decisão de escala e ligar classificação comparável, normalização, percentis e outliers à revisão de premissas.",
+        "work_removed": "Compilar valores e tentar comparar contratos sem classificação e normalização consistentes.",
+        "artifact_use": "Testar premissas de escala com P25, mediana, P75, dispersão, evolução e outliers observados.",
+        "price_anchor": "O preço remunera seleção comparável, normalização e leitura estatística de 36 meses, não uma tabela bruta de valores.",
+        "proof_statement": "O modelo integral expõe recorte, percentis, dispersão, outliers, fonte, período e método.",
+        "cta_inspect": "Examinar as referências de escala",
+        "cta_configure": "Configurar estas referências",
+        "retained_boundary_destination": "Status sintético junto dos números; limite contra preço previsto ou verdade universal junto do método."
+      },
       "sla": {
         "text": "7 dias úteis",
         "business_days": 7,
@@ -323,6 +415,19 @@
         "data de corte"
       ],
       "saida_minima": "leitura de direção, até quatro decisões, trilha até fonte/célula e lacunas",
+      "value_first": {
+        "current_value": "O card lista leitura de direção, decisões, trilha até fonte ou célula e lacunas.",
+        "actual_contract_value": "Escolher onde alocar equipe, acervo e caixa a partir de módulos já reconciliados.",
+        "diagnosed_gap": "O relatório podia parecer apenas consolidação porque o trabalho de integrar módulos e seu uso na alocação não estavam explícitos.",
+        "implemented_direction": "Abrir pela alocação, mostrar integração de módulos e apresentar o plano como memória de decisão com trilha e lacunas.",
+        "work_removed": "Reunir módulos em leituras paralelas e reconstruir a trilha de cada recomendação para a direção.",
+        "artifact_use": "Atribuir até quatro decisões, responsáveis e lacunas com rastreio até fonte ou célula.",
+        "price_anchor": "O preço remunera integração e julgamento sobre módulos já reconciliados, com trilha decisória, sem esconder uma segunda pesquisa.",
+        "proof_statement": "O modelo integral mostra decisões, responsáveis, trilha até fonte ou célula e lacunas declaradas.",
+        "cta_inspect": "Examinar o plano de alocação",
+        "cta_configure": "Configurar este plano",
+        "retained_boundary_destination": "Status sintético junto do plano; ausência de segunda pesquisa junto dos módulos incluídos."
+      },
       "sla": {
         "text": "5 dias úteis após módulos disponíveis",
         "business_days": 5,

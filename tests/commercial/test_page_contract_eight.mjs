@@ -67,7 +67,7 @@ assert(
   "travessao proibido no teste",
 );
 assert("issue_declarada", contract.issue === 331 && contract.parent_issue === 329, contract.issue);
-assert("versao_publica_v2", contract.version === "v2", contract.version);
+assert("versao_publica_v3", contract.version === "v3" && contract.value_first_issue === 530, `${contract.version}/${contract.value_first_issue}`);
 assert("preco_congelado", contract.price_change_allowed === false, contract.price_change_allowed);
 
 // ------------------------------------------------- 1. as oito entradas completas
@@ -108,6 +108,23 @@ for (const d of dels) {
     JSON.stringify(d).slice(0, 200));
   assert(`entrada_${n}`, nonEmptyList(d.entrada) && d.entrada.length >= 5, d.entrada);
   assert(`fronteira_${n}`, nonEmptyList(d.fronteira), d.fronteira);
+  const value = d.value_first || {};
+  const valueKeys = [
+    "current_value",
+    "actual_contract_value",
+    "diagnosed_gap",
+    "implemented_direction",
+    "work_removed",
+    "artifact_use",
+    "price_anchor",
+    "proof_statement",
+    "cta_inspect",
+    "cta_configure",
+    "retained_boundary_destination",
+  ];
+  assert(`value_first_matrix_${n}`, valueKeys.every((key) => nonEmptyString(value[key])), JSON.stringify(value));
+  assert(`value_first_cta_is_next_state_${n}`, /^(Examinar|Configurar)\b/.test(value.cta_inspect) && /^Configurar\b/.test(value.cta_configure), `${value.cta_inspect} | ${value.cta_configure}`);
+  assert(`value_first_no_roi_claim_${n}`, !/\b(?:ROI|retorno garantido|economia garantida|receita garantida)\b/i.test(Object.values(value).join(" | ")), JSON.stringify(value));
   assert(`preco_inteiro_positivo_${n}`,
     Number.isInteger(d.price_cents) && d.price_cents > 0 && d.price_cents % 100 === 0,
     d.price_cents);
@@ -195,6 +212,18 @@ for (const d of dels) {
     assert(`pagina_imprime_${field}_${n}`, pageText.includes(value), `${field} ausente em ${d.file}`);
     assert(`hub_imprime_${field}_${n}`, hubText.includes(value), `${field} ausente no hub`);
   }
+  for (const [field, value] of [
+    ["valor_contratual", d.value_first.actual_contract_value],
+    ["trabalho_comprimido", d.value_first.work_removed],
+    ["uso_artefato", d.value_first.artifact_use],
+    ["ancora_preco", d.value_first.price_anchor],
+    ["prova_positiva", d.value_first.proof_statement],
+  ]) {
+    assert(`pagina_imprime_${field}_${n}`, pageText.includes(value), `${field} ausente em ${d.file}`);
+    assert(`hub_imprime_${field}_${n}`, hubText.includes(value), `${field} ausente no hub`);
+  }
+  assert(`hub_cta_util_inspecao_${n}`, hubText.includes(d.value_first.cta_inspect), d.value_first.cta_inspect);
+  assert(`hub_cta_util_configuracao_${n}`, hubText.includes(d.value_first.cta_configure), d.value_first.cta_configure);
   for (const value of [...d.entrada, ...d.fronteira.map(publicCopy)]) {
     assert(`pagina_imprime_campo_${n}_${results.length}`, pageText.includes(value), value);
     assert(`hub_imprime_campo_${n}_${results.length}`, hubText.includes(value), value);
@@ -222,6 +251,12 @@ for (const d of dels) {
     d.file);
 }
 assert("hub_sem_css_contrato_bloqueante", !hubHtml.includes('/assets/eight-offer-contract.css'));
+assert(
+  "hub_value_before_common_boundaries",
+  hubHtml.indexOf('data-deliverable-id="CFG-D01"') >= 0 &&
+    hubHtml.indexOf('data-deliverable-id="CFG-D08"') < hubHtml.indexOf('class="published-offers__common"'),
+  "fronteiras comuns precisam vir depois das oito decisões e artefatos",
+);
 assert("hub_css_local", hubHtml.includes('/entregas/styles.css') && textOf("entregas/styles.css").includes('.vitrine-item') && textOf("entregas/styles.css").includes('.capability-roll'));
 assert("hub_contexto_resultado", /Cobertura, data de corte, método e o rótulo NÃO INFORMADO/.test(hubText));
 const radarPurchaseText = textOf("comercial/radar-decisorio/index.html");

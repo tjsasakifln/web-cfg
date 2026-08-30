@@ -34,9 +34,13 @@ function readingRules(item) {
 }
 
 function routeBlock(contract, item) {
+  const value = item.value_first;
+  if (!value) throw new Error(`EIGHT_VALUE_FIRST_MISSING: ${item.deliverable_id}`);
   return `${ROUTE_START}
 <section class="eight-contract" aria-labelledby="eight-contract-${item.number}">
-<div class="container"><header class="eight-contract__head"><p class="eyebrow">Contrato desta unidade</p><h2 id="eight-contract-${item.number}">${escapeHtml(item.issue_331_name)}</h2><p>O exemplo integral acima continua sintético. Estes são objeto, entradas, saída, prazo e limites da adaptação contratada.</p></header>
+<div class="container"><header class="eight-contract__head"><p class="eyebrow">Decisão e artefato desta unidade</p><h2 id="eight-contract-${item.number}">${escapeHtml(item.issue_331_name)}</h2><p data-copy-role="value_outcome">${escapeHtml(value.actual_contract_value)}</p></header>
+<div class="eight-contract__scope eight-contract__value"><section data-copy-role="value_created"><h3>Trabalho que a entrega comprime</h3><p>${escapeHtml(value.work_removed)}</p></section><section data-copy-role="artifact"><h3>Como o artefato entra na decisão</h3><p>${escapeHtml(value.artifact_use)}</p></section><section data-copy-role="positive_proof"><h3>O que você pode inspecionar</h3><p>${escapeHtml(value.proof_statement)}</p></section><section><h3>Por que este preço</h3><p>${escapeHtml(value.price_anchor)}</p></section></div>
+<p class="eight-contract__synthetic-boundary">O exemplo integral acima continua sintético e demonstra formato e método, não resultado de cliente. A adaptação contratada preserva o objeto, as entradas, a saída, o prazo e os limites abaixo.</p>
 <dl class="eight-contract__terms"><div><dt>Preço preservado</dt><dd>${escapeHtml(item.price_display)}</dd></div><div><dt>SLA</dt><dd>${escapeHtml(item.sla.text)}</dd></div><div><dt>Marco do prazo</dt><dd>${escapeHtml(item.sla.counts_from === "UNKNOWN" ? "confirmado antes da cobrança" : item.sla.counts_from)}</dd></div></dl>
 <div class="eight-contract__scope"><section><h3>Objeto incluído</h3><p>${escapeHtml(item.objeto_incluido)}</p></section><section><h3>Entradas</h3>${list(item.entrada)}</section><section><h3>Saída mínima</h3><p>${escapeHtml(item.saida_minima)}</p></section><section><h3>Fronteiras</h3>${list(item.fronteira.map((value) => publicCopy(contract, value)))}</section></div>
 ${readingRules(item)}</div>
