@@ -1,10 +1,10 @@
 {
   "schema_version": "2.0.0",
-  "captured_at": "2026-08-30T09:08:17.007Z",
-  "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
-  "tree_dirty": true,
+  "captured_at": "2026-08-30T09:33:35.286Z",
+  "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+  "tree_dirty": false,
   "base_url": "http://127.0.0.1:8792",
-  "output_dir": "docs/design-audit/evidence/capture/baseline",
+  "output_dir": "../../../../../../.cache/confenge/design-direction-494/baseline",
   "state": {
     "id": "fullpage_js-off_motion-reduced",
     "fullpage": true,
@@ -278,8 +278,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 1289045,
-      "sha256": "b7013c540c91b9a4680a2b3915e0bb3687270344cffe93e061242915c02ce885"
+      "bytes": 1283895,
+      "sha256": "19ff5cb2f254af261717948feea4422d15be135261199ea6d8418ec66305db24"
     },
     {
       "file": "ferramentaslimite-acrescimos-supressoes-390x844--fullpage_js-off_motion-reduced.png",

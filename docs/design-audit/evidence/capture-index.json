@@ -2,7 +2,7 @@
   "schema": "confenge.design-direction-capture-index/1.0",
   "issue": 494,
   "indexed_at": "2026-08-30",
-  "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
+  "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
   "protocol": {
     "viewports": [
       "390x844",
@@ -22,9 +22,9 @@
     {
       "group": "a-trilho-de-memoria/comercial",
       "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/comercial/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T09:08:23.655Z",
-      "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
-      "tree_dirty": true,
+      "captured_at": "2026-08-30T09:33:42.093Z",
+      "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+      "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
         "fullpage": true,
@@ -87,9 +87,9 @@
     {
       "group": "a-trilho-de-memoria/instrumento",
       "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/instrumento/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T09:08:48.350Z",
-      "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
-      "tree_dirty": true,
+      "captured_at": "2026-08-30T09:33:55.353Z",
+      "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+      "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
         "fullpage": true,
@@ -152,9 +152,9 @@
     {
       "group": "a-trilho-de-memoria/leitura",
       "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/leitura/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T09:08:41.829Z",
-      "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
-      "tree_dirty": true,
+      "captured_at": "2026-08-30T09:33:48.762Z",
+      "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+      "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
         "fullpage": true,
@@ -217,9 +217,9 @@
     {
       "group": "a-trilho-de-memoria/specimen",
       "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/specimen/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T09:08:43.343Z",
-      "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
-      "tree_dirty": true,
+      "captured_at": "2026-08-30T09:34:02.050Z",
+      "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+      "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
         "fullpage": true,
@@ -282,9 +282,9 @@
     {
       "group": "b-estado-de-revisao/comercial",
       "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/comercial/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T09:08:49.927Z",
-      "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
-      "tree_dirty": true,
+      "captured_at": "2026-08-30T09:34:08.816Z",
+      "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+      "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
         "fullpage": true,
@@ -347,9 +347,9 @@
     {
       "group": "b-estado-de-revisao/instrumento",
       "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/instrumento/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T09:09:02.871Z",
-      "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
-      "tree_dirty": true,
+      "captured_at": "2026-08-30T09:34:22.156Z",
+      "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+      "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
         "fullpage": true,
@@ -412,9 +412,9 @@
     {
       "group": "b-estado-de-revisao/leitura",
       "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/leitura/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T09:08:56.414Z",
-      "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
-      "tree_dirty": true,
+      "captured_at": "2026-08-30T09:34:15.512Z",
+      "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+      "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
         "fullpage": true,
@@ -477,9 +477,9 @@
     {
       "group": "b-estado-de-revisao/specimen",
       "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/specimen/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T09:09:09.556Z",
-      "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
-      "tree_dirty": true,
+      "captured_at": "2026-08-30T09:34:28.906Z",
+      "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+      "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
         "fullpage": true,
@@ -542,9 +542,9 @@
     {
       "group": "baseline",
       "manifest": "docs/design-audit/evidence/capture/baseline/manifest-fullpage_js-off_motion-reduced.json",
-      "captured_at": "2026-08-30T09:08:17.007Z",
-      "commit_sha": "b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5",
-      "tree_dirty": true,
+      "captured_at": "2026-08-30T09:33:35.286Z",
+      "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+      "tree_dirty": false,
       "state": {
         "id": "fullpage_js-off_motion-reduced",
         "fullpage": true,
@@ -641,8 +641,8 @@
           "route": "/conteudos/documentos-reequilibrio-obra-publica/",
           "viewport": "1440x1000",
           "state": "fullpage_js-off_motion-reduced",
-          "bytes": 1289045,
-          "sha256": "b7013c540c91b9a4680a2b3915e0bb3687270344cffe93e061242915c02ce885"
+          "bytes": 1283895,
+          "sha256": "19ff5cb2f254af261717948feea4422d15be135261199ea6d8418ec66305db24"
         },
         {
           "file": "ferramentaslimite-acrescimos-supressoes-390x844--fullpage_js-off_motion-reduced.png",
