@@ -272,12 +272,14 @@ const capabilityRoll = catalogHtml.match(/<section class="capability-roll"[\s\S]
 assert("catalog_has_explicit_state_legend", /8 publicadas/.test(capabilityRoll) && /44 em validação/.test(capabilityRoll) && /2 bloqueadas/.test(capabilityRoll));
 assert("capability_roll_has_no_price", !/R\$/.test(capabilityRoll), capabilityRoll.match(/R\$[^<]*/g));
 
-/* Deliberate mismatch must fail: hub vs catalog vs JSON-LD on D16 name. */
+/* Deliberate mismatch must fail: hub vs catalog data on D16 name.
+ * VALIDATE offers are intentionally absent from the public vitrine, so this
+ * check must not depend on the shared footer repeating the offer name. */
 {
-  const fakeHub = hubHtml.replaceAll("Operação de Proposta para Licitação Crítica", "Bid Room");
-  const fakeText = visibleText(fakeHub);
   const elected = truth.byId.get("CFG-D16").public_name;
-  const mismatch = fakeText.includes("Bid Room") && catalogHtml.includes(elected) && elected !== "Bid Room";
+  const fakeHub = hubHtml.replaceAll(elected, "Bid Room");
+  const fakeText = visibleText(fakeHub);
+  const mismatch = fakeText.includes("Bid Room") && catalogData.includes(elected) && elected !== "Bid Room";
   assert("deliberate_hub_catalog_name_mismatch_is_detectable", mismatch === true, { elected });
 }
 

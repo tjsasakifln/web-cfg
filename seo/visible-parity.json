@@ -53,6 +53,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Contrato sob pressão",
           "Acompanhamento de contratos de obras públicas"
         ],
         "dataset_names": [],
@@ -88,6 +89,7 @@
         ],
         "breadcrumb_names": [
           "Início",
+          "Contrato sob pressão",
           "Acompanhamento de contratos de obras públicas"
         ],
         "canonical": "https://confenge.com.br/acompanhamento-contratos-obras/",
@@ -167,6 +169,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Contrato sob pressão",
           "Atrasos e prorrogações em obras públicas"
         ],
         "dataset_names": [],
@@ -202,6 +205,7 @@
         ],
         "breadcrumb_names": [
           "Início",
+          "Contrato sob pressão",
           "Atrasos e prorrogações em obras públicas"
         ],
         "canonical": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
@@ -395,7 +399,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Exemplos de entrega",
+          "Casos",
           "Aditivo: verificar saldos do art. 125 antes de protocolar"
         ],
         "dataset_names": [],
@@ -431,7 +435,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Exemplos de entrega",
+          "Casos",
           "Aditivo: verificar saldos do art. 125 antes de protocolar"
         ],
         "canonical": "https://confenge.com.br/casos/aditivo-art125-demonstrativo/",
@@ -453,7 +457,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Exemplos de entrega",
+          "Casos",
           "Medição glosada: do apontamento ao pedido certo"
         ],
         "dataset_names": [],
@@ -489,7 +493,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Exemplos de entrega",
+          "Casos",
           "Medição glosada: do apontamento ao pedido certo"
         ],
         "canonical": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
@@ -1205,8 +1209,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Aditivos e serviços extras",
+          "Biblioteca",
           "Aditivo em empreitada por preço global: o que o regime não cobre"
         ],
         "dataset_names": [],
@@ -1251,8 +1254,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Aditivos e serviços extras",
+          "Biblioteca",
           "Aditivo em empreitada por preço global: o que o regime não cobre"
         ],
         "canonical": "https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/",
@@ -1275,8 +1277,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "Administração local: custo direto, BDI ou item da planilha?"
         ],
         "dataset_names": [],
@@ -1321,8 +1322,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "Administração local: custo direto, BDI ou item da planilha?"
         ],
         "canonical": "https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/",
@@ -1345,8 +1345,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "Atraso na medição de obra pública"
         ],
         "dataset_names": [],
@@ -1391,8 +1390,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "Atraso na medição de obra pública"
         ],
         "canonical": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
@@ -1415,8 +1413,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Atrasos e prorrogações",
+          "Biblioteca",
           "Prova de culpa da Administração no atraso da obra"
         ],
         "dataset_names": [],
@@ -1461,8 +1458,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Atrasos e prorrogações",
+          "Biblioteca",
           "Prova de culpa da Administração no atraso da obra"
         ],
         "canonical": "https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/",
@@ -1487,8 +1483,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "Atraso de pagamento: pode suspender a obra pública?"
         ],
         "dataset_names": [],
@@ -1533,8 +1528,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "Atraso de pagamento: pode suspender a obra pública?"
         ],
         "canonical": "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/",
@@ -1557,8 +1551,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "BDI diferenciado em materiais e equipamentos: quando usar"
         ],
         "dataset_names": [],
@@ -1603,8 +1596,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "BDI diferenciado em materiais e equipamentos: quando usar"
         ],
         "canonical": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
@@ -1695,8 +1687,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Edital e proposta",
+          "Biblioteca",
           "Como comprovar exequibilidade sem revelar uma planilha frágil"
         ],
         "dataset_names": [],
@@ -1741,8 +1732,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Edital e proposta",
+          "Biblioteca",
           "Como comprovar exequibilidade sem revelar uma planilha frágil"
         ],
         "canonical": "https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/",
@@ -1767,8 +1757,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "Data-base do orçamento e reajuste: onde muitas construtoras perdem dinheiro"
         ],
         "dataset_names": [],
@@ -1813,8 +1802,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "Data-base do orçamento e reajuste: onde muitas construtoras perdem dinheiro"
         ],
         "canonical": "https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/",
@@ -1837,8 +1825,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Aditivos e serviços extras",
+          "Biblioteca",
           "Demolição não prevista em obra pública: prova, medição e cobrança"
         ],
         "dataset_names": [],
@@ -1883,8 +1870,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Aditivos e serviços extras",
+          "Biblioteca",
           "Demolição não prevista em obra pública: prova, medição e cobrança"
         ],
         "canonical": "https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/",
@@ -1907,8 +1893,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Edital e proposta",
+          "Biblioteca",
           "Empreitada global ou preço unitário: qual regime é mais perigoso?"
         ],
         "dataset_names": [],
@@ -1953,8 +1938,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Edital e proposta",
+          "Biblioteca",
           "Empreitada global ou preço unitário: qual regime é mais perigoso?"
         ],
         "canonical": "https://confenge.com.br/conteudos/empreitada-preco-global-preco-unitario/",
@@ -1977,8 +1961,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "O fiscal se recusa a assinar a medição"
         ],
         "dataset_names": [],
@@ -2023,8 +2006,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "O fiscal se recusa a assinar a medição"
         ],
         "canonical": "https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/",
@@ -2047,8 +2029,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "Glosa por qualidade: extensão do corte"
         ],
         "dataset_names": [],
@@ -2093,8 +2074,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "Glosa por qualidade: extensão do corte"
         ],
         "canonical": "https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/",
@@ -2117,8 +2097,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Aditivos e serviços extras",
+          "Biblioteca",
           "Limite de aditivo 25% e 50% em obra pública: o que conta"
         ],
         "dataset_names": [],
@@ -2163,8 +2142,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Aditivos e serviços extras",
+          "Biblioteca",
           "Limite de aditivo 25% e 50% em obra pública: o que conta"
         ],
         "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
@@ -2188,8 +2166,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Reequilíbrio contratual",
+          "Biblioteca",
           "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?"
         ],
         "dataset_names": [],
@@ -2234,8 +2211,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Reequilíbrio contratual",
+          "Biblioteca",
           "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?"
         ],
         "canonical": "https://confenge.com.br/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
@@ -2258,8 +2234,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "Medição por evento ou por quantitativo"
         ],
         "dataset_names": [],
@@ -2304,8 +2279,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "Medição por evento ou por quantitativo"
         ],
         "canonical": "https://confenge.com.br/conteudos/medicao-por-evento-obra-publica/",
@@ -2328,8 +2302,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "Como calcular mobilização e desmobilização na proposta"
         ],
         "dataset_names": [],
@@ -2374,8 +2347,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "Como calcular mobilização e desmobilização na proposta"
         ],
         "canonical": "https://confenge.com.br/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
@@ -2398,8 +2370,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "Pagamento parcial de etapa no preço global"
         ],
         "dataset_names": [],
@@ -2444,8 +2415,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Medições e pagamentos",
+          "Biblioteca",
           "Pagamento parcial de etapa no preço global"
         ],
         "canonical": "https://confenge.com.br/conteudos/pagamento-parcial-etapa-empreitada-global/",
@@ -2468,8 +2438,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Atrasos e prorrogações",
+          "Biblioteca",
           "Dossiê do pedido de prorrogação de prazo"
         ],
         "dataset_names": [],
@@ -2514,8 +2483,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Atrasos e prorrogações",
+          "Biblioteca",
           "Dossiê do pedido de prorrogação de prazo"
         ],
         "canonical": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
@@ -2538,8 +2506,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Defesa e sanções",
+          "Biblioteca",
           "Resposta à notificação de atraso em obra pública"
         ],
         "dataset_names": [],
@@ -2584,8 +2551,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Defesa e sanções",
+          "Biblioteca",
           "Resposta à notificação de atraso em obra pública"
         ],
         "canonical": "https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/",
@@ -2608,8 +2574,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "SINAPI desonerado ou não desonerado: qual usar?"
         ],
         "dataset_names": [],
@@ -2654,8 +2619,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "SINAPI desonerado ou não desonerado: qual usar?"
         ],
         "canonical": "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/",
@@ -2680,8 +2644,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "SINAPI ou SICRO: qual referência vale para cada serviço?"
         ],
         "dataset_names": [],
@@ -2726,8 +2689,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Orçamento e BDI",
+          "Biblioteca",
           "SINAPI ou SICRO: qual referência vale para cada serviço?"
         ],
         "canonical": "https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/",
@@ -2806,6 +2768,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Contrato sob pressão",
           "Defesa de margem"
         ],
         "dataset_names": [],
@@ -2841,6 +2804,7 @@
         ],
         "breadcrumb_names": [
           "Início",
+          "Contrato sob pressão",
           "Defesa de margem"
         ],
         "canonical": "https://confenge.com.br/defesa-margem-contratos-publicos/",
@@ -2862,6 +2826,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Contrato sob pressão",
           "Defesa técnica em contratos públicos"
         ],
         "dataset_names": [],
@@ -2897,6 +2862,7 @@
         ],
         "breadcrumb_names": [
           "Início",
+          "Contrato sob pressão",
           "Defesa técnica em contratos públicos"
         ],
         "canonical": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
@@ -2971,6 +2937,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Serviços",
           "Diagnóstico de Expansão no Mercado Público"
         ],
         "dataset_names": [],
@@ -3006,6 +2973,7 @@
         ],
         "breadcrumb_names": [
           "Início",
+          "Serviços",
           "Diagnóstico de Expansão no Mercado Público"
         ],
         "canonical": "https://confenge.com.br/diagnostico-b2g-expansao/",
@@ -3252,7 +3220,10 @@
     {
       "claimed": {
         "authors": [],
-        "breadcrumbs": [],
+        "breadcrumbs": [
+          "Início",
+          "Ferramentas"
+        ],
         "dataset_names": [],
         "dates": [],
         "descriptions": [],
@@ -3264,7 +3235,9 @@
         "organizations": [],
         "people": [],
         "reviewers": [],
-        "types": [],
+        "types": [
+          "BreadcrumbList"
+        ],
         "versions": []
       },
       "defects": [],
@@ -3297,7 +3270,11 @@
     {
       "claimed": {
         "authors": [],
-        "breadcrumbs": [],
+        "breadcrumbs": [
+          "Início",
+          "Ferramentas",
+          "Checklist de reequilíbrio"
+        ],
         "dataset_names": [],
         "dates": [],
         "descriptions": [],
@@ -3312,7 +3289,8 @@
         "people": [],
         "reviewers": [],
         "types": [
-          "Organization"
+          "Organization",
+          "BreadcrumbList"
         ],
         "versions": []
       },
@@ -3347,7 +3325,11 @@
     {
       "claimed": {
         "authors": [],
-        "breadcrumbs": [],
+        "breadcrumbs": [
+          "Início",
+          "Ferramentas",
+          "Diagnóstico de defesa de margem"
+        ],
         "dataset_names": [],
         "dates": [],
         "descriptions": [],
@@ -3362,7 +3344,8 @@
         "people": [],
         "reviewers": [],
         "types": [
-          "Organization"
+          "Organization",
+          "BreadcrumbList"
         ],
         "versions": []
       },
@@ -3400,7 +3383,11 @@
     {
       "claimed": {
         "authors": [],
-        "breadcrumbs": [],
+        "breadcrumbs": [
+          "Início",
+          "Ferramentas",
+          "Limite de acréscimos e supressões"
+        ],
         "dataset_names": [],
         "dates": [],
         "descriptions": [],
@@ -3415,7 +3402,8 @@
         ],
         "reviewers": [],
         "types": [
-          "Person"
+          "Person",
+          "BreadcrumbList"
         ],
         "versions": []
       },
@@ -3450,7 +3438,11 @@
     {
       "claimed": {
         "authors": [],
-        "breadcrumbs": [],
+        "breadcrumbs": [
+          "Início",
+          "Ferramentas",
+          "Matriz de atraso"
+        ],
         "dataset_names": [],
         "dates": [],
         "descriptions": [],
@@ -3465,7 +3457,8 @@
         ],
         "reviewers": [],
         "types": [
-          "Person"
+          "Person",
+          "BreadcrumbList"
         ],
         "versions": []
       },
@@ -3555,7 +3548,7 @@
         ],
         "breadcrumbs": [
           "Início",
-          "Guias e checklists",
+          "Guias",
           "Checklist de pedido de aditivo em obra pública"
         ],
         "dataset_names": [],
@@ -3597,7 +3590,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Guias e checklists",
+          "Guias",
           "Checklist de pedido de aditivo em obra pública"
         ],
         "canonical": "https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/",
@@ -3711,7 +3704,7 @@
         ],
         "breadcrumbs": [
           "Início",
-          "Lei 14.133 em obras",
+          "Lei 14.133",
           "Item novo no aditivo: preço e relação proposta/orçamento-base"
         ],
         "dataset_names": [],
@@ -3753,7 +3746,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Lei 14.133 em obras",
+          "Lei 14.133",
           "Item novo no aditivo: preço e relação proposta/orçamento-base"
         ],
         "canonical": "https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/",
@@ -3832,7 +3825,10 @@
     {
       "claimed": {
         "authors": [],
-        "breadcrumbs": [],
+        "breadcrumbs": [
+          "Início",
+          "Metodologia"
+        ],
         "dataset_names": [],
         "dates": [],
         "descriptions": [],
@@ -3850,7 +3846,8 @@
         "reviewers": [],
         "types": [
           "Organization",
-          "Person"
+          "Person",
+          "BreadcrumbList"
         ],
         "versions": []
       },
@@ -3865,7 +3862,6 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Inteligência",
           "Metodologia"
         ],
         "canonical": "https://confenge.com.br/metodologia-inteligencia/",
@@ -3981,7 +3977,6 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Política editorial",
           "Histórico"
         ],
         "dataset_names": [],
@@ -4017,7 +4012,6 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Política editorial",
           "Histórico"
         ],
         "canonical": "https://confenge.com.br/politica-editorial/historico/",
@@ -4040,7 +4034,6 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Política editorial",
           "Versão 1.0.0"
         ],
         "dataset_names": [],
@@ -4076,7 +4069,6 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Política editorial",
           "Versão 1.0.0"
         ],
         "canonical": "https://confenge.com.br/politica-editorial/v/1.0.0/",
@@ -4182,7 +4174,11 @@
     {
       "claimed": {
         "authors": [],
-        "breadcrumbs": [],
+        "breadcrumbs": [
+          "Início",
+          "Radar",
+          "Nacional: obras e margem"
+        ],
         "dataset_names": [
           "Radar Nacional de Obras Públicas e Margem Contratual: recorte aberto"
         ],
@@ -4206,7 +4202,8 @@
         "reviewers": [],
         "types": [
           "Dataset",
-          "Organization"
+          "Organization",
+          "BreadcrumbList"
         ],
         "versions": []
       },
@@ -4446,5 +4443,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/web-cfg-chuva-20260829/_site"
+  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/wa491/_site"
 }

@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `76`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/web-cfg-chuva-20260829/_site`
+- site_root: `/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/wa491/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -60,25 +60,25 @@
 | https://confenge.com.br/diretoria-b2g/ | True | — | Organization,Person,BreadcrumbList | Diretoria Fracionada para o Mercado Público |
 | https://confenge.com.br/entregas/ | True | — | Organization,BreadcrumbList | 8 ofertas publicadas. Escolha pela decisão que está na mesa.Exemplos sintéticos. |
 | https://confenge.com.br/especialista/tiago-jun-sasaki/ | True | — | Organization,Person,BreadcrumbList | Engº Tiago Sasaki |
-| https://confenge.com.br/ferramentas/ | True | — |  | O que você precisa resolver agora? |
-| https://confenge.com.br/ferramentas/checklist-reequilibrio/ | True | — | Organization | Checklist de documentação para reequilíbrio |
-| https://confenge.com.br/ferramentas/diagnostico-defesa-margem/ | True | — | Organization | Diagnóstico de Defesa de Margem em Contratos Públicos |
-| https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/ | True | — | Person | Verificador de limite de acréscimos e supressões |
-| https://confenge.com.br/ferramentas/matriz-atraso-obra/ | True | — | Person | Matriz de atraso de obra |
+| https://confenge.com.br/ferramentas/ | True | — | BreadcrumbList | O que você precisa resolver agora? |
+| https://confenge.com.br/ferramentas/checklist-reequilibrio/ | True | — | Organization,BreadcrumbList | Checklist de documentação para reequilíbrio |
+| https://confenge.com.br/ferramentas/diagnostico-defesa-margem/ | True | — | Organization,BreadcrumbList | Diagnóstico de Defesa de Margem em Contratos Públicos |
+| https://confenge.com.br/ferramentas/limite-acrescimos-supressoes/ | True | — | Person,BreadcrumbList | Verificador de limite de acréscimos e supressões |
+| https://confenge.com.br/ferramentas/matriz-atraso-obra/ | True | — | Person,BreadcrumbList | Matriz de atraso de obra |
 | https://confenge.com.br/guias-contratos-obras/ | True | — | Organization,BreadcrumbList | Guias e checklists para contratos de obras públicas |
 | https://confenge.com.br/guias-contratos-obras/checklist-pedido-aditivo/ | True | — | Organization,BreadcrumbList,Article; Checklist de pedido de aditivo em obra pública | Checklist de pedido de aditivo em obra pública |
 | https://confenge.com.br/imprensa/ | True | — |  | Imprensa e pesquisa |
 | https://confenge.com.br/lei-14133-obras/ | True | — | Organization,BreadcrumbList | Lei nº 14.133/2021 aplicada a obras e serviços de engenharia |
 | https://confenge.com.br/lei-14133-obras/preco-item-novo-desconto-proposta/ | True | — | Organization,BreadcrumbList,Article; Item novo no aditivo: preço e relação proposta/orçamento-base | Item novo no aditivo: preço e relação proposta/orçamento-base |
 | https://confenge.com.br/medicoes-glosas-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Medições, glosas e pagamentos em obras públicas |
-| https://confenge.com.br/metodologia-inteligencia/ | True | — | Organization,Person | Como lemos o mercado público sem transformar histórico em profecia. |
+| https://confenge.com.br/metodologia-inteligencia/ | True | — | Organization,Person,BreadcrumbList | Como lemos o mercado público sem transformar histórico em profecia. |
 | https://confenge.com.br/nurture/ | True | — |  | Cinco e-mails úteis, não newsletter genérica |
 | https://confenge.com.br/politica-editorial/ | True | — | Organization,Person,BreadcrumbList | Política editorial |
 | https://confenge.com.br/politica-editorial/historico/ | True | — | Organization,Person,BreadcrumbList | Histórico da política editorial |
 | https://confenge.com.br/politica-editorial/v/1.0.0/ | True | — | Organization,Person,BreadcrumbList | Política editorial 1.0.0 |
 | https://confenge.com.br/privacidade/ | True | — |  | Política de Privacidade |
 | https://confenge.com.br/problemas-que-resolvemos/ | True | — | BreadcrumbList | Problemas que resolvemos em licitações e contratos de obras |
-| https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization; Radar Nacional de Obras Públicas e Margem Contratual: recorte aberto | Radar Nacional de Obras Públicas e Margem Contratual |
+| https://confenge.com.br/radar/nacional-obras-publicas/ | True | — | Dataset,Organization,BreadcrumbList; Radar Nacional de Obras Públicas e Margem Contratual: recorte aberto | Radar Nacional de Obras Públicas e Margem Contratual |
 | https://confenge.com.br/reequilibrio-obras-publicas/ | True | — | Organization,Person,BreadcrumbList | Reequilíbrio econômico-financeiro de obra pública |
 | https://confenge.com.br/servicos-obras-publicas/ | True | — | BreadcrumbList | Serviços para licitações e contratos de obras públicas |
 | https://confenge.com.br/termos-de-uso/ | True | — |  | Termos de Uso |

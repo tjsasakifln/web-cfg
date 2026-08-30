@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 """Task-first shell navigation: one source of truth, applied to every page.
 
-The header is replicated on ~200 shipped HTML files. `data/site/brand.json`
-(`navigation.desktop` + `navigation.cta`) is the source; this module renders the
-desktop nav, the mobile nav and the footer navigation column from it and can
-rewrite the shipped HTML deterministically.
+The header is replicated on ~200 shipped HTML files. `data/site/public-ia-map.json`
+(three purchase situations, ≤5 destinations + CTA) is the IA contract;
+`data/site/brand.json` (`navigation.desktop` + `navigation.cta`) mirrors the
+header so existing generators keep a single write path. This module renders the
+desktop nav, the mobile nav and the footer discovery columns and can rewrite
+the shipped HTML deterministically.
 
 Usage:
     python3 scripts/site/shell_nav.py --check    # CI: shipped HTML == source
     python3 scripts/site/shell_nav.py --write    # regenerate shipped HTML
 
-Design notes (issue #183):
-  * "Serviços" and "Problemas que resolvemos" point at real hubs, never at a
-    home anchor, so an internal page keeps the visitor in context.
+Design notes (CFG10X-11 / issue #183):
+  * Header names the three purchase situations in visitor language, plus one
+    essential Biblioteca. Destinations are real pages, never home anchors.
   * `aria-current="page"` marks the active branch on internal pages.
-  * Desktop and mobile carry the same links in the same order; the footer
-    navigation column is generated from the same list.
+  * Desktop and mobile carry the same links in the same order; the footer is a
+    short discovery set derived from the IA map, not a taxonomy dump.
   * Nav links carry `data-cta-position` so route choice is measurable through
     the existing click collector (no new event name, no PII).
 """
@@ -31,6 +33,23 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.pseo.html_shell import breadcrumbs_html  # noqa: E402
+from scripts.site.public_ia import (  # noqa: E402
+    active_header_href as ia_active_header_href,
+    align_breadcrumb_trail,
+    breadcrumb_trail,
+    current_breadcrumb_label,
+    footer_columns_html,
+    header_cta as ia_header_cta,
+    header_items as ia_header_items,
+    parse_jsonld_breadcrumb_trail,
+    parse_visible_breadcrumb_trail,
+    rewrite_breadcrumb_list_jsonld,
+)
+
 BRAND_PATH = ROOT / "data" / "site" / "brand.json"
 
 # Directories that never ship a visitor shell.
@@ -69,8 +88,6 @@ _FROZEN_FALLBACK = (
 def _frozen_shell_files() -> frozenset[str]:
     """Read the freeze from the campaign itself so the two can never diverge."""
     try:
-        if str(ROOT) not in sys.path:
-            sys.path.insert(0, str(ROOT))
         from scripts.bofu_dominance.frozen_specs.constants import (  # noqa: PLC0415
             FORBIDDEN_RELATIVE_PATHS,
         )
@@ -101,6 +118,16 @@ FOOTER_NAV_COL_RE = re.compile(
     r'(<div class="footer-links"><strong>Navegação</strong>)(.*?)(</div>)',
     re.S,
 )
+BREADCRUMB_NAV_RE = re.compile(
+    r'<nav\b(?=[^>]*\bbreadcrumbs\b)[^>]*>.*?</nav>',
+    re.S | re.I,
+)
+FOOTER_TOP_RE = re.compile(
+    r'(<div class="container footer-top">\s*<div class="footer-brand">.*?</div>)'
+    r'(.*?)'
+    r'(\s*</div>\s*<div class="container footer-bottom">)',
+    re.S,
+)
 LEGACY_ANCHOR_HREFS = {
     "/#ofertas": "/servicos-obras-publicas/",
     "/#jornadas": "/problemas-que-resolvemos/",
@@ -111,13 +138,19 @@ def load_brand() -> dict[str, Any]:
     return json.loads(BRAND_PATH.read_text(encoding="utf-8"))
 
 
-def nav_items(brand: dict[str, Any]) -> list[dict[str, str]]:
-    items = (brand.get("navigation") or {}).get("desktop") or []
+def nav_items(brand: dict[str, Any] | None = None) -> list[dict[str, str]]:
+    ia_items = ia_header_items()
+    if ia_items:
+        return ia_items
+    items = ((brand or load_brand()).get("navigation") or {}).get("desktop") or []
     return [{"label": i["label"], "href": i["href"]} for i in items]
 
 
-def nav_cta(brand: dict[str, Any]) -> dict[str, str]:
-    return (brand.get("navigation") or {}).get("cta") or {
+def nav_cta(brand: dict[str, Any] | None = None) -> dict[str, str]:
+    cta = ia_header_cta()
+    if cta.get("label") and cta.get("href"):
+        return cta
+    return ((brand or load_brand()).get("navigation") or {}).get("cta") or {
         "label": "Analisar meu caso",
         "href": "/#formulario-contato",
     }
@@ -155,28 +188,15 @@ def active_nav_href(brand: dict[str, Any], current: str | None) -> str | None:
     if not current_path:
         return None
 
-    # Taxonomy roots own their descendants (articles, tools and specialist pages).
+    mapped = ia_active_header_href(current_path)
+    if mapped:
+        return mapped
+
     for item in nav_items(brand):
         href = item["href"]
         target = _path(href)
         if target and not href.startswith("/#") and _within(current_path, target):
             return href
-
-    services = hub(brand, "services").get("url")
-    if services and any(
-        _within(current_path, _path(offer.get("url")))
-        for offer in brand.get("offers") or []
-        if _path(offer.get("url"))
-    ):
-        return services
-
-    problems = hub(brand, "problems").get("url")
-    if problems and any(
-        _within(current_path, _path(cluster.get("url")))
-        for cluster in problem_clusters(brand)
-        if _path(cluster.get("url"))
-    ):
-        return problems
     return None
 
 
@@ -184,41 +204,35 @@ def _current_flag(href: str, active: str | None) -> str:
     return ' aria-current="page"' if active and href == active else ""
 
 
+def _nav_anchor(position: str, href: str, label: str, current: bool) -> str:
+    aria = ' aria-current="page"' if current else ""
+    return (
+        f'<a data-cta-position="{position}"{aria} '
+        f'href="{html_lib.escape(href, quote=True)}" style="min-height:44px">'
+        f"{html_lib.escape(label)}</a>"
+    )
+
+
 def desktop_links(brand: dict[str, Any], current: str | None = None) -> str:
     active = active_nav_href(brand, current)
     return "\n".join(
-        f'<a data-cta-position="header_nav" href="{i["href"]}"'
-        f'{_current_flag(i["href"], active)}>{i["label"]}</a>'
+        _nav_anchor("header_nav", i["href"], i["label"], i["href"] == active)
         for i in nav_items(brand)
     )
 
 
 def mobile_links(brand: dict[str, Any], current: str | None = None) -> str:
     active = active_nav_href(brand, current)
-    return "".join(
-        f'<a data-cta-position="mobile_nav" href="{i["href"]}"'
-        f'{_current_flag(i["href"], active)}>{i["label"]}</a>'
+    return "\n".join(
+        _nav_anchor("mobile_nav", i["href"], i["label"], i["href"] == active)
         for i in nav_items(brand)
     )
 
 
 def footer_nav_links(brand: dict[str, Any], current: str | None = None) -> str:
-    """Footer navigation column: same taxonomy and order as the header."""
-    active = active_nav_href(brand, current)
-    parts = ['<a href="/">Início</a>']
-    seen = {"/"}
-    for item in nav_items(brand):
-        href = (item.get("href") or "").strip()
-        label = (item.get("label") or "").strip()
-        if not href or href in seen:
-            continue
-        seen.add(href)
-        parts.append(
-            f'<a href="{html_lib.escape(href)}"'
-            f'{_current_flag(href, active)}>{html_lib.escape(label)}</a>'
-        )
-    parts.append('<a href="/#contato">Contato</a>')
-    return "".join(parts)
+    """Footer discovery columns from the IA map (not a taxonomy dump)."""
+    del brand, current
+    return footer_columns_html()
 
 
 def desktop_cta(brand: dict[str, Any]) -> str:
@@ -279,8 +293,61 @@ def _header_cta(match: re.Match[str], brand: dict[str, Any]) -> str:
     return desktop_cta(brand)
 
 
+def _aligned_crumbs(
+    text: str, current: str | None
+) -> list[tuple[str, str | None]] | None:
+    if not current:
+        return None
+    existing = parse_visible_breadcrumb_trail(text)
+    if not existing and "BreadcrumbList" not in text:
+        return None
+    label = current_breadcrumb_label(text)
+    trail = breadcrumb_trail(current, current_label=label)
+    return align_breadcrumb_trail(existing, trail)
+
+
+def _migrated_donor_routes() -> frozenset[str]:
+    """Routes whose canonical names a different page.
+
+    A consolidation donor keeps the breadcrumb its canonical owner defines, so
+    the editorial renderer owns that trail. Restamping it from the physical
+    path would fight that renderer on every build and desync the shell.
+    """
+    out: set[str] = set()
+    pages = ROOT / "data" / "editorial" / "pages"
+    if not pages.is_dir():
+        return frozenset()
+    for record in sorted(pages.glob("*.json")):
+        try:
+            doc = json.loads(record.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001 — a malformed record must not break the sync
+            continue
+        url = str(doc.get("url") or "")
+        canonical = str(doc.get("canonical_path") or "")
+        if url and canonical and url.rstrip("/") != canonical.rstrip("/"):
+            out.add(url.rstrip("/") + "/")
+    return frozenset(out)
+
+
+MIGRATED_DONOR_ROUTES = _migrated_donor_routes()
+
+
+def sync_breadcrumbs(text: str, current: str | None) -> str:
+    """Rewrite visible crumbs and BreadcrumbList from the IA parent chain."""
+    if current and current.rstrip("/") + "/" in MIGRATED_DONOR_ROUTES:
+        return text
+    aligned = _aligned_crumbs(text, current)
+    if not aligned or not current:
+        return text
+    if parse_visible_breadcrumb_trail(text) != aligned and BREADCRUMB_NAV_RE.search(text):
+        text = BREADCRUMB_NAV_RE.sub(breadcrumbs_html(aligned), text, count=1)
+    if parse_jsonld_breadcrumb_trail(text, current) != aligned:
+        text = rewrite_breadcrumb_list_jsonld(text, aligned, current)
+    return text
+
+
 def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
-    """Idempotently align one page's header/footer navigation with brand.json."""
+    """Idempotently align one page's header/footer/breadcrumbs with the IA map."""
     if 'class="desktop-nav"' not in text and 'class="mobile-nav"' not in text:
         return text
 
@@ -295,27 +362,18 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
         inner = f"{mobile_links(brand, current)}\n{mobile_cta(brand)}"
         text = _replace_nav(text, MOBILE_NAV_RE, inner)
 
-    if FOOTER_NAV_COL_RE.search(text):
-        # aria-current stays on the header/mobile nav only — one active mark per page.
+    if FOOTER_TOP_RE.search(text):
+        columns = footer_nav_links(brand)
+        text = FOOTER_TOP_RE.sub(
+            lambda m: f"{m.group(1)}\n{columns}{m.group(3)}", text, count=1
+        )
+    elif FOOTER_NAV_COL_RE.search(text):
         links = footer_nav_links(brand)
         text = FOOTER_NAV_COL_RE.sub(
             lambda m: f"{m.group(1)}{links}{m.group(3)}", text, count=1
         )
 
-    services = hub(brand, "services")
-    problems = hub(brand, "problems")
-    if services.get("url"):
-        text = text.replace(
-            '<div class="footer-links"><strong>Ofertas</strong>',
-            '<div class="footer-links"><strong>Serviços</strong>'
-            f'<a href="{services["url"]}">Todos os serviços</a>',
-        )
-    if problems.get("url"):
-        text = text.replace(
-            "<strong>Problemas técnicos</strong>",
-            "<strong>Problemas que resolvemos</strong>"
-            f'<a href="{problems["url"]}">Todos os problemas</a>',
-        )
+    text = sync_breadcrumbs(text, current)
 
     # Any remaining home-anchor pointer (footer, inline links) follows the label.
     for legacy, target in LEGACY_ANCHOR_HREFS.items():
@@ -325,6 +383,14 @@ def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
 
 def run(write: bool) -> int:
     brand = load_brand()
+    ia_labels = [item["label"] for item in ia_header_items()]
+    brand_labels = [item["label"] for item in (brand.get("navigation") or {}).get("desktop") or []]
+    if ia_labels != brand_labels:
+        print(
+            "FAIL brand.json navigation.desktop does not match "
+            f"data/site/public-ia-map.json header: {brand_labels} != {ia_labels}"
+        )
+        return 1
     changed: list[str] = []
     for path in shipped_html_files():
         original = path.read_text(encoding="utf-8")

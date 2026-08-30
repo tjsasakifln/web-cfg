@@ -1,0 +1,352 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-08-29",
+  "purpose": "Source of truth for public information architecture: three purchase situations, hub roles, header/footer chrome, and route → job → parent → next action → index state.",
+  "quality_baseline": {
+    "origin_main_sha": "72ed3831ba28c9400627cdc9599aa54e9329e178",
+    "measured_at": "2026-08-29",
+    "indexable_routes": 75,
+    "orphan_count": 1,
+    "avg_click_depth": 1.8243243243243243,
+    "max_click_depth": 5
+  },
+  "hub_roles": [
+    "solucao_comercial",
+    "problema",
+    "educacao",
+    "ferramenta",
+    "evidencia",
+    "institucional"
+  ],
+  "journeys": [
+    {
+      "id": "edital",
+      "label": "Edital e proposta",
+      "visitor_language": "Estou analisando uma licitação",
+      "href": "/bid-room-licitacoes-obras/",
+      "need": "leitura do edital, habilitação, orçamento e decisão de participar"
+    },
+    {
+      "id": "contrato",
+      "label": "Contrato sob pressão",
+      "visitor_language": "Tenho um contrato sob pressão",
+      "href": "/problemas-que-resolvemos/",
+      "need": "glosa, medição, aditivo, atraso, reequilíbrio ou defesa técnica"
+    },
+    {
+      "id": "operacao",
+      "label": "Operação recorrente",
+      "visitor_language": "Preciso organizar a operação em obras públicas",
+      "href": "/diretoria-b2g/",
+      "need": "rotina de escolha, orçamento, responsáveis e acompanhamento"
+    }
+  ],
+  "header": {
+    "destinations": [
+      {
+        "label": "Edital e proposta",
+        "href": "/bid-room-licitacoes-obras/",
+        "journey": "edital"
+      },
+      {
+        "label": "Contrato sob pressão",
+        "href": "/problemas-que-resolvemos/",
+        "journey": "contrato"
+      },
+      {
+        "label": "Operação recorrente",
+        "href": "/diretoria-b2g/",
+        "journey": "operacao"
+      },
+      {
+        "label": "Biblioteca",
+        "href": "/conteudos/",
+        "hub": "conteudos"
+      }
+    ],
+    "cta": {
+      "label": "Analisar meu caso",
+      "href": "/#formulario-contato"
+    }
+  },
+  "footer": {
+    "columns": [
+      {
+        "heading": "Situações",
+        "links": [
+          { "label": "Edital e proposta", "href": "/bid-room-licitacoes-obras/" },
+          { "label": "Contrato sob pressão", "href": "/problemas-que-resolvemos/" },
+          { "label": "Operação recorrente", "href": "/diretoria-b2g/" }
+        ]
+      },
+      {
+        "heading": "Biblioteca",
+        "links": [
+          { "label": "Conteúdos", "href": "/conteudos/" },
+          { "label": "Ferramentas", "href": "/ferramentas/" },
+          { "label": "Entregas", "href": "/entregas/" },
+          { "label": "Casos", "href": "/casos/" },
+          { "label": "Aditivos", "href": "/aditivos-obras-publicas/" },
+          { "label": "Atrasos", "href": "/atrasos-prorrogacao-obras-publicas/" },
+          { "label": "Defesa técnica", "href": "/defesa-tecnica-contratos-publicos/" },
+          { "label": "Reequilíbrio", "href": "/reequilibrio-obras-publicas/" }
+        ]
+      },
+      {
+        "heading": "Empresa",
+        "links": [
+          { "label": "Serviços", "href": "/servicos-obras-publicas/" },
+          { "label": "Especialista", "href": "/especialista/tiago-jun-sasaki/" },
+          { "label": "Imprensa", "href": "/imprensa/" }
+        ],
+        "contact": true
+      }
+    ]
+  },
+  "hubs": [
+    {
+      "id": "servicos",
+      "route": "/servicos-obras-publicas/",
+      "role": "solucao_comercial",
+      "label": "Serviços",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "problemas",
+      "route": "/problemas-que-resolvemos/",
+      "role": "problema",
+      "label": "Problemas que resolvemos",
+      "next_action": "/defesa-margem-contratos-publicos/"
+    },
+    {
+      "id": "conteudos",
+      "route": "/conteudos/",
+      "role": "educacao",
+      "label": "Conteúdos",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "ferramentas",
+      "route": "/ferramentas/",
+      "role": "ferramenta",
+      "label": "Ferramentas",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "entregas",
+      "route": "/entregas/",
+      "role": "evidencia",
+      "label": "Entregas",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "casos",
+      "route": "/casos/",
+      "role": "evidencia",
+      "label": "Casos",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "especialista",
+      "route": "/especialista/tiago-jun-sasaki/",
+      "role": "institucional",
+      "label": "Especialista",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "guias",
+      "route": "/guias-contratos-obras/",
+      "role": "educacao",
+      "label": "Guias",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "lei-14133",
+      "route": "/lei-14133-obras/",
+      "role": "educacao",
+      "label": "Lei 14.133",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "jurisprudencia",
+      "route": "/jurisprudencia-contratos-obras/",
+      "role": "educacao",
+      "label": "Jurisprudência",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "radar",
+      "route": "/radar/",
+      "role": "evidencia",
+      "label": "Radar",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "analises",
+      "route": "/analises-contratos-publicos/",
+      "role": "evidencia",
+      "label": "Análises de contratos",
+      "next_action": "/#formulario-contato",
+      "chrome": "hidden",
+      "chrome_reason": "Hub noindex — reachable from search and child pages, not from header or footer."
+    },
+    {
+      "id": "panorama",
+      "route": "/panorama-mercado-obras-publicas/",
+      "role": "evidencia",
+      "label": "Panorama de mercado",
+      "next_action": "/#formulario-contato"
+    },
+    {
+      "id": "inteligencia",
+      "route": "/inteligencia/",
+      "role": "evidencia",
+      "label": "Inteligência",
+      "next_action": "/#formulario-contato",
+      "chrome": "hidden",
+      "chrome_reason": "Hub noindex — reachable from search and deep pages, not from header or footer."
+    },
+    {
+      "id": "metodologia",
+      "route": "/metodologia-inteligencia/",
+      "role": "institucional",
+      "label": "Metodologia",
+      "next_action": "/#formulario-contato",
+      "chrome": "hidden",
+      "chrome_reason": "Method page is not a purchase situation; keep off primary chrome."
+    }
+  ],
+  "parents": [
+    { "prefix": "/", "parent": null, "exact": true },
+    { "prefix": "/conteudos/", "parent": "/", "exact": true },
+    { "prefix": "/conteudos/", "parent": "/conteudos/" },
+    { "prefix": "/ferramentas/", "parent": "/", "exact": true },
+    { "prefix": "/ferramentas/", "parent": "/ferramentas/" },
+    { "prefix": "/servicos-obras-publicas/", "parent": "/", "exact": true },
+    { "prefix": "/problemas-que-resolvemos/", "parent": "/", "exact": true },
+    { "prefix": "/entregas/", "parent": "/", "exact": true },
+    { "prefix": "/casos/modelo-", "parent": "/entregas/" },
+    { "prefix": "/casos/", "parent": "/", "exact": true },
+    { "prefix": "/casos/", "parent": "/casos/" },
+    { "prefix": "/especialista/", "parent": "/" },
+    { "prefix": "/bid-room-licitacoes-obras/", "parent": "/" },
+    { "prefix": "/diretoria-b2g/", "parent": "/" },
+    { "prefix": "/defesa-margem-contratos-publicos/", "parent": "/problemas-que-resolvemos/" },
+    { "prefix": "/diagnostico-b2g-360/", "parent": "/servicos-obras-publicas/" },
+    { "prefix": "/diagnostico-b2g-expansao/", "parent": "/servicos-obras-publicas/" },
+    { "prefix": "/diagnostico-pre-licitacao/", "parent": "/problemas-que-resolvemos/" },
+    { "prefix": "/auditoria-orcamento-licitacao/", "parent": "/problemas-que-resolvemos/" },
+    { "prefix": "/acompanhamento-contratos-obras/", "parent": "/problemas-que-resolvemos/" },
+    { "prefix": "/medicoes-glosas-obras-publicas/", "parent": "/problemas-que-resolvemos/" },
+    { "prefix": "/aditivos-obras-publicas/", "parent": "/problemas-que-resolvemos/" },
+    { "prefix": "/atrasos-prorrogacao-obras-publicas/", "parent": "/problemas-que-resolvemos/" },
+    { "prefix": "/reequilibrio-obras-publicas/", "parent": "/problemas-que-resolvemos/" },
+    { "prefix": "/defesa-tecnica-contratos-publicos/", "parent": "/problemas-que-resolvemos/" },
+    { "prefix": "/guias-contratos-obras/", "parent": "/", "exact": true },
+    { "prefix": "/guias-contratos-obras/", "parent": "/guias-contratos-obras/" },
+    { "prefix": "/lei-14133-obras/", "parent": "/", "exact": true },
+    { "prefix": "/lei-14133-obras/", "parent": "/lei-14133-obras/" },
+    { "prefix": "/jurisprudencia-contratos-obras/", "parent": "/", "exact": true },
+    { "prefix": "/jurisprudencia-contratos-obras/", "parent": "/jurisprudencia-contratos-obras/" },
+    { "prefix": "/radar/", "parent": "/", "exact": true },
+    { "prefix": "/radar/", "parent": "/radar/" },
+    { "prefix": "/analises-contratos-publicos/", "parent": "/", "exact": true },
+    { "prefix": "/analises-contratos-publicos/", "parent": "/analises-contratos-publicos/" },
+    { "prefix": "/panorama-mercado-obras-publicas/", "parent": "/", "exact": true },
+    { "prefix": "/panorama-mercado-obras-publicas/", "parent": "/panorama-mercado-obras-publicas/" },
+    { "prefix": "/inteligencia/", "parent": "/", "exact": true },
+    { "prefix": "/inteligencia/", "parent": "/inteligencia/" },
+    { "prefix": "/metodologia-inteligencia/", "parent": "/" },
+    { "prefix": "/privacidade/", "parent": "/" },
+    { "prefix": "/termos-de-uso/", "parent": "/" },
+    { "prefix": "/conflitos/", "parent": "/" },
+    { "prefix": "/uso-de-ia/", "parent": "/" },
+    { "prefix": "/imprensa/", "parent": "/" },
+    { "prefix": "/correcoes/", "parent": "/" },
+    { "prefix": "/politica-editorial/", "parent": "/", "exact": true },
+    { "prefix": "/politica-editorial/", "parent": "/politica-editorial/" },
+    { "prefix": "/comercial/", "parent": "/" },
+    { "prefix": "/nurture/", "parent": "/" },
+    { "prefix": "/piloto/", "parent": "/" }
+  ],
+  "active_header": [
+    { "prefix": "/bid-room-licitacoes-obras/", "href": "/bid-room-licitacoes-obras/" },
+    { "prefix": "/diagnostico-pre-licitacao/", "href": "/bid-room-licitacoes-obras/" },
+    { "prefix": "/auditoria-orcamento-licitacao/", "href": "/bid-room-licitacoes-obras/" },
+    { "prefix": "/problemas-que-resolvemos/", "href": "/problemas-que-resolvemos/" },
+    { "prefix": "/defesa-margem-contratos-publicos/", "href": "/problemas-que-resolvemos/" },
+    { "prefix": "/defesa-tecnica-contratos-publicos/", "href": "/problemas-que-resolvemos/" },
+    { "prefix": "/medicoes-glosas-obras-publicas/", "href": "/problemas-que-resolvemos/" },
+    { "prefix": "/aditivos-obras-publicas/", "href": "/problemas-que-resolvemos/" },
+    { "prefix": "/atrasos-prorrogacao-obras-publicas/", "href": "/problemas-que-resolvemos/" },
+    { "prefix": "/reequilibrio-obras-publicas/", "href": "/problemas-que-resolvemos/" },
+    { "prefix": "/acompanhamento-contratos-obras/", "href": "/problemas-que-resolvemos/" },
+    { "prefix": "/diretoria-b2g/", "href": "/diretoria-b2g/" },
+    { "prefix": "/diagnostico-b2g-360/", "href": "/diretoria-b2g/" },
+    { "prefix": "/diagnostico-b2g-expansao/", "href": "/diretoria-b2g/" },
+    { "prefix": "/conteudos/", "href": "/conteudos/" },
+    { "prefix": "/guias-contratos-obras/", "href": "/conteudos/" },
+    { "prefix": "/lei-14133-obras/", "href": "/conteudos/" },
+    { "prefix": "/jurisprudencia-contratos-obras/", "href": "/conteudos/" },
+    { "prefix": "/ferramentas/", "href": "/conteudos/" }
+  ],
+  "removed_from_primary_nav": [
+    {
+      "label": "Serviços",
+      "href": "/servicos-obras-publicas/",
+      "reason": "Taxonomia sobreposta às três situações de compra; permanece como hub de solução comercial no rodapé."
+    },
+    {
+      "label": "Problemas que resolvemos",
+      "href": "/problemas-que-resolvemos/",
+      "reason": "O destino permanece no header com o rótulo da situação (Contrato sob pressão), sem um segundo item de taxonomia."
+    },
+    {
+      "label": "Entregas",
+      "href": "/entregas/",
+      "reason": "Catálogo de evidência, não uma situação de compra; descoberta no rodapé Biblioteca."
+    },
+    {
+      "label": "Especialista",
+      "href": "/especialista/tiago-jun-sasaki/",
+      "reason": "Página institucional; descoberta no rodapé Empresa."
+    }
+  ],
+  "removed_from_prominent_chrome": [
+    {
+      "label": "Inteligência",
+      "href": "/inteligencia/",
+      "reason": "Hub noindex — chrome principal não aponta para noindex."
+    },
+    {
+      "label": "Metodologia",
+      "href": "/metodologia-inteligencia/",
+      "reason": "Não é situação de compra nem destino de descoberta de primeiro nível."
+    },
+    {
+      "label": "Radar",
+      "href": "/radar/",
+      "reason": "Evidência profunda; permanece acessível pelo hub de conteúdos."
+    },
+    {
+      "label": "Lei 14.133",
+      "href": "/lei-14133-obras/",
+      "reason": "Educação profunda; permanece acessível pelo hub e busca."
+    },
+    {
+      "label": "Jurisprudência",
+      "href": "/jurisprudencia-contratos-obras/",
+      "reason": "Educação profunda; permanece acessível pelo hub e busca."
+    },
+    {
+      "label": "clusters de problema no rodapé",
+      "href": "/problemas-que-resolvemos/",
+      "reason": "O rodapé deixa de enumerar os oito temas; mantém apenas atalhos de alta intenção, enquanto o hub cobre a descoberta completa."
+    },
+    {
+      "label": "ofertas individuais no rodapé",
+      "href": "/servicos-obras-publicas/",
+      "reason": "O rodapé listava cada oferta; as três situações e o hub de serviços cobrem a descoberta."
+    }
+  ]
+}
