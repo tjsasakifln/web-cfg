@@ -230,7 +230,7 @@ ok(
 );
 ok(
   "featured_lead_support",
-  /featured-decision|featured-lead/.test(hub),
+  /featured-decision/.test(hub) && /featured-lead/.test(hub),
   "featured should be lead + support, not equal card grid",
 );
 

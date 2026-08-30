@@ -315,7 +315,7 @@ await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
 await page.goto(`${base}/entregas/`, { waitUntil: "networkidle0", timeout: 30000 });
 const catalogLazyBefore = await page.evaluate(() => performance.getEntriesByType("resource")
   .map((entry) => entry.name)
-  .filter((name) => name.endsWith("/entregas/catalog.css") || name.endsWith("/entregas/catalog-data.js") || name.endsWith("/entregas/catalog.js")));
+  .filter((name) => name.endsWith("/entregas/catalog-data.js") || name.endsWith("/entregas/catalog.js")));
 const catalogErrors = [];
 if (catalogLazyBefore.length) catalogErrors.push("catalog_scripts_loaded");
 const catalogBoot = await page.evaluate(() => ({

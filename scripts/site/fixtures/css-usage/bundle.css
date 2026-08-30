@@ -1,0 +1,9 @@
+/* Fixture for the #511 word-boundary regression.
+   `hero` only ever appears as a substring of `content-hero` in page.html, so a
+   `\b{class}\b` match called it used and the dead rule survived every cleanup. */
+.hero{padding:64px 0}
+.content-hero{padding:32px 0}
+.content-hero h1{font-size:2rem}
+.is-open{display:block}
+.reveal{opacity:0}
+a[href$=".css"]{text-decoration:underline}

@@ -291,7 +291,7 @@ def gate_naturalness(*, only_indexable: bool = True) -> GateReport:
 
 
 _FEATURED_BLOCK = re.compile(
-    r'<(?:article|section|div|p|a)[^>]*(?:class="[^"]*(?:featured|library-item|featured-content|featured-lead|contact-content-hint)[^"]*")[^>]*>[\s\S]*?</(?:article|section|div|p|a)>',
+    r'<(?:article|section|div|p|a)[^>]*(?:class="[^"]*(?:featured|library-item)[^"]*")[^>]*>[\s\S]*?</(?:article|section|div|p|a)>',
     re.I,
 )
 _HREF = re.compile(r"""href=["']([^"']+)["']""", re.I)
@@ -377,6 +377,9 @@ def pillar_guide_count_findings(pillar: str, html: str) -> list[Finding]:
                     excerpt=f"{m.group(0)} kept={kept}",
                 )
             )
+    # No pillar page renders the .pillar-stat tile today and its CSS is gone,
+    # but this is a content guard, not a CSS reference: it fails closed if the
+    # markup ever comes back with a count the library cannot back.
     for m in re.finditer(
         r'class="pillar-stat"[^>]*>\s*<strong>(\d+)</strong>\s*<span>([^<]*guia[^<]*)</span>',
         html,
@@ -485,17 +488,21 @@ def gate_index_surface() -> GateReport:
                             excerpt=href,
                         )
                     )
-        for href in re.findall(r'class="featured-content" href="(/conteudos/[^"]+)"', ht):
-            local = ROOT / href.strip("/") / "index.html"
-            if local.exists() and is_noindex(local.read_text(encoding="utf-8", errors="replace")):
-                findings.append(
-                    Finding(
-                        gate="index_surface",
-                        path="conteudos/index.html",
-                        reason="noindex_in_hub_featured",
-                        excerpt=href,
+        # The hub ships a lead article plus a support list, not .featured-content cards.
+        for block in re.finditer(
+            r'<(?P<tag>article|ul) class="featured-(?:lead|support)"[\s\S]*?</(?P=tag)>', ht
+        ):
+            for href in re.findall(r'href="(/conteudos/[^"]+)"', block.group(0)):
+                local = ROOT / href.strip("/") / "index.html"
+                if local.exists() and is_noindex(local.read_text(encoding="utf-8", errors="replace")):
+                    findings.append(
+                        Finding(
+                            gate="index_surface",
+                            path="conteudos/index.html",
+                            reason="noindex_in_hub_featured",
+                            excerpt=href,
+                        )
                     )
-                )
 
 
     # Pillar hubs must not promote noindex library items

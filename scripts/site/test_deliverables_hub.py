@@ -27,7 +27,6 @@ ROOT = Path(__file__).resolve().parents[2]
 ROUTE = "/entregas/"
 CANONICAL = f"https://confenge.com.br{ROUTE}"
 PAGE = ROOT / "entregas" / "index.html"
-CSS = PAGE.with_name("catalog.css")
 CATALOG_DATA = PAGE.with_name("catalog-data.js")
 REPORT_ROUTE = "/casos/modelo-relatorio-inteligencia-licitacoes/"
 REPORT = ROOT / REPORT_ROUTE.strip("/") / "index.html"
@@ -103,7 +102,7 @@ def _jsonld_graph() -> list[dict]:
 def test_hub_is_direct_indexable_html_without_friction() -> None:
     html = _html()
     lowered = html.casefold()
-    assert PAGE.is_file() and CSS.is_file()
+    assert PAGE.is_file()
     assert '<main id="conteudo">' in html
     assert f'<link href="{CANONICAL}" rel="canonical"/>' in html
     assert (
@@ -248,6 +247,8 @@ def test_each_published_offer_has_one_primary_representation_with_essential_term
 
 def test_progressive_catalog_css_does_not_block_first_paint() -> None:
     html = _html()
+    # The retired progressive stylesheet is deleted, not merely unlinked.
+    assert not PAGE.with_name("catalog.css").exists()
     assert '<link data-catalog-css' not in html
     assert "/entregas/catalog.css" not in html
     assert "/entregas/catalog-bootstrap.js" not in html

@@ -17,12 +17,12 @@ BODY_MIN_PX = 16.0
 # captions, form hints, table headers). Decorative ::before counters are
 # excluded so a 22px numbered disc can stay compact.
 CRITICAL_SELECTOR = re.compile(
-    r"(hero-proof|hero-micro|hero-real-proof|evidence-|disclaimer|form-hint|form-note|"
+    r"(hero-proof|hero-micro|evidence-|disclaimer|form-hint|form-note|"
     r"form-step-legend|consent|field label|figcaption|thead th|article-meta|"
     r"table-note|technical-note|content-badge|item-meta|author-box span|"
     r"aside-card>span|lead-inline-copy span|directory-search label|"
-    r"breakout-meta dt|compare-table thead|trace-matrix thead|"
-    r"catalog-item__facts dt|vitrine-item__facts dt|deliverable-section-head|operating-marker)",
+    r"breakout-meta dt|compare-table thead|"
+    r"vitrine-item__facts dt|operating-marker)",
     re.I,
 )
 
@@ -121,7 +121,6 @@ def public_css_paths(root: Path) -> list[Path]:
         root / "styles-offers.css",
         root / "styles-hubs.css",
         root / "entregas" / "styles.css",
-        root / "entregas" / "catalog.css",
         root / "assets" / "eight-offer-contract.css",
     ]
     return [p for p in paths if p.is_file()]

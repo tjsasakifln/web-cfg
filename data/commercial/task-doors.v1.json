@@ -466,7 +466,6 @@
     "client_loader": "entregas/catalog-bootstrap.js",
     "client_script": "entregas/catalog.js",
     "client_data_asset": "entregas/catalog-data.js",
-    "client_stylesheet": "entregas/catalog.css",
     "stylesheet": "entregas/styles.css",
     "published_offer_count": 8,
     "capability_roll_count": 54,
