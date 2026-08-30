@@ -1170,7 +1170,9 @@ def test_thankyou_specialist_cta_family():
 
 MIN_NON_TEXT_CONTRAST = 3.0
 
-FOCUS_CSS_SURFACE = (
+# The sheets that carried a bespoke ring when #506 was opened. Kept as a floor
+# so a discovery bug that matches nothing cannot turn the gate into a no-op.
+FOCUS_CSS_FLOOR = (
     "styles.css",
     "styles-tokens.css",
     "styles-tools.css",
@@ -1183,6 +1185,28 @@ FOCUS_CSS_SURFACE = (
     "entregas/catalog.css",
     "diagnostico-pre-licitacao/products.css",
 )
+
+# `scripts/` holds fixtures and tooling, not shipped CSS: a fixture exists to
+# carry a broken value on purpose, so scanning it would fail the gate for the
+# wrong reason.
+FOCUS_CSS_SKIP_PARTS = {".git", ".claude", ".worktrees", "_site", "node_modules", "scripts"}
+
+
+def focus_css_surface() -> tuple[str, ...]:
+    """Every stylesheet the public surface ships, discovered rather than listed.
+
+    A hardcoded list only holds the sheets that were already wrong. Discovery is
+    what makes the hundredth stylesheet inherit the measured ring instead of
+    reinventing an rgba nobody measured.
+    """
+    found = sorted(
+        path.relative_to(ROOT).as_posix()
+        for path in ROOT.rglob("*.css")
+        if not any(part in FOCUS_CSS_SKIP_PARTS for part in path.relative_to(ROOT).parts)
+    )
+    missing = [name for name in FOCUS_CSS_FLOOR if name not in found]
+    assert not missing, f"focus CSS discovery stopped seeing shipped sheets: {missing}"
+    return tuple(found)
 
 # Every background the focus ring can land on, taken from the token palette.
 FOCUS_BACKGROUND_TOKENS = (
@@ -1312,7 +1336,7 @@ def test_focus_indicators_never_reintroduce_an_unmeasured_ring():
     """
     tokens = _design_tokens()
     offenders: list[str] = []
-    for relative in FOCUS_CSS_SURFACE:
+    for relative in focus_css_surface():
         path = ROOT / relative
         assert path.is_file(), relative
         for selector, body in _focus_rules(path.read_text(encoding="utf-8")):
