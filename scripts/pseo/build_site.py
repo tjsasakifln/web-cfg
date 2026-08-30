@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from html import escape
@@ -172,6 +173,77 @@ def write_build_info(
         encoding="utf-8",
     )
     return path
+
+
+# --- prototype isolation (#507, pre-condition P4 of #494) -------------------
+# Versioned design prototypes are working material, not a public surface. They
+# live here and nowhere else, so "is this a prototype?" is a path question with
+# one answer instead of a judgement call per file.
+PROTOTYPE_SOURCE_DIR = "docs/design-audit/prototypes"
+# The two path segments that identify a prototype inside the built artifact.
+# Matching on the segment pair catches both a straight `docs/` copy and a
+# prototype promoted one level up during assembly.
+PROTOTYPE_PATH_SEGMENTS = ("design-audit", "prototypes")
+
+
+def prototype_source_root(root: Path | None = None) -> Path:
+    """The single directory that may hold design prototypes."""
+    return (root or ROOT) / PROTOTYPE_SOURCE_DIR
+
+
+def is_prototype_public_path(relative_path: str) -> bool:
+    """True when a path inside the public artifact belongs to a prototype."""
+    parts = relative_path.replace("\\", "/").strip("/").split("/")
+    head, tail = PROTOTYPE_PATH_SEGMENTS
+    return any(
+        parts[index] == head and parts[index + 1] == tail
+        for index in range(len(parts) - 1)
+    )
+
+
+def iter_prototype_leaks(public_root: Path) -> list[str]:
+    """Relative paths under the public artifact that belong to a prototype."""
+    if not public_root.is_dir():
+        return []
+    leaks: list[str] = []
+    for path in public_root.rglob("*"):
+        relative = path.relative_to(public_root).as_posix()
+        if is_prototype_public_path(relative):
+            leaks.append(relative)
+    return sorted(leaks)
+
+
+def enforce_prototype_isolation(public_root: Path) -> dict:
+    """Keep every prototype path out of the built `_site`, fail-closed.
+
+    A leak is removed so the artifact that ships is safe, and reported so the
+    build still fails: a prototype reaching the artifact means the source
+    allowlist regressed, and an unregistered route is a conversion-gate failure
+    that would otherwise be found late and as the wrong error.
+    """
+    leaks = iter_prototype_leaks(public_root)
+    removed: list[str] = []
+    for relative in leaks:
+        target = public_root / relative
+        if not target.exists() and not target.is_symlink():
+            continue
+        if target.is_dir() and not target.is_symlink():
+            shutil.rmtree(target)
+        else:
+            target.unlink()
+        removed.append(relative)
+    remaining = iter_prototype_leaks(public_root)
+    if remaining:
+        raise RuntimeError(
+            "prototype_isolation_failed: "
+            + ",".join(remaining[:5])
+        )
+    return {
+        "source": PROTOTYPE_SOURCE_DIR,
+        "public_directory": public_root.name,
+        "leaked": bool(removed),
+        "removed": removed,
+    }
 
 
 def run_node_gate(script: str) -> dict:
@@ -567,6 +639,18 @@ def main(argv: list[str] | None = None) -> int:
     if not artifact.get("ok"):
         errors.extend(artifact.get("errors") or ["assemble_public_artifact failed"])
 
+    # Prototypes must not reach the artifact. Checked right after assembly so a
+    # leak cannot be hashed, normalized or published downstream.
+    prototype_isolation: dict = {}
+    try:
+        prototype_isolation = enforce_prototype_isolation(ROOT / PUBLIC_DIR_NAME)
+        if prototype_isolation.get("leaked"):
+            errors.append(
+                "prototype_leak:" + ",".join(prototype_isolation.get("removed") or [])
+            )
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"prototype_isolation_failed:{exc}")
+
     responsive_html: dict[str, int] = {}
     try:
         responsive_html = normalize_responsive_public_html(ROOT / PUBLIC_DIR_NAME)
@@ -675,6 +759,7 @@ def main(argv: list[str] | None = None) -> int:
         },
         "validate": {"ok": v.get("ok"), "error_count": len(v.get("errors") or [])},
         "visible_parity": parity_summary,
+        "prototype_isolation": prototype_isolation,
         "turnstile": turnstile_config,
         "responsive_html": responsive_html,
         "public_artifact": {
