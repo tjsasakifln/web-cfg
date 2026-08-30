@@ -148,7 +148,13 @@ def test_sources_show_consulta_date_and_application_limit():
         ), route
         assert "Limite:" in html or "Limite de aplicação" in html, route
         assert "planalto.gov.br" in html
-        assert "Acórdão" not in html and "relator" not in html.lower()
+        if route == "/conteudos/chuva-prorrogacao-prazo-obra-publica/":
+            assert "Acórdão 639/2006-Plenário" in html
+            assert "Acórdão 3.077/2010-Plenário" in html
+            assert "não cria teste universal" in html
+            assert "anterior à Lei 14.133" in html
+        else:
+            assert "Acórdão" not in html and "relator" not in html.lower()
         assert "licitacoesecontratos.tcu.gov.br/6-1-7-pagamento/" not in html
         assert "prorrogacao-escopo-cju-sp-maio-2019.docx" not in html
 

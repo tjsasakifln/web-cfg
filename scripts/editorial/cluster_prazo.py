@@ -21,9 +21,23 @@ OWNED_ROUTES: tuple[str, ...] = (
     "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
     "/conteudos/resposta-notificacao-atraso-obra-publica/",
     "/lei-14133-obras/atraso-imputavel-administracao/",
+    "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
 )
 
 OWNERSHIP: dict[str, dict[str, Any]] = {
+    "/conteudos/chuva-prorrogacao-prazo-obra-publica/": {
+        "decision_id": "qualificar-evento-climatico",
+        "h1_needles": ("chuva", "impact"),
+        "forbidden_hrefs": ("/defesa-margem-contratos-publicos/",),
+        "required_hrefs": (
+            "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+            "/conteudos/atraso-obra-culpa-administracao/",
+            "/conteudos/resposta-notificacao-atraso-obra-publica/",
+            "/lei-14133-obras/atraso-imputavel-administracao/",
+        ),
+        "section_ids": ("cronologia", "matriz", "exemplo-tecnico", "checklist"),
+        "cta_needles": ("evento", "climático"),
+    },
     "/conteudos/atraso-obra-culpa-administracao/": {
         "decision_id": "provar-causa",
         "h1_needles": ("prova", "culpa"),

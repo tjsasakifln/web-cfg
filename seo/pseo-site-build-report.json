@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "3252b15bb811425b88b133761a876083cac93db5",
+  "web_cfg_sha": "5b140bf7c1d29276afd725ffc523a6a70f34a392",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "e0e25de478ef97db04b4edb43d82889d9e6a9c64ac98d63789a1e7d7c91dbd40",
-  "manifest_hash": "7f99aee012fa1df790e36f122ed4f79543e078d81624547aefb419168364a79a",
+  "public_artifact_hash": "ecc2c3d1773ed4de9f8d7720a92fed779d5ef3f699357fa48bf4d08a64c9c2db",
+  "manifest_hash": "7ea2ec5f6ded541c572e6f38069593398d0af0be13adb7be6a7772248226ffa9",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -34,7 +34,7 @@
   },
   "visible_parity": {
     "ok": true,
-    "page_count": 75,
+    "page_count": 76,
     "defect_count": 0
   },
   "turnstile": {

@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 75,
+  "page_count": 76,
   "pages": [
     {
       "claimed": {
@@ -1612,6 +1612,73 @@
         "permission_class": null,
         "reviewers": [],
         "title": "BDI diferenciado em materiais e equipamentos: quando usar | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
+          "Conteúdos",
+          "Atrasos e prorrogações",
+          "Chuva na obra pública: quando o prazo é tecnicamente impactado"
+        ],
+        "dataset_names": [],
+        "dates": [
+          "2026-07-15",
+          "2026-08-29"
+        ],
+        "descriptions": [
+          "Choveu não basta: compare evento oficial, atividade afetada, caminho crítico, mitigação e registros antes de discutir prorrogação."
+        ],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [
+          "Chuva na obra pública: quando o prazo é tecnicamente impactado"
+        ],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE",
+          "Biblioteca técnica CONFENGE"
+        ],
+        "people": [],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Article",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+      "visible": {
+        "authors": [
+          "Biblioteca técnica CONFENGE"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Conteúdos",
+          "Atrasos e prorrogações",
+          "Chuva na obra pública: quando o prazo é tecnicamente impactado"
+        ],
+        "canonical": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "dates": [
+          "2026-07-15",
+          "2026-08-29"
+        ],
+        "description": "Choveu não basta: compare evento oficial, atividade afetada, caminho crítico, mitigação e registros antes de discutir prorrogação.",
+        "h1": "Chuva na obra pública: quando o prazo é tecnicamente impactado",
+        "has_dataset_surface": true,
+        "licenses": [],
+        "permission_class": null,
+        "reviewers": [],
+        "title": "Chuva e prorrogação de obra pública: quando há impacto | CONFENGE",
         "versions": []
       }
     },
@@ -4376,5 +4443,5 @@
       }
     }
   ],
-  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/wa469/_site"
+  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/wa491/_site"
 }
