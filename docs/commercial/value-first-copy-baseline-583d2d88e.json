@@ -403,7 +403,57 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20problema%20urgente%20em%20contrato%20p%C3%BAblico%20(glosa%2C%20medi%C3%A7%C3%A3o%2C%20aditivo%2C%20reequil%C3%ADbrio%20ou%20atraso)%20e%20preciso%20de%20an%C3%A1lise%20inicial.",
           "cta_id": "pillar_bridge"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Indicadores de prazo, medição e caixa para a direção.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D25]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D25",
+          "trigger": "O contrato está em execução e os fatos não viram registro antes de virarem prejuízo.",
+          "decision": "Como um contrato ativo deve registrar e decidir antes da crise?",
+          "artifact": [
+            "matriz de obrigações, mudanças e pendências",
+            "painel de prazo, medição e caixa",
+            "fila de fatos ainda não convertidos em pleito",
+            "pauta e ata de decisão",
+            "alertas de lacuna documental",
+            "encaminhamento para dossiê específico"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 14,
+          "first_artifact_block": 14,
+          "first_positive_proof_block": 67,
+          "first_action_block": 6,
+          "first_limitation_block": 2,
+          "defensive_opening_findings": 2
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Enviar dados para análise",
+            "Estruturar a rotina de acompanhamento"
+          ],
+          "submit_labels": [
+            "Enviar para análise"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "service-pillars"
+        }
+      }
     },
     {
       "route": "/aditivos-obras-publicas/",
@@ -443,7 +493,60 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20estruturar%20aditivo%20ou%20servi%C3%A7o%20extra%20com%20base%20t%C3%A9cnica%20e%20econ%C3%B4mica.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Aditivos e serviços extras em obras públicas: documentar, precificar e decidir",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D19]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D19",
+          "trigger": "A obra executou ou vai executar serviço fora do escopo original sem cobertura formal.",
+          "decision": "Esta mudança de escopo está coberta, e o que falta para instruir o aditivo?",
+          "artifact": [
+            "escopo original comparado ao alterado",
+            "cronologia",
+            "ordem ou autorização",
+            "natureza qualitativa ou quantitativa",
+            "saldo de acréscimos e supressões",
+            "preço de item novo",
+            "impacto em prazo e custo",
+            "matriz documental para termo ou apostila"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 2,
+          "first_artifact_block": 10,
+          "first_positive_proof_block": -1,
+          "first_action_block": 4,
+          "first_limitation_block": 1,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Verificar o contrato no diagnóstico de defesa de margem",
+            "Enquadrar o evento contratual"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "MEASUREMENT_WAIT",
+          "authority": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+          "html_mutation_authorized": false,
+          "earliest_safe_action_at": "2026-09-16",
+          "note": "Preparação e diagnóstico apenas. Data isolada não autoriza mutação."
+        }
+      }
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
@@ -511,7 +614,59 @@
           "href": "#captura-pilar",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Linha do tempo do desvio, nexo com o caminho crítico e memória do impacto de prazo e custo indireto.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D20]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D20",
+          "trigger": "O cronograma estourou e a empresa precisa sustentar pedido de prorrogação com nexo.",
+          "decision": "Quantos dias deste atraso são imputáveis a causa alheia à contratada?",
+          "artifact": [
+            "cronologia",
+            "nexo",
+            "dias impactados calculados",
+            "concorrência de causas",
+            "medidas de mitigação",
+            "pedido técnico recomendado",
+            "lacunas"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 9,
+          "first_artifact_block": 23,
+          "first_positive_proof_block": 81,
+          "first_action_block": 3,
+          "first_limitation_block": 4,
+          "defensive_opening_findings": 3
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Enviar dados para análise",
+            "Enquadrar o atraso agora",
+            "Registrar este evento"
+          ],
+          "submit_labels": [
+            "Enviar para análise"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "service-pillars"
+        }
+      }
     },
     {
       "route": "/auditoria-orcamento-licitacao/",
@@ -543,7 +698,58 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20pre%C3%A7o%2C%20BDI%20e%20risco%20de%20uma%20licita%C3%A7%C3%A3o%20de%20obra.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Preço defendável e margem verificável",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D14]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D14",
+          "trigger": "A planilha do edital parece inconsistente e o deságio esperado ameaça a exequibilidade.",
+          "decision": "A planilha do edital e a nossa proposta sustentam preço, quantitativo e execução?",
+          "artifact": [
+            "inconsistências de quantitativo, preço e base",
+            "itens críticos da curva ABC",
+            "coerência de BDI, encargos e tributação informada",
+            "cenários de deságio e sensibilidade",
+            "risco de exequibilidade global e unitária",
+            "decisão precificar, esclarecer ou impugnar, ajustar ou recusar"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 1,
+          "first_artifact_block": 13,
+          "first_positive_proof_block": -1,
+          "first_action_block": 4,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Analisar uma demanda",
+            "Revisar esta oportunidade"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "MEASUREMENT_WAIT",
+          "authority": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+          "html_mutation_authorized": false,
+          "earliest_safe_action_at": "2026-09-16",
+          "note": "Preparação e diagnóstico apenas. Data isolada não autoriza mutação."
+        }
+      }
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -584,7 +790,59 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20uma%20oportunidade%20cr%C3%ADtica%20de%20licita%C3%A7%C3%A3o%20e%20quero%20avaliar%20se%20vale%20montar%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Resultado: Uma decisão consciente de participar e uma proposta coerente com a capacidade da empresa.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D16]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D16",
+          "trigger": "A oportunidade é material e a empresa não tem estrutura para coordenar a proposta sozinha.",
+          "decision": "Quem coordena esta proposta crítica da decisão de disputar ao checklist final?",
+          "artifact": [
+            "decisão de disputar",
+            "plano de trabalho",
+            "matriz de responsabilidade",
+            "habilitação e acervo",
+            "coordenação de orçamento, BDI e cronograma",
+            "riscos",
+            "revisão crítica",
+            "checklist final para o cliente protocolar"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 12,
+          "first_artifact_block": 31,
+          "first_positive_proof_block": 18,
+          "first_action_block": 15,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Enviar edital para triagem",
+            "Avaliar proposta crítica"
+          ],
+          "submit_labels": [
+            "Solicitar canal seguro para envio"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "service-pillars"
+        }
+      }
     },
     {
       "route": "/casos/aditivo-art125-demonstrativo/",
@@ -611,7 +869,45 @@
           "href": "/#contato",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Decisão apoiada (exemplo)",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Distinguir exemplos de entrega (demonstrativos) de resultados de clientes, hoje em zero, antes de contratar.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 12,
+          "first_artifact_block": 10,
+          "first_positive_proof_block": 3,
+          "first_action_block": -1,
+          "first_limitation_block": 1,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Enviar meu contrato (este demonstrativo não é case)"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos"
+        }
+      }
     },
     {
       "route": "/casos/",
@@ -641,7 +937,45 @@
           "has_receipt_contract": false
         }
       ],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Demonstrativo: relatório de inteligência de licitações , carteira priorizada, fichas decisórias, exposição financeira e plano de 72 horas em consulta direta.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Distinguir exemplos de entrega (demonstrativos) de resultados de clientes, hoje em zero, antes de contratar.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 8,
+          "first_artifact_block": 8,
+          "first_positive_proof_block": -1,
+          "first_action_block": 8,
+          "first_limitation_block": 1,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [
+            "Enviar para análise"
+          ],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos"
+        }
+      }
     },
     {
       "route": "/casos/medicao-glosa-demonstrativo/",
@@ -668,7 +1002,45 @@
           "href": "/defesa-margem-contratos-publicos/",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Protocolo com prazo.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Distinguir exemplos de entrega (demonstrativos) de resultados de clientes, hoje em zero, antes de contratar.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 10,
+          "first_artifact_block": -1,
+          "first_positive_proof_block": 3,
+          "first_action_block": -1,
+          "first_limitation_block": 1,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Defesa de margem"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos"
+        }
+      }
     },
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
@@ -712,7 +1084,53 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20apresenta%C3%A7%C3%A3o%20executiva%20de%20resultados%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20890.",
           "cta_id": "apresentacao-890-hero"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Demonstrativo. Transforme o diagnóstico em decisão assinada na reunião.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D03]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D03",
+          "trigger": "Existe análise reconciliada, mas a reunião de direção termina sem decisão assinada.",
+          "decision": "O que a diretoria precisa decidir agora?",
+          "artifact": [
+            "narrativa executiva",
+            "evidências vinculadas à fonte",
+            "até quatro decisões assináveis"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 2,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 40,
+          "first_action_block": 6,
+          "first_limitation_block": 5,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Quero minha apresentação por R$ 890"
+          ],
+          "submit_labels": [
+            "Registrar pedido de apresentação executiva de resultados"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos-modelos-precificados"
+        }
+      }
     },
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
@@ -756,7 +1174,56 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20base%20quantitativa%20can%C3%B4nica%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%20690.",
           "cta_id": "base-690-hero"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "R$ 690 = 1 base quantitativa adaptada. Escopo e prazo são combinados diretamente antes de qualquer cobrança.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D02]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D02",
+          "trigger": "A diretoria não consegue rastrear um número apresentado até a fonte e a fórmula.",
+          "decision": "De onde vem cada número publicado?",
+          "artifact": [
+            "dados reconciliados",
+            "dicionário de campos",
+            "fórmulas",
+            "memória de cálculo",
+            "checks de consistência",
+            "ressalvas e cobertura"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 7,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 3,
+          "first_action_block": 5,
+          "first_limitation_block": 4,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Quero minha base por R$ 690"
+          ],
+          "submit_labels": [
+            "Registrar pedido de base quantitativa canônica"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos-modelos-precificados"
+        }
+      }
     },
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
@@ -800,7 +1267,55 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20contratos%20vincendos%20e%20recontrata%C3%A7%C3%A3o%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.450.",
           "cta_id": "vincendos-1450-hero"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "A CONFENGE varre os contratos em execução que terminam numa janela distante o bastante para você se preparar e próxima o bastante para importar, agrupa por compra-mãe e mede a propensão de cada conjunto virar nova contratação em vez de simples prorrogação. Você recebe um calendário priorizado, o cálculo aberto por componente e a ordem de reconfirmar antes de gastar caixa.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D05]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D05",
+          "trigger": "A empresa quer entrar em carteira já contratada por concorrente antes da recontratação.",
+          "decision": "Quais contratos vencem entre 90 e 180 dias?",
+          "artifact": [
+            "até 30 sinais candidatos",
+            "estágio observado",
+            "confiança e motivo",
+            "falso positivo declarado",
+            "próxima observação"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 3,
+          "first_artifact_block": 7,
+          "first_positive_proof_block": 27,
+          "first_action_block": 3,
+          "first_limitation_block": 6,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Quero meu mapa de vincendos por R$ 1.450"
+          ],
+          "submit_labels": [
+            "Registrar pedido de painel de contratos vincendos"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos-modelos-precificados"
+        }
+      }
     },
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
@@ -844,7 +1359,55 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapa%20de%20compradores%20p%C3%BAblicos%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.200.",
           "cta_id": "mapa-1200-hero"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "R$ 1.200 = 1 mapa adaptado. Escopo, recorte e o prazo são combinados diretamente antes de qualquer cobrança.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D04]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D04",
+          "trigger": "A empresa depende de poucos compradores e não sabe onde mais existe demanda recorrente.",
+          "decision": "Quais órgãos compram o que a empresa executa?",
+          "artifact": [
+            "até 20 órgãos priorizados",
+            "recorrência observada",
+            "concentração",
+            "calendário de compra observado",
+            "cobertura e lacunas"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 7,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 25,
+          "first_action_block": 5,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Quero meu mapa por R$ 1.200"
+          ],
+          "submit_labels": [
+            "Registrar pedido de mapa de compradores públicos"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos-modelos-precificados"
+        }
+      }
     },
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
@@ -888,7 +1451,54 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20mapeamento%20de%20concorrentes%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%201.900.",
           "cta_id": "concorrentes-1900-hero"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "R$ 1.900 = 1 mapeamento adaptado. Escopo e prazo são combinados diretamente antes de qualquer cobrança.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D06]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D06",
+          "trigger": "A empresa perde disputas repetidamente para os mesmos nomes e não sabe por quê.",
+          "decision": "Contra quem a empresa disputa e onde o concorrente está exposto?",
+          "artifact": [
+            "concentração por comprador",
+            "faixa de contrato",
+            "exposição ativa",
+            "resposta sugerida"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 8,
+          "first_artifact_block": 1,
+          "first_positive_proof_block": 40,
+          "first_action_block": 6,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Quero meu mapeamento por R$ 1.900"
+          ],
+          "submit_labels": [
+            "Registrar pedido de mapeamento de concorrentes"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos-modelos-precificados"
+        }
+      }
     },
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
@@ -932,7 +1542,55 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20painel%20de%20pre%C3%A7os%20de%20obras%20p%C3%BAblicas%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%202.400.",
           "cta_id": "precos-2400-hero"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "R$ 2.400 = 1 painel adaptado. Escopo e prazo são combinados diretamente antes de qualquer cobrança.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D07]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D07",
+          "trigger": "A empresa precisa dimensionar proposta e capacidade sem tabela de mercado confiável.",
+          "decision": "Qual é a escala real de contrato por tipologia?",
+          "artifact": [
+            "P25, mediana e P75",
+            "dispersão",
+            "evolução no período",
+            "outliers identificados",
+            "cobertura e método"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 9,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 23,
+          "first_action_block": 7,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Quero meu painel por R$ 2.400"
+          ],
+          "submit_labels": [
+            "Registrar pedido de painel de preços de obras públicas"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos-modelos-precificados"
+        }
+      }
     },
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
@@ -983,7 +1641,54 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Vi%20o%20modelo%20de%20relat%C3%B3rio%20executivo%20consolidado%20e%20quero%20contratar%20uma%20vers%C3%A3o%20adaptada%20%C3%A0%20minha%20empresa%20por%20R%24%203.750.",
           "cta_id": "consolidado-3750-hero"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Demonstrativo. Decida onde alocar equipe, acervo e caixa nos próximos 90 dias.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D08]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D08",
+          "trigger": "A direção precisa de uma leitura única sobre módulos já reconciliados.",
+          "decision": "Onde alocar equipe, acervo e caixa?",
+          "artifact": [
+            "leitura de direção",
+            "até quatro decisões",
+            "trilha até fonte e célula",
+            "lacunas declaradas"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 2,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 23,
+          "first_action_block": 5,
+          "first_limitation_block": 4,
+          "defensive_opening_findings": 2
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Quero o consolidado por R$ 3.750"
+          ],
+          "submit_labels": [
+            "Registrar pedido de relatório executivo consolidado"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos-modelos-precificados"
+        }
+      }
     },
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
@@ -1027,7 +1732,54 @@
           "href": "/comercial/radar-decisorio/",
           "cta_id": "report-599-hero"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "A CONFENGE cruza editais e anexos com o acervo, a capacidade operacional, o capital de giro e a estratégia da sua construtora. Você recebe uma decisão priorizada, com impedimentos, riscos e próxima ação.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D01]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D01",
+          "trigger": "A empresa tem equipe limitada e mais editais abertos do que capacidade de analisar.",
+          "decision": "Quais editais abertos vale disputar?",
+          "artifact": [
+            "decisão AVANÇAR, CONDICIONAR, INVESTIGAR ou RECUSAR por oportunidade",
+            "justificativa vinculada à evidência",
+            "responsável indicado",
+            "ponto de revalidação"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 3,
+          "first_artifact_block": 5,
+          "first_positive_proof_block": 2,
+          "first_action_block": 5,
+          "first_limitation_block": 4,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Configurar meu relatório por R$ 599"
+          ],
+          "submit_labels": [
+            "Registrar pedido de relatório de priorização de licitações"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "casos-modelos-precificados"
+        }
+      }
     },
     {
       "route": "/comercial/privacidade-leads/",
@@ -1048,7 +1800,43 @@
       },
       "sequence_findings": [],
       "forms": [],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Aceite / contrato: nome do representante, cargo, e-mail, declaração de poderes, razão social e CNPJ, versões e hashes de oferta/escopo/termos/privacidade, timestamp, IP e user-agent em armazenamento protegido, correlation_id, evidência de OTP ou magic link.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Ler as condições comerciais e a política de leads antes de aceitar um diagnóstico pago.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 7,
+          "first_artifact_block": 11,
+          "first_positive_proof_block": 8,
+          "first_action_block": 14,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "comercial-condicoes"
+        }
+      }
     },
     {
       "route": "/comercial/termos-diagnostico-b2g/",
@@ -1069,7 +1857,43 @@
       },
       "sequence_findings": [],
       "forms": [],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Termos B2B - Diagnóstico de Expansão no Mercado Público",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Ler as condições comerciais e a política de leads antes de aceitar um diagnóstico pago.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": -1,
+          "first_artifact_block": 8,
+          "first_positive_proof_block": -1,
+          "first_action_block": -1,
+          "first_limitation_block": 4,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "comercial-condicoes"
+        }
+      }
     },
     {
       "route": "/confianca/",
@@ -1090,7 +1914,43 @@
       },
       "sequence_findings": [],
       "forms": [],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Quem executa, como corrigir e o que conta como prova",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": -1,
+          "first_artifact_block": -1,
+          "first_positive_proof_block": 3,
+          "first_action_block": 4,
+          "first_limitation_block": 2,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [],
+          "terminal_action": "none"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "legal-and-trust"
+        }
+      }
     },
     {
       "route": "/conflitos/",
@@ -1111,7 +1971,43 @@
       },
       "sequence_findings": [],
       "forms": [],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Conflitos e interesses comerciais",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": -1,
+          "first_artifact_block": -1,
+          "first_positive_proof_block": 3,
+          "first_action_block": 4,
+          "first_limitation_block": 2,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [],
+          "terminal_action": "none"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "legal-and-trust"
+        }
+      }
     },
     {
       "route": "/conteudos/aditivo-empreitada-por-preco-global/",
@@ -1148,7 +2044,47 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20avaliar%20aditivo%20em%20empreitada%20por%20pre%C3%A7o%20global.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Em preço global, pequenas variações de quantidade do objeto bem definido podem integrar o risco contratado. Mudança de projeto, item novo ou condição ausente do projeto básico exige outro enquadramento.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 3,
+          "first_artifact_block": 22,
+          "first_positive_proof_block": 13,
+          "first_action_block": 4,
+          "first_limitation_block": 0,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro pelo WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/administracao-local-orcamento-obra-publica/",
@@ -1185,7 +2121,47 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20conferir%20se%20administra%C3%A7%C3%A3o%20local%20no%20or%C3%A7amento%20est%C3%A1%20como%20custo%20direto%2C%20BDI%20ou%20planilha.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "A metodologia CAIXA separa administração local do BDI. Confira item, prazo e postos no edital; qualquer regra diferente exige fonte e fronteira explícitas.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 3,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 3,
+          "first_action_block": 4,
+          "first_limitation_block": 5,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para envio no WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/atraso-na-medicao-obra-publica/",
@@ -1212,7 +2188,45 @@
           "href": "/medicoes-glosas-obras-publicas/",
           "cta_id": "canary-medicao-dossie"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Separe os valores. O art. 143 da Lei nº 14.133/2021 trata da liberação da parcela incontroversa no prazo previsto quando a controvérsia envolve dimensão, qualidade ou quantidade. A aplicação depende do contrato e do fluxo de ateste e liquidação.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender por que o processamento da medição parou e avançar para uma segunda leitura técnica quando houver documentos suficientes.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 26,
+          "first_artifact_block": 41,
+          "first_positive_proof_block": 9,
+          "first_action_block": 4,
+          "first_limitation_block": 5,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Avaliar o Dossiê de Medição, Glosa e Pagamento"
+          ],
+          "submit_labels": [],
+          "terminal_action": "service_transition"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "measurement-delay-canary"
+        }
+      }
     },
     {
       "route": "/conteudos/atraso-obra-culpa-administracao/",
@@ -1244,7 +2258,46 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20atraso%20com%20ind%C3%ADcio%20de%20culpa%20da%20Administra%C3%A7%C3%A3o%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20organizar%20a%20prova%20de%20causa%20e%20o%20nexo%20com%20o%20caminho%20cr%C3%ADtico.%20O%20site%20n%C3%A3o%20recebe%20arquivo%3B%20o%20canal%20%C3%A9%20escolhido%20posteriormente.%20Origem%3A%20%2Fconteudos%2Fatraso-obra-culpa-administracao%2F",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "A matriz de riscos do contrato pode realocar algum desses eventos. Leia a cláusula antes de imputar.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 23,
+          "first_artifact_block": 7,
+          "first_positive_proof_block": 9,
+          "first_action_block": 3,
+          "first_limitation_block": 5,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para a prova",
+            "Solicitar canal seguro para a prova"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/atraso-pagamento-contrato-publico-suspender/",
@@ -1276,7 +2329,46 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20H%C3%A1%20pagamento%20em%20atraso%20ap%C3%B3s%20nota%20fiscal%20e%20quero%20triagem%20sobre%20suspender%20ou%20s%C3%B3%20notificar.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Há documento de cobrança, mas o crédito pode ainda estar no prazo de liquidação. No âmbito federal da IN Seges/ME nº 77/2022, a liquidação tem prazo próprio a contar do recebimento da nota; o pagamento, outro, a contar da liquidação. Estados e municípios têm as cláusulas deles.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 20,
+          "first_artifact_block": 71,
+          "first_positive_proof_block": 14,
+          "first_action_block": 4,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Pedir triagem de suspender ou notificar",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/bdi-diferenciado-obra-publica/",
@@ -1318,7 +2410,48 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20um%20caso%20de%20BDI%20diferenciado%20em%20materiais%20e%20equipamentos%20%28licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica%29.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Job do visitante. Um orçamentista precisa saber quando BDI distinto em material ou equipamento é tecnicamente defensável, e quando é só maquiagem de margem que a diligência derruba.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 6,
+          "first_artifact_block": 16,
+          "first_positive_proof_block": 12,
+          "first_action_block": 4,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Ver auditoria de orçamento e edital",
+            "Solicitar canal seguro para envio no WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
@@ -1350,7 +2483,46 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20um%20canal%20seguro%20para%20validar%20a%20cadeia%20t%C3%A9cnica%20de%20um%20evento%20clim%C3%A1tico.%20O%20site%20n%C3%A3o%20recebe%20arquivo%3B%20o%20canal%20%C3%A9%20escolhido%20posteriormente.%20Origem%3A%20%2Fconteudos%2Fchuva-prorrogacao-prazo-obra-publica%2F",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Chuva na obra pública: quando o prazo é tecnicamente impactado",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 0,
+          "first_artifact_block": 8,
+          "first_positive_proof_block": 8,
+          "first_action_block": 6,
+          "first_limitation_block": 4,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para a análise",
+            "Solicitar canal seguro"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/comprovacao-exequibilidade-proposta-obra/",
@@ -1387,7 +2559,47 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20um%20caso%20de%20comprova%C3%A7%C3%A3o%20exequibilidade%20proposta%20obra%20%28licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica%29.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Cotações nominais dos insumos críticos, com prazo e frete",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 34,
+          "first_artifact_block": 10,
+          "first_positive_proof_block": 13,
+          "first_action_block": 4,
+          "first_limitation_block": 0,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para envio no WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/data-base-orcamento-reajuste-obra-publica/",
@@ -1424,7 +2636,47 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20revisar%20data-base%20e%20reajuste%20do%20contrato%20de%20obra%20p%C3%BAblica.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "CAIXA: publicação SINAPI (competência da tabela)",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 65,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 13,
+          "first_action_block": 4,
+          "first_limitation_block": 2,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para envio no WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/demolicao-nao-prevista-obra-publica/",
@@ -1461,7 +2713,47 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Encontrei%20demoli%C3%A7%C3%A3o%20n%C3%A3o%20prevista%20na%20obra%20p%C3%BAblica%20e%20preciso%20avaliar%20como%20documentar%20e%20cobrar.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "O que realmente decide a cobrança da demolição",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 8,
+          "first_artifact_block": 2,
+          "first_positive_proof_block": 13,
+          "first_action_block": 4,
+          "first_limitation_block": 0,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro pelo WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/empreitada-preco-global-preco-unitario/",
@@ -1498,7 +2790,47 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20um%20caso%20de%20empreitada%20pre%C3%A7o%20global%20pre%C3%A7o%20unit%C3%A1rio%20%28licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica%29.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Preço global ou unitário: o risco de quantidade",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 2,
+          "first_artifact_block": 3,
+          "first_positive_proof_block": 13,
+          "first_action_block": 4,
+          "first_limitation_block": 5,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para envio no WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
@@ -1530,7 +2862,46 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20O%20fiscal%20recusou%20assinar%20o%20boletim%20e%20preciso%20montar%20o%20dossi%C3%AA%20das%20primeiras%2048%20horas.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "O recado informal que trava o caixa",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 13,
+          "first_artifact_block": 31,
+          "first_positive_proof_block": 14,
+          "first_action_block": 4,
+          "first_limitation_block": 2,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Conversar sobre o dossiê das 48 horas",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/glosa-por-qualidade-obra-publica/",
@@ -1562,7 +2933,46 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Recebi%20glosa%20por%20qualidade%20e%20preciso%20separar%20o%20defeito%20localizado%20do%20valor%20que%20permanece%20conforme.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Há prazo e critério de saneamento. O valor volta ao boletim depois da nova conferência. Silêncio da empresa após o apontamento solidifica o corte daquele trecho.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 21,
+          "first_artifact_block": 60,
+          "first_positive_proof_block": 14,
+          "first_action_block": 4,
+          "first_limitation_block": 5,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Conversar sobre o dossiê da glosa por qualidade",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/",
@@ -1583,7 +2993,43 @@
       },
       "sequence_findings": [],
       "forms": [],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Uma leitura principal e atalhos para situações que costumam travar caixa, prazo ou margem.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 5,
+          "first_artifact_block": 41,
+          "first_positive_proof_block": -1,
+          "first_action_block": 9,
+          "first_limitation_block": 8,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/limite-aditivo-25-50-obra-publica/",
@@ -1625,7 +3071,48 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20um%20caso%20de%20limite%20de%20aditivo%2025%25%20e%2050%25%20em%20obra%20p%C3%BAblica%20%28licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica%29.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "O percentual só fecha a conta quando a base de cálculo, o histórico de acréscimos e supressões e a natureza da alteração estão documentados. Este guia responde o limite específico; o hub de aditivos trata tipos de mudança, serviços extras e decisão de margem.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 3,
+          "first_artifact_block": 3,
+          "first_positive_proof_block": 9,
+          "first_action_block": 3,
+          "first_limitation_block": 0,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Abrir o verificador de limite de acréscimos e supressões",
+            "Verificar o contrato no diagnóstico de defesa de margem",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
@@ -1662,7 +3149,47 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20um%20caso%20de%20matriz%20de%20riscos%20reequil%C3%ADbrio%20econ%C3%B4mico%20financeiro%20%28licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica%29.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 0,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 12,
+          "first_action_block": 3,
+          "first_limitation_block": 2,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para envio no WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/medicao-por-evento-obra-publica/",
@@ -1694,7 +3221,46 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20conferir%20se%20o%20contrato%20mede%20por%20evento%20ou%20por%20quantitativo%20e%20qual%20prova%20o%20marco%20exige.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Medição por evento paga o marco de resultado previsto no cronograma. Medição por quantitativo paga o serviço executado segundo a unidade da planilha. Em empreitada por preço global, o art. 46, § 9º, da Lei nº 14.133/2021 amarra o pagamento a etapas e metas de resultado e veda remunerar por preço unitário. O modelo “protege” a construtora só se o evento for mensurável e a prova do marco estiver escrita.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 5,
+          "first_artifact_block": 5,
+          "first_positive_proof_block": 14,
+          "first_action_block": 4,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Ver o serviço de medições e o critério do contrato",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
@@ -1731,7 +3297,47 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20um%20caso%20de%20mobiliza%C3%A7%C3%A3o%20e%20desmobiliza%C3%A7%C3%A3o%20de%20obra%20%28licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica%29.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Na metodologia SINAPI da CAIXA, mobilização, desmobilização e canteiro são custos indiretos valorados em itens próprios, separados do BDI. Se o edital adotar regra expressa diferente, peça a base metodológica e elimine qualquer duplicidade.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 54,
+          "first_artifact_block": 2,
+          "first_positive_proof_block": 13,
+          "first_action_block": 0,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para envio no WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/pagamento-parcial-etapa-empreitada-global/",
@@ -1763,7 +3369,46 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20A%20etapa%20da%20empreitada%20global%20ficou%20incompleta%20e%20quero%20triagem%20sobre%20pagamento%20proporcional.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "04 Escolha o pedido possível Esperar o marco, pedir alteração formal do eventograma, ou, se houver parte aceita e parte em discussão, tratar o recorte da parcela incontroversa. Três pedidos, um de cada vez.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 48,
+          "first_artifact_block": 70,
+          "first_positive_proof_block": 9,
+          "first_action_block": 4,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Pedir triagem da etapa incompleta",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
@@ -1795,7 +3440,46 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20solicitar%20um%20canal%20seguro%20para%20revisar%20o%20dossi%C3%AA%20de%20prorroga%C3%A7%C3%A3o%2C%20incluindo%20vig%C3%AAncia%2C%20execu%C3%A7%C3%A3o%2C%20apostila%20e%20mem%C3%B3ria%20de%20dias.%20O%20site%20n%C3%A3o%20recebe%20arquivo%3B%20o%20canal%20%C3%A9%20escolhido%20posteriormente.%20Origem%3A%20%2Fconteudos%2Fprorrogacao-prazo-obra-publica-documentos%2F",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Dossiê do pedido de prorrogação de prazo",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 0,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 9,
+          "first_action_block": 4,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para o dossiê",
+            "Solicitar canal seguro para o dossiê"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/resposta-notificacao-atraso-obra-publica/",
@@ -1827,7 +3511,46 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Recebi%20notifica%C3%A7%C3%A3o%20de%20atraso%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20revisar%20a%20resposta%20sem%20admitir%20culpa%20indevida.%20O%20site%20n%C3%A3o%20recebe%20arquivo%3B%20o%20canal%20%C3%A9%20escolhido%20posteriormente.%20Origem%3A%20%2Fconteudos%2Fresposta-notificacao-atraso-obra-publica%2F",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Prazo da peça",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 12,
+          "first_artifact_block": 16,
+          "first_positive_proof_block": 9,
+          "first_action_block": 4,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para a resposta",
+            "Solicitar canal seguro para a resposta"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/sinapi-desonerado-nao-desonerado/",
@@ -1888,7 +3611,50 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20validar%20a%20refer%C3%AAncia%20de%20pre%C3%A7o%20%28SINAPI%20desonerado%20ou%20n%C3%A3o%20desonerado%29%20do%20meu%20edital.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "CAIXA, metodologia SINAPI; regra do edital; Lei 12.546/2011 e atualizações de desoneração da folha quando o enquadramento se aplica.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 5,
+          "first_artifact_block": 5,
+          "first_positive_proof_block": 35,
+          "first_action_block": 4,
+          "first_limitation_block": 0,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Ver auditoria de orçamento e edital",
+            "Solicitar canal seguro para envio",
+            "Solicitar canal seguro para envio",
+            "Solicitar canal seguro para envio no WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/conteudos/sinapi-ou-sicro-obra-publica/",
@@ -1925,7 +3691,47 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Gostaria%20de%20analisar%20um%20caso%20de%20SINAPI%20ou%20SICRO%20obra%20p%C3%BAblica%20%28licita%C3%A7%C3%A3o%2C%20contrato%20ou%20obra%20p%C3%BAblica%29.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Publicação SINAPI/CAIXA da mesma data-base, se o confronto for necessário",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 11,
+          "first_artifact_block": 32,
+          "first_positive_proof_block": 13,
+          "first_action_block": 4,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para envio no WhatsApp",
+            "Analisar este cenário",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "editorial-library"
+        }
+      }
     },
     {
       "route": "/correcoes/",
@@ -1955,7 +3761,45 @@
           "has_receipt_contract": false
         }
       ],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Canal de contestação com recibo, PII mínima e prazo UNKNOWN até existir série medida.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 2,
+          "first_artifact_block": -1,
+          "first_positive_proof_block": 3,
+          "first_action_block": 4,
+          "first_limitation_block": 12,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [
+            "Enviar pedido e receber recibo"
+          ],
+          "terminal_action": "none"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "legal-and-trust"
+        }
+      }
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
@@ -2001,7 +3845,61 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20um%20risco%20contratual%20e%20proteger%20a%20margem%20de%20um%20contrato%20p%C3%BAblico.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Defesa de margem",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D17]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D17",
+          "trigger": "O contrato está perdendo margem e a empresa não sabe quais fatos ainda têm prova e prazo.",
+          "decision": "Quais eventos deste contrato ainda podem virar pleito e o que precisa ser registrado agora?",
+          "artifact": [
+            "cronologia inicial",
+            "obrigações",
+            "matriz de risco",
+            "eventos",
+            "prazo",
+            "impacto potencial",
+            "prova existente",
+            "lacunas",
+            "decisão PRIORIZAR, REGISTRAR, QUANTIFICAR, NÃO PLEITEAR ou JURÍDICO"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 1,
+          "first_artifact_block": 13,
+          "first_positive_proof_block": 22,
+          "first_action_block": 3,
+          "first_limitation_block": 4,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar canal seguro para envio",
+            "Registrar este evento",
+            "Avaliar contrato sob pressão"
+          ],
+          "submit_labels": [
+            "Solicitar canal seguro para envio"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "service-pillars"
+        }
+      }
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
@@ -2055,7 +3953,61 @@
           "href": "#captura-pilar",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Construtora notificada ou sob risco de sanção",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D23]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D23",
+          "trigger": "Chegou notificação ou processo sancionador com prazo curto.",
+          "decision": "Quais fatos e provas o jurídico precisa para responder esta notificação?",
+          "artifact": [
+            "fatos admitidos e controvertidos",
+            "cronologia",
+            "obrigação",
+            "causa",
+            "nexo",
+            "medidas adotadas",
+            "evidências",
+            "lacunas",
+            "anexos técnicos para o jurídico"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 2,
+          "first_artifact_block": 21,
+          "first_positive_proof_block": 78,
+          "first_action_block": 6,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Enviar dados para análise",
+            "Organizar a posição técnica",
+            "Registrar este evento"
+          ],
+          "submit_labels": [
+            "Enviar para análise"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "service-pillars"
+        }
+      }
     },
     {
       "route": "/diagnostico-b2g-360/",
@@ -2092,7 +4044,58 @@
           "href": "/?origem=/diagnostico-b2g-360#contato",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Mapeie onde a frente pública perde tempo, margem e controle.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D24]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D24",
+          "trigger": "A direção suspeita que o gargalo é a própria operação B2G, não a falta de oportunidade.",
+          "decision": "Onde a operação perde tempo, margem e controle?",
+          "artifact": [
+            "mapa de maturidade nos seis eixos publicados",
+            "gargalos com evidência",
+            "prioridades ordenadas",
+            "backlog de 90 dias com dono, dependência e decisão",
+            "recomendação: interno, entrega pontual, Operação de Proposta para Licitação Crítica, Acompanhamento ou Diretoria"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 2,
+          "first_artifact_block": 3,
+          "first_positive_proof_block": 6,
+          "first_action_block": 5,
+          "first_limitation_block": 8,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar diagnóstico da operação",
+            "Solicitar diagnóstico da operação",
+            "Pedir diagnóstico da operação"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "MEASUREMENT_WAIT",
+          "authority": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+          "html_mutation_authorized": false,
+          "earliest_safe_action_at": "2026-09-16",
+          "note": "Preparação e diagnóstico apenas. Data isolada não autoriza mutação."
+        }
+      }
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -2128,7 +4131,56 @@
           "href": "#pedido-diagnostico",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Preço, prazo e escopo publicados",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#containers[container_id=expansion_package]",
+          "owner": "deliverables_registry",
+          "container_id": "expansion_package",
+          "decision": "Resolver um evento contratual específico (aditivo, glosa, reequilíbrio, atraso) com a CONFENGE.",
+          "artifact": [
+            "CFG-D02",
+            "CFG-D03",
+            "CFG-D04",
+            "CFG-D05",
+            "CFG-D06",
+            "CFG-D07",
+            "CFG-D08"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 13,
+          "first_artifact_block": 8,
+          "first_positive_proof_block": 18,
+          "first_action_block": 15,
+          "first_limitation_block": 4,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar o diagnóstico"
+          ],
+          "submit_labels": [
+            "Enviar pedido de enquadramento"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "service-pillars"
+        }
+      }
     },
     {
       "route": "/diagnostico-pre-licitacao/",
@@ -2168,7 +4220,56 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20edital%20em%20an%C3%A1lise%20e%20quero%20avaliar%20se%20vale%20uma%20Opera%C3%A7%C3%A3o%20de%20Proposta%20para%20Licita%C3%A7%C3%A3o%20Cr%C3%ADtica%20ou%20diagn%C3%B3stico%20de%20participa%C3%A7%C3%A3o.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Risco identificado antes do preço",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D12]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D12",
+          "trigger": "Um edital aderente foi publicado e a empresa precisa decidir antes de imobilizar equipe.",
+          "decision": "Vale a pena disputar este edital, e em que condições?",
+          "artifact": [
+            "decisão AVANÇAR, AVANÇAR COM CONDIÇÕES, ESCLARECER OU IMPUGNAR ou RECUSAR",
+            "riscos de regime, matriz, habilitação, prazo, caixa, garantia e orçamento",
+            "perguntas abertas",
+            "responsável e próxima ação"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 1,
+          "first_artifact_block": 3,
+          "first_positive_proof_block": -1,
+          "first_action_block": 4,
+          "first_limitation_block": 7,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Analisar uma demanda",
+            "Avaliar uma oportunidade"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "MEASUREMENT_WAIT",
+          "authority": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+          "html_mutation_authorized": false,
+          "earliest_safe_action_at": "2026-09-16",
+          "note": "Preparação e diagnóstico apenas. Data isolada não autoriza mutação."
+        }
+      }
     },
     {
       "route": "/diretoria-b2g/",
@@ -2209,7 +4310,49 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20conhecer%20a%20Diretoria%20Fracionada%20para%20o%20Mercado%20P%C3%BAblico%20e%20entender%20se%20encaixa%20na%20nossa%20opera%C3%A7%C3%A3o.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Uma rotina semanal de decisão sem o custo de montar uma diretoria interna.",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#containers[container_id=diretoria_fracionada]",
+          "owner": "deliverables_registry",
+          "container_id": "diretoria_fracionada",
+          "decision": "Resolver um evento contratual específico (aditivo, glosa, reequilíbrio, atraso) com a CONFENGE.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 3,
+          "first_artifact_block": 10,
+          "first_positive_proof_block": 12,
+          "first_action_block": 11,
+          "first_limitation_block": 4,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Falar sobre minha operação",
+            "Diagnosticar encaixe da Diretoria Fracionada para o Mercado Público"
+          ],
+          "submit_labels": [
+            "Pedir avaliação de enquadramento"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "service-pillars"
+        }
+      }
     },
     {
       "route": "/entregas/",
@@ -2255,7 +4398,49 @@
           "href": "/diagnostico-b2g-expansao/",
           "cta_id": "deliverables-final-bundle"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "8 ofertas publicadas. Escolha pela decisão que está na mesa. Exemplos sintéticos.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Comparar a profundidade das entregas com preço antes de escolher o que contratar.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 0,
+          "first_artifact_block": 17,
+          "first_positive_proof_block": 0,
+          "first_action_block": 1,
+          "first_limitation_block": 2,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Encontrar a entrega certa",
+            "Registrar a decisão na mesa",
+            "Ver o Diagnóstico de Expansão no Mercado Público"
+          ],
+          "submit_labels": [
+            "Enviar para análise"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "entregas"
+        }
+      }
     },
     {
       "route": "/especialista/tiago-jun-sasaki/",
@@ -2287,7 +4472,46 @@
           "href": "/#contato",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Construtoras precisam proteger margem, prazo e capacidade de execução. A Administração precisa decidir dentro de regras, evidências e responsabilidades. A atuação da CONFENGE parte dessa tensão real: estruturar uma posição que faça sentido para a direção da empresa e que também possa ser examinada por fiscalização, gestão, jurídico e controle externo.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Verificar quem responde tecnicamente pela CONFENGE antes de enviar um caso.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 7,
+          "first_artifact_block": 16,
+          "first_positive_proof_block": 2,
+          "first_action_block": 3,
+          "first_limitation_block": 8,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Solicitar diagnóstico da operação",
+            "Solicitar diagnóstico da operação"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "especialista"
+        }
+      }
     },
     {
       "route": "/ferramentas/checklist-reequilibrio/",
@@ -2317,7 +4541,45 @@
           "has_receipt_contract": false
         }
       ],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Base normativa: Lei nº 14.133/2021, especialmente a alocação de riscos e o art. 124.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Calcular um limite, prazo ou risco contratual e sair com um número defensável.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 9,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 6,
+          "first_action_block": 3,
+          "first_limitation_block": 5,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [
+            "Gerar diagnóstico"
+          ],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "ferramentas"
+        }
+      }
     },
     {
       "route": "/ferramentas/diagnostico-defesa-margem/",
@@ -2355,7 +4617,46 @@
           "has_receipt_contract": true
         }
       ],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Diagnóstico de defesa de margem",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Calcular um limite, prazo ou risco contratual e sair com um número defensável.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 0,
+          "first_artifact_block": -1,
+          "first_positive_proof_block": 6,
+          "first_action_block": 5,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [
+            "Ler este contrato",
+            "Quero uma segunda leitura deste contrato"
+          ],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "ferramentas"
+        }
+      }
     },
     {
       "route": "/ferramentas/",
@@ -2387,7 +4688,46 @@
           "href": "/diagnostico-b2g-expansao/",
           "cta_id": "ferramentas-hub-diagnostico-expansao"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Instrumentos de decisão para aditivo, reequilíbrio, atraso e leitura factual de um contrato público. Cada um devolve um resultado útil no navegador.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Escolher o cálculo aplicável e avançar para o diagnóstico de carteira quando a decisão ultrapassa uma ferramenta isolada.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 1,
+          "first_artifact_block": 18,
+          "first_positive_proof_block": 6,
+          "first_action_block": 6,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Usar ferramenta",
+            "Conhecer o Diagnóstico de Expansão no Mercado Público"
+          ],
+          "submit_labels": [],
+          "terminal_action": "service_transition"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "ferramentas-hub"
+        }
+      }
     },
     {
       "route": "/ferramentas/limite-acrescimos-supressoes/",
@@ -2417,7 +4757,45 @@
           "has_receipt_contract": false
         }
       ],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Decisão apoiada: seguir no recorte numérico informado, ou enquadrar o excesso antes de protocolar.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Calcular um limite, prazo ou risco contratual e sair com um número defensável.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 5,
+          "first_artifact_block": 3,
+          "first_positive_proof_block": 6,
+          "first_action_block": 8,
+          "first_limitation_block": 0,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [
+            "Calcular saldos"
+          ],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "ferramentas"
+        }
+      }
     },
     {
       "route": "/ferramentas/matriz-atraso-obra/",
@@ -2447,7 +4825,45 @@
           "has_receipt_contract": false
         }
       ],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Decisão apoiada: completar prova e período, ou enquadrar cronograma e nexo antes de pedir prazo ou custo.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Calcular um limite, prazo ou risco contratual e sair com um número defensável.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 5,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": -1,
+          "first_action_block": 4,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [
+            "Montar hipóteses"
+          ],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "ferramentas"
+        }
+      }
     },
     {
       "route": "/guias-contratos-obras/checklist-pedido-aditivo/",
@@ -2489,7 +4905,48 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Usei%20o%20checklist%20da%20CONFENGE%20de%20pedido%20de%20aditivo%20e%20quero%20validar%20o%20dossi%C3%AA%20do%20meu%20contrato%20de%20obra.%20Origem%3A%20/guias-contratos-obras/checklist-pedido-aditivo/",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Reúna, quando existirem no processo: contrato e aditivos anteriores; planilha orçamentária da proposta; planilha do aditivo; composições de itens novos; projetos “antes” e “depois”; diário de obra; fotos e levantamentos; pareceres técnicos internos; índice de anexos numerados; requerimento objetivo com valor, prazo e enquadramento.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Executar um passo a passo documental (aditivo, glosa, reequilíbrio, notificação) dentro do prazo contratual.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 42,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 4,
+          "first_action_block": 6,
+          "first_limitation_block": 5,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "' + primaryLabel + '",
+            "Enviar a situação pelo WhatsApp",
+            "Enviar a situação pelo WhatsApp",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "guias-contratos-obras"
+        }
+      }
     },
     {
       "route": "/guias-contratos-obras/",
@@ -2516,7 +4973,45 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Estou%20no%20hub%20Guias%20e%20checklists%20para%20contratos%20de%20obras%20p%C3%BAblicas%20da%20CONFENGE%20e%20quero%20orienta%C3%A7%C3%A3o%20sobre%20contratos%20de%20obras%20p%C3%BAblicas.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Roteiros utilizáveis na obra e no escritório: documentos para aditivo, glosa, reequilíbrio, notificação e defesa de margem.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Executar um passo a passo documental (aditivo, glosa, reequilíbrio, notificação) dentro do prazo contratual.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 2,
+          "first_artifact_block": 3,
+          "first_positive_proof_block": -1,
+          "first_action_block": 6,
+          "first_limitation_block": -1,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Enviar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "guias-contratos-obras"
+        }
+      }
     },
     {
       "route": "/imprensa/",
@@ -2537,7 +5032,43 @@
       },
       "sequence_findings": [],
       "forms": [],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Imprensa e pesquisa",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": -1,
+          "first_artifact_block": -1,
+          "first_positive_proof_block": 2,
+          "first_action_block": 3,
+          "first_limitation_block": 5,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [],
+          "terminal_action": "none"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "legal-and-trust"
+        }
+      }
     },
     {
       "route": "/",
@@ -2578,7 +5109,48 @@
           "href": "#jornadas",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Para construtoras: decidir se o edital merece o capital, precificar o risco e proteger a margem na obra.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Entender em 10 segundos o que a CONFENGE resolve em contrato de obra pública e escolher a próxima ação.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 2,
+          "first_artifact_block": 7,
+          "first_positive_proof_block": 7,
+          "first_action_block": 0,
+          "first_limitation_block": 1,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Analisar meu caso",
+            "Ver edital, contrato ou operação"
+          ],
+          "submit_labels": [
+            "Enviar solicitação"
+          ],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "home"
+        }
+      }
     },
     {
       "route": "/lei-14133-obras/",
@@ -2605,7 +5177,45 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Estou%20no%20hub%20Lei%20n%C2%BA%2014.133/2021%20aplicada%20a%20obras%20e%20servi%C3%A7os%20de%20engenharia%20da%20CONFENGE%20e%20quero%20orienta%C3%A7%C3%A3o%20sobre%20contratos%20de%20obras%20p%C3%BAblicas.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Aplicações cotidianas da nova lei de licitações em aditivos, prazos, medições, pagamentos e reequilíbrio, com foco na decisão da construtora.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Encontrar o dispositivo da Lei 14.133 que sustenta um pleito de obra pública.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 2,
+          "first_artifact_block": 3,
+          "first_positive_proof_block": -1,
+          "first_action_block": 6,
+          "first_limitation_block": -1,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Enviar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "lei-14133-obras"
+        }
+      }
     },
     {
       "route": "/lei-14133-obras/preco-item-novo-desconto-proposta/",
@@ -2642,7 +5252,47 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Li%20a%20an%C3%A1lise%20da%20CONFENGE%20sobre%20pre%C3%A7o%20de%20item%20novo%20e%20desconto%20da%20proposta%20em%20aditivo%20de%20obra.%20Quero%20avaliar%20composi%C3%A7%C3%B5es%20e%20documentos.%20Origem%3A%20/lei-14133-obras/preco-item-novo-desconto-proposta/",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Organize documentos, riscos e próximos passos com base no cenário real da obra.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Encontrar o dispositivo da Lei 14.133 que sustenta um pleito de obra pública.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 62,
+          "first_artifact_block": 0,
+          "first_positive_proof_block": 4,
+          "first_action_block": 20,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Enviar a situação pelo WhatsApp",
+            "Enviar a situação pelo WhatsApp",
+            "Conversar pelo WhatsApp"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "lei-14133-obras"
+        }
+      }
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
@@ -2682,7 +5332,60 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20glosa%20ou%20medi%C3%A7%C3%A3o%20contestada%20e%20preciso%20enquadrar%20a%20posi%C3%A7%C3%A3o%20t%C3%A9cnica.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Fluxo de caixa e direito ao recebimento",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D18]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D18",
+          "trigger": "A fiscalização glosou uma medição e o caixa da obra depende da resposta.",
+          "decision": "A glosa desta medição tem base contratual e prova?",
+          "artifact": [
+            "valor com marcação FACT ou CALCULATION",
+            "itens controvertidos",
+            "causa",
+            "evidência",
+            "lacunas",
+            "subsídio técnico para contestação",
+            "parcela incontroversa quando aplicável",
+            "ordem cronológica quando pública"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 1,
+          "first_artifact_block": 15,
+          "first_positive_proof_block": 62,
+          "first_action_block": 4,
+          "first_limitation_block": 6,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Analisar uma demanda",
+            "Enquadrar um risco contratual"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "MEASUREMENT_WAIT",
+          "authority": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+          "html_mutation_authorized": false,
+          "earliest_safe_action_at": "2026-09-16",
+          "note": "Preparação e diagnóstico apenas. Data isolada não autoriza mutação."
+        }
+      }
     },
     {
       "route": "/metodologia-inteligencia/",
@@ -2709,7 +5412,45 @@
           "href": "/diretoria-b2g/",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Como a CONFENGE lê evidências públicas de contratação: fontes, limites, agregados e o papel da recomendação humana. As páginas de inteligência partem de registros públicos. Agregamos, contextualizamos e limitamos o que se pode afirmar. A recomendação comercial e técnica permanece humana e ancorada na capacidade da empresa.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Auditar como a CONFENGE produz a inteligência pública que publica.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 1,
+          "first_artifact_block": 1,
+          "first_positive_proof_block": 1,
+          "first_action_block": 1,
+          "first_limitation_block": 0,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Como funciona a Diretoria Fracionada para o Mercado Público"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "metodologia-inteligencia"
+        }
+      }
     },
     {
       "route": "/nurture/",
@@ -2745,7 +5486,47 @@
           "href": "/#contato",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Ferramenta: matriz de atraso · Oferta: Defesa de margem",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Retomar uma conversa comercial já iniciada a partir de um material enviado.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 15,
+          "first_artifact_block": 4,
+          "first_positive_proof_block": -1,
+          "first_action_block": 4,
+          "first_limitation_block": 1,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Enviar contexto para análise"
+          ],
+          "submit_labels": [
+            "Quero a sequência"
+          ],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "nurture"
+        }
+      }
     },
     {
       "route": "/politica-editorial/historico/",
@@ -2766,7 +5547,43 @@
       },
       "sequence_findings": [],
       "forms": [],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Versão vigente: 1.1.0 . Prazo de correção: UNKNOWN.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Auditar a política editorial vigente e o seu histórico versionado.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 13,
+          "first_artifact_block": -1,
+          "first_positive_proof_block": 2,
+          "first_action_block": 3,
+          "first_limitation_block": 10,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [],
+          "terminal_action": "none"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "politica-editorial"
+        }
+      }
     },
     {
       "route": "/politica-editorial/",
@@ -2787,7 +5604,43 @@
       },
       "sequence_findings": [],
       "forms": [],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "O que esta política cobre",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Auditar a política editorial vigente e o seu histórico versionado.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": -1,
+          "first_artifact_block": 14,
+          "first_positive_proof_block": 0,
+          "first_action_block": 2,
+          "first_limitation_block": 10,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [],
+          "terminal_action": "none"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "politica-editorial"
+        }
+      }
     },
     {
       "route": "/politica-editorial/v/1.0.0/",
@@ -2808,7 +5661,43 @@
       },
       "sequence_findings": [],
       "forms": [],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Política editorial 1.0.0",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Auditar a política editorial vigente e o seu histórico versionado.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": -1,
+          "first_artifact_block": 16,
+          "first_positive_proof_block": 2,
+          "first_action_block": 3,
+          "first_limitation_block": 1,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [],
+          "terminal_action": "none"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "politica-editorial"
+        }
+      }
     },
     {
       "route": "/privacidade/",
@@ -2835,7 +5724,45 @@
           "href": "/",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Controlador: CONFENGE. Encarregado / canal de atendimento a direitos do titular: tiago.sasaki@confenge.com.br · WhatsApp (48) 98834-4559 . Respostas a pedidos de acesso, correção, eliminação, portabilidade, informação sobre compartilhamento ou revogação de consentimento em prazo razoável, observadas hipóteses legais de conservação.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 4,
+          "first_artifact_block": 2,
+          "first_positive_proof_block": 9,
+          "first_action_block": 2,
+          "first_limitation_block": 5,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Voltar para a página inicial"
+          ],
+          "submit_labels": [],
+          "terminal_action": "none"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "legal-and-trust"
+        }
+      }
     },
     {
       "route": "/problemas-que-resolvemos/",
@@ -2862,7 +5789,45 @@
           "href": "/defesa-margem-contratos-publicos/",
           "cta_id": "hub-problemas-defesa-margem"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Cada problema abaixo tem um caminho técnico definido: o que registrar, com qual documento e qual decisão vem depois.",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Reconhecer o próprio problema contratual na lista e ir para quem o resolve.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 3,
+          "first_artifact_block": 11,
+          "first_positive_proof_block": -1,
+          "first_action_block": 3,
+          "first_limitation_block": 4,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Abrir a defesa de margem em contrato"
+          ],
+          "submit_labels": [],
+          "terminal_action": "service_transition"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "problemas-que-resolvemos"
+        }
+      }
     },
     {
       "route": "/radar/nacional-obras-publicas/",
@@ -2889,7 +5854,45 @@
           "href": "/comercial/radar-decisorio/",
           "cta_id": "radar-national-order-599"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Nacional: obras e margem",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Ler o radar nacional de obras públicas e decidir se quer o recorte aplicado ao próprio mercado.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 0,
+          "first_artifact_block": 29,
+          "first_positive_proof_block": 3,
+          "first_action_block": 4,
+          "first_limitation_block": 9,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Configurar meu Radar por R$ 599"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form_or_whatsapp"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "radar"
+        }
+      }
     },
     {
       "route": "/reequilibrio-obras-publicas/",
@@ -2934,7 +5937,63 @@
           "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Preciso%20enquadrar%20reequil%C3%ADbrio%20econ%C3%B4mico-financeiro%20de%20contrato%20de%20obra%20p%C3%BAblica.",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Como a matriz de riscos altera o reequilíbrio",
+        "actual_contract_value": {
+          "source": "data/commercial/deliverables-registry.v1.json#deliverables[deliverable_id=CFG-D22]",
+          "owner": "deliverables_registry",
+          "deliverable_id": "CFG-D22",
+          "trigger": "Um fato superveniente alterou a equação econômica do contrato.",
+          "decision": "Este fato superveniente sustenta pedido de reequilíbrio, e em que medida?",
+          "artifact": [
+            "fato superveniente",
+            "imprevisibilidade e consequência",
+            "alocação de risco",
+            "nexo",
+            "baseline",
+            "metodologia",
+            "quantificação",
+            "mitigação",
+            "documentação",
+            "subsídio técnico ao pedido"
+          ]
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 4,
+          "first_artifact_block": 12,
+          "first_positive_proof_block": -1,
+          "first_action_block": 4,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 1
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Verificar o contrato no diagnóstico de defesa de margem",
+            "Verificar o contrato no diagnóstico de defesa de margem",
+            "Enquadrar o reequilíbrio"
+          ],
+          "submit_labels": [],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "MEASUREMENT_WAIT",
+          "authority": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+          "html_mutation_authorized": false,
+          "earliest_safe_action_at": "2026-09-16",
+          "note": "Preparação e diagnóstico apenas. Data isolada não autoriza mutação."
+        }
+      }
     },
     {
       "route": "/servicos-obras-publicas/",
@@ -2970,7 +6029,47 @@
           "href": "/medicoes-glosas-obras-publicas/",
           "cta_id": "hub-servicos-medicoes-glosas"
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Escolha pelo momento do contrato",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Comparar a entrega para o evento contratual e registrar o contexto antes da proposta.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": 0,
+          "first_artifact_block": 5,
+          "first_positive_proof_block": 17,
+          "first_action_block": 2,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Avaliar o Dossiê de Medição, Glosa e Pagamento"
+          ],
+          "submit_labels": [
+            "Enviar para análise"
+          ],
+          "terminal_action": "capture_form"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "servicos-obras-publicas"
+        }
+      }
     },
     {
       "route": "/termos-de-uso/",
@@ -2997,7 +6096,45 @@
           "href": "/",
           "cta_id": ""
         }
-      ]
+      ],
+      "value_first_matrix": {
+        "current_proposition": "Termos de Uso",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": -1,
+          "first_artifact_block": -1,
+          "first_positive_proof_block": 20,
+          "first_action_block": 4,
+          "first_limitation_block": 2,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [
+            "Voltar para a página inicial"
+          ],
+          "submit_labels": [],
+          "terminal_action": "none"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "legal-and-trust"
+        }
+      }
     },
     {
       "route": "/uso-de-ia/",
@@ -3018,7 +6155,43 @@
       },
       "sequence_findings": [],
       "forms": [],
-      "primary_actions": []
+      "primary_actions": [],
+      "value_first_matrix": {
+        "current_proposition": "Uso material de inteligência artificial",
+        "actual_contract_value": {
+          "source": "data/organic/public-family-registry.json#families[].visitor_job",
+          "owner": "public_family_registry",
+          "decision": "Conferir termos, privacidade, política de conflitos, uso de IA, correções e contato de imprensa antes de confiar na CONFENGE.",
+          "artifact": []
+        },
+        "diagnosed_gap": {
+          "first_value_outcome_block": -1,
+          "first_artifact_block": -1,
+          "first_positive_proof_block": 4,
+          "first_action_block": 5,
+          "first_limitation_block": 3,
+          "defensive_opening_findings": 0
+        },
+        "message_direction": [
+          "desired_outcome_or_active_problem",
+          "value_created",
+          "concrete_mechanism",
+          "tangible_deliverable",
+          "positive_proof",
+          "next_action",
+          "decision_relevant_condition_or_limit"
+        ],
+        "retained_limitations": "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+        "cta_next_state": {
+          "primary_labels": [],
+          "submit_labels": [],
+          "terminal_action": "none"
+        },
+        "mutation_state": {
+          "state": "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          "authority": "legal-and-trust"
+        }
+      }
     }
   ],
   "interpretation": {

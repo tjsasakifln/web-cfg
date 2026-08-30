@@ -575,6 +575,8 @@ export const SUITE_GRAPH = Object.freeze({
       "data/organic/public-family-registry.json",
       "data/organic/bofu-intent-matrix.json",
       "data/commercial/first-fold-contract.v1.json",
+      "data/commercial/deliverables-registry.v1.json",
+      "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
       "docs/commercial/value-first-copy-baseline-583d2d88e.json",
     ],
     artifacts: ["docs/commercial/value-first-copy-baseline-583d2d88e.json"],
