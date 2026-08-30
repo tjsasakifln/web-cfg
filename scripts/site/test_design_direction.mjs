@@ -37,15 +37,28 @@ function walk(dir) {
 }
 
 const readText = (path) => readFileSync(path, "utf8");
+
+/**
+ * Visible text of a prototype page.
+ *
+ * Two deliberate choices, both to keep this a text comparison and not a
+ * half-written HTML parser:
+ *
+ *  - No `<script>`/`<style>` stripping. A regex that tries to match those two
+ *    elements is wrong on `<script >`, on `</script\n>` and on a comment that
+ *    contains either word — and it is unnecessary here, because
+ *    `test_prototype_has_no_inline_script_or_style` asserts the prototypes
+ *    contain neither. Assert the absence; do not paper over it.
+ *  - Entities are decoded in **one pass** through a table. Chained replaces
+ *    turn `&amp;lt;` into `<`, which is the double-escaping defect: text that
+ *    escaped a literal `&lt;` would come back as a tag.
+ */
+const ENTITIES = Object.freeze({
+  "&nbsp;": " ", "&amp;": "&", "&quot;": '"', "&lt;": "<", "&gt;": ">", "&#39;": "'",
+});
 const stripTags = (html) => html
-  .replace(/<script[\s\S]*?<\/script>/gi, " ")
-  .replace(/<style[\s\S]*?<\/style>/gi, " ")
-  .replace(/<[^>]+>/g, " ")
-  .replace(/&nbsp;/g, " ")
-  .replace(/&amp;/g, "&")
-  .replace(/&quot;/g, '"')
-  .replace(/&lt;/g, "<")
-  .replace(/&gt;/g, ">")
+  .replace(/<[^>]*>/g, " ")
+  .replace(/&(?:nbsp|amp|quot|lt|gt|#39);/g, (entity) => ENTITIES[entity])
   .replace(/\s+/g, " ")
   .trim();
 
@@ -150,6 +163,19 @@ test("no webfont, no remote asset, no CSP widening inside the prototypes", () =>
         );
       }
     }
+  }
+});
+
+test("prototype pages carry no inline script and no inline style", () => {
+  // This is what lets `stripTags` skip script/style handling entirely, and it
+  // is worth asserting on its own: a prototype that grew an inline script
+  // would be measuring something the JS-off protocol state does not render.
+  for (const path of walk(PROTOTYPES)) {
+    if (!path.endsWith(".html")) continue;
+    const html = readText(path);
+    assert.ok(!/<script[\s>]/i.test(html), `${relative(ROOT, path)} tem <script> inline`);
+    assert.ok(!/<style[\s>]/i.test(html), `${relative(ROOT, path)} tem <style> inline`);
+    assert.ok(!/\son[a-z]+\s*=/i.test(html), `${relative(ROOT, path)} tem handler inline`);
   }
 });
 
