@@ -361,6 +361,8 @@ function vitrineCard(entry, contractItem) {
   const scopeCtaId = entry.catalog_number === "01" ? "deliverables-understand-scope" : `deliverables-scope-${slug}`;
   const examplePosition = entry.catalog_number === "01" ? "example_01_open" : `example_${entry.catalog_number}_open`;
   const scopePosition = entry.catalog_number === "01" ? "example_01_scope" : `example_${entry.catalog_number}_scope`;
+  const value = contractItem.value_first;
+  if (!value) throw new Error(`EIGHT_VALUE_FIRST_MISSING: ${entry.deliverable_id}`);
   const bundle = entry.offer_container === "expansion_package"
     ? `<p class="vitrine-item__credit"><strong>Pacote e crédito <small>· exemplo: DADOS SINTÉTICOS</small></strong> O valor é abatido do <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> se ele for contratado em até 60 dias; créditos não se acumulam.</p>`
     : `<p class="vitrine-item__credit"><strong>Pacote e crédito <small>· exemplo: DADOS SINTÉTICOS</small></strong> Relatório avulso, à parte e fora do Diagnóstico; é o único sem o crédito de 60 dias. Adaptado: R$ 599 por unidade. A CONFENGE busca os editais abertos no raio informado. A quantidade depende das licitações publicadas; a profundidade é a máxima permitida pelas informações da empresa. Bases: editais abertos localizados pela CONFENGE e realidade da construtora. Compare com o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a>.</p>`;
@@ -370,17 +372,21 @@ function vitrineCard(entry, contractItem) {
   return `${open}
 <header class="vitrine-item__head"><div class="vitrine-item__identity"><span>${entry.catalog_number}</span><span class="offer-state">Oferta publicada · PUBLISHED</span></div><h2 id="${headingId}">${escapeHtml(entry.public_name_pt_br)}</h2><p class="vitrine-item__price"><span>Preço</span><strong>${escapeHtml(priceLabel(entry))}</strong></p></header>
 <dl class="vitrine-item__facts">
+<div data-copy-role="value_outcome"><dt>Decisão</dt><dd>${escapeHtml(value.actual_contract_value)}</dd></div>
+<div data-copy-role="value_created"><dt>Trabalho que a entrega comprime</dt><dd>${escapeHtml(value.work_removed)}</dd></div>
+<div data-copy-role="artifact"><dt>Artefato em uso</dt><dd>${escapeHtml(value.artifact_use)}</dd></div>
+<div data-copy-role="positive_proof"><dt>O que você pode inspecionar</dt><dd>${escapeHtml(value.proof_statement)}</dd></div>
 <div><dt>Situação</dt><dd>${escapeHtml(publicText(entry.trigger))}</dd></div>
-<div><dt>Decisão</dt><dd>${escapeHtml(entry.decision_question)}</dd></div>
 <div><dt>Entrada</dt><dd>${renderInlineList(entry.required_inputs)}</dd></div>
 <div><dt>Objeto e limite</dt><dd>${escapeHtml(contractItem.objeto_incluido)}</dd></div>
 <div><dt>Saída</dt><dd>${escapeHtml(contractItem.saida_minima)}</dd></div>
+<div><dt>Por que este preço</dt><dd>${escapeHtml(value.price_anchor)}</dd></div>
 <div><dt>SLA</dt><dd>${escapeHtml(contractItem.sla.text)}</dd></div>
 </dl>
 ${bundle}
 <div class="vitrine-item__actions">
-<a aria-label="Ver o demonstrativo sintético de ${escapeHtml(entry.public_name_pt_br)}" class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Ver sintético <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a aria-label="Pedir análise de ${escapeHtml(entry.public_name_pt_br)}" class="text-link" data-asset-id="entregas-exemplos-hub" data-cta-id="${scopeCtaId}" data-cta-position="${scopePosition}" data-event-name="cta_click" href="#captura-entregas">Pedir análise</a>
+<a aria-label="Ver o demonstrativo sintético de ${escapeHtml(entry.public_name_pt_br)}: ${escapeHtml(value.cta_inspect)}" class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">${escapeHtml(value.cta_inspect)} <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a aria-label="Pedir análise de ${escapeHtml(entry.public_name_pt_br)}: ${escapeHtml(value.cta_configure)}" class="text-link" data-asset-id="entregas-exemplos-hub" data-cta-id="${scopeCtaId}" data-cta-position="${scopePosition}" data-event-name="cta_click" href="#captura-entregas">${escapeHtml(value.cta_configure)}</a>
 </div>
 ${close}`;
 }
@@ -399,7 +405,6 @@ function renderOfferShowcase(published, eightContract) {
 <div class="container">
 <header class="deliverables-vitrine__intro"><p class="eyebrow">8 ofertas publicadas agora</p><h2 id="catalog-title">Escolha pela decisão. Compare uma vez, com o contrato inteiro à vista.</h2><p>Estas são as únicas ofertas com escopo, preço e SLA publicados para consulta agora. Cada card reúne situação, entrada, limite, saída, crédito e próxima ação sem repetir a oferta em outra tabela.</p></header>
 <nav class="offer-decision-nav" aria-label="Escolher oferta pela decisão"><p>Qual pergunta está na mesa?</p><ol>${decisions}</ol></nav>
-<aside class="published-offers__common" aria-labelledby="published-common-title"><div><p class="eyebrow">Contrato comum</p><h3 id="published-common-title">O que vale para as oito ofertas</h3><p><strong>Entrada comum:</strong> ${renderInlineList(commonInputs)}. A entrada específica aparece em cada oferta.</p></div><div><h4>Fronteiras comuns</h4><p>${renderInlineList(commonBoundaries)}. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado.</p></div></aside>
 <div class="vitrine-items">${published.map((entry) => vitrineCard(entry, contractById.get(entry.deliverable_id))).join("\n")}</div>
 <dl class="compare-ladder-figures">
 <div><dt>Faixa por unidade</dt><dd>R$ 599 a R$ 3.750</dd></div>
@@ -407,6 +412,7 @@ function renderOfferShowcase(published, eightContract) {
 <div><dt>Diagnóstico de Expansão no Mercado Público</dt><dd>R$ 8.000</dd></div>
 </dl>
 <p class="compare-note">Sete ofertas geram um único crédito, sem acúmulo, se o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-offer-summary" data-cta-position="offer_summary" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> for contratado em até 60 dias. A diferença entre R$ 12.280 e R$ 8.000 é R$ 4.280. Os exemplos usam dados sintéticos; não representam cliente real.</p>
+<aside class="published-offers__common" aria-labelledby="published-common-title"><div><p class="eyebrow">Condições da análise</p><h3 id="published-common-title">O que vale para as oito ofertas</h3><p><strong>Entrada comum:</strong> ${renderInlineList(commonInputs)}. A entrada específica aparece em cada oferta.</p></div><div><h4>Fronteiras comuns no ponto que qualificam</h4><p>${renderInlineList(commonBoundaries)}. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado.</p></div></aside>
 </div>
 </section>`;
 }
