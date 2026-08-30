@@ -66,40 +66,54 @@
     </ul>
   </section>
 
-  <form id="handraise-form" class="tool-form" method="post" action="/.netlify/functions/conversion-intake" hidden>
+  <form id="handraise-form" class="tool-form" method="post" action="/.netlify/functions/conversion-intake" data-turnstile-required="true" data-submit-timeout-ms="15000" hidden>
     <input type="hidden" name="action" value="handraise" />
+    <input type="hidden" name="source" value="CONFENGE_WEB" />
+    <input type="hidden" name="market_answer_id" value="ma-pavimentacao-valor-tipico-v0" />
+    <input type="hidden" name="intent" value="revisar_contrato" />
+    <input type="hidden" name="question_class" value="contract_review" />
+    <input type="hidden" name="drill_down_origin" value="answer_to_xray" />
+    <input type="hidden" name="route_family" value="resposta-mercado-xray" />
+    <input type="hidden" name="asset_id" value="ma-pavimentacao-valor-tipico-v0" />
     <h2>Segunda leitura</h2>
     <p>Quem responde uma segunda leitura e a equipe CONFENGE (Tiago Sasaki) quando voce pede esse passo. Nao ha SLA publicado.</p>
     <div class="tool-field">
       <label for="nome">Nome</label>
-      <input id="nome" name="nome" type="text" autocomplete="name" />
+      <input id="nome" name="nome" type="text" autocomplete="name" required />
     </div>
     <div class="tool-field">
       <label for="email">E-mail</label>
-      <input id="email" name="email" type="email" autocomplete="email" />
+      <input id="email" name="email" type="email" autocomplete="email" aria-describedby="contact-hint" />
     </div>
     <div class="tool-field">
       <label for="telefone">WhatsApp</label>
-      <input id="telefone" name="telefone" type="tel" autocomplete="tel" />
+      <input id="telefone" name="telefone" type="tel" autocomplete="tel" aria-describedby="contact-hint" />
     </div>
+    <p class="tool-field-hint" id="contact-hint">Informe ao menos um canal de retorno: e-mail ou WhatsApp.</p>
     <div class="tool-field">
       <label for="estagio">O que voce precisa</label>
-      <select id="estagio" name="estagio">
+      <select id="estagio" name="estagio" required>
         <option value="">Selecione</option>
         <option value="segunda leitura de contrato">Segunda leitura de contrato</option>
       </select>
     </div>
     <div class="tool-field">
       <label for="consentimento">
-        <input id="consentimento" name="consentimento" type="checkbox" value="true" />
+        <input id="consentimento" name="consentimento" type="checkbox" value="true" required />
         Autorizo o uso destes dados para retorno sobre a leitura pedida. Sem envio automatico.
       </label>
     </div>
-    <button id="handraise-submit" class="button button-primary" type="submit">Pedir segunda leitura</button>
-    <p class="form-status" id="handraise-status" role="status" hidden></p>
+    <p class="form-status" id="handraise-status" role="status" tabindex="-1" hidden></p>
+    <div class="field turnstile-slot" id="turnstile-slot" hidden data-turnstile-sitekey="">
+      <div id="handraise-turnstile-widget" class="cf-turnstile" data-theme="light" data-size="compact" data-action="xray_handraise" data-callback="confengeXrayTurnstileVerified" data-expired-callback="confengeXrayTurnstileExpired" data-error-callback="confengeXrayTurnstileError" data-timeout-callback="confengeXrayTurnstileExpired" data-response-field-name="cf-turnstile-response"></div>
+      <p class="tool-field-hint" id="turnstile-hint">Conclua a verificacao antiabuso para habilitar o envio.</p>
+    </div>
+    <button id="handraise-submit" class="button button-primary" type="submit" disabled aria-describedby="turnstile-hint handraise-status">Pedir segunda leitura</button>
   </form>
+  <noscript><p class="form-status is-error" role="alert">A segunda leitura precisa de JavaScript para concluir a verificacao antiabuso. Nada foi enviado.</p></noscript>
 </section>
 </main>
 <script src="/assets/js/conversion-journey.js" defer></script>
+<script src="/script.js" defer></script>
 </body>
 </html>

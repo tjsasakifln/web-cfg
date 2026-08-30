@@ -201,6 +201,7 @@ _CAPTURE_FORM_RE = re.compile(
     r'(?is)<form\b(?=[^>]*\b(?:'
     r'action\s*=\s*["\'](?:/\.netlify/functions/lead|/api/web/lead)["\']'
     r'|id\s*=\s*["\']formulario-contato["\']'
+    r'|data-turnstile-required\s*=\s*["\']true["\']'
     r'))[^>]*>'
 )
 _CLOSE_FORM_RE = re.compile(r"(?is)</form>")
@@ -376,7 +377,7 @@ def normalize_responsive_public_html(public_root: Path) -> dict[str, int]:
 
 
 def is_lead_capture_html(html: str) -> bool:
-    """True when the document posts a public lead (home id or lead endpoint)."""
+    """True for a public lead form or an explicitly protected intake action."""
     return bool(_CAPTURE_FORM_RE.search(html))
 
 
@@ -450,7 +451,12 @@ def configure_turnstile_site_key(public_root: Path, env: dict[str, str] | None =
     if not site_key:
         if context == "production":
             raise RuntimeError("TURNSTILE_SITE_KEY is required for the production publish artifact")
-    elif len(site_key) < 10 or len(site_key) > 200 or re.search(r"[\x00-\x1f\x7f]", site_key):
+    elif (
+        len(site_key) < 16
+        or len(site_key) > 200
+        or re.search(r"[\x00-\x1f\x7f]", site_key)
+        or re.search(r"fixture|placeholder|replace|example", site_key, re.IGNORECASE)
+    ):
         raise RuntimeError("TURNSTILE_SITE_KEY is malformed")
 
     capture_files = 0

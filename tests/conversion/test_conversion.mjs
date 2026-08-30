@@ -256,6 +256,98 @@ const VALID = "11222333000181";
   pass("intake_all_xray_states");
 }
 
+// --- protected handraise: missing token fails closed; authenticated probe succeeds ---
+{
+  const previous = {
+    secret: process.env.TURNSTILE_SECRET_KEY,
+    required: process.env.LEAD_REQUIRE_TURNSTILE,
+    probe: process.env.LEAD_PROBE_SECRET,
+    webhookUrl: process.env.CONFENGE_INBOUND_WEBHOOK_URL,
+    webhookSecret: process.env.CONFENGE_INBOUND_WEBHOOK_SECRET,
+  };
+  const restore = (name, value) => {
+    if (value === undefined) delete process.env[name];
+    else process.env[name] = value;
+  };
+  try {
+    process.env.TURNSTILE_SECRET_KEY = "turnstile-server-fixture-secret";
+    process.env.LEAD_REQUIRE_TURNSTILE = "1";
+    process.env.LEAD_PROBE_SECRET = "xray-probe-secret-at-least-32-characters";
+    process.env.CONFENGE_INBOUND_WEBHOOK_URL = "https://warmbly.invalid/api/v1/webhooks/confenge/inbound";
+    process.env.CONFENGE_INBOUND_WEBHOOK_SECRET = "xray-webhook-fixture-secret";
+    const { handler, setStoreForTests, setFetchForTests } = loadHandler();
+    const store = new MemoryStore();
+    setStoreForTests(store);
+    setFetchForTests(async (_url, options) => {
+      const body = JSON.parse(options.body);
+      return {
+        status: 201,
+        json: async () => ({ ok: true, receipt_id: body.receipt_id }),
+      };
+    });
+    const body = (idempotencyKey) => ({
+      action: "handraise",
+      nome: "QA X-Ray",
+      email: "qa-xray@example.com",
+      telefone: "48999999999",
+      estagio: "segunda leitura de contrato",
+      consentimento: true,
+      jornada: "contrato",
+      source: "CONFENGE_WEB",
+      market_answer_id: "ma-pavimentacao-valor-tipico-v0",
+      intent: "revisar_contrato",
+      question_class: "contract_review",
+      drill_down_origin: "answer_to_xray",
+      route_family: "market-answer-xray",
+      asset_id: "ma-pavimentacao-valor-tipico-v0",
+      idempotency_key: idempotencyKey,
+      correlation_id: `c-${idempotencyKey}`,
+    });
+    const event = (payload, headers = {}) => ({
+      httpMethod: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "https://confenge.com.br",
+        "idempotency-key": payload.idempotency_key,
+        ...headers,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const missing = await handler(event(body("xray-turnstile-missing"), {
+      "x-forwarded-for": "203.0.113.81",
+    }));
+    const missingBody = JSON.parse(missing.body);
+    if (missing.statusCode !== 403 || missingBody.error !== "anti_abuse") {
+      fail("xray_handraise_missing_token_403", { status: missing.statusCode, body: missingBody });
+    }
+    if ((await store.list()).length !== 0) fail("xray_handraise_missing_token_not_persisted");
+    else pass("xray_handraise_missing_token_403", "403 anti_abuse");
+
+    const accepted = await handler(event(body("xray-turnstile-probe-ok"), {
+      "x-forwarded-for": "203.0.113.82",
+      "x-confenge-probe": process.env.LEAD_PROBE_SECRET,
+    }));
+    const acceptedBody = JSON.parse(accepted.body);
+    const stored = await store.list();
+    if (accepted.statusCode !== 201 || !acceptedBody.ok || stored.length !== 1) {
+      fail("xray_handraise_authorized_probe_accepted", { status: accepted.statusCode, body: acceptedBody, stored: stored.length });
+    } else if (stored[0].source !== "CONFENGE_WEB" || stored[0].record_kind !== "synthetic") {
+      fail("xray_handraise_probe_source", { source: stored[0].source, record_kind: stored[0].record_kind });
+    } else {
+      pass("xray_handraise_authorized_probe_accepted", "201 source=CONFENGE_WEB");
+    }
+    setStoreForTests(null);
+    setFetchForTests(null);
+  } finally {
+    restore("TURNSTILE_SECRET_KEY", previous.secret);
+    restore("LEAD_REQUIRE_TURNSTILE", previous.required);
+    restore("LEAD_PROBE_SECRET", previous.probe);
+    restore("CONFENGE_INBOUND_WEBHOOK_URL", previous.webhookUrl);
+    restore("CONFENGE_INBOUND_WEBHOOK_SECRET", previous.webhookSecret);
+  }
+}
+
 // --- persist-first + idempotent replay via REAL handler ---
 {
   const { handler, setStoreForTests, setFetchForTests } = loadHandler();
