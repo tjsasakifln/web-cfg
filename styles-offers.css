@@ -13,6 +13,10 @@
 .offer-hero:has(.offer-context) > .container > .eyebrow{order:1}
 .offer-hero:has(.offer-context) > .container > h1{order:2;max-width:18ch}
 .offer-hero:has(.offer-context) > .container > .content-lead{order:3}
+/* A linha de prova entra logo depois do lead. O container e flex com ordem
+   explicita, entao um paragrafo sem ordem declarada iria para o topo, acima
+   do eyebrow. Empatando com o lead, o desempate segue a ordem do DOM. */
+.offer-hero:has(.offer-context) > .container > .offer-proof-line{order:3}
 .offer-hero:has(.offer-context) > .container > .hero-actions{
   order:4;
   margin:24px 0 4px;
@@ -163,4 +167,25 @@
     font-size:1.0625rem;
     line-height:1.6;
   }
+}
+
+/* Primeira dobra das ofertas (issue #327).
+   A razao de confianca precisa ser conferivel sem cadastro e precisa caber na
+   dobra medida, junto do H1, do lead e da acao dominante. Uma lista de
+   credenciais que so aparece depois de 900px de rolagem nao responde nada. */
+.offer-proof-line{
+  margin:14px 0 0;
+  color:#314256;
+  font-size:.9375rem;
+  line-height:1.55;
+  max-width:64ch;
+}
+.offer-proof-line a{
+  color:var(--green-700);
+  font-weight:750;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+@media (max-width:760px){
+  .offer-proof-line{font-size:.875rem;line-height:1.5;margin-top:12px}
 }

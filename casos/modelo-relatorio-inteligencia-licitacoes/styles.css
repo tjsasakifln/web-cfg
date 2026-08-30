@@ -403,3 +403,26 @@ main { overflow: clip; }
 }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Primeira dobra dos exemplos publicados (issue #327).
+   A razao de confianca de um demonstrativo e o proprio exemplo publicado e o
+   preco publicado. Ela precisa caber na dobra medida, com o H1, o lead, o
+   resultado do exemplo e a acao dominante. */
+.report-proof-line { color: var(--r-muted); font-size: .9rem; line-height: 1.5; margin: 14px 0 0; max-width: 68ch; }
+.report-proof-line a { color: var(--r-green); font-weight: 800; text-decoration: underline; text-underline-offset: 2px; }
+@media (min-width: 961px) and (max-height: 960px) {
+  .report-hero-grid { min-height: 0; padding-bottom: clamp(28px, 3vw, 40px); padding-top: clamp(28px, 3vw, 40px); }
+  .report-hero h1 { font-size: clamp(2.1rem, 3vw, 2.7rem); margin-bottom: 14px; }
+  .report-lead { font-size: 1rem; line-height: 1.5; }
+  .report-hero-result { margin-top: 16px; padding: 10px 0; }
+  .report-hero-actions { margin-top: 16px; }
+  .report-hero-actions .button { min-height: 48px; }
+  .report-proof-line { font-size: .85rem; line-height: 1.45; margin-top: 10px; }
+  .report-offer-authority { font-size: .82rem; line-height: 1.4; margin-top: 10px; }
+  .report-cover { min-height: 0; padding: 20px; }
+  .report-cover-label { margin: 30px 0 12px; }
+  .report-cover h2 { font-size: clamp(1.5rem, 2vw, 2rem); }
+}
+@media (max-width: 620px) {
+  .report-proof-line { font-size: .82rem; line-height: 1.45; margin-top: 10px; }
+}
