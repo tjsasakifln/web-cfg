@@ -306,8 +306,36 @@ def _aligned_crumbs(
     return align_breadcrumb_trail(existing, trail)
 
 
+def _migrated_donor_routes() -> frozenset[str]:
+    """Routes whose canonical names a different page.
+
+    A consolidation donor keeps the breadcrumb its canonical owner defines, so
+    the editorial renderer owns that trail. Restamping it from the physical
+    path would fight that renderer on every build and desync the shell.
+    """
+    out: set[str] = set()
+    pages = ROOT / "data" / "editorial" / "pages"
+    if not pages.is_dir():
+        return frozenset()
+    for record in sorted(pages.glob("*.json")):
+        try:
+            doc = json.loads(record.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001 — a malformed record must not break the sync
+            continue
+        url = str(doc.get("url") or "")
+        canonical = str(doc.get("canonical_path") or "")
+        if url and canonical and url.rstrip("/") != canonical.rstrip("/"):
+            out.add(url.rstrip("/") + "/")
+    return frozenset(out)
+
+
+MIGRATED_DONOR_ROUTES = _migrated_donor_routes()
+
+
 def sync_breadcrumbs(text: str, current: str | None) -> str:
     """Rewrite visible crumbs and BreadcrumbList from the IA parent chain."""
+    if current and current.rstrip("/") + "/" in MIGRATED_DONOR_ROUTES:
+        return text
     aligned = _aligned_crumbs(text, current)
     if not aligned or not current:
         return text
