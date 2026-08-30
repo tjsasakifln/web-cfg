@@ -1,23 +1,42 @@
 /* CONFENGE · camada da home
  * ---------------------------------------------------------------------------
- * Revisao 2026-08-30. A versao anterior instalava uma planilha orcamentaria
- * como motor de layout: uma regua de colunas congelada no topo (ITEM /
- * DESCRICAO / UNIDADE / QUANT / FONTE), cinco trilhos herdados por cada secao
- * e faixas de metadado por banda. A medicao de #538 mostrou o custo: quatro
- * trilhos estreitos ocupavam 599,4px de um viewport de 1366px, 43,9% da
- * largura, para carregar cerca de 150 caracteres. E o DESIGN_DIRECTION_BRIEF
- * de 2026-08-30 classifica fios finos, radius zero, colunas de jornal e
- * numeracao 01/02/03 como o cluster 3 de design generico, proibido a qualquer
- * candidato em #494.
+ * Revisao 2026-08-30 (direcao "parecer"). Registro em
+ * docs/design-audit/issues/13-home-commercial-direction.md.
  *
- * O que substitui o trilho: subordinacao por peso e por formato. Uma tese
- * domina cada secao; o material de apoio tem formato genuinamente diferente,
- * nao um card igual ao lado. A evidencia carrega fonte e data de corte
- * adjacentes, que era a unica informacao real que os trilhos transportavam.
+ * Historico curto. A revisao de #525/#526 instalou uma planilha orcamentaria
+ * como motor de layout (regua ITEM/DESCRICAO/UNIDADE/QUANT/FONTE, cinco
+ * trilhos por secao). #538 mediu o custo e a revisao seguinte a removeu — mas
+ * o que sobrou foi a folha global de volta: caixa cinza com fio de acento no
+ * topo, tres familias tipograficas na mesma pagina e nenhuma tese visual.
+ * Sair da planilha para o generico nao e a terceira direcao; e a segunda de
+ * novo.
  *
- * Esta folha e uma camada fina sobre styles.css, que ja resolve hero, portas,
- * ofertas, autoridade, adequacao e captura. Aqui ficam a identidade
- * tipografica da home e os componentes que so existem nela.
+ * A tese desta camada. A CONFENGE vende julgamento tecnico e economico. O
+ * artefato do julgamento neste mercado e o parecer, e o parecer termina em uma
+ * palavra: participar, condicionar ou recusar. Essa terna e o unico elemento
+ * que nenhum concorrente copia sem mudar de negocio, entao ela — e nao a
+ * mobilia de tabela — carrega a identidade da primeira dobra.
+ *
+ * As tres decisoes que produzem a identidade:
+ *
+ *   1. UM CAMPO ESCURO, no topo. A dobra e um campo continuo em tinta
+ *      #08130e, nao mais uma folha branca com caixas. O cabecalho permanece
+ *      claro (contrato de logo em test_design_gates.py:768) e a aresta entre
+ *      os dois e deliberada.
+ *   2. UMA FAMILIA, TRES LARGURAS. Archivo variavel ja estava carregada e
+ *      tem eixo wdth 66-110 que quase ninguem usa. Display em 96% (--wide),
+ *      rotulo em 78% (--narrow), texto em 100%. Serifa de sistema e
+ *      monoespacada saem da home:
+ *      eram Georgia e Menlo, isto e, o default de qualquer pagina.
+ *   3. REGUA NO LUGAR DE CAIXA. Um unico estilo de fio (1px --rule). Nenhuma
+ *      barra de acento de 2px/3px, nenhum painel cinza. Raio sobrevive so
+ *      onde significa "clicavel": botao e campo de formulario.
+ *
+ * O que esta camada NAO faz: nao redesenha as outras ~260 rotas, nao inventa
+ * paleta global (uma superficie nova, --field, ver secao 0), nao adiciona
+ * arquivo de fonte,
+ * nao toca styles.css / styles-tokens.css / script.js — congelados por janela
+ * de medicao ate 2026-09-13, ver docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md.
  * Nao carregar em outra rota.
  * ------------------------------------------------------------------------- */
 
@@ -33,11 +52,33 @@
   font-display:swap;
 }
 
+/* ── 0. Tokens da home ─────────────────────────────────────────────────── */
+/* Uma superficie nova, --field: o preto-verde da marca, nao o navy corporativo
+ * generico. Deriva do --green-700 existente escurecido ate virar tinta, o que
+ * faz o campo escuro pertencer a CONFENGE em vez de pertencer a categoria.
+ *
+ * Honestidade sobre a contagem: --field e a unica DECISAO de cor nova. As
+ * outras custom properties abaixo nao sao paleta, sao o conjunto legivel sobre
+ * ela (tinta, texto de apoio, acento vivo) e as duas reguas. Nenhuma entra em
+ * styles-tokens.css; todas morrem no escopo da home. Promover qualquer uma a
+ * token global exige issue propria.
+ *
+ * Contraste medido com _contrast_ratio de scripts/site/test_design_gates.py:
+ *   --field-ink  sobre --field  18,92:1
+ *   --field-muted sobre --field  9,45:1
+ *   --accent-live sobre --field  6,51:1 */
 body[data-content-cluster="home"]{
-  --page-gutter:clamp(1.15rem,3.2vw,3rem);
+  --field:#08130e;
+  --field-soft:#12241b;
+  --field-ink:#f4f7f4;
+  --field-muted:#a9bcae;
   --accent:var(--green-700);
-  --panel:#f7f9fa;
-  --panel-line:#e3e9ed;
+  --accent-live:#5ea85a;
+  --rule:#dfe4e6;
+  --rule-strong:#0d1b12;
+  --page-gutter:clamp(1.15rem,3.2vw,3rem);
+  --wide:96%;
+  --narrow:78%;
   font-family:"Archivo Var",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   font-weight:400;
   font-variant-numeric:tabular-nums slashed-zero;
@@ -45,110 +86,295 @@ body[data-content-cluster="home"]{
 }
 body[data-content-cluster="home"] main{overflow-x:clip}
 
-/* O peso, e nao o fio, faz a hierarquia. */
+/* ── 1. Sistema tipografico: uma familia, tres larguras ────────────────── */
+/* A serifa de sistema (--serif resolve para Georgia/Palatino) e a monoespacada
+ * (--mono resolve para Menlo/Consolas) eram o unico "acabamento" tipografico
+ * da pagina e ambas sao o default de qualquer navegador. Saem. O eixo de
+ * largura do Archivo faz o mesmo trabalho e pertence a marca. */
+body[data-content-cluster="home"] .type-serif,
+body[data-content-cluster="home"] .type-mono{
+  font-family:"Archivo Var",ui-sans-serif,system-ui,sans-serif;
+}
+body[data-content-cluster="home"] .type-serif{font-stretch:var(--wide);font-weight:700;letter-spacing:-.03em}
+
 body[data-content-cluster="home"] h1,
-body[data-content-cluster="home"] h2,
-body[data-content-cluster="home"] h3{font-stretch:96%;font-weight:700;letter-spacing:-.022em}
-body[data-content-cluster="home"] .eyebrow{
-  font-stretch:88%;font-weight:750;letter-spacing:.1em;text-transform:uppercase;font-size:.72rem;color:var(--accent);
+body[data-content-cluster="home"] h2{
+  font-stretch:var(--wide);font-weight:760;letter-spacing:-.032em;line-height:1.04;
+}
+body[data-content-cluster="home"] h3{font-stretch:var(--wide);font-weight:720;letter-spacing:-.02em;line-height:1.15}
+
+/* O rotulo estreito e a assinatura tipografica da home: 78% de largura,
+ * peso 750, versalete. Aparece em eyebrow, rotulo de porta e legenda de dado —
+ * sempre nomeando, nunca decorando. */
+body[data-content-cluster="home"] .eyebrow,
+body[data-content-cluster="home"] .journey-kind,
+body[data-content-cluster="home"] .offer-label,
+body[data-content-cluster="home"] .icp-label,
+body[data-content-cluster="home"] .type-mono{
+  font-stretch:var(--narrow);font-weight:750;letter-spacing:.11em;text-transform:uppercase;
+  font-size:var(--text-micro);line-height:1.4;
+}
+/* .offer-label e .icp-label estao no piso funcional de 14px
+ * (test_design_gates.py functional floor + test_ui_geometry functional_text_min_14px):
+ * sao rotulo de oferta e de adequacao, nao legenda. Mantem a largura estreita,
+ * recupera o tamanho. */
+body[data-content-cluster="home"] .offer-label,
+body[data-content-cluster="home"] .icp-label{font-size:.875rem;letter-spacing:.09em}
+body[data-content-cluster="home"] .eyebrow{margin:0 0 .85rem;color:var(--accent)}
+/* O ponto lime do eyebrow era a ultima ocorrencia de --lime na home. */
+body[data-content-cluster="home"] .eyebrow-dot{display:none}
+
+body[data-content-cluster="home"] .section-lead,
+body[data-content-cluster="home"] .editorial-lead{
+  max-width:58ch;color:var(--text);font-size:1.05rem;line-height:1.65;
 }
 
-/* ── 1. Primeira dobra ─────────────────────────────────────────────────── */
-/* A dobra tem duas colunas: a tese a esquerda, o artefato a direita. O lado
- * direito nao e ornamento, e a resposta a pergunta "o que eu recebo". */
+/* ── 2. Ritmo ──────────────────────────────────────────────────────────── */
+/* Quatro alturas de secao, nao oito. A regua entre secoes e sempre a mesma:
+ * 1px --rule, largura do container. */
+body[data-content-cluster="home"] .section{padding:clamp(3.5rem,7vw,6rem) 0}
+body[data-content-cluster="home"] .section--tight{padding:0}
+body[data-content-cluster="home"] .section--loose{padding:clamp(4.25rem,8vw,7.5rem) 0}
+body[data-content-cluster="home"] .section-head{max-width:none;margin-bottom:clamp(2rem,4vw,3rem)}
+body[data-content-cluster="home"] .section-head h2{max-width:20ch}
+/* Cabecalho de secao em duas colunas: a tese a esquerda, a qualificacao a
+ * direita, no lugar de uma coluna curta com 45% da largura vazia. So quando
+ * existe lead; sem :has() a secao volta a empilhar, que continua legivel. */
+@media (min-width:1000px){
+  body[data-content-cluster="home"] .section-head:has(.section-lead){
+    display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+    column-gap:clamp(2rem,5vw,4.5rem);align-items:start;
+  }
+  body[data-content-cluster="home"] .section-head:has(.section-lead) .eyebrow{grid-column:1;grid-row:1}
+  body[data-content-cluster="home"] .section-head:has(.section-lead) h2{grid-column:1;grid-row:2;max-width:17ch}
+  body[data-content-cluster="home"] .section-head:has(.section-lead) .section-lead{grid-column:2;grid-row:2;margin:.35rem 0 0;max-width:46ch}
+}
+
+/* ── 3. Primeira dobra: o campo e o parecer ────────────────────────────── */
+body[data-content-cluster="home"] .hero{
+  padding:clamp(2.75rem,5.5vw,4.5rem) 0 clamp(2.75rem,5vw,4rem);
+  color:var(--field-ink);background:var(--field);border-bottom:0;
+}
+body[data-content-cluster="home"] .hero h1{
+  max-width:22ch;margin:0 0 1.15rem;color:var(--field-ink);
+  font-size:clamp(2.15rem,4.1vw,3.3rem);text-wrap:balance;
+}
+/* A tese tem dois tempos: o que nao paga a conta, e o que paga. O contraste
+ * era carregado por uma serifa de sistema em verde escuro; agora e a mesma
+ * familia numa linha propria, no verde que o campo escuro deixa respirar. */
+body[data-content-cluster="home"] .hero h1 .type-serif{display:block;color:var(--accent-live)}
+body[data-content-cluster="home"] .hero-eyebrow{color:var(--accent-live)}
+body[data-content-cluster="home"] .hero-lead{
+  max-width:50ch;margin:0 0 1.15rem;color:var(--field-muted);
+  font-size:clamp(1rem,1.35vw,1.12rem);line-height:1.6;
+}
+body[data-content-cluster="home"] .hero-deliverable{
+  max-width:52ch;margin:0 0 1.5rem;padding:1rem 0 0;border-top:1px solid rgba(255,255,255,.16);
+  color:var(--field-ink);font-size:1rem;font-weight:600;line-height:1.55;
+}
+body[data-content-cluster="home"] .hero-actions{gap:1rem 1.75rem;margin-bottom:1.4rem}
+
+/* O anel de foco padrao e halo branco + nucleo tinta: sobre o campo escuro o
+ * nucleo desaparece. Invertido aqui, medido em 12,1:1 contra o campo. */
+body[data-content-cluster="home"] .hero{
+  --focus-ring-halo:var(--field);
+  --focus-ring-core:var(--white);
+}
+/* Sobre o campo escuro a acao primaria e a superficie de maior contraste da
+ * pagina: branco solido. Uma acao dominante, sem competidor do mesmo peso. */
+/* .button-lg pede 58px, mas um contrato de layout em styles.css derruba a
+ * altura para o piso de toque de 44px. Ao lado de um display de 3,3rem isso
+ * le como um botao secundario, entao a acao dominante recupera a escala. */
+body[data-content-cluster="home"] .hero .button-primary{
+  min-height:56px;padding-inline:26px;
+  color:var(--field);background:var(--white);box-shadow:none;
+}
+body[data-content-cluster="home"] .hero .button-primary:hover{background:#dce7dd;box-shadow:none}
+body[data-content-cluster="home"] .hero-secondary{color:var(--field-ink)}
+body[data-content-cluster="home"] .hero-secondary:hover{color:var(--accent-live)}
+body[data-content-cluster="home"] .hero-secondary .icon{color:var(--accent-live)}
+
+body[data-content-cluster="home"] .hero-proof{
+  display:flex;flex-wrap:wrap;gap:.5rem 1.75rem;
+  padding:1rem 0 0;border-top:1px solid rgba(255,255,255,.16);
+}
+body[data-content-cluster="home"] .hero-proof li{color:var(--field-muted);font-size:.875rem;line-height:1.45}
+body[data-content-cluster="home"] .proof-mark{color:var(--accent-live)}
+body[data-content-cluster="home"] .hero-proof-line{margin:.7rem 0 0;color:var(--field-muted);font-size:.85rem}
+body[data-content-cluster="home"] .hero-proof-line a{color:var(--field-ink);font-weight:400;text-decoration:underline;text-underline-offset:3px}
+body[data-content-cluster="home"] .hero-proof-line a:hover{color:var(--accent-live)}
+
 body[data-content-cluster="home"] .home-hero-grid{
-  display:grid;grid-template-columns:minmax(0,1.08fr) minmax(300px,.72fr);
-  gap:clamp(2rem,4.5vw,4rem);align-items:start;max-width:none;
-}
-.hero-artifact{
-  margin-top:.35rem;padding:1.35rem 1.4rem 1.25rem;
-  background:var(--panel);border:1px solid var(--panel-line);
-  border-top:3px solid var(--accent);border-radius:var(--radius-sm);
-}
-.hero-artifact-label{
-  margin:0 0 .9rem;font-stretch:88%;font-size:.7rem;font-weight:750;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
-}
-.hero-artifact-list{margin:0;padding:0;list-style:none;display:grid;gap:.85rem}
-.hero-artifact-list li{display:grid;gap:.2rem}
-.hero-artifact-list strong{color:var(--ink);font-size:.98rem;font-weight:700;line-height:1.3}
-.hero-artifact-list span{color:var(--text);font-size:.88rem;line-height:1.5}
-.hero-artifact-foot{
-  margin:1.05rem 0 0;padding-top:.8rem;border-top:1px solid var(--panel-line);
-  color:var(--muted);font-size:.8rem;line-height:1.45;
-}
-.hero-deliverable{
-  max-width:56ch;margin:0 0 22px;padding:14px 0 0;
-  border-top:2px solid var(--accent);
-  color:var(--ink);font-size:1.02rem;font-weight:600;line-height:1.55;
-}
-.hero-proof-line{margin:14px 0 0;color:var(--muted);font-size:.9rem;line-height:1.5}
-.hero-proof-line a{color:var(--ink);text-underline-offset:3px}
-
-/* ── 2. Tres portas: rotulo tipado, nao ornamento numerico ─────────────── */
-/* .journey-row ainda vem de styles.css com grid-template-columns:3.5rem 1fr
- * (2.25rem 1fr no mobile): uma coluna dimensionada para "01"/"02"/"03", nao
- * para um rotulo de texto como "CONTRATO SOB PRESSAO". Sem esta correcao a
- * medicao de responsividade martelava esse rotulo em uma caixa de 36px de
- * largura. O rotulo sobe para linha propria, acima do corpo. */
-body[data-content-cluster="home"] .journey-row{grid-template-columns:1fr;align-items:start;gap:.4rem}
-.journey-kind{
-  margin:0;font-stretch:88%;font-size:.72rem;font-weight:750;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--accent);
-}
-body[data-content-cluster="home"] .journey-row-body h3{font-size:clamp(1.2rem,2vw,1.5rem);max-width:24ch}
-body[data-content-cluster="home"] #contrato-canal-seguro{
-  max-width:58ch;margin:.4rem 0 .2rem;color:var(--muted);font-size:.92rem;line-height:1.55;
+  display:grid;grid-template-columns:minmax(0,1.12fr) minmax(272px,.68fr);
+  gap:clamp(2rem,4.5vw,4.5rem);align-items:center;max-width:none;
 }
 
-/* ── 3. Entregas: o artefato tem formato proprio, nao e mais um card ───── */
+/* A assinatura: o conjunto de vereditos.
+ * Nao e ornamento nem card. E o unico enunciado da pagina que um concorrente
+ * nao copia sem mudar de negocio — a CONFENGE devolve uma palavra, inclusive
+ * "recusar". Tres linhas, regua entre elas, nada dentro de caixa. */
+.hero-verdict{margin:.2rem 0 0;padding:0}
+.hero-verdict-label{
+  margin:0 0 1rem;color:var(--field-muted);
+  font-stretch:var(--narrow);font-weight:750;letter-spacing:.11em;text-transform:uppercase;
+  font-size:var(--text-micro);line-height:1.5;
+}
+.hero-verdict-set{margin:0;padding:0;list-style:none;border-top:1px solid rgba(255,255,255,.22)}
+.hero-verdict-set li{
+  padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.22);
+  color:var(--field-ink);font-stretch:var(--narrow);font-weight:760;
+  letter-spacing:.045em;text-transform:uppercase;line-height:1.1;
+  font-size:clamp(1.6rem,2.9vw,2.55rem);
+}
+.hero-verdict-foot{
+  margin:1rem 0 0;color:var(--field-muted);font-size:.875rem;line-height:1.55;max-width:34ch;
+}
+.hero-verdict-foot strong{color:var(--field-ink);font-weight:650}
+
+/* ── 4. Tres portas: linha editorial, nao card ─────────────────────────── */
+body[data-content-cluster="home"] .journeys-section{border-bottom:0}
+body[data-content-cluster="home"] .journey-list{margin:0;padding:0;list-style:none;border-top:1px solid var(--rule)}
+body[data-content-cluster="home"] .journey-row{
+  display:grid;grid-template-columns:minmax(0,13rem) minmax(0,1fr);
+  gap:.6rem clamp(1.5rem,4vw,3.5rem);align-items:start;
+  margin:0;padding:clamp(1.6rem,3vw,2.25rem) 0;border-bottom:1px solid var(--rule);border-top:0;
+}
+body[data-content-cluster="home"] .journey-kind{margin:.35rem 0 0;color:var(--accent)}
+body[data-content-cluster="home"] .journey-row-body{min-width:0}
+@media (min-width:1000px){
+  body[data-content-cluster="home"] .journey-row-body{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,17rem);
+    column-gap:clamp(1.5rem,3.5vw,3.5rem);
+  }
+  body[data-content-cluster="home"] .journey-row-body>h3,
+  body[data-content-cluster="home"] .journey-row-body>p:not(.journey-row-actions){grid-column:1}
+  body[data-content-cluster="home"] .journey-row-actions{
+    grid-column:2;grid-row:1/span 5;align-self:start;
+    display:grid;justify-items:start;gap:.75rem;margin:0;
+  }
+  body[data-content-cluster="home"] .journey-row-actions .button{width:100%}
+}
+body[data-content-cluster="home"] .journey-row-body h3{
+  margin:0 0 .5rem;max-width:24ch;font-size:clamp(1.25rem,2.1vw,1.6rem);
+}
+body[data-content-cluster="home"] .journey-row-body>p{max-width:60ch;margin:0 0 .75rem;color:var(--text);line-height:1.6}
+body[data-content-cluster="home"] #contrato-canal-seguro{max-width:58ch;color:var(--muted);font-size:.9rem;line-height:1.55}
+body[data-content-cluster="home"] .journey-row-actions{
+  display:flex;align-items:center;flex-wrap:wrap;gap:.6rem 1.5rem;margin:.9rem 0 0;
+}
+body[data-content-cluster="home"] .journey-alt-link{color:var(--muted);font-size:.9rem;text-underline-offset:3px}
+body[data-content-cluster="home"] .journey-alt-link:hover{color:var(--accent)}
+
+/* ── 5. Ofertas: uma tese dominante, apoios subordinados por formato ───── */
+body[data-content-cluster="home"] .offer-layout{
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  gap:clamp(1.75rem,4vw,3.5rem);align-items:start;
+}
+body[data-content-cluster="home"] .offer-dominant{
+  gap:.85rem;padding:clamp(1.9rem,3.5vw,2.75rem);
+  color:var(--field-ink);background:var(--field);border:0;
+}
+body[data-content-cluster="home"] .offer-dominant .offer-label{color:var(--accent-live)}
+body[data-content-cluster="home"] .offer-dominant h3{font-size:clamp(1.4rem,2.2vw,1.9rem)}
+body[data-content-cluster="home"] .offer-dominant .offer-headline{color:var(--field-ink);font-size:1.05rem;font-weight:600}
+body[data-content-cluster="home"] .offer-facts li{color:var(--field-muted)}
+body[data-content-cluster="home"] .offer-facts strong{color:var(--field-ink);font-weight:650}
+body[data-content-cluster="home"] .offer-dominant-link{color:var(--field-ink)}
+body[data-content-cluster="home"] .offer-dominant-link .icon{color:var(--accent-live)}
+body[data-content-cluster="home"] .offer-dominant{--focus-ring-halo:var(--field);--focus-ring-core:var(--white)}
+
+/* Os apoios deixam de ser tres cards iguais ao lado de um card maior: viram
+ * uma lista com regua. Formato diferente = subordinacao legivel. */
+body[data-content-cluster="home"] .offer-paths{display:block;border-top:1px solid var(--rule)}
+body[data-content-cluster="home"] .offer-path{
+  display:grid;gap:.3rem;padding:1.15rem 0;background:none;border:0;border-bottom:1px solid var(--rule);
+  border-radius:0;transition:none;
+}
+body[data-content-cluster="home"] .offer-path:hover{border-color:var(--rule)}
+body[data-content-cluster="home"] .offer-path:hover strong{color:var(--accent)}
+body[data-content-cluster="home"] .offer-path .type-mono{color:var(--accent);font-size:var(--text-micro)}
+body[data-content-cluster="home"] .offer-path strong{font-size:1.05rem;font-weight:720;letter-spacing:-.015em}
+body[data-content-cluster="home"] .offer-path p{max-width:46ch}
+body[data-content-cluster="home"] .path-cta{margin-top:.35rem;color:var(--accent)}
+
+/* ── 6. Entregas: o artefato tem formato proprio ───────────────────────── */
 .home-deliverables{
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.78fr);
-  gap:clamp(1.6rem,4vw,3rem);align-items:start;
-  margin-top:2.5rem;padding-top:1.75rem;border-top:1px solid var(--panel-line);
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);
+  gap:clamp(1.75rem,4vw,3.5rem);align-items:start;
+  margin-top:clamp(2.5rem,5vw,4rem);padding-top:clamp(1.75rem,3vw,2.5rem);border-top:1px solid var(--rule);
 }
-.home-deliverables-copy h3{max-width:22ch;margin:.55rem 0 .7rem;font-size:clamp(1.3rem,2vw,1.8rem)}
-.home-deliverables-copy>p:not(.eyebrow){max-width:56ch;margin:0;color:var(--text);font-size:.98rem;line-height:1.65}
-.home-deliverables-example{
-  padding:1.15rem 1.25rem 1.25rem;background:var(--panel);
-  border:1px solid var(--panel-line);border-left:3px solid var(--accent);border-radius:var(--radius-sm);
-}
+.home-deliverables-copy h3{max-width:20ch;margin:.5rem 0 .75rem;font-size:clamp(1.35rem,2.2vw,1.9rem)}
+.home-deliverables-copy>p:not(.eyebrow){max-width:54ch;margin:0;color:var(--text);font-size:1rem;line-height:1.65}
+.home-deliverables-example{padding:0;background:none;border:0;border-top:2px solid var(--rule-strong);border-radius:0}
 .home-deliverables-example>span{
-  display:block;margin-bottom:.5rem;font-stretch:88%;font-size:.68rem;font-weight:750;
-  letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  display:block;margin:.85rem 0 .35rem;color:var(--muted);
+  font-stretch:var(--narrow);font-weight:750;letter-spacing:.1em;text-transform:uppercase;font-size:var(--text-micro);
 }
-.home-deliverables-example>strong{display:block;margin-bottom:1rem;color:var(--ink);font-size:1.02rem;line-height:1.35}
+.home-deliverables-example>strong{
+  display:block;margin-bottom:1rem;color:var(--ink);font-size:1.1rem;font-weight:720;
+  letter-spacing:-.02em;line-height:1.25;
+}
 .home-deliverables-result{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;
-  margin:0 0 1.15rem;padding:.85rem 0;border-top:1px solid var(--panel-line);border-bottom:1px solid var(--panel-line);
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;
+  margin:0 0 1.15rem;padding:.9rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
 }
-.home-deliverables-result dt{color:var(--muted);font-stretch:88%;font-size:.66rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase}
-.home-deliverables-result dd{margin:.2rem 0 0;color:var(--ink);font-size:1.5rem;font-weight:700;line-height:1.1}
-.home-deliverables-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.7rem 1.15rem}
+.home-deliverables-result dt{
+  color:var(--muted);font-stretch:var(--narrow);font-weight:750;letter-spacing:.09em;
+  text-transform:uppercase;font-size:var(--text-micro);
+}
+.home-deliverables-result dd{margin:.25rem 0 0;color:var(--ink);font-size:1.75rem;font-weight:760;line-height:1;letter-spacing:-.03em}
+.home-deliverables-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.7rem 1.25rem}
 .home-deliverables-actions .button{min-height:48px}
+body[data-content-cluster="home"] .home-deliverables-actions .button-light{
+  color:var(--white);background:var(--accent);box-shadow:none;
+}
+body[data-content-cluster="home"] .home-deliverables-actions .button-light:hover{background:var(--green-600);box-shadow:none}
 
-/* Metodo: quatro movimentos, nomeados pelo que fazem. */
-.home-method-strip{margin-top:2.5rem}
+/* ── 7. Metodo: o verbo carrega a sequencia ────────────────────────────── */
+/* A numeracao 01/02/03/04 saiu. O DESIGN_DIRECTION_BRIEF classifica numeracao
+ * ordinal ornamental como cluster 3 de design generico, e aqui ela nao
+ * transportava informacao: os quatro verbos ja estao em ordem. */
+.home-method-strip{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;
+  margin:clamp(2.5rem,5vw,4rem) 0 0;padding:0;list-style:none;border-top:2px solid var(--rule-strong);
+}
+.home-method-strip .macro-phase{
+  padding:1.4rem clamp(1rem,2vw,1.75rem) 0 0;background:none;border:0;border-radius:0;
+}
+.home-method-strip .macro-phase+.macro-phase{padding-left:clamp(1rem,2vw,1.75rem);border-left:1px solid var(--rule)}
+.home-method-strip .phase-verb{
+  display:block;margin-bottom:.6rem;color:var(--accent);
+  font-stretch:var(--narrow);font-weight:750;letter-spacing:.11em;text-transform:uppercase;font-size:var(--text-micro);
+}
+.home-method-strip .macro-phase h3{margin:0 0 .5rem;font-size:1.02rem;line-height:1.25}
+.home-method-strip .macro-phase>p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
 
-/* ── 4. Evidencia de mercado: procedencia colada ao numero ─────────────── */
-.market-context{background:var(--panel);border-top:1px solid var(--panel-line);border-bottom:1px solid var(--panel-line)}
-.market-context-grid{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(1.75rem,4vw,3.25rem);align-items:start}
-.market-context-copy h2{max-width:20ch;margin:.5rem 0 .8rem}
-.market-context-copy>p{max-width:54ch;color:var(--text);font-size:1rem;line-height:1.7}
-.market-disclaimer{margin-top:1.1rem;padding-top:.85rem;border-top:1px solid var(--panel-line);color:var(--muted);font-size:.85rem;line-height:1.5}
+/* ── 8. Evidencia de mercado: procedencia colada ao numero ─────────────── */
+.market-context{background:var(--soft);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.market-context-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(1.75rem,4vw,3.5rem);align-items:start}
+.market-context-copy h2{max-width:18ch;margin:0 0 .85rem}
+.market-context-copy>p{max-width:52ch;color:var(--text);font-size:1rem;line-height:1.7}
+.market-disclaimer{margin-top:1.1rem;padding-top:.85rem;border-top:1px solid var(--rule);color:var(--muted);font-size:.85rem;line-height:1.5}
 .market-evidence{min-width:0}
-.evidence-kicker{margin:0;font-stretch:88%;font-size:.7rem;font-weight:750;letter-spacing:.09em;text-transform:uppercase}
-.evidence-title{margin:.35rem 0 .5rem;font-size:1.1rem;font-weight:700;line-height:1.35}
-.evidence-illustration{
-  margin:.85rem 0;padding:.8rem .95rem;border-left:2px solid var(--accent);
-  color:var(--text);font-size:.86rem;line-height:1.6;
+.evidence-kicker{margin:0;font-stretch:var(--narrow);font-weight:750;letter-spacing:.1em;text-transform:uppercase;font-size:var(--text-micro)}
+.evidence-title{margin:.4rem 0 .5rem;font-size:1.1rem;font-weight:720;letter-spacing:-.015em;line-height:1.3}
+/* O cabecalho da evidencia e flex com `white-space:nowrap` no rotulo de fonte:
+ * abaixo de ~900px o rotulo nao cabe ao lado do titulo e os dois se sobrepoem.
+ * A procedencia desce para linha propria, que e onde ela pertence. */
+@media (max-width:900px){
+  body[data-content-cluster="home"] .evidence-heading{display:grid;justify-items:start;gap:.3rem}
+  body[data-content-cluster="home"] .evidence-heading>span{white-space:normal}
+}
+body[data-content-cluster="home"] .evidence-illustration{
+  margin:.85rem 0;padding:.75rem 0 0;border-top:1px solid var(--rule);border-left:0;
+  color:var(--muted);font-size:.84rem;line-height:1.55;
 }
 
 /* .evidence-selector nasceu para pousar num painel navy: styles.css ainda
- * carrega branco, cinza-azulado claro e lime pensados para esse fundo
- * escuro. Aqui ele mora sobre --panel claro, entao cada cor herdada volta
- * para tinta — sem isso, ficam textos brancos e lime quase invisiveis sobre
- * fundo claro (medido abaixo de 1.5:1 de contraste). */
+ * carrega branco, cinza-azulado claro e lime pensados para esse fundo escuro.
+ * Aqui ele mora sobre fundo claro, entao cada cor herdada volta para tinta —
+ * sem isso, ficam textos brancos e lime quase invisiveis (medido abaixo de
+ * 1.5:1 de contraste). */
 .evidence-kicker,
 .evidence-tier,
 .evidence-heading>span,
@@ -158,81 +384,170 @@ body[data-content-cluster="home"] #contrato-canal-seguro{
 .evidence-title,
 .evidence-case-title,
 .evidence-facts dd{color:var(--ink)}
-.evidence-facts{border-color:var(--panel-line)}
-.evidence-facts>div+div{border-left-color:var(--panel-line)}
-.evidence-tabs{background:var(--white);border-color:var(--panel-line)}
+.evidence-facts{border-color:var(--rule)}
+.evidence-facts>div+div{border-left-color:var(--rule)}
+.evidence-tabs{background:var(--white);border-color:var(--rule)}
 .evidence-tab{color:var(--muted)}
-.evidence-tab:hover{color:var(--ink);background:var(--panel-line)}
-.evidence-panel{background:var(--white);border-color:var(--panel-line)}
+.evidence-tab:hover{color:var(--ink);background:var(--rule)}
+.evidence-panel{background:var(--white);border-color:var(--rule)}
 .evidence-exposure{background:rgba(45,111,45,.07);border-left-color:var(--accent)}
 .evidence-exposure>span{color:var(--muted)}
 .evidence-exposure strong{color:var(--ink)}
 .evidence-exposure p{color:var(--text)}
-.evidence-method li>span{color:var(--accent)}
+.evidence-method li>span{color:var(--accent);font-family:inherit}
 .evidence-method p{color:var(--text)}
 .evidence-method strong{color:var(--ink)}
-.evidence-source{border-top-color:var(--panel-line)}
+.evidence-source{border-top-color:var(--rule)}
 .evidence-source a,
 .evidence-source-link{color:var(--ink)}
 .evidence-source a:hover,
 .evidence-source-link:hover{color:var(--accent)}
 .evidence-whatsapp{color:var(--ink)}
 .evidence-whatsapp:hover{color:var(--accent)}
-
-/* ── 7. Captura ────────────────────────────────────────────────────────── */
-.turnstile-slot{margin:.75rem 0}
-.turnstile-slot[hidden]{display:none!important}
-
-/* ── Responsivo ────────────────────────────────────────────────────────── */
-@media (max-width:1100px){
-  body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.75rem}
-  .hero-artifact{margin-top:0}
-  .market-context-grid{grid-template-columns:minmax(0,1fr);gap:1.75rem}
-}
-@media (max-width:1000px){
-  .home-deliverables{grid-template-columns:minmax(0,1fr);gap:1.5rem}
-}
-@media (max-width:700px){
-  .hero-deliverable{font-size:.98rem;margin-bottom:18px}
-  .home-deliverables{margin-top:1.9rem}
-  .home-deliverables-copy h3{font-size:1.35rem}
-  .home-deliverables-result dd{font-size:1.3rem}
-  .home-deliverables-actions{display:grid;align-items:stretch}
-  .home-deliverables-actions .button{width:100%}
-  .home-deliverables-actions .text-link{justify-content:center}
-  .home-method-strip{margin-top:1.9rem}
-}
-
-/* Vantagem proprietaria: beneficio primeiro, numero com procedencia depois. */
-.market-advantages{margin:1.5rem 0 0;padding-top:1.35rem;border-top:1px solid var(--panel-line)}
-.market-advantages ul{margin:.7rem 0 0;padding:0;list-style:none;display:grid;gap:.8rem}
-.market-advantages li{
-  padding-left:1rem;border-left:2px solid var(--accent);
-  color:var(--text);font-size:.95rem;line-height:1.6;max-width:56ch;
-}
-.market-advantages li strong{color:var(--ink)}
-.market-advantages-base{
-  margin:1.1rem 0 0;color:var(--muted);font-size:.85rem;line-height:1.55;max-width:56ch;
-}
-.market-advantages-base a{color:var(--ink);text-underline-offset:3px}
-@media (max-width:700px){.market-advantages li{font-size:.92rem}}
-
-/* O lime (--lime:#ced62a) sai da home. Nao e questao de contraste: tinta navy
- * sobre lime passa folgado. E questao de direcao. O DESIGN_DIRECTION_BRIEF de
- * 2026-08-30 registra "--lime sobre --navy-950 ja e vizinho" do cluster 2
- * (fundo escuro + um acento acido), um dos tres agrupamentos de design
- * generico que nenhum candidato pode ser. E, na pratica, o acento acido fazia
- * a acao do painel de evidencia competir em prioridade com o CTA principal da
- * pagina, que e verde. Um sistema, uma cor de acao. */
 .evidence-tab.is-active,
-.evidence-tab[aria-selected="true"]{color:var(--white);background:var(--ink);border-color:var(--ink)}
+.evidence-tab[aria-selected="true"]{color:var(--white);background:var(--rule-strong);border-color:var(--rule-strong)}
+/* Uma acao dominante por pagina: a acao do painel de evidencia e secundaria,
+ * em contorno, para nao disputar peso com o CTA da dobra. */
 .evidence-cta,
-.evidence-cta:hover{color:var(--white);background:var(--accent);border-color:var(--accent)}
-.evidence-cta:hover{background:var(--green-600);border-color:var(--green-600)}
-
-/* Sem o "01/02/03", styles.css ainda reservava a coluna de 1.25rem que os
- * numeros ocupavam, e o texto do metodo caia em uma palavra por linha.
- * O passo agora e uma coluna so: o verbo carrega a sequencia. */
+.evidence-cta:hover{color:var(--ink);background:transparent;border:1px solid var(--rule-strong)}
+.evidence-cta:hover{color:var(--white);background:var(--rule-strong)}
+/* Sem o "01/02/03", styles.css ainda reservava a coluna que os numeros
+ * ocupavam e o texto do metodo caia em uma palavra por linha. */
 .evidence-selector .evidence-method li,
 .evidence-method li{grid-template-columns:1fr;gap:.15rem}
 .evidence-method p{margin:0}
+
+/* Vantagem proprietaria: beneficio primeiro, numero com procedencia depois. */
+.market-advantages{margin:1.5rem 0 0;padding-top:1.35rem;border-top:1px solid var(--rule)}
+.market-advantages ul{margin:.7rem 0 0;padding:0;list-style:none;display:grid;gap:.85rem}
+.market-advantages li{padding-left:1rem;border-left:1px solid var(--accent);color:var(--text);font-size:.95rem;line-height:1.6;max-width:56ch}
+.market-advantages li strong{color:var(--ink);font-weight:650}
+.market-advantages-base{margin:1.1rem 0 0;color:var(--muted);font-size:.85rem;line-height:1.55;max-width:56ch}
+.market-advantages-base a{color:var(--ink);text-underline-offset:3px}
+
+/* ── 9. Autoridade e adequacao: sai o card, fica a regua ───────────────── */
+body[data-content-cluster="home"] .authority-photo{
+  max-width:380px;padding:0;background:none;border:0;overflow:hidden;
+}
+/* O recorte precisa de chao: sobre a secao clara ele flutuava sem base. A
+ * placa usa a propria regua da home, um degrau acima do fundo da secao. */
+body[data-content-cluster="home"] .authority-photo img{
+  width:100%;max-width:340px;background:var(--rule);
+}
+body[data-content-cluster="home"] .authority-photo figcaption{padding:.75rem 0 0;color:var(--muted);font-size:.85rem}
+body[data-content-cluster="home"] .authority-copy blockquote{
+  margin:1.25rem 0;padding-left:1.15rem;border-left:2px solid var(--accent);
+  font-stretch:var(--wide);font-size:1.25rem;font-weight:600;letter-spacing:-.02em;line-height:1.4;
+}
+body[data-content-cluster="home"] .authority-fields{gap:0;margin:1.5rem 0;border-top:1px solid var(--rule)}
+body[data-content-cluster="home"] .authority-fields li{
+  padding:.85rem 0;background:none;border:0;border-bottom:1px solid var(--rule);border-radius:0;
+}
+body[data-content-cluster="home"] .authority-fields li:nth-child(odd){padding-right:1.25rem}
+body[data-content-cluster="home"] .authority-fields li:nth-child(even){padding-left:1.25rem;border-left:1px solid var(--rule)}
+body[data-content-cluster="home"] .authority-fields .type-mono{color:var(--accent);font-size:var(--text-micro)}
+
+body[data-content-cluster="home"] .icp-contrast{border:0;border-top:2px solid var(--rule-strong);border-radius:0}
+body[data-content-cluster="home"] .icp-yes,
+body[data-content-cluster="home"] .icp-no{padding:1.5rem 0 0}
+body[data-content-cluster="home"] .icp-no{background:none;border-left:1px solid var(--rule);padding-left:clamp(1.25rem,3vw,2.5rem)}
+body[data-content-cluster="home"] .icp-yes{padding-right:clamp(1.25rem,3vw,2.5rem)}
+body[data-content-cluster="home"] .icp-contrast li{border-bottom:1px solid var(--rule)}
+body[data-content-cluster="home"] .fit-faq summary{font-weight:720;letter-spacing:-.01em}
+
+/* Toda acao secundaria da home usa o mesmo contorno. Antes conviviam a pilula
+ * do styles.css nas portas, outra no painel de evidencia e uma terceira no
+ * formulario. */
+body[data-content-cluster="home"] .button-secondary{
+  color:var(--ink);background:transparent;border:1px solid var(--rule-strong);box-shadow:none;
+}
+body[data-content-cluster="home"] .button-secondary:hover{color:var(--white);background:var(--rule-strong);border-color:var(--rule-strong)}
+
+/* ── 10. Captura ───────────────────────────────────────────────────────── */
+body[data-content-cluster="home"] .contact-section{background:var(--field)}
+body[data-content-cluster="home"] .contact-section::before{display:none}
+body[data-content-cluster="home"] .contact-copy>p:not(.eyebrow){color:var(--field-muted)}
+body[data-content-cluster="home"] .contact-copy .eyebrow{color:var(--accent-live)}
+body[data-content-cluster="home"] .contact-channels .icon{color:var(--accent-live)}
+body[data-content-cluster="home"] .contact-channels>a:hover{color:var(--accent-live)}
+body[data-content-cluster="home"] .contact-section{--focus-ring-halo:var(--field);--focus-ring-core:var(--white)}
+body[data-content-cluster="home"] .contact-form{
+  border:0;border-radius:0;box-shadow:none;--focus-ring-halo:var(--white);--focus-ring-core:var(--ink);
+}
+/* A legenda de etapa vinha em rgba(6,26,51,.55) sobre o cartao branco, medido
+ * em 3,6:1 e reprovado pelo axe em serious. Tinta solida em 4,8:1. */
+body[data-content-cluster="home"] .form-step-legend{color:var(--muted)}
+/* Etapa 2 e opcional inteira: subordinada por peso, nao escondida. O visitante
+ * precisa ver que pode enviar sem preencher nada disso. */
+body[data-content-cluster="home"] .form-step[data-step="2"] .field label{color:var(--muted);font-weight:600}
+body[data-content-cluster="home"] .form-legal{
+  margin:1.15rem 0 0;padding-top:.9rem;border-top:1px solid var(--rule);
+  color:var(--muted);font-size:.82rem;line-height:1.55;
+}
+body[data-content-cluster="home"] .form-legal p{margin:0 0 .45rem}
+body[data-content-cluster="home"] .form-legal p:last-child{margin:0}
+.turnstile-slot{margin:.75rem 0}
+.turnstile-slot[hidden]{display:none!important}
+
+/* O rodape global e navy #071a31 e a captura agora e --field #08130e. Duas
+ * tintas quase iguais empilhadas leem como erro de producao, nao como decisao;
+ * na home o pe da pagina passa a ser um campo so. */
+body[data-content-cluster="home"] .site-footer{background:var(--field)}
+/* .footer-top e uma grade de tres colunas (1.3fr .65fr 1fr) para quatro
+ * blocos: marca, Situacoes, Biblioteca e Empresa, com Empresa caindo sozinha
+ * na segunda linha e meia largura vazia ao lado. Quatro blocos, quatro
+ * colunas. Escopado na home porque styles.css esta congelado. */
+@media (min-width:1000px){
+  body[data-content-cluster="home"] .footer-top{
+    grid-template-columns:minmax(0,1.35fr) repeat(3,minmax(0,1fr));gap:clamp(2rem,4vw,3.5rem);
+  }
+}
+
+/* ── 11. Responsivo ────────────────────────────────────────────────────── */
+@media (max-width:940px){
+  body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.75rem}
+}
+@media (max-width:1100px){
+  body[data-content-cluster="home"] .offer-layout{grid-template-columns:minmax(0,1fr)}
+  .market-context-grid{grid-template-columns:minmax(0,1fr);gap:1.75rem}
+  .home-method-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-method-strip .macro-phase:nth-child(odd){padding-left:0;border-left:0}
+  .home-method-strip .macro-phase:nth-child(even){padding-left:clamp(1rem,2vw,1.75rem);border-left:1px solid var(--rule)}
+  .home-method-strip .macro-phase:nth-child(n+3){margin-top:1.4rem;border-top:1px solid var(--rule)}
+}
+@media (max-width:1000px){
+  .home-deliverables{grid-template-columns:minmax(0,1fr);gap:1.75rem}
+}
+@media (max-width:820px){
+  body[data-content-cluster="home"] .journey-row{grid-template-columns:minmax(0,1fr);gap:.5rem}
+  body[data-content-cluster="home"] .journey-kind{margin:0}
+}
+@media (max-width:700px){
+  body[data-content-cluster="home"] .hero{padding:1.5rem 0 1.9rem}
+  body[data-content-cluster="home"] .hero h1{font-size:clamp(1.95rem,7.5vw,2.4rem);max-width:none}
+  body[data-content-cluster="home"] .hero-lead{font-size:1rem;margin-bottom:.9rem}
+  body[data-content-cluster="home"] .hero-deliverable{font-size:.97rem;margin-bottom:1.15rem;padding-top:.85rem}
+  body[data-content-cluster="home"] .hero-actions{display:grid;gap:.65rem;margin-bottom:1.1rem}
+  body[data-content-cluster="home"] .hero-actions .button{width:100%}
+  body[data-content-cluster="home"] .hero-secondary{justify-content:flex-start}
+  body[data-content-cluster="home"] .hero-proof{gap:.35rem 1.25rem;padding-top:.85rem}
+  .hero-verdict{margin-top:.1rem}
+  .hero-verdict-label{margin-bottom:.5rem}
+  .hero-verdict-set li{font-size:1.25rem;padding:.4rem 0}
+  .hero-verdict-foot{margin-top:.7rem;font-size:.82rem;max-width:none}
+  .home-deliverables{margin-top:2rem}
+  .home-deliverables-copy h3{font-size:1.3rem}
+  .home-deliverables-result dd{font-size:1.4rem}
+  .home-deliverables-actions{display:grid;align-items:stretch}
+  .home-deliverables-actions .button{width:100%}
+  .home-deliverables-actions .text-link{justify-content:center}
+  .home-method-strip{grid-template-columns:minmax(0,1fr);margin-top:2rem}
+  .home-method-strip .macro-phase{padding:1.15rem 0 0!important;border-left:0!important}
+  .home-method-strip .macro-phase+.macro-phase{margin-top:0;border-top:1px solid var(--rule)}
+  body[data-content-cluster="home"] .market-advantages li{font-size:.92rem}
+  body[data-content-cluster="home"] .icp-no,
+  body[data-content-cluster="home"] .icp-yes{padding-left:0;padding-right:0;border-left:0}
+  body[data-content-cluster="home"] .icp-no{border-top:1px solid var(--rule);margin-top:1.25rem;padding-top:1.25rem}
+  body[data-content-cluster="home"] .authority-fields li:nth-child(even){padding-left:0;border-left:0}
+  body[data-content-cluster="home"] .authority-fields li:nth-child(odd){padding-right:0}
+}

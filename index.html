@@ -17,11 +17,14 @@
 <link href="/styles.css" rel="stylesheet"/>
 <link href="/assets/home-10x.css" rel="stylesheet"/>
 <style data-home-deliverables-critical="">
-body[data-content-cluster="home"] .hero{padding:1.9rem 0 2.1rem}
-body[data-content-cluster="home"] .home-hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(300px,.72fr);gap:clamp(2rem,4.5vw,4rem);align-items:start;max-width:none}
-body[data-content-cluster="home"] .hero-deliverable{max-width:56ch;margin:0 0 22px;padding:14px 0 0;border-top:2px solid #2d6f2d;color:#071a31;font-size:1.02rem;font-weight:600;line-height:1.55}
-@media(max-width:1100px){body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.75rem}}
-@media(max-width:620px){body[data-content-cluster="home"] .hero{padding:1.2rem 0 1.5rem}body[data-content-cluster="home"] .hero-deliverable{font-size:.98rem;margin-bottom:18px}}
+body[data-content-cluster="home"] .hero{padding:2.75rem 0;color:#f4f7f4;background:#08130e;border-bottom:0}
+body[data-content-cluster="home"] .hero h1{max-width:22ch;margin:0 0 1.1rem;color:#f4f7f4;font-size:clamp(2.15rem,4.1vw,3.3rem);line-height:1.04;letter-spacing:-.032em}
+body[data-content-cluster="home"] .hero h1 .type-serif{display:block;color:#5ea85a;font-family:inherit}
+body[data-content-cluster="home"] .hero-lead{max-width:50ch;margin:0 0 1.15rem;color:#a9bcae;font-size:clamp(1rem,1.35vw,1.12rem);line-height:1.6}
+body[data-content-cluster="home"] .home-hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(272px,.68fr);gap:clamp(2rem,4.5vw,4.5rem);align-items:center;max-width:none}
+body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1.5rem;padding:1rem 0 0;border-top:1px solid rgba(255,255,255,.16);color:#f4f7f4;font-size:1rem;font-weight:600;line-height:1.55}
+@media(max-width:940px){body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.75rem}}
+@media(max-width:700px){body[data-content-cluster="home"] .hero{padding:1.5rem 0 1.9rem}body[data-content-cluster="home"] .hero h1{font-size:clamp(1.95rem,7.5vw,2.4rem);max-width:none}body[data-content-cluster="home"] .hero-deliverable{font-size:.97rem;margin-bottom:1.15rem;padding-top:.85rem}}
 </style>
 <script defer="" src="/script.js?v=fortune04"></script>
 <meta content="website" property="og:type"/>
@@ -87,7 +90,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:56ch;margin:0 0 22
 <p class="hero-deliverable">Você recebe relatório, matriz de risco e memória de cálculo que sustentam a sua posição diante da Administração.</p>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-cta-position="hero" data-event-name="cta_click" href="#formulario-contato">Analisar meu caso <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="text-link hero-secondary" data-cta-position="hero" data-event-name="cta_click" href="#jornadas">Ver edital, contrato ou operação</a>
+<a class="text-link hero-secondary" data-cta-position="hero" data-event-name="cta_click" href="#jornadas">Ver edital, contrato ou operação <svg class="icon"><use href="#i-arrow"></use></svg></a>
 </div>
 <ul aria-label="Credenciais verificáveis" class="hero-proof">
 <li><span class="proof-mark" aria-hidden="true">·</span><span>Engenharia Civil pela EESC-USP</span></li>
@@ -95,14 +98,14 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:56ch;margin:0 0 22
 </ul>
 <p class="hero-proof-line"><a href="/casos/modelo-relatorio-inteligencia-licitacoes/">Ver exemplo demonstrativo de relatório</a>.</p>
 </div>
-<aside class="hero-artifact" aria-label="O que a CONFENGE entrega">
-<p class="hero-artifact-label">O que chega na sua mesa</p>
-<ul class="hero-artifact-list">
-<li><strong>Relatório executivo</strong><span>A decisão de participar, condicionar ou recusar, com o critério que a sustenta.</span></li>
-<li><strong>Matriz de risco</strong><span>Cada evento contratual com efeito no prazo, no custo e responsável definido.</span></li>
-<li><strong>Memória de cálculo</strong><span>Preço e reajuste conferidos contra SINAPI e SICRO, prontos para a Administração.</span></li>
+<aside class="hero-verdict" aria-labelledby="hero-verdict-label">
+<p class="hero-verdict-label" id="hero-verdict-label">O parecer termina em uma destas palavras</p>
+<ul class="hero-verdict-set">
+<li>Participar</li>
+<li>Condicionar</li>
+<li>Recusar</li>
 </ul>
-<p class="hero-artifact-foot">Documento assinado, com data e responsável nomeado.</p>
+<p class="hero-verdict-foot">Com o <strong>critério</strong>, o <strong>número</strong> e o <strong>responsável</strong> que sustentam a escolha. Documento assinado, com data.</p>
 </aside>
 </div>
 </section>
@@ -115,7 +118,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:56ch;margin:0 0 22
 <header class="section-head section-head--journeys">
 <p class="eyebrow">Como podemos ajudar</p>
 <h2 id="journeys-title">Qual decisão precisa sair agora?</h2>
-<p class="section-lead">Três situações, três caminhos. Cada rótulo diz exatamente para onde o clique leva.</p>
+<p class="section-lead">A CONFENGE entra em três momentos. Cada um começa por uma pergunta econômica diferente.</p>
 </header>
 <ol class="journey-list">
 <li class="journey-row" data-journey="edital" id="jornada-edital">
@@ -221,22 +224,22 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:56ch;margin:0 0 22
 <p class="section-lead">Cada decisão registra o motivo, a prova e o responsável. Depois, o resultado volta para a mesa e melhora a próxima escolha.</p>
 <ol class="macro-phases home-method-strip" data-journey-enhance id="como-atuamos">
 <li class="macro-phase" id="j-mercado">
-<span class="type-mono">01 · Selecionar</span>
+<span class="phase-verb">Selecionar</span>
 <h3>Escolher onde vale usar capital e equipe</h3>
 <p>Aderência, capacidade, risco e valor pesam mais que a quantidade de editais.</p>
 </li>
 <li class="macro-phase" id="j-decisao">
-<span class="type-mono">02 · Precificar</span>
+<span class="phase-verb">Precificar</span>
 <h3>Formar um preço que reconheça o risco</h3>
 <p>Habilitação, orçamento e cronograma são revistos antes de a proposta seguir.</p>
 </li>
 <li class="macro-phase" id="j-contrato">
-<span class="type-mono">03 · Proteger</span>
+<span class="phase-verb">Proteger</span>
 <h3>Registrar o fato antes que ele vire custo</h3>
 <p>Medições, comunicações e mudanças entram numa linha do tempo enquanto acontecem.</p>
 </li>
 <li class="macro-phase" id="j-aprendizado">
-<span class="type-mono">04 · Aprender</span>
+<span class="phase-verb">Aprender</span>
 <h3>Comparar o plano com o resultado</h3>
 <p>A direção revê o que funcionou, o que falhou e quais critérios precisam mudar.</p>
 </li>
@@ -252,7 +255,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:56ch;margin:0 0 22
 <div class="market-context-copy">
 <p class="eyebrow">Contexto de mercado · PNCP</p>
 <h2 id="market-title">Contrato público deixa rastro. É nesse rastro que a análise começa.</h2>
-<p>Os registros abaixo vêm do PNCP e ilustram três portes de contrato. Servem para mostrar como o mesmo método de análise se aplica em qualquer escala, do contrato municipal à obra hospitalar.</p>
+<p>Os registros vêm do PNCP e cobrem três portes de contrato. Servem para mostrar como o mesmo método de análise se aplica em qualquer escala, do contrato municipal à obra hospitalar.</p>
 <div class="market-advantages">
 <p class="eyebrow">Vantagem que já opera</p>
 <ul>
@@ -270,7 +273,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:56ch;margin:0 0 22
 <span>Fonte · PNCP</span>
 </div>
 <p class="evidence-title" id="evidence-selector-title">O método precisa funcionar em qualquer porte.</p>
-<p class="evidence-context evidence-intro">Escolha a faixa mais próxima do seu contrato.</p>
+<p class="evidence-context evidence-intro">O mesmo método muda de peso conforme o porte do contrato.</p>
 <div aria-label="Faixa de valor do contrato" class="evidence-tabs" role="tablist">
 <button aria-controls="evidence-panel-local" aria-selected="true" class="evidence-tab is-active" data-asset-id="home-contract-local" data-evidence-tab="local" data-event-name="evidence_drilldown" id="evidence-tab-local" role="tab" tabindex="0" type="button">Até R$ 250 mil</button>
 <button aria-controls="evidence-panel-regional" aria-selected="false" class="evidence-tab" data-asset-id="home-contract-regional" data-evidence-tab="regional" data-event-name="evidence_drilldown" id="evidence-tab-regional" role="tab" tabindex="-1" type="button">R$ 250 mil a R$ 1 mi</button>
@@ -530,8 +533,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:56ch;margin:0 0 22
 </div>
 <p class="form-hint" id="offer-fit-hint" data-offer-fit-hint role="status">Faixas opcionais. Sem CNPJ, CPF, contrato completo ou upload nesta etapa. O retorno indica o caminho adequado ao seu caso: conteúdo, entrada, diagnóstico, projeto crítico ou diretoria.</p>
 <div class="field"><label for="mensagem">Contexto em poucas linhas <span class="optional-mark">opcional</span></label><textarea id="mensagem" name="mensagem" placeholder="Edital, contrato, glosa, notificação ou o que precisa ser decidido. Não cole dados sensíveis desnecessários." rows="3"></textarea></div>
-<p class="form-hint">O canal seguro, os tipos e o tamanho dos arquivos são combinados após a confirmação. Nesta etapa, descreva a situação sem colar dados sensíveis.</p>
-<label class="consent" for="canal_seguro"><input id="canal_seguro" name="canal_seguro" type="checkbox" value="1"/><span>Solicitar canal seguro para envio. Confirmação com protocolo; o canal é escolhido posteriormente. Quem acessa: operação CONFENGE. Retenção: até 730 dias. Exclusão: e-mail de privacidade com o protocolo.</span></label>
+<label class="consent" for="canal_seguro"><input id="canal_seguro" name="canal_seguro" type="checkbox" value="1"/><span>Solicitar canal seguro para envio de documentos.</span></label>
 <label class="consent" for="consentimento"><input id="consentimento" name="consentimento" required="" type="checkbox"/><span>Autorizo o uso destes dados para retorno sobre a solicitação, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span></label>
 <!-- Turnstile: set data-sitekey via TURNSTILE_SITE_KEY at build or replace SITEKEY; hidden until key present -->
 <div class="field turnstile-slot" id="turnstile-slot" hidden data-turnstile-sitekey="">
@@ -541,7 +543,10 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:56ch;margin:0 0 22
 <button class="button button-secondary form-back" type="button" data-form-back="2">Voltar</button>
 <button class="button button-primary button-lg form-submit" type="submit" data-cta-position="form-submit">Enviar solicitação <svg class="icon"><use href="#i-arrow"></use></svg></button>
 </div>
+<div class="form-legal">
 <p class="form-note">Retorno direto. Sem lista de e-mails ou compartilhamento comercial dos dados.</p>
+<p class="form-note">Canal seguro: confirmação com protocolo, tipos e tamanho combinados depois. Quem acessa: operação CONFENGE. Retenção: até 730 dias. Exclusão: e-mail de privacidade com o protocolo.</p>
+</div>
 </fieldset>
 <div class="form-status" id="form-status" role="status" aria-live="polite" hidden></div>
 </form>
