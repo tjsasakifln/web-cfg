@@ -306,6 +306,13 @@ if (!hid.asset_id || hid.asset_id.value !== "reequilibrio-obras-publicas") {
 if (!hid.cta_id || hid.cta_id.value !== "pillar_hero") {
   fail("hop2_form_cta_id", hid.cta_id);
 }
+const visitSessionId = first.sandbox.window.confengeSessionId();
+if (!/^sess-[0-9a-f]{27}$/.test(visitSessionId)) {
+  fail("hop_session_id_shape", visitSessionId);
+}
+if (!hid.session_id || hid.session_id.value !== visitSessionId) {
+  fail("hop2_form_session_id", hid.session_id);
+}
 pass("hop2_home_form_keeps_first_touch");
 
 // --- click interceptor: <a data-origem data-tema data-journey href="/#contato"> → session → form ---

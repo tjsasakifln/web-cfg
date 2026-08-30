@@ -17,7 +17,7 @@ TOPIC_ASSETS: tuple[tuple[tuple[str, ...], str, str], ...] = (
     (("bdi", "sinapi", "sicro"), "/inteligencia/cenarios/referencia-sinapi-sicro-margem/", "Referência SINAPI/SICRO e margem"),
     (("reajuste", "reequilibrio", "reequilíbrio", "reajuste_reequilibrio"), "/lei-14133-obras/reequilibrio-reajuste-repactuacao/", "Reajuste, reequilíbrio e repactuação"),
     (("reajuste", "reequilibrio"), "/guias-contratos-obras/documentos-pedido-reequilibrio/", "Documentos do pedido de reequilíbrio"),
-    (("aditivo", "aditivos_valor", "acréscimo", "acrescimo"), "/lei-14133-obras/limite-25-50-aditivo-obra/", "Limite de acréscimos e supressões"),
+    (("aditivo", "aditivos_valor", "acréscimo", "acrescimo"), "/conteudos/limite-aditivo-25-50-obra-publica/", "Limite de acréscimos e supressões"),
     (("aditivo", "art. 125", "art 125"), "/lei-14133-obras/art-124-alteracao-contratual-obra/", "Alteração contratual (art. 124)"),
     (("aditivo",), "/ferramentas/limite-acrescimos-supressoes/", "Calculadora de limite de aditivos"),
     (("prazo", "atraso"), "/lei-14133-obras/atraso-imputavel-administracao/", "Atraso imputável à Administração"),

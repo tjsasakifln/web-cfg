@@ -97,8 +97,37 @@ CLUSTER_OFFER = {
 
 # Versioned public stage classification (generation-time; never runtime title guesswork).
 STAGE_CLASSIFICATION_PATH = ROOT / "data" / "site" / "content-stage-classification.json"
+LEGACY_URL_INVENTORY_PATH = ROOT / "data" / "organic" / "legacy-url-inventory.json"
 ALLOWED_STAGES = frozenset({"antes", "durante", "conflito"})
 _STAGE_CLASSIFICATION_CACHE: dict[str, Any] | None = None
+
+
+def _public_path(value: str) -> str:
+    """Normalize an inventory URL to the public path used by the registry."""
+    value = value.strip()
+    if value.startswith(SITE):
+        value = value[len(SITE):]
+    if not value.startswith("/"):
+        raise ValueError(f"Public URL must be internal to {SITE}: {value!r}")
+    if value != "/" and not value.endswith("/") and "." not in value.rsplit("/", 1)[-1]:
+        value += "/"
+    return value
+
+
+def load_terminal_migrations() -> dict[str, dict[str, Any]]:
+    """Load explicit 301 decisions from the canonical legacy URL inventory."""
+    if not LEGACY_URL_INVENTORY_PATH.exists():
+        raise FileNotFoundError(
+            f"Missing canonical legacy inventory: {LEGACY_URL_INVENTORY_PATH}"
+        )
+    inventory = json.loads(LEGACY_URL_INVENTORY_PATH.read_text(encoding="utf-8"))
+    migrations: dict[str, dict[str, Any]] = {}
+    for item in inventory.get("items") or []:
+        if item.get("status") != "301_redirect":
+            continue
+        source = _public_path(str(item.get("legacy_url") or ""))
+        migrations[source] = item
+    return migrations
 
 
 def load_stage_classification() -> dict[str, Any]:
@@ -335,16 +364,16 @@ NATURAL_FAQ: dict[str, list[tuple[str, str]]] = {
     ],
     "atraso-obra-culpa-administracao": [
         (
-            "Como provar que o atraso é da Administração?",
-            "Ligue o evento (projeto, desapropriação, frente não liberada, pagamento etc.) ao caminho crítico com cronograma, diário, comunicações e impacto de prazo. Sem nexo, a tese não sustenta prorrogação nem custo.",
+            "O que diferencia culpa da Administração de atraso da obra?",
+            "Atraso da obra é o desvio frente ao cronograma. Culpa da Administração exige dever do órgão, evento contemporâneo e nexo com o caminho crítico. Sem os três, a causa não fica atribuída à Administração no processo.",
 ),
         (
-            "O que reunir antes de pedir prazo ou custo?",
-            "Cronograma contratual e atualizado, registros contemporâneos do evento, notificações, medições afetadas e memória de cálculo do impacto. Formalize o pedido antes do vencimento cego do prazo.",
+            "Frente não liberada basta como prova?",
+            "Não. Precisa da data em que a equipe estava apta, do obstáculo específico, de quem deveria removê-lo e do efeito nas atividades sucessoras. Diário genérico de 'aguardando liberação' não fecha o nexo.",
 ),
         (
-            "Qual o erro mais caro neste cenário?",
-            "Aceitar multa ou absorver atraso sem protestar a causa. Depois a narrativa da Administração fica unilateral e a empresa perde margem e prazo.",
+            "Atraso de pagamento entra na mesma cadeia de nexo?",
+            "Só se a falta de pagamento tiver interrompido a frente e isso estiver registrado. Pagamento atrasado com equipe produzindo prova outro pedido; não substitui o nexo físico do atraso.",
 ),
     ],
     "aditivo-empreitada-por-preco-global": [
@@ -517,30 +546,30 @@ NATURAL_FAQ: dict[str, list[tuple[str, str]]] = {
     ],
     "prorrogacao-prazo-obra-publica-documentos": [
         (
-            "Quais documentos não podem faltar no pedido de prazo?",
-            "Cronograma, nexo causal do evento, diário, comunicações e impacto no caminho crítico. Pedido genérico de 'mais prazo' costuma ser indeferido.",
+            "Vigência e prazo de execução pedem o mesmo instrumento?",
+            "Em regra, não. Vigência de contrato por escopo segue o art. 111. Cronograma de execução, em impedimento, paralisação ou suspensão, segue o art. 115, § 5º, por apostila. O requerimento deve dizer qual dos dois está vencendo.",
 ),
         (
-            "Quando protocolar?",
-            "Antes do vencimento do prazo e assim que o evento impactante estiver caracterizado. Demora da empresa enfraquece a tese.",
+            "Protocolar depois do vencimento ainda organiza o pedido?",
+            "O dossiê pode ser montado, mas a posição enfraquece. O calendário do protocolo começa quando o evento se caracteriza, não quando o prazo já acabou. A Lei não promete convalidação tardia.",
 ),
         (
-            "Prazo e custo andam juntos?",
-            "Muitas vezes sim, mas são pedidos com provas distintas. Organize a memória de custo à parte se houver ociosidade ou prolongamento de indiretos.",
+            "A memória de custo vai no mesmo requerimento de prazo?",
+            "Pode ir em anexo separado. Prazo e custo usam provas distintas. Juntar ociosidade sem série de custos mistura o pedido e atrasa a análise do órgão.",
 ),
     ],
     "resposta-notificacao-atraso-obra-publica": [
         (
-            "Como estruturar a resposta à notificação de atraso?",
-            "Admita fatos corretos, conteste incorretos, apresente cronologia, causas e pedidos objetivos (prazo, exclusão de multa, etc.). Tom agressivo sem prova piora a posição.",
+            "Silêncio em notificação informal conta como confissão?",
+            "Trate o recebimento como formal. Responda no canal do contrato. Silêncio não é peça jurídica de confissão, mas vira narrativa unilateral do órgão e piora a dosimetria.",
 ),
         (
-            "O que anexar?",
-            "Cronograma, diário, comunicações à Administração, evidências de fatos externos e memória de impacto. Respeite o prazo da notificação.",
+            "Posso pedir dilação e exclusão de multa na mesma peça?",
+            "Sim, como pedidos principal e subsidiário, cada um com anexo. Dilação sem nexo e exclusão sem cronologia costumam cair juntas. Numere os pedidos.",
 ),
         (
-            "Posso ignorar notificação informal?",
-            "Não trate como irrelevante. Formalize o recebimento e responda no canal adequado. Silêncio vira confissão prática.",
+            "O que não escrever na resposta?",
+            "Não admita 'atraso nosso' para parecer cooperativo. Não agrida o fiscal. Não anexe dossiê de custo como se fosse defesa. Não deixe parágrafo imputado sem resposta.",
 ),
     ],
     "sinapi-ou-sicro-obra-publica": [
@@ -1771,6 +1800,7 @@ def fix_radar(brand: dict[str, Any]) -> None:
 def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
     """Full disposition inventory for known public URLs."""
     idx_map = indexable_map()
+    terminal_migrations = load_terminal_migrations()
     rows: list[dict[str, Any]] = []
 
     def add(
@@ -1906,6 +1936,31 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
             elif status == "REJECTED":
                 disp = "BLOCKED_MISSING_EVIDENCE"
                 human = "REJECTED"
+            elif status == "MIGRATED":
+                source = _public_path(url)
+                migration = terminal_migrations.get(source)
+                if migration is None:
+                    raise ValueError(
+                        f"MIGRATED editorial URL lacks a 301 inventory decision: {source}"
+                    )
+                canonical_path = _public_path(str(page.get("canonical_path") or ""))
+                inventory_destination = _public_path(
+                    str(migration.get("destination") or "")
+                )
+                if canonical_path == source or canonical_path != inventory_destination:
+                    raise ValueError(
+                        "MIGRATED editorial canonical and 301 destination disagree: "
+                        f"{source} -> registry={canonical_path}, "
+                        f"inventory={inventory_destination}"
+                    )
+                expected_canonical = f"{SITE}{canonical_path}"
+                if migration.get("canonical") != expected_canonical:
+                    raise ValueError(
+                        "MIGRATED editorial inventory canonical disagrees with destination: "
+                        f"{source} -> {migration.get('canonical')!r}"
+                    )
+                disp = "REDIRECT_301"
+                human = "NOT_APPLICABLE_TERMINAL_MIGRATION"
             else:
                 disp = "BLOCKED_HUMAN_REVIEW"
                 human = status
@@ -1916,7 +1971,11 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 "search_intent": page.get("primary_keyword") or "",
                 "cluster": page.get("theme") or "",
                 "http_status_production": "UNVERIFIED",
-                "canonical": f"{SITE}{url}",
+                "canonical": (
+                    f"{SITE}{canonical_path}"
+                    if status == "MIGRATED"
+                    else f"{SITE}{url}"
+                ),
                 "robots": "index,follow" if status == "INDEXABLE" else "noindex,follow",
                 "in_sitemap": status == "INDEXABLE",
                 "in_hub": False,
@@ -1931,7 +1990,11 @@ def build_inventory(brand: dict[str, Any]) -> list[dict[str, Any]]:
                 "similarity_notes": "",
                 "disposition": disp,
                 "journey": "contrato" if page.get("journey") == "execucao" else page.get("journey") or "contrato",
-                "notes": "Wave 1: approval path is Tiago-only (PR #10)",
+                "notes": (
+                    f"Terminal migration to {canonical_path}; explicit 301 inventory decision"
+                    if status == "MIGRATED"
+                    else "Wave 1: approval path is Tiago-only (PR #10)"
+                ),
                 "path": "",
             }
             rows.append(row)

@@ -13,8 +13,9 @@
   const PII_PARAM_KEYS = new Set([
     'address', 'arquivo', 'attachment', 'cnpj', 'company', 'cpf',
     'document', 'documento', 'edital', 'email', 'empresa', 'endereco',
-    'file', 'full_name', 'mensagem', 'message', 'message_body', 'name',
-    'nome', 'phone', 'q', 'query', 'search_query', 'tel', 'telefone', 'whatsapp',
+    'comment', 'description', 'file', 'free_text', 'full_name', 'mensagem',
+    'message', 'message_body', 'name', 'nome', 'note', 'phone', 'q', 'query',
+    'search_query', 'tel', 'telefone', 'whatsapp',
   ]);
   const UNKNOWN_SERVICE = 'UNKNOWN_SERVICE';
   const CANONICAL_DESTINATIONS = {
@@ -101,7 +102,25 @@
   };
   const OBSERVED_ONLY_EVENTS = { qualified_lead: 1, pipeline: 1 };
   const RETIRED_EVENTS = { conversion: 1, journey_nav_click: 1 };
-  const ENVELOPE_ID_KEYS = { correlation_id: 1, idempotency_key: 1, event_id: 1 };
+  const ENVELOPE_ID_KEYS = {
+    correlation_id: 1,
+    idempotency_key: 1,
+    event_id: 1,
+    session_id: 1,
+    sid: 1,
+    lead_id: 1,
+    opportunity_id: 1,
+    proposal_id: 1,
+    sale_id: 1,
+  };
+  const ENTITY_ID_PATTERNS = {
+    session_id: /^sess-[0-9a-f]{27}$/i,
+    sid: /^sess-[0-9a-f]{27}$/i,
+    lead_id: /^(?:lead-[0-9a-f]{27}|[0-9a-f]{24})$/i,
+    opportunity_id: /^opp-[0-9a-f]{28}$/i,
+    proposal_id: /^prop-[0-9a-f]{27}$/i,
+    sale_id: /^sale-[0-9a-f]{27}$/i,
+  };
   // EVENT_CONTRACT_CLIENT_END
   window.__CONFENGE_EVENT_CONTRACT = {
     schema_version: EVENT_CONTRACT_SCHEMA_VERSION,
@@ -119,19 +138,50 @@
   const analyticsQueue = [];
   const ANALYTICS_FLUSH_DELAY_MS = 30000;
   let analyticsFlushTimer = null;
+  let volatileSessionId = '';
   const trackedEventIds = new Set();
+  const sessionHexFromSeed = (seed) => {
+    const text = String(seed || 'confenge-session');
+    let out = '';
+    for (let round = 0; out.length < 27; round += 1) {
+      let hash = (0x811c9dc5 ^ round) >>> 0;
+      for (let i = 0; i < text.length; i += 1) {
+        hash ^= text.charCodeAt(i);
+        hash = Math.imul(hash, 0x01000193) >>> 0;
+      }
+      out += hash.toString(16).padStart(8, '0');
+    }
+    return out.slice(0, 27);
+  };
+  const newSessionSeed = () => {
+    try {
+      if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+        return window.crypto.randomUUID();
+      }
+      if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+        const bytes = new Uint8Array(16);
+        window.crypto.getRandomValues(bytes);
+        return Array.from(bytes, (value) => value.toString(16).padStart(2, '0')).join('');
+      }
+    } catch (_) { /* fallback below */ }
+    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 14)}`;
+  };
   const getSessionId = () => {
     try {
       let sid = sessionStorage.getItem('confenge_sid');
-      if (!sid) {
-        sid = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+      if (!/^sess-[0-9a-f]{27}$/.test(String(sid || ''))) {
+        sid = `sess-${sessionHexFromSeed(sid || newSessionSeed())}`;
         sessionStorage.setItem('confenge_sid', sid);
       }
-      return sid.slice(0, 32);
+      return sid;
     } catch (_) {
-      return 'anon';
+      if (!volatileSessionId) {
+        volatileSessionId = `sess-${sessionHexFromSeed(newSessionSeed())}`;
+      }
+      return volatileSessionId;
     }
   };
+  window.confengeSessionId = getSessionId;
   const flushAnalytics = () => {
     analyticsFlushTimer = null;
     if (!analyticsQueue.length || typeof window.fetch !== 'function') return;
@@ -144,7 +194,7 @@
         sid: getSessionId(),
       })),
     });
-    const url = '/.netlify/functions/collect';
+    const url = '/api/web/collect';
     try {
       if (navigator.sendBeacon) {
         const blob = new Blob([body], { type: 'application/json' });
@@ -175,9 +225,24 @@
     if (typeof val !== 'string' || !val) return false;
     if (/@/.test(val)) return true;
     const k = String(key || '').toLowerCase();
-    if (ENVELOPE_ID_KEYS[k]) return false;
+    if (ENVELOPE_ID_KEYS[k]) {
+      if (/^sess-[0-9a-f]{27}$/i.test(val)) return false;
+      if (/^(?:lead-[0-9a-f]{27}|[0-9a-f]{24})$/i.test(val)) return false;
+      if (/^opp-[0-9a-f]{28}$/i.test(val)) return false;
+      if (/^(?:prop|sale)-[0-9a-f]{27}$/i.test(val)) return false;
+      const direct = val.replace(/^(?:sess|lead|opp|prop|sale|evt)-/i, '');
+      const compact = direct.replace(/[\s().-]/g, '');
+      if (!/^\+?\d+$/.test(compact)) return false;
+      const digits = compact.replace(/^\+/, '');
+      if (digits.length === 10 || digits.length === 11 || digits.length === 14) return true;
+      if ((compact.startsWith('+') || digits.startsWith('55')) && (digits.length === 12 || digits.length === 13)) {
+        return true;
+      }
+      return false;
+    }
     if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(val)) return false;
     if (val.startsWith('c-')) return false;
+    if (/^(sess|lead|opp|prop|sale|evt)-/.test(val)) return false;
     // Public PII filter needle kept for validate_seo; envelope ids already returned.
     if (/@|\+?\d{8,}/.test(val)) return true;
     const compact = val.replace(/[\s()-]/g, '');
@@ -191,22 +256,30 @@
       if (!resolved.ok) {
         if (window.CONFENGE_DEBUG_ANALYTICS) {
           // eslint-disable-next-line no-console
-          console.info('[confenge:analytics:reject]', eventName, resolved.reason);
+          console.info('[confenge:analytics:reject]', resolved.reason);
         }
         return;
       }
       if (AGGREGATE_PII_ALLOWLIST.length) return;
       const safe = {};
+      let invalidEntityId = false;
       Object.keys(params || {}).forEach((key) => {
         const val = params[key];
         if (val == null || val === '') return;
         // Drop known PII field names even if caller passes them by mistake
         if (PII_PARAM_KEYS.has(String(key).toLowerCase())) return;
+        const entityPattern = ENTITY_ID_PATTERNS[String(key).toLowerCase()];
+        if (entityPattern && (typeof val !== 'string' || !entityPattern.test(val))) {
+          invalidEntityId = true;
+          return;
+        }
         if (typeof val === 'string' && val.length > 180) return;
         if (looksLikePiiValue(val, key)) return;
         safe[key] = val;
       });
+      if (invalidEntityId) return;
       safe.page_path = safe.page_path || (window.location.pathname || '/');
+      safe.session_id = getSessionId();
       safe.source = EVENT_SOURCE;
       safe.schema_version = EVENT_CONTRACT_SCHEMA_VERSION;
       safe.pii_policy = EVENT_PII_POLICY;

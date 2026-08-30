@@ -3,9 +3,20 @@
 Status: `PRODUCTION_PUBLIC_RUNTIME / NETCUP_NGINX_NODE_V2`
 
 This directory is the production release path for `confenge.com.br`. Public
-traffic already answers on this VPS (`Server: nginx`,
-`X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2`). The
+traffic enters through the Cloudflare proxy (`Server: cloudflare`) and reaches
+this VPS as the origin
+(`X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2`). The
 authoritative record is `docs/architecture/RUNTIME-AUTHORITY.md`.
+
+The apex A and `www` CNAME must remain **Proxied** in Cloudflare. DNS-only
+delivery exposes the remote origin to every visitor and was proven to add
+multi-second connection/TTFB variance from Brazil even while loopback nginx
+answered in under 1 ms. The active `Public HTML edge cache` Cache Rule caches
+only GET/HEAD directory-style public pages for 5 minutes. It excludes `/ops/`,
+`/intranet/`, `/.netlify/` and `/api/`; health/runtime JSON also stays dynamic
+because those paths do not end in `/`. Browser caching still follows the origin
+headers, so an edge purge is not required to clear a visitor's browser. A
+release can remain visible at an edge for at most the five-minute TTL.
 
 Every successful push to `main` now runs the full release chain automatically:
 site gates, immutable package, stage verification and atomic promotion. Manual
@@ -38,7 +49,8 @@ not create that variable, does not change DNS, and does not dispatch a release.
   constant-time; the system gains a release history instead of 100 manual
   deployment procedures.
 - ADR affected: ADR-STRAT-002 remains the canonical-surface decision;
-  RUNTIME-AUTHORITY records the production host as nginx/Netcup.
+  RUNTIME-AUTHORITY records Cloudflare as the public edge and nginx/Netcup as
+  the production origin.
 - Rollback: atomic `current` symlink restoration via
   `/opt/confenge-web/bin/rollback <FULL_SHA>`. See `docs/ops/ROLLBACK.md`.
 
@@ -232,6 +244,12 @@ sha256sum --check confenge-web-<FULL_SHA>.tar.gz.sha256
 Evidence is append-only at `/opt/confenge-web/evidence/deploy.ndjson`. Keep the
 GitHub run URL, attestation and the final `PROMOTED` or `ROLLED_BACK` record in
 the change evidence.
+
+Public verification must see `Server: cloudflare` together with
+`X-Confenge-Host-Architecture-Version: confenge-nginx-node/v2`. The first proves
+the edge is not bypassed; the second proves the response still came from the
+declared Netcup origin. `cf-cache-status: HIT` is expected for a warmed public
+HTML URL, while operational and runtime endpoints must remain `DYNAMIC`.
 
 ## Schedules
 

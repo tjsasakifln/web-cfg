@@ -643,6 +643,33 @@ def test_disposition_matrix_exists_and_covers_classes():
         assert r["disposition"] in ("BLOCKED_MISSING_EVIDENCE", "RETAIN_NOINDEX", "BLOCKED_HUMAN_REVIEW")
 
 
+def test_migrated_editorial_disposition_is_terminal_and_reproducible():
+    """The remediator must never put a migrated donor back on an approval path."""
+    from scripts.site.inbound_first_remediate import build_inventory
+
+    donor = "/lei-14133-obras/limite-25-50-aditivo-obra/"
+    owner = "/conteudos/limite-aditivo-25-50-obra-publica/"
+    checked_in = json.loads(
+        (ROOT / "docs" / "seo" / "URL-DISPOSITION-MATRIX.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    for label, rows in (
+        ("checked-in matrix", checked_in),
+        ("fresh build_inventory output", build_inventory({})),
+    ):
+        matches = [row for row in rows if row.get("url") == donor]
+        assert len(matches) == 1, f"{label}: expected one donor row, got {matches}"
+        row = matches[0]
+        assert row["editorial_status"] == "MIGRATED", label
+        assert row["disposition"] == "REDIRECT_301", label
+        assert row["canonical"] == f"https://confenge.com.br{owner}", label
+        assert row["robots"] == "noindex,follow", label
+        assert row["in_sitemap"] is False, label
+        assert row["human_approval"] == "NOT_APPLICABLE_TERMINAL_MIGRATION", label
+        assert "approval path" not in row["notes"].lower(), label
+
+
 def test_run_all_gates_ok():
     report = run_all_gates()
     assert report["ok"], json.dumps(

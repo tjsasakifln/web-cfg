@@ -57,5 +57,17 @@
     {"state": "HUMAN_REVIEW_REQUIRED", "at": "2026-08-24T00:20:00Z", "actor": "OWNER_CONFENGE"},
     {"state": "APPROVED", "at": "2026-08-24T00:30:00Z", "actor": "HUMAN_TIAGO_JUN_SASAKI"},
     {"state": "PUBLISHED", "at": "2026-08-24T01:00:00Z", "actor": "OWNER_CONFENGE"}
-  ]
+  ],
+  "evidence": {
+    "fonte": "recibo privado de entrega da fixture de gate",
+    "autorizacao": "autorizacao sintetica ativa registrada em recibo privado",
+    "escopo_permitido": "problem, intervention, outcome em confenge.com.br",
+    "anonimizacao": "identidade do titular e valores comerciais omitidos",
+    "baseline": "situacao anterior documentada no recibo privado",
+    "intervencao": "leitura tecnica documentada no material publicado",
+    "resultado_observavel": "material sintetico do gate, sem resultado comercial",
+    "limitacoes": "fixture de teste; nao e cliente, contrato ou resultado real",
+    "revisor": "tiago-jun-sasaki",
+    "expiracao": "2028-08-24T00:00:00Z"
+  }
 }

@@ -863,8 +863,8 @@
   },
   "money_page_scan": {
     "state": "MEASURED_PASS",
-    "measured_at": "2026-08-25",
-    "measured_against": "feat/343-canonical-offer-names",
+    "measured_at": "2026-08-29",
+    "measured_against": "goal/10x10-entregas-commercial-ia-20260829",
     "primary_runner": "scripts/commercial/copy_contract_audit.mjs",
     "route_discovery": "registry_and_public_family_derived",
     "manual_route_allowlist": false,
@@ -872,7 +872,7 @@
     "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. Não existe exceção nominal ou de rota para apresentar nome público aposentado. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
     "live_measurement": {
       "routes_derived": 23,
-      "language_boundaries": 76,
+      "language_boundaries": 78,
       "language_observations": 0,
       "language_violations": 0,
       "structured_social_proof_hits": 0,

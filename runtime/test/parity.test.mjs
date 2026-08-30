@@ -156,7 +156,7 @@ test("every HTTP function preserves direct-handler status, relevant headers and 
         cta_id: "",
       },
       path: "/",
-      sid: "sid-runtime-parity",
+      sid: "sess-222222222222222222222222222",
     }],
   });
   const invalidXray = JSON.stringify({

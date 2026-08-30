@@ -67,10 +67,10 @@ Turn editorial pages and interactive tools into inbound assets that solve part o
 - `pytest scripts/editorial/tests/test_markdown_checklist.py` — interaction_type semantics
 
 ## Remaining limits (honest)
-- Full Playwright E2E matrix at all widths not re-run in this environment after branch thrash; puppeteer/axe remain available via existing scripts.
+- The browser E2E was rerun against `_site` at 320, 360, 390, 430, 768, 1024 and 1440 px. The committed report has zero failures, zero overflow and zero critical/serious axe findings.
 - Source titles from official Planalto/AGU records may still contain em dashes in the Fontes section (external titles, not CONFENGE prose).
 - Wave 1 pages remain non-indexable until named human approval (governance unchanged).
-- Structured checklist requires JS for interactivity; body markdown remains readable without JS.
+- Interactive inputs require JavaScript. Without it, every client-only form stays visibly disabled and uses POST to the same route, so values and free text cannot leak into a query string.
 
 ## Future (out of scope)
 - Template generator for new tools from JSON config only.
@@ -89,6 +89,7 @@ npm run test:tool-compute
 npm run test:tools
 npm run test:tool-events
 npm run lint:editorial-copy
-npm run test:tools-uiux-e2e
+npm run build:site
+PUBLIC_ARTIFACT_REQUIRED=1 npm run test:tools-uiux-e2e
 npm run editorial:build
 ```

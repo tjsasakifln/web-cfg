@@ -105,7 +105,7 @@ def main() -> int:
         "blocked": [],
         "not_automated": [
             "git_merge_of_release_pr",
-            "netlify_production_publish",
+            "netcup_nginx_production_promote",
             "live_production_verify_after_merge",
         ],
         "capabilities": {
@@ -162,6 +162,19 @@ def main() -> int:
                 report["gsc_submit_candidates"].append(
                     f"https://confenge.com.br{path if path.startswith('/') else '/' + path}"
                 )
+        migration_owners_added = 0
+        for page in pages:
+            if page.get("status") != "MIGRATED":
+                continue
+            canonical_path = str(page.get("canonical_path") or "")
+            if not canonical_path.startswith("/"):
+                continue
+            owner_url = f"https://confenge.com.br{canonical_path}"
+            if owner_url not in report["gsc_submit_candidates"]:
+                report["gsc_submit_candidates"].append(owner_url)
+                migration_owners_added += 1
+        if migration_owners_added:
+            report["actions"].append("migration_owners_added_to_gsc_submit_list")
         report["actions"].append("robots_sitemaps_via_editorial_build")
         post_truth = derive_editorial_truth(load_registry())
         release = post_truth.get("release") or {}

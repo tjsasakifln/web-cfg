@@ -33,6 +33,7 @@ from scripts.pseo.html_shell import (
     e,
     page_shell,
 )
+from scripts.site.responsive_text import escape_prose_with_opaque_tokens
 
 PUBLIC_DIR = Path(FAMILY_SLUG)
 SITEMAP_NAME = "sitemap-analises-contratos.xml"
@@ -138,7 +139,7 @@ def _canonical_path(slug: str | None = None) -> str:
 
 def _paragraphs(text: str) -> str:
     chunks = [chunk.strip() for chunk in re.split(r"\n\s*\n", text or "") if chunk.strip()]
-    return "".join(f"<p>{e(chunk)}</p>" for chunk in chunks)
+    return "".join(f"<p>{escape_prose_with_opaque_tokens(chunk)}</p>" for chunk in chunks)
 
 
 def _kind_items(items: list[Any], heading: str, section_id: str) -> str:
@@ -173,12 +174,13 @@ def _kind_items(items: list[Any], heading: str, section_id: str) -> str:
                 extras.append(f"Resultado: {e(result)}")
             src_html = f' <small>{" · ".join(extras)}</small>' if extras else ""
             lis.append(
-                f'<li data-epistemic="{e(kind)}"><span class="ca-kind">{e(label)}</span> {e(body)}{src_html}</li>'
+                f'<li data-epistemic="{e(kind)}"><span class="ca-kind">{e(label)}</span> '
+                f'{escape_prose_with_opaque_tokens(body)}{src_html}</li>'
             )
         else:
             body = _text(item)
             if body:
-                lis.append(f"<li>{e(body)}</li>")
+                lis.append(f"<li>{escape_prose_with_opaque_tokens(body)}</li>")
     if not lis:
         return ""
     return (
@@ -226,7 +228,10 @@ def _timeline_html(items: list[Any]) -> str:
         when = _text(item.get("date") or item.get("when"))
         what = _text(item.get("text") or item.get("label"))
         if when and what:
-            rows.append(f"<tr><th scope='row'><time datetime='{e(_iso(when))}'>{e(when)}</time></th><td>{e(what)}</td></tr>")
+            rows.append(
+                f"<tr><th scope='row'><time datetime='{e(_iso(when))}'>{e(when)}</time></th>"
+                f"<td>{escape_prose_with_opaque_tokens(what)}</td></tr>"
+            )
     if not rows:
         return ""
     return (
@@ -272,11 +277,11 @@ def _history_html(items: list[Any]) -> str:
             when = _iso(item.get("date") or item.get("as_of"))
             note = _text(item.get("text") or item.get("note"))
             if when or note:
-                lis.append(f"<li>{e(when)}: {e(note)}</li>")
+                lis.append(f"<li>{e(when)}: {escape_prose_with_opaque_tokens(note)}</li>")
         else:
             note = _text(item)
             if note:
-                lis.append(f"<li>{e(note)}</li>")
+                lis.append(f"<li>{escape_prose_with_opaque_tokens(note)}</li>")
     if not lis:
         return ""
     return (

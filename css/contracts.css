@@ -36,3 +36,21 @@ img,video{height:auto}
 .action-list>li>span:first-child+*{grid-column:2;min-width:0;max-width:100%}
 .action-list>li:has(>span:first-child)::before{content:none;display:none}
 @media (max-width:520px){.action-list>li{grid-template-columns:32px minmax(0,1fr);gap:12px}}
+/* Sticky navigation must fully occlude scrolled content; transparency creates
+   a ghost layer that competes with the commercial path beneath it. */
+.site-header{background:#fff}
+html{scroll-padding-top:96px}
+/* Natural-language copy wraps only between words. Opaque identifiers opt in
+   explicitly so intrinsic sizing cannot starve ordinary labels again. */
+h1,h2,h3,h4,p,li,dt,dd,figcaption,caption,th,td,label,small,strong{overflow-wrap:normal;word-break:normal;hyphens:none}
+code,pre,kbd,samp,[data-opaque-token],.opaque-token{overflow-wrap:anywhere;word-break:break-word}
+@media (max-width:900px){
+  html{scroll-padding-top:82px}
+  html.no-js .site-header{position:static}
+  .no-js .mobile-nav .button{display:inline-flex;min-width:44px;min-height:44px}
+}
+@media (max-width:430px){
+  .content-hero h1{font-size:clamp(1.8rem,9vw,2.45rem)}
+  .n-wrap>h1{font-size:clamp(1.75rem,8.4vw,2.25rem)}
+  .pilot-wrap>h1{font-size:clamp(1.65rem,8vw,1.9rem)}
+}

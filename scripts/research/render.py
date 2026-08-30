@@ -13,6 +13,7 @@ from scripts.research.citation import (
     dataset_jsonld,
 )
 from scripts.research.metrics import WEDGE
+from scripts.site.responsive_text import escape_prose_with_opaque_tokens
 
 DOCS_DIR = Path("docs/research/edicao-zero-4uf")
 PREVIEW_DIR = Path("radar/pesquisa/edicao-zero-4uf")
@@ -488,7 +489,7 @@ Não descreve o Brasil.
 </div>
 <div class="cite-box" id="citacao">
 <p><strong>Permalink:</strong> <a href="{escape(citation.get('permalink') or 'https://confenge.com.br/radar/pesquisa/edicao-zero-4uf/')}">{escape(citation.get('permalink_path') or '/radar/pesquisa/edicao-zero-4uf/')}</a></p>
-<p><strong>Como citar:</strong> {escape(citation.get('text') or '')}</p>
+<p><strong>Como citar:</strong> {escape_prose_with_opaque_tokens(citation.get('text') or '')}</p>
 <p><strong>Versão:</strong> {escape(str(citation.get('version_label') or pack.get('data_as_of')))}</p>
 <p><strong>Download:</strong> <a href="{escape(DOWNLOAD_FILENAME)}">{escape(DOWNLOAD_FILENAME)}</a> (pack de citação versionado; não é dump de microdados)</p>
 </div>

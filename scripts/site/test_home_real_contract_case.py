@@ -21,7 +21,8 @@ def test_home_replaces_generic_matrix_with_real_public_contract():
     assert "180 dias" in html
     assert "365 dias" in html
     assert "900 dias" in html
-    assert "Qual deles se parece mais com o seu?" in html
+    assert "contexto de mercado" in html.lower()
+    assert "Qual deles se parece mais com o seu?" not in html
     assert "<dt>1% do valor</dt>" not in html
     assert html.count("data-economics-illustration") == 3
     assert html.count("Conta ilustrativa, não é economia observada") == 3
@@ -39,7 +40,10 @@ def test_home_contract_profiles_are_manual_and_accessible():
     selector = selector_match.group(0)
     assert selector.count('role="tab"') == 3
     assert selector.count('role="tabpanel"') == 3
-    assert selector.count('data-event-name="proof_expand"') == 3
+    assert selector.count('data-event-name="evidence_drilldown"') == 3
+    assert 'data-event-name="proof_expand"' not in selector
+    assert selector.count('data-cta-position="market_context"') == 6
+    assert 'data-cta-position="hero_proof"' not in selector
     assert selector.count('aria-selected="true"') == 1
     assert selector.count('aria-selected="false"') == 2
     assert ' hidden' not in selector
@@ -57,6 +61,10 @@ def test_home_contract_case_has_provenance_and_no_client_claim():
     assert "Dados consultados em 21/08/2026" in html
     assert "não são clientes da CONFENGE" in html
     assert "não indicam falha nos contratos" in html
+    assert "contexto de mercado" in html.lower()
+    offers_at = html.find('data-section-archetype="offer_dominant"')
+    pncp_at = html.find("data-evidence-selector")
+    assert 0 < offers_at < pncp_at
 
 
 def test_home_contract_case_keeps_one_primary_hero_cta():
@@ -67,10 +75,7 @@ def test_home_contract_case_keeps_one_primary_hero_cta():
     hero = hero_match.group(0)
     assert hero.count("button-primary") == 1
     assert 'data-event-name="diagnostic_cta_click"' in hero
-    assert "hero-real-proof" in hero
-    assert hero.count('data-set-journey="contrato"') == 3
-    assert hero.count("Prefiro WhatsApp") == 3
-    assert "home-proof-local-whatsapp" in hero
-    assert "home-proof-regional-whatsapp" in hero
-    assert "home-proof-strategic-whatsapp" in hero
-    assert "Analisar meu contrato" in hero
+    assert "data-evidence-selector" not in hero
+    assert "Prefiro WhatsApp" not in hero
+    assert "Analisar meu contrato" not in hero
+    assert "Analisar meu caso" in hero

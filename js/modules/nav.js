@@ -394,6 +394,10 @@
       }
     };
     if (form) {
+      const sessionId = typeof window.confengeSessionId === 'function'
+        ? window.confengeSessionId()
+        : '';
+      ensureHidden('session_id', sessionId, true);
       ensureHidden('origem', origem || storedPseo.origem || window.location.pathname || '/');
       ensureHidden('landing_page', sessionStorage.getItem('confenge_landing') || window.location.pathname || '/', true);
       ensureHidden('utm_source', searchParams.get('utm_source') || sessionStorage.getItem('utm_source') || '');

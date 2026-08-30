@@ -72,8 +72,8 @@
     "min_brl": 599,
     "max_brl": 3750,
     "filters": false,
-    "comparison_columns_pt_br": ["situação", "decisão", "saída", "prazo", "preço", "fit"],
-    "note_pt_br": "A superfície pública de /entregas/ mostra só as oito unidades PUBLISHED. O rol interno permanece 54."
+    "primary_card_fields_pt_br": ["situação", "decisão", "entrada", "objeto e limite", "saída", "SLA", "preço", "pacote e crédito"],
+    "note_pt_br": "A vitrine pública de /entregas/ mostra oito ofertas PUBLISHED como unidades decisórias. A mesma página preserva as 54 capacidades em um rol taxativo de referência, agrupado por tarefa e rotulado por maturidade."
   },
   "doors": [
     {
@@ -468,15 +468,19 @@
     "client_data_asset": "entregas/catalog-data.js",
     "client_stylesheet": "entregas/catalog.css",
     "stylesheet": "entregas/styles.css",
-    "index_count": 8,
+    "published_offer_count": 8,
+    "capability_roll_count": 54,
+    "capability_group_count": 7,
+    "primary_representation_per_offer": 1,
     "framing_steps": 1,
     "filter_dimensions": [],
     "url_state": false,
     "alphabetical_view": false,
+    "progressive_disclosure": "native_details_by_task",
     "comparison": {
-      "min_selection": 2,
-      "max_selection": 4,
-      "mobile_layout": "blocos_empilhados_por_criterio"
+      "mode": "single_primary_card",
+      "duplicated_representation": false,
+      "mobile_hides_essential_fields": false
     },
     "terminal_capture": true,
     "new_analytics_dimensions": false,

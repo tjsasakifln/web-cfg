@@ -172,6 +172,29 @@ test("nginx escaping keeps input values inside quoted arguments", () => {
   assert.equal((rendered.match(/map \$request_uri \$confenge_header_x_escape_probe/g) || []).length, 1);
 });
 
+test("long response headers are chunked below nginx's configuration token limit", () => {
+  const value = "default-src 'self'; script-src 'self' " + "'sha256-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=' ".repeat(90);
+  const contract = {
+    headers: [
+      {
+        match: "global",
+        headers: [{ name: "Content-Security-Policy", value }],
+      },
+    ],
+    routes: [],
+  };
+  const headers = renderHeaders(contract);
+  assert.match(headers, /map \$request_uri \$confenge_header_content_security_policy \{/);
+  assert.match(headers, /map \$request_uri \$confenge_header_content_security_policy_part_1 \{/);
+  for (const line of headers.split("\n")) {
+    assert(Buffer.byteLength(line) < 4096, `nginx config line must stay below 4 KiB: ${Buffer.byteLength(line)}`);
+  }
+  assert.match(
+    renderLocations(contract),
+    /add_header Content-Security-Policy "\$confenge_header_content_security_policy\$confenge_header_content_security_policy_part_1" always;/,
+  );
+});
+
 test("exact header selectors are not overwritten by a same-base terminal wildcard", () => {
   const headers = parseHeaders(`/*
   Cache-Control: no-cache
