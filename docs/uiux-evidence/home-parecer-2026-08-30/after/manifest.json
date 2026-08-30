@@ -1,0 +1,108 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T23:07:15.072Z",
+  "commit_sha": "f8c0ba3bc0014c88f1c06c4f2307b70d34738771",
+  "tree_dirty": true,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "docs/uiux-evidence/home-parecer-2026-08-30/after",
+  "state": {
+    "id": "default",
+    "fullpage": false,
+    "javascript": "on",
+    "motion": "system"
+  },
+  "routes": [
+    "/"
+  ],
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1024x768",
+    "1366x768",
+    "1440x900"
+  ],
+  "files": [
+    "home-390x844.png",
+    "home-768x1024.png",
+    "home-1024x768.png",
+    "home-1366x768.png",
+    "home-1440x900.png"
+  ],
+  "captures": [
+    {
+      "file": "home-390x844.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 75188,
+      "sha256": "525be6a42381aacb4b705f664a7c30cbaae14d148844c87867080b46163f600d"
+    },
+    {
+      "file": "home-768x1024.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 106998,
+      "sha256": "6bce3ecefa302eef17a2a2bdf478a899e111a2d99572c37b7d8977768bbd34fc"
+    },
+    {
+      "file": "home-1024x768.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1024x768",
+      "width": 1024,
+      "height": 768,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 131767,
+      "sha256": "81ef3b2c65e28566cdda5d4cca4678068b1ff05c4b775ed84ccd418804307619"
+    },
+    {
+      "file": "home-1366x768.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 144901,
+      "sha256": "ca791b1fa6038ddd2862750c63396ab3a44199d3bacce9cc9c9bdf52638fbaa3"
+    },
+    {
+      "file": "home-1440x900.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 152433,
+      "sha256": "292dcdcdf413b582c9f5661b7db189950a979b63918f8720402027e50567c4ec"
+    }
+  ]
+}
