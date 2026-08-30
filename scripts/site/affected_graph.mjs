@@ -838,6 +838,9 @@ export const SUITE_GRAPH = Object.freeze({
     producers: [
       "scripts/site/test_design_gates.py",
       "scripts/site/test_visitor_redesign.py",
+      "scripts/site/audit_performance.py",
+      "scripts/site/test_audit_performance.py",
+      "docs/performance/PERFORMANCE-BUDGET-BASELINE.json",
       "scripts/site/build_css.py",
       "scripts/site/css_type_floor.py",
       "scripts/site/fixtures/type-floor/",
@@ -885,6 +888,7 @@ export const SUITE_GRAPH = Object.freeze({
       "data/quality/interface-coverage-policy.json",
       "data/organic/public-family-registry.json",
       "data/organic/bofu-intent-matrix.json",
+      "data/site/design-system.json",
       ".github/workflows/site-ci.yml",
     ],
     artifacts: ["docs/lighthouse-runs/summary.json"],
@@ -1091,6 +1095,16 @@ export const SUITE_GRAPH = Object.freeze({
     producers: ["scripts/site/build_script_modules.mjs", "js/modules/", "script.js"],
     artifacts: ["script.js"],
     surfaces: ["/"],
+  },
+  "test:capture-states": {
+    producers: [
+      "scripts/site/capture_states.mjs",
+      "scripts/site/capture_screenshots.mjs",
+      "scripts/site/test_capture_states.mjs",
+      "scripts/site/resolve_chrome.mjs",
+    ],
+    artifacts: ["docs/uiux-evidence/after/"],
+    surfaces: [],
   },
   "test:indexnow": {
     producers: [

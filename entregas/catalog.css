@@ -13,7 +13,7 @@
 .catalog-framing__steps label,.catalog-filters>label{display:grid;align-content:start;gap:9px;color:#24364a;font-size:.8rem;font-weight:800}
 .catalog-framing__steps label>span{display:grid;width:28px;height:28px;place-items:center;color:#fff;background:#0b684f;border-radius:50%;font-family:var(--mono);font-size:.8rem}
 .catalog-framing select,.catalog-framing input,.catalog-filters select,.catalog-filters input{box-sizing:border-box;width:100%;min-height:44px;padding:10px 12px;color:#17283b;background:#fff;border:1px solid #9caaa3;border-radius:6px;font:inherit}
-.catalog-framing select:focus,.catalog-framing input:focus,.catalog-filters select:focus,.catalog-filters input:focus{outline:3px solid rgba(14,124,102,.18);border-color:#0e7c66}
+.catalog-framing select:focus,.catalog-framing input:focus,.catalog-filters select:focus,.catalog-filters input:focus{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:#0e7c66}
 .catalog-framing>.button{margin-right:16px}
 .catalog-framing>p{display:inline;color:#536276;font-size:.8rem;line-height:1.5}
 .catalog-recommendation{margin-top:24px;padding-top:22px;border-top:1px solid #bdcdc3}
@@ -30,7 +30,7 @@
 .catalog-filter-actions{display:flex;grid-column:1/-1;flex-wrap:wrap;gap:8px;padding-top:4px}
 .catalog-filter-actions button,.catalog-compare-tray button,.catalog-empty button{min-height:44px;padding:10px 13px;color:#17314b;background:#fff;border:1px solid #9ca9b5;border-radius:5px;font:inherit;font-size:.8rem;font-weight:800;cursor:pointer}
 .catalog-filter-actions button[aria-pressed="true"],.catalog-compare-tray [data-compare-open]{color:#fff;background:#0b684f;border-color:#0b684f}
-.catalog-filter-actions button:focus-visible,.catalog-compare-tray button:focus-visible,.catalog-empty button:focus-visible{outline:3px solid rgba(14,124,102,.22);outline-offset:2px}
+.catalog-filter-actions button:focus-visible,.catalog-compare-tray button:focus-visible,.catalog-empty button:focus-visible{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring)}
 .catalog-filter-status{grid-column:1/-1;margin:0;color:#435369;font-family:var(--mono);font-size:.8rem;font-weight:800}
 .catalog-item__compare{display:none;align-items:center;gap:8px;margin:0 0 8px;color:#34465a;font-size:.8rem;font-weight:800}
 .catalog-item__compare input{width:18px;height:18px;accent-color:#0b684f}

@@ -90,6 +90,7 @@ Ver `forbidden_patterns` em `design-system.json`. Resumo operacional:
 - Linguagem de governança editorial no HTML público
 - Dashboard SaaS fictício, stock genérico, métricas inventadas
 - Mais de duas seções consecutivas com o mesmo arquétipo **ou com o mesmo esqueleto**
+- Deslocamento vertical em `:hover` (hover lift) — ver [Movimento](#movimento)
 
 ## Arquétipos fora da home
 
@@ -148,6 +149,30 @@ Permitido: `Engenheiro Civil e consultor B2G` ou `Engenheiro Civil e diretor da 
 ## Movimento
 
 Entrada sutil, foco de etapa, revelação de linha. Sem parallax exagerado, contadores falsos ou animação contínua. Sempre `prefers-reduced-motion`.
+
+### Sem hover lift (regra, não convenção)
+
+Nenhum elemento se desloca na vertical sob o ponteiro. `hover` não é evento de
+elevação: é mudança de estado. O feedback vem de cor, borda, sublinhado ou
+sombra — nunca de `translateY`, `translate3d`, `margin` negativa ou `top`
+deslocado em `:hover`.
+
+- Padrão proibido: `hover_lift_translate_on_pointer` em `forbidden_patterns`.
+- Deslocamento **horizontal** curto de uma seta que aponta para o destino
+  (`.text-link:hover .icon`, `.contact-channels>a:hover`) continua permitido:
+  é direção, não elevação. Segue neutralizado em `prefers-reduced-motion`.
+- O elemento de contato (`.whatsapp-float`) mantém affordance de hover por
+  fundo e borda, foco visível pelo anel global, e alvo de 56 px.
+
+**Como o gate decide.** Regex em `styles.css` não serve: o arquivo já carregou
+lifts que uma declaração posterior cancelava (o regex reprovaria regras que o
+visitante nunca viu) e carregou um lift cujo `transform:none` só existia dentro
+de `@media (prefers-reduced-motion:reduce)` (o regex aprovaria). A regra é
+medida no render, em `hoverLiftFindings` de
+`scripts/site/rendered_layout_truth.mjs`: `page.hover()` e diff de
+`getBoundingClientRect()` em espaço de documento, emitindo
+`hover_lift <seletor> <dy>px`. Roda em `npm run test:ui`, com fixture negativa
+`scripts/site/fixtures/truthful_gates/hover-lift.html` provando que morde.
 
 ## Como não voltar ao genérico
 

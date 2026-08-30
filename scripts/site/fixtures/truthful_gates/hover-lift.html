@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>fixture hover lift</title>
+<style>
+  body{margin:0;font:16px/1.6 system-ui,sans-serif}
+  main{padding:24px}
+  /* The shape the rule forbids: the contact element rises under the pointer,
+     and the only transform:none sits behind prefers-reduced-motion, so every
+     visitor who did not ask for reduced motion still gets the displacement. */
+  .whatsapp-float{
+    position:fixed;right:22px;bottom:22px;width:56px;height:56px;
+    display:grid;place-items:center;color:#fff;background:#2f8c43;
+    border:1px solid rgba(255,255,255,.4);border-radius:50%;
+    transition:transform .1s ease;
+  }
+  .whatsapp-float:hover{transform:translateY(-3px)}
+  @media (prefers-reduced-motion:reduce){
+    .whatsapp-float:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Fixture negativa do gate de hover lift</h1>
+  <p>Esta pagina existe para provar que o gate morde: o elemento de contato
+    sobe 3 px sob o ponteiro, exatamente como acontecia antes da correcao.</p>
+  <form method="post" action="/.netlify/functions/lead" data-capture-form>
+    <label>Nome <input name="nome"></label>
+    <button type="submit">Enviar</button>
+  </form>
+</main>
+<a class="whatsapp-float" href="https://wa.me/5548988344559" aria-label="WhatsApp">W</a>
+</body>
+</html>

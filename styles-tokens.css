@@ -36,7 +36,9 @@
   --read-measure:68ch;
   --page-max:72rem;
   --page-max-narrow:48rem;
-  --focus-ring:0 0 0 3px rgba(45,111,45,.35);
+  --focus-ring-halo:var(--white);
+  --focus-ring-core:var(--ink);
+  --focus-ring:0 0 0 2px var(--focus-ring-halo),0 0 0 5px var(--focus-ring-core);
   --touch-min:44px;
   --section-tight:56px 0;
   --section-default:80px 0;

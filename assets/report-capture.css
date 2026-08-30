@@ -75,8 +75,9 @@
 .report-capture-form input:focus-visible,
 .report-capture-form textarea:focus-visible {
   border-color: var(--r-navy-2, #0a294b);
-  outline: 3px solid rgba(10, 41, 75, .22);
-  outline-offset: 1px;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: var(--focus-ring);
 }
 
 .report-capture-form .capture-consent {
@@ -106,8 +107,9 @@
 .report-capture-submit:hover { background: var(--r-navy-2, #0a294b); }
 
 .report-capture-submit:focus-visible {
-  outline: 3px solid var(--r-lime, #ced62a);
+  outline: 2px solid transparent;
   outline-offset: 2px;
+  box-shadow: var(--focus-ring);
 }
 
 .report-capture-submit[disabled] { cursor: progress; opacity: .6; }

@@ -132,6 +132,8 @@ jobs:
           CONTEXT: ${{ inputs.export_public_artifact && 'production' || '' }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
         run: npm run build:site
+      - name: Prototype isolation in the built artifact
+        run: npm run test:prototype-isolation
       - name: Published medição cluster originality
         run: npm run test:cluster-medicao-published
       - name: Generated Netcup nginx contract E2E
@@ -154,6 +156,11 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: npm run test:money-asset-canary-e2e
+      - name: Headless capture states (full-page, JS-off, reduced-motion)
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          CAPTURE_BROWSER_REQUIRED: "1"
+        run: npm run test:capture-states
       - name: UI geometry, narrow breakpoints and computed cascade
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}

@@ -13,7 +13,7 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 import { resolveSiteRoot } from "./interface_coverage.mjs";
-import { renderedLayoutFindings } from "./rendered_layout_truth.mjs";
+import { hoverLiftFindings, renderedLayoutFindings } from "./rendered_layout_truth.mjs";
 
 const require = createRequire(import.meta.url);
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
@@ -1700,6 +1700,151 @@ async function main() {
     ok("fixture_layout_pass");
   } catch (e) {
     fail("fixture_layout_pass", e.message || e);
+  }
+
+  // No hover lift — declared in docs/DESIGN-SYSTEM.md and in forbidden_patterns,
+  // measured here in the render. A regex over styles.css cannot decide this:
+  // the sheet carried lifts that a later declaration already cancelled, and it
+  // carried one whose transform:none lived only inside prefers-reduced-motion.
+  async function hoverFindingsFromHtml(html, viewport = { width: 1440, height: 900 }) {
+    const tab = await browser.newPage();
+    try {
+      await tab.setViewport({ ...viewport, deviceScaleFactor: 1 });
+      await tab.setContent(html, { waitUntil: "domcontentloaded" });
+      return await hoverLiftFindings(tab);
+    } finally {
+      await tab.close();
+    }
+  }
+
+  try {
+    const lifted = await hoverFindingsFromHtml(
+      readFileSync(join(fixtureDir, "hover-lift.html"), "utf8"),
+    );
+    const hit = lifted.find((row) => row.startsWith("hover_lift ") && row.includes("whatsapp-float"));
+    if (!hit) throw new Error(`expected hover_lift on .whatsapp-float, got ${lifted.join(",") || "<none>"}`);
+    ok(`fixture_hover_lift_fails (${hit})`);
+  } catch (e) {
+    fail("fixture_hover_lift_fails", e.message || e);
+  }
+
+  try {
+    // The same fixture with the forbidden displacement swapped for the
+    // affordance the site actually ships: colour and border, no movement.
+    const still = await hoverFindingsFromHtml(
+      readFileSync(join(fixtureDir, "hover-lift.html"), "utf8").replace(
+        ".whatsapp-float:hover{transform:translateY(-3px)}",
+        ".whatsapp-float:hover{background:#25703a;border-color:#fff}",
+      ),
+    );
+    if (still.length) throw new Error(still.join(","));
+    ok("fixture_hover_lift_pass");
+  } catch (e) {
+    fail("fixture_hover_lift_pass", e.message || e);
+  }
+
+  const HOVER_LIFT_ROUTES = [
+    ["/", { width: 1440, height: 900 }],
+    ["/", { width: 768, height: 1024 }],
+    ["/entregas/", { width: 1440, height: 900 }],
+    ["/conteudos/documentos-reequilibrio-obra-publica/", { width: 1440, height: 900 }],
+  ];
+  for (const [route, viewport] of HOVER_LIFT_ROUTES) {
+    const label = `no_hover_lift ${route}@${viewport.width}`;
+    const tab = await browser.newPage();
+    try {
+      await tab.setViewport({ ...viewport, deviceScaleFactor: 1 });
+      await tab.goto(`${BASE}${route}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+      const lifts = await hoverLiftFindings(tab);
+      if (lifts.length) throw new Error(lifts.join(" | "));
+      ok(label);
+    } catch (e) {
+      fail(label, e.message || e);
+    } finally {
+      await tab.close();
+    }
+  }
+
+  // The contact element must keep a hover affordance and a visible focus ring:
+  // removing the lift may not leave the visitor without feedback.
+  try {
+    const tab = await browser.newPage();
+    try {
+      await tab.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
+      await tab.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
+      const float = await tab.$(".whatsapp-float");
+      if (!float) throw new Error("no .whatsapp-float on the home");
+      const read = () => tab.evaluate(() => {
+        const element = document.querySelector(".whatsapp-float");
+        const style = getComputedStyle(element);
+        const box = element.getBoundingClientRect();
+        return {
+          background: style.backgroundColor,
+          borderColor: style.borderTopColor,
+          boxShadow: style.boxShadow,
+          width: Math.round(box.width),
+          height: Math.round(box.height),
+          top: box.top + window.scrollY,
+        };
+      });
+      // Hover first: hover() may scroll, and both samples must be taken after
+      // that so the displacement diff stays honest.
+      await float.hover();
+      await new Promise((done) => setTimeout(done, 320));
+      const hovered = await read();
+      await tab.mouse.move(1, 1);
+      await new Promise((done) => setTimeout(done, 320));
+      const resting = await read();
+      await float.dispose();
+      const changed = ["background", "borderColor", "boxShadow"]
+        .filter((key) => resting[key] !== hovered[key]);
+      if (!changed.length) {
+        throw new Error(`contact float has no hover affordance left: ${JSON.stringify(resting)}`);
+      }
+      const dy = hovered.top - resting.top;
+      if (Math.abs(dy) > 0.5) {
+        throw new Error(`contact float still lifts ${dy.toFixed(1)}px on hover`);
+      }
+      if (hovered.width !== resting.width || hovered.height !== resting.height) {
+        throw new Error("contact float changes size on hover");
+      }
+      if (resting.width < 44 || resting.height < 44) {
+        throw new Error(`contact float target ${resting.width}x${resting.height} below 44px`);
+      }
+      const focusRing = await tab.evaluate(() => {
+        const element = document.querySelector(".whatsapp-float");
+        element.focus();
+        const style = getComputedStyle(element, null);
+        return {
+          width: style.outlineWidth,
+          style: style.outlineStyle,
+          color: style.outlineColor,
+          boxShadow: style.boxShadow,
+        };
+      });
+      // Reading outlineWidth/outlineStyle alone is not enough. Since #506 the
+      // ring is `outline:2px solid transparent` plus `box-shadow:var(--focus-ring)`
+      // -- the transparent outline exists for Windows high contrast, where
+      // box-shadow is not painted. A rule that overrides box-shadow would leave
+      // that outline reading `solid`/`2px` and pass while painting nothing. So
+      // the indicator has to be found where it actually is: a visible outline,
+      // or a box-shadow that differs from the resting one.
+      const invisible = /^(transparent|rgba\(0,\s*0,\s*0,\s*0\))$/;
+      const outlinePaints =
+        focusRing.style !== "none" &&
+        parseFloat(focusRing.width) >= 1 &&
+        !invisible.test(focusRing.color);
+      const shadowPaints =
+        focusRing.boxShadow !== "none" && focusRing.boxShadow !== resting.boxShadow;
+      if (!outlinePaints && !shadowPaints) {
+        throw new Error(`contact float has no visible focus ring: ${JSON.stringify(focusRing)}`);
+      }
+      ok(`contact_float_hover_affordance (${changed.join("+")}, ${resting.width}x${resting.height}px)`);
+    } finally {
+      await tab.close();
+    }
+  } catch (e) {
+    fail("contact_float_hover_affordance", e.message || e);
   }
 
   const TYPE_FLOOR_FAMILIES = [
