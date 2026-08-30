@@ -1,7 +1,7 @@
 {
   "schema_version": "3.0.0",
-  "derived_at": "2026-08-30T02:01:23Z",
-  "commit_sha": "3252b15bb811425b88b133761a876083cac93db5",
+  "derived_at": "2026-08-30T02:34:29Z",
+  "commit_sha": "5b140bf7c1d29276afd725ffc523a6a70f34a392",
   "commit_sha_role": "informational_only",
   "terminal_status": "READY_FOR_RELEASE",
   "registry_counts": {
@@ -69,13 +69,13 @@
     "awaiting_page_ids": []
   },
   "public_inventory": {
-    "conteudos_indexable": 21,
-    "hub_claimed_guides": 21,
-    "legacy_indexable_public_surface": 21,
+    "conteudos_indexable": 22,
+    "hub_claimed_guides": 22,
+    "legacy_indexable_public_surface": 22,
     "first_cohort_awaiting_approval": 0,
     "first_cohort_published": 2,
     "editorial_backlog_awaiting_approval": 8,
-    "note": "Only FIRST_COHORT_IDS may become indexable in this release."
+    "note": "Only FIRST_COHORT_IDS may become indexable through this registry. A legacy /conteudos/ canary requires its own fail-closed approval gate."
   },
   "sitemaps": {
     "editorial_locs": 4,

@@ -1,9 +1,9 @@
 # Visible parity
 
 - ok: `True`
-- pages: `75`
+- pages: `76`
 - defects: `0`
-- site_root: `/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/wa469/_site`
+- site_root: `/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/wa491/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -35,6 +35,7 @@
 | https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/ | True | — | Organization,Person,Article,BreadcrumbList; Prova de culpa da Administração no atraso da obra | Prova de culpa da Administração no atraso da obra |
 | https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/ | True | — | Organization,Person,Article,BreadcrumbList; Atraso de pagamento: pode suspender a obra pública? | Atraso de pagamento: pode suspender a obra pública? |
 | https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; BDI diferenciado em materiais e equipamentos: quando usar | BDI diferenciado em materiais e equipamentos: quando usar |
+| https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/ | True | — | Organization,Article,BreadcrumbList; Chuva na obra pública: quando o prazo é tecnicamente impactado | Chuva na obra pública: quando o prazo é tecnicamente impactado |
 | https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/ | True | — | Organization,Person,Article,BreadcrumbList; Exequibilidade da proposta: o que comprovar | Exequibilidade da proposta: o que comprovar |
 | https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Data-base e reajuste: meses sem cobertura | Data-base e reajuste: meses sem cobertura |
 | https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; Demolição fora da planilha: como documentar antes de executar | Demolição fora da planilha: como documentar antes de executar |

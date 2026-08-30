@@ -6,7 +6,7 @@
   "owner": "tiago.sasaki",
   "canary_cap": 1,
   "gsc_export": "seo/gsc-2026-08-09",
-  "note": "Demand is a review signal, not an index warrant. HTML generation is not index permission. approve_cli INDEXABLE is the only robots flip.",
+  "note": "Demand is a review signal, not an index warrant. HTML generation is not index permission. A valid hash-bound NAMED_HUMAN_APPROVAL or OWNER_DELEGATED_APPROVAL record is required before the single authorized robots flip.",
   "urls": [
     {
       "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
@@ -15,10 +15,35 @@
       "canary": true,
       "owner": "tiago.sasaki",
       "mapped_service": "/atrasos-prorrogacao-obras-publicas/",
-      "gsc": { "impressions": 17, "clicks": 0, "position": 3.35, "sample_quality": "very_low" },
-      "reason": "Distinct rain-delay proof job at position ~3 while noindex. Candidate for one rewrite; remains noindex until rewrite + named human approve_cli.",
-      "rewrite_complete": false,
-      "approve_cli_indexable": false
+      "gsc": {
+        "impressions": 17,
+        "clicks": 0,
+        "position": 3.35,
+        "sample_quality": "very_low"
+      },
+      "reason": "Distinct job: qualify when a climatic event has demonstrable schedule relevance before the decision moves to request, defense or legal-effect owners. Rewritten canary released only after hash-bound owner-delegated approval.",
+      "rewrite_complete": true,
+      "approve_cli_indexable": true,
+      "approval": {
+        "approval_type": "OWNER_DELEGATED_APPROVAL",
+        "status": "INDEXABLE",
+        "decision_authority": "owner / Tiago Sasaki",
+        "material_author": "agente da campanha de reescrita / CONFENGE_INBOUND_STRIKING_DISTANCE_CHUVA_REWRITE_INDEX_20260829",
+        "reviewer_executor": "revisão adversarial independente / CONFENGE_EDITORIAL_GOVERNANCE_SELF_APPROVAL_FIX_20260829",
+        "approval_basis": "owner-delegated review 2026-08-29",
+        "approved_at": "2026-08-29",
+        "manual_human_review": false,
+        "material_hash": "sha256:f81891d6e9d8f833d838184cff677401cb15396868cffde793a257ebce4af289",
+        "review_results": {
+          "factual_legal_adversarial": true,
+          "originality_anti_doorway": true,
+          "query_ownership_cannibalization": true,
+          "skeptical_visitor_copy_ux": true,
+          "responsive_js_off_keyboard_accessibility": true
+        },
+        "notes": "O conteúdo foi redigido pelo agente da campanha de reescrita (material_author) sob delegação expressa de autoridade do owner. Uma revisão adversarial independente, executada em processo separado da campanha autora (reviewer_executor), verificou as citações legais (Lei 14.133/2021 arts. 115 §5º, 22 §§1-2, 92 VII/IX, 103 §§4-5, 117 §§1-2, 124 II 'd', 137 V), os Acórdãos TCU 639/2006 e 3.077/2010 e a metodologia do INMET (limiar de 1mm de chuva diária, janela 12h UTC-12h UTC), além de originalidade, canibalização de consulta e higiene de indexação, sem encontrar fabricação. Não houve revisão humana manual em nenhuma das duas etapas: nem na autoria, nem nesta revisão adversarial.",
+        "approval_hash": "sha256:bfde87028e1f5ca561f5f1313f498f118803873b72f0005c495e5033d93f8308"
+      }
     },
     {
       "path": "/conteudos/aditivo-qualitativo-quantitativo/",
@@ -27,7 +52,12 @@
       "canary": false,
       "owner": "tiago.sasaki",
       "mapped_service": "/aditivos-obras-publicas/",
-      "gsc": { "impressions": 22, "clicks": 0, "position": 6.09, "sample_quality": "very_low" },
+      "gsc": {
+        "impressions": 22,
+        "clicks": 0,
+        "position": 6.09,
+        "sample_quality": "very_low"
+      },
       "reason": "answer_still_generic and the commercial job is already owned by the aditivos pillar. Hold until the chuva canary has a 28d GSC outcome.",
       "rewrite_complete": false,
       "approve_cli_indexable": false
@@ -39,7 +69,12 @@
       "canary": false,
       "owner": "tiago.sasaki",
       "mapped_service": "/atrasos-prorrogacao-obras-publicas/",
-      "gsc": { "impressions": 18, "clicks": 0, "position": 7.0, "sample_quality": "very_low" },
+      "gsc": {
+        "impressions": 18,
+        "clicks": 0,
+        "position": 7.0,
+        "sample_quality": "very_low"
+      },
       "reason": "answer_still_generic; vigência vs execução is a distinct job but not the canary. Hold noindex.",
       "rewrite_complete": false,
       "approve_cli_indexable": false

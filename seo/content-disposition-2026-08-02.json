@@ -2,8 +2,8 @@
   "generated": "2026-08-02T12:02:43Z",
   "campaign": "CONFENGE-FORTUNE-CONVERSION-SEO-01",
   "content_library_by_disposition": {
-    "noindex": 97,
-    "manter": 21,
+    "noindex": 96,
+    "manter": 22,
     "consolidar": 2
   },
   "generic_boilerplate_stripped_pages": 116,
@@ -313,17 +313,17 @@
     {
       "slug": "chuva-prorrogacao-prazo-obra-publica",
       "path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
-      "title": "Chuva justifica prorrogação de prazo em obra pública? | CONFENGE",
-      "words": 1815,
-      "answer_still_generic": true,
+      "title": "Chuva e prorrogação de obra pública: quando há impacto | CONFENGE",
+      "words": 1899,
+      "answer_still_generic": false,
       "criteria_templated": false,
       "classification": "aprofundar",
-      "priority_gsc": false,
-      "deepened_handcrafted": false,
+      "priority_gsc": true,
+      "deepened_handcrafted": true,
       "consolidate_into": null,
-      "disposition": "noindex",
+      "disposition": "manter",
       "generic_boilerplate_removed": true,
-      "noindex_reason": "thin_or_template_pending_rewrite"
+      "noindex_reason": null
     },
     {
       "slug": "clausula-matriz-risco-abusiva-edital",
