@@ -419,11 +419,18 @@ def table_html(headers: list[str], rows: list[list[Any]], caption: str | None = 
     )
 
 
-def author_box() -> str:
+def author_box(*, archetype: str = "") -> str:
+    """Author identity block.
+
+    ``archetype`` is opt-in: a surface inside ``archetype_gated_surfaces``
+    declares the editorial job this block performs. It is inert everywhere
+    else, so callers outside the gate keep their current bytes.
+    """
     from scripts.site.responsive_raster import AUTHOR_PICTURE
 
+    arch = f' data-section-archetype="{archetype}"' if archetype else ""
     return (
-        '<section class="author-box"><div class="author-photo">'
+        f'<section class="author-box"{arch}><div class="author-photo">'
         f"{AUTHOR_PICTURE}"
         "</div><div><span>Autor e responsável técnico pelo conteúdo</span>"
         '<h2><a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a></h2>'
