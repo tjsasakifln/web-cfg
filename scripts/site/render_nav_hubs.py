@@ -53,6 +53,26 @@ MANAGED_EXTENSIONS = [
 ]
 
 
+def _proof_html(meta: dict[str, Any]) -> str:
+    """Escaped proof sentence with its one verifiable destination linked.
+
+    The first-fold contract (#327) asks for a reason to believe that a skeptical
+    visitor can check without registering. A sentence claiming public tools or
+    published examples is a claim; the link is the check. The anchor text stays
+    inside `proof`, so the visible sentence and the data stay identical.
+    """
+    proof = e(meta["proof"])
+    link = meta.get("proof_link")
+    if not link:
+        return proof
+    anchor = e(link["text"])
+    if anchor not in proof:
+        raise SystemExit(
+            f"proof_link.text is absent from proof: {link['text']!r}"
+        )
+    return proof.replace(anchor, f'<a href="{e(link["href"])}">{anchor}</a>', 1)
+
+
 def e(value: Any) -> str:
     return html_lib.escape("" if value is None else str(value), quote=True)
 
@@ -210,10 +230,10 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
         f"""<section aria-labelledby="hub-title" class="section section--tight">
 <div class="container">
 <header class="section-head">
-<p class="eyebrow">Serviços</p>
+<p class="eyebrow">{e(meta["eyebrow"])}</p>
 <h1 id="hub-title">{e(meta["h1"])}</h1>
 <p class="section-lead">{e(meta["lead"])}</p>
-<p class="section-proof">{e(meta["proof"])}</p>
+<p class="section-proof">{_proof_html(meta)}</p>
 </header>
 <section class="lead-inline" data-commercial-route="medicoes-glosas" aria-label="Rota para medição, glosa e pagamento">
 <div class="lead-inline-copy"><span>Medição ou glosa sob pressão</span>
@@ -274,10 +294,10 @@ def _problems_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
         f"""<section aria-labelledby="hub-title" class="section section--tight">
 <div class="container">
 <header class="section-head">
-<p class="eyebrow">Problemas que resolvemos</p>
+<p class="eyebrow">{e(meta["eyebrow"])}</p>
 <h1 id="hub-title">{e(meta["h1"])}</h1>
 <p class="section-lead">{e(meta["lead"])}</p>
-<p class="section-proof">{e(meta["proof"])}</p>
+<p class="section-proof">{_proof_html(meta)}</p>
 </header>
 <section class="lead-inline" data-commercial-route="defesa-margem" aria-label="Rota para contrato em execução">
 <div class="lead-inline-copy"><span>O prazo já está correndo</span>

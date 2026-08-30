@@ -1,20 +1,48 @@
 {
   "schema": "confenge.first-fold-contract/1.0",
-  "contract_version": "CFG-FIRST-FOLD-2026-08-27-v2",
+  "contract_version": "CFG-FIRST-FOLD-2026-08-30-v3",
   "issue": "#327",
   "rule": "O visitante é cético e concede 3 segundos. Na primeira dobra ele precisa captar, sem ajuda, as quatro respostas obrigatórias.",
   "required_answers": [
-    { "key": "what", "question": "o que a CONFENGE resolve ou entrega" },
-    { "key": "who", "question": "para quem ou para qual situação aquilo serve" },
-    { "key": "why_believe", "question": "por que há motivo verificável para acreditar" },
-    { "key": "next_action", "question": "qual é a próxima ação dominante" }
+    {
+      "key": "what",
+      "question": "o que a CONFENGE resolve ou entrega"
+    },
+    {
+      "key": "who",
+      "question": "para quem ou para qual situação aquilo serve"
+    },
+    {
+      "key": "why_believe",
+      "question": "por que há motivo verificável para acreditar"
+    },
+    {
+      "key": "next_action",
+      "question": "qual é a próxima ação dominante"
+    }
   ],
   "viewports": [
-    { "label": "mobile", "width": 390, "height": 844 },
-    { "label": "laptop", "width": 1366, "height": 768 },
-    { "label": "observado_producao_2026_08_24", "width": 1363, "height": 936 }
+    {
+      "label": "mobile",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "label": "laptop",
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "label": "observado_producao_2026_08_24",
+      "width": 1363,
+      "height": 936
+    }
   ],
-  "evidence_states": ["PENDING", "MEASURED_PASS", "MEASURED_FAIL"],
+  "evidence_states": [
+    "PENDING",
+    "MEASURED_PASS",
+    "MEASURED_FAIL"
+  ],
   "measurement_rule": "Uma superfície só pode declarar MEASURED_PASS com um registro de medição vinculado. Nenhuma superfície é aprovada por opinião ou por passar em axe, Lighthouse e overflow.",
   "human_validation": {
     "minimum_icp_sessions": 5,
@@ -26,33 +54,270 @@
     "note_pt_br": "O protocolo humano de 3 segundos ainda não foi executado. Nenhuma sessão, nenhum participante e nenhum resultado podem ser registrados aqui sem recrutamento e consentimento reais."
   },
   "census": [
-    { "route": "/", "surface_class": "home", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/entregas/", "surface_class": "money_hub", "evidence_state": "PENDING", "measurement": null, "observed_2026_08_24": "documento com cerca de 11266 px de altura; hero promove Conhecer o primeiro exemplo" },
-    { "route": "/servicos-obras-publicas/", "surface_class": "money_hub", "evidence_state": "MEASURED_PASS", "measurement": { "date": "2026-08-27", "viewport": "1366x768", "finding": "H1 de y=243 a y=341; linha de prova de y=453 a y=496; ação primária inteira de y=603 a y=653 em 1366x768, e de y=762 a y=812 em 390x844, dentro da dobra nos dois" } },
-    { "route": "/problemas-que-resolvemos/", "surface_class": "money_hub", "evidence_state": "MEASURED_PASS", "measurement": { "date": "2026-08-27", "viewport": "1366x768", "finding": "H1 de y=243 a y=390; linha de prova de y=474 a y=518; ação primária inteira de y=624 a y=674 em 1366x768, e de y=768 a y=818 em 390x844, dentro da dobra nos dois" } },
-    { "route": "/diagnostico-b2g-expansao/", "surface_class": "money_offer", "evidence_state": "MEASURED_FAIL", "measurement": { "date": "2026-08-24", "viewport": "1363x936", "finding": "preço, prazo, destinatário e CTA na primeira dobra; razão de confiança ainda declaratória e sem prova verificável" } },
-    { "route": "/diagnostico-pre-licitacao/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/auditoria-orcamento-licitacao/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/bid-room-licitacoes-obras/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/defesa-margem-contratos-publicos/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/medicoes-glosas-obras-publicas/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/aditivos-obras-publicas/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/atrasos-prorrogacao-obras-publicas/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/reequilibrio-obras-publicas/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/defesa-tecnica-contratos-publicos/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/diagnostico-b2g-360/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/acompanhamento-contratos-obras/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/diretoria-b2g/", "surface_class": "money_offer", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/casos/modelo-relatorio-inteligencia-licitacoes/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/casos/modelo-base-quantitativa-canonica/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/casos/modelo-apresentacao-executiva-resultados/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/casos/modelo-mapa-compradores-publicos/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/casos/modelo-contratos-vincendos-relicitacao/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/casos/modelo-mapeamento-concorrentes-publicos/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/casos/modelo-painel-precos-obras-publicas/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null },
-    { "route": "/casos/modelo-relatorio-executivo-consolidado/", "surface_class": "money_example", "evidence_state": "PENDING", "measurement": null }
+    {
+      "route": "/",
+      "surface_class": "home",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=146 a y=307; linha de prova de y=537 a y=558; ação primária inteira de y=419 a y=463 em 1366x768, e de y=335 a y=379 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/entregas/",
+      "surface_class": "money_hub",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=191 a y=352; linha de prova de y=454 a y=498; ação primária inteira de y=516 a y=560 em 1366x768, e de y=652 a y=696 em 390x844, dentro da dobra nos dois"
+      },
+      "observed_2026_08_24": "documento com cerca de 11266 px de altura; hero promove Conhecer o primeiro exemplo"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "surface_class": "money_hub",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=243 a y=341; linha de prova de y=425 a y=512; ação primária inteira de y=622 a y=666 em 1366x768, e de y=797 a y=841 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/problemas-que-resolvemos/",
+      "surface_class": "money_hub",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=243 a y=390; linha de prova de y=474 a y=518; ação primária inteira de y=628 a y=672 em 1366x768, e de y=761 a y=805 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=211 a y=410; linha de prova de y=531 a y=601; ação primária inteira de y=625 a y=669 em 1366x768, e de y=599 a y=643 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/diagnostico-pre-licitacao/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_FAIL",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "390x844",
+        "finding": "H1 de y=229 a y=428 em 1366x768; nenhuma linha de prova conferível na dobra em 1366x768 nem em 390x844",
+        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+      }
+    },
+    {
+      "route": "/auditoria-orcamento-licitacao/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_FAIL",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "390x844",
+        "finding": "H1 de y=229 a y=428 em 1366x768; nenhuma linha de prova conferível na dobra em 1366x768 nem em 390x844",
+        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+      }
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=211 a y=344; linha de prova de y=404 a y=474; ação primária inteira de y=498 a y=542 em 1366x768, e de y=532 a y=576 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=211 a y=543; linha de prova de y=603 a y=650; ação primária inteira de y=674 a y=718 em 1366x768, e de y=683 a y=727 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_FAIL",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "390x844",
+        "finding": "H1 de y=229 a y=428 em 1366x768; nenhuma linha de prova conferível na dobra em 1366x768 nem em 390x844",
+        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+      }
+    },
+    {
+      "route": "/aditivos-obras-publicas/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_FAIL",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "390x844",
+        "finding": "H1 de y=229 a y=561 em 1366x768; nenhuma linha de prova conferível na dobra em 1366x768 nem em 390x844",
+        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+      }
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=213 a y=389; linha de prova de y=507 a y=577; ação primária inteira de y=577 a y=621 em 1366x768, e de y=713 a y=757 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_FAIL",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "390x844",
+        "finding": "H1 de y=229 a y=495 em 1366x768; nenhuma linha de prova conferível na dobra em 1366x768 nem em 390x844",
+        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+      }
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=213 a y=345; linha de prova de y=434 a y=481; ação primária inteira de y=481 a y=525 em 1366x768, e de y=594 a y=638 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_FAIL",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "390x844",
+        "finding": "H1 de y=229 a y=362 em 1366x768; linha de prova de y=870 a y=939 em 390x844, fora da dobra de 844; ação primária inteira de y=939 a y=983 em 390x844, fora da dobra de 844",
+        "blocker": "#291 congela o HTML dos seis pilares BOFU e o styles.css como colateral de renderização até 2026-09-16, com html_mutation_authorized=false"
+      }
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=213 a y=345; linha de prova de y=434 a y=481; ação primária inteira de y=481 a y=525 em 1366x768, e de y=651 a y=695 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "surface_class": "money_offer",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=211 a y=344; linha de prova de y=434 a y=481; ação primária inteira de y=505 a y=549 em 1366x768, e de y=532 a y=576 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "surface_class": "money_example",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=220 a y=300; linha de prova de y=480 a y=520; ação primária inteira de y=536 a y=584 em 1366x768, e de y=512 a y=562 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/casos/modelo-base-quantitativa-canonica/",
+      "surface_class": "money_example",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=240 a y=320; linha de prova de y=500 a y=540; ação primária inteira de y=556 a y=604 em 1366x768, e de y=569 a y=619 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/casos/modelo-apresentacao-executiva-resultados/",
+      "surface_class": "money_example",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=210 a y=331; linha de prova de y=558 a y=597; ação primária inteira de y=613 a y=661 em 1366x768, e de y=620 a y=670 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/casos/modelo-mapa-compradores-publicos/",
+      "surface_class": "money_example",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=222 a y=342; linha de prova de y=546 a y=586; ação primária inteira de y=602 a y=650 em 1366x768, e de y=642 a y=692 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+      "surface_class": "money_example",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=278 a y=399; linha de prova de y=627 a y=667; ação primária inteira de y=683 a y=731 em 1366x768, e de y=728 a y=778 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+      "surface_class": "money_example",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=233 a y=313; linha de prova de y=518 a y=557; ação primária inteira de y=573 a y=621 em 1366x768, e de y=585 a y=635 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "surface_class": "money_example",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=222 a y=343; linha de prova de y=546 a y=585; ação primária inteira de y=601 a y=649 em 1366x768, e de y=688 a y=738 em 390x844, dentro da dobra nos dois"
+      }
+    },
+    {
+      "route": "/casos/modelo-relatorio-executivo-consolidado/",
+      "surface_class": "money_example",
+      "evidence_state": "MEASURED_PASS",
+      "measurement": {
+        "date": "2026-08-30",
+        "viewport": "1366x768",
+        "finding": "H1 de y=226 a y=346; linha de prova de y=526 a y=566; ação primária inteira de y=582 a y=630 em 1366x768, e de y=581 a y=631 em 390x844, dentro da dobra nos dois"
+      }
+    }
   ],
-  "obligated_surface_classes": ["home", "money_hub", "money_offer", "money_example"],
+  "obligated_surface_classes": [
+    "home",
+    "money_hub",
+    "money_offer",
+    "money_example"
+  ],
   "census_derivation": {
     "rule_pt_br": "O censo não é allowlist manual. O conjunto obrigado é derivado do registro público de famílias e do que está publicado no disco. Superfície comercial nova sem linha no censo reprova o gate.",
     "authority": "data/organic/public-family-registry.json",
@@ -98,14 +363,571 @@
       "max_primary_actions": 1,
       "secondary_requires_distinct_function": true,
       "rule_pt_br": "Nenhuma primeira dobra obrigada pode declarar mais de uma ação primária concorrente. Ação secundária só é aceita quando cumpre função distinta da primária.",
-      "state": "DECLARED_NOT_MEASURED",
-      "measured_surfaces": []
+      "state": "MEASURED",
+      "measured_surfaces": [
+        {
+          "route": "/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/entregas/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/servicos-obras-publicas/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/problemas-que-resolvemos/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/diagnostico-b2g-expansao/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/diagnostico-pre-licitacao/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/auditoria-orcamento-licitacao/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/bid-room-licitacoes-obras/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/defesa-margem-contratos-publicos/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/medicoes-glosas-obras-publicas/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/aditivos-obras-publicas/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/atrasos-prorrogacao-obras-publicas/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/reequilibrio-obras-publicas/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/defesa-tecnica-contratos-publicos/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/diagnostico-b2g-360/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 0
+          }
+        },
+        {
+          "route": "/acompanhamento-contratos-obras/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/diretoria-b2g/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/casos/modelo-base-quantitativa-canonica/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/casos/modelo-apresentacao-executiva-resultados/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/casos/modelo-mapa-compradores-publicos/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/casos/modelo-painel-precos-obras-publicas/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        },
+        {
+          "route": "/casos/modelo-relatorio-executivo-consolidado/",
+          "primary_actions_in_fold": {
+            "1366x768": 1,
+            "390x844": 1
+          }
+        }
+      ],
+      "measured_at": "2026-08-30"
     },
     "category_repetition": {
-      "fields": ["eyebrow", "h1", "lead"],
+      "fields": [
+        "eyebrow",
+        "h1",
+        "lead"
+      ],
       "rule_pt_br": "Eyebrow, H1 e lead não podem repetir a mesma categoria sem acrescentar informação. Repetição lexical sem decisão nova consome a primeira dobra.",
-      "state": "DECLARED_NOT_MEASURED",
-      "measured_surfaces": [],
+      "state": "MEASURED",
+      "measured_surfaces": [
+        {
+          "route": "/",
+          "ok": true,
+          "eyebrow_adds": [
+            "consultoria",
+            "contratos",
+            "licitacoes",
+            "obras"
+          ],
+          "lead_adds": [
+            "capital",
+            "construtoras",
+            "decidir",
+            "edital"
+          ]
+        },
+        {
+          "route": "/entregas/",
+          "ok": true,
+          "eyebrow_adds": [
+            "comercial",
+            "vitrine"
+          ],
+          "lead_adds": [
+            "abaixo",
+            "acao",
+            "agora",
+            "apresentadas"
+          ]
+        },
+        {
+          "route": "/servicos-obras-publicas/",
+          "ok": true,
+          "eyebrow_adds": [
+            "contrato",
+            "escolha",
+            "momento"
+          ],
+          "lead_adds": [
+            "abaixo",
+            "ciclo",
+            "confenge",
+            "decide"
+          ]
+        },
+        {
+          "route": "/problemas-que-resolvemos/",
+          "ok": true,
+          "eyebrow_adds": [
+            "comece",
+            "evento",
+            "obra",
+            "travou"
+          ],
+          "lead_adds": [
+            "abaixo",
+            "caminho",
+            "decisao",
+            "definido"
+          ]
+        },
+        {
+          "route": "/diagnostico-b2g-expansao/",
+          "ok": true,
+          "eyebrow_adds": [
+            "pontual"
+          ],
+          "lead_adds": [
+            "aceite",
+            "confirmacao",
+            "dados",
+            "dias"
+          ]
+        },
+        {
+          "route": "/diagnostico-pre-licitacao/",
+          "ok": true,
+          "eyebrow_adds": [
+            "identificado",
+            "preco",
+            "risco"
+          ],
+          "lead_adds": [
+            "analisados",
+            "atestados",
+            "contrato",
+            "cronograma"
+          ]
+        },
+        {
+          "route": "/auditoria-orcamento-licitacao/",
+          "ok": true,
+          "eyebrow_adds": [
+            "defendavel",
+            "margem",
+            "verificavel"
+          ],
+          "lead_adds": [
+            "base",
+            "composicoes",
+            "cotacoes",
+            "data"
+          ]
+        },
+        {
+          "route": "/bid-room-licitacoes-obras/",
+          "ok": true,
+          "eyebrow_adds": [
+            "obras",
+            "propostas",
+            "recorrente"
+          ],
+          "lead_adds": [
+            "coordenacao",
+            "edital",
+            "exige",
+            "improviso"
+          ]
+        },
+        {
+          "route": "/defesa-margem-contratos-publicos/",
+          "ok": true,
+          "eyebrow_adds": [
+            "protecao"
+          ],
+          "lead_adds": [
+            "enfraquece",
+            "posicao",
+            "registro"
+          ]
+        },
+        {
+          "route": "/medicoes-glosas-obras-publicas/",
+          "ok": true,
+          "eyebrow_adds": [
+            "caixa",
+            "direito",
+            "fluxo",
+            "recebimento"
+          ],
+          "lead_adds": [
+            "atrasos",
+            "capaz",
+            "criterios",
+            "documentacao"
+          ]
+        },
+        {
+          "route": "/aditivos-obras-publicas/",
+          "ok": true,
+          "eyebrow_adds": [
+            "escopo",
+            "gratuito",
+            "mudancas",
+            "trabalho"
+          ],
+          "lead_adds": [
+            "absorver",
+            "alteracao",
+            "cobertura",
+            "custo"
+          ]
+        },
+        {
+          "route": "/atrasos-prorrogacao-obras-publicas/",
+          "ok": true,
+          "eyebrow_adds": [
+            "atraso",
+            "obra",
+            "paralisacao",
+            "pedido"
+          ],
+          "lead_adds": [
+            "artigo",
+            "chuva",
+            "defesa",
+            "dossie"
+          ]
+        },
+        {
+          "route": "/reequilibrio-obras-publicas/",
+          "ok": true,
+          "eyebrow_adds": [
+            "causalidade",
+            "impacto",
+            "prova"
+          ],
+          "lead_adds": [
+            "demonstrado",
+            "estar",
+            "evento",
+            "existir"
+          ]
+        },
+        {
+          "route": "/defesa-tecnica-contratos-publicos/",
+          "ok": true,
+          "eyebrow_adds": [
+            "construtora",
+            "notificada",
+            "risco",
+            "sancao"
+          ],
+          "lead_adds": [
+            "coerente",
+            "cronologia",
+            "exito",
+            "fatos"
+          ]
+        },
+        {
+          "route": "/diagnostico-b2g-360/",
+          "ok": true,
+          "eyebrow_adds": [
+            "entrada"
+          ],
+          "lead_adds": [
+            "controle",
+            "frente",
+            "mapeie",
+            "margem"
+          ]
+        },
+        {
+          "route": "/acompanhamento-contratos-obras/",
+          "ok": true,
+          "eyebrow_adds": [
+            "apagar",
+            "execucao",
+            "incendio",
+            "obra"
+          ],
+          "lead_adds": [
+            "comunicacoes",
+            "defesa",
+            "desvio",
+            "diario"
+          ]
+        },
+        {
+          "route": "/diretoria-b2g/",
+          "ok": true,
+          "eyebrow_adds": [
+            "contratos",
+            "direcao",
+            "licitacoes",
+            "semanal"
+          ],
+          "lead_adds": [
+            "custo",
+            "decisao",
+            "interna",
+            "montar"
+          ]
+        },
+        {
+          "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+          "ok": true,
+          "eyebrow_adds": [
+            "prioritarias",
+            "radar"
+          ],
+          "lead_adds": [
+            "acao",
+            "acervo",
+            "anexos",
+            "capacidade"
+          ]
+        },
+        {
+          "route": "/casos/modelo-base-quantitativa-canonica/",
+          "ok": true,
+          "eyebrow_adds": [
+            "base",
+            "expansao",
+            "mercado"
+          ],
+          "lead_adds": [
+            "aparece",
+            "aqui",
+            "celula",
+            "derivam"
+          ]
+        },
+        {
+          "route": "/casos/modelo-apresentacao-executiva-resultados/",
+          "ok": true,
+          "eyebrow_adds": [
+            "executiva",
+            "expansao",
+            "sintese"
+          ],
+          "lead_adds": [
+            "apenas",
+            "apro",
+            "atravessa",
+            "base"
+          ]
+        },
+        {
+          "route": "/casos/modelo-mapa-compradores-publicos/",
+          "ok": true,
+          "eyebrow_adds": [
+            "maior",
+            "mapa",
+            "potencial"
+          ],
+          "lead_adds": [
+            "abord",
+            "aproximacao",
+            "comparavel",
+            "confenge"
+          ]
+        },
+        {
+          "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+          "ok": true,
+          "eyebrow_adds": [
+            "proximos",
+            "radar",
+            "renovacao"
+          ],
+          "lead_adds": [
+            "agrupa",
+            "bastante",
+            "compra",
+            "confenge"
+          ]
+        },
+        {
+          "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+          "ok": true,
+          "eyebrow_adds": [
+            "concorrentes",
+            "mapa",
+            "relevantes"
+          ],
+          "lead_adds": [
+            "comprador",
+            "confenge",
+            "contratos",
+            "dependencia"
+          ]
+        },
+        {
+          "route": "/casos/modelo-painel-precos-obras-publicas/",
+          "ok": true,
+          "eyebrow_adds": [
+            "obras",
+            "precos",
+            "publicas",
+            "referencias"
+          ],
+          "lead_adds": [
+            "anual",
+            "base",
+            "contratos",
+            "declara"
+          ]
+        },
+        {
+          "route": "/casos/modelo-relatorio-executivo-consolidado/",
+          "ok": true,
+          "eyebrow_adds": [
+            "executivo",
+            "expansao",
+            "plano"
+          ],
+          "lead_adds": [
+            "arquivos",
+            "camada",
+            "camadas",
+            "celula"
+          ]
+        }
+      ],
       "recorded_findings": [
         {
           "route": "/problemas-que-resolvemos/",
@@ -113,24 +935,49 @@
           "viewport": "1363x936",
           "finding": "o texto repete a mesma categoria no eyebrow, no H1, no title e na navegação sem acrescentar decisão"
         }
-      ]
+      ],
+      "measured_at": "2026-08-30",
+      "method_pt_br": "Palavras de conteúdo com quatro letras ou mais, sem acento e sem palavras de ligação. O eyebrow precisa trazer ao menos uma palavra que o H1 não traz, e o lead ao menos uma que eyebrow e H1 não trazem."
     }
   },
   "automation_boundary": {
-    "may_verify_pt_br": ["presença", "ordem", "viewport", "regressão de contrato"],
+    "may_verify_pt_br": [
+      "presença",
+      "ordem",
+      "viewport",
+      "regressão de contrato"
+    ],
     "may_not_declare_pt_br": "A automação nunca declara compreensão humana, confiança percebida nem aprovação de superfície. Isso depende do protocolo humano de 3 segundos.",
     "llm_and_synthetic_users_pt_br": "Nenhum LLM, usuário sintético ou screenshot test produz evidência de compreensão neste contrato."
   },
   "ownership": {
     "human_protocol_owners": [
-      { "issue": "#183", "owns_pt_br": "recrutamento e protocolo de arquitetura e navegação por tarefa" },
-      { "issue": "#184", "owns_pt_br": "recrutamento e protocolo do painel Fato Prova Impacto da home" },
-      { "issue": "#188", "owns_pt_br": "recrutamento e protocolo de compreensão da copy das ofertas" }
+      {
+        "issue": "#183",
+        "owns_pt_br": "recrutamento e protocolo de arquitetura e navegação por tarefa"
+      },
+      {
+        "issue": "#184",
+        "owns_pt_br": "recrutamento e protocolo do painel Fato Prova Impacto da home"
+      },
+      {
+        "issue": "#188",
+        "owns_pt_br": "recrutamento e protocolo de compreensão da copy das ofertas"
+      }
     ],
     "delegated_scopes": [
-      { "issue": "#295", "owns_pt_br": "comparabilidade de /entregas/" },
-      { "issue": "#300", "owns_pt_br": "ação terminal das famílias públicas" },
-      { "issue": "#267", "owns_pt_br": "paridade entre main e a superfície viva" }
+      {
+        "issue": "#295",
+        "owns_pt_br": "comparabilidade de /entregas/"
+      },
+      {
+        "issue": "#300",
+        "owns_pt_br": "ação terminal das famílias públicas"
+      },
+      {
+        "issue": "#267",
+        "owns_pt_br": "paridade entre main e a superfície viva"
+      }
     ],
     "non_restatement_pt_br": "Este contrato nomeia os donos e não repete os critérios de aceitação deles. Cada issue recebe somente a evidência que lhe pertence."
   }

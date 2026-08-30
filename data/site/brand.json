@@ -117,7 +117,12 @@
         "description": "Serviços da CONFENGE para construtoras: Diagnóstico da Operação em Obras Públicas, Diretoria Fracionada para o Mercado Público, Operação de Proposta para Licitação Crítica e defesa de margem.",
         "h1": "Serviços para licitações e contratos de obras públicas",
         "lead": "A CONFENGE instala o ciclo que decide onde disputar, com que preço entrar e o que registrar durante a obra. Cada trabalho abaixo é uma peça desse ciclo.",
-        "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde a triagem ainda decide o enquadramento, a página diz o que a triagem fecha. Exemplos completos você consulta sem cadastro."
+        "proof": "Onde o trabalho já tem preço e prazo publicados, eles aparecem na página. Onde a triagem ainda decide o enquadramento, a página diz o que a triagem fecha. Exemplos completos você consulta sem cadastro.",
+        "eyebrow": "Escolha pelo momento do contrato",
+        "proof_link": {
+          "text": "Exemplos completos",
+          "href": "/casos/"
+        }
       },
       "problems": {
         "label": "Problemas que resolvemos",
@@ -126,7 +131,12 @@
         "description": "Edital e orçamento, medição e glosa, aditivo, atraso, reequilíbrio e defesa técnica: escolha o problema do seu contrato e veja o caminho técnico.",
         "h1": "Problemas que resolvemos em licitações e contratos de obras",
         "lead": "Cada problema abaixo tem um caminho técnico definido: o que registrar, com qual documento e qual decisão vem depois.",
-        "proof": "Quatro ferramentas públicas calculam limite de aditivo, atraso, reequilíbrio e risco de margem sem cadastro."
+        "proof": "Quatro ferramentas públicas calculam limite de aditivo, atraso, reequilíbrio e risco de margem sem cadastro.",
+        "eyebrow": "Comece pelo evento que travou a obra",
+        "proof_link": {
+          "text": "Quatro ferramentas públicas",
+          "href": "/ferramentas/"
+        }
       }
     }
   },
