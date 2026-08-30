@@ -37,6 +37,15 @@ SKIP_DIRS = (
     "docs/evidence",
     # gate fixtures must never keep a real class alive
     "scripts/site/fixtures",
+    # Design prototypes (#494). This path is contractually non-public:
+    # `scripts/pseo/build_site.py` names it `PROTOTYPE_SOURCE_DIR`, strips it
+    # from `_site` and fails the build if anything under it reaches the
+    # artifact, and `test:prototype-isolation` asserts that. CSS that can never
+    # ship is not public CSS, so it must neither spend the decoration ceiling
+    # nor keep a dead public class alive — the same reason fixtures are
+    # excluded one line above. `test_audit_css_usage.py` pins this string to
+    # `PROTOTYPE_SOURCE_DIR` so the two cannot drift.
+    "docs/design-audit/prototypes",
 )
 # Bundles whose class inventory is tracked selector by selector.
 AUDITED_BUNDLES = ("styles.css", "entregas/styles.css")

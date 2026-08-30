@@ -18,11 +18,14 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts.pseo.build_site import PROTOTYPE_SOURCE_DIR  # noqa: E402
 from scripts.site.audit_css_usage import (  # noqa: E402
+    SKIP_DIRS,
     audit,
     class_selectors,
     decoration_counts,
     is_test_path,
+    public_css_files,
     unused_classes,
     used_classes,
 )
@@ -97,6 +100,32 @@ def test_shipped_audit_reports_every_bundle_and_no_orphan_stylesheet() -> None:
     assert set(result["bundles"]) == {"styles.css", "entregas/styles.css"}
     assert result["unreferenced_css_files"] == [], result["unreferenced_css_files"]
     assert result["public_css_files"], "no public stylesheet found"
+
+
+def test_design_prototypes_are_outside_the_public_css_scope() -> None:
+    """A prototype stylesheet may not spend the public decoration ceiling.
+
+    The path is contractually non-public: `build_site.py` strips it from
+    `_site` and fails the build if it appears there. Counting its radius and
+    shadow against the visitor's budget would charge for bytes the visitor
+    never receives, and would make the ceiling unusable for the very
+    comparison work the path exists to hold (#494). Pinned to the build's own
+    constant so the exclusion cannot drift away from the isolation contract.
+    """
+    assert PROTOTYPE_SOURCE_DIR in SKIP_DIRS, SKIP_DIRS
+    prototypes = [rel for rel in public_css_files(ROOT) if rel.startswith(PROTOTYPE_SOURCE_DIR + "/")]
+    assert prototypes == [], prototypes
+    # And the exclusion must be real on disk, not vacuously true.
+    on_disk = sorted((ROOT / PROTOTYPE_SOURCE_DIR).rglob("*.css"))
+    assert on_disk, "no prototype stylesheet to exclude; the assertion would prove nothing"
+
+
+def test_prototype_markup_does_not_keep_a_public_class_alive() -> None:
+    """Same rule as the gate fixtures: a prototype must not resurrect dead CSS."""
+    used = used_classes(ROOT)
+    for name, sources in used.items():
+        for rel in sources:
+            assert not rel.startswith(PROTOTYPE_SOURCE_DIR + "/"), f"{name} kept alive by {rel}"
 
 
 if __name__ == "__main__":
