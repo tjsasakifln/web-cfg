@@ -165,7 +165,12 @@ for (const name of contract.observedOnlyNames()) {
     fail("analytics_module_missing_observed_only", name);
   }
 }
-if (!classified.journey_nav_click || classified.journey_nav_click !== "retire") {
+// `classified` so contem nomes encontrados como produtores no fonte. A
+// aposentadoria de journey_nav_click terminou em 2026-08-30: a home passou a
+// emitir cta_click no lugar, e o evento nao tem mais nenhum uso vivo. Ausencia
+// e o estado final correto de uma retirada. O guarda continua mordendo se
+// alguem reintroduzir o nome com qualquer classificacao que nao seja "retire".
+if (classified.journey_nav_click && classified.journey_nav_click !== "retire") {
   fail("journey_nav_click_not_retired", classified.journey_nav_click);
 }
 if (!inventory.retired.some((r) => r.name === "journey_nav_click")) {
