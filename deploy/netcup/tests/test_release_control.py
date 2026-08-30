@@ -261,6 +261,47 @@ def test_retention_gate_and_runner_are_sha_bound_without_a_legacy_executor(
         schedule.validate_gate(host, "storage-retention")
 
 
+def test_schedule_runner_refuses_release_flip_after_gate_validation(
+    host: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    called = False
+
+    monkeypatch.setattr(
+        schedule,
+        "validate_gate",
+        lambda _root, _job: {"authorized_release_sha": SHA_A},
+    )
+    monkeypatch.setattr(
+        schedule,
+        "runtime_environment",
+        lambda _root: (
+            host / "releases" / SHA_B,
+            {"CONFENGE_STORAGE_DIR": "/var/lib/confenge-web"},
+        ),
+    )
+
+    def fake_run_retention(*_args: object) -> int:
+        nonlocal called
+        called = True
+        return 0
+
+    monkeypatch.setattr(schedule, "run_retention", fake_run_retention)
+
+    assert schedule.main(["storage-retention"]) == 78
+    assert called is False
+
+
+def test_schedule_gate_rejects_non_object_json(host: Path) -> None:
+    shared = host / "shared"
+    shared.mkdir(parents=True)
+    gate_path = shared / "schedule-cutover.json"
+    gate_path.write_text("[]\n", encoding="utf-8")
+    gate_path.chmod(0o640)
+
+    with pytest.raises(control.ReleaseError, match="gate is invalid"):
+        schedule.validate_gate(host, "storage-retention")
+
+
 def test_retention_lock_is_exclusive_and_non_blocking(host: Path) -> None:
     (host / "shared").mkdir(parents=True)
     first = schedule.acquire_job_lock(host, "storage-retention")

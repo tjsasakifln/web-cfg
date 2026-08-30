@@ -53,9 +53,13 @@ def validate_gate(root: Path, job: str) -> dict[str, object]:
     finally:
         if descriptor >= 0:
             os.close(descriptor)
+    if not isinstance(gate, dict):
+        raise ReleaseError("schedule cutover gate is invalid")
     current = read_release_link(root, "current")
     legacy = gate.get("legacy_executor") or {}
     jobs = gate.get("jobs") or {}
+    if not isinstance(legacy, dict) or not isinstance(jobs, dict):
+        raise ReleaseError("schedule cutover gate is invalid")
     if (
         gate.get("schema") != "confenge.schedule-cutover/v1"
         or gate.get("authorized_release_sha") != current
@@ -128,8 +132,10 @@ def main(argv: list[str] | None = None) -> int:
     job = args[0] if len(args) == 1 else ""
     try:
         root = release_root()
-        validate_gate(root, job)
+        gate = validate_gate(root, job)
         release, env = runtime_environment(root)
+        if release.name != gate.get("authorized_release_sha"):
+            raise ReleaseError("scheduled job release changed after authorization")
         os.chdir(release)
         if job == RETENTION_JOB:
             return run_retention(root, release, env)
