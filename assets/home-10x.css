@@ -1165,6 +1165,11 @@ html.no-js body[data-content-cluster="home"] .evidence-tabs{display:none}
   }
   body[data-content-cluster="home"] main>section[data-section-archetype]>.container{order:1}
   body[data-content-cluster="home"] .band-key .c-val{color:var(--text);font-weight:600}
+  /* Na vista de célula o registro entinta para papel — mas a faixa de captura
+   * é a única superfície escura da folha, e tinta sobre navy dá 1,43:1. */
+  body[data-content-cluster="home"] .contact-section .band-key .c-val{color:#c9d6e2}
+  body[data-content-cluster="home"] .contact-section .band-key .c-lab{color:#93a6b8}
+  body[data-content-cluster="home"] .contact-section .band-key{border-top-color:rgba(255,255,255,.18)}
 }
 
 
