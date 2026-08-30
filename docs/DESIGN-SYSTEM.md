@@ -90,6 +90,7 @@ Ver `forbidden_patterns` em `design-system.json`. Resumo operacional:
 - Linguagem de governança editorial no HTML público
 - Dashboard SaaS fictício, stock genérico, métricas inventadas
 - Mais de duas seções consecutivas com o mesmo arquétipo **ou com o mesmo esqueleto**
+- Deslocamento vertical em `:hover` (hover lift) — ver [Movimento](#movimento)
 
 ## Arquétipos fora da home
 
@@ -109,6 +110,23 @@ Nessas páginas o gate reprova:
 Rotular é declaração, não disfarce: se duas seções são estruturalmente iguais, a terceira precisa
 mudar de composição, não de nome. Para incluir uma página nova, acrescente o caminho relativo a
 `archetype_gated_surfaces`.
+
+### Rollout escalonado da cobertura
+
+`data/site/archetype-gate-rollout.json` é o inventário das 260 rotas públicas com `<main>`: o
+estado de cada rota, o motivo medido de quem ainda não entra no gate, o plano por família, os
+bloqueios de composição e as exceções datadas. Regras do rollout (issue #509):
+
+1. uma família por PR, começando pela menor;
+2. a anotação `data-section-archetype` entra na fonte que gera a página, nunca no artefato;
+3. o caminho entra em `archetype_gated_surfaces` no mesmo PR da anotação;
+4. o que não couber no ciclo vira exceção route-exact, datada, com dono, motivo e `expires_at`
+   — nunca um glob, nunca um diretório.
+
+A maior cohorte fora do gate hoje não é falta de anotação: nas rotas com
+`<div class="container article-layout">` o corpo editorial é neto de `<main>`, então o scanner
+enxerga um único bloco narrativo e a rota reprova por contagem antes de qualquer arquétipo.
+Resolver isso é decisão de composição, registrada como bloqueio no arquivo de rollout.
 
 ## Copy pública
 
@@ -131,6 +149,30 @@ Permitido: `Engenheiro Civil e consultor B2G` ou `Engenheiro Civil e diretor da 
 ## Movimento
 
 Entrada sutil, foco de etapa, revelação de linha. Sem parallax exagerado, contadores falsos ou animação contínua. Sempre `prefers-reduced-motion`.
+
+### Sem hover lift (regra, não convenção)
+
+Nenhum elemento se desloca na vertical sob o ponteiro. `hover` não é evento de
+elevação: é mudança de estado. O feedback vem de cor, borda, sublinhado ou
+sombra — nunca de `translateY`, `translate3d`, `margin` negativa ou `top`
+deslocado em `:hover`.
+
+- Padrão proibido: `hover_lift_translate_on_pointer` em `forbidden_patterns`.
+- Deslocamento **horizontal** curto de uma seta que aponta para o destino
+  (`.text-link:hover .icon`, `.contact-channels>a:hover`) continua permitido:
+  é direção, não elevação. Segue neutralizado em `prefers-reduced-motion`.
+- O elemento de contato (`.whatsapp-float`) mantém affordance de hover por
+  fundo e borda, foco visível pelo anel global, e alvo de 56 px.
+
+**Como o gate decide.** Regex em `styles.css` não serve: o arquivo já carregou
+lifts que uma declaração posterior cancelava (o regex reprovaria regras que o
+visitante nunca viu) e carregou um lift cujo `transform:none` só existia dentro
+de `@media (prefers-reduced-motion:reduce)` (o regex aprovaria). A regra é
+medida no render, em `hoverLiftFindings` de
+`scripts/site/rendered_layout_truth.mjs`: `page.hover()` e diff de
+`getBoundingClientRect()` em espaço de documento, emitindo
+`hover_lift <seletor> <dy>px`. Roda em `npm run test:ui`, com fixture negativa
+`scripts/site/fixtures/truthful_gates/hover-lift.html` provando que morde.
 
 ## Como não voltar ao genérico
 

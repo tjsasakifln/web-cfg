@@ -1,0 +1,2740 @@
+{
+  "schema_version": "1.0.0",
+  "as_of": "2026-08-30",
+  "owner": "CONFENGE INBOUND ENGINE",
+  "owner_issue": 509,
+  "purpose": "Inventário e plano escalonado de cobertura do gate de arquétipo e esqueleto (scripts/site/test_design_gates.py::test_section_archetype_gate_covers_more_than_the_home) sobre a superfície pública inteira.",
+  "policy": "Uma família por PR, começando pela menor. Anotar data-section-archetype na fonte que gera a página, nunca no artefato. O caminho entra em data/site/design-system.json → archetype_gated_surfaces no mesmo PR da anotação. Se duas seções são estruturalmente iguais, a terceira muda de composição, não de rótulo: renomear arquétipo para escapar do gate de esqueleto não é permitido. O que não couber no ciclo vira exceção route-exact, datada, com dono e motivo escrito — nunca um glob e nunca um diretório.",
+  "how_to_refresh": "Reexecutar a classificação com scripts/site/test_design_gates.py::narrative_blocks sobre cada *.html publicado; os campos blocks, skeleton_run e primary_ctas são os três limites que o gate aplica hoje.",
+  "states": {
+    "gated": "A rota está em archetype_gated_surfaces e o gate de arquétipo e esqueleto roda nela a cada CI.",
+    "ready": "A rota já satisfaz as pré-condições do gate (5+ blocos narrativos de topo em <main>, esqueleto sem 3 repetições seguidas, no máximo 4 CTAs primários). Falta apenas anotar data-section-archetype e acrescentar o caminho — trabalho de um PR por família.",
+    "blocked_primary_cta": "A rota tem 5+ blocos narrativos, mas mais de 4 CTAs primários. O gate reprova por primary_cta_overuse antes de olhar arquétipo. Reduzir CTA é decisão de conversão, não de anotação.",
+    "blocked_skeleton_run": "A rota tem 3 ou mais blocos seguidos com esqueleto idêntico. Só recomposição resolve; renomear arquétipo seria falsificar o rótulo.",
+    "blocked_container_wrapped": "O corpo da rota vive dentro de um único <div class=\"container\"> filho de <main>, então o scanner enxerga menos de 5 blocos narrativos de topo. Elevar as seções para filhas diretas de <main> é mudança de composição.",
+    "blocked_article_layout": "A rota usa o esqueleto de artigo: <nav class=\"breadcrumbs\"> + <header class=\"content-hero article-hero\"> + <div class=\"container article-layout\">. Todo o corpo editorial é neto de <main>, então _NarrativeBlockScanner registra 1 bloco e a asserção de 5 blocos reprova antes de qualquer arquétipo. Esta é a cohorte grande da issue #509."
+  },
+  "blockers": [
+    {
+      "id": "article_layout_body_is_a_grandchild_of_main",
+      "routes": 162,
+      "measured": "O corpo editorial fica em <div class=\"container article-layout\"><article class=\"article-main\">, filho de <main>. _NarrativeBlockScanner só registra blocos narrativos em main_depth 0, então a rota inteira aparece como 1 bloco e reprova na asserção de 5 blocos antes de qualquer arquétipo.",
+      "consequence": "Anotar esta cohorte hoje não a torna gateável: a anotação seria inerte e a rota continuaria reprovando por contagem de blocos.",
+      "decision_needed": "Ou o corpo do artigo sobe para filho direto de <main>, ou o scanner passa a descer no article-layout. As duas são mudanças de mecanismo/composição e pertencem ao canário de #493, depois da decisão de #494. A issue #509 não redesenha composição.",
+      "review_at": "2026-11-30"
+    },
+    {
+      "id": "body_wrapped_in_a_single_container_div",
+      "routes": 59,
+      "measured": "As seções vivem dentro de um único <div class=\"container\"> filho de <main>, com o mesmo efeito de contagem.",
+      "decision_needed": "Elevar as seções a filhas diretas de <main>, família por família, sem alterar copy nem URL.",
+      "review_at": "2026-11-30"
+    },
+    {
+      "id": "primary_cta_overuse_blocks_the_archetype_gate",
+      "routes": 8,
+      "measured": "Rotas com 5 ou mais CTAs primários. O gate reprova por primary_cta_overuse mesmo com arquétipos corretos.",
+      "decision_needed": "Reduzir CTA primário é decisão de conversão, com dono comercial; não é anotação de design.",
+      "review_at": "2026-11-30"
+    }
+  ],
+  "exceptions": [
+    {
+      "route": "analises-contratos-publicos/index.html",
+      "owner_issue": 509,
+      "owner": "CONFENGE INBOUND ENGINE",
+      "declared_at": "2026-08-30",
+      "expires_at": "2026-11-30",
+      "reason": "O hub da família anotada em #509 mantém método, byline e listagem dentro de um único <div class=\"container\">, então expõe 2 blocos narrativos de topo e não alcança o mínimo de 5 do gate. O cabeçalho e o bloco de autoria já estão anotados na fonte (scripts/contract_analysis/render.py::render_hub_html); o que falta é elevar método e listagem a seções irmãs, o que é recomposição e não cabe no ciclo desta issue. A exceção é route-exact: uma rota nova da família continua reprovando."
+    }
+  ],
+  "summary": {
+    "routes_scanned": 260,
+    "state_counts": {
+      "blocked_article_layout": 162,
+      "blocked_container_wrapped": 59,
+      "blocked_primary_cta": 8,
+      "blocked_skeleton_run": 1,
+      "gated": 8,
+      "ready": 22
+    },
+    "gated_before_509": 2,
+    "gated_after_509": 8
+  },
+  "families": [
+    {
+      "id": "conteudos",
+      "routes": 121,
+      "state_counts": {
+        "blocked_article_layout": 120,
+        "ready": 1
+      },
+      "plan": "121 rotas. 120 no esqueleto de artigo, mais o hub /conteudos/ pronto para gate. Plano: (1) PR curto gateando só conteudos/index.html; (2) a cohorte de artigos só entra depois que a composição do corpo editorial for decidida — ver blocker article_layout_body_is_a_grandchild_of_main."
+    },
+    {
+      "id": "piloto",
+      "routes": 24,
+      "state_counts": {
+        "blocked_container_wrapped": 9,
+        "ready": 15
+      },
+      "plan": "24 rotas. 15 páginas de mercado, concorrência e órgão já têm 5 seções de topo distintas e 1 CTA primário: são a maior cohorte pronta para anotação em bloco. As 9 restantes (hubs) estão embrulhadas em container."
+    },
+    {
+      "id": "inteligencia",
+      "routes": 23,
+      "state_counts": {
+        "blocked_article_layout": 16,
+        "blocked_container_wrapped": 7
+      },
+      "plan": "23 rotas, nenhuma elegível hoje: 16 no esqueleto de artigo e 7 embrulhadas em container. Depende da mesma decisão de composição de conteudos."
+    },
+    {
+      "id": "casos",
+      "routes": 11,
+      "state_counts": {
+        "blocked_container_wrapped": 11
+      },
+      "plan": "11 rotas, todas embrulhadas em container. Elevar as seções de caso a filhas diretas de <main> é pré-requisito."
+    },
+    {
+      "id": "radar",
+      "routes": 10,
+      "state_counts": {
+        "blocked_article_layout": 7,
+        "blocked_container_wrapped": 2,
+        "blocked_skeleton_run": 1
+      },
+      "plan": "10 rotas. 7 no esqueleto de artigo, 2 embrulhadas em container e 1 (radar/pesquisa/edicao-zero-4uf/) com 8 blocos seguidos de esqueleto idêntico — recomposição real, não rótulo."
+    },
+    {
+      "id": "lei-14133-obras",
+      "routes": 8,
+      "state_counts": {
+        "blocked_article_layout": 7,
+        "blocked_container_wrapped": 1
+      },
+      "plan": "8 rotas: 7 no esqueleto de artigo, 1 hub embrulhado em container."
+    },
+    {
+      "id": "analises-contratos-publicos",
+      "routes": 7,
+      "state_counts": {
+        "blocked_container_wrapped": 1,
+        "gated": 6
+      },
+      "plan": "7 rotas. As 6 análises estão anotadas na fonte (scripts/contract_analysis/render.py → ARCHETYPE_BY_SECTION_ID) e dentro do gate desde a issue #509. O hub tem exceção datada."
+    },
+    {
+      "id": "(root)",
+      "routes": 6,
+      "state_counts": {
+        "blocked_container_wrapped": 5,
+        "gated": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "ferramentas",
+      "routes": 5,
+      "state_counts": {
+        "blocked_container_wrapped": 5
+      },
+      "plan": "5 rotas embrulhadas em container. Ferramenta é superfície funcional; a recomposição vem depois das rotas editoriais."
+    },
+    {
+      "id": "guias-contratos-obras",
+      "routes": 5,
+      "state_counts": {
+        "blocked_article_layout": 4,
+        "blocked_container_wrapped": 1
+      },
+      "plan": "5 rotas: 4 no esqueleto de artigo, 1 hub embrulhado em container."
+    },
+    {
+      "id": "diagnostico-b2g-expansao",
+      "routes": 4,
+      "state_counts": {
+        "blocked_container_wrapped": 4
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "comercial",
+      "routes": 3,
+      "state_counts": {
+        "blocked_container_wrapped": 2,
+        "ready": 1
+      },
+      "plan": "3 rotas: comercial/radar-decisorio/ está pronta para gate; as outras 2 estão embrulhadas em container."
+    },
+    {
+      "id": "politica-editorial",
+      "routes": 3,
+      "state_counts": {
+        "blocked_article_layout": 3
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "jurisprudencia-contratos-obras",
+      "routes": 2,
+      "state_counts": {
+        "blocked_article_layout": 1,
+        "blocked_container_wrapped": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "nurture",
+      "routes": 2,
+      "state_counts": {
+        "blocked_container_wrapped": 2
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "panorama-mercado-obras-publicas",
+      "routes": 2,
+      "state_counts": {
+        "blocked_container_wrapped": 1,
+        "ready": 1
+      },
+      "plan": "2 rotas: a edição publicada está pronta para gate; o hub está embrulhado em container."
+    },
+    {
+      "id": "acompanhamento-contratos-obras",
+      "routes": 1,
+      "state_counts": {
+        "blocked_primary_cta": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "aditivos-obras-publicas",
+      "routes": 1,
+      "state_counts": {
+        "ready": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "atrasos-prorrogacao-obras-publicas",
+      "routes": 1,
+      "state_counts": {
+        "blocked_primary_cta": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "auditoria-orcamento-licitacao",
+      "routes": 1,
+      "state_counts": {
+        "ready": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "bid-room-licitacoes-obras",
+      "routes": 1,
+      "state_counts": {
+        "blocked_primary_cta": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "confianca",
+      "routes": 1,
+      "state_counts": {
+        "blocked_article_layout": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "conflitos",
+      "routes": 1,
+      "state_counts": {
+        "blocked_article_layout": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "correcoes",
+      "routes": 1,
+      "state_counts": {
+        "blocked_article_layout": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "defesa-margem-contratos-publicos",
+      "routes": 1,
+      "state_counts": {
+        "blocked_primary_cta": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "defesa-tecnica-contratos-publicos",
+      "routes": 1,
+      "state_counts": {
+        "blocked_primary_cta": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "diagnostico-b2g-360",
+      "routes": 1,
+      "state_counts": {
+        "blocked_primary_cta": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "diagnostico-pre-licitacao",
+      "routes": 1,
+      "state_counts": {
+        "ready": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "diretoria-b2g",
+      "routes": 1,
+      "state_counts": {
+        "blocked_primary_cta": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "entregas",
+      "routes": 1,
+      "state_counts": {
+        "gated": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "especialista",
+      "routes": 1,
+      "state_counts": {
+        "blocked_container_wrapped": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "imprensa",
+      "routes": 1,
+      "state_counts": {
+        "blocked_container_wrapped": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "medicoes-glosas-obras-publicas",
+      "routes": 1,
+      "state_counts": {
+        "ready": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "metodologia-inteligencia",
+      "routes": 1,
+      "state_counts": {
+        "blocked_container_wrapped": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "privacidade",
+      "routes": 1,
+      "state_counts": {
+        "blocked_container_wrapped": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "problemas-que-resolvemos",
+      "routes": 1,
+      "state_counts": {
+        "blocked_container_wrapped": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "reequilibrio-obras-publicas",
+      "routes": 1,
+      "state_counts": {
+        "blocked_primary_cta": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "servicos-obras-publicas",
+      "routes": 1,
+      "state_counts": {
+        "blocked_container_wrapped": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "termos-de-uso",
+      "routes": 1,
+      "state_counts": {
+        "blocked_container_wrapped": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    },
+    {
+      "id": "uso-de-ia",
+      "routes": 1,
+      "state_counts": {
+        "blocked_article_layout": 1
+      },
+      "plan": "Família pequena. O estado por rota está em routes[]; a rota entra no gate no PR que anotar a família a que pertence."
+    }
+  ],
+  "routes": [
+    {
+      "path": "404.html",
+      "family": "(root)",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "acompanhamento-contratos-obras/index.html",
+      "family": "acompanhamento-contratos-obras",
+      "state": "blocked_primary_cta",
+      "narrative_blocks": 10,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "aditivos-obras-publicas/index.html",
+      "family": "aditivos-obras-publicas",
+      "state": "ready",
+      "narrative_blocks": 12,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
+      "family": "analises-contratos-publicos",
+      "state": "gated",
+      "narrative_blocks": 18,
+      "annotated_blocks": 18,
+      "longest_identical_skeleton_run": 2,
+      "primary_ctas": 3
+    },
+    {
+      "path": "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
+      "family": "analises-contratos-publicos",
+      "state": "gated",
+      "narrative_blocks": 17,
+      "annotated_blocks": 17,
+      "longest_identical_skeleton_run": 2,
+      "primary_ctas": 2
+    },
+    {
+      "path": "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
+      "family": "analises-contratos-publicos",
+      "state": "gated",
+      "narrative_blocks": 19,
+      "annotated_blocks": 19,
+      "longest_identical_skeleton_run": 2,
+      "primary_ctas": 3
+    },
+    {
+      "path": "analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html",
+      "family": "analises-contratos-publicos",
+      "state": "gated",
+      "narrative_blocks": 18,
+      "annotated_blocks": 18,
+      "longest_identical_skeleton_run": 2,
+      "primary_ctas": 3
+    },
+    {
+      "path": "analises-contratos-publicos/index.html",
+      "family": "analises-contratos-publicos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 2,
+      "annotated_blocks": 2,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html",
+      "family": "analises-contratos-publicos",
+      "state": "gated",
+      "narrative_blocks": 18,
+      "annotated_blocks": 18,
+      "longest_identical_skeleton_run": 2,
+      "primary_ctas": 3
+    },
+    {
+      "path": "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html",
+      "family": "analises-contratos-publicos",
+      "state": "gated",
+      "narrative_blocks": 21,
+      "annotated_blocks": 21,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "atrasos-prorrogacao-obras-publicas/index.html",
+      "family": "atrasos-prorrogacao-obras-publicas",
+      "state": "blocked_primary_cta",
+      "narrative_blocks": 13,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 6
+    },
+    {
+      "path": "auditoria-orcamento-licitacao/index.html",
+      "family": "auditoria-orcamento-licitacao",
+      "state": "ready",
+      "narrative_blocks": 11,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "bid-room-licitacoes-obras/index.html",
+      "family": "bid-room-licitacoes-obras",
+      "state": "blocked_primary_cta",
+      "narrative_blocks": 8,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 2,
+      "primary_ctas": 5
+    },
+    {
+      "path": "casos/aditivo-art125-demonstrativo/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 3
+    },
+    {
+      "path": "casos/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 3,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "casos/medicao-glosa-demonstrativo/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 3
+    },
+    {
+      "path": "casos/modelo-apresentacao-executiva-resultados/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 4,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "casos/modelo-base-quantitativa-canonica/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 4,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "casos/modelo-contratos-vincendos-relicitacao/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 4,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "casos/modelo-mapa-compradores-publicos/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 4,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 4,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "casos/modelo-painel-precos-obras-publicas/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 4,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "casos/modelo-relatorio-executivo-consolidado/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 4,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+      "family": "casos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 4,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "comercial/privacidade-leads/index.html",
+      "family": "comercial",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 0
+    },
+    {
+      "path": "comercial/radar-decisorio/index.html",
+      "family": "comercial",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "comercial/termos-diagnostico-b2g/index.html",
+      "family": "comercial",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 0
+    },
+    {
+      "path": "confianca/index.html",
+      "family": "confianca",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 2,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "conflitos/index.html",
+      "family": "conflitos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 2,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "conteudos/aceleracao-obra-publica-custo-adicional/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/aditivo-empreitada-por-preco-global/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/aditivo-qualitativo-quantitativo/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/administracao-local-orcamento-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/administracao-local-prolongada-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/analise-edital-obra-publica-construtora/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/ata-reuniao-ordem-servico-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "conteudos/atraso-obra-culpa-administracao/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "conteudos/atraso-pagamento-contrato-publico-suspender/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "conteudos/atraso-projeto-executivo-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/auditoria-contrato-obra-publica-mensal/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/aumento-material-reequilibrio-contrato-publico/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/bdi-diferenciado-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 6
+    },
+    {
+      "path": "conteudos/bdi-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/calculo-reequilibrio-economico-financeiro/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/capacidade-tecnica-operacional-profissional-licitacao/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "conteudos/clausula-matriz-risco-abusiva-edital/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/como-provar-atraso-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/compensacao-acrescimo-supressao-aditivo/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/composicao-propria-preco-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/comprovacao-exequibilidade-proposta-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/comunicacao-fiscal-contrato-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/consorcio-subcontratacao-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/consultoria-b2g-engenharia-construtora/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/consultoria-contrato-obra-publica-construtora/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/contratacao-integrada-semi-integrada-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/controle-mudancas-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/cotacao-mercado-orcamento-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/criterio-de-medicao-nao-previsto-contrato/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/cronograma-fisico-financeiro-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/cronologia-contrato-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/culpa-sancao-atraso-contrato-publico/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/curva-abc-orcamento-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/curva-abc-reequilibrio-contrato/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/custos-indiretos-atraso-administracao-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/data-base-orcamento-reajuste-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/defesa-processo-sancionador-contrato-publico/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/demolicao-nao-prevista-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/demora-decisao-administracao-contrato-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/desagio-licitacao-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/desconto-da-proposta-em-item-novo-aditivo/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/diario-de-obra-pleito-contrato-publico/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/divergencia-diario-obra-fiscalizacao/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/divergencia-quantitativo-medicao-as-built/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/documentos-reequilibrio-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/dosimetria-multa-contrato-administrativo/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/empreitada-preco-global-preco-unitario/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/erro-de-projeto-gera-aditivo-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/erros-comunicacao-contrato-publico-construtora/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/evento-previsivel-consequencias-incalculaveis-reequilibrio/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/extincao-contrato-culpa-administracao/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/extincao-contrato-obra-publica-pelo-contratado/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/fiscal-mandou-executar-sem-aditivo/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "conteudos/frente-de-servico-nao-liberada-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/garantia-proposta-licitacao-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/gestao-contrato-obra-publica-indicadores/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/glosa-de-medicao-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/glosa-por-qualidade-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "conteudos/impedimento-de-licitar-construtora/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/indenizacao-servico-extracontratual-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/index.html",
+      "family": "conteudos",
+      "state": "ready",
+      "narrative_blocks": 6,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "conteudos/interferencia-concessionaria-obra-publica-atraso/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/jogo-de-planilha-aditivo-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/juros-atraso-pagamento-contrato-administrativo/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/limite-aditivo-25-50-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 6
+    },
+    {
+      "path": "conteudos/manutencao-habilitacao-contrato-publico/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/matriz-de-riscos-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/medicao-de-obra-publica-rejeitada/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/medicao-por-evento-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "conteudos/mobilizacao-desmobilizacao-orcamento-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/mudanca-metodo-construtivo-obra-publica-aditivo/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/multa-atraso-parcial-contrato-publico/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/multa-contrato-obra-publica-defesa/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/notas-fiscais-reequilibrio-contrato/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/notificacao-impacto-prazo-custo-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/orcamento-incompleto-edital-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/orcamento-sigiloso-licitacao-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/ordem-paralisacao-obra-publica-custos/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/pagamento-contrato-publico-certidao-vencida/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/pagamento-parcial-etapa-empreitada-global/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "conteudos/parcela-incontroversa-medicao-contrato-publico/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/pedido-de-reequilibrio-negado/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/pedido-prorrogacao-prazo-antes-vencimento/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/plano-recuperacao-obra-atrasada/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/pleito-tecnico-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/prazo-vigencia-prazo-execucao-contrato-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/preco-de-item-novo-aditivo-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/preco-unitario-acima-referencia-proposta-global/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/produtividade-sinapi-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/projeto-basico-incompleto-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/proposta-inexequivel-obra-publica-lei-14133/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/prorrogacao-prazo-obra-publica-documentos/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "conteudos/prova-custos-adicionais-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/prova-de-medicao-diario-de-obra-fotos/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/quantitativo-insuficiente-planilha-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/reajuste-repactuacao-reequilibrio-diferenca/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/recuperar-contrato-obra-publica-problematico/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/recurso-inabilitacao-tecnica-licitacao/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/reequilibrio-antes-da-prorrogacao-contrato/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/reequilibrio-apos-fim-do-contrato/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/reequilibrio-economico-financeiro-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/reequilibrio-empreitada-preco-global/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/registro-contemporaneo-pleito-obra/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/reprogramacao-cronograma-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/rescisao-unilateral-contrato-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/resposta-notificacao-atraso-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "conteudos/seguro-garantia-execucao-contrato-publico/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/servico-executado-sem-projeto-aprovado/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/servico-executado-sem-termo-aditivo/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/servico-nao-previsto-na-planilha-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/sinapi-desonerado-nao-desonerado/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 8
+    },
+    {
+      "path": "conteudos/sinapi-ou-sicro-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/subcontratacao-obra-publica-autorizacao/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/suspensao-execucao-contrato-publico-contratado/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/tributos-bdi-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/troca-responsavel-tecnico-contrato-publico/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "conteudos/visita-tecnica-licitacao-obra-publica/index.html",
+      "family": "conteudos",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "correcoes/index.html",
+      "family": "correcoes",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 2,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "defesa-margem-contratos-publicos/index.html",
+      "family": "defesa-margem-contratos-publicos",
+      "state": "blocked_primary_cta",
+      "narrative_blocks": 10,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 6
+    },
+    {
+      "path": "defesa-tecnica-contratos-publicos/index.html",
+      "family": "defesa-tecnica-contratos-publicos",
+      "state": "blocked_primary_cta",
+      "narrative_blocks": 12,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 6
+    },
+    {
+      "path": "diagnostico-b2g-360/index.html",
+      "family": "diagnostico-b2g-360",
+      "state": "blocked_primary_cta",
+      "narrative_blocks": 12,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "diagnostico-b2g-expansao/cancelado/index.html",
+      "family": "diagnostico-b2g-expansao",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 0
+    },
+    {
+      "path": "diagnostico-b2g-expansao/expirado/index.html",
+      "family": "diagnostico-b2g-expansao",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 0
+    },
+    {
+      "path": "diagnostico-b2g-expansao/index.html",
+      "family": "diagnostico-b2g-expansao",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 4,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "diagnostico-b2g-expansao/obrigado/index.html",
+      "family": "diagnostico-b2g-expansao",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 0
+    },
+    {
+      "path": "diagnostico-pre-licitacao/index.html",
+      "family": "diagnostico-pre-licitacao",
+      "state": "ready",
+      "narrative_blocks": 10,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "diretoria-b2g/index.html",
+      "family": "diretoria-b2g",
+      "state": "blocked_primary_cta",
+      "narrative_blocks": 9,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 2,
+      "primary_ctas": 5
+    },
+    {
+      "path": "entregas/index.html",
+      "family": "entregas",
+      "state": "gated",
+      "narrative_blocks": 5,
+      "annotated_blocks": 5,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "especialista/tiago-jun-sasaki/index.html",
+      "family": "especialista",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 4,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "ferramentas/checklist-reequilibrio/index.html",
+      "family": "ferramentas",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "ferramentas/diagnostico-defesa-margem/index.html",
+      "family": "ferramentas",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "ferramentas/index.html",
+      "family": "ferramentas",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 2,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "ferramentas/limite-acrescimos-supressoes/index.html",
+      "family": "ferramentas",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 7
+    },
+    {
+      "path": "ferramentas/matriz-atraso-obra/index.html",
+      "family": "ferramentas",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "guias-contratos-obras/checklist-pedido-aditivo/index.html",
+      "family": "guias-contratos-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 12
+    },
+    {
+      "path": "guias-contratos-obras/contestar-glosa-medicao/index.html",
+      "family": "guias-contratos-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "guias-contratos-obras/documentos-pedido-reequilibrio/index.html",
+      "family": "guias-contratos-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "guias-contratos-obras/index.html",
+      "family": "guias-contratos-obras",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 3,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "guias-contratos-obras/responder-notificacao-atraso/index.html",
+      "family": "guias-contratos-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "imprensa/index.html",
+      "family": "imprensa",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 2
+    },
+    {
+      "path": "index.html",
+      "family": "(root)",
+      "state": "gated",
+      "narrative_blocks": 7,
+      "annotated_blocks": 7,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/cenarios/aditivos-e-risco-de-margem/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "inteligencia/cenarios/inconsistencia-orcamento-edital/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "inteligencia/cenarios/index.html",
+      "family": "inteligencia",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "inteligencia/cenarios/medicao-glosa-contratos-recorrentes/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "inteligencia/cenarios/referencia-sinapi-sicro-margem/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "inteligencia/concorrencia/index.html",
+      "family": "inteligencia",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "inteligencia/concorrencia/manutencao-predial-engenharia-rs/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/index.html",
+      "family": "inteligencia",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "inteligencia/mercados/edificacoes-publicas-mg/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/mercados/edificacoes-publicas-rs/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/mercados/index.html",
+      "family": "inteligencia",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/orgaos/index.html",
+      "family": "inteligencia",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/precos/edificacoes-publicas-mg/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/precos/edificacoes-publicas-rs/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/precos/index.html",
+      "family": "inteligencia",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "inteligencia/precos/manutencao-predial-engenharia-rs/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/index.html",
+      "family": "inteligencia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "inteligencia/valor-tipico-contratos-pavimentacao/index.html",
+      "family": "inteligencia",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 3
+    },
+    {
+      "path": "jurisprudencia-contratos-obras/index.html",
+      "family": "jurisprudencia-contratos-obras",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 2,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/index.html",
+      "family": "jurisprudencia-contratos-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "lei-14133-obras/art-124-alteracao-contratual-obra/index.html",
+      "family": "lei-14133-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "lei-14133-obras/atraso-imputavel-administracao/index.html",
+      "family": "lei-14133-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "lei-14133-obras/index.html",
+      "family": "lei-14133-obras",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 3,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "lei-14133-obras/limite-25-50-aditivo-obra/index.html",
+      "family": "lei-14133-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "lei-14133-obras/parcela-incontroversa-medicao-pagamento/index.html",
+      "family": "lei-14133-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "lei-14133-obras/preco-item-novo-desconto-proposta/index.html",
+      "family": "lei-14133-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "lei-14133-obras/reequilibrio-reajuste-repactuacao/index.html",
+      "family": "lei-14133-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "lei-14133-obras/servico-executado-sem-termo-aditivo/index.html",
+      "family": "lei-14133-obras",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "medicoes-glosas-obras-publicas/index.html",
+      "family": "medicoes-glosas-obras-publicas",
+      "state": "ready",
+      "narrative_blocks": 10,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "metodologia-inteligencia/index.html",
+      "family": "metodologia-inteligencia",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 3,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "nurture/index.html",
+      "family": "nurture",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 3,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "nurture/sair/index.html",
+      "family": "nurture",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 2
+    },
+    {
+      "path": "obrigado-contrato.html",
+      "family": "(root)",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "obrigado-edital.html",
+      "family": "(root)",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "obrigado-operacao.html",
+      "family": "(root)",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "obrigado.html",
+      "family": "(root)",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "panorama-mercado-obras-publicas/index.html",
+      "family": "panorama-mercado-obras-publicas",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 2,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/index.html",
+      "family": "panorama-mercado-obras-publicas",
+      "state": "ready",
+      "narrative_blocks": 9,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 2,
+      "primary_ctas": 2
+    },
+    {
+      "path": "piloto/concorrencia/edificacoes-publicas-rs/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/concorrencia/pavimentacao-infraestrutura-viaria-sc/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/conversao-xray/index.html",
+      "family": "piloto",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "piloto/index.html",
+      "family": "piloto",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 0
+    },
+    {
+      "path": "piloto/mercados/edificacoes-publicas-rs/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/mercados/pavimentacao-infraestrutura-viaria-pr/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/mercados/pavimentacao-infraestrutura-viaria-rs/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/mercados/pavimentacao-infraestrutura-viaria-sc/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/mercados/pavimentacao-infraestrutura-viaria-sp/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/ofertas/contratar/index.html",
+      "family": "piloto",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/ofertas/diagnostico-expansao/index.html",
+      "family": "piloto",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/ofertas/diretoria-180/index.html",
+      "family": "piloto",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/ofertas/diretoria-365/index.html",
+      "family": "piloto",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/ofertas/diretoria-flex/index.html",
+      "family": "piloto",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/ofertas/faq/index.html",
+      "family": "piloto",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/ofertas/index.html",
+      "family": "piloto",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 0,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 0,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/orgaos/base-administrativa-do-curado-pe-pe/engenharia/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/orgaos/base-aerea-de-anapolis-go/engenharia/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/index.html",
+      "family": "piloto",
+      "state": "ready",
+      "narrative_blocks": 5,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 1
+    },
+    {
+      "path": "politica-editorial/historico/index.html",
+      "family": "politica-editorial",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 2,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "politica-editorial/index.html",
+      "family": "politica-editorial",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 2,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "politica-editorial/v/1.0.0/index.html",
+      "family": "politica-editorial",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 2,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    },
+    {
+      "path": "privacidade/index.html",
+      "family": "privacidade",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "problemas-que-resolvemos/index.html",
+      "family": "problemas-que-resolvemos",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 3,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "radar/edificacoes-publicas-pr/index.html",
+      "family": "radar",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "radar/edificacoes-publicas-rs/index.html",
+      "family": "radar",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "radar/edificacoes-publicas-sc/index.html",
+      "family": "radar",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "radar/index.html",
+      "family": "radar",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "radar/nacional-obras-publicas/index.html",
+      "family": "radar",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "radar/pavimentacao-infraestrutura-viaria-pr/index.html",
+      "family": "radar",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "radar/pavimentacao-infraestrutura-viaria-rs/index.html",
+      "family": "radar",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "radar/pavimentacao-infraestrutura-viaria-sc/index.html",
+      "family": "radar",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "radar/pesquisa/edicao-zero-4uf/index.html",
+      "family": "radar",
+      "state": "blocked_skeleton_run",
+      "narrative_blocks": 13,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 8,
+      "primary_ctas": 0
+    },
+    {
+      "path": "radar/saneamento-hidraulica-sc/index.html",
+      "family": "radar",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "reequilibrio-obras-publicas/index.html",
+      "family": "reequilibrio-obras-publicas",
+      "state": "blocked_primary_cta",
+      "narrative_blocks": 11,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 5
+    },
+    {
+      "path": "servicos-obras-publicas/index.html",
+      "family": "servicos-obras-publicas",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 3,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 4
+    },
+    {
+      "path": "termos-de-uso/index.html",
+      "family": "termos-de-uso",
+      "state": "blocked_container_wrapped",
+      "narrative_blocks": 1,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 3
+    },
+    {
+      "path": "uso-de-ia/index.html",
+      "family": "uso-de-ia",
+      "state": "blocked_article_layout",
+      "narrative_blocks": 2,
+      "annotated_blocks": 0,
+      "longest_identical_skeleton_run": 1,
+      "primary_ctas": 2
+    }
+  ]
+}
