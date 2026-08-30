@@ -10,6 +10,43 @@
     "#532",
     "#534"
   ],
+  "delivery_status": {
+    "#527": {
+      "state": "FOUNDATION_LANDED_CHILD_DOD_PENDING",
+      "landed": "Hierarquia, destinos de limitações, taxonomia, cobertura derivada, fixtures, baseline e contratos de prova/CTA estão versionados.",
+      "residual": "Concluir e validar as ondas filhas, suas capturas responsivas, revisão humana e smoke de produção antes de declarar a constituição aplicada ao sistema inteiro."
+    },
+    "#528": {
+      "state": "MATRICES_ONLY_NO_ROUTE_MUTATION",
+      "landed": "As matrizes current/actual/gap/direction/CTA são derivadas para as oito rotas mutáveis, sem uma segunda allowlist.",
+      "residual": "Reescrever e revisar a sequência completa das oito rotas de #528, registrar limitações movidas, delta de palavras, prova de artefato, capturas 390x844/1366x768 e smoke do SHA publicado."
+    },
+    "#529": {
+      "state": "MEASUREMENT_WAIT",
+      "landed": "Matrizes preparatórias e mutation_state são derivados do unlock-plan; as seis rotas permanecem html_mutation_authorized=false.",
+      "residual": "Aguardar liberação explícita de cada rota pelo owner da medição; a data isolada não autoriza mutação nem encerra a janela."
+    },
+    "#530": {
+      "state": "FIRST_SHARED_ROLLOUT_DOD_PENDING",
+      "landed": "O contrato compartilhado das oito ofertas passou a carregar decisão, trabalho comprimido, artefato, uso, prova, âncora de preço, escada e CTA; hub e oito modelos consomem os campos.",
+      "residual": "Revisar cada repetição sintética por papel, registrar deltas de palavras e capturas completas nos dois viewports, executar avaliação humana de compreensão/escada/WTP e smoke de produção do SHA exato."
+    },
+    "#531": {
+      "state": "CONTRACT_AND_FIRST_CONSUMER_DOD_PENDING",
+      "landed": "O contrato distingue oito papéis de prova, mantém NO_APPROVED_CLIENT_PROOF fail-closed e a onda #530 consome artefato, método e fronteira sintética.",
+      "residual": "Criar claim-to-proof maps e aplicar prova positiva em home, /casos/, especialista e módulos compartilhados restantes; capturar adjacência/boundary e executar smoke sem review, rating ou case."
+    },
+    "#532": {
+      "state": "CONTRACT_AND_FIRST_CTA_ROLLOUT_DOD_PENDING",
+      "landed": "Inventário de CTAs/formulários é derivado do HTML e das famílias; os oito CTAs primários de #530 agora nomeiam estados úteis sem mudar IDs, campos, transporte ou controles.",
+      "residual": "Aplicar estágio, compromisso, valor pré-form, propósito de campo, submit, erro e receipt específicos a todos os formulários/CTAs do escopo; capturar estados responsivos e executar smoke com PII sintética."
+    },
+    "#534": {
+      "state": "SHADOW_REPORT_ITERATE",
+      "landed": "Classificador, fixtures e baseline reproduzível das rotas derivadas rodam em report-only, sem ratio universal nem CI bloqueante.",
+      "residual": "Executar anotação humana estratificada, documentar falsos positivos/negativos e matriz de erros, então registrar ADOPT_RATCHET, ITERATE ou REJECT; nenhum ratchet está autorizado agora."
+    }
+  },
   "decision_state": "EXECUTE_NOW",
   "executive_front": "Revenue + conversion + trust + inbound",
   "leverage": [

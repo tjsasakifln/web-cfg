@@ -28,6 +28,14 @@ assert("historical_338_preserved", contract.historical_relationship?.truth_issue
 assert("copy_contract_links_successor", copy.value_first_successor?.contract === "data/commercial/value-first-copy-contract.v1.json" && copy.value_first_successor?.issue === "#527", copy.value_first_successor);
 assert("editorial_contract_links_successor", editorial.commercial_copy_contracts?.value_first === "data/commercial/value-first-copy-contract.v1.json", editorial.commercial_copy_contracts);
 
+const delivery = contract.delivery_status || {};
+assert("delivery_status_covers_issue_lot", equal(Object.keys(delivery), ["#527", "#528", "#529", "#530", "#531", "#532", "#534"]), Object.keys(delivery));
+assert("issue_528_does_not_claim_route_rollout", delivery["#528"]?.state === "MATRICES_ONLY_NO_ROUTE_MUTATION" && /oito rotas/.test(delivery["#528"]?.residual || ""), delivery["#528"]);
+assert("issue_529_remains_measurement_wait", delivery["#529"]?.state === "MEASUREMENT_WAIT" && /não autoriza mutação/.test(delivery["#529"]?.residual || ""), delivery["#529"]);
+assert("issue_531_names_required_residual_surfaces", /home, \/casos\/, especialista/.test(delivery["#531"]?.residual || ""), delivery["#531"]);
+assert("issue_532_does_not_claim_form_rollout", /todos os formulários\/CTAs/.test(delivery["#532"]?.residual || ""), delivery["#532"]);
+assert("issue_534_stays_iterate", delivery["#534"]?.state === "SHADOW_REPORT_ITERATE" && /nenhum ratchet está autorizado/.test(delivery["#534"]?.residual || ""), delivery["#534"]);
+
 const hierarchy = contract.canonical_hierarchy || [];
 assert("hierarchy_has_seven_roles", hierarchy.length === 7, hierarchy.length);
 assert("hierarchy_ordered", hierarchy.every((entry, index) => entry.order === index + 1), hierarchy);
