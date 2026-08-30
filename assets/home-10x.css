@@ -32,7 +32,6 @@ body[data-content-cluster="home"]{
   --sheet-rule:1px solid var(--line);
   --sheet-strong:1.5px solid var(--ink);
   --caution-700:#8a5f00;
-  overflow-x:clip;
   font-family:"Archivo Var",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   font-weight:400;
   font-stretch:100%;
@@ -41,6 +40,7 @@ body[data-content-cluster="home"]{
 }
 
 /* ── os cinco trilhos ──────────────────────────────────────────────────── */
+body[data-content-cluster="home"] main{overflow-x:clip}
 body[data-content-cluster="home"] main>section[data-section-archetype],
 body[data-content-cluster="home"] .sheet-ruler{
   display:grid;
@@ -61,6 +61,10 @@ body[data-content-cluster="home"] main>section[data-section-archetype]>.containe
   grid-column:2;
   grid-row:1;
   align-self:stretch;
+  /* styles.css impõe width:min(calc(100% - 48px),1200px). Sem zerar isso o
+   * conteúdo nunca alcança a régua da coluna seguinte e o 1920 fica preso a
+   * 1200px dentro de trilhos de 1312px. */
+  width:auto;
   max-width:none;
   margin:0;
   padding:0 0 0 1.25rem;
@@ -964,3 +968,228 @@ body[data-content-cluster="home"] .contact-form .form-progress-step.is-active{
 body[data-content-cluster="home"] .contact-form .form-progress-bar{background:rgba(255,255,255,.3)}
 /* o anel de foco precisa de halo escuro para medir 3:1 sobre a faixa navy */
 body[data-content-cluster="home"] .contact-section{--focus-ring-halo:var(--navy-900);--focus-ring-core:#fff}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+ * Correções da revisão adversarial (2026-08-30)
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── FOCO: o pior defeito que esta campanha introduziu ─────────────────────
+ * Os `box-shadow:none` que apagaram a elevação também apagaram o anel de
+ * foco, porque o anel É um box-shadow neste sistema — dezesseis paradas de
+ * teclado ficaram sem indicador, incluindo o CTA do herói e o formulário
+ * inteiro de captura. WCAG 2.2 2.4.7 (A) e 1.4.11 (AA).
+ *
+ * O anel é reafirmado na forma EXPANDIDA, nunca via var(--focus-ring): o
+ * valor computado de uma custom property já vem com var() substituído, então
+ * redefinir --focus-ring-halo/-core num descendente não recompõe o token. Era
+ * exatamente esse o engano do "halo invertido" na faixa escura. */
+body[data-content-cluster="home"] a:focus-visible,
+body[data-content-cluster="home"] .button:focus-visible,
+body[data-content-cluster="home"] .offer-path:focus-visible,
+body[data-content-cluster="home"] .contact-channels a:focus-visible,
+body[data-content-cluster="home"] .evidence-tab:focus-visible,
+body[data-content-cluster="home"] summary:focus-visible,
+body[data-content-cluster="home"] button:focus-visible,
+body[data-content-cluster="home"] .field :is(input,select,textarea):focus-visible{
+  outline:2px solid transparent;
+  outline-offset:0;
+  box-shadow:0 0 0 2px var(--white),0 0 0 5px var(--ink);
+}
+/* Sobre a faixa navy o halo claro desaparece: inverte-se o par, medido. */
+body[data-content-cluster="home"] .contact-section a:focus-visible,
+body[data-content-cluster="home"] .contact-section .button:focus-visible,
+body[data-content-cluster="home"] .contact-section button:focus-visible,
+body[data-content-cluster="home"] .contact-section .contact-channels a:focus-visible,
+body[data-content-cluster="home"] .contact-section .field :is(input,select,textarea):focus-visible{
+  box-shadow:0 0 0 2px var(--navy-900),0 0 0 5px var(--white);
+}
+/* styles.css zera o outline dos campos com especificidade que vence o
+ * :focus-visible do bundle; aqui o anel volta acima dele. */
+body[data-content-cluster="home"] .contact-form :is(input,select,textarea):focus-visible{
+  outline:2px solid transparent;
+}
+
+/* ── a régua congelada, agora irmã de <main>, precisa de folga de âncora ── */
+html:has(body[data-content-cluster="home"]){scroll-padding-top:3.75rem}
+
+/* ── alinhamento: rótulo da régua sobre o valor que ele encabeça ─────────── */
+body[data-content-cluster="home"] .sheet-ruler .c-un,
+body[data-content-cluster="home"] .sheet-ruler .c-qt,
+body[data-content-cluster="home"] .sheet-ruler .c-fonte{padding-left:.7rem}
+body[data-content-cluster="home"] .sheet-ruler .c-qt{padding-right:.1rem}
+
+/* ── segunda família: o bundle põe var(--mono) em três lugares que esta
+ *    direção restilizou sem trocar a fonte, e o peso/largura variáveis caíam
+ *    silenciosamente na pilha estática ─────────────────────────────────── */
+body[data-content-cluster="home"] .journey-num,
+body[data-content-cluster="home"] .form-progress-step,
+body[data-content-cluster="home"] .evidence-heading>span,
+body[data-content-cluster="home"] .evidence-method li>span{font-family:inherit}
+
+/* ── a faixa escura é plana: o brilho radial verde continuava vivo ──────── */
+body[data-content-cluster="home"] .contact-section::before,
+body[data-content-cluster="home"] .contact-section::after{display:none}
+
+/* ── sobreviventes de template: raio, sombra e o círculo flutuante ──────── */
+body[data-content-cluster="home"] .whatsapp-float,
+body[data-content-cluster="home"] .mobile-nav,
+body[data-content-cluster="home"] .icp-contrast,
+body[data-content-cluster="home"] .evidence-tabs,
+body[data-content-cluster="home"] .evidence-panel,
+body[data-content-cluster="home"] .fit-faq summary::after,
+body[data-content-cluster="home"] .form-progress-step{
+  border-radius:0;
+  box-shadow:none;
+}
+body[data-content-cluster="home"] .whatsapp-float{
+  background:var(--green-700);
+  border:1.5px solid var(--green-700);
+  transition:background-color .12s linear,border-color .12s linear;
+}
+body[data-content-cluster="home"] .whatsapp-float:hover{
+  background:var(--ink);
+  border-color:var(--ink);
+}
+body[data-content-cluster="home"] .mobile-nav{
+  border:1px solid var(--line);
+  border-top:var(--sheet-strong);
+}
+body[data-content-cluster="home"] .icp-contrast{border:0;overflow:visible}
+body[data-content-cluster="home"] .fit-faq summary::after{border-color:var(--muted);color:var(--ink)}
+/* .evidence-panel guardava fundo e borda de painel escuro, invisíveis no
+ * papel: sem contorno nenhum, o painel deixou de existir como bloco. */
+body[data-content-cluster="home"] .evidence-panel{
+  background:none;
+  border:0;
+  border-top:var(--sheet-rule);
+}
+
+/* ── o menu móvel cobria o próprio botão de fechar ─────────────────────── */
+body[data-content-cluster="home"] .mobile-nav{top:96px}
+
+/* ── sublinhado de hover colado à palavra, não 25px abaixo dela ─────────── */
+body[data-content-cluster="home"] .desktop-nav a,
+body[data-content-cluster="home"] .text-link,
+body[data-content-cluster="home"] .journey-alt-link,
+body[data-content-cluster="home"] .evidence-source-link,
+body[data-content-cluster="home"] .evidence-whatsapp{
+  border-bottom:0;
+  text-decoration-line:none;
+  text-decoration-thickness:1.5px;
+  text-underline-offset:.26em;
+}
+body[data-content-cluster="home"] .desktop-nav a:hover,
+body[data-content-cluster="home"] .text-link:hover,
+body[data-content-cluster="home"] .journey-alt-link:hover,
+body[data-content-cluster="home"] .evidence-source-link:hover,
+body[data-content-cluster="home"] .evidence-whatsapp:hover{text-decoration-line:underline}
+body[data-content-cluster="home"] .evidence-source-link,
+body[data-content-cluster="home"] .evidence-whatsapp{text-decoration-line:underline}
+
+/* ── a barra de seleção de linha caía entre dois trilhos ───────────────── */
+body[data-content-cluster="home"] .journey-row::before{left:-1.25rem}
+/* ── a oferta pontual é um <a> inteiro: precisa de estado, não de 1,06:1 ── */
+body[data-content-cluster="home"] .offer-path{position:relative}
+body[data-content-cluster="home"] .offer-path::before{
+  content:"";
+  position:absolute;
+  left:-1.25rem;top:-1px;bottom:0;width:3px;
+  background:transparent;
+}
+body[data-content-cluster="home"] .offer-path:hover::before,
+body[data-content-cluster="home"] .offer-path:focus-visible::before{background:var(--ink)}
+
+/* ── a folha tem largura de página: não estica ao infinito ─────────────── */
+@media (min-width:1700px){
+  body[data-content-cluster="home"] main>section[data-section-archetype],
+  body[data-content-cluster="home"] .sheet-ruler,
+  body[data-content-cluster="home"] .header-inner,
+  body[data-content-cluster="home"] .footer-top,
+  body[data-content-cluster="home"] .footer-bottom{
+    max-width:1700px;
+    margin-inline:auto;
+  }
+}
+
+/* ── a coluna de leitura da captura não pode ser espremida pelo formulário ─ */
+@media (max-width:1440px){
+  body[data-content-cluster="home"] .contact-grid{grid-template-columns:minmax(0,1fr);gap:1.8rem}
+  body[data-content-cluster="home"] .contact-form{max-width:34rem}
+}
+body[data-content-cluster="home"] .contact-channels>a,
+body[data-content-cluster="home"] .contact-channels>div{max-width:100%;min-width:0}
+body[data-content-cluster="home"] .contact-channels span{min-width:0;overflow-wrap:anywhere}
+
+/* ── rodapé: os mesmos trilhos e a mesma margem da folha ────────────────── */
+body[data-content-cluster="home"] .footer-top,
+body[data-content-cluster="home"] .footer-bottom{width:auto}
+@media (min-width:901px){
+  body[data-content-cluster="home"] .footer-top{
+    display:grid;
+    grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));
+    gap:2rem 2.5rem;
+    align-items:start;
+  }
+}
+body[data-content-cluster="home"] .footer-links,
+body[data-content-cluster="home"] .footer-brand{min-width:0}
+body[data-content-cluster="home"] .footer-links a{overflow-wrap:anywhere}
+
+/* ── algarismo tabular e zero cortado só onde são convenção de planilha ─── */
+body[data-content-cluster="home"] .band-key,
+body[data-content-cluster="home"] .sheet-ruler,
+body[data-content-cluster="home"] .evidence-facts dd,
+body[data-content-cluster="home"] .home-deliverables-result dd,
+body[data-content-cluster="home"] .journey-num,
+body[data-content-cluster="home"] .evidence-method li>span{
+  font-variant-numeric:tabular-nums slashed-zero;
+}
+
+/* ── herdado do bundle, abaixo de AA: 3,01:1 no marcador de "não faz sentido" */
+body[data-content-cluster="home"] .icp-no li::before{color:var(--muted)}
+
+/* ── sem JS, as três faixas do PNCP abrem juntas e as abas ficam inertes ── */
+html.no-js body[data-content-cluster="home"] .evidence-tabs{display:none}
+
+@media (max-width:900px){
+  /* O telefone abria em metadado de esquema — inclusive a marca de "tese da
+   * casa" — antes da proposta de valor. O registro da linha desce para o pé
+   * da faixa, que é onde uma planilha colapsada o põe. */
+  body[data-content-cluster="home"] .band-key{
+    order:2;
+    margin:1.4rem 0 0;
+    padding:.7rem 0 0;
+    border-top:var(--sheet-rule);
+    border-bottom:0;
+  }
+  body[data-content-cluster="home"] main>section[data-section-archetype]>.container{order:1}
+  body[data-content-cluster="home"] .band-key .c-val{color:var(--text);font-weight:600}
+}
+
+
+/* ── segunda passada da revisão adversarial ──────────────────────────────── */
+
+/* O painel de evidência é focalizável por contrato ARIA (role=tabpanel), então
+ * precisa de anel como qualquer outra parada de teclado. */
+body[data-content-cluster="home"] .evidence-panel:focus-visible{
+  outline:2px solid transparent;
+  box-shadow:0 0 0 2px var(--white),0 0 0 5px var(--ink);
+}
+
+/* Raio remanescente em superfícies que a purga anterior não alcançou. */
+body[data-content-cluster="home"] .skip-link,
+body[data-content-cluster="home"] .menu-toggle,
+body[data-content-cluster="home"] input,
+body[data-content-cluster="home"] select,
+body[data-content-cluster="home"] textarea,
+body[data-content-cluster="home"] .turnstile-slot,
+body[data-content-cluster="home"] .form-status{border-radius:0}
+body[data-content-cluster="home"] .eyebrow-dot{box-shadow:none}
+
+/* O flutuante é fixo no canto: no fim da página ele cobria o último link da
+ * barra de políticas. WCAG 2.2 2.4.11 não aceita alvo de foco obscurecido. */
+body[data-content-cluster="home"] .footer-bottom{padding-bottom:6rem}
+@media (min-width:901px){
+  body[data-content-cluster="home"] .footer-bottom{padding-bottom:4.5rem}
+}

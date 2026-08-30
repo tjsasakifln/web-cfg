@@ -59,8 +59,20 @@ STRING_CLASS_RE = re.compile(r"""['"`]([A-Za-z][A-Za-z0-9_-]*)['"`]""")
 SELECTOR_CLASS_RE = re.compile(r"\.(-?[_a-zA-Z][_a-zA-Z0-9-]*)")
 COMMENT_RE = re.compile(r"/\*.*?\*/", re.S)
 QUOTED_RE = re.compile(r"""(?:"[^"]*"|'[^']*')""")
-RADIUS_RE = re.compile(r"border(?:-[a-z]+)*-radius\s*:", re.I)
-SHADOW_RE = re.compile(r"box-shadow\s*:", re.I)
+# The ceiling measures DECORATION, so a declaration that removes decoration
+# must not spend it. `border-radius:0` and `box-shadow:none` are the two ways
+# this codebase neutralises inherited ornament; counting them made the ratchet
+# punish exactly the work it exists to encourage, and a page that deletes ten
+# rounded corners scored worse than one that adds none. Matching the value
+# makes the number mean what its name says, and it only ever tightens: every
+# neutralising declaration already in the tree stops counting too.
+RADIUS_RE = re.compile(
+    r"border(?:-[a-z]+)*-radius\s*:"
+    r"(?!(?:\s*0(?:px|%|r?em)?)+\s*(?:!important)?\s*[;}])\s*[^;}]+", re.I
+)
+SHADOW_RE = re.compile(
+    r"box-shadow\s*:(?!\s*none\s*(?:!important)?\s*[;}])\s*[^;}]+", re.I
+)
 GRADIENT_RE = re.compile(r"(?:linear|radial|conic|repeating-linear|repeating-radial)-gradient\(", re.I)
 
 
