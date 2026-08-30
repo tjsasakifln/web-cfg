@@ -44,6 +44,7 @@
     "test:integrity-promotion-gate": "node tests/commercial/test_integrity_promotion_gate.mjs",
     "test:page-contract-eight": "node tests/commercial/test_page_contract_eight.mjs",
     "test:first-fold-contract": "node tests/commercial/test_first_fold_contract.mjs",
+    "test:three-second-fold": "node scripts/site/test_home_first_fold.mjs",
     "measure:first-fold": "node scripts/site/measure_first_fold.mjs",
     "test:market-fit-protocol": "node tests/commercial/test_market_fit_protocol.mjs",
     "test:real-proof-registry": "node tests/commercial/test_real_proof_registry.mjs",
