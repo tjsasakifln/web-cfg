@@ -866,11 +866,18 @@ def collect_site_metrics(
     try:
         from scripts.site.test_csp_contract import evaluate_live
 
-        csp_errors, _ = evaluate_live()
+        # evaluate_live returns (errors, inline_scripts, style_blocks,
+        # style_attributes). Unpack loosely so adding another observation
+        # cannot silently downgrade this dimension to "evidence unavailable".
+        csp_errors, *_csp_observations = evaluate_live()
         if csp_errors:
             security_codes.append("csp_contract_failed")
-    except Exception:
+    except AssertionError:
+        # The built artifact is genuinely absent, so there is nothing to judge.
         security_codes.append("csp_evidence_unavailable")
+    except Exception as exc:  # noqa: BLE001
+        # A real defect in the evaluator must not read as missing evidence.
+        security_codes.append(f"csp_evaluator_error:{type(exc).__name__}")
     secrets_ok, _ = _run_command(root, ["node", "scripts/site/test_secrets_scan.mjs"])
     if not secrets_ok:
         security_codes.append("secret_scan_failed")
