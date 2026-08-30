@@ -83,9 +83,32 @@ Nenhum score. Nenhuma média ponderada. Nenhum empate declarado por trade-off.
 
 ## 5. Delta de custo declarado
 
-O primeiro webfont do site sobe o orçamento em `data/site/design-system.json` de `font_files_max: 0 / font_total_gzip_kb_max: 0` para `1 / 60`, com o arquivo medido em **59,0 KB gzip**, servido de `assets/archivo-var-latin-22bf4432.woff2` e carregado **só na home**. Isso é exatamente o que a nota do próprio orçamento previa: *"O primeiro webfont deve elevar estes dois números neste arquivo, para que apareça como delta revisado em vez de ser absorvido em silêncio."*
+O primeiro webfont do site sobe o orçamento em `data/site/design-system.json` de `font_files_max: 0 / font_total_gzip_kb_max: 0` para `1 / 64`, com o arquivo medido em **63,7 KB gzip**, servido de `assets/archivo-var-latin-fa9c0ffd.woff2` e carregado **só na home**. Isso é exatamente o que a nota do próprio orçamento previa: *"O primeiro webfont deve elevar estes dois números neste arquivo, para que apareça como delta revisado em vez de ser absorvido em silêncio."*
 
 Os tetos do módulo **não se movem**: `FONT_FILES_CAP = 6` e `FONT_GZIP_CAP_KB = 120` continuam em `scripts/site/audit_performance.py`, e um segundo webfont não declarado continua reprovando. A baseline em `docs/performance/PERFORMANCE-BUDGET-BASELINE.json` foi reancorada no mesmo commit, porque ela é o anchor do delta.
+
+**A revisão adversarial pagou por si aqui.** O primeiro corte do subconjunto foi
+escolhido a mão, codepoint a codepoint, e deixou de fora dois caracteres que já
+estavam em copy visível: o `²` de `4.710 m²` no registro do PNCP e o `©` do
+rodapé. Glifo ausente não levanta erro — o navegador troca de família só naquele
+caractere, então a página fica com dois desenhos e ninguém nota até alguém olhar
+uma captura de perto.
+
+A correção não foi comprar cobertura com bytes. Subir o subconjunto para o bloco
+Latin-1 inteiro custaria ~14 KB de glifos que o site quase nunca usa e ainda
+deixaria a armadilha aberta um bloco adiante. Em vez disso o subconjunto ganhou
+o vocabulário aritmético que uma casa de engenharia digita sem avisar — `m²`,
+`m³`, `±`, `½`, `©`, `®`, `µ`, `÷`, menos tipográfico — e a classe do defeito
+foi fechada por um gate: `scripts/site/test_font_glyph_coverage.py` deriva as
+rotas que carregam webfont local, compara o texto renderizado de cada uma com o
+`cmap` do subconjunto e reprova se sobrar qualquer caractere. Ele tem negativa
+própria, para que um refactor futuro não o transforme em no-op, e carve-out
+estreito para o glifo decorativo que a folha esconde por CSS — válido só
+enquanto ele continuar `aria-hidden`.
+
+O gate encontrou mais dois na primeira execução: os três protótipos ainda
+apontavam para o hash antigo da fonte, e o rodapé da direção A usava `Σ`, que o
+subconjunto não tem.
 
 Duas asserções de teste que cravavam o literal `0` — `font_files_total == 0` e `font_files=0/0` — foram reancoradas no orçamento **declarado**. Elas afirmavam a árvore do dia em que o orçamento foi calibrado; agora afirmam o contrato, que é o que não pode deslizar. As negativas sintéticas que provam o mecanismo (arquivo acima do orçamento, gzip acima do orçamento, `@font-face` sem arquivo resolvível, link do Google Fonts, teto do módulo) continuam intactas e verdes.
 

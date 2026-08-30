@@ -279,13 +279,13 @@
     "own_js_raw_kb_max": 120,
     "own_js_gzip_kb_max": 40,
     "css_gzip_kb_max": 80,
-    "font_total_gzip_kb_max": 60,
+    "font_total_gzip_kb_max": 64,
     "font_files_max": 1,
     "cls_max": 0.05,
     "no_framework_runtime": true,
     "no_carousel_video_webgl_lottie": true,
     "budget_notes": {
-      "font": "Delta revisado de 2026-08-30 (canário de direção visual na home): 0 -> 1 arquivo e 0 -> 60 KB gzip. O arquivo e Archivo v2.001 (Omnibus-Type, SIL OFL 1.1), subconjunto latino pt-BR com dois eixos (wght 100-900, wdth 62-125) e tnum + zero ligados, medido em 59,0 KB, servido de assets/archivo-var-latin-22bf4432.woff2 e carregado apenas na home por assets/home-10x.css. Uma familia cobre display, texto e dado tabular; nao ha segunda familia nem fonte remota. Os tetos do modulo nao se movem: FONT_FILES_CAP=6 e FONT_GZIP_CAP_KB=120 continuam em scripts/site/audit_performance.py, entao um segundo webfont nao declarado continua reprovando. Enforced per route por scripts/site/audit_performance.py.",
+      "font": "Delta revisado de 2026-08-30 (canario de direcao visual na home): 0 -> 1 arquivo e 0 -> 64 KB gzip. O arquivo e Archivo v2.001 (Omnibus-Type, SIL OFL 1.1), subconjunto latino pt-BR com dois eixos (wght 100-900, wdth 62-125) e tnum + zero ligados, medido em 63.7 KB, servido de assets/archivo-var-latin-fa9c0ffd.woff2 e carregado apenas na home por assets/home-10x.css. Uma familia cobre display, texto e dado tabular; nao ha segunda familia nem fonte remota. O subconjunto cobre tambem o vocabulario aritmetico da casa (m2, m3, +-, 1/2, (c), (r)), porque glifo ausente nao levanta erro: ele renderiza noutra fonte em silencio. Isso e verificado por scripts/site/test_font_glyph_coverage.py, que compara o texto renderizado de cada rota com o cmap do subconjunto que ela carrega. Os tetos do modulo nao se movem: FONT_FILES_CAP=6 e FONT_GZIP_CAP_KB=120 continuam em scripts/site/audit_performance.py, entao um segundo webfont nao declarado continua reprovando. Enforced per route por scripts/site/audit_performance.py.",
       "cls": "Enforced twice from this one key: scripts/site/lighthouse_thresholds.mjs applies it to the live headless-Chrome run CI performs on the built _site, and scripts/site/audit_performance.py applies it to the committed rows in docs/lighthouse-runs/summary.json. Observed baseline is 0.000 on every measured route.",
       "baseline": "docs/performance/PERFORMANCE-BUDGET-BASELINE.json"
     }

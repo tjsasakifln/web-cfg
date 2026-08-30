@@ -10,7 +10,7 @@
     "css_gzip_kb_max": 80.0,
     "css_raw_kb_max": 250.0,
     "font_files_max": 1.0,
-    "font_total_gzip_kb_max": 60.0,
+    "font_total_gzip_kb_max": 64.0,
     "own_js_gzip_kb_max": 40.0,
     "own_js_raw_kb_max": 120.0
   },
@@ -143,7 +143,7 @@
   },
   "fonts": {
     "font_files_total": 1,
-    "font_gzip_kb_total": 59.0,
+    "font_gzip_kb_total": 63.75,
     "measured_by": "scripts/site/audit_performance.py measure_routes",
     "routes_with_font_face_rules": [
       "/"
