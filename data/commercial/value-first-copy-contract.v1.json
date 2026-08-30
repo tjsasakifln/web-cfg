@@ -197,6 +197,11 @@
       "commercial": "rota presente no censo de primeira dobra ou família priced_offer/service_pillar",
       "public_data": "demais rotas comerciais indexáveis com ação terminal declarada",
       "trust_legal": "família com profile trust_or_legal"
+    },
+    "child_route_matrices": {
+      "manual_route_allowlist": false,
+      "rule": "Para cada rota derivada, current_proposition vem do HTML, actual_contract_value vem do deliverables-registry ou do visitor_job da família, gap vem da ordem de papéis observada e mutation_state vem do unlock-plan. A matriz não autoriza mutação.",
+      "protected_route_authority": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json"
     }
   },
   "diagnostic": {

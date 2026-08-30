@@ -18,6 +18,8 @@ const CONTRACT_REL = "data/commercial/value-first-copy-contract.v1.json";
 const FAMILY_REL = "data/organic/public-family-registry.json";
 const BOFU_REL = "data/organic/bofu-intent-matrix.json";
 const FIRST_FOLD_REL = "data/commercial/first-fold-contract.v1.json";
+const DELIVERABLES_REL = "data/commercial/deliverables-registry.v1.json";
+const UNLOCK_REL = "data/bofu-dominance/frozen-specs/unlock-plan.v1.json";
 const PUBLIC_SKIP_PARTS = new Set([
   ".git",
   ".github",
@@ -413,7 +415,14 @@ export function deriveCoverage({ familyRegistry, bofu, firstFold, files, readFil
       : firstFoldRoutes.has(entry.route) || ["priced_offer", "service_pillar"].includes(family.profile)
         ? "commercial"
         : "public_data";
-    routes.push({ ...entry, family_id: family.id, family_profile: family.profile, profile, terminal_action: family.terminal_action });
+    routes.push({
+      ...entry,
+      family_id: family.id,
+      family_profile: family.profile,
+      family_visitor_job: family.visitor_job,
+      profile,
+      terminal_action: family.terminal_action,
+    });
   }
   return { routes, problems, published_indexable_count: published.length };
 }
@@ -462,6 +471,77 @@ function sumMetrics(rows) {
   return result;
 }
 
+function firstRoleIndex(blocks, role) {
+  return blocks.findIndex((block) => block.roles.includes(role) && block.primary !== "limitation");
+}
+
+function contractValueForRoute(route, deliverables, familyVisitorJob) {
+  const item = (deliverables.deliverables || []).find((entry) => entry.route === route);
+  if (item) {
+    return {
+      source: `${DELIVERABLES_REL}#deliverables[deliverable_id=${item.deliverable_id}]`,
+      owner: "deliverables_registry",
+      deliverable_id: item.deliverable_id,
+      trigger: item.trigger,
+      decision: item.decision_question,
+      artifact: item.included_outputs,
+    };
+  }
+  const container = (deliverables.containers || []).find((entry) => entry.route === route);
+  if (container) {
+    return {
+      source: `${DELIVERABLES_REL}#containers[container_id=${container.container_id}]`,
+      owner: "deliverables_registry",
+      container_id: container.container_id,
+      decision: familyVisitorJob,
+      artifact: container.composes_deliverables || [],
+    };
+  }
+  return {
+    source: `${FAMILY_REL}#families[].visitor_job`,
+    owner: "public_family_registry",
+    decision: familyVisitorJob,
+    artifact: [],
+  };
+}
+
+function routeMatrix({ entry, blocks, interaction, findings, deliverables, protectedSlugs, unlock, hierarchy }) {
+  const current = blocks.find((block) => block.primary === "value_outcome") || blocks.find((block) => /^h[1-2]$/.test(block.tag)) || blocks[0];
+  const slug = entry.route.replace(/^\//, "").replace(/\/$/, "");
+  const frozen = protectedSlugs.has(slug);
+  return {
+    current_proposition: current?.text || null,
+    actual_contract_value: contractValueForRoute(entry.route, deliverables, entry.family_visitor_job),
+    diagnosed_gap: {
+      first_value_outcome_block: firstRoleIndex(blocks, "value_outcome"),
+      first_artifact_block: firstRoleIndex(blocks, "artifact"),
+      first_positive_proof_block: firstRoleIndex(blocks, "proof"),
+      first_action_block: firstRoleIndex(blocks, "action"),
+      first_limitation_block: blocks.findIndex((block) => block.primary === "limitation"),
+      defensive_opening_findings: findings.length,
+    },
+    message_direction: hierarchy.map((entry) => entry.role),
+    retained_limitations: "Preservar preço, dado, interpretação jurídica, evidência sintética e escopo no destino semântico declarado pelo contrato #527.",
+    cta_next_state: {
+      primary_labels: interaction.primary_actions.map((action) => action.label),
+      submit_labels: interaction.forms.map((form) => form.submit_label).filter(Boolean),
+      terminal_action: entry.terminal_action,
+    },
+    mutation_state: frozen
+      ? {
+          state: "MEASUREMENT_WAIT",
+          authority: UNLOCK_REL,
+          html_mutation_authorized: unlock.html_mutation_authorized === true,
+          earliest_safe_action_at: unlock.earliest_safe_action_at,
+          note: "Preparação e diagnóstico apenas. Data isolada não autoriza mutação."
+        }
+      : {
+          state: "ELIGIBLE_FOR_CHILD_IMPLEMENTATION",
+          authority: entry.family_id,
+        },
+  };
+}
+
 export function buildReport({ ref = null } = {}) {
   assertRef(ref);
   // The classifier contract is the version being evaluated. Historical refs
@@ -471,6 +551,8 @@ export function buildReport({ ref = null } = {}) {
   const familyRegistry = JSON.parse(readRelative(FAMILY_REL, ref));
   const bofu = JSON.parse(readRelative(BOFU_REL, ref));
   const firstFold = JSON.parse(readRelative(FIRST_FOLD_REL, ref));
+  const deliverables = JSON.parse(readRelative(DELIVERABLES_REL, ref));
+  const unlock = JSON.parse(readRelative(UNLOCK_REL, ref));
   const files = publicFiles(ref);
   const coverage = deriveCoverage({
     familyRegistry,
@@ -482,6 +564,8 @@ export function buildReport({ ref = null } = {}) {
   const routeRows = coverage.routes.map((entry) => {
     const blocks = extractBlocks(entry.html).map(classifyBlock);
     const interaction = formsAndActions(entry.html);
+    const findings = sequenceFindings(entry.html, entry.profile);
+    const protectedSlugs = new Set(unlock.protected_pillars || []);
     return {
       route: entry.route,
       family_id: entry.family_id,
@@ -489,9 +573,19 @@ export function buildReport({ ref = null } = {}) {
       diagnostic_profile: entry.profile,
       terminal_action: entry.terminal_action,
       metrics: metricsForBlocks(blocks),
-      sequence_findings: sequenceFindings(entry.html, entry.profile),
+      sequence_findings: findings,
       forms: interaction.forms,
       primary_actions: interaction.primary_actions,
+      value_first_matrix: routeMatrix({
+        entry,
+        blocks,
+        interaction,
+        findings,
+        deliverables,
+        protectedSlugs,
+        unlock,
+        hierarchy: contract.canonical_hierarchy,
+      }),
     };
   });
   const familyRows = [];

@@ -100,6 +100,11 @@ assert("report_covers_every_indexable_family_route", report.coverage.problems.le
 assert("report_has_three_profiles", equal([...new Set(report.routes.map((route) => route.diagnostic_profile))].sort(), ["commercial", "public_data", "trust_legal"]), [...new Set(report.routes.map((route) => route.diagnostic_profile))]);
 assert("report_has_all_dimensions", equal(Object.keys(report.totals), contract.semantic_taxonomy.reported_dimensions.map((name) => name === "value_outcome_blocks" ? name : name)), Object.keys(report.totals));
 assert("report_has_route_and_family_rows", report.routes.length > 50 && report.families.length === new Set(report.routes.map((route) => route.family_id)).size, [report.routes.length, report.families.length]);
+assert("route_matrices_cover_derived_census", report.routes.every((route) => route.value_first_matrix?.current_proposition && route.value_first_matrix?.actual_contract_value?.source && Array.isArray(route.value_first_matrix?.message_direction)), report.routes.filter((route) => !route.value_first_matrix?.current_proposition).map((route) => route.route));
+const measurementWait = report.routes.filter((route) => route.value_first_matrix?.mutation_state?.state === "MEASUREMENT_WAIT");
+assert("six_routes_remain_measurement_wait", measurementWait.length === 6, measurementWait.map((route) => route.route));
+assert("measurement_wait_never_authorizes_html", measurementWait.every((route) => route.value_first_matrix.mutation_state.html_mutation_authorized === false && /não autoriza mutação/i.test(route.value_first_matrix.mutation_state.note)), measurementWait.map((route) => route.value_first_matrix.mutation_state));
+assert("route_matrix_is_not_manual_allowlist", contract.coverage_derivation?.child_route_matrices?.manual_route_allowlist === false && /unlock-plan/.test(contract.coverage_derivation?.child_route_matrices?.protected_route_authority || ""), contract.coverage_derivation?.child_route_matrices);
 assert("report_does_not_claim_quality", report.interpretation.quality_score === null && report.interpretation.universal_ratio === null && report.interpretation.human_persuasion_claimed === false, report.interpretation);
 
 const baselinePath = path.join(root, contract.diagnostic.baseline.report);
