@@ -245,7 +245,7 @@
   .deliverables-vitrine,.capability-roll{padding:30px 0 36px}
   .deliverables-vitrine__intro h2,.capability-roll__intro h2{font-size:2rem}
   .offer-decision-nav{padding:14px}
-  .offer-decision-nav ol{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .offer-decision-nav ol{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
   .published-offers__common{padding:18px;gap:16px}
   .vitrine-items{gap:8px}
   .vitrine-item{padding:12px}
@@ -275,6 +275,11 @@
   .deliverables-next h2{font-size:1.6rem}
   .deliverables-page .pillar-capture{padding:20px 0}
 }
-@media(max-width:360px){
-  .offer-decision-nav ol{grid-template-columns:minmax(0,1fr)}
+.deliverables-hero-copy h1 .hero-h1-note{display:block;margin-top:12px;color:#42566b;font-size:max(1rem,.26em);font-weight:600;letter-spacing:0;line-height:1.35}
+.offer-decision-nav a,.offer-decision-nav a span{overflow-wrap:break-word;word-break:normal;hyphens:none}
+@media(max-width:620px){
+  /* Two-up must actually fit its labels: trim the number column and the
+     horizontal padding so words like "concorrentes?" have room. Height stays
+     at four rows instead of eight, and the 44px touch target is preserved. */
+  .offer-decision-nav a{grid-template-columns:22px minmax(0,1fr);gap:6px;min-height:44px;padding:8px 8px;font-size:.8rem}
 }

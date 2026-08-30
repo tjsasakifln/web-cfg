@@ -2,22 +2,22 @@
 .hero,.hero-grid,.hero-copy,.hero-proof,.hero-actions,.hero-visual,.hero-evidence{min-width:0}
 .hero-proof{overflow-wrap:anywhere}
 .hero-proof li,.hero-proof strong,.hero-proof span,.proof-mark{overflow-wrap:anywhere;line-height:var(--lh-micro);font-size:var(--text-small)}
-.hero-lead,.section-lead,.editorial-lead,.hero-micro{max-width:var(--read-measure);overflow-wrap:anywhere}
+.hero-lead,.section-lead,.editorial-lead,.hero-micro{max-width:var(--read-measure);overflow-wrap:break-word}
 .hero-actions .button,.hero .button-primary{min-height:var(--touch-min)}
-.related-card,.aside-card,.n-card,.offer-path,.cluster-card,.featured-content,.catalog-item,.simple-card,.criterion-card,.macro-phase,.journey-path,.trace-card{min-width:0;overflow-wrap:anywhere}
+.related-card,.aside-card,.n-card,.offer-path,.cluster-card,.featured-content,.catalog-item,.simple-card,.criterion-card,.macro-phase,.journey-path,.trace-card{min-width:0;overflow-wrap:break-word}
 .article-layout,.contact-grid,.offer-layout,.authority-layout,.faq-grid,.content-hero-grid,.hub-hero-grid,.profile-grid,.related-grid,.featured-grid,.cluster-grid,.pillar-overview-grid,.directory-head,.form-row,.macro-phases,.icp-contrast,.offer-context{min-width:0}
 .lead-inline{min-width:0;grid-template-columns:minmax(0,1fr)}
-.lead-inline-copy,.lead-inline-actions{min-width:0;overflow-wrap:anywhere}
+.lead-inline-copy,.lead-inline-actions{min-width:0;overflow-wrap:break-word}
 .case-badge,.eyebrow{overflow-wrap:normal;word-break:normal;max-width:100%;min-width:0}
 .report-disclaimer .container{flex-wrap:wrap;min-width:0}
 .report-disclaimer p{min-width:0;flex:1 1 16rem}
 .report-disclaimer .case-badge{flex:1 1 100%}
 .report-section-grid,.report-section-content,.report-hero-grid,.report-hero-copy,.report-wide-head{min-width:0}
-h1,h2,h3{overflow-wrap:anywhere}
+h1,h2,h3{overflow-wrap:break-word}
 @media (min-width:761px){.lead-inline:has(>.lead-inline-copy):has(>.lead-inline-actions){grid-template-columns:minmax(0,1.2fr) minmax(220px,auto)}}
-.article-aside,aside{min-width:0;overflow-wrap:anywhere}
+.article-aside,aside{min-width:0;overflow-wrap:break-word}
 ul:not([class]),ol:not([class]){padding-inline-start:1.25em}
-li,dd,figcaption,caption,th,td,label,small{overflow-wrap:anywhere}
+li,dd,figcaption,caption,th,td,label,small{overflow-wrap:break-word}
 .field label,.consent,.form-hint,.form-note,.form-step-legend{font-size:var(--text-small);line-height:1.45;overflow-wrap:anywhere}
 .contact-form input:not([type=checkbox]):not([type=radio]):not([type=hidden]),.contact-form select,.contact-form textarea,.field input:not([type=checkbox]):not([type=radio]):not([type=hidden]),.field select,.field textarea{font-size:1rem;min-height:var(--touch-min)}
 .consent input[type=checkbox],.consent input[type=radio]{min-height:18px;width:18px}
