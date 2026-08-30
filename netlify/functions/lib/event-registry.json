@@ -22,7 +22,13 @@
     "destination_path",
     "destination_service_id",
     "consent",
-    "pii_policy"
+    "pii_policy",
+    "session_id",
+    "lead_id",
+    "opportunity_id",
+    "proposal_id",
+    "sale_id",
+    "journey"
   ],
   "layers": [
     "page_view",

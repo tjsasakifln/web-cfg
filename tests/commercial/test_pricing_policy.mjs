@@ -303,7 +303,7 @@ assert(
 );
 
 const EXPECTED_PUBLISHED = ["599", "690", "890", "1.200", "1.450", "1.900", "2.400", "3.750"];
-const htmlPrices = [...entregasHtml.matchAll(/<td[^>]*><strong>R\$\s*([\d.]+)<\/strong><\/td>/g)].map((m) => m[1]);
+const htmlPrices = [...entregasHtml.matchAll(/<p class="vitrine-item__price"><span>Preço<\/span><strong>R\$\s*([\d.]+)<\/strong><\/p>/g)].map((m) => m[1]);
 assert("entregas_has_eight_prices", htmlPrices.length === 8, htmlPrices);
 assert(
   "entregas_prices_unchanged",

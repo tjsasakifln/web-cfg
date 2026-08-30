@@ -21,7 +21,18 @@ HOME_FORM = (
     '<form id="formulario-contato" method="POST" action="/obrigado">'
     "<button type=\"submit\">Enviar</button></form>\n"
 )
-SITEKEY = "0x-public-site-key-fixture"
+XRAY_FORM = (
+    '<form id="xray-form" action="/.netlify/functions/conversion-intake">'
+    '<input type="hidden" name="action" value="xray" />'
+    '<button type="submit">Veja sua empresa</button></form>\n'
+)
+HANDRAISE_FORM = (
+    '<form id="handraise-form" action="/.netlify/functions/conversion-intake" '
+    'data-turnstile-required="true" hidden>'
+    '<input type="hidden" name="action" value="handraise" />'
+    '<input name="nome"/><button type="submit">Pedir segunda leitura</button></form>\n'
+)
+SITEKEY = "0x4AAAAAAACanonicalPublicKeyTestValue"
 PROD = {"CONTEXT": "production", "TURNSTILE_SITE_KEY": SITEKEY}
 
 
@@ -44,15 +55,24 @@ def test_production_build_fails_closed_without_site_key(tmp_path: Path) -> None:
         configure_turnstile_site_key(tmp_path, {"CONTEXT": "production"})
 
 
+def test_production_build_rejects_placeholder_site_key(tmp_path: Path) -> None:
+    write_form(tmp_path)
+    with pytest.raises(RuntimeError, match="malformed"):
+        configure_turnstile_site_key(
+            tmp_path,
+            {"CONTEXT": "production", "TURNSTILE_SITE_KEY": "replace-with-site-key"},
+        )
+
+
 def test_site_key_is_injected_only_into_publish_artifact(tmp_path: Path) -> None:
     target = write_form(tmp_path)
     result = configure_turnstile_site_key(
         tmp_path,
-        {"CONTEXT": "production", "TURNSTILE_SITE_KEY": "0x-public-site-key-fixture"},
+        {"CONTEXT": "production", "TURNSTILE_SITE_KEY": SITEKEY},
     )
     rendered = target.read_text(encoding="utf-8")
     assert result["configured"] is True
-    assert 'data-turnstile-sitekey="0x-public-site-key-fixture"' in rendered
+    assert f'data-turnstile-sitekey="{SITEKEY}"' in rendered
     assert 'data-turnstile-sitekey=""' not in rendered
 
 
@@ -64,7 +84,7 @@ def test_malformed_or_ambiguous_marker_fails_closed(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError, match="expected exactly one"):
         configure_turnstile_site_key(
             tmp_path,
-            {"CONTEXT": "production", "TURNSTILE_SITE_KEY": "0x-public-site-key-fixture"},
+            {"CONTEXT": "production", "TURNSTILE_SITE_KEY": SITEKEY},
         )
 
 
@@ -133,6 +153,39 @@ def test_single_quoted_turnstile_slot_inside_capture_form_is_not_duplicated(
     assert f"data-turnstile-sitekey='{SITEKEY}'" in html
 
 
+def test_explicitly_protected_conversion_intake_form_is_capture() -> None:
+    assert is_lead_capture_html(HANDRAISE_FORM) is True
+    assert is_lead_capture_html(XRAY_FORM) is False
+
+
+def test_conversion_intake_page_keys_only_explicitly_protected_form(tmp_path: Path) -> None:
+    write_form(tmp_path, XRAY_FORM + HANDRAISE_FORM)
+
+    result = configure_turnstile_site_key(tmp_path, PROD)
+
+    html = (tmp_path / "index.html").read_text(encoding="utf-8")
+    xray_start = html.index('id="xray-form"')
+    xray_end = html.index("</form>", xray_start)
+    handraise_start = html.index('id="handraise-form"')
+    handraise_end = html.index("</form>", handraise_start)
+    assert result["configured"] is True
+    assert result["capture_files"] == 1
+    assert html.count('id="turnstile-slot"') == 1
+    assert "turnstile-slot" not in html[xray_start:xray_end]
+    assert f'data-turnstile-sitekey="{SITEKEY}"' in html[handraise_start:handraise_end]
+
+
+def test_turnstile_secret_is_never_written_to_public_artifact(tmp_path: Path) -> None:
+    secret = "0x-private-turnstile-secret-must-never-ship"
+    write_form(tmp_path, HANDRAISE_FORM)
+
+    configure_turnstile_site_key(tmp_path, {**PROD, "TURNSTILE_SECRET_KEY": secret})
+
+    html = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert secret not in html
+    assert SITEKEY in html
+
+
 def _tracked_capture_html() -> list[tuple[str, str]]:
     rows = []
     # Reuse the shipped visitor census. Tooling fixtures may deliberately carry
@@ -168,6 +221,7 @@ ISSUE_440_CAPTURE_ROUTES = {
     "entregas/index.html",
     "ferramentas/diagnostico-defesa-margem/index.html",
     "index.html",
+    "piloto/conversao-xray/index.html",
     "servicos-obras-publicas/index.html",
 }
 

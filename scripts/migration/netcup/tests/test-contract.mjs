@@ -132,7 +132,8 @@ test("nginx output preserves fragments/query and emits only the explicit runtime
   const rendered = renderNginx(contract);
   const redirects = rendered["redirects.generated.conf"];
   const locations = rendered["locations.generated.conf"];
-  assert.match(redirects, /add_header Location "\/\$is_args\$args#como-atuamos" always;/);
+  assert.match(redirects, /add_header Location "\/\$is_args\$args#contato" always;/);
+  assert.match(redirects, /servicos-obras-publicas/);
   assert.match(redirects, /add_header Location "https:\/\/ops\.confenge\.com\.br\/\$is_args\$args" always;/);
   assert.match(redirects, /return 410;/);
   assert.match(redirects, /rewrite \^ "\/obrigado\.html" break;/);
@@ -169,6 +170,29 @@ test("nginx escaping keeps input values inside quoted arguments", () => {
   const rendered = renderHeaders(clone);
   assert.match(rendered, /\\\$uri\\"; return 200; #/);
   assert.equal((rendered.match(/map \$request_uri \$confenge_header_x_escape_probe/g) || []).length, 1);
+});
+
+test("long response headers are chunked below nginx's configuration token limit", () => {
+  const value = "default-src 'self'; script-src 'self' " + "'sha256-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=' ".repeat(90);
+  const contract = {
+    headers: [
+      {
+        match: "global",
+        headers: [{ name: "Content-Security-Policy", value }],
+      },
+    ],
+    routes: [],
+  };
+  const headers = renderHeaders(contract);
+  assert.match(headers, /map \$request_uri \$confenge_header_content_security_policy \{/);
+  assert.match(headers, /map \$request_uri \$confenge_header_content_security_policy_part_1 \{/);
+  for (const line of headers.split("\n")) {
+    assert(Buffer.byteLength(line) < 4096, `nginx config line must stay below 4 KiB: ${Buffer.byteLength(line)}`);
+  }
+  assert.match(
+    renderLocations(contract),
+    /add_header Content-Security-Policy "\$confenge_header_content_security_policy\$confenge_header_content_security_policy_part_1" always;/,
+  );
 });
 
 test("exact header selectors are not overwritten by a same-base terminal wildcard", () => {

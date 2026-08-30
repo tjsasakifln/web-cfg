@@ -198,7 +198,7 @@ async function collectPair() {
         idempotency_key: "idk-test-1",
       },
       path: "/",
-      sid: "sid-test-1",
+      sid: "sess-111111111111111111111111111",
     },
   ]);
   const acceptBody = JSON.parse(acceptRes.body);
@@ -415,16 +415,28 @@ for (const [from, to] of [
 
 const withWarmbly = contract.reconcileFunnel({
   events: sample,
-  warmbly: { qualified_lead: 1, pipeline: 1 },
+  warmbly: { owner: "warmbly", qualified_lead: 1, pipeline: 1 },
 });
 if (withWarmbly.denominators.qualified_lead !== 1 || withWarmbly.denominators.pipeline !== 1) {
   fail("warmbly_observed", withWarmbly);
 }
 if (withWarmbly.derived_qualified_lead !== false) fail("warmbly_marked_derived");
 
+const withoutWarmblyOwner = contract.reconcileFunnel({
+  events: sample,
+  warmbly: { qualified_lead: 1, pipeline: 1 },
+});
+if (
+  withoutWarmblyOwner.denominators.qualified_lead !== 0
+  || withoutWarmblyOwner.denominators.pipeline !== 0
+  || withoutWarmblyOwner.observation_reason !== "wrong_owner"
+) {
+  fail("warmbly_owner_must_be_explicit", withoutWarmblyOwner);
+}
+
 const fixtureWarmbly = contract.reconcileFunnel({
   events: sample,
-  warmbly: { qualified_lead: 3, pipeline: 2, kind: "synthetic" },
+  warmbly: { owner: "warmbly", qualified_lead: 3, pipeline: 2, kind: "synthetic" },
 });
 if (fixtureWarmbly.denominators.qualified_lead !== 0 || fixtureWarmbly.denominators.pipeline !== 0) {
   fail("fixture_promoted_stage", fixtureWarmbly);
@@ -485,12 +497,16 @@ const piiValue = contract.admitEvent({
   event: "page_view",
   props: { page_path: "/", note: "alice@example.com" },
 });
-if (piiValue.ok) fail("pii_like_value_admitted", piiValue);
+if (!piiValue.ok || piiValue.event.props.note != null || !piiValue.dropped.includes("note")) {
+  fail("pii_like_value_admitted", piiValue);
+}
 const cnpjValue = contract.admitEvent({
   event: "internal_search",
   props: { page_path: "/", note: "12345678000199" },
 });
-if (cnpjValue.ok) fail("cnpj_like_value_admitted", cnpjValue);
+if (!cnpjValue.ok || cnpjValue.event.props.note != null || !cnpjValue.dropped.includes("note")) {
+  fail("cnpj_like_value_admitted", cnpjValue);
+}
 
 const collectPii = await postCollect([
   {

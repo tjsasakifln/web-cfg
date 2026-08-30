@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-/** Render the public #331 scope contract into the eight examples and their hub. */
+/** Render the public #331 scope contract into the eight example routes. */
 
 import fs from "fs";
 import path from "path";
@@ -12,8 +12,6 @@ const ROUTE_START = "<!-- GENERATED:EIGHT-OFFER-CONTRACT:START -->";
 const ROUTE_END = "<!-- GENERATED:EIGHT-OFFER-CONTRACT:END -->";
 const FIELDS_START = "<!-- GENERATED:EIGHT-OFFER-FIELDS:START -->";
 const FIELDS_END = "<!-- GENERATED:EIGHT-OFFER-FIELDS:END -->";
-const HUB_START = "<!-- GENERATED:EIGHT-OFFER-HUB:START -->";
-const HUB_END = "<!-- GENERATED:EIGHT-OFFER-HUB:END -->";
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -55,17 +53,6 @@ function formFields(item) {
 ${FIELDS_END}`;
 }
 
-function hubBlock(contract) {
-  const cards = contract.deliverables.map((item) => `<article class="eight-hub__item"><header class="eight-hub__item-head"><span>${item.number}</span><strong>${escapeHtml(item.issue_331_name)}</strong><em>${escapeHtml(item.price_display)}</em></header><dl><div><dt>Objeto incluído</dt><dd>${escapeHtml(item.objeto_incluido)}</dd></div><div><dt>Saída mínima</dt><dd>${escapeHtml(item.saida_minima)}</dd></div><div><dt>SLA</dt><dd>${escapeHtml(item.sla.text)}</dd></div></dl><a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-hub-scope-${item.number}" data-cta-position="eight_hub_${item.number}" data-event-name="cta_click" href="${item.route}">Abrir sintético: ${escapeHtml(item.issue_331_name)}</a></article>`).join("\n");
-  const common = contract.deliverables[0];
-  if (!contract.deliverables.every((item) => JSON.stringify(item.entrada) === JSON.stringify(common.entrada) && JSON.stringify(item.fronteira) === JSON.stringify(common.fronteira))) {
-    throw new Error("hub common scope drift: render per-unit inputs and boundaries instead");
-  }
-  return `${HUB_START}
-<section class="eight-hub" data-section-archetype="reading_method" aria-labelledby="eight-hub-title"><div class="container"><header><p class="eyebrow">Escopo antes da contratação</p><h2 id="eight-hub-title">Compare o contrato das oito unidades atuais.</h2><p>Cada unidade mostra objeto, saída e SLA sem exigir interação. As entradas e fronteiras comuns aparecem uma vez, sem duplicação. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado; preço e aritmética do pacote permanecem iguais.</p></header><div class="eight-hub__common"><section><h3>Entradas comuns às oito unidades</h3>${list(common.entrada)}</section><section><h3>Fronteiras comuns às oito unidades</h3>${list(common.fronteira.map((value) => publicCopy(contract, value)))}</section></div><div class="eight-hub__list">${cards}</div></div></section>
-${HUB_END}`;
-}
-
 function replaceBlock(html, start, end, block, insertionNeedle) {
   const from = html.indexOf(start);
   const to = html.indexOf(end);
@@ -79,10 +66,6 @@ function ensureCss(html, needle) {
   if (html.includes(link)) return html;
   if (!html.includes(needle)) throw new Error(`stylesheet needle missing: ${needle}`);
   return html.replace(needle, `${needle}\n${link}`);
-}
-
-function removeSharedContractCss(html) {
-  return html.replace('<link href="/assets/eight-offer-contract.css" rel="stylesheet"/>\n', "");
 }
 
 function renderRoute(html, contract, item) {
@@ -106,11 +89,6 @@ function renderAll(contract) {
     const current = fs.readFileSync(absolute, "utf8");
     updates.push({ absolute, current, next: renderRoute(current, contract, item) });
   }
-  const hubPath = path.join(root, contract.package.hub_file);
-  const hubCurrent = fs.readFileSync(hubPath, "utf8");
-  let hubNext = removeSharedContractCss(hubCurrent);
-  hubNext = replaceBlock(hubNext, HUB_START, HUB_END, hubBlock(contract), "<!-- GENERATED:PUBLIC-CATALOG:START -->");
-  updates.push({ absolute: hubPath, current: hubCurrent, next: hubNext });
   return updates;
 }
 
@@ -122,10 +100,10 @@ if (process.argv.includes("--check")) {
     console.error(`EIGHT_OFFER_CONTRACT_DRIFT: ${drift.join(", ")}`);
     process.exit(1);
   }
-  console.log(`EIGHT_OFFER_CONTRACT_OK routes=${contract.deliverables.length} hub=1`);
+  console.log(`EIGHT_OFFER_CONTRACT_OK routes=${contract.deliverables.length}`);
 } else if (process.argv.includes("--write")) {
   for (const entry of updates) fs.writeFileSync(entry.absolute, entry.next);
-  console.log(`EIGHT_OFFER_CONTRACT_WRITTEN routes=${contract.deliverables.length} hub=1`);
+  console.log(`EIGHT_OFFER_CONTRACT_WRITTEN routes=${contract.deliverables.length}`);
 } else {
   console.error("usage: render_eight_offer_contracts.mjs --check|--write");
   process.exit(2);

@@ -14,6 +14,7 @@ import argparse
 import json
 import re
 import sys
+from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
@@ -119,7 +120,7 @@ def _strip_tags(html: str) -> str:
     text = re.sub(r"<script\b[^>]*>.*?</script>", " ", html or "", flags=re.I | re.S)
     text = re.sub(r"<style\b[^>]*>.*?</style>", " ", text, flags=re.I | re.S)
     text = re.sub(r"<[^>]+>", " ", text)
-    return re.sub(r"\s+", " ", text)
+    return re.sub(r"\s+", " ", unescape(text))
 
 
 def _digits(text: str) -> str:

@@ -319,12 +319,7 @@ def _cta_block(page: dict[str, Any], position: str) -> str:
         "Solicite um canal seguro para envio. O site não recebe arquivo; "
         "o canal é escolhido posteriormente."
     )
-    if page.get("page_id") == "lei-limite-25-50":
-        landmark_label = (
-            "Próximo passo no conteúdo" if position == "mid" else "Próximo passo ao final"
-        )
-    else:
-        landmark_label = "Próximo passo"
+    landmark_label = "Próximo passo no conteúdo" if position == "mid" else "Próximo passo ao final"
     return f"""
 <section class="editorial-cta" id="cta-{e(position)}" aria-label="{e(landmark_label)}" data-cta-position="{e(position)}">
 <div class="editorial-cta-inner">

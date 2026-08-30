@@ -470,6 +470,28 @@ def revision_surfaces(html: str, *, root: Path, slug: str) -> dict[str, str]:
     }
 
 
+_OPAQUE_TOKEN_SPAN = re.compile(
+    r'<span[^>]*\bdata-opaque-token\b[^>]*>(.*?)</span>', re.S
+)
+
+
+def unwrap_opaque_tokens(html: str) -> str:
+    """Drop the presentational wrapper the responsive build adds.
+
+    The build wraps unbreakable tokens in <span data-opaque-token> so they can
+    wrap on narrow screens. That is presentation, not prose, so it must not
+    read as a content change nor hide a decision artifact from this gate.
+    """
+    previous = None
+    while previous != html:
+        previous = html
+        html = _OPAQUE_TOKEN_SPAN.sub(r"\1", html)
+    # The same pass glues currency and units with a non-breaking space so they
+    # never split across lines. That is presentation too: the reader sees one
+    # space, so the gate must compare against one space.
+    return html.replace("&nbsp;", " ").replace("&#160;", " ").replace("\u00a0", " ")
+
+
 def content_fingerprint(html: str) -> str:
     """SHA-256 of the article body with every date token masked.
 
@@ -477,6 +499,7 @@ def content_fingerprint(html: str) -> str:
     five surfaces never moves it, so the gate can tell "the prose changed"
     apart from "the date was restamped".
     """
+    html = unwrap_opaque_tokens(html)
     match = re.search(r'<article class="article-main".*?</article>', html, re.S)
     body = match.group(0) if match else html
     body = _ISO_DATE.sub("@DATE@", body)
@@ -493,10 +516,10 @@ def content_fingerprint(html: str) -> str:
 REVISION_BODY_SHA256: dict[str, str] = {
     "atraso-na-medicao-obra-publica": "ec6f1034dedc7014d9af5a9676e83a316a74072004c64a25e84f4068fb2abf34",
     "fiscal-nao-assina-medicao-obra-publica": "64023e36c2d84ecd7976394e07ab30eb94c72656b33efa3ce757b736e5fd6233",
-    "glosa-por-qualidade-obra-publica": "9b60d1b4fa9854388fa3bf4198ca39a8ac5439253069773d5e714dc2b838e8bd",
-    "medicao-por-evento-obra-publica": "c48afaf7fb4f91568c782505fcb3ed49aeda1ccd2c858b75c88ce7457bbb18cd",
-    "pagamento-parcial-etapa-empreitada-global": "66ea9fd5a7acd013227502ed89a583138798f2ef6ab415d023518c3daea208eb",
-    "atraso-pagamento-contrato-publico-suspender": "860cb2aded60d9dfb60ed723a7a5f4320e52e2db51ef510ff13559ae9d545bc1",
+    "glosa-por-qualidade-obra-publica": "ae9294d461fa979791485dd4eff29c8ca0034b02dbeaa51cea4fcf6c2ecf5392",
+    "medicao-por-evento-obra-publica": "7c14f8ff418a07609e4fbc3a512adec6a131ec206d03746eb09514a0211e77f3",
+    "pagamento-parcial-etapa-empreitada-global": "e2df8173f111e49caf99a90ce6a02e6957b188f846a1a76d4a2a0fb1638217b6",
+    "atraso-pagamento-contrato-publico-suspender": "376986b4ebbacceda21c939d2fb046dcaac1a9476e5cc00bc32f6d2d26e7108d",
 }
 
 
@@ -662,7 +685,7 @@ def section_html(html: str, section_id: str) -> str:
 
 def artifact_evidence(html: str, contract: ClusterPageContract) -> dict[str, bool]:
     """Require the whole decision artifact inside #exemplo, not in the shell."""
-    example = section_html(html, "exemplo")
+    example = unwrap_opaque_tokens(section_html(html, "exemplo"))
     return {
         "section_present": bool(example),
         "artifact_present": contract.artifact in example,

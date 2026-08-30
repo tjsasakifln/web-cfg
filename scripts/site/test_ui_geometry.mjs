@@ -364,21 +364,21 @@ async function main() {
     fail("functional_text_min_14px", e.message || e);
   }
 
-  // 6) interactive targets prefer ≥44px (never below 24)
+  // 6) primary controls keep the campaign contract of at least 44×44 CSS px.
   try {
     const small = await page.evaluate(() => {
       const bad = [];
-      for (const el of document.querySelectorAll("a.button, button, .menu-toggle, .whatsapp-float, summary")) {
+      for (const el of document.querySelectorAll("a.button, button, .menu-toggle, .whatsapp-float, summary, label.consent")) {
         const r = el.getBoundingClientRect();
         if (r.width === 0 || r.height === 0) continue;
-        if (r.width < 24 || r.height < 24) bad.push({ tag: el.tagName, w: r.width, h: r.height, t: (el.textContent || "").slice(0, 40) });
+        if (r.width < 44 || r.height < 44) bad.push({ tag: el.tagName, w: r.width, h: r.height, t: (el.textContent || "").slice(0, 40) });
       }
       return bad;
     });
     if (small.length) throw new Error(JSON.stringify(small.slice(0, 5)));
-    ok("targets_min_24px");
+    ok("targets_min_44x44px");
   } catch (e) {
-    fail("targets_min_24px", e.message || e);
+    fail("targets_min_44x44px", e.message || e);
   }
 
   // 7) focus visible

@@ -204,7 +204,10 @@ def test_metadata_canonical_schema_and_cta():
         assert "FAQPage" in types, slug
         assert "BreadcrumbList" in types, slug
         assert "wa.me/5548988344559" in html
-        assert re.search(r'href="/\?[^"]*origem=/conteudos/' + re.escape(slug), html)
+        # Attribution moved from tracking query strings to data-* attributes,
+        # read by the capture-phase click handler in js/modules/nav.js. The
+        # guarantee is unchanged: the CTA still carries this page as origem.
+        assert re.search(r'data-origem="/conteudos/' + re.escape(slug) + r'/?"', html), slug
         assert html_has_commercial_bridge(html)
         mapped = map_content_to_service(f"/conteudos/{slug}/")
         assert mapped["cluster_id"] == row["cluster_id"]

@@ -485,11 +485,12 @@ assert(
 
 const catalogPage = fs.readFileSync(path.join(root, "entregas/index.html"), "utf8");
 const catalogData = fs.readFileSync(path.join(root, "entregas/catalog-data.js"), "utf8");
+const primaryVitrineHtml = catalogPage.match(/<div class="vitrine-items">([\s\S]*?)<dl class="compare-ladder-figures">/)?.[1] || "";
 for (const item of items) {
   assert(`catalog_product_not_sold_on_vitrine_${item.item}`, !catalogPage.includes(`id="entrega-${item.item}"`), item.item);
   assert(`catalog_product_kept_in_internal_data_${item.item}`, catalogData.includes(`"${item.deliverable_id}"`) && catalogData.includes(item.public_name_pt_br), item.deliverable_id);
-  const vitrineHtml = (catalogPage.match(/<!-- GENERATED:PUBLIC-CATALOG:START -->[\s\S]*?<!-- GENERATED:PUBLIC-CATALOG:END -->/) || [""])[0];
-  assert(`catalog_product_name_not_on_vitrine_${item.item}`, !vitrineHtml.includes(item.public_name_pt_br), item.public_name_pt_br);
+  assert(`catalog_product_name_not_on_vitrine_${item.item}`, !primaryVitrineHtml.includes(item.public_name_pt_br), item.public_name_pt_br);
+  assert(`catalog_capability_name_findable_in_roll_${item.item}`, catalogPage.includes(`data-capability-id="${item.deliverable_id}"`) && catalogPage.includes(item.public_name_pt_br), item.public_name_pt_br);
 }
 assert("catalog_capture_present", catalogPage.includes('id="captura-entregas"'));
 assert("catalog_capture_persisted", catalogPage.includes('action="/.netlify/functions/lead"'));

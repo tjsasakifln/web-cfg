@@ -332,8 +332,8 @@
     "/termos-de-uso/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-08-29T15:14:39Z",
-  "public_artifact_hash": "3c6e9c27778bd02da9c7b2bce19c3d9c94259ac9df402ea974c25ca9866093e0",
+  "generated_at": "2026-08-30T02:16:31Z",
+  "public_artifact_hash": "8838ea1ce82ef2b43b0e02325988a673beecb11dd18a6cb1172564f6d753dcd9",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -415,6 +415,6 @@
   "structured_identity": {
     "html_scanned": 263,
     "html_rewritten": 211,
-    "fields_removed": 897
+    "fields_removed": 894
   }
 }
