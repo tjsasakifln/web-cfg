@@ -13,7 +13,7 @@ const expectLocalShaHints = true;
 // Legacy path expectations after host/path migration (no soft-404 to home).
 // status: 301 | 410 | 404 ; locPart matched against Location when redirecting.
 const legacy = [
-  ["/servicos", 301, "atuacao"],
+  ["/servicos", 301, "servicos-obras-publicas"],
   ["/blog", 301, "conteudos"],
   ["/privacy-policy", 301, "privacidade"],
   ["/politica-de-privacidade", 301, "privacidade"],

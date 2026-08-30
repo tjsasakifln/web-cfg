@@ -41,7 +41,7 @@ Action: after 410 stable ≥48h, use **URL inspection** on each path above and *
 | From | To | Status |
 |------|-----|--------|
 | /blog | /conteudos/ | 301 |
-| /servicos | /#como-atuamos | 301 |
+| /servicos | /servicos-obras-publicas/ | 301 |
 | /contato | /#contato | 301 |
 | /privacy-policy | /privacidade/ | 301 |
 

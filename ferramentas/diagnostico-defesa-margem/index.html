@@ -113,13 +113,13 @@
 </section> <section id="eventos-defesa-margem" aria-labelledby="h-eventos">
 <h2 id="h-eventos">Eventos de defesa de margem</h2>
 <ul id="out-eventos">
-<li>Aditivo: UNKNOWN (no_amendment_signal)</li>
-<li>Apostilamento: UNKNOWN (no_amendment_signal)</li>
-<li>Prorrogação: UNKNOWN (no_amendment_signal)</li>
-<li>Reajuste: UNKNOWN (no_explicit_adjustment_document)</li>
-<li>Reequilíbrio: UNKNOWN (no_explicit_adjustment_rule)</li>
-<li>Medição: UNKNOWN (source_does_not_offer_measurements)</li>
-<li>Pagamento: UNKNOWN (source_does_not_offer_payments)</li>
+<li>Aditivo: UNKNOWN (<code data-opaque-token>no_amendment_signal</code>)</li>
+<li>Apostilamento: UNKNOWN (<code data-opaque-token>no_amendment_signal</code>)</li>
+<li>Prorrogação: UNKNOWN (<code data-opaque-token>no_amendment_signal</code>)</li>
+<li>Reajuste: UNKNOWN (<code data-opaque-token>no_explicit_adjustment_document</code>)</li>
+<li>Reequilíbrio: UNKNOWN (<code data-opaque-token>no_explicit_adjustment_rule</code>)</li>
+<li>Medição: UNKNOWN (<code data-opaque-token>source_does_not_offer_measurements</code>)</li>
+<li>Pagamento: UNKNOWN (<code data-opaque-token>source_does_not_offer_payments</code>)</li>
 </ul>
 </section> <section id="evidencias-fontes" aria-labelledby="h-fontes">
 <h2 id="h-fontes">Evidências e fontes</h2>
@@ -230,7 +230,7 @@
     if (!timeline.length) timeline.push("<li class=\"journey-stage\"><span class=\"type-mono\">UNKNOWN</span><h3>Sem datas oficiais de vigência neste recorte</h3></li>");
     document.getElementById("out-timeline").innerHTML = timeline.join("");
     document.getElementById("out-eventos").innerHTML = diagnosis.eventos_defesa_margem.map(function(e){
-      return "<li>" + esc(e.family) + ": " + esc(e.classification) + (e.reason ? " (" + esc(e.reason) + ")" : "") + "</li>";
+      return "<li>" + esc(e.family) + ": " + esc(e.classification) + (e.reason ? " (<code data-opaque-token>" + esc(e.reason) + "</code>)" : "") + "</li>";
     }).join("");
     var fontes = [];
     var officialUrl = diagnosis.fontes.classification === "OFFICIAL" ? safeExternalUrl(diagnosis.fontes.value) : "";

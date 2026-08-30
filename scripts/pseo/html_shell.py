@@ -238,8 +238,38 @@ def attribution_query(meta: dict[str, Any], cta_position: str) -> str:
 
 
 def form_href(meta: dict[str, Any], tema: str, cta_position: str = "form") -> str:
-    q = attribution_query(meta, cta_position)
-    return f"/?tema={quote(tema)}&origem={quote(meta.get('origem') or meta.get('url') or '/')}&{q}#contato"
+    """Canonical contact fragment. Attribution is emitted as data-* via form_data_attrs."""
+    del meta, tema, cta_position
+    return "/#contato"
+
+
+def form_data_attrs(meta: dict[str, Any], tema: str, cta_position: str = "form") -> str:
+    """data-* attribution for a clean /#contato href. Never put these on the URL."""
+    parts: list[str] = []
+    if tema:
+        parts.append(f'data-tema="{e(str(tema)[:120])}"')
+    origem = meta.get("origem") or meta.get("url") or "/"
+    if origem:
+        parts.append(f'data-origem="{e(str(origem)[:180])}"')
+    key_map = (
+        ("pseo_page_id", "data-pseo-page-id"),
+        ("page_type", "data-page-type"),
+        ("archetype", "data-segment-key"),
+        ("segment", "data-segment"),
+        ("region", "data-region"),
+        ("agency_id", "data-agency-id"),
+        ("intent", "data-intent"),
+    )
+    for src, attr in key_map:
+        v = meta.get(src)
+        if v:
+            parts.append(f'{attr}="{e(str(v)[:120])}"')
+    snap = meta.get("snapshot") or meta.get("dataset_hash")
+    if snap:
+        parts.append(f'data-snap="{e(str(snap)[:16])}"')
+    if cta_position:
+        parts.append(f'data-cta-position="{e(cta_position)}"')
+    return " ".join(parts)
 
 
 def breadcrumbs_html(crumbs: list[tuple[str, str | None]]) -> str:
@@ -379,6 +409,7 @@ def cta_block(meta: dict[str, Any], label: str, wa_message: str, tema: str) -> s
     """Commercial CTA for pSEO pages ,  decision/consequence language, not pipeline jargon."""
     wa = wa_link(wa_message)
     form = form_href(meta, tema, "inline_cta")
+    form_attrs = form_data_attrs(meta, tema, "inline_cta")
     attr = attribution_query(meta, "inline_cta")
     # Prefer economic framing when label is generic
     display = label
@@ -393,7 +424,7 @@ def cta_block(meta: dict[str, Any], label: str, wa_message: str, tema: str) -> s
 <p>{e(body)}</p></div>
 <div class="lead-inline-actions">
 <a class="button button-primary" data-cta-position="inline_cta" data-content-cluster="pseo" data-pseo-event="pseo_whatsapp_click" href="{e(wa)}" rel="noopener" target="_blank">Revisar esta oportunidade</a>
-<a class="button button-secondary" data-cta-position="form" data-content-cluster="pseo" data-pseo-event="pseo_cta_click" href="{e(form)}">Continuar pelo formulário</a>
+<a class="button button-secondary" data-cta-position="form" data-content-cluster="pseo" data-pseo-event="pseo_cta_click" href="{e(form)}" {form_attrs}>Continuar pelo formulário</a>
 </div></section>"""
 
 

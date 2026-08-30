@@ -290,6 +290,73 @@ def gate_naturalness(*, only_indexable: bool = True) -> GateReport:
     )
 
 
+_FEATURED_BLOCK = re.compile(
+    r'<(?:article|section|div|p|a)[^>]*(?:class="[^"]*(?:featured|library-item|featured-content|featured-lead|contact-content-hint)[^"]*")[^>]*>[\s\S]*?</(?:article|section|div|p|a)>',
+    re.I,
+)
+_HREF = re.compile(r"""href=["']([^"']+)["']""", re.I)
+_FUNCTIONAL_NOINDEX_HREFS = frozenset(
+    {
+        "/nurture/sair/",
+        "/nurture/sair",
+    }
+)
+
+
+def _featured_noindex_from_indexable() -> list[Finding]:
+    """Indexable pages must not featured-link noindex hubs/articles.
+
+    Frozen BOFU pillar HTML (#291) is not mutated in this campaign; those files
+    are skipped here because the freeze, not an SEO allowlist, blocks the rewrite.
+    """
+    from scripts.organic.canonical_hrefs import FROZEN_HTML_REL
+
+    findings: list[Finding] = []
+    public = [
+        p
+        for p in _public_scan_files()
+        if p.suffix == ".html"
+    ]
+    noindex_paths: set[str] = set()
+    indexable_files: list[tuple[Path, str]] = []
+    for path in public:
+        html = path.read_text(encoding="utf-8", errors="replace")
+        rel = path.relative_to(ROOT).as_posix()
+        route = path_to_url(path)
+        if is_noindex(html):
+            noindex_paths.add(route)
+            noindex_paths.add(route.rstrip("/") or "/")
+            continue
+        if rel in FROZEN_HTML_REL:
+            continue
+        indexable_files.append((path, html))
+    for path, html in indexable_files:
+        rel = path.relative_to(ROOT).as_posix()
+        for block in _FEATURED_BLOCK.findall(html):
+            for href in _HREF.findall(block):
+                if href.startswith(("http", "mailto:", "tel:", "#", "//")):
+                    if href.startswith(SITE):
+                        href = urlparse(href).path or "/"
+                    else:
+                        continue
+                target = href.split("?")[0].split("#")[0]
+                if not target.startswith("/"):
+                    continue
+                if target in _FUNCTIONAL_NOINDEX_HREFS:
+                    continue
+                normalized = target if target.endswith("/") or target.endswith(".html") else target + "/"
+                if normalized in noindex_paths or target in noindex_paths:
+                    findings.append(
+                        Finding(
+                            gate="index_surface",
+                            path=rel,
+                            reason="featured_link_to_noindex",
+                            excerpt=href,
+                        )
+                    )
+    return findings
+
+
 def pillar_guide_count_findings(pillar: str, html: str) -> list[Finding]:
     """Fail when published guide counts exceed library-item size.
 
@@ -465,6 +532,8 @@ def gate_index_surface() -> GateReport:
                     )
         for f in pillar_guide_count_findings(pillar, ph):
             findings.append(f)
+
+    findings.extend(_featured_noindex_from_indexable())
 
     # Feed
     feed = ROOT / "feed.xml"
@@ -675,6 +744,15 @@ def _onpage_capture_findings(root: Path, pii_re: re.Pattern[str]) -> tuple[list[
             )
             continue
         form = form_match.group(0)
+        form_open = form.split(">", 1)[0]
+        if not re.search(r'\bdata-receipt-required=["\']true["\']', form_open, re.I):
+            findings.append(
+                Finding(
+                    gate="conversion",
+                    path=str(page.relative_to(root)),
+                    reason="capture_confirmation_not_fail_closed",
+                )
+            )
         if html.find('href="#captura-pilar"') < 0 or html.find('href="#captura-pilar"') > form_match.start():
             findings.append(
                 Finding(
@@ -684,7 +762,7 @@ def _onpage_capture_findings(root: Path, pii_re: re.Pattern[str]) -> tuple[list[
                 )
             )
         for attr in ("data-offer-id", "data-cta-id", "data-asset-id", "data-route-family", "data-cta-position"):
-            if not re.search(rf'\b{attr}=["\'][^"\']*["\']', form_match.group(0).split(">", 1)[0], re.I):
+            if not re.search(rf'\b{attr}=["\'][^"\']*["\']', form_open, re.I):
                 findings.append(
                     Finding(
                         gate="conversion",

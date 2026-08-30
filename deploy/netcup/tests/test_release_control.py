@@ -417,6 +417,7 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "runtime/server.mjs",
         "runtime/contract.json",
         "netlify/functions/lead.cjs",
+        "data/revops/closed-loop-funnel.v1.json",
         "data/nurture/tracks.json",
         "data/site/editorial-policy.json",
         "data/bofu-dominance/core/gsc-live-overlay.v1.json",

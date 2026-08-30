@@ -1,7 +1,7 @@
 {
   "defect_count": 0,
   "ok": true,
-  "page_count": 74,
+  "page_count": 75,
   "pages": [
     {
       "claimed": {
@@ -19,7 +19,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -40,14 +40,12 @@
         "dates": [],
         "description": "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e defesa de margem na execução. Para construtoras.",
         "h1": "Licitação vencida não paga a conta. Contrato rentável, sim.",
-        "has_dataset_surface": true,
+        "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "CONFENGE | Consultoria para licitações e contratos de obras públicas",
-        "versions": [
-          "formulário em 2 etapas + WhatsApp -->"
-        ]
+        "versions": []
       }
     },
     {
@@ -69,7 +67,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -126,7 +124,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -183,7 +181,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -242,7 +240,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -299,7 +297,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -341,7 +339,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Casos técnicos demonstrativos"
+          "Exemplos de entrega"
         ],
         "dataset_names": [],
         "dates": [],
@@ -355,7 +353,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -376,19 +374,19 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Casos técnicos demonstrativos"
+          "Exemplos de entrega"
         ],
         "canonical": "https://confenge.com.br/casos/",
         "dates": [
-          "2026-08-23"
+          "2026-08-28"
         ],
-        "description": "Casos técnicos demonstrativos baseados em Lei 14.133/2021, não são cases de clientes.",
-        "h1": "Casos técnicos demonstrativos",
+        "description": "Exemplos de entrega demonstrativos. Resultados de clientes permanecem em zero até existir autorização e evidência.",
+        "h1": "Exemplos de entrega (demonstrativos)",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Casos técnicos demonstrativos | CONFENGE",
+        "title": "Exemplos de entrega (demonstrativos) | CONFENGE",
         "versions": []
       }
     },
@@ -397,7 +395,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Casos técnicos demonstrativos",
+          "Exemplos de entrega",
           "Aditivo: verificar saldos do art. 125 antes de protocolar"
         ],
         "dataset_names": [],
@@ -412,7 +410,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -433,7 +431,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Casos técnicos demonstrativos",
+          "Exemplos de entrega",
           "Aditivo: verificar saldos do art. 125 antes de protocolar"
         ],
         "canonical": "https://confenge.com.br/casos/aditivo-art125-demonstrativo/",
@@ -441,12 +439,12 @@
           "2026-08-03"
         ],
         "description": "Demonstração metodológica de verificação de acréscimos e supressões (art. 125). Não é case de cliente.",
-        "h1": "Aditivo: verificar saldos do art. 125 antes de protocolar",
+        "h1": "Demonstrativo. Aditivo: verificar saldos do art. 125 antes de protocolar",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Aditivo: verificar saldos do art. 125 antes de protocolar | CONFENGE",
+        "title": "Demonstrativo. Aditivo: verificar saldos do art. 125 antes de protocolar | CONFENGE",
         "versions": []
       }
     },
@@ -455,7 +453,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Casos técnicos demonstrativos",
+          "Exemplos de entrega",
           "Medição glosada: do apontamento ao pedido certo"
         ],
         "dataset_names": [],
@@ -470,7 +468,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -491,7 +489,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Casos técnicos demonstrativos",
+          "Exemplos de entrega",
           "Medição glosada: do apontamento ao pedido certo"
         ],
         "canonical": "https://confenge.com.br/casos/medicao-glosa-demonstrativo/",
@@ -499,12 +497,12 @@
           "2026-08-03"
         ],
         "description": "Demonstração metodológica de dossiê frente a glosa de medição. Não é case de cliente.",
-        "h1": "Medição glosada: do apontamento ao pedido certo",
+        "h1": "Demonstrativo. Medição glosada: do apontamento ao pedido certo",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Medição glosada: do apontamento ao pedido certo | CONFENGE",
+        "title": "Demonstrativo. Medição glosada: do apontamento ao pedido certo | CONFENGE",
         "versions": []
       }
     },
@@ -528,7 +526,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -555,12 +553,12 @@
           "2026-08-23"
         ],
         "description": "R$ 890 por unidade: a leitura da diretoria vira uma reunião de decisão, sem criar um único número novo fora do relatório e da base.",
-        "h1": "Transforme o diagnóstico em decisão assinada na reunião.",
+        "h1": "Demonstrativo. Transforme o diagnóstico em decisão assinada na reunião.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Síntese Executiva de Expansão | Modelo CONFENGE",
+        "title": "Síntese Executiva de Expansão | Demonstrativo CONFENGE",
         "versions": []
       }
     },
@@ -584,7 +582,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -611,12 +609,12 @@
           "2026-08-23"
         ],
         "description": "R$ 690 por unidade: a planilha que sustenta todos os entregáveis, com 13 abas, 252 campos de natureza declarada e 30 controles de qualidade.",
-        "h1": "Confira cada número antes de acreditar nele.",
+        "h1": "Demonstrativo. Confira cada número antes de acreditar nele.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Base de Mercado para Expansão | Modelo CONFENGE",
+        "title": "Base de Mercado para Expansão | Demonstrativo CONFENGE",
         "versions": []
       }
     },
@@ -640,7 +638,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -669,12 +667,12 @@
           "2027-02-03"
         ],
         "description": "R$ 1.450 por unidade: os contratos que vencem entre 91 e 179 dias, com propensão à recontratação medida e o silêncio da fonte declarado.",
-        "h1": "Descubra quais contratos vencem antes que o edital apareça.",
+        "h1": "Demonstrativo. Descubra quais contratos vencem antes que o edital apareça.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Radar de Contratos Próximos da Renovação | Modelo CONFENGE",
+        "title": "Radar de Contratos Próximos da Renovação | Demonstrativo CONFENGE",
         "versions": []
       }
     },
@@ -698,7 +696,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -725,12 +723,12 @@
           "2026-08-23"
         ],
         "description": "R$ 1.200 por unidade: os órgãos que compram o tipo de obra da sua construtora, ordenados por frequência, escala e acessibilidade.",
-        "h1": "Descubra quais órgãos compram o que a sua empresa executa.",
+        "h1": "Demonstrativo. Descubra quais órgãos compram o que a sua empresa executa.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Mapa de Órgãos com Maior Potencial | Modelo CONFENGE",
+        "title": "Mapa de Órgãos com Maior Potencial | Demonstrativo CONFENGE",
         "versions": []
       }
     },
@@ -754,7 +752,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -781,12 +779,12 @@
           "2026-08-23"
         ],
         "description": "R$ 1.900 por unidade: contra quem a sua construtora disputa, quanto cada rival depende de um só comprador e em que faixa de ticket ele opera.",
-        "h1": "Descubra contra quem você realmente disputa.",
+        "h1": "Demonstrativo. Descubra contra quem você realmente disputa.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Mapa de Concorrentes Relevantes | Modelo CONFENGE",
+        "title": "Mapa de Concorrentes Relevantes | Demonstrativo CONFENGE",
         "versions": []
       }
     },
@@ -810,7 +808,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -837,12 +835,12 @@
           "2026-08-23"
         ],
         "description": "R$ 2.400 por unidade: a escala de contrato que o mercado adjudica, por tipologia e por ano, com o que a base não responde declarado.",
-        "h1": "Descubra a escala de contrato que este mercado realmente adjudica.",
+        "h1": "Demonstrativo. Descubra a escala de contrato que este mercado realmente adjudica.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Referências de Preços de Obras Públicas | Modelo CONFENGE",
+        "title": "Referências de Preços de Obras Públicas | Demonstrativo CONFENGE",
         "versions": []
       }
     },
@@ -866,7 +864,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -895,12 +893,12 @@
           "2027-02-03"
         ],
         "description": "R$ 3.750 por unidade: os cinco módulos do diagnóstico viram uma leitura de diretoria, com quatro decisões assináveis e cada número re-derivável na base.",
-        "h1": "Decida onde alocar equipe, acervo e caixa nos próximos 90 dias.",
+        "h1": "Demonstrativo. Decida onde alocar equipe, acervo e caixa nos próximos 90 dias.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Plano Executivo de Expansão | Modelo CONFENGE",
+        "title": "Plano Executivo de Expansão | Demonstrativo CONFENGE",
         "versions": []
       }
     },
@@ -924,7 +922,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -951,12 +949,12 @@
           "2026-08-23"
         ],
         "description": "Veja como a CONFENGE transforma editais e a realidade da construtora em decisões de participar, condicionar ou recusar. Modelo integral; relatório adaptado por R$ 599.",
-        "h1": "Escolha quais licitações disputar e quais recusar.",
+        "h1": "Modelo sintético: licitações a disputar ou recusar.",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
         "reviewers": [],
-        "title": "Relatório executivo de priorização de licitações | Modelo CONFENGE",
+        "title": "Relatório executivo de priorização de licitações | Demonstrativo CONFENGE",
         "versions": []
       }
     },
@@ -1043,6 +1041,62 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
+          "Confiança e evidência"
+        ],
+        "dataset_names": [],
+        "dates": [],
+        "descriptions": [],
+        "downloads": [],
+        "has_dataset_type": false,
+        "has_false_case_type": false,
+        "headlines": [],
+        "licenses": [],
+        "organizations": [
+          "CONFENGE"
+        ],
+        "people": [
+          "Tiago Sasaki"
+        ],
+        "reviewers": [],
+        "types": [
+          "Organization",
+          "Person",
+          "BreadcrumbList"
+        ],
+        "versions": []
+      },
+      "defects": [],
+      "fixture_only": false,
+      "index_intent": true,
+      "ok": true,
+      "url": "https://confenge.com.br/confianca/",
+      "visible": {
+        "authors": [
+          "Engº Tiago Sasaki"
+        ],
+        "breadcrumb_names": [
+          "Início",
+          "Confiança e evidência"
+        ],
+        "canonical": "https://confenge.com.br/confianca/",
+        "dates": [
+          "2026-08-29"
+        ],
+        "description": "Quem executa a CONFENGE, como corrigir, a política de evidência e a distinção entre método demonstrativo e resultado de cliente.",
+        "h1": "Quem executa, como corrigir e o que conta como prova",
+        "has_dataset_surface": false,
+        "licenses": [],
+        "permission_class": "demonstrativo",
+        "reviewers": [],
+        "title": "Confiança e evidência | CONFENGE",
+        "versions": []
+      }
+    },
+    {
+      "claimed": {
+        "authors": [],
+        "breadcrumbs": [
+          "Início",
           "Conflitos e interesses comerciais"
         ],
         "dataset_names": [],
@@ -1057,7 +1111,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1113,7 +1167,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1174,7 +1228,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1228,23 +1282,23 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Administração local é custo direto, BDI ou item de planilha? Critérios para precificar sem duplicar nem omitir encargos."
+          "Como conferir administração local em item separado do BDI segundo a CAIXA, com cálculo reproduzível e teste de duplicidade."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Administração local: custo direto, BDI ou planilha?"
+          "Administração local: item, BDI ou planilha?"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1274,9 +1328,9 @@
         "canonical": "https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
-        "description": "Administração local é custo direto, BDI ou item de planilha? Critérios para precificar sem duplicar nem omitir equipe de canteiro.",
+        "description": "Como conferir administração local em item separado do BDI segundo a CAIXA, com cálculo reproduzível e teste de duplicidade.",
         "h1": "Administração local no orçamento: direto, BDI ou planilha?",
         "has_dataset_surface": true,
         "licenses": [],
@@ -1298,7 +1352,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-25"
+          "2026-08-29"
         ],
         "descriptions": [
           "Como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir processamento da medição, glosa e pagamento."
@@ -1314,7 +1368,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1344,7 +1398,7 @@
         "canonical": "https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-08-25"
+          "2026-08-29"
         ],
         "description": "A medição da obra pública atrasou? Veja como localizar a etapa travada, organizar a prova e cobrar uma decisão sem confundir medição com pagamento.",
         "h1": "Atraso na medição de obra pública: onde o processo travou?",
@@ -1363,28 +1417,28 @@
           "Início",
           "Conteúdos",
           "Atrasos e prorrogações",
-          "Obra atrasada por culpa da Administração: como proteger a construtora"
+          "Prova de culpa da Administração no atraso da obra"
         ],
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-28"
         ],
         "descriptions": [
-          "Atraso por culpa da Administração: como provar e proteger em obras públicas: o que verificar antes de pleitear, aceitar ou escalar o conflito."
+          "Como ligar o evento da Administração ao caminho crítico: cronologia da imputação, nexo e prova contemporânea antes de pedir prazo."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Atraso por culpa da Administração: como provar e proteger"
+          "Prova de culpa da Administração no atraso da obra"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1409,20 +1463,22 @@
           "Início",
           "Conteúdos",
           "Atrasos e prorrogações",
-          "Obra atrasada por culpa da Administração: como proteger a construtora"
+          "Prova de culpa da Administração no atraso da obra"
         ],
         "canonical": "https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-28"
         ],
-        "description": "Atraso por culpa da Administração: como provar causa, impacto no prazo e proteger a construtora antes de sanção ou prejuízo.",
-        "h1": "Atraso por culpa da Administração: como provar",
+        "description": "Como ligar o evento da Administração ao caminho crítico: cronologia da imputação, nexo e prova contemporânea antes de pedir prazo.",
+        "h1": "Prova de culpa da Administração no atraso da obra",
         "has_dataset_surface": false,
-        "licenses": [],
+        "licenses": [
+          "license-token-visible"
+        ],
         "permission_class": null,
         "reviewers": [],
-        "title": "Atraso por culpa da Administração: como provar | CONFENGE",
+        "title": "Prova de culpa da Administração no atraso da obra | CONFENGE",
         "versions": []
       }
     },
@@ -1438,10 +1494,10 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Atraso de pagamento no contrato público autoriza suspender a obra? Condições, riscos e como formalizar a posição da construtora."
+          "Triagem de suspender ou só notificar: dois meses da nota fiscal, exceções do § 3º e risco de sanção por parada precoce."
         ],
         "downloads": [],
         "has_dataset_type": false,
@@ -1454,7 +1510,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1484,9 +1540,9 @@
         "canonical": "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
-        "description": "Atraso de pagamento no contrato público autoriza suspender a obra? Condições, riscos e como formalizar a posição da construtora.",
+        "description": "Nota fiscal emitida e despesa liquidada sem pagamento: o art. 137 da Lei 14.133 trata extinção após dois meses, não paralisação automática no primeiro atraso.",
         "h1": "Atraso de pagamento: pode suspender a obra pública?",
         "has_dataset_surface": false,
         "licenses": [],
@@ -1508,7 +1564,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-18"
+          "2026-08-29"
         ],
         "descriptions": [
           "BDI diferenciado para materiais e equipamentos: critérios técnicos, riscos de rejeição e quando a planilha exige decomposição, guia CONFENGE."
@@ -1524,7 +1580,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1554,9 +1610,10 @@
         "canonical": "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-08-18"
+          "2026-08-18",
+          "2026-08-29"
         ],
-        "description": "Quando o edital ou a natureza do item autoriza BDI distinto, e o risco de aplicar o mesmo percentual em tudo.",
+        "description": "Quando o modelo do edital autoriza BDI distinto em equipamento, com conta de duas famílias e o risco de maquiar margem.",
         "h1": "BDI diferenciado em materiais e equipamentos: quando usar",
         "has_dataset_surface": true,
         "licenses": [],
@@ -1578,23 +1635,23 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-28"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Guia prático: comprovar exequibilidade sem fragilizar a planilha. Documentos, erros e próximo passo, cluster Edital, proposta e matriz de riscos."
+          "Como aplicar os 75% do art. 59 da Lei 14.133 na proposta, o que enviar na diligência e o que não misturar com reajuste."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Comprovar exequibilidade sem fragilizar a planilha"
+          "Exequibilidade da proposta: o que comprovar"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1624,15 +1681,17 @@
         "canonical": "https://confenge.com.br/conteudos/comprovacao-exequibilidade-proposta-obra/",
         "dates": [
           "2026-07-15",
-          "2026-08-28"
+          "2026-08-29"
         ],
-        "description": "Guia prático: comprovar exequibilidade sem fragilizar a planilha. Documentos, erros e próximo passo, cluster Edital, proposta e matriz de riscos.",
-        "h1": "Comprovar exequibilidade sem fragilizar a planilha",
+        "description": "Como aplicar os 75% do art. 59 da Lei 14.133 na proposta, o que enviar na diligência e o que não misturar com reajuste.",
+        "h1": "Exequibilidade da proposta: o que comprovar",
         "has_dataset_surface": true,
-        "licenses": [],
-        "permission_class": null,
+        "licenses": [
+          "license-token-visible"
+        ],
+        "permission_class": "confidential",
         "reviewers": [],
-        "title": "Comprovar exequibilidade sem fragilizar a planilha | CONFENGE",
+        "title": "Exequibilidade da proposta: o que comprovar | CONFENGE",
         "versions": []
       }
     },
@@ -1648,23 +1707,23 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Guia prático: data-base e reajuste: onde a construtora perde dinheiro. Documentos, erros e próximo passo, cluster Orçamento, BDI, SINAPI e preço."
+          "Como a data-base do orçamento estimado e o índice contratual definem meses descobertos, sem confundir reajuste com reequilíbrio."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Data-base e reajuste: onde a construtora perde dinheiro"
+          "Data-base e reajuste: meses sem cobertura"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1694,15 +1753,15 @@
         "canonical": "https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
-        "description": "Data-base e reajuste em obra pública: onde a construtora perde margem e o que conferir no edital e no contrato.",
-        "h1": "Data-base e reajuste: onde se perde margem",
-        "has_dataset_surface": true,
+        "description": "Como a data-base do orçamento estimado e o índice contratual definem meses descobertos, sem confundir reajuste com reequilíbrio.",
+        "h1": "Data-base e reajuste: meses sem cobertura",
+        "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Data-base e reajuste: onde se perde margem | CONFENGE",
+        "title": "Data-base e reajuste: meses sem cobertura | CONFENGE",
         "versions": []
       }
     },
@@ -1734,7 +1793,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1788,23 +1847,23 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Empreitada global ou unitária: qual regime é mais arriscado. Como decidir com base em contrato, planilha e prova, sem atalho genérico."
+          "O que muda na medição quando o quantitativo do projeto original estoura: crédito no unitário, margem no global, com conta reproduzível."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Empreitada global ou unitária: qual regime é mais arriscado?"
+          "Preço global ou unitário: o risco de quantidade"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1834,15 +1893,15 @@
         "canonical": "https://confenge.com.br/conteudos/empreitada-preco-global-preco-unitario/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
-        "description": "Empreitada global ou unitária: qual regime é mais arriscado. Como decidir com base em contrato, planilha e prova, sem atalho genérico.",
-        "h1": "Empreitada global ou unitária: qual regime é mais arriscado?",
+        "description": "O que muda na medição quando o quantitativo do projeto original estoura: crédito no unitário, margem no global, com conta reproduzível.",
+        "h1": "Preço global ou unitário: o risco de quantidade",
         "has_dataset_surface": true,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Empreitada global ou unitária: qual regime é mais arriscado? | CONFENGE",
+        "title": "Preço global ou unitário: o risco de quantidade | CONFENGE",
         "versions": []
       }
     },
@@ -1853,15 +1912,15 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "O fiscal se recusa a assinar a medição: quais documentos produzir"
+          "O fiscal se recusa a assinar a medição"
         ],
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Fiscal recusa assinar a medição? Checklist das primeiras 48h, documentos e como preservar recebimento sem admitir culpa indevida."
+          "Nas 48 horas da recusa de ateste: protocolo, recado transcrito e ofício pedindo o item que impede a assinatura."
         ],
         "downloads": [],
         "has_dataset_type": false,
@@ -1874,7 +1933,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1899,14 +1958,14 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "O fiscal se recusa a assinar a medição: quais documentos produzir"
+          "O fiscal se recusa a assinar a medição"
         ],
         "canonical": "https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
-        "description": "Fiscal recusa assinar a medição? Checklist das primeiras 48h, documentos e como preservar recebimento sem admitir culpa indevida.",
+        "description": "O fiscal recusou assinar o boletim. Nas 48 horas seguintes, registre a recusa, preserve a prova de execução e peça objeção objetiva, sem admitir culpa para destravar.",
         "h1": "Fiscal não assina medição: o que fazer nas primeiras 48h",
         "has_dataset_surface": false,
         "licenses": [],
@@ -1923,28 +1982,28 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "Defeito de qualidade autoriza glosa total da medição?"
+          "Glosa por qualidade: extensão do corte"
         ],
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Glosa por qualidade: a fiscalização pode glosar tudo: critérios técnicos, documentos e riscos para a construtora. Análise CONFENGE."
+          "Como recortar o trecho com ensaio desconforme e pedir o restante da linha sem controvérsia de qualidade."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Glosa por qualidade: a fiscalização pode glosar tudo?"
+          "Glosa por qualidade: pode glosar a medição inteira?"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -1969,14 +2028,14 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "Defeito de qualidade autoriza glosa total da medição?"
+          "Glosa por qualidade: extensão do corte"
         ],
         "canonical": "https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
-        "description": "Glosa por qualidade na medição: o que a fiscalização precisa apontar e como a construtora responde com critério técnico.",
+        "description": "Um defeito de qualidade autoriza cortar o trecho em desconformidade, não o boletim inteiro. Exija localização, ensaio e o valor do trecho afetado.",
         "h1": "Glosa por qualidade: pode glosar a medição inteira?",
         "has_dataset_surface": false,
         "licenses": [],
@@ -2014,7 +2073,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2069,10 +2128,10 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-28"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro: critérios técnicos, documentos e riscos para a construtora. Análise CONFENGE."
+          "Como ler evento, alocação e franquia da matriz antes de protocolar reequilíbrio, com conta de dano após a franquia."
         ],
         "downloads": [],
         "has_dataset_type": false,
@@ -2085,7 +2144,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2115,15 +2174,15 @@
         "canonical": "https://confenge.com.br/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
         "dates": [
           "2026-07-15",
-          "2026-08-28"
+          "2026-08-29"
         ],
-        "description": "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro: critérios técnicos, documentos e riscos para a construtora. Análise CONFENGE.",
+        "description": "Como ler evento, alocação e franquia da matriz antes de protocolar reequilíbrio, com conta de dano após a franquia.",
         "h1": "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?",
-        "has_dataset_surface": false,
+        "has_dataset_surface": true,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro?",
+        "title": "Matriz de riscos pode impedir o reequilíbrio econômico-financeiro? | CONFENGE",
         "versions": []
       }
     },
@@ -2134,28 +2193,28 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "Medição por evento ou por quantitativo: qual modelo protege melhor a construtora?"
+          "Medição por evento ou por quantitativo"
         ],
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Guia prático: medição por evento ou por quantitativo: qual modelo protege melhor a construtora. Documentos, erros e próximo passo."
+          "Evento paga o marco; quantitativo paga a unidade. O art. 46, § 9º, veda remunerar preço global como planilha unitária."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Medição por evento ou por quantitativo: qual modelo protege melhor a construtora?"
+          "Medição por evento ou quantitativo: o que muda"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2180,14 +2239,14 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "Medição por evento ou por quantitativo: qual modelo protege melhor a construtora?"
+          "Medição por evento ou por quantitativo"
         ],
         "canonical": "https://confenge.com.br/conteudos/medicao-por-evento-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
-        "description": "Medição por evento ou por quantitativo: diferenças de caixa, glosa e prova para a construtora em contrato público.",
+        "description": "No preço global, o contrato pode medir por marco de resultado, não por m³. Compare a prova de evento com a prova de quantitativo antes de precificar o caixa.",
         "h1": "Medição por evento ou quantitativo: o que muda",
         "has_dataset_surface": false,
         "licenses": [],
@@ -2209,23 +2268,23 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Como calcular mobilização e desmobilização na proposta de obra pública: frete, canteiro, prazos e erros que corroem a margem."
+          "Como montar memória de viagens, canteiro e retirada na proposta, sem zerar a linha nem duplicar administração local."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Como calcular mobilização e desmobilização na proposta"
+          "Mobilização e desmobilização na planilha"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2255,15 +2314,15 @@
         "canonical": "https://confenge.com.br/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
-        "description": "Como calcular mobilização e desmobilização na proposta de obra pública: frete, canteiro, prazos e erros que corroem a margem.",
-        "h1": "Como calcular mobilização e desmobilização na proposta",
+        "description": "Como montar memória de viagens, canteiro e retirada na proposta, sem zerar a linha nem duplicar administração local.",
+        "h1": "Mobilização e desmobilização na planilha",
         "has_dataset_surface": true,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Como calcular mobilização e desmobilização na proposta | CONFENGE",
+        "title": "Mobilização e desmobilização na planilha | CONFENGE",
         "versions": []
       }
     },
@@ -2274,15 +2333,15 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "Pagamento parcial de etapa em empreitada global: quando é permitido?"
+          "Pagamento parcial de etapa no preço global"
         ],
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Pagamento parcial em empreitada global: quando vale em obras públicas: o que verificar antes de pleitear, aceitar ou escalar o conflito."
+          "Triagem da etapa incompleta no preço global: avanço de campo não cria submarco, e o art. 145 depende da parcela contratual."
         ],
         "downloads": [],
         "has_dataset_type": false,
@@ -2295,7 +2354,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2320,14 +2379,14 @@
           "Início",
           "Conteúdos",
           "Medições e pagamentos",
-          "Pagamento parcial de etapa em empreitada global: quando é permitido?"
+          "Pagamento parcial de etapa no preço global"
         ],
         "canonical": "https://confenge.com.br/conteudos/pagamento-parcial-etapa-empreitada-global/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
-        "description": "Pagamento parcial em empreitada global: quando vale em obras públicas: o que verificar antes de pleitear, aceitar ou escalar o conflito.",
+        "description": "Etapa incompleta em empreitada global não é pagamento antecipado. Confira o eventograma, a meta de resultado e o que o contrato admite medir proporcionalmente.",
         "h1": "Pagamento parcial em empreitada global: quando vale",
         "has_dataset_surface": false,
         "licenses": [],
@@ -2344,7 +2403,7 @@
           "Início",
           "Conteúdos",
           "Atrasos e prorrogações",
-          "Prorrogação de prazo em obra pública: documentos que não podem faltar"
+          "Dossiê do pedido de prorrogação de prazo"
         ],
         "dataset_names": [],
         "dates": [
@@ -2352,20 +2411,20 @@
           "2026-08-28"
         ],
         "descriptions": [
-          "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação."
+          "Peças do requerimento de prazo em obra pública: índice de anexos, apostila do cronograma, memória de dias e o que protocolar antes do vencimento."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Prorrogação de prazo: documentos que não podem faltar"
+          "Dossiê do pedido de prorrogação de prazo"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2390,20 +2449,20 @@
           "Início",
           "Conteúdos",
           "Atrasos e prorrogações",
-          "Prorrogação de prazo em obra pública: documentos que não podem faltar"
+          "Dossiê do pedido de prorrogação de prazo"
         ],
         "canonical": "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/",
         "dates": [
           "2026-07-15",
           "2026-08-28"
         ],
-        "description": "Prorrogação prazo obra pública documentos: impactos em prazo, margem e posição contratual. CONFENGE, cluster Atrasos, prorrogação e paralisação.",
-        "h1": "Prorrogação de prazo: documentos que não podem faltar",
+        "description": "Peças do requerimento de prazo em obra pública: índice de anexos, apostila do cronograma, memória de dias e o que protocolar antes do vencimento.",
+        "h1": "Dossiê do pedido de prorrogação de prazo",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
-        "title": "Prorrogação de prazo em obra pública: checklist de documentos | CONFENGE",
+        "title": "Dossiê do pedido de prorrogação de prazo | CONFENGE",
         "versions": []
       }
     },
@@ -2414,28 +2473,28 @@
           "Início",
           "Conteúdos",
           "Defesa e sanções",
-          "Construtora notificada por atraso: como montar a resposta técnica"
+          "Resposta à notificação de atraso em obra pública"
         ],
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-28"
         ],
         "descriptions": [
-          "Resposta notificação atraso obra pública: impactos em prazo, margem e posição contratual. CONFENGE, cluster Sanções, defesa e extinção."
+          "Como contestar imputação de atraso: fatos admitidos, controvertidos e incorretos, anexos e pedidos (arquivamento, dilação, dosimetria) no prazo da notificação."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "Notificação por atraso: como montar a resposta técnica"
+          "Resposta à notificação de atraso em obra pública"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2460,20 +2519,20 @@
           "Início",
           "Conteúdos",
           "Defesa e sanções",
-          "Construtora notificada por atraso: como montar a resposta técnica"
+          "Resposta à notificação de atraso em obra pública"
         ],
         "canonical": "https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-28"
         ],
-        "description": "Como responder notificação de atraso em obra pública: fatos, anexos, prazos e o que não admitir sem prova.",
-        "h1": "Notificação por atraso: como montar a resposta",
+        "description": "Como contestar imputação de atraso: fatos admitidos, controvertidos e incorretos, anexos e pedidos (arquivamento, dilação, dosimetria) no prazo da notificação.",
+        "h1": "Resposta à notificação de atraso em obra pública",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "Notificação de atraso em obra pública: resposta técnica passo a passo | CONFENGE",
+        "title": "Resposta à notificação de atraso em obra pública | CONFENGE",
         "versions": []
       }
     },
@@ -2489,7 +2548,7 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-08-18"
+          "2026-08-29"
         ],
         "descriptions": [
           "Entenda quando usar o SINAPI desonerado ou não desonerado, como conferir encargos, BDI e edital e quais erros podem comprometer a proposta."
@@ -2505,7 +2564,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2536,7 +2595,8 @@
         "dates": [
           "2026-07-15",
           "2026-07-30",
-          "2026-08-18"
+          "2026-08-18",
+          "2026-08-29"
         ],
         "description": "SINAPI desonerado e não desonerado diferem nos encargos da mão de obra. Use a tabela que o edital e a planilha modelo fixam na data-base; misturar bases distorce o preço.",
         "h1": "SINAPI desonerado ou não desonerado: qual usar?",
@@ -2560,23 +2620,23 @@
         "dataset_names": [],
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
         "descriptions": [
-          "Guia prático: sinapi ou sicro: qual referência vale em cada serviço. Documentos, erros e próximo passo, cluster Orçamento, BDI, SINAPI e preço."
+          "A ordem do art. 23: SICRO em transporte, SINAPI nas demais engenharias, com o vão entre unitários ilustrativos tornado explícito."
         ],
         "downloads": [],
         "has_dataset_type": false,
         "has_false_case_type": false,
         "headlines": [
-          "SINAPI ou SICRO: qual referência vale em cada serviço?"
+          "SINAPI ou SICRO: a referência de cada serviço"
         ],
         "licenses": [],
         "organizations": [
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2606,15 +2666,15 @@
         "canonical": "https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/",
         "dates": [
           "2026-07-15",
-          "2026-07-30"
+          "2026-08-29"
         ],
-        "description": "Guia prático: sinapi ou sicro: qual referência vale em cada serviço. Documentos, erros e próximo passo, cluster Orçamento, BDI, SINAPI e preço.",
-        "h1": "SINAPI ou SICRO: qual referência vale em cada serviço?",
-        "has_dataset_surface": true,
+        "description": "A ordem do art. 23: SICRO em transporte, SINAPI nas demais engenharias, com o vão entre unitários ilustrativos tornado explícito.",
+        "h1": "SINAPI ou SICRO: a referência de cada serviço",
+        "has_dataset_surface": false,
         "licenses": [],
         "permission_class": null,
         "reviewers": [],
-        "title": "SINAPI ou SICRO: qual referência vale em cada serviço? | CONFENGE",
+        "title": "SINAPI ou SICRO: a referência de cada serviço | CONFENGE",
         "versions": []
       }
     },
@@ -2637,7 +2697,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2693,7 +2753,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2749,7 +2809,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2858,7 +2918,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2917,7 +2977,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -2974,7 +3034,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -3052,15 +3112,17 @@
         "canonical": "https://confenge.com.br/entregas/",
         "dates": [
           "2026-08-23",
-          "2026-08-28"
+          "2026-08-29"
         ],
-        "description": "Compare as oito entregas da CONFENGE: preço de R$ 599 a R$ 3.750, a pergunta que cada uma responde e como sete delas formam o Diagnóstico de Expansão no Mercado Público de R$ 8.000.",
-        "h1": "Compare as oito entregas e encontre a decisão que cabe agora.",
+        "description": "Escolha entre 8 ofertas publicadas, de R$ 599 a R$ 3.750, pela decisão que precisa tomar. Consulte também as 54 capacidades do rol taxativo, separadas por maturidade. Os exemplos vinculados são sintéticos; não são resultados de clientes.",
+        "h1": "8 ofertas publicadas. Escolha pela decisão que está na mesa.Exemplos sintéticos.",
         "has_dataset_surface": false,
-        "licenses": [],
-        "permission_class": "demonstrativo",
+        "licenses": [
+          "license-token-visible"
+        ],
+        "permission_class": null,
         "reviewers": [],
-        "title": "Entregas da CONFENGE | Compare as oito antes de contratar",
+        "title": "8 ofertas publicadas e 54 capacidades, exemplos sintéticos | CONFENGE",
         "versions": []
       }
     },
@@ -3083,7 +3145,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -3282,7 +3344,7 @@
         "licenses": [],
         "organizations": [],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -3332,7 +3394,7 @@
         "licenses": [],
         "organizations": [],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -3662,7 +3724,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -3716,7 +3778,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -3810,7 +3872,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -3867,7 +3929,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -3926,7 +3988,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -4133,7 +4195,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -4279,7 +4341,7 @@
           "CONFENGE"
         ],
         "people": [
-          "Engº Tiago Sasaki"
+          "Tiago Sasaki"
         ],
         "reviewers": [],
         "types": [
@@ -4317,5 +4379,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/web-cfg/.worktrees/cfg10x-10-editorial-aditivos-20260829/_site"
+  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/wa474/_site"
 }

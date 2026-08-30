@@ -535,8 +535,14 @@ def validate_loc(
     return issues
 
 
-def lastmod_issues(entries: Iterable[UrlEntry], *, as_of: date) -> list[GraphIssue]:
+def lastmod_issues(
+    entries: Iterable[UrlEntry],
+    *,
+    as_of: date,
+    html_by_loc: dict[str, str | None] | None = None,
+) -> list[GraphIssue]:
     issues: list[GraphIssue] = []
+    html_by_loc = html_by_loc or {}
     for entry in entries:
         if not entry.lastmod:
             continue
@@ -550,7 +556,8 @@ def lastmod_issues(entries: Iterable[UrlEntry], *, as_of: date) -> list[GraphIss
                     detail=entry.lastmod,
                 )
             )
-        elif parsed > as_of:
+            continue
+        if parsed > as_of:
             issues.append(
                 GraphIssue(
                     severity="high",
@@ -559,7 +566,294 @@ def lastmod_issues(entries: Iterable[UrlEntry], *, as_of: date) -> list[GraphIss
                     detail=entry.lastmod,
                 )
             )
+            continue
+        html = html_by_loc.get(entry.loc)
+        if html is None and entry.loc not in html_by_loc:
+            continue
+        signal = substantial_lastmod_from_html(html or "", as_of=as_of)
+        expected = normalize_lastmod(entry.lastmod, as_of=as_of)
+        if not signal or signal != expected:
+            issues.append(
+                GraphIssue(
+                    severity="high",
+                    code="lastmod_without_substantial_signal",
+                    url=entry.loc,
+                    detail={"lastmod": entry.lastmod, "html_signal": signal},
+                )
+            )
     return issues
+
+
+_HEADERS_SITEMAP_PATH = re.compile(r"^/(sitemap[^\s]*)\s*$", re.M)
+
+
+def referenced_sitemap_filenames(
+    *,
+    robots_text: str = "",
+    headers_text: str = "",
+    index_xml: str = "",
+) -> list[str]:
+    """Every sitemap filename advertised by robots, _headers, or sitemap-index."""
+    names: list[str] = []
+    seen: set[str] = set()
+
+    def add(name: str) -> None:
+        cleaned = name.strip().lstrip("/")
+        if not cleaned or cleaned in seen:
+            return
+        seen.add(cleaned)
+        names.append(cleaned)
+
+    for href in robots_sitemap_hrefs(robots_text):
+        add(member_filename(href))
+    for member in parse_sitemap_index(index_xml):
+        add(member.filename)
+    for match in _HEADERS_SITEMAP_PATH.finditer(headers_text or ""):
+        add(match.group(1))
+    return names
+
+
+def missing_referenced_sitemap_issues(root: Path) -> list[GraphIssue]:
+    robots_path = root / "robots.txt"
+    headers_path = root / "_headers"
+    index_path = root / INDEX_NAME
+    names = referenced_sitemap_filenames(
+        robots_text=robots_path.read_text(encoding="utf-8") if robots_path.is_file() else "",
+        headers_text=headers_path.read_text(encoding="utf-8") if headers_path.is_file() else "",
+        index_xml=index_path.read_text(encoding="utf-8") if index_path.is_file() else "",
+    )
+    issues: list[GraphIssue] = []
+    for name in names:
+        if name == INDEX_NAME:
+            if not (root / INDEX_NAME).is_file():
+                issues.append(
+                    GraphIssue(
+                        severity="high",
+                        code="referenced_sitemap_missing",
+                        url=f"{SITE}/{name}",
+                        detail=name,
+                    )
+                )
+            continue
+        if not (root / name).is_file():
+            issues.append(
+                GraphIssue(
+                    severity="high",
+                    code="referenced_sitemap_missing",
+                    url=f"{SITE}/{name}",
+                    detail=name,
+                )
+            )
+    return issues
+
+
+def robots_allow_prefixes(robots_text: str) -> list[str]:
+    rules: list[str] = []
+    for line in (robots_text or "").splitlines():
+        stripped = line.strip()
+        if stripped.lower().startswith("allow:"):
+            value = stripped.split(":", 1)[1].strip()
+            if value:
+                rules.append(value)
+    return rules
+
+
+def indexation_split_issues(robots_text: str, headers_text: str) -> list[GraphIssue]:
+    """Fail when robots crawl permission contradicts X-Robots-Tag on the same path.
+
+    A family Disallow plus a more specific Allow, while X-Robots-Tag is noindex,
+    is the mixed state this gate exists to prevent. Global `Allow: /` is ignored.
+    """
+    issues: list[GraphIssue] = []
+    for allow in robots_allow_prefixes(robots_text):
+        if allow == "/":
+            continue
+        path = allow if allow.startswith("/") else f"/{allow}"
+        if path_blocked_by_robots(path, robots_text):
+            continue
+        if x_robots_noindex(headers_text, path):
+            issues.append(
+                GraphIssue(
+                    severity="high",
+                    code="robots_header_indexation_split",
+                    url=path,
+                    detail="robots Allow vs X-Robots-Tag noindex",
+                )
+            )
+    return issues
+
+
+def jsonld_itemlist_issues(html: str, *, loc: str) -> list[GraphIssue]:
+    """Fail unparseable JSON-LD or ItemList entries with empty/fake URLs."""
+    issues: list[GraphIssue] = []
+    if not html:
+        return issues
+    for block in re.findall(
+        r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+        html,
+        re.I | re.S,
+    ):
+        try:
+            payload = json.loads(block)
+        except json.JSONDecodeError as exc:
+            issues.append(
+                GraphIssue(
+                    severity="high",
+                    code="jsonld_unparseable",
+                    url=loc,
+                    detail=str(exc),
+                )
+            )
+            continue
+        for item_url, name in _iter_itemlist_urls(payload):
+            if not item_url or item_url in {"#", "https://example.com", "http://example.com"}:
+                issues.append(
+                    GraphIssue(
+                        severity="high",
+                        code="itemlist_empty_or_fake_url",
+                        url=loc,
+                        detail=name,
+                    )
+                )
+    return issues
+
+
+def _iter_itemlist_urls(obj: Any) -> list[tuple[str | None, str | None]]:
+    found: list[tuple[str | None, str | None]] = []
+
+    def walk(node: Any) -> None:
+        if isinstance(node, dict):
+            types = node.get("@type")
+            labels = types if isinstance(types, list) else [types]
+            if "ItemList" in labels:
+                for element in node.get("itemListElement") or []:
+                    if not isinstance(element, dict):
+                        continue
+                    item = element.get("item")
+                    url: str | None = element.get("url")
+                    if isinstance(item, str):
+                        url = url or item
+                    elif isinstance(item, dict):
+                        raw = item.get("url") or item.get("@id")
+                        url = url or (str(raw) if raw else None)
+                    found.append((url, element.get("name")))
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(obj)
+    return found
+
+
+def published_route_inventory(root: Path) -> dict[str, Any]:
+    """Derive the public URL universe from published HTML + family indexability.
+
+    No parallel hand-maintained allowlist. Sitemap membership must equal the
+    indexable set.
+    """
+    headers_path = root / "_headers"
+    headers_text = (
+        headers_path.read_text(encoding="utf-8", errors="replace")
+        if headers_path.is_file()
+        else ""
+    )
+    robots_path = root / "robots.txt"
+    robots_text = (
+        robots_path.read_text(encoding="utf-8", errors="replace")
+        if robots_path.is_file()
+        else ""
+    )
+    redirects_path = root / "_redirects"
+    redirect_from = redirect_source_paths(
+        redirects_path.read_text(encoding="utf-8", errors="replace")
+        if redirects_path.is_file()
+        else ""
+    )
+    indexable = sorted(local_indexable_paths(root, headers_text=headers_text))
+    graph = [loc_path(item) for item in load_graph_locs(root)]
+    pages: list[dict[str, Any]] = []
+    for path in indexable:
+        loc = SITE if path == "/" else f"{SITE}{path}"
+        html = read_local_html(root, loc) or ""
+        canonical = extract_canonical(html)
+        title_match = re.search(r"<title[^>]*>(.*?)</title>", html, re.I | re.S)
+        h1s = re.findall(r"<h1[^>]*>(.*?)</h1>", html, re.I | re.S)
+        schema_blocks = re.findall(
+            r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+            html,
+            re.I | re.S,
+        )
+        expected_canonical = SITE if path == "/" else f"{SITE}{path}"
+        parsed_canonical = urlparse(canonical or "")
+        canonical_self = bool(
+            canonical
+            and parsed_canonical.scheme == "https"
+            and parsed_canonical.netloc == "confenge.com.br"
+            and loc_key(canonical) == loc_key(expected_canonical)
+            and not parsed_canonical.query
+            and not parsed_canonical.fragment
+        )
+        pages.append(
+            {
+                "path": path,
+                "status_equivalent": 200 if path not in redirect_from else 300,
+                "title": (title_match.group(1).strip() if title_match else ""),
+                "canonical": canonical,
+                "canonical_self": canonical_self,
+                "h1_count": len(h1s),
+                "h1_nonempty": len(h1s) == 1 and bool(re.sub(r"<[^>]+>", "", h1s[0]).strip()),
+                "robots_allowed": not path_blocked_by_robots(path, robots_text),
+                "has_description": bool(
+                    re.search(r'name=["\']description["\']', html, re.I)
+                ),
+                "schema_count": len(schema_blocks),
+                "jsonld_parseable": bool(schema_blocks)
+                and all(_json_ok(block) for block in schema_blocks),
+                "jsonld_valid": bool(schema_blocks)
+                and all(_jsonld_semantically_valid(block) for block in schema_blocks),
+            }
+        )
+    return {
+        "schema_version": "published-route-inventory-v1",
+        "indexable": indexable,
+        "sitemap": graph,
+        "only_indexable": sorted(set(indexable) - set(graph)),
+        "only_sitemap": sorted(set(graph) - set(indexable)),
+        "pages": pages,
+    }
+
+
+def _json_ok(block: str) -> bool:
+    try:
+        json.loads(block)
+        return True
+    except json.JSONDecodeError:
+        return False
+
+
+def _jsonld_semantically_valid(block: str) -> bool:
+    """Reject parseable placeholders that are not Schema.org JSON-LD."""
+    try:
+        payload = json.loads(block)
+    except json.JSONDecodeError:
+        return False
+
+    roots = payload if isinstance(payload, list) else [payload]
+    if not roots or not all(isinstance(item, dict) for item in roots):
+        return False
+    if not any(item.get("@context") for item in roots):
+        return False
+
+    def has_type(value: Any) -> bool:
+        if isinstance(value, dict):
+            return bool(value.get("@type")) or any(has_type(v) for v in value.values())
+        if isinstance(value, list):
+            return any(has_type(v) for v in value)
+        return False
+
+    return has_type(payload)
 
 
 def stale_market_answer_issues(
@@ -818,7 +1112,24 @@ def audit_graph(
             issues.append(
                 GraphIssue(severity="high", code="empty_sitemap_member", detail=filename)
             )
-    issues.extend(lastmod_issues(entries, as_of=as_of))
+    html_by_loc = {entry.loc: read_local_html(root, entry.loc) for entry in entries}
+    issues.extend(lastmod_issues(entries, as_of=as_of, html_by_loc=html_by_loc))
+    issues.extend(missing_referenced_sitemap_issues(root))
+    redirects_path = root / "_redirects"
+    redirect_from = redirect_source_paths(
+        redirects_path.read_text(encoding="utf-8", errors="replace")
+        if redirects_path.is_file()
+        else ""
+    )
+    headers_path = root / "_headers"
+    headers_text = (
+        headers_path.read_text(encoding="utf-8", errors="replace") if headers_path.is_file() else ""
+    )
+    issues.extend(indexation_split_issues(robots_text, headers_text))
+    for entry in entries:
+        html = html_by_loc.get(entry.loc)
+        if html:
+            issues.extend(jsonld_itemlist_issues(html, loc=entry.loc))
 
     ma_flag = (
         market_answer_indexable
@@ -831,18 +1142,8 @@ def audit_graph(
         )
     )
 
-    redirects_path = root / "_redirects"
-    redirect_from = redirect_source_paths(
-        redirects_path.read_text(encoding="utf-8", errors="replace")
-        if redirects_path.is_file()
-        else ""
-    )
-    headers_path = root / "_headers"
-    headers_text = (
-        headers_path.read_text(encoding="utf-8", errors="replace") if headers_path.is_file() else ""
-    )
     for entry in entries:
-        html = read_local_html(root, entry.loc)
+        html = html_by_loc.get(entry.loc)
         issues.extend(
             validate_loc(
                 entry.loc,
@@ -890,6 +1191,15 @@ def _report(
     for entry in entries:
         fam = family_for_member(entry.member)
         families[fam] = families.get(fam, 0) + 1
+    codes = [item.code for item in issues]
+    broken_codes = {
+        "inaccessible_sitemap_member",
+        "referenced_sitemap_missing",
+        "sitemap_url_missing_file",
+        "canonical_missing",
+        "canonical_external",
+        "canonical_mismatch",
+    }
     return {
         "ok": len(high) == 0,
         "issues": [item.as_dict() for item in issues],
@@ -900,6 +1210,12 @@ def _report(
         "member_sitemaps": [member.loc for member in members],
         "walked_members": [member.filename for member in members],
         "robots_sitemaps": robots_sitemaps,
+        "broken": sum(code in broken_codes for code in codes),
+        "orphan_indexable": codes.count("indexable_missing_from_sitemap"),
+        "noindex_in_sitemap": sum(
+            code in {"sitemap_url_noindex", "sitemap_url_x_robots_noindex"}
+            for code in codes
+        ),
         "market_answer_indexable": market_answer_indexable,
         "market_answer_in_graph": market_answer_in_graph,
     }

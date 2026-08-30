@@ -16,7 +16,25 @@ const DENOMINATORS = Object.freeze([...(REGISTRY.denominators || [])]);
 const ENVELOPE_FIELDS = Object.freeze([...(REGISTRY.envelope_fields || [])]);
 const CTA_KIND_FROM_ALIAS = REGISTRY.cta_kind_from_alias || {};
 // Envelope identifiers may contain Date.now() / UUID digits. Match lead-core.cjs:82.
-const ENVELOPE_ID_KEYS = new Set(["correlation_id", "idempotency_key", "event_id"]);
+const ENVELOPE_ID_KEYS = new Set([
+  "correlation_id",
+  "idempotency_key",
+  "event_id",
+  "session_id",
+  "sid",
+  "lead_id",
+  "opportunity_id",
+  "proposal_id",
+  "sale_id",
+]);
+const ENTITY_ID_PATTERNS = Object.freeze({
+  session_id: /^sess-[0-9a-f]{27}$/i,
+  sid: /^sess-[0-9a-f]{27}$/i,
+  lead_id: /^(?:lead-[0-9a-f]{27}|[0-9a-f]{24})$/i,
+  opportunity_id: /^opp-[0-9a-f]{28}$/i,
+  proposal_id: /^prop-[0-9a-f]{27}$/i,
+  sale_id: /^sale-[0-9a-f]{27}$/i,
+});
 
 const LAYER_RANK = Object.freeze({
   session: 0,
@@ -112,9 +130,24 @@ function looksLikePiiValue(value, key) {
   if (!s) return false;
   if (/@/.test(s)) return true;
   const k = String(key || "").toLowerCase();
-  if (ENVELOPE_ID_KEYS.has(k)) return false;
+  if (ENVELOPE_ID_KEYS.has(k)) {
+    if (/^sess-[0-9a-f]{27}$/i.test(s)) return false;
+    if (/^(?:lead-[0-9a-f]{27}|[0-9a-f]{24})$/i.test(s)) return false;
+    if (/^opp-[0-9a-f]{28}$/i.test(s)) return false;
+    if (/^(?:prop|sale)-[0-9a-f]{27}$/i.test(s)) return false;
+    const direct = s.replace(/^(?:sess|lead|opp|prop|sale|evt)-/i, "");
+    const compact = direct.replace(/[\s().-]/g, "");
+    if (!/^\+?\d+$/.test(compact)) return false;
+    const digits = compact.replace(/^\+/, "");
+    if (digits.length === 10 || digits.length === 11 || digits.length === 14) return true;
+    if ((compact.startsWith("+") || digits.startsWith("55")) && (digits.length === 12 || digits.length === 13)) {
+      return true;
+    }
+    return false;
+  }
   if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return false;
   if (s.startsWith("c-")) return false;
+  if (/^(sess|lead|opp|prop|sale|evt)-/.test(s)) return false;
   if (/@|\+?\d{8,}/.test(s)) return true;
   const compact = s.replace(/[\s()-]/g, "");
   if (/^\+?\d{10,15}$/.test(compact)) return true;
@@ -127,20 +160,32 @@ function keyLooksPii(key) {
   const k = String(key || "").toLowerCase();
   if (PII_KEYS.has(k)) return true;
   if (AGGREGATE_PII_ALLOWLIST.includes(k)) return false;
-  return /email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|cnpj|document|valor|causa|observacao|qid/.test(k);
+  // Union of both denylists: this is a PII guard, so wider always wins.
+  // "observa" already covers "observacao".
+  return /email|phone|tel|nome|name|mensagem|message|whatsapp|cpf|cnpj|document|free.?text|description|note|comment|observa|valor|causa|qid/.test(k);
+}
+
+function isValidEntityId(field, value) {
+  const pattern = ENTITY_ID_PATTERNS[String(field || "").toLowerCase()];
+  return !pattern || (typeof value === "string" && pattern.test(value));
 }
 
 function minimizeProps(props) {
   const out = {};
   const dropped = [];
+  const invalidEntityFields = [];
   if (!props || typeof props !== "object" || Array.isArray(props)) {
-    return { props: out, dropped, tainted: false };
+    return { props: out, dropped, invalidEntityFields, tainted: false };
   }
   let tainted = false;
   for (const [k, v] of Object.entries(props)) {
     if (v == null || v === "") continue;
     if (keyLooksPii(k)) {
       dropped.push(k);
+      continue;
+    }
+    if (!isValidEntityId(k, v)) {
+      invalidEntityFields.push(k);
       continue;
     }
     if (typeof v === "string") {
@@ -154,7 +199,7 @@ function minimizeProps(props) {
       out[k] = v;
     }
   }
-  return { props: out, dropped, tainted };
+  return { props: out, dropped, invalidEntityFields, tainted };
 }
 
 function applyEnvelope(canonical, props, meta = {}) {
@@ -177,7 +222,7 @@ function admitEvent(raw) {
     return {
       ok: false,
       reason: classified.reason || "retired",
-      original,
+      original: classified.prefix ? "custom_*" : original,
       classification: classified.classification,
     };
   }
@@ -185,7 +230,7 @@ function admitEvent(raw) {
     return {
       ok: false,
       reason: classified.reason || "unknown_event",
-      original,
+      original: "",
       classification: classified.classification,
     };
   }
@@ -211,6 +256,16 @@ function admitEvent(raw) {
         Object.entries(input).filter(([k]) => !["event", "name", "props", "path", "sid", "session_id", "ts"].includes(k)),
       );
   const minimized = minimizeProps(rawProps);
+  if (minimized.invalidEntityFields.length) {
+    return {
+      ok: false,
+      reason: "invalid_entity_id",
+      original,
+      canonical,
+      classification: classified.classification,
+      fields: minimized.invalidEntityFields,
+    };
+  }
   if (minimized.tainted) {
     return {
       ok: false,
@@ -223,6 +278,25 @@ function admitEvent(raw) {
   }
   if (AGGREGATE_PII_ALLOWLIST.length !== 0) {
     return { ok: false, reason: "pii_allowlist_not_empty", original, canonical };
+  }
+  const sid = String(input.sid || input.session_id || "").slice(0, 32);
+  if (sid && !isValidEntityId("sid", sid)) {
+    return {
+      ok: false,
+      reason: "invalid_entity_id",
+      original,
+      canonical,
+      classification: classified.classification,
+    };
+  }
+  if (looksLikePiiValue(sid, "sid")) {
+    return {
+      ok: false,
+      reason: "pii_value",
+      original,
+      canonical,
+      classification: classified.classification,
+    };
   }
   for (const key of Object.keys(minimized.props)) {
     if (keyLooksPii(key)) {
@@ -262,7 +336,7 @@ function admitEvent(raw) {
       alias_from: classified.classification === "alias" ? original : undefined,
       props,
       path: safePath,
-      sid: String(input.sid || input.session_id || "").slice(0, 32),
+      sid,
     },
   };
 }
@@ -275,7 +349,7 @@ function admitBatch(events, seen) {
     const result = admitEvent(ev);
     if (!result.ok) {
       rejected.push({
-        event: ev && (ev.event || ev.name),
+        event: result.original || result.canonical || "REJECTED",
         reason: result.reason,
       });
       continue;
@@ -389,7 +463,7 @@ function acceptWarmblyObservation(warmbly) {
   if (!warmbly || typeof warmbly !== "object" || Array.isArray(warmbly)) {
     return { ...unknown, reason: null };
   }
-  const owner = String(warmbly.owner || "warmbly").toLowerCase();
+  const owner = String(warmbly.owner || "").toLowerCase();
   if (owner !== "warmbly") {
     return { ...unknown, reason: "wrong_owner" };
   }

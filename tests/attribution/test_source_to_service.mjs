@@ -505,16 +505,16 @@ for (const j of journeys) {
   if (hits.length !== 1) fail("client_duplicate_event_id", { count: hits.length });
 
   const batch = contract.admitBatch([
-    { event: "content_to_service", props, path: props.source_path, sid: "s-dup" },
-    { event: "content_to_service", props, path: props.source_path, sid: "s-dup" },
+    { event: "content_to_service", props, path: props.source_path, sid: "sess-ddddddddddddddddddddddddddd" },
+    { event: "content_to_service", props, path: props.source_path, sid: "sess-ddddddddddddddddddddddddddd" },
   ]);
   if (batch.admitted.length !== 1) fail("admit_duplicate_event_id", batch);
   if (!batch.rejected.some((r) => r.reason === "duplicate_event_id")) {
     fail("admit_duplicate_reason", batch.rejected);
   }
   const collectDup = await postCollect([
-    { event: "content_to_service", props: { ...props, event_id: "e-collect-dup" }, path: props.source_path, sid: "s-dup" },
-    { event: "content_to_service", props: { ...props, event_id: "e-collect-dup" }, path: props.source_path, sid: "s-dup" },
+    { event: "content_to_service", props: { ...props, event_id: "e-collect-dup" }, path: props.source_path, sid: "sess-ddddddddddddddddddddddddddd" },
+    { event: "content_to_service", props: { ...props, event_id: "e-collect-dup" }, path: props.source_path, sid: "sess-ddddddddddddddddddddddddddd" },
   ]);
   const collectDupBody = JSON.parse(collectDup.body);
   if (collectDupBody.accepted !== 1 || collectDupBody.rejected !== 1) {
@@ -613,7 +613,7 @@ for (const j of journeys) {
     event: ev.event,
     props: ev,
     path: "/casos/modelo-relatorio-inteligencia-licitacoes/",
-    sid: "report-order-entry",
+    sid: "sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa",
   }]);
   const collectBody = JSON.parse(collectResult.body);
   const persisted = collect._recent().slice(-1)[0];
@@ -726,7 +726,9 @@ for (const j of journeys) {
       note: "alice@example.com",
     },
   });
-  if (tainted.ok) fail("pii_note_admitted", tainted);
+  if (!tainted.ok || tainted.event.props.note != null || !tainted.dropped.includes("note")) {
+    fail("pii_note_admitted", tainted);
+  }
   const idsOnly = contract.admitEvent({
     event: "content_to_service",
     props: {
@@ -740,7 +742,7 @@ for (const j of journeys) {
       event_id: "e-ids-only",
     },
     path: "/inteligencia/valor-tipico-contratos-pavimentacao/",
-    sid: "sid-ids",
+    sid: "sess-bbbbbbbbbbbbbbbbbbbbbbbbbbb",
   });
   if (!idsOnly.ok) fail("ids_without_document_rejected", idsOnly);
   if (idsOnly.event.props.destination_service_id !== "diagnostico-defesa-margem") {
@@ -758,21 +760,21 @@ for (const j of journeys) {
     {
       event: "page_view",
       path: "/conteudos/sinapi-desonerado-nao-desonerado/",
-      sid: "s1",
+      sid: "sess-111111111111111111111111111",
       ts: day,
       props: { page_path: "/conteudos/sinapi-desonerado-nao-desonerado/" },
     },
     {
       event: "page_view",
       path: "/conteudos/sinapi-desonerado-nao-desonerado/",
-      sid: "s2",
+      sid: "sess-222222222222222222222222222",
       ts: day,
       props: { page_path: "/conteudos/sinapi-desonerado-nao-desonerado/" },
     },
     {
       event: "content_to_service",
       path: "/conteudos/sinapi-desonerado-nao-desonerado/",
-      sid: "s1",
+      sid: "sess-111111111111111111111111111",
       ts: "2026-08-19T10:01:00Z",
       props: {
         source_path: "/conteudos/sinapi-desonerado-nao-desonerado/",
@@ -787,7 +789,7 @@ for (const j of journeys) {
     {
       event: "content_to_service",
       path: "/conteudos/sinapi-desonerado-nao-desonerado/",
-      sid: "s2",
+      sid: "sess-222222222222222222222222222",
       ts: "2026-08-19T10:02:00Z",
       props: {
         source_path: "/conteudos/sinapi-desonerado-nao-desonerado/",
@@ -799,7 +801,7 @@ for (const j of journeys) {
     {
       event: "content_to_service",
       path: "/ferramentas/limite-acrescimos-supressoes/",
-      sid: "s3",
+      sid: "sess-333333333333333333333333333",
       ts: "2026-08-19T10:03:00Z",
       props: {
         source_path: "/ferramentas/limite-acrescimos-supressoes/",
@@ -878,14 +880,14 @@ for (const j of journeys) {
     {
       event: "page_view",
       path: "/conteudos/sinapi-desonerado-nao-desonerado/",
-      sid: "s-assist",
+      sid: "sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa",
       ts: "2026-08-19T10:00:00Z",
       props: { correlation_id: "c-assist" },
     },
     {
       event: "content_to_service",
       path: "/conteudos/sinapi-desonerado-nao-desonerado/",
-      sid: "s-assist",
+      sid: "sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa",
       ts: "2026-08-19T10:01:00Z",
       props: {
         source_path: "/conteudos/sinapi-desonerado-nao-desonerado/",
@@ -899,7 +901,7 @@ for (const j of journeys) {
   const matched = agg.attributeLeads(
     [{
       lead_id: "L-match",
-      session_id: "s-assist",
+      session_id: "sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa",
       destination_path: "/auditoria-orcamento-licitacao/",
       destination_service_id: "auditoria-orcamento-licitacao",
       received_at: "2026-08-19T10:05:00Z",
@@ -923,7 +925,7 @@ for (const j of journeys) {
   }
 
   const missingLeadDest = agg.attributeLeads(
-    [{ lead_id: "L-miss", session_id: "s-assist", received_at: "2026-08-19T10:05:00Z" }],
+    [{ lead_id: "L-miss", session_id: "sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa", received_at: "2026-08-19T10:05:00Z" }],
     events,
   )[0];
   if (missingLeadDest.discrepancy !== "lead_missing_destination") {
@@ -936,7 +938,7 @@ for (const j of journeys) {
   const missingEvent = agg.attributeLeads(
     [{
       lead_id: "L-ev",
-      session_id: "s-none",
+      session_id: "sess-eeeeeeeeeeeeeeeeeeeeeeeeeee",
       destination_path: "/aditivos-obras-publicas/",
       received_at: "2026-08-19T10:05:00Z",
     }],
@@ -948,7 +950,7 @@ for (const j of journeys) {
   const mismatch = agg.attributeLeads(
     [{
       lead_id: "L-mm",
-      session_id: "s-assist",
+      session_id: "sess-aaaaaaaaaaaaaaaaaaaaaaaaaaa",
       destination_path: "/aditivos-obras-publicas/",
       destination_service_id: "aditivos-obras-publicas",
       received_at: "2026-08-19T10:05:00Z",

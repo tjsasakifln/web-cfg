@@ -174,7 +174,7 @@ def test_bridge_html_is_editorial_not_popup():
     assert "popup" not in html.lower()
     assert "urgency" not in html.lower()
     assert fit["service_path"] in html
-    assert "origem=" in html  # attribution-preserving query
+    assert "data-origem=" in html  # attribution on data-*, not the URL
     # inject into minimal article
     base = "<html><body><article><p>body</p></article></body></html>"
     new, changed = inject_bridge(base, fit, source_path="/conteudos/sinapi-desonerado-nao-desonerado/")
@@ -417,19 +417,16 @@ https://old.example/*  https://new.example/:splat  301!
 
 
 def test_origem_preserves_query_and_fragment():
-    from scripts.organic.bridges import with_origem
+    from scripts.organic.bridges import origem_data_attr, with_origem
 
-    assert with_origem("/svc/", "/conteudos/x/") == "/svc/?origem=/conteudos/x"
-    # existing query
+    assert with_origem("/svc/", "/conteudos/x/") == "/svc/"
+    assert origem_data_attr("/conteudos/x/") == 'data-origem="/conteudos/x"'
     out = with_origem("/svc/?foo=1", "/conteudos/x/")
-    assert "foo=1" in out and "origem=" in out and out.startswith("/svc/?")
-    # fragment
+    assert out == "/svc/?foo=1"
     out2 = with_origem("/#contato", "/conteudos/x/")
-    assert out2.startswith("?") or "?origem=" in out2
-    assert out2.endswith("#contato")
-    # query + fragment
+    assert out2 == "/#contato"
     out3 = with_origem("/svc/?a=1#sec", "/conteudos/y/")
-    assert "a=1" in out3 and "origem=" in out3 and out3.endswith("#sec")
+    assert out3 == "/svc/?a=1#sec"
 
 
 def test_soft_bridge_when_article_aside_present():
@@ -503,4 +500,4 @@ def test_live_bridges_soft_when_aside_present():
     assert m
     bridge = m.group(0)
     assert "button-secondary" not in bridge
-    assert "origem=" in bridge
+    assert "data-origem=" in bridge

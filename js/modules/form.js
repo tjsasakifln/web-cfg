@@ -429,6 +429,7 @@
             });
             track('lead_persisted', {
               page_path: pagePath,
+              lead_id: protocol,
               content_cluster: defaultCluster,
               journey: journey || '',
               route_family: routeFamily,
@@ -494,7 +495,7 @@
             ? Math.min(30000, Math.max(1000, configuredTimeout))
             : 15000;
           const timeoutId = controller ? setTimeout(() => controller.abort(), submitTimeout) : null;
-          fetch('/.netlify/functions/lead', {
+          fetch('/api/web/lead', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
