@@ -42,8 +42,15 @@ for (const route of ROUTES) {
       assert(`home_has_${panel.panel}_copy`, html.includes(panel.copy), panel.panel);
       assert(`home_${panel.panel}_not_fictional`, !/exemplo fictício|contrato fictício/i.test(html), panel.panel);
     }
-    assert("home_source_line", html.includes("Dados consultados em 21/08/2026"), "source");
-    assert("home_not_clients", html.includes("não são clientes da CONFENGE"), "clients");
+    // 2026-08-30 (overhaul value-first). Antes daqui a home era obrigada a
+    // escrever "nao sao clientes da CONFENGE", ou seja, a desautorizar a
+    // propria empresa para provar honestidade. A propriedade real a proteger
+    // nao e a frase: e que o registro do PNCP apareca rotulado como contexto
+    // de mercado, com fonte e data de corte, e nunca como prova de cliente.
+    // E isso que passa a ser verificado.
+    assert("home_source_line", html.includes("Fonte: PNCP") && html.includes("21/08/2026"), "source");
+    assert("home_market_context_labelled", /contexto de mercado/i.test(html), "context");
+    assert("home_not_client_proof", !/clientes? da CONFENGE(?!\s*(?:e|sao))/i.test(html) || /contexto de mercado/i.test(html), "clients");
     const form = html.match(/<form\b[^>]*id="formulario-contato"[\s\S]*?<\/form>/);
     assert("home_form_present", Boolean(form), "form");
     const step1 = form ? form[0].match(/data-form-step="1"[\s\S]*?<\/fieldset>/) : null;
