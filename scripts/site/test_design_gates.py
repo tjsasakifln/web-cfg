@@ -393,7 +393,7 @@ def test_trace_matrix_and_tension_present():
     assert "Como podemos ajudar" in html
     assert "Qual decisão precisa sair agora" in html
     assert "Uma medição ou glosa travou meu caixa" not in html
-    assert ("journey-list" in html or "journey-paths" in html)
+    assert "journey-list" in html
     assert "Sem CTA genérico" not in html
     assert not re.search(r">\s*Jornada\s+[ABC]\s*<", html)
     assert "Risco de não agir" not in html
@@ -426,7 +426,7 @@ def test_primary_cta_not_spam():
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
     # Urgent secondary path present (WhatsApp or critical decision)
     assert "jornadas" in hero_html or "caminhos" in hero_html.lower()
-    assert "evidence-matrix" in html or "hero-evidence" in html or "EESC-USP" in html
+    assert "EESC-USP" in html
 
 
 def test_home_five_second_clarity():
@@ -515,11 +515,15 @@ def test_mobile_matrix_composition():
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     assert "display:none" in css  # responsive hide rules remain
     html = HOME.read_text(encoding="utf-8")
-    # Journey paths stack on narrow viewports (replacement for legacy trace-cards matrix)
-    assert "journey-path" in html or "journey-paths" in html or "journey-list" in html or "journey-row" in html
-    assert "journey-paths" in css or ".journey-path" in css or "journey-list" in css or "journey-row" in css
-    # Hero visual suppressed on narrow viewports
-    assert "hero-visual{display:none}" in css.replace(" ", "") or ".hero-visual{display:none}" in css.replace(" ", "")
+    # The shipped home stacks its decision journey as rows inside a list.
+    assert 'class="journey-list"' in html
+    assert '<li class="journey-row' in html
+    assert ".journey-list{" in css and ".journey-row{" in css
+    # Narrow viewports recompose those rows and give their actions full width.
+    narrow = re.search(r"@media\(max-width:620px\)\{(?:[^{}]|\{[^{}]*\})*\}", css)
+    assert narrow, "narrow-viewport block missing from styles.css"
+    assert ".journey-row{grid-template-columns:2.25rem 1fr" in narrow.group(0)
+    assert ".journey-row-actions .button{width:100%}" in narrow.group(0)
 
 
 def test_css_modules_are_concatenated_without_a_framework():
@@ -560,7 +564,18 @@ def test_shipped_css_respects_type_floor():
 
 def test_layout_contracts_ship_on_cascade():
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    assert "module:css/contracts.css" in css or "BEGIN css-modules:cfg10x-12" in css
+    from scripts.site.build_css import strip_comments
+
+    manifest = json.loads((ROOT / "css" / "manifest.json").read_text(encoding="utf-8"))
+    assert "module:css/" not in css, "author comments must not survive the build"
+    begin = css.index("BEGIN css-modules:cfg10x-12")
+    end = css.index("END css-modules:cfg10x-12")
+    spliced = css[begin:end]
+    assert manifest["modules"], "css/manifest.json declares no module"
+    for rel in manifest["modules"]:
+        body = strip_comments((ROOT / rel).read_text(encoding="utf-8")).strip()
+        assert body, rel
+        assert body in spliced, rel
     for needle in (
         ".hero-proof li",
         ".table-wrap,.report-table-wrap{max-width:100%;min-width:0;overflow-x:auto",
@@ -1182,8 +1197,6 @@ FOCUS_CSS_FLOOR = (
     "assets/report-capture.css",
     "assets/eight-offer-contract.css",
     "entregas/styles.css",
-    "entregas/catalog.css",
-    "diagnostico-pre-licitacao/products.css",
 )
 
 # `scripts/` holds fixtures and tooling, not shipped CSS: a fixture exists to

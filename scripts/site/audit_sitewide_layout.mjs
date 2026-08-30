@@ -352,7 +352,6 @@ async function auditWorker() {
           ".table-note",
           ".article-meta",
           ".evidence-heading > span",
-          ".hero-evidence .evidence-kicker",
         ];
         let minBody = Infinity;
         let minCritical = Infinity;

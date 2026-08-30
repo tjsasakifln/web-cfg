@@ -18,6 +18,7 @@ const PUBLIC_HTML_SUITES = Object.freeze([
   "test:brand",
   "test:authority",
   "test:design",
+  "audit:css-usage",
   "test:copy",
   "audit:accessibility",
   "test:skip-link",
@@ -859,6 +860,20 @@ export const SUITE_GRAPH = Object.freeze({
     ],
     artifacts: [],
     surfaces: ["/", "/ferramentas/", "/diretoria-b2g/"],
+  },
+  "audit:css-usage": {
+    producers: [
+      "scripts/site/audit_css_usage.py",
+      "scripts/site/test_audit_css_usage.py",
+      "scripts/site/fixtures/css-usage/",
+      "data/design/css-usage-baseline.json",
+      "styles.css",
+      "styles-tokens.css",
+      "entregas/styles.css",
+      "css/",
+    ],
+    artifacts: ["data/design/css-usage-baseline.json"],
+    surfaces: ["/", "/entregas/", "/conteudos/"],
   },
   "test:copy": {
     producers: [

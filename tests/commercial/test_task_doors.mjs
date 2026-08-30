@@ -277,17 +277,16 @@ const catalogScriptPath = path.join(root, "entregas/catalog.js");
 const catalogLoaderPath = path.join(root, "entregas/catalog-bootstrap.js");
 const catalogDataPath = path.join(root, "entregas/catalog-data.js");
 const catalogStylePath = path.join(root, "entregas/styles.css");
-const catalogProgressiveStylePath = path.join(root, "entregas/catalog.css");
 const catalogScript = fs.readFileSync(catalogScriptPath, "utf8");
 const catalogLoader = fs.readFileSync(catalogLoaderPath, "utf8");
 const catalogDataScript = fs.readFileSync(catalogDataPath, "utf8");
 const catalogDataMatch = /^window\.CONFENGE_CATALOG_DATA=(\{.*\});\s*$/.exec(catalogDataScript);
 const catalogData = catalogDataMatch ? JSON.parse(catalogDataMatch[1]) : null;
 const catalogStyle = fs.readFileSync(catalogStylePath, "utf8");
-const catalogProgressiveStyle = fs.readFileSync(catalogProgressiveStylePath, "utf8");
 const implementation = doc.public_implementation || {};
 assert("implementation_route", implementation.route === "/entregas/", implementation.route);
-assert("implementation_artifacts_exist", [implementation.renderer, implementation.client_loader, implementation.client_script, implementation.client_data_asset, implementation.client_stylesheet, implementation.stylesheet].every((file) => fs.existsSync(path.join(root, file))), implementation);
+assert("implementation_artifacts_exist", [implementation.renderer, implementation.client_loader, implementation.client_script, implementation.client_data_asset, implementation.stylesheet].every((file) => fs.existsSync(path.join(root, file))), implementation);
+assert("implementation_declares_no_retired_stylesheet", implementation.client_stylesheet === undefined && !fs.existsSync(path.join(root, "entregas/catalog.css")), implementation.client_stylesheet);
 assert("implementation_counts_and_steps", implementation.published_offer_count === 8 && implementation.capability_roll_count === 54 && implementation.capability_group_count === 7 && implementation.primary_representation_per_offer === 1 && implementation.framing_steps === 1, implementation);
 assert("implementation_has_no_public_filters", eq(implementation.filter_dimensions, []) && implementation.alphabetical_view === false, implementation.filter_dimensions);
 assert("implementation_uses_native_progressive_disclosure", implementation.progressive_disclosure === "native_details_by_task", implementation.progressive_disclosure);
@@ -323,11 +322,10 @@ assert("catalog_behavior_validates_exact_data_shape", catalogScript.includes("EX
 assert("catalog_behavior_validates_exact_copy_contract", catalogScript.includes("EXPECTED_CONTRACT_CLAUSES") && catalogScript.includes("hasExactContract(row[15])") && catalogScript.includes("javascript:"), "fail-closed copy contract");
 assert("catalog_contracts_hydrate_only_on_disclosure", catalogScript.includes('details.addEventListener("toggle"') && catalogScript.includes("hydrateContract(details)") && catalogScript.includes("recordFor(card)?.contractHtml"), "lazy copy contract");
 assert("catalog_base_html_omits_deferred_contract_markup", !entregas.includes("data-copy-contract-id") && !entregas.includes("data-copy-clause"), "compact initial HTML");
-assert("public_page_does_not_block_on_catalog_css", !entregas.includes("/entregas/catalog.css"), "catalog css");
+assert("public_page_does_not_block_on_catalog_css", !entregas.includes("/entregas/catalog.css") && !catalogLoader.includes("catalog.css"), "catalog css");
 assert("script_has_no_network_or_analytics_sink", !/(fetch\s*\(|XMLHttpRequest|sendBeacon|dataLayer\.push)/.test(catalogScript), "client script");
 assert("loader_has_no_data_or_analytics_sink", !/(fetch\s*\(|XMLHttpRequest|sendBeacon|dataLayer\.push)/.test(catalogLoader), "client loader");
-assert("style_progressively_reveals_comparison", catalogProgressiveStyle.includes(".catalog-enhanced .catalog-item__compare") && catalogProgressiveStyle.includes(".catalog-item__compare{display:none"), "progressive enhancement");
-assert("style_uses_stacked_mobile_comparison", catalogStyle.includes(".compare-table tbody td::before") || catalogProgressiveStyle.includes(".catalog-comparison [data-comparison-items],.catalog-alpha ol{grid-template-columns:1fr}"), "mobile comparison");
+assert("style_uses_stacked_mobile_comparison", catalogStyle.includes(".vitrine-item__facts{display:block}") && catalogStyle.includes(".vitrine-item__facts>div{display:grid;grid-template-columns:78px minmax(0,1fr)"), "mobile comparison");
 assert("base_style_excludes_progressive_catalog", !catalogStyle.includes(".catalog-recommendation__items") && !catalogStyle.includes(".catalog-compare-tray"), "blocking CSS boundary");
 
 /* 13. Conteineres fora da contagem 01 a 54 ------------------------- */

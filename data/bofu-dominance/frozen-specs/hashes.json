@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "2bcc0e765e9541fdc7c28a0fb77393c10c64bd61",
+  "baseline_commit": "f7bedad2632d8226f013cedb4dfc10d013d338e4",
   "recaptured_at": "2026-08-30",
-  "recapture_reason": "Issue #510 hover-lift recapture pinned to 2bcc0e765e9541fdc7c28a0fb77393c10c64bd61. Removing the live hover lift on the contact float and the dead lift overrides changed only :hover declarations and transition lists in styles.css. The .whatsapp-float:focus-visible rule was split off from its :hover twin so it repaints the measured --focus-ring from #506 instead of overriding it with a drop shadow. styles.css is protected rendering collateral; robots, sitemaps, redirects, analytics, the content-service map and the six protected BOFU pillar HTML files are byte-identical, verified by recomputed sha256. html_mutation remains false and the #291 unlock plan is untouched.",
+  "recapture_reason": "PR #511 recapture onto f7bedad2632d8226f013cedb4dfc10d013d338e4, the commit whose tree carries these exact bytes. Only styles.css moved, and only by deletion: selectors no HTML uses were removed and the three root-level .related-card / .related-grid blocks were merged so every computed value is reproduced exactly. No frozen pillar HTML and no other protected file changed. No rendering change either, proven by a computed-style census over all 263 built routes x 3 viewports (789 renders, 226506 elements) that swapped only the content of the hash-named bundles inside _site, leaving HTML, assets and fonts byte-identical between the two runs: zero differing elements.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -21,7 +21,7 @@
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "b5828ec2e88ff6df78dbd2677b33816fa56ab1b5a13377e36d71616112056432",
     "script.js": "a63729f3ff5915948d3eea91bad8d597996749e1dacd529e044676263f021314",
-    "styles.css": "0615184c3aa7a206b3bb04319b9acf559415a0d686dff5f70d767161e72340a7",
+    "styles.css": "56beaf8e50716616c61a8608e8c011e6e7dbb91f39ad8815c379aae7563a8d39",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "robots.txt": "f5fcb01b1b51cb993860a8f6a77c2ea3e31584f95721e8e95e6093e2e54ec44d",

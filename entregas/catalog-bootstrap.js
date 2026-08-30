@@ -18,12 +18,6 @@
     if (requested) return;
     requested = true;
 
-    const stylesheet = document.createElement("link");
-    stylesheet.dataset.catalogCss = "";
-    stylesheet.href = "/entregas/catalog.css";
-    stylesheet.rel = "stylesheet";
-    document.head.append(stylesheet);
-
     const data = document.createElement("script");
     data.src = "/entregas/catalog-data.js";
     data.fetchPriority = "low";

@@ -707,9 +707,9 @@ def test_hub_problem_first_structure():
     assert "Antes de contratar" in hub
     assert "Durante a execução" in hub
     assert "Quando há conflito" in hub
-    assert "featured-lead" in hub or "featured-decision" in hub
+    assert 'class="featured-decision"' in hub and 'class="featured-lead"' in hub
     assert 'class="hub-metrics"' not in hub
-    assert "cluster-card" not in hub or hub.count("cluster-card") == 0
+    assert "cluster-card" not in hub
 
 
 def test_home_nav_and_hierarchy():
@@ -728,7 +728,7 @@ def test_home_nav_and_hierarchy():
     assert home.count("button-primary") <= 4
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
-    assert "journey-row" in home or "journey-path" in home
+    assert 'class="journey-row' in home
     assert "Edital ou proposta crítica" in home
     assert "Contrato sob pressão" in home
     assert "Operação recorrente" in home
@@ -1178,9 +1178,18 @@ def test_css_visitor_tokens():
     tokens = (ROOT / "styles-tokens.css").read_text(encoding="utf-8")
     tools = (ROOT / "styles-tools.css").read_text(encoding="utf-8")
     assert "--read-measure" in css or "--read-measure" in tokens
-    assert "journey-row" in css
-    assert "problem-stage" in css
-    assert "featured-lead" in css
+    # Every class asserted here must be live: used by shipped HTML *and*
+    # defined in the shipped CSS. A one-sided check would let dead CSS stay.
+    home = (ROOT / "index.html").read_text(encoding="utf-8")
+    hub = (ROOT / "conteudos" / "index.html").read_text(encoding="utf-8")
+    for cls, markup in (
+        ("journey-row", home),
+        ("problem-stages", hub),
+        ("problem-stage-head", hub),
+        ("featured-lead", hub),
+    ):
+        assert re.search(rf'class="[^"]*(?<![\w-]){cls}(?![\w-])', markup), cls
+        assert re.search(rf"\.{cls}(?![\w-])", css), cls
     assert "tool-workflow" in tools
     assert "tool-req-option" in tools
     assert "tool-sticky-bar" in tools
