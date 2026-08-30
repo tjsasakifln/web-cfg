@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0.0",
-  "captured_at": "2026-08-30T23:07:15.072Z",
-  "commit_sha": "f8c0ba3bc0014c88f1c06c4f2307b70d34738771",
+  "captured_at": "2026-08-30T23:25:29.895Z",
+  "commit_sha": "6015bb626841a4b0813da27fb6528845b1b5fd89",
   "tree_dirty": true,
   "base_url": "http://127.0.0.1:8792",
   "output_dir": "docs/uiux-evidence/home-parecer-2026-08-30/after",
@@ -71,8 +71,8 @@
       "fullpage": false,
       "javascript": "on",
       "motion": "system",
-      "bytes": 131767,
-      "sha256": "81ef3b2c65e28566cdda5d4cca4678068b1ff05c4b775ed84ccd418804307619"
+      "bytes": 131737,
+      "sha256": "2d23349d54aeb8beab3efa84c159f01329dcb10d4a446c3297834c5571701702"
     },
     {
       "file": "home-1366x768.png",
@@ -86,8 +86,8 @@
       "fullpage": false,
       "javascript": "on",
       "motion": "system",
-      "bytes": 144901,
-      "sha256": "ca791b1fa6038ddd2862750c63396ab3a44199d3bacce9cc9c9bdf52638fbaa3"
+      "bytes": 145067,
+      "sha256": "76e00c279c8e8d062cfd9cc1d27502c1c2961f9cde2a1a89eb8a1148f88a2e07"
     },
     {
       "file": "home-1440x900.png",
@@ -101,8 +101,8 @@
       "fullpage": false,
       "javascript": "on",
       "motion": "system",
-      "bytes": 152433,
-      "sha256": "292dcdcdf413b582c9f5661b7db189950a979b63918f8720402027e50567c4ec"
+      "bytes": 152633,
+      "sha256": "7a3ece8466a8430693cf8b5428ea0e911f1abbe0df968fe70df2116c4d46de95"
     }
   ]
 }

@@ -1,9 +1,9 @@
 {
   "schema_version": "2.0.0",
-  "captured_at": "2026-08-30T23:07:09.205Z",
-  "commit_sha": "f8c0ba3bc0014c88f1c06c4f2307b70d34738771",
+  "captured_at": "2026-08-30T23:25:24.042Z",
+  "commit_sha": "6015bb626841a4b0813da27fb6528845b1b5fd89",
   "tree_dirty": true,
-  "base_url": "http://127.0.0.1:8811",
+  "base_url": "http://127.0.0.1:8812",
   "output_dir": "docs/uiux-evidence/home-parecer-2026-08-30/before",
   "state": {
     "id": "default",
