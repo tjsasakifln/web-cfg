@@ -26,7 +26,7 @@
 | https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/ | True | — | Organization,Person,BreadcrumbList | Modelo sintético: licitações a disputar ou recusar. |
 | https://confenge.com.br/comercial/privacidade-leads/ | True | — |  | Aviso de privacidade - leads e contratação |
 | https://confenge.com.br/comercial/termos-diagnostico-b2g/ | True | — |  | Termos B2B - Diagnóstico de Expansão no Mercado Público |
-| https://confenge.com.br/confianca/ | True | — | Organization,Person,BreadcrumbList | Quem executa, como corrigir e o que conta como prova |
+| https://confenge.com.br/confianca/ | True | — | Organization,Person,BreadcrumbList | Quem responde pela CONFENGE |
 | https://confenge.com.br/conflitos/ | True | — | Organization,Person,BreadcrumbList | Conflitos e interesses comerciais |
 | https://confenge.com.br/conteudos/ | True | — | Organization,Person,BreadcrumbList | Qual problema de licitação ou contrato você precisa resolver? |
 | https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/ | True | — | Organization,Person,Article,BreadcrumbList; Aditivo em empreitada global: o que o risco de quantitativo não cobre | Aditivo em empreitada global: o que o risco de quantitativo não cobre |

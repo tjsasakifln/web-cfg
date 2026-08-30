@@ -154,6 +154,12 @@ function mapLeadToInboundV1(record) {
 
   const routeFamily = clampText(record.route_family, 80);
   if (routeFamily) body.route_family = routeFamily;
+  // First-class structured journey (one of the three canonical purchase
+  // situations, or the fixed-closed fallbacks) alongside the free-text
+  // "situação=" qualification below. The free-text stays so nothing
+  // downstream that already parses `message` breaks.
+  const journey = clampText(record.jornada, 40);
+  if (journey) body.journey = journey;
   // `asset_id` identifies the acquisition asset and must not be repurposed as a
   // product identifier. The selected deliverable is carried in the versioned
   // free-text next-action context until Warmbly exposes a dedicated field.

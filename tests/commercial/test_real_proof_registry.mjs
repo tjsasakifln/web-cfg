@@ -176,7 +176,7 @@ for (const rel of [...modelPages, ...config.synthetic_surfaces.demonstrative_pag
 }
 
 const unlabelledInlineCard = new Map(pages);
-unlabelledInlineCard.set("index.html", pages.get("index.html").replace("EXEMPLO SINTÉTICO · NÃO É RESULTADO DE CLIENTE", "PRIMEIRO EXEMPLO PUBLICADO"));
+unlabelledInlineCard.set("index.html", pages.get("index.html").replace("Exemplo demonstrativo · estrutura real, números hipotéticos", "PRIMEIRO EXEMPLO PUBLICADO"));
 assert.ok(
   evaluateProofGate({ config, registry, pages: unlabelledInlineCard }).includes("inline_synthetic_card_unlabelled:index.html"),
 );

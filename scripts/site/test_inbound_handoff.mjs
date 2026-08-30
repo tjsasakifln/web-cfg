@@ -595,6 +595,13 @@ try {
     if (destBody.route_family !== "defesa-margem-diagnostico") fail("dest_route", destBody);
     if (destBody.asset_id !== "diagnostico-defesa-margem") fail("dest_asset", destBody);
     if (destBody.cta_id !== "segunda-leitura-contrato") fail("dest_cta", destBody);
+    // journey must be a first-class field (not only folded into the free-text
+    // qualification inside message), and the free-text must still be present
+    // so nothing downstream that already parses it breaks.
+    if (destBody.journey !== "contrato") fail("dest_journey_structured", destBody);
+    if (!destBody.message || !destBody.message.includes("situação=contrato")) {
+      fail("dest_journey_free_text_preserved", destBody);
+    }
     if (!destBody.consent || destBody.consent.granted !== true) fail("dest_consent", destBody);
     const refreshed = await origMemGet(data.lead_id);
     if (!refreshed.handoff || refreshed.handoff.status !== "DELIVERED") {
