@@ -138,7 +138,7 @@ O que garante consistência sem uniformidade são os papéis de tipo, a cor, as 
 ## 6.1 Evidência de captura
 
 `../evidence/breakthrough-capture-index.json` indexa os dois lados: 20 PNGs
-antes (`583d2d88e`) e 20 depois (`8c737b263`), nos cinco viewports do protocolo
+antes (`583d2d88e`) e 20 depois (`60049e95b`), nos cinco viewports do protocolo
 × quatro estados de render — full-page, JS-off, `prefers-reduced-motion`
 e primeira dobra. Os dois lados foram capturados a partir de **git worktrees
 limpas**, então nenhum manifesto está marcado como provisório (`tree_dirty:
