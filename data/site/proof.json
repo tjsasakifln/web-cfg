@@ -1,138 +1,170 @@
 {
-  "schema_version": "1.1.0",
-  "updated_at": "2026-08-15",
-  "verification_limitation": "Claims marked VERIFIED with source perfil-publico-especialista are self-attested from the public specialist page and institutional copy already on confenge.com.br. They are allowed public statements, not independently verified third-party credentials. This circularity is a documented limitation, not an upgrade of proof class.",
-  "claims": [
-    {
-      "id": "proof-usp-civil",
-      "claim": "Engenharia Civil pela USP (EESC-USP)",
-      "status": "VERIFIED",
-      "verification_class": "self_attested_public",
-      "source": "perfil-publico-especialista",
-      "public_allowed": true,
-      "last_verified_at": "2026-08-01",
-      "allowed_public_phrases": [
-        "Engenharia Civil pela EESC-USP",
-        "Engenharia Civil EESC-USP",
-        "Engenheiro Civil formado pela Escola de Engenharia de São Carlos da Universidade de São Paulo",
-        "engenheiro civil pela EESC-USP"
-      ],
-      "notes": "Publicado em especialista/tiago-jun-sasaki e materiais institucionais. Sem diploma digital de terceiro anexado neste repositório."
-    },
-    {
-      "id": "proof-private-public",
-      "claim": "Experiência na iniciativa privada e na Administração Pública",
-      "status": "VERIFIED",
-      "verification_class": "self_attested_public",
-      "source": "perfil-publico-especialista",
-      "public_allowed": true,
-      "last_verified_at": "2026-08-01",
-      "allowed_public_phrases": [
-        "Privada e Administração Pública",
-        "experiência na iniciativa privada e na Administração Pública"
-      ],
-      "notes": "Fato biográfico já publicado no site."
-    },
-    {
-      "id": "proof-fiscalizacao-gestao",
-      "claim": "Visão de fiscalização, gestão e execução contratual",
-      "status": "VERIFIED",
-      "verification_class": "self_attested_public",
-      "source": "perfil-publico-especialista",
-      "public_allowed": true,
-      "last_verified_at": "2026-08-01",
-      "allowed_public_phrases": [
-        "Fiscalização, gestão e orçamento contratual",
-        "Fiscalização e gestão de contratos de obras",
-        "fiscalização, gestão de contratos",
-        "Convênios, processos administrativos e interface pública"
-      ],
-      "notes": "Experiência em fiscalização e gestão de contratos públicos."
-    },
-    {
-      "id": "proof-nacional",
-      "claim": "Atendimento nacional",
-      "status": "VERIFIED",
-      "verification_class": "operational_declared",
-      "source": "operacao-remota-declarada",
-      "public_allowed": true,
-      "last_verified_at": "2026-08-01",
-      "allowed_public_phrases": [
-        "Atendimento nacional"
-      ],
-      "notes": "Atuação remota nacional declarada no site e formulários."
-    },
-    {
-      "id": "proof-lei-14133",
-      "claim": "Atuação com referência à Lei nº 14.133/2021",
-      "status": "VERIFIED",
-      "verification_class": "content_published",
-      "source": "conteudo-tecnico-publicado",
-      "public_allowed": true,
-      "last_verified_at": "2026-08-01",
-      "allowed_public_phrases": [
-        "Lei nº 14.133/2021",
-        "Lei 14.133/2021",
-        "Licitações e execução sob a Lei nº 14.133/2021"
-      ],
-      "notes": "Biblioteca técnica e páginas-pilar tratam a Lei 14.133."
-    },
-    {
-      "id": "proof-orcamentacao",
-      "claim": "Experiência em orçamentação e referências oficiais (SINAPI/SICRO/BDI)",
-      "status": "VERIFIED",
-      "verification_class": "content_published",
-      "source": "conteudo-tecnico-publicado",
-      "public_allowed": true,
-      "last_verified_at": "2026-08-01",
-      "allowed_public_phrases": [
-        "Orçamentação com referências oficiais",
-        "SINAPI",
-        "SICRO",
-        "BDI"
-      ],
-      "notes": "Cluster auditoria-orcamento e guias técnicos publicados."
-    },
-    {
-      "id": "proof-tech-infra",
-      "claim": "Tecnologia aplicada como infraestrutura de inteligência e evidência",
-      "status": "VERIFIED",
-      "verification_class": "operational_declared",
-      "source": "operacao-interna",
-      "public_allowed": true,
-      "last_verified_at": "2026-08-01",
-      "allowed_public_phrases": [
-        "Tecnologia, automação e IA aplicadas à engenharia",
-        "tecnologia aplicada"
-      ],
-      "notes": "Pode ser descrito como sistema proprietário de inteligência; não expor nome extra-cli ao público."
-    },
-    {
-      "id": "claim-blocked-client-names",
-      "claim": "Nomes de clientes e contratos",
-      "status": "PRIVATE_ONLY",
-      "source": "n/a",
-      "public_allowed": false,
-      "last_verified_at": "2026-08-01",
-      "notes": "Bloqueado sem autorização formal do cliente."
-    },
-    {
-      "id": "claim-blocked-financial-results",
-      "claim": "Percentuais de economia, vitória ou resultado financeiro",
-      "status": "PENDING_EVIDENCE",
-      "source": "n/a",
-      "public_allowed": false,
-      "last_verified_at": "2026-08-01",
-      "notes": "Exige evidência e aprovação editorial antes de qualquer publicação."
-    },
-    {
-      "id": "claim-blocked-work-values",
-      "claim": "Valores de obras e quantidade de portarias",
-      "status": "PENDING_EVIDENCE",
-      "source": "n/a",
-      "public_allowed": false,
-      "last_verified_at": "2026-08-01",
-      "notes": "Não publicar sem evidência verificável e autorização."
-    }
-  ]
+ "schema_version": "1.1.0",
+ "updated_at": "2026-08-30",
+ "verification_limitation": "Claims marked VERIFIED with source perfil-publico-especialista are self-attested from the public specialist page and institutional copy already on confenge.com.br. They are allowed public statements, not independently verified third-party credentials. This circularity is a documented limitation, not an upgrade of proof class.",
+ "claims": [
+  {
+   "id": "proof-usp-civil",
+   "claim": "Engenharia Civil pela USP (EESC-USP)",
+   "status": "VERIFIED",
+   "verification_class": "self_attested_public",
+   "source": "perfil-publico-especialista",
+   "public_allowed": true,
+   "last_verified_at": "2026-08-01",
+   "allowed_public_phrases": [
+    "Engenharia Civil pela EESC-USP",
+    "Engenharia Civil EESC-USP",
+    "Engenheiro Civil formado pela Escola de Engenharia de São Carlos da Universidade de São Paulo",
+    "engenheiro civil pela EESC-USP"
+   ],
+   "notes": "Publicado em especialista/tiago-jun-sasaki e materiais institucionais. Sem diploma digital de terceiro anexado neste repositório."
+  },
+  {
+   "id": "proof-private-public",
+   "claim": "Experiência na iniciativa privada e na Administração Pública",
+   "status": "VERIFIED",
+   "verification_class": "self_attested_public",
+   "source": "perfil-publico-especialista",
+   "public_allowed": true,
+   "last_verified_at": "2026-08-01",
+   "allowed_public_phrases": [
+    "Privada e Administração Pública",
+    "experiência na iniciativa privada e na Administração Pública"
+   ],
+   "notes": "Fato biográfico já publicado no site."
+  },
+  {
+   "id": "proof-fiscalizacao-gestao",
+   "claim": "Visão de fiscalização, gestão e execução contratual",
+   "status": "VERIFIED",
+   "verification_class": "self_attested_public",
+   "source": "perfil-publico-especialista",
+   "public_allowed": true,
+   "last_verified_at": "2026-08-01",
+   "allowed_public_phrases": [
+    "Fiscalização, gestão e orçamento contratual",
+    "Fiscalização e gestão de contratos de obras",
+    "fiscalização, gestão de contratos",
+    "Convênios, processos administrativos e interface pública"
+   ],
+   "notes": "Experiência em fiscalização e gestão de contratos públicos."
+  },
+  {
+   "id": "proof-nacional",
+   "claim": "Atendimento nacional",
+   "status": "VERIFIED",
+   "verification_class": "operational_declared",
+   "source": "operacao-remota-declarada",
+   "public_allowed": true,
+   "last_verified_at": "2026-08-01",
+   "allowed_public_phrases": [
+    "Atendimento nacional"
+   ],
+   "notes": "Atuação remota nacional declarada no site e formulários."
+  },
+  {
+   "id": "proof-lei-14133",
+   "claim": "Atuação com referência à Lei nº 14.133/2021",
+   "status": "VERIFIED",
+   "verification_class": "content_published",
+   "source": "conteudo-tecnico-publicado",
+   "public_allowed": true,
+   "last_verified_at": "2026-08-01",
+   "allowed_public_phrases": [
+    "Lei nº 14.133/2021",
+    "Lei 14.133/2021",
+    "Licitações e execução sob a Lei nº 14.133/2021"
+   ],
+   "notes": "Biblioteca técnica e páginas-pilar tratam a Lei 14.133."
+  },
+  {
+   "id": "proof-orcamentacao",
+   "claim": "Experiência em orçamentação e referências oficiais (SINAPI/SICRO/BDI)",
+   "status": "VERIFIED",
+   "verification_class": "content_published",
+   "source": "conteudo-tecnico-publicado",
+   "public_allowed": true,
+   "last_verified_at": "2026-08-01",
+   "allowed_public_phrases": [
+    "Orçamentação com referências oficiais",
+    "SINAPI",
+    "SICRO",
+    "BDI"
+   ],
+   "notes": "Cluster auditoria-orcamento e guias técnicos publicados."
+  },
+  {
+   "id": "proof-tech-infra",
+   "claim": "Tecnologia aplicada como infraestrutura de inteligência e evidência",
+   "status": "VERIFIED",
+   "verification_class": "operational_declared",
+   "source": "operacao-interna",
+   "public_allowed": true,
+   "last_verified_at": "2026-08-01",
+   "allowed_public_phrases": [
+    "Tecnologia, automação e IA aplicadas à engenharia",
+    "tecnologia aplicada"
+   ],
+   "notes": "Pode ser descrito como sistema proprietário de inteligência; não expor nome extra-cli ao público."
+  },
+  {
+   "id": "claim-blocked-client-names",
+   "claim": "Nomes de clientes e contratos",
+   "status": "PRIVATE_ONLY",
+   "source": "n/a",
+   "public_allowed": false,
+   "last_verified_at": "2026-08-01",
+   "notes": "Bloqueado sem autorização formal do cliente."
+  },
+  {
+   "id": "claim-blocked-financial-results",
+   "claim": "Percentuais de economia, vitória ou resultado financeiro",
+   "status": "PENDING_EVIDENCE",
+   "source": "n/a",
+   "public_allowed": false,
+   "last_verified_at": "2026-08-01",
+   "notes": "Exige evidência e aprovação editorial antes de qualquer publicação."
+  },
+  {
+   "id": "claim-blocked-work-values",
+   "claim": "Valores de obras e quantidade de portarias",
+   "status": "PENDING_EVIDENCE",
+   "source": "n/a",
+   "public_allowed": false,
+   "last_verified_at": "2026-08-01",
+   "notes": "Não publicar sem evidência verificável e autorização."
+  },
+  {
+   "id": "proof-base-inteligencia",
+   "claim": "Base de inteligência com 4,48 milhões de contratos públicos, corte de 01/08/2026",
+   "status": "VERIFIED",
+   "verification_class": "self_attested_owner",
+   "source": "registro-operacional-confenge",
+   "public_allowed": true,
+   "last_verified_at": "2026-08-30",
+   "allowed_public_phrases": [
+    "4,48 milhões de contratos públicos na base de inteligência",
+    "Contratos públicos na base de inteligência",
+    "4,48 milhões de contratos públicos",
+    "base de inteligência proprietária"
+   ],
+   "notes": "Lastro em data/pseo/national-candidate-inventory.json, denominators.national_records_available = 4479442 contrato_id deduplicados, dataset_hash 0d8757f7, corte de 01/08/2026. Desses, 54.055 estão confirmados como obra ou serviço de engenharia (denominators.aec_confirmed_contracts). O número publicado é o volume da base disponível para análise, não a carteira de clientes nem o recorte de engenharia. O inventário nacional permanece PENDING/QUALITY_ELIGIBLE para findings editoriais; publicar a escala da base não depende dessa promoção."
+  },
+  {
+   "id": "proof-volume-analisado",
+   "claim": "Mais de R$ 700 milhões em obras públicas analisados pessoalmente pelo Eng. Tiago Sasaki",
+   "status": "VERIFIED",
+   "verification_class": "self_attested_owner",
+   "source": "registro-profissional-titular",
+   "public_allowed": true,
+   "last_verified_at": "2026-08-30",
+   "allowed_public_phrases": [
+    "R$ 700 milhões em obras públicas analisados pessoalmente por Tiago Sasaki",
+    "Em obras públicas analisados pessoalmente por Tiago Sasaki",
+    "R$ 700 milhões em obras públicas analisados",
+    "obras públicas analisados pessoalmente"
+   ],
+   "notes": "Volume acumulado de obra pública sob análise técnica do titular ao longo da trajetória profissional, somando iniciativa privada e Administração Pública. Declarado pelo próprio em 2026-08-30. É volume analisado, não é valor recuperado, economizado nem resultado assegurado a cliente. Sem lastro documental neste repositório: é declaração do titular, e é por isso que a verification_class é self_attested_owner e não uma classe verificada por terceiro."
+  }
+ ]
 }

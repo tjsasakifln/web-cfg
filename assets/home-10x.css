@@ -112,20 +112,20 @@ body[data-content-cluster="home"] .offer-label,
 body[data-content-cluster="home"] .icp-label,
 body[data-content-cluster="home"] .type-mono{
   font-stretch:var(--narrow);font-weight:750;letter-spacing:.11em;text-transform:uppercase;
-  font-size:var(--text-micro);line-height:1.4;
+  font-size:var(--text-small);line-height:1.4;
 }
-/* .offer-label e .icp-label estao no piso funcional de 14px
- * (test_design_gates.py functional floor + test_ui_geometry functional_text_min_14px):
- * sao rotulo de oferta e de adequacao, nao legenda. Mantem a largura estreita,
- * recupera o tamanho. */
+/* O grupo inteiro fica em --text-small (14px), nao em --text-micro (12,8px).
+ * test_ui_geometry mede .contact-copy p, .offer-label, .icp-label e outros
+ * contra um piso funcional de 14px, e o eyebrow da secao de captura cai
+ * dentro de .contact-copy p. A largura estreita ja diferencia o rotulo do
+ * texto; nao e o tamanho que precisa fazer esse trabalho. */
 body[data-content-cluster="home"] .offer-label,
-body[data-content-cluster="home"] .icp-label{font-size:.875rem;letter-spacing:.09em}
+body[data-content-cluster="home"] .icp-label{letter-spacing:.09em}
 body[data-content-cluster="home"] .eyebrow{margin:0 0 .85rem;color:var(--accent)}
 /* O ponto lime do eyebrow era a ultima ocorrencia de --lime na home. */
 body[data-content-cluster="home"] .eyebrow-dot{display:none}
 
-body[data-content-cluster="home"] .section-lead,
-body[data-content-cluster="home"] .editorial-lead{
+body[data-content-cluster="home"] .section-lead{
   max-width:58ch;color:var(--text);font-size:1.05rem;line-height:1.65;
 }
 
@@ -200,7 +200,7 @@ body[data-content-cluster="home"] .hero-proof{
 }
 body[data-content-cluster="home"] .hero-proof li{color:var(--field-muted);font-size:.875rem;line-height:1.45}
 body[data-content-cluster="home"] .proof-mark{color:var(--accent-live)}
-body[data-content-cluster="home"] .hero-proof-line{margin:.7rem 0 0;color:var(--field-muted);font-size:.85rem}
+body[data-content-cluster="home"] .hero-proof-line{margin:.7rem 0 0;color:var(--field-muted);font-size:var(--text-small)}
 body[data-content-cluster="home"] .hero-proof-line a{color:var(--field-ink);font-weight:400;text-decoration:underline;text-underline-offset:3px}
 body[data-content-cluster="home"] .hero-proof-line a:hover{color:var(--accent-live)}
 
@@ -229,6 +229,32 @@ body[data-content-cluster="home"] .home-hero-grid{
 .hero-verdict-foot{
   margin:1rem 0 0;color:var(--field-muted);font-size:.875rem;line-height:1.55;max-width:34ch;
 }
+
+/* Escala da operacao. Sao os dois unicos numeros da dobra, e e aqui que o
+ * tabular-nums que a folha ja carregava desde #526 finalmente trabalha: os
+ * dois valores alinham na virgula. Rotulo em cima, numero embaixo, como em
+ * .home-deliverables-result, para a pagina ter um so jeito de mostrar dado.
+ * Procedencia colada ao numero, uma linha, em vez de ressalva empilhada. */
+.hero-scale{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1rem,2.5vw,1.75rem);
+  margin:1.5rem 0 0;padding-top:1.15rem;border-top:1px solid rgba(255,255,255,.22);
+}
+/* Os dois rotulos tem numero de linhas diferente; sem a linha 1fr os
+ * valores nao pousariam na mesma base. */
+.hero-scale>div{display:grid;grid-template-rows:1fr auto;min-width:0}
+.hero-scale dt{
+  color:var(--field-muted);font-stretch:var(--narrow);font-weight:750;
+  letter-spacing:.09em;text-transform:uppercase;font-size:var(--text-micro);line-height:1.35;
+}
+.hero-scale dd{
+  margin:.4rem 0 0;color:var(--field-ink);font-stretch:var(--wide);font-weight:760;
+  letter-spacing:-.03em;line-height:1;font-size:clamp(1.5rem,2.4vw,2rem);
+}
+.hero-scale-base{
+  margin:.85rem 0 0;color:var(--field-muted);font-size:var(--text-micro);line-height:1.5;
+}
+.hero-scale-base a{color:var(--field-ink);text-decoration:underline;text-underline-offset:3px}
+.hero-scale-base a:hover{color:var(--accent-live)}
 .hero-verdict-foot strong{color:var(--field-ink);font-weight:650}
 
 /* ── 4. Tres portas: linha editorial, nao card ─────────────────────────── */
@@ -354,7 +380,6 @@ body[data-content-cluster="home"] .home-deliverables-actions .button-light:hover
 .market-context-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(1.75rem,4vw,3.5rem);align-items:start}
 .market-context-copy h2{max-width:18ch;margin:0 0 .85rem}
 .market-context-copy>p{max-width:52ch;color:var(--text);font-size:1rem;line-height:1.7}
-.market-disclaimer{margin-top:1.1rem;padding-top:.85rem;border-top:1px solid var(--rule);color:var(--muted);font-size:.85rem;line-height:1.5}
 .market-evidence{min-width:0}
 .evidence-kicker{margin:0;font-stretch:var(--narrow);font-weight:750;letter-spacing:.1em;text-transform:uppercase;font-size:var(--text-micro)}
 .evidence-title{margin:.4rem 0 .5rem;font-size:1.1rem;font-weight:720;letter-spacing:-.015em;line-height:1.3}
@@ -367,7 +392,7 @@ body[data-content-cluster="home"] .home-deliverables-actions .button-light:hover
 }
 body[data-content-cluster="home"] .evidence-illustration{
   margin:.85rem 0;padding:.75rem 0 0;border-top:1px solid var(--rule);border-left:0;
-  color:var(--muted);font-size:.84rem;line-height:1.55;
+  color:var(--muted);font-size:var(--text-small);line-height:1.55;
 }
 
 /* .evidence-selector nasceu para pousar num painel navy: styles.css ainda
@@ -482,7 +507,7 @@ body[data-content-cluster="home"] .form-step-legend{color:var(--muted)}
 body[data-content-cluster="home"] .form-step[data-step="2"] .field label{color:var(--muted);font-weight:600}
 body[data-content-cluster="home"] .form-legal{
   margin:1.15rem 0 0;padding-top:.9rem;border-top:1px solid var(--rule);
-  color:var(--muted);font-size:.82rem;line-height:1.55;
+  color:var(--muted);font-size:var(--text-small);line-height:1.55;
 }
 body[data-content-cluster="home"] .form-legal p{margin:0 0 .45rem}
 body[data-content-cluster="home"] .form-legal p:last-child{margin:0}
@@ -523,7 +548,7 @@ body[data-content-cluster="home"] .site-footer{background:var(--field)}
   body[data-content-cluster="home"] .journey-kind{margin:0}
 }
 @media (max-width:700px){
-  body[data-content-cluster="home"] .hero{padding:1.5rem 0 1.9rem}
+  body[data-content-cluster="home"] .hero{padding:1.4rem 0 1.5rem}
   body[data-content-cluster="home"] .hero h1{font-size:clamp(1.95rem,7.5vw,2.4rem);max-width:none}
   body[data-content-cluster="home"] .hero-lead{font-size:1rem;margin-bottom:.9rem}
   body[data-content-cluster="home"] .hero-deliverable{font-size:.97rem;margin-bottom:1.15rem;padding-top:.85rem}
@@ -534,7 +559,13 @@ body[data-content-cluster="home"] .site-footer{background:var(--field)}
   .hero-verdict{margin-top:.1rem}
   .hero-verdict-label{margin-bottom:.5rem}
   .hero-verdict-set li{font-size:1.25rem;padding:.4rem 0}
-  .hero-verdict-foot{margin-top:.7rem;font-size:.82rem;max-width:none}
+  .hero-verdict-foot{margin-top:.7rem;font-size:var(--text-small);max-width:none}
+  /* A dobra movel encostava em heroCap 1.25 do test_ui_geometry sem folga
+   * nenhuma. Aqui esta a margem de seguranca, tirada do respiro e nao do
+   * conteudo: nenhuma linha some. */
+  .hero-scale{margin-top:.9rem;padding-top:.75rem;gap:.75rem}
+  .hero-scale dd{font-size:1.3rem;margin-top:.3rem}
+  .hero-scale-base{margin-top:.65rem}
   .home-deliverables{margin-top:2rem}
   .home-deliverables-copy h3{font-size:1.3rem}
   .home-deliverables-result dd{font-size:1.4rem}
@@ -550,4 +581,19 @@ body[data-content-cluster="home"] .site-footer{background:var(--field)}
   body[data-content-cluster="home"] .icp-no{border-top:1px solid var(--rule);margin-top:1.25rem;padding-top:1.25rem}
   body[data-content-cluster="home"] .authority-fields li:nth-child(even){padding-left:0;border-left:0}
   body[data-content-cluster="home"] .authority-fields li:nth-child(odd){padding-right:0}
+}
+
+/* Abaixo de 400px (360px ainda e um terco do trafego movel brasileiro) a
+ * dobra passava de 1,3 viewport. A folga sai de tamanho de tipo e respiro,
+ * nunca de conteudo: nenhuma linha e escondida, porque esconder no telefone
+ * o que o desktop mostra e o oposto do que a pagina esta tentando provar. */
+@media (max-width:400px){
+  body[data-content-cluster="home"] .hero h1{font-size:1.85rem}
+  body[data-content-cluster="home"] .hero-lead{margin-bottom:.8rem}
+  body[data-content-cluster="home"] .hero-deliverable{margin-bottom:1rem;padding-top:.75rem}
+  body[data-content-cluster="home"] .hero-actions{margin-bottom:.9rem}
+  body[data-content-cluster="home"] .hero-proof{padding-top:.75rem}
+  .hero-verdict-set li{font-size:1.12rem;padding:.32rem 0}
+  .hero-verdict-foot{margin-top:.6rem}
+  .hero-scale dd{font-size:1.2rem}
 }

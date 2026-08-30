@@ -762,7 +762,11 @@ def extract_credential_claim_texts(html: str) -> list[str]:
     texts: list[str] = []
     for pat in (
         r'<li[^>]*class="[^"]*proof[^"]*"[^>]*>(.*?)</li>',
-        r'<ul class="(?:hero-proof|profile-list)"[^>]*>(.*?)</ul>',
+        # `class` nao e necessariamente o primeiro atributo. A home escreve
+        # `<ul aria-label="Credenciais verificaveis" class="hero-proof">`, e com
+        # o padrao anterior, ancorado em `<ul class="`, a lista de credenciais
+        # da home nunca era extraida: o gate passava por vazio, nao por acerto.
+        r'<ul[^>]*\bclass="[^"]*\b(?:hero-proof|profile-list)\b[^"]*"[^>]*>(.*?)</ul>',
         r'data-credential="([^"]+)"',
     ):
         for m in re.finditer(pat, html or "", flags=re.I | re.S):

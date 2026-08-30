@@ -14,18 +14,23 @@
 <link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="/manifest.webmanifest" rel="manifest"/>
 <script>document.documentElement.classList.replace('no-js','js');</script>
-<link href="/styles.css" rel="stylesheet"/>
-<link href="/assets/home-10x.css" rel="stylesheet"/>
+<!-- Primeira dobra em linha, ANTES das folhas. Quando este bloco vinha depois
+     dos <link>, ele nao era CSS critico: era a ultima palavra da cascata, e
+     silenciosamente vencia assets/home-10x.css em toda regra que os dois
+     declaram. Uma divergencia entre os dois arquivos passava a valer pelo
+     bloco, nao pela folha. Agora a folha e a fonte unica. -->
 <style data-home-deliverables-critical="">
-body[data-content-cluster="home"] .hero{padding:2.75rem 0;color:#f4f7f4;background:#08130e;border-bottom:0}
-body[data-content-cluster="home"] .hero h1{max-width:22ch;margin:0 0 1.1rem;color:#f4f7f4;font-size:clamp(2.15rem,4.1vw,3.3rem);line-height:1.04;letter-spacing:-.032em}
+body[data-content-cluster="home"] .hero{padding:clamp(2.75rem,5.5vw,4.5rem) 0 clamp(2.75rem,5vw,4rem);color:#f4f7f4;background:#08130e;border-bottom:0}
+body[data-content-cluster="home"] .hero h1{max-width:22ch;margin:0 0 1.15rem;color:#f4f7f4;font-size:clamp(2.15rem,4.1vw,3.3rem);line-height:1.04;letter-spacing:-.032em}
 body[data-content-cluster="home"] .hero h1 .type-serif{display:block;color:#5ea85a;font-family:inherit}
 body[data-content-cluster="home"] .hero-lead{max-width:50ch;margin:0 0 1.15rem;color:#a9bcae;font-size:clamp(1rem,1.35vw,1.12rem);line-height:1.6}
 body[data-content-cluster="home"] .home-hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(272px,.68fr);gap:clamp(2rem,4.5vw,4.5rem);align-items:center;max-width:none}
 body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1.5rem;padding:1rem 0 0;border-top:1px solid rgba(255,255,255,.16);color:#f4f7f4;font-size:1rem;font-weight:600;line-height:1.55}
 @media(max-width:940px){body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.75rem}}
-@media(max-width:700px){body[data-content-cluster="home"] .hero{padding:1.5rem 0 1.9rem}body[data-content-cluster="home"] .hero h1{font-size:clamp(1.95rem,7.5vw,2.4rem);max-width:none}body[data-content-cluster="home"] .hero-deliverable{font-size:.97rem;margin-bottom:1.15rem;padding-top:.85rem}}
+@media(max-width:700px){body[data-content-cluster="home"] .hero{padding:1.4rem 0 1.5rem}body[data-content-cluster="home"] .hero-lead{font-size:1rem;margin-bottom:.9rem}body[data-content-cluster="home"] .hero h1{font-size:clamp(1.95rem,7.5vw,2.4rem);max-width:none}body[data-content-cluster="home"] .hero-deliverable{font-size:.97rem;margin-bottom:1.15rem;padding-top:.85rem}}
 </style>
+<link href="/styles.css" rel="stylesheet"/>
+<link href="/assets/home-10x.css" rel="stylesheet"/>
 <script defer="" src="/script.js?v=fortune04"></script>
 <meta content="website" property="og:type"/>
 <meta content="pt_BR" property="og:locale"/>
@@ -106,6 +111,11 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1.
 <li>Recusar</li>
 </ul>
 <p class="hero-verdict-foot">Com o <strong>critério</strong>, o <strong>número</strong> e o <strong>responsável</strong> que sustentam a escolha. Documento assinado, com data.</p>
+<dl class="hero-scale" aria-label="Escala da operação">
+<div><dt>Contratos públicos na base de inteligência</dt><dd data-credential="4,48 milhões de contratos públicos na base de inteligência">4,48 mi</dd></div>
+<div><dt>Em obras públicas analisados pessoalmente por Tiago Sasaki</dt><dd data-credential="R$ 700 milhões em obras públicas analisados pessoalmente por Tiago Sasaki">R$ 700 mi</dd></div>
+</dl>
+<p class="hero-scale-base">Base com corte de 01/08/2026. Volume analisado ao longo da trajetória do engenheiro responsável. <a href="/metodologia-inteligencia/">Método e limites</a>.</p>
 </aside>
 </div>
 </section>
