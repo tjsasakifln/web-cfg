@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "962d144eaa1b7d4390212a2e727506c8c906d15c",
+  "baseline_commit": "27d128a1c073baea1888591a1f6ade711474ed22",
   "recaptured_at": "2026-08-29",
-  "recapture_reason": "Merge recapture pinned to 962d144eaa1b7d4390212a2e727506c8c906d15c, the commit whose protected-path bytes these hashes attest. Hashes recomputed from the merged tree, not copied from either side of the conflict. Drifted collateral: _redirects, robots.txt, script.js. Rendering collateral recaptured: script.js; every frozen pillar HTML is byte-identical to origin/main, so no frozen page changes how it renders. The six protected BOFU pillar HTML files are byte-identical to origin/main, verified by recomputed sha256. html_mutation remains false and the #291 unlock plan is untouched.",
+  "recapture_reason": "Merge recapture pinned to 27d128a1c073baea1888591a1f6ade711474ed22, the commit whose protected-path bytes these hashes attest. Hashes recomputed from the merged tree, not copied from either side of the conflict. Drifted collateral: sitemap.txt, sitemap.xml. The six protected BOFU pillar HTML files are byte-identical to origin/main, verified by recomputed sha256. html_mutation remains false and the #291 unlock plan is untouched.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -25,8 +25,8 @@
     "styles-tokens.css": "8908187527c8120731dc8584eb11c36ae41e66f5cf411dcd431251e1b52cb01d",
     "styles-tools.css": "cfe5e81785c54e8a18601c2a97308dfaf744d0b60596d2acc34ec3ad7e015162",
     "robots.txt": "f5fcb01b1b51cb993860a8f6a77c2ea3e31584f95721e8e95e6093e2e54ec44d",
-    "sitemap.xml": "5c66c99111d0370d02ea53e6fb4ac1a668a80d935efc38a4d784378e63133ae5",
-    "sitemap.txt": "aae5549eccf8b58ad0fb7ab93c9d3fe0923044d08109df881c249399552a1ede",
+    "sitemap.xml": "0ae12394887886a8749964183bf05f440324e759ec4d28b068084f872980c0ff",
+    "sitemap.txt": "eba93e6e485b644b9a947da48840394f943cdd396e618f7ea91a9caec5460363",
     "sitemap-index.xml": "865a4c2b7330b2081eb3473a540d862ad169b7300e1f3d93d5edc9d9742e9244",
     "_redirects": "c32debd36d9ce4bc2d46121c7d7c229139ab11ab5dc1f4aa2db09541ab21e73a",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
