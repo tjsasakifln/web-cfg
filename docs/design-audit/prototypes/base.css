@@ -1,0 +1,124 @@
+/* Base compartilhada dos dois protótipos de #494.
+ * Herda /styles-tokens.css sem alterar nenhum valor. Adiciona um único token:
+ * --caution-700, o sinal de ressalva que falta na paleta (5.26:1 sobre branco).
+ * Cor nunca é o único portador: todo papel semântico aqui também carrega
+ * palavra literal, glifo e posição.
+ */
+:root{
+  --caution-700:#8A5F00;
+  --baseline:1.65rem;
+  --rail:13.5rem;
+  --numero:8.5rem;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--white);
+  color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:var(--text-body-mobile);
+  line-height:var(--lh-body);
+}
+@media (min-width:768px){body{font-size:var(--text-body-desktop)}}
+main{max-width:var(--page-max);margin:0 auto;padding:0 var(--space-5) var(--space-8)}
+.skip-link{position:absolute;left:-9999px}
+.skip-link:focus{left:var(--space-4);top:var(--space-4);background:var(--white);padding:var(--space-3);z-index:2}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.proto-banner{
+  margin:0;padding:var(--space-3) var(--space-5);
+  background:var(--navy-950);color:var(--white);
+  font-size:var(--text-micro);line-height:var(--lh-micro);
+}
+h1{font-size:var(--text-h1);line-height:1.06;letter-spacing:-.01em;color:var(--ink);margin:0 0 var(--space-4)}
+h2{font-size:var(--text-h2);line-height:1.12;color:var(--ink);margin:var(--space-8) 0 var(--space-4)}
+h3{font-size:1.15rem;color:var(--ink);margin:var(--space-5) 0 var(--space-2)}
+.eyebrow{font-size:var(--text-micro);line-height:var(--lh-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 var(--space-3)}
+.page-head{padding:var(--space-8) 0 var(--space-5)}
+.lead{font-family:var(--serif);font-size:1.2rem;max-width:var(--read-measure);margin:0}
+.autoria{font-size:var(--text-micro);line-height:var(--lh-micro);color:var(--muted);margin:var(--space-4) 0 0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums lining-nums;font-feature-settings:"tnum" 1,"lnum" 1}
+
+/* --- conversão: subárvore idêntica nas duas variantes ------------- */
+.conversion{margin:var(--space-6) 0;padding:var(--space-6) 0;border-block:1px solid var(--line)}
+.oferta__unidade{font-size:var(--text-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 var(--space-2)}
+.oferta__titulo{font-size:1.6rem;margin:0 0 var(--space-2)}
+.oferta__resumo{margin:0 0 var(--space-5);max-width:var(--read-measure)}
+.oferta__lockup{display:flex;flex-wrap:wrap;gap:var(--space-6);margin:0 0 var(--space-5)}
+.oferta__lockup dt{font-size:var(--text-micro);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.oferta__lockup dd{margin:var(--space-1) 0 0;font-size:1.5rem;color:var(--ink)}
+.conversion__actions{display:flex;flex-wrap:wrap;gap:var(--space-4);margin:0}
+.button{display:inline-flex;align-items:center;justify-content:center;min-height:var(--touch-min);padding:0 var(--space-5);border-radius:var(--radius-sm);text-decoration:none;font-weight:600;border:1px solid transparent}
+.button-primary{background:var(--green-700);color:var(--white)}
+.button-primary:hover{background:var(--navy-900)}
+.button-ghost{border-color:var(--line);color:var(--ink)}
+.button-ghost:hover{border-color:var(--ink)}
+/* O anel de foco não é desta issue. #513 já corrigiu --focus-ring para
+ * 0 0 0 2px var(--white),0 0 0 5px var(--ink), medido entre 13,48:1 e 19,11:1
+ * em nove superfícies. Os protótipos herdam o token corrigido e nenhuma
+ * candidata pode regredi-lo; o outline transparente preserva o anel em
+ * forced-colors, onde box-shadow não é pintado. */
+.button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,button:focus-visible{box-shadow:var(--focus-ring);outline:2px solid transparent;outline-offset:2px}
+
+/* --- formulário --------------------------------------------------- */
+.captura{margin:var(--space-8) 0 0;padding:var(--space-6) 0;border-top:1px solid var(--line)}
+.form{max-width:34rem;margin-top:var(--space-5)}
+.field{margin-bottom:var(--space-5)}
+.field label{display:block;font-weight:600;color:var(--ink)}
+.field__help{margin:var(--space-1) 0 var(--space-2);font-size:var(--text-small);color:var(--muted)}
+.field input,.field textarea{width:100%;min-height:var(--touch-min);padding:var(--space-3);border:1px solid var(--muted);border-radius:var(--radius-sm);font:inherit;color:var(--ink);background:var(--white)}
+.field[data-state="error"] input,.field[data-state="error"] textarea{border-width:2px;border-color:var(--caution-700)}
+.field__error{margin:var(--space-2) 0 0;font-size:var(--text-small);color:var(--caution-700);font-weight:600}
+.field__error::before{content:"Erro — ";}
+.field__turnstile{margin:var(--space-5) 0;padding:var(--space-3);border:1px dashed var(--line);font-size:var(--text-small);color:var(--muted)}
+.form__actions{margin:var(--space-5) 0 0}
+.form__success{margin:var(--space-4) 0 0;font-size:var(--text-small);color:var(--green-700);font-weight:600}
+.form__success::before{content:"✓ ";}
+.estado-vazio{margin:var(--space-4) 0 0;padding:var(--space-4);background:var(--soft);font-size:var(--text-small)}
+
+/* --- afirmações: casca comum -------------------------------------- */
+.claims{margin-top:var(--space-6)}
+.claim{padding:var(--space-5) 0;border-top:1px solid var(--line)}
+.claim__natureza{margin:0 0 var(--space-2);font-size:var(--text-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.claim__text{margin:0;max-width:var(--read-measure)}
+.claim__evidencia,.claim__fonte{margin:var(--space-3) 0 0;font-size:var(--text-small);color:var(--muted);max-width:var(--read-measure)}
+.claim__evidencia-rotulo{font-weight:700;color:var(--ink)}
+.claim__numero{margin:0;font-size:1.75rem;line-height:var(--baseline);color:var(--ink)}
+.claim__numero--vazio{color:var(--muted)}
+
+/* --- tabela de dado ----------------------------------------------- */
+.tabela-dado{width:100%;border-collapse:collapse;margin-top:var(--space-4)}
+.tabela-dado caption{text-align:start;font-size:var(--text-small);color:var(--muted);padding-bottom:var(--space-3)}
+.tabela-dado th,.tabela-dado td{padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--line);text-align:start;vertical-align:baseline}
+.tabela-dado thead th{font-size:var(--text-micro);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--ink)}
+.tabela-dado .num{text-align:end;font-variant-numeric:tabular-nums lining-nums}
+.tabela-dado tfoot th,.tabela-dado tfoot td{border-top:2px solid var(--ink);font-weight:700}
+
+/* --- specimen ------------------------------------------------------ */
+.spec-block{padding-top:var(--space-5);border-top:1px solid var(--line)}
+.metadado{margin:0;padding-inline-start:var(--space-4);border-inline-start:2px solid var(--ink);font-size:var(--text-micro);line-height:var(--lh-micro)}
+.metadado .trilho__row{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:var(--space-2);padding-block:var(--space-1)}
+.metadado dt{color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.metadado dd{margin:0;color:var(--ink)}
+.measure{max-width:var(--read-measure);font-family:var(--serif)}
+.glifos{font-family:var(--mono);font-size:1.4rem}
+.numero-dominante{margin:0;font-size:clamp(2.4rem,5vw,3.6rem);line-height:1.05;color:var(--ink)}
+.numero-dominante__portador{margin:var(--space-2) 0 0;font-size:var(--text-small);color:var(--muted)}
+.cinza{filter:grayscale(1);padding:var(--space-4);border:1px solid var(--line)}
+
+.page-foot{max-width:var(--page-max);margin:0 auto;padding:var(--space-6) var(--space-5) var(--space-8);border-top:1px solid var(--line);font-size:var(--text-small);color:var(--muted)}
+
+/* --- 400% zoom e refluxo: nada rola na horizontal ------------------ */
+html,body{overflow-x:hidden}
+.tabela-dado{display:block;overflow-x:auto}
+
+/* --- impressão ----------------------------------------------------- */
+@media print{
+  .proto-banner,.conversion__actions,.form,.skip-link{display:none}
+  body{background:#fff;color:#000;font-size:11pt}
+  .claim{break-inside:avoid;border-top:1pt solid #000}
+  .estado__texto,.trilho__row dd{color:#000}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+}
+
+/* --- movimento ------------------------------------------------------ */
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

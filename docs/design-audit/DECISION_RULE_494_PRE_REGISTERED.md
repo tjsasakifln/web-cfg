@@ -120,3 +120,88 @@ A margem de M1 é o critério dominante porque é a única das três que mede a 
 Quando a decisão for tomada, ela é acrescentada **abaixo desta linha, neste arquivo**, com SHA da baseline, SHA de cada variante, as três medidas por candidata, o desfecho e quem assinou. Não em outro documento, para que regra e resultado fiquem no mesmo diff auditável.
 
 <!-- RESULTADO: ainda não decidido. Não preencher antes da janela do §2 abrir. -->
+
+---
+
+## 7. RESULTADO — apurado em 2026-08-30
+
+**Desfecho: `KEEP_CURRENT`.** Empate pela §4.3. Nenhum canário em #493.
+
+### 7.1 O que foi medido, e sobre o quê
+
+| Item | Identidade |
+|---|---|
+| Baseline (main) | `b1691840f29e599146161d8ee43cfb95d3570ec3` — rebase sobre #514, #516, #519 e #520; a apuração foi refeita sobre ela e **as medidas não mudaram**  |
+| Conteúdo fixo | `docs/design-audit/prototypes/fixed-content.json`, sha256 `fcf60cfd021537d7…` |
+| Variante A — trilho de memória | árvore `docs/design-audit/prototypes/a-trilho-de-memoria/`, sha256 concatenado `df2bfafba006d696…` |
+| Variante B — estado de revisão | árvore `docs/design-audit/prototypes/b-estado-de-revisao/`, sha256 concatenado `e3d29d08da0f09fc…` |
+| Casca comum às duas | `docs/design-audit/prototypes/base.css`, sha256 `1bf38ca62612297f…` |
+| Evidência de barreira e medida | `docs/design-audit/evidence/direction-probe.json` |
+| Evidência de paleta (G3) | `docs/design-audit/evidence/palette-g3.json` |
+| Evidência de captura | `docs/design-audit/evidence/capture-index.json` — 55 PNGs, hash por arquivo, full-page · JS-off · reduced-motion, nos cinco viewports do §11 |
+
+Três jobs, um exemplar cada, conteúdo fixo: comercial (espelha `/defesa-margem-contratos-publicos/`), leitura/evidência (`/conteudos/documentos-reequilibrio-obra-publica/`) e instrumento (`/ferramentas/limite-acrescimos-supressoes/`). Zero byte alterado em rota pública.
+
+### 7.2 §4.1 — elegibilidade: as oito barreiras
+
+| Barreira | A | B | Como foi medida |
+|---|---|---|---|
+| G1 slots de domínio | ✅ | ✅ | com todos os campos nulos a página **não** renderiza intacta (árvore de acessibilidade difere) e a primeira dobra carrega ≥3 slots obrigatórios no pior viewport |
+| G2 ablação da assinatura | ✅ | ✅ | `[data-signature]{display:none}` muda o conjunto extraível nos três jobs |
+| G3 separação de luminância | ✅ | ✅ | paleta única; nenhum par abaixo de 3:1 sem portador não-cromático declarado |
+| G4 capacidade da webfont | ✅ | ✅ | nenhuma candidata propõe webfont: 0 arquivo, 0 KB, 0 regra `@font-face` |
+| G5 proximidade da prova | ✅ | ✅ | pior distância claim↔evidência 0,240 dobra (A) e 0,215 dobra (B), contra o teto de 1 |
+| G6 piso funcional | ✅ | ✅ | os nove alvos nomeados verdes no mesmo commit |
+| G7 custo declarado | ✅ | ✅ | 0 arquivo e 0,00 KB gzip contra `font_files_max: 0` e `font_total_gzip_kb_max: 0`; CLS delta 0 contra a baseline de 0,000 em 261 rotas |
+| G8 sem hover lift | ✅ | ✅ | hover renderizado, `getBoundingClientRect().top` relativo ao documento: 0,00 px nas duas |
+
+Nenhuma reprovação. As duas candidatas são elegíveis, então a §4.3 se aplica.
+
+### 7.3 §4.2 — as três medidas decisivas
+
+| Medida | A — trilho | B — estado | Direção | Diferença |
+|---|---|---|---|---|
+| **M1** campos de proveniência que somem sob a ablação de G2 — pior job | **2** | 1 | maior é melhor | A + 1 |
+| M1 por job (comercial · leitura · instrumento) | 2 · 3 · 3 | 1 · 1 · 1 | — | +1 · +2 · +2 |
+| **M2** pior distância claim↔evidência, em dobras | 0,2403 | **0,2153** | menor é melhor | A − 0,025 |
+| **M3** KB gzip de fonte · arquivos · pior CLS por rota | 0,00 · 0 · 0,000 | 0,00 · 0 · 0,000 | menor é melhor | empate exato |
+
+### 7.4 §4.3 — a margem, aplicada
+
+1. ambas passaram G1–G8 — **sim**;
+2. vence M1 por ≥2 campos — **não**. A lidera M1, mas por 2 campos em dois jobs e por **1** no job comercial. A §4.1 proíbe compensação entre barreiras; o mesmo princípio, aplicado dentro de uma medida, exige que a margem se sustente em todo o conteúdo fixo do protocolo, não na média favorável. A margem que se sustenta nos três jobs é **1**;
+3. não perde M2 nem M3 — **verdade** (A perde M2 por 0,025 dobra, dentro da tolerância de 0,25; M3 empata).
+
+Falha a condição 2. Por definição da §4.3, **qualquer resultado fora das três condições é empate**.
+
+**A escolha de agregação foi declarada antes de valer:** a regra pré-registrada não diz como somar M1 entre os três jobs, e essa lacuna decide o desfecho — pela média (2,67 × 1,00) ou pelo melhor job (3 × 1) a margem chegaria a ≥2. Uma regra silenciosa resolve pelo lado conservador, que é o mesmo lado do empate-default da §4.4 e da proibição de compensação da §4.1, e não pelo lado que fabrica um vencedor. As três agregações estão registradas acima para que a escolha seja auditável em vez de invisível.
+
+### 7.5 §4.4 — desfecho e consequência
+
+| Campo | Valor |
+|---|---|
+| Desfecho | **`KEEP_CURRENT`** |
+| Consequência em #493 | **nenhum canário**; a epic fecha ou é recaracterizada |
+| Mecanismo C | **não retorna**. A §5.3 só o libera se ambas forem `KEEP_CURRENT` por ausência de diferença material. Aqui houve diferença medida (A lidera M1 em todos os jobs); ela apenas não alcançou a margem. Reabrir C exige issue própria e re-registro |
+| Quem assinou | a própria **§4.3, auto-executável**, sobre os números da §7.3, pela delegação registrada na §1 em 2026-08-30. Nenhuma pessoa arbitrou, e nada aqui afirma percepção humana — isso é #336 e só #336 |
+| Emenda pós-captura | nenhuma. Esta regra não foi alterada depois da primeira captura; o desfecho **não** é `AMENDED_AFTER_CAPTURE` |
+
+### 7.6 O que o empate não significa
+
+Não significa que os mecanismos sejam equivalentes. Significa que a diferença medida não alcançou a margem pré-registrada, e a margem existe justamente para impedir que uma diferença de um campo compre um redesign. O que a medição deixa estabelecido, e que vale para qualquer tentativa futura:
+
+- **A assinatura de A carrega informação.** Sob a ablação, o trilho leva embora fonte, data de corte e unidade em dois dos três jobs — não é revestimento.
+- **A assinatura de B carrega menos, por definição própria.** O §5 do brief atribui a B frescor, versão e responsável; responsável e versão continuam legíveis na linha de autoria, que é comum às duas variantes, então só a data de corte desaparece. B não foi prejudicado por implementação: foi medido no que declara carregar.
+- **O custo das duas é o mesmo e é zero**, porque nenhuma propõe webfont. A comparação não foi decidida por performance.
+- **A conversão não foi variável em nenhum momento**: a subárvore de preço, ação terminal e captura é byte-idêntica entre A e B, e isso é asserção de teste, não promessa.
+
+### 7.7 Correções de rigor apuradas nesta medição
+
+Duas afirmações do material comparável não sobrevivem à conferência com a aritmética que o próprio repositório usa (`_contrast_ratio` em `scripts/site/test_design_gates.py`):
+
+| Afirmação no brief §4 / Anexo A.3 | Medido aqui | Consequência |
+|---|---|---|
+| `--caution-700:#8A5F00` dá **5,26:1** sobre branco | **5,65:1** | a adição continua válida e com mais folga do que o brief anunciava |
+| `#9A6B00` dá **4,37:1** e **reprova em AA** | **4,69:1**, que **passa** em AA | o motivo para não ressuscitar `#9A6B00` não é AA. É que dois âmbares a 0,5:1 de distância são a mesma cor com dois nomes, e o valor mais escuro guarda folga contra `--soft` e contra a folha de impressão |
+
+Registrado aqui, e não em outro documento, porque a §5.5 exige que hex e capacidade tipográfica só entrem em decisão depois de conferidos em fonte primária — e essa regra vale contra o próprio brief.

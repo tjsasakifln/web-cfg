@@ -1,0 +1,108 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T11:01:16.836Z",
+  "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+  "tree_dirty": false,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "../../../../../../.cache/confenge/design-direction-494/a-trilho-de-memoria/instrumento",
+  "state": {
+    "id": "fullpage_js-off_motion-reduced",
+    "fullpage": true,
+    "javascript": "off",
+    "motion": "reduced"
+  },
+  "routes": [
+    "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/"
+  ],
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1366x768",
+    "1363x936",
+    "1440x1000"
+  ],
+  "files": [
+    "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png"
+  ],
+  "captures": [
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 309498,
+      "sha256": "6b900fc4e852d853c5956c2d2604b28b4249f2f43f7530b0af14abc5cf007fea"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 322976,
+      "sha256": "c0346e6710ee3039c8592f4577934f2009c97d6076f0b77eb3f762348422da15"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 352052,
+      "sha256": "eb6485b2086bdc504dfb8be72ea3ed74358926c63f5f98f1016be94e2fb90288"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1363x936",
+      "width": 1363,
+      "height": 936,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 351482,
+      "sha256": "d732c850905a1420aa29bf9714138fc854aaa23e606e68c26664110b7d84ab44"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 356375,
+      "sha256": "ca656946a9685ccd99ed1317f6776ba9f0a18a909305d44400c6a61826ff88a8"
+    }
+  ]
+}

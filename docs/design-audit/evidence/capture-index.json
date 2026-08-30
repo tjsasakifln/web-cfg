@@ -1,0 +1,690 @@
+{
+  "schema": "confenge.design-direction-capture-index/1.0",
+  "issue": 494,
+  "indexed_at": "2026-08-30",
+  "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+  "protocol": {
+    "viewports": [
+      "390x844",
+      "768x1024",
+      "1366x768",
+      "1363x936",
+      "1440x1000"
+    ],
+    "state": "fullpage + JavaScript off + prefers-reduced-motion: reduce",
+    "harness": "scripts/site/capture_screenshots.mjs (CAPTURE_VIEWPORTS=protocol), issue #512",
+    "reproduce": "CHROME_PATH=... bash scripts/site/capture_design_direction.sh"
+  },
+  "binaries_committed": false,
+  "binaries_note": "As 28 MB de PNG ficam fora da arvore: sao reproduziveis byte a byte a partir do commit registrado, e o hash por arquivo abaixo e o que torna uma recaptura conferivel.",
+  "file_count": 55,
+  "groups": [
+    {
+      "group": "a-trilho-de-memoria/comercial",
+      "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/comercial/manifest-fullpage_js-off_motion-reduced.json",
+      "captured_at": "2026-08-30T11:01:03.891Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+      "tree_dirty": false,
+      "state": {
+        "id": "fullpage_js-off_motion-reduced",
+        "fullpage": true,
+        "javascript": "off",
+        "motion": "reduced"
+      },
+      "viewports": [
+        "390x844",
+        "768x1024",
+        "1366x768",
+        "1363x936",
+        "1440x1000"
+      ],
+      "routes": [
+        "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/"
+      ],
+      "files": [
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 360760,
+          "sha256": "f62d4da58dd2bbdecee838aad53e76408fe38cd284c90dbae68cc45deb66af45"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 378089,
+          "sha256": "91b21e239241a526eea340a6908342c9e7904a29f6ba409dc900b01fa73bbd1f"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 414413,
+          "sha256": "28c40dcde248e05c50b4c063dc161c275bd4331bfdfb714f75cd67b67f2ae181"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 413012,
+          "sha256": "f629b7265cb4b3be6a0864b8f8df85ca2c927ec144f758b17f1fec89b4f722fc"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/comercial/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 417046,
+          "sha256": "9362964f059b074e4ce76ef2b76cfa2090118e9e4d2476f6960e49f5b21767b8"
+        }
+      ]
+    },
+    {
+      "group": "a-trilho-de-memoria/instrumento",
+      "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/instrumento/manifest-fullpage_js-off_motion-reduced.json",
+      "captured_at": "2026-08-30T11:01:16.836Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+      "tree_dirty": false,
+      "state": {
+        "id": "fullpage_js-off_motion-reduced",
+        "fullpage": true,
+        "javascript": "off",
+        "motion": "reduced"
+      },
+      "viewports": [
+        "390x844",
+        "768x1024",
+        "1366x768",
+        "1363x936",
+        "1440x1000"
+      ],
+      "routes": [
+        "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/"
+      ],
+      "files": [
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 309498,
+          "sha256": "6b900fc4e852d853c5956c2d2604b28b4249f2f43f7530b0af14abc5cf007fea"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 322976,
+          "sha256": "c0346e6710ee3039c8592f4577934f2009c97d6076f0b77eb3f762348422da15"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 352052,
+          "sha256": "eb6485b2086bdc504dfb8be72ea3ed74358926c63f5f98f1016be94e2fb90288"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 351482,
+          "sha256": "d732c850905a1420aa29bf9714138fc854aaa23e606e68c26664110b7d84ab44"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/instrumento/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 356375,
+          "sha256": "ca656946a9685ccd99ed1317f6776ba9f0a18a909305d44400c6a61826ff88a8"
+        }
+      ]
+    },
+    {
+      "group": "a-trilho-de-memoria/leitura",
+      "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/leitura/manifest-fullpage_js-off_motion-reduced.json",
+      "captured_at": "2026-08-30T11:01:10.390Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+      "tree_dirty": false,
+      "state": {
+        "id": "fullpage_js-off_motion-reduced",
+        "fullpage": true,
+        "javascript": "off",
+        "motion": "reduced"
+      },
+      "viewports": [
+        "390x844",
+        "768x1024",
+        "1366x768",
+        "1363x936",
+        "1440x1000"
+      ],
+      "routes": [
+        "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/"
+      ],
+      "files": [
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 331085,
+          "sha256": "3db05b4040c906f454e2ab2cc297bfffa5362c16fba394ec6f18488dad37cdb2"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 347375,
+          "sha256": "f59b5861b0334ee0da7d81cfd29e5356f4bc989e6fffe7c6f80256e79e383aaa"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 373233,
+          "sha256": "7b1c0763b907d37d6b33585ce1dbad13e8423af453566bed0f038c90ec482229"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 377600,
+          "sha256": "a4f2905deb2c42225f966eb0e8b85d7d0e5d7365d4e3e5acce530c8b7bd836a3"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 378883,
+          "sha256": "15eb75ca5ee018dcddbc1cbe0642402e08d7bec1c4456594899d812a75718e06"
+        }
+      ]
+    },
+    {
+      "group": "a-trilho-de-memoria/specimen",
+      "manifest": "docs/design-audit/evidence/capture/a-trilho-de-memoria/specimen/manifest-fullpage_js-off_motion-reduced.json",
+      "captured_at": "2026-08-30T11:01:23.514Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+      "tree_dirty": false,
+      "state": {
+        "id": "fullpage_js-off_motion-reduced",
+        "fullpage": true,
+        "javascript": "off",
+        "motion": "reduced"
+      },
+      "viewports": [
+        "390x844",
+        "768x1024",
+        "1366x768",
+        "1363x936",
+        "1440x1000"
+      ],
+      "routes": [
+        "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/"
+      ],
+      "files": [
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 371053,
+          "sha256": "202272c3d0bdbb83298c08fdb76f5210b72a17d59fbb5e98caf1551e215451eb"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 381699,
+          "sha256": "5a607875caa593b2e159b805f96fc10272dc9b6e89dd18291a49d0a0c2305505"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 463476,
+          "sha256": "b268c6d3638918a963d8a36a186384464f03c3fce2b7788ea3bec45d96ff06e2"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 453762,
+          "sha256": "33041e13546b12c4085d772d21b36ee5943d0362324f9f547a722d0dbfe5e676"
+        },
+        {
+          "file": "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 470689,
+          "sha256": "0b7eed38cd3da29c11f872b8f0d949b3e1264286666134bacdb5722fe3f69fb8"
+        }
+      ]
+    },
+    {
+      "group": "b-estado-de-revisao/comercial",
+      "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/comercial/manifest-fullpage_js-off_motion-reduced.json",
+      "captured_at": "2026-08-30T11:01:30.083Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+      "tree_dirty": false,
+      "state": {
+        "id": "fullpage_js-off_motion-reduced",
+        "fullpage": true,
+        "javascript": "off",
+        "motion": "reduced"
+      },
+      "viewports": [
+        "390x844",
+        "768x1024",
+        "1366x768",
+        "1363x936",
+        "1440x1000"
+      ],
+      "routes": [
+        "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/"
+      ],
+      "files": [
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 366594,
+          "sha256": "dc022a535a1576f5b3363c1315759c4c0b007629ccd7890e655b441eff98d108"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 378746,
+          "sha256": "21ed9e0190cabb86af63ba6cc6e9c82d594e9ebc5b1b3fc0eedd7fd4ae384444"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 406436,
+          "sha256": "c59921d80fe3c9815738bb8e7fcb32f3996ecb943fb09a1cf0c6afe59324246d"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 404933,
+          "sha256": "484d47de990ddcb117128ffe1b98d5f32896a77d6e360a2769485cae899c5227"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 409246,
+          "sha256": "d11c21c8a4e8731b87437a71762733df38e96045f6861c4de5f7946208355d16"
+        }
+      ]
+    },
+    {
+      "group": "b-estado-de-revisao/instrumento",
+      "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/instrumento/manifest-fullpage_js-off_motion-reduced.json",
+      "captured_at": "2026-08-30T11:01:43.100Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+      "tree_dirty": false,
+      "state": {
+        "id": "fullpage_js-off_motion-reduced",
+        "fullpage": true,
+        "javascript": "off",
+        "motion": "reduced"
+      },
+      "viewports": [
+        "390x844",
+        "768x1024",
+        "1366x768",
+        "1363x936",
+        "1440x1000"
+      ],
+      "routes": [
+        "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/"
+      ],
+      "files": [
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 324554,
+          "sha256": "56d857c9df29263c4413e020213625163c06a0fb721e73b12af8ef813f3b13ff"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 336297,
+          "sha256": "e1499ead1c8e2895c6883ab5bf0e382cabc691b8f88272d3ad9b46f4f516c22b"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 355646,
+          "sha256": "6d5cf9b698ae1e23f025881c6555a91b8fe4c9d3ce514d3b52764e46761adcbd"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 354955,
+          "sha256": "33f9550f04ff88bf1075ecec44b299da9f5b0e64ac916653619732aab831aa7b"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 359871,
+          "sha256": "407831cbaba506e2095e027b7ed6c9994ba80912d5c5ff6271bbde95304e4514"
+        }
+      ]
+    },
+    {
+      "group": "b-estado-de-revisao/leitura",
+      "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/leitura/manifest-fullpage_js-off_motion-reduced.json",
+      "captured_at": "2026-08-30T11:01:36.613Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+      "tree_dirty": false,
+      "state": {
+        "id": "fullpage_js-off_motion-reduced",
+        "fullpage": true,
+        "javascript": "off",
+        "motion": "reduced"
+      },
+      "viewports": [
+        "390x844",
+        "768x1024",
+        "1366x768",
+        "1363x936",
+        "1440x1000"
+      ],
+      "routes": [
+        "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/"
+      ],
+      "files": [
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 321863,
+          "sha256": "ce7743f975a17df2cf91637568baadb26c8b6fb4c783b73e352655a6331cb02f"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 334514,
+          "sha256": "fbda0fabd8df231869a9a25f24f792f730ebc11ce939d7117aa7a296a7e97564"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 352406,
+          "sha256": "0a7e1f7023f98c4dcf73ce62c5a900428c3aaa3e8594bcc361f47e7a46dc9d2f"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 356259,
+          "sha256": "dd76ed55e6e615a2127bcb416ab979af2809694dfadb56d9b2aae28335c21e6a"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 358208,
+          "sha256": "cfe46a4023fe91c328e92b086ca3e6efc334ea326d3443414d2ea6bc4a6e4621"
+        }
+      ]
+    },
+    {
+      "group": "b-estado-de-revisao/specimen",
+      "manifest": "docs/design-audit/evidence/capture/b-estado-de-revisao/specimen/manifest-fullpage_js-off_motion-reduced.json",
+      "captured_at": "2026-08-30T11:01:49.771Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+      "tree_dirty": false,
+      "state": {
+        "id": "fullpage_js-off_motion-reduced",
+        "fullpage": true,
+        "javascript": "off",
+        "motion": "reduced"
+      },
+      "viewports": [
+        "390x844",
+        "768x1024",
+        "1366x768",
+        "1363x936",
+        "1440x1000"
+      ],
+      "routes": [
+        "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/"
+      ],
+      "files": [
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 370901,
+          "sha256": "f5e6f566f13da7c7406cf944ae3e13735d705c91ce0cb164db80add22cf56623"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 379625,
+          "sha256": "153108829293cfc19f08f029b72f3eb82403ad837132270c5fa9ad058f131f64"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 461097,
+          "sha256": "3eb58e1c74593b6966c2a2f7ea5403afeaa8f0e061d3cbfe5016247b2e637293"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 451379,
+          "sha256": "e79b56de5c2cc1faa8361b28d2998aeead3a7a771f5149d83fd0a4ba398618f5"
+        },
+        {
+          "file": "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/docs/design-audit/prototypes/b-estado-de-revisao/specimen/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 468340,
+          "sha256": "c73f69defb9e97f8cac4a6ae43ee6e4e588e5a5ac70841f38ecd052200358743"
+        }
+      ]
+    },
+    {
+      "group": "baseline",
+      "manifest": "docs/design-audit/evidence/capture/baseline/manifest-fullpage_js-off_motion-reduced.json",
+      "captured_at": "2026-08-30T11:00:57.225Z",
+      "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+      "tree_dirty": false,
+      "state": {
+        "id": "fullpage_js-off_motion-reduced",
+        "fullpage": true,
+        "javascript": "off",
+        "motion": "reduced"
+      },
+      "viewports": [
+        "390x844",
+        "768x1024",
+        "1366x768",
+        "1363x936",
+        "1440x1000"
+      ],
+      "routes": [
+        "/defesa-margem-contratos-publicos/",
+        "/conteudos/documentos-reequilibrio-obra-publica/",
+        "/ferramentas/limite-acrescimos-supressoes/"
+      ],
+      "files": [
+        {
+          "file": "defesa-margem-contratos-publicos-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/defesa-margem-contratos-publicos/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 920863,
+          "sha256": "d2d29bfbca2c3cdf85a58366cf4f44c0ce20488d28be7f01cb5f9d3b327d2816"
+        },
+        {
+          "file": "defesa-margem-contratos-publicos-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/defesa-margem-contratos-publicos/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 1040120,
+          "sha256": "171f1ff2dfff5cfa537507ad0f9fd53307a1fe5213209683ecd7b3abf98b790e"
+        },
+        {
+          "file": "defesa-margem-contratos-publicos-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/defesa-margem-contratos-publicos/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 1175255,
+          "sha256": "ab1e696c52bb53e0c111c034a900783c68a6df8a97a08dd83a1140e9e242142a"
+        },
+        {
+          "file": "defesa-margem-contratos-publicos-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/defesa-margem-contratos-publicos/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 1171768,
+          "sha256": "f6910a0203261ccf5c9589faa7699936f1b9717dc91ce5de9592e4ac14c69bbf"
+        },
+        {
+          "file": "defesa-margem-contratos-publicos-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/defesa-margem-contratos-publicos/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 1196434,
+          "sha256": "9d765974b724ae47343d8ded3c5a9476bfa03aef5d5cbfae9dbe698ac0fdf94e"
+        },
+        {
+          "file": "conteudosdocumentos-reequilibrio-obra-pu-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 1108120,
+          "sha256": "9df8b7a6eb7dccaa148141c47428176e4be5dc3f569786d18a41afae70060266"
+        },
+        {
+          "file": "conteudosdocumentos-reequilibrio-obra-pu-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 1156744,
+          "sha256": "6f39fe5625f4c36ba17e87044006ec3d18434de20383337a57611dfd70629731"
+        },
+        {
+          "file": "conteudosdocumentos-reequilibrio-obra-pu-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 1272005,
+          "sha256": "70a2aad239df08087d888794bafd3a369a3ad370f161233f39034fd95f362a6e"
+        },
+        {
+          "file": "conteudosdocumentos-reequilibrio-obra-pu-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 1275567,
+          "sha256": "a41d0efeeb7ef1ad136848aaf7a1db01b2f12c4bd38cd45b28385eaf5a6a985a"
+        },
+        {
+          "file": "conteudosdocumentos-reequilibrio-obra-pu-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/conteudos/documentos-reequilibrio-obra-publica/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 1289045,
+          "sha256": "b7013c540c91b9a4680a2b3915e0bb3687270344cffe93e061242915c02ce885"
+        },
+        {
+          "file": "ferramentaslimite-acrescimos-supressoes-390x844--fullpage_js-off_motion-reduced.png",
+          "route": "/ferramentas/limite-acrescimos-supressoes/",
+          "viewport": "390x844",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 305378,
+          "sha256": "41c19fbf52759c8a124b6c88ec377aec5c56593f1074d88e8a8b22ac9bfb7515"
+        },
+        {
+          "file": "ferramentaslimite-acrescimos-supressoes-768x1024--fullpage_js-off_motion-reduced.png",
+          "route": "/ferramentas/limite-acrescimos-supressoes/",
+          "viewport": "768x1024",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 343327,
+          "sha256": "b77fa56117bf19cd1ff211828d759be71172124731f056edd27cee0f112edf83"
+        },
+        {
+          "file": "ferramentaslimite-acrescimos-supressoes-1366x768--fullpage_js-off_motion-reduced.png",
+          "route": "/ferramentas/limite-acrescimos-supressoes/",
+          "viewport": "1366x768",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 356364,
+          "sha256": "dc1b3c51f9a0e6a7fa40c06b352e9ace5302efd311ee8f4ec32d50494d2ef264"
+        },
+        {
+          "file": "ferramentaslimite-acrescimos-supressoes-1363x936--fullpage_js-off_motion-reduced.png",
+          "route": "/ferramentas/limite-acrescimos-supressoes/",
+          "viewport": "1363x936",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 356535,
+          "sha256": "1618aba193002db3a7d610d4e0664e8e9fea38035e297b389e3c73288e9c175b"
+        },
+        {
+          "file": "ferramentaslimite-acrescimos-supressoes-1440x1000--fullpage_js-off_motion-reduced.png",
+          "route": "/ferramentas/limite-acrescimos-supressoes/",
+          "viewport": "1440x1000",
+          "state": "fullpage_js-off_motion-reduced",
+          "bytes": 358940,
+          "sha256": "f969ba5ae041532ab5225c707cca9b08e9dda4b57c271865393996bca7038a4e"
+        }
+      ]
+    }
+  ]
+}

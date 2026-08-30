@@ -1,0 +1,41 @@
+/* Mecanismo A — trilho de memória. Um único movimento memorável. */
+.claim{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:var(--space-4);
+}
+@media (min-width:900px){
+  .claim{
+    grid-template-columns:var(--numero) minmax(0,1fr) var(--rail);
+    column-gap:var(--space-6);
+    align-items:start;
+  }
+  .claim__numero{text-align:end;grid-column:1}
+  .claim__prosa{grid-column:2}
+  .trilho{grid-column:3}
+}
+.claim__numero{padding-top:0}
+.trilho{
+  margin:0;
+  padding-inline-start:var(--space-4);
+  border-inline-start:2px solid var(--ink);
+  font-size:var(--text-micro);
+  line-height:var(--lh-micro);
+}
+.trilho__row{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:var(--space-2);padding-block:var(--space-1)}
+.trilho__row dt{color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.trilho__row dd{margin:0;color:var(--ink)}
+.trilho__row--lacuna dd{color:var(--caution-700);font-weight:700}
+.trilho__row--lacuna dd::before{content:"× ";}
+.claim[data-incompleta="sim"] .claim__prosa{
+  border-inline-start:3px solid var(--caution-700);
+  padding-inline-start:var(--space-4);
+}
+.claim__incompleta{
+  margin:var(--space-3) 0 0;
+  font-size:var(--text-small);
+  font-weight:700;
+  color:var(--caution-700);
+}
+.claim__incompleta::before{content:"× ";}
+.claim[data-incompleta="sim"] .trilho{border-inline-start-color:var(--caution-700)}

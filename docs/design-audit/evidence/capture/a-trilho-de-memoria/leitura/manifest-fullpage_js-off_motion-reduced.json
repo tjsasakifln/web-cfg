@@ -1,0 +1,108 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T11:01:10.390Z",
+  "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+  "tree_dirty": false,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "../../../../../../.cache/confenge/design-direction-494/a-trilho-de-memoria/leitura",
+  "state": {
+    "id": "fullpage_js-off_motion-reduced",
+    "fullpage": true,
+    "javascript": "off",
+    "motion": "reduced"
+  },
+  "routes": [
+    "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/"
+  ],
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1366x768",
+    "1363x936",
+    "1440x1000"
+  ],
+  "files": [
+    "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png"
+  ],
+  "captures": [
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 331085,
+      "sha256": "3db05b4040c906f454e2ab2cc297bfffa5362c16fba394ec6f18488dad37cdb2"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 347375,
+      "sha256": "f59b5861b0334ee0da7d81cfd29e5356f4bc989e6fffe7c6f80256e79e383aaa"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 373233,
+      "sha256": "7b1c0763b907d37d6b33585ce1dbad13e8423af453566bed0f038c90ec482229"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1363x936",
+      "width": 1363,
+      "height": 936,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 377600,
+      "sha256": "a4f2905deb2c42225f966eb0e8b85d7d0e5d7365d4e3e5acce530c8b7bd836a3"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/leitura/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 378883,
+      "sha256": "15eb75ca5ee018dcddbc1cbe0642402e08d7bec1c4456594899d812a75718e06"
+    }
+  ]
+}

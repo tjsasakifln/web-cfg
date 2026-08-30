@@ -1,0 +1,248 @@
+{
+  "schema": "confenge.design-direction-fixed-content/1.0",
+  "issue": 494,
+  "as_of": "2026-08-30",
+  "today": "2026-08-30",
+  "why": "Conteúdo fixo do protocolo de comparação (§11 do DESIGN_DIRECTION_BRIEF_2026-08-30). Os dois mecanismos leem este mesmo arquivo. Qualquer diferença de copy entre as variantes invalida a comparação, então a copy não vive no gerador: vive aqui, uma vez.",
+  "provenance_fields": ["fonte", "data_de_corte", "unidade", "responsavel", "versao"],
+  "domain_slots": ["fonte", "data_de_corte", "artigo", "unidade", "responsavel", "protocolo"],
+  "validade_dias": 180,
+  "jobs": [
+    {
+      "id": "comercial",
+      "job": "comercial",
+      "mirror_route": "/defesa-margem-contratos-publicos/",
+      "eyebrow": "Proteção de margem em contratos públicos",
+      "h1": "Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão",
+      "lead": "Quando cada dia sem registro enfraquece sua posição.",
+      "responsavel": "Engº Tiago Sasaki",
+      "protocolo": "CFG-DM-2026-017",
+      "versao": "v1.4",
+      "oferta": {
+        "unidade_nome": "Unidade 17 · preço-piloto",
+        "titulo": "Diagnóstico de Riscos à Margem",
+        "resumo": "Localiza eventos que podem corroer a margem antes de virarem perda.",
+        "preco": "R$ 2.900",
+        "preco_unidade": "por contrato, até cinco eventos",
+        "sla": "5 dias úteis"
+      },
+      "acao_terminal": {
+        "label": "Registrar este evento",
+        "href": "#captura",
+        "confirmacao": "Evento registrado"
+      },
+      "acao_secundaria": { "label": "Ver método, responsabilidades e limites", "href": "#metodo" },
+      "captura": {
+        "titulo": "Envie o evento de margem nesta página",
+        "lead": "Traga o contrato, o evento e o documento disponível para uma primeira leitura. O formulário não conclui contratação nem promete recuperação."
+      },
+      "claims": [
+        {
+          "id": "c1",
+          "natureza": "fato",
+          "text": "O limite de acréscimo em contrato de obra é de 25% do valor inicial atualizado, e sobe a 50% em reforma de edifício ou de equipamento.",
+          "numero": { "valor": "25", "unidade": "% do valor inicial atualizado" },
+          "artigo": "art. 125",
+          "fonte": { "nome": "Lei nº 14.133/2021 (texto compilado, Planalto)", "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm" },
+          "data_de_corte": "2026-08-15",
+          "versao": "compilado 2026-08-15",
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": "Texto compilado do art. 125 conferido no Planalto na data de corte."
+        },
+        {
+          "id": "c2",
+          "natureza": "calculo",
+          "text": "A unidade comercial cobre um contrato e até cinco eventos indicados pelo cliente ou encontrados na leitura, com entrega em 5 dias úteis contados dos documentos mínimos válidos.",
+          "numero": { "valor": "5", "unidade": "dias úteis" },
+          "artigo": null,
+          "fonte": { "nome": "Registro de entregáveis CONFENGE, Unidade 17", "url": null },
+          "data_de_corte": "2026-08-15",
+          "versao": "v1.4",
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": "Prazo contado a partir dos documentos mínimos válidos; a data da decisão do cliente é confirmada antes do envio."
+        },
+        {
+          "id": "c3",
+          "natureza": "inferencia",
+          "text": "Evento sem registro contemporâneo tende a perder força probatória mesmo quando o fato ocorreu, porque a cronologia passa a depender de relato posterior.",
+          "numero": null,
+          "artigo": null,
+          "fonte": { "nome": "Leitura técnica CONFENGE sobre instrução de pleito", "url": null },
+          "data_de_corte": "2025-11-30",
+          "versao": "v1.0",
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": "Inferência declarada como interpretação, separada do que é fato."
+        },
+        {
+          "id": "c4",
+          "natureza": "lacuna",
+          "text": "Quantos dos eventos deste contrato têm registro contemporâneo disponível na data do diagnóstico é desconhecido antes da leitura dos documentos.",
+          "numero": null,
+          "artigo": null,
+          "fonte": null,
+          "data_de_corte": null,
+          "versao": null,
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": null
+        }
+      ]
+    },
+    {
+      "id": "leitura",
+      "job": "leitura/evidência",
+      "mirror_route": "/conteudos/documentos-reequilibrio-obra-publica/",
+      "eyebrow": "Reequilíbrio contratual",
+      "h1": "Documentos essenciais para pedir reequilíbrio em obra pública",
+      "lead": "Documentos de reequilíbrio: como provar o fato, medir o efeito e formalizar a posição no contrato público.",
+      "responsavel": "Engº Tiago Sasaki",
+      "protocolo": "CFG-GT-2026-041",
+      "versao": "v2.1",
+      "oferta": null,
+      "acao_terminal": {
+        "label": "Analisar meu caso",
+        "href": "#captura",
+        "confirmacao": "Análise solicitada"
+      },
+      "acao_secundaria": { "label": "Ver as fontes desta página", "href": "#fontes" },
+      "captura": {
+        "titulo": "Envie o contrato e o evento para uma primeira leitura",
+        "lead": "Traga contrato, cronograma e o registro do evento. A leitura não substitui parecer jurídico."
+      },
+      "claims": [
+        {
+          "id": "c1",
+          "natureza": "fato",
+          "text": "O restabelecimento do equilíbrio econômico-financeiro do contrato é tratado como hipótese de alteração por acordo entre as partes.",
+          "numero": null,
+          "artigo": "art. 124, II, d",
+          "fonte": { "nome": "Lei nº 14.133/2021 (texto compilado, Planalto)", "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm" },
+          "data_de_corte": "2026-08-15",
+          "versao": "compilado 2026-08-15",
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": "Texto compilado do art. 124 conferido no Planalto na data de corte."
+        },
+        {
+          "id": "c2",
+          "natureza": "calculo",
+          "text": "A curva ABC converte o item afetado em número conferível contra a planilha contratual; sem memória de cálculo o pedido vira glosa ou impasse de caixa.",
+          "numero": { "valor": "80", "unidade": "% do valor concentrado na faixa A" },
+          "artigo": null,
+          "fonte": { "nome": "Planilha contratual do caso, curva ABC do contrato analisado", "url": null },
+          "data_de_corte": "2026-07-15",
+          "versao": "v2.1",
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": "Percentual recalculado sobre a planilha contratual do caso na data de corte, não sobre média de mercado."
+        },
+        {
+          "id": "c3",
+          "natureza": "inferencia",
+          "text": "Prova contemporânea tende a valer mais que relato posterior na instrução do pedido, porque liga obrigação, fato, prova e consequência na mesma data.",
+          "numero": null,
+          "artigo": null,
+          "fonte": { "nome": "Leitura técnica CONFENGE sobre instrução de pleito", "url": null },
+          "data_de_corte": "2025-11-30",
+          "versao": "v1.0",
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": "Inferência declarada como interpretação, separada do que é fato."
+        },
+        {
+          "id": "c4",
+          "natureza": "lacuna",
+          "text": "Qual documento do canteiro registrou o evento, e em que data, permanece desconhecido enquanto diário, ordens e protocolos não forem lidos.",
+          "numero": null,
+          "artigo": null,
+          "fonte": null,
+          "data_de_corte": null,
+          "versao": null,
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": null
+        }
+      ]
+    },
+    {
+      "id": "instrumento",
+      "job": "instrumento",
+      "mirror_route": "/ferramentas/limite-acrescimos-supressoes/",
+      "eyebrow": "Art. 125 · Lei 14.133/2021",
+      "h1": "Verificador de limite de acréscimos e supressões",
+      "lead": "Informe a base do contrato, o histórico formalizado e a alteração em análise. Veja saldos de acréscimo e de supressão de forma independente.",
+      "responsavel": "Engº Tiago Sasaki",
+      "protocolo": "CFG-FE-2026-008",
+      "versao": "v1.2",
+      "oferta": null,
+      "acao_terminal": {
+        "label": "Analisar meu caso",
+        "href": "#captura",
+        "confirmacao": "Análise solicitada"
+      },
+      "acao_secundaria": { "label": "Consultar a Lei nº 14.133/2021", "href": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm" },
+      "captura": {
+        "titulo": "Enquadrar o excesso antes de protocolar",
+        "lead": "Se o saldo não cobre a alteração, envie contrato e histórico formalizado para uma primeira leitura."
+      },
+      "claims": [
+        {
+          "id": "c1",
+          "natureza": "fato",
+          "text": "Acréscimo e supressão são eixos independentes: o saldo de um não compensa o do outro.",
+          "numero": { "valor": "25", "unidade": "% em cada eixo" },
+          "artigo": "art. 125",
+          "fonte": { "nome": "Lei nº 14.133/2021 (texto compilado, Planalto)", "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm" },
+          "data_de_corte": "2026-08-15",
+          "versao": "compilado 2026-08-15",
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": "Texto compilado do art. 125 conferido no Planalto na data de corte."
+        },
+        {
+          "id": "c2",
+          "natureza": "calculo",
+          "text": "Sobre uma base de R$ 12.480.500,00 com R$ 1.996.880,00 já formalizados em acréscimo, o saldo remanescente de acréscimo é de R$ 1.123.245,00.",
+          "numero": { "valor": "1.123.245,00", "unidade": "R$ de saldo de acréscimo" },
+          "artigo": "art. 125",
+          "fonte": { "nome": "Cálculo local no navegador, sobre os valores informados", "url": null },
+          "data_de_corte": "2026-08-15",
+          "versao": "v1.2",
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": "25% de R$ 12.480.500,00 = R$ 3.120.125,00; menos R$ 1.996.880,00 já formalizados = R$ 1.123.245,00."
+        },
+        {
+          "id": "c3",
+          "natureza": "inferencia",
+          "text": "Caber no limite numérico não significa que a alteração esteja motivada: o enquadramento continua sendo questão de instrução, não de aritmética.",
+          "numero": null,
+          "artigo": null,
+          "fonte": { "nome": "Leitura técnica CONFENGE sobre enquadramento de alteração", "url": null },
+          "data_de_corte": "2025-11-30",
+          "versao": "v1.0",
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": "Inferência declarada como interpretação, separada do que é fato."
+        },
+        {
+          "id": "c4",
+          "natureza": "lacuna",
+          "text": "Se a base informada já está atualizada por reajuste na data-base correta é desconhecido para esta ferramenta: ela não lê o contrato.",
+          "numero": null,
+          "artigo": null,
+          "fonte": null,
+          "data_de_corte": null,
+          "versao": null,
+          "responsavel": "Engº Tiago Sasaki",
+          "evidencia": null
+        }
+      ]
+    }
+  ],
+  "specimen": {
+    "titulo": "Specimen tipográfico — pilha de sistema, zero @font-face",
+    "paragrafo_68ch": "Contrato, projeto, planilha, cronograma e registros só ganham força quando organizados numa cadeia verificável de causa e consequência: obrigação, fato, prova, cálculo e decisão, cada um com fonte, data de corte, unidade e responsável declarados. Ação sem instrução é opinião com aparência de técnica.",
+    "tabela_preco": [
+      { "linha": "Base do contrato", "valor": "12.480.500,00", "pct": "100,00" },
+      { "linha": "Acréscimos formalizados", "valor": "1.996.880,00", "pct": "16,00" },
+      { "linha": "Limite de acréscimo (art. 125)", "valor": "3.120.125,00", "pct": "25,00" },
+      { "linha": "Saldo de acréscimo", "valor": "1.123.245,00", "pct": "9,00" },
+      { "linha": "Supressões formalizadas", "valor": "-408.114,00", "pct": "-3,27" }
+    ],
+    "glifos": "R$ % ‰ ± × – º ª § m² m³",
+    "confusaveis": "1 l I · 0 O"
+  }
+}

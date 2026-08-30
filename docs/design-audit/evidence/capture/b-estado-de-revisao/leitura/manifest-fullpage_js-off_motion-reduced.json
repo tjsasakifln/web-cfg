@@ -1,0 +1,108 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T11:01:36.613Z",
+  "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+  "tree_dirty": false,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "../../../../../../.cache/confenge/design-direction-494/b-estado-de-revisao/leitura",
+  "state": {
+    "id": "fullpage_js-off_motion-reduced",
+    "fullpage": true,
+    "javascript": "off",
+    "motion": "reduced"
+  },
+  "routes": [
+    "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/"
+  ],
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1366x768",
+    "1363x936",
+    "1440x1000"
+  ],
+  "files": [
+    "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png"
+  ],
+  "captures": [
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 321863,
+      "sha256": "ce7743f975a17df2cf91637568baadb26c8b6fb4c783b73e352655a6331cb02f"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 334514,
+      "sha256": "fbda0fabd8df231869a9a25f24f792f730ebc11ce939d7117aa7a296a7e97564"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 352406,
+      "sha256": "0a7e1f7023f98c4dcf73ce62c5a900428c3aaa3e8594bcc361f47e7a46dc9d2f"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1363x936",
+      "width": 1363,
+      "height": 936,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 356259,
+      "sha256": "dd76ed55e6e615a2127bcb416ab979af2809694dfadb56d9b2aae28335c21e6a"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/leitura/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 358208,
+      "sha256": "cfe46a4023fe91c328e92b086ca3e6efc334ea326d3443414d2ea6bc4a6e4621"
+    }
+  ]
+}

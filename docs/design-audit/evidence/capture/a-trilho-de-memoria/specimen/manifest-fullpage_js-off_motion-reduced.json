@@ -1,0 +1,108 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T11:01:23.514Z",
+  "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+  "tree_dirty": false,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "../../../../../../.cache/confenge/design-direction-494/a-trilho-de-memoria/specimen",
+  "state": {
+    "id": "fullpage_js-off_motion-reduced",
+    "fullpage": true,
+    "javascript": "off",
+    "motion": "reduced"
+  },
+  "routes": [
+    "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/"
+  ],
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1366x768",
+    "1363x936",
+    "1440x1000"
+  ],
+  "files": [
+    "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png"
+  ],
+  "captures": [
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-390x844--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 371053,
+      "sha256": "202272c3d0bdbb83298c08fdb76f5210b72a17d59fbb5e98caf1551e215451eb"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-768x1024--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 381699,
+      "sha256": "5a607875caa593b2e159b805f96fc10272dc9b6e89dd18291a49d0a0c2305505"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1366x768--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 463476,
+      "sha256": "b268c6d3638918a963d8a36a186384464f03c3fce2b7788ea3bec45d96ff06e2"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1363x936--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1363x936",
+      "width": 1363,
+      "height": 936,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 453762,
+      "sha256": "33041e13546b12c4085d772d21b36ee5943d0362324f9f547a722d0dbfe5e676"
+    },
+    {
+      "file": "docsdesign-auditprototypesa-trilho-de-me-1440x1000--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/a-trilho-de-memoria/specimen/",
+      "slug": "docsdesign-auditprototypesa-trilho-de-me",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 470689,
+      "sha256": "0b7eed38cd3da29c11f872b8f0d949b3e1264286666134bacdb5722fe3f69fb8"
+    }
+  ]
+}

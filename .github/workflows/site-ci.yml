@@ -111,6 +111,7 @@ jobs:
           npm run test:env-example
           npm run test:epic-td
           npm run test:script-modules
+          npm run test:design-direction
           npm run test:secrets-scan
           npm run test:cta-whatsapp
           npm run test:release-filters

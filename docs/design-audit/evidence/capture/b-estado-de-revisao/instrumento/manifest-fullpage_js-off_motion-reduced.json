@@ -1,0 +1,108 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T11:01:43.100Z",
+  "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+  "tree_dirty": false,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "../../../../../../.cache/confenge/design-direction-494/b-estado-de-revisao/instrumento",
+  "state": {
+    "id": "fullpage_js-off_motion-reduced",
+    "fullpage": true,
+    "javascript": "off",
+    "motion": "reduced"
+  },
+  "routes": [
+    "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/"
+  ],
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1366x768",
+    "1363x936",
+    "1440x1000"
+  ],
+  "files": [
+    "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png"
+  ],
+  "captures": [
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 324554,
+      "sha256": "56d857c9df29263c4413e020213625163c06a0fb721e73b12af8ef813f3b13ff"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 336297,
+      "sha256": "e1499ead1c8e2895c6883ab5bf0e382cabc691b8f88272d3ad9b46f4f516c22b"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 355646,
+      "sha256": "6d5cf9b698ae1e23f025881c6555a91b8fe4c9d3ce514d3b52764e46761adcbd"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1363x936",
+      "width": 1363,
+      "height": 936,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 354955,
+      "sha256": "33f9550f04ff88bf1075ecec44b299da9f5b0e64ac916653619732aab831aa7b"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/instrumento/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 359871,
+      "sha256": "407831cbaba506e2095e027b7ed6c9994ba80912d5c5ff6271bbde95304e4514"
+    }
+  ]
+}

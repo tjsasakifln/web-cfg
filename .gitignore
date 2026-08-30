@@ -80,3 +80,8 @@ logs/
 .aiox-core/local/
 .claude/settings.local.json
 .aiox/install-log.txt
+
+# Design-direction capture binaries (#494). The per-file SHA-256 index in
+# docs/design-audit/evidence/capture-index.json is the durable evidence; the
+# 28 MB of PNG are reproducible with scripts/site/capture_design_direction.sh.
+docs/design-audit/evidence/capture/**/*.png

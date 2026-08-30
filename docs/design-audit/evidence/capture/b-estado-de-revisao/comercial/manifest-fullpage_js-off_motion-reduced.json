@@ -1,0 +1,108 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T11:01:30.083Z",
+  "commit_sha": "a33c9eb5de77678a5bf4ea1327e9a94df0ac871f",
+  "tree_dirty": false,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "../../../../../../.cache/confenge/design-direction-494/b-estado-de-revisao/comercial",
+  "state": {
+    "id": "fullpage_js-off_motion-reduced",
+    "fullpage": true,
+    "javascript": "off",
+    "motion": "reduced"
+  },
+  "routes": [
+    "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/"
+  ],
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1366x768",
+    "1363x936",
+    "1440x1000"
+  ],
+  "files": [
+    "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+    "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png"
+  ],
+  "captures": [
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-390x844--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 366594,
+      "sha256": "dc022a535a1576f5b3363c1315759c4c0b007629ccd7890e655b441eff98d108"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-768x1024--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 378746,
+      "sha256": "21ed9e0190cabb86af63ba6cc6e9c82d594e9ebc5b1b3fc0eedd7fd4ae384444"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1366x768--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 406436,
+      "sha256": "c59921d80fe3c9815738bb8e7fcb32f3996ecb943fb09a1cf0c6afe59324246d"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1363x936--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1363x936",
+      "width": 1363,
+      "height": 936,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 404933,
+      "sha256": "484d47de990ddcb117128ffe1b98d5f32896a77d6e360a2769485cae899c5227"
+    },
+    {
+      "file": "docsdesign-auditprototypesb-estado-de-re-1440x1000--fullpage_js-off_motion-reduced.png",
+      "route": "/docs/design-audit/prototypes/b-estado-de-revisao/comercial/",
+      "slug": "docsdesign-auditprototypesb-estado-de-re",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage_js-off_motion-reduced",
+      "fullpage": true,
+      "javascript": "off",
+      "motion": "reduced",
+      "bytes": 409246,
+      "sha256": "d11c21c8a4e8731b87437a71762733df38e96045f6861c4de5f7946208355d16"
+    }
+  ]
+}
