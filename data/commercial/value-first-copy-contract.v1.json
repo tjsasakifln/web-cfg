@@ -1,0 +1,277 @@
+{
+  "schema": "confenge.value-first-copy-contract/1.0",
+  "contract_version": "CFG-VALUE-FIRST-2026-08-30-v1",
+  "issue": "#527",
+  "dependent_issues": [
+    "#528",
+    "#529",
+    "#530",
+    "#531",
+    "#532",
+    "#534"
+  ],
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "Revenue + conversion + trust + inbound",
+  "leverage": [
+    "revenue",
+    "trust",
+    "customer",
+    "automation"
+  ],
+  "historical_relationship": {
+    "truth_contract": "data/commercial/copy-contract.v1.json",
+    "truth_issue": "#338",
+    "statement": "#338 concluiu a cobertura de verdade e completude do catálogo. Este contrato revisa sua hierarquia comercial, sem enfraquecer os gates de verdade, identidade, preço, prova, conversão ou proveniência."
+  },
+  "canonical_hierarchy": [
+    {
+      "order": 1,
+      "role": "desired_outcome_or_active_problem",
+      "requirement": "Nomear a decisão ativa do comprador e a consequência econômica, operacional ou de risco materialmente verdadeira."
+    },
+    {
+      "order": 2,
+      "role": "value_created",
+      "requirement": "Explicitar o trabalho que a equipe deixa de montar, reconcilia ou comprime e qual decisão fica mais defensável."
+    },
+    {
+      "order": 3,
+      "role": "concrete_mechanism",
+      "requirement": "Explicar como fontes, documentos, cálculo e julgamento produzem o resultado, depois do valor e antes da prova."
+    },
+    {
+      "order": 4,
+      "role": "tangible_deliverable",
+      "requirement": "Nomear artefato, conteúdo, formato, uso e a decisão seguinte sem transformar qualquer PDF em prova de valor."
+    },
+    {
+      "order": 5,
+      "role": "positive_proof",
+      "requirement": "Colocar fonte, data, método, cálculo, artefato ou expertise autorizada junto do claim exato que sustenta."
+    },
+    {
+      "order": 6,
+      "role": "next_action",
+      "requirement": "Prometer o próximo estado útil e o compromisso real, preservando atribuição e captura fail-closed."
+    },
+    {
+      "order": 7,
+      "role": "decision_relevant_condition_or_limit",
+      "requirement": "Manter a condição material no ponto da decisão que ela qualifica, legível e sem virar a tese da página."
+    }
+  ],
+  "semantic_taxonomy": {
+    "multi_label": true,
+    "primary_role_required_for_diagnostic": true,
+    "roles": [
+      {
+        "id": "value_outcome",
+        "definition": "Decisão, consequência ou capacidade concreta que melhora para o comprador. Adjetivo positivo isolado não conta."
+      },
+      {
+        "id": "artifact",
+        "definition": "Objeto de trabalho reconhecível, com conteúdo ou uso: matriz, cálculo, cronologia, base, relatório, plano ou trilha."
+      },
+      {
+        "id": "mechanism",
+        "definition": "Operação verificável que liga insumos ao artefato: reconciliar, cruzar, calcular, classificar, comparar, revisar ou priorizar."
+      },
+      {
+        "id": "proof",
+        "definition": "Razão positiva para acreditar: fonte, data, método, cálculo reproduzível, artefato inspecionável, freshness ou expertise autorizada."
+      },
+      {
+        "id": "action",
+        "definition": "Próximo estado ou compromisso reconhecível, inclusive inspeção, comparação, cálculo, registro de contexto, enquadramento ou conversa."
+      },
+      {
+        "id": "limitation",
+        "definition": "Condição, exclusão, ausência, incerteza ou fronteira material que qualifica preço, dado, interpretação, prova ou escopo."
+      }
+    ],
+    "reported_dimensions": [
+      "substantive_blocks",
+      "value_outcome_blocks",
+      "artifact_blocks",
+      "mechanism_blocks",
+      "proof_blocks",
+      "action_blocks",
+      "limitation_blocks",
+      "negation_occurrences",
+      "primarily_restrictive_blocks"
+    ],
+    "non_goal": "O diagnóstico não mede sentimento, persuasão, positividade ou conversão e não pode ser otimizado por adjetivos, hype ou mais palavras."
+  },
+  "limitation_destinations": [
+    {
+      "id": "price",
+      "placement": "junto do preço, crédito, condição financeira ou compromisso que qualifica"
+    },
+    {
+      "id": "data",
+      "placement": "junto da fonte, cobertura, data, freshness, cálculo ou UNKNOWN que qualifica"
+    },
+    {
+      "id": "legal_interpretation",
+      "placement": "junto da leitura que poderia ser confundida com representação ou conclusão jurídica"
+    },
+    {
+      "id": "synthetic_evidence",
+      "placement": "junto do artefato ou número sintético que poderia ser confundido com cliente ou outcome real"
+    },
+    {
+      "id": "scope",
+      "placement": "junto da unidade, entrada, exclusão, terceiro ou capacidade que delimita a entrega"
+    }
+  ],
+  "negation_rule": {
+    "statement": "Negação é observação contextual, nunca qualidade por si. Benefício verdadeiro com sem pode ser valor; caveat necessário pode ser limite; repetição defensiva antes de valor é defeito de sequência.",
+    "universal_ratio": null,
+    "raw_negation_threshold": null,
+    "required_sequence_finding": "Uma seção comercial reprova a fixture quando abre com duas ou mais restrições consecutivas antes de explicitar outcome, artefato ou ação. Páginas trust/legal e limitações no ponto decisório correto permanecem permitidas."
+  },
+  "proof_contract": {
+    "issue": "#531",
+    "roles": [
+      "artifact",
+      "calculation",
+      "source_provenance",
+      "freshness",
+      "method",
+      "expertise",
+      "permissioned_client_outcome",
+      "boundary"
+    ],
+    "adjacency_rule": "Cada claim material usa a prova positiva mais forte autorizada ao lado do claim; a fronteira vem no mesmo objeto de evidência quando houver risco real de confusão.",
+    "client_outcome": {
+      "authority": "data/commercial/real-proof-registry.v1.json",
+      "state": "NO_APPROVED_CLIENT_PROOF",
+      "fail_closed": true,
+      "owner_issue": "#328"
+    },
+    "prohibited_promotions": [
+      "fonte pública para cliente",
+      "artefato sintético para outcome observado",
+      "fato autodeclarado para verificação independente",
+      "método para garantia de resultado"
+    ]
+  },
+  "cta_form_contract": {
+    "issue": "#532",
+    "coverage": "Derivada das famílias públicas e dos formulários/CTAs renderizados em cada rota, sem lista manual.",
+    "stages": [
+      "inspect",
+      "calculate",
+      "compare",
+      "register_context",
+      "request_fit_review",
+      "configure_scope",
+      "talk"
+    ],
+    "required_fields": [
+      "funnel_stage",
+      "commitment",
+      "next_useful_state",
+      "pre_form_value",
+      "field_purpose",
+      "submit_state",
+      "success_or_receipt_state",
+      "decision_relevant_boundaries"
+    ],
+    "rules": [
+      "O rótulo descreve o estado útil depois do clique, não apenas o gesto de interface.",
+      "Valor e confirmação real vêm antes de disclaimers administrativos amplos.",
+      "Prazo de resposta só aparece quando uma autoridade operacional versionada o sustenta.",
+      "Pagamento, contrato, arquivo, privacidade, consentimento, retenção e Turnstile permanecem no ponto de possível confusão.",
+      "Formulário e WhatsApp declaram compromissos distintos.",
+      "Nenhum campo ou PII é criado por este contrato."
+    ]
+  },
+  "coverage_derivation": {
+    "manual_route_allowlist": false,
+    "public_authority": "data/organic/public-family-registry.json",
+    "first_fold_authority": "data/commercial/first-fold-contract.v1.json",
+    "service_route_authority": "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route",
+    "rule": "Expandir rotas e prefixos do registro contra index.html publicados e indexáveis; resolver source da família service-pillars pela matriz BOFU; usar o censo de primeira dobra para distinguir superfícies comerciais de alta intenção. Toda rota trust_or_legal usa perfil próprio.",
+    "profiles": {
+      "commercial": "rota presente no censo de primeira dobra ou família priced_offer/service_pillar",
+      "public_data": "demais rotas comerciais indexáveis com ação terminal declarada",
+      "trust_legal": "família com profile trust_or_legal"
+    }
+  },
+  "diagnostic": {
+    "issue": "#534",
+    "classifier_version": "CFG-VALUE-SEMANTIC-1.0.0",
+    "mode": "SHADOW_REPORT",
+    "ci_blocking": false,
+    "decision": "ITERATE",
+    "decision_reason": "A taxonomia, o baseline e as fixtures são reproduzíveis, mas revisão humana estratificada e avaliação de erros ainda não foram executadas. Nenhum ratchet bloqueante está autorizado.",
+    "baseline": {
+      "source_sha": "583d2d88e5f5b83cd774d9366deaf9d03fe0a19a",
+      "measured_on": "2026-08-30",
+      "report": "docs/commercial/value-first-copy-baseline-583d2d88e.json",
+      "reported_by_route_and_family": true,
+      "issue_observation": {
+        "audited_routes": 30,
+        "substantive_blocks": 3353,
+        "value_outcome_blocks": 497,
+        "limitation_blocks": 973,
+        "primarily_restrictive_blocks": 772,
+        "negation_occurrences": 1064,
+        "routes_limitation_over_value": 26,
+        "routes_restriction_over_value": 21
+      },
+      "observation_boundary": "Os números da issue são evidência diagnóstica histórica, não threshold nem score de conversão. O relatório reproduzível usa o classificador versionado deste contrato e pode produzir contagens diferentes."
+    },
+    "ratchet_policy": {
+      "comparison_unit": "rota contra seu baseline aprovado e perfil",
+      "first_delivery": "report_only",
+      "future_blocking_requires": "decisão explícita posterior, revisão humana estratificada, erro documentado e escape auditável temporário",
+      "forbidden": [
+        "ratio universal",
+        "limite bruto de não ou sem",
+        "sentimento como proxy",
+        "recompensa por hype",
+        "remoção de caveat para melhorar score"
+      ]
+    },
+    "human_review": {
+      "state": "NOT_STARTED",
+      "reviewed_fixtures": 0,
+      "confusion_matrix": null,
+      "known_false_positives": [],
+      "known_false_negatives": [],
+      "note": "Fixtures de contrato exercitam o classificador automaticamente. Isso não é anotação humana nem validação de persuasão."
+    }
+  },
+  "truth_boundaries": {
+    "epistemic_classes": [
+      "FACT",
+      "CALCULATION",
+      "INFERENCE",
+      "UNKNOWN"
+    ],
+    "data_owner": "extra-cli via contratos SELECT-only versionados",
+    "commercial_action_owner": "Warmbly",
+    "source": "CONFENGE_WEB",
+    "analytics_pii": "forbidden",
+    "capture": "fail_closed",
+    "claims_forbidden_without_own_proof": [
+      "ROI",
+      "SLA",
+      "urgência",
+      "escassez",
+      "outcome",
+      "cliente",
+      "credencial",
+      "superlativo"
+    ]
+  },
+  "implementation": {
+    "audit_runner": "scripts/commercial/value_first_copy_audit.mjs",
+    "fixture_corpus": "data/commercial/value-first-copy-fixtures.v1.json",
+    "test_runner": "tests/commercial/test_value_first_copy.mjs",
+    "report_command": "npm run report:value-first-copy",
+    "test_command": "npm run test:value-first-copy"
+  }
+}

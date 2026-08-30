@@ -10,6 +10,11 @@
     "#336",
     "#343"
   ],
+  "value_first_successor": {
+    "issue": "#527",
+    "contract": "data/commercial/value-first-copy-contract.v1.json",
+    "relationship": "Sucessor de hierarquia comercial. Preserva integralmente os gates de verdade e completude deste contrato #338."
+  },
   "state": "NOT_STARTED",
   "state_note": "NOT_STARTED significa que a revisão adversarial em oito lentes e o protocolo humano não rodaram. A aplicação pública das 15 cláusulas e os gates derivados do registro estão medidos separadamente; não substituem julgamento humano.",
   "recorded_at": "2026-08-24",

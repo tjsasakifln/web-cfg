@@ -6,6 +6,10 @@
   "effective_at": "2026-08-16",
   "canonical_path": "/politica-editorial/",
   "historico_path": "/politica-editorial/historico/",
+  "commercial_copy_contracts": {
+    "truth_and_completeness": "data/commercial/copy-contract.v1.json",
+    "value_first": "data/commercial/value-first-copy-contract.v1.json"
+  },
   "prazo": "UNKNOWN",
   "prazo_note": "Nenhum prazo de acuse, revisão ou publicação foi medido. UNKNOWN permanece UNKNOWN até existir série observada de pedidos reais.",
   "epistemic_classes": [
