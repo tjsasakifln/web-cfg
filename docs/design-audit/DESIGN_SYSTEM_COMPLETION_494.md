@@ -59,7 +59,7 @@ Não decidir é depreciar em silêncio, então a decisão é explícita.
 |---|---|---|
 | Sobre fundo navy/ink (`.article-callout > .icon`, `.pillar-stat strong`, `.lead-inline-copy span`, `.final-cta-section .eyebrow`, `.decision-spine li.is-core .type-mono`, `.offer-dominant .offer-label`, `.offer-dominant-link .icon`, `.contact-channels .icon` ×2, `.model-section .eyebrow`, `.hero-evidence .evidence-kicker`, `.evidence-tab.is-active` fundo+borda, `.evidence-tier`, `.evidence-cta` fundo+borda, `.evidence-method li > span`, `.pillar-evidence .pillar-evidence-count strong`, `.pillar-docs li:not(:has(.icon))`, `.content-feature .type-mono`, `.compare-human` borda + `.compare-human > .type-mono`, `.dm-node.is-core > .type-mono`) | 23 | **mantém** — todas ≥9,27:1 |
 | `.hero-eyebrow > span` — ponto de 7 px sobre o gradiente claro do hero | 1 | **remove** — 1,48:1, não carrega significado, é ornamento |
-| `.evidence-callout` — fio de 3 px sobre `rgba(206,214,42,.075)` | 1 | **substitui** por `--caution-700` ou `--ink`, conforme o papel; hoje é o único diferenciador do bloco a ~1,5:1 |
+| `.evidence-exposure` — fio de 3 px sobre `rgba(206,214,42,.075)` | 1 | **substitui** por `--caution-700` ou `--ink`, conforme o papel; hoje é o único diferenciador do bloco a ~1,5:1 |
 
 Duas ocorrências, não dezesseis. O custo da decisão é pequeno e agora é conhecido, que era a questão.
 
@@ -361,7 +361,7 @@ A Definition of Done pede a matriz. Ela é do **sistema existente**, apurada nes
 | `--caution-700:#8A5F00` | não existe | **ADD** (única adição, 5,65:1) | entra quando um papel de ressalva for implementado; hoje só vive no protótipo |
 | `--lime` sobre navy (23 ocorrências) | 9,27–12,08:1 | **KEEP** | — |
 | `--lime` em `.hero-eyebrow > span` | 1,48:1, ornamento | **REMOVE** | #493 ou issue de a11y |
-| `--lime` em `.evidence-callout` | ~1,5:1, único diferenciador | **REPLACE** por `--caution-700` ou `--ink` | idem |
+| `--lime` em `.evidence-exposure` | ~1,5:1, único diferenciador | **REPLACE** por `--caution-700` ou `--ink` | idem |
 | `--focus-ring` | corrigido por #513, 13,48–19,11:1 | **KEEP** | nenhuma candidata pode regredi-lo |
 | `--muted` sobre navy | 2,66–3,47:1 | **REMOVE** do vocabulário escuro | contrato da §5 |
 | `.hero` / `.content-hero` / `.deliverables-hero` / `.article-hero` — quatro cópias da mesma receita em ~190 de 262 rotas | duplicação medida em #493 B.1 | **REDUCE** para uma receita | #493 |
