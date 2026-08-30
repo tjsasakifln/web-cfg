@@ -1,7 +1,7 @@
 # Canário de ruptura visual — a home como planilha
 
 **Campanha:** `CONFENGE_DESIGN_BREAKTHROUGH_CANARY_20260830`
-**Parent:** #493 · **Supersede estético de:** #494 (`KEEP_CURRENT`, commit `583d2d88e`)
+**Issue:** #525 · **Parent:** #493 · **Supersede estético de:** #494 (`KEEP_CURRENT`, commit `583d2d88e`)
 **Estado da decisão:** `EXECUTE_NOW` · **Frente executiva:** INBOUND ENGINE
 **Tempo até evidência:** um canário, uma rota, medido nos mesmos cinco viewports do protocolo.
 **Alavancas:** trust, distribution, customer.
@@ -109,6 +109,26 @@ A unidade de herança é o **conjunto de trilhos**, não a forma da seção. A m
 O que garante consistência sem uniformidade são os papéis de tipo, a cor, as réguas, a densidade, o tratamento de proveniência e a linguagem estrutural — não a repetição do mesmo hero e das mesmas caixas.
 
 **Nada disso foi implementado nesta campanha.** A matriz existe para provar que a direção não depende de customização irrepetível, e para que a próxima família tenha um contrato para herdar em vez de um render para imitar.
+
+---
+
+## 6.1 Evidência de captura
+
+`../evidence/breakthrough-capture-index.json` indexa os dois lados: 20 PNGs
+antes (`583d2d88e`) e 20 depois (`81b4c46e8`), nos cinco viewports do protocolo
+× quatro estados de render — full-page, JS-off, `prefers-reduced-motion`
+e primeira dobra. Os dois lados foram capturados a partir de **git worktrees
+limpas**, então nenhum manifesto está marcado como provisório (`tree_dirty:
+false` nos oito manifestos).
+
+Os 20 pares diferem — **nenhum** sha256 antes coincide com o depois. A mudança
+existe em todo viewport e em todo estado, inclusive com JavaScript desligado e
+sob movimento reduzido. É essa a resposta mecânica ao §11: não é "talvez", e
+não é "só olhando com atenção".
+
+Os PNGs não entram na árvore, pela mesma razão da #494: são reproduzíveis byte
+a byte a partir do commit registrado re-rodando o mesmo harness, e o que torna
+uma re-captura conferível é o hash, não o binário.
 
 ---
 

@@ -1,0 +1,474 @@
+{
+  "schema_version": "1.0.0",
+  "campaign": "CONFENGE_DESIGN_BREAKTHROUGH_CANARY_20260830",
+  "route": "/",
+  "generated_by": "scripts/site/capture_screenshots.mjs (harness de #512), rodado a partir de git worktrees limpas",
+  "why_the_pngs_are_not_committed": "Mesma razao de #494: os PNGs sao reproduziveis byte a byte a partir do commit registrado re-rodando o mesmo harness, e o que torna uma re-captura conferivel e o hash, nao o binario. O indice fica no repositorio; os arquivos ficam em ~/.cache/confenge/design-breakthrough-20260830/.",
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1366x768",
+    "1363x936",
+    "1440x1000"
+  ],
+  "states": [
+    "fullpage (JS on, motion do sistema)",
+    "fullpage + JS off",
+    "fullpage + prefers-reduced-motion: reduce",
+    "primeira dobra (JS on)"
+  ],
+  "before": {
+    "commit_sha": "583d2d88e5f5b83cd774d9366deaf9d03fe0a19a",
+    "tree_dirty": false,
+    "png_count": 20,
+    "groups": {
+      "fold": {
+        "state": {
+          "id": "default",
+          "fullpage": false,
+          "javascript": "on",
+          "motion": "system"
+        },
+        "files": [
+          {
+            "file": "home-390x844.png",
+            "viewport": "390x844",
+            "state": "default",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 82760,
+            "sha256": "f8b57f00b44772d39b6e02e389cc0a164ab9f48342c412b5626cfe97d51f999d"
+          },
+          {
+            "file": "home-768x1024.png",
+            "viewport": "768x1024",
+            "state": "default",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 121599,
+            "sha256": "68709fbe1656cec3bbcde94b7eae590968222958ac4ab80ea19c66f4373991c7"
+          },
+          {
+            "file": "home-1366x768.png",
+            "viewport": "1366x768",
+            "state": "default",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 106652,
+            "sha256": "6023c1a0c7dead3298311d5e7185ce702c33c99db51d55f7fe0cb5edf2590d91"
+          },
+          {
+            "file": "home-1363x936.png",
+            "viewport": "1363x936",
+            "state": "default",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 127500,
+            "sha256": "d3adea1bf14e45d3dec227249fa6e477ff93abcebffd41cf5658d5b08ae30b46"
+          },
+          {
+            "file": "home-1440x1000.png",
+            "viewport": "1440x1000",
+            "state": "default",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 134606,
+            "sha256": "1f36c9cf2cf9cf0b1d4e373661ab5ffa0c05d9624bf5eb675f43ab7853184091"
+          }
+        ]
+      },
+      "js-off": {
+        "state": {
+          "id": "fullpage_js-off",
+          "fullpage": true,
+          "javascript": "off",
+          "motion": "system"
+        },
+        "files": [
+          {
+            "file": "home-390x844--fullpage_js-off.png",
+            "viewport": "390x844",
+            "state": "fullpage_js-off",
+            "javascript": "off",
+            "motion": "system",
+            "bytes": 1390182,
+            "sha256": "9b03554412ed120faa0cad9e44a20abce3c8fba9ca817e6a8cfec420049a16e6"
+          },
+          {
+            "file": "home-768x1024--fullpage_js-off.png",
+            "viewport": "768x1024",
+            "state": "fullpage_js-off",
+            "javascript": "off",
+            "motion": "system",
+            "bytes": 1544781,
+            "sha256": "a65d067207e12f62156526921458840eec874213f4cbea9cdd97250d879bc46b"
+          },
+          {
+            "file": "home-1366x768--fullpage_js-off.png",
+            "viewport": "1366x768",
+            "state": "fullpage_js-off",
+            "javascript": "off",
+            "motion": "system",
+            "bytes": 1645756,
+            "sha256": "7f77d06437d46b950cf99610a6adc27455c12c7e503e575fc7b857348b2b684f"
+          },
+          {
+            "file": "home-1363x936--fullpage_js-off.png",
+            "viewport": "1363x936",
+            "state": "fullpage_js-off",
+            "javascript": "off",
+            "motion": "system",
+            "bytes": 1640137,
+            "sha256": "851ee8f4a5e32db403898a7af9b3a705552b13b1281fb12a30bbcf48441ac559"
+          },
+          {
+            "file": "home-1440x1000--fullpage_js-off.png",
+            "viewport": "1440x1000",
+            "state": "fullpage_js-off",
+            "javascript": "off",
+            "motion": "system",
+            "bytes": 1666435,
+            "sha256": "b6c2062859aff27f49110da4f82dba2313baceff8480a8ebf73eb380c94bfd3a"
+          }
+        ]
+      },
+      "js-on": {
+        "state": {
+          "id": "fullpage",
+          "fullpage": true,
+          "javascript": "on",
+          "motion": "system"
+        },
+        "files": [
+          {
+            "file": "home-390x844--fullpage.png",
+            "viewport": "390x844",
+            "state": "fullpage",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 336782,
+            "sha256": "09b1fbd8cb12031b3f094741677a1028fc25fbad34980f34118d40a26e6686d1"
+          },
+          {
+            "file": "home-768x1024--fullpage.png",
+            "viewport": "768x1024",
+            "state": "fullpage",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 386423,
+            "sha256": "1e01decebd9d2ae63e832277ae7e2b7759e10b08d852b4877746b0e0bd891cde"
+          },
+          {
+            "file": "home-1366x768--fullpage.png",
+            "viewport": "1366x768",
+            "state": "fullpage",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 423487,
+            "sha256": "0d48d56011780e79083dd3a0c3064fa68d8037f090ccb2c782658a9c7bbe9e46"
+          },
+          {
+            "file": "home-1363x936--fullpage.png",
+            "viewport": "1363x936",
+            "state": "fullpage",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 817695,
+            "sha256": "44a49db9177577069ef50fae8c7bcd8d1960524e7ae5c768ea65bdb702a3d6e7"
+          },
+          {
+            "file": "home-1440x1000--fullpage.png",
+            "viewport": "1440x1000",
+            "state": "fullpage",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 832892,
+            "sha256": "b20b4e040e2c7b78c27ae99b063e9ac9536b5aed90e349bc906971fdb6f003e6"
+          }
+        ]
+      },
+      "motion-reduced": {
+        "state": {
+          "id": "fullpage_motion-reduced",
+          "fullpage": true,
+          "javascript": "on",
+          "motion": "reduced"
+        },
+        "files": [
+          {
+            "file": "home-390x844--fullpage_motion-reduced.png",
+            "viewport": "390x844",
+            "state": "fullpage_motion-reduced",
+            "javascript": "on",
+            "motion": "reduced",
+            "bytes": 336782,
+            "sha256": "09b1fbd8cb12031b3f094741677a1028fc25fbad34980f34118d40a26e6686d1"
+          },
+          {
+            "file": "home-768x1024--fullpage_motion-reduced.png",
+            "viewport": "768x1024",
+            "state": "fullpage_motion-reduced",
+            "javascript": "on",
+            "motion": "reduced",
+            "bytes": 386423,
+            "sha256": "1e01decebd9d2ae63e832277ae7e2b7759e10b08d852b4877746b0e0bd891cde"
+          },
+          {
+            "file": "home-1366x768--fullpage_motion-reduced.png",
+            "viewport": "1366x768",
+            "state": "fullpage_motion-reduced",
+            "javascript": "on",
+            "motion": "reduced",
+            "bytes": 423487,
+            "sha256": "0d48d56011780e79083dd3a0c3064fa68d8037f090ccb2c782658a9c7bbe9e46"
+          },
+          {
+            "file": "home-1363x936--fullpage_motion-reduced.png",
+            "viewport": "1363x936",
+            "state": "fullpage_motion-reduced",
+            "javascript": "on",
+            "motion": "reduced",
+            "bytes": 817695,
+            "sha256": "44a49db9177577069ef50fae8c7bcd8d1960524e7ae5c768ea65bdb702a3d6e7"
+          },
+          {
+            "file": "home-1440x1000--fullpage_motion-reduced.png",
+            "viewport": "1440x1000",
+            "state": "fullpage_motion-reduced",
+            "javascript": "on",
+            "motion": "reduced",
+            "bytes": 832892,
+            "sha256": "b20b4e040e2c7b78c27ae99b063e9ac9536b5aed90e349bc906971fdb6f003e6"
+          }
+        ]
+      }
+    }
+  },
+  "after": {
+    "commit_sha": "81b4c46e8b72300ec68bab0fbe8e255c0ce6fbc4",
+    "tree_dirty": false,
+    "png_count": 20,
+    "groups": {
+      "fold": {
+        "state": {
+          "id": "default",
+          "fullpage": false,
+          "javascript": "on",
+          "motion": "system"
+        },
+        "files": [
+          {
+            "file": "home-390x844.png",
+            "viewport": "390x844",
+            "state": "default",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 69076,
+            "sha256": "beb280233ddaf32b59c06614020564879987e99e1bf124937991e4f886ca173b"
+          },
+          {
+            "file": "home-768x1024.png",
+            "viewport": "768x1024",
+            "state": "default",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 114965,
+            "sha256": "d8720e2b359cdfb877c396a1a67cebdf4586113f815b6f0b6bf1824566d4d27e"
+          },
+          {
+            "file": "home-1366x768.png",
+            "viewport": "1366x768",
+            "state": "default",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 97326,
+            "sha256": "fd381cc00fe660cbb756f61a32181dd83038221b5ed629bd1ef07f9ce8be7a15"
+          },
+          {
+            "file": "home-1363x936.png",
+            "viewport": "1363x936",
+            "state": "default",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 116922,
+            "sha256": "45895bef89e755d084d7581f156561def1397bcdc1c966992bfae6d1f60fddb1"
+          },
+          {
+            "file": "home-1440x1000.png",
+            "viewport": "1440x1000",
+            "state": "default",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 132423,
+            "sha256": "c9f889f71ec2061cc6c35004114ff3920c1cf37e4da810abb1c526891a3eaec2"
+          }
+        ]
+      },
+      "js-off": {
+        "state": {
+          "id": "fullpage_js-off",
+          "fullpage": true,
+          "javascript": "off",
+          "motion": "system"
+        },
+        "files": [
+          {
+            "file": "home-390x844--fullpage_js-off.png",
+            "viewport": "390x844",
+            "state": "fullpage_js-off",
+            "javascript": "off",
+            "motion": "system",
+            "bytes": 1158643,
+            "sha256": "228c6f774567066f3800f6a7972e346e62edda6540a462dea38ab3834dd66b4f"
+          },
+          {
+            "file": "home-768x1024--fullpage_js-off.png",
+            "viewport": "768x1024",
+            "state": "fullpage_js-off",
+            "javascript": "off",
+            "motion": "system",
+            "bytes": 1204325,
+            "sha256": "40903de1ff559b28df605df55273b4a28fd16b1a08c0ccc2e8071f6094c91c43"
+          },
+          {
+            "file": "home-1366x768--fullpage_js-off.png",
+            "viewport": "1366x768",
+            "state": "fullpage_js-off",
+            "javascript": "off",
+            "motion": "system",
+            "bytes": 1370290,
+            "sha256": "59daab50bb4352d464f5e5b8000a4d962eb35dcd10746b5307bce8cf0eb502ab"
+          },
+          {
+            "file": "home-1363x936--fullpage_js-off.png",
+            "viewport": "1363x936",
+            "state": "fullpage_js-off",
+            "javascript": "off",
+            "motion": "system",
+            "bytes": 1352762,
+            "sha256": "e200297da6455e305ef1d74eac2052e5ac2cc63892f666d7daa3471268cf8334"
+          },
+          {
+            "file": "home-1440x1000--fullpage_js-off.png",
+            "viewport": "1440x1000",
+            "state": "fullpage_js-off",
+            "javascript": "off",
+            "motion": "system",
+            "bytes": 1318879,
+            "sha256": "6ebf2bc16f358e012f19dd1646d25c0718ecbb1e8d8a9ffbb21f7db70ce1225b"
+          }
+        ]
+      },
+      "js-on": {
+        "state": {
+          "id": "fullpage",
+          "fullpage": true,
+          "javascript": "on",
+          "motion": "system"
+        },
+        "files": [
+          {
+            "file": "home-390x844--fullpage.png",
+            "viewport": "390x844",
+            "state": "fullpage",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 348635,
+            "sha256": "4f0f24760e9fc193d493313c58c6fbf03c6cb63d48ecf232ecccbc6a950843c7"
+          },
+          {
+            "file": "home-768x1024--fullpage.png",
+            "viewport": "768x1024",
+            "state": "fullpage",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 374833,
+            "sha256": "540dbfc39ae4b65158d0bf2e380ba9fd58f6aebb805b73c17230bae34e2295a9"
+          },
+          {
+            "file": "home-1366x768--fullpage.png",
+            "viewport": "1366x768",
+            "state": "fullpage",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 425749,
+            "sha256": "366e2d41494ebeab6410ee346794a76a133862dbbccada0c1b3cb3b6cc0a0fb8"
+          },
+          {
+            "file": "home-1363x936--fullpage.png",
+            "viewport": "1363x936",
+            "state": "fullpage",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 419025,
+            "sha256": "09387b91725b473ec1714c17fa0caf8dba6d7b16b0ff99da6a3da4e6f7e55ab3"
+          },
+          {
+            "file": "home-1440x1000--fullpage.png",
+            "viewport": "1440x1000",
+            "state": "fullpage",
+            "javascript": "on",
+            "motion": "system",
+            "bytes": 684616,
+            "sha256": "4fd66fd70a37fb559afc28b26e77bc432ee4cf15bdc14235acb992b5105629f5"
+          }
+        ]
+      },
+      "motion-reduced": {
+        "state": {
+          "id": "fullpage_motion-reduced",
+          "fullpage": true,
+          "javascript": "on",
+          "motion": "reduced"
+        },
+        "files": [
+          {
+            "file": "home-390x844--fullpage_motion-reduced.png",
+            "viewport": "390x844",
+            "state": "fullpage_motion-reduced",
+            "javascript": "on",
+            "motion": "reduced",
+            "bytes": 348635,
+            "sha256": "4f0f24760e9fc193d493313c58c6fbf03c6cb63d48ecf232ecccbc6a950843c7"
+          },
+          {
+            "file": "home-768x1024--fullpage_motion-reduced.png",
+            "viewport": "768x1024",
+            "state": "fullpage_motion-reduced",
+            "javascript": "on",
+            "motion": "reduced",
+            "bytes": 374833,
+            "sha256": "540dbfc39ae4b65158d0bf2e380ba9fd58f6aebb805b73c17230bae34e2295a9"
+          },
+          {
+            "file": "home-1366x768--fullpage_motion-reduced.png",
+            "viewport": "1366x768",
+            "state": "fullpage_motion-reduced",
+            "javascript": "on",
+            "motion": "reduced",
+            "bytes": 425749,
+            "sha256": "366e2d41494ebeab6410ee346794a76a133862dbbccada0c1b3cb3b6cc0a0fb8"
+          },
+          {
+            "file": "home-1363x936--fullpage_motion-reduced.png",
+            "viewport": "1363x936",
+            "state": "fullpage_motion-reduced",
+            "javascript": "on",
+            "motion": "reduced",
+            "bytes": 419025,
+            "sha256": "09387b91725b473ec1714c17fa0caf8dba6d7b16b0ff99da6a3da4e6f7e55ab3"
+          },
+          {
+            "file": "home-1440x1000--fullpage_motion-reduced.png",
+            "viewport": "1440x1000",
+            "state": "fullpage_motion-reduced",
+            "javascript": "on",
+            "motion": "reduced",
+            "bytes": 684616,
+            "sha256": "4fd66fd70a37fb559afc28b26e77bc432ee4cf15bdc14235acb992b5105629f5"
+          }
+        ]
+      }
+    }
+  }
+}
