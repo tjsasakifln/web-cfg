@@ -246,9 +246,6 @@ a.tool-card:focus-visible {
   gap: 0.35rem;
   min-width: 0;
 }
-.tool-field--full {
-  grid-column: 1 / -1;
-}
 .tool-field label {
   font-weight: 650;
   font-size: 0.9rem;

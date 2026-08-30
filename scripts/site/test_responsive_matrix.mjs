@@ -179,11 +179,6 @@ async function renderedGeometry(page, route, width) {
     const normalWordBreaks = [];
     let wordCandidates = 0;
     const main = document.querySelector("main") || document.body;
-    const proseProbe = document.createElement("p");
-    proseProbe.textContent = "responsabilidades";
-    main.appendChild(proseProbe);
-    const proseOverflowWrap = getComputedStyle(proseProbe).overflowWrap;
-    proseProbe.remove();
     const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
     for (let node = walker.nextNode(); node && normalWordBreaks.length < 5; node = walker.nextNode()) {
       const parent = node.parentElement;
@@ -252,7 +247,6 @@ async function renderedGeometry(page, route, width) {
       overflowOffenders,
       starved,
       normalWordBreaks,
-      proseOverflowWrap,
       wordCandidates,
       prices,
       wrappedPrices: prices.filter(({ lines }) => lines !== 1),
@@ -274,9 +268,6 @@ async function renderedGeometry(page, route, width) {
   if (metrics.documentOverflow) errors.push({ code: "document_overflow", detail: metrics.overflowOffenders });
   if (metrics.starved.length) errors.push({ code: "column_starvation", detail: metrics.starved });
   if (metrics.normalWordBreaks.length) errors.push({ code: "normal_word_broken", detail: metrics.normalWordBreaks });
-  if (metrics.proseOverflowWrap !== "break-word") {
-    errors.push({ code: "prose_wrap_contract", detail: metrics.proseOverflowWrap });
-  }
   if (metrics.wrappedPrices.length) errors.push({ code: "price_not_atomic", detail: metrics.wrappedPrices });
   if (route.family === "deliverables" && metrics.hiddenDeliverableFacts) {
     errors.push({ code: "deliverable_substance_hidden", detail: metrics.hiddenDeliverableFacts });

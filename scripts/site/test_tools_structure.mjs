@@ -45,10 +45,13 @@ if(!reequilibrio.includes("Método e limites")||!reequilibrio.includes("licitaco
 if(reequilibrio.includes("#contato?")){console.error("FAIL reequilibrio_attribution_order");fail++;}else console.log("PASS reequilibrio_attribution_order");
 if(!reequilibrio.includes('data-route-family="reequilibrio"') || !reequilibrio.includes('data-asset-id="checklist-reequilibrio"')){console.error("FAIL reequilibrio_attribution");fail++;}else console.log("PASS reequilibrio_attribution");
 const matriz=readFileSync(resolve(ROOT,"ferramentas/matriz-atraso-obra/index.html"),"utf8");
+const matrizCss=readFileSync(resolve(ROOT,"ferramentas/matriz-atraso-obra/styles.css"),"utf8");
 if (/\bout\.innerHTML\s*=/.test(matriz)) {
   console.error("FAIL matriz_result_dom_html_sink"); fail++;
 } else console.log("PASS matriz_result_dom_text_only");
-if (/style=["']grid-column\s*:\s*1\s*\/\s*-1/i.test(matriz) || !matriz.includes("tool-field--full")) {
+if (/style=["']grid-column\s*:\s*1\s*\/\s*-1/i.test(matriz)
+    || !matriz.includes("tool-field--full")
+    || !/\.tool-field--full\s*\{[^}]*grid-column\s*:\s*1\s*\/\s*-1/i.test(matrizCss)) {
   console.error("FAIL matriz_dynamic_inline_grid_style"); fail++;
 } else console.log("PASS matriz_dynamic_grid_class");
 const money=readFileSync(resolve(ROOT,"ferramentas/diagnostico-defesa-margem/index.html"),"utf8");

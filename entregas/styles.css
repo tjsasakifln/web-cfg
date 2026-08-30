@@ -281,5 +281,5 @@
   /* Two-up must actually fit its labels: trim the number column and the
      horizontal padding so words like "concorrentes?" have room. Height stays
      at four rows instead of eight, and the 44px touch target is preserved. */
-  .offer-decision-nav a{grid-template-columns:18px minmax(0,1fr);gap:4px;min-height:44px;padding:8px 6px;font-size:.8rem}
+  .offer-decision-nav a{grid-template-columns:15px minmax(0,1fr);gap:3px;min-height:44px;padding:8px 4px;font-size:.75rem}
 }

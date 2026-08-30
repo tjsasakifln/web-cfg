@@ -19,7 +19,6 @@ h1,h2,h3{overflow-wrap:break-word}
 ul:not([class]),ol:not([class]){padding-inline-start:1.25em}
 li,dd,figcaption,caption,th,td,label,small{overflow-wrap:break-word}
 .field label,.consent,.form-hint,.form-note,.form-step-legend{font-size:var(--text-small);line-height:1.45;overflow-wrap:anywhere}
-.consent{min-height:var(--touch-min)}
 .contact-form input:not([type=checkbox]):not([type=radio]):not([type=hidden]),.contact-form select,.contact-form textarea,.field input:not([type=checkbox]):not([type=radio]):not([type=hidden]),.field select,.field textarea{font-size:1rem;min-height:var(--touch-min)}
 .consent input[type=checkbox],.consent input[type=radio]{min-height:18px;width:18px}
 .table-wrap,.report-table-wrap{max-width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -41,10 +40,9 @@ img,video{height:auto}
    a ghost layer that competes with the commercial path beneath it. */
 .site-header{background:#fff}
 html{scroll-padding-top:96px}
-/* Natural-language copy prefers word boundaries, but may break an exceptional
-   long token instead of overflowing or being clipped. Geometry tests reject
-   ordinary words that actually need this fallback, exposing starved columns. */
-h1,h2,h3,h4,p,li,dt,dd,figcaption,caption,th,td,label,small,strong{overflow-wrap:break-word;word-break:normal;hyphens:none}
+/* Natural-language copy wraps only between words. Opaque identifiers opt in
+   explicitly so intrinsic sizing cannot starve ordinary labels again. */
+h1,h2,h3,h4,p,li,dt,dd,figcaption,caption,th,td,label,small,strong{overflow-wrap:normal;word-break:normal;hyphens:none}
 code,pre,kbd,samp,[data-opaque-token],.opaque-token{overflow-wrap:anywhere;word-break:break-word}
 @media (max-width:900px){
   html{scroll-padding-top:82px}
