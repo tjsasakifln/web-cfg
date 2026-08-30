@@ -140,7 +140,7 @@
 .pillar-capture-form select{min-height:48px}
 .pillar-capture-form input:focus,
 .pillar-capture-form select:focus,
-.pillar-capture-form textarea:focus{outline:3px solid rgba(14,124,102,.2);border-color:var(--green)}
+.pillar-capture-form textarea:focus{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:var(--green)}
 .pillar-capture-form .capture-consent{display:flex;gap:10px;align-items:flex-start;font-weight:500}
 .pillar-capture-form .capture-consent input{width:auto;margin-top:4px}
 .pillar-capture-form .form-status{min-height:1.5em;margin:0}

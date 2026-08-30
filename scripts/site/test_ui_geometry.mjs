@@ -1815,9 +1815,28 @@ async function main() {
         const element = document.querySelector(".whatsapp-float");
         element.focus();
         const style = getComputedStyle(element, null);
-        return { width: style.outlineWidth, style: style.outlineStyle };
+        return {
+          width: style.outlineWidth,
+          style: style.outlineStyle,
+          color: style.outlineColor,
+          boxShadow: style.boxShadow,
+        };
       });
-      if (focusRing.style === "none" || parseFloat(focusRing.width) < 1) {
+      // Reading outlineWidth/outlineStyle alone is not enough. Since #506 the
+      // ring is `outline:2px solid transparent` plus `box-shadow:var(--focus-ring)`
+      // -- the transparent outline exists for Windows high contrast, where
+      // box-shadow is not painted. A rule that overrides box-shadow would leave
+      // that outline reading `solid`/`2px` and pass while painting nothing. So
+      // the indicator has to be found where it actually is: a visible outline,
+      // or a box-shadow that differs from the resting one.
+      const invisible = /^(transparent|rgba\(0,\s*0,\s*0,\s*0\))$/;
+      const outlinePaints =
+        focusRing.style !== "none" &&
+        parseFloat(focusRing.width) >= 1 &&
+        !invisible.test(focusRing.color);
+      const shadowPaints =
+        focusRing.boxShadow !== "none" && focusRing.boxShadow !== resting.boxShadow;
+      if (!outlinePaints && !shadowPaints) {
         throw new Error(`contact float has no visible focus ring: ${JSON.stringify(focusRing)}`);
       }
       ok(`contact_float_hover_affordance (${changed.join("+")}, ${resting.width}x${resting.height}px)`);
