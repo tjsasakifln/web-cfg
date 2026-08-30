@@ -1,10 +1,10 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-08-30T06:08:07.725Z",
+  "measured_at": "2026-08-30T06:24:13.609Z",
   "measured_on": "2026-08-30",
-  "commit_sha": "47c70a89d10d1e64f2d6899dc5f4912f84121256",
-  "tree_dirty": true,
+  "commit_sha": "bf13e3fd596aa77c529262ee8fc7166e7a3b894f",
+  "tree_dirty": false,
   "viewports": [
     "1366x768",
     "390x844"
