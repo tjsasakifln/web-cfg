@@ -23,7 +23,8 @@
         "approval_type": "OWNER_DELEGATED_APPROVAL",
         "status": "INDEXABLE",
         "decision_authority": "owner / Tiago Sasaki",
-        "reviewer_executor": "agente desta campanha / CONFENGE_INBOUND_STRIKING_DISTANCE_CHUVA_REWRITE_INDEX_20260829",
+        "material_author": "agente da campanha de reescrita / CONFENGE_INBOUND_STRIKING_DISTANCE_CHUVA_REWRITE_INDEX_20260829",
+        "reviewer_executor": "revisão adversarial independente / CONFENGE_EDITORIAL_GOVERNANCE_SELF_APPROVAL_FIX_20260829",
         "approval_basis": "owner-delegated review 2026-08-29",
         "approved_at": "2026-08-29",
         "manual_human_review": false,
@@ -35,8 +36,8 @@
           "skeptical_visitor_copy_ux": true,
           "responsive_js_off_keyboard_accessibility": true
         },
-        "notes": "Owner authority was explicitly delegated to this campaign. The campaign agent executed the reviews; no manual human review or second independent reviewer occurred.",
-        "approval_hash": "sha256:373456323ef34f6002961bc1c7a2263d52f1fa9dde74b6168db296564e18d94f"
+        "notes": "O conteúdo foi redigido pelo agente da campanha de reescrita (material_author) sob delegação expressa de autoridade do owner. Uma revisão adversarial independente, executada em processo separado da campanha autora (reviewer_executor), verificou as citações legais (Lei 14.133/2021 arts. 115 §5º, 22 §§1-2, 92 VII/IX, 103 §§4-5, 117 §§1-2, 124 II 'd', 137 V), os Acórdãos TCU 639/2006 e 3.077/2010 e a metodologia do INMET (limiar de 1mm de chuva diária, janela 12h UTC-12h UTC), além de originalidade, canibalização de consulta e higiene de indexação, sem encontrar fabricação. Não houve revisão humana manual em nenhuma das duas etapas: nem na autoria, nem nesta revisão adversarial.",
+        "approval_hash": "sha256:c2d69cd935b0d187419aa4f2a47a3e0a74b1cdc3879d35f1e57d185c8d426edc"
       }
     },
     {

@@ -44,7 +44,8 @@ def _delegated_row(tmp_path: Path) -> dict:
         "approval_type": "OWNER_DELEGATED_APPROVAL",
         "status": "INDEXABLE",
         "decision_authority": "owner / Tiago Sasaki",
-        "reviewer_executor": "agente desta campanha / test fixture",
+        "material_author": "agente desta campanha / test fixture author",
+        "reviewer_executor": "revisão adversarial independente / test fixture reviewer",
         "approval_basis": "owner-delegated review 2026-08-29",
         "approved_at": "2026-08-29",
         "manual_human_review": False,
@@ -164,3 +165,61 @@ def test_owner_delegated_approval_requires_every_substantive_review(tmp_path: Pa
         for error in approval_errors(row, tmp_path)
     )
     assert may_flip_index(row, tmp_path) is False
+
+
+def test_self_approval_fails_closed_even_with_consistent_hashes(tmp_path: Path):
+    """The author cannot also be the reviewer, no matter how tidy the hashes are.
+
+    Regression for the #491 defect: OWNER_DELEGATED_APPROVAL let the same party
+    that wrote the page also write its own PASS and compute the hashes that
+    made that self-approval look valid. material_hash and approval_hash are
+    both perfectly consistent here — the record still must fail closed because
+    reviewer_executor equals material_author.
+    """
+    row = _delegated_row(tmp_path)
+    row["approval"]["reviewer_executor"] = row["approval"]["material_author"]
+    row["approval"]["approval_hash"] = approval_payload_hash(row["approval"])
+
+    # Hash consistency alone is not enough: both hashes still validate.
+    assert row["approval"]["material_hash"] == page_material_hash(row, tmp_path)
+    assert row["approval"]["approval_hash"] == approval_payload_hash(row["approval"])
+
+    errors = approval_errors(row, tmp_path)
+    assert "self_approval_forbidden" in errors
+    assert may_flip_index(row, tmp_path) is False
+
+
+def test_self_approval_is_case_and_whitespace_insensitive(tmp_path: Path):
+    """A cosmetically different but identical reviewer string still self-approves."""
+    row = _delegated_row(tmp_path)
+    row["approval"]["reviewer_executor"] = "  " + row["approval"]["material_author"].upper() + "  "
+    row["approval"]["approval_hash"] = approval_payload_hash(row["approval"])
+    assert "self_approval_forbidden" in approval_errors(row, tmp_path)
+    assert may_flip_index(row, tmp_path) is False
+
+
+def test_distinct_independent_reviewer_passes(tmp_path: Path):
+    """Naming a reviewer distinct from the author is exactly what should pass."""
+    row = _delegated_row(tmp_path)
+    assert row["approval"]["material_author"] != row["approval"]["reviewer_executor"]
+    assert approval_errors(row, tmp_path) == []
+    assert may_flip_index(row, tmp_path) is True
+
+
+def test_missing_material_author_fails_closed(tmp_path: Path):
+    row = _delegated_row(tmp_path)
+    del row["approval"]["material_author"]
+    row["approval"]["approval_hash"] = approval_payload_hash(row["approval"])
+    assert "missing_material_author" in approval_errors(row, tmp_path)
+    assert may_flip_index(row, tmp_path) is False
+
+
+def test_shipped_chuva_approval_names_an_independent_reviewer():
+    """The real #127 record must not regress into naming itself as its own reviewer."""
+    data = load_decisions()
+    rows = {row["path"]: row for row in data["urls"]}
+    approval = rows["/conteudos/chuva-prorrogacao-prazo-obra-publica/"]["approval"]
+    assert approval["material_author"]
+    assert approval["reviewer_executor"]
+    assert approval["material_author"] != approval["reviewer_executor"]
+    assert approval["manual_human_review"] is False

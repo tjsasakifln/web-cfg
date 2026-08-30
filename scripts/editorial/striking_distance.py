@@ -1,6 +1,9 @@
 """Approval-bound noindex gate for three striking-distance library URLs (#127).
 
 Dimensional GSC demand never flips robots. A hash-bound approval is required.
+An approval must also name a reviewer distinct from the material's author:
+``material_author`` and ``reviewer_executor`` are compared and self-approval
+fails closed even when every hash is internally consistent.
 """
 
 from __future__ import annotations
@@ -93,6 +96,11 @@ def approval_payload_hash(approval: dict[str, Any]) -> str:
     return "sha256:" + hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
+def _normalize_identity(value: str) -> str:
+    """Collapse whitespace/case so trivial formatting differences don't mask identity."""
+    return re.sub(r"\s+", " ", value.strip().lower())
+
+
 def approval_errors(row: dict[str, Any], root: Path | None = None) -> list[str]:
     """Validate named-human or explicit owner-delegated approval provenance."""
 
@@ -108,12 +116,25 @@ def approval_errors(row: dict[str, Any], root: Path | None = None) -> list[str]:
         errors.append("approval_status_not_indexable")
     if not str(approval.get("decision_authority") or "").strip():
         errors.append("missing_decision_authority")
+    if not str(approval.get("material_author") or "").strip():
+        errors.append("missing_material_author")
     if not str(approval.get("reviewer_executor") or "").strip():
         errors.append("missing_reviewer_executor")
     if not str(approval.get("approval_basis") or "").strip():
         errors.append("missing_approval_basis")
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(approval.get("approved_at") or "")):
         errors.append("invalid_approved_at")
+
+    # Self-approval must fail closed regardless of hash consistency: the party
+    # that authored the material can never be the party that approves it. This
+    # check is independent of, and precedes, the hash checks below on purpose —
+    # a self-approval with perfectly consistent hashes is still a self-approval.
+    material_author = str(approval.get("material_author") or "").strip()
+    reviewer_executor = str(approval.get("reviewer_executor") or "").strip()
+    if material_author and reviewer_executor and (
+        _normalize_identity(material_author) == _normalize_identity(reviewer_executor)
+    ):
+        errors.append("self_approval_forbidden")
 
     expected_material = page_material_hash(row, root)
     if not expected_material or approval.get("material_hash") != expected_material:
