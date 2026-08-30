@@ -1,0 +1,153 @@
+{
+  "assets_snapshot": {
+    "asset_files_max_route": 15,
+    "asset_raw_kb_max_route": 998.65,
+    "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
+    "routes_measured": 261
+  },
+  "budget": {
+    "cls_max": 0.05,
+    "css_gzip_kb_max": 80.0,
+    "css_raw_kb_max": 250.0,
+    "font_files_max": 0.0,
+    "font_total_gzip_kb_max": 0.0,
+    "own_js_gzip_kb_max": 40.0,
+    "own_js_raw_kb_max": 120.0
+  },
+  "cls": {
+    "measured_by": "headless Chrome, npm run test:lighthouse, committed to docs/lighthouse-runs/",
+    "observed_max": 0.0,
+    "per_route": [
+      {
+        "cls": 0.0,
+        "route": "/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/acompanhamento-contratos-obras/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/casos/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/casos/modelo-relatorio-inteligencia-licitacoes/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/comercial/privacidade-leads/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/conteudos/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/conteudos/atraso-na-medicao-obra-publica/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/conteudos/documentos-reequilibrio-obra-publica/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/diagnostico-b2g-expansao/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/diagnostico-b2g-expansao/obrigado/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/diretoria-b2g/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/entregas/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/especialista/tiago-jun-sasaki/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/ferramentas/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/ferramentas/diagnostico-defesa-margem/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/guias-contratos-obras/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/inteligencia/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/jurisprudencia-contratos-obras/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/lei-14133-obras/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/metodologia-inteligencia/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/nurture/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/obrigado.html"
+      },
+      {
+        "cls": 0.0,
+        "route": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/piloto/ofertas/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/politica-editorial/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/problemas-que-resolvemos/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/radar/nacional-obras-publicas/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/servicos-obras-publicas/"
+      },
+      {
+        "cls": 0.0,
+        "route": "/termos-de-uso/"
+      }
+    ],
+    "routes_measured": 30
+  },
+  "fonts": {
+    "font_files_total": 0,
+    "font_gzip_kb_total": 0,
+    "measured_by": "scripts/site/audit_performance.py measure_routes",
+    "routes_with_font_face_rules": [],
+    "routes_with_font_files": []
+  },
+  "generated_by": "npm run audit:performance -- --write-baseline",
+  "issue": 508
+}

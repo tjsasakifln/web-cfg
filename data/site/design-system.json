@@ -258,8 +258,16 @@
     "own_js_raw_kb_max": 120,
     "own_js_gzip_kb_max": 40,
     "css_gzip_kb_max": 80,
+    "font_total_gzip_kb_max": 0,
+    "font_files_max": 0,
+    "cls_max": 0.05,
     "no_framework_runtime": true,
-    "no_carousel_video_webgl_lottie": true
+    "no_carousel_video_webgl_lottie": true,
+    "budget_notes": {
+      "font": "Calibrated on the measured baseline: the site ships zero @font-face and zero font files. The first webfont must raise these two numbers in this file, so it lands as a reviewed delta instead of being absorbed silently. Enforced per route by scripts/site/audit_performance.py; ceilings live in that module.",
+      "cls": "Enforced twice from this one key: scripts/site/lighthouse_thresholds.mjs applies it to the live headless-Chrome run CI performs on the built _site, and scripts/site/audit_performance.py applies it to the committed rows in docs/lighthouse-runs/summary.json. Observed baseline is 0.000 on every measured route.",
+      "baseline": "docs/performance/PERFORMANCE-BUDGET-BASELINE.json"
+    }
   },
   "accessibility": {
     "wcag": "2.2 AA",
