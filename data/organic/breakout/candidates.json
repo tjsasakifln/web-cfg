@@ -44,7 +44,7 @@
       "author": "Engº Tiago Sasaki",
       "reviewer": "CONFENGE / editorial",
       "refresh_owner": "CONFENGE / organic-breakout",
-      "correction_route": "/correcoes/?asset=sinapi-desonerado-nao-desonerado",
+      "correction_route": "/correcoes/",
       "cta": {
         "id": "conferir-base-sinapi",
         "label": "Ver auditoria de orçamento e edital",
@@ -102,7 +102,7 @@
       "author": "Engº Tiago Sasaki",
       "reviewer": "CONFENGE / editorial",
       "refresh_owner": "CONFENGE / organic-breakout",
-      "correction_route": "/correcoes/?asset=bdi-diferenciado-obra-publica",
+      "correction_route": "/correcoes/",
       "cta": {
         "id": "auditar-bdi",
         "label": "Ver auditoria de orçamento e edital",
@@ -160,7 +160,7 @@
       "author": "Engº Tiago Sasaki",
       "reviewer": "CONFENGE / editorial",
       "refresh_owner": "CONFENGE / organic-breakout",
-      "correction_route": "/correcoes/?asset=limite-aditivo-25-50-obra-publica",
+      "correction_route": "/correcoes/",
       "cta": {
         "id": "verificar-saldo-aditivo",
         "label": "Abrir o verificador de limite de acréscimos e supressões",
@@ -173,7 +173,7 @@
         {"href": "/aditivos-obras-publicas/", "label": "Hub de aditivos e serviços extras"},
         {"href": "/ferramentas/limite-acrescimos-supressoes/", "label": "Verificador de acréscimos e supressões"},
         {"href": "/ferramentas/diagnostico-defesa-margem/", "label": "Diagnóstico de defesa de margem"},
-        {"href": "/lei-14133-obras/limite-25-50-aditivo-obra/", "label": "Artigo 125 na trilha da Lei 14.133"}
+        {"href": "/lei-14133-obras/art-124-alteracao-contratual-obra/", "label": "Art. 124: alteração unilateral ou acordo"}
       ],
       "demand_claim": "historical_labeled",
       "publication_requires_live_demand": false,

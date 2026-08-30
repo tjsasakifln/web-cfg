@@ -419,6 +419,19 @@ def test_conversion_fails_before_and_passes_after_onpage_capture():
             target.write_text((ROOT / slug / "index.html").read_text(encoding="utf-8"), encoding="utf-8")
         assert gate_conversion(tmp_path).ok
 
+        target = tmp_path / "bid-room-licitacoes-obras" / "index.html"
+        original = target.read_text(encoding="utf-8")
+        target.write_text(
+            original.replace(' data-receipt-required="true"', "", 1),
+            encoding="utf-8",
+        )
+        report = gate_conversion(tmp_path)
+        assert any(
+            finding.reason == "capture_confirmation_not_fail_closed"
+            for finding in report.findings
+        )
+        target.write_text(original, encoding="utf-8")
+
         for slug in routes:
             target = tmp_path / slug / "index.html"
             html = target.read_text(encoding="utf-8")
@@ -628,6 +641,33 @@ def test_disposition_matrix_exists_and_covers_classes():
     rejected = [r for r in rows if r.get("editorial_status") == "REJECTED"]
     for r in rejected:
         assert r["disposition"] in ("BLOCKED_MISSING_EVIDENCE", "RETAIN_NOINDEX", "BLOCKED_HUMAN_REVIEW")
+
+
+def test_migrated_editorial_disposition_is_terminal_and_reproducible():
+    """The remediator must never put a migrated donor back on an approval path."""
+    from scripts.site.inbound_first_remediate import build_inventory
+
+    donor = "/lei-14133-obras/limite-25-50-aditivo-obra/"
+    owner = "/conteudos/limite-aditivo-25-50-obra-publica/"
+    checked_in = json.loads(
+        (ROOT / "docs" / "seo" / "URL-DISPOSITION-MATRIX.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    for label, rows in (
+        ("checked-in matrix", checked_in),
+        ("fresh build_inventory output", build_inventory({})),
+    ):
+        matches = [row for row in rows if row.get("url") == donor]
+        assert len(matches) == 1, f"{label}: expected one donor row, got {matches}"
+        row = matches[0]
+        assert row["editorial_status"] == "MIGRATED", label
+        assert row["disposition"] == "REDIRECT_301", label
+        assert row["canonical"] == f"https://confenge.com.br{owner}", label
+        assert row["robots"] == "noindex,follow", label
+        assert row["in_sitemap"] is False, label
+        assert row["human_approval"] == "NOT_APPLICABLE_TERMINAL_MIGRATION", label
+        assert "approval path" not in row["notes"].lower(), label
 
 
 def test_run_all_gates_ok():
@@ -1169,6 +1209,30 @@ def test_public_scan_fails_closed_when_the_walk_collapses():
                 raise AssertionError("empty checkout did not fail closed")
         finally:
             ig.ROOT = real_root
+
+
+def test_featured_link_to_noindex_is_empty_on_shipped_indexable_pages():
+    from scripts.site.inbound_gates import _featured_noindex_from_indexable
+
+    findings = _featured_noindex_from_indexable()
+    assert findings == [], [f"{f.path}:{f.excerpt}" for f in findings]
+
+
+def test_parameterized_internal_hrefs_only_documented_exceptions():
+    from pathlib import Path
+
+    from scripts.organic.canonical_hrefs import scan_public_parameterized_hrefs
+
+    hits = scan_public_parameterized_hrefs(Path(__file__).resolve().parents[2])
+    open_hits = [h for h in hits if not h.get("exception")]
+    assert open_hits == [], open_hits
+    allowed = {h["exception"] for h in hits}
+    assert allowed <= {
+        "frozen_html",
+        "functional_query",
+        "hash_bound_render",
+        "hash_pinned_html",
+    }
 
 
 if __name__ == "__main__":

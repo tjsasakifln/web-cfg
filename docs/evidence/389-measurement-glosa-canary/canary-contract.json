@@ -24,7 +24,7 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "2ca2d161a41fa76a192124d1aa156b0b3cf61f401af4163cf53a8244da4178b6"
+    "after_sha256": "bc604a66eddb833a43781b92968b3d8017493d212f2af3c0a93286369e31cf77"
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -73,9 +73,9 @@
     "membership_changed": false,
     "new_sitemap_created": false,
     "lastmod_before": "2026-07-30",
-    "lastmod_after": "2026-08-25",
+    "lastmod_after": "2026-08-29",
     "recapture_registry": "data/bofu-dominance/frozen-specs/hashes.json",
-    "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente; os seis pilares protegidos e a composição dos sitemaps permanecem inalterados."
+    "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente. O corpo do canário foi reescrito em 2026-08-28 (CFG10X-06) e reconciliado com o main, as fontes oficiais e o gate do artefato publicado em 2026-08-29. As cinco superfícies de revisão da URL - article:modified_time, dateModified do JSON-LD, o \"Revisado em\" visível, a data de consulta das fontes e o lastmod do sitemap - declaram 2026-08-29. Divergência entre as cinco é barrada por scripts/organic/cluster_medicao_originality.revision_failures. Os seis pilares protegidos e a composição dos sitemaps permanecem inalterados."
   },
   "content_contract": {
     "title": "Atraso na medição de obra pública: o que fazer | CONFENGE",
@@ -126,7 +126,7 @@
     },
     {
       "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
-      "sha256": "ea0923bb6cee8749f84a50c46d9eaf6d4dbf8d1bcb95128cb0315416007193fa"
+      "sha256": "72c53b2ac3806b16bba902fb2531cd9edcbf65f69215f0a28a3f29ef3ed965a1"
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",

@@ -148,11 +148,103 @@ def test_progressive_catalog_never_serializes_false_integrity_conclusions() -> N
 
 def test_progressive_catalog_controls_keep_a_mobile_touch_target() -> None:
     css = (PAGE.with_name("styles.css")).read_text(encoding="utf-8")
-    assert ".deliverable-frame__list a{" in css
-    rule = re.search(r"\.deliverable-frame__list a\{([^}]+)\}", css)
-    assert rule
-    assert "min-height:44px" in rule.group(1)
+    for selector, minimum in (
+        (r"\.offer-decision-nav a", 52),
+        (r"\.capability-group>summary", 64),
+    ):
+        rule = re.search(rf"{selector}\{{([^}}]+)\}}", css)
+        assert rule, selector
+        assert f"min-height:{minimum}px" in rule.group(1)
 
+
+def test_public_ia_separates_published_offers_from_taxative_capabilities() -> None:
+    """The buying showcase and the taxative capability roll are distinct sets."""
+    html = _html()
+    registry = json.loads(
+        (ROOT / "data/commercial/deliverables-registry.v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    deliverables = registry["deliverables"]
+    expected_states = {"PUBLISHED": 8, "VALIDATE": 44, "BLOCKED": 2}
+
+    assert registry["catalog_count"] == len(deliverables) == 54
+    assert {
+        state: sum(row["public_state"] == state for row in deliverables)
+        for state in expected_states
+    } == expected_states
+
+    h1 = _visible_text(re.search(r"<h1[^>]*>.*?</h1>", html, re.DOTALL).group(0))
+    assert "8 ofertas publicadas" in h1
+    assert "54 capacidades do rol taxativo" in _visible_text(html)
+
+    title = re.search(r"<title>([^<]+)</title>", html).group(1)
+    description = re.search(r'<meta content="([^"]+)" name="description"/>', html).group(1)
+    og_title = re.search(r'<meta content="([^"]+)" property="og:title"/>', html).group(1)
+    og_description = re.search(
+        r'<meta content="([^"]+)" property="og:description"/>', html
+    ).group(1)
+    assert title == "8 ofertas publicadas e 54 capacidades, exemplos sintéticos | CONFENGE"
+    for surface in (description, og_title, og_description):
+        assert "8" in surface
+        assert "54" in surface or "rol taxativo completo" in surface
+        assert "54 ofertas" not in surface.casefold()
+
+    graph = _jsonld_graph()
+    collection = next(node for node in graph if node.get("@type") == "CollectionPage")
+    item_list = next(node for node in graph if node.get("@type") == "ItemList")
+    assert "8 ofertas publicadas" in collection["name"]
+    assert "54 capacidades" in collection["name"]
+    assert item_list["name"] == "8 ofertas publicadas da CONFENGE"
+    assert item_list["numberOfItems"] == len(item_list["itemListElement"]) == 8
+
+    primary_ids = re.findall(
+        r'<article class="vitrine-item[^>]*data-deliverable-id="([^"]+)"', html
+    )
+    assert primary_ids == [f"CFG-D{number:02d}" for number in range(1, 9)]
+
+    capability_rows = re.findall(
+        r'<li class="capability-item[^>]*data-capability-id="([^"]+)"'
+        r'[^>]*data-public-state="([^"]+)"',
+        html,
+    )
+    assert len(capability_rows) == 54
+    assert sorted(item_id for item_id, _ in capability_rows) == [
+        f"CFG-D{number:02d}" for number in range(1, 55)
+    ]
+    assert {
+        state: sum(row_state == state for _, row_state in capability_rows)
+        for state in expected_states
+    } == expected_states
+
+
+def test_each_published_offer_has_one_primary_representation_with_essential_terms() -> None:
+    html = _html()
+    primary = re.findall(
+        r'<article class="vitrine-item[^>]*data-primary-offer="true"[^>]*>'
+        r"[\s\S]*?</article>",
+        html,
+    )
+
+    assert len(primary) == 8
+    assert "compare-table" not in html
+    assert "eight-hub__item" not in html
+    for card in primary:
+        visible = _visible_text(card)
+        for label in (
+            "situação",
+            "decisão",
+            "entrada",
+            "objeto e limite",
+            "saída",
+            "sla",
+            "preço",
+            "pacote e crédito",
+        ):
+            assert label in visible, label
+        assert "oferta publicada · published" in visible
+        assert 'aria-label="Ver o demonstrativo sintético de ' in card
+        assert 'aria-label="Pedir análise de ' in card
 
 def test_progressive_catalog_css_does_not_block_first_paint() -> None:
     html = _html()
@@ -162,15 +254,17 @@ def test_progressive_catalog_css_does_not_block_first_paint() -> None:
     assert "/entregas/catalog-data.js" not in html
     assert "/entregas/catalog.js" not in html
     base_css = (PAGE.with_name("styles.css")).read_text(encoding="utf-8")
-    assert ".deliverable-frame__list a" in base_css
+    assert ".offer-decision-nav a" in base_css
+    assert ".capability-group>summary" in base_css
     assert "min-height:44px" in base_css
 
 
 def test_hub_is_honest_about_every_published_example() -> None:
     html = _html()
     for phrase in (
-        "8 entregas, de R$ 599 a R$ 3.750",
-        "Oito exemplos integrais, sem cadastro",
+        "8 ofertas publicadas agora",
+        "Estas são as únicas ofertas com escopo, preço e SLA publicados",
+        "54 capacidades do rol taxativo",
         "Radar de Licitações Prioritárias",
         "R$ 599 por unidade",
         "R$ 599 a R$ 3.750",
@@ -182,9 +276,15 @@ def test_hub_is_honest_about_every_published_example() -> None:
     assert "em breve" not in library
     assert "as 54 entregáveis" not in library
     assert "r$ 39.800" not in library
-    assert "em validação" not in library
     cards = re.findall(r'<article class="vitrine-item', html)
     assert len(cards) == 8
+    primary_block = re.search(
+        r'<div class="vitrine-items">(.*?)</div>\s*<dl class="compare-ladder-figures">',
+        html,
+        re.DOTALL,
+    ).group(1)
+    assert "em validação" not in primary_block.casefold()
+    assert "bloqueada" not in primary_block.casefold()
     for number in range(1, 9):
         assert f'id="entrega-0{number}"' in html
     assert 'id="entrega-09"' not in html
@@ -205,7 +305,12 @@ def test_every_example_uses_the_same_action_label() -> None:
         "Referências de Preços de Obras Públicas",
         "Plano Executivo de Expansão",
     ):
-        assert f"Ver o exemplo de {name}" in html, name
+        # #475 requires every synthetic example to be explicitly labelled as such.
+        # #484's per-card layout does not have room for "Abrir sintético: {name}"
+        # on the CTA itself without wrapping the button row; the label survives
+        # as an explicit, per-item honesty marker in the page's structured data.
+        assert f"{name} — exemplo sintético" in html, name
+        assert f"Ver o demonstrativo sintético de {name}" in html, name
         assert f"Pedir análise de {name}" in html, name
 
 
@@ -214,8 +319,8 @@ def test_the_library_has_one_name_across_its_own_surfaces() -> None:
     title = re.search(r"<title>([^<]*)</title>", html).group(1)
     h1 = re.sub(r"<[^>]+>", " ", re.search(r"<h1[^>]*>(.*?)</h1>", html, re.DOTALL).group(1))
     breadcrumb = re.search(r'class="breadcrumbs container">(.*?)</nav>', html, re.DOTALL).group(1)
-    assert title.startswith("Entregas da CONFENGE")
-    assert "entregas" in h1.casefold()
+    assert title.startswith("8 ofertas publicadas e 54 capacidades")
+    assert "8 ofertas publicadas" in h1.casefold()
     assert "Entregas" in breadcrumb
     assert "Exemplos de entregas da CONFENGE" not in html
     # The entry example carries the canonical #343 name here, on its own page and in JSON-LD.
@@ -225,48 +330,52 @@ def test_the_library_has_one_name_across_its_own_surfaces() -> None:
     assert "Modelo de relatório de inteligência" not in report
 
 
-def test_the_eight_are_comparable_before_the_long_sections() -> None:
-    """Price, question answered and ladder position must precede the sections."""
+def test_the_eight_are_decidable_once_before_the_taxative_roll() -> None:
+    """The decision nav and complete primary cards replace the repeated table."""
     html = _html()
-    compare = re.search(
-        r'<section[^>]+id="comparar".*?</section>', html, flags=re.DOTALL
+    showcase = re.search(
+        r'<div class="vitrine-items">(.*?)<dl class="compare-ladder-figures">',
+        html,
+        flags=re.DOTALL,
     )
-    assert compare, "no comparable view"
-    table = compare.group(0)
-    assert html.index('id="comparar"') < html.index('id="primeiro-exemplo"')
+    assert showcase, "no published-offer showcase"
+    surface = showcase.group(0)
+    assert html.index('class="offer-decision-nav"') < html.index('id="entrega-01"')
+    assert html.index('id="entrega-08"') < html.index('id="rol-taxativo"')
+    assert "compare-table" not in html
     for price in ("R$ 599", "R$ 690", "R$ 890", "R$ 1.200", "R$ 1.450", "R$ 1.900", "R$ 2.400", "R$ 3.750"):
-        assert price in table, price
+        assert price in surface, price
     for route in LADDER_ROUTES:
-        assert f'href="{route}"' in table, route
-    assert table.count("<tr>") == len(LADDER_ROUTES) + 1
-    for column in ("Situação", "Decisão", "Saída", "Prazo", "Preço", "Fit"):
-        assert f">{column}</th>" in table, column
-    assert table.count("Sim, em até 60 dias") == len(LADDER_ROUTES) - 1
-    assert "Não. Entrega à parte, fora do pacote" in table
-    assert 'class="compare-scroll" role="region"' in table
-    assert 'tabindex="0"' in table
+        assert surface.count(f'href="{route}"') == 1, route
+    assert surface.count('data-primary-offer="true"') == len(LADDER_ROUTES)
+    for label in ("Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"):
+        assert surface.count(f"<dt>{label}</dt>") == len(LADDER_ROUTES), label
 
 
-def test_bundle_arithmetic_is_derived_from_the_comparison_rows() -> None:
-    """The package total excludes the declared R$ 599 standalone delivery."""
+def test_bundle_arithmetic_is_derived_from_the_primary_offer_cards() -> None:
+    """The package total excludes the declared R$ 599 standalone offer."""
     html = _html()
-    tbody = re.search(r"<tbody>(.*?)</tbody>", html, flags=re.DOTALL)
-    assert tbody, "comparison table has no body"
-    rows = re.findall(r"<tr>(.*?)</tr>", tbody.group(1), flags=re.DOTALL)
-    assert len(rows) == len(LADDER_ROUTES)
+    cards = re.findall(
+        r'<article class="vitrine-item[^>]*data-primary-offer="true"[^>]*>'
+        r"([\s\S]*?)</article>",
+        html,
+    )
+    assert len(cards) == len(LADDER_ROUTES)
 
-    def row_price(row: str) -> int:
-        prices = re.findall(r"R\$\s*([\d.]+)", row)
-        assert len(prices) == 1, row
+    def card_price(card: str) -> int:
+        price_node = re.search(r'class="vitrine-item__price".*?</p>', card, re.DOTALL)
+        assert price_node, card
+        prices = re.findall(r"R\$\s*([\d.]+)", price_node.group(0))
+        assert len(prices) == 1, card
         return int(prices[0].replace(".", ""))
 
-    standalone = [row for row in rows if "fora do pacote" in row]
-    credited = [row for row in rows if "Sim, em até 60 dias" in row]
+    standalone = [card for card in cards if "único sem o crédito" in card]
+    credited = [card for card in cards if "se ele for contratado em até 60 dias" in card]
     assert len(standalone) == 1
-    assert row_price(standalone[0]) == 599
+    assert card_price(standalone[0]) == 599
     assert len(credited) == 7
 
-    units_total = sum(row_price(row) for row in credited)
+    units_total = sum(card_price(card) for card in credited)
     bundle_total = 8_000
     assert units_total == 12_280
     assert units_total - bundle_total == 4_280
@@ -280,12 +389,11 @@ def test_the_credit_rule_is_coherent_across_the_eight() -> None:
     credit = "se ele for contratado em até 60 dias"
     assert html.count(credit) >= len(LADDER_ROUTES) - 1
     entry = re.search(
-        r'<section[^>]+id="primeiro-exemplo".*?</section>', html, flags=re.DOTALL
+        r'<article[^>]+id="entrega-01".*?</article>', html, flags=re.DOTALL
     ).group(0)
-    assert "Por que abre a biblioteca" in entry
-    assert "único sem o crédito de 60 dias" in entry
+    assert "Relatório avulso, à parte e fora do Diagnóstico" in entry
     assert "Primeiro exemplo publicado" not in html
-    assert "Entrega à parte, fora do Diagnóstico de Expansão no Mercado Público" in entry
+    assert "R$ 599 por unidade" in entry
 
 
 def test_hub_states_the_bundle_without_replacing_the_unit_prices() -> None:

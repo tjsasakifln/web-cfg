@@ -18,13 +18,18 @@ from scripts.organic.sitemap_graph import (
     close_graph,
     consumed_market_answer_indexable,
     exact_one_issues,
+    indexation_split_issues,
+    jsonld_itemlist_issues,
     loc_set_drift,
     indexability_graph_issues,
+    lastmod_issues,
     market_answer_canonical,
+    missing_referenced_sitemap_issues,
     normalize_lastmod,
     parse_sitemap_index,
     parse_sitemap_txt,
     parse_urlset_entries,
+    published_route_inventory,
     render_sitemap_index,
     render_sitemap_txt,
     render_urlset,
@@ -498,3 +503,140 @@ def test_x_robots_last_match_index_override_not_family_noindex():
     canary = "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
     assert x_robots_noindex(headers, family) is True
     assert x_robots_noindex(headers, canary) is False
+
+
+def test_headers_missing_sitemap_file_fails(tmp_path: Path):
+    loc = f"{SITE}/a/"
+    _seed(tmp_path, members={"sitemap.xml": [(loc, None)]}, pages={loc: {}})
+    headers = tmp_path / "_headers"
+    headers.write_text(
+        (headers.read_text(encoding="utf-8") if headers.is_file() else "")
+        + "\n/sitemap-analises-contratos.xml\n  Content-Type: application/xml\n",
+        encoding="utf-8",
+    )
+    report = audit_sitemaps(tmp_path)
+    assert report["ok"] is False
+    assert any(i["code"] == "referenced_sitemap_missing" for i in report["issues"])
+    assert missing_referenced_sitemap_issues(tmp_path)
+
+
+def test_robots_allow_vs_x_robots_noindex_is_split(tmp_path: Path):
+    loc = f"{SITE}/a/"
+    canary = "/analises-contratos-publicos/canary/"
+    robots = (
+        "Allow: /analises-contratos-publicos/canary/\n"
+        "Disallow: /analises-contratos-publicos/\n"
+    )
+    headers = (
+        "/analises-contratos-publicos/*\n"
+        "  X-Robots-Tag: noindex, nofollow, noarchive\n"
+    )
+    issues = indexation_split_issues(
+        "User-agent: *\nAllow: /\n" + robots, headers
+    )
+    assert any(i.code == "robots_header_indexation_split" for i in issues)
+    _seed(
+        tmp_path,
+        members={"sitemap.xml": [(loc, None)]},
+        pages={loc: {}},
+        robots_extra=robots,
+        headers=headers,
+    )
+    report = audit_sitemaps(tmp_path)
+    assert report["ok"] is False
+    assert any(i["code"] == "robots_header_indexation_split" for i in report["issues"])
+    del canary
+
+
+def test_lastmod_without_html_signal_fails():
+    loc = f"{SITE}/a/"
+    issues = lastmod_issues(
+        [UrlEntry(loc=loc, lastmod="2026-08-01", member="sitemap.xml")],
+        as_of=AS_OF,
+        html_by_loc={loc: _html(loc)},
+    )
+    assert any(i.code == "lastmod_without_substantial_signal" for i in issues)
+    ok = lastmod_issues(
+        [UrlEntry(loc=loc, lastmod="2026-08-01", member="sitemap.xml")],
+        as_of=AS_OF,
+        html_by_loc={loc: _html(loc, modified="2026-08-01")},
+    )
+    assert ok == []
+
+
+def test_itemlist_empty_url_fails():
+    html = (
+        '<script type="application/ld+json">'
+        '{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,'
+        '"name":"Ghost","url":""}]}'
+        "</script>"
+    )
+    issues = jsonld_itemlist_issues(html, loc=f"{SITE}/hub/")
+    assert any(i.code == "itemlist_empty_or_fake_url" for i in issues)
+    bad_json = '<script type="application/ld+json">{not json}</script>'
+    parse_issues = jsonld_itemlist_issues(bad_json, loc=f"{SITE}/hub/")
+    assert any(i.code == "jsonld_unparseable" for i in parse_issues)
+
+
+def test_published_inventory_derives_from_routes_not_allowlist(tmp_path: Path):
+    loc = f"{SITE}/a/"
+    extra = f"{SITE}/b/"
+    _seed(
+        tmp_path,
+        members={"sitemap.xml": [(loc, None)]},
+        pages={loc: {}, extra: {}},
+    )
+    inventory = published_route_inventory(tmp_path)
+    assert "/a/" in inventory["indexable"]
+    assert "/b/" in inventory["indexable"]
+    assert "/b/" in inventory["only_indexable"]
+    first = audit_sitemaps(tmp_path)
+    assert first["ok"] is False
+    assert any(i["code"] == "indexable_missing_from_sitemap" for i in first["issues"])
+    xml = (tmp_path / "sitemap.xml").read_text(encoding="utf-8")
+    entries = parse_urlset_entries(xml)
+    (tmp_path / "sitemap.xml").write_text(
+        render_urlset(entries + [(extra, None)]), encoding="utf-8"
+    )
+    closed = close_graph(tmp_path, as_of=AS_OF, market_answer_indexable=True)
+    assert closed["ok"] is True
+    after = published_route_inventory(tmp_path)
+    assert after["only_indexable"] == []
+    assert set(after["indexable"]) == set(after["sitemap"])
+
+
+def test_published_inventory_requires_real_schema_and_clean_self_canonical(tmp_path: Path):
+    loc = f"{SITE}/a/"
+    _seed(tmp_path, members={"sitemap.xml": [(loc, None)]}, pages={loc: {}})
+    page = tmp_path / "a" / "index.html"
+    html = page.read_text(encoding="utf-8")
+    html = html.replace("</head>", "</head>").replace(
+        f'href="{loc}"', f'href="{loc}?utm_source=bad"'
+    )
+    page.write_text(html.replace('<script type="application/ld+json">{}</script>', ''), encoding="utf-8")
+    inventory = published_route_inventory(tmp_path)
+    row = inventory["pages"][0]
+    assert row["status_equivalent"] == 200
+    assert row["title"] == "T"
+    assert row["h1_nonempty"] is True
+    assert row["canonical_self"] is False
+    assert row["schema_count"] == 0
+    assert row["jsonld_parseable"] is False
+
+
+def test_published_inventory_rejects_parseable_jsonld_placeholder(tmp_path: Path):
+    loc = f"{SITE}/a/"
+    _seed(tmp_path, members={"sitemap.xml": [(loc, None)]}, pages={loc: {}})
+    row = published_route_inventory(tmp_path)["pages"][0]
+    assert row["schema_count"] == 1
+    assert row["jsonld_parseable"] is True
+    assert row["jsonld_valid"] is False
+
+
+def test_report_exposes_acceptance_counters(tmp_path: Path):
+    loc = f"{SITE}/a/"
+    _seed(tmp_path, members={"sitemap.xml": [(loc, None)]}, pages={loc: {}})
+    report = audit_sitemaps(tmp_path)
+    assert report["broken"] == 0
+    assert report["orphan_indexable"] == 0
+    assert report["noindex_in_sitemap"] == 0

@@ -308,6 +308,10 @@ def test_live_registry_first_cohort_indexable_only():
         if pid == "jur-sumula-260-art":
             assert p.get("status") == "REJECTED"
             continue
+        if pid == "lei-limite-25-50":
+            assert p.get("status") == "MIGRATED"
+            assert not p.get("approval"), pid
+            continue
         if pid in FIRST_COHORT_SET:
             assert p.get("status") == "INDEXABLE", pid
             appr = p.get("approval") or {}
@@ -318,10 +322,10 @@ def test_live_registry_first_cohort_indexable_only():
         assert p.get("status") == "EDITORIAL_REVIEWED", pid
         assert not p.get("approval"), pid
     truth = derive_editorial_truth(reg)
-    assert truth["wave1"]["human_approved"] == 3
-    assert truth["wave1"]["indexable"] == 3
-    assert truth["first_cohort"]["indexable"] == 3
-    assert truth["sitemaps"]["editorial_locs"] >= 3
+    assert truth["wave1"]["human_approved"] == 2
+    assert truth["wave1"]["indexable"] == 2
+    assert truth["first_cohort"]["indexable"] == 2
+    assert truth["sitemaps"]["editorial_locs"] >= 2
     assert truth["ok"], truth.get("contradictions")
     assert truth["terminal_status"] == "READY_FOR_RELEASE"
     assert truth["release"]["cohort_complete"] is True
@@ -345,7 +349,7 @@ def test_write_terminal_never_emits_blocked_empty_contras():
         assert data["terminal_status"] == "READY_FOR_NAMED_HUMAN_APPROVAL"
         assert data["ok"] is True
         assert data["indexable_count"] == 0
-        assert data["awaiting_human"] == 3
+        assert data["awaiting_human"] == 2
 
 
 def test_packaged_terminal_status_matches_live_ready():
@@ -375,8 +379,8 @@ def test_truth_write_matches_registry():
     truth = derive_editorial_truth()
     path = write_terminal_result(truth)
     data = json.loads(path.read_text(encoding="utf-8"))
-    assert data["indexable_count"] == 3
-    assert data["human_approved_count"] == 3
+    assert data["indexable_count"] == 2
+    assert data["human_approved_count"] == 2
     assert data["awaiting_human"] == 0
     assert data["rejected"] == 1
     assert data["cohort_complete"] is True
@@ -414,22 +418,22 @@ def test_only_valid_named_human_approvals_in_registry():
             # Short / false stamp must never appear (distinct from full legal name)
             if h.get("event") in {"HUMAN_APPROVED", "INDEXABLE"} and h.get("reviewer") == "Tiago Sasaki":
                 pytest.fail(f"false Tiago approval history on {p.get('page_id')}: {h}")
-    assert approved == 3
+    assert approved == 2
 
 
 def test_first_cohort_is_exact_and_backlog_stays_noindex():
     from scripts.editorial.truth import FIRST_COHORT_IDS, derive_editorial_truth
 
     assert FIRST_COHORT_IDS == (
-        "lei-limite-25-50",
         "guia-checklist-aditivo",
         "lei-item-novo-desconto",
     )
     truth = derive_editorial_truth()
-    assert truth["first_cohort"]["total"] == 3
-    assert truth["first_cohort"]["indexable"] == 3
-    assert truth["first_cohort"]["human_approved"] == 3
+    assert truth["first_cohort"]["total"] == 2
+    assert truth["first_cohort"]["indexable"] == 2
+    assert truth["first_cohort"]["human_approved"] == 2
     assert truth["editorial_backlog"]["editorial_reviewed"] == 8
+    assert truth["migrated"] == {"count": 1, "page_ids": ["lei-limite-25-50"]}
 
 
 def test_packet_is_material_bound_not_head_bound():
@@ -440,7 +444,6 @@ def test_packet_is_material_bound_not_head_bound():
     packet = review_packet(reg, truth)
     assert packet["commit_sha_role"] == "informational_only"
     assert [row["page_id"] for row in packet["pages"]] == [
-        "lei-limite-25-50",
         "guia-checklist-aditivo",
         "lei-item-novo-desconto",
     ]

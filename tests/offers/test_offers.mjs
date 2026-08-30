@@ -338,6 +338,7 @@ const compare = fs.readFileSync(path.join(root, "piloto/ofertas/index.html"), "u
 assert("prices_visible", compare.includes("8.000") && compare.includes("20.000") && compare.includes("15.000") && compare.includes("12.500"), "prices");
 assert("no_generic_pay_link", !/asaas\.com|pay\.asaas/i.test(compare), compare.slice(0, 80));
 assert("cta_contextual", compare.includes("Verificar capacidade") || compare.includes("Solicitar contratacao"), "cta");
+assert("compare_table_keyboard_scroll", compare.includes('<div class="table-wrap" role="group" tabindex="0"'), "table wrapper");
 
 const failed = results.filter((r) => !r.ok);
 console.log(JSON.stringify({ ok: failed.length === 0, passed: results.length - failed.length, failed: failed.length, results }, null, 2));

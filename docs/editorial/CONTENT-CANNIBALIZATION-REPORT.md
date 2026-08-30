@@ -1,5 +1,7 @@
 # Content cannibalization report — Wave 1 vs `/conteudos/`
 
+> **SUPERSEDED_EVIDENCE (2026-08-29):** snapshot histórico da análise feita em 2026-08-02; não é uma superfície operacional de decisão. A consulta geral 25%/50% tem owner terminal em `/conteudos/limite-aditivo-25-50-obra-publica/`, e `/lei-14133-obras/limite-25-50-aditivo-obra/` está `MIGRATED` com 301 direto. Use `data/organic/legacy-url-inventory.json`, `docs/editorial/EDITORIAL-INVENTORY.json` e `docs/editorial/WAVE1-FIRST-COHORT.md` para o estado ativo.
+
 **Date:** 2026-08-02  
 **Policy:** Prefer one indexable URL per intent. Unapproved Wave 1 pages are `noindex` and out of sitemaps until named human approval.
 

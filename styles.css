@@ -1011,8 +1011,8 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 .policy-version-disclosure a{text-decoration:underline;text-underline-offset:2px}
 .breakout-chassis{margin:28px 0;padding:22px 22px 8px;border:1px solid var(--line);border-radius:12px;background:#f7faf7}
 .breakout-job{margin:0 0 16px;color:#314256}
-.breakout-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;margin:0 0 22px}
-.breakout-meta div{margin:0}
+.breakout-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px;margin:0 0 22px}
+.breakout-meta div{min-width:0;margin:0}
 .breakout-meta dt{margin:0 0 4px;color:var(--green-700);font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
 .breakout-meta dd{margin:0;color:#314256;font-size:.92rem;line-height:1.55}
 .breakout-visual{margin:8px 0 22px}
@@ -1025,11 +1025,11 @@ body{font-size:var(--text-body-mobile);line-height:var(--lh-body)}
 .breakout-links ul{display:grid;gap:8px;margin:0 0 18px;padding:0;list-style:none}
 .breakout-links a{color:var(--green-700);text-decoration:underline;text-underline-offset:2px}
 .breakout-bars{display:block;width:min(100%,360px);height:auto;margin:12px 0}
-@media (max-width:700px){.breakout-meta{grid-template-columns:1fr}}
+@media (max-width:700px){.breakout-meta{grid-template-columns:minmax(0,1fr)}}
 
 
 .contact-form-title{margin:0 0 16px;color:var(--ink);font-size:clamp(1.35rem,3.2vw,1.85rem);letter-spacing:-.03em;max-width:22ch}
-#formulario-contato{scroll-margin-top:96px}
+#formulario-contato{scroll-margin-top:112px}
 @media (max-width:900px){
   .contact-grid{display:flex;flex-direction:column}
   .contact-grid > .contact-form,
@@ -1487,22 +1487,22 @@ html.no-js body[data-content-cluster="home"] .site-header{position:static}
 .hero,.hero-grid,.hero-copy,.hero-proof,.hero-actions,.hero-visual,.hero-evidence{min-width:0}
 .hero-proof{overflow-wrap:anywhere}
 .hero-proof li,.hero-proof strong,.hero-proof span,.proof-mark{overflow-wrap:anywhere;line-height:var(--lh-micro);font-size:var(--text-small)}
-.hero-lead,.section-lead,.editorial-lead,.hero-micro{max-width:var(--read-measure);overflow-wrap:anywhere}
+.hero-lead,.section-lead,.editorial-lead,.hero-micro{max-width:var(--read-measure);overflow-wrap:break-word}
 .hero-actions .button,.hero .button-primary{min-height:var(--touch-min)}
-.related-card,.aside-card,.n-card,.offer-path,.cluster-card,.featured-content,.catalog-item,.simple-card,.criterion-card,.macro-phase,.journey-path,.trace-card{min-width:0;overflow-wrap:anywhere}
+.related-card,.aside-card,.n-card,.offer-path,.cluster-card,.featured-content,.catalog-item,.simple-card,.criterion-card,.macro-phase,.journey-path,.trace-card{min-width:0;overflow-wrap:break-word}
 .article-layout,.contact-grid,.offer-layout,.authority-layout,.faq-grid,.content-hero-grid,.hub-hero-grid,.profile-grid,.related-grid,.featured-grid,.cluster-grid,.pillar-overview-grid,.directory-head,.form-row,.macro-phases,.icp-contrast,.offer-context{min-width:0}
 .lead-inline{min-width:0;grid-template-columns:minmax(0,1fr)}
-.lead-inline-copy,.lead-inline-actions{min-width:0;overflow-wrap:anywhere}
+.lead-inline-copy,.lead-inline-actions{min-width:0;overflow-wrap:break-word}
 .case-badge,.eyebrow{overflow-wrap:normal;word-break:normal;max-width:100%;min-width:0}
 .report-disclaimer .container{flex-wrap:wrap;min-width:0}
 .report-disclaimer p{min-width:0;flex:1 1 16rem}
 .report-disclaimer .case-badge{flex:1 1 100%}
 .report-section-grid,.report-section-content,.report-hero-grid,.report-hero-copy,.report-wide-head{min-width:0}
-h1,h2,h3{overflow-wrap:anywhere}
+h1,h2,h3{overflow-wrap:break-word}
 @media (min-width:761px){.lead-inline:has(>.lead-inline-copy):has(>.lead-inline-actions){grid-template-columns:minmax(0,1.2fr) minmax(220px,auto)}}
-.article-aside,aside{min-width:0;overflow-wrap:anywhere}
+.article-aside,aside{min-width:0;overflow-wrap:break-word}
 ul:not([class]),ol:not([class]){padding-inline-start:1.25em}
-li,dd,figcaption,caption,th,td,label,small{overflow-wrap:anywhere}
+li,dd,figcaption,caption,th,td,label,small{overflow-wrap:break-word}
 .field label,.consent,.form-hint,.form-note,.form-step-legend{font-size:var(--text-small);line-height:1.45;overflow-wrap:anywhere}
 .contact-form input:not([type=checkbox]):not([type=radio]):not([type=hidden]),.contact-form select,.contact-form textarea,.field input:not([type=checkbox]):not([type=radio]):not([type=hidden]),.field select,.field textarea{font-size:1rem;min-height:var(--touch-min)}
 .consent input[type=checkbox],.consent input[type=radio]{min-height:18px;width:18px}
@@ -1521,6 +1521,22 @@ img,video{height:auto}
 .action-list>li>span:first-child+*{grid-column:2;min-width:0;max-width:100%}
 .action-list>li:has(>span:first-child)::before{content:none;display:none}
 @media (max-width:520px){.action-list>li{grid-template-columns:32px minmax(0,1fr);gap:12px}}
+
+.site-header{background:#fff}
+html{scroll-padding-top:96px}
+
+h1,h2,h3,h4,p,li,dt,dd,figcaption,caption,th,td,label,small,strong{overflow-wrap:normal;word-break:normal;hyphens:none}
+code,pre,kbd,samp,[data-opaque-token],.opaque-token{overflow-wrap:anywhere;word-break:break-word}
+@media (max-width:900px){
+  html{scroll-padding-top:82px}
+  html.no-js .site-header{position:static}
+  .no-js .mobile-nav .button{display:inline-flex;min-width:44px;min-height:44px}
+}
+@media (max-width:430px){
+  .content-hero h1{font-size:clamp(1.8rem,9vw,2.45rem)}
+  .n-wrap>h1{font-size:clamp(1.75rem,8.4vw,2.25rem)}
+  .pilot-wrap>h1{font-size:clamp(1.65rem,8vw,1.9rem)}
+}
 
 
 .hero-evidence .evidence-kicker,.evidence-heading>span,.evidence-tier,.evidence-facts dt,.evidence-facts dd,.evidence-context,.evidence-exposure>span,.evidence-exposure p,.evidence-method li>span,.evidence-method p,.evidence-comparables>p,.evidence-comparables span,.evidence-source a,.evidence-source p,.evidence-panel .evidence-exposure>span,.evidence-selector .evidence-method p,.hero-real-proof,.hero-real-proof span,.article-cover figcaption,.article-meta,.content-badge,.item-meta,.author-box span,.aside-card>span,.aside-compact strong,.featured-content>span,.cluster-card>span,.cluster-card>div small,.library-rank,.criterion-card>span,.action-list>li>span,.answer-box span,.lead-inline-copy span,.directory-search label,.results-count,.hub-metrics span,.content-directory-item p,.technical-note,.breakout-meta dt,.operating-marker,.featured-support-theme,.profile-mark small{font-size:max(var(--text-micro),12.8px);line-height:var(--lh-micro)}

@@ -37,7 +37,7 @@ from scripts.editorial.registry import (# noqa: E402
 )
 from scripts.editorial.render import render_hub, render_page # noqa: E402
 from scripts.editorial.sources import load_manifest, page_sources_ok # noqa: E402
-from scripts.editorial.cohort import FIRST_COHORT_IDS, FIRST_COHORT_SET # noqa: E402
+from scripts.editorial.cohort import FIRST_COHORT_IDS, FIRST_COHORT_SET, MIGRATED_IDS # noqa: E402
 from scripts.editorial.preview import write_preview_packet # noqa: E402
 from scripts.site.scrub_em_dashes import scrub_html # noqa: E402
 
@@ -48,6 +48,21 @@ SITE = "https://confenge.com.br"
 
 def _now_date() -> str:
     return build_timestamp()[:10]
+
+
+def _record_rejection(page: dict[str, Any], reason: str) -> None:
+    """Record a rejection fact once, rather than once per identical build."""
+    history = page.setdefault("history", [])
+    last = history[-1] if history else None
+    if (
+        isinstance(last, dict)
+        and last.get("event") == "REJECTED"
+        and last.get("reason") == reason
+    ):
+        return
+    history.append(
+        {"at": build_timestamp(), "event": "REJECTED", "reason": reason}
+    )
 
 
 def load_page_defs() -> list[dict[str, Any]]:
@@ -197,13 +212,7 @@ def _auto_progress_to_editorial_reviewed(
                 or url.endswith("jurisprudencia/")
 ):
                 stored["status"] = "REJECTED"
-                stored.setdefault("history", []).append(
-                    {
-                        "at": build_timestamp(),
-                        "event": "REJECTED",
-                        "reason": "jurisprudence_source_incomplete",
-                    }
-)
+                _record_rejection(stored, "jurisprudence_source_incomplete")
                 return "REJECTED"
 
     actor = "editorial-build-gates"
@@ -263,13 +272,25 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             sp = get_page(reg, merged["page_id"])
             if sp:
                 sp["status"] = "REJECTED"
-                sp.setdefault("history", []).append(
+                _record_rejection(sp, "official_sumula_text_date_url_not_verified")
+
+        if merged.get("page_id") in MIGRATED_IDS:
+            migrated = get_page(reg, merged["page_id"])
+            if migrated and migrated.get("status") != "MIGRATED":
+                previous = migrated.get("status")
+                migrated["status"] = "MIGRATED"
+                migrated.pop("approval", None)
+                migrated.setdefault("history", []).append(
                     {
                         "at": build_timestamp(),
-                        "event": "REJECTED",
-                        "reason": "official_sumula_text_date_url_not_verified",
+                        "event": "MIGRATED",
+                        "from": previous,
+                        "destination": migrated.get("canonical_path"),
+                        "reason": "canonical_query_owner_consolidation",
                     }
-)
+                )
+            if migrated:
+                merged = {**merged, **migrated}
 
         # This release has one explicit cohort. A valid approval outside it may
         # remain HUMAN_APPROVED for a later release, but it cannot render/index now.
@@ -295,7 +316,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
         gate = evaluate_page(merged, html, other_bodies=bodies, manifest=man)
         bodies.append(merged.get("body_markdown") or "")
 
-        if merged.get("status") != "REJECTED":
+        if merged.get("status") not in {"REJECTED", "MIGRATED"}:
             st = _auto_progress_to_editorial_reviewed(
                 reg, merged["page_id"], gate_ok=gate["ok"], man=man, page=merged
 )
@@ -305,12 +326,12 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             merged = {**merged, **stored2}
             html = render_page(merged)
 
-        if merged.get("status") != "REJECTED":
+        if merged.get("status") not in {"REJECTED", "MIGRATED"}:
             write_html(merged["url"], html)
         else:
-            # Still write noindex shell so URL does not 404 if linked; exclude from sitemap
-            merged["status"] = "REJECTED"
-            html = render_page({**merged, "status": "REJECTED"})
+            # Keep a noindex shell for terminal states; edge routing owns the
+            # public redirect for MIGRATED and REJECTED remains inspectable.
+            html = render_page(merged)
             # render uses noindex for non-INDEXABLE
             write_html(merged["url"], html)
 
@@ -447,6 +468,7 @@ def build(*, actor: str = "editorial-build") -> dict[str, Any]:
             and r["gate_ok"]
         ],
         "rejected": [r["url"] for r in results if r["status"] == "REJECTED"],
+        "migrated": [r["url"] for r in results if r["status"] == "MIGRATED"],
         "terminal_hint": (
             "READY_FOR_NAMED_HUMAN_APPROVAL"
             if len(indexable) == 0 and len([r for r in results if r["page_id"] in FIRST_COHORT_SET and r["status"] == "EDITORIAL_REVIEWED"]) == len(FIRST_COHORT_SET)

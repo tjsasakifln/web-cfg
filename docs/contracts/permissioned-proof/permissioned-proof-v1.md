@@ -30,6 +30,9 @@ conversation 100 times would only create 100 unreviewable units of risk.
 ## Authority boundary
 
 - `web-cfg` owns the public-proof contract, registry and publication gate.
+- `data/site/permissioned-proof-registry.json#records` is the single editable
+  entry point for a real proof. Audit manifests and the older cases registry
+  may not duplicate client-proof records.
 - Warmbly remains the owner of commercial action and observed outcomes. An
   observed outcome is input evidence, not publication permission.
 - Consent receipts and delivery material stay in owner-controlled private
@@ -66,6 +69,25 @@ agent or CI run cannot turn a review decision into a publication claim.
 
 Commercial-contact consent, payment, delivery acceptance, a public contract or
 silence never counts as consent to publish proof.
+
+## Evidence record
+
+From `CONSENT_CAPTURED` onward, a record must name:
+
+- fonte
+- autorizacao
+- escopo_permitido
+- anonimizacao
+- baseline
+- intervencao
+- resultado_observavel
+- limitacoes
+- revisor
+- expiracao (UTC seconds)
+
+Missing authorization, expired authorization or missing fonte fail closed as
+`authorization_absent`, `authorization_expired` and `fonte_absent`. Operator
+templates live in `docs/ops/proof-collection-kit/` and are not public cases.
 
 ## Consent record
 
@@ -107,9 +129,9 @@ proof-bound private approval reference, a canonical
 after approval. The page must declare that exact canonical and mark exactly the
 fields allowed by the consent scope.
 The registry resolves that URL to the committed HTML and refuses a missing or
-hash-drifted file. An approved row in the existing `data/site/cases.json` must
-have the same `proof_id`, permission class and public path; neither registry can
-bypass the other.
+hash-drifted file. `data/site/permissioned-proof-registry.json#records` is the
+only editable proof-record entrypoint. `data/site/cases.json` remains legacy
+demonstrative inventory and must not duplicate, authorize or publish real proof.
 
 This is an explicit solo-operator trust boundary, not a cryptographic claim:
 CI validates chronology, state, exact bindings, duplicate-reference reuse and
@@ -164,7 +186,7 @@ and cannot enter the real registry.
 ## Next test
 
 `first-real-delivery-permissioned-proof` remains
-`WAIT_FIRST_REAL_DELIVERY`, owned by Engº Tiago Sasaki. When documentary outcome
+`BLOCKED_EXTERNAL:FIRST_PERMISSIONED_CUSTOMER_PROOF`, owned by Engº Tiago Sasaki. When documentary outcome
 evidence from the first real delivery exists, the owner may create one private
 receipt and one registry record. The result is either:
 

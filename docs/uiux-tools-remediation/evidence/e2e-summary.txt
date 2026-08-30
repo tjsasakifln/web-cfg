@@ -3,5 +3,5 @@ overflows=0
 axe_critical=0
 axe_serious=0
 axe_moderate=0
-screenshots=/mnt/d/webcfg/docs/uiux-tools-remediation/evidence/screenshots/after
-generated=2026-08-05T11:59:13.087Z
+screenshots=docs/uiux-tools-remediation/evidence/screenshots/after
+generated=2026-08-29T16:25:59.064Z

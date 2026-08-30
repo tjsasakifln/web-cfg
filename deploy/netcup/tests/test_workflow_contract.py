@@ -10,6 +10,7 @@ PSEO = ROOT / ".github" / "workflows" / "pseo.yml"
 README = ROOT / "deploy" / "netcup" / "README.md"
 NGINX = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-origin.conf"
 NGINX_HTTP = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-http.conf"
+NGINX_PUBLIC = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-public.conf"
 SCHEDULE = ROOT / "deploy" / "netcup" / "schedules" / "schedule-contract.json"
 
 
@@ -111,6 +112,13 @@ def test_nginx_contract_is_loopback_only_and_consumes_only_generated_behavior() 
         assert generated in text + http
     assert "proxy_pass" not in text + http
     assert "_headers" not in text + http and "_redirects" not in text + http
+
+
+def test_public_redirects_preserve_the_full_hsts_contract() -> None:
+    text = NGINX_PUBLIC.read_text(encoding="utf-8")
+    hsts = 'Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always'
+    assert text.count(hsts) == 2
+    assert 'Strict-Transport-Security "max-age=31536000" always' not in text
 
 
 def test_scheduler_is_disabled_and_double_run_gate_is_explicit() -> None:

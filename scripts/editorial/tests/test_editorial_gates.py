@@ -125,6 +125,39 @@ def test_full_gate_on_editorial_reviewed_candidate():
         assert gate["ok"], (page["page_id"], gate["issues"])
 
 
+def test_canonical_migration_is_internal_and_never_indexable():
+    man = load_manifest()
+    source = next(page for page in _load_pages() if page["page_id"] == "lei-limite-25-50")
+
+    external = {
+        **source,
+        "status": "EDITORIAL_REVIEWED",
+        "canonical_path": "https://example.test/owner/",
+        "material_hash": material_hash(source),
+    }
+    external_gate = evaluate_page(
+        external,
+        render_page(external),
+        other_bodies=[],
+        manifest=man,
+    )
+    assert "canonical_not_absolute_path" in external_gate["issues"]
+
+    indexable = {
+        **source,
+        "status": "INDEXABLE",
+        "approval": {"reviewer": "Test reviewer"},
+        "material_hash": material_hash(source),
+    }
+    indexable_gate = evaluate_page(
+        indexable,
+        render_page(indexable),
+        other_bodies=[],
+        manifest=man,
+    )
+    assert "indexable_canonical_not_self" in indexable_gate["issues"]
+
+
 def test_blocked_reviewers():
     assert is_blocked_reviewer("editorial-wave1-operator")
     assert is_blocked_reviewer("ci-bot")

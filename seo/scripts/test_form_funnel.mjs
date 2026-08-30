@@ -10,6 +10,17 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../..");
 const code = fs.readFileSync(path.join(root, "script.js"), "utf8");
+const formSource = fs.readFileSync(path.join(root, "js/modules/form.js"), "utf8");
+
+if (!formSource.includes("fetch('/api/web/lead'") || formSource.includes("fetch('/.netlify/functions/lead'")) {
+  console.error("FAIL: browser form must use the canonical Netcup lead route");
+  process.exit(1);
+}
+
+if (!formSource.includes("lead_id: protocol")) {
+  console.error("FAIL: persisted analytics does not carry the server receipt id");
+  process.exit(1);
+}
 
 // Structural: shipped home has multi-step form + journey CTAs
 const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
@@ -17,7 +28,7 @@ for (const needle of [
   'data-form-multistep="true"',
   'name="diagnostico-b2g"',
   "Solicitar canal seguro para envio",
-  "Enviar edital para triagem",
+  "Solicitar triagem do edital",
   'data-set-journey="contrato"',
   'data-set-journey="edital"',
   'data-set-journey="operacao"',

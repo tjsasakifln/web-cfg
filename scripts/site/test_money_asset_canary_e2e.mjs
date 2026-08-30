@@ -107,7 +107,10 @@ function staticFile(urlPath) {
 
 const app = http.createServer((req, res) => {
   const url = new URL(req.url || "/", base);
-  if (req.method === "POST" && url.pathname === "/.netlify/functions/lead") {
+  if (
+    req.method === "POST" &&
+    (url.pathname === "/.netlify/functions/lead" || url.pathname === "/api/web/lead")
+  ) {
     const chunks = [];
     req.on("data", (chunk) => chunks.push(chunk));
     req.on("end", async () => {
@@ -131,7 +134,7 @@ const app = http.createServer((req, res) => {
     });
     return;
   }
-  if (req.method === "POST" && url.pathname === "/.netlify/functions/collect") {
+  if (req.method === "POST" && url.pathname === "/api/web/collect") {
     req.resume();
     res.writeHead(202, { "Content-Type": "application/json" });
     res.end('{"ok":true}');

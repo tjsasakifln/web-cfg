@@ -39,12 +39,14 @@
 <p class="eyebrow">Dossiê de reequilíbrio</p>
 <h1>Checklist de documentação para reequilíbrio</h1>
 <p class="content-lead">Avalie a prontidão documental do pedido de reequilíbrio, encontre bloqueadores centrais e organize a próxima correção sem enviar dados. Marque o que já existe. A urgência ordena a correção; a materialidade só classifica a gravidade em faixas.</p>
+<p class="tool-job" data-tool-job>O que esta ferramenta resolve: ver se o dossiê documental do pedido de reequilíbrio está pronto ou se há bloqueadores centrais.</p>
+<p class="tool-decision" data-tool-decision>Decisão apoiada: corrigir lacunas na ordem indicada, sem tratar o escore como direito ao reequilíbrio.</p>
 </div></header>
 <div class="container tool-shell">
 <section class="tool-method" aria-labelledby="metodo-checklist">
 <p class="eyebrow">Método e limites</p>
 <h2 id="metodo-checklist">O que este diagnóstico verifica</h2>
-<p>O checklist organiza três frentes: fato e nexo, suporte econômico e instrução do pedido. Respostas não marcadas entram como pendentes; um bloqueador central impede prontidão alta. O resultado ordena lacunas documentais, mas não conclui se existe direito ao reequilíbrio.</p>
+<p>O checklist organiza três frentes: fato e nexo, suporte econômico e instrução do pedido. Respostas não marcadas entram como pendentes; um bloqueador central impede prontidão alta. O resultado separa <strong>fato</strong>, <strong>cálculo</strong>, <strong>inferência</strong> e o que permanece <strong>desconhecido</strong>. Não conclui se existe direito ao reequilíbrio.</p>
 <ul class="tool-evidence-list">
 <li><strong>Base normativa:</strong> Lei nº 14.133/2021, especialmente a alocação de riscos e o art. 124.</li>
 <li><strong>Referência de interpretação:</strong> Manual de Licitações e Contratos do TCU, capítulo de reequilíbrio econômico-financeiro.</li>
@@ -53,7 +55,9 @@
 </ul>
 <p><a href="https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm" rel="external noopener" target="_blank">Consultar a Lei nº 14.133/2021</a> · <a href="https://licitacoesecontratos.tcu.gov.br/6-2-2-1-1-reequilibrio-economico-financeiro-recomposicao-ou-revisao-2/" rel="external noopener" target="_blank">Consultar o manual do TCU</a></p>
 </section>
-<form id="f" class="tool-form">
+<p class="tool-runtime-status" id="reeq-runtime-status" data-tool-runtime-status role="status" style="border-inline-start:4px solid var(--green-600, #3d8238);margin-block:1rem;padding:.75rem 1rem">Ative o JavaScript para avaliar no navegador. O formulário está bloqueado para não enviar respostas pela URL ou ao servidor.</p>
+<form id="f" class="tool-form" method="post" action="/ferramentas/checklist-reequilibrio/">
+<fieldset class="tool-runtime-fields" data-tool-runtime-fields disabled style="border:0;margin:0;min-inline-size:0;padding:0">
 <div id="root"></div>
 <div class="tool-grid" style="margin-top:1rem">
 <div class="tool-field"><label for="urg">Urgência</label>
@@ -65,9 +69,10 @@
 </div>
 <p class="tool-privacy-note">Respostas só neste navegador e não são enviadas à CONFENGE.</p>
 <div class="tool-actions">
-<button class="button button-primary tool-run" type="submit">Gerar diagnóstico</button>
+<button class="button button-primary tool-run" type="submit" disabled aria-describedby="reeq-runtime-status">Gerar diagnóstico</button>
 <button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Apagar respostas</button>
 </div>
+</fieldset>
 </form>
 <div id="out" class="tool-result-panel" hidden tabindex="-1" aria-live="polite"></div>
 <div class="tool-actions" id="ra" hidden>
@@ -87,6 +92,11 @@
 (function(){
   var T=window.ConfengeTools, C=window.ConfengeToolCompute;
   var TOOL="checklist-reequilibrio", SCHEMA=4, lastText="";
+  var runtimeStatus=document.getElementById("reeq-runtime-status"), form=document.getElementById("f");
+  if(!T||!C||!form) return;
+  if(runtimeStatus) runtimeStatus.hidden=true;
+  var runtimeFields=form.querySelector("[data-tool-runtime-fields]"); if(runtimeFields) runtimeFields.disabled=false;
+  var runButton=form.querySelector("button.tool-run"); if(runButton) runButton.disabled=false;
   if(T.bindToolLifecycle) T.bindToolLifecycle({tool:TOOL});
   var root=document.getElementById("root"), h="";
   Object.keys(C.REEQ_CATEGORIES).forEach(function(cid){
@@ -140,7 +150,22 @@
       urgencia: document.getElementById("urg").value,
       materialidade: document.getElementById("mat").value
     });
+    var expl=C.explainReequilibrio(r);
     var out=document.getElementById("out");
+    if(!r.ok){
+      var escInvalid=T.escapeHtml||function(s){return String(s==null?"":s);};
+      out.hidden=false; out.className="tool-result-panel bad";
+      out.innerHTML='<p class="tool-result-summary"><strong>Não foi possível medir a prontidão.</strong> '+escInvalid(expl.layers.fato)+'</p>'+
+        '<section class="tool-layers" aria-labelledby="camadas-reeq-erro"><h3 id="camadas-reeq-erro">Como ler este estado</h3>'+
+        '<p data-layer="fato"><strong>Fato.</strong> '+escInvalid(expl.layers.fato)+'</p>'+
+        '<p data-layer="calculo"><strong>Cálculo.</strong> '+escInvalid(expl.layers.calculo)+'</p>'+
+        '<p data-layer="inferencia"><strong>Inferência.</strong> '+escInvalid(expl.layers.inferencia)+'</p>'+
+        '<p data-layer="unknown"><strong>Desconhecido.</strong> '+escInvalid(expl.layers.unknown)+'</p></section>'+
+        '<p class="tool-disclaimer">'+escInvalid(expl.legalDisclaimer)+'</p>';
+      document.getElementById("ra").hidden=true;
+      document.getElementById("cta").hidden=true;
+      lastText=""; T.focusResult(out); persist(); return;
+    }
     out.hidden=false; out.className="tool-result-panel "+r.level;
     var esc=T.escapeHtml||function(s){return String(s==null?"":s);};
     var order=(r.correctionOrder||[]).map(function(o){ return "<li><strong>"+esc(o.label)+"</strong> ("+esc(o.reason)+")</li>"; }).join("");
@@ -153,12 +178,22 @@
       "<li>Suporte econômico pendente: "+(r.missingImportant||[]).length+"</li>"+
       "<li>Organização pendente: "+(r.missingProcess||[]).length+"</li>"+
       "<li>Não aplicáveis: "+(r.naKeys?r.naKeys.length:0)+"</li></ul>"+
+      '<section class="tool-layers" aria-labelledby="camadas-reeq"><h3 id="camadas-reeq">Como ler este resultado</h3>'+
+      '<p data-layer="fato"><strong>Fato.</strong> '+esc(expl.layers.fato)+'</p>'+
+      '<p data-layer="calculo"><strong>Cálculo.</strong> '+esc(expl.layers.calculo)+'</p>'+
+      '<p data-layer="inferencia"><strong>Inferência.</strong> '+esc(expl.layers.inferencia)+'</p>'+
+      '<p data-layer="unknown"><strong>Desconhecido.</strong> '+esc(expl.layers.unknown)+'</p></section>'+
+      '<h3>Premissas visíveis</h3><ul class="tool-precalc-list" data-premises>'+(expl.premises||[]).map(function(p){return "<li>"+esc(p)+"</li>";}).join("")+"</ul>"+
       ressalvasHtml+
       (order?'<h3>Ordem recomendada de correção</h3><ol class="tool-next-actions" data-correction-order>'+order+"</ol>":"")+
-      '<p class="tool-disclaimer">Diagnóstico documental orientativo. Cobertura alta não significa direito ao reequilíbrio.</p>'+
+      '<p class="tool-disclaimer">'+esc(expl.legalDisclaimer)+"</p>"+
       '<p class="tool-privacy-note">Gerado em '+T.localNow()+".</p>";
     lastText=T.buildReport([
       {title:"CONFENGE: checklist de reequilíbrio", body:r.readinessLabel+"\n"+r.synthesis},
+      {title:"Fato", body:expl.layers.fato},
+      {title:"Cálculo", body:expl.layers.calculo},
+      {title:"Inferência", body:expl.layers.inferencia},
+      {title:"Desconhecido", body:expl.layers.unknown},
       {title:"Indicadores", lines:[
         "Cobertura: "+r.score_pct+"%",
         "Bloqueadores: "+(r.missingBlockers||[]).join(", "),
@@ -170,16 +205,16 @@
       ]},
       {title:"Ressalvas", lines:r.ressalvas||[]},
       {title:"Ordem de correção", lines:(r.correctionOrder||[]).map(function(o){return o.label+" ["+o.reason+"]";})},
-      {title:"Aviso", body:"Diagnóstico documental orientativo."}
+      {title:"Aviso", body:expl.legalDisclaimer}
     ]);
     document.getElementById("ra").hidden=false;
     T.focusResult(out);
     var cta=document.getElementById("cta");
     cta.hidden=false;
     cta.innerHTML=r.hasCentralBlocker
-      ? '<p>Há bloqueadores centrais. Organize o dossiê antes de protocolar.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="checklist-reequilibrio-bloqueado" data-route-family="reequilibrio" data-asset-id="checklist-reequilibrio" href="/reequilibrio-obras-publicas/">Enquadrar o dossiê de reequilíbrio</a></div>'
-      : '<p>O dossiê está mais completo; a próxima decisão ainda precisa de leitura contratual.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="checklist-reequilibrio-pronto" data-route-family="reequilibrio" data-asset-id="checklist-reequilibrio" href="/reequilibrio-obras-publicas/">Validar o enquadramento</a><a class="button button-secondary" data-tool-to-content href="/conteudos/calculo-reequilibrio-economico-financeiro/">Revisar o cálculo</a></div>';
-    T.track("tool_complete",{tool:TOOL,readiness:r.readiness,level:r.level,blockers:(r.missingBlockers||[]).length,urgencia:r.urgencia,materialidade:r.materialidade});
+      ? '<p>Há bloqueadores centrais. Organize o dossiê antes de protocolar.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="checklist-reequilibrio-bloqueado" data-route-family="reequilibrio" data-asset-id="checklist-reequilibrio" data-tool-to-offer="reequilibrio-obras-publicas" href="/reequilibrio-obras-publicas/">Enquadrar o dossiê de reequilíbrio</a></div>'
+      : '<p>O dossiê está mais completo; a próxima decisão ainda precisa de leitura contratual.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="checklist-reequilibrio-pronto" data-route-family="reequilibrio" data-asset-id="checklist-reequilibrio" data-tool-to-offer="reequilibrio-obras-publicas" href="/reequilibrio-obras-publicas/">Validar o enquadramento</a><a class="button button-secondary" data-tool-to-content href="/conteudos/calculo-reequilibrio-economico-financeiro/">Revisar o cálculo</a></div>';
+    T.track("tool_complete",{tool:TOOL,readiness:r.readiness,level:r.level,blockers:(r.missingBlockers||[]).length,urgencia:r.urgencia,materialidade:r.materialidade,cta_branch:expl.cta.branch});
     persist();
   });
   root.addEventListener("change", persist);

@@ -1,32 +1,31 @@
 {
   "schema_version": "3.0.0",
-  "derived_at": "2026-08-24T11:24:41Z",
-  "commit_sha": "096cd6552fbe9ee6a3ece0331ced2fd28706a393",
+  "derived_at": "2026-08-30T01:07:49Z",
+  "commit_sha": "7cb21b6983dbee131505210c95e7f768dfe394c3",
   "commit_sha_role": "informational_only",
   "terminal_status": "READY_FOR_RELEASE",
   "registry_counts": {
-    "INDEXABLE": 3,
+    "INDEXABLE": 2,
     "EDITORIAL_REVIEWED": 8,
-    "REJECTED": 1
+    "REJECTED": 1,
+    "MIGRATED": 1
   },
   "first_cohort": {
-    "total": 3,
+    "total": 2,
     "editorial_reviewed": 0,
-    "human_approved": 3,
-    "indexable": 3,
+    "human_approved": 2,
+    "indexable": 2,
     "page_ids": [
-      "lei-limite-25-50",
       "guia-checklist-aditivo",
       "lei-item-novo-desconto"
     ]
   },
   "wave1": {
-    "total": 3,
+    "total": 2,
     "editorial_reviewed": 0,
-    "human_approved": 3,
-    "indexable": 3,
+    "human_approved": 2,
+    "indexable": 2,
     "page_ids": [
-      "lei-limite-25-50",
       "guia-checklist-aditivo",
       "lei-item-novo-desconto"
     ]
@@ -53,12 +52,17 @@
       "jur-sumula-260-art"
     ]
   },
+  "migrated": {
+    "count": 1,
+    "page_ids": [
+      "lei-limite-25-50"
+    ]
+  },
   "release": {
-    "approved_count": 3,
-    "released_count": 3,
+    "approved_count": 2,
+    "released_count": 2,
     "cohort_complete": true,
     "released_page_ids": [
-      "lei-limite-25-50",
       "guia-checklist-aditivo",
       "lei-item-novo-desconto"
     ],
@@ -69,30 +73,27 @@
     "hub_claimed_guides": 21,
     "legacy_indexable_public_surface": 21,
     "first_cohort_awaiting_approval": 0,
-    "first_cohort_published": 3,
+    "first_cohort_published": 2,
     "editorial_backlog_awaiting_approval": 8,
     "note": "Only FIRST_COHORT_IDS may become indexable in this release."
   },
   "sitemaps": {
-    "editorial_locs": 5,
+    "editorial_locs": 4,
     "jurisprudencia_locs": 0,
     "editorial_urls": [
       "/guias-contratos-obras/",
       "/guias-contratos-obras/checklist-pedido-aditivo/",
       "/lei-14133-obras/",
-      "/lei-14133-obras/limite-25-50-aditivo-obra/",
       "/lei-14133-obras/preco-item-novo-desconto-proposta/"
     ],
     "expected_urls": [
       "/guias-contratos-obras/",
       "/guias-contratos-obras/checklist-pedido-aditivo/",
       "/lei-14133-obras/",
-      "/lei-14133-obras/limite-25-50-aditivo-obra/",
       "/lei-14133-obras/preco-item-novo-desconto-proposta/"
     ],
     "valid_page_urls": [
       "/guias-contratos-obras/checklist-pedido-aditivo/",
-      "/lei-14133-obras/limite-25-50-aditivo-obra/",
       "/lei-14133-obras/preco-item-novo-desconto-proposta/"
     ],
     "approved_hubs": [
@@ -204,16 +205,14 @@
     {
       "page_id": "lei-limite-25-50",
       "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "registry_status": "INDEXABLE",
-      "valid_indexable": true,
+      "registry_status": "MIGRATED",
+      "valid_indexable": false,
       "html_exists": true,
-      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
-      "canonical": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "sitemaps": [
-        "sitemap-editorial.xml"
-      ],
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "sitemaps": [],
       "hub": "/lei-14133-obras/",
-      "hub_listed": true
+      "hub_listed": false
     },
     {
       "page_id": "lei-parcela-incontroversa",
@@ -356,16 +355,14 @@
     {
       "page_id": "lei-limite-25-50",
       "url": "/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "registry_status": "INDEXABLE",
-      "valid_indexable": true,
+      "registry_status": "MIGRATED",
+      "valid_indexable": false,
       "html_exists": true,
-      "robots": "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
-      "canonical": "https://confenge.com.br/lei-14133-obras/limite-25-50-aditivo-obra/",
-      "sitemaps": [
-        "sitemap-editorial.xml"
-      ],
+      "robots": "noindex,follow",
+      "canonical": "https://confenge.com.br/conteudos/limite-aditivo-25-50-obra-publica/",
+      "sitemaps": [],
       "hub": "/lei-14133-obras/",
-      "hub_listed": true
+      "hub_listed": false
     },
     {
       "page_id": "lei-parcela-incontroversa",

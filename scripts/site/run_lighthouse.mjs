@@ -6,12 +6,21 @@
  */
 import { createServer } from "http";
 import { gzipSync } from "zlib";
-import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync } from "fs";
+import {
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
+  existsSync,
+  statSync,
+} from "fs";
+import { tmpdir } from "os";
 import { join, resolve, extname, dirname } from "path";
 import { fileURLToPath } from "url";
 import { launch as launchChrome } from "chrome-launcher";
 import lighthouse from "lighthouse";
-import { evaluateLighthouseResults } from "./lighthouse_thresholds.mjs";
+import { CRITICAL_MONEY_PATHS, evaluateLighthouseResults } from "./lighthouse_thresholds.mjs";
 import {
   deriveCoverage,
   formatCoverageDeclaration,
@@ -23,13 +32,27 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const OUT = join(ROOT, "docs", "lighthouse-runs");
 const coverage = deriveCoverage({ policy: loadPolicy(), siteRoot: resolveSiteRoot() });
 const PAGES = coverage.lighthouse.pages;
+const cliArgs = process.argv.slice(2);
+const option = (name) => cliArgs.find((arg) => arg.startsWith(`--${name}=`))?.split("=", 2)[1] || "";
+const only = option("only");
+const evidenceLabel = option("label");
+if (evidenceLabel && !/^[a-z0-9-]+$/.test(evidenceLabel)) {
+  throw new Error(`--label must contain only lowercase letters, numbers and dashes: ${evidenceLabel}`);
+}
+const requestedPages = only ? only.split(",").map((value) => value.trim()).filter(Boolean) : PAGES;
+const unknownPages = requestedPages.filter((page) => !PAGES.includes(page));
+if (unknownPages.length) throw new Error(`--only contains route(s) outside derived coverage: ${unknownPages.join(", ")}`);
+const RUN_PAGES = [...new Set(requestedPages)];
+if (only && !RUN_PAGES.includes("/")) {
+  throw new Error("focused Lighthouse evidence must include / so the repeated home gate cannot be bypassed");
+}
 const IMAGE_GATE_PAGES = new Set(coverage.lighthouse.image_gate_pages);
 const SEO_EXEMPT_PAGES = new Set(coverage.lighthouse.seo_exempt_pages);
-const HOME_RUNS = Number(process.env.LH_HOME_RUNS || 1);
+const REPEATED_RUNS = Number(option("runs") || process.env.LH_HOME_RUNS || 1);
 console.log(formatCoverageDeclaration(coverage));
-console.log(`lighthouse pages (${PAGES.length}): ${PAGES.join(" ")}`);
-if (!Number.isInteger(HOME_RUNS) || HOME_RUNS < 1 || HOME_RUNS > 5) {
-  throw new Error(`LH_HOME_RUNS must be an integer from 1 to 5, got ${process.env.LH_HOME_RUNS}`);
+console.log(`lighthouse pages (${RUN_PAGES.length}/${PAGES.length}): ${RUN_PAGES.join(" ")}`);
+if (!Number.isInteger(REPEATED_RUNS) || REPEATED_RUNS < 1 || REPEATED_RUNS > 5) {
+  throw new Error(`--runs/LH_HOME_RUNS must be an integer from 1 to 5, got ${option("runs") || process.env.LH_HOME_RUNS}`);
 }
 for (const [name, configuredPages] of [
   ["image_gate_pages", IMAGE_GATE_PAGES],
@@ -58,7 +81,7 @@ const MIME = {
   ".txt": "text/plain",
 };
 
-const baseArg = process.argv[2];
+const baseArg = cliArgs.find((arg) => !arg.startsWith("--"));
 let server = null;
 let BASE = baseArg;
 
@@ -121,32 +144,62 @@ async function waitForCdp(port, attempts = 40) {
   throw new Error(`Chrome CDP not ready on port ${port}`);
 }
 
-const HOME_LCP_MAX_MS = Number(process.env.LH_HOME_LCP_MAX_MS || 2000);
+async function launchIsolatedChrome() {
+  // chrome-launcher mistakes this WSL host for Windows and otherwise hands the
+  // Linux Chrome a relative C:\\Users\\... profile path inside the checkout.
+  // The final duplicate flag wins, keeps all mutable browser state in /tmp and
+  // lets us remove the exact profile after every run.
+  const profileDir = mkdtempSync(join(tmpdir(), "confenge-lighthouse-profile-"));
+  try {
+    const chrome = await launchChrome({
+      chromePath: process.env.CHROME_PATH || "/usr/bin/google-chrome",
+      chromeFlags: [
+        "--headless=new",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--disable-dev-shm-usage",
+        "--disable-extensions",
+        `--user-data-dir=${profileDir}`,
+      ],
+      connectionPollInterval: 250,
+      maxConnectionRetries: 50,
+    });
+    await waitForCdp(chrome.port);
+    return { chrome, profileDir };
+  } catch (error) {
+    rmSync(profileDir, { recursive: true, force: true });
+    throw error;
+  }
+}
+
+async function warmChromeHost() {
+  // A deterministic, result-free preflight warms the Chromium executable and
+  // shared-library page cache. It runs once for every matrix and never depends
+  // on a score, so no failing page result is retried or discarded.
+  let launched = null;
+  try {
+    launched = await launchIsolatedChrome();
+    console.log("Lighthouse browser preflight", "clean_port=", launched.chrome.port);
+  } finally {
+    if (launched?.chrome) await launched.chrome.kill();
+    if (launched?.profileDir) rmSync(launched.profileDir, { recursive: true, force: true });
+  }
+}
 
 try {
-  for (const path of PAGES) {
-    const attempts = path === "/" ? HOME_RUNS : 1;
-    let retriesLeft = path === "/" ? 1 : 0;
+  await warmChromeHost();
+  for (const path of RUN_PAGES) {
+    const attempts = CRITICAL_MONEY_PATHS.has(path) ? REPEATED_RUNS : 1;
     for (let run = 1; run <= attempts; ) {
       const url = `${BASE.replace(/\/$/, "")}${path}`;
-      const slug = path === "/" ? "home" : path.replace(/\//g, "_").replace(/^_|_$/g, "");
+      const baseSlug = path === "/" ? "home" : path.replace(/\//g, "_").replace(/^_|_$/g, "");
+      const slug = evidenceLabel ? `${baseSlug}-${evidenceLabel}` : baseSlug;
       const suffix = attempts > 1 ? `-run-${run}` : "";
       const outJson = join(OUT, `${slug}${suffix}.json`);
       let chrome = null;
+      let profileDir = null;
       try {
-        chrome = await launchChrome({
-          chromePath: process.env.CHROME_PATH || "/usr/bin/google-chrome",
-          chromeFlags: [
-            "--headless=new",
-            "--no-sandbox",
-            "--disable-gpu",
-            "--disable-dev-shm-usage",
-            "--disable-extensions",
-          ],
-          connectionPollInterval: 250,
-          maxConnectionRetries: 50,
-        });
-        await waitForCdp(chrome.port);
+        ({ chrome, profileDir } = await launchIsolatedChrome());
         console.log("Lighthouse", url, `run=${run}`, "clean_port=", chrome.port);
         const runnerResult = await lighthouse(url, {
           port: chrome.port,
@@ -186,25 +239,16 @@ try {
           si_ms: audits["speed-index"]?.numericValue,
           image_aspect_ratio: audits["image-aspect-ratio"]?.score,
           image_size_responsive: audits["image-size-responsive"]?.score,
+          dom_elements: audits["dom-size-insight"]?.numericValue,
+          total_byte_weight: audits["total-byte-weight"]?.numericValue,
+          render_blocking_savings_ms:
+            audits["render-blocking-insight"]?.metricSavings?.LCP || 0,
+          image_delivery_savings_bytes:
+            audits["image-delivery-insight"]?.details?.debugData?.wastedBytes || 0,
+          font_display_score: audits["font-display-insight"]?.score,
+          benchmark_index: runnerResult.lhr.environment?.benchmarkIndex,
           seo_exempt: SEO_EXEMPT_PAGES.has(path),
         };
-        const noisyHomeLcp =
-          path === "/"
-          && retriesLeft > 0
-          && Number.isFinite(row.lcp_ms)
-          && row.lcp_ms > HOME_LCP_MAX_MS;
-        if (noisyHomeLcp) {
-          retriesLeft -= 1;
-          console.warn(
-            JSON.stringify({
-              retry: "home_lcp",
-              run,
-              lcp_ms: row.lcp_ms,
-              gate_ms: HOME_LCP_MAX_MS,
-            }),
-          );
-          continue;
-        }
         results.push(row);
         console.log(JSON.stringify(row));
         run += 1;
@@ -215,6 +259,7 @@ try {
         run += 1;
       } finally {
         if (chrome) await chrome.kill();
+        if (profileDir) rmSync(profileDir, { recursive: true, force: true });
       }
     }
   }
@@ -223,7 +268,8 @@ try {
 }
 
 const evaluation = evaluateLighthouseResults(results, {
-  homeRuns: HOME_RUNS,
+  homeRuns: REPEATED_RUNS,
+  criticalRuns: REPEATED_RUNS,
   imageGatePages: IMAGE_GATE_PAGES,
   seoExemptPages: SEO_EXEMPT_PAGES,
   thresholds: coverage.lighthouse.thresholds,
@@ -237,6 +283,9 @@ const summary = {
     family_count: coverage.lighthouse.families.length,
     families: coverage.lighthouse.families,
     pages: PAGES,
+    measured_pages: RUN_PAGES,
+    critical_money_pages: [...CRITICAL_MONEY_PATHS],
+    repeated_runs: REPEATED_RUNS,
     additional_pages: coverage.lighthouse.additional_pages,
     image_gate_pages: [...IMAGE_GATE_PAGES],
     seo_exempt_pages: [...SEO_EXEMPT_PAGES],
@@ -247,8 +296,9 @@ const summary = {
   results,
   evaluation,
 };
-writeFileSync(join(OUT, "summary.json"), JSON.stringify(summary, null, 2));
-console.log("Wrote", join(OUT, "summary.json"));
+const summaryName = evidenceLabel ? `summary-${evidenceLabel}.json` : "summary.json";
+writeFileSync(join(OUT, summaryName), JSON.stringify(summary, null, 2));
+console.log("Wrote", join(OUT, summaryName));
 if (!evaluation.ok) console.error("Lighthouse gates failed", JSON.stringify(evaluation));
 else console.log("Lighthouse gates passed", JSON.stringify(evaluation.home));
 process.exit(evaluation.ok ? 0 : 1);

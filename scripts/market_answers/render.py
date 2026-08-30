@@ -101,11 +101,12 @@ def _table(rows: list[dict[str, Any]]) -> str:
             "</tr>"
         )
     return (
+        '<div class="table-wrap" role="group" tabindex="0" aria-label="Faixas de ticket contratual">'
         '<table class="ma-table">'
         "<caption>Faixas de ticket contratual (valor integral nominal, não custo por km)</caption>"
         "<thead><tr><th scope=\"col\">Faixa</th><th scope=\"col\">Contratos (n)</th>"
         "<th scope=\"col\">Participação</th></tr></thead>"
-        f"<tbody>{''.join(body)}</tbody></table>"
+        f"<tbody>{''.join(body)}</tbody></table></div>"
     )
 
 
