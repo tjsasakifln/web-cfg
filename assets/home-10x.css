@@ -1,284 +1,1203 @@
-/* Home 10x — first-viewport decision path. Do not load on other routes. */
+/* Home canário — direção "planilha". Do not load on other routes.
+ *
+ * A grade de uma planilha orçamentária é o motor de layout da home inteira:
+ * cabeçalho, cada seção e o rodapé snapam nos mesmos cinco trilhos
+ * (ITEM · DESCRIÇÃO · UNIDADE · QUANT · FONTE) e a régua de coluna fica
+ * congelada no topo, como numa folha aberta. Os trilhos estreitos não são
+ * enfeite: carregam a unidade de decisão, a quantidade e a PROVENIÊNCIA de
+ * cada seção. Onde a seção não tem fonte externa, o trilho FONTE diz
+ * "tese da casa" em âmbar, com marcador não-cromático — a lacuna aparece,
+ * não some (WCAG 2.2 1.4.1: cor nunca é o único portador).
+ *
+ * Escopo: tudo aqui é prefixado por body[data-content-cluster="home"]. As
+ * outras 260 rotas não são tocadas por esta campanha; o rollback é o SHA.
+ */
+
+/* Archivo v2.001 · Omnibus-Type · SIL OFL 1.1 · assets/archivo-OFL.txt
+ * Subconjunto latino pt-BR com dois eixos (wght 100–900, wdth 66–110) e
+ * tnum + zero ligados: uma família cobre display, texto e dado tabular. */
+@font-face{
+  font-family:"Archivo Var";
+  src:url("/assets/archivo-var-latin-bf6e041e.woff2") format("woff2-variations");
+  font-weight:100 900;
+  font-stretch:66% 110%;
+  font-style:normal;
+  font-display:swap;
+}
+
 body[data-content-cluster="home"]{
-  overflow-x:clip;
+  --cols:3rem minmax(0,1fr) 6rem 5rem 13rem;
+  --col-gap:1.25rem;
+  --page-gutter:clamp(1.15rem,3.2vw,3rem);
+  --sheet-rule:1px solid var(--line);
+  --sheet-strong:1.5px solid var(--ink);
+  --caution-700:#8a5f00;
+  font-family:"Archivo Var",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-weight:400;
+  font-stretch:100%;
+  font-variant-numeric:tabular-nums slashed-zero;
+  background:var(--white);
+}
+
+/* ── os cinco trilhos ──────────────────────────────────────────────────── */
+body[data-content-cluster="home"] main{overflow-x:clip}
+body[data-content-cluster="home"] main>section[data-section-archetype],
+body[data-content-cluster="home"] .sheet-ruler{
+  display:grid;
+  grid-template-columns:var(--cols);
+  column-gap:var(--col-gap);
+  align-items:start;
+  padding-inline:var(--page-gutter);
+  max-width:none;
+  margin:0;
+}
+body[data-content-cluster="home"] .band-key{
+  display:contents;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+body[data-content-cluster="home"] main>section[data-section-archetype]>.container{
+  grid-column:2;
+  grid-row:1;
+  align-self:stretch;
+  /* styles.css impõe width:min(calc(100% - 48px),1200px). Sem zerar isso o
+   * conteúdo nunca alcança a régua da coluna seguinte e o 1920 fica preso a
+   * 1200px dentro de trilhos de 1312px. */
+  width:auto;
+  max-width:none;
+  margin:0;
+  padding:0 0 0 1.25rem;
+  margin-left:-1.25rem;
+  box-shadow:inset 1px 0 0 var(--line);
+}
+/* Uma faixa é UMA linha da folha: sem grid-row explícito, o auto-placement
+ * esparso empurra a descrição para uma segunda linha e as réguas de coluna
+ * deixam de correr a altura inteira da faixa. */
+body[data-content-cluster="home"] .c-item{grid-column:1;grid-row:1}
+body[data-content-cluster="home"] .c-desc{grid-column:2;grid-row:1}
+body[data-content-cluster="home"] .c-un{grid-column:3;grid-row:1}
+body[data-content-cluster="home"] .c-qt{grid-column:4;grid-row:1}
+body[data-content-cluster="home"] .c-fonte{grid-column:5;grid-row:1}
+
+body[data-content-cluster="home"] .band-key .c{
+  align-self:stretch;
+  padding-top:.55rem;
+  font-size:.8rem;
+  font-weight:500;
+  font-stretch:88%;
+  line-height:1.35;
+  color:var(--muted);
+}
+body[data-content-cluster="home"] .band-key .c-un,
+body[data-content-cluster="home"] .band-key .c-qt,
+body[data-content-cluster="home"] .band-key .c-fonte{
+  padding-left:.7rem;
+  box-shadow:inset 1px 0 0 var(--line);
+}
+body[data-content-cluster="home"] .band-key .c-qt{text-align:right;padding-right:.1rem}
+body[data-content-cluster="home"] .band-key .c-item{
+  font-weight:700;
+  font-stretch:74%;
+  letter-spacing:.04em;
+}
+body[data-content-cluster="home"] .band-key .c-lab{
+  position:absolute;
+  width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+/* fonte ausente: âmbar + glifo + a palavra. Nunca só cor. */
+body[data-content-cluster="home"] .band-key[data-unsourced] .c-fonte{
+  color:var(--caution-700);
+  font-weight:650;
+}
+body[data-content-cluster="home"] .band-key[data-unsourced] .c-fonte .c-val::before{
+  content:"";
+  display:inline-block;
+  width:7px;
+  height:7px;
+  margin-right:.45rem;
+  border:1.5px solid var(--caution-700);
+  vertical-align:baseline;
+}
+
+/* ── régua congelada ───────────────────────────────────────────────────── */
+body[data-content-cluster="home"] .sheet-ruler{
+  position:sticky;
+  top:0;
+  z-index:30;
+  padding-block:.42rem;
+  background:var(--white);
+  border-top:var(--sheet-rule);
+  border-bottom:var(--sheet-strong);
+  list-style:none;
+}
+body[data-content-cluster="home"] .sheet-ruler .c{
+  font-size:.8rem;
+  font-weight:800;
+  font-stretch:66%;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:var(--muted);
+}
+body[data-content-cluster="home"] .sheet-ruler .c-qt{text-align:right}
+
+/* ── cabeçalho: bloco de título da folha ───────────────────────────────── */
+body[data-content-cluster="home"] .site-header{
+  position:static;
+  padding:1.1rem 0 .85rem;
+  background:var(--white);
+  border-bottom:0;
+  box-shadow:none;
+}
+body[data-content-cluster="home"] .header-inner{
+  display:flex;
+  align-items:center;
+  gap:.6rem 1.6rem;
+  max-width:none;
+  margin:0;
+  padding-inline:var(--page-gutter);
+}
+body[data-content-cluster="home"] .brand{margin-right:auto}
+/* O bundle limita a marca a 160px no mobile; com height:44px fixo isso
+ * espremia a proporção de 3,846 para 3,636 e derrubava o best-practices do
+ * Lighthouse de 100 para 96 (imagem exibida fora da proporção natural). */
+body[data-content-cluster="home"] .brand img{width:auto;height:44px;max-width:none}
+body[data-content-cluster="home"] .desktop-nav{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:0 1.35rem;
+}
+body[data-content-cluster="home"] .desktop-nav a{
+  padding:0;
+  color:var(--text);
+  font-size:.875rem;
+  font-weight:620;
+  font-stretch:90%;
+  text-decoration:none;
+  white-space:nowrap;
+  border-bottom:1.5px solid transparent;
+  border-radius:0;
+  background:none;
+}
+body[data-content-cluster="home"] .desktop-nav a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+body[data-content-cluster="home"] .header-cta{flex:none}
+
+/* ── faixas ────────────────────────────────────────────────────────────── */
+body[data-content-cluster="home"] main>section[data-section-archetype]{
+  padding-block:2rem 2.2rem;
+  border-top:var(--sheet-rule);
+  background:var(--white);
 }
 body[data-content-cluster="home"] .hero{
-  padding:22px 0 28px;
-  background:#fff;
-  border-bottom:1px solid var(--line);
+  padding:1.9rem 0 2.1rem;
+  padding-inline:var(--page-gutter);
+  border-top:0;
+  border-bottom:0;
 }
-body[data-content-cluster="home"] .home-hero-grid{
-  display:block;
-  max-width:40rem;
+body[data-content-cluster="home"] .journeys-section[data-section-archetype],
+body[data-content-cluster="home"] .offers-section[data-section-archetype],
+body[data-content-cluster="home"] .fit-section[data-section-archetype]{padding-block:2.6rem 2.8rem;border-top:var(--sheet-strong)}
+body[data-content-cluster="home"] .contact-section[data-section-archetype]{
+  padding-block:2.4rem 3rem;
+  color:#fff;
+  background:var(--navy-900);
+  border-top:var(--sheet-strong);
 }
-body[data-content-cluster="home"] .hero-copy{
-  padding:4px 0 0;
+body[data-content-cluster="home"] .contact-section .band-key .c{color:#93a6b8}
+body[data-content-cluster="home"] .contact-section .band-key .c-un,
+body[data-content-cluster="home"] .contact-section .band-key .c-qt,
+body[data-content-cluster="home"] .contact-section .band-key .c-fonte,
+body[data-content-cluster="home"] .contact-section>.container{box-shadow:inset 1px 0 0 rgba(255,255,255,.18)}
+body[data-content-cluster="home"] .contact-section .eyebrow{color:#fff}
+body[data-content-cluster="home"] .contact-channels .icon{color:#fff}
+body[data-content-cluster="home"] .contact-channels>a:hover{color:#fff;transform:none}
+body[data-content-cluster="home"] .contact-sla li,
+body[data-content-cluster="home"] .contact-channels>a,
+body[data-content-cluster="home"] .contact-channels>div{border-top-color:rgba(255,255,255,.18)}
+body[data-content-cluster="home"] .market-context[data-section-archetype]{
+  padding-block:2.6rem 2.8rem;
+  background:var(--white);
+  border-top:var(--sheet-strong);
+  border-bottom:0;
 }
+body[data-content-cluster="home"] .authority-section[data-section-archetype]{padding-block:2.6rem 2.8rem}
+
+/* ── tipografia ────────────────────────────────────────────────────────── */
+/* .eyebrow entra no piso de texto funcional (14px) porque o contrato de UI o
+ * mede por `.contact-copy p`. Compensa-se com tracking menor, não com corpo. */
+body[data-content-cluster="home"] .eyebrow{
+  margin:0 0 .8rem;
+  color:var(--green-700);
+  font-size:.875rem;
+  font-weight:800;
+  font-stretch:66%;
+  text-transform:uppercase;
+  letter-spacing:.13em;
+}
+body[data-content-cluster="home"] .eyebrow-dot{display:none}
 body[data-content-cluster="home"] .hero-copy h1{
-  max-width:18ch;
-  margin:0 0 14px;
-  font-size:clamp(1.85rem,4.2vw,3.1rem);
-  letter-spacing:-.04em;
-  line-height:1.08;
+  max-width:22ch;
+  margin:0 0 .9rem;
+  color:var(--ink);
+  font-size:clamp(2.05rem,4.4vw,3.7rem);
+  font-weight:760;
+  font-stretch:84%;
+  line-height:.99;
+  letter-spacing:-.025em;
+  text-wrap:balance;
+}
+body[data-content-cluster="home"] .type-serif{
+  font-family:inherit;
+  font-style:normal;
+  font-weight:760;
+  font-stretch:110%;
+  color:var(--green-700);
 }
 body[data-content-cluster="home"] .hero-lead{
-  max-width:42ch;
-  margin:0 0 18px;
-  color:#314256;
-  font-size:1.05rem;
-  line-height:1.6;
+  max-width:44ch;
+  margin:0 0 1.1rem;
+  color:var(--text);
+  font-size:1.14rem;
+  font-weight:450;
+  line-height:1.48;
 }
+body[data-content-cluster="home"] h2{
+  max-width:26ch;
+  color:var(--ink);
+  font-size:clamp(1.5rem,2.5vw,2.3rem);
+  font-weight:720;
+  font-stretch:88%;
+  line-height:1.06;
+  letter-spacing:-.018em;
+  text-wrap:balance;
+}
+body[data-content-cluster="home"] h3{
+  color:var(--ink);
+  font-weight:700;
+  font-stretch:94%;
+  line-height:1.22;
+  letter-spacing:-.008em;
+}
+body[data-content-cluster="home"] .section-lead{
+  max-width:52ch;
+  color:var(--text);
+  font-size:1.06rem;
+  font-weight:450;
+  line-height:1.5;
+}
+body[data-content-cluster="home"] .type-mono{
+  font-family:inherit;
+  /* rótulo de trilho nunca parte no meio da palavra: a folha herda
+   * overflow-wrap:anywhere do bundle e um "Precifi-car" lê como defeito */
+  overflow-wrap:normal;
+  word-break:normal;
+  font-size:.8rem;
+  font-weight:800;
+  font-stretch:70%;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--muted);
+}
+
+/* ── ações: quadradas, sem sombra, sem lift ────────────────────────────── */
+body[data-content-cluster="home"] .button,
+body[data-content-cluster="home"] .button-primary,
+body[data-content-cluster="home"] .button-secondary,
+body[data-content-cluster="home"] .button-light{
+  border-radius:0;
+  box-shadow:none;
+  font-weight:700;
+  font-stretch:92%;
+  letter-spacing:0;
+  transform:none;
+}
+body[data-content-cluster="home"] .button-primary{background:var(--green-700);border:1.5px solid var(--green-700);color:#fff}
+body[data-content-cluster="home"] .button-primary:hover{background:var(--ink);border-color:var(--ink)}
+body[data-content-cluster="home"] .button-secondary{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+body[data-content-cluster="home"] .button-secondary:hover{background:var(--ink);color:#fff}
+body[data-content-cluster="home"] .text-link,
+body[data-content-cluster="home"] .journey-alt-link{
+  border-bottom:1.5px solid var(--line);
+  border-radius:0;
+  font-weight:620;
+  text-decoration:none;
+}
+body[data-content-cluster="home"] .text-link:hover,
+body[data-content-cluster="home"] .journey-alt-link:hover{border-bottom-color:var(--green-700);color:var(--green-700)}
 body[data-content-cluster="home"] .hero-actions{
   display:flex;
   align-items:center;
   flex-wrap:wrap;
-  gap:12px 22px;
-  margin:0 0 14px;
+  gap:.7rem 1.5rem;
+  margin:0 0 .9rem;
 }
 body[data-content-cluster="home"] .hero-proof{
-  grid-template-columns:1fr 1fr;
-  gap:8px 16px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.35rem 1.5rem;
   margin:0;
-  padding:10px 0 0;
+  padding:.6rem 0 0;
+  border:0;
 }
 body[data-content-cluster="home"] .hero-proof li{
+  gap:.55rem;
+  color:var(--muted);
   font-size:.875rem;
+  font-weight:600;
+  border:0;
+  padding:0;
+}
+body[data-content-cluster="home"] .hero-proof .proof-mark{
+  width:6px;height:2px;
+  overflow:hidden;
+  color:transparent;
+  background:var(--green-700);
+  flex:none;
+  align-self:center;
 }
 body[data-content-cluster="home"] .hero-proof-line{
-  margin:8px 0 0;
+  margin:.5rem 0 0;
   padding:0;
   border:0;
-  color:#314256;
-  font-size:.875rem;
-  line-height:1.5;
-}
-body[data-content-cluster="home"] .hero-proof-line a{
-  color:var(--green-700);
-  font-weight:750;
-  text-decoration:underline;
-  text-underline-offset:2px;
-}
-
-/* Three doors */
-body[data-content-cluster="home"] .journeys-section{
-  padding:40px 0 48px;
-}
-body[data-content-cluster="home"] .journey-row-body h3{
-  margin:0 0 .45rem;
-  font-size:1.2rem;
-}
-body[data-content-cluster="home"] .journey-row-body>p{
-  font-size:1rem;
-}
-
-/* Capture sits immediately after the doors. */
-body[data-content-cluster="home"] .contact-section{
-  padding:48px 0 72px;
-}
-
-/* Offer + received artifact */
-body[data-content-cluster="home"] .offers-section{
-  padding:52px 0;
-}
-body[data-content-cluster="home"] .home-method-strip{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-  margin:28px 0 0;
-  padding:0;
-  list-style:none;
-}
-body[data-content-cluster="home"] .home-method-strip .macro-phase{
-  padding:16px 14px;
-}
-body[data-content-cluster="home"] .home-method-strip h3{
-  font-size:1rem;
-}
-body[data-content-cluster="home"] .home-method-strip p{
-  margin:0;
   color:var(--muted);
   font-size:.875rem;
   line-height:1.5;
 }
-body[data-content-cluster="home"] .home-deliverables{
-  margin-top:36px;
+body[data-content-cluster="home"] .hero-proof-line a{color:var(--ink);font-weight:650;text-decoration:underline;text-underline-offset:2px}
+
+/* ── portas: linhas da folha, não cards ────────────────────────────────── */
+body[data-content-cluster="home"] .journey-list{margin-top:1.6rem}
+body[data-content-cluster="home"] .journey-row{
+  padding:1.15rem 0;
+  background:none;
+  border:0;
+  border-top:var(--sheet-rule);
+  border-radius:0;
+  box-shadow:none;
+  position:relative;
 }
-body[data-content-cluster="home"] .home-deliverables-result>div{
-  padding-inline-end:4px;
+body[data-content-cluster="home"] .journey-row::before{
+  content:"";
+  position:absolute;
+  left:calc(var(--page-gutter)*-1);
+  top:-1px;bottom:0;width:3px;
+  background:transparent;
 }
-body[data-content-cluster="home"] .home-deliverables-result>div+div{
-  padding-inline-start:6px;
-}
-body[data-content-cluster="home"] .home-deliverables-result dt{
+body[data-content-cluster="home"] .journey-row:hover::before{background:var(--ink)}
+body[data-content-cluster="home"] .journey-num{
+  color:var(--muted);
   font-size:.8rem;
+  font-weight:750;
+  font-stretch:74%;
+  letter-spacing:.05em;
 }
-body[data-content-cluster="home"] .home-deliverables-example>span{
-  font-size:.8rem;
+body[data-content-cluster="home"] .journey-row-body h3{margin:0 0 .4rem;font-size:1.16rem}
+body[data-content-cluster="home"] .journey-row-body>p{max-width:64ch;font-size:1rem;line-height:1.58}
+body[data-content-cluster="home"] #contrato-canal-seguro{
+  max-width:58ch;
+  padding-left:.85rem;
+  border-left:3px solid var(--caution-700);
+  color:var(--caution-700);
+  font-size:.9rem;
 }
 
-/* PNCP = market context, never client proof */
-body[data-content-cluster="home"] .market-context{
-  padding:48px 0 56px;
-  background:var(--soft);
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
+/* ── oferta: uma faixa escura, que é a linha de total da folha ─────────── */
+body[data-content-cluster="home"] .offer-layout{gap:0;margin-top:1.6rem}
+body[data-content-cluster="home"] .offer-dominant{
+  padding:1.5rem 0 1.7rem;
+  background:none;
+  border:0;
+  border-top:var(--sheet-strong);
+  border-radius:0;
+  box-shadow:none;
 }
+body[data-content-cluster="home"] .offer-label{
+  padding:0;
+  background:none;
+  border:0;
+  border-radius:0;
+  color:var(--green-700);
+  font-size:.875rem;
+  font-weight:800;
+  font-stretch:68%;
+  letter-spacing:.15em;
+}
+body[data-content-cluster="home"] .offer-dominant h3{
+  max-width:18ch;
+  font-size:clamp(1.45rem,2.3vw,2.05rem);
+  font-weight:740;
+  font-stretch:86%;
+  line-height:1.06;
+  letter-spacing:-.02em;
+}
+body[data-content-cluster="home"] .offer-facts{margin-top:1rem}
+body[data-content-cluster="home"] .offer-facts li{
+  padding:.6rem 0;
+  border-top:var(--sheet-rule);
+  border-bottom:0;
+  font-size:.95rem;
+  line-height:1.5;
+}
+body[data-content-cluster="home"] .offer-paths{gap:0;margin-top:0}
+body[data-content-cluster="home"] .offer-path{
+  padding:1.05rem 0;
+  background:none;
+  border:0;
+  border-top:var(--sheet-rule);
+  border-radius:0;
+  box-shadow:none;
+  transform:none;
+}
+body[data-content-cluster="home"] .offer-path:hover{background:var(--soft)}
+body[data-content-cluster="home"] .offer-path strong{
+  display:block;
+  margin:.15rem 0 .3rem;
+  color:var(--ink);
+  font-size:1.1rem;
+  font-weight:700;
+  font-stretch:96%;
+}
+body[data-content-cluster="home"] .offer-path p{max-width:62ch;font-size:.95rem;line-height:1.55}
+body[data-content-cluster="home"] .path-cta{font-size:.88rem;font-weight:650}
+body[data-content-cluster="home"] .home-method-strip{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0;
+  margin:2rem 0 0;
+  padding:0;
+  list-style:none;
+}
+body[data-content-cluster="home"] .home-method-strip .macro-phase{
+  padding:.9rem 1.15rem .95rem 0;
+  background:none;
+  border:0;
+  border-top:var(--sheet-strong);
+  border-radius:0;
+  box-shadow:none;
+}
+body[data-content-cluster="home"] .home-method-strip .macro-phase+.macro-phase{
+  padding-left:1.15rem;
+  border-left:var(--sheet-rule);
+}
+body[data-content-cluster="home"] .home-method-strip h3{margin:.35rem 0 .25rem;font-size:1rem}
+body[data-content-cluster="home"] .home-method-strip p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5}
+
+/* ── mercado: registros do PNCP como linhas de folha ───────────────────── */
 body[data-content-cluster="home"] .market-context-grid{
   display:grid;
-  grid-template-columns:minmax(0,.9fr) minmax(280px,1.1fr);
-  gap:36px;
+  grid-template-columns:minmax(0,.85fr) minmax(300px,1.15fr);
+  gap:2.5rem;
   align-items:start;
 }
-body[data-content-cluster="home"] .market-context-copy h2{
-  max-width:18ch;
-}
-body[data-content-cluster="home"] .market-context-copy p{
-  max-width:48ch;
-  color:#314256;
-  font-size:1rem;
-  line-height:1.65;
-}
+body[data-content-cluster="home"] .market-context-copy h2{max-width:20ch}
+body[data-content-cluster="home"] .market-context-copy p{max-width:48ch;font-size:1rem;line-height:1.6}
 body[data-content-cluster="home"] .market-disclaimer{
-  margin:16px 0 0;
-  padding:12px 14px;
-  color:#314256;
-  background:#fff;
-  border-left:3px solid var(--green-700);
-  font-size:.875rem;
+  margin:1rem 0 0;
+  padding:0 0 0 .85rem;
+  background:none;
+  border:0;
+  border-left:3px solid var(--caution-700);
+  color:var(--caution-700);
+  font-size:.88rem;
   line-height:1.5;
 }
 body[data-content-cluster="home"] .market-evidence{
   min-height:0;
-  padding:1.25rem 1.3rem;
-  color:#e8eef4;
-  background:#071a31;
-  border:1px solid #0a294b;
-  border-radius:var(--radius-sm);
+  padding:0;
+  color:var(--text);
+  background:none;
+  border:0;
+  border-top:var(--sheet-strong);
+  border-radius:0;
+  box-shadow:none;
 }
-body[data-content-cluster="home"] .market-evidence .evidence-kicker,
-body[data-content-cluster="home"] .market-evidence .evidence-tier,
-body[data-content-cluster="home"] .market-evidence .evidence-facts dt,
-body[data-content-cluster="home"] .market-evidence .evidence-heading>span,
-body[data-content-cluster="home"] .market-evidence .evidence-source p{
+body[data-content-cluster="home"] .evidence-heading{padding-top:.7rem;border:0}
+body[data-content-cluster="home"] .evidence-title{max-width:24ch;margin:.2rem 0 .4rem;color:var(--ink);font-size:clamp(1.1rem,1.7vw,1.4rem);font-weight:700;line-height:1.18}
+body[data-content-cluster="home"] .evidence-kicker,
+body[data-content-cluster="home"] .evidence-tier,
+body[data-content-cluster="home"] .evidence-heading>span,
+body[data-content-cluster="home"] .evidence-facts dt,
+body[data-content-cluster="home"] .evidence-source p{
+  color:var(--muted);
   font-size:.8rem;
+  font-weight:800;
+  font-stretch:70%;
+  text-transform:uppercase;
+  letter-spacing:.11em;
   line-height:1.4;
 }
-body[data-content-cluster="home"] .market-evidence .evidence-title{
-  max-width:22ch;
-  margin:0 0 .4rem;
-  color:#fff;
-  font-size:clamp(1.15rem,1.8vw,1.45rem);
-  line-height:1.2;
+body[data-content-cluster="home"] .evidence-source p{font-weight:500;font-stretch:92%;text-transform:none;letter-spacing:0;font-size:.8rem}
+body[data-content-cluster="home"] .evidence-tabs{gap:0;margin:.9rem 0 0;border-top:var(--sheet-rule);border-bottom:var(--sheet-rule)}
+body[data-content-cluster="home"] .evidence-tab{
+  padding:.6rem .9rem;
+  min-height:44px;
+  background:none;
+  border:0;
+  border-radius:0;
+  color:var(--muted);
+  font-size:.83rem;
+  font-weight:700;
+  font-stretch:90%;
 }
-body[data-content-cluster="home"] .market-evidence .evidence-context,
-body[data-content-cluster="home"] .market-evidence .evidence-case-title,
-body[data-content-cluster="home"] .market-evidence .evidence-facts dd,
-body[data-content-cluster="home"] .market-evidence .evidence-tab,
-body[data-content-cluster="home"] .market-evidence .evidence-source-link,
-body[data-content-cluster="home"] .market-evidence .evidence-exposure{
-  font-size:.875rem;
+body[data-content-cluster="home"] .evidence-tab+.evidence-tab{border-left:var(--sheet-rule)}
+body[data-content-cluster="home"] .evidence-tab.is-active{background:var(--ink);color:#fff}
+body[data-content-cluster="home"] .evidence-panel{padding-top:.9rem}
+body[data-content-cluster="home"] .evidence-case-title{color:var(--ink);font-size:1.02rem;font-weight:700;line-height:1.25}
+body[data-content-cluster="home"] .evidence-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin-top:.8rem;border-top:var(--sheet-rule)}
+body[data-content-cluster="home"] .evidence-facts>div{padding:.55rem .8rem .6rem 0}
+body[data-content-cluster="home"] .evidence-facts>div+div{padding-left:.8rem;border-left:var(--sheet-rule)}
+body[data-content-cluster="home"] .evidence-facts dd{color:var(--ink);font-size:1.05rem;font-weight:700}
+body[data-content-cluster="home"] .evidence-illustration{
+  margin-top:.9rem;
+  padding:0 0 0 .85rem;
+  background:none;
+  border:0;
+  border-left:3px solid var(--caution-700);
+  color:var(--caution-700);
+  font-size:.86rem;
+  line-height:1.5;
 }
-body[data-content-cluster="home"] .market-evidence .evidence-actions{
-  display:none;
+body[data-content-cluster="home"] .evidence-exposure{
+  margin-top:.9rem;
+  padding:.8rem 0 0;
+  background:none;
+  border:0;
+  border-top:var(--sheet-rule);
+  border-radius:0;
+  font-size:.9rem;
 }
-body[data-content-cluster="home"] .market-evidence .evidence-facts{
-  grid-template-columns:repeat(2,minmax(0,1fr));
-}
+body[data-content-cluster="home"] .evidence-exposure span{color:var(--muted);font-size:.8rem;font-weight:800;font-stretch:70%;text-transform:uppercase;letter-spacing:.11em}
+body[data-content-cluster="home"] .evidence-exposure strong{color:var(--ink)}
+body[data-content-cluster="home"] .evidence-method{gap:0;margin-top:1rem;border-top:var(--sheet-strong)}
+body[data-content-cluster="home"] .evidence-method li{padding:.6rem .9rem .6rem 0;background:none;border:0;border-radius:0}
+body[data-content-cluster="home"] .evidence-method li+li{padding-left:.9rem;border-left:var(--sheet-rule)}
+body[data-content-cluster="home"] .evidence-method span{color:var(--muted);font-weight:800;font-stretch:70%}
+body[data-content-cluster="home"] .evidence-source{margin-top:.9rem;padding-top:.7rem;border-top:var(--sheet-rule)}
+body[data-content-cluster="home"] .evidence-source-link{font-size:.86rem;font-weight:650}
 
-@media (min-width:901px){
-  body[data-content-cluster="home"] .hero{
-    padding:36px 0 44px;
-  }
-  body[data-content-cluster="home"] .home-hero-grid{
-    max-width:44rem;
-  }
+/* ── autoridade ────────────────────────────────────────────────────────── */
+body[data-content-cluster="home"] .authority-layout{
+  display:grid;
+  grid-template-columns:minmax(0,14rem) minmax(0,1fr);
+  gap:2.5rem;
+  align-items:start;
 }
-
-@media (max-width:900px){
-  body[data-content-cluster="home"] .market-context-grid,
-  body[data-content-cluster="home"] .home-method-strip{
-    grid-template-columns:1fr;
-  }
+body[data-content-cluster="home"] .authority-photo{
+  margin:0;
+  padding-top:.75rem;
+  background:none;
+  border:0;
+  border-top:var(--sheet-strong);
+  border-radius:0;
+  box-shadow:none;
 }
-
-@media (max-width:700px){
-  body[data-content-cluster="home"] .home-deliverables{
-    padding-inline:16px;
-  }
-  body[data-content-cluster="home"] .hero{
-    padding:16px 0 20px;
-  }
-  body[data-content-cluster="home"] .hero-copy h1{
-    max-width:none;
-    margin-bottom:12px;
-    font-size:clamp(1.7rem,7.2vw,2.15rem);
-  }
-  body[data-content-cluster="home"] .hero-lead{
-    margin-bottom:14px;
-    font-size:1rem;
-  }
-  body[data-content-cluster="home"] .hero-actions{
-    display:grid;
-    align-items:stretch;
-    gap:8px;
-    margin-bottom:10px;
-  }
-  body[data-content-cluster="home"] .hero-actions .button{
-    width:100%;
-  }
-  body[data-content-cluster="home"] .hero-secondary{
-    justify-content:center;
-  }
-  body[data-content-cluster="home"] .journeys-section,
-  body[data-content-cluster="home"] .contact-section,
-  body[data-content-cluster="home"] .offers-section,
-  body[data-content-cluster="home"] .market-context,
-  body[data-content-cluster="home"] .authority-section,
-  body[data-content-cluster="home"] .fit-section{
-    padding:40px 0;
-  }
+body[data-content-cluster="home"] .authority-photo img{width:100%;border-radius:0;filter:grayscale(1) contrast(1.06)}
+body[data-content-cluster="home"] .authority-photo figcaption{margin-top:.6rem}
+body[data-content-cluster="home"] .authority-copy blockquote{
+  margin:1.3rem 0 0;
+  padding:0 0 0 1.1rem;
+  background:none;
+  border:0;
+  border-left:3px solid var(--green-700);
+  border-radius:0;
+  color:var(--ink);
+  font-family:inherit;
+  font-size:1.14rem;
+  font-style:normal;
+  font-weight:500;
+  font-stretch:96%;
+  line-height:1.4;
+  max-width:36ch;
 }
-
-@media (max-width:360px){
-  body[data-content-cluster="home"] .home-deliverables-result{
-    grid-template-columns:1fr;
-  }
-  body[data-content-cluster="home"] .home-deliverables-result>div{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) auto;
-    align-items:baseline;
-    padding:10px 0;
-  }
-  body[data-content-cluster="home"] .home-deliverables-result>div+div{
-    padding-inline-start:0;
-    border-top:1px solid rgba(255,255,255,.15);
-    border-left:0;
-  }
-  body[data-content-cluster="home"] .home-deliverables-result dd{
-    margin:0;
-  }
+body[data-content-cluster="home"] .authority-fields{gap:0;margin-top:1.2rem}
+body[data-content-cluster="home"] .authority-fields li{
+  padding:.55rem 0;
+  background:none;
+  border:0;
+  border-top:var(--sheet-rule);
+  border-radius:0;
+  font-size:.94rem;
 }
+body[data-content-cluster="home"] .authority-diff{max-width:52ch;font-size:1.04rem;font-weight:450}
 
+/* ── adequação e objeções ──────────────────────────────────────────────── */
+body[data-content-cluster="home"] .icp-contrast{gap:0 2.5rem;margin-top:1.6rem}
+body[data-content-cluster="home"] .icp-yes,
+body[data-content-cluster="home"] .icp-no{
+  padding:.85rem 0 0;
+  background:none;
+  border:0;
+  border-top:2px solid var(--green-700);
+  border-radius:0;
+  box-shadow:none;
+}
+body[data-content-cluster="home"] .icp-no{border-top-color:var(--caution-700)}
+body[data-content-cluster="home"] .icp-no .icp-label{color:var(--caution-700)}
+body[data-content-cluster="home"] .icp-yes li,
+body[data-content-cluster="home"] .icp-no li{font-size:.94rem;line-height:1.5}
+body[data-content-cluster="home"] .fit-faq details{
+  margin:0;
+  background:none;
+  border:0;
+  border-top:var(--sheet-rule);
+  border-radius:0;
+  box-shadow:none;
+}
 body[data-content-cluster="home"] .fit-faq summary{
-  color:#06121f;
-  background:#fff;
+  padding:.85rem 0;
+  background:none;
+  border:0;
+  border-radius:0;
+  color:var(--ink);
   font-size:1rem;
+  font-weight:650;
 }
-body[data-content-cluster="home"] .fit-faq summary::after{
-  color:#1a4a1c;
-  border-color:#1a4a1c;
+body[data-content-cluster="home"] .fit-faq details>p{padding:0 0 1rem;max-width:62ch;font-size:.95rem}
+
+/* ── captura: cada campo é uma linha ───────────────────────────────────── */
+body[data-content-cluster="home"] .contact-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,26rem);
+  gap:2.5rem;
+  align-items:start;
 }
+body[data-content-cluster="home"] .contact-form{
+  padding:1.1rem 0 0;
+  background:none;
+  border:0;
+  border-top:var(--sheet-strong);
+  border-radius:0;
+  box-shadow:none;
+}
+body[data-content-cluster="home"] .contact-form-title{
+  max-width:22ch;
+  color:var(--ink);
+  font-size:1.32rem;
+  font-weight:720;
+  font-stretch:92%;
+  line-height:1.15;
+  letter-spacing:-.015em;
+}
+body[data-content-cluster="home"] .contact-sla li,
+body[data-content-cluster="home"] .contact-channels a,
+body[data-content-cluster="home"] .contact-channels div{
+  background:none;
+  border:0;
+  border-top:var(--sheet-rule);
+  border-radius:0;
+  box-shadow:none;
+}
+body[data-content-cluster="home"] .contact-sla li{padding:.55rem 0;font-size:.94rem}
+body[data-content-cluster="home"] .contact-channels a,
+body[data-content-cluster="home"] .contact-channels div{padding:.6rem 0}
+body[data-content-cluster="home"] .field label,
+body[data-content-cluster="home"] .form-step-legend{
+  color:var(--ink);
+  font-size:.875rem;
+  font-weight:750;
+  font-stretch:80%;
+  text-transform:uppercase;
+  letter-spacing:.09em;
+}
+body[data-content-cluster="home"] .field input,
+body[data-content-cluster="home"] .field select,
+body[data-content-cluster="home"] .field textarea{
+  background:var(--white);
+  border:0;
+  border-bottom:1.5px solid var(--ink);
+  border-radius:0;
+  box-shadow:none;
+  font-family:inherit;
+}
+body[data-content-cluster="home"] .field input:hover,
+body[data-content-cluster="home"] .field select:hover,
+body[data-content-cluster="home"] .field textarea:hover{background:var(--soft)}
+body[data-content-cluster="home"] .form-progress-step{border-radius:0}
+body[data-content-cluster="home"] .contact-proof-near-cta{color:var(--muted);font-size:.875rem}
+
+/* ── entregas: o artefato demonstrativo, sem gradiente ─────────────────── */
+body[data-content-cluster="home"] .home-deliverables{
+  margin-top:2rem;
+  padding:1.4rem 0 0;
+  color:var(--text);
+  background:none;
+  border:0;
+  border-top:var(--sheet-strong);
+  border-radius:0;
+}
+body[data-content-cluster="home"] .home-deliverables .eyebrow{color:var(--green-700)}
+body[data-content-cluster="home"] .home-deliverables h3{
+  max-width:20ch;
+  color:var(--ink);
+  font-size:clamp(1.35rem,2.1vw,1.95rem);
+  font-weight:730;
+  font-stretch:90%;
+  letter-spacing:-.02em;
+}
+body[data-content-cluster="home"] .home-deliverables-copy>p:not(.eyebrow){max-width:60ch;color:var(--text);font-size:.96rem;line-height:1.6}
+body[data-content-cluster="home"] .home-deliverables-example{
+  padding:1rem 1.15rem 1.1rem;
+  border:var(--sheet-strong);
+}
+body[data-content-cluster="home"] .home-deliverables-example>span{
+  color:var(--caution-700);
+  font-family:inherit;
+  font-size:.8rem;
+  font-weight:800;
+  font-stretch:66%;
+  letter-spacing:.14em;
+}
+body[data-content-cluster="home"] .home-deliverables-example>strong{color:var(--ink);font-size:1rem;font-weight:700}
+body[data-content-cluster="home"] .home-deliverables-result{
+  margin:.9rem 0 1.1rem;
+  border-top:var(--sheet-strong);
+  border-bottom:var(--sheet-rule);
+}
+body[data-content-cluster="home"] .home-deliverables-result>div+div{border-left:var(--sheet-rule)}
+body[data-content-cluster="home"] .home-deliverables-result dt{color:var(--muted);font-size:.8rem;font-weight:800;font-stretch:66%;letter-spacing:.12em}
+body[data-content-cluster="home"] .home-deliverables-result dd{color:var(--ink);font-size:1.5rem;font-weight:700}
+body[data-content-cluster="home"] .home-deliverables .button-light{
+  background:transparent;
+  border:1.5px solid var(--ink);
+  color:var(--ink);
+}
+body[data-content-cluster="home"] .home-deliverables .button-light:hover{background:var(--ink);color:#fff}
+body[data-content-cluster="home"] .home-deliverables .text-link{color:var(--ink)}
+
+/* ── rodapé: a linha de fechamento da folha ────────────────────────────── */
+body[data-content-cluster="home"] .site-footer{border-top:var(--sheet-strong)}
+body[data-content-cluster="home"] .footer-top,
+body[data-content-cluster="home"] .footer-bottom{padding-inline:var(--page-gutter);max-width:none}
 body[data-content-cluster="home"] .footer-links a,
 body[data-content-cluster="home"] .footer-bottom a,
 body[data-content-cluster="home"] .footer-authority a{
-  min-height:24px;
   display:inline-flex;
   align-items:center;
+  min-height:24px;
   padding:6px 0;
+}
+body[data-content-cluster="home"] .footer-links strong{
+  font-size:.875rem;
+  font-weight:800;
+  font-stretch:66%;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+}
+
+/* ── vista de célula: a planilha colapsa, não empilha ──────────────────── */
+@media (max-width:1200px){
+  body[data-content-cluster="home"]{--cols:2.5rem minmax(0,1fr) 4.5rem 4rem 9rem;--col-gap:1rem}
+  /* Abaixo de 1200 o trilho DESCRIÇÃO não sustenta duas colunas de leitura ao
+   * lado da ficha: a cópia da captura empilha antes de ser espremida. */
+  body[data-content-cluster="home"] .contact-grid{grid-template-columns:minmax(0,1fr);gap:1.8rem}
+  body[data-content-cluster="home"] .home-method-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body[data-content-cluster="home"] .home-method-strip .macro-phase:nth-child(2n+1){padding-left:0;border-left:0}
+  body[data-content-cluster="home"] .home-method-strip .macro-phase:nth-child(n+3){border-top:var(--sheet-rule)}
+  body[data-content-cluster="home"] .contact-form{max-width:34rem}
+  body[data-content-cluster="home"] .header-inner{flex-wrap:wrap}
+  body[data-content-cluster="home"] .desktop-nav{
+    order:3;
+    width:100%;
+    justify-content:flex-start;
+    gap:0 1.2rem;
+    padding-top:.2rem;
+    border-top:var(--sheet-rule);
+  }
+
+  body[data-content-cluster="home"] .authority-layout{grid-template-columns:minmax(0,11rem) minmax(0,1fr);gap:1.8rem}
+}
+@media (max-width:900px){
+  body[data-content-cluster="home"]{--cols:minmax(0,1fr);--col-gap:0}
+  body[data-content-cluster="home"] .sheet-ruler{display:none}
+  body[data-content-cluster="home"] main>section[data-section-archetype]>.container,
+  body[data-content-cluster="home"] .c-item,
+  body[data-content-cluster="home"] .c-un,
+  body[data-content-cluster="home"] .c-qt,
+  body[data-content-cluster="home"] .c-fonte{grid-column:1;grid-row:auto}
+  body[data-content-cluster="home"] main>section[data-section-archetype]>.container{
+    margin-left:0;
+    padding-left:0;
+    box-shadow:none;
+  }
+  body[data-content-cluster="home"] .band-key{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0 1.4rem;
+    margin:0 0 1rem;
+    padding-bottom:.6rem;
+    border-bottom:var(--sheet-rule);
+  }
+  body[data-content-cluster="home"] .band-key .c{
+    display:flex;
+    gap:.4rem;
+    align-items:baseline;
+    padding:0;
+    box-shadow:none;
+    text-align:left;
+    font-size:.8rem;
+  }
+  body[data-content-cluster="home"] .band-key .c-lab{
+    position:static;
+    width:auto;height:auto;
+    margin:0;overflow:visible;clip:auto;
+    color:var(--muted);
+    font-size:.8rem;
+    font-weight:800;
+    font-stretch:66%;
+    text-transform:uppercase;
+    letter-spacing:.11em;
+  }
+  body[data-content-cluster="home"] .desktop-nav{display:none}
+  body[data-content-cluster="home"] .header-inner{
+    display:flex;
+    flex-wrap:nowrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:.6rem 1rem;
+  }
+  body[data-content-cluster="home"] .market-context-grid,
+  body[data-content-cluster="home"] .contact-grid,
+  body[data-content-cluster="home"] .authority-layout,
+  body[data-content-cluster="home"] .home-method-strip{grid-template-columns:minmax(0,1fr)}
+  body[data-content-cluster="home"] .home-method-strip .macro-phase+.macro-phase{padding-left:0;border-left:0;border-top:var(--sheet-rule)}
+  body[data-content-cluster="home"] .authority-photo{max-width:12rem}
+  body[data-content-cluster="home"] .journey-row::before{left:0}
+}
+@media (max-width:700px){
+  body[data-content-cluster="home"] .hero{padding-block:1.2rem 1.5rem}
+  body[data-content-cluster="home"] .hero-copy h1{max-width:none;font-size:clamp(1.75rem,7.4vw,2.3rem)}
+  body[data-content-cluster="home"] .hero-lead{margin-bottom:.9rem;font-size:1.02rem}
+  body[data-content-cluster="home"] .hero-actions{display:grid;align-items:stretch;gap:.5rem;margin-bottom:.6rem}
+  body[data-content-cluster="home"] .hero-actions .button{width:100%}
+  body[data-content-cluster="home"] .hero-secondary{justify-content:center}
+  body[data-content-cluster="home"] main>section[data-section-archetype]{padding-block:1.9rem}
+  body[data-content-cluster="home"] .home-deliverables{padding-inline:0}
+  body[data-content-cluster="home"] .home-deliverables-actions{display:grid;align-items:stretch}
+  body[data-content-cluster="home"] .home-deliverables-actions .button{width:100%}
+  body[data-content-cluster="home"] .home-deliverables-actions .text-link{justify-content:center}
+}
+@media (max-width:360px){
+  body[data-content-cluster="home"] .home-deliverables-result{grid-template-columns:1fr}
+  body[data-content-cluster="home"] .home-deliverables-result>div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;padding:10px 0}
+  body[data-content-cluster="home"] .home-deliverables-result>div+div{padding-inline-start:0;border-top:var(--sheet-rule);border-left:0}
+  body[data-content-cluster="home"] .home-deliverables-result dd{margin:0}
 }
 
 @media (prefers-reduced-motion:reduce){
-  body[data-content-cluster="home"] *{
-    scroll-behavior:auto!important;
+  body[data-content-cluster="home"] *{scroll-behavior:auto!important}
+}
+
+
+/* ── re-entintagem: componentes que nasceram sobre painel escuro ───────────
+ * .offer-dominant e .market-evidence eram painéis navy. Nesta direção eles
+ * viram linhas claras da folha, então cada cor branca herdada volta para
+ * tinta, e os dois call sites de --lime da home saem (o brief registra --lime
+ * como o que aproxima o site do cluster "dark + acid"). */
+body[data-content-cluster="home"] .offer-dominant .offer-label{color:var(--green-700)}
+body[data-content-cluster="home"] .offer-dominant h3{color:var(--ink)}
+body[data-content-cluster="home"] .offer-dominant .offer-headline{color:var(--text);font-size:1.08rem;font-weight:450}
+body[data-content-cluster="home"] .offer-facts li{color:var(--text)}
+body[data-content-cluster="home"] .offer-facts strong{color:var(--ink)}
+body[data-content-cluster="home"] .offer-dominant-link{color:var(--ink)}
+body[data-content-cluster="home"] .offer-dominant-link .icon{color:var(--green-700)}
+body[data-content-cluster="home"] .evidence-context{color:var(--muted)}
+body[data-content-cluster="home"] .evidence-exposure{background:none;border-left:0}
+body[data-content-cluster="home"] .evidence-exposure>span{color:var(--muted)}
+body[data-content-cluster="home"] .evidence-exposure strong{color:var(--ink)}
+body[data-content-cluster="home"] .evidence-exposure p{color:var(--text)}
+body[data-content-cluster="home"] .evidence-cta{
+  color:#fff;
+  background:var(--green-700);
+  border-color:var(--green-700);
+}
+body[data-content-cluster="home"] .evidence-cta:hover{color:#fff;background:var(--ink);border-color:var(--ink)}
+body[data-content-cluster="home"] .evidence-whatsapp{color:var(--ink)}
+body[data-content-cluster="home"] .evidence-whatsapp:hover{color:var(--green-700)}
+body[data-content-cluster="home"] .evidence-source-link{color:var(--ink)}
+body[data-content-cluster="home"] .evidence-source-link:hover{color:var(--green-700)}
+/* Archivo não traz U+2197; deixar o glifo cair para uma fonte de sistema
+ * poria um segundo desenho na página por causa de um enfeite. A seta vira
+ * U+2192, que o subconjunto tem, e o glifo decorativo sai. */
+body[data-content-cluster="home"] .evidence-source-link>span[aria-hidden]{display:none}
+body[data-content-cluster="home"] .evidence-source-link::after{content:" \2192";margin-left:.35rem}
+body[data-content-cluster="home"] .evidence-method{border-top-color:var(--ink)}
+body[data-content-cluster="home"] .evidence-method li>span{color:var(--muted);font-family:inherit;font-weight:800;font-stretch:70%}
+body[data-content-cluster="home"] .evidence-method p{color:var(--text)}
+body[data-content-cluster="home"] .evidence-method strong{color:var(--ink)}
+body[data-content-cluster="home"] .evidence-intro{color:var(--muted)}
+body[data-content-cluster="home"] .offer-path .type-mono{color:var(--green-700);font-size:.8rem;letter-spacing:.1em}
+
+
+/* ── o formulário sobre a faixa escura ─────────────────────────────────────
+ * A ficha de captura perdeu o cartão branco: agora é a folha inserida na
+ * linha de total. Sobre navy, tudo que era tinta vira papel — e os campos
+ * seguem brancos, porque quem preenche precisa ver o que digitou. */
+body[data-content-cluster="home"] .contact-form-title{color:#fff}
+body[data-content-cluster="home"] .contact-form .form-step-legend,
+body[data-content-cluster="home"] .contact-form .field label,
+body[data-content-cluster="home"] .contact-form .consent,
+body[data-content-cluster="home"] .contact-form .optional-mark{color:#fff}
+body[data-content-cluster="home"] .contact-form .form-hint,
+body[data-content-cluster="home"] .contact-form .form-note,
+body[data-content-cluster="home"] .contact-proof-near-cta{color:#c9d6e2}
+body[data-content-cluster="home"] .contact-form .consent a{color:#fff}
+body[data-content-cluster="home"] .contact-form .field input,
+body[data-content-cluster="home"] .contact-form .field select,
+body[data-content-cluster="home"] .contact-form .field textarea{
+  color:var(--ink);
+  background:var(--white);
+  border-bottom-color:var(--white);
+}
+body[data-content-cluster="home"] .contact-form .field input:hover,
+body[data-content-cluster="home"] .contact-form .field select:hover,
+body[data-content-cluster="home"] .contact-form .field textarea:hover{background:var(--soft)}
+body[data-content-cluster="home"] .contact-form .button-secondary{
+  color:#fff;
+  background:transparent;
+  border-color:#fff;
+}
+body[data-content-cluster="home"] .contact-form .button-secondary:hover{color:var(--ink);background:#fff}
+body[data-content-cluster="home"] .contact-form .form-progress-step{
+  color:#c9d6e2;
+  background:transparent;
+  border:1.5px solid rgba(255,255,255,.4);
+}
+body[data-content-cluster="home"] .contact-form .form-progress-step.is-active{
+  color:var(--ink);
+  background:#fff;
+  border-color:#fff;
+}
+body[data-content-cluster="home"] .contact-form .form-progress-bar{background:rgba(255,255,255,.3)}
+/* o anel de foco precisa de halo escuro para medir 3:1 sobre a faixa navy */
+body[data-content-cluster="home"] .contact-section{--focus-ring-halo:var(--navy-900);--focus-ring-core:#fff}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+ * Correções da revisão adversarial (2026-08-30)
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── FOCO: o pior defeito que esta campanha introduziu ─────────────────────
+ * Os `box-shadow:none` que apagaram a elevação também apagaram o anel de
+ * foco, porque o anel É um box-shadow neste sistema — dezesseis paradas de
+ * teclado ficaram sem indicador, incluindo o CTA do herói e o formulário
+ * inteiro de captura. WCAG 2.2 2.4.7 (A) e 1.4.11 (AA).
+ *
+ * O anel é reafirmado na forma EXPANDIDA, nunca via var(--focus-ring): o
+ * valor computado de uma custom property já vem com var() substituído, então
+ * redefinir --focus-ring-halo/-core num descendente não recompõe o token. Era
+ * exatamente esse o engano do "halo invertido" na faixa escura. */
+body[data-content-cluster="home"] a:focus-visible,
+body[data-content-cluster="home"] .button:focus-visible,
+body[data-content-cluster="home"] .offer-path:focus-visible,
+body[data-content-cluster="home"] .contact-channels a:focus-visible,
+body[data-content-cluster="home"] .evidence-tab:focus-visible,
+body[data-content-cluster="home"] summary:focus-visible,
+body[data-content-cluster="home"] button:focus-visible,
+body[data-content-cluster="home"] .field :is(input,select,textarea):focus-visible{
+  outline:2px solid transparent;
+  outline-offset:0;
+  box-shadow:0 0 0 2px var(--white),0 0 0 5px var(--ink);
+}
+/* Sobre a faixa navy o halo claro desaparece: inverte-se o par, medido. */
+body[data-content-cluster="home"] .contact-section a:focus-visible,
+body[data-content-cluster="home"] .contact-section .button:focus-visible,
+body[data-content-cluster="home"] .contact-section button:focus-visible,
+body[data-content-cluster="home"] .contact-section .contact-channels a:focus-visible,
+body[data-content-cluster="home"] .contact-section .field :is(input,select,textarea):focus-visible{
+  box-shadow:0 0 0 2px var(--navy-900),0 0 0 5px var(--white);
+}
+/* styles.css zera o outline dos campos com especificidade que vence o
+ * :focus-visible do bundle; aqui o anel volta acima dele. */
+body[data-content-cluster="home"] .contact-form :is(input,select,textarea):focus-visible{
+  outline:2px solid transparent;
+}
+
+/* ── a régua congelada, agora irmã de <main>, precisa de folga de âncora ── */
+html:has(body[data-content-cluster="home"]){scroll-padding-top:3.75rem}
+
+/* ── alinhamento: rótulo da régua sobre o valor que ele encabeça ─────────── */
+body[data-content-cluster="home"] .sheet-ruler .c-un,
+body[data-content-cluster="home"] .sheet-ruler .c-qt,
+body[data-content-cluster="home"] .sheet-ruler .c-fonte{padding-left:.7rem}
+body[data-content-cluster="home"] .sheet-ruler .c-qt{padding-right:.1rem}
+
+/* ── segunda família: o bundle põe var(--mono) em três lugares que esta
+ *    direção restilizou sem trocar a fonte, e o peso/largura variáveis caíam
+ *    silenciosamente na pilha estática ─────────────────────────────────── */
+body[data-content-cluster="home"] .journey-num,
+body[data-content-cluster="home"] .form-progress-step,
+body[data-content-cluster="home"] .evidence-heading>span,
+body[data-content-cluster="home"] .evidence-method li>span{font-family:inherit}
+
+/* ── a faixa escura é plana: o brilho radial verde continuava vivo ──────── */
+body[data-content-cluster="home"] .contact-section::before,
+body[data-content-cluster="home"] .contact-section::after{display:none}
+
+/* ── sobreviventes de template: raio, sombra e o círculo flutuante ──────── */
+body[data-content-cluster="home"] .whatsapp-float,
+body[data-content-cluster="home"] .mobile-nav,
+body[data-content-cluster="home"] .icp-contrast,
+body[data-content-cluster="home"] .evidence-tabs,
+body[data-content-cluster="home"] .evidence-panel,
+body[data-content-cluster="home"] .fit-faq summary::after,
+body[data-content-cluster="home"] .form-progress-step{
+  border-radius:0;
+  box-shadow:none;
+}
+body[data-content-cluster="home"] .whatsapp-float{
+  background:var(--green-700);
+  border:1.5px solid var(--green-700);
+  transition:background-color .12s linear,border-color .12s linear;
+}
+body[data-content-cluster="home"] .whatsapp-float:hover{
+  background:var(--ink);
+  border-color:var(--ink);
+}
+body[data-content-cluster="home"] .mobile-nav{
+  border:1px solid var(--line);
+  border-top:var(--sheet-strong);
+}
+body[data-content-cluster="home"] .icp-contrast{border:0;overflow:visible}
+body[data-content-cluster="home"] .fit-faq summary::after{border-color:var(--muted);color:var(--ink)}
+/* .evidence-panel guardava fundo e borda de painel escuro, invisíveis no
+ * papel: sem contorno nenhum, o painel deixou de existir como bloco. */
+body[data-content-cluster="home"] .evidence-panel{
+  background:none;
+  border:0;
+  border-top:var(--sheet-rule);
+}
+
+/* ── o menu móvel cobria o próprio botão de fechar ─────────────────────── */
+body[data-content-cluster="home"] .mobile-nav{top:96px}
+
+/* ── sublinhado de hover colado à palavra, não 25px abaixo dela ─────────── */
+body[data-content-cluster="home"] .desktop-nav a,
+body[data-content-cluster="home"] .text-link,
+body[data-content-cluster="home"] .journey-alt-link,
+body[data-content-cluster="home"] .evidence-source-link,
+body[data-content-cluster="home"] .evidence-whatsapp{
+  border-bottom:0;
+  text-decoration-line:none;
+  text-decoration-thickness:1.5px;
+  text-underline-offset:.26em;
+}
+body[data-content-cluster="home"] .desktop-nav a:hover,
+body[data-content-cluster="home"] .text-link:hover,
+body[data-content-cluster="home"] .journey-alt-link:hover,
+body[data-content-cluster="home"] .evidence-source-link:hover,
+body[data-content-cluster="home"] .evidence-whatsapp:hover{text-decoration-line:underline}
+body[data-content-cluster="home"] .evidence-source-link,
+body[data-content-cluster="home"] .evidence-whatsapp{text-decoration-line:underline}
+
+/* ── a barra de seleção de linha caía entre dois trilhos ───────────────── */
+body[data-content-cluster="home"] .journey-row::before{left:-1.25rem}
+/* ── a oferta pontual é um <a> inteiro: precisa de estado, não de 1,06:1 ── */
+body[data-content-cluster="home"] .offer-path{position:relative}
+body[data-content-cluster="home"] .offer-path::before{
+  content:"";
+  position:absolute;
+  left:-1.25rem;top:-1px;bottom:0;width:3px;
+  background:transparent;
+}
+body[data-content-cluster="home"] .offer-path:hover::before,
+body[data-content-cluster="home"] .offer-path:focus-visible::before{background:var(--ink)}
+
+/* ── a folha tem largura de página: não estica ao infinito ─────────────── */
+@media (min-width:1700px){
+  body[data-content-cluster="home"] main>section[data-section-archetype],
+  body[data-content-cluster="home"] .sheet-ruler,
+  body[data-content-cluster="home"] .header-inner,
+  body[data-content-cluster="home"] .footer-top,
+  body[data-content-cluster="home"] .footer-bottom{
+    max-width:1700px;
+    margin-inline:auto;
   }
+}
+
+/* ── a coluna de leitura da captura não pode ser espremida pelo formulário ─ */
+@media (max-width:1440px){
+  body[data-content-cluster="home"] .contact-grid{grid-template-columns:minmax(0,1fr);gap:1.8rem}
+  body[data-content-cluster="home"] .contact-form{max-width:34rem}
+}
+body[data-content-cluster="home"] .contact-channels>a,
+body[data-content-cluster="home"] .contact-channels>div{max-width:100%;min-width:0}
+body[data-content-cluster="home"] .contact-channels span{min-width:0;overflow-wrap:anywhere}
+
+/* ── rodapé: os mesmos trilhos e a mesma margem da folha ────────────────── */
+body[data-content-cluster="home"] .footer-top,
+body[data-content-cluster="home"] .footer-bottom{width:auto}
+@media (min-width:901px){
+  body[data-content-cluster="home"] .footer-top{
+    display:grid;
+    grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));
+    gap:2rem 2.5rem;
+    align-items:start;
+  }
+}
+body[data-content-cluster="home"] .footer-links,
+body[data-content-cluster="home"] .footer-brand{min-width:0}
+body[data-content-cluster="home"] .footer-links a{overflow-wrap:anywhere}
+
+/* ── algarismo tabular e zero cortado só onde são convenção de planilha ─── */
+body[data-content-cluster="home"] .band-key,
+body[data-content-cluster="home"] .sheet-ruler,
+body[data-content-cluster="home"] .evidence-facts dd,
+body[data-content-cluster="home"] .home-deliverables-result dd,
+body[data-content-cluster="home"] .journey-num,
+body[data-content-cluster="home"] .evidence-method li>span{
+  font-variant-numeric:tabular-nums slashed-zero;
+}
+
+/* ── herdado do bundle, abaixo de AA: 3,01:1 no marcador de "não faz sentido" */
+body[data-content-cluster="home"] .icp-no li::before{color:var(--muted)}
+
+/* ── sem JS, as três faixas do PNCP abrem juntas e as abas ficam inertes ── */
+html.no-js body[data-content-cluster="home"] .evidence-tabs{display:none}
+
+@media (max-width:900px){
+  /* O telefone abria em metadado de esquema — inclusive a marca de "tese da
+   * casa" — antes da proposta de valor. O registro da linha desce para o pé
+   * da faixa, que é onde uma planilha colapsada o põe. */
+  body[data-content-cluster="home"] .band-key{
+    order:2;
+    margin:1.4rem 0 0;
+    padding:.7rem 0 0;
+    border-top:var(--sheet-rule);
+    border-bottom:0;
+  }
+  body[data-content-cluster="home"] main>section[data-section-archetype]>.container{order:1}
+  body[data-content-cluster="home"] .band-key .c-val{color:var(--text);font-weight:600}
+  /* Na vista de célula o registro entinta para papel — mas a faixa de captura
+   * é a única superfície escura da folha, e tinta sobre navy dá 1,43:1. */
+  body[data-content-cluster="home"] .contact-section .band-key .c-val{color:#c9d6e2}
+  body[data-content-cluster="home"] .contact-section .band-key .c-lab{color:#93a6b8}
+  body[data-content-cluster="home"] .contact-section .band-key{border-top-color:rgba(255,255,255,.18)}
+}
+
+
+/* ── segunda passada da revisão adversarial ──────────────────────────────── */
+
+/* O painel de evidência é focalizável por contrato ARIA (role=tabpanel), então
+ * precisa de anel como qualquer outra parada de teclado. */
+body[data-content-cluster="home"] .evidence-panel:focus-visible{
+  outline:2px solid transparent;
+  box-shadow:0 0 0 2px var(--white),0 0 0 5px var(--ink);
+}
+
+/* Raio remanescente em superfícies que a purga anterior não alcançou. */
+body[data-content-cluster="home"] .skip-link,
+body[data-content-cluster="home"] .menu-toggle,
+body[data-content-cluster="home"] input,
+body[data-content-cluster="home"] select,
+body[data-content-cluster="home"] textarea,
+body[data-content-cluster="home"] .turnstile-slot,
+body[data-content-cluster="home"] .form-status{border-radius:0}
+body[data-content-cluster="home"] .eyebrow-dot{box-shadow:none}
+
+/* O flutuante é fixo no canto: no fim da página ele cobria o último link da
+ * barra de políticas. WCAG 2.2 2.4.11 não aceita alvo de foco obscurecido. */
+body[data-content-cluster="home"] .footer-bottom{padding-bottom:6rem}
+@media (min-width:901px){
+  body[data-content-cluster="home"] .footer-bottom{padding-bottom:4.5rem}
 }

@@ -39,9 +39,9 @@
       ]
     },
     "entregas/styles.css": {
-      "bytes": 18179,
-      "class_selectors": 53,
-      "used": 53,
+      "bytes": 19684,
+      "class_selectors": 54,
+      "used": 54,
       "unused": []
     }
   },
@@ -57,8 +57,8 @@
       "gradient": 0
     },
     "assets/home-10x.css": {
-      "border_radius": 1,
-      "box_shadow": 0,
+      "border_radius": 0,
+      "box_shadow": 6,
       "gradient": 0
     },
     "assets/report-capture.css": {
@@ -162,19 +162,19 @@
       "gradient": 0
     },
     "styles-tools.css": {
-      "border_radius": 22,
-      "box_shadow": 8,
+      "border_radius": 17,
+      "box_shadow": 7,
       "gradient": 1
     },
     "styles.css": {
-      "border_radius": 101,
-      "box_shadow": 54,
+      "border_radius": 96,
+      "box_shadow": 42,
       "gradient": 34
     }
   },
   "decoration_totals": {
-    "border_radius": 148,
-    "box_shadow": 74,
+    "border_radius": 137,
+    "box_shadow": 67,
     "gradient": 51
   }
 }

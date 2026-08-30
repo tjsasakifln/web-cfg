@@ -279,13 +279,13 @@
     "own_js_raw_kb_max": 120,
     "own_js_gzip_kb_max": 40,
     "css_gzip_kb_max": 80,
-    "font_total_gzip_kb_max": 0,
-    "font_files_max": 0,
+    "font_total_gzip_kb_max": 60,
+    "font_files_max": 1,
     "cls_max": 0.05,
     "no_framework_runtime": true,
     "no_carousel_video_webgl_lottie": true,
     "budget_notes": {
-      "font": "Calibrated on the measured baseline: the site ships zero @font-face and zero font files. The first webfont must raise these two numbers in this file, so it lands as a reviewed delta instead of being absorbed silently. Enforced per route by scripts/site/audit_performance.py; ceilings live in that module.",
+      "font": "Delta revisado de 2026-08-30 (canario de direcao visual na home): 0 -> 1 arquivo e 0 -> 60 KB gzip. O arquivo e Archivo v2.001 (Omnibus-Type, SIL OFL 1.1), subconjunto latino pt-BR, dois eixos com faixa reduzida ao que o CSS usa (wght 100-900, wdth 66-110) e tnum + zero ligados, medido em 58.7 KB. O eixo de largura custa ~34 KB e e a propria historia tipografica da direcao: rotulo de coluna condensado, titulo em 84% e linha de virada em 110%. Fixar wdth cairia para 24 KB e devolveria a home a uma grotesca de largura unica, que e o que a campanha existe para evitar. Servido de assets/archivo-var-latin-bf6e041e.woff2 e carregado apenas na home por assets/home-10x.css. O subconjunto cobre o vocabulario aritmetico da casa (m2, m3, +-, 1/2, (c), (r)), porque glifo ausente nao levanta erro: renderiza noutra fonte em silencio. Verificado por scripts/site/test_font_glyph_coverage.py. Os tetos do modulo nao se movem: FONT_FILES_CAP=6 e FONT_GZIP_CAP_KB=120 em scripts/site/audit_performance.py, entao um segundo webfont nao declarado continua reprovando.",
       "cls": "Enforced twice from this one key: scripts/site/lighthouse_thresholds.mjs applies it to the live headless-Chrome run CI performs on the built _site, and scripts/site/audit_performance.py applies it to the committed rows in docs/lighthouse-runs/summary.json. Observed baseline is 0.000 on every measured route.",
       "baseline": "docs/performance/PERFORMANCE-BUDGET-BASELINE.json"
     }

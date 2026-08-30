@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 75,
+        "scanned": 76,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,14 +14,14 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 75
+        "sitemap_locs": 76
       }
     },
     "brand_shell": {
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 28,
+        "scanned": 29,
         "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, or",
         "footer": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina cont"
       }
@@ -178,7 +178,7 @@
         }
       ],
       "stats": {
-        "scanned": 75,
+        "scanned": 76,
         "onpage_capture_scanned": 5,
         "journeys": [
           "contrato",
@@ -188,15 +188,15 @@
         "profiles": {
           "service_pillar": 13,
           "priced_offer": 10,
-          "commercial_content": 42,
+          "commercial_content": 43,
           "trust_or_legal": 10
         },
         "main_cta": {
-          "covered": 65,
-          "total": 65,
+          "covered": 66,
+          "total": 66,
           "coverage": 1.0,
           "exempt": 10,
-          "public_scanned": 75
+          "public_scanned": 76
         },
         "on_page_capture": {
           "covered": 7,
@@ -216,9 +216,9 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 53,
-          "total": 65,
-          "coverage": 0.8154,
+          "covered": 54,
+          "total": 66,
+          "coverage": 0.8182,
           "exempt_trust_or_legal": 10,
           "registered_debt": 6
         },
@@ -391,8 +391,8 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "pages": 21,
-        "pairs": 210,
+        "pages": 22,
+        "pairs": 231,
         "threshold": 0.55
       }
     },

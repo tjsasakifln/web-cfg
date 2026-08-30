@@ -140,3 +140,42 @@ if __name__ == "__main__":
                 print("FAIL", name, exc)
     print("AUDIT_CSS_USAGE_TESTS_OK" if not failed else f"AUDIT_CSS_USAGE_TESTS_FAILED {failed}")
     raise SystemExit(1 if failed else 0)
+
+
+def test_neutralising_declarations_do_not_spend_the_decoration_ceiling():
+    """`border-radius:0` and `box-shadow:none` REMOVE ornament.
+
+    Counting them made the ratchet punish the work it exists to encourage: a
+    page that deleted ten rounded corners scored worse than one that added
+    none. The guard also has to survive backtracking — an unanchored `\\s*`
+    after the colon could step past the lookahead and match " none".
+    """
+    from scripts.site.audit_css_usage import decoration_counts
+
+    removals = (
+        "a{border-radius:0}"
+        "b{border-radius: 0 0 0 0 ;}"
+        "c{border-radius:0px}"
+        "d{border-radius: 0 !important ;}"
+        "e{box-shadow:none}"
+        "f{box-shadow: none }"
+        "g{box-shadow: none !important ;}"
+    )
+    assert decoration_counts(removals) == {
+        "border_radius": 0,
+        "box_shadow": 0,
+        "gradient": 0,
+    }
+
+    ornament = (
+        "a{border-radius:8px}"
+        "b{border-radius:0 0 8px 8px}"
+        "c{border-top-left-radius:4px}"
+        "d{border-radius:var(--radius)}"
+        "e{box-shadow:0 2px 4px #000}"
+        "f{box-shadow:inset 1px 0 0 red}"
+        "g{box-shadow:var(--focus-ring)}"
+    )
+    counts = decoration_counts(ornament)
+    assert counts["border_radius"] == 4, counts
+    assert counts["box_shadow"] == 3, counts

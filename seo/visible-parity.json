@@ -1620,8 +1620,7 @@
         "authors": [],
         "breadcrumbs": [
           "Início",
-          "Conteúdos",
-          "Atrasos e prorrogações",
+          "Biblioteca",
           "Chuva na obra pública: quando o prazo é tecnicamente impactado"
         ],
         "dataset_names": [],
@@ -1663,8 +1662,7 @@
         ],
         "breadcrumb_names": [
           "Início",
-          "Conteúdos",
-          "Atrasos e prorrogações",
+          "Biblioteca",
           "Chuva na obra pública: quando o prazo é tecnicamente impactado"
         ],
         "canonical": "https://confenge.com.br/conteudos/chuva-prorrogacao-prazo-obra-publica/",
@@ -4443,5 +4441,5 @@
       }
     }
   ],
-  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/wa491/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/web-cfg/_site"
 }

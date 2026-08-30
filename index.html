@@ -9,6 +9,7 @@
 <meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/>
 <link href="https://confenge.com.br/" rel="canonical"/>
 <link rel="preload" as="image" href="/assets/logo-confenge-500-f8a83f6d.png" fetchpriority="high"/>
+<link rel="preload" as="font" type="font/woff2" href="/assets/archivo-var-latin-bf6e041e.woff2" crossorigin="anonymous"/>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link href="/assets/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="/manifest.webmanifest" rel="manifest"/>
@@ -16,24 +17,23 @@
 <link href="/styles.css" rel="stylesheet"/>
 <link href="/assets/home-10x.css" rel="stylesheet"/>
 <style data-home-deliverables-critical="">
-body[data-content-cluster="home"] .hero{padding:22px 0 28px}
-body[data-content-cluster="home"] .home-hero-grid{display:block;max-width:40rem}
-.home-deliverables{display:grid;grid-template-columns:minmax(0,.95fr) minmax(310px,.65fr);gap:clamp(34px,6vw,82px);align-items:center;margin-top:52px;padding:clamp(30px,4.3vw,54px);color:#dce5ed;background:linear-gradient(135deg,#071b34,#041426);border:1px solid #123452;border-radius:4px}
-.home-deliverables .eyebrow{color:var(--lime)}
-.home-deliverables h3{max-width:15ch;margin:0 0 16px;color:#fff;font-size:clamp(2rem,3.3vw,3.35rem);letter-spacing:-.045em}
-.home-deliverables-copy>p:not(.eyebrow){max-width:670px;margin:0;color:#bdc9d4;font-size:.93rem;line-height:1.7}
-.home-deliverables-result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 20px;border-top:1px solid rgba(255,255,255,.15);border-bottom:1px solid rgba(255,255,255,.15)}
-.home-deliverables-result>div{padding:16px 8px 16px 0}
-.home-deliverables-result>div+div{padding-left:12px;border-left:1px solid rgba(255,255,255,.15)}
-.home-deliverables-result dt{color:#91a3b3;font-size:.8rem;font-weight:760;text-transform:uppercase}
-.home-deliverables-result dd{margin:3px 0 0;color:#fff;font-size:1.35rem;font-weight:780}
-.home-deliverables-example>span{display:block;margin-bottom:6px;color:var(--lime);font-family:var(--mono);font-size:.8rem;font-weight:800;letter-spacing:.08em}
-.home-deliverables-example>strong{display:block;margin-bottom:18px;color:#fff;font-size:1rem;line-height:1.4}
-.home-deliverables-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px}
-.home-deliverables .button-light{min-height:48px}
-.home-deliverables .text-link{color:#fff}
-@media(max-width:900px){.home-deliverables{grid-template-columns:1fr;gap:32px}}
-@media(max-width:620px){body[data-content-cluster="home"] .hero{padding:16px 0 20px}.home-deliverables{margin-top:38px;padding:28px 22px}.home-deliverables h3{font-size:2.2rem}.home-deliverables-actions{display:grid;align-items:stretch}.home-deliverables-actions .button{width:100%}.home-deliverables-actions .text-link{justify-content:center}}
+body[data-content-cluster="home"] .hero{padding:1.9rem clamp(1rem,3.2vw,3rem) 2.1rem}
+body[data-content-cluster="home"] .home-hero-grid{display:block;max-width:none}
+body[data-content-cluster="home"] .home-deliverables{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,.7fr);gap:clamp(1.8rem,5vw,3.6rem);align-items:start;margin-top:2rem;padding:1.4rem 0 0;color:#26374a;border-top:1.5px solid #071a31}
+body[data-content-cluster="home"] .home-deliverables h3{max-width:20ch;margin:0 0 .7rem;color:#071a31;font-size:clamp(1.35rem,2.1vw,1.95rem);letter-spacing:-.02em}
+body[data-content-cluster="home"] .home-deliverables-copy>p:not(.eyebrow){max-width:60ch;margin:0;font-size:.96rem;line-height:1.6}
+body[data-content-cluster="home"] .home-deliverables-example{padding:1rem 1.15rem 1.1rem;border:1.5px solid #071a31}
+body[data-content-cluster="home"] .home-deliverables-result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:.9rem 0 1.1rem;border-top:1.5px solid #071a31;border-bottom:1px solid #dce3e8}
+body[data-content-cluster="home"] .home-deliverables-result>div{padding:.55rem .8rem .6rem 0}
+body[data-content-cluster="home"] .home-deliverables-result>div+div{padding-left:.8rem;border-left:1px solid #dce3e8}
+body[data-content-cluster="home"] .home-deliverables-result dt{color:#5d6a7a;font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em}
+body[data-content-cluster="home"] .home-deliverables-result dd{margin:3px 0 0;color:#071a31;font-size:1.5rem;font-weight:700}
+body[data-content-cluster="home"] .home-deliverables-example>span{display:block;margin-bottom:.35rem;color:#8a5f00;font-size:.64rem;font-weight:800;letter-spacing:.14em}
+body[data-content-cluster="home"] .home-deliverables-example>strong{display:block;margin-bottom:.9rem;color:#071a31;font-size:1rem;line-height:1.35}
+body[data-content-cluster="home"] .home-deliverables-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px}
+body[data-content-cluster="home"] .home-deliverables .button-light{min-height:48px}
+@media(max-width:1200px){body[data-content-cluster="home"] .home-deliverables{grid-template-columns:minmax(0,1fr);gap:1.6rem}}
+@media(max-width:620px){body[data-content-cluster="home"] .hero{padding:1.2rem clamp(1rem,3.2vw,3rem) 1.5rem}body[data-content-cluster="home"] .home-deliverables{margin-top:1.6rem}body[data-content-cluster="home"] .home-deliverables h3{font-size:1.6rem}body[data-content-cluster="home"] .home-deliverables-actions{display:grid;align-items:stretch}body[data-content-cluster="home"] .home-deliverables-actions .button{width:100%}body[data-content-cluster="home"] .home-deliverables-actions .text-link{justify-content:center}}
 </style>
 <script defer="" src="/script.js?v=fortune04"></script>
 <meta content="website" property="og:type"/>
@@ -85,10 +85,16 @@ body[data-content-cluster="home"] .home-hero-grid{display:block;max-width:40rem}
 </nav>
 </header>
 
+<ul class="sheet-ruler" aria-label="Colunas do registro">
+<li class="c c-item">Item</li><li class="c c-desc">Descrição</li><li class="c c-un">Unidade</li><li class="c c-qt">Quant</li><li class="c c-fonte">Fonte</li>
+</ul>
+
 <main id="conteudo">
 
 <!-- 1. HERO: fit, problema, prova, próximo passo no primeiro viewport -->
 <section aria-labelledby="hero-title" class="hero section--tight" data-section-archetype="hero_split">
+<ul class="band-key" data-unsourced="true" aria-label="Registro da seção 1"><li class="c c-item"><span class="c-lab">Item</span><span class="c-val">1</span></li><li class="c c-un"><span class="c-lab">Unidade</span><span class="c-val">porta</span></li><li class="c c-qt"><span class="c-lab">Quant</span><span class="c-val">3</span></li><li class="c c-fonte"><span class="c-lab">Fonte</span><span class="c-val">tese da casa</span></li></ul>
+
 <div class="container hero-grid home-hero-grid">
 <div class="hero-copy">
 <p class="eyebrow hero-eyebrow"><span aria-hidden="true" class="eyebrow-dot"></span>Consultoria para licitações e contratos de obras públicas</p>
@@ -109,6 +115,8 @@ body[data-content-cluster="home"] .home-hero-grid{display:block;max-width:40rem}
 
 <!-- 2. TRÊS PORTAS -->
 <section aria-labelledby="journeys-title" class="section section--default tension-section journeys-section" data-section-archetype="journey_paths" id="jornadas">
+<ul class="band-key" aria-label="Registro da seção 2"><li class="c c-item"><span class="c-lab">Item</span><span class="c-val">2</span></li><li class="c c-un"><span class="c-lab">Unidade</span><span class="c-val">porta</span></li><li class="c c-qt"><span class="c-lab">Quant</span><span class="c-val">3</span></li><li class="c c-fonte"><span class="c-lab">Fonte</span><span class="c-val">ofertas publicadas</span></li></ul>
+
 <div class="container">
 <header class="section-head section-head--journeys">
 <p class="eyebrow">Como podemos ajudar</p>
@@ -155,6 +163,8 @@ body[data-content-cluster="home"] .home-hero-grid{display:block;max-width:40rem}
 
 <!-- 3. CAPTURA (única, mais perto da decisão) -->
 <section aria-labelledby="contact-title" class="section section--default contact-section" data-section-archetype="cta_formal" id="contato">
+<ul class="band-key" aria-label="Registro da seção 3"><li class="c c-item"><span class="c-lab">Item</span><span class="c-val">3</span></li><li class="c c-un"><span class="c-lab">Unidade</span><span class="c-val">dia útil</span></li><li class="c c-qt"><span class="c-lab">Quant</span><span class="c-val">1–2</span></li><li class="c c-fonte"><span class="c-lab">Fonte</span><span class="c-val">SLA publicado</span></li></ul>
+
 <div class="container contact-grid">
 <div class="contact-copy">
 <p class="eyebrow">Próximo passo</p>
@@ -295,6 +305,8 @@ body[data-content-cluster="home"] .home-hero-grid{display:block;max-width:40rem}
 
 <!-- 4. OFERTA + ARTEFATO RECEBIDO -->
 <section aria-labelledby="offers-title" class="section section--loose offers-section" data-section-archetype="offer_dominant" id="ofertas">
+<ul class="band-key" aria-label="Registro da seção 4"><li class="c c-item"><span class="c-lab">Item</span><span class="c-val">4</span></li><li class="c c-un"><span class="c-lab">Unidade</span><span class="c-val">oferta</span></li><li class="c c-qt"><span class="c-lab">Quant</span><span class="c-val">4</span></li><li class="c c-fonte"><span class="c-lab">Fonte</span><span class="c-val">ofertas publicadas</span></li></ul>
+
 <div class="container">
 <header class="section-head">
 <p class="eyebrow">Como a CONFENGE atua</p>
@@ -382,6 +394,8 @@ body[data-content-cluster="home"] .home-hero-grid{display:block;max-width:40rem}
 
 <!-- 5. PNCP = CONTEXTO DE MERCADO, NUNCA PROVA DE CLIENTE -->
 <section aria-labelledby="market-title" class="section market-context" data-section-archetype="market_context" id="mercado-pncp">
+<ul class="band-key" aria-label="Registro da seção 5"><li class="c c-item"><span class="c-lab">Item</span><span class="c-val">5</span></li><li class="c c-un"><span class="c-lab">Unidade</span><span class="c-val">registro</span></li><li class="c c-qt"><span class="c-lab">Quant</span><span class="c-val">3</span></li><li class="c c-fonte"><span class="c-lab">Fonte</span><span class="c-val">PNCP · 21/08/2026</span></li></ul>
+
 <div class="container market-context-grid">
 <div class="market-context-copy">
 <p class="eyebrow">Contexto de mercado · PNCP</p>
@@ -469,6 +483,8 @@ body[data-content-cluster="home"] .home-hero-grid{display:block;max-width:40rem}
 
 <!-- 6. PROVA E AUTORIDADE (próximo aos CTAs da página) -->
 <section aria-labelledby="authority-title" class="section section--loose authority-section" data-section-archetype="authority_editorial" id="autoridade">
+<ul class="band-key" aria-label="Registro da seção 6"><li class="c c-item"><span class="c-lab">Item</span><span class="c-val">6</span></li><li class="c c-un"><span class="c-lab">Unidade</span><span class="c-val">responsável</span></li><li class="c c-qt"><span class="c-lab">Quant</span><span class="c-val">1</span></li><li class="c c-fonte"><span class="c-lab">Fonte</span><span class="c-val">EESC-USP</span></li></ul>
+
 <div class="container authority-layout">
 <figure class="authority-photo">
 <picture><source type="image/avif" srcset="/assets/tiago-sasaki-foto-v11-sem-fundo-560.avif"/><source type="image/webp" srcset="/assets/tiago-sasaki-foto-v11-sem-fundo-560.webp"/><img src="/assets/tiago-sasaki-foto-v11-sem-fundo-560.png" width="560" height="700" alt="Engº Tiago Sasaki, responsável técnico da CONFENGE" loading="lazy" decoding="async" fetchpriority="low"/></picture>
@@ -493,6 +509,8 @@ body[data-content-cluster="home"] .home-hero-grid{display:block;max-width:40rem}
 
 <!-- 7. ADEQUAÇÃO E OBJEÇÕES -->
 <section aria-labelledby="fit-title" class="section section--tight fit-section" data-section-archetype="icp_contrast" id="para-quem">
+<ul class="band-key" data-unsourced="true" aria-label="Registro da seção 7"><li class="c c-item"><span class="c-lab">Item</span><span class="c-val">7</span></li><li class="c c-un"><span class="c-lab">Unidade</span><span class="c-val">critério</span></li><li class="c c-qt"><span class="c-lab">Quant</span><span class="c-val">8</span></li><li class="c c-fonte"><span class="c-lab">Fonte</span><span class="c-val">tese da casa</span></li></ul>
+
 <div class="container">
 <header class="section-head">
 <p class="eyebrow">Adequação</p>

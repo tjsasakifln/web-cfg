@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "5b140bf7c1d29276afd725ffc523a6a70f34a392",
+  "web_cfg_sha": "36f5ddfb0b90420ed86c8b702ad2fb0a67692bd3",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "ecc2c3d1773ed4de9f8d7720a92fed779d5ef3f699357fa48bf4d08a64c9c2db",
-  "manifest_hash": "7ea2ec5f6ded541c572e6f38069593398d0af0be13adb7be6a7772248226ffa9",
+  "public_artifact_hash": "71a627dade8f58769e80637ee9b1ae2a97e99925f38b929252958566db1f49fa",
+  "manifest_hash": "6dc94de40ac8508c322c68d611e47999e9c486dbc2364b0909f953b89731055e",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -37,6 +37,12 @@
     "page_count": 76,
     "defect_count": 0
   },
+  "prototype_isolation": {
+    "source": "docs/design-audit/prototypes",
+    "public_directory": "_site",
+    "leaked": false,
+    "removed": []
+  },
   "turnstile": {
     "configured": false,
     "context": "local",
@@ -53,7 +59,7 @@
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 494,
+    "file_count": 514,
     "finding_count": 0
   },
   "errors": []

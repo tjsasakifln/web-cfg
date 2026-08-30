@@ -32,6 +32,41 @@ efetivamente construído.
 Não publicar protótipo em rota pública, não capturar rota de protótipo em CI
 público e não mover protótipo para fora deste diretório para "testar rápido".
 
+## O que vive aqui hoje (breakthrough 2026-08-30)
+
+`breakthrough-2026-08-30/` guarda as três direções da campanha
+`CONFENGE_DESIGN_BREAKTHROUGH_CANARY_20260830`, que superou a conclusão
+estética `KEEP_CURRENT` da #494 depois da revisão do brand owner em produção.
+São **estudos de direção**, não um protocolo de medida: a #494 comparava dois
+mecanismos sob uma direção única e por isso não podia produzir ruptura
+perceptível; aqui a variável em disputa é a composição inteira.
+
+- `a-planilha/` — a grade da planilha orçamentária é o motor de layout da
+  página inteira. **Venceu e foi implementada na home.**
+- `b-parecer/` — espinha assimétrica com aparato de margem: fonte, artigo,
+  data de corte, unidade e limite na linha de cada afirmação.
+- `c-folha-de-rosto/` — folha de rosto e sumário com linha de chamada, no
+  formato de relatório técnico brasileiro.
+
+`shell.css` é a casca comum às três (reset, tipografia, foco, reduced motion),
+para que a composição seja a única variável. A copy é a mesma nas três, e é a
+copy congelada da home real.
+
+Diferente do par da #494, este diretório é **autoral**, não gerado: as três
+direções são estudos, e um gerador que impusesse a mesma estrutura às três
+teria impedido justamente a divergência que a campanha exigia.
+
+Estes protótipos declaram `@font-face`. A proibição de webfont continua valendo
+para a subárvore da #494, onde ela registra um fato medido daquela comparação;
+aqui vale a regra que a substitui e que é mais forte no que importa: a face
+declarada precisa resolver para um arquivo versionado em `/assets/`. Fonte
+remota, recurso de terceiro, script inline, estilo inline, mexida em CSP e
+ausência de `noindex` continuam proibidos em **todos** os protótipos, e o
+isolamento de caminho é o mesmo.
+
+O registro da decisão está em
+[`../issues/12-breakthrough-canary.md`](../issues/12-breakthrough-canary.md).
+
 ## O que vive aqui hoje (#494)
 
 `fixed-content.json` é o conteúdo fixo do protocolo de comparação (§11 do

@@ -1,7 +1,7 @@
 {
   "assets_snapshot": {
     "asset_files_max_route": 15,
-    "asset_raw_kb_max_route": 998.65,
+    "asset_raw_kb_max_route": 984.6,
     "note": "informational; per-route asset weight moves with editorial content, so it is not a frozen gate. Refresh with npm run audit:performance -- --write-baseline",
     "routes_measured": 261
   },
@@ -9,8 +9,8 @@
     "cls_max": 0.05,
     "css_gzip_kb_max": 80.0,
     "css_raw_kb_max": 250.0,
-    "font_files_max": 0.0,
-    "font_total_gzip_kb_max": 0.0,
+    "font_files_max": 1.0,
+    "font_total_gzip_kb_max": 60.0,
     "own_js_gzip_kb_max": 40.0,
     "own_js_raw_kb_max": 120.0
   },
@@ -142,11 +142,15 @@
     "routes_measured": 30
   },
   "fonts": {
-    "font_files_total": 0,
-    "font_gzip_kb_total": 0,
+    "font_files_total": 1,
+    "font_gzip_kb_total": 58.69,
     "measured_by": "scripts/site/audit_performance.py measure_routes",
-    "routes_with_font_face_rules": [],
-    "routes_with_font_files": []
+    "routes_with_font_face_rules": [
+      "/"
+    ],
+    "routes_with_font_files": [
+      "/"
+    ]
   },
   "generated_by": "npm run audit:performance -- --write-baseline",
   "issue": 508
