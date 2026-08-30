@@ -53,7 +53,7 @@
       "obrigado": "/obrigado-contrato",
       "wa_message": "Olá, Tiago. Tenho um problema urgente em contrato público e quero solicitar um canal seguro para envio.",
       "response_sla": "Retorno inicial em até 1 dia útil nos casos urgentes; demais em até 2 dias úteis. O canal de envio é escolhido posteriormente.",
-      "next_step": "Registramos o pedido de canal seguro. O site não recebe arquivo; o canal é escolhido posteriormente. Sem promessa de deferimento ou recuperação."
+      "next_step": "Registramos o pedido de canal seguro. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação. Cada caso recebe análise fundamentada e recomendação técnica; a decisão permanece com a Administração."
     },
     {
       "id": "edital",
@@ -68,7 +68,7 @@
       "obrigado": "/obrigado-edital",
       "wa_message": "Olá, Tiago. Tenho um edital em análise e quero solicitar um canal seguro para envio.",
       "response_sla": "Triagem inicial em até 2 dias úteis após dados essenciais. O canal de envio é escolhido posteriormente.",
-      "next_step": "Registramos o pedido de canal seguro. O site não recebe arquivo; o canal é escolhido posteriormente. Indicamos se o caso pede leitura rápida, Operação de Proposta para Licitação Crítica ou recusa fundamentada."
+      "next_step": "Registramos o pedido de canal seguro. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação. Indicamos se o caso pede leitura rápida, Operação de Proposta para Licitação Crítica ou recusa fundamentada."
     },
     {
       "id": "operacao",

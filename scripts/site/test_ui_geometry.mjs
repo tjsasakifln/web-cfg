@@ -453,7 +453,17 @@ async function main() {
     });
     if (matrix.cardCount < 3) throw new Error(`expected ≥3 journey paths, got ${matrix.cardCount}`);
     if (matrix.gridDisplay === "none") throw new Error("journey paths hidden on mobile");
-    const expected = ["Edital ou proposta crítica", "Contrato sob pressão", "Operação recorrente"];
+    // 2026-08-30 (overhaul value-first). As portas deixaram de ser rotuladas
+    // por categoria ("Edital ou proposta critica") e passaram a ser a pergunta
+    // que o visitante tem na cabeca. A taxonomia canonica nao sumiu: ela subiu
+    // para .journey-kind, verificada em test_visitor_redesign.py, e continua
+    // identica ao menu e ao rodape. Aqui a checagem e de geometria, entao o que
+    // importa e que as tres portas existam e estejam visiveis no mobile.
+    const expected = [
+      "O edital merece o seu capital?",
+      "O contrato está consumindo a sua margem.",
+      "A operação decide caso a caso, sem critério.",
+    ];
     for (const label of expected) {
       if (!matrix.labels.includes(label)) throw new Error(`missing door ${label}: ${JSON.stringify(matrix.labels)}`);
     }

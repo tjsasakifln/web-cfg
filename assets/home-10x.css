@@ -86,11 +86,16 @@ body[data-content-cluster="home"] .home-hero-grid{
 .hero-proof-line a{color:var(--ink);text-underline-offset:3px}
 
 /* ── 2. Tres portas: rotulo tipado, nao ornamento numerico ─────────────── */
+/* .journey-row ainda vem de styles.css com grid-template-columns:3.5rem 1fr
+ * (2.25rem 1fr no mobile): uma coluna dimensionada para "01"/"02"/"03", nao
+ * para um rotulo de texto como "CONTRATO SOB PRESSAO". Sem esta correcao a
+ * medicao de responsividade martelava esse rotulo em uma caixa de 36px de
+ * largura. O rotulo sobe para linha propria, acima do corpo. */
+body[data-content-cluster="home"] .journey-row{grid-template-columns:1fr;align-items:start;gap:.4rem}
 .journey-kind{
   margin:0;font-stretch:88%;font-size:.72rem;font-weight:750;letter-spacing:.1em;
   text-transform:uppercase;color:var(--accent);
 }
-body[data-content-cluster="home"] .journey-row{align-items:start}
 body[data-content-cluster="home"] .journey-row-body h3{font-size:clamp(1.2rem,2vw,1.5rem);max-width:24ch}
 body[data-content-cluster="home"] #contrato-canal-seguro{
   max-width:58ch;margin:.4rem 0 .2rem;color:var(--muted);font-size:.92rem;line-height:1.55;
@@ -135,9 +140,44 @@ body[data-content-cluster="home"] #contrato-canal-seguro{
 .evidence-kicker{margin:0;font-stretch:88%;font-size:.7rem;font-weight:750;letter-spacing:.09em;text-transform:uppercase}
 .evidence-title{margin:.35rem 0 .5rem;font-size:1.1rem;font-weight:700;line-height:1.35}
 .evidence-illustration{
-  margin:.85rem 0;padding:.8rem .95rem;border-left:2px solid rgba(255,255,255,.28);
-  color:#c8d4df;font-size:.86rem;line-height:1.6;
+  margin:.85rem 0;padding:.8rem .95rem;border-left:2px solid var(--accent);
+  color:var(--text);font-size:.86rem;line-height:1.6;
 }
+
+/* .evidence-selector nasceu para pousar num painel navy: styles.css ainda
+ * carrega branco, cinza-azulado claro e lime pensados para esse fundo
+ * escuro. Aqui ele mora sobre --panel claro, entao cada cor herdada volta
+ * para tinta — sem isso, ficam textos brancos e lime quase invisiveis sobre
+ * fundo claro (medido abaixo de 1.5:1 de contraste). */
+.evidence-kicker,
+.evidence-tier,
+.evidence-heading>span,
+.evidence-facts dt,
+.evidence-source p{color:var(--muted)}
+.evidence-context{color:var(--muted)}
+.evidence-title,
+.evidence-case-title,
+.evidence-facts dd{color:var(--ink)}
+.evidence-facts{border-color:var(--panel-line)}
+.evidence-facts>div+div{border-left-color:var(--panel-line)}
+.evidence-tabs{background:var(--white);border-color:var(--panel-line)}
+.evidence-tab{color:var(--muted)}
+.evidence-tab:hover{color:var(--ink);background:var(--panel-line)}
+.evidence-panel{background:var(--white);border-color:var(--panel-line)}
+.evidence-exposure{background:rgba(45,111,45,.07);border-left-color:var(--accent)}
+.evidence-exposure>span{color:var(--muted)}
+.evidence-exposure strong{color:var(--ink)}
+.evidence-exposure p{color:var(--text)}
+.evidence-method li>span{color:var(--accent)}
+.evidence-method p{color:var(--text)}
+.evidence-method strong{color:var(--ink)}
+.evidence-source{border-top-color:var(--panel-line)}
+.evidence-source a,
+.evidence-source-link{color:var(--ink)}
+.evidence-source a:hover,
+.evidence-source-link:hover{color:var(--accent)}
+.evidence-whatsapp{color:var(--ink)}
+.evidence-whatsapp:hover{color:var(--accent)}
 
 /* ── 7. Captura ────────────────────────────────────────────────────────── */
 .turnstile-slot{margin:.75rem 0}
@@ -176,3 +216,23 @@ body[data-content-cluster="home"] #contrato-canal-seguro{
 }
 .market-advantages-base a{color:var(--ink);text-underline-offset:3px}
 @media (max-width:700px){.market-advantages li{font-size:.92rem}}
+
+/* O lime (--lime:#ced62a) sai da home. Nao e questao de contraste: tinta navy
+ * sobre lime passa folgado. E questao de direcao. O DESIGN_DIRECTION_BRIEF de
+ * 2026-08-30 registra "--lime sobre --navy-950 ja e vizinho" do cluster 2
+ * (fundo escuro + um acento acido), um dos tres agrupamentos de design
+ * generico que nenhum candidato pode ser. E, na pratica, o acento acido fazia
+ * a acao do painel de evidencia competir em prioridade com o CTA principal da
+ * pagina, que e verde. Um sistema, uma cor de acao. */
+.evidence-tab.is-active,
+.evidence-tab[aria-selected="true"]{color:var(--white);background:var(--ink);border-color:var(--ink)}
+.evidence-cta,
+.evidence-cta:hover{color:var(--white);background:var(--accent);border-color:var(--accent)}
+.evidence-cta:hover{background:var(--green-600);border-color:var(--green-600)}
+
+/* Sem o "01/02/03", styles.css ainda reservava a coluna de 1.25rem que os
+ * numeros ocupavam, e o texto do metodo caia em uma palavra por linha.
+ * O passo agora e uma coluna so: o verbo carrega a sequencia. */
+.evidence-selector .evidence-method li,
+.evidence-method li{grid-template-columns:1fr;gap:.15rem}
+.evidence-method p{margin:0}

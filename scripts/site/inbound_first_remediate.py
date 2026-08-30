@@ -763,7 +763,7 @@ def inject_journey_cta(html: str, brand: dict[str, Any], journey_id: str, topic:
         f'data-journey="{journey_id}">'
         f'<div class="lead-inline-copy"><span>Próximo passo</span>'
         f"<strong>{html_lib.escape(cta)}</strong>"
-        f"<p>{html_lib.escape(next_step or 'Registramos o pedido de canal seguro. O site não recebe arquivo; o canal é escolhido posteriormente.')}</p>"
+        f"<p>{html_lib.escape(next_step or 'Registramos o pedido de canal seguro. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.')}</p>"
         f"</div>"
         f'<div class="lead-inline-actions">'
         f'<a class="button button-primary" data-cta-position="inline" data-journey="{journey_id}" '

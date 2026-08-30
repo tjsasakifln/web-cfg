@@ -81,7 +81,7 @@ exports.handler = async (event) => {
             parsed.error === "payload_too_large"
               ? "Payload muito grande."
               : parsed.error === "file_payload_rejected"
-                ? "O site não recebe arquivo. Solicite um canal seguro para envio."
+                ? "Anexos não são aceitos por este formulário. Solicite um canal seguro para envio."
                 : parsed.error === "unsupported_media_type"
                   ? "Tipo de conteúdo não suportado."
                 : "Requisição inválida.",

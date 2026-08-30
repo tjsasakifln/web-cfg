@@ -149,7 +149,7 @@ def cta(slug: str, journey: str, theme: str, wa: str, heading: str, body: str, w
     form = (
         f"/?jornada={journey}&amp;tema={quote(theme)}&amp;origem=/conteudos/{slug}/#contato"
     )
-    return f"""<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo" data-journey="{journey}"><div class="lead-inline-copy"><span>Próximo passo</span><strong>Solicitar canal seguro para envio</strong><p>{body} O site não recebe arquivo; o canal é escolhido posteriormente.</p></div><div class="lead-inline-actions"><a class="button button-primary" data-cta-position="inline" data-journey="{journey}" href="{wa_url}" rel="noopener" target="_blank">Solicitar canal seguro para envio no WhatsApp</a><a class="button button-secondary" data-cta-position="form" data-journey="{journey}" href="{form}">Continuar pelo formulário</a></div></section>"""
+    return f"""<section class="lead-inline" id="diagnostico-confenge" aria-label="Próximo passo" data-journey="{journey}"><div class="lead-inline-copy"><span>Próximo passo</span><strong>Solicitar canal seguro para envio</strong><p>{body} Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.</p></div><div class="lead-inline-actions"><a class="button button-primary" data-cta-position="inline" data-journey="{journey}" href="{wa_url}" rel="noopener" target="_blank">Solicitar canal seguro para envio no WhatsApp</a><a class="button button-secondary" data-cta-position="form" data-journey="{journey}" href="{form}">Continuar pelo formulário</a></div></section>"""
 
 
 def decision(wa: str, body: str) -> str:

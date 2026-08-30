@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30T13:06:22.069Z",
+  "generated_at": "2026-08-30T20:32:59.656Z",
   "issue": 293,
   "base": "http://127.0.0.1:8793",
   "site_root": "_site",
@@ -1709,30 +1709,12 @@
       ],
       "counts": {
         "critical": 0,
-        "serious": 1,
+        "serious": 0,
         "moderate": 0,
         "minor": 0
       },
-      "blocking": 1,
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
-          "nodes": 7,
-          "targets": [
-            [
-              ".offer-headline"
-            ],
-            [
-              ".offer-facts > li:nth-child(1)"
-            ],
-            [
-              ".offer-facts > li:nth-child(2)"
-            ]
-          ]
-        }
-      ]
+      "blocking": 0,
+      "violations": []
     },
     {
       "path": "/acompanhamento-contratos-obras/",
@@ -2849,30 +2831,12 @@
       ],
       "counts": {
         "critical": 0,
-        "serious": 1,
+        "serious": 0,
         "moderate": 0,
         "minor": 0
       },
-      "blocking": 1,
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
-          "nodes": 10,
-          "targets": [
-            [
-              ".offer-headline"
-            ],
-            [
-              ".offer-facts > li:nth-child(1)"
-            ],
-            [
-              ".offer-facts > li:nth-child(2)"
-            ]
-          ]
-        }
-      ]
+      "blocking": 0,
+      "violations": []
     },
     {
       "path": "/acompanhamento-contratos-obras/",
@@ -3981,8 +3945,8 @@
     }
   ],
   "critical": 0,
-  "serious": 2,
+  "serious": 0,
   "moderate": 0,
   "minor": 0,
-  "duration_seconds": 172
+  "duration_seconds": 161
 }
