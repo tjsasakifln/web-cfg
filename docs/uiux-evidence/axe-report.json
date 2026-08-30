@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30T20:32:59.656Z",
+  "generated_at": "2026-08-30T21:49:44.812Z",
   "issue": 293,
   "base": "http://127.0.0.1:8793",
   "site_root": "_site",
@@ -1709,12 +1709,24 @@
       ],
       "counts": {
         "critical": 0,
-        "serious": 0,
+        "serious": 1,
         "moderate": 0,
         "minor": 0
       },
-      "blocking": 0,
-      "violations": []
+      "blocking": 1,
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 1,
+          "targets": [
+            [
+              "#form-step-1 > legend"
+            ]
+          ]
+        }
+      ]
     },
     {
       "path": "/acompanhamento-contratos-obras/",
@@ -2831,12 +2843,24 @@
       ],
       "counts": {
         "critical": 0,
-        "serious": 0,
+        "serious": 1,
         "moderate": 0,
         "minor": 0
       },
-      "blocking": 0,
-      "violations": []
+      "blocking": 1,
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 1,
+          "targets": [
+            [
+              "#form-step-1 > legend"
+            ]
+          ]
+        }
+      ]
     },
     {
       "path": "/acompanhamento-contratos-obras/",
@@ -3945,8 +3969,8 @@
     }
   ],
   "critical": 0,
-  "serious": 0,
+  "serious": 2,
   "moderate": 0,
   "minor": 0,
-  "duration_seconds": 161
+  "duration_seconds": 170
 }
