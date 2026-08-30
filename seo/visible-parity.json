@@ -3115,7 +3115,7 @@
           "2026-08-29"
         ],
         "description": "Escolha entre 8 ofertas publicadas, de R$ 599 a R$ 3.750, pela decisão que precisa tomar. Consulte também as 54 capacidades do rol taxativo, separadas por maturidade. Os exemplos vinculados são sintéticos; não são resultados de clientes.",
-        "h1": "8 ofertas publicadas, exemplos sintéticos. Escolha pela decisão que está na mesa.",
+        "h1": "8 ofertas publicadas. Escolha pela decisão que está na mesa.Exemplos sintéticos.",
         "has_dataset_surface": false,
         "licenses": [
           "license-token-visible"
@@ -4379,5 +4379,5 @@
       }
     }
   ],
-  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/wa485/_site"
+  "site_root": "/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/fix2/_site"
 }
