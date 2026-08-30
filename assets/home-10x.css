@@ -123,9 +123,9 @@ body[data-content-cluster="home"] .band-key[data-unsourced] .c-fonte .c-val::bef
 
 /* ── régua congelada ───────────────────────────────────────────────────── */
 body[data-content-cluster="home"] .sheet-ruler{
-  position:sticky;
-  top:0;
-  z-index:30;
+  /* Legenda de coluna da folha: impressa uma vez no topo. Quem fica fixo e o
+   * cabecalho comercial, que carrega navegacao e CTA. */
+  position:static;
   padding-block:.42rem;
   background:var(--white);
   border-top:var(--sheet-rule);
@@ -144,10 +144,12 @@ body[data-content-cluster="home"] .sheet-ruler .c-qt{text-align:right}
 
 /* ── cabeçalho: bloco de título da folha ───────────────────────────────── */
 body[data-content-cluster="home"] .site-header{
-  position:static;
+  position:sticky;
+  top:0;
+  z-index:40;
   padding:1.1rem 0 .85rem;
   background:var(--white);
-  border-bottom:0;
+  border-bottom:var(--sheet-rule);
   box-shadow:none;
 }
 body[data-content-cluster="home"] .header-inner{
@@ -796,12 +798,13 @@ body[data-content-cluster="home"] .footer-links strong{
   body[data-content-cluster="home"] .home-method-strip .macro-phase:nth-child(n+3){border-top:var(--sheet-rule)}
   body[data-content-cluster="home"] .contact-form{max-width:34rem}
   body[data-content-cluster="home"] .header-inner{flex-wrap:wrap}
+  body[data-content-cluster="home"] .site-header{padding:.7rem 0 .5rem}
   body[data-content-cluster="home"] .desktop-nav{
     order:3;
     width:100%;
     justify-content:flex-start;
     gap:0 1.2rem;
-    padding-top:.2rem;
+    padding-top:.15rem;
     border-top:var(--sheet-rule);
   }
 
@@ -1013,8 +1016,10 @@ body[data-content-cluster="home"] .contact-form :is(input,select,textarea):focus
   outline:2px solid transparent;
 }
 
-/* ── a régua congelada, agora irmã de <main>, precisa de folga de âncora ── */
-html:has(body[data-content-cluster="home"]){scroll-padding-top:3.75rem}
+/* ── a folga de âncora acompanha o cabeçalho fixo, medida por breakpoint ── */
+html:has(body[data-content-cluster="home"]){scroll-padding-top:7.5rem}
+@media (max-width:1200px){html:has(body[data-content-cluster="home"]){scroll-padding-top:8.25rem}}
+@media (max-width:900px){html:has(body[data-content-cluster="home"]){scroll-padding-top:6.25rem}}
 
 /* ── alinhamento: rótulo da régua sobre o valor que ele encabeça ─────────── */
 body[data-content-cluster="home"] .sheet-ruler .c-un,

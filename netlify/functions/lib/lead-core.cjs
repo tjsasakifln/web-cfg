@@ -507,7 +507,9 @@ function normalizeJourney(raw, estagio) {
   if (/edital|proposta|licita/.test(e)) return "edital";
   if (/contrato|glosa|medi[cç][aã]o|aditivo|reequil|atraso|san[cç]/.test(e)) return "contrato";
   if (/diagn[oó]stico|opera[cç][aã]o|diretoria|b2g/.test(e)) return "operacao";
-  return "operacao";
+  // Sem sinal, nao adivinhe: classificar como "operacao" rebaixava em silencio
+  // um contrato urgente para a jornada de menor urgencia.
+  return "outro";
 }
 
 function looksLikeBinaryPayload(raw) {

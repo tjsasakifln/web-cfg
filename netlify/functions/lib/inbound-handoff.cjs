@@ -205,6 +205,7 @@ function mapLeadToInboundV1(record) {
   const referrer = sanitizeUrl(record.referrer);
   if (referrer) body.referrer = referrer;
   const qualification = [
+    ["situação", record.jornada],
     ["entrega", deliverableId],
     ["prazo", record.opportunity_deadline],
     ["evento contratual", record.contract_event],
