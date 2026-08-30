@@ -7,6 +7,7 @@ import {
   buildReport,
   evaluateFixture,
   normalize,
+  visibleText,
 } from "../../scripts/commercial/value_first_copy_audit.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
@@ -23,6 +24,7 @@ function assert(name, condition, detail) {
 const equal = (left, right) => JSON.stringify(left) === JSON.stringify(right);
 
 assert("schema", contract.schema === "confenge.value-first-copy-contract/1.0", contract.schema);
+assert("entities_decode_once", visibleText("<p>&amp;lt;script&amp;gt;</p>") === "&lt;script&gt;", visibleText("<p>&amp;lt;script&amp;gt;</p>"));
 assert("issue_527", contract.issue === "#527", contract.issue);
 assert("historical_338_preserved", contract.historical_relationship?.truth_issue === "#338" && /revisa sua hierarquia comercial/i.test(contract.historical_relationship?.statement || ""), contract.historical_relationship);
 assert("copy_contract_links_successor", copy.value_first_successor?.contract === "data/commercial/value-first-copy-contract.v1.json" && copy.value_first_successor?.issue === "#527", copy.value_first_successor);

@@ -88,15 +88,26 @@ export function normalize(text) {
 }
 
 function decodeEntities(text) {
-  return String(text || "")
-    .replace(/&nbsp;|&#160;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
-    .replace(/&quot;|&#34;/gi, '"')
-    .replace(/&#39;|&apos;/gi, "'")
-    .replace(/&#(\d+);/g, (_match, code) => String.fromCodePoint(Number(code)))
-    .replace(/&[a-z]+;/gi, " ");
+  const named = {
+    nbsp: " ",
+    amp: "&",
+    lt: "<",
+    gt: ">",
+    quot: '"',
+    apos: "'",
+  };
+  return String(text || "").replace(
+    /&(?:#(\d+)|([a-z]+));/gi,
+    (_match, decimal, name) => {
+      if (decimal !== undefined) {
+        const codePoint = Number(decimal);
+        return Number.isInteger(codePoint) && codePoint >= 0 && codePoint <= 0x10ffff
+          ? String.fromCodePoint(codePoint)
+          : " ";
+      }
+      return named[String(name).toLowerCase()] ?? " ";
+    },
+  );
 }
 
 export function visibleText(html) {
