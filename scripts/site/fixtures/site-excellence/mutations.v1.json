@@ -1,0 +1,157 @@
+{
+  "schema": "confenge.site-excellence-mutations/1.0",
+  "fixtures": [
+    {
+      "id": "forbidden-public-copy",
+      "dimension": "value-proposition-copy",
+      "metric_id": "copy-contract",
+      "observation": {"route": "/", "findings": [{"code": "forbidden_public_copy"}]},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "forbidden_public_copy"
+    },
+    {
+      "id": "census-collapse",
+      "dimension": "information-architecture",
+      "metric_id": "published-route-census",
+      "observation": {
+        "source_routes": ["/", "/entregas/", "/nova-rota/"],
+        "artifact_routes": ["/", "/entregas/"],
+        "manifest_routes": ["/", "/entregas/"]
+      },
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "census_artifact_drift"
+    },
+    {
+      "id": "orphan-url",
+      "dimension": "information-architecture",
+      "metric_id": "internal-link-reachability",
+      "observation": {"orphans": ["/sem-link/"], "broken_internal": [], "depth_gt_3": []},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "orphan_url"
+    },
+    {
+      "id": "word-squeezed",
+      "dimension": "responsive",
+      "metric_id": "responsive-geometry",
+      "observation": {
+        "measurements": [{"route": "/entregas/", "width": 360, "errors": ["hub_name_starved=5"]}]
+      },
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "word_squeezed"
+    },
+    {
+      "id": "cta-missing-1000px",
+      "dimension": "conversion",
+      "metric_id": "conversion-capture",
+      "observation": {
+        "measurements": [{"route": "/", "width": 1000, "errors": ["header_cta_missing"]}]
+      },
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "cta_missing_at_viewport"
+    },
+    {
+      "id": "form-without-turnstile",
+      "dimension": "conversion",
+      "metric_id": "turnstile-coverage",
+      "observation": {"missing_routes": ["/diagnostico-b2g-expansao/"]},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "form_without_turnstile"
+    },
+    {
+      "id": "broken-price",
+      "dimension": "offer-truth",
+      "metric_id": "price-geometry",
+      "observation": {
+        "measurements": [{"route": "/entregas/", "width": 360, "errors": ["price_wrapped=R$ 599/2L"]}]
+      },
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "broken_price_geometry"
+    },
+    {
+      "id": "eight-fifty-four-contradiction",
+      "dimension": "offer-truth",
+      "metric_id": "offer-truth",
+      "observation": {"route": "/entregas/", "findings": [{"code": "catalog_count_contradiction_8_54"}]},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "catalog_count_contradiction_8_54"
+    },
+    {
+      "id": "fake-testimonial",
+      "dimension": "trust-proof",
+      "metric_id": "permissioned-proof",
+      "observation": {"route": "/", "unpermissioned_markers": ["testimonial-carousel"]},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "fake_or_unpermissioned_proof"
+    },
+    {
+      "id": "indexable-boilerplate",
+      "dimension": "seo",
+      "metric_id": "seo-contract",
+      "observation": {"route": "/conteudos/molde/", "findings": [{"code": "indexable_boilerplate"}]},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "indexable_boilerplate"
+    },
+    {
+      "id": "semantic-boilerplate-cluster",
+      "dimension": "editorial-originality",
+      "metric_id": "editorial-originality",
+      "observation": {"findings": [{"code": "editorial_mold_cluster"}]},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "editorial_mold_cluster"
+    },
+    {
+      "id": "lcp-budget-exceeded",
+      "dimension": "performance",
+      "metric_id": "performance-budget",
+      "policy": {"maximum_lcp_ms": 2000},
+      "observation": {"route": "/", "viewport": "390x844", "lcp_ms": 2001},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "lcp_budget_exceeded"
+    },
+    {
+      "id": "unlabelled-control",
+      "dimension": "accessibility",
+      "metric_id": "accessibility-audit",
+      "observation": {"route": "/", "viewport": "390x844", "unlabelled_controls": 1, "coverage_complete": true},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "unlabelled_control"
+    },
+    {
+      "id": "unsafe-csp",
+      "dimension": "security-privacy",
+      "metric_id": "security-privacy",
+      "observation": {"findings": [{"code": "csp_unsafe_inline"}]},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "csp_unsafe_inline"
+    },
+    {
+      "id": "pii-in-analytics",
+      "dimension": "analytics-revops",
+      "metric_id": "analytics-revops",
+      "policy": {"forbidden_fields": ["email", "phone", "nome", "empresa", "mensagem", "query"]},
+      "observation": {"route": "/", "event_fields": ["event", "email"], "source": "CONFENGE_WEB"},
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "analytics_pii"
+    },
+    {
+      "id": "deploy-identity-drift",
+      "dimension": "deploy-runtime",
+      "metric_id": "deploy-identity",
+      "observation": {
+        "expected": {"commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "environment": "production", "host_architecture_version": "confenge-nginx-node/v2"},
+        "observed": {"commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "environment": "preview", "host_architecture_version": "netlify/v1"}
+      },
+      "expected_status": "MEASURED_FAIL",
+      "expected_code": "deploy_identity_commit_drift"
+    },
+    {
+      "id": "stale-gsc",
+      "dimension": "freshness",
+      "metric_id": "gsc-freshness",
+      "policy": {"maximum_age_days": 7},
+      "observation": {"as_of": "2026-08-18", "today": "2026-08-29", "source_available": true, "owner": "web-cfg #413"},
+      "expected_status": "BLOCKED_EXTERNAL",
+      "expected_code": "gsc_stale"
+    }
+  ]
+}

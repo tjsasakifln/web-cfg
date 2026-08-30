@@ -1,0 +1,289 @@
+{
+  "schema": "confenge.site-excellence/1.0",
+  "contract_version": "CFG-SITE-EXCELLENCE-2026-08-29-v1",
+  "implementation_base_sha": "83bcce42cdd742a98583d14ce69c581b472137fa",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "COMPOUNDING SYSTEM",
+  "time_to_evidence": "every site-ci run before the immutable Netcup artifact is exported",
+  "leverage": [
+    "automation",
+    "trust",
+    "distribution",
+    "revenue"
+  ],
+  "purpose": "Turn excellence into a fail-closed, evidence-bearing contract. Repeating the gate 100 times compounds regression coverage instead of creating 100 manual reviews.",
+  "authority": {
+    "public_surface": "confenge.com.br",
+    "truth_owner": "extra-cli SELECT-only versioned contracts",
+    "commercial_action_owner": "Warmbly",
+    "governance_owner": "Governance / Control Center",
+    "runtime": "Cloudflare public edge in front of the nginx/Netcup origin (confenge-nginx-node/v2)",
+    "affected_adr": "ADR-STRAT-002 (preserved; no boundary change)"
+  },
+  "allowed_statuses": [
+    "MEASURED_PASS",
+    "MEASURED_FAIL",
+    "BLOCKED_EXTERNAL"
+  ],
+  "scoring": {
+    "unit": "dimension",
+    "addressable_formula": "10 * MEASURED_PASS / (MEASURED_PASS + MEASURED_FAIL)",
+    "blocked_external_excluded_from_addressable_denominator": true,
+    "ten_of_ten_requires_every_addressable_dimension_to_pass": true,
+    "ten_of_ten_requires_no_blocked_external": true,
+    "measured_fail_blocks_ci": true,
+    "blocked_external_blocks_ci_or_promotion": false,
+    "blocked_external_blocks_ci_or_promotion_rationale": "BLOCKED_EXTERNAL dimensions (e.g. trust-proof, issue #328) cannot be cleared by any code PR, so they no longer hard-fail the required site-ci check or the Netcup promotion gate that reuses it. They are still fully measured, reported and withhold the global 10/10 claim.",
+    "blocked_external_withholds_global_claim_and_emits_ci_warning": true
+  },
+  "census": {
+    "source": "all visitor-facing source HTML derived by scripts/site/public_copy_scope.py",
+    "artifact": "all visitor-facing _site HTML plus seo/PUBLIC-ARTIFACT-MANIFEST.json",
+    "rule": "source and artifact route sets must agree exactly; the manifest must equal the index.html route class derived from source, after named non-visitor exemptions",
+    "minimum_route_count": null,
+    "manual_route_allowlist": false,
+    "fail_closed_on_missing_or_empty_source": true,
+    "fail_closed_on_any_set_difference": true
+  },
+  "report": {
+    "json": "build/reports/site-excellence.json",
+    "markdown": "build/reports/site-excellence.md",
+    "github_step_summary": true,
+    "private_ci_artifact": "site-ci-reports",
+    "sensitive_fields_forbidden": [
+      "email",
+      "name",
+      "phone",
+      "telefone",
+      "nome",
+      "empresa",
+      "cnpj",
+      "cpf",
+      "message",
+      "mensagem",
+      "query",
+      "query_text",
+      "lead_text"
+    ]
+  },
+  "dimensions": [
+    {
+      "id": "value-proposition-copy",
+      "label": "Value proposition and copy",
+      "critical": true,
+      "owner": "web-cfg #327",
+      "metrics": [
+        {
+          "id": "copy-contract",
+          "measurement": "automatic commercial claim and public-copy findings across the derived census",
+          "evidence": "route and finding code",
+          "fixture": "forbidden-public-copy"
+        }
+      ]
+    },
+    {
+      "id": "information-architecture",
+      "label": "Information architecture",
+      "critical": true,
+      "owner": "web-cfg #61",
+      "metrics": [
+        {
+          "id": "published-route-census",
+          "measurement": "automatic set equality among source, artifact and publish manifest routes",
+          "evidence": "route-set counts and exact differences",
+          "fixture": "census-collapse"
+        },
+        {
+          "id": "internal-link-reachability",
+          "owner": "web-cfg #481",
+          "measurement": "automatic home reachability and internal-link graph over every sitemap URL",
+          "evidence": "orphan route, source route and crawl depth",
+          "fixture": "orphan-url"
+        }
+      ]
+    },
+    {
+      "id": "responsive",
+      "label": "Responsive behavior",
+      "critical": true,
+      "owner": "web-cfg #468",
+      "metrics": [
+        {
+          "id": "responsive-geometry",
+          "measurement": "browser geometry at the declared mobile, tablet and desktop viewports",
+          "evidence": "route, viewport, measured width and line count",
+          "fixture": "word-squeezed"
+        }
+      ]
+    },
+    {
+      "id": "conversion",
+      "label": "Conversion",
+      "critical": true,
+      "owner": "web-cfg #267",
+      "metrics": [
+        {
+          "id": "conversion-capture",
+          "measurement": "automatic terminal-action and usable capture-form contract over the derived census",
+          "evidence": "route, viewport and failure code",
+          "fixture": "cta-missing-1000px"
+        },
+        {
+          "id": "turnstile-coverage",
+          "owner": "web-cfg #482",
+          "measurement": "automatic anti-abuse widget coverage for every form whose public runtime requires Turnstile; production keys must be non-empty",
+          "evidence": "route and missing integration code",
+          "fixture": "form-without-turnstile"
+        }
+      ]
+    },
+    {
+      "id": "offer-truth",
+      "label": "Offer truth",
+      "critical": true,
+      "owner": "web-cfg #343",
+      "metrics": [
+        {
+          "id": "offer-truth",
+          "measurement": "automatic catalog count, container, price-band and rendered price geometry checks",
+          "evidence": "route, viewport, observed claim and canonical registry value",
+          "fixture": "eight-fifty-four-contradiction"
+        },
+        {
+          "id": "price-geometry",
+          "measurement": "browser line-box and cell-bound checks for every displayed comparison price",
+          "evidence": "route, viewport, price text and line count",
+          "fixture": "broken-price"
+        }
+      ]
+    },
+    {
+      "id": "trust-proof",
+      "label": "Trust and proof",
+      "critical": true,
+      "owner": "web-cfg #328",
+      "metrics": [
+        {
+          "id": "permissioned-proof",
+          "measurement": "automatic scan for unpermissioned proof plus explicit external registry state",
+          "evidence": "route, proof marker and blocker owner",
+          "fixture": "fake-testimonial"
+        }
+      ]
+    },
+    {
+      "id": "seo",
+      "label": "SEO",
+      "critical": true,
+      "owner": "web-cfg #61",
+      "metrics": [
+        {
+          "id": "seo-contract",
+          "measurement": "automatic canonical, robots, sitemap, schema and indexable-mold validation",
+          "evidence": "route and SEO failure code",
+          "fixture": "indexable-boilerplate"
+        }
+      ]
+    },
+    {
+      "id": "editorial-originality",
+      "label": "Editorial originality",
+      "critical": true,
+      "owner": "web-cfg #83",
+      "metrics": [
+        {
+          "id": "editorial-originality",
+          "measurement": "automatic boilerplate fingerprints and cross-page semantic mold clusters over every indexable route",
+          "evidence": "route, matching routes and mold code",
+          "fixture": "indexable-boilerplate"
+        }
+      ]
+    },
+    {
+      "id": "performance",
+      "label": "Performance",
+      "critical": true,
+      "owner": "web-cfg public runtime",
+      "metrics": [
+        {
+          "id": "performance-budget",
+          "measurement": "recomputed Lighthouse result under the existing interface-coverage and Web Vitals budgets",
+          "evidence": "route, viewport, runs and measured timing",
+          "threshold_source": "scripts/site/lighthouse_thresholds.mjs",
+          "fixture": "lcp-budget-exceeded"
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "label": "Accessibility",
+      "critical": true,
+      "owner": "web-cfg public surface",
+      "metrics": [
+        {
+          "id": "accessibility-audit",
+          "measurement": "axe critical/serious census and keyboard/geometry checks at mobile and desktop viewports",
+          "evidence": "route, viewport and rule id",
+          "fixture": "unlabelled-control"
+        }
+      ]
+    },
+    {
+      "id": "security-privacy",
+      "label": "Security and privacy",
+      "critical": true,
+      "owner": "web-cfg public runtime",
+      "metrics": [
+        {
+          "id": "security-privacy",
+          "measurement": "automatic CSP/header, secret, PII-shape and form anti-abuse checks",
+          "evidence": "policy file, route and failure code",
+          "fixture": "unsafe-csp"
+        }
+      ]
+    },
+    {
+      "id": "analytics-revops",
+      "label": "Analytics and RevOps",
+      "critical": true,
+      "owner": "web-cfg #267; Warmbly owns downstream action",
+      "metrics": [
+        {
+          "id": "analytics-revops",
+          "measurement": "automatic event dictionary, CONFENGE_WEB attribution and PII rejection",
+          "evidence": "route, event name and forbidden key code only",
+          "fixture": "pii-in-analytics"
+        }
+      ]
+    },
+    {
+      "id": "deploy-runtime",
+      "label": "Deploy and runtime",
+      "critical": true,
+      "owner": "RUNTIME-AUTHORITY; web-cfg #466",
+      "metrics": [
+        {
+          "id": "deploy-identity",
+          "measurement": "automatic build SHA, environment and nginx/Netcup authority comparison",
+          "evidence": "expected and observed non-sensitive identity fields",
+          "fixture": "deploy-identity-drift"
+        }
+      ]
+    },
+    {
+      "id": "freshness",
+      "label": "Freshness",
+      "critical": true,
+      "owner": "web-cfg #413",
+      "metrics": [
+        {
+          "id": "gsc-freshness",
+          "measurement": "age of the latest redacted live GSC observation",
+          "evidence": "source kind, as-of date, age and exact blocker owner",
+          "maximum_age_days": 7,
+          "fixture": "stale-gsc"
+        }
+      ]
+    }
+  ]
+}

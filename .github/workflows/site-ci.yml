@@ -163,6 +163,13 @@ jobs:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           UI_GEOMETRY_REQUIRED: "1"
         run: npm run audit:layout-sitewide
+      - name: "Perceptual commercial regressions from #468"
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          UI_GEOMETRY_REQUIRED: "1"
+          PUBLIC_ARTIFACT_REQUIRED: "1"
+          DELIVERABLES_HUB_REPORT: build/reports/deliverables-hub-ui.json
+        run: npm run test:deliverables-hub-ui
       - name: pSEO validate and audit
         run: |
           npm run pseo:validate
@@ -178,6 +185,7 @@ jobs:
       - name: axe accessibility
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          AXE_REPORT_PATH: build/reports/axe-report.json
         run: npm run audit:axe
       - name: Lighthouse local (_site)
         env:
@@ -208,6 +216,12 @@ jobs:
           done
           node scripts/site/playwright_local_checklist.mjs
           kill "$(cat /tmp/site-http.pid)" || true
+      - name: Executable site-excellence scorecard
+        if: always()
+        run: >-
+          npm run quality:site-excellence --
+          --expected-environment
+          ${{ inputs.export_public_artifact && 'production' || 'local' }}
       - name: Release artifact carries a usable anti-abuse widget
         if: inputs.export_public_artifact
         run: |
@@ -244,7 +258,10 @@ jobs:
           name: site-ci-reports
           path: |
             docs/lighthouse-runs/
-            docs/uiux-evidence/axe-report.json
             docs/uiux-tools-remediation/evidence/
             seo/pseo-*.json
+            build/reports/deliverables-hub-ui.json
+            build/reports/axe-report.json
+            build/reports/site-excellence.json
+            build/reports/site-excellence.md
           if-no-files-found: ignore

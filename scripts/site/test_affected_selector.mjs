@@ -92,7 +92,13 @@ function expectSubset(result, mustInclude, because) {
 {
   const paths = [".github/workflows/site-ci.yml"];
   const result = selectAffected(paths, scripts);
-  expectSubset(result, ["test:workflow-gates"], "workflow yaml");
+  expectSubset(result, ["test:workflow-gates", "test:site-excellence"], "workflow yaml");
+}
+
+{
+  const paths = ["data/quality/site-excellence.v1.json"];
+  const result = selectAffected(paths, scripts);
+  expectSubset(result, ["test:site-excellence"], "site excellence contract");
 }
 
 {
