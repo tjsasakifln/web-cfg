@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
+  CLS_CAP,
   CRITICAL_MONEY_PATHS,
+  DECLARED_CLS_MAX,
   evaluateLighthouseResults,
   percentile75,
+  readDeclaredBudget,
+  validateDeclaredBudget,
 } from "./lighthouse_thresholds.mjs";
 import { ROOT, deriveCoverage, loadPolicy } from "./interface_coverage.mjs";
 
@@ -278,6 +282,73 @@ for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary
       `summary.json ${field} does not match ${filename}`,
     );
   }
+}
+
+// --- #508: the CLS budget is one declared number, enforced on live Chrome ---
+//
+// `performance_budget.cls_max` in data/site/design-system.json is read here and
+// applied to the rows `npm run test:lighthouse` produces from headless Chrome
+// against the built _site. scripts/site/audit_performance.py reads the same key
+// and applies it to the committed rows in docs/lighthouse-runs/summary.json.
+// Nothing below hardcodes 0.05 as the source of truth.
+{
+  const declared = JSON.parse(
+    readFileSync(new URL("../../data/site/design-system.json", import.meta.url), "utf8"),
+  ).performance_budget;
+  assert.equal(
+    DECLARED_CLS_MAX,
+    declared.cls_max,
+    "the CLS gate must read design-system.json, not a hardcoded literal",
+  );
+  assert.equal(readDeclaredBudget().clsMax, declared.cls_max);
+  assert.ok(declared.cls_max <= CLS_CAP, "cls_max must not be loosened past the release gate");
+  assert.ok(
+    Number.isFinite(declared.font_total_gzip_kb_max) && Number.isFinite(declared.font_files_max),
+    "the font budget keys must exist alongside cls_max",
+  );
+
+  // A declaration that loosens or removes the gate must not load at all.
+  assert.throws(
+    () => validateDeclaredBudget({ cls_max: CLS_CAP + 0.01 }),
+    /exceeds cap/,
+    "raising cls_max above the release gate must fail closed",
+  );
+  assert.throws(
+    () => validateDeclaredBudget({}),
+    /cls_max is missing/,
+    "a performance_budget without cls_max must fail closed",
+  );
+
+  // And the declared number must actually bite on a measured row.
+  const row = (cls) => ({
+    path: "/entregas/",
+    run: 1,
+    performance: 100,
+    accessibility: 100,
+    best_practices: 100,
+    seo: 100,
+    tbt_ms: 10,
+    longest_own_task_ms: 10,
+    lcp_ms: 1000,
+    dom_elements: 500,
+    total_byte_weight: 1000,
+    font_display_score: 1,
+    image_aspect_ratio: 1,
+    image_size_responsive: 1,
+    cls,
+  });
+  const clsErrors = (cls, options = {}) =>
+    evaluateLighthouseResults([row(cls)], { homeRuns: 0, criticalRuns: 1, ...options })
+      .errors.filter((error) => error.startsWith("/entregas/: CLS"));
+  assert.equal(clsErrors(DECLARED_CLS_MAX).length, 0, "a row exactly on the budget passes");
+  assert.ok(clsErrors(DECLARED_CLS_MAX + 0.01).length > 0, "a row above the budget must fail");
+  // Tightening the declaration tightens the gate, with no other edit.
+  assert.ok(
+    clsErrors(0.02, { clsMax: 0.01 }).length > 0,
+    "a tighter declared cls_max must reject a row the looser one accepted",
+  );
+  assert.equal(clsErrors(0.02, { clsMax: 0.03 }).length, 0);
+  console.log("OK declared_cls_budget_is_read_and_bites");
 }
 
 console.log("LIGHTHOUSE_THRESHOLDS_OK");

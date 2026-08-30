@@ -1,3 +1,45 @@
+import { readFileSync } from "node:fs";
+
+/**
+ * CLS budget (issue #508).
+ *
+ * `performance_budget.cls_max` in data/site/design-system.json is the single
+ * declared number. It is enforced in two places against two different
+ * measurements, and neither of them is a guess:
+ *
+ *  - here, against the live headless-Chrome run CI performs on the built _site
+ *    (`npm run test:lighthouse`, then `LH_REQUIRE_RAW_EVIDENCE=1 npm run
+ *    test:lighthouse-gates`);
+ *  - in scripts/site/audit_performance.py, against the committed rows in
+ *    docs/lighthouse-runs/summary.json, per route.
+ *
+ * CLS_CAP mirrors the Python cap: the declaration may tighten the release gate
+ * that already exists, never loosen it.
+ */
+export const CLS_CAP = 0.05;
+const DESIGN_SYSTEM_URL = new URL("../../data/site/design-system.json", import.meta.url);
+
+/** Read and validate the declared budget. Fail closed on a missing or raised key. */
+export function readDeclaredBudget(url = DESIGN_SYSTEM_URL) {
+  return validateDeclaredBudget(
+    JSON.parse(readFileSync(url, "utf8")).performance_budget || {},
+  );
+}
+
+/** Pure validation, so a negative test can drive it without touching disk. */
+export function validateDeclaredBudget(budget) {
+  const clsMax = Number(budget.cls_max);
+  if (!Number.isFinite(clsMax)) {
+    throw new Error("design-system.json performance_budget.cls_max is missing");
+  }
+  if (clsMax > CLS_CAP) {
+    throw new Error(`declared cls_max ${clsMax} exceeds cap ${CLS_CAP}`);
+  }
+  return { clsMax };
+}
+
+export const DECLARED_CLS_MAX = readDeclaredBudget().clsMax;
+
 export function percentile75(values) {
   const ordered = values
     .filter((value) => Number.isFinite(value))
@@ -25,7 +67,8 @@ export function evaluateLighthouseResults(results, options = {}) {
   const criticalRoutes = options.criticalRoutes || new Set(["/entregas/"]);
   const criticalPerformance = Number(options.criticalPerformance || 95);
   const homeLcpMaxMs = Number(options.homeLcpMaxMs || 2000);
-  const homeClsMax = Number(options.homeClsMax || 0.05);
+  const homeClsMax = Number(options.homeClsMax ?? DECLARED_CLS_MAX);
+  const clsMax = Number(options.clsMax ?? DECLARED_CLS_MAX);
   const thresholds = {
     performance: 90,
     accessibility: 95,
@@ -57,8 +100,8 @@ export function evaluateLighthouseResults(results, options = {}) {
         errors.push(`${row.path}: performance ${row.performance} < ${floor}`);
       }
     }
-    if (Number.isFinite(row.cls) && row.cls > (options.clsMax ?? 0.05)) {
-      errors.push(`${row.path}: CLS ${row.cls} > ${options.clsMax ?? 0.05}`);
+    if (Number.isFinite(row.cls) && row.cls > clsMax) {
+      errors.push(`${row.path}: CLS ${row.cls} > ${clsMax}`);
     }
     if (
       imageGatePages.has(row.path)
