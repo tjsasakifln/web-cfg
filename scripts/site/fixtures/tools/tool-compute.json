@@ -1,0 +1,101 @@
+{
+  "schema": "confenge-tool-compute-fixtures/1.0",
+  "source": "Lei 14.133/2021 art. 125; TCU reequilíbrio documental; matriz de atraso como hipótese",
+  "limite": {
+    "geral_25_over": {
+      "input": {
+        "valorInicial": 10000000,
+        "tipo": "geral",
+        "acrescimosPrevios": 1800000,
+        "supressoesPrevias": 0,
+        "acrescimoProposto": 900000,
+        "supressaoProposta": 0
+      },
+      "expect": {
+        "ok": true,
+        "withinAc": false,
+        "withinSu": true,
+        "level": "bad",
+        "limAc": 0.25,
+        "maxAc": 2500000,
+        "acTotal": 2700000
+      }
+    },
+    "reforma_50_ok": {
+      "input": {
+        "valorInicial": 1000000,
+        "tipo": "reforma",
+        "acrescimosPrevios": 0,
+        "supressoesPrevias": 0,
+        "acrescimoProposto": 400000,
+        "supressaoProposta": 0
+      },
+      "expect": {
+        "ok": true,
+        "limAc": 0.5,
+        "limSu": 0.25,
+        "withinAc": true,
+        "withinSu": true,
+        "maxAc": 500000
+      }
+    },
+    "independent_axes": {
+      "input": {
+        "valorInicial": 1000000,
+        "tipo": "geral",
+        "acrescimosPrevios": 300000,
+        "supressoesPrevias": 0,
+        "acrescimoProposto": 0,
+        "supressaoProposta": 50000
+      },
+      "expect": {
+        "ok": true,
+        "withinAc": false,
+        "withinSu": true,
+        "limAc": 0.25,
+        "limSu": 0.25
+      }
+    },
+    "zero_base": {
+      "input": { "valorInicial": 0, "tipo": "geral" },
+      "expect": { "ok": false }
+    },
+    "negative_acrescimo": {
+      "input": {
+        "valorInicial": 1000000,
+        "tipo": "geral",
+        "acrescimosPrevios": -1
+      },
+      "expect": { "ok": false }
+    },
+    "overflow": {
+      "input": {
+        "valorInicial": 1e13,
+        "tipo": "geral"
+      },
+      "expect": { "ok": false }
+    },
+    "rounding_visible": {
+      "input": {
+        "valorInicial": 1000000.006,
+        "tipo": "geral",
+        "acrescimosPrevios": 0,
+        "supressoesPrevias": 0,
+        "acrescimoProposto": 0,
+        "supressaoProposta": 0
+      },
+      "expect": {
+        "ok": true,
+        "V": 1000000.01,
+        "roundedContains": "valor_inicial"
+      }
+    }
+  },
+  "parseBRL": [
+    { "raw": "10000000", "value": 10000000 },
+    { "raw": "10000000,50", "value": 10000000.5 },
+    { "raw": "10.000.000", "value": 10000000 },
+    { "raw": "10.000.000,50", "value": 10000000.5 }
+  ],
+  "parseBRL_invalid": ["abc", "", "12,345", "-10", "1e6", "NaN"]
+}

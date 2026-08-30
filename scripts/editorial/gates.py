@@ -147,10 +147,17 @@ def evaluate_page(
         if appr.get("material_hash") and appr.get("material_hash") != page.get("material_hash"):
             issues.append("approval_material_hash_mismatch")
 
-    # Canonical path shape
+    # Canonical path shape. A reviewed migration donor may declare the
+    # indexable owner that render.py emits, but an indexable page must remain
+    # self-canonical and no declaration may escape the public CONFENGE path.
     url = page.get("url") or ""
     if not url.startswith("/"):
         issues.append("url_not_absolute_path")
+    canonical_path = page.get("canonical_path") or url
+    if not canonical_path.startswith("/") or canonical_path.startswith("//"):
+        issues.append("canonical_not_absolute_path")
+    elif status in INDEXABLE_STATES and canonical_path != url:
+        issues.append("indexable_canonical_not_self")
 
     analytics_missing = analytics_hooks_present(html)
     if analytics_missing:
@@ -161,7 +168,7 @@ def evaluate_page(
     if is_fixture_only(html):
         issues.append("visible_parity:fixture_only")
     else:
-        parity = compare_visible_parity(html, url=url or None)
+        parity = compare_visible_parity(html, url=canonical_path or None)
         for defect in parity.get("defects") or []:
             issues.append(
                 "visible_parity:" + defect["code"] + ":" + (defect.get("field") or "")

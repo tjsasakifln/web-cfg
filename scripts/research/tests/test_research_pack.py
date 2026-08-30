@@ -310,6 +310,7 @@ def test_preview_is_noindex_and_absent_from_sitemaps():
     html = preview.read_text(encoding="utf-8")
     assert 'content="noindex,nofollow"' in html
     assert "Como citar:" in html
+    assert "Como citar:</strong> CONFENGE." in html
     assert "id=\"metodologia\"" in html or "id='metodologia'" in html
     assert "dataset_hash" in html
     assert "evidência Q1" in html
@@ -327,6 +328,19 @@ def test_preview_is_noindex_and_absent_from_sitemaps():
         path = ROOT / name
         if path.is_file():
             assert needle not in path.read_text(encoding="utf-8")
+
+
+def test_preview_renderer_marks_citation_provenance_as_opaque(
+    pack, tmp_path, monkeypatch
+):
+    from scripts.research import render as render_module
+
+    monkeypatch.setattr(render_module, "_root", lambda: tmp_path)
+    preview = render_module.render_preview(pack)
+    html = preview.read_text(encoding="utf-8")
+
+    assert "Como citar:</strong> CONFENGE." in html
+    assert "data-opaque-token" in html
 
 
 def test_findings_trace_to_questions(pack):

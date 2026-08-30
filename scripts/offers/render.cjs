@@ -85,11 +85,13 @@ function writePages() {
     lead: "Precos visiveis, sem link generico de pagamento. Preview noindex enquanto o catalogo publico permanece desligado.",
     body: `
 <p>Flags: catalogo publico=${flags.CONFENGE_OFFER_CATALOG_PUBLIC} · ASAAS_MODE=${flags.ASAAS_MODE} · pagamento de producao=${flags.production_checkout_enabled}.</p>
+<div class="table-wrap" role="group" tabindex="0" aria-label="Comparação de ofertas CONFENGE">
 <table class="ma-table">
 <caption>Ofertas publicas aprovadas (sem Extra historico)</caption>
 <thead><tr><th scope="col">Oferta</th><th scope="col">Preco</th><th scope="col">Modo</th><th scope="col">Proximo passo</th></tr></thead>
 <tbody>${rows}</tbody>
 </table>
+</div>
 <p class="ma-cta">
 <a class="button button-primary" href="/piloto/ofertas/contratar/">Solicitar contratacao</a>
 <a class="button" href="/piloto/ofertas/faq/">Perguntas frequentes</a>

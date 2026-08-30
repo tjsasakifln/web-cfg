@@ -255,26 +255,31 @@ for (const offerId of truth.hub.cited_offer_ids) {
   assert(`hub_jsonld_lists_${offerId}`, hubList.includes(offer.public_name), hubList);
 }
 
-/* Public vitrine shows PUBLISHED only. VALIDATE stays in catalog-data.js, never as a card. */
+/* Only PUBLISHED units are buying cards; every state remains findable in the reference roll. */
 const catalogHtml = read("entregas/index.html");
 const catalogData = read("entregas/catalog-data.js");
 assert("public_vitrine_has_8_cards", (catalogHtml.match(/<article class="vitrine-item/g) || []).length === 8);
 for (const offerId of ["CFG-D16", "CFG-D17", "CFG-D24"]) {
   const offer = truth.byId.get(offerId);
   assert(`catalog_omits_validate_card_${offerId}`, !catalogHtml.includes(`data-deliverable-id="${offerId}"`), offerId);
+  assert(`catalog_lists_validate_capability_${offerId}`, catalogHtml.includes(`data-capability-id="${offerId}" data-public-state="VALIDATE"`), offerId);
   assert(`catalog_data_has_${offerId}`, catalogData.includes(`"${offerId}"`), offerId);
   assert(`catalog_not_buy_cta_${offerId}`, !new RegExp(`data-deliverable-id="${offerId}"[\\s\\S]{0,800}comprar agora`, "i").test(catalogHtml));
   assert(`catalog_name_not_sold_as_published_${offerId}`, offer.public_state === "VALIDATE", offer.public_state);
 }
 assert("catalog_expansion_price", catalogHtml.includes("R$ 8.000"), "expansion");
-assert("catalog_omits_validate_legend", !/Em validação/.test(catalogHtml) && !/as 54 entregáveis/.test(catalogHtml));
+const capabilityRoll = catalogHtml.match(/<section class="capability-roll"[\s\S]*?<\/section>/)?.[0] || "";
+assert("catalog_has_explicit_state_legend", /8 publicadas/.test(capabilityRoll) && /44 em validação/.test(capabilityRoll) && /2 bloqueadas/.test(capabilityRoll));
+assert("capability_roll_has_no_price", !/R\$/.test(capabilityRoll), capabilityRoll.match(/R\$[^<]*/g));
 
-/* Deliberate mismatch must fail: hub vs catalog vs JSON-LD on D16 name. */
+/* Deliberate mismatch must fail: hub vs catalog data on D16 name.
+ * VALIDATE offers are intentionally absent from the public vitrine, so this
+ * check must not depend on the shared footer repeating the offer name. */
 {
-  const fakeHub = hubHtml.replaceAll("Operação de Proposta para Licitação Crítica", "Bid Room");
-  const fakeText = visibleText(fakeHub);
   const elected = truth.byId.get("CFG-D16").public_name;
-  const mismatch = fakeText.includes("Bid Room") && catalogHtml.includes(elected) && elected !== "Bid Room";
+  const fakeHub = hubHtml.replaceAll(elected, "Bid Room");
+  const fakeText = visibleText(fakeHub);
+  const mismatch = fakeText.includes("Bid Room") && catalogData.includes(elected) && elected !== "Bid Room";
   assert("deliberate_hub_catalog_name_mismatch_is_detectable", mismatch === true, { elected });
 }
 

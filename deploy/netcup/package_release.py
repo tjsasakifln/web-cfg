@@ -349,6 +349,7 @@ def build_release(
         )
         for relative in (
             "data/revops/inbound-backlog-decision.v1.json",
+            "data/revops/closed-loop-funnel.v1.json",
             "data/nurture/tracks.json",
             "data/site/editorial-policy.json",
             "data/bofu-dominance/core/gsc-live-overlay.v1.json",
@@ -408,6 +409,7 @@ def build_release(
                 "data/offers/provider-mapping.json",
                 "data/offers/fixtures/",
                 "data/revops/inbound-backlog-decision.v1.json",
+                "data/revops/closed-loop-funnel.v1.json",
                 "netlify.toml",
                 "package.json",
                 "package-lock.json",

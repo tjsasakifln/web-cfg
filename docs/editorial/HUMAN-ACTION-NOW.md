@@ -11,27 +11,6 @@ A aprovação vale para o conteúdo material canônico, as fontes exatas e o dep
 3. Revise a URL de preview, as fontes e a decisão de canibalização da página abaixo.
 4. Rode somente um comando de aprovação por vez, fora de CI. O CLI volta a verificar o preview antes de gravar qualquer decisão.
 
-## Limite de 25% e 50% no art. 125: o que conta no aditivo de obra
-
-- Preview: https://deploy-preview-54--confenge.netlify.app/lei-14133-obras/limite-25-50-aditivo-obra/
-- Material hash v3: `52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5`
-- Fontes a conferir: `lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024,agu-on-50-2014`
-- Concorrente interno: `/conteudos/limite-aditivo-25-50-obra-publica/`
-- Risco de canibalização: alto: definir uma única canônica antes de indexar; 301 ou noindex do peer somente após decisão humana.
-
-```bash
-ALLOW_HUMAN_APPROVAL=1 python3 scripts/editorial/approve_cli.py \
-  --reviewer "<nome humano real>" \
-  --page-id lei-limite-25-50 \
-  --notes "<notas concretas da revisão humana, com ao menos 20 caracteres>" \
-  --sources lei-14133-art125,lei-14133-art124,lei-14133-art126-132,lei-14133-planalto,agu-alteracoes-contratuais-2024,agu-on-50-2014 \
-  --checklist sources_verified,legal_devices_checked,naturalness_ok,cta_contextual,no_fictitious_authorship,cannibalization_resolved_or_blocked,material_hash_confirmed,no_indecent_promise \
-  --material-hash 52fea1f7faec7e204efc017356f900f47dfda65aca9454fd7372a05392e05de5 \
-  --preview-base-url https://deploy-preview-54--confenge.netlify.app \
-  --confirm \
-  --indexable
-```
-
 ## Checklist de pedido de aditivo em obra pública
 
 - Preview: https://deploy-preview-54--confenge.netlify.app/guias-contratos-obras/checklist-pedido-aditivo/

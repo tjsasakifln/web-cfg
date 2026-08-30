@@ -205,8 +205,8 @@ async function main() {
   );
   check(/\/blog\s+\/conteudos\//.test(redirectsFile), "_redirects has /blog → /conteudos/");
   check(
-    /\/servicos\s+\/#como-atuamos/.test(redirectsFile),
-    "_redirects has /servicos → /#como-atuamos"
+    /\/servicos\s+\/servicos-obras-publicas\//.test(redirectsFile),
+    "_redirects has /servicos → /servicos-obras-publicas/"
   );
   check(/\/contato\s+\/#contato/.test(redirectsFile), "_redirects has /contato → /#contato");
   let slashOnly = 0;
@@ -333,8 +333,8 @@ async function main() {
     {
       path: "/servicos",
       wantStatus: [301, 308],
-      locIncludes: "como-atuamos",
-      name: "servicos→como-atuamos",
+      locIncludes: "servicos-obras-publicas",
+      name: "servicos→servicos-obras-publicas",
     },
     {
       path: "/contato",

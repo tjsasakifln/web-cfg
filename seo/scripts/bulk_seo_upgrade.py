@@ -36,18 +36,18 @@ TITLE_OVERRIDES = {
     "bdi-diferenciado-obra-publica": "BDI diferenciado em materiais e equipamentos: quando usar",
     "limite-aditivo-25-50-obra-publica": "Limite de aditivo 25% e 50%: o que conta na Lei 14.133",
     "fiscal-nao-assina-medicao-obra-publica": "Fiscal não assina medição: o que fazer nas primeiras 48h",
-    "demolicao-nao-prevista-obra-publica": "Demolição não prevista em obra pública: como cobrar",
+    "demolicao-nao-prevista-obra-publica": "Demolição não prevista em obra pública: prova e medição",
     "atraso-pagamento-contrato-publico-suspender": "Atraso de pagamento: pode suspender a obra pública?",
     "administracao-local-orcamento-obra-publica": "Administração local: custo direto, BDI ou planilha?",
     "mobilizacao-desmobilizacao-orcamento-obra": "Como calcular mobilização e desmobilização na proposta",
-    "atraso-obra-culpa-administracao": "Atraso por culpa da Administração: como provar e proteger",
-    "aditivo-empreitada-por-preco-global": "Aditivo em empreitada global: quando a construtora tem direito",
-    "resposta-notificacao-atraso-obra-publica": "Notificação por atraso: como montar a resposta técnica",
+    "atraso-obra-culpa-administracao": "Prova de culpa da Administração no atraso da obra",
+    "aditivo-empreitada-por-preco-global": "Aditivo em empreitada por preço global: quando o regime não cobre",
+    "resposta-notificacao-atraso-obra-publica": "Resposta à notificação de atraso em obra pública",
     "data-base-orcamento-reajuste-obra-publica": "Data-base e reajuste: onde a construtora perde dinheiro",
     "glosa-por-qualidade-obra-publica": "Glosa por qualidade: a fiscalização pode glosar tudo?",
     "atraso-na-medicao-obra-publica": "Atraso na medição: como proteger o fluxo de caixa",
     "pagamento-parcial-etapa-empreitada-global": "Pagamento parcial em empreitada global: quando vale",
-    "prorrogacao-prazo-obra-publica-documentos": "Prorrogação de prazo: documentos que não podem faltar",
+    "prorrogacao-prazo-obra-publica-documentos": "Dossiê do pedido de prorrogação de prazo",
     "sinapi-ou-sicro-obra-publica": "SINAPI ou SICRO: qual referência vale em cada serviço?",
     "desconto-da-proposta-em-item-novo-aditivo": "Item novo no aditivo: aplica o desconto da licitação?",
     "comprovacao-exequibilidade-proposta-obra": "Comprovar exequibilidade sem fragilizar a planilha",
@@ -210,7 +210,7 @@ def lead_inline_html(wa_url: str, topic: str, form_path: str) -> str:
         f'<div class="lead-inline-actions">'
         f'<a class="button button-primary" href="{wa_url}" rel="noopener" target="_blank">'
         f"WhatsApp sobre {topic[:42]}</a>"
-        f'<a class="button button-secondary" href="/#contato?tema={quote(topic)}&amp;origem={quote(form_path)}">'
+        f'<a class="button button-secondary" href="/#contato" data-tema="{topic}" data-origem="{form_path}">'
         f"Preferir formulário</a>"
         f"</div></section>"
     )

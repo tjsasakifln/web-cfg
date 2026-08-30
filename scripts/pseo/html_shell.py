@@ -24,6 +24,11 @@ except Exception:  # noqa: BLE001 ,  keep pSEO build resilient
     _footer_blurb = None  # type: ignore[assignment]
 
 try:
+    from scripts.site.public_ia import footer_columns_html as _footer_columns_html
+except Exception:  # noqa: BLE001
+    _footer_columns_html = None  # type: ignore[assignment]
+
+try:
     from scripts.site.authority import footer_authority_nav as _footer_authority_nav
 except Exception:  # noqa: BLE001
     _footer_authority_nav = None  # type: ignore[assignment]
@@ -128,23 +133,21 @@ def _build_header() -> str:
     brand = _brand_safe()
     # Approved visitor redesign shell (fallback matches data/site/brand.json).
     nav = (brand.get("navigation") or {}).get("desktop") or [
-        {"label": "Serviços", "href": "/servicos-obras-publicas/"},
-        {"label": "Problemas que resolvemos", "href": "/problemas-que-resolvemos/"},
-        {"label": "Entregas", "href": "/entregas/"},
-        {"label": "Conteúdos", "href": "/conteudos/"},
-        {"label": "Ferramentas", "href": "/ferramentas/"},
-        {"label": "Especialista", "href": "/especialista/tiago-jun-sasaki/"},
+        {"label": "Edital e proposta", "href": "/bid-room-licitacoes-obras/"},
+        {"label": "Contrato sob pressão", "href": "/problemas-que-resolvemos/"},
+        {"label": "Operação recorrente", "href": "/diretoria-b2g/"},
+        {"label": "Biblioteca", "href": "/conteudos/"},
     ]
     cta = (brand.get("navigation") or {}).get("cta") or {
         "label": "Analisar meu caso",
         "href": "/#formulario-contato",
     }
     links = "\n".join(
-        f'<a data-cta-position="header_nav" href="{n["href"]}">{n["label"]}</a>'
+        f'<a data-cta-position="header_nav" href="{html.escape(n["href"], quote=True)}" style="min-height:44px">{html.escape(n["label"])}</a>'
         for n in nav
     )
-    mobile = "".join(
-        f'<a data-cta-position="mobile_nav" href="{n["href"]}">{n["label"]}</a>'
+    mobile = "\n".join(
+        f'<a data-cta-position="mobile_nav" href="{html.escape(n["href"], quote=True)}" style="min-height:44px">{html.escape(n["label"])}</a>'
         for n in nav
     )
     return f"""<header class="site-header" id="inicio">
@@ -167,22 +170,40 @@ def _build_header() -> str:
 
 def _build_footer() -> str:
     blurb = _footer_text()
-    brand = _brand_safe()
-    offers = brand.get("offers") or []
-    offer_links = "".join(
-        f'<a href="{o.get("url")}">{html.escape(o.get("name") or "")}</a>' for o in offers
-    ) or (
-        '<a href="/diagnostico-b2g-360/">Diagnóstico da Operação em Obras Públicas</a>'
-        '<a href="/diretoria-b2g/">Diretoria Fracionada para o Mercado Público</a>'
-        '<a href="/bid-room-licitacoes-obras/">Operação de Proposta para Licitação Crítica</a>'
-        '<a href="/defesa-margem-contratos-publicos/">Defesa de margem</a>'
-    )
+    if _footer_columns_html is not None:
+        try:
+            columns = _footer_columns_html()
+        except Exception:  # noqa: BLE001
+            columns = ""
+    else:
+        columns = ""
+    if not columns:
+        columns = (
+            '<div class="footer-links"><strong>Situações</strong>'
+            '<a href="/bid-room-licitacoes-obras/">Edital e proposta</a>'
+            '<a href="/problemas-que-resolvemos/">Contrato sob pressão</a>'
+            '<a href="/diretoria-b2g/">Operação recorrente</a></div>'
+            '<div class="footer-links"><strong>Biblioteca</strong>'
+            '<a href="/conteudos/">Conteúdos</a>'
+            '<a href="/ferramentas/">Ferramentas</a>'
+            '<a href="/entregas/">Entregas</a>'
+            '<a href="/casos/">Casos</a>'
+            '<a href="/aditivos-obras-publicas/">Aditivos</a>'
+            '<a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a>'
+            '<a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a>'
+            '<a href="/reequilibrio-obras-publicas/">Reequilíbrio</a></div>'
+            '<div class="footer-links"><strong>Empresa</strong>'
+            '<a href="/servicos-obras-publicas/">Serviços</a>'
+            '<a href="/especialista/tiago-jun-sasaki/">Especialista</a>'
+            '<a href="/imprensa/">Imprensa</a>'
+            '<a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a>'
+            '<a href="tel:+5548988344559">(48) 98834-4559</a>'
+            "<span>Atendimento nacional</span></div>"
+        )
     return f"""<footer class="site-footer">
 <div class="container footer-top">
 <div class="footer-brand"><img alt="CONFENGE" decoding="async" height="58" loading="lazy" src="/assets/logo-confenge-white-500-1677038e.png" width="224"/><p>{html.escape(blurb)}</p></div>
-<div class="footer-links"><strong>Serviços</strong><a href="/servicos-obras-publicas/">Todos os serviços</a>{offer_links}</div>
-<div class="footer-links footer-clusters"><strong>Problemas que resolvemos</strong><a href="/problemas-que-resolvemos/">Todos os problemas</a><a href="/diagnostico-pre-licitacao/">Edital e proposta</a><a href="/auditoria-orcamento-licitacao/">Orçamento e BDI</a><a href="/medicoes-glosas-obras-publicas/">Medições e glosas</a><a href="/aditivos-obras-publicas/">Aditivos</a><a href="/reequilibrio-obras-publicas/">Reequilíbrio</a><a href="/defesa-tecnica-contratos-publicos/">Defesa técnica</a><a href="/acompanhamento-contratos-obras/">Gestão contratual</a><a href="/atrasos-prorrogacao-obras-publicas/">Atrasos</a></div>
-<div class="footer-links"><strong>Empresa</strong><a href="/">Início</a><a href="/inteligencia/">Inteligência</a><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a href="/especialista/tiago-jun-sasaki/">Especialista</a><a href="/metodologia-inteligencia/">Metodologia</a><a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a><a href="tel:+5548988344559">(48) 98834-4559</a><span>Atendimento nacional</span></div>
+{columns}
 </div>
 <div class="container footer-bottom"><span>© <span id="year">2026</span> CONFENGE. CNPJ 52.407.089/0001-09.</span>{_authority_nav()}</div>
 </footer>"""
@@ -238,8 +259,38 @@ def attribution_query(meta: dict[str, Any], cta_position: str) -> str:
 
 
 def form_href(meta: dict[str, Any], tema: str, cta_position: str = "form") -> str:
-    q = attribution_query(meta, cta_position)
-    return f"/?tema={quote(tema)}&origem={quote(meta.get('origem') or meta.get('url') or '/')}&{q}#contato"
+    """Canonical contact fragment. Attribution is emitted as data-* via form_data_attrs."""
+    del meta, tema, cta_position
+    return "/#contato"
+
+
+def form_data_attrs(meta: dict[str, Any], tema: str, cta_position: str = "form") -> str:
+    """data-* attribution for a clean /#contato href. Never put these on the URL."""
+    parts: list[str] = []
+    if tema:
+        parts.append(f'data-tema="{e(str(tema)[:120])}"')
+    origem = meta.get("origem") or meta.get("url") or "/"
+    if origem:
+        parts.append(f'data-origem="{e(str(origem)[:180])}"')
+    key_map = (
+        ("pseo_page_id", "data-pseo-page-id"),
+        ("page_type", "data-page-type"),
+        ("archetype", "data-segment-key"),
+        ("segment", "data-segment"),
+        ("region", "data-region"),
+        ("agency_id", "data-agency-id"),
+        ("intent", "data-intent"),
+    )
+    for src, attr in key_map:
+        v = meta.get(src)
+        if v:
+            parts.append(f'{attr}="{e(str(v)[:120])}"')
+    snap = meta.get("snapshot") or meta.get("dataset_hash")
+    if snap:
+        parts.append(f'data-snap="{e(str(snap)[:16])}"')
+    if cta_position:
+        parts.append(f'data-cta-position="{e(cta_position)}"')
+    return " ".join(parts)
 
 
 def breadcrumbs_html(crumbs: list[tuple[str, str | None]]) -> str:
@@ -293,7 +344,7 @@ def page_shell(
         ensure_ascii=False,
         separators=(",", ":"),
     ).replace("<", "\\u003c")
-    return f"""<!DOCTYPE html>
+    document = f"""<!DOCTYPE html>
 <html class="no-js" lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
@@ -333,6 +384,12 @@ def page_shell(
 </body>
 </html>
 """
+    try:
+        from scripts.site.shell_nav import load_brand, sync_text  # noqa: PLC0415
+
+        return sync_text(document, load_brand(), canonical_path)
+    except Exception:  # noqa: BLE001
+        return document
 
 
 def indicators_html(items: list[tuple[str, str, str | None]]) -> str:
@@ -379,6 +436,7 @@ def cta_block(meta: dict[str, Any], label: str, wa_message: str, tema: str) -> s
     """Commercial CTA for pSEO pages ,  decision/consequence language, not pipeline jargon."""
     wa = wa_link(wa_message)
     form = form_href(meta, tema, "inline_cta")
+    form_attrs = form_data_attrs(meta, tema, "inline_cta")
     attr = attribution_query(meta, "inline_cta")
     # Prefer economic framing when label is generic
     display = label
@@ -393,7 +451,7 @@ def cta_block(meta: dict[str, Any], label: str, wa_message: str, tema: str) -> s
 <p>{e(body)}</p></div>
 <div class="lead-inline-actions">
 <a class="button button-primary" data-cta-position="inline_cta" data-content-cluster="pseo" data-pseo-event="pseo_whatsapp_click" href="{e(wa)}" rel="noopener" target="_blank">Revisar esta oportunidade</a>
-<a class="button button-secondary" data-cta-position="form" data-content-cluster="pseo" data-pseo-event="pseo_cta_click" href="{e(form)}">Continuar pelo formulário</a>
+<a class="button button-secondary" data-cta-position="form" data-content-cluster="pseo" data-pseo-event="pseo_cta_click" href="{e(form)}" {form_attrs}>Continuar pelo formulário</a>
 </div></section>"""
 
 

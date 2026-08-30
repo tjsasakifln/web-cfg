@@ -95,6 +95,12 @@ def evaluate_cache_contract(
         errors.append("HTML default must not be immutable")
     if not is_revalidatable(global_cache):
         errors.append("HTML default must stay revalidatable")
+    if "no-transform" not in global_cache.lower():
+        errors.append("HTML default must set no-transform to prevent edge script injection")
+
+    private_ops = parsed.get("/ops/*", {}).get("cache-control", "")
+    if private_ops.lower() != "no-store":
+        errors.append("/ops/* private surfaces must use Cache-Control: no-store")
 
     identity = parsed.get("/.well-known/build-info.json", {}).get("cache-control", "")
     if not identity:

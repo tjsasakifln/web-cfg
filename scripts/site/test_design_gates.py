@@ -231,22 +231,28 @@ def test_section_archetype_gate_covers_more_than_the_home():
         assert primaries <= 4, f"{relative}: {primaries} primary CTAs"
 
 
-def test_deliverables_library_declares_its_hierarchy_in_copy():
-    """The most promoted item must be explained, not merely enlarged."""
+def test_deliverables_library_declares_offer_and_capability_hierarchy_in_copy():
+    """Eight buying units and the 54-item reference roll must remain distinct."""
     path = ROOT / "entregas" / "index.html"
     html = path.read_text(encoding="utf-8")
     blocks = narrative_blocks(html)
     by_archetype = Counter(b["archetype"] for b in blocks)
-    assert by_archetype["compare_ladder"] == 1, by_archetype
     assert by_archetype["catalog_index"] == 1, by_archetype
+    assert by_archetype["reading_method"] == 1, by_archetype
 
     text = re.sub(r"<[^>]+>", " ", html)
     text = re.sub(r"\s+", " ", text)
-    assert "Por que abre a biblioteca" in text, "entry step must declare why it opens the page"
-    assert "único sem o crédito de 60 dias" in text
+    assert "8 ofertas publicadas" in text
+    assert "54 capacidades do rol taxativo" in text
+    assert "não afirma que existem 54 ofertas prontas" in text
+    assert "Cada card reúne situação, entrada, limite, saída, crédito e próxima ação sem repetir a oferta em outra tabela" in text
 
     cards = re.findall(r'<article class="vitrine-item[\s\S]*?</article>', html)
     assert len(cards) == 8, len(cards)
+    assert all(
+        all(f"<dt>{label}</dt>" in card for label in ("Situação", "Decisão", "Entrada", "Objeto e limite", "Saída", "SLA"))
+        for card in cards
+    )
     lengths = [
         len(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", card)).strip())
         for card in cards
@@ -371,17 +377,22 @@ def test_trace_matrix_and_tension_present():
     html = HOME.read_text(encoding="utf-8")
     assert "Diretoria Fracionada para o Mercado Público" in html
     assert "Arquitetura de ofertas" not in html
-    # Three differentiated conversion paths (required by conversion architecture)
-    assert "Avaliar o Dossiê de Medição, Glosa e Pagamento" in html
+    # Three named doors — labels predict destination
+    assert "Edital ou proposta crítica" in html
+    assert "Contrato sob pressão" in html
+    assert "Operação recorrente" in html
+    assert "Solicitar triagem do edital" in html
     assert "Solicitar canal seguro para envio" in html
+    assert "enviar documentos para análise" not in html.lower()
     assert "Solicitar diagnóstico da operação" in html
+    assert "Avaliar o Dossiê de Medição, Glosa e Pagamento" in html
     assert 'data-journey="contrato"' in html
     assert 'data-journey="edital"' in html
     assert 'data-journey="operacao"' in html
     # Client-facing journey section — no briefing metalinguage
     assert "Como podemos ajudar" in html
-    assert "Qual situação sua empresa precisa resolver agora" in html
-    assert "Uma medição ou glosa travou meu caixa" in html
+    assert "Qual decisão precisa sair agora" in html
+    assert "Uma medição ou glosa travou meu caixa" not in html
     assert ("journey-list" in html or "journey-paths" in html)
     assert "Sem CTA genérico" not in html
     assert not re.search(r">\s*Jornada\s+[ABC]\s*<", html)
@@ -419,16 +430,53 @@ def test_primary_cta_not_spam():
 
 
 def test_home_five_second_clarity():
-    """Buyer can answer what / who / problem / trust / next from home copy."""
+    """Buyer can answer who / problem / trust / next from visible home copy."""
     html = HOME.read_text(encoding="utf-8")
+    hero = re.search(r'class="hero[\s\S]*?</section>', html)
+    assert hero, "hero missing"
+    fold = hero.group(0)
+    fold_lower = fold.lower()
     lower = html.lower()
+    # who
+    assert "construtor" in fold_lower
+    # problem
+    assert "licitação vencida não paga a conta" in fold_lower
+    assert "margem" in fold_lower
+    # trust (true microproof, not an invented metric)
+    assert "eesc-usp" in fold_lower
+    assert "iniciativa privada" in fold_lower and "administração pública" in fold_lower
+    # next click
+    assert "analisar meu caso" in fold_lower
+    assert "#formulario-contato" in fold
+    assert "ver edital, contrato ou operação" in fold_lower
+    assert "#jornadas" in fold
     assert "consultoria para licitações" in lower or "licitações e contratos" in lower
     assert "diretoria fracionada para o mercado público" in lower
-    assert "construtor" in lower
-    assert "margem" in lower
-    assert "eesc-usp" in lower or "usp" in lower
     assert "#contato" in html or 'id="contato"' in html
-    assert "analisar meu caso" in lower or "solicitar diagnóstico da operação" in lower
+
+
+def test_home_decision_fold_hierarchy():
+    """Shipped home: compact first fold, three doors, PNCP after offer as market context."""
+    html = HOME.read_text(encoding="utf-8")
+    hero = re.search(r'<section[^>]*class="hero[\s\S]*?</section>', html)
+    assert hero, "hero missing"
+    hero_html = hero.group(0)
+    assert "Licitação vencida não paga a conta" in hero_html
+    assert "Contrato rentável, sim" in hero_html
+    assert "data-evidence-selector" not in hero_html
+    assert "hero-evidence" not in hero_html
+    assert hero_html.count("button-primary") == 1
+    assert html.count('name="diagnostico-b2g"') == 1
+    assert html.count('id="formulario-contato"') == 1
+    offers_at = html.find('data-section-archetype="offer_dominant"')
+    pncp_at = html.find("data-evidence-selector")
+    assert 0 < offers_at < pncp_at, "PNCP must come after the offer explanation"
+    market = html[pncp_at:]
+    assert "contexto de mercado" in html.lower()
+    assert "não são clientes da CONFENGE" in html
+    assert "não é resultado de cliente" in html.lower()
+    assert "Relatório Executivo de Priorização de Licitações" in html
+    assert "Você recebe uma decisão" in html
 
 
 def test_form_qualification_minimal():
@@ -984,6 +1032,21 @@ def test_accessibility_label_gate_rejects_id_only_fields():
     )
     assert has_accessible_label('<input id="email" aria-label="E-mail" type="email">', "email")
     assert has_accessible_label('<label>E-mail <input name="email" type="email"></label>', "email")
+
+
+def test_canonical_palette_keeps_aa_contrast_margin():
+    """Token pairings stay at least 0.5:1 above normal-text WCAG AA."""
+    from scripts.site.audit_accessibility import (
+        AA_CONTRAST_WITH_MARGIN,
+        contrast_contract,
+        contrast_ratio,
+    )
+
+    failures, evidence = contrast_contract(ROOT)
+    assert not failures, failures
+    assert len(evidence) >= 7, evidence
+    assert AA_CONTRAST_WITH_MARGIN == 5.0
+    assert contrast_ratio("#777777", "#ffffff") < AA_CONTRAST_WITH_MARGIN
 
 
 def _srgb_channel(value: float) -> float:

@@ -109,6 +109,64 @@ function ok(failures, name, cond, detail = "") {
   }
 }
 
+function internalRedirectPath(value, { source = false } = {}) {
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  if (raw.startsWith("http://") || raw.startsWith("https://")) {
+    let parsed;
+    try { parsed = new URL(raw.replace(":splat", "__SPLAT__")); } catch (_) { return null; }
+    if (source || !["confenge.com.br", "www.confenge.com.br"].includes(parsed.hostname)) return null;
+    const restored = parsed.pathname.replace("__SPLAT__", ":splat");
+    return restored.replace(/\/$/, "") || "/";
+  }
+  if (!raw.startsWith("/")) return null;
+  const path = raw.split("#", 1)[0].split("?", 1)[0];
+  return path.replace(/\/$/, "") || "/";
+}
+
+export function redirectTopologyFailures(rules, label = "redirects") {
+  const failures = [];
+  const graph = new Map();
+  for (const rule of rules) {
+    if (!["301", "302", "307", "308"].includes(rule.status)) continue;
+    const from = internalRedirectPath(rule.from, { source: true });
+    const to = internalRedirectPath(rule.to);
+    if (!from || !to) continue;
+    if (graph.has(from)) failures.push(`${label}: duplicate redirect source ${from}`);
+    graph.set(from, to);
+  }
+  for (const [from, to] of graph) {
+    if (from === to) failures.push(`${label}: redirect loop ${from} -> ${to}`);
+    if (graph.has(to) && from !== to) {
+      failures.push(`${label}: redirect chain ${from} -> ${to} -> ${graph.get(to)}`);
+    }
+    const seen = new Set([from]);
+    let cursor = to;
+    while (graph.has(cursor)) {
+      if (seen.has(cursor)) {
+        failures.push(`${label}: redirect cycle reaches ${cursor} from ${from}`);
+        break;
+      }
+      seen.add(cursor);
+      cursor = graph.get(cursor);
+    }
+  }
+  return [...new Set(failures)];
+}
+
+export function abandonedBrandHomeFailures(rules, label = "redirects") {
+  const abandoned = new Set([
+    "/vision", "/nexgen", "/avcbclcb", "/avcb", "/avcb-clcb", "/clcb",
+    "/avaliacoes", "/avaliacoes-imobiliarias", "/avaliacao-imovel",
+    "/ia", "/inteligencia-artificial", "/automacao",
+  ]);
+  return rules
+    .filter((rule) => abandoned.has(internalRedirectPath(rule.from, { source: true })))
+    .filter((rule) => ["301", "302", "307", "308"].includes(rule.status))
+    .filter((rule) => internalRedirectPath(rule.to) === "/")
+    .map((rule) => `${label}: abandoned brand blanket-redirects home (${rule.raw || `${rule.from} ${rule.to} ${rule.status}`})`);
+}
+
 export async function runRedirectGates({ root = ROOT, base = BASE, log = console } = {}) {
   const failures = [];
   const sources = loadRedirectFiles(root);
@@ -117,8 +175,20 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
   ok(failures, "redirects_file_nonempty", rules.length >= 5, `count=${rules.length}`);
 
   const byFrom = Object.fromEntries(rules.map((r) => [r.from, r]));
-  ok(failures, "servicos_rule", byFrom["/servicos"]?.to?.includes("como-atuamos"), JSON.stringify(byFrom["/servicos"]));
+  ok(
+    failures,
+    "servicos_rule",
+    byFrom["/servicos"]?.to === "/servicos-obras-publicas/" || byFrom["/servicos"]?.to === "/servicos-obras-publicas",
+    JSON.stringify(byFrom["/servicos"])
+  );
   ok(failures, "servicos_301", byFrom["/servicos"]?.status === "301", byFrom["/servicos"]?.status);
+  ok(
+    failures,
+    "servicos_html_rule",
+    byFrom["/servicos.html"]?.to === "/servicos-obras-publicas/" || byFrom["/servicos.html"]?.to === "/servicos-obras-publicas",
+    JSON.stringify(byFrom["/servicos.html"])
+  );
+  ok(failures, "servicos_html_301", byFrom["/servicos.html"]?.status === "301", byFrom["/servicos.html"]?.status);
   ok(failures, "vision_410", byFrom["/vision"]?.status === "410", JSON.stringify(byFrom["/vision"]));
   ok(failures, "nexgen_410", byFrom["/nexgen"]?.status === "410", JSON.stringify(byFrom["/nexgen"]));
   ok(failures, "avcbclcb_410", byFrom["/avcbclcb"]?.status === "410", JSON.stringify(byFrom["/avcbclcb"]));
@@ -158,6 +228,24 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
       failures.push(`loop_rule: ${r.raw}`);
       log.error("FAIL loop_rule", r.raw);
     }
+  }
+
+  for (const failure of redirectTopologyFailures(rules, "source:_redirects")) {
+    failures.push(failure);
+    log.error("FAIL redirect_topology", failure);
+  }
+  for (const failure of abandonedBrandHomeFailures(rules, "source:_redirects")) {
+    failures.push(failure);
+    log.error("FAIL abandoned_brand_home", failure);
+  }
+  for (const abandoned of ["/nexgen", "/vision"]) {
+    const r = byFrom[abandoned];
+    ok(
+      failures,
+      `abandoned_not_301_home:${abandoned}`,
+      r?.status === "410",
+      JSON.stringify(r)
+    );
   }
 
   for (const src of sources) {
@@ -207,11 +295,69 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
   );
   ok(failures, "intranet_matcher_accepts_splat_302", acceptSplat.length === 0, acceptSplat.join("|"));
 
+  const chainFixture = redirectTopologyFailures([
+    { from: "/old", to: "https://confenge.com.br/middle/", status: "301" },
+    { from: "/middle", to: "/final/", status: "301" },
+  ], "fixture");
+  ok(
+    failures,
+    "topology_rejects_absolute_internal_chain",
+    chainFixture.some((f) => f.includes("redirect chain")),
+    chainFixture.join("|")
+  );
+  const cycleFixture = redirectTopologyFailures([
+    { from: "/a", to: "/b", status: "301" },
+    { from: "/b", to: "/a", status: "301" },
+  ], "fixture");
+  ok(
+    failures,
+    "topology_rejects_cycle",
+    cycleFixture.some((f) => f.includes("cycle")),
+    cycleFixture.join("|")
+  );
+  const selfFixture = redirectTopologyFailures([
+    { from: "/same", to: "/same/", status: "301" },
+  ], "fixture");
+  ok(
+    failures,
+    "topology_rejects_normalized_self_loop",
+    selfFixture.some((f) => f.includes("loop")),
+    selfFixture.join("|")
+  );
+  const blanketFixture = abandonedBrandHomeFailures([
+    { from: "/nexgen", to: "https://confenge.com.br/", status: "301", raw: "/nexgen https://confenge.com.br/ 301" },
+  ], "fixture");
+  ok(
+    failures,
+    "abandoned_brand_matcher_rejects_absolute_home",
+    blanketFixture.length === 1,
+    blanketFixture.join("|")
+  );
+
   ok(
     failures,
     "no_intranet_html_page",
     !existsSync(resolve(root, "intranet/index.html")) && !existsSync(resolve(root, "intranet.html")),
     "intranet HTML page must not exist"
+  );
+
+  // CFG10X-09: lei 25/50 URL consolidates onto the conteudos owner. Force 301,
+  // destination is not itself a from-path (no chain), from ≠ to (no loop).
+  const limitDonor = "/lei-14133-obras/limite-25-50-aditivo-obra/";
+  const limitOwner = "/conteudos/limite-aditivo-25-50-obra-publica/";
+  const limitRule = byFrom[limitDonor];
+  ok(
+    failures,
+    "cfg10x09_limit_301",
+    limitRule?.to === limitOwner && (limitRule?.status === "301") && limitRule?.force === true,
+    JSON.stringify(limitRule)
+  );
+  ok(failures, "cfg10x09_limit_no_loop", limitDonor !== limitOwner, `${limitDonor} -> ${limitOwner}`);
+  ok(
+    failures,
+    "cfg10x09_limit_no_chain",
+    !byFrom[limitOwner],
+    `owner is itself a from-path: ${JSON.stringify(byFrom[limitOwner])}`
   );
 
   const tomlPath = resolve(root, "netlify.toml");
@@ -225,7 +371,7 @@ export async function runRedirectGates({ root = ROOT, base = BASE, log = console
     log.log("SKIP live probes (no base URL)");
   } else {
     const probes = [
-      { path: "/servicos", expectStatus: [301, 302, 308], locIncludes: "como-atuamos" },
+      { path: "/servicos", expectStatus: [301, 302, 308], locIncludes: "servicos-obras-publicas" },
       { path: "/vision", expectStatus: [410] },
       { path: "/nexgen", expectStatus: [410] },
       { path: "/avcbclcb", expectStatus: [410] },

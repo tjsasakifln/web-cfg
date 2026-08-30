@@ -22,7 +22,13 @@
     "destination_path",
     "destination_service_id",
     "consent",
-    "pii_policy"
+    "pii_policy",
+    "session_id",
+    "lead_id",
+    "opportunity_id",
+    "proposal_id",
+    "sale_id",
+    "journey"
   ],
   "layers": [
     "page_view",
@@ -696,7 +702,14 @@
     "full_name",
     "search_query",
     "q",
-    "query"
+    "query",
+    "valor",
+    "valorinicial",
+    "causa",
+    "observacao",
+    "raw",
+    "qid",
+    "identificador"
   ],
   "cta_kind_from_alias": {
     "service_cta": "service",

@@ -24,7 +24,7 @@
     "commercial_destination": "/medicoes-glosas-obras-publicas/",
     "offer": "Dossiê de Medição, Glosa e Pagamento",
     "before_sha256": "455200070af5d118d3f564a9cf74de643d24a1511f058b61c30c070dfc708f8a",
-    "after_sha256": "d9273cbd246b6120e9c75c562b927c7b10da73087f67317e4abc8cafbf1e593a"
+    "after_sha256": "bc604a66eddb833a43781b92968b3d8017493d212f2af3c0a93286369e31cf77"
   },
   "selection_evidence": {
     "source": "seo/gsc-2026-08-09/Paginas.csv",
@@ -73,9 +73,9 @@
     "membership_changed": false,
     "new_sitemap_created": false,
     "lastmod_before": "2026-07-30",
-    "lastmod_after": "2026-08-25",
+    "lastmod_after": "2026-08-29",
     "recapture_registry": "data/bofu-dominance/frozen-specs/hashes.json",
-    "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente; os seis pilares protegidos e a composição dos sitemaps permanecem inalterados."
+    "reason": "O build propaga a revisão factual do HTML ao lastmod da URL já existente. O corpo do canário foi reescrito em 2026-08-28 (CFG10X-06) e reconciliado com o main, as fontes oficiais e o gate do artefato publicado em 2026-08-29. As cinco superfícies de revisão da URL - article:modified_time, dateModified do JSON-LD, o \"Revisado em\" visível, a data de consulta das fontes e o lastmod do sitemap - declaram 2026-08-29. Divergência entre as cinco é barrada por scripts/organic/cluster_medicao_originality.revision_failures. Os seis pilares protegidos e a composição dos sitemaps permanecem inalterados."
   },
   "content_contract": {
     "title": "Atraso na medição de obra pública: o que fazer | CONFENGE",
@@ -118,15 +118,15 @@
   "frozen_siblings": [
     {
       "path": "conteudos/glosa-de-medicao-obra-publica/index.html",
-      "sha256": "0d994e11ceb9c98defcde4fab4b82b8785fec7ecc4526c2555222f06ab39025e"
+      "sha256": "0d6a7419d74fa80a3c80b2c0e7d62a17c9f0b37b2e0b46ca1595ca09f2a9d51a"
     },
     {
       "path": "conteudos/medicao-de-obra-publica-rejeitada/index.html",
-      "sha256": "375b9c35c61e432ffe7d94e7e7338be2f8d46895880e97858f519fba2428c8a4"
+      "sha256": "995eb3d940ecc69e60b7e55bfc755aeaa843842dfa5f3be94b6b1e79cb95be19"
     },
     {
       "path": "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
-      "sha256": "4a15f6415d8b02171270b020106e5c0c2c35742d35db19a983b4b28c2832b05c"
+      "sha256": "72c53b2ac3806b16bba902fb2531cd9edcbf65f69215f0a28a3f29ef3ed965a1"
     },
     {
       "path": "medicoes-glosas-obras-publicas/index.html",

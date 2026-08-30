@@ -19,20 +19,14 @@ from scripts.site.inbound_first_remediate import (  # noqa: E402
     load_stage_classification,
     resolve_content_stage,
 )
+from scripts.site.public_ia import header_items  # noqa: E402
 from scripts.site.public_navigation import (  # noqa: E402
     FROZEN_NAV_HTML_PATHS,
     audit_public_navigation_tree,
 )
 
 ALLOWED = frozenset(ALLOWED_STAGES)
-EXPECTED_NAV = [
-    "Serviços",
-    "Problemas que resolvemos",
-    "Entregas",
-    "Conteúdos",
-    "Ferramentas",
-    "Especialista",
-]
+EXPECTED_NAV = [item["label"] for item in header_items()]
 LEGACY_NAV = [
     "Serviços",
     "Problemas que resolvemos",
@@ -721,8 +715,9 @@ def test_hub_problem_first_structure():
 def test_home_nav_and_hierarchy():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Analisar meu caso" in home
-    assert "Serviços" in home
-    assert "Problemas que resolvemos" in home
+    assert "Edital e proposta" in home
+    assert "Contrato sob pressão" in home
+    assert "Operação recorrente" in home
     assert "Conteúdos" in home
     assert "Ferramentas" in home
     assert "Conteúdos e ferramentas" not in home
@@ -733,8 +728,12 @@ def test_home_nav_and_hierarchy():
     assert home.count("button-primary") <= 4
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
-    assert "journey-row--dominant" in home or "journey-path--core" in home
-    assert "evidence-matrix" in home or "hero-evidence" in home
+    assert "journey-row" in home or "journey-path" in home
+    assert "Edital ou proposta crítica" in home
+    assert "Contrato sob pressão" in home
+    assert "Operação recorrente" in home
+    assert "data-evidence-selector" in home
+    assert "data-evidence-selector" not in hero.group(0)
 
 
 # ---------------------------------------------------------------------------
@@ -1098,8 +1097,8 @@ def test_home_form_anchor_reveals_fields():
         r"#formulario-contato\{order:\s*-1\}|\.contact-form\{order:\s*-1",
         css.replace(" ", ""),
     ), "mobile rule must set form order so title + first field lead the 390px viewport"
-    # #182 keeps edital/operacao on the fields. #390 makes the contract path
-    # cross the canonical Medicoes/Glosas service page before capture.
+    # Edital/operacao land on the form. Contrato stays the single commercial
+    # transfer to Medicoes/Glosas (#390) — no second destination in that row.
     for match in re.finditer(
         r'<a\b[^>]*data-cta-position="(journey_[abc])"[^>]*>', html
     ):

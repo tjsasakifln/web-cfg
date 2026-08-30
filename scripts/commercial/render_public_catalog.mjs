@@ -15,8 +15,8 @@ import { fileURLToPath } from "url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const registryPath = path.join(root, "data/commercial/deliverables-registry.v1.json");
 const doorsPath = path.join(root, "data/commercial/task-doors.v1.json");
-const namingPath = path.join(root, "data/commercial/offer-naming.v1.json");
 const executionPath = path.join(root, "data/commercial/page-contract-execucao.v1.json");
+const eightContractPath = path.join(root, "data/commercial/page-contract-eight.v1.json");
 const pagePath = path.join(root, "entregas/index.html");
 const clientDataPath = path.join(root, "entregas/catalog-data.js");
 
@@ -24,6 +24,8 @@ const CATALOG_START = "<!-- GENERATED:PUBLIC-CATALOG:START -->";
 const CATALOG_END = "<!-- GENERATED:PUBLIC-CATALOG:END -->";
 const SELECT_START = "<!-- GENERATED:DELIVERABLE-SELECT:START -->";
 const SELECT_END = "<!-- GENERATED:DELIVERABLE-SELECT:END -->";
+const LEGACY_HUB_START = "<!-- GENERATED:EIGHT-OFFER-HUB:START -->";
+const LEGACY_HUB_END = "<!-- GENERATED:EIGHT-OFFER-HUB:END -->";
 const CLIENT_DATA_SCHEMA = "confenge.public-deliverable-catalog/1.1";
 const CLIENT_DATA_FIELDS = [
   "id",
@@ -312,6 +314,17 @@ const VITRINE_CTA_SLUGS = {
   "08": "relatorio-executivo",
 };
 
+const VITRINE_DECISION_NAV = {
+  "01": "Onde disputar?",
+  "02": "Fontes dos números?",
+  "03": "O que decidir?",
+  "04": "Órgãos prioritários?",
+  "05": "Contratos a vencer?",
+  "06": "Mapa dos concorrentes?",
+  "07": "Escala dos contratos?",
+  "08": "Onde alocar?",
+};
+
 export function publishedVitrine(registry) {
   const items = (registry.deliverables || []).filter((entry) => entry.public_state === "PUBLISHED");
   if (items.length !== 8) throw new Error(`PUBLIC_VITRINE_COUNT: expected 8 published entregas, got ${items.length}`);
@@ -322,35 +335,26 @@ export function publishedVitrine(registry) {
   return items;
 }
 
-function fitLabel(entry) {
-  if (entry.offer_container === "expansion_package") {
-    return "Unidade do Diagnóstico. Crédito em até 60 dias, sem acúmulo.";
-  }
-  return "À parte, fora do pacote. Sem crédito.";
-}
-
 function searchAliases(entry) {
   return escapeHtml((entry.name_aliases || []).filter((name) => name !== entry.public_name_pt_br).join(" | "));
 }
 
-function comparisonRow(entry) {
-  const slug = VITRINE_CTA_SLUGS[entry.catalog_number];
-  const creditCell = entry.offer_container === "expansion_package"
-    ? "Sim, em até 60 dias"
-    : "Não. Entrega à parte, fora do pacote";
-  const creditClass = entry.offer_container === "expansion_package" ? "" : ' class="compare-credit-off"';
-  return `<tr>
-<th scope="row"><span class="compare-index">${entry.catalog_number}</span><a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-table-${slug}" data-cta-position="ladder_table" data-event-name="cta_click" href="${escapeHtml(entry.route)}">${escapeHtml(entry.public_name_pt_br)}</a></th>
-<td data-label="Situação">${escapeHtml(publicText(entry.trigger))}</td>
-<td data-label="Decisão">${escapeHtml(entry.decision_question)}</td>
-<td data-label="Saída">${escapeHtml(publicText(entry.included_outputs[0]))}</td>
-<td data-label="Prazo">${escapeHtml(publicText(slaLabel(entry)))}</td>
-<td data-label="Preço"><strong>${escapeHtml(priceLabel(entry))}</strong></td>
-<td data-label="Fit"${creditClass}>${creditCell}</td>
-</tr>`;
+function renderCompactList(values) {
+  return `<ul>${values.map((value) => `<li>${escapeHtml(publicText(value))}</li>`).join("")}</ul>`;
 }
 
-function vitrineCard(entry) {
+function renderInlineList(values) {
+  return escapeHtml(values.map((value) => publicText(value)).join("; "));
+}
+
+function eightContractCopy(contract, value) {
+  return publicText(contract.public_copy_overrides?.[value] || value);
+}
+
+function vitrineCard(entry, contractItem) {
+  if (!contractItem || contractItem.deliverable_id !== entry.deliverable_id) {
+    throw new Error(`EIGHT_CONTRACT_MISSING: ${entry.deliverable_id}`);
+  }
   const headingId = VITRINE_HEADING_IDS[entry.catalog_number];
   const slug = VITRINE_CTA_SLUGS[entry.catalog_number];
   const exampleCtaId = entry.catalog_number === "01" ? "deliverables-open-report" : `deliverables-open-${slug}`;
@@ -358,71 +362,111 @@ function vitrineCard(entry) {
   const examplePosition = entry.catalog_number === "01" ? "example_01_open" : `example_${entry.catalog_number}_open`;
   const scopePosition = entry.catalog_number === "01" ? "example_01_scope" : `example_${entry.catalog_number}_scope`;
   const bundle = entry.offer_container === "expansion_package"
-    ? `<p class="vitrine-item__credit">O valor é abatido do <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> se ele for contratado em até 60 dias, sem acúmulo com outros créditos.</p>`
-    : `<p class="vitrine-item__credit">Por que abre a biblioteca: é o degrau mais barato e o único sem o crédito de 60 dias. Entrega à parte, fora do Diagnóstico de Expansão no Mercado Público. Relatório adaptado: R$ 599 por unidade. A CONFENGE busca os editais abertos no raio informado. A quantidade depende das licitações publicadas, e a profundidade é a máxima permitida pelas informações da empresa. Bases da análise: editais abertos localizados pela CONFENGE e realidade da construtora. Compare com o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a>.</p>`;
-  const open = entry.catalog_number === "01"
-    ? `<section id="primeiro-exemplo" data-section-archetype="ladder_entry" aria-labelledby="${headingId}"><article class="vitrine-item vitrine-item--anchor" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-search-aliases="${searchAliases(entry)}" id="entrega-${entry.catalog_number}">`
-    : `<article class="vitrine-item" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-search-aliases="${searchAliases(entry)}" id="entrega-${entry.catalog_number}">`;
-  const close = entry.catalog_number === "01" ? "</article></section>" : "</article>";
+    ? `<p class="vitrine-item__credit"><strong>Pacote e crédito <small>· exemplo: DADOS SINTÉTICOS</small></strong> O valor é abatido do <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> se ele for contratado em até 60 dias; créditos não se acumulam.</p>`
+    : `<p class="vitrine-item__credit"><strong>Pacote e crédito <small>· exemplo: DADOS SINTÉTICOS</small></strong> Relatório avulso, à parte e fora do Diagnóstico; é o único sem o crédito de 60 dias. Adaptado: R$ 599 por unidade. A CONFENGE busca os editais abertos no raio informado. A quantidade depende das licitações publicadas; a profundidade é a máxima permitida pelas informações da empresa. Bases: editais abertos localizados pela CONFENGE e realidade da construtora. Compare com o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-${slug}" data-cta-position="example_${entry.catalog_number}_price" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a>.</p>`;
+  const anchorClass = entry.catalog_number === "01" ? " vitrine-item--anchor" : "";
+  const open = `<article class="vitrine-item${anchorClass}" data-primary-offer="true" data-deliverable-id="${entry.deliverable_id}" data-public-state="${entry.public_state}" data-search-aliases="${searchAliases(entry)}" id="entrega-${entry.catalog_number}">`;
+  const close = "</article>";
   return `${open}
-<header class="vitrine-item__head"><span>${entry.catalog_number}</span><span>DADOS SINTÉTICOS</span><h2 id="${headingId}">${escapeHtml(entry.public_name_pt_br)}</h2><strong>${escapeHtml(priceLabel(entry))}</strong></header>
-<p class="vitrine-item__value">${escapeHtml(entry.value_line_pt_br)}</p>
+<header class="vitrine-item__head"><div class="vitrine-item__identity"><span>${entry.catalog_number}</span><span class="offer-state">Oferta publicada · PUBLISHED</span></div><h2 id="${headingId}">${escapeHtml(entry.public_name_pt_br)}</h2><p class="vitrine-item__price"><span>Preço</span><strong>${escapeHtml(priceLabel(entry))}</strong></p></header>
 <dl class="vitrine-item__facts">
 <div><dt>Situação</dt><dd>${escapeHtml(publicText(entry.trigger))}</dd></div>
 <div><dt>Decisão</dt><dd>${escapeHtml(entry.decision_question)}</dd></div>
-<div><dt>Saída</dt><dd>${escapeHtml(publicText(entry.included_outputs[0]))}</dd></div>
-<div><dt>Prazo</dt><dd>${escapeHtml(publicText(slaLabel(entry)))}</dd></div>
-<div><dt>Preço</dt><dd>${escapeHtml(priceLabel(entry))}</dd></div>
-<div><dt>Fit</dt><dd>${escapeHtml(fitLabel(entry))}</dd></div>
+<div><dt>Entrada</dt><dd>${renderInlineList(entry.required_inputs)}</dd></div>
+<div><dt>Objeto e limite</dt><dd>${escapeHtml(contractItem.objeto_incluido)}</dd></div>
+<div><dt>Saída</dt><dd>${escapeHtml(contractItem.saida_minima)}</dd></div>
+<div><dt>SLA</dt><dd>${escapeHtml(contractItem.sla.text)}</dd></div>
 </dl>
 ${bundle}
 <div class="vitrine-item__actions">
-<a class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Ver o exemplo de ${escapeHtml(entry.public_name_pt_br)} <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="text-link" data-asset-id="entregas-exemplos-hub" data-cta-id="${scopeCtaId}" data-cta-position="${scopePosition}" data-event-name="cta_click" href="#captura-entregas">Pedir análise de ${escapeHtml(entry.public_name_pt_br)}</a>
+<a aria-label="Ver o demonstrativo sintético de ${escapeHtml(entry.public_name_pt_br)}" class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="${exampleCtaId}" data-cta-position="${examplePosition}" data-event-name="cta_click" href="${escapeHtml(entry.route)}">Ver sintético <svg class="icon"><use href="#i-arrow"></use></svg></a>
+<a aria-label="Pedir análise de ${escapeHtml(entry.public_name_pt_br)}" class="text-link" data-asset-id="entregas-exemplos-hub" data-cta-id="${scopeCtaId}" data-cta-position="${scopePosition}" data-event-name="cta_click" href="#captura-entregas">Pedir análise</a>
 </div>
 ${close}`;
 }
 
-function renderComparison(published) {
-  return `<section class="deliverable-compare" id="comparar" data-section-archetype="compare_ladder" aria-labelledby="compare-title">
+function renderOfferShowcase(published, eightContract) {
+  const contractById = new Map(
+    eightContract.deliverables.map((entry) => [entry.deliverable_id, entry]),
+  );
+  const decisions = published.map((entry) =>
+    `<li><a aria-label="${escapeHtml(entry.decision_question)}" href="#entrega-${entry.catalog_number}"><span>${entry.catalog_number}</span>${escapeHtml(VITRINE_DECISION_NAV[entry.catalog_number])}</a></li>`,
+  ).join("");
+  const commonBoundaries = eightContract.common_boundaries
+    .map((value) => eightContractCopy(eightContract, value));
+  const commonInputs = eightContract.common_inputs.map((value) => publicText(value));
+  return `<section class="deliverables-vitrine" id="enquadrar" data-section-archetype="catalog_index" aria-labelledby="catalog-title">
 <div class="container">
-<div class="compare-head">
-<div>
-<p class="eyebrow">As oito, lado a lado</p>
-<h2 id="compare-title">Escolha pela pergunta que você precisa responder.</h2>
-</div>
-<p class="compare-lead">Sete das oito são unidades avulsas do <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-ladder-table" data-cta-position="ladder_table_summary" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> e devolvem o valor pago se o pacote for contratado em até 60 dias. A primeira é contratada à parte e por isso não entra nessa regra.</p>
-</div>
-<div class="compare-scroll" role="region" aria-label="Tabela comparativa das oito entregas" tabindex="0">
-<table class="compare-table">
-<caption class="compare-caption">Entregas publicadas, com situação, decisão, saída, prazo, preço e encaixe no pacote de R$ 8.000.</caption>
-<thead><tr><th scope="col">Entrega</th><th scope="col">Situação</th><th scope="col">Decisão</th><th scope="col">Saída</th><th scope="col">Prazo</th><th scope="col">Preço</th><th scope="col">Fit</th></tr></thead>
-<tbody>
-${published.map(comparisonRow).join("\n")}
-</tbody>
-</table>
-</div>
+<header class="deliverables-vitrine__intro"><p class="eyebrow">8 ofertas publicadas agora</p><h2 id="catalog-title">Escolha pela decisão. Compare uma vez, com o contrato inteiro à vista.</h2><p>Estas são as únicas ofertas com escopo, preço e SLA publicados para consulta agora. Cada card reúne situação, entrada, limite, saída, crédito e próxima ação sem repetir a oferta em outra tabela.</p></header>
+<nav class="offer-decision-nav" aria-label="Escolher oferta pela decisão"><p>Qual pergunta está na mesa?</p><ol>${decisions}</ol></nav>
+<aside class="published-offers__common" aria-labelledby="published-common-title"><div><p class="eyebrow">Contrato comum</p><h3 id="published-common-title">O que vale para as oito ofertas</h3><p><strong>Entrada comum:</strong> ${renderInlineList(commonInputs)}. A entrada específica aparece em cada oferta.</p></div><div><h4>Fronteiras comuns</h4><p>${renderInlineList(commonBoundaries)}. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado.</p></div></aside>
+<div class="vitrine-items">${published.map((entry) => vitrineCard(entry, contractById.get(entry.deliverable_id))).join("\n")}</div>
 <dl class="compare-ladder-figures">
 <div><dt>Faixa por unidade</dt><dd>R$ 599 a R$ 3.750</dd></div>
 <div><dt>As sete unidades, uma a uma</dt><dd>R$ 12.280</dd></div>
 <div><dt>Diagnóstico de Expansão no Mercado Público</dt><dd>R$ 8.000</dd></div>
 </dl>
-<p class="compare-note">A diferença entre R$ 12.280 e R$ 8.000 é R$ 4.280. Todos os exemplos usam a mesma base sintética. Empresa, órgãos, concorrentes, valores e decisões são demonstrativos e não representam cliente real.</p>
+<p class="compare-note">Sete ofertas geram um único crédito, sem acúmulo, se o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-offer-summary" data-cta-position="offer_summary" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> for contratado em até 60 dias. A diferença entre R$ 12.280 e R$ 8.000 é R$ 4.280. Os exemplos usam dados sintéticos; não representam cliente real.</p>
 </div>
 </section>`;
 }
 
-function renderFraming(published) {
-  const items = published.map((entry) =>
-    `<li><a href="#entrega-${entry.catalog_number}">${escapeHtml(entry.decision_question)}</a></li>`
-  ).join("");
-  return `<section class="deliverable-frame" id="enquadrar" data-section-archetype="reading_method" aria-labelledby="catalog-framing-title">
+const CAPABILITY_STATE = {
+  PUBLISHED: {
+    label: "Publicada",
+    explanation: "Oferta publicada acima, com preço, escopo e SLA consultáveis.",
+  },
+  VALIDATE: {
+    label: "Em validação",
+    explanation: "Capacidade em validação. Ainda não é oferta pronta para contratação.",
+  },
+  BLOCKED: {
+    label: "Bloqueada",
+    explanation: "Capacidade indisponível enquanto cobertura, proveniência ou dependência externa não cumprir o gate.",
+  },
+};
+
+function renderCapabilityItem(entry) {
+  const state = CAPABILITY_STATE[entry.public_state];
+  if (!state) throw new Error(`CAPABILITY_STATE_UNKNOWN: ${entry.public_state}`);
+  const action = entry.public_state === "PUBLISHED"
+    ? `<a href="#entrega-${entry.catalog_number}">Ver oferta publicada acima</a>`
+    : "";
+  return `<li class="capability-item capability-item--${entry.public_state.toLocaleLowerCase()}" data-capability-id="${entry.deliverable_id}" data-public-state="${entry.public_state}"><span class="capability-item__number">${entry.catalog_number}</span><span class="capability-item__copy"><strong>${escapeHtml(entry.public_name_pt_br)}</strong><small>${escapeHtml(entry.decision_question)}</small></span><span class="capability-item__maturity"><strong>${state.label}</strong><small>${state.explanation}</small>${action}</span></li>`;
+}
+
+function renderCapabilityRoll(registry, taskDoors) {
+  const byId = new Map(registry.deliverables.map((entry) => [entry.deliverable_id, entry]));
+  const renderedIds = [];
+  const groups = [...taskDoors.doors]
+    .sort((left, right) => left.order - right.order)
+    .map((door) => {
+      const entries = door.members.map(({ deliverable_id: id }) => {
+        const entry = byId.get(id);
+        if (!entry) throw new Error(`CAPABILITY_DOOR_UNKNOWN_ID: ${door.door}/${id}`);
+        renderedIds.push(id);
+        return entry;
+      });
+      const counts = Object.fromEntries(Object.keys(CAPABILITY_STATE).map((state) => [
+        state,
+        entries.filter((entry) => entry.public_state === state).length,
+      ]));
+      const maturity = [
+        counts.PUBLISHED ? `${counts.PUBLISHED} publicada${counts.PUBLISHED === 1 ? "" : "s"}` : "",
+        counts.VALIDATE ? `${counts.VALIDATE} em validação` : "",
+        counts.BLOCKED ? `${counts.BLOCKED} bloqueada${counts.BLOCKED === 1 ? "" : "s"}` : "",
+      ].filter(Boolean).join(" · ");
+      return `<details class="capability-group" data-task-door="${door.door}"><summary><span>${String(door.order).padStart(2, "0")}</span><strong>${escapeHtml(door.public_label_pt_br)}</strong><small>${entries.length} capacidades · ${maturity}</small></summary><div class="capability-group__body"><p>${escapeHtml(door.decision_question_pt_br)}</p><ol>${entries.map(renderCapabilityItem).join("\n")}</ol></div></details>`;
+    }).join("\n");
+  const expectedIds = registry.deliverables.map((entry) => entry.deliverable_id).sort();
+  if (JSON.stringify([...renderedIds].sort()) !== JSON.stringify(expectedIds)) {
+    throw new Error(`CAPABILITY_DOOR_CENSUS: expected ${expectedIds.length}, got ${renderedIds.length}`);
+  }
+  return `<section class="capability-roll" id="rol-taxativo" data-section-archetype="reading_method" aria-labelledby="capability-roll-title">
 <div class="container">
-<p class="eyebrow">Enquadramento</p>
-<h2 id="catalog-framing-title">Qual pergunta está na mesa?</h2>
-<p>As oito ofertas publicadas cabem em uma tela. Escolha a pergunta; o próximo passo é o exemplo integral ou o pedido de análise desta unidade.</p>
-<ol class="deliverable-frame__list">${items}</ol>
-<a class="button button-secondary" data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-frame-capture" data-cta-position="framing" data-event-name="cta_click" href="#captura-entregas">Se a pergunta não está na lista, registrar o caso</a>
+<header class="capability-roll__intro"><p class="eyebrow">Rol taxativo</p><h2 id="capability-roll-title">54 capacidades do rol taxativo, organizadas pela decisão do comprador.</h2><p>Este índice preserva o universo comercial da CONFENGE; ele não afirma que existem 54 ofertas prontas. Hoje são <strong>8 publicadas</strong>, <strong>44 em validação</strong> e <strong>2 bloqueadas</strong>. Abra uma situação para consultar nomes, perguntas e maturidade.</p></header>
+<div class="capability-state-legend" aria-label="Significado dos estados comerciais"><div><strong>PUBLICADA</strong><span>8 ofertas contratáveis ou consultáveis agora</span></div><div><strong>EM VALIDAÇÃO</strong><span>44 capacidades ainda sem oferta pronta</span></div><div><strong>BLOQUEADA</strong><span>2 capacidades indisponíveis até cumprir o gate</span></div></div>
+<div class="capability-groups">${groups}</div>
 </div>
 </section>`;
 }
@@ -471,17 +515,11 @@ export function renderClientData(registry, executionContract) {
   return rendered;
 }
 
-export function renderCatalog(registry) {
+export function renderCatalog(registry, taskDoors, eightContract) {
   const published = publishedVitrine(registry);
   return `${CATALOG_START}
-${renderFraming(published)}
-${renderComparison(published)}
-<section class="deliverables-vitrine" id="indice-integral" data-section-archetype="catalog_index" aria-labelledby="catalog-title">
-<div class="container">
-<header class="deliverables-vitrine__intro"><p class="eyebrow">Oito ofertas contratáveis</p><h2 id="catalog-title">Cada entrega responde uma pergunta, com preço e prazo visíveis.</h2><p>A vitrine pública mostra só as oito unidades publicadas, de R$ 599 a R$ 3.750. O restante do rol interno permanece registro, não produto.</p></header>
-<div class="vitrine-items">${published.map(vitrineCard).join("\n")}</div>
-</div>
-</section>
+${renderOfferShowcase(published, eightContract)}
+${renderCapabilityRoll(registry, taskDoors)}
 ${CATALOG_END}`;
 }
 
@@ -501,8 +539,16 @@ function replaceBlock(html, start, end, rendered) {
   return `${html.slice(0, from)}${rendered}${html.slice(to + end.length)}`;
 }
 
-export function renderPage(html, registry) {
-  let next = replaceBlock(html, CATALOG_START, CATALOG_END, renderCatalog(registry));
+export function renderPage(html, registry, taskDoors, eightContract) {
+  let next = replaceBlock(
+    html,
+    CATALOG_START,
+    CATALOG_END,
+    renderCatalog(registry, taskDoors, eightContract),
+  );
+  if (next.includes(LEGACY_HUB_START)) {
+    next = replaceBlock(next, LEGACY_HUB_START, LEGACY_HUB_END, "");
+  }
   next = replaceBlock(next, SELECT_START, SELECT_END, renderSelect(registry));
   return next;
 }
@@ -510,19 +556,11 @@ export function renderPage(html, registry) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
   const taskDoors = JSON.parse(fs.readFileSync(doorsPath, "utf8"));
-  const naming = JSON.parse(fs.readFileSync(namingPath, "utf8"));
   const executionContract = JSON.parse(fs.readFileSync(executionPath, "utf8"));
-  const valueById = new Map(naming.names.map((entry) => [entry.deliverable_id, entry.value_line_pt_br]));
-  const renderedRegistry = {
-    ...registry,
-    deliverables: registry.deliverables.map((entry) => ({
-      ...entry,
-      value_line_pt_br: valueById.get(entry.deliverable_id),
-    })),
-  };
+  const eightContract = JSON.parse(fs.readFileSync(eightContractPath, "utf8"));
   const current = fs.readFileSync(pagePath, "utf8");
-  const rendered = renderPage(current, renderedRegistry);
-  const clientData = renderClientData(renderedRegistry, executionContract);
+  const rendered = renderPage(current, registry, taskDoors, eightContract);
+  const clientData = renderClientData(registry, executionContract);
   const currentClientData = fs.existsSync(clientDataPath)
     ? fs.readFileSync(clientDataPath, "utf8")
     : "";
@@ -534,11 +572,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       console.error(`PUBLIC_CATALOG_DRIFT: ${drift.join(", ")}; run node scripts/commercial/render_public_catalog.mjs --write`);
       process.exit(1);
     }
-    console.log(`PUBLIC_CATALOG_OK internal=${registry.deliverables.length} public=${publishedVitrine(renderedRegistry).length}`);
+    console.log(`PUBLIC_CATALOG_OK internal=${registry.deliverables.length} public=${publishedVitrine(registry).length}`);
   } else if (process.argv.includes("--write")) {
     fs.writeFileSync(pagePath, rendered);
     fs.writeFileSync(clientDataPath, clientData);
-    console.log(`PUBLIC_CATALOG_WRITTEN internal=${registry.deliverables.length} public=${publishedVitrine(renderedRegistry).length}`);
+    console.log(`PUBLIC_CATALOG_WRITTEN internal=${registry.deliverables.length} public=${publishedVitrine(registry).length}`);
   } else {
     console.error("usage: render_public_catalog.mjs --check|--write");
     process.exit(2);

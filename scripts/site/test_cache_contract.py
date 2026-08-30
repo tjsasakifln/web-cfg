@@ -42,7 +42,13 @@ def hashed_published_assets() -> set[str]:
 
 
 def _headers(body: str) -> str:
-    return "/*\n  Cache-Control: no-cache, max-age=0, must-revalidate\n" + body
+    return (
+        "/*\n"
+        "  Cache-Control: no-cache, max-age=0, must-revalidate, no-transform\n"
+        + body
+        + "/ops/*\n"
+        "  Cache-Control: no-store\n"
+    )
 
 
 def test_parser_reads_the_shipped_header_source() -> None:
@@ -63,6 +69,19 @@ def test_html_default_must_not_be_immutable() -> None:
     )
     errors = evaluate_cache_contract(headers_text=text, hashed_source_assets=set())
     assert any("HTML default" in item for item in errors), errors
+
+
+def test_html_default_without_no_transform_fails() -> None:
+    text = (
+        "/*\n"
+        "  Cache-Control: no-cache, max-age=0, must-revalidate\n"
+        "/assets/*\n"
+        "  Cache-Control: public, max-age=3600, must-revalidate\n"
+        "/.well-known/build-info.json\n"
+        "  Cache-Control: no-cache, max-age=0, must-revalidate\n"
+    )
+    errors = evaluate_cache_contract(headers_text=text, hashed_source_assets=set())
+    assert any("no-transform" in item for item in errors), errors
 
 
 def test_build_info_must_not_be_immutable() -> None:
@@ -99,6 +118,21 @@ def test_assets_wildcard_immutable_fails() -> None:
     )
     errors = evaluate_cache_contract(headers_text=text, hashed_source_assets=set())
     assert any("/assets/*" in item and "immutable" in item for item in errors), errors
+
+
+def test_private_ops_surface_must_be_no_store() -> None:
+    text = (
+        "/*\n"
+        "  Cache-Control: no-cache, max-age=0, must-revalidate, no-transform\n"
+        "/assets/*\n"
+        "  Cache-Control: public, max-age=3600, must-revalidate\n"
+        "/.well-known/build-info.json\n"
+        "  Cache-Control: no-cache, max-age=0, must-revalidate\n"
+        "/ops/*\n"
+        "  Cache-Control: private, max-age=60\n"
+    )
+    errors = evaluate_cache_contract(headers_text=text, hashed_source_assets=set())
+    assert any("/ops/*" in item and "no-store" in item for item in errors), errors
 
 
 def test_downloadable_without_content_disposition_fails() -> None:
@@ -180,7 +214,8 @@ def main() -> int:
     print(
         "CACHE_CONTRACT_OK "
         f"fallback_max_age={fallback_age} immutable_assets={exact} "
-        "missing_asset_policy=revalidate html=revalidate build-info=revalidate"
+        "missing_asset_policy=revalidate html=revalidate+no-transform "
+        "build-info=revalidate ops=no-store"
     )
     return 1 if failed else 0
 
