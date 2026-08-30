@@ -356,11 +356,23 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
         "nginx/generated/locations.generated.conf",
         "nginx/generated/runtime-upstream.generated.conf",
         "nginx/generated/runtime-locations.generated.conf",
+        "nginx/confenge-web-http.conf",
+        "nginx/confenge-web-origin.conf",
+        "nginx/confenge-web-public.conf",
+        "nginx/confenge-web-logrotate",
         "ops/bin/run-runtime",
         "ops/bin/run-schedule",
         "ops/lib/runtime_launcher.py",
         "ops/lib/schedule_gate.py",
         "ops/systemd/confenge-web-runtime.service",
+        "scripts/storage/lib.cjs",
+        "scripts/storage/retention.mjs",
+        "schedules/confenge-web-retention.service",
+        "schedules/confenge-web-retention.timer",
+        "schedules/confenge-web-retention-alert@.service",
+        "schedules/confenge-web-schedule@.service",
+        "schedules/confenge-web-search-observation.timer",
+        "schedules/schedule-contract.json",
     )
     for rel in required:
         path = release / rel

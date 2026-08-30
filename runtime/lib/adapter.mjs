@@ -2,7 +2,12 @@ import { randomUUID } from "node:crypto";
 import { TextDecoder } from "node:util";
 
 const ROUTE = /^\/(?:\.netlify\/functions|api\/web)\/([a-z0-9][a-z0-9-]*)$/;
-const REQUEST_ID = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,79}$/;
+// scripts/migration/netcup/lib/nginx.mjs renders
+// `proxy_set_header X-Request-Id $request_id`, so the public nginx path always
+// overwrites this header with its own 128-bit random hexadecimal value. Reject
+// arbitrary client text here as defense in depth: a direct loopback call cannot
+// smuggle an IP address, phone number or other literal into the application log.
+const REQUEST_ID = /^(?:[a-f0-9]{32}|[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12})$/i;
 const HOP_BY_HOP = new Set([
   "connection",
   "content-length",

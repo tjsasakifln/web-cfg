@@ -343,6 +343,16 @@ def build_release(
             (repo_root / "data" / "conversion", payload / "data" / "conversion"),
         ):
             copy_tree(source, destination)
+        for relative in (
+            "scripts/storage/lib.cjs",
+            "scripts/storage/retention.mjs",
+        ):
+            source = repo_root / relative
+            destination = payload / relative
+            if not source.is_file() or source.is_symlink():
+                raise PackageError(f"required runtime file is missing: {relative}")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
         copy_tree(
             repo_root / "data" / "offers" / "fixtures",
             payload / "data" / "offers" / "fixtures",
@@ -399,6 +409,8 @@ def build_release(
                 "netlify/functions/",
                 "scripts/conversion/",
                 "scripts/offers/",
+                "scripts/storage/lib.cjs",
+                "scripts/storage/retention.mjs",
                 "data/commercial/",
                 "data/conversion/",
                 "data/nurture/tracks.json",

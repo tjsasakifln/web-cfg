@@ -2,9 +2,11 @@
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-const { HostFileBackend } = require("../../netlify/functions/lib/host-file-store.cjs");
+const { HostFileBackend, sha256 } = require("../../netlify/functions/lib/host-file-store.cjs");
 const { FileStore } = require("../../netlify/functions/lib/lead-store.cjs");
 const { ensureAbsoluteOutside } = require("./lib.cjs");
+
+const REPORT_SCHEMA = "confenge-storage-retention-report/v1";
 
 function parse(argv) {
   const out = { apply: false, now: new Date() };
@@ -68,53 +70,99 @@ function expiryFor(namespace, value) {
   return NaN;
 }
 
+function safeErrorCode(err) {
+  const code = String(err && err.code || "");
+  if (/^[A-Z][A-Z0-9_]{1,63}$/.test(code)) return code;
+  const message = String(err && err.message || "");
+  if (message.startsWith("invalid_retention_days:")) return "RETENTION_POLICY_INVALID";
+  if (message.startsWith("unexpected_argument:") || message.startsWith("--store")) return "RETENTION_ARGUMENT_INVALID";
+  return "RETENTION_FAILED";
+}
+
+function deleteUnlocked(backend, leads, item) {
+  if (item.namespace !== "leads") {
+    return backend.namespace(item.namespace)._deleteUnlocked(item.key);
+  }
+  const current = leads.records.get(item.key);
+  if (!current) return false;
+  leads.records._deleteUnlocked(item.key);
+  if (current.idempotency_key) {
+    leads.idempotency._deleteUnlocked(sha256(String(current.idempotency_key)));
+  }
+  return true;
+}
+
 async function main() {
   const options = parse(process.argv.slice(2));
   const root = ensureAbsoluteOutside(options.store, [], { mustExist: true });
   const backend = new HostFileBackend(root);
   const leads = new FileStore(root, { backend });
-  const report = { dry_run: !options.apply, scanned: 0, expired: 0, deleted: 0, malformed_retention: 0, by_namespace: {} };
-  const pendingDeletes = [];
-  for (const namespace of Object.keys(POLICIES)) {
-    const rows = backend.namespace(namespace).list();
-    const stats = { scanned: rows.length, expired: 0, deleted: 0, malformed_retention: 0 };
-    report.scanned += rows.length;
-    for (const row of rows) {
-      const expiry = expiryFor(namespace, row.value);
-      if (!Number.isFinite(expiry)) {
-        stats.malformed_retention += 1;
-        report.malformed_retention += 1;
-        continue;
+  const report = {
+    schema: REPORT_SCHEMA,
+    dry_run: !options.apply,
+    scanned: 0,
+    expired: 0,
+    deleted: 0,
+    malformed_retention: 0,
+    by_namespace: {},
+  };
+  backend.withExclusiveLock(() => {
+    // Validate both durable envelopes and lead/idempotency relationships before
+    // planning any mutation. The same global writer lock covers scan, apply and
+    // the post-apply validation, so an application write cannot invalidate the
+    // decision between those phases.
+    backend.validate({ writeProbe: false });
+    const pendingDeletes = [];
+    for (const namespace of Object.keys(POLICIES)) {
+      const rows = backend.namespace(namespace).list();
+      const stats = { scanned: rows.length, expired: 0, deleted: 0, malformed_retention: 0 };
+      report.scanned += rows.length;
+      for (const row of rows) {
+        const expiry = expiryFor(namespace, row.value);
+        if (!Number.isFinite(expiry)) {
+          stats.malformed_retention += 1;
+          report.malformed_retention += 1;
+          continue;
+        }
+        if (expiry > options.now.getTime()) continue;
+        stats.expired += 1;
+        report.expired += 1;
+        pendingDeletes.push({ namespace, key: row.key });
       }
-      if (expiry > options.now.getTime()) continue;
-      stats.expired += 1;
-      report.expired += 1;
-      pendingDeletes.push({ namespace, key: row.key });
+      report.by_namespace[namespace] = stats;
     }
-    report.by_namespace[namespace] = stats;
-  }
-  report.suppressions_preserved = backend.namespace("nurture-suppressions").list().length;
-  if (options.apply && report.malformed_retention > 0) {
-    report.ok = false;
-    report.blocked = true;
-    report.reason = "malformed_retention";
+    report.suppressions_preserved = backend.namespace("nurture-suppressions").list().length;
+    report.indexes_preserved = backend.namespace("leads-idempotency").list().length;
+    if (options.apply && report.malformed_retention > 0) {
+      report.ok = false;
+      report.blocked = true;
+      report.reason = "malformed_retention";
+      return;
+    }
+    if (options.apply) {
+      for (const item of pendingDeletes) {
+        if (!deleteUnlocked(backend, leads, item)) {
+          throw Object.assign(new Error("retention target disappeared under exclusive lock"), {
+            code: "RETENTION_TARGET_MISSING",
+          });
+        }
+        report.by_namespace[item.namespace].deleted += 1;
+        report.deleted += 1;
+      }
+      backend.validate({ writeProbe: false });
+      report.indexes_preserved = backend.namespace("leads-idempotency").list().length;
+    }
+  });
+  if (report.blocked) {
     process.stdout.write(JSON.stringify(report) + "\n");
     process.exitCode = 2;
     return;
-  }
-  if (options.apply) {
-    for (const item of pendingDeletes) {
-      if (item.namespace === "leads") await leads.delete(item.key);
-      else backend.namespace(item.namespace).delete(item.key);
-      report.by_namespace[item.namespace].deleted += 1;
-      report.deleted += 1;
-    }
   }
   report.ok = true;
   process.stdout.write(JSON.stringify(report) + "\n");
 }
 
 main().catch((err) => {
-  process.stderr.write(JSON.stringify({ ok: false, error: String(err.code || err.message || "retention_failed").slice(0, 120) }) + "\n");
+  process.stderr.write(JSON.stringify({ schema: REPORT_SCHEMA, ok: false, error_code: safeErrorCode(err) }) + "\n");
   process.exit(1);
 });

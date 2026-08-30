@@ -57,6 +57,7 @@ public_canonical:
     http_process: systemd confenge-web-runtime.service
     revops: GitHub Actions workflow revops-scheduled.yml against live HTTPS
     search_observation_host_timer: packaged disabled until /opt/confenge-web/shared/schedule-cutover.json
+    storage_retention_host_timer: packaged disabled until the current full SHA and jobs.storage-retention=true are authorized in /opt/confenge-web/shared/schedule-cutover.json
     netlify_scheduled_functions: leftover declaration in netlify.toml; not the public production plane
   health:
     public_identity: /.well-known/build-info.json

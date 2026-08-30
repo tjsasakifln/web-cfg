@@ -421,6 +421,9 @@ try {
   const appliedRetention = JSON.parse((await execFileAsync(process.execPath, [retentionScript, "--store", importRoot, "--now", "2026-08-26T00:00:00Z", "--apply"])).stdout);
   assert(appliedRetention.deleted >= 1 && await importStore.get("lead_expired") === null && await importStore.getByIdempotency("idem_expired") === null, "retention apply failed");
   assert(appliedRetention.suppressions_preserved === 1, "retention removed suppression");
+  assert(appliedRetention.indexes_preserved === 1, "retention removed a live lead idempotency index");
+  assert((await importStore.getByIdempotency("idem_migration")).lead_id === "lead_migration", "retention corrupted a live lead idempotency index");
+  assert(JSON.stringify(appliedRetention).includes("lead_expired") === false, "retention report leaked a record key");
 
   // Apply is all-or-nothing when any governed record has no valid timestamp.
   const malformedRetentionRoot = privateDir("confenge-retention-malformed-");

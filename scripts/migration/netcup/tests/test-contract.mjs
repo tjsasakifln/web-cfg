@@ -153,6 +153,7 @@ test("nginx output preserves fragments/query and emits only the explicit runtime
   assert.match(runtimeLocations, /proxy_pass http:\/\/confenge_web_runtime;/);
   assert.match(runtimeLocations, /proxy_set_header X-Forwarded-For \$remote_addr;/);
   assert.match(runtimeLocations, /proxy_set_header X-Real-IP \$remote_addr;/);
+  assert.match(runtimeLocations, /proxy_set_header X-Request-Id \$request_id;/);
   assert.doesNotMatch(runtimeLocations, /proxy_add_x_forwarded_for/);
   assert.doesNotMatch(runtimeLocations, /search-observation-tick/);
   assert.doesNotMatch(runtimeLocations, /location ~ \^\/\.netlify\/functions\/\.\*/);

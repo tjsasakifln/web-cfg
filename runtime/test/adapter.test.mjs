@@ -189,6 +189,26 @@ test("runtime logs never echo PII embedded in an unmatched URL path", async (t) 
   assert.equal(requestLog.route, "unmatched");
 });
 
+test("runtime logs reject raw client IP and user-agent values as correlation data", async (t) => {
+  const fixture = await startFixtureRuntime();
+  t.after(() => fixture.runtime.shutdown("test"));
+  const rawIp = "203.0.113.77";
+  const rawAgent = "privacy-canary-user-agent/1";
+  const response = await fetch(fixture.baseUrl + "/api/web/echo", {
+    headers: {
+      "x-request-id": rawIp,
+      "x-forwarded-for": rawIp,
+      "user-agent": rawAgent,
+    },
+  });
+  assert.equal(response.status, 207);
+  const logs = fixture.logs.join("\n");
+  assert.equal(logs.includes(rawIp), false);
+  assert.equal(logs.includes(rawAgent), false);
+  const requestLog = fixture.logs.map((line) => JSON.parse(line)).find((row) => row.event === "runtime_request");
+  assert.match(requestLog.request_id, /^[a-f0-9-]{36}$/);
+});
+
 test("production startup is refused when critical requirements are absent", async () => {
   const env = isolatedTestEnv({
     NODE_ENV: "production",

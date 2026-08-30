@@ -1,0 +1,15 @@
+[Unit]
+Description=CONFENGE daily host-owned storage retention (disabled until authorized)
+Documentation=https://github.com/tjsasakifln/web-cfg/issues/443
+ConditionPathExists=/opt/confenge-web/shared/schedule-cutover.json
+
+[Timer]
+Unit=confenge-web-retention.service
+OnCalendar=*-*-* 03:20:00 America/Sao_Paulo
+Persistent=true
+AccuracySec=1min
+RandomizedDelaySec=2700
+FixedRandomDelay=true
+
+[Install]
+WantedBy=timers.target

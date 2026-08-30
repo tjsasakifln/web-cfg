@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -12,6 +13,10 @@ NGINX = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-origin.conf"
 NGINX_HTTP = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-http.conf"
 NGINX_PUBLIC = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-public.conf"
 SCHEDULE = ROOT / "deploy" / "netcup" / "schedules" / "schedule-contract.json"
+RETENTION_SERVICE = ROOT / "deploy" / "netcup" / "schedules" / "confenge-web-retention.service"
+RETENTION_TIMER = ROOT / "deploy" / "netcup" / "schedules" / "confenge-web-retention.timer"
+RETENTION_ALERT = ROOT / "deploy" / "netcup" / "schedules" / "confenge-web-retention-alert@.service"
+LOGROTATE = ROOT / "deploy" / "netcup" / "nginx" / "confenge-web-logrotate"
 
 
 def test_release_reuses_site_ci_and_never_rebuilds() -> None:
@@ -121,6 +126,61 @@ def test_public_redirects_preserve_the_full_hsts_contract() -> None:
     assert 'Strict-Transport-Security "max-age=31536000" always' not in text
 
 
+def test_nginx_access_logs_are_finite_aggregate_classes_without_raw_identifiers() -> None:
+    http = NGINX_HTTP.read_text(encoding="utf-8")
+    public = NGINX_PUBLIC.read_text(encoding="utf-8")
+    origin = NGINX.read_text(encoding="utf-8")
+    log_format = http.split("log_format confenge_minimized", 1)[1].split(";", 1)[0]
+    variables = set(re.findall(r"\$[a-zA-Z0-9_]+", log_format))
+    for forbidden in (
+        "$remote_addr",
+        "$remote_user",
+        "$http_user_agent",
+        "$http_referer",
+        "$http_cookie",
+        "$http_x_forwarded_for",
+        "$request",
+        "$request_uri",
+        "$args",
+        "$uri",
+        "$host",
+        "$request_id",
+    ):
+        assert forbidden not in variables
+    for aggregate in (
+        "$confenge_route_class",
+        "$confenge_method_class",
+        "$confenge_status_class",
+        "$confenge_content_class",
+        "$request_time",
+        "$upstream_response_time",
+    ):
+        assert aggregate in log_format
+    assert public.count("server {") == public.count("access_log /var/log/nginx/confenge-web-access.log confenge_minimized")
+    assert origin.count("server {") == origin.count("access_log /var/log/nginx/confenge-web-origin-access.log confenge_minimized")
+    assert public.count("error_log /dev/null crit;") == public.count("server {")
+    assert origin.count("error_log /dev/null crit;") == origin.count("server {")
+
+
+def test_nginx_minimized_logs_have_bounded_retention_and_private_permissions() -> None:
+    text = LOGROTATE.read_text(encoding="utf-8")
+    runbook = README.read_text(encoding="utf-8")
+    assert "/var/log/nginx/confenge-web-access.log" in text
+    assert "/var/log/nginx/confenge-web-origin-access.log" in text
+    for directive in (
+        "daily",
+        "rotate 14",
+        "maxage 14",
+        "compress",
+        "create 0640 root adm",
+        "su root adm",
+        "kill -USR1",
+    ):
+        assert directive in text
+    assert "chown root:adm /var/log/nginx/confenge-web-access.log" in runbook
+    assert "chmod 0640 /var/log/nginx/confenge-web-access.log" in runbook
+
+
 def test_scheduler_is_disabled_and_double_run_gate_is_explicit() -> None:
     text = SCHEDULE.read_text(encoding="utf-8")
     assert '"default_state": "DISABLED"' in text
@@ -132,6 +192,48 @@ def test_scheduler_is_disabled_and_double_run_gate_is_explicit() -> None:
     workflow = WORKFLOW.read_text(encoding="utf-8")
     assert "systemctl enable" not in workflow
     assert "CUTOVER_SCHEDULES_AUTHORIZED" not in workflow
+
+
+def test_storage_retention_is_a_single_gated_serialized_systemd_job() -> None:
+    contract = json.loads(SCHEDULE.read_text(encoding="utf-8"))
+    retention = next(job for job in contract["jobs"] if job["id"] == "storage-retention")
+    assert contract["default_state"] == "DISABLED"
+    assert retention == {
+        "id": "storage-retention",
+        "owner": "runtime/storage Netcup",
+        "decision_state": "EXECUTE_NOW",
+        "leverage": "automation, trust",
+        "command": "/opt/confenge-web/bin/run-schedule storage-retention",
+        "dry_run_command": "node /opt/confenge-web/current/scripts/storage/retention.mjs --store /var/lib/confenge-web",
+        "service": "confenge-web-retention.service",
+        "timer": "confenge-web-retention.timer",
+        "cadence": "daily at 03:20 America/Sao_Paulo",
+        "jitter_seconds": 2700,
+        "persistent": True,
+        "lock": "/opt/confenge-web/shared/storage-retention.lock (exclusive, non-blocking)",
+        "observability": "aggregate JSON on stdout; failures mark the unit failed and emit user.alert via confenge-web-retention-alert@.service",
+        "legacy_scheduler": "none",
+        "legacy_active_at_packaging": False,
+        "activation_gate_required": True,
+        "netcup_enabled": False,
+    }
+    service = RETENTION_SERVICE.read_text(encoding="utf-8")
+    timer = RETENTION_TIMER.read_text(encoding="utf-8")
+    alert = RETENTION_ALERT.read_text(encoding="utf-8")
+    assert "ConditionPathExists=/opt/confenge-web/shared/schedule-cutover.json" in service
+    assert "ExecStart=/opt/confenge-web/bin/run-schedule storage-retention" in service
+    assert "OnFailure=confenge-web-retention-alert@%n.service" in service
+    assert "User=confenge-deploy" in service and "Group=confenge-web" in service
+    assert "UMask=0027" in service
+    assert "ReadWritePaths=/opt/confenge-web/shared /var/lib/confenge-web" in service
+    assert "OnCalendar=*-*-* 03:20:00 America/Sao_Paulo" in timer
+    assert "RandomizedDelaySec=2700" in timer
+    assert "FixedRandomDelay=true" in timer
+    assert "Persistent=true" in timer
+    assert "WantedBy=timers.target" in timer
+    assert "user.alert" in alert and "retention_schedule_failed" in alert
+    generic_service = (ROOT / "deploy" / "netcup" / "schedules" / "confenge-web-schedule@.service").read_text(encoding="utf-8")
+    assert "User=confenge-deploy" in generic_service and "Group=confenge-web" in generic_service
 
 
 def test_runbook_contains_secret_commands_and_operational_evidence() -> None:

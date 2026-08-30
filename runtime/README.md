@@ -290,6 +290,7 @@ Operational schedulers in production:
 |---|---|---|
 | RevOps daily/weekly/nurture | GitHub Actions `revops-scheduled.yml` | Hits live HTTPS through nginx |
 | search-observation-tick | portable `runtime/schedule.mjs` | Host timer stays gated by `schedule-cutover.json`; leftover Netlify schedule in `netlify.toml` is not the public plane |
+| storage-retention | packaged `scripts/storage/retention.mjs` through the gated host runner | Dedicated systemd timer stays disabled until the current SHA and exact job are authorized; aggregate output only |
 
     cd /opt/confenge-web/current
     /usr/bin/env node runtime/schedule.mjs search-observation-tick

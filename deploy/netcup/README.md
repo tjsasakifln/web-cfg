@@ -146,6 +146,42 @@ immutable generated snippets. The public vhost
 `_headers`/`_redirects` contract into `/etc/nginx` and never edit or reload
 unrelated vhosts.
 
+### Minimized nginx request telemetry
+
+The CONFENGE vhosts use `confenge_minimized`. It records finite route, method,
+status, content and upstream classes plus byte/latency aggregates. It never
+records a client/forwarded address, user agent, referer, cookie, query string,
+free-form URI or request identifier. nginx request error logs cannot be
+custom-redacted, so the CONFENGE server blocks send them to `/dev/null`; failed
+config tests, reloads and service health remain visible through systemd and the
+release evidence. This scope does not alter unrelated nginx vhosts.
+
+The operational owner is `runtime Netcup/nginx`. Logs are root-owned, group
+readable only by `adm` (`0640`), rotated daily, compressed and deleted after at
+most 14 days. This is an operational minimization ceiling, not an assertion of
+legal basis. Install or update the reviewed files only during the #442 cutover:
+
+```sh
+sudo touch /var/log/nginx/confenge-web-access.log /var/log/nginx/confenge-web-origin-access.log
+sudo chown root:adm /var/log/nginx/confenge-web-access.log /var/log/nginx/confenge-web-origin-access.log
+sudo chmod 0640 /var/log/nginx/confenge-web-access.log /var/log/nginx/confenge-web-origin-access.log
+sudo install -o root -g root -m 0644 /opt/confenge-web/current/nginx/confenge-web-http.conf /etc/nginx/conf.d/confenge-web-http.conf
+sudo install -o root -g root -m 0644 /opt/confenge-web/current/nginx/confenge-web-origin.conf /etc/nginx/sites-available/confenge-web-origin.conf
+sudo install -o root -g root -m 0644 /opt/confenge-web/current/nginx/confenge-web-public.conf /etc/nginx/sites-available/confenge.com.br
+sudo install -o root -g root -m 0644 /opt/confenge-web/current/nginx/confenge-web-logrotate /etc/logrotate.d/confenge-web
+sudo nginx -t
+sudo systemctl reload nginx
+sudo logrotate --debug /etc/logrotate.d/confenge-web
+```
+
+Do not attach log samples to a GitHub issue or PR. Post-cutover proof is
+aggregate-only: confirm file owner/mode, inspect the active nginx configuration
+for `confenge_minimized`, and use field names/counts rather than request rows.
+The rollback is the previous validated vhost plus `nginx -t` and reload; if
+availability forces that rollback, #442 remains an open privacy incident. Use
+the same four `install` commands against the exact previous release directory,
+then run `nginx -t` before reload; never fall back to an unversioned copy.
+
 Use a dedicated SSH key and pin the server host key after comparing its
 fingerprint through an independent trusted channel. Never accept `ssh-keyscan`
 output as trusted without that comparison.
@@ -281,6 +317,91 @@ sudo systemctl enable --now confenge-web-search-observation.timer
 
 If the leftover scheduler cannot be proven disabled, stop: the activation gate
 must remain absent. This is the explicit proof against double execution.
+
+### Host-owned storage retention
+
+`storage-retention` is the only canonical retention scheduler. It has no legacy
+executor, but remains disabled and fail-closed until the shared gate binds the
+current full SHA and sets `jobs.storage-retention=true`. The daily timer runs at
+03:20 `America/Sao_Paulo` with a stable delay of up to 45 minutes and catches up
+after downtime. The runner takes a non-blocking exclusive lock at
+`/opt/confenge-web/shared/storage-retention.lock`; a concurrent timer, generic
+unit or manual invocation fails instead of overlapping.
+
+The retention command validates the complete store and lead idempotency indexes
+under the host writer lock before applying. Any governed record with a missing
+or malformed retention timestamp blocks all planned deletes. Suppressions and
+indexes for retained leads are preserved. stdout is aggregate JSON only;
+failures mark the unit failed and the `OnFailure` unit emits a `user.alert`
+journal event without record keys or payloads.
+
+This P1 is `EXECUTE_NOW`, front `SCALE / SUNSET`, with automation and trust
+leverage. Time to evidence is one timer window after authorized activation.
+One hundred executions improve the system through bounded, observable policy
+enforcement; they do not create one hundred manual cleanup tasks. It does not
+claim a QCO or revenue outcome.
+
+After the exact release is promoted, install the versioned units and runner,
+but do not enable the timer yet:
+
+```sh
+sudo install -o root -g root -m 0755 /opt/confenge-web/current/ops/bin/run-schedule /opt/confenge-web/bin/run-schedule
+sudo install -o root -g root -m 0644 /opt/confenge-web/current/ops/lib/schedule_gate.py /opt/confenge-web/lib/schedule_gate.py
+sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-retention.service /etc/systemd/system/confenge-web-retention.service
+sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-retention.timer /etc/systemd/system/confenge-web-retention.timer
+sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-retention-alert@.service /etc/systemd/system/confenge-web-retention-alert@.service
+sudo systemctl daemon-reload
+systemctl is-enabled confenge-web-retention.timer 2>&1 | grep -Eq 'disabled|not-found'
+```
+
+Run the aggregate dry-run from the promoted immutable release before creating
+the gate. Review `malformed_retention`, `expired`, `suppressions_preserved` and
+`indexes_preserved`; do not print or copy stored records:
+
+```sh
+sudo -u confenge-deploy node /opt/confenge-web/current/scripts/storage/retention.mjs --store /var/lib/confenge-web
+```
+
+The reviewed gate must be a root-reviewed regular file (never a symlink) with
+the current 40-character SHA and the exact job authorization. Creating it and
+enabling the timer are privileged live changes deliberately left outside an
+automatic promotion:
+
+```json
+{
+  "schema": "confenge.schedule-cutover/v1",
+  "authorized_release_sha": "FULL_SHA",
+  "jobs": {
+    "storage-retention": true
+  }
+}
+```
+
+Write that JSON to a protected reviewed file, substitute the promoted full SHA,
+then install it without relaxing ownership or mode before enabling the timer:
+
+```sh
+sudo install -o root -g confenge-web -m 0640 /secure/confenge/schedule-cutover.json /opt/confenge-web/shared/schedule-cutover.json
+sudo systemctl enable --now confenge-web-retention.timer
+```
+
+After authorized activation, capture only unit/timer state and aggregate job
+output from the journal:
+
+```sh
+systemctl is-enabled confenge-web-retention.timer
+systemctl is-active confenge-web-retention.timer
+systemctl list-timers confenge-web-retention.timer --no-pager
+systemctl show confenge-web-retention.service -p Result -p ExecMainStatus -p ExecMainStartTimestamp -p ExecMainExitTimestamp
+journalctl -u confenge-web-retention.service --since today --output=json --no-pager
+```
+
+Rollback disables only `confenge-web-retention.timer` and removes that job's
+authorization from the gate. It must not delete or restore the host-owned store
+and must not create a cron replacement. Run
+`sudo systemctl disable --now confenge-web-retention.timer`, install a reviewed
+`0640 root:confenge-web` gate with `storage-retention` omitted (preserving any
+independently authorized job), then confirm the timer is inactive.
 
 ## Rollback and pruning
 

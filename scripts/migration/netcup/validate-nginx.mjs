@@ -12,9 +12,15 @@ const ROOT = resolve(new URL("../../..", import.meta.url).pathname);
 const output = resolve(ROOT, "build/netcup-host-contract");
 const scratch = mkdtempSync(join(tmpdir(), "confenge-nginx-test-"));
 const config = join(scratch, "nginx.conf");
+const wrapperConfig = join(scratch, "nginx-wrappers.conf");
+const testCertificate = join(scratch, "fullchain.pem");
+const testCertificateKey = join(scratch, "privkey.pem");
 const syntaxContainer = `confenge-host-contract-syntax-${process.pid}`;
+const wrapperSyntaxContainer = `confenge-host-wrappers-syntax-${process.pid}`;
+const wrapperE2eContainer = `confenge-host-wrappers-e2e-${process.pid}`;
 const e2eContainer = `confenge-host-contract-e2e-${process.pid}`;
 let container = null;
+let wrapperContainer = null;
 
 function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
@@ -77,6 +83,153 @@ http {
     { stdio: "inherit", timeout: 120_000 },
   );
   console.log("NGINX_HOST_CONTRACT_SYNTAX_OK");
+
+  // The generated contract alone cannot prove that the checked-in http/server
+  // wrappers parse. Assemble those exact files with only absolute host paths
+  // redirected to read-only test mounts and an ephemeral test certificate.
+  const normalizeWrapper = (name) => readFileSync(
+    resolve(ROOT, "deploy/netcup/nginx", name),
+    "utf8",
+  )
+    .replaceAll("/opt/confenge-web/current/nginx/generated/", "/contract/")
+    .replaceAll("/opt/confenge-web/current/_site", "/site")
+    .replaceAll("/etc/letsencrypt/live/confenge.com.br/fullchain.pem", "/test/fullchain.pem")
+    .replaceAll("/etc/letsencrypt/live/confenge.com.br/privkey.pem", "/test/privkey.pem");
+  writeFileSync(
+    wrapperConfig,
+    `events {}
+http {
+  include /etc/nginx/mime.types;
+${normalizeWrapper("confenge-web-http.conf")}
+${normalizeWrapper("confenge-web-origin.conf")}
+${normalizeWrapper("confenge-web-public.conf")}
+}
+`,
+    "utf8",
+  );
+  execFileSync(
+    "openssl",
+    [
+      "req", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", "1",
+      "-subj", "/CN=confenge-nginx-contract.invalid",
+      "-keyout", testCertificateKey,
+      "-out", testCertificate,
+    ],
+    { stdio: "ignore", timeout: 30_000 },
+  );
+  execFileSync(
+    "docker",
+    [
+      "run",
+      "--name",
+      wrapperSyntaxContainer,
+      "--volume",
+      `${wrapperConfig}:/etc/nginx/nginx.conf:ro`,
+      "--volume",
+      `${output}:/contract:ro`,
+      "--volume",
+      `${resolve(ROOT, "_site")}:/site:ro`,
+      "--volume",
+      `${scratch}:/test:ro`,
+      "nginx:1.27-alpine",
+      "nginx",
+      "-t",
+    ],
+    { stdio: "inherit", timeout: 120_000 },
+  );
+  console.log("NGINX_CHECKED_IN_WRAPPERS_SYNTAX_OK");
+
+  wrapperContainer = execFileSync(
+    "docker",
+    [
+      "run",
+      "--detach",
+      "--rm",
+      "--name",
+      wrapperE2eContainer,
+      "--publish",
+      "127.0.0.1::80",
+      "--volume",
+      `${wrapperConfig}:/etc/nginx/nginx.conf:ro`,
+      "--volume",
+      `${output}:/contract:ro`,
+      "--volume",
+      `${resolve(ROOT, "_site")}:/site:ro`,
+      "--volume",
+      `${scratch}:/test:ro`,
+      "nginx:1.27-alpine",
+    ],
+    { encoding: "utf8", timeout: 120_000 },
+  ).trim();
+  const wrapperBinding = execFileSync("docker", ["port", wrapperContainer, "80/tcp"], { encoding: "utf8" }).trim();
+  const wrapperPort = wrapperBinding.match(/:(\d+)$/)?.[1];
+  if (!wrapperPort) throw new Error(`cannot determine nginx wrapper test port from ${wrapperBinding}`);
+  const privacyClient = createOriginClient({
+    label: "nginx-wrapper-privacy",
+    baseUrl: `http://127.0.0.1:${wrapperPort}`,
+    hostHeader: "confenge.com.br",
+  });
+  let wrapperReady = false;
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    try {
+      const response = await privacyClient.request("/");
+      wrapperReady = response.status === 301;
+      if (wrapperReady) break;
+    } catch {
+      await new Promise((done) => setTimeout(done, 50));
+    }
+  }
+  if (!wrapperReady) throw new Error("nginx wrapper test container did not become ready");
+  const piiMarkers = [
+    "private.person@example.com",
+    "198.51.100.49",
+    "privacy-canary-user-agent/1",
+    "5511988887766",
+  ];
+  const privacyResponse = await privacyClient.request(
+    `/privacy-canary/${encodeURIComponent(piiMarkers[0])}?phone=${piiMarkers[3]}`,
+    {
+      extraHeaders: {
+        "User-Agent": piiMarkers[2],
+        "X-Forwarded-For": piiMarkers[1],
+        "X-Request-Id": piiMarkers[0],
+      },
+    },
+  );
+  assertProbe("minimized_log_probe_status", privacyResponse.status === 301, `status=${privacyResponse.status}`);
+  execFileSync("docker", ["kill", "--signal", "USR1", wrapperContainer], { stdio: "ignore", timeout: 30_000 });
+  await new Promise((done) => setTimeout(done, 100));
+  const privacyLog = execFileSync(
+    "docker",
+    ["exec", wrapperContainer, "cat", "/var/log/nginx/confenge-web-access.log"],
+    { encoding: "utf8", timeout: 30_000 },
+  );
+  assertProbe(
+    "minimized_log_no_raw_pii",
+    piiMarkers.every((marker) => !privacyLog.includes(marker)),
+    "access log contained a raw privacy canary",
+  );
+  const privacyLogLines = privacyLog.trim().split("\n").filter(Boolean);
+  assertProbe("minimized_log_emitted", privacyLogLines.length >= 2, `lines=${privacyLogLines.length}`);
+  const allowedLogKeys = [
+    "bytes",
+    "content_class",
+    "method_class",
+    "request_seconds",
+    "route_class",
+    "status",
+    "status_class",
+    "ts",
+    "upstream_class",
+    "upstream_seconds",
+  ];
+  for (const line of privacyLogLines) {
+    assertProbe(
+      "minimized_log_schema",
+      JSON.stringify(Object.keys(JSON.parse(line)).sort()) === JSON.stringify(allowedLogKeys),
+      line,
+    );
+  }
 
   container = execFileSync(
     "docker",
@@ -205,6 +358,13 @@ http {
   console.log("PRODUCTION_CUTOVER_HTTP_HOST_MODE_OK");
   console.log("NGINX_HOST_CONTRACT_E2E_OK");
 } finally {
+  if (wrapperContainer) {
+    try {
+      execFileSync("docker", ["rm", "--force", wrapperContainer], { stdio: "ignore", timeout: 30_000 });
+    } catch {
+      // The --rm container may already have exited; cleanup is best effort for this exact container id.
+    }
+  }
   if (container) {
     try {
       execFileSync("docker", ["rm", "--force", container], { stdio: "ignore", timeout: 30_000 });
@@ -212,7 +372,7 @@ http {
       // The --rm container may already have exited; cleanup is best effort for this exact container id.
     }
   }
-  for (const name of [syntaxContainer, e2eContainer]) {
+  for (const name of [syntaxContainer, wrapperSyntaxContainer, wrapperE2eContainer, e2eContainer]) {
     try {
       execFileSync("docker", ["rm", "--force", name], { stdio: "ignore", timeout: 30_000 });
     } catch {

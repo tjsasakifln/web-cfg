@@ -16,8 +16,8 @@ from typing import Self
 import pytest
 
 from deploy.netcup.lib import release_control as control
+from deploy.netcup.lib import schedule_gate as schedule
 from deploy.netcup.lib.runtime_launcher import runtime_environment
-from deploy.netcup.lib.schedule_gate import validate_gate
 from deploy.netcup.package_release import build_release, sha256_file
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -183,7 +183,7 @@ def test_schedule_gate_refuses_double_execution_until_legacy_disablement_is_boun
     control.stage_release(SHA_A)
     control.atomic_release_link(host, "current", SHA_A)
     with pytest.raises(control.ReleaseError, match="gate is absent"):
-        validate_gate(host, "search-observation-tick")
+        schedule.validate_gate(host, "search-observation-tick")
     gate_path = host / "shared" / "schedule-cutover.json"
     gate = {
         "schema": "confenge.schedule-cutover/v1",
@@ -196,11 +196,81 @@ def test_schedule_gate_refuses_double_execution_until_legacy_disablement_is_boun
         "jobs": {"search-observation-tick": True},
     }
     gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
+    gate_path.chmod(0o640)
     with pytest.raises(control.ReleaseError, match="disablement is not proven"):
-        validate_gate(host, "search-observation-tick")
+        schedule.validate_gate(host, "search-observation-tick")
     gate["legacy_executor"]["netlify_search_observation_disabled"] = True
     gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
-    assert validate_gate(host, "search-observation-tick")["authorized_release_sha"] == SHA_A
+    assert schedule.validate_gate(host, "search-observation-tick")["authorized_release_sha"] == SHA_A
+
+
+def test_retention_gate_and_runner_are_sha_bound_without_a_legacy_executor(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    control.stage_release(SHA_A)
+    control.atomic_release_link(host, "current", SHA_A)
+    gate_path = host / "shared" / "schedule-cutover.json"
+    gate = {
+        "schema": "confenge.schedule-cutover/v1",
+        "authorized_release_sha": SHA_A,
+        "jobs": {"storage-retention": True},
+    }
+    gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
+    gate_path.chmod(0o640)
+    assert schedule.validate_gate(host, "storage-retention")["authorized_release_sha"] == SHA_A
+
+    observed: dict[str, object] = {}
+
+    def fake_run(command, **kwargs):
+        observed.update({"command": command, **kwargs})
+        return subprocess.CompletedProcess(command, 2)
+
+    monkeypatch.setattr(schedule.subprocess, "run", fake_run)
+    release = host / "releases" / SHA_A
+    assert schedule.run_retention(
+        host,
+        release,
+        {"CONFENGE_STORAGE_DIR": "/var/lib/confenge-web"},
+    ) == 2
+    assert observed["command"] == [
+        "node",
+        str(release / "scripts" / "storage" / "retention.mjs"),
+        "--store",
+        "/var/lib/confenge-web",
+        "--apply",
+    ]
+    assert observed["cwd"] == release
+    assert observed["check"] is False
+    with pytest.raises(control.ReleaseError, match="path must match"):
+        schedule.run_retention(host, release, {"CONFENGE_STORAGE_DIR": "/tmp/not-authoritative"})
+
+    gate["authorized_release_sha"] = SHA_B
+    gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
+    with pytest.raises(control.ReleaseError, match="authorization is not proven"):
+        schedule.validate_gate(host, "storage-retention")
+    gate_path.chmod(0o644)
+    with pytest.raises(control.ReleaseError, match="permissions must be 0640"):
+        schedule.validate_gate(host, "storage-retention")
+    gate_path.unlink()
+    target = host / "gate-target.json"
+    target.write_text(json.dumps(gate) + "\n", encoding="utf-8")
+    target.chmod(0o640)
+    gate_path.symlink_to(target)
+    with pytest.raises(control.ReleaseError, match="gate is absent"):
+        schedule.validate_gate(host, "storage-retention")
+
+
+def test_retention_lock_is_exclusive_and_non_blocking(host: Path) -> None:
+    (host / "shared").mkdir(parents=True)
+    first = schedule.acquire_job_lock(host, "storage-retention")
+    try:
+        with pytest.raises(control.ReleaseError, match="lock is already held"):
+            schedule.acquire_job_lock(host, "storage-retention")
+    finally:
+        os.close(first)
+    second = schedule.acquire_job_lock(host, "storage-retention")
+    os.close(second)
 
 
 def test_short_sha_is_rejected(host: Path) -> None:
@@ -433,6 +503,18 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "ops/bin/verify-release",
         "ops/bin/promote-release",
         "ops/bin/rollback",
+        "scripts/storage/lib.cjs",
+        "scripts/storage/retention.mjs",
+        "schedules/confenge-web-retention.service",
+        "schedules/confenge-web-retention.timer",
+        "schedules/confenge-web-retention-alert@.service",
+        "schedules/confenge-web-schedule@.service",
+        "schedules/confenge-web-search-observation.timer",
+        "schedules/schedule-contract.json",
+        "nginx/confenge-web-http.conf",
+        "nginx/confenge-web-origin.conf",
+        "nginx/confenge-web-public.conf",
+        "nginx/confenge-web-logrotate",
     ):
         assert required in names
 
