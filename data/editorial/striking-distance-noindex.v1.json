@@ -28,7 +28,7 @@
         "approval_basis": "owner-delegated review 2026-08-29",
         "approved_at": "2026-08-29",
         "manual_human_review": false,
-        "material_hash": "sha256:a588953e8df4fd59555afbad2ce331cb2c02d866ba06301850b804c882d7696d",
+        "material_hash": "sha256:26f90a221f75f2cf82b664cafa3882ef15f3e93ef6225625973b9f837d7de1e7",
         "review_results": {
           "factual_legal_adversarial": true,
           "originality_anti_doorway": true,
@@ -37,7 +37,7 @@
           "responsive_js_off_keyboard_accessibility": true
         },
         "notes": "O conteúdo foi redigido pelo agente da campanha de reescrita (material_author) sob delegação expressa de autoridade do owner. Uma revisão adversarial independente, executada em processo separado da campanha autora (reviewer_executor), verificou as citações legais (Lei 14.133/2021 arts. 115 §5º, 22 §§1-2, 92 VII/IX, 103 §§4-5, 117 §§1-2, 124 II 'd', 137 V), os Acórdãos TCU 639/2006 e 3.077/2010 e a metodologia do INMET (limiar de 1mm de chuva diária, janela 12h UTC-12h UTC), além de originalidade, canibalização de consulta e higiene de indexação, sem encontrar fabricação. Não houve revisão humana manual em nenhuma das duas etapas: nem na autoria, nem nesta revisão adversarial.",
-        "approval_hash": "sha256:c2d69cd935b0d187419aa4f2a47a3e0a74b1cdc3879d35f1e57d185c8d426edc"
+        "approval_hash": "sha256:a2a61120ebf1cb626c5a4790f2a122a485be7d666746acb141ed84ec15ffe5a0"
       }
     },
     {
