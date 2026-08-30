@@ -110,7 +110,28 @@
     "reading_method": "Numbered reading criteria that apply to the whole library, not to a single item",
     "ladder_credit": "Ladder arithmetic and credit rule on an authority surface",
     "catalog_index": "Taxative full-catalog index grouped by visitor task, with canonical state, price, SLA, evidence boundary and one terminal action per available item",
-    "market_context": "Public market records labeled as market context, never as CONFENGE client proof"
+    "market_context": "Public market records labeled as market context, never as CONFENGE client proof",
+    "analysis_masthead": "Technical-analysis masthead: editorial class label, H1, the not-a-client-case caveat and the publication state of the page",
+    "analysis_abstract": "Executive summary of the analysis: the conclusion that is possible, in short prose, before any evidence",
+    "analysis_relevance": "Why this public contract deserves an analysis; a selection criterion, not a commercial promise",
+    "analysis_argument": "Continuous prose body, used only when the record needs development beyond the epistemic lists",
+    "evidence_record": "Instrument record: identification table for the contract, built from a public source",
+    "evidence_timeline": "Dated timeline of the contract events",
+    "evidence_claims": "FACT-tracked claims, each with source, locator and hash",
+    "evidence_calculation": "Calculations with explicit method and result, kept apart from the facts",
+    "evidence_comparables": "Public comparables consumed, or the declared reason for consuming none",
+    "editorial_interpretation": "CONFENGE technical interpretation, labelled as inference and never mixed into the facts",
+    "epistemic_boundary": "What cannot be concluded from the available evidence",
+    "source_ledger": "Ledger of public sources with reference date and scope",
+    "method_disclosure": "Method and gate version that produced the page, signed by the technical owner",
+    "limitation_notice": "Declared limitations of the scope, the data and the reach of the analysis",
+    "maintenance_owner": "Named owner of the page update",
+    "update_log": "Dated history of update and correction",
+    "related_assets": "Related useful assets, chosen by visitor task and not by link volume",
+    "contextual_next_action": "Contextual next step on an editorial surface: one action, without restating the offer in another table",
+    "provenance_hashes": "Hashes and provenance binding the page to its evidence pack",
+    "correction_channel": "Public channel for correction and contestation",
+    "author_identity": "Named author and technical owner, with a verifiable trajectory"
   },
   "component_usage_rules": {
     "card_allowed_when": [
@@ -268,6 +289,13 @@
   ],
   "archetype_gated_surfaces": [
     "index.html",
-    "entregas/index.html"
-  ]
+    "entregas/index.html",
+    "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
+    "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
+    "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
+    "analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/index.html",
+    "analises-contratos-publicos/reajuste-aniversario-serie-indice/index.html",
+    "analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html"
+  ],
+  "archetype_gate_rollout": "data/site/archetype-gate-rollout.json"
 }
