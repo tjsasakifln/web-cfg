@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `76`
 - defects: `0`
-- site_root: `/tmp/claude-1000/-home-tjsasakifln-code-confenge-web-cfg/26ea4b29-7762-4fb9-a07b-bb3c194280ae/scratchpad/wa491/_site`
+- site_root: `/home/tjsasakifln/code/confenge/web-cfg/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |

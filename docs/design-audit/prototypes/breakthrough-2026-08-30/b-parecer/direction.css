@@ -1,0 +1,221 @@
+/* DIREÇÃO B — PARECER COM APARATO DE MARGEM
+ * Espinha assimétrica em toda a página: margem de referência à esquerda,
+ * corpo à direita. Nada é centralizado, nada é card, nada tem raio. */
+:root{
+  --gutter:clamp(1.15rem,4vw,4.5rem);
+  --ref-w:14.5rem;
+  --spine:2.75rem;
+  --measure:44rem;
+  --rule:1px solid var(--line);
+}
+body{background:var(--white);color:var(--text)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:.75rem 1rem;z-index:60}
+.skip:focus{left:0}
+
+.claim,.doc-head-inner,.doc-foot-inner{
+  display:grid;grid-template-columns:var(--ref-w) minmax(0,1fr);
+  column-gap:var(--spine);padding-inline:var(--gutter);
+}
+.part{display:contents}
+
+/* ── cabeçalho de documento ────────────────────────────────────────────── */
+.doc-head{border-bottom:1.5px solid var(--ink);padding-top:1.6rem}
+.doc-head-inner{align-items:start;row-gap:1.1rem;padding-bottom:1.2rem}
+.brand{grid-column:1;text-decoration:none;align-self:start}
+.brand-mark{font-size:1.28rem;font-weight:800;font-stretch:72%;letter-spacing:.15em;color:var(--ink)}
+.doc-meta{grid-column:2;display:grid;gap:.28rem;max-width:52rem}
+.doc-meta>div{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:1rem;align-items:baseline}
+.doc-meta dt{font-size:.63rem;font-weight:800;font-stretch:66%;text-transform:uppercase;letter-spacing:.15em;color:var(--muted)}
+.doc-meta dd{margin:0;font-size:.86rem;font-weight:550;color:var(--ink)}
+.head-cta{grid-column:2;justify-self:start;margin-top:.4rem}
+.nav{
+  display:flex;flex-wrap:wrap;gap:0 2rem;padding:0 var(--gutter);
+  border-top:var(--rule);
+}
+.nav a{
+  font-size:.78rem;font-weight:650;font-stretch:80%;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;
+  min-height:var(--touch-min);border-bottom:2px solid transparent;
+}
+.nav a:hover{color:var(--ink);border-bottom-color:var(--green-700)}
+
+/* ── a margem de referência ────────────────────────────────────────────── */
+.claim{padding-block:2.1rem 2.3rem;border-top:var(--rule);align-items:start}
+.claim-open{padding-block:3.4rem 3.2rem;border-top:0}
+.claim-part{padding-top:3.6rem;border-top:1.5px solid var(--ink)}
+.ref{
+  position:sticky;top:1.5rem;font-size:.72rem;line-height:1.4;
+  border-right:1px solid var(--line);padding-right:1.1rem;
+}
+.ref-n{
+  font-size:.82rem;font-weight:800;font-stretch:70%;letter-spacing:.1em;
+  color:var(--ink);margin-bottom:.75rem;
+}
+.ref dl{display:grid;gap:.55rem}
+.ref dt{font-size:.6rem;font-weight:800;font-stretch:64%;text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+.ref dd{margin:.1rem 0 0;font-size:.74rem;font-weight:550;font-stretch:90%;color:var(--text);overflow-wrap:anywhere}
+/* a lacuna aparece: cor + glifo + palavra, nunca só cor (WCAG 1.4.1) */
+.ref[data-unsourced] .ref-n{color:var(--caution-700)}
+.ref-gap{
+  color:var(--caution-700);font-size:.72rem;line-height:1.35;font-weight:550;
+  border-left:2px solid var(--caution-700);padding-left:.55rem;margin-bottom:.75rem;
+}
+.ref-glyph{display:block;font-size:.9rem;line-height:1;margin-bottom:.3rem}
+
+/* ── corpo ─────────────────────────────────────────────────────────────── */
+.say{max-width:var(--measure)}
+.eyebrow{font-size:.65rem;font-weight:800;font-stretch:68%;text-transform:uppercase;letter-spacing:.16em;color:var(--green-700);margin-bottom:1rem}
+h1{
+  font-size:clamp(2.35rem,4.4vw,3.7rem);font-weight:700;font-stretch:94%;
+  line-height:1.02;letter-spacing:-.026em;color:var(--ink);text-wrap:balance;
+}
+h1 em{font-style:normal;font-weight:500;font-stretch:104%;color:var(--muted)}
+h2{font-size:clamp(1.6rem,2.7vw,2.5rem);font-weight:660;font-stretch:96%;line-height:1.08;letter-spacing:-.02em;color:var(--ink);max-width:24ch;text-wrap:balance}
+h3{font-size:1.22rem;font-weight:680;font-stretch:98%;line-height:1.22;color:var(--ink);letter-spacing:-.01em}
+.h3-lead{font-size:clamp(1.45rem,2.2vw,2rem);line-height:1.08;max-width:18ch}
+h3 a{text-decoration:none}h3 a:hover{text-decoration:underline;text-underline-offset:.18em}
+h4{font-size:1rem;font-weight:680;color:var(--ink);line-height:1.3;margin-top:.2rem}
+.say p{font-size:1.0625rem;line-height:1.66;margin-top:.85rem;max-width:66ch}
+.lead{font-size:1.16rem!important;line-height:1.5!important;color:var(--text);font-weight:450;max-width:48ch!important}
+.claim-open .lead{margin-top:1.2rem!important;font-size:1.22rem!important}
+.kicker{font-size:.68rem;font-weight:800;font-stretch:70%;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin-top:0!important}
+.limit{
+  color:var(--caution-700)!important;font-size:.92rem!important;
+  border-left:3px solid var(--caution-700);padding-left:.85rem;max-width:58ch!important;
+}
+.limit::before{content:"Ressalva ";font-weight:800;font-stretch:70%;text-transform:uppercase;letter-spacing:.11em;font-size:.72em}
+
+/* ── ações ─────────────────────────────────────────────────────────────── */
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem 1.6rem;margin-top:1.3rem}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;min-height:48px;
+  padding:.6rem 1.4rem;font-size:.92rem;font-weight:700;font-stretch:92%;
+  text-decoration:none;border-radius:0;border:1.5px solid transparent;cursor:pointer;
+  transition:background-color .12s linear,color .12s linear;
+}
+.btn-primary{background:var(--green-700);color:#fff;border-color:var(--green-700)}
+.btn-primary:hover{background:var(--ink);border-color:var(--ink)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:#fff}
+.link{
+  font-size:.92rem;font-weight:620;color:var(--ink);text-decoration:none;
+  border-bottom:1.5px solid var(--line);padding-bottom:.1rem;
+  display:inline-flex;align-items:center;min-height:var(--touch-min);
+}
+.link:hover{border-bottom-color:var(--green-700);color:var(--green-700)}
+
+/* ── listas de fato ────────────────────────────────────────────────────── */
+.proof{display:flex;flex-wrap:wrap;gap:.4rem 1.5rem;margin-top:1.45rem}
+.proof li{font-size:.84rem;font-weight:600;color:var(--muted);padding-left:.9rem;position:relative}
+.proof li::before{content:"";position:absolute;left:0;top:.56em;width:6px;height:2px;background:var(--green-700)}
+.proof-line{font-size:.84rem!important;color:var(--muted);margin-top:.55rem!important}
+.proof-line a{color:var(--ink)}
+.sla,.facts,.record{margin-top:1.2rem;display:grid;max-width:58ch}
+.sla>div,.facts>div,.record>div{display:grid;grid-template-columns:9rem minmax(0,1fr);gap:1rem;padding:.62rem 0;border-top:var(--rule)}
+.sla dt,.facts dt,.record dt{font-size:.63rem;font-weight:800;font-stretch:66%;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);padding-top:.2rem}
+.sla dd,.facts dd,.record dd{margin:0;font-size:.95rem;line-height:1.5}
+.record dd{font-size:1.05rem;font-weight:650;color:var(--ink)}
+.channels{display:flex;flex-wrap:wrap;gap:1.4rem 2.6rem;margin-top:1.4rem;border-top:var(--rule);padding-top:1.05rem}
+.channels li{display:flex;flex-direction:column}
+.channels span{font-size:.62rem;font-weight:800;font-stretch:66%;text-transform:uppercase;letter-spacing:.13em;color:var(--muted)}
+.channels strong{font-size:.96rem;font-weight:650;color:var(--ink)}
+
+/* ── artefato demonstrativo ────────────────────────────────────────────── */
+.artifact{margin-top:1.5rem;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:1rem 0 1.15rem;max-width:40rem}
+.badge{font-size:.62rem!important;font-weight:800;font-stretch:66%;text-transform:uppercase;letter-spacing:.14em;color:var(--caution-700);margin:0!important}
+.artifact-name{font-size:1.05rem!important;font-weight:680;color:var(--ink);margin-top:.4rem!important}
+.tally{display:grid;grid-template-columns:repeat(3,1fr);margin-top:.95rem;border-top:var(--rule)}
+.tally>div{padding:.65rem .9rem .7rem 0}
+.tally>div+div{border-left:var(--rule);padding-left:.9rem}
+.tally dt{font-size:.62rem;font-weight:800;font-stretch:66%;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.tally dd{margin:0;font-size:1.55rem;font-weight:700;color:var(--ink);line-height:1.08}
+
+/* ── método numerado (a ordem é real: seleção → preço → registro → revisão) */
+.method{margin-top:1.4rem;display:grid;gap:0}
+.method li{display:grid;grid-template-columns:3.25rem minmax(0,1fr);gap:1.1rem;padding:1rem 0;border-top:var(--rule)}
+.step-n{font-size:1.15rem;font-weight:750;font-stretch:74%;color:var(--muted);letter-spacing:.04em}
+.method p{margin-top:.3rem!important;font-size:.95rem!important}
+.steps{margin-top:1.1rem;display:flex;flex-wrap:wrap;gap:.5rem 2.2rem}
+.steps li{font-size:.9rem}
+.steps .num{color:var(--muted);font-weight:800;font-stretch:72%;margin-right:.45rem}
+
+/* ── adequação e objeções ──────────────────────────────────────────────── */
+.icp{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:0 2.5rem;margin-top:1.7rem}
+.icp>div{border-top:2px solid var(--green-700);padding-top:.85rem}
+.icp-no{border-top-color:var(--caution-700)}
+.icp li{font-size:.95rem;line-height:1.5;padding:.3rem 0 .3rem 1rem;position:relative}
+.icp-yes li::before{content:"";position:absolute;left:0;top:.72em;width:7px;height:2px;background:var(--green-700)}
+.icp-no li::before{content:"";position:absolute;left:0;top:.52em;width:7px;height:7px;border:1.5px solid var(--caution-700)}
+.icp .kicker{margin-bottom:.5rem}
+.faq details{border-top:var(--rule)}
+.faq summary{cursor:pointer;padding:.9rem 0;font-weight:650;font-size:1rem;color:var(--ink);list-style:none;display:flex;gap:.85rem;align-items:center;min-height:var(--touch-min)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"+";font-weight:800;color:var(--green-700);font-size:1.15rem;line-height:1}
+.faq details[open] summary::before{content:"−"}
+.faq p{padding:0 0 1.1rem 1.95rem;font-size:.96rem!important;max-width:62ch!important;margin-top:0!important}
+
+/* ── autoridade ────────────────────────────────────────────────────────── */
+.claim-authority .say{max-width:none}
+.authority{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,13.5rem);gap:2.75rem;align-items:start}
+.authority figure{border-top:2px solid var(--ink);padding-top:.8rem}
+.authority img{width:100%;filter:grayscale(1) contrast(1.06)}
+.authority figcaption{font-size:.65rem;font-weight:800;font-stretch:68%;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-top:.65rem}
+blockquote{
+  margin:1.5rem 0 0;padding:0 0 0 1.2rem;border-left:3px solid var(--green-700);
+  font-size:1.2rem;font-weight:480;font-stretch:98%;line-height:1.38;color:var(--ink);max-width:34ch;
+}
+
+/* ── formulário ────────────────────────────────────────────────────────── */
+.form{max-width:34rem}
+.form-step{font-size:.63rem;font-weight:800;font-stretch:66%;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:1.1rem}
+.field{display:grid;gap:.35rem;margin-bottom:.95rem}
+.field label{font-size:.72rem;font-weight:750;font-stretch:80%;text-transform:uppercase;letter-spacing:.09em;color:var(--ink)}
+input[type=text],input[type=tel],input[type=email],select{
+  width:100%;min-height:var(--touch-min);padding:.55rem .7rem;font:inherit;font-size:1rem;
+  color:var(--ink);background:var(--white);border:0;border-bottom:1.5px solid var(--ink);border-radius:0;
+}
+input:hover,select:hover{background:var(--soft)}
+input:focus,select:focus{background:var(--soft)}
+.hint{font-size:.83rem!important;color:var(--muted);margin:-.35rem 0 1rem!important}
+.consent{display:flex;gap:.7rem;align-items:flex-start;font-size:.89rem;line-height:1.45;margin-top:1.1rem;cursor:pointer}
+.consent input{margin-top:.24rem;width:1.05rem;height:1.05rem;accent-color:var(--green-700);flex:none}
+.note{font-size:.82rem!important;color:var(--muted)}
+
+/* ── rodapé: bloco de assinatura ───────────────────────────────────────── */
+.doc-foot{margin-top:3rem;border-top:2px solid var(--ink);background:var(--soft)}
+.doc-foot-inner{padding-block:2.4rem 2rem;row-gap:2rem}
+.foot-sign{grid-column:1/-1;max-width:46rem}
+.sign-name{font-size:1.12rem;font-weight:700;font-stretch:92%;color:var(--ink);margin-top:.35rem}
+.foot-blurb{font-size:.92rem;color:var(--text);max-width:48ch;margin-top:.7rem}
+.foot-groups{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:1.6rem 3.2rem;border-top:var(--rule);padding-top:1.4rem}
+.foot-groups>div{display:flex;flex-direction:column}
+.foot-groups strong{font-size:.62rem;font-weight:800;font-stretch:66%;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:.4rem}
+.foot-groups a,.foot-bottom a{color:var(--text);text-decoration:none;font-size:.87rem;display:inline-flex;align-items:center;min-height:36px}
+.foot-groups a:hover,.foot-bottom a:hover{color:var(--ink);text-decoration:underline}
+.foot-bottom{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem 2rem;
+  padding:1rem var(--gutter) 2.2rem;border-top:var(--rule);font-size:.82rem;color:var(--muted);
+}
+.foot-bottom nav{display:flex;flex-wrap:wrap;gap:.2rem 1.5rem}
+
+/* ── mobile: a margem vira nota ancorada acima da afirmação, não rodapé ── */
+@media(max-width:1180px){:root{--ref-w:12rem;--spine:2rem}}
+@media(max-width:900px){
+  :root{--ref-w:100%;--spine:0}
+  .claim,.doc-head-inner,.doc-foot-inner{grid-template-columns:minmax(0,1fr)}
+  .ref{
+    position:static;border-right:0;border-left:2px solid var(--line);
+    padding:.55rem 0 .65rem .85rem;margin-bottom:1.1rem;
+  }
+  .ref[data-unsourced]{border-left-color:var(--caution-700)}
+  .ref-n{display:inline;margin:0}
+  .ref-gap{border-left:0;padding-left:0;margin:.35rem 0 .5rem}
+  .ref-glyph{display:inline;margin-right:.35rem}
+  .ref dl{display:flex;flex-wrap:wrap;gap:.35rem 1.4rem;margin-top:.45rem}
+  .ref dl>div{display:flex;gap:.4rem;align-items:baseline}
+  .ref dd{margin:0}
+  .doc-meta,.head-cta,.brand{grid-column:1}
+  .authority{grid-template-columns:minmax(0,1fr)}
+  .authority figure{max-width:12rem;order:-1}
+  .actions .btn{width:100%}
+}

@@ -1,0 +1,34 @@
+@font-face{
+  font-family:"Archivo Var";
+  src:url("/assets/archivo-var-latin-22bf4432.woff2") format("woff2-variations");
+  font-weight:100 900;font-stretch:62% 125%;font-style:normal;font-display:swap;
+}
+:root{
+  --navy-950:#031020;--navy-900:#061a33;--navy-800:#0a294b;
+  --green-700:#2d6f2d;--caution-700:#8a5f00;
+  --ink:#071a31;--text:#26374a;--muted:#5d6a7a;--line:#dce3e8;--soft:#f3f4f5;--white:#fff;
+  --sans:"Archivo Var",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --focus-ring:0 0 0 2px var(--white),0 0 0 5px var(--ink);
+  --touch-min:44px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:100%;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--white);color:var(--text);
+  font-family:var(--sans);font-weight:400;font-stretch:100%;
+  font-size:1rem;line-height:1.6;
+  font-variant-numeric:tabular-nums slashed-zero;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+h1,h2,h3,h4,p,ul,ol,dl,dd,figure,blockquote{margin:0}
+ul,ol{padding:0;list-style:none}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{
+  outline:2px solid transparent;box-shadow:var(--focus-ring);border-radius:1px;
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.num{font-variant-numeric:tabular-nums slashed-zero;font-feature-settings:"tnum" 1,"zero" 1}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}

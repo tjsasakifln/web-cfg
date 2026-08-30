@@ -375,11 +375,28 @@ def test_cls_rows_come_from_committed_chrome_evidence_not_from_this_auditor() ->
     assert "docs/lighthouse-runs/summary.json" in source
 
 
-def test_real_tree_ships_zero_webfonts_and_stays_inside_every_budget() -> None:
+def test_real_tree_ships_only_the_declared_webfont_and_stays_inside_every_budget() -> None:
+    """The tree may only ship the webfont the budget file declares.
+
+    Until 2026-08-30 the tree shipped zero @font-face and this test asserted the
+    literal zero. The home canary declares one subsetted family, so the literal
+    would now be asserting yesterday's tree instead of today's contract. The
+    contract is the declared budget: `report["ok"]` still enforces it per route,
+    the module caps still bound what may be declared, and an undeclared second
+    font still fails here because the census must not exceed the declaration.
+    """
     report = audit_tree()
     assert report["ok"] is True, report["failures"]
-    assert report["font_routes"] == [], report["font_routes"]
-    assert report["per_route"]["font_files_total"] == 0
+    declared_files = report["per_route"]["font_files_budget"]
+    declared_gzip = report["per_route"]["font_total_gzip_budget_kb"]
+    assert report["per_route"]["font_files_total"] <= declared_files
+    assert report["per_route"]["font_gzip_kb_max_route"] <= declared_gzip
+    assert len(report["font_routes"]) <= declared_files, report["font_routes"]
+    for route in report["font_routes"]:
+        assert route["font_files"] <= declared_files, route
+        assert all(
+            source.startswith("/assets/") for source in route["font_sources"]
+        ), f"webfont must be self-hosted: {route}"
     assert report["per_route"]["routes_measured"] >= 200
     assert report["per_route"]["cls_routes_measured"] >= 20
     assert report["per_route"]["cls_observed_max"] <= report["per_route"]["cls_budget"]
@@ -410,8 +427,10 @@ def test_committed_baseline_is_the_delta_anchor_and_is_still_true() -> None:
     assert committed["fonts"] == current["fonts"], (
         "the font baseline moved: declare the delta and refresh the baseline"
     )
-    assert committed["fonts"]["font_files_total"] == 0
-    assert committed["fonts"]["routes_with_font_face_rules"] == []
+    assert committed["fonts"]["font_files_total"] <= current["budget"]["font_files_max"]
+    assert len(committed["fonts"]["routes_with_font_face_rules"]) <= current["budget"][
+        "font_files_max"
+    ], committed["fonts"]["routes_with_font_face_rules"]
     assert committed["cls"]["observed_max"] <= committed["budget"]["cls_max"]
     assert committed["cls"]["routes_measured"] >= 20
 
@@ -431,7 +450,14 @@ def test_cli_text_format_prints_a_per_route_census() -> None:
     )
     assert proc.returncode == 0, proc.stderr
     assert "@font-face" in proc.stdout
-    assert "font_files=0/0" in proc.stdout
+    budget = json.loads(
+        (ROOT / "data" / "site" / "design-system.json").read_text(encoding="utf-8")
+    )["performance_budget"]
+    # The census prints measured/declared. Pinning the literal "0/0" pinned the
+    # tree of the day the budget was calibrated; pinning the declared number
+    # keeps the assertion about the contract, which is what may not drift.
+    assert f"/{budget['font_files_max']}" in proc.stdout, proc.stdout
+    assert "font_files=" in proc.stdout, proc.stdout
     assert "cls_max_observed=0.0/0.05" in proc.stdout
     assert proc.stdout.count("\n") > 200, "every shipped route must appear"
 

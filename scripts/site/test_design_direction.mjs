@@ -15,7 +15,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync, readdirSync, statSync } from "fs";
 import { tmpdir } from "os";
-import { join, relative, resolve } from "path";
+import { join, relative, resolve, sep } from "path";
 import { fileURLToPath } from "url";
 import { build, loadContent, revisionState, VARIANTS } from "./build_design_prototypes.mjs";
 
@@ -23,6 +23,27 @@ const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const PROTOTYPES = join(ROOT, "docs/design-audit/prototypes");
 const EVIDENCE = join(ROOT, "docs/design-audit/evidence");
 const RULE = join(ROOT, "docs/design-audit/DECISION_RULE_494_PRE_REGISTERED.md");
+
+/**
+ * The #494 subtree, where "zero @font-face" is a measured fact of that
+ * comparison rather than a site-wide rule.
+ *
+ * #494 compared two provenance mechanisms under one fixed palette and one
+ * fixed type stack: neither candidate proposed a webfont, the specimen page
+ * says so in prose, and the budget it was measured against was
+ * `font_files_max: 0`. Asserting the absence of `@font-face` across every
+ * future prototype would make that campaign's finding a constitution.
+ * Campaigns that are allowed to propose type — the 2026-08-30 breakthrough
+ * canary is — keep every other guarantee here and gain one: a declared
+ * `@font-face` must resolve to a versioned file inside this repository.
+ */
+const LEGACY_494 = ["a-trilho-de-memoria", "b-estado-de-revisao"].map((slug) =>
+  join(PROTOTYPES, slug),
+);
+const isLegacy494 = (path) =>
+  LEGACY_494.some((dir) => path.startsWith(dir + sep)) ||
+  path === join(PROTOTYPES, "base.css") ||
+  path === join(PROTOTYPES, "fixed-content.json");
 
 const content = loadContent();
 
@@ -147,21 +168,39 @@ test("mechanism B renders no drawn carimbo", () => {
   }
 });
 
-test("no webfont, no remote asset, no CSP widening inside the prototypes", () => {
+test("no remote asset, no remote font, no CSP widening inside the prototypes", () => {
+  // Public-source hosts a prototype may LINK to. Linking is not loading: an
+  // outbound anchor to the law or to PNCP costs the visitor nothing until it
+  // is clicked, and the whole direction rests on citing those sources.
+  const LINKABLE = /^https:\/\/(?:www\.planalto\.gov\.br|pncp\.gov\.br)\//;
   for (const path of walk(PROTOTYPES)) {
     const text = readText(path);
-    // The rule, not the word: the specimen page says "zero @font-face" in prose.
-    assert.ok(!/@font-face\s*\{/i.test(text), `${relative(ROOT, path)} declara uma regra @font-face`);
+    if (isLegacy494(path)) {
+      // The rule, not the word: the specimen page says "zero @font-face" in prose.
+      assert.ok(!/@font-face\s*\{/i.test(text), `${relative(ROOT, path)} declara uma regra @font-face`);
+    }
     assert.ok(!/fonts\.(googleapis|gstatic|bunny)\./i.test(text), `${relative(ROOT, path)} referencia fonte remota`);
     assert.ok(!/<meta[^>]+Content-Security-Policy/i.test(text), `${relative(ROOT, path)} mexe em CSP`);
-    if (path.endsWith(".html")) {
-      const remote = text.match(/(?:src|href)\s*=\s*"https?:\/\/[^"]+"/gi) || [];
-      for (const ref of remote) {
-        assert.ok(
-          /planalto\.gov\.br/.test(ref),
-          `${relative(ROOT, path)} carrega recurso de terceiro: ${ref}`,
-        );
-      }
+
+    // A declared face must resolve to a versioned file in this repository.
+    for (const [, url] of text.matchAll(/@font-face\s*\{[^}]*url\(\s*"([^"]+)"/gi)) {
+      assert.ok(url.startsWith("/assets/"), `${relative(ROOT, path)}: fonte fora de /assets/: ${url}`);
+      assert.ok(
+        statSync(join(ROOT, url.replace(/^\//, ""))).isFile(),
+        `${relative(ROOT, path)}: fonte declarada não existe no repositório: ${url}`,
+      );
+    }
+
+    if (!path.endsWith(".html")) continue;
+    // Loads are what a prototype must not take from a third party. `src` on
+    // any tag and `href` on <link> load; `href` on <a> navigates.
+    const loads = [
+      ...(text.match(/\bsrc\s*=\s*"https?:\/\/[^"]+"/gi) || []),
+      ...(text.match(/<link\b[^>]*\bhref\s*=\s*"https?:\/\/[^"]+"/gi) || []),
+    ];
+    assert.deepEqual(loads, [], `${relative(ROOT, path)} carrega recurso de terceiro`);
+    for (const [, url] of text.matchAll(/<a\b[^>]*\bhref\s*=\s*"(https?:\/\/[^"]+)"/gi)) {
+      assert.ok(LINKABLE.test(url), `${relative(ROOT, path)} aponta para host não público: ${url}`);
     }
   }
 });

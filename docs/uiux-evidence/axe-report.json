@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-29T15:53:24.665Z",
+  "generated_at": "2026-08-30T13:06:22.069Z",
   "issue": 293,
-  "base": "http://127.0.0.1:8873",
+  "base": "http://127.0.0.1:8793",
   "site_root": "_site",
   "policy_path": "data/quality/interface-coverage-policy.json",
   "coverage": {
-    "public_route_count": 261,
+    "public_route_count": 262,
     "audited_route_count": 69,
     "viewports": [
       {
@@ -536,7 +536,7 @@
         ]
       }
     ],
-    "not_audited_count": 192,
+    "not_audited_count": 193,
     "not_audited": [
       {
         "route": "/404.html",
@@ -613,6 +613,12 @@
       {
         "route": "/comercial/privacidade-leads/",
         "family": "comercial-condicoes",
+        "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
+        "matched_by": []
+      },
+      {
+        "route": "/confianca/",
+        "family": "legal-and-trust",
         "reason": "no visible BRL amount and no capture/checkout form; geometry is proved by npm run audit:layout-sitewide",
         "matched_by": []
       },
@@ -1703,12 +1709,30 @@
       ],
       "counts": {
         "critical": 0,
-        "serious": 0,
+        "serious": 1,
         "moderate": 0,
         "minor": 0
       },
-      "blocking": 0,
-      "violations": []
+      "blocking": 1,
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 7,
+          "targets": [
+            [
+              ".offer-headline"
+            ],
+            [
+              ".offer-facts > li:nth-child(1)"
+            ],
+            [
+              ".offer-facts > li:nth-child(2)"
+            ]
+          ]
+        }
+      ]
     },
     {
       "path": "/acompanhamento-contratos-obras/",
@@ -2825,12 +2849,30 @@
       ],
       "counts": {
         "critical": 0,
-        "serious": 0,
+        "serious": 1,
         "moderate": 0,
         "minor": 0
       },
-      "blocking": 0,
-      "violations": []
+      "blocking": 1,
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "nodes": 10,
+          "targets": [
+            [
+              ".offer-headline"
+            ],
+            [
+              ".offer-facts > li:nth-child(1)"
+            ],
+            [
+              ".offer-facts > li:nth-child(2)"
+            ]
+          ]
+        }
+      ]
     },
     {
       "path": "/acompanhamento-contratos-obras/",
@@ -3939,8 +3981,8 @@
     }
   ],
   "critical": 0,
-  "serious": 0,
+  "serious": 2,
   "moderate": 0,
   "minor": 0,
-  "duration_seconds": 259
+  "duration_seconds": 172
 }
