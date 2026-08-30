@@ -137,11 +137,9 @@ def _tracked_capture_html() -> list[tuple[str, str]]:
     rows = []
     # Reuse the shipped visitor census. Tooling fixtures may deliberately carry
     # realistic lead forms, but they are not public routes and must never alter
-    # the exact production contract. The market-answer canary's `handraise`
-    # form (#482) posts to the shared conversion-intake endpoint under a
-    # backend-verified action and is now a usable, Turnstile-protected lead
-    # path, so it is tracked here; its sibling `xray` form on the same page
-    # stays unprotected by design and must not inflate this census.
+    # the exact 21-route production contract. The market-answer canary links to
+    # a real capture surface; its former hidden metadata-only form was not a
+    # usable lead path and must not inflate this census.
     for rel in visitor_facing_relpaths(ROOT):
         text = (ROOT / rel).read_text(encoding="utf-8")
         if is_lead_capture_html(text):
@@ -170,44 +168,8 @@ ISSUE_440_CAPTURE_ROUTES = {
     "entregas/index.html",
     "ferramentas/diagnostico-defesa-margem/index.html",
     "index.html",
-    "piloto/conversao-xray/index.html",
     "servicos-obras-publicas/index.html",
 }
-
-
-XRAY_FORM = (
-    '<form id="xray-form" action="/.netlify/functions/conversion-intake">'
-    '<input type="hidden" name="action" value="xray" />'
-    '<button type="submit">Veja sua empresa</button></form>\n'
-)
-HANDRAISE_FORM = (
-    '<form id="handraise-form" action="/.netlify/functions/conversion-intake" hidden>'
-    '<input type="hidden" name="action" value="handraise" />'
-    "<input name=\"nome\"/><button type=\"submit\">Pedir segunda leitura</button></form>\n"
-)
-
-
-def test_conversion_intake_handraise_is_capture_xray_is_not() -> None:
-    """#482: same endpoint, two actions. Only `handraise` needs Turnstile."""
-    assert is_lead_capture_html(HANDRAISE_FORM) is True
-    assert is_lead_capture_html(XRAY_FORM) is False
-
-
-def test_conversion_intake_page_with_both_forms_slots_only_handraise(tmp_path: Path) -> None:
-    page = XRAY_FORM + HANDRAISE_FORM
-    write_form(tmp_path, page)
-
-    result = configure_turnstile_site_key(tmp_path, PROD)
-
-    html = (tmp_path / "index.html").read_text(encoding="utf-8")
-    assert result["configured"] is True
-    assert result["capture_files"] == 1
-    assert html.count('id="turnstile-slot"') == 1
-    xray_start = html.index('id="xray-form"')
-    handraise_start = html.index('id="handraise-form"')
-    slot_start = html.index("turnstile-slot")
-    assert handraise_start < slot_start
-    assert not (xray_start < slot_start < html.index("</form>", xray_start))
 
 
 def test_issue_440_every_tracked_capture_route_receives_turnstile(tmp_path: Path) -> None:
