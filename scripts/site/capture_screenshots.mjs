@@ -1,44 +1,48 @@
 /**
  * Capture home (+ optional paths) screenshots at required viewports.
  * Usage: node scripts/site/capture_screenshots.mjs [outDir] [baseUrl]
+ *
+ * Environment (all additive; unset means exactly the historic behaviour):
+ *   CAPTURE_PATHS="/,/entregas/"        routes to capture
+ *   CAPTURE_VIEWPORTS="protocol"        viewport table; presets `default` and
+ *                                       `protocol` (the five #494 viewports,
+ *                                       including 1366x768 and 1363x936) mix
+ *                                       freely with explicit WxH pairs
+ *   CAPTURE_FULLPAGE=1                  whole document instead of first fold
+ *   CAPTURE_JS=off                      render with script execution disabled
+ *   CAPTURE_MOTION=reduced              render under prefers-reduced-motion
+ *   CAPTURE_ALLOW_DIRTY=1               stamp an uncommitted tree as provisional
+ *   CAPTURE_ALLOW_EPHEMERAL=1           accept an out dir under /tmp
+ *
+ * The three state keys combine. Each state writes its own filenames and its own
+ * manifest, so one directory holds the whole matrix as durable evidence.
  */
 import puppeteer from "puppeteer-core";
 import { mkdirSync, writeFileSync } from "fs";
 import { execFileSync } from "child_process";
-import { join, resolve } from "path";
+import { join, relative, resolve } from "path";
 import { createServer } from "http";
 import { readFileSync, existsSync, statSync } from "fs";
 import { extname } from "path";
 import { fileURLToPath } from "url";
 import { resolveChromePath } from "./resolve_chrome.mjs";
+import {
+  applyCaptureState,
+  assertDurableOutDir,
+  buildManifest,
+  captureFileName,
+  captureRecord,
+  manifestFileName,
+  resolveCaptureState,
+  resolveViewports,
+} from "./capture_states.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
-const OUT = resolve(process.argv[2] || join(ROOT, "docs/uiux-evidence/after"));
+const OUT = assertDurableOutDir(process.argv[2] || join(ROOT, "docs/uiux-evidence/after"));
 const PORT = 8792;
 const CHROME = resolveChromePath();
-const DEFAULT_VIEWPORTS = [
-  [320, 568],
-  [360, 800],
-  [390, 844],
-  [768, 1024],
-  [1024, 768],
-  [1440, 1000],
-  [1920, 1080],
-];
-// CAPTURE_VIEWPORTS="1366x768,390x844" narrows the sweep to the viewports a
-// contract actually declares. The first-fold contract (#327) measures two, and
-// the default sweep does not include its 1366x768 laptop.
-const VIEWPORTS = String(process.env.CAPTURE_VIEWPORTS || "")
-  .split(",")
-  .map((pair) => pair.trim())
-  .filter(Boolean)
-  .map((pair) => pair.split("x").map((n) => Number.parseInt(n, 10)));
-if (!VIEWPORTS.length) VIEWPORTS.push(...DEFAULT_VIEWPORTS);
-for (const [w, h] of VIEWPORTS) {
-  if (!Number.isInteger(w) || !Number.isInteger(h) || w < 1 || h < 1) {
-    throw new Error(`CAPTURE_VIEWPORTS holds an unusable pair: ${w}x${h}`);
-  }
-}
+const STATE = resolveCaptureState();
+const VIEWPORTS = resolveViewports();
 const DEFAULT_PATHS = ["/", "/diretoria-b2g/", "/diagnostico-b2g-360/", "/bid-room-licitacoes-obras/", "/defesa-margem-contratos-publicos/", "/conteudos/", "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/", "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/"];
 const PATHS = String(process.env.CAPTURE_PATHS || "")
   .split(",")
@@ -92,7 +96,10 @@ const browser = await puppeteer.launch({
   args: ["--no-sandbox", "--disable-gpu"],
 });
 const page = await browser.newPage();
-const written = [];
+// JS-off and reduced-motion are page-level emulation: set once, before the
+// first navigation, so no route is ever captured in a half-applied state.
+await applyCaptureState(page, STATE);
+const captures = [];
 for (const path of PATHS) {
   const slug = path === "/" ? "home" : path.replace(/\//g, "").slice(0, 40);
   for (const [w, h] of VIEWPORTS) {
@@ -103,9 +110,10 @@ for (const path of PATHS) {
     await page.evaluate(() => {
       document.documentElement.style.scrollBehavior = "auto";
     });
-    const file = join(OUT, `${slug}-${w}x${h}.png`);
-    await page.screenshot({ path: file, fullPage: false });
-    written.push(`${slug}-${w}x${h}.png`);
+    const name = captureFileName({ slug, width: w, height: h, state: STATE });
+    const file = join(OUT, name);
+    await page.screenshot({ path: file, fullPage: STATE.fullPage });
+    captures.push(captureRecord({ file: name, path: file, route: path, slug, width: w, height: h, state: STATE }));
     console.log("wrote", file);
     for (const [index, selector] of (COMPONENTS[path] || []).entries()) {
       // Some shared primitives intentionally live inside a disclosure. Open
@@ -122,7 +130,14 @@ for (const path of PATHS) {
       });
       const component = await page.$(selector);
       if (!component) continue;
-      const componentFile = join(OUT, `${slug}-component-${index + 1}-${w}x${h}.png`);
+      const componentName = captureFileName({
+        slug,
+        width: w,
+        height: h,
+        state: STATE,
+        componentIndex: index + 1,
+      });
+      const componentFile = join(OUT, componentName);
       await page.evaluate(() => {
         for (const element of document.querySelectorAll(".site-header,.skip-link")) {
           element.dataset.captureVisibility = element.style.visibility;
@@ -130,6 +145,17 @@ for (const path of PATHS) {
         }
       });
       await component.screenshot({ path: componentFile });
+      captures.push(captureRecord({
+        file: componentName,
+        path: componentFile,
+        route: path,
+        slug,
+        width: w,
+        height: h,
+        state: STATE,
+        selector,
+        componentIndex: index + 1,
+      }));
       await page.evaluate(() => {
         for (const element of document.querySelectorAll("[data-capture-visibility]")) {
           element.style.visibility = element.dataset.captureVisibility || "";
@@ -154,21 +180,25 @@ if (dirty && process.env.CAPTURE_ALLOW_DIRTY !== "1") {
       `Commit first, or set CAPTURE_ALLOW_DIRTY=1 to record it as provisional.\n${dirty}`,
   );
 }
+const manifestPath = join(OUT, manifestFileName(STATE));
 writeFileSync(
-  join(OUT, "manifest.json"),
+  manifestPath,
   `${JSON.stringify(
-    {
-      captured_at: new Date().toISOString(),
-      commit_sha: commit,
-      tree_dirty: Boolean(dirty),
-      base_url: BASE,
+    buildManifest({
+      capturedAt: new Date().toISOString(),
+      commitSha: commit,
+      treeDirty: Boolean(dirty),
+      baseUrl: BASE,
+      outputDir: relative(ROOT, OUT) || ".",
       routes: PATHS,
-      viewports: VIEWPORTS.map(([w, h]) => `${w}x${h}`),
-      files: written,
-    },
+      viewports: VIEWPORTS,
+      state: STATE,
+      captures,
+    }),
     null,
     2,
   )}\n`,
   "utf8",
 );
+console.log("state", STATE.id, "manifest", manifestPath);
 console.log("done", OUT);

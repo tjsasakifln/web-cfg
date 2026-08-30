@@ -14,7 +14,7 @@
   --tool-workbench: 68rem; /* ~1088px */
   --tool-read: 68ch;
   --tool-radius: 4px;
-  --tool-focus: 0 0 0 3px rgba(45, 111, 45, 0.35);
+  --tool-focus: var(--focus-ring);
 }
 
 /* Wide workbench: break out of narrow article column */

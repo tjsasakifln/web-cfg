@@ -1096,6 +1096,16 @@ export const SUITE_GRAPH = Object.freeze({
     artifacts: ["script.js"],
     surfaces: ["/"],
   },
+  "test:capture-states": {
+    producers: [
+      "scripts/site/capture_states.mjs",
+      "scripts/site/capture_screenshots.mjs",
+      "scripts/site/test_capture_states.mjs",
+      "scripts/site/resolve_chrome.mjs",
+    ],
+    artifacts: ["docs/uiux-evidence/after/"],
+    surfaces: [],
+  },
   "test:indexnow": {
     producers: [
       "scripts/site/test_indexnow.mjs",
