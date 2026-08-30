@@ -131,7 +131,7 @@ Quando a decisão for tomada, ela é acrescentada **abaixo desta linha, neste ar
 
 | Item | Identidade |
 |---|---|
-| Baseline (main e produção) | `b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5` |
+| Baseline (main) | `6941d6698d771fe582be6601b3ee642cc01aca3e` — rebase sobre #514, #516 e #519; as medidas foram refeitas e não mudaram |
 | Conteúdo fixo | `docs/design-audit/prototypes/fixed-content.json`, sha256 `fcf60cfd021537d7…` |
 | Variante A — trilho de memória | árvore `docs/design-audit/prototypes/a-trilho-de-memoria/`, sha256 concatenado `df2bfafba006d696…` |
 | Variante B — estado de revisão | árvore `docs/design-audit/prototypes/b-estado-de-revisao/`, sha256 concatenado `e3d29d08da0f09fc…` |

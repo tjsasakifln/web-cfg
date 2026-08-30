@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0.0",
-  "captured_at": "2026-08-30T09:33:35.286Z",
-  "commit_sha": "2ffca9999e84a024fab5f4b4e9e6b74a71e2105d",
+  "captured_at": "2026-08-30T10:37:29.575Z",
+  "commit_sha": "d73c61af2161f46636ce1002475e8240e5e1491c",
   "tree_dirty": false,
   "base_url": "http://127.0.0.1:8792",
   "output_dir": "../../../../../../.cache/confenge/design-direction-494/baseline",
@@ -58,8 +58,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 902902,
-      "sha256": "861dcd2f5140d6f8207523cf20f252c57088164f0c15e43a62b60924e51d0742"
+      "bytes": 920863,
+      "sha256": "d2d29bfbca2c3cdf85a58366cf4f44c0ce20488d28be7f01cb5f9d3b327d2816"
     },
     {
       "file": "defesa-margem-contratos-publicos-component-1-390x844--fullpage_js-off_motion-reduced.png",
@@ -90,8 +90,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 1015994,
-      "sha256": "957276f06b276307ea0ae9cf513ee677d042a1ca9cefeeacb4ae8493f45732b6"
+      "bytes": 1040120,
+      "sha256": "171f1ff2dfff5cfa537507ad0f9fd53307a1fe5213209683ecd7b3abf98b790e"
     },
     {
       "file": "defesa-margem-contratos-publicos-component-1-768x1024--fullpage_js-off_motion-reduced.png",
@@ -107,8 +107,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 80651,
-      "sha256": "c979c95b1238b9665f956467477b69e515b29fa8684adff3032089a41c689ff6"
+      "bytes": 80612,
+      "sha256": "c5b61f9b0d7d5bfde3f612a1b1f806fcbf48934ff0400471d27559b291723855"
     },
     {
       "file": "defesa-margem-contratos-publicos-1366x768--fullpage_js-off_motion-reduced.png",
@@ -122,8 +122,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 1157731,
-      "sha256": "9adcab9117d6878d7f1b2598ffea631d065052a54c84a4efb91903bf97483474"
+      "bytes": 1175255,
+      "sha256": "ab1e696c52bb53e0c111c034a900783c68a6df8a97a08dd83a1140e9e242142a"
     },
     {
       "file": "defesa-margem-contratos-publicos-component-1-1366x768--fullpage_js-off_motion-reduced.png",
@@ -139,8 +139,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 73229,
-      "sha256": "2dfdec712a8e4d70813d421b2ab733e057638dfda301d5c817e9e6604cbc0d67"
+      "bytes": 73221,
+      "sha256": "86eeb3c906fc8bbd1ee26aeb089ef3daf12caadefad65961de39f8229c4eb555"
     },
     {
       "file": "defesa-margem-contratos-publicos-1363x936--fullpage_js-off_motion-reduced.png",
@@ -154,8 +154,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 1156172,
-      "sha256": "ce37f98429a9bec0db5ab5185a983a160802f6a20704dd754916814f085654ac"
+      "bytes": 1171768,
+      "sha256": "f6910a0203261ccf5c9589faa7699936f1b9717dc91ce5de9592e4ac14c69bbf"
     },
     {
       "file": "defesa-margem-contratos-publicos-component-1-1363x936--fullpage_js-off_motion-reduced.png",
@@ -171,8 +171,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 73249,
-      "sha256": "e2de9c617b2ca95a888a475ae27b481be1b1167093968569f929fe1c0e4c498c"
+      "bytes": 73173,
+      "sha256": "2bc64485f42e6b71b03faaba67f505fdf5f38ef4d7e8185b95061df34f0543b6"
     },
     {
       "file": "defesa-margem-contratos-publicos-1440x1000--fullpage_js-off_motion-reduced.png",
@@ -186,8 +186,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 1183365,
-      "sha256": "1e2785c877c7993b0278aebfc6cbb203f29dac3d9ec70be5675984c5fd80af17"
+      "bytes": 1196434,
+      "sha256": "9d765974b724ae47343d8ded3c5a9476bfa03aef5d5cbfae9dbe698ac0fdf94e"
     },
     {
       "file": "defesa-margem-contratos-publicos-component-1-1440x1000--fullpage_js-off_motion-reduced.png",
@@ -203,8 +203,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 73181,
-      "sha256": "48ed1d468b1820abb6b38cd1e5fbb8d8b1e30f76fd7fa6407aca28eaa7b006a9"
+      "bytes": 73178,
+      "sha256": "4cd70f908751ac80e89d1e71eb32a9ba799674c49f81b2d8eedfdd77fadc61d5"
     },
     {
       "file": "conteudosdocumentos-reequilibrio-obra-pu-390x844--fullpage_js-off_motion-reduced.png",
@@ -248,8 +248,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 1272005,
-      "sha256": "70a2aad239df08087d888794bafd3a369a3ad370f161233f39034fd95f362a6e"
+      "bytes": 1277477,
+      "sha256": "029642db16f5b5870f32b47410f359a77203183fb12faa6ba93c1235eeba2401"
     },
     {
       "file": "conteudosdocumentos-reequilibrio-obra-pu-1363x936--fullpage_js-off_motion-reduced.png",
@@ -278,8 +278,8 @@
       "fullpage": true,
       "javascript": "off",
       "motion": "reduced",
-      "bytes": 1283895,
-      "sha256": "19ff5cb2f254af261717948feea4422d15be135261199ea6d8418ec66305db24"
+      "bytes": 1289045,
+      "sha256": "b7013c540c91b9a4680a2b3915e0bb3687270344cffe93e061242915c02ce885"
     },
     {
       "file": "ferramentaslimite-acrescimos-supressoes-390x844--fullpage_js-off_motion-reduced.png",

@@ -2,7 +2,7 @@
 
 **Issue:** #494 · **Parent:** #493 · **Data:** 2026-08-30
 **Desfecho da comparação:** `KEEP_CURRENT` — registrado em [DECISION_RULE_494_PRE_REGISTERED §7](DECISION_RULE_494_PRE_REGISTERED.md#7-resultado--apurado-em-2026-08-30)
-**Baseline:** `b396d1ab6f797e4b8e57801cc2c4dbcb306e62e5`
+**Baseline:** `6941d6698d771fe582be6601b3ee642cc01aca3e`
 **Escopo:** especificação. **Zero byte alterado em rota pública, em token, em CSS servido ou em runtime.**
 
 ---
