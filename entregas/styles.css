@@ -281,5 +281,13 @@
   /* Two-up must actually fit its labels: trim the number column and the
      horizontal padding so words like "concorrentes?" have room. Height stays
      at four rows instead of eight, and the 44px touch target is preserved. */
-  .offer-decision-nav a{grid-template-columns:15px minmax(0,1fr);gap:3px;min-height:44px;padding:8px 4px;font-size:.75rem}
+  .offer-decision-nav a{grid-template-columns:18px minmax(0,1fr);gap:4px;min-height:44px;padding:8px 6px;font-size:max(var(--text-micro),12.8px)}
+}
+@media(max-width:340px){
+  /* At the narrowest supported viewport, give the decision itself the full
+     track. The target and its descriptive aria-label retain the destination. */
+  .offer-decision-nav{padding:10px}
+  .offer-decision-nav ol{gap:4px}
+  .offer-decision-nav a{grid-template-columns:minmax(0,1fr);padding:8px 4px}
+  .offer-decision-nav a span{display:none}
 }

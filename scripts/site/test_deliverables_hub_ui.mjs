@@ -111,7 +111,11 @@ for (const width of widths) {
     const decisionNav = document.querySelector(".offer-decision-nav");
     const decisionNavList = decisionNav?.querySelector("ol");
     const decisionNavBrokenWords = [];
+    const decisionNavTextWidths = [];
     for (const link of decisionNav?.querySelectorAll("a") || []) {
+      const style = getComputedStyle(link);
+      const tracks = style.gridTemplateColumns.match(/[\d.]+px/g) || [];
+      if (tracks.length) decisionNavTextWidths.push(Number.parseFloat(tracks.at(-1)));
       const walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT);
       for (let node = walker.nextNode(); node; node = walker.nextNode()) {
         // Include terminal punctuation in the measured range. Otherwise a
@@ -160,6 +164,12 @@ for (const width of widths) {
         ? getComputedStyle(decisionNavList).gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
         : 0,
       decisionNavBrokenWords,
+      decisionNavMinTextWidth: decisionNavTextWidths.length
+        ? Math.round(Math.min(...decisionNavTextWidths) * 10) / 10
+        : 0,
+      decisionNavFontSize: decisionNav
+        ? Number.parseFloat(getComputedStyle(decisionNav.querySelector("a")).fontSize)
+        : 0,
       firstOfferTop: Math.round((firstOffer?.getBoundingClientRect().top || 0) + window.scrollY),
       mainLinks: document.querySelectorAll("main a").length,
       offers: offerCards.map((card) => {
@@ -256,6 +266,12 @@ for (const width of widths) {
     errors.push(`decision_nav_columns=${metrics.decisionNavColumns}`);
   }
   if (width <= 360 && metrics.decisionNavHeight > 330) errors.push(`decision_nav_height=${metrics.decisionNavHeight}`);
+  if (width === 320 && metrics.decisionNavMinTextWidth < 110) {
+    errors.push(`decision_nav_text_width=${metrics.decisionNavMinTextWidth}`);
+  }
+  if (width <= 360 && metrics.decisionNavFontSize < 12.8) {
+    errors.push(`decision_nav_font_size=${metrics.decisionNavFontSize}`);
+  }
   if (metrics.decisionNavBrokenWords.length) {
     errors.push(`decision_nav_broken_words=${metrics.decisionNavBrokenWords.join(",")}`);
   }
