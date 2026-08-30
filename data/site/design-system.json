@@ -145,7 +145,8 @@
     "icon_as_art_direction_substitute",
     "fictional_metrics_or_fake_case_numbers",
     "more_than_two_consecutive_identical_section_archetypes",
-    "more_than_two_consecutive_identical_section_skeletons"
+    "more_than_two_consecutive_identical_section_skeletons",
+    "hover_lift_translate_on_pointer"
   ],
   "public_copy_leaks": [
     "0 guias",
@@ -224,9 +225,24 @@
       "exaggerated parallax",
       "continuous float",
       "fake counters",
-      "particles"
+      "particles",
+      "hover lift"
     ],
-    "prefers_reduced_motion": true
+    "prefers_reduced_motion": true,
+    "hover_state": {
+      "no_vertical_displacement": true,
+      "allowed_feedback": [
+        "color",
+        "background",
+        "border",
+        "underline",
+        "shadow"
+      ],
+      "allowed_horizontal_nudge": "arrow pointing at its destination only",
+      "gate": "scripts/site/rendered_layout_truth.mjs hoverLiftFindings (npm run test:ui)",
+      "negative_fixture": "scripts/site/fixtures/truthful_gates/hover-lift.html",
+      "finding": "hover_lift <selector> <dy>px"
+    }
   },
   "breakpoints": {
     "xs": 360,

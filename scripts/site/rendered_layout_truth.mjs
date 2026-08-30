@@ -171,3 +171,116 @@ export async function renderedLayoutFindings(page, options = {}) {
     return [...new Set(findings)];
   }, requirements);
 }
+
+/**
+ * Rendered hover-displacement findings: the "no hover lift" rule, measured.
+ *
+ * A static scan of styles.css cannot answer this. Several hover lifts in the
+ * sheet were already dead — neutralised by a later declaration — so a regex for
+ * `:hover{...translate` reproves rules the visitor never sees, while a lift
+ * that survives everywhere except `prefers-reduced-motion` passes it. So drive
+ * the real cascade instead: hover a representative of every distinct rendered
+ * component, diff `getBoundingClientRect()` in document space, and report the
+ * vertical displacement as `hover_lift <signature> <dy>px`.
+ *
+ * Horizontal nudges (a link arrow travelling toward its destination) are
+ * directional affordance, not elevation, and are deliberately not measured.
+ */
+export const HOVER_PROBE_ATTRIBUTE = "data-hover-lift-probe";
+
+export async function hoverLiftFindings(page, options = {}) {
+  const tolerancePx = options.tolerancePx ?? 0.5;
+  const sampleLimit = options.sampleLimit ?? 24;
+  const settleMs = options.settleMs ?? 300;
+  const attribute = HOVER_PROBE_ATTRIBUTE;
+
+  // One probe per distinct tag+class signature: the cascade keys off classes,
+  // so a second card of the same class cannot lift when the first does not.
+  const signatures = await page.evaluate((max, attr) => {
+    const classOf = (element) => {
+      const raw = element.getAttribute("class") || "";
+      const parts = raw.trim().split(/\s+/).filter(Boolean);
+      return parts.length ? `.${parts.join(".")}` : "";
+    };
+    const visible = (element) => {
+      for (let current = element; current; current = current.parentElement) {
+        const style = getComputedStyle(current);
+        if (style.display === "none" || style.visibility === "hidden"
+          || style.visibility === "collapse" || Number(style.opacity) === 0) {
+          return false;
+        }
+      }
+      if (element.closest("[hidden], [aria-hidden='true'], [inert], .honeypot")) return false;
+      const box = element.getBoundingClientRect();
+      return box.width > 0 && box.height > 0;
+    };
+    const found = [];
+    const seen = new Set();
+    // The contact element is the one this rule exists for. A page with many
+    // distinct card classes must never crowd it out of the sample.
+    const candidates = [
+      ...document.querySelectorAll(".whatsapp-float, .contact-float a, .contact-float button"),
+      ...document.querySelectorAll(
+        "a[href], button, summary, label, [class*='card'], [class*='path'],"
+        + " [class*='item'], [class*='tile'], [class*='float']",
+      ),
+    ];
+    for (const element of candidates) {
+      if (found.length >= max) break;
+      if (element.classList.contains("skip-link")) continue;
+      if (!visible(element)) continue;
+      const signature = `${element.tagName.toLowerCase()}${classOf(element)}`;
+      if (seen.has(signature)) continue;
+      seen.add(signature);
+      element.setAttribute(attr, String(found.length));
+      found.push(signature);
+    }
+    return found;
+  }, sampleLimit, attribute);
+
+  const findings = [];
+  const wait = (ms) => new Promise((done) => setTimeout(done, ms));
+  const geometry = (selector, wantHover) => page.evaluate((sel, hovered) => {
+    const element = document.querySelector(sel);
+    if (!element) return null;
+    if (element.matches(":hover") !== hovered) return null;
+    const box = element.getBoundingClientRect();
+    return { top: box.top + window.scrollY, left: box.left + window.scrollX };
+  }, selector, wantHover);
+
+  for (let index = 0; index < signatures.length; index += 1) {
+    const selector = `[${attribute}="${index}"]`;
+    const handle = await page.$(selector);
+    if (!handle) continue;
+    try {
+      // hover() scrolls the element into view first; both samples are taken
+      // afterwards and in document space, so scrolling cannot fake or mask a
+      // displacement.
+      await handle.hover();
+      await wait(settleMs);
+      const hovered = await geometry(selector, true);
+      // A probe the pointer cannot actually reach (covered by a sticky layer,
+      // clipped by a scroller) carries no evidence either way — skip it rather
+      // than invent a finding. A real lift stays reachable by definition.
+      if (!hovered) continue;
+      await page.mouse.move(1, 1);
+      await wait(settleMs);
+      const resting = await geometry(selector, false);
+      if (!resting) continue;
+      const dy = hovered.top - resting.top;
+      if (Math.abs(dy) > tolerancePx) {
+        findings.push(`hover_lift ${signatures[index]} ${dy.toFixed(1)}px`);
+      }
+    } finally {
+      await handle.dispose();
+    }
+  }
+
+  await page.evaluate((attr) => {
+    for (const element of document.querySelectorAll(`[${attr}]`)) {
+      element.removeAttribute(attr);
+    }
+  }, attribute);
+
+  return [...new Set(findings)];
+}
