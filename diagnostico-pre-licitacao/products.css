@@ -5,7 +5,7 @@
 .licitacao-products__intro>p:last-child{max-width:650px;margin:0;color:#435369;line-height:1.7}
 .licitacao-products__nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:54px}
 .licitacao-products__nav a{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;min-width:0;min-height:76px;padding:14px;color:var(--ink);background:#fff;border:1px solid #c6d0d8;border-radius:4px;font-size:.72rem;font-weight:760;line-height:1.4;text-decoration:none}
-.licitacao-products__nav a:hover,.licitacao-products__nav a:focus-visible{border-color:var(--green-700);outline:3px solid rgba(61,130,56,.18)}
+.licitacao-products__nav a:hover,.licitacao-products__nav a:focus-visible{border-color:var(--green-700)}
 .licitacao-products__nav span{color:var(--green-700);font-family:var(--mono);font-weight:850}
 .licitacao-products__list{display:grid;gap:30px}
 .licitacao-product{scroll-margin-top:24px;padding:clamp(26px,4vw,50px);background:#fff;border:1px solid #c6d0d8;border-radius:4px}
@@ -38,7 +38,7 @@
 .licitacao-products__rules{margin-top:30px;padding:clamp(24px,4vw,38px);color:#fff;background:#071a31}.licitacao-products__rules h3{margin:0 0 12px;color:#fff}.licitacao-products__rules p{max-width:920px;margin:8px 0;color:#dbe5ee;line-height:1.65}
 .licitacao-capture-form,.licitacao-capture-form label,.licitacao-capture-form__row>*{min-width:0}
 .licitacao-capture-form select{box-sizing:border-box;display:block;width:100%;max-width:100%;min-width:0;padding:12px 14px;color:var(--text);background:#fff;border:1px solid #a9b6b0;border-radius:8px;font:inherit}
-.licitacao-capture-form select:focus{outline:3px solid rgba(14,124,102,.2);border-color:var(--green)}
+.licitacao-capture-form select:focus{outline:2px solid transparent;outline-offset:2px;box-shadow:var(--focus-ring);border-color:var(--green)}
 .licitacao-capture-form__row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:900px){.licitacao-products__intro{grid-template-columns:1fr;align-items:start}.licitacao-products__nav{grid-template-columns:repeat(2,minmax(0,1fr))}.licitacao-example__evidence,.licitacao-product__tiers>div{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.licitacao-products{padding:62px 0 68px}.licitacao-products__nav,.licitacao-product__terms,.licitacao-product__scope,.licitacao-example__evidence,.licitacao-product__tiers>div,.licitacao-capture-form__row{grid-template-columns:1fr}.licitacao-product__terms>div{padding:14px 0}.licitacao-product__terms>div+div{padding-left:0;border-left:0;border-top:1px solid #cbd4dc}.licitacao-product__head{grid-template-columns:1fr;gap:14px}.licitacao-product>.button{width:100%}}

@@ -1166,6 +1166,245 @@ def test_thankyou_specialist_cta_family():
     assert "analisar meu cenário" not in lower
     assert "apresentar uma demanda" not in lower
 
+# --- WCAG 2.2 1.4.11 focus indicator gate (issue #506) --------------------
+
+MIN_NON_TEXT_CONTRAST = 3.0
+
+# The sheets that carried a bespoke ring when #506 was opened. Kept as a floor
+# so a discovery bug that matches nothing cannot turn the gate into a no-op.
+FOCUS_CSS_FLOOR = (
+    "styles.css",
+    "styles-tokens.css",
+    "styles-tools.css",
+    "styles-offers.css",
+    "css/contracts.css",
+    "css/type-floor.css",
+    "assets/report-capture.css",
+    "assets/eight-offer-contract.css",
+    "entregas/styles.css",
+    "entregas/catalog.css",
+    "diagnostico-pre-licitacao/products.css",
+)
+
+# `scripts/` holds fixtures and tooling, not shipped CSS: a fixture exists to
+# carry a broken value on purpose, so scanning it would fail the gate for the
+# wrong reason.
+FOCUS_CSS_SKIP_PARTS = {".git", ".claude", ".worktrees", "_site", "node_modules", "scripts"}
+
+
+def focus_css_surface() -> tuple[str, ...]:
+    """Every stylesheet the public surface ships, discovered rather than listed.
+
+    A hardcoded list only holds the sheets that were already wrong. Discovery is
+    what makes the hundredth stylesheet inherit the measured ring instead of
+    reinventing an rgba nobody measured.
+    """
+    found = sorted(
+        path.relative_to(ROOT).as_posix()
+        for path in ROOT.rglob("*.css")
+        if not any(part in FOCUS_CSS_SKIP_PARTS for part in path.relative_to(ROOT).parts)
+    )
+    missing = [name for name in FOCUS_CSS_FLOOR if name not in found]
+    assert not missing, f"focus CSS discovery stopped seeing shipped sheets: {missing}"
+    return tuple(found)
+
+# Every background the focus ring can land on, taken from the token palette.
+FOCUS_BACKGROUND_TOKENS = (
+    "--white",
+    "--soft",
+    "--green-100",
+    "--line",
+    "--green-700",
+    "--ink",
+    "--navy-800",
+    "--navy-900",
+    "--navy-950",
+)
+
+FOCUS_RING_ALIASES = ("--focus-ring", "--tool-focus")
+_HEX_RE = re.compile(r"#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b")
+_FUNC_COLOR_RE = re.compile(r"\b(?:rgba?|hsla?|color)\s*\(", re.I)
+_VAR_RE = re.compile(r"var\(\s*(--[a-z0-9-]+)\s*(?:,([^()]*))?\)", re.I)
+_CSS_RULE_RE = re.compile(r"([^{}]+)\{([^{}]*)\}")
+_NAMED_SAFE = {
+    "transparent", "none", "currentcolor", "inherit", "initial", "unset",
+    "solid", "dashed", "dotted", "double", "groove", "ridge", "inset",
+    "outset", "hidden", "auto", "thin", "medium", "thick",
+}
+
+
+def _normalise_hex(color: str) -> str:
+    raw = color.strip().lstrip("#")
+    if len(raw) == 3:
+        raw = "".join(ch * 2 for ch in raw)
+    return "#" + raw.lower()
+
+
+def _design_tokens() -> dict[str, str]:
+    css = (ROOT / "styles-tokens.css").read_text(encoding="utf-8")
+    root = css.split(":root{", 1)[1].split("}", 1)[0]
+    tokens: dict[str, str] = {}
+    for line in root.split(";"):
+        if ":" not in line:
+            continue
+        name, _, value = line.partition(":")
+        name = name.strip()
+        if name.startswith("--"):
+            tokens[name] = value.strip()
+    return tokens
+
+
+def _resolve_vars(value: str, tokens: dict[str, str], depth: int = 0) -> str:
+    """Expand var() references against the token file (fallbacks included)."""
+    if depth > 6:
+        return value
+    def swap(match: re.Match[str]) -> str:
+        name = match.group(1)
+        fallback = (match.group(2) or "").strip()
+        return tokens.get(name, fallback)
+    expanded = _VAR_RE.sub(swap, value)
+    return expanded if expanded == value else _resolve_vars(expanded, tokens, depth + 1)
+
+
+def _focus_ring_layers() -> list[str]:
+    tokens = _design_tokens()
+    ring = _resolve_vars(tokens["--focus-ring"], tokens)
+    assert not _FUNC_COLOR_RE.search(ring), (
+        f"--focus-ring must not composite over the page background: {ring}"
+    )
+    layers = [_normalise_hex(hex_) for hex_ in _HEX_RE.findall(ring)]
+    assert layers, f"--focus-ring declares no measurable colour: {ring}"
+    return layers
+
+
+def test_focus_ring_token_meets_wcag_non_text_contrast():
+    """#506: WCAG 2.2 1.4.11 wants >=3:1 for the focus indicator, on every surface.
+
+    A translucent ring composites with whatever is behind it, so an rgba() value
+    cannot be measured once and trusted. The shipped ring is opaque and layered:
+    for each surface at least one layer must clear 3:1, and the two layers must
+    clear 3:1 against each other so the ring reads as a ring.
+    """
+    tokens = _design_tokens()
+    layers = _focus_ring_layers()
+    assert len(layers) >= 2, f"a single-colour ring cannot survive light and dark: {layers}"
+
+    measured: dict[str, float] = {}
+    for name in FOCUS_BACKGROUND_TOKENS:
+        surface = _normalise_hex(_resolve_vars(tokens[name], tokens))
+        best = max(_contrast_ratio(layer, surface) for layer in layers)
+        measured[name] = best
+        assert best >= MIN_NON_TEXT_CONTRAST, (
+            f"focus ring {layers} measures {best:.2f}:1 on {name} ({surface}); "
+            f"WCAG 2.2 1.4.11 requires {MIN_NON_TEXT_CONTRAST}:1"
+        )
+
+    for first, second in zip(layers, layers[1:]):
+        ratio = _contrast_ratio(first, second)
+        assert ratio >= MIN_NON_TEXT_CONTRAST, (
+            f"ring layers {first}/{second} measure {ratio:.2f}:1 against each other"
+        )
+    assert min(measured.values()) >= MIN_NON_TEXT_CONTRAST, measured
+
+
+def _focus_rules(css: str) -> list[tuple[str, str]]:
+    return [
+        (" ".join(selector.split()), body)
+        for selector, body in _CSS_RULE_RE.findall(css)
+        if ":focus" in selector
+    ]
+
+
+def _declarations(body: str) -> list[tuple[str, str]]:
+    out = []
+    for chunk in body.split(";"):
+        prop, _, value = chunk.partition(":")
+        prop = prop.strip().lower()
+        if prop:
+            out.append((prop, value.strip()))
+    return out
+
+
+def test_focus_indicators_never_reintroduce_an_unmeasured_ring():
+    """The measured token is the only focus ring the public surface may draw.
+
+    ``outline`` and ``box-shadow`` are what paint the indicator. Inside a
+    ``:focus`` rule they may only reference the measured token, or be switched
+    off (``none``/``transparent``) so a lower-specificity token rule still
+    paints. A bespoke colour here is exactly how #506 shipped a 1.69:1 ring, so
+    it fails closed instead of being re-measured per surface.
+    """
+    tokens = _design_tokens()
+    offenders: list[str] = []
+    for relative in focus_css_surface():
+        path = ROOT / relative
+        assert path.is_file(), relative
+        for selector, body in _focus_rules(path.read_text(encoding="utf-8")):
+            for prop, value in _declarations(body):
+                if prop not in ("outline", "box-shadow"):
+                    continue
+                if any(f"var({alias}" in value.replace(" ", "") for alias in FOCUS_RING_ALIASES):
+                    continue
+                bare = _VAR_RE.sub("", value).strip().lower()
+                if _HEX_RE.search(value) or _FUNC_COLOR_RE.search(value):
+                    offenders.append(f"{relative}: {selector} {{{prop}:{value}}}")
+                    continue
+                words = {word for word in re.split(r"[\s,]+", bare) if word and not word[0].isdigit()}
+                if words - _NAMED_SAFE:
+                    offenders.append(f"{relative}: {selector} {{{prop}:{value}}}")
+    assert not offenders, offenders
+
+    tool_focus = _resolve_vars(_design_tokens_of("styles-tools.css")["--tool-focus"], tokens)
+    assert tool_focus == _resolve_vars(tokens["--focus-ring"], tokens), (
+        f"--tool-focus drifted from the measured ring: {tool_focus}"
+    )
+
+
+def _design_tokens_of(relative: str) -> dict[str, str]:
+    css = (ROOT / relative).read_text(encoding="utf-8")
+    root = css.split(":root", 1)[1].split("{", 1)[1].split("}", 1)[0]
+    tokens: dict[str, str] = {}
+    for line in root.split(";"):
+        name, _, value = line.partition(":")
+        name = name.strip()
+        if name.startswith("--"):
+            tokens[name] = value.strip()
+    return tokens
+
+
+def test_focus_ring_survives_reduced_motion_and_js_off():
+    """The ring is CSS-only and unconditional: no JS class, no motion query."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    compact = re.sub(r"\s+", "", css)
+    assert ":focus-visible{outline:2pxsolidtransparent;outline-offset:2px;box-shadow:var(--focus-ring)}" in compact, (
+        "styles.css lost the unconditional :focus-visible ring"
+    )
+
+    # No JS-gated ancestor may own the ring, and no motion query may drop it.
+    for selector, body in _focus_rules(css):
+        if "var(--focus-ring)" not in body and "var(--tool-focus)" not in body:
+            continue
+        assert not re.match(r"(html|body)?\.(no-)?js\b", selector.strip()), selector
+
+    for match in re.finditer(r"@media[^{]*prefers-reduced-motion[^{]*\{", css):
+        block = css[match.end():]
+        depth = 1
+        end = 0
+        for index, char in enumerate(block):
+            if char == "{":
+                depth += 1
+            elif char == "}":
+                depth -= 1
+                if depth == 0:
+                    end = index
+                    break
+        for selector, body in _focus_rules(block[:end]):
+            for prop, value in _declarations(body):
+                assert not (prop in ("outline", "box-shadow") and value.strip().lower() == "none"), (
+                    f"prefers-reduced-motion removes the focus ring: {selector}"
+                )
+
+
 def run_all() -> int:
     tests = [v for k, v in list(globals().items()) if k.startswith("test_") and callable(v)]
     failed = 0
