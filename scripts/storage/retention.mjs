@@ -7,6 +7,7 @@ const { FileStore } = require("../../netlify/functions/lib/lead-store.cjs");
 const { ensureAbsoluteOutside } = require("./lib.cjs");
 
 const REPORT_SCHEMA = "confenge-storage-retention-report/v1";
+const APPLY_AUTHORITY = "confenge-schedule-runner/v1";
 
 function parse(argv) {
   const out = { apply: false, now: new Date() };
@@ -94,6 +95,11 @@ function deleteUnlocked(backend, leads, item) {
 
 async function main() {
   const options = parse(process.argv.slice(2));
+  if (options.apply && process.env.CONFENGE_RETENTION_APPLY_AUTHORITY !== APPLY_AUTHORITY) {
+    throw Object.assign(new Error("retention apply requires the canonical schedule runner"), {
+      code: "RETENTION_APPLY_NOT_AUTHORIZED",
+    });
+  }
   const root = ensureAbsoluteOutside(options.store, [], { mustExist: true });
   const backend = new HostFileBackend(root);
   const leads = new FileStore(root, { backend });

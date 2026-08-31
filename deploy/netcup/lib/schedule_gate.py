@@ -22,6 +22,7 @@ JOB = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 GATE_NAME = "schedule-cutover.json"
 RETENTION_JOB = "storage-retention"
 RETENTION_LOCK = "storage-retention.lock"
+RETENTION_APPLY_AUTHORITY = "confenge-schedule-runner/v1"
 
 
 def validate_gate(root: Path, job: str) -> dict[str, object]:
@@ -115,10 +116,15 @@ def run_retention(root: Path, release: Path, env: dict[str, str]) -> int:
         raise ReleaseError("packaged storage retention script is missing")
     descriptor = acquire_job_lock(root, RETENTION_JOB)
     try:
+        retention_env = dict(env)
+        # This is an execution-path invariant, not a credential. Overwrite any
+        # inherited value only after the SHA/job gate and external lock have
+        # succeeded, so direct `retention.mjs --apply` calls fail closed.
+        retention_env["CONFENGE_RETENTION_APPLY_AUTHORITY"] = RETENTION_APPLY_AUTHORITY
         result = subprocess.run(
             ["node", str(script), "--store", storage, "--apply"],
             cwd=release,
-            env=env,
+            env=retention_env,
             check=False,
         )
         return result.returncode

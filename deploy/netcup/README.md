@@ -335,6 +335,16 @@ indexes for retained leads are preserved. stdout is aggregate JSON only;
 failures mark the unit failed and the `OnFailure` unit emits a `user.alert`
 journal event without record keys or payloads.
 
+`--apply` also requires the internal
+`CONFENGE_RETENTION_APPLY_AUTHORITY=confenge-schedule-runner/v1` signal. The
+canonical runner sets it only after the release/job gate and external job lock
+have succeeded. A direct invocation without `--apply` remains a dry-run, while
+a direct `--apply` fails closed. This signal is a runner-path invariant, not a
+secret credential. Deletion consists of individually durable filesystem
+operations under one writer lock, not a multi-record filesystem transaction;
+after an interrupted apply, validate the store and rerun the same idempotent
+job rather than claiming transactional rollback.
+
 This P1 is `EXECUTE_NOW`, front `SCALE / SUNSET`, with automation and trust
 leverage. Time to evidence is one timer window after authorized activation.
 One hundred executions improve the system through bounded, observable policy

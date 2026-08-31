@@ -242,6 +242,7 @@ def test_retention_gate_and_runner_are_sha_bound_without_a_legacy_executor(
     ]
     assert observed["cwd"] == release
     assert observed["check"] is False
+    assert observed["env"]["CONFENGE_RETENTION_APPLY_AUTHORITY"] == "confenge-schedule-runner/v1"
     with pytest.raises(control.ReleaseError, match="path must match"):
         schedule.run_retention(host, release, {"CONFENGE_STORAGE_DIR": "/tmp/not-authoritative"})
 

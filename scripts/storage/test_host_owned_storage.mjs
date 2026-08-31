@@ -418,14 +418,39 @@ try {
   const retentionScript = path.join(root, "scripts/storage/retention.mjs");
   const dryRetention = JSON.parse((await execFileAsync(process.execPath, [retentionScript, "--store", importRoot, "--now", "2026-08-26T00:00:00Z"])).stdout);
   assert(dryRetention.expired >= 1 && await importStore.get("lead_expired"), "retention dry-run mutated data");
-  const appliedRetention = JSON.parse((await execFileAsync(process.execPath, [retentionScript, "--store", importRoot, "--now", "2026-08-26T00:00:00Z", "--apply"])).stdout);
+  const directApplyEnv = { ...process.env };
+  delete directApplyEnv.CONFENGE_RETENTION_APPLY_AUTHORITY;
+  let unauthorizedRetention;
+  try {
+    await execFileAsync(
+      process.execPath,
+      [retentionScript, "--store", importRoot, "--now", "2026-08-26T00:00:00Z", "--apply"],
+      { env: directApplyEnv },
+    );
+  } catch (err) {
+    unauthorizedRetention = JSON.parse(err.stderr);
+  }
+  assert(
+    unauthorizedRetention?.error_code === "RETENTION_APPLY_NOT_AUTHORIZED" && await importStore.get("lead_expired"),
+    "direct retention apply bypassed the canonical runner",
+    unauthorizedRetention,
+  );
+  const retentionApplyEnv = {
+    ...process.env,
+    CONFENGE_RETENTION_APPLY_AUTHORITY: "confenge-schedule-runner/v1",
+  };
+  const appliedRetention = JSON.parse((await execFileAsync(
+    process.execPath,
+    [retentionScript, "--store", importRoot, "--now", "2026-08-26T00:00:00Z", "--apply"],
+    { env: retentionApplyEnv },
+  )).stdout);
   assert(appliedRetention.deleted >= 1 && await importStore.get("lead_expired") === null && await importStore.getByIdempotency("idem_expired") === null, "retention apply failed");
   assert(appliedRetention.suppressions_preserved === 1, "retention removed suppression");
   assert(appliedRetention.indexes_preserved === 1, "retention removed a live lead idempotency index");
   assert((await importStore.getByIdempotency("idem_migration")).lead_id === "lead_migration", "retention corrupted a live lead idempotency index");
   assert(JSON.stringify(appliedRetention).includes("lead_expired") === false, "retention report leaked a record key");
 
-  // Apply is all-or-nothing when any governed record has no valid timestamp.
+  // Preflight blocks every planned deletion when a governed timestamp is invalid.
   const malformedRetentionRoot = privateDir("confenge-retention-malformed-");
   cleanup.push(malformedRetentionRoot);
   const malformedRetentionStore = new FileStore(malformedRetentionRoot);
@@ -434,7 +459,11 @@ try {
   await malformedRetentionStore.put({ ...sampleLead("lead_retention_invalid", "idem_retention_invalid"), delete_after: "not-a-date" }, { onlyIfNew: true });
   let blockedRetention;
   try {
-    await execFileAsync(process.execPath, [retentionScript, "--store", malformedRetentionRoot, "--now", "2026-08-26T00:00:00Z", "--apply"]);
+    await execFileAsync(
+      process.execPath,
+      [retentionScript, "--store", malformedRetentionRoot, "--now", "2026-08-26T00:00:00Z", "--apply"],
+      { env: retentionApplyEnv },
+    );
   } catch (err) {
     blockedRetention = JSON.parse(err.stdout);
   }
