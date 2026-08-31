@@ -47,7 +47,7 @@ Sair da planilha em direção a isso não é a terceira direção. É a segunda 
 
 A CONFENGE vende julgamento técnico e econômico. O artefato do julgamento neste mercado não é a planilha, que é insumo, nem o relatório, que é embalagem: é o **parecer**, e o parecer termina em uma palavra. Participar, condicionar ou recusar. Essa terna é o único elemento da página que um concorrente não copia sem mudar de negócio, porque copiá-la significa assumir o risco de recomendar recusa a um cliente que quer participar. Logo, é ela, e não a mobília de tabela, que deve carregar a identidade da primeira dobra.
 
-A consequência de composição é direta: o painel `.hero-artifact` deixou de existir e o lado direito da dobra passou a ser `.hero-verdict`, com o rótulo "O parecer termina em uma destas palavras", a lista Participar / Condicionar / Recusar e um pé que nomeia o que sustenta a escolha: o critério, o número e o responsável. Não é uma lista de entregáveis reformatada; é a saída do trabalho.
+A consequência de composição é direta: o painel `.hero-artifact` deixou de existir e o lado direito da dobra passou a ser `.hero-verdict`, com um rótulo que escopa a terna a um parecer de edital, a lista Participar / Condicionar / Recusar e um pé que generaliza o princípio e nomeia o que sustenta a escolha: o critério, o número e o responsável. Não é uma lista de entregáveis reformatada; é a saída do trabalho. A redação exata do rótulo e do pé foi corrigida na revisão da §5-bis, porque a primeira versão enunciava a terna como definição universal do trabalho da CONFENGE em vez de exemplo.
 
 ### 2.2 As três decisões que produzem a identidade
 
@@ -120,6 +120,85 @@ O que se pode fazer, e o que este parágrafo faz, é registrar **antes da evidê
 Primeiro, queda de oportunidades qualificadas originadas na home na janela comparável, sem outra causa identificada. Segundo, reprovação em qualquer gate que hoje passa, com destaque para o piso funcional de 14px, o contrato de logo de `test_design_gates.py:768`, a cobertura de glifos e o `npm run inbound:gates`, que é fail-closed por `AGENTS.md` e no qual a conversão nunca é a variável em disputa. Terceiro, crescimento não declarado do orçamento de fonte ou de CSS. Quarto, a descoberta de que a dobra escura foi classificada como cluster 2 pelo próprio critério do brief §1, isto é, que o campo mais o `--accent-live` reproduzem a assinatura "escuro mais acento ácido" que a direção afirma evitar. Quinto, qualquer vazamento desta camada para outra rota, que quebraria a premissa de reversibilidade que sustenta o escopo.
 
 **O que não conta como evidência, em nenhuma direção.** Afirmação sobre percepção humana. Nem a favor, nem contra. O `AGENTS.md` e a §5.4 da regra de #494 são explícitos: nenhum documento, papel ou agente pode afirmar o que uma pessoa achou mais confiável, mais premium ou menos genérico. Isso é #336, exclusivamente, e #336 está bloqueada com 0 de 20 participantes. Enquanto ela não rodar, esta direção se defende por derivação (cada decisão vem de um artefato real do ofício e carrega informação), por conformidade medida (contraste, gates, orçamento) e por resultado comercial, e por mais nada.
+
+---
+
+## 5-bis. Revisão adversarial de 2026-08-30 (segunda passagem)
+
+A primeira passagem acertou a direção e errou a dose. A dobra tentava concluir a
+auditoria inteira da empresa antes de conquistar o interesse: categoria, ICP,
+manchete, lead, entregável, ação primária, ação secundária, credencial, link
+para relatório, a terna, a explicação da terna, dois números de escala e a nota
+de método, tudo antes do primeiro rolar. Em 390x844 isso media 1,19 viewport de
+`.hero`. Quatro correções, nesta ordem de importância.
+
+**A terna deixou de ser uma definição universal e virou um exemplo.** O rótulo
+dizia "O parecer termina em uma destas palavras". Isso descreve corretamente um
+parecer de licitação e descreve mal o resto do negócio: num contrato em execução
+a decisão é quantificar, registrar, notificar, pleitear, contestar, negociar,
+escalar, aceitar ou não prosseguir. Escrita como definição, a terna reduzia a
+CONFENGE a um motor de bid/no-bid. O rótulo passou a ser "Assim termina um
+parecer de edital", que escopa, e o pé passou a carregar o princípio: toda
+análise termina em decisão, inclusive quando a decisão é não entrar, e no
+contrato em execução muda a palavra, não a exigência de critério, número e
+responsável com data. A assinatura é a decisão fundamentada; a terna é uma
+manifestação dela. A força visual não mudou: mesma escala, mesmas réguas.
+
+**A escala saiu da dobra e virou faixa.** `.hero-scale` deixou o `aside` e virou
+`.home-proof-strip`, uma faixa clara logo abaixo do campo escuro. Os números
+continuam a um passo do olho e param de disputar a mensagem com ela. A troca de
+superfície, campo escuro para folha clara, é o sinal de que a dobra acabou, que
+uma faixa dentro do próprio hero não conseguia dar. A faixa não é um oitavo
+bloco narrativo: não tem título, não tem ação, e é uma `div` no nível do `main`,
+que é exatamente como o gate de arquétipos de `test_design_gates.py` enxerga o
+que não é seção. Rotulá-la de seção para caber no gate seria o inverso do que
+ela é.
+
+**O proof point da base passou a distinguir universo de recorte.** Publicar
+"4,48 milhões de contratos públicos na base" sozinho convida a leitura de que
+existem 4,48 milhões de contratos de engenharia relevantes a uma construtora. O
+próprio inventário desmente: `denominators.aec_confirmed_contracts` é 54.055. A
+faixa passa a mostrar os dois, nesta ordem, com o recorte primeiro: 54.055
+contratos de engenharia confirmados, 4,48 mi de registros públicos mapeados. O
+número que demonstra a capacidade que interessa ao ICP é o menor dos dois, e é
+por isso que ele vem antes. Na seção de contexto de mercado, a linha de base
+ganhou escopo explícito ("recorte de quatro estados, não a base nacional
+inteira") para que 233 e 54.055 parem de parecer o mesmo número contado duas
+vezes.
+
+**R$ 700 milhões saiu da posição de prova e foi para a trajetória.** O dado é
+verdadeiro e é declaração do titular: não tem lastro documental neste
+repositório, não é valor recuperado, não é economia e não é resultado de
+cliente. Numa marca que se posiciona por evidência, colocá-lo entre os proof
+points mais fortes da primeira dobra era exatamente o tipo de conveniência que
+um visitante cético encontra primeiro. Ele agora vive na seção de autoridade,
+junto do responsável técnico, onde a natureza autobiográfica do dado é
+intuitivamente adequada, e a frase declara o que ele é e o que ele não é.
+
+**Consequência em `data/site/proof.json`.** A combinação `status: VERIFIED` mais
+`verification_class: self_attested_owner` induzia leitura ruim. A auditoria dos
+consumidores mostrou que `status` é uma chave de publicação binária, com dois
+gates fail-closed em cima dela (`scripts/site/brand.py:121` e o contrato de
+autoridade), e não uma escala de confiança: mexer nele derrubaria a home. A
+distinção foi expressa onde ela cabe, em `verification_class`, que é vocabulário
+aberto e degrada com segurança. `self_attested_owner` virou duas classes,
+`data_backed_internal` para o que é reproduzível a partir de um dataset
+commitado aqui, com `evidence_ref` apontando arquivo e campo, e `owner_declared`
+para a declaração do titular, sem lastro. `status_semantics` e
+`verification_classes` passam a dizer isso em prosa, e a limitação deixou de
+citar uma única fonte para enumerar todas as classes não verificadas por
+terceiro. As duas classes novas entraram em `SELF_ATTESTED_PROOF_CLASSES`, o que
+move os dois registros do ramo de sobra do ladder para o ramo explícito: o
+mapeamento SELF_DECLARED passa a ser afirmado, não sorteado. De quebra, a guarda
+de `validate.py` que protegia o token `third_party` só quando a base citava
+`perfil-publico-especialista` passou a valer para qualquer fonte, e
+`self_attested_not_upgraded` passou a ser derivado da contagem em vez de ser o
+literal `True`.
+
+**Geometria medida depois, `.hero` sobre viewport.** 390x844 de 1,19 para 1,017;
+430x932 0,917; 768x1024 0,830; 1024x768 0,808; 1366x768 0,897; 1440x900 0,765.
+O teto de `test_ui_geometry` é 1,25 e continua 1,25: a folga veio de tirar
+conteúdo da dobra e respiro do espaçamento, não de afrouxar o gate.
 
 ---
 
