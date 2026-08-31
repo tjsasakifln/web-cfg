@@ -4,8 +4,8 @@
   "capture_mode": "first_fold_and_element_sections_no_fullpage",
   "fullpage_used": false,
   "fullpage_limitation_issue": 540,
-  "captured_at": "2026-08-31T15:08:48.387Z",
-  "commit_sha": "9f6da606b81480bc7ea78a727a54d528ddb62093",
+  "captured_at": "2026-08-31T15:11:47.747Z",
+  "commit_sha": "85ed3afb813218a8266539f329779d0e1448bdce",
   "rendered_content_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
   "remote_build_info": {
     "artifact_hash": "f8df6acb623d204218cae25109316f15f15d67d8123d34956e5608649d829347",
