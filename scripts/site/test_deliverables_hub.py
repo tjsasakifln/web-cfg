@@ -280,7 +280,8 @@ def test_hub_is_honest_about_every_published_example() -> None:
     cards = re.findall(r'<article class="vitrine-item', html)
     assert len(cards) == 8
     primary_block = re.search(
-        r'<div class="vitrine-items">(.*?)</div>\s*<dl class="compare-ladder-figures">',
+        r'<div class="vitrine-items">(.*?)</div>\s*'
+        r'<section class="offer-value-ladder"[^>]*data-offer-ladder=',
         html,
         re.DOTALL,
     ).group(1)
