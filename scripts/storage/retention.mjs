@@ -95,7 +95,7 @@ async function main() {
     });
   }
   const root = ensureAbsoluteOutside(options.store, [], { mustExist: true });
-  const backend = new HostFileBackend(root);
+  const backend = new HostFileBackend(root, { readOnly: !options.apply });
   const leads = new FileStore(root, { backend });
   const report = {
     schema: REPORT_SCHEMA,
@@ -106,11 +106,12 @@ async function main() {
     malformed_retention: 0,
     by_namespace: {},
   };
-  backend.withExclusiveLock(() => {
+  const inspectAndApply = () => {
     // Validate both durable envelopes and lead/idempotency relationships before
-    // planning any mutation. The same global writer lock covers scan, apply and
-    // the post-apply validation, so an application write cannot invalidate the
-    // decision between those phases.
+    // planning any mutation. Apply holds the global writer lock across scan,
+    // repair, mutation and post-validation. Dry-run uses the read-only backend:
+    // it creates neither namespaces nor a lock file and may fail conservatively
+    // if a concurrent writer changes the snapshot.
     // Recover only the safe interruption boundary (lead exists, derived index
     // missing) before the strict scan. Dangling or malformed indexes still
     // block the run. The global writer lock makes repair+planning one serial
@@ -158,7 +159,9 @@ async function main() {
       leads.validateUnlocked();
       report.indexes_preserved = backend.namespace("leads-idempotency").list().length;
     }
-  });
+  };
+  if (options.apply) backend.withExclusiveLock(inspectAndApply);
+  else inspectAndApply();
   if (report.blocked) {
     process.stdout.write(JSON.stringify(report) + "\n");
     process.exitCode = 2;

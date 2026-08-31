@@ -417,8 +417,13 @@ try {
   const importStore = new FileStore(importRoot);
   await importStore.put(retentionLead, { onlyIfNew: true });
   const retentionScript = path.join(root, "scripts/storage/retention.mjs");
+  const retentionTreeBeforeDryRun = fs.readdirSync(importRoot, { recursive: true }).map(String).sort();
   const dryRetention = JSON.parse((await execFileAsync(process.execPath, [retentionScript, "--store", importRoot, "--now", "2026-08-26T00:00:00Z"])).stdout);
   assert(dryRetention.expired >= 1 && await importStore.get("lead_expired"), "retention dry-run mutated data");
+  assert(
+    JSON.stringify(fs.readdirSync(importRoot, { recursive: true }).map(String).sort()) === JSON.stringify(retentionTreeBeforeDryRun),
+    "retention dry-run mutated the filesystem tree",
+  );
   const directApplyEnv = { ...process.env };
   delete directApplyEnv.CONFENGE_RETENTION_APPLY_AUTHORITY;
   let unauthorizedRetention;
