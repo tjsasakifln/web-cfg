@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "f7bedad2632d8226f013cedb4dfc10d013d338e4",
+  "baseline_commit": "6f95e392515d845d14107e63ebacd5ad0a26282b",
   "recaptured_at": "2026-08-30",
-  "recapture_reason": "PR #511 recapture onto f7bedad2632d8226f013cedb4dfc10d013d338e4, the commit whose tree carries these exact bytes. Only styles.css moved, and only by deletion: selectors no HTML uses were removed and the three root-level .related-card / .related-grid blocks were merged so every computed value is reproduced exactly. No frozen pillar HTML and no other protected file changed. No rendering change either, proven by a computed-style census over all 263 built routes x 3 viewports (789 renders, 226506 elements) that swapped only the content of the hash-named bundles inside _site, leaving HTML, assets and fonts byte-identical between the two runs: zero differing elements.",
+  "recapture_reason": "Recaptura de sitemap.xml em tres passagens sobre a branch feat/home-value-first. A regra e uma so: restaurar os bytes anteriores publicaria um lastmod que a propria pagina desmente, e lastmod so pode subir quando a pagina declara, no proprio metadado, que mudou. Primeira passagem (hash 9a170f2690946f92364bd73241311f17cbdbbe0080c7a70ed393f69442349de6): /confianca/ de 2026-08-29 para 2026-08-30, porque confianca/index.html mudou nesta branch. Segunda passagem (hash ebd286881...): uma auditoria adversarial apontou que a regra tinha sido aplicada a uma rota so. As tres rotas suspeitas foram conferidas uma a uma. / nao publica lastmod nenhum: index.html nao declara dateModified, entao nao havia data falsa a corrigir e nada foi inventado. /especialista/tiago-jun-sasaki/ era defeito real: 7b5d2159f reescreveu a secao 'Prova e limites' sem tocar no dateModified, que ficou em 2026-07-15; o proprio metadado da pagina foi corrigido para 2026-08-30 e o lastmod passou a derivar dele. Terceira passagem, esta: /entregas/ tambem era defeito real. A pagina recebeu os campos value-first de #527-#534 e, em 2026-08-30, a reducao de 62 nos de DOM, mas seu CollectionPage.dateModified continuava em 2026-08-29. O metadado da pagina foi corrigido para 2026-08-30, junto da linha visivel 'atualizada em', e o lastmod passou a derivar dele. test_deliverables_hub.py exige que os dois digam a mesma coisa, e agora dizem. Em nenhuma das tres passagens o lastmod foi escrito a mao: close_graph le o metadado da pagina, nunca o git nem o relogio do build.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -25,9 +25,9 @@
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "robots.txt": "f5fcb01b1b51cb993860a8f6a77c2ea3e31584f95721e8e95e6093e2e54ec44d",
-    "sitemap.xml": "0ae12394887886a8749964183bf05f440324e759ec4d28b068084f872980c0ff",
+    "sitemap.xml": "48d45634e1116405f7a06c27f1d73ee6520de98200947da2618b4441429e9adc",
     "sitemap.txt": "eba93e6e485b644b9a947da48840394f943cdd396e618f7ea91a9caec5460363",
-    "sitemap-index.xml": "865a4c2b7330b2081eb3473a540d862ad169b7300e1f3d93d5edc9d9742e9244",
+    "sitemap-index.xml": "70a612f8863e45a6df4c3b69ab03397079c3a6386eb78f7e58df562b34eb5190",
     "_redirects": "c32debd36d9ce4bc2d46121c7d7c229139ab11ab5dc1f4aa2db09541ab21e73a",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
     "js/modules/analytics.js": "5fd78c3d9c3c8b9d135e6cc4cb02a11ee276c09018cf3f81e6a1a641f8029698"

@@ -316,8 +316,7 @@ def _cta_block(page: dict[str, Any], position: str) -> str:
     label_em = page.get("cta_email_label") or "Solicitar análise inicial por e-mail"
     offer = page.get("cta_offer") or "Avaliar os documentos deste caso"
     blurb = page.get("cta_blurb") or (
-        "Solicite um canal seguro para envio. O site não recebe arquivo; "
-        "o canal é escolhido posteriormente."
+        "Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação."
     )
     landmark_label = "Próximo passo no conteúdo" if position == "mid" else "Próximo passo ao final"
     return f"""

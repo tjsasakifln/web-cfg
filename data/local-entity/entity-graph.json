@@ -39,6 +39,9 @@
     "name": "Engº Tiago Sasaki",
     "image": "https://confenge.com.br/assets/tiago-sasaki-foto-v11-sem-fundo.png",
     "url": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
+    "sameAs": [
+      "https://github.com/tjsasakifln"
+    ],
     "jobTitle": "Engenheiro Civil e consultor B2G",
     "worksFor": {
       "@id": "https://confenge.com.br/#organization"
@@ -187,7 +190,9 @@
       "id": "person-sameAs",
       "entity": "Person",
       "field": "sameAs",
-      "value": null,
+      "value": [
+        "https://github.com/tjsasakifln"
+      ],
       "status": "UNKNOWN",
       "basis": "absent_jsonld",
       "third_party_verified": false,
@@ -393,6 +398,39 @@
       "basis": "proof.json source=n/a verification_class=None",
       "third_party_verified": false,
       "notes": "Não publicar sem evidência verificável e autorização. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-base-inteligencia",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "Base de inteligência com 4,48 milhões de contratos públicos, corte de 01/08/2026",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=registro-operacional-confenge verification_class=data_backed_internal",
+      "third_party_verified": false,
+      "notes": "Lastro em data/pseo/national-candidate-inventory.json, denominators.national_records_available = 4479442 contrato_id deduplicados, dataset_hash 0d8757f7, corte de 01/08/2026. Desses, 54.055 estão confirmados como obra ou serviço de engenharia (denominators.aec_confirmed_contracts). O número publicado é o volume da base disponível para análise, não a carteira de clientes nem o recorte de engenharia. O inventário nacional permanece PENDING/QUALITY_ELIGIBLE para findings editoriais; publicar a escala da base não depende dessa promoção. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-base-engenharia",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "54.055 contratos de obra ou serviço de engenharia confirmados na base de inteligência, corte de 01/08/2026",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=registro-operacional-confenge verification_class=data_backed_internal",
+      "third_party_verified": false,
+      "notes": "Lastro em data/pseo/national-candidate-inventory.json, denominators.aec_confirmed_contracts = 54055, dataset_hash 0d8757f7, corte de 01/08/2026. Confirmado significa classificado em multiplas camadas como obra ou servico de engenharia; classified_share_note do proprio inventario declara que so objetos aec_confirmed entram em agregados publicos. Este e o recorte relevante ao ICP: publicar 4,48 milhoes sem ele convida a leitura de que existem 4,48 milhoes de contratos de engenharia. Nao e carteira de clientes. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
+      "as_of": "2026-08-19"
+    },
+    {
+      "id": "proof:proof-volume-analisado",
+      "entity": "ProofRecord",
+      "field": "credentials",
+      "value": "Mais de R$ 700 milhões em obras públicas analisados pessoalmente pelo Eng. Tiago Sasaki",
+      "status": "SELF_DECLARED",
+      "basis": "proof.json source=registro-profissional-titular verification_class=owner_declared",
+      "third_party_verified": false,
+      "notes": "Volume acumulado de obra pública sob análise técnica do titular ao longo da trajetória profissional, somando iniciativa privada e Administração Pública. Declarado pelo próprio em 2026-08-30. É volume analisado, não é valor recuperado, economizado nem resultado assegurado a cliente. Sem lastro documental neste repositório: é declaração do titular, e é por isso que a verification_class é self_attested_owner e não uma classe verificada por terceiro. data/site/proof.json claims marked VERIFIED with source perfil-publico-especialista (or other self-attested classes) are circular self-attestation from owned copy. This campaign remaps them to SELF_DECLARED. Campaign VERIFIED is reserved for independent third-party evidence committed in-repo; none is present for identity/NAP/CREA.",
       "as_of": "2026-08-19"
     }
   ],

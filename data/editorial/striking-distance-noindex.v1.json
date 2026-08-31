@@ -33,7 +33,7 @@
         "approval_basis": "owner-delegated review 2026-08-29",
         "approved_at": "2026-08-29",
         "manual_human_review": false,
-        "material_hash": "sha256:f81891d6e9d8f833d838184cff677401cb15396868cffde793a257ebce4af289",
+        "material_hash": "sha256:45b162b336413029c9aa5ccbdaed9857b6029a4c98c97142d2e3158a568fa6bd",
         "review_results": {
           "factual_legal_adversarial": true,
           "originality_anti_doorway": true,
@@ -41,8 +41,8 @@
           "skeptical_visitor_copy_ux": true,
           "responsive_js_off_keyboard_accessibility": true
         },
-        "notes": "O conteúdo foi redigido pelo agente da campanha de reescrita (material_author) sob delegação expressa de autoridade do owner. Uma revisão adversarial independente, executada em processo separado da campanha autora (reviewer_executor), verificou as citações legais (Lei 14.133/2021 arts. 115 §5º, 22 §§1-2, 92 VII/IX, 103 §§4-5, 117 §§1-2, 124 II 'd', 137 V), os Acórdãos TCU 639/2006 e 3.077/2010 e a metodologia do INMET (limiar de 1mm de chuva diária, janela 12h UTC-12h UTC), além de originalidade, canibalização de consulta e higiene de indexação, sem encontrar fabricação. Não houve revisão humana manual em nenhuma das duas etapas: nem na autoria, nem nesta revisão adversarial.",
-        "approval_hash": "sha256:bfde87028e1f5ca561f5f1313f498f118803873b72f0005c495e5033d93f8308"
+        "notes": "O conteúdo foi redigido pelo agente da campanha de reescrita (material_author) sob delegação expressa de autoridade do owner. Uma revisão adversarial independente, executada em processo separado da campanha autora (reviewer_executor), verificou as citações legais (Lei 14.133/2021 arts. 115 §5º, 22 §§1-2, 92 VII/IX, 103 §§4-5, 117 §§1-2, 124 II 'd', 137 V), os Acórdãos TCU 639/2006 e 3.077/2010 e a metodologia do INMET (limiar de 1mm de chuva diária, janela 12h UTC-12h UTC), além de originalidade, canibalização de consulta e higiene de indexação, sem encontrar fabricação. Não houve revisão humana manual em nenhuma das duas etapas: nem na autoria, nem nesta revisão adversarial. Correção de copy em 2026-08-30 (CONFENGE_VALUE_FIRST_DOCUMENT_INTAKE_REWRITE_20260830): substituída a frase de negação inicial \"o site não recebe arquivo\" pela afirmação positiva da conduta (\"a CONFENGE abre um canal seguro para o envio\"), preservando fato, citações legais, TCU e INMET revisados nesta aprovação; revisão adversarial independente confirmou que nenhuma claim factual, jurídica ou metodológica foi alterada.",
+        "approval_hash": "sha256:a2ab20e2a4232619efe48f2d317f378a4790b1b80f52d6cf635d422345dca521"
       }
     },
     {

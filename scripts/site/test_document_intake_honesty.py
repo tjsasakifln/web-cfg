@@ -72,7 +72,19 @@ def test_sinapi_breakout_uses_honest_cta() -> None:
     pos_docs = html[html.find('id="cta-pos-documentos"') : html.find('id="diagnostico-confenge"')]
     assert HONEST_CTA in pos_resposta
     assert HONEST_CTA in pos_docs
-    assert CHANNEL_SLA in pos_docs or "não recebe arquivo" in pos_docs
+    # CHANNEL_SLA ("canal escolhido posteriormente") and "não recebe arquivo"
+    # were the two leading-negation phrasings this block could carry. The
+    # value-first rewrite (2026-08-30) replaced both with a positive
+    # statement of what CONFENGE does after protocol confirmation ("a
+    # CONFENGE abre o canal para o envio ..."), so accept either the old
+    # neutral SLA phrase or the new positive one; a bare pass on the removed
+    # negation would defeat the purpose of the rewrite.
+    assert (
+        CHANNEL_SLA in pos_docs
+        or "não recebe arquivo" in pos_docs
+        or "abre o canal para o envio" in pos_docs
+        or "abre um canal seguro para o envio" in pos_docs
+    )
     assert not capture_forms_with_file_input(html)
 
 

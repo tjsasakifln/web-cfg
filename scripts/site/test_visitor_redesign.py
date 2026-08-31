@@ -729,9 +729,12 @@ def test_home_nav_and_hierarchy():
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
     assert 'class="journey-row' in home
-    assert "Edital ou proposta crítica" in home
-    assert "Contrato sob pressão" in home
-    assert "Operação recorrente" in home
+    # 2026-08-30: os rotulos canonicos das tres jornadas ja sao verificados
+    # acima (linhas do bloco de nav). Aqui basta garantir que as portas usam a
+    # mesma taxonomia do menu e do rodape, via .journey-kind, em vez do rotulo
+    # antigo "Edital ou proposta critica", que so existia na home.
+    assert 'class="journey-kind"' in home
+    assert home.count('class="journey-kind"') == 3
     assert "data-evidence-selector" in home
     assert "data-evidence-selector" not in hero.group(0)
 

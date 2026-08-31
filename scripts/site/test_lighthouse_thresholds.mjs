@@ -369,8 +369,13 @@ console.log("LIGHTHOUSE_THRESHOLDS_OK");
     const errors = Array.isArray(out) ? out : out.errors || [];
     return errors.filter((e) => String(e).includes("DOM"));
   };
-  assert.equal(domErrors("/entregas/", 1024).length, 0, "entregas within its catalogue budget");
-  assert.ok(domErrors("/entregas/", 1150).length > 0, "entregas budget still fails closed");
+  // 1063 e a contagem real medida pelo Lighthouse na rota depois da remocao do
+  // wrapper capability-item__copy e do <small> redundante (2026-08-30); 1101 e
+  // um elemento acima do teto de 1100. As duas sondas cercam o orcamento, entao
+  // ele continua mordendo e nao pode ser elevado sem que este teste seja movido
+  // junto, de proposito e a vista.
+  assert.equal(domErrors("/entregas/", 1063).length, 0, "entregas within its catalogue budget");
+  assert.ok(domErrors("/entregas/", 1101).length > 0, "entregas budget still fails closed");
   assert.equal(domErrors("/casos/", 700).length, 0, "other money routes pass under 800");
   assert.ok(domErrors("/casos/", 850).length > 0, "other money routes keep the 800 budget");
   console.log("OK per_route_dom_budget");

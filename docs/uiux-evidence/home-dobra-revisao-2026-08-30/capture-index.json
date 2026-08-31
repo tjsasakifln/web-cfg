@@ -1,0 +1,141 @@
+{
+ "campaign": "CONFENGE_HOME_FIRST_FOLD_REVISION_20260830",
+ "route": "/",
+ "record": "docs/design-audit/issues/13-home-commercial-direction.md#5-bis",
+ "before_commit": "68dbfada49deac48c5340e0381b5684e7f2160f7",
+ "before_note": "HEAD do PR #541 imediatamente antes da revisao adversarial final. NAO e 15e56bc5c, que e o estado anterior a direcao 'parecer' e ja esta medido em home-parecer-2026-08-30. Estes pares mostram o delta desta revisao sobre a direcao ja aprovada, nao o delta da direcao.",
+ "after_commit": "153534d82dde5abc7466493ef8c597c84d0bd58d",
+ "state": "default (primeira dobra)",
+ "harness": "scripts/site/capture_screenshots.mjs",
+ "capture_note": "Os dois lados foram capturados de worktrees limpas nos respectivos commits, nunca da arvore de trabalho. Nenhum dos dois manifests e provisional.",
+ "hero_ratio_note": "altura de .hero dividida pela altura do viewport, medida em Chrome headless nos dois commits. O teto de scripts/site/test_ui_geometry.mjs e 1.25 e nao foi tocado. As razoes 'depois' aqui sao as da paleta escura; a reversao de cor de 2026-08-31 as move em no maximo 0,001, ver after_note. LEITURA HONESTA DO RESULTADO: o ganho e de 390 a 768 de largura, onde a grade do hero empilha e a coluna do parecer entra na conta da altura. De 1024 para cima a altura de .hero e IDENTICA antes e depois, 620px, 689px e 689px, porque a grade e align-items:center e a coluna da esquerda sempre foi a mais alta: tirar dois numeros e uma nota da coluna da direita nao encurta uma linha que a esquerda define. O que muda no desktop nao e a altura da caixa, e a densidade dentro dela: a dobra passou a carregar menos coisa para ler, e a escala foi para a faixa logo abaixo. Publicar esses tres viewports como se tivessem encolhido seria descrever a mudanca errada.",
+ "pairs": [
+  {
+   "viewport": "390x844",
+   "before": {
+    "file": "before/home-390x844.png",
+    "sha256": "525be6a42381aacb4b705f664a7c30cbaae14d148844c87867080b46163f600d",
+    "bytes": 75188,
+    "hero_px": 1019,
+    "viewport_px": 844,
+    "hero_ratio": 1.207
+   },
+   "after": {
+    "file": "after/home-390x844.png",
+    "sha256": "925ad86a6878c800a7a7e43a6d50fb41667ee4948dc90bfb2992d4b5765658c5",
+    "bytes": 78417,
+    "hero_px": 860,
+    "viewport_px": 844,
+    "hero_ratio": 1.018
+   },
+   "differs": true,
+   "hero_ratio_delta": -0.189
+  },
+  {
+   "viewport": "430x932",
+   "before": {
+    "file": "before/home-430x932.png",
+    "sha256": "3257ca35f0c19812a441267d7c1aa592fbd7561e69d710dd12de30d99d60273e",
+    "bytes": 89067,
+    "hero_px": 993,
+    "viewport_px": 932,
+    "hero_ratio": 1.066
+   },
+   "after": {
+    "file": "after/home-430x932.png",
+    "sha256": "f34e80991425aa5975cd0c8bfa32b1f51ac499eb17bdecdedb3d979ad1a07e33",
+    "bytes": 92643,
+    "hero_px": 856,
+    "viewport_px": 932,
+    "hero_ratio": 0.918
+   },
+   "differs": true,
+   "hero_ratio_delta": -0.148
+  },
+  {
+   "viewport": "768x1024",
+   "before": {
+    "file": "before/home-768x1024.png",
+    "sha256": "6bce3ecefa302eef17a2a2bdf478a899e111a2d99572c37b7d8977768bbd34fc",
+    "bytes": 106998,
+    "hero_px": 1021,
+    "viewport_px": 1024,
+    "hero_ratio": 0.997
+   },
+   "after": {
+    "file": "after/home-768x1024.png",
+    "sha256": "68e9ae4acead35a075535eed54fcad8be1851c2db8a96017e331b781a5cf7009",
+    "bytes": 127201,
+    "hero_px": 851,
+    "viewport_px": 1024,
+    "hero_ratio": 0.831
+   },
+   "differs": true,
+   "hero_ratio_delta": -0.166
+  },
+  {
+   "viewport": "1024x768",
+   "before": {
+    "file": "before/home-1024x768.png",
+    "sha256": "2d23349d54aeb8beab3efa84c159f01329dcb10d4a446c3297834c5571701702",
+    "bytes": 131737,
+    "hero_px": 620,
+    "viewport_px": 768,
+    "hero_ratio": 0.808
+   },
+   "after": {
+    "file": "after/home-1024x768.png",
+    "sha256": "d31b4a731ddfeffbb8c5a855dd6550c65926f7999f39a126779bc958cb4d886a",
+    "bytes": 136652,
+    "hero_px": 621,
+    "viewport_px": 768,
+    "hero_ratio": 0.809
+   },
+   "differs": true,
+   "hero_ratio_delta": 0.001
+  },
+  {
+   "viewport": "1366x768",
+   "before": {
+    "file": "before/home-1366x768.png",
+    "sha256": "76e00c279c8e8d062cfd9cc1d27502c1c2961f9cde2a1a89eb8a1148f88a2e07",
+    "bytes": 145067,
+    "hero_px": 689,
+    "viewport_px": 768,
+    "hero_ratio": 0.897
+   },
+   "after": {
+    "file": "after/home-1366x768.png",
+    "sha256": "8a99baa4a193680ffe96c942c345b0755e97e89d6a2494e90e68b26468588193",
+    "bytes": 135249,
+    "hero_px": 690,
+    "viewport_px": 768,
+    "hero_ratio": 0.898
+   },
+   "differs": true,
+   "hero_ratio_delta": 0.001
+  },
+  {
+   "viewport": "1440x900",
+   "before": {
+    "file": "before/home-1440x900.png",
+    "sha256": "7a3ece8466a8430693cf8b5428ea0e911f1abbe0df968fe70df2116c4d46de95",
+    "bytes": 152633,
+    "hero_px": 689,
+    "viewport_px": 900,
+    "hero_ratio": 0.765
+   },
+   "after": {
+    "file": "after/home-1440x900.png",
+    "sha256": "403d7601ca2e7e2a431a6b3dd9049cfc2b587de95e719428b37c75fc01f521e3",
+    "bytes": 161201,
+    "hero_px": 690,
+    "viewport_px": 900,
+    "hero_ratio": 0.766
+   },
+   "differs": true,
+   "hero_ratio_delta": 0.001
+  }
+ ],
+ "after_note": "O lado 'depois' foi recapturado em 2026-08-31, depois de o dono da marca inspecionar a versao escura e pedir a paleta institucional de volta. Portanto este par carrega DUAS mudancas ao mesmo tempo: a reducao de densidade da dobra e a reversao de cor. Elas sao separaveis pela medida: a cor nao mexe em geometria, e as razoes de .hero depois da reversao batem com as de antes dela a menos de 1px de arredondamento (1,017 -> 1,018; 0,917 -> 0,918; 0,830 -> 0,831; 0,808 -> 0,809; 0,897 -> 0,898; 0,765 -> 0,766). O que a tabela de razoes mede e a densidade; o que os PNG mostram e densidade mais paleta."
+}

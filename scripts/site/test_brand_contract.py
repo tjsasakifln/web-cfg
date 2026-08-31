@@ -65,7 +65,10 @@ def test_home_has_canonical_copy():
     assert "Como podemos ajudar" in html
     assert "Analisar meu caso" in html
     assert "Contrato sob pressão" in html
-    assert "Edital ou proposta crítica" in html
+    # 2026-08-30: rotulo canonico da jornada, identico ao menu, ao rodape e ao
+    # formulario. O rotulo antigo so existia na home e criava vocabulario
+    # concorrente com a propria navegacao.
+    assert "Edital e proposta" in html
     assert "Operação recorrente" in html
     assert "enviar documentos para análise" not in html.lower()
     assert "Sem CTA genérico" not in html

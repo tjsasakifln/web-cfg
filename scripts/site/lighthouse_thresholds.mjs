@@ -143,6 +143,19 @@ export function evaluateLighthouseResults(results, options = {}) {
   // with the published inventory (8 offers plus the 54-capability roll), not
   // with page weight, so the shared 800 budget cannot express it. Every other
   // money route keeps 800, and LCP, TBT and payload budgets are unchanged here.
+  //
+  // 1100 -> 1150 em 2026-08-30 (#530), depois revertido para 1100 no mesmo dia
+  // (#531/#532). #530 tinha exposto decisao, trabalho comprimido, artefato e
+  // razao do preco nas oito ofertas via .vitrine-item__facts, elevando a
+  // contagem medida para 1125. Nesta mesma data, render_public_catalog.mjs
+  // parou de emitir o wrapper <span class="capability-item__copy"> (54 nos) e
+  // o <small> redundante nas 8 linhas PUBLISHED (8 nos): -62 tags de abertura
+  // na fonte. O Lighthouse dom_elements medido em /entregas/ apos o corte caiu
+  // para 1063 (medicao direta com run_lighthouse.mjs --only=/entregas/,
+  // confirmada por document.body.getElementsByTagName('*').length+1 = 1062 via
+  // Puppeteer headless contra _site/). Isso fica abaixo do teto de 1100
+  // original, entao o afrouxamento de #530 deixou de ser necessario e o teto
+  // volta a 1100, com 37 elementos de folga sobre o medido.
   const criticalDomMaxByPath = { "/entregas/": 1100, ...(options.criticalDomMaxByPath || {}) };
   const domMaxFor = (path) => criticalDomMaxByPath[path] ?? criticalDomMax;
   const criticalByteWeightMax = options.criticalByteWeightMax ?? 150 * 1024;

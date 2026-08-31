@@ -101,7 +101,8 @@ def test_microcopy_preferences():
     assert "como podemos ajudar" in lower
     assert "qual decisão precisa sair agora" in lower
     assert "contrato sob pressão" in lower
-    assert "edital ou proposta crítica" in lower
+    # Rotulo canonico da jornada, identico ao menu e ao rodape (#527 taxonomia).
+    assert "edital e proposta" in lower
     assert "operação recorrente" in lower
     assert "analisar meu caso" in lower
     assert "solicitar canal seguro para envio" in lower

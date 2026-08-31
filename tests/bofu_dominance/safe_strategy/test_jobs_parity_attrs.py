@@ -43,7 +43,14 @@ JOB_TOKENS = {
         "uma rotina semanal de decisão sem o custo de montar uma diretoria interna.",
         "operação de proposta",
         "defesa de margem",
-        "equipe ilimitada",
+        # O limite de escopo continua exigido na dobra; o que muda e a forma.
+        # A dobra dizia "Sem equipe ilimitada" e passou a dizer "Ate quatro
+        # oportunidades ativas por vez": o mesmo limite, afirmado pelo que a
+        # oferta entrega em vez de pelo que ela nega. O gate segue exigindo que
+        # o teto de WIP esteja visivel antes da rolagem, e
+        # test_diretoria_scope_wip_not_unlimited continua exigindo
+        # "nao e equipe ilimitada" no corpo da pagina, onde a negacao cabe.
+        "quatro oportunidades",
     ),
     "expansao": (
         "mapa de compradores",

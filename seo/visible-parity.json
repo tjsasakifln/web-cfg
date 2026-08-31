@@ -332,7 +332,7 @@
         "h1": "Operação de Proposta para Licitação Crítica",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Operação de Proposta para Licitação Crítica | CONFENGE",
         "versions": []
@@ -1084,15 +1084,15 @@
         ],
         "canonical": "https://confenge.com.br/confianca/",
         "dates": [
-          "2026-08-29"
+          "2026-08-30"
         ],
-        "description": "Quem executa a CONFENGE, como corrigir, a política de evidência e a distinção entre método demonstrativo e resultado de cliente.",
-        "h1": "Quem executa, como corrigir e o que conta como prova",
+        "description": "A CONFENGE atua sob o CNPJ 52.407.089/0001-09, conduzida pelo engenheiro civil Tiago Sasaki. Consulte o cadastro oficial, os critérios técnicos e a política de evidência.",
+        "h1": "Quem responde pela CONFENGE",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
-        "title": "Confiança e evidência | CONFENGE",
+        "title": "Quem responde pela CONFENGE | CNPJ, responsável e critérios",
         "versions": []
       }
     },
@@ -3099,7 +3099,7 @@
         "h1": "Diretoria Fracionada para o Mercado Público",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": null,
+        "permission_class": "demonstrativo",
         "reviewers": [],
         "title": "Diretoria Fracionada para o Mercado Público | Rotina de licitações e contratos | CONFENGE",
         "versions": []
@@ -3145,7 +3145,7 @@
         "canonical": "https://confenge.com.br/entregas/",
         "dates": [
           "2026-08-23",
-          "2026-08-29"
+          "2026-08-30"
         ],
         "description": "Escolha entre 8 ofertas publicadas, de R$ 599 a R$ 3.750, pela decisão que precisa tomar. Consulte também as 54 capacidades do rol taxativo, separadas por maturidade. Os exemplos vinculados são sintéticos; não são resultados de clientes.",
         "h1": "8 ofertas publicadas. Escolha pela decisão que está na mesa.Exemplos sintéticos.",
@@ -3195,7 +3195,7 @@
       "url": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
       "visible": {
         "authors": [
-          "Engº Tiago Sasaki. Sem revisão independente: não há segundo revisor nomeado. Atualizado em"
+          "Engº Tiago Sasaki. Atualizado em"
         ],
         "breadcrumb_names": [
           "Início",
@@ -3203,7 +3203,8 @@
         ],
         "canonical": "https://confenge.com.br/especialista/tiago-jun-sasaki/",
         "dates": [
-          "2026-07-15"
+          "2026-07-15",
+          "2026-08-30"
         ],
         "description": "Conheça a experiência de Engº Tiago Sasaki, engenheiro civil pela EESC-USP e fundador da CONFENGE, em contratos, obras públicas, orçamento e tecnologia.",
         "h1": "Engº Tiago Sasaki",

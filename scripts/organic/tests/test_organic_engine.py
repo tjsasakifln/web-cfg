@@ -200,13 +200,32 @@ def test_normative_editorial_not_unique_data_on_live_pseo():
             assert dl.get("is_contract_aggregate") is False
 
 
-def test_cohort_does_not_inject_contract_eyebrow_for_editorial():
+def test_cohort_does_not_inject_contract_eyebrow_for_editorial(tmp_path):
+    """Roda contra uma copia da arvore, nunca contra as paginas publicadas.
+
+    Ate 2026-08-30 este teste chamava materialize_cohort_item(ROOT, ..., apply=True)
+    com numeros inventados e escrevia direto em duas paginas de producao. O
+    efeito colateral ficou visivel: a pagina de mercado de pavimentacao passou
+    tres semanas publicando "Analisamos 24 contratos no recorte SC" enquanto o
+    corpo, o schema e a caixa de resposta da MESMA pagina diziam 13, sete vezes,
+    que e o numero que data/pseo/markets.json realmente carrega. O 24 nunca
+    existiu fora deste fixture. Um teste que grava fixture em arvore publicada
+    nao testa o site: publica no site.
+    """
     from scripts.organic.cohort import (
         FORBIDDEN_PUBLIC_FRAGMENTS,
         is_contract_aggregate_evidence,
         materialize_cohort_item,
         remove_organic_insight_blocks,
     )
+
+    def sandbox(rel: str) -> Path:
+        """Copia uma pagina real para a arvore temporaria, no mesmo caminho."""
+        source = ROOT / rel
+        target = tmp_path / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+        return target
 
     # Editorial pattern must not count as contract aggregate
     dl_editorial = {
@@ -238,12 +257,12 @@ def test_cohort_does_not_inject_contract_eyebrow_for_editorial():
         "indexability_gate": {"indexable": True, "decision": "indexable_candidate"},
     }
     # Ensure page starts without false insight
-    path = ROOT / "conteudos/glosa-de-medicao-obra-publica/index.html"
-    assert path.exists()
+    assert (ROOT / "conteudos/glosa-de-medicao-obra-publica/index.html").exists()
+    path = sandbox("conteudos/glosa-de-medicao-obra-publica/index.html")
     html0 = remove_organic_insight_blocks(path.read_text(encoding="utf-8"))
     path.write_text(html0, encoding="utf-8")
 
-    result = materialize_cohort_item(ROOT, opp, apply=True)
+    result = materialize_cohort_item(tmp_path, opp, apply=True)
     html = path.read_text(encoding="utf-8")
     assert "Evidência de contratos públicos" not in html
     assert "Registros: 48" not in html
@@ -265,8 +284,9 @@ def test_cohort_does_not_inject_contract_eyebrow_for_editorial():
         "limitations": ["Amostra regional."],
     }
     assert is_contract_aggregate_evidence(dl_market) is True
-    market_path = ROOT / "inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/index.html"
-    if market_path.exists():
+    market_rel = "inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/index.html"
+    if (ROOT / market_rel).exists():
+        market_path = sandbox(market_rel)
         market_path.write_text(
             remove_organic_insight_blocks(market_path.read_text(encoding="utf-8")),
             encoding="utf-8",
@@ -283,7 +303,7 @@ def test_cohort_does_not_inject_contract_eyebrow_for_editorial():
             "suggested_internal_links": ["/metodologia-inteligencia/"],
             "indexability_gate": {"indexable": True, "decision": "indexable_candidate"},
         }
-        materialize_cohort_item(ROOT, mopp, apply=True)
+        materialize_cohort_item(tmp_path, mopp, apply=True)
         mhtml = market_path.read_text(encoding="utf-8")
         assert "Evidência de contratos públicos" in mhtml
         assert "Contratos no recorte: 24" in mhtml

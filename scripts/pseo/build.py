@@ -111,6 +111,17 @@ def load_existing_reviews(registry_path: Path) -> dict[str, dict[str, Any]]:
                 "reviewed_material_signature": p.get("reviewed_material_signature")
                 or p.get("current_material_signature"),
                 "page_material_hash": p.get("page_material_hash"),
+                # Sem esta linha, write_registry nunca conseguia carregar a data
+                # para frente. Ele TENTA: a expressao e
+                #   material_date if material_changed else (
+                #       prev.get("last_material_change") or material_date)
+                # mas `prev` e montado aqui a partir de uma lista fixa de chaves,
+                # e last_material_change nao estava nela. prev.get devolvia None,
+                # o `or` caia em material_date, e o campo era reescrito com a data
+                # da corrida em TODA build, para toda pagina, inclusive as que nao
+                # mudaram material nenhum. O ramo de carry-forward existia e era
+                # inalcancavel.
+                "last_material_change": p.get("last_material_change"),
             }
     return out
 

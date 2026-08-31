@@ -1,0 +1,109 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T23:25:24.042Z",
+  "commit_sha": "15e56bc5cf4642fd2f3423517a4937de519cea1d",
+  "commit_sha_note": "Corrected: this file previously stamped 6015bb626841a4b0813da27fb6528845b1b5fd89, which is the AFTER commit (see the sibling after/manifest.json, which correctly stamps that SHA) -- a copy/paste stamp, not the state these before/ screenshots were captured against. The sibling ../capture-index.json already recorded the true before_commit as 15e56bc5c ('fix(copy): o site para de abrir a conversa dizendo o que nao faz'); this field is now consistent with it. The before/ PNGs themselves are not re-captured here -- they will be re-captured by a later pass at the branch's final commit; this fix only removes the self-contradiction in the recorded metadata.",
+  "tree_dirty": true,
+  "base_url": "http://127.0.0.1:8812",
+  "output_dir": "docs/uiux-evidence/home-parecer-2026-08-30/before",
+  "state": {
+    "id": "default",
+    "fullpage": false,
+    "javascript": "on",
+    "motion": "system"
+  },
+  "routes": [
+    "/"
+  ],
+  "viewports": [
+    "390x844",
+    "768x1024",
+    "1024x768",
+    "1366x768",
+    "1440x900"
+  ],
+  "files": [
+    "home-390x844.png",
+    "home-768x1024.png",
+    "home-1024x768.png",
+    "home-1366x768.png",
+    "home-1440x900.png"
+  ],
+  "captures": [
+    {
+      "file": "home-390x844.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 77334,
+      "sha256": "04bfc5c368d9855ecaeafa66a9fb086fd889cc0e4125a24ccdc99a2e5a8c14f0"
+    },
+    {
+      "file": "home-768x1024.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 114084,
+      "sha256": "ec82b415ae91dbf45f1a4c90b68ec7f3f1291966bcb29e55b42d84ba538e3d7b"
+    },
+    {
+      "file": "home-1024x768.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1024x768",
+      "width": 1024,
+      "height": 768,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 93388,
+      "sha256": "121fd30b6ba7e56a6edf0ab8e01a9f645e1b6d99dca15cf7a6a436d05df177cf"
+    },
+    {
+      "file": "home-1366x768.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 136917,
+      "sha256": "c5f0e5d26eb1cc7ca3244cfd9809b95bc6d95bc07103d63c51bd4f8d4c18cdd7"
+    },
+    {
+      "file": "home-1440x900.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 149279,
+      "sha256": "5a87cb03e9e3ab6ad79012fc81919d05e184888a020b8183b4b079ec6909a551"
+    }
+  ]
+}

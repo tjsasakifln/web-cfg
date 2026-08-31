@@ -1,0 +1,83 @@
+{
+ "campaign": "CONFENGE_HOME_COMMERCIAL_DIRECTION_20260830",
+ "route": "/",
+ "record": "docs/design-audit/issues/13-home-commercial-direction.md",
+ "before_commit": "15e56bc5c",
+ "before_note": "Estado da branch imediatamente antes da direcao 'parecer'. NAO e e2b11f109: aquele e o estado da planilha, ja vetado pelo brand owner.",
+ "after_commit": "6015bb626841a4b0813da27fb6528845b1b5fd89",
+ "state": "default (primeira dobra)",
+ "harness": "scripts/site/capture_screenshots.mjs",
+ "pairs": [
+  {
+   "viewport": "1024x768",
+   "before": {
+    "file": "before/home-1024x768.png",
+    "sha256": "121fd30b6ba7e56a6edf0ab8e01a9f645e1b6d99dca15cf7a6a436d05df177cf",
+    "bytes": 93388
+   },
+   "after": {
+    "file": "after/home-1024x768.png",
+    "sha256": "2d23349d54aeb8beab3efa84c159f01329dcb10d4a446c3297834c5571701702",
+    "bytes": 131737
+   },
+   "differs": true
+  },
+  {
+   "viewport": "1366x768",
+   "before": {
+    "file": "before/home-1366x768.png",
+    "sha256": "c5f0e5d26eb1cc7ca3244cfd9809b95bc6d95bc07103d63c51bd4f8d4c18cdd7",
+    "bytes": 136917
+   },
+   "after": {
+    "file": "after/home-1366x768.png",
+    "sha256": "76e00c279c8e8d062cfd9cc1d27502c1c2961f9cde2a1a89eb8a1148f88a2e07",
+    "bytes": 145067
+   },
+   "differs": true
+  },
+  {
+   "viewport": "1440x900",
+   "before": {
+    "file": "before/home-1440x900.png",
+    "sha256": "5a87cb03e9e3ab6ad79012fc81919d05e184888a020b8183b4b079ec6909a551",
+    "bytes": 149279
+   },
+   "after": {
+    "file": "after/home-1440x900.png",
+    "sha256": "7a3ece8466a8430693cf8b5428ea0e911f1abbe0df968fe70df2116c4d46de95",
+    "bytes": 152633
+   },
+   "differs": true
+  },
+  {
+   "viewport": "390x844",
+   "before": {
+    "file": "before/home-390x844.png",
+    "sha256": "04bfc5c368d9855ecaeafa66a9fb086fd889cc0e4125a24ccdc99a2e5a8c14f0",
+    "bytes": 77334
+   },
+   "after": {
+    "file": "after/home-390x844.png",
+    "sha256": "525be6a42381aacb4b705f664a7c30cbaae14d148844c87867080b46163f600d",
+    "bytes": 75188
+   },
+   "differs": true
+  },
+  {
+   "viewport": "768x1024",
+   "before": {
+    "file": "before/home-768x1024.png",
+    "sha256": "ec82b415ae91dbf45f1a4c90b68ec7f3f1291966bcb29e55b42d84ba538e3d7b",
+    "bytes": 114084
+   },
+   "after": {
+    "file": "after/home-768x1024.png",
+    "sha256": "6bce3ecefa302eef17a2a2bdf478a899e111a2d99572c37b7d8977768bbd34fc",
+    "bytes": 106998
+   },
+   "differs": true
+  }
+ ],
+ "all_pairs_differ": true
+}

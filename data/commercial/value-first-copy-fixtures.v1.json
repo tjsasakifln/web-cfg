@@ -1,0 +1,93 @@
+{
+  "schema": "confenge.value-first-copy-fixtures/1.0",
+  "classifier_version": "CFG-VALUE-SEMANTIC-1.0.0",
+  "issue": "#534",
+  "annotation": {
+    "source": "contract_examples",
+    "human_review_state": "NOT_STARTED",
+    "note": "Os rótulos abaixo são fixtures de comportamento exigido pelo contrato. Não representam corpus revisado por compradores nem validação humana."
+  },
+  "fixtures": [
+    {
+      "id": "commercial_defensive_opening",
+      "profile": "commercial",
+      "html": "<main><section><h2>O que não fazemos</h2><p>Não prometemos vitória nem pagamento.</p><p>Sem documentos completos, não iniciamos.</p><p>A matriz organiza cronologia, cálculo e evidências para a direção decidir.</p><a class=\"button\" href=\"#captura\">Registrar o contexto para enquadramento</a></section></main>",
+      "expected": {
+        "defensive_opening": true,
+        "minimum_negations": 3
+      }
+    },
+    {
+      "id": "commercial_value_first_with_boundary",
+      "profile": "commercial",
+      "html": "<main><section><h2>Decida onde a margem está sendo corroída</h2><p>A leitura reúne evento, impacto e opção para a direção escolher a próxima ação.</p><p>Reconciliamos contrato, cronologia, documentos e memória de cálculo.</p><p>Você recebe uma matriz de eventos e uma memória de cálculo para revisar com engenharia e jurídico.</p><p>Fonte, data, fórmula e UNKNOWN permanecem visíveis em cada item.</p><a class=\"button\" href=\"#captura\">Registrar o contrato para enquadramento</a><p data-boundary-id=\"legal\">O trabalho fornece subsídio técnico; representação e estratégia jurídica permanecem com o cliente.</p></section></main>",
+      "expected": {
+        "defensive_opening": false,
+        "required_roles": [
+          "value_outcome",
+          "mechanism",
+          "artifact",
+          "proof",
+          "action",
+          "limitation"
+        ],
+        "required_boundary_ids": [
+          "legal"
+        ]
+      }
+    },
+    {
+      "id": "benefit_with_sem",
+      "profile": "commercial",
+      "html": "<main><section><h2>Rotina semanal de decisão</h2><p>Priorize responsáveis e decisões sem montar uma diretoria interna.</p><a href=\"#captura\">Configurar a rotina</a></section></main>",
+      "expected": {
+        "defensive_opening": false,
+        "text_contains_primary": {
+          "sem montar uma diretoria interna": "value_outcome"
+        }
+      }
+    },
+    {
+      "id": "necessary_unknown_and_data_caveat",
+      "profile": "public_data",
+      "html": "<main><section><h2>Veja o que a fonte permite decidir</h2><p>A base mostra data, cobertura e origem de cada fato.</p><p data-boundary-id=\"data\">Quando a fonte não sustenta a conclusão, o campo permanece UNKNOWN.</p><a href=\"#metodo\">Conferir método e cobertura</a></section></main>",
+      "expected": {
+        "defensive_opening": false,
+        "required_boundary_ids": [
+          "data"
+        ]
+      }
+    },
+    {
+      "id": "trust_legal_can_open_with_condition",
+      "profile": "trust_legal",
+      "html": "<main><section><h2>O que esta política não autoriza</h2><p>Não há uso de dados sem finalidade declarada.</p><p>A política registra consentimento, retenção e canal de correção.</p></section></main>",
+      "expected": {
+        "defensive_opening": false
+      }
+    },
+    {
+      "id": "hype_is_not_value",
+      "profile": "commercial",
+      "html": "<main><section><h2>Solução revolucionária</h2><p>Experiência transformadora, líder e completa para qualquer empresa.</p></section></main>",
+      "expected": {
+        "defensive_opening": false,
+        "forbidden_roles": [
+          "value_outcome",
+          "proof"
+        ]
+      }
+    },
+    {
+      "id": "synthetic_boundary_after_positive_proof",
+      "profile": "commercial",
+      "html": "<main><section><h2>Inspecione a trilha antes de contratar</h2><p>A matriz permite rastrear cada decisão até fonte, data e cálculo.</p><p>O modelo integral mostra colunas, fórmulas e prioridades do artefato.</p><p data-boundary-id=\"synthetic\">Os dados são sintéticos e não representam cliente ou resultado observado.</p><a href=\"#captura\">Configurar esta análise</a></section></main>",
+      "expected": {
+        "defensive_opening": false,
+        "required_boundary_ids": [
+          "synthetic"
+        ]
+      }
+    }
+  ]
+}

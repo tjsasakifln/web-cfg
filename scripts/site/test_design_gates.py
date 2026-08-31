@@ -377,8 +377,9 @@ def test_trace_matrix_and_tension_present():
     html = HOME.read_text(encoding="utf-8")
     assert "Diretoria Fracionada para o Mercado Público" in html
     assert "Arquitetura de ofertas" not in html
-    # Three named doors — labels predict destination
-    assert "Edital ou proposta crítica" in html
+    # Three named doors — labels predict destination.
+    # 2026-08-30: rotulo canonico alinhado ao menu, ao rodape e ao formulario.
+    assert "Edital e proposta" in html
     assert "Contrato sob pressão" in html
     assert "Operação recorrente" in html
     assert "Solicitar triagem do edital" in html
@@ -473,8 +474,13 @@ def test_home_decision_fold_hierarchy():
     assert 0 < offers_at < pncp_at, "PNCP must come after the offer explanation"
     market = html[pncp_at:]
     assert "contexto de mercado" in html.lower()
-    assert "não são clientes da CONFENGE" in html
-    assert "não é resultado de cliente" in html.lower()
+    # 2026-08-30: a secao de mercado prova honestidade por procedencia (fonte e
+    # data de corte), nao por uma frase que desautoriza a propria CONFENGE.
+    assert "Fonte: PNCP" in market
+    assert "21/08/2026" in market
+    # O exemplo continua rotulado de forma inequivoca, agora sem caixa alta
+    # negativa: o rotulo precisa casar com explicit_label_pattern do registro.
+    assert re.search(r"sint[eé]tic|demonstrativ", html, re.IGNORECASE)
     assert "Relatório Executivo de Priorização de Licitações" in html
     assert "Você recebe uma decisão" in html
 

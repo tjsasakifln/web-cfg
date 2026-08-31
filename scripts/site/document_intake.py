@@ -19,7 +19,7 @@ CHANNEL_SLA = "canal escolhido posteriormente"
 SECURE_CHANNEL_INTENT = "secure_channel_request"
 WA_REQUEST = (
     "Olá, Tiago. Quero solicitar um canal seguro para envio. "
-    "O site não recebe arquivo; o canal é escolhido posteriormente."
+    "Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação."
 )
 
 # Longest first so nested labels do not leave leftovers.
@@ -97,7 +97,7 @@ BODY_REPLACEMENTS: tuple[tuple[str, str], ...] = (
     ),
     (
         "Envie o edital, a planilha, a notificação ou a medição. Retorno com enquadramento técnico e próximos passos.",
-        "Solicite um canal seguro para envio. O site não recebe arquivo; o canal é escolhido posteriormente.",
+        "Solicite um canal seguro para envio. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.",
     ),
     (
         "Envie o edital e a planilha para verificar a referência de preço.",
@@ -105,7 +105,7 @@ BODY_REPLACEMENTS: tuple[tuple[str, str], ...] = (
     ),
     (
         "Envie trechos do edital (SINAPI/data-base/BDI), planilha e, se tiver, memória de encargos. O primeiro retorno organiza o que está coerente, o que está em risco e o próximo passo, sem exigir arquivo perfeito.",
-        "O site não recebe arquivo. Tipos, trechos de edital e planilha só seguem pelo canal escolhido posteriormente, após a confirmação com protocolo.",
+        "Após a confirmação com protocolo, a CONFENGE abre o canal para o envio de tipos, trechos de edital e planilha.",
     ),
     (
         "WhatsApp: conferir base SINAPI",
@@ -113,15 +113,15 @@ BODY_REPLACEMENTS: tuple[tuple[str, str], ...] = (
     ),
     (
         "Envie o edital, a planilha ou a notificação. Retornamos com enquadramento técnico e próximos passos, sem cadastro em lista.",
-        "Solicite um canal seguro para envio. O site não recebe arquivo; o canal é escolhido posteriormente.",
+        "Solicite um canal seguro para envio. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.",
     ),
     (
         "Envie o edital, a planilha ou a notificação. Retornamos com enquadramento técnico e próximos passos.",
-        "Solicite um canal seguro para envio. O site não recebe arquivo; o canal é escolhido posteriormente.",
+        "Solicite um canal seguro para envio. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.",
     ),
     (
         "Enviar documentos para análise começa por este formulário. Descreva a situação e deixe um canal de retorno. Se houver documentos sensíveis, combinamos o envio seguro depois do primeiro contato.",
-        "Solicitar canal seguro para envio começa por este formulário. O site não recebe arquivo. Descreva a situação e deixe um canal de retorno; o canal de envio é escolhido posteriormente.",
+        "Solicitar canal seguro para envio começa por este formulário. Descreva a situação e deixe um canal de retorno; após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.",
     ),
     (
         "anexe editais e planilhas apenas após combinarmos WhatsApp ou e-mail com o protocolo",
@@ -129,7 +129,7 @@ BODY_REPLACEMENTS: tuple[tuple[str, str], ...] = (
     ),
     (
         "Após o protocolo, a orientação é combinar canal seguro (preferencialmente WhatsApp operacional ou e-mail com destinatário confirmado) para anexos.",
-        "Após o protocolo, o canal de envio é escolhido posteriormente (WhatsApp operacional ou e-mail com destinatário confirmado). O site não recebe arquivo.",
+        "Após o protocolo, a CONFENGE abre um canal seguro para o envio da documentação (WhatsApp operacional ou e-mail com destinatário confirmado).",
     ),
     (
         "envie o PDF/link do edital apenas pelo WhatsApp ou e-mail com o protocolo na mensagem, não pelo formulário público",

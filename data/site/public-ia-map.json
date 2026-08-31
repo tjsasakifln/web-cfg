@@ -234,7 +234,7 @@
     { "prefix": "/defesa-margem-contratos-publicos/", "parent": "/problemas-que-resolvemos/" },
     { "prefix": "/diagnostico-b2g-360/", "parent": "/servicos-obras-publicas/" },
     { "prefix": "/diagnostico-b2g-expansao/", "parent": "/servicos-obras-publicas/" },
-    { "prefix": "/diagnostico-pre-licitacao/", "parent": "/problemas-que-resolvemos/" },
+    { "prefix": "/diagnostico-pre-licitacao/", "parent": "/bid-room-licitacoes-obras/" },
     { "prefix": "/auditoria-orcamento-licitacao/", "parent": "/problemas-que-resolvemos/" },
     { "prefix": "/acompanhamento-contratos-obras/", "parent": "/problemas-que-resolvemos/" },
     { "prefix": "/medicoes-glosas-obras-publicas/", "parent": "/problemas-que-resolvemos/" },

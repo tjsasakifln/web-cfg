@@ -486,7 +486,22 @@ def test_home_discovery_is_inside_the_existing_commercial_section() -> None:
     home = _html(ROOT / "index.html")
     assert '<link href="/entregas/styles.css" rel="stylesheet"/>' not in home
     assert 'data-home-deliverables-critical=""' in home
-    assert ".home-deliverables{" in home
+    # 2026-08-30 (overhaul value-first). O bloco critico inline existe para que
+    # a PRIMEIRA DOBRA nao dependa de folha externa. Quando este gate foi
+    # escrito, a previa de entregas ficava logo abaixo do hero e era ela que
+    # precisava do CSS inline. A ordem mudou: agora a pagina e valor, situacao,
+    # entrega, metodo, evidencia, autoridade, adequacao e captura, e a previa
+    # de entregas caiu para a terceira secao, bem abaixo da dobra. Quem precisa
+    # do CSS inline passou a ser o hero e a coluna do artefato. O gate segue a
+    # propriedade, nao o seletor antigo.
+    crit = re.search(r'<style data-home-deliverables-critical=""[^>]*>([\s\S]*?)</style>', home)
+    assert crit, "bloco critico inline ausente"
+    critical_css = crit.group(1)
+    assert ".hero{" in critical_css
+    assert ".home-hero-grid{" in critical_css
+    assert ".hero-deliverable{" in critical_css
+    home_css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
+    assert ".home-deliverables{" in home_css
     assert "Conheça nossas entregas" in home
     assert 'href="/entregas/"' in home
     assert f'href="{REPORT_ROUTE}"' in home

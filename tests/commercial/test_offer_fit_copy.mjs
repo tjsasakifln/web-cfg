@@ -42,8 +42,38 @@ for (const route of ROUTES) {
       assert(`home_has_${panel.panel}_copy`, html.includes(panel.copy), panel.panel);
       assert(`home_${panel.panel}_not_fictional`, !/exemplo fictício|contrato fictício/i.test(html), panel.panel);
     }
-    assert("home_source_line", html.includes("Dados consultados em 21/08/2026"), "source");
-    assert("home_not_clients", html.includes("não são clientes da CONFENGE"), "clients");
+    // 2026-08-30 (overhaul value-first). Antes daqui a home era obrigada a
+    // escrever "nao sao clientes da CONFENGE", ou seja, a desautorizar a
+    // propria empresa para provar honestidade. A propriedade real a proteger
+    // nao e a frase: e que o registro do PNCP apareca rotulado como contexto
+    // de mercado, com fonte e data de corte, e nunca como prova de cliente.
+    // E isso que passa a ser verificado.
+    assert("home_source_line", html.includes("Fonte: PNCP") && html.includes("21/08/2026"), "source");
+    assert("home_market_context_labelled", /contexto de mercado/i.test(html), "context");
+    // 2026-08-30 (revisao adversarial). A versao anterior desta linha era
+    // `!CLIENT_FRAMING.test(html) || /contexto de mercado/i.test(html)`, e o
+    // lado direito da disjuncao e exatamente o predicado que a linha de cima ja
+    // afirmou verdadeiro: a assercao nao podia falhar em nenhuma home possivel.
+    // Um gate que nunca reprova nao protege propriedade nenhuma. A disjuncao
+    // sai, e a verificacao passa a ser escopada na secao onde a propriedade
+    // vive, para que ela tambem nao passe por ausencia de conteudo.
+    const CLIENT_FRAMING = /clientes? da CONFENGE|nossos clientes|clientes? atendidos?|carteira de clientes|resultados? (?:da|de|obtidos? pela) CONFENGE|cases? de cliente/i;
+    const marketSection = html.match(/<section\b[^>]*id="mercado-pncp"[\s\S]*?<\/section>/);
+    assert("home_market_section_present", Boolean(marketSection), "market section");
+    assert(
+      "home_not_client_proof",
+      Boolean(marketSection) && !CLIENT_FRAMING.test(marketSection[0]),
+      "client framing inside the PNCP market-context section",
+    );
+    assert("home_not_client_proof_page_wide", !CLIENT_FRAMING.test(html), "client framing anywhere on the home");
+    assert(
+      "home_market_provenance_in_section",
+      Boolean(marketSection)
+        && marketSection[0].includes("Fonte: PNCP")
+        && marketSection[0].includes("21/08/2026")
+        && /contexto de mercado/i.test(marketSection[0]),
+      "provenance must sit inside the section, not float anywhere on the page",
+    );
     const form = html.match(/<form\b[^>]*id="formulario-contato"[\s\S]*?<\/form>/);
     assert("home_form_present", Boolean(form), "form");
     const step1 = form ? form[0].match(/data-form-step="1"[\s\S]*?<\/fieldset>/) : null;

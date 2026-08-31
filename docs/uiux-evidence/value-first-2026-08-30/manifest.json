@@ -1,0 +1,58 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-30T20:23:13.453Z",
+  "commit_sha": "20f724bc2ea100c5c789b69eeee1bc79bab6e6e4",
+  "commit_sha_note": "Original stamp at capture time was 9c223d25846f08b31864b99eabe43c60554e6508, a pre-rebase SHA later unreachable from HEAD. Replaced with its reachable twin (identical commit message 'fix(copy): decodificar entidades em passagem única' and identical tree, confirmed via git diff --stat) after an adversarial audit found the orphan.",
+  "tree_dirty": true,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "docs/uiux-evidence/value-first-2026-08-30",
+  "state": {
+    "id": "default",
+    "fullpage": false,
+    "javascript": "on",
+    "motion": "system"
+  },
+  "routes": [
+    "/"
+  ],
+  "viewports": [
+    "390x844",
+    "1440x900"
+  ],
+  "files": [
+    "home-390x844.png",
+    "home-1440x900.png"
+  ],
+  "captures": [
+    {
+      "file": "home-390x844.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 77334,
+      "sha256": "04bfc5c368d9855ecaeafa66a9fb086fd889cc0e4125a24ccdc99a2e5a8c14f0"
+    },
+    {
+      "file": "home-1440x900.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 149279,
+      "sha256": "5a87cb03e9e3ab6ad79012fc81919d05e184888a020b8183b4b079ec6909a551"
+    }
+  ]
+}

@@ -15,7 +15,8 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.site.authority import (  # noqa: E402
+from scripts.site.authority import (
+    extract_credential_claim_texts,  # noqa: E402
     FOOTER_AUTHORITY_NAV,
     REQUIRED_SLOT_KEYS,
     SURFACE_TYPES,
@@ -295,6 +296,22 @@ def test_specialist_credentials_are_subset_of_public_verified_proof():
     assert "5 estrelas" not in html.lower()
     assert "selo iso" not in html.lower()
     assert "certificação internacional" not in html.lower()
+
+
+def test_home_credentials_are_subset_of_public_verified_proof():
+    """A home tambem afirma credencial, e ate agora ninguem conferia.
+
+    extract_credential_claim_texts ancorava em `<ul class="`, e a home escreve
+    `<ul aria-label="..." class="hero-proof">`: a lista voltava vazia e o gate
+    passava por ausencia de entrada, nao por lastro. Com o padrao corrigido a
+    home entra no mesmo contrato do perfil do especialista, e as quatro
+    afirmacoes da primeira dobra precisam existir em data/site/proof.json.
+    """
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    claims = extract_credential_claim_texts(html)
+    assert claims, "home credential claims must be extractable, not silently empty"
+    errors = check_credentials_against_proof(html)
+    assert not errors, errors
 
 
 def test_demonstrative_cases_and_zero_approved_clients():

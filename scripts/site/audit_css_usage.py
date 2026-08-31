@@ -22,6 +22,7 @@ all fail. Run with ``--write`` to record a new baseline after a cleanup.
 from __future__ import annotations
 
 import argparse
+import os
 import json
 import re
 from pathlib import Path
@@ -34,6 +35,11 @@ SKIP_DIRS = (
     "_site",
     "build",
     ".git",
+    # Worktrees de agente. `walk()` faz sorted(rglob("*")) sobre a arvore
+    # inteira antes de aplicar _skip(), e stylesheet_references() chama walk()
+    # duas vezes por folha: com 8 worktrees aqui a auditoria passava de 12 min
+    # e nao terminava. Sao copias do repositorio, nunca superficie publica.
+    ".claude",
     "docs/evidence",
     # gate fixtures must never keep a real class alive
     "scripts/site/fixtures",
@@ -93,15 +99,28 @@ def is_test_path(rel: str) -> bool:
 
 
 def walk(root: Path, suffixes: tuple[str, ...]) -> list[Path]:
+    """Poda o diretorio na descida, em vez de listar tudo e filtrar depois.
+
+    `sorted(root.rglob("*"))` materializava a arvore inteira antes de `_skip()`
+    ver qualquer caminho, e `stylesheet_references()` chama esta funcao duas
+    vezes por folha de estilo. Com worktrees de agente em `.claude/` o
+    diretorio chega a 134 mil arquivos, e a auditoria deixava de terminar. A
+    poda usa o mesmo `SKIP_DIRS`, entao o conjunto de arquivos devolvido e
+    identico: muda o custo, nao o resultado.
+    """
     out = []
-    for path in sorted(root.rglob("*")):
-        if not path.is_file() or path.suffix not in suffixes:
-            continue
-        rel = path.relative_to(root).as_posix()
-        if _skip(rel):
-            continue
-        out.append(path)
-    return out
+    for dirpath, dirnames, filenames in os.walk(root):
+        rel_dir = Path(dirpath).relative_to(root).as_posix()
+        prefix = "" if rel_dir == "." else rel_dir + "/"
+        dirnames[:] = sorted(d for d in dirnames if not _skip(prefix + d))
+        for name in filenames:
+            if not name.endswith(suffixes):
+                continue
+            rel = prefix + name
+            if _skip(rel):
+                continue
+            out.append(root / rel)
+    return sorted(out)
 
 
 def class_selectors(css: str) -> list[str]:

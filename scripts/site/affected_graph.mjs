@@ -564,6 +564,24 @@ export const SUITE_GRAPH = Object.freeze({
       "/casos/modelo-relatorio-inteligencia-licitacoes/",
     ],
   },
+  "test:value-first-copy": {
+    producers: [
+      "tests/commercial/test_value_first_copy.mjs",
+      "scripts/commercial/value_first_copy_audit.mjs",
+      "data/commercial/value-first-copy-contract.v1.json",
+      "data/commercial/value-first-copy-fixtures.v1.json",
+      "data/commercial/copy-contract.v1.json",
+      "data/site/editorial-policy.json",
+      "data/organic/public-family-registry.json",
+      "data/organic/bofu-intent-matrix.json",
+      "data/commercial/first-fold-contract.v1.json",
+      "data/commercial/deliverables-registry.v1.json",
+      "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+      "docs/commercial/value-first-copy-baseline-583d2d88e.json",
+    ],
+    artifacts: ["docs/commercial/value-first-copy-baseline-583d2d88e.json"],
+    surfaces: [],
+  },
   "test:page-contract-integridade": {
     producers: [
       "tests/commercial/test_page_contract_integridade.mjs",
