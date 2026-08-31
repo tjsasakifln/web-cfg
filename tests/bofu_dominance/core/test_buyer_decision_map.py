@@ -122,6 +122,16 @@ def test_protected_route_never_becomes_execute_now():
     target["execution_state"] = "VALIDATE"
     assert "protected_route_executable_now" in _reasons(supporting_window)
 
+    stripped_reference = copy.deepcopy(_document())
+    target = _row(stripped_reference, "atrasos-prorrogacao")
+    target["issue_refs"] = []
+    target["coverage_state"] = "OWNED_BUT_WEAK"
+    target["execution_state"] = "VALIDATE"
+    target["content_quality"]["state"] = "WEAK"
+    reasons = _reasons(stripped_reference)
+    assert "protected_issue_reference_missing" in reasons
+    assert "protected_route_executable_now" in reasons
+
 
 def test_unknown_gsc_is_not_no_demand_without_independent_basis():
     document = copy.deepcopy(_document())
@@ -187,6 +197,13 @@ def test_query_visibility_is_censored_and_cannot_own_or_score_a_family():
     assert owners_before == [row["canonical_owner_url"] for row in document["rows"]]
     assert queue_before == document["controllable_gap_queue"]
 
+    nested_plaintext = _manual_snapshot()
+    nested_plaintext["page_rows"][0]["query"] = "plaintext query must never be committed"
+    report = validate_buyer_decision_map(manual_snapshot=nested_plaintext)
+    reasons = {item.reason for item in report.findings}
+    assert "plaintext_query_or_sensitive_url_forbidden" in reasons
+    assert "manual_page_row_schema_invalid" in reasons
+
 
 def test_page_absence_remains_unknown_and_zero_clicks_are_exposure_only():
     missing = _manual_snapshot()
@@ -202,6 +219,25 @@ def test_page_absence_remains_unknown_and_zero_clicks_are_exposure_only():
     assert evidence["owner_observation"]["clicks"] == 0
     assert evidence["owner_observation"]["impressions"] == 6
     assert evidence["interpretation"] == "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+
+
+def test_every_manual_page_is_mapped_or_explicitly_excluded():
+    document = _document()
+    snapshot_paths = {row["path"] for row in _manual_snapshot()["page_rows"]}
+    mapped_paths = {
+        item["path"]
+        for row in document["rows"]
+        for item in row["manual_page_evidence"]["mapped_pages"]
+    }
+    exclusions = {item["path"]: item for item in document["manual_mapping_exclusions"]}
+    assert mapped_paths.isdisjoint(exclusions)
+    assert mapped_paths | set(exclusions) == snapshot_paths
+    assert exclusions["/conteudos/reequilibrio-empreitada-preco-global/"]["state"] == (
+        "UNMAPPED_NO_EXISTING_CONTRACT"
+    )
+    assert "visible query cannot create" in exclusions[
+        "/conteudos/reequilibrio-empreitada-preco-global/"
+    ]["reason"]
 
 
 def test_structurally_empty_quality_proof_and_answer_fail_closed():

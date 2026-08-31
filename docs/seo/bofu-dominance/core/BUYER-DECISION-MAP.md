@@ -30,6 +30,7 @@ For each economically relevant decision, the buyer must find one CONFENGE answer
 - `MANUAL_GSC_SNAPSHOT`: founder-reported Search Console UI export for Web / last 28 days (`2026-08-02`..`2026-08-29`); page rows may be used as measured exposure where URL mapping is exact.
 - durable/current authority: remains `UNKNOWN` at **2/3** distinct durable observations. There is no snapshot/pointer write, host read-after-write or manifest parity for this manual export.
 - raw provenance: the referenced campaign CSV directory was unavailable in the execution workspace, so no raw checksum is claimed. The normalized page aggregate is hash-pinned; plaintext queries are not committed.
+- page classification: **23 mapped rows** and **6 explicit exclusions**. The reequilíbrio/global-price article and defesa-margem tool are retained but not mapped because current contracts do not authorize using them to inflate a family score.
 - interpretation: zero clicks on six, four or three impressions is exposure, not a conversion-failure conclusion.
 
 ## Buyer job → owner/gap → next decision

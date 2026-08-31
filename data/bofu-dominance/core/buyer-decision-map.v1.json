@@ -64,6 +64,38 @@
     "path": "data/bofu-dominance/core/issue-state-snapshot.v1.json",
     "schema_version": "bofu-issue-state-snapshot/v1"
   },
+  "manual_mapping_exclusions": [
+    {
+      "path": "/",
+      "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
+      "reason": "The home page is a cross-family navigation surface, not a canonical owner for one of the 15 buyer jobs."
+    },
+    {
+      "path": "/conteudos/",
+      "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
+      "reason": "The editorial hub is a cross-family library surface, not a canonical owner for one buyer job."
+    },
+    {
+      "path": "http://confenge.com.br/",
+      "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
+      "reason": "The legacy HTTP home observation is canonical hygiene evidence, not a buyer-job owner mapping."
+    },
+    {
+      "path": "/especialista/tiago-jun-sasaki/",
+      "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
+      "reason": "The specialist profile is a trust surface shared across families, not a canonical buyer-job owner."
+    },
+    {
+      "path": "/conteudos/reequilibrio-empreitada-preco-global/",
+      "state": "UNMAPPED_NO_EXISTING_CONTRACT",
+      "reason": "The page row is retained, but current route and content-service contracts do not map this URL to reequilibrio; a visible query cannot create that mapping."
+    },
+    {
+      "path": "/ferramentas/diagnostico-defesa-margem/",
+      "state": "UNMAPPED_NO_EXISTING_CONTRACT",
+      "reason": "The tool is a separate utility and the current BOFU matrix declares no supporting route for defesa-margem, so its impressions do not inflate the canonical-owner score."
+    }
+  ],
   "reconciliation_exceptions": [
     {
       "source": "data/organic/demand-map.json",

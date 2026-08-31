@@ -77,6 +77,38 @@ MANUAL_PAGE_MAPPING_PATHS = {
     "bid-readiness": [],
     "partner-integrity": [],
 }
+MANUAL_MAPPING_EXCLUSIONS = [
+    {
+        "path": "/",
+        "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
+        "reason": "The home page is a cross-family navigation surface, not a canonical owner for one of the 15 buyer jobs.",
+    },
+    {
+        "path": "/conteudos/",
+        "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
+        "reason": "The editorial hub is a cross-family library surface, not a canonical owner for one buyer job.",
+    },
+    {
+        "path": "http://confenge.com.br/",
+        "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
+        "reason": "The legacy HTTP home observation is canonical hygiene evidence, not a buyer-job owner mapping.",
+    },
+    {
+        "path": "/especialista/tiago-jun-sasaki/",
+        "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
+        "reason": "The specialist profile is a trust surface shared across families, not a canonical buyer-job owner.",
+    },
+    {
+        "path": "/conteudos/reequilibrio-empreitada-preco-global/",
+        "state": "UNMAPPED_NO_EXISTING_CONTRACT",
+        "reason": "The page row is retained, but current route and content-service contracts do not map this URL to reequilibrio; a visible query cannot create that mapping.",
+    },
+    {
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "state": "UNMAPPED_NO_EXISTING_CONTRACT",
+        "reason": "The tool is a separate utility and the current BOFU matrix declares no supporting route for defesa-margem, so its impressions do not inflate the canonical-owner score.",
+    },
+]
 REQUIRED_ROW_FIELDS = (
     "family_id",
     "buyer_job",
@@ -148,6 +180,18 @@ ALLOWED_OFFER_STATES = {
     "EXISTING_SERVICE_ROUTE",
     "EXISTING_PAID_OFFER",
     "NO_AUTHORIZED_OFFER",
+}
+FORBIDDEN_MANUAL_EVIDENCE_KEYS = {
+    "query",
+    "queries",
+    "query_text",
+    "query_rows",
+    "keyword",
+    "keywords",
+    "search_term",
+    "search_terms",
+    "url",
+    "page_url",
 }
 
 
@@ -247,6 +291,23 @@ def _validate_manual_gsc_snapshot(
     if snapshot.get("source_kind") != "MANUAL_GSC_SNAPSHOT":
         report.add("manual-gsc", "manual_snapshot_source_kind_invalid", str(snapshot.get("source_kind")))
 
+    def reject_sensitive_keys(value: Any, path: str) -> None:
+        if isinstance(value, dict):
+            for key, nested in value.items():
+                normalized = str(key).casefold().replace("-", "_")
+                if normalized in FORBIDDEN_MANUAL_EVIDENCE_KEYS:
+                    report.add(
+                        path,
+                        "plaintext_query_or_sensitive_url_forbidden",
+                        f"forbidden key={key!r}",
+                    )
+                reject_sensitive_keys(nested, f"{path}.{key}")
+        elif isinstance(value, list):
+            for index, nested in enumerate(value):
+                reject_sensitive_keys(nested, f"{path}[{index}]")
+
+    reject_sensitive_keys(snapshot, "manual-gsc")
+
     raw = snapshot.get("raw_export_provenance") or {}
     expected_raw = {
         "workspace_status": "NOT_AVAILABLE_IN_EXECUTION_WORKSPACE",
@@ -296,15 +357,19 @@ def _validate_manual_gsc_snapshot(
     ratio = query_visibility.get("visible_impression_ratio")
     if not isinstance(ratio, (int, float)) or abs(ratio - expected_ratio) > 0.000001:
         report.add("manual-gsc.query_visibility", "query_visibility_ratio_invalid", str(ratio))
-    if "queries" in snapshot or "query_rows" in snapshot:
-        report.add("manual-gsc", "plaintext_query_rows_forbidden", "Commit only aggregate query-visibility metadata.")
-
     pages: dict[str, dict[str, Any]] = {}
     for index, row in enumerate(snapshot.get("page_rows") or []):
         label = f"manual-gsc.page_rows[{index}]"
         if not isinstance(row, dict):
             report.add(label, "manual_page_row_invalid", str(row))
             continue
+        expected_page_keys = {"path", "clicks", "impressions", "ctr", "position"}
+        if set(row) != expected_page_keys:
+            report.add(
+                label,
+                "manual_page_row_schema_invalid",
+                f"expected={sorted(expected_page_keys)} actual={sorted(row)}",
+            )
         path = row.get("path")
         if not isinstance(path, str) or not path:
             report.add(label, "manual_page_path_invalid", str(path))
@@ -684,6 +749,42 @@ def validate_buyer_decision_map(
     matrix_by_id = {item["intent_cluster"]: item for item in matrix.get("rows") or []}
     rows = doc.get("rows") or []
     manual_pages = _validate_manual_gsc_snapshot(manual_gsc_snapshot, report)
+    if doc.get("manual_mapping_exclusions") != MANUAL_MAPPING_EXCLUSIONS:
+        report.add(
+            "manual_mapping_exclusions",
+            "manual_mapping_exclusions_drift",
+            f"expected={MANUAL_MAPPING_EXCLUSIONS} actual={doc.get('manual_mapping_exclusions')}",
+        )
+    mapped_manual_paths = [
+        path for paths in MANUAL_PAGE_MAPPING_PATHS.values() for path in paths
+    ]
+    if len(mapped_manual_paths) != len(set(mapped_manual_paths)):
+        report.add(
+            "manual_page_mapping",
+            "manual_page_mapped_to_multiple_families",
+            str(mapped_manual_paths),
+        )
+    excluded_manual_paths = [item["path"] for item in MANUAL_MAPPING_EXCLUSIONS]
+    if len(excluded_manual_paths) != len(set(excluded_manual_paths)):
+        report.add(
+            "manual_mapping_exclusions",
+            "manual_mapping_exclusion_duplicate",
+            str(excluded_manual_paths),
+        )
+    mapped_set = set(mapped_manual_paths)
+    excluded_set = set(excluded_manual_paths)
+    if mapped_set & excluded_set:
+        report.add(
+            "manual_page_mapping",
+            "manual_page_mapped_and_excluded",
+            str(sorted(mapped_set & excluded_set)),
+        )
+    if mapped_set | excluded_set != set(manual_pages):
+        report.add(
+            "manual_page_mapping",
+            "manual_page_classification_incomplete",
+            f"unclassified={sorted(set(manual_pages) - mapped_set - excluded_set)} missing={sorted((mapped_set | excluded_set) - set(manual_pages))}",
+        )
     if not isinstance(rows, list):
         report.add("rows", "projection_rows_invalid", "rows must be an array")
         return report
@@ -979,16 +1080,23 @@ def validate_buyer_decision_map(
             for item in row.get("issue_refs") or []
             if isinstance(item, dict)
         }
-        issue_protected = bool(referenced_issues & PROTECTED_ISSUES)
+        active_issue = family.get("active_issue")
+        authority_protected = route in PROTECTED_ROUTES or active_issue in PROTECTED_ISSUES
+        if active_issue in PROTECTED_ISSUES and active_issue not in referenced_issues:
+            report.add(
+                label,
+                "protected_issue_reference_missing",
+                f"intent-registry.v2 active_issue=#{active_issue}",
+            )
         if route in PROTECTED_ROUTES:
             protected_seen.add(str(route))
-        if route in PROTECTED_ROUTES or issue_protected:
+        if authority_protected:
             protected_family_ids.add(family_id)
             if state != "MEASUREMENT_WAIT" or execution_state != "MEASUREMENT_WAIT":
                 report.add(
                     label,
                     "protected_route_executable_now",
-                    f"{route or family_id}: {state}/{execution_state}; issues={sorted(referenced_issues & PROTECTED_ISSUES)}",
+                    f"{route or family_id}: {state}/{execution_state}; authority_issue={active_issue}",
                 )
 
         gsc = row.get("gsc") or {}
@@ -1166,7 +1274,7 @@ def validate_buyer_decision_map(
 
         priority_score = _validate_priority(row, label, report)
         if priority_score:
-            if route in PROTECTED_ROUTES or issue_protected:
+            if authority_protected:
                 report.add(label, "protected_route_in_controllable_queue", str(route or family_id))
             score, known_product = priority_score
             controllable.append((score, known_product, family_id, row))
@@ -1233,6 +1341,10 @@ def render_buyer_decision_report(document: dict[str, Any]) -> str:
         for row in rows
         if (row.get("manual_page_evidence") or {}).get("status") == "MANUAL_GSC_SNAPSHOT"
     )
+    manual_mapped_pages = sum(
+        len((row.get("manual_page_evidence") or {}).get("mapped_pages") or [])
+        for row in rows
+    )
     counts: dict[str, int] = {}
     for row in rows:
         counts[row["coverage_state"]] = counts.get(row["coverage_state"], 0) + 1
@@ -1269,6 +1381,7 @@ def render_buyer_decision_report(document: dict[str, Any]) -> str:
         "- `MANUAL_GSC_SNAPSHOT`: founder-reported Search Console UI export for Web / last 28 days (`2026-08-02`..`2026-08-29`); page rows may be used as measured exposure where URL mapping is exact.",
         "- durable/current authority: remains `UNKNOWN` at **2/3** distinct durable observations. There is no snapshot/pointer write, host read-after-write or manifest parity for this manual export.",
         "- raw provenance: the referenced campaign CSV directory was unavailable in the execution workspace, so no raw checksum is claimed. The normalized page aggregate is hash-pinned; plaintext queries are not committed.",
+        f"- page classification: **{manual_mapped_pages} mapped rows** and **{len(document['manual_mapping_exclusions'])} explicit exclusions**. The reequilíbrio/global-price article and defesa-margem tool are retained but not mapped because current contracts do not authorize using them to inflate a family score.",
         "- interpretation: zero clicks on six, four or three impressions is exposure, not a conversion-failure conclusion.",
         "",
         "## Buyer job → owner/gap → next decision",
