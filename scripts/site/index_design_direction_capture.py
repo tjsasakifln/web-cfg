@@ -9,9 +9,10 @@ viewport, the render state, the byte size and the SHA-256.
 Why the index and not the binaries: the protocol (§11 of the brief) requires a
 durable baseline "with SHA, date, per-file hash and a readable manifest,
 outside /tmp". That is the hash index. The PNGs themselves are 28 MB of
-losslessly compressed text screenshots, reproducible byte-for-byte from the
-recorded commit by re-running the one script, so they stay out of the tree and
-the hashes are what makes a re-capture checkable.
+losslessly compressed text screenshots, so they stay out of the tree and the
+hashes bind the exact captured artifacts. Re-capture is comparable only when
+the commit, browser and full-page preparation contract recorded by the harness
+also match; manifests produced before #540 did not record that contract.
 
 Usage: python3 scripts/site/index_design_direction_capture.py [captureRoot]
 """
@@ -38,6 +39,96 @@ def commit_sha() -> str | None:
         return None
 
 
+def layout_comparison_ready(layout: object) -> bool:
+    if not isinstance(layout, dict):
+        return False
+    height = layout.get("scroll_height")
+    before = layout.get("scroll_height_samples")
+    after = layout.get("post_screenshot_scroll_height_samples")
+    return (
+        layout.get("strategy") == "content-visibility-visible/v1"
+        and type(height) is int
+        and height > 0
+        and isinstance(before, list)
+        and isinstance(after, list)
+        and len(before) >= 3
+        and len(after) >= 3
+        and all(type(sample) is int and sample == height for sample in before + after)
+    )
+
+
+def manifest_comparison_ready(data: dict, files: list[dict]) -> bool:
+    runtime = data.get("capture_runtime")
+    preparation = runtime.get("fullpage_preparation") if isinstance(runtime, dict) else None
+    return (
+        data.get("schema_version") == "2.1.0"
+        and data.get("tree_dirty") is False
+        and bool(data.get("commit_sha"))
+        and isinstance(runtime, dict)
+        and bool(runtime.get("browser_version"))
+        and isinstance(preparation, dict)
+        and preparation.get("strategy") == "content-visibility-visible/v1"
+        and bool(files)
+        and all(layout_comparison_ready(entry.get("layout")) for entry in files)
+    )
+
+
+def collect_comparison_blockers(groups: list[dict]) -> list[str]:
+    blockers = [group["group"] for group in groups if not group["comparison_ready"]]
+    if len({group.get("commit_sha") for group in groups}) != 1:
+        blockers.append("mixed_commit_sha")
+    browsers = {
+        (group.get("capture_runtime") or {}).get("browser_version")
+        for group in groups
+    }
+    if len(browsers) != 1:
+        blockers.append("mixed_browser_version")
+    return blockers
+
+
+def self_test() -> int:
+    layout = {
+        "strategy": "content-visibility-visible/v1",
+        "scroll_height": 1200,
+        "scroll_height_samples": [1200, 1200, 1200],
+        "post_screenshot_scroll_height_samples": [1200, 1200, 1200],
+    }
+    data = {
+        "schema_version": "2.1.0",
+        "tree_dirty": False,
+        "commit_sha": "a" * 40,
+        "capture_runtime": {
+            "browser_version": "Chrome/151.0.0.0",
+            "fullpage_preparation": {"strategy": "content-visibility-visible/v1"},
+        },
+    }
+    files = [{"layout": layout}]
+    assert manifest_comparison_ready(data, files)
+    assert not manifest_comparison_ready({**data, "tree_dirty": True}, files)
+    assert not manifest_comparison_ready(data, [{"layout": {**layout, "scroll_height": 0}}])
+    assert not manifest_comparison_ready(
+        data,
+        [{"layout": {**layout, "post_screenshot_scroll_height_samples": [1200, 1201, 1200]}}],
+    )
+    groups = [
+        {
+            "group": "one",
+            "comparison_ready": True,
+            "commit_sha": "a" * 40,
+            "capture_runtime": data["capture_runtime"],
+        },
+        {
+            "group": "two",
+            "comparison_ready": True,
+            "commit_sha": "b" * 40,
+            "capture_runtime": {**data["capture_runtime"], "browser_version": "Chrome/152.0.0.0"},
+        },
+    ]
+    assert collect_comparison_blockers(groups) == ["mixed_commit_sha", "mixed_browser_version"]
+    print("CAPTURE_INDEX_SELF_TEST_OK")
+    return 0
+
+
 def main(argv: list[str]) -> int:
     capture_root = Path(argv[1]) if len(argv) > 1 else DEFAULT_CAPTURE
     manifests = sorted(capture_root.rglob("manifest-*.json"))
@@ -50,6 +141,7 @@ def main(argv: list[str]) -> int:
     for path in manifests:
         data = json.loads(path.read_text(encoding="utf-8"))
         rel_dir = path.parent.relative_to(ROOT).as_posix()
+        runtime = data.get("capture_runtime")
         files = [
             {
                 "file": entry["file"],
@@ -58,10 +150,12 @@ def main(argv: list[str]) -> int:
                 "state": entry["state"],
                 "bytes": entry["bytes"],
                 "sha256": entry["sha256"],
+                "layout": entry.get("layout"),
             }
             for entry in data["captures"]
             if entry["kind"] == "page"
         ]
+        comparison_ready = manifest_comparison_ready(data, files)
         total += len(files)
         groups.append(
             {
@@ -70,6 +164,9 @@ def main(argv: list[str]) -> int:
                 "captured_at": data["captured_at"],
                 "commit_sha": data["commit_sha"],
                 "tree_dirty": data["tree_dirty"],
+                "manifest_schema_version": data.get("schema_version"),
+                "capture_runtime": runtime,
+                "comparison_ready": comparison_ready,
                 "state": data["state"],
                 "viewports": data["viewports"],
                 "routes": data["routes"],
@@ -77,6 +174,7 @@ def main(argv: list[str]) -> int:
             }
         )
 
+    comparison_blockers = collect_comparison_blockers(groups)
     payload = {
         "schema": "confenge.design-direction-capture-index/1.0",
         "issue": 494,
@@ -89,9 +187,15 @@ def main(argv: list[str]) -> int:
             "reproduce": "CHROME_PATH=... bash scripts/site/capture_design_direction.sh",
         },
         "binaries_committed": False,
+        "comparison_ready": not comparison_blockers,
+        "comparison_blockers": comparison_blockers,
         "binaries_note": (
-            "As 28 MB de PNG ficam fora da arvore: sao reproduziveis byte a byte a partir do "
-            "commit registrado, e o hash por arquivo abaixo e o que torna uma recaptura conferivel."
+            "As 28 MB de PNG ficam fora da arvore; os hashes vinculam os artefatos exatos. "
+            + (
+                "Os manifests registram commit, browser e contrato de materializacao #540."
+                if not comparison_blockers
+                else "Ha manifests anteriores a #540 sem browser/materializacao; nao sao baseline direto."
+            )
         ),
         "file_count": total,
         "groups": groups,
@@ -103,4 +207,6 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
+    if sys.argv[1:] == ["--self-test"]:
+        raise SystemExit(self_test())
     raise SystemExit(main(sys.argv))

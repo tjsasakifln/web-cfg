@@ -13,7 +13,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "crypto";
-import { mkdtempSync, rmSync, writeFileSync } from "fs";
+import { inflateSync } from "zlib";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { join, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -27,9 +28,11 @@ import {
   captureFileName,
   captureRecord,
   manifestFileName,
+  prepareFullPageCapture,
   resolveCaptureState,
   resolveViewports,
   sha256OfFile,
+  verifyFullPageCapture,
 } from "./capture_states.mjs";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 
@@ -209,7 +212,10 @@ test("the manifest carries commit, date, route, viewport, state and a hash per f
     const state = resolveCaptureState({ CAPTURE_FULLPAGE: "1", CAPTURE_MOTION: "reduced" });
     const name = captureFileName({ slug: "home", width: 1366, height: 768, state });
     const path = join(dir, name);
-    const bytes = Buffer.from("not-a-real-png-but-a-real-hash");
+    const bytes = Buffer.alloc(32);
+    Buffer.from("89504e470d0a1a0a", "hex").copy(bytes);
+    bytes.writeUInt32BE(1366, 16);
+    bytes.writeUInt32BE(2000, 20);
     writeFileSync(path, bytes);
 
     const record = captureRecord({
@@ -220,6 +226,15 @@ test("the manifest carries commit, date, route, viewport, state and a hash per f
       width: 1366,
       height: 768,
       state,
+      layout: {
+        strategy: "content-visibility-visible/v1",
+        materialized_elements: 2,
+        initial_scroll_height: 2300,
+        scroll_height: 2000,
+        scroll_height_samples: [2000, 2000, 2000],
+        observed_scroll_heights: [2000, 2000, 2000],
+        post_screenshot_scroll_height_samples: [2000, 2000, 2000],
+      },
     });
     assert.equal(record.file, "home-1366x768--fullpage_motion-reduced.png");
     assert.equal(record.route, "/");
@@ -262,12 +277,18 @@ test("the manifest carries commit, date, route, viewport, state and a hash per f
       viewports: resolveViewports({ CAPTURE_VIEWPORTS: "protocol" }),
       state,
       captures: [record, componentRecord],
+      browserVersion: "Chrome/140.0.0.0",
     });
 
     assert.equal(manifest.schema_version, MANIFEST_SCHEMA_VERSION);
     assert.equal(manifest.captured_at, "2026-08-30T12:00:00.000Z");
     assert.equal(manifest.commit_sha, "b4cafc4fe0a005c3769a7b6acde882ff1f9d65d8");
     assert.equal(manifest.tree_dirty, false);
+    assert.equal(manifest.capture_runtime.browser_version, "Chrome/140.0.0.0");
+    assert.equal(
+      manifest.capture_runtime.fullpage_preparation.strategy,
+      "content-visibility-visible/v1",
+    );
     assert.equal(manifest.output_dir, "docs/uiux-evidence/after");
     assert.deepEqual(manifest.routes, ["/", "/conteudos/"]);
     assert.deepEqual(manifest.viewports, [
@@ -286,6 +307,7 @@ test("the manifest carries commit, date, route, viewport, state and a hash per f
     // Back-compat: the flat file list the previous manifest exposed.
     assert.deepEqual(manifest.files, [record.file, componentRecord.file]);
     assert.equal(manifest.captures.length, 2);
+    assert.equal(manifest.captures[0].layout.scroll_height, 2000);
     for (const entry of manifest.captures) {
       assert.match(entry.sha256, /^[0-9a-f]{64}$/);
       assert.ok(entry.route && entry.viewport && entry.state);
@@ -295,6 +317,69 @@ test("the manifest carries commit, date, route, viewport, state and a hash per f
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("full-page records fail closed without stable layout evidence", () => {
+  const state = resolveCaptureState({ CAPTURE_FULLPAGE: "1" });
+  const base = {
+    file: "probe.png",
+    path: "/does/not/need/to/exist.png",
+    route: "/",
+    slug: "home",
+    width: 400,
+    height: 300,
+    state,
+  };
+  assert.throws(() => captureRecord(base), /CAPTURE_LAYOUT_EVIDENCE_MISSING/);
+  assert.throws(
+    () => captureRecord({
+      ...base,
+      layout: {
+        strategy: "content-visibility-visible/v1",
+        materialized_elements: 1,
+        scroll_height: 1200,
+        scroll_height_samples: [1200, 1201, 1200],
+        post_screenshot_scroll_height_samples: [1200, 1200, 1200],
+      },
+    }),
+    /CAPTURE_LAYOUT_EVIDENCE_UNSTABLE/,
+  );
+});
+
+test("a manifest refuses to omit the browser version", () => {
+  assert.throws(
+    () => buildManifest({
+      capturedAt: "2026-08-31T12:00:00.000Z",
+      commitSha: "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+      treeDirty: false,
+      baseUrl: "http://127.0.0.1:8792",
+      outputDir: "docs/uiux-evidence/after",
+      routes: ["/"],
+      viewports: [[400, 300]],
+      state: resolveCaptureState({}),
+      captures: [],
+    }),
+    /CAPTURE_BROWSER_VERSION_MISSING/,
+  );
+});
+
+test("the versioned #540 report proves the measured before/after contract", () => {
+  const report = JSON.parse(readFileSync(
+    join(ROOT, "docs/evidence/issue-540-fullpage-capture/report.json"),
+    "utf8",
+  ));
+  assert.equal(report.issue, 540);
+  assert.equal(report.before.commit_sha, "81c600b7c26dcc606d3a03e648ecd9820d9c1c37");
+  assert.equal(report.before.fresh_run_scroll_height_instability_reproduced, false);
+  assert.equal(report.before.materialization_path_scroll_height_instability_reproduced, true);
+  assert.ok(Math.max(...report.before.largest_near_white_bands_px) > 128);
+  assert.ok(Math.max(...report.after.largest_near_white_bands_px) <= 128);
+  assert.equal(new Set(report.after.stable_scroll_heights).size, 1);
+  assert.equal(new Set(report.after.png_heights).size, 1);
+  assert.equal(new Set(report.after.png_sha256).size, 1);
+  assert.equal(report.after.manifest_tree_dirty, false);
+  assert.equal(report.acceptance.public_css_or_html_changed, false);
+  assert.equal(report.historical_comparability.directly_comparable, false);
 });
 
 /* ------------------------------------------------------------------ */
@@ -320,15 +405,79 @@ const FIXTURE = `<!doctype html><html><head><style>
   body { margin: 0; background: #fff; }
   #probe { color: rgb(9, 8, 7); }
   @media (prefers-reduced-motion: reduce) { #probe { color: rgb(1, 2, 3); } }
-  #tall { height: 2000px; background: #eee; }
+  .below-fold { content-visibility: auto; contain-intrinsic-size: 900px; }
+  .below-fold > div { height: 400px; background: #eee; }
 </style></head><body>
   <p id="js-state">no-js</p>
   <p id="probe">motion probe</p>
-  <div id="tall"></div>
+  <section class="below-fold"><div>one</div></section>
+  <section class="below-fold"><div>two</div></section>
+  <section class="below-fold"><div>three</div></section>
+  <section class="below-fold"><div>four</div></section>
+  <section class="below-fold"><div>five</div></section>
   <script>document.getElementById('js-state').textContent = 'js-ran';</script>
 </body></html>`;
 
 const pngHeight = (buffer) => buffer.readUInt32BE(20);
+
+function largestNearWhiteBand(buffer) {
+  assert.equal(buffer[24], 8, "fixture screenshot must be 8-bit PNG");
+  assert.equal(buffer[25], 2, "fixture screenshot must be RGB PNG");
+  const width = buffer.readUInt32BE(16);
+  const height = buffer.readUInt32BE(20);
+  const idat = [];
+  for (let offset = 8; offset < buffer.length;) {
+    const length = buffer.readUInt32BE(offset);
+    const name = buffer.toString("ascii", offset + 4, offset + 8);
+    if (name === "IDAT") idat.push(buffer.subarray(offset + 8, offset + 8 + length));
+    offset += length + 12;
+  }
+  const raw = inflateSync(Buffer.concat(idat));
+  const bytesPerPixel = 3;
+  const stride = width * bytesPerPixel;
+  let position = 0;
+  let previous = Buffer.alloc(stride);
+  let largest = 0;
+  let current = 0;
+  const paeth = (left, above, upperLeft) => {
+    const estimate = left + above - upperLeft;
+    const leftDistance = Math.abs(estimate - left);
+    const aboveDistance = Math.abs(estimate - above);
+    const upperLeftDistance = Math.abs(estimate - upperLeft);
+    if (leftDistance <= aboveDistance && leftDistance <= upperLeftDistance) return left;
+    return aboveDistance <= upperLeftDistance ? above : upperLeft;
+  };
+  for (let y = 0; y < height; y += 1) {
+    const filter = raw[position];
+    position += 1;
+    const scanline = raw.subarray(position, position + stride);
+    position += stride;
+    const row = Buffer.allocUnsafe(stride);
+    let nearWhitePixels = 0;
+    for (let x = 0; x < stride; x += 1) {
+      const left = x >= bytesPerPixel ? row[x - bytesPerPixel] : 0;
+      const above = previous[x];
+      const upperLeft = x >= bytesPerPixel ? previous[x - bytesPerPixel] : 0;
+      const predictor = filter === 0
+        ? 0
+        : filter === 1
+          ? left
+          : filter === 2
+            ? above
+            : filter === 3
+              ? Math.floor((left + above) / 2)
+              : paeth(left, above, upperLeft);
+      row[x] = (scanline[x] + predictor) & 0xff;
+    }
+    for (let x = 0; x < stride; x += bytesPerPixel) {
+      if (row[x] >= 250 && row[x + 1] >= 250 && row[x + 2] >= 250) nearWhitePixels += 1;
+    }
+    current = nearWhitePixels / width >= 0.995 ? current + 1 : 0;
+    largest = Math.max(largest, current);
+    previous = row;
+  }
+  return largest;
+}
 
 // One browser for the whole file; a fresh page per state so no emulation leaks
 // from one state into the next.
@@ -349,12 +498,21 @@ async function renderUnder(env) {
     await applyCaptureState(page, state);
     await page.setViewport({ width: 400, height: 300, deviceScaleFactor: 1 });
     await page.setContent(FIXTURE, { waitUntil: "networkidle0" });
+    let layout = await prepareFullPageCapture(page, state);
     const shot = await page.screenshot({ fullPage: state.fullPage });
+    layout = await verifyFullPageCapture(page, state, layout);
     const jsState = await page.evaluate(() => document.getElementById("js-state").textContent);
     const probeColor = await page.evaluate(
       () => getComputedStyle(document.getElementById("probe")).color,
     );
-    return { state, height: pngHeight(shot), jsState, probeColor };
+    return {
+      state,
+      height: pngHeight(shot),
+      largestNearWhiteBand: state.fullPage ? largestNearWhiteBand(shot) : null,
+      jsState,
+      probeColor,
+      layout,
+    };
   } finally {
     await page.close();
   }
@@ -374,8 +532,28 @@ test("default state renders first fold, JS on, motion as reported", { skip: skip
 test("CAPTURE_FULLPAGE=1 captures below the fold", { skip: skipBrowser }, async () => {
   const got = await renderUnder({ CAPTURE_FULLPAGE: "1" });
   assert.ok(got.height > 1500, `expected a full-document capture, got ${got.height}px`);
+  assert.equal(got.layout.strategy, "content-visibility-visible/v1");
+  assert.equal(got.layout.materialized_elements, 5);
+  assert.equal(new Set(got.layout.scroll_height_samples).size, 1);
+  assert.equal(got.height, got.layout.scroll_height);
+  assert.ok(
+    got.largestNearWhiteBand <= 128,
+    `artificial near-white band is ${got.largestNearWhiteBand}px`,
+  );
+  assert.deepEqual(
+    got.layout.post_screenshot_scroll_height_samples,
+    got.layout.scroll_height_samples,
+  );
   assert.equal(got.jsState, "js-ran");
   assert.equal(got.probeColor, "rgb(9, 8, 7)");
+});
+
+test("consecutive full-page preparations converge to the same geometry", { skip: skipBrowser }, async () => {
+  const first = await renderUnder({ CAPTURE_FULLPAGE: "1" });
+  const second = await renderUnder({ CAPTURE_FULLPAGE: "1" });
+  assert.equal(first.layout.scroll_height, second.layout.scroll_height);
+  assert.equal(first.height, second.height);
+  assert.deepEqual(first.layout.scroll_height_samples, second.layout.scroll_height_samples);
 });
 
 test("CAPTURE_JS=off renders the no-script state", { skip: skipBrowser }, async () => {
@@ -399,6 +577,8 @@ test("the three states combine in one render", { skip: skipBrowser }, async () =
   });
   assert.equal(got.state.id, "fullpage_js-off_motion-reduced");
   assert.ok(got.height > 1500, `expected a full-document capture, got ${got.height}px`);
+  assert.equal(got.layout.strategy, "content-visibility-visible/v1");
+  assert.equal(new Set(got.layout.scroll_height_samples).size, 1);
   assert.equal(got.jsState, "no-js");
   assert.equal(got.probeColor, "rgb(1, 2, 3)");
 });

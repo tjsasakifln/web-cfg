@@ -13,6 +13,7 @@
  */
 import test from "node:test";
 import assert from "node:assert/strict";
+import { spawnSync } from "child_process";
 import { mkdtempSync, readFileSync, readdirSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { join, relative, resolve, sep } from "path";
@@ -285,6 +286,12 @@ test("the committed evidence still supports the recorded decision", () => {
 test("the capture index is durable, hashed, and on the five protocol viewports", () => {
   const index = JSON.parse(readText(join(EVIDENCE, "capture-index.json")));
   assert.deepEqual(index.protocol.viewports, ["390x844", "768x1024", "1366x768", "1363x936", "1440x1000"]);
+  assert.equal(typeof index.comparison_ready, "boolean", "capture comparability is undeclared");
+  if (index.comparison_ready) {
+    assert.deepEqual(index.comparison_blockers, [], "comparable capture still declares blockers");
+  } else {
+    assert.ok(index.comparison_blockers.length > 0, "historical capture blockers disappeared");
+  }
   assert.ok(index.file_count >= 45, `índice raso: ${index.file_count} arquivos`);
   for (const group of index.groups) {
     assert.equal(group.state.fullpage, true, `${group.group}: captura não é full-page`);
@@ -297,6 +304,16 @@ test("the capture index is durable, hashed, and on the five protocol viewports",
       assert.ok(file.bytes > 0, `${group.group}/${file.file}: arquivo vazio`);
     }
   }
+});
+
+test("the capture index comparability gate fails closed", () => {
+  const result = spawnSync(
+    "python3",
+    [join(ROOT, "scripts/site/index_design_direction_capture.py"), "--self-test"],
+    { cwd: ROOT, encoding: "utf8" },
+  );
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.match(result.stdout, /CAPTURE_INDEX_SELF_TEST_OK/);
 });
 
 test("the fixed content itself is well formed", () => {
