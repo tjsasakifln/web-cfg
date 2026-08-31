@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0.0",
-  "captured_at": "2026-08-31T15:05:07.267Z",
-  "commit_sha": "eca5401363259cf765c0b58ec9994357674009ee",
+  "captured_at": "2026-08-31T15:18:30.604Z",
+  "commit_sha": "bf97cd517da22c6ff40d3659642651a37680bd40",
   "tree_dirty": false,
   "base_url": "http://127.0.0.1:8792",
   "output_dir": "docs/qa/issue-528-money-pages-value-first/after-first-fold",
@@ -60,8 +60,8 @@
       "fullpage": false,
       "javascript": "on",
       "motion": "system",
-      "bytes": 127676,
-      "sha256": "343970ea13fce6f8bdd9a59d10ddb160937fa553dc5b7309f08d450e8652e984"
+      "bytes": 126965,
+      "sha256": "bdba08bb49bdf6d9a4d4df551df5205bb5f090cd0e9538271eb6867dd29907e6"
     },
     {
       "file": "servicos-obras-publicas-1366x768.png",
@@ -75,8 +75,8 @@
       "fullpage": false,
       "javascript": "on",
       "motion": "system",
-      "bytes": 196405,
-      "sha256": "d74a15c1a0533353dbe748256a85f19bc782b2c8673533fcaec66aa26d29a92e"
+      "bytes": 201227,
+      "sha256": "1b743794c02238abde3ba29d1eb0f5ccbdfe69cc2d34ba255170fba7a75c7a58"
     },
     {
       "file": "diagnostico-b2g-expansao-390x844.png",
