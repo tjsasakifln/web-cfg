@@ -31,6 +31,10 @@ def _json(relative: str) -> dict:
     return json.loads((ROOT / relative).read_text(encoding="utf-8"))
 
 
+def _manual_snapshot() -> dict:
+    return _json("seo/gsc-2026-08-31/manual-page-snapshot.v1.json")
+
+
 def test_projection_covers_every_buyer_job_with_one_owner_or_gap():
     report = validate_buyer_decision_map()
     assert report.ok, report.findings
@@ -41,10 +45,13 @@ def test_projection_covers_every_buyer_job_with_one_owner_or_gap():
         "canonical_owners": 13,
         "gaps": 2,
         "duplicate_owners": 0,
-        "gsc_unknown": 15,
+        "durable_gsc_unknown": 15,
+        "manual_page_observed": 13,
+        "manual_page_unknown": 2,
         "protected_routes": 6,
+        "protected_families": 7,
         "controllable_queue": 4,
-        "reconciled_authorities": 9,
+        "reconciled_authorities": 10,
         "coverage_states": {
             "COMMERCIAL_BRIDGE_GAP": 2,
             "CONTENT_GAP": 1,
@@ -109,6 +116,12 @@ def test_protected_route_never_becomes_execute_now():
     assert "execution_state_invalid" in reasons
     assert "protected_route_executable_now" in reasons
 
+    supporting_window = copy.deepcopy(_document())
+    target = _row(supporting_window, "atrasos-prorrogacao")
+    target["coverage_state"] = "OWNED_BUT_WEAK"
+    target["execution_state"] = "VALIDATE"
+    assert "protected_route_executable_now" in _reasons(supporting_window)
+
 
 def test_unknown_gsc_is_not_no_demand_without_independent_basis():
     document = copy.deepcopy(_document())
@@ -132,6 +145,63 @@ def test_gsc_must_reconcile_with_the_versioned_overlay():
     assert "gsc_policy_state_mismatch" in reasons
     assert "gsc_source_drift" in reasons
     assert "gsc_observation_drift" in reasons
+
+
+def test_manual_snapshot_stays_separate_from_durable_413_authority():
+    snapshot = _manual_snapshot()
+    relation = snapshot["durable_authority_relationship"]
+    assert relation == {
+        "issue": 413,
+        "current_authority_state": "UNKNOWN",
+        "durable_distinct_observations": 2,
+        "durable_observations_required": 3,
+        "counts_as_durable_observation": False,
+        "read_after_write_proven": False,
+        "reason": "A manual UI export has no producer snapshot/pointer write, durable host read-back or producer-consumer manifest parity and therefore cannot satisfy the third #413 observation.",
+    }
+
+    promoted = copy.deepcopy(snapshot)
+    promoted["durable_authority_relationship"]["current_authority_state"] = "CURRENT"
+    promoted["durable_authority_relationship"]["counts_as_durable_observation"] = True
+    report = validate_buyer_decision_map(manual_snapshot=promoted)
+    assert "manual_snapshot_promoted_to_durable" in {item.reason for item in report.findings}
+
+
+def test_query_visibility_is_censored_and_cannot_own_or_score_a_family():
+    document = _document()
+    snapshot = _manual_snapshot()
+    visibility = snapshot["query_visibility"]
+    assert visibility["visible_query_impressions"] == 52
+    assert visibility["site_impressions"] == 1201
+    assert visibility["visible_impression_ratio"] == 0.043297
+    assert visibility["permitted_use"] == "QUALITATIVE_CORROBORATION_ONLY"
+    assert visibility["raw_query_text_committed"] is False
+    assert not (ROOT / "seo/gsc-2026-08-31/Consultas.csv").exists()
+
+    owners_before = [row["canonical_owner_url"] for row in document["rows"]]
+    queue_before = copy.deepcopy(document["controllable_gap_queue"])
+    changed = copy.deepcopy(snapshot)
+    changed["query_visibility"]["visible_query_rows"] = 999
+    report = validate_buyer_decision_map(document=document, manual_snapshot=changed)
+    assert "query_visibility_contract_drift" in {item.reason for item in report.findings}
+    assert owners_before == [row["canonical_owner_url"] for row in document["rows"]]
+    assert queue_before == document["controllable_gap_queue"]
+
+
+def test_page_absence_remains_unknown_and_zero_clicks_are_exposure_only():
+    missing = _manual_snapshot()
+    missing["page_rows"] = [
+        row for row in missing["page_rows"] if row["path"] != "/defesa-margem-contratos-publicos/"
+    ]
+    report = validate_buyer_decision_map(manual_snapshot=missing)
+    reasons = {item.reason for item in report.findings}
+    assert "manual_mapped_page_missing" in reasons
+    assert "manual_page_evidence_drift" in reasons
+
+    evidence = _row(_document(), "defesa-margem")["manual_page_evidence"]
+    assert evidence["owner_observation"]["clicks"] == 0
+    assert evidence["owner_observation"]["impressions"] == 6
+    assert evidence["interpretation"] == "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
 
 
 def test_structurally_empty_quality_proof_and_answer_fail_closed():
@@ -224,19 +294,23 @@ def test_controllable_queue_is_deterministic_capped_and_preserves_unknown():
     document = _document()
     assert [item["family_id"] for item in document["controllable_gap_queue"]] == [
         "defesa-margem",
-        "gestao-contratual",
-        "bid-room",
         "defesa-sancoes",
+        "bid-room",
+        "gestao-contratual",
     ]
     assert len(document["controllable_gap_queue"]) <= 5
     for family_id in [item["family_id"] for item in document["controllable_gap_queue"]]:
         priority = _row(document, family_id)["prioritization"]
-        assert priority["search_demand"] == {
-            "state": "UNKNOWN",
+        assert priority["query_demand"] == {
+            "state": "UNKNOWN_QUERY_UNIVERSE_CENSORED",
             "score": None,
         }
-        assert priority["score"]["value"] is None
-        assert priority["score"]["ceiling"] == priority["score"]["known_factor_product"] * 5
+        exposure = priority["page_exposure"]
+        assert exposure["state"] == "OBSERVED_CANONICAL_OWNER_PAGE"
+        assert exposure["conversion_inference"] == "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+        assert priority["score"]["value"] == (
+            priority["score"]["known_factor_product"] * exposure["impressions"]
+        )
 
 
 def test_tracked_report_is_reproducible_from_projection():

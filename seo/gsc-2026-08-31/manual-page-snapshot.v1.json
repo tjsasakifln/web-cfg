@@ -1,0 +1,95 @@
+{
+  "schema_version": "confenge-manual-gsc-snapshot/v1",
+  "source_kind": "MANUAL_GSC_SNAPSHOT",
+  "reported_at": "2026-08-31",
+  "reported_by_role": "founder",
+  "property": "sc-domain:confenge.com.br",
+  "export": {
+    "search_type": "Web",
+    "ui_period": "last_28_days",
+    "start_date": "2026-08-02",
+    "end_date": "2026-08-29",
+    "timezone": "America/Sao_Paulo"
+  },
+  "raw_export_provenance": {
+    "expected_campaign_path": "evidence/search-console-2026-08-31/",
+    "workspace_status": "NOT_AVAILABLE_IN_EXECUTION_WORKSPACE",
+    "archived": false,
+    "checksum_status": "UNKNOWN_RAW_FILES_UNAVAILABLE",
+    "sha256": null,
+    "basis": "The founder supplied the measured export summary in the 2026-08-31 campaign goal, but the referenced CSV package was not present in the shared workspace, attachment cache or campaign worktrees. No raw checksum is invented."
+  },
+  "durable_authority_relationship": {
+    "issue": 413,
+    "current_authority_state": "UNKNOWN",
+    "durable_distinct_observations": 2,
+    "durable_observations_required": 3,
+    "counts_as_durable_observation": false,
+    "read_after_write_proven": false,
+    "reason": "A manual UI export has no producer snapshot/pointer write, durable host read-back or producer-consumer manifest parity and therefore cannot satisfy the third #413 observation."
+  },
+  "site_summary": {
+    "clicks": 27,
+    "impressions": 1201,
+    "ctr": 0.02248,
+    "impression_weighted_daily_position": 8.24
+  },
+  "country_summary": {
+    "country": "Brazil",
+    "clicks": 27,
+    "impressions": 1048,
+    "ctr": 0.0258,
+    "position": 7.14
+  },
+  "device_summary": [
+    {"device": "Desktop", "clicks": 22, "impressions": 938, "ctr": 0.0235, "position": 7.75},
+    {"device": "Mobile", "clicks": 5, "impressions": 262, "ctr": 0.0191, "position": 9.92}
+  ],
+  "weekly_samples": [
+    {"start_date": "2026-08-23", "end_date": "2026-08-29", "clicks": 8, "impressions": 212, "ctr": 0.0377, "impression_weighted_position": 7.42},
+    {"start_date": "2026-08-16", "end_date": "2026-08-22", "clicks": 5, "impressions": 305, "ctr": 0.0164, "impression_weighted_position": 7.08}
+  ],
+  "weekly_interpretation": "Two weekly samples are not a trend claim because query mix and volume are not controlled.",
+  "query_visibility": {
+    "status": "HEAVILY_CENSORED_OR_ANONYMIZED",
+    "visible_query_rows": 17,
+    "visible_query_impressions": 52,
+    "site_impressions": 1201,
+    "visible_impression_ratio": 0.043297,
+    "permitted_use": "QUALITATIVE_CORROBORATION_ONLY",
+    "forbidden_inference": "The visible queries are not the query universe and cannot create an owner or prove absence of demand.",
+    "raw_query_text_committed": false
+  },
+  "page_rows": [
+    {"path": "/conteudos/sinapi-desonerado-nao-desonerado/", "clicks": 2, "impressions": 299, "ctr": 0.0067, "position": 6.79},
+    {"path": "/medicoes-glosas-obras-publicas/", "clicks": 1, "impressions": 99, "ctr": 0.0101, "position": 6.61},
+    {"path": "/conteudos/empreitada-preco-global-preco-unitario/", "clicks": 1, "impressions": 98, "ctr": 0.0102, "position": 8.13},
+    {"path": "/aditivos-obras-publicas/", "clicks": 0, "impressions": 66, "ctr": 0.0, "position": 26.91},
+    {"path": "/", "clicks": 5, "impressions": 57, "ctr": 0.0877, "position": 15.65},
+    {"path": "/conteudos/bdi-diferenciado-obra-publica/", "clicks": 3, "impressions": 54, "ctr": 0.0556, "position": 7.74},
+    {"path": "/conteudos/limite-aditivo-25-50-obra-publica/", "clicks": 1, "impressions": 38, "ctr": 0.0263, "position": 27.58},
+    {"path": "/conteudos/administracao-local-orcamento-obra-publica/", "clicks": 1, "impressions": 36, "ctr": 0.0278, "position": 7.72},
+    {"path": "/auditoria-orcamento-licitacao/", "clicks": 1, "impressions": 28, "ctr": 0.0357, "position": 8.64},
+    {"path": "/conteudos/", "clicks": 0, "impressions": 27, "ctr": 0.0, "position": 3.41},
+    {"path": "http://confenge.com.br/", "clicks": 0, "impressions": 26, "ctr": 0.0, "position": 9.38},
+    {"path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/", "clicks": 0, "impressions": 23, "ctr": 0.0, "position": 6.3},
+    {"path": "/conteudos/comprovacao-exequibilidade-proposta-obra/", "clicks": 0, "impressions": 23, "ctr": 0.0, "position": 8.65},
+    {"path": "/atrasos-prorrogacao-obras-publicas/", "clicks": 1, "impressions": 22, "ctr": 0.0455, "position": 5.41},
+    {"path": "/conteudos/aditivo-qualitativo-quantitativo/", "clicks": 0, "impressions": 22, "ctr": 0.0, "position": 6.09},
+    {"path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/", "clicks": 0, "impressions": 21, "ctr": 0.0, "position": 3.95},
+    {"path": "/especialista/tiago-jun-sasaki/", "clicks": 0, "impressions": 16, "ctr": 0.0, "position": 5.94},
+    {"path": "/diagnostico-b2g-360/", "clicks": 0, "impressions": 16, "ctr": 0.0, "position": 4.12},
+    {"path": "/conteudos/reequilibrio-empreitada-preco-global/", "clicks": 1, "impressions": 16, "ctr": 0.0625, "position": 6.88},
+    {"path": "/reequilibrio-obras-publicas/", "clicks": 1, "impressions": 14, "ctr": 0.0714, "position": 6.36},
+    {"path": "/diagnostico-pre-licitacao/", "clicks": 0, "impressions": 11, "ctr": 0.0, "position": 4.64},
+    {"path": "/conteudos/glosa-de-medicao-obra-publica/", "clicks": 1, "impressions": 11, "ctr": 0.0909, "position": 4.55},
+    {"path": "/defesa-tecnica-contratos-publicos/", "clicks": 0, "impressions": 6, "ctr": 0.0, "position": 5.33},
+    {"path": "/defesa-margem-contratos-publicos/", "clicks": 0, "impressions": 6, "ctr": 0.0, "position": 7.83},
+    {"path": "/bid-room-licitacoes-obras/", "clicks": 0, "impressions": 4, "ctr": 0.0, "position": 5.5},
+    {"path": "/ferramentas/diagnostico-defesa-margem/", "clicks": 0, "impressions": 3, "ctr": 0.0, "position": 1.33},
+    {"path": "/acompanhamento-contratos-obras/", "clicks": 0, "impressions": 3, "ctr": 0.0, "position": 5.0},
+    {"path": "/diretoria-b2g/", "clicks": 0, "impressions": 2, "ctr": 0.0, "position": 6.0},
+    {"path": "/diagnostico-b2g-expansao/", "clicks": 0, "impressions": 1, "ctr": 0.0, "position": 1.0}
+  ],
+  "interpretation_guardrail": "This snapshot proves page exposure for mapped URLs. It does not by itself prove conversion failure, query-family completeness, causality, trend, ranking durability or #413 CURRENT authority."
+}

@@ -15,6 +15,7 @@ from scripts.bofu_dominance.core.constants import (
     BUYER_DECISION_MAP_PATH,
     BUYER_DECISION_MAP_SCHEMA,
     BUYER_DECISION_REPORT_PATH,
+    MANUAL_GSC_SNAPSHOT_PATH,
     ORIGIN_MAIN_SHA,
     ROOT,
 )
@@ -37,6 +38,45 @@ PROTECTED_ROUTES = (
     "/reequilibrio-obras-publicas/",
     "/diagnostico-b2g-360/",
 )
+PROTECTED_ISSUES = frozenset({126, 127, 128, 327, 387, 529})
+MANUAL_GSC_SOURCE = "seo/gsc-2026-08-31/manual-page-snapshot.v1.json"
+MANUAL_PAGE_MAPPING_PATHS = {
+    "aditivos": [
+        "/aditivos-obras-publicas/",
+        "/conteudos/limite-aditivo-25-50-obra-publica/",
+        "/conteudos/aditivo-qualitativo-quantitativo/",
+    ],
+    "medicoes-pagamentos": [
+        "/medicoes-glosas-obras-publicas/",
+        "/conteudos/glosa-de-medicao-obra-publica/",
+    ],
+    "reequilibrio": ["/reequilibrio-obras-publicas/"],
+    "orcamento-bdi": [
+        "/auditoria-orcamento-licitacao/",
+        "/conteudos/sinapi-desonerado-nao-desonerado/",
+        "/conteudos/bdi-diferenciado-obra-publica/",
+        "/conteudos/administracao-local-orcamento-obra-publica/",
+    ],
+    "carteira-operacao": ["/diagnostico-b2g-360/"],
+    "edital-proposta": [
+        "/diagnostico-pre-licitacao/",
+        "/conteudos/comprovacao-exequibilidade-proposta-obra/",
+        "/conteudos/empreitada-preco-global-preco-unitario/",
+    ],
+    "defesa-margem": ["/defesa-margem-contratos-publicos/"],
+    "atrasos-prorrogacao": [
+        "/atrasos-prorrogacao-obras-publicas/",
+        "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
+        "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+    ],
+    "defesa-sancoes": ["/defesa-tecnica-contratos-publicos/"],
+    "gestao-contratual": ["/acompanhamento-contratos-obras/"],
+    "bid-room": ["/bid-room-licitacoes-obras/"],
+    "diagnostico-expansao": ["/diagnostico-b2g-expansao/"],
+    "diretoria-b2g": ["/diretoria-b2g/"],
+    "bid-readiness": [],
+    "partner-integrity": [],
+}
 REQUIRED_ROW_FIELDS = (
     "family_id",
     "buyer_job",
@@ -47,6 +87,7 @@ REQUIRED_ROW_FIELDS = (
     "gap",
     "supporting_urls",
     "gsc",
+    "manual_page_evidence",
     "content_quality",
     "proof",
     "offer",
@@ -197,6 +238,109 @@ def _validate_source_hashes(
     return sources
 
 
+def _validate_manual_gsc_snapshot(
+    snapshot: dict[str, Any], report: MapValidationReport
+) -> dict[str, dict[str, Any]]:
+    """Validate the sanitized founder snapshot without promoting it to CURRENT."""
+    if snapshot.get("schema_version") != "confenge-manual-gsc-snapshot/v1":
+        report.add("manual-gsc", "manual_snapshot_schema_invalid", str(snapshot.get("schema_version")))
+    if snapshot.get("source_kind") != "MANUAL_GSC_SNAPSHOT":
+        report.add("manual-gsc", "manual_snapshot_source_kind_invalid", str(snapshot.get("source_kind")))
+
+    raw = snapshot.get("raw_export_provenance") or {}
+    expected_raw = {
+        "workspace_status": "NOT_AVAILABLE_IN_EXECUTION_WORKSPACE",
+        "archived": False,
+        "checksum_status": "UNKNOWN_RAW_FILES_UNAVAILABLE",
+        "sha256": None,
+    }
+    for key, expected in expected_raw.items():
+        if raw.get(key) != expected:
+            report.add("manual-gsc.raw_export_provenance", "manual_raw_provenance_overclaim", f"{key}={raw.get(key)!r}")
+    if not _is_non_generic(raw.get("basis")):
+        report.add("manual-gsc.raw_export_provenance", "manual_raw_provenance_basis_missing", str(raw))
+
+    durable = snapshot.get("durable_authority_relationship") or {}
+    expected_durable = {
+        "issue": 413,
+        "current_authority_state": "UNKNOWN",
+        "durable_distinct_observations": 2,
+        "durable_observations_required": 3,
+        "counts_as_durable_observation": False,
+        "read_after_write_proven": False,
+    }
+    for key, expected in expected_durable.items():
+        if durable.get(key) != expected:
+            report.add("manual-gsc.durable_authority_relationship", "manual_snapshot_promoted_to_durable", f"{key}={durable.get(key)!r}")
+
+    site = snapshot.get("site_summary") or {}
+    if site.get("clicks") != 27 or site.get("impressions") != 1201:
+        report.add("manual-gsc.site_summary", "manual_site_totals_drift", str(site))
+    expected_site_ctr = 27 / 1201
+    if not isinstance(site.get("ctr"), (int, float)) or abs(site["ctr"] - expected_site_ctr) > 0.000005:
+        report.add("manual-gsc.site_summary", "manual_site_ctr_invalid", str(site.get("ctr")))
+
+    query_visibility = snapshot.get("query_visibility") or {}
+    expected_query_visibility = {
+        "status": "HEAVILY_CENSORED_OR_ANONYMIZED",
+        "visible_query_rows": 17,
+        "visible_query_impressions": 52,
+        "site_impressions": 1201,
+        "permitted_use": "QUALITATIVE_CORROBORATION_ONLY",
+        "raw_query_text_committed": False,
+    }
+    for key, expected in expected_query_visibility.items():
+        if query_visibility.get(key) != expected:
+            report.add("manual-gsc.query_visibility", "query_visibility_contract_drift", f"{key}={query_visibility.get(key)!r}")
+    expected_ratio = 52 / 1201
+    ratio = query_visibility.get("visible_impression_ratio")
+    if not isinstance(ratio, (int, float)) or abs(ratio - expected_ratio) > 0.000001:
+        report.add("manual-gsc.query_visibility", "query_visibility_ratio_invalid", str(ratio))
+    if "queries" in snapshot or "query_rows" in snapshot:
+        report.add("manual-gsc", "plaintext_query_rows_forbidden", "Commit only aggregate query-visibility metadata.")
+
+    pages: dict[str, dict[str, Any]] = {}
+    for index, row in enumerate(snapshot.get("page_rows") or []):
+        label = f"manual-gsc.page_rows[{index}]"
+        if not isinstance(row, dict):
+            report.add(label, "manual_page_row_invalid", str(row))
+            continue
+        path = row.get("path")
+        if not isinstance(path, str) or not path:
+            report.add(label, "manual_page_path_invalid", str(path))
+            continue
+        if path in pages:
+            report.add(label, "manual_page_path_duplicate", path)
+            continue
+        clicks = row.get("clicks")
+        impressions = row.get("impressions")
+        ctr = row.get("ctr")
+        position = row.get("position")
+        if not isinstance(clicks, int) or clicks < 0 or not isinstance(impressions, int) or impressions <= 0 or clicks > impressions:
+            report.add(label, "manual_page_counts_invalid", str(row))
+        if not isinstance(ctr, (int, float)) or not 0 <= ctr <= 1:
+            report.add(label, "manual_page_ctr_invalid", str(ctr))
+        elif isinstance(clicks, int) and isinstance(impressions, int) and impressions > 0:
+            if abs(ctr - clicks / impressions) > 0.0001:
+                report.add(label, "manual_page_ctr_incoherent", str(row))
+        if not isinstance(position, (int, float)) or position <= 0:
+            report.add(label, "manual_page_position_invalid", str(position))
+        pages[path] = row
+    return pages
+
+
+def _manual_aggregate(observations: list[dict[str, Any]]) -> dict[str, Any]:
+    impressions = sum(item["impressions"] for item in observations)
+    clicks = sum(item["clicks"] for item in observations)
+    weighted_position = sum(item["impressions"] * item["position"] for item in observations)
+    return {
+        "clicks": clicks,
+        "impressions": impressions,
+        "ctr": round(clicks / impressions, 6),
+        "position": round(weighted_position / impressions, 2),
+    }
+
+
 def _validate_priority(
     row: dict[str, Any], label: str, report: MapValidationReport
 ) -> tuple[int, int] | None:
@@ -215,9 +359,28 @@ def _validate_priority(
             report.add(label, "priority_factor_invalid", f"{factor}={value!r}")
             return None
         values.append(value)
-    demand = priority.get("search_demand") or {}
-    if demand.get("state") != "UNKNOWN" or demand.get("score") is not None:
-        report.add(label, "unknown_demand_not_preserved", json.dumps(demand, ensure_ascii=False))
+    demand = priority.get("query_demand") or {}
+    if demand != {"state": "UNKNOWN_QUERY_UNIVERSE_CENSORED", "score": None}:
+        report.add(label, "unknown_query_demand_not_preserved", json.dumps(demand, ensure_ascii=False))
+        return None
+    manual = row.get("manual_page_evidence") or {}
+    owner_observation = manual.get("owner_observation") or {}
+    exposure = priority.get("page_exposure") or {}
+    expected_exposure = {
+        "state": "OBSERVED_CANONICAL_OWNER_PAGE",
+        "source_kind": "MANUAL_GSC_SNAPSHOT",
+        "impressions": owner_observation.get("impressions"),
+        "clicks": owner_observation.get("clicks"),
+        "ctr": owner_observation.get("ctr"),
+        "position": owner_observation.get("position"),
+        "conversion_inference": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE",
+    }
+    if manual.get("status") != "MANUAL_GSC_SNAPSHOT" or exposure != expected_exposure:
+        report.add(label, "page_exposure_priority_drift", f"expected={expected_exposure} actual={exposure}")
+        return None
+    impressions = exposure.get("impressions")
+    if not isinstance(impressions, int) or impressions <= 0:
+        report.add(label, "page_exposure_impressions_invalid", str(impressions))
         return None
     base = values[0] * values[1] * values[2] * values[3]
     if priority.get("commercial_intent") != (row.get("commercial_intent") or {}).get("score"):
@@ -225,10 +388,10 @@ def _validate_priority(
     if priority.get("economic_value") != (row.get("economic_consequence") or {}).get("score"):
         report.add(label, "economic_value_priority_drift", str(priority.get("economic_value")))
     expected = {
-        "state": "UNKNOWN_DEMAND",
-        "value": None,
+        "state": "OBSERVED_PAGE_EXPOSURE",
+        "value": base * impressions,
         "known_factor_product": base,
-        "ceiling": base * 5,
+        "canonical_owner_impressions": impressions,
     }
     if priority.get("score") != expected:
         report.add(
@@ -238,7 +401,7 @@ def _validate_priority(
         )
     if not str(priority.get("next_wave_output") or "").strip():
         report.add(label, "priority_next_wave_output_missing", row.get("family_id", "?"))
-    return base, base * 5
+    return base * impressions, base
 
 
 def _validate_reconciled_authorities(
@@ -444,7 +607,9 @@ def _validate_reconciled_authorities(
 
 
 def validate_buyer_decision_map(
-    root: Path = ROOT, document: dict[str, Any] | None = None
+    root: Path = ROOT,
+    document: dict[str, Any] | None = None,
+    manual_snapshot: dict[str, Any] | None = None,
 ) -> MapValidationReport:
     """Validate completeness, ownership, honesty, protected routes and priority."""
     report = MapValidationReport()
@@ -481,6 +646,7 @@ def validate_buyer_decision_map(
         "data/organic/medicoes-glosas-query-ownership.v1.json",
         "data/bofu-dominance/core/gsc-live-overlay.v1.json",
         "data/bofu-dominance/core/issue-state-snapshot.v1.json",
+        MANUAL_GSC_SOURCE,
     }
     if set(sources) != required_sources:
         report.add(
@@ -502,6 +668,11 @@ def validate_buyer_decision_map(
             root / "data/organic/medicoes-glosas-query-ownership.v1.json"
         )
         gsc_overlay = _read_json(root / "data/bofu-dominance/core/gsc-live-overlay.v1.json")
+        manual_gsc_snapshot = (
+            manual_snapshot
+            if manual_snapshot is not None
+            else _read_json(root / MANUAL_GSC_SNAPSHOT_PATH.relative_to(ROOT))
+        )
         issue_snapshot = _read_json(
             root / "data/bofu-dominance/core/issue-state-snapshot.v1.json"
         )
@@ -512,6 +683,7 @@ def validate_buyer_decision_map(
     registry_by_id = {item["id"]: item for item in registry.get("families") or []}
     matrix_by_id = {item["intent_cluster"]: item for item in matrix.get("rows") or []}
     rows = doc.get("rows") or []
+    manual_pages = _validate_manual_gsc_snapshot(manual_gsc_snapshot, report)
     if not isinstance(rows, list):
         report.add("rows", "projection_rows_invalid", "rows must be an array")
         return report
@@ -616,6 +788,20 @@ def validate_buyer_decision_map(
             "gsc_policy_readiness_overclaim",
             f"policy={gsc_policy.get('state')} overlay_ready={gsc_overlay.get('core_ready_for_product_decisions')}",
         )
+    expected_manual_policy = {
+        "source": MANUAL_GSC_SOURCE,
+        "source_kind": "MANUAL_GSC_SNAPSHOT",
+        "page_evidence_state": "OBSERVED_WHERE_EXACTLY_MAPPED",
+        "query_visibility_state": "HEAVILY_CENSORED_OR_ANONYMIZED",
+        "counts_as_issue_413_observation": False,
+        "durable_current_authority": "UNKNOWN",
+    }
+    if gsc_policy.get("manual_snapshot") != expected_manual_policy:
+        report.add(
+            "gsc_policy.manual_snapshot",
+            "manual_gsc_policy_drift",
+            f"expected={expected_manual_policy} actual={gsc_policy.get('manual_snapshot')}",
+        )
 
     declared_owner_rows: dict[str, list[str]] = {}
     for row in rows:
@@ -633,8 +819,11 @@ def validate_buyer_decision_map(
     owner_to_family = {url: families[0] for url, families in declared_owner_rows.items()}
     controllable: list[tuple[int, int, str, dict[str, Any]]] = []
     unknown_gsc = 0
+    manual_observed = 0
+    manual_unknown = 0
     coverage_counts: dict[str, int] = {}
     protected_seen: set[str] = set()
+    protected_family_ids: set[str] = set()
     for index, row in enumerate(rows):
         label = f"rows[{index}]"
         if not isinstance(row, dict):
@@ -785,10 +974,22 @@ def validate_buyer_decision_map(
         if execution_state not in ALLOWED_EXECUTION_STATES:
             report.add(label, "execution_state_invalid", str(execution_state))
         route = _route_from_url(str(owner_url)) if owner_url else None
+        referenced_issues = {
+            item.get("number")
+            for item in row.get("issue_refs") or []
+            if isinstance(item, dict)
+        }
+        issue_protected = bool(referenced_issues & PROTECTED_ISSUES)
         if route in PROTECTED_ROUTES:
             protected_seen.add(str(route))
+        if route in PROTECTED_ROUTES or issue_protected:
+            protected_family_ids.add(family_id)
             if state != "MEASUREMENT_WAIT" or execution_state != "MEASUREMENT_WAIT":
-                report.add(label, "protected_route_executable_now", f"{route}: {state}/{execution_state}")
+                report.add(
+                    label,
+                    "protected_route_executable_now",
+                    f"{route or family_id}: {state}/{execution_state}; issues={sorted(referenced_issues & PROTECTED_ISSUES)}",
+                )
 
         gsc = row.get("gsc") or {}
         if gsc.get("status") != gsc_policy.get("state"):
@@ -855,6 +1056,71 @@ def validate_buyer_decision_map(
         elif gsc.get("status") != "OBSERVED_COMPARABLE":
             report.add(label, "gsc_state_invalid", str(gsc.get("status")))
 
+        manual = row.get("manual_page_evidence") or {}
+        expected_paths = MANUAL_PAGE_MAPPING_PATHS.get(family_id)
+        if expected_paths is None:
+            report.add(label, "manual_family_mapping_missing", family_id)
+            expected_paths = []
+        if expected_paths:
+            missing_paths = [path for path in expected_paths if path not in manual_pages]
+            if missing_paths:
+                report.add(label, "manual_mapped_page_missing", str(missing_paths))
+            observations = [manual_pages[path] for path in expected_paths if path in manual_pages]
+            matrix_support = {
+                item.replace(PUBLIC_ORIGIN, "", 1)
+                for item in row.get("supporting_urls") or []
+            }
+            expected_mappings = [
+                {
+                    "path": path,
+                    "role": (
+                        "CANONICAL_OWNER"
+                        if path == route
+                        else "DECLARED_SUPPORT"
+                        if path in matrix_support
+                        else "CONTRACT_MAPPED_SUPPORT"
+                    ),
+                }
+                for path in expected_paths
+            ]
+            expected_manual = {
+                "status": "MANUAL_GSC_SNAPSHOT",
+                "source": MANUAL_GSC_SOURCE,
+                "mapping_confidence": (
+                    "HIGH_EXACT_CANONICAL_OWNER"
+                    if len(expected_paths) == 1
+                    else "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT"
+                ),
+                "mapped_pages": expected_mappings,
+                "owner_observation": manual_pages.get(route),
+                "family_aggregate": _manual_aggregate(observations) if observations else None,
+                "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE",
+            }
+            if manual != expected_manual:
+                report.add(
+                    label,
+                    "manual_page_evidence_drift",
+                    f"expected={expected_manual} actual={manual}",
+                )
+            manual_observed += 1
+        else:
+            expected_manual = {
+                "status": "UNKNOWN",
+                "source": MANUAL_GSC_SOURCE,
+                "mapping_confidence": "NONE_NO_CANONICAL_MAPPING",
+                "mapped_pages": [],
+                "owner_observation": None,
+                "family_aggregate": None,
+                "reason": "No valid canonical page mapping exists; manual page evidence remains UNKNOWN and is not zero demand.",
+            }
+            if manual != expected_manual:
+                report.add(
+                    label,
+                    "manual_page_unknown_drift",
+                    f"expected={expected_manual} actual={manual}",
+                )
+            manual_unknown += 1
+
         current = row.get("current_answer") or {}
         if not current.get("type") or not isinstance(current.get("source_urls"), list):
             report.add(label, "current_answer_invalid", str(current))
@@ -900,10 +1166,10 @@ def validate_buyer_decision_map(
 
         priority_score = _validate_priority(row, label, report)
         if priority_score:
-            if route in PROTECTED_ROUTES:
-                report.add(label, "protected_route_in_controllable_queue", str(route))
-            minimum, maximum = priority_score
-            controllable.append((maximum, minimum, family_id, row))
+            if route in PROTECTED_ROUTES or issue_protected:
+                report.add(label, "protected_route_in_controllable_queue", str(route or family_id))
+            score, known_product = priority_score
+            controllable.append((score, known_product, family_id, row))
 
     if protected_seen != set(PROTECTED_ROUTES):
         report.add(
@@ -943,8 +1209,11 @@ def validate_buyer_decision_map(
         "duplicate_owners": sum(
             len(families) - 1 for families in declared_owner_rows.values() if len(families) > 1
         ),
-        "gsc_unknown": unknown_gsc,
+        "durable_gsc_unknown": unknown_gsc,
+        "manual_page_observed": manual_observed,
+        "manual_page_unknown": manual_unknown,
         "protected_routes": len(protected_seen),
+        "protected_families": len(protected_family_ids),
         "controllable_queue": len(queue),
         "reconciled_authorities": len(required_sources),
         "coverage_states": dict(sorted(coverage_counts.items())),
@@ -958,7 +1227,12 @@ def render_buyer_decision_report(document: dict[str, Any]) -> str:
     rows = document["rows"]
     owners = sum(1 for row in rows if row.get("canonical_owner_url"))
     gaps = len(rows) - owners
-    unknown = sum(1 for row in rows if (row.get("gsc") or {}).get("status") == "UNKNOWN")
+    durable_unknown = sum(1 for row in rows if (row.get("gsc") or {}).get("status") == "UNKNOWN")
+    manual_observed = sum(
+        1
+        for row in rows
+        if (row.get("manual_page_evidence") or {}).get("status") == "MANUAL_GSC_SNAPSHOT"
+    )
     counts: dict[str, int] = {}
     for row in rows:
         counts[row["coverage_state"]] = counts.get(row["coverage_state"], 0) + 1
@@ -984,30 +1258,48 @@ def render_buyer_decision_report(document: dict[str, Any]) -> str:
         f"- buyer jobs: **{len(rows)}/{len(rows)} (100%)**",
         f"- unique canonical owners: **{owners}**",
         f"- explicit gaps: **{gaps}**",
-        f"- GSC `UNKNOWN`: **{unknown}/{len(rows)}**; UNKNOWN is never zero demand or zero rank",
+        f"- durable/current GSC authority `UNKNOWN`: **{durable_unknown}/{len(rows)}**; the manual export does not count as #413 observation 3/3",
+        f"- manual page evidence observed: **{manual_observed}/{len(rows)}** families; the two ownerless gaps remain page-level `UNKNOWN`",
+        "- query visibility: **52/1,201 impressions (4.3%)**; visible queries are qualitative corroboration only, never the query universe",
         f"- protected routes held at `MEASUREMENT_WAIT`: **{len(document['protected_routes'])}/{len(document['protected_routes'])}**",
         f"- coverage states: {', '.join(f'`{key}`={value}' for key, value in sorted(counts.items()))}",
         "",
+        "## GSC evidence status and #413 boundary",
+        "",
+        "- `MANUAL_GSC_SNAPSHOT`: founder-reported Search Console UI export for Web / last 28 days (`2026-08-02`..`2026-08-29`); page rows may be used as measured exposure where URL mapping is exact.",
+        "- durable/current authority: remains `UNKNOWN` at **2/3** distinct durable observations. There is no snapshot/pointer write, host read-after-write or manifest parity for this manual export.",
+        "- raw provenance: the referenced campaign CSV directory was unavailable in the execution workspace, so no raw checksum is claimed. The normalized page aggregate is hash-pinned; plaintext queries are not committed.",
+        "- interpretation: zero clicks on six, four or three impressions is exposure, not a conversion-failure conclusion.",
+        "",
         "## Buyer job → owner/gap → next decision",
         "",
-        "| Query family | Buyer job | Owner or gap | State | Proof | Offer / CTA | Next decision → destination |",
-        "|---|---|---|---|---|---|---|",
+        "| Query family | Buyer job | Owner or gap | State | Manual owner-page evidence | Proof | Offer / CTA | Next decision → destination |",
+        "|---|---|---|---|---|---|---|---|",
     ]
     for row in rows:
         owner = row.get("canonical_owner_url") or f"GAP: {(row.get('gap') or {}).get('state')}"
         offer = (row.get("offer") or {}).get("destination_service_id") or "none"
         cta = (row.get("cta") or {}).get("label") or "none"
+        observation = (row.get("manual_page_evidence") or {}).get("owner_observation")
+        if observation:
+            page_evidence = (
+                f"{observation['clicks']} clicks / {observation['impressions']} imp / "
+                f"{observation['ctr'] * 100:.2f}% CTR / pos {observation['position']:.2f}; "
+                f"`{row['manual_page_evidence']['mapping_confidence']}`"
+            )
+        else:
+            page_evidence = "UNKNOWN; `NONE_NO_CANONICAL_MAPPING`"
         lines.append(
-            f"| `{row['family_id']}` | {row['buyer_job']} | `{owner}` | `{row['coverage_state']}` | `{row['proof']['state']}` | `{offer}` / {cta} | {row['next_likely_decision']} → `{row['canonical_destination']}` |"
+            f"| `{row['family_id']}` | {row['buyer_job']} | `{owner}` | `{row['coverage_state']}` | {page_evidence} | `{row['proof']['state']}` | `{offer}` / {cta} | {row['next_likely_decision']} → `{row['canonical_destination']}` |"
         )
     lines.extend(
         [
             "",
             "## Controllable gaps for the next wave",
             "",
-            f"Rule: `{document['priority_rule']['formula']}`. All search-demand values are UNKNOWN, so the realized product stays null; zero and a fabricated floor are never substituted. Ordering uses only the potential ordinal ceiling, then the product of known factors, with a hard cap of five.",
+            f"Rule: `{document['priority_rule']['formula']}`. Query-universe demand stays UNKNOWN because only 4.3% of site impressions are visible in the query table. The realized priority index uses actual canonical-owner page impressions; clicks, CTR and position remain context and do not turn tiny zero-click samples into conversion failure. Hard cap: five.",
             "",
-            "| Rank | Family | State | Demand-aware score | Finite next-wave output |",
+            "| Rank | Family | State | Page-exposure priority index | Finite next-wave output |",
             "|---:|---|---|---:|---|",
         ]
     )
@@ -1015,8 +1307,9 @@ def render_buyer_decision_report(document: dict[str, Any]) -> str:
     for item in document["controllable_gap_queue"]:
         row = by_id[item["family_id"]]
         score = item["score"]
+        exposure = row["prioritization"]["page_exposure"]
         lines.append(
-            f"| {item['rank']} | `{item['family_id']}` | `{item['coverage_state']}` | `UNKNOWN`; ceiling {score['ceiling']}, known factors {score['known_factor_product']} | {row['prioritization']['next_wave_output']} |"
+            f"| {item['rank']} | `{item['family_id']}` | `{item['coverage_state']}` | {score['value']} = {score['known_factor_product']} × {score['canonical_owner_impressions']} owner-page impressions; {exposure['clicks']} clicks, {exposure['ctr'] * 100:.2f}% CTR, pos {exposure['position']:.2f} | {row['prioritization']['next_wave_output']} |"
         )
     lines.extend(
         [
@@ -1028,6 +1321,7 @@ def render_buyer_decision_report(document: dict[str, Any]) -> str:
             "- `intent-registry.v2` remains the only intent universe; this file is a hash-pinned derived projection.",
             "- `bofu-intent-matrix` owns existing route/CTA/offer projection; `public-family-registry` remains the public conversion gate.",
             "- `content-service-map` is read-only here because it is frozen by the active measurement window.",
+            "- The manual page snapshot is a sanitized, hash-pinned measurement overlay. It does not replace the durable GSC authority or count toward #413.",
             "- `extra-cli` owns facts and provenance through versioned SELECT-only contracts.",
             "- Warmbly owns qualified opportunity, proposal, contract, margin and outcomes after `source=CONFENGE_WEB` receipt.",
             "- Public analytics remain aggregate allowlist only, without PII.",
