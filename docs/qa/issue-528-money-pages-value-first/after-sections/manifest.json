@@ -4,9 +4,9 @@
   "capture_mode": "first_fold_and_element_sections_no_fullpage",
   "fullpage_used": false,
   "fullpage_limitation_issue": 540,
-  "captured_at": "2026-08-31T15:12:50.871Z",
-  "commit_sha": "6f90e2d28a50cc2126ddc3d8b6e670a149eda8f4",
-  "rendered_content_sha": "6f90e2d28a50cc2126ddc3d8b6e670a149eda8f4",
+  "captured_at": "2026-08-31T15:17:40.934Z",
+  "commit_sha": "66f9934942463f9e73166ddc5d6a586fabb3bbf6",
+  "rendered_content_sha": "66f9934942463f9e73166ddc5d6a586fabb3bbf6",
   "remote_build_info": null,
   "tree_dirty": false,
   "base_url": "http://127.0.0.1:8798",
@@ -22,7 +22,7 @@
       "section": "first-fold",
       "viewport": "390x844",
       "file": "servicos-obras-publicas-first-fold-390x844.png",
-      "sha256": "343970ea13fce6f8bdd9a59d10ddb160937fa553dc5b7309f08d450e8652e984"
+      "sha256": "bdba08bb49bdf6d9a4d4df551df5205bb5f090cd0e9538271eb6867dd29907e6"
     },
     {
       "route": "/servicos-obras-publicas/",
@@ -30,7 +30,7 @@
       "section": "decision",
       "viewport": "390x844",
       "file": "servicos-obras-publicas-decision-390x844.png",
-      "sha256": "67b5216b63f5cafca1b28be0bdc33b183f84fc452345afdb5e7a37e1b3d74646"
+      "sha256": "abc1674ba9a3da16be7fd71825cdc4fb8b2f5807289121568f02c3f189d8e4da"
     },
     {
       "route": "/servicos-obras-publicas/",
@@ -38,7 +38,7 @@
       "section": "contract-events",
       "viewport": "390x844",
       "file": "servicos-obras-publicas-contract-events-390x844.png",
-      "sha256": "e629374b27f15a18b56141ee53932d980349a5720e0f9968b28a55aca4456984"
+      "sha256": "3dc387e99837e93652ed1dbbb89f5848b4bd48c6e53dc3802c625fcdc54ac897"
     },
     {
       "route": "/servicos-obras-publicas/",
@@ -46,7 +46,7 @@
       "section": "first-fold",
       "viewport": "1366x768",
       "file": "servicos-obras-publicas-first-fold-1366x768.png",
-      "sha256": "d74a15c1a0533353dbe748256a85f19bc782b2c8673533fcaec66aa26d29a92e"
+      "sha256": "1b743794c02238abde3ba29d1eb0f5ccbdfe69cc2d34ba255170fba7a75c7a58"
     },
     {
       "route": "/servicos-obras-publicas/",
@@ -54,7 +54,7 @@
       "section": "decision",
       "viewport": "1366x768",
       "file": "servicos-obras-publicas-decision-1366x768.png",
-      "sha256": "3b7caf8666fe8b9c8791efd2ae6e6a6781e3d2682bf46af47cde0b710bc58907"
+      "sha256": "e5c5e9ddcfcedd3213f1f6ddccf75dc3326757126998337f771a035f2fdd7bd0"
     },
     {
       "route": "/servicos-obras-publicas/",
@@ -62,7 +62,7 @@
       "section": "contract-events",
       "viewport": "1366x768",
       "file": "servicos-obras-publicas-contract-events-1366x768.png",
-      "sha256": "3c9ce23ff697dae725cd48f4b910c2479430d45dd3f90f0a53f6800f363189dc"
+      "sha256": "8a3dd8395d982b8410ebc156431bdd1402562d39963cd9a0123f99abad6d151e"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
