@@ -1116,7 +1116,7 @@ def test_value_ladder_price_and_persisted_order_entry_contract() -> None:
         "report_final",
         "report_mobile_sticky",
     } == positions
-    assert html.count("Configurar meu relatório por R$ 599") >= 3
+    assert html.count("Configurar esta priorização por R$ 599") >= 3
     assert "R$ 599 = 1 relatório adaptado" in html
     for marker in (
         "Conclusão executiva",
