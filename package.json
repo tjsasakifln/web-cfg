@@ -123,6 +123,7 @@
     "audit:layout-sitewide": "node scripts/site/audit_sitewide_layout.mjs",
     "test:report-model-ui": "node scripts/site/test_report_model_ui.mjs",
     "test:deliverables-hub-ui": "node scripts/site/test_deliverables_hub_ui.mjs",
+    "audit:deliverables-live": "node scripts/site/audit_deliverables_live.mjs",
     "test:site-excellence": "python3 -m pytest scripts/site/test_site_excellence.py -q",
     "quality:site-excellence": "python3 scripts/site/site_excellence.py",
     "test:screenshots": "node scripts/site/capture_screenshots.mjs",
