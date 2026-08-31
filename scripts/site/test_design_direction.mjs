@@ -285,8 +285,12 @@ test("the committed evidence still supports the recorded decision", () => {
 test("the capture index is durable, hashed, and on the five protocol viewports", () => {
   const index = JSON.parse(readText(join(EVIDENCE, "capture-index.json")));
   assert.deepEqual(index.protocol.viewports, ["390x844", "768x1024", "1366x768", "1363x936", "1440x1000"]);
-  assert.equal(index.comparison_ready, false, "pre-#540 captures must not claim comparability");
-  assert.ok(index.comparison_blockers.length > 0, "historical capture blockers disappeared");
+  assert.equal(typeof index.comparison_ready, "boolean", "capture comparability is undeclared");
+  if (index.comparison_ready) {
+    assert.deepEqual(index.comparison_blockers, [], "comparable capture still declares blockers");
+  } else {
+    assert.ok(index.comparison_blockers.length > 0, "historical capture blockers disappeared");
+  }
   assert.ok(index.file_count >= 45, `índice raso: ${index.file_count} arquivos`);
   for (const group of index.groups) {
     assert.equal(group.state.fullpage, true, `${group.group}: captura não é full-page`);
