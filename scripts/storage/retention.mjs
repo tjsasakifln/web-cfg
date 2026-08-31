@@ -115,7 +115,9 @@ async function main() {
     // missing) before the strict scan. Dangling or malformed indexes still
     // block the run. The global writer lock makes repair+planning one serial
     // operation.
-    leads.validateUnlocked({ repairIdempotency: true });
+    // Dry-run is strictly read-only. Only an already authorized apply may
+    // repair the one recoverable interruption boundary before retrying.
+    leads.validateUnlocked({ repairIdempotency: options.apply });
     const pendingDeletes = [];
     for (const namespace of Object.keys(POLICIES)) {
       const rows = backend.namespace(namespace).list();

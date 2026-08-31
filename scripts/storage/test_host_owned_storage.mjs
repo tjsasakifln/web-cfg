@@ -472,6 +472,20 @@ try {
     interruptedStrictCode = err.code;
   }
   assert(interruptedStrictCode === "STORE_INDEX_MISSING", "interruption fixture did not remove only the derived index", interruptedStrictCode);
+  let interruptedDryRun;
+  try {
+    await execFileAsync(
+      process.execPath,
+      [retentionScript, "--store", interruptedRetentionRoot, "--now", "2026-08-26T00:00:00Z"],
+    );
+  } catch (err) {
+    interruptedDryRun = JSON.parse(err.stderr);
+  }
+  assert(interruptedDryRun?.error_code === "STORE_INDEX_MISSING", "retention dry-run did not fail closed on a missing index", interruptedDryRun);
+  assert(
+    interruptedRetentionStore.idempotency.get(sha256(retentionInterruptedLead.idempotency_key)) === null,
+    "retention dry-run repaired an index instead of remaining read-only",
+  );
   const resumedRetention = JSON.parse((await execFileAsync(
     process.execPath,
     [retentionScript, "--store", interruptedRetentionRoot, "--now", "2026-08-26T00:00:00Z", "--apply"],

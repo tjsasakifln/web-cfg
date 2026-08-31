@@ -40,6 +40,7 @@ const logCanaries = {
   query: "private-query-442",
   uri: "private-uri-442",
 };
+const opaqueRequestCanaries = ["campaign-442", "AcmeBot", "551199"];
 
 const body = (key) => ({
   action: "handraise",
@@ -126,7 +127,7 @@ try {
     has_phone: true,
     has_email: true,
     handoff: "PENDING",
-    as_of: "2026-08-31T12:00:00Z",
+    as_of: "2026-08-31",
     history_state_sha256: "0123456789abcdef",
     promoted: true,
     dead: 2,
@@ -138,6 +139,11 @@ try {
   safeLog("error", "redaction_probe", adversarialLogFields);
   safeLog("error/private-error-442", `redaction_probe/${logCanaries.uri}?q=${logCanaries.query}`, adversarialLogFields);
   safeLog("error", "redaction_probe", { code: logCanaries.ipv6 });
+  safeLog("error", "opaque_request_probe", {
+    code: opaqueRequestCanaries[0],
+    reason: opaqueRequestCanaries[1],
+    count: Number(opaqueRequestCanaries[2]),
+  });
   safeLog("info", "operational_probe", {
     status: "persisted",
     http: 202,
@@ -159,6 +165,7 @@ for (const needle of [
   "12.345",
   "must-not-leak",
   ...Object.values(logCanaries),
+  ...opaqueRequestCanaries,
 ]) {
   assert.equal(logText.includes(needle), false, `request canary leaked in app log: ${needle}`);
 }
@@ -168,13 +175,13 @@ for (const aggregate of [
   '"stage_len":42',
   '"has_phone":true',
   '"has_email":true',
-  '"handoff":"PENDING"',
-  '"as_of":"2026-08-31T12:00:00Z"',
+  '"handoff":"pending"',
+  '"as_of":"2026-08-31"',
   '"history_state_sha256":"0123456789abcdef"',
   '"promoted":true',
   '"dead":2',
   '"aborted":1',
-  '"abort_reason":"policy_blocked"',
+  '"abort_reason":"configuration"',
   '"backlog_attempted":3',
   '"backlog_policy_blocked":1',
 ]) {

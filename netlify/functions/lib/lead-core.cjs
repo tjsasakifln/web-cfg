@@ -1189,6 +1189,26 @@ const SAFE_LOG_OPAQUE_KEYS = new Set([
   "subscription_id",
 ]);
 const REQUEST_LITERAL_MARKER = /(?:^|[-_.:])(?:cookie|query|referer|referrer|request|session|ua|uri|url|user[-_.]?agent)(?:[-_.:]|$)|mozilla|applewebkit|chrome|firefox|safari|curl|wget|postman/i;
+const SAFE_LOG_CLASS_VALUES = new Map([
+  ["action", new Set(["handraise", "xray"])],
+  ["classifier", new Set(["default", "signals"])],
+  ["contact_kind", new Set(["email", "phone", "whatsapp", "none", "anonymous"])],
+  ["decision_state", new Set(["execute_now", "validate", "defer", "sunset", "superseded"])],
+  ["fallback_kind", new Set(["internal"])],
+  ["flag", new Set(["on", "off"])],
+  ["handoff", new Set(["skipped", "pending", "delivered", "retryable", "dead", "blocked"])],
+  ["journey", ALLOWED_JOURNEYS],
+  ["prazo", new Set(["unknown"])],
+  ["record_kind", new Set(["real", "qa", "synthetic", "internal"])],
+  ["send", new Set(["ok", "skipped", "error", "held"])],
+  ["status", new Set(["ok", "error", "skip", "skipped", "held", "pending", "persisted", "retryable", "delivered", "dead", "blocked", "failed", "current", "unknown", "ready", "active", "inactive"])],
+  ["track", new Set(["contrato", "edital", "operacao"])],
+  ["to", new Set(["lead_persisted", "contacted", "qualified", "proposal_sent", "won", "lost", "nurturing"])],
+  ["uf", new Set(["ac", "al", "ap", "am", "ba", "ce", "df", "es", "go", "ma", "mt", "ms", "mg", "pa", "pb", "pr", "pe", "pi", "rj", "rn", "rs", "ro", "rr", "sc", "sp", "se", "to"])],
+  ["via", new Set(["idem_map", "only_if_new", "only_if_new_body_pending"])],
+  ["xray_state", new Set(["requested", "ready", "generated", "unavailable", "failed"])],
+]);
+const OPERATIONAL_REASON_LITERALS = new Set(["retryable", "blocked", "skipped", "unknown"]);
 
 // Application logs are an operational event stream, not a request dump. New
 // fields fail closed until explicitly classified here; request headers, URLs,
@@ -1265,7 +1285,19 @@ function safeLogNumber(key, value) {
   if (key === "http") return Number.isInteger(value) && value >= 100 && value <= 599 ? value : null;
   if (key === "latency_ms") return value <= 15 * 60 * 1000 ? value : null;
   if (key === "stage_len") return Number.isInteger(value) && value <= MAX_FIELD.estagio ? value : null;
-  return value <= 1_000_000 ? value : null;
+  return value <= 100_000 ? value : null;
+}
+
+function operationalReasonClass(value) {
+  const text = value.toLowerCase();
+  if (OPERATIONAL_REASON_LITERALS.has(text)) return text;
+  if (/auth|unauthor|credential|secret|token/.test(text)) return "authorization";
+  if (/turnstile|captcha|honeypot|rate|(?:^|_)ip(?:_|$)/.test(text)) return "anti_abuse";
+  if (/store|persist|write|blob|file|index|memory/.test(text)) return "storage";
+  if (/http|webhook|ntfy|email|resend|delivery|handoff|upstream|network|timeout/.test(text)) return "transport";
+  if (/config|missing|invalid|allowlist|https|host|environment|policy/.test(text)) return "configuration";
+  if (/conflict|exists|duplicate|idempot/.test(text)) return "conflict";
+  return "other";
 }
 
 function safeLogString(key, value) {
@@ -1273,12 +1305,17 @@ function safeLogString(key, value) {
   if (REQUEST_LITERAL_MARKER.test(text) || RAW_IPV4_RE.test(text) || net.isIP(text) !== 0) return null;
   if (redactSensitiveText(text) !== text) return null;
   if (key === "as_of") {
-    return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(text) ? text : null;
+    return /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z)?$/.test(text) ? text : null;
   }
   if (SAFE_LOG_OPAQUE_KEYS.has(key)) {
     return /^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,127}$/.test(text) ? text : null;
   }
-  return SAFE_LOG_TOKEN_RE.test(text) && text.split(":").length <= 2 ? text : null;
+  if (["abort_reason", "code", "error", "reason"].includes(key)) return operationalReasonClass(text);
+  if (key === "recorte") return text ? "present" : null;
+  const classes = SAFE_LOG_CLASS_VALUES.get(key);
+  if (!classes || !SAFE_LOG_TOKEN_RE.test(text) || text.split(":").length > 2) return null;
+  const normalized = text.toLowerCase();
+  return classes.has(normalized) ? normalized : "other";
 }
 
 function redactSensitiveText(value) {
