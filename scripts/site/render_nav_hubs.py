@@ -219,9 +219,9 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
             "<span>{label}</span><strong>{name}</strong><small>{headline}</small>"
             "</a>".format(
                 url=e(offer["url"]),
-                label=e(offer.get("label") or ""),
+                label=e(offer.get("services_hub_label") or offer.get("label") or ""),
                 name=e(offer["name"]),
-                headline=e(offer.get("headline") or ""),
+                headline=e(offer.get("services_hub_headline") or offer.get("headline") or ""),
             )
         )
         items.append({"name": offer["name"], "url": offer["url"]})
@@ -249,8 +249,8 @@ def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
 <section aria-labelledby="hub-next" class="section section--default">
 <div class="container">
 <header class="section-head">
-<h2 class="hub-section-title" id="hub-next">O problema é outro ou ainda não está delimitado?</h2>
-<p class="section-lead">O Diagnóstico da Operação em Obras Públicas é uma porta de entrada: mapeia onde a frente pública perde tempo, margem e controle e indica o próximo trabalho aplicável.</p>
+<h2 class="hub-section-title" id="hub-next">A decisão ainda não está delimitada?</h2>
+<p class="section-lead">O Diagnóstico da Operação em Obras Públicas entrega um mapa de perdas e prioridades para 90 dias antes de indicar o próximo trabalho aplicável.</p>
 </header>
 <p><a class="button button-secondary" href="/diagnostico-b2g-360/">Começar pelo Diagnóstico da Operação em Obras Públicas <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
 <p><a class="text-link" href="{e(problems["url"])}">Conhecer os problemas que resolvemos <svg class="icon"><use href="#i-arrow"></use></svg></a></p>
