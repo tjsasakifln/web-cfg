@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
-  "review_target_sha": "0cf4782b173842415eb5a980c1bfeb39349b2478",
+  "review_target_sha": "b8c7de298aa51120902d1e00c4304ca53cd00ca2",
   "preview_base_url": "https://deploy-preview-54--confenge.netlify.app",
-  "preview_build_sha": "0cf4782b173842415eb5a980c1bfeb39349b2478",
-  "preview_generated_at": "2026-08-30T23:19:27Z",
+  "preview_build_sha": "b8c7de298aa51120902d1e00c4304ca53cd00ca2",
+  "preview_generated_at": "2026-08-31T01:19:51Z",
   "pages": [
     {
       "page_id": "guia-checklist-aditivo",
