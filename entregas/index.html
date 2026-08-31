@@ -334,7 +334,8 @@
 <p>Você já viu o formato, o conteúdo e o preço de cada unidade. Descreva aqui a decisão que precisa tomar e a carteira envolvida: a resposta indica qual entrega se aplica, em qual ordem e com quais insumos.</p>
 <p>Este formulário registra o pedido de análise. Ele não cobra, não recebe pagamento e não conclui a contratação.</p>
 </div>
-<form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="entregas-hub-handraise" data-asset-id="entregas-exemplos-hub" data-route-family="entregas" data-cta-position="hub_capture" data-journey="operacao">
+<form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="entregas-hub-handraise" data-asset-id="entregas-exemplos-hub" data-route-family="entregas" data-cta-position="hub_capture" data-journey="operacao" data-form-contract="next-state/v1" data-next-state-profile="delivery_selection" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Registre a decisão e, se souber, a entrega mais próxima para receber um enquadramento entre as unidades publicadas.</p>
+<p class="form-hint" data-field-purpose>A entrega selecionada orienta a comparação; nome e um canal válido permitem retorno; empresa e descrição da decisão são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <input type="hidden" name="offer_id" value=""/>
 <input type="hidden" name="terms_id" value=""/>
 <input type="hidden" id="jornada-hidden" name="jornada" value="operacao"/>
@@ -356,12 +357,13 @@
 <!-- GENERATED:DELIVERABLE-SELECT:END -->
 <label>Nome do representante <input id="nome" name="nome" required autocomplete="name"/></label>
 <label>Empresa <input id="empresa" name="empresa" autocomplete="organization"/></label>
-<label>E-mail profissional <input id="email" name="email" type="email" autocomplete="email"/></label>
-<label>WhatsApp <input id="telefone" name="telefone" inputmode="numeric" autocomplete="tel"/></label>
+<label>E-mail profissional <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/></label>
+<label>WhatsApp <input id="telefone" name="telefone" inputmode="tel" autocomplete="tel" type="tel" maxlength="20" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."/></label>
 <label>Qual decisão está na mesa <textarea id="mensagem" name="mensagem" rows="4" maxlength="2000" placeholder="Decisão a tomar, carteira envolvida e prazo. Sem dados de proposta sigilosa."></textarea></label>
 <label class="capture-consent"><input type="checkbox" name="consentimento" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label>
-<button class="button button-primary" type="submit">Enviar para análise</button>
+<button class="button button-primary" type="submit">Registrar decisão para indicar a entrega</button>
 <p class="form-status" role="status" aria-live="polite"></p>
+<p class="form-hint" data-form-boundary>O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 </div>
 </section>

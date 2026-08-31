@@ -100,7 +100,8 @@
 <p>O envio registra o pedido e abre a etapa de pagamento. Enquanto o registro não for confirmado pelo servidor, a etapa de pagamento continua fechada.</p>
 <p><a href="/comercial/privacidade-leads/">Aviso de privacidade</a> · <a href="/casos/modelo-relatorio-inteligencia-licitacoes/">Ver o modelo sintético público do relatório</a></p>
 
-<form id="radar-params-form" class="offer-request-form" method="post" action="/.netlify/functions/lead" data-asset-id="radar-decisorio-avulso" data-cta-id="radar-decisorio-parametros" data-route-family="radar-decisorio" data-cta-position="offer_final">
+<form id="radar-params-form" class="offer-request-form" method="post" action="/.netlify/functions/lead" data-asset-id="radar-decisorio-avulso" data-cta-id="radar-decisorio-parametros" data-route-family="radar-decisorio" data-cta-position="offer_final" data-form-contract="next-state/v1" data-next-state-profile="paid_offer_parameters" data-runtime-profile="inline_reference_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Defina empresa, território, segmentos e acervo para registrar exatamente o Radar que será produzido antes de pedir a instrução de pagamento.</p>
+<p class="form-hint" data-field-purpose>CNPJ identifica a contratante; recorte e segmentos delimitam a busca; cidade e raio são obrigatórios no recorte por cidade-base, e ao menos um segmento é obrigatório. Acervo orienta aderência; e-mail recebe a entrega; WhatsApp é opcional. O WhatsApp aceita DDD e 10 ou 11 dígitos.</p>
 <input type="hidden" name="offer_id" value="handraise-report-intelligence-599-v1"/>
 <input type="hidden" name="jornada" value="edital"/>
 <input type="hidden" name="estagio" value="radar-decisorio-parametros"/>
@@ -141,10 +142,11 @@
 <label for="radar-email">E-mail de entrega do PDF</label>
 <input id="radar-email" name="radar_email_entrega" type="email" required autocomplete="email"/>
 <label for="radar-telefone">WhatsApp para acompanhamento</label>
-<input id="radar-telefone" name="telefone" inputmode="numeric" autocomplete="tel"/>
+<input id="radar-telefone" name="telefone" inputmode="tel" autocomplete="tel" type="tel" maxlength="20" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."/>
 <label><input type="checkbox" name="consentimento" value="1" required/> autorizo o uso destes dados para produzir e entregar o Radar Decisório contratado</label>
-<button class="button button-primary" type="submit" id="btn-radar-params">Registrar parâmetros e abrir o pagamento</button>
+<button class="button button-primary" type="submit" id="btn-radar-params">Registrar parâmetros e pedir instrução de pagamento</button>
 <p id="radar-status" role="status" aria-live="polite"></p>
+<p class="form-hint" data-form-boundary>O pagamento direto pelo site permanece desligado. Sem registro válido, não há referência nem instrução de pagamento; nenhum arquivo é enviado neste formulário. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 </div>
 </section>
@@ -193,10 +195,27 @@
   var reference = document.querySelector("[data-radar-reference]");
   var paymentLink = document.querySelector("[data-radar-payment-link]");
   var submitted = false;
+  var idempotencyStorageKey = "confenge_idem:/comercial/radar-decisorio/:radar-decisorio-parametros";
   var externalReferenceShape = /^cfg:[A-Za-z0-9._-]{1,120}:[A-Za-z0-9._-]{1,60}$/;
 
   function show(message) {
     if (status) status.textContent = message || "";
+  }
+
+  function track(name, props) {
+    if (typeof window.confengeTrack === "function") window.confengeTrack(name, props || {});
+  }
+
+  function idempotencyKey() {
+    var key = "";
+    try { key = sessionStorage.getItem(idempotencyStorageKey) || ""; } catch (_) {}
+    if (!key) {
+      key = "fe-" + (window.crypto && typeof window.crypto.randomUUID === "function"
+        ? window.crypto.randomUUID()
+        : Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12));
+      try { sessionStorage.setItem(idempotencyStorageKey, key); } catch (_) {}
+    }
+    return key;
   }
 
   // Fail-closed: the payment step only ever opens from a persisted server
@@ -234,6 +253,14 @@
   form.addEventListener("change", function (ev) {
     if (ev.target && ev.target.name === "radar_recorte") syncCityFields();
   });
+  form.addEventListener("focusin", function () {
+    track("lead_form_start", {
+      page_path: "/comercial/radar-decisorio/",
+      route_family: "radar-decisorio",
+      asset_id: "radar-decisorio-avulso",
+      cta_id: "radar-decisorio-parametros"
+    });
+  }, { once: true });
   syncCityFields();
 
   form.addEventListener("submit", function (ev) {
@@ -250,15 +277,27 @@
     });
     body.radar_segmentos = data.getAll("radar_segmentos");
     body.consentimento = data.get("consentimento") === "1";
+    var turnstileToken = String(data.get("cf-turnstile-response") || "");
+    if (turnstileToken) {
+      body.turnstile_token = turnstileToken;
+      body["cf-turnstile-response"] = turnstileToken;
+    }
+    body.idempotency_key = idempotencyKey();
     if (!body.radar_segmentos.length) {
       show("Escolha pelo menos um segmento de obra.");
       return;
     }
     if (button) button.disabled = true;
     show("Registrando os parâmetros…");
+    track("lead_form_submit", {
+      page_path: "/comercial/radar-decisorio/",
+      route_family: "radar-decisorio",
+      asset_id: "radar-decisorio-avulso",
+      cta_id: "radar-decisorio-parametros"
+    });
     fetch("/.netlify/functions/lead", {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", "Idempotency-Key": body.idempotency_key },
       body: JSON.stringify(body)
     })
       .then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); })
@@ -266,6 +305,10 @@
         var payload = out.j || {};
         if (!payload.ok || !payload.external_reference) {
           if (button) button.disabled = false;
+          if (payload.error === "anti_abuse" || String(payload.error || "").indexOf("turnstile") !== -1) {
+            show("Validação de segurança não concluída. Os parâmetros não foram registrados, não há referência e a etapa comercial continua fechada.");
+            return;
+          }
           show(payload.message || "Não foi possível registrar os parâmetros. O pagamento não foi liberado.");
           return;
         }
@@ -275,7 +318,23 @@
           return;
         }
         submitted = true;
-        show("Parâmetros registrados. O prazo de 3 dias úteis começou agora.");
+        try { sessionStorage.removeItem(idempotencyStorageKey); } catch (_) {}
+        show("Parâmetros registrados. Guarde a referência abaixo; o próximo estado é pedir a instrução de pagamento para este mesmo pedido.");
+        track("lead_form_success", {
+          page_path: "/comercial/radar-decisorio/",
+          route_family: "radar-decisorio",
+          asset_id: "radar-decisorio-avulso",
+          cta_id: "radar-decisorio-parametros",
+          receipt_id: payload.lead_id || payload.receipt_id || payload.external_reference
+        });
+        track("lead_persisted", {
+          page_path: "/comercial/radar-decisorio/",
+          route_family: "radar-decisorio",
+          asset_id: "radar-decisorio-avulso",
+          cta_id: "radar-decisorio-parametros",
+          lead_id: payload.lead_id || payload.receipt_id || "",
+          source: "CONFENGE_WEB"
+        });
       })
       .catch(function () {
         if (button) button.disabled = false;
