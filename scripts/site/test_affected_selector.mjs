@@ -80,6 +80,18 @@ function expectSubset(result, mustInclude, because) {
 }
 
 {
+  for (const input of [
+    "scripts/demand_radar/engine.py",
+    "data/demand_radar/ledger.v1.json",
+    "docs/demand-radar/REPORT.md",
+  ]) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:demand-radar"], `internal demand radar input ${input}`);
+    assert.ok(!result.selected_ids.includes("test:inbound-gates"));
+  }
+}
+
+{
   const paths = ["docs/research/icp-trust-session-v1/PROTOCOL-TREE-TEST.md"];
   const result = selectAffected(paths, scripts);
   expectSubset(

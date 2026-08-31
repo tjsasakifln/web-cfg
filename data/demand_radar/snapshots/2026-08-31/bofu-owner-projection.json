@@ -1,0 +1,455 @@
+{
+  "schema_version": "confenge-demand-radar-snapshot/v1",
+  "source": {
+    "id": "bofu-owner-projection-2026-08-31-pr545",
+    "kind": "CANONICAL_BOFU_OWNER_PROJECTION",
+    "observed_at": "2026-08-31",
+    "geo": "BRA",
+    "language": "pt-BR",
+    "privacy_class": "PUBLIC_NON_PERSONAL",
+    "provenance": {
+      "authority": "web-cfg PR #545 canonical derived BOFU buyer-job/owner projection",
+      "repository": "tjsasakifln/web-cfg",
+      "path": "data/bofu-dominance/core/buyer-decision-map.v1.json",
+      "revision": "283a8770664fa6400d74430cfb6d6975b4e540e6",
+      "content_sha256": "9f362647c914e9eda515c1a2e8ec625c79097cb967ecee5e11275f74a2a262ff"
+    },
+    "freshness": {
+      "state": "CURRENT",
+      "evaluated_at": "2026-08-31",
+      "expires_at": null,
+      "note": "Pinned to the contemporary open/clean PR head; it is not represented as integrated main."
+    },
+    "unknown_semantics": "UNKNOWN owner or demand evidence remains UNKNOWN and never becomes zero, a page authorization or an invented owner.",
+    "limitations": [
+      "This is a normalized snapshot of the canonical projection, not a second owner registry.",
+      "The source PR is open; every fact remains revision-pinned until integration."
+    ]
+  },
+  "records": [
+    {
+      "family_id": "aditivos",
+      "buyer_job": "Decidir se um acréscimo, supressão ou serviço extra cabe em aditivo formal antes de executar sem cobertura.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/aditivos-obras-publicas/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "ACTIVE",
+        "controllable": false,
+        "exclusion": "ACTIVE_MEASUREMENT_WINDOW"
+      },
+      "coverage_state": "MEASUREMENT_WAIT",
+      "content_state": "PROTECTED_WAIT",
+      "execution_state": "MEASUREMENT_WAIT",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Executar escopo sem cobertura formal pode comprometer preço, prazo, caixa e defesa contratual."
+      },
+      "issue_refs": [
+        {"number": 128, "role": "MEASUREMENT_WINDOW"},
+        {"number": 529, "role": "PROTECTED_ROUTE"}
+      ],
+      "next_step": "Record the next accepted measurement-window observation; do not edit the protected owner."
+    },
+    {
+      "family_id": "medicoes-pagamentos",
+      "buyer_job": "Contestar glosa, medição rejeitada ou parcela retida com nexo contratual e prova contemporânea.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "ACTIVE",
+        "controllable": false,
+        "exclusion": "ACTIVE_MEASUREMENT_WINDOW"
+      },
+      "coverage_state": "MEASUREMENT_WAIT",
+      "content_state": "PROTECTED_WAIT",
+      "execution_state": "MEASUREMENT_WAIT",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Glosa, rejeição ou retenção sem resposta sustentada pressiona caixa e pode consolidar perda contratual."
+      },
+      "issue_refs": [
+        {"number": 128, "role": "MEASUREMENT_WINDOW"},
+        {"number": 387, "role": "MEASUREMENT_WINDOW"},
+        {"number": 529, "role": "PROTECTED_ROUTE"}
+      ],
+      "next_step": "Record the next accepted measurement-window observation; do not edit the protected owner."
+    },
+    {
+      "family_id": "reequilibrio",
+      "buyer_job": "Decidir se cabe reequilíbrio econômico-financeiro agora e como instruir o pleito.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/reequilibrio-obras-publicas/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "ACTIVE",
+        "controllable": false,
+        "exclusion": "ACTIVE_MEASUREMENT_WINDOW"
+      },
+      "coverage_state": "MEASUREMENT_WAIT",
+      "content_state": "PROTECTED_WAIT",
+      "execution_state": "MEASUREMENT_WAIT",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Um choque de custo mal enquadrado pode permanecer sem recomposição e pressionar a margem do contrato."
+      },
+      "issue_refs": [
+        {"number": 128, "role": "MEASUREMENT_WINDOW"},
+        {"number": 529, "role": "PROTECTED_ROUTE"}
+      ],
+      "next_step": "Record the next accepted measurement-window observation; do not edit the protected owner."
+    },
+    {
+      "family_id": "orcamento-bdi",
+      "buyer_job": "Auditar orçamento, BDI e base SINAPI/SICRO do edital antes de precificar a proposta.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "ACTIVE",
+        "controllable": false,
+        "exclusion": "ACTIVE_MEASUREMENT_WINDOW"
+      },
+      "coverage_state": "MEASUREMENT_WAIT",
+      "content_state": "PROTECTED_WAIT",
+      "execution_state": "MEASUREMENT_WAIT",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Base de custos ou BDI inadequados podem transformar uma proposta vencedora em obrigação economicamente frágil."
+      },
+      "issue_refs": [
+        {"number": 126, "role": "SUPPORTING_MEASUREMENT_WINDOW"},
+        {"number": 128, "role": "MEASUREMENT_WINDOW"},
+        {"number": 529, "role": "PROTECTED_ROUTE"}
+      ],
+      "next_step": "Record the next accepted measurement-window observation; do not mutate SINAPI or the protected owner."
+    },
+    {
+      "family_id": "carteira-operacao",
+      "buyer_job": "Diagnosticar a operação B2G da carteira, não um contrato isolado.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/diagnostico-b2g-360/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "ACTIVE",
+        "controllable": false,
+        "exclusion": "ACTIVE_MEASUREMENT_WINDOW"
+      },
+      "coverage_state": "MEASUREMENT_WAIT",
+      "content_state": "PROTECTED_WAIT",
+      "execution_state": "MEASUREMENT_WAIT",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Falhas repetidas de gestão podem reproduzir atrasos, omissões documentais e pressão de margem em vários contratos."
+      },
+      "issue_refs": [
+        {"number": 128, "role": "MEASUREMENT_WINDOW"},
+        {"number": 529, "role": "PROTECTED_ROUTE"}
+      ],
+      "next_step": "Record the next accepted measurement-window observation; do not edit the protected owner."
+    },
+    {
+      "family_id": "edital-proposta",
+      "buyer_job": "Decidir participar, impugnar ou ajustar a proposta antes do preço final.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/diagnostico-pre-licitacao/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "ACTIVE",
+        "controllable": false,
+        "exclusion": "ACTIVE_MEASUREMENT_WINDOW"
+      },
+      "coverage_state": "MEASUREMENT_WAIT",
+      "content_state": "PROTECTED_WAIT",
+      "execution_state": "MEASUREMENT_WAIT",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Um go/no-go frágil consome custo de proposta e pode assumir risco contratual incompatível com preço e capacidade."
+      },
+      "issue_refs": [
+        {"number": 128, "role": "MEASUREMENT_WINDOW"},
+        {"number": 327, "role": "PROTECTED_ROUTE"},
+        {"number": 529, "role": "PROTECTED_ROUTE"}
+      ],
+      "next_step": "Record the next accepted measurement-window observation; do not edit the protected owner."
+    },
+    {
+      "family_id": "defesa-margem",
+      "buyer_job": "Partir de um contrato público real e decidir se vale uma segunda leitura técnica de margem.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "NONE",
+        "controllable": true,
+        "exclusion": null
+      },
+      "coverage_state": "OWNED_BUT_WEAK",
+      "content_state": "WEAK",
+      "execution_state": "VALIDATE",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Riscos contratuais não revistos podem permanecer sem enquadramento e continuar pressionando a margem."
+      },
+      "issue_refs": [
+        {"number": 60, "role": "OPERATING_EXPERIMENT"}
+      ],
+      "next_step": "Audit proof and progression for this single owner before any URL-exact content change."
+    },
+    {
+      "family_id": "atrasos-prorrogacao",
+      "buyer_job": "Proteger prazo e documentar prorrogação, paralisação ou atraso imputável.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "ACTIVE",
+        "controllable": false,
+        "exclusion": "ACTIVE_MEASUREMENT_WINDOW"
+      },
+      "coverage_state": "MEASUREMENT_WAIT",
+      "content_state": "SUPPORTING_MEASUREMENT_WAIT",
+      "execution_state": "MEASUREMENT_WAIT",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Documentação tardia pode comprometer prorrogação, defesa de atraso e exposição a sanções."
+      },
+      "issue_refs": [
+        {"number": 127, "role": "SUPPORTING_MEASUREMENT_WINDOW"}
+      ],
+      "next_step": "Record the next accepted measurement-window observation; do not edit the protected supporting route."
+    },
+    {
+      "family_id": "defesa-sancoes",
+      "buyer_job": "Responder notificação, defesa técnica ou risco de sanção/extinção com cronologia e nexo.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "NONE",
+        "controllable": true,
+        "exclusion": null
+      },
+      "coverage_state": "OWNED_BUT_WEAK",
+      "content_state": "WEAK",
+      "execution_state": "VALIDATE",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Resposta frágil pode ampliar exposição a multa, impedimento ou extinção contratual."
+      },
+      "issue_refs": [
+        {"number": 61, "role": "PARENT_EPIC"}
+      ],
+      "next_step": "Validate the single supporting-to-owner edge and proof boundary before a URL-exact change."
+    },
+    {
+      "family_id": "gestao-contratual",
+      "buyer_job": "Decidir se a construtora contrata acompanhamento contínuo de contratos públicos.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/acompanhamento-contratos-obras/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "NONE",
+        "controllable": true,
+        "exclusion": null
+      },
+      "coverage_state": "COMMERCIAL_BRIDGE_GAP",
+      "content_state": "BRIDGE_GAP",
+      "execution_state": "VALIDATE",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Rotina fragmentada aumenta omissões, pleitos tardios e perda de continuidade documental."
+      },
+      "issue_refs": [
+        {"number": 61, "role": "PARENT_EPIC"}
+      ],
+      "next_step": "Specify one URL-exact next-decision bridge and validate it against the 360 owner before implementation."
+    },
+    {
+      "family_id": "bid-room",
+      "buyer_job": "Operar uma sala de licitação de obras com recorte, prazo e decisão humana.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "NONE",
+        "controllable": true,
+        "exclusion": null
+      },
+      "coverage_state": "COMMERCIAL_BRIDGE_GAP",
+      "content_state": "BRIDGE_GAP",
+      "execution_state": "VALIDATE",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Entradas fragmentadas e decisões tardias podem elevar retrabalho e risco de submissão inadequada."
+      },
+      "issue_refs": [
+        {"number": 88, "role": "COMMERCIAL_GATE"}
+      ],
+      "next_step": "Specify the Bid Room versus pre-licitation decision edge without creating another offer URL."
+    },
+    {
+      "family_id": "diagnostico-expansao",
+      "buyer_job": "Decidir em quais compradores, territórios e segmentos a construtora deve concentrar uma expansão B2G antes de dispersar capital comercial.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/diagnostico-b2g-expansao/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "ACTIVE",
+        "controllable": false,
+        "exclusion": "ACTIVE_ATTRIBUTION_MEASUREMENT"
+      },
+      "coverage_state": "MEASUREMENT_WAIT",
+      "content_state": "MEASUREMENT_PENDING",
+      "execution_state": "MEASUREMENT_WAIT",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Foco disperso pode consumir capacidade comercial em compradores, territórios ou segmentos pouco aderentes."
+      },
+      "issue_refs": [
+        {"number": 237, "role": "HISTORICAL_IMPLEMENTATION"}
+      ],
+      "next_step": "Wait for an accepted attribution observation; do not change the route from this radar."
+    },
+    {
+      "family_id": "diretoria-b2g",
+      "buyer_job": "Decidir se a construtora precisa de direção B2G recorrente para priorizar oportunidades e contratos dentro da capacidade disponível.",
+      "canonical_owner": {
+        "state": "OWNED",
+        "url": "https://confenge.com.br/diretoria-b2g/",
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "ACTIVE",
+        "controllable": false,
+        "exclusion": "ACTIVE_ATTRIBUTION_MEASUREMENT"
+      },
+      "coverage_state": "MEASUREMENT_WAIT",
+      "content_state": "MEASUREMENT_PENDING",
+      "execution_state": "MEASUREMENT_WAIT",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Prioridade sem limite de capacidade pode sobrecarregar a equipe e alocar esforço em oportunidades inadequadas."
+      },
+      "issue_refs": [
+        {"number": 237, "role": "HISTORICAL_IMPLEMENTATION"}
+      ],
+      "next_step": "Wait for an accepted attribution observation; do not change the route from this radar."
+    },
+    {
+      "family_id": "bid-readiness",
+      "buyer_job": "Antes de enviar a proposta, o edital, a planilha, a documentação e o acervo estão cobertos para um go/no-go humano?",
+      "canonical_owner": {
+        "state": "GAP",
+        "url": null,
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "NONE",
+        "controllable": false,
+        "exclusion": "NO_DEMAND_EVIDENCE_WITH_INDEPENDENT_GOVERNANCE_BASIS"
+      },
+      "coverage_state": "NO_DEMAND_EVIDENCE",
+      "content_state": "GAP",
+      "execution_state": "DEFER",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Uma proposta enviada com lacunas pode gerar retrabalho, inabilitação ou compromisso incompatível com o edital."
+      },
+      "issue_refs": [
+        {"number": 155, "role": "HISTORICAL_GAP_DECISION"}
+      ],
+      "gap": {
+        "state": "NO_DEMAND_EVIDENCE",
+        "reason": "Issue #155 was closed as not planned because no demand evidence and no authorized current upstream artifact justified a public consumer."
+      },
+      "next_step": "Keep the gap in the ledger; do not create a page, issue or owner without new valid demand evidence."
+    },
+    {
+      "family_id": "partner-integrity",
+      "buyer_job": "Consultar ocorrências públicas CEIS/CNEP de parceiro/consórcio/subcontratado antes de diligência humana.",
+      "canonical_owner": {
+        "state": "GAP",
+        "url": null,
+        "operational_owner": "web-cfg/organic-market-capture"
+      },
+      "eligibility": {
+        "buyer_fit": "ELIGIBLE",
+        "truth": "PASS",
+        "freeze": "NONE",
+        "controllable": false,
+        "exclusion": "BLOCKED_EXTERNAL"
+      },
+      "coverage_state": "CONTENT_GAP",
+      "content_state": "GAP",
+      "execution_state": "DEFER_EXTERNAL",
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Cobertura incompleta ou interpretada como certidão pode expor a decisão de parceria e a proposta a risco de integridade."
+      },
+      "issue_refs": [
+        {"number": 156, "role": "EXTERNAL_BLOCKER"}
+      ],
+      "gap": {
+        "state": "CONTENT_GAP",
+        "reason": "No public owner may exist until an official, fresh, complete, redacted extra-cli contract passes the external gate."
+      },
+      "next_step": "Obtain one versioned SELECT-only extra-cli contract snapshot with provenance, freshness and UNKNOWN semantics."
+    }
+  ],
+  "records_sha256": "e19b66716141e73c3c2dc18aeeb6e6d8e2d52a2286fa7c92a0d511a7028f47ec",
+  "snapshot_sha256": "e9bd9cb13207c384e50f39d9e7bcddceca07bdc80108c823b371db649596b837"
+}
