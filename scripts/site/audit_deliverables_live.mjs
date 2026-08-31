@@ -55,6 +55,7 @@ const expectedRuntime = candidateLocal
   : authorityRuntime;
 
 const base = option("base", "https://confenge.com.br").replace(/\/$/, "");
+const canonicalOrigin = candidateLocal ? "https://confenge.com.br" : base;
 const finalOutputDir = path.resolve(ROOT, option("out", "/tmp/confenge-deliverables-live"));
 const expectedSha = option(
   "expected-sha",
@@ -90,6 +91,9 @@ const offers = contract.deliverables.map((entry) => ({
     ["artifact_use", entry.value_first.artifact_use],
     ["proof", entry.value_first.proof_statement],
     ["price_anchor", entry.value_first.price_anchor],
+    ["diagnosis_trigger", contract.value_ladder.diagnosis_trigger],
+    ["recurring_direction_trigger", contract.value_ladder.recurring_direction_trigger],
+    ["recurring_direction_scope", contract.value_ladder.recurring_direction_scope],
   ].map(([id, text]) => ({ id, text })),
   hubCtaTexts: [
     ["cta_inspect", entry.value_first.cta_inspect],
@@ -344,7 +348,7 @@ async function inspectPage(page, expected) {
         promises_credit: /(?:volta como crédito|valor (?:pago )?é abatido|abate o valor)/i.test(ladderText),
         says_unit_01_has_no_credit: /(?:únic[oa] sem o crédito|não gera crédito|fora do diagnóstico)/i.test(ladderText),
         diagnosis_link: ladderLinks.some(({ href }) => href === "/diagnostico-b2g-expansao/"),
-        recurring_direction_context: ladderLinks.some(({ href, text: label }) => href === "/diretoria-b2g/" && /recorr|diretoria/i.test(label)),
+        recurring_direction_context: ladderLinks.some(({ href, text: label }) => href === "/diretoria-b2g/" && /recorr|direção|diretoria/i.test(label)),
       },
       schema: {
         parse_errors: jsonLd.filter((entry) => entry.parse_error).length,
@@ -364,7 +368,7 @@ async function inspectPage(page, expected) {
 
 function validateMetrics(metrics, expected) {
   const errors = [];
-  add(errors, metrics.canonical === `${base}${expected.route}`, "canonical_mismatch");
+  add(errors, metrics.canonical === `${canonicalOrigin}${expected.route}`, "canonical_mismatch");
   add(errors, metrics.h1_count === 1, "h1_count");
   add(errors, metrics.overflow === false, "horizontal_overflow");
   add(errors, metrics.source === "CONFENGE_WEB", "source_not_CONFENGE_WEB");
@@ -392,7 +396,7 @@ function validateMetrics(metrics, expected) {
     add(errors, metrics.ladder.recurring_direction_context, "recurring_direction_step_missing");
     for (const [index, offer] of offers.entries()) {
       const item = metrics.schema.item_list[index];
-      add(errors, item?.position === index + 1 && item?.url === `${base}${offer.route}` && item?.name?.includes(offer.published_name_pt_br), `item_list_${offer.deliverable_id}`);
+      add(errors, item?.position === index + 1 && item?.url === `${canonicalOrigin}${offer.route}` && item?.name?.includes(offer.published_name_pt_br), `item_list_${offer.deliverable_id}`);
     }
   } else {
     add(errors, ["WebPage", "Report", "BreadcrumbList"].every((type) => metrics.schema.types.includes(type)), "model_schema_types");
