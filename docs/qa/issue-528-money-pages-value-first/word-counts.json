@@ -5,12 +5,12 @@
   "tokenization": "scripts/commercial/value_first_copy_audit.mjs#visibleText then whitespace split",
   "routes": [
     { "route": "/servicos-obras-publicas/", "before": 734, "after": 724, "delta": -10 },
-    { "route": "/diagnostico-b2g-expansao/", "before": 1038, "after": 1023, "delta": -15 },
-    { "route": "/bid-room-licitacoes-obras/", "before": 1286, "after": 1232, "delta": -54 },
-    { "route": "/defesa-margem-contratos-publicos/", "before": 1318, "after": 1313, "delta": -5 },
+    { "route": "/diagnostico-b2g-expansao/", "before": 1038, "after": 1025, "delta": -13 },
+    { "route": "/bid-room-licitacoes-obras/", "before": 1286, "after": 1237, "delta": -49 },
+    { "route": "/defesa-margem-contratos-publicos/", "before": 1318, "after": 1316, "delta": -2 },
     { "route": "/atrasos-prorrogacao-obras-publicas/", "before": 1242, "after": 1220, "delta": -22 },
-    { "route": "/defesa-tecnica-contratos-publicos/", "before": 1156, "after": 1154, "delta": -2 },
+    { "route": "/defesa-tecnica-contratos-publicos/", "before": 1156, "after": 1155, "delta": -1 },
     { "route": "/acompanhamento-contratos-obras/", "before": 911, "after": 847, "delta": -64 },
-    { "route": "/diretoria-b2g/", "before": 1515, "after": 1505, "delta": -10 }
+    { "route": "/diretoria-b2g/", "before": 1515, "after": 1513, "delta": -2 }
   ]
 }
