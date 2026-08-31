@@ -308,7 +308,49 @@ def _validate_manual_gsc_snapshot(
 
     reject_sensitive_keys(snapshot, "manual-gsc")
 
+    def require_closed_keys(value: Any, expected: set[str], path: str) -> None:
+        if not isinstance(value, dict) or set(value) != expected:
+            actual = sorted(value) if isinstance(value, dict) else type(value).__name__
+            report.add(
+                path,
+                "manual_snapshot_closed_schema_violation",
+                f"expected={sorted(expected)} actual={actual}",
+            )
+
+    require_closed_keys(
+        snapshot,
+        {
+            "schema_version",
+            "source_kind",
+            "reported_at",
+            "reported_by_role",
+            "property",
+            "export",
+            "raw_export_provenance",
+            "durable_authority_relationship",
+            "site_summary",
+            "country_summary",
+            "device_summary",
+            "weekly_samples",
+            "weekly_interpretation",
+            "query_visibility",
+            "page_rows",
+            "interpretation_guardrail",
+        },
+        "manual-gsc",
+    )
+    require_closed_keys(
+        snapshot.get("export"),
+        {"search_type", "ui_period", "start_date", "end_date", "timezone"},
+        "manual-gsc.export",
+    )
+
     raw = snapshot.get("raw_export_provenance") or {}
+    require_closed_keys(
+        raw,
+        {"expected_campaign_path", "workspace_status", "archived", "checksum_status", "sha256", "basis"},
+        "manual-gsc.raw_export_provenance",
+    )
     expected_raw = {
         "workspace_status": "NOT_AVAILABLE_IN_EXECUTION_WORKSPACE",
         "archived": False,
@@ -322,6 +364,19 @@ def _validate_manual_gsc_snapshot(
         report.add("manual-gsc.raw_export_provenance", "manual_raw_provenance_basis_missing", str(raw))
 
     durable = snapshot.get("durable_authority_relationship") or {}
+    require_closed_keys(
+        durable,
+        {
+            "issue",
+            "current_authority_state",
+            "durable_distinct_observations",
+            "durable_observations_required",
+            "counts_as_durable_observation",
+            "read_after_write_proven",
+            "reason",
+        },
+        "manual-gsc.durable_authority_relationship",
+    )
     expected_durable = {
         "issue": 413,
         "current_authority_state": "UNKNOWN",
@@ -335,6 +390,11 @@ def _validate_manual_gsc_snapshot(
             report.add("manual-gsc.durable_authority_relationship", "manual_snapshot_promoted_to_durable", f"{key}={durable.get(key)!r}")
 
     site = snapshot.get("site_summary") or {}
+    require_closed_keys(
+        site,
+        {"clicks", "impressions", "ctr", "impression_weighted_daily_position"},
+        "manual-gsc.site_summary",
+    )
     if site.get("clicks") != 27 or site.get("impressions") != 1201:
         report.add("manual-gsc.site_summary", "manual_site_totals_drift", str(site))
     expected_site_ctr = 27 / 1201
@@ -342,6 +402,20 @@ def _validate_manual_gsc_snapshot(
         report.add("manual-gsc.site_summary", "manual_site_ctr_invalid", str(site.get("ctr")))
 
     query_visibility = snapshot.get("query_visibility") or {}
+    require_closed_keys(
+        query_visibility,
+        {
+            "status",
+            "visible_query_rows",
+            "visible_query_impressions",
+            "site_impressions",
+            "visible_impression_ratio",
+            "permitted_use",
+            "forbidden_inference",
+            "raw_query_text_committed",
+        },
+        "manual-gsc.query_visibility",
+    )
     expected_query_visibility = {
         "status": "HEAVILY_CENSORED_OR_ANONYMIZED",
         "visible_query_rows": 17,
@@ -357,6 +431,32 @@ def _validate_manual_gsc_snapshot(
     ratio = query_visibility.get("visible_impression_ratio")
     if not isinstance(ratio, (int, float)) or abs(ratio - expected_ratio) > 0.000001:
         report.add("manual-gsc.query_visibility", "query_visibility_ratio_invalid", str(ratio))
+
+    require_closed_keys(
+        snapshot.get("country_summary"),
+        {"country", "clicks", "impressions", "ctr", "position"},
+        "manual-gsc.country_summary",
+    )
+    device_summary = snapshot.get("device_summary") or []
+    if not isinstance(device_summary, list):
+        report.add("manual-gsc.device_summary", "manual_snapshot_closed_schema_violation", type(device_summary).__name__)
+    else:
+        for index, row in enumerate(device_summary):
+            require_closed_keys(
+                row,
+                {"device", "clicks", "impressions", "ctr", "position"},
+                f"manual-gsc.device_summary[{index}]",
+            )
+    weekly_samples = snapshot.get("weekly_samples") or []
+    if not isinstance(weekly_samples, list):
+        report.add("manual-gsc.weekly_samples", "manual_snapshot_closed_schema_violation", type(weekly_samples).__name__)
+    else:
+        for index, row in enumerate(weekly_samples):
+            require_closed_keys(
+                row,
+                {"start_date", "end_date", "clicks", "impressions", "ctr", "impression_weighted_position"},
+                f"manual-gsc.weekly_samples[{index}]",
+            )
     pages: dict[str, dict[str, Any]] = {}
     for index, row in enumerate(snapshot.get("page_rows") or []):
         label = f"manual-gsc.page_rows[{index}]"

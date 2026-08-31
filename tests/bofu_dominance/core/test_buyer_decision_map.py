@@ -204,6 +204,15 @@ def test_query_visibility_is_censored_and_cannot_own_or_score_a_family():
     assert "plaintext_query_or_sensitive_url_forbidden" in reasons
     assert "manual_page_row_schema_invalid" in reasons
 
+    unexpected_nested = _manual_snapshot()
+    unexpected_nested["query_visibility"]["visible_queries"] = [
+        "plaintext query hidden under a new key"
+    ]
+    report = validate_buyer_decision_map(manual_snapshot=unexpected_nested)
+    assert "manual_snapshot_closed_schema_violation" in {
+        item.reason for item in report.findings
+    }
+
 
 def test_page_absence_remains_unknown_and_zero_clicks_are_exposure_only():
     missing = _manual_snapshot()
