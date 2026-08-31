@@ -317,6 +317,20 @@ def _validate_manual_gsc_snapshot(
                 f"expected={sorted(expected)} actual={actual}",
             )
 
+    def strictly_matches(actual: Any, expected: Any) -> bool:
+        if type(actual) is not type(expected):
+            return False
+        if isinstance(expected, dict):
+            return set(actual) == set(expected) and all(
+                strictly_matches(actual[key], expected[key]) for key in expected
+            )
+        if isinstance(expected, list):
+            return len(actual) == len(expected) and all(
+                strictly_matches(actual_item, expected_item)
+                for actual_item, expected_item in zip(actual, expected)
+            )
+        return actual == expected
+
     require_closed_keys(
         snapshot,
         {
@@ -354,7 +368,7 @@ def _validate_manual_gsc_snapshot(
         "interpretation_guardrail": "This snapshot proves page exposure for mapped URLs. It does not by itself prove conversion failure, query-family completeness, causality, trend, ranking durability or #413 CURRENT authority.",
     }
     for key, expected in expected_top_scalars.items():
-        if snapshot.get(key) != expected:
+        if not strictly_matches(snapshot.get(key), expected):
             report.add(
                 f"manual-gsc.{key}",
                 "manual_snapshot_scalar_drift",
@@ -367,7 +381,7 @@ def _validate_manual_gsc_snapshot(
         "end_date": "2026-08-29",
         "timezone": "America/Sao_Paulo",
     }
-    if snapshot.get("export") != expected_export:
+    if not strictly_matches(snapshot.get("export"), expected_export):
         report.add(
             "manual-gsc.export",
             "manual_snapshot_export_drift",
@@ -389,7 +403,7 @@ def _validate_manual_gsc_snapshot(
         "sha256": None,
         "basis": "The founder supplied the measured export summary in the 2026-08-31 campaign goal, but the referenced CSV package was not present in the shared workspace, attachment cache or campaign worktrees. No raw checksum is invented.",
     }
-    if raw != expected_raw:
+    if not strictly_matches(raw, expected_raw):
         report.add(
             "manual-gsc.raw_export_provenance",
             "manual_raw_provenance_overclaim",
@@ -420,7 +434,7 @@ def _validate_manual_gsc_snapshot(
         "read_after_write_proven": False,
         "reason": "A manual UI export has no producer snapshot/pointer write, durable host read-back or producer-consumer manifest parity and therefore cannot satisfy the third #413 observation.",
     }
-    if durable != expected_durable:
+    if not strictly_matches(durable, expected_durable):
         report.add(
             "manual-gsc.durable_authority_relationship",
             "manual_snapshot_promoted_to_durable",
@@ -440,7 +454,7 @@ def _validate_manual_gsc_snapshot(
         "ctr": 0.02248,
         "impression_weighted_daily_position": 8.24,
     }
-    if site != expected_site:
+    if not strictly_matches(site, expected_site):
         report.add(
             "manual-gsc.site_summary",
             "manual_site_totals_drift",
@@ -480,7 +494,7 @@ def _validate_manual_gsc_snapshot(
         "forbidden_inference": "The visible queries are not the query universe and cannot create an owner or prove absence of demand.",
         "raw_query_text_committed": False,
     }
-    if query_visibility != expected_query_visibility:
+    if not strictly_matches(query_visibility, expected_query_visibility):
         report.add(
             "manual-gsc.query_visibility",
             "query_visibility_contract_drift",
@@ -504,7 +518,7 @@ def _validate_manual_gsc_snapshot(
         "ctr": 0.0258,
         "position": 7.14,
     }
-    if country_summary != expected_country:
+    if not strictly_matches(country_summary, expected_country):
         report.add(
             "manual-gsc.country_summary",
             "manual_country_summary_drift",
@@ -524,7 +538,7 @@ def _validate_manual_gsc_snapshot(
         {"device": "Desktop", "clicks": 22, "impressions": 938, "ctr": 0.0235, "position": 7.75},
         {"device": "Mobile", "clicks": 5, "impressions": 262, "ctr": 0.0191, "position": 9.92},
     ]
-    if device_summary != expected_devices:
+    if not strictly_matches(device_summary, expected_devices):
         report.add(
             "manual-gsc.device_summary",
             "manual_device_summary_drift",
@@ -544,7 +558,7 @@ def _validate_manual_gsc_snapshot(
         {"start_date": "2026-08-23", "end_date": "2026-08-29", "clicks": 8, "impressions": 212, "ctr": 0.0377, "impression_weighted_position": 7.42},
         {"start_date": "2026-08-16", "end_date": "2026-08-22", "clicks": 5, "impressions": 305, "ctr": 0.0164, "impression_weighted_position": 7.08},
     ]
-    if weekly_samples != expected_weekly_samples:
+    if not strictly_matches(weekly_samples, expected_weekly_samples):
         report.add(
             "manual-gsc.weekly_samples",
             "manual_weekly_samples_drift",
@@ -574,14 +588,14 @@ def _validate_manual_gsc_snapshot(
         impressions = row.get("impressions")
         ctr = row.get("ctr")
         position = row.get("position")
-        if not isinstance(clicks, int) or clicks < 0 or not isinstance(impressions, int) or impressions <= 0 or clicks > impressions:
+        if type(clicks) is not int or clicks < 0 or type(impressions) is not int or impressions <= 0 or clicks > impressions:
             report.add(label, "manual_page_counts_invalid", str(row))
-        if not isinstance(ctr, (int, float)) or not 0 <= ctr <= 1:
+        if type(ctr) is not float or not 0 <= ctr <= 1:
             report.add(label, "manual_page_ctr_invalid", str(ctr))
-        elif isinstance(clicks, int) and isinstance(impressions, int) and impressions > 0:
+        elif type(clicks) is int and type(impressions) is int and impressions > 0:
             if abs(ctr - clicks / impressions) > 0.0001:
                 report.add(label, "manual_page_ctr_incoherent", str(row))
-        if not isinstance(position, (int, float)) or position <= 0:
+        if type(position) is not float or position <= 0:
             report.add(label, "manual_page_position_invalid", str(position))
         pages[path] = row
     return pages

@@ -213,6 +213,21 @@ def test_query_visibility_is_censored_and_cannot_own_or_score_a_family():
         item.reason for item in report.findings
     }
 
+    strict_type_drift = _manual_snapshot()
+    strict_type_drift["raw_export_provenance"]["archived"] = 0
+    strict_type_drift["durable_authority_relationship"]["issue"] = 413.0
+    strict_type_drift["durable_authority_relationship"][
+        "counts_as_durable_observation"
+    ] = 0
+    strict_type_drift["query_visibility"]["raw_query_text_committed"] = 0
+    strict_type_drift["site_summary"]["clicks"] = 27.0
+    report = validate_buyer_decision_map(manual_snapshot=strict_type_drift)
+    reasons = {item.reason for item in report.findings}
+    assert "manual_raw_provenance_overclaim" in reasons
+    assert "manual_snapshot_promoted_to_durable" in reasons
+    assert "query_visibility_contract_drift" in reasons
+    assert "manual_site_totals_drift" in reasons
+
     hidden_in_allowed_field = _manual_snapshot()
     hidden_in_allowed_field["query_visibility"]["forbidden_inference"] = {
         "visible_queries": ["plaintext query hidden inside an allowed key"]
