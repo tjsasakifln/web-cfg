@@ -46,7 +46,24 @@ Formulários, campos, Turnstile, consentimento, transporte, `CONFENGE_WEB`, IDs 
 
 ## Gates, rollback e arquitetura
 
-Resultado final dos gates será gravado aqui antes da abertura do PR.
+Conteúdo público final validado no worktree isolado:
+
+| Gate | Resultado |
+|---|---|
+| `npm run test:copy` | Verde: core, linguagem pública, lint e travessões; 261 superfícies, zero phrase hit. |
+| `npm run test:commercial-contracts` | Verde: todos os contratos, truth, fit, prova real fail-closed e `value-first-copy` 65/65. |
+| `npm run test:first-fold-contract` | Verde: 1.738/1.738 checks. |
+| `npm run measure:first-fold` | 19 PASS e 6 FAIL conhecidos. As oito rotas de #528 são PASS; os seis FAIL são exclusivamente as rotas congeladas de #529. Dry-run, nada gravado. |
+| `npm run test:analytics` | Verde: `CONFENGE_WEB`, dicionário de eventos, atribuição e allowlist de PII vazia. |
+| `npm run inbound:gates` + `test:inbound-gates` | Verde, zero erro. Avisos preexistentes e declarados: 6 rotas protegidas sem formulário e débitos route-exact de #61; 10/10 ofertas com preço mantêm captura. |
+| `npm run validate:seo` | Verde: 261 páginas, 76 no sitemap/indexáveis, zero erro e zero warning. |
+| `npm run audit:accessibility` | Verde: landmarks, skip link, labels, consentimento, motion, foco e contraste. |
+| `npm run build:site` | Verde: artefato público montado, auditado e com visible parity sem defeito. |
+| `npm run test:html-integrity:site` | Verde: 263 HTML, 426 perguntas FAQ, CSP e cache sem falha. |
+| `npm run audit:axe` | Verde após execução isolada: 69 rotas × 2 viewports, 138 auditorias, zero critical/serious. A primeira tentativa concorrente colidiu na porta 8793; não houve mudança de código para a repetição. |
+| `npm run test:ui` | Verde: geometria, home fold, 19×6 layout checks e matriz responsiva de 12 rotas × 16 larguras. |
+
+Checagem adicional de fronteira: os oito elementos `<form>` são byte a byte iguais a `origin/main`; `script.js`, `js/`, `netlify/functions/` e as seis rotas protegidas não têm diff.
 
 - Rollback: revert único da PR restaura copy e ordem do bloco gerado sem alterar URLs, formulários, contratos de dados ou histórico de medição.
 - ADR afetado: nenhum. A mudança aplica ADR-STRAT-002 e mantém CONFENGE como superfície canônica, `extra-cli` como truth e Warmbly como action.
