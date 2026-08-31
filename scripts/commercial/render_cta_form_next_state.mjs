@@ -42,6 +42,17 @@ function ensureInlineStyle(tag, property, value) {
   return setInputAttr(tag, "style", `${current}${separator}${property}:${value}`);
 }
 
+function removeInlineStyle(tag, property, value) {
+  const current = attrValue(tag, "style");
+  if (!current) return tag;
+  const exact = new RegExp(`^${property}\\s*:\\s*${value}$`, "i");
+  const declarations = current.split(";").map((entry) => entry.trim()).filter(Boolean);
+  const kept = declarations.filter((entry) => !exact.test(entry));
+  if (kept.length === declarations.length) return tag;
+  if (!kept.length) return tag.replace(/\sstyle=["'][^"']*["']/i, "");
+  return setInputAttr(tag, "style", kept.join(";"));
+}
+
 function profileFor(surface) {
   for (const rule of contract.profile_derivation || []) {
     if (rule.family_id && rule.family_id === surface.family_id) return rule.profile;
@@ -79,14 +90,18 @@ function appendBoundary(body, text) {
   return `${body.replace(pattern, "").trimEnd()}\n<p class="form-hint" data-form-boundary>${escapeHtml(text)} ${privacy} <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>\n`;
 }
 
-function constrainContact(body, runtime) {
+function constrainContact(body, runtime, ensurePhoneTouchTarget) {
   const update = (source, field, attributes) => source.replace(
     new RegExp(`<input\\b(?=[^>]*\\bname=["']${field}["'])[^>]*>`, "gi"),
     (tag) => {
       let next = tag;
       if (!/\bid=["']/i.test(next) && runtime === "shared_lead_form_v1") next = setInputAttr(next, "id", field);
       for (const [name, value] of Object.entries(attributes)) next = setInputAttr(next, name, value);
-      if (field === "telefone") next = ensureInlineStyle(next, "min-height", "44px");
+      if (field === "telefone") {
+        next = ensurePhoneTouchTarget
+          ? ensureInlineStyle(next, "min-height", "44px")
+          : removeInlineStyle(next, "min-height", "44px");
+      }
       return next;
     },
   );
@@ -197,7 +212,8 @@ function renderForm(full, open, body, surface) {
   nextOpen = setAttr(nextOpen, "data-next-state-profile", profileId);
   nextOpen = setAttr(nextOpen, "data-runtime-profile", runtime);
   nextOpen = setAttr(nextOpen, "data-receipt-required", "true");
-  let nextBody = constrainSharedSelectors(constrainContact(body, runtime), runtime);
+  const ensurePhoneTouchTarget = profileId === "configured_delivery_request";
+  let nextBody = constrainSharedSelectors(constrainContact(body, runtime, ensurePhoneTouchTarget), runtime);
   if (profileId === "delivery_selection") {
     nextBody = removeMarker(removeMarker(removeMarker(nextBody, "data-form-value"), "data-field-purpose"), "data-form-boundary");
     nextBody = updateSubmit(nextBody, profileId);

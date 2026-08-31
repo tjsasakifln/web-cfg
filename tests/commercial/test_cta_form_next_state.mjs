@@ -137,6 +137,9 @@ for (const item of eight.deliverables) {
   assert.match(phone, /\bstyle=["'][^"']*min-height:\s*44px/i, `${item.route}: WhatsApp touch target`);
 }
 
+const homePhone = fs.readFileSync("index.html", "utf8").match(/<input\b(?=[^>]*\bname=["']telefone["'])[^>]*>/i)?.[0] || "";
+assert.doesNotMatch(homePhone, /\bstyle=["'][^"']*min-height:/i, "home must use existing CSS without inline payload");
+
 const radarForm = report.surfaces.find((surface) => surface.route === "/comercial/radar-decisorio/")?.forms[0];
 assert.ok(radarForm.field_purpose.required.includes("radar_segmentos"));
 assert.ok(radarForm.field_purpose.required.includes("radar_cidade_base_when_city_base"));
