@@ -38,11 +38,11 @@
       "destination_type": "form"
     },
     {
-      "label": "Prefiro WhatsApp",
+      "label": "Pedir triagem pelo WhatsApp",
       "destination_type": "whatsapp"
     },
     {
-      "label": "Falar sobre minha operação",
+      "label": "Pedir revisão de encaixe da operação",
       "destination_type": "whatsapp"
     },
     {
@@ -50,11 +50,11 @@
       "destination_type": "form"
     },
     {
-      "label": "Enviar dados pelo formulário",
+      "label": "Registrar operação para revisão de encaixe",
       "destination_type": "form"
     },
     {
-      "label": "Enviar para análise",
+      "label": "Registrar contexto para revisão de encaixe",
       "destination_type": "form"
     },
     {
@@ -62,7 +62,7 @@
       "destination_type": "form"
     },
     {
-      "label": "Enviar pedido de enquadramento",
+      "label": "Registrar pedido para revisão de enquadramento",
       "destination_type": "form"
     }
   ],
@@ -124,7 +124,7 @@
       "buyable_note": "Faixa publicada; a contratação depende de capacidade confirmada e não fecha no site.",
       "page_publishes_price": true,
       "jsonld_offer_price": true,
-      "cta_label": "Falar sobre minha operação",
+      "cta_label": "Pedir revisão de encaixe da operação",
       "cta_href_type": "whatsapp",
       "cta_destination_type": "whatsapp",
       "visible_aliases_forbidden": ["Diretoria B2G", "Flex", "Bid Room"]
