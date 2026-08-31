@@ -1,7 +1,17 @@
 /* CONFENGE · camada da home
  * ---------------------------------------------------------------------------
- * Revisao 2026-08-30 (direcao "parecer"). Registro em
+ * Revisao 2026-08-30 (direcao "parecer"), com a paleta revertida em
+ * 2026-08-31 a pedido do dono da marca. Registro em
  * docs/design-audit/issues/13-home-commercial-direction.md.
+ *
+ * LEIA ISTO ANTES DA SECAO 0. O campo escuro descrito abaixo como decisao 1
+ * NAO esta mais em producao. O dono da marca inspecionou a versao escura e
+ * preferiu a paleta institucional, e so as CORES foram revertidas: a dobra
+ * voltou a ser folha, o escuro voltou para a oferta dominante, a captura e o
+ * rodape em navy #071a31, e o acento voltou a --green-700. Composicao,
+ * hierarquia, faixa de escala, terna, copy, Archivo e o eixo wdth continuam
+ * exatamente como esta camada os instalou. As decisoes 2 e 3 seguem valendo
+ * na integra; a decisao 1 fica no texto como historico do que foi tentado.
  *
  * Historico curto. A revisao de #525/#526 instalou uma planilha orcamentaria
  * como motor de layout (regua ITEM/DESCRICAO/UNIDADE/QUANT/FONTE, cinco
@@ -68,12 +78,33 @@
  *   --field-muted sobre --field  9,45:1
  *   --accent-live sobre --field  6,51:1 */
 body[data-content-cluster="home"]{
-  --field:#08130e;
-  --field-soft:#12241b;
-  --field-ink:#f4f7f4;
-  --field-muted:#a9bcae;
+  /* 2026-08-31. O dono da marca inspecionou a versao escura e preferiu a
+   * paleta institucional: mais CONFENGE, menos categoria. Revertidas as CORES
+   * e so elas. Composicao, hierarquia, faixa de escala, terna, copy, Archivo e
+   * o eixo wdth ficam exatamente como estavam.
+   *
+   * --field deixa de ser o preto-verde e volta a ser a folha. O escuro nao
+   * some da pagina: ele volta para onde a folha global sempre o pos, que e a
+   * oferta dominante, a captura e o rodape, agora em --dark, o navy #071a31 de
+   * styles.css, e nao numa tinta nova.
+   *
+   * Contraste medido com _contrast_ratio de scripts/site/test_design_gates.py:
+   *   --field-ink   sobre --field  17,48:1
+   *   --field-muted sobre --field   5,51:1
+   *   --accent-live sobre --field   6,13:1
+   *   --dark-ink    sobre --dark   17,48:1
+   *   --dark-muted  sobre --dark   10,72:1
+   *   --dark-accent sobre --dark   11,05:1 */
+  --field:#fff;
+  --field-soft:var(--soft);
+  --field-ink:var(--ink);
+  --field-muted:var(--muted);
   --accent:var(--green-700);
-  --accent-live:#5ea85a;
+  --accent-live:var(--green-700);
+  --dark:#071a31;
+  --dark-ink:#fff;
+  --dark-muted:#c1ccd6;
+  --dark-accent:var(--lime);
   --rule:#dfe4e6;
   --rule-strong:#0d1b12;
   --page-gutter:clamp(1.15rem,3.2vw,3rem);
@@ -153,7 +184,7 @@ body[data-content-cluster="home"] .section-head h2{max-width:20ch}
 /* ── 3. Primeira dobra: o campo e o parecer ────────────────────────────── */
 body[data-content-cluster="home"] .hero{
   padding:clamp(2.75rem,5.5vw,4.5rem) 0 clamp(2.75rem,5vw,4rem);
-  color:var(--field-ink);background:var(--field);border-bottom:0;
+  color:var(--field-ink);background:var(--field);border-bottom:1px solid var(--rule);
 }
 body[data-content-cluster="home"] .hero h1{
   max-width:22ch;margin:0 0 1.15rem;color:var(--field-ink);
@@ -169,34 +200,30 @@ body[data-content-cluster="home"] .hero-lead{
   font-size:clamp(1rem,1.35vw,1.12rem);line-height:1.6;
 }
 body[data-content-cluster="home"] .hero-deliverable{
-  max-width:52ch;margin:0 0 1.5rem;padding:1rem 0 0;border-top:1px solid rgba(255,255,255,.16);
+  max-width:52ch;margin:0 0 1.5rem;padding:1rem 0 0;border-top:1px solid var(--rule);
   color:var(--field-ink);font-size:1rem;font-weight:600;line-height:1.55;
 }
 body[data-content-cluster="home"] .hero-actions{gap:1rem 1.75rem;margin-bottom:1.4rem}
 
-/* O anel de foco padrao e halo branco + nucleo tinta: sobre o campo escuro o
- * nucleo desaparece. Invertido aqui, medido em 12,1:1 contra o campo. */
-body[data-content-cluster="home"] .hero{
-  --focus-ring-halo:var(--field);
-  --focus-ring-core:var(--white);
-}
-/* Sobre o campo escuro a acao primaria e a superficie de maior contraste da
- * pagina: branco solido. Uma acao dominante, sem competidor do mesmo peso. */
+/* Sobre folha o anel de foco global (halo branco + nucleo tinta) ja e o
+ * correto; a inversao que o campo escuro exigia deixou de fazer sentido. */
+/* Sobre folha a acao primaria volta a ser o verde institucional, que e a cor
+ * de acao do resto do site. Uma acao dominante, sem competidor do mesmo peso.
+ * Branco sobre --green-700 mede 6,13:1, acima do piso de 4,5:1 do gate. */
 /* .button-lg pede 58px, mas um contrato de layout em styles.css derruba a
  * altura para o piso de toque de 44px. Ao lado de um display de 3,3rem isso
  * le como um botao secundario, entao a acao dominante recupera a escala. */
 body[data-content-cluster="home"] .hero .button-primary{
   min-height:56px;padding-inline:26px;
-  color:var(--field);background:var(--white);box-shadow:none;
+  color:var(--white);background:var(--green-700);
 }
-body[data-content-cluster="home"] .hero .button-primary:hover{background:#dce7dd;box-shadow:none}
 body[data-content-cluster="home"] .hero-secondary{color:var(--field-ink)}
 body[data-content-cluster="home"] .hero-secondary:hover{color:var(--accent-live)}
 body[data-content-cluster="home"] .hero-secondary .icon{color:var(--accent-live)}
 
 body[data-content-cluster="home"] .hero-proof{
   display:flex;flex-wrap:wrap;gap:.5rem 1.75rem;
-  padding:1rem 0 0;border-top:1px solid rgba(255,255,255,.16);
+  padding:1rem 0 0;border-top:1px solid var(--rule);
 }
 body[data-content-cluster="home"] .hero-proof li{color:var(--field-muted);font-size:.875rem;line-height:1.45}
 body[data-content-cluster="home"] .proof-mark{color:var(--accent-live)}
@@ -219,9 +246,9 @@ body[data-content-cluster="home"] .home-hero-grid{
   font-stretch:var(--narrow);font-weight:750;letter-spacing:.11em;text-transform:uppercase;
   font-size:var(--text-micro);line-height:1.5;
 }
-.hero-verdict-set{margin:0;padding:0;list-style:none;border-top:1px solid rgba(255,255,255,.22)}
+.hero-verdict-set{margin:0;padding:0;list-style:none;border-top:1px solid var(--rule-strong)}
 .hero-verdict-set li{
-  padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.22);
+  padding:.7rem 0;border-bottom:1px solid var(--rule-strong);
   color:var(--field-ink);font-stretch:var(--narrow);font-weight:760;
   letter-spacing:.045em;text-transform:uppercase;line-height:1.1;
   font-size:clamp(1.6rem,2.9vw,2.55rem);
@@ -250,7 +277,7 @@ body[data-content-cluster="home"] .home-hero-grid{
  * construtora, depois o universo de onde ele sai. Magnitude sozinha nao e
  * argumento; 4,48 milhoes sem os 54.055 ao lado convida a leitura errada de
  * que ha 4,48 milhoes de contratos de engenharia. */
-.home-proof-strip{background:var(--white);border-bottom:1px solid var(--rule)}
+.home-proof-strip{background:var(--soft);border-bottom:1px solid var(--rule)}
 .home-proof-strip-inner{
   display:grid;grid-template-columns:minmax(0,1.2fr) repeat(2,minmax(0,.6fr));
   gap:clamp(1.25rem,3vw,3rem);align-items:end;
@@ -318,16 +345,16 @@ body[data-content-cluster="home"] .offer-layout{
 }
 body[data-content-cluster="home"] .offer-dominant{
   gap:.85rem;padding:clamp(1.9rem,3.5vw,2.75rem);
-  color:var(--field-ink);background:var(--field);border:0;
+  color:var(--dark-ink);background:var(--dark);border:0;
 }
-body[data-content-cluster="home"] .offer-dominant .offer-label{color:var(--accent-live)}
+body[data-content-cluster="home"] .offer-dominant .offer-label{color:var(--dark-accent)}
 body[data-content-cluster="home"] .offer-dominant h3{font-size:clamp(1.4rem,2.2vw,1.9rem)}
-body[data-content-cluster="home"] .offer-dominant .offer-headline{color:var(--field-ink);font-size:1.05rem;font-weight:600}
-body[data-content-cluster="home"] .offer-facts li{color:var(--field-muted)}
-body[data-content-cluster="home"] .offer-facts strong{color:var(--field-ink);font-weight:650}
-body[data-content-cluster="home"] .offer-dominant-link{color:var(--field-ink)}
-body[data-content-cluster="home"] .offer-dominant-link .icon{color:var(--accent-live)}
-body[data-content-cluster="home"] .offer-dominant{--focus-ring-halo:var(--field);--focus-ring-core:var(--white)}
+body[data-content-cluster="home"] .offer-dominant .offer-headline{color:var(--dark-ink);font-size:1.05rem;font-weight:600}
+body[data-content-cluster="home"] .offer-facts li{color:var(--dark-muted)}
+body[data-content-cluster="home"] .offer-facts strong{color:var(--dark-ink);font-weight:650}
+body[data-content-cluster="home"] .offer-dominant-link{color:var(--dark-ink)}
+body[data-content-cluster="home"] .offer-dominant-link .icon{color:var(--dark-accent)}
+body[data-content-cluster="home"] .offer-dominant{--focus-ring-halo:var(--dark);--focus-ring-core:var(--white)}
 
 /* Os apoios deixam de ser tres cards iguais ao lado de um card maior: viram
  * uma lista com regua. Formato diferente = subordinacao legivel. */
@@ -509,13 +536,13 @@ body[data-content-cluster="home"] .button-secondary{
 body[data-content-cluster="home"] .button-secondary:hover{color:var(--white);background:var(--rule-strong);border-color:var(--rule-strong)}
 
 /* ── 10. Captura ───────────────────────────────────────────────────────── */
-body[data-content-cluster="home"] .contact-section{background:var(--field)}
+body[data-content-cluster="home"] .contact-section{background:var(--dark)}
 body[data-content-cluster="home"] .contact-section::before{display:none}
-body[data-content-cluster="home"] .contact-copy>p:not(.eyebrow){color:var(--field-muted)}
-body[data-content-cluster="home"] .contact-copy .eyebrow{color:var(--accent-live)}
-body[data-content-cluster="home"] .contact-channels .icon{color:var(--accent-live)}
-body[data-content-cluster="home"] .contact-channels>a:hover{color:var(--accent-live)}
-body[data-content-cluster="home"] .contact-section{--focus-ring-halo:var(--field);--focus-ring-core:var(--white)}
+body[data-content-cluster="home"] .contact-copy>p:not(.eyebrow){color:var(--dark-muted)}
+body[data-content-cluster="home"] .contact-copy .eyebrow{color:var(--dark-accent)}
+body[data-content-cluster="home"] .contact-channels .icon{color:var(--dark-accent)}
+body[data-content-cluster="home"] .contact-channels>a:hover{color:var(--dark-accent)}
+body[data-content-cluster="home"] .contact-section{--focus-ring-halo:var(--dark);--focus-ring-core:var(--white)}
 body[data-content-cluster="home"] .contact-form{
   border:0;border-radius:0;box-shadow:none;--focus-ring-halo:var(--white);--focus-ring-core:var(--ink);
 }
@@ -534,10 +561,11 @@ body[data-content-cluster="home"] .form-legal p:last-child{margin:0}
 .turnstile-slot{margin:.75rem 0}
 .turnstile-slot[hidden]{display:none!important}
 
-/* O rodape global e navy #071a31 e a captura agora e --field #08130e. Duas
- * tintas quase iguais empilhadas leem como erro de producao, nao como decisao;
- * na home o pe da pagina passa a ser um campo so. */
-body[data-content-cluster="home"] .site-footer{background:var(--field)}
+/* O rodape volta a --navy-950 da folha global, que e o que a home tinha antes
+ * do campo escuro. Ele fica um degrau mais escuro que a captura #071a31 logo
+ * acima: e a mesma aresta que a folha global sempre teve, e o dono da marca a
+ * prefere ao campo unico. */
+body[data-content-cluster="home"] .site-footer{background:var(--navy-950)}
 /* .footer-top e uma grade de tres colunas (1.3fr .65fr 1fr) para quatro
  * blocos: marca, Situacoes, Biblioteca e Empresa, com Empresa caindo sozinha
  * na segunda linha e meia largura vazia ao lado. Quatro blocos, quatro
