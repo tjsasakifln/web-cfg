@@ -72,6 +72,15 @@ if (dirty && process.env.CAPTURE_ALLOW_DIRTY !== "1") {
 const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).trim();
 const server = BASE_ARG ? null : await startServer();
 const baseUrl = BASE_ARG || `http://127.0.0.1:${PORT}`;
+let remoteBuildInfo = null;
+if (BASE_ARG) {
+  try {
+    const response = await fetch(`${baseUrl}/.well-known/build-info.json`);
+    if (response.ok) remoteBuildInfo = await response.json();
+  } catch {
+    remoteBuildInfo = null;
+  }
+}
 mkdirSync(OUT, { recursive: true });
 
 const browser = await puppeteer.launch({
@@ -90,7 +99,20 @@ for (const route of ROUTES) {
     if (!response || response.status() >= 400) throw new Error(`capture HTTP ${response?.status() || 0}: ${route.path}`);
     await page.evaluate(async () => {
       document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, 0);
       await document.fonts?.ready;
+    });
+
+    const foldFile = `${slug}-first-fold-${width}x${height}.png`;
+    const foldAbsolute = join(OUT, foldFile);
+    await page.screenshot({ path: foldAbsolute, fullPage: false });
+    captures.push({
+      route: route.path,
+      selector: "viewport",
+      section: "first-fold",
+      viewport: `${width}x${height}`,
+      file: foldFile,
+      sha256: createHash("sha256").update(readFileSync(foldAbsolute)).digest("hex"),
     });
 
     for (const [name, selector] of route.targets) {
@@ -126,13 +148,15 @@ for (const route of ROUTES) {
 await browser.close();
 if (server) server.close();
 writeFileSync(join(OUT, "manifest.json"), `${JSON.stringify({
-  schema: "confenge.issue-528-segmented-capture/1.0",
+  schema: "confenge.issue-528-segmented-capture/1.1",
   issue: 528,
-  capture_mode: "element_sections_no_fullpage",
+  capture_mode: "first_fold_and_element_sections_no_fullpage",
   fullpage_used: false,
   fullpage_limitation_issue: 540,
   captured_at: new Date().toISOString(),
   commit_sha: commit,
+  rendered_content_sha: BASE_ARG ? (remoteBuildInfo?.commit || "UNKNOWN") : commit,
+  remote_build_info: BASE_ARG ? remoteBuildInfo : null,
   tree_dirty: Boolean(dirty),
   base_url: baseUrl,
   output_dir: relative(ROOT, OUT),
