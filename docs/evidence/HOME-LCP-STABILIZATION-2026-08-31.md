@@ -1,8 +1,10 @@
 # Home LCP stabilization — causal diagnosis
 
-**State:** `DEFER / NO SAFE REMEDY ACCEPTED`  
-**Main:** `81c600b7c26dcc606d3a03e648ecd9820d9c1c37`  
-**Classification:** `D — MIXED_CAUSES`  
+**State:** `DEFER / NO SAFE REMEDY ACCEPTED`
+
+**Main:** `81c600b7c26dcc606d3a03e648ecd9820d9c1c37`
+
+**Classification:** `D — MIXED_CAUSES`
 **PR #536:** `HOLD_WAITING_FOR_DEPENDENCY`
 
 ## Decision
