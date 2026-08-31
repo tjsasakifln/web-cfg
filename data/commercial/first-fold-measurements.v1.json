@@ -1,10 +1,10 @@
 {
   "schema": "confenge.first-fold-measurements/1.0",
   "issue": "#327",
-  "measured_at": "2026-08-30T08:56:15.849Z",
-  "measured_on": "2026-08-30",
-  "commit_sha": "dedcb0c69a0b0cf8f91f47581d107ca153d19881",
-  "tree_dirty": false,
+  "measured_at": "2026-08-31T01:24:24.692Z",
+  "measured_on": "2026-08-31",
+  "commit_sha": "5c19365332a9a5a6d3598edef23dbf8537768930",
+  "tree_dirty": true,
   "viewports": [
     "1366x768",
     "390x844"
@@ -47,7 +47,7 @@
   "routes": [
     {
       "route": "/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -55,60 +55,60 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 109,
-                "bottom": 132,
-                "left": 363,
-                "right": 1003,
-                "width": 640,
-                "height": 23
+                "top": 167,
+                "bottom": 187,
+                "left": 83,
+                "right": 791,
+                "width": 708,
+                "height": 20
               },
               "text": "Consultoria para licitações e contratos de obras públicas"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 146,
-                "bottom": 307,
-                "left": 363,
-                "right": 984,
-                "width": 621,
-                "height": 161
+                "top": 200,
+                "bottom": 365,
+                "left": 83,
+                "right": 772,
+                "width": 689,
+                "height": 165
               },
               "text": "Licitação vencida não paga a conta. Contrato rentável, sim."
             },
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 321,
-                "bottom": 401,
-                "left": 363,
-                "right": 811,
-                "width": 448,
-                "height": 81
+                "top": 383,
+                "bottom": 441,
+                "left": 83,
+                "right": 596,
+                "width": 513,
+                "height": 57
               },
               "text": "Para construtoras: decidir se o edital merece o capital, precificar o risco e proteger a margem na obra."
             },
             "proof": {
               "selector": ".hero-proof-line",
               "box": {
-                "top": 537,
-                "bottom": 558,
-                "left": 363,
-                "right": 1003,
-                "width": 640,
-                "height": 21
+                "top": 677,
+                "bottom": 700,
+                "left": 83,
+                "right": 791,
+                "width": 708,
+                "height": 23
               },
               "text": "Ver exemplo demonstrativo de relatório."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 419,
-                "bottom": 463,
-                "left": 363,
-                "right": 585,
-                "width": 222,
-                "height": 44
+                "top": 550,
+                "bottom": 606,
+                "left": 83,
+                "right": 290,
+                "width": 207,
+                "height": 56
               },
               "text": "Analisar meu caso"
             }
@@ -118,12 +118,12 @@
               "text": "Analisar meu caso",
               "href": "#formulario-contato",
               "box": {
-                "top": 419,
-                "bottom": 463,
-                "left": 363,
-                "right": 585,
-                "width": 222,
-                "height": 44
+                "top": 550,
+                "bottom": 606,
+                "left": 83,
+                "right": 290,
+                "width": 207,
+                "height": 56
               }
             }
           ],
@@ -145,32 +145,32 @@
             "eyebrow": {
               "selector": ".hero-eyebrow",
               "box": {
-                "top": 81,
-                "bottom": 127,
+                "top": 91,
+                "bottom": 131,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 46
+                "height": 39
               },
               "text": "Consultoria para licitações e contratos de obras públicas"
             },
             "h1": {
               "selector": "h1",
               "box": {
-                "top": 141,
-                "bottom": 232,
+                "top": 144,
+                "bottom": 236,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 91
+                "height": 92
               },
               "text": "Licitação vencida não paga a conta. Contrato rentável, sim."
             },
             "lead": {
               "selector": ".hero-lead",
               "box": {
-                "top": 244,
-                "bottom": 321,
+                "top": 255,
+                "bottom": 332,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -181,24 +181,24 @@
             "proof": {
               "selector": ".hero-proof-line",
               "box": {
-                "top": 521,
-                "bottom": 542,
+                "top": 641,
+                "bottom": 664,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 21
+                "height": 23
               },
               "text": "Ver exemplo demonstrativo de relatório."
             },
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 335,
-                "bottom": 379,
+                "top": 446,
+                "bottom": 502,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 44
+                "height": 56
               },
               "text": "Analisar meu caso"
             }
@@ -208,12 +208,12 @@
               "text": "Analisar meu caso",
               "href": "#formulario-contato",
               "box": {
-                "top": 335,
-                "bottom": 379,
+                "top": 446,
+                "bottom": 502,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 44
+                "height": 56
               }
             }
           ],
@@ -256,7 +256,7 @@
     },
     {
       "route": "/entregas/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -469,7 +469,7 @@
     },
     {
       "route": "/servicos-obras-publicas/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -670,7 +670,7 @@
     },
     {
       "route": "/problemas-que-resolvemos/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -867,7 +867,7 @@
     },
     {
       "route": "/diagnostico-b2g-expansao/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1078,7 +1078,7 @@
     },
     {
       "route": "/diagnostico-pre-licitacao/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1261,7 +1261,7 @@
     },
     {
       "route": "/auditoria-orcamento-licitacao/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1444,7 +1444,7 @@
     },
     {
       "route": "/bid-room-licitacoes-obras/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1645,7 +1645,7 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -1851,7 +1851,7 @@
     },
     {
       "route": "/medicoes-glosas-obras-publicas/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2035,7 +2035,7 @@
     },
     {
       "route": "/aditivos-obras-publicas/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2216,7 +2216,7 @@
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2423,7 +2423,7 @@
     },
     {
       "route": "/reequilibrio-obras-publicas/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2605,7 +2605,7 @@
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2638,19 +2638,19 @@
               "selector": ".content-lead",
               "box": {
                 "top": 363,
-                "bottom": 420,
+                "bottom": 449,
                 "left": 83,
                 "right": 691,
                 "width": 608,
-                "height": 57
+                "height": 86
               },
-              "text": "Subsídio técnico, não advocacia: fatos, cronologia e pedido coerente para o jurídico. Sem representação e sem promessa de êxito."
+              "text": "Subsídio técnico, não advocacia: fatos, cronologia e pedido coerente para o jurídico. O advogado da empresa mantém a representação e assina as peças jurídicas."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 434,
-                "bottom": 481,
+                "top": 463,
+                "bottom": 509,
                 "left": 83,
                 "right": 694,
                 "width": 611,
@@ -2661,8 +2661,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 481,
-                "bottom": 525,
+                "top": 509,
+                "bottom": 553,
                 "left": 83,
                 "right": 364,
                 "width": 281,
@@ -2676,8 +2676,8 @@
               "text": "Enviar dados para análise",
               "href": "#captura-pilar",
               "box": {
-                "top": 481,
-                "bottom": 525,
+                "top": 509,
+                "bottom": 553,
                 "left": 83,
                 "right": 364,
                 "width": 281,
@@ -2728,19 +2728,19 @@
               "selector": ".content-lead",
               "box": {
                 "top": 384,
-                "bottom": 498,
+                "bottom": 526,
                 "left": 20,
                 "right": 370,
                 "width": 350,
-                "height": 114
+                "height": 143
               },
-              "text": "Subsídio técnico, não advocacia: fatos, cronologia e pedido coerente para o jurídico. Sem representação e sem promessa de êxito."
+              "text": "Subsídio técnico, não advocacia: fatos, cronologia e pedido coerente para o jurídico. O advogado da empresa mantém a representação e assina as peças jurídicas."
             },
             "proof": {
               "selector": ".offer-proof-line",
               "box": {
-                "top": 510,
-                "bottom": 594,
+                "top": 538,
+                "bottom": 622,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -2751,8 +2751,8 @@
             "primary_action": {
               "selector": "a.button-primary",
               "box": {
-                "top": 594,
-                "bottom": 638,
+                "top": 622,
+                "bottom": 666,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -2766,8 +2766,8 @@
               "text": "Enviar dados para análise",
               "href": "#captura-pilar",
               "box": {
-                "top": 594,
-                "bottom": 638,
+                "top": 622,
+                "bottom": 666,
                 "left": 20,
                 "right": 370,
                 "width": 350,
@@ -2798,20 +2798,24 @@
           "sancao"
         ],
         "lead_new": [
+          "advogado",
+          "assina",
           "coerente",
           "cronologia",
-          "exito",
+          "empresa",
           "fatos",
+          "juridicas",
           "juridico",
+          "mantem",
+          "pecas",
           "pedido",
-          "promessa",
           "representacao"
         ]
       }
     },
     {
       "route": "/diagnostico-b2g-360/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -2989,7 +2993,7 @@
     },
     {
       "route": "/acompanhamento-contratos-obras/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3187,7 +3191,7 @@
     },
     {
       "route": "/diretoria-b2g/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3390,7 +3394,7 @@
     },
     {
       "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3599,7 +3603,7 @@
     },
     {
       "route": "/casos/modelo-base-quantitativa-canonica/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -3808,7 +3812,7 @@
     },
     {
       "route": "/casos/modelo-apresentacao-executiva-resultados/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4019,7 +4023,7 @@
     },
     {
       "route": "/casos/modelo-mapa-compradores-publicos/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4230,7 +4234,7 @@
     },
     {
       "route": "/casos/modelo-contratos-vincendos-relicitacao/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4442,7 +4446,7 @@
     },
     {
       "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4650,7 +4654,7 @@
     },
     {
       "route": "/casos/modelo-painel-precos-obras-publicas/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
@@ -4863,7 +4867,7 @@
     },
     {
       "route": "/casos/modelo-relatorio-executivo-consolidado/",
-      "measured_on": "2026-08-30",
+      "measured_on": "2026-08-31",
       "viewports": {
         "1366x768": {
           "viewport": "1366x768",
