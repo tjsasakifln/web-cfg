@@ -212,6 +212,46 @@ def test_orphan_contract_end_after_neighbor_does_not_consume_neighbor(
     assert rendered == expected
 
 
+@pytest.mark.parametrize(
+    ("filename", "contract_rule_body", "market_rule_body"),
+    [
+        (
+            "robots.txt",
+            "Disallow: /analises-contratos-publicos/\n",
+            "Disallow: /panorama-mercado-obras-publicas/\n",
+        ),
+        (
+            "_headers",
+            (
+                "/analises-contratos-publicos/*\n"
+                "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+            ),
+            (
+                "/panorama-mercado-obras-publicas/*\n"
+                "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+            ),
+        ),
+    ],
+)
+def test_market_family_before_contract_remains_byte_identical(
+    tmp_path: Path,
+    filename: str,
+    contract_rule_body: str,
+    market_rule_body: str,
+) -> None:
+    market_block = f"{MARKET_BEGIN}\n{market_rule_body}{MARKET_END}\n"
+    contract_block = f"{CONTRACT_BEGIN}\n{contract_rule_body}{CONTRACT_END}\n"
+    path = tmp_path / filename
+    path.write_text(f"{market_block}{contract_block}", encoding="utf-8")
+
+    sync_family_crawler_rules([], root=tmp_path)
+    once = path.read_bytes()
+    sync_family_crawler_rules([], root=tmp_path)
+
+    assert once == f"{market_block}{contract_block}".encode()
+    assert path.read_bytes() == once
+
+
 def _robots_directives(payload: bytes) -> list[bytes]:
     return [
         line
