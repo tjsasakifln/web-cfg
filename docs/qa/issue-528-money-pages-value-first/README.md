@@ -62,6 +62,7 @@ Conteúdo público final validado no worktree isolado:
 | `npm run test:html-integrity:site` | Verde: 263 HTML, 426 perguntas FAQ, CSP e cache sem falha. |
 | `npm run audit:axe` | Verde após execução isolada: 69 rotas × 2 viewports, 138 auditorias, zero critical/serious. A primeira tentativa concorrente colidiu na porta 8793; não houve mudança de código para a repetição. |
 | `npm run test:ui` | Verde: geometria, home fold, 19×6 layout checks e matriz responsiva de 12 rotas × 16 larguras. |
+| `npm run test:affected` | Verde no HEAD final: 37/91 suítes selecionadas, incluindo renderer/nav canônico, contratos, design, copy, a11y, UI, inbound, first-fold e integridade. |
 
 Checagem adicional de fronteira: os oito elementos `<form>` são byte a byte iguais a `origin/main`; `script.js`, `js/`, `netlify/functions/` e as seis rotas protegidas não têm diff.
 
