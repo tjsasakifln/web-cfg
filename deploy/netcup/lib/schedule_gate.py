@@ -13,17 +13,26 @@ import subprocess
 from pathlib import Path
 
 try:
-    from .release_control import ReleaseError, read_release_link, release_root
+    from .release_control import (
+        ReleaseError,
+        deploy_lock,
+        read_release_link,
+        release_root,
+    )
     from .runtime_launcher import runtime_environment
 except ImportError:  # Installed scripts share /opt/confenge-web/lib without a package.
-    from release_control import ReleaseError, read_release_link, release_root
+    from release_control import (
+        ReleaseError,
+        deploy_lock,
+        read_release_link,
+        release_root,
+    )
     from runtime_launcher import runtime_environment
 
 JOB = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 GATE_NAME = "schedule-cutover.json"
 RETENTION_JOB = "storage-retention"
 RETENTION_LOCK = "storage-retention.lock"
-RETENTION_APPLY_AUTHORITY = "confenge-schedule-runner/v1"
 
 
 def expected_gate_gid() -> int:
@@ -35,7 +44,7 @@ def expected_gate_gid() -> int:
         raise ReleaseError("confenge-web schedule gate group is absent") from exc
 
 
-def validate_gate(root: Path, job: str) -> dict[str, object]:
+def open_validated_gate(root: Path, job: str) -> tuple[dict[str, object], int]:
     if not JOB.fullmatch(job):
         raise ReleaseError("scheduled job name is invalid")
     gate_path = root / "shared" / GATE_NAME
@@ -58,26 +67,36 @@ def validate_gate(root: Path, job: str) -> dict[str, object]:
             raise ReleaseError("schedule cutover gate must be root-owned")
         if gate_stat.st_gid != expected_gate_gid():
             raise ReleaseError("schedule cutover gate must be confenge-web group-owned")
-        with os.fdopen(descriptor, encoding="utf-8") as handle:
-            descriptor = -1
-            gate = json.load(handle)
-    except (OSError, json.JSONDecodeError) as exc:
+        payload = os.read(descriptor, 65537)
+        if len(payload) > 65536:
+            raise ReleaseError("schedule cutover gate is invalid")
+        gate = json.loads(payload.decode("utf-8"))
+        os.lseek(descriptor, 0, os.SEEK_SET)
+    except ReleaseError:
+        os.close(descriptor)
+        raise
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        os.close(descriptor)
         raise ReleaseError("schedule cutover gate is invalid") from exc
-    finally:
-        if descriptor >= 0:
-            os.close(descriptor)
     if not isinstance(gate, dict):
+        os.close(descriptor)
         raise ReleaseError("schedule cutover gate is invalid")
-    current = read_release_link(root, "current")
+    try:
+        current = read_release_link(root, "current")
+    except ReleaseError:
+        os.close(descriptor)
+        raise
     legacy = gate.get("legacy_executor") or {}
     jobs = gate.get("jobs") or {}
     if not isinstance(legacy, dict) or not isinstance(jobs, dict):
+        os.close(descriptor)
         raise ReleaseError("schedule cutover gate is invalid")
     if (
         gate.get("schema") != "confenge.schedule-cutover/v1"
         or gate.get("authorized_release_sha") != current
         or jobs.get(job) is not True
     ):
+        os.close(descriptor)
         raise ReleaseError("scheduled job authorization is not proven for this release/job")
     if job == "search-observation-tick" and (
         legacy.get("netlify_search_observation_disabled") is not True
@@ -85,7 +104,14 @@ def validate_gate(root: Path, job: str) -> dict[str, object]:
         or not isinstance(legacy.get("evidence"), str)
         or len(legacy.get("evidence")) < 8
     ):
+        os.close(descriptor)
         raise ReleaseError("legacy executor disablement is not proven for this release/job")
+    return gate, descriptor
+
+
+def validate_gate(root: Path, job: str) -> dict[str, object]:
+    gate, descriptor = open_validated_gate(root, job)
+    os.close(descriptor)
     return gate
 
 
@@ -119,30 +145,44 @@ def acquire_job_lock(root: Path, job: str) -> int:
     return descriptor
 
 
-def run_retention(root: Path, release: Path, env: dict[str, str]) -> int:
+def run_retention(
+    root: Path,
+    release: Path,
+    env: dict[str, str],
+    gate_descriptor: int,
+    lock_descriptor: int,
+    deploy_descriptor: int,
+) -> int:
     storage = env.get("CONFENGE_STORAGE_DIR") or ""
     if storage != "/var/lib/confenge-web":
         raise ReleaseError("storage retention path must match /var/lib/confenge-web")
     script = release / "scripts" / "storage" / "retention.mjs"
     if not script.is_file() or script.is_symlink():
         raise ReleaseError("packaged storage retention script is missing")
-    descriptor = acquire_job_lock(root, RETENTION_JOB)
-    try:
-        retention_env = dict(env)
-        # This is an execution-path invariant, not a credential. Overwrite any
-        # inherited value only after the SHA/job gate and external lock have
-        # succeeded, so direct `retention.mjs --apply` calls fail closed.
-        retention_env["CONFENGE_RETENTION_APPLY_AUTHORITY"] = RETENTION_APPLY_AUTHORITY
-        result = subprocess.run(
-            ["node", str(script), "--store", storage, "--apply"],
-            cwd=release,
-            env=retention_env,
-            check=False,
-        )
-        return result.returncode
-    finally:
-        fcntl.flock(descriptor, fcntl.LOCK_UN)
-        os.close(descriptor)
+    result = subprocess.run(
+        [
+            "node",
+            str(script),
+            "--store",
+            storage,
+            "--apply",
+            "--authority-fd",
+            str(gate_descriptor),
+            "--lock-fd",
+            str(lock_descriptor),
+            "--deploy-lock-fd",
+            str(deploy_descriptor),
+            "--release-root",
+            str(root),
+            "--release-sha",
+            release.name,
+        ],
+        cwd=release,
+        env=env,
+        check=False,
+        pass_fds=(gate_descriptor, lock_descriptor, deploy_descriptor),
+    )
+    return result.returncode
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -150,13 +190,34 @@ def main(argv: list[str] | None = None) -> int:
     job = args[0] if len(args) == 1 else ""
     try:
         root = release_root()
+        if job == RETENTION_JOB:
+            with deploy_lock(root) as deploy_descriptor:
+                lock_descriptor = acquire_job_lock(root, RETENTION_JOB)
+                gate_descriptor = -1
+                try:
+                    gate, gate_descriptor = open_validated_gate(root, job)
+                    release, env = runtime_environment(root)
+                    if release.name != gate.get("authorized_release_sha"):
+                        raise ReleaseError("scheduled job release changed after authorization")
+                    os.chdir(release)
+                    return run_retention(
+                        root,
+                        release,
+                        env,
+                        gate_descriptor,
+                        lock_descriptor,
+                        deploy_descriptor,
+                    )
+                finally:
+                    if gate_descriptor >= 0:
+                        os.close(gate_descriptor)
+                    fcntl.flock(lock_descriptor, fcntl.LOCK_UN)
+                    os.close(lock_descriptor)
         gate = validate_gate(root, job)
         release, env = runtime_environment(root)
         if release.name != gate.get("authorized_release_sha"):
             raise ReleaseError("scheduled job release changed after authorization")
         os.chdir(release)
-        if job == RETENTION_JOB:
-            return run_retention(root, release, env)
         os.execvpe("node", ["node", "runtime/schedule.mjs", job], env)
     except (OSError, ReleaseError) as exc:
         print(f"NETCUP_SCHEDULE_BLOCKED: {exc}", file=os.sys.stderr)

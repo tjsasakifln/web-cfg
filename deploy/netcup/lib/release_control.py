@@ -31,6 +31,7 @@ from typing import Any
 REPO = "tjsasakifln/web-cfg"
 DEFAULT_ROOT = Path("/opt/confenge-web")
 SCHEMA_VERSION = "1.0.0"
+OPERATIONAL_PRIVACY_RETENTION_CAPABILITY = "confenge.operational-privacy-retention/v1"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX_256 = re.compile(r"^[0-9a-f]{64}$")
 ALLOWED_TOP_LEVEL = {
@@ -105,7 +106,7 @@ def ensure_layout(root: Path) -> None:
 
 
 @contextlib.contextmanager
-def deploy_lock(root: Path) -> Iterator[None]:
+def deploy_lock(root: Path) -> Iterator[int]:
     ensure_layout(root)
     lock_path = root / "locks" / "deploy.lock"
     descriptor = os.open(lock_path, os.O_CREAT | os.O_RDWR, 0o640)
@@ -118,7 +119,7 @@ def deploy_lock(root: Path) -> Iterator[None]:
             ) from exc
         os.ftruncate(descriptor, 0)
         os.write(descriptor, f"pid={os.getpid()} at={utc_now()}\n".encode())
-        yield
+        yield descriptor
     finally:
         try:
             fcntl.flock(descriptor, fcntl.LOCK_UN)
@@ -177,6 +178,13 @@ def validate_release_manifest(manifest: dict[str, Any], sha: str) -> None:
         raise ReleaseError("unexpected release manifest_type")
     if manifest.get("repo") != REPO or manifest.get("commit") != sha:
         raise ReleaseError("release manifest repo/SHA mismatch")
+    capabilities = manifest.get("capabilities")
+    if capabilities is not None and (
+        not isinstance(capabilities, dict)
+        or capabilities.get("operational_privacy_retention")
+        != OPERATIONAL_PRIVACY_RETENTION_CAPABILITY
+    ):
+        raise ReleaseError("release capabilities are invalid")
     contracts = manifest.get("contract_versions")
     if not isinstance(contracts, dict):
         raise ReleaseError("release contract_versions are missing")
@@ -201,6 +209,10 @@ def validate_release_manifest(manifest: dict[str, Any], sha: str) -> None:
         raise ReleaseError("release checksum filename does not match full SHA")
     if not HEX_256.fullmatch(str(artifact.get("sha256") or "")):
         raise ReleaseError("release manifest artifact SHA-256 is invalid")
+    if capabilities is not None and not HEX_256.fullmatch(
+        str(artifact.get("files_manifest_sha256") or "")
+    ):
+        raise ReleaseError("release manifest files_manifest_sha256 is invalid")
     public = manifest.get("public_artifact")
     if not isinstance(public, dict):
         raise ReleaseError("release manifest public_artifact is missing")
@@ -359,25 +371,49 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
         "nginx/confenge-web-http.conf",
         "nginx/confenge-web-origin.conf",
         "nginx/confenge-web-public.conf",
-        "nginx/confenge-web-logrotate",
         "ops/bin/run-runtime",
         "ops/bin/run-schedule",
         "ops/lib/runtime_launcher.py",
         "ops/lib/schedule_gate.py",
         "ops/systemd/confenge-web-runtime.service",
+        "schedules/confenge-web-schedule@.service",
+        "schedules/confenge-web-search-observation.timer",
+        "schedules/schedule-contract.json",
+    )
+    operational_privacy_retention_required = (
+        "nginx/confenge-web-logrotate",
         "scripts/storage/lib.cjs",
         "scripts/storage/retention.mjs",
         "schedules/confenge-web-retention.service",
         "schedules/confenge-web-retention.timer",
         "schedules/confenge-web-retention-alert@.service",
-        "schedules/confenge-web-schedule@.service",
-        "schedules/confenge-web-search-observation.timer",
-        "schedules/schedule-contract.json",
     )
     for rel in required:
         path = release / rel
         if not path.is_file() or path.is_symlink():
             raise ReleaseError(f"release is missing required regular file: {rel}")
+
+    manifest = load_json(release / "metadata" / "release-manifest.json")
+    validate_release_manifest(manifest, sha)
+    source = load_json(release / "metadata" / "release-source.json")
+    source_capabilities = source.get("capabilities")
+    if source_capabilities is not None and (
+        not isinstance(source_capabilities, dict)
+        or source_capabilities.get("operational_privacy_retention")
+        != OPERATIONAL_PRIVACY_RETENTION_CAPABILITY
+    ):
+        raise ReleaseError("release source capabilities are invalid")
+    if (manifest.get("capabilities") or {}) != (source_capabilities or {}):
+        raise ReleaseError("release manifest/source capabilities diverge")
+    if source_capabilities is not None:
+        for rel in operational_privacy_retention_required:
+            path = release / rel
+            if not path.is_file() or path.is_symlink():
+                raise ReleaseError(f"release is missing required regular file: {rel}")
+        if sha256_file(release / "metadata" / "files.sha256") != manifest[
+            "artifact"
+        ]["files_manifest_sha256"]:
+            raise ReleaseError("release files manifest diverges from artifact envelope")
 
     expected = _parse_files_manifest(release / "metadata" / "files.sha256")
     actual = _actual_release_files(release)
@@ -394,9 +430,6 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
         if found != digest:
             raise ReleaseError(f"release file checksum mismatch: {rel}")
 
-    source = load_json(release / "metadata" / "release-source.json")
-    manifest = load_json(release / "metadata" / "release-manifest.json")
-    validate_release_manifest(manifest, sha)
     if source.get("schema_version") != SCHEMA_VERSION:
         raise ReleaseError("internal release-source schema mismatch")
     if source.get("repo") != REPO or source.get("commit") != sha:
@@ -477,8 +510,8 @@ def verify_release_tree(root: Path, sha: str) -> dict[str, Any]:
 def verify_release_envelope_and_tree(root: Path, sha: str) -> dict[str, Any]:
     _, incoming_manifest = validate_incoming(root, sha)
     stored_manifest = verify_release_tree(root, sha)
-    if stored_manifest["artifact"]["sha256"] != incoming_manifest["artifact"]["sha256"]:
-        raise ReleaseError("stored release and incoming artifact checksums diverge")
+    if stored_manifest != incoming_manifest:
+        raise ReleaseError("stored release and incoming manifests diverge")
     return stored_manifest
 
 
@@ -790,12 +823,9 @@ def _adopt_uploaded_bundle(root: Path, sha: str, upload_dir: Path) -> None:
         if destination.is_symlink() or not destination.is_dir():
             raise ReleaseError("pre-existing incoming release path is unsafe")
         _, stored_manifest = validate_incoming(root, sha, destination)
-        if (
-            stored_manifest["artifact"]["sha256"]
-            != uploaded_manifest["artifact"]["sha256"]
-        ):
+        if stored_manifest != uploaded_manifest:
             raise ReleaseError(
-                "pre-existing incoming release has divergent artifact identity"
+                "pre-existing incoming release has divergent manifest identity"
             )
         shutil.rmtree(upload_dir)
         return
@@ -812,9 +842,9 @@ def stage_release(sha: str, upload_dir: Path | None = None) -> dict[str, Any]:
         target = root / "releases" / sha
         if os.path.lexists(target):
             stored = verify_release_tree(root, sha)
-            if stored["artifact"]["sha256"] != incoming_manifest["artifact"]["sha256"]:
+            if stored != incoming_manifest:
                 raise ReleaseError(
-                    "pre-existing release directory has divergent artifact identity"
+                    "pre-existing release directory has divergent manifest identity"
                 )
             append_evidence(
                 root,

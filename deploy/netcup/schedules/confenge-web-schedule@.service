@@ -22,4 +22,4 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true
 ProtectSystem=strict
-ReadWritePaths=/opt/confenge-web/shared /var/lib/confenge-web
+ReadWritePaths=/opt/confenge-web/locks /opt/confenge-web/shared /var/lib/confenge-web

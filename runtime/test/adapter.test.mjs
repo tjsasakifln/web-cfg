@@ -189,6 +189,19 @@ test("runtime logs never echo PII embedded in an unmatched URL path", async (t) 
   assert.equal(requestLog.route, "unmatched");
 });
 
+test("runtime logs classify unknown function routes without echoing their URI segment", async (t) => {
+  const fixture = await startFixtureRuntime();
+  t.after(() => fixture.runtime.shutdown("test"));
+  const privateSegment = "private-cookie-value-442";
+  const response = await fetch(`${fixture.baseUrl}/api/web/${privateSegment}`);
+  assert.equal(response.status, 404);
+  const logs = fixture.logs.join("\n");
+  assert.equal(logs.includes(privateSegment), false);
+  const requestLog = fixture.logs.map((line) => JSON.parse(line)).find((row) => row.event === "runtime_request");
+  assert.equal(requestLog.route, "unknown_function");
+  assert.equal(requestLog.function, null);
+});
+
 test("runtime logs reject raw client IP and user-agent values as correlation data", async (t) => {
   const fixture = await startFixtureRuntime();
   t.after(() => fixture.runtime.shutdown("test"));

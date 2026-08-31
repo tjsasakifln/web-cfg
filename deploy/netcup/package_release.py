@@ -25,6 +25,7 @@ from typing import Any
 
 REPO = "tjsasakifln/web-cfg"
 SCHEMA_VERSION = "1.0.0"
+OPERATIONAL_PRIVACY_RETENTION_CAPABILITY = "confenge.operational-privacy-retention/v1"
 FULL_SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX_256 = re.compile(r"^[0-9a-f]{64}$")
 FORBIDDEN_PATH_PARTS = {".git", "node_modules", "__pycache__", ".pytest_cache"}
@@ -399,6 +400,9 @@ def build_release(
                 "netcup": integrated_contract["netcup_production"],
             },
             "host_contract": host_contract_identity,
+            "capabilities": {
+                "operational_privacy_retention": OPERATIONAL_PRIVACY_RETENTION_CAPABILITY,
+            },
             "package_layout": [
                 "_site/",
                 "metadata/",
@@ -432,6 +436,7 @@ def build_release(
         file_manifest_path.write_text(
             files_manifest(payload, {"metadata/files.sha256"}), encoding="utf-8"
         )
+        files_manifest_sha256 = sha256_file(file_manifest_path)
         assert_regular_tree(payload, "release payload")
         assert_payload_hygiene(payload)
         write_deterministic_tar(payload, package_path, source_date_epoch)
@@ -450,6 +455,7 @@ def build_release(
             "sha256": artifact_sha,
             "size_bytes": package_path.stat().st_size,
             "checksum_filename": checksum_path.name,
+            "files_manifest_sha256": files_manifest_sha256,
         },
         "public_artifact": public_identity,
         "contract_versions": {
@@ -458,6 +464,9 @@ def build_release(
             "storage": integrated_contract["storage_contract_version"],
             "host_architecture": integrated_contract["host_architecture_version"],
             "http_host_manifest": host_contract_identity["schema"],
+        },
+        "capabilities": {
+            "operational_privacy_retention": OPERATIONAL_PRIVACY_RETENTION_CAPABILITY,
         },
         "host_contract": host_contract_identity,
         "identity_contract": {

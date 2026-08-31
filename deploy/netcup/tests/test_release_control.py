@@ -18,7 +18,11 @@ import pytest
 from deploy.netcup.lib import release_control as control
 from deploy.netcup.lib import schedule_gate as schedule
 from deploy.netcup.lib.runtime_launcher import runtime_environment
-from deploy.netcup.package_release import build_release, sha256_file
+from deploy.netcup.package_release import (
+    build_release,
+    sha256_file,
+    write_deterministic_tar,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SHA_A = "a" * 40
@@ -156,6 +160,85 @@ def test_stage_valid_and_verify(host: Path, tmp_path: Path) -> None:
     assert not os.path.lexists(host / "current")
 
 
+def test_pre_privacy_retention_release_remains_a_valid_rollback_target(
+    host: Path, tmp_path: Path
+) -> None:
+    legacy_tmp = tmp_path / "legacy"
+    legacy_tmp.mkdir()
+    incoming = make_incoming(legacy_tmp, host, SHA_A)
+    payload = legacy_tmp / "payload"
+    payload.mkdir()
+    with tarfile.open(incoming["artifact"], "r:gz") as archive:
+        archive.extractall(payload, filter="data")
+    source_path = payload / "metadata" / "release-source.json"
+    source = json.loads(source_path.read_text(encoding="utf-8"))
+    source.pop("capabilities", None)
+    source["package_layout"] = [
+        item
+        for item in source["package_layout"]
+        if item not in ("scripts/storage/lib.cjs", "scripts/storage/retention.mjs")
+    ]
+    source_path.write_text(json.dumps(source, sort_keys=True) + "\n", encoding="utf-8")
+    feature_files = (
+        "nginx/confenge-web-logrotate",
+        "scripts/storage/lib.cjs",
+        "scripts/storage/retention.mjs",
+        "schedules/confenge-web-retention.service",
+        "schedules/confenge-web-retention.timer",
+        "schedules/confenge-web-retention-alert@.service",
+    )
+    for relative in feature_files:
+        target = payload / relative
+        if target.exists():
+            target.unlink()
+    actual = control._actual_release_files(payload)
+    lines = [
+        f"{control.sha256_file(path)}  {relative}"
+        for relative, path in sorted(actual.items())
+        if relative != "metadata/files.sha256"
+    ]
+    (payload / "metadata" / "files.sha256").write_text(
+        "\n".join(lines) + "\n", encoding="utf-8"
+    )
+    write_deterministic_tar(payload, incoming["artifact"], 1787756400)
+    manifest = json.loads(incoming["manifest"].read_text(encoding="utf-8"))
+    manifest.pop("capabilities", None)
+    manifest["artifact"].pop("files_manifest_sha256", None)
+    manifest["artifact"]["sha256"] = sha256_file(incoming["artifact"])
+    manifest["artifact"]["size_bytes"] = incoming["artifact"].stat().st_size
+    incoming["manifest"].write_text(
+        json.dumps(manifest, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    incoming["checksum"].write_text(
+        f"{manifest['artifact']['sha256']}  {incoming['artifact'].name}\n",
+        encoding="utf-8",
+    )
+    control.stage_release(SHA_A)
+    new_tmp = tmp_path / "new"
+    new_tmp.mkdir()
+    make_incoming(new_tmp, host, SHA_B)
+    control.stage_release(SHA_B)
+    control.atomic_release_link(host, "current", SHA_B)
+    with LiveServer(host):
+        rolled_back = control.rollback_release(SHA_A)
+    assert rolled_back["commit"] == SHA_A
+    assert control.read_release_link(host, "current") == SHA_A
+
+
+def test_capability_bearing_release_cannot_be_relabelled_as_legacy(
+    host: Path, tmp_path: Path
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    control.stage_release(SHA_A)
+    manifest_path = host / "releases" / SHA_A / "metadata" / "release-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest.pop("capabilities")
+    manifest["artifact"].pop("files_manifest_sha256")
+    manifest_path.write_text(json.dumps(manifest, sort_keys=True) + "\n", encoding="utf-8")
+    with pytest.raises(control.ReleaseError, match="manifest/source capabilities diverge"):
+        control.verify_release_envelope_and_tree(host, SHA_A)
+
+
 def test_runtime_identity_is_derived_from_the_current_immutable_release(
     host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -232,23 +315,51 @@ def test_retention_gate_and_runner_are_sha_bound_without_a_legacy_executor(
 
     monkeypatch.setattr(schedule.subprocess, "run", fake_run)
     release = host / "releases" / SHA_A
-    assert schedule.run_retention(
-        host,
-        release,
-        {"CONFENGE_STORAGE_DIR": "/var/lib/confenge-web"},
-    ) == 2
+    _, gate_descriptor = schedule.open_validated_gate(host, "storage-retention")
+    lock_descriptor = schedule.acquire_job_lock(host, "storage-retention")
+    try:
+        with control.deploy_lock(host) as deploy_descriptor:
+            assert schedule.run_retention(
+                host,
+                release,
+                {"CONFENGE_STORAGE_DIR": "/var/lib/confenge-web"},
+                gate_descriptor,
+                lock_descriptor,
+                deploy_descriptor,
+            ) == 2
+    finally:
+        os.close(gate_descriptor)
+        os.close(lock_descriptor)
     assert observed["command"] == [
         "node",
         str(release / "scripts" / "storage" / "retention.mjs"),
         "--store",
         "/var/lib/confenge-web",
         "--apply",
+        "--authority-fd",
+        str(gate_descriptor),
+        "--lock-fd",
+        str(lock_descriptor),
+        "--deploy-lock-fd",
+        str(deploy_descriptor),
+        "--release-root",
+        str(host),
+        "--release-sha",
+        SHA_A,
     ]
     assert observed["cwd"] == release
     assert observed["check"] is False
-    assert observed["env"]["CONFENGE_RETENTION_APPLY_AUTHORITY"] == "confenge-schedule-runner/v1"
+    assert observed["pass_fds"] == (gate_descriptor, lock_descriptor, deploy_descriptor)
+    assert "CONFENGE_RETENTION_APPLY_AUTHORITY" not in observed["env"]
     with pytest.raises(control.ReleaseError, match="path must match"):
-        schedule.run_retention(host, release, {"CONFENGE_STORAGE_DIR": "/tmp/not-authoritative"})
+        schedule.run_retention(
+            host,
+            release,
+            {"CONFENGE_STORAGE_DIR": "/tmp/not-authoritative"},
+            gate_descriptor,
+            lock_descriptor,
+            deploy_descriptor,
+        )
 
     gate["authorized_release_sha"] = SHA_B
     gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
@@ -273,8 +384,8 @@ def test_schedule_runner_refuses_release_flip_after_gate_validation(
 
     monkeypatch.setattr(
         schedule,
-        "validate_gate",
-        lambda _root, _job: {"authorized_release_sha": SHA_A},
+        "open_validated_gate",
+        lambda _root, _job: ({"authorized_release_sha": SHA_A}, os.open("/dev/null", os.O_RDONLY)),
     )
     monkeypatch.setattr(
         schedule,

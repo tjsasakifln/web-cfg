@@ -165,10 +165,10 @@ legal basis. Install or update the reviewed files only during the #442 cutover:
 sudo touch /var/log/nginx/confenge-web-access.log /var/log/nginx/confenge-web-origin-access.log
 sudo chown root:adm /var/log/nginx/confenge-web-access.log /var/log/nginx/confenge-web-origin-access.log
 sudo chmod 0640 /var/log/nginx/confenge-web-access.log /var/log/nginx/confenge-web-origin-access.log
-sudo install -o root -g root -m 0644 /opt/confenge-web/current/nginx/confenge-web-http.conf /etc/nginx/conf.d/confenge-web-http.conf
-sudo install -o root -g root -m 0644 /opt/confenge-web/current/nginx/confenge-web-origin.conf /etc/nginx/sites-available/confenge-web-origin.conf
-sudo install -o root -g root -m 0644 /opt/confenge-web/current/nginx/confenge-web-public.conf /etc/nginx/sites-available/confenge.com.br
-sudo install -o root -g root -m 0644 /opt/confenge-web/current/nginx/confenge-web-logrotate /etc/logrotate.d/confenge-web
+sudo install -o root -g root -m 0644 /opt/confenge-web/releases/$FULL_SHA/nginx/confenge-web-http.conf /etc/nginx/conf.d/confenge-web-http.conf
+sudo install -o root -g root -m 0644 /opt/confenge-web/releases/$FULL_SHA/nginx/confenge-web-origin.conf /etc/nginx/sites-available/confenge-web-origin.conf
+sudo install -o root -g root -m 0644 /opt/confenge-web/releases/$FULL_SHA/nginx/confenge-web-public.conf /etc/nginx/sites-available/confenge.com.br
+sudo install -o root -g root -m 0644 /opt/confenge-web/releases/$FULL_SHA/nginx/confenge-web-logrotate /etc/logrotate.d/confenge-web
 sudo nginx -t
 sudo systemctl reload nginx
 sudo logrotate --debug /etc/logrotate.d/confenge-web
@@ -335,12 +335,12 @@ indexes for retained leads are preserved. stdout is aggregate JSON only;
 failures mark the unit failed and the `OnFailure` unit emits a `user.alert`
 journal event without record keys or payloads.
 
-`--apply` also requires the internal
-`CONFENGE_RETENTION_APPLY_AUTHORITY=confenge-schedule-runner/v1` signal. The
-canonical runner sets it only after the release/job gate and external job lock
-have succeeded. A direct invocation without `--apply` remains a dry-run, while
-a direct `--apply` fails closed. This signal is a runner-path invariant, not a
-secret credential. Deletion consists of individually durable filesystem
+`--apply` also requires inherited descriptors for the already validated
+root-owned gate and the already held external job lock. The canonical runner
+passes them only while holding the deployment lock, after confirming the exact
+current release and job. A direct invocation without `--apply` remains a
+dry-run, while a direct `--apply` (including one that sets the retired static
+environment signal) fails closed. Deletion consists of individually durable filesystem
 operations under one writer lock, not a multi-record filesystem transaction;
 after an interrupted apply, validate the store and rerun the same idempotent
 job rather than claiming transactional rollback.
@@ -355,12 +355,13 @@ After the exact release is promoted, install the versioned units and runner,
 but do not enable the timer yet:
 
 ```sh
-sudo install -o root -g root -m 0755 /opt/confenge-web/current/ops/bin/run-schedule /opt/confenge-web/bin/run-schedule
-sudo install -o root -g root -m 0644 /opt/confenge-web/current/ops/lib/schedule_gate.py /opt/confenge-web/lib/schedule_gate.py
-sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-retention.service /etc/systemd/system/confenge-web-retention.service
-sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-retention.timer /etc/systemd/system/confenge-web-retention.timer
-sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-retention-alert@.service /etc/systemd/system/confenge-web-retention-alert@.service
-sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-schedule@.service /etc/systemd/system/confenge-web-schedule@.service
+sudo install -o root -g root -m 0755 /opt/confenge-web/releases/$FULL_SHA/ops/bin/run-schedule /opt/confenge-web/bin/run-schedule
+sudo install -o root -g root -m 0644 /opt/confenge-web/releases/$FULL_SHA/ops/lib/release_control.py /opt/confenge-web/lib/release_control.py
+sudo install -o root -g root -m 0644 /opt/confenge-web/releases/$FULL_SHA/ops/lib/schedule_gate.py /opt/confenge-web/lib/schedule_gate.py
+sudo install -o root -g root -m 0644 /opt/confenge-web/releases/$FULL_SHA/schedules/confenge-web-retention.service /etc/systemd/system/confenge-web-retention.service
+sudo install -o root -g root -m 0644 /opt/confenge-web/releases/$FULL_SHA/schedules/confenge-web-retention.timer /etc/systemd/system/confenge-web-retention.timer
+sudo install -o root -g root -m 0644 /opt/confenge-web/releases/$FULL_SHA/schedules/confenge-web-retention-alert@.service /etc/systemd/system/confenge-web-retention-alert@.service
+sudo install -o root -g root -m 0644 /opt/confenge-web/releases/$FULL_SHA/schedules/confenge-web-schedule@.service /etc/systemd/system/confenge-web-schedule@.service
 sudo systemctl daemon-reload
 systemctl is-enabled confenge-web-retention.timer 2>&1 | grep -Eq 'disabled|not-found'
 ```
@@ -370,7 +371,7 @@ the gate. Review `malformed_retention`, `expired`, `suppressions_preserved` and
 `indexes_preserved`; do not print or copy stored records:
 
 ```sh
-sudo -u confenge-deploy node /opt/confenge-web/current/scripts/storage/retention.mjs --store /var/lib/confenge-web
+sudo -u confenge-deploy node /opt/confenge-web/releases/$FULL_SHA/scripts/storage/retention.mjs --store /var/lib/confenge-web
 ```
 
 The reviewed gate must be a root-reviewed regular file (never a symlink) with
@@ -407,12 +408,79 @@ systemctl show confenge-web-retention.service -p Result -p ExecMainStatus -p Exe
 journalctl -u confenge-web-retention.service --since today --output=json --no-pager
 ```
 
-Rollback disables only `confenge-web-retention.timer` and removes that job's
-authorization from the gate. It must not delete or restore the host-owned store
-and must not create a cron replacement. Run
-`sudo systemctl disable --now confenge-web-retention.timer`, install a reviewed
-`0640 root:confenge-web` gate with `storage-retention` omitted (preserving any
-independently authorized job), then confirm the timer is inactive.
+Rollback first disables `confenge-web-retention.timer`, then checks the oneshot
+service separately because stopping a timer does not stop an apply already in
+progress. Normally wait for the active service to finish and validate the
+store. If an incident forces a stop, keep the gate and release pinned, rerun
+the authorized job so it repairs/completes the documented interruption
+boundary, then validate. Only after successful validation may the operator
+remove this job's authorization (preserving independently authorized jobs).
+Confirm both unit states. Rollback must not blindly restore the host-owned
+store or create a cron replacement.
+
+### #442/#443/#410 serial cutover and rollback checkpoints
+
+This lane is separate from every commercial/search release. Use one full SHA
+throughout and do not overlap its host mutations with another cutover.
+
+1. **Merge and automatic package/stage/promote.** Before merge, record
+   `PREVIOUS_SHA=$(readlink /opt/confenge-web/current | xargs basename)` and the
+   current host-file checksums. Merge only inside the separately authorized
+   production window. Require the successful `netcup-release` run to show the
+   exact merge SHA, package checksum/attestation, stage verification and live
+   build/runtime identity. **Rollback checkpoint:**
+   `/opt/confenge-web/bin/rollback "$PREVIOUS_SHA"`; stop if `current` changed
+   during package/stage, because `stage_verify` itself must never promote.
+2. **Install host-owned files, still with the timer disabled.** Create a
+   root-owned, checksum-recorded pre-install checkpoint for the exact existing
+   nginx/logrotate/control/unit targets. Install only the files enumerated in
+   the two sections above from `/opt/confenge-web/releases/$FULL_SHA`, run
+   `systemctl daemon-reload`, and prove the timer is `disabled|not-found`.
+   **Rollback checkpoint:** restore every target from that pre-install
+   checkpoint (remove only targets recorded as absent), run `daemon-reload`,
+   and keep the timer disabled. Never substitute a hand-edited host copy.
+3. **Validate and reload nginx.** Run `nginx -t`, reload, then confirm public and
+   origin health. **Rollback checkpoint:** restore the pre-install nginx and
+   logrotate targets, run `nginx -t`, reload, and keep #442 open as an incident
+   if the restored format records raw request data.
+4. **Run the aggregate privacy canary.** From the host, send synthetic canaries
+   in XFF, UA, referer, cookie, query and an unknown URI to public nginx, the
+   loopback nginx origin at `127.0.0.1:8088`, and the loopback runtime at
+   `127.0.0.1:18100`. Count each synthetic literal across the two
+   CONFENGE access logs and `confenge-web-runtime.service` journal with
+   `grep -F -c`; emit only `{stream, canary_count}` and require every count to
+   be zero. Do not print or attach request/log rows. **Rollback checkpoint:** no
+   state changes; on failure, disable the new timer if present, restore the
+   prior nginx checkpoint, and leave #442 open.
+5. **Run CSP browser live.** From a clean checkout of `$FULL_SHA`, run
+   `npm run test:csp-browser:live`; require all six routes HTTP 200, zero
+   `securitypolicyviolation`, `/ops/`=`no-store, no-transform`, and no CSP
+   widening. **Rollback checkpoint:** no state changes; restore the prior nginx
+   checkpoint if the header caused the regression and leave #410 open.
+6. **Run retention dry-run.** Execute the read-only command above and require
+   `dry_run=true`, `deleted=0`, no malformed governed timestamps, and unchanged
+   store tree/lock/index state. **Rollback checkpoint:** none is needed because
+   the verified dry-run is non-mutating; any mutation is an incident and blocks
+   authorization.
+7. **Obtain separate retention authorization and install the gate.** The owner
+   reviews the exact full SHA/job JSON, then installs it `0640
+   root:confenge-web`; do not enable the timer yet. **Rollback checkpoint:**
+   install a reviewed gate with only `storage-retention` omitted, preserving
+   other jobs, and re-run the dry-run.
+8. **Enable the timer.** Run
+   `systemctl enable --now confenge-web-retention.timer` and verify enabled and
+   active. **Rollback checkpoint:** run
+   `systemctl disable --now confenge-web-retention.timer`; if
+   `confenge-web-retention.service` is active, wait for it to finish. If an
+   incident forces a stop, keep the gate/release pinned, rerun the authorized
+   job to repair/complete, and validate. Revoke only this job after validation.
+9. **Observe one journaled run.** Require `Result=success`, `ExecMainStatus=0`,
+   the authorized full SHA and aggregate-only report; never publish records or
+   keys. **Rollback checkpoint:** disable the timer, follow step 8's
+   wait-or-repair order for an active oneshot, validate, then revoke only the
+   retention job. Filesystem deletes are not claimed transactional; recovery
+   from an evidenced data-loss incident uses the separately verified
+   storage-backup procedure, never an automatic blanket restore.
 
 ## Rollback and pruning
 

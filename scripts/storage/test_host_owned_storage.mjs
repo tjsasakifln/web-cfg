@@ -1,5 +1,5 @@
 import { createRequire } from "module";
-import { execFile } from "child_process";
+import { execFile, spawn } from "child_process";
 import fs from "fs";
 import os from "os";
 import path from "path";
@@ -45,6 +45,62 @@ function privateDir(prefix) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), prefix));
   fs.chmodSync(dir, DIR_MODE);
   return dir;
+}
+
+function prepareRetentionAuthority() {
+  const releaseRoot = privateDir("confenge-retention-authority-");
+  const releaseSha = "a".repeat(40);
+  const release = path.join(releaseRoot, "releases", releaseSha);
+  const shared = path.join(releaseRoot, "shared");
+  const locks = path.join(releaseRoot, "locks");
+  fs.mkdirSync(release, { recursive: true, mode: 0o750 });
+  fs.mkdirSync(shared, { mode: 0o750 });
+  fs.mkdirSync(locks, { mode: 0o750 });
+  fs.symlinkSync(release, path.join(releaseRoot, "current"));
+  const gate = path.join(shared, "schedule-cutover.json");
+  const lock = path.join(shared, "storage-retention.lock");
+  const deployLock = path.join(locks, "deploy.lock");
+  fs.writeFileSync(gate, JSON.stringify({
+    schema: "confenge.schedule-cutover/v1",
+    authorized_release_sha: releaseSha,
+    jobs: { "storage-retention": true },
+  }) + "\n", { mode: 0o640 });
+  fs.writeFileSync(lock, "", { mode: 0o640 });
+  fs.writeFileSync(deployLock, "", { mode: 0o640 });
+  return { releaseRoot, releaseSha, release, gate, lock, deployLock };
+}
+
+function runAuthorizedRetention(retentionScript, authority, args) {
+  const gateFd = fs.openSync(authority.gate, "r");
+  const lockFd = fs.openSync(authority.lock, "r+");
+  const deployLockFd = fs.openSync(authority.deployLock, "r+");
+  return new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [
+      retentionScript,
+      ...args,
+      "--apply",
+      "--authority-fd", "3",
+      "--lock-fd", "4",
+      "--deploy-lock-fd", "5",
+      "--release-root", authority.releaseRoot,
+      "--release-sha", authority.releaseSha,
+    ], {
+      cwd: authority.release,
+      env: { ...process.env },
+      stdio: ["ignore", "pipe", "pipe", gateFd, lockFd, deployLockFd],
+    });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.setEncoding("utf8");
+    child.stderr.setEncoding("utf8");
+    child.stdout.on("data", (chunk) => { stdout += chunk; });
+    child.stderr.on("data", (chunk) => { stderr += chunk; });
+    child.on("error", reject);
+    child.on("close", (code) => resolve({ code, stdout, stderr }));
+    fs.closeSync(gateFd);
+    fs.closeSync(lockFd);
+    fs.closeSync(deployLockFd);
+  });
 }
 
 function sampleLead(id = "lead_host_1", idem = "idem-host-1") {
@@ -417,6 +473,8 @@ try {
   const importStore = new FileStore(importRoot);
   await importStore.put(retentionLead, { onlyIfNew: true });
   const retentionScript = path.join(root, "scripts/storage/retention.mjs");
+  const retentionAuthority = prepareRetentionAuthority();
+  cleanup.push(retentionAuthority.releaseRoot);
   const retentionTreeBeforeDryRun = fs.readdirSync(importRoot, { recursive: true }).map(String).sort();
   const dryRetention = JSON.parse((await execFileAsync(process.execPath, [retentionScript, "--store", importRoot, "--now", "2026-08-26T00:00:00Z"])).stdout);
   assert(dryRetention.expired >= 1 && await importStore.get("lead_expired"), "retention dry-run mutated data");
@@ -425,7 +483,7 @@ try {
     "retention dry-run mutated the filesystem tree",
   );
   const directApplyEnv = { ...process.env };
-  delete directApplyEnv.CONFENGE_RETENTION_APPLY_AUTHORITY;
+  directApplyEnv.CONFENGE_RETENTION_APPLY_AUTHORITY = "confenge-schedule-runner/v1";
   let unauthorizedRetention;
   try {
     await execFileAsync(
@@ -441,15 +499,13 @@ try {
     "direct retention apply bypassed the canonical runner",
     unauthorizedRetention,
   );
-  const retentionApplyEnv = {
-    ...process.env,
-    CONFENGE_RETENTION_APPLY_AUTHORITY: "confenge-schedule-runner/v1",
-  };
-  const appliedRetention = JSON.parse((await execFileAsync(
-    process.execPath,
-    [retentionScript, "--store", importRoot, "--now", "2026-08-26T00:00:00Z", "--apply"],
-    { env: retentionApplyEnv },
-  )).stdout);
+  const appliedResult = await runAuthorizedRetention(
+    retentionScript,
+    retentionAuthority,
+    ["--store", importRoot, "--now", "2026-08-26T00:00:00Z"],
+  );
+  assert(appliedResult.code === 0, "authorized retention apply failed", appliedResult);
+  const appliedRetention = JSON.parse(appliedResult.stdout);
   assert(appliedRetention.deleted >= 1 && await importStore.get("lead_expired") === null && await importStore.getByIdempotency("idem_expired") === null, "retention apply failed");
   assert(appliedRetention.suppressions_preserved === 1, "retention removed suppression");
   assert(appliedRetention.indexes_preserved === 1, "retention removed a live lead idempotency index");
@@ -491,11 +547,13 @@ try {
     interruptedRetentionStore.idempotency.get(sha256(retentionInterruptedLead.idempotency_key)) === null,
     "retention dry-run repaired an index instead of remaining read-only",
   );
-  const resumedRetention = JSON.parse((await execFileAsync(
-    process.execPath,
-    [retentionScript, "--store", interruptedRetentionRoot, "--now", "2026-08-26T00:00:00Z", "--apply"],
-    { env: retentionApplyEnv },
-  )).stdout);
+  const resumedResult = await runAuthorizedRetention(
+    retentionScript,
+    retentionAuthority,
+    ["--store", interruptedRetentionRoot, "--now", "2026-08-26T00:00:00Z"],
+  );
+  assert(resumedResult.code === 0, "authorized interrupted retention apply failed", resumedResult);
+  const resumedRetention = JSON.parse(resumedResult.stdout);
   assert(resumedRetention.deleted === 1, "interrupted retention did not resume idempotently", resumedRetention);
   assert(await interruptedRetentionStore.get(retentionInterruptedLead.lead_id) === null, "resumed retention kept the expired lead");
   assert(await interruptedRetentionStore.getByIdempotency(retentionInterruptedLead.idempotency_key) === null, "resumed retention kept an idempotency index");
@@ -508,16 +566,19 @@ try {
   await malformedRetentionStore.put({ ...sampleLead("lead_retention_expired", "idem_retention_expired"), delete_after: "2020-01-01T00:00:00Z" }, { onlyIfNew: true });
   await malformedRetentionStore.put({ ...sampleLead("lead_retention_missing", "idem_retention_missing"), delete_after: undefined, received_at: undefined }, { onlyIfNew: true });
   await malformedRetentionStore.put({ ...sampleLead("lead_retention_invalid", "idem_retention_invalid"), delete_after: "not-a-date" }, { onlyIfNew: true });
-  let blockedRetention;
-  try {
-    await execFileAsync(
-      process.execPath,
-      [retentionScript, "--store", malformedRetentionRoot, "--now", "2026-08-26T00:00:00Z", "--apply"],
-      { env: retentionApplyEnv },
-    );
-  } catch (err) {
-    blockedRetention = JSON.parse(err.stdout);
+  const ambiguousTimestamps = ["0", "1", "2020", "01/02/03", "2021-02-30T00:00:00Z"];
+  for (const [index, timestamp] of ambiguousTimestamps.entries()) {
+    await malformedRetentionStore.put({
+      ...sampleLead(`lead_retention_ambiguous_${index}`, `idem_retention_ambiguous_${index}`),
+      delete_after: timestamp,
+    }, { onlyIfNew: true });
   }
+  const blockedResult = await runAuthorizedRetention(
+    retentionScript,
+    retentionAuthority,
+    ["--store", malformedRetentionRoot, "--now", "2026-08-26T00:00:00Z"],
+  );
+  const blockedRetention = JSON.parse(blockedResult.stdout);
   assert(
     blockedRetention?.blocked === true && blockedRetention.reason === "malformed_retention" && blockedRetention.deleted === 0,
     "malformed retention did not block the whole apply",
@@ -526,6 +587,9 @@ try {
   assert(await malformedRetentionStore.get("lead_retention_expired"), "blocked retention partially deleted expired data");
   assert(await malformedRetentionStore.get("lead_retention_missing"), "missing timestamp was silently deleted");
   assert(await malformedRetentionStore.get("lead_retention_invalid"), "invalid timestamp was silently deleted");
+  for (const index of ambiguousTimestamps.keys()) {
+    assert(await malformedRetentionStore.get(`lead_retention_ambiguous_${index}`), "ambiguous timestamp was normalized and deleted", index);
+  }
 
   // Consistent snapshot/checksum and restore only into a new directory.
   const backupRoot = privateDir("confenge-backups-");

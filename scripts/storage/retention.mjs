@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 import { createRequire } from "module";
+import { spawnSync } from "child_process";
+import fs from "fs";
+import path from "path";
 
 const require = createRequire(import.meta.url);
 const { HostFileBackend } = require("../../netlify/functions/lib/host-file-store.cjs");
@@ -7,7 +10,9 @@ const { FileStore } = require("../../netlify/functions/lib/lead-store.cjs");
 const { ensureAbsoluteOutside } = require("./lib.cjs");
 
 const REPORT_SCHEMA = "confenge-storage-retention-report/v1";
-const APPLY_AUTHORITY = "confenge-schedule-runner/v1";
+const GATE_SCHEMA = "confenge.schedule-cutover/v1";
+const RETENTION_JOB = "storage-retention";
+const FULL_SHA = /^[0-9a-f]{40}$/;
 
 function parse(argv) {
   const out = { apply: false, now: new Date() };
@@ -15,9 +20,18 @@ function parse(argv) {
     if (argv[i] === "--apply") out.apply = true;
     else if (argv[i] === "--store") out.store = argv[++i];
     else if (argv[i] === "--now") out.now = new Date(argv[++i]);
+    else if (argv[i] === "--authority-fd") out.authorityFd = Number(argv[++i]);
+    else if (argv[i] === "--lock-fd") out.lockFd = Number(argv[++i]);
+    else if (argv[i] === "--deploy-lock-fd") out.deployLockFd = Number(argv[++i]);
+    else if (argv[i] === "--release-root") out.releaseRoot = argv[++i];
+    else if (argv[i] === "--release-sha") out.releaseSha = argv[++i];
     else throw new Error(`unexpected_argument:${argv[i]}`);
   }
   if (!out.store || !Number.isFinite(out.now.getTime())) throw new Error("--store and a valid --now are required");
+  const authorityFields = [out.authorityFd, out.lockFd, out.deployLockFd, out.releaseRoot, out.releaseSha];
+  if (!out.apply && authorityFields.some((value) => value !== undefined)) {
+    throw new Error("apply authority is invalid for dry-run");
+  }
   return out;
 }
 
@@ -48,8 +62,86 @@ function eventTimestamp(value) {
 }
 
 function parseTimestamp(value) {
-  if (typeof value !== "string" || !value.trim()) return NaN;
-  return Date.parse(value);
+  if (typeof value !== "string") return NaN;
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,3}))?Z$/);
+  if (!match) return NaN;
+  const fraction = (match[7] || "").padEnd(3, "0");
+  const canonical = `${match[1]}-${match[2]}-${match[3]}T${match[4]}:${match[5]}:${match[6]}.${fraction}Z`;
+  const timestamp = Date.parse(canonical);
+  if (!Number.isFinite(timestamp) || new Date(timestamp).toISOString() !== canonical) return NaN;
+  return timestamp;
+}
+
+function descriptorPath(descriptor) {
+  if (!Number.isInteger(descriptor) || descriptor < 3) return "";
+  try {
+    return fs.realpathSync(`/proc/self/fd/${descriptor}`);
+  } catch {
+    return "";
+  }
+}
+
+function validateApplyAuthority(options) {
+  if (!options.apply) return;
+  if (!FULL_SHA.test(String(options.releaseSha || "")) || !path.isAbsolute(String(options.releaseRoot || ""))) {
+    throw Object.assign(new Error("retention apply authority is incomplete"), { code: "RETENTION_APPLY_NOT_AUTHORIZED" });
+  }
+  const root = fs.realpathSync(options.releaseRoot);
+  const expectedGate = path.join(root, "shared", "schedule-cutover.json");
+  const expectedLock = path.join(root, "shared", "storage-retention.lock");
+  const expectedDeployLock = path.join(root, "locks", "deploy.lock");
+  if (
+    descriptorPath(options.authorityFd) !== expectedGate
+    || descriptorPath(options.lockFd) !== expectedLock
+    || descriptorPath(options.deployLockFd) !== expectedDeployLock
+  ) {
+    throw Object.assign(new Error("retention apply authority descriptors are invalid"), { code: "RETENTION_APPLY_NOT_AUTHORIZED" });
+  }
+  const gateStat = fs.fstatSync(options.authorityFd);
+  const lockStat = fs.fstatSync(options.lockFd);
+  const deployLockStat = fs.fstatSync(options.deployLockFd);
+  if (
+    !gateStat.isFile()
+    || !lockStat.isFile()
+    || !deployLockStat.isFile()
+    || (gateStat.mode & 0o777) !== 0o640
+    || (lockStat.mode & 0o777) !== 0o640
+    || (deployLockStat.mode & 0o777) !== 0o640
+  ) {
+    throw Object.assign(new Error("retention apply authority files are invalid"), { code: "RETENTION_APPLY_NOT_AUTHORIZED" });
+  }
+  const gate = JSON.parse(fs.readFileSync(options.authorityFd, "utf8"));
+  const current = path.basename(fs.realpathSync(path.join(root, "current")));
+  const release = path.join(root, "releases", options.releaseSha);
+  const runningScript = fs.realpathSync(new URL(import.meta.url));
+  const productionStore = fs.realpathSync(options.store) === "/var/lib/confenge-web";
+  if (productionStore) {
+    const parentCommand = fs.readFileSync(`/proc/${process.ppid}/cmdline`, "utf8").split("\0");
+    const canonicalParent = parentCommand.includes("/opt/confenge-web/lib/schedule_gate.py")
+      && parentCommand.includes(RETENTION_JOB);
+    const jobLockProbe = spawnSync("/usr/bin/flock", ["--nonblock", expectedLock, "/usr/bin/true"]);
+    const deployLockProbe = spawnSync("/usr/bin/flock", ["--nonblock", expectedDeployLock, "/usr/bin/true"]);
+    const jobLockBusy = jobLockProbe.status === 1 && !jobLockProbe.error;
+    const deployLockBusy = deployLockProbe.status === 1 && !deployLockProbe.error;
+    if (
+      root !== "/opt/confenge-web"
+      || gateStat.uid !== 0
+      || runningScript !== path.join(release, "scripts", "storage", "retention.mjs")
+      || !canonicalParent
+      || !jobLockBusy
+      || !deployLockBusy
+    ) {
+      throw Object.assign(new Error("production retention authority is not held by the canonical runner"), { code: "RETENTION_APPLY_NOT_AUTHORIZED" });
+    }
+  }
+  if (
+    gate?.schema !== GATE_SCHEMA
+    || gate?.authorized_release_sha !== options.releaseSha
+    || gate?.jobs?.[RETENTION_JOB] !== true
+    || current !== options.releaseSha
+  ) {
+    throw Object.assign(new Error("retention apply is not bound to the current release/job"), { code: "RETENTION_APPLY_NOT_AUTHORIZED" });
+  }
 }
 
 function expiryFor(namespace, value) {
@@ -89,11 +181,7 @@ function deleteUnlocked(backend, leads, item) {
 
 async function main() {
   const options = parse(process.argv.slice(2));
-  if (options.apply && process.env.CONFENGE_RETENTION_APPLY_AUTHORITY !== APPLY_AUTHORITY) {
-    throw Object.assign(new Error("retention apply requires the canonical schedule runner"), {
-      code: "RETENTION_APPLY_NOT_AUTHORIZED",
-    });
-  }
+  validateApplyAuthority(options);
   const root = ensureAbsoluteOutside(options.store, [], { mustExist: true });
   const backend = new HostFileBackend(root, { readOnly: !options.apply });
   const leads = new FileStore(root, { backend });

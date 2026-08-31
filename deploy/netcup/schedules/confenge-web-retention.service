@@ -33,4 +33,4 @@ ProtectKernelModules=true
 ProtectKernelTunables=true
 ProtectControlGroups=true
 RestrictSUIDSGID=true
-ReadWritePaths=/opt/confenge-web/shared /var/lib/confenge-web
+ReadWritePaths=/opt/confenge-web/locks /opt/confenge-web/shared /var/lib/confenge-web

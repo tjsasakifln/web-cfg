@@ -225,7 +225,7 @@ def test_storage_retention_is_a_single_gated_serialized_systemd_job() -> None:
     assert "OnFailure=confenge-web-retention-alert@%n.service" in service
     assert "User=confenge-deploy" in service and "Group=confenge-web" in service
     assert "UMask=0027" in service
-    assert "ReadWritePaths=/opt/confenge-web/shared /var/lib/confenge-web" in service
+    assert "ReadWritePaths=/opt/confenge-web/locks /opt/confenge-web/shared /var/lib/confenge-web" in service
     assert "OnCalendar=*-*-* 03:20:00 America/Sao_Paulo" in timer
     assert "RandomizedDelaySec=2700" in timer
     assert "FixedRandomDelay=true" in timer

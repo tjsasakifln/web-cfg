@@ -283,16 +283,14 @@ function endpointMethodAllowed(req) {
   return req.method === "GET" || req.method === "HEAD";
 }
 
-function routeForLog(pathname) {
+function admittedRouteForLog(pathname, functionName) {
   const value = String(pathname || "/");
   if (["/healthz", "/ready", "/runtime-identity", "/.well-known/runtime-info.json"].includes(value)) {
     return value;
   }
-  const match = value.match(ROUTE);
-  if (!match) return "unmatched";
   return value.startsWith("/api/web/")
-    ? `/api/web/${match[1]}`
-    : `/.netlify/functions/${match[1]}`;
+    ? `/api/web/${functionName}`
+    : `/.netlify/functions/${functionName}`;
 }
 
 export function createHttpAdapter({
@@ -313,9 +311,9 @@ export function createHttpAdapter({
       const host = String((req.headers && req.headers.host) || "localhost").replace(/[\r\n]/g, "");
       const url = new URL(req.url || "/", "http://" + host);
       const requestPath = url.pathname;
-      route = routeForLog(requestPath);
 
       if (["/healthz", "/ready", "/runtime-identity", "/.well-known/runtime-info.json"].includes(requestPath)) {
+        route = admittedRouteForLog(requestPath, null);
         if (!endpointMethodAllowed(req)) {
           writeJson(res, 405, { ok: false, error: "method_not_allowed" }, requestId, {
             Allow: "GET, HEAD",
@@ -349,13 +347,16 @@ export function createHttpAdapter({
         status = 404;
         return;
       }
-      functionName = match[1];
-      const handler = registry.getHttpHandler(functionName);
+      const candidateFunction = match[1];
+      const handler = registry.getHttpHandler(candidateFunction);
       if (!handler) {
+        route = "unknown_function";
         writeJson(res, 404, { ok: false, error: "function_not_found" }, requestId);
         status = 404;
         return;
       }
+      functionName = candidateFunction;
+      route = admittedRouteForLog(requestPath, functionName);
 
       let body;
       try {
