@@ -33,8 +33,10 @@ import {
   captureFileName,
   captureRecord,
   manifestFileName,
+  prepareFullPageCapture,
   resolveCaptureState,
   resolveViewports,
+  verifyFullPageCapture,
 } from "./capture_states.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
@@ -95,6 +97,7 @@ const browser = await puppeteer.launch({
   headless: true,
   args: ["--no-sandbox", "--disable-gpu"],
 });
+const browserVersion = await browser.version();
 const page = await browser.newPage();
 // JS-off and reduced-motion are page-level emulation: set once, before the
 // first navigation, so no route is ever captured in a half-applied state.
@@ -110,10 +113,21 @@ for (const path of PATHS) {
     await page.evaluate(() => {
       document.documentElement.style.scrollBehavior = "auto";
     });
+    let layout = await prepareFullPageCapture(page, STATE);
     const name = captureFileName({ slug, width: w, height: h, state: STATE });
     const file = join(OUT, name);
     await page.screenshot({ path: file, fullPage: STATE.fullPage });
-    captures.push(captureRecord({ file: name, path: file, route: path, slug, width: w, height: h, state: STATE }));
+    layout = await verifyFullPageCapture(page, STATE, layout);
+    captures.push(captureRecord({
+      file: name,
+      path: file,
+      route: path,
+      slug,
+      width: w,
+      height: h,
+      state: STATE,
+      layout,
+    }));
     console.log("wrote", file);
     for (const [index, selector] of (COMPONENTS[path] || []).entries()) {
       // Some shared primitives intentionally live inside a disclosure. Open
@@ -194,6 +208,7 @@ writeFileSync(
       viewports: VIEWPORTS,
       state: STATE,
       captures,
+      browserVersion,
     }),
     null,
     2,

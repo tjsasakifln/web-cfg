@@ -22,6 +22,7 @@ import { createHash } from "crypto";
 import { readFileSync, realpathSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { resolve, sep } from "path";
+import { performance } from "perf_hooks";
 
 /** The sweep the harness has always run when CAPTURE_VIEWPORTS is unset. */
 export const DEFAULT_VIEWPORTS = Object.freeze([
@@ -202,12 +203,198 @@ export async function applyCaptureState(page, state) {
   );
 }
 
+export const FULLPAGE_CAPTURE_PREPARATION = Object.freeze({
+  strategy: "content-visibility-visible/v1",
+  stable_samples: 3,
+  sample_interval_ms: 50,
+  max_wait_ms: 5000,
+});
+
+/**
+ * Materialize and stabilize the document before a full-page screenshot.
+ *
+ * Chrome's full-page capture does not necessarily scroll the viewport. A
+ * subtree left under `content-visibility:auto` can therefore keep its
+ * intrinsic fallback box while contributing no paint, producing both a false
+ * white band and a height that changes as sections happen to materialize.
+ * These inline overrides exist only in the Puppeteer page used for evidence;
+ * no public CSS or HTML is changed.
+ */
+export async function prepareFullPageCapture(
+  page,
+  state,
+  options = FULLPAGE_CAPTURE_PREPARATION,
+) {
+  if (!state.fullPage) return null;
+  const config = {
+    strategy: options.strategy || FULLPAGE_CAPTURE_PREPARATION.strategy,
+    stableSamples: options.stable_samples || FULLPAGE_CAPTURE_PREPARATION.stable_samples,
+    sampleIntervalMs:
+      options.sample_interval_ms || FULLPAGE_CAPTURE_PREPARATION.sample_interval_ms,
+    maxWaitMs: options.max_wait_ms || FULLPAGE_CAPTURE_PREPARATION.max_wait_ms,
+  };
+
+  const wait = (milliseconds) => new Promise((resolveWait) => setTimeout(resolveWait, milliseconds));
+  const initial = await page.evaluate(() => {
+    const root = document.documentElement;
+    const initialScrollHeight = root.scrollHeight;
+    root.style.scrollBehavior = "auto";
+    const materialized = [...document.querySelectorAll("*")].filter(
+      (element) => getComputedStyle(element).contentVisibility === "auto",
+    );
+    for (const element of materialized) {
+      element.style.setProperty("content-visibility", "visible", "important");
+    }
+    void root.offsetHeight;
+    return {
+      initialScrollHeight,
+      initialScroll: { x: window.scrollX, y: window.scrollY },
+      materializedElements: materialized.length,
+      viewportHeight: Math.max(1, window.innerHeight),
+    };
+  });
+  await wait(config.sampleIntervalMs);
+
+  // Visit the complete geometry after materialization. Besides exercising
+  // each paint region, this starts legitimate lazy image requests before the
+  // screenshot without mutating the served document. Delays live in Node so
+  // this remains runnable when page JavaScript is disabled.
+  const traversalDeadline = performance.now() + config.maxWaitMs;
+  let target = 0;
+  while (true) {
+    const height = await page.evaluate((scrollTarget) => {
+      window.scrollTo({ top: scrollTarget, behavior: "instant" });
+      void document.documentElement.offsetHeight;
+      return document.documentElement.scrollHeight;
+    }, target);
+    if (target > height) break;
+    if (performance.now() > traversalDeadline) {
+      throw new Error(`CAPTURE_LAYOUT_TRAVERSAL_TIMEOUT height=${height}`);
+    }
+    target += initial.viewportHeight;
+    await wait(config.sampleIntervalMs);
+  }
+  await page.evaluate(() => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
+    void document.documentElement.offsetHeight;
+  });
+  await wait(config.sampleIntervalMs);
+
+  let assetState = null;
+  const assetDeadline = performance.now() + config.maxWaitMs;
+  while (performance.now() <= assetDeadline) {
+    assetState = await page.evaluate(() => ({
+      fonts: document.fonts?.status || "loaded",
+      pendingImages: [...document.images].filter((image) => !image.complete).length,
+    }));
+    if (assetState.fonts === "loaded" && assetState.pendingImages === 0) break;
+    await wait(config.sampleIntervalMs);
+  }
+  if (assetState?.fonts !== "loaded" || assetState?.pendingImages !== 0) {
+    throw new Error(
+      `CAPTURE_ASSETS_UNSTABLE fonts=${assetState?.fonts} pending_images=${assetState?.pendingImages}`,
+    );
+  }
+  await page.evaluate((scroll) => {
+    window.scrollTo({ left: scroll.x, top: scroll.y, behavior: "instant" });
+    void document.documentElement.offsetHeight;
+  }, initial.initialScroll);
+  await wait(config.sampleIntervalMs);
+
+  const observed = [];
+  let stableRun = [];
+  const stabilityDeadline = performance.now() + config.maxWaitMs;
+  while (performance.now() <= stabilityDeadline) {
+    const height = await page.evaluate(() => document.documentElement.scrollHeight);
+    observed.push(height);
+    stableRun = stableRun.at(-1) === height ? [...stableRun, height] : [height];
+    if (stableRun.length >= config.stableSamples) {
+      return {
+        strategy: config.strategy,
+        materialized_elements: initial.materializedElements,
+        initial_scroll_height: initial.initialScrollHeight,
+        scroll_height: height,
+        scroll_height_samples: stableRun,
+        observed_scroll_heights: observed,
+      };
+    }
+    await wait(config.sampleIntervalMs);
+  }
+  throw new Error(`CAPTURE_LAYOUT_UNSTABLE samples=${observed.join(",")}`);
+}
+
+/** Confirm that taking the screenshot did not invalidate the stable geometry. */
+export async function verifyFullPageCapture(page, state, layout) {
+  if (!state.fullPage) return layout;
+  const samples = [];
+  for (let index = 0; index < FULLPAGE_CAPTURE_PREPARATION.stable_samples; index += 1) {
+    samples.push(await page.evaluate(() => document.documentElement.scrollHeight));
+    if (index + 1 < FULLPAGE_CAPTURE_PREPARATION.stable_samples) {
+      await new Promise((resolveWait) => {
+        setTimeout(resolveWait, FULLPAGE_CAPTURE_PREPARATION.sample_interval_ms);
+      });
+    }
+  }
+  if (samples.some((height) => height !== layout?.scroll_height)) {
+    throw new Error(
+      `CAPTURE_LAYOUT_CHANGED_DURING_SCREENSHOT before=${layout?.scroll_height} `
+      + `after=${samples.join(",")}`,
+    );
+  }
+  return { ...layout, post_screenshot_scroll_height_samples: samples };
+}
+
 export function sha256OfFile(path) {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
 }
 
 /** Describe one written file for the manifest: route, viewport, state and hash. */
-export function captureRecord({ file, path, route, slug, width, height, state, selector = null, componentIndex = null }) {
+export function captureRecord({
+  file,
+  path,
+  route,
+  slug,
+  width,
+  height,
+  state,
+  selector = null,
+  componentIndex = null,
+  layout = null,
+}) {
+  if (state.fullPage && componentIndex === null) {
+    const samples = layout?.scroll_height_samples || [];
+    const postSamples = layout?.post_screenshot_scroll_height_samples || [];
+    if (
+      !layout
+      || layout.strategy !== FULLPAGE_CAPTURE_PREPARATION.strategy
+      || !Number.isInteger(layout.materialized_elements)
+      || layout.materialized_elements < 0
+      || !Number.isInteger(layout.scroll_height)
+      || layout.scroll_height < 1
+      || samples.length < FULLPAGE_CAPTURE_PREPARATION.stable_samples
+      || postSamples.length < FULLPAGE_CAPTURE_PREPARATION.stable_samples
+    ) {
+      throw new Error(`CAPTURE_LAYOUT_EVIDENCE_MISSING file=${file}`);
+    }
+    const recordedHeights = [...samples, ...postSamples];
+    if (
+      new Set(recordedHeights).size !== 1
+      || recordedHeights[0] !== layout.scroll_height
+    ) {
+      throw new Error(
+        `CAPTURE_LAYOUT_EVIDENCE_UNSTABLE file=${file} samples=${recordedHeights.join(",")}`,
+      );
+    }
+    const png = readFileSync(path);
+    const pngWidth = png.length >= 24 ? png.readUInt32BE(16) : 0;
+    const pngHeight = png.length >= 24 ? png.readUInt32BE(20) : 0;
+    if (pngWidth !== width || pngHeight !== layout.scroll_height) {
+      throw new Error(
+        `CAPTURE_PNG_LAYOUT_MISMATCH file=${file} png=${pngWidth}x${pngHeight} `
+        + `expected=${width}x${layout.scroll_height}`,
+      );
+    }
+  }
   return {
     file,
     route,
@@ -223,10 +410,11 @@ export function captureRecord({ file, path, route, slug, width, height, state, s
     motion: state.motion,
     bytes: statSync(path).size,
     sha256: sha256OfFile(path),
+    ...(layout ? { layout } : {}),
   };
 }
 
-export const MANIFEST_SCHEMA_VERSION = "2.0.0";
+export const MANIFEST_SCHEMA_VERSION = "2.1.0";
 
 /**
  * The durable manifest: which commit, which day, which route, which viewport,
@@ -242,7 +430,9 @@ export function buildManifest({
   viewports,
   state,
   captures,
+  browserVersion,
 }) {
+  if (!browserVersion) throw new Error("CAPTURE_BROWSER_VERSION_MISSING");
   return {
     schema_version: MANIFEST_SCHEMA_VERSION,
     captured_at: capturedAt,
@@ -255,6 +445,10 @@ export function buildManifest({
       fullpage: state.fullPage,
       javascript: state.javascript,
       motion: state.motion,
+    },
+    capture_runtime: {
+      browser_version: browserVersion,
+      fullpage_preparation: state.fullPage ? { ...FULLPAGE_CAPTURE_PREPARATION } : null,
     },
     routes: [...routes],
     viewports: viewports.map(([w, h]) => `${w}x${h}`),

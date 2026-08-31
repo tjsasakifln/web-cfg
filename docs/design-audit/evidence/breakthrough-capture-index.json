@@ -3,7 +3,7 @@
   "campaign": "CONFENGE_DESIGN_BREAKTHROUGH_CANARY_20260830",
   "route": "/",
   "generated_by": "scripts/site/capture_screenshots.mjs (harness de #512), rodado a partir de git worktrees limpas",
-  "why_the_pngs_are_not_committed": "Mesma razao de #494: os PNGs sao reproduziveis byte a byte a partir do commit registrado re-rodando o mesmo harness, e o que torna uma re-captura conferivel e o hash, nao o binario. O indice fica no repositorio; os arquivos ficam em ~/.cache/confenge/design-breakthrough-20260830/.",
+  "why_the_pngs_are_not_committed": "Indice historico anterior a #540: os hashes vinculam os artefatos exatos, mas os full-page antigos nao registram browser nem materializacao de content-visibility e nao sao baseline diretamente comparavel. Novas recapturas comparaveis exigem o mesmo commit, browser e contrato #540. O indice fica no repositorio; os arquivos ficam em ~/.cache/confenge/design-breakthrough-20260830/.",
   "viewports": [
     "390x844",
     "768x1024",

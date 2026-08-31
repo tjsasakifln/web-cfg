@@ -9,9 +9,10 @@ viewport, the render state, the byte size and the SHA-256.
 Why the index and not the binaries: the protocol (§11 of the brief) requires a
 durable baseline "with SHA, date, per-file hash and a readable manifest,
 outside /tmp". That is the hash index. The PNGs themselves are 28 MB of
-losslessly compressed text screenshots, reproducible byte-for-byte from the
-recorded commit by re-running the one script, so they stay out of the tree and
-the hashes are what makes a re-capture checkable.
+losslessly compressed text screenshots, so they stay out of the tree and the
+hashes bind the exact captured artifacts. Re-capture is comparable only when
+the commit, browser and full-page preparation contract recorded by the harness
+also match; manifests produced before #540 did not record that contract.
 
 Usage: python3 scripts/site/index_design_direction_capture.py [captureRoot]
 """
@@ -50,6 +51,7 @@ def main(argv: list[str]) -> int:
     for path in manifests:
         data = json.loads(path.read_text(encoding="utf-8"))
         rel_dir = path.parent.relative_to(ROOT).as_posix()
+        runtime = data.get("capture_runtime")
         files = [
             {
                 "file": entry["file"],
@@ -58,10 +60,28 @@ def main(argv: list[str]) -> int:
                 "state": entry["state"],
                 "bytes": entry["bytes"],
                 "sha256": entry["sha256"],
+                "layout": entry.get("layout"),
             }
             for entry in data["captures"]
             if entry["kind"] == "page"
         ]
+        preparation = runtime.get("fullpage_preparation") if isinstance(runtime, dict) else None
+        page_layouts = [entry["layout"] for entry in files]
+        comparison_ready = (
+            data.get("schema_version") == "2.1.0"
+            and isinstance(runtime, dict)
+            and bool(runtime.get("browser_version"))
+            and isinstance(preparation, dict)
+            and preparation.get("strategy") == "content-visibility-visible/v1"
+            and bool(page_layouts)
+            and all(
+                isinstance(layout, dict)
+                and layout.get("strategy") == "content-visibility-visible/v1"
+                and len(layout.get("scroll_height_samples", [])) >= 3
+                and len(layout.get("post_screenshot_scroll_height_samples", [])) >= 3
+                for layout in page_layouts
+            )
+        )
         total += len(files)
         groups.append(
             {
@@ -70,6 +90,9 @@ def main(argv: list[str]) -> int:
                 "captured_at": data["captured_at"],
                 "commit_sha": data["commit_sha"],
                 "tree_dirty": data["tree_dirty"],
+                "manifest_schema_version": data.get("schema_version"),
+                "capture_runtime": runtime,
+                "comparison_ready": comparison_ready,
                 "state": data["state"],
                 "viewports": data["viewports"],
                 "routes": data["routes"],
@@ -77,6 +100,7 @@ def main(argv: list[str]) -> int:
             }
         )
 
+    comparison_blockers = [group["group"] for group in groups if not group["comparison_ready"]]
     payload = {
         "schema": "confenge.design-direction-capture-index/1.0",
         "issue": 494,
@@ -89,9 +113,15 @@ def main(argv: list[str]) -> int:
             "reproduce": "CHROME_PATH=... bash scripts/site/capture_design_direction.sh",
         },
         "binaries_committed": False,
+        "comparison_ready": not comparison_blockers,
+        "comparison_blockers": comparison_blockers,
         "binaries_note": (
-            "As 28 MB de PNG ficam fora da arvore: sao reproduziveis byte a byte a partir do "
-            "commit registrado, e o hash por arquivo abaixo e o que torna uma recaptura conferivel."
+            "As 28 MB de PNG ficam fora da arvore; os hashes vinculam os artefatos exatos. "
+            + (
+                "Os manifests registram commit, browser e contrato de materializacao #540."
+                if not comparison_blockers
+                else "Ha manifests anteriores a #540 sem browser/materializacao; nao sao baseline direto."
+            )
         ),
         "file_count": total,
         "groups": groups,
