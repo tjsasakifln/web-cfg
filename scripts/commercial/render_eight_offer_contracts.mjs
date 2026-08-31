@@ -80,6 +80,7 @@ function renderActionLabels(html, item) {
     /<a\b([^>]*\bdata-next-action-id=["'][^"']+["'][^>]*)>([\s\S]*?)<\/a>/gi,
     (_full, attrs, content) => {
       let nextAttrs = attrs;
+      const position = attrs.match(/\bdata-cta-position=["']([^"']+)["']/i)?.[1] || "";
       const href = attrs.match(/\bhref=["']([^"']+)["']/i)?.[1] || "";
       const ariaLabel = /https:\/\/(?:wa\.me|api\.whatsapp\.com)\//i.test(href)
         ? `${fullLabel} pelo WhatsApp`
@@ -91,6 +92,7 @@ function renderActionLabels(html, item) {
         const nextContent = content.replace(/<span\b[^>]*>[\s\S]*?<\/span>/i, "<span>Configurar pedido</span>");
         return `<a${nextAttrs}>${nextContent}</a>`;
       }
+      if (position === "report_header") return `<a${nextAttrs}>Configurar pedido</a>`;
       const suffix = content.match(/\s*(<svg\b[\s\S]*)$/i)?.[1] || "";
       return `<a${nextAttrs}>${escapeHtml(fullLabel)}${suffix ? ` ${suffix}` : ""}</a>`;
     },

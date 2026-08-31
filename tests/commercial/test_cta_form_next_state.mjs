@@ -123,13 +123,18 @@ for (const item of eight.deliverables) {
   assert.equal(actionAnchors.length, 5, `${item.route}: primary action census`);
   for (const anchor of actionAnchors) {
     const label = anchor[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-    if (/<span\b/i.test(anchor[2])) assert.match(label, /Configurar pedido/i, `${item.route}: ${label}`);
+    const position = anchor[1].match(/\bdata-cta-position=["']([^"']+)["']/i)?.[1] || "";
+    if (/<span\b/i.test(anchor[2]) || position === "report_header") {
+      assert.match(label, /^Configurar pedido\b/i, `${item.route}: ${position}: ${label}`);
+    }
     else assert.match(label, new RegExp(item.value_first.cta_configure, "i"), `${item.route}: ${label}`);
     assert.doesNotMatch(label, /^Quero\b/i, `${item.route}: generic desire label`);
     const href = anchor[1].match(/\bhref=["']([^"']+)["']/i)?.[1] || "";
     const aria = anchor[1].match(/\baria-label=["']([^"']+)["']/i)?.[1] || "";
     if (href.startsWith("/")) assert.doesNotMatch(aria, /WhatsApp/i, `${item.route}: internal action aria`);
   }
+  const phone = html.match(/<input\b(?=[^>]*\bname=["']telefone["'])[^>]*>/i)?.[0] || "";
+  assert.match(phone, /\bstyle=["'][^"']*min-height:\s*44px/i, `${item.route}: WhatsApp touch target`);
 }
 
 const radarForm = report.surfaces.find((surface) => surface.route === "/comercial/radar-decisorio/")?.forms[0];

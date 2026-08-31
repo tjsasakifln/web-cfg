@@ -34,6 +34,14 @@ function setInputAttr(tag, name, value) {
   return tag.replace(/\s*\/?\s*>$/, (ending) => ` ${name}="${escapeHtml(value)}"${ending}`);
 }
 
+function ensureInlineStyle(tag, property, value) {
+  const current = attrValue(tag, "style");
+  const pattern = new RegExp(`(?:^|;)\\s*${property}\\s*:`, "i");
+  if (pattern.test(current)) return tag;
+  const separator = current.trim() && !current.trim().endsWith(";") ? ";" : "";
+  return setInputAttr(tag, "style", `${current}${separator}${property}:${value}`);
+}
+
 function profileFor(surface) {
   for (const rule of contract.profile_derivation || []) {
     if (rule.family_id && rule.family_id === surface.family_id) return rule.profile;
@@ -78,6 +86,7 @@ function constrainContact(body, runtime) {
       let next = tag;
       if (!/\bid=["']/i.test(next) && runtime === "shared_lead_form_v1") next = setInputAttr(next, "id", field);
       for (const [name, value] of Object.entries(attributes)) next = setInputAttr(next, name, value);
+      if (field === "telefone") next = ensureInlineStyle(next, "min-height", "44px");
       return next;
     },
   );
