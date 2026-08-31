@@ -4,7 +4,7 @@
   "surface": "visible text inside main",
   "tokenization": "scripts/commercial/value_first_copy_audit.mjs#visibleText then whitespace split",
   "routes": [
-    { "route": "/servicos-obras-publicas/", "before": 734, "after": 730, "delta": -4 },
+    { "route": "/servicos-obras-publicas/", "before": 734, "after": 724, "delta": -10 },
     { "route": "/diagnostico-b2g-expansao/", "before": 1038, "after": 1023, "delta": -15 },
     { "route": "/bid-room-licitacoes-obras/", "before": 1286, "after": 1231, "delta": -55 },
     { "route": "/defesa-margem-contratos-publicos/", "before": 1318, "after": 1313, "delta": -5 },
