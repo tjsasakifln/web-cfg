@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -298,6 +299,126 @@ def test_non_crawler_headers_for_family_subpath_remain_outside_owned_block(
     sync_family_crawler_rules([], root=tmp_path)
 
     assert path.read_text(encoding="utf-8") == original
+
+
+def test_legacy_header_migration_preserves_non_crawler_directives(
+    tmp_path: Path,
+) -> None:
+    legacy = (
+        f"{CONTRACT_BEGIN}\n"
+        "/analises-contratos-publicos/*\n"
+        "  X-Robots-Tag: noindex, nofollow, noarchive\n"
+        "  Cache-Control: no-store\n"
+        "  Content-Security-Policy: default-src 'none'\n\n"
+        "# Neighbor crawler policy\n"
+        "/vizinha/*\n"
+        "  X-Robots-Tag: noindex\n"
+    )
+    expected = (
+        f"{CONTRACT_BEGIN}\n"
+        "/analises-contratos-publicos/*\n"
+        "  X-Robots-Tag: noindex, nofollow, noarchive\n"
+        "  Cache-Control: no-store\n"
+        "  Content-Security-Policy: default-src 'none'\n\n"
+        f"{CONTRACT_END}\n"
+        "# Neighbor crawler policy\n"
+        "/vizinha/*\n"
+        "  X-Robots-Tag: noindex\n"
+    )
+    path = tmp_path / "_headers"
+    path.write_text(legacy, encoding="utf-8")
+
+    sync_family_crawler_rules([], root=tmp_path)
+    once = path.read_bytes()
+    sync_family_crawler_rules([], root=tmp_path)
+
+    assert once == expected.encode()
+    assert path.read_bytes() == once
+    assert path.read_text(encoding="utf-8").count("/analises-contratos-publicos/*") == 1
+
+
+def test_legacy_header_migration_preserves_index_override_non_crawler_directives(
+    tmp_path: Path,
+) -> None:
+    slug = "preserved-slug"
+    selector = f"/analises-contratos-publicos/{slug}/*"
+    legacy = (
+        f"{CONTRACT_BEGIN}\n"
+        "/analises-contratos-publicos/*\n"
+        "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+        f"{selector}\n"
+        "  X-Robots-Tag: index, follow\n"
+        "  Cache-Control: no-store\n"
+        "  Content-Security-Policy: default-src 'none'\n\n"
+        "# Neighbor crawler policy\n"
+        "/vizinha/*\n"
+        "  X-Robots-Tag: noindex\n"
+    )
+    expected = (
+        f"{CONTRACT_BEGIN}\n"
+        "/analises-contratos-publicos/*\n"
+        "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+        f"{selector}\n"
+        "  X-Robots-Tag: index, follow\n"
+        "  Cache-Control: no-store\n"
+        "  Content-Security-Policy: default-src 'none'\n\n"
+        f"{CONTRACT_END}\n"
+        "# Neighbor crawler policy\n"
+        "/vizinha/*\n"
+        "  X-Robots-Tag: noindex\n"
+    )
+    path = tmp_path / "_headers"
+    path.write_text(legacy, encoding="utf-8")
+    decision = SimpleNamespace(
+        state="PUBLISHABLE_INDEX", indexable=True, slug=slug
+    )
+
+    sync_family_crawler_rules([({}, decision)], root=tmp_path)
+    once = path.read_bytes()
+    sync_family_crawler_rules([({}, decision)], root=tmp_path)
+
+    assert once == expected.encode()
+    assert path.read_bytes() == once
+    rendered = path.read_text(encoding="utf-8")
+    assert rendered.count("/analises-contratos-publicos/*") == 1
+    assert rendered.count(selector) == 1
+
+
+def test_stale_index_override_retains_non_crawler_directives_without_xrobots(
+    tmp_path: Path,
+) -> None:
+    selector = "/analises-contratos-publicos/former-slug/*"
+    original = (
+        f"{CONTRACT_BEGIN}\n"
+        "/analises-contratos-publicos/*\n"
+        "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+        f"{selector}\n"
+        "  X-Robots-Tag: index, follow\n"
+        "  Cache-Control: no-store\n"
+        "  Content-Security-Policy: default-src 'none'\n\n"
+        f"{CONTRACT_END}\n"
+    )
+    expected = (
+        f"{CONTRACT_BEGIN}\n"
+        "/analises-contratos-publicos/*\n"
+        "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+        f"{selector}\n"
+        "  Cache-Control: no-store\n"
+        "  Content-Security-Policy: default-src 'none'\n\n"
+        f"{CONTRACT_END}\n"
+    )
+    path = tmp_path / "_headers"
+    path.write_text(original, encoding="utf-8")
+
+    sync_family_crawler_rules([], root=tmp_path)
+    once = path.read_bytes()
+    sync_family_crawler_rules([], root=tmp_path)
+
+    rendered = path.read_text(encoding="utf-8")
+    assert once == expected.encode()
+    assert path.read_bytes() == once
+    assert rendered.count(selector) == 1
+    assert f"{selector}\n  X-Robots-Tag:" not in rendered
 
 
 @pytest.mark.parametrize(

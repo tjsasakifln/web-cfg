@@ -918,18 +918,35 @@ def sync_family_crawler_rules(
     headers_path = root / "_headers"
     if headers_path.is_file():
         headers = headers_path.read_text(encoding="utf-8")
+        retained_headers = _owned_non_crawler_headers(headers)
         allow_block_parts = tuple(
-            f"{FAMILY_PATH}{slug}/*\n  X-Robots-Tag: index, follow\n\n" for slug in slugs
+            _header_stanza(
+                f"{FAMILY_PATH}{slug}/*",
+                "  X-Robots-Tag: index, follow\n",
+                retained_headers.get(f"{FAMILY_PATH}{slug}/*", ()),
+            )
+            for slug in slugs
         )
         allow_blocks = "".join(allow_block_parts)
-        family_noindex_block = (
-            f"{FAMILY_PATH}*\n"
-            "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+        generated_selectors = {
+            f"{FAMILY_PATH}*",
+            *(f"{FAMILY_PATH}{slug}/*" for slug in slugs),
+        }
+        stale_non_crawler_blocks = "".join(
+            _header_stanza(selector, "", retained)
+            for selector, retained in sorted(retained_headers.items())
+            if selector not in generated_selectors
+        )
+        family_noindex_block = _header_stanza(
+            f"{FAMILY_PATH}*",
+            "  X-Robots-Tag: noindex, nofollow, noarchive\n",
+            retained_headers.get(f"{FAMILY_PATH}*", ()),
         )
         block = (
             f"{HEADERS_FAMILY_BEGIN}\n"
             f"{family_noindex_block}"
             f"{allow_blocks}"
+            f"{stale_non_crawler_blocks}"
             f"{HEADERS_FAMILY_END}\n"
         )
         headers = _replace_or_append_block(
@@ -996,6 +1013,66 @@ def _legacy_block_close(lines: list[str], start: int) -> int:
         ):
             return idx - 1
     return len(lines) - 1
+
+
+def _header_stanza(selector: str, crawler_directive: str, retained: tuple[str, ...]) -> str:
+    return f"{selector}\n{crawler_directive}{''.join(retained)}\n"
+
+
+def _owned_non_crawler_headers(text: str) -> dict[str, tuple[str, ...]]:
+    """Return non-crawler directives from selectors in the owned header block.
+
+    Older generated stanzas can have acquired a cache or CSP directive after
+    their X-Robots-Tag.  Migrating the crawler control must not silently delete
+    that neighboring runtime policy.  Regenerated stanzas remain each
+    selector's sole owner, which avoids duplicate-selector host violations.
+    """
+    lines = text.splitlines(keepends=True)
+    start = next(
+        (
+            index
+            for index, line in enumerate(lines)
+            if line.startswith((HEADERS_FAMILY_BEGIN, "# Contract-analysis canary:"))
+        ),
+        None,
+    )
+    if start is None:
+        return {}
+    legacy_close = _legacy_block_close(lines, start)
+    first_boundary = legacy_close + 1
+    end = next(
+        (
+            index
+            for index in range(start + 1, len(lines))
+            if lines[index].startswith(HEADERS_FAMILY_END)
+        ),
+        None,
+    )
+    close = legacy_close if end is None or (
+        first_boundary < len(lines) and first_boundary < end
+    ) else end
+    retained_by_selector: dict[str, tuple[str, ...]] = {}
+    index = start + 1
+    while index <= close:
+        selector = lines[index]
+        normalized_selector = selector.rstrip("\r\n")
+        if not normalized_selector.startswith(FAMILY_PATH):
+            index += 1
+            continue
+        cursor = index + 1
+        retained_headers: list[str] = []
+        while (
+            cursor <= close
+            and lines[cursor].strip()
+            and lines[cursor][:1].isspace()
+        ):
+            if not lines[cursor].strip().casefold().startswith("x-robots-tag:"):
+                retained_headers.append(lines[cursor])
+            cursor += 1
+        if retained_headers:
+            retained_by_selector[normalized_selector] = tuple(retained_headers)
+        index = cursor
+    return retained_by_selector
 
 
 def _replace_or_append_block(

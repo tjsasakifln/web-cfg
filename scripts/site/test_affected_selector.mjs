@@ -119,6 +119,29 @@ function expectSubset(result, mustInclude, because) {
   expectSubset(result, ["test:schedules"], "future inbound proof artifact");
 }
 
+// Foundation capture/audit tooling must select its own browser and contract gates.
+{
+  const capturePaths = [
+    "scripts/site/capture_states.mjs",
+    "scripts/site/capture_screenshots.mjs",
+    "scripts/site/index_design_direction_capture.py",
+    "scripts/site/test_design_direction.mjs",
+    "docs/evidence/issue-540-fullpage-capture/report.json",
+  ];
+  for (const input of capturePaths) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:capture-states", "test:design-direction"], `capture producer ${input}`);
+  }
+  for (const input of [
+    "scripts/site/audit_deliverables_live.mjs",
+    "scripts/site/deliverables_live_audit_contract.mjs",
+    "scripts/site/fixtures/deliverables-live/content-visibility-current-defects.html",
+  ]) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:deliverables-live-audit"], `deliverables audit producer ${input}`);
+  }
+}
+
 // script.js is read by the shipped pSEO attribution test — must not omit that suite
 {
   const src = readFileSync(path.join(ROOT, "seo/scripts/test_pseo_attribution.mjs"), "utf8");

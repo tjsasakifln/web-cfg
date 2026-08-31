@@ -2,9 +2,9 @@
  * Read-only live audit for /entregas/ and its eight published model pages.
  *
  * The route and copy expectations come from page-contract-eight.v1.json. The
- * audit never submits a form and never serializes form values. Screenshots are
- * restricted to the viewport or a named DOM element because full-page capture
- * is not reliable until #540 is resolved.
+ * audit never submits a form and never serializes form values. Viewport and
+ * named-segment evidence is complemented by one deterministic full-page
+ * capture per route through the shared #540 capture-only materialization path.
  *
  * Usage:
  *   node scripts/site/audit_deliverables_live.mjs \
@@ -18,14 +18,53 @@ import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
+import {
+  DELIVERABLES_LIVE_AUDIT_SCHEMA,
+  LIVE_FULL_PAGE_CAPTURE_STATUS,
+  LIVE_FULL_PAGE_STATE,
+  assertArtifactHashContinuity,
+  assertFullPageCoverage,
+  assertReplaceableEvidenceOutput,
+  assertSafeEvidenceOutputDir,
+  buildCommercialDefects,
+  captureStableFullPage,
+  classifyRouteResult,
+  inspectCommercialLadder,
+  publishEvidenceAtomically,
+  validateCommercialLadder,
+} from "./deliverables_live_audit_contract.mjs";
 import { resolveChromePath } from "./resolve_chrome.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const require = createRequire(import.meta.url);
 const axeSource = fs.readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
-const contract = JSON.parse(fs.readFileSync(path.join(ROOT, "data/commercial/page-contract-eight.v1.json"), "utf8"));
-const registry = JSON.parse(fs.readFileSync(path.join(ROOT, "data/commercial/deliverables-registry.v1.json"), "utf8"));
-const authorityDocument = fs.readFileSync(path.join(ROOT, "docs/architecture/RUNTIME-AUTHORITY.md"), "utf8");
+
+function option(name, fallback) {
+  const prefix = `--${name}=`;
+  const value = process.argv.find((arg) => arg.startsWith(prefix));
+  return value ? value.slice(prefix.length) : fallback;
+}
+
+const base = option("base", "https://confenge.com.br").replace(/\/$/, "");
+const expectedSha = option(
+  "expected-sha",
+  execFileSync("git", ["rev-parse", "origin/main"], { cwd: ROOT, encoding: "utf8" }).trim(),
+);
+if (!/^[0-9a-f]{40}$/.test(expectedSha)) throw new Error(`invalid --expected-sha: ${expectedSha}`);
+
+function readExpectedText(file) {
+  return execFileSync("git", ["show", `${expectedSha}:${file}`], {
+    cwd: ROOT,
+    encoding: "utf8",
+    maxBuffer: 20 * 1024 * 1024,
+  });
+}
+
+// A feature worktree may contain unreleased contracts or HTML. Expectations
+// must come from the exact SHA whose live identity is audited, never HEAD.
+const contract = JSON.parse(readExpectedText("data/commercial/page-contract-eight.v1.json"));
+const registry = JSON.parse(readExpectedText("data/commercial/deliverables-registry.v1.json"));
+const authorityDocument = readExpectedText("docs/architecture/RUNTIME-AUTHORITY.md");
 
 function authorityValue(key) {
   const match = authorityDocument.match(new RegExp(`^\\s*${key}:\\s*([^\\n#]+)`, "m"));
@@ -43,18 +82,11 @@ const expectedCapabilities = registry.deliverables.map((entry) => ({
   state: entry.public_state,
 }));
 
-function option(name, fallback) {
-  const prefix = `--${name}=`;
-  const value = process.argv.find((arg) => arg.startsWith(prefix));
-  return value ? value.slice(prefix.length) : fallback;
-}
-
-const base = option("base", "https://confenge.com.br").replace(/\/$/, "");
-const finalOutputDir = path.resolve(ROOT, option("out", "/tmp/confenge-deliverables-live"));
-const expectedSha = option(
-  "expected-sha",
-  execFileSync("git", ["rev-parse", "origin/main"], { cwd: ROOT, encoding: "utf8" }).trim(),
-);
+const finalOutputDir = assertSafeEvidenceOutputDir({
+  repoRoot: ROOT,
+  target: path.resolve(ROOT, option("out", "/tmp/confenge-deliverables-live-v2")),
+});
+assertReplaceableEvidenceOutput(finalOutputDir);
 fs.mkdirSync(path.dirname(finalOutputDir), { recursive: true });
 const outputDir = fs.mkdtempSync(path.join(
   path.dirname(finalOutputDir),
@@ -63,8 +95,6 @@ const outputDir = fs.mkdtempSync(path.join(
 process.on("exit", () => {
   if (fs.existsSync(outputDir)) fs.rmSync(outputDir, { recursive: true, force: true });
 });
-const existingReadme = path.join(finalOutputDir, "README.md");
-if (fs.existsSync(existingReadme)) fs.copyFileSync(existingReadme, path.join(outputDir, "README.md"));
 const screenshotsDir = path.join(outputDir, "screenshots");
 fs.mkdirSync(screenshotsDir, { recursive: true });
 
@@ -98,7 +128,7 @@ function attributes(tag) {
 }
 
 function attributionProjection(file) {
-  const html = fs.readFileSync(path.join(ROOT, file), "utf8");
+  const html = readExpectedText(file);
   const body = attributes(html.match(/<body\b[^>]*>/i)?.[0] || "");
   const formTag = html.match(/<form\b[^>]*action="\/\.netlify\/functions\/lead"[^>]*>/i)?.[0] || "";
   const form = attributes(formTag);
@@ -164,9 +194,28 @@ function screenshotRecord(file, capture = "viewport") {
 }
 
 async function json(url) {
-  const response = await fetch(url, { headers: { accept: "application/json" } });
+  const response = await fetchReadOnly(url, { headers: { accept: "application/json" } });
   if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
   return response.json();
+}
+
+async function fetchReadOnly(url, options = {}) {
+  let lastError = null;
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: AbortSignal.timeout(15000),
+      });
+      if (response.status < 500 || attempt === 2) return response;
+      lastError = new Error(`${url}: HTTP ${response.status}`);
+    } catch (error) {
+      lastError = error;
+      if (attempt === 2) throw error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  throw lastError;
 }
 
 function add(errors, condition, code) {
@@ -290,15 +339,6 @@ async function inspectPage(page, expected) {
       contract_boundary: hasSynthetic(document.querySelector(".eight-contract__synthetic-boundary")),
       structured_disclosure: /sint[ée]tic/i.test(JSON.stringify(jsonLd)),
     };
-    // The ladder must live in main content, never only in global chrome/footer.
-    // Model templates use several historical class names, so main is the one
-    // stable semantic boundary shared by all nine routes.
-    const ladderNodes = [document.querySelector("main")].filter(Boolean);
-    const ladderText = normalize(ladderNodes.map((node) => node.textContent).join(" "));
-    const ladderLinks = ladderNodes.flatMap((node) => [...node.querySelectorAll("a[href]")].map((link) => ({
-      href: link.getAttribute("href"),
-      text: normalize(link.textContent),
-    })));
     return {
       canonical: document.querySelector('link[rel="canonical"]')?.href || null,
       title: document.title,
@@ -331,15 +371,6 @@ async function inspectPage(page, expected) {
         matches_canonical_source: JSON.stringify(observedAttribution) === JSON.stringify(routeExpected.attribution),
         observed_ctas: observedCtas.length,
         expected_ctas: routeExpected.attribution.ctas.length,
-      },
-      ladder: {
-        has_units_sum: ladderText.includes(routeExpected.package.units_sum_display),
-        has_package_price: ladderText.includes(routeExpected.package.package_price_display),
-        has_credit_window: ladderText.includes(`${routeExpected.package.credit_window_days} dias`),
-        promises_credit: /(?:volta como crédito|valor (?:pago )?é abatido|abate o valor)/i.test(ladderText),
-        says_unit_01_has_no_credit: /(?:únic[oa] sem o crédito|não gera crédito|fora do diagnóstico)/i.test(ladderText),
-        diagnosis_link: ladderLinks.some(({ href }) => href === "/diagnostico-b2g-expansao/"),
-        recurring_direction_context: ladderLinks.some(({ href, text: label }) => href === "/diretoria-b2g/" && /recorr|diretoria/i.test(label)),
       },
       schema: {
         parse_errors: jsonLd.filter((entry) => entry.parse_error).length,
@@ -380,26 +411,14 @@ function validateMetrics(metrics, expected) {
     add(errors, metrics.hub?.capabilities === 54, "capability_count");
     add(errors, JSON.stringify(metrics.hub?.state_counts) === JSON.stringify({ PUBLISHED: 8, VALIDATE: 44, BLOCKED: 2 }), "capability_semantics");
     add(errors, JSON.stringify(metrics.hub?.capability_projection) === JSON.stringify(expectedCapabilities), "capability_identity_or_state_drift");
-    add(errors, metrics.ladder.has_units_sum && metrics.ladder.has_package_price && metrics.ladder.has_credit_window, "value_ladder_arithmetic");
-    add(errors, metrics.ladder.says_unit_01_has_no_credit, "unit_01_no_credit_boundary_missing");
-    add(errors, metrics.ladder.diagnosis_link, "diagnosis_step_missing");
-    add(errors, metrics.ladder.recurring_direction_context, "recurring_direction_step_missing");
     for (const [index, offer] of offers.entries()) {
       const item = metrics.schema.item_list[index];
       add(errors, item?.position === index + 1 && item?.url === `${base}${offer.route}` && item?.name?.includes(offer.published_name_pt_br), `item_list_${offer.deliverable_id}`);
     }
   } else {
     add(errors, ["WebPage", "Report", "BreadcrumbList"].every((type) => metrics.schema.types.includes(type)), "model_schema_types");
-    add(errors, metrics.ladder.has_credit_window, "credit_window_missing");
-    add(errors, metrics.ladder.diagnosis_link, "diagnosis_step_missing");
-    add(errors, metrics.ladder.recurring_direction_context, "recurring_direction_step_missing");
-    if (expected.id === "CFG-D01") {
-      add(errors, !metrics.ladder.promises_credit, "unit_01_false_credit_promise");
-      add(errors, metrics.ladder.says_unit_01_has_no_credit, "unit_01_no_credit_boundary_missing");
-    } else {
-      add(errors, metrics.ladder.has_package_price && metrics.ladder.promises_credit, "package_credit_terms_missing");
-    }
   }
+  errors.push(...validateCommercialLadder(metrics.ladder, expected));
   add(errors, metrics.schema.offer_nodes.length === 0, "unexpected_offer_schema_requires_contract_update");
   return errors;
 }
@@ -448,7 +467,7 @@ async function keyboardAudit(page) {
 async function auditLinks(pageUrls) {
   const unique = new Set();
   for (const url of pageUrls) {
-    const html = await (await fetch(url)).text();
+    const html = await (await fetchReadOnly(url)).text();
     for (const match of html.matchAll(/\bhref=["']([^"'#]+)["']/gi)) {
       const resolved = new URL(match[1], url);
       if (resolved.origin === new URL(base).origin) unique.add(`${resolved.origin}${resolved.pathname}${resolved.search}`);
@@ -456,7 +475,7 @@ async function auditLinks(pageUrls) {
   }
   const broken = [];
   for (const url of [...unique].sort()) {
-    const response = await fetch(url, { redirect: "follow" });
+    const response = await fetchReadOnly(url, { redirect: "follow" });
     if (response.status >= 400) broken.push({ path: new URL(url).pathname, status: response.status });
   }
   return { checked: unique.size, broken };
@@ -477,22 +496,6 @@ function validateLiveIdentity(build, runtime, phase) {
   if (failures.length) throw new Error(`live identity mismatch: ${failures.join(",")}`);
 }
 
-function publishOutputAtomically() {
-  const backup = `${finalOutputDir}.previous-${process.pid}`;
-  if (fs.existsSync(backup)) throw new Error(`stale evidence backup exists: ${backup}`);
-  const hadPrevious = fs.existsSync(finalOutputDir);
-  if (hadPrevious) fs.renameSync(finalOutputDir, backup);
-  try {
-    fs.renameSync(outputDir, finalOutputDir);
-  } catch (error) {
-    if (hadPrevious && fs.existsSync(backup) && !fs.existsSync(finalOutputDir)) {
-      fs.renameSync(backup, finalOutputDir);
-    }
-    throw error;
-  }
-  if (hadPrevious) fs.rmSync(backup, { recursive: true, force: true });
-}
-
 const buildInfo = await json(`${base}/.well-known/build-info.json`);
 const runtimeInfo = await json(`${base}/.well-known/runtime-info.json`);
 validateLiveIdentity(buildInfo, runtimeInfo, "before");
@@ -508,9 +511,10 @@ try {
   console.error("DELIVERABLES_LIVE_BROWSER_REQUIRED", String(error?.message || error));
   process.exit(2);
 }
+const browserVersion = await browser.version();
 
 const report = {
-  schema: "confenge.deliverables-live-audit/1.0",
+  schema: DELIVERABLES_LIVE_AUDIT_SCHEMA,
   issue: 530,
   generated_at: new Date().toISOString(),
   base_url: base,
@@ -524,8 +528,13 @@ const report = {
     expected: expectedRuntime,
   },
   decision_state: "VALIDATE_LIVE",
-  full_page: "DEFERRED_BY_540",
-  capture_method: "first-fold viewport and named DOM-element segments only; fullPage is never requested",
+  full_page: {
+    status: LIVE_FULL_PAGE_CAPTURE_STATUS,
+    required_per_route: true,
+    state: LIVE_FULL_PAGE_STATE.id,
+  },
+  capture_method: "first-fold viewport, named DOM-element segments, and one #540-stabilized full-page capture per route",
+  capture_runtime: { browser_version: browserVersion },
   schema_policy: {
     hub_required: ["CollectionPage", "ItemList", "BreadcrumbList"],
     model_required: ["WebPage", "Report", "BreadcrumbList"],
@@ -538,7 +547,15 @@ const report = {
 };
 
 for (const expected of routes) {
-  const routeResult = { route: expected.route, deliverable_id: expected.id, result: "PASS", viewports: [], js_off: null, keyboard: null };
+  const routeResult = {
+    route: expected.route,
+    deliverable_id: expected.id,
+    result: "PASS",
+    viewports: [],
+    full_page: null,
+    js_off: null,
+    keyboard: null,
+  };
   for (const viewport of viewports) {
     const page = await browser.newPage();
     await page.setViewport({ ...viewport, deviceScaleFactor: 1 });
@@ -549,6 +566,7 @@ for (const expected of routes) {
     });
     const response = await page.goto(`${base}${expected.route}`, { waitUntil: "networkidle0", timeout: 60000 });
     const metrics = await inspectPage(page, expected);
+    metrics.ladder = await page.evaluate(inspectCommercialLadder, expected);
     await page.evaluate(axeSource);
     const axe = await page.evaluate(async () => {
       const results = await globalThis.axe.run(document, {
@@ -566,6 +584,17 @@ for (const expected of routes) {
     await page.screenshot({ path: firstFold, fullPage: false });
     const segments = [];
     if (viewport.id === "1366x768") {
+      const fullPageFile = path.join(screenshotsDir, `${prefix}-full-page.png`);
+      routeResult.full_page = await captureStableFullPage({
+        page,
+        filePath: fullPageFile,
+        outputDir,
+        route: expected.route,
+        slug: slug(expected.route),
+        width: viewport.width,
+        height: viewport.height,
+        browserVersion,
+      });
       const selectors = expected.kind === "hub"
         ? [["decision-nav", ".offer-decision-nav"], ["first-offer", "#entrega-01"], ["last-offer", "#entrega-08"], ["form", "main form"]]
         : [["value", ".eight-contract__value"], ["price-cta", ".report-final-offer"], ["form", "main form"]];
@@ -593,14 +622,12 @@ for (const expected of routes) {
       hub: metrics.hub,
       evidence: [screenshotRecord(firstFold, "viewport-first-fold"), ...segments],
     });
-    if (errors.length) routeResult.result = "DEFECT";
     if (viewport.id === "390x844") {
       routeResult.keyboard = await keyboardAudit(page);
       routeResult.keyboard.errors = [];
       add(routeResult.keyboard.errors, routeResult.keyboard.visible === 10, "focused_control_not_visible");
       add(routeResult.keyboard.errors, routeResult.keyboard.with_indicator === 10, "focus_indicator_missing");
       add(routeResult.keyboard.errors, routeResult.keyboard.first_is_skip_link, "skip_link_not_first");
-      if (routeResult.keyboard.errors.length) routeResult.result = "DEFECT";
     }
     await page.close();
   }
@@ -612,6 +639,7 @@ for (const expected of routes) {
   await noJs.evaluate(() => document.fonts?.ready || Promise.resolve());
   await new Promise((resolve) => setTimeout(resolve, 200));
   const noJsMetrics = await inspectPage(noJs, expected);
+  noJsMetrics.ladder = await noJs.evaluate(inspectCommercialLadder, expected);
   const noJsErrors = validateMetrics(noJsMetrics, expected);
   add(noJsErrors, noJsResponse && [200, 304].includes(noJsResponse.status()), `http_${noJsResponse?.status() || "none"}`);
   const noJsFile = path.join(screenshotsDir, `${slug(expected.route)}-390x844-js-off-first-fold.png`);
@@ -623,17 +651,24 @@ for (const expected of routes) {
     geometry: { overflow: noJsMetrics.overflow },
     evidence: [screenshotRecord(noJsFile, "viewport-first-fold-js-off")],
   };
-  if (noJsErrors.length) routeResult.result = "DEFECT";
   await noJs.close();
+  const routeErrors = [
+    ...routeResult.viewports.flatMap(({ errors }) => errors),
+    ...routeResult.js_off.errors,
+    ...routeResult.keyboard.errors,
+  ];
+  routeResult.result = classifyRouteResult(routeErrors);
   report.routes.push(routeResult);
   console.log(`${routeResult.result} ${expected.route}`);
 }
 
 await browser.close();
+assertFullPageCoverage(report.routes);
 report.links = await auditLinks(routes.map(({ route }) => `${base}${route}`));
 const finalBuildInfo = await json(`${base}/.well-known/build-info.json`);
 const finalRuntimeInfo = await json(`${base}/.well-known/runtime-info.json`);
 validateLiveIdentity(finalBuildInfo, finalRuntimeInfo, "after");
+assertArtifactHashContinuity(buildInfo, finalBuildInfo);
 report.identity_rechecked_at = new Date().toISOString();
 report.final_artifact_hash = finalBuildInfo.artifact_hash;
 const allErrors = (entry) => [
@@ -641,57 +676,7 @@ const allErrors = (entry) => [
   ...entry.js_off.errors,
   ...entry.keyboard.errors,
 ];
-const d01 = report.routes.find(({ deliverable_id: id }) => id === "CFG-D01");
-if (d01 && allErrors(d01).includes("unit_01_false_credit_promise")) {
-  report.defects.push({
-    id: "CFG530-D01-CREDIT-CONTRADICTION",
-    severity: "HIGH",
-    owner_issue: 547,
-    affected_routes: [d01.route],
-    symptoms: [
-      "unit_01_false_credit_promise",
-      "unit_01_no_credit_boundary_missing",
-      "diagnosis_step_missing",
-    ],
-    reproduction: [
-      "In /entregas/, inspect CFG-D01: it is the only unit declared outside the package and without 60-day credit.",
-      "Open CFG-D01 and scroll to the written-request form: the page says the value returns as credit within 60 days.",
-    ],
-    probable_files: [
-      "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
-      "tests/commercial/test_page_contract_eight.mjs",
-    ],
-    evidence: [
-      "screenshots/entregas-1366x768-first-offer.png",
-      "screenshots/casos_modelo-relatorio-inteligencia-licitacoes-1366x768-form.png",
-    ],
-  });
-}
-const recurringAffected = report.routes
-  .filter((entry) => allErrors(entry).includes("recurring_direction_step_missing"))
-  .map(({ route }) => route);
-if (recurringAffected.length) {
-  report.defects.push({
-    id: "CFG530-RECURRING-DIRECTION-LADDER-MISSING",
-    severity: "MEDIUM",
-    owner_issue: 547,
-    affected_routes: recurringAffected,
-    symptoms: ["recurring_direction_step_missing"],
-    reproduction: [
-      "Inspect the value-ladder content inside <main> on each route.",
-      "No route places /diretoria-b2g/ in the ladder with a recurring-direction trigger or scope; the URL appears only in global chrome/footer.",
-    ],
-    probable_files: [
-      "data/commercial/page-contract-eight.v1.json",
-      "scripts/commercial/render_public_catalog.mjs",
-      "scripts/commercial/render_eight_offer_contracts.mjs",
-    ],
-    evidence: [
-      "report.json",
-      "screenshots/entregas-1366x768-decision-nav.png",
-    ],
-  });
-}
+report.defects = buildCommercialDefects(report.routes, allErrors);
 report.summary = {
   pass: report.routes.filter(({ result }) => result === "PASS").length,
   defect: report.routes.filter(({ result }) => result === "DEFECT").length,
@@ -699,6 +684,6 @@ report.summary = {
   broken_links: report.links.broken.length,
 };
 fs.writeFileSync(path.join(outputDir, "report.json"), `${JSON.stringify(report, null, 2)}\n`, "utf8");
-publishOutputAtomically();
+publishEvidenceAtomically({ repoRoot: ROOT, workingDir: outputDir, finalOutputDir });
 console.log("DELIVERABLES_LIVE_AUDIT", JSON.stringify(report.summary));
 if (report.summary.defect || report.summary.broken_links) process.exitCode = 1;

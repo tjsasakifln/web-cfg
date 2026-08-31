@@ -117,12 +117,17 @@ não uma terceira iniciativa.
 
 ## Comandos reproduzidos
 
+Este diretório é o snapshot histórico imutável do schema 1.0. A ferramenta
+contemporânea recusa sobrescrevê-lo; novas execuções devem usar outro diretório
+ou `/tmp` para não misturar o estado de captura anterior à #540 com evidência
+full-page materializada.
+
 ```sh
 git fetch origin --prune
 node scripts/site/runtime_authority.mjs --live
 npm run audit:deliverables-live -- \
   --base=https://confenge.com.br \
-  --out=docs/evidence/issue-530-live-2026-08-31
+  --out=/tmp/confenge-deliverables-live-v2
 npm run test:deliverables-registry
 npm run test:page-contract-eight
 npm run test:value-first-copy
