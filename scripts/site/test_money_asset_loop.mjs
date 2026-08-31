@@ -83,7 +83,7 @@ const indexability = JSON.parse(
     if (sitemap.includes("diagnostico-defesa-margem")) fail("sitemap_must_omit_while_not_indexable");
     if (indexability.html_noindex !== true || indexability.in_sitemap !== false) fail("indexability_inconsistent", indexability);
   }
-  if (!pageHtml.includes("Quero uma segunda leitura deste contrato")) fail("cta_copy");
+  if (!pageHtml.includes("Registrar pedido de segunda leitura deste contrato")) fail("cta_copy");
   if (!pageHtml.includes('action="/.netlify/functions/lead"') || !pageHtml.includes('data-receipt-required="true"')) {
     fail("receipt_required_form_action");
   }
@@ -385,7 +385,7 @@ hidden.push(
 const submitBtn = makeEl({
   type: "submit",
   tagName: "BUTTON",
-  textContent: "Quero uma segunda leitura deste contrato",
+  textContent: "Registrar pedido de segunda leitura deste contrato",
   attrs: {
     "data-event-name": "cta_click",
     "data-asset-id": "diagnostico-defesa-margem",
