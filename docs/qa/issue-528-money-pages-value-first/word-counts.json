@@ -5,7 +5,7 @@
   "tokenization": "scripts/commercial/value_first_copy_audit.mjs#visibleText then whitespace split",
   "routes": [
     { "route": "/servicos-obras-publicas/", "before": 734, "after": 724, "delta": -10 },
-    { "route": "/diagnostico-b2g-expansao/", "before": 1038, "after": 1025, "delta": -13 },
+    { "route": "/diagnostico-b2g-expansao/", "before": 1038, "after": 1028, "delta": -10 },
     { "route": "/bid-room-licitacoes-obras/", "before": 1286, "after": 1237, "delta": -49 },
     { "route": "/defesa-margem-contratos-publicos/", "before": 1318, "after": 1316, "delta": -2 },
     { "route": "/atrasos-prorrogacao-obras-publicas/", "before": 1242, "after": 1220, "delta": -22 },
