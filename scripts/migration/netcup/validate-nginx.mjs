@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -165,7 +165,7 @@ ${normalizeWrapper("confenge-web-public.conf")}
   const wrapperPort = wrapperBinding.match(/:(\d+)$/)?.[1];
   if (!wrapperPort) throw new Error(`cannot determine nginx wrapper test port from ${wrapperBinding}`);
   const privacyClient = createOriginClient({
-    label: "nginx-wrapper-privacy",
+    label: "nginx-wrapper-public-privacy",
     baseUrl: `http://127.0.0.1:${wrapperPort}`,
     hostHeader: "confenge.com.br",
   });
@@ -185,32 +185,50 @@ ${normalizeWrapper("confenge-web-public.conf")}
     "198.51.100.49",
     "privacy-canary-user-agent/1",
     "5511988887766",
+    "privacy-canary-referer-442",
+    "privacy-canary-cookie-442",
   ];
-  const privacyResponse = await privacyClient.request(
-    `/privacy-canary/${encodeURIComponent(piiMarkers[0])}?phone=${piiMarkers[3]}`,
-    {
-      extraHeaders: {
-        "User-Agent": piiMarkers[2],
-        "X-Forwarded-For": piiMarkers[1],
-        "X-Request-Id": piiMarkers[0],
-      },
-    },
+  const privacyPath = `/privacy-canary/${encodeURIComponent(piiMarkers[0])}?phone=${piiMarkers[3]}`;
+  const privacyHeaders = {
+    "User-Agent": piiMarkers[2],
+    "X-Forwarded-For": piiMarkers[1],
+    "X-Request-Id": piiMarkers[0],
+    Referer: `https://outside.invalid/${piiMarkers[4]}?email=${encodeURIComponent(piiMarkers[0])}`,
+    Cookie: `__Host-session=${piiMarkers[5]}`,
+  };
+  const publicPrivacyResponse = await privacyClient.request(privacyPath, { extraHeaders: privacyHeaders });
+  assertProbe("public_minimized_log_probe_status", publicPrivacyResponse.status === 301, `status=${publicPrivacyResponse.status}`);
+  // The candidate origin is deliberately bound to loopback inside the host.
+  // Exercise that exact boundary from inside the container rather than
+  // weakening the checked-in bind address for a test-only published port.
+  execFileSync(
+    "docker",
+    [
+      "exec",
+      wrapperContainer,
+      "wget",
+      "-q",
+      "-O",
+      "/dev/null",
+      "--header",
+      "Host: confenge.com.br",
+      "--header",
+      `User-Agent: ${piiMarkers[2]}`,
+      "--header",
+      `X-Forwarded-For: ${piiMarkers[1]}`,
+      "--header",
+      `X-Request-Id: ${piiMarkers[0]}`,
+      "--header",
+      `Referer: ${privacyHeaders.Referer}`,
+      "--header",
+      `Cookie: ${privacyHeaders.Cookie}`,
+      `http://127.0.0.1:8088/?uri=${encodeURIComponent(piiMarkers[0])}&phone=${piiMarkers[3]}`,
+    ],
+    { stdio: "ignore", timeout: 30_000 },
   );
-  assertProbe("minimized_log_probe_status", privacyResponse.status === 301, `status=${privacyResponse.status}`);
+  assertProbe("origin_minimized_log_probe_status", true, "loopback request failed");
   execFileSync("docker", ["kill", "--signal", "USR1", wrapperContainer], { stdio: "ignore", timeout: 30_000 });
   await new Promise((done) => setTimeout(done, 100));
-  const privacyLog = execFileSync(
-    "docker",
-    ["exec", wrapperContainer, "cat", "/var/log/nginx/confenge-web-access.log"],
-    { encoding: "utf8", timeout: 30_000 },
-  );
-  assertProbe(
-    "minimized_log_no_raw_pii",
-    piiMarkers.every((marker) => !privacyLog.includes(marker)),
-    "access log contained a raw privacy canary",
-  );
-  const privacyLogLines = privacyLog.trim().split("\n").filter(Boolean);
-  assertProbe("minimized_log_emitted", privacyLogLines.length >= 2, `lines=${privacyLogLines.length}`);
   const allowedLogKeys = [
     "bytes",
     "content_class",
@@ -223,13 +241,42 @@ ${normalizeWrapper("confenge-web-public.conf")}
     "upstream_class",
     "upstream_seconds",
   ];
-  for (const line of privacyLogLines) {
-    assertProbe(
-      "minimized_log_schema",
-      JSON.stringify(Object.keys(JSON.parse(line)).sort()) === JSON.stringify(allowedLogKeys),
-      line,
+  for (const [label, logPath] of [
+    ["public", "/var/log/nginx/confenge-web-access.log"],
+    ["origin", "/var/log/nginx/confenge-web-origin-access.log"],
+  ]) {
+    const privacyLog = execFileSync(
+      "docker",
+      ["exec", wrapperContainer, "cat", logPath],
+      { encoding: "utf8", timeout: 30_000 },
     );
+    assertProbe(
+      `${label}_minimized_log_no_raw_pii`,
+      piiMarkers.every((marker) => !privacyLog.includes(marker)),
+      `${logPath} contained a raw privacy canary`,
+    );
+    const privacyLogLines = privacyLog.trim().split("\n").filter(Boolean);
+    assertProbe(`${label}_minimized_log_emitted`, privacyLogLines.length >= 1, `lines=${privacyLogLines.length}`);
+    for (const line of privacyLogLines) {
+      assertProbe(
+        `${label}_minimized_log_schema`,
+        JSON.stringify(Object.keys(JSON.parse(line)).sort()) === JSON.stringify(allowedLogKeys),
+        line,
+      );
+    }
   }
+  const nginxLogs = spawnSync("docker", ["logs", wrapperContainer], {
+    encoding: "utf8",
+    timeout: 30_000,
+  });
+  if (nginxLogs.error) throw nginxLogs.error;
+  if (nginxLogs.status !== 0) throw new Error(`docker logs failed: ${nginxLogs.stderr || nginxLogs.stdout}`);
+  const nginxProcessLog = `${nginxLogs.stdout || ""}\n${nginxLogs.stderr || ""}`;
+  assertProbe(
+    "nginx_error_stream_no_raw_pii",
+    piiMarkers.every((marker) => !nginxProcessLog.includes(marker)),
+    "nginx stdout/stderr contained a raw privacy canary",
+  );
 
   container = execFileSync(
     "docker",
@@ -270,6 +317,16 @@ ${normalizeWrapper("confenge-web-public.conf")}
     }
   }
   if (!ready) throw new Error("nginx test container did not become ready");
+
+  const ops = await client.request("/ops/");
+  const opsCacheControl = String(ops.headers["cache-control"] || "").toLowerCase();
+  assertProbe("ops_200", ops.status === 200, `status=${ops.status}`);
+  assertProbe(
+    "ops_cache_no_store_no_transform",
+    opsCacheControl.split(",").map((token) => token.trim()).includes("no-store") &&
+      opsCacheControl.split(",").map((token) => token.trim()).includes("no-transform"),
+    `cache-control=${opsCacheControl}`,
+  );
 
   const obrigado = await client.request("/obrigado?host_contract=1");
   assertProbe("obrigado_200", obrigado.status === 200, `status=${obrigado.status}`);

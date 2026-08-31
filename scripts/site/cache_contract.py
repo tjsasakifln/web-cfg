@@ -99,8 +99,13 @@ def evaluate_cache_contract(
         errors.append("HTML default must set no-transform to prevent edge script injection")
 
     private_ops = parsed.get("/ops/*", {}).get("cache-control", "")
-    if private_ops.lower() != "no-store":
-        errors.append("/ops/* private surfaces must use Cache-Control: no-store")
+    private_ops_directives = {
+        directive.strip().lower() for directive in private_ops.split(",") if directive.strip()
+    }
+    if not {"no-store", "no-transform"}.issubset(private_ops_directives):
+        errors.append(
+            "/ops/* private surfaces must use Cache-Control: no-store, no-transform"
+        )
 
     identity = parsed.get("/.well-known/build-info.json", {}).get("cache-control", "")
     if not identity:

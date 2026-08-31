@@ -3,6 +3,7 @@
  * No I/O — unit-testable without mocks of the unit under test.
  */
 const crypto = require("crypto");
+const net = require("net");
 const { validateCnpj } = require("../../../scripts/conversion/cnpj.cjs");
 
 const MAX_BODY_BYTES = 24 * 1024;
@@ -1170,6 +1171,73 @@ function publicErrorBody({ error, message }) {
 }
 
 const SENSITIVE_LOG_KEY = /(?:^|_)(?:authorization|bearer|cnpj|cpf|email|ip|mail|message|mensagem|name|nome|phone|secret|tel|token|whatsapp|file|arquivo|anexo|document|upload|eicar)(?:_|$)/i;
+const SAFE_LOG_LEVELS = new Set(["error", "warn", "info"]);
+const SAFE_LOG_EVENT_RE = /^[a-z][a-z0-9_]{0,63}$/;
+const SAFE_LOG_TOKEN_RE = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/;
+const RAW_IPV4_RE = /(?:^|[^0-9])(?:\d{1,3}\.){3}\d{1,3}(?:$|[^0-9])/;
+const SAFE_LOG_BOOLEAN_AGGREGATE_KEYS = new Set(["has_email", "has_phone"]);
+
+// Application logs are an operational event stream, not a request dump. New
+// fields fail closed until explicitly classified here; request headers, URLs,
+// query strings and free text therefore cannot silently migrate from access
+// logs into stdout/stderr.
+const SAFE_LOG_FIELD_KEYS = new Set([
+  "action",
+  "applied",
+  "attempt",
+  "attempted",
+  "attempts",
+  "auto_send_off",
+  "classifier",
+  "code",
+  "contact_kind",
+  "contract",
+  "count",
+  "decision_state",
+  "delivered",
+  "durable_store_failed",
+  "eligible",
+  "error",
+  "fallback_kind",
+  "flag",
+  "fp",
+  "handoff",
+  "has_context",
+  "has_email",
+  "has_phone",
+  "has_site",
+  "held",
+  "http",
+  "idempotent",
+  "latency_ms",
+  "lead_id",
+  "journey",
+  "manifest_sha256",
+  "offer_id",
+  "policy_version",
+  "prazo",
+  "receipt_id",
+  "record_kind",
+  "recorte",
+  "rejected",
+  "replay",
+  "requeued",
+  "reason",
+  "retryable",
+  "segment_count",
+  "selected",
+  "send",
+  "snapshot_id",
+  "status",
+  "stage_len",
+  "subscription_id",
+  "synthetic",
+  "to",
+  "track",
+  "uf",
+  "via",
+  "xray_state",
+]);
 
 function redactSensitiveText(value) {
   let text = String(value == null ? "" : value);
@@ -1178,8 +1246,10 @@ function redactSensitiveText(value) {
   } catch {
     // Keep malformed percent-encoding printable, then apply the same guards.
   }
+  if (net.isIP(text.trim()) !== 0) return "[redacted]";
   return text
     .replaceAll(EICAR_SIGNATURE, "[redacted]")
+    .replace(RAW_IPV4_RE, (match) => match.replace(/(?:\d{1,3}\.){3}\d{1,3}/, "[redacted]"))
     .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, "[redacted]")
     .replace(/\b\d{3}[.-]?\d{3}[.-]?\d{3}-?\d{2}\b/g, "[redacted]")
     .replace(/\b\d{2}[.\s]?\d{3}[.\s]?\d{3}[\/]?\d{4}-?\d{2}\b/g, "[redacted]")
@@ -1193,26 +1263,47 @@ function redactSensitiveText(value) {
 function sanitizeLogFields(fields) {
   const safe = {};
   for (const [key, value] of Object.entries(fields && typeof fields === "object" ? fields : {})) {
+    if (!SAFE_LOG_FIELD_KEYS.has(key)) continue;
     if (SENSITIVE_LOG_KEY.test(key)) {
-      safe[key] = typeof value === "boolean" ? value : "[redacted]";
+      if (SAFE_LOG_BOOLEAN_AGGREGATE_KEYS.has(key) && typeof value === "boolean") safe[key] = value;
       continue;
     }
-    if (typeof value === "string") safe[key] = redactSensitiveText(value);
-    else if (typeof value === "number" || typeof value === "boolean" || value == null) safe[key] = value;
-    else safe[key] = "[redacted]";
+    if (typeof value === "number") {
+      if (Number.isFinite(value)) safe[key] = value;
+      continue;
+    }
+    if (typeof value === "boolean" || value == null) {
+      safe[key] = value;
+      continue;
+    }
+    if (typeof value !== "string") continue;
+    const text = value.slice(0, 128);
+    if (
+      !SAFE_LOG_TOKEN_RE.test(text) ||
+      RAW_IPV4_RE.test(text) ||
+      net.isIP(text) !== 0 ||
+      text.split(":").length > 2 ||
+      redactSensitiveText(text) !== text
+    ) {
+      safe[key] = "[redacted]";
+      continue;
+    }
+    safe[key] = text;
   }
   return safe;
 }
 
 /** Structured log line — defense-in-depth redaction even if a caller errs. */
 function safeLog(level, event, fields) {
+  const safeLevel = SAFE_LOG_LEVELS.has(level) ? level : "error";
+  const safeEvent = SAFE_LOG_EVENT_RE.test(String(event || "")) ? String(event) : "invalid_event";
   const line = JSON.stringify({
     ts: new Date().toISOString(),
-    level,
-    event,
+    level: safeLevel,
+    event: safeEvent,
     ...sanitizeLogFields(fields),
   });
-  if (level === "error") console.error(line);
+  if (safeLevel === "error") console.error(line);
   else console.log(line);
 }
 
