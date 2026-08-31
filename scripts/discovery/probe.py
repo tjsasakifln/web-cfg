@@ -23,6 +23,7 @@ from scripts.discovery.inspect import (
     parse_html,
     path_blocked_by_robots,
     robots_disallows,
+    robots_target_from_url,
 )
 from scripts.discovery.observation import (
     REASON_CANONICAL_DIVERGENT,
@@ -316,8 +317,10 @@ def probe_asset(
     robots_text = robots_resp.text if robots_resp.body else ""
     robots_blocked = False
     if robots_resp.body and not robots_resp.unavailable:
-        parsed_path = urlparse(canonical).path or "/"
-        robots_blocked = path_blocked_by_robots(parsed_path, robots_text)
+        parsed_path = robots_target_from_url(canonical)
+        robots_blocked = path_blocked_by_robots(
+            parsed_path, robots_text, user_agent=user_agent
+        )
     if robots_blocked:
         reasons.append(REASON_ROBOTS_BLOCKING)
 
@@ -399,7 +402,11 @@ def probe_asset(
             "url": robots_url,
             "status": robots_resp.status,
             "blocked": robots_blocked,
-            "disallows": robots_disallows(robots_text) if robots_text else [],
+            "disallows": (
+                robots_disallows(robots_text, user_agent=user_agent)
+                if robots_text
+                else []
+            ),
             "meta": robots_meta,
         },
         "indexability": indexable,

@@ -23,6 +23,7 @@ from scripts.discovery.campaign_overlay import (
     gsc_page_evidence,
     load_live_gsc_snapshot,
     inspect_local,
+    parse_robots_bot_policy,
     refuse_collapsed_stage,
 )
 from scripts.discovery.http_client import FakeTransport, ProbeResponse
@@ -73,6 +74,19 @@ def test_local_reproof_of_four_urls_and_no_new_public_path():
             assert cell["freshness"]
             assert cell["owner"]
             assert cell["next_action"]
+
+
+def test_bot_policy_distinguishes_named_override_from_wildcard_allow():
+    robots = """User-agent: *
+Disallow: /private/
+
+User-agent: Googlebot
+Allow: /private/
+"""
+    policy = parse_robots_bot_policy(robots, "/private/report")
+    assert policy["star_blocked"] is True
+    assert policy["bots"]["Googlebot"] == "allowed_via_named_group"
+    assert policy["bots"]["Bingbot"] == "disallowed"
 
 
 def test_stages_refuse_collapsed_counts():
