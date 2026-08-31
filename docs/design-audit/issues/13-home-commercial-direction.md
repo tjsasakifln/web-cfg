@@ -195,10 +195,31 @@ de `validate.py` que protegia o token `third_party` só quando a base citava
 `self_attested_not_upgraded` passou a ser derivado da contagem em vez de ser o
 literal `True`.
 
-**Geometria medida depois, `.hero` sobre viewport.** 390x844 de 1,19 para 1,017;
-430x932 0,917; 768x1024 0,830; 1024x768 0,808; 1366x768 0,897; 1440x900 0,765.
-O teto de `test_ui_geometry` é 1,25 e continua 1,25: a folga veio de tirar
-conteúdo da dobra e respiro do espaçamento, não de afrouxar o gate.
+**Geometria medida nos dois commits, `.hero` sobre viewport.** O teto de
+`test_ui_geometry` é 1,25 e não foi tocado.
+
+| viewport | antes | depois |
+|---|---|---|
+| 390x844 | 1,207 | **1,017** |
+| 430x932 | 1,066 | **0,917** |
+| 768x1024 | 0,997 | **0,830** |
+| 1024x768 | 0,808 | 0,808 |
+| 1366x768 | 0,897 | 0,897 |
+| 1440x900 | 0,765 | 0,765 |
+
+A leitura honesta deste resultado: **o ganho de altura existe de 390 a 768 de
+largura, e não existe de 1024 para cima.** Até 768 a grade do hero empilha,
+então a coluna do parecer entra na conta da altura e encurtá-la encurta a
+dobra. De 1024 para cima a grade é `align-items:center` e a coluna da esquerda
+sempre foi a mais alta: tirar dois números e uma nota da coluna da direita não
+encurta uma linha que a esquerda define. A altura é idêntica, 620px, 689px e
+689px.
+
+O que muda no desktop não é o tamanho da caixa, é a densidade dentro dela. A
+dobra passou a carregar menos coisa para ler e a escala foi para a faixa logo
+abaixo. Publicar os três viewports de desktop como se tivessem encolhido seria
+descrever a mudança errada. A folga que apareceu de 390 a 768 veio de tirar
+conteúdo da dobra e respiro do espaçamento, nunca de afrouxar o gate.
 
 ---
 
