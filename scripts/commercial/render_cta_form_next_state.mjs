@@ -58,6 +58,13 @@ function replaceMarker(body, marker, text, className) {
   return `<p class="${className}" ${marker}>${escapeHtml(text)}</p>\n${cleaned}`;
 }
 
+function removeMarker(body, marker) {
+  return body.replace(new RegExp(
+    `<([a-z][a-z0-9:-]*)\\b(?=[^>]*\\b${marker}(?:\\s|=|>))[^>]*>[\\s\\S]*?<\\/\\1>\\s*`,
+    "gi",
+  ), "");
+}
+
 function appendBoundary(body, text) {
   const pattern = /<([a-z][a-z0-9:-]*)\b(?=[^>]*\bdata-form-boundary(?:\s|=|>))[^>]*>[\s\S]*?<\/\1>\s*/gi;
   const privacy = "Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da";
@@ -162,6 +169,16 @@ function updateMainActions(html) {
   ));
 }
 
+function relocateDeliveryContract(html) {
+  const valueAndPurpose = "Descreva a decisão; a resposta indica entrega, ordem e insumos. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.";
+  const boundary = "O pedido fica registrado, sem cobrança ou contratação. Preço e escopo exigem aceite. Uso só para retorno; retenção: 730 dias. Exclusão com protocolo pela";
+  const replacement = `$1\n<p data-form-value data-field-purpose>${escapeHtml(valueAndPurpose)}</p>\n<p data-form-boundary>${escapeHtml(boundary)} <a href="/privacidade/">Política de Privacidade</a>.</p>\n$2`;
+  return html.replace(
+    /(<div class="pillar-capture-copy">[\s\S]*?<h2\b[^>]*>[\s\S]*?<\/h2>)\s*<p\b[^>]*>[\s\S]*?<\/p>\s*<p\b[^>]*>[\s\S]*?<\/p>\s*(<\/div>)/i,
+    replacement,
+  );
+}
+
 function renderForm(full, open, body, surface) {
   const profileId = profileFor(surface);
   const profile = contract.profiles[profileId];
@@ -172,15 +189,20 @@ function renderForm(full, open, body, surface) {
   nextOpen = setAttr(nextOpen, "data-runtime-profile", runtime);
   nextOpen = setAttr(nextOpen, "data-receipt-required", "true");
   let nextBody = constrainSharedSelectors(constrainContact(body, runtime), runtime);
+  if (profileId === "delivery_selection") {
+    nextBody = removeMarker(removeMarker(removeMarker(nextBody, "data-form-value"), "data-field-purpose"), "data-form-boundary");
+    nextBody = updateSubmit(nextBody, profileId);
+    return `${nextOpen}${nextBody}</form>`;
+  }
   const hasStandardEmail = /\bname=["']email["']/i.test(nextBody);
   const hasStandardPhone = /\bname=["']telefone["']/i.test(nextBody);
-  const formatHint = hasStandardEmail && hasStandardPhone
+  const formatHint = profile.format_hint || (hasStandardEmail && hasStandardPhone
     ? " WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos."
     : hasStandardEmail
       ? " O e-mail precisa de domínio e extensão completos."
       : hasStandardPhone
         ? " O WhatsApp aceita DDD e 10 ou 11 dígitos."
-        : "";
+        : "");
   nextBody = replaceMarker(nextBody, "data-field-purpose", `${profile.field_purpose}${formatHint}`, "form-hint");
   nextBody = replaceMarker(nextBody, "data-form-value", profile.pre_form_value, "form-hint");
   nextBody = updateSubmit(nextBody, profileId);
@@ -199,7 +221,8 @@ function renderFile(html, surface) {
     return renderForm(full, open, body, surface);
   });
   if (matched !== 1) throw new Error(`CTA_FORM_RENDER_COUNT: ${surface.route} count=${matched}`);
-  return updateMainActions(next);
+  const actions = updateMainActions(next);
+  return profileFor(surface) === "delivery_selection" ? relocateDeliveryContract(actions) : actions;
 }
 
 const inventory = buildInventory();

@@ -119,9 +119,10 @@
       "commitment": "medium",
       "next_useful_state": "A decisão fica registrada para a CONFENGE indicar a entrega aplicável, a ordem de execução e os insumos que ainda precisam ser confirmados.",
       "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-      "pre_form_value": "Registre a decisão e, se souber, a entrega mais próxima para receber um enquadramento entre as unidades publicadas.",
-      "field_purpose": "A entrega selecionada orienta a comparação; nome e um canal válido permitem retorno; empresa e descrição da decisão são opcionais.",
-      "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado."
+      "pre_form_value": "Registre a decisão para enquadrar a entrega.",
+      "field_purpose": "Obrigatórios: nome, consentimento e um canal válido. Demais campos opcionais.",
+      "format_hint": " Contato: WhatsApp com DDD e 10/11 dígitos; e-mail completo.",
+      "boundary": "Sem cobrança; preço e escopo exigem aceite."
     },
     "configured_delivery_request": {
       "stage": "configure_scope",
