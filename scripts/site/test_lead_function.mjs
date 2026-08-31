@@ -1633,6 +1633,59 @@ _reset();
   pass("request_deletion_and_export_file_free");
 }
 
+// --- Canal de contato: presenca nao e validade (2026-08-31) ----------------
+// Antes disto, normalizePhone e normalizeEmail devolviam "" tanto para campo
+// vazio quanto para campo preenchido com lixo, e o servidor tratava os dois
+// como o mesmo caso. Um WhatsApp digitado errado sumia em silencio, e o
+// visitante que so tinha informado esse canal recebia "Informe WhatsApp ou
+// e-mail para retorno.", culpando-o por um campo que ele havia preenchido.
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const base = {
+    nome: "Tiago",
+    estagio: "Edital ou proposta em análise",
+    jornada: "edital",
+    consentimento: "on",
+    record_kind: "qa",
+    test_mode: true,
+  };
+
+  const rejects = [
+    ["telefone_invalido_sozinho", { telefone: "48988" }, "telefone", /WhatsApp/i],
+    ["telefone_invalido_com_email_valido", { telefone: "48988", email: "a@b.com.br" }, "telefone", /WhatsApp/i],
+    ["email_invalido_sozinho", { email: "asdf" }, "email", /E-mail/i],
+    ["email_sem_tld", { email: "a@b" }, "email", /E-mail/i],
+    ["telefone_longo_demais", { telefone: "4898834455912345678" }, "telefone", /WhatsApp/i],
+  ];
+  for (const [name, extra, field, messageRe] of rejects) {
+    const check = core.validateAndNormalize({ ...base, ...extra });
+    if (check.ok) fail(name, { reason: "aceitou valor incompativel", check });
+    else if (check.field !== field) fail(name, { reason: "campo errado", got: check.field, want: field });
+    else if (!messageRe.test(String(check.message || ""))) fail(name, { reason: "alerta sem o canal", message: check.message });
+    else pass(name);
+  }
+
+  // O caso generico continua existindo: nada informado segue sendo "faltou canal".
+  const empty = core.validateAndNormalize({ ...base });
+  if (empty.ok || empty.field || !/Informe WhatsApp ou e-mail/i.test(String(empty.message || ""))) {
+    fail("sem_canal_mantem_mensagem_generica", empty);
+  } else pass("sem_canal_mantem_mensagem_generica");
+
+  // Aceitos normalizam: o formato que o visitante digita nao e o que se grava.
+  const accepts = [
+    ["telefone_formatado_normaliza", { telefone: "(48) 98834-4559" }, (l) => l.telefone === "48988344559"],
+    ["telefone_com_ddi_normaliza", { telefone: "+55 48 98834-4559" }, (l) => l.telefone === "5548988344559"],
+    ["telefone_fixo_dez_digitos", { telefone: "48 3223-4455" }, (l) => l.telefone === "4832234455"],
+    ["email_maiusculo_normaliza", { email: "TIAGO@CONFENGE.COM.BR" }, (l) => l.email === "tiago@confenge.com.br"],
+  ];
+  for (const [name, extra, predicate] of accepts) {
+    const check = core.validateAndNormalize({ ...base, ...extra });
+    if (!check.ok) fail(name, { reason: "recusou valor valido", check });
+    else if (!predicate(check.lead)) fail(name, { reason: "nao normalizou", lead: { telefone: check.lead.telefone, email: check.lead.email } });
+    else pass(name);
+  }
+}
+
 console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
 // cleanup store dir
 try {

@@ -798,9 +798,18 @@ function validateAndNormalize(data) {
   }
 
   const nome = clamp(data.nome || data.name, MAX_FIELD.nome);
-  const telefone = normalizePhone(data.telefone || data.whatsapp || data.phone || data.tel);
+  // Presenca e validade sao coisas diferentes. normalizePhone e normalizeEmail
+  // devolvem "" nos dois casos, e ate 2026-08-31 o servidor tratava os dois
+  // como o mesmo: um WhatsApp digitado errado era descartado em silencio, e o
+  // visitante que so tinha informado esse canal recebia "Informe WhatsApp ou
+  // e-mail para retorno." Ele TINHA informado. A mensagem culpava o visitante
+  // por um campo que ele preencheu, e nao dizia o que estava errado.
+  const rawTelefone = clamp(data.telefone || data.whatsapp || data.phone || data.tel, MAX_FIELD.telefone);
+  const rawEmail = clamp(data.email, MAX_FIELD.email);
+  const telefone = normalizePhone(rawTelefone);
+  const normalizedEmail = normalizeEmail(rawEmail);
   // On a Radar order the delivery e-mail is also the contact channel.
-  const email = normalizeEmail(data.email) || (radarParams ? radarParams.email_entrega : "");
+  const email = normalizedEmail || (radarParams ? radarParams.email_entrega : "");
   const estagio = clamp(data.estagio || data.tipo_demanda || data.demand_type, MAX_FIELD.estagio);
   const jornada = normalizeJourney(data.jornada || data.journey, estagio);
   const consentRaw = data.consentimento ?? data.consent ?? data.lgpd;
@@ -818,6 +827,28 @@ function validateAndNormalize(data) {
       status: 400,
       error: "validation",
       message: "Informe seu nome.",
+    };
+  }
+  // Recusar antes de "faltou canal": quem digitou algo precisa saber o que
+  // estava errado no que digitou, nao ser informado de que nao digitou nada.
+  if (rawTelefone && !telefone) {
+    return {
+      ok: false,
+      status: 400,
+      error: "validation",
+      field: "telefone",
+      message:
+        "WhatsApp invalido. Informe DDD e numero, com 10 ou 11 digitos. Exemplo: (48) 98834-4559.",
+    };
+  }
+  if (rawEmail && !normalizedEmail) {
+    return {
+      ok: false,
+      status: 400,
+      error: "validation",
+      field: "email",
+      message:
+        "E-mail invalido. Informe um endereco completo, como nome@empresa.com.br.",
     };
   }
   if (!telefone && !email) {
