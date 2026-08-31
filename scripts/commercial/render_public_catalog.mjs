@@ -397,15 +397,15 @@ function renderOfferLadder(contract) {
   if (!ladder) throw new Error("PUBLIC_VALUE_LADDER_MISSING");
   return `<section class="offer-value-ladder" data-offer-ladder="unit-diagnosis-recurring" aria-labelledby="offer-value-ladder-title">
 <header><p class="eyebrow">Próxima camada pelo tipo de decisão</p><h3 id="offer-value-ladder-title">Unidade, Diagnóstico ou direção recorrente?</h3><p>A escolha começa pelo gatilho e pelo escopo da decisão, não apenas pelo preço.</p></header>
-<ol><li><strong>Uma unidade basta</strong><span>Quando há uma pergunta delimitada e o recorte permanece nos eixos declarados na oferta.</span></li>
-<li><strong>Diagnóstico integrado</strong><span>Quando ${escapeHtml(ladder.diagnosis_trigger)}, o ${escapeHtml(pkg.public_name_pt_br)} reúne ${escapeHtml(ladder.diagnosis_scope)} por ${escapeHtml(pkg.package_price_display)}.</span></li>
-<li><strong>Direção recorrente</strong><span>Quando ${escapeHtml(ladder.recurring_direction_trigger)}, a <a href="${escapeHtml(ladder.recurring_direction_route)}">${escapeHtml(ladder.recurring_direction_name_pt_br)}</a> assume ${escapeHtml(ladder.recurring_direction_scope)}.</span></li></ol>
+<ol><li data-ladder-step="unit"><strong>Uma unidade basta</strong><span>Quando há uma pergunta delimitada e o recorte permanece nos eixos declarados na oferta.</span></li>
+<li data-ladder-step="diagnosis"><strong>Diagnóstico integrado</strong><span>Quando ${escapeHtml(ladder.diagnosis_trigger)}, o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-offer-summary" data-cta-position="offer_summary" data-event-name="cta_click" href="${escapeHtml(ladder.diagnosis_route)}">${escapeHtml(pkg.public_name_pt_br)}</a> reúne ${escapeHtml(ladder.diagnosis_scope)} por ${escapeHtml(pkg.package_price_display)}.</span></li>
+<li data-ladder-step="recurring"><strong>Direção recorrente</strong><span>Quando ${escapeHtml(ladder.recurring_direction_trigger)}, a <a href="${escapeHtml(ladder.recurring_direction_route)}">${escapeHtml(ladder.recurring_direction_name_pt_br)}</a> assume ${escapeHtml(ladder.recurring_direction_scope)}.</span></li></ol>
 <dl class="compare-ladder-figures">
 <div><dt>Faixa por unidade</dt><dd>R$ 599 a R$ 3.750</dd></div>
 <div><dt>As sete unidades, uma a uma</dt><dd>${escapeHtml(pkg.units_sum_display)}</dd></div>
 <div><dt>${escapeHtml(pkg.public_name_pt_br)}</dt><dd>${escapeHtml(pkg.package_price_display)}</dd></div>
 </dl>
-<p class="compare-note">Sete ofertas geram um único crédito, sem acúmulo, se o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-offer-summary" data-cta-position="offer_summary" data-event-name="cta_click" href="${escapeHtml(ladder.diagnosis_route)}">${escapeHtml(pkg.public_name_pt_br)}</a> for contratado em até ${pkg.credit_window_days} dias. A unidade 01 fica fora do Diagnóstico e não gera crédito de ${pkg.credit_window_days} dias. A diferença entre ${escapeHtml(pkg.units_sum_display)} e ${escapeHtml(pkg.package_price_display)} é R$ 4.280. Os exemplos usam dados sintéticos; não representam cliente real.</p>
+<p class="compare-note">Sete ofertas geram um único crédito, sem acúmulo, se o ${escapeHtml(pkg.public_name_pt_br)} for contratado em até ${pkg.credit_window_days} dias. A unidade 01 fica fora do Diagnóstico e não gera crédito de ${pkg.credit_window_days} dias. A diferença entre ${escapeHtml(pkg.units_sum_display)} e ${escapeHtml(pkg.package_price_display)} é R$ 4.280. Os exemplos usam dados sintéticos; não representam cliente real.</p>
 </section>`;
 }
 

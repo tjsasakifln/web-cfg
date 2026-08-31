@@ -50,9 +50,9 @@ function offerLadder(contract, item) {
   if (!ladder) throw new Error("EIGHT_VALUE_LADDER_MISSING");
   return `<section class="eight-contract__ladder" data-offer-ladder="unit-diagnosis-recurring" aria-labelledby="eight-ladder-${item.number}">
 <p class="eyebrow">Próxima camada pelo tipo de decisão</p><h3 id="eight-ladder-${item.number}">Unidade, Diagnóstico ou direção recorrente?</h3>
-<ol><li><strong>Esta unidade basta</strong><span>Quando a decisão é ${escapeHtml(lowerFirst(item.value_first.actual_contract_value))} O recorte continua limitado a ${escapeHtml(item.objeto_incluido)}.</span></li>
-<li><strong>Diagnóstico integrado</strong><span>É necessário quando ${escapeHtml(ladder.diagnosis_trigger)}. O <a href="${escapeHtml(ladder.diagnosis_route)}">${escapeHtml(contract.package.public_name_pt_br)}</a> reúne ${escapeHtml(ladder.diagnosis_scope)} por ${escapeHtml(contract.package.package_price_display)}. ${diagnosisBoundary(contract, item)}</span></li>
-<li><strong>Direção recorrente</strong><span>A <a href="${escapeHtml(ladder.recurring_direction_route)}">${escapeHtml(ladder.recurring_direction_name_pt_br)}</a> é apropriada quando ${escapeHtml(ladder.recurring_direction_trigger)}; seu escopo é ${escapeHtml(ladder.recurring_direction_scope)}.</span></li></ol>
+<ol><li data-ladder-step="unit"><strong>Esta unidade basta</strong><span>Quando a decisão é ${escapeHtml(lowerFirst(item.value_first.actual_contract_value))} O recorte continua limitado a ${escapeHtml(item.objeto_incluido)}.</span></li>
+<li data-ladder-step="diagnosis"><strong>Diagnóstico integrado</strong><span>É necessário quando ${escapeHtml(ladder.diagnosis_trigger)}. O <a href="${escapeHtml(ladder.diagnosis_route)}">${escapeHtml(contract.package.public_name_pt_br)}</a> reúne ${escapeHtml(ladder.diagnosis_scope)} por ${escapeHtml(contract.package.package_price_display)}. ${diagnosisBoundary(contract, item)}</span></li>
+<li data-ladder-step="recurring"><strong>Direção recorrente</strong><span>A <a href="${escapeHtml(ladder.recurring_direction_route)}">${escapeHtml(ladder.recurring_direction_name_pt_br)}</a> é apropriada quando ${escapeHtml(ladder.recurring_direction_trigger)}; seu escopo é ${escapeHtml(ladder.recurring_direction_scope)}.</span></li></ol>
 </section>`;
 }
 

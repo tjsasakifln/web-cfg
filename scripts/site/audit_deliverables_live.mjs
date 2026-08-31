@@ -303,7 +303,11 @@ async function inspectPage(page, expected) {
     // in global chrome/footer or an incidental mention elsewhere on the page.
     const ladderNodes = [...document.querySelectorAll("main [data-offer-ladder]")];
     const ladderText = normalize(ladderNodes.map((node) => node.textContent).join(" "));
-    const ladderLinks = ladderNodes.flatMap((node) => [...node.querySelectorAll("a[href]")].map((link) => ({
+    const diagnosisLinks = ladderNodes.flatMap((node) => [...node.querySelectorAll('[data-ladder-step="diagnosis"] a[href]')].map((link) => ({
+      href: link.getAttribute("href"),
+      text: normalize(link.textContent),
+    })));
+    const recurringLinks = ladderNodes.flatMap((node) => [...node.querySelectorAll('[data-ladder-step="recurring"] a[href]')].map((link) => ({
       href: link.getAttribute("href"),
       text: normalize(link.textContent),
     })));
@@ -347,8 +351,8 @@ async function inspectPage(page, expected) {
         has_credit_window: ladderText.includes(`${routeExpected.package.credit_window_days} dias`),
         promises_credit: /(?:volta como crédito|valor (?:pago )?é abatido|abate o valor)/i.test(ladderText),
         says_unit_01_has_no_credit: /(?:únic[oa] sem o crédito|não gera crédito|fora do diagnóstico)/i.test(ladderText),
-        diagnosis_link: ladderLinks.some(({ href }) => href === "/diagnostico-b2g-expansao/"),
-        recurring_direction_context: ladderLinks.some(({ href, text: label }) => href === "/diretoria-b2g/" && /recorr|direção|diretoria/i.test(label)),
+        diagnosis_link: diagnosisLinks.some(({ href }) => href === "/diagnostico-b2g-expansao/"),
+        recurring_direction_context: recurringLinks.some(({ href, text: label }) => href === "/diretoria-b2g/" && /recorr|direção|diretoria/i.test(label)),
       },
       schema: {
         parse_errors: jsonLd.filter((entry) => entry.parse_error).length,

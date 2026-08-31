@@ -213,14 +213,16 @@ for (const d of dels) {
   const pageHtml = fs.readFileSync(abs, "utf8");
   const ladderHtml = pageHtml.match(/<section\b[^>]*data-offer-ladder="unit-diagnosis-recurring"[\s\S]*?<\/section>/i)?.[0] || "";
   const ladderText = textFromHtml(ladderHtml);
+  const diagnosisStep = ladderHtml.match(/<li\b[^>]*data-ladder-step="diagnosis"[\s\S]*?<\/li>/i)?.[0] || "";
+  const recurringStep = ladderHtml.match(/<li\b[^>]*data-ladder-step="recurring"[\s\S]*?<\/li>/i)?.[0] || "";
   assert(`pagina_escada_explicita_${n}`, Boolean(ladderHtml), d.file);
   assert(`pagina_escada_diagnostico_${n}`,
-    ladderHtml.includes(`href="${ladder.diagnosis_route}"`) && ladderHtml.includes(contract.package.package_price_display),
-    ladderHtml.slice(0, 240));
+    diagnosisStep.includes(`href="${ladder.diagnosis_route}"`) && diagnosisStep.includes(contract.package.package_price_display),
+    diagnosisStep.slice(0, 240));
   assert(`pagina_escada_direcao_${n}`,
-    ladderHtml.includes(`href="${ladder.recurring_direction_route}"`) &&
-      ladderHtml.includes(ladder.recurring_direction_trigger) && ladderHtml.includes(ladder.recurring_direction_scope),
-    ladderHtml.slice(0, 240));
+    recurringStep.includes(`href="${ladder.recurring_direction_route}"`) &&
+      recurringStep.includes(ladder.recurring_direction_trigger) && recurringStep.includes(ladder.recurring_direction_scope),
+    recurringStep.slice(0, 240));
   assert(`pagina_escada_unidade_por_decisao_e_escopo_${n}`,
     ladderText.toLocaleLowerCase("pt-BR").includes(d.value_first.actual_contract_value.toLocaleLowerCase("pt-BR")) &&
       ladderText.includes(d.objeto_incluido),
@@ -293,14 +295,17 @@ for (const d of dels) {
 }
 assert("hub_sem_css_contrato_bloqueante", !hubHtml.includes('/assets/eight-offer-contract.css'));
 const hubLadderHtml = hubHtml.match(/<section\b[^>]*data-offer-ladder="unit-diagnosis-recurring"[\s\S]*?<\/section>/i)?.[0] || "";
+const hubDiagnosisStep = hubLadderHtml.match(/<li\b[^>]*data-ladder-step="diagnosis"[\s\S]*?<\/li>/i)?.[0] || "";
+const hubRecurringStep = hubLadderHtml.match(/<li\b[^>]*data-ladder-step="recurring"[\s\S]*?<\/li>/i)?.[0] || "";
 assert("hub_escada_explicita", Boolean(hubLadderHtml), "data-offer-ladder ausente no hub");
 assert("hub_escada_por_gatilho_e_escopo",
   hubLadderHtml.includes(ladder.diagnosis_trigger) && hubLadderHtml.includes(ladder.diagnosis_scope) &&
     hubLadderHtml.includes(ladder.recurring_direction_trigger) && hubLadderHtml.includes(ladder.recurring_direction_scope),
   hubLadderHtml.slice(0, 300));
 assert("hub_escada_links_canonicos",
-  hubLadderHtml.includes(`href="${ladder.diagnosis_route}"`) &&
-    hubLadderHtml.includes(`href="${ladder.recurring_direction_route}"`),
+  hubDiagnosisStep.includes(`href="${ladder.diagnosis_route}"`) &&
+    hubDiagnosisStep.includes(contract.package.package_price_display) &&
+    hubRecurringStep.includes(`href="${ladder.recurring_direction_route}"`),
   hubLadderHtml.slice(0, 300));
 assert("hub_escada_d01_sem_credito",
   /unidade 01[\s\S]*fora do Diagnóstico[\s\S]*não gera crédito de 60 dias/i.test(hubLadderHtml),
