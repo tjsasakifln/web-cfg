@@ -1,0 +1,189 @@
+{
+  "schema": "confenge.cta-form-next-state/1.0",
+  "contract_version": "1.0.0",
+  "issue": "#532",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "Revenue, Conversion, Automation",
+  "time_to_evidence": "Immediate derived coverage and synthetic state smoke; qualified-opportunity evidence remains subject to the honest commercial observation window.",
+  "leverage": [
+    "revenue",
+    "customer",
+    "automation",
+    "trust"
+  ],
+  "hundred_repetition_test": "Every new declared capture surface inherits the same derived profile and gate; no route-by-route manual inventory is required.",
+  "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "source": "CONFENGE_WEB",
+  "analytics_pii_allowlist": [],
+  "allowed_stages": [
+    "inspect",
+    "calculate",
+    "compare",
+    "register_context",
+    "request_fit_review",
+    "configure_scope",
+    "talk"
+  ],
+  "allowed_commitments": [
+    "low",
+    "medium",
+    "commercial_configuration"
+  ],
+  "coverage": {
+    "manual_route_allowlist": false,
+    "authority": "data/organic/public-family-registry.json",
+    "rule": "Derive every lead-bearing public HTML form, including declared noindex commercial configuration steps, then exclude mutation on the six routes held by the frozen unlock plan.",
+    "expected_active_capture_routes": 21,
+    "expected_declared_ctas": 128
+  },
+  "invariants": [
+    "Turnstile is injected fail-closed into every production lead form.",
+    "The server persists before it returns lead_id or receipt_id.",
+    "Idempotency remains bound to the same receipt across a retry.",
+    "No file upload, checkout, calendar, new field or response SLA is introduced.",
+    "Consent, privacy, retention and safe-document-channel truth remain visible.",
+    "Analytics emit allowlisted categories and opaque receipts only; field values and PII never enter events.",
+    "The normalized source remains CONFENGE_WEB and commercial action remains in Warmbly."
+  ],
+  "field_purpose_policy": {
+    "required_optional_from_html": true,
+    "logical_contact_requirement": "When e-mail and WhatsApp are individually optional, the visible copy and server require at least one valid return channel.",
+    "no_new_fields": true
+  },
+  "event_semantics": [
+    "lead_form_start",
+    "lead_form_submit",
+    "lead_form_success",
+    "lead_persisted"
+  ],
+  "profile_derivation": [
+    {
+      "family_id": "home",
+      "profile": "general_triage"
+    },
+    {
+      "family_id": "casos-modelos-precificados",
+      "profile": "configured_delivery_request"
+    },
+    {
+      "family_id": "casos",
+      "profile": "case_evidence_review"
+    },
+    {
+      "family_id": "entregas",
+      "profile": "delivery_selection"
+    },
+    {
+      "family_id": "ferramentas",
+      "profile": "second_reading"
+    },
+    {
+      "family_id": "comercial-condicoes",
+      "profile": "paid_offer_parameters"
+    },
+    {
+      "terminal_action": "capture_form",
+      "profile": "service_fit_review"
+    }
+  ],
+  "profiles": {
+    "general_triage": {
+      "stage": "register_context",
+      "commitment": "medium",
+      "next_useful_state": "A situação fica registrada para triagem; o protocolo confirma a gravação e a confirmação indica qual decisão vem depois.",
+      "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
+      "pre_form_value": "Registre o contexto mínimo para a CONFENGE separar edital, contrato e operação e devolver o próximo enquadramento útil.",
+      "field_purpose": "Nome identifica o responsável; um canal válido permite retorno; o tipo de necessidade direciona a triagem. Empresa, urgência e contexto adicional são opcionais.",
+      "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo."
+    },
+    "service_fit_review": {
+      "stage": "request_fit_review",
+      "commitment": "medium",
+      "next_useful_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
+      "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+      "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE enquadrar a entrega, a prova necessária e a capacidade de atendimento.",
+      "field_purpose": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados.",
+      "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo."
+    },
+    "case_evidence_review": {
+      "stage": "register_context",
+      "commitment": "medium",
+      "next_useful_state": "O evento demonstrado fica registrado para identificar a prova faltante e o trabalho aplicável, sem tratar exemplo sintético como resultado de cliente.",
+      "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+      "pre_form_value": "Use o demonstrativo como referência e registre o evento real para a CONFENGE indicar qual prova falta e qual análise pode ser enquadrada.",
+      "field_purpose": "Nome identifica o responsável; um canal válido permite retorno; empresa e descrição do evento ajudam a ligar a situação ao demonstrativo e são opcionais.",
+      "boundary": "Os demonstrativos são sintéticos. O formulário não recebe arquivo, não cobra e não conclui contratação."
+    },
+    "delivery_selection": {
+      "stage": "compare",
+      "commitment": "medium",
+      "next_useful_state": "A decisão fica registrada para a CONFENGE indicar a entrega aplicável, a ordem de execução e os insumos que ainda precisam ser confirmados.",
+      "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+      "pre_form_value": "Registre a decisão e, se souber, a entrega mais próxima para receber um enquadramento entre as unidades publicadas.",
+      "field_purpose": "A entrega selecionada orienta a comparação; nome e um canal válido permitem retorno; empresa e descrição da decisão são opcionais.",
+      "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado."
+    },
+    "configured_delivery_request": {
+      "stage": "configure_scope",
+      "commitment": "commercial_configuration",
+      "next_useful_state": "O pedido da unidade escolhida fica registrado com recorte, data e decisão para confirmação de escopo e capacidade antes de qualquer cobrança.",
+      "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+      "pre_form_value": "Configure o recorte da unidade demonstrada para deixar um pedido rastreável, com data de corte e decisão explicitadas.",
+      "field_purpose": "CNPJ identifica a empresa; datas delimitam corte e prazo da decisão; intenção define o uso do artefato; nome e um canal válido permitem retorno. Empresa e recorte textual são opcionais.",
+      "boundary": "O formulário registra o pedido, mas não cobra nem conclui contratação. O exemplo permanece sintético e não representa resultado de cliente."
+    },
+    "second_reading": {
+      "stage": "request_fit_review",
+      "commitment": "medium",
+      "next_useful_state": "O contrato já lido fica vinculado ao pedido de segunda leitura; o protocolo confirma o registro para uma conferência humana contextual.",
+      "actual_receipt": "lead_id ou receipt_id persistido e correlacionado ao identificador público do contrato",
+      "pre_form_value": "Vincule a leitura pública a um pedido de conferência humana sem repetir os dados do contrato nem enviar documentos pelo site.",
+      "field_purpose": "O identificador público já vem da ferramenta; nome e um canal válido permitem retorno; o contexto adicional é opcional.",
+      "boundary": "A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior."
+    },
+    "paid_offer_parameters": {
+      "stage": "configure_scope",
+      "commitment": "commercial_configuration",
+      "next_useful_state": "Os parâmetros ficam registrados com uma referência que libera apenas a instrução comercial de pagamento para o mesmo pedido.",
+      "actual_receipt": "external_reference no formato cfg:offer_id:correlation_id após persistência",
+      "pre_form_value": "Defina empresa, território, segmentos e acervo para registrar exatamente o Radar que será produzido antes de pedir a instrução de pagamento.",
+      "field_purpose": "CNPJ identifica a contratante; recorte e segmentos delimitam a busca; cidade e raio são obrigatórios no recorte por cidade-base, e ao menos um segmento é obrigatório. Acervo orienta aderência; e-mail recebe a entrega; WhatsApp é opcional.",
+      "boundary": "O pagamento direto pelo site permanece desligado. Sem registro válido, não há referência nem instrução de pagamento; nenhum arquivo é enviado neste formulário."
+    }
+  },
+  "runtime_profiles": {
+    "shared_lead_form_v1": {
+      "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+      "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+      "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+      "loading": "Enviando…",
+      "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+      "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+      "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação.",
+      "mutation_state": "FROZEN_BY_533",
+      "authority": "docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md"
+    },
+    "inline_receipt_v1": {
+      "initial": "Pedido de enquadramento disponível com campos e limites visíveis.",
+      "validation_error": "O navegador mantém required e tipos antes do envio; o servidor recusa formato ou consentimento inválido.",
+      "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+      "loading": "Registrando pedido de enquadramento…",
+      "error": "O pedido continua não registrado e pode ser reenviado sem presumir protocolo.",
+      "success": "Pedido persistido; a confirmação mostra o protocolo e informa que o próximo estado é a revisão de enquadramento.",
+      "receipt": "lead_id ou receipt_id opaco devolvido pelo servidor."
+    },
+    "inline_reference_v1": {
+      "initial": "Configuração disponível; a etapa comercial permanece fechada.",
+      "validation_error": "Campos e ao menos um segmento são validados antes do registro.",
+      "turnstile_error": "Sem validação Turnstile, o servidor não grava parâmetros nem abre a etapa comercial.",
+      "loading": "Registrando parâmetros…",
+      "error": "Sem persistência não existe referência e a etapa comercial permanece fechada.",
+      "success": "Parâmetros persistidos; a referência abre somente a instrução comercial para o mesmo pedido.",
+      "receipt": "external_reference opaca no formato cfg:offer_id:correlation_id."
+    }
+  },
+  "whatsapp_relationship": {
+    "parallel_talk_path": "WhatsApp abre uma conversa com contexto e protocolo próprios; não simula a confirmação do formulário.",
+    "form_only": "A rota mantém o formulário como caminho comercial declarado; não inventa um segundo canal."
+  }
+}

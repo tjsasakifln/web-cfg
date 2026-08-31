@@ -72,6 +72,31 @@ function ensureCss(html, needle) {
   return html.replace(needle, `${needle}\n${link}`);
 }
 
+function renderActionLabels(html, item) {
+  const action = item.value_first?.cta_configure;
+  if (!action) throw new Error(`EIGHT_CTA_NEXT_STATE_MISSING: ${item.deliverable_id}`);
+  const fullLabel = `${action} por ${item.price_display}`;
+  return html.replace(
+    /<a\b([^>]*\bdata-next-action-id=["'][^"']+["'][^>]*)>([\s\S]*?)<\/a>/gi,
+    (_full, attrs, content) => {
+      let nextAttrs = attrs;
+      const href = attrs.match(/\bhref=["']([^"']+)["']/i)?.[1] || "";
+      const ariaLabel = /https:\/\/(?:wa\.me|api\.whatsapp\.com)\//i.test(href)
+        ? `${fullLabel} pelo WhatsApp`
+        : `${fullLabel}: abrir configuração do pedido`;
+      if (/\baria-label=["']/i.test(nextAttrs)) {
+        nextAttrs = nextAttrs.replace(/\baria-label=["'][^"']*["']/i, `aria-label="${escapeHtml(ariaLabel)}"`);
+      }
+      if (/<span\b/i.test(content)) {
+        const nextContent = content.replace(/<span\b[^>]*>[\s\S]*?<\/span>/i, `<span>${escapeHtml(action)}</span>`);
+        return `<a${nextAttrs}>${nextContent}</a>`;
+      }
+      const suffix = content.match(/\s*(<svg\b[\s\S]*)$/i)?.[1] || "";
+      return `<a${nextAttrs}>${escapeHtml(fullLabel)}${suffix ? ` ${suffix}` : ""}</a>`;
+    },
+  );
+}
+
 function renderRoute(html, contract, item) {
   let next = ensureCss(html, '<link href="/assets/report-capture.css" rel="stylesheet"/>');
   next = replaceBlock(next, ROUTE_START, ROUTE_END, routeBlock(contract, item), '<section class="report-capture"');
@@ -83,7 +108,7 @@ function renderRoute(html, contract, item) {
     if (!match) throw new Error(`capture form missing: ${item.file}`);
     next = next.replace(match[0], `${match[0]}\n${fields}`);
   }
-  return next;
+  return renderActionLabels(next, item);
 }
 
 function renderAll(contract) {
