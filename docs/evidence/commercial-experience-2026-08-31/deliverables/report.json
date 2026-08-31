@@ -1,11 +1,11 @@
 {
   "schema": "confenge.deliverables-live-audit/1.0",
   "issue": 547,
-  "generated_at": "2026-08-31T19:37:19.826Z",
-  "base_url": "http://127.0.0.1:8801",
-  "expected_main_sha": "38a61ade21399673b13a82902a3c0a5b36cb0216",
-  "live_sha": "38a61ade21399673b13a82902a3c0a5b36cb0216",
-  "artifact_hash": "efedafab40c3e3e6fc8cb1b5b0d7f581da35cbd544298e1f953f21f4233466b2",
+  "generated_at": "2026-08-31T21:10:27.136Z",
+  "base_url": "http://127.0.0.1:8803",
+  "expected_main_sha": "0054a86ecbd81372685eb7e1c32e6fac2e41a543",
+  "live_sha": "0054a86ecbd81372685eb7e1c32e6fac2e41a543",
+  "artifact_hash": "476da1402e15006b49294041e6c0c2aefd1d39e505adddae28d7703b796dc39f",
   "runtime": {
     "environment": "local",
     "profile": "local-candidate",
@@ -729,12 +729,12 @@
             {
               "file": "screenshots/entregas-1366x768-ladder.png",
               "capture": "viewport-segment",
-              "sha256": "02ede2ab488e5f40824e6bb8aef43f3afa3e938d3370dbf26f7d3691eafde79b"
+              "sha256": "9d852f7e5cc8216d30f8f2197c9a581927059fa69ea44cba88dfff040ea79330"
             },
             {
               "file": "screenshots/entregas-1366x768-form.png",
               "capture": "viewport-segment",
-              "sha256": "668170adb7386fd89533f1c12b830bc4624dda556f90735a7f4fe439b0270e26"
+              "sha256": "dccec0ab860dff7717b2ea415b7bade0bf971f6492e290a2138657a0021b189f"
             }
           ]
         }
@@ -885,12 +885,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 687,
-              "bottom": 731,
+              "top": 783,
+              "bottom": 827,
               "width": 158,
               "height": 44
             },
-            "scroll_y": 882,
+            "scroll_y": 786,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -900,12 +900,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 650,
-              "bottom": 704,
+              "top": 783,
+              "bottom": 837,
               "width": 158,
               "height": 54
             },
-            "scroll_y": 919,
+            "scroll_y": 786,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1238,12 +1238,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 786,
-              "bottom": 801,
+              "top": 815,
+              "bottom": 830,
               "width": 103,
               "height": 15
             },
-            "scroll_y": 18573,
+            "scroll_y": 18544,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1253,12 +1253,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 824,
-              "bottom": 868,
+              "top": 779,
+              "bottom": 823,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 19312,
+            "scroll_y": 19357,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1601,12 +1601,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 733,
-              "bottom": 1831,
+              "top": 664,
+              "bottom": 1762,
               "width": 350,
               "height": 1098
             },
-            "scroll_y": 5347,
+            "scroll_y": 5416,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1616,12 +1616,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 793,
-              "bottom": 1621,
+              "top": 724,
+              "bottom": 1552,
               "width": 350,
               "height": 828
             },
-            "scroll_y": 7802,
+            "scroll_y": 7871,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1631,12 +1631,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 736,
-              "bottom": 1269,
+              "top": 719,
+              "bottom": 1252,
               "width": 350,
               "height": 533
             },
-            "scroll_y": 12415,
+            "scroll_y": 12432,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1646,12 +1646,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 740,
-              "bottom": 1479,
+              "top": 733,
+              "bottom": 1472,
               "width": 350,
               "height": 739
             },
-            "scroll_y": 14819,
+            "scroll_y": 14826,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2014,12 +2014,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 744,
-              "bottom": 788,
+              "top": 827,
+              "bottom": 871,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 23912,
+            "scroll_y": 23829,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2029,12 +2029,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 771,
-              "bottom": 815,
+              "top": 759,
+              "bottom": 803,
               "width": 301,
               "height": 44
             },
-            "scroll_y": 26185,
+            "scroll_y": 26197,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2044,12 +2044,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 686,
-              "bottom": 723,
+              "top": 675,
+              "bottom": 712,
               "width": 316,
               "height": 37
             },
-            "scroll_y": 26458,
+            "scroll_y": 26469,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2059,12 +2059,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 690,
-              "bottom": 705,
+              "top": 682,
+              "bottom": 697,
               "width": 103,
               "height": 15
             },
-            "scroll_y": 26519,
+            "scroll_y": 26527,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2372,12 +2372,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 798,
-              "bottom": 842,
+              "top": 727,
+              "bottom": 771,
               "width": 310,
               "height": 44
             },
-            "scroll_y": 2177,
+            "scroll_y": 2248,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2387,12 +2387,12 @@
             "id": null,
             "classes": "report-table-wrap map-wrap",
             "rect": {
-              "top": 692,
-              "bottom": 1653,
+              "top": 664,
+              "bottom": 1625,
               "width": 350,
               "height": 961
             },
-            "scroll_y": 5084,
+            "scroll_y": 5112,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2402,12 +2402,12 @@
             "id": null,
             "classes": "report-table-wrap map-wrap",
             "rect": {
-              "top": 674,
-              "bottom": 1853,
+              "top": 664,
+              "bottom": 1843,
               "width": 350,
               "height": 1179
             },
-            "scroll_y": 9262,
+            "scroll_y": 9272,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2417,12 +2417,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 781,
-              "bottom": 825,
+              "top": 809,
+              "bottom": 853,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 16332,
+            "scroll_y": 16304,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2432,12 +2432,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 838,
-              "bottom": 881,
+              "top": 778,
+              "bottom": 821,
               "width": 279,
               "height": 44
             },
-            "scroll_y": 21100,
+            "scroll_y": 21160,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2750,12 +2750,12 @@
             "id": null,
             "classes": "vinc-table-wrap",
             "rect": {
-              "top": 762,
-              "bottom": 1658,
+              "top": 823,
+              "bottom": 1719,
               "width": 350,
               "height": 895
             },
-            "scroll_y": 6362,
+            "scroll_y": 6301,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2765,12 +2765,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 807,
-              "bottom": 851,
+              "top": 843,
+              "bottom": 887,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 17310,
+            "scroll_y": 17274,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2780,12 +2780,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 782,
-              "bottom": 826,
+              "top": 831,
+              "bottom": 875,
               "width": 301,
               "height": 44
             },
-            "scroll_y": 21323,
+            "scroll_y": 21274,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2795,12 +2795,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 673,
-              "bottom": 710,
+              "top": 807,
+              "bottom": 844,
               "width": 316,
               "height": 37
             },
-            "scroll_y": 21620,
+            "scroll_y": 21486,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3163,12 +3163,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 808,
-              "bottom": 1224,
+              "top": 793,
+              "bottom": 1209,
               "width": 350,
               "height": 416
             },
-            "scroll_y": 11045,
+            "scroll_y": 11060,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3178,12 +3178,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 808,
-              "bottom": 852,
+              "top": 841,
+              "bottom": 885,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 21048,
+            "scroll_y": 21015,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3471,12 +3471,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 736,
-              "bottom": 780,
+              "top": 771,
+              "bottom": 815,
               "width": 310,
               "height": 44
             },
-            "scroll_y": 2273,
+            "scroll_y": 2238,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3486,12 +3486,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 799,
-              "bottom": 843,
+              "top": 840,
+              "bottom": 884,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 20120,
+            "scroll_y": 20079,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3501,12 +3501,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 731,
-              "bottom": 775,
+              "top": 742,
+              "bottom": 786,
               "width": 281,
               "height": 44
             },
-            "scroll_y": 22416,
+            "scroll_y": 22405,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3516,12 +3516,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 810,
-              "bottom": 847,
+              "top": 742,
+              "bottom": 779,
               "width": 316,
               "height": 37
             },
-            "scroll_y": 24879,
+            "scroll_y": 24947,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3531,12 +3531,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 790,
-              "bottom": 805,
+              "top": 768,
+              "bottom": 783,
               "width": 103,
               "height": 15
             },
-            "scroll_y": 24985,
+            "scroll_y": 25007,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3869,12 +3869,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 809,
-              "bottom": 1404,
+              "top": 771,
+              "bottom": 1366,
               "width": 350,
               "height": 596
             },
-            "scroll_y": 7576,
+            "scroll_y": 7614,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3884,12 +3884,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 809,
-              "bottom": 1412,
+              "top": 644,
+              "bottom": 1247,
               "width": 350,
               "height": 603
             },
-            "scroll_y": 8916,
+            "scroll_y": 9081,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3899,12 +3899,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 657,
-              "bottom": 1127,
+              "top": 837,
+              "bottom": 1307,
               "width": 350,
               "height": 471
             },
-            "scroll_y": 10148,
+            "scroll_y": 9968,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3914,12 +3914,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 735,
-              "bottom": 1154,
+              "top": 645,
+              "bottom": 1064,
               "width": 350,
               "height": 419
             },
-            "scroll_y": 11743,
+            "scroll_y": 11833,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3940,6 +3940,6 @@
     "links_checked": 48,
     "broken_links": 0
   },
-  "identity_rechecked_at": "2026-08-31T19:39:25.127Z",
-  "final_artifact_hash": "efedafab40c3e3e6fc8cb1b5b0d7f581da35cbd544298e1f953f21f4233466b2"
+  "identity_rechecked_at": "2026-08-31T21:12:07.468Z",
+  "final_artifact_hash": "476da1402e15006b49294041e6c0c2aefd1d39e505adddae28d7703b796dc39f"
 }
