@@ -32,7 +32,7 @@ assert("editorial_contract_links_successor", editorial.commercial_copy_contracts
 
 const delivery = contract.delivery_status || {};
 assert("delivery_status_covers_issue_lot", equal(Object.keys(delivery), ["#527", "#528", "#529", "#530", "#531", "#532", "#534"]), Object.keys(delivery));
-assert("issue_528_does_not_claim_route_rollout", delivery["#528"]?.state === "MATRICES_ONLY_NO_ROUTE_MUTATION" && /oito rotas/.test(delivery["#528"]?.residual || ""), delivery["#528"]);
+assert("issue_528_records_route_rollout", delivery["#528"]?.state === "ROUTE_ROLLOUT_COMPLETE_PR_PENDING" && /#532/.test(delivery["#528"]?.residual || ""), delivery["#528"]);
 assert("issue_529_remains_measurement_wait", delivery["#529"]?.state === "MEASUREMENT_WAIT" && /não autoriza mutação/.test(delivery["#529"]?.residual || ""), delivery["#529"]);
 assert("issue_531_names_required_residual_surfaces", /home, \/casos\/, especialista/.test(delivery["#531"]?.residual || ""), delivery["#531"]);
 assert("issue_532_does_not_claim_form_rollout", /todos os formulários\/CTAs/.test(delivery["#532"]?.residual || ""), delivery["#532"]);

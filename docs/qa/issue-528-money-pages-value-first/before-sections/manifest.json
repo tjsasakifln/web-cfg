@@ -1,0 +1,418 @@
+{
+  "schema": "confenge.issue-528-segmented-capture/1.0",
+  "issue": 528,
+  "capture_mode": "element_sections_no_fullpage",
+  "fullpage_used": false,
+  "fullpage_limitation_issue": 540,
+  "captured_at": "2026-08-31T15:01:24.345Z",
+  "commit_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "tree_dirty": true,
+  "base_url": "https://confenge.com.br",
+  "output_dir": "docs/qa/issue-528-money-pages-value-first/before-sections",
+  "viewports": [
+    "390x844",
+    "1366x768"
+  ],
+  "captures": [
+    {
+      "route": "/servicos-obras-publicas/",
+      "selector": "main > .section",
+      "section": "decision",
+      "viewport": "390x844",
+      "file": "servicos-obras-publicas-decision-390x844.png",
+      "sha256": "5b00625f2a9fa2135f8e6d20bbb5bd9f0a2fd41ffafb8d09b94c2bb6a5c10e3b"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "selector": ".contract-products-hub",
+      "section": "contract-events",
+      "viewport": "390x844",
+      "file": "servicos-obras-publicas-contract-events-390x844.png",
+      "sha256": "523f9f91ed3d6fba448a697f9c3a796c9dec43106227c16909c81d8389ea075f"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "selector": "main > .section",
+      "section": "decision",
+      "viewport": "1366x768",
+      "file": "servicos-obras-publicas-decision-1366x768.png",
+      "sha256": "fb871c4877c077bb92dd0a2fdf906c808dacc77ff5d48585aeab86a545c0900a"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "selector": ".contract-products-hub",
+      "section": "contract-events",
+      "viewport": "1366x768",
+      "file": "servicos-obras-publicas-contract-events-1366x768.png",
+      "sha256": "9e3362a338aed4f9c8f345c9e42e076825a5e63cec7ff7149fe87a3f955c1990"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "selector": ".offer-hero",
+      "section": "hero",
+      "viewport": "390x844",
+      "file": "diagnostico-b2g-expansao-hero-390x844.png",
+      "sha256": "0d4d7faa2cd1b7708f183e99cc4319bf4b0687117cfeaba8bd3eb7066f0d9acd"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "selector": "[data-offer-section='outputs']",
+      "section": "artifact",
+      "viewport": "390x844",
+      "file": "diagnostico-b2g-expansao-artifact-390x844.png",
+      "sha256": "fda6818b396874dd6d15c305421bc3362330eea88e2895b9e337337e9ebaef4a"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "selector": "[data-offer-section='proof']",
+      "section": "proof",
+      "viewport": "390x844",
+      "file": "diagnostico-b2g-expansao-proof-390x844.png",
+      "sha256": "4caff0ca867dd9bc5f94bf3c777610e50149cd680920c4d52a1ee7e50d3de54e"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "selector": ".offer-hero",
+      "section": "hero",
+      "viewport": "1366x768",
+      "file": "diagnostico-b2g-expansao-hero-1366x768.png",
+      "sha256": "3e687bdcac6e704ec697e471e6640282fe4b0021f369e3d7bbd1594e01ec941c"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "selector": "[data-offer-section='outputs']",
+      "section": "artifact",
+      "viewport": "1366x768",
+      "file": "diagnostico-b2g-expansao-artifact-1366x768.png",
+      "sha256": "9db7a8b3a7a680ba9cf325f864759a15c0ce99c0a7480929dd2ce72724ef38de"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "selector": "[data-offer-section='proof']",
+      "section": "proof",
+      "viewport": "1366x768",
+      "file": "diagnostico-b2g-expansao-proof-1366x768.png",
+      "sha256": "248b4ac40b572a0218d922f2edea1ee7f492a63a13e2df0eecd45737cac7d25c"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "selector": ".offer-hero",
+      "section": "hero",
+      "viewport": "390x844",
+      "file": "bid-room-licitacoes-obras-hero-390x844.png",
+      "sha256": "c9fa9578637c777de9d9d0751b4e38ed8232042089b016d4816ef78b0d88dc4e"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "selector": "[data-offer-section='urgency']",
+      "section": "decision",
+      "viewport": "390x844",
+      "file": "bid-room-licitacoes-obras-decision-390x844.png",
+      "sha256": "74577dfca19ae7711d01939b0004dd7b1311711ca9b0bd69cd43b02158159ef4"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "selector": "[data-offer-section='outputs']",
+      "section": "artifact",
+      "viewport": "390x844",
+      "file": "bid-room-licitacoes-obras-artifact-390x844.png",
+      "sha256": "4adbcd2064753d4769ecb757485ab60de48e3de9153eeead49733bad5323756a"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "selector": "[data-offer-section='wip']",
+      "section": "price-value",
+      "viewport": "390x844",
+      "file": "bid-room-licitacoes-obras-price-value-390x844.png",
+      "sha256": "1223428dbd0258ba97d228c0b06fbf754a337f6dc6fded7a0855ea2d2cff391a"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "selector": ".offer-hero",
+      "section": "hero",
+      "viewport": "1366x768",
+      "file": "bid-room-licitacoes-obras-hero-1366x768.png",
+      "sha256": "ef7c2d940739635e277aeb85731de8a6d2d55bd86ff93f6a9c7845ea229806ac"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "selector": "[data-offer-section='urgency']",
+      "section": "decision",
+      "viewport": "1366x768",
+      "file": "bid-room-licitacoes-obras-decision-1366x768.png",
+      "sha256": "74f661b52971faeffa356462977631c8ca316a4665b0bac5e426c5db8d2b876a"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "selector": "[data-offer-section='outputs']",
+      "section": "artifact",
+      "viewport": "1366x768",
+      "file": "bid-room-licitacoes-obras-artifact-1366x768.png",
+      "sha256": "c8d8e2e5537073780dffc1613144be00226a66dd5244274d64ef7dd2a7c37ddc"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "selector": "[data-offer-section='wip']",
+      "section": "price-value",
+      "viewport": "1366x768",
+      "file": "bid-room-licitacoes-obras-price-value-1366x768.png",
+      "sha256": "8040607c641354f627edd52d49706be09df5f20f78a24f62613c006800ce7234"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "selector": ".offer-hero",
+      "section": "hero",
+      "viewport": "390x844",
+      "file": "defesa-margem-contratos-publicos-hero-390x844.png",
+      "sha256": "0e9cc0eb2957c0acf575b653efdc4f693ed5893a385b54eafe5a390c1aead39a"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "selector": "[aria-label='Entregáveis e inputs']",
+      "section": "artifact",
+      "viewport": "390x844",
+      "file": "defesa-margem-contratos-publicos-artifact-390x844.png",
+      "sha256": "13e5fa27d9a4200af9d4ee20c17f455aaab34ed4185d78b67dcbbe16b54734d8"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "selector": ".contract-product",
+      "section": "contract",
+      "viewport": "390x844",
+      "file": "defesa-margem-contratos-publicos-contract-390x844.png",
+      "sha256": "c2e98ebde018688f77bb2afb9905346851feb6f4a998f630bb09e5fd6c79156d"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "selector": ".offer-hero",
+      "section": "hero",
+      "viewport": "1366x768",
+      "file": "defesa-margem-contratos-publicos-hero-1366x768.png",
+      "sha256": "d2d5383bb9e5dc235a1a8206f1a1a4c6e46b841c86abe8a4f7e5bad757575c0a"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "selector": "[aria-label='Entregáveis e inputs']",
+      "section": "artifact",
+      "viewport": "1366x768",
+      "file": "defesa-margem-contratos-publicos-artifact-1366x768.png",
+      "sha256": "86df29ffd52e553abf129f17d372bee6bbd783811b7ef2f9ebd46bd269d7b6b8"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "selector": ".contract-product",
+      "section": "contract",
+      "viewport": "1366x768",
+      "file": "defesa-margem-contratos-publicos-contract-1366x768.png",
+      "sha256": "e80b61ef56421e54d950ae0d0afececb63f297018eaf6d27e2c61d30b9700333"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "selector": ".pillar-hero",
+      "section": "hero",
+      "viewport": "390x844",
+      "file": "atrasos-prorrogacao-obras-publicas-hero-390x844.png",
+      "sha256": "47637cdcf611a6c60ce9713d2b8e21b289fcc13a5e740ff1bf4c4832f1b7e771"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "selector": ".pillar-overview",
+      "section": "decision",
+      "viewport": "390x844",
+      "file": "atrasos-prorrogacao-obras-publicas-decision-390x844.png",
+      "sha256": "cdb43c41b0b79ebd12f8c7671c03a06670d9e1cbf654ccd8b0eae4edeebf814d"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "selector": ".contract-product",
+      "section": "contract",
+      "viewport": "390x844",
+      "file": "atrasos-prorrogacao-obras-publicas-contract-390x844.png",
+      "sha256": "97d65a6fa2f3ffdd6f819b4fd304f707c6ea0426a4e31dd0137d8c8ecf800718"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "selector": ".pillar-hero",
+      "section": "hero",
+      "viewport": "1366x768",
+      "file": "atrasos-prorrogacao-obras-publicas-hero-1366x768.png",
+      "sha256": "6e165171e359cbe0fe069b11471c3fe1bea8055b20cf757a39e3ae55ec65f5e2"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "selector": ".pillar-overview",
+      "section": "decision",
+      "viewport": "1366x768",
+      "file": "atrasos-prorrogacao-obras-publicas-decision-1366x768.png",
+      "sha256": "87e5ca9eab1367c7ca5353d29870fe4080cb732a23437e57dc2675b76eaa9f68"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "selector": ".contract-product",
+      "section": "contract",
+      "viewport": "1366x768",
+      "file": "atrasos-prorrogacao-obras-publicas-contract-1366x768.png",
+      "sha256": "8210539022d666763f5f993da23bb8ecfe44f04abca312be480bed3735fa0c4a"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "selector": ".pillar-hero",
+      "section": "hero",
+      "viewport": "390x844",
+      "file": "defesa-tecnica-contratos-publicos-hero-390x844.png",
+      "sha256": "683e0aeb02c634d33d56601439c8d10259aa3512142b172e3a81b5a87705f166"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "selector": ".pillar-overview",
+      "section": "decision",
+      "viewport": "390x844",
+      "file": "defesa-tecnica-contratos-publicos-decision-390x844.png",
+      "sha256": "54ae93febd03ad8cf4c6a2e03825dc5352f82f7ef921de5b2ba91a644c93a784"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "selector": ".contract-product",
+      "section": "contract",
+      "viewport": "390x844",
+      "file": "defesa-tecnica-contratos-publicos-contract-390x844.png",
+      "sha256": "f27de0b95150cfcda093eec4abff88ac0cce692c67ce6f274473c967674ca003"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "selector": ".pillar-hero",
+      "section": "hero",
+      "viewport": "1366x768",
+      "file": "defesa-tecnica-contratos-publicos-hero-1366x768.png",
+      "sha256": "f160974d3d5a16506f876bbad80de69d19b0d9f613c9e86885a2f63ade650d51"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "selector": ".pillar-overview",
+      "section": "decision",
+      "viewport": "1366x768",
+      "file": "defesa-tecnica-contratos-publicos-decision-1366x768.png",
+      "sha256": "6c2b77a01535032fb9fa98819c811d8e5c5d928e29303bb7cf664c7edc5c0756"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "selector": ".contract-product",
+      "section": "contract",
+      "viewport": "1366x768",
+      "file": "defesa-tecnica-contratos-publicos-contract-1366x768.png",
+      "sha256": "a42b456fc95703d51d1a3447b477c06c6ec69df3a70aa4847977259d433b6f39"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "selector": ".pillar-hero",
+      "section": "hero",
+      "viewport": "390x844",
+      "file": "acompanhamento-contratos-obras-hero-390x844.png",
+      "sha256": "826efa2bc8edccbc0e2aab1d41d63da78f14b7f86a01bb094edf0d2bb6cc5d43"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "selector": ".pillar-overview",
+      "section": "decision",
+      "viewport": "390x844",
+      "file": "acompanhamento-contratos-obras-decision-390x844.png",
+      "sha256": "45e91127d3589afa51c715f8a347cb9109698d7732f1163118833729df2e8751"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "selector": "[aria-label='Oferta comercial relacionada']",
+      "section": "engagement",
+      "viewport": "390x844",
+      "file": "acompanhamento-contratos-obras-engagement-390x844.png",
+      "sha256": "6baa51e924b57411ab374e3b989a41c78965e62959e69243015258bd590bcff8"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "selector": ".pillar-hero",
+      "section": "hero",
+      "viewport": "1366x768",
+      "file": "acompanhamento-contratos-obras-hero-1366x768.png",
+      "sha256": "68da930b8309166c0bb2c510f4e94385354b677cedbc91c565f5f908f54f57f5"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "selector": ".pillar-overview",
+      "section": "decision",
+      "viewport": "1366x768",
+      "file": "acompanhamento-contratos-obras-decision-1366x768.png",
+      "sha256": "0540a9698122bca7fd40719ce996ea7406fb9b1b62704a91ed2420c74608b579"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "selector": "[aria-label='Oferta comercial relacionada']",
+      "section": "engagement",
+      "viewport": "1366x768",
+      "file": "acompanhamento-contratos-obras-engagement-1366x768.png",
+      "sha256": "f27ea27a724f8225f138ae44ebcc7adc55040806a2a15f03db1245bcfcd2e032"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "selector": ".offer-hero",
+      "section": "hero",
+      "viewport": "390x844",
+      "file": "diretoria-b2g-hero-390x844.png",
+      "sha256": "6ec0a50cf5cd6f4cd57ec1d6fe5505fec286dafeeca05eb09402c7acc55e32a2"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "selector": "[data-offer-section='problem']",
+      "section": "decision",
+      "viewport": "390x844",
+      "file": "diretoria-b2g-decision-390x844.png",
+      "sha256": "faaa4ad6084c510baf1f103b8e7722ced13be1c5a9410a8baf568cc41a4424ee"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "selector": "[data-offer-section='outputs']",
+      "section": "artifact",
+      "viewport": "390x844",
+      "file": "diretoria-b2g-artifact-390x844.png",
+      "sha256": "4965d1ac779407ec468a39619853427fb8f7fc818739091cfe225139b358fae7"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "selector": "[data-offer-section='offer']",
+      "section": "price-value",
+      "viewport": "390x844",
+      "file": "diretoria-b2g-price-value-390x844.png",
+      "sha256": "e8d11cec00a5f387a274594c7bcde17f2d9b3a89d0c5cc591cfe7b792d372179"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "selector": ".offer-hero",
+      "section": "hero",
+      "viewport": "1366x768",
+      "file": "diretoria-b2g-hero-1366x768.png",
+      "sha256": "7f421662ea651e572a44db49b20cc6657945fa549c25d4f8511a13f6db460658"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "selector": "[data-offer-section='problem']",
+      "section": "decision",
+      "viewport": "1366x768",
+      "file": "diretoria-b2g-decision-1366x768.png",
+      "sha256": "176b5cdc34fb80d817c77e4e176ae47a74414ae8d4b134c02b52d8460bc5378a"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "selector": "[data-offer-section='outputs']",
+      "section": "artifact",
+      "viewport": "1366x768",
+      "file": "diretoria-b2g-artifact-1366x768.png",
+      "sha256": "155919de69739e8bca52cc691badd793d16dbdd213000013631d92892052c5a2"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "selector": "[data-offer-section='offer']",
+      "section": "price-value",
+      "viewport": "1366x768",
+      "file": "diretoria-b2g-price-value-1366x768.png",
+      "sha256": "4ff62eb3175c57ab5b4e78abac63279a407f5962eb2d9f569003b41ea1b83b99"
+    }
+  ]
+}
