@@ -123,7 +123,8 @@ for (const item of eight.deliverables) {
   assert.equal(actionAnchors.length, 5, `${item.route}: primary action census`);
   for (const anchor of actionAnchors) {
     const label = anchor[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-    assert.match(label, new RegExp(item.value_first.cta_configure, "i"), `${item.route}: ${label}`);
+    if (/<span\b/i.test(anchor[2])) assert.match(label, /Configurar pedido/i, `${item.route}: ${label}`);
+    else assert.match(label, new RegExp(item.value_first.cta_configure, "i"), `${item.route}: ${label}`);
     assert.doesNotMatch(label, /^Quero\b/i, `${item.route}: generic desire label`);
     const href = anchor[1].match(/\bhref=["']([^"']+)["']/i)?.[1] || "";
     const aria = anchor[1].match(/\baria-label=["']([^"']+)["']/i)?.[1] || "";

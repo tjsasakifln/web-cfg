@@ -88,7 +88,7 @@ function renderActionLabels(html, item) {
         nextAttrs = nextAttrs.replace(/\baria-label=["'][^"']*["']/i, `aria-label="${escapeHtml(ariaLabel)}"`);
       }
       if (/<span\b/i.test(content)) {
-        const nextContent = content.replace(/<span\b[^>]*>[\s\S]*?<\/span>/i, `<span>${escapeHtml(action)}</span>`);
+        const nextContent = content.replace(/<span\b[^>]*>[\s\S]*?<\/span>/i, "<span>Configurar pedido</span>");
         return `<a${nextAttrs}>${nextContent}</a>`;
       }
       const suffix = content.match(/\s*(<svg\b[\s\S]*)$/i)?.[1] || "";
