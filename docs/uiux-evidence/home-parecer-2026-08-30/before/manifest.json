@@ -1,7 +1,8 @@
 {
   "schema_version": "2.0.0",
   "captured_at": "2026-08-30T23:25:24.042Z",
-  "commit_sha": "6015bb626841a4b0813da27fb6528845b1b5fd89",
+  "commit_sha": "15e56bc5cf4642fd2f3423517a4937de519cea1d",
+  "commit_sha_note": "Corrected: this file previously stamped 6015bb626841a4b0813da27fb6528845b1b5fd89, which is the AFTER commit (see the sibling after/manifest.json, which correctly stamps that SHA) -- a copy/paste stamp, not the state these before/ screenshots were captured against. The sibling ../capture-index.json already recorded the true before_commit as 15e56bc5c ('fix(copy): o site para de abrir a conversa dizendo o que nao faz'); this field is now consistent with it. The before/ PNGs themselves are not re-captured here -- they will be re-captured by a later pass at the branch's final commit; this fix only removes the self-contradiction in the recorded metadata.",
   "tree_dirty": true,
   "base_url": "http://127.0.0.1:8812",
   "output_dir": "docs/uiux-evidence/home-parecer-2026-08-30/before",

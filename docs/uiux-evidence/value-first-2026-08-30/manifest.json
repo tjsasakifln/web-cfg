@@ -1,7 +1,8 @@
 {
   "schema_version": "2.0.0",
   "captured_at": "2026-08-30T20:23:13.453Z",
-  "commit_sha": "9c223d25846f08b31864b99eabe43c60554e6508",
+  "commit_sha": "20f724bc2ea100c5c789b69eeee1bc79bab6e6e4",
+  "commit_sha_note": "Original stamp at capture time was 9c223d25846f08b31864b99eabe43c60554e6508, a pre-rebase SHA later unreachable from HEAD. Replaced with its reachable twin (identical commit message 'fix(copy): decodificar entidades em passagem única' and identical tree, confirmed via git diff --stat) after an adversarial audit found the orphan.",
   "tree_dirty": true,
   "base_url": "http://127.0.0.1:8792",
   "output_dir": "docs/uiux-evidence/value-first-2026-08-30",

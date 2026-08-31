@@ -245,7 +245,8 @@
     }
   },
   "after": {
-    "commit_sha": "7edeb0b0d01b48f859027b2d8a2faa480cac358f",
+    "commit_sha": "31fcff8165ed2482fbd7759b0566750aa9e6a5ab",
+    "commit_sha_note": "Original stamp was 7edeb0b0d01b48f859027b2d8a2faa480cac358f, the standalone pre-squash commit for #525 (\"perf(home): #525 recuperar os 4 KB do teto agregado sem tocar no orçamento\"). It has no reachable twin: no commit on any ref shares its message or tree, because #526 squash-merged it (and the rest of the #525/#526 work) into 31fcff8165ed2482fbd7759b0566750aa9e6a5ab, which is the commit that actually landed in history reachable from HEAD and whose body names this exact fix (\"payload crítico 4 KB acima do teto\") and this exact file. Replaced with that squash-merge commit rather than inventing or keeping the dangling SHA.",
     "tree_dirty": false,
     "png_count": 20,
     "groups": {
