@@ -31,13 +31,24 @@ SELF_ATTESTED_PROOF_SOURCES = frozenset(
         "operacao-remota-declarada",
         "conteudo-tecnico-publicado",
         "operacao-interna",
+        "registro-operacional-confenge",
+        "registro-profissional-titular",
     }
 )
+# Toda classe de proof.json que NAO e third_party. `data_backed_internal` esta
+# aqui de proposito: um numero reproduzivel a partir de um dataset commitado
+# neste repositorio continua sendo evidencia interna, e o grafo da campanha nao
+# pode chama-lo de verificado. Antes destas duas linhas, `owner_declared` e
+# `data_backed_internal` chegavam a SELF_DECLARED pela ultima clausula de
+# `remap_proof_status` (status == VERIFIED), isto e, por sobra. Agora chegam
+# pelo ramo explicito, e a garantia deixa de depender da ordem do ladder.
 SELF_ATTESTED_PROOF_CLASSES = frozenset(
     {
         "self_attested_public",
         "operational_declared",
         "content_published",
+        "data_backed_internal",
+        "owner_declared",
     }
 )
 

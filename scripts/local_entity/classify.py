@@ -346,6 +346,7 @@ def classify_graph(
         raise ValueError(f"claim_status_not_in_enum:{unknown_status}")
 
     covered = {c["field"] for c in claims if c["field"] in GRAPH_FIELDS or c["field"] == "restricted"}
+    third_party_verified_count = sum(1 for c in claims if c["status"] == "VERIFIED")
     return {
         "as_of": CAMPAIGN_AS_OF,
         "proof_limitation": PROOF_LIMITATION,
@@ -354,8 +355,12 @@ def classify_graph(
         "claims": claims,
         "claim_statuses": statuses,
         "graph_fields_present": sorted(covered),
-        "third_party_verified_count": sum(1 for c in claims if c["status"] == "VERIFIED"),
-        "self_attested_not_upgraded": True,
+        "third_party_verified_count": third_party_verified_count,
+        # Derivado, nao afirmado. Enquanto isto era o literal True, o relatorio
+        # da campanha diria "nada foi promovido" mesmo que um registro tivesse
+        # sido promovido: a frase mais importante do pacote de honestidade era
+        # a unica que nao media nada.
+        "self_attested_not_upgraded": third_party_verified_count == 0,
     }
 
 

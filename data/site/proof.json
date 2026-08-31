@@ -1,7 +1,16 @@
 {
  "schema_version": "1.1.0",
  "updated_at": "2026-08-30",
- "verification_limitation": "Claims marked VERIFIED with source perfil-publico-especialista are self-attested from the public specialist page and institutional copy already on confenge.com.br. They are allowed public statements, not independently verified third-party credentials. This circularity is a documented limitation, not an upgrade of proof class.",
+ "status_semantics": "status is a publication permission, not a grade of evidence. VERIFIED means the statement is cleared to appear in public copy; it never means a third party verified it. The grade of evidence is verification_class, and only verification_class third_party denotes independent evidence committed in-repo. No record carries it today.",
+ "verification_limitation": "No claim in this file is third-party verified. Every public claim is self-attested by CONFENGE or the owner, or backed by an artifact this repository itself produces. self_attested_public (public specialist page and institutional copy already on confenge.com.br) and owner_declared (the owner's personal professional declaration, with no documentary backing in this repository) carry no external corroboration at all. data_backed_internal points to a committed dataset through evidence_ref, which makes the number reproducible here but still not independently audited. content_published and operational_declared are statements about work this site publishes or operations it runs. This circularity is a documented limitation, not an upgrade of proof class.",
+ "verification_classes": {
+  "third_party": "Independent third-party evidence committed in-repo. Unused: no record qualifies today.",
+  "data_backed_internal": "Reproducible from a dataset committed in this repository. evidence_ref names the file and the field. Internal, not audited by a third party.",
+  "operational_declared": "Operational fact declared by the business about how it operates.",
+  "content_published": "Backed by technical content published on this site.",
+  "self_attested_public": "Published on the owned specialist page and institutional copy. Circular by construction.",
+  "owner_declared": "Personal declaration by the owner. No documentary backing in this repository. The weakest class: never present it as data-backed or as a client result."
+ },
  "claims": [
   {
    "id": "proof-usp-civil",
@@ -138,7 +147,8 @@
    "id": "proof-base-inteligencia",
    "claim": "Base de inteligência com 4,48 milhões de contratos públicos, corte de 01/08/2026",
    "status": "VERIFIED",
-   "verification_class": "self_attested_owner",
+   "verification_class": "data_backed_internal",
+   "evidence_ref": "data/pseo/national-candidate-inventory.json#denominators.national_records_available",
    "source": "registro-operacional-confenge",
    "public_allowed": true,
    "last_verified_at": "2026-08-30",
@@ -151,10 +161,29 @@
    "notes": "Lastro em data/pseo/national-candidate-inventory.json, denominators.national_records_available = 4479442 contrato_id deduplicados, dataset_hash 0d8757f7, corte de 01/08/2026. Desses, 54.055 estão confirmados como obra ou serviço de engenharia (denominators.aec_confirmed_contracts). O número publicado é o volume da base disponível para análise, não a carteira de clientes nem o recorte de engenharia. O inventário nacional permanece PENDING/QUALITY_ELIGIBLE para findings editoriais; publicar a escala da base não depende dessa promoção."
   },
   {
+   "id": "proof-base-engenharia",
+   "claim": "54.055 contratos de obra ou serviço de engenharia confirmados na base de inteligência, corte de 01/08/2026",
+   "status": "VERIFIED",
+   "verification_class": "data_backed_internal",
+   "evidence_ref": "data/pseo/national-candidate-inventory.json#denominators.aec_confirmed_contracts",
+   "source": "registro-operacional-confenge",
+   "public_allowed": true,
+   "last_verified_at": "2026-08-30",
+   "allowed_public_phrases": [
+    "54.055 contratos de obra e serviço de engenharia confirmados na base de inteligência",
+    "54.055 contratos de obra ou serviço de engenharia confirmados na base de inteligência",
+    "Contratos de engenharia confirmados",
+    "54.055 contratos de engenharia"
+   ],
+   "notes": "Lastro em data/pseo/national-candidate-inventory.json, denominators.aec_confirmed_contracts = 54055, dataset_hash 0d8757f7, corte de 01/08/2026. Confirmado significa classificado em multiplas camadas como obra ou servico de engenharia; classified_share_note do proprio inventario declara que so objetos aec_confirmed entram em agregados publicos. Este e o recorte relevante ao ICP: publicar 4,48 milhoes sem ele convida a leitura de que existem 4,48 milhoes de contratos de engenharia. Nao e carteira de clientes."
+  },
+  {
    "id": "proof-volume-analisado",
    "claim": "Mais de R$ 700 milhões em obras públicas analisados pessoalmente pelo Eng. Tiago Sasaki",
    "status": "VERIFIED",
-   "verification_class": "self_attested_owner",
+   "verification_class": "owner_declared",
+   "evidence_ref": null,
+   "public_placement": "Trajetória e responsável técnico. Não pode ocupar posição de prova data-backed: é declaração do titular, não é resultado de cliente.",
    "source": "registro-profissional-titular",
    "public_allowed": true,
    "last_verified_at": "2026-08-30",

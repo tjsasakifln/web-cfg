@@ -60,6 +60,8 @@ def test_proof_json_verified_self_attested_is_not_campaign_verified() -> None:
             "self_attested_public",
             "operational_declared",
             "content_published",
+            "data_backed_internal",
+            "owner_declared",
         }:
             assert mapped != "VERIFIED"
         if raw.get("status") == "PRIVATE_ONLY":

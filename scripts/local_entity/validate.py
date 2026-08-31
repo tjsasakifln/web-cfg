@@ -114,10 +114,17 @@ def classify_status_errors(classified: dict[str, Any]) -> list[str]:
         if status not in CLAIM_STATUSES:
             errors.append(f"invalid_claim_status:{claim.get('id')}:{status}")
         source = str(claim.get("basis") or "")
+        # `third_party` e o unico token que promove um registro de proof.json a
+        # VERIFIED na campanha. A guarda anterior so disparava quando a base
+        # citava perfil-publico-especialista, entao qualquer OUTRA fonte podia
+        # ser promovida sem que gate nenhum reclamasse. A condicao passa a ser a
+        # regra que se quer garantir: promocao exige a classe third_party, venha
+        # de que fonte vier.
         if (
             claim.get("status") == "VERIFIED"
-            and "perfil-publico-especialista" in source
             and claim.get("third_party_verified") is True
+            and source.startswith("proof.json ")
+            and "verification_class=third_party" not in source
         ):
             errors.append(f"self_attested_upgraded:{claim.get('id')}")
     return errors
