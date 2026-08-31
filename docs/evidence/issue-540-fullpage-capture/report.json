@@ -15,6 +15,8 @@
     "commit_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
     "harness": "pre-#540: fullPage imediato apos networkidle0",
     "fresh_runs": 5,
+    "fresh_run_scroll_height_instability_reproduced": false,
+    "materialization_path_scroll_height_instability_reproduced": true,
     "png_heights": [
       7866,
       7866,
@@ -44,7 +46,7 @@
       7828,
       7549
     ],
-    "observation": "Paginas novas paradas no topo repetem o fallback de 7866 px; ao percorrer as regioes content-visibility, o mesmo documento assume seis alturas. A captura antiga nao fazia o percurso e fotografava o fallback sem paint."
+    "observation": "No Chrome 151, cinco processos fresh parados no topo repetiram o fallback de 7866 px; a oscilacao inter-run historica nao foi reproduzida nem reutilizada como dado atual. Ao percorrer as regioes content-visibility, o mesmo documento contemporaneo assumiu seis alturas. A captura antiga nao fazia o percurso e fotografava o fallback sem paint."
   },
   "fully_materialized_control": {
     "commit_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",

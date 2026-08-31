@@ -39,6 +39,96 @@ def commit_sha() -> str | None:
         return None
 
 
+def layout_comparison_ready(layout: object) -> bool:
+    if not isinstance(layout, dict):
+        return False
+    height = layout.get("scroll_height")
+    before = layout.get("scroll_height_samples")
+    after = layout.get("post_screenshot_scroll_height_samples")
+    return (
+        layout.get("strategy") == "content-visibility-visible/v1"
+        and type(height) is int
+        and height > 0
+        and isinstance(before, list)
+        and isinstance(after, list)
+        and len(before) >= 3
+        and len(after) >= 3
+        and all(type(sample) is int and sample == height for sample in before + after)
+    )
+
+
+def manifest_comparison_ready(data: dict, files: list[dict]) -> bool:
+    runtime = data.get("capture_runtime")
+    preparation = runtime.get("fullpage_preparation") if isinstance(runtime, dict) else None
+    return (
+        data.get("schema_version") == "2.1.0"
+        and data.get("tree_dirty") is False
+        and bool(data.get("commit_sha"))
+        and isinstance(runtime, dict)
+        and bool(runtime.get("browser_version"))
+        and isinstance(preparation, dict)
+        and preparation.get("strategy") == "content-visibility-visible/v1"
+        and bool(files)
+        and all(layout_comparison_ready(entry.get("layout")) for entry in files)
+    )
+
+
+def collect_comparison_blockers(groups: list[dict]) -> list[str]:
+    blockers = [group["group"] for group in groups if not group["comparison_ready"]]
+    if len({group.get("commit_sha") for group in groups}) != 1:
+        blockers.append("mixed_commit_sha")
+    browsers = {
+        (group.get("capture_runtime") or {}).get("browser_version")
+        for group in groups
+    }
+    if len(browsers) != 1:
+        blockers.append("mixed_browser_version")
+    return blockers
+
+
+def self_test() -> int:
+    layout = {
+        "strategy": "content-visibility-visible/v1",
+        "scroll_height": 1200,
+        "scroll_height_samples": [1200, 1200, 1200],
+        "post_screenshot_scroll_height_samples": [1200, 1200, 1200],
+    }
+    data = {
+        "schema_version": "2.1.0",
+        "tree_dirty": False,
+        "commit_sha": "a" * 40,
+        "capture_runtime": {
+            "browser_version": "Chrome/151.0.0.0",
+            "fullpage_preparation": {"strategy": "content-visibility-visible/v1"},
+        },
+    }
+    files = [{"layout": layout}]
+    assert manifest_comparison_ready(data, files)
+    assert not manifest_comparison_ready({**data, "tree_dirty": True}, files)
+    assert not manifest_comparison_ready(data, [{"layout": {**layout, "scroll_height": 0}}])
+    assert not manifest_comparison_ready(
+        data,
+        [{"layout": {**layout, "post_screenshot_scroll_height_samples": [1200, 1201, 1200]}}],
+    )
+    groups = [
+        {
+            "group": "one",
+            "comparison_ready": True,
+            "commit_sha": "a" * 40,
+            "capture_runtime": data["capture_runtime"],
+        },
+        {
+            "group": "two",
+            "comparison_ready": True,
+            "commit_sha": "b" * 40,
+            "capture_runtime": {**data["capture_runtime"], "browser_version": "Chrome/152.0.0.0"},
+        },
+    ]
+    assert collect_comparison_blockers(groups) == ["mixed_commit_sha", "mixed_browser_version"]
+    print("CAPTURE_INDEX_SELF_TEST_OK")
+    return 0
+
+
 def main(argv: list[str]) -> int:
     capture_root = Path(argv[1]) if len(argv) > 1 else DEFAULT_CAPTURE
     manifests = sorted(capture_root.rglob("manifest-*.json"))
@@ -65,23 +155,7 @@ def main(argv: list[str]) -> int:
             for entry in data["captures"]
             if entry["kind"] == "page"
         ]
-        preparation = runtime.get("fullpage_preparation") if isinstance(runtime, dict) else None
-        page_layouts = [entry["layout"] for entry in files]
-        comparison_ready = (
-            data.get("schema_version") == "2.1.0"
-            and isinstance(runtime, dict)
-            and bool(runtime.get("browser_version"))
-            and isinstance(preparation, dict)
-            and preparation.get("strategy") == "content-visibility-visible/v1"
-            and bool(page_layouts)
-            and all(
-                isinstance(layout, dict)
-                and layout.get("strategy") == "content-visibility-visible/v1"
-                and len(layout.get("scroll_height_samples", [])) >= 3
-                and len(layout.get("post_screenshot_scroll_height_samples", [])) >= 3
-                for layout in page_layouts
-            )
-        )
+        comparison_ready = manifest_comparison_ready(data, files)
         total += len(files)
         groups.append(
             {
@@ -100,7 +174,7 @@ def main(argv: list[str]) -> int:
             }
         )
 
-    comparison_blockers = [group["group"] for group in groups if not group["comparison_ready"]]
+    comparison_blockers = collect_comparison_blockers(groups)
     payload = {
         "schema": "confenge.design-direction-capture-index/1.0",
         "issue": 494,
@@ -133,4 +207,6 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
+    if sys.argv[1:] == ["--self-test"]:
+        raise SystemExit(self_test())
     raise SystemExit(main(sys.argv))

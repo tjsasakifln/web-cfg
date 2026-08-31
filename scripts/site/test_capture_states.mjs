@@ -370,6 +370,8 @@ test("the versioned #540 report proves the measured before/after contract", () =
   ));
   assert.equal(report.issue, 540);
   assert.equal(report.before.commit_sha, "81c600b7c26dcc606d3a03e648ecd9820d9c1c37");
+  assert.equal(report.before.fresh_run_scroll_height_instability_reproduced, false);
+  assert.equal(report.before.materialization_path_scroll_height_instability_reproduced, true);
   assert.ok(Math.max(...report.before.largest_near_white_bands_px) > 128);
   assert.ok(Math.max(...report.after.largest_near_white_bands_px) <= 128);
   assert.equal(new Set(report.after.stable_scroll_heights).size, 1);

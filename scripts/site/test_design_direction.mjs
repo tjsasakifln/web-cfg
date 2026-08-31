@@ -13,6 +13,7 @@
  */
 import test from "node:test";
 import assert from "node:assert/strict";
+import { spawnSync } from "child_process";
 import { mkdtempSync, readFileSync, readdirSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { join, relative, resolve, sep } from "path";
@@ -303,6 +304,16 @@ test("the capture index is durable, hashed, and on the five protocol viewports",
       assert.ok(file.bytes > 0, `${group.group}/${file.file}: arquivo vazio`);
     }
   }
+});
+
+test("the capture index comparability gate fails closed", () => {
+  const result = spawnSync(
+    "python3",
+    [join(ROOT, "scripts/site/index_design_direction_capture.py"), "--self-test"],
+    { cwd: ROOT, encoding: "utf8" },
+  );
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.match(result.stdout, /CAPTURE_INDEX_SELF_TEST_OK/);
 });
 
 test("the fixed content itself is well formed", () => {

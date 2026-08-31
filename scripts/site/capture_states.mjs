@@ -220,18 +220,13 @@ export const FULLPAGE_CAPTURE_PREPARATION = Object.freeze({
  * These inline overrides exist only in the Puppeteer page used for evidence;
  * no public CSS or HTML is changed.
  */
-export async function prepareFullPageCapture(
-  page,
-  state,
-  options = FULLPAGE_CAPTURE_PREPARATION,
-) {
+export async function prepareFullPageCapture(page, state) {
   if (!state.fullPage) return null;
   const config = {
-    strategy: options.strategy || FULLPAGE_CAPTURE_PREPARATION.strategy,
-    stableSamples: options.stable_samples || FULLPAGE_CAPTURE_PREPARATION.stable_samples,
-    sampleIntervalMs:
-      options.sample_interval_ms || FULLPAGE_CAPTURE_PREPARATION.sample_interval_ms,
-    maxWaitMs: options.max_wait_ms || FULLPAGE_CAPTURE_PREPARATION.max_wait_ms,
+    strategy: FULLPAGE_CAPTURE_PREPARATION.strategy,
+    stableSamples: FULLPAGE_CAPTURE_PREPARATION.stable_samples,
+    sampleIntervalMs: FULLPAGE_CAPTURE_PREPARATION.sample_interval_ms,
+    maxWaitMs: FULLPAGE_CAPTURE_PREPARATION.max_wait_ms,
   };
 
   const wait = (milliseconds) => new Promise((resolveWait) => setTimeout(resolveWait, milliseconds));
