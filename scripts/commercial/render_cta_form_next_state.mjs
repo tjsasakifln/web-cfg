@@ -139,6 +139,7 @@ function constrainSharedSelectors(body, runtime) {
 
 function usefulSubmitLabel(profileId, current) {
   if (/^Enviar pedido de enquadramento$/i.test(current)) return "Registrar pedido para revisão de enquadramento";
+  if (/^Registrar parâmetros e abrir o pagamento$/i.test(current)) return "Registrar parâmetros e pedir instrução de pagamento";
   if (/^Quero uma segunda leitura deste contrato$/i.test(current)) return "Registrar pedido de segunda leitura deste contrato";
   if (!/^(?:Enviar solicitação|Enviar para análise)$/i.test(current)) return current;
   const labels = {

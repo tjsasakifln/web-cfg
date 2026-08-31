@@ -142,11 +142,12 @@
 </section> <section id="segunda-leitura" class="tool-cta-contextual" aria-labelledby="h-cta" data-cta-id="segunda-leitura-contrato">
 <h2 id="h-cta">Segunda leitura deste contrato</h2>
 <p>A leitura acima permanece útil sem enviar nada. Se quiser uma conferência humana da CONFENGE sobre <strong>este</strong> contrato, use o pedido abaixo.</p>
-<form action="/.netlify/functions/lead" class="contact-form" data-ajax="true" data-receipt-required="true" data-success-destination="/obrigado-contrato" data-submit-timeout-ms="15000" method="POST" name="diagnostico-b2g" id="lead-form">
+<form action="/.netlify/functions/lead" class="contact-form" data-ajax="true" data-success-destination="/obrigado-contrato" data-submit-timeout-ms="15000" method="POST" name="diagnostico-b2g" id="lead-form" data-form-contract="next-state/v1" data-next-state-profile="second_reading" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Vincule a leitura pública a um pedido de conferência humana sem repetir os dados do contrato nem enviar documentos pelo site.</p>
+<p class="form-hint" data-field-purpose>O identificador público já vem da ferramenta; nome e um canal válido permitem retorno; o contexto adicional é opcional. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <input name="form-name" type="hidden" value="segunda-leitura-contrato"/>
 <input name="origem" type="hidden" value="/ferramentas/diagnostico-defesa-margem/"/>
 <input name="jornada" id="jornada-hidden" type="hidden" value="contrato"/>
-<input name="estagio" type="hidden" value="problema urgente em contrato"/>
+<input name="estagio" type="hidden" value="problema urgente em contrato" id="estagio"/>
 <input name="asset_id" type="hidden" value="diagnostico-defesa-margem"/>
 <input name="route_family" type="hidden" value="defesa-margem-diagnostico"/>
 <input name="public_contract_id" id="public-contract-id" type="hidden" value="83102277000152-2-000626/2026"/>
@@ -156,14 +157,15 @@
 <p class="honeypot"><label for="empresa-site">Não preencha este campo</label><input autocomplete="off" id="empresa-site" name="empresa-site" tabindex="-1"/></p>
 <div class="field"><label for="nome">Nome</label><input autocomplete="name" id="nome" name="nome" required="" type="text"/></div>
 <div class="form-row">
-<div class="field"><label for="telefone">WhatsApp</label><input autocomplete="tel" id="telefone" inputmode="tel" name="telefone" type="tel"/></div>
-<div class="field"><label for="email">E-mail</label><input autocomplete="email" id="email" name="email" type="email"/></div>
+<div class="field"><label for="telefone">WhatsApp</label><input autocomplete="tel" id="telefone" inputmode="tel" name="telefone" type="tel" maxlength="20" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."/></div>
+<div class="field"><label for="email">E-mail</label><input autocomplete="email" id="email" name="email" type="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/></div>
 </div>
 <p class="form-hint">Informe WhatsApp ou e-mail para retorno.</p>
 <div class="field"><label for="mensagem">Contexto em poucas linhas <span class="optional-mark">opcional</span></label><textarea id="mensagem" name="mensagem" rows="3" placeholder="O que precisa ser conferido neste contrato. Não cole dados pessoais desnecessários."></textarea></div>
 <label class="consent" for="consentimento"><input id="consentimento" name="consentimento" required="" type="checkbox"/><span>Autorizo o uso destes dados para retorno sobre a solicitação, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span></label>
 <p class="form-status" role="status" aria-live="polite" aria-atomic="true" hidden></p>
-<button class="button button-primary button-lg form-submit" type="submit" data-tool-to-form data-cta-position="money-asset" data-event-name="cta_click" data-asset-id="diagnostico-defesa-margem" data-route-family="defesa-margem-diagnostico" data-cta-id="segunda-leitura-contrato">Quero uma segunda leitura deste contrato</button>
+<button class="button button-primary button-lg form-submit" type="submit" data-tool-to-form data-cta-position="money-asset" data-event-name="cta_click" data-asset-id="diagnostico-defesa-margem" data-route-family="defesa-margem-diagnostico" data-cta-id="segunda-leitura-contrato">Registrar pedido de segunda leitura deste contrato</button>
+<p class="form-hint" data-form-boundary>A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 </section>
 </div>

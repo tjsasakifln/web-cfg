@@ -226,7 +226,8 @@
 <p>Canal comercial, suporte e privacidade: <a href="mailto:tiago.sasaki@confenge.com.br">tiago.sasaki@confenge.com.br</a> · WhatsApp <a href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20enquadrar%20o%20Diagn%C3%B3stico%20de%20Expans%C3%A3o%20no%20Mercado%20P%C3%BAblico." data-cta-id="diag-exp-whatsapp" data-offer-id="CFG-DIAG-EXP-v1" data-asset-id="diagnostico-b2g-expansao">+55 48 98834-4559</a>.</p>
 <p><a href="/comercial/termos-diagnostico-b2g/">Termos B2B</a> · <a href="/comercial/privacidade-leads/">Aviso de privacidade</a></p>
 
-<form id="handraise-diag" class="offer-request-form" method="post" action="/.netlify/functions/lead" data-offer-id="CFG-DIAG-EXP-v1" data-cta-id="diag-exp-handraise" data-asset-id="diagnostico-b2g-expansao" data-route-family="diagnostico-b2g-expansao" data-cta-position="offer_final">
+<form id="handraise-diag" class="offer-request-form" method="post" action="/.netlify/functions/lead" data-offer-id="CFG-DIAG-EXP-v1" data-cta-id="diag-exp-handraise" data-asset-id="diagnostico-b2g-expansao" data-route-family="diagnostico-b2g-expansao" data-cta-position="offer_final" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="inline_receipt_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Registre a demanda e a decisão que está na mesa para a CONFENGE enquadrar a entrega, a prova necessária e a capacidade de atendimento.</p>
+<p class="form-hint" data-field-purpose>Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <h2>Conte o que sua empresa precisa avaliar</h2>
 <input type="hidden" name="offer_id" value="CFG-DIAG-EXP-v1"/>
 <input type="hidden" name="terms_id" value="CFG-TERMS-B2B-2026-08-17-v1"/>
@@ -239,13 +240,14 @@
 <input type="hidden" name="landing_page" value="https://confenge.com.br/diagnostico-b2g-expansao/"/>
 <label>Nome do representante <input name="nome" required autocomplete="name"/></label>
 <label>Empresa <input name="empresa" autocomplete="organization"/></label>
-<label>E-mail profissional <input name="email" type="email" autocomplete="email"/></label>
-<label>WhatsApp <input name="telefone" inputmode="numeric" autocomplete="tel"/></label>
+<label>E-mail profissional <input name="email" type="email" autocomplete="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/></label>
+<label>WhatsApp <input name="telefone" inputmode="tel" autocomplete="tel" type="tel" maxlength="20" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."/></label>
 <label>CNPJ <input name="cnpj" inputmode="numeric" autocomplete="off"/></label>
 <label>Mensagem <textarea name="mensagem" rows="3" maxlength="2000" placeholder="Contexto da expansão no mercado público (sem dados de proposta sigilosa)."></textarea></label>
 <label><input type="checkbox" name="consentimento" value="1" required/> autorizo o uso destes dados para retorno sobre o Diagnóstico de Expansão no Mercado Público</label>
-<button class="button button-primary" type="submit" id="btn-enquadramento">Enviar pedido de enquadramento</button>
+<button class="button button-primary" type="submit" id="btn-enquadramento">Registrar pedido para revisão de enquadramento</button>
 <p id="status" role="status"></p>
+<p class="form-hint" data-form-boundary>O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 <p>Se a demanda for adequada e houver capacidade, enviaremos as condições e os próximos passos pelo canal informado.</p>
 </div>
@@ -262,30 +264,74 @@
 (function () {
   var form = document.getElementById("handraise-diag");
   var status = document.getElementById("status");
+  var button = document.getElementById("btn-enquadramento");
   var submitted = false;
+  var submitting = false;
+  var idempotencyStorageKey = "confenge_idem:/diagnostico-b2g-expansao/:diag-exp-handraise";
   if (!form) return;
   function show(msg) { status.textContent = msg || ""; }
+  function track(name, props) {
+    if (typeof window.confengeTrack === "function") window.confengeTrack(name, props || {});
+  }
+  function idempotencyKey() {
+    var key = "";
+    try { key = sessionStorage.getItem(idempotencyStorageKey) || ""; } catch (_) {}
+    if (!key) {
+      key = "fe-" + (window.crypto && typeof window.crypto.randomUUID === "function"
+        ? window.crypto.randomUUID()
+        : Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12));
+      try { sessionStorage.setItem(idempotencyStorageKey, key); } catch (_) {}
+    }
+    return key;
+  }
+  form.addEventListener("focusin", function () {
+    track("lead_form_start", {
+      page_path: "/diagnostico-b2g-expansao/",
+      route_family: "diagnostico-b2g-expansao",
+      asset_id: "diagnostico-b2g-expansao",
+      cta_id: "diag-exp-handraise"
+    });
+  }, { once: true });
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
     if (submitted) {
       show("Pedido já enviado. Evite dupla submissão.");
       return;
     }
+    if (submitting) return;
     var data = new FormData(form);
     var body = {};
     data.forEach(function (value, key) { body[key] = value; });
     body.consentimento = data.get("consentimento") === "1";
     body.offer_id = "CFG-DIAG-EXP-v1";
     body.terms_id = data.get("terms_id") || "CFG-TERMS-B2B-2026-08-17-v1";
-    show("Enviando pedido de enquadramento…");
+    var turnstileToken = String(data.get("cf-turnstile-response") || "");
+    if (turnstileToken) {
+      body.turnstile_token = turnstileToken;
+      body["cf-turnstile-response"] = turnstileToken;
+    }
+    body.idempotency_key = idempotencyKey();
+    submitting = true;
+    if (button) button.disabled = true;
+    show("Registrando pedido de enquadramento…");
+    track("lead_form_submit", {
+      page_path: "/diagnostico-b2g-expansao/",
+      route_family: "diagnostico-b2g-expansao",
+      asset_id: "diagnostico-b2g-expansao",
+      cta_id: "diag-exp-handraise"
+    });
     fetch("/.netlify/functions/lead", {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", "Idempotency-Key": body.idempotency_key },
       body: JSON.stringify(body)
     }).then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); })
       .then(function (out) {
         if (!out.j || !out.j.ok) {
           var err = (out.j && out.j.error) || "";
+          if (err === "anti_abuse" || String(err).indexOf("turnstile") !== -1) {
+            show("Validação de segurança não concluída. O pedido não foi registrado e não há protocolo; confirme e tente de novo.");
+            return;
+          }
           if (err === "terms_version_mismatch") {
             show("Os termos submetidos não coincidem com o registro vigente. O envio foi bloqueado.");
             return;
@@ -297,11 +343,38 @@
           show((out.j && out.j.message) || "Não foi possível persistir o pedido. Tente de novo.");
           return;
         }
+        var receipt = String(out.j.lead_id || out.j.receipt_id || "");
+        if (!receipt) {
+          show("O servidor não confirmou o protocolo. O pedido continua sem confirmação e pode ser reenviado.");
+          return;
+        }
         submitted = true;
-        form.querySelector("button[type=submit]").disabled = true;
-        show("Pedido recebido. Entraremos em contato pelo canal informado.");
+        try {
+          sessionStorage.setItem("confenge_last_receipt", receipt);
+          sessionStorage.removeItem(idempotencyStorageKey);
+        } catch (_) {}
+        show("Pedido registrado. Protocolo CONFENGE: " + receipt + ". Próximo estado: revisão de enquadramento e capacidade.");
+        track("lead_form_success", {
+          page_path: "/diagnostico-b2g-expansao/",
+          route_family: "diagnostico-b2g-expansao",
+          asset_id: "diagnostico-b2g-expansao",
+          cta_id: "diag-exp-handraise",
+          receipt_id: receipt
+        });
+        track("lead_persisted", {
+          page_path: "/diagnostico-b2g-expansao/",
+          route_family: "diagnostico-b2g-expansao",
+          asset_id: "diagnostico-b2g-expansao",
+          cta_id: "diag-exp-handraise",
+          lead_id: receipt,
+          source: "CONFENGE_WEB"
+        });
       })
-      .catch(function () { show("Falha de rede. Tente de novo."); });
+      .catch(function () { show("Falha de rede. O pedido não foi registrado e não há protocolo; tente de novo."); })
+      .finally(function () {
+        submitting = false;
+        if (button && !submitted) button.disabled = false;
+      });
   });
 })();
 </script>

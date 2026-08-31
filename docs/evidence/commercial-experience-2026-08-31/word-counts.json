@@ -1,0 +1,16 @@
+{
+  "schema": "confenge.commercial-experience-word-counts/1.0",
+  "method": "Visible Unicode words inside main; scripts, styles, templates and noscript removed. main_without_forms also removes form elements.",
+  "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "routes": {
+    "/servicos-obras-publicas/": {"full_main": {"before": 744, "after": 847, "delta": 103}, "main_without_forms": {"before": 628, "after": 618, "delta": -10}, "form_delta": 113},
+    "/diagnostico-b2g-expansao/": {"full_main": {"before": 1038, "after": 1139, "delta": 101}, "main_without_forms": {"before": 1003, "after": 985, "delta": -18}, "form_delta": 119},
+    "/bid-room-licitacoes-obras/": {"full_main": {"before": 1266, "after": 1342, "delta": 76}, "main_without_forms": {"before": 1223, "after": 1182, "delta": -41}, "form_delta": 117},
+    "/defesa-margem-contratos-publicos/": {"full_main": {"before": 1296, "after": 1420, "delta": 124}, "main_without_forms": {"before": 1204, "after": 1211, "delta": 7}, "form_delta": 117},
+    "/atrasos-prorrogacao-obras-publicas/": {"full_main": {"before": 1231, "after": 1333, "delta": 102}, "main_without_forms": {"before": 1161, "after": 1143, "delta": -18}, "form_delta": 120},
+    "/defesa-tecnica-contratos-publicos/": {"full_main": {"before": 1145, "after": 1268, "delta": 123}, "main_without_forms": {"before": 1075, "after": 1078, "delta": 3}, "form_delta": 120},
+    "/acompanhamento-contratos-obras/": {"full_main": {"before": 903, "after": 962, "delta": 59}, "main_without_forms": {"before": 882, "after": 821, "delta": -61}, "form_delta": 120},
+    "/diretoria-b2g/": {"full_main": {"before": 1505, "after": 1628, "delta": 123}, "main_without_forms": {"before": 1483, "after": 1489, "delta": 6}, "form_delta": 117}
+  }
+}
+

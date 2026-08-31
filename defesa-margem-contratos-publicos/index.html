@@ -78,7 +78,7 @@
 <ul class="hero-proof" aria-label="Credenciais e posicionamento"><li><span class="proof-mark" aria-hidden="true">·</span><span>Ferramenta e exemplo sintético abertos</span></li><li><span class="proof-mark" aria-hidden="true">·</span><span>Fiscalização e gestão contratual</span></li></ul>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-offer-id="contract-defense" data-cta-position="offer_hero" data-event-name="offer_cta_click" data-journey="contrato" data-cta-id="contato-direto" data-route-family="margin-defense" href="#captura-pilar">Solicitar canal seguro para envio <svg class="icon"><use href="#i-arrow"></use></svg></a>
-<a class="text-link" data-journey="contrato" data-cta-id="contato-direto" data-route-family="margin-defense" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio." rel="noopener" target="_blank">Prefiro WhatsApp</a>
+<a class="text-link" data-journey="contrato" data-cta-id="contato-direto" data-route-family="margin-defense" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20sob%20press%C3%A3o%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio." rel="noopener" target="_blank">Pedir triagem pelo WhatsApp</a>
 <a class="text-link" data-journey="contrato" data-cta-id="diagnosticar-contrato" data-asset-id="diagnostico-defesa-margem" data-route-family="defesa-margem-diagnostico" href="/ferramentas/diagnostico-defesa-margem/">Fazer uma primeira leitura do contrato</a>
 </div>
 <p class="hero-micro">Piloto em validação: R$ 2.900 e 5 dias úteis para um contrato e até cinco eventos, após insumos válidos e capacidade confirmada. Não inclui quantificação integral, advocacia, protocolo ou promessa de recuperação.</p>
@@ -201,7 +201,8 @@
 <section class="section pillar-capture" id="captura-pilar">
 <div class="container pillar-capture-grid">
 <div class="pillar-capture-copy"><p class="eyebrow">Próximo passo</p><h2>Envie o evento de margem nesta página</h2><p>Traga o contrato, o evento e o documento disponível para uma primeira leitura. O formulário não conclui contratação nem promete recuperação.</p></div>
-<form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-receipt-required="true" data-offer-id="" data-cta-id="defesa-margem-contratos-publicos-handraise" data-asset-id="defesa-margem-contratos-publicos" data-route-family="defesa-margem-contratos-publicos" data-cta-position="pillar_capture">
+<form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="defesa-margem-contratos-publicos-handraise" data-asset-id="defesa-margem-contratos-publicos" data-route-family="defesa-margem-contratos-publicos" data-cta-position="pillar_capture" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Registre a demanda e a decisão que está na mesa para a CONFENGE enquadrar a entrega, a prova necessária e a capacidade de atendimento.</p>
+<p class="form-hint" data-field-purpose>Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <!-- GENERATED:CONTRACT-DEFENSE-FIELDS:START -->
 <input name="deliverable_id" type="hidden" value="CFG-D17"/>
 <label>Identificador do contrato <input name="public_contract_id" maxlength="80" required/></label>
@@ -220,13 +221,14 @@
 <input type="hidden" name="document_intent" value="secure_channel_request">
 <label>Nome do representante <input id="nome" name="nome" required autocomplete="name"></label>
 <label>Empresa <input id="empresa" name="empresa" autocomplete="organization"></label>
-<label>E-mail profissional <input id="email" name="email" type="email" autocomplete="email"></label>
-<label>WhatsApp <input id="telefone" name="telefone" inputmode="numeric" autocomplete="tel"></label>
+<label>E-mail profissional <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."></label>
+<label>WhatsApp <input id="telefone" name="telefone" inputmode="tel" autocomplete="tel" type="tel" maxlength="20" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."></label>
 <label>Contexto <textarea id="mensagem" name="mensagem" rows="4" maxlength="2000" placeholder="Evento, impacto e documento disponível."></textarea></label>
 <label class="capture-consent"><input type="checkbox" name="canal_seguro" value="1"> Solicitar canal seguro para envio. Após o primeiro contato, a CONFENGE abre um canal seguro para o envio da documentação.</label>
 <label class="capture-consent"><input type="checkbox" name="consentimento" value="1" required> Autorizo o uso destes dados para retorno sobre esta demanda.</label>
 <button class="button button-primary" type="submit">Solicitar canal seguro para envio</button>
 <p class="form-status" role="status" aria-live="polite"></p>
+<p class="form-hint" data-form-boundary>O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 </div>
 </section>

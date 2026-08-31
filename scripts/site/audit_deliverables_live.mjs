@@ -9,7 +9,7 @@
  * Usage:
  *   node scripts/site/audit_deliverables_live.mjs \
  *     --base=https://confenge.com.br \
- *     --out=docs/evidence/issue-530-live-2026-08-31
+ *     --out=docs/evidence/commercial-experience-2026-08-31/deliverables
  */
 import crypto from "node:crypto";
 import fs from "node:fs";
@@ -290,10 +290,9 @@ async function inspectPage(page, expected) {
       contract_boundary: hasSynthetic(document.querySelector(".eight-contract__synthetic-boundary")),
       structured_disclosure: /sint[ée]tic/i.test(JSON.stringify(jsonLd)),
     };
-    // The ladder must live in main content, never only in global chrome/footer.
-    // Model templates use several historical class names, so main is the one
-    // stable semantic boundary shared by all nine routes.
-    const ladderNodes = [document.querySelector("main")].filter(Boolean);
+    // The ladder must be an explicit main-content component, never only a link
+    // in global chrome/footer or an incidental mention elsewhere on the page.
+    const ladderNodes = [...document.querySelectorAll("main [data-offer-ladder]")];
     const ladderText = normalize(ladderNodes.map((node) => node.textContent).join(" "));
     const ladderLinks = ladderNodes.flatMap((node) => [...node.querySelectorAll("a[href]")].map((link) => ({
       href: link.getAttribute("href"),
@@ -333,6 +332,7 @@ async function inspectPage(page, expected) {
         expected_ctas: routeExpected.attribution.ctas.length,
       },
       ladder: {
+        explicit_components: ladderNodes.length,
         has_units_sum: ladderText.includes(routeExpected.package.units_sum_display),
         has_package_price: ladderText.includes(routeExpected.package.package_price_display),
         has_credit_window: ladderText.includes(`${routeExpected.package.credit_window_days} dias`),
@@ -380,6 +380,7 @@ function validateMetrics(metrics, expected) {
     add(errors, metrics.hub?.capabilities === 54, "capability_count");
     add(errors, JSON.stringify(metrics.hub?.state_counts) === JSON.stringify({ PUBLISHED: 8, VALIDATE: 44, BLOCKED: 2 }), "capability_semantics");
     add(errors, JSON.stringify(metrics.hub?.capability_projection) === JSON.stringify(expectedCapabilities), "capability_identity_or_state_drift");
+    add(errors, metrics.ladder.explicit_components === 1, "explicit_value_ladder_missing");
     add(errors, metrics.ladder.has_units_sum && metrics.ladder.has_package_price && metrics.ladder.has_credit_window, "value_ladder_arithmetic");
     add(errors, metrics.ladder.says_unit_01_has_no_credit, "unit_01_no_credit_boundary_missing");
     add(errors, metrics.ladder.diagnosis_link, "diagnosis_step_missing");
@@ -390,6 +391,7 @@ function validateMetrics(metrics, expected) {
     }
   } else {
     add(errors, ["WebPage", "Report", "BreadcrumbList"].every((type) => metrics.schema.types.includes(type)), "model_schema_types");
+    add(errors, metrics.ladder.explicit_components === 1, "explicit_value_ladder_missing");
     add(errors, metrics.ladder.has_credit_window, "credit_window_missing");
     add(errors, metrics.ladder.diagnosis_link, "diagnosis_step_missing");
     add(errors, metrics.ladder.recurring_direction_context, "recurring_direction_step_missing");
@@ -511,7 +513,7 @@ try {
 
 const report = {
   schema: "confenge.deliverables-live-audit/1.0",
-  issue: 530,
+  issue: 547,
   generated_at: new Date().toISOString(),
   base_url: base,
   expected_main_sha: expectedSha,
@@ -523,7 +525,7 @@ const report = {
     host_architecture_version: runtimeInfo.host_architecture_version,
     expected: expectedRuntime,
   },
-  decision_state: "VALIDATE_LIVE",
+  decision_state: "EXECUTE_NOW",
   full_page: "DEFERRED_BY_540",
   capture_method: "first-fold viewport and named DOM-element segments only; fullPage is never requested",
   schema_policy: {
@@ -567,8 +569,8 @@ for (const expected of routes) {
     const segments = [];
     if (viewport.id === "1366x768") {
       const selectors = expected.kind === "hub"
-        ? [["decision-nav", ".offer-decision-nav"], ["first-offer", "#entrega-01"], ["last-offer", "#entrega-08"], ["form", "main form"]]
-        : [["value", ".eight-contract__value"], ["price-cta", ".report-final-offer"], ["form", "main form"]];
+        ? [["decision-nav", ".offer-decision-nav"], ["first-offer", "#entrega-01"], ["last-offer", "#entrega-08"], ["ladder", "[data-offer-ladder]"], ["form", "main form"]]
+        : [["value", ".eight-contract__value"], ["ladder", "[data-offer-ladder]"], ["price-cta", ".report-final-offer"], ["form", "main form"]];
       for (const [name, selector] of selectors) {
         const record = await captureSegment(page, selector, path.join(screenshotsDir, `${prefix}-${name}.png`));
         if (record) segments.push(record); else errors.push(`segment_missing:${name}`);
@@ -644,9 +646,9 @@ const allErrors = (entry) => [
 const d01 = report.routes.find(({ deliverable_id: id }) => id === "CFG-D01");
 if (d01 && allErrors(d01).includes("unit_01_false_credit_promise")) {
   report.defects.push({
-    id: "CFG530-D01-CREDIT-CONTRADICTION",
+    id: "CFG547-D01-CREDIT-CONTRADICTION",
     severity: "HIGH",
-    owner_issue: 528,
+    owner_issue: 547,
     affected_routes: [d01.route],
     symptoms: [
       "unit_01_false_credit_promise",
@@ -672,9 +674,9 @@ const recurringAffected = report.routes
   .map(({ route }) => route);
 if (recurringAffected.length) {
   report.defects.push({
-    id: "CFG530-RECURRING-DIRECTION-LADDER-MISSING",
+    id: "CFG547-RECURRING-DIRECTION-LADDER-MISSING",
     severity: "MEDIUM",
-    owner_issue: 528,
+    owner_issue: 547,
     affected_routes: recurringAffected,
     symptoms: ["recurring_direction_step_missing"],
     reproduction: [
