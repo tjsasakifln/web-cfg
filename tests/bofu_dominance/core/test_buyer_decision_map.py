@@ -213,6 +213,30 @@ def test_query_visibility_is_censored_and_cannot_own_or_score_a_family():
         item.reason for item in report.findings
     }
 
+    hidden_in_allowed_field = _manual_snapshot()
+    hidden_in_allowed_field["query_visibility"]["forbidden_inference"] = {
+        "visible_queries": ["plaintext query hidden inside an allowed key"]
+    }
+    report = validate_buyer_decision_map(manual_snapshot=hidden_in_allowed_field)
+    assert "query_visibility_contract_drift" in {
+        item.reason for item in report.findings
+    }
+
+    hidden_in_scalar = _manual_snapshot()
+    hidden_in_scalar["weekly_interpretation"] = ["plaintext query in scalar slot"]
+    report = validate_buyer_decision_map(manual_snapshot=hidden_in_scalar)
+    assert "manual_snapshot_scalar_drift" in {
+        item.reason for item in report.findings
+    }
+
+    malformed_container = _manual_snapshot()
+    malformed_container["raw_export_provenance"] = ["not a mapping"]
+    report = validate_buyer_decision_map(manual_snapshot=malformed_container)
+    assert report.ok is False
+    assert "manual_snapshot_closed_schema_violation" in {
+        item.reason for item in report.findings
+    }
+
 
 def test_page_absence_remains_unknown_and_zero_clicks_are_exposure_only():
     missing = _manual_snapshot()
