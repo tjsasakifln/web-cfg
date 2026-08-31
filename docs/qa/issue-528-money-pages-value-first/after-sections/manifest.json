@@ -4,9 +4,9 @@
   "capture_mode": "first_fold_and_element_sections_no_fullpage",
   "fullpage_used": false,
   "fullpage_limitation_issue": 540,
-  "captured_at": "2026-08-31T15:55:23.321Z",
-  "commit_sha": "c09e5ad3a2231cd2f67912e6b2308fafa5fcf675",
-  "rendered_content_sha": "c09e5ad3a2231cd2f67912e6b2308fafa5fcf675",
+  "captured_at": "2026-08-31T16:05:15.086Z",
+  "commit_sha": "05b44c70df8a1a872cb7d923547e2b75f98ae034",
+  "rendered_content_sha": "05b44c70df8a1a872cb7d923547e2b75f98ae034",
   "remote_build_info": null,
   "tree_dirty": false,
   "base_url": "http://127.0.0.1:8798",
@@ -142,7 +142,7 @@
       "section": "hero",
       "viewport": "390x844",
       "file": "bid-room-licitacoes-obras-hero-390x844.png",
-      "sha256": "3f3d0f3c7e4d8dcc2774c4a449745afc3b151eff5fc3cdfd4a7b16ea40a897f2"
+      "sha256": "187ac86680d39e99f7c277a4695fde39ac4e8572039b2a8f873bf79c283053b8"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -166,7 +166,7 @@
       "section": "price-value",
       "viewport": "390x844",
       "file": "bid-room-licitacoes-obras-price-value-390x844.png",
-      "sha256": "f0a42d9e118bb35796269cffa4d8c5799c15e6543ea3cc9e7d072ed78fa2e047"
+      "sha256": "ea98142b6c70648c6ac3c66c7457f04b186b41c60bb2e2734a8251de8f324248"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -182,7 +182,7 @@
       "section": "hero",
       "viewport": "1366x768",
       "file": "bid-room-licitacoes-obras-hero-1366x768.png",
-      "sha256": "9c970502b5dfcbd01e1c6aa1ad18574edb29721b8c84117853c34867fb9bfd1d"
+      "sha256": "e4b9409ae30897c89519e2b42864c955370f9f4820ec97c2bebd78b2b19007c0"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -206,7 +206,7 @@
       "section": "price-value",
       "viewport": "1366x768",
       "file": "bid-room-licitacoes-obras-price-value-1366x768.png",
-      "sha256": "9526e08fa949c174b9477cbf866c68dc8260d50d439779d0522926d609a3ceff"
+      "sha256": "b6da0fab6174d55ff04d026fdcdaca2200eb6610fbbd08c980fdfa0a984796c3"
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
