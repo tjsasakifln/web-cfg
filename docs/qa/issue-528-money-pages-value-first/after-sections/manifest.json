@@ -4,9 +4,9 @@
   "capture_mode": "first_fold_and_element_sections_no_fullpage",
   "fullpage_used": false,
   "fullpage_limitation_issue": 540,
-  "captured_at": "2026-08-31T15:17:40.934Z",
-  "commit_sha": "66f9934942463f9e73166ddc5d6a586fabb3bbf6",
-  "rendered_content_sha": "66f9934942463f9e73166ddc5d6a586fabb3bbf6",
+  "captured_at": "2026-08-31T15:35:04.004Z",
+  "commit_sha": "2b876ee7222af877cac913790f8b556c304a942a",
+  "rendered_content_sha": "2b876ee7222af877cac913790f8b556c304a942a",
   "remote_build_info": null,
   "tree_dirty": false,
   "base_url": "http://127.0.0.1:8798",
@@ -430,7 +430,7 @@
       "section": "engagement",
       "viewport": "390x844",
       "file": "acompanhamento-contratos-obras-engagement-390x844.png",
-      "sha256": "7e69b3d32230e5b6a1a2ddf53b785df318bc4db0cea14fa46796a09806d38b08"
+      "sha256": "7d0c3b700c2f2cb9a2e307eee2d931e9290a33cf28441f3846d827243cce0d7e"
     },
     {
       "route": "/acompanhamento-contratos-obras/",
@@ -462,7 +462,7 @@
       "section": "engagement",
       "viewport": "1366x768",
       "file": "acompanhamento-contratos-obras-engagement-1366x768.png",
-      "sha256": "03a58967201573e15923738fe9d256ef019d014bfe12166750035b7cfcb4ee4e"
+      "sha256": "a5004da398c64918e6988a7741458e9e901e99cb7a4c1cca87a126b314d883fe"
     },
     {
       "route": "/diretoria-b2g/",
