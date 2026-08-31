@@ -223,6 +223,53 @@ conteúdo da dobra e respiro do espaçamento, nunca de afrouxar o gate.
 
 ---
 
+## 5-ter. Reversão de paleta, 2026-08-31
+
+O dono da marca inspecionou a versão escura em produção de preview e preferiu a
+paleta institucional: mais CONFENGE, menos categoria. **Revertidas as cores e
+nada além delas.**
+
+A decisão 1 da §2.2, o campo escuro `--field:#08130e`, **não está mais em
+produção**. `assets/home-10x.css` avisa isso no cabeçalho, antes da seção 0,
+para que ninguém leia a documentação como se ela descrevesse a página. As
+decisões 2 (uma família, três larguras) e 3 (régua no lugar de caixa) seguem
+valendo na íntegra, e foram justamente elas que sobreviveram à troca de
+superfície sem alteração nenhuma.
+
+O que voltou:
+
+- `--field` volta a ser folha. A dobra é branca, tinta `--ink`, acento
+  `--green-700`, e reganha a aresta inferior de 1px da folha global.
+- O escuro não sai da página: volta para onde a folha global sempre o pôs.
+  Oferta dominante e captura em `#071a31`, rodapé em `--navy-950`, acento em
+  `--lime`. São as tintas de `styles.css`, não uma paleta nova.
+- A ação primária da dobra era branco sólido sobre campo escuro; volta a ser
+  `--green-700` com texto branco, a cor de ação do resto do site.
+- Os fios da dobra eram alfa branco sobre tinta; viram `--rule` e
+  `--rule-strong`.
+- A faixa de escala era branca contra campo escuro, e a troca de superfície era
+  o sinal de que a dobra acabou. Com a dobra clara ela passa a `--soft`, para
+  continuar sendo faixa e não continuação.
+- O anel de foco invertido some: sobre folha o anel global já é o correto.
+
+**A reversão não tocou em geometria, e a medida prova.** As razões de `.hero`
+depois da troca de cor batem com as de antes dela a menos de arredondamento de
+1px: 1,017 → 1,018; 0,917 → 0,918; 0,830 → 0,831; 0,808 → 0,809; 0,897 → 0,898;
+0,765 → 0,766. Densidade e paleta são mudanças separáveis, e foram separadas.
+
+Contraste remedido com `_contrast_ratio` do próprio repositório, não estimado:
+`--field-ink` 17,48:1, `--field-muted` 5,51:1, `--accent-live` 6,13:1, branco
+sobre o CTA verde 6,13:1, `--dark-ink` 17,48:1, `--dark-muted` 10,72:1,
+`--dark-accent` 11,05:1. Todos acima do piso de 4,5:1, e `audit:axe` segue em 0
+violações sobre folha.
+
+Custo assumido, declarado e não escondido: a captura `#071a31` volta a ficar
+empilhada contra o rodapé `#031020`, que é a aresta de duas tintas quase iguais
+que o campo escuro tinha resolvido. É o preço da paleta institucional, e é uma
+escolha do dono da marca, não um descuido.
+
+---
+
 ## 6. Definition of done
 
 - [x] veto do brand owner registrado com SHA e data, e a evidência de #525/#526 preservada em vez de apagada
