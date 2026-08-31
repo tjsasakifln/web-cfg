@@ -227,35 +227,55 @@ body[data-content-cluster="home"] .home-hero-grid{
   font-size:clamp(1.6rem,2.9vw,2.55rem);
 }
 .hero-verdict-foot{
-  margin:1rem 0 0;color:var(--field-muted);font-size:.875rem;line-height:1.55;max-width:34ch;
+  margin:1rem 0 0;color:var(--field-muted);font-size:.875rem;line-height:1.55;
 }
+.hero-verdict-foot strong{color:var(--field-ink);font-weight:650}
 
-/* Escala da operacao. Sao os dois unicos numeros da dobra, e e aqui que o
- * tabular-nums que a folha ja carregava desde #526 finalmente trabalha: os
- * dois valores alinham na virgula. Rotulo em cima, numero embaixo, como em
- * .home-deliverables-result, para a pagina ter um so jeito de mostrar dado.
- * Procedencia colada ao numero, uma linha, em vez de ressalva empilhada. */
-.hero-scale{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1rem,2.5vw,1.75rem);
-  margin:1.5rem 0 0;padding-top:1.15rem;border-top:1px solid rgba(255,255,255,.22);
+/* -- 3b. Faixa de escala: a primeira coisa depois do campo -------------- */
+/* Os numeros sairam da dobra. Nao por serem fracos, mas por disputarem a
+ * mensagem com ela: um visitante em 390x844 recebia categoria, tese, promessa,
+ * entregavel, acao, credencial, veredito E escala antes de rolar. Aqui eles
+ * ficam a um passo do olho e nao dentro do argumento.
+ *
+ * A aresta e deliberada: o campo escuro termina, a folha comeca. Essa troca de
+ * superficie e o sinal de que a dobra acabou, e e o que uma faixa dentro do
+ * proprio hero nao conseguia dar.
+ *
+ * Nao e um oitavo bloco narrativo. Nao tem titulo, nao tem acao e nao e uma
+ * <section>: e um <div> no nivel do <main>, que e exatamente como o gate de
+ * arquetipos de test_design_gates.py enxerga o que nao e secao. Rotular esta
+ * faixa de "secao" para caber no gate seria o inverso do que ela e.
+ *
+ * Dois numeros, nesta ordem: primeiro o recorte que interessa a uma
+ * construtora, depois o universo de onde ele sai. Magnitude sozinha nao e
+ * argumento; 4,48 milhoes sem os 54.055 ao lado convida a leitura errada de
+ * que ha 4,48 milhoes de contratos de engenharia. */
+.home-proof-strip{background:var(--white);border-bottom:1px solid var(--rule)}
+.home-proof-strip-inner{
+  display:grid;grid-template-columns:minmax(0,1.2fr) repeat(2,minmax(0,.6fr));
+  gap:clamp(1.25rem,3vw,3rem);align-items:end;
+  padding-block:clamp(1.5rem,2.6vw,2.25rem);
 }
-/* Os dois rotulos tem numero de linhas diferente; sem a linha 1fr os
- * valores nao pousariam na mesma base. */
-.hero-scale>div{display:grid;grid-template-rows:1fr auto;min-width:0}
-.hero-scale dt{
-  color:var(--field-muted);font-stretch:var(--narrow);font-weight:750;
+.home-proof-strip-claim{
+  grid-row:1;margin:0;max-width:30ch;
+  color:var(--ink);font-size:clamp(1.02rem,1.5vw,1.2rem);font-weight:650;line-height:1.4;
+}
+.home-proof-strip-figures{display:contents;margin:0}
+.home-proof-strip-figures>div{display:grid;grid-template-rows:1fr auto;min-width:0}
+.home-proof-strip-figures dt{
+  color:#526275;font-stretch:var(--narrow);font-weight:750;
   letter-spacing:.09em;text-transform:uppercase;font-size:var(--text-micro);line-height:1.35;
 }
-.hero-scale dd{
-  margin:.4rem 0 0;color:var(--field-ink);font-stretch:var(--wide);font-weight:760;
-  letter-spacing:-.03em;line-height:1;font-size:clamp(1.5rem,2.4vw,2rem);
+.home-proof-strip-figures dd{
+  margin:.4rem 0 0;color:var(--ink);font-stretch:var(--wide);font-weight:760;
+  letter-spacing:-.03em;line-height:1;font-size:clamp(1.5rem,2.4vw,2.1rem);
 }
-.hero-scale-base{
-  margin:.85rem 0 0;color:var(--field-muted);font-size:var(--text-micro);line-height:1.5;
+.home-proof-strip-base{
+  grid-column:1 / -1;max-width:82ch;margin:1rem 0 0;padding-top:.9rem;border-top:1px solid var(--rule);
+  color:#526275;font-size:var(--text-micro);line-height:1.5;
 }
-.hero-scale-base a{color:var(--field-ink);text-decoration:underline;text-underline-offset:3px}
-.hero-scale-base a:hover{color:var(--accent-live)}
-.hero-verdict-foot strong{color:var(--field-ink);font-weight:650}
+.home-proof-strip-base a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.home-proof-strip-base a:hover{color:var(--accent)}
 
 /* ── 4. Tres portas: linha editorial, nao card ─────────────────────────── */
 body[data-content-cluster="home"] .journeys-section{border-bottom:0}
@@ -530,7 +550,7 @@ body[data-content-cluster="home"] .site-footer{background:var(--field)}
 
 /* ── 11. Responsivo ────────────────────────────────────────────────────── */
 @media (max-width:940px){
-  body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.75rem}
+  body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.25rem}
 }
 @media (max-width:1100px){
   body[data-content-cluster="home"] .offer-layout{grid-template-columns:minmax(0,1fr)}
@@ -548,24 +568,25 @@ body[data-content-cluster="home"] .site-footer{background:var(--field)}
   body[data-content-cluster="home"] .journey-kind{margin:0}
 }
 @media (max-width:700px){
-  body[data-content-cluster="home"] .hero{padding:1.4rem 0 1.5rem}
+  body[data-content-cluster="home"] .hero{padding:1.4rem 0 1.15rem}
   body[data-content-cluster="home"] .hero h1{font-size:clamp(1.95rem,7.5vw,2.4rem);max-width:none}
   body[data-content-cluster="home"] .hero-lead{font-size:1rem;margin-bottom:.9rem}
-  body[data-content-cluster="home"] .hero-deliverable{font-size:.97rem;margin-bottom:1.15rem;padding-top:.85rem}
-  body[data-content-cluster="home"] .hero-actions{display:grid;gap:.65rem;margin-bottom:1.1rem}
+  body[data-content-cluster="home"] .hero-deliverable{font-size:.97rem;margin-bottom:1rem;padding-top:.8rem}
+  body[data-content-cluster="home"] .hero-actions{display:grid;gap:.65rem;margin-bottom:.95rem}
   body[data-content-cluster="home"] .hero-actions .button{width:100%}
   body[data-content-cluster="home"] .hero-secondary{justify-content:flex-start}
   body[data-content-cluster="home"] .hero-proof{gap:.35rem 1.25rem;padding-top:.85rem}
   .hero-verdict{margin-top:.1rem}
-  .hero-verdict-label{margin-bottom:.5rem}
-  .hero-verdict-set li{font-size:1.25rem;padding:.4rem 0}
-  .hero-verdict-foot{margin-top:.7rem;font-size:var(--text-small);max-width:none}
+  .hero-verdict-label{margin-bottom:.4rem}
+  .hero-verdict-set li{font-size:1.25rem;padding:.34rem 0}
+  .hero-verdict-foot{margin-top:.6rem;font-size:var(--text-small)}
   /* A dobra movel encostava em heroCap 1.25 do test_ui_geometry sem folga
    * nenhuma. Aqui esta a margem de seguranca, tirada do respiro e nao do
    * conteudo: nenhuma linha some. */
-  .hero-scale{margin-top:.9rem;padding-top:.75rem;gap:.75rem}
-  .hero-scale dd{font-size:1.3rem;margin-top:.3rem}
-  .hero-scale-base{margin-top:.65rem}
+  .home-proof-strip-inner{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.1rem 1.5rem}
+  .home-proof-strip-claim{grid-column:1 / -1;max-width:none;font-size:1.02rem}
+  .home-proof-strip-figures dd{font-size:1.45rem}
+  .home-proof-strip-base{margin-top:.55rem;padding-top:.75rem}
   .home-deliverables{margin-top:2rem}
   .home-deliverables-copy h3{font-size:1.3rem}
   .home-deliverables-result dd{font-size:1.4rem}
@@ -595,5 +616,5 @@ body[data-content-cluster="home"] .site-footer{background:var(--field)}
   body[data-content-cluster="home"] .hero-proof{padding-top:.75rem}
   .hero-verdict-set li{font-size:1.12rem;padding:.32rem 0}
   .hero-verdict-foot{margin-top:.6rem}
-  .hero-scale dd{font-size:1.2rem}
+  .home-proof-strip-figures dd{font-size:1.3rem}
 }
