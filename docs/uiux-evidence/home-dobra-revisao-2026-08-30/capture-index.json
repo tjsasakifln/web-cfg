@@ -1,0 +1,140 @@
+{
+ "campaign": "CONFENGE_HOME_FIRST_FOLD_REVISION_20260830",
+ "route": "/",
+ "record": "docs/design-audit/issues/13-home-commercial-direction.md#5-bis",
+ "before_commit": "68dbfada49deac48c5340e0381b5684e7f2160f7",
+ "before_note": "HEAD do PR #541 imediatamente antes da revisao adversarial final. NAO e 15e56bc5c, que e o estado anterior a direcao 'parecer' e ja esta medido em home-parecer-2026-08-30. Estes pares mostram o delta desta revisao sobre a direcao ja aprovada, nao o delta da direcao.",
+ "after_commit": "4cca7f13e4dde4fed08c8c75efcd75a831c3fb83",
+ "state": "default (primeira dobra)",
+ "harness": "scripts/site/capture_screenshots.mjs",
+ "capture_note": "Os dois lados foram capturados de worktrees limpas nos respectivos commits, nunca da arvore de trabalho. Nenhum dos dois manifests e provisional.",
+ "hero_ratio_note": "altura de .hero dividida pela altura do viewport, medida em Chrome headless nos dois commits. O teto de scripts/site/test_ui_geometry.mjs e 1.25 e nao foi tocado. LEITURA HONESTA DO RESULTADO: o ganho e de 390 a 768 de largura, onde a grade do hero empilha e a coluna do parecer entra na conta da altura. De 1024 para cima a altura de .hero e IDENTICA antes e depois, 620px, 689px e 689px, porque a grade e align-items:center e a coluna da esquerda sempre foi a mais alta: tirar dois numeros e uma nota da coluna da direita nao encurta uma linha que a esquerda define. O que muda no desktop nao e a altura da caixa, e a densidade dentro dela: a dobra passou a carregar menos coisa para ler, e a escala foi para a faixa logo abaixo. Publicar esses tres viewports como se tivessem encolhido seria descrever a mudanca errada.",
+ "pairs": [
+  {
+   "viewport": "390x844",
+   "before": {
+    "file": "before/home-390x844.png",
+    "sha256": "525be6a42381aacb4b705f664a7c30cbaae14d148844c87867080b46163f600d",
+    "bytes": 75188,
+    "hero_px": 1019,
+    "viewport_px": 844,
+    "hero_ratio": 1.207
+   },
+   "after": {
+    "file": "after/home-390x844.png",
+    "sha256": "29ccddfc1c41fe3ddbd01672762105afc214e2bd909e560b4beb2e58f18bbf84",
+    "bytes": 76101,
+    "hero_px": 859,
+    "viewport_px": 844,
+    "hero_ratio": 1.017
+   },
+   "differs": true,
+   "hero_ratio_delta": -0.19
+  },
+  {
+   "viewport": "430x932",
+   "before": {
+    "file": "before/home-430x932.png",
+    "sha256": "3257ca35f0c19812a441267d7c1aa592fbd7561e69d710dd12de30d99d60273e",
+    "bytes": 89067,
+    "hero_px": 993,
+    "viewport_px": 932,
+    "hero_ratio": 1.066
+   },
+   "after": {
+    "file": "after/home-430x932.png",
+    "sha256": "af5bad30eff2da9a9010e23774e3cc3c282984b1f462916bdc17464f07851a99",
+    "bytes": 89950,
+    "hero_px": 855,
+    "viewport_px": 932,
+    "hero_ratio": 0.917
+   },
+   "differs": true,
+   "hero_ratio_delta": -0.149
+  },
+  {
+   "viewport": "768x1024",
+   "before": {
+    "file": "before/home-768x1024.png",
+    "sha256": "6bce3ecefa302eef17a2a2bdf478a899e111a2d99572c37b7d8977768bbd34fc",
+    "bytes": 106998,
+    "hero_px": 1021,
+    "viewport_px": 1024,
+    "hero_ratio": 0.997
+   },
+   "after": {
+    "file": "after/home-768x1024.png",
+    "sha256": "600dfbec64a5fa37f39e75cc26b74254bc5dbb480ac168a0c8b72d956d8cc939",
+    "bytes": 123420,
+    "hero_px": 850,
+    "viewport_px": 1024,
+    "hero_ratio": 0.83
+   },
+   "differs": true,
+   "hero_ratio_delta": -0.167
+  },
+  {
+   "viewport": "1024x768",
+   "before": {
+    "file": "before/home-1024x768.png",
+    "sha256": "2d23349d54aeb8beab3efa84c159f01329dcb10d4a446c3297834c5571701702",
+    "bytes": 131737,
+    "hero_px": 620,
+    "viewport_px": 768,
+    "hero_ratio": 0.808
+   },
+   "after": {
+    "file": "after/home-1024x768.png",
+    "sha256": "f7031d76ccc8fa348b9bd7a0405763551c089091e3f9ac7887298ea0c24edd11",
+    "bytes": 132986,
+    "hero_px": 620,
+    "viewport_px": 768,
+    "hero_ratio": 0.808
+   },
+   "differs": true,
+   "hero_ratio_delta": 0.0
+  },
+  {
+   "viewport": "1366x768",
+   "before": {
+    "file": "before/home-1366x768.png",
+    "sha256": "76e00c279c8e8d062cfd9cc1d27502c1c2961f9cde2a1a89eb8a1148f88a2e07",
+    "bytes": 145067,
+    "hero_px": 689,
+    "viewport_px": 768,
+    "hero_ratio": 0.897
+   },
+   "after": {
+    "file": "after/home-1366x768.png",
+    "sha256": "a4b26dbad6a9768144a496e8be8190ac8a6ec2010914e43820825f238ccc9f15",
+    "bytes": 130996,
+    "hero_px": 689,
+    "viewport_px": 768,
+    "hero_ratio": 0.897
+   },
+   "differs": true,
+   "hero_ratio_delta": 0.0
+  },
+  {
+   "viewport": "1440x900",
+   "before": {
+    "file": "before/home-1440x900.png",
+    "sha256": "7a3ece8466a8430693cf8b5428ea0e911f1abbe0df968fe70df2116c4d46de95",
+    "bytes": 152633,
+    "hero_px": 689,
+    "viewport_px": 900,
+    "hero_ratio": 0.765
+   },
+   "after": {
+    "file": "after/home-1440x900.png",
+    "sha256": "abbd625d7dff293188b71e7ededa177c3e1841534c04bc9b0fb58a928835c063",
+    "bytes": 157625,
+    "hero_px": 689,
+    "viewport_px": 900,
+    "hero_ratio": 0.765
+   },
+   "differs": true,
+   "hero_ratio_delta": 0.0
+  }
+ ]
+}

@@ -1,0 +1,125 @@
+{
+  "schema_version": "2.0.0",
+  "captured_at": "2026-08-31T01:21:37.186Z",
+  "commit_sha": "4cca7f13e4dde4fed08c8c75efcd75a831c3fb83",
+  "tree_dirty": false,
+  "base_url": "http://127.0.0.1:8792",
+  "output_dir": "../../../../../../home/tjsasakifln/code/confenge/web-cfg/docs/uiux-evidence/home-dobra-revisao-2026-08-30/after",
+  "state": {
+    "id": "default",
+    "fullpage": false,
+    "javascript": "on",
+    "motion": "system"
+  },
+  "routes": [
+    "/"
+  ],
+  "viewports": [
+    "390x844",
+    "430x932",
+    "768x1024",
+    "1024x768",
+    "1366x768",
+    "1440x900"
+  ],
+  "files": [
+    "home-390x844.png",
+    "home-430x932.png",
+    "home-768x1024.png",
+    "home-1024x768.png",
+    "home-1366x768.png",
+    "home-1440x900.png"
+  ],
+  "captures": [
+    {
+      "file": "home-390x844.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 76101,
+      "sha256": "29ccddfc1c41fe3ddbd01672762105afc214e2bd909e560b4beb2e58f18bbf84"
+    },
+    {
+      "file": "home-430x932.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "430x932",
+      "width": 430,
+      "height": 932,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 89950,
+      "sha256": "af5bad30eff2da9a9010e23774e3cc3c282984b1f462916bdc17464f07851a99"
+    },
+    {
+      "file": "home-768x1024.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "768x1024",
+      "width": 768,
+      "height": 1024,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 123420,
+      "sha256": "600dfbec64a5fa37f39e75cc26b74254bc5dbb480ac168a0c8b72d956d8cc939"
+    },
+    {
+      "file": "home-1024x768.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1024x768",
+      "width": 1024,
+      "height": 768,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 132986,
+      "sha256": "f7031d76ccc8fa348b9bd7a0405763551c089091e3f9ac7887298ea0c24edd11"
+    },
+    {
+      "file": "home-1366x768.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1366x768",
+      "width": 1366,
+      "height": 768,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 130996,
+      "sha256": "a4b26dbad6a9768144a496e8be8190ac8a6ec2010914e43820825f238ccc9f15"
+    },
+    {
+      "file": "home-1440x900.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "kind": "page",
+      "state": "default",
+      "fullpage": false,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 157625,
+      "sha256": "abbd625d7dff293188b71e7ededa177c3e1841534c04bc9b0fb58a928835c063"
+    }
+  ]
+}
