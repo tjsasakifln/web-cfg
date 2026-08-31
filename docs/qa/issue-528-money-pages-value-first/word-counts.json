@@ -10,7 +10,7 @@
     { "route": "/defesa-margem-contratos-publicos/", "before": 1318, "after": 1313, "delta": -5 },
     { "route": "/atrasos-prorrogacao-obras-publicas/", "before": 1242, "after": 1220, "delta": -22 },
     { "route": "/defesa-tecnica-contratos-publicos/", "before": 1156, "after": 1154, "delta": -2 },
-    { "route": "/acompanhamento-contratos-obras/", "before": 911, "after": 822, "delta": -89 },
+    { "route": "/acompanhamento-contratos-obras/", "before": 911, "after": 846, "delta": -65 },
     { "route": "/diretoria-b2g/", "before": 1515, "after": 1505, "delta": -10 }
   ]
 }

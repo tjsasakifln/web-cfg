@@ -25,7 +25,7 @@
 
 ## Contagem e fronteira #532
 
-Nenhuma rota aumentou. A contagem reproduzível está em `word-counts.json`; o intervalo é de −2 a −89 palavras visíveis dentro de `main`.
+Nenhuma rota aumentou. A contagem reproduzível está em `word-counts.json`; o intervalo é de −2 a −65 palavras visíveis dentro de `main`.
 
 Formulários, campos, Turnstile, consentimento, transporte, `CONFENGE_WEB`, IDs de analytics, submit/loading/error/success/receipt e scripts compartilhados não foram alterados. Os oito rótulos recomendados acima são evidência editorial e residual explícito de #532.
 
