@@ -1,0 +1,110 @@
+{
+  "schema": "confenge.home-lcp-stabilization-evidence/v1",
+  "recorded_at": "2026-08-31",
+  "main_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "classification": "MIXED_CAUSES",
+  "classification_code": "D",
+  "lcp_element": "section.hero > div.container > div.hero-copy > p.hero-lead",
+  "lcp_element_kind": "text",
+  "resource_load_delay": "N/A",
+  "resource_load_duration": "N/A",
+  "threshold_ms": 2000,
+  "threshold_changed": false,
+  "site_ci_bypassed": false,
+  "home_design_changed": false,
+  "performance_implementation_retained": false,
+  "safe_optimization_found": false,
+  "performance_pr": null,
+  "pr536_state": "HOLD_WAITING_FOR_DEPENDENCY",
+  "baselines": {
+    "ci_attempt_1_ms": [1956.717, 2103.2156, 1951.73],
+    "ci_attempt_2_ms": [1806.5042, 2040.1711, 1951.3304],
+    "main_local_initial_ms": [1951.452, 1950.148, 1950.369],
+    "production_ms": [2659.616, 2420.008, 2269.321],
+    "deploy_preview_ms": [2148.952, 1501.483, 1659.48],
+    "production_ttfb_ms": [602.879, 82.761, 75.905],
+    "deploy_preview_ttfb_ms": [1423.395, 76.332, 65.522]
+  },
+  "final_balanced_protocol": {
+    "order": [
+      "before",
+      "candidate",
+      "candidate",
+      "before",
+      "candidate",
+      "before",
+      "before",
+      "candidate"
+    ],
+    "samples_per_block": 3,
+    "before_samples_ms": [
+      1951.648,
+      2010.0,
+      2010.0,
+      1954.368,
+      1950.359,
+      1060.2017027282716,
+      1951.669,
+      1950.228,
+      1950.224,
+      1955.363,
+      1950.557,
+      1950.158
+    ],
+    "candidate_samples_ms": [
+      1651.942,
+      1650.048,
+      1710.0,
+      1352.014,
+      1800.302,
+      1860.0,
+      1650.906,
+      1650.096,
+      1710.0,
+      1652.036,
+      1650.362,
+      1650.014
+    ],
+    "before_max_ms": 2010.0,
+    "candidate_max_ms": 1860.0,
+    "paired_max_improvement_ms": [300.0, 94.368, 241.669, 303.327],
+    "candidate_payload_bytes": 152450,
+    "before_payload_bytes": 153299,
+    "candidate_cls": 0,
+    "candidate_accessibility_min": 100,
+    "candidate_seo_min": 100,
+    "acceptance": {
+      "all_candidate_below_gate": true,
+      "all_candidate_at_or_below_1850_ms": false,
+      "every_pair_improved_by_at_least_100_ms": false,
+      "accepted": false
+    }
+  },
+  "causal_evidence": {
+    "real_headroom_deficit": "Six CI/local samples clustered near 1950-1957 ms and the balanced before protocol reached 2010 ms.",
+    "css": "The home waited on styles.css, its serial styles-tokens.css import, and home-10x.css; Lighthouse estimated 150-500 ms LCP savings.",
+    "javascript": "The frozen deferred app bundle produced long tasks near the simulated LCP boundary; delaying execution until after one paint reduced the common mode.",
+    "external_variance": "The CI outlier delayed all post-document requests by about 225 ms and attributed about 1002 ms to Unattributable work with loopback TTFB below 8 ms.",
+    "font": "Archivo was preloaded, font-display swap passed, and no font audit finding existed; the safe Latin-1 subset saved only 3136 bytes.",
+    "edge": "Cloudflare/Netcup and Netlify showed cold TTFB outliers, but CI used a loopback server, so edge behavior did not cause the required-check failure.",
+    "harness": "No selective retry, cache carry-over, path bypass, or reproducible methodological defect was found."
+  },
+  "rejected_experiments": [
+    {
+      "id": "global-token-inline",
+      "reason": "Touched frozen shared CSS and did not improve worst-case LCP; reverted."
+    },
+    {
+      "id": "home-publish-css-plus-after-paint-loader",
+      "reason": "Improved the distribution but retained a 1950.306 ms sample; superseded by combined CSS experiment."
+    },
+    {
+      "id": "home-complete-css-plus-after-paint-loader",
+      "reason": "Materially improved all samples but missed the pre-registered engineering target: one 1860 ms sample and one paired maximum improvement of only 94.368 ms. Reverted."
+    },
+    {
+      "id": "font-subset",
+      "reason": "The safe Latin-1 subset reduced 60064 bytes to only 56928 bytes; the aggressive subset would lose dynamic-input glyph coverage. Not implemented."
+    }
+  ]
+}
