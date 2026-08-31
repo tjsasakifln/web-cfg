@@ -4,9 +4,9 @@
   "capture_mode": "first_fold_and_element_sections_no_fullpage",
   "fullpage_used": false,
   "fullpage_limitation_issue": 540,
-  "captured_at": "2026-08-31T16:18:24.855Z",
-  "commit_sha": "fe989c252a752790feacbfa771c3cdc6bcf10275",
-  "rendered_content_sha": "fe989c252a752790feacbfa771c3cdc6bcf10275",
+  "captured_at": "2026-08-31T16:34:09.119Z",
+  "commit_sha": "dc9419680d2d897386b50e38481c880c177d5a1e",
+  "rendered_content_sha": "dc9419680d2d897386b50e38481c880c177d5a1e",
   "remote_build_info": null,
   "tree_dirty": false,
   "base_url": "http://127.0.0.1:8798",
@@ -70,7 +70,7 @@
       "section": "first-fold",
       "viewport": "390x844",
       "file": "diagnostico-b2g-expansao-first-fold-390x844.png",
-      "sha256": "4a209388eff44bbf280c87ceddcdc7a89358475c0231f03569ec78ae37953fe2"
+      "sha256": "5ba880408081a6a89f9bd6aa40f118150bd1f52a230e97a59efc2d1775d0e0be"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -78,7 +78,7 @@
       "section": "hero",
       "viewport": "390x844",
       "file": "diagnostico-b2g-expansao-hero-390x844.png",
-      "sha256": "6d849d6de026a17b0ccb54f8efb94151c1cb63f76dd1f1a62926bf049e54e9e3"
+      "sha256": "63fff61439414d0d907bdbfb03bdff9c08e190921dea43372edce507024e8884"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -86,7 +86,7 @@
       "section": "artifact",
       "viewport": "390x844",
       "file": "diagnostico-b2g-expansao-artifact-390x844.png",
-      "sha256": "7346114d56f4788a6f476b13eb2ce98fa8214204bb8a8ef2a884133dbbf533b7"
+      "sha256": "06a47d2b1b0f36e2f000201f1c963f2f81d09f9006f11635ebfbd2282fdbca30"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -94,7 +94,7 @@
       "section": "proof",
       "viewport": "390x844",
       "file": "diagnostico-b2g-expansao-proof-390x844.png",
-      "sha256": "21c6bb4f617d67ed580223d0284321a4d27959eb8eb8e46b70125a4f96c04be4"
+      "sha256": "354bf9590acea0561c40c90a94e1e57dea236319bab858a7c7445b106db0b43c"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -102,7 +102,7 @@
       "section": "first-fold",
       "viewport": "1366x768",
       "file": "diagnostico-b2g-expansao-first-fold-1366x768.png",
-      "sha256": "545e437b66bbad7af76348be31c34c49abb31090570ce7160bc572a7241429b3"
+      "sha256": "4494a4ef636054e0dd307b31cf6b2fd8c7e09614accc248d5a171d151762947e"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -110,7 +110,7 @@
       "section": "hero",
       "viewport": "1366x768",
       "file": "diagnostico-b2g-expansao-hero-1366x768.png",
-      "sha256": "7db782fc9b99a634f964674538ed179bc1c6a662a8b49436a1cc2c49c935f688"
+      "sha256": "67823ac47ea00e889f4d65beef47b4af0c6206b2d8c0e20c8cdd45af8117b40f"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -118,7 +118,7 @@
       "section": "artifact",
       "viewport": "1366x768",
       "file": "diagnostico-b2g-expansao-artifact-1366x768.png",
-      "sha256": "a4b0b33b15714e6a64d0b7be626752fec0e00f6bd7ea50f1ab929f8087ac6288"
+      "sha256": "04ebe6031c4ed21a426ca3304e6c8fb6f683079d83a257192481c9de10971e14"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -126,7 +126,7 @@
       "section": "proof",
       "viewport": "1366x768",
       "file": "diagnostico-b2g-expansao-proof-1366x768.png",
-      "sha256": "cf1199a3e8427d7172fd645495ddbb1b5e0747c5094e26f916b968166b735c31"
+      "sha256": "18b77525c774799cc6d07096e768fe0f8d2528979e48949fde8f8ca96a21c652"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -134,7 +134,7 @@
       "section": "first-fold",
       "viewport": "390x844",
       "file": "bid-room-licitacoes-obras-first-fold-390x844.png",
-      "sha256": "414f6ebcc12b5c30fad75968009f6fd6dc50d5cc7d307c463ad4b8511fb7b008"
+      "sha256": "1a36cded0e035cc8437841dcd04493efb2d6ca405f54c0c1e12877e39570d630"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -142,7 +142,7 @@
       "section": "hero",
       "viewport": "390x844",
       "file": "bid-room-licitacoes-obras-hero-390x844.png",
-      "sha256": "187ac86680d39e99f7c277a4695fde39ac4e8572039b2a8f873bf79c283053b8"
+      "sha256": "da993337f1fac651c55199e07b7a04edec8b20e41fbc60956bf4e058140e77bc"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -150,7 +150,7 @@
       "section": "decision",
       "viewport": "390x844",
       "file": "bid-room-licitacoes-obras-decision-390x844.png",
-      "sha256": "7ddbb0e0b69127a573d228067bb425e0f48a153bc7cdde8a5687dcb410bf074f"
+      "sha256": "36e47a98e2fff6af9cbabf4f43c93bc8711635b18755af3c66a2486620b6d97d"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -158,7 +158,7 @@
       "section": "artifact",
       "viewport": "390x844",
       "file": "bid-room-licitacoes-obras-artifact-390x844.png",
-      "sha256": "69c756c5746e59920ca541c073786f50549a8db173ceeba517fd7e4cd2e03879"
+      "sha256": "d9b68d9a8c11a6a78040b8a33c194bd278bc98af976724caf9a5ef5d9a6fccb4"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -166,7 +166,7 @@
       "section": "price-value",
       "viewport": "390x844",
       "file": "bid-room-licitacoes-obras-price-value-390x844.png",
-      "sha256": "ea98142b6c70648c6ac3c66c7457f04b186b41c60bb2e2734a8251de8f324248"
+      "sha256": "736625466854ef0db498d81704c0c46766dca05d9c9e60efd2138add83ee93f2"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -174,7 +174,7 @@
       "section": "first-fold",
       "viewport": "1366x768",
       "file": "bid-room-licitacoes-obras-first-fold-1366x768.png",
-      "sha256": "4733ac3f1ff581a74cfe13ab9b6299188af1b7f0fefa30d2820d6ade41a41e8e"
+      "sha256": "d0ed177dc5ece19514f822c1a3cf319a575fa2246e8c74edc308dfa934c3a0bc"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -182,7 +182,7 @@
       "section": "hero",
       "viewport": "1366x768",
       "file": "bid-room-licitacoes-obras-hero-1366x768.png",
-      "sha256": "e4b9409ae30897c89519e2b42864c955370f9f4820ec97c2bebd78b2b19007c0"
+      "sha256": "8c1c473e28350016343eba3b5b614922496db726fbd896dfc8ad582c6946ad39"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -190,7 +190,7 @@
       "section": "decision",
       "viewport": "1366x768",
       "file": "bid-room-licitacoes-obras-decision-1366x768.png",
-      "sha256": "8bfd580af4fe72e5ed151478fd3711ee6bc8410d11c79ce6cf2b3ea7d413cefb"
+      "sha256": "1ec7583806edc8a648173a3485083ea0202f3e1c27f8ac3825675891e5f9deb6"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -198,7 +198,7 @@
       "section": "artifact",
       "viewport": "1366x768",
       "file": "bid-room-licitacoes-obras-artifact-1366x768.png",
-      "sha256": "b7d049f74cc9cbf2d98f0e1e83d4eabb5e23a2d532b17309251733d75a3edec0"
+      "sha256": "0db1b9d1ccd71cf40347372ba1f796c07e10e4814e0c8d7a152a1c4109b8e0fc"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -206,7 +206,7 @@
       "section": "price-value",
       "viewport": "1366x768",
       "file": "bid-room-licitacoes-obras-price-value-1366x768.png",
-      "sha256": "b6da0fab6174d55ff04d026fdcdaca2200eb6610fbbd08c980fdfa0a984796c3"
+      "sha256": "6c59812c3a2b200473efcec365d60a1d800506bca85e8d4369751dfae75f5b51"
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
@@ -238,7 +238,7 @@
       "section": "contract",
       "viewport": "390x844",
       "file": "defesa-margem-contratos-publicos-contract-390x844.png",
-      "sha256": "f941525ed8721ea6ffe87263e7255204a3658b3fe23333ea351cd9179ef8eac6"
+      "sha256": "5a98fa4ed704f4b6755080fd994859f38913b285aca491a4b12f890bbf6f21df"
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
@@ -342,7 +342,7 @@
       "section": "first-fold",
       "viewport": "390x844",
       "file": "defesa-tecnica-contratos-publicos-first-fold-390x844.png",
-      "sha256": "7471dc6a428e5ef35880a110567156f6d024c2dbdb9f87b3de079e5c9ab10b57"
+      "sha256": "83ef6466994b0930db664a3f4f8cfc72bce8250b2dd5cf62eb95ed2546a987fa"
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
@@ -350,7 +350,7 @@
       "section": "hero",
       "viewport": "390x844",
       "file": "defesa-tecnica-contratos-publicos-hero-390x844.png",
-      "sha256": "6320c041f6baaffe687632b86f26137943624a2ef33627cb7220eb1a443f09d9"
+      "sha256": "51c5cbaeced6c3d75e590539c96cef4df1365d2c862c3688f4489c06b603bd6c"
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
@@ -366,7 +366,7 @@
       "section": "contract",
       "viewport": "390x844",
       "file": "defesa-tecnica-contratos-publicos-contract-390x844.png",
-      "sha256": "b1851c2b7567fc1a2711d2578bfdf437ece21e2beee8342e92a134cc32235842"
+      "sha256": "193f51caef9a37bf604a982fcb2435abc6ef0c9cde6e5b74506b4b254d6565c7"
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
@@ -374,7 +374,7 @@
       "section": "first-fold",
       "viewport": "1366x768",
       "file": "defesa-tecnica-contratos-publicos-first-fold-1366x768.png",
-      "sha256": "fb2442795fb89269a8be294a1335f5d85d7edfdd9842ba2e9a5af0cf414590e8"
+      "sha256": "d059873cf79ebcfd132e3d9f339de7365825b6102f719fb006c0f31fe8cc73dc"
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
@@ -382,7 +382,7 @@
       "section": "hero",
       "viewport": "1366x768",
       "file": "defesa-tecnica-contratos-publicos-hero-1366x768.png",
-      "sha256": "73736a7450c02116011097a377af03ecf1ada5f79bba2626c1d1879971204960"
+      "sha256": "be83f08f2a8f82800e706fb4beb16817b4197baf464cbc7b7225060617a0a7c0"
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
@@ -470,7 +470,7 @@
       "section": "first-fold",
       "viewport": "390x844",
       "file": "diretoria-b2g-first-fold-390x844.png",
-      "sha256": "4f98024daa2345f64685e1141169740e29146a87c4dffec9d84cdde00387dbeb"
+      "sha256": "d2f5d55b0d159ab9ec8db9484c1f911d0f7832bfa566eda570647f111bd6a49c"
     },
     {
       "route": "/diretoria-b2g/",
@@ -478,7 +478,7 @@
       "section": "hero",
       "viewport": "390x844",
       "file": "diretoria-b2g-hero-390x844.png",
-      "sha256": "179bec4782dfe9e1f60399598598b3ae5d39d704fef7a13bc7bd5257d8b2ad74"
+      "sha256": "15200814b3ac3058adda5ffc428ae7df0ca00bc447bf713c1abed5712b190228"
     },
     {
       "route": "/diretoria-b2g/",
@@ -486,7 +486,7 @@
       "section": "decision",
       "viewport": "390x844",
       "file": "diretoria-b2g-decision-390x844.png",
-      "sha256": "ef1edc8245d4c54346c1acc7dbf0933d1c9412e632044a64f248dd35e46dac89"
+      "sha256": "34c19a1e915d521fc879584e3b33ba6f560237fba32db621570c549dfa601584"
     },
     {
       "route": "/diretoria-b2g/",
@@ -494,7 +494,7 @@
       "section": "artifact",
       "viewport": "390x844",
       "file": "diretoria-b2g-artifact-390x844.png",
-      "sha256": "3aba5dc5803325f926e81d09c97cc33f863ecd808ae1b663a038ca901b9c46c0"
+      "sha256": "7ff177ecdb6365e9d4de315a58cbf41da7232e5fccdff852e4a2867ce221f497"
     },
     {
       "route": "/diretoria-b2g/",
@@ -502,7 +502,7 @@
       "section": "price-value",
       "viewport": "390x844",
       "file": "diretoria-b2g-price-value-390x844.png",
-      "sha256": "fcad0735df10d030799d2a0c9b19962553ea6ac7e19ab72eb42c19594b1647a7"
+      "sha256": "a2cc58e5711a6111b3d31523e1a3eee6afe86d818bb7c67138f4b15a56379595"
     },
     {
       "route": "/diretoria-b2g/",
@@ -510,7 +510,7 @@
       "section": "first-fold",
       "viewport": "1366x768",
       "file": "diretoria-b2g-first-fold-1366x768.png",
-      "sha256": "d77e004418c6d2491b212d62a9624a09f971d028f7680a8bd517bd6def85ce9b"
+      "sha256": "6c44aa4d7bbd229401d4fa80d07b09cd03482e5b5205f760ac68836145f2e1ed"
     },
     {
       "route": "/diretoria-b2g/",
@@ -518,7 +518,7 @@
       "section": "hero",
       "viewport": "1366x768",
       "file": "diretoria-b2g-hero-1366x768.png",
-      "sha256": "bf922e71dc1c1ac112e785836b493f4b65ca56d468479f71bbdbdc1a72d5da75"
+      "sha256": "1e2a2624c04c7fb3617711c491104f56f02b52f49c9d7222ec518e8b13f7b134"
     },
     {
       "route": "/diretoria-b2g/",
@@ -534,7 +534,7 @@
       "section": "artifact",
       "viewport": "1366x768",
       "file": "diretoria-b2g-artifact-1366x768.png",
-      "sha256": "dee94e57ec6defda5e70fc225a455463dfd70456a77f248b68786a9ea613460b"
+      "sha256": "2f0bec584555aae93b0d628c76688e45e488ac3ce635b6505fec2ef8fbfb9bbd"
     },
     {
       "route": "/diretoria-b2g/",
