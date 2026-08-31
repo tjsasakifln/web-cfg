@@ -14,7 +14,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "crypto";
 import { inflateSync } from "zlib";
-import { mkdtempSync, rmSync, writeFileSync } from "fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { join, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -361,6 +361,23 @@ test("a manifest refuses to omit the browser version", () => {
     }),
     /CAPTURE_BROWSER_VERSION_MISSING/,
   );
+});
+
+test("the versioned #540 report proves the measured before/after contract", () => {
+  const report = JSON.parse(readFileSync(
+    join(ROOT, "docs/evidence/issue-540-fullpage-capture/report.json"),
+    "utf8",
+  ));
+  assert.equal(report.issue, 540);
+  assert.equal(report.before.commit_sha, "81c600b7c26dcc606d3a03e648ecd9820d9c1c37");
+  assert.ok(Math.max(...report.before.largest_near_white_bands_px) > 128);
+  assert.ok(Math.max(...report.after.largest_near_white_bands_px) <= 128);
+  assert.equal(new Set(report.after.stable_scroll_heights).size, 1);
+  assert.equal(new Set(report.after.png_heights).size, 1);
+  assert.equal(new Set(report.after.png_sha256).size, 1);
+  assert.equal(report.after.manifest_tree_dirty, false);
+  assert.equal(report.acceptance.public_css_or_html_changed, false);
+  assert.equal(report.historical_comparability.directly_comparable, false);
 });
 
 /* ------------------------------------------------------------------ */

@@ -1,0 +1,154 @@
+{
+  "schema": "confenge.fullpage-capture-evidence/v1",
+  "issue": 540,
+  "decision_state": "EXECUTE_NOW",
+  "executive_fronts": [
+    "automation",
+    "trust"
+  ],
+  "measured_at": "2026-08-31T15:08:37Z",
+  "route": "/",
+  "viewport": "1366x768",
+  "browser_version": "Chrome/151.0.7922.34",
+  "near_white_band_definition": "Maior sequencia vertical de linhas em que pelo menos 99,5% dos pixels tem RGB >= 250.",
+  "before": {
+    "commit_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+    "harness": "pre-#540: fullPage imediato apos networkidle0",
+    "fresh_runs": 5,
+    "png_heights": [
+      7866,
+      7866,
+      7866,
+      7866,
+      7866
+    ],
+    "largest_near_white_bands_px": [
+      1119,
+      1119,
+      1119,
+      1119,
+      1119
+    ],
+    "png_sha256": [
+      "7ec987bf14ea28674974de583bebce4305440b9dbf655ea0412ac8c0c39ac4d7",
+      "7ec987bf14ea28674974de583bebce4305440b9dbf655ea0412ac8c0c39ac4d7",
+      "7ec987bf14ea28674974de583bebce4305440b9dbf655ea0412ac8c0c39ac4d7",
+      "7ec987bf14ea28674974de583bebce4305440b9dbf655ea0412ac8c0c39ac4d7",
+      "7ec987bf14ea28674974de583bebce4305440b9dbf655ea0412ac8c0c39ac4d7"
+    ],
+    "scroll_height_during_deterministic_traversal": [
+      7866,
+      8345,
+      8183,
+      7989,
+      7828,
+      7549
+    ],
+    "observation": "Paginas novas paradas no topo repetem o fallback de 7866 px; ao percorrer as regioes content-visibility, o mesmo documento assume seis alturas. A captura antiga nao fazia o percurso e fotografava o fallback sem paint."
+  },
+  "fully_materialized_control": {
+    "commit_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+    "capture_only_override": "content-visibility: visible !important nos elementos cujo estilo computado era auto",
+    "public_assets_changed": false,
+    "runs": 3,
+    "scroll_heights": [
+      7549,
+      7549,
+      7549
+    ],
+    "largest_near_white_bands_px": [
+      124,
+      124,
+      124
+    ],
+    "png_sha256": [
+      "e84872cf603cd03c21de5ba39674313bcba41b56c070906aaf4b13f284afd425",
+      "e84872cf603cd03c21de5ba39674313bcba41b56c070906aaf4b13f284afd425",
+      "e84872cf603cd03c21de5ba39674313bcba41b56c070906aaf4b13f284afd425"
+    ]
+  },
+  "after": {
+    "harness_commit_sha": "7e0ab2e5a41bf3a0aa7f0a1f7b075bb1324f72bf",
+    "manifest_schema_version": "2.1.0",
+    "manifest_tree_dirty": false,
+    "strategy": "content-visibility-visible/v1",
+    "runs": 3,
+    "materialized_elements_per_run": [
+      6,
+      6,
+      6
+    ],
+    "initial_scroll_heights": [
+      7866,
+      7866,
+      7866
+    ],
+    "stable_scroll_heights": [
+      7549,
+      7549,
+      7549
+    ],
+    "pre_screenshot_samples_per_run": [
+      [
+        7549,
+        7549,
+        7549
+      ],
+      [
+        7549,
+        7549,
+        7549
+      ],
+      [
+        7549,
+        7549,
+        7549
+      ]
+    ],
+    "post_screenshot_samples_per_run": [
+      [
+        7549,
+        7549,
+        7549
+      ],
+      [
+        7549,
+        7549,
+        7549
+      ],
+      [
+        7549,
+        7549,
+        7549
+      ]
+    ],
+    "png_heights": [
+      7549,
+      7549,
+      7549
+    ],
+    "largest_near_white_bands_px": [
+      124,
+      124,
+      124
+    ],
+    "png_sha256": [
+      "3a91db956e41b2ad1c042186633bc508b28099298ac45e1961dd4e0e9b9dd6b0",
+      "3a91db956e41b2ad1c042186633bc508b28099298ac45e1961dd4e0e9b9dd6b0",
+      "3a91db956e41b2ad1c042186633bc508b28099298ac45e1961dd4e0e9b9dd6b0"
+    ]
+  },
+  "acceptance": {
+    "largest_near_white_band_at_most_128_px": true,
+    "scroll_height_stable_across_consecutive_runs": true,
+    "png_output_identical_across_consecutive_runs_in_recorded_environment": true,
+    "public_css_or_html_changed": false,
+    "content_visibility_preserved_in_public_css": true,
+    "js_off_and_reduced_motion_browser_tests_pass": true
+  },
+  "historical_comparability": {
+    "directly_comparable": false,
+    "reason": "Capturas full-page anteriores a #540 nao registravam browser nem contrato de materializacao e podiam conter fallback sem paint. Seus hashes continuam vinculando o artefato antigo, mas nao provam um render comparavel ao harness 2.1.0."
+  },
+  "reproduce_after": "CAPTURE_ALLOW_EPHEMERAL=1 CAPTURE_PATHS=/ CAPTURE_VIEWPORTS=1366x768 CAPTURE_FULLPAGE=1 node scripts/site/capture_screenshots.mjs /tmp/issue540-after"
+}
