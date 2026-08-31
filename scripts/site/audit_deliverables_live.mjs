@@ -646,7 +646,7 @@ if (d01 && allErrors(d01).includes("unit_01_false_credit_promise")) {
   report.defects.push({
     id: "CFG530-D01-CREDIT-CONTRADICTION",
     severity: "HIGH",
-    owner_issue: 528,
+    owner_issue: 547,
     affected_routes: [d01.route],
     symptoms: [
       "unit_01_false_credit_promise",
@@ -674,7 +674,7 @@ if (recurringAffected.length) {
   report.defects.push({
     id: "CFG530-RECURRING-DIRECTION-LADDER-MISSING",
     severity: "MEDIUM",
-    owner_issue: 528,
+    owner_issue: 547,
     affected_routes: recurringAffected,
     symptoms: ["recurring_direction_step_missing"],
     reproduction: [

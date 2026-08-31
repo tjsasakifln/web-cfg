@@ -1,7 +1,7 @@
 {
   "schema": "confenge.deliverables-live-audit/1.0",
   "issue": 530,
-  "generated_at": "2026-08-31T15:36:27.810Z",
+  "generated_at": "2026-08-31T15:43:34.328Z",
   "base_url": "https://confenge.com.br",
   "expected_main_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
   "live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
@@ -898,12 +898,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 687,
-              "bottom": 741,
+              "top": 730,
+              "bottom": 784,
               "width": 158,
               "height": 54
             },
-            "scroll_y": 882,
+            "scroll_y": 839,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1214,12 +1214,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 751,
-              "bottom": 795,
+              "top": 819,
+              "bottom": 863,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 14750,
+            "scroll_y": 14682,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1229,12 +1229,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 761,
-              "bottom": 797,
+              "top": 751,
+              "bottom": 787,
               "width": 316,
               "height": 37
             },
-            "scroll_y": 18534,
+            "scroll_y": 18544,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1244,12 +1244,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 795,
-              "bottom": 810,
+              "top": 759,
+              "bottom": 774,
               "width": 103,
               "height": 15
             },
-            "scroll_y": 18564,
+            "scroll_y": 18600,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1259,12 +1259,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 753,
-              "bottom": 797,
+              "top": 748,
+              "bottom": 792,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 19383,
+            "scroll_y": 19388,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1591,12 +1591,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 844,
-              "bottom": 888,
+              "top": 766,
+              "bottom": 810,
               "width": 310,
               "height": 44
             },
-            "scroll_y": 2262,
+            "scroll_y": 2340,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1606,12 +1606,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 543,
-              "bottom": 1641,
+              "top": 717,
+              "bottom": 1815,
               "width": 350,
               "height": 1098
             },
-            "scroll_y": 5537,
+            "scroll_y": 5363,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1621,12 +1621,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 839,
-              "bottom": 1667,
+              "top": 623,
+              "bottom": 1451,
               "width": 350,
               "height": 828
             },
-            "scroll_y": 7756,
+            "scroll_y": 7972,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1636,12 +1636,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 746,
-              "bottom": 1279,
+              "top": 737,
+              "bottom": 1270,
               "width": 350,
               "height": 533
             },
-            "scroll_y": 12405,
+            "scroll_y": 12414,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -1651,12 +1651,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 684,
-              "bottom": 1423,
+              "top": 723,
+              "bottom": 1462,
               "width": 350,
               "height": 739
             },
-            "scroll_y": 14875,
+            "scroll_y": 14836,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2018,12 +2018,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 828,
-              "bottom": 872,
+              "top": 784,
+              "bottom": 828,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 23828,
+            "scroll_y": 23872,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2033,12 +2033,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 759,
-              "bottom": 803,
+              "top": 747,
+              "bottom": 791,
               "width": 301,
               "height": 44
             },
-            "scroll_y": 26197,
+            "scroll_y": 26209,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2048,12 +2048,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 675,
-              "bottom": 712,
+              "top": 665,
+              "bottom": 702,
               "width": 316,
               "height": 37
             },
-            "scroll_y": 26469,
+            "scroll_y": 26479,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2063,12 +2063,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 642,
-              "bottom": 657,
+              "top": 730,
+              "bottom": 745,
               "width": 103,
               "height": 15
             },
-            "scroll_y": 26567,
+            "scroll_y": 26479,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2420,12 +2420,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 778,
-              "bottom": 822,
+              "top": 808,
+              "bottom": 852,
               "width": 319,
               "height": 44
             },
-            "scroll_y": 16335,
+            "scroll_y": 16305,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2435,12 +2435,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 743,
-              "bottom": 786,
+              "top": 778,
+              "bottom": 821,
               "width": 279,
               "height": 44
             },
-            "scroll_y": 21195,
+            "scroll_y": 21160,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2737,12 +2737,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 750,
-              "bottom": 794,
+              "top": 717,
+              "bottom": 761,
               "width": 310,
               "height": 44
             },
-            "scroll_y": 2306,
+            "scroll_y": 2339,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2752,12 +2752,12 @@
             "id": null,
             "classes": "vinc-table-wrap",
             "rect": {
-              "top": 823,
-              "bottom": 1719,
+              "top": 812,
+              "bottom": 1708,
               "width": 350,
               "height": 895
             },
-            "scroll_y": 6301,
+            "scroll_y": 6312,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2767,12 +2767,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 843,
-              "bottom": 887,
+              "top": 776,
+              "bottom": 820,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 17274,
+            "scroll_y": 17341,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2782,12 +2782,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 797,
-              "bottom": 841,
+              "top": 782,
+              "bottom": 826,
               "width": 301,
               "height": 44
             },
-            "scroll_y": 21308,
+            "scroll_y": 21323,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -2797,12 +2797,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 714,
-              "bottom": 751,
+              "top": 701,
+              "bottom": 738,
               "width": 316,
               "height": 37
             },
-            "scroll_y": 21579,
+            "scroll_y": 21592,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3018,7 +3018,7 @@
       ],
       "js_off": {
         "viewport": "390x844",
-        "http_status": 304,
+        "http_status": 200,
         "errors": [
           "recurring_direction_step_missing"
         ],
@@ -3119,12 +3119,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 737,
-              "bottom": 781,
+              "top": 772,
+              "bottom": 816,
               "width": 310,
               "height": 44
             },
-            "scroll_y": 2391,
+            "scroll_y": 2356,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3134,12 +3134,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 680,
-              "bottom": 1156,
+              "top": 825,
+              "bottom": 1301,
               "width": 350,
               "height": 476
             },
-            "scroll_y": 5570,
+            "scroll_y": 5425,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3149,12 +3149,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 651,
-              "bottom": 2161,
+              "top": 826,
+              "bottom": 2336,
               "width": 350,
               "height": 1510
             },
-            "scroll_y": 7479,
+            "scroll_y": 7304,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3164,12 +3164,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 752,
-              "bottom": 1168,
+              "top": 800,
+              "bottom": 1216,
               "width": 350,
               "height": 416
             },
-            "scroll_y": 11101,
+            "scroll_y": 11053,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3179,12 +3179,12 @@
             "id": null,
             "classes": "button button-light button-lg",
             "rect": {
-              "top": 445,
-              "bottom": 489,
+              "top": 808,
+              "bottom": 852,
               "width": 350,
               "height": 44
             },
-            "scroll_y": 21411,
+            "scroll_y": 21048,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3501,12 +3501,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 731,
-              "bottom": 775,
+              "top": 803,
+              "bottom": 847,
               "width": 281,
               "height": 44
             },
-            "scroll_y": 22416,
+            "scroll_y": 22344,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3516,12 +3516,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 810,
-              "bottom": 847,
+              "top": 831,
+              "bottom": 868,
               "width": 316,
               "height": 37
             },
-            "scroll_y": 24879,
+            "scroll_y": 24858,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3531,12 +3531,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 826,
-              "bottom": 841,
+              "top": 645,
+              "bottom": 660,
               "width": 103,
               "height": 15
             },
-            "scroll_y": 24949,
+            "scroll_y": 25130,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3853,12 +3853,12 @@
             "id": null,
             "classes": null,
             "rect": {
-              "top": 776,
-              "bottom": 820,
+              "top": 814,
+              "bottom": 858,
               "width": 310,
               "height": 44
             },
-            "scroll_y": 2364,
+            "scroll_y": 2326,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3868,12 +3868,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 771,
-              "bottom": 1366,
+              "top": 818,
+              "bottom": 1413,
               "width": 350,
               "height": 596
             },
-            "scroll_y": 7614,
+            "scroll_y": 7567,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3883,12 +3883,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 644,
-              "bottom": 1247,
+              "top": 815,
+              "bottom": 1418,
               "width": 350,
               "height": 603
             },
-            "scroll_y": 9081,
+            "scroll_y": 8910,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3898,12 +3898,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 837,
-              "bottom": 1307,
+              "top": 660,
+              "bottom": 1130,
               "width": 350,
               "height": 471
             },
-            "scroll_y": 9968,
+            "scroll_y": 10145,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3913,12 +3913,12 @@
             "id": null,
             "classes": "report-table-wrap",
             "rect": {
-              "top": 836,
-              "bottom": 1255,
+              "top": 737,
+              "bottom": 1156,
               "width": 350,
               "height": 419
             },
-            "scroll_y": 11642,
+            "scroll_y": 11741,
             "visible": true,
             "indicator": true,
             "skip_link": null
@@ -3932,7 +3932,7 @@
     {
       "id": "CFG530-D01-CREDIT-CONTRADICTION",
       "severity": "HIGH",
-      "owner_issue": 528,
+      "owner_issue": 547,
       "affected_routes": [
         "/casos/modelo-relatorio-inteligencia-licitacoes/"
       ],
@@ -3957,7 +3957,7 @@
     {
       "id": "CFG530-RECURRING-DIRECTION-LADDER-MISSING",
       "severity": "MEDIUM",
-      "owner_issue": 528,
+      "owner_issue": 547,
       "affected_routes": [
         "/entregas/",
         "/casos/modelo-relatorio-inteligencia-licitacoes/",
@@ -3997,6 +3997,6 @@
     "links_checked": 48,
     "broken_links": 0
   },
-  "identity_rechecked_at": "2026-08-31T15:38:52.067Z",
+  "identity_rechecked_at": "2026-08-31T15:45:53.667Z",
   "final_artifact_hash": "f8df6acb623d204218cae25109316f15f15d67d8123d34956e5608649d829347"
 }

@@ -9,7 +9,7 @@ JS-off e acessibilidade passaram; a escada de valor não passou:
 2. hub e oito modelos não apresentam a passagem para direção recorrente dentro
    da escada — `/diretoria-b2g/` aparece apenas no chrome/footer.
 
-A #530 não deve ser fechada. O residual concreto pertence à #528. A captura
+A #530 não deve ser fechada. O residual concreto pertence à #547. A captura
 full-page permanece `DEFERRED_BY_540`; nenhuma imagem full-page foi usada como
 prova de produto.
 
@@ -28,7 +28,7 @@ prova de produto.
   `f8df6acb623d204218cae25109316f15f15d67d8123d34956e5608649d829347`;
 - runtime validado contra `RUNTIME-AUTHORITY.md`: produção,
   `netcup-production`, `confenge-nginx-node/v2`;
-- audit: `2026-08-31T15:36:27.810Z` a `2026-08-31T15:38:52.067Z`.
+- audit: `2026-08-31T15:43:34.328Z` a `2026-08-31T15:45:53.667Z`.
 
 O relatório estruturado, inclusive hashes SHA-256 das 55 capturas, está em
 [`report.json`](report.json). As imagens em [`screenshots/`](screenshots/) são
@@ -52,7 +52,7 @@ ficaram vazios e nenhum submit foi executado.
 ## Defeito 1 — crédito contraditório em CFG-D01
 
 - severity: `HIGH`;
-- owner: #528;
+- owner: #547;
 - reprodução:
   1. em `/entregas/`, CFG-D01 diz “Relatório avulso, à parte e fora do
      Diagnóstico; é o único sem o crédito de 60 dias”;
@@ -74,7 +74,7 @@ não uma terceira iniciativa.
 ## Defeito 2 — direção recorrente ausente da escada
 
 - severity: `MEDIUM`;
-- owner: #528;
+- owner: #547;
 - afetadas: as nove rotas;
 - reprodução: inspecionar o conteúdo de escada dentro de `<main>`.
   `/diretoria-b2g/` só existe no cabeçalho/rodapé nas nove rotas, sem trigger,
@@ -150,7 +150,9 @@ o trabalho removido, comparar o preço e avançar com contexto atribuível. A
 hipótese é que essa clareza melhora progressão útil e qualidade da oportunidade;
 não afirma WTP, ROI ou uplift causal. WTP continua em #336 e pricing em #341.
 
-`web-cfg` é owner da projeção pública; #528 recebe os dois resíduos. Nenhum
+`web-cfg` é owner da projeção pública; #547 recebe os dois resíduos. #528
+exclui explicitamente o hub e os modelos, enquanto #531/#532 não cobrem
+crédito/escada. Nenhum
 contrato `extra-cli`, dado, identidade, variável de measurement window ou rota
 protegida foi modificado. A observabilidade permanece sem PII e o handoff
 continua `CONFENGE_WEB`.
