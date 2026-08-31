@@ -88,12 +88,12 @@ const browser = await puppeteer.launch({
   headless: true,
   args: ["--disable-gpu", "--font-render-hinting=none", "--no-sandbox"],
 });
-const page = await browser.newPage();
 const captures = [];
 
 for (const route of ROUTES) {
   const slug = route.path.replaceAll("/", "");
   for (const [width, height] of VIEWPORTS) {
+    const page = await browser.newPage();
     await page.setViewport({ width, height, deviceScaleFactor: 1 });
     const response = await page.goto(`${baseUrl}${route.path}`, { waitUntil: "networkidle0", timeout: 60000 });
     if (!response || response.status() >= 400) throw new Error(`capture HTTP ${response?.status() || 0}: ${route.path}`);
@@ -142,6 +142,7 @@ for (const route of ROUTES) {
         for (const node of document.querySelectorAll(".site-header,.contact-float,.skip-link")) node.style.visibility = "";
       });
     }
+    await page.close();
   }
 }
 
