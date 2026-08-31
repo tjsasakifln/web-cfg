@@ -4,9 +4,9 @@
   "capture_mode": "first_fold_and_element_sections_no_fullpage",
   "fullpage_used": false,
   "fullpage_limitation_issue": 540,
-  "captured_at": "2026-08-31T16:34:09.119Z",
-  "commit_sha": "dc9419680d2d897386b50e38481c880c177d5a1e",
-  "rendered_content_sha": "dc9419680d2d897386b50e38481c880c177d5a1e",
+  "captured_at": "2026-08-31T16:49:05.124Z",
+  "commit_sha": "42771eeaf75319d18462cee971cf4b1c286aee02",
+  "rendered_content_sha": "42771eeaf75319d18462cee971cf4b1c286aee02",
   "remote_build_info": null,
   "tree_dirty": false,
   "base_url": "http://127.0.0.1:8798",
@@ -70,7 +70,7 @@
       "section": "first-fold",
       "viewport": "390x844",
       "file": "diagnostico-b2g-expansao-first-fold-390x844.png",
-      "sha256": "5ba880408081a6a89f9bd6aa40f118150bd1f52a230e97a59efc2d1775d0e0be"
+      "sha256": "634090f51ce6b6dcc5a25608ba6df4fefd679ec4d70ef62c5c1629d2e1d56075"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -78,7 +78,7 @@
       "section": "hero",
       "viewport": "390x844",
       "file": "diagnostico-b2g-expansao-hero-390x844.png",
-      "sha256": "63fff61439414d0d907bdbfb03bdff9c08e190921dea43372edce507024e8884"
+      "sha256": "873096483e0283b43755949f6c32778704cd49da3b299472b1c8af4187eed4e3"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -86,7 +86,7 @@
       "section": "artifact",
       "viewport": "390x844",
       "file": "diagnostico-b2g-expansao-artifact-390x844.png",
-      "sha256": "06a47d2b1b0f36e2f000201f1c963f2f81d09f9006f11635ebfbd2282fdbca30"
+      "sha256": "5e5c311f1bbf2fa28948307786f05fc68d1d5e8cff9fb71a33c4ceb850eee923"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -102,7 +102,7 @@
       "section": "first-fold",
       "viewport": "1366x768",
       "file": "diagnostico-b2g-expansao-first-fold-1366x768.png",
-      "sha256": "4494a4ef636054e0dd307b31cf6b2fd8c7e09614accc248d5a171d151762947e"
+      "sha256": "fefbc7e3ccea974fa89c763569dae93d8f06070628b10cbb96f4f726a20e4894"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -110,7 +110,7 @@
       "section": "hero",
       "viewport": "1366x768",
       "file": "diagnostico-b2g-expansao-hero-1366x768.png",
-      "sha256": "67823ac47ea00e889f4d65beef47b4af0c6206b2d8c0e20c8cdd45af8117b40f"
+      "sha256": "ec5da9051171234aae6ac99b4dfbd24ccd4d0c850c321b683ebf056fdf8c0f05"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -118,7 +118,7 @@
       "section": "artifact",
       "viewport": "1366x768",
       "file": "diagnostico-b2g-expansao-artifact-1366x768.png",
-      "sha256": "04ebe6031c4ed21a426ca3304e6c8fb6f683079d83a257192481c9de10971e14"
+      "sha256": "8615148dd5c82e1c5cd1359917ebc22ad533daabf982a6559ddcddfbdde791ad"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -126,7 +126,7 @@
       "section": "proof",
       "viewport": "1366x768",
       "file": "diagnostico-b2g-expansao-proof-1366x768.png",
-      "sha256": "18b77525c774799cc6d07096e768fe0f8d2528979e48949fde8f8ca96a21c652"
+      "sha256": "cf1199a3e8427d7172fd645495ddbb1b5e0747c5094e26f916b968166b735c31"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
