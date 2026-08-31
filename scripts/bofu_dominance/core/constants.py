@@ -24,6 +24,7 @@ BUYER_DECISION_MAP_SCHEMA = "bofu-buyer-decision-map/v1"
 BUYER_DECISION_MAP_PATH = DATA_DIR / "buyer-decision-map.v1.json"
 BUYER_DECISION_REPORT_PATH = DOCS_DIR / "BUYER-DECISION-MAP.md"
 MANUAL_GSC_SNAPSHOT_PATH = ROOT / "seo" / "gsc-2026-08-31" / "manual-page-snapshot.v1.json"
+MANUAL_GSC_SOURCE_MANIFEST_PATH = ROOT / "seo" / "gsc-2026-08-31" / "source-manifest.v1.json"
 
 BLOCKED_GSC_LIVE_STATE = "BLOCKED_CREDENTIAL_FAILURE"
 GSC_LIVE_STATE = BLOCKED_GSC_LIVE_STATE  # default until overlay/job proof

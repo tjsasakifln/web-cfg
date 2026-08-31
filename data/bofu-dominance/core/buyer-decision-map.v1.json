@@ -34,7 +34,8 @@
     {"path": "data/organic/medicoes-glosas-query-ownership.v1.json", "sha256": "bd4f120c7e565eba03fddc843647a75a90bb9cd6413bc61418fa5df5b53567ef"},
     {"path": "data/bofu-dominance/core/gsc-live-overlay.v1.json", "sha256": "c9ff7ee00fa58fc4e7756a2c1e733c3ff6269272cf6b58a5c378386476470f14"},
     {"path": "data/bofu-dominance/core/issue-state-snapshot.v1.json", "sha256": "f7112f325b44e33192c8a85018f60b0d1e7059e6f29a0ab260dcd685249cb877"},
-    {"path": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "sha256": "20ffb683961cdfca82f52d2e5e817a8d6cdfba7234274c55d2c45d54df5256ef"}
+    {"path": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "sha256": "a9b46acf107e6d4b32aff58fc0afb1f8c7fce5a8be8d3796ff02a6f3fab034ed"},
+    {"path": "seo/gsc-2026-08-31/source-manifest.v1.json", "sha256": "ac5215ed0e9b5a4c95cfc6f2631218025a2f2335af650e42db142ee4746b3bb9"}
   ],
   "allowed_coverage_states": [
     "DOMINANT_CANDIDATE",
@@ -64,38 +65,21 @@
     "path": "data/bofu-dominance/core/issue-state-snapshot.v1.json",
     "schema_version": "bofu-issue-state-snapshot/v1"
   },
-  "manual_mapping_exclusions": [
-    {
-      "path": "/",
-      "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
-      "reason": "The home page is a cross-family navigation surface, not a canonical owner for one of the 15 buyer jobs."
-    },
-    {
-      "path": "/conteudos/",
-      "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
-      "reason": "The editorial hub is a cross-family library surface, not a canonical owner for one buyer job."
-    },
-    {
-      "path": "http://confenge.com.br/",
-      "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
-      "reason": "The legacy HTTP home observation is canonical hygiene evidence, not a buyer-job owner mapping."
-    },
-    {
-      "path": "/especialista/tiago-jun-sasaki/",
-      "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
-      "reason": "The specialist profile is a trust surface shared across families, not a canonical buyer-job owner."
-    },
-    {
-      "path": "/conteudos/reequilibrio-empreitada-preco-global/",
-      "state": "UNMAPPED_NO_EXISTING_CONTRACT",
-      "reason": "The page row is retained, but current route and content-service contracts do not map this URL to reequilibrio; a visible query cannot create that mapping."
-    },
-    {
-      "path": "/ferramentas/diagnostico-defesa-margem/",
-      "state": "UNMAPPED_NO_EXISTING_CONTRACT",
-      "reason": "The tool is a separate utility and the current BOFU matrix declares no supporting route for defesa-margem, so its impressions do not inflate the canonical-owner score."
-    }
-  ],
+  "manual_mapping_exclusions": {
+    "state": "UNMAPPED_PAGE_ROWS_EXCLUDED_FROM_15_FAMILY_SCORE",
+    "count": 90,
+    "rule": "Any returned page row without an exact canonical-owner, bofu-intent-matrix support, content-service-map override or pinned frozen-sibling contract remains excluded; URL wording and visible queries cannot create a mapping.",
+    "notable": [
+      {
+        "path": "/conteudos/reequilibrio-empreitada-preco-global/",
+        "reason": "No existing route or content-service contract maps this page to reequilibrio."
+      },
+      {
+        "path": "/ferramentas/diagnostico-defesa-margem/",
+        "reason": "The current BOFU matrix declares no supporting route for defesa-margem, so tool impressions do not inflate the canonical-owner score."
+      }
+    ]
+  },
   "reconciliation_exceptions": [
     {
       "source": "data/organic/demand-map.json",
@@ -162,7 +146,7 @@
       "gap": null,
       "supporting_urls": ["https://confenge.com.br/conteudos/aditivo-empreitada-por-preco-global/", "https://confenge.com.br/conteudos/demolicao-nao-prevista-obra-publica/"],
       "gsc": {"status": "UNKNOWN", "as_of": "2026-08-17", "source": "data/bofu-dominance/core/gsc-live-overlay.v1.json", "reason": "The owner observation is Spain/mixed-device and is not comparable for the Brazilian query family.", "observation": {"impressions": 20, "clicks": 0, "position": 73.55, "geo": "esp", "device": "MIXED", "denominator": "impressions_in_returned_top_rows"}},
-      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT", "mapped_pages": [{"path": "/aditivos-obras-publicas/", "role": "CANONICAL_OWNER"}, {"path": "/conteudos/limite-aditivo-25-50-obra-publica/", "role": "CONTRACT_MAPPED_SUPPORT"}, {"path": "/conteudos/aditivo-qualitativo-quantitativo/", "role": "CONTRACT_MAPPED_SUPPORT"}], "owner_observation": {"path": "/aditivos-obras-publicas/", "clicks": 0, "impressions": 66, "ctr": 0.0, "position": 26.91}, "family_aggregate": {"clicks": 1, "impressions": 126, "ctr": 0.007937, "position": 23.48}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
+      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT", "mapped_pages": [{"path": "/aditivos-obras-publicas/", "role": "CANONICAL_OWNER"}, {"path": "/conteudos/limite-aditivo-25-50-obra-publica/", "role": "CONTRACT_MAPPED_SUPPORT"}, {"path": "/conteudos/aditivo-qualitativo-quantitativo/", "role": "CONTRACT_MAPPED_SUPPORT"}, {"path": "/conteudos/aditivo-empreitada-por-preco-global/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/demolicao-nao-prevista-obra-publica/", "role": "DECLARED_SUPPORT"}], "owner_observation": {"path": "/aditivos-obras-publicas/", "clicks": 0, "impressions": 66, "ctr": 0.0, "position": 26.91}, "family_aggregate": {"clicks": 1, "impressions": 131, "ctr": 0.007634, "position": 22.78}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
       "content_quality": {"state": "PROTECTED_WAIT", "basis": "Value-first correction is protected by the active six-route measurement window."},
       "proof": {"state": "PUBLIC_METHOD_AND_SUPPORT", "sources": ["https://confenge.com.br/aditivos-obras-publicas/"], "claim_boundary": "No customer result, ROI or rank is claimed."},
       "offer": {"state": "EXISTING_SERVICE_ROUTE", "destination_service_id": "aditivos-obras-publicas", "offer_class": null, "offer_id": null},
@@ -188,7 +172,7 @@
       "gap": null,
       "supporting_urls": ["https://confenge.com.br/conteudos/atraso-na-medicao-obra-publica/", "https://confenge.com.br/conteudos/atraso-pagamento-contrato-publico-suspender/", "https://confenge.com.br/conteudos/fiscal-nao-assina-medicao-obra-publica/", "https://confenge.com.br/conteudos/glosa-por-qualidade-obra-publica/", "https://confenge.com.br/conteudos/medicao-por-evento-obra-publica/", "https://confenge.com.br/conteudos/pagamento-parcial-etapa-empreitada-global/"],
       "gsc": {"status": "UNKNOWN", "as_of": "2026-08-17", "source": "data/bofu-dominance/core/gsc-live-overlay.v1.json", "reason": "Owner absent from returned live top rows; absence is not zero demand or zero rank."},
-      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT", "mapped_pages": [{"path": "/medicoes-glosas-obras-publicas/", "role": "CANONICAL_OWNER"}, {"path": "/conteudos/glosa-de-medicao-obra-publica/", "role": "CONTRACT_MAPPED_SUPPORT"}], "owner_observation": {"path": "/medicoes-glosas-obras-publicas/", "clicks": 1, "impressions": 99, "ctr": 0.0101, "position": 6.61}, "family_aggregate": {"clicks": 2, "impressions": 110, "ctr": 0.018182, "position": 6.4}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
+      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT", "mapped_pages": [{"path": "/medicoes-glosas-obras-publicas/", "role": "CANONICAL_OWNER"}, {"path": "/conteudos/medicao-de-obra-publica-rejeitada/", "role": "CONTRACT_MAPPED_SUPPORT"}, {"path": "/conteudos/glosa-de-medicao-obra-publica/", "role": "CONTRACT_MAPPED_SUPPORT"}, {"path": "/conteudos/atraso-pagamento-contrato-publico-suspender/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/pagamento-parcial-etapa-empreitada-global/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/fiscal-nao-assina-medicao-obra-publica/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/glosa-por-qualidade-obra-publica/", "role": "DECLARED_SUPPORT"}], "owner_observation": {"path": "/medicoes-glosas-obras-publicas/", "clicks": 1, "impressions": 99, "ctr": 0.0101, "position": 6.61}, "family_aggregate": {"clicks": 3, "impressions": 150, "ctr": 0.02, "position": 6.4}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
       "content_quality": {"state": "PROTECTED_WAIT", "basis": "The owner and a URL-exact canary remain under active measurement ownership."},
       "proof": {"state": "PUBLIC_METHOD_AND_SUPPORT", "sources": ["https://confenge.com.br/medicoes-glosas-obras-publicas/", "https://confenge.com.br/casos/medicao-glosa-demonstrativo/"], "claim_boundary": "The demonstrative case is not permissioned customer proof."},
       "offer": {"state": "EXISTING_SERVICE_ROUTE", "destination_service_id": "medicoes-glosas-obras-publicas", "offer_class": null, "offer_id": null},
@@ -214,7 +198,7 @@
       "gap": null,
       "supporting_urls": ["https://confenge.com.br/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/"],
       "gsc": {"status": "UNKNOWN", "as_of": "2026-08-17", "source": "data/bofu-dominance/core/gsc-live-overlay.v1.json", "reason": "Owner absent from returned live top rows; absence is not zero demand or zero rank."},
-      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_CANONICAL_OWNER", "mapped_pages": [{"path": "/reequilibrio-obras-publicas/", "role": "CANONICAL_OWNER"}], "owner_observation": {"path": "/reequilibrio-obras-publicas/", "clicks": 1, "impressions": 14, "ctr": 0.0714, "position": 6.36}, "family_aggregate": {"clicks": 1, "impressions": 14, "ctr": 0.071429, "position": 6.36}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
+      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT", "mapped_pages": [{"path": "/reequilibrio-obras-publicas/", "role": "CANONICAL_OWNER"}, {"path": "/conteudos/curva-abc-reequilibrio-contrato/", "role": "CONTRACT_MAPPED_SUPPORT"}, {"path": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/", "role": "DECLARED_SUPPORT"}], "owner_observation": {"path": "/reequilibrio-obras-publicas/", "clicks": 1, "impressions": 14, "ctr": 0.0714, "position": 6.36}, "family_aggregate": {"clicks": 2, "impressions": 25, "ctr": 0.08, "position": 5.84}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
       "content_quality": {"state": "PROTECTED_WAIT", "basis": "Value-first correction is protected by the active six-route measurement window."},
       "proof": {"state": "PUBLIC_METHOD_AND_SUPPORT", "sources": ["https://confenge.com.br/reequilibrio-obras-publicas/"], "claim_boundary": "No recovery amount, ROI, customer result or rank is claimed."},
       "offer": {"state": "EXISTING_SERVICE_ROUTE", "destination_service_id": "reequilibrio-obras-publicas", "offer_class": null, "offer_id": null},
@@ -240,7 +224,7 @@
       "gap": null,
       "supporting_urls": ["https://confenge.com.br/conteudos/administracao-local-orcamento-obra-publica/", "https://confenge.com.br/conteudos/bdi-diferenciado-obra-publica/", "https://confenge.com.br/conteudos/data-base-orcamento-reajuste-obra-publica/", "https://confenge.com.br/conteudos/mobilizacao-desmobilizacao-orcamento-obra/", "https://confenge.com.br/conteudos/sinapi-desonerado-nao-desonerado/", "https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/"],
       "gsc": {"status": "UNKNOWN", "as_of": "2026-08-17", "source": "data/bofu-dominance/core/gsc-live-overlay.v1.json", "reason": "The owner observation is Chile/mobile and is not comparable for the Brazilian query family.", "observation": {"impressions": 1, "clicks": 0, "position": 10, "geo": "chl", "device": "MOBILE", "denominator": "impressions_in_returned_top_rows"}},
-      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT", "mapped_pages": [{"path": "/auditoria-orcamento-licitacao/", "role": "CANONICAL_OWNER"}, {"path": "/conteudos/sinapi-desonerado-nao-desonerado/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/bdi-diferenciado-obra-publica/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/administracao-local-orcamento-obra-publica/", "role": "DECLARED_SUPPORT"}], "owner_observation": {"path": "/auditoria-orcamento-licitacao/", "clicks": 1, "impressions": 28, "ctr": 0.0357, "position": 8.64}, "family_aggregate": {"clicks": 7, "impressions": 417, "ctr": 0.016787, "position": 7.12}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
+      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT", "mapped_pages": [{"path": "/auditoria-orcamento-licitacao/", "role": "CANONICAL_OWNER"}, {"path": "/conteudos/sinapi-desonerado-nao-desonerado/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/bdi-diferenciado-obra-publica/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/administracao-local-orcamento-obra-publica/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/data-base-orcamento-reajuste-obra-publica/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/sinapi-ou-sicro-obra-publica/", "role": "DECLARED_SUPPORT"}], "owner_observation": {"path": "/auditoria-orcamento-licitacao/", "clicks": 1, "impressions": 28, "ctr": 0.0357, "position": 8.64}, "family_aggregate": {"clicks": 7, "impressions": 436, "ctr": 0.016055, "position": 7.06}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
       "content_quality": {"state": "PROTECTED_WAIT", "basis": "The owner is protected and the SINAPI supporting route remains under issue #126 observation."},
       "proof": {"state": "PUBLIC_METHOD_AND_SUPPORT", "sources": ["https://confenge.com.br/auditoria-orcamento-licitacao/"], "claim_boundary": "No savings, customer outcome or Brazilian rank is claimed."},
       "offer": {"state": "EXISTING_SERVICE_ROUTE", "destination_service_id": "auditoria-orcamento-licitacao", "offer_class": null, "offer_id": null},
@@ -344,7 +328,7 @@
       "gap": null,
       "supporting_urls": ["https://confenge.com.br/conteudos/atraso-obra-culpa-administracao/", "https://confenge.com.br/conteudos/prorrogacao-prazo-obra-publica-documentos/"],
       "gsc": {"status": "UNKNOWN", "as_of": "2026-08-17", "source": "data/bofu-dominance/core/gsc-live-overlay.v1.json", "reason": "Owner absent from returned live top rows; absence is not zero demand or zero rank."},
-      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT", "mapped_pages": [{"path": "/atrasos-prorrogacao-obras-publicas/", "role": "CANONICAL_OWNER"}, {"path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/", "role": "CONTRACT_MAPPED_SUPPORT"}, {"path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/", "role": "CONTRACT_MAPPED_SUPPORT"}], "owner_observation": {"path": "/atrasos-prorrogacao-obras-publicas/", "clicks": 1, "impressions": 22, "ctr": 0.0455, "position": 5.41}, "family_aggregate": {"clicks": 1, "impressions": 66, "ctr": 0.015152, "position": 5.26}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
+      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT", "mapped_pages": [{"path": "/atrasos-prorrogacao-obras-publicas/", "role": "CANONICAL_OWNER"}, {"path": "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/", "role": "CONTRACT_MAPPED_SUPPORT"}, {"path": "/conteudos/chuva-prorrogacao-prazo-obra-publica/", "role": "CONTRACT_MAPPED_SUPPORT"}, {"path": "/conteudos/prorrogacao-prazo-obra-publica-documentos/", "role": "DECLARED_SUPPORT"}, {"path": "/conteudos/atraso-obra-culpa-administracao/", "role": "DECLARED_SUPPORT"}], "owner_observation": {"path": "/atrasos-prorrogacao-obras-publicas/", "clicks": 1, "impressions": 22, "ctr": 0.0455, "position": 5.41}, "family_aggregate": {"clicks": 1, "impressions": 69, "ctr": 0.014493, "position": 5.42}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
       "content_quality": {"state": "SUPPORTING_MEASUREMENT_WAIT", "basis": "The chuva supporting canary remains under issue #127 measurement."},
       "proof": {"state": "PUBLIC_METHOD_AND_SUPPORT", "sources": ["https://confenge.com.br/atrasos-prorrogacao-obras-publicas/"], "claim_boundary": "No extension approval, avoided sanction, customer result or rank is claimed."},
       "offer": {"state": "EXISTING_SERVICE_ROUTE", "destination_service_id": "atrasos-prorrogacao-obras-publicas", "offer_class": null, "offer_id": null},
@@ -370,7 +354,7 @@
       "gap": null,
       "supporting_urls": ["https://confenge.com.br/conteudos/resposta-notificacao-atraso-obra-publica/"],
       "gsc": {"status": "UNKNOWN", "as_of": "2026-08-17", "source": "data/bofu-dominance/core/gsc-live-overlay.v1.json", "reason": "Owner absent from returned live top rows; absence is not zero demand or zero rank."},
-      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_CANONICAL_OWNER", "mapped_pages": [{"path": "/defesa-tecnica-contratos-publicos/", "role": "CANONICAL_OWNER"}], "owner_observation": {"path": "/defesa-tecnica-contratos-publicos/", "clicks": 0, "impressions": 6, "ctr": 0.0, "position": 5.33}, "family_aggregate": {"clicks": 0, "impressions": 6, "ctr": 0.0, "position": 5.33}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
+      "manual_page_evidence": {"status": "MANUAL_GSC_SNAPSHOT", "source": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json", "mapping_confidence": "HIGH_EXACT_OWNER_AND_CONTRACTED_SUPPORT", "mapped_pages": [{"path": "/defesa-tecnica-contratos-publicos/", "role": "CANONICAL_OWNER"}, {"path": "/conteudos/resposta-notificacao-atraso-obra-publica/", "role": "DECLARED_SUPPORT"}], "owner_observation": {"path": "/defesa-tecnica-contratos-publicos/", "clicks": 0, "impressions": 6, "ctr": 0.0, "position": 5.33}, "family_aggregate": {"clicks": 0, "impressions": 10, "ctr": 0.0, "position": 5.3}, "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"},
       "content_quality": {"state": "WEAK", "basis": "Owner exists with one supporting route; six manual owner-page impressions prove exposure, not transfer or conversion failure."},
       "proof": {"state": "PUBLIC_METHOD_AND_SUPPORT", "sources": ["https://confenge.com.br/defesa-tecnica-contratos-publicos/"], "claim_boundary": "No avoided sanction, customer result or rank is claimed."},
       "offer": {"state": "EXISTING_SERVICE_ROUTE", "destination_service_id": "defesa-tecnica-contratos-publicos", "offer_class": null, "offer_id": null},

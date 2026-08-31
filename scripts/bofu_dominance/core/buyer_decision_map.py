@@ -16,6 +16,7 @@ from scripts.bofu_dominance.core.constants import (
     BUYER_DECISION_MAP_SCHEMA,
     BUYER_DECISION_REPORT_PATH,
     MANUAL_GSC_SNAPSHOT_PATH,
+    MANUAL_GSC_SOURCE_MANIFEST_PATH,
     ORIGIN_MAIN_SHA,
     ROOT,
 )
@@ -40,22 +41,37 @@ PROTECTED_ROUTES = (
 )
 PROTECTED_ISSUES = frozenset({126, 127, 128, 327, 387, 529})
 MANUAL_GSC_SOURCE = "seo/gsc-2026-08-31/manual-page-snapshot.v1.json"
+MANUAL_GSC_SOURCE_MANIFEST = "seo/gsc-2026-08-31/source-manifest.v1.json"
 MANUAL_PAGE_MAPPING_PATHS = {
     "aditivos": [
         "/aditivos-obras-publicas/",
         "/conteudos/limite-aditivo-25-50-obra-publica/",
         "/conteudos/aditivo-qualitativo-quantitativo/",
+        "/conteudos/aditivo-empreitada-por-preco-global/",
+        "/conteudos/demolicao-nao-prevista-obra-publica/",
     ],
     "medicoes-pagamentos": [
         "/medicoes-glosas-obras-publicas/",
+        "/conteudos/medicao-de-obra-publica-rejeitada/",
         "/conteudos/glosa-de-medicao-obra-publica/",
+        "/conteudos/atraso-pagamento-contrato-publico-suspender/",
+        "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+        "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+        "/conteudos/glosa-por-qualidade-obra-publica/",
     ],
-    "reequilibrio": ["/reequilibrio-obras-publicas/"],
+    "reequilibrio": [
+        "/reequilibrio-obras-publicas/",
+        "/conteudos/curva-abc-reequilibrio-contrato/",
+        "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+    ],
     "orcamento-bdi": [
         "/auditoria-orcamento-licitacao/",
         "/conteudos/sinapi-desonerado-nao-desonerado/",
         "/conteudos/bdi-diferenciado-obra-publica/",
         "/conteudos/administracao-local-orcamento-obra-publica/",
+        "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+        "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+        "/conteudos/sinapi-ou-sicro-obra-publica/",
     ],
     "carteira-operacao": ["/diagnostico-b2g-360/"],
     "edital-proposta": [
@@ -68,8 +84,13 @@ MANUAL_PAGE_MAPPING_PATHS = {
         "/atrasos-prorrogacao-obras-publicas/",
         "/conteudos/prazo-vigencia-prazo-execucao-contrato-obra/",
         "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
+        "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+        "/conteudos/atraso-obra-culpa-administracao/",
     ],
-    "defesa-sancoes": ["/defesa-tecnica-contratos-publicos/"],
+    "defesa-sancoes": [
+        "/defesa-tecnica-contratos-publicos/",
+        "/conteudos/resposta-notificacao-atraso-obra-publica/",
+    ],
     "gestao-contratual": ["/acompanhamento-contratos-obras/"],
     "bid-room": ["/bid-room-licitacoes-obras/"],
     "diagnostico-expansao": ["/diagnostico-b2g-expansao/"],
@@ -77,38 +98,21 @@ MANUAL_PAGE_MAPPING_PATHS = {
     "bid-readiness": [],
     "partner-integrity": [],
 }
-MANUAL_MAPPING_EXCLUSIONS = [
-    {
-        "path": "/",
-        "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
-        "reason": "The home page is a cross-family navigation surface, not a canonical owner for one of the 15 buyer jobs.",
-    },
-    {
-        "path": "/conteudos/",
-        "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
-        "reason": "The editorial hub is a cross-family library surface, not a canonical owner for one buyer job.",
-    },
-    {
-        "path": "http://confenge.com.br/",
-        "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
-        "reason": "The legacy HTTP home observation is canonical hygiene evidence, not a buyer-job owner mapping.",
-    },
-    {
-        "path": "/especialista/tiago-jun-sasaki/",
-        "state": "OUTSIDE_15_BUYER_JOB_OWNER_SCOPE",
-        "reason": "The specialist profile is a trust surface shared across families, not a canonical buyer-job owner.",
-    },
-    {
-        "path": "/conteudos/reequilibrio-empreitada-preco-global/",
-        "state": "UNMAPPED_NO_EXISTING_CONTRACT",
-        "reason": "The page row is retained, but current route and content-service contracts do not map this URL to reequilibrio; a visible query cannot create that mapping.",
-    },
-    {
-        "path": "/ferramentas/diagnostico-defesa-margem/",
-        "state": "UNMAPPED_NO_EXISTING_CONTRACT",
-        "reason": "The tool is a separate utility and the current BOFU matrix declares no supporting route for defesa-margem, so its impressions do not inflate the canonical-owner score.",
-    },
-]
+MANUAL_MAPPING_EXCLUSION_POLICY = {
+    "state": "UNMAPPED_PAGE_ROWS_EXCLUDED_FROM_15_FAMILY_SCORE",
+    "count": 90,
+    "rule": "Any returned page row without an exact canonical-owner, bofu-intent-matrix support, content-service-map override or pinned frozen-sibling contract remains excluded; URL wording and visible queries cannot create a mapping.",
+    "notable": [
+        {
+            "path": "/conteudos/reequilibrio-empreitada-preco-global/",
+            "reason": "No existing route or content-service contract maps this page to reequilibrio.",
+        },
+        {
+            "path": "/ferramentas/diagnostico-defesa-margem/",
+            "reason": "The current BOFU matrix declares no supporting route for defesa-margem, so tool impressions do not inflate the canonical-owner score.",
+        },
+    ],
+}
 REQUIRED_ROW_FIELDS = (
     "family_id",
     "buyer_job",
@@ -232,6 +236,21 @@ def _sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _strictly_matches(actual: Any, expected: Any) -> bool:
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(expected, dict):
+        return set(actual) == set(expected) and all(
+            _strictly_matches(actual[key], expected[key]) for key in expected
+        )
+    if isinstance(expected, list):
+        return len(actual) == len(expected) and all(
+            _strictly_matches(actual_item, expected_item)
+            for actual_item, expected_item in zip(actual, expected)
+        )
+    return actual == expected
+
+
 def _full_url(route: str) -> str:
     return f"{PUBLIC_ORIGIN}{route}"
 
@@ -282,6 +301,59 @@ def _validate_source_hashes(
     return sources
 
 
+def _validate_manual_gsc_source_manifest(
+    manifest: dict[str, Any], report: MapValidationReport
+) -> None:
+    expected = {
+        "schema_version": "confenge-manual-gsc-source-manifest/v1",
+        "source_kind": "MANUAL_GSC_SNAPSHOT_RAW_CHECKSUM_MANIFEST",
+        "received_at": "2026-08-31",
+        "campaign_path": "evidence/search-console-2026-08-31/",
+        "source_archives": [
+            {
+                "filename": "confenge.com.br-Performance-on-Search-2026-08-31.zip",
+                "role": "ORIGINAL_GSC_EXPORT",
+                "bytes": 4426,
+                "sha256": "4d0c323d8d142e7aeebd199c15feda9f4f34a284e1f01e805e31cf088f62e652",
+            },
+            {
+                "filename": "confenge_parallel_campaigns_gsc_2026-08-31.zip",
+                "role": "CAMPAIGN_PACKAGE",
+                "bytes": 35044,
+                "sha256": "69bffb9c0f4927347ccf269f0fc35e763aafbeb9539a81b8c5b22dd007944ecf",
+            },
+        ],
+        "files": [
+            {"name": "Aspecto da pesquisa.csv", "bytes": 53, "sha256": "7dc4e4ca44e0888ddae5f00f3e255d5670c26d25541683a07428fe6b3e67216f", "privacy_class": "AGGREGATE_DIMENSION"},
+            {"name": "Consultas.csv", "bytes": 477, "sha256": "6e6a9803ee32ed8151a33926d37af20f0a5635943b13f91c98d2235bb6493cc2", "privacy_class": "PRIVATE_QUERY_TEXT_CHECKSUM_ONLY"},
+            {"name": "Dispositivos.csv", "bytes": 115, "sha256": "9aaa16a007aeac0a15c6d20ac7e9672c7cd7df79f0925449f4a1ed32843b70af", "privacy_class": "AGGREGATE_DIMENSION"},
+            {"name": "Filtros.csv", "bytes": 55, "sha256": "966cb476de42d921a6951fe9cde788f9d2079e213f85606ee353580bc33ecac4", "privacy_class": "AGGREGATE_DIMENSION"},
+            {"name": "Gráfico.csv", "bytes": 739, "sha256": "4e7a6974364f1b920ca29853eab8f43604929d0d713d9e47e2ccdd09154363c1", "privacy_class": "AGGREGATE_DAILY"},
+            {"name": "Países.csv", "bytes": 530, "sha256": "4536ac63684b85085d22b9bcc4ebd7e436d89c9e72c58ceed663f48ac688e59a", "privacy_class": "AGGREGATE_DIMENSION"},
+            {"name": "Páginas.csv", "bytes": 10044, "sha256": "fe94ad6a491d7ee8cb4588bc56877601af516b52cd240879fb1e7ea3c0767cae", "privacy_class": "PAGE_LEVEL_AGGREGATE"},
+            {"name": "snapshot-summary.json", "bytes": 891, "sha256": "9e706dd2ae11c1a85d580efd078a1515355d4eaeaa01716518c8f93b132b11cb", "privacy_class": "CAMPAIGN_DERIVED_SUMMARY"},
+        ],
+        "cross_archive_validation": {
+            "status": "VERIFIED_IDENTICAL_CONTENT",
+            "matched_original_files": 7,
+            "mismatched_files": 0,
+            "rule": "The seven original GSC export members have identical SHA-256 values in the original export ZIP and the campaign evidence directory.",
+        },
+        "privacy": {
+            "raw_query_text_committed": False,
+            "query_file_storage": "CHECKSUM_ONLY_NOT_COMMITTED",
+            "safe_committed_projection": MANUAL_GSC_SOURCE,
+            "rule": "Only aggregate query visibility and sanitized page-level rows may enter git.",
+        },
+    }
+    if not _strictly_matches(manifest, expected):
+        report.add(
+            "manual-gsc-source-manifest",
+            "manual_source_manifest_drift",
+            "The versioned checksum/privacy manifest does not match the validated raw export.",
+        )
+
+
 def _validate_manual_gsc_snapshot(
     snapshot: dict[str, Any], report: MapValidationReport
 ) -> dict[str, dict[str, Any]]:
@@ -317,20 +389,6 @@ def _validate_manual_gsc_snapshot(
                 f"expected={sorted(expected)} actual={actual}",
             )
 
-    def strictly_matches(actual: Any, expected: Any) -> bool:
-        if type(actual) is not type(expected):
-            return False
-        if isinstance(expected, dict):
-            return set(actual) == set(expected) and all(
-                strictly_matches(actual[key], expected[key]) for key in expected
-            )
-        if isinstance(expected, list):
-            return len(actual) == len(expected) and all(
-                strictly_matches(actual_item, expected_item)
-                for actual_item, expected_item in zip(actual, expected)
-            )
-        return actual == expected
-
     require_closed_keys(
         snapshot,
         {
@@ -343,6 +401,7 @@ def _validate_manual_gsc_snapshot(
             "raw_export_provenance",
             "durable_authority_relationship",
             "site_summary",
+            "page_table_summary",
             "country_summary",
             "device_summary",
             "weekly_samples",
@@ -368,7 +427,7 @@ def _validate_manual_gsc_snapshot(
         "interpretation_guardrail": "This snapshot proves page exposure for mapped URLs. It does not by itself prove conversion failure, query-family completeness, causality, trend, ranking durability or #413 CURRENT authority.",
     }
     for key, expected in expected_top_scalars.items():
-        if not strictly_matches(snapshot.get(key), expected):
+        if not _strictly_matches(snapshot.get(key), expected):
             report.add(
                 f"manual-gsc.{key}",
                 "manual_snapshot_scalar_drift",
@@ -381,7 +440,7 @@ def _validate_manual_gsc_snapshot(
         "end_date": "2026-08-29",
         "timezone": "America/Sao_Paulo",
     }
-    if not strictly_matches(snapshot.get("export"), expected_export):
+    if not _strictly_matches(snapshot.get("export"), expected_export):
         report.add(
             "manual-gsc.export",
             "manual_snapshot_export_drift",
@@ -391,19 +450,30 @@ def _validate_manual_gsc_snapshot(
     raw_value = snapshot.get("raw_export_provenance")
     require_closed_keys(
         raw_value,
-        {"expected_campaign_path", "workspace_status", "archived", "checksum_status", "sha256", "basis"},
+        {
+            "expected_campaign_path",
+            "workspace_status",
+            "archive_mode",
+            "checksum_status",
+            "source_manifest",
+            "source_manifest_sha256",
+            "raw_files_committed",
+            "raw_query_text_committed",
+        },
         "manual-gsc.raw_export_provenance",
     )
     raw = raw_value if isinstance(raw_value, dict) else {}
     expected_raw = {
         "expected_campaign_path": "evidence/search-console-2026-08-31/",
-        "workspace_status": "NOT_AVAILABLE_IN_EXECUTION_WORKSPACE",
-        "archived": False,
-        "checksum_status": "UNKNOWN_RAW_FILES_UNAVAILABLE",
-        "sha256": None,
-        "basis": "The founder supplied the measured export summary in the 2026-08-31 campaign goal, but the referenced CSV package was not present in the shared workspace, attachment cache or campaign worktrees. No raw checksum is invented.",
+        "workspace_status": "LOCATED_AND_VALIDATED",
+        "archive_mode": "CHECKSUM_MANIFEST_PLUS_SANITIZED_PAGE_ROWS",
+        "checksum_status": "VERIFIED_IDENTICAL_ARCHIVE_CONTENT",
+        "source_manifest": MANUAL_GSC_SOURCE_MANIFEST,
+        "source_manifest_sha256": "ac5215ed0e9b5a4c95cfc6f2631218025a2f2335af650e42db142ee4746b3bb9",
+        "raw_files_committed": False,
+        "raw_query_text_committed": False,
     }
-    if not strictly_matches(raw, expected_raw):
+    if not _strictly_matches(raw, expected_raw):
         report.add(
             "manual-gsc.raw_export_provenance",
             "manual_raw_provenance_overclaim",
@@ -434,7 +504,7 @@ def _validate_manual_gsc_snapshot(
         "read_after_write_proven": False,
         "reason": "A manual UI export has no producer snapshot/pointer write, durable host read-back or producer-consumer manifest parity and therefore cannot satisfy the third #413 observation.",
     }
-    if not strictly_matches(durable, expected_durable):
+    if not _strictly_matches(durable, expected_durable):
         report.add(
             "manual-gsc.durable_authority_relationship",
             "manual_snapshot_promoted_to_durable",
@@ -451,10 +521,10 @@ def _validate_manual_gsc_snapshot(
     expected_site = {
         "clicks": 27,
         "impressions": 1201,
-        "ctr": 0.02248,
-        "impression_weighted_daily_position": 8.24,
+        "ctr": 0.022481,
+        "impression_weighted_daily_position": 8.2355,
     }
-    if not strictly_matches(site, expected_site):
+    if not _strictly_matches(site, expected_site):
         report.add(
             "manual-gsc.site_summary",
             "manual_site_totals_drift",
@@ -465,6 +535,36 @@ def _validate_manual_gsc_snapshot(
     expected_site_ctr = 27 / 1201
     if not isinstance(site.get("ctr"), (int, float)) or abs(site["ctr"] - expected_site_ctr) > 0.000005:
         report.add("manual-gsc.site_summary", "manual_site_ctr_invalid", str(site.get("ctr")))
+
+    page_summary = snapshot.get("page_table_summary")
+    require_closed_keys(
+        page_summary,
+        {
+            "rows",
+            "clicks",
+            "impressions",
+            "ctr",
+            "impression_weighted_position",
+            "denominator",
+            "aggregation_note",
+        },
+        "manual-gsc.page_table_summary",
+    )
+    expected_page_summary = {
+        "rows": 128,
+        "clicks": 27,
+        "impressions": 1389,
+        "ctr": 0.019438,
+        "impression_weighted_position": 8.4557,
+        "denominator": "sum_of_returned_page_rows",
+        "aggregation_note": "GSC dimensional page rows sum to 1,389 impressions while the site chart has 1,201; dimensional aggregation and privacy rules mean these totals need not match.",
+    }
+    if not _strictly_matches(page_summary, expected_page_summary):
+        report.add(
+            "manual-gsc.page_table_summary",
+            "manual_page_table_summary_drift",
+            f"expected={expected_page_summary} actual={page_summary}",
+        )
 
     query_visibility_value = snapshot.get("query_visibility")
     require_closed_keys(
@@ -494,7 +594,7 @@ def _validate_manual_gsc_snapshot(
         "forbidden_inference": "The visible queries are not the query universe and cannot create an owner or prove absence of demand.",
         "raw_query_text_committed": False,
     }
-    if not strictly_matches(query_visibility, expected_query_visibility):
+    if not _strictly_matches(query_visibility, expected_query_visibility):
         report.add(
             "manual-gsc.query_visibility",
             "query_visibility_contract_drift",
@@ -512,13 +612,13 @@ def _validate_manual_gsc_snapshot(
         "manual-gsc.country_summary",
     )
     expected_country = {
-        "country": "Brazil",
+        "country": "Brasil",
         "clicks": 27,
         "impressions": 1048,
         "ctr": 0.0258,
         "position": 7.14,
     }
-    if not strictly_matches(country_summary, expected_country):
+    if not _strictly_matches(country_summary, expected_country):
         report.add(
             "manual-gsc.country_summary",
             "manual_country_summary_drift",
@@ -535,10 +635,11 @@ def _validate_manual_gsc_snapshot(
                 f"manual-gsc.device_summary[{index}]",
             )
     expected_devices = [
-        {"device": "Desktop", "clicks": 22, "impressions": 938, "ctr": 0.0235, "position": 7.75},
-        {"device": "Mobile", "clicks": 5, "impressions": 262, "ctr": 0.0191, "position": 9.92},
+        {"device": "Computador", "clicks": 22, "impressions": 938, "ctr": 0.0235, "position": 7.75},
+        {"device": "Celular", "clicks": 5, "impressions": 262, "ctr": 0.0191, "position": 9.92},
+        {"device": "Tablet", "clicks": 0, "impressions": 1, "ctr": 0.0, "position": 8.0},
     ]
-    if not strictly_matches(device_summary, expected_devices):
+    if not _strictly_matches(device_summary, expected_devices):
         report.add(
             "manual-gsc.device_summary",
             "manual_device_summary_drift",
@@ -555,10 +656,10 @@ def _validate_manual_gsc_snapshot(
                 f"manual-gsc.weekly_samples[{index}]",
             )
     expected_weekly_samples = [
-        {"start_date": "2026-08-23", "end_date": "2026-08-29", "clicks": 8, "impressions": 212, "ctr": 0.0377, "impression_weighted_position": 7.42},
-        {"start_date": "2026-08-16", "end_date": "2026-08-22", "clicks": 5, "impressions": 305, "ctr": 0.0164, "impression_weighted_position": 7.08},
+        {"start_date": "2026-08-23", "end_date": "2026-08-29", "clicks": 8, "impressions": 212, "ctr": 0.037736, "impression_weighted_position": 7.4175},
+        {"start_date": "2026-08-16", "end_date": "2026-08-22", "clicks": 5, "impressions": 305, "ctr": 0.016393, "impression_weighted_position": 7.0784},
     ]
-    if not strictly_matches(weekly_samples, expected_weekly_samples):
+    if not _strictly_matches(weekly_samples, expected_weekly_samples):
         report.add(
             "manual-gsc.weekly_samples",
             "manual_weekly_samples_drift",
@@ -598,6 +699,35 @@ def _validate_manual_gsc_snapshot(
         if type(position) is not float or position <= 0:
             report.add(label, "manual_page_position_invalid", str(position))
         pages[path] = row
+    if pages and all(
+        type(item.get("clicks")) is int
+        and type(item.get("impressions")) is int
+        and type(item.get("ctr")) is float
+        and type(item.get("position")) is float
+        for item in pages.values()
+    ):
+        page_clicks = sum(item["clicks"] for item in pages.values())
+        page_impressions = sum(item["impressions"] for item in pages.values())
+        page_weighted_position = sum(
+            item["impressions"] * item["position"] for item in pages.values()
+        )
+        recomputed_page_summary = {
+            "rows": len(pages),
+            "clicks": page_clicks,
+            "impressions": page_impressions,
+            "ctr": round(page_clicks / page_impressions, 6),
+            "impression_weighted_position": round(
+                page_weighted_position / page_impressions, 4
+            ),
+            "denominator": "sum_of_returned_page_rows",
+            "aggregation_note": expected_page_summary["aggregation_note"],
+        }
+        if not _strictly_matches(page_summary, recomputed_page_summary):
+            report.add(
+                "manual-gsc.page_table_summary",
+                "manual_page_table_summary_incoherent",
+                f"expected={recomputed_page_summary} actual={page_summary}",
+            )
     return pages
 
 
@@ -611,6 +741,49 @@ def _manual_aggregate(observations: list[dict[str, Any]]) -> dict[str, Any]:
         "ctr": round(clicks / impressions, 6),
         "position": round(weighted_position / impressions, 2),
     }
+
+
+def _derive_manual_page_mapping_authority(
+    *,
+    registry_by_id: dict[str, dict[str, Any]],
+    matrix_by_id: dict[str, dict[str, Any]],
+    content_map: dict[str, Any],
+    frozen_ownership: dict[str, Any],
+    manual_pages: dict[str, dict[str, Any]],
+) -> dict[str, dict[str, str]]:
+    """Derive page mappings only from pinned owner/support contracts."""
+    authority: dict[str, dict[str, str]] = {}
+    role_rank = {"CONTRACT_MAPPED_SUPPORT": 1, "DECLARED_SUPPORT": 2, "CANONICAL_OWNER": 3}
+
+    def add(path: str | None, family_id: str | None, role: str, source: str) -> None:
+        if not path or not family_id or path not in manual_pages:
+            return
+        candidate = {"family_id": family_id, "role": role, "source": source}
+        prior = authority.get(path)
+        if prior is None or role_rank[role] > role_rank[prior["role"]]:
+            authority[path] = candidate
+
+    owner_path_to_family: dict[str, str] = {}
+    for family_id, family in registry_by_id.items():
+        owner_path = (family.get("canonical_owner") or {}).get("path")
+        if owner_path:
+            owner_path_to_family[str(owner_path)] = family_id
+            add(str(owner_path), family_id, "CANONICAL_OWNER", "intent-registry.v2")
+    for family_id, row in matrix_by_id.items():
+        for path in row.get("supporting_indexable_routes") or []:
+            add(str(path), family_id, "DECLARED_SUPPORT", "bofu-intent-matrix")
+    for path, family_id in (content_map.get("path_overrides") or {}).items():
+        add(str(path), str(family_id), "CONTRACT_MAPPED_SUPPORT", "content-service-map")
+    for slug, pillar in (frozen_ownership.get("pillars") or {}).items():
+        family_id = owner_path_to_family.get(f"/{slug}/")
+        for sibling in ((pillar or {}).get("cannibalization") or {}).get("siblings") or []:
+            add(
+                str(sibling.get("url") or ""),
+                family_id,
+                "CONTRACT_MAPPED_SUPPORT",
+                "frozen-query-ownership",
+            )
+    return authority
 
 
 def _validate_priority(
@@ -919,6 +1092,7 @@ def validate_buyer_decision_map(
         "data/bofu-dominance/core/gsc-live-overlay.v1.json",
         "data/bofu-dominance/core/issue-state-snapshot.v1.json",
         MANUAL_GSC_SOURCE,
+        MANUAL_GSC_SOURCE_MANIFEST,
     }
     if set(sources) != required_sources:
         report.add(
@@ -945,6 +1119,9 @@ def validate_buyer_decision_map(
             if manual_snapshot is not None
             else _read_json(root / MANUAL_GSC_SNAPSHOT_PATH.relative_to(ROOT))
         )
+        manual_gsc_source_manifest = _read_json(
+            root / MANUAL_GSC_SOURCE_MANIFEST_PATH.relative_to(ROOT)
+        )
         issue_snapshot = _read_json(
             root / "data/bofu-dominance/core/issue-state-snapshot.v1.json"
         )
@@ -955,12 +1132,13 @@ def validate_buyer_decision_map(
     registry_by_id = {item["id"]: item for item in registry.get("families") or []}
     matrix_by_id = {item["intent_cluster"]: item for item in matrix.get("rows") or []}
     rows = doc.get("rows") or []
+    _validate_manual_gsc_source_manifest(manual_gsc_source_manifest, report)
     manual_pages = _validate_manual_gsc_snapshot(manual_gsc_snapshot, report)
-    if doc.get("manual_mapping_exclusions") != MANUAL_MAPPING_EXCLUSIONS:
+    if doc.get("manual_mapping_exclusions") != MANUAL_MAPPING_EXCLUSION_POLICY:
         report.add(
             "manual_mapping_exclusions",
             "manual_mapping_exclusions_drift",
-            f"expected={MANUAL_MAPPING_EXCLUSIONS} actual={doc.get('manual_mapping_exclusions')}",
+            f"expected={MANUAL_MAPPING_EXCLUSION_POLICY} actual={doc.get('manual_mapping_exclusions')}",
         )
     mapped_manual_paths = [
         path for paths in MANUAL_PAGE_MAPPING_PATHS.values() for path in paths
@@ -971,27 +1149,52 @@ def validate_buyer_decision_map(
             "manual_page_mapped_to_multiple_families",
             str(mapped_manual_paths),
         )
-    excluded_manual_paths = [item["path"] for item in MANUAL_MAPPING_EXCLUSIONS]
-    if len(excluded_manual_paths) != len(set(excluded_manual_paths)):
-        report.add(
-            "manual_mapping_exclusions",
-            "manual_mapping_exclusion_duplicate",
-            str(excluded_manual_paths),
-        )
+    manual_mapping_authority = _derive_manual_page_mapping_authority(
+        registry_by_id=registry_by_id,
+        matrix_by_id=matrix_by_id,
+        content_map=content_map,
+        frozen_ownership=frozen_ownership,
+        manual_pages=manual_pages,
+    )
+    derived_by_family = {
+        family_id: {
+            path
+            for path, item in manual_mapping_authority.items()
+            if item["family_id"] == family_id
+        }
+        for family_id in registry_by_id
+    }
+    for family_id in registry_by_id:
+        declared = set(MANUAL_PAGE_MAPPING_PATHS.get(family_id) or [])
+        derived = derived_by_family[family_id]
+        if declared != derived:
+            report.add(
+                f"manual_page_mapping:{family_id}",
+                "manual_mapping_authority_drift",
+                f"declared={sorted(declared)} derived={sorted(derived)}",
+            )
     mapped_set = set(mapped_manual_paths)
-    excluded_set = set(excluded_manual_paths)
-    if mapped_set & excluded_set:
-        report.add(
-            "manual_page_mapping",
-            "manual_page_mapped_and_excluded",
-            str(sorted(mapped_set & excluded_set)),
-        )
-    if mapped_set | excluded_set != set(manual_pages):
+    missing_mapped_paths = mapped_set - set(manual_pages)
+    if missing_mapped_paths:
         report.add(
             "manual_page_mapping",
             "manual_page_classification_incomplete",
-            f"unclassified={sorted(set(manual_pages) - mapped_set - excluded_set)} missing={sorted((mapped_set | excluded_set) - set(manual_pages))}",
+            f"mapped paths absent from snapshot={sorted(missing_mapped_paths)}",
         )
+    excluded_set = set(manual_pages) - mapped_set
+    if len(excluded_set) != MANUAL_MAPPING_EXCLUSION_POLICY["count"]:
+        report.add(
+            "manual_mapping_exclusions",
+            "manual_mapping_exclusion_count_drift",
+            f"expected={MANUAL_MAPPING_EXCLUSION_POLICY['count']} actual={len(excluded_set)}",
+        )
+    for item in MANUAL_MAPPING_EXCLUSION_POLICY["notable"]:
+        if item["path"] not in excluded_set:
+            report.add(
+                "manual_mapping_exclusions",
+                "manual_mapping_notable_exclusion_missing",
+                item["path"],
+            )
     if not isinstance(rows, list):
         report.add("rows", "projection_rows_invalid", "rows must be an array")
         return report
@@ -1381,20 +1584,10 @@ def validate_buyer_decision_map(
             if missing_paths:
                 report.add(label, "manual_mapped_page_missing", str(missing_paths))
             observations = [manual_pages[path] for path in expected_paths if path in manual_pages]
-            matrix_support = {
-                item.replace(PUBLIC_ORIGIN, "", 1)
-                for item in row.get("supporting_urls") or []
-            }
             expected_mappings = [
                 {
                     "path": path,
-                    "role": (
-                        "CANONICAL_OWNER"
-                        if path == route
-                        else "DECLARED_SUPPORT"
-                        if path in matrix_support
-                        else "CONTRACT_MAPPED_SUPPORT"
-                    ),
+                    "role": (manual_mapping_authority.get(path) or {}).get("role"),
                 }
                 for path in expected_paths
             ]
@@ -1527,6 +1720,9 @@ def validate_buyer_decision_map(
         "durable_gsc_unknown": unknown_gsc,
         "manual_page_observed": manual_observed,
         "manual_page_unknown": manual_unknown,
+        "manual_page_rows": len(manual_pages),
+        "manual_mapped_page_rows": len(mapped_set),
+        "manual_excluded_page_rows": len(excluded_set),
         "protected_routes": len(protected_seen),
         "protected_families": len(protected_family_ids),
         "controllable_queue": len(queue),
@@ -1587,13 +1783,13 @@ def render_buyer_decision_report(document: dict[str, Any]) -> str:
         "",
         "- `MANUAL_GSC_SNAPSHOT`: founder-reported Search Console UI export for Web / last 28 days (`2026-08-02`..`2026-08-29`); page rows may be used as measured exposure where URL mapping is exact.",
         "- durable/current authority: remains `UNKNOWN` at **2/3** distinct durable observations. There is no snapshot/pointer write, host read-after-write or manifest parity for this manual export.",
-        "- raw provenance: the referenced campaign CSV directory was unavailable in the execution workspace, so no raw checksum is claimed. The normalized page aggregate is hash-pinned; plaintext queries are not committed.",
-        f"- page classification: **{manual_mapped_pages} mapped rows** and **{len(document['manual_mapping_exclusions'])} explicit exclusions**. The reequilíbrio/global-price article and defesa-margem tool are retained but not mapped because current contracts do not authorize using them to inflate a family score.",
+        "- raw provenance: both the original GSC ZIP and campaign package were located; all seven original members are byte-identical and recorded in a hash-pinned source manifest. `Consultas.csv` remains checksum-only and plaintext queries are not committed.",
+        f"- page classification: the full **128-row** page table contains **{manual_mapped_pages} contract-mapped rows** and **{document['manual_mapping_exclusions']['count']} excluded rows**. The reequilíbrio/global-price article and defesa-margem tool remain excluded because current contracts do not authorize using them to inflate a family score.",
         "- interpretation: zero clicks on six, four or three impressions is exposure, not a conversion-failure conclusion.",
         "",
         "## Buyer job → owner/gap → next decision",
         "",
-        "| Query family | Buyer job | Owner or gap | State | Manual owner-page evidence | Proof | Offer / CTA | Next decision → destination |",
+        "| Query family | Buyer job | Owner or gap | State | Manual page evidence | Proof | Offer / CTA | Next decision → destination |",
         "|---|---|---|---|---|---|---|---|",
     ]
     for row in rows:
@@ -1602,10 +1798,14 @@ def render_buyer_decision_report(document: dict[str, Any]) -> str:
         cta = (row.get("cta") or {}).get("label") or "none"
         observation = (row.get("manual_page_evidence") or {}).get("owner_observation")
         if observation:
+            manual = row["manual_page_evidence"]
+            aggregate = manual["family_aggregate"]
             page_evidence = (
-                f"{observation['clicks']} clicks / {observation['impressions']} imp / "
+                f"owner {observation['clicks']} clicks / {observation['impressions']} imp / "
                 f"{observation['ctr'] * 100:.2f}% CTR / pos {observation['position']:.2f}; "
-                f"`{row['manual_page_evidence']['mapping_confidence']}`"
+                f"mapped family {aggregate['clicks']} / {aggregate['impressions']} / "
+                f"{aggregate['ctr'] * 100:.2f}% / pos {aggregate['position']:.2f}; "
+                f"`{manual['mapping_confidence']}`"
             )
         else:
             page_evidence = "UNKNOWN; `NONE_NO_CANONICAL_MAPPING`"

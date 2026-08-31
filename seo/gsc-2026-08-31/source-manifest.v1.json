@@ -1,0 +1,82 @@
+{
+  "schema_version": "confenge-manual-gsc-source-manifest/v1",
+  "source_kind": "MANUAL_GSC_SNAPSHOT_RAW_CHECKSUM_MANIFEST",
+  "received_at": "2026-08-31",
+  "campaign_path": "evidence/search-console-2026-08-31/",
+  "source_archives": [
+    {
+      "filename": "confenge.com.br-Performance-on-Search-2026-08-31.zip",
+      "role": "ORIGINAL_GSC_EXPORT",
+      "bytes": 4426,
+      "sha256": "4d0c323d8d142e7aeebd199c15feda9f4f34a284e1f01e805e31cf088f62e652"
+    },
+    {
+      "filename": "confenge_parallel_campaigns_gsc_2026-08-31.zip",
+      "role": "CAMPAIGN_PACKAGE",
+      "bytes": 35044,
+      "sha256": "69bffb9c0f4927347ccf269f0fc35e763aafbeb9539a81b8c5b22dd007944ecf"
+    }
+  ],
+  "files": [
+    {
+      "name": "Aspecto da pesquisa.csv",
+      "bytes": 53,
+      "sha256": "7dc4e4ca44e0888ddae5f00f3e255d5670c26d25541683a07428fe6b3e67216f",
+      "privacy_class": "AGGREGATE_DIMENSION"
+    },
+    {
+      "name": "Consultas.csv",
+      "bytes": 477,
+      "sha256": "6e6a9803ee32ed8151a33926d37af20f0a5635943b13f91c98d2235bb6493cc2",
+      "privacy_class": "PRIVATE_QUERY_TEXT_CHECKSUM_ONLY"
+    },
+    {
+      "name": "Dispositivos.csv",
+      "bytes": 115,
+      "sha256": "9aaa16a007aeac0a15c6d20ac7e9672c7cd7df79f0925449f4a1ed32843b70af",
+      "privacy_class": "AGGREGATE_DIMENSION"
+    },
+    {
+      "name": "Filtros.csv",
+      "bytes": 55,
+      "sha256": "966cb476de42d921a6951fe9cde788f9d2079e213f85606ee353580bc33ecac4",
+      "privacy_class": "AGGREGATE_DIMENSION"
+    },
+    {
+      "name": "Gráfico.csv",
+      "bytes": 739,
+      "sha256": "4e7a6974364f1b920ca29853eab8f43604929d0d713d9e47e2ccdd09154363c1",
+      "privacy_class": "AGGREGATE_DAILY"
+    },
+    {
+      "name": "Países.csv",
+      "bytes": 530,
+      "sha256": "4536ac63684b85085d22b9bcc4ebd7e436d89c9e72c58ceed663f48ac688e59a",
+      "privacy_class": "AGGREGATE_DIMENSION"
+    },
+    {
+      "name": "Páginas.csv",
+      "bytes": 10044,
+      "sha256": "fe94ad6a491d7ee8cb4588bc56877601af516b52cd240879fb1e7ea3c0767cae",
+      "privacy_class": "PAGE_LEVEL_AGGREGATE"
+    },
+    {
+      "name": "snapshot-summary.json",
+      "bytes": 891,
+      "sha256": "9e706dd2ae11c1a85d580efd078a1515355d4eaeaa01716518c8f93b132b11cb",
+      "privacy_class": "CAMPAIGN_DERIVED_SUMMARY"
+    }
+  ],
+  "cross_archive_validation": {
+    "status": "VERIFIED_IDENTICAL_CONTENT",
+    "matched_original_files": 7,
+    "mismatched_files": 0,
+    "rule": "The seven original GSC export members have identical SHA-256 values in the original export ZIP and the campaign evidence directory."
+  },
+  "privacy": {
+    "raw_query_text_committed": false,
+    "query_file_storage": "CHECKSUM_ONLY_NOT_COMMITTED",
+    "safe_committed_projection": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json",
+    "rule": "Only aggregate query visibility and sanitized page-level rows may enter git."
+  }
+}

@@ -8,6 +8,8 @@ import subprocess
 
 from scripts.bofu_dominance.core.buyer_decision_map import (
     MapValidationReport,
+    _derive_manual_page_mapping_authority,
+    _validate_manual_gsc_source_manifest,
     _validate_reconciled_authorities,
     check_report,
     validate_buyer_decision_map,
@@ -35,6 +37,10 @@ def _manual_snapshot() -> dict:
     return _json("seo/gsc-2026-08-31/manual-page-snapshot.v1.json")
 
 
+def _manual_source_manifest() -> dict:
+    return _json("seo/gsc-2026-08-31/source-manifest.v1.json")
+
+
 def test_projection_covers_every_buyer_job_with_one_owner_or_gap():
     report = validate_buyer_decision_map()
     assert report.ok, report.findings
@@ -48,10 +54,13 @@ def test_projection_covers_every_buyer_job_with_one_owner_or_gap():
         "durable_gsc_unknown": 15,
         "manual_page_observed": 13,
         "manual_page_unknown": 2,
+        "manual_page_rows": 128,
+        "manual_mapped_page_rows": 38,
+        "manual_excluded_page_rows": 90,
         "protected_routes": 6,
         "protected_families": 7,
         "controllable_queue": 4,
-        "reconciled_authorities": 10,
+        "reconciled_authorities": 11,
         "coverage_states": {
             "COMMERCIAL_BRIDGE_GAP": 2,
             "CONTENT_GAP": 1,
@@ -177,6 +186,41 @@ def test_manual_snapshot_stays_separate_from_durable_413_authority():
     assert "manual_snapshot_promoted_to_durable" in {item.reason for item in report.findings}
 
 
+def test_raw_export_checksums_are_versioned_without_plaintext_queries():
+    manifest = _manual_source_manifest()
+    assert manifest["source_archives"] == [
+        {
+            "filename": "confenge.com.br-Performance-on-Search-2026-08-31.zip",
+            "role": "ORIGINAL_GSC_EXPORT",
+            "bytes": 4426,
+            "sha256": "4d0c323d8d142e7aeebd199c15feda9f4f34a284e1f01e805e31cf088f62e652",
+        },
+        {
+            "filename": "confenge_parallel_campaigns_gsc_2026-08-31.zip",
+            "role": "CAMPAIGN_PACKAGE",
+            "bytes": 35044,
+            "sha256": "69bffb9c0f4927347ccf269f0fc35e763aafbeb9539a81b8c5b22dd007944ecf",
+        },
+    ]
+    query_file = next(item for item in manifest["files"] if item["name"] == "Consultas.csv")
+    assert query_file["sha256"] == (
+        "6e6a9803ee32ed8151a33926d37af20f0a5635943b13f91c98d2235bb6493cc2"
+    )
+    assert query_file["privacy_class"] == "PRIVATE_QUERY_TEXT_CHECKSUM_ONLY"
+    assert manifest["privacy"]["raw_query_text_committed"] is False
+    assert not (ROOT / "seo/gsc-2026-08-31/Consultas.csv").exists()
+
+    report = MapValidationReport()
+    _validate_manual_gsc_source_manifest(manifest, report)
+    assert report.ok, report.findings
+
+    tampered = copy.deepcopy(manifest)
+    tampered["privacy"]["raw_query_text_committed"] = True
+    report = MapValidationReport()
+    _validate_manual_gsc_source_manifest(tampered, report)
+    assert "manual_source_manifest_drift" in {item.reason for item in report.findings}
+
+
 def test_query_visibility_is_censored_and_cannot_own_or_score_a_family():
     document = _document()
     snapshot = _manual_snapshot()
@@ -214,7 +258,7 @@ def test_query_visibility_is_censored_and_cannot_own_or_score_a_family():
     }
 
     strict_type_drift = _manual_snapshot()
-    strict_type_drift["raw_export_provenance"]["archived"] = 0
+    strict_type_drift["raw_export_provenance"]["raw_files_committed"] = 0
     strict_type_drift["durable_authority_relationship"]["issue"] = 413.0
     strict_type_drift["durable_authority_relationship"][
         "counts_as_durable_observation"
@@ -277,15 +321,33 @@ def test_every_manual_page_is_mapped_or_explicitly_excluded():
         for row in document["rows"]
         for item in row["manual_page_evidence"]["mapped_pages"]
     }
-    exclusions = {item["path"]: item for item in document["manual_mapping_exclusions"]}
-    assert mapped_paths.isdisjoint(exclusions)
-    assert mapped_paths | set(exclusions) == snapshot_paths
-    assert exclusions["/conteudos/reequilibrio-empreitada-preco-global/"]["state"] == (
-        "UNMAPPED_NO_EXISTING_CONTRACT"
+    excluded_paths = snapshot_paths - mapped_paths
+    policy = document["manual_mapping_exclusions"]
+    assert len(snapshot_paths) == 128
+    assert len(mapped_paths) == 38
+    assert len(excluded_paths) == policy["count"] == 90
+    assert "visible queries cannot create a mapping" in policy["rule"]
+    notable = {item["path"]: item for item in policy["notable"]}
+    assert set(notable) <= excluded_paths
+    assert "/conteudos/reequilibrio-empreitada-preco-global/" in notable
+    assert "/ferramentas/diagnostico-defesa-margem/" in notable
+
+    registry = _json("data/bofu-dominance/core/intent-registry.v2.json")
+    matrix = _json("data/organic/bofu-intent-matrix.json")
+    authority = _derive_manual_page_mapping_authority(
+        registry_by_id={item["id"]: item for item in registry["families"]},
+        matrix_by_id={item["intent_cluster"]: item for item in matrix["rows"]},
+        content_map=_json("data/organic/content-service-map.json"),
+        frozen_ownership=_json("data/bofu-dominance/frozen-specs/query-ownership.json"),
+        manual_pages={item["path"]: item for item in _manual_snapshot()["page_rows"]},
     )
-    assert "visible query cannot create" in exclusions[
-        "/conteudos/reequilibrio-empreitada-preco-global/"
-    ]["reason"]
+    assert len(authority) == 38
+    assert authority["/aditivos-obras-publicas/"]["role"] == "CANONICAL_OWNER"
+    assert authority["/conteudos/limite-aditivo-25-50-obra-publica/"]["source"] == (
+        "frozen-query-ownership"
+    )
+    assert "/conteudos/reequilibrio-empreitada-preco-global/" not in authority
+    assert "/ferramentas/diagnostico-defesa-margem/" not in authority
 
 
 def test_structurally_empty_quality_proof_and_answer_fail_closed():
