@@ -1,0 +1,4002 @@
+{
+  "schema": "confenge.deliverables-live-audit/1.0",
+  "issue": 530,
+  "generated_at": "2026-08-31T15:36:27.810Z",
+  "base_url": "https://confenge.com.br",
+  "expected_main_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "artifact_hash": "f8df6acb623d204218cae25109316f15f15d67d8123d34956e5608649d829347",
+  "runtime": {
+    "environment": "production",
+    "profile": "netcup-production",
+    "host_architecture_version": "confenge-nginx-node/v2",
+    "expected": {
+      "environment": "production",
+      "profile": "netcup-production",
+      "host_architecture_version": "confenge-nginx-node/v2"
+    }
+  },
+  "decision_state": "VALIDATE_LIVE",
+  "full_page": "DEFERRED_BY_540",
+  "capture_method": "first-fold viewport and named DOM-element segments only; fullPage is never requested",
+  "schema_policy": {
+    "hub_required": [
+      "CollectionPage",
+      "ItemList",
+      "BreadcrumbList"
+    ],
+    "model_required": [
+      "WebPage",
+      "Report",
+      "BreadcrumbList"
+    ],
+    "offer_nodes": "ABSENT_BY_CURRENT_REPORT_CONTRACT; ANY APPEARANCE REQUIRES CONTRACT UPDATE"
+  },
+  "routes": [
+    {
+      "route": "/entregas/",
+      "deliverable_id": "HUB",
+      "result": "DEFECT",
+      "viewports": [
+        {
+          "viewport": "390x844",
+          "http_status": 200,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 12,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": []
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 20,
+            "synthetic_roles": {
+              "first_fold_label": true,
+              "structured_item_labels": true,
+              "offer_boundaries": true,
+              "inspect_ctas": true
+            },
+            "value_roles": {
+              "value_outcome": 8,
+              "value_created": 8,
+              "artifact": 8,
+              "positive_proof": 8
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 29,
+              "expected_ctas": 29
+            },
+            "ladder": {
+              "has_units_sum": true,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": true,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebSite",
+              "CollectionPage",
+              "ItemList",
+              "ListItem",
+              "BreadcrumbList"
+            ],
+            "item_list": [
+              {
+                "name": "Radar de Licitações Prioritárias — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/",
+                "position": 1
+              },
+              {
+                "name": "Base de Mercado para Expansão — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-base-quantitativa-canonica/",
+                "position": 2
+              },
+              {
+                "name": "Síntese Executiva de Expansão — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/",
+                "position": 3
+              },
+              {
+                "name": "Mapa de Órgãos com Maior Potencial — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-mapa-compradores-publicos/",
+                "position": 4
+              },
+              {
+                "name": "Radar de Contratos Próximos da Renovação — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-contratos-vincendos-relicitacao/",
+                "position": 5
+              },
+              {
+                "name": "Mapa de Concorrentes Relevantes — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-mapeamento-concorrentes-publicos/",
+                "position": 6
+              },
+              {
+                "name": "Referências de Preços de Obras Públicas — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-painel-precos-obras-publicas/",
+                "position": 7
+              },
+              {
+                "name": "Plano Executivo de Expansão — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-relatorio-executivo-consolidado/",
+                "position": 8
+              }
+            ],
+            "offer_nodes": []
+          },
+          "hub": {
+            "primary_offers": 8,
+            "capabilities": 54,
+            "state_counts": {
+              "PUBLISHED": 8,
+              "VALIDATE": 44,
+              "BLOCKED": 2
+            },
+            "capability_projection": [
+              {
+                "id": "CFG-D01",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D02",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D03",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D04",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D05",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D06",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D07",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D08",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D09",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D10",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D11",
+                "state": "BLOCKED"
+              },
+              {
+                "id": "CFG-D12",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D13",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D14",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D15",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D16",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D17",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D18",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D19",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D20",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D21",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D22",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D23",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D24",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D25",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D26",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D27",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D28",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D29",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D30",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D31",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D32",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D33",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D34",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D35",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D36",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D37",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D38",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D39",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D40",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D41",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D42",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D43",
+                "state": "BLOCKED"
+              },
+              {
+                "id": "CFG-D44",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D45",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D46",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D47",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D48",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D49",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D50",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D51",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D52",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D53",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D54",
+                "state": "VALIDATE"
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "file": "screenshots/entregas-390x844-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "e96d4768c7f7af6488f2883a7039f65c3b8dcabdb6e58da722543057acdec2d0"
+            }
+          ]
+        },
+        {
+          "viewport": "1366x768",
+          "http_status": 304,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 12,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": []
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 20,
+            "synthetic_roles": {
+              "first_fold_label": true,
+              "structured_item_labels": true,
+              "offer_boundaries": true,
+              "inspect_ctas": true
+            },
+            "value_roles": {
+              "value_outcome": 8,
+              "value_created": 8,
+              "artifact": 8,
+              "positive_proof": 8
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 29,
+              "expected_ctas": 29
+            },
+            "ladder": {
+              "has_units_sum": true,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": true,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebSite",
+              "CollectionPage",
+              "ItemList",
+              "ListItem",
+              "BreadcrumbList"
+            ],
+            "item_list": [
+              {
+                "name": "Radar de Licitações Prioritárias — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-relatorio-inteligencia-licitacoes/",
+                "position": 1
+              },
+              {
+                "name": "Base de Mercado para Expansão — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-base-quantitativa-canonica/",
+                "position": 2
+              },
+              {
+                "name": "Síntese Executiva de Expansão — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-apresentacao-executiva-resultados/",
+                "position": 3
+              },
+              {
+                "name": "Mapa de Órgãos com Maior Potencial — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-mapa-compradores-publicos/",
+                "position": 4
+              },
+              {
+                "name": "Radar de Contratos Próximos da Renovação — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-contratos-vincendos-relicitacao/",
+                "position": 5
+              },
+              {
+                "name": "Mapa de Concorrentes Relevantes — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-mapeamento-concorrentes-publicos/",
+                "position": 6
+              },
+              {
+                "name": "Referências de Preços de Obras Públicas — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-painel-precos-obras-publicas/",
+                "position": 7
+              },
+              {
+                "name": "Plano Executivo de Expansão — exemplo sintético",
+                "url": "https://confenge.com.br/casos/modelo-relatorio-executivo-consolidado/",
+                "position": 8
+              }
+            ],
+            "offer_nodes": []
+          },
+          "hub": {
+            "primary_offers": 8,
+            "capabilities": 54,
+            "state_counts": {
+              "PUBLISHED": 8,
+              "VALIDATE": 44,
+              "BLOCKED": 2
+            },
+            "capability_projection": [
+              {
+                "id": "CFG-D01",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D02",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D03",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D04",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D05",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D06",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D07",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D08",
+                "state": "PUBLISHED"
+              },
+              {
+                "id": "CFG-D09",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D10",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D11",
+                "state": "BLOCKED"
+              },
+              {
+                "id": "CFG-D12",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D13",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D14",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D15",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D16",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D17",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D18",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D19",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D20",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D21",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D22",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D23",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D24",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D25",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D26",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D27",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D28",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D29",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D30",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D31",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D32",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D33",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D34",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D35",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D36",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D37",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D38",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D39",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D40",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D41",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D42",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D43",
+                "state": "BLOCKED"
+              },
+              {
+                "id": "CFG-D44",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D45",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D46",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D47",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D48",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D49",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D50",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D51",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D52",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D53",
+                "state": "VALIDATE"
+              },
+              {
+                "id": "CFG-D54",
+                "state": "VALIDATE"
+              }
+            ]
+          },
+          "evidence": [
+            {
+              "file": "screenshots/entregas-1366x768-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "52d6438d58cd4609cf304578751aec155c145c89126959e128328229d709ca7e"
+            },
+            {
+              "file": "screenshots/entregas-1366x768-decision-nav.png",
+              "capture": "viewport-segment",
+              "sha256": "b13222861e4469012b2afbe83f38438404e589b4c3a4edbce9f2990f3b6e4cc3"
+            },
+            {
+              "file": "screenshots/entregas-1366x768-first-offer.png",
+              "capture": "viewport-segment",
+              "sha256": "da831b21a759608ed5eaf1c666ae5c8a14c6c13fb2259972fd528d6b1561ca45"
+            },
+            {
+              "file": "screenshots/entregas-1366x768-last-offer.png",
+              "capture": "viewport-segment",
+              "sha256": "7c2dcb5ef6e0c0e199b7dc4a54e51d6dfeb5ac37615f8be50e954b52378c71bd"
+            },
+            {
+              "file": "screenshots/entregas-1366x768-form.png",
+              "capture": "viewport-segment",
+              "sha256": "70b08551fbf96a61651ab6afca16a6b6edb872f1d601060c422f014e5885e823"
+            }
+          ]
+        }
+      ],
+      "js_off": {
+        "viewport": "390x844",
+        "http_status": 304,
+        "errors": [
+          "recurring_direction_step_missing"
+        ],
+        "geometry": {
+          "overflow": false
+        },
+        "evidence": [
+          {
+            "file": "screenshots/entregas-390x844-js-off-first-fold.png",
+            "capture": "viewport-first-fold-js-off",
+            "sha256": "974843f3d64997fdcd7966222c44ad30c3641acc4d33567ccfe3178c7fe16e57"
+          }
+        ]
+      },
+      "keyboard": {
+        "stops": 10,
+        "visible": 10,
+        "with_indicator": 10,
+        "first_is_skip_link": true,
+        "details": [
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "skip-link",
+            "rect": {
+              "top": 12,
+              "bottom": 58,
+              "width": 205,
+              "height": 46
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": true
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "brand",
+            "rect": {
+              "top": 9,
+              "bottom": 51,
+              "width": 160,
+              "height": 42
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "BUTTON",
+            "id": null,
+            "classes": "menu-toggle",
+            "rect": {
+              "top": 8,
+              "bottom": 52,
+              "width": 44,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 79,
+              "bottom": 100,
+              "width": 38,
+              "height": 21
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 577,
+              "bottom": 614,
+              "width": 312,
+              "height": 37
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 598,
+              "bottom": 614,
+              "width": 225,
+              "height": 16
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-primary button-lg",
+            "rect": {
+              "top": 631,
+              "bottom": 675,
+              "width": 350,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "text-link",
+            "rect": {
+              "top": 689,
+              "bottom": 733,
+              "width": 350,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 783,
+              "bottom": 827,
+              "width": 158,
+              "height": 44
+            },
+            "scroll_y": 786,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 687,
+              "bottom": 741,
+              "width": 158,
+              "height": 54
+            },
+            "scroll_y": 882,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "deliverable_id": "CFG-D01",
+      "result": "DEFECT",
+      "viewports": [
+        {
+          "viewport": "390x844",
+          "http_status": 200,
+          "errors": [
+            "diagnosis_step_missing",
+            "recurring_direction_step_missing",
+            "unit_01_false_credit_promise",
+            "unit_01_no_credit_boundary_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 18,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 7,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": false,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": false,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-relatorio-inteligencia-licitacoes-390x844-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "07487eb8112de7f4363f7cbbaa44581c3c1e297cfe64edd43a22ed8da96df875"
+            }
+          ]
+        },
+        {
+          "viewport": "1366x768",
+          "http_status": 304,
+          "errors": [
+            "diagnosis_step_missing",
+            "recurring_direction_step_missing",
+            "unit_01_false_credit_promise",
+            "unit_01_no_credit_boundary_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 18,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 9,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": false,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": false,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-relatorio-inteligencia-licitacoes-1366x768-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "6e5ef0ced0341b613a50dbd51601da7bd5f1b6e6f06de3e16fb73ed79f153c5b"
+            },
+            {
+              "file": "screenshots/casos_modelo-relatorio-inteligencia-licitacoes-1366x768-value.png",
+              "capture": "viewport-segment",
+              "sha256": "cd2640a24e5801a0fe60f96cc5495c96e0ca9b1d0706273bffba5d73f931b808"
+            },
+            {
+              "file": "screenshots/casos_modelo-relatorio-inteligencia-licitacoes-1366x768-price-cta.png",
+              "capture": "viewport-segment",
+              "sha256": "6bac47d8d9ec26584b98929889e99be9c6003b384b586012ef33c74ff4008ed6"
+            },
+            {
+              "file": "screenshots/casos_modelo-relatorio-inteligencia-licitacoes-1366x768-form.png",
+              "capture": "viewport-segment",
+              "sha256": "4f8f4c89d7a24759d9d6d61b2d49a14dba786ae069e3408b5ae0e6ef895adb27"
+            }
+          ]
+        }
+      ],
+      "js_off": {
+        "viewport": "390x844",
+        "http_status": 304,
+        "errors": [
+          "diagnosis_step_missing",
+          "recurring_direction_step_missing",
+          "unit_01_false_credit_promise",
+          "unit_01_no_credit_boundary_missing"
+        ],
+        "geometry": {
+          "overflow": false
+        },
+        "evidence": [
+          {
+            "file": "screenshots/casos_modelo-relatorio-inteligencia-licitacoes-390x844-js-off-first-fold.png",
+            "capture": "viewport-first-fold-js-off",
+            "sha256": "85af1de2f568998452a24c4e2e405c34fe1bb28114313127b4c8ddb047cc6961"
+          }
+        ]
+      },
+      "keyboard": {
+        "stops": 10,
+        "visible": 10,
+        "with_indicator": 10,
+        "first_is_skip_link": true,
+        "details": [
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "skip-link",
+            "rect": {
+              "top": 12,
+              "bottom": 58,
+              "width": 205,
+              "height": 46
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": true
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "brand",
+            "rect": {
+              "top": 9,
+              "bottom": 51,
+              "width": 160,
+              "height": 42
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "BUTTON",
+            "id": null,
+            "classes": "menu-toggle",
+            "rect": {
+              "top": 8,
+              "bottom": 52,
+              "width": 44,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 479,
+              "bottom": 494,
+              "width": 142,
+              "height": 15
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-primary button-lg",
+            "rect": {
+              "top": 512,
+              "bottom": 562,
+              "width": 350,
+              "height": 50
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 735,
+              "bottom": 779,
+              "width": 310,
+              "height": 44
+            },
+            "scroll_y": 2269,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-light button-lg",
+            "rect": {
+              "top": 751,
+              "bottom": 795,
+              "width": 350,
+              "height": 44
+            },
+            "scroll_y": 14750,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 761,
+              "bottom": 797,
+              "width": 316,
+              "height": 37
+            },
+            "scroll_y": 18534,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 795,
+              "bottom": 810,
+              "width": 103,
+              "height": 15
+            },
+            "scroll_y": 18564,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-light button-lg",
+            "rect": {
+              "top": 753,
+              "bottom": 797,
+              "width": 350,
+              "height": 44
+            },
+            "scroll_y": 19383,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "route": "/casos/modelo-base-quantitativa-canonica/",
+      "deliverable_id": "CFG-D02",
+      "result": "DEFECT",
+      "viewports": [
+        {
+          "viewport": "390x844",
+          "http_status": 200,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 16,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 14,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 11,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 13,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 8,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 9,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-base-quantitativa-canonica-390x844-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "76512c8a24ffdc7b7c537ba6ce4d8eb088bd8301594ead31f97e2a5da86202cc"
+            }
+          ]
+        },
+        {
+          "viewport": "1366x768",
+          "http_status": 304,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 16,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 14,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 11,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 13,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 8,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 10,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-base-quantitativa-canonica-1366x768-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "a41a487589607897b470879eaf79d3de36efd3a7ed969abde91f52581f4b1b32"
+            },
+            {
+              "file": "screenshots/casos_modelo-base-quantitativa-canonica-1366x768-value.png",
+              "capture": "viewport-segment",
+              "sha256": "da0a8c03f4a493e7bf4e8d50efbf342fc500cd16b193976aa7a55112f3a372dc"
+            },
+            {
+              "file": "screenshots/casos_modelo-base-quantitativa-canonica-1366x768-price-cta.png",
+              "capture": "viewport-segment",
+              "sha256": "f5e3504efb07a5e7ced6359844cdbacaa96cfcd1e5878e7917689cb0f2f0956c"
+            },
+            {
+              "file": "screenshots/casos_modelo-base-quantitativa-canonica-1366x768-form.png",
+              "capture": "viewport-segment",
+              "sha256": "743ef23b4f6b417f8769b05869094ae63b29e1509ba3e3036d1802c1d0a2dafb"
+            }
+          ]
+        }
+      ],
+      "js_off": {
+        "viewport": "390x844",
+        "http_status": 304,
+        "errors": [
+          "recurring_direction_step_missing"
+        ],
+        "geometry": {
+          "overflow": false
+        },
+        "evidence": [
+          {
+            "file": "screenshots/casos_modelo-base-quantitativa-canonica-390x844-js-off-first-fold.png",
+            "capture": "viewport-first-fold-js-off",
+            "sha256": "7ee8b192a67379d60e5d784f3a507d39f75bbc28871aeb2c318e73552f44763e"
+          }
+        ]
+      },
+      "keyboard": {
+        "stops": 10,
+        "visible": 10,
+        "with_indicator": 10,
+        "first_is_skip_link": true,
+        "details": [
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "skip-link",
+            "rect": {
+              "top": 12,
+              "bottom": 58,
+              "width": 205,
+              "height": 46
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": true
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "brand",
+            "rect": {
+              "top": 9,
+              "bottom": 51,
+              "width": 160,
+              "height": 42
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "BUTTON",
+            "id": null,
+            "classes": "menu-toggle",
+            "rect": {
+              "top": 8,
+              "bottom": 52,
+              "width": 44,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 536,
+              "bottom": 551,
+              "width": 142,
+              "height": 15
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-primary button-lg",
+            "rect": {
+              "top": 569,
+              "bottom": 619,
+              "width": 350,
+              "height": 50
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 844,
+              "bottom": 888,
+              "width": 310,
+              "height": 44
+            },
+            "scroll_y": 2262,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 543,
+              "bottom": 1641,
+              "width": 350,
+              "height": 1098
+            },
+            "scroll_y": 5537,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 839,
+              "bottom": 1667,
+              "width": 350,
+              "height": 828
+            },
+            "scroll_y": 7756,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 746,
+              "bottom": 1279,
+              "width": 350,
+              "height": 533
+            },
+            "scroll_y": 12405,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 684,
+              "bottom": 1423,
+              "width": 350,
+              "height": 739
+            },
+            "scroll_y": 14875,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "route": "/casos/modelo-apresentacao-executiva-resultados/",
+      "deliverable_id": "CFG-D03",
+      "result": "DEFECT",
+      "viewports": [
+        {
+          "viewport": "390x844",
+          "http_status": 200,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 20,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 13,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 9,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 13,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 8,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 6,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-apresentacao-executiva-resultados-390x844-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "32bf1bd819e1b95dd950f7de86c4185e509723e680b8f6d5c6a22d039871c23a"
+            }
+          ]
+        },
+        {
+          "viewport": "1366x768",
+          "http_status": 304,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 20,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 13,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 9,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 13,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 8,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 14,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-apresentacao-executiva-resultados-1366x768-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "51edc55b19f449d66bb5278460c2dba5ad0f84bc66d9c4f25bedff685d08f33d"
+            },
+            {
+              "file": "screenshots/casos_modelo-apresentacao-executiva-resultados-1366x768-value.png",
+              "capture": "viewport-segment",
+              "sha256": "e6a4d11ec1f522fb627eb9c313a738212ab6671ea4463d1b8bd14f478d77fc97"
+            },
+            {
+              "file": "screenshots/casos_modelo-apresentacao-executiva-resultados-1366x768-price-cta.png",
+              "capture": "viewport-segment",
+              "sha256": "714efd53ea5a283d2818b1065bd437beb9804bf8d1d0d969f9dd976149c00060"
+            },
+            {
+              "file": "screenshots/casos_modelo-apresentacao-executiva-resultados-1366x768-form.png",
+              "capture": "viewport-segment",
+              "sha256": "55d3a96e3f9719c1af5a059577aeba583de8da1dd12fc0a4cf4f8955a0074255"
+            }
+          ]
+        }
+      ],
+      "js_off": {
+        "viewport": "390x844",
+        "http_status": 304,
+        "errors": [
+          "recurring_direction_step_missing"
+        ],
+        "geometry": {
+          "overflow": false
+        },
+        "evidence": [
+          {
+            "file": "screenshots/casos_modelo-apresentacao-executiva-resultados-390x844-js-off-first-fold.png",
+            "capture": "viewport-first-fold-js-off",
+            "sha256": "b67b38d428159c9815ae21ee8046b9f531aafde5758f6f7d80400a76f4f53426"
+          }
+        ]
+      },
+      "keyboard": {
+        "stops": 10,
+        "visible": 10,
+        "with_indicator": 10,
+        "first_is_skip_link": true,
+        "details": [
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "skip-link",
+            "rect": {
+              "top": 12,
+              "bottom": 58,
+              "width": 205,
+              "height": 46
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": true
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "brand",
+            "rect": {
+              "top": 9,
+              "bottom": 51,
+              "width": 160,
+              "height": 42
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "BUTTON",
+            "id": null,
+            "classes": "menu-toggle",
+            "rect": {
+              "top": 8,
+              "bottom": 52,
+              "width": 44,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 587,
+              "bottom": 602,
+              "width": 142,
+              "height": 15
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-primary button-lg",
+            "rect": {
+              "top": 620,
+              "bottom": 670,
+              "width": 350,
+              "height": 50
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 768,
+              "bottom": 812,
+              "width": 310,
+              "height": 44
+            },
+            "scroll_y": 2229,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-light button-lg",
+            "rect": {
+              "top": 828,
+              "bottom": 872,
+              "width": 350,
+              "height": 44
+            },
+            "scroll_y": 23828,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 759,
+              "bottom": 803,
+              "width": 301,
+              "height": 44
+            },
+            "scroll_y": 26197,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 675,
+              "bottom": 712,
+              "width": 316,
+              "height": 37
+            },
+            "scroll_y": 26469,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 642,
+              "bottom": 657,
+              "width": 103,
+              "height": 15
+            },
+            "scroll_y": 26567,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "route": "/casos/modelo-mapa-compradores-publicos/",
+      "deliverable_id": "CFG-D04",
+      "result": "DEFECT",
+      "viewports": [
+        {
+          "viewport": "390x844",
+          "http_status": 200,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 12,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 7,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 9,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-mapa-compradores-publicos-390x844-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "639b897e50123fc026abef0d72d5b989909251965e17efeb21a59b55ad088f5e"
+            }
+          ]
+        },
+        {
+          "viewport": "1366x768",
+          "http_status": 304,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 12,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 7,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 10,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-mapa-compradores-publicos-1366x768-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "cb06be7d026646a4b4e70bb523a34aaf2393a085a2794f3b99a3e46e806250fa"
+            },
+            {
+              "file": "screenshots/casos_modelo-mapa-compradores-publicos-1366x768-value.png",
+              "capture": "viewport-segment",
+              "sha256": "a1498175aab2e4b536a56cf6468e6e5e7a34033e9a2029cb4bd98db8bc47337e"
+            },
+            {
+              "file": "screenshots/casos_modelo-mapa-compradores-publicos-1366x768-price-cta.png",
+              "capture": "viewport-segment",
+              "sha256": "7d85c6b388da06cf0d3c1fd1c6a10cf095635c5546acf40463d750edb54ebdf7"
+            },
+            {
+              "file": "screenshots/casos_modelo-mapa-compradores-publicos-1366x768-form.png",
+              "capture": "viewport-segment",
+              "sha256": "0abbd566fa23361e0c39df940aff3f6592ea10631c51482b634cb1ff6e0f9d54"
+            }
+          ]
+        }
+      ],
+      "js_off": {
+        "viewport": "390x844",
+        "http_status": 304,
+        "errors": [
+          "recurring_direction_step_missing"
+        ],
+        "geometry": {
+          "overflow": false
+        },
+        "evidence": [
+          {
+            "file": "screenshots/casos_modelo-mapa-compradores-publicos-390x844-js-off-first-fold.png",
+            "capture": "viewport-first-fold-js-off",
+            "sha256": "05b9ade9185961e82a98671fefb08b480def16b887b1e9d39df48fe14771dff2"
+          }
+        ]
+      },
+      "keyboard": {
+        "stops": 10,
+        "visible": 10,
+        "with_indicator": 10,
+        "first_is_skip_link": true,
+        "details": [
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "skip-link",
+            "rect": {
+              "top": 12,
+              "bottom": 58,
+              "width": 205,
+              "height": 46
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": true
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "brand",
+            "rect": {
+              "top": 9,
+              "bottom": 51,
+              "width": 160,
+              "height": 42
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "BUTTON",
+            "id": null,
+            "classes": "menu-toggle",
+            "rect": {
+              "top": 8,
+              "bottom": 52,
+              "width": 44,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 609,
+              "bottom": 624,
+              "width": 142,
+              "height": 15
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-primary button-lg",
+            "rect": {
+              "top": 642,
+              "bottom": 692,
+              "width": 350,
+              "height": 50
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 840,
+              "bottom": 884,
+              "width": 310,
+              "height": 44
+            },
+            "scroll_y": 2135,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap map-wrap",
+            "rect": {
+              "top": 645,
+              "bottom": 1606,
+              "width": 350,
+              "height": 961
+            },
+            "scroll_y": 5131,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap map-wrap",
+            "rect": {
+              "top": 659,
+              "bottom": 1838,
+              "width": 350,
+              "height": 1179
+            },
+            "scroll_y": 9277,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-light button-lg",
+            "rect": {
+              "top": 778,
+              "bottom": 822,
+              "width": 319,
+              "height": 44
+            },
+            "scroll_y": 16335,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 743,
+              "bottom": 786,
+              "width": 279,
+              "height": 44
+            },
+            "scroll_y": 21195,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+      "deliverable_id": "CFG-D05",
+      "result": "DEFECT",
+      "viewports": [
+        {
+          "viewport": "390x844",
+          "http_status": 200,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 11,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 8,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 7,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-contratos-vincendos-relicitacao-390x844-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "9c272da281a203e228c154eeb4f6aee7a9c5ac93d6265867e9a0269cf7b783af"
+            }
+          ]
+        },
+        {
+          "viewport": "1366x768",
+          "http_status": 304,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 11,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 8,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 9,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-contratos-vincendos-relicitacao-1366x768-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "6d5cd272f2d89ee244b7217f649da7ded0be2262ba41b235823b057fa2ff699c"
+            },
+            {
+              "file": "screenshots/casos_modelo-contratos-vincendos-relicitacao-1366x768-value.png",
+              "capture": "viewport-segment",
+              "sha256": "221410f5967b925e4490567a35cfb62ee1899169227aba1ce5ea70c46850f738"
+            },
+            {
+              "file": "screenshots/casos_modelo-contratos-vincendos-relicitacao-1366x768-price-cta.png",
+              "capture": "viewport-segment",
+              "sha256": "ea2e4d09dfe35510a088bdcba927b9cc0ba9f71bd3bae52056e4c87dc9c850df"
+            },
+            {
+              "file": "screenshots/casos_modelo-contratos-vincendos-relicitacao-1366x768-form.png",
+              "capture": "viewport-segment",
+              "sha256": "18f461e63fe992bcc7a30478ab2757f4153c7164ce233ac35d5653d928d8fb79"
+            }
+          ]
+        }
+      ],
+      "js_off": {
+        "viewport": "390x844",
+        "http_status": 304,
+        "errors": [
+          "recurring_direction_step_missing"
+        ],
+        "geometry": {
+          "overflow": false
+        },
+        "evidence": [
+          {
+            "file": "screenshots/casos_modelo-contratos-vincendos-relicitacao-390x844-js-off-first-fold.png",
+            "capture": "viewport-first-fold-js-off",
+            "sha256": "a1ff874d18d001d0d880ea1245503b4bf6617ce86941c332798d7e879f653437"
+          }
+        ]
+      },
+      "keyboard": {
+        "stops": 10,
+        "visible": 10,
+        "with_indicator": 10,
+        "first_is_skip_link": true,
+        "details": [
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "skip-link",
+            "rect": {
+              "top": 12,
+              "bottom": 58,
+              "width": 205,
+              "height": 46
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": true
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "brand",
+            "rect": {
+              "top": 9,
+              "bottom": 51,
+              "width": 160,
+              "height": 42
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "BUTTON",
+            "id": null,
+            "classes": "menu-toggle",
+            "rect": {
+              "top": 8,
+              "bottom": 52,
+              "width": 44,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 695,
+              "bottom": 710,
+              "width": 142,
+              "height": 15
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-primary button-lg",
+            "rect": {
+              "top": 728,
+              "bottom": 778,
+              "width": 350,
+              "height": 50
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 750,
+              "bottom": 794,
+              "width": 310,
+              "height": 44
+            },
+            "scroll_y": 2306,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "vinc-table-wrap",
+            "rect": {
+              "top": 823,
+              "bottom": 1719,
+              "width": 350,
+              "height": 895
+            },
+            "scroll_y": 6301,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-light button-lg",
+            "rect": {
+              "top": 843,
+              "bottom": 887,
+              "width": 350,
+              "height": 44
+            },
+            "scroll_y": 17274,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 797,
+              "bottom": 841,
+              "width": 301,
+              "height": 44
+            },
+            "scroll_y": 21308,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 714,
+              "bottom": 751,
+              "width": 316,
+              "height": 37
+            },
+            "scroll_y": 21579,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+      "deliverable_id": "CFG-D06",
+      "result": "DEFECT",
+      "viewports": [
+        {
+          "viewport": "390x844",
+          "http_status": 200,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 13,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 8,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 8,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-mapeamento-concorrentes-publicos-390x844-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "02b83cd5ff759a1592e91304078c69acba51b4d14d2b9aceaaca225d79b52bbb"
+            }
+          ]
+        },
+        {
+          "viewport": "1366x768",
+          "http_status": 304,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 13,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 8,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 9,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-mapeamento-concorrentes-publicos-1366x768-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "66051f5057cefb081b7488ef1d02618b7bb248da243f746ef7086e66a105eebe"
+            },
+            {
+              "file": "screenshots/casos_modelo-mapeamento-concorrentes-publicos-1366x768-value.png",
+              "capture": "viewport-segment",
+              "sha256": "9422257a3420b1ec884c5e684ff65de59a6f47a4319df9e6d1a07f0481bf6c6b"
+            },
+            {
+              "file": "screenshots/casos_modelo-mapeamento-concorrentes-publicos-1366x768-price-cta.png",
+              "capture": "viewport-segment",
+              "sha256": "7f2e7a24fcf68d9783c64cfae66edd143ff678eff81849564dcbdd287f39cf0b"
+            },
+            {
+              "file": "screenshots/casos_modelo-mapeamento-concorrentes-publicos-1366x768-form.png",
+              "capture": "viewport-segment",
+              "sha256": "f3987cb54bf4f46b0763ca25a4d538503ac2f3f2e21e29767d5db34549be3f70"
+            }
+          ]
+        }
+      ],
+      "js_off": {
+        "viewport": "390x844",
+        "http_status": 304,
+        "errors": [
+          "recurring_direction_step_missing"
+        ],
+        "geometry": {
+          "overflow": false
+        },
+        "evidence": [
+          {
+            "file": "screenshots/casos_modelo-mapeamento-concorrentes-publicos-390x844-js-off-first-fold.png",
+            "capture": "viewport-first-fold-js-off",
+            "sha256": "71edcadfdcb063a625700df0b1cefc4fec2d81746216edd46dcf1d8f5d26054e"
+          }
+        ]
+      },
+      "keyboard": {
+        "stops": 10,
+        "visible": 10,
+        "with_indicator": 10,
+        "first_is_skip_link": true,
+        "details": [
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "skip-link",
+            "rect": {
+              "top": 12,
+              "bottom": 58,
+              "width": 205,
+              "height": 46
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": true
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "brand",
+            "rect": {
+              "top": 9,
+              "bottom": 51,
+              "width": 160,
+              "height": 42
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "BUTTON",
+            "id": null,
+            "classes": "menu-toggle",
+            "rect": {
+              "top": 8,
+              "bottom": 52,
+              "width": 44,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 552,
+              "bottom": 567,
+              "width": 142,
+              "height": 15
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-primary button-lg",
+            "rect": {
+              "top": 585,
+              "bottom": 635,
+              "width": 350,
+              "height": 50
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 737,
+              "bottom": 781,
+              "width": 310,
+              "height": 44
+            },
+            "scroll_y": 2391,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 680,
+              "bottom": 1156,
+              "width": 350,
+              "height": 476
+            },
+            "scroll_y": 5570,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 651,
+              "bottom": 2161,
+              "width": 350,
+              "height": 1510
+            },
+            "scroll_y": 7479,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 752,
+              "bottom": 1168,
+              "width": 350,
+              "height": 416
+            },
+            "scroll_y": 11101,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-light button-lg",
+            "rect": {
+              "top": 445,
+              "bottom": 489,
+              "width": 350,
+              "height": 44
+            },
+            "scroll_y": 21411,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "deliverable_id": "CFG-D07",
+      "result": "DEFECT",
+      "viewports": [
+        {
+          "viewport": "390x844",
+          "http_status": 200,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 7,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-painel-precos-obras-publicas-390x844-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "a974da5ed42c38903b6e61bb50be6b758870904d624e1c9494257c2e202fe1fa"
+            }
+          ]
+        },
+        {
+          "viewport": "1366x768",
+          "http_status": 304,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 10,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 9,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-painel-precos-obras-publicas-1366x768-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "add6d9fa8a63bef8a94dccf4b3d0833ddda3d928a7d278dd00ce6f9d0070db57"
+            },
+            {
+              "file": "screenshots/casos_modelo-painel-precos-obras-publicas-1366x768-value.png",
+              "capture": "viewport-segment",
+              "sha256": "e4dd6febb0c9e1d63e783178368433d1bdde93d317f1de3bd252409fb0f02b0c"
+            },
+            {
+              "file": "screenshots/casos_modelo-painel-precos-obras-publicas-1366x768-price-cta.png",
+              "capture": "viewport-segment",
+              "sha256": "e0c2b78f909c3e61a15803aee671b9102a6e63390e756d0b9fbe34add7288baa"
+            },
+            {
+              "file": "screenshots/casos_modelo-painel-precos-obras-publicas-1366x768-form.png",
+              "capture": "viewport-segment",
+              "sha256": "db3b35f0092b5bec41b68f4a8f1e1b789f18a2a0c567ef844760d6d0e0bb0892"
+            }
+          ]
+        }
+      ],
+      "js_off": {
+        "viewport": "390x844",
+        "http_status": 304,
+        "errors": [
+          "recurring_direction_step_missing"
+        ],
+        "geometry": {
+          "overflow": false
+        },
+        "evidence": [
+          {
+            "file": "screenshots/casos_modelo-painel-precos-obras-publicas-390x844-js-off-first-fold.png",
+            "capture": "viewport-first-fold-js-off",
+            "sha256": "47c03f7f74d5785de9c4e318db4d558463bfb080dafa8c59633902cd3a234b86"
+          }
+        ]
+      },
+      "keyboard": {
+        "stops": 10,
+        "visible": 10,
+        "with_indicator": 10,
+        "first_is_skip_link": true,
+        "details": [
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "skip-link",
+            "rect": {
+              "top": 12,
+              "bottom": 58,
+              "width": 205,
+              "height": 46
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": true
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "brand",
+            "rect": {
+              "top": 9,
+              "bottom": 51,
+              "width": 160,
+              "height": 42
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "BUTTON",
+            "id": null,
+            "classes": "menu-toggle",
+            "rect": {
+              "top": 8,
+              "bottom": 52,
+              "width": 44,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 655,
+              "bottom": 670,
+              "width": 142,
+              "height": 15
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-primary button-lg",
+            "rect": {
+              "top": 688,
+              "bottom": 738,
+              "width": 350,
+              "height": 50
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 736,
+              "bottom": 780,
+              "width": 310,
+              "height": 44
+            },
+            "scroll_y": 2273,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-light button-lg",
+            "rect": {
+              "top": 799,
+              "bottom": 843,
+              "width": 324,
+              "height": 44
+            },
+            "scroll_y": 20120,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 731,
+              "bottom": 775,
+              "width": 281,
+              "height": 44
+            },
+            "scroll_y": 22416,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 810,
+              "bottom": 847,
+              "width": 316,
+              "height": 37
+            },
+            "scroll_y": 24879,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 826,
+              "bottom": 841,
+              "width": 103,
+              "height": 15
+            },
+            "scroll_y": 24949,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          }
+        ],
+        "errors": []
+      }
+    },
+    {
+      "route": "/casos/modelo-relatorio-executivo-consolidado/",
+      "deliverable_id": "CFG-D08",
+      "result": "DEFECT",
+      "viewports": [
+        {
+          "viewport": "390x844",
+          "http_status": 200,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 13,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 12,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 8,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 11,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 13,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-relatorio-executivo-consolidado-390x844-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "6ce2f566f0591e12d1947f2adec855cce5e28ebbc3e7869dbb6fe4c3df07b450"
+            }
+          ]
+        },
+        {
+          "viewport": "1366x768",
+          "http_status": 304,
+          "errors": [
+            "recurring_direction_step_missing"
+          ],
+          "geometry": {
+            "overflow": false,
+            "primary_targets": {
+              "count": 5,
+              "below_44px": 0
+            }
+          },
+          "accessibility": {
+            "hard_axe": [],
+            "unlabeled_controls": 0,
+            "tables": [
+              {
+                "has_caption": true,
+                "headers": 13,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 12,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 8,
+                "headers_without_scope": 0
+              },
+              {
+                "has_caption": true,
+                "headers": 11,
+                "headers_without_scope": 0
+              }
+            ]
+          },
+          "contract": {
+            "missing_text": [],
+            "synthetic_mentions": 14,
+            "synthetic_roles": {
+              "first_read_label": true,
+              "artifact_label": true,
+              "contract_boundary": true,
+              "structured_disclosure": true
+            },
+            "value_roles": {
+              "value_outcome": 1,
+              "value_created": 1,
+              "artifact": 1,
+              "positive_proof": 1
+            },
+            "source": "CONFENGE_WEB",
+            "attribution": {
+              "matches_canonical_source": true,
+              "observed_ctas": 7,
+              "expected_ctas": 7
+            },
+            "ladder": {
+              "has_units_sum": false,
+              "has_package_price": true,
+              "has_credit_window": true,
+              "promises_credit": true,
+              "says_unit_01_has_no_credit": false,
+              "diagnosis_link": true,
+              "recurring_direction_context": false
+            }
+          },
+          "schema": {
+            "parse_errors": 0,
+            "types": [
+              "Organization",
+              "WebPage",
+              "Report",
+              "Person",
+              "BreadcrumbList",
+              "ListItem"
+            ],
+            "item_list": [],
+            "offer_nodes": []
+          },
+          "hub": null,
+          "evidence": [
+            {
+              "file": "screenshots/casos_modelo-relatorio-executivo-consolidado-1366x768-first-fold.png",
+              "capture": "viewport-first-fold",
+              "sha256": "f1c19ca5435588cc50a7fd7aabff0abfd362f28758c67a7c5303777ed2694d19"
+            },
+            {
+              "file": "screenshots/casos_modelo-relatorio-executivo-consolidado-1366x768-value.png",
+              "capture": "viewport-segment",
+              "sha256": "48696e2ec1379099c97af255d1920e285da414c53ad3d6f35eae49cc60306321"
+            },
+            {
+              "file": "screenshots/casos_modelo-relatorio-executivo-consolidado-1366x768-price-cta.png",
+              "capture": "viewport-segment",
+              "sha256": "2ac31bd8bcc02fe2dbc7a92af28d55b856c4079bafb0101f2cf920e389cc223c"
+            },
+            {
+              "file": "screenshots/casos_modelo-relatorio-executivo-consolidado-1366x768-form.png",
+              "capture": "viewport-segment",
+              "sha256": "38605519fedba2839b8f6c60d91058e870b529a113ed607b0e4edae1df2f8bb4"
+            }
+          ]
+        }
+      ],
+      "js_off": {
+        "viewport": "390x844",
+        "http_status": 304,
+        "errors": [
+          "recurring_direction_step_missing"
+        ],
+        "geometry": {
+          "overflow": false
+        },
+        "evidence": [
+          {
+            "file": "screenshots/casos_modelo-relatorio-executivo-consolidado-390x844-js-off-first-fold.png",
+            "capture": "viewport-first-fold-js-off",
+            "sha256": "d3b263218a1113f7c0f2bf86f4df4ab85fd0c6ad7c07cacf801383abe8338328"
+          }
+        ]
+      },
+      "keyboard": {
+        "stops": 10,
+        "visible": 10,
+        "with_indicator": 10,
+        "first_is_skip_link": true,
+        "details": [
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "skip-link",
+            "rect": {
+              "top": 12,
+              "bottom": 58,
+              "width": 205,
+              "height": 46
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": true
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "brand",
+            "rect": {
+              "top": 9,
+              "bottom": 51,
+              "width": 160,
+              "height": 42
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "BUTTON",
+            "id": null,
+            "classes": "menu-toggle",
+            "rect": {
+              "top": 8,
+              "bottom": 52,
+              "width": 44,
+              "height": 44
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 548,
+              "bottom": 563,
+              "width": 142,
+              "height": 15
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": "button button-primary button-lg",
+            "rect": {
+              "top": 581,
+              "bottom": 631,
+              "width": 350,
+              "height": 50
+            },
+            "scroll_y": 0,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "A",
+            "id": null,
+            "classes": null,
+            "rect": {
+              "top": 776,
+              "bottom": 820,
+              "width": 310,
+              "height": 44
+            },
+            "scroll_y": 2364,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 771,
+              "bottom": 1366,
+              "width": 350,
+              "height": 596
+            },
+            "scroll_y": 7614,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 644,
+              "bottom": 1247,
+              "width": 350,
+              "height": 603
+            },
+            "scroll_y": 9081,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 837,
+              "bottom": 1307,
+              "width": 350,
+              "height": 471
+            },
+            "scroll_y": 9968,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          },
+          {
+            "tag": "DIV",
+            "id": null,
+            "classes": "report-table-wrap",
+            "rect": {
+              "top": 836,
+              "bottom": 1255,
+              "width": 350,
+              "height": 419
+            },
+            "scroll_y": 11642,
+            "visible": true,
+            "indicator": true,
+            "skip_link": null
+          }
+        ],
+        "errors": []
+      }
+    }
+  ],
+  "defects": [
+    {
+      "id": "CFG530-D01-CREDIT-CONTRADICTION",
+      "severity": "HIGH",
+      "owner_issue": 528,
+      "affected_routes": [
+        "/casos/modelo-relatorio-inteligencia-licitacoes/"
+      ],
+      "symptoms": [
+        "unit_01_false_credit_promise",
+        "unit_01_no_credit_boundary_missing",
+        "diagnosis_step_missing"
+      ],
+      "reproduction": [
+        "In /entregas/, inspect CFG-D01: it is the only unit declared outside the package and without 60-day credit.",
+        "Open CFG-D01 and scroll to the written-request form: the page says the value returns as credit within 60 days."
+      ],
+      "probable_files": [
+        "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+        "tests/commercial/test_page_contract_eight.mjs"
+      ],
+      "evidence": [
+        "screenshots/entregas-1366x768-first-offer.png",
+        "screenshots/casos_modelo-relatorio-inteligencia-licitacoes-1366x768-form.png"
+      ]
+    },
+    {
+      "id": "CFG530-RECURRING-DIRECTION-LADDER-MISSING",
+      "severity": "MEDIUM",
+      "owner_issue": 528,
+      "affected_routes": [
+        "/entregas/",
+        "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "/casos/modelo-base-quantitativa-canonica/",
+        "/casos/modelo-apresentacao-executiva-resultados/",
+        "/casos/modelo-mapa-compradores-publicos/",
+        "/casos/modelo-contratos-vincendos-relicitacao/",
+        "/casos/modelo-mapeamento-concorrentes-publicos/",
+        "/casos/modelo-painel-precos-obras-publicas/",
+        "/casos/modelo-relatorio-executivo-consolidado/"
+      ],
+      "symptoms": [
+        "recurring_direction_step_missing"
+      ],
+      "reproduction": [
+        "Inspect the value-ladder content inside <main> on each route.",
+        "No route places /diretoria-b2g/ in the ladder with a recurring-direction trigger or scope; the URL appears only in global chrome/footer."
+      ],
+      "probable_files": [
+        "data/commercial/page-contract-eight.v1.json",
+        "scripts/commercial/render_public_catalog.mjs",
+        "scripts/commercial/render_eight_offer_contracts.mjs"
+      ],
+      "evidence": [
+        "report.json",
+        "screenshots/entregas-1366x768-decision-nav.png"
+      ]
+    }
+  ],
+  "links": {
+    "checked": 48,
+    "broken": []
+  },
+  "summary": {
+    "pass": 0,
+    "defect": 9,
+    "links_checked": 48,
+    "broken_links": 0
+  },
+  "identity_rechecked_at": "2026-08-31T15:38:52.067Z",
+  "final_artifact_hash": "f8df6acb623d204218cae25109316f15f15d67d8123d34956e5608649d829347"
+}
