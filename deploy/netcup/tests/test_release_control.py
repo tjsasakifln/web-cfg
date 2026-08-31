@@ -219,6 +219,10 @@ def test_retention_gate_and_runner_are_sha_bound_without_a_legacy_executor(
     gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
     gate_path.chmod(0o640)
     assert schedule.validate_gate(host, "storage-retention")["authorized_release_sha"] == SHA_A
+    monkeypatch.setattr(schedule, "expected_gate_gid", lambda: os.getgid() + 1)
+    with pytest.raises(control.ReleaseError, match="confenge-web group-owned"):
+        schedule.validate_gate(host, "storage-retention")
+    monkeypatch.setattr(schedule, "expected_gate_gid", os.getgid)
 
     observed: dict[str, object] = {}
 

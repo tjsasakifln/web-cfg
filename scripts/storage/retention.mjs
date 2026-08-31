@@ -2,7 +2,7 @@
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-const { HostFileBackend, sha256 } = require("../../netlify/functions/lib/host-file-store.cjs");
+const { HostFileBackend } = require("../../netlify/functions/lib/host-file-store.cjs");
 const { FileStore } = require("../../netlify/functions/lib/lead-store.cjs");
 const { ensureAbsoluteOutside } = require("./lib.cjs");
 
@@ -84,13 +84,7 @@ function deleteUnlocked(backend, leads, item) {
   if (item.namespace !== "leads") {
     return backend.namespace(item.namespace)._deleteUnlocked(item.key);
   }
-  const current = leads.records.get(item.key);
-  if (!current) return false;
-  leads.records._deleteUnlocked(item.key);
-  if (current.idempotency_key) {
-    leads.idempotency._deleteUnlocked(sha256(String(current.idempotency_key)));
-  }
-  return true;
+  return leads._deleteUnlocked(item.key);
 }
 
 async function main() {
@@ -117,7 +111,11 @@ async function main() {
     // planning any mutation. The same global writer lock covers scan, apply and
     // the post-apply validation, so an application write cannot invalidate the
     // decision between those phases.
-    backend.validate({ writeProbe: false });
+    // Recover only the safe interruption boundary (lead exists, derived index
+    // missing) before the strict scan. Dangling or malformed indexes still
+    // block the run. The global writer lock makes repair+planning one serial
+    // operation.
+    leads.validateUnlocked({ repairIdempotency: true });
     const pendingDeletes = [];
     for (const namespace of Object.keys(POLICIES)) {
       const rows = backend.namespace(namespace).list();
@@ -155,7 +153,7 @@ async function main() {
         report.by_namespace[item.namespace].deleted += 1;
         report.deleted += 1;
       }
-      backend.validate({ writeProbe: false });
+      leads.validateUnlocked();
       report.indexes_preserved = backend.namespace("leads-idempotency").list().length;
     }
   });

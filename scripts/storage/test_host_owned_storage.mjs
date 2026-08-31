@@ -15,6 +15,7 @@ const {
   StorageError,
   DIR_MODE,
   FILE_MODE,
+  sha256,
 } = require("../../netlify/functions/lib/host-file-store.cjs");
 const {
   FileStore,
@@ -449,6 +450,37 @@ try {
   assert(appliedRetention.indexes_preserved === 1, "retention removed a live lead idempotency index");
   assert((await importStore.getByIdempotency("idem_migration")).lead_id === "lead_migration", "retention corrupted a live lead idempotency index");
   assert(JSON.stringify(appliedRetention).includes("lead_expired") === false, "retention report leaked a record key");
+
+  // A stop after removing the derived index but before removing its lead is
+  // recoverable: the next retention run rebuilds from the authoritative lead,
+  // then retries the same deletion without leaving a dangling relationship.
+  const interruptedRetentionRoot = privateDir("confenge-retention-interrupted-");
+  cleanup.push(interruptedRetentionRoot);
+  const interruptedRetentionStore = new FileStore(interruptedRetentionRoot);
+  const retentionInterruptedLead = {
+    ...sampleLead("lead_retention_interrupted", "idem_retention_interrupted"),
+    delete_after: "2020-01-01T00:00:00Z",
+  };
+  await interruptedRetentionStore.put(retentionInterruptedLead, { onlyIfNew: true });
+  interruptedRetentionStore.backend.withExclusiveLock(() => {
+    interruptedRetentionStore.idempotency._deleteUnlocked(sha256(retentionInterruptedLead.idempotency_key));
+  });
+  let interruptedStrictCode = null;
+  try {
+    interruptedRetentionStore.backend.validate({ writeProbe: false });
+  } catch (err) {
+    interruptedStrictCode = err.code;
+  }
+  assert(interruptedStrictCode === "STORE_INDEX_MISSING", "interruption fixture did not remove only the derived index", interruptedStrictCode);
+  const resumedRetention = JSON.parse((await execFileAsync(
+    process.execPath,
+    [retentionScript, "--store", interruptedRetentionRoot, "--now", "2026-08-26T00:00:00Z", "--apply"],
+    { env: retentionApplyEnv },
+  )).stdout);
+  assert(resumedRetention.deleted === 1, "interrupted retention did not resume idempotently", resumedRetention);
+  assert(await interruptedRetentionStore.get(retentionInterruptedLead.lead_id) === null, "resumed retention kept the expired lead");
+  assert(await interruptedRetentionStore.getByIdempotency(retentionInterruptedLead.idempotency_key) === null, "resumed retention kept an idempotency index");
+  assert(interruptedRetentionStore.backend.validate({ writeProbe: false }).ok, "resumed retention left the store invalid");
 
   // Preflight blocks every planned deletion when a governed timestamp is invalid.
   const malformedRetentionRoot = privateDir("confenge-retention-malformed-");

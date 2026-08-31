@@ -196,6 +196,8 @@ ${normalizeWrapper("confenge-web-public.conf")}
     Referer: `https://outside.invalid/${piiMarkers[4]}?email=${encodeURIComponent(piiMarkers[0])}`,
     Cookie: `__Host-session=${piiMarkers[5]}`,
   };
+  const privacyWgetHeaders = Object.entries(privacyHeaders)
+    .flatMap(([name, value]) => ["--header", `${name}: ${value}`]);
   const publicPrivacyResponse = await privacyClient.request(privacyPath, { extraHeaders: privacyHeaders });
   assertProbe("public_minimized_log_probe_status", publicPrivacyResponse.status === 301, `status=${publicPrivacyResponse.status}`);
   // The candidate origin is deliberately bound to loopback inside the host.
@@ -212,21 +214,36 @@ ${normalizeWrapper("confenge-web-public.conf")}
       "/dev/null",
       "--header",
       "Host: confenge.com.br",
-      "--header",
-      `User-Agent: ${piiMarkers[2]}`,
-      "--header",
-      `X-Forwarded-For: ${piiMarkers[1]}`,
-      "--header",
-      `X-Request-Id: ${piiMarkers[0]}`,
-      "--header",
-      `Referer: ${privacyHeaders.Referer}`,
-      "--header",
-      `Cookie: ${privacyHeaders.Cookie}`,
+      ...privacyWgetHeaders,
       `http://127.0.0.1:8088/?uri=${encodeURIComponent(piiMarkers[0])}&phone=${piiMarkers[3]}`,
     ],
     { stdio: "ignore", timeout: 30_000 },
   );
   assertProbe("origin_minimized_log_probe_status", true, "loopback request failed");
+  // No runtime listens on 18100 in this wrapper container, so this is a real
+  // nginx upstream-connect failure rather than another successful response.
+  const errorProbe = spawnSync(
+    "docker",
+    [
+      "exec",
+      wrapperContainer,
+      "wget",
+      "-S",
+      "-O",
+      "/dev/null",
+      "--header",
+      "Host: confenge.com.br",
+      ...privacyWgetHeaders,
+      `http://127.0.0.1:8088/api/web/lead?privacy=${encodeURIComponent(piiMarkers[4])}`,
+    ],
+    { encoding: "utf8", timeout: 30_000 },
+  );
+  if (errorProbe.error) throw errorProbe.error;
+  assertProbe(
+    "nginx_error_path_502",
+    errorProbe.status !== 0 && /502 Bad Gateway/.test(errorProbe.stderr || ""),
+    `status=${errorProbe.status} stderr=${errorProbe.stderr || ""}`,
+  );
   execFileSync("docker", ["kill", "--signal", "USR1", wrapperContainer], { stdio: "ignore", timeout: 30_000 });
   await new Promise((done) => setTimeout(done, 100));
   const allowedLogKeys = [

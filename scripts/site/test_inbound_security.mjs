@@ -117,13 +117,23 @@ try {
     referer: logCanaries.referer,
     cookie: logCanaries.cookie,
     request_uri: `/private/${logCanaries.uri}?q=${logCanaries.query}`,
-    code: `upstream rejected ${logCanaries.referer}`,
+    code: logCanaries.query,
+    reason: logCanaries.userAgent,
+    http: 5511988887766,
     lead_id: "abcdef123456789012345678",
     journey: "contrato",
     stage_len: 42,
     has_phone: true,
     has_email: true,
     handoff: "PENDING",
+    as_of: "2026-08-31T12:00:00Z",
+    history_state_sha256: "0123456789abcdef",
+    promoted: true,
+    dead: 2,
+    aborted: 1,
+    abort_reason: "policy_blocked",
+    backlog_attempted: 3,
+    backlog_policy_blocked: 1,
   };
   safeLog("error", "redaction_probe", adversarialLogFields);
   safeLog("error/private-error-442", `redaction_probe/${logCanaries.uri}?q=${logCanaries.query}`, adversarialLogFields);
@@ -159,6 +169,14 @@ for (const aggregate of [
   '"has_phone":true',
   '"has_email":true',
   '"handoff":"PENDING"',
+  '"as_of":"2026-08-31T12:00:00Z"',
+  '"history_state_sha256":"0123456789abcdef"',
+  '"promoted":true',
+  '"dead":2',
+  '"aborted":1',
+  '"abort_reason":"policy_blocked"',
+  '"backlog_attempted":3',
+  '"backlog_policy_blocked":1',
 ]) {
   assert(logText.includes(aggregate), `operational aggregate was over-redacted: ${aggregate}`);
 }

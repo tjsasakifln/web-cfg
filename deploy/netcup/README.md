@@ -360,6 +360,7 @@ sudo install -o root -g root -m 0644 /opt/confenge-web/current/ops/lib/schedule_
 sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-retention.service /etc/systemd/system/confenge-web-retention.service
 sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-retention.timer /etc/systemd/system/confenge-web-retention.timer
 sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-retention-alert@.service /etc/systemd/system/confenge-web-retention-alert@.service
+sudo install -o root -g root -m 0644 /opt/confenge-web/current/schedules/confenge-web-schedule@.service /etc/systemd/system/confenge-web-schedule@.service
 sudo systemctl daemon-reload
 systemctl is-enabled confenge-web-retention.timer 2>&1 | grep -Eq 'disabled|not-found'
 ```

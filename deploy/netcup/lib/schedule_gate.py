@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import fcntl
+import grp
 import json
 import os
 import re
@@ -23,6 +24,15 @@ GATE_NAME = "schedule-cutover.json"
 RETENTION_JOB = "storage-retention"
 RETENTION_LOCK = "storage-retention.lock"
 RETENTION_APPLY_AUTHORITY = "confenge-schedule-runner/v1"
+
+
+def expected_gate_gid() -> int:
+    if os.environ.get("CONFENGE_RELEASE_TEST_MODE") == "1":
+        return os.getgid()
+    try:
+        return grp.getgrnam("confenge-web").gr_gid
+    except KeyError as exc:
+        raise ReleaseError("confenge-web schedule gate group is absent") from exc
 
 
 def validate_gate(root: Path, job: str) -> dict[str, object]:
@@ -46,6 +56,8 @@ def validate_gate(root: Path, job: str) -> dict[str, object]:
             raise ReleaseError("schedule cutover gate permissions must be 0640")
         if os.environ.get("CONFENGE_RELEASE_TEST_MODE") != "1" and gate_stat.st_uid != 0:
             raise ReleaseError("schedule cutover gate must be root-owned")
+        if gate_stat.st_gid != expected_gate_gid():
+            raise ReleaseError("schedule cutover gate must be confenge-web group-owned")
         with os.fdopen(descriptor, encoding="utf-8") as handle:
             descriptor = -1
             gate = json.load(handle)

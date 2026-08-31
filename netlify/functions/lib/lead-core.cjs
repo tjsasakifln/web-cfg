@@ -1176,6 +1176,19 @@ const SAFE_LOG_EVENT_RE = /^[a-z][a-z0-9_]{0,63}$/;
 const SAFE_LOG_TOKEN_RE = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/;
 const RAW_IPV4_RE = /(?:^|[^0-9])(?:\d{1,3}\.){3}\d{1,3}(?:$|[^0-9])/;
 const SAFE_LOG_BOOLEAN_AGGREGATE_KEYS = new Set(["has_email", "has_phone"]);
+const SAFE_LOG_OPAQUE_KEYS = new Set([
+  "contract",
+  "fp",
+  "history_state_sha256",
+  "lead_id",
+  "manifest_sha256",
+  "offer_id",
+  "policy_version",
+  "receipt_id",
+  "snapshot_id",
+  "subscription_id",
+]);
+const REQUEST_LITERAL_MARKER = /(?:^|[-_.:])(?:cookie|query|referer|referrer|request|session|ua|uri|url|user[-_.]?agent)(?:[-_.:]|$)|mozilla|applewebkit|chrome|firefox|safari|curl|wget|postman/i;
 
 // Application logs are an operational event stream, not a request dump. New
 // fields fail closed until explicitly classified here; request headers, URLs,
@@ -1184,16 +1197,22 @@ const SAFE_LOG_BOOLEAN_AGGREGATE_KEYS = new Set(["has_email", "has_phone"]);
 const SAFE_LOG_FIELD_KEYS = new Set([
   "action",
   "applied",
+  "abort_reason",
+  "aborted",
+  "as_of",
   "attempt",
   "attempted",
   "attempts",
   "auto_send_off",
+  "backlog_attempted",
+  "backlog_policy_blocked",
   "classifier",
   "code",
   "contact_kind",
   "contract",
   "count",
   "decision_state",
+  "dead",
   "delivered",
   "durable_store_failed",
   "eligible",
@@ -1213,9 +1232,11 @@ const SAFE_LOG_FIELD_KEYS = new Set([
   "lead_id",
   "journey",
   "manifest_sha256",
+  "history_state_sha256",
   "offer_id",
   "policy_version",
   "prazo",
+  "promoted",
   "receipt_id",
   "record_kind",
   "recorte",
@@ -1238,6 +1259,27 @@ const SAFE_LOG_FIELD_KEYS = new Set([
   "via",
   "xray_state",
 ]);
+
+function safeLogNumber(key, value) {
+  if (!Number.isFinite(value) || value < 0) return null;
+  if (key === "http") return Number.isInteger(value) && value >= 100 && value <= 599 ? value : null;
+  if (key === "latency_ms") return value <= 15 * 60 * 1000 ? value : null;
+  if (key === "stage_len") return Number.isInteger(value) && value <= MAX_FIELD.estagio ? value : null;
+  return value <= 1_000_000 ? value : null;
+}
+
+function safeLogString(key, value) {
+  const text = value.slice(0, 128);
+  if (REQUEST_LITERAL_MARKER.test(text) || RAW_IPV4_RE.test(text) || net.isIP(text) !== 0) return null;
+  if (redactSensitiveText(text) !== text) return null;
+  if (key === "as_of") {
+    return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(text) ? text : null;
+  }
+  if (SAFE_LOG_OPAQUE_KEYS.has(key)) {
+    return /^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,127}$/.test(text) ? text : null;
+  }
+  return SAFE_LOG_TOKEN_RE.test(text) && text.split(":").length <= 2 ? text : null;
+}
 
 function redactSensitiveText(value) {
   let text = String(value == null ? "" : value);
@@ -1269,7 +1311,9 @@ function sanitizeLogFields(fields) {
       continue;
     }
     if (typeof value === "number") {
-      if (Number.isFinite(value)) safe[key] = value;
+      const number = safeLogNumber(key, value);
+      if (number != null) safe[key] = number;
+      else safe[key] = "[redacted]";
       continue;
     }
     if (typeof value === "boolean" || value == null) {
@@ -1277,18 +1321,8 @@ function sanitizeLogFields(fields) {
       continue;
     }
     if (typeof value !== "string") continue;
-    const text = value.slice(0, 128);
-    if (
-      !SAFE_LOG_TOKEN_RE.test(text) ||
-      RAW_IPV4_RE.test(text) ||
-      net.isIP(text) !== 0 ||
-      text.split(":").length > 2 ||
-      redactSensitiveText(text) !== text
-    ) {
-      safe[key] = "[redacted]";
-      continue;
-    }
-    safe[key] = text;
+    const text = safeLogString(key, value);
+    safe[key] = text == null ? "[redacted]" : text;
   }
   return safe;
 }

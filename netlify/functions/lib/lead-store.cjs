@@ -187,17 +187,30 @@ class FileStore {
       return next;
     });
   }
+  validateUnlocked({ repairIdempotency = false } = {}) {
+    // The caller must already hold the backend writer lock. Missing indexes
+    // are the one recoverable crash boundary: the lead record is authoritative
+    // and can recreate its derived idempotency entry. Dangling/corrupt indexes
+    // remain fail-closed.
+    this.backend._validateUnlocked();
+    if (!this.backend.layoutExists) return;
+    this.backend._validateLeadIdempotencyUnlocked({ repair: repairIdempotency });
+  }
+  _deleteUnlocked(id) {
+    const cur = this.records.get(String(id));
+    if (!cur) return false;
+    // Delete the derived index first. If execution stops here, the next writer
+    // can rebuild it from the still-authoritative lead before retrying. The
+    // inverse order creates a dangling index that cannot be safely inferred.
+    if (cur.idempotency_key) {
+      const indexKey = sha256(String(cur.idempotency_key));
+      this.idempotency._deleteUnlocked(indexKey);
+    }
+    this.records._deleteUnlocked(String(id));
+    return true;
+  }
   async delete(id) {
-    return this.backend.withExclusiveLock(() => {
-      const cur = this.records.get(String(id));
-      if (!cur) return false;
-      this.records._deleteUnlocked(String(id));
-      if (cur.idempotency_key) {
-        const indexKey = sha256(String(cur.idempotency_key));
-        this.idempotency._deleteUnlocked(indexKey);
-      }
-      return true;
-    });
+    return this.backend.withExclusiveLock(() => this._deleteUnlocked(id));
   }
   async list() {
     return this.records.list().map((row) => row.value);
