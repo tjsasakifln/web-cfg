@@ -33,7 +33,7 @@ function authorityValue(key) {
   return match[1].trim();
 }
 
-const expectedRuntime = {
+const authorityRuntime = {
   environment: authorityValue("expected_environment"),
   profile: authorityValue("expected_profile"),
   host_architecture_version: authorityValue("host_architecture_version"),
@@ -48,6 +48,11 @@ function option(name, fallback) {
   const value = process.argv.find((arg) => arg.startsWith(prefix));
   return value ? value.slice(prefix.length) : fallback;
 }
+
+const candidateLocal = option("candidate-local", "0") === "1";
+const expectedRuntime = candidateLocal
+  ? { ...authorityRuntime, environment: "local", profile: "local-candidate" }
+  : authorityRuntime;
 
 const base = option("base", "https://confenge.com.br").replace(/\/$/, "");
 const finalOutputDir = path.resolve(ROOT, option("out", "/tmp/confenge-deliverables-live"));
@@ -526,6 +531,7 @@ const report = {
     expected: expectedRuntime,
   },
   decision_state: "EXECUTE_NOW",
+  evidence_mode: candidateLocal ? "LOCAL_CANDIDATE_EXACT_SHA" : "LIVE_AUTHORITY",
   full_page: "DEFERRED_BY_540",
   capture_method: "first-fold viewport and named DOM-element segments only; fullPage is never requested",
   schema_policy: {
