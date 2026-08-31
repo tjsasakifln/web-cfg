@@ -2902,10 +2902,10 @@
           "current_label": "Registrar situação para triagem",
           "useful_next_state": "A situação fica registrada para triagem; o protocolo confirma a gravação e a confirmação indica qual decisão vem depois.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "pre_form_value": "Registre o contexto mínimo para a CONFENGE separar edital, contrato e operação e devolver o próximo enquadramento útil.",
+          "pre_form_value": "Registre o contexto para a CONFENGE separar edital, contrato e operação e indicar o próximo enquadramento.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Nome identifica o responsável; um canal válido permite retorno; o tipo de necessidade direciona a triagem. Empresa, urgência e contexto adicional são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Nome identifica o responsável; o contato permite retorno; a necessidade direciona a triagem. Empresa, urgência e contexto são opcionais. WhatsApp: DDD e 10/11 dígitos; e-mail completo.",
             "visible": true,
             "required": [
               "nome",
