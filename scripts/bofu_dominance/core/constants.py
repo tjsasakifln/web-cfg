@@ -10,8 +10,8 @@ SLOT = "BOFU-CORE"
 SCHEMA = "bofu-intent-registry/2.0"
 STATUS_SCHEMA = "bofu-intent-status/1.0"
 CENSUS_SCHEMA = "bofu-serp-census/1.0"
-AS_OF = "2026-08-22"
-ORIGIN_MAIN_SHA = "14740dab6b21bde19ecc62396d89393c2c7adab6"
+AS_OF = "2026-08-31"
+ORIGIN_MAIN_SHA = "81c600b7c26dcc606d3a03e648ecd9820d9c1c37"
 
 DATA_DIR = ROOT / "data" / "bofu-dominance" / "core"
 DOCS_DIR = ROOT / "docs" / "seo" / "bofu-dominance" / "core"
@@ -20,6 +20,9 @@ CENSUS_PATH = DATA_DIR / "serp-census.v1.json"
 STATUS_PATH = DATA_DIR / "status.json"
 REPORT_PATH = DOCS_DIR / "REPORT.md"
 NEXT_ACTIONS_PATH = DOCS_DIR / "NEXT-ACTIONS.md"
+BUYER_DECISION_MAP_SCHEMA = "bofu-buyer-decision-map/v1"
+BUYER_DECISION_MAP_PATH = DATA_DIR / "buyer-decision-map.v1.json"
+BUYER_DECISION_REPORT_PATH = DOCS_DIR / "BUYER-DECISION-MAP.md"
 
 BLOCKED_GSC_LIVE_STATE = "BLOCKED_CREDENTIAL_FAILURE"
 GSC_LIVE_STATE = BLOCKED_GSC_LIVE_STATE  # default until overlay/job proof
@@ -112,37 +115,42 @@ GRAPH_NODES = (
         "id": "issue-151",
         "kind": "issue",
         "ref": 151,
-        "role": "freshness_clock",
-        "note": "Market Answer real-clock freshness. Not a BOFU family.",
+        "role": "historical_freshness_implementation",
+        "state": "closed",
+        "note": "Closed historical Market Answer real-clock implementation. Not an operational owner or BOFU family.",
     },
     {
         "id": "issue-152",
         "kind": "issue",
         "ref": 152,
-        "role": "sitemap_graph",
-        "note": "Deterministic freshness-aware sitemap graph. Not a BOFU family.",
+        "role": "historical_sitemap_implementation",
+        "state": "closed",
+        "note": "Closed historical freshness-aware sitemap implementation. Not an operational owner or BOFU family.",
     },
     {
         "id": "issue-153",
         "kind": "issue",
         "ref": 153,
-        "role": "origin_to_service_owner",
-        "note": "Canonical owner of content→service transition with destination_service_id.",
+        "role": "historical_origin_to_service_implementation",
+        "state": "closed",
+        "note": "Closed historical implementation of destination_service_id. The operational owner is web-cfg/attribution-contract.",
     },
     {
         "id": "issue-154",
         "kind": "issue",
         "ref": 154,
-        "role": "growth_accounting",
-        "note": "Compounding standard. Does not authorize BOFU page scale.",
+        "role": "historical_growth_accounting_decision",
+        "state": "closed_not_planned",
+        "note": "Closed not-planned growth-accounting decision. Does not authorize BOFU page scale.",
     },
     {
         "id": "issue-155",
         "kind": "issue",
         "ref": 155,
-        "role": "gated_family",
+        "role": "historical_gap_decision",
         "family_id": "bid-readiness",
-        "note": "GATED bid-readiness canary. Not an existing page.",
+        "state": "closed_not_planned",
+        "note": "Closed historical bid-readiness decision. Not an existing page or operational owner.",
     },
     {
         "id": "issue-156",
@@ -158,7 +166,7 @@ GRAPH_NODES = (
         "ref": 157,
         "role": "contract_analysis_canary_not_family",
         "note": "Exactly one official-live contract analysis canary. Not a new BOFU family.",
-        "state": "draft_open",
+        "state": "closed_unmerged",
         "head": "campaign/confenge-web-contract-authority-canary-03",
         "sha": "42056bb11bfd1ee273ea922f4d1348fb98fac2a5",
         "merged_to_main": False,
@@ -169,22 +177,22 @@ GRAPH_NODES = (
         "ref": 158,
         "role": "data_desk_kit_not_registry",
         "note": "Approved SC Data Desk citation kit. Do not create a second target registry here.",
-        "state": "draft_open",
+        "state": "merged",
         "head": "campaign/confenge-web-data-desk-authority-02",
         "sha": "769764a72c2b7457f9ee7c8a86804e57caf38311",
-        "merged_to_main": False,
+        "merged_to_main": True,
     },
     {
         "id": "pr-159",
         "kind": "pull_request",
         "ref": 159,
-        "role": "observability_candidate_not_live_gsc",
-        "note": "Search-demand observability producer. Candidate to merge; not main. Isolated gsc job 32322344062 is LIVE_JOB_OK overlay in BOFU-CORE, not a merged PR #159 loop.",
-        "state": "draft_open",
+        "role": "historical_observability_implementation",
+        "note": "Merged search-demand observability implementation. The versioned overlay remains top-rows-only and not product-decision ready.",
+        "state": "merged",
         "head": "campaign/confenge-web-seo-demand-control-02",
         "sha": "feba68928ab997229028a66bb25d3b3b5a439206",
         "gsc_live_state": LIVE_JOB_OK,
-        "merged_to_main": False,
+        "merged_to_main": True,
     },
 )
 

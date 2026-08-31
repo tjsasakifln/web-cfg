@@ -93,6 +93,7 @@ def build_status(
             "owner": resolved["owner_path"] or family["canonical_owner"].get("path"),
             "owner_issue": resolved["owner_issue"],
             "active_issue": family.get("active_issue"),
+            "operational_owner": "web-cfg/organic-market-capture",
             "active_pr": family.get("active_pr"),
             "earliest_safe_action_at": family.get("earliest_safe_action_at"),
             "evidence": evidence,
@@ -104,12 +105,13 @@ def build_status(
             "census": observations_for_family(census_doc, family["id"]),
             "gate": family.get("gate"),
             "freeze": family.get("freeze"),
-            "transition_owner_issue": 153,
+            "transition_owner": "web-cfg/attribution-contract",
+            "historical_transition_issue": 153,
         }
         if item["canonical_owner"].get("path"):
             item["owner"] = item["canonical_owner"]["path"]
         elif item["state"] == "NO_CANONICAL":
-            item["owner"] = f"issue:{item.get('active_issue') or item['canonical_owner'].get('issue')}"
+            item["owner"] = f"gap:{item['id']}"
         if not item.get("owner") or not item.get("state") or not item.get("reason"):
             raise RegistryError(f"{item['id']} missing owner/state/reason")
         resolved_families.append(item)
@@ -156,7 +158,8 @@ def build_status(
             "pr158_is_second_target_registry": False,
             "pr159_is_main_live_gsc": False,
             "gated_155_156_are_existing_pages": False,
-            "transition_owner_issue": 153,
+            "transition_owner": "web-cfg/attribution-contract",
+            "historical_transition_issue": 153,
             "top_requires_context": True,
             "missing_gsc_credentials_are_zero_rank": False,
         },

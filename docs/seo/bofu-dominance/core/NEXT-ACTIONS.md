@@ -17,23 +17,23 @@ Keep the six #128 BOFU pillars FROZEN. Census and spec are allowed; do not recom
 - earliest_safe_action_at: `2026-09-16`
 - refs: issue-128
 
-## 3. `origin-to-service-153` — keep_owner
+## 3. `origin-to-service-contract` — keep_owner
 
-#153 owns the origin→service transition with destination_service_id. This ledger does not reimplement analytics or edit script.js.
+The versioned attribution contract owns origin→service; closed #153 is historical. This ledger does not reimplement analytics or edit script.js.
 
 - authorizes_html_edit: `False`
 - refs: issue-153, issue-128
 
-## 4. `gated-155-156` — hold_gated
+## 4. `gap-155-blocked-156` — hold_gated
 
-#155 bid-readiness and #156 partner-integrity enter as GATED, not as existing pages. Do not ship HTML. #156 stays blocked on extra-cli#436.
+Closed #155 is historical NO_DEMAND_EVIDENCE; open #156 remains an external CONTENT_GAP. Neither is an existing page or current URL owner.
 
 - authorizes_html_edit: `False`
 - refs: issue-155, issue-156, issue-154
 
-## 5. `prs-157-159-roles` — do_not_duplicate
+## 5. `historical-pr-roles` — do_not_duplicate
 
-PR #157 is one contract-analysis canary, not a BOFU family. PR #158 is the Data Desk kit, not a second target registry. PR #159 is an observability candidate to merge, not live GSC on main.
+PR #157 closed unmerged and is not a BOFU family. PR #158 and PR #159 are historical merged implementations, not operational owners or live-rank claims.
 
 - authorizes_html_edit: `False`
 - refs: pr-157, pr-158, pr-159
@@ -41,6 +41,5 @@ PR #157 is one contract-analysis canary, not a BOFU family. PR #158 is the Data 
 ## Stop
 
 - Do not edit #128 HTML before 2026-09-16.
-- Do not publish #155/#156 landings from this slot.
-- Do not merge this PR as if GSC were live.
-
+- Do not publish a #155/#156 landing from this slot.
+- Do not treat top-row GSC evidence as comparable demand or rank.

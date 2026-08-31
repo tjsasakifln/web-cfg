@@ -456,6 +456,30 @@
         "errors": 0,
         "warnings": 5
       }
+    },
+    "bofu_buyer_decision_map": {
+      "ok": true,
+      "findings": [],
+      "stats": {
+        "buyer_jobs": 15,
+        "registry_buyer_jobs": 15,
+        "coverage_percent": 100.0,
+        "canonical_owners": 13,
+        "gaps": 2,
+        "duplicate_owners": 0,
+        "gsc_unknown": 15,
+        "protected_routes": 6,
+        "controllable_queue": 4,
+        "reconciled_authorities": 9,
+        "coverage_states": {
+          "COMMERCIAL_BRIDGE_GAP": 2,
+          "CONTENT_GAP": 1,
+          "MEASUREMENT_WAIT": 9,
+          "NO_DEMAND_EVIDENCE": 1,
+          "OWNED_BUT_WEAK": 2
+        },
+        "wave_decision": "INSUFFICIENT_EVIDENCE"
+      }
     }
   }
 }
