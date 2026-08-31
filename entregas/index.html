@@ -331,12 +331,10 @@
 <div class="pillar-capture-copy">
 <p class="eyebrow">Próximo passo</p>
 <h2 id="entregas-captura-title">Diga qual destas entregas resolve a sua pergunta</h2>
-<p>Você já viu o formato, o conteúdo e o preço de cada unidade. Descreva aqui a decisão que precisa tomar e a carteira envolvida: a resposta indica qual entrega se aplica, em qual ordem e com quais insumos.</p>
-<p>Este formulário registra o pedido de análise. Ele não cobra, não recebe pagamento e não conclui a contratação.</p>
+<p data-form-value data-field-purpose>Descreva a decisão; a resposta indica entrega, ordem e insumos. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.</p>
+<p data-form-boundary>O pedido fica registrado, sem cobrança ou contratação. Preço e escopo exigem aceite. Uso só para retorno; retenção: 730 dias. Exclusão com protocolo pela <a href="/privacidade/">Política de Privacidade</a>.</p>
 </div>
-<form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="entregas-hub-handraise" data-asset-id="entregas-exemplos-hub" data-route-family="entregas" data-cta-position="hub_capture" data-journey="operacao" data-form-contract="next-state/v1" data-next-state-profile="delivery_selection" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Registre a decisão e, se souber, a entrega mais próxima para receber um enquadramento entre as unidades publicadas.</p>
-<p class="form-hint" data-field-purpose>A entrega selecionada orienta a comparação; nome e um canal válido permitem retorno; empresa e descrição da decisão são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
-<input type="hidden" name="offer_id" value=""/>
+<form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="entregas-hub-handraise" data-asset-id="entregas-exemplos-hub" data-route-family="entregas" data-cta-position="hub_capture" data-journey="operacao" data-form-contract="next-state/v1" data-next-state-profile="delivery_selection" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><input type="hidden" name="offer_id" value=""/>
 <input type="hidden" name="terms_id" value=""/>
 <input type="hidden" id="jornada-hidden" name="jornada" value="operacao"/>
 <input type="hidden" id="estagio" name="estagio" value="entregas-exemplos-hub"/>
@@ -363,7 +361,6 @@
 <label class="capture-consent"><input type="checkbox" name="consentimento" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label>
 <button class="button button-primary" type="submit">Registrar decisão para indicar a entrega</button>
 <p class="form-status" role="status" aria-live="polite"></p>
-<p class="form-hint" data-form-boundary>O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 </div>
 </section>

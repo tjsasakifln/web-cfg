@@ -2351,10 +2351,10 @@
           "current_label": "Registrar decisão para indicar a entrega",
           "useful_next_state": "A decisão fica registrada para a CONFENGE indicar a entrega aplicável, a ordem de execução e os insumos que ainda precisam ser confirmados.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
-          "pre_form_value": "Registre a decisão e, se souber, a entrega mais próxima para receber um enquadramento entre as unidades publicadas.",
+          "pre_form_value": "Descreva a decisão; a resposta indica entrega, ordem e insumos. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "A entrega selecionada orienta a comparação; nome e um canal válido permitem retorno; empresa e descrição da decisão são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible_text": "Descreva a decisão; a resposta indica entrega, ordem e insumos. Obrigatórios: nome, consentimento e contato. Demais campos opcionais. WhatsApp: DDD + 10/11 dígitos; e-mail completo.",
             "visible": true,
             "required": [
               "nome",
@@ -2369,7 +2369,7 @@
               "mensagem"
             ]
           },
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary": "O pedido fica registrado, sem cobrança ou contratação. Preço e escopo exigem aceite. Uso só para retorno; retenção: 730 dias. Exclusão com protocolo pela Política de Privacidade .",
           "boundary_visible": true,
           "privacy_link_visible": true,
           "event_semantics": [
@@ -2407,7 +2407,7 @@
           "useful_next_state": "Abre o destino declarado por “Encontrar a entrega certa” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2422,7 +2422,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2437,7 +2437,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico de Expansão no Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2452,7 +2452,7 @@
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2467,7 +2467,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2482,7 +2482,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico de Expansão no Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2497,7 +2497,7 @@
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2512,7 +2512,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2527,7 +2527,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico de Expansão no Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2542,7 +2542,7 @@
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2557,7 +2557,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2572,7 +2572,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico de Expansão no Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2587,7 +2587,7 @@
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2602,7 +2602,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2617,7 +2617,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico de Expansão no Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2632,7 +2632,7 @@
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2647,7 +2647,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2662,7 +2662,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico de Expansão no Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2677,7 +2677,7 @@
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2692,7 +2692,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2707,7 +2707,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico de Expansão no Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2722,7 +2722,7 @@
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2737,7 +2737,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2752,7 +2752,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico de Expansão no Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2767,7 +2767,7 @@
           "useful_next_state": "Abre o demonstrativo sintético para inspecionar formato, método e limites.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2782,7 +2782,7 @@
           "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2797,7 +2797,7 @@
           "useful_next_state": "Abre o destino declarado por “Diagnóstico de Expansão no Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
@@ -2812,7 +2812,7 @@
           "useful_next_state": "Abre o destino declarado por “Ver o Diagnóstico de Expansão no Mercado Público” para continuar a decisão.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
-          "boundary": "O registro não cobra, não recebe pagamento e não conclui contratação; preço e escopo continuam sujeitos ao aceite separado.",
+          "boundary": "Sem cobrança; preço e escopo exigem aceite.",
           "event_semantics": [
             "cta_click"
           ]
