@@ -1,12 +1,29 @@
 {
-  "schema": "confenge.issue-528-segmented-capture/1.0",
+  "schema": "confenge.issue-528-segmented-capture/1.1",
   "issue": 528,
-  "capture_mode": "element_sections_no_fullpage",
+  "capture_mode": "first_fold_and_element_sections_no_fullpage",
   "fullpage_used": false,
   "fullpage_limitation_issue": 540,
-  "captured_at": "2026-08-31T15:01:24.345Z",
-  "commit_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-  "tree_dirty": true,
+  "captured_at": "2026-08-31T15:08:48.387Z",
+  "commit_sha": "9f6da606b81480bc7ea78a727a54d528ddb62093",
+  "rendered_content_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "remote_build_info": {
+    "artifact_hash": "f8df6acb623d204218cae25109316f15f15d67d8123d34956e5608649d829347",
+    "build_time": "2026-08-31T04:16:19Z",
+    "commit": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+    "deploy_id": null,
+    "environment": "production",
+    "manifest_hash": "99180ba6407b6f3a5b8e00bdbcc9ada1362395af64e16aee31385a60726ae0f4",
+    "schema_version": "1.2.0",
+    "site_schema_version": "1.1.0",
+    "source": "build_site.write_build_info",
+    "versioned_timestamp_fields": [
+      "build_time",
+      "generated_at",
+      "preview_generated_at"
+    ]
+  },
+  "tree_dirty": false,
   "base_url": "https://confenge.com.br",
   "output_dir": "docs/qa/issue-528-money-pages-value-first/before-sections",
   "viewports": [
@@ -14,6 +31,14 @@
     "1366x768"
   ],
   "captures": [
+    {
+      "route": "/servicos-obras-publicas/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "390x844",
+      "file": "servicos-obras-publicas-first-fold-390x844.png",
+      "sha256": "3e0feb8701b95fa51b5f6a0b94b684bd5e496e687711dcf3ac9ecd885a1e6e7c"
+    },
     {
       "route": "/servicos-obras-publicas/",
       "selector": "main > .section",
@@ -32,6 +57,14 @@
     },
     {
       "route": "/servicos-obras-publicas/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "1366x768",
+      "file": "servicos-obras-publicas-first-fold-1366x768.png",
+      "sha256": "22957506eb51580551f7544967584a7dafb658c8004563f9fa73041493aeb148"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
       "selector": "main > .section",
       "section": "decision",
       "viewport": "1366x768",
@@ -45,6 +78,14 @@
       "viewport": "1366x768",
       "file": "servicos-obras-publicas-contract-events-1366x768.png",
       "sha256": "9e3362a338aed4f9c8f345c9e42e076825a5e63cec7ff7149fe87a3f955c1990"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "390x844",
+      "file": "diagnostico-b2g-expansao-first-fold-390x844.png",
+      "sha256": "79d6ec7adeb9bcf6564ea325fe54c28b7ca914e922a6379c3c7848ec995da619"
     },
     {
       "route": "/diagnostico-b2g-expansao/",
@@ -72,6 +113,14 @@
     },
     {
       "route": "/diagnostico-b2g-expansao/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "1366x768",
+      "file": "diagnostico-b2g-expansao-first-fold-1366x768.png",
+      "sha256": "8f85834e5451436ce1c28292fdd68e0c414fda23f2cedc870cca804629f8b2cf"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
       "selector": ".offer-hero",
       "section": "hero",
       "viewport": "1366x768",
@@ -93,6 +142,14 @@
       "viewport": "1366x768",
       "file": "diagnostico-b2g-expansao-proof-1366x768.png",
       "sha256": "248b4ac40b572a0218d922f2edea1ee7f492a63a13e2df0eecd45737cac7d25c"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "390x844",
+      "file": "bid-room-licitacoes-obras-first-fold-390x844.png",
+      "sha256": "d59e939f4893c5e0bb9d7782c89593f641dc198ba59bb7754f808a1844a722af"
     },
     {
       "route": "/bid-room-licitacoes-obras/",
@@ -128,6 +185,14 @@
     },
     {
       "route": "/bid-room-licitacoes-obras/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "1366x768",
+      "file": "bid-room-licitacoes-obras-first-fold-1366x768.png",
+      "sha256": "351f1f5f01d2ecd628c1ab11a3cc188bf92c138d8d47b4bfc1703900e687fec8"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
       "selector": ".offer-hero",
       "section": "hero",
       "viewport": "1366x768",
@@ -160,6 +225,14 @@
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "390x844",
+      "file": "defesa-margem-contratos-publicos-first-fold-390x844.png",
+      "sha256": "741a48e0d4541b36e3a9046e1296adecb92451aeeb37e766cf6a69d5974099e6"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
       "selector": ".offer-hero",
       "section": "hero",
       "viewport": "390x844",
@@ -181,6 +254,14 @@
       "viewport": "390x844",
       "file": "defesa-margem-contratos-publicos-contract-390x844.png",
       "sha256": "c2e98ebde018688f77bb2afb9905346851feb6f4a998f630bb09e5fd6c79156d"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "1366x768",
+      "file": "defesa-margem-contratos-publicos-first-fold-1366x768.png",
+      "sha256": "ce809d495d4526aecb858bef2802e26c237f6705339445435bceb0dff28f9297"
     },
     {
       "route": "/defesa-margem-contratos-publicos/",
@@ -208,6 +289,14 @@
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "390x844",
+      "file": "atrasos-prorrogacao-obras-publicas-first-fold-390x844.png",
+      "sha256": "1f99015d5dbf39dc8564b80ecc8b802254780f434bb2c3b5fb72c2cfb3c689ac"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
       "selector": ".pillar-hero",
       "section": "hero",
       "viewport": "390x844",
@@ -229,6 +318,14 @@
       "viewport": "390x844",
       "file": "atrasos-prorrogacao-obras-publicas-contract-390x844.png",
       "sha256": "97d65a6fa2f3ffdd6f819b4fd304f707c6ea0426a4e31dd0137d8c8ecf800718"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "1366x768",
+      "file": "atrasos-prorrogacao-obras-publicas-first-fold-1366x768.png",
+      "sha256": "965ff1f1ecec269ac38eba6ff56b23a67a60df0d9776a544723cb880e9611229"
     },
     {
       "route": "/atrasos-prorrogacao-obras-publicas/",
@@ -256,6 +353,14 @@
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "390x844",
+      "file": "defesa-tecnica-contratos-publicos-first-fold-390x844.png",
+      "sha256": "c2ea78f1f9b48627769bfc3e24f3eae0ffbefdf739ddb7d1a70fdf382aa31b26"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
       "selector": ".pillar-hero",
       "section": "hero",
       "viewport": "390x844",
@@ -277,6 +382,14 @@
       "viewport": "390x844",
       "file": "defesa-tecnica-contratos-publicos-contract-390x844.png",
       "sha256": "f27de0b95150cfcda093eec4abff88ac0cce692c67ce6f274473c967674ca003"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "1366x768",
+      "file": "defesa-tecnica-contratos-publicos-first-fold-1366x768.png",
+      "sha256": "6a3ac4f8250a2dc942aaf34f5f9ab3e94e9872d8d8a97a977f611ca93de19801"
     },
     {
       "route": "/defesa-tecnica-contratos-publicos/",
@@ -304,6 +417,14 @@
     },
     {
       "route": "/acompanhamento-contratos-obras/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "390x844",
+      "file": "acompanhamento-contratos-obras-first-fold-390x844.png",
+      "sha256": "31267ebfcd98a8d2d06329794614da26d0ca9fa21cae479ca5deba3c4baabe6c"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
       "selector": ".pillar-hero",
       "section": "hero",
       "viewport": "390x844",
@@ -328,6 +449,14 @@
     },
     {
       "route": "/acompanhamento-contratos-obras/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "1366x768",
+      "file": "acompanhamento-contratos-obras-first-fold-1366x768.png",
+      "sha256": "8d904e91d4e77e6b482033721e9a7a82f89b6c523773c349d54ba918699baa7a"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
       "selector": ".pillar-hero",
       "section": "hero",
       "viewport": "1366x768",
@@ -349,6 +478,14 @@
       "viewport": "1366x768",
       "file": "acompanhamento-contratos-obras-engagement-1366x768.png",
       "sha256": "f27ea27a724f8225f138ae44ebcc7adc55040806a2a15f03db1245bcfcd2e032"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "390x844",
+      "file": "diretoria-b2g-first-fold-390x844.png",
+      "sha256": "a3b6b41ade1ea074c1302771b138283f05988329941cc0184601eb57accc3deb"
     },
     {
       "route": "/diretoria-b2g/",
@@ -381,6 +518,14 @@
       "viewport": "390x844",
       "file": "diretoria-b2g-price-value-390x844.png",
       "sha256": "e8d11cec00a5f387a274594c7bcde17f2d9b3a89d0c5cc591cfe7b792d372179"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "selector": "viewport",
+      "section": "first-fold",
+      "viewport": "1366x768",
+      "file": "diretoria-b2g-first-fold-1366x768.png",
+      "sha256": "ec54613c5bb6712ae74e44ddb97d079275b83a663512d9bd2f1ab25a680d6963"
     },
     {
       "route": "/diretoria-b2g/",
