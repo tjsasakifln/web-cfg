@@ -912,18 +912,23 @@ def sync_family_crawler_rules(
             begin_markers=(ROBOTS_FAMILY_BEGIN, "# Contract-analysis canary:"),
             end_marker=ROBOTS_FAMILY_END,
             new_block=block,
+            crawler_format="robots",
         )
         robots_path.write_text(robots, encoding="utf-8")
     headers_path = root / "_headers"
     if headers_path.is_file():
         headers = headers_path.read_text(encoding="utf-8")
-        allow_blocks = "".join(
+        allow_block_parts = tuple(
             f"{FAMILY_PATH}{slug}/*\n  X-Robots-Tag: index, follow\n\n" for slug in slugs
+        )
+        allow_blocks = "".join(allow_block_parts)
+        family_noindex_block = (
+            f"{FAMILY_PATH}*\n"
+            "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
         )
         block = (
             f"{HEADERS_FAMILY_BEGIN}\n"
-            f"{FAMILY_PATH}*\n"
-            "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+            f"{family_noindex_block}"
             f"{allow_blocks}"
             f"{HEADERS_FAMILY_END}\n"
         )
@@ -932,6 +937,7 @@ def sync_family_crawler_rules(
             begin_markers=(HEADERS_FAMILY_BEGIN, "# Contract-analysis canary:"),
             end_marker=HEADERS_FAMILY_END,
             new_block=block,
+            crawler_format="headers",
         )
         headers_path.write_text(headers, encoding="utf-8")
 
@@ -998,12 +1004,29 @@ def _replace_or_append_block(
     begin_markers: tuple[str, ...],
     end_marker: str,
     new_block: str,
+    crawler_format: str,
 ) -> str:
     lines = text.splitlines(keepends=True)
+    first_start = next(
+        (
+            candidate
+            for candidate, line in enumerate(lines)
+            if any(line.startswith(marker) for marker in begin_markers)
+        ),
+        len(lines),
+    )
+    robots_insert_at: int | None = None
+    if crawler_format == "robots" and first_start == len(lines):
+        robots_insert_at, owned_user_agent = _robots_wildcard_group_end(lines)
+    else:
+        owned_user_agent = _nearest_user_agent(lines, first_start)
     kept: list[str] = []
+    kept_insert_at: int | None = None
     index = 0
     replaced = False
     while index < len(lines):
+        if robots_insert_at == index and kept_insert_at is None:
+            kept_insert_at = len(kept)
         if any(lines[index].startswith(marker) for marker in begin_markers):
             legacy_close = _legacy_block_close(lines, index)
             first_boundary = legacy_close + 1
@@ -1029,23 +1052,114 @@ def _replace_or_append_block(
         if lines[index].startswith(end_marker):
             index += 1
             continue
-        if lines[index].startswith((f"Allow: {FAMILY_PATH}", f"Disallow: {FAMILY_PATH}")):
-            index += 1
-            continue
-        if lines[index].startswith(FAMILY_PATH):
-            index += 1
-            while index < len(lines) and (
-                not lines[index].strip() or lines[index][:1].isspace()
-            ):
-                index += 1
+        orphan_end = _owned_orphan_end(
+            lines,
+            index,
+            crawler_format=crawler_format,
+            owned_user_agent=owned_user_agent,
+        )
+        if orphan_end is not None:
+            index = orphan_end
             continue
         kept.append(lines[index])
         index += 1
 
     if not replaced:
+        if crawler_format == "robots":
+            if kept_insert_at is None:
+                kept_insert_at = len(kept)
+            insertion = (
+                new_block
+                if owned_user_agent is not None
+                else f"User-agent: *\n{new_block}"
+            )
+            return _insert_generated_block(kept, kept_insert_at, insertion)
         body = "".join(kept)
         if body and not body.endswith("\n"):
             body += "\n"
         return body + "\n" + new_block
     rebuilt = "".join(kept)
     return rebuilt if rebuilt.endswith("\n") else rebuilt + "\n"
+
+
+def _nearest_user_agent(lines: list[str], index: int) -> str | None:
+    for candidate in range(index - 1, -1, -1):
+        if lines[candidate].casefold().startswith("user-agent:"):
+            return lines[candidate].strip().casefold()
+    return None
+
+
+def _robots_wildcard_group_end(lines: list[str]) -> tuple[int, str | None]:
+    wildcard = next(
+        (
+            index
+            for index, line in enumerate(lines)
+            if line.strip().casefold() == "user-agent: *"
+        ),
+        None,
+    )
+    if wildcard is None:
+        return len(lines), None
+    saw_rule = False
+    for index in range(wildcard + 1, len(lines)):
+        line = lines[index].strip().casefold()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("user-agent:"):
+            if saw_rule:
+                return index, _nearest_user_agent(lines, index)
+            continue
+        saw_rule = True
+    return len(lines), _nearest_user_agent(lines, len(lines))
+
+
+def _insert_generated_block(kept: list[str], index: int, new_block: str) -> str:
+    before = "".join(kept[:index])
+    after = "".join(kept[index:])
+    if before and not before.endswith("\n"):
+        before += "\n"
+    if before and not before.endswith(("\n\n", "\r\n\r\n")):
+        before += "\n"
+    rebuilt = before + new_block + after
+    return rebuilt if rebuilt.endswith("\n") else rebuilt + "\n"
+
+
+def _owned_orphan_end(
+    lines: list[str],
+    index: int,
+    *,
+    crawler_format: str,
+    owned_user_agent: str | None,
+) -> int | None:
+    if crawler_format == "robots":
+        if _nearest_user_agent(lines, index) != owned_user_agent:
+            return None
+        directive = lines[index].rstrip("\r\n")
+        if directive.startswith(
+            (f"Allow: {FAMILY_PATH}", f"Disallow: {FAMILY_PATH}")
+        ):
+            return index + 1
+        return None
+
+    if crawler_format != "headers":
+        raise ValueError(f"unsupported crawler format: {crawler_format}")
+    if not lines[index].rstrip("\r\n").startswith(FAMILY_PATH):
+        return None
+
+    cursor = index + 1
+    headers: list[str] = []
+    while (
+        cursor < len(lines)
+        and lines[cursor].strip()
+        and lines[cursor][:1].isspace()
+    ):
+        headers.append(lines[cursor].strip())
+        cursor += 1
+    if headers not in (
+        ["X-Robots-Tag: index, follow"],
+        ["X-Robots-Tag: noindex, nofollow, noarchive"],
+    ):
+        return None
+    if cursor < len(lines) and not lines[cursor].strip():
+        return cursor + 1
+    return cursor

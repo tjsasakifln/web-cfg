@@ -252,6 +252,209 @@ def test_market_family_before_contract_remains_byte_identical(
     assert path.read_bytes() == once
 
 
+def test_robot_rule_for_another_user_agent_is_not_an_orphan_duplicate(
+    tmp_path: Path,
+) -> None:
+    archive_allow = "Allow: /analises-contratos-publicos/publica/\n"
+    contract_block = (
+        f"{CONTRACT_BEGIN}\n"
+        "Disallow: /analises-contratos-publicos/\n"
+        f"{CONTRACT_END}\n"
+    )
+    original = (
+        "User-agent: ArchiveBot\n"
+        "Disallow: /\n"
+        f"{archive_allow}"
+        "User-agent: *\n"
+        f"{contract_block}"
+    )
+    path = tmp_path / "robots.txt"
+    path.write_text(original, encoding="utf-8")
+
+    sync_family_crawler_rules([], root=tmp_path)
+
+    assert path.read_text(encoding="utf-8") == original
+
+
+def test_non_crawler_headers_for_family_subpath_remain_outside_owned_block(
+    tmp_path: Path,
+) -> None:
+    security_block = (
+        "# Neighbor security policy\n"
+        "/analises-contratos-publicos/documentos/*\n"
+        "  Cache-Control: no-store\n"
+        "  Content-Security-Policy: default-src 'none'\n\n"
+    )
+    contract_block = (
+        f"{CONTRACT_BEGIN}\n"
+        "/analises-contratos-publicos/*\n"
+        "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+        f"{CONTRACT_END}\n"
+    )
+    original = f"{security_block}{contract_block}"
+    path = tmp_path / "_headers"
+    path.write_text(original, encoding="utf-8")
+
+    sync_family_crawler_rules([], root=tmp_path)
+
+    assert path.read_text(encoding="utf-8") == original
+
+
+@pytest.mark.parametrize(
+    ("filename", "prefix", "stale_override", "expected"),
+    [
+        (
+            "robots.txt",
+            "User-agent: *\n",
+            "Allow: /analises-contratos-publicos/former-slug/\n",
+            "User-agent: *\n",
+        ),
+        (
+            "_headers",
+            "",
+            (
+                "/analises-contratos-publicos/former-slug/*\n"
+                "  X-Robots-Tag: index, follow\n\n"
+            ),
+            "",
+        ),
+    ],
+)
+def test_stale_index_override_is_removed_from_owned_scope(
+    tmp_path: Path,
+    filename: str,
+    prefix: str,
+    stale_override: str,
+    expected: str,
+) -> None:
+    contract_rule_body = (
+        "Disallow: /analises-contratos-publicos/\n"
+        if filename == "robots.txt"
+        else (
+            "/analises-contratos-publicos/*\n"
+            "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+        )
+    )
+    contract_block = f"{CONTRACT_BEGIN}\n{contract_rule_body}{CONTRACT_END}\n"
+    path = tmp_path / filename
+    path.write_text(f"{prefix}{contract_block}{stale_override}", encoding="utf-8")
+
+    sync_family_crawler_rules([], root=tmp_path)
+
+    assert path.read_text(encoding="utf-8") == f"{expected}{contract_block}"
+
+
+@pytest.mark.parametrize(
+    ("filename", "prefix", "contract_rule_body", "duplicate_at_eof"),
+    [
+        (
+            "robots.txt",
+            "User-agent: *\n",
+            "Disallow: /analises-contratos-publicos/\n",
+            "Disallow: /analises-contratos-publicos/",
+        ),
+        (
+            "_headers",
+            "",
+            (
+                "/analises-contratos-publicos/*\n"
+                "  X-Robots-Tag: noindex, nofollow, noarchive\n\n"
+            ),
+            (
+                "/analises-contratos-publicos/*\n"
+                "  X-Robots-Tag: noindex, nofollow, noarchive"
+            ),
+        ),
+    ],
+)
+def test_canonical_duplicate_at_eof_is_removed_on_first_run(
+    tmp_path: Path,
+    filename: str,
+    prefix: str,
+    contract_rule_body: str,
+    duplicate_at_eof: str,
+) -> None:
+    contract_block = f"{CONTRACT_BEGIN}\n{contract_rule_body}{CONTRACT_END}\n"
+    expected = f"{prefix}{contract_block}".encode()
+    path = tmp_path / filename
+    path.write_text(
+        f"{prefix}{contract_block}{duplicate_at_eof}", encoding="utf-8"
+    )
+
+    sync_family_crawler_rules([], root=tmp_path)
+    once = path.read_bytes()
+    sync_family_crawler_rules([], root=tmp_path)
+
+    assert once == expected
+    assert path.read_bytes() == once
+
+
+def test_missing_robot_marker_inserts_block_in_wildcard_group(
+    tmp_path: Path,
+) -> None:
+    contract_block = (
+        f"{CONTRACT_BEGIN}\n"
+        "Disallow: /analises-contratos-publicos/\n"
+        f"{CONTRACT_END}\n"
+    )
+    original = (
+        "User-agent: *\n"
+        "Disallow: /private/\n"
+        "User-agent: ArchiveBot\n"
+        "Disallow: /\n"
+    )
+    expected = (
+        "User-agent: *\n"
+        "Disallow: /private/\n\n"
+        f"{contract_block}"
+        "User-agent: ArchiveBot\n"
+        "Disallow: /\n"
+    ).encode()
+    path = tmp_path / "robots.txt"
+    path.write_text(original, encoding="utf-8")
+
+    sync_family_crawler_rules([], root=tmp_path)
+    once = path.read_bytes()
+    sync_family_crawler_rules([], root=tmp_path)
+
+    assert once == expected
+    assert path.read_bytes() == once
+
+
+def test_missing_marker_preserves_combined_wildcard_user_agent_group(
+    tmp_path: Path,
+) -> None:
+    contract_block = (
+        f"{CONTRACT_BEGIN}\n"
+        "Disallow: /analises-contratos-publicos/\n"
+        f"{CONTRACT_END}\n"
+    )
+    original = (
+        "User-agent: *\n"
+        "User-agent: Googlebot\n"
+        "Disallow: /private/\n"
+        "User-agent: ArchiveBot\n"
+        "Disallow: /\n"
+    )
+    expected = (
+        "User-agent: *\n"
+        "User-agent: Googlebot\n"
+        "Disallow: /private/\n\n"
+        f"{contract_block}"
+        "User-agent: ArchiveBot\n"
+        "Disallow: /\n"
+    ).encode()
+    path = tmp_path / "robots.txt"
+    path.write_text(original, encoding="utf-8")
+
+    sync_family_crawler_rules([], root=tmp_path)
+    once = path.read_bytes()
+    sync_family_crawler_rules([], root=tmp_path)
+
+    assert once == expected
+    assert path.read_bytes() == once
+
+
 def _robots_directives(payload: bytes) -> list[bytes]:
     return [
         line
