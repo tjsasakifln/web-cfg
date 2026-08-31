@@ -17,9 +17,9 @@
       "residual": "Concluir e validar as ondas filhas, suas capturas responsivas, revisão humana e smoke de produção antes de declarar a constituição aplicada ao sistema inteiro."
     },
     "#528": {
-      "state": "MATRICES_ONLY_NO_ROUTE_MUTATION",
-      "landed": "As matrizes current/actual/gap/direction/CTA são derivadas para as oito rotas mutáveis, sem uma segunda allowlist.",
-      "residual": "Reescrever e revisar a sequência completa das oito rotas de #528, registrar limitações movidas, delta de palavras, prova de artefato, capturas 390x844/1366x768 e smoke do SHA publicado."
+      "state": "ROUTE_ROLLOUT_COMPLETE_PR_PENDING",
+      "landed": "As oito rotas mutáveis aplicam decisão, consequência, trabalho comprimido, artefato e uso, prova defensável, âncora de valor e limite material sem aumentar a contagem de palavras.",
+      "residual": "O rollout de CTA/form, incluindo submit, erro, receipt e copy compartilhada, permanece delegado à #532; smoke do SHA público depende do merge desta PR."
     },
     "#529": {
       "state": "MEASUREMENT_WAIT",
