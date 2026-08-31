@@ -435,10 +435,23 @@ const CAPABILITY_STATE = {
 function renderCapabilityItem(entry) {
   const state = CAPABILITY_STATE[entry.public_state];
   if (!state) throw new Error(`CAPABILITY_STATE_UNKNOWN: ${entry.public_state}`);
+  // O nome e a pergunta de decisao entram como filhos diretos do <li>. O <span
+  // class="capability-item__copy"> que os embrulhava nao tinha borda, fundo,
+  // padding, papel nem ARIA: existia so para ocupar a coluna 2 da grade, o que
+  // grid-column/grid-row fazem sem elemento. Sao 54 nos devolvidos ao orcamento
+  // de DOM de /entregas/, um por capacidade do rol.
   const action = entry.public_state === "PUBLISHED"
     ? `<a href="#entrega-${entry.catalog_number}">Ver oferta publicada acima</a>`
     : "";
-  return `<li class="capability-item capability-item--${entry.public_state.toLocaleLowerCase()}" data-capability-id="${entry.deliverable_id}" data-public-state="${entry.public_state}"><span class="capability-item__number">${entry.catalog_number}</span><span class="capability-item__copy"><strong>${escapeHtml(entry.public_name_pt_br)}</strong><small>${escapeHtml(entry.decision_question)}</small></span><span class="capability-item__maturity"><strong>${state.label}</strong><small>${state.explanation}</small>${action}</span></li>`;
+  // A explicacao de PUBLISHED dizia o mesmo que o link logo abaixo dela ("Ver
+  // oferta publicada acima"). Uma das duas frases e ruido; fica o link, que
+  // alem de dizer, leva. Os estados nao publicados nao tem link e mantem a
+  // explicacao, que e a unica coisa que diz por que a capacidade nao esta a
+  // venda.
+  const explanation = entry.public_state === "PUBLISHED"
+    ? ""
+    : `<small>${state.explanation}</small>`;
+  return `<li class="capability-item capability-item--${entry.public_state.toLocaleLowerCase()}" data-capability-id="${entry.deliverable_id}" data-public-state="${entry.public_state}"><span class="capability-item__number">${entry.catalog_number}</span><strong>${escapeHtml(entry.public_name_pt_br)}</strong><small>${escapeHtml(entry.decision_question)}</small><span class="capability-item__maturity"><strong>${state.label}</strong>${explanation}${action}</span></li>`;
 }
 
 function renderCapabilityRoll(registry, taskDoors) {

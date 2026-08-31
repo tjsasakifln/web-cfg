@@ -144,22 +144,19 @@ export function evaluateLighthouseResults(results, options = {}) {
   // with page weight, so the shared 800 budget cannot express it. Every other
   // money route keeps 800, and LCP, TBT and payload budgets are unchanged here.
   //
-  // 1100 -> 1150 em 2026-08-30. #530 passou a expor decisao, trabalho comprimido,
-  // artefato e razao do preco nas oito ofertas: 4 linhas por oferta, cada linha
-  // uma celula de grade com borda em .vitrine-item__facts, isto e 32 x (div, dt,
-  // dd) = 96 elementos. Nao ha DOM redundante para devolver: o wrapper e a
-  // propria celula da grade de tres colunas, e removelo trocaria de layout, nao
-  // reduziria conteudo.
-  //
-  // Isto e afrouxamento de orcamento e esta declarado como tal. O que sustenta o
-  // numero e a medicao, nao a conveniencia: nas tres corridas de Lighthouse a
-  // rota fecha performance 99, acessibilidade 100, best practices 100, SEO 100,
-  // LCP 1,65 s contra o teto de 2,0 s, CLS 0, TBT 0 a 65 ms contra 200 ms e 91 KB
-  // contra 150 KB. Todo desfecho que a contagem de DOM serve para proteger passa
-  // com folga; o proxy era o unico a nao passar, por 2,3%. O teto novo cobre os
-  // 1125 medidos com 25 de folga, entao continua mordendo: mais oito linhas de
-  // fato reprovam de novo e obrigam a decidir entre conteudo e orcamento.
-  const criticalDomMaxByPath = { "/entregas/": 1150, ...(options.criticalDomMaxByPath || {}) };
+  // 1100 -> 1150 em 2026-08-30 (#530), depois revertido para 1100 no mesmo dia
+  // (#531/#532). #530 tinha exposto decisao, trabalho comprimido, artefato e
+  // razao do preco nas oito ofertas via .vitrine-item__facts, elevando a
+  // contagem medida para 1125. Nesta mesma data, render_public_catalog.mjs
+  // parou de emitir o wrapper <span class="capability-item__copy"> (54 nos) e
+  // o <small> redundante nas 8 linhas PUBLISHED (8 nos): -62 tags de abertura
+  // na fonte. O Lighthouse dom_elements medido em /entregas/ apos o corte caiu
+  // para 1063 (medicao direta com run_lighthouse.mjs --only=/entregas/,
+  // confirmada por document.body.getElementsByTagName('*').length+1 = 1062 via
+  // Puppeteer headless contra _site/). Isso fica abaixo do teto de 1100
+  // original, entao o afrouxamento de #530 deixou de ser necessario e o teto
+  // volta a 1100, com 37 elementos de folga sobre o medido.
+  const criticalDomMaxByPath = { "/entregas/": 1100, ...(options.criticalDomMaxByPath || {}) };
   const domMaxFor = (path) => criticalDomMaxByPath[path] ?? criticalDomMax;
   const criticalByteWeightMax = options.criticalByteWeightMax ?? 150 * 1024;
   for (const path of criticalPaths) {
