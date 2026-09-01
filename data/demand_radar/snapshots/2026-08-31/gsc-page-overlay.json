@@ -1,0 +1,146 @@
+{
+  "schema_version": "confenge-demand-radar-snapshot/v1",
+  "source": {
+    "id": "gsc-page-overlay-2026-08-02-2026-08-29",
+    "kind": "GSC_PAGE_OVERLAY",
+    "range": {
+      "start": "2026-08-02",
+      "end": "2026-08-29"
+    },
+    "geo": "BRA",
+    "language": "pt-BR",
+    "privacy_class": "AGGREGATE_NO_PII",
+    "provenance": {
+      "authority": "Accepted manual page-level GSC snapshot reconciled by web-cfg PR #545 and measurement PR #554",
+      "repository": "tjsasakifln/web-cfg",
+      "path": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json",
+      "revision": "283a8770664fa6400d74430cfb6d6975b4e540e6",
+      "content_sha256": "a9b46acf107e6d4b32aff58fc0afb1f8c7fce5a8be8d3796ff02a6f3fab034ed"
+    },
+    "freshness": {
+      "state": "ACCEPTED_HISTORICAL",
+      "evaluated_at": "2026-08-31",
+      "expires_at": null,
+      "note": "Accepted campaign snapshot; it does not supersede durable #413 CURRENT authority."
+    },
+    "unknown_semantics": "A missing page or family mapping remains UNKNOWN, never zero impressions, zero demand, zero rank or conversion failure.",
+    "sample": {
+      "property": "Web",
+      "clicks": 27,
+      "impressions": 1201,
+      "ctr": 0.02248,
+      "visible_query_impressions": 52,
+      "query_visibility_state": "HEAVILY_CENSORED_OR_ANONYMIZED"
+    },
+    "limitations": [
+      "Page evidence is the strongest current first-party search signal.",
+      "Visible query rows cover only 52 of 1,201 impressions and cannot define the query universe.",
+      "No row proves conversion failure, causality, trend or durable ranking."
+    ]
+  },
+  "records": [
+    {
+      "family_id": "aditivos",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/aditivos-obras-publicas/", "clicks": 0, "impressions": 66, "ctr": 0.0, "position": 26.91},
+      "family_aggregate": {"clicks": 1, "impressions": 131, "ctr": 0.007634, "position": 22.78},
+      "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+    },
+    {
+      "family_id": "medicoes-pagamentos",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/medicoes-glosas-obras-publicas/", "clicks": 1, "impressions": 99, "ctr": 0.0101, "position": 6.61},
+      "family_aggregate": {"clicks": 3, "impressions": 150, "ctr": 0.02, "position": 6.4},
+      "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+    },
+    {
+      "family_id": "reequilibrio",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/reequilibrio-obras-publicas/", "clicks": 1, "impressions": 14, "ctr": 0.0714, "position": 6.36},
+      "family_aggregate": {"clicks": 2, "impressions": 25, "ctr": 0.08, "position": 5.84},
+      "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+    },
+    {
+      "family_id": "orcamento-bdi",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/auditoria-orcamento-licitacao/", "clicks": 1, "impressions": 28, "ctr": 0.0357, "position": 8.64},
+      "family_aggregate": {"clicks": 7, "impressions": 436, "ctr": 0.016055, "position": 7.06},
+      "interpretation": "PAGE_EXPOSURE_ONLY_PROTECTED_SUPPORT_INCLUDED"
+    },
+    {
+      "family_id": "carteira-operacao",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/diagnostico-b2g-360/", "clicks": 0, "impressions": 16, "ctr": 0.0, "position": 4.12},
+      "family_aggregate": {"clicks": 0, "impressions": 16, "ctr": 0.0, "position": 4.12},
+      "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+    },
+    {
+      "family_id": "edital-proposta",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/diagnostico-pre-licitacao/", "clicks": 0, "impressions": 11, "ctr": 0.0, "position": 4.64},
+      "family_aggregate": {"clicks": 1, "impressions": 132, "ctr": 0.007576, "position": 7.93},
+      "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+    },
+    {
+      "family_id": "defesa-margem",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/defesa-margem-contratos-publicos/", "clicks": 0, "impressions": 6, "ctr": 0.0, "position": 7.83},
+      "family_aggregate": {"clicks": 0, "impressions": 6, "ctr": 0.0, "position": 7.83},
+      "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+    },
+    {
+      "family_id": "atrasos-prorrogacao",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/atrasos-prorrogacao-obras-publicas/", "clicks": 1, "impressions": 22, "ctr": 0.0455, "position": 5.41},
+      "family_aggregate": {"clicks": 1, "impressions": 69, "ctr": 0.014493, "position": 5.42},
+      "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+    },
+    {
+      "family_id": "defesa-sancoes",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/defesa-tecnica-contratos-publicos/", "clicks": 0, "impressions": 6, "ctr": 0.0, "position": 5.33},
+      "family_aggregate": {"clicks": 0, "impressions": 10, "ctr": 0.0, "position": 5.3},
+      "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+    },
+    {
+      "family_id": "gestao-contratual",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/acompanhamento-contratos-obras/", "clicks": 0, "impressions": 3, "ctr": 0.0, "position": 5.0},
+      "family_aggregate": {"clicks": 0, "impressions": 3, "ctr": 0.0, "position": 5.0},
+      "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+    },
+    {
+      "family_id": "bid-room",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/bid-room-licitacoes-obras/", "clicks": 0, "impressions": 4, "ctr": 0.0, "position": 5.5},
+      "family_aggregate": {"clicks": 0, "impressions": 4, "ctr": 0.0, "position": 5.5},
+      "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+    },
+    {
+      "family_id": "diagnostico-expansao",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/diagnostico-b2g-expansao/", "clicks": 0, "impressions": 1, "ctr": 0.0, "position": 1.0},
+      "family_aggregate": {"clicks": 0, "impressions": 1, "ctr": 0.0, "position": 1.0},
+      "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+    },
+    {
+      "family_id": "diretoria-b2g",
+      "state": "OBSERVED",
+      "owner_observation": {"path": "/diretoria-b2g/", "clicks": 0, "impressions": 2, "ctr": 0.0, "position": 6.0},
+      "family_aggregate": {"clicks": 0, "impressions": 2, "ctr": 0.0, "position": 6.0},
+      "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+    },
+    {
+      "family_id": "bid-readiness",
+      "state": "UNKNOWN",
+      "reason": "No valid canonical page mapping exists; manual page evidence remains UNKNOWN and is not zero demand."
+    },
+    {
+      "family_id": "partner-integrity",
+      "state": "UNKNOWN",
+      "reason": "No valid canonical page mapping exists; manual page evidence remains UNKNOWN and is not zero demand."
+    }
+  ],
+  "records_sha256": "67c90f3306ba944ecea184842760575cbfb0eea60f9dfae5ffcfe98067518c36",
+  "snapshot_sha256": "d5b2388653fe013dd7badc1312ece0bdee167b34b6eeb26d2faa609b489e475d"
+}

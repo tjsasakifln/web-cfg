@@ -637,6 +637,16 @@ export const SUITE_GRAPH = Object.freeze({
       "/diagnostico-b2g-expansao/",
     ],
   },
+  "test:demand-radar": {
+    producers: [
+      "tests/demand_radar/",
+      "scripts/demand_radar/",
+      "data/demand_radar/",
+      "docs/demand-radar/",
+    ],
+    artifacts: ["data/demand_radar/ledger.v1.json", "docs/demand-radar/REPORT.md"],
+    surfaces: [],
+  },
   "test:local-entity": {
     producers: [
       "tests/local_entity/",
