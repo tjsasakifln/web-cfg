@@ -116,7 +116,7 @@
           "field_purpose": "not_applicable",
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
-            "no_direct_event_declared"
+            "cta_click"
           ]
         },
         {
@@ -246,7 +246,7 @@
           "field_purpose": "not_applicable",
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
-            "no_direct_event_declared"
+            "cta_click"
           ]
         },
         {
@@ -1982,7 +1982,7 @@
           "field_purpose": "not_applicable",
           "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo.",
           "event_semantics": [
-            "no_direct_event_declared"
+            "cta_click"
           ]
         },
         {
