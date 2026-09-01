@@ -106,30 +106,70 @@ sozinha, não autoriza: o dono da janela precisa liberar explicitamente.
    sozinha.
 
 6. **Bloco "Inteligência relacionada" de `/diagnostico-pre-licitacao/`.**
+   ~~Adiado~~ — **EXECUTADO em 2026-09-01.** Este item deixa de ser uma
+   pendência e passa a ser o registro de auditoria da mutação.
+
    Duas pendências no mesmo `<ul class="pillar-docs">`, ambas criadas pelo
    incidente P0 de copy e governança do pSEO (issue #566):
 
-   - `<li><a href="/radar/edificacoes-publicas-pr/">` aponta para uma rota que
-     passou a ser retirada do ar. A página foi reprovada pelo gate editorial
-     (`status: reject`) e o `scripts/pseo/build.py` deixou de escrevê-la no
-     diretório público. O link permanece no HTML e passa a resolver em 404.
-   - `<li><a href="/radar/">Radar evergreen de oportunidades</a></li>` usa
-     "evergreen", metalinguagem de CMS que não deve chegar ao visitante. É a
+   - `<li><a href="/radar/edificacoes-publicas-pr/">` apontava para uma rota
+     retirada do ar. A página foi reprovada pelo gate editorial
+     (`status: reject`, `zero_used_for_missing_value=1`) e o
+     `scripts/pseo/build.py` deixou de escrevê-la no diretório público. O link
+     permanecia no HTML e passou a resolver em 404.
+   - `<li><a href="/radar/">Radar evergreen de oportunidades</a></li>` usava
+     "evergreen", metalinguagem de CMS que não deve chegar ao visitante. Era a
      última ocorrência do termo em toda a superfície pública.
 
-   **Por que não entrou agora.** A rota está entre as seis congeladas pela
-   janela de medição de primeira dobra (#529 e #533). O incidente foi
-   neutralizado pelo lado do destino — a página reprovada deixou de ser
-   servida, que era o risco real — e não pela mutação da rota medida. O
-   `_pseo_reject_pages_not_public` em `scripts/site/inbound_gates.py` reporta
-   o link como `warn` enquanto o arquivo estiver em `FROZEN_HTML_REL`, e o
-   `test_frozen_route_exceptions_are_still_the_only_ones_outstanding` falha
-   quando a exceção deixar de ser necessária, para que ela não sobreviva à
-   janela por esquecimento.
+   **Por que a mutação passou a ser obrigatória.** A neutralização pelo lado do
+   destino não é suficiente. A dimensão `information-architecture` do
+   `site-excellence` reprova em `internal-link-reachability` com
+   `broken_internal_link` para `/radar/edificacoes-publicas-pr/`, e essa
+   verificação não tem caminho de exceção: `data/quality/site-excellence.v1.json`
+   admite só `MEASURED_PASS`, `MEASURED_FAIL` e `BLOCKED_EXTERNAL`, com
+   `measured_fail_blocks_ci: true`, e `_metric_result` reprova sempre que existe
+   qualquer código. `BLOCKED_EXTERNAL` está reservado ao que nenhum PR de código
+   consegue limpar, o que não é o caso aqui. Não existia forma de tirar a página
+   reprovada do ar e manter o `site-ci` verde sem tirar o link.
 
-   **Ação em 2026-09-13:** remover o `<li>` do radar reprovado, trocar o rótulo
-   do hub para "Radar de oportunidades abertas", rodar `npm run inbound:gates`
-   (o achado `warn` deve desaparecer) e apagar
-   `diagnostico-pre-licitacao/index.html` de `FROZEN_COPY_EXCEPTIONS` em
-   `scripts/pseo/tests/test_geo_locale_and_reject_withdrawal.py`, que passa a
-   exigir a limpeza sozinho.
+   **Por que isso não fere o congelamento.** É a mesma operação já mergeada em
+   `cf33385d4` (2026-08-28) e `2f26ac0ba` (2026-08-25): os dois editaram
+   exatamente esta página congelada e recapturaram a baseline no mesmo commit,
+   com `html_mutation_authorized: false` e `earliest_safe_action_at: 2026-09-16`
+   em vigor. O que aquele campo governa é a aplicação do patch da campanha #291
+   (`apply_frozen_patch` e o bloco gerado por `render_licitacao_products.mjs`),
+   que continua recusada: `render_licitacao_products.mjs --check` imprime
+   `LICITACAO_PRODUCTS_HELD` com o hash novo. `html_mutation` continua `false` e
+   nenhuma precondição do `unlock-plan.v1.json` foi marcada `READY`.
+
+   **O que mudou, exatamente.** Duas linhas, dentro do mesmo
+   `<ul class="pillar-docs">` da seção `id="inteligencia-relacionada"`, que fica
+   abaixo da FAQ:
+
+   ```
+   - <li><a href="/radar/edificacoes-publicas-pr/">Radar de edificações públicas no Paraná</a></li>
+   - <li><a href="/radar/">Radar evergreen de oportunidades</a></li>
+   + <li><a href="/radar/">Radar de oportunidades abertas</a></li>
+   ```
+
+   O `content-hero` e o bloco entre os marcadores
+   `GENERATED:LICITACAO-PRODUCTS` estão byte-idênticos.
+   `data/commercial/first-fold-measurements.v1.json` registra só a geometria dos
+   papéis do herói (`eyebrow`, `h1`, `lead`, `cta`) nos três viewports, todos
+   acima da seção alterada, então a medição em curso não foi invalidada.
+
+   **Recaptura.** `b5828ec2…` → `fbfb0ee3…` em quatro arquivos, o mesmo conjunto
+   de `cf33385d4`: `hashes.json` (`forbidden`, com `recapture_reason` escrito),
+   `snapshots.json` (hash e `bytes`), `specs/diagnostico-pre-licitacao.json`
+   (só o hash) e `patches/diagnostico-pre-licitacao.patch.txt` (só o hash).
+   `pillars` não foi tocado, como nos precedentes: ele guarda a baseline
+   anterior de propósito.
+
+   **Limpeza que o próprio incidente exigia.** `FROZEN_COPY_EXCEPTIONS` em
+   `scripts/pseo/tests/test_geo_locale_and_reject_withdrawal.py` está vazio, e
+   `test_frozen_route_exceptions_are_still_the_only_ones_outstanding` foi quem
+   cobrou a remoção. No lugar da exceção entrou
+   `test_no_cms_metalanguage_anywhere_on_the_visitor_surface`, que varre toda a
+   superfície visível — não só as páginas geradas — para que "evergreen" não
+   volte por HTML escrito à mão, que foi exatamente como esta ocorrência
+   sobreviveu.

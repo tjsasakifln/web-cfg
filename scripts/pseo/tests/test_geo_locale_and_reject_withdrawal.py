@@ -27,13 +27,14 @@ from scripts.pseo.build import PRESERVED_STATIC_INDEXES
 
 ROOT = Path(__file__).resolve().parents[3]
 
-# Routes under an active measurement freeze (issues #529/#533). The freeze,
-# not an editorial allowlist, blocks the rewrite; the dated action lives in
-# docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md and is due
-# 2026-09-13, at which point these entries must be deleted, not extended.
-FROZEN_COPY_EXCEPTIONS = {
-    "diagnostico-pre-licitacao/index.html",
-}
+# Routes under an active measurement freeze (issues #529/#533) whose banned
+# copy the freeze -- not an editorial allowlist -- still blocks. The set is
+# empty: /diagnostico-pre-licitacao/ was cleaned on 2026-09-01 under the
+# reviewed hash-recapture precedent of cf33385d4, recorded in
+# docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md.
+# It may only ever shrink. Adding an entry means a visitor is reading CMS
+# metalanguage, so any addition needs a dated action in that same document.
+FROZEN_COPY_EXCEPTIONS: set[str] = set()
 
 # CMS/SEO metalanguage that must never reach a visitor.
 BANNED_COPY = {
@@ -265,6 +266,26 @@ def test_registry_copy_has_no_metalanguage():
         for label, rx in BANNED_COPY.items():
             if rx.search(blob):
                 offenders.append(f"{page.get('page_id')}: {label}")
+    assert offenders == [], offenders
+
+
+def test_no_cms_metalanguage_anywhere_on_the_visitor_surface():
+    """The ban covers hand-authored HTML too, not only generated pages.
+
+    ``test_generated_pages_carry_no_cms_metalanguage`` scans only the pSEO
+    output. The last "evergreen" of this incident was not there: it was the
+    anchor text of a hand-written ``<li>`` on /diagnostico-pre-licitacao/,
+    which no scan reached, so removing it left nothing to stop it returning.
+    This asserts the whole indexable surface instead.
+    """
+    from scripts.site.public_copy_scope import visitor_facing_relpaths
+
+    offenders = []
+    for rel in visitor_facing_relpaths():
+        text = (ROOT / rel).read_text(encoding="utf-8", errors="replace")
+        for label, rx in BANNED_COPY.items():
+            if rx.search(text):
+                offenders.append(f"{rel}: {label}")
     assert offenders == [], offenders
 
 
