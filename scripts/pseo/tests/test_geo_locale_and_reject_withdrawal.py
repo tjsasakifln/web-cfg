@@ -182,6 +182,55 @@ def test_generated_pages_never_render_an_unaccented_uf():
     assert offenders == [], offenders
 
 
+def _render_radar_html(slug: str) -> str:
+    """Render one radar page from real snapshot data, without writing it.
+
+    The lead and the answer box live only in ``render.py`` and appear in no
+    registry field, so scanning the public tree cannot protect them: every
+    radar page is currently withdrawn, which would make a disk scan pass
+    vacuously. "Página rolante" was the string this incident was named for,
+    so it is asserted against freshly rendered HTML instead.
+    """
+    from scripts.pseo.render import render_candidate
+    from scripts.pseo.schema import validate_snapshot
+    from scripts.pseo.score import build_candidates
+
+    snap = validate_snapshot(ROOT / "data" / "pseo")
+    manifest, data = snap["manifest"], snap["data"]
+    for candidate in build_candidates(data, manifest):
+        if candidate.url == f"/radar/{slug}/":
+            return render_candidate(candidate, manifest)
+    raise AssertionError(f"radar candidate not built: {slug}")
+
+
+def test_rendered_radar_page_has_no_metalanguage_in_its_body():
+    html = _render_radar_html("edificacoes-publicas-pr")
+    for label, rx in BANNED_COPY.items():
+        assert not rx.search(html), f"radar body still renders {label}"
+    # The specific sentence the incident was reported for.
+    assert "Página rolante" not in html
+    assert "Última verificação" in html
+
+
+def test_rendered_radar_page_uses_the_right_preposition():
+    html = _render_radar_html("edificacoes-publicas-pr")
+    assert "no Paraná" in html
+    assert "em Parana" not in html
+    assert not re.search(r"\bParana\b", html)
+
+
+def test_rendered_radar_page_for_a_non_no_uf():
+    # Santa Catarina takes "em", not "no": the contract is per-UF, not a rule.
+    html = _render_radar_html("edificacoes-publicas-sc")
+    assert "em Santa Catarina" in html
+    assert "no Santa Catarina" not in html
+
+
+def test_rendered_radar_page_lists_no_contract_urls():
+    html = _render_radar_html("edificacoes-publicas-pr")
+    assert "/app/contratos/" not in html
+
+
 def test_registry_copy_uses_the_locale_contract():
     """Titles/H1s/descriptions must carry the right preposition per UF."""
     registry = json.loads((ROOT / "data/pseo/registry.json").read_text(encoding="utf-8"))
