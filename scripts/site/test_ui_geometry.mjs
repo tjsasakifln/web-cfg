@@ -1675,6 +1675,39 @@ async function main() {
   }
 
   try {
+    const gatedForm = await layoutFindingsFromHtml(`<!doctype html>
+      <html lang="pt-BR"><body><main>
+      <div id="resultado" hidden></div>
+      <section hidden><form method="post" action="/.netlify/functions/lead" data-result-gated-capture="true" data-result-source="#resultado">
+      <label>Nome <input name="nome"></label><button type="submit">Enviar</button>
+      </form></section>
+      <aside class="contact-float"><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+      </main></body></html>`);
+    if (gatedForm.includes("broken_form")) {
+      throw new Error(`result-gated capture remained broken: ${gatedForm.join(",")}`);
+    }
+    ok("fixture_result_gated_capture_passes_when_revealed");
+  } catch (e) {
+    fail("fixture_result_gated_capture_passes_when_revealed", e.message || e);
+  }
+
+  try {
+    const malformedGatedForm = await layoutFindingsFromHtml(`<!doctype html>
+      <html lang="pt-BR"><body><main>
+      <section hidden><form method="post" action="/.netlify/functions/lead" data-result-gated-capture="true" data-result-source="#missing-result">
+      <label>Nome <input name="nome"></label><button type="submit">Enviar</button>
+      </form></section>
+      <aside class="contact-float"><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+      </main></body></html>`);
+    if (!malformedGatedForm.includes("broken_form")) {
+      throw new Error(`malformed result gate passed: ${malformedGatedForm.join(",")}`);
+    }
+    ok("fixture_result_gated_capture_without_source_fails");
+  } catch (e) {
+    fail("fixture_result_gated_capture_without_source_fails", e.message || e);
+  }
+
+  try {
     const hiddenOnlyForm = await layoutFindingsFromHtml(`<!doctype html>
       <html lang="pt-BR"><body><main>
       <form method="post" action="/.netlify/functions/lead" data-capture-form>
