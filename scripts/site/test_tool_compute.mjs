@@ -138,6 +138,46 @@ assertNoSilentZero("coerce_neg_base", C.computeLimiteAditivo({ valorInicial: -10
   if (!ok.premises.some((p) => /art\. 125/i.test(p))) fail("premise_art125"); else pass("premise_art125");
 }
 
+// --- Art. 125 triage: explicit premise state controls the top-level branch ---
+for (const [name, case_] of Object.entries(fixtures.art125_triage)) {
+  const r = C.computeArt125Triage(case_.input);
+  const exp = case_.expect;
+  if (!r || !r.ok) { fail("triage_" + name + "_ok", r); continue; }
+  if (r.branch !== exp.branch) fail("triage_" + name + "_branch", { got: r.branch, exp: exp.branch });
+  else if (r.calculationStatus !== exp.calculationStatus) fail("triage_" + name + "_calculation_status", { got: r.calculationStatus, exp: exp.calculationStatus });
+  else if (exp.withinAc != null && (!r.calculation || r.calculation.withinAc !== exp.withinAc)) fail("triage_" + name + "_within_ac", r.calculation);
+  else if (exp.withinSu != null && (!r.calculation || r.calculation.withinSu !== exp.withinSu)) fail("triage_" + name + "_within_su", r.calculation);
+  else if (exp.unknownCode && !(r.unknowns || []).some((u) => u.code === exp.unknownCode)) fail("triage_" + name + "_unknown", r.unknowns);
+  else if (r.branch === "INPUT_NOT_CONFIRMED" && r.calculationStatus === "FINAL") fail("triage_" + name + "_unknown_became_final", r);
+  else pass("triage_" + name);
+}
+
+{
+  const r = C.computeArt125Triage({
+    baseStatus: "UNKNOWN",
+    objectStatus: "CONFIRMED",
+    previousTotalsStatus: "UNKNOWN",
+    valorInicial: "",
+    tipo: "geral",
+    acrescimosPrevios: "",
+    supressoesPrevias: "",
+    acrescimoProposto: 0,
+    supressaoProposta: 0
+  });
+  if (!r.ok || r.calculation !== null || r.branch !== "INPUT_NOT_CONFIRMED") fail("triage_unknown_never_zero", r);
+  else pass("triage_unknown_never_zero");
+}
+
+{
+  const bad = C.computeArt125Triage({
+    baseStatus: "MAYBE",
+    objectStatus: "CONFIRMED",
+    previousTotalsStatus: "CONFIRMED_COMPLETE"
+  });
+  if (bad && bad.ok) fail("triage_invalid_state_fail_closed", bad);
+  else pass("triage_invalid_state_fail_closed");
+}
+
 // --- Reequilibrio with N/A, blockers, urgency order, ressalvas ---
 {
   const all = {};

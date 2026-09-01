@@ -15,6 +15,7 @@
   var ART125_AC_GERAL = 0.25;
   var ART125_AC_REFORMA = 0.5;
   var ART125_SU = 0.25;
+  var ART125_TRIAGE_METHOD_VERSION = "art125-numeric-triage/1.0.0";
 
   function parseBRL(raw) {
     if (raw === null || raw === undefined) return { ok: false, error: "vazio" };
@@ -202,9 +203,119 @@
     return out;
   }
 
+  function computeArt125Triage(input) {
+    input = input || {};
+    var baseStates = ["CONFIRMED", "UNKNOWN"];
+    var objectStates = ["CONFIRMED", "UNKNOWN"];
+    var previousStates = ["CONFIRMED_COMPLETE", "KNOWN_PARTIAL", "UNKNOWN"];
+    var baseStatus = input.baseStatus;
+    var objectStatus = input.objectStatus;
+    var previousTotalsStatus = input.previousTotalsStatus;
+    if (baseStates.indexOf(baseStatus) < 0) return { ok: false, error: "base_status_invalid" };
+    if (objectStates.indexOf(objectStatus) < 0) return { ok: false, error: "object_status_invalid" };
+    if (previousStates.indexOf(previousTotalsStatus) < 0) return { ok: false, error: "previous_totals_status_invalid" };
+
+    var proposedAc = readMoney(input.acrescimoProposto, "acrescimo_proposto", { required: true });
+    var proposedSu = readMoney(input.supressaoProposta, "supressao_proposta", { required: true });
+    if (!proposedAc.ok) return { ok: false, error: proposedAc.error };
+    if (!proposedSu.ok) return { ok: false, error: proposedSu.error };
+
+    var base = null;
+    if (baseStatus === "CONFIRMED") {
+      base = readMoney(input.valorInicial, "valor_inicial", { required: true });
+      if (!base.ok || base.cents <= 0) return { ok: false, error: base.ok ? "valor_inicial_invalido" : base.error };
+    }
+    var tipo = null;
+    if (objectStatus === "CONFIRMED") {
+      tipo = input.tipo;
+      if (tipo !== "geral" && tipo !== "reforma") return { ok: false, error: "tipo_invalido" };
+    }
+    var previousAc = null;
+    var previousSu = null;
+    if (previousTotalsStatus !== "UNKNOWN") {
+      previousAc = readMoney(input.acrescimosPrevios, "acrescimos_previos", { required: true });
+      previousSu = readMoney(input.supressoesPrevias, "supressoes_previas", { required: true });
+      if (!previousAc.ok) return { ok: false, error: previousAc.error };
+      if (!previousSu.ok) return { ok: false, error: previousSu.error };
+    }
+
+    var unknowns = [];
+    if (baseStatus === "UNKNOWN") {
+      unknowns.push({ code: "updated_base", label: "A base inicial atualizada não foi confirmada.", document: "Contrato inicial e memória de reajustes ou repactuações aplicáveis." });
+    }
+    if (objectStatus === "UNKNOWN") {
+      unknowns.push({ code: "object_classification", label: "A classificação do objeto não foi confirmada.", document: "Edital, contrato, projetos e descrição do objeto predominante." });
+    }
+    if (previousTotalsStatus === "KNOWN_PARTIAL") {
+      unknowns.push({ code: "previous_totals_incomplete", label: "Os totais anteriores conhecidos são parciais.", document: "Relação completa de termos, apostilamentos e alterações já formalizadas." });
+    } else if (previousTotalsStatus === "UNKNOWN") {
+      unknowns.push({ code: "previous_totals_unknown", label: "Os totais anteriores formalizados são desconhecidos.", document: "Processo contratual e todos os termos de alteração já formalizados." });
+    }
+
+    var premisesConfirmed = baseStatus === "CONFIRMED" && objectStatus === "CONFIRMED" && previousTotalsStatus === "CONFIRMED_COMPLETE";
+    var canCalculate = baseStatus === "CONFIRMED" && objectStatus === "CONFIRMED" && previousTotalsStatus !== "UNKNOWN";
+    var calculation = null;
+    var calculationStatus = "NOT_AVAILABLE";
+    if (canCalculate) {
+      calculation = computeLimiteAditivo({
+        valorInicial: base.value,
+        tipo: tipo,
+        acrescimosPrevios: previousAc.value,
+        supressoesPrevias: previousSu.value,
+        acrescimoProposto: proposedAc.value,
+        supressaoProposta: proposedSu.value
+      });
+      if (!calculation.ok) return calculation;
+      calculationStatus = premisesConfirmed ? "FINAL" : "PROVISIONAL_KNOWN_PARTIAL";
+    }
+
+    var branch = "INPUT_NOT_CONFIRMED";
+    if (premisesConfirmed) {
+      branch = calculation.withinAc && calculation.withinSu ? "WITHIN_NUMERIC_SCOPE" : "NUMERIC_SCOPE_EXCEEDED";
+    }
+    var questions = unknowns.map(function (item) {
+      return { code: item.code, question: item.label, document: item.document };
+    });
+    questions.push({
+      code: "legal_scope",
+      question: "A alteração está no recorte unilateral do art. 124, I, sem transfigurar o objeto?",
+      document: "Motivação, matriz de riscos, projeto e manifestação técnica responsável."
+    });
+    questions.push({
+      code: "exceptional_calamity_regime",
+      question: "Existe ato e enquadramento no regime excepcional de calamidade da Lei nº 14.981/2024?",
+      document: "Ato autorizativo e cláusulas do regime excepcional, se houver."
+    });
+
+    return {
+      ok: true,
+      branch: branch,
+      calculationStatus: calculationStatus,
+      calculation: calculation,
+      premiseStates: {
+        updatedBase: baseStatus,
+        objectClassification: objectStatus,
+        previousTotals: previousTotalsStatus
+      },
+      unknowns: unknowns,
+      questionsDocuments: questions,
+      method: {
+        version: ART125_TRIAGE_METHOD_VERSION,
+        source: "Lei nº 14.133/2021, arts. 124, I, 125 e 126",
+        sourceUrl: "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14133.htm",
+        sourceAsOf: "2026-08-31"
+      },
+      limitations: [
+        "Triagem exclusivamente numérica; não conclui validade, autorização, execução ou direito a pagamento.",
+        "Não classifica o objeto, não lê o processo e não avalia transfiguração do objeto.",
+        "Não cobre o regime excepcional de calamidade da Lei nº 14.981/2024."
+      ]
+    };
+  }
+
   function explainLimite(r) {
     var job = "Conferir se o próximo acréscimo ou a próxima supressão ainda cabe no limite numérico do art. 125.";
-    var decision = "Seguir com o aditivo só no recorte numérico informado, ou enquadrar o excesso antes de protocolar.";
+    var decision = "Identificar o recorte numérico informado e as premissas que ainda exigem confirmação.";
     if (!r || !r.ok) {
       return {
         job: job, decision: "Não calcular com dados inválidos.",
@@ -667,13 +778,14 @@
   var api = {
     parseBRL: parseBRL, readMoney: readMoney, roundBRL: roundBRL, formatBRL: formatBRL,
     nonFinitePaths: nonFinitePaths, MAX_BRL: MAX_BRL,
-    computeLimiteAditivo: computeLimiteAditivo, explainLimite: explainLimite,
+    computeLimiteAditivo: computeLimiteAditivo, computeArt125Triage: computeArt125Triage, explainLimite: explainLimite,
     computeChecklistScore: computeChecklistScore, computeReequilibrio: computeReequilibrio,
     explainReequilibrio: explainReequilibrio, computeMatrizAtraso: computeMatrizAtraso,
     computeMatrizEventos: computeMatrizEventos, explainMatriz: explainMatriz,
     computeAditivoReadiness: computeAditivoReadiness,
     REEQ_CATEGORIES: REEQ_CATEGORIES, ATRASO_MAP: ATRASO_MAP,
-    ART125_AC_GERAL: ART125_AC_GERAL, ART125_AC_REFORMA: ART125_AC_REFORMA, ART125_SU: ART125_SU
+    ART125_AC_GERAL: ART125_AC_GERAL, ART125_AC_REFORMA: ART125_AC_REFORMA, ART125_SU: ART125_SU,
+    ART125_TRIAGE_METHOD_VERSION: ART125_TRIAGE_METHOD_VERSION
   };
   root.ConfengeToolCompute = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
