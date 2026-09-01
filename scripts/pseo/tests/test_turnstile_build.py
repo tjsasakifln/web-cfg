@@ -220,6 +220,7 @@ ISSUE_440_CAPTURE_ROUTES = {
     "diretoria-b2g/index.html",
     "entregas/index.html",
     "ferramentas/diagnostico-defesa-margem/index.html",
+    "ferramentas/limite-acrescimos-supressoes/index.html",
     "index.html",
     "piloto/conversao-xray/index.html",
     "servicos-obras-publicas/index.html",

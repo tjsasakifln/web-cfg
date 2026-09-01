@@ -61,11 +61,11 @@ assert(coverage.axe.routes.every((entry) =>
 ), "axe routes must derive only from declared visitor risk");
 // #566: the 18 reject-status pSEO pages were withdrawn from the public tree.
 // All 18 rendered a visible price and none carried a capture form, so the
-// price count and the union both drop by exactly 18 and the capture-form count
-// is unchanged. Recaptured from deriveCoverage(), not adjusted by arithmetic.
+// price count drops by exactly 18. The recovered Art. 125 receipt is a new
+// result-gated capture form and has to be included in the recaptured census.
 assert.equal(coverage.axe.price_route_count, 44);
-assert.equal(coverage.axe.capture_form_route_count, 25);
-assert.equal(coverage.axe.route_count, 51);
+assert.equal(coverage.axe.capture_form_route_count, 26);
+assert.equal(coverage.axe.route_count, 52);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(
@@ -75,12 +75,15 @@ assert.deepEqual(
 );
 for (const route of [
   "/ferramentas/checklist-reequilibrio/",
-  "/ferramentas/limite-acrescimos-supressoes/",
   "/ferramentas/matriz-atraso-obra/",
 ]) {
   const html = readFileSync(routeToFile(ROOT, route), "utf8");
   assert(!hasCaptureForm(html), `local calculator must not be called a capture form: ${route}`);
 }
+assert(
+  hasCaptureForm(readFileSync(routeToFile(ROOT, "/ferramentas/limite-acrescimos-supressoes/"), "utf8")),
+  "issue #556 utility must expose its persisted on-page CFG-D19 terminal capture",
+);
 
 assert.equal(coverage.axe.page_loads, coverage.axe.route_count * 2);
 assert(coverage.axe.not_sampled.every((entry) => entry.reason), "every omitted axe route needs a reason");
