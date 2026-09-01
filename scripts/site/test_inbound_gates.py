@@ -1161,6 +1161,17 @@ def test_semantic_query_ownership_is_complete_and_non_mutating():
     }
 
 
+def test_bofu_buyer_decision_map_is_complete_and_non_mutating():
+    from scripts.site.inbound_gates import gate_bofu_buyer_decision_map
+
+    report = gate_bofu_buyer_decision_map()
+    assert report.ok is True
+    assert report.stats["coverage_percent"] == 100.0
+    assert report.stats["canonical_owners"] == 13
+    assert report.stats["gaps"] == 2
+    assert report.stats["controllable_queue"] <= 5
+
+
 def test_public_scan_survives_a_checkout_under_an_excluded_directory_name():
     """The skip list names directories inside the repo, never ancestors of it.
 

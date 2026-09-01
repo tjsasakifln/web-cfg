@@ -1,11 +1,11 @@
 # BOFU intent dominance — BOFU-CORE
 
-**Campaign:** `CONFENGE-WEB-BOFU-INTENT-DOMINANCE-02`  
-**As of:** 2026-08-22
-**Git head (origin/main pin):** `14740dab6b21bde19ecc62396d89393c2c7adab6`
-**Decision state:** VALIDATE (ledger) / EXECUTE_NOW (honesty gates)  
-**Leverage:** distribution, data, trust  
-**Time to evidence:** this PR for the ledger; `gsc_live_state` is `LIVE_JOB_OK`  
+**Campaign:** `CONFENGE-WEB-BOFU-INTENT-DOMINANCE-02`
+**As of:** 2026-08-31
+**Git head (origin/main pin):** `81c600b7c26dcc606d3a03e648ecd9820d9c1c37`
+**Decision state:** VALIDATE (ledger) / EXECUTE_NOW (honesty gates)
+**Leverage:** distribution, data, trust
+**Time to evidence:** this PR for the ledger; `gsc_live_state` is `LIVE_JOB_OK`
 **North Star:** inbound qualified pipeline / month — not page count
 
 ## Visitor job
@@ -27,8 +27,8 @@ without converting historical CSV or SERP samples into live rank.
 Credentials are proven by isolated job `gsc` on run `32322344062`.
 The 2026-08-09 CSV, redacted snapshots and SERP samples are **not** this
 live pull. Top-rows-only, date gaps, mixed device and non-BR geo do not
-authorize TOP* or HTML. PR #159 remains an observability candidate, not
-main. Absence of a path in the returned top rows is not ranking zero.
+authorize TOP* or HTML. Merged PR #159 is historical implementation, not
+an operational owner or rank claim. Absence from returned top rows is not ranking zero.
 
 ## Coverage
 
@@ -52,24 +52,24 @@ main. Absence of a path in the returned top rows is not ranking zero.
 | `defesa-sancoes` | P2 | `COVERED` | `/defesa-tecnica-contratos-publicos/` | 61 | canonical_page_exists_current_rank_unknown | no |
 | `gestao-contratual` | P2 | `COVERED` | `/acompanhamento-contratos-obras/` | 61 | canonical_page_exists_current_rank_unknown | no |
 | `bid-room` | P2 | `COVERED` | `/bid-room-licitacoes-obras/` | 88 | canonical_page_exists_current_rank_unknown | no |
-| `diagnostico-expansao` | P0 | `COVERED` | `/diagnostico-b2g-expansao/` | 237 | canonical_page_exists_current_rank_unknown | no |
-| `diretoria-b2g` | P0 | `COVERED` | `/diretoria-b2g/` | 237 | canonical_page_exists_current_rank_unknown | no |
-| `bid-readiness` | P1 | `NO_CANONICAL` | `issue:155` | 155 | gated_issue_no_public_page | no |
-| `partner-integrity` | P1 | `NO_CANONICAL` | `issue:156` | 156 | gated_issue_no_public_page | no |
+| `diagnostico-expansao` | P0 | `COVERED` | `/diagnostico-b2g-expansao/` | — | canonical_page_exists_current_rank_unknown | no |
+| `diretoria-b2g` | P0 | `COVERED` | `/diretoria-b2g/` | — | canonical_page_exists_current_rank_unknown | no |
+| `bid-readiness` | P1 | `NO_CANONICAL` | `gap:bid-readiness` | — | closed_without_demand_or_authorized_current_contract | no |
+| `partner-integrity` | P1 | `NO_CANONICAL` | `gap:partner-integrity` | 156 | gated_issue_no_public_page | no |
 
 Frozen families stay FROZEN even when live top-rows show Spain/Chile
 impressions or mixed devices. That is not a BR TOP* and not edit-now.
 
 ## Dependency graph
 
-Required issues #61, #128, #151–#156 and PRs #157–#159 are nodes.
+Issues #61, #128, historical #151–#155, open #156 and PRs #157–#159 remain provenance nodes.
 
 - **#128** owns the six frozen pillars.
-- **#153** owns origin→service (`destination_service_id`). This slot does not edit `script.js`.
-- **#155 / #156** are GATED families, not existing pages.
-- **PR #157** is exactly one contract-analysis canary, not a BOFU family.
-- **PR #158** is the Data Desk kit; this ledger is not a second target registry.
-- **PR #159** is the observability producer candidate. `gsc_live_state` is `LIVE_JOB_OK`; PR #159 is not merged to main.
+- The `web-cfg/attribution-contract` owns origin→service; closed #153 is historical.
+- Closed #155 is a historical no-demand-evidence gap; open #156 is externally blocked.
+- Closed-unmerged PR #157 remains a canary reference, not a BOFU family.
+- Merged PR #158 is historical Data Desk implementation; this ledger is not a second registry.
+- Merged **PR #159** is the historical observability implementation. `gsc_live_state` is `LIVE_JOB_OK`; top-row evidence still does not authorize rank or demand claims.
 
 ## SERP census
 
@@ -93,7 +93,7 @@ Notable sample facts (not ranks):
 - Edit HTML, analytics, sitemaps, offers or package files.
 - Convert historical GSC, redacted snapshots or SERP samples into live rank.
 - Open a second Data Desk target registry.
-- Treat PR #157 as a new BOFU family.
+- Treat historical PRs or closed issues as current operational owners.
 
 ## Rollback
 

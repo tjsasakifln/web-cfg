@@ -88,7 +88,7 @@
 <a href="/ferramentas/limite-acrescimos-supressoes/">Verificador art. 125</a> ·
 <a href="/ferramentas/matriz-atraso-obra/">Matriz de atraso</a> ·
 <a href="/defesa-margem-contratos-publicos/">Defesa de margem</a> ·
-<a href="/#contato" data-journey="contrato">Análise inicial</a>
+<a href="/#contato" data-journey="contrato">Registrar evento para identificar a prova faltante</a>
 </p>
 </div>
 
@@ -100,7 +100,8 @@
 <p>Estes demonstrativos usam contexto, órgãos e valores hipotéticos. Se o seu contrato tem o mesmo problema, descreva aqui o evento e o documento que você já tem: a resposta diz qual prova falta e qual é o pedido correto.</p>
 <p>Este formulário registra o pedido de análise. Ele não cobra, não recebe pagamento e não conclui a contratação.</p>
 </div>
-<form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="casos-hub-handraise" data-asset-id="casos-hub" data-route-family="casos" data-cta-position="hub_capture" data-journey="contrato">
+<form class="pillar-capture-form" name="diagnostico-confenge" method="post" action="/.netlify/functions/lead" data-offer-id="" data-cta-id="casos-hub-handraise" data-asset-id="casos-hub" data-route-family="casos" data-cta-position="hub_capture" data-journey="contrato" data-form-contract="next-state/v1" data-next-state-profile="case_evidence_review" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Use o demonstrativo como referência e registre o evento real para a CONFENGE indicar qual prova falta e qual análise pode ser enquadrada.</p>
+<p class="form-hint" data-field-purpose>Nome identifica o responsável; um canal válido permite retorno; empresa e descrição do evento ajudam a ligar a situação ao demonstrativo e são opcionais. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <input type="hidden" name="offer_id" value=""/>
 <input type="hidden" name="terms_id" value=""/>
 <input type="hidden" id="jornada-hidden" name="jornada" value="contrato"/>
@@ -112,12 +113,13 @@
 <input type="hidden" name="landing_page" value="https://confenge.com.br/casos/"/>
 <label>Nome do representante <input id="nome" name="nome" required autocomplete="name"/></label>
 <label>Empresa <input id="empresa" name="empresa" autocomplete="organization"/></label>
-<label>E-mail profissional <input id="email" name="email" type="email" autocomplete="email"/></label>
-<label>WhatsApp <input id="telefone" name="telefone" inputmode="numeric" autocomplete="tel"/></label>
+<label>E-mail profissional <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="180" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" title="Informe um e-mail completo, como nome@empresa.com.br."/></label>
+<label>WhatsApp <input id="telefone" name="telefone" inputmode="tel" autocomplete="tel" type="tel" maxlength="20" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" title="Informe DDD e número, com 10 ou 11 dígitos."/></label>
 <label>Evento e documento disponível <textarea id="mensagem" name="mensagem" rows="4" maxlength="2000" placeholder="Aditivo, medição, glosa ou atraso: o que aconteceu, quando e qual registro existe."></textarea></label>
 <label class="capture-consent"><input type="checkbox" name="consentimento" value="1" required/> Autorizo o uso destes dados para retorno sobre esta demanda.</label>
-<button class="button button-primary" type="submit">Enviar para análise</button>
+<button class="button button-primary" type="submit">Registrar evento e identificar a prova faltante</button>
 <p class="form-status" role="status" aria-live="polite"></p>
+<p class="form-hint" data-form-boundary>Os demonstrativos são sintéticos. O formulário não recebe arquivo, não cobra e não conclui contratação. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 </div>
 </section>

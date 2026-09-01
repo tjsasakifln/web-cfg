@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -79,10 +81,23 @@ def main() -> int:
             ok("import_pages", payload["page_count"] >= 5, str(payload["page_count"]))
             insights = sdo.analyze(payload)
             ok("insights_actions", isinstance(insights["priority_actions"], list))
+            forbidden_publish_keys = {
+                "queries",
+                "branded_queries",
+                "nonbranded_queries",
+                "3_commercial_queries_without_page_join",
+                "legacy_entity_queries_still_ranking",
+            }
+            produced_keys = set(insights["counts"]) | set(insights["analyses"])
+            ok(
+                "publishable_insights_key_shape",
+                not (produced_keys & forbidden_publish_keys),
+                str(sorted(produced_keys & forbidden_publish_keys)),
+            )
             ok("legacy_detected", any(
                 "avcb" in (q.get("query") or "").lower()
-                for q in insights["analyses"]["legacy_entity_queries_still_ranking"]
-            ), str(insights["analyses"]["legacy_entity_queries_still_ranking"]))
+                for q in insights["analyses"]["legacy_entity_demand_still_ranking"]
+            ), str(insights["analyses"]["legacy_entity_demand_still_ranking"]))
             ok("attribution_warning", "aggregate" in insights["attribution_warning"].lower())
             # No fake lead↔query join field
             blob = json.dumps(insights)
@@ -90,7 +105,7 @@ def main() -> int:
             required = [
                 "1_high_impressions_low_ctr",
                 "2_striking_distance_pos_4_20",
-                "3_commercial_queries_without_page_join",
+                "3_commercial_demand_without_page_join",
                 "4_cluster_page_competition",
                 "5_content_growing",
                 "6_content_decaying",
@@ -105,6 +120,81 @@ def main() -> int:
             ok("twelve_analyses", not missing, str(missing or insights["counts"].get("analysis_keys")))
             ok("cohort_not_identity", "cohort" in json.dumps(insights["analyses"]["9_clusters_traffic_without_leads"]).lower())
             ok("gap_proxy_list", isinstance(insights["analyses"]["12_competitor_content_gaps"], list))
+
+            # Exercise the real producer -> recursive redaction -> JS publisher
+            # validator seam, including non-empty nested priority actions.
+            with tempfile.TemporaryDirectory() as td:
+                previous_data = sdo.DATA
+                previous_private = sdo.PRIVATE_DIR
+                sdo.DATA = Path(td) / "gsc"
+                sdo.PRIVATE_DIR = sdo.DATA / "private"
+                try:
+                    current_as_of = datetime.now(timezone.utc).date().isoformat()
+                    sdo.analyze(
+                        {
+                            "as_of": current_as_of,
+                            "source": "search_analytics_api",
+                            "source_kind": "search_analytics_api",
+                            "synthetic": False,
+                            "fixture": False,
+                            "historical": False,
+                            "ready_for_product_decisions": True,
+                            "readiness_status": "READY",
+                            "readiness_access_mode": "READ_WRITE",
+                            "readiness_reasons": [],
+                            "reason_codes": [],
+                            "readiness_contract_version": "gsc-readiness/v2",
+                            "history_state_sha256": "b" * 64,
+                            "manifest": {"content_sha256": "a" * 64},
+                            "queries": [
+                                {
+                                    "query": "licitacao de obra publica",
+                                    "page": "https://confenge.com.br/",
+                                    "impressions": 200,
+                                    "clicks": 0,
+                                    "ctr": 0,
+                                    "position": 5,
+                                    "branded": False,
+                                    "intent": "commercial",
+                                    "cluster": "licitacoes",
+                                }
+                            ],
+                            "pages": [],
+                        }
+                    )
+                    persisted = json.loads(
+                        (sdo.DATA / "insights_latest.json").read_text(encoding="utf-8")
+                    )
+                finally:
+                    sdo.DATA = previous_data
+                    sdo.PRIVATE_DIR = previous_private
+            validator = subprocess.run(
+                [
+                    "node",
+                    "--input-type=module",
+                    "-e",
+                    (
+                        'import { validatePublishable } from "./scripts/revops/'
+                        'publish_gsc_insights.mjs"; '
+                        'let raw = ""; for await (const chunk of process.stdin) raw += chunk; '
+                        'validatePublishable(JSON.parse(raw));'
+                    ),
+                ],
+                cwd=ROOT,
+                input=json.dumps(persisted),
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            ok(
+                "producer_redaction_publisher_contract",
+                validator.returncode == 0,
+                (validator.stderr or validator.stdout).strip(),
+            )
+            ok(
+                "redaction_drops_non_string_query_key",
+                "query" not in sdo.redact_live_query_fields({"query": None}),
+            )
         else:
             # Synthetic CSV
             with tempfile.TemporaryDirectory() as td:

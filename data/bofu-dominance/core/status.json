@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-22",
+  "as_of": "2026-08-31",
   "campaign": "CONFENGE-WEB-BOFU-INTENT-DOMINANCE-02",
   "census_summary": {
     "confenge_observed_by_family": {
@@ -20,7 +20,7 @@
     "over_limit": {},
     "p0_p1_missing_census": []
   },
-  "content_sha256": "7c055a63eecfe9c576db182023ecc1a2b674472bbea2dd7b6ff21eedb6bf82e2",
+  "content_sha256": "0cbdd706dce4087443cee6914a6d48d50fa224d2eca7de9c6d8091c0291b7e78",
   "families": [
     {
       "active_issue": 128,
@@ -319,6 +319,7 @@
         "spec_allowed": true
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "aditivos",
       "job": "Decidir se um acréscimo, supressão ou serviço extra cabe em aditivo formal antes de executar sem cobertura.",
       "kill": "If 28d live GSC still shows 0 service clicks while content clicks hold, the gap is offer/SERP and #88/#60 own the next move.",
@@ -328,6 +329,7 @@
         "master builders aditivos"
       ],
       "next_test": "After 2026-09-16 and live GSC credentials, re-read commercial clicks on /aditivos-obras-publicas/ without editing HTML now.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "orcamento-bdi",
@@ -360,7 +362,7 @@
         "summary": "Family aditivos is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
       },
       "state": "FROZEN",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 128,
@@ -649,6 +651,7 @@
         "spec_allowed": true
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "medicoes-pagamentos",
       "job": "Contestar glosa, medição rejeitada ou parcela retida com nexo contratual e prova contemporânea.",
       "kill": "Kill further snippet work if historical top-10 on the pillar never becomes a click after live GSC is restored.",
@@ -657,6 +660,7 @@
         "glosa médica convênio"
       ],
       "next_test": "Observe whether owned articles (glosa/rejeitada/fiscal) transfer to the pillar once #153 destination events exist.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "defesa-sancoes",
@@ -689,7 +693,7 @@
         "summary": "Family medicoes-pagamentos is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
       },
       "state": "FROZEN",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 128,
@@ -976,6 +980,7 @@
         "spec_allowed": true
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "reequilibrio",
       "job": "Decidir se cabe reequilíbrio econômico-financeiro agora e como instruir o pleito.",
       "kill": "If demand is only generic TCU explainer with no commercial click, stop forcing the generic query.",
@@ -984,6 +989,7 @@
         "reequilíbrio de treino"
       ],
       "next_test": "Do not claim unindexed from the 2026-08-14 site: sample. Wait for live URL inspection + GSC.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "atrasos-prorrogacao",
@@ -1016,7 +1022,7 @@
         "summary": "Family reequilibrio is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
       },
       "state": "FROZEN",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 128,
@@ -1317,6 +1323,7 @@
         "spec_allowed": true
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "orcamento-bdi",
       "job": "Auditar orçamento, BDI e base SINAPI/SICRO do edital antes de precificar a proposta.",
       "kill": "If the pillar never earns a commercial click after bridges + live GSC, treat demand as informational SINAPI-only.",
@@ -1325,6 +1332,7 @@
         "calculadora bdi genérica sem edital"
       ],
       "next_test": "SINAPI article CTR remains #126; do not steal that query onto the pillar while #126 observation runs.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "edital-proposta",
@@ -1357,7 +1365,7 @@
         "summary": "Family orcamento-bdi is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
       },
       "state": "FROZEN",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 128,
@@ -1652,6 +1660,7 @@
         "spec_allowed": true
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "carteira-operacao",
       "job": "Diagnosticar a operação B2G da carteira, não um contrato isolado.",
       "kill": "If the URL only ranks for brand, do not expand portfolio pages.",
@@ -1660,6 +1669,7 @@
         "B2B SaaS 360"
       ],
       "next_test": "Confirm branded/generic 'diagnóstico B2G' does not cannibalize Diretoria B2G or 360.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "gestao-contratual",
@@ -1692,7 +1702,7 @@
         "summary": "Family carteira-operacao is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
       },
       "state": "FROZEN",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 128,
@@ -1981,6 +1991,7 @@
         "spec_allowed": true
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "edital-proposta",
       "job": "Decidir participar, impugnar ou ajustar a proposta antes do preço final.",
       "kill": "If the page never appears for non-brand decision queries after live GSC, do not clone it.",
@@ -1989,6 +2000,7 @@
         "como ganhar licitação garantido"
       ],
       "next_test": "Keep Bid Room as offer format, not a second pré-licitação URL.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "orcamento-bdi",
@@ -2025,7 +2037,7 @@
         "summary": "Family edital-proposta is FROZEN under issue #128. Census and spec are allowed; HTML edit-now is refused."
       },
       "state": "FROZEN",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 60,
@@ -2311,6 +2323,7 @@
         "frozen": false
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "defesa-margem",
       "job": "Partir de um contrato público real e decidir se vale uma segunda leitura técnica de margem.",
       "kill": "If branded-only demand and no qualified hand-raise, do not spawn sibling offer URLs.",
@@ -2319,6 +2332,7 @@
         "proteção de margem de rio"
       ],
       "next_test": "Tool /ferramentas/diagnostico-defesa-margem/ is the utility; this path stays the commercial owner. No HTML in this slot.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "reequilibrio",
@@ -2355,7 +2369,7 @@
         "summary": "Family defesa-margem is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 127,
@@ -2393,6 +2407,7 @@
         "note": "Service URL is not in the #128 six-URL freeze list; supporting noindex content remains #127."
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "atrasos-prorrogacao",
       "job": "Proteger prazo e documentar prorrogação, paralisação ou atraso imputável.",
       "kill": "If only informational chuva queries click, do not force the service URL.",
@@ -2401,6 +2416,7 @@
         "atraso de voo"
       ],
       "next_test": "Do not index the #127 noindex library to feed this pillar.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "defesa-sancoes",
@@ -2433,7 +2449,7 @@
         "summary": "Family atrasos-prorrogacao is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 61,
@@ -2470,6 +2486,7 @@
         "frozen": false
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "defesa-sancoes",
       "job": "Responder notificação, defesa técnica ou risco de sanção/extinção com cronologia e nexo.",
       "kill": "If the page only ranks for brand, do not add sanção variants.",
@@ -2478,6 +2495,7 @@
         "sanção penal genérica"
       ],
       "next_test": "No HTML. Confirm the URL is not competing with defesa-margem copy.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "atrasos-prorrogacao",
@@ -2510,7 +2528,7 @@
         "summary": "Family defesa-sancoes is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 61,
@@ -2547,6 +2565,7 @@
         "frozen": false
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "gestao-contratual",
       "job": "Decidir se a construtora contrata acompanhamento contínuo de contratos públicos.",
       "kill": "If both 360 and acompanhamento rank for the same generic gestão query, consolidate internal links — do not add a third URL.",
@@ -2554,6 +2573,7 @@
         "software de gestão de contratos genérico"
       ],
       "next_test": "Watch cannibalization with /diagnostico-b2g-360/ and /diretoria-b2g/.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "carteira-operacao",
@@ -2582,7 +2602,7 @@
         "summary": "Family gestao-contratual is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 88,
@@ -2619,6 +2639,7 @@
         "frozen": false
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "bid-room",
       "job": "Operar uma sala de licitação de obras com recorte, prazo e decisão humana.",
       "kill": "If Bid Room never receives origin→service from pré-licitação, fix #153 rather than cloning pages.",
@@ -2627,6 +2648,7 @@
         "hotel bid room"
       ],
       "next_test": "Do not create a second Bid Room URL for #155.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "edital-proposta",
@@ -2659,14 +2681,14 @@
         "summary": "Family bid-room is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
-      "active_issue": 237,
+      "active_issue": null,
       "active_pr": null,
       "canonical_owner": {
+        "historical_issue": 237,
         "indexable": true,
-        "issue": 237,
         "page_exists": true,
         "page_type": "paid_offer",
         "path": "/diagnostico-b2g-expansao/",
@@ -2845,6 +2867,7 @@
         "frozen": false
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "diagnostico-expansao",
       "job": "Decidir em quais compradores, territórios e segmentos a construtora deve concentrar uma expansão B2G antes de dispersar capital comercial.",
       "kill": "Owner web-cfg/conversion: on 2026-09-19 kill paid-offer promotion if qualified opportunities remain zero after 28 days with attributable commercial entries; do not create segment variants.",
@@ -2854,6 +2877,7 @@
         "lista de leads públicos"
       ],
       "next_test": "Owner web-cfg/conversion: on 2026-09-19 reconcile attributed entry → handraise → qualified opportunity for CFG-DIAG-EXP-v1; official SERP position remains UNKNOWN until a source with complete context exists.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "carteira-operacao",
@@ -2873,7 +2897,7 @@
         }
       ],
       "owner": "/diagnostico-b2g-expansao/",
-      "owner_issue": 237,
+      "owner_issue": null,
       "primary_queries": [
         "diagnóstico B2G de expansão",
         "mercado de obras públicas para construtora",
@@ -2894,14 +2918,14 @@
         "summary": "Family diagnostico-expansao is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
-      "active_issue": 237,
+      "active_issue": null,
       "active_pr": null,
       "canonical_owner": {
+        "historical_issue": 237,
         "indexable": true,
-        "issue": 237,
         "page_exists": true,
         "page_type": "paid_offer",
         "path": "/diretoria-b2g/",
@@ -3080,6 +3104,7 @@
         "frozen": false
       },
       "gate": null,
+      "historical_transition_issue": 153,
       "id": "diretoria-b2g",
       "job": "Decidir se a construtora precisa de direção B2G recorrente para priorizar oportunidades e contratos dentro da capacidade disponível.",
       "kill": "Owner web-cfg/conversion: kill checkout language or autonomous sending immediately; on 2026-09-19 consolidate into the operational diagnosis if capacity-qualified requests remain zero rather than cloning pages.",
@@ -3089,6 +3114,7 @@
         "software automação licitação"
       ],
       "next_test": "Owner web-cfg/conversion: on 2026-09-19 reconcile on-page capacity handraise → qualified opportunity for the catalog offer; official SERP position remains UNKNOWN without complete evidence.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "carteira-operacao",
@@ -3108,7 +3134,7 @@
         }
       ],
       "owner": "/diretoria-b2g/",
-      "owner_issue": 237,
+      "owner_issue": null,
       "primary_queries": [
         "diretoria B2G fracionada",
         "consultoria recorrente licitações obras",
@@ -3129,14 +3155,14 @@
         "summary": "Family diretoria-b2g is COVERED. Live GSC job may be OK; top-rows/non-BR/mixed context still refuse edit-now."
       },
       "state": "COVERED",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
-      "active_issue": 155,
+      "active_issue": null,
       "active_pr": null,
       "canonical_owner": {
+        "historical_issue": 155,
         "indexable": false,
-        "issue": 155,
         "page_exists": false,
         "page_type": null,
         "path": null,
@@ -3409,11 +3435,12 @@
       },
       "gate": {
         "gated": true,
-        "issue": 155,
+        "historical_issue": 155,
         "page_exists": false,
-        "reason": "gated_issue_no_public_page",
-        "status": "GATED"
+        "reason": "closed_without_demand_or_authorized_current_contract",
+        "status": "CLOSED_NOT_PLANNED"
       },
+      "historical_transition_issue": 153,
       "id": "bid-readiness",
       "job": "Antes de enviar a proposta, o edital, a planilha, a documentação e o acervo estão cobertos para um go/no-go humano?",
       "kill": "Kill if documents cannot produce auditable FACT/RISK/UNKNOWN or if 28d qualified use does not transfer BOFU.",
@@ -3421,7 +3448,8 @@
         "centro de triagem de resíduos",
         "sistema de triagem automática correios"
       ],
-      "next_test": "Consumer contract extra-cli ↔ web-cfg before any landing. This slot does not ship HTML.",
+      "next_test": "Revalidate demand and an authorized current extra-cli contract before reopening any landing decision. This slot does not ship HTML.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "edital-proposta",
@@ -3436,8 +3464,8 @@
           "rule": "cta_may_point_to_bid_room_after_human_review"
         }
       ],
-      "owner": "issue:155",
-      "owner_issue": 155,
+      "owner": "gap:bid-readiness",
+      "owner_issue": null,
       "primary_queries": [
         "prontidão licitação obras",
         "bid readiness licitação",
@@ -3445,7 +3473,7 @@
         "checklist prontidão proposta obra pública"
       ],
       "priority": "P1",
-      "reason": "gated_issue_no_public_page",
+      "reason": "closed_without_demand_or_authorized_current_contract",
       "recommendation": {
         "action": "hold_gated",
         "authorizes_html_edit": false,
@@ -3453,12 +3481,12 @@
         "earliest_safe_action_at": "2026-09-16",
         "family_id": "bid-readiness",
         "kill": "Kill if documents cannot produce auditable FACT/RISK/UNKNOWN or if 28d qualified use does not transfer BOFU.",
-        "next_test": "Consumer contract extra-cli ↔ web-cfg before any landing. This slot does not ship HTML.",
+        "next_test": "Revalidate demand and an authorized current extra-cli contract before reopening any landing decision. This slot does not ship HTML.",
         "state": "NO_CANONICAL",
         "summary": "Family bid-readiness is GATED/NO_CANONICAL. Do not publish a page in this slot."
       },
       "state": "NO_CANONICAL",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     },
     {
       "active_issue": 156,
@@ -3744,6 +3772,7 @@
         "reason": "gated_issue_no_public_page",
         "status": "GATED"
       },
+      "historical_transition_issue": 153,
       "id": "partner-integrity",
       "job": "Consultar ocorrências públicas CEIS/CNEP de parceiro/consórcio/subcontratado antes de diligência humana.",
       "kill": "Do not index if source cannot paginate/provenance, if copy implies certificado, or if CNPJ leaks.",
@@ -3753,6 +3782,7 @@
         "empresa idônea automática"
       ],
       "next_test": "Hold until extra-cli#436 is green and #154/#155 slot rules allow a second BOFU canary.",
+      "operational_owner": "web-cfg/organic-market-capture",
       "overlap": [
         {
           "other_family": "defesa-sancoes",
@@ -3763,7 +3793,7 @@
           "rule": "do_not_run_two_bofu_canaries_in_parallel_by_default"
         }
       ],
-      "owner": "issue:156",
+      "owner": "gap:partner-integrity",
       "owner_issue": 156,
       "primary_queries": [
         "consulta CEIS CNEP empresa",
@@ -3785,11 +3815,11 @@
         "summary": "Family partner-integrity is GATED/NO_CANONICAL. Do not publish a page in this slot."
       },
       "state": "NO_CANONICAL",
-      "transition_owner_issue": 153
+      "transition_owner": "web-cfg/attribution-contract"
     }
   ],
   "family_count": 15,
-  "git_head": "14740dab6b21bde19ecc62396d89393c2c7adab6",
+  "git_head": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
   "graph": {
     "canary_not_family_pr": 157,
     "data_desk_kit_pr": 158,
@@ -3881,6 +3911,8 @@
       }
     ],
     "frozen_owner_issue": 128,
+    "historical_observability_pr": 159,
+    "historical_transition_issue": 153,
     "nodes": [
       {
         "id": "issue-61",
@@ -3899,38 +3931,43 @@
       {
         "id": "issue-151",
         "kind": "issue",
-        "note": "Market Answer real-clock freshness. Not a BOFU family.",
+        "note": "Closed historical Market Answer real-clock implementation. Not an operational owner or BOFU family.",
         "ref": 151,
-        "role": "freshness_clock"
+        "role": "historical_freshness_implementation",
+        "state": "closed"
       },
       {
         "id": "issue-152",
         "kind": "issue",
-        "note": "Deterministic freshness-aware sitemap graph. Not a BOFU family.",
+        "note": "Closed historical freshness-aware sitemap implementation. Not an operational owner or BOFU family.",
         "ref": 152,
-        "role": "sitemap_graph"
+        "role": "historical_sitemap_implementation",
+        "state": "closed"
       },
       {
         "id": "issue-153",
         "kind": "issue",
-        "note": "Canonical owner of content→service transition with destination_service_id.",
+        "note": "Closed historical implementation of destination_service_id. The operational owner is web-cfg/attribution-contract.",
         "ref": 153,
-        "role": "origin_to_service_owner"
+        "role": "historical_origin_to_service_implementation",
+        "state": "closed"
       },
       {
         "id": "issue-154",
         "kind": "issue",
-        "note": "Compounding standard. Does not authorize BOFU page scale.",
+        "note": "Closed not-planned growth-accounting decision. Does not authorize BOFU page scale.",
         "ref": 154,
-        "role": "growth_accounting"
+        "role": "historical_growth_accounting_decision",
+        "state": "closed_not_planned"
       },
       {
         "family_id": "bid-readiness",
         "id": "issue-155",
         "kind": "issue",
-        "note": "GATED bid-readiness canary. Not an existing page.",
+        "note": "Closed historical bid-readiness decision. Not an existing page or operational owner.",
         "ref": 155,
-        "role": "gated_family"
+        "role": "historical_gap_decision",
+        "state": "closed_not_planned"
       },
       {
         "family_id": "partner-integrity",
@@ -3949,33 +3986,32 @@
         "ref": 157,
         "role": "contract_analysis_canary_not_family",
         "sha": "42056bb11bfd1ee273ea922f4d1348fb98fac2a5",
-        "state": "draft_open"
+        "state": "closed_unmerged"
       },
       {
         "head": "campaign/confenge-web-data-desk-authority-02",
         "id": "pr-158",
         "kind": "pull_request",
-        "merged_to_main": false,
+        "merged_to_main": true,
         "note": "Approved SC Data Desk citation kit. Do not create a second target registry here.",
         "ref": 158,
         "role": "data_desk_kit_not_registry",
         "sha": "769764a72c2b7457f9ee7c8a86804e57caf38311",
-        "state": "draft_open"
+        "state": "merged"
       },
       {
         "gsc_live_state": "LIVE_JOB_OK",
         "head": "campaign/confenge-web-seo-demand-control-02",
         "id": "pr-159",
         "kind": "pull_request",
-        "merged_to_main": false,
-        "note": "Search-demand observability producer. Candidate to merge; not main. Isolated gsc job 32322344062 is LIVE_JOB_OK overlay in BOFU-CORE, not a merged PR #159 loop.",
+        "merged_to_main": true,
+        "note": "Merged search-demand observability implementation. The versioned overlay remains top-rows-only and not product-decision ready.",
         "ref": 159,
-        "role": "observability_candidate_not_live_gsc",
+        "role": "historical_observability_implementation",
         "sha": "feba68928ab997229028a66bb25d3b3b5a439206",
-        "state": "draft_open"
+        "state": "merged"
       }
     ],
-    "observability_candidate_pr": 159,
     "required_issues": [
       61,
       128,
@@ -3991,7 +4027,7 @@
       158,
       159
     ],
-    "transition_owner_issue": 153
+    "transition_owner": "web-cfg/attribution-contract"
   },
   "gsc_live": {
     "actions_run_id": 32322344062,
@@ -4032,8 +4068,8 @@
     "job_ready_for_product_decisions": true,
     "last_sync_blocked": false,
     "last_sync_error": null,
-    "note": "Committed live mechanical state is overlay LIVE_JOB_OK (data/bofu-dominance/core/gsc-live-overlay.v1.json; as_of 2026-08-17; core_ready_for_product_decisions=false). data/revops/gsc/last_sync.json is gitignored and is not a committed missing_credentials source. PR #159 freeze-head historically recorded credential_failure. Historical CSV and SERP samples are not this live pull. Top-rows-only, date gaps, mixed device and non-BR geo do not authorize TOP* or HTML.",
-    "pr_159_role": "observability_candidate_not_merged_to_main",
+    "note": "Committed live mechanical state is overlay LIVE_JOB_OK (data/bofu-dominance/core/gsc-live-overlay.v1.json; as_of 2026-08-17; core_ready_for_product_decisions=false). data/revops/gsc/last_sync.json is gitignored and is not a committed missing_credentials source. Merged PR #159 is the historical observability implementation; its freeze-head recorded credential_failure. Historical CSV and SERP samples are not this live pull. Top-rows-only, date gaps, mixed device and non-BR geo do not authorize TOP* or HTML.",
+    "pr_159_role": "historical_merged_observability_implementation",
     "query_text_redacted": true,
     "ready_for_product_decisions": false,
     "recommendation": "observe_only",
@@ -4054,7 +4090,7 @@
       "action": "observe_only",
       "authorizes_html_edit": false,
       "id": "gsc-live-overlay",
-      "owner": "pr-159",
+      "owner": "web-cfg/search-observatory",
       "refs": [
         "pr-159",
         "issue-128"
@@ -4075,50 +4111,51 @@
     {
       "action": "keep_owner",
       "authorizes_html_edit": false,
-      "id": "origin-to-service-153",
-      "owner": "issue-153",
+      "id": "origin-to-service-contract",
+      "owner": "web-cfg/attribution-contract",
       "refs": [
         "issue-153",
         "issue-128"
       ],
-      "summary": "#153 owns the origin→service transition with destination_service_id. This ledger does not reimplement analytics or edit script.js."
+      "summary": "The versioned attribution contract owns origin→service; closed #153 is historical. This ledger does not reimplement analytics or edit script.js."
     },
     {
       "action": "hold_gated",
       "authorizes_html_edit": false,
-      "id": "gated-155-156",
-      "owner": "issue-155",
+      "id": "gap-155-blocked-156",
+      "owner": "web-cfg/organic-market-capture",
       "refs": [
         "issue-155",
         "issue-156",
         "issue-154"
       ],
-      "summary": "#155 bid-readiness and #156 partner-integrity enter as GATED, not as existing pages. Do not ship HTML. #156 stays blocked on extra-cli#436."
+      "summary": "Closed #155 is historical NO_DEMAND_EVIDENCE; open #156 remains an external CONTENT_GAP. Neither is an existing page or current URL owner."
     },
     {
       "action": "do_not_duplicate",
       "authorizes_html_edit": false,
-      "id": "prs-157-159-roles",
-      "owner": "pr-159",
+      "id": "historical-pr-roles",
+      "owner": "web-cfg/organic-market-capture",
       "refs": [
         "pr-157",
         "pr-158",
         "pr-159"
       ],
-      "summary": "PR #157 is one contract-analysis canary, not a BOFU family. PR #158 is the Data Desk kit, not a second target registry. PR #159 is an observability candidate to merge, not live GSC on main."
+      "summary": "PR #157 closed unmerged and is not a BOFU family. PR #158 and PR #159 are historical merged implementations, not operational owners or live-rank claims."
     }
   ],
-  "origin_main": "14740dab6b21bde19ecc62396d89393c2c7adab6",
+  "origin_main": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
   "rules": {
     "duplicate_organic_engine": false,
     "frozen_html": false,
     "gated_155_156_are_existing_pages": false,
+    "historical_transition_issue": 153,
     "missing_gsc_credentials_are_zero_rank": false,
     "pr157_is_bofu_family": false,
     "pr158_is_second_target_registry": false,
     "pr159_is_main_live_gsc": false,
     "top_requires_context": true,
-    "transition_owner_issue": 153
+    "transition_owner": "web-cfg/attribution-contract"
   },
   "schema": "bofu-intent-status/1.0",
   "slot": "BOFU-CORE",

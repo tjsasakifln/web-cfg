@@ -280,7 +280,8 @@ def test_hub_is_honest_about_every_published_example() -> None:
     cards = re.findall(r'<article class="vitrine-item', html)
     assert len(cards) == 8
     primary_block = re.search(
-        r'<div class="vitrine-items">(.*?)</div>\s*<dl class="compare-ladder-figures">',
+        r'<div class="vitrine-items">(.*?)</div>\s*'
+        r'<section class="offer-value-ladder"[^>]*data-offer-ladder=',
         html,
         re.DOTALL,
     ).group(1)
@@ -502,7 +503,7 @@ def test_home_discovery_is_inside_the_existing_commercial_section() -> None:
     assert ".hero-deliverable{" in critical_css
     home_css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
     assert ".home-deliverables{" in home_css
-    assert "Conheça nossas entregas" in home
+    assert "Comparar entregas e artefatos" in home
     assert 'href="/entregas/"' in home
     assert f'href="{REPORT_ROUTE}"' in home
     assert "home-deliverables-result" in home

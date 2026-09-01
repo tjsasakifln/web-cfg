@@ -74,7 +74,8 @@ const humanWidgetContract = {
   widget_present: findings.some((row) => row.route === "/" && row.turnstile_widget),
   cloudflare_loader_present: scriptText.includes("https://challenges.cloudflare.com/turnstile/v0/api.js"),
   token_forwarded: scriptText.includes("cf-turnstile-response") && scriptText.includes("turnstile_token"),
-  lead_endpoint_bound: scriptText.includes("/.netlify/functions/lead"),
+  lead_endpoint_bound: scriptText.includes("/api/web/lead")
+    || scriptText.includes("/.netlify/functions/lead"),
 };
 const humanWidgetReady = Object.values(humanWidgetContract).every(Boolean);
 const routes = findings

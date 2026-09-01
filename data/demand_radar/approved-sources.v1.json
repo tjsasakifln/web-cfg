@@ -1,0 +1,30 @@
+{
+  "schema_version": "confenge-demand-radar-source-approvals/v1",
+  "sources": [
+    {
+      "source_id": "bofu-owner-projection-2026-08-31-pr545",
+      "kind": "CANONICAL_BOFU_OWNER_PROJECTION",
+      "repository": "tjsasakifln/web-cfg",
+      "path": "data/bofu-dominance/core/buyer-decision-map.v1.json",
+      "revision": "283a8770664fa6400d74430cfb6d6975b4e540e6",
+      "content_sha256": "9f362647c914e9eda515c1a2e8ec625c79097cb967ecee5e11275f74a2a262ff",
+      "snapshot_sha256": "e9bd9cb13207c384e50f39d9e7bcddceca07bdc80108c823b371db649596b837",
+      "allow_accepted_historical": false,
+      "approved_at": "2026-08-31",
+      "reason": "Pinned contemporary canonical BOFU buyer-job and owner projection from open clean PR #545."
+    },
+    {
+      "source_id": "gsc-page-overlay-2026-08-02-2026-08-29",
+      "kind": "GSC_PAGE_OVERLAY",
+      "repository": "tjsasakifln/web-cfg",
+      "path": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json",
+      "revision": "283a8770664fa6400d74430cfb6d6975b4e540e6",
+      "content_sha256": "a9b46acf107e6d4b32aff58fc0afb1f8c7fce5a8be8d3796ff02a6f3fab034ed",
+      "snapshot_sha256": "d5b2388653fe013dd7badc1312ece0bdee167b34b6eeb26d2faa609b489e475d",
+      "allow_accepted_historical": true,
+      "approved_at": "2026-08-31",
+      "reason": "Campaign-accepted page-level GSC snapshot; historical use is bound to this exact sealed envelope and does not supersede #413."
+    }
+  ],
+  "manifest_sha256": "e72ed9cf69e387f080278b3fdde1f1796df1a2a331dc1b463dae5eb9fe902891"
+}

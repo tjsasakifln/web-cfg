@@ -10,7 +10,6 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
 
 from scripts.discovery.http_client import DEFAULT_UA, Transport, UrllibTransport, request
 from scripts.discovery.inspect import (
@@ -19,6 +18,7 @@ from scripts.discovery.inspect import (
     load_sitemap_urls,
     parse_html,
     path_blocked_by_robots,
+    robots_target_from_url,
 )
 from scripts.discovery.metrics import count_event
 from scripts.discovery.registry import repo_root
@@ -240,11 +240,16 @@ def refuse_collapsed_stage(event_type: str, stage: str) -> None:
 
 
 def parse_robots_bot_policy(robots_text: str, path: str) -> dict[str, Any]:
-    """Public robots: * Allow:/ with specific Disallow. Named bots inherit unless blocked."""
-    blocked = path_blocked_by_robots(path, robots_text)
+    """Evaluate wildcard and named crawler policy without flattening groups."""
+    blocked = path_blocked_by_robots(path, robots_text, user_agent="*")
     named: dict[str, str] = {}
     for bot in WATCHED_BOTS:
-        named[bot] = "disallowed" if blocked else "allowed_via_star"
+        if path_blocked_by_robots(path, robots_text, user_agent=bot):
+            named[bot] = "disallowed"
+        elif blocked:
+            named[bot] = "allowed_via_named_group"
+        else:
+            named[bot] = "allowed_via_star"
     return {
         "path": path,
         "star_blocked": blocked,
@@ -273,7 +278,7 @@ def inspect_local(asset: dict[str, Any], *, root: Path) -> dict[str, Any]:
     html = page.read_text(encoding="utf-8", errors="replace") if page.is_file() else ""
     parsed = parse_html(html) if html else {}
     robots_text = (root / "robots.txt").read_text(encoding="utf-8", errors="replace")
-    path = urlparse(str(asset["canonical"])).path or "/"
+    path = robots_target_from_url(str(asset["canonical"]))
     cta = _cta_and_attribution(html, str(asset.get("cta_id") or ""))
     self_canonical = (
         (parsed.get("canonical") or "").rstrip("/") == str(asset["canonical"]).rstrip("/")
@@ -321,7 +326,7 @@ def reprove_live(
     )
     if robots_resp.status == 200:
         robots_live_text = robots_resp.text
-    path = urlparse(url).path or "/"
+    path = robots_target_from_url(url)
     live_bot = parse_robots_bot_policy(robots_live_text or (root / "robots.txt").read_text(encoding="utf-8"), path)
     sm_resp = request(
         "GET",

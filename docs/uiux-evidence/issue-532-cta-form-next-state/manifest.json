@@ -1,0 +1,211 @@
+{
+  "schema": "confenge.issue-532-form-state-evidence/1.0",
+  "issue": "#532",
+  "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "synthetic_pii_only": true,
+  "synthetic_identity": "Pessoa Sintética QA 532 / qa532@example.test",
+  "routes": [
+    "/",
+    "/servicos-obras-publicas/"
+  ],
+  "states": [
+    "initial",
+    "validation-error",
+    "turnstile-error",
+    "submit-loading",
+    "success-receipt"
+  ],
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1366,
+      "height": 768
+    }
+  ],
+  "captures": [
+    {
+      "route": "/",
+      "state": "initial",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "home-initial-390x844.png"
+    },
+    {
+      "route": "/",
+      "state": "validation-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "home-validation-error-390x844.png"
+    },
+    {
+      "route": "/",
+      "state": "turnstile-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "home-turnstile-error-390x844.png"
+    },
+    {
+      "route": "/",
+      "state": "submit-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "home-submit-loading-390x844.png"
+    },
+    {
+      "route": "/",
+      "state": "success-receipt",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "home-success-receipt-390x844.png"
+    },
+    {
+      "route": "/",
+      "state": "initial",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "file": "home-initial-1366x768.png"
+    },
+    {
+      "route": "/",
+      "state": "validation-error",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "file": "home-validation-error-1366x768.png"
+    },
+    {
+      "route": "/",
+      "state": "turnstile-error",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "file": "home-turnstile-error-1366x768.png"
+    },
+    {
+      "route": "/",
+      "state": "submit-loading",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "file": "home-submit-loading-1366x768.png"
+    },
+    {
+      "route": "/",
+      "state": "success-receipt",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "file": "home-success-receipt-1366x768.png"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "state": "initial",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "servicos-initial-390x844.png"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "state": "validation-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "servicos-validation-error-390x844.png"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "state": "turnstile-error",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "servicos-turnstile-error-390x844.png"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "state": "submit-loading",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "servicos-submit-loading-390x844.png"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "state": "success-receipt",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "file": "servicos-success-receipt-390x844.png"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "state": "initial",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "file": "servicos-initial-1366x768.png"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "state": "validation-error",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "file": "servicos-validation-error-1366x768.png"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "state": "turnstile-error",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "file": "servicos-turnstile-error-1366x768.png"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "state": "submit-loading",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "file": "servicos-submit-loading-1366x768.png"
+    },
+    {
+      "route": "/servicos-obras-publicas/",
+      "state": "success-receipt",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "file": "servicos-success-receipt-1366x768.png"
+    }
+  ],
+  "note": "The shared runtime error string is frozen by #533; the Turnstile capture records its current fail-closed fallback without mutating script.js."
+}

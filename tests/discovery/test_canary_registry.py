@@ -9,9 +9,9 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.discovery.observation import validate_observation
+from scripts.discovery.observation import REASON_TECHNICAL_LIVE, build_observation, validate_observation
 from scripts.discovery.registry import load_cohort
-from scripts.discovery.store import default_store_path, load_observations
+from scripts.discovery.store import append_observation, default_store_path, load_observations
 
 EVIDENCED_ID = "valor-tipico-contratos-pavimentacao"
 EVIDENCED_URL = "https://confenge.com.br/inteligencia/valor-tipico-contratos-pavimentacao/"
@@ -58,15 +58,51 @@ def test_canary_is_registered_from_issue_84_evidence():
     assert leftover["canonical"] == "https://confenge.com.br/inteligencia/cenarios/aditivos-e-risco-de-margem/"
 
 
-def test_committed_live_snapshots_are_valid_technical_probes_only():
+def test_committed_live_snapshots_admit_eligible_cohort_and_preserve_historical_canary():
+    cohort = load_cohort(root=ROOT)
+    assets = {asset["id"]: asset for asset in cohort["assets"]}
     rows = load_observations(default_store_path(ROOT))
     assert rows, "live probe snapshot must be committed"
     for row in rows:
         validate_observation(row)
         assert row["observation_type"] == "technical_probe"
-        assert row["asset_id"] == EVIDENCED_ID
-    assert any(row.get("technical_status") == "TECHNICAL_LIVE" for row in rows)
-    assert any(row.get("http", {}).get("status") == 200 for row in rows)
-    assert any(row.get("declared_canonical") == EVIDENCED_URL for row in rows)
+        assert row["asset_id"] in assets
+        asset = assets[row["asset_id"]]
+        assert asset.get("fixture") is not True
+        if row["asset_id"] != EVIDENCED_ID:
+            assert asset["index_intent"] == "INDEX"
+            assert asset["publicable"] is True
+            assert asset["noindex"] is False
+    historical = [row for row in rows if row["asset_id"] == EVIDENCED_ID]
+    assert historical, "the historical #84 canary evidence must remain append-only"
+    assert any(row.get("technical_status") == "TECHNICAL_LIVE" for row in historical)
+    assert any(row.get("http", {}).get("status") == 200 for row in historical)
+    assert any(row.get("declared_canonical") == EVIDENCED_URL for row in historical)
     # No imported GSC/outcome in the committed store: discovery stays unproven.
     assert all(row["observation_type"] != "gsc" for row in rows)
+
+
+def test_store_accepts_eligible_non_historical_asset_without_replacing_canary(tmp_path):
+    store = tmp_path / "observations.ndjson"
+    store.write_text(default_store_path(ROOT).read_text(encoding="utf-8"), encoding="utf-8")
+    methodology = build_observation(
+        asset_id="methodology-inteligencia",
+        observation_type="technical_probe",
+        observed_at="2026-08-31T15:00:00Z",
+        source="public_http_get_head",
+        status="observed",
+        reason_codes=[REASON_TECHNICAL_LIVE],
+        dimensions={"canonical_url": "https://confenge.com.br/metodologia-inteligencia/"},
+    )
+
+    appended = append_observation(store, methodology)
+    replayed = append_observation(store, methodology)
+    rows = load_observations(store)
+
+    assert appended["appended"] is True
+    assert replayed["appended"] is False
+    assert replayed["replay"] is True
+    assert {row["asset_id"] for row in rows} >= {EVIDENCED_ID, "methodology-inteligencia"}
+    assert len(rows) == len(load_observations(default_store_path(ROOT))) + 1
+    for row in rows:
+        validate_observation(row)

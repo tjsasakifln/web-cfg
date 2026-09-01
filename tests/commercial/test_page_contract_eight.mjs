@@ -30,6 +30,10 @@ const contract = JSON.parse(raw);
 
 function textOf(rel) {
   const html = fs.readFileSync(path.join(root, rel), "utf8");
+  return textFromHtml(html);
+}
+
+function textFromHtml(html) {
   return html
     .replace(/<script\b[\s\S]*?<\/script[^>]*>/gi, " ")
     .replace(/<style\b[\s\S]*?<\/style[^>]*>/gi, " ")
@@ -68,6 +72,7 @@ assert(
 );
 assert("issue_declarada", contract.issue === 331 && contract.parent_issue === 329, contract.issue);
 assert("versao_publica_v3", contract.version === "v3" && contract.value_first_issue === 530, `${contract.version}/${contract.value_first_issue}`);
+assert("escada_comercial_issue_547", contract.offer_ladder_issue === 547, contract.offer_ladder_issue);
 assert("preco_congelado", contract.price_change_allowed === false, contract.price_change_allowed);
 
 // ------------------------------------------------- 1. as oito entradas completas
@@ -182,6 +187,18 @@ const hubFile = contract.package.hub_file;
 assert("hub_existe", fs.existsSync(path.join(root, hubFile)), hubFile);
 const hubText = textOf(hubFile);
 const hubHtml = fs.readFileSync(path.join(root, hubFile), "utf8");
+const ladder = contract.value_ladder || {};
+assert("escada_diagnostico_canonica",
+  ladder.diagnosis_route === "/diagnostico-b2g-expansao/" &&
+    /unidades 02 a 08/.test(ladder.diagnosis_trigger) &&
+    nonEmptyString(ladder.diagnosis_scope),
+  JSON.stringify(ladder));
+assert("escada_direcao_recorrente_canonica",
+  ladder.recurring_direction_route === "/diretoria-b2g/" &&
+    /Direção Fracionada/.test(ladder.recurring_direction_name_pt_br) &&
+    /continuamente/.test(ladder.recurring_direction_trigger) &&
+    /cadência recorrente/.test(ladder.recurring_direction_scope),
+  JSON.stringify(ladder));
 
 for (const d of dels) {
   const n = d.number;
@@ -194,6 +211,32 @@ for (const d of dels) {
   if (!exists) continue;
   const pageText = textOf(d.file);
   const pageHtml = fs.readFileSync(abs, "utf8");
+  const ladderHtml = pageHtml.match(/<section\b[^>]*data-offer-ladder="unit-diagnosis-recurring"[\s\S]*?<\/section>/i)?.[0] || "";
+  const ladderText = textFromHtml(ladderHtml);
+  const diagnosisStep = ladderHtml.match(/<li\b[^>]*data-ladder-step="diagnosis"[\s\S]*?<\/li>/i)?.[0] || "";
+  const recurringStep = ladderHtml.match(/<li\b[^>]*data-ladder-step="recurring"[\s\S]*?<\/li>/i)?.[0] || "";
+  assert(`pagina_escada_explicita_${n}`, Boolean(ladderHtml), d.file);
+  assert(`pagina_escada_diagnostico_${n}`,
+    diagnosisStep.includes(`href="${ladder.diagnosis_route}"`) && diagnosisStep.includes(contract.package.package_price_display),
+    diagnosisStep.slice(0, 240));
+  assert(`pagina_escada_direcao_${n}`,
+    recurringStep.includes(`href="${ladder.recurring_direction_route}"`) &&
+      recurringStep.includes(ladder.recurring_direction_trigger) && recurringStep.includes(ladder.recurring_direction_scope),
+    recurringStep.slice(0, 240));
+  assert(`pagina_escada_unidade_por_decisao_e_escopo_${n}`,
+    ladderText.toLocaleLowerCase("pt-BR").includes(d.value_first.actual_contract_value.toLocaleLowerCase("pt-BR")) &&
+      ladderText.includes(d.objeto_incluido),
+    ladderHtml.slice(0, 240));
+  if (n === "01") {
+    assert("pagina_01_sem_promessa_credito",
+      !/volta como crédito|valor pago é abatido/i.test(pageText) &&
+        /fora do Diagnóstico[\s\S]*não gera crédito de 60 dias/i.test(ladderText),
+      ladderHtml.slice(0, 300));
+  } else {
+    assert(`pagina_credito_02_a_08_${n}`,
+      /maior valor pago é abatido/i.test(ladderHtml) && /em até 60 dias, sem acúmulo/i.test(ladderHtml),
+      ladderHtml.slice(0, 300));
+  }
   assert(`pagina_imprime_preco_${n}`, pageText.includes(d.price_display),
     `${d.price_display} ausente em ${d.file}`);
   assert(`pagina_imprime_nome_${n}`,
@@ -251,6 +294,22 @@ for (const d of dels) {
     d.file);
 }
 assert("hub_sem_css_contrato_bloqueante", !hubHtml.includes('/assets/eight-offer-contract.css'));
+const hubLadderHtml = hubHtml.match(/<section\b[^>]*data-offer-ladder="unit-diagnosis-recurring"[\s\S]*?<\/section>/i)?.[0] || "";
+const hubDiagnosisStep = hubLadderHtml.match(/<li\b[^>]*data-ladder-step="diagnosis"[\s\S]*?<\/li>/i)?.[0] || "";
+const hubRecurringStep = hubLadderHtml.match(/<li\b[^>]*data-ladder-step="recurring"[\s\S]*?<\/li>/i)?.[0] || "";
+assert("hub_escada_explicita", Boolean(hubLadderHtml), "data-offer-ladder ausente no hub");
+assert("hub_escada_por_gatilho_e_escopo",
+  hubLadderHtml.includes(ladder.diagnosis_trigger) && hubLadderHtml.includes(ladder.diagnosis_scope) &&
+    hubLadderHtml.includes(ladder.recurring_direction_trigger) && hubLadderHtml.includes(ladder.recurring_direction_scope),
+  hubLadderHtml.slice(0, 300));
+assert("hub_escada_links_canonicos",
+  hubDiagnosisStep.includes(`href="${ladder.diagnosis_route}"`) &&
+    hubDiagnosisStep.includes(contract.package.package_price_display) &&
+    hubRecurringStep.includes(`href="${ladder.recurring_direction_route}"`),
+  hubLadderHtml.slice(0, 300));
+assert("hub_escada_d01_sem_credito",
+  /unidade 01[\s\S]*fora do Diagnóstico[\s\S]*não gera crédito de 60 dias/i.test(hubLadderHtml),
+  hubLadderHtml.slice(0, 300));
 assert(
   "hub_value_before_common_boundaries",
   hubHtml.indexOf('data-deliverable-id="CFG-D01"') >= 0 &&

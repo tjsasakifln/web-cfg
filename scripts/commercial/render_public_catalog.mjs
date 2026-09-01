@@ -391,6 +391,24 @@ ${bundle}
 ${close}`;
 }
 
+function renderOfferLadder(contract) {
+  const ladder = contract.value_ladder;
+  const pkg = contract.package;
+  if (!ladder) throw new Error("PUBLIC_VALUE_LADDER_MISSING");
+  return `<section class="offer-value-ladder" data-offer-ladder="unit-diagnosis-recurring" aria-labelledby="offer-value-ladder-title">
+<header><p class="eyebrow">Próxima camada pelo tipo de decisão</p><h3 id="offer-value-ladder-title">Unidade, Diagnóstico ou direção recorrente?</h3><p>A escolha começa pelo gatilho e pelo escopo da decisão, não apenas pelo preço.</p></header>
+<ol><li data-ladder-step="unit"><strong>Uma unidade basta</strong><span>Quando há uma pergunta delimitada e o recorte permanece nos eixos declarados na oferta.</span></li>
+<li data-ladder-step="diagnosis"><strong>Diagnóstico integrado</strong><span>Quando ${escapeHtml(ladder.diagnosis_trigger)}, o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-offer-summary" data-cta-position="offer_summary" data-event-name="cta_click" href="${escapeHtml(ladder.diagnosis_route)}">${escapeHtml(pkg.public_name_pt_br)}</a> reúne ${escapeHtml(ladder.diagnosis_scope)} por ${escapeHtml(pkg.package_price_display)}.</span></li>
+<li data-ladder-step="recurring"><strong>Direção recorrente</strong><span>Quando ${escapeHtml(ladder.recurring_direction_trigger)}, a <a href="${escapeHtml(ladder.recurring_direction_route)}">${escapeHtml(ladder.recurring_direction_name_pt_br)}</a> assume ${escapeHtml(ladder.recurring_direction_scope)}.</span></li></ol>
+<dl class="compare-ladder-figures">
+<div><dt>Faixa por unidade</dt><dd>R$ 599 a R$ 3.750</dd></div>
+<div><dt>As sete unidades, uma a uma</dt><dd>${escapeHtml(pkg.units_sum_display)}</dd></div>
+<div><dt>${escapeHtml(pkg.public_name_pt_br)}</dt><dd>${escapeHtml(pkg.package_price_display)}</dd></div>
+</dl>
+<p class="compare-note">Sete ofertas geram um único crédito, sem acúmulo, se o ${escapeHtml(pkg.public_name_pt_br)} for contratado em até ${pkg.credit_window_days} dias. A unidade 01 fica fora do Diagnóstico e não gera crédito de ${pkg.credit_window_days} dias. A diferença entre ${escapeHtml(pkg.units_sum_display)} e ${escapeHtml(pkg.package_price_display)} é R$ 4.280. Os exemplos usam dados sintéticos; não representam cliente real.</p>
+</section>`;
+}
+
 function renderOfferShowcase(published, eightContract) {
   const contractById = new Map(
     eightContract.deliverables.map((entry) => [entry.deliverable_id, entry]),
@@ -406,12 +424,7 @@ function renderOfferShowcase(published, eightContract) {
 <header class="deliverables-vitrine__intro"><p class="eyebrow">8 ofertas publicadas agora</p><h2 id="catalog-title">Escolha pela decisão. Compare uma vez, com o contrato inteiro à vista.</h2><p>Estas são as únicas ofertas com escopo, preço e SLA publicados para consulta agora. Cada card reúne situação, entrada, limite, saída, crédito e próxima ação sem repetir a oferta em outra tabela.</p></header>
 <nav class="offer-decision-nav" aria-label="Escolher oferta pela decisão"><p>Qual pergunta está na mesa?</p><ol>${decisions}</ol></nav>
 <div class="vitrine-items">${published.map((entry) => vitrineCard(entry, contractById.get(entry.deliverable_id))).join("\n")}</div>
-<dl class="compare-ladder-figures">
-<div><dt>Faixa por unidade</dt><dd>R$ 599 a R$ 3.750</dd></div>
-<div><dt>As sete unidades, uma a uma</dt><dd>R$ 12.280</dd></div>
-<div><dt>Diagnóstico de Expansão no Mercado Público</dt><dd>R$ 8.000</dd></div>
-</dl>
-<p class="compare-note">Sete ofertas geram um único crédito, sem acúmulo, se o <a data-asset-id="entregas-exemplos-hub" data-cta-id="deliverables-bundle-from-offer-summary" data-cta-position="offer_summary" data-event-name="cta_click" href="/diagnostico-b2g-expansao/">Diagnóstico de Expansão no Mercado Público</a> for contratado em até 60 dias. A diferença entre R$ 12.280 e R$ 8.000 é R$ 4.280. Os exemplos usam dados sintéticos; não representam cliente real.</p>
+${renderOfferLadder(eightContract)}
 <aside class="published-offers__common" aria-labelledby="published-common-title"><div><p class="eyebrow">Condições da análise</p><h3 id="published-common-title">O que vale para as oito ofertas</h3><p><strong>Entrada comum:</strong> ${renderInlineList(commonInputs)}. A entrada específica aparece em cada oferta.</p></div><div><h4>Fronteiras comuns no ponto que qualificam</h4><p>${renderInlineList(commonBoundaries)}. Cobertura, data de corte, método e o rótulo NÃO INFORMADO acompanham o resultado.</p></div></aside>
 </div>
 </section>`;

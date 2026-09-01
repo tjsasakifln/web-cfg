@@ -13,21 +13,23 @@ def test_required_issues_and_prs_are_nodes():
         assert graph_contains(graph, kind, number), number
     for number in (157, 158, 159):
         assert graph_contains(graph, "pull_request", number), number
-    assert graph["transition_owner_issue"] == 153
+    assert graph["transition_owner"] == "web-cfg/attribution-contract"
+    assert graph["historical_transition_issue"] == 153
     assert graph["canary_not_family_pr"] == 157
     assert graph["data_desk_kit_pr"] == 158
-    assert graph["observability_candidate_pr"] == 159
+    assert graph["historical_observability_pr"] == 159
 
 
-def test_status_graph_does_not_treat_pr159_as_main_or_live():
+def test_status_graph_records_contemporary_historical_pr_states():
     status = build_status()
     pr159 = next(node for node in status["graph"]["nodes"] if node["id"] == "pr-159")
-    assert pr159["merged_to_main"] is False
+    assert pr159["merged_to_main"] is True
     assert pr159["gsc_live_state"] == "LIVE_JOB_OK"
     pr157 = next(node for node in status["graph"]["nodes"] if node["id"] == "pr-157")
     assert pr157["role"] == "contract_analysis_canary_not_family"
     pr158 = next(node for node in status["graph"]["nodes"] if node["id"] == "pr-158")
     assert pr158["role"] == "data_desk_kit_not_registry"
+    assert pr158["merged_to_main"] is True
     assert status["rules"]["pr157_is_bofu_family"] is False
     assert status["rules"]["pr158_is_second_target_registry"] is False
     assert status["rules"]["pr159_is_main_live_gsc"] is False

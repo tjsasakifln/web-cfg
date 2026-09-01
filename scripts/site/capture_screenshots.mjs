@@ -33,8 +33,10 @@ import {
   captureFileName,
   captureRecord,
   manifestFileName,
+  prepareFullPageCapture,
   resolveCaptureState,
   resolveViewports,
+  verifyFullPageCapture,
 } from "./capture_states.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
@@ -49,6 +51,17 @@ const PATHS = String(process.env.CAPTURE_PATHS || "")
   .map((path) => path.trim())
   .filter(Boolean);
 if (!PATHS.length) PATHS.push(...DEFAULT_PATHS);
+// Snapshot source-tree identity before evidence files are written. New or
+// refreshed screenshots are outputs of this run and must not make the source
+// tree look dirty after the fact.
+const COMMIT = execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).trim();
+const DIRTY_AT_START = execFileSync("git", ["status", "--porcelain"], { cwd: ROOT, encoding: "utf8" }).trim();
+if (DIRTY_AT_START && process.env.CAPTURE_ALLOW_DIRTY !== "1") {
+  throw new Error(
+    `CAPTURE_TREE_DIRTY: refusing to stamp ${COMMIT} on screenshots of an uncommitted tree.\n` +
+      `Commit first, or set CAPTURE_ALLOW_DIRTY=1 to record it as provisional.\n${DIRTY_AT_START}`,
+  );
+}
 const COMPONENTS = {
   "/diagnostico-b2g-360/": ["[data-offer-section='scope']"],
   "/bid-room-licitacoes-obras/": [".decision-map"],
@@ -95,6 +108,7 @@ const browser = await puppeteer.launch({
   headless: true,
   args: ["--no-sandbox", "--disable-gpu"],
 });
+const browserVersion = await browser.version();
 const page = await browser.newPage();
 // JS-off and reduced-motion are page-level emulation: set once, before the
 // first navigation, so no route is ever captured in a half-applied state.
@@ -110,10 +124,21 @@ for (const path of PATHS) {
     await page.evaluate(() => {
       document.documentElement.style.scrollBehavior = "auto";
     });
+    let layout = await prepareFullPageCapture(page, STATE);
     const name = captureFileName({ slug, width: w, height: h, state: STATE });
     const file = join(OUT, name);
     await page.screenshot({ path: file, fullPage: STATE.fullPage });
-    captures.push(captureRecord({ file: name, path: file, route: path, slug, width: w, height: h, state: STATE }));
+    layout = await verifyFullPageCapture(page, STATE, layout);
+    captures.push(captureRecord({
+      file: name,
+      path: file,
+      route: path,
+      slug,
+      width: w,
+      height: h,
+      state: STATE,
+      layout,
+    }));
     console.log("wrote", file);
     for (const [index, selector] of (COMPONENTS[path] || []).entries()) {
       // Some shared primitives intentionally live inside a disclosure. Open
@@ -170,30 +195,21 @@ await browser.close();
 if (server) server.close();
 
 // Evidence is only evidence if it says which commit and which day produced it.
-const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT, encoding: "utf8" }).trim();
-// A named commit whose tree is not what rendered is not evidence. Refuse rather
-// than record a SHA the screenshots do not show.
-const dirty = execFileSync("git", ["status", "--porcelain"], { cwd: ROOT, encoding: "utf8" }).trim();
-if (dirty && process.env.CAPTURE_ALLOW_DIRTY !== "1") {
-  throw new Error(
-    `CAPTURE_TREE_DIRTY: refusing to stamp ${commit} on screenshots of an uncommitted tree.\n` +
-      `Commit first, or set CAPTURE_ALLOW_DIRTY=1 to record it as provisional.\n${dirty}`,
-  );
-}
 const manifestPath = join(OUT, manifestFileName(STATE));
 writeFileSync(
   manifestPath,
   `${JSON.stringify(
     buildManifest({
       capturedAt: new Date().toISOString(),
-      commitSha: commit,
-      treeDirty: Boolean(dirty),
+      commitSha: COMMIT,
+      treeDirty: Boolean(DIRTY_AT_START),
       baseUrl: BASE,
       outputDir: relative(ROOT, OUT) || ".",
       routes: PATHS,
       viewports: VIEWPORTS,
       state: STATE,
       captures,
+      browserVersion,
     }),
     null,
     2,

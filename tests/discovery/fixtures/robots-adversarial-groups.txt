@@ -1,0 +1,38 @@
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+User-agent: Googlebot-News
+Disallow: /named/*
+Allow: /named/exception$
+Disallow:
+
+User-agent: Googlebot
+Disallow: /generic-only/
+
+User-agent: Googlebot-News
+Disallow: /second-news-group/
+
+User-agent: Googlebot/1.2
+Disallow: /versioned-agent/
+
+User-agent: Googlebot*
+Disallow: /star-agent/
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: *
+Disallow: /private/*
+Allow: /private/public/*
+Disallow: /same
+Allow: /same
+Allow: /page
+Disallow: /*.htm
+Allow: /x
+Disallow: /x$
+Disallow: /foo/bar/%62%61%7A
+Disallow: /foo/bar?baz=https%3A%2F%2Ffoo.bar
+Disallow: /params%3Bblocked
+Disallow: /*.php$
+Disallow: /*?id=

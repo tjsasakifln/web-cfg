@@ -818,7 +818,14 @@ def test_price_leaves_a_persisted_inline_record() -> None:
     anchor = html.find('href="#captura-modelo"')
     assert 0 < anchor < match.start()
     band = re.search(r'<section class="report-capture".*?</section>', html, re.S)
-    assert band and set(re.findall(r"R\$ [\d.]*\d", band.group(0))) == {"R$ 599"}
+    # #547 makes the form-adjacent value ladder explicit without changing the
+    # D01 price: this band may name only the R$ 599 unit and the canonical
+    # R$ 8.000 Diagnosis boundary, which D01 does not join or credit.
+    assert band
+    band_html = band.group(0)
+    assert set(re.findall(r"R\$ [\d.]*\d", band_html)) == {"R$ 599", "R$ 8.000"}
+    assert 'href="/diagnostico-b2g-expansao/"' in band_html
+    assert "não gera crédito de 60 dias" in band_html
     # #304 remains authoritative: five CTAs use the canonical persisted order
     # intake, while this form is the visitor's inline alternative.
     assert html.count('href="/comercial/radar-decisorio/"') == 5
@@ -1116,7 +1123,7 @@ def test_value_ladder_price_and_persisted_order_entry_contract() -> None:
         "report_final",
         "report_mobile_sticky",
     } == positions
-    assert html.count("Configurar meu relatório por R$ 599") >= 3
+    assert html.count("Configurar esta priorização por R$ 599") >= 3
     assert "R$ 599 = 1 relatório adaptado" in html
     for marker in (
         "Conclusão executiva",

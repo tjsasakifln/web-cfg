@@ -80,6 +80,43 @@ function expectSubset(result, mustInclude, because) {
 }
 
 {
+  for (const input of [
+    "scripts/demand_radar/engine.py",
+    "data/demand_radar/ledger.v1.json",
+    "docs/demand-radar/REPORT.md",
+  ]) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:demand-radar"], `internal demand radar input ${input}`);
+    assert.ok(!result.selected_ids.includes("test:inbound-gates"));
+  }
+}
+
+// #545's internal buyer-decision authority selects on both source inputs and
+// emitted reports. Its GSC projection remains separate from public mutation.
+{
+  for (const input of [
+    "data/bofu-dominance/core/buyer-decision-map.v1.json",
+    "docs/seo/bofu-dominance/core/BUYER-DECISION-MAP.md",
+  ]) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:bofu-ownership"], `BOFU ownership input ${input}`);
+  }
+}
+
+// #554's release-bound ledger selects on its persisted source of truth and
+// rendered report, while retaining the normal fail-closed unknown fallback.
+{
+  for (const input of [
+    "data/organic/experiments/integrated-commercial-release-2026-08-31/ledger.json",
+    "docs/measurement/INTEGRATED-COMMERCIAL-RELEASE-2026-08-31.md",
+  ]) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:commercial-release-ledger"], `commercial ledger input ${input}`);
+    assert.ok(!result.selected_ids.includes("test:inbound-gates"));
+  }
+}
+
+{
   const paths = ["docs/research/icp-trust-session-v1/PROTOCOL-TREE-TEST.md"];
   const result = selectAffected(paths, scripts);
   expectSubset(
@@ -117,6 +154,29 @@ function expectSubset(result, mustInclude, because) {
   const paths = ["data/revops/inbound-proof-runs/inbound-issue-267-run-99999999999.json"];
   const result = selectAffected(paths, scripts);
   expectSubset(result, ["test:schedules"], "future inbound proof artifact");
+}
+
+// Foundation capture/audit tooling must select its own browser and contract gates.
+{
+  const capturePaths = [
+    "scripts/site/capture_states.mjs",
+    "scripts/site/capture_screenshots.mjs",
+    "scripts/site/index_design_direction_capture.py",
+    "scripts/site/test_design_direction.mjs",
+    "docs/evidence/issue-540-fullpage-capture/report.json",
+  ];
+  for (const input of capturePaths) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:capture-states", "test:design-direction"], `capture producer ${input}`);
+  }
+  for (const input of [
+    "scripts/site/audit_deliverables_live.mjs",
+    "scripts/site/deliverables_live_audit_contract.mjs",
+    "scripts/site/fixtures/deliverables-live/content-visibility-current-defects.html",
+  ]) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:deliverables-live-audit"], `deliverables audit producer ${input}`);
+  }
 }
 
 // script.js is read by the shipped pSEO attribution test — must not omit that suite

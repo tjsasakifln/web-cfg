@@ -76,12 +76,13 @@ def gsc_live_record(
                 "(data/bofu-dominance/core/gsc-live-overlay.v1.json; as_of "
                 "2026-08-17; core_ready_for_product_decisions=false). "
                 "data/revops/gsc/last_sync.json is gitignored and is not a "
-                "committed missing_credentials source. PR #159 freeze-head "
-                "historically recorded credential_failure. Historical CSV and "
+                "committed missing_credentials source. Merged PR #159 is the "
+                "historical observability implementation; its freeze-head recorded "
+                "credential_failure. Historical CSV and "
                 "SERP samples are not this live pull. Top-rows-only, date "
                 "gaps, mixed device and non-BR geo do not authorize TOP* or HTML."
             ),
-            "pr_159_role": "observability_candidate_not_merged_to_main",
+            "pr_159_role": "historical_merged_observability_implementation",
             "query_text_redacted": True,
         }
     sync = last_sync or load_last_sync()
@@ -101,7 +102,7 @@ def gsc_live_record(
             "not ranking zero. Historical CSV, redacted snapshots and SERP "
             "samples are not GSC live."
         ),
-        "pr_159_role": "observability_candidate_not_merged_to_main",
+        "pr_159_role": "historical_merged_observability_implementation",
     }
 
 

@@ -1,0 +1,1822 @@
+{
+  "schema_version": "confenge-demand-radar-ledger/v1",
+  "ledger_id": "confenge-minimum-demand-radar",
+  "as_of": "2026-08-31",
+  "origin_main": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "INBOUND_ENGINE",
+  "time_to_evidence": "One accepted snapshot cycle; public implementation is separately authorized.",
+  "north_star": "Qualified Commercial Opportunities attributable through CONFENGE_WEB to proposal, contract and margin.",
+  "not_success_by_itself": [
+    "pages",
+    "keywords",
+    "traffic",
+    "impressions",
+    "CTR",
+    "raw_leads",
+    "issues",
+    "PR_count"
+  ],
+  "decision_method": {
+    "type": "LEXICOGRAPHIC_STAGED_NO_COMPOSITE_SCORE",
+    "stages": [
+      "hard eligibility: buyer fit / canonical owner / freeze / truth",
+      "first-party GSC page evidence",
+      "valid Planner market breadth",
+      "Trends relative momentum",
+      "aggregate QCO / proposal / contract feedback",
+      "execution leverage",
+      "cannibalization / compliance / evidence risk"
+    ],
+    "actionable_now_cap": 5,
+    "unknown_rule": "UNKNOWN is preserved and never converted to zero or an invented floor.",
+    "advisory_rule": "No radar action authorizes a public mutation, page, issue, offer or outreach."
+  },
+  "source_approval_manifest_sha256": "e72ed9cf69e387f080278b3fdde1f1796df1a2a331dc1b463dae5eb9fe902891",
+  "source_snapshots": [
+    {
+      "id": "bofu-owner-projection-2026-08-31-pr545",
+      "kind": "CANONICAL_BOFU_OWNER_PROJECTION",
+      "effective_date": "2026-08-31",
+      "geo": "BRA",
+      "language": "pt-BR",
+      "privacy_class": "PUBLIC_NON_PERSONAL",
+      "freshness": {
+        "state": "CURRENT",
+        "evaluated_at": "2026-08-31",
+        "expires_at": null,
+        "note": "Pinned to the contemporary open/clean PR head; it is not represented as integrated main."
+      },
+      "provenance": {
+        "authority": "web-cfg PR #545 canonical derived BOFU buyer-job/owner projection",
+        "repository": "tjsasakifln/web-cfg",
+        "path": "data/bofu-dominance/core/buyer-decision-map.v1.json",
+        "revision": "283a8770664fa6400d74430cfb6d6975b4e540e6",
+        "content_sha256": "9f362647c914e9eda515c1a2e8ec625c79097cb967ecee5e11275f74a2a262ff"
+      },
+      "records": 15,
+      "records_sha256": "e19b66716141e73c3c2dc18aeeb6e6d8e2d52a2286fa7c92a0d511a7028f47ec",
+      "snapshot_sha256": "e9bd9cb13207c384e50f39d9e7bcddceca07bdc80108c823b371db649596b837",
+      "unknown_semantics": "UNKNOWN owner or demand evidence remains UNKNOWN and never becomes zero, a page authorization or an invented owner."
+    },
+    {
+      "id": "gsc-page-overlay-2026-08-02-2026-08-29",
+      "kind": "GSC_PAGE_OVERLAY",
+      "effective_date": "2026-08-29",
+      "geo": "BRA",
+      "language": "pt-BR",
+      "privacy_class": "AGGREGATE_NO_PII",
+      "freshness": {
+        "state": "ACCEPTED_HISTORICAL",
+        "evaluated_at": "2026-08-31",
+        "expires_at": null,
+        "note": "Accepted campaign snapshot; it does not supersede durable #413 CURRENT authority."
+      },
+      "provenance": {
+        "authority": "Accepted manual page-level GSC snapshot reconciled by web-cfg PR #545 and measurement PR #554",
+        "repository": "tjsasakifln/web-cfg",
+        "path": "seo/gsc-2026-08-31/manual-page-snapshot.v1.json",
+        "revision": "283a8770664fa6400d74430cfb6d6975b4e540e6",
+        "content_sha256": "a9b46acf107e6d4b32aff58fc0afb1f8c7fce5a8be8d3796ff02a6f3fab034ed"
+      },
+      "records": 15,
+      "records_sha256": "67c90f3306ba944ecea184842760575cbfb0eea60f9dfae5ffcfe98067518c36",
+      "snapshot_sha256": "d5b2388653fe013dd7badc1312ece0bdee167b34b6eeb26d2faa609b489e475d",
+      "unknown_semantics": "A missing page or family mapping remains UNKNOWN, never zero impressions, zero demand, zero rank or conversion failure."
+    }
+  ],
+  "source_availability": {
+    "CANONICAL_BOFU_OWNER_PROJECTION": {
+      "state": "USABLE",
+      "source_id": "bofu-owner-projection-2026-08-31-pr545",
+      "freshness": "CURRENT",
+      "reason": null
+    },
+    "GOOGLE_TRENDS": {
+      "state": "UNKNOWN",
+      "source_id": null,
+      "reason": "No as-of-valid snapshot supplied."
+    },
+    "GSC_PAGE_OVERLAY": {
+      "state": "USABLE",
+      "source_id": "gsc-page-overlay-2026-08-02-2026-08-29",
+      "freshness": "ACCEPTED_HISTORICAL",
+      "reason": null
+    },
+    "KEYWORD_PLANNER": {
+      "state": "UNKNOWN",
+      "source_id": null,
+      "reason": "No as-of-valid snapshot supplied."
+    },
+    "SERP_RESEARCH": {
+      "state": "UNKNOWN",
+      "source_id": null,
+      "reason": "No as-of-valid snapshot supplied."
+    },
+    "WARMBLY_AGGREGATE_OUTCOMES": {
+      "state": "UNKNOWN",
+      "source_id": null,
+      "reason": "No as-of-valid snapshot supplied."
+    }
+  },
+  "selected_source_ids": {
+    "CANONICAL_BOFU_OWNER_PROJECTION": "bofu-owner-projection-2026-08-31-pr545",
+    "GSC_PAGE_OVERLAY": "gsc-page-overlay-2026-08-02-2026-08-29"
+  },
+  "active_source_ids": {
+    "CANONICAL_BOFU_OWNER_PROJECTION": "bofu-owner-projection-2026-08-31-pr545",
+    "GSC_PAGE_OVERLAY": "gsc-page-overlay-2026-08-02-2026-08-29"
+  },
+  "ignored_source_snapshots": [],
+  "opportunities": [
+    {
+      "family_id": "medicoes-pagamentos",
+      "bucket": "WAIT",
+      "buyer_job": "Contestar glosa, medição rejeitada ou parcela retida com nexo contratual e prova contemporânea.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/medicoes-glosas-obras-publicas/",
+        "coverage_state": "MEASUREMENT_WAIT",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/medicoes-glosas-obras-publicas/",
+          "clicks": 1,
+          "impressions": 99,
+          "ctr": 0.0101,
+          "position": 6.61
+        },
+        "family_aggregate": {
+          "clicks": 3,
+          "impressions": 150,
+          "ctr": 0.02,
+          "position": 6.4
+        },
+        "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Glosa, rejeição ou retenção sem resposta sustentada pressiona caixa e pode consolidar perda contratual."
+      },
+      "action": "WAIT_MEASUREMENT",
+      "mechanism": "Keep the protected owner unchanged and ingest the next accepted observation into the same ledger.",
+      "smallest_finite_next_action": "Record the next accepted measurement-window observation; do not edit the protected owner.",
+      "owner_issue": "#128",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "ACTIVE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/medicoes-glosas-obras-publicas/",
+            "clicks": 1,
+            "impressions": 99,
+            "ctr": 0.0101,
+            "position": 6.61
+          },
+          "family_aggregate": {
+            "clicks": 3,
+            "impressions": 150,
+            "ctr": 0.02,
+            "position": 6.4
+          },
+          "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "data",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "BLOCKED",
+          "reason": "Active measurement/freeze authority forbids mutation.",
+          "cannibalization": "NO_MUTATION",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "aditivos",
+      "bucket": "WAIT",
+      "buyer_job": "Decidir se um acréscimo, supressão ou serviço extra cabe em aditivo formal antes de executar sem cobertura.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/aditivos-obras-publicas/",
+        "coverage_state": "MEASUREMENT_WAIT",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/aditivos-obras-publicas/",
+          "clicks": 0,
+          "impressions": 66,
+          "ctr": 0.0,
+          "position": 26.91
+        },
+        "family_aggregate": {
+          "clicks": 1,
+          "impressions": 131,
+          "ctr": 0.007634,
+          "position": 22.78
+        },
+        "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Executar escopo sem cobertura formal pode comprometer preço, prazo, caixa e defesa contratual."
+      },
+      "action": "WAIT_MEASUREMENT",
+      "mechanism": "Keep the protected owner unchanged and ingest the next accepted observation into the same ledger.",
+      "smallest_finite_next_action": "Record the next accepted measurement-window observation; do not edit the protected owner.",
+      "owner_issue": "#128",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "ACTIVE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/aditivos-obras-publicas/",
+            "clicks": 0,
+            "impressions": 66,
+            "ctr": 0.0,
+            "position": 26.91
+          },
+          "family_aggregate": {
+            "clicks": 1,
+            "impressions": 131,
+            "ctr": 0.007634,
+            "position": 22.78
+          },
+          "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "data",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "BLOCKED",
+          "reason": "Active measurement/freeze authority forbids mutation.",
+          "cannibalization": "NO_MUTATION",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "orcamento-bdi",
+      "bucket": "WAIT",
+      "buyer_job": "Auditar orçamento, BDI e base SINAPI/SICRO do edital antes de precificar a proposta.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/auditoria-orcamento-licitacao/",
+        "coverage_state": "MEASUREMENT_WAIT",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/auditoria-orcamento-licitacao/",
+          "clicks": 1,
+          "impressions": 28,
+          "ctr": 0.0357,
+          "position": 8.64
+        },
+        "family_aggregate": {
+          "clicks": 7,
+          "impressions": 436,
+          "ctr": 0.016055,
+          "position": 7.06
+        },
+        "interpretation": "PAGE_EXPOSURE_ONLY_PROTECTED_SUPPORT_INCLUDED"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Base de custos ou BDI inadequados podem transformar uma proposta vencedora em obrigação economicamente frágil."
+      },
+      "action": "WAIT_MEASUREMENT",
+      "mechanism": "Keep the protected owner unchanged and ingest the next accepted observation into the same ledger.",
+      "smallest_finite_next_action": "Record the next accepted measurement-window observation; do not mutate SINAPI or the protected owner.",
+      "owner_issue": "#126",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "ACTIVE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/auditoria-orcamento-licitacao/",
+            "clicks": 1,
+            "impressions": 28,
+            "ctr": 0.0357,
+            "position": 8.64
+          },
+          "family_aggregate": {
+            "clicks": 7,
+            "impressions": 436,
+            "ctr": 0.016055,
+            "position": 7.06
+          },
+          "interpretation": "PAGE_EXPOSURE_ONLY_PROTECTED_SUPPORT_INCLUDED"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "data",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "BLOCKED",
+          "reason": "Active measurement/freeze authority forbids mutation.",
+          "cannibalization": "NO_MUTATION",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "atrasos-prorrogacao",
+      "bucket": "WAIT",
+      "buyer_job": "Proteger prazo e documentar prorrogação, paralisação ou atraso imputável.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/atrasos-prorrogacao-obras-publicas/",
+        "coverage_state": "MEASUREMENT_WAIT",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/atrasos-prorrogacao-obras-publicas/",
+          "clicks": 1,
+          "impressions": 22,
+          "ctr": 0.0455,
+          "position": 5.41
+        },
+        "family_aggregate": {
+          "clicks": 1,
+          "impressions": 69,
+          "ctr": 0.014493,
+          "position": 5.42
+        },
+        "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Documentação tardia pode comprometer prorrogação, defesa de atraso e exposição a sanções."
+      },
+      "action": "WAIT_MEASUREMENT",
+      "mechanism": "Keep the protected owner unchanged and ingest the next accepted observation into the same ledger.",
+      "smallest_finite_next_action": "Record the next accepted measurement-window observation; do not edit the protected supporting route.",
+      "owner_issue": "#127",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "ACTIVE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/atrasos-prorrogacao-obras-publicas/",
+            "clicks": 1,
+            "impressions": 22,
+            "ctr": 0.0455,
+            "position": 5.41
+          },
+          "family_aggregate": {
+            "clicks": 1,
+            "impressions": 69,
+            "ctr": 0.014493,
+            "position": 5.42
+          },
+          "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "data",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "BLOCKED",
+          "reason": "Active measurement/freeze authority forbids mutation.",
+          "cannibalization": "NO_MUTATION",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "carteira-operacao",
+      "bucket": "WAIT",
+      "buyer_job": "Diagnosticar a operação B2G da carteira, não um contrato isolado.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/diagnostico-b2g-360/",
+        "coverage_state": "MEASUREMENT_WAIT",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/diagnostico-b2g-360/",
+          "clicks": 0,
+          "impressions": 16,
+          "ctr": 0.0,
+          "position": 4.12
+        },
+        "family_aggregate": {
+          "clicks": 0,
+          "impressions": 16,
+          "ctr": 0.0,
+          "position": 4.12
+        },
+        "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Falhas repetidas de gestão podem reproduzir atrasos, omissões documentais e pressão de margem em vários contratos."
+      },
+      "action": "WAIT_MEASUREMENT",
+      "mechanism": "Keep the protected owner unchanged and ingest the next accepted observation into the same ledger.",
+      "smallest_finite_next_action": "Record the next accepted measurement-window observation; do not edit the protected owner.",
+      "owner_issue": "#128",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "ACTIVE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/diagnostico-b2g-360/",
+            "clicks": 0,
+            "impressions": 16,
+            "ctr": 0.0,
+            "position": 4.12
+          },
+          "family_aggregate": {
+            "clicks": 0,
+            "impressions": 16,
+            "ctr": 0.0,
+            "position": 4.12
+          },
+          "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "data",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "BLOCKED",
+          "reason": "Active measurement/freeze authority forbids mutation.",
+          "cannibalization": "NO_MUTATION",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "reequilibrio",
+      "bucket": "WAIT",
+      "buyer_job": "Decidir se cabe reequilíbrio econômico-financeiro agora e como instruir o pleito.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/reequilibrio-obras-publicas/",
+        "coverage_state": "MEASUREMENT_WAIT",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/reequilibrio-obras-publicas/",
+          "clicks": 1,
+          "impressions": 14,
+          "ctr": 0.0714,
+          "position": 6.36
+        },
+        "family_aggregate": {
+          "clicks": 2,
+          "impressions": 25,
+          "ctr": 0.08,
+          "position": 5.84
+        },
+        "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Um choque de custo mal enquadrado pode permanecer sem recomposição e pressionar a margem do contrato."
+      },
+      "action": "WAIT_MEASUREMENT",
+      "mechanism": "Keep the protected owner unchanged and ingest the next accepted observation into the same ledger.",
+      "smallest_finite_next_action": "Record the next accepted measurement-window observation; do not edit the protected owner.",
+      "owner_issue": "#128",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "ACTIVE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/reequilibrio-obras-publicas/",
+            "clicks": 1,
+            "impressions": 14,
+            "ctr": 0.0714,
+            "position": 6.36
+          },
+          "family_aggregate": {
+            "clicks": 2,
+            "impressions": 25,
+            "ctr": 0.08,
+            "position": 5.84
+          },
+          "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "data",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "BLOCKED",
+          "reason": "Active measurement/freeze authority forbids mutation.",
+          "cannibalization": "NO_MUTATION",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "edital-proposta",
+      "bucket": "WAIT",
+      "buyer_job": "Decidir participar, impugnar ou ajustar a proposta antes do preço final.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/diagnostico-pre-licitacao/",
+        "coverage_state": "MEASUREMENT_WAIT",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/diagnostico-pre-licitacao/",
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0.0,
+          "position": 4.64
+        },
+        "family_aggregate": {
+          "clicks": 1,
+          "impressions": 132,
+          "ctr": 0.007576,
+          "position": 7.93
+        },
+        "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Um go/no-go frágil consome custo de proposta e pode assumir risco contratual incompatível com preço e capacidade."
+      },
+      "action": "WAIT_MEASUREMENT",
+      "mechanism": "Keep the protected owner unchanged and ingest the next accepted observation into the same ledger.",
+      "smallest_finite_next_action": "Record the next accepted measurement-window observation; do not edit the protected owner.",
+      "owner_issue": "#128",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "ACTIVE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/diagnostico-pre-licitacao/",
+            "clicks": 0,
+            "impressions": 11,
+            "ctr": 0.0,
+            "position": 4.64
+          },
+          "family_aggregate": {
+            "clicks": 1,
+            "impressions": 132,
+            "ctr": 0.007576,
+            "position": 7.93
+          },
+          "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "data",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "BLOCKED",
+          "reason": "Active measurement/freeze authority forbids mutation.",
+          "cannibalization": "NO_MUTATION",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "defesa-sancoes",
+      "bucket": "ACTIONABLE_NOW",
+      "buyer_job": "Responder notificação, defesa técnica ou risco de sanção/extinção com cronologia e nexo.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/defesa-tecnica-contratos-publicos/",
+        "coverage_state": "OWNED_BUT_WEAK",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/defesa-tecnica-contratos-publicos/",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0.0,
+          "position": 5.33
+        },
+        "family_aggregate": {
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0.0,
+          "position": 5.3
+        },
+        "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Resposta frágil pode ampliar exposição a multa, impedimento ou extinção contratual."
+      },
+      "action": "IMPROVE_CANONICAL_OWNER",
+      "mechanism": "Strengthen proof and decision progression on the existing owner without creating another route.",
+      "smallest_finite_next_action": "Validate the single supporting-to-owner edge and proof boundary before a URL-exact change.",
+      "owner_issue": "#61",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "NONE",
+          "truth": "PASS",
+          "controllable": true
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/defesa-tecnica-contratos-publicos/",
+            "clicks": 0,
+            "impressions": 6,
+            "ctr": 0.0,
+            "position": 5.33
+          },
+          "family_aggregate": {
+            "clicks": 0,
+            "impressions": 10,
+            "ctr": 0.0,
+            "position": 5.3
+          },
+          "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "trust",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "MEDIUM",
+          "reason": "Tiny page samples do not prove query demand, conversion failure or causality.",
+          "cannibalization": "REVIEW_REQUIRED",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "defesa-margem",
+      "bucket": "ACTIONABLE_NOW",
+      "buyer_job": "Partir de um contrato público real e decidir se vale uma segunda leitura técnica de margem.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/defesa-margem-contratos-publicos/",
+        "coverage_state": "OWNED_BUT_WEAK",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/defesa-margem-contratos-publicos/",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0.0,
+          "position": 7.83
+        },
+        "family_aggregate": {
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0.0,
+          "position": 7.83
+        },
+        "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Riscos contratuais não revistos podem permanecer sem enquadramento e continuar pressionando a margem."
+      },
+      "action": "IMPROVE_CANONICAL_OWNER",
+      "mechanism": "Strengthen proof and decision progression on the existing owner without creating another route.",
+      "smallest_finite_next_action": "Audit proof and progression for this single owner before any URL-exact content change.",
+      "owner_issue": "#60",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "NONE",
+          "truth": "PASS",
+          "controllable": true
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/defesa-margem-contratos-publicos/",
+            "clicks": 0,
+            "impressions": 6,
+            "ctr": 0.0,
+            "position": 7.83
+          },
+          "family_aggregate": {
+            "clicks": 0,
+            "impressions": 6,
+            "ctr": 0.0,
+            "position": 7.83
+          },
+          "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "trust",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "MEDIUM",
+          "reason": "Tiny page samples do not prove query demand, conversion failure or causality.",
+          "cannibalization": "REVIEW_REQUIRED",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "bid-room",
+      "bucket": "ACTIONABLE_NOW",
+      "buyer_job": "Operar uma sala de licitação de obras com recorte, prazo e decisão humana.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/bid-room-licitacoes-obras/",
+        "coverage_state": "COMMERCIAL_BRIDGE_GAP",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/bid-room-licitacoes-obras/",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0.0,
+          "position": 5.5
+        },
+        "family_aggregate": {
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0.0,
+          "position": 5.5
+        },
+        "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Entradas fragmentadas e decisões tardias podem elevar retrabalho e risco de submissão inadequada."
+      },
+      "action": "FIX_COMMERCIAL_BRIDGE",
+      "mechanism": "Specify one owner-to-CONFENGE_WEB next-decision edge without creating another offer or handoff.",
+      "smallest_finite_next_action": "Specify the Bid Room versus pre-licitation decision edge without creating another offer URL.",
+      "owner_issue": "#88",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "NONE",
+          "truth": "PASS",
+          "controllable": true
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/bid-room-licitacoes-obras/",
+            "clicks": 0,
+            "impressions": 4,
+            "ctr": 0.0,
+            "position": 5.5
+          },
+          "family_aggregate": {
+            "clicks": 0,
+            "impressions": 4,
+            "ctr": 0.0,
+            "position": 5.5
+          },
+          "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "revenue",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "MEDIUM",
+          "reason": "Bridge work must avoid competing with adjacent canonical owners and offers.",
+          "cannibalization": "REVIEW_REQUIRED",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "gestao-contratual",
+      "bucket": "ACTIONABLE_NOW",
+      "buyer_job": "Decidir se a construtora contrata acompanhamento contínuo de contratos públicos.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/acompanhamento-contratos-obras/",
+        "coverage_state": "COMMERCIAL_BRIDGE_GAP",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/acompanhamento-contratos-obras/",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0.0,
+          "position": 5.0
+        },
+        "family_aggregate": {
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0.0,
+          "position": 5.0
+        },
+        "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Rotina fragmentada aumenta omissões, pleitos tardios e perda de continuidade documental."
+      },
+      "action": "FIX_COMMERCIAL_BRIDGE",
+      "mechanism": "Specify one owner-to-CONFENGE_WEB next-decision edge without creating another offer or handoff.",
+      "smallest_finite_next_action": "Specify one URL-exact next-decision bridge and validate it against the 360 owner before implementation.",
+      "owner_issue": "#61",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "NONE",
+          "truth": "PASS",
+          "controllable": true
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/acompanhamento-contratos-obras/",
+            "clicks": 0,
+            "impressions": 3,
+            "ctr": 0.0,
+            "position": 5.0
+          },
+          "family_aggregate": {
+            "clicks": 0,
+            "impressions": 3,
+            "ctr": 0.0,
+            "position": 5.0
+          },
+          "interpretation": "INSUFFICIENT_EVIDENCE_TINY_SAMPLE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "revenue",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "MEDIUM",
+          "reason": "Bridge work must avoid competing with adjacent canonical owners and offers.",
+          "cannibalization": "REVIEW_REQUIRED",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "diretoria-b2g",
+      "bucket": "WAIT",
+      "buyer_job": "Decidir se a construtora precisa de direção B2G recorrente para priorizar oportunidades e contratos dentro da capacidade disponível.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/diretoria-b2g/",
+        "coverage_state": "MEASUREMENT_WAIT",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/diretoria-b2g/",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 6.0
+        },
+        "family_aggregate": {
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 6.0
+        },
+        "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Prioridade sem limite de capacidade pode sobrecarregar a equipe e alocar esforço em oportunidades inadequadas."
+      },
+      "action": "WAIT_MEASUREMENT",
+      "mechanism": "Keep the protected owner unchanged and ingest the next accepted observation into the same ledger.",
+      "smallest_finite_next_action": "Wait for an accepted attribution observation; do not change the route from this radar.",
+      "owner_issue": "#237",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "ACTIVE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/diretoria-b2g/",
+            "clicks": 0,
+            "impressions": 2,
+            "ctr": 0.0,
+            "position": 6.0
+          },
+          "family_aggregate": {
+            "clicks": 0,
+            "impressions": 2,
+            "ctr": 0.0,
+            "position": 6.0
+          },
+          "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "data",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "BLOCKED",
+          "reason": "Active measurement/freeze authority forbids mutation.",
+          "cannibalization": "NO_MUTATION",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "diagnostico-expansao",
+      "bucket": "WAIT",
+      "buyer_job": "Decidir em quais compradores, territórios e segmentos a construtora deve concentrar uma expansão B2G antes de dispersar capital comercial.",
+      "owner_or_gap": {
+        "state": "OWNED",
+        "canonical_owner_url": "https://confenge.com.br/diagnostico-b2g-expansao/",
+        "coverage_state": "MEASUREMENT_WAIT",
+        "gap": null
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "OBSERVED_PAGE_EVIDENCE",
+        "owner_observation": {
+          "path": "/diagnostico-b2g-expansao/",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 1.0
+        },
+        "family_aggregate": {
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 1.0
+        },
+        "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Foco disperso pode consumir capacidade comercial em compradores, territórios ou segmentos pouco aderentes."
+      },
+      "action": "WAIT_MEASUREMENT",
+      "mechanism": "Keep the protected owner unchanged and ingest the next accepted observation into the same ledger.",
+      "smallest_finite_next_action": "Wait for an accepted attribution observation; do not change the route from this radar.",
+      "owner_issue": "#237",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "OWNED",
+          "freeze": "ACTIVE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "OBSERVED_PAGE_EVIDENCE",
+          "owner_observation": {
+            "path": "/diagnostico-b2g-expansao/",
+            "clicks": 0,
+            "impressions": 1,
+            "ctr": 0.0,
+            "position": 1.0
+          },
+          "family_aggregate": {
+            "clicks": 0,
+            "impressions": 1,
+            "ctr": 0.0,
+            "position": 1.0
+          },
+          "interpretation": "PAGE_EXPOSURE_ONLY_NOT_CONVERSION_FAILURE"
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "data",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "BLOCKED",
+          "reason": "Active measurement/freeze authority forbids mutation.",
+          "cannibalization": "NO_MUTATION",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "bid-readiness",
+      "bucket": "RESEARCH",
+      "buyer_job": "Antes de enviar a proposta, o edital, a planilha, a documentação e o acervo estão cobertos para um go/no-go humano?",
+      "owner_or_gap": {
+        "state": "GAP",
+        "canonical_owner_url": null,
+        "coverage_state": "NO_DEMAND_EVIDENCE",
+        "gap": {
+          "state": "NO_DEMAND_EVIDENCE",
+          "reason": "Issue #155 was closed as not planned because no demand evidence and no authorized current upstream artifact justified a public consumer."
+        }
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "UNKNOWN",
+        "reason": "No valid canonical page mapping exists; manual page evidence remains UNKNOWN and is not zero demand."
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Uma proposta enviada com lacunas pode gerar retrabalho, inabilitação ou compromisso incompatível com o edital."
+      },
+      "action": "DEPRIORITIZE",
+      "mechanism": "Retain the evidence and stop engineering work until a new valid signal arrives.",
+      "smallest_finite_next_action": "Keep the gap in the ledger; do not create a page, issue or owner without new valid demand evidence.",
+      "owner_issue": "#155",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "GAP",
+          "freeze": "NONE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "UNKNOWN",
+          "reason": "No valid canonical page mapping exists; manual page evidence remains UNKNOWN and is not zero demand."
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "customer",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "HIGH",
+          "reason": "Issue #155 was closed as not planned because no demand evidence and no authorized current upstream artifact justified a public consumer.",
+          "cannibalization": "REVIEW_REQUIRED",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    },
+    {
+      "family_id": "partner-integrity",
+      "bucket": "RESEARCH",
+      "buyer_job": "Consultar ocorrências públicas CEIS/CNEP de parceiro/consórcio/subcontratado antes de diligência humana.",
+      "owner_or_gap": {
+        "state": "GAP",
+        "canonical_owner_url": null,
+        "coverage_state": "CONTENT_GAP",
+        "gap": {
+          "state": "CONTENT_GAP",
+          "reason": "No public owner may exist until an official, fresh, complete, redacted extra-cli contract passes the external gate."
+        }
+      },
+      "evidence_sample": {
+        "stage": 2,
+        "name": "FIRST_PARTY_GSC",
+        "source_kind": "GSC_PAGE_OVERLAY",
+        "state": "UNKNOWN",
+        "reason": "No valid canonical page mapping exists; manual page evidence remains UNKNOWN and is not zero demand."
+      },
+      "commercial_relevance": {
+        "level": "HIGH",
+        "economic_consequence": "Cobertura incompleta ou interpretada como certidão pode expor a decisão de parceria e a proposta a risco de integridade."
+      },
+      "action": "RESEARCH_REQUIRED",
+      "mechanism": "Fill the named evidence or authority gap with one bounded snapshot before engineering work.",
+      "smallest_finite_next_action": "Obtain one versioned SELECT-only extra-cli contract snapshot with provenance, freshness and UNKNOWN semantics.",
+      "owner_issue": "#156",
+      "decision_trace": [
+        {
+          "stage": 1,
+          "name": "HARD_ELIGIBILITY",
+          "buyer_fit": "ELIGIBLE",
+          "owner": "GAP",
+          "freeze": "NONE",
+          "truth": "PASS",
+          "controllable": false
+        },
+        {
+          "stage": 2,
+          "name": "FIRST_PARTY_GSC",
+          "source_kind": "GSC_PAGE_OVERLAY",
+          "state": "UNKNOWN",
+          "reason": "No valid canonical page mapping exists; manual page evidence remains UNKNOWN and is not zero demand."
+        },
+        {
+          "stage": 3,
+          "name": "PLANNER_MARKET_BREADTH",
+          "source_kind": "KEYWORD_PLANNER",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 4,
+          "name": "TRENDS_MOMENTUM",
+          "source_kind": "GOOGLE_TRENDS",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 5,
+          "name": "COMMERCIAL_FEEDBACK",
+          "source_kind": "WARMBLY_AGGREGATE_OUTCOMES",
+          "state": "UNKNOWN",
+          "reason": "No as-of-valid snapshot supplied."
+        },
+        {
+          "stage": 6,
+          "name": "EXECUTION_LEVERAGE",
+          "state": "ENRICHES_SHARED_LEDGER",
+          "leverage_type": "data",
+          "repetition_test": "100 repetitions enrich this ledger; they do not create 100 pages or issues."
+        },
+        {
+          "stage": 7,
+          "name": "CANNIBALIZATION_COMPLIANCE_EVIDENCE_RISK",
+          "state": "HIGH",
+          "reason": "No public owner may exist until an official, fresh, complete, redacted extra-cli contract passes the external gate.",
+          "cannibalization": "REVIEW_REQUIRED",
+          "compliance": "FAIL_CLOSED",
+          "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
+          "serp_context": {
+            "source_kind": "SERP_RESEARCH",
+            "state": "UNKNOWN",
+            "reason": "No as-of-valid snapshot supplied."
+          }
+        }
+      ],
+      "advisory_only": true,
+      "authorizes_public_mutation": false
+    }
+  ],
+  "report": {
+    "actionable_now": [
+      "defesa-sancoes",
+      "defesa-margem",
+      "bid-room",
+      "gestao-contratual"
+    ],
+    "wait": [
+      "medicoes-pagamentos",
+      "aditivos",
+      "orcamento-bdi",
+      "atrasos-prorrogacao",
+      "carteira-operacao",
+      "reequilibrio",
+      "edital-proposta",
+      "diretoria-b2g",
+      "diagnostico-expansao"
+    ],
+    "research": [
+      "bid-readiness",
+      "partner-integrity"
+    ]
+  },
+  "ignored_source_records": [],
+  "repetition_rule": "Additional observations are normalized into snapshots and rebuild this one ledger; they do not create pages or issues."
+}

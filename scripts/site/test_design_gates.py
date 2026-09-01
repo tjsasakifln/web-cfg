@@ -447,7 +447,7 @@ def test_home_five_second_clarity():
     assert "eesc-usp" in fold_lower
     assert "iniciativa privada" in fold_lower and "administração pública" in fold_lower
     # next click
-    assert "analisar meu caso" in fold_lower
+    assert "registrar situação para triagem" in fold_lower
     assert "#formulario-contato" in fold
     assert "ver edital, contrato ou operação" in fold_lower
     assert "#jornadas" in fold

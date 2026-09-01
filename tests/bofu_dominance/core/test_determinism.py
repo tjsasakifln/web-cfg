@@ -12,4 +12,4 @@ def test_build_status_is_deterministic():
     assert first == second
     assert sha256_json(first) == sha256_json(second)
     assert first["content_sha256"]
-    assert first["as_of"] == "2026-08-22"
+    assert first["as_of"] == "2026-08-31"

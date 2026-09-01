@@ -617,14 +617,17 @@ async function main() {
       if (!clicked) throw new Error(`no visible [data-set-journey=${j}]`);
       await page.waitForFunction((expectedJourney) => {
         const form = document.querySelector("#formulario-contato");
+        const destination = form?.getAttribute("data-success-destination") || form?.getAttribute("action") || "";
         return document.querySelector("#jornada-hidden")?.value === expectedJourney &&
           document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey === expectedJourney &&
-          form?.getAttribute("action")?.includes(expectedJourney);
+          destination.includes(expectedJourney);
       }, { timeout: 8000 }, j);
       const state = await page.evaluate(() => ({
         journey: document.querySelector("#jornada-hidden")?.value || "",
         stageJourney: document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey || "",
-        action: document.querySelector("#formulario-contato")?.getAttribute("action") || "",
+        action: document.querySelector("#formulario-contato")?.getAttribute("data-success-destination")
+          || document.querySelector("#formulario-contato")?.getAttribute("action")
+          || "",
       }));
       if (state.journey !== j) throw new Error(`data-set-journey=${j} left hidden=${state.journey}`);
       if (state.stageJourney !== j) throw new Error(`data-set-journey=${j} left stage=${state.stageJourney}`);
