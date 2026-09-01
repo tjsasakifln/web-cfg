@@ -144,25 +144,54 @@ export async function renderedLayoutFindings(page, options = {}) {
       if (!forms.length) findings.push("missing_form");
       else if (!captureForms.length) findings.push("broken_form");
       else {
+        const revealResultGatedCapture = (form) => {
+          if (form.getAttribute("data-result-gated-capture") !== "true") return null;
+          const selector = (form.getAttribute("data-result-source") || "").trim();
+          let result = null;
+          try { result = selector ? document.querySelector(selector) : null; } catch (_) { result = null; }
+          const followsResult = result
+            && Boolean(result.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING);
+          if (!result || !result.hasAttribute("hidden") || !followsResult) return null;
+          const hiddenAncestors = [];
+          for (let current = form; current && current !== document.body; current = current.parentElement) {
+            if (current.hasAttribute("hidden")) {
+              hiddenAncestors.push(current);
+              current.removeAttribute("hidden");
+            }
+          }
+          if (!hiddenAncestors.length) return null;
+          return () => hiddenAncestors.forEach((element) => element.setAttribute("hidden", ""));
+        };
         const usableCapture = captureForms.some((form) => {
-          if (!visible(form)) return false;
+          let restore = null;
+          if (!visible(form)) restore = revealResultGatedCapture(form);
+          if (!visible(form)) {
+            if (restore) restore();
+            return false;
+          }
 
-          const dataControls = [...form.querySelectorAll(
-            "input:not([type='hidden']):not([type='button']):not([type='submit']):not([type='image']), select, textarea",
-          )];
-          const hasUsableDataControl = dataControls.some(
-            (control) => visible(control) && enabled(control)
-              && (control.getAttribute("name") || "").trim() !== "",
-          );
-          if (!hasUsableDataControl) return false;
+          let usable = false;
+          try {
+            const dataControls = [...form.querySelectorAll(
+              "input:not([type='hidden']):not([type='button']):not([type='submit']):not([type='image']), select, textarea",
+            )];
+            const hasUsableDataControl = dataControls.some(
+              (control) => visible(control) && enabled(control)
+                && (control.getAttribute("name") || "").trim() !== "",
+            );
+            if (!hasUsableDataControl) return false;
 
-          const submitControls = [...form.querySelectorAll(
-            "button:not([type]), button[type='submit'], input[type='submit'], input[type='image']",
-          )].filter(enabled);
-          const hasVisibleSubmit = submitControls.some(actionable);
-          const hasReachableMultistepSubmit = submitControls.length > 0
-            && [...form.querySelectorAll("[data-form-next]")].some(actionable);
-          return hasVisibleSubmit || hasReachableMultistepSubmit;
+            const submitControls = [...form.querySelectorAll(
+              "button:not([type]), button[type='submit'], input[type='submit'], input[type='image']",
+            )].filter(enabled);
+            const hasVisibleSubmit = submitControls.some(actionable);
+            const hasReachableMultistepSubmit = submitControls.length > 0
+              && [...form.querySelectorAll("[data-form-next]")].some(actionable);
+            usable = hasVisibleSubmit || hasReachableMultistepSubmit;
+          } finally {
+            if (restore) restore();
+          }
+          return usable;
         });
         if (!usableCapture) findings.push("broken_form");
       }

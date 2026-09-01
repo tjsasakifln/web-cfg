@@ -177,6 +177,37 @@ const inbound = loadInbound();
   pass("mapper_present_fields");
 }
 
+// Issue #556: CFG-D19 carries only categorical attribution and next-action
+// context. Calculator money and the local text artifact are not in inbound-v1.
+{
+  const mapped = inbound.mapLeadToInboundV1({
+    lead_id: "art125001art125001art125001",
+    received_at: "2026-08-31T12:00:00.000Z",
+    source: "CONFENGE_WEB",
+    route_family: "aditivos",
+    asset_id: "limite-acrescimos-supressoes",
+    deliverable_id: "CFG-D19",
+    cta_id: "art125-input-not-confirmed",
+    landing_page: "/ferramentas/limite-acrescimos-supressoes/",
+    public_contract_id: "CTR-ART125-2026",
+    nome: "QA Art125",
+    email: "qa-art125@example.com",
+    consentimento: true,
+    opportunity_deadline: "2026-09-30",
+    contract_event: "mudanca_escopo",
+    contract_stage: "documentando",
+    valor_inicial: "10000000",
+    acrescimos_previos: "1800000",
+    artifact: "Triagem numérica do Art. 125 com R$ 10.000.000,00",
+  });
+  const serialized = JSON.stringify(mapped);
+  if (mapped.source !== "CONFENGE_WEB" || mapped.asset_id !== "limite-acrescimos-supressoes" ||
+      !mapped.message.includes("entrega=CFG-D19") || !mapped.message.includes("evento contratual=mudanca_escopo") ||
+      /10000000|1800000|10\.000\.000|Triagem numérica do Art\. 125/.test(serialized)) {
+    fail("map_art125_cfg_d19_no_calculator_values", mapped);
+  } else pass("map_art125_cfg_d19_no_calculator_values");
+}
+
 {
   const sparse = inbound.mapLeadToInboundV1({
     lead_id: "only-id-0000000000000001",

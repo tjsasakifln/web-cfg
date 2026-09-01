@@ -34,7 +34,7 @@
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
-    "active_capture_routes": 21,
+    "active_capture_routes": 22,
     "declared_ctas": 128,
     "protected_routes_with_capture": [],
     "problems": []
@@ -2852,6 +2852,72 @@
               "telefone",
               "email",
               "mensagem"
+            ]
+          },
+          "boundary": "A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "form_only",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true
+        }
+      ],
+      "actions": []
+    },
+    {
+      "route": "/ferramentas/limite-acrescimos-supressoes/",
+      "file": "ferramentas/limite-acrescimos-supressoes/index.html",
+      "family_id": "ferramentas",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/.netlify/functions/lead",
+          "cta_id": "",
+          "form_contract": "next-state/v1",
+          "profile": "second_reading",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Solicitar análise para CFG-D19",
+          "current_label": "Solicitar análise para CFG-D19",
+          "useful_next_state": "O contrato já lido fica vinculado ao pedido de segunda leitura; o protocolo confirma o registro para uma conferência humana contextual.",
+          "actual_receipt": "lead_id ou receipt_id persistido e correlacionado ao identificador público do contrato",
+          "pre_form_value": "Vincule a leitura pública a um pedido de conferência humana sem repetir os dados do contrato nem enviar documentos pelo site.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "O identificador público já vem da ferramenta; nome e um canal válido permitem retorno; o contexto adicional é opcional. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "public_contract_id",
+              "opportunity_deadline",
+              "contract_stage",
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "telefone",
+              "email"
             ]
           },
           "boundary": "A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",

@@ -91,6 +91,102 @@
       }
     }
   },
+  "art125_triage": {
+    "confirmed_within": {
+      "input": {
+        "baseStatus": "CONFIRMED",
+        "objectStatus": "CONFIRMED",
+        "previousTotalsStatus": "CONFIRMED_COMPLETE",
+        "valorInicial": 1000000,
+        "tipo": "geral",
+        "acrescimosPrevios": 100000,
+        "supressoesPrevias": 50000,
+        "acrescimoProposto": 100000,
+        "supressaoProposta": 100000
+      },
+      "expect": {
+        "branch": "WITHIN_NUMERIC_SCOPE",
+        "calculationStatus": "FINAL",
+        "withinAc": true,
+        "withinSu": true
+      }
+    },
+    "confirmed_exceeded": {
+      "input": {
+        "baseStatus": "CONFIRMED",
+        "objectStatus": "CONFIRMED",
+        "previousTotalsStatus": "CONFIRMED_COMPLETE",
+        "valorInicial": 1000000,
+        "tipo": "reforma",
+        "acrescimosPrevios": 400000,
+        "supressoesPrevias": 0,
+        "acrescimoProposto": 100000.01,
+        "supressaoProposta": 250000.01
+      },
+      "expect": {
+        "branch": "NUMERIC_SCOPE_EXCEEDED",
+        "calculationStatus": "FINAL",
+        "withinAc": false,
+        "withinSu": false
+      }
+    },
+    "base_unknown": {
+      "input": {
+        "baseStatus": "UNKNOWN",
+        "objectStatus": "CONFIRMED",
+        "previousTotalsStatus": "CONFIRMED_COMPLETE",
+        "valorInicial": "",
+        "tipo": "geral",
+        "acrescimosPrevios": 0,
+        "supressoesPrevias": 0,
+        "acrescimoProposto": 100,
+        "supressaoProposta": 0
+      },
+      "expect": {
+        "branch": "INPUT_NOT_CONFIRMED",
+        "calculationStatus": "NOT_AVAILABLE",
+        "unknownCode": "updated_base"
+      }
+    },
+    "previous_known_partial": {
+      "input": {
+        "baseStatus": "CONFIRMED",
+        "objectStatus": "CONFIRMED",
+        "previousTotalsStatus": "KNOWN_PARTIAL",
+        "valorInicial": 1000000,
+        "tipo": "geral",
+        "acrescimosPrevios": 100000,
+        "supressoesPrevias": 50000,
+        "acrescimoProposto": 100000,
+        "supressaoProposta": 100000
+      },
+      "expect": {
+        "branch": "INPUT_NOT_CONFIRMED",
+        "calculationStatus": "PROVISIONAL_KNOWN_PARTIAL",
+        "withinAc": true,
+        "withinSu": true,
+        "unknownCode": "previous_totals_incomplete"
+      }
+    },
+    "previous_unknown_ignores_numbers": {
+      "input": {
+        "baseStatus": "CONFIRMED",
+        "objectStatus": "CONFIRMED",
+        "previousTotalsStatus": "UNKNOWN",
+        "valorInicial": 1000000,
+        "tipo": "geral",
+        "acrescimosPrevios": 0,
+        "supressoesPrevias": 0,
+        "acrescimoProposto": 100000,
+        "supressaoProposta": 0
+      },
+      "expect": {
+        "branch": "INPUT_NOT_CONFIRMED",
+        "calculationStatus": "NOT_AVAILABLE",
+        "unknownCode": "previous_totals_unknown"
+      }
+    }
+  },
   "parseBRL": [
     { "raw": "10000000", "value": 10000000 },
     { "raw": "10000000,50", "value": 10000000.5 },
