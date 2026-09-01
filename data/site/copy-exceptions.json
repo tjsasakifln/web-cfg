@@ -17,6 +17,12 @@
     },
     {
       "rule": "plain_language",
+      "match": "\\bunknown\\b",
+      "path": "ferramentas/limite-acrescimos-supressoes/index.html",
+      "reason": "A issue #556 exige os estados epistemicos literais CONFIRMED, CONFIRMED_COMPLETE, KNOWN_PARTIAL e UNKNOWN para impedir que uma premissa desconhecida vire zero. Cada token aparece ao lado da explicacao em portugues e a excecao route-exact nao libera jargao, threshold ou nova superficie."
+    },
+    {
+      "rule": "plain_language",
       "match": "\\bfact\\b",
       "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
       "reason": "A issue #389 exige os quatro rotulos epistemicos visiveis FACT, CALCULATION, INFERENCE e UNKNOWN. Eles reproduzem o vocabulario publicado na politica editorial 1.1.0 e aparecem aqui somente ao lado da explicacao em portugues; a excecao e route-exact e nao autoriza jargao em outra pagina."

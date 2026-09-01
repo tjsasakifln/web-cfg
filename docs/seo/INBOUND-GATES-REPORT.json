@@ -122,20 +122,6 @@
         },
         {
           "gate": "conversion",
-          "path": "ferramentas/limite-acrescimos-supressoes/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/ferramentas/limite-acrescimos-supressoes/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "ferramentas/limite-acrescimos-supressoes/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
           "path": "ferramentas/matriz-atraso-obra/index.html",
           "reason": "terminal_action_debt",
           "excerpt": "/ferramentas/matriz-atraso-obra/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
@@ -216,11 +202,11 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 54,
+          "covered": 55,
           "total": 66,
-          "coverage": 0.8182,
+          "coverage": 0.8333,
           "exempt_trust_or_legal": 10,
-          "registered_debt": 6
+          "registered_debt": 5
         },
         "exemptions": [
           {
@@ -245,16 +231,6 @@
           },
           {
             "route": "/ferramentas/checklist-reequilibrio/",
-            "family": "ferramentas",
-            "kind": "debt",
-            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
-            "owner_issue": 61,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
-          {
-            "route": "/ferramentas/limite-acrescimos-supressoes/",
             "family": "ferramentas",
             "kind": "debt",
             "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
@@ -377,7 +353,7 @@
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 21
+        "warnings": 19
       }
     },
     "legacy_entity": {
