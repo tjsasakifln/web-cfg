@@ -1,0 +1,25 @@
+{
+  "schema_version": "bofu-issue-state-snapshot/v1",
+  "as_of": "2026-08-31T04:39:10Z",
+  "repository": "tjsasakifln/web-cfg",
+  "audited_origin_main": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "source": "GitHub issue API read-only audit for #543",
+  "rule": "Closed issues may be historical evidence, never an operational owner.",
+  "issues": [
+    {"number": 60, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/60", "closed_at": null},
+    {"number": 61, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/61", "closed_at": null},
+    {"number": 88, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/88", "closed_at": null},
+    {"number": 126, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/126", "closed_at": null},
+    {"number": 127, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/127", "closed_at": null},
+    {"number": 128, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/128", "closed_at": null},
+    {"number": 155, "state": "CLOSED", "url": "https://github.com/tjsasakifln/web-cfg/issues/155", "closed_at": "2026-08-31T04:18:12Z"},
+    {"number": 156, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/156", "closed_at": null},
+    {"number": 237, "state": "CLOSED", "url": "https://github.com/tjsasakifln/web-cfg/issues/237", "closed_at": "2026-08-23T00:29:33Z"},
+    {"number": 327, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/327", "closed_at": null},
+    {"number": 387, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/387", "closed_at": null},
+    {"number": 413, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/413", "closed_at": null},
+    {"number": 529, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/529", "closed_at": null},
+    {"number": 533, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/533", "closed_at": null},
+    {"number": 543, "state": "OPEN", "url": "https://github.com/tjsasakifln/web-cfg/issues/543", "closed_at": null}
+  ]
+}

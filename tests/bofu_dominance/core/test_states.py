@@ -111,16 +111,20 @@ def test_web_search_sample_cannot_be_top1():
     assert resolved["state"] != "TOP1"
 
 
-def test_gated_families_are_no_canonical_not_existing_pages():
+def test_gap_families_are_no_canonical_not_existing_pages():
     status = build_status()
     by_id = {item["id"]: item for item in status["families"]}
-    for fid, issue in (("bid-readiness", 155), ("partner-integrity", 156)):
+    expected_gate = {
+        "bid-readiness": "CLOSED_NOT_PLANNED",
+        "partner-integrity": "GATED",
+    }
+    for fid in ("bid-readiness", "partner-integrity"):
         item = by_id[fid]
         assert item["state"] == "NO_CANONICAL"
-        assert item["gate"]["status"] == "GATED"
+        assert item["gate"]["status"] == expected_gate[fid]
         assert item["canonical_owner"]["page_exists"] is False
         assert item["canonical_owner"]["path"] is None
-        assert item["owner"] == f"issue:{issue}"
+        assert item["owner"] == f"gap:{fid}"
         assert item["recommendation"]["authorizes_html_edit"] is False
         assert item["recommendation"]["action"] == "hold_gated"
 
@@ -128,5 +132,9 @@ def test_gated_families_are_no_canonical_not_existing_pages():
 def test_registry_matches_gated_issues():
     registry = load_registry()
     gated = [item for item in registry["families"] if (item.get("gate") or {}).get("status") == "GATED"]
-    assert {item["id"] for item in gated} == {"bid-readiness", "partner-integrity"}
-    assert {item["active_issue"] for item in gated} == {155, 156}
+    assert {item["id"] for item in gated} == {"partner-integrity"}
+    assert {item["active_issue"] for item in gated} == {156}
+    bid = next(item for item in registry["families"] if item["id"] == "bid-readiness")
+    assert bid["gate"]["status"] == "CLOSED_NOT_PLANNED"
+    assert bid["active_issue"] is None
+    assert bid["canonical_owner"]["historical_issue"] == 155

@@ -14,12 +14,12 @@ def render_report(status: dict[str, Any]) -> str:
     lines = [
         f"# BOFU intent dominance — {SLOT}",
         "",
-        f"**Campaign:** `{status.get('campaign') or CAMPAIGN}`  ",
-        f"**As of:** {status['as_of']}  ",
-        f"**Git head (origin/main pin):** `{status.get('origin_main')}`  ",
-        f"**Decision state:** VALIDATE (ledger) / EXECUTE_NOW (honesty gates)  ",
-        f"**Leverage:** distribution, data, trust  ",
-        f"**Time to evidence:** this PR for the ledger; `gsc_live_state` is `{status['gsc_live_state']}`  ",
+        f"**Campaign:** `{status.get('campaign') or CAMPAIGN}`",
+        f"**As of:** {status['as_of']}",
+        f"**Git head (origin/main pin):** `{status.get('origin_main')}`",
+        f"**Decision state:** VALIDATE (ledger) / EXECUTE_NOW (honesty gates)",
+        f"**Leverage:** distribution, data, trust",
+        f"**Time to evidence:** this PR for the ledger; `gsc_live_state` is `{status['gsc_live_state']}`",
         f"**North Star:** inbound qualified pipeline / month — not page count",
         "",
         "## Visitor job",
@@ -46,8 +46,8 @@ def render_report(status: dict[str, Any]) -> str:
         ),
         "The 2026-08-09 CSV, redacted snapshots and SERP samples are **not** this",
         "live pull. Top-rows-only, date gaps, mixed device and non-BR geo do not",
-        "authorize TOP* or HTML. PR #159 remains an observability candidate, not",
-        "main. Absence of a path in the returned top rows is not ranking zero.",
+        "authorize TOP* or HTML. Merged PR #159 is historical implementation, not",
+        "an operational owner or rank claim. Absence from returned top rows is not ranking zero.",
         "",
         "## Coverage",
         "",
@@ -83,17 +83,17 @@ def render_report(status: dict[str, Any]) -> str:
             "",
             "## Dependency graph",
             "",
-            "Required issues #61, #128, #151–#156 and PRs #157–#159 are nodes.",
+            "Issues #61, #128, historical #151–#155, open #156 and PRs #157–#159 remain provenance nodes.",
             "",
             "- **#128** owns the six frozen pillars.",
-            "- **#153** owns origin→service (`destination_service_id`). This slot does not edit `script.js`.",
-            "- **#155 / #156** are GATED families, not existing pages.",
-            "- **PR #157** is exactly one contract-analysis canary, not a BOFU family.",
-            "- **PR #158** is the Data Desk kit; this ledger is not a second target registry.",
+            "- The `web-cfg/attribution-contract` owns origin→service; closed #153 is historical.",
+            "- Closed #155 is a historical no-demand-evidence gap; open #156 is externally blocked.",
+            "- Closed-unmerged PR #157 remains a canary reference, not a BOFU family.",
+            "- Merged PR #158 is historical Data Desk implementation; this ledger is not a second registry.",
             (
-                "- **PR #159** is the observability producer candidate. "
+                "- Merged **PR #159** is the historical observability implementation. "
                 f"`gsc_live_state` is `{status['gsc_live_state']}`; "
-                "PR #159 is not merged to main."
+                "top-row evidence still does not authorize rank or demand claims."
             ),
             "",
             "## SERP census",
@@ -118,7 +118,7 @@ def render_report(status: dict[str, Any]) -> str:
             "- Edit HTML, analytics, sitemaps, offers or package files.",
             "- Convert historical GSC, redacted snapshots or SERP samples into live rank.",
             "- Open a second Data Desk target registry.",
-            "- Treat PR #157 as a new BOFU family.",
+            "- Treat historical PRs or closed issues as current operational owners.",
             "",
             "## Rollback",
             "",
@@ -126,7 +126,7 @@ def render_report(status: dict[str, Any]) -> str:
             "",
         ]
     )
-    return "\n".join(lines) + "\n"
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def render_next_actions(status: dict[str, Any]) -> str:
@@ -155,9 +155,9 @@ def render_next_actions(status: dict[str, Any]) -> str:
             "## Stop",
             "",
             "- Do not edit #128 HTML before 2026-09-16.",
-            "- Do not publish #155/#156 landings from this slot.",
-            "- Do not merge this PR as if GSC were live.",
+            "- Do not publish a #155/#156 landing from this slot.",
+            "- Do not treat top-row GSC evidence as comparable demand or rank.",
             "",
         ]
     )
-    return "\n".join(lines) + "\n"
+    return "\n".join(lines).rstrip() + "\n"

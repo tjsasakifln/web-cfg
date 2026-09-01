@@ -2075,6 +2075,26 @@ def gate_semantic_query_ownership() -> GateReport:
     return GateReport(ok=report.ok, findings=findings, stats=report.stats)
 
 
+def gate_bofu_buyer_decision_map() -> GateReport:
+    """Require the complete, unique and decision-bearing #543 BOFU projection."""
+    from scripts.bofu_dominance.core.buyer_decision_map import (
+        validate_buyer_decision_map,
+    )
+
+    report = validate_buyer_decision_map(ROOT)
+    findings = [
+        Finding(
+            gate="bofu_buyer_decision_map",
+            path=item.path,
+            reason=item.reason,
+            excerpt=item.detail,
+            severity=item.severity,
+        )
+        for item in report.findings
+    ]
+    return GateReport(ok=report.ok, findings=findings, stats=report.stats)
+
+
 def run_all_gates() -> dict[str, Any]:
     reports = {
         "naturalness": gate_naturalness(only_indexable=True),
@@ -2084,6 +2104,7 @@ def run_all_gates() -> dict[str, Any]:
         "legacy_entity": gate_legacy_entity_matrix(),
         "similarity": gate_similarity_indexable(),
         "semantic_query_ownership": gate_semantic_query_ownership(),
+        "bofu_buyer_decision_map": gate_bofu_buyer_decision_map(),
     }
     ok = all(r.ok for r in reports.values())
     return {

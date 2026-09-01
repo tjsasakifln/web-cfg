@@ -22,7 +22,7 @@ def test_every_family_has_owner_state_reason():
         assert item["primary_queries"]
         assert item["negative_queries"]
         assert item["canonical_owner"]
-        assert item["active_issue"]
+        assert item["operational_owner"] == "web-cfg/organic-market-capture"
         assert item["earliest_safe_action_at"]
         assert item["overlap"]
         assert item["next_test"]
@@ -32,7 +32,8 @@ def test_every_family_has_owner_state_reason():
         assert "geo" in item["evidence"]
         assert "device" in item["evidence"]
         assert "denominator" in item["evidence"]
-        assert item["transition_owner_issue"] == 153
+        assert item["transition_owner"] == "web-cfg/attribution-contract"
+        assert item["historical_transition_issue"] == 153
 
 
 def test_gsc_live_state_is_job_ok_and_not_product_ready():

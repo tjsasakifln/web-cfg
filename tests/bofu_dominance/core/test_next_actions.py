@@ -18,8 +18,8 @@ def test_next_actions_cap_and_no_edit_now():
     assert "gsc-live-overlay" in ids
     assert "gsc-credentials" not in ids
     assert "freeze-128" in ids
-    assert "origin-to-service-153" in ids
-    assert "gated-155-156" in ids
-    assert "prs-157-159-roles" in ids
+    assert "origin-to-service-contract" in ids
+    assert "gap-155-blocked-156" in ids
+    assert "historical-pr-roles" in ids
     status = build_status()
     assert status["next_actions"] == actions

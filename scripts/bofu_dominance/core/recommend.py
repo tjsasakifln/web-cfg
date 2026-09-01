@@ -62,7 +62,7 @@ def ledger_next_actions() -> list[dict[str, Any]]:
             "id": "gsc-live-overlay",
             "action": "observe_only",
             "authorizes_html_edit": False,
-            "owner": "pr-159",
+            "owner": "web-cfg/search-observatory",
             "refs": ["pr-159", "issue-128"],
             "summary": (
                 "Current mechanical state is LIVE_JOB_OK with "
@@ -87,37 +87,36 @@ def ledger_next_actions() -> list[dict[str, Any]]:
             ),
         },
         {
-            "id": "origin-to-service-153",
+            "id": "origin-to-service-contract",
             "action": "keep_owner",
             "authorizes_html_edit": False,
-            "owner": "issue-153",
+            "owner": "web-cfg/attribution-contract",
             "refs": ["issue-153", "issue-128"],
             "summary": (
-                "#153 owns the origin→service transition with destination_service_id. "
+                "The versioned attribution contract owns origin→service; closed #153 is historical. "
                 "This ledger does not reimplement analytics or edit script.js."
             ),
         },
         {
-            "id": "gated-155-156",
+            "id": "gap-155-blocked-156",
             "action": "hold_gated",
             "authorizes_html_edit": False,
-            "owner": "issue-155",
+            "owner": "web-cfg/organic-market-capture",
             "refs": ["issue-155", "issue-156", "issue-154"],
             "summary": (
-                "#155 bid-readiness and #156 partner-integrity enter as GATED, not as "
-                "existing pages. Do not ship HTML. #156 stays blocked on extra-cli#436."
+                "Closed #155 is historical NO_DEMAND_EVIDENCE; open #156 remains an external "
+                "CONTENT_GAP. Neither is an existing page or current URL owner."
             ),
         },
         {
-            "id": "prs-157-159-roles",
+            "id": "historical-pr-roles",
             "action": "do_not_duplicate",
             "authorizes_html_edit": False,
-            "owner": "pr-159",
+            "owner": "web-cfg/organic-market-capture",
             "refs": ["pr-157", "pr-158", "pr-159"],
             "summary": (
-                "PR #157 is one contract-analysis canary, not a BOFU family. "
-                "PR #158 is the Data Desk kit, not a second target registry. "
-                "PR #159 is an observability candidate to merge, not live GSC on main."
+                "PR #157 closed unmerged and is not a BOFU family. PR #158 and PR #159 "
+                "are historical merged implementations, not operational owners or live-rank claims."
             ),
         },
     ]

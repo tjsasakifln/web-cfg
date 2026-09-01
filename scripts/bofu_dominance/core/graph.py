@@ -37,18 +37,19 @@ def build_graph() -> dict[str, Any]:
         raise RegistryError("PR #157 must remain a canary, not a BOFU family")
     if pr158.get("role") != "data_desk_kit_not_registry":
         raise RegistryError("PR #158 is the Data Desk kit; do not create a second target registry")
-    if pr159.get("merged_to_main") is True:
-        raise RegistryError("PR #159 is a candidate producer, not main already integrated")
-    if pr157.get("merged_to_main") or pr158.get("merged_to_main"):
-        raise RegistryError("PRs #157/#158 are draft producers, not main")
+    if pr157.get("merged_to_main"):
+        raise RegistryError("PR #157 closed unmerged and must not become a BOFU family")
+    if not pr158.get("merged_to_main") or not pr159.get("merged_to_main"):
+        raise RegistryError("PRs #158/#159 are historical merged implementations")
     return {
         "nodes": nodes,
         "edges": edges,
         "required_issues": list(ISSUE_GRAPH_REQUIRED),
         "required_prs": list(PR_GRAPH_REQUIRED),
-        "transition_owner_issue": 153,
+        "transition_owner": "web-cfg/attribution-contract",
+        "historical_transition_issue": 153,
         "frozen_owner_issue": 128,
-        "observability_candidate_pr": 159,
+        "historical_observability_pr": 159,
         "canary_not_family_pr": 157,
         "data_desk_kit_pr": 158,
     }

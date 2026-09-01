@@ -2,16 +2,16 @@
   "schema": "bofu-intent-registry/2.0",
   "campaign": "CONFENGE-WEB-BOFU-INTENT-DOMINANCE-02",
   "slot": "BOFU-CORE",
-  "as_of": "2026-08-22",
+  "as_of": "2026-08-31",
   "public_surface": "https://confenge.com.br",
   "gsc_live_state": "LIVE_JOB_OK",
   "notes": [
     "This is the canonical BOFU intent ledger, not a second Organic Opportunity Engine.",
     "Families from issue #128 are FROZEN: census and spec allowed, HTML not.",
-    "Issues #155 and #156 enter as GATED, not as existing pages.",
-    "PR #157 is a contract-analysis canary, not a family in this list.",
-    "PR #158 is the Data Desk kit; this file is not a second target registry.",
-    "PR #159 is an observability candidate; it does not make GSC live."
+    "Issue #155 is a closed historical gap reference; #156 remains a GATED external dependency. Neither is an existing page or a URL owner.",
+    "Closed-unmerged PR #157 is a contract-analysis canary, not a family in this list.",
+    "Merged PR #158 is the historical Data Desk implementation; this file is not a second target registry.",
+    "Merged PR #159 is the historical observability implementation; top-row output still does not authorize live rank claims."
   ],
   "families": [
     {
@@ -435,10 +435,10 @@
         "page_type": "paid_offer",
         "page_exists": true,
         "indexable": true,
-        "issue": 237
+        "historical_issue": 237
       },
       "freeze": {"frozen": false},
-      "active_issue": 237,
+      "active_issue": null,
       "active_pr": null,
       "earliest_safe_action_at": "2026-08-22",
       "overlap": [
@@ -470,10 +470,10 @@
         "page_type": "paid_offer",
         "page_exists": true,
         "indexable": true,
-        "issue": 237
+        "historical_issue": 237
       },
       "freeze": {"frozen": false},
-      "active_issue": 237,
+      "active_issue": null,
       "active_pr": null,
       "earliest_safe_action_at": "2026-08-22",
       "overlap": [
@@ -504,17 +504,17 @@
         "page_type": null,
         "page_exists": false,
         "indexable": false,
-        "issue": 155
+        "historical_issue": 155
       },
       "gate": {
-        "status": "GATED",
+        "status": "CLOSED_NOT_PLANNED",
         "gated": true,
-        "issue": 155,
-        "reason": "gated_issue_no_public_page",
+        "historical_issue": 155,
+        "reason": "closed_without_demand_or_authorized_current_contract",
         "page_exists": false
       },
       "freeze": {"frozen": false},
-      "active_issue": 155,
+      "active_issue": null,
       "active_pr": null,
       "earliest_safe_action_at": "2026-09-16",
       "overlap": [
@@ -522,7 +522,7 @@
         {"other_family": "orcamento-bdi", "rule": "do_not_replace_auditoria_pillar"},
         {"other_family": "bid-room", "rule": "cta_may_point_to_bid_room_after_human_review"}
       ],
-      "next_test": "Consumer contract extra-cli ↔ web-cfg before any landing. This slot does not ship HTML.",
+      "next_test": "Revalidate demand and an authorized current extra-cli contract before reopening any landing decision. This slot does not ship HTML.",
       "kill": "Kill if documents cannot produce auditable FACT/RISK/UNKNOWN or if 28d qualified use does not transfer BOFU.",
       "consolidate": "One future canary URL. No pages per edital/CNPJ/órgão."
     },
