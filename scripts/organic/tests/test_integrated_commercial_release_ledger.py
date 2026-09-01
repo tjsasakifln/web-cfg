@@ -114,6 +114,20 @@ def test_missing_semantics_are_owned_without_changing_event_payloads_here():
     assert record["scope_guard"]["analytics_payload_change"] is False
 
 
+def test_550_instrument_declares_next_treatment_without_rewriting_history():
+    instrument = ledger.validate_instrumentation_550()
+    assert instrument["baseline_reset"] is False
+    assert instrument["pii_analytics_allowlist"] == []
+    assert instrument["authorization"]["html_mutation_authorized_for_529_value_first"] is False
+    assert {row["route"] for row in instrument["primary_hash_ctas"]} == ledger.MISSING_PRIMARY_CTA_ROUTES
+    assert instrument["validation_category"]["allowlist"] == [
+        "required",
+        "contact_format",
+        "rate_limited",
+    ]
+    assert instrument["validation_category"]["legacy_missing_state"] == "UNKNOWN_CATEGORY"
+
+
 def test_available_primary_ctas_have_raw_exact_predicates_not_route_aggregates():
     record = _record()
     for row in record["routes"]:
