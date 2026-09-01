@@ -16,7 +16,19 @@
     "reproduce": "CHROME_PATH=... bash scripts/site/capture_design_direction.sh"
   },
   "binaries_committed": false,
-  "binaries_note": "As 28 MB de PNG ficam fora da arvore: sao reproduziveis byte a byte a partir do commit registrado, e o hash por arquivo abaixo e o que torna uma recaptura conferivel.",
+  "comparison_ready": false,
+  "comparison_blockers": [
+    "a-trilho-de-memoria/comercial",
+    "a-trilho-de-memoria/instrumento",
+    "a-trilho-de-memoria/leitura",
+    "a-trilho-de-memoria/specimen",
+    "b-estado-de-revisao/comercial",
+    "b-estado-de-revisao/instrumento",
+    "b-estado-de-revisao/leitura",
+    "b-estado-de-revisao/specimen",
+    "baseline"
+  ],
+  "binaries_note": "As 28 MB de PNG ficam fora da arvore; os hashes vinculam os artefatos exatos. Ha manifests anteriores a #540 sem browser/materializacao; nao sao baseline direto.",
   "file_count": 55,
   "groups": [
     {

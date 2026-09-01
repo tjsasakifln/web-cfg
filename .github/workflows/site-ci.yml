@@ -161,7 +161,9 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           CAPTURE_BROWSER_REQUIRED: "1"
-        run: npm run test:capture-states
+        run: |
+          npm run test:capture-states
+          npm run test:deliverables-live-audit
       - name: UI geometry, narrow breakpoints and computed cascade
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
