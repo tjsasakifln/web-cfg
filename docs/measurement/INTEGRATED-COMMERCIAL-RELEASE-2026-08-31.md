@@ -66,7 +66,7 @@ No route-level analytics counts were supplied for the pre-release period. Their 
 
 ## #550 observability instrument (separate from the historical baseline)
 
-- Status: `DECLARED_AWAITING_EXACT_PROMOTION`; exact instrumentation tree: `0e744149c2b5ae8241d44b44c21fc8cb3ebec608`; baseline reset: `False`.
+- Status: `DECLARED_AWAITING_EXACT_PROMOTION`; exact instrumentation tree: `084bdf868fcaf60e2c85d4600553a1ddd1734e54`; baseline reset: `False`.
 - Hash CTAs: three route-exact `cta_click` predicates are declared for the next exact promoted treatment. Historical missing observations remain unknown.
 - `lead_form_error.validation_category`: `required, contact_format, rate_limited`; legacy absence is `UNKNOWN_CATEGORY`; `lead_form_backend_error` remains separate.
 - The exception recaptured only `script.js` and `js/modules/analytics.js`; CSP refresh produced no `_headers` diff. Promotion and exact-SHA smoke remain required before collection is treated as available.

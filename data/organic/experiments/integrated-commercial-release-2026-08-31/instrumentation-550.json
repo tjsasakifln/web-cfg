@@ -10,7 +10,7 @@
     "protected_route_content_mutation": "NOT_AUTHORIZED",
     "html_mutation_authorized_for_529_value_first": false
   },
-  "instrumentation_tree_sha": "0e744149c2b5ae8241d44b44c21fc8cb3ebec608",
+  "instrumentation_tree_sha": "084bdf868fcaf60e2c85d4600553a1ddd1734e54",
   "baseline_reset": false,
   "pii_analytics_allowlist": [],
   "historical_release_ledger": {
@@ -33,14 +33,14 @@
     {
       "path": "script.js",
       "old_sha256": "a63729f3ff5915948d3eea91bad8d597996749e1dacd529e044676263f021314",
-      "new_sha256": "fda1c5421e9d8c80f3cd7cc5da693557995d52772c0f6b6d5a704398f9d2549b",
-      "reason": "#550 finite validation-category producer and client-side property allowlist"
+      "new_sha256": "087044e2dcf5dd2770f9d603457d2b054aab09319e89013bf14d8214b6a4189a",
+      "reason": "#550 finite validation-category producer and client-side property allowlist; compacted only to retain the existing home critical-payload gate"
     },
     {
       "path": "js/modules/analytics.js",
       "old_sha256": "5fd78c3d9c3c8b9d135e6cc4cb02a11ee276c09018cf3f81e6a1a641f8029698",
-      "new_sha256": "ba341a753907f9f7fc59caec1d9539dddffb1c47737c9e35f232059319cd93fa",
-      "reason": "#550 finite validation-category client allowlist and no-field/no-message filter"
+      "new_sha256": "34dd899f504710c5bfac5fa7cda2b80a40f904a80dcf037ada4d71f576b73193",
+      "reason": "#550 finite validation-category client allowlist and no-field/no-message filter; compacted only to retain the existing home critical-payload gate"
     }
   ],
   "csp_recapture": {"required": false, "reason": "CSP refresh against the final build produced no _headers diff."},
