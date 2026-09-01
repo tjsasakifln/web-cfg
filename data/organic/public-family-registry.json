@@ -293,12 +293,6 @@
       "owner_issue": 61,
       "debt": [
         {
-          "route": "/ferramentas/checklist-reequilibrio/",
-          "owner_issue": 61,
-          "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
-          "expires_at": "2026-09-30"
-        },
-        {
           "route": "/ferramentas/matriz-atraso-obra/",
           "owner_issue": 61,
           "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",

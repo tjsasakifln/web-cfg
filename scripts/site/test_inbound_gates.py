@@ -886,8 +886,8 @@ def test_registered_debt_is_route_exact_and_never_absorbs_a_sibling():
         tmp_path = Path(tmp)
         _green_fixture_root(tmp_path)
         # This child tool still carries exact debt under #290.
-        registered = ROOT / "ferramentas" / "checklist-reequilibrio" / "index.html"
-        target = tmp_path / "ferramentas" / "checklist-reequilibrio" / "index.html"
+        registered = ROOT / "ferramentas" / "matriz-atraso-obra" / "index.html"
+        target = tmp_path / "ferramentas" / "matriz-atraso-obra" / "index.html"
         target.parent.mkdir(parents=True)
         target.write_text(registered.read_text(encoding="utf-8"), encoding="utf-8")
         report = gate_conversion(tmp_path)
@@ -958,10 +958,13 @@ def test_every_exemption_carries_a_written_reason_and_an_owner():
 def test_report_lists_every_exempt_route_with_its_reason():
     report = gate_conversion()
     assert not any(
-        finding.path == "ferramentas/limite-acrescimos-supressoes/index.html"
+        finding.path in {
+            "ferramentas/limite-acrescimos-supressoes/index.html",
+            "ferramentas/checklist-reequilibrio/index.html",
+        }
         and finding.reason == "missing_journey_signal"
         for finding in report.findings
-    ), "#556 capture must declare its contrato journey explicitly"
+    ), "#556 and #561 captures must declare their contrato journey explicitly"
     exemptions = report.stats["exemptions"]
     assert exemptions, "the report must name the exempt routes, never truncate them"
     for entry in exemptions:
@@ -978,10 +981,10 @@ def test_report_lists_every_exempt_route_with_its_reason():
         "/problemas-que-resolvemos/",
         "/ferramentas/",
         "/ferramentas/limite-acrescimos-supressoes/",
+        "/ferramentas/checklist-reequilibrio/",
     ):
         assert route not in debt_routes, route
     for route in (
-        "/ferramentas/checklist-reequilibrio/",
         "/ferramentas/matriz-atraso-obra/",
         "/casos/aditivo-art125-demonstrativo/",
     ):

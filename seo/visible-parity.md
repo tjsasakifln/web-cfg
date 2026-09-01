@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `76`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/web-cfg/.claude/worktrees/agent-a543fb73fb40aef02/_site`
+- site_root: `/tmp/wt-ferramentas-cta/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
