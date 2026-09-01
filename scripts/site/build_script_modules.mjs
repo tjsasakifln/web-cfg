@@ -56,8 +56,8 @@ const header = `/* CONFENGE public site JS — modular assembly (SYS-03).
 `;
 const bodies = mods.map((m) => m.text.replace(/^\/\* MODULE[\s\S]*?\*\/\n/, ""));
 const result = await minify(header + bodies.join("\n"), {
-  compress: { passes: 2 },
-  mangle: { reserved: ["PII_PARAM_KEYS", "firstInvalid", "applyJourneyToForm", "confengeRouteOfferFit"] },
+  compress: { passes: 5, drop_console: true, unsafe: true },
+  mangle: { toplevel: true, reserved: ["PII_PARAM_KEYS", "firstInvalid", "applyJourneyToForm", "confengeRouteOfferFit"] },
   format: { comments: /CONFENGE public site JS|EVENT_CONTRACT_CLIENT_/ },
 });
 if (!result.code) {
