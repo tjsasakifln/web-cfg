@@ -10,7 +10,7 @@
     "protected_route_content_mutation": "NOT_AUTHORIZED",
     "html_mutation_authorized_for_529_value_first": false
   },
-  "instrumentation_tree_sha": "084bdf868fcaf60e2c85d4600553a1ddd1734e54",
+  "instrumentation_tree_sha": "f073917fadb054d2253dafd6942beaa12c07be8c",
   "baseline_reset": false,
   "pii_analytics_allowlist": [],
   "historical_release_ledger": {
@@ -33,8 +33,8 @@
     {
       "path": "script.js",
       "old_sha256": "a63729f3ff5915948d3eea91bad8d597996749e1dacd529e044676263f021314",
-      "new_sha256": "087044e2dcf5dd2770f9d603457d2b054aab09319e89013bf14d8214b6a4189a",
-      "reason": "#550 finite validation-category producer and client-side property allowlist; compacted only to retain the existing home critical-payload gate"
+      "new_sha256": "848d8fe9e7131cc6c727af849d1174e811b91571f82b67e0fc65d2b400333988",
+      "reason": "#550 finite validation-category producer and client-side property allowlist; generated with the canonical compact runtime configuration to retain the existing home critical-payload gate"
     },
     {
       "path": "js/modules/analytics.js",
