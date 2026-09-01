@@ -82,8 +82,9 @@ const analyticsCalls = [...money.matchAll(/(?:T\.track|window\.confengeTrack)\([
 if (/public_id_slug|public_contract_id|\bqid\b|\bquery\b/.test(analyticsCalls)) {
   console.error("FAIL money_identifier_in_analytics"); fail++;
 } else console.log("PASS money_identifier_not_in_analytics");
+// Only the tools that still end by attributing the result to another page.
+// #556 and #561 replaced that ending with a persisted on-page capture.
 const resultRoutes = new Map([
-  ["ferramentas/checklist-reequilibrio/index.html", "/reequilibrio-obras-publicas/"],
   ["ferramentas/matriz-atraso-obra/index.html", "/atrasos-prorrogacao-obras-publicas/"],
 ]);
 for (const [rel, destination] of resultRoutes) {
@@ -107,6 +108,30 @@ if (!limite.includes('id="cfg-d19-handoff"') || !limite.includes('action="/.netl
 if (!limite.includes('name="deliverable_id" type="hidden" value="CFG-D19"') || !limite.includes('name="contract_event" type="hidden" value="mudanca_escopo"')) {
   console.error("FAIL limite_cfg_d19_contract"); fail++;
 } else console.log("PASS limite_cfg_d19_contract");
+
+// #561: the reequilibrio checklist ends with a persisted terminal capture,
+// result-gated, and never ships a computed readiness value to the server.
+if (!reequilibrio.includes('id="reequilibrio-handoff"')
+    || !reequilibrio.includes('action="/.netlify/functions/lead"')
+    || !reequilibrio.includes('data-receipt-required="true"')
+    || !reequilibrio.includes('data-result-gated-capture="true"')
+    || !reequilibrio.includes('data-result-source="#out"')) {
+  console.error("FAIL reequilibrio_terminal_capture"); fail++;
+} else console.log("PASS reequilibrio_terminal_capture");
+{
+  const capture = reequilibrio.match(/<form\b[^>]*id="reequilibrio-capture-form"[^>]*>[\s\S]*?<\/form>/i)?.[0] || "";
+  const computed = ["readiness", "score_pct", "level", "blockers", "missingBlockers", "cta_branch", "artifact"];
+  const leaked = computed.filter((name) => new RegExp(`name=["'][^"']*${name}[^"']*["']`, "i").test(capture));
+  if (!capture || leaked.length) {
+    console.error("FAIL reequilibrio_capture_without_computed_values", leaked); fail++;
+  } else console.log("PASS reequilibrio_capture_without_computed_values");
+}
+if (!reequilibrio.includes("btn-copy") || !reequilibrio.includes("btn-dl") || !reequilibrio.includes("btn-print") || !reequilibrio.includes("btn-reset")) {
+  console.error("FAIL reequilibrio_clear_export"); fail++;
+} else console.log("PASS reequilibrio_clear_export");
+if (!reequilibrio.includes("Premissas") && !reequilibrio.includes("premissas")) {
+  console.error("FAIL reequilibrio_premises"); fail++;
+} else console.log("PASS reequilibrio_premises");
 
 function cadastroGatesResult(rel, html) {
   const leadIdx = html.search(/<form[^>]*(id="lead-form"|name="diagnostico-b2g")|<input[^>]*(id="nome"|name="nome")[^>]*required/i);

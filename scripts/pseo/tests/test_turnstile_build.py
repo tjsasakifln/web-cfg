@@ -219,6 +219,7 @@ ISSUE_440_CAPTURE_ROUTES = {
     "diagnostico-b2g-expansao/index.html",
     "diretoria-b2g/index.html",
     "entregas/index.html",
+    "ferramentas/checklist-reequilibrio/index.html",
     "ferramentas/diagnostico-defesa-margem/index.html",
     "ferramentas/limite-acrescimos-supressoes/index.html",
     "index.html",

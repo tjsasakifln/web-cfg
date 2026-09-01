@@ -108,20 +108,6 @@
         },
         {
           "gate": "conversion",
-          "path": "ferramentas/checklist-reequilibrio/index.html",
-          "reason": "terminal_action_debt",
-          "excerpt": "/ferramentas/checklist-reequilibrio/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
-          "path": "ferramentas/checklist-reequilibrio/index.html",
-          "reason": "missing_journey_signal",
-          "excerpt": "",
-          "severity": "warn"
-        },
-        {
-          "gate": "conversion",
           "path": "ferramentas/matriz-atraso-obra/index.html",
           "reason": "terminal_action_debt",
           "excerpt": "/ferramentas/matriz-atraso-obra/ required=capture_form_or_whatsapp issue=#61 expires_at=2026-09-30",
@@ -202,11 +188,11 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 55,
+          "covered": 56,
           "total": 66,
-          "coverage": 0.8333,
+          "coverage": 0.8485,
           "exempt_trust_or_legal": 10,
-          "registered_debt": 5
+          "registered_debt": 4
         },
         "exemptions": [
           {
@@ -224,16 +210,6 @@
             "family": "casos",
             "kind": "debt",
             "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
-            "owner_issue": 61,
-            "expires_at": "2026-09-30",
-            "required_terminal_action": "capture_form_or_whatsapp",
-            "expired": false
-          },
-          {
-            "route": "/ferramentas/checklist-reequilibrio/",
-            "family": "ferramentas",
-            "kind": "debt",
-            "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
             "owner_issue": 61,
             "expires_at": "2026-09-30",
             "required_terminal_action": "capture_form_or_whatsapp",
@@ -353,7 +329,7 @@
           "warn_before_date": true
         },
         "errors": 0,
-        "warnings": 19
+        "warnings": 17
       }
     },
     "legacy_entity": {

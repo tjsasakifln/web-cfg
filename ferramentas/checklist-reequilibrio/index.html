@@ -80,7 +80,35 @@
 <button type="button" class="button button-secondary" id="btn-dl" data-tool-download>Baixar (.txt)</button>
 <button type="button" class="button button-secondary" id="btn-print">Imprimir</button>
 </div>
-<div class="tool-cta-contextual" id="cta" hidden></div>
+<div class="tool-cta-contextual" id="cta" hidden><p id="cta-branch"></p></div>
+<section class="tool-cta-contextual" id="reequilibrio-handoff" hidden aria-labelledby="reequilibrio-handoff-title">
+<p class="eyebrow">Próximo passo opcional</p>
+<h2 id="reequilibrio-handoff-title">Conferência humana do dossiê de reequilíbrio</h2>
+<p>A prontidão acima permanece disponível sem cadastro e continua apenas neste navegador. Se quiser uma conferência humana do enquadramento antes de protocolar, registre o contexto abaixo. Não repita aqui o resultado do checklist nem os documentos.</p>
+<form action="/.netlify/functions/lead" class="contact-form" data-ajax="true" data-result-gated-capture="true" data-result-source="#out" data-success-destination="/obrigado-contrato" data-submit-timeout-ms="15000" data-journey="contrato" method="POST" name="checklist-reequilibrio" id="reequilibrio-capture-form" data-form-contract="next-state/v1" data-next-state-profile="second_reading" data-runtime-profile="shared_lead_form_v1" data-receipt-required="true"><p class="form-hint" data-form-value>Vincule a leitura pública a um pedido de conferência humana sem repetir os dados do contrato nem enviar documentos pelo site.</p>
+<p class="form-hint" data-field-purpose>O identificador público já vem da ferramenta; nome e um canal válido permitem retorno; o contexto adicional é opcional. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
+<input name="form-name" type="hidden" value="checklist-reequilibrio"/>
+<input name="origem" type="hidden" value="/ferramentas/checklist-reequilibrio/"/>
+<input name="landing_page" type="hidden" value="/ferramentas/checklist-reequilibrio/"/>
+<input name="jornada" id="jornada-hidden" type="hidden" value="contrato"/>
+<input name="estagio" type="hidden" value="prontidao documental de reequilibrio" id="estagio"/>
+<input name="asset_id" type="hidden" value="checklist-reequilibrio"/>
+<input name="route_family" type="hidden" value="reequilibrio"/>
+<input name="cta_id" type="hidden" value="checklist-reequilibrio-conferencia"/>
+<p class="honeypot"><label for="empresa-site">Não preencha este campo</label><input autocomplete="off" id="empresa-site" name="empresa-site" tabindex="-1"/></p>
+<div class="field"><label for="nome">Nome</label><input autocomplete="name" id="nome" maxlength="120" name="nome" required="" type="text"/></div>
+<div class="form-row" role="group" aria-describedby="contato-hint">
+<div class="field"><label for="telefone">WhatsApp</label><input autocomplete="tel" aria-describedby="contato-hint" id="telefone" inputmode="tel" maxlength="20" name="telefone" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" type="tel" title="Informe DDD e número, com 10 ou 11 dígitos."/></div>
+<div class="field"><label for="email">E-mail</label><input autocomplete="email" aria-describedby="contato-hint" id="email" inputmode="email" maxlength="180" name="email" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" type="email" title="Informe um e-mail completo, como nome@empresa.com.br."/></div>
+</div>
+<p class="form-hint" id="contato-hint">Informe WhatsApp ou e-mail para retorno.</p>
+<div class="field"><label for="mensagem">Contexto em poucas linhas <span class="optional-mark">opcional</span></label><textarea id="mensagem" name="mensagem" rows="3" placeholder="Qual decisão está próxima e o que precisa ser conferido. Não cole dados pessoais desnecessários."></textarea></div>
+<label class="consent" for="consentimento"><input id="consentimento" name="consentimento" required="" type="checkbox" value="1"/><span>Autorizo o uso destes dados para retorno sobre a solicitação, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span></label>
+<p class="form-status" id="reequilibrio-form-status" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+<button class="button button-primary button-lg form-submit" type="submit" data-tool-to-form data-cta-position="tool_result" data-event-name="cta_click" data-asset-id="checklist-reequilibrio" data-route-family="reequilibrio" data-cta-id="checklist-reequilibrio-conferencia">Registrar pedido de conferência do dossiê de reequilíbrio</button>
+<p class="form-hint" data-form-boundary>A leitura não é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; documentos seguem apenas por canal seguro posterior. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
+</form>
+</section>
 </div>
 </main>
 <script src="/assets/js/tool-persist.js"></script>
@@ -164,6 +192,7 @@
         '<p class="tool-disclaimer">'+escInvalid(expl.legalDisclaimer)+'</p>';
       document.getElementById("ra").hidden=true;
       document.getElementById("cta").hidden=true;
+      document.getElementById("reequilibrio-handoff").hidden=true;
       lastText=""; T.focusResult(out); persist(); return;
     }
     out.hidden=false; out.className="tool-result-panel "+r.level;
@@ -211,9 +240,10 @@
     T.focusResult(out);
     var cta=document.getElementById("cta");
     cta.hidden=false;
-    cta.innerHTML=r.hasCentralBlocker
-      ? '<p>Há bloqueadores centrais. Organize o dossiê antes de protocolar.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="checklist-reequilibrio-bloqueado" data-route-family="reequilibrio" data-asset-id="checklist-reequilibrio" data-tool-to-offer="reequilibrio-obras-publicas" href="/reequilibrio-obras-publicas/">Enquadrar o dossiê de reequilíbrio</a></div>'
-      : '<p>O dossiê está mais completo; a próxima decisão ainda precisa de leitura contratual.</p><div class="tool-actions"><a class="button button-primary" data-cta-id="checklist-reequilibrio-pronto" data-route-family="reequilibrio" data-asset-id="checklist-reequilibrio" data-tool-to-offer="reequilibrio-obras-publicas" href="/reequilibrio-obras-publicas/">Validar o enquadramento</a><a class="button button-secondary" data-tool-to-content href="/conteudos/calculo-reequilibrio-economico-financeiro/">Revisar o cálculo</a></div>';
+    document.getElementById("cta-branch").textContent=r.hasCentralBlocker
+      ? "Há bloqueadores centrais. Organize o dossiê antes de protocolar."
+      : "O dossiê está mais completo; a próxima decisão ainda precisa de leitura contratual.";
+    document.getElementById("reequilibrio-handoff").hidden=false;
     T.track("tool_complete",{tool:TOOL,readiness:r.readiness,level:r.level,blockers:(r.missingBlockers||[]).length,urgencia:r.urgencia,materialidade:r.materialidade,cta_branch:expl.cta.branch});
     persist();
   });
@@ -229,6 +259,7 @@
     document.getElementById("out").hidden=true;
     document.getElementById("ra").hidden=true;
     document.getElementById("cta").hidden=true;
+    document.getElementById("reequilibrio-handoff").hidden=true;
     lastText="";
     T.clearState(TOOL);
   };
