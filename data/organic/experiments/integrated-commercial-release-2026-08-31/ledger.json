@@ -1,0 +1,563 @@
+{
+  "schema": "confenge.release-bound-measurement-ledger/1.0",
+  "version": "1.0.0",
+  "ledger_id": "integrated-commercial-release-2026-08-31",
+  "title": "Integrated commercial experience measurement ledger (#548 + #549 + #547)",
+  "decision": {
+    "execution_state": "EXECUTE_NOW",
+    "outcome_state": "VALIDATE",
+    "priority": "P1",
+    "executive_front": ["Revenue", "Conversion", "Data", "Trust"],
+    "leverage": ["revenue", "data", "automation", "trust", "customer"],
+    "time_to_evidence": "technical smoke within 24 hours of exact-SHA promotion; first non-causal read after 7 complete days; terminal read after at least 28 complete days and the fixed sufficiency gate"
+  },
+  "visitor_job": "A high-intent buyer must understand the applicable commercial progression, take a proportionate next action, and receive a traceable CONFENGE_WEB receipt without a stronger promise than the service can support.",
+  "hypothesis": "The integrated value-first narrative, explicit CTA/form next state, and truthful offer ladder can make useful commercial progression more observable without asserting that the release caused search, conversion, pipeline, or revenue changes.",
+  "hundred_repetition_test": "PASS: every later release can append one exact-SHA observation to the same owner-separated ledger; one manual scorecard or causal story per route would create 100 units of work and fails this test.",
+  "scope_guard": {
+    "measurement_only": true,
+    "public_surface_mutation": false,
+    "new_public_urls": 0,
+    "home_redesign": false,
+    "mass_content": false,
+    "analytics_payload_change": false,
+    "gsc_freshness_authority_change": false,
+    "bofu_ownership_projection_change": false,
+    "query_strategy_from_censored_export": false,
+    "protected_route_mutation": false,
+    "unknown_to_zero": false,
+    "combined_seo_conversion_score": false,
+    "causal_claim_allowed": false,
+    "instrumentation_gap_issue": 550
+  },
+  "architecture": {
+    "canonical_public_surface": "confenge.com.br",
+    "public_owner": "web-cfg",
+    "truth_owner": "extra-cli through versioned SELECT-only contracts",
+    "commercial_action_owner": "Warmbly",
+    "analytics_source": "CONFENGE_WEB",
+    "analytics_pii_policy": "aggregate_allowlist_empty",
+    "runtime": "Cloudflare proxy to Netcup confenge-nginx-node/v2",
+    "affected_adr": "ADR-STRAT-002 applies as a guardrail; this ledger changes no architecture boundary"
+  },
+  "release_binding": {
+    "frozen_at": "2026-08-31T18:58:27Z",
+    "repository": "tjsasakifln/web-cfg",
+    "baseline": {
+      "origin_main_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+      "public_live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+      "identity_match": true,
+      "public_build_info": "https://confenge.com.br/.well-known/build-info.json",
+      "public_runtime_info": "https://confenge.com.br/.well-known/runtime-info.json",
+      "observed_at": "2026-08-31T18:58:27Z"
+    },
+    "candidate_components": [
+      {
+        "ref": 548,
+        "type": "pull_request",
+        "state": "OPEN",
+        "mergeable": "MERGEABLE",
+        "merge_state": "CLEAN",
+        "base_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+        "head_sha": "4c827c5fbf737c25d475ebca2b56a8e0a5cad7c3",
+        "role": "value-first narrative on eight mutable money pages",
+        "observed_at": "2026-08-31T18:58:27Z"
+      },
+      {
+        "ref": 549,
+        "type": "pull_request",
+        "state": "OPEN",
+        "mergeable": "MERGEABLE",
+        "merge_state": "CLEAN",
+        "base_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+        "head_sha": "c4af85f58d426f6d617ed0ab63d9b8d397543ced",
+        "role": "explicit CTA/form next-state semantics",
+        "observed_at": "2026-08-31T18:58:27Z"
+      },
+      {
+        "ref": 547,
+        "type": "issue",
+        "state": "OPEN",
+        "implementation_pr": "UNKNOWN",
+        "head_sha": "UNKNOWN",
+        "role": "truthful D01 credit boundary and recurring-direction offer-ladder step",
+        "observed_at": "2026-08-31T18:58:27Z"
+      }
+    ],
+    "supporting_evidence": {
+      "ref": 546,
+      "type": "pull_request",
+      "state": "OPEN",
+      "head_sha": "6fca0b954a02a668aa6a6d0c14a649640c578082",
+      "role": "live audit evidence only; not the #547 treatment"
+    },
+    "treatment_anchor": {
+      "status": "AWAITING_EXACT_PROMOTED_SHA",
+      "exact_promoted_sha": "UNKNOWN",
+      "promoted_at": "UNKNOWN",
+      "rule": "No post-release observation belongs to this ledger until one exact public build/runtime SHA contains the accepted #548 and #549 changes plus an implementation satisfying #547.",
+      "candidate_head_warning": "PR heads are evidence of intended components, never the release treatment or live authority.",
+      "concurrent_change_policy": "Record every later public SHA touching a cohort route or its shared CTA/form/offer contracts. Segment or end the window; never silently attribute mixed treatment to this release."
+    }
+  },
+  "manual_gsc_snapshot": {
+    "snapshot_id": "user-manual-gsc-web-2026-08-31",
+    "source": "User-supplied Google Search Console manual export reported 2026-08-31; values embedded in this ledger because raw CSV files were not supplied",
+    "source_kind": "MANUAL_USER_EXPORT",
+    "search_type": "Web",
+    "filter": "ultimos 28 dias",
+    "date_range": {
+      "start": "2026-08-02",
+      "end": "2026-08-29",
+      "complete_days": 28
+    },
+    "authority_boundary": {
+      "canonical_freshness_owner_issue": 413,
+      "updates_canonical_gsc_authority": false,
+      "purpose": "timestamped release baseline only"
+    },
+    "site_level": {
+      "clicks": 27,
+      "impressions": 1201,
+      "ctr_percent": 2.248,
+      "impression_weighted_daily_average_position": 8.24
+    },
+    "country_brazil": {
+      "clicks": 27,
+      "impressions": 1048,
+      "ctr_percent": 2.58,
+      "reported_average_position": 7.14
+    },
+    "devices": {
+      "desktop": {"clicks": 22, "impressions": 938, "ctr_percent": 2.35, "position": 7.75},
+      "mobile": {"clicks": 5, "impressions": 262, "ctr_percent": 1.91, "position": 9.92}
+    },
+    "weekly_context": {
+      "last_7_days_2026-08-23_to_2026-08-29": {"clicks": 8, "impressions": 212, "ctr_percent": 3.77, "weighted_position": 7.42},
+      "prior_7_days_2026-08-16_to_2026-08-22": {"clicks": 5, "impressions": 305, "ctr_percent": 1.64, "weighted_position": 7.08},
+      "interpretation": "CONTEXT_ONLY_NO_TREND_INFERENCE_WITHOUT_QUERY_MIX_AND_VOLUME"
+    },
+    "query_privacy": {
+      "visible_query_impressions": 52,
+      "site_impressions": 1201,
+      "visible_share_percent": 4.3297,
+      "status": "HEAVILY_CENSORED_OR_ANONYMIZED",
+      "rule": "Visible queries are not the query universe and cannot authorize keyword strategy or protected-variable mutation."
+    },
+    "page_row_rule": "A missing page row is NO_ROW_IN_EXPORT with all metrics UNKNOWN; it is never zero demand."
+  },
+  "profiles": {
+    "protection": {
+      "cohort-not-protected-v1": {
+        "status": "NOT_PROTECTED",
+        "checked_issue_refs": [126, 127, 128, 327, 387, 529],
+        "machine_registry": "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+        "note": "The route is outside the exact protected set. This status does not release or reset any protected route."
+      }
+    },
+    "analytics": {
+      "web-form-funnel-v1": {
+        "route_visit": {
+          "status": "AVAILABLE_RAW_AND_AGGREGATED",
+          "event": "page_view",
+          "aggregate_field": "route_paths.page_view"
+        },
+        "form_start": {
+          "status": "AVAILABLE_RAW_AND_AGGREGATED",
+          "event": "lead_form_start",
+          "aggregate_field": "route_paths.form_start"
+        },
+        "form_validation_category": {
+          "status": "PARTIAL_RAW_NOT_AGGREGATED",
+          "event": "lead_form_error",
+          "available": "validation occurrence and form_step; rate_limited has an error_code",
+          "missing": "PII-free category for ordinary client validation",
+          "owner_issue": 550
+        },
+        "submit": {
+          "status": "AVAILABLE_RAW_NOT_ROUTE_AGGREGATED",
+          "event": "lead_form_submit",
+          "meaning": "valid submit attempt; not persistence and not a lead"
+        },
+        "ux_success": {
+          "status": "AVAILABLE_RAW_NOT_A_LEAD",
+          "event": "lead_form_success"
+        },
+        "receipt": {
+          "status": "AVAILABLE_RAW_AND_AGGREGATED",
+          "event": "lead_persisted",
+          "aggregate_field": "route_paths.form_success",
+          "meaning": "persisted id returned; lead denominator, not QCO"
+        },
+        "downstream_qco": {
+          "status": "CONDITIONAL_EXTERNAL_OBSERVATION",
+          "owner": "Warmbly",
+          "event": "qualified_lead",
+          "rule": "Use only an accepted Warmbly/operator observation joined by non-PII identifiers. Missing or unmatchable evidence is UNKNOWN."
+        }
+      }
+    }
+  },
+  "cohorts": {
+    "money_pages_528": {
+      "purpose": "Eight mutable commercial routes whose narrative and CTA/form semantics change in the integrated release",
+      "membership_frozen_at": "2026-08-31T18:58:27Z",
+      "source_at_freeze": "issue #528 and pull request #548",
+      "routes": [
+        "/servicos-obras-publicas/",
+        "/diagnostico-b2g-expansao/",
+        "/bid-room-licitacoes-obras/",
+        "/defesa-margem-contratos-publicos/",
+        "/atrasos-prorrogacao-obras-publicas/",
+        "/defesa-tecnica-contratos-publicos/",
+        "/acompanhamento-contratos-obras/",
+        "/diretoria-b2g/"
+      ]
+    },
+    "offer_ladder_547": {
+      "purpose": "Offer-ladder hub and eight model pages; observed separately from the money-page cohort",
+      "membership_frozen_at": "2026-08-31T18:58:27Z",
+      "source_contract_at_freeze": {
+        "path": "data/commercial/page-contract-eight.v1.json",
+        "file_sha256": "73370a91083e0b0cb2d9ab575bb3c11fa94313584a16c28684c100898c20994e",
+        "comparison_status": "MATCHED_FROZEN_COHORT_AT_FREEZE"
+      },
+      "routes": [
+        "/entregas/",
+        "/casos/modelo-relatorio-inteligencia-licitacoes/",
+        "/casos/modelo-base-quantitativa-canonica/",
+        "/casos/modelo-apresentacao-executiva-resultados/",
+        "/casos/modelo-mapa-compradores-publicos/",
+        "/casos/modelo-contratos-vincendos-relicitacao/",
+        "/casos/modelo-mapeamento-concorrentes-publicos/",
+        "/casos/modelo-painel-precos-obras-publicas/",
+        "/casos/modelo-relatorio-executivo-consolidado/"
+      ]
+    }
+  },
+  "routes": [
+    {
+      "route": "/servicos-obras-publicas/",
+      "file": "servicos-obras-publicas/index.html",
+      "cohort": "money_pages_528",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "60e2e41d35e7e23f58443724a867373e828d2f2333876bc5239be6b2e2deb5df"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "NO_ROW_IN_EXPORT", "metrics": {"clicks": "UNKNOWN", "impressions": "UNKNOWN", "ctr_percent": "UNKNOWN", "position": "UNKNOWN"}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Avaliar o Dossiê de Medição, Glosa e Pagamento", "destination": "/medicoes-glosas-obras-publicas/", "cta_id": "hub-servicos-medicoes-glosas", "position": "hub_services"},
+        "form": {"heading": "Registrar o contexto antes da proposta", "action": "/.netlify/functions/lead", "cta_id": "contract-defense-products-handraise", "submit_label": "Enviar para análise", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "content_to_service", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "hub-servicos-medicoes-glosas", "cta_position": "hub_services", "destination_path": "/medicoes-glosas-obras-publicas/"}}}
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "file": "diagnostico-b2g-expansao/index.html",
+      "cohort": "money_pages_528",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "35325ebc853706751cb80ca5d3266f17a83637bb8a96f3f2d31ba1478080e18e"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "MEASURED_ROW", "metrics": {"clicks": 0, "impressions": 1, "ctr_percent": 0, "position": 1.0}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Solicitar o diagnóstico", "destination": "#pedido-diagnostico", "cta_id": "diag-exp-handraise", "position": "offer_hero"},
+        "form": {"heading": "Pedir enquadramento do Diagnóstico de Expansão no Mercado Público", "action": "/.netlify/functions/lead", "cta_id": "diag-exp-handraise", "submit_label": "Enviar pedido de enquadramento", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "cta_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "diag-exp-handraise", "cta_position": "offer_hero", "offer_id": "CFG-DIAG-EXP-v1"}}}
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "file": "bid-room-licitacoes-obras/index.html",
+      "cohort": "money_pages_528",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "98e3b0c9ae78e221026e30d23bb26c77e45f354ead4c0ea6167a3dc1c9947037"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "MEASURED_ROW", "metrics": {"clicks": 0, "impressions": 4, "ctr_percent": 0, "position": 5.5}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Enviar edital para triagem", "destination": "#captura-pilar", "cta_id": "UNKNOWN", "position": "offer_hero"},
+        "form": {"heading": "Envie o contexto do edital nesta página", "action": "/.netlify/functions/lead", "cta_id": "bid-room-licitacoes-obras-handraise", "submit_label": "Solicitar canal seguro para envio", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "cta_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_position": "offer_hero", "offer_id": "bid-room"}}}
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "file": "defesa-margem-contratos-publicos/index.html",
+      "cohort": "money_pages_528",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "c48c272701a626241d76e8635f8e8a027fedbbcbda05a2636267f7e9531112b5"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "MEASURED_ROW", "metrics": {"clicks": 0, "impressions": 6, "ctr_percent": 0, "position": 7.83}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Solicitar canal seguro para envio", "destination": "#captura-pilar", "cta_id": "contato-direto", "position": "offer_hero"},
+        "form": {"heading": "Envie o evento de margem nesta página", "action": "/.netlify/functions/lead", "cta_id": "defesa-margem-contratos-publicos-handraise", "submit_label": "Solicitar canal seguro para envio", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "cta_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "contato-direto", "cta_position": "offer_hero", "offer_id": "contract-defense"}}}
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "file": "atrasos-prorrogacao-obras-publicas/index.html",
+      "cohort": "money_pages_528",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "615673fe74f2a826b91e6fa047c3754d5d70116f8c2d2c72ece37d4aa981573b"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "MEASURED_ROW", "metrics": {"clicks": 1, "impressions": 22, "ctr_percent": 4.55, "position": 5.41}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Enviar dados para análise", "destination": "#captura-pilar", "cta_id": "pillar_hero", "position": "UNKNOWN"},
+        "form": {"heading": "Conte o evento de prazo sem voltar para a home", "action": "/.netlify/functions/lead", "cta_id": "atrasos-prorrogacao-obras-publicas-handraise", "submit_label": "Enviar para análise", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "MISSING_DECLARED_EVENT", "primary_cta_event": "UNKNOWN", "primary_cta_source": "UNKNOWN_PENDING_550", "primary_cta_predicate": "UNKNOWN_PENDING_550", "owner_issue": 550}
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "file": "defesa-tecnica-contratos-publicos/index.html",
+      "cohort": "money_pages_528",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "9f3ff21ffb56cb3635b0e1afad7266ed2423ddb47c86cd3bb23dc04a7babc9cf"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "MEASURED_ROW", "metrics": {"clicks": 0, "impressions": 6, "ctr_percent": 0, "position": 5.33}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Enviar dados para análise", "destination": "#captura-pilar", "cta_id": "pillar_hero", "position": "UNKNOWN"},
+        "form": {"heading": "Envie o contexto da notificação nesta página", "action": "/.netlify/functions/lead", "cta_id": "defesa-tecnica-contratos-publicos-handraise", "submit_label": "Enviar para análise", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "MISSING_DECLARED_EVENT", "primary_cta_event": "UNKNOWN", "primary_cta_source": "UNKNOWN_PENDING_550", "primary_cta_predicate": "UNKNOWN_PENDING_550", "owner_issue": 550}
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "file": "acompanhamento-contratos-obras/index.html",
+      "cohort": "money_pages_528",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "d650a63d28f01d628ed42626508c9af32dc2de47918219fce4fea5f4088a6562"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "MEASURED_ROW", "metrics": {"clicks": 0, "impressions": 3, "ctr_percent": 0, "position": 5.0}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Enviar dados para análise", "destination": "#captura-pilar", "cta_id": "pillar_hero", "position": "UNKNOWN"},
+        "form": {"heading": "Conte como a carteira é acompanhada hoje", "action": "/.netlify/functions/lead", "cta_id": "acompanhamento-contratos-obras-handraise", "submit_label": "Enviar para análise", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "MISSING_DECLARED_EVENT", "primary_cta_event": "UNKNOWN", "primary_cta_source": "UNKNOWN_PENDING_550", "primary_cta_predicate": "UNKNOWN_PENDING_550", "owner_issue": 550}
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "file": "diretoria-b2g/index.html",
+      "cohort": "money_pages_528",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "44c59f47c7a23a8323b099dbc2c8d726943a4449060a9c3d986174ef8b9b9b80"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "MEASURED_ROW", "metrics": {"clicks": 0, "impressions": 2, "ctr_percent": 0, "position": 6.0}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Falar sobre minha operação", "destination": "WHATSAPP_PREFILLED", "cta_id": "UNKNOWN", "position": "offer_hero"},
+        "form": {"heading": "Avaliar o encaixe da Diretoria Fracionada para o Mercado Público", "action": "/.netlify/functions/lead", "cta_id": "diretoria-handraise", "submit_label": "Pedir avaliação de enquadramento", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "whatsapp_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_position": "offer_hero", "offer_id": "diretoria-b2g"}}}
+    },
+    {
+      "route": "/entregas/",
+      "file": "entregas/index.html",
+      "cohort": "offer_ladder_547",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "693c9e49da0f71c94a7ddfb1e6f07f02f429c99898f84d0446582dfc5924909d"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "NO_ROW_IN_EXPORT", "metrics": {"clicks": "UNKNOWN", "impressions": "UNKNOWN", "ctr_percent": "UNKNOWN", "position": "UNKNOWN"}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Encontrar a entrega certa", "destination": "#enquadrar", "cta_id": "deliverables-hero-compare", "position": "hero"},
+        "form": {"heading": "Diga qual destas entregas resolve a sua pergunta", "action": "/.netlify/functions/lead", "cta_id": "entregas-hub-handraise", "submit_label": "Enviar para análise", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "cta_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "deliverables-hero-compare", "cta_position": "hero"}}}
+    },
+    {
+      "route": "/casos/modelo-relatorio-inteligencia-licitacoes/",
+      "file": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
+      "cohort": "offer_ladder_547",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "aa9fd819f550ea4651d38cac452b34f8bec17191733b1ea5ae7ec0673d1ebfcc"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "NO_ROW_IN_EXPORT", "metrics": {"clicks": "UNKNOWN", "impressions": "UNKNOWN", "ctr_percent": "UNKNOWN", "position": "UNKNOWN"}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Configurar meu relatório por R$ 599", "destination": "/comercial/radar-decisorio/", "cta_id": "report-599-hero", "position": "report_hero"},
+        "form": {"heading": "Deixe o pedido registrado, com protocolo", "action": "/.netlify/functions/lead", "cta_id": "report-599-capture", "submit_label": "Registrar pedido de relatório de priorização de licitações", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "cta_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "report-599-hero", "cta_position": "report_hero", "offer_id": "handraise-report-intelligence-599-v1", "next_action_id": "contratar_relatorio_inteligencia_599"}}}
+    },
+    {
+      "route": "/casos/modelo-base-quantitativa-canonica/",
+      "file": "casos/modelo-base-quantitativa-canonica/index.html",
+      "cohort": "offer_ladder_547",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "ab58a7bd6d1d4ca9c86937f8e11e9f9a5b2d65fc26b5a7aa8c37c16c63813832"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "NO_ROW_IN_EXPORT", "metrics": {"clicks": "UNKNOWN", "impressions": "UNKNOWN", "ctr_percent": "UNKNOWN", "position": "UNKNOWN"}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Quero minha base por R$ 690", "destination": "WHATSAPP_PREFILLED", "cta_id": "base-690-hero", "position": "report_hero"},
+        "form": {"heading": "Deixe o pedido registrado, com protocolo", "action": "/.netlify/functions/lead", "cta_id": "base-690-capture", "submit_label": "Registrar pedido de base quantitativa canônica", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "whatsapp_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "base-690-hero", "cta_position": "report_hero", "offer_id": "handraise-modelo-base-quantitativa-canonica-v1", "next_action_id": "contratar_base_quantitativa_canonica"}}}
+    },
+    {
+      "route": "/casos/modelo-apresentacao-executiva-resultados/",
+      "file": "casos/modelo-apresentacao-executiva-resultados/index.html",
+      "cohort": "offer_ladder_547",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "cc54770311f730354de8e3a3deb84edde5c94664ee839f499c5f97c3115aba0a"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "NO_ROW_IN_EXPORT", "metrics": {"clicks": "UNKNOWN", "impressions": "UNKNOWN", "ctr_percent": "UNKNOWN", "position": "UNKNOWN"}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Quero minha apresentação por R$ 890", "destination": "WHATSAPP_PREFILLED", "cta_id": "apresentacao-890-hero", "position": "report_hero"},
+        "form": {"heading": "Deixe o pedido registrado, com protocolo", "action": "/.netlify/functions/lead", "cta_id": "apresentacao-890-capture", "submit_label": "Registrar pedido de apresentação executiva de resultados", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "whatsapp_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "apresentacao-890-hero", "cta_position": "report_hero", "offer_id": "handraise-modelo-apresentacao-executiva-resultados-v1", "next_action_id": "contratar_apresentacao_executiva"}}}
+    },
+    {
+      "route": "/casos/modelo-mapa-compradores-publicos/",
+      "file": "casos/modelo-mapa-compradores-publicos/index.html",
+      "cohort": "offer_ladder_547",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "c7d26a9ea8448b333472b6da6fd43451c33b516a736a47a50034f8e725101880"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "NO_ROW_IN_EXPORT", "metrics": {"clicks": "UNKNOWN", "impressions": "UNKNOWN", "ctr_percent": "UNKNOWN", "position": "UNKNOWN"}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Quero meu mapa por R$ 1.200", "destination": "WHATSAPP_PREFILLED", "cta_id": "mapa-1200-hero", "position": "report_hero"},
+        "form": {"heading": "Deixe o pedido registrado, com protocolo", "action": "/.netlify/functions/lead", "cta_id": "mapa-1200-capture", "submit_label": "Registrar pedido de mapa de compradores públicos", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "whatsapp_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "mapa-1200-hero", "cta_position": "report_hero", "offer_id": "handraise-modelo-mapa-compradores-publicos-v1", "next_action_id": "contratar_mapa_compradores"}}}
+    },
+    {
+      "route": "/casos/modelo-contratos-vincendos-relicitacao/",
+      "file": "casos/modelo-contratos-vincendos-relicitacao/index.html",
+      "cohort": "offer_ladder_547",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "262f752bb266be7402d0b23d131ef0ca2614d2d9aff0e15c5e5420846d4f4808"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "NO_ROW_IN_EXPORT", "metrics": {"clicks": "UNKNOWN", "impressions": "UNKNOWN", "ctr_percent": "UNKNOWN", "position": "UNKNOWN"}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Quero meu mapa de vincendos por R$ 1.450", "destination": "WHATSAPP_PREFILLED", "cta_id": "vincendos-1450-hero", "position": "report_hero"},
+        "form": {"heading": "Deixe o pedido registrado, com protocolo", "action": "/.netlify/functions/lead", "cta_id": "vincendos-1450-capture", "submit_label": "Registrar pedido de painel de contratos vincendos", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "whatsapp_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "vincendos-1450-hero", "cta_position": "report_hero", "offer_id": "handraise-modelo-contratos-vincendos-relicitacao-v1", "next_action_id": "contratar_contratos_vincendos"}}}
+    },
+    {
+      "route": "/casos/modelo-mapeamento-concorrentes-publicos/",
+      "file": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
+      "cohort": "offer_ladder_547",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "a1bf58e83f41a8cbb69c17c01b0be1c6d00dd8faebb9c4b37ac73cb55c607784"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "NO_ROW_IN_EXPORT", "metrics": {"clicks": "UNKNOWN", "impressions": "UNKNOWN", "ctr_percent": "UNKNOWN", "position": "UNKNOWN"}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Quero meu mapeamento por R$ 1.900", "destination": "WHATSAPP_PREFILLED", "cta_id": "concorrentes-1900-hero", "position": "report_hero"},
+        "form": {"heading": "Deixe o pedido registrado, com protocolo", "action": "/.netlify/functions/lead", "cta_id": "concorrentes-1900-capture", "submit_label": "Registrar pedido de mapeamento de concorrentes", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "whatsapp_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "concorrentes-1900-hero", "cta_position": "report_hero", "offer_id": "handraise-modelo-mapeamento-concorrentes-publicos-v1", "next_action_id": "contratar_mapeamento_concorrentes"}}}
+    },
+    {
+      "route": "/casos/modelo-painel-precos-obras-publicas/",
+      "file": "casos/modelo-painel-precos-obras-publicas/index.html",
+      "cohort": "offer_ladder_547",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "a9bb301d7bdc9635382d7f6d3157a368efc869e841e934bcf0b057151bb40d54"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "NO_ROW_IN_EXPORT", "metrics": {"clicks": "UNKNOWN", "impressions": "UNKNOWN", "ctr_percent": "UNKNOWN", "position": "UNKNOWN"}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Quero meu painel por R$ 2.400", "destination": "WHATSAPP_PREFILLED", "cta_id": "precos-2400-hero", "position": "report_hero"},
+        "form": {"heading": "Deixe o pedido registrado, com protocolo", "action": "/.netlify/functions/lead", "cta_id": "precos-2400-capture", "submit_label": "Registrar pedido de painel de preços de obras públicas", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "whatsapp_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "precos-2400-hero", "cta_position": "report_hero", "offer_id": "handraise-modelo-painel-precos-obras-publicas-v1", "next_action_id": "contratar_painel_precos"}}}
+    },
+    {
+      "route": "/casos/modelo-relatorio-executivo-consolidado/",
+      "file": "casos/modelo-relatorio-executivo-consolidado/index.html",
+      "cohort": "offer_ladder_547",
+      "baseline_identity": {"live_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37", "file_sha256": "2b3ffea361a87067407af889d3a99467ce36e42e201bd8965433924451ecac0b"},
+      "gsc_baseline": {"snapshot_id": "user-manual-gsc-web-2026-08-31", "date_range": {"start": "2026-08-02", "end": "2026-08-29"}, "row_status": "NO_ROW_IN_EXPORT", "metrics": {"clicks": "UNKNOWN", "impressions": "UNKNOWN", "ctr_percent": "UNKNOWN", "position": "UNKNOWN"}},
+      "protection": {"status": "NOT_PROTECTED", "profile": "cohort-not-protected-v1"},
+      "current_cta_form_semantics": {
+        "primary_cta": {"label": "Quero o consolidado por R$ 3.750", "destination": "WHATSAPP_PREFILLED", "cta_id": "consolidado-3750-hero", "position": "report_hero"},
+        "form": {"heading": "Deixe o pedido registrado, com protocolo", "action": "/.netlify/functions/lead", "cta_id": "consolidado-3750-capture", "submit_label": "Registrar pedido de relatório executivo consolidado", "runtime_persistence_required": true}
+      },
+      "analytics_funnel_availability": {"profile": "web-form-funnel-v1", "primary_cta_status": "AVAILABLE_RAW_EXACT_PREDICATE", "primary_cta_event": "whatsapp_click", "primary_cta_source": "RAW_EVENTS_ONLY", "primary_cta_predicate": {"props": {"cta_id": "consolidado-3750-hero", "cta_position": "report_hero", "offer_id": "handraise-modelo-relatorio-executivo-consolidado-v1", "next_action_id": "contratar_relatorio_executivo"}}}
+    }
+  ],
+  "pre_release_funnel_baseline": {
+    "source": "No route-level analytics export was supplied with this campaign",
+    "values": {
+      "route_visit": "UNKNOWN_NOT_EXPORTED",
+      "primary_cta": "UNKNOWN_NOT_EXPORTED",
+      "form_start": "UNKNOWN_NOT_EXPORTED",
+      "form_validation_category": "UNKNOWN_NOT_EXPORTED",
+      "submit": "UNKNOWN_NOT_EXPORTED",
+      "receipt": "UNKNOWN_NOT_EXPORTED",
+      "downstream_qco": "UNKNOWN_NOT_PROVIDED_BY_WARMBLY"
+    },
+    "rule": "Event availability and baseline values are separate. Availability does not authorize a zero count, and later post-release counts do not become an uplift claim without a comparable pre-release export."
+  },
+  "post_release_observation": {
+    "anchor": "release_binding.treatment_anchor.promoted_at after exact build/runtime SHA match",
+    "first_technical_smoke": {
+      "window": "promotion through +24 hours",
+      "decision_use": "technical integrity only",
+      "checks": [
+        "exact build-info and runtime-info SHA match",
+        "17 cohort routes return canonical successful HTML",
+        "declared primary CTA destination and form action remain present",
+        "CONFENGE_WEB, consent, Turnstile, idempotency and persisted receipt remain fail-closed",
+        "no PII is admitted to analytics",
+        "D01 no-credit boundary and 9/9 recurring-direction ladder acceptance for #547"
+      ]
+    },
+    "first_non_causal_read": {
+      "window": "after 7 complete days on one stable exact-SHA treatment",
+      "decision_use": "directional data-quality and progression read only",
+      "rules": [
+        "report each cohort separately",
+        "show denominators and UNKNOWN values",
+        "show GSC exposure only as context",
+        "do not call a CTR, conversion, QCO, proposal, contract or margin change an uplift caused by the release"
+      ]
+    },
+    "minimum_honest_observation_window": {
+      "complete_days": 28,
+      "stable_treatment_required": true,
+      "fixed_sufficiency_gate_per_cohort": {
+        "minimum_route_visits": 100,
+        "minimum_observable_primary_cta_raw_events": 20,
+        "primary_cta_semantic_coverage": "ALL_ROUTES_OR_INSUFFICIENT_EVIDENCE",
+        "form_validation_category_coverage": "COMPLETE_OR_REPORTED_PARTIAL",
+        "purpose": "evidence sufficiency only; these are not success, effect-size or statistical-significance thresholds"
+      },
+      "gsc_requirement": "one comparable complete page-level window when available; missing rows remain NO_ROW_IN_EXPORT or UNKNOWN",
+      "warmbly_requirement": "QCO and later stages are included only when owner-provided, accepted and joinable without PII"
+    },
+    "metrics": [
+      {"name": "serp_exposure", "owner": "Google Search Console page-level aggregate", "role": "context_only", "combine_with_conversion": false},
+      {"name": "route_visit", "owner": "web-cfg", "event": "page_view", "role": "denominator"},
+      {"name": "primary_cta", "owner": "web-cfg", "events": ["content_to_service", "cta_click", "whatsapp_click"], "source": "raw accepted events matched by each route's frozen exact predicate; route aggregates are forbidden for this metric", "role": "engagement", "gap_issue": 550},
+      {"name": "form_start", "owner": "web-cfg", "event": "lead_form_start", "role": "engagement"},
+      {"name": "form_validation_category", "owner": "web-cfg", "event": "lead_form_error", "role": "data_quality", "availability": "PARTIAL", "gap_issue": 550},
+      {"name": "submit", "owner": "web-cfg", "event": "lead_form_submit", "role": "engagement_not_lead"},
+      {"name": "receipt", "owner": "web-cfg", "event": "lead_persisted", "role": "lead_denominator"},
+      {"name": "downstream_qco", "owner": "Warmbly", "event": "qualified_lead", "role": "observed_only"},
+      {"name": "proposal", "owner": "Warmbly", "role": "observed_only"},
+      {"name": "contract", "owner": "Warmbly", "role": "observed_only"},
+      {"name": "margin", "owner": "Warmbly", "role": "observed_only"}
+    ],
+    "post_release_values": {
+      "serp_exposure": "UNKNOWN",
+      "route_visit": "UNKNOWN",
+      "primary_cta": "UNKNOWN",
+      "form_start": "UNKNOWN",
+      "form_validation_category": "UNKNOWN",
+      "submit": "UNKNOWN",
+      "receipt": "UNKNOWN",
+      "downstream_qco": "UNKNOWN",
+      "proposal": "UNKNOWN",
+      "contract": "UNKNOWN",
+      "margin": "UNKNOWN"
+    }
+  },
+  "terminal_decision": {
+    "allowed": ["REPEAT", "CHANGE", "STOP", "INSUFFICIENT_EVIDENCE"],
+    "predeclared_rules": {
+      "STOP": "Use immediately for a confirmed fail-closed, privacy, consent, Turnstile, idempotency, receipt, CONFENGE_WEB, offer-truth or protected-route regression. Do not wait 28 days for a safety or truth failure.",
+      "CHANGE": "After the minimum window and fixed sufficiency gate, use when a reproducible CTA/receipt semantic mismatch, offer-ladder contradiction, or observable progression defect has a concrete corrective hypothesis. This is not proof that the release caused a business outcome.",
+      "REPEAT": "After the minimum window and fixed sufficiency gate, keep the treatment for another declared window when invariants remain green, the next state and receipt stay coherent, and at least one persisted receipt is observed. REPEAT is not a causal win or ROI claim.",
+      "INSUFFICIENT_EVIDENCE": "Use when the exact promoted SHA/window is missing or mixed, either cohort misses a fixed denominator, required CTA semantics remain unobservable, GSC is incomparable for an SEO read, or Warmbly evidence is missing/unjoinable for downstream claims. Never replace this state with zero."
+    },
+    "forbidden": [
+      "change the fixed window or denominator after seeing results",
+      "infer trend from the two weekly GSC samples",
+      "claim CTR uplift from tiny samples",
+      "treat visible queries as the query universe",
+      "combine SEO and conversion into one score",
+      "derive QCO, proposal, contract, margin or ROI from web events"
+    ]
+  },
+  "protected_work": {
+    "do_not_reset_or_mutate": [126, 127, 128, 327, 387, 529],
+    "gsc_freshness_authority": 413,
+    "bofu_ownership_projection": 545,
+    "instrumentation_gap": 550,
+    "rule": "Search exposure does not release a protected variable. Date alone does not release a protected route."
+  },
+  "rollback": "Revert only this ledger, its validator and generated report. A later treatment rollback must preserve the frozen baseline and observation history while restoring the previous public SHA through the production rollback authority."
+}
