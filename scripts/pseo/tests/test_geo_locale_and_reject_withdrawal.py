@@ -280,8 +280,15 @@ def test_no_cms_metalanguage_anywhere_on_the_visitor_surface():
     """
     from scripts.site.public_copy_scope import visitor_facing_relpaths
 
+    files = list(visitor_facing_relpaths())
+    # Anti-collapse floor, same idiom as tests/brand/test_logo_contract.mjs.
+    # A sitewide scan that silently resolves to an empty or truncated file list
+    # passes vacuously, which is precisely how the "evergreen" this test exists
+    # for survived every earlier scan. Measured at 243 on 2026-09-01 (#566).
+    assert len(files) >= 200, f"visitor-surface scan collapsed to {len(files)} files"
+
     offenders = []
-    for rel in visitor_facing_relpaths():
+    for rel in files:
         text = (ROOT / rel).read_text(encoding="utf-8", errors="replace")
         for label, rx in BANNED_COPY.items():
             if rx.search(text):

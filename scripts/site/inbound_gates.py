@@ -390,8 +390,15 @@ def _pseo_reject_pages_not_public() -> list[Finding]:
 def _featured_noindex_from_indexable() -> list[Finding]:
     """Indexable pages must not featured-link noindex hubs/articles.
 
-    Frozen BOFU pillar HTML (#291) is not mutated in this campaign; those files
-    are skipped here because the freeze, not an SEO allowlist, blocks the rewrite.
+    Frozen BOFU pillar HTML (#291) is skipped. That skip is a scope decision,
+    not an impossibility: #566 showed a reviewed edit with a same-commit
+    baseline recapture is merged practice (cf33385d4, 2f26ac0ba), so the freeze
+    does not make these six unfixable. It stays because rewriting a featured
+    link is an editorial change with its own remedy and its own review, unlike
+    a link that resolves to 404 — which `_pseo_reject_pages_not_public` reports
+    as an error on every route, frozen included. Lifting this skip belongs to
+    the six routes' copy pass, tracked in
+    docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md item 3.
     """
     from scripts.organic.canonical_hrefs import FROZEN_HTML_REL
 
