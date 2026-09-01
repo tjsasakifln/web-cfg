@@ -107,7 +107,7 @@ sozinha, não autoriza: o dono da janela precisa liberar explicitamente.
 
 6. **Bloco "Inteligência relacionada" de `/diagnostico-pre-licitacao/`.**
    Duas pendências no mesmo `<ul class="pillar-docs">`, ambas criadas pelo
-   incidente P0 de copy e governança do pSEO (issue #ISSUE_NUMBER):
+   incidente P0 de copy e governança do pSEO (issue #566):
 
    - `<li><a href="/radar/edificacoes-publicas-pr/">` aponta para uma rota que
      passou a ser retirada do ar. A página foi reprovada pelo gate editorial
