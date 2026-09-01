@@ -1,0 +1,37 @@
+{
+  "schema": "confenge.commercial-experience-generated-conflicts/1.0",
+  "source_heads": {
+    "pr_548": "4c827c5fbf737c25d475ebca2b56a8e0a5cad7c3",
+    "pr_549": "c4af85f58d426f6d617ed0ab63d9b8d397543ced"
+  },
+  "overlapping_generated_html": [
+    "acompanhamento-contratos-obras/index.html",
+    "atrasos-prorrogacao-obras-publicas/index.html",
+    "bid-room-licitacoes-obras/index.html",
+    "defesa-margem-contratos-publicos/index.html",
+    "defesa-tecnica-contratos-publicos/index.html",
+    "diagnostico-b2g-expansao/index.html",
+    "diretoria-b2g/index.html",
+    "servicos-obras-publicas/index.html"
+  ],
+  "overlapping_source_renderer": [
+    "scripts/commercial/render_contract_defense_products.mjs"
+  ],
+  "resolution": {
+    "narrative": "PR #548 wins H1, hero, body, mechanism, artifact and proof narrative.",
+    "forms": "PR #549 wins CTA, form, field-purpose, loading, error, success, receipt, Turnstile and idempotency semantics.",
+    "offer_ladder": "Issue #547 wins D01 credit truth and the unit to Diagnosis to recurring-direction ladder.",
+    "generation_order": [
+      "scripts/site/render_nav_hubs.py",
+      "scripts/commercial/render_contract_defense_products.mjs",
+      "scripts/commercial/render_eight_offer_contracts.mjs",
+      "scripts/commercial/render_public_catalog.mjs",
+      "scripts/commercial/render_cta_form_next_state.mjs"
+    ]
+  },
+  "excluded_stale_artifacts": {
+    "pr_548": "179 historical files under docs/qa/issue-528-money-pages-value-first were not transplanted.",
+    "pr_549": "The historical inventory and 20 screenshots were regenerated on the integrated tree.",
+    "pr_546": "The historical defect report and 55 screenshots were not transplanted; only the audit source and package command were integrated."
+  }
+}

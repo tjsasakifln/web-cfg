@@ -430,11 +430,15 @@ def test_price_leaves_a_persisted_record_not_only_a_whatsapp_click() -> None:
         # The visitor can reach the record without leaving the page.
         anchor = html.find('href="#captura-modelo"')
         assert 0 < anchor < match.start(), slug
-        # The written path repeats the published price, and adds no new one.
+        # The written path repeats the unit price and #547's canonical R$ 8.000
+        # Diagnosis boundary; no third price or unrelated offer may appear.
         band = re.search(r'<section class="report-capture".*?</section>', html, re.S)
         assert band, slug
-        assert price in band.group(0), slug
-        assert set(re.findall(r"R\$ [\d.]*\d", band.group(0))) == {price}, slug
+        band_html = band.group(0)
+        assert price in band_html, slug
+        assert set(re.findall(r"R\$ [\d.]*\d", band_html)) == {price, "R$ 8.000"}, slug
+        assert 'href="/diagnostico-b2g-expansao/"' in band_html, slug
+        assert "em até 60 dias, sem acúmulo" in band_html, slug
         # WhatsApp is not replaced.
         assert html.count("wa.me/5548988344559") == 5, slug
 

@@ -43,7 +43,12 @@ export function assertSafeEvidenceOutputDir({ repoRoot, target, temporaryRoots =
   const durableRoot = path.join(resolvedRoot, "docs", "evidence");
   const ephemeralRoots = temporaryRoots || [tmpdir(), "/tmp", "/var/tmp", "/dev/shm"];
   const allowedRoots = [durableRoot, ...ephemeralRoots].map((entry) => path.resolve(entry));
-  if (!allowedRoots.some((allowedRoot) => isStrictChild(allowedRoot, resolvedTarget))) {
+  const insideRepository = resolvedTarget === resolvedRoot || isStrictChild(resolvedRoot, resolvedTarget);
+  const insideDedicatedEvidence = isStrictChild(durableRoot, resolvedTarget);
+  if (
+    (insideRepository && !insideDedicatedEvidence)
+    || !allowedRoots.some((allowedRoot) => isStrictChild(allowedRoot, resolvedTarget))
+  ) {
     throw new Error(
       `DELIVERABLES_EVIDENCE_OUTPUT_UNSAFE target=${resolvedTarget}; `
         + `use a dedicated child of ${durableRoot} or a temporary root`,
@@ -161,21 +166,23 @@ export function classifyRouteResult(errors) {
 /** Browser-evaluable extraction shared by live code and the hermetic fixture. */
 export function inspectCommercialLadder(routeExpected) {
   const normalize = (value) => String(value || "").replace(/\u00a0/g, " ").replace(/\s+/g, " ").trim();
-  const main = document.querySelector("main");
-  const ladderText = normalize(main?.textContent);
-  const ladderLinks = [...(main?.querySelectorAll("a[href]") || [])].map((link) => ({
-    href: link.getAttribute("href"),
-    text: normalize(link.textContent),
-  }));
+  const ladders = [...document.querySelectorAll("main [data-offer-ladder]")];
+  const ladderText = normalize(ladders.map((node) => node.textContent).join(" "));
+  const linksForStep = (step) => ladders.flatMap((node) => [
+    ...node.querySelectorAll(`[data-ladder-step="${step}"] a[href]`),
+  ]).map((link) => ({ href: link.getAttribute("href"), text: normalize(link.textContent) }));
+  const diagnosisLinks = linksForStep("diagnosis");
+  const recurringLinks = linksForStep("recurring");
   return {
+    explicit_components: ladders.length,
     has_units_sum: ladderText.includes(routeExpected.package.units_sum_display),
     has_package_price: ladderText.includes(routeExpected.package.package_price_display),
     has_credit_window: ladderText.includes(`${routeExpected.package.credit_window_days} dias`),
     promises_credit: /(?:volta como crédito|valor (?:pago )?é abatido|abate o valor)/i.test(ladderText),
     says_unit_01_has_no_credit: /(?:únic[oa] sem o crédito|não gera crédito|fora do diagnóstico)/i.test(ladderText),
-    diagnosis_link: ladderLinks.some(({ href }) => href === "/diagnostico-b2g-expansao/"),
-    recurring_direction_context: ladderLinks.some(
-      ({ href, text }) => href === "/diretoria-b2g/" && /recorr|diretoria/i.test(text),
+    diagnosis_link: diagnosisLinks.some(({ href }) => href === "/diagnostico-b2g-expansao/"),
+    recurring_direction_context: recurringLinks.some(
+      ({ href, text }) => href === "/diretoria-b2g/" && /recorr|direção|diretoria/i.test(text),
     ),
   };
 }
@@ -186,6 +193,7 @@ export function validateCommercialLadder(ladder, expected) {
   const require = (condition, code) => {
     if (!condition) errors.push(code);
   };
+  require(ladder.explicit_components === 1, "explicit_value_ladder_missing");
   if (expected.kind === "hub") {
     require(
       ladder.has_units_sum && ladder.has_package_price && ladder.has_credit_window,

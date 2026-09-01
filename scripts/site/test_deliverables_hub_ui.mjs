@@ -266,9 +266,12 @@ for (const width of widths) {
   // across repeated local runs), so the 12,500 px budget no longer reflects a
   // page carrying the same substance: the copy was reviewed for repetition and
   // found tight enough to keep, so the budget moves to the measurement instead of
-  // being squeezed to fit the old number. 15,750 px keeps ~76 px (0.5%) of
-  // headroom for minor rendering variance while still catching a real regression.
-  if (width === 390 && metrics.documentHeight > 15750) errors.push(`document_height=${metrics.documentHeight}`);
+  // being squeezed to fit the old number. #547 then added one distinct, explicit
+  // unit -> Diagnosis -> recurring-direction ladder that was absent from the hub.
+  // After removing redundant links and duplicate credit copy, the integrated
+  // component measures 16,554 px at 390 px. 16,650 px keeps ~96 px (0.6%) of
+  // rendering headroom while continuing to catch unrelated page-length drift.
+  if (width === 390 && metrics.documentHeight > 16650) errors.push(`document_height=${metrics.documentHeight}`);
   if (width === 390 && metrics.decisionNavTop > 1800) errors.push(`decision_nav_top=${metrics.decisionNavTop}`);
   if (width <= 360 && metrics.decisionNavColumns !== 2) {
     errors.push(`decision_nav_columns=${metrics.decisionNavColumns}`);

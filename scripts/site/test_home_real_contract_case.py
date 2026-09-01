@@ -89,4 +89,4 @@ def test_home_contract_case_keeps_one_primary_hero_cta():
     assert "data-evidence-selector" not in hero
     assert "Prefiro WhatsApp" not in hero
     assert "Analisar meu contrato" not in hero
-    assert "Analisar meu caso" in hero
+    assert "Registrar situação para triagem" in hero

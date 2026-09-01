@@ -724,7 +724,7 @@ def test_home_nav_and_hierarchy():
     labels, _ = _nav_from(ROOT / "index.html")
     assert labels == EXPECTED_NAV
     assert 'href="/entregas/"' in home
-    assert "Conheça nossas entregas" in home
+    assert "Comparar entregas e artefatos" in home
     assert home.count("button-primary") <= 4
     hero = re.search(r'class="hero[\s\S]*?</section>', home)
     assert hero and hero.group(0).count("button-primary") == 1
@@ -1036,7 +1036,7 @@ def test_organic_tool_block_waits_for_outer_section_close():
 
 
 def test_home_form_anchor_reveals_fields():
-    """Hero/primary 'Analisar meu caso' must land on the form, not the long contact copy."""
+    """Hero next-state action must land on the form, not the long contact copy."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     form = re.search(
@@ -1058,17 +1058,17 @@ def test_home_form_anchor_reveals_fields():
         )
         assert re.search(r"<h2\b", form_html, re.I), "form card must include its title"
     hero = re.search(
-        r'<a\b[^>]*data-cta-position="hero"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Analisar meu caso',
+        r'<a\b[^>]*data-cta-position="hero"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Registrar situação para triagem',
         html,
         re.I,
     )
     if not hero:
         hero = re.search(
-            r'<a\b[^>]*class="[^"]*\bbutton-primary\b[^"]*button-lg[^"]*"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Analisar meu caso',
+            r'<a\b[^>]*class="[^"]*\bbutton-primary\b[^"]*button-lg[^"]*"[^>]*href="([^"]+)"[^>]*>[\s\S]*?Registrar situação para triagem',
             html,
             re.I,
         )
-    assert hero, "hero/primary Analisar meu caso CTA missing"
+    assert hero, "hero/primary Registrar situação para triagem CTA missing"
     assert "#formulario-contato" in hero.group(1), (
         f"hero/primary CTA must target #formulario-contato, got {hero.group(1)!r}"
     )

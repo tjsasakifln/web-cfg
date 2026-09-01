@@ -45,7 +45,9 @@ function option(name, fallback) {
   return value ? value.slice(prefix.length) : fallback;
 }
 
+const candidateLocal = option("candidate-local", "0") === "1";
 const base = option("base", "https://confenge.com.br").replace(/\/$/, "");
+const canonicalOrigin = candidateLocal ? "https://confenge.com.br" : base;
 const expectedSha = option(
   "expected-sha",
   execFileSync("git", ["rev-parse", "origin/main"], { cwd: ROOT, encoding: "utf8" }).trim(),
@@ -72,11 +74,14 @@ function authorityValue(key) {
   return match[1].trim();
 }
 
-const expectedRuntime = {
+const authorityRuntime = {
   environment: authorityValue("expected_environment"),
   profile: authorityValue("expected_profile"),
   host_architecture_version: authorityValue("host_architecture_version"),
 };
+const expectedRuntime = candidateLocal
+  ? { ...authorityRuntime, environment: "local", profile: "local-candidate" }
+  : authorityRuntime;
 const expectedCapabilities = registry.deliverables.map((entry) => ({
   id: entry.deliverable_id,
   state: entry.public_state,
@@ -115,6 +120,9 @@ const offers = contract.deliverables.map((entry) => ({
     ["artifact_use", entry.value_first.artifact_use],
     ["proof", entry.value_first.proof_statement],
     ["price_anchor", entry.value_first.price_anchor],
+    ["diagnosis_trigger", contract.value_ladder.diagnosis_trigger],
+    ["recurring_direction_trigger", contract.value_ladder.recurring_direction_trigger],
+    ["recurring_direction_scope", contract.value_ladder.recurring_direction_scope],
   ].map(([id, text]) => ({ id, text })),
   hubCtaTexts: [
     ["cta_inspect", entry.value_first.cta_inspect],
@@ -390,7 +398,7 @@ async function inspectPage(page, expected) {
 
 function validateMetrics(metrics, expected) {
   const errors = [];
-  add(errors, metrics.canonical === `${base}${expected.route}`, "canonical_mismatch");
+  add(errors, metrics.canonical === `${canonicalOrigin}${expected.route}`, "canonical_mismatch");
   add(errors, metrics.h1_count === 1, "h1_count");
   add(errors, metrics.overflow === false, "horizontal_overflow");
   add(errors, metrics.source === "CONFENGE_WEB", "source_not_CONFENGE_WEB");
@@ -413,7 +421,7 @@ function validateMetrics(metrics, expected) {
     add(errors, JSON.stringify(metrics.hub?.capability_projection) === JSON.stringify(expectedCapabilities), "capability_identity_or_state_drift");
     for (const [index, offer] of offers.entries()) {
       const item = metrics.schema.item_list[index];
-      add(errors, item?.position === index + 1 && item?.url === `${base}${offer.route}` && item?.name?.includes(offer.published_name_pt_br), `item_list_${offer.deliverable_id}`);
+      add(errors, item?.position === index + 1 && item?.url === `${canonicalOrigin}${offer.route}` && item?.name?.includes(offer.published_name_pt_br), `item_list_${offer.deliverable_id}`);
     }
   } else {
     add(errors, ["WebPage", "Report", "BreadcrumbList"].every((type) => metrics.schema.types.includes(type)), "model_schema_types");
@@ -528,6 +536,7 @@ const report = {
     expected: expectedRuntime,
   },
   decision_state: "VALIDATE_LIVE",
+  evidence_mode: candidateLocal ? "LOCAL_CANDIDATE_EXACT_SHA" : "LIVE_AUTHORITY",
   full_page: {
     status: LIVE_FULL_PAGE_CAPTURE_STATUS,
     required_per_route: true,
@@ -596,8 +605,8 @@ for (const expected of routes) {
         browserVersion,
       });
       const selectors = expected.kind === "hub"
-        ? [["decision-nav", ".offer-decision-nav"], ["first-offer", "#entrega-01"], ["last-offer", "#entrega-08"], ["form", "main form"]]
-        : [["value", ".eight-contract__value"], ["price-cta", ".report-final-offer"], ["form", "main form"]];
+        ? [["decision-nav", ".offer-decision-nav"], ["first-offer", "#entrega-01"], ["last-offer", "#entrega-08"], ["ladder", "main [data-offer-ladder]"], ["form", "main form"]]
+        : [["value", ".eight-contract__value"], ["ladder", "main [data-offer-ladder]"], ["price-cta", ".report-final-offer"], ["form", "main form"]];
       for (const [name, selector] of selectors) {
         const record = await captureSegment(page, selector, path.join(screenshotsDir, `${prefix}-${name}.png`));
         if (record) segments.push(record); else errors.push(`segment_missing:${name}`);

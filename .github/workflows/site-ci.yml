@@ -73,6 +73,7 @@ jobs:
           npm run test:diagnose-margin
           npm run test:analytics
           npm run test:form-funnel
+          npm run test:cta-form-next-state
           npm run test:lead-function
           npm run test:search-observation
           npm run test:checkout-negatives
@@ -100,6 +101,10 @@ jobs:
           npm run test:public-offer-truth
           npm run test:radar-params
           npm run test:bofu-dominance
+          npm run test:bofu-ownership
+          npm run test:commercial-release-ledger
+          npm run test:demand-radar
+          npm run demand-radar:check
           npm run test:local-entity
           npm run test:market-answers
           npm run test:contract-analysis

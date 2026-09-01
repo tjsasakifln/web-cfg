@@ -25,6 +25,7 @@ const PUBLIC_HTML_SUITES = Object.freeze([
   "test:ui",
   "test:inbound-gates",
   "test:cta-whatsapp",
+  "test:cta-form-next-state",
   "test:tools",
   "test:nurture-pages",
   "test:ferramentas-footer",
@@ -154,6 +155,22 @@ export const SUITE_GRAPH = Object.freeze({
     producers: ["seo/scripts/test_form_funnel.mjs", "script.js", "js/modules/form.js", "index.html"],
     artifacts: [],
     surfaces: ["/", "/obrigado.html"],
+  },
+  "test:cta-form-next-state": {
+    producers: [
+      "data/commercial/cta-form-next-state.v1.json",
+      "data/organic/public-family-registry.json",
+      "data/organic/bofu-intent-matrix.json",
+      "data/bofu-dominance/frozen-specs/unlock-plan.v1.json",
+      "scripts/commercial/cta_form_next_state_audit.mjs",
+      "scripts/commercial/render_cta_form_next_state.mjs",
+      "scripts/commercial/render_contract_defense_products.mjs",
+      "scripts/commercial/render_eight_offer_contracts.mjs",
+      "scripts/site/inbound_capture_surface_probe.mjs",
+      "tests/commercial/test_cta_form_next_state.mjs",
+    ],
+    artifacts: ["docs/commercial/cta-form-next-state-inventory.json"],
+    surfaces: ["/", "/servicos-obras-publicas/", "/entregas/", "/casos/", "/ferramentas/diagnostico-defesa-margem/"],
   },
   "test:lead-function": {
     producers: [

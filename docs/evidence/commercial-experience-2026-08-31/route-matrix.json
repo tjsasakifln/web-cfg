@@ -1,0 +1,70 @@
+{
+  "schema": "confenge.commercial-experience-route-matrix/1.0",
+  "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "routes": [
+    {
+      "route": "/servicos-obras-publicas/",
+      "visitor_decision": "choose the service path by decision and artifact use",
+      "value_first_outcome": "compare events and artifacts 17-23 before credit, urgency and limits",
+      "form_profile": "service_fit_review",
+      "runtime_profile": "shared_lead_form_v1",
+      "submit_state": "Registrar contexto para revisão de encaixe"
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "visitor_decision": "choose buyers, territories and segments before dispersing capital",
+      "value_first_outcome": "use the map, panel and recommendations as a direction-level decision artifact",
+      "form_profile": "service_fit_review",
+      "runtime_profile": "inline_receipt_v1",
+      "submit_state": "Registrar pedido para revisão de enquadramento"
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "visitor_decision": "decide whether to commit team, guarantee and capital to a bid",
+      "value_first_outcome": "use the plan, responsibility matrix and checklist; price reflects coordination, not pages",
+      "form_profile": "service_fit_review",
+      "runtime_profile": "shared_lead_form_v1",
+      "submit_state": "Solicitar canal seguro para envio"
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "visitor_decision": "decide which contract events still justify action",
+      "value_first_outcome": "end in PRIORITIZE, RECORD, QUANTIFY, DO NOT CLAIM or LEGAL",
+      "form_profile": "service_fit_review",
+      "runtime_profile": "shared_lead_form_v1",
+      "submit_state": "Solicitar canal seguro para envio"
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "visitor_decision": "establish attributable days and the causal window",
+      "value_first_outcome": "use the causal record to request, mitigate, absorb or route to legal",
+      "form_profile": "service_fit_review",
+      "runtime_profile": "shared_lead_form_v1",
+      "submit_state": "Registrar contexto para revisão de encaixe"
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "visitor_decision": "organize facts and evidence for a response within the applicable deadline",
+      "value_first_outcome": "use an allegation-to-evidence matrix without presenting the work as legal representation",
+      "form_profile": "service_fit_review",
+      "runtime_profile": "shared_lead_form_v1",
+      "submit_state": "Registrar contexto para revisão de encaixe"
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "visitor_decision": "install a recurring execution-decision cadence",
+      "value_first_outcome": "use obligations matrix, panel, queue, agenda and minutes during execution",
+      "form_profile": "service_fit_review",
+      "runtime_profile": "shared_lead_form_v1",
+      "submit_state": "Registrar contexto para revisão de encaixe"
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "visitor_decision": "reserve recurring coordination capacity across focus, capital and team",
+      "value_first_outcome": "connect the monthly offer to an explicit cadence and reserved coordination",
+      "form_profile": "service_fit_review",
+      "runtime_profile": "shared_lead_form_v1",
+      "submit_state": "Pedir avaliação de enquadramento"
+    }
+  ]
+}

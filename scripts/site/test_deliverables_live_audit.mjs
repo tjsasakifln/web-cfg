@@ -54,7 +54,14 @@ test("evidence output accepts only dedicated evidence or temporary children", ()
     assertSafeEvidenceOutputDir({ repoRoot: ROOT, target: "/tmp/confenge-deliverables-fixture" }),
     "/tmp/confenge-deliverables-fixture",
   );
-  for (const unsafe of [ROOT, path.dirname(ROOT), path.join(ROOT, "docs/evidence"), "/", "/tmp"]) {
+  for (const unsafe of [
+    ROOT,
+    path.dirname(ROOT),
+    path.join(ROOT, "tmp-output"),
+    path.join(ROOT, "docs/evidence"),
+    "/",
+    "/tmp",
+  ]) {
     assert.throws(
       () => assertSafeEvidenceOutputDir({ repoRoot: ROOT, target: unsafe }),
       /DELIVERABLES_EVIDENCE_OUTPUT_UNSAFE/,
@@ -186,6 +193,12 @@ test("full-page evidence and honest #547 defects coexist", { skip: skipBrowser }
         credit_window_days: 60,
       },
     };
+    await page.$eval("[data-offer-ladder]", (node) => node.removeAttribute("data-offer-ladder"));
+    const missingExplicitLadder = await page.evaluate(inspectCommercialLadder, expected);
+    assert.ok(
+      validateCommercialLadder(missingExplicitLadder, expected).includes("explicit_value_ladder_missing"),
+    );
+    await page.$eval("main section", (node) => node.setAttribute("data-offer-ladder", "unit-diagnosis-recurring"));
     const ladder = await page.evaluate(inspectCommercialLadder, expected);
     const expectedErrors = validateCommercialLadder(ladder, expected);
     const fullPage = await captureStableFullPage({
@@ -205,6 +218,7 @@ test("full-page evidence and honest #547 defects coexist", { skip: skipBrowser }
     };
     assert.equal(route.result, "DEFECT");
     assert.ok(expectedErrors.includes("unit_01_false_credit_promise"));
+    assert.ok(expectedErrors.includes("diagnosis_step_missing"));
     assert.ok(expectedErrors.includes("recurring_direction_step_missing"));
     const defects = buildCommercialDefects(
       [{ ...route, deliverable_id: "CFG-D01", errors: expectedErrors }],
