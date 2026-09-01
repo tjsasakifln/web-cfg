@@ -40,6 +40,16 @@ if(!compute.includes("0.25")||!compute.includes("0.5")){console.error("FAIL thr"
 if(!compute.includes("explainLimite")||!compute.includes("explainReequilibrio")||!compute.includes("explainMatriz")){
   console.error("FAIL explainers"); fail++;
 } else console.log("PASS explainers");
+const limite=readFileSync(resolve(ROOT,"ferramentas/limite-acrescimos-supressoes/index.html"),"utf8");
+for (const state of ["CONFIRMED", "UNKNOWN", "CONFIRMED_COMPLETE", "KNOWN_PARTIAL"]) {
+  if (!limite.includes(`value="${state}"`)) { console.error("FAIL limite_premise_state", state); fail++; }
+  else console.log("PASS limite_premise_state", state);
+}
+if (!limite.includes("computeArt125Triage")) { console.error("FAIL limite_triage_public_api"); fail++; }
+else console.log("PASS limite_triage_public_api");
+if (/\b(?:box|out|cta)\.innerHTML\s*=/.test(limite)) {
+  console.error("FAIL limite_persisted_state_html_sink"); fail++;
+} else console.log("PASS limite_persisted_state_text_safe_dom");
 const reequilibrio=readFileSync(resolve(ROOT,"ferramentas/checklist-reequilibrio/index.html"),"utf8");
 if(!reequilibrio.includes("Método e limites")||!reequilibrio.includes("licitacoesecontratos.tcu.gov.br")){console.error("FAIL reequilibrio_method");fail++;}else console.log("PASS reequilibrio_method");
 if(reequilibrio.includes("#contato?")){console.error("FAIL reequilibrio_attribution_order");fail++;}else console.log("PASS reequilibrio_attribution_order");
@@ -74,7 +84,6 @@ if (/public_id_slug|public_contract_id|\bqid\b|\bquery\b/.test(analyticsCalls)) 
 } else console.log("PASS money_identifier_not_in_analytics");
 const resultRoutes = new Map([
   ["ferramentas/checklist-reequilibrio/index.html", "/reequilibrio-obras-publicas/"],
-  ["ferramentas/limite-acrescimos-supressoes/index.html", "/aditivos-obras-publicas/"],
   ["ferramentas/matriz-atraso-obra/index.html", "/atrasos-prorrogacao-obras-publicas/"],
 ]);
 for (const [rel, destination] of resultRoutes) {
@@ -92,6 +101,12 @@ for (const [rel, destination] of resultRoutes) {
     console.error("FAIL premises", rel); fail++;
   } else console.log("PASS premises", rel);
 }
+if (!limite.includes('id="cfg-d19-handoff"') || !limite.includes('action="/.netlify/functions/lead"') || !limite.includes('data-receipt-required="true"')) {
+  console.error("FAIL limite_terminal_capture"); fail++;
+} else console.log("PASS limite_terminal_capture");
+if (!limite.includes('name="deliverable_id" type="hidden" value="CFG-D19"') || !limite.includes('name="contract_event" type="hidden" value="mudanca_escopo"')) {
+  console.error("FAIL limite_cfg_d19_contract"); fail++;
+} else console.log("PASS limite_cfg_d19_contract");
 
 function cadastroGatesResult(rel, html) {
   const leadIdx = html.search(/<form[^>]*(id="lead-form"|name="diagnostico-b2g")|<input[^>]*(id="nome"|name="nome")[^>]*required/i);

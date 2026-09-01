@@ -288,6 +288,9 @@ await page.setViewport({ width: 1440, height: 1000 });
   });
   await page.waitForSelector("#valor_inicial", { timeout: 10000 });
   await page.evaluate(() => {
+    document.getElementById("base_status").value = "CONFIRMED";
+    document.getElementById("object_status").value = "CONFIRMED";
+    document.getElementById("base_status").dispatchEvent(new Event("change", { bubbles: true }));
     document.getElementById("valor_inicial").value = "10.000.000,00";
     document.getElementById("tipo").value = "geral";
     const n1 = document.querySelector('[data-limite-step="1"] [data-limite-next]');
@@ -295,6 +298,8 @@ await page.setViewport({ width: 1440, height: 1000 });
   });
   await page.waitForSelector('[data-limite-step="2"]:not([hidden])', { timeout: 5000 }).catch(() => null);
   await page.evaluate(() => {
+    document.getElementById("previous_totals_status").value = "CONFIRMED_COMPLETE";
+    document.getElementById("previous_totals_status").dispatchEvent(new Event("change", { bubbles: true }));
     document.getElementById("acrescimos_previos").value = "1.800.000,00";
     document.getElementById("supressoes_previas").value = "0";
     const n2 = document.querySelector('[data-limite-step="2"] [data-limite-next]');
@@ -317,9 +322,11 @@ await page.setViewport({ width: 1440, height: 1000 });
       hasPanels: !!(out && out.querySelector(".tool-limit-panel")),
       hasNumeric: !!(out && /limite numérico|saldos|percentual|utilizado/i.test(out.innerText)),
       hasSteps: !!document.querySelector("[data-limite-step]"),
+      branch: out ? /NUMERIC_SCOPE_EXCEEDED/.test(out.innerText) : false,
+      handoffVisible: !document.getElementById("cfg-d19-handoff")?.hidden,
     };
   });
-  if (lim.hidden || !lim.hasPanels) fail("limite_result " + JSON.stringify(lim));
+  if (lim.hidden || !lim.hasPanels || !lim.branch || !lim.handoffVisible) fail("limite_result " + JSON.stringify(lim));
   else pass("limite_result panels");
   if (!lim.hasNumeric) fail("limite_wording");
   else pass("limite_wording");
@@ -327,30 +334,160 @@ await page.setViewport({ width: 1440, height: 1000 });
   else pass("limite_steps");
   const matchCompute = await page.evaluate(() => {
     const C = window.ConfengeToolCompute;
-    const r = C.computeLimiteAditivo({
+    const r = C.computeArt125Triage({
+      baseStatus: "CONFIRMED", objectStatus: "CONFIRMED", previousTotalsStatus: "CONFIRMED_COMPLETE",
       valorInicial: 1e7, tipo: "geral", acrescimosPrevios: 1.8e6,
       supressoesPrevias: 0, acrescimoProposto: 9e5, supressaoProposta: 0,
     });
+    const calc = r.calculation;
     const t = document.getElementById("resultado") ? document.getElementById("resultado").innerText : "";
     return {
       ok: r.ok,
-      withinAc: r.withinAc,
-      textHasStatus: t.includes(r.acrescimos.labelStatus),
+      branch: r.branch,
+      withinAc: calc && calc.withinAc,
+      textHasStatus: !!(calc && t.includes(calc.acrescimos.labelStatus)),
       textNonEmpty: t.trim().length > 40,
       hasLayers: /Fato\.|Cálculo\.|Inferência\.|Desconhecido/i.test(t),
     };
   });
-  if (!matchCompute.ok || matchCompute.withinAc !== false || !matchCompute.textHasStatus || !matchCompute.textNonEmpty) {
+  if (!matchCompute.ok || matchCompute.branch !== "NUMERIC_SCOPE_EXCEEDED" || matchCompute.withinAc !== false || !matchCompute.textHasStatus || !matchCompute.textNonEmpty) {
     fail("limite_result_matches_compute " + JSON.stringify(matchCompute));
   } else pass("limite_result_matches_compute");
   if (!matchCompute.hasLayers) fail("limite_layers_visible");
   else pass("limite_layers_visible");
+  const analyticsSafe = await page.evaluate(() => {
+    const events = (window.dataLayer || []).filter((entry) => entry && /^tool_(view|start|complete)$/.test(entry.event));
+    const serialized = JSON.stringify(events);
+    const forbiddenKeys = ["valor_inicial", "acrescimos_previos", "supressoes_previas", "acrescimo_proposto", "supressao_proposta", "artifact", "nome", "email", "telefone"];
+    return {
+      count: events.length,
+      names: events.map((entry) => entry.event),
+      leakedKeys: events.flatMap((entry) => forbiddenKeys.filter((key) => Object.prototype.hasOwnProperty.call(entry, key))),
+      leakedValue: /10\.000\.000|1800000|1\.800\.000|900000|Triagem numérica do Art\. 125/.test(serialized),
+    };
+  });
+  if (!["tool_view", "tool_start", "tool_complete"].every((name) => analyticsSafe.names.includes(name)) || analyticsSafe.leakedKeys.length || analyticsSafe.leakedValue) fail("limite_analytics_no_pii_money " + JSON.stringify(analyticsSafe));
+  else pass("limite_analytics_no_pii_money");
   report.flows.push({ flow: "limite", ...lim });
   await page.screenshot({
     path: join(OUT, "screenshots", "after", "limite-result-1440.png"),
     fullPage: true,
   });
   await runAxeAudit(page, "limite-result", "/ferramentas/limite-acrescimos-supressoes/#resultado");
+}
+
+// Limite epistemic branches: partial is provisional; UNKNOWN never becomes zero.
+{
+  await page.evaluate(() => {
+    document.getElementById("previous_totals_status").value = "KNOWN_PARTIAL";
+    document.getElementById("previous_totals_status").dispatchEvent(new Event("change", { bubbles: true }));
+    const form = document.getElementById("limite-form");
+    if (form.requestSubmit) form.requestSubmit();
+    else form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  });
+  const partial = await page.evaluate(() => {
+    const text = document.getElementById("resultado")?.innerText || "";
+    return { inputBranch: text.includes("INPUT_NOT_CONFIRMED"), provisional: /provisório|máximo teórico/i.test(text), panels: document.querySelectorAll("#resultado .tool-limit-panel").length };
+  });
+  if (!partial.inputBranch || !partial.provisional || partial.panels !== 2) fail("limite_partial_branch " + JSON.stringify(partial));
+  else pass("limite_partial_branch");
+
+  await page.evaluate(() => {
+    document.getElementById("previous_totals_status").value = "UNKNOWN";
+    document.getElementById("previous_totals_status").dispatchEvent(new Event("change", { bubbles: true }));
+    const form = document.getElementById("limite-form");
+    if (form.requestSubmit) form.requestSubmit();
+    else form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  });
+  const unknown = await page.evaluate(() => {
+    const text = document.getElementById("resultado")?.innerText || "";
+    return { inputBranch: text.includes("INPUT_NOT_CONFIRMED"), noCalculation: /Memória de cálculo indisponível|Nenhum saldo foi calculado/i.test(text), panels: document.querySelectorAll("#resultado .tool-limit-panel").length };
+  });
+  if (!unknown.inputBranch || !unknown.noCalculation || unknown.panels !== 0) fail("limite_unknown_branch " + JSON.stringify(unknown));
+  else pass("limite_unknown_branch");
+}
+
+// CFG-D19 handoff: two cases in one tab get distinct idempotency keys, categorical context and no calculator values.
+{
+  await page.evaluate(() => {
+    document.getElementById("previous_totals_status").value = "CONFIRMED_COMPLETE";
+    document.getElementById("previous_totals_status").dispatchEvent(new Event("change", { bubbles: true }));
+    const form = document.getElementById("limite-form");
+    if (form.requestSubmit) form.requestSubmit();
+    else form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  });
+  await page.click('#cta [data-tool-to-form]');
+  const firstPrepared = await page.evaluate(() => document.querySelector('#cfg-d19-form [name="idempotency_key"]')?.value || "");
+  let leadPayloads = [];
+  await page.setRequestInterception(true);
+  const requestHandler = (request) => {
+    if (request.url().endsWith("/api/web/lead") && request.method() === "POST") {
+      try { leadPayloads.push(JSON.parse(request.postData() || "{}")); } catch { leadPayloads.push({}); }
+      const receipt = leadPayloads.length === 1 ? "lead-abcdef1234567890abcdef12345" : "lead-bcdef1234567890abcdef123456";
+      request.respond({ status: 201, contentType: "application/json", body: JSON.stringify({ ok: true, lead_id: receipt, receipt_id: receipt }) });
+      return;
+    }
+    request.continue();
+  };
+  page.on("request", requestHandler);
+  await page.evaluate(() => {
+    document.getElementById("public_contract_id").value = "CTR-2026-125";
+    document.getElementById("opportunity_deadline").value = "2026-09-15";
+    document.getElementById("contract_stage").value = "documentando";
+    document.getElementById("nome").value = "Pessoa Teste";
+    document.getElementById("email").value = "teste@example.com";
+    document.getElementById("consentimento").checked = true;
+    const form = document.getElementById("cfg-d19-form");
+    if (form.requestSubmit) form.requestSubmit();
+    else form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  });
+  for (let i = 0; i < 40 && leadPayloads.length < 1; i += 1) await new Promise((r) => setTimeout(r, 50));
+  await new Promise((r) => setTimeout(r, 300));
+
+  await page.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, { waitUntil: "networkidle0", timeout: 60000 });
+  await page.evaluate(() => {
+    document.getElementById("base_status").value = "CONFIRMED";
+    document.getElementById("object_status").value = "CONFIRMED";
+    document.getElementById("previous_totals_status").value = "CONFIRMED_COMPLETE";
+    document.getElementById("base_status").dispatchEvent(new Event("change", { bubbles: true }));
+    document.getElementById("previous_totals_status").dispatchEvent(new Event("change", { bubbles: true }));
+    document.getElementById("valor_inicial").value = "1.000.000,00";
+    document.getElementById("tipo").value = "geral";
+    document.getElementById("acrescimos_previos").value = "0";
+    document.getElementById("supressoes_previas").value = "0";
+    document.getElementById("acrescimo_proposto").value = "100.000,00";
+    document.getElementById("supressao_proposta").value = "0";
+    const calculator = document.getElementById("limite-form");
+    if (calculator.requestSubmit) calculator.requestSubmit();
+    else calculator.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  });
+  const secondPrepared = await page.evaluate(() => document.querySelector('#cfg-d19-form [name="idempotency_key"]')?.value || "");
+  await page.evaluate(() => {
+    document.getElementById("public_contract_id").value = "CTR-2026-126";
+    document.getElementById("opportunity_deadline").value = "2026-09-16";
+    document.getElementById("contract_stage").value = "quantificando";
+    document.getElementById("nome").value = "Pessoa Teste Dois";
+    document.getElementById("email").value = "teste2@example.com";
+    document.getElementById("consentimento").checked = true;
+    const form = document.getElementById("cfg-d19-form");
+    if (form.requestSubmit) form.requestSubmit();
+    else form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  });
+  for (let i = 0; i < 40 && leadPayloads.length < 2; i += 1) await new Promise((r) => setTimeout(r, 50));
+  await new Promise((r) => setTimeout(r, 300));
+  page.off("request", requestHandler);
+  await page.setRequestInterception(false);
+  const forbiddenKeys = ["valor_inicial", "acrescimos_previos", "supressoes_previas", "acrescimo_proposto", "supressao_proposta", "calculation", "artifact", "lastText"];
+  const leakedKeys = leadPayloads.flatMap((payload) => forbiddenKeys.filter((key) => Object.prototype.hasOwnProperty.call(payload, key)));
+  const serializedLead = JSON.stringify(leadPayloads);
+  const handoffOk = leadPayloads.length === 2
+    && leadPayloads.every((payload) => payload.deliverable_id === "CFG-D19" && payload.contract_event === "mudanca_escopo" && payload.route_family === "aditivos" && payload.asset_id === "limite-acrescimos-supressoes" && payload.idempotency_key)
+    && leadPayloads[0].cta_id === "art125-numeric-scope-exceeded"
+    && leadPayloads[1].cta_id === "art125-within-numeric-scope"
+    && leadPayloads[0].idempotency_key !== leadPayloads[1].idempotency_key;
+  if (firstPrepared || secondPrepared || !handoffOk || leakedKeys.length || /10\.000\.000|1800000|1\.800\.000|900000|Triagem numérica do Art\. 125/.test(serializedLead)) {
+    fail("limite_cfg_d19_payload " + JSON.stringify({ firstPrepared, secondPrepared, handoffOk, leakedKeys, leadPayloads }));
+  } else pass("limite_cfg_d19_payload_no_calculator_values");
 }
 
 // Reequilibrio flow - mark blockers missing
@@ -574,10 +711,20 @@ await page.setViewport({ width: 1440, height: 1000 });
   await page.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, { waitUntil: "networkidle0", timeout: 60000 });
   await page.evaluate(() => localStorage.removeItem("confenge.tool.limite-acrescimos"));
   await page.reload({ waitUntil: "networkidle0", timeout: 60000 });
-  await page.focus("#valor_inicial");
+  await page.focus("#base_status");
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("Tab");
   await page.keyboard.type("1000000");
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("ArrowDown");
   const step1 = await tabToSelector(page, '[data-limite-step="1"] [data-limite-next]');
   if (step1) await page.keyboard.press("Enter");
+  await page.focus("#previous_totals_status");
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("Tab");
+  await page.keyboard.type("0");
+  await page.keyboard.press("Tab");
+  await page.keyboard.type("0");
   const step2 = await tabToSelector(page, '[data-limite-step="2"] [data-limite-next]');
   if (step2) await page.keyboard.press("Enter");
   const submit = await tabToSelector(page, '[data-limite-step="3"] button.tool-run');
@@ -671,16 +818,55 @@ await page.setViewport({ width: 1440, height: 1000 });
 
 // --- Persist / erase / copy / download / invalid money (skeptic gaps) ---
 {
+  // Limite: hostile persisted values stay literal text and never become markup.
+  await page.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, { waitUntil: "networkidle0", timeout: 60000 });
+  const hostile = '</li><img id="persisted-xss" src=x onerror="window.__persistedXss=1">';
+  await page.evaluate((payloadText) => {
+    window.__persistedXss = 0;
+    localStorage.setItem("confenge.tool.limite-acrescimos", JSON.stringify({
+      v: 5,
+      savedAt: Date.now(),
+      data: {
+        base_status: "CONFIRMED",
+        valor_inicial: payloadText,
+        object_status: "CONFIRMED",
+        tipo: "geral",
+        previous_totals_status: "CONFIRMED_COMPLETE",
+        acrescimos_previos: payloadText,
+        supressoes_previas: "0",
+        acrescimo_proposto: "0",
+        supressao_proposta: "0",
+        __step: 3,
+      },
+    }));
+  }, hostile);
+  await page.reload({ waitUntil: "networkidle0", timeout: 60000 });
+  const hostileState = await page.evaluate(() => ({
+    executed: window.__persistedXss === 1,
+    injectedNode: !!document.getElementById("persisted-xss"),
+    summaryText: document.querySelector("[data-precalc-summary]")?.innerText || "",
+    rawValue: document.getElementById("valor_inicial")?.value || "",
+  }));
+  if (hostileState.executed || hostileState.injectedNode || !hostileState.summaryText.includes("<img") || !hostileState.rawValue.includes("<img")) {
+    fail("limite_hostile_persisted_text_safe " + JSON.stringify(hostileState));
+  } else pass("limite_hostile_persisted_text_safe");
+  await page.evaluate(() => localStorage.removeItem("confenge.tool.limite-acrescimos"));
+
   // Limite: invalid money must not coerce to 0 (staged UI — advance then set invalid)
   await page.goto(`${BASE}/ferramentas/limite-acrescimos-supressoes/`, { waitUntil: "networkidle0", timeout: 60000 });
   await page.waitForSelector("#valor_inicial");
   await page.evaluate(() => {
+    document.getElementById("base_status").value = "CONFIRMED";
+    document.getElementById("object_status").value = "CONFIRMED";
+    document.getElementById("base_status").dispatchEvent(new Event("change", { bubbles: true }));
     document.getElementById("valor_inicial").value = "10.000.000";
     const n1 = document.querySelector('[data-limite-step="1"] [data-limite-next]');
     if (n1) n1.click();
   });
   await page.waitForSelector('[data-limite-step="2"]:not([hidden])', { timeout: 5000 }).catch(() => null);
   await page.evaluate(() => {
+    document.getElementById("previous_totals_status").value = "CONFIRMED_COMPLETE";
+    document.getElementById("previous_totals_status").dispatchEvent(new Event("change", { bubbles: true }));
     document.getElementById("acrescimos_previos").value = "abc";
     document.getElementById("supressoes_previas").value = "0";
     const n2 = document.querySelector('[data-limite-step="2"] [data-limite-next]');
@@ -713,6 +899,11 @@ await page.setViewport({ width: 1440, height: 1000 });
   // Limite: valid submit → persist → reload
   await page.evaluate(() => {
     // Ensure all steps filled and submit
+    document.getElementById("base_status").value = "CONFIRMED";
+    document.getElementById("object_status").value = "CONFIRMED";
+    document.getElementById("previous_totals_status").value = "CONFIRMED_COMPLETE";
+    document.getElementById("base_status").dispatchEvent(new Event("change", { bubbles: true }));
+    document.getElementById("previous_totals_status").dispatchEvent(new Event("change", { bubbles: true }));
     document.getElementById("valor_inicial").value = "10.000.000,00";
     document.getElementById("acrescimos_previos").value = "1.800.000,00";
     document.getElementById("supressoes_previas").value = "0";
@@ -736,17 +927,24 @@ await page.setViewport({ width: 1440, height: 1000 });
   const restored = await page.evaluate(() => ({
     v: document.getElementById("valor_inicial").value,
     ac: document.getElementById("acrescimos_previos").value,
+    baseStatus: document.getElementById("base_status").value,
+    previousStatus: document.getElementById("previous_totals_status").value,
     raw: localStorage.getItem("confenge.tool.limite-acrescimos"),
   }));
   const acOk =
     String(restored.ac || "").includes("1800000") ||
     String(restored.ac || "").includes("1.800.000") ||
     (restored.raw && (restored.raw.includes("1800000") || restored.raw.includes("1.800.000")));
-  if (!restored.v || !acOk) fail("limite_persist_reload " + JSON.stringify(restored));
+  if (!restored.v || !acOk || restored.baseStatus !== "CONFIRMED" || restored.previousStatus !== "CONFIRMED_COMPLETE") fail("limite_persist_reload " + JSON.stringify(restored));
   else pass("limite_persist_reload");
 
   // Copy / download produce non-empty text (re-run calc first after restore)
   await page.evaluate(() => {
+    document.getElementById("base_status").value = "CONFIRMED";
+    document.getElementById("object_status").value = "CONFIRMED";
+    document.getElementById("previous_totals_status").value = "CONFIRMED_COMPLETE";
+    document.getElementById("base_status").dispatchEvent(new Event("change", { bubbles: true }));
+    document.getElementById("previous_totals_status").dispatchEvent(new Event("change", { bubbles: true }));
     document.getElementById("valor_inicial").value = "10.000.000,00";
     document.getElementById("acrescimos_previos").value = "1.800.000,00";
     document.getElementById("supressoes_previas").value = "0";
@@ -761,15 +959,24 @@ await page.setViewport({ width: 1440, height: 1000 });
   });
   await page.waitForSelector("#resultado:not([hidden])", { timeout: 8000 });
   const reportLen = await page.evaluate(async () => {
+    window.__copiedArt125Report = "";
+    if (window.ConfengeTools) {
+      window.ConfengeTools.copyText = function(text) { window.__copiedArt125Report = String(text || ""); return Promise.resolve(true); };
+    }
     const btn = document.getElementById("btn-copy");
     if (btn) btn.click();
     const dl = document.getElementById("btn-dl");
-    return { hasCopy: !!btn, hasDl: !!dl, resultText: (document.getElementById("resultado") || {}).innerText || "" };
+    await Promise.resolve();
+    return { hasCopy: !!btn, hasDl: !!dl, resultText: (document.getElementById("resultado") || {}).innerText || "", copied: window.__copiedArt125Report };
   });
   if (!reportLen.hasCopy || !reportLen.hasDl) fail("limite_copy_dl_buttons");
   else pass("limite_copy_dl_buttons");
   if (!reportLen.resultText || reportLen.resultText.length < 40) fail("limite_result_text_short");
   else pass("limite_result_text_professional", reportLen.resultText.length);
+  const artifactNeedles = ["Triagem numérica do Art. 125", "Base atualizada: R$", "Tipo predominante:", "Acréscimo proposto:", "Supressão proposta:", "Alertas", "art125-numeric-triage/1.0.0", "Limite epistemológico"];
+  const artifactMissing = artifactNeedles.filter((needle) => !reportLen.copied.includes(needle));
+  if (artifactMissing.length) fail("limite_artifact_complete " + JSON.stringify({ artifactMissing, copied: reportLen.copied.slice(0, 800) }));
+  else pass("limite_artifact_complete");
   // print path exists
   const hasPrint = await page.$("#btn-print");
   if (!hasPrint) fail("limite_print_btn");

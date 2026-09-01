@@ -610,7 +610,7 @@ def test_limit_tool_staged_structure():
     # copy/download/print after result container
     assert 'id="ra"' in page and "hidden" in page
     # compute still wired
-    assert "computeLimiteAditivo" in page
+    assert "computeArt125Triage" in page
     # no competing primary reset button class on reset
     assert re.search(
         r'id="btn-reset"[^>]*class="tool-text-action"|class="tool-text-action"[^>]*id="btn-reset"',
