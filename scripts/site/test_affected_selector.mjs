@@ -91,6 +91,31 @@ function expectSubset(result, mustInclude, because) {
   }
 }
 
+// #545's internal buyer-decision authority selects on both source inputs and
+// emitted reports. Its GSC projection remains separate from public mutation.
+{
+  for (const input of [
+    "data/bofu-dominance/core/buyer-decision-map.v1.json",
+    "docs/seo/bofu-dominance/core/BUYER-DECISION-MAP.md",
+  ]) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:bofu-ownership"], `BOFU ownership input ${input}`);
+  }
+}
+
+// #554's release-bound ledger selects on its persisted source of truth and
+// rendered report, while retaining the normal fail-closed unknown fallback.
+{
+  for (const input of [
+    "data/organic/experiments/integrated-commercial-release-2026-08-31/ledger.json",
+    "docs/measurement/INTEGRATED-COMMERCIAL-RELEASE-2026-08-31.md",
+  ]) {
+    const result = selectAffected([input], scripts);
+    expectSubset(result, ["test:commercial-release-ledger"], `commercial ledger input ${input}`);
+    assert.ok(!result.selected_ids.includes("test:inbound-gates"));
+  }
+}
+
 {
   const paths = ["docs/research/icp-trust-session-v1/PROTOCOL-TREE-TEST.md"];
   const result = selectAffected(paths, scripts);
