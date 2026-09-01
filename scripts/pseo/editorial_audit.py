@@ -465,7 +465,35 @@ def run_editorial_audit(*, root: Path | None = None) -> dict[str, Any]:
 
     publish_fails = [r for r in results if r.status == "publish" and r.decision == "fail_publish"]
     p0_count = sum(1 for r in results for i in r.issues if i.severity == "P0")
-    ok = len(publish_fails) == 0
+
+    # ANY_PUBLIC_P0 => CANNOT_PUBLISH.
+    #
+    # The old rule counted fails only for status=="publish", so a page carrying
+    # real P0 issues contributed nothing to `ok` as soon as it was rejected —
+    # the report could assert ok=true with 25 open P0 issues while the offending
+    # pages were still being written to the public tree and served.
+    #
+    # `ok` now asks the question that matters: is any P0-carrying page actually
+    # reachable by a visitor right now? A page correctly withdrawn (build.py no
+    # longer writes reject pages, so no index.html exists) does not block the
+    # aggregate; a P0 page still on disk does, whatever its status.
+    #
+    # The repo root is authoritative for "currently served": it is what the
+    # generator just produced. `_site` is a build artifact that can lag a
+    # withdrawal, so a stale copy there must not hold `ok` false forever.
+    served_p0 = [
+        r
+        for r in results
+        if any(i.severity == "P0" for i in r.issues)
+        and (root / (r.url or "").strip("/") / "index.html").exists()
+    ]
+    withdrawn_p0 = [
+        r
+        for r in results
+        if any(i.severity == "P0" for i in r.issues)
+        and not (root / (r.url or "").strip("/") / "index.html").exists()
+    ]
+    ok = len(publish_fails) == 0 and len(served_p0) == 0
 
     # Enrich with evidence_kind / editorial decision fields (Frente G)
     ps_by_id: dict[str, dict] = {}
@@ -523,6 +551,13 @@ def run_editorial_audit(*, root: Path | None = None) -> dict[str, Any]:
         "page_count": len(results),
         "publish_fail_count": len(publish_fails),
         "p0_issue_count": p0_count,
+        # Named counters so the report can never again assert health by
+        # omission: a P0 that is merely rejected still shows up here.
+        "served_p0_page_count": len(served_p0),
+        "served_p0_urls": sorted(r.url for r in served_p0),
+        "withdrawn_p0_page_count": len(withdrawn_p0),
+        "withdrawn_p0_urls": sorted(r.url for r in withdrawn_p0),
+        "total_p0_issue_count": p0_count,
         "pages": enriched_pages,
         "editorial_decisions": {
             p["page_id"]: p.get("editorial_decision") for p in enriched_pages
@@ -566,7 +601,19 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--json-out", default=None)
     args = ap.parse_args(argv)
     report = run_editorial_audit()
-    print(json.dumps({"ok": report.get("ok"), "publish_fail_count": report.get("publish_fail_count"), "p0_issue_count": report.get("p0_issue_count"), "page_count": report.get("page_count")}, indent=2))
+    print(
+        json.dumps(
+            {
+                "ok": report.get("ok"),
+                "publish_fail_count": report.get("publish_fail_count"),
+                "p0_issue_count": report.get("p0_issue_count"),
+                "served_p0_page_count": report.get("served_p0_page_count"),
+                "withdrawn_p0_page_count": report.get("withdrawn_p0_page_count"),
+                "page_count": report.get("page_count"),
+            },
+            indent=2,
+        )
+    )
     return 0 if report.get("ok") else 1
 
 

@@ -766,6 +766,15 @@ LEAD_INLINE_HIERARCHY_EXCEPTIONS: dict[str, str] = {}
 TRUNCATED_BEFORE_MAIN_CLOSE = frozenset()
 
 
+# Anti-collapse floor for the derived lead-inline scope. It exists to catch a
+# broken selector or a walk that stops early, never to pin an exact page count.
+# 2026-08-23 (#299): scope measured 159, floor set to 150 -- a margin of 9.
+# 2026-09-01 (#566): the 18 reject-status pSEO pages were withdrawn and all 18
+# carried lead-inline, so the scope measured 141. The floor is recaptured to
+# 132, keeping the same margin of 9. Lower it only against a fresh measurement.
+LEAD_INLINE_SCOPE_FLOOR = 132
+
+
 def _lead_inline_pages() -> list[Path]:
     """Every shipped public page that carries the promotional lead-inline class."""
     pages: list[Path] = []
@@ -807,7 +816,7 @@ def test_lead_inline_not_before_main_or_h1():
     reintroduce the #181 defect with CI green.
     """
     pages = _lead_inline_pages()
-    assert len(pages) >= 150, (
+    assert len(pages) >= LEAD_INLINE_SCOPE_FLOOR, (
         f"lead-inline scan collapsed to {len(pages)} pages; the guard must stay sitewide"
     )
     relatives = {path.relative_to(ROOT).as_posix() for path in pages}
@@ -935,7 +944,9 @@ def test_no_consecutive_duplicate_cta():
     hand-written route list.
     """
     pages = _lead_inline_pages()
-    assert len(pages) >= 150, f"duplicate-CTA scan collapsed to {len(pages)} pages"
+    assert len(pages) >= LEAD_INLINE_SCOPE_FLOOR, (
+        f"duplicate-CTA scan collapsed to {len(pages)} pages"
+    )
     failures: list[str] = []
     for path in pages:
         html = path.read_text(encoding="utf-8", errors="replace")

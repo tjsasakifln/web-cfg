@@ -82,10 +82,22 @@ class TestSemanticGates(unittest.TestCase):
         self.assertTrue(any("zero_used" in f for f in fails))
 
     def test_radar_duplicates(self):
+        """Same official identifier three times = one opportunity, two dups."""
+        item = {"pncp_id": "111-1-000001/2026", "objeto": "Pavimentação Indaial", "orgao_nome": "Indaial", "data_encerramento": "2026-08-01", "valor_estimado": 100, "link_pncp": "https://pncp.gov.br/app/editais/1/2026/1", "value_status": "known"}
+        o = {"open_count": 3, "duplicate_rate": 0, "items": [item, dict(item), dict(item)]}
+        fails = semantic_radar_fails(o)
+        self.assertTrue(any("duplicate" in f for f in fails), fails)
+
+    def test_radar_rows_without_official_id_fail_closed(self):
+        """No pncp_id means identity cannot be proven, so the gate must fail.
+
+        Identity comes from the official identifier minted upstream by
+        extra-cli, never from an objeto/órgão/data text signature.
+        """
         item = {"objeto": "Pavimentação Indaial", "orgao_nome": "Indaial", "data_encerramento": "2026-08-01", "valor_estimado": 100, "link_pncp": "https://pncp.gov.br/app/editais/1/2026/1", "value_status": "known"}
         o = {"open_count": 3, "duplicate_rate": 0, "items": [item, dict(item), dict(item)]}
         fails = semantic_radar_fails(o)
-        self.assertTrue(any("duplicate" in f for f in fails))
+        self.assertTrue(any("without_official_id" in f for f in fails), fails)
 
     def test_problem_generic_evidence(self):
         fails = semantic_problem_fails({"theme": "aditivos", "evidence_count": 48})
@@ -294,7 +306,13 @@ class TestDatasetAndCopy(unittest.TestCase):
                 # if any were publish, generic would matter; currently none publish
                 pass
 
-    def test_radar_near_duplicate_values_fail_gate(self):
+    def test_radar_rows_without_official_id_never_reach_a_list(self):
+        """Near-identical wording without an official id must fail closed.
+
+        These rows used to be caught by an objeto/órgão/data text signature.
+        That signature also merged genuinely distinct procurements, so the
+        rule is now identifier-based: no identifier, no publication.
+        """
         from scripts.pseo.score import semantic_radar_fails
         o = {
             "open_count": 3,
@@ -306,19 +324,38 @@ class TestDatasetAndCopy(unittest.TestCase):
             ],
         }
         fails = semantic_radar_fails(o)
-        self.assertTrue(any("duplicate" in f for f in fails), fails)
+        self.assertTrue(any("without_official_id" in f for f in fails), fails)
 
+    def test_distinct_sequenciais_are_not_duplicates(self):
+        """Two official identifiers = two opportunities, whatever the wording.
 
-    def test_radar_missing_vs_known_valor_near_dup(self):
-        """Missing valor vs known valor same org/objeto/closing is a near-dup fail."""
+        Regression for the false positive that rejected real radar pages:
+        PNCP sequenciais …-000186/2026 and …-000187/2026 are distinct
+        procurements even when objeto, órgão and closing date all match.
+        """
         from scripts.pseo.score import semantic_radar_fails
         o = {
             "open_count": 3,
             "duplicate_rate": 0,
             "items": [
-                {"objeto": "Reforma Centro Desenvolvimento Social", "orgao_nome": "Mariopolis", "data_encerramento": "2026-08-20", "valor_estimado": None, "value_status": "not_informed", "link_pncp": "https://pncp.gov.br/app/editais/1"},
-                {"objeto": "Reforma Centro Desenvolvimento Social", "orgao_nome": "Mariopolis", "data_encerramento": "2026-08-20", "valor_estimado": 1230482.04, "value_status": "known", "link_pncp": "https://pncp.gov.br/app/editais/2"},
-                {"objeto": "Outra obra", "orgao_nome": "X", "data_encerramento": "2026-08-21", "valor_estimado": 100, "value_status": "known", "link_pncp": "https://pncp.gov.br/app/editais/3"},
+                {"pncp_id": "831-1-000186/2026", "objeto": "Pavimentação da Rua A", "orgao_nome": "Indaial", "data_encerramento": "2026-08-20", "valor_estimado": 730738.47, "link_pncp": "https://pncp.gov.br/app/editais/1", "value_status": "known"},
+                {"pncp_id": "831-1-000187/2026", "objeto": "Pavimentação da Rua A", "orgao_nome": "Indaial", "data_encerramento": "2026-08-20", "valor_estimado": 730738.47, "link_pncp": "https://pncp.gov.br/app/editais/2", "value_status": "known"},
+                {"pncp_id": "831-1-000188/2026", "objeto": "Outra obra", "orgao_nome": "X", "data_encerramento": "2026-08-21", "valor_estimado": 100, "link_pncp": "https://pncp.gov.br/app/editais/3", "value_status": "known"},
+            ],
+        }
+        fails = semantic_radar_fails(o)
+        self.assertFalse([f for f in fails if "duplicate" in f], fails)
+
+    def test_radar_missing_vs_known_valor_same_official_id_is_a_duplicate(self):
+        """One procurement republished with a value filled in is still one row."""
+        from scripts.pseo.score import semantic_radar_fails
+        o = {
+            "open_count": 3,
+            "duplicate_rate": 0,
+            "items": [
+                {"pncp_id": "769-1-000118/2026", "objeto": "Reforma Centro Desenvolvimento Social", "orgao_nome": "Mariopolis", "data_encerramento": "2026-08-20", "valor_estimado": None, "value_status": "not_informed", "link_pncp": "https://pncp.gov.br/app/editais/1"},
+                {"pncp_id": "769-1-000118/2026", "objeto": "Reforma Centro Desenvolvimento Social", "orgao_nome": "Mariopolis", "data_encerramento": "2026-08-20", "valor_estimado": 1230482.04, "value_status": "known", "link_pncp": "https://pncp.gov.br/app/editais/2"},
+                {"pncp_id": "769-1-000119/2026", "objeto": "Outra obra", "orgao_nome": "X", "data_encerramento": "2026-08-21", "valor_estimado": 100, "value_status": "known", "link_pncp": "https://pncp.gov.br/app/editais/3"},
             ],
         }
         fails = semantic_radar_fails(o)

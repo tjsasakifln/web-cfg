@@ -17,14 +17,14 @@
       "editorial_audit": {
         "ok": true,
         "publish_fail_count": 0,
-        "p0_issue_count": 25
+        "p0_issue_count": 7
       }
     },
     "determinism": {
-      "first_hash": "0d8e1b7dbd04231473d4ebe087270f55a91fb8698181eee36cbf81646051070c",
-      "second_hash": "0d8e1b7dbd04231473d4ebe087270f55a91fb8698181eee36cbf81646051070c",
+      "first_hash": "764ee02ce738dcd85079100c246a16f4fa0c8a4def2325f925f872be4122b46c",
+      "second_hash": "764ee02ce738dcd85079100c246a16f4fa0c8a4def2325f925f872be4122b46c",
       "deterministic": true,
-      "page_count": 31
+      "page_count": 15
     },
     "tracking": {
       "events_declared_or_handled": [
@@ -43,7 +43,7 @@
     "regression": {
       "conteudos_pages": 120,
       "missing_pillars": [],
-      "main_sitemap_urls": 48,
+      "main_sitemap_urls": 72,
       "ok": true
     },
     "data_forbidden": {
@@ -55,7 +55,18 @@
       "generated_from": "data/pseo/registry.json",
       "page_count": 23,
       "publish_fail_count": 0,
-      "p0_issue_count": 25,
+      "p0_issue_count": 7,
+      "served_p0_page_count": 0,
+      "served_p0_urls": [],
+      "withdrawn_p0_page_count": 5,
+      "withdrawn_p0_urls": [
+        "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
+        "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
+        "/inteligencia/precos/edificacoes-publicas-mg/",
+        "/inteligencia/precos/edificacoes-publicas-rs/",
+        "/inteligencia/precos/manutencao-predial-engenharia-rs/"
+      ],
+      "total_p0_issue_count": 7,
       "pages": [
         {
           "page_id": "market-pavimentacao-infraestrutura-viaria-sc",
@@ -93,7 +104,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": "tiago-sasaki-editorial-audit",
-          "page_material_hash": "7ff5b67c2417b2f549f43eeab8e493f947f51935bdc31136fe344f7de6e19854"
+          "page_material_hash": "d40cd67a939d9063dca65e38c5a1956595caebc9d3c3b8dbf4c4ccc9d72766cd"
         },
         {
           "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
@@ -131,7 +142,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "9c488d51e053545667e11f70e5fe968e7b149a640ae71ee2dcf71d503a384839"
+          "page_material_hash": "a1b83dad4b09d2224634012cebbe0656e647e8c44f79c763efeaee363f5089c0"
         },
         {
           "page_id": "market-edificacoes-publicas-mg",
@@ -169,7 +180,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": "tiago",
-          "page_material_hash": "fafd65a881b3d3bbef507b0307bb8bc723aa43c94fc0b8fc4df7514e282212d7"
+          "page_material_hash": "cb22db149447e316a40c4042cde24f717744b7deb0e383e10934f4cf129c14d1"
         },
         {
           "page_id": "market-edificacoes-publicas-rs",
@@ -207,7 +218,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "d5b140f4d4ff19d3e3d260855e29b17139a935986393f9bc2873de79bc28eeea"
+          "page_material_hash": "e6f57fe80e18fbbde630918d1ff92310e56178ff46ef7aa0e43642b500c14045"
         },
         {
           "page_id": "agency-88830609",
@@ -287,12 +298,6 @@
           "approval_recommendation": "reject_or_noindex",
           "issues": [
             {
-              "code": "ingestion_prefix_name",
-              "severity": "P0",
-              "message": "Nome de órgão com prefixo de ingestão",
-              "evidence": "MRS-PREFEITURA"
-            },
-            {
               "code": "sample_concentration",
               "severity": "P0",
               "message": "Amostra concentrada/insuficiente: buyers<3",
@@ -315,7 +320,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "932e8191451b13b6b305c21124f8777f717e68e11c87132a701b0b1b0f5cfd0c"
+          "page_material_hash": "9d0fe28d200d8c03a8647754707aa295745599a1dbe1844e44757b2d419b4e66"
         },
         {
           "page_id": "price-edificacoes-publicas-mg",
@@ -366,7 +371,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "0ee9aa2ca7459b51c36cfa6f6841da0c6baa8a1faea230a0b40938fb8edf4cf9"
+          "page_material_hash": "550fe84a17bcb8cdd4dca7f5ddb9c3c2c1d9837a89d9dd48dc2200dd22528cc2"
         },
         {
           "page_id": "price-pavimentacao-infraestrutura-viaria-pi",
@@ -393,14 +398,7 @@
             "intent": "validar_preco_margem"
           },
           "approval_recommendation": "reject_or_noindex",
-          "issues": [
-            {
-              "code": "missing_accents",
-              "severity": "P1",
-              "message": "Termo técnico sem acentuação editorial",
-              "evidence": "Piaui"
-            }
-          ],
+          "issues": [],
           "intent": "estimar_valores_dispersao",
           "evidence_kind": null,
           "direct_evidence_count": 0,
@@ -411,7 +409,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "a353f928fbc684dd9cdea20b5a9e7b5439e43032a2be28a46b29d9b0c8fbe84f"
+          "page_material_hash": "76102908192b838b1502821ded224b82fa1cf692971f4e8a764f8a6c6de055bf"
         },
         {
           "page_id": "price-edificacoes-publicas-rs",
@@ -462,7 +460,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "8384a35f4666bcc8b23aa41c16e1623d6fe9660e2d5ebaa312f38be6e479c977"
+          "page_material_hash": "9ff5207524657747d645816f060adfed8ad9ac13a4a18048c0002bddc000a1ee"
         },
         {
           "page_id": "price-pavimentacao-infraestrutura-viaria-sc",
@@ -500,7 +498,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "067fa35c2703dc1eefc31b0103e79202acb1e241faa4b9fbc9a2a07825fd7f51"
+          "page_material_hash": "623a3c2c13fc215c53fa87d84e2c614ecdccc40eb8d77990c0b7d09288ef9f03"
         },
         {
           "page_id": "comp-manutencao-predial-engenharia-rs",
@@ -519,7 +517,7 @@
           ],
           "copy_quality": {
             "title_len": 99,
-            "meta_desc_len": 152
+            "meta_desc_len": 154
           },
           "cannibalization": {},
           "cta": {
@@ -545,7 +543,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "1ced1a37efe8e46388cd116c35846e5e03f4e69210e6882fab75b7d7e5f3aa16"
+          "page_material_hash": "a1b02e142b5d76e87b7bb0ed6ee59081bae30cb1b9334d93701ae0cedafd1596"
         },
         {
           "page_id": "radar-edificacoes-publicas-pr",
@@ -555,7 +553,7 @@
           "human_review": "PENDING",
           "decision": "pass",
           "sample": {
-            "observation_count": 15
+            "observation_count": 8
           },
           "independence": {},
           "duplication": {},
@@ -563,8 +561,8 @@
             "pncp"
           ],
           "copy_quality": {
-            "title_len": 65,
-            "meta_desc_len": 134
+            "title_len": 66,
+            "meta_desc_len": 150
           },
           "cannibalization": {},
           "cta": {
@@ -572,26 +570,7 @@
             "intent": "analisar_edital"
           },
           "approval_recommendation": "reject_or_noindex",
-          "issues": [
-            {
-              "code": "data_quality_gate",
-              "severity": "P0",
-              "message": "duplicate_rate>0",
-              "evidence": "duplicate_rate>0"
-            },
-            {
-              "code": "data_quality_gate",
-              "severity": "P0",
-              "message": "contract_url_as_opportunity=7",
-              "evidence": "contract_url_as_opportunity=7"
-            },
-            {
-              "code": "contract_link_as_opportunity",
-              "severity": "P0",
-              "message": "Link de contrato em radar",
-              "evidence": "/app/contratos/"
-            }
-          ],
+          "issues": [],
           "intent": "avaliar_oportunidades",
           "evidence_kind": null,
           "direct_evidence_count": 0,
@@ -602,7 +581,7 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "3c51da9b37d54bae134468f10df0c9e123fff4021b11ab5ff1e8cf897f8ada07"
+          "page_material_hash": "1d30ca567ae7bf637d194bb7b8d89b6ef706a428c5d2d5d3fc67d3b3d6404e66"
         },
         {
           "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
@@ -612,7 +591,7 @@
           "human_review": "NEEDS_DATA_FIX",
           "decision": "pass",
           "sample": {
-            "observation_count": 7
+            "observation_count": 3
           },
           "independence": {},
           "duplication": {},
@@ -620,8 +599,8 @@
             "pncp"
           ],
           "copy_quality": {
-            "title_len": 89,
-            "meta_desc_len": 150
+            "title_len": 90,
+            "meta_desc_len": 154
           },
           "cannibalization": {},
           "cta": {
@@ -629,32 +608,7 @@
             "intent": "analisar_edital"
           },
           "approval_recommendation": "reject_or_noindex",
-          "issues": [
-            {
-              "code": "table_duplicates",
-              "severity": "P0",
-              "message": "Linhas duplicadas na tabela (2)",
-              "evidence": "Contratação de Empresa Especializada Para Pavimentação em paralelepípe | R$ 730.738,47 | Concorrência - Eletrônica | Ind"
-            },
-            {
-              "code": "data_quality_gate",
-              "severity": "P0",
-              "message": "duplicate_rate>0",
-              "evidence": "duplicate_rate>0"
-            },
-            {
-              "code": "data_quality_gate",
-              "severity": "P0",
-              "message": "contract_url_as_opportunity=4",
-              "evidence": "contract_url_as_opportunity=4"
-            },
-            {
-              "code": "contract_link_as_opportunity",
-              "severity": "P0",
-              "message": "Link de contrato em radar",
-              "evidence": "/app/contratos/"
-            }
-          ],
+          "issues": [],
           "intent": "avaliar_oportunidades",
           "evidence_kind": null,
           "direct_evidence_count": 0,
@@ -665,215 +619,11 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": "grok-build-editorial-audit",
-          "page_material_hash": "805ca57d06a5dcb679bb67045248b390613743f10862b4580b3f219c95f6020b"
+          "page_material_hash": "7fe5a65cbb7a9b153823776891e5d4b4a4c292f818a2f125750e99cfa71e417e"
         },
         {
           "page_id": "radar-saneamento-hidraulica-sc",
           "url": "/radar/saneamento-hidraulica-sc/",
-          "page_type": "radar",
-          "status": "reject",
-          "human_review": "PENDING",
-          "decision": "pass",
-          "sample": {
-            "observation_count": 5
-          },
-          "independence": {},
-          "duplication": {},
-          "sources_checked": [
-            "pncp"
-          ],
-          "copy_quality": {
-            "title_len": 76,
-            "meta_desc_len": 144
-          },
-          "cannibalization": {},
-          "cta": {
-            "label": "Analisar este edital antes da proposta",
-            "intent": "analisar_edital"
-          },
-          "approval_recommendation": "reject_or_noindex",
-          "issues": [
-            {
-              "code": "data_quality_gate",
-              "severity": "P0",
-              "message": "contract_url_as_opportunity=2",
-              "evidence": "contract_url_as_opportunity=2"
-            },
-            {
-              "code": "contract_link_as_opportunity",
-              "severity": "P0",
-              "message": "Link de contrato em radar",
-              "evidence": "/app/contratos/"
-            }
-          ],
-          "intent": "avaliar_oportunidades",
-          "evidence_kind": null,
-          "direct_evidence_count": 0,
-          "contextual_evidence_count": 0,
-          "editorial_unique_ratio": null,
-          "similarity_max": null,
-          "commercial_offer": "Analisar este edital antes da proposta",
-          "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-          "indexability": "reject",
-          "reviewer": null,
-          "page_material_hash": "e175f615a8048f4789d08d5077e23d3d58b1685db26d4fff290fd6ef51d174da"
-        },
-        {
-          "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
-          "url": "/radar/pavimentacao-infraestrutura-viaria-rs/",
-          "page_type": "radar",
-          "status": "reject",
-          "human_review": "PENDING",
-          "decision": "pass",
-          "sample": {
-            "observation_count": 4
-          },
-          "independence": {},
-          "duplication": {},
-          "sources_checked": [
-            "pncp"
-          ],
-          "copy_quality": {
-            "title_len": 92,
-            "meta_desc_len": 153
-          },
-          "cannibalization": {},
-          "cta": {
-            "label": "Analisar este edital antes da proposta",
-            "intent": "analisar_edital"
-          },
-          "approval_recommendation": "reject_or_noindex",
-          "issues": [
-            {
-              "code": "data_quality_gate",
-              "severity": "P0",
-              "message": "contract_url_as_opportunity=2",
-              "evidence": "contract_url_as_opportunity=2"
-            },
-            {
-              "code": "contract_link_as_opportunity",
-              "severity": "P0",
-              "message": "Link de contrato em radar",
-              "evidence": "/app/contratos/"
-            }
-          ],
-          "intent": "avaliar_oportunidades",
-          "evidence_kind": null,
-          "direct_evidence_count": 0,
-          "contextual_evidence_count": 0,
-          "editorial_unique_ratio": null,
-          "similarity_max": null,
-          "commercial_offer": "Analisar este edital antes da proposta",
-          "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-          "indexability": "reject",
-          "reviewer": null,
-          "page_material_hash": "99df985a4a8fc4a1d6f3ce1505734956bf0be0e33f26eb044dcfb14d3e0d9c28"
-        },
-        {
-          "page_id": "radar-edificacoes-publicas-sc",
-          "url": "/radar/edificacoes-publicas-sc/",
-          "page_type": "radar",
-          "status": "reject",
-          "human_review": "PENDING",
-          "decision": "pass",
-          "sample": {
-            "observation_count": 4
-          },
-          "independence": {},
-          "duplication": {},
-          "sources_checked": [
-            "pncp"
-          ],
-          "copy_quality": {
-            "title_len": 73,
-            "meta_desc_len": 141
-          },
-          "cannibalization": {},
-          "cta": {
-            "label": "Analisar este edital antes da proposta",
-            "intent": "analisar_edital"
-          },
-          "approval_recommendation": "reject_or_noindex",
-          "issues": [
-            {
-              "code": "data_quality_gate",
-              "severity": "P0",
-              "message": "contract_url_as_opportunity=2",
-              "evidence": "contract_url_as_opportunity=2"
-            },
-            {
-              "code": "contract_link_as_opportunity",
-              "severity": "P0",
-              "message": "Link de contrato em radar",
-              "evidence": "/app/contratos/"
-            }
-          ],
-          "intent": "avaliar_oportunidades",
-          "evidence_kind": null,
-          "direct_evidence_count": 0,
-          "contextual_evidence_count": 0,
-          "editorial_unique_ratio": null,
-          "similarity_max": null,
-          "commercial_offer": "Analisar este edital antes da proposta",
-          "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-          "indexability": "reject",
-          "reviewer": null,
-          "page_material_hash": "08970782dcf759cc64ddf9b70b7f41754ba7637bcf05782a2b34fa0ca364e39e"
-        },
-        {
-          "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
-          "url": "/radar/pavimentacao-infraestrutura-viaria-pr/",
-          "page_type": "radar",
-          "status": "reject",
-          "human_review": "PENDING",
-          "decision": "pass",
-          "sample": {
-            "observation_count": 4
-          },
-          "independence": {},
-          "duplication": {},
-          "sources_checked": [
-            "pncp"
-          ],
-          "copy_quality": {
-            "title_len": 81,
-            "meta_desc_len": 149
-          },
-          "cannibalization": {},
-          "cta": {
-            "label": "Analisar este edital antes da proposta",
-            "intent": "analisar_edital"
-          },
-          "approval_recommendation": "reject_or_noindex",
-          "issues": [
-            {
-              "code": "data_quality_gate",
-              "severity": "P0",
-              "message": "contract_url_as_opportunity=4",
-              "evidence": "contract_url_as_opportunity=4"
-            },
-            {
-              "code": "contract_link_as_opportunity",
-              "severity": "P0",
-              "message": "Link de contrato em radar",
-              "evidence": "/app/contratos/"
-            }
-          ],
-          "intent": "avaliar_oportunidades",
-          "evidence_kind": null,
-          "direct_evidence_count": 0,
-          "contextual_evidence_count": 0,
-          "editorial_unique_ratio": null,
-          "similarity_max": null,
-          "commercial_offer": "Analisar este edital antes da proposta",
-          "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
-          "indexability": "reject",
-          "reviewer": null,
-          "page_material_hash": "b7fd39c71123209d2aaf1d75fdb032c2bda36813bf5b33fc47ca50c485e5dbfb"
-        },
-        {
-          "page_id": "radar-edificacoes-publicas-rs",
-          "url": "/radar/edificacoes-publicas-rs/",
           "page_type": "radar",
           "status": "reject",
           "human_review": "PENDING",
@@ -887,8 +637,8 @@
             "pncp"
           ],
           "copy_quality": {
-            "title_len": 76,
-            "meta_desc_len": 144
+            "title_len": 77,
+            "meta_desc_len": 154
           },
           "cannibalization": {},
           "cta": {
@@ -896,20 +646,7 @@
             "intent": "analisar_edital"
           },
           "approval_recommendation": "reject_or_noindex",
-          "issues": [
-            {
-              "code": "data_quality_gate",
-              "severity": "P0",
-              "message": "contract_url_as_opportunity=1",
-              "evidence": "contract_url_as_opportunity=1"
-            },
-            {
-              "code": "contract_link_as_opportunity",
-              "severity": "P0",
-              "message": "Link de contrato em radar",
-              "evidence": "/app/contratos/"
-            }
-          ],
+          "issues": [],
           "intent": "avaliar_oportunidades",
           "evidence_kind": null,
           "direct_evidence_count": 0,
@@ -920,7 +657,159 @@
           "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
           "indexability": "reject",
           "reviewer": null,
-          "page_material_hash": "425810cf20eddc6d1033b3abaab5e1e2df13f3e06a2839a75444c153d852103f"
+          "page_material_hash": "196b7b35f943c75f191e8eb6ba801f3dd538c51269bcf3fa3b6a9737ad0e6a27"
+        },
+        {
+          "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
+          "url": "/radar/pavimentacao-infraestrutura-viaria-rs/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 2
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 93,
+            "meta_desc_len": 149
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [],
+          "intent": "avaliar_oportunidades",
+          "evidence_kind": null,
+          "direct_evidence_count": 0,
+          "contextual_evidence_count": 0,
+          "editorial_unique_ratio": null,
+          "similarity_max": null,
+          "commercial_offer": "Analisar este edital antes da proposta",
+          "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+          "indexability": "reject",
+          "reviewer": null,
+          "page_material_hash": "30963c9c17e13c3b0e75e0984a1688fad1638ff383e70016d04a820661d58e27"
+        },
+        {
+          "page_id": "radar-edificacoes-publicas-sc",
+          "url": "/radar/edificacoes-publicas-sc/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 2
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 74,
+            "meta_desc_len": 151
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [],
+          "intent": "avaliar_oportunidades",
+          "evidence_kind": null,
+          "direct_evidence_count": 0,
+          "contextual_evidence_count": 0,
+          "editorial_unique_ratio": null,
+          "similarity_max": null,
+          "commercial_offer": "Analisar este edital antes da proposta",
+          "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+          "indexability": "reject",
+          "reviewer": null,
+          "page_material_hash": "2cafaf4f957f37ff41341164ec0d396df013a1cbc99f7d41fa1299dbf4b7f6be"
+        },
+        {
+          "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
+          "url": "/radar/pavimentacao-infraestrutura-viaria-pr/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 0
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 82,
+            "meta_desc_len": 146
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [],
+          "intent": "avaliar_oportunidades",
+          "evidence_kind": null,
+          "direct_evidence_count": 0,
+          "contextual_evidence_count": 0,
+          "editorial_unique_ratio": null,
+          "similarity_max": null,
+          "commercial_offer": "Analisar este edital antes da proposta",
+          "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+          "indexability": "reject",
+          "reviewer": null,
+          "page_material_hash": "9876ae3602ea468a2d6c951ca456c12a1f62b9d29bb898e8cbef4ef799353686"
+        },
+        {
+          "page_id": "radar-edificacoes-publicas-rs",
+          "url": "/radar/edificacoes-publicas-rs/",
+          "page_type": "radar",
+          "status": "reject",
+          "human_review": "PENDING",
+          "decision": "pass",
+          "sample": {
+            "observation_count": 2
+          },
+          "independence": {},
+          "duplication": {},
+          "sources_checked": [
+            "pncp"
+          ],
+          "copy_quality": {
+            "title_len": 77,
+            "meta_desc_len": 154
+          },
+          "cannibalization": {},
+          "cta": {
+            "label": "Analisar este edital antes da proposta",
+            "intent": "analisar_edital"
+          },
+          "approval_recommendation": "reject_or_noindex",
+          "issues": [],
+          "intent": "avaliar_oportunidades",
+          "evidence_kind": null,
+          "direct_evidence_count": 0,
+          "contextual_evidence_count": 0,
+          "editorial_unique_ratio": null,
+          "similarity_max": null,
+          "commercial_offer": "Analisar este edital antes da proposta",
+          "editorial_decision": "REJECT_DUPLICATE_OR_WEAK",
+          "indexability": "reject",
+          "reviewer": null,
+          "page_material_hash": "c93ffb134ab440066e466ad0b012c28ec9f5df29602f3519fdb371cc0342078e"
         },
         {
           "page_id": "prob-orcamento-edital",
@@ -1094,7 +983,7 @@
           ],
           "copy_quality": {
             "title_len": 63,
-            "meta_desc_len": 154
+            "meta_desc_len": 153
           },
           "cannibalization": {},
           "cta": {

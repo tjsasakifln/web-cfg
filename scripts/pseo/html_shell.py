@@ -532,8 +532,8 @@ _LIMITATION_REPLACEMENTS = (
         "Não é monitoramento em tempo real; confira sempre no portal oficial.",
     ),
     (
-        re.compile(r"Pagina evergreen:\s*nao indexa um edital por URL\.?", re.I),
-        "Página evergreen: não indexa um edital individual por URL.",
+        re.compile(r"P[áa]gina evergreen:\s*n[ãa]o indexa um edital(?: individual)? por URL\.?", re.I),
+        "Esta lista reúne várias oportunidades; cada edital tem endereço próprio no portal oficial.",
     ),
     (re.compile(r"\bdata_encerramento\b", re.I), "data de encerramento"),
     (re.compile(r"\bas_of\b", re.I), "data de verificação"),

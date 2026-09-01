@@ -79,7 +79,7 @@ const contract = JSON.parse(raw);
 assert("schema", contract.schema === "confenge-logo-contract-v1", contract.schema);
 assert("version", contract.contract_version === "v1", contract.contract_version);
 assert("issue", contract.source_issue === "#326", contract.source_issue);
-assert("updated", contract.updated_at === "2026-08-29", contract.updated_at);
+assert("updated", contract.updated_at === "2026-09-01", contract.updated_at);
 assert("priority_decision", contract.priority === "P1" && contract.decision_state === "EXECUTE_NOW", contract);
 assert("blocked_category", contract.campaign_category === "BLOCKED_EXTERNAL", contract.campaign_category);
 assert("front", contract.executive_front === "INBOUND_ENGINE", contract.executive_front);
@@ -170,14 +170,14 @@ assert("legacy_retained", observation.state === "LEGACY_RASTER_RETAINED", observ
 assert("legacy_primary_exact", observation.header_primary === "/assets/logo-confenge-500-f8a83f6d.png" && observation.footer_primary === "/assets/logo-confenge-white-500-1677038e.png", observation);
 assert("legacy_ratio", observation.intrinsic_ratio === "50:13", observation.intrinsic_ratio);
 assert("observed_html_count", observation.source_html_files_scanned === 276, observation.source_html_files_scanned);
-assert("observed_logo_count", observation.logo_image_occurrences === 464, observation.logo_image_occurrences);
-assert("observed_header_count", observation.header_lockup_occurrences === 239, observation.header_lockup_occurrences);
-assert("observed_footer_count", observation.footer_lockup_occurrences === 225, observation.footer_lockup_occurrences);
+assert("observed_logo_count", observation.logo_image_occurrences === 428, observation.logo_image_occurrences);
+assert("observed_header_count", observation.header_lockup_occurrences === 221, observation.header_lockup_occurrences);
+assert("observed_footer_count", observation.footer_lockup_occurrences === 207, observation.footer_lockup_occurrences);
 assert("observed_asset_counts", JSON.stringify(observation.legacy_asset_occurrences) === JSON.stringify({
   "/assets/logo-confenge.png": 6,
-  "/assets/logo-confenge-500-f8a83f6d.png": 233,
+  "/assets/logo-confenge-500-f8a83f6d.png": 215,
   "/assets/logo-confenge-white.png": 6,
-  "/assets/logo-confenge-white-500-1677038e.png": 219,
+  "/assets/logo-confenge-white-500-1677038e.png": 201,
 }), observation.legacy_asset_occurrences);
 assert("current_noncompliance_honest", observation.header_black_on_white === "NON_COMPLIANT" && observation.master_svg === "MISSING", observation);
 assert("unexecuted_visual_proof", observation.sharpness_viewport_matrix === "NOT_EXECUTED" && observation.tagline_minimum_legibility === "NOT_APPROVED" && observation.screenshot_regression === "MISSING", observation);

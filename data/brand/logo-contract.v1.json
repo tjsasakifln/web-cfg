@@ -2,7 +2,7 @@
   "schema": "confenge-logo-contract-v1",
   "contract_version": "v1",
   "source_issue": "#326",
-  "updated_at": "2026-08-29",
+  "updated_at": "2026-09-01",
   "priority": "P1",
   "decision_state": "EXECUTE_NOW",
   "campaign_category": "BLOCKED_EXTERNAL",
@@ -132,14 +132,14 @@
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
     "source_html_files_scanned": 276,
-    "logo_image_occurrences": 464,
-    "header_lockup_occurrences": 239,
-    "footer_lockup_occurrences": 225,
+    "logo_image_occurrences": 428,
+    "header_lockup_occurrences": 221,
+    "footer_lockup_occurrences": 207,
     "legacy_asset_occurrences": {
       "/assets/logo-confenge.png": 6,
-      "/assets/logo-confenge-500-f8a83f6d.png": 233,
+      "/assets/logo-confenge-500-f8a83f6d.png": 215,
       "/assets/logo-confenge-white.png": 6,
-      "/assets/logo-confenge-white-500-1677038e.png": 219
+      "/assets/logo-confenge-white-500-1677038e.png": 201
     },
     "intrinsic_ratio": "50:13",
     "header_black_on_white": "NON_COMPLIANT",

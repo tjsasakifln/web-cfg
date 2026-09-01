@@ -59,9 +59,13 @@ assert(coverage.axe.routes.every((entry) =>
   entry.reasons.length > 0
   && entry.reasons.every((reason) => reason === "price" || reason === "capture_form")
 ), "axe routes must derive only from declared visitor risk");
-assert.equal(coverage.axe.price_route_count, 62);
+// #566: the 18 reject-status pSEO pages were withdrawn from the public tree.
+// All 18 rendered a visible price and none carried a capture form, so the
+// price count and the union both drop by exactly 18 and the capture-form count
+// is unchanged. Recaptured from deriveCoverage(), not adjusted by arithmetic.
+assert.equal(coverage.axe.price_route_count, 44);
 assert.equal(coverage.axe.capture_form_route_count, 25);
-assert.equal(coverage.axe.route_count, 69);
+assert.equal(coverage.axe.route_count, 51);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(

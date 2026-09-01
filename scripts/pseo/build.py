@@ -80,6 +80,24 @@ def url_to_path(url: str) -> Path:
     return ROOT / rel / "index.html"
 
 
+def _prune_empty_dir(directory: Path) -> None:
+    """Remove a now-empty generated page directory, never its parents' content.
+
+    Only walks upward while the directory is empty and still inside the two
+    generated trees, so a withdrawn route leaves no empty shell behind.
+    """
+    roots = (ROOT / "inteligencia", ROOT / "radar")
+    cur = directory
+    while cur.is_dir() and any(cur != r and r in cur.parents for r in roots):
+        try:
+            if any(cur.iterdir()):
+                return
+            cur.rmdir()
+        except OSError:
+            return
+        cur = cur.parent
+
+
 def load_existing_reviews(registry_path: Path) -> dict[str, dict[str, Any]]:
     if not registry_path.exists():
         return {}
@@ -501,7 +519,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Cenários técnicos para decisão | CONFENGE",
             "Do padrão público à decisão da construtora",
             "Cenários que ligam evidência pública a decisões de proposta, preço e contrato.",
-            "Cenários evergreen (aditivos, SINAPI/SICRO, orçamento×edital, medição/glosa) "
+            "Cenários recorrentes (aditivos, SINAPI/SICRO, orçamento×edital, medição/glosa) "
             "com limitações, fontes oficiais e próximo passo comercial concreto.",
             items_for("problem_service"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Cenários", None)],
@@ -629,22 +647,31 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
                     index.unlink()
                 except OSError:
                     pass
+    withdrawn_pages = []
     for c in cands:
-        # Write HTML for publish + previously known noindex/reject paths.
-        # Never create brand-new public paths for reject-only candidates
-        # (Wave 0 freeze: "não criar novas páginas").
+        # Fail-closed: `reject` means the page is never written to the public
+        # tree, whether or not the path existed before. The earlier rule only
+        # skipped *new* reject paths (Wave 0 freeze: "não criar novas páginas"),
+        # which left a page that regressed publish -> reject still being served
+        # and rewritten on every build. A reject page is withdrawn instead: the
+        # wipe above already removed it, and it is not re-emitted here.
         path = url_to_path(c.url)
-        is_new_path = c.url not in prior_urls
-        if c.status == "reject" and is_new_path:
-            written_pages.append(
+        if c.status == "reject":
+            withdrawn_pages.append(
                 {
                     "url": c.url,
                     "status": c.status,
                     "score": c.score,
                     "path": str(path.relative_to(ROOT)),
-                    "skipped_new_reject_path": True,
+                    "reasons": c.reasons,
+                    "previously_public": c.url in prior_urls,
                 }
 )
+            # A reject page that existed before this run has just been removed
+            # by the wipe. Remove its now-empty directory too, so the public
+            # tree carries no trace of a withdrawn route.
+            if not dry_run:
+                _prune_empty_dir(path.parent)
             continue
         # Only status=publish enters the intelligence sitemap.
         try:
@@ -695,6 +722,14 @@ def build(data_dir: Path | None = None, dry_run: bool = False) -> dict[str, Any]
             if c.status == "reject"
         ],
         "pages_written": len(written_pages),
+        # Explicit, URL-level record of every route withheld from the public
+        # tree this run. A reject page is withdrawn, never silently rewritten.
+        "withdrawn_urls": [w["url"] for w in withdrawn_pages],
+        "withdrawn_count": len(withdrawn_pages),
+        "withdrawn_previously_public": [
+            w["url"] for w in withdrawn_pages if w["previously_public"]
+        ],
+        "withdrawn": withdrawn_pages,
         "hubs": hubs,
         "sitemap": str(sm.relative_to(ROOT)) if sm else None,
         "registry": str(registry_path.relative_to(ROOT)),

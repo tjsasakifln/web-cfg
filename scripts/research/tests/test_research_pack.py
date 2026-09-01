@@ -292,6 +292,11 @@ def test_preview_survives_pseo_wipe():
     preview_rel = "radar/pesquisa/edicao-zero-4uf/index.html"
     assert is_preserved_static_surface(preview_rel) is True
     assert is_preserved_static_surface("radar/nacional-obras-publicas/index.html") is True
+    # The classifier must discriminate, or "the preview survives" means nothing.
+    # This is asserted on the classifier that build:site actually calls, not by
+    # hunting the tree for a wipeable page: #566 withdrew all seven rejected
+    # radar pages, so a tree scan now finds none and would prove nothing either
+    # way. A radar page that is published again later is wipeable by design.
     assert is_preserved_static_surface("radar/edificacoes-publicas-pr/index.html") is False
     assert (ROOT / preview_rel).is_file()
     would_wipe = []
@@ -300,7 +305,6 @@ def test_preview_survives_pseo_wipe():
         if not is_preserved_static_surface(rel):
             would_wipe.append(rel)
     assert preview_rel not in would_wipe
-    assert any(rel.startswith("radar/") and rel not in {preview_rel} for rel in would_wipe)
 
 
 def test_preview_is_noindex_and_absent_from_sitemaps():

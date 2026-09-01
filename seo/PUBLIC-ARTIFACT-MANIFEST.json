@@ -72,7 +72,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 257,
+  "html_route_count": 239,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -255,21 +255,10 @@
     "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
     "/inteligencia/cenarios/referencia-sinapi-sicro-margem/",
     "/inteligencia/concorrencia/",
-    "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/",
     "/inteligencia/",
-    "/inteligencia/mercados/edificacoes-publicas-mg/",
-    "/inteligencia/mercados/edificacoes-publicas-rs/",
     "/inteligencia/mercados/",
-    "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/",
-    "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-sc/",
     "/inteligencia/orgaos/",
-    "/inteligencia/orgaos/mrs-prefeitura-municipal-de-caxias-do-sul-rs/engenharia/",
-    "/inteligencia/precos/edificacoes-publicas-mg/",
-    "/inteligencia/precos/edificacoes-publicas-rs/",
     "/inteligencia/precos/",
-    "/inteligencia/precos/manutencao-predial-engenharia-rs/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/",
-    "/inteligencia/precos/pavimentacao-infraestrutura-viaria-sc/",
     "/inteligencia/valor-tipico-contratos-pavimentacao/",
     "/jurisprudencia-contratos-obras/",
     "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
@@ -317,23 +306,16 @@
     "/politica-editorial/v/1.0.0/",
     "/privacidade/",
     "/problemas-que-resolvemos/",
-    "/radar/edificacoes-publicas-pr/",
-    "/radar/edificacoes-publicas-rs/",
-    "/radar/edificacoes-publicas-sc/",
     "/radar/",
     "/radar/nacional-obras-publicas/",
-    "/radar/pavimentacao-infraestrutura-viaria-pr/",
-    "/radar/pavimentacao-infraestrutura-viaria-rs/",
-    "/radar/pavimentacao-infraestrutura-viaria-sc/",
     "/radar/pesquisa/edicao-zero-4uf/",
-    "/radar/saneamento-hidraulica-sc/",
     "/reequilibrio-obras-publicas/",
     "/servicos-obras-publicas/",
     "/termos-de-uso/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-08-31T03:46:06Z",
-  "public_artifact_hash": "bf78a45f5e01049066bd4bb04ac0aa3e071087d0ba52e856f5f1b109f618188a",
+  "generated_at": "2026-09-01T04:15:27Z",
+  "public_artifact_hash": "38b10bc4c6bd934ed802fc60a9d44b381a3a0aefa96efa788f5918d05012a006",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -408,13 +390,13 @@
   ],
   "promoted_navigation_files": 0,
   "navigation_audit": {
-    "audited_files": 224,
-    "audited_blocks": 447,
+    "audited_files": 206,
+    "audited_blocks": 411,
     "frozen_files": 6
   },
   "structured_identity": {
-    "html_scanned": 263,
-    "html_rewritten": 211,
-    "fields_removed": 894
+    "html_scanned": 245,
+    "html_rewritten": 193,
+    "fields_removed": 822
   }
 }

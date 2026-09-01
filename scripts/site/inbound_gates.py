@@ -303,11 +303,102 @@ _FUNCTIONAL_NOINDEX_HREFS = frozenset(
 )
 
 
+def _pseo_reject_pages_not_public() -> list[Finding]:
+    """A pSEO page rejected by the editorial gate must not be publicly served.
+
+    `reject` is fail-closed: the route is withdrawn, not merely de-indexed.
+    This gate proves the withdrawal actually happened, by checking that no
+    rejected route survives on disk, in a sitemap, or as a link from an
+    indexable page.
+
+    A dead link is an error on every route, frozen BOFU pillar HTML (#291)
+    included. An earlier revision of this gate downgraded the frozen six to a
+    warning, on the reading that the measurement freeze made the link
+    unfixable. It does not: `html_mutation_authorized: false` gates the
+    campaign's own patch application, and a reviewed edit carrying a
+    same-commit baseline recapture is merged practice (cf33385d4, 2f26ac0ba).
+    `internal-link-reachability` in site_excellence.py has no exception path
+    either, so a warning here would only hide a failure that lands anyway.
+    """
+    findings: list[Finding] = []
+    reg_path = ROOT / "data" / "pseo" / "registry.json"
+    if not reg_path.exists():
+        return findings
+    try:
+        registry = json.loads(reg_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return findings
+    rejected = {
+        (p.get("url") or "").strip()
+        for p in registry.get("pages") or []
+        if p.get("status") == "reject" and p.get("url")
+    }
+    if not rejected:
+        return findings
+
+    # 1) Never present in the public HTML tree.
+    for url in sorted(rejected):
+        page = ROOT / url.strip("/") / "index.html"
+        if page.exists():
+            findings.append(
+                Finding(
+                    gate="pseo_reject_withdrawn",
+                    path=page.relative_to(ROOT).as_posix(),
+                    reason="rejected_pseo_page_is_publicly_served",
+                    excerpt=url,
+                )
+            )
+
+    # 2) Never listed in any sitemap.
+    for sm in sorted(ROOT.glob("**/sitemap*.xml")):
+        if any(part in {"node_modules", "_site", ".git"} for part in sm.parts):
+            continue
+        text = sm.read_text(encoding="utf-8", errors="replace")
+        for url in sorted(rejected):
+            if url in text:
+                findings.append(
+                    Finding(
+                        gate="pseo_reject_withdrawn",
+                        path=sm.relative_to(ROOT).as_posix(),
+                        reason="rejected_pseo_page_in_sitemap",
+                        excerpt=url,
+                    )
+                )
+
+    # 3) Never linked from an indexable page.
+    for path in _public_scan_files():
+        if path.suffix != ".html":
+            continue
+        rel = path.relative_to(ROOT).as_posix()
+        html = path.read_text(encoding="utf-8", errors="replace")
+        if is_noindex(html):
+            continue
+        for url in sorted(rejected):
+            if f'href="{url}"' not in html:
+                continue
+            findings.append(
+                Finding(
+                    gate="pseo_reject_withdrawn",
+                    path=rel,
+                    reason="indexable_page_links_rejected_pseo_page",
+                    excerpt=url,
+                )
+            )
+    return findings
+
+
 def _featured_noindex_from_indexable() -> list[Finding]:
     """Indexable pages must not featured-link noindex hubs/articles.
 
-    Frozen BOFU pillar HTML (#291) is not mutated in this campaign; those files
-    are skipped here because the freeze, not an SEO allowlist, blocks the rewrite.
+    Frozen BOFU pillar HTML (#291) is skipped. That skip is a scope decision,
+    not an impossibility: #566 showed a reviewed edit with a same-commit
+    baseline recapture is merged practice (cf33385d4, 2f26ac0ba), so the freeze
+    does not make these six unfixable. It stays because rewriting a featured
+    link is an editorial change with its own remedy and its own review, unlike
+    a link that resolves to 404 — which `_pseo_reject_pages_not_public` reports
+    as an error on every route, frozen included. Lifting this skip belongs to
+    the six routes' copy pass, tracked in
+    docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md item 3.
     """
     from scripts.organic.canonical_hrefs import FROZEN_HTML_REL
 
@@ -541,6 +632,7 @@ def gate_index_surface() -> GateReport:
             findings.append(f)
 
     findings.extend(_featured_noindex_from_indexable())
+    findings.extend(_pseo_reject_pages_not_public())
 
     # Feed
     feed = ROOT / "feed.xml"
