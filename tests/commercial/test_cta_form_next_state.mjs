@@ -8,7 +8,7 @@ const report = buildInventory();
 
 assert.equal(report.schema, "confenge.cta-form-next-state-inventory/1.0");
 assert.equal(report.coverage.manual_route_allowlist, false);
-assert.equal(report.coverage.active_capture_routes, 21);
+assert.equal(report.coverage.active_capture_routes, 22);
 assert.equal(report.coverage.declared_ctas, report.contract.expected_declared_ctas, `declared CTAs: ${report.coverage.declared_ctas}`);
 assert.equal(report.coverage.problems.length, 0, JSON.stringify(report.coverage.problems));
 assert.deepEqual(report.coverage.protected_routes_with_capture, []);
@@ -25,7 +25,7 @@ const forms = report.surfaces.flatMap((surface) => surface.forms.map((form) => (
   route: surface.route,
   ...form,
 })));
-assert.equal(forms.length, 21);
+assert.equal(forms.length, 22);
 for (const form of forms) {
   assert.equal(form.form_contract, "next-state/v1", `${form.route}: form contract`);
   assert.ok(report.contract.allowed_stages.includes(form.stage), `${form.route}: ${form.stage}`);

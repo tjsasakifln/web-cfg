@@ -37,6 +37,7 @@
 |---|---|
 | `npm run test:tool-compute` | PASS - fixtures gerais, arredondamento, eixos independentes, propriedades e estados confirmed/partial/unknown |
 | `npm run test:tools` | PASS - estrutura, eventos, DOM text-safe e fail-closed |
+| `npm run test:cta-form-next-state` | PASS - censo derivado inclui a captura Art. 125 (22 rotas), sem allowlist manual |
 | E2E de tools em `_site` | PENDENTE DE CI - runner local não inicia Chromium porque falta `libnspr4.so`; a suíte falha fechada, sem equivalência inventada |
 | `npm run test:analytics` + `test:form-funnel` | PASS - PII/raw-money negativos e `pii_allowlist=[]` |
 | `npm run test:lead-function` | PASS - 54 checks; `CFG-D19` persiste com receipt e sem valores da calculadora |
