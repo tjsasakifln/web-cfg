@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -16,6 +17,7 @@ DEFAULT_INPUT = ROOT / "data" / "demand_radar" / "snapshots"
 DEFAULT_APPROVALS = ROOT / "data" / "demand_radar" / "approved-sources.v1.json"
 DEFAULT_LEDGER = ROOT / "data" / "demand_radar" / "ledger.v1.json"
 DEFAULT_REPORT = ROOT / "docs" / "demand-radar" / "REPORT.md"
+FULL_GIT_SHA = re.compile(r"^[0-9a-f]{40}$")
 
 
 def _reject_non_standard_number(token: str) -> None:
@@ -50,13 +52,34 @@ def _origin_main() -> str:
     return result.stdout.strip()
 
 
+def _full_git_sha(value: object, *, source: str) -> str:
+    if not isinstance(value, str) or not FULL_GIT_SHA.fullmatch(value):
+        raise ValueError(f"origin_main_full_sha_required:{source}")
+    return value
+
+
+def _sealed_origin_main(ledger_path: Path) -> str:
+    ledger = _load(ledger_path)
+    return _full_git_sha(ledger.get("origin_main"), source=str(ledger_path))
+
+
+def _resolved_origin_main(args: argparse.Namespace) -> str:
+    if args.origin_main is not None:
+        return _full_git_sha(args.origin_main, source="--origin-main")
+    if args.command == "check":
+        # A deterministic check reproduces the provenance sealed in the output;
+        # build is the only mode that observes the contemporary remote ref.
+        return _sealed_origin_main(args.ledger)
+    return _full_git_sha(_origin_main(), source="origin/main")
+
+
 def _render(args: argparse.Namespace) -> tuple[str, str]:
     snapshots = load_snapshots(args.input_dir)
     ledger = build_ledger(
         snapshots,
         approvals=_load(args.approvals),
         as_of=args.as_of,
-        origin_main=args.origin_main or _origin_main(),
+        origin_main=_resolved_origin_main(args),
     )
     ledger_text = json.dumps(ledger, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
     return ledger_text, render_markdown(ledger)

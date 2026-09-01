@@ -105,6 +105,12 @@ npm run demand-radar:check
 - `data/demand_radar/ledger.v1.json`
 - `docs/demand-radar/REPORT.md`
 
+`build` without `--origin-main` records the contemporary full `origin/main` SHA.
+`check` without that override instead rebuilds against the full SHA already sealed
+in the ledger, so a later movement of `origin/main` does not make a valid
+historical observation stale. Pass `--origin-main <full-sha>` only to verify an
+explicit candidate; a different SHA correctly reports stale generated output.
+
 For a future observation, add a sealed normalized snapshot under the dated input directory, add its exact reviewed entry to the sealed approved-source manifest, keep source provenance immutable, update the explicit `--as-of` date in the package commands through review, rebuild, and inspect the changed ledger/report. Do not add a public route or one issue per observation.
 
 ## Pull-request evidence
