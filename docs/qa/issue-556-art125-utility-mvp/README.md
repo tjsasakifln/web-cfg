@@ -49,7 +49,7 @@
 | `npm run validate:seo` | PASS - 0 erros, 0 warnings |
 | `npm run test:affected -- --base origin/main` | PASS - subset de risco, 31/91 suites selecionadas, sem fallback |
 | Protected diff | PASS - único HTML alterado é a rota #556; home, pilares protegidos e rotas #126/#127/#128/#327/#387/#529 permanecem sem diff |
-| SEO estável da rota | PASS - title, H1, canonical e robots sem alteração; somente `dateModified` acompanha a revisão real |
+| SEO estável da rota | PASS - title, H1, canonical, robots e `dateModified` sem alteração; a reconfirmação legal fica no método/resultado e nesta evidência sem tocar sitemaps congelados |
 
 Os testes browser usaram bibliotecas Chromium extraídas em `/tmp` por falta de `libnspr4/libnss3` no host; nenhum threshold ou gate foi alterado.
 
