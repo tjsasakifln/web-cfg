@@ -8,10 +8,17 @@ Two independent contracts are locked here:
 2. **Governance.** ``reject`` is fail-closed: a rejected page is withdrawn
    from the public tree, not merely de-indexed.
 
-The copy scan deliberately walks only the pSEO-generated surface (the routes
-in ``data/pseo/registry.json`` plus the generated trees), never the whole
-repo -- documentation, fixtures and snapshots quote the defective strings on
-purpose and must not trip this.
+Neither copy scan ever walks the whole repo: documentation, fixtures and
+snapshots quote the defective strings on purpose and must not trip these.
+Two scopes are used, and the difference matters:
+
+* ``test_generated_pages_carry_no_cms_metalanguage`` walks the pSEO-generated
+  surface (the routes in ``data/pseo/registry.json`` plus the generated
+  trees), because only there can the generator reintroduce a defect.
+* ``test_no_cms_metalanguage_anywhere_on_the_visitor_surface`` walks every
+  shipped visitor page via ``visitor_facing_relpaths()``. The last
+  "evergreen" of this incident was hand-written anchor text on a commercial
+  pillar, which the generated-surface scan could never reach.
 """
 
 from __future__ import annotations
