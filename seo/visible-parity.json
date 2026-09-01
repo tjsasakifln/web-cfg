@@ -332,7 +332,7 @@
         "h1": "Operação de Proposta para Licitação Crítica",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Operação de Proposta para Licitação Crítica | CONFENGE",
         "versions": []
@@ -2868,7 +2868,7 @@
           "2026-08-15"
         ],
         "description": "Subsídio técnico, não advocacia, para notificação, sanção ou risco de extinção em contrato público de obra. Fatos, cronologia e pedido coerente para o jurídico.",
-        "h1": "Defesa técnica em contratos públicos: subsídio técnico, não advocacia",
+        "h1": "Defesa técnica em contratos públicos: fatos e provas como subsídio técnico, não advocacia",
         "has_dataset_surface": false,
         "licenses": [],
         "permission_class": "demonstrativo",
@@ -3099,7 +3099,7 @@
         "h1": "Diretoria Fracionada para o Mercado Público",
         "has_dataset_surface": false,
         "licenses": [],
-        "permission_class": "demonstrativo",
+        "permission_class": null,
         "reviewers": [],
         "title": "Diretoria Fracionada para o Mercado Público | Rotina de licitações e contratos | CONFENGE",
         "versions": []
@@ -4442,5 +4442,5 @@
       }
     }
   ],
-  "site_root": "/home/tjsasakifln/code/confenge/web-cfg/_site"
+  "site_root": "/home/tjsasakifln/code/confenge/web-cfg/.claude/worktrees/agent-a543fb73fb40aef02/_site"
 }

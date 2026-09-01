@@ -3,7 +3,7 @@
 - ok: `True`
 - pages: `76`
 - defects: `0`
-- site_root: `/home/tjsasakifln/code/confenge/web-cfg/_site`
+- site_root: `/home/tjsasakifln/code/confenge/web-cfg/.claude/worktrees/agent-a543fb73fb40aef02/_site`
 
 | url | ok | defects | claimed | visible |
 | --- | --- | --- | --- | --- |
@@ -53,7 +53,7 @@
 | https://confenge.com.br/conteudos/sinapi-ou-sicro-obra-publica/ | True | — | Organization,Person,Article,BreadcrumbList; SINAPI ou SICRO: a referência de cada serviço | SINAPI ou SICRO: a referência de cada serviço |
 | https://confenge.com.br/correcoes/ | True | — | Organization,Person,BreadcrumbList | Como contestar e corrigir |
 | https://confenge.com.br/defesa-margem-contratos-publicos/ | True | — | Organization,BreadcrumbList,Person | Defesa de margem em contratos públicos: detecção, documentação, cálculo e decisão |
-| https://confenge.com.br/defesa-tecnica-contratos-publicos/ | True | — | Organization,Person,BreadcrumbList | Defesa técnica em contratos públicos: subsídio técnico, não advocacia |
+| https://confenge.com.br/defesa-tecnica-contratos-publicos/ | True | — | Organization,Person,BreadcrumbList | Defesa técnica em contratos públicos: fatos e provas como subsídio técnico, não advocacia |
 | https://confenge.com.br/diagnostico-b2g-360/ | True | — | Organization,BreadcrumbList | Diagnóstico da Operação em Obras Públicas |
 | https://confenge.com.br/diagnostico-b2g-expansao/ | True | — | Organization,BreadcrumbList,Person | Diagnóstico de Expansão no Mercado Público |
 | https://confenge.com.br/diagnostico-pre-licitacao/ | True | — | Organization,Person,BreadcrumbList | Diagnóstico pré-licitação para obras públicas |

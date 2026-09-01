@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "web_cfg_sha": "972466694306a2f4954a33896aad4566b4d717b7",
+  "web_cfg_sha": "3022bb7ae8d6a730502b6434bab0f821d89c6f87",
   "manifest_public": ".well-known/pseo-build.json",
   "public_directory": "_site",
-  "public_artifact_hash": "b3cd85ee335e34931de400ea2b116fb750954ea1287342518c57f24f75e0dbf2",
-  "manifest_hash": "9bdb99eab13cdd30fb54e91ed757d3beb4b2dd7e441b79b44524ca84635f85ce",
+  "public_artifact_hash": "c2357f6642c31e25220d7c9582fa036e218138b5a724c0b0bf6d5f007be8903c",
+  "manifest_hash": "de52715386bbf6e926de2685c03394d4842a77ff6cbf46431a1e646fb0d3e0e1",
   "reproducible_manifest": ".well-known/build-manifest.json",
   "build_summary": {
     "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
@@ -13,7 +13,7 @@
       "noindex": 5
     },
     "publishable": [],
-    "pages_written": 23
+    "pages_written": 5
   },
   "editorial_wave": {
     "ok": true,
@@ -51,15 +51,15 @@
     "injected_files": 0
   },
   "responsive_html": {
-    "files": 263,
-    "currency_files": 61,
-    "opaque_token_files": 238,
+    "files": 245,
+    "currency_files": 43,
+    "opaque_token_files": 220,
     "marker_files": 54
   },
   "public_artifact": {
     "assembled": true,
     "audit_ok": true,
-    "file_count": 514,
+    "file_count": 496,
     "finding_count": 0
   },
   "errors": []
