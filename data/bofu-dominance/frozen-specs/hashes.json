@@ -20,7 +20,7 @@
     "auditoria-orcamento-licitacao/index.html": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "fbfb0ee348841ae3a01c437cee579832139cc7868e6dcb081534ff956bfae654",
-    "script.js": "848d8fe9e7131cc6c727af849d1174e811b91571f82b67e0fc65d2b400333988",
+    "script.js": "0474eced79bcab6154611d707eca5dd9f5969e0fc3a183437b05eb07ca7831cc",
     "styles.css": "56beaf8e50716616c61a8608e8c011e6e7dbb91f39ad8815c379aae7563a8d39",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
@@ -30,6 +30,6 @@
     "sitemap-index.xml": "70a612f8863e45a6df4c3b69ab03397079c3a6386eb78f7e58df562b34eb5190",
     "_redirects": "c32debd36d9ce4bc2d46121c7d7c229139ab11ab5dc1f4aa2db09541ab21e73a",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "34dd899f504710c5bfac5fa7cda2b80a40f904a80dcf037ada4d71f576b73193"
+    "js/modules/analytics.js": "10587de5c5d04ac88f33474934836612462cc796a7c1196aba42d32b92013456"
   }
 }
