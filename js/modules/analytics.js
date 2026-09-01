@@ -10,13 +10,7 @@
   const EVENT_SOURCE = 'CONFENGE_WEB';
   const EVENT_PII_POLICY = 'aggregate_allowlist_empty';
   const AGGREGATE_PII_ALLOWLIST = [];
-  const PII_PARAM_KEYS = new Set([
-    'address', 'arquivo', 'attachment', 'cnpj', 'company', 'cpf',
-    'document', 'documento', 'edital', 'email', 'empresa', 'endereco',
-    'comment', 'description', 'field', 'field_id', 'field_name', 'field_value', 'file', 'free_text', 'full_name', 'mensagem',
-    'message', 'message_body', 'native_message', 'validation_message', 'error_message', 'name', 'nome', 'note', 'phone', 'q', 'query', 'raw_text',
-    'search_query', 'tel', 'telefone', 'whatsapp',
-  ]);
+  const PII_PARAM_KEYS = new Set('address arquivo attachment cnpj company cpf document documento edital email empresa endereco comment description field file free_text full_name mensagem message message_body name nome note phone q query raw_text search_query tel telefone whatsapp'.split(' '));
   const UNKNOWN_SERVICE = 'UNKNOWN_SERVICE';
   const CANONICAL_DESTINATIONS = {
     '/auditoria-orcamento-licitacao/': 'auditoria-orcamento-licitacao',
@@ -102,9 +96,6 @@
   };
   const OBSERVED_ONLY_EVENTS = { qualified_lead: 1, pipeline: 1 };
   const RETIRED_EVENTS = { conversion: 1, journey_nav_click: 1 };
-  const EVENT_PROPERTY_ALLOWLIST = {
-    lead_form_error: { validation_category: { required: 1, contact_format: 1, rate_limited: 1 } },
-  };
   const ENVELOPE_ID_KEYS = {
     correlation_id: 1,
     idempotency_key: 1,
@@ -264,20 +255,15 @@
         return;
       }
       if (AGGREGATE_PII_ALLOWLIST.length) return;
+      if (resolved.canonical === 'lead_form_error' && params.validation_category && !/^(required|contact_format|rate_limited)$/.test(params.validation_category)) return;
       const safe = {};
       let invalidEntityId = false;
-      let invalidAllowedProperty = false;
       Object.keys(params || {}).forEach((key) => {
         const val = params[key];
         if (val == null || val === '') return;
-        // Drop known PII field names even if caller passes them by mistake
-        if (PII_PARAM_KEYS.has(String(key).toLowerCase())) return;
-        const allowedValues = EVENT_PROPERTY_ALLOWLIST[resolved.canonical]?.[key];
-        if (allowedValues && (typeof val !== 'string' || !allowedValues[val])) {
-          invalidAllowedProperty = true;
-          return;
-        }
-        const entityPattern = ENTITY_ID_PATTERNS[String(key).toLowerCase()];
+        const piiKey = String(key).toLowerCase();
+        if (PII_PARAM_KEYS.has(piiKey) || /field_|_message$/.test(piiKey)) return;
+        const entityPattern = ENTITY_ID_PATTERNS[piiKey];
         if (entityPattern && (typeof val !== 'string' || !entityPattern.test(val))) {
           invalidEntityId = true;
           return;
@@ -286,7 +272,7 @@
         if (looksLikePiiValue(val, key)) return;
         safe[key] = val;
       });
-      if (invalidEntityId || invalidAllowedProperty) return;
+      if (invalidEntityId) return;
       safe.page_path = safe.page_path || (window.location.pathname || '/');
       safe.session_id = getSessionId();
       safe.source = EVENT_SOURCE;
