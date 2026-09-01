@@ -125,7 +125,17 @@ function validInsights(history) {
     readiness_contract_version: "gsc-readiness/v2",
     history_state_sha256: history.state_sha256,
     snapshot_sha256: MANIFEST_SHA256,
-    counts: { query_count: 71 },
+    counts: {
+      returned_rows: 71,
+      branded_rows: 5,
+      nonbranded_rows: 66,
+    },
+    analyses: {
+      "3_commercial_demand_without_page_join": [
+        { query_hash: "sha256:abc123", impressions: 2 },
+      ],
+      legacy_entity_demand_still_ranking: [],
+    },
   };
 }
 

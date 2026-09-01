@@ -106,6 +106,34 @@ insights.snapshot_sha256 = history.last_known_good.snapshot_sha256;
 check("history_contract_valid", validateHistoryState(history).ok);
 
 check("publishable_redacted_snapshot", validatePublishable(insights).as_of === insights.as_of);
+const producerShapedInsights = {
+  ...insights,
+  counts: {
+    returned_rows: 65,
+    branded_rows: 4,
+    nonbranded_rows: 61,
+  },
+  analyses: {
+    "3_commercial_demand_without_page_join": [
+      { query_hash: "sha256:abc123", impressions: 2 },
+    ],
+    legacy_entity_demand_still_ranking: [],
+  },
+};
+check(
+  "producer_shaped_redacted_snapshot_publishable",
+  validatePublishable(producerShapedInsights).as_of === producerShapedInsights.as_of,
+);
+try {
+  validatePublishable({ ...insights, counts: { queries: 65 } });
+  check("ambiguous_aggregate_query_key_rejected", false);
+} catch (error) {
+  check(
+    "ambiguous_aggregate_query_key_rejected",
+    error.message === "gsc_insights_sensitive_field",
+    error.message,
+  );
+}
 const syncState = {
   schema_version: "gsc-sync-state/v1",
   manifest_schema_version: "gsc_snapshot_manifest_v1",
