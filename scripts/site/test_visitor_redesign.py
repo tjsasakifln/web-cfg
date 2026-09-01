@@ -1200,6 +1200,36 @@ def test_css_visitor_tokens():
     assert "tool-result-dominant" in tools or "tool-result-highlights" in tools
 
 
+# ---------------------------------------------------------------------------
+# Dead-affordance guard (issue #564): non-interactive labels/cards next to real
+# links must not carry click-affordance CSS (cursor:pointer, hover-driven
+# color/shadow/transform). A visitor reads those cues as "this is clickable";
+# adding them to a heading/card with no href/onclick recreates the #564 bug
+# class even though the current markup does not.
+# ---------------------------------------------------------------------------
+
+NON_INTERACTIVE_CONTAINERS = (
+    "problem-stage-head",
+    "macro-phase",
+    "offer-dominant",
+)
+
+
+def test_non_interactive_containers_carry_no_click_affordance():
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    for cls in NON_INTERACTIVE_CONTAINERS:
+        rules = re.findall(rf"\.{re.escape(cls)}(?:\s+h\d)?[^{{]*\{{[^}}]*\}}", css)
+        assert rules, f"expected at least one CSS rule for .{cls}"
+        for rule in rules:
+            assert "cursor:pointer" not in rule.replace(" ", ""), (
+                f".{cls} must not use cursor:pointer without an <a>/<button> wrapper: {rule}"
+            )
+        hover_rules = re.findall(rf"\.{re.escape(cls)}(?:\s+h\d)?:hover[^{{]*\{{[^}}]*\}}", css)
+        assert not hover_rules, (
+            f".{cls} must not define :hover styling — it has no href/onclick: {hover_rules}"
+        )
+
+
 if __name__ == "__main__":
     failed = 0
     for name, fn in list(globals().items()):
