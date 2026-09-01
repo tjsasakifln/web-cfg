@@ -12,7 +12,7 @@
     "reject": 18
   },
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-  "generated_at": "2026-08-31",
+  "generated_at": "2026-09-01",
   "human_review_policy": {
     "indexable_states": [
       "APPROVED",
@@ -147,7 +147,7 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
-        "description": "Inteligência de mercado: 13 contratos, 6 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
+        "description": "Inteligência de mercado: 13 contratos, 6 órgãos no Piauí. Medianas, compradores e implicações para empresas de engenharia.",
         "h1": "Quanto o poder público contratou em Pavimentação e infraestrutura viária (Piauí)",
         "mandatory_fail": [
           "contracts<15"
@@ -160,7 +160,7 @@
           "pncp_contracts"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Mercado de Pavimentação e infraestrutura viária em Piauí: contratos e órgãos | CONFENGE",
+        "title": "Mercado de Pavimentação e infraestrutura viária no Piauí: contratos e órgãos | CONFENGE",
         "unique_buyer_count": 6,
         "unique_supplier_count": 13
       },
@@ -174,7 +174,7 @@
         "unique_supplier_count": 13
       },
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Inteligência de mercado: 13 contratos, 6 órgãos em Piauí. Medianas, compradores e implicações para empresas de engenharia.",
+      "description": "Inteligência de mercado: 13 contratos, 6 órgãos no Piauí. Medianas, compradores e implicações para empresas de engenharia.",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
@@ -183,13 +183,13 @@
       "indexability_score": 71,
       "indexability_score_alias": 71,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
         "contracts<15"
       ],
       "observation_count": 13,
       "page_id": "market-pavimentacao-infraestrutura-viaria-pi",
-      "page_material_hash": "e5a1c803ac2ccf27587f77e44f1d1da6018cf88193be5de8ad4f0d6577ed6e06",
+      "page_material_hash": "a1b83dad4b09d2224634012cebbe0656e647e8c44f79c763efeaee363f5089c0",
       "page_type": "market",
       "publication_decision_reason": "contracts<15",
       "quality_eligible": false,
@@ -240,7 +240,7 @@
         "pncp_contracts"
       ],
       "status": "reject",
-      "title": "Mercado de Pavimentação e infraestrutura viária em Piauí: contratos e órgãos | CONFENGE",
+      "title": "Mercado de Pavimentação e infraestrutura viária no Piauí: contratos e órgãos | CONFENGE",
       "url": "/inteligencia/mercados/pavimentacao-infraestrutura-viaria-pi/"
     },
     {
@@ -369,7 +369,7 @@
         "archetype": "edificacoes-publicas",
         "cta_intent": "mapa_mercado",
         "cta_label": "Solicitar um mapa aplicado à minha empresa",
-        "description": "Inteligência de mercado: 10 contratos, 10 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
+        "description": "Inteligência de mercado: 10 contratos, 10 órgãos no Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
         "h1": "Quanto o poder público contratou em Edificações públicas (Rio Grande do Sul)",
         "mandatory_fail": [
           "contracts<15"
@@ -382,7 +382,7 @@
           "pncp_contracts"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Mercado de Edificações públicas em Rio Grande do Sul: contratos e órgãos | CONFENGE",
+        "title": "Mercado de Edificações públicas no Rio Grande do Sul: contratos e órgãos | CONFENGE",
         "unique_buyer_count": 10,
         "unique_supplier_count": 10
       },
@@ -396,7 +396,7 @@
         "unique_supplier_count": 10
       },
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Inteligência de mercado: 10 contratos, 10 órgãos em Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
+      "description": "Inteligência de mercado: 10 contratos, 10 órgãos no Rio Grande do Sul. Medianas, compradores e implicações para empresas de engenharia.",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
@@ -405,13 +405,13 @@
       "indexability_score": 75,
       "indexability_score_alias": 75,
       "intent": "encontrar_mercados_oportunidades",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
         "contracts<15"
       ],
       "observation_count": 10,
       "page_id": "market-edificacoes-publicas-rs",
-      "page_material_hash": "cdf7262367ac51ff558609e2c679a513fd7f4330707490741e5312f7e4e8e80c",
+      "page_material_hash": "e6f57fe80e18fbbde630918d1ff92310e56178ff46ef7aa0e43642b500c14045",
       "page_type": "market",
       "publication_decision_reason": "contracts<15",
       "quality_eligible": false,
@@ -462,7 +462,7 @@
         "pncp_contracts"
       ],
       "status": "reject",
-      "title": "Mercado de Edificações públicas em Rio Grande do Sul: contratos e órgãos | CONFENGE",
+      "title": "Mercado de Edificações públicas no Rio Grande do Sul: contratos e órgãos | CONFENGE",
       "url": "/inteligencia/mercados/edificacoes-publicas-rs/"
     },
     {
@@ -615,7 +615,7 @@
         "archetype": "manutencao-predial-engenharia",
         "cta_intent": "validar_preco_margem",
         "cta_label": "Validar preço, risco e margem",
-        "description": "Faixa de valores: Manutenção predial e serviços de engenharia em Rio Grande do Sul (19 contratos; manutenção-predial-engenharia ·…",
+        "description": "Faixa de valores: Manutenção predial e serviços de engenharia no Rio Grande do Sul (19 contratos; manutenção-predial-engenharia ·…",
         "h1": "Valores de contratos: Manutenção predial e serviços de engenharia (Rio Grande do Sul)",
         "mandatory_fail": [
           "buyers<3",
@@ -631,13 +631,13 @@
           "pncp_contracts"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Faixa de valores de contratos: Manutenção predial e serviços de engenharia em Rio Grande do Sul | CONFENGE",
+        "title": "Faixa de valores de contratos: Manutenção predial e serviços de engenharia no Rio Grande do Sul | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Faixa de valores: Manutenção predial e serviços de engenharia em Rio Grande do Sul (19 contratos; manutenção-predial-engenharia ·…",
+      "description": "Faixa de valores: Manutenção predial e serviços de engenharia no Rio Grande do Sul (19 contratos; manutenção-predial-engenharia ·…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
@@ -646,7 +646,7 @@
       "indexability_score": 75,
       "indexability_score_alias": 75,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
         "buyers<3",
         "temporal_span_days<90",
@@ -655,7 +655,7 @@
       ],
       "observation_count": 19,
       "page_id": "price-manutencao-predial-engenharia-rs",
-      "page_material_hash": "64996ff24e4c38798d8a72dfe7c596a019dda710de3c75bc7eb49d8e2e7e9e17",
+      "page_material_hash": "9d0fe28d200d8c03a8647754707aa295745599a1dbe1844e44757b2d419b4e66",
       "page_type": "price",
       "publication_decision_reason": "buyers<3; temporal_span_days<90; max_buyer_share>0.60; no_comparison_group; score=75",
       "quality_eligible": false,
@@ -716,7 +716,7 @@
         "pncp_contracts"
       ],
       "status": "reject",
-      "title": "Faixa de valores de contratos: Manutenção predial e serviços de engenharia em Rio Grande do Sul | CONFENGE",
+      "title": "Faixa de valores de contratos: Manutenção predial e serviços de engenharia no Rio Grande do Sul | CONFENGE",
       "url": "/inteligencia/precos/manutencao-predial-engenharia-rs/"
     },
     {
@@ -843,7 +843,7 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "validar_preco_margem",
         "cta_label": "Validar preço, risco e margem",
-        "description": "Faixa de valores: Pavimentação e infraestrutura viária em Piauí (13 contratos; pavimentação-infraestrutura-viaria ·…",
+        "description": "Faixa de valores: Pavimentação e infraestrutura viária no Piauí (13 contratos; pavimentação-infraestrutura-viaria ·…",
         "h1": "Valores de contratos: Pavimentação e infraestrutura viária (Piauí)",
         "mandatory_fail": [
           "no_comparison_group",
@@ -859,13 +859,13 @@
           "pncp_contracts"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Faixa de valores de contratos: Pavimentação e infraestrutura viária em Piauí | CONFENGE",
+        "title": "Faixa de valores de contratos: Pavimentação e infraestrutura viária no Piauí | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Faixa de valores: Pavimentação e infraestrutura viária em Piauí (13 contratos; pavimentação-infraestrutura-viaria ·…",
+      "description": "Faixa de valores: Pavimentação e infraestrutura viária no Piauí (13 contratos; pavimentação-infraestrutura-viaria ·…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
@@ -874,7 +874,7 @@
       "indexability_score": 72,
       "indexability_score_alias": 72,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
         "obs<15",
         "primary_contracts<15",
@@ -883,7 +883,7 @@
       ],
       "observation_count": 13,
       "page_id": "price-pavimentacao-infraestrutura-viaria-pi",
-      "page_material_hash": "7fad3894611e3d9114c7f48ab0f989cfa28055645001d28a29e362086f9356b9",
+      "page_material_hash": "76102908192b838b1502821ded224b82fa1cf692971f4e8a764f8a6c6de055bf",
       "page_type": "price",
       "publication_decision_reason": "obs<15; primary_contracts<15; temporal_span_days<90; no_comparison_group; score=72",
       "quality_eligible": false,
@@ -944,7 +944,7 @@
         "pncp_contracts"
       ],
       "status": "reject",
-      "title": "Faixa de valores de contratos: Pavimentação e infraestrutura viária em Piauí | CONFENGE",
+      "title": "Faixa de valores de contratos: Pavimentação e infraestrutura viária no Piauí | CONFENGE",
       "url": "/inteligencia/precos/pavimentacao-infraestrutura-viaria-pi/"
     },
     {
@@ -961,7 +961,7 @@
         "archetype": "edificacoes-publicas",
         "cta_intent": "validar_preco_margem",
         "cta_label": "Validar preço, risco e margem",
-        "description": "Faixa de valores: Edificações públicas em Rio Grande do Sul (12 contratos; edificacoes-publicas · edificacoes-publicas-rs). Mediana/P25/P75 de tickets…",
+        "description": "Faixa de valores: Edificações públicas no Rio Grande do Sul (12 contratos; edificacoes-publicas · edificacoes-publicas-rs). Mediana/P25/P75 de tickets…",
         "h1": "Valores de contratos: Edificações públicas (Rio Grande do Sul)",
         "mandatory_fail": [
           "no_comparison_group",
@@ -976,13 +976,13 @@
           "pncp_contracts"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Faixa de valores de contratos: Edificações públicas em Rio Grande do Sul | CONFENGE",
+        "title": "Faixa de valores de contratos: Edificações públicas no Rio Grande do Sul | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Faixa de valores: Edificações públicas em Rio Grande do Sul (12 contratos; edificacoes-publicas · edificacoes-publicas-rs). Mediana/P25/P75 de tickets…",
+      "description": "Faixa de valores: Edificações públicas no Rio Grande do Sul (12 contratos; edificacoes-publicas · edificacoes-publicas-rs). Mediana/P25/P75 de tickets…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
@@ -991,7 +991,7 @@
       "indexability_score": 71,
       "indexability_score_alias": 71,
       "intent": "estimar_valores_dispersao",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
         "obs<15",
         "primary_contracts<15",
@@ -999,7 +999,7 @@
       ],
       "observation_count": 12,
       "page_id": "price-edificacoes-publicas-rs",
-      "page_material_hash": "b933d983a00bb907f49be794f55e49b63d7e911f9d4884708e87e8787774005a",
+      "page_material_hash": "9ff5207524657747d645816f060adfed8ad9ac13a4a18048c0002bddc000a1ee",
       "page_type": "price",
       "publication_decision_reason": "obs<15; primary_contracts<15; no_comparison_group; score=71",
       "quality_eligible": false,
@@ -1058,7 +1058,7 @@
         "pncp_contracts"
       ],
       "status": "reject",
-      "title": "Faixa de valores de contratos: Edificações públicas em Rio Grande do Sul | CONFENGE",
+      "title": "Faixa de valores de contratos: Edificações públicas no Rio Grande do Sul | CONFENGE",
       "url": "/inteligencia/precos/edificacoes-publicas-rs/"
     },
     {
@@ -1202,7 +1202,7 @@
           "pncp_contracts"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Concorrência observada: Manutenção predial e serviços de engenharia em Rio Grande do Sul | CONFENGE",
+        "title": "Concorrência observada: Manutenção predial e serviços de engenharia no Rio Grande do Sul | CONFENGE",
         "unique_buyer_count": 0,
         "unique_supplier_count": 2
       },
@@ -1217,13 +1217,13 @@
       "indexability_score": 73,
       "indexability_score_alias": 73,
       "intent": "compreender_concorrencia",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
         "suppliers<3"
       ],
       "observation_count": 50,
       "page_id": "comp-manutencao-predial-engenharia-rs",
-      "page_material_hash": "e75e4e17e4867e0948520d3288bdd8bb731eb12e7be4cffc358f2e801197c3a3",
+      "page_material_hash": "a1b02e142b5d76e87b7bb0ed6ee59081bae30cb1b9334d93701ae0cedafd1596",
       "page_type": "competition",
       "publication_decision_reason": "suppliers<3; score=73",
       "quality_eligible": false,
@@ -1275,7 +1275,7 @@
         "pncp_contracts"
       ],
       "status": "reject",
-      "title": "Concorrência observada: Manutenção predial e serviços de engenharia em Rio Grande do Sul | CONFENGE",
+      "title": "Concorrência observada: Manutenção predial e serviços de engenharia no Rio Grande do Sul | CONFENGE",
       "url": "/inteligencia/concorrencia/manutencao-predial-engenharia-rs/"
     },
     {
@@ -1292,59 +1292,50 @@
         "archetype": "edificacoes-publicas",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por edital.",
-        "h1": "Oportunidades abertas em Edificações públicas (Parana)",
+        "description": "8 oportunidades de Edificações públicas no Paraná classificadas como abertas na última verificação (2026-07-31). Confirme prazo e condições no portal…",
+        "h1": "Oportunidades abertas em Edificações públicas no Paraná",
         "mandatory_fail": [
-          "contract_url_as_opportunity=7",
-          "duplicate_items=1",
-          "duplicate_rate>0",
           "radar_stale_hours>72",
           "zero_used_for_missing_value=1"
         ],
-        "observation_count": 15,
+        "observation_count": 8,
         "period_end": "2026-07-31",
         "period_start": "2026-07-31",
-        "primary_contract_count": 15,
+        "primary_contract_count": 8,
         "sources": [
           "pncp"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Radar de oportunidades: Edificações públicas em Parana | CONFENGE",
+        "title": "Oportunidades abertas em Edificações públicas no Paraná | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Radar de Edificações públicas em Parana: 15 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por edital.",
+      "description": "8 oportunidades de Edificações públicas no Paraná classificadas como abertas na última verificação (2026-07-31). Confirme prazo e condições no portal…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Oportunidades abertas em Edificações públicas (Parana)",
+      "h1": "Oportunidades abertas em Edificações públicas no Paraná",
       "human_review": "PENDING",
-      "indexability_score": 77,
-      "indexability_score_alias": 77,
+      "indexability_score": 74,
+      "indexability_score_alias": 74,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
-        "duplicate_items=1",
-        "duplicate_rate>0",
-        "contract_url_as_opportunity=7",
         "zero_used_for_missing_value=1",
         "radar_stale_hours>72"
       ],
-      "observation_count": 15,
+      "observation_count": 8,
       "page_id": "radar-edificacoes-publicas-pr",
-      "page_material_hash": "9d6ea07cb1349634e1cb4bc105b2c8f985b75315859fa99861201ad7a49c0ef5",
+      "page_material_hash": "1d30ca567ae7bf637d194bb7b8d89b6ef706a428c5d2d5d3fc67d3b3d6404e66",
       "page_type": "radar",
-      "publication_decision_reason": "duplicate_items=1; duplicate_rate>0; contract_url_as_opportunity=7; zero_used_for_missing_value=1; radar_stale_hours>72; score=77",
+      "publication_decision_reason": "zero_used_for_missing_value=1; radar_stale_hours>72; score=74",
       "quality_eligible": false,
       "reasons": [
-        "duplicate_items=1",
-        "duplicate_rate>0",
-        "contract_url_as_opportunity=7",
         "zero_used_for_missing_value=1",
         "radar_stale_hours>72",
-        "score=77"
+        "score=74"
       ],
       "region": "PR",
       "related_urls": [],
@@ -1383,7 +1374,7 @@
         "classification_confidence": 8,
         "commercial_intent": 14,
         "comparability": 5,
-        "differentiation": 10,
+        "differentiation": 7,
         "evidence": 15,
         "freshness": 0,
         "icp_adherence": 15,
@@ -1396,7 +1387,7 @@
         "pncp"
       ],
       "status": "reject",
-      "title": "Radar de oportunidades: Edificações públicas em Parana | CONFENGE",
+      "title": "Oportunidades abertas em Edificações públicas no Paraná | CONFENGE",
       "url": "/radar/edificacoes-publicas-pr/"
     },
     {
@@ -1413,23 +1404,20 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por…",
-        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária (Santa Catarina)",
+        "description": "3 oportunidades de Pavimentação e infraestrutura viária em Santa Catarina classificadas como abertas na última verificação (2026-07-31). Confirme prazo e…",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária em Santa Catarina",
         "mandatory_fail": [
-          "contract_url_as_opportunity=4",
-          "duplicate_items=2",
-          "duplicate_rate>0",
           "radar_stale_hours>72"
         ],
-        "observation_count": 7,
+        "observation_count": 3,
         "period_end": "2026-07-31",
         "period_start": "2026-07-31",
-        "primary_contract_count": 7,
+        "primary_contract_count": 3,
         "sources": [
           "pncp"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
+        "title": "Oportunidades abertas em Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
@@ -1442,36 +1430,30 @@
         "unique_open": 31
       },
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Radar de Pavimentação e infraestrutura viária em Santa Catarina: 7 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por…",
+      "description": "3 oportunidades de Pavimentação e infraestrutura viária em Santa Catarina classificadas como abertas na última verificação (2026-07-31). Confirme prazo e…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": [
         "open=7"
       ],
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária (Santa Catarina)",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária em Santa Catarina",
       "human_review": "NEEDS_DATA_FIX",
-      "indexability_score": 70,
-      "indexability_score_alias": 70,
+      "indexability_score": 59,
+      "indexability_score_alias": 59,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
-        "duplicate_items=2",
-        "duplicate_rate>0",
-        "contract_url_as_opportunity=4",
         "radar_stale_hours>72"
       ],
-      "observation_count": 7,
+      "observation_count": 3,
       "page_id": "radar-pavimentacao-infraestrutura-viaria-sc",
-      "page_material_hash": "b86ce825b3f426baf3b35c85dfb8519352b65961707f9aa048850f79fe75a37a",
+      "page_material_hash": "7fe5a65cbb7a9b153823776891e5d4b4a4c292f818a2f125750e99cfa71e417e",
       "page_type": "radar",
-      "publication_decision_reason": "duplicate_items=2; duplicate_rate>0; contract_url_as_opportunity=4; radar_stale_hours>72; score=70",
+      "publication_decision_reason": "radar_stale_hours>72; score=59",
       "quality_eligible": false,
       "reasons": [
-        "duplicate_items=2",
-        "duplicate_rate>0",
-        "contract_url_as_opportunity=4",
         "radar_stale_hours>72",
-        "score=70"
+        "score=59"
       ],
       "region": "SC",
       "related_urls": [],
@@ -1502,10 +1484,10 @@
         "classification_confidence": 8,
         "commercial_intent": 14,
         "comparability": 5,
-        "differentiation": 6,
-        "evidence": 13,
+        "differentiation": 4,
+        "evidence": 6,
         "freshness": 0,
-        "icp_adherence": 14,
+        "icp_adherence": 12,
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
@@ -1515,7 +1497,7 @@
         "pncp"
       ],
       "status": "reject",
-      "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
+      "title": "Oportunidades abertas em Pavimentação e infraestrutura viária em Santa Catarina | CONFENGE",
       "url": "/radar/pavimentacao-infraestrutura-viaria-sc/"
     },
     {
@@ -1532,21 +1514,20 @@
         "archetype": "saneamento-hidraulica",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Saneamento e hidráulica em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por edital.",
-        "h1": "Oportunidades abertas em Saneamento e hidráulica (Santa Catarina)",
+        "description": "3 oportunidades de Saneamento e hidráulica em Santa Catarina classificadas como abertas na última verificação (2026-07-31). Confirme prazo e condições no…",
+        "h1": "Oportunidades abertas em Saneamento e hidráulica em Santa Catarina",
         "mandatory_fail": [
-          "contract_url_as_opportunity=2",
           "radar_stale_hours>72"
         ],
-        "observation_count": 5,
+        "observation_count": 3,
         "period_end": "2026-07-31",
         "period_start": "2026-07-31",
-        "primary_contract_count": 5,
+        "primary_contract_count": 3,
         "sources": [
           "pncp"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Radar de oportunidades: Saneamento e hidráulica em Santa Catarina | CONFENGE",
+        "title": "Oportunidades abertas em Saneamento e hidráulica em Santa Catarina | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
@@ -1559,30 +1540,28 @@
         "unique_open": 31
       },
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Radar de Saneamento e hidráulica em Santa Catarina: 5 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por edital.",
+      "description": "3 oportunidades de Saneamento e hidráulica em Santa Catarina classificadas como abertas na última verificação (2026-07-31). Confirme prazo e condições no…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Oportunidades abertas em Saneamento e hidráulica (Santa Catarina)",
+      "h1": "Oportunidades abertas em Saneamento e hidráulica em Santa Catarina",
       "human_review": "PENDING",
-      "indexability_score": 65,
-      "indexability_score_alias": 65,
+      "indexability_score": 59,
+      "indexability_score_alias": 59,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
-        "contract_url_as_opportunity=2",
         "radar_stale_hours>72"
       ],
-      "observation_count": 5,
+      "observation_count": 3,
       "page_id": "radar-saneamento-hidraulica-sc",
-      "page_material_hash": "9785b43329924307857b5bd5c2436f2b0b6cca1143a3a9ee78bedee580889d6e",
+      "page_material_hash": "196b7b35f943c75f191e8eb6ba801f3dd538c51269bcf3fa3b6a9737ad0e6a27",
       "page_type": "radar",
-      "publication_decision_reason": "contract_url_as_opportunity=2; radar_stale_hours>72; score=65",
+      "publication_decision_reason": "radar_stale_hours>72; score=59",
       "quality_eligible": false,
       "reasons": [
-        "contract_url_as_opportunity=2",
         "radar_stale_hours>72",
-        "score=65"
+        "score=59"
       ],
       "region": "SC",
       "related_urls": [],
@@ -1613,10 +1592,10 @@
         "classification_confidence": 8,
         "commercial_intent": 14,
         "comparability": 5,
-        "differentiation": 6,
-        "evidence": 9,
+        "differentiation": 4,
+        "evidence": 6,
         "freshness": 0,
-        "icp_adherence": 13,
+        "icp_adherence": 12,
         "service_cta": 5
       },
       "segment": "Saneamento e hidráulica",
@@ -1626,7 +1605,7 @@
         "pncp"
       ],
       "status": "reject",
-      "title": "Radar de oportunidades: Saneamento e hidráulica em Santa Catarina | CONFENGE",
+      "title": "Oportunidades abertas em Saneamento e hidráulica em Santa Catarina | CONFENGE",
       "url": "/radar/saneamento-hidraulica-sc/"
     },
     {
@@ -1643,50 +1622,53 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por…",
-        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária (Rio Grande do Sul)",
+        "description": "2 oportunidades de Pavimentação e infraestrutura viária no Rio Grande do Sul classificadas como abertas na última verificação (2026-07-31). Confirme…",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária no Rio Grande do Sul",
         "mandatory_fail": [
-          "contract_url_as_opportunity=2",
+          "open<3",
+          "open<3",
           "radar_stale_hours>72"
         ],
-        "observation_count": 4,
+        "observation_count": 2,
         "period_end": "2026-07-31",
         "period_start": "2026-07-31",
-        "primary_contract_count": 4,
+        "primary_contract_count": 2,
         "sources": [
           "pncp"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Rio Grande do Sul | CONFENGE",
+        "title": "Oportunidades abertas em Pavimentação e infraestrutura viária no Rio Grande do Sul | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Radar de Pavimentação e infraestrutura viária em Rio Grande do Sul: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por…",
+      "description": "2 oportunidades de Pavimentação e infraestrutura viária no Rio Grande do Sul classificadas como abertas na última verificação (2026-07-31). Confirme…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária (Rio Grande do Sul)",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária no Rio Grande do Sul",
       "human_review": "PENDING",
-      "indexability_score": 62,
-      "indexability_score_alias": 62,
+      "indexability_score": 56,
+      "indexability_score_alias": 56,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
-        "contract_url_as_opportunity=2",
+        "open<3",
+        "open<3",
         "radar_stale_hours>72"
       ],
-      "observation_count": 4,
+      "observation_count": 2,
       "page_id": "radar-pavimentacao-infraestrutura-viaria-rs",
-      "page_material_hash": "f7283d92c14dae3e689ae9ed6f169cd3d53a941788999345c634a72cb358df11",
+      "page_material_hash": "30963c9c17e13c3b0e75e0984a1688fad1638ff383e70016d04a820661d58e27",
       "page_type": "radar",
-      "publication_decision_reason": "contract_url_as_opportunity=2; radar_stale_hours>72; score=62",
+      "publication_decision_reason": "open<3; open<3; radar_stale_hours>72; score=56",
       "quality_eligible": false,
       "reasons": [
-        "contract_url_as_opportunity=2",
+        "open<3",
+        "open<3",
         "radar_stale_hours>72",
-        "score=62"
+        "score=56"
       ],
       "region": "RS",
       "related_urls": [],
@@ -1722,10 +1704,10 @@
         "classification_confidence": 8,
         "commercial_intent": 14,
         "comparability": 5,
-        "differentiation": 5,
-        "evidence": 8,
+        "differentiation": 4,
+        "evidence": 4,
         "freshness": 0,
-        "icp_adherence": 12,
+        "icp_adherence": 11,
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
@@ -1735,7 +1717,7 @@
         "pncp"
       ],
       "status": "reject",
-      "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Rio Grande do Sul | CONFENGE",
+      "title": "Oportunidades abertas em Pavimentação e infraestrutura viária no Rio Grande do Sul | CONFENGE",
       "url": "/radar/pavimentacao-infraestrutura-viaria-rs/"
     },
     {
@@ -1752,50 +1734,53 @@
         "archetype": "edificacoes-publicas",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Edificações públicas em Santa Catarina: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por edital.",
-        "h1": "Oportunidades abertas em Edificações públicas (Santa Catarina)",
+        "description": "2 oportunidades de Edificações públicas em Santa Catarina classificadas como abertas na última verificação (2026-07-31). Confirme prazo e condições no…",
+        "h1": "Oportunidades abertas em Edificações públicas em Santa Catarina",
         "mandatory_fail": [
-          "contract_url_as_opportunity=2",
+          "open<3",
+          "open<3",
           "radar_stale_hours>72"
         ],
-        "observation_count": 4,
+        "observation_count": 2,
         "period_end": "2026-07-31",
         "period_start": "2026-07-31",
-        "primary_contract_count": 4,
+        "primary_contract_count": 2,
         "sources": [
           "pncp"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Radar de oportunidades: Edificações públicas em Santa Catarina | CONFENGE",
+        "title": "Oportunidades abertas em Edificações públicas em Santa Catarina | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Radar de Edificações públicas em Santa Catarina: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por edital.",
+      "description": "2 oportunidades de Edificações públicas em Santa Catarina classificadas como abertas na última verificação (2026-07-31). Confirme prazo e condições no…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Oportunidades abertas em Edificações públicas (Santa Catarina)",
+      "h1": "Oportunidades abertas em Edificações públicas em Santa Catarina",
       "human_review": "PENDING",
-      "indexability_score": 62,
-      "indexability_score_alias": 62,
+      "indexability_score": 56,
+      "indexability_score_alias": 56,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
-        "contract_url_as_opportunity=2",
+        "open<3",
+        "open<3",
         "radar_stale_hours>72"
       ],
-      "observation_count": 4,
+      "observation_count": 2,
       "page_id": "radar-edificacoes-publicas-sc",
-      "page_material_hash": "f16efda0353d936aaff7a4604ccae059ea5c85d8c49730082ca9c8f12b530563",
+      "page_material_hash": "2cafaf4f957f37ff41341164ec0d396df013a1cbc99f7d41fa1299dbf4b7f6be",
       "page_type": "radar",
-      "publication_decision_reason": "contract_url_as_opportunity=2; radar_stale_hours>72; score=62",
+      "publication_decision_reason": "open<3; open<3; radar_stale_hours>72; score=56",
       "quality_eligible": false,
       "reasons": [
-        "contract_url_as_opportunity=2",
+        "open<3",
+        "open<3",
         "radar_stale_hours>72",
-        "score=62"
+        "score=56"
       ],
       "region": "SC",
       "related_urls": [],
@@ -1832,10 +1817,10 @@
         "classification_confidence": 8,
         "commercial_intent": 14,
         "comparability": 5,
-        "differentiation": 5,
-        "evidence": 8,
+        "differentiation": 4,
+        "evidence": 4,
         "freshness": 0,
-        "icp_adherence": 12,
+        "icp_adherence": 11,
         "service_cta": 5
       },
       "segment": "Edificações públicas",
@@ -1845,7 +1830,7 @@
         "pncp"
       ],
       "status": "reject",
-      "title": "Radar de oportunidades: Edificações públicas em Santa Catarina | CONFENGE",
+      "title": "Oportunidades abertas em Edificações públicas em Santa Catarina | CONFENGE",
       "url": "/radar/edificacoes-publicas-sc/"
     },
     {
@@ -1862,50 +1847,53 @@
         "archetype": "pavimentacao-infraestrutura-viaria",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Pavimentação e infraestrutura viária em Parana: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por edital.",
-        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária (Parana)",
+        "description": "0 oportunidades de Pavimentação e infraestrutura viária no Paraná classificadas como abertas na última verificação (2026-07-31). Confirme prazo e…",
+        "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária no Paraná",
         "mandatory_fail": [
-          "contract_url_as_opportunity=4",
+          "open<3",
+          "open<3",
           "radar_stale_hours>72"
         ],
-        "observation_count": 4,
+        "observation_count": 0,
         "period_end": "2026-07-31",
         "period_start": "2026-07-31",
-        "primary_contract_count": 4,
+        "primary_contract_count": 0,
         "sources": [
           "pncp"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Parana | CONFENGE",
+        "title": "Oportunidades abertas em Pavimentação e infraestrutura viária no Paraná | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Radar de Pavimentação e infraestrutura viária em Parana: 4 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por edital.",
+      "description": "0 oportunidades de Pavimentação e infraestrutura viária no Paraná classificadas como abertas na última verificação (2026-07-31). Confirme prazo e…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária (Parana)",
+      "h1": "Oportunidades abertas em Pavimentação e infraestrutura viária no Paraná",
       "human_review": "PENDING",
-      "indexability_score": 62,
-      "indexability_score_alias": 62,
+      "indexability_score": 49,
+      "indexability_score_alias": 49,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
-        "contract_url_as_opportunity=4",
+        "open<3",
+        "open<3",
         "radar_stale_hours>72"
       ],
-      "observation_count": 4,
+      "observation_count": 0,
       "page_id": "radar-pavimentacao-infraestrutura-viaria-pr",
-      "page_material_hash": "0325780713ebd038c138e493b3ae0a20411525b8ad2e7c262f19501ae8007eb3",
+      "page_material_hash": "9876ae3602ea468a2d6c951ca456c12a1f62b9d29bb898e8cbef4ef799353686",
       "page_type": "radar",
-      "publication_decision_reason": "contract_url_as_opportunity=4; radar_stale_hours>72; score=62",
+      "publication_decision_reason": "open<3; open<3; radar_stale_hours>72; score=49",
       "quality_eligible": false,
       "reasons": [
-        "contract_url_as_opportunity=4",
+        "open<3",
+        "open<3",
         "radar_stale_hours>72",
-        "score=62"
+        "score=49"
       ],
       "region": "PR",
       "related_urls": [],
@@ -1941,10 +1929,10 @@
         "classification_confidence": 8,
         "commercial_intent": 14,
         "comparability": 5,
-        "differentiation": 5,
-        "evidence": 8,
+        "differentiation": 3,
+        "evidence": 0,
         "freshness": 0,
-        "icp_adherence": 12,
+        "icp_adherence": 9,
         "service_cta": 5
       },
       "segment": "Pavimentação e infraestrutura viária",
@@ -1954,7 +1942,7 @@
         "pncp"
       ],
       "status": "reject",
-      "title": "Radar de oportunidades: Pavimentação e infraestrutura viária em Parana | CONFENGE",
+      "title": "Oportunidades abertas em Pavimentação e infraestrutura viária no Paraná | CONFENGE",
       "url": "/radar/pavimentacao-infraestrutura-viaria-pr/"
     },
     {
@@ -1971,50 +1959,53 @@
         "archetype": "edificacoes-publicas",
         "cta_intent": "analisar_edital",
         "cta_label": "Analisar este edital antes da proposta",
-        "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por edital.",
-        "h1": "Oportunidades abertas em Edificações públicas (Rio Grande do Sul)",
+        "description": "2 oportunidades de Edificações públicas no Rio Grande do Sul classificadas como abertas na última verificação (2026-07-31). Confirme prazo e condições no…",
+        "h1": "Oportunidades abertas em Edificações públicas no Rio Grande do Sul",
         "mandatory_fail": [
-          "contract_url_as_opportunity=1",
+          "open<3",
+          "open<3",
           "radar_stale_hours>72"
         ],
-        "observation_count": 3,
+        "observation_count": 2,
         "period_end": "2026-07-31",
         "period_start": "2026-07-31",
-        "primary_contract_count": 3,
+        "primary_contract_count": 2,
         "sources": [
           "pncp"
         ],
         "template_version": "pseo-html-v2",
-        "title": "Radar de oportunidades: Edificações públicas em Rio Grande do Sul | CONFENGE",
+        "title": "Oportunidades abertas em Edificações públicas no Rio Grande do Sul | CONFENGE",
         "unique_buyer_count": null,
         "unique_supplier_count": null
       },
       "data_quality_metrics": null,
       "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
-      "description": "Radar de Edificações públicas em Rio Grande do Sul: 3 oportunidades abertas (verificado em 2026-07-31). Página evergreen: não é URL por edital.",
+      "description": "2 oportunidades de Edificações públicas no Rio Grande do Sul classificadas como abertas na última verificação (2026-07-31). Confirme prazo e condições no…",
       "editorial_issues": null,
       "evidence_sample": null,
       "evidences_checked": null,
-      "h1": "Oportunidades abertas em Edificações públicas (Rio Grande do Sul)",
+      "h1": "Oportunidades abertas em Edificações públicas no Rio Grande do Sul",
       "human_review": "PENDING",
-      "indexability_score": 59,
-      "indexability_score_alias": 59,
+      "indexability_score": 56,
+      "indexability_score_alias": 56,
       "intent": "avaliar_oportunidades",
-      "last_material_change": "2026-08-29",
+      "last_material_change": "2026-09-01",
       "mandatory_fail": [
-        "contract_url_as_opportunity=1",
+        "open<3",
+        "open<3",
         "radar_stale_hours>72"
       ],
-      "observation_count": 3,
+      "observation_count": 2,
       "page_id": "radar-edificacoes-publicas-rs",
-      "page_material_hash": "e4b68976adf793e9edf2b64a2dba43cda00f05663c48c65288651d9da652e5cd",
+      "page_material_hash": "c93ffb134ab440066e466ad0b012c28ec9f5df29602f3519fdb371cc0342078e",
       "page_type": "radar",
-      "publication_decision_reason": "contract_url_as_opportunity=1; radar_stale_hours>72; score=59",
+      "publication_decision_reason": "open<3; open<3; radar_stale_hours>72; score=56",
       "quality_eligible": false,
       "reasons": [
-        "contract_url_as_opportunity=1",
+        "open<3",
+        "open<3",
         "radar_stale_hours>72",
-        "score=59"
+        "score=56"
       ],
       "region": "RS",
       "related_urls": [],
@@ -2051,9 +2042,9 @@
         "commercial_intent": 14,
         "comparability": 5,
         "differentiation": 4,
-        "evidence": 6,
+        "evidence": 4,
         "freshness": 0,
-        "icp_adherence": 12,
+        "icp_adherence": 11,
         "service_cta": 5
       },
       "segment": "Edificações públicas",
@@ -2063,7 +2054,7 @@
         "pncp"
       ],
       "status": "reject",
-      "title": "Radar de oportunidades: Edificações públicas em Rio Grande do Sul | CONFENGE",
+      "title": "Oportunidades abertas em Edificações públicas no Rio Grande do Sul | CONFENGE",
       "url": "/radar/edificacoes-publicas-rs/"
     },
     {

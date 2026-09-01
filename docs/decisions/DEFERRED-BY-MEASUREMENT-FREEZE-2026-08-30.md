@@ -104,3 +104,32 @@ sozinha, não autoriza: o dono da janela precisa liberar explicitamente.
    recapturar a baseline e estender `scrub_em_dashes.py` para varrer também
    `js/modules/*.js`, para que a próxima travessão em copy de interface reprove
    sozinha.
+
+6. **Bloco "Inteligência relacionada" de `/diagnostico-pre-licitacao/`.**
+   Duas pendências no mesmo `<ul class="pillar-docs">`, ambas criadas pelo
+   incidente P0 de copy e governança do pSEO (issue #ISSUE_NUMBER):
+
+   - `<li><a href="/radar/edificacoes-publicas-pr/">` aponta para uma rota que
+     passou a ser retirada do ar. A página foi reprovada pelo gate editorial
+     (`status: reject`) e o `scripts/pseo/build.py` deixou de escrevê-la no
+     diretório público. O link permanece no HTML e passa a resolver em 404.
+   - `<li><a href="/radar/">Radar evergreen de oportunidades</a></li>` usa
+     "evergreen", metalinguagem de CMS que não deve chegar ao visitante. É a
+     última ocorrência do termo em toda a superfície pública.
+
+   **Por que não entrou agora.** A rota está entre as seis congeladas pela
+   janela de medição de primeira dobra (#529 e #533). O incidente foi
+   neutralizado pelo lado do destino — a página reprovada deixou de ser
+   servida, que era o risco real — e não pela mutação da rota medida. O
+   `_pseo_reject_pages_not_public` em `scripts/site/inbound_gates.py` reporta
+   o link como `warn` enquanto o arquivo estiver em `FROZEN_HTML_REL`, e o
+   `test_frozen_route_exceptions_are_still_the_only_ones_outstanding` falha
+   quando a exceção deixar de ser necessária, para que ela não sobreviva à
+   janela por esquecimento.
+
+   **Ação em 2026-09-13:** remover o `<li>` do radar reprovado, trocar o rótulo
+   do hub para "Radar de oportunidades abertas", rodar `npm run inbound:gates`
+   (o achado `warn` deve desaparecer) e apagar
+   `diagnostico-pre-licitacao/index.html` de `FROZEN_COPY_EXCEPTIONS` em
+   `scripts/pseo/tests/test_geo_locale_and_reject_withdrawal.py`, que passa a
+   exigir a limpeza sozinho.

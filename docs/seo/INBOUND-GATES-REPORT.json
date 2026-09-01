@@ -12,7 +12,15 @@
     },
     "index_surface": {
       "ok": true,
-      "findings": [],
+      "findings": [
+        {
+          "gate": "pseo_reject_withdrawn",
+          "path": "diagnostico-pre-licitacao/index.html",
+          "reason": "indexable_page_links_rejected_pseo_page",
+          "excerpt": "/radar/edificacoes-publicas-pr/",
+          "severity": "warn"
+        }
+      ],
       "stats": {
         "sitemap_locs": 76
       }

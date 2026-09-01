@@ -519,7 +519,7 @@ def render_hubs(cands: list[Candidate]) -> list[str]:
             "Cenários técnicos para decisão | CONFENGE",
             "Do padrão público à decisão da construtora",
             "Cenários que ligam evidência pública a decisões de proposta, preço e contrato.",
-            "Cenários evergreen (aditivos, SINAPI/SICRO, orçamento×edital, medição/glosa) "
+            "Cenários recorrentes (aditivos, SINAPI/SICRO, orçamento×edital, medição/glosa) "
             "com limitações, fontes oficiais e próximo passo comercial concreto.",
             items_for("problem_service"),
             [("Início", "/"), ("Inteligência", "/inteligencia/"), ("Cenários", None)],
