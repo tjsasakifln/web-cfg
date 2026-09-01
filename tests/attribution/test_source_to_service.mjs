@@ -486,6 +486,50 @@ for (const j of journeys) {
   }
 }
 
+// --- #550 hash-only primary CTAs: each named anchor emits exactly one canonical click ---
+for (const target of [
+  {
+    html: "atrasos-prorrogacao-obras-publicas/index.html",
+    pathname: "/atrasos-prorrogacao-obras-publicas/",
+    asset_id: "atrasos-prorrogacao-obras-publicas",
+    route_family: "atrasos",
+  },
+  {
+    html: "defesa-tecnica-contratos-publicos/index.html",
+    pathname: "/defesa-tecnica-contratos-publicos/",
+    asset_id: "defesa-tecnica-contratos-publicos",
+    route_family: "defesa-tecnica",
+  },
+  {
+    html: "acompanhamento-contratos-obras/index.html",
+    pathname: "/acompanhamento-contratos-obras/",
+    asset_id: "acompanhamento-contratos-obras",
+    route_family: "acompanhamento",
+  },
+]) {
+  const html = htmlOf(target.html);
+  const attrs = findAnchor(html, (a) => a["data-cta-id"] === "pillar_hero" && a.href === "#captura-pilar");
+  if (!attrs || attrs["data-event-name"] !== "cta_click") fail("hash_primary_cta_missing_event", { target, attrs });
+  const el = makeEl(attrs, "Registrar contexto para revisão");
+  const driven = driveScript({
+    pathname: target.pathname,
+    body: bodyAttrs(html),
+    hrefEls: [el],
+    namedEls: [el],
+  });
+  el.click();
+  const clicks = driven.dataLayer.filter((event) => event.event === "cta_click");
+  if (clicks.length !== 1) fail("hash_primary_cta_duplicate", { target, events: driven.dataLayer });
+  const click = clicks[0];
+  if (click.cta_id !== "pillar_hero" || click.asset_id !== target.asset_id || click.route_family !== target.route_family) {
+    fail("hash_primary_cta_context_drift", { target, click });
+  }
+  const flushed = flushedEvents(driven.fetches).filter((event) => event.event === "cta_click");
+  if (flushed.length !== 1 || !contract.admitEvent(flushed[0]).ok) {
+    fail("hash_primary_cta_not_admitted_once", { target, flushed });
+  }
+}
+
 // --- Duplicate event_id on track + collect ---
 {
   const driven = driveScript({ pathname: "/conteudos/sinapi-desonerado-nao-desonerado/", body: {}, hrefEls: [] });

@@ -254,6 +254,26 @@ const collectB = await collectPair();
 if (collectA.acceptBody.accepted !== collectB.acceptBody.accepted) fail("collect_accept_inconsistent");
 if (collectA.rejectBody.rejected !== collectB.rejectBody.rejected) fail("collect_reject_inconsistent");
 
+// #550: finite validation categories are accepted only through the declared contract.
+for (const validation_category of ["required", "contact_format", "rate_limited"]) {
+  const admitted = contract.admitEvent({
+    event: "lead_form_error",
+    props: { page_path: "/", validation_category },
+  });
+  if (!admitted.ok || admitted.event.props.validation_category !== validation_category) {
+    fail("validation_category_not_admitted", { validation_category, admitted });
+  }
+}
+for (const props of [
+  { page_path: "/", validation_category: "turnstile" },
+  { page_path: "/", validation_category: "customer supplied message" },
+  { page_path: "/", validation_category: "required", field: "email" },
+  { page_path: "/", validation_category: "required", field_value: "alice@example.com" },
+]) {
+  const rejected = contract.admitEvent({ event: "lead_form_error", props });
+  if (rejected.ok) fail("validation_category_or_pii_admitted", { props, rejected });
+}
+
 // --- 4. Client track path ---
 function driveClient() {
   const dataLayer = [];
@@ -325,6 +345,8 @@ function driveClient() {
   track("qualified_lead", { page_path: "/" });
   track("pipeline", { page_path: "/" });
   track("qualified_scroll", { page_path: "/", cta_position: "scroll_50" });
+  track("lead_form_error", { page_path: "/", validation_category: "required", field: "email" });
+  track("lead_form_error", { page_path: "/", validation_category: "turnstile" });
 
   const names = dataLayer.map((e) => e.event);
   if (!names.includes("page_view")) fail("client_missing_page_view", names);
@@ -337,6 +359,13 @@ function driveClient() {
     fail("client_emitted_rejected", names);
   }
   if (!names.includes("scroll_depth")) fail("client_scroll_alias", names);
+  const validationErrors = dataLayer.filter((e) => e.event === "lead_form_error");
+  if (validationErrors.length !== 1 || validationErrors[0].validation_category !== "required") {
+    fail("client_validation_category_allowlist", validationErrors);
+  }
+  if (validationErrors[0].field || JSON.stringify(validationErrors[0]).includes("email")) {
+    fail("client_validation_category_pii", validationErrors[0]);
+  }
   const persisted = dataLayer.find((e) => e.event === "lead_persisted");
   if (persisted.source !== "CONFENGE_WEB" || persisted.pii_policy !== "aggregate_allowlist_empty") {
     fail("client_envelope", persisted);

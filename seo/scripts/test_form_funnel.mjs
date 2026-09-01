@@ -21,6 +21,12 @@ if (!formSource.includes("lead_id: protocol")) {
   console.error("FAIL: persisted analytics does not carry the server receipt id");
   process.exit(1);
 }
+for (const needle of ["validationCategory", "validation_category: 'rate_limited'"]) {
+  if (!formSource.includes(needle)) {
+    console.error("FAIL: form validation category source missing", needle);
+    process.exit(1);
+  }
+}
 
 // Structural: shipped home has multi-step form + journey CTAs
 const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
@@ -159,6 +165,13 @@ track("lead_form_submit", {
   telefone: "+5548999999999",
   mensagem: "secret document text",
 });
+track("lead_form_error", {
+  page_path: "/",
+  validation_category: "contact_format",
+  field: "email",
+  field_value: "leak@example.com",
+  native_message: "Invalid email",
+});
 track("whatsapp_click", { page_path: "/", journey: "contrato", cta_position: "hero" });
 track("email_click", { page_path: "/", destination_type: "email" });
 track("service_page_view", { page_path: "/defesa-margem-contratos-publicos/", offer_id: "contract-defense" });
@@ -189,6 +202,17 @@ const sub = dataLayer.find((e) => e.event === "lead_form_submit");
 if (sub.journey !== "contrato" || sub.nome || sub.email || sub.telefone || sub.mensagem) {
   console.error("FAIL: submit payload", sub);
   process.exit(1);
+}
+const validation = dataLayer.find((e) => e.event === "lead_form_error");
+if (!validation || validation.validation_category !== "contact_format") {
+  console.error("FAIL: validation category missing", validation);
+  process.exit(1);
+}
+for (const key of ["field", "field_value", "native_message"]) {
+  if (validation[key] != null) {
+    console.error("FAIL: validation PII/debug key leaked", { key, validation });
+    process.exit(1);
+  }
 }
 
 // Script source must implement multi-step + journey actions

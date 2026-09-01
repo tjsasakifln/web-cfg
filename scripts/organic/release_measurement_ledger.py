@@ -34,6 +34,7 @@ PROTECTION_PLAN = (
     ROOT / "data" / "bofu-dominance" / "frozen-specs" / "unlock-plan.v1.json"
 )
 EVENT_REGISTRY = ROOT / "netlify" / "functions" / "lib" / "event-registry.json"
+INSTRUMENTATION_550 = DEFAULT_LEDGER.with_name("instrumentation-550.json")
 
 MONEY_ROUTES = [
     "/servicos-obras-publicas/",
@@ -66,6 +67,38 @@ TERMINAL_DECISIONS = ["REPEAT", "CHANGE", "STOP", "INSUFFICIENT_EVIDENCE"]
 
 def _json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_instrumentation_550() -> dict[str, Any]:
+    """Read the post-baseline #550 contract without rewriting its history."""
+
+    return _json(INSTRUMENTATION_550)
+
+
+def validate_instrumentation_550() -> dict[str, Any]:
+    instrument = load_instrumentation_550()
+    _check(instrument["schema"] == "confenge.commercial-observability-instrument/1", "#550 instrument schema drift")
+    _check(instrument["issue"] == 550, "#550 instrument owner drift")
+    _check(instrument["baseline_reset"] is False, "#550 must not reset the baseline")
+    _check(instrument["pii_analytics_allowlist"] == [], "#550 PII allowlist must remain empty")
+    auth = instrument["authorization"]
+    _check(auth["shared_runtime_observability_exception"] == "AUTHORIZED", "#550 runtime exception missing")
+    _check(auth["protected_route_content_mutation"] == "NOT_AUTHORIZED", "#550 cannot unlock protected content")
+    _check(auth["html_mutation_authorized_for_529_value_first"] is False, "#529 value-first must remain held")
+    _check(len(instrument["instrumentation_tree_sha"]) == 40, "#550 instrument SHA must be complete")
+    routes = instrument["primary_hash_ctas"]
+    _check({row["route"] for row in routes} == MISSING_PRIMARY_CTA_ROUTES, "#550 hash CTA route set drift")
+    _check(all(row["event"] == "cta_click" and row["predicate"] for row in routes), "#550 CTA predicate drift")
+    category = instrument["validation_category"]
+    _check(category["event"] == "lead_form_error", "#550 validation event drift")
+    _check(category["allowlist"] == ["required", "contact_format", "rate_limited"], "#550 category allowlist drift")
+    _check(category["legacy_missing_state"] == "UNKNOWN_CATEGORY", "#550 missing category must remain unknown")
+    _check(category["backend_event"] == "lead_form_backend_error", "#550 backend semantic drift")
+    recapture = instrument["frozen_runtime_recapture"]
+    _check({row["path"] for row in recapture} == {"script.js", "js/modules/analytics.js"}, "#550 recapture scope drift")
+    _check(all(len(row["old_sha256"]) == len(row["new_sha256"]) == 64 for row in recapture), "#550 recapture hash drift")
+    _check(instrument["csp_recapture"] == {"required": False, "reason": "CSP refresh against the final build produced no _headers diff."}, "#550 CSP declaration drift")
+    return instrument
 
 
 def _check(condition: bool, message: str) -> None:
@@ -419,6 +452,7 @@ def validate_ledger(record: dict[str, Any]) -> None:
         _check(event in events, f"ledger references missing event: {event}")
     _check(events["qualified_lead"]["owner"] == "warmbly", "registry QCO owner drift")
     _check(events["qualified_lead"]["admission"] == "observed_only", "QCO must remain observed-only")
+    validate_instrumentation_550()
 
     post = record["post_release_observation"]
     _check(set(post["post_release_values"].values()) == {"UNKNOWN"}, "post-release values must remain UNKNOWN")
@@ -736,6 +770,7 @@ def render_report(record: dict[str, Any]) -> str:
         )
 
     profile = record["profiles"]["analytics"]["web-form-funnel-v1"]
+    instrument = validate_instrumentation_550()
     window = record["post_release_observation"]["minimum_honest_observation_window"]
     gate = window["fixed_sufficiency_gate_per_cohort"]
     lines.extend(
@@ -754,6 +789,13 @@ def render_report(record: dict[str, Any]) -> str:
             f"| QCO and downstream | {profile['downstream_qco']['status']} | Warmbly | Missing/unmatchable evidence remains UNKNOWN |",
             "",
             "No route-level analytics counts were supplied for the pre-release period. Their baseline values are `UNKNOWN_NOT_EXPORTED`; event availability is not a zero count and later counts cannot become an uplift claim by subtraction.",
+            "",
+            "## #550 observability instrument (separate from the historical baseline)",
+            "",
+            f"- Status: `{instrument['status']}`; exact instrumentation tree: `{instrument['instrumentation_tree_sha']}`; baseline reset: `{instrument['baseline_reset']}`.",
+            "- Hash CTAs: three route-exact `cta_click` predicates are declared for the next exact promoted treatment. Historical missing observations remain unknown.",
+            f"- `lead_form_error.validation_category`: `{', '.join(instrument['validation_category']['allowlist'])}`; legacy absence is `{instrument['validation_category']['legacy_missing_state']}`; `{instrument['validation_category']['backend_event']}` remains separate.",
+            "- The exception recaptured only `script.js` and `js/modules/analytics.js`; CSP refresh produced no `_headers` diff. Promotion and exact-SHA smoke remain required before collection is treated as available.",
             "",
             "## Post-release observation contract",
             "",

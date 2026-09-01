@@ -10,13 +10,7 @@
   const EVENT_SOURCE = 'CONFENGE_WEB';
   const EVENT_PII_POLICY = 'aggregate_allowlist_empty';
   const AGGREGATE_PII_ALLOWLIST = [];
-  const PII_PARAM_KEYS = new Set([
-    'address', 'arquivo', 'attachment', 'cnpj', 'company', 'cpf',
-    'document', 'documento', 'edital', 'email', 'empresa', 'endereco',
-    'comment', 'description', 'file', 'free_text', 'full_name', 'mensagem',
-    'message', 'message_body', 'name', 'nome', 'note', 'phone', 'q', 'query',
-    'search_query', 'tel', 'telefone', 'whatsapp',
-  ]);
+  const PII_PARAM_PATTERN = /address|arquivo|attach|cnpj|company|cpf|document|edital|email|empresa|endereco|comment|description|field|file|text|name|nome|message|mensagem|note|phone|query|search|tel|whatsapp/;
   const UNKNOWN_SERVICE = 'UNKNOWN_SERVICE';
   const CANONICAL_DESTINATIONS = {
     '/auditoria-orcamento-licitacao/': 'auditoria-orcamento-licitacao',
@@ -261,14 +255,15 @@
         return;
       }
       if (AGGREGATE_PII_ALLOWLIST.length) return;
+      if (resolved.canonical === 'lead_form_error' && params.validation_category && !/^(required|contact_format|rate_limited)$/.test(params.validation_category)) return;
       const safe = {};
       let invalidEntityId = false;
       Object.keys(params || {}).forEach((key) => {
         const val = params[key];
         if (val == null || val === '') return;
-        // Drop known PII field names even if caller passes them by mistake
-        if (PII_PARAM_KEYS.has(String(key).toLowerCase())) return;
-        const entityPattern = ENTITY_ID_PATTERNS[String(key).toLowerCase()];
+        const piiKey = String(key).toLowerCase();
+        if (PII_PARAM_PATTERN.test(piiKey)) return;
+        const entityPattern = ENTITY_ID_PATTERNS[piiKey];
         if (entityPattern && (typeof val !== 'string' || !entityPattern.test(val))) {
           invalidEntityId = true;
           return;

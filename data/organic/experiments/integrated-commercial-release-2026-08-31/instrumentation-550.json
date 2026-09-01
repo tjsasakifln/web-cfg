@@ -1,0 +1,48 @@
+{
+  "schema": "confenge.commercial-observability-instrument/1",
+  "issue": 550,
+  "decision_state": "EXECUTE_NOW",
+  "status": "DECLARED_AWAITING_EXACT_PROMOTION",
+  "authorization": {
+    "issue": 529,
+    "record": "https://github.com/tjsasakifln/web-cfg/issues/529#issuecomment-5497033811",
+    "shared_runtime_observability_exception": "AUTHORIZED",
+    "protected_route_content_mutation": "NOT_AUTHORIZED",
+    "html_mutation_authorized_for_529_value_first": false
+  },
+  "instrumentation_tree_sha": "d0691f9e9d983976550e90b30b040b7034d6d234",
+  "baseline_reset": false,
+  "pii_analytics_allowlist": [],
+  "historical_release_ledger": {
+    "path": "data/organic/experiments/integrated-commercial-release-2026-08-31/ledger.json",
+    "treatment": "historical baseline remains immutable; missing values remain UNKNOWN"
+  },
+  "primary_hash_ctas": [
+    {"route": "/atrasos-prorrogacao-obras-publicas/", "event": "cta_click", "predicate": {"cta_id": "pillar_hero", "route_family": "atrasos", "asset_id": "atrasos-prorrogacao-obras-publicas"}},
+    {"route": "/defesa-tecnica-contratos-publicos/", "event": "cta_click", "predicate": {"cta_id": "pillar_hero", "route_family": "defesa-tecnica", "asset_id": "defesa-tecnica-contratos-publicos"}},
+    {"route": "/acompanhamento-contratos-obras/", "event": "cta_click", "predicate": {"cta_id": "pillar_hero", "route_family": "acompanhamento", "asset_id": "acompanhamento-contratos-obras"}}
+  ],
+  "validation_category": {
+    "event": "lead_form_error",
+    "field": "validation_category",
+    "allowlist": ["required", "contact_format", "rate_limited"],
+    "legacy_missing_state": "UNKNOWN_CATEGORY",
+    "backend_event": "lead_form_backend_error"
+  },
+  "frozen_runtime_recapture": [
+    {
+      "path": "script.js",
+      "old_sha256": "a63729f3ff5915948d3eea91bad8d597996749e1dacd529e044676263f021314",
+      "new_sha256": "0474eced79bcab6154611d707eca5dd9f5969e0fc3a183437b05eb07ca7831cc",
+      "reason": "#550 finite validation-category producer and client-side PII property guard; generated with the canonical compact runtime configuration to retain the existing home critical-payload gate"
+    },
+    {
+      "path": "js/modules/analytics.js",
+      "old_sha256": "5fd78c3d9c3c8b9d135e6cc4cb02a11ee276c09018cf3f81e6a1a641f8029698",
+      "new_sha256": "10587de5c5d04ac88f33474934836612462cc796a7c1196aba42d32b92013456",
+      "reason": "#550 finite validation-category client allowlist and broad PII property-name filter; compacted only to retain the existing home critical-payload gate"
+    }
+  ],
+  "csp_recapture": {"required": false, "reason": "CSP refresh against the final build produced no _headers diff."},
+  "post_promotion_smoke_required": true
+}

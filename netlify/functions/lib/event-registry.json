@@ -367,10 +367,14 @@
     "lead_form_error": {
       "layer": "engagement",
       "owner": "web-cfg",
-      "schema_version": "1.0.0",
+      "schema_version": "1.1.0",
       "producers": ["js/modules/form.js"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
-      "semantic": "Form validation or submit error."
+      "semantic": "Form validation or rate-limit error. validation_category, when present, is one finite PII-free value: required, contact_format, or rate_limited. It never carries a field name, value, native message, contact, document, free text, or Turnstile token. Legacy events without validation_category remain readable as UNKNOWN_CATEGORY; lead_form_backend_error remains separate.",
+      "property_allowlist": {
+        "validation_category": ["required", "contact_format", "rate_limited"]
+      },
+      "strict_no_pii_props": true
     },
     "lead_form_submit": {
       "layer": "engagement",
@@ -677,6 +681,10 @@
   },
   "reject_prefixes": ["custom_"],
   "pii_keys": [
+    "field",
+    "field_id",
+    "field_name",
+    "field_value",
     "nome",
     "name",
     "email",
@@ -708,6 +716,10 @@
     "causa",
     "observacao",
     "raw",
+    "raw_text",
+    "native_message",
+    "validation_message",
+    "error_message",
     "qid",
     "identificador"
   ],
