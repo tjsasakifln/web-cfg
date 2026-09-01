@@ -19,6 +19,7 @@ from scripts.discovery.http_client import (
     assert_safe_method,
     request,
 )
+from scripts.discovery.inspect import path_blocked_by_robots, robots_disallows
 from scripts.discovery.observation import (
     REASON_CANONICAL_DIVERGENT,
     REASON_HTTP_429,
@@ -51,6 +52,16 @@ SITEMAP = (
     f"<url><loc>{CANONICAL}</loc></url></urlset>"
 )
 EMPTY_SITEMAP = '<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'
+FIXTURES = ROOT / "tests" / "discovery" / "fixtures"
+LIVE_EDGE_ROBOTS = (FIXTURES / "robots-live-edge.txt").read_text(encoding="utf-8")
+ADVERSARIAL_ROBOTS = (FIXTURES / "robots-adversarial-groups.txt").read_text(encoding="utf-8")
+FAILED_LIVE_PATHS = (
+    "/ferramentas/diagnostico-defesa-margem/",
+    "/metodologia-inteligencia/",
+    "/especialista/tiago-jun-sasaki/",
+    "/defesa-margem-contratos-publicos/",
+    "/radar/nacional-obras-publicas/",
+)
 
 
 def _ok(method: str, url: str, body: bytes = b"", status: int = 200, headers: dict | None = None) -> ProbeResponse:
@@ -157,6 +168,104 @@ def test_robots_blocking():
     assert result["robots"]["blocked"] is True
     assert REASON_ROBOTS_BLOCKING in result["reason_codes"]
     assert result["technical_status"] != "TECHNICAL_LIVE"
+
+
+@pytest.mark.parametrize("path", FAILED_LIVE_PATHS)
+def test_live_edge_named_groups_do_not_block_observatory_ua(path):
+    assert path_blocked_by_robots(path, LIVE_EDGE_ROBOTS, user_agent=DEFAULT_UA) is False
+
+
+def test_probe_uses_ua_aware_live_edge_rules():
+    transport = baseline_transport(
+        {
+            ("GET", "https://confenge.com.br/robots.txt"): _ok(
+                "GET", "https://confenge.com.br/robots.txt", LIVE_EDGE_ROBOTS.encode()
+            )
+        }
+    )
+    result = run_probe(transport)
+    assert result["robots"]["blocked"] is False
+    assert REASON_ROBOTS_BLOCKING not in result["reason_codes"]
+    assert result["technical_status"] == "TECHNICAL_LIVE"
+
+
+def test_robots_group_selection_multiple_tokens_and_named_specificity():
+    assert path_blocked_by_robots(
+        "/named/article", ADVERSARIAL_ROBOTS, user_agent="Googlebot-News/1.0"
+    ) is True
+    assert path_blocked_by_robots(
+        "/named/exception", ADVERSARIAL_ROBOTS, user_agent="Googlebot-News/1.0"
+    ) is False
+    assert path_blocked_by_robots(
+        "/named/exception/child", ADVERSARIAL_ROBOTS, user_agent="Googlebot-News/1.0"
+    ) is True
+    assert path_blocked_by_robots(
+        "/generic-only/report", ADVERSARIAL_ROBOTS, user_agent="Googlebot-News/1.0"
+    ) is False
+    assert path_blocked_by_robots(
+        "/second-news-group/report", ADVERSARIAL_ROBOTS, user_agent="Googlebot-News/1.0"
+    ) is True
+    assert path_blocked_by_robots(
+        "/versioned-agent/report", ADVERSARIAL_ROBOTS, user_agent="Googlebot/2.1"
+    ) is True
+    assert path_blocked_by_robots(
+        "/star-agent/report", ADVERSARIAL_ROBOTS, user_agent="Googlebot/2.1"
+    ) is True
+    assert path_blocked_by_robots(
+        "/anything", ADVERSARIAL_ROBOTS, user_agent="GPTBot/1.0"
+    ) is True
+    assert path_blocked_by_robots(
+        "/anything", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is False
+
+
+def test_robots_wildcards_empty_disallow_and_allow_precedence():
+    assert path_blocked_by_robots(
+        "/private/report", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is True
+    assert path_blocked_by_robots(
+        "/private/public/report", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is False
+    assert path_blocked_by_robots(
+        "/same", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is False
+    assert path_blocked_by_robots(
+        "/page.htm", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is True
+    assert path_blocked_by_robots(
+        "/x", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is True
+    assert path_blocked_by_robots(
+        "/foo/bar/baz", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is True
+    assert path_blocked_by_robots(
+        "/foo/bar?baz=https://foo.bar", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is True
+    assert path_blocked_by_robots(
+        "/params;blocked", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is True
+    assert path_blocked_by_robots(
+        "/filename.php", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is True
+    assert path_blocked_by_robots(
+        "/filename.php?parameters", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is False
+    assert path_blocked_by_robots(
+        "/report?id=123", ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA
+    ) is True
+    trailing_wildcard = "User-agent: *\nAllow: /\nDisallow: /*\n"
+    assert path_blocked_by_robots("/", trailing_wildcard, user_agent=DEFAULT_UA) is True
+    assert robots_disallows(ADVERSARIAL_ROBOTS, user_agent=DEFAULT_UA) == [
+        "/private/*",
+        "/same",
+        "/*.htm",
+        "/x$",
+        "/foo/bar/%62%61%7A",
+        "/foo/bar?baz=https%3A%2F%2Ffoo.bar",
+        "/params%3Bblocked",
+        "/*.php$",
+        "/*?id=",
+    ]
 
 
 def test_divergent_canonical():
