@@ -1,0 +1,49 @@
+{
+  "schema_version": "confenge-demand-radar-external-intake/v1",
+  "input_sha256": "61602ce6a4252e067b51ee29ce5bfa0198ff3f4c7827c52f8514eeb8dc8c4078",
+  "source": {
+    "id": "serp-research-bra-2026-09-01",
+    "kind": "SERP_RESEARCH",
+    "observed_at": "2026-09-01",
+    "geo": "BRA",
+    "language": "pt-BR",
+    "privacy_class": "PUBLIC_NON_PERSONAL",
+    "provenance": {
+      "authority": "Founder-authorized bounded manual public SERP observation, sanitized",
+      "repository": "tjsasakifln/web-cfg",
+      "path": "data/demand_radar/intake-candidates/2026-09-01/serp-research.draft.json",
+      "revision": "de3a66138fb70220efc87c18e2b8189c993ee8bb",
+      "content_sha256": "c3627a27aad350dcb09dd520d8ff19a955978eefc2f7445acf647f0cad8a9d88"
+    },
+    "freshness": {
+      "state": "CURRENT",
+      "evaluated_at": "2026-09-01",
+      "expires_at": "2026-09-15"
+    },
+    "unknown_semantics": "UNKNOWN is preserved and never interpreted as zero demand, volume, priority, revenue, or authorization.",
+    "limitations": [
+      "Bounded qualitative observation only; it is not volume, durable rank, revenue, WTP, causality, or public-mutation authorization.",
+      "No query, result text, URL, domain, rank, screenshot, or personal data is retained."
+    ]
+  },
+  "records": [
+    {
+      "family_id": "defesa-sancoes",
+      "state": "OBSERVED",
+      "intent_match": "HIGH",
+      "formats": ["service", "guide", "official_source"]
+    },
+    {
+      "family_id": "bid-readiness",
+      "state": "OBSERVED",
+      "intent_match": "HIGH",
+      "formats": ["service", "guide"]
+    },
+    {
+      "family_id": "diagnostico-expansao",
+      "state": "OBSERVED",
+      "intent_match": "MEDIUM",
+      "formats": ["service", "guide", "official_source"]
+    }
+  ]
+}

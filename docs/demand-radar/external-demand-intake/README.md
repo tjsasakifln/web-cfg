@@ -1,8 +1,8 @@
 # External-demand intake (#561)
 
-Decision state: `EXECUTE_NOW` for the intake contract; external evidence state: `FOUNDER_ACTION_REQUIRED` until a founder supplies a legitimate export. This is the one path by which aggregate Planner, Trends, or bounded SERP evidence can enter the existing Demand Radar. It does not create a keyword backlog, crawler, score, public page, or authorization to mutate the public surface.
+Decision state: `EXECUTE_NOW`. Bounded SERP evidence is accepted in the existing Demand Radar; each unavailable individual source remains `UNKNOWN` rather than blocking the intake. This is the one path by which aggregate Planner, Trends, or bounded SERP evidence can enter the existing Demand Radar. It does not create a keyword backlog, crawler, score, public page, or authorization to mutate the public surface.
 
-The complete founder packet is versioned at `data/demand_radar/external-intake/founder-action-required.v1.json`. It specifies the exact UI/export, Brazil/Portuguese scope, period, permitted aggregate columns, prohibited fields, sanitization, checksum, expiry, import/replay and revocation process. Its absence remains `UNKNOWN`, never zero.
+The complete intake contract is versioned at `data/demand_radar/external-intake/founder-action-required.v1.json`. It specifies the exact UI/export, Brazil/Portuguese scope, period, permitted aggregate columns, prohibited fields, sanitization, checksum, expiry, import/replay and revocation process. An unavailable source remains `UNKNOWN`, never zero.
 
 Create the reviewed aggregate draft from the packet, then run:
 

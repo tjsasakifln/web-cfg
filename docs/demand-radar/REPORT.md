@@ -1,7 +1,7 @@
 # Minimum Viable CONFENGE Demand Radar
 
-- **As of:** `2026-08-31`
-- **Origin/main pin:** `81c600b7c26dcc606d3a03e648ecd9820d9c1c37`
+- **As of:** `2026-09-01`
+- **Origin/main pin:** `de3a66138fb70220efc87c18e2b8189c993ee8bb`
 - **Decision state:** `EXECUTE_NOW`
 - **Executive front:** `INBOUND_ENGINE`
 - **Method:** staged lexicographic decisions; no composite score
@@ -11,12 +11,13 @@ The engine answers which few search-market opportunities deserve engineering att
 
 ## Source state
 
-- Approved-source manifest: `e72ed9cf69e387f080278b3fdde1f1796df1a2a331dc1b463dae5eb9fe902891`
+- Approved-source manifest: `e25a70e467fa91f6b633f567d0556f4c5f054eb632307206e41fbd685eedd675`
 - `CANONICAL_BOFU_OWNER_PROJECTION` → `bofu-owner-projection-2026-08-31-pr545`; 15 records; freshness `CURRENT`; envelope `e9bd9cb13207c384e50f39d9e7bcddceca07bdc80108c823b371db649596b837`
 - `GSC_PAGE_OVERLAY` → `gsc-page-overlay-2026-08-02-2026-08-29`; 15 records; freshness `ACCEPTED_HISTORICAL`; envelope `d5b2388653fe013dd7badc1312ece0bdee167b34b6eeb26d2faa609b489e475d`
+- `SERP_RESEARCH` → `serp-research-bra-2026-09-01`; 3 records; freshness `CURRENT`; envelope `5b552e050a040969fa12f62a031fe7d275791eecae023f63d979da491c16d255`
 - `KEYWORD_PLANNER` is `UNKNOWN` — No as-of-valid snapshot supplied.
 - `GOOGLE_TRENDS` is `UNKNOWN` — No as-of-valid snapshot supplied.
-- `SERP_RESEARCH` is `UNKNOWN` — No as-of-valid snapshot supplied.
+- `SERP_RESEARCH` is decision-usable from `serp-research-bra-2026-09-01`.
 - `WARMBLY_AGGREGATE_OUTCOMES` is `UNKNOWN` — No as-of-valid snapshot supplied.
 - Visible GSC query impressions are heavily censored/anonymized; page evidence does not establish query completeness, demand volume, conversion failure or causality.
 

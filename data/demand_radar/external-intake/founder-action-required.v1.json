@@ -1,8 +1,8 @@
 {
   "schema_version": "confenge-demand-radar-founder-action-required/v1",
-  "decision_state": "FOUNDER_ACTION_REQUIRED",
+  "decision_state": "EXECUTE_NOW",
   "as_of": "2026-09-01",
-  "effect_of_absence": "UNKNOWN; no demand value, priority, revenue, public mutation, or zero may be inferred.",
+  "effect_of_absence": "An unavailable individual source remains UNKNOWN; no demand value, priority, revenue, public mutation, or zero may be inferred.",
   "sources": [
     {
       "source_kind": "KEYWORD_PLANNER",

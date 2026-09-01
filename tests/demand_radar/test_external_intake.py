@@ -115,8 +115,8 @@ def test_unapproved_and_mismatched_approval_fail_closed() -> None:
 def test_founder_action_packet_covers_each_missing_external_source() -> None:
     packet_path = Path(__file__).resolve().parents[2] / "data/demand_radar/external-intake/founder-action-required.v1.json"
     packet = json.loads(packet_path.read_text(encoding="utf-8"))
-    assert packet["decision_state"] == "FOUNDER_ACTION_REQUIRED"
-    assert packet["effect_of_absence"].startswith("UNKNOWN")
+    assert packet["decision_state"] == "EXECUTE_NOW"
+    assert "UNKNOWN" in packet["effect_of_absence"]
     sources = {source["source_kind"]: source for source in packet["sources"]}
     assert set(sources) == {"KEYWORD_PLANNER", "GOOGLE_TRENDS", "SERP_RESEARCH"}
     for source in sources.values():
