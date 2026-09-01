@@ -303,6 +303,89 @@ _FUNCTIONAL_NOINDEX_HREFS = frozenset(
 )
 
 
+def _pseo_reject_pages_not_public() -> list[Finding]:
+    """A pSEO page rejected by the editorial gate must not be publicly served.
+
+    `reject` is fail-closed: the route is withdrawn, not merely de-indexed.
+    This gate proves the withdrawal actually happened, by checking that no
+    rejected route survives on disk, in a sitemap, or as a link from an
+    indexable page.
+
+    Frozen BOFU pillar HTML (#291) is reported as a warning rather than an
+    error: the freeze — not an SEO allowlist — blocks the rewrite, and the
+    dated action lives in
+    docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md.
+    """
+    from scripts.organic.canonical_hrefs import FROZEN_HTML_REL
+
+    findings: list[Finding] = []
+    reg_path = ROOT / "data" / "pseo" / "registry.json"
+    if not reg_path.exists():
+        return findings
+    try:
+        registry = json.loads(reg_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return findings
+    rejected = {
+        (p.get("url") or "").strip()
+        for p in registry.get("pages") or []
+        if p.get("status") == "reject" and p.get("url")
+    }
+    if not rejected:
+        return findings
+
+    # 1) Never present in the public HTML tree.
+    for url in sorted(rejected):
+        page = ROOT / url.strip("/") / "index.html"
+        if page.exists():
+            findings.append(
+                Finding(
+                    gate="pseo_reject_withdrawn",
+                    path=page.relative_to(ROOT).as_posix(),
+                    reason="rejected_pseo_page_is_publicly_served",
+                    excerpt=url,
+                )
+            )
+
+    # 2) Never listed in any sitemap.
+    for sm in sorted(ROOT.glob("**/sitemap*.xml")):
+        if any(part in {"node_modules", "_site", ".git"} for part in sm.parts):
+            continue
+        text = sm.read_text(encoding="utf-8", errors="replace")
+        for url in sorted(rejected):
+            if url in text:
+                findings.append(
+                    Finding(
+                        gate="pseo_reject_withdrawn",
+                        path=sm.relative_to(ROOT).as_posix(),
+                        reason="rejected_pseo_page_in_sitemap",
+                        excerpt=url,
+                    )
+                )
+
+    # 3) Never linked from an indexable page.
+    for path in _public_scan_files():
+        if path.suffix != ".html":
+            continue
+        rel = path.relative_to(ROOT).as_posix()
+        html = path.read_text(encoding="utf-8", errors="replace")
+        if is_noindex(html):
+            continue
+        for url in sorted(rejected):
+            if f'href="{url}"' not in html:
+                continue
+            findings.append(
+                Finding(
+                    gate="pseo_reject_withdrawn",
+                    path=rel,
+                    reason="indexable_page_links_rejected_pseo_page",
+                    excerpt=url,
+                    severity="warn" if rel in FROZEN_HTML_REL else "error",
+                )
+            )
+    return findings
+
+
 def _featured_noindex_from_indexable() -> list[Finding]:
     """Indexable pages must not featured-link noindex hubs/articles.
 
@@ -541,6 +624,7 @@ def gate_index_surface() -> GateReport:
             findings.append(f)
 
     findings.extend(_featured_noindex_from_indexable())
+    findings.extend(_pseo_reject_pages_not_public())
 
     # Feed
     feed = ROOT / "feed.xml"

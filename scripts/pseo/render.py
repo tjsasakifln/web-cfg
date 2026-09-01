@@ -22,6 +22,7 @@ from scripts.pseo.html_shell import (
     page_shell,
     table_html,
 )
+from scripts.pseo import geo_locale
 from scripts.pseo.score import Candidate
 
 def br_date(iso: str | None) -> str:
@@ -403,23 +404,14 @@ def money_or_ni(v, value_status: str | None = None) -> str:
 
 
 def accent_region(label: str | None) -> str:
-    if not label:
-        return ""
-    fixes = {
-        "Piaui": "Piauí", "Sao Paulo": "São Paulo", "Parana": "Paraná",
-        "Goias": "Goiás", "Ceara": "Ceará", "Para": "Pará",
-        "Espirito Santo": "Espírito Santo", "Rondonia": "Rondônia",
-        "Amapa": "Amapá",
-    }
-    s = str(label)
-    for a, b in fixes.items():
-        s = s.replace(a, b)
-    s = s.replace("paralelepipedo", "paralelepípedo").replace("Paralelepipedo", "Paralelepípedo")
-    s = s.replace("manutencao", "manutenção").replace("Manutencao", "Manutenção")
-    s = s.replace("pavimentacao", "pavimentação").replace("Pavimentacao", "Pavimentação")
-    # strip archetype slug in parentheses e.g. "foo (manutencao-predial-engenharia)"
-    s = re.sub(r"\s*\([a-z0-9]+(?:-[a-z0-9]+)+\)", "", s)
-    return s
+    """Deprecated alias kept for callers outside this module.
+
+    The locale contract lives in :mod:`scripts.pseo.geo_locale`. Use
+    ``geo_locale.display_name`` for a region and ``geo_locale.normalize_label``
+    for a free-text object label; prefer ``geo_locale.prepositional_phrase``
+    over building ``"em " + region`` by hand.
+    """
+    return geo_locale.normalize_label(label)
 
 
 
@@ -472,7 +464,8 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
     m = c.data_ref
     meta = _meta(c, manifest)
     summary = _exec_summary(
-        f"No recorte público analisado, {m.get('segment')} em {m.get('region_label')} "
+        f"No recorte público analisado, {m.get('segment')} "
+        f"{geo_locale.prepositional_phrase(m.get('region') or m.get('region_label'))} "
         f"reúne {m.get('contract_count')} contratos de engenharia/obras junto a "
         f"{m.get('buyer_count')} órgãos, com valor total de {money(m.get('total_value'))}. "
         f"A mediana contratual é {money(m.get('median_value'))} (P25 {money(m.get('p25_value'))}, "
@@ -540,7 +533,8 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         else "Dispersão moderada no recorte; ainda assim objetos não são unitariamente comparáveis."
 )
     interpretation = (
-        f"Em {m.get('region_label')}, o segmento {m.get('segment')} concentra "
+        f"{geo_locale.prepositional_phrase(m.get('region') or m.get('region_label'), capitalize=True)}, "
+        f"o segmento {m.get('segment')} concentra "
         f"{m.get('contract_count')} contratos e {m.get('buyer_count')} órgãos. "
         f"O comprador mais frequente no recorte é {top_buyer.get('name') or 'não identificado'} "
         f"({top_buyer.get('contract_count') or 0} contratos, {money(top_buyer.get('total_value'))}). "
@@ -548,7 +542,8 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         f"({top_obj.get('count') or 0} ocorrências). {year_note} {disp}"
 )
     implications = (
-        f"Para atuar em {m.get('region')}: (1) priorize órgãos com frequência ≥3 no recorte; "
+        f"Para atuar {geo_locale.prepositional_phrase(m.get('region') or m.get('region_label'))}: "
+        f"(1) priorize órgãos com frequência ≥3 no recorte; "
         f"(2) ancore porte pela mediana {money(m.get('median_value'))}, nunca por média; "
         f"(3) cruze {m.get('open_opportunity_count')} oportunidades do radar com capacidade "
         f"técnica e de documentação; (4) rode auditoria de planilha antes de deságio agressivo."
@@ -562,7 +557,8 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
     ]
     wa = (
         f"Olá, Tiago. Vi a página de inteligência de mercado de {m.get('segment')} "
-        f"em {m.get('region_label')} e gostaria de um mapa aplicado à minha empresa."
+        f"{geo_locale.prepositional_phrase(m.get('region') or m.get('region_label'))} "
+        f"e gostaria de um mapa aplicado à minha empresa."
 )
     body = f"""
 {breadcrumbs_html(crumbs)}
@@ -572,7 +568,7 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
 <p class="content-lead">Decisão: onde há demanda pública recorrente e como priorizar esforços comerciais com evidência.</p>
 <div class="article-meta"><a href="/especialista/tiago-jun-sasaki/" rel="author">Engº Tiago Sasaki</a>
 <span>Dados: <time datetime="{e(m.get('period_start'))}">{e(br_date(m.get('period_start')))}</time> – <time datetime="{e(m.get('period_end'))}">{e(br_date(m.get('period_end')))}</time></span>
-<span>Escopo: {e(m.get('region_label'))}</span></div>
+<span>Escopo: {e(geo_locale.display_name(m.get('region') or m.get('region_label')))}</span></div>
 </div></div></header>
 <div class="container article-layout">
 <article class="article-main">
@@ -610,7 +606,8 @@ def _render_market(c: Candidate, manifest: dict[str, Any]) -> str:
         "identifier": c.page_id,
         "isBasedOn": "https://pncp.gov.br/",
         "temporalCoverage": f"{m.get('period_start') or ''}/{m.get('period_end') or ''}".strip("/"),
-        "spatialCoverage": m.get("region_label") or m.get("region") or "BR",
+        # Structured data takes the bare accented name, never a prepositional phrase.
+        "spatialCoverage": geo_locale.display_name(m.get("region") or m.get("region_label")) or "Brasil",
         "variableMeasured": ["contract_count", "median_value", "buyer_count", "primary_contract_count"],
         "license": "https://opendefinition.org/od/2.1/pt/",
         "dateModified": (manifest.get("data_as_of") or manifest.get("generated_at") or "")[:10],
@@ -845,11 +842,12 @@ def _render_agency(c: Candidate, manifest: dict[str, Any]) -> str:
 
 def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
     p = c.data_ref
-    obj_label = accent_region(p.get('object_label'))
-    region_label = accent_region(p.get('region_label') or p.get('region'))
+    obj_label = geo_locale.normalize_label(p.get('object_label'))
+    region_label = geo_locale.display_name(p.get('region') or p.get('region_label'))
+    region_phrase = geo_locale.prepositional_phrase(p.get('region') or p.get('region_label'))
     meta = _meta(c, manifest)
     summary = _exec_summary(
-        f"Para {obj_label} em {region_label}, com {p.get('observation_count')} "
+        f"Para {obj_label} {region_phrase}, com {p.get('observation_count')} "
         f"contratos primários comparáveis (ticket integral, não preço unitário), a mediana contratual é "
         f"{money(p.get('median_value'))}, com P25 {money(p.get('p25_value'))} e P75 "
         f"{money(p.get('p75_value'))}. IQR = {money(p.get('dispersion_iqr'))}. "
@@ -919,7 +917,7 @@ def _render_price(c: Candidate, manifest: dict[str, Any]) -> str:
     ]
     wa = (
         f"Olá, Tiago. Quero validar preço, risco e margem com base no benchmark de "
-        f"{p.get('object_label')} em {p.get('region_label')}."
+        f"{obj_label} {region_phrase}."
 )
     body = f"""
 {breadcrumbs_html(crumbs)}
@@ -979,7 +977,8 @@ e teste de exequibilidade quando o deságio implícito ameaça a margem.</p></se
             "description": c.description,
             "identifier": c.page_id,
             "temporalCoverage": f"{p.get('period_start') or ''}/{p.get('period_end') or ''}".strip("/"),
-            "spatialCoverage": region_label or p.get("region") or "BR",
+            # Bare accented name for structured data, never a prepositional phrase.
+            "spatialCoverage": region_label or "Brasil",
             "variableMeasured": [
                 "median_value",
                 "p25_value",
@@ -1010,7 +1009,9 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
     d = c.data_ref
     meta = _meta(c, manifest)
     summary = _exec_summary(
-        f"Em {d.get('segment')} ({d.get('region_label')}), {d.get('supplier_count')} fornecedores "
+        f"Em {d.get('segment')} "
+        f"({geo_locale.display_name(d.get('region') or d.get('region_label'))}), "
+        f"{d.get('supplier_count')} fornecedores "
         f"foram observados em {d.get('contract_count')} contratos públicos classificados. "
         f"Os três mais frequentes concentram {float(d.get('concentration_top3_share') or 0)*100:.1f}% "
         f"dos contratos do recorte. Linguagem neutra: frequência observada, não qualidade."
@@ -1052,7 +1053,8 @@ def _render_competition(c: Candidate, manifest: dict[str, Any]) -> str:
     ]
     wa = (
         f"Olá, Tiago. Vi a página de concorrência observada em {d.get('segment')} "
-        f"({d.get('region_label')}) e quero um mapa aplicado à minha empresa."
+        f"({geo_locale.display_name(d.get('region') or d.get('region_label'))}) "
+        f"e quero um mapa aplicado à minha empresa."
 )
     body = f"""
 {breadcrumbs_html(crumbs)}
@@ -1121,17 +1123,18 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
     as_of_br = br_date(as_of) if as_of else "n/d"
     open_n = o.get("open_count")
     hist_n = o.get("historical_count")
+    region_phrase = geo_locale.prepositional_phrase(o.get("region") or o.get("region_label"))
     summary = _exec_summary(
-        f"Radar evergreen de {o.get('segment')} em {o.get('region_label')}: "
-        f"{open_n} oportunidades classificadas no recorte de {as_of_br}. "
-        f"Esta URL não representa um edital individual; editais entram e saem da lista. "
-        f"Confirme sempre no portal de origem antes de precificar."
+        f"{open_n} oportunidades de {o.get('segment')} {region_phrase} estavam classificadas "
+        f"como abertas na verificação de {as_of_br}. "
+        f"A lista é atualizada a cada verificação e não substitui o edital: "
+        f"confirme prazo, documentos e condições no portal oficial antes de precificar."
 )
     inds = indicators_html(
         [
             ("Abertas", str(open_n), f"referência {as_of_br}"),
             ("Segmento", str(o.get("segment")), None),
-            ("UF", str(o.get("region")), o.get("region_label")),
+            ("UF", str(o.get("region")), geo_locale.display_name(o.get("region") or o.get("region_label"))),
             ("Itens listados", str(len(o.get("items") or [])), "nesta página"),
         ]
 )
@@ -1185,8 +1188,8 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
         (f"{o.get('segment')}, {o.get('region')}", None),
     ]
     wa = (
-        f"Olá, Tiago. Quero analisar um edital do radar de {o.get('segment')} "
-        f"em {o.get('region_label')} antes da proposta."
+        f"Olá, Tiago. Quero analisar um edital de {o.get('segment')} "
+        f"{region_phrase} antes da proposta."
 )
     market_link = o.get("related_market_slug")
     # Only link to market pages that exist on disk (reject/no-build siblings omitted)
@@ -1216,8 +1219,9 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
 <header class="content-hero article-hero"><div class="container content-hero-grid"><div>
 <p class="eyebrow">Radar de oportunidades</p>
 <h1>{e(c.h1)}</h1>
-<p class="content-lead">Página rolante (evergreen). Verificado em <time datetime="{e(verified)}">{e(verified_br)}</time>
- (horário de Brasília). Somente status aberto com data limite igual ou posterior à data de verificação.</p>
+<p class="content-lead">Última verificação: <time datetime="{e(verified)}">{e(verified_br)}</time> (horário de Brasília).
+ A lista reúne as oportunidades classificadas como abertas nessa data, com prazo igual ou posterior a ela.
+ Confirme prazo, documentos e condições no portal oficial antes de preparar a proposta.</p>
 </div></div></header>
 <div class="container article-layout"><article class="article-main">
 <div class="answer-box" id="resposta"><span>Resposta executiva</span><p>{e(summary)}</p></div>
@@ -1226,7 +1230,8 @@ def _render_radar(c: Candidate, manifest: dict[str, Any]) -> str:
 <section id="lista"><p class="eyebrow">Vigentes no recorte</p><h2>Oportunidades classificadas</h2>{tbl}
 <ul class="document-list">{links}</ul></section>
 <section id="historico"><p class="eyebrow">Histórico</p><h2>Separação histórico × vigente</h2>
-<p>Itens encerrados saem desta lista na próxima atualização. Não mantemos URL indexável por edital.
+<p>Esta lista é atualizada a cada verificação: itens encerrados saem dela e novos entram.
+ Cada oportunidade tem endereço próprio no portal oficial, que é onde a versão vigente do edital deve ser lida.
 {hist_sentence}</p></section>
 {confenge_help(
     ["/diagnostico-pre-licitacao/", "/auditoria-orcamento-licitacao/", "/conteudos/analise-edital-obra-publica-construtora/"],

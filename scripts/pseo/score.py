@@ -14,6 +14,11 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
+try:  # module import (python3 -m scripts.pseo...) and script import both work
+    from . import geo_locale as geo
+except ImportError:  # pragma: no cover - direct-script execution
+    import geo_locale as geo  # type: ignore[no-redef]
+
 # Weights (sum 100)
 W_ICP = 20
 W_INTENT = 15
@@ -159,6 +164,82 @@ def semantic_price_fails(pr: dict) -> list[str]:
     return fails
 
 
+# A PNCP contract-detail URL identifies a *contrato* already signed, not an
+# open *oportunidade*/edital. Such a row must never reach a radar list.
+_CONTRACT_URL = re.compile(r"/app/contratos/", re.I)
+
+
+def _is_contract_row(it: dict) -> bool:
+    """True when the row is a contract record, not an open opportunity."""
+    if (it.get("source_url_type") or "").strip().lower() == "contract":
+        return True
+    for field in ("link_pncp", "link_oficial", "canonical_source_url"):
+        if _CONTRACT_URL.search(str(it.get(field) or "")):
+            return True
+    return False
+
+
+def _opportunity_identity(it: dict) -> str | None:
+    """Deterministic identity from the official procurement identifier.
+
+    ``pncp_id`` is the identifier minted upstream by extra-cli (PNCP
+    ``CNPJ-seq-numero/ano``). Identity is never synthesised here from objeto /
+    órgão / data text, which merges genuinely distinct procurements whose
+    wording happens to match.
+    """
+    for field in ("pncp_id", "id", "official_id"):
+        v = str(it.get(field) or "").strip()
+        if v:
+            return v
+    return None
+
+
+def radar_opportunity_view(o: dict) -> dict:
+    """Return ``o`` with its item list corrected, for scoring *and* rendering.
+
+    Two structural corrections, applied once so every downstream consumer sees
+    the same list: contract-detail rows are dropped, and rows are deduplicated
+    on the official identifier. Counts derived from the list are recomputed so
+    the page can never claim more open opportunities than it shows.
+
+    The source file ``data/pseo/opportunities.json`` is a SELECT-only contract
+    owned by extra-cli and is never written back to.
+    """
+    items = list(o.get("items") or [])
+    kept: list[dict] = []
+    seen: set[str] = set()
+    dropped_contract = 0
+    dropped_duplicate = 0
+    unidentified = 0
+    for it in items:
+        if _is_contract_row(it):
+            dropped_contract += 1
+            continue
+        ident = _opportunity_identity(it)
+        if ident is None:
+            # No official identifier: cannot prove identity, so it cannot be
+            # deduplicated or trusted as a distinct opportunity. Fail closed.
+            unidentified += 1
+            continue
+        if ident in seen:
+            dropped_duplicate += 1
+            continue
+        seen.add(ident)
+        kept.append(it)
+
+    view = dict(o)
+    view["items"] = kept
+    view["open_count"] = len(kept)
+    view["identity_audit"] = {
+        "source_item_count": len(items),
+        "kept": len(kept),
+        "dropped_contract_url": dropped_contract,
+        "dropped_duplicate_official_id": dropped_duplicate,
+        "dropped_without_official_id": unidentified,
+    }
+    return view
+
+
 def semantic_radar_fails(o: dict) -> list[str]:
     fails: list[str] = []
     items = o.get("items") or []
@@ -168,63 +249,26 @@ def semantic_radar_fails(o: dict) -> list[str]:
     dup_rate = float(o.get("duplicate_rate") if o.get("duplicate_rate") is not None else (o.get("sample_metrics") or {}).get("duplicate_rate") or 0)
     if dup_rate > 0:
         fails.append("duplicate_rate>0")
-    # Detect duplicate / version-like rows (accent/case + value tolerance)
-    import unicodedata
-    def _fold(s: str) -> str:
-        s = unicodedata.normalize("NFKD", (s or "").lower())
-        return "".join(ch for ch in s if not unicodedata.combining(ch))
-    def _near_val(v) -> str:
-        try:
-            f = float(v)
-        except (TypeError, ValueError):
-            return ""
-        if f == 0:
-            return ""  # treat zero/missing-like as empty for near-dup
-        step = 100.0 if abs(f) >= 100_000 else (10.0 if abs(f) >= 1000 else 1.0)
-        return f"{round(f / step) * step:.2f}"
-
-    def _base_key(it) -> tuple:
-        # Valor intentionally omitted: missing vs known (retificação) is a near-dup.
-        return (
-            _fold((it.get("objeto") or "")[:160]),
-            _fold(str(it.get("orgao_nome") or "")),
-            str(it.get("data_encerramento") or it.get("closing_at") or "")[:10],
-        )
-
-    # Cluster by base; within base, missing/not_informed merges into a sole known
-    # value bucket (version/retificação). Multiple distinct known values stay separate.
-    from collections import Counter
-    by_base: dict = {}
-    for it in items:
-        by_base.setdefault(_base_key(it), []).append(it)
+    # Identity is the official procurement identifier, never a text signature.
+    # Two rows are the same opportunity only when extra-cli gave them the same
+    # pncp_id; distinct sequenciais (…-000186/2026 vs …-000187/2026) are
+    # distinct procurements even when the objeto wording is byte-identical.
     dups = 0
-    for members in by_base.values():
-        known_vals: set[str] = set()
-        missing_n = 0
-        for it in members:
-            vs = it.get("value_status")
-            tok = _near_val(it.get("valor_estimado"))
-            if tok == "" or vs in {"not_informed", "confidential"}:
-                missing_n += 1
-            else:
-                known_vals.add(tok)
-        if len(known_vals) == 0:
-            dups += max(0, missing_n - 1)
-        elif len(known_vals) == 1:
-            dups += max(0, len(members) - 1)
-        else:
-            c: Counter = Counter()
-            for it in members:
-                tok = _near_val(it.get("valor_estimado"))
-                if tok and it.get("value_status") not in {"not_informed", "confidential"}:
-                    c[tok] += 1
-            dups += sum(n - 1 for n in c.values() if n > 1)
+    unidentified = 0
+    seen_ids: set[str] = set()
+    for it in items:
+        ident = _opportunity_identity(it)
+        if ident is None:
+            unidentified += 1
+            continue
+        if ident in seen_ids:
+            dups += 1
+        seen_ids.add(ident)
+
     contract_links = 0
     zero_as_missing = 0
     for it in items:
-        url = str(it.get("link_pncp") or it.get("link_oficial") or it.get("canonical_source_url") or "")
-        ut = it.get("source_url_type") or ""
-        if ut == "contract" or "/app/contratos/" in url:
+        if _is_contract_row(it):
             contract_links += 1
         vs = it.get("value_status")
         if it.get("valor_estimado") in (0, 0.0) and vs not in {"zero_valid", "known"}:
@@ -232,6 +276,8 @@ def semantic_radar_fails(o: dict) -> list[str]:
     if dups:
         fails.append(f"duplicate_items={dups}")
         fails.append("duplicate_rate>0")
+    if unidentified:
+        fails.append(f"opportunity_without_official_id={unidentified}")
     if contract_links:
         fails.append(f"contract_url_as_opportunity={contract_links}")
     if zero_as_missing:
@@ -780,12 +826,8 @@ def _humanize_agency_name(name: str | None) -> str:
 
 
 def _clean_price_label(label: str | None) -> str:
-    s = str(label or "")
-    s = re.sub(r"\s*\([a-z0-9]+(?:-[a-z0-9]+)+\)", "", s)
-    s = s.replace("paralelepipedo", "paralelepípedo").replace("Paralelepipedo", "Paralelepípedo")
-    s = s.replace("manutencao", "manutenção").replace("Manutencao", "Manutenção")
-    s = s.replace("pavimentacao", "pavimentação").replace("Piaui", "Piauí")
-    return s.strip()
+    """Object-label normalisation. Delegates to the single locale contract."""
+    return geo.normalize_label(label)
 
 
 
@@ -864,11 +906,19 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_id=m["id"],
                 page_type="market",
                 url=url,
-                title=f"Mercado de {m['segment']} em {m['region_label']}: contratos e órgãos | CONFENGE",
-                h1=f"Quanto o poder público contratou em {m['segment']} ({m['region_label']})",
+                title=(
+                    f"Mercado de {m['segment']} "
+                    f"{geo.prepositional_phrase(m.get('region') or m.get('region_label'))}: "
+                    f"contratos e órgãos | CONFENGE"
+                ),
+                h1=(
+                    f"Quanto o poder público contratou em {m['segment']} "
+                    f"({geo.display_name(m.get('region') or m.get('region_label'))})"
+                ),
                 description=(
                     f"Inteligência de mercado: {m['contract_count']} contratos, "
-                    f"{m['buyer_count']} órgãos em {m['region_label']}. "
+                    f"{m['buyer_count']} órgãos "
+                    f"{geo.prepositional_phrase(m.get('region') or m.get('region_label'))}. "
                     f"Medianas, compradores e implicações para empresas de engenharia."
                 ),
                 archetype=arch,
@@ -1022,11 +1072,17 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_id=p["id"],
                 page_type="price",
                 url=url,
-                title=f"Faixa de valores de contratos: {_clean_price_label(p.get('object_label'))} em {_clean_price_label(p.get('region_label'))} | CONFENGE",
-                h1=f"Valores de contratos: {_clean_price_label(p.get('object_label'))} ({_clean_price_label(p.get('region_label'))})",
+                title=(
+                    f"Faixa de valores de contratos: {_clean_price_label(p.get('object_label'))} "
+                    f"{geo.prepositional_phrase(p.get('region') or p.get('region_label'))} | CONFENGE"
+                ),
+                h1=(
+                    f"Valores de contratos: {_clean_price_label(p.get('object_label'))} "
+                    f"({geo.display_name(p.get('region') or p.get('region_label'))})"
+                ),
                 description=(
-                    f"Faixa de valores: {_clean_price_label(p.get('object_label'))} em "
-                    f"{_clean_price_label(p.get('region_label'))} "
+                    f"Faixa de valores: {_clean_price_label(p.get('object_label'))} "
+                    f"{geo.prepositional_phrase(p.get('region') or p.get('region_label'))} "
                     f"({p['observation_count']} contratos; "
                     f"{_clean_price_label(arch) if arch else 'padrão'} "
                     f"· {p.get('slug') or p.get('id') or 'price'}). "
@@ -1100,10 +1156,17 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_id=c["id"],
                 page_type="competition",
                 url=url,
-                title=f"Concorrência observada: {c['segment']} em {c['region_label']} | CONFENGE",
-                h1=f"Fornecedores observados em {c['segment']} ({c['region_label']})",
+                title=(
+                    f"Concorrência observada: {c['segment']} "
+                    f"{geo.prepositional_phrase(c.get('region') or c.get('region_label'))} | CONFENGE"
+                ),
+                h1=(
+                    f"Fornecedores observados em {c['segment']} "
+                    f"({geo.display_name(c.get('region') or c.get('region_label'))})"
+                ),
                 description=(
-                    f"Concorrência observada em {c['segment']} ({c['region_label']}): "
+                    f"Concorrência observada em {c['segment']} "
+                    f"({geo.display_name(c.get('region') or c.get('region_label'))}): "
                     f"{c['supplier_count']} fornecedores e {c['contract_count']} contratos "
                     f"no recorte público, sem juízo de qualidade."
                 ),
@@ -1132,7 +1195,10 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
             )
         )
 
-    for o in opportunities:
+    for source_o in opportunities:
+        # Correct the item list once: contract rows out, official-id dedup,
+        # counts recomputed. Scoring and rendering share this same view.
+        o = radar_opportunity_view(source_o)
         fails = []
         open_n = int(o.get("open_count") or 0)
         if open_n < MIN_RADAR_OPEN:
@@ -1186,12 +1252,19 @@ def build_candidates(data: dict[str, Any], manifest: dict[str, Any]) -> list[Can
                 page_id=o["id"],
                 page_type="radar",
                 url=url,
-                title=f"Radar de oportunidades: {o['segment']} em {o['region_label']} | CONFENGE",
-                h1=f"Oportunidades abertas em {o['segment']} ({o['region_label']})",
+                title=(
+                    f"Oportunidades abertas em {o['segment']} "
+                    f"{geo.prepositional_phrase(o.get('region') or o.get('region_label'))} | CONFENGE"
+                ),
+                h1=(
+                    f"Oportunidades abertas em {o['segment']} "
+                    f"{geo.prepositional_phrase(o.get('region') or o.get('region_label'))}"
+                ),
                 description=(
-                    f"Radar de {o['segment']} em {o['region_label']}: "
-                    f"{open_n} oportunidades abertas "
-                    f"(verificado em {as_of}). Página evergreen: não é URL por edital."
+                    f"{open_n} oportunidades de {o['segment']} "
+                    f"{geo.prepositional_phrase(o.get('region') or o.get('region_label'))} "
+                    f"classificadas como abertas na última verificação ({as_of}). "
+                    f"Confirme prazo e condições no portal oficial."
                 ),
                 archetype=arch,
                 segment=o.get("segment"),
