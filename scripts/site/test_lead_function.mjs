@@ -824,6 +824,53 @@ _reset();
   pass("contract_products_fail_closed_and_persisted", { ids: 7, lead_id: data.lead_id });
 }
 
+// 5i) Issue #556 Art. 125 utility persists the CFG-D19 categorical handoff,
+// while calculator money and the local artifact remain outside the public form
+// and are dropped even if a forged client adds them.
+{
+  const routeHtml = fs.readFileSync(path.join(root, "ferramentas/limite-acrescimos-supressoes/index.html"), "utf8");
+  const capture = routeHtml.match(/<form\b[^>]*id="cfg-d19-form"[^>]*>[\s\S]*?<\/form>/i)?.[0] || "";
+  const forbiddenCalculatorFields = ["valor_inicial", "acrescimos_previos", "supressoes_previas", "acrescimo_proposto", "supressao_proposta", "artifact"];
+  const exposed = forbiddenCalculatorFields.filter((name) => new RegExp(`name=["']${name}["']`, "i").test(capture));
+  if (!capture || exposed.length || !capture.includes('value="CFG-D19"') || !capture.includes('value="mudanca_escopo"')) {
+    fail("art125_cfg_d19_form_contract", { capture: Boolean(capture), exposed });
+  }
+  const deadline = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10);
+  const payload = {
+    nome: "QA Art125",
+    email: "qa-art125@example.com",
+    estagio: "triagem_numerica_art125",
+    jornada: "contrato",
+    consentimento: "1",
+    origem: "/ferramentas/limite-acrescimos-supressoes/",
+    landing_page: "/ferramentas/limite-acrescimos-supressoes/",
+    route_family: "aditivos",
+    asset_family: "aditivos",
+    asset_id: "limite-acrescimos-supressoes",
+    cta_id: "art125-numeric-scope-exceeded",
+    deliverable_id: "CFG-D19",
+    public_contract_id: "CTR-ART125-2026",
+    contract_event: "mudanca_escopo",
+    opportunity_deadline: deadline,
+    contract_stage: "documentando",
+    idempotency_key: "qa-art125-cfg-d19-001",
+    valor_inicial: "10000000",
+    acrescimos_previos: "1800000",
+    artifact: "Triagem numérica do Art. 125 com R$ 10.000.000,00",
+    record_kind: "qa",
+    test_mode: true,
+  };
+  const res = await handler(event(payload, "POST", { ip: "203.0.113.96", "Idempotency-Key": payload.idempotency_key }));
+  const data = JSON.parse(res.body);
+  const stored = data.lead_id ? await mem.get(data.lead_id) : null;
+  const storedLeak = forbiddenCalculatorFields.filter((key) => stored && Object.prototype.hasOwnProperty.call(stored, key));
+  if (res.statusCode !== 201 || !data.receipt_id || !stored || stored.source !== "CONFENGE_WEB" ||
+      stored.deliverable_id !== "CFG-D19" || stored.contract_event !== "mudanca_escopo" ||
+      stored.route_family !== "aditivos" || stored.asset_id !== "limite-acrescimos-supressoes" || storedLeak.length) {
+    fail("art125_cfg_d19_persisted_without_calculator_values", { status: res.statusCode, data, stored, storedLeak });
+  } else pass("art125_cfg_d19_persisted_without_calculator_values", data.receipt_id);
+}
+
 // 6) idempotency — second submit same payload returns same lead_id + HTTP 200 + idempotent
 {
   const payload = {
