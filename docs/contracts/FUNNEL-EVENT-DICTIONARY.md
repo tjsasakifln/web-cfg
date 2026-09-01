@@ -30,6 +30,12 @@ Every admitted event carries:
 
 The aggregate PII allowlist is empty. `nome`, `email`, `telefone`, CNPJ, query text, description/note/comment/free-text fields and PII-like values are never admitted. Join identifiers are validated against their complete declared patterns: `sess-`, `lead-` (plus the rollback-compatible legacy 24-hex lead id), `opp-`, `prop-` and `sale-`. `correlation_id`, `idempotency_key` and `event_id` remain non-PII technical tokens; `@` still fails on every field.
 
+## Form validation category
+
+`lead_form_error.validation_category` is a finite PII-free aggregate with exactly three admitted values: `required`, `contact_format`, and `rate_limited`. The client and collector reject any other supplied category. It never carries a field name, field value, native validation message, contact, document, free text, or Turnstile token. Older events that predate this instrument remain readable without a category as `UNKNOWN_CATEGORY`; that absence is not a zero. `lead_form_backend_error` remains a distinct semantic.
+
+The primary `pillar_hero → #captura-pilar` anchors on `/atrasos-prorrogacao-obras-publicas/`, `/defesa-tecnica-contratos-publicos/`, and `/acompanhamento-contratos-obras/` use the canonical `cta_click` event. Hash links bind only the named listener, so one physical activation emits exactly one event.
+
 ## Layers (denominators)
 
 | Layer | Meaning | May become qualified lead / pipeline? |

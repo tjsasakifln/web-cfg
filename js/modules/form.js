@@ -230,6 +230,16 @@
         applyContactDescribedBy(true);
         return false;
       };
+      // Finite aggregate only: never disclose a field, value, native message, or token.
+      const validationCategory = () => {
+        const contactHasFormatError = [emailEl, phoneEl].some((el) => {
+          const value = String(el?.value || '').trim();
+          if (!value) return false;
+          if (el?.validity && typeof el.validity.valid === 'boolean') return !el.validity.valid;
+          return typeof el?.checkValidity === 'function' && !el.checkValidity();
+        });
+        return contactHasFormatError ? 'contact_format' : 'required';
+      };
       const validateStep1 = () => {
         markStart();
         let ok = true;
@@ -268,6 +278,7 @@
             device_context: deviceContext,
             destination_type: 'form',
             form_step: 1,
+            validation_category: validationCategory(),
           });
           return false;
         }
@@ -355,6 +366,7 @@
             device_context: deviceContext,
             destination_type: 'form',
             form_step: formStep,
+            validation_category: validationCategory(),
           });
           return;
         }
@@ -515,7 +527,7 @@
               track('lead_form_error', {
                 page_path: pagePath,
                 journey: journey || '',
-                error_code: 'rate_limited',
+                validation_category: 'rate_limited',
               });
               return;
             }
@@ -535,6 +547,7 @@
           device_context: deviceContext,
           destination_type: 'form',
           form_step: formStep,
+          validation_category: validationCategory(),
         });
       }, true);
       // Exposes readiness for deterministic UI verification after all handlers bind.

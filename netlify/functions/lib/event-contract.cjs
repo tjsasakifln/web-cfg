@@ -214,6 +214,26 @@ function applyEnvelope(canonical, props, meta = {}) {
   return next;
 }
 
+function invalidPropertyAllowlist(def, props) {
+  const rules = def && def.property_allowlist;
+  if (!rules || typeof rules !== "object") return [];
+  const invalid = [];
+  for (const [key, allowed] of Object.entries(rules)) {
+    if (!Object.prototype.hasOwnProperty.call(props, key)) continue;
+    if (!Array.isArray(allowed) || typeof props[key] !== "string" || !allowed.includes(props[key])) {
+      invalid.push(key);
+    }
+  }
+  return invalid;
+}
+
+function strictPiiProps(def, props) {
+  if (!def || def.strict_no_pii_props !== true || !props || typeof props !== "object") return [];
+  return Object.entries(props)
+    .filter(([key, value]) => keyLooksPii(key) || looksLikePiiValue(value, key))
+    .map(([key]) => key);
+}
+
 function admitEvent(raw) {
   const input = raw && typeof raw === "object" ? raw : {};
   const original = String(input.event || input.name || "").slice(0, 64);
@@ -255,6 +275,17 @@ function admitEvent(raw) {
     : Object.fromEntries(
         Object.entries(input).filter(([k]) => !["event", "name", "props", "path", "sid", "session_id", "ts"].includes(k)),
       );
+  const forbiddenStrictProps = strictPiiProps(def, rawProps);
+  if (forbiddenStrictProps.length) {
+    return {
+      ok: false,
+      reason: "pii_validation_property",
+      original,
+      canonical,
+      classification: classified.classification,
+      fields: forbiddenStrictProps,
+    };
+  }
   const minimized = minimizeProps(rawProps);
   if (minimized.invalidEntityFields.length) {
     return {
@@ -308,6 +339,17 @@ function admitEvent(raw) {
         key,
       };
     }
+  }
+  const invalidAllowlistedProperties = invalidPropertyAllowlist(def, minimized.props);
+  if (invalidAllowlistedProperties.length) {
+    return {
+      ok: false,
+      reason: "invalid_property_value",
+      original,
+      canonical,
+      classification: classified.classification,
+      fields: invalidAllowlistedProperties,
+    };
   }
 
   const aliasMeta = classified.classification === "alias"
