@@ -171,6 +171,15 @@ def seal_snapshot(payload: dict[str, Any]) -> dict[str, Any]:
     return sealed
 
 
+def seal_external_intake_record(record: dict[str, Any], *, content_sha256: str) -> dict[str, Any]:
+    """Attach an aggregate-source provenance pointer and a record-level seal."""
+    sealed = deepcopy(record)
+    sealed["record_provenance"] = {"source_content_sha256": content_sha256}
+    unsigned = {key: value for key, value in sealed.items() if key != "record_sha256"}
+    sealed["record_sha256"] = sha256_json(unsigned)
+    return sealed
+
+
 def parse_iso_date(value: Any, code: str) -> date:
     try:
         parsed = date.fromisoformat(str(value))
@@ -300,7 +309,7 @@ def _validate_source(source: Any) -> dict[str, Any]:
     kind = source.get("kind")
     if kind not in SOURCE_KINDS:
         raise SnapshotError(f"source_kind_invalid:{kind}")
-    optional = {"observed_at", "range", "limitations"}
+    optional = {"observed_at", "range", "limitations", "intake_version"}
     if kind == "GSC_PAGE_OVERLAY":
         optional.add("sample")
     required = {
@@ -348,6 +357,11 @@ def _validate_source(source: Any) -> dict[str, Any]:
             isinstance(item, str) and item.strip() for item in source["limitations"]
         ):
             raise SnapshotError("limitations_invalid")
+    if "intake_version" in source and (
+        source["intake_version"] != "confenge-demand-radar-external-intake/v1"
+        or kind not in {"KEYWORD_PLANNER", "GOOGLE_TRENDS", "SERP_RESEARCH"}
+    ):
+        raise SnapshotError("external_intake_version_invalid")
     if "sample" in source:
         _validate_gsc_sample(source["sample"])
     return source
@@ -535,27 +549,26 @@ def _validate_gsc_record(record: dict[str, Any]) -> None:
 
 
 def _validate_optional_record(
-    kind: str, record: dict[str, Any], *, source_geo: str
+    kind: str, record: dict[str, Any], *, source_geo: str, source_content_sha256: str, intake: bool
 ) -> None:
     family_id = str(record.get("family_id") or "")
     if not ID_RE.fullmatch(family_id):
         raise SnapshotError(f"optional_family_id_invalid:{kind}")
     state = record.get("state")
+    envelope = {"record_provenance", "record_sha256"} if intake else set()
     if state == UNKNOWN:
         _require_exact_keys(
             record,
-            required={"family_id", "state", "reason"},
+            required={"family_id", "state", "reason"} | envelope,
             code="optional_unknown_record",
         )
         _require_text(record["reason"], f"optional_unknown_reason_required:{kind}:{family_id}")
-        return
-    if state != "OBSERVED":
+    elif state != "OBSERVED":
         raise SnapshotError(f"optional_state_invalid:{kind}:{family_id}")
-
-    if kind == "KEYWORD_PLANNER":
+    elif kind == "KEYWORD_PLANNER":
         _require_exact_keys(
             record,
-            required={"family_id", "state", "breadth", "competition", "bid"},
+            required={"family_id", "state", "breadth", "competition", "bid"} | envelope,
             code="planner_record",
         )
         if record["breadth"] not in {"HIGH", "MEDIUM", "LOW", UNKNOWN}:
@@ -577,7 +590,7 @@ def _validate_optional_record(
     elif kind == "GOOGLE_TRENDS":
         _require_exact_keys(
             record,
-            required={"family_id", "state", "momentum", "geography"},
+            required={"family_id", "state", "momentum", "geography"} | envelope,
             code="trends_record",
         )
         if record["momentum"] not in {"RISING", "STABLE", "FALLING", UNKNOWN}:
@@ -588,7 +601,7 @@ def _validate_optional_record(
     elif kind == "SERP_RESEARCH":
         _require_exact_keys(
             record,
-            required={"family_id", "state", "intent_match", "formats"},
+            required={"family_id", "state", "intent_match", "formats"} | envelope,
             code="serp_record",
         )
         if record["intent_match"] not in {"HIGH", "MEDIUM", "LOW", UNKNOWN}:
@@ -600,7 +613,7 @@ def _validate_optional_record(
     elif kind == "WARMBLY_AGGREGATE_OUTCOMES":
         _require_exact_keys(
             record,
-            required={"family_id", "state", "outcomes"},
+            required={"family_id", "state", "outcomes"} | envelope,
             code="warmbly_record",
         )
         outcomes = _require_exact_keys(
@@ -615,6 +628,15 @@ def _validate_optional_record(
                 raise SnapshotError(f"warmbly_outcome_invalid:{family_id}:{key}")
     else:  # pragma: no cover - SOURCE_KINDS and caller make this unreachable.
         raise SnapshotError(f"optional_kind_unhandled:{kind}")
+    if intake:
+        provenance = _require_exact_keys(
+            record["record_provenance"], required={"source_content_sha256"}, code="record_provenance"
+        )
+        if provenance["source_content_sha256"] != source_content_sha256:
+            raise SnapshotError(f"record_provenance_source_mismatch:{kind}:{family_id}")
+        expected = sha256_json({key: value for key, value in record.items() if key != "record_sha256"})
+        if record["record_sha256"] != expected:
+            raise SnapshotError(f"record_hash_mismatch:{kind}:{family_id}")
 
 
 def validate_snapshot(payload: Any) -> dict[str, Any]:
@@ -658,7 +680,11 @@ def validate_snapshot(payload: Any) -> dict[str, Any]:
         elif source["kind"] == "GSC_PAGE_OVERLAY":
             _validate_gsc_record(record)
         else:
-            _validate_optional_record(source["kind"], record, source_geo=source["geo"])
+            _validate_optional_record(
+                source["kind"], record, source_geo=source["geo"],
+                source_content_sha256=source["provenance"]["content_sha256"],
+                intake="intake_version" in source,
+            )
     return snapshot
 
 
