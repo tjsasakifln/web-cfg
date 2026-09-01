@@ -10,7 +10,7 @@
   const EVENT_SOURCE = 'CONFENGE_WEB';
   const EVENT_PII_POLICY = 'aggregate_allowlist_empty';
   const AGGREGATE_PII_ALLOWLIST = [];
-  const PII_PARAM_KEYS = new Set('address arquivo attachment cnpj company cpf document documento edital email empresa endereco comment description field file free_text full_name mensagem message message_body name nome note phone q query raw_text search_query tel telefone whatsapp'.split(' '));
+  const PII_PARAM_PATTERN = /address|arquivo|attach|cnpj|company|cpf|document|edital|email|empresa|endereco|comment|description|field|file|text|name|nome|message|mensagem|note|phone|query|search|tel|whatsapp/;
   const UNKNOWN_SERVICE = 'UNKNOWN_SERVICE';
   const CANONICAL_DESTINATIONS = {
     '/auditoria-orcamento-licitacao/': 'auditoria-orcamento-licitacao',
@@ -262,7 +262,7 @@
         const val = params[key];
         if (val == null || val === '') return;
         const piiKey = String(key).toLowerCase();
-        if (PII_PARAM_KEYS.has(piiKey) || /field_|_message$/.test(piiKey)) return;
+        if (PII_PARAM_PATTERN.test(piiKey)) return;
         const entityPattern = ENTITY_ID_PATTERNS[piiKey];
         if (entityPattern && (typeof val !== 'string' || !entityPattern.test(val))) {
           invalidEntityId = true;
