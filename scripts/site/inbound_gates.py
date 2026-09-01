@@ -311,13 +311,15 @@ def _pseo_reject_pages_not_public() -> list[Finding]:
     rejected route survives on disk, in a sitemap, or as a link from an
     indexable page.
 
-    Frozen BOFU pillar HTML (#291) is reported as a warning rather than an
-    error: the freeze — not an SEO allowlist — blocks the rewrite, and the
-    dated action lives in
-    docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md.
+    A dead link is an error on every route, frozen BOFU pillar HTML (#291)
+    included. An earlier revision of this gate downgraded the frozen six to a
+    warning, on the reading that the measurement freeze made the link
+    unfixable. It does not: `html_mutation_authorized: false` gates the
+    campaign's own patch application, and a reviewed edit carrying a
+    same-commit baseline recapture is merged practice (cf33385d4, 2f26ac0ba).
+    `internal-link-reachability` in site_excellence.py has no exception path
+    either, so a warning here would only hide a failure that lands anyway.
     """
-    from scripts.organic.canonical_hrefs import FROZEN_HTML_REL
-
     findings: list[Finding] = []
     reg_path = ROOT / "data" / "pseo" / "registry.json"
     if not reg_path.exists():
@@ -380,7 +382,6 @@ def _pseo_reject_pages_not_public() -> list[Finding]:
                     path=rel,
                     reason="indexable_page_links_rejected_pseo_page",
                     excerpt=url,
-                    severity="warn" if rel in FROZEN_HTML_REL else "error",
                 )
             )
     return findings
