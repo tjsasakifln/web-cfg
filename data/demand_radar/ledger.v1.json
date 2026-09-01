@@ -1,8 +1,8 @@
 {
   "schema_version": "confenge-demand-radar-ledger/v1",
   "ledger_id": "confenge-minimum-demand-radar",
-  "as_of": "2026-08-31",
-  "origin_main": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
+  "as_of": "2026-09-01",
+  "origin_main": "de3a66138fb70220efc87c18e2b8189c993ee8bb",
   "decision_state": "EXECUTE_NOW",
   "executive_front": "INBOUND_ENGINE",
   "time_to_evidence": "One accepted snapshot cycle; public implementation is separately authorized.",
@@ -32,7 +32,7 @@
     "unknown_rule": "UNKNOWN is preserved and never converted to zero or an invented floor.",
     "advisory_rule": "No radar action authorizes a public mutation, page, issue, offer or outreach."
   },
-  "source_approval_manifest_sha256": "e72ed9cf69e387f080278b3fdde1f1796df1a2a331dc1b463dae5eb9fe902891",
+  "source_approval_manifest_sha256": "e25a70e467fa91f6b633f567d0556f4c5f054eb632307206e41fbd685eedd675",
   "source_snapshots": [
     {
       "id": "bofu-owner-projection-2026-08-31-pr545",
@@ -83,6 +83,30 @@
       "records_sha256": "67c90f3306ba944ecea184842760575cbfb0eea60f9dfae5ffcfe98067518c36",
       "snapshot_sha256": "d5b2388653fe013dd7badc1312ece0bdee167b34b6eeb26d2faa609b489e475d",
       "unknown_semantics": "A missing page or family mapping remains UNKNOWN, never zero impressions, zero demand, zero rank or conversion failure."
+    },
+    {
+      "id": "serp-research-bra-2026-09-01",
+      "kind": "SERP_RESEARCH",
+      "effective_date": "2026-09-01",
+      "geo": "BRA",
+      "language": "pt-BR",
+      "privacy_class": "PUBLIC_NON_PERSONAL",
+      "freshness": {
+        "state": "CURRENT",
+        "evaluated_at": "2026-09-01",
+        "expires_at": "2026-09-15"
+      },
+      "provenance": {
+        "authority": "Founder-authorized bounded manual public SERP observation, sanitized",
+        "repository": "tjsasakifln/web-cfg",
+        "path": "data/demand_radar/intake-candidates/2026-09-01/serp-research.draft.json",
+        "revision": "de3a66138fb70220efc87c18e2b8189c993ee8bb",
+        "content_sha256": "c3627a27aad350dcb09dd520d8ff19a955978eefc2f7445acf647f0cad8a9d88"
+      },
+      "records": 3,
+      "records_sha256": "70b517a5ac7c1b1d43904118f17b20b887be3bf0eecd115a3314e35f15ee931d",
+      "snapshot_sha256": "5b552e050a040969fa12f62a031fe7d275791eecae023f63d979da491c16d255",
+      "unknown_semantics": "UNKNOWN is preserved and never interpreted as zero demand, volume, priority, revenue, or authorization."
     }
   ],
   "source_availability": {
@@ -109,9 +133,10 @@
       "reason": "No as-of-valid snapshot supplied."
     },
     "SERP_RESEARCH": {
-      "state": "UNKNOWN",
-      "source_id": null,
-      "reason": "No as-of-valid snapshot supplied."
+      "state": "USABLE",
+      "source_id": "serp-research-bra-2026-09-01",
+      "freshness": "CURRENT",
+      "reason": null
     },
     "WARMBLY_AGGREGATE_OUTCOMES": {
       "state": "UNKNOWN",
@@ -121,11 +146,13 @@
   },
   "selected_source_ids": {
     "CANONICAL_BOFU_OWNER_PROJECTION": "bofu-owner-projection-2026-08-31-pr545",
-    "GSC_PAGE_OVERLAY": "gsc-page-overlay-2026-08-02-2026-08-29"
+    "GSC_PAGE_OVERLAY": "gsc-page-overlay-2026-08-02-2026-08-29",
+    "SERP_RESEARCH": "serp-research-bra-2026-09-01"
   },
   "active_source_ids": {
     "CANONICAL_BOFU_OWNER_PROJECTION": "bofu-owner-projection-2026-08-31-pr545",
-    "GSC_PAGE_OVERLAY": "gsc-page-overlay-2026-08-02-2026-08-29"
+    "GSC_PAGE_OVERLAY": "gsc-page-overlay-2026-08-02-2026-08-29",
+    "SERP_RESEARCH": "serp-research-bra-2026-09-01"
   },
   "ignored_source_snapshots": [],
   "opportunities": [
@@ -236,7 +263,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -350,7 +377,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -464,7 +491,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -578,7 +605,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -692,7 +719,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -806,7 +833,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -920,7 +947,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -1033,8 +1060,14 @@
           "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
-            "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "state": "OBSERVED_QUALITATIVE_INTENT",
+            "intent_match": "HIGH",
+            "formats": [
+              "service",
+              "guide",
+              "official_source"
+            ],
+            "interpretation": "Qualitative intent/format evidence; never volume or durable rank."
           }
         }
       ],
@@ -1148,7 +1181,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -1262,7 +1295,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -1376,7 +1409,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -1490,7 +1523,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],
@@ -1603,8 +1636,14 @@
           "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
-            "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "state": "OBSERVED_QUALITATIVE_INTENT",
+            "intent_match": "MEDIUM",
+            "formats": [
+              "service",
+              "guide",
+              "official_source"
+            ],
+            "interpretation": "Qualitative intent/format evidence; never volume or durable rank."
           }
         }
       ],
@@ -1694,8 +1733,13 @@
           "evidence": "NO_FABRICATED_DEMAND_OR_OUTCOME",
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
-            "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "state": "OBSERVED_QUALITATIVE_INTENT",
+            "intent_match": "HIGH",
+            "formats": [
+              "service",
+              "guide"
+            ],
+            "interpretation": "Qualitative intent/format evidence; never volume or durable rank."
           }
         }
       ],
@@ -1786,7 +1830,7 @@
           "serp_context": {
             "source_kind": "SERP_RESEARCH",
             "state": "UNKNOWN",
-            "reason": "No as-of-valid snapshot supplied."
+            "reason": "No family-matched qualitative SERP observation exists."
           }
         }
       ],

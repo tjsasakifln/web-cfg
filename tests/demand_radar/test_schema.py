@@ -39,6 +39,7 @@ def test_committed_source_approvals_are_sealed_and_exact() -> None:
     assert set(approved) == {
         "bofu-owner-projection-2026-08-31-pr545",
         "gsc-page-overlay-2026-08-02-2026-08-29",
+        "serp-research-bra-2026-09-01",
     }
 
 

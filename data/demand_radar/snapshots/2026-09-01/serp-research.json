@@ -1,0 +1,74 @@
+{
+  "schema_version": "confenge-demand-radar-snapshot/v1",
+  "source": {
+    "id": "serp-research-bra-2026-09-01",
+    "kind": "SERP_RESEARCH",
+    "observed_at": "2026-09-01",
+    "geo": "BRA",
+    "language": "pt-BR",
+    "privacy_class": "PUBLIC_NON_PERSONAL",
+    "provenance": {
+      "authority": "Founder-authorized bounded manual public SERP observation, sanitized",
+      "repository": "tjsasakifln/web-cfg",
+      "path": "data/demand_radar/intake-candidates/2026-09-01/serp-research.draft.json",
+      "revision": "de3a66138fb70220efc87c18e2b8189c993ee8bb",
+      "content_sha256": "c3627a27aad350dcb09dd520d8ff19a955978eefc2f7445acf647f0cad8a9d88"
+    },
+    "freshness": {
+      "state": "CURRENT",
+      "evaluated_at": "2026-09-01",
+      "expires_at": "2026-09-15"
+    },
+    "unknown_semantics": "UNKNOWN is preserved and never interpreted as zero demand, volume, priority, revenue, or authorization.",
+    "limitations": [
+      "Bounded qualitative observation only; it is not volume, durable rank, revenue, WTP, causality, or public-mutation authorization.",
+      "No query, result text, URL, domain, rank, screenshot, or personal data is retained."
+    ],
+    "intake_version": "confenge-demand-radar-external-intake/v1"
+  },
+  "records": [
+    {
+      "family_id": "defesa-sancoes",
+      "state": "OBSERVED",
+      "intent_match": "HIGH",
+      "formats": [
+        "service",
+        "guide",
+        "official_source"
+      ],
+      "record_provenance": {
+        "source_content_sha256": "c3627a27aad350dcb09dd520d8ff19a955978eefc2f7445acf647f0cad8a9d88"
+      },
+      "record_sha256": "46873dc88db2556b99a1bfda27eadc5be3382c0a91169a9e3c26ebab99c2ec5f"
+    },
+    {
+      "family_id": "bid-readiness",
+      "state": "OBSERVED",
+      "intent_match": "HIGH",
+      "formats": [
+        "service",
+        "guide"
+      ],
+      "record_provenance": {
+        "source_content_sha256": "c3627a27aad350dcb09dd520d8ff19a955978eefc2f7445acf647f0cad8a9d88"
+      },
+      "record_sha256": "796f3cd245d16fac12a5655adba7bd8a558c8b2151073239940e2be615a3b88b"
+    },
+    {
+      "family_id": "diagnostico-expansao",
+      "state": "OBSERVED",
+      "intent_match": "MEDIUM",
+      "formats": [
+        "service",
+        "guide",
+        "official_source"
+      ],
+      "record_provenance": {
+        "source_content_sha256": "c3627a27aad350dcb09dd520d8ff19a955978eefc2f7445acf647f0cad8a9d88"
+      },
+      "record_sha256": "3ee8047b64cea623d0b29a3c69deb9ce8303d07dffa2ed4c8b9d3d2e67331e9a"
+    }
+  ],
+  "records_sha256": "70b517a5ac7c1b1d43904118f17b20b887be3bf0eecd115a3314e35f15ee931d",
+  "snapshot_sha256": "5b552e050a040969fa12f62a031fe7d275791eecae023f63d979da491c16d255"
+}

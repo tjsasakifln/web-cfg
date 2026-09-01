@@ -1,0 +1,47 @@
+{
+  "schema_version": "confenge-demand-radar-founder-action-required/v1",
+  "decision_state": "EXECUTE_NOW",
+  "as_of": "2026-09-01",
+  "effect_of_absence": "An unavailable individual source remains UNKNOWN; no demand value, priority, revenue, public mutation, or zero may be inferred.",
+  "sources": [
+    {
+      "source_kind": "KEYWORD_PLANNER",
+      "why_needed": "Aggregate breadth, competition band and bid band can corroborate an existing canonical family; they are not revenue or causal priority.",
+      "authorized_access": "Google Ads account UI/export only; no scraping, auth bypass or API credential request.",
+      "exact_export": "Keyword Planner > Discover new keywords or Get search volume and forecasts > export historical metrics for Brazil, Portuguese, last 12 complete months.",
+      "minimum_columns": ["family_id", "average_monthly_searches_band", "competition_band", "top_of_page_bid_band_brl", "geo", "language", "period_end"],
+      "forbidden_fields": ["keyword", "search_term", "query", "URL", "account", "campaign", "customer_id", "email", "phone", "CPF", "CNPJ", "free_text"],
+      "sanitization": "Aggregate only to a pre-existing canonical family_id; replace numeric volume and bid with LOW/MEDIUM/HIGH bands; delete every raw row and identifier before creating the JSON draft.",
+      "freshness": {"expires_after_days": 35, "expiry_rule": "expires_at is period_end plus 35 days"}
+    },
+    {
+      "source_kind": "GOOGLE_TRENDS",
+      "why_needed": "Relative momentum, seasonality and Brazilian geography can corroborate an existing canonical family; the index is never absolute volume.",
+      "authorized_access": "Official Google Trends UI export/API legitimately available to the founder; no unofficial scraper or rate-limit bypass.",
+      "exact_export": "Explore > Brazil > past 12 months > Web Search > export interest over time and regional interest, then aggregate to existing family_id.",
+      "minimum_columns": ["family_id", "momentum", "geo", "language", "period_end"],
+      "forbidden_fields": ["term", "topic", "query", "related_query", "URL", "account", "email", "phone", "CPF", "CNPJ", "free_text"],
+      "sanitization": "Retain only RISING/STABLE/FALLING and BRA; do not retain search terms, numeric indices, related-query text or export rows.",
+      "freshness": {"expires_after_days": 35, "expiry_rule": "expires_at is period_end plus 35 days"}
+    },
+    {
+      "source_kind": "SERP_RESEARCH",
+      "why_needed": "A bounded manual observation can corroborate language, intent and result format for an existing canonical family; it is never volume or durable rank.",
+      "authorized_access": "Normal browser observation only; do not use a persistent crawler, automation, login bypass, or rate-limit bypass.",
+      "exact_export": "No export is required. Record a human-reviewed, date-stamped aggregate classification for Brazil/Portuguese from a bounded manual SERP/PAA/related/autocomplete observation, then discard source text and URLs.",
+      "minimum_columns": ["family_id", "intent_match", "formats", "geo", "language", "observed_at"],
+      "forbidden_fields": ["query", "search_term", "PAA_text", "related_text", "autocomplete_text", "URL", "email", "phone", "CPF", "CNPJ", "free_text"],
+      "sanitization": "Keep only HIGH/MEDIUM/LOW intent and a controlled format label such as service, guide, calculator, or official_source; retain no result text, URL, domain, rank, screenshot, or query string.",
+      "freshness": {"expires_after_days": 14, "expiry_rule": "expires_at is observed_at plus 14 days"}
+    }
+  ],
+  "ingestion": {
+    "draft_schema": "confenge-demand-radar-external-intake/v1",
+    "draft_location": "a local, access-controlled file outside git until sanitized; then data/demand_radar/intake-candidates/YYYY-MM-DD/<source>.draft.json for review",
+    "normalized_location": "data/demand_radar/snapshots/YYYY-MM-DD/<source>.json",
+    "normalize_command": "python3 -m scripts.demand_radar.external_intake normalize --as-of YYYY-MM-DD --input DRAFT --output SNAPSHOT",
+    "expected_checksum": "The command prints deterministic SHA-256 snapshot_sha256; copy that exact value into the reviewed approved-sources.v1.json entry, then run verify.",
+    "verify_command": "python3 -m scripts.demand_radar.external_intake verify --as-of YYYY-MM-DD --input DRAFT --approvals data/demand_radar/approved-sources.v1.json",
+    "revoke": "Remove the exact approval and snapshot in one reviewed change, rebuild the existing Radar, and the source becomes UNKNOWN."
+  }
+}
