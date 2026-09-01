@@ -1127,8 +1127,9 @@ def redact_live_query_fields(value: Any) -> Any:
         return value
     out: dict[str, Any] = {}
     for key, item in value.items():
-        if key == "query" and isinstance(item, str):
-            out["query_hash"] = redact_query(item)
+        if key == "query":
+            if isinstance(item, str) and item:
+                out["query_hash"] = redact_query(item)
         elif key in {
             "page",
             "url",
@@ -1741,10 +1742,10 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
         or data.get("manifest_sha256"),
         "live_baseline_invented": False,
         "counts": {
-            "queries": len(queries),
+            "returned_rows": len(queries),
             "pages": len(pages),
-            "branded_queries": sum(1 for q in queries if q.get("branded")),
-            "nonbranded_queries": sum(1 for q in queries if not q.get("branded")),
+            "branded_rows": sum(1 for q in queries if q.get("branded")),
+            "nonbranded_rows": sum(1 for q in queries if not q.get("branded")),
             "brand_classes": brand_class_counts(queries),
             "analysis_keys": 12,
             "lead_cohort_paths": len(lead_pages),
@@ -1754,7 +1755,7 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             "2_striking_distance_pos_4_20": sorted(
                 striking_distance, key=lambda x: float(x.get("position") or 99)
             )[:30],
-            "3_commercial_queries_without_page_join": commercial_no_page[:30],
+            "3_commercial_demand_without_page_join": commercial_no_page[:30],
             "4_cluster_page_competition": {
                 k: sorted(v, key=lambda x: -float(x.get("impressions") or 0))[:5]
                 for k, v in by_cluster.items()
@@ -1781,7 +1782,7 @@ def analyze(data: dict[str, Any] | None = None) -> dict[str, Any]:
             },
             "11_emerging_terms": sorted(queries, key=lambda x: -float(x.get("impressions") or 0))[:15],
             "12_competitor_content_gaps": competitor_gaps,
-            "legacy_entity_queries_still_ranking": legacy_entity,
+            "legacy_entity_demand_still_ranking": legacy_entity,
             "detection_classes": detect_all(
                 list(queries) + list(pages),
                 indexable_urls=sorted(DEFAULT_ADEQUATE_PATHS),
@@ -3148,7 +3149,7 @@ def main(argv: list[str] | None = None) -> int:
                     "pages": payload["page_count"],
                     "priority_actions": len(insights["priority_actions"]),
                     "legacy_entity_queries": len(
-                        insights["analyses"]["legacy_entity_queries_still_ranking"]
+                        insights["analyses"]["legacy_entity_demand_still_ranking"]
                     ),
                 },
                 ensure_ascii=False,
@@ -3164,7 +3165,7 @@ def main(argv: list[str] | None = None) -> int:
                     "ok": True,
                     "counts": insights["counts"],
                     "priority_actions": insights["priority_actions"][:10],
-                    "legacy": insights["analyses"]["legacy_entity_queries_still_ranking"],
+                    "legacy": insights["analyses"]["legacy_entity_demand_still_ranking"],
                 },
                 ensure_ascii=False,
                 indent=2,
