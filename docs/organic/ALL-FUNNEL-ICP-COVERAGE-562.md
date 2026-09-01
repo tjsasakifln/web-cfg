@@ -6,7 +6,7 @@ This is a derived advisory portfolio, not a keyword list, URL backlog, public re
 
 ## Universe
 
-16 finite economic families: contractor-side TOFU, MOFU and BOFU decisions plus explicit non-ICP exclusions. External breadth is `UNKNOWN`; it is never treated as zero.
+16 finite economic families: contractor-side TOFU, MOFU and BOFU decisions plus explicit non-ICP exclusions. External breadth is `CURRENT`; it is never treated as zero.
 
 ## Coverage states
 
@@ -39,7 +39,7 @@ BOFU owner joins resolve through #543's `intent-registry.v2`; this projection cr
 ### `sancoes-notificacoes-defesa-tecnica`
 
 - Observed problem: Observed page exposure with no sufficient CTR conclusion; canonical owner is available.
-- Evidence: #543 accepted historical page overlay; GSC query universe censored.
+- Evidence: #543 accepted historical page overlay plus #561 current sealed qualitative SERP classification; no volume or causal claim.
 - Owner: #61
 - Smallest justified action: Specify one existing-owner SERP hypothesis for separate authorization.
 - Dependency: Protected-route and measurement authorization.
@@ -51,10 +51,10 @@ BOFU owner joins resolve through #543's `intent-registry.v2`; this projection cr
 ### `pre-licitacao-bid-no-bid`
 
 - Observed problem: Bid-readiness is a named utility gap without an owner.
-- Evidence: #543 explicit bid-readiness gap; external breadth UNKNOWN.
+- Evidence: #543 explicit bid-readiness gap plus #561 current sealed qualitative SERP classification; no volume or causal claim.
 - Owner: new finite child issue after validation
 - Smallest justified action: Validate one finite contractor-side readiness utility specification.
-- Dependency: Approved external-demand snapshot or bounded qualitative format evidence.
+- Dependency: Protected-route and measurement authorization.
 - Time to evidence: One approved evidence cycle.
 - Why now: Economic consequence is high but no URL is proposed.
 - Why not another page: No owner is invented before utility and cannibalization review.
@@ -71,6 +71,15 @@ BOFU owner joins resolve through #543's `intent-registry.v2`; this projection cr
 - Why now: Potential reusable data moat, not a content volume play.
 - Why not another page: Data freshness and provenance must precede a public surface.
 - Public mutation still requires separate authorization: `true`.
+
+## External-evidence recomputation
+
+- PRE_EXTERNAL_ACTIONS: `sancoes-notificacoes-defesa-tecnica:IMPROVE_EXISTING_PAGE, pre-licitacao-bid-no-bid:BUILD_UTILITY, market-intelligence-construtoras:BUILD_DATA_ASSET`
+- POST_EXTERNAL_ACTIONS: `sancoes-notificacoes-defesa-tecnica:IMPROVE_EXISTING_PAGE, pre-licitacao-bid-no-bid:BUILD_UTILITY, market-intelligence-construtoras:BUILD_DATA_ASSET`
+- CHANGED_DECISIONS: `NONE`
+- UNCHANGED_DECISIONS: `sancoes-notificacoes-defesa-tecnica, pre-licitacao-bid-no-bid, market-intelligence-construtoras`
+- EXTERNAL_BREADTH_STATE: `CURRENT`
+- NEXT_BEST_ACTION: `sancoes-notificacoes-defesa-tecnica: specify one existing-owner SERP hypothesis for separate authorization.`
 
 ## Rollback
 

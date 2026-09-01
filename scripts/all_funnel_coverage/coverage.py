@@ -68,7 +68,8 @@ def render(doc, counts):
     lines += ["", "## Candidate actions (next wave)", ""]
     for a in doc["candidate_actions"]:
         lines += [f"### `{a['family_id']}`", "", f"- Observed problem: {a['observed_problem']}", f"- Evidence: {a['evidence']}", f"- Owner: {a['owner']}", f"- Smallest justified action: {a['smallest_justified_action']}", f"- Dependency: {a['dependency']}", f"- Time to evidence: {a['time_to_evidence']}", f"- Why now: {a['why_now']}", f"- Why not another page: {a['why_not_another_page']}", "- Public mutation still requires separate authorization: `true`.", ""]
-    lines += ["## Rollback", "", "Revert this derived projection and report. No route, HTML, canonical, analytics, lead flow, public registry, or runtime changed.", ""]
+    comparison = doc["comparison"]
+    lines += ["## External-evidence recomputation", "", f"- PRE_EXTERNAL_ACTIONS: `{', '.join(comparison['pre_external_actions'])}`", f"- POST_EXTERNAL_ACTIONS: `{', '.join(comparison['post_external_actions'])}`", f"- CHANGED_DECISIONS: `{', '.join(comparison['changed_decisions']) or 'NONE'}`", f"- UNCHANGED_DECISIONS: `{', '.join(comparison['unchanged_decisions'])}`", f"- EXTERNAL_BREADTH_STATE: `{doc['external_breadth']['state']}`", f"- NEXT_BEST_ACTION: `{comparison['next_best_action']}`", "", "## Rollback", "", "Revert this derived projection and report. No route, HTML, canonical, analytics, lead flow, public registry, or runtime changed.", ""]
     return "\n".join(lines)
 
 def main():
