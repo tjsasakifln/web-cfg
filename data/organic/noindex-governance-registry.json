@@ -52,6 +52,16 @@
       "description": "Canário com gate próprio nomeado (contract-analysis-publication-gate/1.0) que exige decisão humana hash-bound explícita do founder antes de reindexação, por issue já existente e nominal. Ver #83.",
       "class": "REMEDIABLE",
       "context": "contract-analysis-canary"
+    },
+    "post_transaction_state": {
+      "description": "Pagina de estado pos-transacao: recibo de formulario enviado, retorno de pagamento, cancelamento ou expiracao de link. So e alcancada depois de uma acao do visitante, nao e rota de descoberta e indexa-la colocaria um recibo no lugar da oferta no resultado de busca.",
+      "class": "PERMANENT",
+      "context": "transactional"
+    },
+    "http_status_page": {
+      "description": "Pagina de status HTTP servida pelo host (404 e afins). Nao e rota de descoberta com trabalho de visitante; noindex e o comportamento correto e permanente.",
+      "class": "PERMANENT",
+      "context": "static"
     }
   },
   "families": [
@@ -124,6 +134,27 @@
       "owner_issue": 266,
       "review_at": "2026-12-31",
       "note": "Rotas /radar/ (index) e /radar/pesquisa/edicao-zero-4uf/ são preview/staging com dados fixture. Títulos das páginas indicam estado: '(preview noindex)'. Rota /radar/nacional-obras-publicas/ é indexável. Aguardam dados reais/publicação produção."
+    },
+    {
+      "family_id": "diagnostico-b2g-expansao-estados",
+      "reason_code": "post_transaction_state",
+      "owner_issue": 88,
+      "review_at": null,
+      "note": "PERMANENT: retorno de pagamento, cancelamento e expiracao de link do Diagnostico B2G de Expansao. A superficie de oferta indexavel e /diagnostico-b2g-expansao/, que nao pertence a esta familia e continua INDEX_READY."
+    },
+    {
+      "family_id": "obrigado-transacional",
+      "reason_code": "post_transaction_state",
+      "owner_issue": 61,
+      "review_at": null,
+      "note": "PERMANENT: quatro recibos pos-formulario, um geral e tres por jornada de comprador (contrato, edital, operacao). OWNERSHIP PENDENTE: nenhuma issue referenciada nos commits de criacao; #61 e titular provisorio ate atribuicao explicita do fundador. A pendencia e de dono, nao de razao: o motivo do noindex e definitivo."
+    },
+    {
+      "family_id": "pagina-nao-encontrada",
+      "reason_code": "http_status_page",
+      "owner_issue": 300,
+      "review_at": null,
+      "note": "PERMANENT: pagina de erro 404 com noindex,nofollow. Nao ha remediacao a fazer."
     }
   ]
 }

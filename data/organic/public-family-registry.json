@@ -496,6 +496,70 @@
       "owner_issue": 563,
       "debt": [],
       "editorial_jargon_strict": true
+    },
+    {
+      "id": "diagnostico-b2g-expansao-estados",
+      "visitor_job": "Entender o que aconteceu com o proprio pagamento do Diagnostico B2G de Expansao (retorno confirmado, cancelado ou link expirado) e saber qual e o proximo passo.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "classification": "TRANSACTIONAL_THANK_YOU",
+      "match": {
+        "routes": [
+          "/diagnostico-b2g-expansao/cancelado/",
+          "/diagnostico-b2g-expansao/expirado/",
+          "/diagnostico-b2g-expansao/obrigado/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 88,
+      "note": "Tres estados pos-checkout da oferta CFG-DIAG-EXP-v1, que pertence ao epico comercial #88 (mesmo dono de /comercial/ e de /nurture/). Declaradas por rota exata, e nao por prefixo, de proposito: /diagnostico-b2g-expansao/ (a superficie de oferta, INDEX_READY) e um canonical_service_route de bofu-intent-matrix.json e nao pode ser absorvida por esta familia. Nenhuma das tres exibe preco e nenhuma tem acao terminal no <main>.",
+      "debt": [],
+      "exemption_reason": "Pagina de estado pos-transacao so e alcancada depois de o visitante ter agido: ela confirma, cancela ou explica a expiracao de um pagamento. Cobrar acao terminal de conversao aqui seria pedir ao visitante que convertesse de novo no recibo da propria transacao."
+    },
+    {
+      "id": "obrigado-transacional",
+      "visitor_job": "Confirmar que a solicitacao enviada pelo formulario foi recebida, saber em quanto tempo a CONFENGE responde e ter um canal direto caso o assunto seja urgente.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "classification": "TRANSACTIONAL_THANK_YOU",
+      "match": {
+        "prefix": "/obrigado"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 61,
+      "note": "Quatro recibos pos-formulario: /obrigado.html (2477b111b, 2026-07-30) e /obrigado-contrato.html, /obrigado-edital.html e /obrigado-operacao.html, um por jornada de comprador (0431cba39, 2026-08-02). Declarados por prefixo /obrigado porque _is_canonical_route exige que match.routes termine em barra e estas quatro sao .html de raiz. O prefixo nao colide com /diagnostico-b2g-expansao/obrigado/, que nao comeca por /obrigado. As paginas tem WhatsApp no <main> como continuidade de atendimento, nao como acao terminal exigida; declarar none nao proibe esse link, apenas nao o cobra. OWNERSHIP PENDENTE: nenhuma issue foi referenciada nos commits que as criaram; owner_issue 61 (epico inbound) e titular provisorio ate atribuicao explicita do fundador.",
+      "debt": [],
+      "exemption_reason": "Recibo de conversao ja concluida. O visitante acabou de executar a acao terminal na pagina anterior; exigir outra aqui transformaria a confirmacao em um segundo pedido e mediria a mesma conversao duas vezes."
+    },
+    {
+      "id": "pagina-nao-encontrada",
+      "visitor_job": "Descobrir que a URL pedida nao existe mais e voltar para uma superficie util do site sem sair para o buscador.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "classification": "STATIC_SPECIAL",
+      "match": {
+        "prefix": "/404.html"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 300,
+      "note": "Pagina de status HTTP servida pelo host, nao uma rota com trabalho de visitante no sentido normal. Declarada por prefixo porque _is_canonical_route exige barra final e esta e um .html de raiz; o prefixo casa exatamente uma rota. Pertence ao dono da superficie publica canonica (#300), o mesmo de /home e de legal-and-trust. Nao tem nenhuma acao no <main>, o que e o comportamento correto para uma pagina de erro.",
+      "debt": [],
+      "exemption_reason": "Pagina de erro nao e superficie de conversao: o visitante chegou nela por engano, e vender alguma coisa em cima de um erro de navegacao piora a recuperacao em vez de melhora-la."
     }
   ]
 }
