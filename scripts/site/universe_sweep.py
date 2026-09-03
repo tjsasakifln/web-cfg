@@ -3,26 +3,50 @@
 Derives the entire public-route universe from authorities only:
 - data/organic/public-family-registry.json (family declarations)
 - data/organic/noindex-governance-registry.json (why a family stays noindex)
-- docs/seo/INBOUND-GATES-REPORT.json (per-family editorial/instance gate results,
-  itself produced by scripts/site/inbound_gates.py from the shipped public HTML)
+- the per-route and per-family readiness verdicts in scripts/site/inbound_gates.py
+  (``instance_index_ready_for_route`` / ``archetype_editorial_ready_for_family``),
+  which are computed from the shipped public HTML plus the editorial authorities
+  that already exist in this repository
 
 The build tree (scripts/site._conversion_files) is used only to enumerate actual
 routes and detect orphans -- routes with no declared family -- never as the
-authority for what SHOULD be indexed. That authority is the registry.
+authority for what SHOULD be indexed.
 
-Every route lands in exactly one bucket:
-  INDEX_READY        -- indexable now, correctly index,follow
-  NOINDEX_JUSTIFIED   -- noindex with a valid governance reason_code
-  REJECT_WITHDRAW     -- fails PUBLIC_SAFE/archetype materially (not wired here yet
-                         beyond what inbound_gates.py already flags as errors)
-  NOT_PUBLIC_SAFE      -- fails naturalness/brand-shell/machine-pattern checks
-  INDEX_READY_BUT_NOINDEX -- indexable per its family's editorial+instance gates,
-                             but currently noindex with no valid reason (violation)
-  NOINDEX_WITHOUT_REASON  -- noindex, no governance record for its family (violation)
-  ORPHAN               -- route with no declared family at all (flag, don't classify)
+Every route lands in exactly one bucket, in this order:
 
-North star is the last two counts at zero -- achieved by correct classification
-(add real governance, or actually index), never by loosening a gate.
+  REJECT_WITHDRAW  -- a named editorial authority REJECTED this route, or its
+                      archetype is a doorway (sibling pages are one template
+                      with different nouns). The remedy is WITHDRAWAL: the route
+                      leaves the public tree. Distinct from NOT_PUBLIC_SAFE,
+                      whose remedy is a copy fix on a route that stays, and from
+                      NOINDEX_JUSTIFIED, whose remedy is a dated review of a
+                      route that stays served and out of the index.
+  NOT_PUBLIC_SAFE  -- the rendered page carries machine/doorway residue, an
+                      abandoned-entity leak, or (for a family opted into
+                      editorial_jargon_strict) raw internal jargon in visible
+                      copy. Fix the copy; the route stays.
+  ORPHAN           -- route with no declared family at all (flag, don't classify)
+  INDEX_READY      -- independently earned INSTANCE_INDEX_READY and is indexable
+  INDEX_READY_BUT_NOINDEX
+                   -- independently earned INSTANCE_INDEX_READY and is STILL
+                      noindex. Not "noindex with no recorded excuse": the
+                      evidence says index, the public state says otherwise.
+  INDEXABLE_WITHOUT_EVIDENCE
+                   -- currently indexable but did NOT earn it. The remedy is
+                      evidence (a date, a source, a distinct grain), not a
+                      robots flip, so this gate reports it and takes no action.
+  NOINDEX_JUSTIFIED -- did not earn an index slot and a governance reason_code
+                       records why it is out
+  NOINDEX_WITHOUT_REASON -- did not earn an index slot and nobody recorded why
+
+REJECT_WITHDRAW is deliberately evaluated before ORPHAN: an explicit REJECTED
+verdict is stronger evidence than the absence of a family declaration, and
+hiding a rejected page inside ORPHAN would be exactly the conflation this
+campaign exists to remove.
+
+North star is INDEX_READY_BUT_NOINDEX and NOINDEX_WITHOUT_REASON at zero --
+achieved by correct classification (add real governance, or actually index),
+never by loosening a gate.
 """
 
 from __future__ import annotations
@@ -32,137 +56,152 @@ from pathlib import Path
 
 from scripts.site.inbound_gates import (
     ROOT,
-    _conversion_files,
-    _family_routes,
-    _bofu_service_routes,
+    archetype_editorial_ready_for_family,
+    build_indexation_context,
+    instance_index_ready_for_route,
     is_noindex,
-    load_family_registry,
 )
 
 GOVERNANCE_REL = "data/organic/noindex-governance-registry.json"
 GATES_REPORT_REL = "docs/seo/INBOUND-GATES-REPORT.json"
 OUT_REL = "docs/seo/UNIVERSE-SWEEP-REPORT.json"
 
+BUCKET_ORDER = (
+    "REJECT_WITHDRAW",
+    "NOT_PUBLIC_SAFE",
+    "ORPHAN",
+    "INDEX_READY",
+    "INDEX_READY_BUT_NOINDEX",
+    "INDEXABLE_WITHOUT_EVIDENCE",
+    "NOINDEX_JUSTIFIED",
+    "NOINDEX_WITHOUT_REASON",
+)
 
-def _route_of(path: Path) -> str:
-    rel = path.relative_to(ROOT).as_posix()
-    return "/" if rel == "index.html" else "/" + rel.removesuffix("index.html")
+# Instance subgates whose failure means the rendered page is not safe to show a
+# visitor as it stands. The route stays; the copy has to change.
+NOT_PUBLIC_SAFE_SUBGATES = ("public_safe",)
 
 
 def _load_json(path: Path) -> dict:
     if not path.exists():
         return {}
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        loaded = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {}
+    return loaded if isinstance(loaded, dict) else {}
 
 
 def sweep(root: Path | None = None) -> dict:
     base = root or ROOT
-    registry = load_family_registry(base)
-    families = registry.get("families") or []
+    ctx = build_indexation_context(base)
+
     governance = _load_json(base / GOVERNANCE_REL)
     governance_by_family = {
-        entry.get("family_id"): entry for entry in (governance.get("families") or []) if entry.get("family_id")
-    }
-    gates_report = _load_json(base / GATES_REPORT_REL)
-    editorial_findings = {
-        f["path"] for f in gates_report.get("gates", {}).get("archetype_editorial_ready", {}).get("findings", [])
-    }
-    naturalness_findings = {
-        f["path"] for f in gates_report.get("gates", {}).get("naturalness", {}).get("findings", [])
+        str(entry.get("family_id")): entry
+        for entry in (governance.get("families") or [])
+        if entry.get("family_id")
     }
 
-    service_routes = _bofu_service_routes()
-    all_files = _conversion_files(base)
-    route_to_family: dict[str, dict] = {}
-    for family in families:
-        routes, prefix = _family_routes(family, service_routes)
-        for p in all_files:
-            route = _route_of(p)
-            if route in routes or (prefix and route.startswith(prefix)):
-                route_to_family.setdefault(route, family)
+    # One archetype verdict per family, reused by every route it owns.
+    archetype: dict[str, dict] = {}
+    for family in ctx.families:
+        fid = str(family.get("id") or "")
+        if not fid:
+            continue
+        ok, detail = archetype_editorial_ready_for_family(family, context=ctx)
+        archetype[fid] = {"ready": ok, "material": detail.get("material") or []}
 
-    buckets = {
-        "INDEX_READY": [],
-        "NOINDEX_JUSTIFIED": [],
-        "NOT_PUBLIC_SAFE": [],
-        "INDEX_READY_BUT_NOINDEX": [],
-        "NOINDEX_WITHOUT_REASON": [],
-        "ORPHAN": [],
-    }
+    buckets: dict[str, list[str]] = {name: [] for name in BUCKET_ORDER}
+    reasons: dict[str, dict] = {}
 
-    for p in all_files:
-        route = _route_of(p)
-        rel = str(p.relative_to(base))
-        family = route_to_family.get(route)
-        html = p.read_text(encoding="utf-8", errors="replace")
+    for route in sorted(ctx.html_by_route):
+        html = ctx.html_by_route[route]
+        family = ctx.route_family.get(route)
+        fid = str((family or {}).get("id") or "")
         noindex = is_noindex(html)
+        ready, detail = instance_index_ready_for_route(route, html, family, ctx)
+        blocking = detail["blocking"]
+        material = list(detail["material"])
+        # A family's hub lists the archetype, it is not generated by it, so it
+        # does not inherit the archetype's material verdict. Every other route
+        # in the family does: an instance of a rejected archetype is rejected.
+        prefix = str(((family or {}).get("match") or {}).get("prefix") or "")
+        if not (prefix and route == prefix):
+            material += [
+                f"archetype:{name}"
+                for name in archetype.get(fid, {}).get("material") or []
+            ]
 
-        if family is None:
-            buckets["ORPHAN"].append(route)
-            continue
-
-        fid = family["id"]
-        not_public_safe = rel in naturalness_findings or (
-            family.get("editorial_jargon_strict") and rel in editorial_findings
-        )
-
-        if not_public_safe:
-            buckets["NOT_PUBLIC_SAFE"].append(route)
-            continue
-
-        gov = governance_by_family.get(fid)
-        has_valid_reason = bool(gov and gov.get("reason_code"))
-
-        if noindex:
-            if has_valid_reason:
-                buckets["NOINDEX_JUSTIFIED"].append(route)
-            else:
-                # Family's own archetype is not opted into the strict editorial gate
-                # (i.e. not flagged NOT_PUBLIC_SAFE) but still has no governance record
-                # for its noindex state -- this is the literal violation to remediate,
-                # either by adding a real reason_code or by actually indexing it.
-                buckets["NOINDEX_WITHOUT_REASON"].append(route)
+        if material:
+            bucket = "REJECT_WITHDRAW"
+        elif any(name in blocking for name in NOT_PUBLIC_SAFE_SUBGATES):
+            bucket = "NOT_PUBLIC_SAFE"
+        elif family is None:
+            bucket = "ORPHAN"
+        elif ready:
+            bucket = "INDEX_READY_BUT_NOINDEX" if noindex else "INDEX_READY"
+        elif not noindex:
+            bucket = "INDEXABLE_WITHOUT_EVIDENCE"
         else:
-            buckets["INDEX_READY"].append(route)
+            entry = governance_by_family.get(fid)
+            bucket = (
+                "NOINDEX_JUSTIFIED"
+                if entry and entry.get("reason_code")
+                else "NOINDEX_WITHOUT_REASON"
+            )
 
-    # A route that IS a valid archetype (public safe, family declared) but sits in
-    # NOINDEX_WITHOUT_REASON with no legitimate reason and is not fixture/synthetic
-    # is a candidate for INDEX_READY_BUT_NOINDEX -- surfaced separately for remediation
-    # triage rather than auto-flipped, per the no-forced-index rule.
-    for route in list(buckets["NOINDEX_WITHOUT_REASON"]):
-        family = route_to_family.get(route)
-        if family and family.get("id", "").startswith("live-intelligence"):
-            # Live Intelligence is fixture-backed pending the real contract -- its
-            # noindex-without-a-governance-record state (if any slips through) is a
-            # remediation target for governance, not an index-now candidate, since the
-            # archetype itself doesn't yet pass ARCHETYPE_EDITORIAL_READY.
-            continue
-        buckets["INDEX_READY_BUT_NOINDEX"].append(route)
-        buckets["NOINDEX_WITHOUT_REASON"].remove(route)
+        buckets[bucket].append(route)
+        reasons[route] = {
+            "bucket": bucket,
+            "family": fid or None,
+            "noindex": noindex,
+            "instance_index_ready": ready,
+            "blocking": blocking,
+            "material": material,
+            "governance_reason_code": (governance_by_family.get(fid) or {}).get(
+                "reason_code"
+            ),
+        }
 
     total = sum(len(v) for v in buckets.values())
-    report = {
-        "schema_version": "universe-sweep-v1",
+    return {
+        "schema_version": "universe-sweep-v2",
         "total_routes": total,
-        "counts": {k: len(v) for k, v in buckets.items()},
+        "counts": {name: len(buckets[name]) for name in BUCKET_ORDER},
+        "archetype_verdicts": archetype,
+        "reject_withdraw": buckets["REJECT_WITHDRAW"],
         "index_ready_but_noindex": buckets["INDEX_READY_BUT_NOINDEX"],
         "noindex_without_reason": buckets["NOINDEX_WITHOUT_REASON"],
+        "indexable_without_evidence": buckets["INDEXABLE_WITHOUT_EVIDENCE"],
         "orphans": buckets["ORPHAN"],
         "not_public_safe": buckets["NOT_PUBLIC_SAFE"],
         "buckets": buckets,
+        "routes": reasons,
     }
-    return report
 
 
 def main() -> int:
     report = sweep()
     out_path = ROOT / OUT_REL
-    out_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({k: v for k, v in report.items() if k != "buckets"}, ensure_ascii=False, indent=2))
-    violations = report["counts"]["INDEX_READY_BUT_NOINDEX"] + report["counts"]["NOINDEX_WITHOUT_REASON"]
+    out_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    print(
+        json.dumps(
+            {
+                k: v
+                for k, v in report.items()
+                if k not in {"buckets", "routes", "archetype_verdicts"}
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
+    violations = (
+        report["counts"]["INDEX_READY_BUT_NOINDEX"]
+        + report["counts"]["NOINDEX_WITHOUT_REASON"]
+    )
     return 0 if violations == 0 else 1
 
 
