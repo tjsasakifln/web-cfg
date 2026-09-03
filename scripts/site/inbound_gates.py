@@ -2359,10 +2359,11 @@ def gate_instance_index_ready(root: Path | None = None) -> GateReport:
         if family_id and family_id not in families_with_noindex:
             families_with_noindex[family_id] = route
 
-    # Now validate that families with noindex routes have governance
+    # Now validate that families with noindex routes have governance with a valid reason_code
     for family_id, sample_route in families_with_noindex.items():
-        has_governance = family_id in governance_by_family
-        if has_governance:
+        gov_entry = governance_by_family.get(family_id)
+        has_valid_reason = bool(gov_entry and gov_entry.get("reason_code"))
+        if has_valid_reason:
             justified_families += 1
         else:
             findings.append(
@@ -2370,7 +2371,7 @@ def gate_instance_index_ready(root: Path | None = None) -> GateReport:
                     gate="instance_index_ready",
                     path=str(base / sample_route.strip("/") / "index.html"),
                     reason="noindex_without_reason",
-                    excerpt=f"family={family_id} has noindex routes but no governance record in {NOINDEX_GOVERNANCE_REL}",
+                    excerpt=f"family={family_id} has noindex routes but no valid governance reason_code in {NOINDEX_GOVERNANCE_REL}",
                 )
             )
 
