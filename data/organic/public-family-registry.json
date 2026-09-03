@@ -598,6 +598,66 @@
       "owner_issue": 251,
       "note": "Namespace inteiro sob decisao versionada e datada: data/offers/piloto-checkout-decision.v1.json, decision_id CFG-PILOTO-CHECKOUT-2026-08-24, issue 251, parent_issue 88, decision_state DEFER, activation_authorized false, review_on 2026-09-20. Esse registro enumera exatamente as 24 URLs de /piloto/ com decision DEFER cada uma e declara robots_rule 'Disallow: /piloto/', que robots.txt de fato aplica. Nao e ausencia de governanca nem fixture solta: e um ativo reversivel preservado de proposito enquanto a decisao pai continua VALIDATE. As 17 rotas restantes de /piloto/ ficam nesta familia; as 7 de /piloto/ofertas/ estao na familia irma priced_offer.",
       "debt": []
+    },
+    {
+      "id": "market-answer-canary",
+      "visitor_job": "Obter a resposta direta sobre o ticket contratual tipico de pavimentacao em SC, com metodo, recorte e limitacoes explicitos, e citar a fonte.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "classification": "PUBLIC_FAMILY",
+      "match": {
+        "routes": [
+          "/inteligencia/valor-tipico-contratos-pavimentacao/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 84,
+      "note": "Canario Market Answer de #84. Esteve index,follow entre ed498b1c7 (2026-08-17) e cea6cd6b0 (2026-08-19); voltou a noindex,nofollow quando o gate de frescor de #151 passou a avaliar expires_at em relogio UTC real e classificou o payload extra-cli como STALE. Fail-closed por desenho: reindexa sozinho quando houver payload renovado mais aprovacao correspondente. Rota exata declarada antes do prefixo /inteligencia/ porque a sua governanca e outra. Atencao para quem reindexar: o <main> exibe medianas de contrato (R$) que o heuristico _displays_price pode ler como preco de oferta; a rota precisara resolver priced_offer ou priced_reference_routes no momento do flip.",
+      "debt": []
+    },
+    {
+      "id": "inteligencia-pseo",
+      "visitor_job": "Navegar pela inteligencia de mercado derivada de contratos publicos (mercados, orgaos, precos, concorrencia e cenarios tecnicos) antes de decidir onde disputar.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "classification": "PUBLIC_FAMILY",
+      "match": {
+        "prefix": "/inteligencia/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 61,
+      "note": "Hub pSEO ICP-Derived Evidence, criado em 9c975611e (2026-07-31) sem issue referenciada. A publicacao e governada por data/pseo/registry.json (human_review_policy: so APPROVED e APPROVED_WITH_NOTES podem ser publicados/indexados; hoje 5 noindex e 18 reject) e sitemap-inteligencia.xml esta vazio. OWNERSHIP PENDENTE: nao foi encontrada issue especifica para esta familia depois de buscar git log, docs/ e data/organic/*.json; owner_issue 61 (epico inbound/pSEO) e um titular provisorio e a atribuicao explicita precisa de decisao do fundador. Revisao registrada em noindex-governance-registry (review_at 2026-12-01). Debt array vazio de proposito: o validador exige que rota em debt seja indexavel e todas estas sao noindex.",
+      "debt": []
+    },
+    {
+      "id": "data-desk-citation-kit",
+      "visitor_job": "Baixar e citar o kit de dados versionado (tabela, grafico, metodo, cobertura e limitacoes) que sustenta uma resposta publicada, com permalink estavel para imprensa e pesquisa.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "classification": "PUBLIC_FAMILY",
+      "match": {
+        "prefix": "/assets/data-desk/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "none"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 89,
+      "note": "Kit de citacao do Data Desk (#89, entregue em 214c94842). A pagina nao tem <main>: e um indice de arquivos (PRESS-BRIEF.txt, chart.svg, dataset.json, table.csv, method.json, coverage.json, limitations.txt) atras de um permalink versionado, e ela mesma declara no corpo 'noindex,follow: esta URL nao e uma pagina indexavel'. A URL canonica publica do fato e /inteligencia/valor-tipico-contratos-pavimentacao/, nao o pacote. Cobertura de acessibilidade declarada como none porque a rota nao esta no censo de audit_accessibility.py, o que e coerente com uma pagina sem <main>.",
+      "debt": [],
+      "exemption_reason": "Permalink de kit de citacao existe para ser baixado e citado por terceiros, nao para converter. Um CTA comercial dentro do pacote de dados contaminaria a prova de independencia que o kit serve para dar, exatamente como em /politica-editorial/."
     }
   ]
 }

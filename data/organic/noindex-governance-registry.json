@@ -67,6 +67,21 @@
       "description": "Namespace inteiro mantido fora do indice por decisao versionada, datada e enumerada por URL em um registro de decisao do repositorio, com Disallow correspondente em robots.txt. O ativo e reversivel e preservado de proposito; a indexacao so volta a ser discutida quando a decisao pai sair de DEFER na data de revisao declarada.",
       "class": "REMEDIABLE",
       "context": "offers-pilot"
+    },
+    "market_answer_freshness_stale": {
+      "description": "Market Answer cujo gate de frescor classificou o payload como STALE ou UNKNOWN a partir de expires_at em relogio UTC real. Fail-closed: fica noindex e fora do sitemap ate existir payload renovado mais aprovacao correspondente. Ver #151.",
+      "class": "REMEDIABLE",
+      "context": "market-answers"
+    },
+    "pseo_publication_gate_unmet": {
+      "description": "Pagina pSEO derivada de dados publicos cuja publicacao ainda nao foi autorizada pelo gate de qualidade e revisao humana de data/pseo/registry.json (human_review_policy: so APPROVED e APPROVED_WITH_NOTES podem ser publicados/indexados).",
+      "class": "REMEDIABLE",
+      "context": "pseo"
+    },
+    "syndication_kit_permalink": {
+      "description": "Permalink versionado de kit de citacao para sindicacao e imprensa. Deliberadamente noindex: a URL canonica publica do fato e a pagina de conteudo que o kit cita, nao o pacote de arquivos. Indexar o pacote competiria com a propria fonte canonica.",
+      "class": "PERMANENT",
+      "context": "data-desk"
     }
   },
   "families": [
@@ -174,6 +189,27 @@
       "owner_issue": 251,
       "review_at": "2026-09-20",
       "note": "REMEDIABLE: as demais 17 rotas de /piloto/ estao no mesmo registro de decisao DEFER, que declara robots_rule 'Disallow: /piloto/' e robots.txt aplica. Ativo reversivel preservado enquanto a decisao pai (#88) continua VALIDATE. review_at espelha o review_on do registro de decisao."
+    },
+    {
+      "family_id": "market-answer-canary",
+      "reason_code": "market_answer_freshness_stale",
+      "owner_issue": 84,
+      "review_at": "2026-12-01",
+      "note": "REMEDIABLE: esteve index,follow entre 2026-08-17 e 2026-08-19. cea6cd6b0 (Refs #151) trocou o calendario congelado por datetime.now(timezone.utc) e o payload extra-cli passou a classificar como STALE, devolvendo a rota para noindex,nofollow e tirando-a de sitemap-inteligencia.xml. Reindexa sozinha com payload renovado mais aprovacao correspondente; nao deve ser flipada a mao."
+    },
+    {
+      "family_id": "inteligencia-pseo",
+      "reason_code": "pseo_publication_gate_unmet",
+      "owner_issue": 61,
+      "review_at": "2026-12-01",
+      "note": "REMEDIABLE: 11 rotas (hub, /cenarios/ com 5 cenarios tecnicos, /mercados/, /orgaos/, /precos/, /concorrencia/) em noindex,follow. data/pseo/registry.json conta 5 noindex e 18 reject e so admite publicacao em APPROVED ou APPROVED_WITH_NOTES; sitemap-inteligencia.xml esta vazio, coerente. docs/LIGHTHOUSE-REPORT.md ja registrava 'intentional noindex,follow while publish_count=0'. OWNERSHIP PENDENTE: sem issue propria encontrada; #61 e titular provisorio ate o fundador atribuir dono explicito."
+    },
+    {
+      "family_id": "data-desk-citation-kit",
+      "reason_code": "syndication_kit_permalink",
+      "owner_issue": 89,
+      "review_at": null,
+      "note": "PERMANENT: a propria pagina declara no corpo 'noindex,follow: esta URL nao e uma pagina indexavel' e aponta a fonte canonica /inteligencia/valor-tipico-contratos-pavimentacao/. Indexar o kit competiria com a resposta que ele existe para sustentar."
     }
   ]
 }
