@@ -28,7 +28,7 @@ const {
 const { createStore, buildLeadRecord } = require("./lib/lead-store.cjs");
 const { rateLimit } = require("./lib/lead-rate-limit.cjs");
 const { verifyTurnstile, deliverAll } = require("./lib/lead-delivery.cjs");
-const { initialHandoff, attemptInboundHandoff } = require("./lib/inbound-handoff.cjs");
+const { initialHandoff, attemptInboundHandoff, postWebIntentToWarmbly } = require("./lib/inbound-handoff.cjs");
 const resultStore = require("./lib/live-intelligence-result-store.cjs");
 
 // Allow tests to inject store
@@ -519,6 +519,37 @@ exports.handler = async (event) => {
         lead_id,
         code: err && err.message ? String(err.message).slice(0, 80) : "error",
       });
+    }
+
+    // Web-intent delivery (if intent_kind is set) — non-blocking
+    if (record.intent_kind) {
+      try {
+        const webIntentResult = await postWebIntentToWarmbly({
+          intent_kind: record.intent_kind,
+          email: record.email,
+          nome: record.nome,
+          company_ref: record.company_ref,
+          opportunity_id: record.opportunity_id,
+          topic: record.topic,
+          cadence: record.cadence,
+          consent_checked: record.consentimento === "on" || record.consentimento === true,
+          consent_at: record.consent_at,
+          evidence: record.evidence,
+        });
+        safeLog("info", "web_intent_delivery_attempted", {
+          lead_id,
+          intent_kind: record.intent_kind,
+          status: webIntentResult.status,
+          http: webIntentResult.http || null,
+          error: webIntentResult.last_error || null,
+        });
+      } catch (err) {
+        safeLog("error", "web_intent_delivery_unexpected", {
+          lead_id,
+          intent_kind: record.intent_kind,
+          code: err && err.message ? String(err.message).slice(0, 80) : "error",
+        });
+      }
     }
   }
 

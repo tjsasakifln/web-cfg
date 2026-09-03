@@ -780,27 +780,15 @@ function isDue(handoff, now = new Date()) {
   return Date.parse(handoff.next_attempt_at) <= now.getTime();
 }
 
-async function postInbound(record, { now = new Date(), env = process.env } = {}) {
-  if (!isHandoffTransportableRecord(record)) {
-    return { status: STATUS.SKIPPED, reason: "non_real", attemptsDelta: 0 };
-  }
+/**
+ * Generic signed inbound POST — handles any envelope type (lead, web-intent, etc.)
+ * by delegating HTTP/signature/retry logic without payload-specific mapping.
+ */
+async function postSignedInbound(payload, { now = new Date(), env = process.env } = {}) {
   const cfg = resolveInboundConfig(env);
   if (cfg.skip) return { status: STATUS.SKIPPED, reason: cfg.reason, attemptsDelta: 0 };
   if (cfg.blocked) return { status: STATUS.BLOCKED, reason: cfg.reason, last_error: cfg.reason, attemptsDelta: 0 };
 
-  // Resolve company_ref from establishment_digest (server-side identity enrichment)
-  const recordWithIdentity = { ...record };
-  if (record && record._establishment_digest) {
-    const companyRef = resolveCompanyRef(record._establishment_digest, { env });
-    if (companyRef) {
-      recordWithIdentity.company_ref = companyRef;
-    }
-  }
-
-  const payload = mapLeadToInboundV1(recordWithIdentity);
-  if (!payload.lead_id && !payload.receipt_id) {
-    return { status: STATUS.DEAD, reason: "missing_lead_id", last_error: "missing_lead_id", attemptsDelta: 0 };
-  }
   const rawBody = stableBody(payload);
   const unix = Math.floor(now.getTime() / 1000);
   const signature = signWarmblyInbound(cfg.secret, rawBody, unix);
@@ -817,7 +805,7 @@ async function postInbound(record, { now = new Date(), env = process.env } = {})
         Accept: "application/json",
         "User-Agent": "confenge-inbound/1.0",
         "X-Warmbly-Signature": signature,
-        "Idempotency-Key": payload.lead_id || payload.receipt_id,
+        "Idempotency-Key": payload.lead_id || payload.receipt_id || payload.schema || "web-intent",
       },
       body: rawBody,
       signal: controller ? controller.signal : undefined,
@@ -831,7 +819,8 @@ async function postInbound(record, { now = new Date(), env = process.env } = {})
       const actionId = inner && inner.action && (inner.action.id || inner.action.ID);
       const receipt = inner && (
         inner.receipt_id ||
-        (inner.lead && (inner.lead.receipt_id || inner.lead.lead_id))
+        (inner.lead && (inner.lead.receipt_id || inner.lead.lead_id)) ||
+        inner.id
       );
       downstream = {
         http: res.status,
@@ -839,8 +828,9 @@ async function postInbound(record, { now = new Date(), env = process.env } = {})
         action_id: actionId ? String(actionId).slice(0, 80) : undefined,
         downstream_receipt: receipt ? String(receipt).slice(0, 80) : undefined,
       };
-      const expectedReceipt = String(payload.receipt_id || payload.lead_id || "");
-      if (!receipt || String(receipt) !== expectedReceipt) {
+      // Only validate receipt if we have an expected key
+      const expectedReceipt = String(payload.lead_id || payload.receipt_id || "");
+      if (expectedReceipt && receipt && String(receipt) !== expectedReceipt) {
         classified = STATUS.RETRYABLE;
         downstream = null;
       }
@@ -869,6 +859,95 @@ async function postInbound(record, { now = new Date(), env = process.env } = {})
   } finally {
     if (timer) clearTimeout(timer);
   }
+}
+
+async function postInbound(record, { now = new Date(), env = process.env } = {}) {
+  if (!isHandoffTransportableRecord(record)) {
+    return { status: STATUS.SKIPPED, reason: "non_real", attemptsDelta: 0 };
+  }
+
+  // Resolve company_ref from establishment_digest (server-side identity enrichment)
+  const recordWithIdentity = { ...record };
+  if (record && record._establishment_digest) {
+    const companyRef = resolveCompanyRef(record._establishment_digest, { env });
+    if (companyRef) {
+      recordWithIdentity.company_ref = companyRef;
+    }
+  }
+
+  const payload = mapLeadToInboundV1(recordWithIdentity);
+  if (!payload.lead_id && !payload.receipt_id) {
+    return { status: STATUS.DEAD, reason: "missing_lead_id", last_error: "missing_lead_id", attemptsDelta: 0 };
+  }
+
+  return postSignedInbound(payload, { now, env });
+}
+
+/**
+ * Post web-intent envelope to Warmbly — fail-closed if envelope is invalid.
+ * Accepts form data and converts to CONFENGE_WEB_INTENT/1.0 envelope.
+ */
+async function postWebIntentToWarmbly(formData, { now = new Date(), env = process.env } = {}) {
+  if (!formData || !formData.intent_kind) {
+    return { status: STATUS.SKIPPED, reason: "no_intent_kind", attemptsDelta: 0 };
+  }
+
+  let buildWebIntentEnvelope;
+  let validateWebIntentEnvelope;
+  try {
+    const builder = require("./web-intent-builder.cjs");
+    buildWebIntentEnvelope = builder.buildWebIntentEnvelope;
+    validateWebIntentEnvelope = builder.validateWebIntentEnvelope;
+  } catch (err) {
+    safeLog("error", "web_intent_builder_load_failed", {
+      error: err && err.message ? String(err.message).slice(0, 80) : "unknown",
+    });
+    return { status: STATUS.BLOCKED, reason: "builder_load_failed", last_error: "builder_unavailable", attemptsDelta: 0 };
+  }
+
+  // Build envelope from form data
+  const buildResult = buildWebIntentEnvelope({
+    intent_kind: formData.intent_kind,
+    email: formData.email,
+    name: formData.nome || formData.name,
+    company_ref: formData.company_ref,
+    opportunity_id: formData.opportunity_id,
+    topic: formData.topic,
+    cadence: formData.cadence,
+    consent_checked: formData.consentimento === true || formData.consentimento === "on",
+    consent_at: formData.consent_at || new Date().toISOString(),
+    evidence: formData.evidence,
+    occurred_at: formData.occurred_at || new Date().toISOString(),
+  });
+
+  if (!buildResult.ok) {
+    safeLog("warn", "web_intent_build_failed", {
+      intent_kind: formData.intent_kind,
+      error: buildResult.error,
+      details: buildResult.details ? buildResult.details.join(",") : "",
+    });
+    return { status: STATUS.BLOCKED, reason: "envelope_build_failed", last_error: buildResult.error, attemptsDelta: 0 };
+  }
+
+  const envelope = buildResult.envelope;
+
+  // Validate envelope (redundant check, but fail-closed)
+  const validation = validateWebIntentEnvelope(envelope);
+  if (!validation.ok) {
+    safeLog("warn", "web_intent_validation_failed", {
+      intent_kind: formData.intent_kind,
+      errors: validation.errors.join(","),
+    });
+    return { status: STATUS.BLOCKED, reason: "envelope_validation_failed", last_error: validation.errors[0], attemptsDelta: 0 };
+  }
+
+  safeLog("info", "web_intent_envelope_built", {
+    intent_kind: formData.intent_kind,
+    contact_email: String(formData.email || "").slice(0, 20),
+  });
+
+  // Post to Warmbly using generic handler
+  return await postSignedInbound(envelope, { now, env });
 }
 
 function applyAttempt(current, result, { now = new Date(), env = process.env } = {}) {
@@ -1117,7 +1196,9 @@ module.exports = {
   probeInboundDestinationHealth,
   requeueEligibleHandoffs,
   isDue,
+  postSignedInbound,
   postInbound,
+  postWebIntentToWarmbly,
   applyAttempt,
   attemptInboundHandoff,
   drainPendingHandoffs,
