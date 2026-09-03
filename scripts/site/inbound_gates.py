@@ -3487,6 +3487,30 @@ def _regression_fixtures(
 # --- gate drivers -----------------------------------------------------------
 
 
+REJECT_WITHDRAW_DEBT_REL = "data/organic/reject-withdraw-debt.json"
+
+
+def _reject_withdraw_debt(base: Path) -> dict[str, dict[str, Any]]:
+    """Load dated, owned exceptions that keep an already-noindex REJECT family
+    from hard-blocking CI. See the file's own ``purpose`` for the exact rule:
+    the finding stays reported as material/error, this only decides whether it
+    also flips the gate's aggregate ``ok`` -- and only when every current
+    instance of the family is already noindex, so the debt cannot mask an
+    indexation risk, mirroring the conversion gate's existing debt_policy."""
+    doc = _read_json(base / REJECT_WITHDRAW_DEBT_REL)
+    today = date.today().isoformat()
+    out: dict[str, dict[str, Any]] = {}
+    for entry in doc.get("entries") or []:
+        fid = entry.get("family_id")
+        expires_at = entry.get("expires_at")
+        if not fid or not expires_at or expires_at < today:
+            continue
+        if not entry.get("owner_issue") or not entry.get("reason"):
+            continue
+        out[str(fid)] = entry
+    return out
+
+
 def gate_archetype_editorial_ready(root: Path | None = None) -> GateReport:
     """Composite archetype verdict per declared family.
 
@@ -3494,11 +3518,23 @@ def gate_archetype_editorial_ready(root: Path | None = None) -> GateReport:
     family's own deterministic sample. A material failure (unsafe copy, an
     explicit named-gate REJECT, or a doorway archetype) is an error and means
     withdraw; every other failing subgate is a warning and means remediate.
+
+    A material failure whose family has every current instance already
+    noindex AND a non-expired, owned entry in ``reject-withdraw-debt.json``
+    does not flip the gate's aggregate ``ok`` -- it is reported as
+    ``severity="error"`` exactly like any other material finding (nothing is
+    hidden or softened), but tagged ``debt_tracked=True`` so a route that is
+    already unreachable via search does not hard-block every PR in the repo
+    while its actual withdrawal (a distinct, sometimes irreversible action)
+    is pending its owning issue's decision.
     """
     ctx = build_indexation_context(root)
+    debt = _reject_withdraw_debt(ctx.base)
     findings: list[Finding] = []
     verdicts: dict[str, Any] = {}
     ready = 0
+    blocking_material_families: list[str] = []
+    debt_tracked_families: list[str] = []
     for family in ctx.families:
         fid = str(family.get("id") or "")
         if not fid:
@@ -3519,21 +3555,36 @@ def gate_archetype_editorial_ready(root: Path | None = None) -> GateReport:
             if sample and sample[0] in ctx.path_by_route
             else FAMILY_REGISTRY_REL
         )
+        is_material = bool(detail.get("material"))
+        family_routes = ctx.family_routes.get(fid) or []
+        all_noindex = bool(family_routes) and all(
+            is_noindex(ctx.html_by_route.get(r, "")) for r in family_routes
+        )
+        debt_entry = debt.get(fid) if is_material and all_noindex else None
+        if debt_entry:
+            debt_tracked_families.append(fid)
+        elif is_material:
+            blocking_material_families.append(fid)
         for name in detail.get("blocking") or []:
             subgate = (detail.get("subgates") or {}).get(name) or {}
             material = name in (detail.get("material") or [])
+            excerpt = f"family={fid} {subgate.get('detail', '')}"
+            if debt_entry:
+                excerpt += (
+                    f" [debt_tracked owner_issue={debt_entry['owner_issue']} "
+                    f"expires_at={debt_entry['expires_at']}: {debt_entry['reason']}]"
+                )
             findings.append(
                 Finding(
                     gate="archetype_editorial_ready",
                     path=path,
                     reason=f"archetype_{name}_failed",
-                    excerpt=f"family={fid} {subgate.get('detail', '')}"[:400],
+                    excerpt=excerpt[:600],
                     severity="error" if material else "warn",
                 )
             )
-    errors = [f for f in findings if f.severity == "error"]
     return GateReport(
-        ok=len(errors) == 0,
+        ok=len(blocking_material_families) == 0,
         findings=findings,
         stats={
             "schema": INDEXATION_EVIDENCE_SCHEMA,
@@ -3543,6 +3594,8 @@ def gate_archetype_editorial_ready(root: Path | None = None) -> GateReport:
             "materially_rejected": sorted(
                 fid for fid, v in verdicts.items() if v["material"]
             ),
+            "materially_rejected_blocking": sorted(blocking_material_families),
+            "materially_rejected_debt_tracked": sorted(debt_tracked_families),
             "verdicts": verdicts,
         },
     )

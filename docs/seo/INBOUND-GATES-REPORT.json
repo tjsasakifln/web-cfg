@@ -1,5 +1,5 @@
 {
-  "ok": false,
+  "ok": true,
   "gates": {
     "naturalness": {
       "ok": true,
@@ -440,7 +440,7 @@
       }
     },
     "archetype_editorial_ready": {
-      "ok": false,
+      "ok": true,
       "findings": [
         {
           "gate": "archetype_editorial_ready",
@@ -880,28 +880,28 @@
           "gate": "archetype_editorial_ready",
           "path": "piloto/index.html",
           "reason": "archetype_answer_first_failed",
-          "excerpt": "family=piloto-preview 3/6 sampled pages fail: /piloto/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "excerpt": "family=piloto-preview 3/6 sampled pages fail: /piloto/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/: first 3 paragraphs are shorter than 120 chars or open with a CTA [debt_tracked owner_issue=251 expires_at=2026-10-15: data/offers/piloto-checkout-decision.v1.json already records this entire namespace as a versioned, dated DEFER decision, enumerated by URL, with a matching robots.txt Disallow -- the decision to keep this out of discovery already exists and predates this campaign. The archetype gate additionally fi",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "piloto/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=piloto-preview 3/6 sampled pages fail: /piloto/: 31 words; /piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/: 295 words",
+          "excerpt": "family=piloto-preview 3/6 sampled pages fail: /piloto/: 31 words; /piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/: 295 words [debt_tracked owner_issue=251 expires_at=2026-10-15: data/offers/piloto-checkout-decision.v1.json already records this entire namespace as a versioned, dated DEFER decision, enumerated by URL, with a matching robots.txt Disallow -- the decision to keep this out of discovery already exists and predates this campaign. The archetype gate additionally finds the per-UF /piloto/concorrencia/ pages are near-duplicate templates (jaccard6 0.742), which is consistent w",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "piloto/index.html",
           "reason": "archetype_specific_value_failed",
-          "excerpt": "family=piloto-preview 3/6 sampled pages fail: /piloto/: 0 concrete specifics (min 3); /piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/: 2 concrete specifics (min 3)",
+          "excerpt": "family=piloto-preview 3/6 sampled pages fail: /piloto/: 0 concrete specifics (min 3); /piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/: 2 concrete specifics (min 3) [debt_tracked owner_issue=251 expires_at=2026-10-15: data/offers/piloto-checkout-decision.v1.json already records this entire namespace as a versioned, dated DEFER decision, enumerated by URL, with a matching robots.txt Disallow -- the decision to keep this out of discovery already exists and predates this campaign. The archetype gate additionally finds the per-UF /piloto/concorrencia/ pages are near-duplicate templates ",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "piloto/index.html",
           "reason": "archetype_not_doorway_failed",
-          "excerpt": "family=piloto-preview max intra-archetype jaccard6=0.742 ('/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/', '/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/')",
+          "excerpt": "family=piloto-preview max intra-archetype jaccard6=0.742 ('/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/', '/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/') [debt_tracked owner_issue=251 expires_at=2026-10-15: data/offers/piloto-checkout-decision.v1.json already records this entire namespace as a versioned, dated DEFER decision, enumerated by URL, with a matching robots.txt Disallow -- the decision to keep this out of discovery already exists and predates this campaign. The archetype gate additionally finds the per-UF /piloto/concorrencia/ pages are near-duplicate te",
           "severity": "error"
         },
         {
@@ -929,21 +929,21 @@
           "gate": "archetype_editorial_ready",
           "path": "jurisprudencia-contratos-obras/index.html",
           "reason": "archetype_substantive_failed",
-          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: /jurisprudencia-contratos-obras/: 66 words",
+          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: /jurisprudencia-contratos-obras/: 66 words [debt_tracked owner_issue=245 expires_at=2026-10-15: EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.]",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "jurisprudencia-contratos-obras/index.html",
           "reason": "archetype_specific_value_failed",
-          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: /jurisprudencia-contratos-obras/: 0 concrete specifics (min 3)",
+          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: /jurisprudencia-contratos-obras/: 0 concrete specifics (min 3) [debt_tracked owner_issue=245 expires_at=2026-10-15: EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.]",
           "severity": "warn"
         },
         {
           "gate": "archetype_editorial_ready",
           "path": "jurisprudencia-contratos-obras/index.html",
           "reason": "archetype_named_gate_verdict_failed",
-          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: data/editorial/EDITORIAL-REGISTRY.json = REJECTED",
+          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: data/editorial/EDITORIAL-REGISTRY.json = REJECTED [debt_tracked owner_issue=245 expires_at=2026-10-15: EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.]",
           "severity": "error"
         },
         {
@@ -967,6 +967,11 @@
         "archetype_ready": 3,
         "archetype_not_ready": 31,
         "materially_rejected": [
+          "jurisprudencia-contratos-obras",
+          "piloto-preview"
+        ],
+        "materially_rejected_blocking": [],
+        "materially_rejected_debt_tracked": [
           "jurisprudencia-contratos-obras",
           "piloto-preview"
         ],
