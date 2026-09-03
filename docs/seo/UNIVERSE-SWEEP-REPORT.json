@@ -5,9 +5,9 @@
     "REJECT_WITHDRAW": 19,
     "NOT_PUBLIC_SAFE": 98,
     "ORPHAN": 0,
-    "INDEX_READY": 23,
+    "INDEX_READY": 58,
     "INDEX_READY_BUT_NOINDEX": 0,
-    "INDEXABLE_WITHOUT_EVIDENCE": 53,
+    "INDEXABLE_WITHOUT_EVIDENCE": 18,
     "NOINDEX_JUSTIFIED": 56,
     "NOINDEX_WITHOUT_REASON": 0
   },
@@ -177,60 +177,53 @@
   "index_ready_but_noindex": [],
   "noindex_without_reason": [],
   "indexable_without_evidence": [
-    "/acompanhamento-contratos-obras/",
-    "/atrasos-prorrogacao-obras-publicas/",
-    "/auditoria-orcamento-licitacao/",
-    "/bid-room-licitacoes-obras/",
-    "/casos/",
     "/casos/aditivo-art125-demonstrativo/",
     "/casos/medicao-glosa-demonstrativo/",
-    "/casos/modelo-apresentacao-executiva-resultados/",
-    "/casos/modelo-base-quantitativa-canonica/",
-    "/casos/modelo-contratos-vincendos-relicitacao/",
-    "/casos/modelo-mapa-compradores-publicos/",
-    "/casos/modelo-mapeamento-concorrentes-publicos/",
-    "/casos/modelo-painel-precos-obras-publicas/",
-    "/casos/modelo-relatorio-executivo-consolidado/",
-    "/casos/modelo-relatorio-inteligencia-licitacoes/",
     "/comercial/privacidade-leads/",
     "/comercial/termos-diagnostico-b2g/",
     "/conflitos/",
     "/conteudos/",
-    "/conteudos/administracao-local-orcamento-obra-publica/",
-    "/conteudos/bdi-diferenciado-obra-publica/",
-    "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
-    "/conteudos/comprovacao-exequibilidade-proposta-obra/",
-    "/conteudos/data-base-orcamento-reajuste-obra-publica/",
-    "/conteudos/empreitada-preco-global-preco-unitario/",
     "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
-    "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
-    "/conteudos/sinapi-desonerado-nao-desonerado/",
-    "/conteudos/sinapi-ou-sicro-obra-publica/",
-    "/correcoes/",
-    "/defesa-margem-contratos-publicos/",
-    "/defesa-tecnica-contratos-publicos/",
-    "/diagnostico-b2g-360/",
-    "/diagnostico-b2g-expansao/",
-    "/diagnostico-pre-licitacao/",
-    "/diretoria-b2g/",
-    "/entregas/",
     "/ferramentas/",
-    "/ferramentas/diagnostico-defesa-margem/",
     "/ferramentas/matriz-atraso-obra/",
     "/guias-contratos-obras/",
     "/imprensa/",
     "/lei-14133-obras/",
     "/metodologia-inteligencia/",
     "/nurture/",
-    "/politica-editorial/",
     "/politica-editorial/historico/",
-    "/politica-editorial/v/1.0.0/",
     "/problemas-que-resolvemos/",
-    "/radar/nacional-obras-publicas/",
     "/servicos-obras-publicas/",
-    "/termos-de-uso/",
     "/uso-de-ia/"
   ],
+  "indexable_without_evidence_by_remedy": {
+    "EXTERNAL_EVIDENCE": [
+      "/ferramentas/"
+    ],
+    "NAMED_GATE_VERDICT": [
+      "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/"
+    ],
+    "STALE_OR_UNDATED": [
+      "/comercial/privacidade-leads/",
+      "/comercial/termos-diagnostico-b2g/",
+      "/conteudos/",
+      "/guias-contratos-obras/",
+      "/imprensa/",
+      "/lei-14133-obras/",
+      "/nurture/",
+      "/problemas-que-resolvemos/",
+      "/servicos-obras-publicas/"
+    ],
+    "THIN_OR_INCOMPLETE": [
+      "/casos/aditivo-art125-demonstrativo/",
+      "/casos/medicao-glosa-demonstrativo/",
+      "/conflitos/",
+      "/ferramentas/matriz-atraso-obra/",
+      "/metodologia-inteligencia/",
+      "/politica-editorial/historico/",
+      "/uso-de-ia/"
+    ]
+  },
   "orphans": [],
   "not_public_safe": [
     "/conteudos/aceleracao-obra-publica-custo-adicional/",
@@ -457,38 +450,12 @@
     "ORPHAN": [],
     "INDEX_READY": [
       "/",
-      "/aditivos-obras-publicas/",
-      "/confianca/",
-      "/conteudos/aditivo-empreitada-por-preco-global/",
-      "/conteudos/atraso-na-medicao-obra-publica/",
-      "/conteudos/atraso-obra-culpa-administracao/",
-      "/conteudos/atraso-pagamento-contrato-publico-suspender/",
-      "/conteudos/demolicao-nao-prevista-obra-publica/",
-      "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
-      "/conteudos/glosa-por-qualidade-obra-publica/",
-      "/conteudos/limite-aditivo-25-50-obra-publica/",
-      "/conteudos/medicao-por-evento-obra-publica/",
-      "/conteudos/pagamento-parcial-etapa-empreitada-global/",
-      "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
-      "/conteudos/resposta-notificacao-atraso-obra-publica/",
-      "/especialista/tiago-jun-sasaki/",
-      "/ferramentas/checklist-reequilibrio/",
-      "/ferramentas/limite-acrescimos-supressoes/",
-      "/guias-contratos-obras/checklist-pedido-aditivo/",
-      "/lei-14133-obras/preco-item-novo-desconto-proposta/",
-      "/medicoes-glosas-obras-publicas/",
-      "/privacidade/",
-      "/reequilibrio-obras-publicas/"
-    ],
-    "INDEX_READY_BUT_NOINDEX": [],
-    "INDEXABLE_WITHOUT_EVIDENCE": [
       "/acompanhamento-contratos-obras/",
+      "/aditivos-obras-publicas/",
       "/atrasos-prorrogacao-obras-publicas/",
       "/auditoria-orcamento-licitacao/",
       "/bid-room-licitacoes-obras/",
       "/casos/",
-      "/casos/aditivo-art125-demonstrativo/",
-      "/casos/medicao-glosa-demonstrativo/",
       "/casos/modelo-apresentacao-executiva-resultados/",
       "/casos/modelo-base-quantitativa-canonica/",
       "/casos/modelo-contratos-vincendos-relicitacao/",
@@ -497,18 +464,26 @@
       "/casos/modelo-painel-precos-obras-publicas/",
       "/casos/modelo-relatorio-executivo-consolidado/",
       "/casos/modelo-relatorio-inteligencia-licitacoes/",
-      "/comercial/privacidade-leads/",
-      "/comercial/termos-diagnostico-b2g/",
-      "/conflitos/",
-      "/conteudos/",
+      "/confianca/",
+      "/conteudos/aditivo-empreitada-por-preco-global/",
       "/conteudos/administracao-local-orcamento-obra-publica/",
+      "/conteudos/atraso-na-medicao-obra-publica/",
+      "/conteudos/atraso-obra-culpa-administracao/",
+      "/conteudos/atraso-pagamento-contrato-publico-suspender/",
       "/conteudos/bdi-diferenciado-obra-publica/",
       "/conteudos/chuva-prorrogacao-prazo-obra-publica/",
       "/conteudos/comprovacao-exequibilidade-proposta-obra/",
       "/conteudos/data-base-orcamento-reajuste-obra-publica/",
+      "/conteudos/demolicao-nao-prevista-obra-publica/",
       "/conteudos/empreitada-preco-global-preco-unitario/",
-      "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+      "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
+      "/conteudos/glosa-por-qualidade-obra-publica/",
+      "/conteudos/limite-aditivo-25-50-obra-publica/",
+      "/conteudos/medicao-por-evento-obra-publica/",
       "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/",
+      "/conteudos/pagamento-parcial-etapa-empreitada-global/",
+      "/conteudos/prorrogacao-prazo-obra-publica-documentos/",
+      "/conteudos/resposta-notificacao-atraso-obra-publica/",
       "/conteudos/sinapi-desonerado-nao-desonerado/",
       "/conteudos/sinapi-ou-sicro-obra-publica/",
       "/correcoes/",
@@ -519,21 +494,39 @@
       "/diagnostico-pre-licitacao/",
       "/diretoria-b2g/",
       "/entregas/",
-      "/ferramentas/",
+      "/especialista/tiago-jun-sasaki/",
+      "/ferramentas/checklist-reequilibrio/",
       "/ferramentas/diagnostico-defesa-margem/",
+      "/ferramentas/limite-acrescimos-supressoes/",
+      "/guias-contratos-obras/checklist-pedido-aditivo/",
+      "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+      "/medicoes-glosas-obras-publicas/",
+      "/politica-editorial/",
+      "/politica-editorial/v/1.0.0/",
+      "/privacidade/",
+      "/radar/nacional-obras-publicas/",
+      "/reequilibrio-obras-publicas/",
+      "/termos-de-uso/"
+    ],
+    "INDEX_READY_BUT_NOINDEX": [],
+    "INDEXABLE_WITHOUT_EVIDENCE": [
+      "/casos/aditivo-art125-demonstrativo/",
+      "/casos/medicao-glosa-demonstrativo/",
+      "/comercial/privacidade-leads/",
+      "/comercial/termos-diagnostico-b2g/",
+      "/conflitos/",
+      "/conteudos/",
+      "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/",
+      "/ferramentas/",
       "/ferramentas/matriz-atraso-obra/",
       "/guias-contratos-obras/",
       "/imprensa/",
       "/lei-14133-obras/",
       "/metodologia-inteligencia/",
       "/nurture/",
-      "/politica-editorial/",
       "/politica-editorial/historico/",
-      "/politica-editorial/v/1.0.0/",
       "/problemas-que-resolvemos/",
-      "/radar/nacional-obras-publicas/",
       "/servicos-obras-publicas/",
-      "/termos-de-uso/",
       "/uso-de-ia/"
     ],
     "NOINDEX_JUSTIFIED": [
@@ -621,14 +614,11 @@
       "governance_reason_code": "http_status_page"
     },
     "/acompanhamento-contratos-obras/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "service-pillars",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
@@ -768,48 +758,38 @@
       "governance_reason_code": "syndication_kit_permalink"
     },
     "/atrasos-prorrogacao-obras-publicas/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "service-pillars",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/auditoria-orcamento-licitacao/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "service-pillars",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/bid-room-licitacoes-obras/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "service-pillars",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/casos/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "casos",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
@@ -830,105 +810,80 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
-        "citable_source",
         "archetype_completeness"
       ],
       "material": [],
       "governance_reason_code": null
     },
     "/casos/modelo-apresentacao-executiva-resultados/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "casos-modelos-precificados",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/casos/modelo-base-quantitativa-canonica/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "casos-modelos-precificados",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/casos/modelo-contratos-vincendos-relicitacao/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "casos-modelos-precificados",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/casos/modelo-mapa-compradores-publicos/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "casos-modelos-precificados",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/casos/modelo-mapeamento-concorrentes-publicos/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "casos-modelos-precificados",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/casos/modelo-painel-precos-obras-publicas/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "casos-modelos-precificados",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/casos/modelo-relatorio-executivo-consolidado/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "casos-modelos-precificados",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/casos/modelo-relatorio-inteligencia-licitacoes/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "casos-modelos-precificados",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
@@ -949,9 +904,7 @@
       "noindex": true,
       "instance_index_ready": false,
       "blocking": [
-        "official_live",
         "freshness",
-        "citable_source",
         "self_canonical"
       ],
       "material": [],
@@ -963,8 +916,7 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
-        "freshness",
-        "citable_source"
+        "freshness"
       ],
       "material": [],
       "governance_reason_code": "commercial_transactional_form"
@@ -984,7 +936,6 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
-        "citable_source",
         "archetype_completeness"
       ],
       "material": [],
@@ -1035,13 +986,11 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/administracao-local-orcamento-obra-publica/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "editorial-library",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": "editorial_disposition_hold"
     },
@@ -1145,13 +1094,11 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/bdi-diferenciado-obra-publica/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "editorial-library",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": "editorial_disposition_hold"
     },
@@ -1192,13 +1139,11 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/chuva-prorrogacao-prazo-obra-publica/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "editorial-library",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": "editorial_disposition_hold"
     },
@@ -1251,13 +1196,11 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/comprovacao-exequibilidade-proposta-obra/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "editorial-library",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": "editorial_disposition_hold"
     },
@@ -1431,13 +1374,11 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/data-base-orcamento-reajuste-obra-publica/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "editorial-library",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": "editorial_disposition_hold"
     },
@@ -1561,13 +1502,11 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/empreitada-preco-global-preco-unitario/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "editorial-library",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": "editorial_disposition_hold"
     },
@@ -1810,7 +1749,6 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
-        "official_live",
         "named_gate_verdict"
       ],
       "material": [],
@@ -1839,13 +1777,11 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "editorial-library",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": "editorial_disposition_hold"
     },
@@ -2324,24 +2260,20 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/sinapi-desonerado-nao-desonerado/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "editorial-library",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/sinapi-ou-sicro-obra-publica/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "editorial-library",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": "editorial_disposition_hold"
     },
@@ -2406,60 +2338,47 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/correcoes/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "legal-and-trust",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/defesa-margem-contratos-publicos/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "service-pillars",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/defesa-tecnica-contratos-publicos/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "service-pillars",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/diagnostico-b2g-360/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "service-pillars",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/diagnostico-b2g-expansao/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "service-pillars",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
@@ -2506,37 +2425,29 @@
       "governance_reason_code": "post_transaction_state"
     },
     "/diagnostico-pre-licitacao/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "service-pillars",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/diretoria-b2g/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "service-pillars",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
     "/entregas/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "entregas",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "official_live",
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
@@ -2571,13 +2482,11 @@
       "governance_reason_code": null
     },
     "/ferramentas/diagnostico-defesa-margem/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "ferramentas",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
@@ -2596,7 +2505,6 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
-        "citable_source",
         "archetype_completeness"
       ],
       "material": [],
@@ -2664,7 +2572,6 @@
       "instance_index_ready": false,
       "blocking": [
         "freshness",
-        "citable_source",
         "archetype_completeness"
       ],
       "material": [],
@@ -2948,7 +2855,6 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
-        "citable_source",
         "archetype_completeness"
       ],
       "material": [],
@@ -3449,13 +3355,11 @@
       "governance_reason_code": "deferred_by_decision_record"
     },
     "/politica-editorial/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "politica-editorial",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
@@ -3465,20 +3369,17 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
-        "citable_source",
         "archetype_completeness"
       ],
       "material": [],
       "governance_reason_code": null
     },
     "/politica-editorial/v/1.0.0/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "politica-editorial",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
@@ -3497,8 +3398,7 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
-        "freshness",
-        "citable_source"
+        "freshness"
       ],
       "material": [],
       "governance_reason_code": null
@@ -3510,20 +3410,17 @@
       "instance_index_ready": false,
       "blocking": [
         "freshness",
-        "citable_source",
         "archetype_completeness"
       ],
       "material": [],
       "governance_reason_code": "fixture_preview_staging"
     },
     "/radar/nacional-obras-publicas/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "radar",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": "fixture_preview_staging"
     },
@@ -3533,8 +3430,7 @@
       "noindex": true,
       "instance_index_ready": false,
       "blocking": [
-        "public_safe",
-        "citable_source"
+        "public_safe"
       ],
       "material": [],
       "governance_reason_code": "fixture_preview_staging"
@@ -3554,20 +3450,17 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
-        "freshness",
-        "citable_source"
+        "freshness"
       ],
       "material": [],
       "governance_reason_code": null
     },
     "/termos-de-uso/": {
-      "bucket": "INDEXABLE_WITHOUT_EVIDENCE",
+      "bucket": "INDEX_READY",
       "family": "legal-and-trust",
       "noindex": false,
-      "instance_index_ready": false,
-      "blocking": [
-        "citable_source"
-      ],
+      "instance_index_ready": true,
+      "blocking": [],
       "material": [],
       "governance_reason_code": null
     },
@@ -3577,7 +3470,6 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
-        "citable_source",
         "archetype_completeness"
       ],
       "material": [],

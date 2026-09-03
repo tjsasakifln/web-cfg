@@ -2278,6 +2278,56 @@ SUBGATE_REMEDIABLE = "remediable"
 # subjects, which is not an accusation against anyone.
 NAMED_ENTITY_FAMILY_IDS = frozenset({"analises-contratos-publicos"})
 
+# --- which families must prove an EXTERNAL record, and which may not claim not to
+#
+# ``official_live`` and ``citable_source`` ask about a record the site did not
+# author: is the record behind this page production data, and can the reader
+# check the claim against the source it came from? Both questions are
+# well-formed only for a page that REPRESENTS an external record (a PNCP
+# opportunity, a contract analysis derived from a real document).
+#
+# For the site's own first-party publication — a commercial pitch, our terms of
+# use, our editorial policy, a labelled synthetic exemplar of a deliverable,
+# proprietary research — there is no external record behind the page: the page
+# IS the primary source. Demanding that it link a .gov.br URL to prove itself is
+# a category error, the same shape as demanding concrete figures from a
+# compliance document (see ``specific_value``'s trust_or_legal carve-out).
+#
+# A family says so by declaring ``index_evidence`` in
+# data/organic/public-family-registry.json. The declaration is narrow by
+# construction:
+#   * it may waive ONLY the two external-record subgates below — freshness,
+#     archetype_completeness, public_safe, self_canonical, distinct_grain and
+#     named_gate_verdict stay applicable and blocking, and those are the
+#     subgates that actually test a first-party page;
+#   * it may not be made by a family whose instances are external records
+#     (EXTERNAL_RECORD_ONLY_* below) — those are hard-rejected at load time, so
+#     the exemption can never migrate onto live-intelligence or contract
+#     analyses;
+#   * it must carry a written reason, the governing contract it points at, a
+#     declaration date and an owning issue, all of which are echoed into the
+#     subgate detail so the sweep report explains each waiver in place.
+#
+# The declaration is a SCOPE statement, not a readiness certificate: it says
+# which question is ill-posed here, and readiness is still carried by the
+# subgates that remain. It deliberately does not "verify" a named gate that
+# lives in the same registry object — a family certifying its own exemption by
+# pointing three lines up would be self-certification with extra steps.
+INDEX_EVIDENCE_KEY = "index_evidence"
+SUBSTRATE_EXTERNAL_RECORD = "external_record"
+SUBSTRATE_FIRST_PARTY = "first_party_publication"
+INDEX_EVIDENCE_SUBSTRATES = frozenset(
+    {SUBSTRATE_EXTERNAL_RECORD, SUBSTRATE_FIRST_PARTY}
+)
+WAIVABLE_EXTERNAL_EVIDENCE_SUBGATES = frozenset({"official_live", "citable_source"})
+INDEX_EVIDENCE_REQUIRED_FIELDS = ("reason", "authority", "declared_at", "owner_issue")
+
+# Families whose instances represent a record acquired from outside this site.
+# ``_sub_official_live`` special-cases exactly these; they may never declare
+# first_party_publication. Mirrors the ids that subgate branches on.
+EXTERNAL_RECORD_ONLY_FAMILY_IDS = frozenset({"analises-contratos-publicos"})
+EXTERNAL_RECORD_ONLY_FAMILY_PREFIXES = ("live-intelligence",)
+
 CONTRACT_ANALYSIS_STATUS_REL = "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.json"
 EDITORIAL_REGISTRY_REL = "data/editorial/EDITORIAL-REGISTRY.json"
 CONTENT_DISPOSITION_REL = "seo/content-disposition-2026-08-02.json"
@@ -2288,8 +2338,36 @@ QUERY_OWNERSHIP_REL = "data/organic/medicoes-glosas-query-ownership.v1.json"
 # production data. "demonstrativo" is deliberately absent: /casos/ ships
 # labelled demonstrations that are legitimately public.
 FIXTURE_MARKER_RE = re.compile(
-    r"(test_only_fixture|\bfixtures?\b|sint[ée]tic|preview\s+noindex|"
+    r"(test_only_fixture|\bfixtures?\b|preview\s+noindex|"
     r"dados?\s+fict[íi]ci|dados?\s+de\s+teste)",
+    re.I,
+)
+
+# "Sintético" on its own is not a fixture admission: it is an ordinary
+# Portuguese adjective this site uses to LABEL an illustrative artefact — "o
+# exemplo sintético", "premissas sintéticas, não tabela oficial do mês",
+# a section called "Exemplo sintético". That sentence is the page disclosing a
+# limit, which ``_caveats_preserved`` actively rewards; reading it as a fixture
+# confession made the gate system punish and reward the same string, and it
+# blocked nine already-indexed /conteudos/ pages whose only sin was honesty.
+#
+# The word only admits a non-production RECORD when it qualifies the record
+# itself — "dados sintéticos", "base de dados sintética", "séries sintéticas".
+# "tabela"/"planilha" are deliberately absent from the noun list: the library's
+# standard disclaimer is "premissas sintéticas, NÃO tabela oficial do mês", and
+# the negated noun must not be read as the thing being described.
+_SYNTHETIC_RECORD_NOUN = (
+    r"\b(?:dados?|registros?|amostras?|s[ée]ries?|datasets?"
+    r"|bases?\s+de\s+dados|conjuntos?\s+de\s+dados)\b"
+)
+# A record noun on the far side of a negation is being DENIED, not described:
+# "Exemplo inteiramente sintético, sem dado de obra real" and "os dados não são
+# sintéticos" both disclose the opposite of a fixture. Temper the gap so the two
+# halves have to belong to the same, affirmative claim.
+_NO_NEGATION = r"(?:(?!\b(?:sem|n[ãa]o|nem)\b)[^.;:!?\n])"
+SYNTHETIC_RECORD_RE = re.compile(
+    rf"{_SYNTHETIC_RECORD_NOUN}{_NO_NEGATION}{{0,30}}\bsint[ée]tic"
+    rf"|\bsint[ée]tic\w*{_NO_NEGATION}{{0,30}}{_SYNTHETIC_RECORD_NOUN}",
     re.I,
 )
 
@@ -2558,6 +2636,7 @@ def build_indexation_context(
 
     registry = load_family_registry(root)
     families = [f for f in (registry.get("families") or []) if isinstance(f, dict)]
+    validate_index_evidence_declarations(families)
     service_routes = _bofu_service_routes(root)
 
     ctx = IndexationContext(
@@ -2634,6 +2713,99 @@ def build_indexation_context(
     return ctx
 
 
+# --- evidence substrate: which questions are well-posed for this family -----
+
+
+def validate_index_evidence_declarations(families: list[dict[str, Any]]) -> None:
+    """Fail closed on a malformed or forbidden ``index_evidence`` declaration.
+
+    Called before any verdict is computed, so a typo or an over-broad waiver
+    stops the sweep loudly instead of silently exempting a route.
+    """
+    problems: list[str] = []
+    for family in families:
+        fid = str(family.get("id") or "?")
+        declared = family.get(INDEX_EVIDENCE_KEY)
+        if declared is None:
+            continue
+        if not isinstance(declared, dict):
+            problems.append(f"{fid}: {INDEX_EVIDENCE_KEY} must be an object")
+            continue
+        substrate = str(declared.get("substrate") or "")
+        if substrate not in INDEX_EVIDENCE_SUBSTRATES:
+            problems.append(
+                f"{fid}: substrate={substrate!r} not in {sorted(INDEX_EVIDENCE_SUBSTRATES)}"
+            )
+            continue
+        waived = declared.get("not_applicable") or []
+        if substrate == SUBSTRATE_EXTERNAL_RECORD:
+            if waived:
+                problems.append(
+                    f"{fid}: substrate=external_record may not waive {waived}; the "
+                    "external-record subgates are the whole point of that substrate"
+                )
+            continue
+        if fid in EXTERNAL_RECORD_ONLY_FAMILY_IDS or fid.startswith(
+            EXTERNAL_RECORD_ONLY_FAMILY_PREFIXES
+        ):
+            problems.append(
+                f"{fid}: this family's instances represent an externally acquired "
+                "record; it may never declare first_party_publication"
+            )
+            continue
+        if not isinstance(waived, list) or not waived:
+            problems.append(f"{fid}: first_party_publication must name not_applicable")
+            continue
+        unknown = sorted(set(map(str, waived)) - WAIVABLE_EXTERNAL_EVIDENCE_SUBGATES)
+        if unknown:
+            problems.append(
+                f"{fid}: not_applicable={unknown} is outside "
+                f"{sorted(WAIVABLE_EXTERNAL_EVIDENCE_SUBGATES)}; no other subgate is waivable"
+            )
+        for required in INDEX_EVIDENCE_REQUIRED_FIELDS:
+            if not declared.get(required):
+                problems.append(f"{fid}: first_party_publication needs {required}")
+        declared_at = str(declared.get("declared_at") or "")
+        if declared_at:
+            try:
+                date.fromisoformat(declared_at)
+            except ValueError:
+                problems.append(f"{fid}: declared_at={declared_at!r} is not an ISO date")
+    if problems:
+        raise SystemExit(
+            "INDEX_EVIDENCE_DECLARATION_INVALID in "
+            + FAMILY_REGISTRY_REL
+            + "\n  - "
+            + "\n  - ".join(problems)
+        )
+
+
+def external_evidence_waiver(
+    family: dict[str, Any] | None, subgate: str
+) -> str | None:
+    """The written reason this family declares ``subgate`` inapplicable, if any.
+
+    Returns ``None`` when the subgate applies — the default for every family
+    that has not declared otherwise, so a new family inherits the strict bar.
+    """
+    declared = (family or {}).get(INDEX_EVIDENCE_KEY)
+    if not isinstance(declared, dict):
+        return None
+    if str(declared.get("substrate") or "") != SUBSTRATE_FIRST_PARTY:
+        return None
+    if subgate not in set(map(str, declared.get("not_applicable") or [])):
+        return None
+    authority = declared.get("authority") or []
+    if isinstance(authority, str):
+        authority = [authority]
+    return (
+        f"{FAMILY_REGISTRY_REL} declares substrate={SUBSTRATE_FIRST_PARTY} "
+        f"(#{declared.get('owner_issue')}, {declared.get('declared_at')}): "
+        f"{declared.get('reason')} Governed instead by: "
+        f"{', '.join(str(a) for a in authority)}."
+    )
+
+
 # --- individual evidence questions -----------------------------------------
 
 
@@ -2679,6 +2851,11 @@ def _sub_official_live(
 ) -> Subgate:
     """Is the record behind this page production data, or a fixture/preview?"""
     fid = str((family or {}).get("id") or "")
+    waiver = external_evidence_waiver(family, "official_live")
+    if waiver:
+        return Subgate(
+            "official_live", True, SUBGATE_REMEDIABLE, waiver, applicable=False
+        )
     if fid.startswith("live-intelligence") and not ctx.live_contract_status.startswith(
         "SHIPPED"
     ):
@@ -2709,7 +2886,8 @@ def _sub_official_live(
                 f"slug={slug} source_kind={item.get('source_kind')} "
                 f"fixture={item.get('fixture')}",
             )
-    marker = FIXTURE_MARKER_RE.search(visible_main_text(html))
+    text = visible_main_text(html)
+    marker = FIXTURE_MARKER_RE.search(text) or SYNTHETIC_RECORD_RE.search(text)
     if marker:
         return Subgate(
             "official_live",
@@ -2742,7 +2920,12 @@ def _sub_freshness(html: str, ctx: IndexationContext) -> Subgate:
     return Subgate("freshness", True, SUBGATE_REMEDIABLE, f"as of {newest.isoformat()} ({age}d)")
 
 
-def _sub_citable_source(html: str) -> Subgate:
+def _sub_citable_source(html: str, family: dict[str, Any] | None = None) -> Subgate:
+    waiver = external_evidence_waiver(family, "citable_source")
+    if waiver:
+        return Subgate(
+            "citable_source", True, SUBGATE_REMEDIABLE, waiver, applicable=False
+        )
     main = _main_html(html) or html
     if OFFICIAL_SOURCE_HREF_RE.search(main):
         return Subgate("citable_source", True, SUBGATE_REMEDIABLE, "links an official source")
@@ -3156,7 +3339,7 @@ def instance_index_ready_for_route(
         _sub_public_safe(route, html),
         _sub_official_live(route, html, family, ctx),
         _sub_freshness(html, ctx),
-        _sub_citable_source(html),
+        _sub_citable_source(html, family),
         _sub_archetype_completeness(html, family),
         _sub_distinct_grain(route, html, ctx, fid),
         _sub_self_canonical(route, html),

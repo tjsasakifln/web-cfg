@@ -1436,41 +1436,6 @@
       "findings": [
         {
           "gate": "instance_index_ready",
-          "path": "acompanhamento-contratos-obras/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/acompanhamento-contratos-obras/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "atrasos-prorrogacao-obras-publicas/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/atrasos-prorrogacao-obras-publicas/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "auditoria-orcamento-licitacao/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/auditoria-orcamento-licitacao/ blocking=citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "bid-room-licitacoes-obras/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/bid-room-licitacoes-obras/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "casos/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/ blocking=official_live",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
           "path": "casos/aditivo-art125-demonstrativo/index.html",
           "reason": "indexable_without_evidence",
           "excerpt": "/casos/aditivo-art125-demonstrativo/ blocking=archetype_completeness",
@@ -1480,63 +1445,7 @@
           "gate": "instance_index_ready",
           "path": "casos/medicao-glosa-demonstrativo/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/casos/medicao-glosa-demonstrativo/ blocking=citable_source,archetype_completeness",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "casos/modelo-apresentacao-executiva-resultados/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/modelo-apresentacao-executiva-resultados/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "casos/modelo-base-quantitativa-canonica/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/modelo-base-quantitativa-canonica/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "casos/modelo-contratos-vincendos-relicitacao/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/modelo-contratos-vincendos-relicitacao/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "casos/modelo-mapa-compradores-publicos/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/modelo-mapa-compradores-publicos/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "casos/modelo-mapeamento-concorrentes-publicos/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/modelo-mapeamento-concorrentes-publicos/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "casos/modelo-painel-precos-obras-publicas/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/modelo-painel-precos-obras-publicas/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "casos/modelo-relatorio-executivo-consolidado/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/modelo-relatorio-executivo-consolidado/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "casos/modelo-relatorio-inteligencia-licitacoes/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/casos/modelo-relatorio-inteligencia-licitacoes/ blocking=official_live,citable_source",
+          "excerpt": "/casos/medicao-glosa-demonstrativo/ blocking=archetype_completeness",
           "severity": "warn"
         },
         {
@@ -1550,14 +1459,14 @@
           "gate": "instance_index_ready",
           "path": "comercial/termos-diagnostico-b2g/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/comercial/termos-diagnostico-b2g/ blocking=freshness,citable_source",
+          "excerpt": "/comercial/termos-diagnostico-b2g/ blocking=freshness",
           "severity": "warn"
         },
         {
           "gate": "instance_index_ready",
           "path": "conflitos/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/conflitos/ blocking=citable_source,archetype_completeness",
+          "excerpt": "/conflitos/ blocking=archetype_completeness",
           "severity": "warn"
         },
         {
@@ -1569,128 +1478,9 @@
         },
         {
           "gate": "instance_index_ready",
-          "path": "conteudos/administracao-local-orcamento-obra-publica/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/conteudos/administracao-local-orcamento-obra-publica/ blocking=official_live",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "conteudos/bdi-diferenciado-obra-publica/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/conteudos/bdi-diferenciado-obra-publica/ blocking=official_live",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/conteudos/chuva-prorrogacao-prazo-obra-publica/ blocking=official_live",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "conteudos/comprovacao-exequibilidade-proposta-obra/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/conteudos/comprovacao-exequibilidade-proposta-obra/ blocking=official_live",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "conteudos/data-base-orcamento-reajuste-obra-publica/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/conteudos/data-base-orcamento-reajuste-obra-publica/ blocking=official_live",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "conteudos/empreitada-preco-global-preco-unitario/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/conteudos/empreitada-preco-global-preco-unitario/ blocking=official_live",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
           "path": "conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/ blocking=official_live,named_gate_verdict",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "conteudos/mobilizacao-desmobilizacao-orcamento-obra/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/conteudos/mobilizacao-desmobilizacao-orcamento-obra/ blocking=official_live",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "conteudos/sinapi-desonerado-nao-desonerado/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/conteudos/sinapi-desonerado-nao-desonerado/ blocking=official_live",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "conteudos/sinapi-ou-sicro-obra-publica/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/conteudos/sinapi-ou-sicro-obra-publica/ blocking=official_live",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "correcoes/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/correcoes/ blocking=citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "defesa-margem-contratos-publicos/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/defesa-margem-contratos-publicos/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "defesa-tecnica-contratos-publicos/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/defesa-tecnica-contratos-publicos/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "diagnostico-b2g-360/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/diagnostico-b2g-360/ blocking=citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "diagnostico-b2g-expansao/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/diagnostico-b2g-expansao/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "diagnostico-pre-licitacao/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/diagnostico-pre-licitacao/ blocking=citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "diretoria-b2g/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/diretoria-b2g/ blocking=official_live,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "entregas/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/entregas/ blocking=official_live,citable_source",
+          "excerpt": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/ blocking=named_gate_verdict",
           "severity": "warn"
         },
         {
@@ -1702,16 +1492,9 @@
         },
         {
           "gate": "instance_index_ready",
-          "path": "ferramentas/diagnostico-defesa-margem/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/ferramentas/diagnostico-defesa-margem/ blocking=citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
           "path": "ferramentas/matriz-atraso-obra/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/ferramentas/matriz-atraso-obra/ blocking=citable_source,archetype_completeness",
+          "excerpt": "/ferramentas/matriz-atraso-obra/ blocking=archetype_completeness",
           "severity": "warn"
         },
         {
@@ -1725,7 +1508,7 @@
           "gate": "instance_index_ready",
           "path": "imprensa/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/imprensa/ blocking=freshness,citable_source,archetype_completeness",
+          "excerpt": "/imprensa/ blocking=freshness,archetype_completeness",
           "severity": "warn"
         },
         {
@@ -1739,7 +1522,7 @@
           "gate": "instance_index_ready",
           "path": "metodologia-inteligencia/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/metodologia-inteligencia/ blocking=citable_source,archetype_completeness",
+          "excerpt": "/metodologia-inteligencia/ blocking=archetype_completeness",
           "severity": "warn"
         },
         {
@@ -1751,58 +1534,30 @@
         },
         {
           "gate": "instance_index_ready",
-          "path": "politica-editorial/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/politica-editorial/ blocking=citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
           "path": "politica-editorial/historico/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/politica-editorial/historico/ blocking=citable_source,archetype_completeness",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "politica-editorial/v/1.0.0/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/politica-editorial/v/1.0.0/ blocking=citable_source",
+          "excerpt": "/politica-editorial/historico/ blocking=archetype_completeness",
           "severity": "warn"
         },
         {
           "gate": "instance_index_ready",
           "path": "problemas-que-resolvemos/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/problemas-que-resolvemos/ blocking=freshness,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "radar/nacional-obras-publicas/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/radar/nacional-obras-publicas/ blocking=citable_source",
+          "excerpt": "/problemas-que-resolvemos/ blocking=freshness",
           "severity": "warn"
         },
         {
           "gate": "instance_index_ready",
           "path": "servicos-obras-publicas/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/servicos-obras-publicas/ blocking=freshness,citable_source",
-          "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "termos-de-uso/index.html",
-          "reason": "indexable_without_evidence",
-          "excerpt": "/termos-de-uso/ blocking=citable_source",
+          "excerpt": "/servicos-obras-publicas/ blocking=freshness",
           "severity": "warn"
         },
         {
           "gate": "instance_index_ready",
           "path": "uso-de-ia/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/uso-de-ia/ blocking=citable_source,archetype_completeness",
+          "excerpt": "/uso-de-ia/ blocking=archetype_completeness",
           "severity": "warn"
         }
       ],
@@ -1810,18 +1565,18 @@
         "schema": "indexation-evidence-v1",
         "scanned": 249,
         "noindex": 173,
-        "instance_index_ready": 23,
+        "instance_index_ready": 58,
         "index_ready_but_noindex": [],
-        "indexable_without_evidence": 53,
+        "indexable_without_evidence": 18,
         "noindex_without_reason": [],
         "blocking_subgates": {
           "named_gate_verdict": 114,
           "public_safe": 98,
-          "citable_source": 85,
+          "citable_source": 47,
           "freshness": 46,
           "archetype_completeness": 45,
-          "official_live": 42,
           "self_canonical": 16,
+          "official_live": 14,
           "record_specific_content": 12,
           "no_cannibalization": 11,
           "materially_distinct_grain": 5,

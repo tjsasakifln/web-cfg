@@ -86,6 +86,28 @@ NOT_PUBLIC_SAFE_SUBGATES = ("public_safe",)
 # sibling must not withdraw the family around it.
 ARCHETYPE_LEVEL_MATERIAL = frozenset({"not_doorway"})
 
+# INDEXABLE_WITHOUT_EVIDENCE says "did not earn it" but not "who fixes what".
+# Each remaining route is grouped by the remedy its blocking subgates name, so
+# no route sits in the bucket unexplained and the residue can be read as work
+# rather than as a number. Order matters: the first matching remedy wins, so a
+# route missing external evidence is reported as that, not as a date defect.
+REMEDY_BY_SUBGATE = (
+    ("EXTERNAL_EVIDENCE", ("official_live", "citable_source")),
+    ("NAMED_GATE_VERDICT", ("named_gate_verdict",)),
+    ("STALE_OR_UNDATED", ("freshness",)),
+    ("THIN_OR_INCOMPLETE", ("archetype_completeness",)),
+    ("DISTINCT_GRAIN", ("materially_distinct_grain", "record_specific_content",
+                        "no_cannibalization")),
+    ("CANONICAL_HYGIENE", ("self_canonical", "not_redirect_source")),
+)
+
+
+def _remedy_for(blocking: list[str]) -> str:
+    for remedy, names in REMEDY_BY_SUBGATE:
+        if any(name in blocking for name in names):
+            return remedy
+    return "UNCLASSIFIED"
+
 
 def _load_json(path: Path) -> dict:
     if not path.exists():
@@ -176,6 +198,9 @@ def sweep(root: Path | None = None) -> dict:
         }
 
     total = sum(len(v) for v in buckets.values())
+    by_remedy: dict[str, list[str]] = {}
+    for route in buckets["INDEXABLE_WITHOUT_EVIDENCE"]:
+        by_remedy.setdefault(_remedy_for(reasons[route]["blocking"]), []).append(route)
     return {
         "schema_version": "universe-sweep-v2",
         "total_routes": total,
@@ -185,6 +210,9 @@ def sweep(root: Path | None = None) -> dict:
         "index_ready_but_noindex": buckets["INDEX_READY_BUT_NOINDEX"],
         "noindex_without_reason": buckets["NOINDEX_WITHOUT_REASON"],
         "indexable_without_evidence": buckets["INDEXABLE_WITHOUT_EVIDENCE"],
+        "indexable_without_evidence_by_remedy": {
+            remedy: sorted(routes) for remedy, routes in sorted(by_remedy.items())
+        },
         "orphans": buckets["ORPHAN"],
         "not_public_safe": buckets["NOT_PUBLIC_SAFE"],
         "buckets": buckets,

@@ -17,6 +17,23 @@
     "trust_or_legal": "Páginas legais e de confiança. Isentas de ação terminal, com motivo escrito. Preço nessas rotas reprova, salvo se a rota exata estiver em priced_reference_routes com motivo.",
     "commercial_content": "Conteúdo comercial. A ação terminal exigida é a declarada pela família."
   },
+  "index_evidence_rules": {
+    "purpose": "Declara para quais famílias as perguntas de evidência EXTERNA (official_live, citable_source) são bem-postas. Consumido por scripts/site/inbound_gates.py::external_evidence_waiver e validado, fail-closed, por validate_index_evidence_declarations.",
+    "default": "Ausente = substrate external_record. A barra estrita vale por omissão: uma família nova herda official_live e citable_source aplicáveis e bloqueantes.",
+    "external_record": "Instâncias representam um registro adquirido fora deste site (oportunidade PNCP, análise de contrato real). official_live e citable_source são a própria razão de ser da família e não podem ser dispensados.",
+    "first_party_publication": "Publicação de primeira parte: pitch comercial, documento legal, política, método, exemplar sintético rotulado de um entregável, pesquisa proprietária. A página É a fonte primária; exigir link oficial de terceiro é erro de categoria, do mesmo tipo do carve-out de specific_value para trust_or_legal.",
+    "escopo_da_dispensa": "not_applicable só aceita official_live e citable_source. freshness, archetype_completeness, public_safe, self_canonical, materially_distinct_grain, no_cannibalization, record_specific_content, named_gate_verdict e reputational_safety permanecem aplicáveis e bloqueantes — são justamente as perguntas que testam uma página de primeira parte.",
+    "proibicao": "Famílias cujas instâncias são registros externos (analises-contratos-publicos, prefixo live-intelligence) NUNCA podem declarar first_party_publication; a declaração é rejeitada no carregamento.",
+    "nao_e_certificado": "A declaração é uma afirmação de ESCOPO (qual pergunta é mal-posta aqui), não um certificado de prontidão. A prontidão continua sendo carregada pelos subgates que permanecem aplicáveis; a declaração não verifica um gate declarado no mesmo objeto, o que seria autocertificação.",
+    "campos_obrigatorios": [
+      "substrate",
+      "not_applicable",
+      "reason",
+      "authority",
+      "declared_at",
+      "owner_issue"
+    ]
+  },
   "debt_policy": {
     "rule": "Débito é exceção explícita, datada e por rota exata — nunca por prefixo. Uma rota nova dentro de uma família com débito NÃO herda a isenção: ela precisa cumprir a ação terminal declarada ou reprova. Toda entrada exige owner_issue, motivo escrito e expires_at; depois de expires_at o gate reprova.",
     "reported_in": "docs/seo/INBOUND-GATES-REPORT.json → gates.conversion.stats.exemptions"
@@ -57,7 +74,21 @@
       "declared_at": "2026-08-23",
       "owner_issue": 227,
       "note": "A cobertura de captura destes pilares é auditada pela regra dedicada missing_on_page_form, que honra o congelamento EARLIEST_SAFE_ACTION_AT de #291. Esta declaração não afrouxa aquela regra.",
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Pitch comercial de primeira parte: a página descreve o serviço, o método e o preço da própria CONFENGE. Não representa um registro externo, então não existe fonte de terceiro para ancorar a alegação central — a página é a fonte primária.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/organic/bofu-intent-matrix.json (rotas de pilar de serviço)",
+          "scripts/site/inbound_gates.py::gate_conversion (missing_on_page_form + ação terminal)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "legal-and-trust",
@@ -83,7 +114,21 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 300,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Documento legal e de confiança da própria CONFENGE (termos, conflitos, correções, uso de IA, imprensa). A página é o instrumento, não um relato sobre um registro de terceiro; a mesma razão pela qual specific_value já é inaplicável ao perfil trust_or_legal.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.trust_or_legal)",
+          "/politica-editorial/",
+          "scripts/site/inbound_gates.py::gate_legacy_entity_matrix"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "comercial-condicoes",
@@ -106,7 +151,20 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 88,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Condições comerciais e de privacidade da própria CONFENGE. O texto é o compromisso contratual, não uma afirmação sobre registro público de terceiro.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)",
+          "/politica-editorial/"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "politica-editorial",
@@ -124,7 +182,20 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 300,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "A política editorial da CONFENGE é a norma que as demais páginas citam. Pedir que ela cite uma fonte externa para a própria norma é circular.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.trust_or_legal)",
+          "data/editorial/EDITORIAL-REGISTRY.json"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "measurement-delay-canary",
@@ -255,7 +326,20 @@
           "reason": "Página de método publicada antes deste gate existir: hoje encerra sem captura e sem WhatsApp no <main>. #74 foi superseded; o épico operacional #61 mantém este débito nominal até a data de expiração, sem reativar a iniciativa histórica.",
           "expires_at": "2026-10-31"
         }
-      ]
+      ],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Descrição do método proprietário de leitura de evidências públicas. A página explica como a CONFENGE trabalha; a fonte externa pertence às páginas de inteligência que aplicam o método, não a esta.",
+        "authority": [
+          "/politica-editorial/",
+          "docs/strategy/MARKET-CAPTURE-OS.md"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "radar",
@@ -272,7 +356,21 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 266,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Pesquisa proprietária publicada em versão aberta, com metodologia e limites na própria página. A CONFENGE é a fonte primária deste recorte; não existe URL oficial de terceiro que o publique.",
+        "authority": [
+          "/politica-editorial/",
+          "/metodologia-inteligencia/",
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "analises-contratos-publicos",
@@ -319,7 +417,21 @@
           "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
           "expires_at": "2026-09-30"
         }
-      ]
+      ],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Demonstrativo metodológico próprio, rotulado como hipotético e explicitamente não-case de cliente. O objeto demonstrado é o método da CONFENGE, não um registro público de terceiro.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)",
+          "scripts/site/inbound_gates.py::gate_conversion",
+          "/politica-editorial/ (rotulagem obrigatória de demonstrativo)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "casos-modelos-precificados",
@@ -336,7 +448,22 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 289,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Exemplar sintético de um entregável pago, sintético por projeto e declarado como tal em copy visível. Não há registro de produção por trás da página: o artefato É o produto, e exigir dado oficial ou fonte externa inverteria a natureza declarada da peça.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/organic/public-family-registry.json (profile_rules.priced_offer)",
+          "scripts/site/inbound_gates.py::gate_conversion (captura obrigatória em rota com preço)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "entregas",
@@ -355,7 +482,21 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 295,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Vitrine comercial das ofertas da própria CONFENGE, que lista e rotula os exemplares sintéticos de casos-modelos-precificados. Não representa registro externo.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.priced_offer)",
+          "scripts/site/inbound_gates.py::gate_conversion (captura obrigatória em rota com preço)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "servicos-obras-publicas",
@@ -374,7 +515,20 @@
       },
       "declared_at": "2026-08-25",
       "owner_issue": 333,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Catálogo de serviços precificados da própria CONFENGE. A alegação central é sobre o que vendemos, não sobre um registro público.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.priced_offer)",
+          "scripts/site/inbound_gates.py::gate_conversion (captura obrigatória em rota com preço)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "problemas-que-resolvemos",
@@ -393,7 +547,20 @@
       },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Mapa comercial de primeira parte entre problema do visitante e oferta da CONFENGE. Não afirma fato externo verificável.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)",
+          "scripts/site/inbound_gates.py::gate_conversion"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "ferramentas-hub",
@@ -436,7 +603,20 @@
           "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
           "expires_at": "2026-09-30"
         }
-      ]
+      ],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Ferramenta interativa de primeira parte: o valor da rota é o cálculo que o visitante roda, não um fato externo relatado pela página.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)",
+          "scripts/site/inbound_gates.py::gate_conversion"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "live-intelligence-cnpj-tool",

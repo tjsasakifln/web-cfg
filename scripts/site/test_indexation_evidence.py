@@ -190,6 +190,149 @@ def test_archetype_verdict_is_composite_not_only_the_jargon_scan():
     } <= names, sorted(names)
 
 
+def _first_party(fid: str, waived: list[str]) -> dict:
+    return {
+        "id": fid,
+        "index_evidence": {
+            "substrate": G.SUBSTRATE_FIRST_PARTY,
+            "not_applicable": waived,
+            "reason": "motivo escrito",
+            "authority": ["/politica-editorial/"],
+            "declared_at": "2026-09-03",
+            "owner_issue": 300,
+        },
+    }
+
+
+def test_an_honest_synthetic_caveat_is_not_a_fixture_confession():
+    """The library discloses that its worked numbers are illustrative. That
+    sentence is what ``_caveats_preserved`` rewards; reading it as a fixture
+    admission made the gate system punish and reward the same string."""
+    disclaimers = (
+        "Os números acima são premissas sintéticas, não tabela oficial do mês.",
+        "Os valores desta página são premissas sintéticas; os livros CAIXA "
+        "explicam o método.",
+        "Exemplo inteiramente sintético, sem dado de obra real.",
+        "Nesta página: Três camadas, Exemplo sintético, Checagem de campo.",
+        "O exemplo sintético de carteira de contratos abre sem cadastro.",
+    )
+    for sentence in disclaimers:
+        html = f"<html><body><main><p>{sentence}</p></main></body></html>"
+        result = G._sub_official_live("/conteudos/x/", html, {"id": "editorial-library"}, ctx())
+        assert result.applicable and result.passed, (sentence, result.detail)
+    # The word still condemns the page when it qualifies the RECORD itself.
+    for sentence in (
+        "Exemplar público com dados integralmente sintéticos.",
+        "Órgãos, contratos, valores, datas e séries anuais são sintéticos.",
+        "Esta página usa uma base de dados sintética.",
+        "Perfil contratual (fixture — aguardando dados de produção).",
+    ):
+        html = f"<html><body><main><p>{sentence}</p></main></body></html>"
+        result = G._sub_official_live("/conteudos/x/", html, {"id": "editorial-library"}, ctx())
+        assert result.applicable and not result.passed, (sentence, result.detail)
+
+
+def test_the_editorial_library_still_has_to_prove_external_evidence():
+    """The nine /conteudos/ pages were cleared by fixing the detector, NOT by a
+    waiver: the library keeps official_live and citable_source applicable, so a
+    genuinely fixture-backed post there still fails."""
+    family = next(f for f in ctx().families if f["id"] == "editorial-library")
+    assert G.INDEX_EVIDENCE_KEY not in family
+    route, html = _sample_route(
+        lambda r: r.startswith("/conteudos/") and r != "/conteudos/"
+    )
+    _, detail = G.instance_index_ready_for_route(route, html, family, ctx())
+    assert detail["subgates"]["official_live"]["applicable"] is True, route
+    assert detail["subgates"]["citable_source"]["applicable"] is True, route
+
+
+def test_a_first_party_declaration_scopes_only_the_external_record_questions():
+    """The waiver is a scope statement, not a readiness certificate: everything
+    that actually tests a first-party page stays applicable and blocking."""
+    family = _first_party("service-pillars", ["official_live", "citable_source"])
+    thin = '<html><head></head><body><main><p>curto</p></main></body></html>'
+    _, detail = G.instance_index_ready_for_route("/x/", thin, family, ctx())
+    for name in ("official_live", "citable_source"):
+        assert detail["subgates"][name]["applicable"] is False, name
+        # The reason travels with the verdict, so the report explains itself.
+        assert "motivo escrito" in detail["subgates"][name]["detail"], name
+    for name in ("freshness", "archetype_completeness", "self_canonical"):
+        assert detail["subgates"][name]["applicable"] is True, name
+        assert name in detail["blocking"], name
+
+
+def test_a_declaration_may_not_waive_anything_but_the_two_external_subgates():
+    for waived in (["freshness"], ["archetype_completeness"], ["public_safe"], []):
+        try:
+            G.validate_index_evidence_declarations([_first_party("casos", waived)])
+        except SystemExit as exc:
+            assert "INDEX_EVIDENCE_DECLARATION_INVALID" in str(exc), waived
+        else:
+            raise AssertionError(f"waiving {waived} must not be accepted")
+    G.validate_index_evidence_declarations([_first_party("casos", ["citable_source"])])
+
+
+def test_a_family_of_external_records_may_never_declare_first_party():
+    """The tripwire, not a convention: live-intelligence and the contract
+    analyses represent records acquired outside this site."""
+    for fid in ("live-intelligence-opportunity", "analises-contratos-publicos"):
+        try:
+            G.validate_index_evidence_declarations(
+                [_first_party(fid, ["official_live"])]
+            )
+        except SystemExit as exc:
+            assert "may never declare first_party_publication" in str(exc), fid
+        else:
+            raise AssertionError(f"{fid} must not be able to waive official_live")
+
+
+def test_a_malformed_declaration_fails_closed():
+    for broken in (
+        {"id": "casos", "index_evidence": {"substrate": "legado"}},
+        {"id": "casos", "index_evidence": "first_party"},
+        {
+            "id": "casos",
+            "index_evidence": {
+                "substrate": G.SUBSTRATE_FIRST_PARTY,
+                "not_applicable": ["citable_source"],
+                "authority": ["/politica-editorial/"],
+                "declared_at": "2026-09-03",
+                "owner_issue": 300,
+            },
+        },
+    ):
+        try:
+            G.validate_index_evidence_declarations([broken])
+        except SystemExit:
+            continue
+        raise AssertionError(f"malformed declaration accepted: {broken}")
+    # Absent is the strict default: no declaration, no waiver.
+    G.validate_index_evidence_declarations([{"id": "editorial-library"}])
+    assert G.external_evidence_waiver({"id": "editorial-library"}, "official_live") is None
+
+
+def test_every_shipped_declaration_is_valid_and_narrow():
+    G.validate_index_evidence_declarations(ctx().families)
+    for family in ctx().families:
+        declared = family.get(G.INDEX_EVIDENCE_KEY)
+        if not declared:
+            continue
+        waived = set(declared["not_applicable"])
+        assert waived <= G.WAIVABLE_EXTERNAL_EVIDENCE_SUBGATES, family["id"]
+
+
+def test_the_residue_names_the_remedy_it_needs():
+    """Nothing may sit in INDEXABLE_WITHOUT_EVIDENCE unexplained."""
+    from scripts.site.universe_sweep import REMEDY_BY_SUBGATE
+
+    report = sweep()
+    by_remedy = report["indexable_without_evidence_by_remedy"]
+    assert "UNCLASSIFIED" not in by_remedy, by_remedy.get("UNCLASSIFIED")
+    assert set(by_remedy) <= {name for name, _ in REMEDY_BY_SUBGATE}
+    flat = [route for routes in by_remedy.values() for route in routes]
+    assert sorted(flat) == sorted(report["indexable_without_evidence"])
+
+
 def test_historic_families_are_not_forced_into_the_jargon_ban():
     """politica-editorial documents the epistemic vocabulary on purpose."""
     family = next(f for f in ctx().families if f["id"] == "politica-editorial")
