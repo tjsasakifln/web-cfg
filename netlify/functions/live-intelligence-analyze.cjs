@@ -291,7 +291,8 @@ function renderResultPage(result) {
         .map((row) => {
           const id = String(row.opportunity_id);
           const dims = (row.dimensoes || []).join(", ") || NAO_INFORMADO;
-          return `<li><a href="/oportunidades/${encodeURIComponent(id)}/">${esc(id)}</a> — dimensões: ${esc(dims)}</li>`;
+          const href = `/oportunidades/${id.split("/").map(encodeURIComponent).join("/")}/`;
+          return `<li><a href="${esc(href)}">${esc(id)}</a> — dimensões: ${esc(dims)}</li>`;
         })
         .join("")}</ul>`
     : "";

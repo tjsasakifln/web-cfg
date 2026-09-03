@@ -24,6 +24,8 @@ const {
   validateProjection,
   buildDigestToRefMap,
   setProjectionForTests,
+  loadProjection,
+  OFFICIAL_IDENTITY_PROJECTION_PATH,
 } = require(path.join(root, "netlify/functions/lib/identity-resolver.cjs"));
 
 const resultStore = require(path.join(
@@ -231,6 +233,45 @@ test("Stored record structure preserves _private for server-side access", () => 
     true,
     "Stored record should have _private key"
   );
+});
+
+test("Official identity path is the producer sibling, not live/.private", () => {
+  assert.strictEqual(
+    OFFICIAL_IDENTITY_PROJECTION_PATH.endsWith(
+      "data/live_intelligence/official.private/identity_projection.json"
+    ),
+    true,
+    OFFICIAL_IDENTITY_PROJECTION_PATH
+  );
+  assert.strictEqual(
+    OFFICIAL_IDENTITY_PROJECTION_PATH.includes("live/.private"),
+    false
+  );
+});
+
+test("loadProjection reads CONFENGE_IDENTITY_PROJECTION_PATH as candidate, never official_live", () => {
+  const fs = require("fs");
+  const os = require("os");
+  const tmp = path.join(os.tmpdir(), `li-identity-${process.pid}.json`);
+  fs.writeFileSync(tmp, JSON.stringify(testProjection), "utf8");
+  const prev = process.env.CONFENGE_IDENTITY_PROJECTION_PATH;
+  setProjectionForTests(null);
+  process.env.CONFENGE_IDENTITY_PROJECTION_PATH = tmp;
+  try {
+    const loaded = loadProjection(process.env);
+    assert.strictEqual(loaded.schema, "CONFENGE_IDENTITY_PROJECTION/1.0");
+    assert.strictEqual(
+      resolveCompanyRef("aaaaaaaaaaaaaaaa", { projection: loaded }),
+      "cref1:00000000000000000000000000000001"
+    );
+    const blob = JSON.stringify(loaded);
+    assert.ok(blob.includes("company_ref"));
+  } finally {
+    if (prev === undefined) delete process.env.CONFENGE_IDENTITY_PROJECTION_PATH;
+    else process.env.CONFENGE_IDENTITY_PROJECTION_PATH = prev;
+    fs.unlinkSync(tmp);
+    setProjectionForTests(null);
+  }
 });
 
 console.log("\nAll identity resolution tests completed.");

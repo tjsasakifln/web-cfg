@@ -224,7 +224,10 @@
         result.oportunidades_aderentes.forEach((row) => {
           const li = document.createElement("li");
           const a = document.createElement("a");
-          a.href = `/oportunidades/${encodeURIComponent(row.opportunity_id)}/`;
+          a.href = `/oportunidades/${String(row.opportunity_id || "")
+            .split("/")
+            .map(encodeURIComponent)
+            .join("/")}/`;
           a.textContent = escapeText(row.opportunity_id);
           li.appendChild(a);
           li.appendChild(document.createTextNode(` — dimensões: ${(row.dimensoes || []).join(", ") || NAO_INFORMADO}`));

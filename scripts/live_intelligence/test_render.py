@@ -37,6 +37,50 @@ def test_write_pages_removes_orphaned_directories():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def test_write_pages_keeps_pncp_ids_with_slash_and_prunes_others():
+    """Producer PNCP ids contain `/` and must survive as nested page dirs."""
+    tmp = _tmp_root()
+    try:
+        base = tmp / R.FAMILY_SLUG
+        projection = {
+            "index_eligible": False,
+            "opportunities": [
+                {
+                    "opportunity_id": "12345678000190-1/2026",
+                    "objeto": "Pavimentação",
+                    "orgao": {"nome": "Município"},
+                    "local": {"municipio": "Chapecó", "uf": "SC"},
+                    "prazo": {"status": "ABERTA", "data_encerramento": "2026-09-24"},
+                    "valor": {"estimado_brl": "2500000", "faixa": "1M_10M", "epistemic_class": "FACT"},
+                    "fonte": [{"nome": "PNCP", "url": "https://pncp.gov.br/app/editais/1"}],
+                    "freshness": {
+                        "source_as_of": "2026-09-01T03:00:00+00:00",
+                        "generated_at": "2026-09-01T09:00:00+00:00",
+                        "max_age_hours": 48,
+                    },
+                    "publication_state": "PUBLISHABLE_NOINDEX",
+                    "index_eligible": False,
+                    "source_kind": "test_only_fixture",
+                    "content_hash": "abc",
+                }
+            ],
+        }
+        orphan = base / "orphan-old-opp"
+        orphan.mkdir(parents=True)
+        (orphan / "index.html").write_text("stale", encoding="utf-8")
+        written = R.write_pages(projection, root=tmp)
+        assert len(written) == 1
+        page = base / "12345678000190-1" / "2026" / "index.html"
+        assert page.exists()
+        html = page.read_text(encoding="utf-8")
+        assert "R$ 2.500.000,00" in html
+        assert "1M_10M" in html
+        assert "company_ref" not in html
+        assert not orphan.exists()
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def test_write_pages_reruns_are_idempotent_and_still_prune():
     tmp = _tmp_root()
     try:

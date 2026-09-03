@@ -167,7 +167,8 @@ def _brl(amount: Any) -> str:
     """Format a declared amount. Absence is stated in words; it is never zero.
 
     The ``"UNKNOWN"`` literal below is the *input* the contract ships, not
-    output: it is matched, then translated.
+    output: it is matched, then translated. Producer `estimado_brl` is a
+    decimal string; fixture `amount_brl` may be a number.
     """
     if amount in (None, "", "UNKNOWN"):
         return NAO_INFORMADO
@@ -177,6 +178,22 @@ def _brl(amount: Any) -> str:
         return NAO_INFORMADO
     inteiro, _, centavos = f"{value:,.2f}".partition(".")
     return f"R$ {inteiro.replace(',', '.')},{centavos}"
+
+
+def _declared_amount(valor: dict[str, Any]) -> Any:
+    if valor.get("estimado_brl") not in (None, ""):
+        return valor.get("estimado_brl")
+    return valor.get("amount_brl")
+
+
+def _page_dir(base: Path, opportunity_id: str) -> Path:
+    """Page directory for one opportunity, including PNCP ids that contain `/`."""
+    target = (base / opportunity_id).resolve()
+    try:
+        target.relative_to(base.resolve())
+    except ValueError as exc:
+        raise ValueError(f"unsafe opportunity_id: {opportunity_id!r}") from exc
+    return target
 
 
 def _kv_rows(rows: list[tuple[str, str]]) -> str:
@@ -281,14 +298,15 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 <h2>Ficha da oportunidade</h2>
 {_kv_rows([
     ("Objeto", objeto),
-    ("Valor estimado declarado na fonte", _brl(valor.get("amount_brl"))),
+    ("Valor estimado declarado na fonte", _brl(_declared_amount(valor))),
+    ("Faixa de valor declarada", _pt(valor.get("faixa"))),
     ("Base do valor", _pt(valor.get("basis"))),
     ("Como o valor foi declarado", _mapped(valor.get("epistemic_class"), EPISTEMIC_LABEL, "classificação não declarada pela fonte")),
     ("Órgão", orgao_nome),
     ("Esfera", _pt(orgao.get("esfera"))),
     ("Local", _local_label(local)),
     ("Status da sessão", _mapped(status, PRAZO_LABEL, NAO_INFORMADO)),
-    ("Data da sessão", _pt(prazo.get("data_sessao"))),
+    ("Data da sessão", _pt(prazo.get("data_sessao") or prazo.get("data_encerramento"))),
 ])}
 <p class="form-hint">O valor acima é a estimativa declarada no documento público citado. Não é valor contratado e não é valor de serviço CONFENGE. {NAO_INFORMADO_NOTA}</p>
 </section>
@@ -379,18 +397,24 @@ def write_pages(projection: dict[str, Any], root: Path | None = None) -> list[Pa
     """
     base = (root or _root()) / FAMILY_SLUG
     written: list[Path] = []
-    live_ids: set[str] = set()
+    live_dirs: set[Path] = set()
     for record in renderable(projection):
         opportunity_id = record["opportunity_id"]
-        live_ids.add(opportunity_id)
-        target = base / opportunity_id / "index.html"
+        page_dir = _page_dir(base, opportunity_id)
+        live_dirs.add(page_dir)
+        target = page_dir / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(render_opportunity_html(record), encoding="utf-8")
         written.append(target)
     if base.is_dir():
-        for child in sorted(base.iterdir()):
-            if child.is_dir() and child.name not in live_ids:
-                shutil.rmtree(child)
+        for html in sorted(base.rglob("index.html")):
+            if html.parent.resolve() not in live_dirs:
+                shutil.rmtree(html.parent)
+        for dirpath in sorted((p for p in base.rglob("*") if p.is_dir()), reverse=True):
+            try:
+                next(dirpath.iterdir())
+            except StopIteration:
+                dirpath.rmdir()
     return written
 
 

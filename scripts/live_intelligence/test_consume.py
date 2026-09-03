@@ -15,12 +15,16 @@ import pytest
 
 from scripts.live_intelligence import (
     COMPANIES_OUT,
+    COMPANY_FAMILY,
     CONTRACT_VERSION,
     DEFAULT_FIXTURE_DIR,
+    DEFAULT_OFFICIAL_DIR,
     FIXTURE_SCHEMA,
+    IDENTITY_PROJECTION_SCHEMA,
     INTENT_KINDS,
     LIVE_SCHEMA,
     OPPORTUNITIES_OUT,
+    OPPORTUNITY_FAMILY,
     SOURCE_FIXTURE,
     SOURCE_OFFICIAL_LIVE,
 )
@@ -617,3 +621,433 @@ def test_intent_kinds_match_the_lead_core_allowlist():
     block = source.split("INTENT_KIND_ALLOWED = new Set([", 1)[1].split("]);", 1)[0]
     declared = tuple(part.strip().strip('",') for part in block.split(",") if part.strip())
     assert declared == INTENT_KINDS
+
+
+# --- extra-cli #539 native export shape (CONTRACT CANDIDATE, never live) -----
+
+# Real PNCP opportunity_id: `<cnpj>-<seq>/<ano>`. The producer writes nested
+# files; the consumer must accept this id, not invent a second slug.
+_PNCP_OPPORTUNITY_ID = "12345678000190-1/2026"
+_COMPANY_DIGEST = "aaaaaaaaaaaaaaaa"
+_BUYER_DIGEST = "bbbbbbbbbbbbbbbb"
+_COMPANY_REF = "cref1:0123456789abcdef0123456789abcdef"
+_SNAPSHOT_ID = "snap-539-candidate-001"
+
+
+def _write_json(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _539_opportunity(**overrides) -> dict:
+    record = {
+        "schema": OPPORTUNITY_FAMILY,
+        "opportunity_id": _PNCP_OPPORTUNITY_ID,
+        "objeto": "Pavimentação asfáltica de vias urbanas",
+        "valor": {
+            "faixa": "1M_10M",
+            "estimado_brl": "2500000",
+            "estado": "OBSERVED",
+        },
+        "orgao": {
+            "nome": "Município de Chapecó",
+            "cnpj": "12345678000190",
+            "estado": "OBSERVED",
+        },
+        "local": {
+            "uf": "SC",
+            "municipio": "Chapecó",
+            "codigo_ibge": "4204202",
+            "estado": "OBSERVED",
+        },
+        "prazo": {
+            "status": "ABERTA",
+            "data_encerramento": "2026-09-24",
+            "data_publicacao": "2026-09-01",
+        },
+        "fonte": {
+            "sistema": "PNCP",
+            "source_id": _PNCP_OPPORTUNITY_ID,
+            "link_edital": "https://pncp.gov.br/app/editais/12345678000190/2026/1",
+        },
+        "as_of": "2026-09-01",
+        "freshness": {
+            "max_age_hours": 48,
+            "generated_at": "2026-09-01T09:00:00+00:00",
+            "source_as_of": "2026-09-01T03:00:00+00:00",
+            "state": "FRESH",
+        },
+        "coverage": {
+            "row_completeness_state": "COMPLETE",
+            "dimensoes_desconhecidas": [],
+        },
+        "limitations": ["O valor é a estimativa pública declarada no documento de origem."],
+        "epistemic_classes": {
+            "objeto": "FACT",
+            "valor.faixa": "CALCULATION",
+            "valor.estimado_brl": "FACT",
+            "orgao": "FACT",
+            "local": "FACT",
+            "prazo.status": "CALCULATION",
+        },
+        "data_state": "DATA_READY",
+        "reason_codes": [],
+    }
+    record.update(overrides)
+    record["content_hash"] = C.content_hash_of(record)
+    return record
+
+
+def _539_company(**overrides) -> dict:
+    record = {
+        "schema": COMPANY_FAMILY,
+        "company_digest": _COMPANY_DIGEST,
+        "perfil": {
+            "razao_social": "Construtora Exemplo Ltda",
+            "contratos_observados": 4,
+            "contratacao_mais_recente": "2025-11-02",
+        },
+        "categorias": ["pavimentacao"],
+        "faixas": ["1M_10M"],
+        "geografias": ["SC"],
+        "compradores": [{"buyer_digest": _BUYER_DIGEST}],
+        "oportunidades_aderentes": [
+            {
+                "opportunity_id": _PNCP_OPPORTUNITY_ID,
+                "matched_dimensions": ["dim_object", "dim_geography"],
+                "unknown_dimensions": [],
+                "reason_codes": [],
+            }
+        ],
+        "gaps": [
+            {
+                "opportunity_id": _PNCP_OPPORTUNITY_ID,
+                "dimensoes_sem_correspondencia": ["dim_comparable_buyer"],
+            }
+        ],
+        "unknowns": ["dim_recency"],
+        "as_of": "2026-09-01",
+        "freshness": {
+            "max_age_hours": 48,
+            "generated_at": "2026-09-01T09:00:00+00:00",
+            "source_as_of": "2026-09-01T03:00:00+00:00",
+            "state": "FRESH",
+        },
+        "coverage": {
+            "row_completeness_state": "COMPLETE",
+            "dimensoes_desconhecidas": ["dim_recency"],
+        },
+        "limitations": ["Aderência histórica não é habilitação, capacidade nem recomendação."],
+        "epistemic_classes": {
+            "perfil": "FACT",
+            "oportunidades_aderentes": "CALCULATION",
+        },
+        "data_state": "DATA_READY",
+        "reason_codes": [],
+    }
+    record.update(overrides)
+    record["content_hash"] = C.content_hash_of(record)
+    return record
+
+
+def _write_539_candidate(
+    tmp_path: Path,
+    *,
+    catalog_mode: str = "fixture",
+    official_live: bool | None = None,
+    mutate_opportunity=None,
+    mutate_company=None,
+    mutate_manifest=None,
+    identity: bool = True,
+) -> Path:
+    """Write a #539-shaped export. Hashes come from the shipped hasher, never literals."""
+    export_dir = tmp_path / "export"
+    opportunity = _539_opportunity()
+    company = _539_company()
+    if mutate_opportunity:
+        opportunity = mutate_opportunity(opportunity)
+        if "content_hash" in opportunity:
+            opportunity["content_hash"] = C.content_hash_of(opportunity)
+    if mutate_company:
+        company = mutate_company(company)
+        if "content_hash" in company:
+            company["content_hash"] = C.content_hash_of(company)
+
+    if official_live is None:
+        official_live = catalog_mode == SOURCE_OFFICIAL_LIVE
+    producer_status = SOURCE_OFFICIAL_LIVE if official_live else "fixture"
+
+    opp_rel = f"opportunities/{opportunity['opportunity_id']}.json"
+    co_rel = f"companies/{company['company_digest']}.json"
+    _write_json(export_dir / opp_rel, opportunity)
+    _write_json(export_dir / co_rel, company)
+
+    manifest = {
+        "schema": LIVE_SCHEMA,
+        "contract_version": "1.0",
+        "catalog_mode": catalog_mode,
+        "official_live": official_live,
+        "producer_status": producer_status,
+        "as_of": "2026-09-01",
+        "generated_at": "2026-09-01T09:00:00+00:00",
+        "source_as_of": "2026-09-01T03:00:00+00:00",
+        "freshness": {
+            "max_age_hours": 48,
+            "generated_at": "2026-09-01T09:00:00+00:00",
+            "source_as_of": "2026-09-01T03:00:00+00:00",
+            "state": "FRESH",
+        },
+        "data_state": "DATA_READY",
+        "coverage": {
+            "opportunities_observed": 1,
+            "opportunities_excluded": 0,
+            "companies_observed": 1,
+            "companies_excluded": 0,
+            "establishment_digests": 1,
+            "buyers_unhashable": 0,
+        },
+        "limitations": ["O escopo dos dados é o histórico público declarado na fonte PNCP."],
+        "epistemic_classes": {
+            "coverage": "FACT",
+            "data_state": "CALCULATION",
+            "freshness": "CALCULATION",
+        },
+        "reason_codes": [],
+        "sources": [{"nome": "PNCP", "as_of": "2026-09-01T03:00:00+00:00"}],
+        "index": {
+            "opportunities": [
+                {
+                    "opportunity_id": opportunity["opportunity_id"],
+                    "file": opp_rel,
+                    "schema": OPPORTUNITY_FAMILY,
+                    "content_hash": opportunity["content_hash"],
+                }
+            ],
+            "companies": [
+                {
+                    "company_digest": company["company_digest"],
+                    "file": co_rel,
+                    "schema": COMPANY_FAMILY,
+                    "content_hash": company["content_hash"],
+                }
+            ],
+        },
+    }
+    if mutate_manifest:
+        mutate_manifest(manifest)
+    manifest["manifest_hash"] = C.manifest_hash_of(manifest)
+    _write_json(export_dir / "manifest.json", manifest)
+
+    if identity:
+        projection = {
+            "schema": IDENTITY_PROJECTION_SCHEMA,
+            "snapshot_id": _SNAPSHOT_ID,
+            "sealed_to_manifest_hash": manifest["manifest_hash"],
+            "entries": [
+                {
+                    "establishment_digest": _COMPANY_DIGEST,
+                    "company_ref": _COMPANY_REF,
+                }
+            ],
+        }
+        projection["sealed_hash"] = C.sealed_hash_of(projection)
+        _write_json(C.identity_projection_path_for(export_dir), projection)
+
+    return export_dir
+
+
+def test_official_bundle_is_not_in_the_tree():
+    """P6_OFFICIAL_BUNDLE_AVAILABLE=NO — no official snapshot is checked in."""
+    assert not (ROOT / DEFAULT_OFFICIAL_DIR).exists()
+
+
+def test_539_candidate_loads_and_projects_as_not_live(tmp_path):
+    export_dir = _write_539_candidate(tmp_path)
+    bundle = C.load_export_dir(export_dir)
+    assert bundle["schema"] == LIVE_SCHEMA
+    assert bundle["catalog_mode"] == "fixture"
+    assert bundle["_source_kind"] == SOURCE_FIXTURE
+    assert bundle["_identity_projection"]["schema"] == IDENTITY_PROJECTION_SCHEMA
+    assert bundle["_identity_projection"]["entries"][0]["company_ref"] == _COMPANY_REF
+
+    projection = C.build_projection(bundle)
+    assert projection["index_eligible"] is False
+    assert projection["source_kind"] != SOURCE_OFFICIAL_LIVE
+    assert projection["source_kind"] == SOURCE_FIXTURE
+    assert len(projection["opportunities"]) == 1
+    opp = projection["opportunities"][0]
+    assert opp["opportunity_id"] == _PNCP_OPPORTUNITY_ID
+    assert "/" in opp["opportunity_id"]
+    assert opp["valor"]["estimado_brl"] == "2500000"
+    assert opp["valor"]["faixa"] == "1M_10M"
+    assert opp["fonte"][0]["url"].startswith("https://pncp.gov.br/")
+    assert opp["fonte"][0]["source_id"] == _PNCP_OPPORTUNITY_ID
+    assert opp["index_eligible"] is False
+    assert "catalog_mode_fixture" in opp["index_bars"]
+    company = projection["companies"][_COMPANY_DIGEST]
+    assert company["perfil"]["razao_social"] == "Construtora Exemplo Ltda"
+    assert company["compradores"] == [_BUYER_DIGEST]
+    assert company["oportunidades_aderentes"][0]["dimensoes"] == ["dim_object", "dim_geography"]
+    blob = json.dumps(projection, ensure_ascii=False)
+    assert "company_ref" not in blob
+    assert _COMPANY_REF not in blob
+
+
+def test_539_candidate_consume_entry_is_not_official_live(tmp_path):
+    export_dir = _write_539_candidate(tmp_path)
+    projection = C.consume(export_dir)
+    assert projection["source_kind"] != SOURCE_OFFICIAL_LIVE
+    assert projection["index_eligible"] is False
+    assert C.main(["--source", str(export_dir)]) == 0
+
+
+def test_539_broken_content_hash_is_rejected(tmp_path):
+    def poison(record):
+        record["objeto"] = "adulterado"
+        return record  # helper re-seals; break the seal after write via load
+
+    export_dir = _write_539_candidate(tmp_path, mutate_opportunity=poison)
+    # Re-open and restore a stale hash so the file on disk disagrees.
+    opp_path = export_dir / "opportunities" / "12345678000190-1" / "2026.json"
+    payload = json.loads(opp_path.read_text(encoding="utf-8"))
+    payload["content_hash"] = "0" * 64
+    opp_path.write_text(json.dumps(payload, ensure_ascii=False) + "\n", encoding="utf-8")
+    bundle = C.load_export_dir(export_dir)
+    decision = C.decide(bundle["opportunities"][0], manifest=bundle["manifest"])
+    assert decision["ready"] is False
+    assert decision["state"] == "REJECT"
+    assert "content_hash_mismatch" in decision["reason_codes"]
+    projection = C.build_projection(bundle)
+    assert projection["opportunities"] == []
+    assert projection["source_kind"] != SOURCE_OFFICIAL_LIVE
+
+
+def test_539_unsupported_schema_is_rejected(tmp_path):
+    export_dir = _write_539_candidate(
+        tmp_path,
+        mutate_manifest=lambda manifest: manifest.update({"schema": "CONFENGE_LIVE_INTELLIGENCE/2.0"}),
+    )
+    bundle = C.load_export_dir(export_dir)
+    decision = C.decide(bundle["opportunities"][0], manifest=bundle["manifest"])
+    assert decision["state"] == "REJECT"
+    assert decision["source_kind"] != SOURCE_OFFICIAL_LIVE
+
+
+def test_539_stale_freshness_is_held_not_live(tmp_path):
+    def stale(record):
+        record["freshness"] = {
+            **record["freshness"],
+            "source_as_of": "2026-08-01T03:00:00+00:00",
+        }
+        return record
+
+    export_dir = _write_539_candidate(tmp_path, mutate_opportunity=stale)
+    bundle = C.load_export_dir(export_dir)
+    decision = C.decide(bundle["opportunities"][0], manifest=bundle["manifest"])
+    assert decision["ready"] is False
+    assert decision["state"] == "HOLD_FOR_DATA"
+    assert decision["reason_codes"] == ["freshness_stale"]
+    assert decision["index_eligible"] is False
+    assert decision["source_kind"] != SOURCE_OFFICIAL_LIVE
+
+
+def test_539_missing_source_is_rejected(tmp_path):
+    def unsourced(record):
+        record["fonte"] = {}
+        return record
+
+    export_dir = _write_539_candidate(tmp_path, mutate_opportunity=unsourced)
+    bundle = C.load_export_dir(export_dir)
+    decision = C.decide(bundle["opportunities"][0], manifest=bundle["manifest"])
+    assert decision["ready"] is False
+    assert "source_absent" in decision["reason_codes"]
+
+
+def test_539_manifest_hash_mismatch_is_rejected(tmp_path):
+    export_dir = _write_539_candidate(tmp_path)
+    manifest_path = export_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["coverage"] = {**manifest["coverage"], "opportunities_observed": 99}
+    # Keep the stale manifest_hash.
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False) + "\n", encoding="utf-8")
+    bundle = C.load_export_dir(export_dir)
+    decision = C.decide(bundle["opportunities"][0], manifest=bundle["manifest"])
+    assert decision["ready"] is False
+    assert "manifest_hash_mismatch" in decision["reason_codes"]
+
+
+def test_539_identity_lives_on_the_sibling_private_path(tmp_path):
+    export_dir = _write_539_candidate(tmp_path)
+    private_path = C.identity_projection_path_for(export_dir)
+    assert private_path == export_dir.parent / f"{export_dir.name}.private" / "identity_projection.json"
+    assert private_path.is_file()
+    assert not (export_dir / ".private").exists()
+    loaded = C.load_identity_projection(
+        export_dir,
+        manifest_hash=json.loads((export_dir / "manifest.json").read_text(encoding="utf-8"))["manifest_hash"],
+    )
+    assert loaded is not None
+    assert loaded["entries"][0]["company_ref"] == _COMPANY_REF
+
+
+def test_539_identity_seal_mismatch_fails_closed(tmp_path):
+    export_dir = _write_539_candidate(tmp_path)
+    private_path = C.identity_projection_path_for(export_dir)
+    payload = json.loads(private_path.read_text(encoding="utf-8"))
+    payload["sealed_to_manifest_hash"] = "0" * 64
+    payload["sealed_hash"] = C.sealed_hash_of(payload)
+    private_path.write_text(json.dumps(payload, ensure_ascii=False) + "\n", encoding="utf-8")
+    with pytest.raises(C.ConsumeError, match="not sealed"):
+        C.load_export_dir(export_dir)
+
+
+def test_missing_official_source_fails_closed_with_no_fixture_fallback(tmp_path, monkeypatch):
+    monkeypatch.setattr(C, "DEFAULT_OFFICIAL_DIR", str(tmp_path / "absent-official"))
+    with pytest.raises(C.ConsumeError):
+        C.consume()
+    out_dir = tmp_path / "out"
+    rc = C.main(["--out", str(out_dir.relative_to(ROOT)) if False else str(out_dir), "--write"])
+    # main() joins --out to repo root; pass an absolute path via consume write guard.
+    assert rc == 1
+    assert not list(out_dir.glob("*.json")) if out_dir.exists() else True
+
+
+def test_main_missing_official_does_not_write_live_projection(capsys):
+    """Default CLI entry (no --source) is official and FAIL CLOSED today."""
+    assert not (ROOT / DEFAULT_OFFICIAL_DIR).exists()
+    rc = C.main([])
+    assert rc == 1
+    captured = capsys.readouterr().out
+    payload = json.loads(captured.strip().splitlines()[-1])
+    assert payload["ok"] is False
+    assert payload["index_eligible"] is False
+    assert payload.get("official_live") is False
+
+
+def test_main_explicit_fixture_still_runs(capsys):
+    rc = C.main(["--source", DEFAULT_FIXTURE_DIR])
+    assert rc == 0
+    payload = json.loads(capsys.readouterr().out.strip().splitlines()[-1])
+    assert payload["source_kind"] == SOURCE_FIXTURE
+    assert payload["index_eligible"] is False
+    assert payload["opportunities_ready"] == 4
+
+
+def test_539_pncp_id_is_not_path_traversal():
+    with pytest.raises(C.ConsumeError):
+        C.assert_safe_opportunity_id("../../etc/passwd")
+    with pytest.raises(C.ConsumeError):
+        C.assert_safe_opportunity_id("foo/../../etc")
+    assert C.assert_safe_opportunity_id(_PNCP_OPPORTUNITY_ID) == _PNCP_OPPORTUNITY_ID
+
+
+def test_539_company_without_fonte_is_not_source_absent(tmp_path):
+    export_dir = _write_539_candidate(tmp_path)
+    bundle = C.load_export_dir(export_dir)
+    company = bundle["companies"][0]
+    assert "fonte" not in company or not company.get("fonte")
+    decision = C.decide(company, manifest=bundle["manifest"])
+    assert "source_absent" not in decision["reason_codes"]
+    assert decision["ready"] is True
+    assert decision["index_eligible"] is False
+    assert decision["source_kind"] != SOURCE_OFFICIAL_LIVE

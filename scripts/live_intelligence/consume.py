@@ -1,15 +1,17 @@
 """SELECT-only consume of extra-cli `CONFENGE_LIVE_INTELLIGENCE/1.0`.
 
 Accepts the shipped export layout (manifest.json + opportunities/<id>.json +
-companies/<digest>.json). Does not crawl, extract or invent facts. extra-cli
-DATA_* never becomes editorial INDEX. `catalog_mode=fixture` and
-fixture-claimed-live payloads are labeled test-only and cannot reach
-`PUBLISHABLE_INDEX`.
+companies/<digest>.json, plus the sibling `<out_dir>.private/identity_projection.json`).
+Does not crawl, extract or invent facts. extra-cli DATA_* never becomes editorial
+INDEX. `catalog_mode=fixture` and fixture-claimed-live payloads are labeled
+test-only and cannot reach `PUBLISHABLE_INDEX`.
 
-The producer has not shipped this contract yet. Until it does the only input is
-the labeled fixture catalog under `data/live_intelligence/fixtures/`, whose
-schema (`confenge-live-intelligence-fixture/1.0`) is structurally rejected by
-schema negotiation — a fixture cannot be projected as live even by mistake.
+The production entry point reads one official producer bundle. Missing, invalid
+or stale official input FAIL CLOSED: no fixture fallback, no parallel schema, no
+per-URL hand edit. The labeled fixture catalog under
+`data/live_intelligence/fixtures/` remains an explicit `--source` for tests/dev;
+its schema (`confenge-live-intelligence-fixture/1.0`) is structurally rejected
+by schema negotiation — a fixture cannot be projected as live even by mistake.
 
 `negotiate_schema` is the single schema authority. `inspect_producer_integrity`,
 `index_bars` and `load_export_dir` all read their schema verdict from it, and
@@ -31,9 +33,11 @@ from scripts.live_intelligence import (
     COMPANIES_OUT,
     COMPANY_FAMILY,
     CONTRACT_VERSION,
-    DEFAULT_FIXTURE_DIR,
     DEFAULT_LIVE_DIR,
+    DEFAULT_OFFICIAL_DIR,
     FIXTURE_SCHEMA,
+    IDENTITY_PROJECTION_FILE,
+    IDENTITY_PROJECTION_SCHEMA,
     LIVE_SCHEMA,
     MAX_AGE_HOURS,
     OPPORTUNITIES_OUT,
@@ -73,7 +77,12 @@ INDEX_BAR_REASON_CODES = (
 _SCHEMA_1X = re.compile(r"^CONFENGE_LIVE_INTELLIGENCE/1(?:\.\d+)?$")
 _CONTRACT_V1 = re.compile(r"^v?1(?:\.\d+){0,2}$")
 _DIGEST_RE = re.compile(r"^[0-9a-f]{16}$")
-_OPPORTUNITY_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]{2,63}$")
+# Producer PNCP opportunity_id values contain `/` (e.g. `<cnpj>-<seq>/<ano>`)
+# and are written as nested files. Fixture ids stay hyphenated slugs. `..` and
+# leading slashes are refused separately so a nested id cannot traverse.
+_OPPORTUNITY_ID_RE = re.compile(
+    r"^[a-zA-Z0-9][a-zA-Z0-9._-]{0,80}(?:/[a-zA-Z0-9][a-zA-Z0-9._-]{0,20}){0,3}$"
+)
 # A company profile is keyed by a consumer-side digest. A raw CNPJ — bare or
 # masked — must never survive into the projection, the route or analytics.
 _CNPJ_SHAPED = re.compile(r"(?<!\d)\d{14}(?!\d)|\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}")
@@ -107,18 +116,33 @@ def _rel(path: Path) -> str:
 
 
 def canonical_dumps(payload: Any) -> str:
-    """Byte-stable JSON matching extra-cli `canonical_dumps`."""
+    """Byte-stable JSON matching extra-cli `canonical_json` / `live_hash`."""
     return json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def envelope_hash(document: dict[str, Any], *, drop: str) -> str:
+    """SHA-256 of the document with `drop` and consumer `_` keys stripped."""
+    body = {
+        key: value
+        for key, value in document.items()
+        if key != drop and not str(key).startswith("_")
+    }
+    return hashlib.sha256(canonical_dumps(body).encode("utf-8")).hexdigest()
 
 
 def content_hash_of(document: dict[str, Any]) -> str:
     """SHA-256 of the document with `content_hash` and consumer `_` keys stripped."""
-    body = {
-        key: value
-        for key, value in document.items()
-        if key != "content_hash" and not str(key).startswith("_")
-    }
-    return hashlib.sha256(canonical_dumps(body).encode("utf-8")).hexdigest()
+    return envelope_hash(document, drop="content_hash")
+
+
+def manifest_hash_of(document: dict[str, Any]) -> str:
+    """SHA-256 of the envelope with `manifest_hash` and consumer `_` keys stripped."""
+    return envelope_hash(document, drop="manifest_hash")
+
+
+def sealed_hash_of(document: dict[str, Any]) -> str:
+    """SHA-256 of an identity projection with `sealed_hash` stripped."""
+    return envelope_hash(document, drop="sealed_hash")
 
 
 def verify_content_hash(document: dict[str, Any]) -> bool:
@@ -126,6 +150,20 @@ def verify_content_hash(document: dict[str, Any]) -> bool:
     if not declared:
         return False
     return declared == content_hash_of(document)
+
+
+def verify_manifest_hash(document: dict[str, Any]) -> bool:
+    declared = str(document.get("manifest_hash") or "").strip()
+    if not declared:
+        return False
+    return declared == manifest_hash_of(document)
+
+
+def verify_sealed_hash(document: dict[str, Any]) -> bool:
+    declared = str(document.get("sealed_hash") or "").strip()
+    if not declared:
+        return False
+    return declared == sealed_hash_of(document)
 
 
 class SchemaNegotiation(NamedTuple):
@@ -279,6 +317,18 @@ def _has_coverage(payload: dict[str, Any]) -> bool:
     return bool(str(coverage).strip())
 
 
+def _source_item_citable(item: dict[str, Any]) -> bool:
+    return bool(
+        item.get("url")
+        or item.get("document_id")
+        or item.get("link_edital")
+        or item.get("source_id")
+        or item.get("nome")
+        or item.get("name")
+        or item.get("sistema")
+    )
+
+
 def _has_source(payload: dict[str, Any]) -> bool:
     """A public fact without a citable source is not publishable."""
     if payload.get("link_edital") or payload.get("source_id"):
@@ -286,23 +336,26 @@ def _has_source(payload: dict[str, Any]) -> bool:
     sources = payload.get("fonte") or payload.get("sources") or payload.get("official_refs")
     if isinstance(sources, list):
         for item in sources:
-            if isinstance(item, dict) and (
-                item.get("url")
-                or item.get("document_id")
-                or item.get("link_edital")
-                or item.get("source_id")
-            ):
+            if isinstance(item, dict) and _source_item_citable(item):
                 return True
             if isinstance(item, str) and item.strip():
                 return True
     if isinstance(sources, dict):
-        return bool(
-            sources.get("url")
-            or sources.get("document_id")
-            or sources.get("link_edital")
-            or sources.get("source_id")
-        )
+        return _source_item_citable(sources)
     return False
+
+
+def _requires_citable_source(payload: dict[str, Any]) -> bool:
+    """Company-fit records cite provenance at the envelope, not per file.
+
+    extra-cli #539 company payloads have no `fonte`; requiring one would reject
+    every real company file. Opportunity records and the envelope still must
+    name a citable source.
+    """
+    schema = str(payload.get("schema") or "").strip()
+    if schema == COMPANY_FAMILY:
+        return False
+    return True
 
 
 def freshness_reasons(payload: dict[str, Any]) -> list[str]:
@@ -329,6 +382,36 @@ def freshness_reasons(payload: dict[str, Any]) -> list[str]:
     return reasons
 
 
+def _payload_hash_reasons(payload: dict[str, Any]) -> list[str]:
+    """Record files carry `content_hash`; the envelope carries `manifest_hash`.
+
+    extra-cli #539 never puts `content_hash` on the manifest. Requiring it would
+    reject every real bundle. A payload with neither hash is still absent.
+    """
+    if str(payload.get("content_hash") or "").strip():
+        if payload.get("_content_hash_ok") is False:
+            return ["content_hash_mismatch"]
+        if payload.get("_content_hash_ok") is not True and not verify_content_hash(payload):
+            return ["content_hash_mismatch"]
+        return []
+    if str(payload.get("manifest_hash") or "").strip():
+        if not verify_manifest_hash(payload):
+            return ["manifest_hash_mismatch"]
+        return []
+    return ["content_hash_absent"]
+
+
+def _envelope_hash_reasons(manifest: dict[str, Any]) -> list[str]:
+    if str(manifest.get("manifest_hash") or "").strip():
+        if not verify_manifest_hash(manifest):
+            return ["manifest_hash_mismatch"]
+        return []
+    declared = str(manifest.get("content_hash") or "").strip()
+    if declared and not verify_content_hash(manifest):
+        return ["manifest_hash_mismatch"]
+    return []
+
+
 def inspect_producer_integrity(
     payload: dict[str, Any],
     *,
@@ -343,21 +426,13 @@ def inspect_producer_integrity(
     negotiated = negotiate_schema(payload.get("schema"), payload.get("contract_version"))
     if negotiated.kind is None:
         reasons.extend(negotiated.reasons)
-    declared_hash = str(payload.get("content_hash") or "").strip()
-    if not declared_hash:
-        reasons.append("content_hash_absent")
-    elif payload.get("_content_hash_ok") is False:
-        reasons.append("content_hash_mismatch")
-    elif payload.get("_content_hash_ok") is not True and not verify_content_hash(payload):
-        reasons.append("content_hash_mismatch")
-    if manifest is not None:
-        declared = str(manifest.get("content_hash") or "").strip()
-        if declared and not verify_content_hash(manifest):
-            reasons.append("manifest_hash_mismatch")
+    reasons.extend(_payload_hash_reasons(payload))
+    if manifest is not None and manifest is not payload:
+        reasons.extend(_envelope_hash_reasons(manifest))
     reasons.extend(freshness_reasons(payload))
     if not _has_coverage(payload):
         reasons.append("coverage_absent")
-    if not _has_source(payload):
+    if _requires_citable_source(payload) and not _has_source(payload):
         reasons.append("source_absent")
     if fixture_as_live(payload):
         # A fixture that claims to be live is not a labeling slip; it is a lie
@@ -427,6 +502,39 @@ def _looks_export_dir(path: Path) -> bool:
     return path.is_dir() and (path / "manifest.json").is_file()
 
 
+def identity_projection_path_for(export_dir: Path) -> Path:
+    """Producer writes identity as a SIBLING `<name>.private/`, never a child."""
+    return export_dir.parent / f"{export_dir.name}.private" / IDENTITY_PROJECTION_FILE
+
+
+def _contained_file(root: Path, rel: str) -> Path:
+    """Resolve `rel` under `root`. Refuse path traversal."""
+    candidate = (root / rel).resolve()
+    try:
+        candidate.relative_to(root.resolve())
+    except ValueError as exc:
+        raise ConsumeError(f"record path escapes export dir: {rel}") from exc
+    return candidate
+
+
+def load_identity_projection(export_dir: Path, *, manifest_hash: str = "") -> dict[str, Any] | None:
+    """Load the sibling identity projection. Absent is None; invalid is fail-closed."""
+    path = identity_projection_path_for(export_dir)
+    if not path.is_file():
+        return None
+    payload = _parse_json(path)
+    if str(payload.get("schema") or "") != IDENTITY_PROJECTION_SCHEMA:
+        raise ConsumeError(f"identity projection schema unsupported: {path}")
+    if not verify_sealed_hash(payload):
+        raise ConsumeError(f"identity projection sealed_hash mismatch: {path}")
+    if manifest_hash and str(payload.get("sealed_to_manifest_hash") or "") != manifest_hash:
+        raise ConsumeError(f"identity projection is not sealed to this manifest: {path}")
+    entries = payload.get("entries")
+    if not isinstance(entries, list):
+        raise ConsumeError(f"identity projection entries missing: {path}")
+    return payload
+
+
 def load_export_dir(path: Path) -> dict[str, Any]:
     """Load a producer export directory: manifest.json + records under their family dirs."""
     resolved = path if path.is_absolute() else _root() / path
@@ -441,6 +549,12 @@ def load_export_dir(path: Path) -> dict[str, Any]:
     manifest["_schema_negotiated_live"] = negotiated.accepted
     manifest["_schema_reasons"] = list(negotiated.reasons)
     schema_reasons = negotiated.reasons
+    envelope_hash_ok = (
+        verify_manifest_hash(manifest)
+        if str(manifest.get("manifest_hash") or "").strip()
+        else (not str(manifest.get("content_hash") or "").strip() or verify_content_hash(manifest))
+    )
+    manifest["_manifest_hash_ok"] = envelope_hash_ok
 
     def _load(entries: Any, default_dir: str, key: str) -> list[dict[str, Any]]:
         out: list[dict[str, Any]] = []
@@ -451,7 +565,7 @@ def load_export_dir(path: Path) -> dict[str, Any]:
             rel = entry.get("file") or entry.get("path") or (f"{default_dir}/{record_id}.json" if record_id else "")
             if not rel:
                 continue
-            record_path = resolved / rel
+            record_path = _contained_file(resolved, str(rel))
             if not record_path.is_file():
                 raise ConsumeError(f"missing live-intelligence record: {record_path}")
             record = _parse_json(record_path)
@@ -462,12 +576,20 @@ def load_export_dir(path: Path) -> dict[str, Any]:
             record["_schema_reasons"] = list(schema_reasons)
             record.setdefault(key, record_id)
             record.setdefault("catalog_mode", catalog_mode_of(manifest))
-            record.setdefault("claimed_live", claimed_live_of(manifest))
+            record.setdefault("producer_status", producer_status_of(manifest))
             if "official_live" not in record and "official_live" in manifest:
                 record["official_live"] = manifest.get("official_live")
+            # Producer #539 does not emit claimed_live. Do not invent True.
+            if "claimed_live" in manifest:
+                record.setdefault("claimed_live", claimed_live_of(manifest))
             record["_manifest_entry"] = entry
             out.append(record)
         return out
+
+    identity = load_identity_projection(
+        resolved,
+        manifest_hash=str(manifest.get("manifest_hash") or ""),
+    )
 
     return {
         "schema": str(manifest.get("schema") or ""),
@@ -488,6 +610,10 @@ def load_export_dir(path: Path) -> dict[str, Any]:
         ),
         "_source_path": _rel(resolved),
         "_source_kind": source_kind_of(manifest),
+        "_identity_projection": identity,
+        "_identity_projection_path": (
+            _rel(identity_projection_path_for(resolved)) if identity is not None else None
+        ),
     }
 
 
@@ -501,52 +627,107 @@ def _unknown(value: Any) -> str:
     return text or "UNKNOWN"
 
 
+def assert_safe_opportunity_id(opportunity_id: str) -> str:
+    """Accept producer PNCP ids (including `/`) and refuse path traversal."""
+    text = _text(opportunity_id)
+    if not text or ".." in text or text.startswith("/") or "\\" in text:
+        raise ConsumeError(f"unsafe opportunity_id: {opportunity_id!r}")
+    if not _OPPORTUNITY_ID_RE.fullmatch(text):
+        raise ConsumeError(f"unsafe opportunity_id: {opportunity_id!r}")
+    return text
+
+
+def _fonte_items(record: dict[str, Any]) -> list[dict[str, Any]]:
+    """Normalize producer object-shaped `fonte` and fixture list-shaped `fonte`."""
+    raw = record.get("fonte")
+    items: list[dict[str, Any]]
+    if isinstance(raw, dict):
+        items = [raw]
+    elif isinstance(raw, list):
+        items = [item for item in raw if isinstance(item, dict)]
+    else:
+        items = []
+    out: list[dict[str, Any]] = []
+    for item in items:
+        url = _text(item.get("url") or item.get("link_edital"))
+        nome = _text(item.get("nome") or item.get("name") or item.get("sistema"))
+        source_id = _text(item.get("source_id"))
+        if not (url or nome or source_id):
+            continue
+        row = {
+            "nome": nome,
+            "url": url,
+            "url_status": _unknown(item.get("url_status")),
+            "retrieved_at": _unknown(item.get("retrieved_at")),
+        }
+        if source_id:
+            row["source_id"] = source_id
+        out.append(row)
+    return out
+
+
+def _valor_amount(valor: dict[str, Any]) -> Any:
+    if valor.get("estimado_brl") not in (None, ""):
+        return valor.get("estimado_brl")
+    return valor.get("amount_brl")
+
+
 def project_opportunity(record: dict[str, Any]) -> dict[str, Any]:
     """Consumer-bound projection of one `live-opportunity/1.0` record."""
-    opportunity_id = _text(record.get("opportunity_id"))
-    if not _OPPORTUNITY_ID_RE.fullmatch(opportunity_id):
-        raise ConsumeError(f"unsafe opportunity_id: {opportunity_id!r}")
+    opportunity_id = assert_safe_opportunity_id(_text(record.get("opportunity_id")))
     valor = record.get("valor") if isinstance(record.get("valor"), dict) else {}
     orgao = record.get("orgao") if isinstance(record.get("orgao"), dict) else {}
     local = record.get("local") if isinstance(record.get("local"), dict) else {}
     prazo = record.get("prazo") if isinstance(record.get("prazo"), dict) else {}
     status = _text(prazo.get("status")).upper()
     fresh = freshness_of(record)
+    amount = _valor_amount(valor)
+    epistemic = valor.get("epistemic_class") or (record.get("epistemic_classes") or {}).get(
+        "valor.estimado_brl"
+    )
+    valor_out: dict[str, Any] = {
+        # Declared public estimate carried by the source document. Not a
+        # CONFENGE price: the renderer never puts a commitment word near it.
+        "amount_brl": amount,
+        "basis": _unknown(valor.get("basis")),
+        "epistemic_class": _unknown(epistemic),
+    }
+    if "estimado_brl" in valor or "faixa" in valor:
+        valor_out["estimado_brl"] = amount
+        valor_out["faixa"] = valor.get("faixa")
+        if "estado" in valor:
+            valor_out["estado"] = valor.get("estado")
+    orgao_out: dict[str, Any] = {
+        "nome": _unknown(orgao.get("nome")),
+        "esfera": _unknown(orgao.get("esfera")),
+        "uf": _unknown(orgao.get("uf")),
+    }
+    if "cnpj" in orgao:
+        # Contracting-body CNPJ is public source data on the opportunity, not
+        # a company identity key. Never copied onto a company projection.
+        orgao_out["cnpj"] = orgao.get("cnpj")
+        orgao_out["estado"] = _unknown(orgao.get("estado"))
+    prazo_out: dict[str, Any] = {
+        "status": status if status in PRAZO_STATUS else "UNKNOWN",
+        "data_sessao": _unknown(prazo.get("data_sessao") or prazo.get("data_encerramento")),
+    }
+    if "data_encerramento" in prazo:
+        prazo_out["data_encerramento"] = _unknown(prazo.get("data_encerramento"))
+    if "data_publicacao" in prazo:
+        prazo_out["data_publicacao"] = _unknown(prazo.get("data_publicacao"))
     return {
         "family": OPPORTUNITY_FAMILY,
         "opportunity_id": opportunity_id,
         "route": f"/oportunidades/{opportunity_id}/",
         "objeto": _text(record.get("objeto")),
-        "valor": {
-            # Declared public estimate carried by the source document. Not a
-            # CONFENGE price: the renderer never puts a commitment word near it.
-            "amount_brl": valor.get("amount_brl"),
-            "basis": _unknown(valor.get("basis")),
-            "epistemic_class": _unknown(valor.get("epistemic_class")),
-        },
-        "orgao": {
-            "nome": _unknown(orgao.get("nome")),
-            "esfera": _unknown(orgao.get("esfera")),
-            "uf": _unknown(orgao.get("uf")),
-        },
+        "valor": valor_out,
+        "orgao": orgao_out,
         "local": {
             "municipio": _unknown(local.get("municipio")),
             "uf": _unknown(local.get("uf")),
         },
-        "prazo": {
-            "status": status if status in PRAZO_STATUS else "UNKNOWN",
-            "data_sessao": _unknown(prazo.get("data_sessao")),
-        },
-        "fonte": [
-            {
-                "nome": _text(item.get("nome") or item.get("name")),
-                "url": _text(item.get("url")),
-                "url_status": _unknown(item.get("url_status")),
-                "retrieved_at": _unknown(item.get("retrieved_at")),
-            }
-            for item in record.get("fonte") or []
-            if isinstance(item, dict)
-        ],
+        "prazo": prazo_out,
+        "fonte": _fonte_items(record),
         "as_of": fresh["source_as_of"],
         "freshness": fresh,
         "coverage": record.get("coverage"),
@@ -555,6 +736,33 @@ def project_opportunity(record: dict[str, Any]) -> dict[str, Any]:
         "data_state": data_state_of(record),
         "content_hash": _text(record.get("content_hash")),
     }
+
+
+def _assert_company_record_has_no_cnpj(record: dict[str, Any], digest: str) -> None:
+    """A company profile must never carry a raw CNPJ or a `cnpj` key.
+
+    PNCP `opportunity_id` values embed a 14-digit source id (`<cnpj>-<seq>/<ano>`).
+    Those are opportunity keys, not company identity, and are skipped.
+    """
+
+    def walk(obj: Any) -> None:
+        if isinstance(obj, dict):
+            for key, value in obj.items():
+                if re.search(r"cnpj", str(key), re.I):
+                    raise ConsumeError(f"company record carries a raw CNPJ or a cnpj key: {digest}")
+                if key == "opportunity_id":
+                    continue
+                walk(value)
+            return
+        if isinstance(obj, list):
+            for item in obj:
+                walk(item)
+            return
+        if isinstance(obj, str) and (_CNPJ_SHAPED.search(obj) or _CNPJ_KEY.search(obj)):
+            raise ConsumeError(f"company record carries a raw CNPJ or a cnpj key: {digest}")
+
+    public = {key: value for key, value in record.items() if not str(key).startswith("_")}
+    walk(public)
 
 
 def project_company(record: dict[str, Any]) -> dict[str, Any]:
@@ -566,35 +774,74 @@ def project_company(record: dict[str, Any]) -> dict[str, Any]:
     digest = _text(record.get("company_digest")).lower()
     if not _DIGEST_RE.fullmatch(digest):
         raise ConsumeError(f"company_digest is not a 16-hex digest: {digest!r}")
-    blob = canonical_dumps({k: v for k, v in record.items() if not str(k).startswith("_")})
-    if _CNPJ_SHAPED.search(blob) or _CNPJ_KEY.search(blob):
-        raise ConsumeError(f"company record carries a raw CNPJ or a cnpj key: {digest}")
+    _assert_company_record_has_no_cnpj(record, digest)
     perfil = record.get("perfil") if isinstance(record.get("perfil"), dict) else {}
     fresh = freshness_of(record)
+    perfil_out: dict[str, Any] = {
+        "natureza": _unknown(perfil.get("natureza")),
+        "porte_declarado": _unknown(perfil.get("porte_declarado")),
+        "primeiro_contrato_publico": _unknown(perfil.get("primeiro_contrato_publico")),
+        "contratos_publicos_declarados": perfil.get("contratos_publicos_declarados"),
+    }
+    if "razao_social" in perfil:
+        perfil_out["razao_social"] = _unknown(perfil.get("razao_social"))
+    if "contratos_observados" in perfil:
+        perfil_out["contratos_observados"] = perfil.get("contratos_observados")
+    if "contratacao_mais_recente" in perfil:
+        perfil_out["contratacao_mais_recente"] = _unknown(perfil.get("contratacao_mais_recente"))
+    compradores: list[str] = []
+    for item in record.get("compradores") or []:
+        if isinstance(item, dict):
+            buyer = _text(item.get("buyer_digest")).lower()
+            if not buyer:
+                continue
+            if not _DIGEST_RE.fullmatch(buyer):
+                raise ConsumeError(f"buyer_digest is not a 16-hex digest: {buyer!r}")
+            compradores.append(buyer)
+        else:
+            text = _text(item)
+            if text:
+                compradores.append(text)
+    gaps: list[str] = []
+    for item in record.get("gaps") or []:
+        if isinstance(item, dict):
+            oid = _text(item.get("opportunity_id"))
+            dims = [
+                _text(dim)
+                for dim in item.get("dimensoes_sem_correspondencia") or []
+                if _text(dim)
+            ]
+            if oid and dims:
+                gaps.append(f"{oid}: {', '.join(dims)}")
+            elif oid:
+                gaps.append(oid)
+            elif dims:
+                gaps.append(", ".join(dims))
+        else:
+            text = _text(item)
+            if text:
+                gaps.append(text)
     return {
         "family": COMPANY_FAMILY,
         "company_digest": digest,
-        "perfil": {
-            "natureza": _unknown(perfil.get("natureza")),
-            "porte_declarado": _unknown(perfil.get("porte_declarado")),
-            "primeiro_contrato_publico": _unknown(perfil.get("primeiro_contrato_publico")),
-            "contratos_publicos_declarados": perfil.get("contratos_publicos_declarados"),
-        },
+        "perfil": perfil_out,
         "categorias": [_text(item) for item in record.get("categorias") or [] if _text(item)],
         "faixas": [_text(item) for item in record.get("faixas") or [] if _text(item)],
         "geografias": [_text(item) for item in record.get("geografias") or [] if _text(item)],
-        "compradores": [_text(item) for item in record.get("compradores") or [] if _text(item)],
+        "compradores": compradores,
         "oportunidades_aderentes": [
             {
                 "opportunity_id": _text(item.get("opportunity_id")),
                 "dimensoes": [
-                    _text(dim) for dim in item.get("dimensoes") or [] if _text(dim)
+                    _text(dim)
+                    for dim in (item.get("dimensoes") or item.get("matched_dimensions") or [])
+                    if _text(dim)
                 ],
             }
             for item in record.get("oportunidades_aderentes") or []
             if isinstance(item, dict) and _text(item.get("opportunity_id"))
         ],
-        "gaps": [_text(item) for item in record.get("gaps") or [] if _text(item)],
+        "gaps": gaps,
         "unknowns": [_text(item) for item in record.get("unknowns") or [] if _text(item)],
         "as_of": fresh["source_as_of"],
         "freshness": fresh,
@@ -660,7 +907,7 @@ def build_projection(bundle: dict[str, Any]) -> dict[str, Any]:
             if row["opportunity_id"] in ready_ids
         ]
 
-    return {
+    projection = {
         "schema": LIVE_SCHEMA,
         "contract_version": CONTRACT_VERSION,
         "source_kind": source_kind,
@@ -675,6 +922,15 @@ def build_projection(bundle: dict[str, Any]) -> dict[str, Any]:
         "companies": companies,
         "rejected": sorted(rejected, key=lambda item: (item["family"], item["id"])),
     }
+    _assert_no_company_ref(projection)
+    return projection
+
+
+def _assert_no_company_ref(payload: Any) -> None:
+    """company_ref is private identity. It never enters a public projection."""
+    blob = json.dumps(payload, ensure_ascii=False)
+    if "company_ref" in blob:
+        raise ConsumeError("company_ref leaked into public projection")
 
 
 def write_projection(projection: dict[str, Any], out_dir: Path | None = None) -> list[Path]:
@@ -716,19 +972,72 @@ def write_projection(projection: dict[str, Any], out_dir: Path | None = None) ->
     return [opportunities_path, companies_path]
 
 
-def consume(source: Path | None = None, out_dir: Path | None = None) -> dict[str, Any]:
-    bundle = load_export_dir(source or Path(DEFAULT_FIXTURE_DIR))
+def assert_official_bundle(bundle: dict[str, Any]) -> None:
+    """Production consume: fixture is not a silent fallback."""
+    manifest = bundle.get("manifest") or {}
+    if is_fixture_catalog(manifest) or source_kind_of(manifest) != SOURCE_OFFICIAL_LIVE:
+        raise ConsumeError(
+            "official live bundle required; refusing fixture fallback"
+        )
+    reasons = inspect_producer_integrity(manifest, manifest=manifest)
+    if reasons:
+        raise ConsumeError(f"official bundle rejected: {','.join(reasons)}")
+
+
+def consume(
+    source: Path | None = None,
+    out_dir: Path | None = None,
+    *,
+    require_official: bool | None = None,
+) -> dict[str, Any]:
+    """Load one producer export and project it.
+
+    With no `source`, the official input dir is required and FAIL CLOSED when
+    absent, invalid or stale. The fixture catalog is consumed only when the
+    caller passes it explicitly.
+    """
+    del out_dir  # write path is owned by write_projection / main --write
+    if source is None:
+        source = Path(DEFAULT_OFFICIAL_DIR)
+        if require_official is None:
+            require_official = True
+    bundle = load_export_dir(source)
+    if require_official:
+        assert_official_bundle(bundle)
     return build_projection(bundle)
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Consume CONFENGE_LIVE_INTELLIGENCE/1.0 (SELECT-only).")
-    parser.add_argument("--source", default=DEFAULT_FIXTURE_DIR, help="producer export directory")
+    parser.add_argument(
+        "--source",
+        default=None,
+        help="producer export directory (default: official; fixture must be passed explicitly)",
+    )
     parser.add_argument("--out", default=DEFAULT_LIVE_DIR, help="validated projection directory")
     parser.add_argument("--write", action="store_true", help="write the projection to --out")
     args = parser.parse_args(argv)
-    projection = consume(Path(args.source))
+    explicit_source = Path(args.source) if args.source else None
+    try:
+        projection = consume(explicit_source, require_official=explicit_source is None)
+    except ConsumeError as exc:
+        print(
+            json.dumps(
+                {
+                    "ok": False,
+                    "error": str(exc),
+                    "source_kind": None,
+                    "index_eligible": False,
+                    "official_live": False,
+                },
+                ensure_ascii=False,
+            )
+        )
+        return 1
     if args.write:
+        if projection["source_kind"] == SOURCE_OFFICIAL_LIVE and projection["index_eligible"] is not False:
+            print(json.dumps({"ok": False, "error": "refusing to write an index-eligible projection"}))
+            return 1
         written = write_projection(projection, _root() / args.out)
         for path in written:
             print(f"wrote {_rel(path)}")

@@ -58,6 +58,13 @@ ADHERENCE_DISCLAIMER_PT = (
 )
 
 DEFAULT_FIXTURE_DIR = "data/live_intelligence/fixtures"
+# Official producer bundle (SELECT-only input). Distinct from DEFAULT_LIVE_DIR,
+# which is the consumer projection output. Absent/invalid/stale official input
+# FAIL CLOSED — the fixture catalog is never a silent fallback.
+DEFAULT_OFFICIAL_DIR = "data/live_intelligence/official"
 DEFAULT_LIVE_DIR = "data/live_intelligence/live"
 OPPORTUNITIES_OUT = "opportunities.json"
 COMPANIES_OUT = "companies.json"
+
+IDENTITY_PROJECTION_SCHEMA = "CONFENGE_IDENTITY_PROJECTION/1.0"
+IDENTITY_PROJECTION_FILE = "identity_projection.json"
