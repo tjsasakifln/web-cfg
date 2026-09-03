@@ -42,6 +42,39 @@ const DISCLAIMER_PT =
   "Os dados descrevem o histórico público declarado nas fontes citadas e " +
   "podem estar incompletos.";
 
+// --- reader-facing vocabulary ----------------------------------------------
+//
+// `UNKNOWN`, `test_only_fixture` and friends are contract vocabulary. They stay
+// untouched in the stored/returned JSON — only the rendered copy translates
+// them, and the translation never adds certainty: a field nobody published says
+// exactly that, it never says zero.
+const NAO_INFORMADO = "não informado pela fonte";
+
+// The single epistemic-boundary sentence for this surface. It is byte-identical
+// in analise-cnpj/index.html and analise-cnpj/r/index.html, which are what the
+// client-rendered path shows — the same page used to state this caveat twice in
+// two different wordings (finding 13 of
+// docs/seo/LIVE-INTELLIGENCE-ARCHETYPE-FINDINGS.md).
+const NAO_INFORMADO_NOTA =
+  "Quando um campo aparece como não informado pela fonte, o dado não foi " +
+  "publicado pelas fontes consultadas. Isso não vale zero e não vale ausência " +
+  "de histórico.";
+
+// `source_kind`/`producer_status` as reader copy. An unmapped member falls back
+// to a PT-BR phrase, never to the raw token: echoing the constant is exactly
+// the leak this map exists to close.
+const SOURCE_KIND_PT = {
+  official_live: "fonte pública oficial",
+  test_only_fixture: "dado de teste, não corresponde a um histórico real",
+  fixture: "dado de teste, não corresponde a um histórico real",
+};
+
+function fonteKindPt(value) {
+  const key = String(value == null ? "" : value).trim();
+  if (!key) return NAO_INFORMADO;
+  return SOURCE_KIND_PT[key] || "origem não classificada";
+}
+
 const RESULT_STATES = Object.freeze({
   MATCH: "PERFIL_ENCONTRADO",
   NO_MATCH: "SEM_DADOS_SUFICIENTES",
@@ -154,9 +187,11 @@ function matchResult(analysisId, profile, establishmentDigest = null) {
     state: RESULT_STATES.MATCH,
     reason: "",
     titulo: "Perfil contratual público",
+    // The "not published is not zero" caveat lives once per page, in the
+    // epistemic-boundary section, not here as well: this sentence and that one
+    // used to say the same thing in different words on the same render.
     explicacao:
-      "O perfil abaixo descreve o histórico público declarado nas fontes citadas. " +
-      "Campos marcados como UNKNOWN não foram publicados e não valem zero.",
+      "O perfil abaixo descreve o histórico público declarado nas fontes citadas.",
     perfil: profile.perfil || null,
     categorias: profile.categorias || [],
     faixas: profile.faixas || [],
@@ -243,7 +278,7 @@ function renderResultPage(result) {
     ? `<dl>${Object.keys(perfil)
         .map((key) => {
           const raw = perfil[key];
-          const shown = raw === null || raw === "" ? "UNKNOWN" : raw;
+          const shown = raw === null || raw === "" ? NAO_INFORMADO : raw;
           return `<dt>${esc(key.replace(/_/g, " "))}</dt><dd>${esc(shown)}</dd>`;
         })
         .join("")}</dl>`
@@ -255,7 +290,7 @@ function renderResultPage(result) {
     ? `<h3>Oportunidades aderentes</h3><ul>${aderentes
         .map((row) => {
           const id = String(row.opportunity_id);
-          const dims = (row.dimensoes || []).join(", ") || "UNKNOWN";
+          const dims = (row.dimensoes || []).join(", ") || NAO_INFORMADO;
           return `<li><a href="/oportunidades/${encodeURIComponent(id)}/">${esc(id)}</a> — dimensões: ${esc(dims)}</li>`;
         })
         .join("")}</ul>`
@@ -291,21 +326,21 @@ ${listBlock("Geografias declaradas", result.geografias)}
 ${listBlock("Compradores declarados", result.compradores)}
 ${listBlock("Dimensões da aderência", result.dimensoes_da_aderencia)}
 ${listBlock("Lacunas declaradas", result.gaps)}
-${listBlock("UNKNOWN nas fontes", result.unknowns)}
+${listBlock("O que as fontes não informaram", result.unknowns)}
 ${aderentesHtml}
 </section>
 ${limitations.length ? `<section class="section"><h2>Limitações declaradas</h2><ul>${limitations.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></section>` : ""}
 <section class="section">
 <h2>O que esta análise não afirma</h2>
 <p>${esc(result.disclaimer || DISCLAIMER_PT)}</p>
-<p>Campos marcados como UNKNOWN não foram publicados pelas fontes consultadas. UNKNOWN não vale zero e não vale ausência de histórico.</p>
+<p>${esc(NAO_INFORMADO_NOTA)}</p>
 ${result.as_of ? `<p class="form-note">Dados declarados até ${esc(result.as_of)}.</p>` : ""}
 </section>
 <section class="section" id="hashes" data-section-archetype="provenance_hashes">
 <h2>Procedência técnica</h2>
 <dl>
-<dt>Identificador estável</dt><dd>${esc(result.analysis_id || "UNKNOWN")}</dd>
-<dt>Origem dos dados</dt><dd>${esc(result.fonte_kind || "UNKNOWN")}</dd>
+<dt>Identificador estável</dt><dd>${esc(result.analysis_id || NAO_INFORMADO)}</dd>
+<dt>Origem dos dados</dt><dd>${esc(fonteKindPt(result.fonte_kind))}</dd>
 <dt>Elegível a indexação</dt><dd>não</dd>
 </dl>
 </section>
@@ -574,6 +609,11 @@ exports.datasetFreshness = datasetFreshness;
 exports.newAnalysisId = newAnalysisId;
 exports.resultRoute = resultRoute;
 exports.DISCLAIMER_PT = DISCLAIMER_PT;
+exports.NAO_INFORMADO = NAO_INFORMADO;
+exports.NAO_INFORMADO_NOTA = NAO_INFORMADO_NOTA;
+// Exported so the test asserts provenance disclosure against the real mapping
+// rather than a copy of the phrase that could drift away from it.
+exports.fonteKindPt = fonteKindPt;
 exports.RESULT_STATES = RESULT_STATES;
 exports.RESULT_ROUTE_PREFIX = RESULT_ROUTE_PREFIX;
 exports._setDatasetForTests = _setDatasetForTests;

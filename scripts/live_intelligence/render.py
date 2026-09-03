@@ -50,16 +50,109 @@ ARCHETYPE_BY_SECTION_ID = {
     "hashes": "provenance_hashes",
 }
 
+# --- reader-facing vocabulary ------------------------------------------------
+#
+# The pipeline's internal tokens (``UNKNOWN``, ``FACT``, ``PUBLISHABLE_NOINDEX``,
+# ``test_only_fixture``, ``as_of``, ``content_hash``) are contract vocabulary,
+# not reader vocabulary. They stay exactly as they are on the input side — every
+# dict KEY below and every comparison in ``renderable()`` is still the raw enum —
+# and are translated only at the moment they become visible copy.
+#
+# The translation never adds certainty the record does not carry: an absent
+# field says it was not published, it never says zero and never says "n/a".
+NAO_INFORMADO = "não informado pela fonte"
+
+# One sentence, reused verbatim across every live-intelligence surface (see the
+# identical copy in analise-cnpj/index.html, analise-cnpj/r/index.html and
+# netlify/functions/live-intelligence-analyze.cjs). Stating the same caveat in
+# two different wordings on one page is what finding 13 of
+# docs/seo/LIVE-INTELLIGENCE-ARCHETYPE-FINDINGS.md flagged.
+NAO_INFORMADO_NOTA = (
+    "Quando um campo aparece como não informado pela fonte, o dado não foi "
+    "publicado, não significa zero."
+)
+
 PRAZO_LABEL = {
     "ABERTA": "Aberta",
     "SUSPENSA": "Suspensa",
     "ENCERRADA": "Encerrada",
-    "UNKNOWN": "UNKNOWN",
+    "UNKNOWN": NAO_INFORMADO,
+}
+
+# The masthead reads as a sentence fragment ("... · sessão aberta"), so it needs
+# its own agreement rather than the table-cell label.
+PRAZO_MASTHEAD = {
+    "ABERTA": "sessão aberta",
+    "SUSPENSA": "sessão suspensa",
+    "ENCERRADA": "sessão encerrada",
+    "UNKNOWN": "sessão sem status informado pela fonte",
+}
+
+# How the source declared the amount. Replaces the raw `epistemic_class` token.
+EPISTEMIC_LABEL = {
+    "FACT": "declarado como valor no documento público",
+    "CALCULATION": "calculado a partir do documento público",
+    "INFERENCE": "inferido a partir do documento público",
+    "UNKNOWN": NAO_INFORMADO,
+}
+
+# `source_kind`. A fixture-backed record must say so in plain words: the page is
+# otherwise readable as a real opportunity.
+SOURCE_KIND_LABEL = {
+    "official_live": "fonte pública oficial",
+    "test_only_fixture": "dado de teste, não corresponde a uma licitação real",
+}
+
+# `publication_state`. Only PUBLISHABLE_NOINDEX can actually reach a page (see
+# ``renderable()``); the rest are mapped so a future state cannot leak a token.
+PUBLICATION_STATE_LABEL = {
+    "PUBLISHABLE_INDEX": "publicada e elegível a indexação",
+    "PUBLISHABLE_NOINDEX": "publicada sem indexação em buscadores",
+    "HOLD_FOR_DATA": "retida à espera de dados da fonte",
+    "REJECT": "não publicável",
 }
 
 
 def _root() -> Path:
     return Path(__file__).resolve().parents[2]
+
+
+def _pt(value: Any, missing: str = NAO_INFORMADO) -> str:
+    """Free-text field as reader copy.
+
+    ``UNKNOWN`` is a *declared value* in this contract (see ``PRAZO_STATUS`` and
+    ``EPISTEMIC_CLASSES`` in ``__init__``), not only an absent key — so
+    ``record.get(k) or default`` is not enough: the projection really does ship
+    the literal string, and it must never reach the page.
+    """
+    text = str(value if value is not None else "").strip()
+    return missing if not text or text.upper() == "UNKNOWN" else text
+
+
+def _mapped(value: Any, table: dict[str, str], unmapped: str) -> str:
+    """Enum as reader copy. Never falls back to the raw token.
+
+    An enum member nobody mapped yet is a gap in this table, and saying so is
+    honest; echoing the constant would silently reopen the leak.
+    """
+    key = str(value if value is not None else "").strip()
+    if not key:
+        return NAO_INFORMADO
+    return table.get(key.upper(), table.get(key, unmapped))
+
+
+def _local_label(local: dict[str, Any]) -> str:
+    """`municipio/uf`, stating which half the source left out rather than
+    printing a token in its place."""
+    municipio = _pt(local.get("municipio"), "")
+    uf = _pt(local.get("uf"), "")
+    if municipio and uf:
+        return f"{municipio}/{uf}"
+    if municipio:
+        return f"{municipio} (UF não informada pela fonte)"
+    if uf:
+        return f"{uf} (município não informado pela fonte)"
+    return NAO_INFORMADO
 
 
 def archetype_attr(section_id: str) -> str:
@@ -71,13 +164,17 @@ def e(value: Any) -> str:
 
 
 def _brl(amount: Any) -> str:
-    """Format a declared amount. Absence stays UNKNOWN; it is never zero."""
+    """Format a declared amount. Absence is stated in words; it is never zero.
+
+    The ``"UNKNOWN"`` literal below is the *input* the contract ships, not
+    output: it is matched, then translated.
+    """
     if amount in (None, "", "UNKNOWN"):
-        return "UNKNOWN"
+        return NAO_INFORMADO
     try:
         value = float(amount)
     except (TypeError, ValueError):
-        return "UNKNOWN"
+        return NAO_INFORMADO
     inteiro, _, centavos = f"{value:,.2f}".partition(".")
     return f"R$ {inteiro.replace(',', '.')},{centavos}"
 
@@ -91,13 +188,13 @@ def _kv_rows(rows: list[tuple[str, str]]) -> str:
 
 def _sources_html(sources: list[dict[str, Any]]) -> str:
     if not sources:
-        return "<p>UNKNOWN — a fonte não foi declarada.</p>"
+        return "<p>A fonte não foi declarada.</p>"
     items = []
     for source in sources:
-        nome = e(source.get("nome") or "Fonte pública")
+        nome = e(_pt(source.get("nome"), "Fonte pública"))
         url = str(source.get("url") or "").strip()
-        status = e(source.get("url_status") or "UNKNOWN")
-        retrieved = e(source.get("retrieved_at") or "UNKNOWN")
+        status = e(_pt(source.get("url_status")))
+        retrieved = e(_pt(source.get("retrieved_at")))
         link = (
             f'<a href="{e(url)}" rel="nofollow noopener" target="_blank">{nome}</a>'
             if url.startswith("https://")
@@ -111,7 +208,7 @@ def _sources_html(sources: list[dict[str, Any]]) -> str:
 
 def _limitations_html(limitations: list[str]) -> str:
     if not limitations:
-        return "<p>UNKNOWN — a fonte não declarou limitações.</p>"
+        return "<p>A fonte não declarou limitações.</p>"
     items = "".join(f"<li>{e(item)}</li>" for item in limitations)
     return f"<ul>{items}</ul>"
 
@@ -119,13 +216,16 @@ def _limitations_html(limitations: list[str]) -> str:
 def render_opportunity_html(record: dict[str, Any]) -> str:
     """Render one opportunity page. Always noindex."""
     opportunity_id = record["opportunity_id"]
-    objeto = record.get("objeto") or "UNKNOWN"
+    objeto = _pt(record.get("objeto"))
     orgao = record.get("orgao") or {}
     local = record.get("local") or {}
     prazo = record.get("prazo") or {}
     valor = record.get("valor") or {}
     freshness = record.get("freshness") or {}
-    title = f"{objeto} — {orgao.get('nome', 'UNKNOWN')} | CONFENGE"
+    orgao_nome = _pt(orgao.get("nome"))
+    # <title> survives the gate's visible-text extraction (only <script>/<style>
+    # content is dropped), so it is reader copy and is normalised like the body.
+    title = f"{objeto}, {orgao_nome} | CONFENGE"
     description = (
         f"Dados públicos declarados da oportunidade {opportunity_id}: objeto, valor estimado "
         f"declarado na fonte, órgão, local, prazo e status, com fonte e data de referência."
@@ -174,7 +274,7 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 <section class="section" id="masthead"{archetype_attr("masthead")}>
 <p class="eyebrow">Oportunidade pública · dados declarados na fonte</p>
 <h1>{e(objeto)}</h1>
-<p>{e(orgao.get("nome") or "UNKNOWN")} · {e(local.get("municipio") or "UNKNOWN")}/{e(local.get("uf") or "UNKNOWN")} · sessão {e(PRAZO_LABEL.get(status, "UNKNOWN"))}</p>
+<p>{e(orgao_nome)} · {e(_local_label(local))} · {e(_mapped(status, PRAZO_MASTHEAD, "sessão sem status informado pela fonte"))}</p>
 </section>
 
 <section class="section" id="ficha"{archetype_attr("ficha")}>
@@ -182,15 +282,15 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 {_kv_rows([
     ("Objeto", objeto),
     ("Valor estimado declarado na fonte", _brl(valor.get("amount_brl"))),
-    ("Base do valor", valor.get("basis") or "UNKNOWN"),
-    ("Classe epistêmica do valor", valor.get("epistemic_class") or "UNKNOWN"),
-    ("Órgão", orgao.get("nome") or "UNKNOWN"),
-    ("Esfera", orgao.get("esfera") or "UNKNOWN"),
-    ("Local", f"{local.get('municipio') or 'UNKNOWN'}/{local.get('uf') or 'UNKNOWN'}"),
-    ("Status da sessão", PRAZO_LABEL.get(status, "UNKNOWN")),
-    ("Data da sessão", prazo.get("data_sessao") or "UNKNOWN"),
+    ("Base do valor", _pt(valor.get("basis"))),
+    ("Como o valor foi declarado", _mapped(valor.get("epistemic_class"), EPISTEMIC_LABEL, "classificação não declarada pela fonte")),
+    ("Órgão", orgao_nome),
+    ("Esfera", _pt(orgao.get("esfera"))),
+    ("Local", _local_label(local)),
+    ("Status da sessão", _mapped(status, PRAZO_LABEL, NAO_INFORMADO)),
+    ("Data da sessão", _pt(prazo.get("data_sessao"))),
 ])}
-<p class="form-hint">O valor acima é a estimativa declarada no documento público citado. Não é valor contratado e não é valor de serviço CONFENGE. Campo UNKNOWN significa que a fonte não publicou o dado — não significa zero.</p>
+<p class="form-hint">O valor acima é a estimativa declarada no documento público citado. Não é valor contratado e não é valor de serviço CONFENGE. {NAO_INFORMADO_NOTA}</p>
 </section>
 
 <section class="section" id="fontes"{archetype_attr("fontes")}>
@@ -201,8 +301,8 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 <section class="section" id="atualizacao"{archetype_attr("atualizacao")}>
 <h2>Atualização dos dados</h2>
 {_kv_rows([
-    ("Data de referência da fonte (as_of)", freshness.get("source_as_of") or "UNKNOWN"),
-    ("Exportação declarada (generated_at)", freshness.get("generated_at") or "UNKNOWN"),
+    ("Data de referência da fonte", _pt(freshness.get("source_as_of"))),
+    ("Data da exportação declarada", _pt(freshness.get("generated_at"))),
     ("Janela de frescor declarada", f"{freshness.get('max_age_hours', 48)} horas"),
 ])}
 <p class="form-hint">As datas acima são declaradas pela fonte e pela exportação. Nenhuma delas é o relógio de quem lê esta página.</p>
@@ -232,9 +332,9 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 <h2>Procedência técnica</h2>
 {_kv_rows([
     ("Identificador estável", opportunity_id),
-    ("content_hash da fonte", record.get("content_hash") or "UNKNOWN"),
-    ("Origem dos dados", record.get("source_kind") or "UNKNOWN"),
-    ("Estado editorial", record.get("publication_state") or "UNKNOWN"),
+    ("Hash de integridade da fonte", _pt(record.get("content_hash"))),
+    ("Origem dos dados", _mapped(record.get("source_kind"), SOURCE_KIND_LABEL, "origem não classificada")),
+    ("Estado editorial", _mapped(record.get("publication_state"), PUBLICATION_STATE_LABEL, "estado não classificado")),
     ("Elegível a indexação", "não"),
 ])}
 </section>

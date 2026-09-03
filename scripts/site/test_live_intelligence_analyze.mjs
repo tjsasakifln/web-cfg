@@ -425,12 +425,33 @@ if (!/text\/html/.test(native.headers["Content-Type"] || "")) fail("native_form_
 if (!/noindex/i.test(native.headers["X-Robots-Tag"] || "")) fail("native_form_page_is_indexable", native.headers);
 // The answer is served, not withheld: a no-JS visitor still gets their result.
 if (!/Perfil contratual/i.test(native.body)) fail("js_absent_visitor_got_no_result");
-// Provenance is disclosed, not just computed: fonte_kind must actually render.
+// Provenance is disclosed, not just computed: fonte_kind must actually render —
+// but as reader copy, not as the raw `source_kind` constant. Both halves are
+// asserted, so this cannot be satisfied by dropping the disclosure OR by
+// leaking the token back into the page.
 if (!/Procedência técnica/i.test(native.body)) fail("native_page_missing_provenance_section");
-if (match.fonte_kind && !native.body.includes(match.fonte_kind)) {
-  fail("native_page_missing_fonte_kind_value", match.fonte_kind);
+if (match.fonte_kind) {
+  const shown = fn.fonteKindPt(match.fonte_kind);
+  if (shown === match.fonte_kind) fail("fonte_kind_not_translated", match.fonte_kind);
+  if (!native.body.includes(shown)) fail("native_page_missing_fonte_kind_value", shown);
+  if (native.body.includes(match.fonte_kind)) {
+    fail("native_page_leaks_raw_fonte_kind_token", match.fonte_kind);
+  }
 }
 pass("provenance_source_kind_is_actually_rendered");
+
+// The internal vocabulary never reaches the rendered page. This is the
+// regression guard for docs/seo/LIVE-INTELLIGENCE-ARCHETYPE-FINDINGS.md
+// findings 9-13, which the ARCHETYPE_EDITORIAL_READY gate can only catch on
+// pages that have a static file — and this one is rendered at request time.
+for (const token of ["UNKNOWN", "as_of", "generated_at", "content_hash", "reason_code"]) {
+  if (native.body.includes(token)) fail("native_page_leaks_internal_jargon", token);
+}
+// Removing the token must not remove the caveat it carried, and the page must
+// state that caveat once, not twice in two different wordings.
+const notaCount = native.body.split(fn.NAO_INFORMADO_NOTA).length - 1;
+if (notaCount !== 1) fail("epistemic_boundary_not_stated_exactly_once", notaCount);
+pass("no_internal_jargon_in_the_js_absent_page");
 // And nothing in that response echoes the submitted CNPJ back.
 if (native.body.includes(KNOWN_CNPJ) || native.body.includes(KNOWN_MASKED)) {
   fail("cnpj_echoed_into_js_absent_page");

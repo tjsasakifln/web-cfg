@@ -74,6 +74,22 @@
 
   const escapeText = (value) => String(value == null ? "" : value);
 
+  // Reader-facing vocabulary. Mirrors netlify/functions/live-intelligence-analyze.cjs
+  // so the client path and the JS-absent server path render the same words for
+  // the same record. The contract tokens themselves are never displayed.
+  const NAO_INFORMADO = "não informado pela fonte";
+  const SOURCE_KIND_PT = {
+    official_live: "fonte pública oficial",
+    test_only_fixture: "dado de teste, não corresponde a um histórico real",
+    fixture: "dado de teste, não corresponde a um histórico real",
+  };
+  // An unmapped enum member gets a PT-BR phrase, never the raw token.
+  const fonteKindPt = (value) => {
+    const key = String(value == null ? "" : value).trim();
+    if (!key) return NAO_INFORMADO;
+    return SOURCE_KIND_PT[key] || "origem não classificada";
+  };
+
   // --- Surface A: opportunity page ------------------------------------------
   if (surface === "opportunity") {
     // The "monitor" CTA links to the homepage's shared contact form
@@ -182,7 +198,7 @@
           dt.textContent = key.replace(/_/g, " ");
           const dd = document.createElement("dd");
           const raw = perfil[key];
-          dd.textContent = raw === null || raw === "" ? "UNKNOWN" : escapeText(raw);
+          dd.textContent = raw === null || raw === "" ? NAO_INFORMADO : escapeText(raw);
           dl.appendChild(dt);
           dl.appendChild(dd);
         });
@@ -195,7 +211,7 @@
         ["Compradores declarados", result.compradores],
         ["Dimensões da aderência", result.dimensoes_da_aderencia],
         ["Lacunas declaradas", result.gaps],
-        ["UNKNOWN nas fontes", result.unknowns],
+        ["O que as fontes não informaram", result.unknowns],
       ].forEach(([heading, values]) => {
         const node = block(heading, values);
         if (node) resultadoCorpo.appendChild(node);
@@ -211,7 +227,7 @@
           a.href = `/oportunidades/${encodeURIComponent(row.opportunity_id)}/`;
           a.textContent = escapeText(row.opportunity_id);
           li.appendChild(a);
-          li.appendChild(document.createTextNode(` — dimensões: ${(row.dimensoes || []).join(", ") || "UNKNOWN"}`));
+          li.appendChild(document.createTextNode(` — dimensões: ${(row.dimensoes || []).join(", ") || NAO_INFORMADO}`));
           ul.appendChild(li);
         });
         resultadoCorpo.appendChild(ul);
@@ -222,13 +238,13 @@
       const provDl = document.createElement("dl");
       [
         ["Identificador estável", result.analysis_id],
-        ["Origem dos dados", result.fonte_kind],
+        ["Origem dos dados", fonteKindPt(result.fonte_kind)],
         ["Elegível a indexação", "não"],
       ].forEach(([label, value]) => {
         const dt = document.createElement("dt");
         dt.textContent = label;
         const dd = document.createElement("dd");
-        dd.textContent = value === null || value === undefined || value === "" ? "UNKNOWN" : escapeText(value);
+        dd.textContent = value === null || value === undefined || value === "" ? NAO_INFORMADO : escapeText(value);
         provDl.appendChild(dt);
         provDl.appendChild(dd);
       });
