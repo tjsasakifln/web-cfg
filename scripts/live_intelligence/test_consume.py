@@ -552,14 +552,60 @@ def test_renderable_skips_non_ready_records():
     assert [item["opportunity_id"] for item in records] == ["c"]
 
 
-def test_family_registry_declares_no_live_intelligence_family():
-    """W1 is noindex-only, so it must not claim an indexable public family."""
+def test_live_intelligence_families_are_declared_and_still_governed_noindex():
+    """W1 is fixture-backed, so its families must be declared *and* proven noindex.
+
+    Before the CONFENGE-PSEO-EDITORIAL-INDEXATION-CUTOVER gate work (see
+    scripts/site/inbound_gates.py's instance_index_ready_for_route /
+    archetype_editorial_ready_for_family), an undeclared family was the only
+    way this suite could prove W1 wasn't claiming a public indexable surface --
+    absence from data/organic/public-family-registry.json stood in for
+    "correctly not indexable". That proxy is gone now: the families ARE
+    declared (data/organic/public-family-registry.json and
+    data/organic/noindex-governance-registry.json), because declaring and
+    governing them is what lets the evidence gate check them at all. The
+    real invariant this test now proves is the same one as before -- W1
+    still doesn't claim an indexable public surface -- just checked
+    directly against the gate that actually decides that, instead of via
+    registry absence.
+    """
     registry = json.loads(
         (ROOT / "data/organic/public-family-registry.json").read_text(encoding="utf-8")
     )
-    blob = json.dumps(registry, ensure_ascii=False)
-    assert "/oportunidades/" not in blob
-    assert "/analise-cnpj/" not in blob
+    family_ids = {f["id"] for f in registry.get("families", [])}
+    assert {
+        "live-intelligence-opportunity",
+        "live-intelligence-cnpj-tool",
+        "live-intelligence-cnpj-result",
+    } <= family_ids
+
+    governance = json.loads(
+        (ROOT / "data/organic/noindex-governance-registry.json").read_text(encoding="utf-8")
+    )
+    governance_by_family = {g["family_id"]: g for g in governance.get("families", [])}
+    # live-intelligence-cnpj-tool intentionally carries no PERMANENT reason --
+    # it's meant to earn INDEX once real data lands -- but every W1 family
+    # still fixture-backed today must carry a real, non-null reason_code.
+    for fid in ("live-intelligence-opportunity", "live-intelligence-cnpj-result"):
+        entry = governance_by_family.get(fid)
+        assert entry and entry.get("reason_code"), (
+            f"{fid} must carry a governed noindex reason while fixture-backed"
+        )
+
+    from scripts.site.inbound_gates import (
+        build_indexation_context,
+        instance_index_ready_for_route,
+        is_noindex,
+    )
+
+    ctx = build_indexation_context(ROOT)
+    for route in ("/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/", "/analise-cnpj/"):
+        html = ctx.html_by_route.get(route, "")
+        assert html, f"{route} not found on disk -- fixture set changed?"
+        assert is_noindex(html), f"{route} must still be noindex while fixture-backed"
+        family = ctx.route_family.get(route)
+        ready, _ = instance_index_ready_for_route(route, html, family, ctx)
+        assert not ready, f"{route} must not independently earn an index slot yet"
 
 
 # --- Intent kinds mirror the server allowlist -------------------------------
