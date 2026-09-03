@@ -828,11 +828,18 @@ async function postSignedInbound(payload, { now = new Date(), env = process.env 
         action_id: actionId ? String(actionId).slice(0, 80) : undefined,
         downstream_receipt: receipt ? String(receipt).slice(0, 80) : undefined,
       };
-      // Only validate receipt if we have an expected key
-      const expectedReceipt = String(payload.lead_id || payload.receipt_id || "");
-      if (expectedReceipt && receipt && String(receipt) !== expectedReceipt) {
-        classified = STATUS.RETRYABLE;
-        downstream = null;
+      // Lead payloads (lead_id/receipt_id present) keep the original fail-closed
+      // contract: a missing or mismatched downstream receipt is retryable, not
+      // silently accepted. Web-intent envelopes (schema-identified, no lead_id)
+      // have no receipt concept on this endpoint, so they are exempt rather than
+      // held to a key they were never given.
+      const isLeadPayload = Boolean(payload.lead_id || payload.receipt_id);
+      if (isLeadPayload) {
+        const expectedReceipt = String(payload.receipt_id || payload.lead_id || "");
+        if (!receipt || String(receipt) !== expectedReceipt) {
+          classified = STATUS.RETRYABLE;
+          downstream = null;
+        }
       }
     }
     return {
