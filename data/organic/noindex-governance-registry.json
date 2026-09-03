@@ -82,6 +82,16 @@
       "description": "Permalink versionado de kit de citacao para sindicacao e imprensa. Deliberadamente noindex: a URL canonica publica do fato e a pagina de conteudo que o kit cita, nao o pacote de arquivos. Indexar o pacote competiria com a propria fonte canonica.",
       "class": "PERMANENT",
       "context": "data-desk"
+    },
+    "editorial_source_verification_failed": {
+      "description": "Pagina editorial reprovada pelo gate de verificacao de fonte: status REJECTED com publication_hold em data/editorial/EDITORIAL-REGISTRY.json. Diferente de pending_named_human_approval, aqui a pagina nao esta esperando um revisor, esta reprovada ate a fonte oficial ser verificada e a pagina reaprovada.",
+      "class": "REMEDIABLE",
+      "context": "editorial-approval-gate"
+    },
+    "pending_hash_bound_index_approval": {
+      "description": "Familia consumidora de contrato do extra-cli em que o produtor nunca concede INDEX: DATA_READY autoriza no maximo um rascunho noindex e a indexacao e decisao deste repositorio, por pagina, vinculada ao hash do payload. Analogo de pending_founder_hash_approval, mas para outro gate, outro artefato de aprovacao e outra issue: ADR-STRAT-003 e data/editorial/market-panorama/approvals.json, nao contract-analysis-publication-gate/1.0.",
+      "class": "REMEDIABLE",
+      "context": "market-panorama"
     }
   },
   "families": [
@@ -210,6 +220,20 @@
       "owner_issue": 89,
       "review_at": null,
       "note": "PERMANENT: a propria pagina declara no corpo 'noindex,follow: esta URL nao e uma pagina indexavel' e aponta a fonte canonica /inteligencia/valor-tipico-contratos-pavimentacao/. Indexar o kit competiria com a resposta que ele existe para sustentar."
+    },
+    {
+      "family_id": "jurisprudencia-contratos-obras",
+      "reason_code": "editorial_source_verification_failed",
+      "owner_issue": 245,
+      "review_at": "2026-10-31",
+      "note": "REMEDIABLE: /jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/ esta REJECTED em data/editorial/EDITORIAL-REGISTRY.json, publication_hold true, hold_reason official_sumula_text_date_and_specific_url_not_verified, com historico de reprovacao repetida desde 2026-08-02 e uma nota de 2026-08-03 revogando marcacoes HUMAN_APPROVED sem evidencia humana externa valida. O hub /jurisprudencia-contratos-obras/ fica noindex por consequencia: nao ha nenhum artigo publicavel para listar. Remediacao e verificar o texto, a data e a URL oficial da sumula no portal TCU e reaprovar por scripts/editorial/approve_cli.py."
+    },
+    {
+      "family_id": "panorama-mercado-obras-publicas",
+      "reason_code": "pending_hash_bound_index_approval",
+      "owner_issue": 225,
+      "review_at": "2026-10-31",
+      "note": "REMEDIABLE por desenho proprio, nao por divida: ADR-STRAT-003 decide que o produtor nunca concede INDEX e que a autorizacao vive em data/editorial/market-panorama/approvals.json vinculada ao hash do payload, expirando sozinha quando fatos novos mudam o hash. approvals.json hoje e {} e o <main> do hub diz 'rascunho noindex'. robots.txt aplica Disallow: /panorama-mercado-obras-publicas/. Nao afrouxar: a aprovacao por pagina e o mecanismo."
     }
   ]
 }

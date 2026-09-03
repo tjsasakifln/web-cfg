@@ -658,6 +658,44 @@
       "note": "Kit de citacao do Data Desk (#89, entregue em 214c94842). A pagina nao tem <main>: e um indice de arquivos (PRESS-BRIEF.txt, chart.svg, dataset.json, table.csv, method.json, coverage.json, limitations.txt) atras de um permalink versionado, e ela mesma declara no corpo 'noindex,follow: esta URL nao e uma pagina indexavel'. A URL canonica publica do fato e /inteligencia/valor-tipico-contratos-pavimentacao/, nao o pacote. Cobertura de acessibilidade declarada como none porque a rota nao esta no censo de audit_accessibility.py, o que e coerente com uma pagina sem <main>.",
       "debt": [],
       "exemption_reason": "Permalink de kit de citacao existe para ser baixado e citado por terceiros, nao para converter. Um CTA comercial dentro do pacote de dados contaminaria a prova de independencia que o kit serve para dar, exatamente como em /politica-editorial/."
+    },
+    {
+      "id": "jurisprudencia-contratos-obras",
+      "visitor_job": "Encontrar a decisao ou sumula do TCU que sustenta um pleito de obra publica e entender como ela se aplica ao proprio contrato.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "classification": "PUBLIC_FAMILY",
+      "match": {
+        "prefix": "/jurisprudencia-contratos-obras/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 245,
+      "note": "Terceiro hub do Wave 1 inbound engine (e801200f9, 2026-08-02), irmao de /guias-contratos-obras/ e /lei-14133-obras/, que ja pertencem ao epico editorial #245. O unico artigo, /jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/, esta REJECTED em data/editorial/EDITORIAL-REGISTRY.json com publication_hold=true e hold_reason official_sumula_text_date_and_specific_url_not_verified; o hub fica noindex porque nao tem nenhum artigo publicavel. sitemap-jurisprudencia.xml esta vazio, coerente com esse estado. Nao e REJECT_WITHDRAW: a pagina tem dono (#245) e o defeito e remediavel (verificar o texto oficial da sumula no portal TCU e reaprovar).",
+      "debt": []
+    },
+    {
+      "id": "panorama-mercado-obras-publicas",
+      "visitor_job": "Ler o panorama desidentificado de contratacao de um recorte de mercado (faixas de valor por categoria, estrutura de concorrencia e editais abertos) sem que nenhuma empresa seja identificada.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "classification": "PUBLIC_FAMILY",
+      "match": {
+        "prefix": "/panorama-mercado-obras-publicas/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 225,
+      "note": "Familia decidida em ADR-STRAT-003 (Accepted, 2026-08-22) e implementada em 14740dab6 (#225), consumidora fail-closed de public-read-confenge-dossier/1.0. O ADR e explicito: o produtor nunca concede INDEX e DATA_READY autoriza no maximo um rascunho noindex; INDEX e decisao deste repositorio, por pagina, vinculada ao hash do payload, registrada em data/editorial/market-panorama/approvals.json, que hoje esta vazio ({}). O <main> do hub diz literalmente 'rascunho noindex'. robots.txt tambem aplica Disallow: /panorama-mercado-obras-publicas/. Nao e debito: e o gate nomeado da propria familia funcionando.",
+      "debt": []
     }
   ]
 }
