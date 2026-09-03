@@ -32,6 +32,15 @@ const FILE_FIELD_KEYS = new Set([
   "octet",
 ]);
 const DOCUMENT_INTENT_ALLOWED = new Set(["secure_channel_request"]);
+// Live-intelligence next-action kinds. Server-side allowlist, not free text: an
+// unknown value is dropped to null rather than forwarded, so a tampered form
+// cannot invent a commercial intent for warmbly to act on.
+const INTENT_KIND_ALLOWED = new Set([
+  "MONITOR_OPPORTUNITY",
+  "MONITOR_COMPANY",
+  "REQUEST_DEEP_DIVE",
+  "REQUEST_HUMAN_REVIEW",
+]);
 const MAX_FIELD = {
   nome: 120,
   telefone: 40,
@@ -83,6 +92,7 @@ const MAX_FIELD = {
   terms_id: 80,
   amount_cents: 16,
   document_intent: 40,
+  intent_kind: 40,
   session_id: 32,
 };
 
@@ -583,6 +593,9 @@ function titularExport(record) {
     jornada: record.jornada || null,
     estagio: record.estagio || null,
     document_intent: record.document_intent || null,
+    // The record holds what the subject asked for; a subject export that omits
+    // it would be less honest than the record it describes.
+    intent_kind: record.intent_kind || null,
     canal_seguro: Boolean(record.canal_seguro),
     channel_status: record.document_intent ? "canal escolhido posteriormente" : null,
     source: record.source || "CONFENGE_WEB",
@@ -954,6 +967,9 @@ function validateAndNormalize(data) {
     document_intent: DOCUMENT_INTENT_ALLOWED.has(clamp(data.document_intent, MAX_FIELD.document_intent))
       ? clamp(data.document_intent, MAX_FIELD.document_intent)
       : null,
+    intent_kind: INTENT_KIND_ALLOWED.has(clamp(data.intent_kind, MAX_FIELD.intent_kind))
+      ? clamp(data.intent_kind, MAX_FIELD.intent_kind)
+      : null,
     canal_seguro:
       data.canal_seguro === true ||
       data.canal_seguro === "true" ||
@@ -1227,6 +1243,7 @@ function retentionPolicy() {
 module.exports = {
   MAX_BODY_BYTES,
   MAX_FIELD,
+  INTENT_KIND_ALLOWED,
   ATTR_ALLOWLIST,
   ALLOWED_ORIGINS,
   ALLOWED_JOURNEYS,

@@ -1,0 +1,66 @@
+{
+  "as_of": "2026-09-01T03:00:00+00:00",
+  "catalog_mode": "fixture",
+  "categorias": [
+    "pavimentacao",
+    "drenagem"
+  ],
+  "claimed_live": false,
+  "content_hash": "ad78f8dbd34b8f6999cfed97a80d3a5b6b5a55b38dd6bd4ed5fa166545d289ca",
+  "contract_version": "v1.0.0",
+  "coverage": {
+    "campos_declarados": 9,
+    "campos_esperados": 11,
+    "documentos": 2
+  },
+  "data_state": "DATA_READY",
+  "epistemic_classes": {
+    "objeto": "FACT",
+    "prazo": "FACT",
+    "quantitativos": "UNKNOWN",
+    "valor": "FACT"
+  },
+  "fonte": [
+    {
+      "nome": "Portal Nacional de Contratações Públicas",
+      "retrieved_at": "2026-09-01T03:00:00+00:00",
+      "url": "https://pncp.gov.br/app/editais/83021873000108/2026/412",
+      "url_status": "DECLARED"
+    }
+  ],
+  "freshness": {
+    "generated_at": "2026-09-01T09:00:00+00:00",
+    "max_age_hours": 48,
+    "policy": "live-intelligence-freshness-slo-v1",
+    "source_as_of": "2026-09-01T03:00:00+00:00"
+  },
+  "generated_at": "2026-09-01T09:00:00+00:00",
+  "limitations": [
+    "O valor é a estimativa declarada no edital, não o valor contratado.",
+    "Quantitativos por item não constam do documento publicado."
+  ],
+  "local": {
+    "municipio": "Chapecó",
+    "uf": "SC"
+  },
+  "objeto": "Pavimentação asfáltica e drenagem de vias urbanas no bairro Efapi",
+  "official_live": false,
+  "opportunity_id": "pe-2026-000412-pav-urbana-chapeco-sc",
+  "orgao": {
+    "esfera": "MUNICIPAL",
+    "nome": "Prefeitura Municipal de Chapecó",
+    "uf": "SC"
+  },
+  "prazo": {
+    "data_sessao": "2026-09-19",
+    "status": "ABERTA"
+  },
+  "producer_status": "fixture",
+  "schema": "confenge-live-intelligence-fixture/1.0",
+  "test_only": true,
+  "valor": {
+    "amount_brl": 4820000.0,
+    "basis": "estimativa declarada no edital",
+    "epistemic_class": "FACT"
+  }
+}

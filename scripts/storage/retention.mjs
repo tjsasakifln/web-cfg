@@ -31,6 +31,10 @@ const POLICIES = {
   corrections: { days: retentionDays("CORRECTION_RETAIN_DAYS", 730), fields: ["delete_after", "received_at"] },
   "commercial-events": { days: retentionDays("COMMERCIAL_EVENT_RETAIN_DAYS", 730), fields: ["delete_after", "occurred_at", "created_at"] },
   "search-observations": { days: retentionDays("SEARCH_OBSERVATION_RETAIN_DAYS", 730), fields: ["delete_after", "observed_at", "created_at"] },
+  // Shareable live-intelligence result pages. A cached projection of already
+  // public contract data carrying no PII, so it gets a short life of its own
+  // rather than the 730-day lead default.
+  "live-intelligence-results": { days: retentionDays("LIVE_INTELLIGENCE_RESULT_RETAIN_DAYS", 30), fields: ["delete_after", "created_at"] },
   "offers-sandbox": { days: 2, fields: ["expires_at"] },
   "offers-production": { days: 730, fields: ["expires_at", "updated_at", "created_at"] },
 };

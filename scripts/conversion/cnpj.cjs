@@ -7,7 +7,8 @@ const WEIGHTS_1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 const WEIGHTS_2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 
 function onlyDigits(raw) {
-  return String(raw == null ? "" : raw).replace(/\D/g, "");
+  if (typeof raw !== "string") return "";
+  return raw.replace(/\D/g, "");
 }
 
 function normalizeCnpj(raw) {

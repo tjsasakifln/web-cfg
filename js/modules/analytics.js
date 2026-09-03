@@ -6,7 +6,7 @@
 
   /** Analytics bus — no PII. First-party collector + optional gtag/plausible. */
   // EVENT_CONTRACT_CLIENT_START — keep in lockstep with netlify/functions/lib/event-registry.json
-  const EVENT_CONTRACT_SCHEMA_VERSION = '1.2.0';
+  const EVENT_CONTRACT_SCHEMA_VERSION = '1.3.0';
   const EVENT_SOURCE = 'CONFENGE_WEB';
   const EVENT_PII_POLICY = 'aggregate_allowlist_empty';
   const AGGREGATE_PII_ALLOWLIST = [];
@@ -78,13 +78,17 @@
   };
   const ADMITTED_EVENTS = {
     analysis_click: 1, answer_view: 1, asset_view: 1, case_law_page_view: 1,
-    checklist_view: 1, comparison_view: 1, confirmation_view: 1, content_to_service: 1,
+    checklist_view: 1, comparison_view: 1, company_analysis_complete: 1,
+    company_analysis_start: 1, confirmation_view: 1, content_to_service: 1,
     contract_analyzed: 1, contract_selected: 1, correction_open: 1, cta_click: 1,
-    cta_view: 1, data_insight_view: 1, editorial_page_view: 1, email_click: 1,
-    evidence_drilldown: 1, field_abandonment: 1, handraise_complete: 1, internal_search: 1,
+    cta_view: 1, data_insight_view: 1, deep_dive_request_persisted: 1,
+    editorial_page_view: 1, email_click: 1,
+    evidence_drilldown: 1, field_abandonment: 1, fit_result_shown: 1,
+    handraise_complete: 1, intel_view: 1, internal_search: 1,
     lead_form_backend_error: 1, lead_form_error: 1, lead_form_start: 1, lead_form_step: 1,
     lead_form_submit: 1, lead_form_success: 1, lead_persisted: 1, lead_receipt_correlated: 1,
-    legal_article_view: 1, method_open: 1, offer_view: 1,
+    legal_article_view: 1, method_open: 1, monitor_cta_click: 1,
+    monitor_request_persisted: 1, offer_view: 1,
     organic_landing: 1, outbound_click: 1, page_view: 1, proof_expand: 1,
     pseo_related_page_click: 1, pseo_source_open: 1, pseo_table_interaction: 1,
     qualification_stage_select: 1, qualification_urgency_select: 1,

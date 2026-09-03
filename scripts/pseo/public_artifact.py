@@ -76,6 +76,10 @@ PUBLIC_TOP_DIRS = frozenset(
         "analises-contratos-publicos",
         # Market-panorama family. Noindex until an individual INDEX approval.
         "panorama-mercado-obras-publicas",
+        # Live Intelligence W1 (CNPJ analysis + opportunity pages). Fixture-backed,
+        # noindex until the real CONFENGE_LIVE_INTELLIGENCE contract ships.
+        "analise-cnpj",
+        "oportunidades",
         ".well-known",
     }
 )

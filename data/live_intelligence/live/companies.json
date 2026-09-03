@@ -1,0 +1,232 @@
+{
+  "catalog_mode": "fixture",
+  "companies": {
+    "1a2199adcab5828b": {
+      "as_of": "2026-09-01T03:00:00+00:00",
+      "categorias": [
+        "edificacoes",
+        "reforma"
+      ],
+      "company_digest": "1a2199adcab5828b",
+      "compradores": [
+        "Município de Londrina"
+      ],
+      "content_hash": "bf0828de87837d770a8c6426ff0acddec2c880b2e83fb77a3735fad372abb98a",
+      "coverage": {
+        "contratos_com_valor": 3,
+        "contratos_declarados": 4,
+        "fontes": 1
+      },
+      "data_state": "DATA_READY",
+      "faixas": [
+        "R$ 500 mil a R$ 2 mi"
+      ],
+      "family": "company-fit-profile/1.0",
+      "freshness": {
+        "generated_at": "2026-09-01T09:00:00+00:00",
+        "max_age_hours": 48,
+        "source_as_of": "2026-09-01T03:00:00+00:00"
+      },
+      "gaps": [
+        "Nenhum contrato declarado em pavimentação.",
+        "Nenhum contrato declarado fora do PR."
+      ],
+      "geografias": [
+        "PR"
+      ],
+      "index_bars": [
+        "catalog_mode_fixture",
+        "fixture_schema",
+        "producer_status_not_official_live"
+      ],
+      "index_eligible": false,
+      "limitations": [
+        "Base de 4 contratos: o histórico é curto e não sustenta leitura de tendência."
+      ],
+      "oportunidades_aderentes": [
+        {
+          "dimensoes": [
+            "categoria",
+            "faixa de valor",
+            "geografia",
+            "comprador"
+          ],
+          "opportunity_id": "pe-2026-000188-reforma-ubs-londrina-pr"
+        }
+      ],
+      "perfil": {
+        "contratos_publicos_declarados": 4,
+        "natureza": "sociedade empresária limitada",
+        "porte_declarado": "UNKNOWN",
+        "primeiro_contrato_publico": "2022"
+      },
+      "publication_state": "PUBLISHABLE_NOINDEX",
+      "source_kind": "test_only_fixture",
+      "unknowns": [
+        "Porte não declarado nas fontes consultadas.",
+        "Quadro técnico não consta das fontes públicas."
+      ]
+    },
+    "b1e38ce6b408a119": {
+      "as_of": "2026-09-01T03:00:00+00:00",
+      "categorias": [
+        "pavimentacao",
+        "drenagem",
+        "manutencao-viaria"
+      ],
+      "company_digest": "b1e38ce6b408a119",
+      "compradores": [
+        "Prefeitura Municipal de Chapecó",
+        "Município de Caxias do Sul"
+      ],
+      "content_hash": "b4e45f3e2a7597d8568d8ee45cabdfe5a6d2abe38afbd7006e4c09421f4bcbbc",
+      "coverage": {
+        "contratos_com_valor": 12,
+        "contratos_declarados": 14,
+        "fontes": 2
+      },
+      "data_state": "DATA_READY",
+      "faixas": [
+        "R$ 500 mil a R$ 2 mi",
+        "R$ 2 mi a R$ 5 mi"
+      ],
+      "family": "company-fit-profile/1.0",
+      "freshness": {
+        "generated_at": "2026-09-01T09:00:00+00:00",
+        "max_age_hours": 48,
+        "source_as_of": "2026-09-01T03:00:00+00:00"
+      },
+      "gaps": [
+        "Nenhum contrato declarado em obras de arte especiais."
+      ],
+      "geografias": [
+        "SC",
+        "RS"
+      ],
+      "index_bars": [
+        "catalog_mode_fixture",
+        "fixture_schema",
+        "producer_status_not_official_live"
+      ],
+      "index_eligible": false,
+      "limitations": [
+        "O histórico cobre apenas contratos publicados nas fontes citadas.",
+        "Contratos anteriores a 2019 não constam das fontes consultadas."
+      ],
+      "oportunidades_aderentes": [
+        {
+          "dimensoes": [
+            "categoria",
+            "faixa de valor",
+            "geografia",
+            "comprador"
+          ],
+          "opportunity_id": "pe-2026-000412-pav-urbana-chapeco-sc"
+        },
+        {
+          "dimensoes": [
+            "categoria",
+            "faixa de valor",
+            "geografia",
+            "comprador"
+          ],
+          "opportunity_id": "pe-2026-000903-sinalizacao-viaria-caxias-rs"
+        }
+      ],
+      "perfil": {
+        "contratos_publicos_declarados": 14,
+        "natureza": "sociedade empresária limitada",
+        "porte_declarado": "EPP",
+        "primeiro_contrato_publico": "2019"
+      },
+      "publication_state": "PUBLISHABLE_NOINDEX",
+      "source_kind": "test_only_fixture",
+      "unknowns": [
+        "Acervo técnico do responsável técnico não consta das fontes públicas."
+      ]
+    },
+    "d67fda759f405f42": {
+      "as_of": "2026-09-01T03:00:00+00:00",
+      "categorias": [
+        "obras-de-arte-especiais",
+        "estrutura",
+        "pavimentacao"
+      ],
+      "company_digest": "d67fda759f405f42",
+      "compradores": [
+        "Departamento Estadual de Infraestrutura",
+        "Prefeitura Municipal de Chapecó"
+      ],
+      "content_hash": "2753241296f9e9ec2327fdbfdae5a845b15d77b7ff0226b0d6c14bae4876ca94",
+      "coverage": {
+        "contratos_com_valor": 35,
+        "contratos_declarados": 38,
+        "fontes": 3
+      },
+      "data_state": "DATA_READY",
+      "faixas": [
+        "R$ 2 mi a R$ 5 mi",
+        "acima de R$ 5 mi"
+      ],
+      "family": "company-fit-profile/1.0",
+      "freshness": {
+        "generated_at": "2026-09-01T09:00:00+00:00",
+        "max_age_hours": 48,
+        "source_as_of": "2026-09-01T03:00:00+00:00"
+      },
+      "gaps": [
+        "Nenhum contrato declarado em sinalização viária."
+      ],
+      "geografias": [
+        "SC",
+        "PR",
+        "RS"
+      ],
+      "index_bars": [
+        "catalog_mode_fixture",
+        "fixture_schema",
+        "producer_status_not_official_live"
+      ],
+      "index_eligible": false,
+      "limitations": [
+        "Três contratos não têm valor publicado; ausência de valor não é valor zero."
+      ],
+      "oportunidades_aderentes": [
+        {
+          "dimensoes": [
+            "categoria",
+            "geografia",
+            "comprador"
+          ],
+          "opportunity_id": "cc-2026-000047-ponte-rio-do-sul-sc"
+        },
+        {
+          "dimensoes": [
+            "categoria",
+            "geografia",
+            "comprador"
+          ],
+          "opportunity_id": "pe-2026-000412-pav-urbana-chapeco-sc"
+        }
+      ],
+      "perfil": {
+        "contratos_publicos_declarados": 38,
+        "natureza": "sociedade anônima fechada",
+        "porte_declarado": "DEMAIS",
+        "primeiro_contrato_publico": "2014"
+      },
+      "publication_state": "PUBLISHABLE_NOINDEX",
+      "source_kind": "test_only_fixture",
+      "unknowns": [
+        "A faixa de valor da oportunidade cc-2026-000047 é UNKNOWN na fonte, portanto a dimensão de faixa não pôde ser avaliada."
+      ]
+    }
+  },
+  "contract_version": "v1.0.0",
+  "generated_at": "2026-09-01T09:00:00+00:00",
+  "index_eligible": false,
+  "schema": "CONFENGE_LIVE_INTELLIGENCE/1.0",
+  "source_as_of": "2026-09-01T03:00:00+00:00",
+  "source_kind": "test_only_fixture",
+  "source_path": "data/live_intelligence/fixtures"
+}

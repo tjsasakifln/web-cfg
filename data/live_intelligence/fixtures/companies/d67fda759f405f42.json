@@ -1,0 +1,84 @@
+{
+  "as_of": "2026-09-01T03:00:00+00:00",
+  "catalog_mode": "fixture",
+  "categorias": [
+    "obras-de-arte-especiais",
+    "estrutura",
+    "pavimentacao"
+  ],
+  "claimed_live": false,
+  "company_digest": "d67fda759f405f42",
+  "compradores": [
+    "Departamento Estadual de Infraestrutura",
+    "Prefeitura Municipal de Chapecó"
+  ],
+  "content_hash": "2753241296f9e9ec2327fdbfdae5a845b15d77b7ff0226b0d6c14bae4876ca94",
+  "contract_version": "v1.0.0",
+  "coverage": {
+    "contratos_com_valor": 35,
+    "contratos_declarados": 38,
+    "fontes": 3
+  },
+  "data_state": "DATA_READY",
+  "faixas": [
+    "R$ 2 mi a R$ 5 mi",
+    "acima de R$ 5 mi"
+  ],
+  "fonte": [
+    {
+      "nome": "Portal Nacional de Contratações Públicas",
+      "retrieved_at": "2026-09-01T03:00:00+00:00",
+      "url": "https://pncp.gov.br/app/contratos",
+      "url_status": "DECLARED"
+    }
+  ],
+  "freshness": {
+    "generated_at": "2026-09-01T09:00:00+00:00",
+    "max_age_hours": 48,
+    "policy": "live-intelligence-freshness-slo-v1",
+    "source_as_of": "2026-09-01T03:00:00+00:00"
+  },
+  "gaps": [
+    "Nenhum contrato declarado em sinalização viária."
+  ],
+  "generated_at": "2026-09-01T09:00:00+00:00",
+  "geografias": [
+    "SC",
+    "PR",
+    "RS"
+  ],
+  "limitations": [
+    "Três contratos não têm valor publicado; ausência de valor não é valor zero."
+  ],
+  "official_live": false,
+  "oportunidades_aderentes": [
+    {
+      "dimensoes": [
+        "categoria",
+        "geografia",
+        "comprador"
+      ],
+      "opportunity_id": "cc-2026-000047-ponte-rio-do-sul-sc"
+    },
+    {
+      "dimensoes": [
+        "categoria",
+        "geografia",
+        "comprador"
+      ],
+      "opportunity_id": "pe-2026-000412-pav-urbana-chapeco-sc"
+    }
+  ],
+  "perfil": {
+    "contratos_publicos_declarados": 38,
+    "natureza": "sociedade anônima fechada",
+    "porte_declarado": "DEMAIS",
+    "primeiro_contrato_publico": "2014"
+  },
+  "producer_status": "fixture",
+  "schema": "confenge-live-intelligence-fixture/1.0",
+  "test_only": true,
+  "unknowns": [
+    "A faixa de valor da oportunidade cc-2026-000047 é UNKNOWN na fonte, portanto a dimensão de faixa não pôde ser avaliada."
+  ]
+}

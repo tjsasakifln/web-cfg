@@ -241,6 +241,10 @@ function mapLeadToInboundV1(record) {
   if (correlation) body.correlation_id = correlation;
   const analysisId = clampText(record.analysis_id, 120);
   if (analysisId) body.analysis_id = analysisId;
+  // Already narrowed to the server-side allowlist in lead-core; forwarded as the
+  // next-action context so warmbly knows what was asked for, never as free text.
+  const intentKind = clampText(record.intent_kind, 40);
+  if (intentKind) body.intent_kind = intentKind;
   const evidencePackVersion = clampText(record.evidence_pack_version, 80);
   if (evidencePackVersion) body.evidence_pack_version = evidencePackVersion;
   const assetFamily = clampText(record.asset_family, 80);

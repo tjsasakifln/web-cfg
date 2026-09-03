@@ -15,6 +15,17 @@ https://confenge.netlify.app/*  https://confenge.com.br/:splat  301!
 /obrigado-edital  /obrigado-edital.html  200
 /obrigado-operacao  /obrigado-operacao.html  200
 
+# --- Live-intelligence shareable result (opaque random token, noindex) ---
+# Deliberately NO rule here. `/analise-cnpj/r/` is a real static page and the
+# opaque token travels as its `?t=` query, so the address resolves through the
+# ordinary pretty-URL chain like every other page. A token-as-path-segment shape
+# is not expressible in this contract: a wildcard source requires a one-to-one
+# `:splat` in the target (HC_REDIRECT_SPLAT_UNSAFE), `:placeholder` sources are
+# rejected (HC_REDIRECT_SELECTOR_UNSUPPORTED), destination query strings are
+# rejected (HC_REDIRECT_TARGET_QUERY_UNSUPPORTED), and the runtime location
+# allowlist is anchored at the function name, so a function-served token path
+# cannot be routed either.
+
 # --- Legacy with semantic substitute (301, single hop) ---
 /privacy-policy            /privacidade/     301
 /politica-de-privacidade   /privacidade/     301
