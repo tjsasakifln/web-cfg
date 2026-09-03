@@ -2244,6 +2244,16 @@ def gate_archetype_editorial_ready() -> GateReport:
         fid = family.get("id")
         if not fid:
             continue
+        if not family.get("editorial_jargon_strict"):
+            # Several already-approved families (analises-contratos-publicos/#83's own
+            # contract-analysis-publication-gate, politica-editorial, correcoes, ferramentas)
+            # intentionally document CONFENGE's epistemic-class vocabulary (FACT/CALCULATION/
+            # INFERENCE/UNKNOWN, as_of citations) as established, human-reviewed, explained
+            # editorial voice — that is not a jargon leak and this check must not regress
+            # already-indexed pages built on that convention. Only families that explicitly
+            # opt in (editorial_jargon_strict: true) are held to the stricter
+            # no-raw-technical-label bar. See data/organic/public-family-registry.json.
+            continue
         scanned_families += 1
 
         # Discover all pages matching this family

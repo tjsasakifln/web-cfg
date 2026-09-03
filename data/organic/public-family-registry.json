@@ -27,8 +27,16 @@
       "visitor_job": "Entender em 10 segundos o que a CONFENGE resolve em contrato de obra pública e escolher a próxima ação.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"routes": ["/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 300,
       "debt": []
@@ -38,8 +46,14 @@
       "visitor_job": "Resolver um evento contratual específico (aditivo, glosa, reequilíbrio, atraso) com a CONFENGE.",
       "profile": "service_pillar",
       "terminal_action": "capture_form",
-      "match": {"source": "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "source": "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 227,
       "note": "A cobertura de captura destes pilares é auditada pela regra dedicada missing_on_page_form, que honra o congelamento EARLIEST_SAFE_ACTION_AT de #291. Esta declaração não afrouxa aquela regra.",
@@ -62,7 +76,11 @@
           "/confianca/"
         ]
       },
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 300,
       "debt": []
@@ -72,14 +90,20 @@
       "visitor_job": "Ler as condições comerciais e a política de leads antes de aceitar um diagnóstico pago.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/comercial/"},
+      "match": {
+        "prefix": "/comercial/"
+      },
       "priced_reference_routes": [
         {
           "route": "/comercial/termos-diagnostico-b2g/",
           "reason": "O preço aparece como referência contratual do Diagnóstico B2G dentro das condições, não como oferta. A superfície de oferta é /diagnostico-b2g-expansao/, que já captura com formulário persistido no <main>."
         }
       ],
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 88,
       "debt": []
@@ -90,8 +114,14 @@
       "profile": "trust_or_legal",
       "terminal_action": "none",
       "exemption_reason": "Registro editorial versionado. Existe para ser citado e auditado; ação comercial no corpo contaminaria a prova de independência editorial.",
-      "match": {"prefix": "/politica-editorial/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/politica-editorial/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 300,
       "debt": []
@@ -101,8 +131,16 @@
       "visitor_job": "Entender por que o processamento da medição parou e avançar para uma segunda leitura técnica quando houver documentos suficientes.",
       "profile": "commercial_content",
       "terminal_action": "service_transition",
-      "match": {"routes": ["/conteudos/atraso-na-medicao-obra-publica/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/conteudos/atraso-na-medicao-obra-publica/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-25",
       "owner_issue": 389,
       "note": "Exceção route-exact: exige uma única ponte plenamente atribuída para /medicoes-glosas-obras-publicas/. Não altera a ação terminal da família /conteudos/.",
@@ -113,8 +151,14 @@
       "visitor_job": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/conteudos/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/conteudos/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 245,
       "debt": []
@@ -124,8 +168,14 @@
       "visitor_job": "Executar um passo a passo documental (aditivo, glosa, reequilíbrio, notificação) dentro do prazo contratual.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/guias-contratos-obras/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/guias-contratos-obras/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 245,
       "debt": []
@@ -135,8 +185,14 @@
       "visitor_job": "Encontrar o dispositivo da Lei 14.133 que sustenta um pleito de obra pública.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/lei-14133-obras/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/lei-14133-obras/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 245,
       "debt": []
@@ -146,8 +202,14 @@
       "visitor_job": "Verificar quem responde tecnicamente pela CONFENGE antes de enviar um caso.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/especialista/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/especialista/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 243,
       "debt": []
@@ -157,8 +219,14 @@
       "visitor_job": "Retomar uma conversa comercial já iniciada a partir de um material enviado.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/nurture/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/nurture/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 88,
       "debt": []
@@ -168,8 +236,16 @@
       "visitor_job": "Auditar como a CONFENGE produz a inteligência pública que publica.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"routes": ["/metodologia-inteligencia/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": [
@@ -186,8 +262,14 @@
       "visitor_job": "Ler o radar nacional de obras públicas e decidir se quer o recorte aplicado ao próprio mercado.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/radar/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/radar/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 266,
       "debt": []
@@ -197,8 +279,14 @@
       "visitor_job": "Ler uma análise contratual desidentificada e reconhecer o próprio caso nela.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/analises-contratos-publicos/"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "match": {
+        "prefix": "/analises-contratos-publicos/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "none",
+        "accessibility": "none"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 83,
       "debt": []
@@ -208,8 +296,14 @@
       "visitor_job": "Distinguir exemplos de entrega (demonstrativos) de resultados de clientes, hoje em zero, antes de contratar.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/casos/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/casos/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": [
@@ -232,8 +326,14 @@
       "visitor_job": "Comparar modelos de entrega com preço público (R$ 599 a R$ 3.750) e comprar o que resolve o próprio problema.",
       "profile": "priced_offer",
       "terminal_action": "capture_form",
-      "match": {"prefix": "/casos/modelo-"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/casos/modelo-"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 289,
       "debt": []
@@ -243,8 +343,16 @@
       "visitor_job": "Comparar a profundidade das entregas com preço antes de escolher o que contratar.",
       "profile": "priced_offer",
       "terminal_action": "capture_form",
-      "match": {"routes": ["/entregas/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/entregas/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 295,
       "debt": []
@@ -254,8 +362,16 @@
       "visitor_job": "Comparar a entrega para o evento contratual e registrar o contexto antes da proposta.",
       "profile": "priced_offer",
       "terminal_action": "capture_form",
-      "match": {"routes": ["/servicos-obras-publicas/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/servicos-obras-publicas/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-25",
       "owner_issue": 333,
       "debt": []
@@ -265,8 +381,16 @@
       "visitor_job": "Reconhecer o próprio problema contratual na lista e ir para quem o resolve.",
       "profile": "commercial_content",
       "terminal_action": "service_transition",
-      "match": {"routes": ["/problemas-que-resolvemos/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/problemas-que-resolvemos/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": []
@@ -276,8 +400,16 @@
       "visitor_job": "Escolher o cálculo aplicável e avançar para o diagnóstico de carteira quando a decisão ultrapassa uma ferramenta isolada.",
       "profile": "commercial_content",
       "terminal_action": "service_transition",
-      "match": {"routes": ["/ferramentas/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/ferramentas/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-24",
       "owner_issue": 61,
       "debt": []
@@ -287,8 +419,14 @@
       "visitor_job": "Calcular um limite, prazo ou risco contratual e sair com um número defensável.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/ferramentas/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/ferramentas/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": [
@@ -305,34 +443,59 @@
       "visitor_job": "Pesquisar e analisar dados públicos de CNPJ para fundamentar decisões contratais de obra pública.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"routes": ["/analise-cnpj/"]},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "match": {
+        "routes": [
+          "/analise-cnpj/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "none",
+        "accessibility": "none"
+      },
       "declared_at": "2026-09-03",
       "owner_issue": 563,
-      "debt": []
+      "debt": [],
+      "editorial_jargon_strict": true
     },
     {
       "id": "live-intelligence-cnpj-result",
       "visitor_job": "Compartilhar e consultar análise estruturada de CNPJ com share token (noindex permanente — não é rota indexável).",
       "profile": "trust_or_legal",
       "terminal_action": "none",
-      "match": {"routes": ["/analise-cnpj/r/"]},
+      "match": {
+        "routes": [
+          "/analise-cnpj/r/"
+        ]
+      },
       "exemption_reason": "Resultado individual com share token, fixture-backed, permanentemente noindex. Não é página de conversão mas transação privada de compartilhamento.",
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "none",
+        "accessibility": "none"
+      },
       "declared_at": "2026-09-03",
       "owner_issue": 563,
-      "debt": []
+      "debt": [],
+      "editorial_jargon_strict": true
     },
     {
       "id": "live-intelligence-opportunity",
       "visitor_job": "Visualizar detalhes de oportunidade de obra pública com análise de risco e contexto (atualmente fixture-backed → noindex; candidata a indexação quando dados live/official chegarem).",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/oportunidades/"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "match": {
+        "prefix": "/oportunidades/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "none",
+        "accessibility": "none"
+      },
       "declared_at": "2026-09-03",
       "owner_issue": 563,
-      "debt": []
+      "debt": [],
+      "editorial_jargon_strict": true
     }
   ]
 }
