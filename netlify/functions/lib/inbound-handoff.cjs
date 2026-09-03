@@ -240,7 +240,16 @@ function mapLeadToInboundV1(record) {
   const correlation = clampText(record.correlation_id, 160);
   if (correlation) body.correlation_id = correlation;
   const analysisId = clampText(record.analysis_id, 120);
-  if (analysisId) body.analysis_id = analysisId;
+  // A live-intelligence share token (li_xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx) is
+  // the exact opaque value embedded in a publicly shareable URL
+  // (/analise-cnpj/r/?t=<token>). It must never double as a commercial
+  // correlation key: anyone holding the public link would then also hold a
+  // valid Warmbly-side reference, which this repo does not control the
+  // downstream handling of. A non-token analysis_id (e.g. an opportunity's
+  // stable public slug) is unaffected and still forwarded.
+  if (analysisId && !/^li_[0-9a-f]{8}(?:-[0-9a-f]{8}){3}$/.test(analysisId)) {
+    body.analysis_id = analysisId;
+  }
   // Already narrowed to the server-side allowlist in lead-core; forwarded as the
   // next-action context so warmbly knows what was asked for, never as free text.
   const intentKind = clampText(record.intent_kind, 40);

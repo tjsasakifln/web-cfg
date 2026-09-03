@@ -325,18 +325,26 @@ const CNPJ_DIGEST = createRequire(import.meta.url)(
 // 4a. The analytics payload actually emitted never carries the CNPJ, in any form.
 const live = await runProducer({ cnpj: CNPJ_MASKED });
 if (!live.tracked.length) fail("producer_emitted_nothing");
+const SHARE_TOKEN = "li_aabbccdd-11a2b3c4-55667f88-99aabbcc"; // the analysis_id the sandbox fetch returns
 for (const { name, props } of live.tracked) {
   for (const text of allStrings(props)) {
     if (text.includes(CNPJ) || text.includes(CNPJ_MASKED) || text.includes(CNPJ_DIGEST)) {
       fail("cnpj_in_emitted_analytics_payload", { name, text });
     }
     if (/^\d{14}$/.test(text)) fail("cnpj_shaped_value_in_analytics_payload", { name, text });
+    // The opaque shareable-result token must never become an analytics
+    // property either — it identifies a specific analysis, and analytics
+    // is meant to carry aggregate signals, not a per-record identifier.
+    if (text === SHARE_TOKEN || /^li_[0-9a-f]{8}(?:-[0-9a-f]{8}){3}$/.test(text)) {
+      fail("share_token_in_emitted_analytics_payload", { name, text });
+    }
   }
   for (const key of Object.keys(props)) {
     if (/cnpj|cpf|documento/i.test(key)) fail("cnpj_shaped_key_in_analytics_payload", { name, key });
+    if (/analysis_id|result_token|opaque_id/i.test(key)) fail("token_shaped_key_in_analytics_payload", { name, key });
   }
 }
-pass("emitted_analytics_payload_never_contains_the_cnpj", {
+pass("emitted_analytics_payload_never_contains_the_cnpj_or_the_share_token", {
   events: live.tracked.map((e) => e.name),
 });
 
@@ -486,5 +494,94 @@ if (/intel_surface/.test(producerSrc) || /intel_surface/.test(analyticsMod) || /
 }
 if (!producerSrc.includes("surface_kind")) fail("surface_kind_missing_from_producer");
 pass("intel_surface_fully_renamed_to_surface_kind");
+
+// --- 7. Surface A's monitor CTA actually threads intent through navigation --
+// The CTA links to the homepage's shared contact form (a full page load), so
+// the only way intent_kind and the opportunity id survive that navigation is
+// the sessionStorage attribution channel js/modules/nav.js already reads on
+// load. This proves the write side actually happens and is correctly shaped
+// — not just that the read side (nav.js's allowlist) exists.
+{
+  const OPPORTUNITY_ID = "pe-2026-000903-sinalizacao-viaria-caxias-rs";
+  const tracked = [];
+  const sessionStore = new Map();
+  const ctaNode = {
+    attrs: new Map([
+      ["data-intel-cta", "monitor"],
+      ["data-intent-kind", "MONITOR_OPPORTUNITY"],
+      ["data-analysis-id", OPPORTUNITY_ID],
+      ["data-cta-id", "intel_monitor_opportunity"],
+      ["data-cta-position", "opportunity_next_action"],
+    ]),
+    listeners: new Map(),
+    getAttribute(k) { return this.attrs.has(k) ? this.attrs.get(k) : null; },
+    addEventListener(name, fn) { this.listeners.set(name, fn); },
+  };
+  const oppBody = {
+    attrs: new Map([
+      ["data-intel-surface", "opportunity"],
+      ["data-asset-id", OPPORTUNITY_ID],
+      ["data-asset-family", "live-opportunity"],
+      ["data-route-family", "live-opportunity"],
+      ["data-index-state", "NOINDEX"],
+    ]),
+    getAttribute(k) { return this.attrs.has(k) ? this.attrs.get(k) : null; },
+  };
+  const oppSandbox = {
+    window: {
+      location: { pathname: `/oportunidades/${OPPORTUNITY_ID}/`, search: "" },
+      confengeTrack: (name, props) => tracked.push({ name, props }),
+      addEventListener: () => {},
+    },
+    document: {
+      body: oppBody,
+      getElementById: () => null,
+      createElement: () => ({ attrs: new Map(), setAttribute() {}, addEventListener() {} }),
+      querySelectorAll: (sel) => (sel === "[data-intel-cta]" ? [ctaNode] : []),
+      addEventListener: () => {},
+    },
+    sessionStorage: {
+      getItem: (k) => (sessionStore.has(k) ? sessionStore.get(k) : null),
+      setItem: (k, v) => sessionStore.set(k, v),
+    },
+    console,
+    setTimeout,
+  };
+  oppSandbox.globalThis = oppSandbox;
+  vm.runInNewContext(producerSrc, oppSandbox, { filename: PRODUCER });
+
+  const clickHandler = ctaNode.listeners.get("click");
+  if (!clickHandler) fail("opportunity_cta_has_no_click_handler");
+  clickHandler();
+
+  const attribution = JSON.parse(sessionStore.get("confenge_pseo_attribution") || "null");
+  if (!attribution) fail("opportunity_cta_click_did_not_write_attribution");
+  if (attribution.intent_kind !== "MONITOR_OPPORTUNITY") {
+    fail("opportunity_cta_wrong_intent_kind", attribution.intent_kind);
+  }
+  if (attribution.analysis_id !== OPPORTUNITY_ID) {
+    fail("opportunity_cta_wrong_analysis_id", attribution.analysis_id);
+  }
+  pass("opportunity_monitor_cta_writes_intent_kind_for_the_homepage_form_to_pick_up");
+
+  // The analytics event fires too, but never carries the raw opportunity id
+  // as anything beyond what the registry already admits for monitor_cta_click.
+  const clickEvent = tracked.find((e) => e.name === "monitor_cta_click");
+  if (!clickEvent) fail("opportunity_monitor_cta_click_not_tracked");
+  if (clickEvent.props.intent_kind !== "MONITOR_OPPORTUNITY") {
+    fail("opportunity_monitor_cta_click_wrong_intent", clickEvent.props.intent_kind);
+  }
+  pass("opportunity_monitor_cta_click_tracked");
+}
+
+// nav.js must actually allowlist intent_kind for the sessionStorage channel
+// above to reach the shared form's hidden field — read the source, don't
+// assume the constant list still includes it.
+const navSrc = fs.readFileSync(path.join(root, "js/modules/nav.js"), "utf8");
+const pseoKeysMatch = navSrc.match(/const PSEO_ATTR_KEYS = \[([\s\S]*?)\];/);
+if (!pseoKeysMatch || !/'intent_kind'/.test(pseoKeysMatch[1])) {
+  fail("nav_pseo_attr_keys_missing_intent_kind");
+}
+pass("nav_reads_intent_kind_from_the_same_attribution_channel");
 
 console.log("LIVE_INTELLIGENCE_EVENTS_OK", JSON.stringify({ tests: results.length }));

@@ -1781,7 +1781,7 @@ _reset();
   // The opaque analysis token must survive the attribution sanitizer. A token
   // shape it silently rejects would null the field and break the thread with no
   // error anywhere.
-  const token = "li_3f9a2c7e5b1d4068";
+  const token = "li_3f9a2c7e-5b1d4068-9a7c2e0f-1b6d4a3c";
   const tokened = core.validateAndNormalize({
     ...base,
     intent_kind: "MONITOR_COMPANY",
@@ -1791,16 +1791,41 @@ _reset();
     fail("intent_kind_analysis_token_survives", { analysis_id: tokened.lead && tokened.lead.analysis_id });
   } else pass("intent_kind_analysis_token_survives");
 
+  // A live-intelligence share token is stored locally (so ops can see it in
+  // the lead record), but it is exactly the opaque value embedded in a
+  // publicly shareable URL — it must never also become a Warmbly-side
+  // correlation key. intent_kind still reaches the handoff; analysis_id
+  // specifically does not, only for this token shape.
   const forwarded = handoff.mapLeadToInboundV1({
     ...tokened.lead,
     lead_id: "lead-000000000000000000000000000",
     consentimento: true,
   });
-  if (forwarded.intent_kind !== "MONITOR_COMPANY" || forwarded.analysis_id !== token) {
-    fail("intent_kind_reaches_handoff", { intent_kind: forwarded.intent_kind, analysis_id: forwarded.analysis_id });
+  if (forwarded.intent_kind !== "MONITOR_COMPANY") {
+    fail("intent_kind_reaches_handoff", { intent_kind: forwarded.intent_kind });
+  } else if ("analysis_id" in forwarded) {
+    fail("share_token_reached_commercial_handoff", forwarded.analysis_id);
   } else if (forwarded.source !== "CONFENGE_WEB") {
     fail("intent_kind_handoff_source", forwarded.source);
-  } else pass("intent_kind_reaches_handoff");
+  } else pass("intent_kind_reaches_handoff_share_token_does_not");
+
+  // A non-token analysis_id (e.g. an opportunity's stable public slug from
+  // Surface A) is a different kind of value — public by design, not a share
+  // token resolving a private-until-shared result — and is unaffected.
+  const opportunityId = "pe-2026-000903-sinalizacao-viaria-caxias-rs";
+  const opportunityLead = core.validateAndNormalize({
+    ...base,
+    intent_kind: "MONITOR_OPPORTUNITY",
+    analysis_id: opportunityId,
+  });
+  const opportunityForwarded = handoff.mapLeadToInboundV1({
+    ...opportunityLead.lead,
+    lead_id: "lead-000000000000000000000000004",
+    consentimento: true,
+  });
+  if (opportunityForwarded.analysis_id !== opportunityId) {
+    fail("non_token_analysis_id_should_reach_handoff", opportunityForwarded.analysis_id);
+  } else pass("opportunity_id_reaches_handoff_unlike_share_token");
 
   const dropped = core.validateAndNormalize({ ...base, intent_kind: "MONITOR_EVERYTHING" });
   const droppedBody = handoff.mapLeadToInboundV1({

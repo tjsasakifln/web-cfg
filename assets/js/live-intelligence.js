@@ -76,15 +76,40 @@
 
   // --- Surface A: opportunity page ------------------------------------------
   if (surface === "opportunity") {
+    // The "monitor" CTA links to the homepage's shared contact form
+    // (/#formulario-contato) — a full navigation, so no in-page JS state
+    // survives it. js/modules/nav.js already reads a small, allowlisted
+    // attribution object from this exact sessionStorage key on page load and
+    // applies it to the shared form's hidden fields (analysis_id and
+    // route_family are already on that allowlist; intent_kind is added to it
+    // alongside this change). Writing here, not a new mechanism, is what
+    // makes intent_kind and the opportunity id actually reach the lead and
+    // the Warmbly handoff instead of being lost at navigation.
+    const PSEO_STORAGE_KEY = "confenge_pseo_attribution";
     document.querySelectorAll('[data-intel-cta]').forEach((node) => {
       node.addEventListener("click", () => {
         const kind = node.getAttribute("data-intent-kind") || "";
+        const validKind = Object.prototype.hasOwnProperty.call(INTENT_KINDS, kind) ? kind : "";
         emit("monitor_cta_click", {
           cta_id: node.getAttribute("data-cta-id") || "",
           cta_position: node.getAttribute("data-cta-position") || "",
-          intent_kind: Object.prototype.hasOwnProperty.call(INTENT_KINDS, kind) ? kind : "",
+          intent_kind: validKind,
           surface_kind: surface,
         });
+        if (!validKind) return;
+        try {
+          const prior = JSON.parse(sessionStorage.getItem(PSEO_STORAGE_KEY) || "{}") || {};
+          const merged = {
+            ...(prior && typeof prior === "object" ? prior : {}),
+            intent_kind: validKind,
+            analysis_id: node.getAttribute("data-analysis-id") || "",
+            route_family: "live-opportunity-monitor",
+            saved_at: String(Date.now()),
+          };
+          sessionStorage.setItem(PSEO_STORAGE_KEY, JSON.stringify(merged));
+        } catch (_) {
+          /* private mode: the CTA still navigates, just without prefill */
+        }
       });
     });
     return;
