@@ -560,6 +560,44 @@
       "note": "Pagina de status HTTP servida pelo host, nao uma rota com trabalho de visitante no sentido normal. Declarada por prefixo porque _is_canonical_route exige barra final e esta e um .html de raiz; o prefixo casa exatamente uma rota. Pertence ao dono da superficie publica canonica (#300), o mesmo de /home e de legal-and-trust. Nao tem nenhuma acao no <main>, o que e o comportamento correto para uma pagina de erro.",
       "debt": [],
       "exemption_reason": "Pagina de erro nao e superficie de conversao: o visitante chegou nela por engano, e vender alguma coisa em cima de um erro de navegacao piora a recuperacao em vez de melhora-la."
+    },
+    {
+      "id": "piloto-ofertas",
+      "visitor_job": "Comparar as ofertas CONFENGE com preco publico (Diagnostico de Expansao e Diretoria Fracionada mensal, semestral e anual), ler o FAQ e solicitar contratacao.",
+      "profile": "priced_offer",
+      "terminal_action": "capture_form",
+      "classification": "PILOT_STAGING",
+      "match": {
+        "prefix": "/piloto/ofertas/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "none"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 251,
+      "note": "Catalogo de ofertas manual-first criado em 4e2023fe8 (2026-08-17) para o registro de quatro ofertas de #88, com checkout apenas em Sandbox e flags desligadas. Declarada priced_offer separadamente do resto de /piloto/ porque estas sete rotas exibem preco: se o namespace algum dia sair de DEFER e for indexado, o gate tem de exigir captura persistida aqui, e nao a acao mais fraca do prefixo pai. Prefixo mais longo declarado antes de /piloto/ para que a resolucao mais especifica valha nos dois matchers.",
+      "debt": []
+    },
+    {
+      "id": "piloto-preview",
+      "visitor_job": "Pre-visualizar a inteligencia de mercado aplicada (quanto o poder publico contratou por segmento e UF, fornecedores observados e contratacao de engenharia por orgao) antes de a oferta existir em producao.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "classification": "PILOT_STAGING",
+      "match": {
+        "prefix": "/piloto/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "none"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 251,
+      "note": "Namespace inteiro sob decisao versionada e datada: data/offers/piloto-checkout-decision.v1.json, decision_id CFG-PILOTO-CHECKOUT-2026-08-24, issue 251, parent_issue 88, decision_state DEFER, activation_authorized false, review_on 2026-09-20. Esse registro enumera exatamente as 24 URLs de /piloto/ com decision DEFER cada uma e declara robots_rule 'Disallow: /piloto/', que robots.txt de fato aplica. Nao e ausencia de governanca nem fixture solta: e um ativo reversivel preservado de proposito enquanto a decisao pai continua VALIDATE. As 17 rotas restantes de /piloto/ ficam nesta familia; as 7 de /piloto/ofertas/ estao na familia irma priced_offer.",
+      "debt": []
     }
   ]
 }

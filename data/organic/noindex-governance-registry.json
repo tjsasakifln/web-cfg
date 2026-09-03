@@ -62,6 +62,11 @@
       "description": "Pagina de status HTTP servida pelo host (404 e afins). Nao e rota de descoberta com trabalho de visitante; noindex e o comportamento correto e permanente.",
       "class": "PERMANENT",
       "context": "static"
+    },
+    "deferred_by_decision_record": {
+      "description": "Namespace inteiro mantido fora do indice por decisao versionada, datada e enumerada por URL em um registro de decisao do repositorio, com Disallow correspondente em robots.txt. O ativo e reversivel e preservado de proposito; a indexacao so volta a ser discutida quando a decisao pai sair de DEFER na data de revisao declarada.",
+      "class": "REMEDIABLE",
+      "context": "offers-pilot"
     }
   },
   "families": [
@@ -155,6 +160,20 @@
       "owner_issue": 300,
       "review_at": null,
       "note": "PERMANENT: pagina de erro 404 com noindex,nofollow. Nao ha remediacao a fazer."
+    },
+    {
+      "family_id": "piloto-ofertas",
+      "reason_code": "deferred_by_decision_record",
+      "owner_issue": 251,
+      "review_at": "2026-09-20",
+      "note": "REMEDIABLE: as 7 rotas de /piloto/ofertas/ estao entre as 24 URLs enumeradas com decision DEFER em data/offers/piloto-checkout-decision.v1.json (CFG-PILOTO-CHECKOUT-2026-08-24, activation_authorized false, review_on 2026-09-20). Checkout so em Sandbox, flags desligadas, sem chamada Asaas real. review_at espelha o review_on do registro de decisao."
+    },
+    {
+      "family_id": "piloto-preview",
+      "reason_code": "deferred_by_decision_record",
+      "owner_issue": 251,
+      "review_at": "2026-09-20",
+      "note": "REMEDIABLE: as demais 17 rotas de /piloto/ estao no mesmo registro de decisao DEFER, que declara robots_rule 'Disallow: /piloto/' e robots.txt aplica. Ativo reversivel preservado enquanto a decisao pai (#88) continua VALIDATE. review_at espelha o review_on do registro de decisao."
     }
   ]
 }
