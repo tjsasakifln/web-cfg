@@ -421,9 +421,10 @@
       "index_evidence": {
         "substrate": "first_party_publication",
         "not_applicable": [
+          "official_live",
           "citable_source"
         ],
-        "reason": "Demonstrativo metodológico próprio, rotulado como hipotético e explicitamente não-case de cliente. O objeto demonstrado é o método da CONFENGE, não um registro público de terceiro.",
+        "reason": "Demonstrativo metodológico próprio, rotulado como hipotético e explicitamente não-case de cliente. O objeto demonstrado é o método da CONFENGE, não um registro público de terceiro: não há registro de produção por trás da rota, e ser hipotético é a natureza declarada da peça, não um defeito. official_live entra aqui pela mesma razão que em casos-modelos-precificados — sem isso a rota dependeria do acaso da redação (“os demonstrativos são sintéticos” passa, “usam dados sintéticos” reprovaria), e não de uma decisão.",
         "authority": [
           "data/organic/public-family-registry.json (profile_rules.commercial_content)",
           "scripts/site/inbound_gates.py::gate_conversion",
