@@ -540,7 +540,7 @@ exports.handler = async (event) => {
     if (html) {
       return { statusCode: 200, headers: pageHeaders(), body: renderResultPage(result) };
     }
-    return { statusCode: 200, headers, body: JSON.stringify(result) };
+    return { statusCode: 200, headers, body: JSON.stringify(resultStore.publicResult(result)) };
   }
 
   if (html) {
@@ -553,7 +553,7 @@ exports.handler = async (event) => {
     // not get is a bookmarkable link to it.
     return { statusCode: 200, headers: pageHeaders(), body: renderResultPage(result) };
   }
-  return { statusCode: 200, headers, body: JSON.stringify(result) };
+  return { statusCode: 200, headers, body: JSON.stringify(resultStore.publicResult(result)) };
 };
 
 exports.analyze = analyze;
