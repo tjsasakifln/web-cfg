@@ -22,6 +22,31 @@
       "description": "Página renderizada de dados fixture/sintéticos para testes e validação. Será substituída por dados live/official quando a contract chegar.",
       "class": "REMEDIABLE",
       "context": "live-intelligence"
+    },
+    "editorial_disposition_hold": {
+      "description": "Conteúdo editorial classificado como thin/template/duplicado por campanha anterior (content-disposition). Marcado noindex enquanto aguarda reescrita editorial completa.",
+      "class": "REMEDIABLE",
+      "context": "editorial-library"
+    },
+    "pending_named_human_approval": {
+      "description": "Página editorial em pipeline de aprovação humana (scripts/editorial/approve_cli.py). Requer revisão nomeada por humano específico e validação em Netlify preview antes de indexação.",
+      "class": "REMEDIABLE",
+      "context": "editorial-approval-gate"
+    },
+    "transactional_exit": {
+      "description": "Página transacional de saída de usuário (descadastro, unsubscribe, etc). Não é conteúdo público de descoberta/conversão, é ação de usuário já convertido.",
+      "class": "PERMANENT",
+      "context": "transactional"
+    },
+    "commercial_transactional_form": {
+      "description": "Formulário de coleta de parâmetros para transação comercial paga. Não é página pública de conteúdo; é passo intermediário entre oferta e pagamento.",
+      "class": "PERMANENT",
+      "context": "commercial"
+    },
+    "fixture_preview_staging": {
+      "description": "Página de preview/staging com dados fixture ou em estágio inicial. Será substituída ou indexada quando dados reais/produção estiverem prontos.",
+      "class": "REMEDIABLE",
+      "context": "staging"
     }
   },
   "families": [
@@ -55,45 +80,45 @@
     },
     {
       "family_id": "comercial-condicoes",
-      "reason_code": null,
+      "reason_code": "commercial_transactional_form",
       "owner_issue": 88,
       "review_at": null,
-      "note": "Família comercial com algumas rotas noindex (ex: radar-decisorio). Requer classificação de razão específica."
+      "note": "Rota /comercial/radar-decisorio/ é formulário de coleta de parâmetros para compra paga (R$ 599). Não indexável. Demais rotas da família (/comercial/privacidade-leads/, /comercial/termos-diagnostico-b2g/) são indexáveis."
     },
     {
       "family_id": "editorial-library",
-      "reason_code": null,
+      "reason_code": "editorial_disposition_hold",
       "owner_issue": 245,
-      "review_at": null,
-      "note": "Família editorial. Algumas rotas marcadas noindex para fins de staging ou exclusão editorial. Requer audit de razão específica por rota."
+      "review_at": "2026-12-01",
+      "note": "~96 itens de /conteudos/ marcados noindex pela campanha CONFENGE-FORTUNE-CONVERSION-SEO-01 (2026-08-02) como 'thin_or_template_pending_rewrite'. Classificação deliberada: conteúdo genérico/duplicado aguarda reescrita editorial antes de indexação. Ver seo/content-disposition-2026-08-02.json para detalhes por URL."
     },
     {
       "family_id": "guias-contratos-obras",
-      "reason_code": null,
+      "reason_code": "pending_named_human_approval",
       "owner_issue": 245,
-      "review_at": null,
-      "note": "Família de guias. Algumas rotas noindex requerem classificação de motivo."
+      "review_at": "2026-10-31",
+      "note": "Rotas /guias-contratos-obras/contestar-glosa-medicao/, /documentos-pedido-reequilibrio/, /responder-notificacao-atraso/ estão em data/editorial/EDITORIAL-REGISTRY.json com status EDITORIAL_REVIEWED. Aguardam aprovação humana via scripts/editorial/approve_cli.py com revisor nomeado. Ver histórico EDITORIAL_REVIEWED → HUMAN_APPROVED em cada página."
     },
     {
       "family_id": "lei-14133-obras",
-      "reason_code": null,
+      "reason_code": "pending_named_human_approval",
       "owner_issue": 245,
-      "review_at": null,
-      "note": "Família de lei. Algumas rotas noindex requerem classificação de motivo."
+      "review_at": "2026-10-31",
+      "note": "Múltiplas rotas /lei-14133-obras/* estão em data/editorial/EDITORIAL-REGISTRY.json com status EDITORIAL_REVIEWED ou MIGRATED. Aguardam aprovação humana via scripts/editorial/approve_cli.py. Rotas indexáveis em /lei-14133-obras/ (raiz) e /lei-14133-obras/preco-item-novo-desconto-proposta/ (INDEXABLE). Demais rotas noindex até aprovação."
     },
     {
       "family_id": "nurture",
-      "reason_code": null,
+      "reason_code": "transactional_exit",
       "owner_issue": 88,
       "review_at": null,
-      "note": "Família de nurture. Rota /nurture/sair/ é transacional (exit), permanentemente noindex. Requer reclassificação com reason_code apropriado."
+      "note": "Rota /nurture/sair/ é página de descadastro/unsubscribe de sequências de e-mail. Ação transacional de saída para usuário já convertido, não conteúdo público de descoberta. Demais rotas da família (/nurture/index.html) são indexáveis."
     },
     {
       "family_id": "radar",
-      "reason_code": null,
+      "reason_code": "fixture_preview_staging",
       "owner_issue": 266,
-      "review_at": null,
-      "note": "Família radar. Algumas rotas noindex requerem classificação de motivo."
+      "review_at": "2026-12-31",
+      "note": "Rotas /radar/ (index) e /radar/pesquisa/edicao-zero-4uf/ são preview/staging com dados fixture. Títulos das páginas indicam estado: '(preview noindex)'. Rota /radar/nacional-obras-publicas/ é indexável. Aguardam dados reais/publicação produção."
     }
   ]
 }
