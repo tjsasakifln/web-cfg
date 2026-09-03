@@ -88,6 +88,11 @@
       "class": "REMEDIABLE",
       "context": "editorial-approval-gate"
     },
+    "archetype_evidence_incomplete": {
+      "description": "Pagina search-facing (nao um registro individual) que ainda nao produz evidencia independente suficiente para instance_index_ready: official_live, freshness, fonte citavel e/ou self_canonical dependem do contrato Live Intelligence ainda em construcao pela campanha concorrente, e a copia visivel ainda carrega jargao interno (UNKNOWN/as_of/generated_at) por auditoria read-only registrada em docs/seo/LIVE-INTELLIGENCE-ARCHETYPE-FINDINGS.md. Revisao: proxima execucao do gate apos o renderer concorrente atualizar a pagina, nao uma data de calendario.",
+      "class": "REMEDIABLE",
+      "context": "live-intelligence"
+    },
     "pending_hash_bound_index_approval": {
       "description": "Familia consumidora de contrato do extra-cli em que o produtor nunca concede INDEX: DATA_READY autoriza no maximo um rascunho noindex e a indexacao e decisao deste repositorio, por pagina, vinculada ao hash do payload. Analogo de pending_founder_hash_approval, mas para outro gate, outro artefato de aprovacao e outra issue: ADR-STRAT-003 e data/editorial/market-panorama/approvals.json, nao contract-analysis-publication-gate/1.0.",
       "class": "REMEDIABLE",
@@ -107,14 +112,14 @@
       "reason_code": "fixture_synthetic",
       "owner_issue": 563,
       "review_at": "2026-12-01",
-      "note": "REMEDIABLE: Fixture-backed hoje. Será revisado quando o contrato live/official da extra-cli chegar. Data de revisão é placeholder pending real contract delivery."
+      "note": "REMEDIABLE: Fixture-backed hoje. Trigger real de revisão é o contrato live/official da extra-cli chegar e a próxima execução do gate rodar contra dados reais (evento interno) — 2026-12-01 é apenas o teto de SLA, não uma data para esperar passivamente; se o contrato chegar antes, revalidar imediatamente."
     },
     {
       "family_id": "live-intelligence-cnpj-tool",
-      "reason_code": null,
+      "reason_code": "archetype_evidence_incomplete",
       "owner_issue": 563,
       "review_at": null,
-      "note": "Tool landing page: indexável uma vez que copy/accessibility gates passem. Não noindex."
+      "note": "Tool landing page (não um resultado individual): indexável assim que instance_index_ready=true de verdade — hoje bloqueada em official_live/freshness/citable_source/self_canonical e ainda carrega UNKNOWN/as_of/generated_at cru no corpo visível (achados em docs/seo/LIVE-INTELLIGENCE-ARCHETYPE-FINDINGS.md, PR #573, read-only). Trigger de revisão é a próxima execução do gate após o renderer concorrente atualizar a página, não uma data fixa."
     },
     {
       "family_id": "analises-contratos-publicos",
@@ -135,7 +140,7 @@
       "reason_code": "editorial_disposition_hold",
       "owner_issue": 245,
       "review_at": "2026-12-01",
-      "note": "~96 itens de /conteudos/ marcados noindex pela campanha CONFENGE-FORTUNE-CONVERSION-SEO-01 (2026-08-02) como 'thin_or_template_pending_rewrite'. Classificação deliberada: conteúdo genérico/duplicado aguarda reescrita editorial antes de indexação. Ver seo/content-disposition-2026-08-02.json para detalhes por URL."
+      "note": "~96 itens de /conteudos/ marcados noindex pela campanha CONFENGE-FORTUNE-CONVERSION-SEO-01 (2026-08-02) como 'thin_or_template_pending_rewrite'. Revalidado programaticamente em 2026-09-03 pelo gate_archetype_editorial_ready composto (não jargão isolado): 97/121 rotas continuam NOT_PUBLIC_SAFE (thin/boilerplate confirmado de forma independente, disposição de 2026-08-02 permanece correta), 12 já INDEX_READY, e 1 (/conteudos/desconto-da-proposta-em-item-novo-aditivo/) provou instance_index_ready=true individualmente e foi promovida a index,follow nesta mesma passagem — a exceção prova que o trigger real é reescrita+re-execução do gate por página, não a data de calendário. review_at é apenas o teto de SLA para reler a disposição inteira; qualquer página reescrita antes disso deve ser revalidada imediatamente ao invés de esperar dezembro."
     },
     {
       "family_id": "guias-contratos-obras",
