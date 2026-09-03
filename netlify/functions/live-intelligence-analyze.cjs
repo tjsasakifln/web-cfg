@@ -107,8 +107,8 @@ function datasetFreshness(dataset) {
 const newAnalysisId = resultStore.newResultToken;
 const resultRoute = resultStore.resultRoute;
 
-function insufficientResult(analysisId, reason) {
-  return {
+function insufficientResult(analysisId, reason, establishmentDigest = null) {
+  const result = {
     ok: true,
     analysis_id: analysisId,
     result_path: resultRoute(analysisId),
@@ -135,14 +135,19 @@ function insufficientResult(analysisId, reason) {
     fonte_kind: null,
     disclaimer: DISCLAIMER_PT,
   };
+  // Private field: server-side only, never exposed to client
+  if (establishmentDigest) {
+    result._establishment_digest = establishmentDigest;
+  }
+  return result;
 }
 
-function matchResult(analysisId, profile) {
+function matchResult(analysisId, profile, establishmentDigest = null) {
   const dimensoes = new Set();
   for (const row of profile.oportunidades_aderentes || []) {
     for (const dim of row.dimensoes || []) dimensoes.add(dim);
   }
-  return {
+  const result = {
     ok: true,
     analysis_id: analysisId,
     result_path: resultRoute(analysisId),
@@ -166,6 +171,11 @@ function matchResult(analysisId, profile) {
     fonte_kind: profile.source_kind || null,
     disclaimer: DISCLAIMER_PT,
   };
+  // Private field: server-side only, never exposed to client
+  if (establishmentDigest) {
+    result._establishment_digest = establishmentDigest;
+  }
+  return result;
 }
 
 /** Pure lookup, exported so tests drive the real decision, not a reimplementation. */
@@ -186,11 +196,14 @@ function analyze(cnpjRaw, dataset = DATASET) {
     return insufficientResult(analysisId, fresh.reason);
   }
   const digest = hashCnpj(check.cnpj);
+  // establishmentDigest is stored privately and used server-side for identity
+  // resolution. It is never exposed to the client.
+  const establishmentDigest = digest;
   const profile = dataset.companies[digest];
   if (!profile || typeof profile !== "object") {
-    return insufficientResult(analysisId, "no_match");
+    return insufficientResult(analysisId, "no_match", establishmentDigest);
   }
-  return matchResult(analysisId, profile);
+  return matchResult(analysisId, profile, establishmentDigest);
 }
 
 const HTML_ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };

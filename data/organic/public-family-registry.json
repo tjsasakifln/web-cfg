@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-08-25",
+  "as_of": "2026-09-03",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -299,6 +299,40 @@
           "expires_at": "2026-09-30"
         }
       ]
+    },
+    {
+      "id": "live-intelligence-cnpj-tool",
+      "visitor_job": "Pesquisar e analisar dados públicos de CNPJ para fundamentar decisões contratais de obra pública.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"routes": ["/analise-cnpj/"]},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-09-03",
+      "owner_issue": 563,
+      "debt": []
+    },
+    {
+      "id": "live-intelligence-cnpj-result",
+      "visitor_job": "Compartilhar e consultar análise estruturada de CNPJ com share token (noindex permanente — não é rota indexável).",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "match": {"routes": ["/analise-cnpj/r/"]},
+      "exemption_reason": "Resultado individual com share token, fixture-backed, permanentemente noindex. Não é página de conversão mas transação privada de compartilhamento.",
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-09-03",
+      "owner_issue": 563,
+      "debt": []
+    },
+    {
+      "id": "live-intelligence-opportunity",
+      "visitor_job": "Visualizar detalhes de oportunidade de obra pública com análise de risco e contexto (atualmente fixture-backed → noindex; candidata a indexação quando dados live/official chegarem).",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {"prefix": "/oportunidades/"},
+      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "declared_at": "2026-09-03",
+      "owner_issue": 563,
+      "debt": []
     }
   ]
 }

@@ -1,0 +1,99 @@
+{
+  "schema_version": "noindex-governance-v1",
+  "as_of": "2026-09-03",
+  "purpose": "Registra governança de páginas permanentemente noindex e fixture-backed. Separa a decisão de não indexação do HTML (tags meta robots) e fornece rastreabilidade, data de revisão futura (para REMEDIABLE), e cadeia de decisão (reason_code + owner).",
+  "reason_codes": {
+    "cnpj_individual_result": {
+      "description": "Resultado individual de CNPJ com share token, fixture-backed ou privado. Não é página de conversão pública.",
+      "class": "PERMANENT",
+      "context": "live-intelligence-cnpj-result"
+    },
+    "share_token": {
+      "description": "Página acessada via share token privado (transação de compartilhamento), não rota pública indexável.",
+      "class": "PERMANENT",
+      "context": "live-intelligence"
+    },
+    "ops_private": {
+      "description": "Página operacional privada, dashboard, debug ou infraestrutura; não destinada a visitantes públicos.",
+      "class": "PERMANENT",
+      "context": "ops"
+    },
+    "fixture_synthetic": {
+      "description": "Página renderizada de dados fixture/sintéticos para testes e validação. Será substituída por dados live/official quando a contract chegar.",
+      "class": "REMEDIABLE",
+      "context": "live-intelligence"
+    }
+  },
+  "families": [
+    {
+      "family_id": "live-intelligence-cnpj-result",
+      "reason_code": "cnpj_individual_result",
+      "owner_issue": 563,
+      "review_at": null,
+      "note": "PERMANENT: Resultado com share token é transação privada, não indexável."
+    },
+    {
+      "family_id": "live-intelligence-opportunity",
+      "reason_code": "fixture_synthetic",
+      "owner_issue": 563,
+      "review_at": "2026-12-01",
+      "note": "REMEDIABLE: Fixture-backed hoje. Será revisado quando o contrato live/official da extra-cli chegar. Data de revisão é placeholder pending real contract delivery."
+    },
+    {
+      "family_id": "live-intelligence-cnpj-tool",
+      "reason_code": null,
+      "owner_issue": 563,
+      "review_at": null,
+      "note": "Tool landing page: indexável uma vez que copy/accessibility gates passem. Não noindex."
+    },
+    {
+      "family_id": "analises-contratos-publicos",
+      "reason_code": null,
+      "owner_issue": 83,
+      "review_at": null,
+      "note": "Família de análises contratuais desidentificadas. Algumas rotas existem mas são marcadas noindex para fins de staging ou validação (exemplos de padrão de análise). Requer audit de qual rota deve ser indexada vs permanentemente noindex."
+    },
+    {
+      "family_id": "comercial-condicoes",
+      "reason_code": null,
+      "owner_issue": 88,
+      "review_at": null,
+      "note": "Família comercial com algumas rotas noindex (ex: radar-decisorio). Requer classificação de razão específica."
+    },
+    {
+      "family_id": "editorial-library",
+      "reason_code": null,
+      "owner_issue": 245,
+      "review_at": null,
+      "note": "Família editorial. Algumas rotas marcadas noindex para fins de staging ou exclusão editorial. Requer audit de razão específica por rota."
+    },
+    {
+      "family_id": "guias-contratos-obras",
+      "reason_code": null,
+      "owner_issue": 245,
+      "review_at": null,
+      "note": "Família de guias. Algumas rotas noindex requerem classificação de motivo."
+    },
+    {
+      "family_id": "lei-14133-obras",
+      "reason_code": null,
+      "owner_issue": 245,
+      "review_at": null,
+      "note": "Família de lei. Algumas rotas noindex requerem classificação de motivo."
+    },
+    {
+      "family_id": "nurture",
+      "reason_code": null,
+      "owner_issue": 88,
+      "review_at": null,
+      "note": "Família de nurture. Rota /nurture/sair/ é transacional (exit), permanentemente noindex. Requer reclassificação com reason_code apropriado."
+    },
+    {
+      "family_id": "radar",
+      "reason_code": null,
+      "owner_issue": 266,
+      "review_at": null,
+      "note": "Família radar. Algumas rotas noindex requerem classificação de motivo."
+    }
+  ]
+}

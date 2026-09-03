@@ -998,6 +998,25 @@ GATE_COVERAGE_KEYS = ("conversion", "copy", "accessibility")
 MIN_WRITTEN_REASON = 24
 MAX_DEBT_DURATION_DAYS = 90
 
+# NOINDEX governance
+NOINDEX_GOVERNANCE_REL = "data/organic/noindex-governance-registry.json"
+
+# Internal jargon tokens that must not appear in visible editorial text
+# (but may legitimately appear in <script>, <meta>, data-* attributes, JSON-LD)
+EDITORIAL_JARGON_TOKENS = (
+    "UNKNOWN",
+    "as_of",
+    "generated_at",
+    "epistemic",
+    "classe epistêmica",
+    "reason_code",
+    "content_hash",
+)
+EDITORIAL_JARGON_RE = re.compile(
+    r"\b(" + "|".join(re.escape(t) for t in EDITORIAL_JARGON_TOKENS) + r")\b",
+    re.I | re.U,
+)
+
 # A price is "displayed" when structured offer markup is present, or when a
 # BRL amount sits next to a commitment word. Bare BRL amounts are data (contract
 # values, reference costs), not offers, so they must not escalate the profile.
@@ -2187,6 +2206,172 @@ def gate_bofu_buyer_decision_map() -> GateReport:
     return GateReport(ok=report.ok, findings=findings, stats=report.stats)
 
 
+def _strip_html_preserve_visibility(html: str) -> str:
+    """Remove script/style/meta tags and attribute content, keeping only visible text.
+
+    Unlike strip_html, this explicitly excludes <script> blocks (including JSON-LD),
+    <style>, and their content, so jargon tokens in machine-readable sections
+    do not trigger false positives.
+    """
+    # Remove <script> tags (including type="application/ld+json")
+    t = re.sub(r"(?is)<script\b[^>]*>.*?</script>", " ", html)
+    # Remove <style> tags
+    t = re.sub(r"(?is)<style\b[^>]*>.*?</style>", " ", t)
+    # Remove all other tags but keep content
+    t = re.sub(r"(?s)<[^>]+>", " ", t)
+    # Decode HTML entities
+    t = re.sub(r"&\w+;", " ", t)
+    # Normalize whitespace
+    return re.sub(r"\s+", " ", t).strip()
+
+
+def gate_archetype_editorial_ready() -> GateReport:
+    """Scan representative sample of each family for internal jargon in visible text.
+
+    Flags literal internal-jargon tokens appearing in visible body text (stripped HTML,
+    excluding <script> and <style>), but does NOT flag the same tokens when they appear
+    inside machine-readable sections (JSON-LD, data-* attributes, or other meta fields).
+
+    This check runs once per family archetype (on available pages), not on every instance.
+    """
+    findings: list[Finding] = []
+    registry = load_family_registry()
+    families = registry.get("families") or []
+    scanned_families = 0
+    flagged_families = 0
+
+    for family in families:
+        fid = family.get("id")
+        if not fid:
+            continue
+        scanned_families += 1
+
+        # Discover all pages matching this family
+        routes, prefix = _family_routes(family, _bofu_service_routes())
+        matched_routes: set[str] = set()
+        for p in _conversion_files(ROOT):
+            html = p.read_text(encoding="utf-8", errors="replace")
+            rel = p.relative_to(ROOT).as_posix()
+            route = "/" if rel == "index.html" else "/" + rel.removesuffix("index.html")
+            if route in routes or (prefix and route.startswith(prefix)):
+                matched_routes.add(route)
+
+        if not matched_routes:
+            continue
+
+        # Scan a representative sample (first 3 or all if < 3)
+        pages_for_sample = []
+        for p in _conversion_files(ROOT):
+            rel = p.relative_to(ROOT).as_posix()
+            route = "/" if rel == "index.html" else "/" + rel.removesuffix("index.html")
+            if route in matched_routes:
+                pages_for_sample.append(p)
+                if len(pages_for_sample) >= 3:
+                    break
+
+        for p in pages_for_sample:
+            html = p.read_text(encoding="utf-8", errors="replace")
+            visible_text = _strip_html_preserve_visibility(html)
+            page_hits = []
+            for match in EDITORIAL_JARGON_RE.finditer(visible_text):
+                token = match.group(1)
+                excerpt = visible_text[max(0, match.start() - 40) : min(len(visible_text), match.end() + 40)]
+                page_hits.append((token, excerpt))
+
+            if page_hits:
+                flagged_families += 1
+                for token, excerpt in page_hits[:3]:
+                    findings.append(
+                        Finding(
+                            gate="archetype_editorial_ready",
+                            path=str(p.relative_to(ROOT)),
+                            reason="editorial_jargon_in_visible_text",
+                            excerpt=f"token={token} context={excerpt[:80]}",
+                        )
+                    )
+
+    errors = [f for f in findings if f.severity == "error"]
+    return GateReport(
+        ok=len(errors) == 0,
+        findings=findings,
+        stats={"scanned_families": scanned_families, "flagged_families": flagged_families},
+    )
+
+
+def gate_instance_index_ready(root: Path | None = None) -> GateReport:
+    """Validate that every noindex route whose family is declared has a governance reason.
+
+    For each family that has at least one noindex route, check that it has a corresponding
+    entry in the noindex-governance registry. Missing governance for a family with noindex
+    routes = "noindex_without_reason" error. This ensures we know WHY something is noindex
+    and when (if ever) to revisit it.
+
+    Families with no noindex routes do not require governance entries (they're fully indexable
+    or properly exempted via trust_or_legal profile).
+    """
+    base = root or ROOT
+    findings: list[Finding] = []
+    scanned_noindex = 0
+    justified_families = 0
+
+    # Load governance registry
+    governance_path = base / NOINDEX_GOVERNANCE_REL
+    governance: dict[str, Any] = {}
+    if governance_path.exists():
+        try:
+            governance = json.loads(governance_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            pass
+
+    governance_by_family: dict[str, dict[str, Any]] = {}
+    for entry in governance.get("families") or []:
+        fam_id = entry.get("family_id")
+        if fam_id:
+            governance_by_family[fam_id] = entry
+
+    # Scan all pages and build a map of family -> has_noindex
+    registry = load_family_registry(base)
+    families = registry.get("families") or []
+    service_routes = _bofu_service_routes(base)
+    families_with_noindex: dict[str, str] = {}  # family_id -> sample_noindex_route
+
+    for p in _conversion_files(base):
+        html = p.read_text(encoding="utf-8", errors="replace")
+        if not is_noindex(html):
+            continue
+        scanned_noindex += 1
+        rel = p.relative_to(base).as_posix()
+        route = "/" if rel == "index.html" else "/" + rel.removesuffix("index.html")
+        family = _match_family(route, families, service_routes)
+        family_id = family.get("id") if family else None
+
+        # Track that this family has at least one noindex route
+        if family_id and family_id not in families_with_noindex:
+            families_with_noindex[family_id] = route
+
+    # Now validate that families with noindex routes have governance
+    for family_id, sample_route in families_with_noindex.items():
+        has_governance = family_id in governance_by_family
+        if has_governance:
+            justified_families += 1
+        else:
+            findings.append(
+                Finding(
+                    gate="instance_index_ready",
+                    path=str(base / sample_route.strip("/") / "index.html"),
+                    reason="noindex_without_reason",
+                    excerpt=f"family={family_id} has noindex routes but no governance record in {NOINDEX_GOVERNANCE_REL}",
+                )
+            )
+
+    errors = [f for f in findings if f.severity == "error"]
+    return GateReport(
+        ok=len(errors) == 0,
+        findings=findings,
+        stats={"scanned_noindex": scanned_noindex, "families_with_noindex": len(families_with_noindex), "justified_families": justified_families},
+    )
+
+
 def run_all_gates() -> dict[str, Any]:
     reports = {
         "naturalness": gate_naturalness(only_indexable=True),
@@ -2197,6 +2382,8 @@ def run_all_gates() -> dict[str, Any]:
         "similarity": gate_similarity_indexable(),
         "semantic_query_ownership": gate_semantic_query_ownership(),
         "bofu_buyer_decision_map": gate_bofu_buyer_decision_map(),
+        "archetype_editorial_ready": gate_archetype_editorial_ready(),
+        "instance_index_ready": gate_instance_index_ready(),
     }
     ok = all(r.ok for r in reports.values())
     return {

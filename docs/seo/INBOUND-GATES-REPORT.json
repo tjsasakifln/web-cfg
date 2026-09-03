@@ -1,5 +1,5 @@
 {
-  "ok": true,
+  "ok": false,
   "gates": {
     "naturalness": {
       "ok": true,
@@ -183,7 +183,7 @@
         "family_registry": {
           "path": "data/organic/public-family-registry.json",
           "schema_version": "public-family-registry-v1",
-          "families": 21,
+          "families": 24,
           "fail_closed": true,
           "undeclared_routes": 0
         },
@@ -410,8 +410,16 @@
       }
     },
     "bofu_buyer_decision_map": {
-      "ok": true,
-      "findings": [],
+      "ok": false,
+      "findings": [
+        {
+          "gate": "bofu_buyer_decision_map",
+          "path": "derived_from[4]",
+          "reason": "source_contract_hash_drift",
+          "excerpt": "data/organic/public-family-registry.json: expected=11aea6cd64d5b83d1b5523f1440c5e6fd5ef10f6bdf0ae47c562494a1eb43022 actual=4f2dc758f5ec21f0ce7b53a697276915b5a75fc96b6675cf22f793fc8d6cd52c",
+          "severity": "error"
+        }
+      ],
       "stats": {
         "buyer_jobs": 15,
         "registry_buyer_jobs": 15,
@@ -437,6 +445,297 @@
           "OWNED_BUT_WEAK": 2
         },
         "wave_decision": "INSUFFICIENT_EVIDENCE"
+      }
+    },
+    "archetype_editorial_ready": {
+      "ok": false,
+      "findings": [
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "correcoes/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=testação com recibo, PII mínima e prazo UNKNOWN até existir série medida. Respon",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "correcoes/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context= prazo de acuse, revisão e publicação é UNKNOWN . Não há série medida de pedidos",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "correcoes/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=Classe epistêmica context=u à jurisprudência o que elas não dizem Classe epistêmica trocada (FACT no lugar",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/historico/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context= epistêmicas FACT/CALCULATION/INFERENCE/UNKNOWN; prazo UNKNOWN; canal de contest",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/historico/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=CT/CALCULATION/INFERENCE/UNKNOWN; prazo UNKNOWN; canal de contestação com recibo",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/historico/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=são vigente: 1.1.0 . Prazo de correção: UNKNOWN. Consultoria para licitações e c",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=vo. Sem fonte rastreável, o trecho fica UNKNOWN ou não sobe. Classes epistêmicas",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=tos e cálculos, sem se passar por fato. UNKNOWN é ausência de evidência suficien",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=ncia de evidência suficiente: permanece UNKNOWN, sem preenchimento por estimativ",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/v/1.0.0/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=fonte, data de referência e limitações. UNKNOWN permanece UNKNOWN. Uso de IA O u",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/v/1.0.0/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=erência e limitações. UNKNOWN permanece UNKNOWN. Uso de IA O uso de sistemas de ",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "conteudos/atraso-na-medicao-obra-publica/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=,00 como crédito integral já liquidado. UNKNOWN Regime legal, cláusula de mediçã",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "especialista/tiago-jun-sasaki/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=as_of context=ica editorial · Política de evidência . as_of 2026-07-15 . sameAs: perfil mantid",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=as_of context=2026-08-16 · Atualizado em 2026-08-16 · as_of 2026-07-28 · Como corrigir ou cont",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=, não para o teto quantitativo isolado. UNKNOWN O pacote não traz parecer da fis",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=as_of context=vo. Fontes Termos aditivos publicados · as_of 2026-07-28 Pedido de serviço extra",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=as_of context=2026-08-16 · Atualizado em 2026-08-16 · as_of 2026-08-05 · Como corrigir ou cont",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context= documentar, não como atraso imputável. UNKNOWN Não há no pacote resposta da Adm",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=as_of context=o. Fontes Diário de medição publicado · as_of 2026-08-05 Ofício contemporâneo da",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=as_of context=2026-08-16 · Atualizado em 2026-08-16 · as_of 2026-08-01 · Como corrigir ou cont",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=luir sobrepreço, fraude ou má execução. UNKNOWN Não há memória de cálculo da adm",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/bdi-composicao-vs-referencia-sc/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context= ela, a causa da concentração permanece UNKNOWN. O que não é possível concluir N",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "ferramentas/checklist-reequilibrio/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=ão é conclusão jurídica, não transforma UNKNOWN em fato e não recebe arquivo; do",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "ferramentas/diagnostico-defesa-margem/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=leitura separa fato oficial, derivado e UNKNOWN. Não conclui direito, crédito ou",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "ferramentas/diagnostico-defesa-margem/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context= classificação. Campo ausente permanece UNKNOWN. Ausência não é prova de que o e",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "ferramentas/diagnostico-defesa-margem/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=juste, medições e pagamentos permanecem UNKNOWN. Ausência no recorte não prova q",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analise-cnpj/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=estar incompletos. Campos marcados como UNKNOWN não foram publicados pelas fonte",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analise-cnpj/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=am publicados pelas fontes consultadas. UNKNOWN não vale zero e não vale ausênci",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analise-cnpj/r/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=estar incompletos. Campos marcados como UNKNOWN não foram publicados pelas fonte",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analise-cnpj/r/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=am publicados pelas fontes consultadas. UNKNOWN não vale zero e não vale ausênci",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=o Sul Valor estimado declarado na fonte UNKNOWN Base do valor UNKNOWN Classe epi",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context=eclarado na fonte UNKNOWN Base do valor UNKNOWN Classe epistêmica do valor UNKNO",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=Classe epistêmica context= na fonte UNKNOWN Base do valor UNKNOWN Classe epistêmica do valor UNKNOWN Órgão",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=Classe epistêmica context=do valor estimativa declarada no edital Classe epistêmica do valor FACT Órgão Mu",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context= não é valor de serviço CONFENGE. Campo UNKNOWN significa que a fonte não public",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=as_of context= dos dados Data de referência da fonte (as_of) 2026-09-01T03:00:00+00:00 Exporta",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=Classe epistêmica context=do valor estimativa declarada no edital Classe epistêmica do valor FACT Órgão Pr",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=UNKNOWN context= não é valor de serviço CONFENGE. Campo UNKNOWN significa que a fonte não public",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/index.html",
+          "reason": "editorial_jargon_in_visible_text",
+          "excerpt": "token=as_of context= dos dados Data de referência da fonte (as_of) 2026-09-01T03:00:00+00:00 Exporta",
+          "severity": "error"
+        }
+      ],
+      "stats": {
+        "scanned_families": 24,
+        "flagged_families": 16
+      }
+    },
+    "instance_index_ready": {
+      "ok": true,
+      "findings": [],
+      "stats": {
+        "scanned_noindex": 173,
+        "families_with_noindex": 10,
+        "justified_families": 10
       }
     }
   }

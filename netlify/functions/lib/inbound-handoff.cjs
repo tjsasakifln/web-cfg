@@ -11,6 +11,7 @@
 const crypto = require("crypto");
 const { safeLog, redactSensitiveText } = require("./lead-core.cjs");
 const { isProductionProfile } = require("./lead-store.cjs");
+const { resolveCompanyRef } = require("./identity-resolver.cjs");
 const {
   authorizeInboundBacklogReplay,
   authorizeInboundBacklogDrain,
@@ -258,6 +259,13 @@ function mapLeadToInboundV1(record) {
   if (evidencePackVersion) body.evidence_pack_version = evidencePackVersion;
   const assetFamily = clampText(record.asset_family, 80);
   if (assetFamily) body.asset_family = assetFamily;
+
+  // Server-side identity enrichment: company_ref is resolved from establishment_digest
+  // and never exposed to the client. It is included in the Warmbly handoff only.
+  const companyRef = clampText(record.company_ref, 80);
+  if (companyRef && /^cref\d+:[0-9a-f]{32}$/.test(companyRef)) {
+    body.company_ref = companyRef;
+  }
 
   return body;
 }
@@ -786,7 +794,16 @@ async function postInbound(record, { now = new Date(), env = process.env } = {})
   if (cfg.skip) return { status: STATUS.SKIPPED, reason: cfg.reason, attemptsDelta: 0 };
   if (cfg.blocked) return { status: STATUS.BLOCKED, reason: cfg.reason, last_error: cfg.reason, attemptsDelta: 0 };
 
-  const payload = mapLeadToInboundV1(record);
+  // Resolve company_ref from establishment_digest (server-side identity enrichment)
+  const recordWithIdentity = { ...record };
+  if (record && record._establishment_digest) {
+    const companyRef = resolveCompanyRef(record._establishment_digest, { env });
+    if (companyRef) {
+      recordWithIdentity.company_ref = companyRef;
+    }
+  }
+
+  const payload = mapLeadToInboundV1(recordWithIdentity);
   if (!payload.lead_id && !payload.receipt_id) {
     return { status: STATUS.DEAD, reason: "missing_lead_id", last_error: "missing_lead_id", attemptsDelta: 0 };
   }

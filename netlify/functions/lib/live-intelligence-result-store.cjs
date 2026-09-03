@@ -168,12 +168,30 @@ const ENVELOPE_FIELDS = Object.freeze([
  *
  * Copying is deliberately not an option: an unknown key is dropped, so a future
  * caller cannot widen what gets persisted by widening what it passes in.
+ *
+ * Private fields (prefixed with `_`) are stored but not included in the public
+ * projection. They are server-side only and never exposed via GET.
  */
 function publicResult(raw) {
   const source = raw && typeof raw === "object" ? raw : {};
   const out = {};
   for (const field of RESULT_FIELDS) {
     if (source[field] !== undefined) out[field] = source[field];
+  }
+  return out;
+}
+
+/**
+ * Extract private fields from a result. These are server-side only.
+ * Private fields are prefixed with `_` and never exposed publicly.
+ */
+function privateFields(raw) {
+  const source = raw && typeof raw === "object" ? raw : {};
+  const out = {};
+  for (const [key, value] of Object.entries(source)) {
+    if (String(key).startsWith("_")) {
+      out[key] = value;
+    }
   }
   return out;
 }
@@ -215,6 +233,9 @@ function buildRecord(result, now = new Date()) {
     // be swept, so it is written unconditionally.
     delete_after: new Date(now.getTime() + retainDays() * 864e5).toISOString(),
     result: publicResult(result),
+    // Private fields are stored but never exposed via GET. They are server-side
+    // only and available to functions that load() the record directly.
+    _private: privateFields(result),
   };
   const clean = assertRecordIsClean(record);
   if (!clean.ok) return clean;
@@ -279,7 +300,7 @@ function saveResult(result, { env = process.env, event = null, now = new Date() 
 }
 
 /** Resolve a token to its stored result, or null. Never throws to the caller. */
-function loadResult(token, { env = process.env, event = null, now = new Date() } = {}) {
+function loadResult(token, { env = process.env, event = null, now = new Date(), includePrivate = false } = {}) {
   if (!isResultToken(token)) return null;
   const opened = openNamespace(env, event, { readOnly: true });
   if (!opened.ok) return null;
@@ -294,7 +315,13 @@ function loadResult(token, { env = process.env, event = null, now = new Date() }
     if (!Number.isFinite(deleteAfter) || deleteAfter <= now.getTime()) return null;
     // Project again on read. A record written by an older, wider version of this
     // module cannot serve a field this version does not allow.
-    return { ...record, result: publicResult(record.result) };
+    const out = { ...record, result: publicResult(record.result) };
+    // Private fields are only included if explicitly requested and only for
+    // server-side use. Never for HTTP responses.
+    if (!includePrivate) {
+      delete out._private;
+    }
+    return out;
   } catch (err) {
     safeLog("warn", "live_intelligence_result_read_failed", { code: (err && err.code) || "unknown" });
     return null;
@@ -313,6 +340,7 @@ module.exports = {
   isResultToken,
   resultRoute,
   publicResult,
+  privateFields,
   assertRecordIsClean,
   buildRecord,
   saveResult,
