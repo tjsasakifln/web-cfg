@@ -158,6 +158,8 @@ def _classify_schema(schema: Any, contract_version: Any) -> tuple[str | None, li
         kind = "fixture"
     elif text == LIVE_SCHEMA:
         kind = "live"
+    elif text in (OPPORTUNITY_FAMILY, COMPANY_FAMILY):
+        kind = "live"
     elif _SCHEMA_1X.fullmatch(text):
         kind = "live"
         reasons.append("schema_additive_1x")
@@ -279,15 +281,27 @@ def _has_coverage(payload: dict[str, Any]) -> bool:
 
 def _has_source(payload: dict[str, Any]) -> bool:
     """A public fact without a citable source is not publishable."""
+    if payload.get("link_edital") or payload.get("source_id"):
+        return True
     sources = payload.get("fonte") or payload.get("sources") or payload.get("official_refs")
     if isinstance(sources, list):
         for item in sources:
-            if isinstance(item, dict) and (item.get("url") or item.get("document_id")):
+            if isinstance(item, dict) and (
+                item.get("url")
+                or item.get("document_id")
+                or item.get("link_edital")
+                or item.get("source_id")
+            ):
                 return True
             if isinstance(item, str) and item.strip():
                 return True
     if isinstance(sources, dict):
-        return bool(sources.get("url") or sources.get("document_id"))
+        return bool(
+            sources.get("url")
+            or sources.get("document_id")
+            or sources.get("link_edital")
+            or sources.get("source_id")
+        )
     return False
 
 
