@@ -260,12 +260,6 @@ function mapLeadToInboundV1(record) {
   const assetFamily = clampText(record.asset_family, 80);
   if (assetFamily) body.asset_family = assetFamily;
 
-  // Server-side identity enrichment: company_ref is resolved from establishment_digest
-  // and never exposed to the client. It is included in the Warmbly handoff only.
-  const companyRef = clampText(record.company_ref, 80);
-  if (companyRef && /^cref\d+:[0-9a-f]{32}$/.test(companyRef)) {
-    body.company_ref = companyRef;
-  }
 
   return body;
 }
