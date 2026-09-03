@@ -434,7 +434,7 @@ def load_export_dir(path: Path) -> dict[str, Any]:
             if not isinstance(entry, dict):
                 continue
             record_id = str(entry.get(key) or entry.get("id") or "")
-            rel = entry.get("path") or (f"{default_dir}/{record_id}.json" if record_id else "")
+            rel = entry.get("file") or entry.get("path") or (f"{default_dir}/{record_id}.json" if record_id else "")
             if not rel:
                 continue
             record_path = resolved / rel
@@ -462,8 +462,16 @@ def load_export_dir(path: Path) -> dict[str, Any]:
         "claimed_live": claimed_live_of(manifest),
         "generated_at": manifest.get("generated_at"),
         "source_as_of": manifest.get("source_as_of"),
-        "opportunities": _load(manifest.get("opportunities"), "opportunities", "opportunity_id"),
-        "companies": _load(manifest.get("companies"), "companies", "company_digest"),
+        "opportunities": _load(
+            manifest.get("opportunities") or (manifest.get("index") or {}).get("opportunities"),
+            "opportunities",
+            "opportunity_id",
+        ),
+        "companies": _load(
+            manifest.get("companies") or (manifest.get("index") or {}).get("companies"),
+            "companies",
+            "company_digest",
+        ),
         "_source_path": _rel(resolved),
         "_source_kind": source_kind_of(manifest),
     }
