@@ -337,8 +337,18 @@ ${result.as_of ? `<p class="form-note">Dados declarados até ${esc(result.as_of)
 <div class="field"><label for="intel-email">E-mail</label><input autocapitalize="off" autocomplete="email" id="intel-email" inputmode="email" maxlength="180" name="email" placeholder="nome@empresa.com.br" spellcheck="false" type="email"/></div>
 </div>
 <p class="form-hint" id="intel-contato-hint">Informe WhatsApp ou e-mail para retorno. O CNPJ consultado não acompanha este pedido: o vínculo é o identificador opaco da análise.</p>
+<div class="field"><label for="intel-topic">Tópico de interesse <span class="optional-mark">opcional</span></label><input autocomplete="off" id="intel-topic" maxlength="200" name="topic" type="text"/></div>
+<div class="field" id="intel-cadence-field" hidden>
+  <label for="intel-cadence">Frequência de monitoramento</label>
+  <select id="intel-cadence" name="cadence">
+    <option value="immediate">Imediato (quando surgem)</option>
+    <option value="weekly">Semanal</option>
+    <option value="monthly">Mensal</option>
+  </select>
+</div>
 <div class="field"><label for="intel-mensagem">Contexto em poucas linhas <span class="optional-mark">opcional</span></label><textarea id="intel-mensagem" name="mensagem" rows="3"></textarea></div>
 <label class="consent" for="intel-consentimento"><input id="intel-consentimento" name="consentimento" required="" type="checkbox"/><span>Autorizo o uso destes dados para retorno sobre esta solicitação, conforme a <a href="/privacidade/">Política de Privacidade</a>.</span></label>
+<input id="intel-consent-at" name="consent_at" type="hidden" value=""/>
 <div class="field turnstile-slot" id="turnstile-slot" hidden data-turnstile-sitekey="${esc(process.env.TURNSTILE_SITE_KEY || "")}">
   <div class="cf-turnstile" data-theme="light" data-size="normal"></div>
 </div>

@@ -136,6 +136,10 @@
   const intentInput = el("intel-intent-kind");
   const analysisInput = el("intel-analysis-id");
   const ctaInput = el("intel-cta-id");
+  const consentCheckbox = el("intel-consentimento");
+  const consentAtInput = el("intel-consent-at");
+  const cadenceField = el("intel-cadence-field");
+  const consentCheckTime = {}; // Store when consent was checked
 
   // On the shareable result page the analysis is already known: the server
   // rendered its opaque token into the document. Seeding from there is what
@@ -343,6 +347,27 @@
     });
   }
 
+  // Capture consent timestamp when checkbox is checked
+  if (consentCheckbox) {
+    consentCheckbox.addEventListener("change", () => {
+      if (consentCheckbox.checked && !consentCheckTime.at) {
+        consentCheckTime.at = new Date().toISOString();
+        if (consentAtInput) {
+          consentAtInput.value = consentCheckTime.at;
+        }
+      }
+    });
+  }
+
+  // Show/hide cadence field based on intent_kind
+  function updateCadenceVisibility() {
+    const kind = intentInput ? intentInput.value : "";
+    const isMonitor = kind === "MONITOR_COMPANY" || kind === "MONITOR_OPPORTUNITY";
+    if (cadenceField) {
+      cadenceField.hidden = !isMonitor;
+    }
+  }
+
   document.querySelectorAll('[data-intel-cta="request"]').forEach((node) => {
     node.addEventListener("click", () => {
       const kind = node.getAttribute("data-intent-kind") || "";
@@ -358,6 +383,7 @@
       if (analysisInput) analysisInput.value = currentAnalysisId;
       if (ctaInput) ctaInput.value = ctaId;
       if (pedidoTitulo) pedidoTitulo.textContent = node.textContent.trim();
+      updateCadenceVisibility();
       show(pedido);
       const firstField = el("intel-nome");
       if (firstField && typeof firstField.focus === "function") firstField.focus();
