@@ -170,12 +170,12 @@ assert("legacy_retained", observation.state === "LEGACY_RASTER_RETAINED", observ
 assert("legacy_primary_exact", observation.header_primary === "/assets/logo-confenge-500-f8a83f6d.png" && observation.footer_primary === "/assets/logo-confenge-white-500-1677038e.png", observation);
 assert("legacy_ratio", observation.intrinsic_ratio === "50:13", observation.intrinsic_ratio);
 assert("observed_html_count", observation.source_html_files_scanned === 276, observation.source_html_files_scanned);
-assert("observed_logo_count", observation.logo_image_occurrences === 428, observation.logo_image_occurrences);
-assert("observed_header_count", observation.header_lockup_occurrences === 221, observation.header_lockup_occurrences);
+assert("observed_logo_count", observation.logo_image_occurrences === 434, observation.logo_image_occurrences);
+assert("observed_header_count", observation.header_lockup_occurrences === 227, observation.header_lockup_occurrences);
 assert("observed_footer_count", observation.footer_lockup_occurrences === 207, observation.footer_lockup_occurrences);
 assert("observed_asset_counts", JSON.stringify(observation.legacy_asset_occurrences) === JSON.stringify({
   "/assets/logo-confenge.png": 6,
-  "/assets/logo-confenge-500-f8a83f6d.png": 215,
+  "/assets/logo-confenge-500-f8a83f6d.png": 221,
   "/assets/logo-confenge-white.png": 6,
   "/assets/logo-confenge-white-500-1677038e.png": 201,
 }), observation.legacy_asset_occurrences);
