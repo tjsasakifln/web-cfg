@@ -3,21 +3,13 @@
   "total_routes": 249,
   "counts": {
     "INDEX_READY": 76,
-    "NOINDEX_JUSTIFIED": 112,
+    "NOINDEX_JUSTIFIED": 119,
     "NOT_PUBLIC_SAFE": 5,
-    "INDEX_READY_BUT_NOINDEX": 7,
+    "INDEX_READY_BUT_NOINDEX": 0,
     "NOINDEX_WITHOUT_REASON": 0,
     "ORPHAN": 49
   },
-  "index_ready_but_noindex": [
-    "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
-    "/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/",
-    "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/",
-    "/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/",
-    "/analises-contratos-publicos/",
-    "/analises-contratos-publicos/reajuste-aniversario-serie-indice/",
-    "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
-  ],
+  "index_ready_but_noindex": [],
   "noindex_without_reason": [],
   "orphans": [
     "/404.html",
@@ -157,6 +149,13 @@
       "/uso-de-ia/"
     ],
     "NOINDEX_JUSTIFIED": [
+      "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
+      "/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/",
+      "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/",
+      "/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/",
+      "/analises-contratos-publicos/",
+      "/analises-contratos-publicos/reajuste-aniversario-serie-indice/",
+      "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/",
       "/comercial/radar-decisorio/",
       "/conteudos/aceleracao-obra-publica-custo-adicional/",
       "/conteudos/aditivo-qualitativo-quantitativo/",
@@ -277,15 +276,7 @@
       "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
       "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/"
     ],
-    "INDEX_READY_BUT_NOINDEX": [
-      "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
-      "/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/",
-      "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/",
-      "/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/",
-      "/analises-contratos-publicos/",
-      "/analises-contratos-publicos/reajuste-aniversario-serie-indice/",
-      "/analises-contratos-publicos/reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/"
-    ],
+    "INDEX_READY_BUT_NOINDEX": [],
     "NOINDEX_WITHOUT_REASON": [],
     "ORPHAN": [
       "/404.html",

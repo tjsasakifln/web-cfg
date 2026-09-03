@@ -47,6 +47,11 @@
       "description": "Página de preview/staging com dados fixture ou em estágio inicial. Será substituída ou indexada quando dados reais/produção estiverem prontos.",
       "class": "REMEDIABLE",
       "context": "staging"
+    },
+    "pending_founder_hash_approval": {
+      "description": "Canário com gate próprio nomeado (contract-analysis-publication-gate/1.0) que exige decisão humana hash-bound explícita do founder antes de reindexação, por issue já existente e nominal. Ver #83.",
+      "class": "REMEDIABLE",
+      "context": "contract-analysis-canary"
     }
   },
   "families": [
@@ -73,10 +78,10 @@
     },
     {
       "family_id": "analises-contratos-publicos",
-      "reason_code": null,
+      "reason_code": "pending_founder_hash_approval",
       "owner_issue": 83,
-      "review_at": null,
-      "note": "Família de análises contratuais desidentificadas. Algumas rotas existem mas são marcadas noindex para fins de staging ou validação (exemplos de padrão de análise). Requer audit de qual rota deve ser indexada vs permanentemente noindex."
+      "review_at": "2026-10-31",
+      "note": "#83 exige explicitamente decisão humana hash-bound do founder (aprovar payload/render/approval hashes exatos, ou rejeitar) antes de reindexar o canário contract-analysis. Default fail-closed: noindex até essa decisão nominal ser registrada em #83. Não é gap de governança, é gate nomeado já existente aguardando o founder — não deve ser afrouxado nem indexado automaticamente por esta campanha."
     },
     {
       "family_id": "comercial-condicoes",
