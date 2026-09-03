@@ -2,13 +2,13 @@
   "schema_version": "universe-sweep-v2",
   "total_routes": 249,
   "counts": {
-    "REJECT_WITHDRAW": 17,
+    "REJECT_WITHDRAW": 19,
     "NOT_PUBLIC_SAFE": 98,
     "ORPHAN": 0,
-    "INDEX_READY": 24,
+    "INDEX_READY": 23,
     "INDEX_READY_BUT_NOINDEX": 0,
     "INDEXABLE_WITHOUT_EVIDENCE": 53,
-    "NOINDEX_JUSTIFIED": 57,
+    "NOINDEX_JUSTIFIED": 56,
     "NOINDEX_WITHOUT_REASON": 0
   },
   "archetype_verdicts": {
@@ -154,7 +154,9 @@
     }
   },
   "reject_withdraw": [
+    "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
     "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+    "/lei-14133-obras/limite-25-50-aditivo-obra/",
     "/piloto/concorrencia/edificacoes-publicas-rs/",
     "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
     "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/",
@@ -332,7 +334,9 @@
   ],
   "buckets": {
     "REJECT_WITHDRAW": [
+      "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
       "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/",
+      "/lei-14133-obras/limite-25-50-aditivo-obra/",
       "/piloto/concorrencia/edificacoes-publicas-rs/",
       "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
       "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-rs/",
@@ -460,7 +464,6 @@
       "/conteudos/atraso-obra-culpa-administracao/",
       "/conteudos/atraso-pagamento-contrato-publico-suspender/",
       "/conteudos/demolicao-nao-prevista-obra-publica/",
-      "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
       "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
       "/conteudos/glosa-por-qualidade-obra-publica/",
       "/conteudos/limite-aditivo-25-50-obra-publica/",
@@ -567,7 +570,6 @@
       "/jurisprudencia-contratos-obras/",
       "/lei-14133-obras/art-124-alteracao-contratual-obra/",
       "/lei-14133-obras/atraso-imputavel-administracao/",
-      "/lei-14133-obras/limite-25-50-aditivo-obra/",
       "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
       "/lei-14133-obras/reequilibrio-reajuste-repactuacao/",
       "/lei-14133-obras/servico-executado-sem-termo-aditivo/",
@@ -1485,12 +1487,16 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/desconto-da-proposta-em-item-novo-aditivo/": {
-      "bucket": "INDEX_READY",
+      "bucket": "REJECT_WITHDRAW",
       "family": "editorial-library",
-      "noindex": false,
-      "instance_index_ready": true,
-      "blocking": [],
-      "material": [],
+      "noindex": true,
+      "instance_index_ready": false,
+      "blocking": [
+        "not_redirect_source"
+      ],
+      "material": [
+        "not_redirect_source"
+      ],
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/diario-de-obra-pleito-contrato-publico/": {
@@ -2549,6 +2555,7 @@
       "noindex": false,
       "instance_index_ready": false,
       "blocking": [
+        "official_live",
         "archetype_completeness"
       ],
       "material": [],
@@ -2869,15 +2876,18 @@
       "governance_reason_code": "pending_named_human_approval"
     },
     "/lei-14133-obras/limite-25-50-aditivo-obra/": {
-      "bucket": "NOINDEX_JUSTIFIED",
+      "bucket": "REJECT_WITHDRAW",
       "family": "lei-14133-obras",
       "noindex": true,
       "instance_index_ready": false,
       "blocking": [
         "self_canonical",
+        "not_redirect_source",
         "named_gate_verdict"
       ],
-      "material": [],
+      "material": [
+        "not_redirect_source"
+      ],
       "governance_reason_code": "pending_named_human_approval"
     },
     "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/": {

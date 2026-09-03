@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 77,
+        "scanned": 76,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,14 +14,14 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 77
+        "sitemap_locs": 76
       }
     },
     "brand_shell": {
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 30,
+        "scanned": 29,
         "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, or",
         "footer": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina cont"
       }
@@ -150,7 +150,7 @@
         }
       ],
       "stats": {
-        "scanned": 77,
+        "scanned": 76,
         "onpage_capture_scanned": 5,
         "journeys": [
           "contrato",
@@ -160,15 +160,15 @@
         "profiles": {
           "service_pillar": 13,
           "priced_offer": 10,
-          "commercial_content": 44,
+          "commercial_content": 43,
           "trust_or_legal": 10
         },
         "main_cta": {
-          "covered": 67,
-          "total": 67,
+          "covered": 66,
+          "total": 66,
           "coverage": 1.0,
           "exempt": 10,
-          "public_scanned": 77
+          "public_scanned": 76
         },
         "on_page_capture": {
           "covered": 7,
@@ -188,9 +188,9 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 57,
-          "total": 67,
-          "coverage": 0.8507,
+          "covered": 56,
+          "total": 66,
+          "coverage": 0.8485,
           "exempt_trust_or_legal": 10,
           "registered_debt": 4
         },
@@ -343,8 +343,8 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "pages": 23,
-        "pairs": 253,
+        "pages": 22,
+        "pairs": 231,
         "threshold": 0.55
       }
     },
@@ -1697,7 +1697,7 @@
           "gate": "instance_index_ready",
           "path": "ferramentas/index.html",
           "reason": "indexable_without_evidence",
-          "excerpt": "/ferramentas/ blocking=archetype_completeness",
+          "excerpt": "/ferramentas/ blocking=official_live,archetype_completeness",
           "severity": "warn"
         },
         {
@@ -1809,8 +1809,8 @@
       "stats": {
         "schema": "indexation-evidence-v1",
         "scanned": 249,
-        "noindex": 172,
-        "instance_index_ready": 24,
+        "noindex": 173,
+        "instance_index_ready": 23,
         "index_ready_but_noindex": [],
         "indexable_without_evidence": 53,
         "noindex_without_reason": [],
@@ -1820,11 +1820,12 @@
           "citable_source": 85,
           "freshness": 46,
           "archetype_completeness": 45,
-          "official_live": 41,
+          "official_live": 42,
           "self_canonical": 16,
           "record_specific_content": 12,
           "no_cannibalization": 11,
-          "materially_distinct_grain": 5
+          "materially_distinct_grain": 5,
+          "not_redirect_source": 2
         }
       }
     }

@@ -2520,6 +2520,7 @@ class IndexationContext:
     live_contract_status: str = ""
     ownership_route_status: dict[str, str] = field(default_factory=dict)
     ownership_loser_routes: dict[str, str] = field(default_factory=dict)
+    redirect_source_routes: set[str] = field(default_factory=set)
 
 
 _INDEXATION_CONTEXT_CACHE: dict[tuple[str, str], IndexationContext] = {}
@@ -2560,7 +2561,11 @@ def build_indexation_context(
     service_routes = _bofu_service_routes(root)
 
     ctx = IndexationContext(
-        base=root, today=today, families=families, service_routes=service_routes
+        base=root,
+        today=today,
+        families=families,
+        service_routes=service_routes,
+        redirect_source_routes=_redirect_source_routes(root),
     )
 
     for page in _conversion_files(root):
@@ -2859,6 +2864,42 @@ def _sub_self_canonical(route: str, html: str) -> Subgate:
     return Subgate("self_canonical", True, SUBGATE_REMEDIABLE, f"self-canonical {route}")
 
 
+_REDIRECT_SOURCE_RE = re.compile(r"^(/\S*)\s+\S+\s+30[128]!?\s*$", re.M)
+
+
+def _redirect_source_routes(root: Path) -> set[str]:
+    """Source paths of every 30x rule in ``_redirects``.
+
+    A route configured here has an authoritative destination elsewhere; it is
+    not a page competing for its own index slot no matter what its own copy
+    looks like, evidence-based or not.
+    """
+    path = root / "_redirects"
+    if not path.exists():
+        return set()
+    text = path.read_text(encoding="utf-8", errors="replace")
+    sources = set()
+    for match in _REDIRECT_SOURCE_RE.finditer(text):
+        source = match.group(1)
+        if not source.endswith("/") and not source.endswith(".html") and "." not in source.rsplit("/", 1)[-1]:
+            source += "/"
+        sources.add(source)
+    return sources
+
+
+def _sub_not_redirect_source(route: str, ctx: IndexationContext) -> Subgate:
+    if route in ctx.redirect_source_routes:
+        return Subgate(
+            "not_redirect_source",
+            False,
+            SUBGATE_MATERIAL,
+            f"{route} is a registered 301 redirect source in _redirects; the "
+            "canonical URL is its redirect target, this route must stay "
+            "noindex and out of the sitemap regardless of its own copy",
+        )
+    return Subgate("not_redirect_source", True, SUBGATE_MATERIAL, f"{route} is not a redirect source")
+
+
 def _sub_no_cannibalization(route: str, html: str, ctx: IndexationContext) -> Subgate:
     conflict = ctx.ownership_loser_routes.get(route)
     if conflict:
@@ -3119,6 +3160,7 @@ def instance_index_ready_for_route(
         _sub_archetype_completeness(html, family),
         _sub_distinct_grain(route, html, ctx, fid),
         _sub_self_canonical(route, html),
+        _sub_not_redirect_source(route, ctx),
         _sub_no_cannibalization(route, html, ctx),
         _sub_record_specific(route, html, family, ctx, fid),
         _sub_named_gate_verdict(route, family, ctx),
