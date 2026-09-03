@@ -92,25 +92,6 @@
 <button class="button button-primary button-lg" type="submit">Registrar seguimento desta análise</button>
 <p class="form-hint" data-form-boundary>O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
-<script>
-// Turnstile token forwarding for compliance audit
-(function() {
-  const turnstile = document.querySelector('[name="cf-turnstile-response"]');
-  if (turnstile) {
-    const form = document.getElementById('intel-lead-form');
-    form.addEventListener('submit', function(e) {
-      const turnstileToken = String(turnstile.value || '');
-      if (turnstileToken) {
-        const tokenInput = document.createElement('input');
-        tokenInput.type = 'hidden';
-        tokenInput.name = 'turnstile_token';
-        tokenInput.value = turnstileToken;
-        form.appendChild(tokenInput);
-      }
-    });
-  }
-})();
-</script>
 <div class="form-status" id="pedido-status" role="status" aria-live="polite" hidden></div>
 <div class="form-legal">
 <p class="form-note">Retorno direto. Sem lista de e-mails ou compartilhamento comercial dos dados.</p>

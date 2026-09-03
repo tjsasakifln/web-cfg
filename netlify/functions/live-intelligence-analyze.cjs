@@ -356,25 +356,6 @@ ${result.as_of ? `<p class="form-note">Dados declarados até ${esc(result.as_of)
 </div>
 <button class="button button-primary button-lg" type="submit">Registrar seguimento desta análise</button>
 </form>
-<script>
-// Turnstile token forwarding for compliance audit
-(function() {
-  const turnstile = document.querySelector('[name="cf-turnstile-response"]');
-  if (turnstile) {
-    const form = document.getElementById('intel-lead-form');
-    form.addEventListener('submit', function(e) {
-      const turnstileToken = String(turnstile.value || '');
-      if (turnstileToken) {
-        const tokenInput = document.createElement('input');
-        tokenInput.type = 'hidden';
-        tokenInput.name = 'turnstile_token';
-        tokenInput.value = turnstileToken;
-        form.appendChild(tokenInput);
-      }
-    });
-  }
-})();
-</script>
 <div class="form-status" id="pedido-status" role="status" aria-live="polite" hidden></div>
 <div class="form-legal">
 <p class="form-note">Retorno direto. Sem lista de e-mails ou compartilhamento comercial dos dados.</p>
