@@ -322,19 +322,21 @@ ${result.as_of ? `<p class="form-note">Dados declarados até ${esc(result.as_of)
 
 <section class="section" id="pedido" data-section-archetype="contextual_next_action" hidden>
 <h2 id="pedido-titulo">Registrar o pedido</h2>
-<form class="contact-form" id="intel-lead-form" novalidate method="post" action="/api/web/lead" data-turnstile-required="true">
+<form class="contact-form" id="intel-lead-form" novalidate method="post" action="/api/web/lead" data-form-contract="next-state/v1" data-next-state-profile="service_fit_review" data-runtime-profile="inline_receipt_v1" data-receipt-required="true">
+<p class="form-hint" data-form-value>Registre a demanda e a decisão que está na mesa para a CONFENGE enquadrar a entrega, a prova necessária e a capacidade de atendimento.</p>
+<p class="form-hint" data-field-purpose>Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados.</p>
 <input id="intel-intent-kind" name="intent_kind" type="hidden" value=""/>
 <input id="intel-analysis-id" name="analysis_id" type="hidden" value="${esc(result.analysis_id || "")}"/>
 <input name="origem" type="hidden" value="/analise-cnpj/"/>
-<input name="jornada" type="hidden" value="operacao"/>
-<input name="estagio" type="hidden" value="escolhendo oportunidades"/>
+<input name="jornada" id="jornada-hidden" type="hidden" value="operacao"/>
+<input name="estagio" id="estagio" type="hidden" value="escolhendo oportunidades"/>
 <input name="route_family" type="hidden" value="live-company-analysis"/>
 <input id="intel-cta-id" name="cta_id" type="hidden" value=""/>
 <p class="honeypot"><label for="intel-empresa-site">Não preencha este campo</label><input autocomplete="off" id="intel-empresa-site" name="empresa-site" tabindex="-1"/></p>
 <div class="field"><label for="intel-nome">Nome</label><input autocomplete="name" id="intel-nome" name="nome" required="" type="text"/></div>
 <div class="form-row" role="group" aria-describedby="intel-contato-hint">
-<div class="field"><label for="intel-telefone">WhatsApp</label><input autocomplete="tel" id="intel-telefone" inputmode="tel" maxlength="20" name="telefone" placeholder="(48) 98834-4559" type="tel"/></div>
-<div class="field"><label for="intel-email">E-mail</label><input autocapitalize="off" autocomplete="email" id="intel-email" inputmode="email" maxlength="180" name="email" placeholder="nome@empresa.com.br" spellcheck="false" type="email"/></div>
+<div class="field"><label for="intel-telefone">WhatsApp</label><input autocomplete="tel" id="intel-telefone" inputmode="tel" maxlength="20" name="telefone" pattern="(\+?55[\s.\-]?)?\(?\d{2}\)?[\s.\-]?9?\d{4}[\s.\-]?\d{4}" placeholder="(48) 98834-4559" title="Informe DDD e número, com 10 ou 11 dígitos." type="tel"/></div>
+<div class="field"><label for="intel-email">E-mail</label><input autocapitalize="off" autocomplete="email" id="intel-email" inputmode="email" maxlength="180" name="email" pattern="[^@\s]+@[^@\s]+\.[A-Za-z]{2,}" placeholder="nome@empresa.com.br" spellcheck="false" title="Informe um e-mail completo, como nome@empresa.com.br." type="email"/></div>
 </div>
 <p class="form-hint" id="intel-contato-hint">Informe WhatsApp ou e-mail para retorno. O CNPJ consultado não acompanha este pedido: o vínculo é o identificador opaco da análise.</p>
 <div class="field"><label for="intel-topic">Tópico de interesse <span class="optional-mark">opcional</span></label><input autocomplete="off" id="intel-topic" maxlength="200" name="topic" type="text"/></div>
@@ -352,11 +354,31 @@ ${result.as_of ? `<p class="form-note">Dados declarados até ${esc(result.as_of)
 <div class="field turnstile-slot" id="turnstile-slot" hidden data-turnstile-sitekey="${esc(process.env.TURNSTILE_SITE_KEY || "")}">
   <div class="cf-turnstile" data-theme="light" data-size="normal"></div>
 </div>
-<button class="button button-primary button-lg" type="submit">Enviar pedido</button>
+<button class="button button-primary button-lg" type="submit">Registrar seguimento desta análise</button>
 </form>
+<script>
+// Turnstile token forwarding for compliance audit
+(function() {
+  const turnstile = document.querySelector('[name="cf-turnstile-response"]');
+  if (turnstile) {
+    const form = document.getElementById('intel-lead-form');
+    form.addEventListener('submit', function(e) {
+      const turnstileToken = String(turnstile.value || '');
+      if (turnstileToken) {
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = 'turnstile_token';
+        tokenInput.value = turnstileToken;
+        form.appendChild(tokenInput);
+      }
+    });
+  }
+})();
+</script>
 <div class="form-status" id="pedido-status" role="status" aria-live="polite" hidden></div>
 <div class="form-legal">
-<p class="form-note">Retorno direto. Sem lista de e-mails ou compartilhamento comercial dos dados. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
+<p class="form-note">Retorno direto. Sem lista de e-mails ou compartilhamento comercial dos dados.</p>
+<p class="form-note" data-form-boundary>O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </div>
 </section>
 </article>

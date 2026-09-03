@@ -202,6 +202,8 @@ def _tracked_capture_html() -> list[tuple[str, str]]:
 
 ISSUE_440_CAPTURE_ROUTES = {
     "acompanhamento-contratos-obras/index.html",
+    "analise-cnpj/index.html",
+    "analise-cnpj/r/index.html",
     "atrasos-prorrogacao-obras-publicas/index.html",
     "bid-room-licitacoes-obras/index.html",
     "casos/index.html",

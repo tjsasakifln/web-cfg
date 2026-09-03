@@ -34,7 +34,7 @@
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
-    "active_capture_routes": 23,
+    "active_capture_routes": 25,
     "declared_ctas": 128,
     "protected_routes_with_capture": [],
     "problems": []
@@ -3458,6 +3458,134 @@
           ]
         }
       ]
+    },
+    {
+      "route": "/analise-cnpj/",
+      "file": "analise-cnpj/index.html",
+      "family_id": "live-intelligence-cnpj-tool",
+      "family_profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "forms": [
+        {
+          "action": "/api/web/lead",
+          "cta_id": "",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Registrar seguimento desta análise",
+          "current_label": "Registrar seguimento desta análise",
+          "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE enquadrar a entrega, a prova necessária e a capacidade de atendimento.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "telefone",
+              "email",
+              "mensagem"
+            ]
+          },
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "form_only",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true
+        }
+      ],
+      "actions": []
+    },
+    {
+      "route": "/analise-cnpj/r/",
+      "file": "analise-cnpj/r/index.html",
+      "family_id": "live-intelligence-cnpj-result",
+      "family_profile": "trust_or_legal",
+      "terminal_action": "none",
+      "forms": [
+        {
+          "action": "/api/web/lead",
+          "cta_id": "",
+          "form_contract": "next-state/v1",
+          "profile": "service_fit_review",
+          "runtime_profile": "shared_lead_form_v1",
+          "stage": "request_fit_review",
+          "commitment": "medium",
+          "submit_label": "Registrar seguimento desta análise",
+          "current_label": "Registrar seguimento desta análise",
+          "useful_next_state": "O contexto fica registrado para revisão de aderência, documentos mínimos e capacidade; o protocolo confirma que a análise pode ser enquadrada.",
+          "actual_receipt": "lead_id ou receipt_id persistido antes da confirmação",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE enquadrar a entrega, a prova necessária e a capacidade de atendimento.",
+          "pre_form_value_visible": true,
+          "field_purpose": {
+            "visible_text": "Os campos marcados como obrigatórios delimitam a decisão e identificam o responsável; o canal solicitado permite retorno. Empresa e contexto adicional são opcionais quando não estão marcados. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
+            "visible": true,
+            "required": [
+              "nome",
+              "consentimento",
+              "email_or_whatsapp"
+            ],
+            "optional": [
+              "telefone",
+              "email",
+              "mensagem"
+            ]
+          },
+          "boundary": "O registro não é compra, parecer jurídico ou promessa de resultado. O site não recebe arquivo; quando necessário, o canal seguro é combinado após o protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
+          "boundary_visible": true,
+          "privacy_link_visible": true,
+          "event_semantics": [
+            "lead_form_start",
+            "lead_form_submit",
+            "lead_form_success",
+            "lead_persisted"
+          ],
+          "runtime_states": {
+            "initial": "Formulário disponível com instruções, campos mínimos e limites visíveis.",
+            "validation_error": "Informe e-mail ou WhatsApp para retorno; valores preenchidos inválidos são recusados explicitamente.",
+            "turnstile_error": "Sem validação Turnstile, o servidor não grava o pedido e nenhum protocolo é emitido.",
+            "loading": "Enviando…",
+            "error": "Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.",
+            "success": "Após resposta persistida, redireciona para a confirmação da jornada com o receipt na URL e no sessionStorage.",
+            "receipt": "lead_id ou receipt_id opaco, exibido como protocolo na confirmação."
+          },
+          "turnstile_ready": true,
+          "turnstile_token_forwarding": true,
+          "receipt_required": true,
+          "contact_constraints_ready": true,
+          "form_whatsapp_relationship": "form_only",
+          "shared_runtime_selectors_ready": true,
+          "shared_runtime_journey_ready": true
+        }
+      ],
+      "actions": []
     },
     {
       "route": "/comercial/radar-decisorio/",

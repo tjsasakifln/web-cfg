@@ -84,6 +84,14 @@
     {
       "terminal_action": "capture_form",
       "profile": "service_fit_review"
+    },
+    {
+      "family_id": "live-intelligence-cnpj-tool",
+      "profile": "service_fit_review"
+    },
+    {
+      "family_id": "live-intelligence-cnpj-result",
+      "profile": "service_fit_review"
     }
   ],
   "profiles": {
