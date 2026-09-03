@@ -5,7 +5,7 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 76,
+        "scanned": 77,
         "pages_with_hits": 0,
         "error_count": 0
       }
@@ -14,14 +14,14 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "sitemap_locs": 76
+        "sitemap_locs": 77
       }
     },
     "brand_shell": {
       "ok": true,
       "findings": [],
       "stats": {
-        "scanned": 29,
+        "scanned": 30,
         "org_description": "Consultoria para licitações e contratos de obras públicas: análise de edital, or",
         "footer": "Consultoria para licitações e contratos de obras públicas. Modelo de rotina cont"
       }
@@ -150,7 +150,7 @@
         }
       ],
       "stats": {
-        "scanned": 76,
+        "scanned": 77,
         "onpage_capture_scanned": 5,
         "journeys": [
           "contrato",
@@ -160,15 +160,15 @@
         "profiles": {
           "service_pillar": 13,
           "priced_offer": 10,
-          "commercial_content": 43,
+          "commercial_content": 44,
           "trust_or_legal": 10
         },
         "main_cta": {
-          "covered": 66,
-          "total": 66,
+          "covered": 67,
+          "total": 67,
           "coverage": 1.0,
           "exempt": 10,
-          "public_scanned": 76
+          "public_scanned": 77
         },
         "on_page_capture": {
           "covered": 7,
@@ -188,9 +188,9 @@
           "undeclared_routes": 0
         },
         "terminal_action": {
-          "covered": 56,
-          "total": 66,
-          "coverage": 0.8485,
+          "covered": 57,
+          "total": 67,
+          "coverage": 0.8507,
           "exempt_trust_or_legal": 10,
           "registered_debt": 4
         },
@@ -343,8 +343,8 @@
       "ok": true,
       "findings": [],
       "stats": {
-        "pages": 22,
-        "pairs": 231,
+        "pages": 23,
+        "pairs": 253,
         "threshold": 0.55
       }
     },
@@ -1427,7 +1427,7 @@
       }
     },
     "instance_index_ready": {
-      "ok": false,
+      "ok": true,
       "findings": [
         {
           "gate": "instance_index_ready",
@@ -1435,13 +1435,6 @@
           "reason": "indexable_without_evidence",
           "excerpt": "/acompanhamento-contratos-obras/ blocking=official_live,citable_source",
           "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "analise-cnpj/index.html",
-          "reason": "noindex_without_reason",
-          "excerpt": "/analise-cnpj/ family=live-intelligence-cnpj-tool is noindex with no reason_code in data/organic/noindex-governance-registry.json (blocking=official_live,freshness,citable_source,self_canonical)",
-          "severity": "error"
         },
         {
           "gate": "instance_index_ready",
@@ -1603,13 +1596,6 @@
           "reason": "indexable_without_evidence",
           "excerpt": "/conteudos/data-base-orcamento-reajuste-obra-publica/ blocking=official_live",
           "severity": "warn"
-        },
-        {
-          "gate": "instance_index_ready",
-          "path": "conteudos/desconto-da-proposta-em-item-novo-aditivo/index.html",
-          "reason": "noindex_suppresses_index_ready_instance",
-          "excerpt": "/conteudos/desconto-da-proposta-em-item-novo-aditivo/ passed every instance subgate on its own evidence and is still noindex",
-          "severity": "error"
         },
         {
           "gate": "instance_index_ready",
@@ -1818,15 +1804,11 @@
       "stats": {
         "schema": "indexation-evidence-v1",
         "scanned": 249,
-        "noindex": 173,
+        "noindex": 172,
         "instance_index_ready": 24,
-        "index_ready_but_noindex": [
-          "/conteudos/desconto-da-proposta-em-item-novo-aditivo/"
-        ],
+        "index_ready_but_noindex": [],
         "indexable_without_evidence": 53,
-        "noindex_without_reason": [
-          "/analise-cnpj/"
-        ],
+        "noindex_without_reason": [],
         "blocking_subgates": {
           "named_gate_verdict": 114,
           "public_safe": 98,

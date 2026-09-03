@@ -62,6 +62,27 @@ def test_instance_verdict_ignores_the_robots_meta_it_is_auditing():
     assert first_detail["blocking"] == second_detail["blocking"]
 
 
+def test_instance_verdict_reads_the_html_it_was_handed_not_the_disk():
+    """Every subgate must judge the passed HTML, or a caller checking an edited
+    or not-yet-published page gets a verdict about the version on disk."""
+    route, html = _sample_route(lambda r: r.startswith("/conteudos/") and r != "/conteudos/")
+    family = ctx().route_family.get(route)
+    _, before = G.instance_index_ready_for_route(route, html, family, ctx())
+    gutted = "<html><head></head><body><main><p>vazio</p></main></body></html>"
+    _, after = G.instance_index_ready_for_route(route, gutted, family, ctx())
+    assert after["blocking"] != before["blocking"]
+    # A route the context has never seen must not pass distinct-grain trivially.
+    # politica-editorial is small enough that MAX_SIBLING_COMPARISONS cannot
+    # sample the twin away, so the clone is guaranteed to be compared.
+    twin = ctx().family_routes["politica-editorial"][0]
+    unseen = "/politica-editorial/rota-que-nao-existe-no-disco/"
+    grain = G._sub_distinct_grain(
+        unseen, ctx().html_by_route[twin], ctx(), "politica-editorial"
+    )
+    assert grain.applicable and not grain.passed, grain.detail
+    assert not G._sub_distinct_grain(unseen, "", ctx(), "politica-editorial").passed
+
+
 def test_instance_verdict_ignores_the_governance_registry():
     """A governance reason_code must not be able to manufacture readiness."""
     route, html = _sample_route(lambda r: r.startswith("/oportunidades/"))
@@ -184,7 +205,17 @@ def test_archetype_inherits_materiality_and_never_invents_it():
         for name in verdict["material"]:
             assert name in {"named_gate_verdict", "not_doorway", "public_safe"}, (fid, name)
     assert verdicts["editorial-library"]["material"] == [], verdicts["editorial-library"]
-    assert "named_gate_verdict" in verdicts["jurisprudencia-contratos-obras"]["material"]
+
+
+def test_only_a_doorway_archetype_is_inherited_by_its_instances():
+    """A named REJECT is per-instance; it must not withdraw the family around it."""
+    from scripts.site.universe_sweep import ARCHETYPE_LEVEL_MATERIAL
+
+    assert ARCHETYPE_LEVEL_MATERIAL == {"not_doorway"}
+    report = sweep()
+    for route, row in report["routes"].items():
+        inherited = [m for m in row["material"] if m.startswith("archetype:")]
+        assert all(m == "archetype:not_doorway" for m in inherited), (route, inherited)
 
 
 def test_a_caveat_may_not_be_stripped_along_with_the_jargon():
@@ -213,14 +244,14 @@ def test_every_route_lands_in_exactly_one_declared_bucket():
 def test_reject_withdraw_is_distinct_from_not_public_safe_and_noindex_justified():
     report = sweep()
     rejected = set(report["buckets"]["REJECT_WITHDRAW"])
-    assert rejected, "the canary REJECT must not silently disappear"
     assert not rejected & set(report["buckets"]["NOT_PUBLIC_SAFE"])
     assert not rejected & set(report["buckets"]["NOINDEX_JUSTIFIED"])
-    # Every rejected route names the material subgate that rejected it.
+    # Every rejected route names the material subgate that rejected it. The
+    # bucket is deliberately not asserted non-empty: withdrawing the routes in
+    # it is the correct remediation, and a test that went red on success would
+    # only invite someone to loosen the gate.
     for route in rejected:
         assert report["routes"][route]["material"], route
-    # #83's editorial registry REJECT is the canary and must be in the bucket.
-    assert "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/" in rejected
     # A route rejected only for unsafe copy belongs in NOT_PUBLIC_SAFE instead.
     for route in report["buckets"]["NOT_PUBLIC_SAFE"]:
         assert "public_safe" in report["routes"][route]["blocking"], route

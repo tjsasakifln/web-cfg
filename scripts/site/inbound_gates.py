@@ -2579,6 +2579,15 @@ def build_indexation_context(
     for routes in ctx.family_routes.values():
         routes.sort()
 
+    # Fail closed, exactly like public_html_files(). A walk that collapses would
+    # otherwise report zero routes, zero violations and a green sweep over an
+    # empty universe.
+    if root == ROOT and len(ctx.html_by_route) < MIN_PUBLIC_HTML_FILES:
+        raise SystemExit(
+            f"INDEXATION_SCOPE_COLLAPSED scanned={len(ctx.html_by_route)} "
+            f"expected_at_least={MIN_PUBLIC_HTML_FILES} root={root}"
+        )
+
     # #83's own gate, verdict per analysis slug.
     canary = _read_json(root / CONTRACT_ANALYSIS_STATUS_REL)
     for item in canary.get("items") or []:
@@ -2775,7 +2784,16 @@ def _sub_archetype_completeness(html: str, family: dict[str, Any] | None) -> Sub
     )
 
 
-def _sub_distinct_grain(route: str, ctx: IndexationContext, family_id: str) -> Subgate:
+def _sub_distinct_grain(
+    route: str, html: str, ctx: IndexationContext, family_id: str
+) -> Subgate:
+    """The page's own shingles come from the ``html`` the caller passed.
+
+    Reading them back out of the context instead would make the verdict
+    describe the version on disk, and would let a route the context has never
+    seen (a page checked before publication) compare an empty shingle set
+    against its siblings and pass as "distinct".
+    """
     siblings = [r for r in ctx.family_routes.get(family_id, []) if r != route]
     if not siblings:
         return Subgate(
@@ -2785,10 +2803,14 @@ def _sub_distinct_grain(route: str, ctx: IndexationContext, family_id: str) -> S
             "single-instance family: nothing to be a clone of",
             applicable=False,
         )
-    mine = ctx.shingles_by_route.get(route)
-    if mine is None:
-        mine = _shingle_set(visible_main_text(ctx.html_by_route.get(route, "")))
-        ctx.shingles_by_route[route] = mine
+    mine = _shingle_set(visible_main_text(html))
+    if not mine:
+        return Subgate(
+            "materially_distinct_grain",
+            False,
+            SUBGATE_MATERIAL,
+            "page has no body text to compare against its siblings",
+        )
     worst = 0.0
     worst_route = ""
     for sibling in _sampled(siblings, MAX_SIBLING_COMPARISONS):
@@ -2837,7 +2859,7 @@ def _sub_self_canonical(route: str, html: str) -> Subgate:
     return Subgate("self_canonical", True, SUBGATE_REMEDIABLE, f"self-canonical {route}")
 
 
-def _sub_no_cannibalization(route: str, ctx: IndexationContext) -> Subgate:
+def _sub_no_cannibalization(route: str, html: str, ctx: IndexationContext) -> Subgate:
     conflict = ctx.ownership_loser_routes.get(route)
     if conflict:
         return Subgate(
@@ -2854,7 +2876,7 @@ def _sub_no_cannibalization(route: str, ctx: IndexationContext) -> Subgate:
             SUBGATE_REMEDIABLE,
             f"{QUERY_OWNERSHIP_REL} classifies this route {status}",
         )
-    title = _normalized_title(ctx.html_by_route.get(route, ""))
+    title = _normalized_title(html)
     twins = [r for r in ctx.title_owners.get(title, []) if r != route]
     if title and twins:
         return Subgate(
@@ -2866,11 +2888,16 @@ def _sub_no_cannibalization(route: str, ctx: IndexationContext) -> Subgate:
     return Subgate("no_cannibalization", True, SUBGATE_REMEDIABLE, "no declared conflict")
 
 
-def _sub_record_specific(route: str, html: str, ctx: IndexationContext, family_id: str) -> Subgate:
+def _sub_record_specific(
+    route: str,
+    html: str,
+    family: dict[str, Any] | None,
+    ctx: IndexationContext,
+    family_id: str,
+) -> Subgate:
     """Does the body talk about THIS record, or only about the family's subject?"""
     siblings = [r for r in ctx.family_routes.get(family_id, []) if r != route]
-    family = ctx.route_family.get(route) or {}
-    prefix = str((family.get("match") or {}).get("prefix") or "")
+    prefix = str(((family or {}).get("match") or {}).get("prefix") or "")
     is_hub = route == "/" or (prefix and route == prefix)
     slug = route.strip("/").split("/")[-1].removesuffix(".html") if route != "/" else ""
     mine = {
@@ -3090,10 +3117,10 @@ def instance_index_ready_for_route(
         _sub_freshness(html, ctx),
         _sub_citable_source(html),
         _sub_archetype_completeness(html, family),
-        _sub_distinct_grain(route, ctx, fid),
+        _sub_distinct_grain(route, html, ctx, fid),
         _sub_self_canonical(route, html),
-        _sub_no_cannibalization(route, ctx),
-        _sub_record_specific(route, html, ctx, fid),
+        _sub_no_cannibalization(route, html, ctx),
+        _sub_record_specific(route, html, family, ctx, fid),
         _sub_named_gate_verdict(route, family, ctx),
         _sub_reputational_safety(html, family),
     ]

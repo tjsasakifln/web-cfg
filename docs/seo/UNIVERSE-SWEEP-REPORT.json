@@ -5,11 +5,11 @@
     "REJECT_WITHDRAW": 17,
     "NOT_PUBLIC_SAFE": 98,
     "ORPHAN": 0,
-    "INDEX_READY": 23,
-    "INDEX_READY_BUT_NOINDEX": 1,
+    "INDEX_READY": 24,
+    "INDEX_READY_BUT_NOINDEX": 0,
     "INDEXABLE_WITHOUT_EVIDENCE": 53,
-    "NOINDEX_JUSTIFIED": 56,
-    "NOINDEX_WITHOUT_REASON": 1
+    "NOINDEX_JUSTIFIED": 57,
+    "NOINDEX_WITHOUT_REASON": 0
   },
   "archetype_verdicts": {
     "home": {
@@ -172,12 +172,8 @@
     "/piloto/orgaos/esp-prestacao-de-servicos-fde-see-sp/engenharia/",
     "/piloto/orgaos/superintendencia-reg-pol-rodv-federal-go-go/engenharia/"
   ],
-  "index_ready_but_noindex": [
-    "/conteudos/desconto-da-proposta-em-item-novo-aditivo/"
-  ],
-  "noindex_without_reason": [
-    "/analise-cnpj/"
-  ],
+  "index_ready_but_noindex": [],
+  "noindex_without_reason": [],
   "indexable_without_evidence": [
     "/acompanhamento-contratos-obras/",
     "/atrasos-prorrogacao-obras-publicas/",
@@ -464,6 +460,7 @@
       "/conteudos/atraso-obra-culpa-administracao/",
       "/conteudos/atraso-pagamento-contrato-publico-suspender/",
       "/conteudos/demolicao-nao-prevista-obra-publica/",
+      "/conteudos/desconto-da-proposta-em-item-novo-aditivo/",
       "/conteudos/fiscal-nao-assina-medicao-obra-publica/",
       "/conteudos/glosa-por-qualidade-obra-publica/",
       "/conteudos/limite-aditivo-25-50-obra-publica/",
@@ -480,9 +477,7 @@
       "/privacidade/",
       "/reequilibrio-obras-publicas/"
     ],
-    "INDEX_READY_BUT_NOINDEX": [
-      "/conteudos/desconto-da-proposta-em-item-novo-aditivo/"
-    ],
+    "INDEX_READY_BUT_NOINDEX": [],
     "INDEXABLE_WITHOUT_EVIDENCE": [
       "/acompanhamento-contratos-obras/",
       "/atrasos-prorrogacao-obras-publicas/",
@@ -540,6 +535,7 @@
     ],
     "NOINDEX_JUSTIFIED": [
       "/404.html",
+      "/analise-cnpj/",
       "/analise-cnpj/r/",
       "/analises-contratos-publicos/",
       "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
@@ -596,9 +592,7 @@
       "/piloto/ofertas/faq/",
       "/radar/"
     ],
-    "NOINDEX_WITHOUT_REASON": [
-      "/analise-cnpj/"
-    ]
+    "NOINDEX_WITHOUT_REASON": []
   },
   "routes": {
     "/": {
@@ -646,7 +640,7 @@
       "governance_reason_code": null
     },
     "/analise-cnpj/": {
-      "bucket": "NOINDEX_WITHOUT_REASON",
+      "bucket": "NOINDEX_JUSTIFIED",
       "family": "live-intelligence-cnpj-tool",
       "noindex": true,
       "instance_index_ready": false,
@@ -657,7 +651,7 @@
         "self_canonical"
       ],
       "material": [],
-      "governance_reason_code": null
+      "governance_reason_code": "archetype_evidence_incomplete"
     },
     "/analise-cnpj/r/": {
       "bucket": "NOINDEX_JUSTIFIED",
@@ -1491,9 +1485,9 @@
       "governance_reason_code": "editorial_disposition_hold"
     },
     "/conteudos/desconto-da-proposta-em-item-novo-aditivo/": {
-      "bucket": "INDEX_READY_BUT_NOINDEX",
+      "bucket": "INDEX_READY",
       "family": "editorial-library",
-      "noindex": true,
+      "noindex": false,
       "instance_index_ready": true,
       "blocking": [],
       "material": [],
@@ -2836,8 +2830,7 @@
         "named_gate_verdict"
       ],
       "material": [
-        "named_gate_verdict",
-        "archetype:named_gate_verdict"
+        "named_gate_verdict"
       ],
       "governance_reason_code": "editorial_source_verification_failed"
     },
