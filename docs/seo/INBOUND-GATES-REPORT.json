@@ -540,12 +540,27 @@
       }
     },
     "instance_index_ready": {
-      "ok": true,
-      "findings": [],
+      "ok": false,
+      "findings": [
+        {
+          "gate": "instance_index_ready",
+          "path": "/home/tjsasakifln/code/confenge/web-cfg/analise-cnpj/index.html",
+          "reason": "noindex_without_reason",
+          "excerpt": "family=live-intelligence-cnpj-tool has noindex routes but no valid governance reason_code in data/organic/noindex-governance-registry.json",
+          "severity": "error"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "/home/tjsasakifln/code/confenge/web-cfg/analises-contratos-publicos/aditivo-saldo-art125-item-novo/index.html",
+          "reason": "noindex_without_reason",
+          "excerpt": "family=analises-contratos-publicos has noindex routes but no valid governance reason_code in data/organic/noindex-governance-registry.json",
+          "severity": "error"
+        }
+      ],
       "stats": {
         "scanned_noindex": 173,
         "families_with_noindex": 10,
-        "justified_families": 10
+        "justified_families": 8
       }
     }
   }
