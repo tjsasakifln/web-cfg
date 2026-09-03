@@ -410,16 +410,8 @@
       }
     },
     "bofu_buyer_decision_map": {
-      "ok": false,
-      "findings": [
-        {
-          "gate": "bofu_buyer_decision_map",
-          "path": "derived_from[4]",
-          "reason": "source_contract_hash_drift",
-          "excerpt": "data/organic/public-family-registry.json: expected=11aea6cd64d5b83d1b5523f1440c5e6fd5ef10f6bdf0ae47c562494a1eb43022 actual=34248c779a3a3de324b5dc55fb3be519aa4c50db2231532ed7b7f5390c8418b1",
-          "severity": "error"
-        }
-      ],
+      "ok": true,
+      "findings": [],
       "stats": {
         "buyer_jobs": 15,
         "registry_buyer_jobs": 15,
