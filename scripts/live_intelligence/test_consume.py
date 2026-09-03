@@ -886,6 +886,15 @@ def test_539_candidate_loads_and_projects_as_not_live(tmp_path):
     assert "catalog_mode_fixture" in opp["index_bars"]
     company = projection["companies"][_COMPANY_DIGEST]
     assert company["perfil"]["razao_social"] == "Construtora Exemplo Ltda"
+    assert set(company["perfil"]) == {
+        "razao_social",
+        "contratos_observados",
+        "contratacao_mais_recente",
+    }
+    assert "natureza" not in company["perfil"]
+    assert "porte_declarado" not in company["perfil"]
+    assert "primeiro_contrato_publico" not in company["perfil"]
+    assert "UNKNOWN" not in json.dumps(company["perfil"], ensure_ascii=False)
     assert company["compradores"] == [_BUYER_DIGEST]
     assert company["oportunidades_aderentes"][0]["dimensoes"] == ["dim_object", "dim_geography"]
     blob = json.dumps(projection, ensure_ascii=False)

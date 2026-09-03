@@ -777,18 +777,16 @@ def project_company(record: dict[str, Any]) -> dict[str, Any]:
     _assert_company_record_has_no_cnpj(record, digest)
     perfil = record.get("perfil") if isinstance(record.get("perfil"), dict) else {}
     fresh = freshness_of(record)
-    perfil_out: dict[str, Any] = {
-        "natureza": _unknown(perfil.get("natureza")),
-        "porte_declarado": _unknown(perfil.get("porte_declarado")),
-        "primeiro_contrato_publico": _unknown(perfil.get("primeiro_contrato_publico")),
-        "contratos_publicos_declarados": perfil.get("contratos_publicos_declarados"),
-    }
-    if "razao_social" in perfil:
-        perfil_out["razao_social"] = _unknown(perfil.get("razao_social"))
-    if "contratos_observados" in perfil:
-        perfil_out["contratos_observados"] = perfil.get("contratos_observados")
-    if "contratacao_mais_recente" in perfil:
-        perfil_out["contratacao_mais_recente"] = _unknown(perfil.get("contratacao_mais_recente"))
+    # Only keys the producer actually declared. Filling fixture fields such as
+    # natureza on a #539 company invents UNKNOWN and that token then leaks into
+    # visible CNPJ copy.
+    perfil_out: dict[str, Any] = {}
+    for key in ("natureza", "porte_declarado", "primeiro_contrato_publico", "razao_social", "contratacao_mais_recente"):
+        if key in perfil:
+            perfil_out[key] = _unknown(perfil.get(key))
+    for key in ("contratos_publicos_declarados", "contratos_observados"):
+        if key in perfil:
+            perfil_out[key] = perfil.get(key)
     compradores: list[str] = []
     for item in record.get("compradores") or []:
         if isinstance(item, dict):

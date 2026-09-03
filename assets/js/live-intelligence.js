@@ -89,6 +89,12 @@
     if (!key) return NAO_INFORMADO;
     return SOURCE_KIND_PT[key] || "origem não classificada";
   };
+  const readerCopy = (value) => {
+    if (value == null || value === "") return NAO_INFORMADO;
+    const text = String(value).trim();
+    if (!text || text.toUpperCase() === "UNKNOWN") return NAO_INFORMADO;
+    return text;
+  };
 
   // --- Surface A: opportunity page ------------------------------------------
   if (surface === "opportunity") {
@@ -166,8 +172,9 @@
   const list = (values) => {
     const ul = document.createElement("ul");
     (values || []).forEach((value) => {
+      if (value == null || String(value).trim() === "") return;
       const li = document.createElement("li");
-      li.textContent = escapeText(value);
+      li.textContent = escapeText(readerCopy(value));
       ul.appendChild(li);
     });
     return ul;
@@ -197,8 +204,7 @@
           const dt = document.createElement("dt");
           dt.textContent = key.replace(/_/g, " ");
           const dd = document.createElement("dd");
-          const raw = perfil[key];
-          dd.textContent = raw === null || raw === "" ? NAO_INFORMADO : escapeText(raw);
+          dd.textContent = escapeText(readerCopy(perfil[key]));
           dl.appendChild(dt);
           dl.appendChild(dd);
         });

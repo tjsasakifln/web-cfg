@@ -75,6 +75,14 @@ function fonteKindPt(value) {
   return SOURCE_KIND_PT[key] || "origem não classificada";
 }
 
+/** Contract token `UNKNOWN` is input vocabulary. It never reaches visible copy. */
+function readerCopy(value) {
+  if (value == null || value === "") return NAO_INFORMADO;
+  const text = String(value).trim();
+  if (!text || text.toUpperCase() === "UNKNOWN") return NAO_INFORMADO;
+  return text;
+}
+
 const RESULT_STATES = Object.freeze({
   MATCH: "PERFIL_ENCONTRADO",
   NO_MATCH: "SEM_DADOS_SUFICIENTES",
@@ -261,7 +269,9 @@ function pageHeaders() {
 }
 
 function listBlock(heading, values) {
-  const rows = (values || []).filter((value) => String(value || "").trim());
+  const rows = (values || [])
+    .filter((value) => value != null && String(value).trim() !== "")
+    .map((value) => readerCopy(value));
   if (!rows.length) return "";
   return `<h3>${esc(heading)}</h3><ul>${rows.map((v) => `<li>${esc(v)}</li>`).join("")}</ul>`;
 }
@@ -277,8 +287,7 @@ function renderResultPage(result) {
   const perfilRows = perfil
     ? `<dl>${Object.keys(perfil)
         .map((key) => {
-          const raw = perfil[key];
-          const shown = raw === null || raw === "" ? NAO_INFORMADO : raw;
+          const shown = readerCopy(perfil[key]);
           return `<dt>${esc(key.replace(/_/g, " "))}</dt><dd>${esc(shown)}</dd>`;
         })
         .join("")}</dl>`
@@ -615,6 +624,8 @@ exports.NAO_INFORMADO_NOTA = NAO_INFORMADO_NOTA;
 // Exported so the test asserts provenance disclosure against the real mapping
 // rather than a copy of the phrase that could drift away from it.
 exports.fonteKindPt = fonteKindPt;
+exports.readerCopy = readerCopy;
+exports.renderResultPage = renderResultPage;
 exports.RESULT_STATES = RESULT_STATES;
 exports.RESULT_ROUTE_PREFIX = RESULT_ROUTE_PREFIX;
 exports._setDatasetForTests = _setDatasetForTests;

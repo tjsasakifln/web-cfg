@@ -215,10 +215,23 @@ function assertRecordIsClean(record) {
     }
   }
   // A bare or masked CNPJ anywhere in the record, whatever key carried it.
-  if (/(?<!\d)\d{14}(?!\d)/.test(blob) || /\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/.test(blob)) {
+  // PNCP opportunity_id values are `<cnpj>-<seq>/<ano>`: the 14-digit run is
+  // followed by `-<seq>/<year>`, which is not a company identity leak.
+  if (hasBareCnpj(blob) || /\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/.test(blob)) {
     return { ok: false, error: "result_cnpj_shaped_value" };
   }
   return { ok: true };
+}
+
+function hasBareCnpj(text) {
+  const re = /(?<!\d)(\d{14})(?!\d)/g;
+  let match;
+  while ((match = re.exec(text))) {
+    const rest = text.slice(match.index + 14);
+    if (/^-\d+\/\d{4}/.test(rest)) continue;
+    return true;
+  }
+  return false;
 }
 
 function buildRecord(result, now = new Date()) {

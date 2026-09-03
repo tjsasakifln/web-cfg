@@ -638,4 +638,87 @@ try {
   fsMod.rmSync(storeDir, { recursive: true, force: true });
 }
 
+// --- 12. extra-cli #539 company through the real consume → analyze → HTML path
+// The producer perfil has razao_social / contratos_observados /
+// contratacao_mais_recente and never natureza/porte. Projecting UNKNOWN into
+// those missing keys used to leak the token into CNPJ copy.
+{
+  const { spawnSync } = require("child_process");
+  const outFile = path.join(osMod.tmpdir(), `li-539-proj-${process.pid}.json`);
+  const py = spawnSync(
+    "python3",
+    [
+      "-c",
+      [
+        "from pathlib import Path",
+        "import json, sys, tempfile",
+        "from scripts.live_intelligence.test_consume import _write_539_candidate",
+        "from scripts.live_intelligence import consume as C",
+        "digest, dest = sys.argv[1], Path(sys.argv[2])",
+        "def stamp(record):",
+        "    record['company_digest'] = digest",
+        "    return record",
+        "export = _write_539_candidate(Path(tempfile.mkdtemp()), mutate_company=stamp)",
+        "projection = C.consume(export)",
+        "dest.write_text(json.dumps({",
+        "    'schema': projection['schema'],",
+        "    'source_kind': projection['source_kind'],",
+        "    'catalog_mode': projection['catalog_mode'],",
+        "    'generated_at': projection['generated_at'],",
+        "    'source_as_of': projection['source_as_of'],",
+        "    'index_eligible': False,",
+        "    'companies': projection['companies'],",
+        "}), encoding='utf-8')",
+      ].join("\n"),
+      cnpjLib.hashCnpj(KNOWN_CNPJ),
+      outFile,
+    ],
+    { cwd: root, encoding: "utf8" },
+  );
+  if (py.status !== 0) {
+    fail("539_consume_failed", { status: py.status, stderr: py.stderr, stdout: py.stdout });
+  }
+  const candidateDataset = JSON.parse(fsMod.readFileSync(outFile, "utf8"));
+  fsMod.unlinkSync(outFile);
+  const candidateProfile = candidateDataset.companies[cnpjLib.hashCnpj(KNOWN_CNPJ)];
+  if (!candidateProfile) fail("539_digest_not_in_projection", Object.keys(candidateDataset.companies));
+  if ("natureza" in candidateProfile.perfil) fail("539_invented_natureza", candidateProfile.perfil);
+  if (JSON.stringify(candidateProfile.perfil).includes("UNKNOWN")) {
+    fail("539_perfil_projects_unknown", candidateProfile.perfil);
+  }
+
+  fn._setDatasetForTests(candidateDataset);
+  try {
+    const jsonMatch = JSON.parse((await post({ cnpj: KNOWN_CNPJ })).body);
+    if (jsonMatch.state !== fn.RESULT_STATES.MATCH) fail("539_analyze_not_match", jsonMatch);
+    if ("natureza" in (jsonMatch.perfil || {})) fail("539_matchResult_invented_natureza", jsonMatch.perfil);
+    if (JSON.stringify(jsonMatch.perfil || {}).includes("UNKNOWN")) {
+      fail("539_matchResult_perfil_unknown", jsonMatch.perfil);
+    }
+    const html = fn.renderResultPage(jsonMatch);
+    if (html.includes("UNKNOWN")) fail("539_renderResultPage_leaks_UNKNOWN");
+    if (!html.includes("Construtora Exemplo Ltda")) fail("539_renderResultPage_missing_razao_social");
+    if (/<dt>natureza<\/dt>/i.test(html)) fail("539_renderResultPage_shows_invented_natureza");
+    const persisted = resultStore.saveResult(jsonMatch);
+    if (!persisted.ok) fail("539_share_persist_rejected_pncp_id", persisted);
+    const native539 = await nativeFormPost(KNOWN_MASKED);
+    if (native539.statusCode !== 200) fail("539_native_status", native539.statusCode);
+    if (native539.body.includes("UNKNOWN")) fail("539_native_html_leaks_UNKNOWN");
+    if (!native539.body.includes("Construtora Exemplo Ltda")) fail("539_native_html_missing_razao_social");
+    if (/<dt>natureza<\/dt>/i.test(native539.body)) fail("539_native_html_shows_invented_natureza");
+    pass("539_company_visible_copy_has_no_UNKNOWN");
+  } finally {
+    fn._setDatasetForTests(original);
+  }
+}
+
+const clientRender = require("fs").readFileSync(
+  path.join(root, "assets/js/live-intelligence.js"),
+  "utf8",
+);
+if (!clientRender.includes('text.toUpperCase() === "UNKNOWN"')) {
+  fail("client_renderResult_does_not_translate_UNKNOWN");
+}
+pass("client_renderResult_translates_UNKNOWN");
+
 console.log("LIVE_INTELLIGENCE_ANALYZE_OK", JSON.stringify({ tests: results.length }));
