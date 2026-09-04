@@ -1219,95 +1219,24 @@ body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panor
 .n-card{min-width:0;padding:var(--space-6);background:#fff;border:1px solid var(--line);border-radius:12px}
 .n-card h2{margin:0 0 var(--space-3);font-size:1.35rem;line-height:1.3}
 .n-card p:last-child{margin-bottom:0;color:var(--muted)}
-.n-card form input:not([type="checkbox"]):not([type="radio"]),
-.n-card form select,
-.n-card form textarea{min-height:44px}
-
-
+.n-card form input:not([type="checkbox"]):not([type="radio"]),.n-card form select,.n-card form textarea{min-height:44px}
 .content-cta .container{grid-template-columns:minmax(0,1fr) minmax(0,auto)}
 .content-cta .container>*{min-width:0}
 .content-cta .button{max-width:100%;padding-block:var(--space-3);white-space:normal;text-align:center}
-
-
 .content-directory-item>.dir-body:first-child:last-child{grid-column:1/-1;min-width:0}
-
-
-.site-header .logo{
-  display:inline-flex;
-  align-items:center;
-  min-height:44px;
-  margin-right:auto;
-  color:var(--navy-950);
-  font-weight:850;
-  letter-spacing:.08em;
-}
+.site-header .logo{display:inline-flex;align-items:center;min-height:44px;margin-right:auto;color:var(--navy-950);font-weight:850;letter-spacing:.08em}
 .site-header .nav-desktop{display:flex;align-items:center;gap:var(--space-5)}
 .site-header .nav-desktop a{min-height:44px;display:inline-flex;align-items:center;color:#3e4e61;font-size:.875rem;font-weight:700}
 .pilot-wrap{min-width:0}
-main .pilot-table,
-main .radar-table,
-main .ma-table{
-  display:block;
-  width:100%;
-  max-width:100%;
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-}
+main .pilot-table,main .radar-table,main .ma-table{display:block;width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 details>summary{min-height:44px;padding-block:9px}
-
-@media (max-width:1100px){
-  .content-editorial-layout{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .content-feature{grid-column:1/-1}
-}
-@media (max-width:760px){
-  .content-editorial-layout,.compare-split,.faq-layout,.n-grid{grid-template-columns:minmax(0,1fr)}
-  .content-feature{grid-column:auto;padding:var(--space-6) var(--space-5)}
-  .compare-split{gap:0}
-  .compare-side{padding:var(--space-6) var(--space-5)}
-  .compare-divider{min-height:32px}
-  .decision-map{padding:var(--space-5)}
-  .decision-map-rail{grid-template-columns:minmax(0,1fr)}
-  .offer-request-form{padding:var(--space-6) var(--space-5)}
-  .content-cta .container{grid-template-columns:minmax(0,1fr);gap:var(--space-6)}
-
-}
-@media (max-width:900px){
-  .site-header .nav-desktop{display:none}
-}
-
-
-
+@media (max-width:1100px){.content-editorial-layout{grid-template-columns:repeat(2,minmax(0,1fr))}.content-feature{grid-column:1/-1}}
+@media (max-width:760px){.content-editorial-layout,.compare-split,.faq-layout,.n-grid{grid-template-columns:minmax(0,1fr)}.content-feature{grid-column:auto;padding:var(--space-6) var(--space-5)}.compare-split{gap:0}.compare-side{padding:var(--space-6) var(--space-5)}.compare-divider{min-height:32px}.decision-map{padding:var(--space-5)}.decision-map-rail{grid-template-columns:minmax(0,1fr)}.offer-request-form{padding:var(--space-6) var(--space-5)}.content-cta .container{grid-template-columns:minmax(0,1fr);gap:var(--space-6)}}
+@media (max-width:900px){.site-header .nav-desktop{display:none}}
 html.no-js body[data-content-cluster="home"] .site-header{position:static}
-
-
-@supports (content-visibility:auto){
-  html.js body[data-content-cluster="home"] main>section:not(.hero){
-    content-visibility:auto;
-    contain-intrinsic-size:auto 900px;
-  }
-  body[data-content-cluster="home"] main>.contact-section{
-    contain-intrinsic-size:auto 760px;
-  }
-}
-
-@media (min-width:901px) and (max-width:999px){
-  .desktop-nav{display:none}
-  .menu-toggle{display:inline-flex}
-  .no-js .menu-toggle{display:none}
-  .mobile-nav{position:fixed;z-index:99;top:74px;right:18px;left:18px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 26px 60px rgba(3,16,32,.18)}
-  .js .mobile-nav.is-open{display:grid;gap:5px}
-  .no-js .mobile-nav{display:flex;position:static;flex-wrap:wrap;gap:4px;padding:0 18px 14px;border:0;border-radius:0;box-shadow:none;overflow:visible}
-  .no-js .mobile-nav .button{display:none}
-  .mobile-nav>a:not(.button){padding:12px;color:var(--ink);font-weight:720;border-radius:8px}
-  .mobile-nav .button{margin-top:8px}
-  .header-cta{display:inline-flex;padding-inline:12px;font-size:.8rem}
-}
-@media (min-width:1000px) and (max-width:1240px){
-  .header-inner{gap:10px}
-  .brand,.brand img{width:162px}
-  .desktop-nav a{padding-inline:4px;font-size:.78rem;white-space:nowrap}
-  .header-cta{display:inline-flex;padding-inline:11px;font-size:.79rem}
-}
+@supports (content-visibility:auto){html.js body[data-content-cluster="home"] main>section:not(.hero){content-visibility:auto;contain-intrinsic-size:auto 900px}body[data-content-cluster="home"] main>.contact-section{contain-intrinsic-size:auto 760px}}
+@media (min-width:901px) and (max-width:999px){.desktop-nav{display:none}.menu-toggle{display:inline-flex}.no-js .menu-toggle{display:none}.mobile-nav{position:fixed;z-index:99;top:74px;right:18px;left:18px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 26px 60px rgba(3,16,32,.18)}.js .mobile-nav.is-open{display:grid;gap:5px}.no-js .mobile-nav{display:flex;position:static;flex-wrap:wrap;gap:4px;padding:0 18px 14px;border:0;border-radius:0;box-shadow:none;overflow:visible}.no-js .mobile-nav .button{display:none}.mobile-nav>a:not(.button){padding:12px;color:var(--ink);font-weight:720;border-radius:8px}.mobile-nav .button{margin-top:8px}.header-cta{display:inline-flex;padding-inline:12px;font-size:.8rem}}
+@media (min-width:1000px) and (max-width:1240px){.header-inner{gap:10px}.brand,.brand img{width:162px}.desktop-nav a{padding-inline:4px;font-size:.78rem;white-space:nowrap}.header-cta{display:inline-flex;padding-inline:11px;font-size:.79rem}}
 
 
 .compare-table th,.compare-table td{overflow-wrap:normal;word-break:normal}
