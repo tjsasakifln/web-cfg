@@ -1,0 +1,29 @@
+{
+  "campaign_from": "03",
+  "campaign_to": "10",
+  "target_path": "Meetcfg/handraiser context (owner: campaign 10)",
+  "operation": "pin_offer_context_fields",
+  "stable_key": "MEETCFG_HANDRAISER_CONTEXT/1.0.0-draft.20260904",
+  "dependency": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+  "test": "node tests/offers/test_multivertical_catalog.mjs",
+  "rollback": "Drop offer_id from context; do not mint a parallel ID. Keep outbound_eligible=false and auto_send=false.",
+  "contracts": {
+    "handraiser_state": "CONFENGE_HANDRAISER_STATE/1.0.0-draft.20260904",
+    "meetcfg_context": "MEETCFG_HANDRAISER_CONTEXT/1.0.0-draft.20260904",
+    "intake": "CONFENGE_WEB_INTAKE/2.0.0-draft.20260904"
+  },
+  "required_context_fields": [
+    "offer_id",
+    "nucleus_id",
+    "catalog_contract",
+    "catalog_hash",
+    "source=CONFENGE_WEB",
+    "outbound_eligible=false",
+    "auto_send=false"
+  ],
+  "instructions": [
+    "Consumers fix version/hash. Fail closed on mismatch.",
+    "Do not copy the catalog schema.",
+    "Canary private asset remains private_project_technical_readiness_v1."
+  ]
+}

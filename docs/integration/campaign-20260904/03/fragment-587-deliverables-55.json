@@ -1,0 +1,23 @@
+{
+  "campaign_from": "03",
+  "campaign_to": ["97", "owner-#329/#343"],
+  "target_path": "data/commercial/deliverables-registry.v1.json",
+  "operation": "append_deliverable_54_to_55",
+  "stable_key": "CFG-D55",
+  "dependency": "offer public_works_technical_procurement_planning and fragment-343-587-naming-55.json",
+  "test": "node tests/commercial/test_deliverables_registry.mjs after catalog_count is versioned to 55",
+  "rollback": "Delete only CFG-D55. The previous 54 rows stay byte-identical.",
+  "proposed_identity": {
+    "deliverable_id": "CFG-D55",
+    "public_name": "Planejamento Técnico de Licitações de Obras Públicas",
+    "price_state": "NOT_PRICED",
+    "public_state": "BLOCKED",
+    "checkout_enabled": false,
+    "source_issue": "#587"
+  },
+  "constraints": [
+    "No invented public price, faixa or prazo.",
+    "Do not enable checkout.",
+    "Do not register a public-family or money page (#588 is out of this wave)."
+  ]
+}

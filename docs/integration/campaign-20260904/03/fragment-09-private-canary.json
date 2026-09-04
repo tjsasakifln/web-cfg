@@ -1,0 +1,32 @@
+{
+  "campaign_from": "03",
+  "campaign_to": "09",
+  "target_path": "private canary surface (owner: campaign 09)",
+  "operation": "consume_canary_offer",
+  "stable_key": "private_project_technical_readiness_assessment",
+  "dependency": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+  "test": "node tests/offers/test_multivertical_catalog.mjs",
+  "rollback": "Disable the canary by offer_id. Do not unpublish B2G. Do not promote other modeled offers.",
+  "canary": {
+    "offer_id": "private_project_technical_readiness_assessment",
+    "private_asset_id": "private_project_technical_readiness_v1",
+    "nucleus_id": "building_engineering_documentation",
+    "wave_class": "FIRST_WAVE_CANARY",
+    "readiness": "MODELED",
+    "public_price": null,
+    "sla": "UNKNOWN",
+    "html_route": null,
+    "catalog_public": false
+  },
+  "invariants": {
+    "source": "CONFENGE_WEB",
+    "outbound_eligible": false,
+    "auto_send": false
+  },
+  "instructions": [
+    "Only this offer may be promoted in the first private wave without a later decision.",
+    "Modeling is not publishing. Do not add a public page or price.",
+    "Pin catalog and taxonomy hashes from consumer-pin.json.",
+    "#588 and #587 stay out of this canary."
+  ]
+}
