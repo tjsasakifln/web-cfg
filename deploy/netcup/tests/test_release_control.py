@@ -31,6 +31,16 @@ def test_live_intel_overlay_paths_are_explicit() -> None:
     assert control.is_live_intel_overlay("data/live_intelligence/official/manifest.json")
     assert not control.is_live_intel_overlay("_site/index.html")
     assert not control.is_live_intel_overlay("netlify/functions/lead.cjs")
+    assert control.is_live_intel_withdrawal(
+        "_site/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html"
+    )
+    assert control.is_live_intel_withdrawal("_site/sitemap-oportunidades.xml")
+    assert not control.is_live_intel_withdrawal("_site/ferramentas/index.html")
+    assert not control.is_live_intel_withdrawal("_site/sitemap-index.xml")
+    assert control.is_release_ephemeral(
+        "scripts/live_intelligence/__pycache__/publish.cpython-313.pyc"
+    )
+    assert not control.is_release_ephemeral("scripts/live_intelligence/publish.py")
 SHA_A = "a" * 40
 SHA_B = "b" * 40
 SHA_C = "c" * 40
@@ -463,6 +473,50 @@ def test_overlay_import_failure_is_fail_closed_when_official_present(
     (release / "_site").mkdir()
     with pytest.raises(control.ReleaseError, match="missing packaged scripts"):
         control._publish_live_intelligence_overlay(release)
+
+
+def test_verify_allows_overlay_withdrawal_and_ignores_bytecode(
+    host: Path, tmp_path: Path
+) -> None:
+    site = make_site(tmp_path, SHA_A)
+    fixture = (
+        site / "oportunidades" / "pe-2026-000188-reforma-ubs-londrina-pr" / "index.html"
+    )
+    fixture.parent.mkdir(parents=True)
+    fixture.write_text("<html>fixture</html>\n", encoding="utf-8")
+    output = tmp_path / "package-withdraw"
+    result = build_release(
+        repo_root=REPO_ROOT,
+        site=site,
+        host_contract=make_host_contract(tmp_path),
+        output_dir=output,
+        sha=SHA_A,
+        node_version="v22.19.0",
+        python_version="3.12.10",
+        ci_run_id="1234",
+        ci_run_url="https://github.com/tjsasakifln/web-cfg/actions/runs/1234",
+        source_date_epoch=1787756400,
+    )
+    incoming = host / "incoming" / SHA_A
+    incoming.mkdir(parents=True)
+    for path in result.values():
+        shutil.copy2(path, incoming / path.name)
+    control.stage_release(SHA_A)
+    release = host / "releases" / SHA_A
+    withdrawn = (
+        release
+        / "_site"
+        / "oportunidades"
+        / "pe-2026-000188-reforma-ubs-londrina-pr"
+        / "index.html"
+    )
+    assert withdrawn.is_file()
+    withdrawn.unlink()
+    pyc_dir = release / "scripts" / "live_intelligence" / "__pycache__"
+    pyc_dir.mkdir(parents=True)
+    (pyc_dir / "publish.cpython-313.pyc").write_bytes(b"\0")
+    verified = control.verify_release_tree_at(release, SHA_A)
+    assert verified["commit"] == SHA_A
 
 
 # systemd returns from `restart` as soon as it has spawned a Type=simple unit, so

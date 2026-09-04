@@ -224,7 +224,7 @@ jobs:
             -e "ssh -p $NETCUP_DEPLOY_PORT -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/netcup-ssh/known_hosts -i $RUNNER_TEMP/netcup-ssh/id_ed25519" \
             "dist/netcup/$RELEASE_SHA/" "$target:$upload/"
           ssh "${ssh_options[@]}" "$target" \
-            "/opt/confenge-web/bin/stage-release '$RELEASE_SHA' --upload-dir '$upload'"
+            "PYTHONDONTWRITEBYTECODE=1 /opt/confenge-web/bin/stage-release '$RELEASE_SHA' --upload-dir '$upload'"
           ssh "${ssh_options[@]}" "$target" "/opt/confenge-web/bin/verify-release '$RELEASE_SHA'"
 
   promote:
