@@ -1,7 +1,55 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-08-29",
-  "purpose": "Source of truth for public information architecture: three purchase situations, hub roles, header/footer chrome, and route → job → parent → next action → index state.",
+  "purpose": "Source of truth for public information architecture: corporate five-nucleus chooser on home, short header (B2G conserved, no mega-menu), hub roles, footer chrome, and route → job → parent → next action → index state.",
+  "taxonomy": {
+    "id": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
+    "status": "draft_test_only",
+    "fail_closed": true,
+    "note": "Draft coordination ID. Not a production runtime fallback. Goal 97 ratifies or migrates."
+  },
+  "nuclei": [
+    {
+      "id": "expert_evidence_assistance",
+      "label": "Perícias e assistência técnica",
+      "visitor_language": "Preciso produzir ou contestar prova técnica em um processo",
+      "index_state": "withheld",
+      "href": "/#formulario-contato",
+      "hub_template": "docs/integration/campaign-20260904/10/hubs/expert_evidence_assistance/index.html"
+    },
+    {
+      "id": "property_valuation",
+      "label": "Avaliações de imóveis",
+      "visitor_language": "Preciso saber o valor defensável de um imóvel",
+      "index_state": "withheld",
+      "href": "/#formulario-contato",
+      "hub_template": "docs/integration/campaign-20260904/10/hubs/property_valuation/index.html"
+    },
+    {
+      "id": "building_engineering_documentation",
+      "label": "Engenharia de edificações e documentação",
+      "visitor_language": "Preciso documentar, orçar, compatibilizar ou diagnosticar uma edificação",
+      "index_state": "withheld",
+      "href": "/#formulario-contato",
+      "hub_template": "docs/integration/campaign-20260904/10/hubs/building_engineering_documentation/index.html"
+    },
+    {
+      "id": "occupational_safety",
+      "label": "Segurança do trabalho",
+      "visitor_language": "Preciso reduzir ou documentar risco ocupacional",
+      "index_state": "withheld",
+      "href": "/#formulario-contato",
+      "hub_template": "docs/integration/campaign-20260904/10/hubs/occupational_safety/index.html"
+    },
+    {
+      "id": "public_works_b2g",
+      "label": "Obras públicas",
+      "visitor_language": "Preciso decidir ou proteger margem em licitação ou contrato público",
+      "index_state": "index",
+      "href": "/servicos-obras-publicas/",
+      "hub_template": "docs/integration/campaign-20260904/10/hubs/public_works_b2g/index.html"
+    }
+  ],
   "quality_baseline": {
     "origin_main_sha": "72ed3831ba28c9400627cdc9599aa54e9329e178",
     "measured_at": "2026-08-29",
@@ -44,6 +92,11 @@
   "header": {
     "destinations": [
       {
+        "label": "Obras públicas",
+        "href": "/servicos-obras-publicas/",
+        "nucleus": "public_works_b2g"
+      },
+      {
         "label": "Edital e proposta",
         "href": "/bid-room-licitacoes-obras/",
         "journey": "edital"
@@ -52,11 +105,6 @@
         "label": "Contrato sob pressão",
         "href": "/problemas-que-resolvemos/",
         "journey": "contrato"
-      },
-      {
-        "label": "Operação recorrente",
-        "href": "/diretoria-b2g/",
-        "journey": "operacao"
       },
       {
         "label": "Biblioteca",
@@ -72,11 +120,11 @@
   "footer": {
     "columns": [
       {
-        "heading": "Situações",
+        "heading": "Núcleos",
         "links": [
+          { "label": "Obras públicas", "href": "/servicos-obras-publicas/" },
           { "label": "Edital e proposta", "href": "/bid-room-licitacoes-obras/" },
-          { "label": "Contrato sob pressão", "href": "/problemas-que-resolvemos/" },
-          { "label": "Operação recorrente", "href": "/diretoria-b2g/" }
+          { "label": "Contrato sob pressão", "href": "/problemas-que-resolvemos/" }
         ]
       },
       {
@@ -281,9 +329,10 @@
     { "prefix": "/atrasos-prorrogacao-obras-publicas/", "href": "/problemas-que-resolvemos/" },
     { "prefix": "/reequilibrio-obras-publicas/", "href": "/problemas-que-resolvemos/" },
     { "prefix": "/acompanhamento-contratos-obras/", "href": "/problemas-que-resolvemos/" },
-    { "prefix": "/diretoria-b2g/", "href": "/diretoria-b2g/" },
-    { "prefix": "/diagnostico-b2g-360/", "href": "/diretoria-b2g/" },
-    { "prefix": "/diagnostico-b2g-expansao/", "href": "/diretoria-b2g/" },
+    { "prefix": "/servicos-obras-publicas/", "href": "/servicos-obras-publicas/" },
+    { "prefix": "/diretoria-b2g/", "href": "/servicos-obras-publicas/" },
+    { "prefix": "/diagnostico-b2g-360/", "href": "/servicos-obras-publicas/" },
+    { "prefix": "/diagnostico-b2g-expansao/", "href": "/servicos-obras-publicas/" },
     { "prefix": "/conteudos/", "href": "/conteudos/" },
     { "prefix": "/guias-contratos-obras/", "href": "/conteudos/" },
     { "prefix": "/lei-14133-obras/", "href": "/conteudos/" },
@@ -294,7 +343,7 @@
     {
       "label": "Serviços",
       "href": "/servicos-obras-publicas/",
-      "reason": "Taxonomia sobreposta às três situações de compra; permanece como hub de solução comercial no rodapé."
+      "reason": "O destino permanece no header com o rótulo do núcleo (Obras públicas), sem um segundo item de taxonomia."
     },
     {
       "label": "Problemas que resolvemos",
