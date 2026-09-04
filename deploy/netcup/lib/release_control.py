@@ -889,10 +889,13 @@ def _publish_live_intelligence_overlay(release: Path) -> None:
             "live-intelligence official overlay import failed; the release "
             "payload must include scripts/live_intelligence and scripts/organic"
         ) from exc
+    if official is None:
+        _withdraw_packaged_opportunity_pages(release)
     result = publish(
         root=release,
         public_root=release / "_site",
         mutate_discovery=True,
+        withdraw_if_absent=True,
     )
     if result.get("ok") is False:
         raise ReleaseError(

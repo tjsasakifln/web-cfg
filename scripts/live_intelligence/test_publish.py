@@ -16,7 +16,16 @@ def test_publish_withdraws_fixture_pages_when_official_absent(
     pages.mkdir(parents=True)
     (pages / "index.html").write_text("<html>fixture</html>\n", encoding="utf-8")
     monkeypatch.setenv("CONFENGE_LI_OFFICIAL_DIR", str(tmp_path / "missing-official"))
-    result = P.publish(root=tmp_path, public_root=tmp_path, mutate_discovery=False)
+    skipped = P.publish(root=tmp_path, public_root=tmp_path, mutate_discovery=False)
+    assert skipped["reason"] == "official_input_absent"
+    assert skipped["withdrawn"] == 0
+    assert (pages / "index.html").is_file()
+    result = P.publish(
+        root=tmp_path,
+        public_root=tmp_path,
+        mutate_discovery=False,
+        withdraw_if_absent=True,
+    )
     assert result["ok"] is True
     assert result["skipped"] is True
     assert result["reason"] == "official_input_absent"

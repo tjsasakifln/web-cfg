@@ -50,12 +50,16 @@ def publish(
     *,
     public_root: Path | None = None,
     mutate_discovery: bool = True,
+    withdraw_if_absent: bool = False,
 ) -> dict[str, Any]:
     """Consume official input when present and render INDEX pages.
 
     Returns a status object. ``ok`` is True when either there is no official
     input (skip, no fixture promote) or official consume+render succeeded.
     ``ok`` is False only when official input exists and was rejected.
+
+    ``withdraw_if_absent`` is for the staged ``_site`` overlay only. The site
+    build must not delete committed source pages when official input is missing.
     """
     site = root or _root()
     pages_root = public_root or site
@@ -63,7 +67,9 @@ def publish(
     if not official.is_absolute():
         official = site / official
     if not official.is_dir() or not (official / "manifest.json").is_file():
-        withdrawn = withdraw_packaged_opportunities(pages_root)
+        withdrawn = (
+            withdraw_packaged_opportunities(pages_root) if withdraw_if_absent else 0
+        )
         return {
             "ok": True,
             "skipped": True,
