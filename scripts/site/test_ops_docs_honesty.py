@@ -123,6 +123,141 @@ SEVEN_LABELS = (
 )
 
 
+CAMPAIGN_01_REPORT = (
+    ROOT / "docs" / "integration" / "campaign-20260904" / "open-pr-convergence.md"
+)
+CAMPAIGN_01_LABELS = (
+    "MERGE_CANDIDATE_CURRENT",
+    "PORT_RESIDUAL_VIA_HANDOFF",
+    "SUPERSEDED_CLOSE",
+    "HOLD_WITH_EXPLICIT_TRIGGER",
+    "DEPENDABOT_REFRESH_OR_CLOSE",
+    "REJECT_REGRESSION",
+)
+CAMPAIGN_01_TABLE_HEADER = (
+    "PR | base/head | arquivos | comportamento já em main | residual real | "
+    "conflito estratégico | testes | decisão | ação | rollback"
+)
+CAMPAIGN_01_CLOSE_LABELS = {
+    "SUPERSEDED_CLOSE",
+    "REJECT_REGRESSION",
+    "PORT_RESIDUAL_VIA_HANDOFF",
+    "DEPENDABOT_REFRESH_OR_CLOSE",
+}
+
+
+def _campaign_01_table_rows(text: str) -> list[dict[str, str]]:
+    header_line = next(
+        (
+            line
+            for line in text.splitlines()
+            if CAMPAIGN_01_TABLE_HEADER in line.replace("**", "")
+        ),
+        None,
+    )
+    assert header_line is not None, "campaign 01 classification table header missing"
+    rows: list[dict[str, str]] = []
+    started = False
+    for line in text.splitlines():
+        if CAMPAIGN_01_TABLE_HEADER in line.replace("**", ""):
+            started = True
+            continue
+        if not started:
+            continue
+        if not line.startswith("|"):
+            break
+        if re.match(r"^\|\s*-+", line):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 10:
+            continue
+        if not re.fullmatch(r"#?\d+", cells[0]):
+            continue
+        rows.append(
+            {
+                "pr": cells[0].lstrip("#"),
+                "base_head": cells[1],
+                "arquivos": cells[2],
+                "ja_em_main": cells[3],
+                "residual": cells[4],
+                "conflito": cells[5],
+                "testes": cells[6],
+                "decisao": cells[7],
+                "acao": cells[8],
+                "rollback": cells[9],
+            }
+        )
+    return rows
+
+
+def test_campaign_01_open_pr_convergence_report():
+    assert CAMPAIGN_01_REPORT.is_file(), (
+        "missing docs/integration/campaign-20260904/open-pr-convergence.md"
+    )
+    text = CAMPAIGN_01_REPORT.read_text(encoding="utf-8")
+    assert "WRITE_SET" in text and "DO_NOT_TOUCH_SET" in text
+    assert "CAMPAIGN_ID=01" in text
+    assert re.search(r"AUDITED_MAIN_SHA=[0-9a-f]{40}", text)
+    assert "ABSORBED_OPS_NO_TRANSFORM=YES" in text
+    assert "ABSORBED_RETENTION_TIMER=YES" in text
+    assert "ABSORBED_MINIMIZED_LOGS=YES" in text
+    assert "LCP_HOLD=YES" in text
+    assert "RESIDUAL_HANDOFF=" in text
+    assert "EQUIVALENCE_FILE_COUNT_IS_NOT_PROOF=YES" in text
+    residual = re.search(r"RESIDUAL_HANDOFF=(\S+)", text)
+    assert residual, "missing RESIDUAL_HANDOFF path"
+    residual_path = ROOT / residual.group(1)
+    assert residual_path.is_file(), f"missing residual handoff {residual.group(1)}"
+    residual_text = residual_path.read_text(encoding="utf-8")
+    assert re.search(r"SOURCE_COMMIT=[0-9a-f]{40}", residual_text)
+    assert "target_path" in residual_text
+    assert "LCP_HOLD=YES" in residual_text
+    assert "goal 97" in residual_text.lower() or "goal 97" in residual_text
+    rows = _campaign_01_table_rows(text)
+    numbers = [int(row["pr"]) for row in rows]
+    assert numbers, "classification table has no PR rows"
+    assert len(numbers) == len(set(numbers)), f"duplicate PR rows: {numbers}"
+    inventoried = re.search(
+        r"Live GitHub on [0-9-]+ matched\s+both\.",
+        text,
+    )
+    assert inventoried, "live GitHub inventory sentence missing"
+    anchor = re.search(r"open set `([^`]+)`", text)
+    assert anchor, "live/historical open-set anchor missing"
+    live_set = [int(n) for n in re.findall(r"#(\d+)", anchor.group(1))]
+    assert live_set, "open-set anchor has no PR numbers"
+    assert sorted(numbers) == sorted(live_set), (
+        f"table {sorted(numbers)} != live inventoried set {sorted(live_set)}"
+    )
+    for row in rows:
+        assert row["decisao"] in CAMPAIGN_01_LABELS, (
+            f"PR #{row['pr']} decisão {row['decisao']!r} not in six labels"
+        )
+        for key in (
+            "base_head",
+            "arquivos",
+            "ja_em_main",
+            "residual",
+            "conflito",
+            "testes",
+            "acao",
+            "rollback",
+        ):
+            assert row[key], f"PR #{row['pr']} missing {key}"
+    assert any(int(row["pr"]) == 536 for row in rows), "live set must include #536"
+    closed = {
+        int(row["pr"])
+        for row in rows
+        if row["decisao"] in CAMPAIGN_01_CLOSE_LABELS and "close" in row["acao"].lower()
+    }
+    for match in re.finditer(r"WAIT FOR #(\d+)", text):
+        target = int(match.group(1))
+        assert target not in closed, (
+            f"live WAIT FOR #{target} points at a closed/superseded PR"
+        )
+    print("OK test_campaign_01_open_pr_convergence_report")
+
+
 def test_pr_portfolio_disposition_campaign_artifact():
     assert CAMPAIGN_DISPOSITION_JSON.is_file(), "missing docs/ops/PR_PORTFOLIO_DISPOSITION.json"
     assert CAMPAIGN_DISPOSITION_MD.is_file(), "missing docs/ops/PR_PORTFOLIO_DISPOSITION.md"
@@ -169,6 +304,7 @@ def main() -> int:
         test_restore_report_post_merge_human_actions,
         test_portfolio_disposition_report_shape,
         test_pr_portfolio_disposition_campaign_artifact,
+        test_campaign_01_open_pr_convergence_report,
     ):
         try:
             t()
