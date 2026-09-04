@@ -1,0 +1,34 @@
+{
+  "contract": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
+  "owner": "campaign-02",
+  "replaceable_fixture": true,
+  "fixture_owner": "campaign-03-consume-only",
+  "note": "Fixture explícita e substituível. Campanha 02 é a autoridade da taxonomia. Goal 97 ratifica ou migra. Cinco núcleos de #577; não criar segunda taxonomia.",
+  "nuclei": [
+    {
+      "nucleus_id": "expert_evidence_assistance",
+      "public_name": "Perícias e Assistência Técnica",
+      "decision_axis": "evidência técnica para decisão em disputa ou pré-litígio"
+    },
+    {
+      "nucleus_id": "property_valuation",
+      "public_name": "Avaliações de Imóveis",
+      "decision_axis": "valor de imóvel urbano em data e finalidade definidas"
+    },
+    {
+      "nucleus_id": "building_engineering_documentation",
+      "public_name": "Engenharia de Edificações e Documentação",
+      "decision_axis": "escopo, custo, interferência, condição e prontidão de obra privada"
+    },
+    {
+      "nucleus_id": "occupational_safety",
+      "public_name": "Segurança do Trabalho",
+      "decision_axis": "risco, documentação e análise técnica de SST na atribuição"
+    },
+    {
+      "nucleus_id": "public_works_b2g",
+      "public_name": "Obras Públicas e B2G",
+      "decision_axis": "licitação e contrato de obra pública, inclusive planejamento do ente"
+    }
+  ]
+}

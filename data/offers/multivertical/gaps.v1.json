@@ -1,0 +1,106 @@
+{
+  "schema": "confenge.offer-gap-register/1.0",
+  "contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+  "gaps": [
+    {
+      "gap_id": "GAP_RURAL_VALUATION",
+      "reason": "avaliação rural fora do recorte urbano modelado",
+      "nucleus_hint": "property_valuation"
+    },
+    {
+      "gap_id": "GAP_COURT_APPOINTED_EXPERT",
+      "reason": "nomeação como perito do juízo não é produto vendável",
+      "nucleus_hint": "expert_evidence_assistance"
+    },
+    {
+      "gap_id": "GAP_LEGAL_REPRESENTATION",
+      "reason": "advocacia e representação jurídica estão fora do catálogo",
+      "nucleus_hint": "expert_evidence_assistance"
+    },
+    {
+      "gap_id": "GAP_OCCUPATIONAL_PHYSICIAN_AS_INTERNAL",
+      "reason": "médico do trabalho não é disciplina interna disponível",
+      "nucleus_hint": "occupational_safety"
+    },
+    {
+      "gap_id": "GAP_ARCHITECTURE_DESIGN",
+      "reason": "projeto arquitetônico como disciplina interna não está modelado",
+      "nucleus_hint": "building_engineering_documentation"
+    },
+    {
+      "gap_id": "GAP_CRIMINAL_FORENSICS",
+      "reason": "perícia criminal está fora de atribuição deste catálogo",
+      "nucleus_hint": "expert_evidence_assistance"
+    },
+    {
+      "gap_id": "GAP_ENVIRONMENTAL_LICENSING",
+      "reason": "licenciamento ambiental como produto interno não está modelado",
+      "nucleus_hint": "building_engineering_documentation"
+    },
+    {
+      "gap_id": "GAP_ISSUE_588_PUBLICATION",
+      "reason": "money page #588 permanece fora de publicação nesta onda",
+      "nucleus_hint": "public_works_b2g"
+    },
+    {
+      "gap_id": "GAP_NR12_MACHINE_SAFETY_SPECIALIST",
+      "reason": "NR-12 de máquina como especialidade interna não está modelada",
+      "nucleus_hint": "occupational_safety"
+    },
+    {
+      "gap_id": "GAP_SOFTWARE_SAAS",
+      "reason": "software ou SaaS não é oferta técnica deste catálogo",
+      "nucleus_hint": null
+    },
+    {
+      "gap_id": "GAP_HOURLY_STAFF_AUGMENTATION",
+      "reason": "alocação horária genérica não é unidade de trabalho",
+      "nucleus_hint": null
+    },
+    {
+      "gap_id": "GAP_OPEN_ENDED_RETAINER",
+      "reason": "retainer sem unidade de decisão não é oferta deste catálogo",
+      "nucleus_hint": null
+    },
+    {
+      "gap_id": "GAP_INTERNATIONAL_VALUATION",
+      "reason": "avaliação fora do Brasil não está modelada",
+      "nucleus_hint": "property_valuation"
+    },
+    {
+      "gap_id": "GAP_MINING",
+      "reason": "mineração está fora do recorte",
+      "nucleus_hint": null
+    },
+    {
+      "gap_id": "GAP_NAVAL",
+      "reason": "naval está fora do recorte",
+      "nucleus_hint": null
+    },
+    {
+      "gap_id": "GAP_ELECTRICAL_DESIGN_PRIMARY",
+      "reason": "projeto elétrico como oferta primária interna não está modelado",
+      "nucleus_hint": "building_engineering_documentation"
+    },
+    {
+      "gap_id": "GAP_FIRE_BRIGADE_TRAINING",
+      "reason": "treinamento de brigada como produto interno não está modelado",
+      "nucleus_hint": "occupational_safety"
+    },
+    {
+      "gap_id": "GAP_ISO_CERTIFICATION_BODY",
+      "reason": "organismo certificador não é papel da CONFENGE",
+      "nucleus_hint": "occupational_safety"
+    },
+    {
+      "gap_id": "GAP_AIRPORT_PAVEMENT_SPECIALTY",
+      "reason": "especialidade aeroportuária não está no conjunto mínimo",
+      "nucleus_hint": "building_engineering_documentation"
+    },
+    {
+      "gap_id": "GAP_UNMAPPED",
+      "reason": "demanda sem regra de fronteira; registrar em vez de inventar SKU",
+      "nucleus_hint": null
+    }
+  ]
+}
