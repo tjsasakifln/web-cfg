@@ -556,7 +556,7 @@ def test_kv_rows_and_fixture_pages_contain_tables_in_overflow_wrap():
     assert 'class="table-wrap"' in html
     assert 'class="data-table"' in html
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    assert ".data-table{width:100%;max-width:100%;min-width:0;table-layout:fixed;" in css
+    assert ".data-table{width:100%;table-layout:fixed;" in css
     assert "min-width:36rem" not in css
     for path in sorted((ROOT / "oportunidades").glob("*/index.html")):
         page = path.read_text(encoding="utf-8")

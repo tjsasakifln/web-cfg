@@ -171,6 +171,22 @@ assert.equal(
   true,
   "non-critical family performance floor stays 90",
 );
+assert.equal(
+  evaluateLighthouseResults(
+    [...passing, criticalPage("/ops/", 100, 0, { accessibility: 89, best_practices: 90, seo: 58 })],
+    { homeRuns: 3, seoExemptPages: new Set(["/ops/"]) },
+  ).ok,
+  true,
+  "seo-exempt noindex utilities are not scored on accessibility/SEO",
+);
+assert.equal(
+  evaluateLighthouseResults(
+    [...passing, criticalPage("/ops/", 100, 0, { accessibility: 89 })],
+    { homeRuns: 3 },
+  ).ok,
+  false,
+  "non-exempt pages still fail closed on accessibility",
+);
 
 for (const [name, rows] of [
   ["missing repetition", passing.slice(0, 2)],
