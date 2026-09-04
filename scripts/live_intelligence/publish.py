@@ -13,7 +13,6 @@ from typing import Any
 from scripts.live_intelligence import (
     DEFAULT_ACCEPTED_DIR,
     DEFAULT_LAST_ACCEPTED_DIR,
-    FAMILY_PATH,
     SOURCE_OFFICIAL_LIVE,
 )
 from scripts.live_intelligence import consume as C
@@ -25,6 +24,25 @@ DISCOVERY_MARKER = "<!-- live-intelligence-index-discovery -->"
 
 def _root() -> Path:
     return Path(__file__).resolve().parents[2]
+
+
+def withdraw_packaged_opportunities(pages_root: Path) -> int:
+    """Remove packaged fixture/opportunity pages when official input is absent.
+
+    A missing official snapshot must not leave W1 fixture HTML under
+    ``oportunidades/`` to be promoted as if it were live.
+    """
+    base = pages_root / R.FAMILY_SLUG
+    existing = list(base.rglob("index.html")) if base.is_dir() else []
+    R.write_pages(
+        {
+            "source_kind": SOURCE_OFFICIAL_LIVE,
+            "index_eligible": False,
+            "opportunities": [],
+        },
+        root=pages_root,
+    )
+    return len(existing)
 
 
 def publish(
@@ -45,6 +63,7 @@ def publish(
     if not official.is_absolute():
         official = site / official
     if not official.is_dir() or not (official / "manifest.json").is_file():
+        withdrawn = withdraw_packaged_opportunities(pages_root)
         return {
             "ok": True,
             "skipped": True,
@@ -52,6 +71,7 @@ def publish(
             "official_live": False,
             "pages": 0,
             "indexable": 0,
+            "withdrawn": withdrawn,
         }
     try:
         projection = C.consume(official, require_official=True)

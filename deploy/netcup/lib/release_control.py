@@ -842,32 +842,49 @@ def _adopt_uploaded_bundle(root: Path, sha: str, upload_dir: Path) -> None:
     os.replace(upload_dir, destination)
 
 
+def _withdraw_packaged_opportunity_pages(release: Path) -> None:
+    """Delete packaged ``_site/oportunidades`` when official input cannot be consumed."""
+    pages = release / "_site" / "oportunidades"
+    if pages.is_dir() and not pages.is_symlink():
+        shutil.rmtree(pages)
+    sitemap = release / "_site" / "sitemap-oportunidades.xml"
+    if sitemap.is_file() and not sitemap.is_symlink():
+        sitemap.unlink()
+
+
 def _publish_live_intelligence_overlay(release: Path) -> None:
     """Render official INDEX pages into the staged `_site` without rewriting hashed files."""
     if os.environ.get("CONFENGE_RELEASE_TEST_MODE") == "1":
         return
-    official = HOST_OFFICIAL_DIR
+    official: Path | None = HOST_OFFICIAL_DIR
     if not (official / "manifest.json").is_file():
         bundled = release / "data" / "live_intelligence" / "official" / "manifest.json"
-        if not bundled.is_file():
-            return
-        official = bundled.parent
-    os.environ["CONFENGE_LI_OFFICIAL_DIR"] = str(official)
+        official = bundled.parent if bundled.is_file() else None
     os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
     sys.dont_write_bytecode = True
     publish_py = release / "scripts" / "live_intelligence" / "publish.py"
     organic_py = release / "scripts" / "organic" / "sitemap_graph.py"
-    if not publish_py.is_file() or not organic_py.is_file():
-        raise ReleaseError(
-            "live-intelligence official overlay missing packaged scripts "
-            "(scripts/live_intelligence/publish.py and "
-            "scripts/organic/sitemap_graph.py)"
-        )
+    if official is None:
+        os.environ.pop("CONFENGE_LI_OFFICIAL_DIR", None)
+        if not publish_py.is_file() or not organic_py.is_file():
+            _withdraw_packaged_opportunity_pages(release)
+            return
+    else:
+        os.environ["CONFENGE_LI_OFFICIAL_DIR"] = str(official)
+        if not publish_py.is_file() or not organic_py.is_file():
+            raise ReleaseError(
+                "live-intelligence official overlay missing packaged scripts "
+                "(scripts/live_intelligence/publish.py and "
+                "scripts/organic/sitemap_graph.py)"
+            )
     if str(release) not in sys.path:
         sys.path.insert(0, str(release))
     try:
         from scripts.live_intelligence.publish import publish
     except ImportError as exc:
+        if official is None:
+            _withdraw_packaged_opportunity_pages(release)
+            return
         raise ReleaseError(
             "live-intelligence official overlay import failed; the release "
             "payload must include scripts/live_intelligence and scripts/organic"

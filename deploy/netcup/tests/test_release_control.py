@@ -475,9 +475,28 @@ def test_overlay_import_failure_is_fail_closed_when_official_present(
         control._publish_live_intelligence_overlay(release)
 
 
-def test_verify_allows_overlay_withdrawal_and_ignores_bytecode(
-    host: Path, tmp_path: Path
+def test_overlay_withdraws_fixtures_without_scripts_when_official_absent(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    monkeypatch.delenv("CONFENGE_RELEASE_TEST_MODE", raising=False)
+    monkeypatch.delenv("CONFENGE_LI_OFFICIAL_DIR", raising=False)
+    monkeypatch.setattr(control, "HOST_OFFICIAL_DIR", tmp_path / "no-official")
+    release = tmp_path / "release"
+    fixture = (
+        release
+        / "_site"
+        / "oportunidades"
+        / "pe-2026-000188-reforma-ubs-londrina-pr"
+        / "index.html"
+    )
+    fixture.parent.mkdir(parents=True)
+    fixture.write_text("<html>fixture</html>\n", encoding="utf-8")
+    control._publish_live_intelligence_overlay(release)
+    assert not fixture.exists()
+    assert not (release / "_site" / "oportunidades").exists()
+
+
+def _stage_release_with_fixture_opportunity(host: Path, tmp_path: Path) -> Path:
     site = make_site(tmp_path, SHA_A)
     fixture = (
         site / "oportunidades" / "pe-2026-000188-reforma-ubs-londrina-pr" / "index.html"
@@ -502,21 +521,59 @@ def test_verify_allows_overlay_withdrawal_and_ignores_bytecode(
     for path in result.values():
         shutil.copy2(path, incoming / path.name)
     control.stage_release(SHA_A)
-    release = host / "releases" / SHA_A
-    withdrawn = (
+    return host / "releases" / SHA_A
+
+
+def test_overlay_withdraws_fixtures_when_official_absent(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    release = _stage_release_with_fixture_opportunity(host, tmp_path)
+    fixture = (
         release
         / "_site"
         / "oportunidades"
         / "pe-2026-000188-reforma-ubs-londrina-pr"
         / "index.html"
     )
-    assert withdrawn.is_file()
-    withdrawn.unlink()
+    assert fixture.is_file()
+    monkeypatch.delenv("CONFENGE_RELEASE_TEST_MODE", raising=False)
+    monkeypatch.delenv("CONFENGE_LI_OFFICIAL_DIR", raising=False)
+    monkeypatch.setattr(control, "HOST_OFFICIAL_DIR", tmp_path / "no-official")
+    control._publish_live_intelligence_overlay(release)
+    assert not fixture.exists()
     pyc_dir = release / "scripts" / "live_intelligence" / "__pycache__"
     pyc_dir.mkdir(parents=True)
     (pyc_dir / "publish.cpython-313.pyc").write_bytes(b"\0")
     verified = control.verify_release_tree_at(release, SHA_A)
     assert verified["commit"] == SHA_A
+
+
+def test_overlay_prunes_fixture_and_writes_index_when_official_present(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from scripts.live_intelligence.test_consume import _write_539_candidate
+
+    release = _stage_release_with_fixture_opportunity(host, tmp_path)
+    fixture = (
+        release
+        / "_site"
+        / "oportunidades"
+        / "pe-2026-000188-reforma-ubs-londrina-pr"
+        / "index.html"
+    )
+    export = _write_539_candidate(tmp_path / "official-src", catalog_mode="official_live")
+    monkeypatch.delenv("CONFENGE_RELEASE_TEST_MODE", raising=False)
+    monkeypatch.setattr(control, "HOST_OFFICIAL_DIR", export)
+    control._publish_live_intelligence_overlay(release)
+    assert not fixture.exists()
+    index_page = (
+        release / "_site" / "oportunidades" / "12345678000190-1" / "2026" / "index.html"
+    )
+    assert index_page.is_file()
+    html = index_page.read_text(encoding="utf-8")
+    assert 'content="index,follow" name="robots"' in html
+    assert "UNKNOWN" not in html
+    assert "1M_10M" not in html
 
 
 # systemd returns from `restart` as soon as it has spawned a Type=simple unit, so
