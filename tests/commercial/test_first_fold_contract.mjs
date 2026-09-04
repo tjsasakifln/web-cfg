@@ -636,6 +636,12 @@ for (const src of derivationSources) {
 const triageSource = derivationSources.find((s) => s.id === "money_hub_triage");
 assert("derivation_triage_threshold_is_two", triageSource?.minimum_distinct_service_links === 2, triageSource?.minimum_distinct_service_links);
 assert("derivation_triage_filter_written", filled(triageSource?.filter_pt_br), triageSource?.filter_pt_br);
+const exampleSource = derivationSources.find((s) => s.id === "money_example");
+assert(
+  "derivation_money_example_excludes_pilot_staging",
+  /PILOT_STAGING/.test(exampleSource?.filter_pt_br || ""),
+  exampleSource?.filter_pt_br,
+);
 
 // --- derivacao efetiva, contra o disco --------------------------------
 const derived = new Map(); // route -> { surface_class, why }
@@ -660,10 +666,21 @@ const canonicalServiceRoutes = [...new Set((bofu.rows || []).map((r) => r.canoni
 assert("derivation_bofu_has_service_routes", canonicalServiceRoutes.length > 0, canonicalServiceRoutes.length);
 for (const r of canonicalServiceRoutes) derive(r, "money_offer", "rota canonica de servico da matriz BOFU");
 
-// (c) priced_offer: rotas explicitas e prefixos expandidos contra o disco
+// (c) priced_offer: rotas explicitas e prefixos expandidos contra o disco.
+// PILOT_STAGING stays in the public family registry (ownership + noindex
+// governance) but is not a first-fold obligated money surface until the
+// dated DEFER decision authorizes activation. Measuring those pages today
+// fails the fold (proof/CTA below the fold) and they are not #291-frozen.
 const pricedFamilies = famList.filter((f) => f.profile === "priced_offer");
 assert("derivation_has_priced_offer_families", pricedFamilies.length >= 2, pricedFamilies.map((f) => f.id));
-for (const fam of pricedFamilies) {
+const obligatedPricedFamilies = pricedFamilies.filter((f) => f.classification !== "PILOT_STAGING");
+assert(
+  "derivation_excludes_pilot_staging_from_first_fold_census",
+  pricedFamilies.some((f) => f.classification === "PILOT_STAGING")
+    && obligatedPricedFamilies.every((f) => f.classification !== "PILOT_STAGING"),
+  pricedFamilies.filter((f) => f.classification === "PILOT_STAGING").map((f) => f.id),
+);
+for (const fam of obligatedPricedFamilies) {
   for (const r of fam.match?.routes || []) derive(r, "money_hub", `familia priced_offer ${fam.id}`);
   const prefix = fam.match?.prefix;
   if (!prefix) continue;

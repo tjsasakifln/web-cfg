@@ -1,0 +1,23 @@
+{
+  "schema_version": "reject-withdraw-debt-v1",
+  "as_of": "2026-09-03",
+  "purpose": "Explicit, dated, owned exception for a family that gate_archetype_editorial_ready has materially REJECTed (the route's remedy is literal withdrawal from the public tree) but whose every current instance is already noindex, so it carries zero indexation risk today. Mirrors the conversion gate's debt_policy: an entry here does not hide or soften the underlying finding -- it stays reported as material/error in gate_archetype_editorial_ready's per-family findings -- it only keeps a tracked, owned, dated withdrawal decision from hard-blocking npm test for content that cannot reach a visitor via search while the entry is valid. debt_policy's own rule applies: exception is route-family-exact, dated, requires owner_issue + written reason + expires_at, and does not extend to a new family or route added later.",
+  "entries": [
+    {
+      "family_id": "jurisprudencia-contratos-obras",
+      "owner_issue": 245,
+      "reason": "EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.",
+      "requires_before_expiry": "Either the page is withdrawn (file removed, redirect/410 decided per AGENTS.md's URL-level MIGRATE/REDIRECT/RETIRE rule) or EDITORIAL-REGISTRY.json's verdict for this slug is corrected and it re-passes the named gate.",
+      "verified_noindex_at": "2026-09-03",
+      "expires_at": "2026-10-15"
+    },
+    {
+      "family_id": "piloto-preview",
+      "owner_issue": 251,
+      "reason": "data/offers/piloto-checkout-decision.v1.json already records this entire namespace as a versioned, dated DEFER decision, enumerated by URL, with a matching robots.txt Disallow -- the decision to keep this out of discovery already exists and predates this campaign. The archetype gate additionally finds the per-UF /piloto/concorrencia/ pages are near-duplicate templates (jaccard6 0.742), which is consistent with a still-provisional pilot rather than a defect introduced today. Withdrawal (vs. continued DEFER) is #251's call, not this campaign's.",
+      "requires_before_expiry": "#251 either lets the DEFER decision expire into withdrawal, or the per-UF pages are made materially distinct before the pilot is ever promoted out of DEFER.",
+      "verified_noindex_at": "2026-09-03",
+      "expires_at": "2026-10-15"
+    }
+  ]
+}

@@ -1733,6 +1733,178 @@ _reset();
   }
 }
 
+// --- intent_kind: server-side allowlist, mirrored on document_intent --------
+// The live-intelligence surfaces submit through this same endpoint. An intent
+// the server does not recognize must be dropped, not forwarded: warmbly acts on
+// this field, so an unknown value would be an invented commercial instruction.
+{
+  const core = require(path.join(root, "netlify/functions/lib/lead-core.cjs"));
+  const handoff = require(path.join(root, "netlify/functions/lib/inbound-handoff.cjs"));
+  const base = {
+    nome: "Tiago",
+    email: "intent@example.com",
+    estagio: "Edital ou proposta em análise",
+    jornada: "edital",
+    consentimento: "on",
+    record_kind: "qa",
+    test_mode: true,
+  };
+
+  const allowed = ["MONITOR_OPPORTUNITY", "MONITOR_COMPANY", "REQUEST_DEEP_DIVE", "REQUEST_HUMAN_REVIEW"];
+  if (JSON.stringify([...core.INTENT_KIND_ALLOWED]) !== JSON.stringify(allowed)) {
+    fail("intent_kind_allowlist_drift", [...core.INTENT_KIND_ALLOWED]);
+  } else pass("intent_kind_allowlist_shape");
+
+  for (const kind of allowed) {
+    const check = core.validateAndNormalize({ ...base, intent_kind: kind });
+    if (!check.ok) fail(`intent_kind_accept_${kind}`, check);
+    else if (check.lead.intent_kind !== kind) fail(`intent_kind_accept_${kind}`, check.lead.intent_kind);
+    else pass(`intent_kind_accept_${kind}`);
+  }
+
+  const unknowns = [
+    ["desconhecido", "MONITOR_EVERYTHING"],
+    ["minusculo", "monitor_company"],
+    ["vazio", ""],
+    ["injecao", "MONITOR_COMPANY; DROP"],
+    ["longo_demais", "MONITOR_COMPANY".padEnd(120, "X")],
+    ["nao_string", { kind: "MONITOR_COMPANY" }],
+  ];
+  for (const [name, value] of unknowns) {
+    const check = core.validateAndNormalize({ ...base, intent_kind: value });
+    if (!check.ok) fail(`intent_kind_reject_${name}`, { reason: "recusou o lead inteiro", check });
+    else if (check.lead.intent_kind !== null) {
+      fail(`intent_kind_reject_${name}`, { reason: "valor desconhecido persistiu", got: check.lead.intent_kind });
+    } else pass(`intent_kind_reject_${name}`);
+  }
+
+  // The opaque analysis token must survive the attribution sanitizer. A token
+  // shape it silently rejects would null the field and break the thread with no
+  // error anywhere.
+  const token = "li_3f9a2c7e-5b1d4068-9a7c2e0f-1b6d4a3c";
+  const tokened = core.validateAndNormalize({
+    ...base,
+    intent_kind: "MONITOR_COMPANY",
+    analysis_id: token,
+  });
+  if (!tokened.ok || tokened.lead.analysis_id !== token) {
+    fail("intent_kind_analysis_token_survives", { analysis_id: tokened.lead && tokened.lead.analysis_id });
+  } else pass("intent_kind_analysis_token_survives");
+
+  // A live-intelligence share token is stored locally (so ops can see it in
+  // the lead record), but it is exactly the opaque value embedded in a
+  // publicly shareable URL — it must never also become a Warmbly-side
+  // correlation key. intent_kind still reaches the handoff; analysis_id
+  // specifically does not, only for this token shape.
+  const forwarded = handoff.mapLeadToInboundV1({
+    ...tokened.lead,
+    lead_id: "lead-000000000000000000000000000",
+    consentimento: true,
+  });
+  if (forwarded.intent_kind !== "MONITOR_COMPANY") {
+    fail("intent_kind_reaches_handoff", { intent_kind: forwarded.intent_kind });
+  } else if ("analysis_id" in forwarded) {
+    fail("share_token_reached_commercial_handoff", forwarded.analysis_id);
+  } else if (forwarded.source !== "CONFENGE_WEB") {
+    fail("intent_kind_handoff_source", forwarded.source);
+  } else pass("intent_kind_reaches_handoff_share_token_does_not");
+
+  // A non-token analysis_id (e.g. an opportunity's stable public slug from
+  // Surface A) is a different kind of value — public by design, not a share
+  // token resolving a private-until-shared result — and is unaffected.
+  const opportunityId = "pe-2026-000903-sinalizacao-viaria-caxias-rs";
+  const opportunityLead = core.validateAndNormalize({
+    ...base,
+    intent_kind: "MONITOR_OPPORTUNITY",
+    analysis_id: opportunityId,
+  });
+  const opportunityForwarded = handoff.mapLeadToInboundV1({
+    ...opportunityLead.lead,
+    lead_id: "lead-000000000000000000000000004",
+    consentimento: true,
+  });
+  if (opportunityForwarded.analysis_id !== opportunityId) {
+    fail("non_token_analysis_id_should_reach_handoff", opportunityForwarded.analysis_id);
+  } else pass("opportunity_id_reaches_handoff_unlike_share_token");
+
+  const dropped = core.validateAndNormalize({ ...base, intent_kind: "MONITOR_EVERYTHING" });
+  const droppedBody = handoff.mapLeadToInboundV1({
+    ...dropped.lead,
+    lead_id: "lead-000000000000000000000000001",
+    consentimento: true,
+  });
+  if ("intent_kind" in droppedBody) {
+    fail("intent_kind_unknown_not_forwarded", droppedBody.intent_kind);
+  } else pass("intent_kind_unknown_not_forwarded");
+
+  // End to end through the real handler, not just the pure validator: the body
+  // passes parseBody and attribution capture before it reaches the record, and
+  // a field the wire drops is a field warmbly never sees.
+  _reset();
+  const wire = await handler(
+    event({
+      nome: "QA Intent",
+      email: "qa-intent@example.com",
+      estagio: "escolhendo oportunidades",
+      jornada: "operacao",
+      consentimento: "on",
+      intent_kind: "MONITOR_COMPANY",
+      analysis_id: token,
+      origem: "/analise-cnpj/",
+      idempotency_key: "qa-intent-kind-1",
+    }),
+  );
+  const wireBody = JSON.parse(wire.body);
+  if (wire.statusCode !== 201 || !wireBody.lead_id) fail("intent_kind_wire_persist", wireBody);
+  const storedIntent = await mem.get(wireBody.lead_id);
+  if (!storedIntent || storedIntent.intent_kind !== "MONITOR_COMPANY") {
+    fail("intent_kind_not_stored_from_wire", { intent_kind: storedIntent && storedIntent.intent_kind });
+  }
+  if (storedIntent.analysis_id !== token) {
+    fail("analysis_id_not_stored_from_wire", storedIntent.analysis_id);
+  }
+  // The public receipt stays a whitelist: no intent, no token echoed back.
+  if ("intent_kind" in wireBody || "analysis_id" in wireBody) {
+    fail("intent_kind_echoed_in_receipt", wireBody);
+  }
+  pass("intent_kind_survives_the_wire");
+
+  _reset();
+  const wireUnknown = await handler(
+    event({
+      nome: "QA Intent",
+      email: "qa-intent2@example.com",
+      estagio: "escolhendo oportunidades",
+      jornada: "operacao",
+      consentimento: "on",
+      intent_kind: "MONITOR_EVERYTHING",
+      idempotency_key: "qa-intent-kind-2",
+    }),
+  );
+  const unknownBody = JSON.parse(wireUnknown.body);
+  if (wireUnknown.statusCode !== 201) fail("intent_kind_unknown_wire_status", unknownBody);
+  const storedUnknown = await mem.get(unknownBody.lead_id);
+  if (!storedUnknown || storedUnknown.intent_kind !== null) {
+    fail("intent_kind_unknown_stored_from_wire", storedUnknown && storedUnknown.intent_kind);
+  }
+  pass("intent_kind_unknown_dropped_on_the_wire");
+
+  // A CNPJ must never ride the lead path as an intent or analysis token.
+  const cnpjToken = core.validateAndNormalize({
+    ...base,
+    intent_kind: "MONITOR_COMPANY",
+    analysis_id: "11222333000181",
+  });
+  const cnpjBody = handoff.mapLeadToInboundV1({
+    ...cnpjToken.lead,
+    lead_id: "lead-000000000000000000000000002",
+    consentimento: true,
+  });
+  if (/(?<!\d)\d{14}(?!\d)/.test(JSON.stringify({ ...cnpjBody, message: "" }))) {
+    fail("intent_kind_no_cnpj_in_handoff", cnpjBody.analysis_id);
+  } else pass("intent_kind_no_cnpj_in_handoff");
+}
+
 console.log("LEAD_FUNCTION_OK", JSON.stringify({ tests: results.length, storeDir }));
 // cleanup store dir
 try {

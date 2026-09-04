@@ -424,10 +424,15 @@ async function auditWorker() {
         // here we measure sticky CTA geometry when present without inventing a
         // second, stricter commercial contract.
         requireStickyCta: false,
-        // Priced offers are unconditionally fail-closed. Service pillars retain
-        // their explicit frozen/debt handling in inbound_gates.py; an existing
+        // Priced offers are unconditionally fail-closed except PILOT_STAGING
+        // (dated DEFER). Those pages stay in the public family for ownership
+        // and noindex; capture lives on the gated contratar route and must
+        // not be invented on hub/faq/detail. Service pillars retain their
+        // explicit frozen/debt handling in inbound_gates.py; an existing
         // capture form is still checked here for rendered integrity.
-        requireCaptureForm: contract.hasCapture || contract.family?.profile === "priced_offer",
+        requireCaptureForm: contract.hasCapture
+          || (contract.family?.profile === "priced_offer"
+            && contract.family?.classification !== "PILOT_STAGING"),
       });
       issues.push(...truthful.map((detail) => ({ code: "layout_truth", detail })));
     } catch (error) {

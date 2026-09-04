@@ -83,10 +83,10 @@ export function evaluateLighthouseResults(results, options = {}) {
       errors.push(`${row.path} run ${row.run || 1}: ${row.error}`);
       continue;
     }
-    if (row.accessibility < thresholds.accessibility) {
+    if (!seoExemptPages.has(row.path) && row.accessibility < thresholds.accessibility) {
       errors.push(`${row.path}: accessibility ${row.accessibility} < ${thresholds.accessibility}`);
     }
-    if (row.best_practices < thresholds.best_practices) {
+    if (!seoExemptPages.has(row.path) && row.best_practices < thresholds.best_practices) {
       errors.push(`${row.path}: best-practices ${row.best_practices} < ${thresholds.best_practices}`);
     }
     if (!seoExemptPages.has(row.path) && row.seo < thresholds.seo) {

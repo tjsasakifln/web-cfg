@@ -4,6 +4,7 @@
     ".well-known/",
     "acompanhamento-contratos-obras/",
     "aditivos-obras-publicas/",
+    "analise-cnpj/",
     "analises-contratos-publicos/",
     "assets/",
     "atrasos-prorrogacao-obras-publicas/",
@@ -32,6 +33,7 @@
     "medicoes-glosas-obras-publicas/",
     "metodologia-inteligencia/",
     "nurture/",
+    "oportunidades/",
     "ops/",
     "panorama-mercado-obras-publicas/",
     "piloto/",
@@ -72,11 +74,13 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 239,
+  "html_route_count": 245,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
     "/aditivos-obras-publicas/",
+    "/analise-cnpj/",
+    "/analise-cnpj/r/",
     "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
     "/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/",
     "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/",
@@ -274,6 +278,10 @@
     "/metodologia-inteligencia/",
     "/nurture/",
     "/nurture/sair/",
+    "/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/",
+    "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+    "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
+    "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/",
     "/ops/",
     "/panorama-mercado-obras-publicas/",
     "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
@@ -314,12 +322,13 @@
     "/termos-de-uso/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-09-01T21:30:07Z",
-  "public_artifact_hash": "51d76772e2aba4de81810974d6eb63d9d155506d8b7ce65fdbd534fffb4ee668",
+  "generated_at": "2026-09-03T13:51:48Z",
+  "public_artifact_hash": "5282532a552959e84df025d9abec56c4b0e8551656d549c62b7ef8c253da8b0e",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
     "aditivos-obras-publicas/",
+    "analise-cnpj/",
     "analises-contratos-publicos/",
     "assets/",
     "atrasos-prorrogacao-obras-publicas/",
@@ -348,6 +357,7 @@
     "medicoes-glosas-obras-publicas/",
     "metodologia-inteligencia/",
     "nurture/",
+    "oportunidades/",
     "ops/",
     "panorama-mercado-obras-publicas/",
     "piloto/",
@@ -390,12 +400,12 @@
   ],
   "promoted_navigation_files": 0,
   "navigation_audit": {
-    "audited_files": 206,
-    "audited_blocks": 411,
+    "audited_files": 212,
+    "audited_blocks": 422,
     "frozen_files": 6
   },
   "structured_identity": {
-    "html_scanned": 245,
+    "html_scanned": 251,
     "html_rewritten": 193,
     "fields_removed": 822
   }

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "source": "CONFENGE_WEB",
   "pii_policy": "aggregate_allowlist_empty",
   "aggregate_pii_allowlist": [],
@@ -127,6 +127,14 @@
       "producers": ["assets/js/market-answer.js", "scripts/market_answers/events.py"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
       "semantic": "Market Answer impression. Not a lead."
+    },
+    "intel_view": {
+      "layer": "page_view",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/live-intelligence.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "Live-intelligence surface impression. Impression only; not a lead."
     },
     "organic_landing": {
       "layer": "page_view",
@@ -503,6 +511,54 @@
       "producers": ["assets/js/conversion-journey.js"],
       "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
       "semantic": "X-Ray recorte returned. Completion; not a qualified lead."
+    },
+    "company_analysis_start": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/live-intelligence.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "Visitor submitted a CNPJ for analysis. Engagement; the CNPJ never enters the payload."
+    },
+    "company_analysis_complete": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/live-intelligence.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "Analysis call returned. Engagement; outcome is a fixed state label, never a computed value."
+    },
+    "fit_result_shown": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/live-intelligence.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "Adherence result rendered to the visitor. Engagement; carries no company facts."
+    },
+    "monitor_cta_click": {
+      "layer": "engagement",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/live-intelligence.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "Monitoring or deep-dive CTA clicked. Engagement; not a lead until the form persists."
+    },
+    "monitor_request_persisted": {
+      "layer": "lead",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/live-intelligence.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "Monitoring request persisted (intent_kind MONITOR_OPPORTUNITY or MONITOR_COMPANY). Lead; not qualified lead or pipeline."
+    },
+    "deep_dive_request_persisted": {
+      "layer": "lead",
+      "owner": "web-cfg",
+      "schema_version": "1.0.0",
+      "producers": ["assets/js/live-intelligence.js"],
+      "consumers": ["netlify/functions/collect.cjs", "netlify/functions/lib/analytics-agg.cjs"],
+      "semantic": "Deep-dive or human-review request persisted (intent_kind REQUEST_DEEP_DIVE or REQUEST_HUMAN_REVIEW). Lead; not qualified lead or pipeline."
     },
     "lead_persisted": {
       "layer": "lead",

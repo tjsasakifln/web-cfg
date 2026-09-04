@@ -85,3 +85,7 @@ logs/
 # docs/design-audit/evidence/capture-index.json is the durable evidence; the
 # 28 MB of PNG are reproducible with scripts/site/capture_design_direction.sh.
 docs/design-audit/evidence/capture/**/*.png
+
+# Official Live Intelligence producer input is delivered at the host, not committed.
+data/live_intelligence/official/
+data/live_intelligence/official.private/

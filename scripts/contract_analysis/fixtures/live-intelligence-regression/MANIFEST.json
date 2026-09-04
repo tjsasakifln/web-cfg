@@ -1,0 +1,35 @@
+{
+  "purpose": "Regression fixtures for the PUBLIC_SAFE / archetype editorial-copy audit of the Live Intelligence surfaces (Surface A: /oportunidades/, Surface B: /analise-cnpj/). Captured read-only for docs/seo/LIVE-INTELLIGENCE-ARCHETYPE-FINDINGS.md; does not modify the live renderer or its output.",
+  "captured_at": "2026-09-03",
+  "captured_from_git_sha": "3c26b5e494a4c816d0bb6f4ac86d43811c263131",
+  "fixtures": [
+    {
+      "file": "opportunity/opportunity-example.html",
+      "page_type": "Surface A — opportunity page",
+      "source_path": "oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html",
+      "capture_method": "verbatim copy of the committed, already-rendered output produced by scripts/live_intelligence/render.py:render_opportunity_html()",
+      "note": "One representative instance; the other three oportunidades/*/index.html files on disk share the same template and the same findings pattern (see findings doc)."
+    },
+    {
+      "file": "cnpj-tool-landing/cnpj-tool-landing.html",
+      "page_type": "Surface B — CNPJ analysis tool landing (pre-submit form)",
+      "source_path": "analise-cnpj/index.html",
+      "capture_method": "verbatim copy of the committed static shell",
+      "note": "Static page; the result content is injected client-side by assets/js/live-intelligence.js after the visitor submits a CNPJ."
+    },
+    {
+      "file": "cnpj-result-shell/cnpj-result-shell.html",
+      "page_type": "Surface B — shareable result shell, pre-hydration",
+      "source_path": "analise-cnpj/r/index.html",
+      "capture_method": "verbatim copy of the committed static shell",
+      "note": "Static page addressed by an opaque ?t= token; assets/js/live-intelligence.js fetches the stored result and renders it into this shell client-side."
+    },
+    {
+      "file": "cnpj-result-example/cnpj-result-example.html",
+      "page_type": "Surface B — CNPJ result page, fully rendered",
+      "source_path": "netlify/functions/live-intelligence-analyze.cjs (renderResultPage, the JS-absent server-side render path — not exported, so its logic was copied verbatim rather than a static file existing on disk)",
+      "capture_method": "RECONSTRUCTED, not copied from a committed output file. There is no static per-result HTML file in the repo for Surface B results — matchResult()/renderResultPage() run at request time. This fixture was built by requiring data/live_intelligence/fixtures/companies/1a2199adcab5828b.json (a real fixture company record) and running it through a verbatim, unmodified copy of renderResultPage()'s template (read from netlify/functions/live-intelligence-analyze.cjs at the captured SHA) offline in the scratchpad — no netlify function, dev server, or repo output file was invoked or written.",
+      "note": "analysis_id in this fixture (li_1a2199ad-cab5-4828-b16f-audit000001a) is a synthetic placeholder, not a real minted token. fonte_kind was set from the fixture record's producer_status (\"fixture\"). Field values otherwise trace 1:1 to the source fixture and to the template's literal strings."
+    }
+  ]
+}

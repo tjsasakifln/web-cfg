@@ -190,6 +190,12 @@ test("every HTTP function preserves direct-handler status, relevant headers and 
         "empresa-site": "spam",
       }),
     },
+    {
+      name: "live-intelligence-analyze",
+      method: "POST",
+      path: "/.netlify/functions/live-intelligence-analyze",
+      body: JSON.stringify({ cnpj: "00000000000000" }),
+    },
     { name: "market-answer-intake", method: "POST", path: "/.netlify/functions/market-answer-intake", body: invalidXray },
     { name: "nurture", method: "GET", path: "/.netlify/functions/nurture?action=health" },
     {

@@ -1,0 +1,65 @@
+{
+  "as_of": "2026-09-01T03:00:00+00:00",
+  "catalog_mode": "fixture",
+  "categorias": [
+    "edificacoes",
+    "reforma"
+  ],
+  "claimed_live": false,
+  "content_hash": "c8b2960dc3c0b2779063be1e15f3fbcb4afd174c1574780bd448866fdd9a253f",
+  "contract_version": "v1.0.0",
+  "coverage": {
+    "campos_declarados": 10,
+    "campos_esperados": 11,
+    "documentos": 3
+  },
+  "data_state": "DATA_READY",
+  "epistemic_classes": {
+    "objeto": "FACT",
+    "prazo": "FACT",
+    "regime": "UNKNOWN",
+    "valor": "FACT"
+  },
+  "fonte": [
+    {
+      "nome": "Portal Nacional de Contratações Públicas",
+      "retrieved_at": "2026-09-01T03:00:00+00:00",
+      "url": "https://pncp.gov.br/app/editais/75771477000170/2026/188",
+      "url_status": "DECLARED"
+    }
+  ],
+  "freshness": {
+    "generated_at": "2026-09-01T09:00:00+00:00",
+    "max_age_hours": 48,
+    "policy": "live-intelligence-freshness-slo-v1",
+    "source_as_of": "2026-09-01T03:00:00+00:00"
+  },
+  "generated_at": "2026-09-01T09:00:00+00:00",
+  "limitations": [
+    "O regime de execução consta do edital e não foi normalizado pela fonte."
+  ],
+  "local": {
+    "municipio": "Londrina",
+    "uf": "PR"
+  },
+  "objeto": "Reforma e ampliação de duas Unidades Básicas de Saúde",
+  "official_live": false,
+  "opportunity_id": "pe-2026-000188-reforma-ubs-londrina-pr",
+  "orgao": {
+    "esfera": "MUNICIPAL",
+    "nome": "Município de Londrina",
+    "uf": "PR"
+  },
+  "prazo": {
+    "data_sessao": "2026-09-24",
+    "status": "ABERTA"
+  },
+  "producer_status": "fixture",
+  "schema": "confenge-live-intelligence-fixture/1.0",
+  "test_only": true,
+  "valor": {
+    "amount_brl": 1937450.0,
+    "basis": "estimativa declarada no edital",
+    "epistemic_class": "FACT"
+  }
+}

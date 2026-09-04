@@ -183,7 +183,7 @@
         "family_registry": {
           "path": "data/organic/public-family-registry.json",
           "schema_version": "public-family-registry-v1",
-          "families": 21,
+          "families": 34,
           "fail_closed": true,
           "undeclared_routes": 0
         },
@@ -437,6 +437,1151 @@
           "OWNED_BUT_WEAK": 2
         },
         "wave_decision": "INSUFFICIENT_EVIDENCE"
+      }
+    },
+    "archetype_editorial_ready": {
+      "ok": true,
+      "findings": [
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=home 1/1 sampled pages fail: /: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=home 1/1 sampled pages fail: /: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "index.html",
+          "reason": "archetype_cta_subordinate_failed",
+          "excerpt": "family=home 1/1 sampled pages fail: /: 9 CTAs in <main> for 2152 words (max 5)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "acompanhamento-contratos-obras/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=service-pillars 2/6 sampled pages fail: /acompanhamento-contratos-obras/: 2 concrete specifics (min 3); /bid-room-licitacoes-obras/: 2 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "acompanhamento-contratos-obras/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=service-pillars 1/6 sampled pages fail: /diagnostico-b2g-expansao/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "acompanhamento-contratos-obras/index.html",
+          "reason": "archetype_cta_subordinate_failed",
+          "excerpt": "family=service-pillars 1/6 sampled pages fail: /atrasos-prorrogacao-obras-publicas/: 4 CTAs in <main> for 1341 words (max 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "confianca/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=legal-and-trust 2/6 sampled pages fail: /conflitos/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /correcoes/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "confianca/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=legal-and-trust 2/6 sampled pages fail: /conflitos/: 195 words; /imprensa/: 139 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "confianca/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=legal-and-trust 1/6 sampled pages fail: /correcoes/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "comercial/privacidade-leads/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=comercial-condicoes 1/3 sampled pages fail: /comercial/radar-decisorio/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=politica-editorial 2/3 sampled pages fail: /politica-editorial/historico/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /politica-editorial/v/1.0.0/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=politica-editorial 1/3 sampled pages fail: /politica-editorial/historico/: 147 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "politica-editorial/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=politica-editorial 1/3 sampled pages fail: /politica-editorial/historico/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "conteudos/index.html",
+          "reason": "archetype_public_safe_failed",
+          "excerpt": "family=editorial-library 4/6 sampled pages fail: machine pattern faq_doc_caso_de; machine pattern faq_doc_caso_de",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "conteudos/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=editorial-library 1/6 sampled pages fail: /conteudos/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "conteudos/index.html",
+          "reason": "archetype_named_gate_verdict_failed",
+          "excerpt": "family=editorial-library 4/6 sampled pages fail: seo/content-disposition-2026-08-02.json disposition=noindex classification=aprofundar reason=thin_or_template_pending_rewrite; seo/content-disposition-2026-08-02.json disposition=noindex classification=aprofundar reason=thin_or_template_pending_rewrite",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "guias-contratos-obras/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=guias-contratos-obras 3/5 sampled pages fail: /guias-contratos-obras/contestar-glosa-medicao/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /guias-contratos-obras/documentos-pedido-reequilibrio/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "guias-contratos-obras/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=guias-contratos-obras 1/5 sampled pages fail: /guias-contratos-obras/: 93 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "guias-contratos-obras/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=guias-contratos-obras 1/5 sampled pages fail: /guias-contratos-obras/: 1 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "guias-contratos-obras/index.html",
+          "reason": "archetype_named_gate_verdict_failed",
+          "excerpt": "family=guias-contratos-obras 3/5 sampled pages fail: data/editorial/EDITORIAL-REGISTRY.json = EDITORIAL_REVIEWED (awaiting named human approval); data/editorial/EDITORIAL-REGISTRY.json = EDITORIAL_REVIEWED (awaiting named human approval)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "lei-14133-obras/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=lei-14133-obras 1/6 sampled pages fail: /lei-14133-obras/reequilibrio-reajuste-repactuacao/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "lei-14133-obras/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=lei-14133-obras 1/6 sampled pages fail: /lei-14133-obras/: 116 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "lei-14133-obras/index.html",
+          "reason": "archetype_named_gate_verdict_failed",
+          "excerpt": "family=lei-14133-obras 4/6 sampled pages fail: data/editorial/EDITORIAL-REGISTRY.json = EDITORIAL_REVIEWED (awaiting named human approval); data/editorial/EDITORIAL-REGISTRY.json = EDITORIAL_REVIEWED (awaiting named human approval)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "especialista/tiago-jun-sasaki/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=especialista 1/1 sampled pages fail: /especialista/tiago-jun-sasaki/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "nurture/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=nurture 1/2 sampled pages fail: /nurture/sair/: 91 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "nurture/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=nurture 1/2 sampled pages fail: /nurture/sair/: 0 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "metodologia-inteligencia/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=metodologia-inteligencia 1/1 sampled pages fail: /metodologia-inteligencia/: 248 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "metodologia-inteligencia/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=metodologia-inteligencia 1/1 sampled pages fail: /metodologia-inteligencia/: 1 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "radar/index.html",
+          "reason": "archetype_public_safe_failed",
+          "excerpt": "family=radar 1/3 sampled pages fail: machine pattern pipeline_internal",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "radar/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=radar 2/3 sampled pages fail: /radar/nacional-obras-publicas/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /radar/pesquisa/edicao-zero-4uf/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "radar/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=radar 1/3 sampled pages fail: /radar/: 110 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "radar/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=radar 1/3 sampled pages fail: /radar/: 0 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=analises-contratos-publicos 1/6 sampled pages fail: /analises-contratos-publicos/: 297 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=analises-contratos-publicos 5/6 sampled pages fail: /analises-contratos-publicos/: 1 concrete specifics (min 3); /analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/: 2 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analises-contratos-publicos/index.html",
+          "reason": "archetype_named_gate_verdict_failed",
+          "excerpt": "family=analises-contratos-publicos 5/6 sampled pages fail: contract-analysis-publication-gate/1.0 has no verdict for aditivo-saldo-art125-item-novo; contract-analysis-publication-gate/1.0 has no verdict for atraso-eventos-sem-comunicacao-contemporanea",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "casos/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=casos 2/3 sampled pages fail: /casos/aditivo-art125-demonstrativo/: 172 words; /casos/medicao-glosa-demonstrativo/: 112 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "casos/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=casos 1/3 sampled pages fail: /casos/medicao-glosa-demonstrativo/: 1 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "entregas/index.html",
+          "reason": "archetype_cta_subordinate_failed",
+          "excerpt": "family=entregas 1/1 sampled pages fail: /entregas/: 29 CTAs in <main> for 4316 words (max 10)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "servicos-obras-publicas/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=servicos-obras-publicas 1/1 sampled pages fail: /servicos-obras-publicas/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "problemas-que-resolvemos/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=problemas-que-resolvemos 1/1 sampled pages fail: /problemas-que-resolvemos/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "problemas-que-resolvemos/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=problemas-que-resolvemos 1/1 sampled pages fail: /problemas-que-resolvemos/: 0 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "ferramentas/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=ferramentas-hub 1/1 sampled pages fail: /ferramentas/: 2 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "ferramentas/checklist-reequilibrio/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=ferramentas 1/4 sampled pages fail: /ferramentas/matriz-atraso-obra/: 159 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "ferramentas/checklist-reequilibrio/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=ferramentas 1/4 sampled pages fail: /ferramentas/matriz-atraso-obra/: 0 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "ferramentas/checklist-reequilibrio/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=ferramentas 1/4 sampled pages fail: /ferramentas/checklist-reequilibrio/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analise-cnpj/index.html",
+          "reason": "archetype_jargon_free_failed",
+          "excerpt": "family=live-intelligence-cnpj-tool 1/1 sampled pages fail: /analise-cnpj/: raw internal tokens in visible copy: ['UNKNOWN']",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analise-cnpj/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=live-intelligence-cnpj-tool 1/1 sampled pages fail: /analise-cnpj/: 1 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analise-cnpj/index.html",
+          "reason": "archetype_regression_fixtures_failed",
+          "excerpt": "family=live-intelligence-cnpj-tool 1/1 captured pages still reproduce their recorded jargon findings: ['analise-cnpj/index.html']",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analise-cnpj/r/index.html",
+          "reason": "archetype_jargon_free_failed",
+          "excerpt": "family=live-intelligence-cnpj-result 1/1 sampled pages fail: /analise-cnpj/r/: raw internal tokens in visible copy: ['UNKNOWN']",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "analise-cnpj/r/index.html",
+          "reason": "archetype_regression_fixtures_failed",
+          "excerpt": "family=live-intelligence-cnpj-result 1/1 captured pages still reproduce their recorded jargon findings: ['analise-cnpj/r/index.html']",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
+          "reason": "archetype_jargon_free_failed",
+          "excerpt": "family=live-intelligence-opportunity 4/4 sampled pages fail: /oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/: raw internal tokens in visible copy: ['Classe epistêmica', 'UNKNOWN', 'as_of', 'content_hash', 'generated_at']; /oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/: raw internal tokens in visible copy: ['Classe epistêmica', 'UNKNOWN', 'as_of', 'content_hash', 'generated_at']",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=live-intelligence-opportunity 2/4 sampled pages fail: /oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/: 290 words; /oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/: 296 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=live-intelligence-opportunity 4/4 sampled pages fail: /oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/: 1 concrete specifics (min 3); /oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/: 2 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/index.html",
+          "reason": "archetype_regression_fixtures_failed",
+          "excerpt": "family=live-intelligence-opportunity 1/1 captured pages still reproduce their recorded jargon findings: ['oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/index.html']",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "diagnostico-b2g-expansao/cancelado/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=diagnostico-b2g-expansao-estados 3/3 sampled pages fail: /diagnostico-b2g-expansao/cancelado/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /diagnostico-b2g-expansao/expirado/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "diagnostico-b2g-expansao/cancelado/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=diagnostico-b2g-expansao-estados 3/3 sampled pages fail: /diagnostico-b2g-expansao/cancelado/: 21 words; /diagnostico-b2g-expansao/expirado/: 26 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "obrigado-contrato.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=obrigado-transacional 4/4 sampled pages fail: /obrigado-contrato.html: 178 words; /obrigado-edital.html: 173 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "404.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=pagina-nao-encontrada 1/1 sampled pages fail: /404.html: 55 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "piloto/ofertas/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=piloto-ofertas 4/6 sampled pages fail: /piloto/ofertas/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /piloto/ofertas/contratar/: first 3 paragraphs are shorter than 120 chars or open with a CTA",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "piloto/ofertas/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=piloto-ofertas 6/6 sampled pages fail: /piloto/ofertas/: 147 words; /piloto/ofertas/contratar/: 95 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "piloto/ofertas/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=piloto-ofertas 1/6 sampled pages fail: /piloto/ofertas/contratar/: 1 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "piloto/ofertas/index.html",
+          "reason": "archetype_caveats_preserved_failed",
+          "excerpt": "family=piloto-ofertas 5/6 sampled pages fail: /piloto/ofertas/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried; /piloto/ofertas/diagnostico-expansao/: shows a figure or epistemic label with no limitation disclosed — removing raw jargon must not remove the uncertainty it carried",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "piloto/index.html",
+          "reason": "archetype_answer_first_failed",
+          "excerpt": "family=piloto-preview 3/6 sampled pages fail: /piloto/: first 3 paragraphs are shorter than 120 chars or open with a CTA; /piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/: first 3 paragraphs are shorter than 120 chars or open with a CTA [debt_tracked owner_issue=251 expires_at=2026-10-15: data/offers/piloto-checkout-decision.v1.json already records this entire namespace as a versioned, dated DEFER decision, enumerated by URL, with a matching robots.txt Disallow -- the decision to keep this out of discovery already exists and predates this campaign. The archetype gate additionally fi",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "piloto/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=piloto-preview 3/6 sampled pages fail: /piloto/: 31 words; /piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/: 295 words [debt_tracked owner_issue=251 expires_at=2026-10-15: data/offers/piloto-checkout-decision.v1.json already records this entire namespace as a versioned, dated DEFER decision, enumerated by URL, with a matching robots.txt Disallow -- the decision to keep this out of discovery already exists and predates this campaign. The archetype gate additionally finds the per-UF /piloto/concorrencia/ pages are near-duplicate templates (jaccard6 0.742), which is consistent w",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "piloto/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=piloto-preview 3/6 sampled pages fail: /piloto/: 0 concrete specifics (min 3); /piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/: 2 concrete specifics (min 3) [debt_tracked owner_issue=251 expires_at=2026-10-15: data/offers/piloto-checkout-decision.v1.json already records this entire namespace as a versioned, dated DEFER decision, enumerated by URL, with a matching robots.txt Disallow -- the decision to keep this out of discovery already exists and predates this campaign. The archetype gate additionally finds the per-UF /piloto/concorrencia/ pages are near-duplicate templates ",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "piloto/index.html",
+          "reason": "archetype_not_doorway_failed",
+          "excerpt": "family=piloto-preview max intra-archetype jaccard6=0.742 ('/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/', '/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/') [debt_tracked owner_issue=251 expires_at=2026-10-15: data/offers/piloto-checkout-decision.v1.json already records this entire namespace as a versioned, dated DEFER decision, enumerated by URL, with a matching robots.txt Disallow -- the decision to keep this out of discovery already exists and predates this campaign. The archetype gate additionally finds the per-UF /piloto/concorrencia/ pages are near-duplicate te",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "inteligencia/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=inteligencia-pseo 4/6 sampled pages fail: /inteligencia/: 123 words; /inteligencia/cenarios/: 101 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "inteligencia/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=inteligencia-pseo 6/6 sampled pages fail: /inteligencia/: 0 concrete specifics (min 3); /inteligencia/cenarios/: 0 concrete specifics (min 3)",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=data-desk-citation-kit 1/1 sampled pages fail: /assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/: 129 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "jurisprudencia-contratos-obras/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: /jurisprudencia-contratos-obras/: 66 words [debt_tracked owner_issue=245 expires_at=2026-10-15: EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.]",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "jurisprudencia-contratos-obras/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: /jurisprudencia-contratos-obras/: 0 concrete specifics (min 3) [debt_tracked owner_issue=245 expires_at=2026-10-15: EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.]",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "jurisprudencia-contratos-obras/index.html",
+          "reason": "archetype_named_gate_verdict_failed",
+          "excerpt": "family=jurisprudencia-contratos-obras 1/2 sampled pages fail: data/editorial/EDITORIAL-REGISTRY.json = REJECTED [debt_tracked owner_issue=245 expires_at=2026-10-15: EDITORIAL-REGISTRY.json already carries status REJECTED with publication_hold for this slug (source verification failed) -- the editorial authority made the withdrawal call. Actually deleting the file from the tree is a distinct, irreversible action this campaign is not authorized to take unilaterally; tracked here as owned debt until #245 executes or reverses the removal.]",
+          "severity": "error"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "panorama-mercado-obras-publicas/index.html",
+          "reason": "archetype_substantive_failed",
+          "excerpt": "family=panorama-mercado-obras-publicas 1/2 sampled pages fail: /panorama-mercado-obras-publicas/: 50 words",
+          "severity": "warn"
+        },
+        {
+          "gate": "archetype_editorial_ready",
+          "path": "panorama-mercado-obras-publicas/index.html",
+          "reason": "archetype_specific_value_failed",
+          "excerpt": "family=panorama-mercado-obras-publicas 1/2 sampled pages fail: /panorama-mercado-obras-publicas/: 1 concrete specifics (min 3)",
+          "severity": "warn"
+        }
+      ],
+      "stats": {
+        "schema": "indexation-evidence-v1",
+        "families": 34,
+        "archetype_ready": 3,
+        "archetype_not_ready": 31,
+        "materially_rejected": [
+          "jurisprudencia-contratos-obras",
+          "piloto-preview"
+        ],
+        "materially_rejected_blocking": [],
+        "materially_rejected_debt_tracked": [
+          "jurisprudencia-contratos-obras",
+          "piloto-preview"
+        ],
+        "verdicts": {
+          "home": {
+            "ready": false,
+            "sample": [
+              "/"
+            ],
+            "blocking": [
+              "answer_first",
+              "caveats_preserved",
+              "cta_subordinate"
+            ],
+            "material": []
+          },
+          "service-pillars": {
+            "ready": false,
+            "sample": [
+              "/acompanhamento-contratos-obras/",
+              "/atrasos-prorrogacao-obras-publicas/",
+              "/bid-room-licitacoes-obras/",
+              "/defesa-tecnica-contratos-publicos/",
+              "/diagnostico-b2g-expansao/",
+              "/diretoria-b2g/"
+            ],
+            "blocking": [
+              "specific_value",
+              "caveats_preserved",
+              "cta_subordinate"
+            ],
+            "material": []
+          },
+          "legal-and-trust": {
+            "ready": false,
+            "sample": [
+              "/confianca/",
+              "/conflitos/",
+              "/correcoes/",
+              "/imprensa/",
+              "/privacidade/",
+              "/termos-de-uso/"
+            ],
+            "blocking": [
+              "answer_first",
+              "substantive",
+              "caveats_preserved"
+            ],
+            "material": []
+          },
+          "comercial-condicoes": {
+            "ready": false,
+            "sample": [
+              "/comercial/privacidade-leads/",
+              "/comercial/radar-decisorio/",
+              "/comercial/termos-diagnostico-b2g/"
+            ],
+            "blocking": [
+              "caveats_preserved"
+            ],
+            "material": []
+          },
+          "politica-editorial": {
+            "ready": false,
+            "sample": [
+              "/politica-editorial/",
+              "/politica-editorial/historico/",
+              "/politica-editorial/v/1.0.0/"
+            ],
+            "blocking": [
+              "answer_first",
+              "substantive",
+              "caveats_preserved"
+            ],
+            "material": []
+          },
+          "measurement-delay-canary": {
+            "ready": true,
+            "sample": [
+              "/conteudos/atraso-na-medicao-obra-publica/"
+            ],
+            "blocking": [],
+            "material": []
+          },
+          "editorial-library": {
+            "ready": false,
+            "sample": [
+              "/conteudos/",
+              "/conteudos/compensacao-acrescimo-supressao-aditivo/",
+              "/conteudos/demora-decisao-administracao-contrato-obra/",
+              "/conteudos/glosa-por-qualidade-obra-publica/",
+              "/conteudos/ordem-paralisacao-obra-publica-custos/",
+              "/conteudos/recurso-inabilitacao-tecnica-licitacao/"
+            ],
+            "blocking": [
+              "public_safe",
+              "caveats_preserved",
+              "named_gate_verdict"
+            ],
+            "material": []
+          },
+          "guias-contratos-obras": {
+            "ready": false,
+            "sample": [
+              "/guias-contratos-obras/",
+              "/guias-contratos-obras/checklist-pedido-aditivo/",
+              "/guias-contratos-obras/contestar-glosa-medicao/",
+              "/guias-contratos-obras/documentos-pedido-reequilibrio/",
+              "/guias-contratos-obras/responder-notificacao-atraso/"
+            ],
+            "blocking": [
+              "answer_first",
+              "substantive",
+              "specific_value",
+              "named_gate_verdict"
+            ],
+            "material": []
+          },
+          "lei-14133-obras": {
+            "ready": false,
+            "sample": [
+              "/lei-14133-obras/",
+              "/lei-14133-obras/art-124-alteracao-contratual-obra/",
+              "/lei-14133-obras/atraso-imputavel-administracao/",
+              "/lei-14133-obras/parcela-incontroversa-medicao-pagamento/",
+              "/lei-14133-obras/preco-item-novo-desconto-proposta/",
+              "/lei-14133-obras/reequilibrio-reajuste-repactuacao/"
+            ],
+            "blocking": [
+              "answer_first",
+              "substantive",
+              "named_gate_verdict"
+            ],
+            "material": []
+          },
+          "especialista": {
+            "ready": false,
+            "sample": [
+              "/especialista/tiago-jun-sasaki/"
+            ],
+            "blocking": [
+              "caveats_preserved"
+            ],
+            "material": []
+          },
+          "nurture": {
+            "ready": false,
+            "sample": [
+              "/nurture/",
+              "/nurture/sair/"
+            ],
+            "blocking": [
+              "substantive",
+              "specific_value"
+            ],
+            "material": []
+          },
+          "metodologia-inteligencia": {
+            "ready": false,
+            "sample": [
+              "/metodologia-inteligencia/"
+            ],
+            "blocking": [
+              "substantive",
+              "specific_value"
+            ],
+            "material": []
+          },
+          "radar": {
+            "ready": false,
+            "sample": [
+              "/radar/",
+              "/radar/nacional-obras-publicas/",
+              "/radar/pesquisa/edicao-zero-4uf/"
+            ],
+            "blocking": [
+              "public_safe",
+              "answer_first",
+              "substantive",
+              "specific_value"
+            ],
+            "material": []
+          },
+          "analises-contratos-publicos": {
+            "ready": false,
+            "sample": [
+              "/analises-contratos-publicos/",
+              "/analises-contratos-publicos/aditivo-saldo-art125-item-novo/",
+              "/analises-contratos-publicos/atraso-eventos-sem-comunicacao-contemporanea/",
+              "/analises-contratos-publicos/bdi-composicao-vs-referencia-sc/",
+              "/analises-contratos-publicos/comparaveis-rejeitados-regime-distinto/",
+              "/analises-contratos-publicos/reajuste-aniversario-serie-indice/"
+            ],
+            "blocking": [
+              "substantive",
+              "specific_value",
+              "named_gate_verdict"
+            ],
+            "material": []
+          },
+          "casos": {
+            "ready": false,
+            "sample": [
+              "/casos/",
+              "/casos/aditivo-art125-demonstrativo/",
+              "/casos/medicao-glosa-demonstrativo/"
+            ],
+            "blocking": [
+              "substantive",
+              "specific_value"
+            ],
+            "material": []
+          },
+          "casos-modelos-precificados": {
+            "ready": true,
+            "sample": [
+              "/casos/modelo-apresentacao-executiva-resultados/",
+              "/casos/modelo-base-quantitativa-canonica/",
+              "/casos/modelo-contratos-vincendos-relicitacao/",
+              "/casos/modelo-mapeamento-concorrentes-publicos/",
+              "/casos/modelo-painel-precos-obras-publicas/",
+              "/casos/modelo-relatorio-executivo-consolidado/"
+            ],
+            "blocking": [],
+            "material": []
+          },
+          "entregas": {
+            "ready": false,
+            "sample": [
+              "/entregas/"
+            ],
+            "blocking": [
+              "cta_subordinate"
+            ],
+            "material": []
+          },
+          "servicos-obras-publicas": {
+            "ready": false,
+            "sample": [
+              "/servicos-obras-publicas/"
+            ],
+            "blocking": [
+              "caveats_preserved"
+            ],
+            "material": []
+          },
+          "problemas-que-resolvemos": {
+            "ready": false,
+            "sample": [
+              "/problemas-que-resolvemos/"
+            ],
+            "blocking": [
+              "answer_first",
+              "specific_value"
+            ],
+            "material": []
+          },
+          "ferramentas-hub": {
+            "ready": false,
+            "sample": [
+              "/ferramentas/"
+            ],
+            "blocking": [
+              "specific_value"
+            ],
+            "material": []
+          },
+          "ferramentas": {
+            "ready": false,
+            "sample": [
+              "/ferramentas/checklist-reequilibrio/",
+              "/ferramentas/diagnostico-defesa-margem/",
+              "/ferramentas/limite-acrescimos-supressoes/",
+              "/ferramentas/matriz-atraso-obra/"
+            ],
+            "blocking": [
+              "substantive",
+              "specific_value",
+              "caveats_preserved"
+            ],
+            "material": []
+          },
+          "live-intelligence-cnpj-tool": {
+            "ready": false,
+            "sample": [
+              "/analise-cnpj/"
+            ],
+            "blocking": [
+              "jargon_free",
+              "specific_value",
+              "regression_fixtures"
+            ],
+            "material": []
+          },
+          "live-intelligence-cnpj-result": {
+            "ready": false,
+            "sample": [
+              "/analise-cnpj/r/"
+            ],
+            "blocking": [
+              "jargon_free",
+              "regression_fixtures"
+            ],
+            "material": []
+          },
+          "live-intelligence-opportunity": {
+            "ready": false,
+            "sample": [
+              "/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/",
+              "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+              "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
+              "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/"
+            ],
+            "blocking": [
+              "jargon_free",
+              "substantive",
+              "specific_value",
+              "regression_fixtures"
+            ],
+            "material": []
+          },
+          "diagnostico-b2g-expansao-estados": {
+            "ready": false,
+            "sample": [
+              "/diagnostico-b2g-expansao/cancelado/",
+              "/diagnostico-b2g-expansao/expirado/",
+              "/diagnostico-b2g-expansao/obrigado/"
+            ],
+            "blocking": [
+              "answer_first",
+              "substantive"
+            ],
+            "material": []
+          },
+          "obrigado-transacional": {
+            "ready": false,
+            "sample": [
+              "/obrigado-contrato.html",
+              "/obrigado-edital.html",
+              "/obrigado-operacao.html",
+              "/obrigado.html"
+            ],
+            "blocking": [
+              "substantive"
+            ],
+            "material": []
+          },
+          "pagina-nao-encontrada": {
+            "ready": false,
+            "sample": [
+              "/404.html"
+            ],
+            "blocking": [
+              "substantive"
+            ],
+            "material": []
+          },
+          "piloto-ofertas": {
+            "ready": false,
+            "sample": [
+              "/piloto/ofertas/",
+              "/piloto/ofertas/contratar/",
+              "/piloto/ofertas/diagnostico-expansao/",
+              "/piloto/ofertas/diretoria-180/",
+              "/piloto/ofertas/diretoria-365/",
+              "/piloto/ofertas/diretoria-flex/"
+            ],
+            "blocking": [
+              "answer_first",
+              "substantive",
+              "specific_value",
+              "caveats_preserved"
+            ],
+            "material": []
+          },
+          "piloto-preview": {
+            "ready": false,
+            "sample": [
+              "/piloto/",
+              "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-pr/",
+              "/piloto/concorrencia/pavimentacao-infraestrutura-viaria-sp/",
+              "/piloto/mercados/pavimentacao-infraestrutura-viaria-pr/",
+              "/piloto/mercados/pavimentacao-infraestrutura-viaria-sp/",
+              "/piloto/orgaos/eem-euclides-pinheiro-de-andrade-ce/engenharia/"
+            ],
+            "blocking": [
+              "answer_first",
+              "substantive",
+              "specific_value",
+              "not_doorway"
+            ],
+            "material": [
+              "not_doorway"
+            ]
+          },
+          "market-answer-canary": {
+            "ready": true,
+            "sample": [
+              "/inteligencia/valor-tipico-contratos-pavimentacao/"
+            ],
+            "blocking": [],
+            "material": []
+          },
+          "inteligencia-pseo": {
+            "ready": false,
+            "sample": [
+              "/inteligencia/",
+              "/inteligencia/cenarios/",
+              "/inteligencia/cenarios/inconsistencia-orcamento-edital/",
+              "/inteligencia/cenarios/reequilibrio-e-dispersao-de-precos/",
+              "/inteligencia/concorrencia/",
+              "/inteligencia/orgaos/"
+            ],
+            "blocking": [
+              "substantive",
+              "specific_value"
+            ],
+            "material": []
+          },
+          "data-desk-citation-kit": {
+            "ready": false,
+            "sample": [
+              "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/"
+            ],
+            "blocking": [
+              "substantive"
+            ],
+            "material": []
+          },
+          "jurisprudencia-contratos-obras": {
+            "ready": false,
+            "sample": [
+              "/jurisprudencia-contratos-obras/",
+              "/jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/"
+            ],
+            "blocking": [
+              "substantive",
+              "specific_value",
+              "named_gate_verdict"
+            ],
+            "material": [
+              "named_gate_verdict"
+            ]
+          },
+          "panorama-mercado-obras-publicas": {
+            "ready": false,
+            "sample": [
+              "/panorama-mercado-obras-publicas/",
+              "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/"
+            ],
+            "blocking": [
+              "substantive",
+              "specific_value"
+            ],
+            "material": []
+          }
+        }
+      }
+    },
+    "instance_index_ready": {
+      "ok": true,
+      "findings": [
+        {
+          "gate": "instance_index_ready",
+          "path": "casos/aditivo-art125-demonstrativo/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/casos/aditivo-art125-demonstrativo/ blocking=archetype_completeness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "casos/medicao-glosa-demonstrativo/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/casos/medicao-glosa-demonstrativo/ blocking=archetype_completeness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "comercial/privacidade-leads/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/comercial/privacidade-leads/ blocking=freshness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "comercial/termos-diagnostico-b2g/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/comercial/termos-diagnostico-b2g/ blocking=freshness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "conflitos/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/conflitos/ blocking=archetype_completeness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "conteudos/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/conteudos/ blocking=freshness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/conteudos/matriz-de-riscos-reequilibrio-economico-financeiro/ blocking=named_gate_verdict",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "ferramentas/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/ferramentas/ blocking=official_live,archetype_completeness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "ferramentas/matriz-atraso-obra/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/ferramentas/matriz-atraso-obra/ blocking=archetype_completeness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "guias-contratos-obras/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/guias-contratos-obras/ blocking=freshness,archetype_completeness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "imprensa/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/imprensa/ blocking=freshness,archetype_completeness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "lei-14133-obras/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/lei-14133-obras/ blocking=freshness,archetype_completeness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "metodologia-inteligencia/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/metodologia-inteligencia/ blocking=archetype_completeness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "nurture/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/nurture/ blocking=freshness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "politica-editorial/historico/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/politica-editorial/historico/ blocking=archetype_completeness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "problemas-que-resolvemos/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/problemas-que-resolvemos/ blocking=freshness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "servicos-obras-publicas/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/servicos-obras-publicas/ blocking=freshness",
+          "severity": "warn"
+        },
+        {
+          "gate": "instance_index_ready",
+          "path": "uso-de-ia/index.html",
+          "reason": "indexable_without_evidence",
+          "excerpt": "/uso-de-ia/ blocking=archetype_completeness",
+          "severity": "warn"
+        }
+      ],
+      "stats": {
+        "schema": "indexation-evidence-v1",
+        "scanned": 249,
+        "noindex": 173,
+        "instance_index_ready": 58,
+        "index_ready_but_noindex": [],
+        "indexable_without_evidence": 18,
+        "noindex_without_reason": [],
+        "blocking_subgates": {
+          "named_gate_verdict": 114,
+          "public_safe": 98,
+          "citable_source": 47,
+          "freshness": 46,
+          "archetype_completeness": 45,
+          "self_canonical": 16,
+          "official_live": 14,
+          "record_specific_content": 12,
+          "no_cannibalization": 11,
+          "materially_distinct_grain": 5,
+          "not_redirect_source": 2
+        }
       }
     }
   }

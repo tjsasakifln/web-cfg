@@ -59,14 +59,14 @@ assert(coverage.axe.routes.every((entry) =>
   entry.reasons.length > 0
   && entry.reasons.every((reason) => reason === "price" || reason === "capture_form")
 ), "axe routes must derive only from declared visitor risk");
-// #566: the 18 reject-status pSEO pages were withdrawn from the public tree.
+// #566 withdrew 18 priced pSEO pages. #563/W1 added 3 fixture opportunity pages with visible BRL (44+3=47) and 3 axe routes (53+3=56).
 // All 18 rendered a visible price and none carried a capture form, so the
 // price count drops by exactly 18. The recovered Art. 125 receipt and the
 // issue #61 reequilibrio checklist receipt are result-gated capture forms and
 // have to be included in the recaptured census.
-assert.equal(coverage.axe.price_route_count, 44);
+assert.equal(coverage.axe.price_route_count, 47);
 assert.equal(coverage.axe.capture_form_route_count, 27);
-assert.equal(coverage.axe.route_count, 53);
+assert.equal(coverage.axe.route_count, 56);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(
@@ -90,9 +90,9 @@ for (const [route, why] of [
 assert.equal(coverage.axe.page_loads, coverage.axe.route_count * 2);
 assert(coverage.axe.not_sampled.every((entry) => entry.reason), "every omitted axe route needs a reason");
 assert.equal(coverage.lighthouse.canonical_family_count, registry.families.length);
-assert.equal(coverage.lighthouse.canonical_family_count, 21);
-assert.equal(coverage.lighthouse.supplemental_family_count, 6);
-assert.equal(coverage.lighthouse.pages.length, 30);
+assert.equal(coverage.lighthouse.canonical_family_count, 34);
+assert.equal(coverage.lighthouse.supplemental_family_count, 1);
+assert.equal(coverage.lighthouse.pages.length, 38);
 assert(coverage.lighthouse.pages.includes("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(coverage.lighthouse.pages.includes("/diretoria-b2g/"));
 assert(coverage.lighthouse.pages.includes("/diagnostico-b2g-expansao/"));
@@ -164,7 +164,7 @@ assert.throws(
 );
 
 const wrongOwner = structuredClone(policy);
-wrongOwner.lighthouse.canonical_representatives.find((entry) => entry.family_id === "home").route = "/404.html";
+wrongOwner.lighthouse.canonical_representatives.find((entry) => entry.family_id === "home").route = "/casos/aditivo-art125-demonstrativo/";
 assert.throws(
   () => deriveCoverage({ policy: wrongOwner, registry, siteRoot: ROOT }),
   /must belong to its resolved family/,
@@ -179,7 +179,7 @@ assert.throws(
 
 const unclassified = structuredClone(policy);
 unclassified.supplemental_families = unclassified.supplemental_families.filter(
-  (family) => family.id !== "market-panorama-noindex",
+  (family) => family.id !== "transaction-utilities-noindex",
 );
 assert.throws(
   () => deriveCoverage({ policy: unclassified, registry, siteRoot: ROOT }),

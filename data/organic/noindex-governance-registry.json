@@ -1,0 +1,244 @@
+{
+  "schema_version": "noindex-governance-v1",
+  "as_of": "2026-09-03",
+  "purpose": "Registra governança de páginas permanentemente noindex e fixture-backed. Separa a decisão de não indexação do HTML (tags meta robots) e fornece rastreabilidade, data de revisão futura (para REMEDIABLE), e cadeia de decisão (reason_code + owner).",
+  "reason_codes": {
+    "cnpj_individual_result": {
+      "description": "Resultado individual de CNPJ com share token, fixture-backed ou privado. Não é página de conversão pública.",
+      "class": "PERMANENT",
+      "context": "live-intelligence-cnpj-result"
+    },
+    "share_token": {
+      "description": "Página acessada via share token privado (transação de compartilhamento), não rota pública indexável.",
+      "class": "PERMANENT",
+      "context": "live-intelligence"
+    },
+    "ops_private": {
+      "description": "Página operacional privada, dashboard, debug ou infraestrutura; não destinada a visitantes públicos.",
+      "class": "PERMANENT",
+      "context": "ops"
+    },
+    "fixture_synthetic": {
+      "description": "Página renderizada de dados fixture/sintéticos para testes e validação. Será substituída por dados live/official quando a contract chegar.",
+      "class": "REMEDIABLE",
+      "context": "live-intelligence"
+    },
+    "editorial_disposition_hold": {
+      "description": "Conteúdo editorial classificado como thin/template/duplicado por campanha anterior (content-disposition). Marcado noindex enquanto aguarda reescrita editorial completa.",
+      "class": "REMEDIABLE",
+      "context": "editorial-library"
+    },
+    "pending_named_human_approval": {
+      "description": "Página editorial em pipeline de aprovação humana (scripts/editorial/approve_cli.py). Requer revisão nomeada por humano específico e validação em Netlify preview antes de indexação.",
+      "class": "REMEDIABLE",
+      "context": "editorial-approval-gate"
+    },
+    "transactional_exit": {
+      "description": "Página transacional de saída de usuário (descadastro, unsubscribe, etc). Não é conteúdo público de descoberta/conversão, é ação de usuário já convertido.",
+      "class": "PERMANENT",
+      "context": "transactional"
+    },
+    "commercial_transactional_form": {
+      "description": "Formulário de coleta de parâmetros para transação comercial paga. Não é página pública de conteúdo; é passo intermediário entre oferta e pagamento.",
+      "class": "PERMANENT",
+      "context": "commercial"
+    },
+    "fixture_preview_staging": {
+      "description": "Página de preview/staging com dados fixture ou em estágio inicial. Será substituída ou indexada quando dados reais/produção estiverem prontos.",
+      "class": "REMEDIABLE",
+      "context": "staging"
+    },
+    "pending_founder_hash_approval": {
+      "description": "Canário com gate próprio nomeado (contract-analysis-publication-gate/1.0) que exige decisão humana hash-bound explícita do founder antes de reindexação, por issue já existente e nominal. Ver #83.",
+      "class": "REMEDIABLE",
+      "context": "contract-analysis-canary"
+    },
+    "post_transaction_state": {
+      "description": "Pagina de estado pos-transacao: recibo de formulario enviado, retorno de pagamento, cancelamento ou expiracao de link. So e alcancada depois de uma acao do visitante, nao e rota de descoberta e indexa-la colocaria um recibo no lugar da oferta no resultado de busca.",
+      "class": "PERMANENT",
+      "context": "transactional"
+    },
+    "http_status_page": {
+      "description": "Pagina de status HTTP servida pelo host (404 e afins). Nao e rota de descoberta com trabalho de visitante; noindex e o comportamento correto e permanente.",
+      "class": "PERMANENT",
+      "context": "static"
+    },
+    "deferred_by_decision_record": {
+      "description": "Namespace inteiro mantido fora do indice por decisao versionada, datada e enumerada por URL em um registro de decisao do repositorio, com Disallow correspondente em robots.txt. O ativo e reversivel e preservado de proposito; a indexacao so volta a ser discutida quando a decisao pai sair de DEFER na data de revisao declarada.",
+      "class": "REMEDIABLE",
+      "context": "offers-pilot"
+    },
+    "market_answer_freshness_stale": {
+      "description": "Market Answer cujo gate de frescor classificou o payload como STALE ou UNKNOWN a partir de expires_at em relogio UTC real. Fail-closed: fica noindex e fora do sitemap ate existir payload renovado mais aprovacao correspondente. Ver #151.",
+      "class": "REMEDIABLE",
+      "context": "market-answers"
+    },
+    "pseo_publication_gate_unmet": {
+      "description": "Pagina pSEO derivada de dados publicos cuja publicacao ainda nao foi autorizada pelo gate de qualidade e revisao humana de data/pseo/registry.json (human_review_policy: so APPROVED e APPROVED_WITH_NOTES podem ser publicados/indexados).",
+      "class": "REMEDIABLE",
+      "context": "pseo"
+    },
+    "syndication_kit_permalink": {
+      "description": "Permalink versionado de kit de citacao para sindicacao e imprensa. Deliberadamente noindex: a URL canonica publica do fato e a pagina de conteudo que o kit cita, nao o pacote de arquivos. Indexar o pacote competiria com a propria fonte canonica.",
+      "class": "PERMANENT",
+      "context": "data-desk"
+    },
+    "editorial_source_verification_failed": {
+      "description": "Pagina editorial reprovada pelo gate de verificacao de fonte: status REJECTED com publication_hold em data/editorial/EDITORIAL-REGISTRY.json. Diferente de pending_named_human_approval, aqui a pagina nao esta esperando um revisor, esta reprovada ate a fonte oficial ser verificada e a pagina reaprovada.",
+      "class": "REMEDIABLE",
+      "context": "editorial-approval-gate"
+    },
+    "archetype_evidence_incomplete": {
+      "description": "Pagina search-facing (nao um registro individual) que ainda nao produz evidencia independente suficiente para instance_index_ready: official_live, freshness, fonte citavel e/ou self_canonical dependem do contrato Live Intelligence ainda em construcao pela campanha concorrente, e a copia visivel ainda carrega jargao interno (UNKNOWN/as_of/generated_at) por auditoria read-only registrada em docs/seo/LIVE-INTELLIGENCE-ARCHETYPE-FINDINGS.md. Revisao: proxima execucao do gate apos o renderer concorrente atualizar a pagina, nao uma data de calendario.",
+      "class": "REMEDIABLE",
+      "context": "live-intelligence"
+    },
+    "pending_hash_bound_index_approval": {
+      "description": "Familia consumidora de contrato do extra-cli em que o produtor nunca concede INDEX: DATA_READY autoriza no maximo um rascunho noindex e a indexacao e decisao deste repositorio, por pagina, vinculada ao hash do payload. Analogo de pending_founder_hash_approval, mas para outro gate, outro artefato de aprovacao e outra issue: ADR-STRAT-003 e data/editorial/market-panorama/approvals.json, nao contract-analysis-publication-gate/1.0.",
+      "class": "REMEDIABLE",
+      "context": "market-panorama"
+    }
+  },
+  "families": [
+    {
+      "family_id": "live-intelligence-cnpj-result",
+      "reason_code": "cnpj_individual_result",
+      "owner_issue": 563,
+      "review_at": null,
+      "note": "PERMANENT: Resultado com share token é transação privada, não indexável."
+    },
+    {
+      "family_id": "live-intelligence-opportunity",
+      "reason_code": "fixture_synthetic",
+      "owner_issue": 563,
+      "review_at": "2026-12-01",
+      "note": "REMEDIABLE: Fixture-backed hoje. Trigger real de revisão é o contrato live/official da extra-cli chegar e a próxima execução do gate rodar contra dados reais (evento interno) — 2026-12-01 é apenas o teto de SLA, não uma data para esperar passivamente; se o contrato chegar antes, revalidar imediatamente."
+    },
+    {
+      "family_id": "live-intelligence-cnpj-tool",
+      "reason_code": "archetype_evidence_incomplete",
+      "owner_issue": 563,
+      "review_at": null,
+      "note": "Tool landing page (não um resultado individual): indexável assim que instance_index_ready=true de verdade — hoje bloqueada em official_live/freshness/citable_source/self_canonical e ainda carrega UNKNOWN/as_of/generated_at cru no corpo visível (achados em docs/seo/LIVE-INTELLIGENCE-ARCHETYPE-FINDINGS.md, PR #573, read-only). Trigger de revisão é a próxima execução do gate após o renderer concorrente atualizar a página, não uma data fixa."
+    },
+    {
+      "family_id": "analises-contratos-publicos",
+      "reason_code": "pending_founder_hash_approval",
+      "owner_issue": 83,
+      "review_at": "2026-10-31",
+      "note": "#83 exige explicitamente decisão humana hash-bound do founder (aprovar payload/render/approval hashes exatos, ou rejeitar) antes de reindexar o canário contract-analysis. Default fail-closed: noindex até essa decisão nominal ser registrada em #83. Não é gap de governança, é gate nomeado já existente aguardando o founder — não deve ser afrouxado nem indexado automaticamente por esta campanha."
+    },
+    {
+      "family_id": "comercial-condicoes",
+      "reason_code": "commercial_transactional_form",
+      "owner_issue": 88,
+      "review_at": null,
+      "note": "Rota /comercial/radar-decisorio/ é formulário de coleta de parâmetros para compra paga (R$ 599). Não indexável. Demais rotas da família (/comercial/privacidade-leads/, /comercial/termos-diagnostico-b2g/) são indexáveis."
+    },
+    {
+      "family_id": "editorial-library",
+      "reason_code": "editorial_disposition_hold",
+      "owner_issue": 245,
+      "review_at": "2026-12-01",
+      "note": "~96 itens de /conteudos/ marcados noindex pela campanha CONFENGE-FORTUNE-CONVERSION-SEO-01 (2026-08-02) como 'thin_or_template_pending_rewrite'. Revalidado programaticamente em 2026-09-03 pelo gate_archetype_editorial_ready composto (não jargão isolado): 97/121 rotas continuam NOT_PUBLIC_SAFE (thin/boilerplate confirmado de forma independente, disposição de 2026-08-02 permanece correta), 12 já INDEX_READY. Uma rota (/conteudos/desconto-da-proposta-em-item-novo-aditivo/) foi promovida a index,follow nesta campanha e depois REVERTIDA no mesmo dia: o gate a marcou instance_index_ready=true, mas ela é fonte de um redirect 301 permanente já configurado em `_redirects` para /lei-14133-obras/preco-item-novo-desconto-proposta/ (URL canônica, já indexada) — instance_index_ready ainda não consulta `_redirects`/`data/organic/legacy-url-inventory.json`, então um redirect source pode passar como falso positivo. Ficou noindex,follow (estado anterior à campanha) até essa checagem existir no gate; ver TODO no commit de reversão. review_at é apenas o teto de SLA para reler a disposição inteira; qualquer página genuinamente reescrita antes disso deve ser revalidada imediatamente ao invés de esperar dezembro — mas revalidação exige primeiro fechar o gap de redirect-source."
+    },
+    {
+      "family_id": "guias-contratos-obras",
+      "reason_code": "pending_named_human_approval",
+      "owner_issue": 245,
+      "review_at": "2026-10-31",
+      "note": "Rotas /guias-contratos-obras/contestar-glosa-medicao/, /documentos-pedido-reequilibrio/, /responder-notificacao-atraso/ estão em data/editorial/EDITORIAL-REGISTRY.json com status EDITORIAL_REVIEWED. Aguardam aprovação humana via scripts/editorial/approve_cli.py com revisor nomeado. Ver histórico EDITORIAL_REVIEWED → HUMAN_APPROVED em cada página."
+    },
+    {
+      "family_id": "lei-14133-obras",
+      "reason_code": "pending_named_human_approval",
+      "owner_issue": 245,
+      "review_at": "2026-10-31",
+      "note": "Múltiplas rotas /lei-14133-obras/* estão em data/editorial/EDITORIAL-REGISTRY.json com status EDITORIAL_REVIEWED ou MIGRATED. Aguardam aprovação humana via scripts/editorial/approve_cli.py. Rotas indexáveis em /lei-14133-obras/ (raiz) e /lei-14133-obras/preco-item-novo-desconto-proposta/ (INDEXABLE). Demais rotas noindex até aprovação."
+    },
+    {
+      "family_id": "nurture",
+      "reason_code": "transactional_exit",
+      "owner_issue": 88,
+      "review_at": null,
+      "note": "Rota /nurture/sair/ é página de descadastro/unsubscribe de sequências de e-mail. Ação transacional de saída para usuário já convertido, não conteúdo público de descoberta. Demais rotas da família (/nurture/index.html) são indexáveis."
+    },
+    {
+      "family_id": "radar",
+      "reason_code": "fixture_preview_staging",
+      "owner_issue": 266,
+      "review_at": "2026-12-31",
+      "note": "Rotas /radar/ (index) e /radar/pesquisa/edicao-zero-4uf/ são preview/staging com dados fixture. Títulos das páginas indicam estado: '(preview noindex)'. Rota /radar/nacional-obras-publicas/ é indexável. Aguardam dados reais/publicação produção."
+    },
+    {
+      "family_id": "diagnostico-b2g-expansao-estados",
+      "reason_code": "post_transaction_state",
+      "owner_issue": 88,
+      "review_at": null,
+      "note": "PERMANENT: retorno de pagamento, cancelamento e expiracao de link do Diagnostico B2G de Expansao. A superficie de oferta indexavel e /diagnostico-b2g-expansao/, que nao pertence a esta familia e continua INDEX_READY."
+    },
+    {
+      "family_id": "obrigado-transacional",
+      "reason_code": "post_transaction_state",
+      "owner_issue": 61,
+      "review_at": null,
+      "note": "PERMANENT: quatro recibos pos-formulario, um geral e tres por jornada de comprador (contrato, edital, operacao). OWNERSHIP PENDENTE: nenhuma issue referenciada nos commits de criacao; #61 e titular provisorio ate atribuicao explicita do fundador. A pendencia e de dono, nao de razao: o motivo do noindex e definitivo."
+    },
+    {
+      "family_id": "pagina-nao-encontrada",
+      "reason_code": "http_status_page",
+      "owner_issue": 300,
+      "review_at": null,
+      "note": "PERMANENT: pagina de erro 404 com noindex,nofollow. Nao ha remediacao a fazer."
+    },
+    {
+      "family_id": "piloto-ofertas",
+      "reason_code": "deferred_by_decision_record",
+      "owner_issue": 251,
+      "review_at": "2026-09-20",
+      "note": "REMEDIABLE: as 7 rotas de /piloto/ofertas/ estao entre as 24 URLs enumeradas com decision DEFER em data/offers/piloto-checkout-decision.v1.json (CFG-PILOTO-CHECKOUT-2026-08-24, activation_authorized false, review_on 2026-09-20). Checkout so em Sandbox, flags desligadas, sem chamada Asaas real. review_at espelha o review_on do registro de decisao."
+    },
+    {
+      "family_id": "piloto-preview",
+      "reason_code": "deferred_by_decision_record",
+      "owner_issue": 251,
+      "review_at": "2026-09-20",
+      "note": "REMEDIABLE: as demais 17 rotas de /piloto/ estao no mesmo registro de decisao DEFER, que declara robots_rule 'Disallow: /piloto/' e robots.txt aplica. Ativo reversivel preservado enquanto a decisao pai (#88) continua VALIDATE. review_at espelha o review_on do registro de decisao."
+    },
+    {
+      "family_id": "market-answer-canary",
+      "reason_code": "market_answer_freshness_stale",
+      "owner_issue": 84,
+      "review_at": "2026-12-01",
+      "note": "REMEDIABLE: esteve index,follow entre 2026-08-17 e 2026-08-19. cea6cd6b0 (Refs #151) trocou o calendario congelado por datetime.now(timezone.utc) e o payload extra-cli passou a classificar como STALE, devolvendo a rota para noindex,nofollow e tirando-a de sitemap-inteligencia.xml. Reindexa sozinha com payload renovado mais aprovacao correspondente; nao deve ser flipada a mao."
+    },
+    {
+      "family_id": "inteligencia-pseo",
+      "reason_code": "pseo_publication_gate_unmet",
+      "owner_issue": 61,
+      "review_at": "2026-12-01",
+      "note": "REMEDIABLE: 11 rotas (hub, /cenarios/ com 5 cenarios tecnicos, /mercados/, /orgaos/, /precos/, /concorrencia/) em noindex,follow. data/pseo/registry.json conta 5 noindex e 18 reject e so admite publicacao em APPROVED ou APPROVED_WITH_NOTES; sitemap-inteligencia.xml esta vazio, coerente. docs/LIGHTHOUSE-REPORT.md ja registrava 'intentional noindex,follow while publish_count=0'. OWNERSHIP PENDENTE: sem issue propria encontrada; #61 e titular provisorio ate o fundador atribuir dono explicito."
+    },
+    {
+      "family_id": "data-desk-citation-kit",
+      "reason_code": "syndication_kit_permalink",
+      "owner_issue": 89,
+      "review_at": null,
+      "note": "PERMANENT: a propria pagina declara no corpo 'noindex,follow: esta URL nao e uma pagina indexavel' e aponta a fonte canonica /inteligencia/valor-tipico-contratos-pavimentacao/. Indexar o kit competiria com a resposta que ele existe para sustentar."
+    },
+    {
+      "family_id": "jurisprudencia-contratos-obras",
+      "reason_code": "editorial_source_verification_failed",
+      "owner_issue": 245,
+      "review_at": "2026-10-31",
+      "note": "REMEDIABLE: /jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/ esta REJECTED em data/editorial/EDITORIAL-REGISTRY.json, publication_hold true, hold_reason official_sumula_text_date_and_specific_url_not_verified, com historico de reprovacao repetida desde 2026-08-02 e uma nota de 2026-08-03 revogando marcacoes HUMAN_APPROVED sem evidencia humana externa valida. O hub /jurisprudencia-contratos-obras/ fica noindex por consequencia: nao ha nenhum artigo publicavel para listar. Remediacao e verificar o texto, a data e a URL oficial da sumula no portal TCU e reaprovar por scripts/editorial/approve_cli.py."
+    },
+    {
+      "family_id": "panorama-mercado-obras-publicas",
+      "reason_code": "pending_hash_bound_index_approval",
+      "owner_issue": 225,
+      "review_at": "2026-10-31",
+      "note": "REMEDIABLE por desenho proprio, nao por divida: ADR-STRAT-003 decide que o produtor nunca concede INDEX e que a autorizacao vive em data/editorial/market-panorama/approvals.json vinculada ao hash do payload, expirando sozinha quando fatos novos mudam o hash. approvals.json hoje e {} e o <main> do hub diz 'rascunho noindex'. robots.txt aplica Disallow: /panorama-mercado-obras-publicas/. Nao afrouxar: a aprovacao por pagina e o mecanismo."
+    }
+  ]
+}

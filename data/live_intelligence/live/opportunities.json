@@ -1,0 +1,263 @@
+{
+  "catalog_mode": "fixture",
+  "contract_version": "v1.0.0",
+  "generated_at": "2026-09-01T09:00:00+00:00",
+  "index_eligible": false,
+  "opportunities": [
+    {
+      "as_of": "2026-09-01T03:00:00+00:00",
+      "content_hash": "9269c690b46579a5132bff596a5caaba16e831af1e70bb63919e36dc3d5ce848",
+      "coverage": {
+        "campos_declarados": 7,
+        "campos_esperados": 11,
+        "documentos": 1
+      },
+      "data_state": "DATA_READY",
+      "epistemic_classes": {
+        "data_sessao": "UNKNOWN",
+        "objeto": "FACT",
+        "prazo": "FACT",
+        "valor": "UNKNOWN"
+      },
+      "family": "live-opportunity/1.0",
+      "fonte": [
+        {
+          "nome": "Diário Oficial do Estado de Santa Catarina",
+          "retrieved_at": "2026-09-01T03:00:00+00:00",
+          "url": "https://doe.sea.sc.gov.br/edicao/2026-09-01/aviso-47",
+          "url_status": "DECLARED"
+        }
+      ],
+      "freshness": {
+        "generated_at": "2026-09-01T09:00:00+00:00",
+        "max_age_hours": 48,
+        "source_as_of": "2026-09-01T03:00:00+00:00"
+      },
+      "index_bars": [
+        "catalog_mode_fixture",
+        "fixture_schema",
+        "producer_status_not_official_live"
+      ],
+      "index_eligible": false,
+      "limitations": [
+        "O valor estimado não foi publicado. Ausência de valor não é valor zero.",
+        "A sessão está suspensa; a nova data não consta da fonte."
+      ],
+      "local": {
+        "municipio": "Rio do Sul",
+        "uf": "SC"
+      },
+      "objeto": "Construção de ponte em concreto armado sobre o Rio Itajaí do Sul",
+      "opportunity_id": "cc-2026-000047-ponte-rio-do-sul-sc",
+      "orgao": {
+        "esfera": "ESTADUAL",
+        "nome": "Departamento Estadual de Infraestrutura",
+        "uf": "SC"
+      },
+      "prazo": {
+        "data_sessao": "UNKNOWN",
+        "status": "SUSPENSA"
+      },
+      "publication_state": "PUBLISHABLE_NOINDEX",
+      "route": "/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/",
+      "source_kind": "test_only_fixture",
+      "valor": {
+        "amount_brl": null,
+        "basis": "UNKNOWN",
+        "epistemic_class": "UNKNOWN"
+      }
+    },
+    {
+      "as_of": "2026-09-01T03:00:00+00:00",
+      "content_hash": "c8b2960dc3c0b2779063be1e15f3fbcb4afd174c1574780bd448866fdd9a253f",
+      "coverage": {
+        "campos_declarados": 10,
+        "campos_esperados": 11,
+        "documentos": 3
+      },
+      "data_state": "DATA_READY",
+      "epistemic_classes": {
+        "objeto": "FACT",
+        "prazo": "FACT",
+        "regime": "UNKNOWN",
+        "valor": "FACT"
+      },
+      "family": "live-opportunity/1.0",
+      "fonte": [
+        {
+          "nome": "Portal Nacional de Contratações Públicas",
+          "retrieved_at": "2026-09-01T03:00:00+00:00",
+          "url": "https://pncp.gov.br/app/editais/75771477000170/2026/188",
+          "url_status": "DECLARED"
+        }
+      ],
+      "freshness": {
+        "generated_at": "2026-09-01T09:00:00+00:00",
+        "max_age_hours": 48,
+        "source_as_of": "2026-09-01T03:00:00+00:00"
+      },
+      "index_bars": [
+        "catalog_mode_fixture",
+        "fixture_schema",
+        "producer_status_not_official_live"
+      ],
+      "index_eligible": false,
+      "limitations": [
+        "O regime de execução consta do edital e não foi normalizado pela fonte."
+      ],
+      "local": {
+        "municipio": "Londrina",
+        "uf": "PR"
+      },
+      "objeto": "Reforma e ampliação de duas Unidades Básicas de Saúde",
+      "opportunity_id": "pe-2026-000188-reforma-ubs-londrina-pr",
+      "orgao": {
+        "esfera": "MUNICIPAL",
+        "nome": "Município de Londrina",
+        "uf": "PR"
+      },
+      "prazo": {
+        "data_sessao": "2026-09-24",
+        "status": "ABERTA"
+      },
+      "publication_state": "PUBLISHABLE_NOINDEX",
+      "route": "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+      "source_kind": "test_only_fixture",
+      "valor": {
+        "amount_brl": 1937450.0,
+        "basis": "estimativa declarada no edital",
+        "epistemic_class": "FACT"
+      }
+    },
+    {
+      "as_of": "2026-09-01T03:00:00+00:00",
+      "content_hash": "ad78f8dbd34b8f6999cfed97a80d3a5b6b5a55b38dd6bd4ed5fa166545d289ca",
+      "coverage": {
+        "campos_declarados": 9,
+        "campos_esperados": 11,
+        "documentos": 2
+      },
+      "data_state": "DATA_READY",
+      "epistemic_classes": {
+        "objeto": "FACT",
+        "prazo": "FACT",
+        "quantitativos": "UNKNOWN",
+        "valor": "FACT"
+      },
+      "family": "live-opportunity/1.0",
+      "fonte": [
+        {
+          "nome": "Portal Nacional de Contratações Públicas",
+          "retrieved_at": "2026-09-01T03:00:00+00:00",
+          "url": "https://pncp.gov.br/app/editais/83021873000108/2026/412",
+          "url_status": "DECLARED"
+        }
+      ],
+      "freshness": {
+        "generated_at": "2026-09-01T09:00:00+00:00",
+        "max_age_hours": 48,
+        "source_as_of": "2026-09-01T03:00:00+00:00"
+      },
+      "index_bars": [
+        "catalog_mode_fixture",
+        "fixture_schema",
+        "producer_status_not_official_live"
+      ],
+      "index_eligible": false,
+      "limitations": [
+        "O valor é a estimativa declarada no edital, não o valor contratado.",
+        "Quantitativos por item não constam do documento publicado."
+      ],
+      "local": {
+        "municipio": "Chapecó",
+        "uf": "SC"
+      },
+      "objeto": "Pavimentação asfáltica e drenagem de vias urbanas no bairro Efapi",
+      "opportunity_id": "pe-2026-000412-pav-urbana-chapeco-sc",
+      "orgao": {
+        "esfera": "MUNICIPAL",
+        "nome": "Prefeitura Municipal de Chapecó",
+        "uf": "SC"
+      },
+      "prazo": {
+        "data_sessao": "2026-09-19",
+        "status": "ABERTA"
+      },
+      "publication_state": "PUBLISHABLE_NOINDEX",
+      "route": "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
+      "source_kind": "test_only_fixture",
+      "valor": {
+        "amount_brl": 4820000.0,
+        "basis": "estimativa declarada no edital",
+        "epistemic_class": "FACT"
+      }
+    },
+    {
+      "as_of": "2026-09-01T03:00:00+00:00",
+      "content_hash": "66ece037e864aeef64539b2f2eed1d38485814c552facedf2d465d49c93fb628",
+      "coverage": {
+        "campos_declarados": 10,
+        "campos_esperados": 11,
+        "documentos": 2
+      },
+      "data_state": "DATA_READY",
+      "epistemic_classes": {
+        "objeto": "FACT",
+        "prazo": "FACT",
+        "prazo_execucao": "UNKNOWN",
+        "valor": "FACT"
+      },
+      "family": "live-opportunity/1.0",
+      "fonte": [
+        {
+          "nome": "Portal Nacional de Contratações Públicas",
+          "retrieved_at": "2026-09-01T03:00:00+00:00",
+          "url": "https://pncp.gov.br/app/editais/88778936000103/2026/903",
+          "url_status": "DECLARED"
+        }
+      ],
+      "freshness": {
+        "generated_at": "2026-09-01T09:00:00+00:00",
+        "max_age_hours": 48,
+        "source_as_of": "2026-09-01T03:00:00+00:00"
+      },
+      "index_bars": [
+        "catalog_mode_fixture",
+        "fixture_schema",
+        "producer_status_not_official_live"
+      ],
+      "index_eligible": false,
+      "limitations": [
+        "A fonte não declara o prazo de execução em dias."
+      ],
+      "local": {
+        "municipio": "Caxias do Sul",
+        "uf": "RS"
+      },
+      "objeto": "Serviços de sinalização viária horizontal e vertical em vias coletoras",
+      "opportunity_id": "pe-2026-000903-sinalizacao-viaria-caxias-rs",
+      "orgao": {
+        "esfera": "MUNICIPAL",
+        "nome": "Município de Caxias do Sul",
+        "uf": "RS"
+      },
+      "prazo": {
+        "data_sessao": "2026-09-16",
+        "status": "ABERTA"
+      },
+      "publication_state": "PUBLISHABLE_NOINDEX",
+      "route": "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/",
+      "source_kind": "test_only_fixture",
+      "valor": {
+        "amount_brl": 612300.0,
+        "basis": "estimativa declarada no edital",
+        "epistemic_class": "FACT"
+      }
+    }
+  ],
+  "rejected": [],
+  "schema": "CONFENGE_LIVE_INTELLIGENCE/1.0",
+  "source_as_of": "2026-09-01T03:00:00+00:00",
+  "source_kind": "test_only_fixture",
+  "source_path": "data/live_intelligence/fixtures"
+}

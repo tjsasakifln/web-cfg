@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-08-25",
+  "as_of": "2026-09-03",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -17,6 +17,23 @@
     "trust_or_legal": "Páginas legais e de confiança. Isentas de ação terminal, com motivo escrito. Preço nessas rotas reprova, salvo se a rota exata estiver em priced_reference_routes com motivo.",
     "commercial_content": "Conteúdo comercial. A ação terminal exigida é a declarada pela família."
   },
+  "index_evidence_rules": {
+    "purpose": "Declara para quais famílias as perguntas de evidência EXTERNA (official_live, citable_source) são bem-postas. Consumido por scripts/site/inbound_gates.py::external_evidence_waiver e validado, fail-closed, por validate_index_evidence_declarations.",
+    "default": "Ausente = substrate external_record. A barra estrita vale por omissão: uma família nova herda official_live e citable_source aplicáveis e bloqueantes.",
+    "external_record": "Instâncias representam um registro adquirido fora deste site (oportunidade PNCP, análise de contrato real). official_live e citable_source são a própria razão de ser da família e não podem ser dispensados.",
+    "first_party_publication": "Publicação de primeira parte: pitch comercial, documento legal, política, método, exemplar sintético rotulado de um entregável, pesquisa proprietária. A página É a fonte primária; exigir link oficial de terceiro é erro de categoria, do mesmo tipo do carve-out de specific_value para trust_or_legal.",
+    "escopo_da_dispensa": "not_applicable só aceita official_live e citable_source. freshness, archetype_completeness, public_safe, self_canonical, materially_distinct_grain, no_cannibalization, record_specific_content, named_gate_verdict e reputational_safety permanecem aplicáveis e bloqueantes — são justamente as perguntas que testam uma página de primeira parte.",
+    "proibicao": "Famílias cujas instâncias são registros externos (analises-contratos-publicos, prefixo live-intelligence) NUNCA podem declarar first_party_publication; a declaração é rejeitada no carregamento.",
+    "nao_e_certificado": "A declaração é uma afirmação de ESCOPO (qual pergunta é mal-posta aqui), não um certificado de prontidão. A prontidão continua sendo carregada pelos subgates que permanecem aplicáveis; a declaração não verifica um gate declarado no mesmo objeto, o que seria autocertificação.",
+    "campos_obrigatorios": [
+      "substrate",
+      "not_applicable",
+      "reason",
+      "authority",
+      "declared_at",
+      "owner_issue"
+    ]
+  },
   "debt_policy": {
     "rule": "Débito é exceção explícita, datada e por rota exata — nunca por prefixo. Uma rota nova dentro de uma família com débito NÃO herda a isenção: ela precisa cumprir a ação terminal declarada ou reprova. Toda entrada exige owner_issue, motivo escrito e expires_at; depois de expires_at o gate reprova.",
     "reported_in": "docs/seo/INBOUND-GATES-REPORT.json → gates.conversion.stats.exemptions"
@@ -27,8 +44,16 @@
       "visitor_job": "Entender em 10 segundos o que a CONFENGE resolve em contrato de obra pública e escolher a próxima ação.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"routes": ["/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 300,
       "debt": []
@@ -38,12 +63,32 @@
       "visitor_job": "Resolver um evento contratual específico (aditivo, glosa, reequilíbrio, atraso) com a CONFENGE.",
       "profile": "service_pillar",
       "terminal_action": "capture_form",
-      "match": {"source": "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "source": "data/organic/bofu-intent-matrix.json#rows[].canonical_service_route"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 227,
       "note": "A cobertura de captura destes pilares é auditada pela regra dedicada missing_on_page_form, que honra o congelamento EARLIEST_SAFE_ACTION_AT de #291. Esta declaração não afrouxa aquela regra.",
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Pitch comercial de primeira parte: a página descreve o serviço, o método e o preço da própria CONFENGE. Não representa um registro externo, então não existe fonte de terceiro para ancorar a alegação central — a página é a fonte primária.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/organic/bofu-intent-matrix.json (rotas de pilar de serviço)",
+          "scripts/site/inbound_gates.py::gate_conversion (missing_on_page_form + ação terminal)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "legal-and-trust",
@@ -62,27 +107,64 @@
           "/confianca/"
         ]
       },
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 300,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Documento legal e de confiança da própria CONFENGE (termos, conflitos, correções, uso de IA, imprensa). A página é o instrumento, não um relato sobre um registro de terceiro; a mesma razão pela qual specific_value já é inaplicável ao perfil trust_or_legal.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.trust_or_legal)",
+          "/politica-editorial/",
+          "scripts/site/inbound_gates.py::gate_legacy_entity_matrix"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "comercial-condicoes",
       "visitor_job": "Ler as condições comerciais e a política de leads antes de aceitar um diagnóstico pago.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/comercial/"},
+      "match": {
+        "prefix": "/comercial/"
+      },
       "priced_reference_routes": [
         {
           "route": "/comercial/termos-diagnostico-b2g/",
           "reason": "O preço aparece como referência contratual do Diagnóstico B2G dentro das condições, não como oferta. A superfície de oferta é /diagnostico-b2g-expansao/, que já captura com formulário persistido no <main>."
         }
       ],
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 88,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Condições comerciais e de privacidade da própria CONFENGE. O texto é o compromisso contratual, não uma afirmação sobre registro público de terceiro.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)",
+          "/politica-editorial/"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "politica-editorial",
@@ -90,19 +172,46 @@
       "profile": "trust_or_legal",
       "terminal_action": "none",
       "exemption_reason": "Registro editorial versionado. Existe para ser citado e auditado; ação comercial no corpo contaminaria a prova de independência editorial.",
-      "match": {"prefix": "/politica-editorial/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/politica-editorial/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 300,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "A política editorial da CONFENGE é a norma que as demais páginas citam. Pedir que ela cite uma fonte externa para a própria norma é circular.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.trust_or_legal)",
+          "data/editorial/EDITORIAL-REGISTRY.json"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "measurement-delay-canary",
       "visitor_job": "Entender por que o processamento da medição parou e avançar para uma segunda leitura técnica quando houver documentos suficientes.",
       "profile": "commercial_content",
       "terminal_action": "service_transition",
-      "match": {"routes": ["/conteudos/atraso-na-medicao-obra-publica/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/conteudos/atraso-na-medicao-obra-publica/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-25",
       "owner_issue": 389,
       "note": "Exceção route-exact: exige uma única ponte plenamente atribuída para /medicoes-glosas-obras-publicas/. Não altera a ação terminal da família /conteudos/.",
@@ -113,8 +222,14 @@
       "visitor_job": "Entender um problema contratual concreto de obra pública antes de decidir pedir ajuda.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/conteudos/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/conteudos/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 245,
       "debt": []
@@ -124,8 +239,14 @@
       "visitor_job": "Executar um passo a passo documental (aditivo, glosa, reequilíbrio, notificação) dentro do prazo contratual.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/guias-contratos-obras/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/guias-contratos-obras/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 245,
       "debt": []
@@ -135,8 +256,14 @@
       "visitor_job": "Encontrar o dispositivo da Lei 14.133 que sustenta um pleito de obra pública.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/lei-14133-obras/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/lei-14133-obras/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 245,
       "debt": []
@@ -146,8 +273,14 @@
       "visitor_job": "Verificar quem responde tecnicamente pela CONFENGE antes de enviar um caso.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/especialista/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/especialista/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 243,
       "debt": []
@@ -157,8 +290,14 @@
       "visitor_job": "Retomar uma conversa comercial já iniciada a partir de um material enviado.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/nurture/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/nurture/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 88,
       "debt": []
@@ -168,8 +307,16 @@
       "visitor_job": "Auditar como a CONFENGE produz a inteligência pública que publica.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"routes": ["/metodologia-inteligencia/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/metodologia-inteligencia/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": [
@@ -179,26 +326,65 @@
           "reason": "Página de método publicada antes deste gate existir: hoje encerra sem captura e sem WhatsApp no <main>. #74 foi superseded; o épico operacional #61 mantém este débito nominal até a data de expiração, sem reativar a iniciativa histórica.",
           "expires_at": "2026-10-31"
         }
-      ]
+      ],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Descrição do método proprietário de leitura de evidências públicas. A página explica como a CONFENGE trabalha; a fonte externa pertence às páginas de inteligência que aplicam o método, não a esta.",
+        "authority": [
+          "/politica-editorial/",
+          "docs/strategy/MARKET-CAPTURE-OS.md"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "radar",
       "visitor_job": "Ler o radar nacional de obras públicas e decidir se quer o recorte aplicado ao próprio mercado.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/radar/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/radar/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 266,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Pesquisa proprietária publicada em versão aberta, com metodologia e limites na própria página. A CONFENGE é a fonte primária deste recorte; não existe URL oficial de terceiro que o publique.",
+        "authority": [
+          "/politica-editorial/",
+          "/metodologia-inteligencia/",
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "analises-contratos-publicos",
       "visitor_job": "Ler uma análise contratual desidentificada e reconhecer o próprio caso nela.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/analises-contratos-publicos/"},
-      "gate_coverage": {"conversion": "full", "copy": "none", "accessibility": "none"},
+      "match": {
+        "prefix": "/analises-contratos-publicos/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "none",
+        "accessibility": "none"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 83,
       "debt": []
@@ -208,8 +394,14 @@
       "visitor_job": "Distinguir exemplos de entrega (demonstrativos) de resultados de clientes, hoje em zero, antes de contratar.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/casos/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/casos/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": [
@@ -225,59 +417,167 @@
           "reason": "Demonstrativo da família /casos/ sem ação terminal no <main>. O residual inbound de conversão pertence ao épico #61; a issue de implementação #290 já foi encerrada.",
           "expires_at": "2026-09-30"
         }
-      ]
+      ],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Demonstrativo metodológico próprio, rotulado como hipotético e explicitamente não-case de cliente. O objeto demonstrado é o método da CONFENGE, não um registro público de terceiro: não há registro de produção por trás da rota, e ser hipotético é a natureza declarada da peça, não um defeito. official_live entra aqui pela mesma razão que em casos-modelos-precificados — sem isso a rota dependeria do acaso da redação (“os demonstrativos são sintéticos” passa, “usam dados sintéticos” reprovaria), e não de uma decisão.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)",
+          "scripts/site/inbound_gates.py::gate_conversion",
+          "/politica-editorial/ (rotulagem obrigatória de demonstrativo)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "casos-modelos-precificados",
       "visitor_job": "Comparar modelos de entrega com preço público (R$ 599 a R$ 3.750) e comprar o que resolve o próprio problema.",
       "profile": "priced_offer",
       "terminal_action": "capture_form",
-      "match": {"prefix": "/casos/modelo-"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/casos/modelo-"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 289,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Exemplar sintético de um entregável pago, sintético por projeto e declarado como tal em copy visível. Não há registro de produção por trás da página: o artefato É o produto, e exigir dado oficial ou fonte externa inverteria a natureza declarada da peça.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/organic/public-family-registry.json (profile_rules.priced_offer)",
+          "scripts/site/inbound_gates.py::gate_conversion (captura obrigatória em rota com preço)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "entregas",
       "visitor_job": "Comparar a profundidade das entregas com preço antes de escolher o que contratar.",
       "profile": "priced_offer",
       "terminal_action": "capture_form",
-      "match": {"routes": ["/entregas/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/entregas/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 295,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "official_live",
+          "citable_source"
+        ],
+        "reason": "Vitrine comercial das ofertas da própria CONFENGE, que lista e rotula os exemplares sintéticos de casos-modelos-precificados. Não representa registro externo.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.priced_offer)",
+          "scripts/site/inbound_gates.py::gate_conversion (captura obrigatória em rota com preço)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "servicos-obras-publicas",
       "visitor_job": "Comparar a entrega para o evento contratual e registrar o contexto antes da proposta.",
       "profile": "priced_offer",
       "terminal_action": "capture_form",
-      "match": {"routes": ["/servicos-obras-publicas/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/servicos-obras-publicas/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-25",
       "owner_issue": 333,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Catálogo de serviços precificados da própria CONFENGE. A alegação central é sobre o que vendemos, não sobre um registro público.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.priced_offer)",
+          "scripts/site/inbound_gates.py::gate_conversion (captura obrigatória em rota com preço)"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "problemas-que-resolvemos",
       "visitor_job": "Reconhecer o próprio problema contratual na lista e ir para quem o resolve.",
       "profile": "commercial_content",
       "terminal_action": "service_transition",
-      "match": {"routes": ["/problemas-que-resolvemos/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/problemas-que-resolvemos/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
-      "debt": []
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Mapa comercial de primeira parte entre problema do visitante e oferta da CONFENGE. Não afirma fato externo verificável.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)",
+          "scripts/site/inbound_gates.py::gate_conversion"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
     },
     {
       "id": "ferramentas-hub",
       "visitor_job": "Escolher o cálculo aplicável e avançar para o diagnóstico de carteira quando a decisão ultrapassa uma ferramenta isolada.",
       "profile": "commercial_content",
       "terminal_action": "service_transition",
-      "match": {"routes": ["/ferramentas/"]},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "routes": [
+          "/ferramentas/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-24",
       "owner_issue": 61,
       "debt": []
@@ -287,8 +587,14 @@
       "visitor_job": "Calcular um limite, prazo ou risco contratual e sair com um número defensável.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
-      "match": {"prefix": "/ferramentas/"},
-      "gate_coverage": {"conversion": "full", "copy": "full", "accessibility": "full"},
+      "match": {
+        "prefix": "/ferramentas/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
       "declared_at": "2026-08-23",
       "owner_issue": 61,
       "debt": [
@@ -298,7 +604,279 @@
           "reason": "A ferramenta encerra com CTA atribuído para outra página, não com ação terminal. O residual inbound pertence ao épico #61; /ferramentas/diagnostico-defesa-margem/ já mostra o padrão com captura persistida.",
           "expires_at": "2026-09-30"
         }
-      ]
+      ],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Ferramenta interativa de primeira parte: o valor da rota é o cálculo que o visitante roda, não um fato externo relatado pela página.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)",
+          "scripts/site/inbound_gates.py::gate_conversion"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 300
+      }
+    },
+    {
+      "id": "live-intelligence-cnpj-tool",
+      "visitor_job": "Pesquisar e analisar dados públicos de CNPJ para fundamentar decisões contratais de obra pública.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/analise-cnpj/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "none",
+        "accessibility": "none"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 563,
+      "debt": [],
+      "editorial_jargon_strict": true
+    },
+    {
+      "id": "live-intelligence-cnpj-result",
+      "visitor_job": "Compartilhar e consultar análise estruturada de CNPJ com share token (noindex permanente — não é rota indexável).",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "match": {
+        "routes": [
+          "/analise-cnpj/r/"
+        ]
+      },
+      "exemption_reason": "Resultado individual com share token, fixture-backed, permanentemente noindex. Não é página de conversão mas transação privada de compartilhamento.",
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "none",
+        "accessibility": "none"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 563,
+      "debt": [],
+      "editorial_jargon_strict": true
+    },
+    {
+      "id": "live-intelligence-opportunity",
+      "visitor_job": "Visualizar detalhes de oportunidade de obra pública com análise de risco e contexto (atualmente fixture-backed → noindex; candidata a indexação quando dados live/official chegarem).",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "prefix": "/oportunidades/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "none",
+        "accessibility": "none"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 563,
+      "debt": [],
+      "editorial_jargon_strict": true
+    },
+    {
+      "id": "diagnostico-b2g-expansao-estados",
+      "visitor_job": "Entender o que aconteceu com o proprio pagamento do Diagnostico B2G de Expansao (retorno confirmado, cancelado ou link expirado) e saber qual e o proximo passo.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "classification": "TRANSACTIONAL_THANK_YOU",
+      "match": {
+        "routes": [
+          "/diagnostico-b2g-expansao/cancelado/",
+          "/diagnostico-b2g-expansao/expirado/",
+          "/diagnostico-b2g-expansao/obrigado/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 88,
+      "note": "Tres estados pos-checkout da oferta CFG-DIAG-EXP-v1, que pertence ao epico comercial #88 (mesmo dono de /comercial/ e de /nurture/). Declaradas por rota exata, e nao por prefixo, de proposito: /diagnostico-b2g-expansao/ (a superficie de oferta, INDEX_READY) e um canonical_service_route de bofu-intent-matrix.json e nao pode ser absorvida por esta familia. Nenhuma das tres exibe preco e nenhuma tem acao terminal no <main>.",
+      "debt": [],
+      "exemption_reason": "Pagina de estado pos-transacao so e alcancada depois de o visitante ter agido: ela confirma, cancela ou explica a expiracao de um pagamento. Cobrar acao terminal de conversao aqui seria pedir ao visitante que convertesse de novo no recibo da propria transacao."
+    },
+    {
+      "id": "obrigado-transacional",
+      "visitor_job": "Confirmar que a solicitacao enviada pelo formulario foi recebida, saber em quanto tempo a CONFENGE responde e ter um canal direto caso o assunto seja urgente.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "classification": "TRANSACTIONAL_THANK_YOU",
+      "match": {
+        "prefix": "/obrigado"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 61,
+      "note": "Quatro recibos pos-formulario: /obrigado.html (2477b111b, 2026-07-30) e /obrigado-contrato.html, /obrigado-edital.html e /obrigado-operacao.html, um por jornada de comprador (0431cba39, 2026-08-02). Declarados por prefixo /obrigado porque _is_canonical_route exige que match.routes termine em barra e estas quatro sao .html de raiz. O prefixo nao colide com /diagnostico-b2g-expansao/obrigado/, que nao comeca por /obrigado. As paginas tem WhatsApp no <main> como continuidade de atendimento, nao como acao terminal exigida; declarar none nao proibe esse link, apenas nao o cobra. OWNERSHIP PENDENTE: nenhuma issue foi referenciada nos commits que as criaram; owner_issue 61 (epico inbound) e titular provisorio ate atribuicao explicita do fundador.",
+      "debt": [],
+      "exemption_reason": "Recibo de conversao ja concluida. O visitante acabou de executar a acao terminal na pagina anterior; exigir outra aqui transformaria a confirmacao em um segundo pedido e mediria a mesma conversao duas vezes."
+    },
+    {
+      "id": "pagina-nao-encontrada",
+      "visitor_job": "Descobrir que a URL pedida nao existe mais e voltar para uma superficie util do site sem sair para o buscador.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "classification": "STATIC_SPECIAL",
+      "match": {
+        "prefix": "/404.html"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 300,
+      "note": "Pagina de status HTTP servida pelo host, nao uma rota com trabalho de visitante no sentido normal. Declarada por prefixo porque _is_canonical_route exige barra final e esta e um .html de raiz; o prefixo casa exatamente uma rota. Pertence ao dono da superficie publica canonica (#300), o mesmo de /home e de legal-and-trust. Nao tem nenhuma acao no <main>, o que e o comportamento correto para uma pagina de erro.",
+      "debt": [],
+      "exemption_reason": "Pagina de erro nao e superficie de conversao: o visitante chegou nela por engano, e vender alguma coisa em cima de um erro de navegacao piora a recuperacao em vez de melhora-la."
+    },
+    {
+      "id": "piloto-ofertas",
+      "visitor_job": "Comparar as ofertas CONFENGE com preco publico (Diagnostico de Expansao e Diretoria Fracionada mensal, semestral e anual), ler o FAQ e solicitar contratacao.",
+      "profile": "priced_offer",
+      "terminal_action": "capture_form",
+      "classification": "PILOT_STAGING",
+      "match": {
+        "prefix": "/piloto/ofertas/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "none"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 251,
+      "note": "Catalogo de ofertas manual-first criado em 4e2023fe8 (2026-08-17) para o registro de quatro ofertas de #88, com checkout apenas em Sandbox e flags desligadas. Declarada priced_offer separadamente do resto de /piloto/ porque estas sete rotas exibem preco: se o namespace algum dia sair de DEFER e for indexado, o gate tem de exigir captura persistida aqui, e nao a acao mais fraca do prefixo pai. Prefixo mais longo declarado antes de /piloto/ para que a resolucao mais especifica valha nos dois matchers.",
+      "debt": []
+    },
+    {
+      "id": "piloto-preview",
+      "visitor_job": "Pre-visualizar a inteligencia de mercado aplicada (quanto o poder publico contratou por segmento e UF, fornecedores observados e contratacao de engenharia por orgao) antes de a oferta existir em producao.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "classification": "PILOT_STAGING",
+      "match": {
+        "prefix": "/piloto/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "none"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 251,
+      "note": "Namespace inteiro sob decisao versionada e datada: data/offers/piloto-checkout-decision.v1.json, decision_id CFG-PILOTO-CHECKOUT-2026-08-24, issue 251, parent_issue 88, decision_state DEFER, activation_authorized false, review_on 2026-09-20. Esse registro enumera exatamente as 24 URLs de /piloto/ com decision DEFER cada uma e declara robots_rule 'Disallow: /piloto/', que robots.txt de fato aplica. Nao e ausencia de governanca nem fixture solta: e um ativo reversivel preservado de proposito enquanto a decisao pai continua VALIDATE. As 17 rotas restantes de /piloto/ ficam nesta familia; as 7 de /piloto/ofertas/ estao na familia irma priced_offer.",
+      "debt": []
+    },
+    {
+      "id": "market-answer-canary",
+      "visitor_job": "Obter a resposta direta sobre o ticket contratual tipico de pavimentacao em SC, com metodo, recorte e limitacoes explicitos, e citar a fonte.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "classification": "PUBLIC_FAMILY",
+      "match": {
+        "routes": [
+          "/inteligencia/valor-tipico-contratos-pavimentacao/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 84,
+      "note": "Canario Market Answer de #84. Esteve index,follow entre ed498b1c7 (2026-08-17) e cea6cd6b0 (2026-08-19); voltou a noindex,nofollow quando o gate de frescor de #151 passou a avaliar expires_at em relogio UTC real e classificou o payload extra-cli como STALE. Fail-closed por desenho: reindexa sozinho quando houver payload renovado mais aprovacao correspondente. Rota exata declarada antes do prefixo /inteligencia/ porque a sua governanca e outra. Atencao para quem reindexar: o <main> exibe medianas de contrato (R$) que o heuristico _displays_price pode ler como preco de oferta; a rota precisara resolver priced_offer ou priced_reference_routes no momento do flip.",
+      "debt": []
+    },
+    {
+      "id": "inteligencia-pseo",
+      "visitor_job": "Navegar pela inteligencia de mercado derivada de contratos publicos (mercados, orgaos, precos, concorrencia e cenarios tecnicos) antes de decidir onde disputar.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "classification": "PUBLIC_FAMILY",
+      "match": {
+        "prefix": "/inteligencia/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 61,
+      "note": "Hub pSEO ICP-Derived Evidence, criado em 9c975611e (2026-07-31) sem issue referenciada. A publicacao e governada por data/pseo/registry.json (human_review_policy: so APPROVED e APPROVED_WITH_NOTES podem ser publicados/indexados; hoje 5 noindex e 18 reject) e sitemap-inteligencia.xml esta vazio. OWNERSHIP PENDENTE: nao foi encontrada issue especifica para esta familia depois de buscar git log, docs/ e data/organic/*.json; owner_issue 61 (epico inbound/pSEO) e um titular provisorio e a atribuicao explicita precisa de decisao do fundador. Revisao registrada em noindex-governance-registry (review_at 2026-12-01). Debt array vazio de proposito: o validador exige que rota em debt seja indexavel e todas estas sao noindex.",
+      "debt": []
+    },
+    {
+      "id": "data-desk-citation-kit",
+      "visitor_job": "Baixar e citar o kit de dados versionado (tabela, grafico, metodo, cobertura e limitacoes) que sustenta uma resposta publicada, com permalink estavel para imprensa e pesquisa.",
+      "profile": "trust_or_legal",
+      "terminal_action": "none",
+      "classification": "PUBLIC_FAMILY",
+      "match": {
+        "prefix": "/assets/data-desk/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "none"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 89,
+      "note": "Kit de citacao do Data Desk (#89, entregue em 214c94842). A pagina nao tem <main>: e um indice de arquivos (PRESS-BRIEF.txt, chart.svg, dataset.json, table.csv, method.json, coverage.json, limitations.txt) atras de um permalink versionado, e ela mesma declara no corpo 'noindex,follow: esta URL nao e uma pagina indexavel'. A URL canonica publica do fato e /inteligencia/valor-tipico-contratos-pavimentacao/, nao o pacote. Cobertura de acessibilidade declarada como none porque a rota nao esta no censo de audit_accessibility.py, o que e coerente com uma pagina sem <main>.",
+      "debt": [],
+      "exemption_reason": "Permalink de kit de citacao existe para ser baixado e citado por terceiros, nao para converter. Um CTA comercial dentro do pacote de dados contaminaria a prova de independencia que o kit serve para dar, exatamente como em /politica-editorial/."
+    },
+    {
+      "id": "jurisprudencia-contratos-obras",
+      "visitor_job": "Encontrar a decisao ou sumula do TCU que sustenta um pleito de obra publica e entender como ela se aplica ao proprio contrato.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "classification": "PUBLIC_FAMILY",
+      "match": {
+        "prefix": "/jurisprudencia-contratos-obras/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 245,
+      "note": "Terceiro hub do Wave 1 inbound engine (e801200f9, 2026-08-02), irmao de /guias-contratos-obras/ e /lei-14133-obras/, que ja pertencem ao epico editorial #245. O unico artigo, /jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/, esta REJECTED em data/editorial/EDITORIAL-REGISTRY.json com publication_hold=true e hold_reason official_sumula_text_date_and_specific_url_not_verified; o hub fica noindex porque nao tem nenhum artigo publicavel. sitemap-jurisprudencia.xml esta vazio, coerente com esse estado. Nao e REJECT_WITHDRAW: a pagina tem dono (#245) e o defeito e remediavel (verificar o texto oficial da sumula no portal TCU e reaprovar).",
+      "debt": []
+    },
+    {
+      "id": "panorama-mercado-obras-publicas",
+      "visitor_job": "Ler o panorama desidentificado de contratacao de um recorte de mercado (faixas de valor por categoria, estrutura de concorrencia e editais abertos) sem que nenhuma empresa seja identificada.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "classification": "PUBLIC_FAMILY",
+      "match": {
+        "prefix": "/panorama-mercado-obras-publicas/"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 225,
+      "note": "Familia decidida em ADR-STRAT-003 (Accepted, 2026-08-22) e implementada em 14740dab6 (#225), consumidora fail-closed de public-read-confenge-dossier/1.0. O ADR e explicito: o produtor nunca concede INDEX e DATA_READY autoriza no maximo um rascunho noindex; INDEX e decisao deste repositorio, por pagina, vinculada ao hash do payload, registrada em data/editorial/market-panorama/approvals.json, que hoje esta vazio ({}). O <main> do hub diz literalmente 'rascunho noindex'. robots.txt tambem aplica Disallow: /panorama-mercado-obras-publicas/. Nao e debito: e o gate nomeado da propria familia funcionando.",
+      "debt": []
     }
   ]
 }

@@ -1,0 +1,79 @@
+{
+  "catalog_mode": "fixture",
+  "claimed_live": false,
+  "companies": [
+    {
+      "company_digest": "b1e38ce6b408a119",
+      "content_hash": "b4e45f3e2a7597d8568d8ee45cabdfe5a6d2abe38afbd7006e4c09421f4bcbbc",
+      "data_state": "DATA_READY",
+      "path": "companies/b1e38ce6b408a119.json"
+    },
+    {
+      "company_digest": "1a2199adcab5828b",
+      "content_hash": "bf0828de87837d770a8c6426ff0acddec2c880b2e83fb77a3735fad372abb98a",
+      "data_state": "DATA_READY",
+      "path": "companies/1a2199adcab5828b.json"
+    },
+    {
+      "company_digest": "d67fda759f405f42",
+      "content_hash": "2753241296f9e9ec2327fdbfdae5a845b15d77b7ff0226b0d6c14bae4876ca94",
+      "data_state": "DATA_READY",
+      "path": "companies/d67fda759f405f42.json"
+    }
+  ],
+  "consumer": {
+    "family": "web-cfg / live-intelligence engine",
+    "id": "web-cfg/live-intelligence"
+  },
+  "content_hash": "9732680c5fa5164df747d246fc610a5d1ba0e0c28f8d885cf1de7135dd7cfaa6",
+  "contract_version": "v1.0.0",
+  "coverage": {
+    "companies": 3,
+    "opportunities": 4,
+    "ufs": [
+      "SC",
+      "PR",
+      "RS"
+    ]
+  },
+  "freshness": {
+    "generated_at": "2026-09-01T09:00:00+00:00",
+    "max_age_hours": 48,
+    "policy": "live-intelligence-freshness-slo-v1",
+    "source_as_of": "2026-09-01T03:00:00+00:00"
+  },
+  "generated_at": "2026-09-01T09:00:00+00:00",
+  "grain": "opportunity_id | company_digest",
+  "never_index": true,
+  "official_live": false,
+  "opportunities": [
+    {
+      "content_hash": "ad78f8dbd34b8f6999cfed97a80d3a5b6b5a55b38dd6bd4ed5fa166545d289ca",
+      "data_state": "DATA_READY",
+      "opportunity_id": "pe-2026-000412-pav-urbana-chapeco-sc",
+      "path": "opportunities/pe-2026-000412-pav-urbana-chapeco-sc.json"
+    },
+    {
+      "content_hash": "c8b2960dc3c0b2779063be1e15f3fbcb4afd174c1574780bd448866fdd9a253f",
+      "data_state": "DATA_READY",
+      "opportunity_id": "pe-2026-000188-reforma-ubs-londrina-pr",
+      "path": "opportunities/pe-2026-000188-reforma-ubs-londrina-pr.json"
+    },
+    {
+      "content_hash": "9269c690b46579a5132bff596a5caaba16e831af1e70bb63919e36dc3d5ce848",
+      "data_state": "DATA_READY",
+      "opportunity_id": "cc-2026-000047-ponte-rio-do-sul-sc",
+      "path": "opportunities/cc-2026-000047-ponte-rio-do-sul-sc.json"
+    },
+    {
+      "content_hash": "66ece037e864aeef64539b2f2eed1d38485814c552facedf2d465d49c93fb628",
+      "data_state": "DATA_READY",
+      "opportunity_id": "pe-2026-000903-sinalizacao-viaria-caxias-rs",
+      "path": "opportunities/pe-2026-000903-sinalizacao-viaria-caxias-rs.json"
+    }
+  ],
+  "producer_status": "fixture",
+  "schema": "confenge-live-intelligence-fixture/1.0",
+  "source_as_of": "2026-09-01T03:00:00+00:00",
+  "test_only": true
+}

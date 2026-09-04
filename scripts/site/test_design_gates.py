@@ -584,7 +584,7 @@ def test_layout_contracts_ship_on_cascade():
         assert body in spliced, rel
     for needle in (
         ".hero-proof li",
-        ".table-wrap,.report-table-wrap{max-width:100%;min-width:0;overflow-x:auto",
+        ".table-wrap,.report-table-wrap{display:block;width:100%;max-width:100%;min-width:0;overflow-x:auto",
         ".report-disclaimer .case-badge{flex:1 1 100%}",
         "min-height:var(--touch-min)",
         "overflow-wrap:anywhere",

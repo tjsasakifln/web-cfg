@@ -1,0 +1,74 @@
+{
+  "as_of": "2026-09-01T03:00:00+00:00",
+  "catalog_mode": "fixture",
+  "categorias": [
+    "edificacoes",
+    "reforma"
+  ],
+  "claimed_live": false,
+  "company_digest": "1a2199adcab5828b",
+  "compradores": [
+    "Município de Londrina"
+  ],
+  "content_hash": "bf0828de87837d770a8c6426ff0acddec2c880b2e83fb77a3735fad372abb98a",
+  "contract_version": "v1.0.0",
+  "coverage": {
+    "contratos_com_valor": 3,
+    "contratos_declarados": 4,
+    "fontes": 1
+  },
+  "data_state": "DATA_READY",
+  "faixas": [
+    "R$ 500 mil a R$ 2 mi"
+  ],
+  "fonte": [
+    {
+      "nome": "Portal Nacional de Contratações Públicas",
+      "retrieved_at": "2026-09-01T03:00:00+00:00",
+      "url": "https://pncp.gov.br/app/contratos",
+      "url_status": "DECLARED"
+    }
+  ],
+  "freshness": {
+    "generated_at": "2026-09-01T09:00:00+00:00",
+    "max_age_hours": 48,
+    "policy": "live-intelligence-freshness-slo-v1",
+    "source_as_of": "2026-09-01T03:00:00+00:00"
+  },
+  "gaps": [
+    "Nenhum contrato declarado em pavimentação.",
+    "Nenhum contrato declarado fora do PR."
+  ],
+  "generated_at": "2026-09-01T09:00:00+00:00",
+  "geografias": [
+    "PR"
+  ],
+  "limitations": [
+    "Base de 4 contratos: o histórico é curto e não sustenta leitura de tendência."
+  ],
+  "official_live": false,
+  "oportunidades_aderentes": [
+    {
+      "dimensoes": [
+        "categoria",
+        "faixa de valor",
+        "geografia",
+        "comprador"
+      ],
+      "opportunity_id": "pe-2026-000188-reforma-ubs-londrina-pr"
+    }
+  ],
+  "perfil": {
+    "contratos_publicos_declarados": 4,
+    "natureza": "sociedade empresária limitada",
+    "porte_declarado": "UNKNOWN",
+    "primeiro_contrato_publico": "2022"
+  },
+  "producer_status": "fixture",
+  "schema": "confenge-live-intelligence-fixture/1.0",
+  "test_only": true,
+  "unknowns": [
+    "Porte não declarado nas fontes consultadas.",
+    "Quadro técnico não consta das fontes públicas."
+  ]
+}

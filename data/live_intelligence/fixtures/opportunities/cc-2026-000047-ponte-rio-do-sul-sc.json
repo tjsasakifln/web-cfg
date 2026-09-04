@@ -1,0 +1,66 @@
+{
+  "as_of": "2026-09-01T03:00:00+00:00",
+  "catalog_mode": "fixture",
+  "categorias": [
+    "obras-de-arte-especiais",
+    "estrutura"
+  ],
+  "claimed_live": false,
+  "content_hash": "9269c690b46579a5132bff596a5caaba16e831af1e70bb63919e36dc3d5ce848",
+  "contract_version": "v1.0.0",
+  "coverage": {
+    "campos_declarados": 7,
+    "campos_esperados": 11,
+    "documentos": 1
+  },
+  "data_state": "DATA_READY",
+  "epistemic_classes": {
+    "data_sessao": "UNKNOWN",
+    "objeto": "FACT",
+    "prazo": "FACT",
+    "valor": "UNKNOWN"
+  },
+  "fonte": [
+    {
+      "nome": "Diário Oficial do Estado de Santa Catarina",
+      "retrieved_at": "2026-09-01T03:00:00+00:00",
+      "url": "https://doe.sea.sc.gov.br/edicao/2026-09-01/aviso-47",
+      "url_status": "DECLARED"
+    }
+  ],
+  "freshness": {
+    "generated_at": "2026-09-01T09:00:00+00:00",
+    "max_age_hours": 48,
+    "policy": "live-intelligence-freshness-slo-v1",
+    "source_as_of": "2026-09-01T03:00:00+00:00"
+  },
+  "generated_at": "2026-09-01T09:00:00+00:00",
+  "limitations": [
+    "O valor estimado não foi publicado. Ausência de valor não é valor zero.",
+    "A sessão está suspensa; a nova data não consta da fonte."
+  ],
+  "local": {
+    "municipio": "Rio do Sul",
+    "uf": "SC"
+  },
+  "objeto": "Construção de ponte em concreto armado sobre o Rio Itajaí do Sul",
+  "official_live": false,
+  "opportunity_id": "cc-2026-000047-ponte-rio-do-sul-sc",
+  "orgao": {
+    "esfera": "ESTADUAL",
+    "nome": "Departamento Estadual de Infraestrutura",
+    "uf": "SC"
+  },
+  "prazo": {
+    "data_sessao": "UNKNOWN",
+    "status": "SUSPENSA"
+  },
+  "producer_status": "fixture",
+  "schema": "confenge-live-intelligence-fixture/1.0",
+  "test_only": true,
+  "valor": {
+    "amount_brl": null,
+    "basis": "UNKNOWN",
+    "epistemic_class": "UNKNOWN"
+  }
+}

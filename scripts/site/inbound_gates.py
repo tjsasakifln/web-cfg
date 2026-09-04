@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import unicodedata
 from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass, field
 from datetime import date, datetime
@@ -689,16 +690,7 @@ def gate_index_surface() -> GateReport:
         if "inteligencia/" in str(p) and p.name != "index.html":
             continue
         html = p.read_text(encoding="utf-8", errors="replace")
-        can = re.search(
-            r'rel=["\']canonical["\'][^>]*href=["\']([^"\']+)',
-            html,
-            re.I,
-        ) or re.search(
-            r'href=["\']([^"\']+)["\'][^>]*rel=["\']canonical["\']',
-            html,
-            re.I,
-        )
-        if not can:
+        if not canonical_hrefs(html):
             findings.append(
                 Finding(
                     gate="index_surface",
@@ -997,6 +989,25 @@ GATE_COVERAGE_LEVELS = {"full", "partial", "none"}
 GATE_COVERAGE_KEYS = ("conversion", "copy", "accessibility")
 MIN_WRITTEN_REASON = 24
 MAX_DEBT_DURATION_DAYS = 90
+
+# NOINDEX governance
+NOINDEX_GOVERNANCE_REL = "data/organic/noindex-governance-registry.json"
+
+# Internal jargon tokens that must not appear in visible editorial text
+# (but may legitimately appear in <script>, <meta>, data-* attributes, JSON-LD)
+EDITORIAL_JARGON_TOKENS = (
+    "UNKNOWN",
+    "as_of",
+    "generated_at",
+    "epistemic",
+    "classe epistêmica",
+    "reason_code",
+    "content_hash",
+)
+EDITORIAL_JARGON_RE = re.compile(
+    r"\b(" + "|".join(re.escape(t) for t in EDITORIAL_JARGON_TOKENS) + r")\b",
+    re.I | re.U,
+)
 
 # A price is "displayed" when structured offer markup is present, or when a
 # BRL amount sits next to a commitment word. Bare BRL amounts are data (contract
@@ -2187,6 +2198,1741 @@ def gate_bofu_buyer_decision_map() -> GateReport:
     return GateReport(ok=report.ok, findings=findings, stats=report.stats)
 
 
+def _strip_html_preserve_visibility(html: str) -> str:
+    """Remove script/style/meta tags and attribute content, keeping only visible text.
+
+    Unlike strip_html, this explicitly excludes <script> blocks (including JSON-LD),
+    <style>, and their content, so jargon tokens in machine-readable sections
+    do not trigger false positives.
+    """
+    # Remove <script> tags (including type="application/ld+json")
+    t = re.sub(r"(?is)<script\b[^>]*>.*?</script>", " ", html)
+    # Remove <style> tags
+    t = re.sub(r"(?is)<style\b[^>]*>.*?</style>", " ", t)
+    # Remove all other tags but keep content
+    t = re.sub(r"(?s)<[^>]+>", " ", t)
+    # Decode HTML entities
+    t = re.sub(r"&\w+;", " ", t)
+    # Normalize whitespace
+    return re.sub(r"\s+", " ", t).strip()
+
+
+# ---------------------------------------------------------------------------
+# Independent indexation evidence
+# (CONFENGE-PSEO-EDITORIAL-INDEXATION-CUTOVER)
+#
+# INSTANCE_INDEX_READY and ARCHETYPE_EDITORIAL_READY used to be circular. The
+# first asked only "is there a recorded excuse for the robots tag this page
+# already carries"; the second only "does this page contain a banned token".
+# Neither ever asked whether the page had earned an index slot.
+#
+# Both are now evidence-first verdicts computed WITHOUT reading the page's
+# current robots meta, its sitemap membership or its governance record. The
+# comparison against the shipped public state happens afterwards, in the
+# caller (gate_instance_index_ready, universe_sweep), so that
+# "index-ready but noindex" can finally mean what it says.
+#
+# Every subgate is answered from an authority that already exists in this
+# repository. Nothing here re-implements a check another gate owns:
+#   - machine/doorway residue  -> MACHINE_PATTERNS (gate_naturalness)
+#   - template clones          -> jaccard_similarity (gate_similarity_indexable)
+#   - canonical ownership      -> canonical_hrefs (gate_index_surface)
+#   - query cannibalization    -> medicoes-glosas-query-ownership.v1.json
+#                                 (gate_semantic_query_ownership)
+#   - CTA subordination        -> the terminal_action framework of the family
+#                                 registry (gate_conversion)
+#   - named editorial verdicts -> #83's contract-analysis-publication-gate/1.0,
+#                                 data/editorial/EDITORIAL-REGISTRY.json,
+#                                 seo/content-disposition-2026-08-02.json
+#   - reputational safety      -> scripts/contract_analysis/reputation.py
+# ---------------------------------------------------------------------------
+
+INDEXATION_EVIDENCE_SCHEMA = "indexation-evidence-v1"
+
+# A public claim older than 18 months is stale: it has to be re-dated before it
+# can be offered to a search visitor as the current answer.
+MAX_CONTENT_AGE_DAYS = 548
+
+# Archetype floors. Below these the page cannot answer its own visitor_job.
+MIN_SUBSTANTIVE_WORDS = 300
+MIN_ANSWER_FIRST_CHARS = 120
+ANSWER_FIRST_WINDOW_CHARS = 900
+MIN_CONCRETE_SPECIFICS = 3
+
+# Two pages of the same family sharing this much 6-gram surface are one template
+# with different nouns, not distinct grain. This is the threshold the existing
+# ``similarity`` gate already treats as an error, not a new, looser one.
+FAMILY_CLONE_JACCARD = 0.70
+SHINGLE_N = 6
+MAX_SIBLING_COMPARISONS = 60
+
+# Deterministic per-family sample for the archetype verdict.
+ARCHETYPE_SAMPLE_SIZE = 6
+
+SUBGATE_MATERIAL = "material"
+SUBGATE_REMEDIABLE = "remediable"
+
+# Families that name a real, identifiable counterparty (a company, a CNPJ, a
+# contracting body) in the page body. Reputational safety is a real risk only
+# there; the educational library discusses "irregularidade" and "sobrepreço" as
+# subjects, which is not an accusation against anyone.
+NAMED_ENTITY_FAMILY_IDS = frozenset({"analises-contratos-publicos"})
+
+# --- which families must prove an EXTERNAL record, and which may not claim not to
+#
+# ``official_live`` and ``citable_source`` ask about a record the site did not
+# author: is the record behind this page production data, and can the reader
+# check the claim against the source it came from? Both questions are
+# well-formed only for a page that REPRESENTS an external record (a PNCP
+# opportunity, a contract analysis derived from a real document).
+#
+# For the site's own first-party publication — a commercial pitch, our terms of
+# use, our editorial policy, a labelled synthetic exemplar of a deliverable,
+# proprietary research — there is no external record behind the page: the page
+# IS the primary source. Demanding that it link a .gov.br URL to prove itself is
+# a category error, the same shape as demanding concrete figures from a
+# compliance document (see ``specific_value``'s trust_or_legal carve-out).
+#
+# A family says so by declaring ``index_evidence`` in
+# data/organic/public-family-registry.json. The declaration is narrow by
+# construction:
+#   * it may waive ONLY the two external-record subgates below — freshness,
+#     archetype_completeness, public_safe, self_canonical, distinct_grain and
+#     named_gate_verdict stay applicable and blocking, and those are the
+#     subgates that actually test a first-party page;
+#   * it may not be made by a family whose instances are external records
+#     (EXTERNAL_RECORD_ONLY_* below) — those are hard-rejected at load time, so
+#     the exemption can never migrate onto live-intelligence or contract
+#     analyses;
+#   * it must carry a written reason, the governing contract it points at, a
+#     declaration date and an owning issue, all of which are echoed into the
+#     subgate detail so the sweep report explains each waiver in place.
+#
+# The declaration is a SCOPE statement, not a readiness certificate: it says
+# which question is ill-posed here, and readiness is still carried by the
+# subgates that remain. It deliberately does not "verify" a named gate that
+# lives in the same registry object — a family certifying its own exemption by
+# pointing three lines up would be self-certification with extra steps.
+INDEX_EVIDENCE_KEY = "index_evidence"
+SUBSTRATE_EXTERNAL_RECORD = "external_record"
+SUBSTRATE_FIRST_PARTY = "first_party_publication"
+INDEX_EVIDENCE_SUBSTRATES = frozenset(
+    {SUBSTRATE_EXTERNAL_RECORD, SUBSTRATE_FIRST_PARTY}
+)
+WAIVABLE_EXTERNAL_EVIDENCE_SUBGATES = frozenset({"official_live", "citable_source"})
+INDEX_EVIDENCE_REQUIRED_FIELDS = ("reason", "authority", "declared_at", "owner_issue")
+
+# Families whose instances represent a record acquired from outside this site.
+# ``_sub_official_live`` special-cases exactly these; they may never declare
+# first_party_publication. Mirrors the ids that subgate branches on.
+EXTERNAL_RECORD_ONLY_FAMILY_IDS = frozenset({"analises-contratos-publicos"})
+EXTERNAL_RECORD_ONLY_FAMILY_PREFIXES = ("live-intelligence",)
+
+CONTRACT_ANALYSIS_STATUS_REL = "docs/editorial/CONTRACT_ANALYSIS_CANARY_STATUS.json"
+EDITORIAL_REGISTRY_REL = "data/editorial/EDITORIAL-REGISTRY.json"
+CONTENT_DISPOSITION_REL = "seo/content-disposition-2026-08-02.json"
+LIVE_INTELLIGENCE_CONTRACT_REL = "docs/contracts/confenge-live-intelligence-v1.json"
+QUERY_OWNERSHIP_REL = "data/organic/medicoes-glosas-query-ownership.v1.json"
+
+# The page's own visible copy admitting that the record behind it is not
+# production data. "demonstrativo" is deliberately absent: /casos/ ships
+# labelled demonstrations that are legitimately public.
+FIXTURE_MARKER_RE = re.compile(
+    r"(test_only_fixture|\bfixtures?\b|preview\s+noindex|"
+    r"dados?\s+fict[íi]ci|dados?\s+de\s+teste)",
+    re.I,
+)
+
+# "Sintético" on its own is not a fixture admission: it is an ordinary
+# Portuguese adjective this site uses to LABEL an illustrative artefact — "o
+# exemplo sintético", "premissas sintéticas, não tabela oficial do mês",
+# a section called "Exemplo sintético". That sentence is the page disclosing a
+# limit, which ``_caveats_preserved`` actively rewards; reading it as a fixture
+# confession made the gate system punish and reward the same string, and it
+# blocked nine already-indexed /conteudos/ pages whose only sin was honesty.
+#
+# The word only admits a non-production RECORD when it qualifies the record
+# itself — "dados sintéticos", "base de dados sintética", "séries sintéticas".
+# "tabela"/"planilha" are deliberately absent from the noun list: the library's
+# standard disclaimer is "premissas sintéticas, NÃO tabela oficial do mês", and
+# the negated noun must not be read as the thing being described.
+_SYNTHETIC_RECORD_NOUN = (
+    r"\b(?:dados?|registros?|amostras?|s[ée]ries?|datasets?"
+    r"|bases?\s+de\s+dados|conjuntos?\s+de\s+dados)\b"
+)
+# A record noun on the far side of a negation is being DENIED, not described:
+# "Exemplo inteiramente sintético, sem dado de obra real" and "os dados não são
+# sintéticos" both disclose the opposite of a fixture. Temper the gap so the two
+# halves have to belong to the same, affirmative claim.
+_NO_NEGATION = r"(?:(?!\b(?:sem|n[ãa]o|nem)\b)[^.;:!?\n])"
+SYNTHETIC_RECORD_RE = re.compile(
+    rf"{_SYNTHETIC_RECORD_NOUN}{_NO_NEGATION}{{0,30}}\bsint[ée]tic"
+    rf"|\bsint[ée]tic\w*{_NO_NEGATION}{{0,30}}{_SYNTHETIC_RECORD_NOUN}",
+    re.I,
+)
+
+OFFICIAL_SOURCE_HREF_RE = re.compile(
+    r'href=["\']https?://[^"\']*'
+    r"(?:\.gov\.br|\.leg\.br|\.jus\.br|planalto|pncp|comprasnet|tcu\.|ibge|"
+    r"caixa\.gov|sinapi|portaltransparencia)",
+    re.I,
+)
+LEGAL_DEVICE_RE = re.compile(
+    r"\bLei\s*n?[º°]?\s*\d{1,2}\.?\d{3}\b"
+    r"|\bart(?:igo)?s?\.?\s*\d{1,3}\b"
+    r"|\bAc[óo]rd[ãa]o\s+\d{1,5}[/-]\d{4}\b"
+    r"|\bS[úu]mula\s+\d+\b"
+    r"|\bDecreto\s+n?[º°]?\s*\d"
+    r"|\bIN\s+\d+/\d{4}\b",
+    re.I,
+)
+
+_DATETIME_ATTR_RE = re.compile(r'datetime=["\'](\d{4}-\d{2}-\d{2})', re.I)
+_JSONLD_DATE_RE = re.compile(
+    r'"(?:dateModified|datePublished)"\s*:\s*"(\d{4}-\d{2}-\d{2})', re.I
+)
+_META_DATE_RE = re.compile(
+    r'(?:article:modified_time|article:published_time)["\'][^>]*'
+    r'content=["\'](\d{4}-\d{2}-\d{2})',
+    re.I,
+)
+_VISIBLE_ISO_DATE_RE = re.compile(r"\b(20\d{2}-\d{2}-\d{2})\b")
+_PT_MONTHS = {
+    "janeiro": 1,
+    "fevereiro": 2,
+    "marco": 3,
+    "abril": 4,
+    "maio": 5,
+    "junho": 6,
+    "julho": 7,
+    "agosto": 8,
+    "setembro": 9,
+    "outubro": 10,
+    "novembro": 11,
+    "dezembro": 12,
+}
+_VISIBLE_PT_DATE_RE = re.compile(
+    r"\b(\d{1,2})\s*(?:º|°)?\s+de\s+([A-Za-zçÇáéíóúâêôãõà]+)\s+de\s+(20\d{2})\b", re.I
+)
+_VISIBLE_BR_DATE_RE = re.compile(r"\b(\d{2})/(\d{2})/(20\d{2})\b")
+
+# Visible disclosure of a limitation or of residual uncertainty. Removing raw
+# internal jargon must not remove these: "as_of" leaving the copy is a fix,
+# "we do not know this" leaving the copy is a regression.
+CAVEAT_MARKER_RE = re.compile(
+    r"(n[ãa]o substitui|n[ãa]o constitui|conte[úu]do educacional|limita[çc][õo]?e?s?\b"
+    r"|n[ãa]o informad|n[ãa]o publicad[oa] pela fonte|n[ãa]o se afirma|n[ãa]o significa"
+    r"|sujeit[oa] a|estimativa|estimad|aproximad|pode variar|depende do caso"
+    r"|confirme|verifique|sem prova documental|n[ãa]o [ée] parecer|refer[êe]ncia,? n[ãa]o)",
+    re.I,
+)
+# A page only owes a caveat when it actually asserts a figure or an
+# epistemic label. A legal notice that asserts nothing owes nothing.
+CLAIM_NEEDING_CAVEAT_RE = re.compile(
+    r"(R\$\s*\d|\d+(?:[.,]\d+)?\s*%|\bFACT\b|\bINFERENCE\b|\bCALCULATION\b|\bUNKNOWN\b"
+    r"|\bestimativa\b|\bproje[çc][ãa]o\b|\bcalculad)",
+    re.I,
+)
+
+CTA_PHRASE_RE = re.compile(
+    r"(fale com|falar no whatsapp|conversar pelo whatsapp|solicitar|solicite|agendar|"
+    r"agende|pe[çc]a |quero |contrate|contratar|envie (?:o|a|os|as|seu|sua) |"
+    r"receba |baixe |assine |analisar (?:este|meu) )",
+    re.I,
+)
+_CONCRETE_SPECIFIC_RE = re.compile(
+    r"(\bR\$\s*[\d.]+|\d+(?:[.,]\d+)?\s*%|\b20\d{2}\b|\bart(?:igo)?s?\.?\s*\d{1,3}\b"
+    r"|\bAc[óo]rd[ãa]o\s+\d|\bLei\s*n?[º°]?\s*\d|\b\d{1,3}\s*dias?\b)",
+    re.I,
+)
+
+_SLUG_STOPWORDS = frozenset(
+    {
+        "para",
+        "como",
+        "obra",
+        "obras",
+        "publica",
+        "publicas",
+        "publico",
+        "publicos",
+        "contrato",
+        "contratos",
+        "index",
+        "sobre",
+        "quando",
+        "pelo",
+        "pela",
+        "com",
+        "sem",
+        "dos",
+        "das",
+        "que",
+        "nao",
+        "uma",
+    }
+)
+
+
+# check_reputational_safety was written for structured analysis records. Run
+# over a whole rendered page it also reads the page's own disclaimer sentences
+# ("Limitação: não é parecer jurídico, não julga irregularidade e não transforma
+# 'atípico' em 'irregular'"), whose verbs sit outside its own _SAFE_SCOPE list.
+# A disclaimer is the opposite of an accusation, so the sentence carrying one is
+# dropped before the check runs — the check itself is never weakened.
+PAGE_DISCLAIMER_RE = re.compile(
+    r"n[ãa]o\s+(julga|imputa|acusa|atribui|aponta|declara|qualifica|transforma|"
+    r"caracteriza|presume|[ée]\s+(parecer|den[úu]ncia|acusa[çc][ãa]o|julgamento))"
+    r"|limita[çc][õo]es?\s*:",
+    re.I,
+)
+
+
+LEGACY_DISCLAIMER_RE = re.compile(
+    r"n[ãa]o\s+(somos|fazemos|atuamos|oferecemos|prestamos|vendemos)"
+    r"|entidade\s+legada"
+    r"|p[áa]ginas?\s+410"
+    r"|descontinuad",
+    re.I,
+)
+
+
+def _fold(value: str) -> str:
+    """Lowercase and strip accents, so ``medicao`` in a slug meets ``medição``."""
+    decomposed = unicodedata.normalize("NFKD", value.lower())
+    return "".join(ch for ch in decomposed if not unicodedata.combining(ch))
+
+
+def canonical_hrefs(html: str) -> list[str]:
+    """Every ``rel=canonical`` href on the page, in document order.
+
+    gate_index_surface only ever needed "is there one". Instance readiness also
+    needs "is there exactly one, and does it point at this page", so the
+    extraction moved here and gate_index_surface now calls it.
+    """
+    found: list[str] = []
+    for match in re.finditer(r"(?is)<link\b[^>]*>", html):
+        tag = match.group(0)
+        if not re.search(r'rel=["\']canonical["\']', tag, re.I):
+            continue
+        href = re.search(r'href=["\']([^"\']+)["\']', tag, re.I)
+        if href:
+            found.append(href.group(1).strip())
+    return found
+
+
+def visible_main_text(html: str) -> str:
+    """Visible reader text of ``<main>``, falling back to the whole document."""
+    main = _main_html(html)
+    return _strip_html_preserve_visibility(main or html)
+
+
+def _shingle_set(text: str, n: int = SHINGLE_N) -> frozenset[str]:
+    """Same shingling as scripts.editorial.naturalness.jaccard_similarity.
+
+    Precomputed once per page because the family-level comparison is pairwise;
+    ``test_family_shingles_match_the_similarity_gate`` pins the equivalence.
+    """
+    tokens = re.findall(r"\w+", text.lower())
+    if len(tokens) < n:
+        return frozenset({" ".join(tokens)} if tokens else set())
+    return frozenset(" ".join(tokens[i : i + n]) for i in range(len(tokens) - n + 1))
+
+
+def _jaccard(a: frozenset[str], b: frozenset[str]) -> float:
+    if not a or not b:
+        return 0.0
+    union = len(a | b)
+    return len(a & b) / union if union else 0.0
+
+
+def _sampled(items: list[str], cap: int) -> list[str]:
+    """Deterministic, evenly spaced sample so the verdict is reproducible."""
+    if len(items) <= cap:
+        return list(items)
+    step = len(items) / cap
+    return [items[int(i * step)] for i in range(cap)]
+
+
+@dataclass(frozen=True)
+class Subgate:
+    """One evidence question, its answer, and why."""
+
+    name: str
+    passed: bool
+    severity: str = SUBGATE_REMEDIABLE
+    detail: str = ""
+    applicable: bool = True
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "passed": self.passed,
+            "applicable": self.applicable,
+            "severity": self.severity,
+            "detail": self.detail,
+        }
+
+
+@dataclass
+class IndexationContext:
+    """Everything the per-route and per-family verdicts read, loaded once.
+
+    Built by :func:`build_indexation_context`. Passing it in keeps
+    ``instance_index_ready_for_route`` cheap enough to call in a loop from a
+    downstream remediation pass; omitting it makes the call self-contained.
+    """
+
+    base: Path
+    today: date
+    families: list[dict[str, Any]] = field(default_factory=list)
+    service_routes: set[str] = field(default_factory=set)
+    route_family: dict[str, dict[str, Any]] = field(default_factory=dict)
+    family_routes: dict[str, list[str]] = field(default_factory=dict)
+    html_by_route: dict[str, str] = field(default_factory=dict)
+    path_by_route: dict[str, Path] = field(default_factory=dict)
+    shingles_by_route: dict[str, frozenset[str]] = field(default_factory=dict)
+    title_owners: dict[str, list[str]] = field(default_factory=dict)
+    editorial_registry: dict[str, str] = field(default_factory=dict)
+    content_disposition: dict[str, dict[str, Any]] = field(default_factory=dict)
+    contract_analysis: dict[str, dict[str, Any]] = field(default_factory=dict)
+    live_contract_status: str = ""
+    ownership_route_status: dict[str, str] = field(default_factory=dict)
+    ownership_loser_routes: dict[str, str] = field(default_factory=dict)
+    redirect_source_routes: set[str] = field(default_factory=set)
+
+
+_INDEXATION_CONTEXT_CACHE: dict[tuple[str, str], IndexationContext] = {}
+
+
+def _read_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        loaded = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def _normalized_title(html: str) -> str:
+    match = re.search(r"(?is)<title\b[^>]*>(.*?)</title>", html)
+    if not match:
+        return ""
+    title = _fold(strip_html(match.group(1)))
+    title = re.split(r"\s*[|·—–]\s*confenge", title)[0]
+    return re.sub(r"\s+", " ", title).strip()
+
+
+def build_indexation_context(
+    base: Path | None = None, *, now: date | datetime | str | None = None
+) -> IndexationContext:
+    """Load every authority the readiness verdicts consult, exactly once."""
+    root = base or ROOT
+    today = _as_date(now)
+    key = (str(root), today.isoformat())
+    cached = _INDEXATION_CONTEXT_CACHE.get(key)
+    if cached is not None:
+        return cached
+
+    registry = load_family_registry(root)
+    families = [f for f in (registry.get("families") or []) if isinstance(f, dict)]
+    validate_index_evidence_declarations(families)
+    service_routes = _bofu_service_routes(root)
+
+    ctx = IndexationContext(
+        base=root,
+        today=today,
+        families=families,
+        service_routes=service_routes,
+        redirect_source_routes=_redirect_source_routes(root),
+    )
+
+    for page in _conversion_files(root):
+        rel = page.relative_to(root).as_posix()
+        route = "/" if rel == "index.html" else "/" + rel.removesuffix("index.html")
+        html = page.read_text(encoding="utf-8", errors="replace")
+        ctx.html_by_route[route] = html
+        ctx.path_by_route[route] = page
+        family = _match_family(route, families, service_routes)
+        if family is not None:
+            ctx.route_family[route] = family
+            ctx.family_routes.setdefault(str(family.get("id")), []).append(route)
+        title = _normalized_title(html)
+        if title:
+            ctx.title_owners.setdefault(title, []).append(route)
+    for routes in ctx.family_routes.values():
+        routes.sort()
+
+    # Fail closed, exactly like public_html_files(). A walk that collapses would
+    # otherwise report zero routes, zero violations and a green sweep over an
+    # empty universe.
+    if root == ROOT and len(ctx.html_by_route) < MIN_PUBLIC_HTML_FILES:
+        raise SystemExit(
+            f"INDEXATION_SCOPE_COLLAPSED scanned={len(ctx.html_by_route)} "
+            f"expected_at_least={MIN_PUBLIC_HTML_FILES} root={root}"
+        )
+
+    # #83's own gate, verdict per analysis slug.
+    canary = _read_json(root / CONTRACT_ANALYSIS_STATUS_REL)
+    for item in canary.get("items") or []:
+        slug = str(item.get("slug") or "")
+        if slug:
+            ctx.contract_analysis[slug] = item
+
+    editorial = _read_json(root / EDITORIAL_REGISTRY_REL)
+    for page_row in editorial.get("pages") or []:
+        url = str(page_row.get("url") or "")
+        if url:
+            ctx.editorial_registry[url] = str(page_row.get("status") or "")
+
+    disposition = _read_json(root / CONTENT_DISPOSITION_REL)
+    for item in disposition.get("items") or []:
+        path_value = str(item.get("path") or "")
+        if path_value:
+            ctx.content_disposition[path_value] = item
+
+    ctx.live_contract_status = str(
+        _read_json(root / LIVE_INTELLIGENCE_CONTRACT_REL).get("status") or ""
+    )
+
+    ownership = _read_json(root / QUERY_OWNERSHIP_REL)
+    for row in ownership.get("routes") or []:
+        path_value = str(row.get("path") or "")
+        if path_value:
+            ctx.ownership_route_status[path_value] = str(row.get("status") or "")
+    for conflict in ownership.get("conflicts") or []:
+        owner = str(conflict.get("owner_path") or "")
+        for competitor in conflict.get("competing_routes") or []:
+            competitor = str(competitor)
+            if competitor and competitor != owner:
+                ctx.ownership_loser_routes[competitor] = (
+                    f"{conflict.get('id')} owner={owner} state={conflict.get('state')}"
+                )
+
+    _INDEXATION_CONTEXT_CACHE[key] = ctx
+    return ctx
+
+
+# --- evidence substrate: which questions are well-posed for this family -----
+
+
+def validate_index_evidence_declarations(families: list[dict[str, Any]]) -> None:
+    """Fail closed on a malformed or forbidden ``index_evidence`` declaration.
+
+    Called before any verdict is computed, so a typo or an over-broad waiver
+    stops the sweep loudly instead of silently exempting a route.
+    """
+    problems: list[str] = []
+    for family in families:
+        fid = str(family.get("id") or "?")
+        declared = family.get(INDEX_EVIDENCE_KEY)
+        if declared is None:
+            continue
+        if not isinstance(declared, dict):
+            problems.append(f"{fid}: {INDEX_EVIDENCE_KEY} must be an object")
+            continue
+        substrate = str(declared.get("substrate") or "")
+        if substrate not in INDEX_EVIDENCE_SUBSTRATES:
+            problems.append(
+                f"{fid}: substrate={substrate!r} not in {sorted(INDEX_EVIDENCE_SUBSTRATES)}"
+            )
+            continue
+        waived = declared.get("not_applicable") or []
+        if substrate == SUBSTRATE_EXTERNAL_RECORD:
+            if waived:
+                problems.append(
+                    f"{fid}: substrate=external_record may not waive {waived}; the "
+                    "external-record subgates are the whole point of that substrate"
+                )
+            continue
+        if fid in EXTERNAL_RECORD_ONLY_FAMILY_IDS or fid.startswith(
+            EXTERNAL_RECORD_ONLY_FAMILY_PREFIXES
+        ):
+            problems.append(
+                f"{fid}: this family's instances represent an externally acquired "
+                "record; it may never declare first_party_publication"
+            )
+            continue
+        if not isinstance(waived, list) or not waived:
+            problems.append(f"{fid}: first_party_publication must name not_applicable")
+            continue
+        unknown = sorted(set(map(str, waived)) - WAIVABLE_EXTERNAL_EVIDENCE_SUBGATES)
+        if unknown:
+            problems.append(
+                f"{fid}: not_applicable={unknown} is outside "
+                f"{sorted(WAIVABLE_EXTERNAL_EVIDENCE_SUBGATES)}; no other subgate is waivable"
+            )
+        for required in INDEX_EVIDENCE_REQUIRED_FIELDS:
+            if not declared.get(required):
+                problems.append(f"{fid}: first_party_publication needs {required}")
+        declared_at = str(declared.get("declared_at") or "")
+        if declared_at:
+            try:
+                date.fromisoformat(declared_at)
+            except ValueError:
+                problems.append(f"{fid}: declared_at={declared_at!r} is not an ISO date")
+    if problems:
+        raise SystemExit(
+            "INDEX_EVIDENCE_DECLARATION_INVALID in "
+            + FAMILY_REGISTRY_REL
+            + "\n  - "
+            + "\n  - ".join(problems)
+        )
+
+
+def external_evidence_waiver(
+    family: dict[str, Any] | None, subgate: str
+) -> str | None:
+    """The written reason this family declares ``subgate`` inapplicable, if any.
+
+    Returns ``None`` when the subgate applies — the default for every family
+    that has not declared otherwise, so a new family inherits the strict bar.
+    """
+    declared = (family or {}).get(INDEX_EVIDENCE_KEY)
+    if not isinstance(declared, dict):
+        return None
+    if str(declared.get("substrate") or "") != SUBSTRATE_FIRST_PARTY:
+        return None
+    if subgate not in set(map(str, declared.get("not_applicable") or [])):
+        return None
+    authority = declared.get("authority") or []
+    if isinstance(authority, str):
+        authority = [authority]
+    return (
+        f"{FAMILY_REGISTRY_REL} declares substrate={SUBSTRATE_FIRST_PARTY} "
+        f"(#{declared.get('owner_issue')}, {declared.get('declared_at')}): "
+        f"{declared.get('reason')} Governed instead by: "
+        f"{', '.join(str(a) for a in authority)}."
+    )
+
+
+# --- individual evidence questions -----------------------------------------
+
+
+def page_dates(html: str) -> list[date]:
+    """Dates the page itself publishes, structured markup preferred.
+
+    Visible prose is only consulted when the page carries no machine-readable
+    date at all, because a quoted statute date ("de 1º de abril de 2021") is
+    not this page's own freshness claim.
+    """
+    found: list[date] = []
+    for pattern in (_JSONLD_DATE_RE, _META_DATE_RE, _DATETIME_ATTR_RE):
+        for raw in pattern.findall(html):
+            try:
+                found.append(date.fromisoformat(raw))
+            except ValueError:
+                continue
+    if found:
+        return found
+    text = _strip_html_preserve_visibility(html)
+    for raw in _VISIBLE_ISO_DATE_RE.findall(text):
+        try:
+            found.append(date.fromisoformat(raw))
+        except ValueError:
+            continue
+    for day, month, year in _VISIBLE_PT_DATE_RE.findall(text):
+        number = _PT_MONTHS.get(_fold(month))
+        if number:
+            try:
+                found.append(date(int(year), number, int(day)))
+            except ValueError:
+                continue
+    for day, month, year in _VISIBLE_BR_DATE_RE.findall(text):
+        try:
+            found.append(date(int(year), int(month), int(day)))
+        except ValueError:
+            continue
+    return found
+
+
+def _sub_official_live(
+    route: str, html: str, family: dict[str, Any] | None, ctx: IndexationContext
+) -> Subgate:
+    """Is the record behind this page production data, or a fixture/preview?"""
+    fid = str((family or {}).get("id") or "")
+    waiver = external_evidence_waiver(family, "official_live")
+    if waiver:
+        return Subgate(
+            "official_live", True, SUBGATE_REMEDIABLE, waiver, applicable=False
+        )
+    if fid.startswith("live-intelligence") and not ctx.live_contract_status.startswith(
+        "SHIPPED"
+    ):
+        return Subgate(
+            "official_live",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"{LIVE_INTELLIGENCE_CONTRACT_REL} status={ctx.live_contract_status!r}: "
+            "the producer contract behind this archetype is not shipped, so no "
+            "instance of it is backed by official live data",
+        )
+    if fid == "analises-contratos-publicos" and route != "/analises-contratos-publicos/":
+        slug = route.strip("/").split("/")[-1]
+        item = ctx.contract_analysis.get(slug)
+        if item is None:
+            return Subgate(
+                "official_live",
+                False,
+                SUBGATE_REMEDIABLE,
+                f"slug={slug} has no recorded state in {CONTRACT_ANALYSIS_STATUS_REL}; "
+                "the data state of this instance is unknown, not official_live",
+            )
+        if item.get("fixture") or str(item.get("source_kind")) != "official_live":
+            return Subgate(
+                "official_live",
+                False,
+                SUBGATE_REMEDIABLE,
+                f"slug={slug} source_kind={item.get('source_kind')} "
+                f"fixture={item.get('fixture')}",
+            )
+    text = visible_main_text(html)
+    marker = FIXTURE_MARKER_RE.search(text) or SYNTHETIC_RECORD_RE.search(text)
+    if marker:
+        return Subgate(
+            "official_live",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"visible copy declares a non-production record: {marker.group(0)!r}",
+        )
+    return Subgate("official_live", True, SUBGATE_REMEDIABLE, "no fixture/preview marker")
+
+
+def _sub_freshness(html: str, ctx: IndexationContext) -> Subgate:
+    dates = page_dates(html)
+    if not dates:
+        return Subgate(
+            "freshness", False, SUBGATE_REMEDIABLE, "page publishes no date at all"
+        )
+    newest = max(dates)
+    if newest > ctx.today:
+        return Subgate(
+            "freshness", False, SUBGATE_REMEDIABLE, f"future-dated: {newest.isoformat()}"
+        )
+    age = (ctx.today - newest).days
+    if age > MAX_CONTENT_AGE_DAYS:
+        return Subgate(
+            "freshness",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"newest date {newest.isoformat()} is {age}d old (max {MAX_CONTENT_AGE_DAYS}d)",
+        )
+    return Subgate("freshness", True, SUBGATE_REMEDIABLE, f"as of {newest.isoformat()} ({age}d)")
+
+
+def _sub_citable_source(html: str, family: dict[str, Any] | None = None) -> Subgate:
+    waiver = external_evidence_waiver(family, "citable_source")
+    if waiver:
+        return Subgate(
+            "citable_source", True, SUBGATE_REMEDIABLE, waiver, applicable=False
+        )
+    main = _main_html(html) or html
+    if OFFICIAL_SOURCE_HREF_RE.search(main):
+        return Subgate("citable_source", True, SUBGATE_REMEDIABLE, "links an official source")
+    devices = set(LEGAL_DEVICE_RE.findall(visible_main_text(html)))
+    if devices:
+        return Subgate(
+            "citable_source",
+            True,
+            SUBGATE_REMEDIABLE,
+            f"cites {len(devices)} legal device(s)",
+        )
+    return Subgate(
+        "citable_source",
+        False,
+        SUBGATE_REMEDIABLE,
+        "no official source link and no legal-device citation for the core claim",
+    )
+
+
+def _sub_archetype_completeness(html: str, family: dict[str, Any] | None) -> Subgate:
+    text = visible_main_text(html)
+    words = len(re.findall(r"\w+", text))
+    headings = len(re.findall(r"(?is)<h2\b", _main_html(html) or html))
+    has_h1 = bool(re.search(r"(?is)<h1\b", html))
+    job = str((family or {}).get("visitor_job") or "").strip()
+    problems: list[str] = []
+    if not has_h1:
+        problems.append("no h1")
+    if words < MIN_SUBSTANTIVE_WORDS:
+        problems.append(f"{words} words < {MIN_SUBSTANTIVE_WORDS}")
+    if headings < 2:
+        problems.append(f"{headings} h2 sections < 2")
+    if not job:
+        problems.append("family declares no visitor_job to answer")
+    if problems:
+        return Subgate(
+            "archetype_completeness", False, SUBGATE_REMEDIABLE, "; ".join(problems)
+        )
+    return Subgate(
+        "archetype_completeness",
+        True,
+        SUBGATE_REMEDIABLE,
+        f"{words} words, {headings} sections, answers: {job[:60]}",
+    )
+
+
+def _sub_distinct_grain(
+    route: str, html: str, ctx: IndexationContext, family_id: str
+) -> Subgate:
+    """The page's own shingles come from the ``html`` the caller passed.
+
+    Reading them back out of the context instead would make the verdict
+    describe the version on disk, and would let a route the context has never
+    seen (a page checked before publication) compare an empty shingle set
+    against its siblings and pass as "distinct".
+    """
+    siblings = [r for r in ctx.family_routes.get(family_id, []) if r != route]
+    if not siblings:
+        return Subgate(
+            "materially_distinct_grain",
+            True,
+            SUBGATE_MATERIAL,
+            "single-instance family: nothing to be a clone of",
+            applicable=False,
+        )
+    mine = _shingle_set(visible_main_text(html))
+    if not mine:
+        return Subgate(
+            "materially_distinct_grain",
+            False,
+            SUBGATE_MATERIAL,
+            "page has no body text to compare against its siblings",
+        )
+    worst = 0.0
+    worst_route = ""
+    for sibling in _sampled(siblings, MAX_SIBLING_COMPARISONS):
+        theirs = ctx.shingles_by_route.get(sibling)
+        if theirs is None:
+            theirs = _shingle_set(visible_main_text(ctx.html_by_route.get(sibling, "")))
+            ctx.shingles_by_route[sibling] = theirs
+        score = _jaccard(mine, theirs)
+        if score > worst:
+            worst, worst_route = score, sibling
+    if worst >= FAMILY_CLONE_JACCARD:
+        return Subgate(
+            "materially_distinct_grain",
+            False,
+            SUBGATE_MATERIAL,
+            f"jaccard{SHINGLE_N}={worst:.3f} vs {worst_route} "
+            f"(>= {FAMILY_CLONE_JACCARD}): same template, different nouns",
+        )
+    return Subgate(
+        "materially_distinct_grain",
+        True,
+        SUBGATE_MATERIAL,
+        f"max sibling jaccard{SHINGLE_N}={worst:.3f}",
+    )
+
+
+def _sub_self_canonical(route: str, html: str) -> Subgate:
+    hrefs = canonical_hrefs(html)
+    if len(hrefs) != 1:
+        return Subgate(
+            "self_canonical",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"{len(hrefs)} canonical tags (exactly 1 required): {hrefs[:3]}",
+        )
+    target = urlparse(hrefs[0]).path or "/"
+    if not target.endswith("/") and not target.endswith(".html"):
+        target += "/"
+    if target != route:
+        return Subgate(
+            "self_canonical",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"canonical points at {target}, not at {route}",
+        )
+    return Subgate("self_canonical", True, SUBGATE_REMEDIABLE, f"self-canonical {route}")
+
+
+_REDIRECT_SOURCE_RE = re.compile(r"^(/\S*)\s+\S+\s+30[128]!?\s*$", re.M)
+
+
+def _redirect_source_routes(root: Path) -> set[str]:
+    """Source paths of every 30x rule in ``_redirects``.
+
+    A route configured here has an authoritative destination elsewhere; it is
+    not a page competing for its own index slot no matter what its own copy
+    looks like, evidence-based or not.
+    """
+    path = root / "_redirects"
+    if not path.exists():
+        return set()
+    text = path.read_text(encoding="utf-8", errors="replace")
+    sources = set()
+    for match in _REDIRECT_SOURCE_RE.finditer(text):
+        source = match.group(1)
+        if not source.endswith("/") and not source.endswith(".html") and "." not in source.rsplit("/", 1)[-1]:
+            source += "/"
+        sources.add(source)
+    return sources
+
+
+def _sub_not_redirect_source(route: str, ctx: IndexationContext) -> Subgate:
+    if route in ctx.redirect_source_routes:
+        return Subgate(
+            "not_redirect_source",
+            False,
+            SUBGATE_MATERIAL,
+            f"{route} is a registered 301 redirect source in _redirects; the "
+            "canonical URL is its redirect target, this route must stay "
+            "noindex and out of the sitemap regardless of its own copy",
+        )
+    return Subgate("not_redirect_source", True, SUBGATE_MATERIAL, f"{route} is not a redirect source")
+
+
+def _sub_no_cannibalization(route: str, html: str, ctx: IndexationContext) -> Subgate:
+    conflict = ctx.ownership_loser_routes.get(route)
+    if conflict:
+        return Subgate(
+            "no_cannibalization",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"{QUERY_OWNERSHIP_REL} declares another route the owner: {conflict}",
+        )
+    status = ctx.ownership_route_status.get(route)
+    if status and status != "INDEXABLE":
+        return Subgate(
+            "no_cannibalization",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"{QUERY_OWNERSHIP_REL} classifies this route {status}",
+        )
+    title = _normalized_title(html)
+    twins = [r for r in ctx.title_owners.get(title, []) if r != route]
+    if title and twins:
+        return Subgate(
+            "no_cannibalization",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"identical title also served by {twins[:3]}",
+        )
+    return Subgate("no_cannibalization", True, SUBGATE_REMEDIABLE, "no declared conflict")
+
+
+def _sub_record_specific(
+    route: str,
+    html: str,
+    family: dict[str, Any] | None,
+    ctx: IndexationContext,
+    family_id: str,
+) -> Subgate:
+    """Does the body talk about THIS record, or only about the family's subject?"""
+    siblings = [r for r in ctx.family_routes.get(family_id, []) if r != route]
+    prefix = str(((family or {}).get("match") or {}).get("prefix") or "")
+    is_hub = route == "/" or (prefix and route == prefix)
+    slug = route.strip("/").split("/")[-1].removesuffix(".html") if route != "/" else ""
+    mine = {
+        token
+        for token in _fold(slug).split("-")
+        if len(token) >= 4 and token not in _SLUG_STOPWORDS
+    }
+    if not siblings or is_hub or not mine:
+        return Subgate(
+            "record_specific_content",
+            True,
+            SUBGATE_REMEDIABLE,
+            "hub route, single-instance family, or slug with no distinctive token: "
+            "there is no per-record grain to prove here",
+            applicable=False,
+        )
+    shared = Counter()
+    for sibling in siblings:
+        sibling_slug = sibling.strip("/").split("/")[-1]
+        for token in set(_fold(sibling_slug).split("-")):
+            shared[token] += 1
+    limit = max(1, int(0.4 * len(siblings)))
+    distinctive = {token for token in mine if shared[token] <= limit}
+    if not distinctive:
+        return Subgate(
+            "record_specific_content",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"every slug token of {slug} is shared with its siblings",
+        )
+    body = _fold(visible_main_text(html))
+    present = {token for token in distinctive if token in body}
+    if len(present) * 2 < len(distinctive):
+        return Subgate(
+            "record_specific_content",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"only {sorted(present)} of {sorted(distinctive)} appear in the body: "
+            "the copy is the family's, not this record's",
+        )
+    return Subgate(
+        "record_specific_content",
+        True,
+        SUBGATE_REMEDIABLE,
+        f"{len(present)}/{len(distinctive)} distinctive tokens present",
+    )
+
+
+def _sub_public_safe(route: str, html: str) -> Subgate:
+    """Machine/doorway residue and abandoned-entity leaks. Same patterns as
+    gate_naturalness and gate_legacy_entity_matrix, asked per instance."""
+    text = strip_html(html)
+    for name, pattern in MACHINE_PATTERNS:
+        if pattern.search(html) or pattern.search(text):
+            return Subgate(
+                "public_safe", False, SUBGATE_REMEDIABLE, f"machine pattern {name}"
+            )
+    if not LEGACY_SCAN_SKIP.search(route):
+        # A page that names an abandoned entity in order to disown it
+        # ("Não somos: ... AVCB/CLCB", a GSC row labelled "entidade legada") is
+        # doing the opposite of promoting it, so the disclaiming sentence is
+        # dropped before the scan — same rule as PAGE_DISCLAIMER_RE.
+        for sentence in re.split(
+            r"(?<=[.;!?])\s+", _strip_html_preserve_visibility(html)
+        ):
+            if LEGACY_DISCLAIMER_RE.search(sentence):
+                continue
+            legacy = LEGACY_ENTITY_RE.search(sentence)
+            if legacy:
+                return Subgate(
+                    "public_safe",
+                    False,
+                    SUBGATE_REMEDIABLE,
+                    f"abandoned entity in visible copy: {legacy.group(0)!r}",
+                )
+    return Subgate("public_safe", True, SUBGATE_REMEDIABLE, "no machine/legacy residue")
+
+
+def _sub_named_gate_verdict(
+    route: str, family: dict[str, Any] | None, ctx: IndexationContext
+) -> Subgate:
+    """The family's own already-established editorial authority, where one exists."""
+    fid = str((family or {}).get("id") or "")
+    if fid == "analises-contratos-publicos" and route != "/analises-contratos-publicos/":
+        slug = route.strip("/").split("/")[-1]
+        item = ctx.contract_analysis.get(slug)
+        if item is None:
+            return Subgate(
+                "named_gate_verdict",
+                False,
+                SUBGATE_REMEDIABLE,
+                f"contract-analysis-publication-gate/1.0 has no verdict for {slug}",
+            )
+        state = str(item.get("state") or "")
+        if state == "REJECT":
+            return Subgate(
+                "named_gate_verdict",
+                False,
+                SUBGATE_MATERIAL,
+                f"contract-analysis-publication-gate/1.0 = REJECT "
+                f"({','.join(item.get('reason_codes') or [])})",
+            )
+        if state != "PUBLISHABLE_INDEX":
+            return Subgate(
+                "named_gate_verdict",
+                False,
+                SUBGATE_REMEDIABLE,
+                f"contract-analysis-publication-gate/1.0 = {state} "
+                f"({','.join(item.get('reason_codes') or [])}); INDEX needs all 12 "
+                "conditions plus the founder's hash-bound approval (#83)",
+            )
+        return Subgate(
+            "named_gate_verdict", True, SUBGATE_REMEDIABLE, "PUBLISHABLE_INDEX"
+        )
+
+    status = ctx.editorial_registry.get(route)
+    if status:
+        if status == "REJECTED":
+            return Subgate(
+                "named_gate_verdict",
+                False,
+                SUBGATE_MATERIAL,
+                f"{EDITORIAL_REGISTRY_REL} = REJECTED",
+            )
+        if status != "INDEXABLE":
+            return Subgate(
+                "named_gate_verdict",
+                False,
+                SUBGATE_REMEDIABLE,
+                f"{EDITORIAL_REGISTRY_REL} = {status} (awaiting named human approval)",
+            )
+        return Subgate("named_gate_verdict", True, SUBGATE_REMEDIABLE, "INDEXABLE")
+
+    item = ctx.content_disposition.get(route)
+    if item:
+        disposition = str(item.get("disposition") or "")
+        if disposition != "manter":
+            return Subgate(
+                "named_gate_verdict",
+                False,
+                SUBGATE_REMEDIABLE,
+                f"{CONTENT_DISPOSITION_REL} disposition={disposition} "
+                f"classification={item.get('classification')} "
+                f"reason={item.get('noindex_reason')}",
+            )
+        return Subgate(
+            "named_gate_verdict", True, SUBGATE_REMEDIABLE, "content-disposition=manter"
+        )
+
+    return Subgate(
+        "named_gate_verdict",
+        True,
+        SUBGATE_REMEDIABLE,
+        "no named editorial authority claims this family",
+        applicable=False,
+    )
+
+
+def _sub_reputational_safety(
+    html: str, family: dict[str, Any] | None
+) -> Subgate:
+    """#83's own reputational rule, applied only where a real party is named."""
+    fid = str((family or {}).get("id") or "")
+    named_entity = fid in NAMED_ENTITY_FAMILY_IDS or bool(
+        family and family.get("editorial_jargon_strict")
+    )
+    if not named_entity:
+        return Subgate(
+            "reputational_safety",
+            True,
+            SUBGATE_MATERIAL,
+            "family names no identifiable counterparty",
+            applicable=False,
+        )
+    from scripts.contract_analysis.reputation import check_reputational_safety
+
+    asserted = " ".join(
+        sentence
+        for sentence in re.split(r"(?<=[.;!?])\s+", visible_main_text(html))
+        if not PAGE_DISCLAIMER_RE.search(sentence)
+    )
+    codes = check_reputational_safety({}, rendered_html=asserted)
+    if codes:
+        return Subgate(
+            "reputational_safety",
+            False,
+            SUBGATE_MATERIAL,
+            f"accusatory language without documentary basis: {','.join(codes)}",
+        )
+    return Subgate("reputational_safety", True, SUBGATE_MATERIAL, "no unbacked accusation")
+
+
+# --- public, per-route and per-family verdicts ------------------------------
+
+
+def instance_index_ready_for_route(
+    route: str,
+    html: str,
+    family: dict[str, Any] | None,
+    context: IndexationContext | None = None,
+) -> tuple[bool, dict[str, Any]]:
+    """Should THIS instance be indexed, on its own evidence?
+
+    Deliberately blind to the page's current robots meta, its sitemap
+    membership and its governance record: those describe the state we are
+    auditing, not the evidence for it. The caller compares the two.
+
+    Returns ``(ready, reasons)`` where ``reasons`` carries every subgate result,
+    the blocking subgate names and the materially-failing subset (the ones that
+    mean withdraw, not de-index).
+    """
+    ctx = context or build_indexation_context()
+    fid = str((family or {}).get("id") or "")
+    subgates = [
+        _sub_public_safe(route, html),
+        _sub_official_live(route, html, family, ctx),
+        _sub_freshness(html, ctx),
+        _sub_citable_source(html, family),
+        _sub_archetype_completeness(html, family),
+        _sub_distinct_grain(route, html, ctx, fid),
+        _sub_self_canonical(route, html),
+        _sub_not_redirect_source(route, ctx),
+        _sub_no_cannibalization(route, html, ctx),
+        _sub_record_specific(route, html, family, ctx, fid),
+        _sub_named_gate_verdict(route, family, ctx),
+        _sub_reputational_safety(html, family),
+    ]
+    if family is None:
+        subgates.insert(
+            0,
+            Subgate(
+                "declared_family",
+                False,
+                SUBGATE_REMEDIABLE,
+                f"{route} belongs to no family declared in {FAMILY_REGISTRY_REL}",
+            ),
+        )
+    blocking = [s.name for s in subgates if s.applicable and not s.passed]
+    material = [
+        s.name for s in subgates if s.applicable and not s.passed and s.severity == SUBGATE_MATERIAL
+    ]
+    return (
+        not blocking,
+        {
+            "schema": INDEXATION_EVIDENCE_SCHEMA,
+            "route": route,
+            "family": fid or None,
+            "subgates": {s.name: s.to_dict() for s in subgates},
+            "blocking": blocking,
+            "material": material,
+        },
+    )
+
+
+def archetype_editorial_ready_for_family(
+    family: dict[str, Any],
+    sample_pages: list[tuple[str, str]] | None = None,
+    context: IndexationContext | None = None,
+) -> tuple[bool, dict[str, Any]]:
+    """Is this family's ARCHETYPE fit to be published, on a real sample?
+
+    Composite, not a single token scan. ``sample_pages`` is a list of
+    ``(route, html)``; when omitted a deterministic sample of the family's own
+    shipped routes is used. Each subgate reports pass/fail, applicability and
+    severity, so a caller can tell "fix the copy" from "withdraw the route".
+    """
+    ctx = context or build_indexation_context()
+    fid = str(family.get("id") or "")
+    if sample_pages is None:
+        routes = _sampled(ctx.family_routes.get(fid, []), ARCHETYPE_SAMPLE_SIZE)
+        sample_pages = [(r, ctx.html_by_route.get(r, "")) for r in routes]
+    if not sample_pages:
+        return True, {
+            "schema": INDEXATION_EVIDENCE_SCHEMA,
+            "family": fid,
+            "sample": [],
+            "subgates": {},
+            "blocking": [],
+            "material": [],
+            "note": "family declares no shipped route to sample",
+        }
+
+    subgates: list[Subgate] = []
+
+    def worst(name: str, results: list[Subgate], severity: str) -> Subgate:
+        """Aggregate a per-page subgate over the sample.
+
+        The archetype inherits materiality from its instances, it does not
+        invent it: the aggregate is MATERIAL only when a failing page is itself
+        MATERIAL (a named-gate REJECT). Copy defects stay remediable, which is
+        what keeps REJECT_WITHDRAW distinct from NOT_PUBLIC_SAFE.
+        """
+        failed = [r for r in results if r.applicable and not r.passed]
+        applicable = any(r.applicable for r in results)
+        if not applicable:
+            return Subgate(name, True, severity, "not applicable to this family", applicable=False)
+        if failed:
+            escalated = (
+                SUBGATE_MATERIAL
+                if any(r.severity == SUBGATE_MATERIAL for r in failed)
+                else severity
+            )
+            return Subgate(
+                name,
+                False,
+                escalated,
+                f"{len(failed)}/{len(results)} sampled pages fail: "
+                + "; ".join(f"{r.detail}" for r in failed[:2]),
+            )
+        return Subgate(name, True, severity, f"{len(results)} sampled pages pass")
+
+    subgates.append(
+        worst("public_safe", [_sub_public_safe(r, h) for r, h in sample_pages], SUBGATE_REMEDIABLE)
+    )
+
+    # Jargon: the pre-existing opt-in scan, now one subgate among many. It stays
+    # opt-in because 16 already-approved families document CONFENGE's epistemic
+    # vocabulary as explained editorial voice (politica-editorial), which is not
+    # a leak. See data/organic/public-family-registry.json.
+    if family.get("editorial_jargon_strict"):
+        jargon_results = []
+        for route, html in sample_pages:
+            hits = [m.group(1) for m in EDITORIAL_JARGON_RE.finditer(_strip_html_preserve_visibility(html))]
+            jargon_results.append(
+                Subgate(
+                    "jargon",
+                    not hits,
+                    SUBGATE_REMEDIABLE,
+                    f"{route}: raw internal tokens in visible copy: {sorted(set(hits))[:5]}"
+                    if hits
+                    else f"{route}: clean",
+                )
+            )
+        subgates.append(worst("jargon_free", jargon_results, SUBGATE_REMEDIABLE))
+    else:
+        subgates.append(
+            Subgate(
+                "jargon_free",
+                True,
+                SUBGATE_REMEDIABLE,
+                "family not opted into editorial_jargon_strict; its epistemic "
+                "vocabulary is documented editorial voice, not a leak",
+                applicable=False,
+            )
+        )
+
+    answer_first: list[Subgate] = []
+    substantive: list[Subgate] = []
+    specific: list[Subgate] = []
+    caveats: list[Subgate] = []
+    cta: list[Subgate] = []
+    verdicts: list[Subgate] = []
+    for route, html in sample_pages:
+        answer_first.append(_answer_first(route, html))
+        text = visible_main_text(html)
+        words = len(re.findall(r"\w+", text))
+        substantive.append(
+            Subgate(
+                "substantive",
+                words >= MIN_SUBSTANTIVE_WORDS,
+                SUBGATE_REMEDIABLE,
+                f"{route}: {words} words",
+            )
+        )
+        concrete = len(set(m.group(0) for m in _CONCRETE_SPECIFIC_RE.finditer(text)))
+        specific.append(
+            Subgate(
+                "specific_value",
+                concrete >= MIN_CONCRETE_SPECIFICS,
+                SUBGATE_REMEDIABLE,
+                f"{route}: {concrete} concrete specifics (min {MIN_CONCRETE_SPECIFICS})",
+                # A compliance or policy document earns its place by being
+                # complete and current, not by carrying figures. Demanding
+                # concrete specifics there is a category error, not a standard.
+                applicable=str(family.get("profile")) != "trust_or_legal",
+            )
+        )
+        caveats.append(_caveats_preserved(route, text))
+        cta.append(_cta_subordinate(route, html, text))
+        verdicts.append(_sub_named_gate_verdict(route, family, ctx))
+
+    subgates.append(worst("answer_first", answer_first, SUBGATE_REMEDIABLE))
+    subgates.append(worst("substantive", substantive, SUBGATE_REMEDIABLE))
+    subgates.append(worst("specific_value", specific, SUBGATE_REMEDIABLE))
+    subgates.append(worst("caveats_preserved", caveats, SUBGATE_REMEDIABLE))
+    subgates.append(worst("cta_subordinate", cta, SUBGATE_REMEDIABLE))
+    subgates.append(worst("named_gate_verdict", verdicts, SUBGATE_REMEDIABLE))
+
+    # Doorway test across the archetype itself: if the sample's own pages are
+    # near-identical, the archetype is a template, whatever any single page says.
+    if len(sample_pages) >= 2:
+        shingles = [(r, _shingle_set(visible_main_text(h))) for r, h in sample_pages]
+        worst_score, pair = 0.0, ("", "")
+        for i in range(len(shingles)):
+            for j in range(i + 1, len(shingles)):
+                score = _jaccard(shingles[i][1], shingles[j][1])
+                if score > worst_score:
+                    worst_score, pair = score, (shingles[i][0], shingles[j][0])
+        subgates.append(
+            Subgate(
+                "not_doorway",
+                worst_score < FAMILY_CLONE_JACCARD,
+                SUBGATE_MATERIAL,
+                f"max intra-archetype jaccard{SHINGLE_N}={worst_score:.3f} {pair}",
+            )
+        )
+    else:
+        subgates.append(
+            Subgate(
+                "not_doorway",
+                True,
+                SUBGATE_MATERIAL,
+                "single sampled page",
+                applicable=False,
+            )
+        )
+
+    subgates.append(_regression_fixtures(family, sample_pages, ctx))
+
+    blocking = [s.name for s in subgates if s.applicable and not s.passed]
+    material = [
+        s.name for s in subgates if s.applicable and not s.passed and s.severity == SUBGATE_MATERIAL
+    ]
+    return (
+        not blocking,
+        {
+            "schema": INDEXATION_EVIDENCE_SCHEMA,
+            "family": fid,
+            "sample": [r for r, _ in sample_pages],
+            "subgates": {s.name: s.to_dict() for s in subgates},
+            "blocking": blocking,
+            "material": material,
+        },
+    )
+
+
+def _answer_first(route: str, html: str) -> Subgate:
+    main = _main_html(html) or html
+    paragraphs = [
+        _strip_html_preserve_visibility(m.group(1))
+        for m in re.finditer(r"(?is)<p\b[^>]*>(.*?)</p>", main)
+    ][:3]
+    for paragraph in paragraphs:
+        if len(paragraph) >= MIN_ANSWER_FIRST_CHARS and not CTA_PHRASE_RE.match(paragraph):
+            return Subgate("answer_first", True, SUBGATE_REMEDIABLE, f"{route}: opens with an answer")
+    if paragraphs:
+        return Subgate(
+            "answer_first",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"{route}: first 3 paragraphs are shorter than "
+            f"{MIN_ANSWER_FIRST_CHARS} chars or open with a CTA",
+        )
+    opening = visible_main_text(html)[:ANSWER_FIRST_WINDOW_CHARS]
+    return Subgate(
+        "answer_first",
+        len(opening) >= MIN_ANSWER_FIRST_CHARS,
+        SUBGATE_REMEDIABLE,
+        f"{route}: no <p> in <main>; opening is {len(opening)} chars",
+    )
+
+
+def _caveats_preserved(route: str, text: str) -> Subgate:
+    if not CLAIM_NEEDING_CAVEAT_RE.search(text):
+        return Subgate(
+            "caveats_preserved",
+            True,
+            SUBGATE_REMEDIABLE,
+            f"{route}: asserts no figure or epistemic label",
+            applicable=False,
+        )
+    if CAVEAT_MARKER_RE.search(text):
+        return Subgate("caveats_preserved", True, SUBGATE_REMEDIABLE, f"{route}: discloses a limit")
+    return Subgate(
+        "caveats_preserved",
+        False,
+        SUBGATE_REMEDIABLE,
+        f"{route}: shows a figure or epistemic label with no limitation disclosed — "
+        "removing raw jargon must not remove the uncertainty it carried",
+    )
+
+
+def _cta_subordinate(route: str, html: str, text: str) -> Subgate:
+    """The terminal action must close the page, not be the page.
+
+    Counts the attributed CTAs the conversion gate itself recognises
+    (``data-cta-id`` anchors and lead forms inside ``<main>``) and the share of
+    visible text they occupy. A family whose declared terminal_action is
+    ``none`` owes no CTA and cannot fail here for having one CTA too few.
+    """
+    main = _main_html(html) or html
+    anchors = re.findall(r"(?is)<a\b[^>]*\bdata-cta-id=[^>]*>.*?</a>", main)
+    forms = re.findall(
+        r'(?is)<form\b[^>]*action=["\']/\.netlify/functions/lead["\'][^>]*>.*?</form>', main
+    )
+    cta_count = len(anchors) + len(forms)
+    words = max(1, len(re.findall(r"\w+", text)))
+    allowed = max(3, words // 400)
+    cta_chars = sum(len(_strip_html_preserve_visibility(block)) for block in anchors + forms)
+    share = cta_chars / max(1, len(text))
+    if cta_count > allowed:
+        return Subgate(
+            "cta_subordinate",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"{route}: {cta_count} CTAs in <main> for {words} words (max {allowed})",
+        )
+    if share > 0.35:
+        return Subgate(
+            "cta_subordinate",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"{route}: CTA blocks are {share:.0%} of the visible text",
+        )
+    return Subgate(
+        "cta_subordinate",
+        True,
+        SUBGATE_REMEDIABLE,
+        f"{route}: {cta_count} CTAs, {share:.0%} of the text",
+    )
+
+
+def _regression_fixtures(
+    family: dict[str, Any],
+    sample_pages: list[tuple[str, str]],
+    ctx: IndexationContext,
+) -> Subgate:
+    """Where a golden fixture recorded findings, they must actually be gone.
+
+    The Live Intelligence surfaces have a captured fixture set
+    (scripts/contract_analysis/fixtures/live-intelligence-regression) taken at a
+    known SHA. A fixture that still reproduces its recorded jargon on the live
+    page means the archetype has not moved, whatever the current copy claims.
+    """
+    fid = str(family.get("id") or "")
+    manifest_path = (
+        ctx.base
+        / "scripts/contract_analysis/fixtures/live-intelligence-regression/MANIFEST.json"
+    )
+    if not fid.startswith("live-intelligence") or not manifest_path.is_file():
+        return Subgate(
+            "regression_fixtures",
+            True,
+            SUBGATE_REMEDIABLE,
+            "no golden fixture set declared for this family",
+            applicable=False,
+        )
+    manifest = _read_json(manifest_path)
+    captured = {
+        str(entry.get("source_path")): str(entry.get("file"))
+        for entry in manifest.get("fixtures") or []
+        if entry.get("source_path")
+    }
+    still_failing: list[str] = []
+    checked = 0
+    for route, html in sample_pages:
+        source = route.strip("/") + "/index.html" if route != "/" else "index.html"
+        if source not in captured:
+            continue
+        checked += 1
+        if EDITORIAL_JARGON_RE.search(_strip_html_preserve_visibility(html)):
+            still_failing.append(source)
+    if not checked:
+        return Subgate(
+            "regression_fixtures",
+            True,
+            SUBGATE_REMEDIABLE,
+            f"sample matches no captured fixture (manifest sha "
+            f"{manifest.get('captured_from_git_sha', '')[:8]})",
+            applicable=False,
+        )
+    if still_failing:
+        return Subgate(
+            "regression_fixtures",
+            False,
+            SUBGATE_REMEDIABLE,
+            f"{len(still_failing)}/{checked} captured pages still reproduce their "
+            f"recorded jargon findings: {still_failing[:2]}",
+        )
+    return Subgate(
+        "regression_fixtures",
+        True,
+        SUBGATE_REMEDIABLE,
+        f"{checked} captured pages no longer reproduce their recorded findings",
+    )
+
+
+# --- gate drivers -----------------------------------------------------------
+
+
+REJECT_WITHDRAW_DEBT_REL = "data/organic/reject-withdraw-debt.json"
+
+
+def _reject_withdraw_debt(base: Path) -> dict[str, dict[str, Any]]:
+    """Load dated, owned exceptions that keep an already-noindex REJECT family
+    from hard-blocking CI. See the file's own ``purpose`` for the exact rule:
+    the finding stays reported as material/error, this only decides whether it
+    also flips the gate's aggregate ``ok`` -- and only when every current
+    instance of the family is already noindex, so the debt cannot mask an
+    indexation risk, mirroring the conversion gate's existing debt_policy."""
+    doc = _read_json(base / REJECT_WITHDRAW_DEBT_REL)
+    today = date.today().isoformat()
+    out: dict[str, dict[str, Any]] = {}
+    for entry in doc.get("entries") or []:
+        fid = entry.get("family_id")
+        expires_at = entry.get("expires_at")
+        if not fid or not expires_at or expires_at < today:
+            continue
+        if not entry.get("owner_issue") or not entry.get("reason"):
+            continue
+        out[str(fid)] = entry
+    return out
+
+
+def gate_archetype_editorial_ready(root: Path | None = None) -> GateReport:
+    """Composite archetype verdict per declared family.
+
+    Runs :func:`archetype_editorial_ready_for_family` over every declared
+    family's own deterministic sample. A material failure (unsafe copy, an
+    explicit named-gate REJECT, or a doorway archetype) is an error and means
+    withdraw; every other failing subgate is a warning and means remediate.
+
+    A material failure whose family has every current instance already
+    noindex AND a non-expired, owned entry in ``reject-withdraw-debt.json``
+    does not flip the gate's aggregate ``ok`` -- it is reported as
+    ``severity="error"`` exactly like any other material finding (nothing is
+    hidden or softened), but tagged ``debt_tracked=True`` so a route that is
+    already unreachable via search does not hard-block every PR in the repo
+    while its actual withdrawal (a distinct, sometimes irreversible action)
+    is pending its owning issue's decision.
+    """
+    ctx = build_indexation_context(root)
+    debt = _reject_withdraw_debt(ctx.base)
+    findings: list[Finding] = []
+    verdicts: dict[str, Any] = {}
+    ready = 0
+    blocking_material_families: list[str] = []
+    debt_tracked_families: list[str] = []
+    for family in ctx.families:
+        fid = str(family.get("id") or "")
+        if not fid:
+            continue
+        ok, detail = archetype_editorial_ready_for_family(family, context=ctx)
+        verdicts[fid] = {
+            "ready": ok,
+            "sample": detail.get("sample"),
+            "blocking": detail.get("blocking"),
+            "material": detail.get("material"),
+        }
+        if ok:
+            ready += 1
+            continue
+        sample = detail.get("sample") or []
+        path = (
+            str((ctx.path_by_route[sample[0]]).relative_to(ctx.base))
+            if sample and sample[0] in ctx.path_by_route
+            else FAMILY_REGISTRY_REL
+        )
+        is_material = bool(detail.get("material"))
+        family_routes = ctx.family_routes.get(fid) or []
+        all_noindex = bool(family_routes) and all(
+            is_noindex(ctx.html_by_route.get(r, "")) for r in family_routes
+        )
+        debt_entry = debt.get(fid) if is_material and all_noindex else None
+        if debt_entry:
+            debt_tracked_families.append(fid)
+        elif is_material:
+            blocking_material_families.append(fid)
+        for name in detail.get("blocking") or []:
+            subgate = (detail.get("subgates") or {}).get(name) or {}
+            material = name in (detail.get("material") or [])
+            excerpt = f"family={fid} {subgate.get('detail', '')}"
+            if debt_entry:
+                excerpt += (
+                    f" [debt_tracked owner_issue={debt_entry['owner_issue']} "
+                    f"expires_at={debt_entry['expires_at']}: {debt_entry['reason']}]"
+                )
+            findings.append(
+                Finding(
+                    gate="archetype_editorial_ready",
+                    path=path,
+                    reason=f"archetype_{name}_failed",
+                    excerpt=excerpt[:600],
+                    severity="error" if material else "warn",
+                )
+            )
+    return GateReport(
+        ok=len(blocking_material_families) == 0,
+        findings=findings,
+        stats={
+            "schema": INDEXATION_EVIDENCE_SCHEMA,
+            "families": len(verdicts),
+            "archetype_ready": ready,
+            "archetype_not_ready": len(verdicts) - ready,
+            "materially_rejected": sorted(
+                fid for fid, v in verdicts.items() if v["material"]
+            ),
+            "materially_rejected_blocking": sorted(blocking_material_families),
+            "materially_rejected_debt_tracked": sorted(debt_tracked_families),
+            "verdicts": verdicts,
+        },
+    )
+
+
+def gate_instance_index_ready(root: Path | None = None) -> GateReport:
+    """Per-instance index readiness, then a comparison with the public state.
+
+    The verdict is computed first, from evidence only. Only afterwards is it
+    compared with the robots meta and the governance record, which is what makes
+    the two violations below meaningful:
+
+    * ``noindex_suppresses_index_ready_instance`` — the instance independently
+      earned an index slot and is still suppressed.
+    * ``noindex_without_reason`` — the instance did not earn one and nobody
+      recorded why it is out.
+
+    An indexable route that did not earn its slot is reported as a warning
+    (``indexable_without_evidence``): the remedy is evidence, and flipping it to
+    noindex is a downstream editorial decision, not this gate's to take.
+    """
+    ctx = build_indexation_context(root)
+    findings: list[Finding] = []
+
+    governance = _read_json(ctx.base / NOINDEX_GOVERNANCE_REL)
+    governance_by_family = {
+        str(entry.get("family_id")): entry
+        for entry in (governance.get("families") or [])
+        if entry.get("family_id")
+    }
+
+    scanned = 0
+    ready_count = 0
+    noindex_count = 0
+    index_ready_but_noindex: list[str] = []
+    indexable_without_evidence: list[str] = []
+    noindex_without_reason: list[str] = []
+    blocking_histogram: Counter[str] = Counter()
+
+    for route in sorted(ctx.html_by_route):
+        html = ctx.html_by_route[route]
+        family = ctx.route_family.get(route)
+        scanned += 1
+        ready, detail = instance_index_ready_for_route(route, html, family, ctx)
+        for name in detail["blocking"]:
+            blocking_histogram[name] += 1
+        rel = str(ctx.path_by_route[route].relative_to(ctx.base))
+        noindex = is_noindex(html)
+        if noindex:
+            noindex_count += 1
+        if ready:
+            ready_count += 1
+            if noindex:
+                index_ready_but_noindex.append(route)
+                findings.append(
+                    Finding(
+                        gate="instance_index_ready",
+                        path=rel,
+                        reason="noindex_suppresses_index_ready_instance",
+                        excerpt=(
+                            f"{route} passed every instance subgate on its own evidence "
+                            "and is still noindex"
+                        ),
+                    )
+                )
+            continue
+        if not noindex:
+            indexable_without_evidence.append(route)
+            findings.append(
+                Finding(
+                    gate="instance_index_ready",
+                    path=rel,
+                    reason="indexable_without_evidence",
+                    excerpt=f"{route} blocking={','.join(detail['blocking'])}",
+                    severity="warn",
+                )
+            )
+            continue
+        fid = str((family or {}).get("id") or "")
+        entry = governance_by_family.get(fid)
+        if not (entry and entry.get("reason_code")):
+            noindex_without_reason.append(route)
+            findings.append(
+                Finding(
+                    gate="instance_index_ready",
+                    path=rel,
+                    reason="noindex_without_reason",
+                    excerpt=(
+                        f"{route} family={fid or '<undeclared>'} is noindex with no "
+                        f"reason_code in {NOINDEX_GOVERNANCE_REL} "
+                        f"(blocking={','.join(detail['blocking'])})"
+                    ),
+                )
+            )
+
+    errors = [f for f in findings if f.severity == "error"]
+    return GateReport(
+        ok=len(errors) == 0,
+        findings=findings,
+        stats={
+            "schema": INDEXATION_EVIDENCE_SCHEMA,
+            "scanned": scanned,
+            "noindex": noindex_count,
+            "instance_index_ready": ready_count,
+            "index_ready_but_noindex": index_ready_but_noindex,
+            "indexable_without_evidence": len(indexable_without_evidence),
+            "noindex_without_reason": noindex_without_reason,
+            "blocking_subgates": dict(blocking_histogram.most_common()),
+        },
+    )
+
+
 def run_all_gates() -> dict[str, Any]:
     reports = {
         "naturalness": gate_naturalness(only_indexable=True),
@@ -2197,6 +3943,8 @@ def run_all_gates() -> dict[str, Any]:
         "similarity": gate_similarity_indexable(),
         "semantic_query_ownership": gate_semantic_query_ownership(),
         "bofu_buyer_decision_map": gate_bofu_buyer_decision_map(),
+        "archetype_editorial_ready": gate_archetype_editorial_ready(),
+        "instance_index_ready": gate_instance_index_ready(),
     }
     ok = all(r.ok for r in reports.values())
     return {
