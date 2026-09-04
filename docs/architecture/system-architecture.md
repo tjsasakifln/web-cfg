@@ -1,4 +1,4 @@
-> **Authoritative architecture notice (2026-08-14):** [ADR-STRAT-002](ADR-STRAT-002-confenge-canonical-public-surface.md) governs current cross-repository ownership. `confenge.com.br` / `web-cfg` is the sole public surface, `extra-cli` is the truth plane, `warmbly` is the action plane, and SmartLic is only a legacy migration source. Where this brownfield snapshot conflicts, ADR-STRAT-002 wins.
+> **Authoritative architecture notice (2026-08-14, amended 2026-09-04):** [ADR-STRAT-002](ADR-STRAT-002-confenge-canonical-public-surface.md) governs current cross-repository ownership. `confenge.com.br` / `web-cfg` is the sole public surface for Engenharia, Perícias e Inteligência Técnica; B2G is a protected specialist vertical, not the corporate category. `extra-cli` is the truth plane, `warmbly` is the action plane, Governance owns policy/exceptions/kill switch, Meetcfg consumes accepted context, and SmartLic is only a legacy migration source. Where this brownfield snapshot conflicts, ADR-STRAT-002 wins. The nuclei live in `data/corporate/taxonomy.v1.json`.
 
 # System Architecture — CONFENGE (confenge-site)
 
@@ -12,7 +12,7 @@
 
 ## 1. Executive overview
 
-CONFENGE is a **static marketing + editorial + tools site** for B2G (business-to-government) engineering consulting focused on Brazilian public-works contracts (Lei 14.133, aditivos, reequilíbrio, medições).
+CONFENGE is a **static marketing + editorial + tools site** for engineering, expert evidence and technical intelligence. The currently published public surface is the protected B2G / public-works vertical (Lei 14.133, aditivos, reequilíbrio, medições); additional nuclei are represented in the corporate taxonomy and are not yet rendered on home/nav.
 
 It is **not** a SPA framework app. The product is:
 
