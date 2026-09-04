@@ -548,6 +548,21 @@ def test_rendered_pages_are_noindex():
         assert '<meta content="noindex,nofollow" name="robots"/>' in html, path
 
 
+def test_kv_rows_and_fixture_pages_contain_tables_in_overflow_wrap():
+    """Narrow viewports must not grow sideways from a 36rem table min-width."""
+    from scripts.live_intelligence import render as R
+
+    html = R._kv_rows([("Objeto", "Reforma e ampliação")])
+    assert 'class="table-wrap"' in html
+    assert 'class="data-table"' in html
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    assert ".data-table{width:100%;max-width:100%;min-width:0;table-layout:fixed;" in css
+    assert "min-width:36rem" not in css
+    for path in sorted((ROOT / "oportunidades").glob("*/index.html")):
+        page = path.read_text(encoding="utf-8")
+        assert 'class="table-wrap"' in page, path
+
+
 def test_rendered_pages_carry_no_price_markup():
     """A displayed price would make an indexable route a priced offer.
 

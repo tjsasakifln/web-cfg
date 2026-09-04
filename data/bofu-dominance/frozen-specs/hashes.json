@@ -3,7 +3,7 @@
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
   "baseline_commit": "6f95e392515d845d14107e63ebacd5ad0a26282b",
   "recaptured_at": "2026-09-04",
-  "recapture_reason": "Recaptura de duas chaves forbidden do W1 live-intelligence, sem html_mutation e sem abrir o unlock-plan #291. _redirects: de c32debd36d9ce4bc2d46121c7d7c229139ab11ab5dc1f4aa2db09541ab21e73a para ac438fa0eb4430b221c4563d3659c3a6cdf6de4c6757103bc8c13c1bce42b358. O arquivo ganhou um bloco de comentario que documenta a ausencia deliberada de regra para /analise-cnpj/r/ (token opaco via query, nao path). Nenhuma regra de redirecionamento mudou. js/modules/analytics.js: de 10587de5c5d04ac88f33474934836612462cc796a7c1196aba42d32b92013456 para e5e40f52630f6b014150765a3fadad0068513b97144785a0262170e8658ffda5. O W1 passou a carregar eventos da superficie live-intelligence no mesmo modulo, sem alterar o contrato de campos proibidos. script.js ja tinha sido recapturado em ef42264de. O gate de igualdade nao foi afrouxado: as demais chaves forbidden e todos os pillars permanecem. baseline_commit continua em 6f95e392.",
+  "recapture_reason": "Recaptura de styles.css para conter overflow horizontal das fichas live-intelligence (.data-table table-layout:fixed, simple-card capped to 100vw, table-wrap width 100%). Hash b6e37282c05c3d3b769c79d4f7a2d62925735ce3d4de1e3dbeb79445be5607ca. Nao e html_mutation de pilar #291. Igualdade nao afrouxada; demais forbidden e pillars intactos.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -21,7 +21,7 @@
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "fbfb0ee348841ae3a01c437cee579832139cc7868e6dcb081534ff956bfae654",
     "script.js": "412795711992bc7620347d34320c2007bef412a02b6bf1941eb0ff5c2fd30fe6",
-    "styles.css": "56beaf8e50716616c61a8608e8c011e6e7dbb91f39ad8815c379aae7563a8d39",
+    "styles.css": "b6e37282c05c3d3b769c79d4f7a2d62925735ce3d4de1e3dbeb79445be5607ca",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "robots.txt": "f5fcb01b1b51cb993860a8f6a77c2ea3e31584f95721e8e95e6093e2e54ec44d",

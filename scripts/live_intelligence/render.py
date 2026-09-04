@@ -215,7 +215,11 @@ def _kv_rows(rows: list[tuple[str, str]]) -> str:
     cells = "".join(
         f"<tr><th scope=\"row\">{e(label)}</th><td>{e(value)}</td></tr>" for label, value in rows
     )
-    return f"<table class=\"data-table\"><tbody>{cells}</tbody></table>"
+    return (
+        '<div class="table-wrap" role="group" tabindex="0" '
+        'aria-label="ficha de dados">'
+        f"<table class=\"data-table\"><tbody>{cells}</tbody></table></div>"
+    )
 
 
 def _sources_html(sources: list[dict[str, Any]]) -> str:

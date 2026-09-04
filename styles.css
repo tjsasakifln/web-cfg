@@ -72,6 +72,8 @@ html.js .form-step-fallback{display:none}
 .form-status.is-error{color:#b42318;margin-top:.75rem;font-size:.9rem}
 .form-status.is-ok{color:var(--green-700,#2d6f2d);margin-top:.75rem;font-size:.9rem}
 .field input.is-invalid,.field select.is-invalid,.field textarea.is-invalid{border-color:#b42318;outline-color:#b42318}
+.simple-main{min-width:0;max-width:100%;width:100%;box-sizing:border-box;overflow-x:auto}
+.simple-card{width:min(760px,calc(100vw - 48px));max-width:100%;min-width:0;box-sizing:border-box}
 .simple-card .journey-next{margin-top:1rem;display:grid;gap:.5rem}
 .simple-card .sla-box{margin:1rem 0;padding:1rem 1.1rem;border-radius:12px;background:rgba(6,26,51,.04);border:1px solid rgba(6,26,51,.08);font-size:.95rem;line-height:1.5}
 
@@ -1210,10 +1212,10 @@ body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panor
 .ca-list>li{padding:var(--space-5);background:#f7f9f8;border:1px solid var(--line);border-radius:10px;line-height:1.65}
 .ca-kind{display:inline-flex;margin:0 var(--space-2) var(--space-1) 0;padding:var(--space-1) var(--space-2);color:var(--green-700);background:var(--green-100);border-radius:999px;font-family:var(--mono);font-size:.875rem;font-weight:750;letter-spacing:.04em;text-transform:uppercase}
 .ca-list small{display:block;margin-top:var(--space-2);color:#526275;font-size:.875rem}
-.data-table{width:100%;min-width:36rem;border-collapse:collapse;font-size:.9rem}
-.data-table th,.data-table td{padding:var(--space-3) var(--space-4);text-align:left;vertical-align:top;border-bottom:1px solid var(--line);line-height:1.5}
-.data-table th{color:var(--ink);font-weight:750;background:#f7f9f8}
-.data-table td{color:#34465a;overflow-wrap:anywhere}
+.data-table{width:100%;max-width:100%;min-width:0;table-layout:fixed;border-collapse:collapse;font-size:.9rem}
+.data-table th,.data-table td{padding:var(--space-3) var(--space-4);text-align:left;vertical-align:top;border-bottom:1px solid var(--line);line-height:1.5;overflow-wrap:anywhere;word-break:break-word}
+.data-table th{width:38%;color:var(--ink);font-weight:750;background:#f7f9f8}
+.data-table td{color:#34465a}
 .data-table tr:last-child th,.data-table tr:last-child td{border-bottom:0}
 .n-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4);margin:0;padding:0}
 .n-card{min-width:0;padding:var(--space-6);background:#fff;border:1px solid var(--line);border-radius:12px}
@@ -1245,10 +1247,12 @@ body:is([data-surface-type="analise_tecnica_contrato"],[data-surface-type="panor
 .site-header .nav-desktop a{min-height:44px;display:inline-flex;align-items:center;color:#3e4e61;font-size:.875rem;font-weight:700}
 .pilot-wrap{min-width:0}
 main .pilot-table,
-main .radar-table{
+main .radar-table,
+main .ma-table{
   display:block;
   width:100%;
   max-width:100%;
+  min-width:0;
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
 }
@@ -1268,7 +1272,7 @@ details>summary{min-height:44px;padding-block:9px}
   .decision-map-rail{grid-template-columns:minmax(0,1fr)}
   .offer-request-form{padding:var(--space-6) var(--space-5)}
   .content-cta .container{grid-template-columns:minmax(0,1fr);gap:var(--space-6)}
-  .data-table{min-width:30rem}
+  .data-table{min-width:0}
 }
 @media (max-width:900px){
   .site-header .nav-desktop{display:none}
@@ -1336,7 +1340,7 @@ li,dd,figcaption,caption,th,td,label,small{overflow-wrap:break-word}
 .field label,.consent,.form-hint,.form-note,.form-step-legend{font-size:var(--text-small);line-height:1.45;overflow-wrap:anywhere}
 .contact-form input:not([type=checkbox]):not([type=radio]):not([type=hidden]),.contact-form select,.contact-form textarea,.field input:not([type=checkbox]):not([type=radio]):not([type=hidden]),.field select,.field textarea{font-size:1rem;min-height:var(--touch-min)}
 .consent input[type=checkbox],.consent input[type=radio]{min-height:18px;width:18px}
-.table-wrap,.report-table-wrap{max-width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-wrap,.report-table-wrap{display:block;width:100%;max-width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{overflow-wrap:anywhere}
 .compare-table thead th{font-size:var(--text-small)}
 .button,.button-primary,.button-secondary,.header-cta,.text-link{min-height:var(--touch-min)}
