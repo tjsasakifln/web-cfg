@@ -710,6 +710,13 @@ def test_real_schema_types_mirror_visible_copy():
     assert seen == set(samples)
 
 
+def test_multivertical_conflict_gate_shipped():
+    """#585: authority runner must execute the shipped conflict-gate suite."""
+    from scripts.site.test_conflict_gate import run_suite
+
+    run_suite()
+
+
 def test_jsonld_extractor_reads_shipped_markup():
     html = (ROOT / "diretoria-b2g" / "index.html").read_text(encoding="utf-8")
     blocks = extract_jsonld_blocks(html)
