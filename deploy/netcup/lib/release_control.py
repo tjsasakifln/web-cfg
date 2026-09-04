@@ -822,6 +822,8 @@ def _adopt_uploaded_bundle(root: Path, sha: str, upload_dir: Path) -> None:
 
 def _publish_live_intelligence_overlay(release: Path) -> None:
     """Render official INDEX pages into the staged `_site` without rewriting hashed files."""
+    if os.environ.get("CONFENGE_RELEASE_TEST_MODE") == "1":
+        return
     official = HOST_OFFICIAL_DIR
     if not (official / "manifest.json").is_file():
         bundled = release / "data" / "live_intelligence" / "official" / "manifest.json"
@@ -829,12 +831,23 @@ def _publish_live_intelligence_overlay(release: Path) -> None:
             return
         official = bundled.parent
     os.environ["CONFENGE_LI_OFFICIAL_DIR"] = str(official)
+    publish_py = release / "scripts" / "live_intelligence" / "publish.py"
+    organic_py = release / "scripts" / "organic" / "sitemap_graph.py"
+    if not publish_py.is_file() or not organic_py.is_file():
+        raise ReleaseError(
+            "live-intelligence official overlay missing packaged scripts "
+            "(scripts/live_intelligence/publish.py and "
+            "scripts/organic/sitemap_graph.py)"
+        )
     if str(release) not in sys.path:
         sys.path.insert(0, str(release))
     try:
         from scripts.live_intelligence.publish import publish
-    except ImportError:
-        return
+    except ImportError as exc:
+        raise ReleaseError(
+            "live-intelligence official overlay import failed; the release "
+            "payload must include scripts/live_intelligence and scripts/organic"
+        ) from exc
     result = publish(
         root=release,
         public_root=release / "_site",

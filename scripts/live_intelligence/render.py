@@ -295,10 +295,34 @@ def _sources_html(sources: list[dict[str, Any]]) -> str:
     return f"<ul class=\"source-ledger\">{''.join(items)}</ul>"
 
 
+# Producer limitation strings may still carry contract tokens. Translate those
+# tokens at the last moment so visitor copy never shows raw UNKNOWN / SUSPENSA.
+_LIMITATION_REWRITES = (
+    (
+        "UNKNOWN permanece UNKNOWN",
+        "Ausência de evidência permanece ausência de evidência",
+    ),
+    (
+        "O status SUSPENSA previsto no contrato público nunca é emitido: "
+        "não existe fonte observada para ele no produtor.",
+        "O contrato público prevê um status de sessão suspensa que esta fonte "
+        "nunca emitiu; isso não aparece aqui por ausência de evidência, não "
+        "por decisão editorial.",
+    ),
+)
+
+
+def _limitation_copy(item: str) -> str:
+    text = str(item or "").strip()
+    for source, destination in _LIMITATION_REWRITES:
+        text = text.replace(source, destination)
+    return text
+
+
 def _limitations_html(limitations: list[str]) -> str:
     if not limitations:
         return "<p>A fonte não declarou limitações.</p>"
-    items = "".join(f"<li>{e(item)}</li>" for item in limitations)
+    items = "".join(f"<li>{e(_limitation_copy(item))}</li>" for item in limitations)
     return f"<ul>{items}</ul>"
 
 
