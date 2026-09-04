@@ -60,11 +60,18 @@ LIVE_INTEL_OVERLAY_PREFIXES = (
     "data/live_intelligence/accepted.last/",
 )
 LIVE_INTEL_OVERLAY_FILES = frozenset({"_site/sitemap-oportunidades.xml"})
+# sitemap-index is hashed in the package. Stage overlay may add the
+# oportunidades child after official consume; checksum may then differ.
+LIVE_INTEL_OVERLAY_REWRITES = frozenset({"_site/sitemap-index.xml"})
 HOST_OFFICIAL_DIR = Path("/var/lib/confenge-web/live_intelligence/official")
 
 
 def is_live_intel_overlay(rel: str) -> bool:
-    return rel in LIVE_INTEL_OVERLAY_FILES or rel.startswith(LIVE_INTEL_OVERLAY_PREFIXES)
+    return (
+        rel in LIVE_INTEL_OVERLAY_FILES
+        or rel in LIVE_INTEL_OVERLAY_REWRITES
+        or rel.startswith(LIVE_INTEL_OVERLAY_PREFIXES)
+    )
 
 
 class ReleaseError(RuntimeError):
@@ -399,6 +406,8 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
     for rel, digest in expected.items():
         found = sha256_file(actual[rel])
         if found != digest:
+            if rel in LIVE_INTEL_OVERLAY_REWRITES:
+                continue
             raise ReleaseError(f"release file checksum mismatch: {rel}")
 
     source = load_json(release / "metadata" / "release-source.json")
