@@ -16,6 +16,7 @@ from typing import Self
 import pytest
 
 from deploy.netcup.lib import release_control as control
+from deploy.netcup.lib import schedule_gate as schedule
 from deploy.netcup.lib.runtime_launcher import runtime_environment
 from deploy.netcup.lib.schedule_gate import validate_gate
 from deploy.netcup.package_release import build_release, sha256_file
@@ -216,11 +217,135 @@ def test_schedule_gate_refuses_double_execution_until_legacy_disablement_is_boun
         "jobs": {"search-observation-tick": True},
     }
     gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
+    gate_path.chmod(0o640)
     with pytest.raises(control.ReleaseError, match="disablement is not proven"):
         validate_gate(host, "search-observation-tick")
     gate["legacy_executor"]["netlify_search_observation_disabled"] = True
     gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
     assert validate_gate(host, "search-observation-tick")["authorized_release_sha"] == SHA_A
+
+
+def test_retention_gate_and_runner_are_sha_bound_without_a_legacy_executor(
+    host: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    make_incoming(tmp_path, host, SHA_A)
+    control.stage_release(SHA_A)
+    control.atomic_release_link(host, "current", SHA_A)
+    gate_path = host / "shared" / "schedule-cutover.json"
+    gate = {
+        "schema": "confenge.schedule-cutover/v1",
+        "authorized_release_sha": SHA_A,
+        "jobs": {"storage-retention": True},
+    }
+    gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
+    gate_path.chmod(0o640)
+    assert schedule.validate_gate(host, "storage-retention")["authorized_release_sha"] == SHA_A
+    monkeypatch.setattr(schedule, "expected_gate_gid", lambda: os.getgid() + 1)
+    with pytest.raises(control.ReleaseError, match="confenge-web group-owned"):
+        schedule.validate_gate(host, "storage-retention")
+    monkeypatch.setattr(schedule, "expected_gate_gid", os.getgid)
+
+    observed: dict[str, object] = {}
+
+    def fake_run(command, **kwargs):
+        observed.update({"command": command, **kwargs})
+        return subprocess.CompletedProcess(command, 2)
+
+    monkeypatch.setattr(schedule.subprocess, "run", fake_run)
+    release = host / "releases" / SHA_A
+    _, gate_descriptor = schedule.open_validated_gate(host, "storage-retention")
+    lock_descriptor = schedule.acquire_job_lock(host, "storage-retention")
+    try:
+        with control.deploy_lock(host) as deploy_descriptor:
+            assert (
+                schedule.run_retention(
+                    host,
+                    release,
+                    {"CONFENGE_STORAGE_DIR": "/var/lib/confenge-web"},
+                    gate_descriptor,
+                    lock_descriptor,
+                    deploy_descriptor,
+                )
+                == 2
+            )
+    finally:
+        os.close(gate_descriptor)
+        os.close(lock_descriptor)
+    assert observed["command"] == [
+        "node",
+        str(release / "scripts" / "storage" / "retention.mjs"),
+        "--store",
+        "/var/lib/confenge-web",
+        "--apply",
+    ]
+    assert observed["cwd"] == release
+    assert observed["check"] is False
+    with pytest.raises(control.ReleaseError, match="path must match"):
+        schedule.run_retention(
+            host,
+            release,
+            {"CONFENGE_STORAGE_DIR": "/tmp/not-authoritative"},
+            gate_descriptor,
+            lock_descriptor,
+            deploy_descriptor,
+        )
+    gate["authorized_release_sha"] = SHA_B
+    gate_path.write_text(json.dumps(gate) + "\n", encoding="utf-8")
+    with pytest.raises(control.ReleaseError, match="authorization is not proven"):
+        schedule.validate_gate(host, "storage-retention")
+
+
+def test_schedule_runner_refuses_release_flip_after_gate_validation(
+    host: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    called = False
+    monkeypatch.setattr(
+        schedule,
+        "open_validated_gate",
+        lambda _root, _job: (
+            {"authorized_release_sha": SHA_A},
+            os.open("/dev/null", os.O_RDONLY),
+        ),
+    )
+    monkeypatch.setattr(
+        schedule,
+        "runtime_environment",
+        lambda _root: (
+            host / "releases" / SHA_B,
+            {"CONFENGE_STORAGE_DIR": "/var/lib/confenge-web"},
+        ),
+    )
+
+    def fake_run_retention(*_args: object) -> int:
+        nonlocal called
+        called = True
+        return 0
+
+    monkeypatch.setattr(schedule, "run_retention", fake_run_retention)
+    assert schedule.main(["storage-retention"]) == 78
+    assert called is False
+
+
+def test_schedule_gate_rejects_non_object_json(host: Path) -> None:
+    shared = host / "shared"
+    shared.mkdir(parents=True)
+    gate_path = shared / "schedule-cutover.json"
+    gate_path.write_text("[]\n", encoding="utf-8")
+    gate_path.chmod(0o640)
+    with pytest.raises(control.ReleaseError, match="gate is invalid"):
+        schedule.validate_gate(host, "storage-retention")
+
+
+def test_retention_lock_is_exclusive_and_non_blocking(host: Path) -> None:
+    (host / "shared").mkdir(parents=True)
+    first = schedule.acquire_job_lock(host, "storage-retention")
+    try:
+        with pytest.raises(control.ReleaseError, match="lock is already held"):
+            schedule.acquire_job_lock(host, "storage-retention")
+    finally:
+        os.close(first)
+    second = schedule.acquire_job_lock(host, "storage-retention")
+    os.close(second)
 
 
 def test_short_sha_is_rejected(host: Path) -> None:
@@ -456,6 +581,12 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "scripts/__init__.py",
         "scripts/live_intelligence/publish.py",
         "scripts/organic/sitemap_graph.py",
+        "scripts/storage/lib.cjs",
+        "scripts/storage/retention.mjs",
+        "schedules/confenge-web-retention.service",
+        "schedules/confenge-web-retention.timer",
+        "schedules/confenge-web-retention-alert@.service",
+        "nginx/confenge-web-logrotate",
     ):
         assert required in names
 

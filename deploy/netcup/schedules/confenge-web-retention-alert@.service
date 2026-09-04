@@ -1,0 +1,13 @@
+[Unit]
+Description=CONFENGE retention failure signal for %i
+
+[Service]
+Type=oneshot
+User=confenge-deploy
+Group=confenge-web
+ExecStart=/usr/bin/logger --priority user.alert --tag confenge-web-retention retention_schedule_failed unit=%i
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict

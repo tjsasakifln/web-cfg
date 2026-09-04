@@ -1,16 +1,36 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "default_state": "DISABLED",
   "activation_gate": "/opt/confenge-web/shared/schedule-cutover.json",
   "activation_gate_schema": "confenge.schedule-cutover/v1",
-  "single_scheduler_rule": "The gate must bind the current full SHA and evidence legacy_executor.netlify_search_observation_disabled=true before the runner executes.",
+  "single_scheduler_rule": "The gate must bind the current full SHA and authorize the exact job. A job with a legacy executor must also evidence that executor as disabled before the runner executes.",
   "jobs": [
     {
       "id": "search-observation-tick",
       "command": "/opt/confenge-web/bin/run-schedule search-observation-tick",
       "timer": "confenge-web-search-observation.timer",
       "legacy_scheduler": "Netlify scheduled function declared in netlify.toml",
+      "activation_requirement": "legacy_executor.netlify_search_observation_disabled=true",
       "legacy_active_at_packaging": true,
+      "netcup_enabled": false
+    },
+    {
+      "id": "storage-retention",
+      "owner": "runtime/storage Netcup",
+      "decision_state": "EXECUTE_NOW",
+      "leverage": "automation, trust",
+      "command": "/opt/confenge-web/bin/run-schedule storage-retention",
+      "dry_run_command": "node /opt/confenge-web/current/scripts/storage/retention.mjs --store /var/lib/confenge-web",
+      "service": "confenge-web-retention.service",
+      "timer": "confenge-web-retention.timer",
+      "cadence": "daily at 03:20 America/Sao_Paulo",
+      "jitter_seconds": 2700,
+      "persistent": true,
+      "lock": "/opt/confenge-web/shared/storage-retention.lock (exclusive, non-blocking)",
+      "observability": "aggregate JSON on stdout; failures mark the unit failed and emit user.alert via confenge-web-retention-alert@.service",
+      "legacy_scheduler": "none",
+      "legacy_active_at_packaging": false,
+      "activation_gate_required": true,
       "netcup_enabled": false
     }
   ]

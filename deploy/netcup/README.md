@@ -118,6 +118,15 @@ sudo install -o root -g root -m 0644 deploy/netcup/runtime/confenge-web-runtime.
 sudo install -o root -g confenge-web -m 0640 /secure/confenge/netcup-runtime.env /etc/confenge-web/runtime.env
 sudo systemctl daemon-reload
 sudo systemctl enable confenge-web-runtime.service
+sudo touch /var/log/nginx/confenge-web-access.log /var/log/nginx/confenge-web-origin-access.log
+sudo chown root:adm /var/log/nginx/confenge-web-access.log /var/log/nginx/confenge-web-origin-access.log
+sudo chmod 0640 /var/log/nginx/confenge-web-access.log /var/log/nginx/confenge-web-origin-access.log
+sudo install -o root -g root -m 0644 deploy/netcup/nginx/confenge-web-logrotate /etc/logrotate.d/confenge-web
+# Retention timer stays disabled until schedule-cutover.json authorizes storage-retention.
+sudo install -o root -g root -m 0644 deploy/netcup/schedules/confenge-web-retention.service /etc/systemd/system/confenge-web-retention.service
+sudo install -o root -g root -m 0644 deploy/netcup/schedules/confenge-web-retention.timer /etc/systemd/system/confenge-web-retention.timer
+sudo install -o root -g root -m 0644 deploy/netcup/schedules/confenge-web-retention-alert@.service /etc/systemd/system/confenge-web-retention-alert@.service
+sudo systemctl daemon-reload
 ```
 
 Before loading GitHub secrets, verify that sshd is listening on the configured

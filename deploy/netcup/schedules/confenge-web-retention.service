@@ -1,9 +1,10 @@
 [Unit]
-Description=CONFENGE portable scheduled command %i
+Description=CONFENGE host-owned storage retention
+Documentation=https://github.com/tjsasakifln/web-cfg/issues/443
 ConditionPathExists=/opt/confenge-web/shared/schedule-cutover.json
 ConditionPathIsSymbolicLink=/opt/confenge-web/current
-After=network-online.target
-Wants=network-online.target
+After=local-fs.target
+OnFailure=confenge-web-retention-alert@%n.service
 
 [Service]
 Type=oneshot
@@ -17,9 +18,19 @@ Environment=RUNTIME_PORT=18100
 Environment=CONFENGE_STORAGE_BACKEND=filesystem
 Environment=CONFENGE_STORAGE_DIR=/var/lib/confenge-web
 EnvironmentFile=/etc/confenge-web/runtime.env
-ExecStart=/opt/confenge-web/bin/run-schedule %i
+ExecStart=/opt/confenge-web/bin/run-schedule storage-retention
+TimeoutStartSec=15min
+UMask=0027
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=confenge-web-retention
 NoNewPrivileges=true
+PrivateDevices=true
 PrivateTmp=true
 ProtectHome=true
 ProtectSystem=strict
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
 ReadWritePaths=/opt/confenge-web/locks /opt/confenge-web/shared /var/lib/confenge-web

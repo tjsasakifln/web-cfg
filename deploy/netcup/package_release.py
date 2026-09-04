@@ -352,6 +352,16 @@ def build_release(
         if not scripts_init.is_file() or scripts_init.is_symlink():
             raise PackageError("required runtime file is missing: scripts/__init__.py")
         shutil.copy2(scripts_init, payload / "scripts" / "__init__.py")
+        for relative in (
+            "scripts/storage/lib.cjs",
+            "scripts/storage/retention.mjs",
+        ):
+            source = repo_root / relative
+            destination = payload / relative
+            if not source.is_file() or source.is_symlink():
+                raise PackageError(f"required runtime file is missing: {relative}")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
         copy_tree(
             repo_root / "data" / "offers" / "fixtures",
             payload / "data" / "offers" / "fixtures",
@@ -411,6 +421,8 @@ def build_release(
                 "scripts/live_intelligence/",
                 "scripts/organic/",
                 "scripts/__init__.py",
+                "scripts/storage/lib.cjs",
+                "scripts/storage/retention.mjs",
                 "data/commercial/",
                 "data/conversion/",
                 "data/nurture/tracks.json",
