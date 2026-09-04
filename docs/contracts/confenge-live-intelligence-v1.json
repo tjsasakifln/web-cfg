@@ -3,7 +3,7 @@
   "contract_version": "v1.0.0",
   "public_read_base": "v1.0.0",
   "compatibility": "additive_nullable_within_v1",
-  "status": "DECLARED_NOT_YET_SHIPPED_BY_PRODUCER",
+  "status": "SHIPPED_BY_PRODUCER",
   "consumer": {
     "id": "web-cfg/live-intelligence",
     "family": "web-cfg / live-intelligence engine",

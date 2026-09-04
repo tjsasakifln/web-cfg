@@ -898,9 +898,15 @@ def _write_539_candidate(
     return export_dir
 
 
-def test_official_bundle_is_not_in_the_tree():
-    """P6_OFFICIAL_BUNDLE_AVAILABLE=NO — no official snapshot is checked in."""
-    assert not (ROOT / DEFAULT_OFFICIAL_DIR).exists()
+def test_official_bundle_is_never_a_fixture():
+    """Official input is absent (fail-closed) or a real official_live export."""
+    official = ROOT / DEFAULT_OFFICIAL_DIR
+    if not official.exists():
+        return
+    bundle = C.load_export_dir(official)
+    assert C.source_kind_of(bundle["manifest"]) == SOURCE_OFFICIAL_LIVE
+    assert bundle["manifest"].get("official_live") is True
+    assert C.is_fixture_catalog(bundle["manifest"]) is False
 
 
 def test_539_candidate_loads_and_projects_as_not_live(tmp_path):
@@ -1063,9 +1069,9 @@ def test_missing_official_source_fails_closed_with_no_fixture_fallback(tmp_path,
     assert not list(out_dir.glob("*.json")) if out_dir.exists() else True
 
 
-def test_main_missing_official_does_not_write_live_projection(capsys):
-    """Default CLI entry (no --source) is official and FAIL CLOSED today."""
-    assert not (ROOT / DEFAULT_OFFICIAL_DIR).exists()
+def test_main_missing_official_does_not_write_live_projection(tmp_path, monkeypatch, capsys):
+    """Default CLI entry (no --source) is official and FAIL CLOSED when absent."""
+    monkeypatch.setattr(C, "DEFAULT_OFFICIAL_DIR", str(tmp_path / "absent-official"))
     rc = C.main([])
     assert rc == 1
     captured = capsys.readouterr().out
