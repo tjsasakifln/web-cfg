@@ -1,0 +1,641 @@
+{
+  "schema": "confenge.proof-qa-fixtures/2.0",
+  "classifier_version": "CFG-MULTIVERTICAL-PROOF-QA-2.0.0",
+  "campaign_id": 12,
+  "issues": ["#531", "#534"],
+  "annotation": {
+    "source": "contract_examples",
+    "human_review_state": "AWAITING_HUMAN_ANNOTATION",
+    "identified_human_annotator": null,
+    "consent_record": null,
+    "agent_or_llm_self_label_as_human": "FORBIDDEN",
+    "note": "Rótulos abaixo são fixtures de comportamento exigido pelo contrato. Não são corpus revisado por pessoa identificada e consentida."
+  },
+  "fixtures": [
+    {
+      "id": "pericia_positive_method_artifact",
+      "nucleus": "pericia_assistencia",
+      "profile": "commercial",
+      "html": "<main><section><h2>Organize quesitos e cronologia antes da audiência</h2><p>A assistência técnica reúne documentos, cronologia e quesitos para a parte decidir o próximo ato.</p><p>Você recebe um dossiê com trilha de fonte, data e o que permanece UNKNOWN.</p><a class=\"button\" href=\"#captura\">Registrar o contexto para enquadramento</a><p data-boundary-id=\"legal\">Assistência técnica não é advocacia nem nomeação como perito do juízo.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.pericia.metodo",
+          "nucleus": "pericia_assistencia",
+          "claim": "A assistência técnica reúne documentos, cronologia e quesitos para a parte decidir o próximo ato.",
+          "proof_role": "method",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "AUTHORIZED_METHOD",
+          "placement_target": "fixture",
+          "boundary": "Assistência técnica não é advocacia nem nomeação como perito do juízo.",
+          "prohibited_inference": "nomeacao_como_perito_do_juizo",
+          "revocation": "fixture_only"
+        }
+      ],
+      "required_caveats": [
+        { "boundary_id": "legal", "needle": "não é advocacia nem nomeação" }
+      ],
+      "expected": {
+        "defensive_opening": false,
+        "required_qa_labels": ["value_outcome", "mechanism", "artifact", "action", "limitation"],
+        "forbidden_qa_labels": ["hype", "orphan_claim", "proof_mismatch", "caveat_removed", "defensive_repetition"],
+        "claim_promotions_pass": true
+      }
+    },
+    {
+      "id": "pericia_negative_cptec_nomeacao",
+      "nucleus": "pericia_assistencia",
+      "profile": "commercial",
+      "html": "<main><section><h2>Perito oficial do Tribunal</h2><p>O cadastro CPTEC comprova que somos perito nomeado e homologado pelo Tribunal.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.pericia.cptec.nomeacao",
+          "nucleus": "pericia_assistencia",
+          "claim": "O cadastro CPTEC comprova que somos perito nomeado e homologado pelo Tribunal.",
+          "proof_role": "credential",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "PROHIBITED_PROMOTION",
+          "placement_target": "fixture",
+          "boundary": "Cadastro não é nomeação.",
+          "prohibited_inference": "perito_oficial_ou_nomeacao",
+          "revocation": "fixture_only"
+        }
+      ],
+      "expected": {
+        "defensive_opening": false,
+        "required_qa_labels": ["proof_mismatch"],
+        "forbidden_qa_labels": ["value_outcome"],
+        "promotion_codes": ["cptec_registration_not_nomeacao", "credential_not_endorsement"]
+      }
+    },
+    {
+      "id": "pericia_unknown_case_outcome",
+      "nucleus": "pericia_assistencia",
+      "profile": "commercial",
+      "html": "<main><section><h2>Veja o que o dossiê permite afirmar</h2><p>A trilha mostra fonte e data de cada fato.</p><p data-boundary-id=\"data\">O resultado do processo permanece UNKNOWN quando a fonte não sustenta a conclusão.</p><a href=\"#metodo\">Conferir método e cobertura</a></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.pericia.outcome.unknown",
+          "nucleus": "pericia_assistencia",
+          "claim": "O resultado do processo permanece UNKNOWN.",
+          "proof_role": "unknown",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "UNKNOWN",
+          "placement_target": "fixture",
+          "boundary": "UNKNOWN não é prova positiva nem negativa.",
+          "prohibited_inference": "prova_positiva_ou_negativa",
+          "revocation": "fixture_only"
+        }
+      ],
+      "required_caveats": [
+        { "boundary_id": "data", "needle": "UNKNOWN" }
+      ],
+      "expected": {
+        "defensive_opening": false,
+        "unknown_is_neither_proof": true,
+        "forbidden_qa_labels": ["proof_mismatch", "hype"]
+      }
+    },
+    {
+      "id": "avaliacao_positive_calculation",
+      "nucleus": "avaliacao",
+      "profile": "commercial",
+      "html": "<main><section><h2>Decida com memória de cálculo visível</h2><p>O laudo torna visíveis insumos, fórmula e a opinião de valor para a negociação.</p><p>Calculamos homogeneização e fatores a partir da amostra declarada.</p><a class=\"button\" href=\"#captura\">Configurar a avaliação</a><p data-boundary-id=\"scope\">Opinião de valor não é garantia de transação.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.avaliacao.calculo",
+          "nucleus": "avaliacao",
+          "claim": "Calculamos homogeneização e fatores a partir da amostra declarada.",
+          "proof_role": "calculation",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "AUTHORIZED_CALCULATION",
+          "placement_target": "fixture",
+          "boundary": "Opinião de valor não é garantia de transação.",
+          "prohibited_inference": "garantia_de_negocio",
+          "revocation": "fixture_only"
+        }
+      ],
+      "required_caveats": [
+        { "boundary_id": "scope", "needle": "não é garantia de transação" }
+      ],
+      "expected": {
+        "defensive_opening": false,
+        "required_qa_labels": ["value_outcome", "artifact", "mechanism", "action"],
+        "forbidden_qa_labels": ["hype", "orphan_claim", "proof_mismatch"]
+      }
+    },
+    {
+      "id": "avaliacao_negative_credential_endorsement",
+      "nucleus": "avaliacao",
+      "profile": "commercial",
+      "html": "<main><section><h2>Acreditados pelo Tribunal</h2><p>Credencial de pós-graduação nos torna homologados e certificados pelo Tribunal para qualquer avaliação.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.avaliacao.endosso",
+          "nucleus": "avaliacao",
+          "claim": "Credencial de pós-graduação nos torna homologados e certificados pelo Tribunal para qualquer avaliação.",
+          "proof_role": "credential",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "PROHIBITED_PROMOTION",
+          "placement_target": "fixture",
+          "boundary": "Credencial demonstra aderência específica, nunca endosso.",
+          "prohibited_inference": "endosso",
+          "revocation": "fixture_only"
+        }
+      ],
+      "expected": {
+        "required_qa_labels": ["proof_mismatch", "hype"],
+        "forbidden_qa_labels": ["value_outcome", "proof"],
+        "promotion_codes": ["credential_not_endorsement"]
+      }
+    },
+    {
+      "id": "avaliacao_unknown_value",
+      "nucleus": "avaliacao",
+      "profile": "public_data",
+      "html": "<main><section><h2>Veja o que a amostra permite decidir</h2><p>A base mostra data, cobertura e origem de cada comparável.</p><p data-boundary-id=\"data\">Quando a amostra não sustenta o fator, o campo permanece UNKNOWN.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.avaliacao.unknown",
+          "nucleus": "avaliacao",
+          "claim": "Quando a amostra não sustenta o fator, o campo permanece UNKNOWN.",
+          "proof_role": "unknown",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "UNKNOWN",
+          "placement_target": "fixture",
+          "boundary": "UNKNOWN não prova valor alto nem baixo.",
+          "prohibited_inference": "prova_positiva_ou_negativa",
+          "revocation": "fixture_only"
+        }
+      ],
+      "required_caveats": [
+        { "boundary_id": "data", "needle": "UNKNOWN" }
+      ],
+      "expected": {
+        "unknown_is_neither_proof": true
+      }
+    },
+    {
+      "id": "edificacoes_positive_synthetic_method",
+      "nucleus": "edificacoes_bim_orcamento",
+      "profile": "commercial",
+      "html": "<main><section><h2>Inspecione colunas e fórmulas do orçamento</h2><p>O modelo integral mostra quantitativos, composições e prioridades do artefato.</p><p>Reconciliamos projeto, quantitativo e memória de cálculo para a direção decidir o próximo passo.</p><a href=\"#captura\">Configurar esta análise</a><p data-boundary-id=\"synthetic\">Os dados são sintéticos e não representam cliente ou resultado observado.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.edificacoes.sintetico.metodo",
+          "nucleus": "edificacoes_bim_orcamento",
+          "claim": "O modelo integral mostra quantitativos, composições e prioridades do artefato.",
+          "proof_role": "artifact",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "AUTHORIZED_ARTIFACT",
+          "placement_target": "fixture",
+          "boundary": "Os dados são sintéticos e não representam cliente ou resultado observado.",
+          "prohibited_inference": "outcome_de_cliente",
+          "revocation": "fixture_only",
+          "synthetic": true
+        }
+      ],
+      "required_caveats": [
+        { "boundary_id": "synthetic", "needle": "sintéticos" }
+      ],
+      "expected": {
+        "defensive_opening": false,
+        "required_qa_labels": ["artifact", "mechanism", "action"],
+        "forbidden_qa_labels": ["proof_mismatch", "hype"],
+        "synthetic_demonstrates_method_not_outcome": true
+      }
+    },
+    {
+      "id": "edificacoes_negative_synthetic_as_outcome",
+      "nucleus": "edificacoes_bim_orcamento",
+      "profile": "commercial",
+      "html": "<main><section><h2>Economia real do cliente</h2><p>Este modelo sintético comprova o resultado observado na obra do cliente e a economia prometida.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.edificacoes.sintetico.outcome",
+          "nucleus": "edificacoes_bim_orcamento",
+          "claim": "Este modelo sintético comprova o resultado observado na obra do cliente e a economia prometida.",
+          "proof_role": "artifact",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "PROHIBITED_PROMOTION",
+          "placement_target": "fixture",
+          "boundary": "Sintético não é outcome.",
+          "prohibited_inference": "outcome_de_cliente",
+          "revocation": "fixture_only",
+          "synthetic": true,
+          "promotes_to": "permissioned_client_outcome"
+        }
+      ],
+      "expected": {
+        "required_qa_labels": ["proof_mismatch"],
+        "promotion_codes": ["synthetic_artifact_not_outcome"]
+      }
+    },
+    {
+      "id": "edificacoes_unknown_cost",
+      "nucleus": "edificacoes_bim_orcamento",
+      "profile": "public_data",
+      "html": "<main><section><h2>Veja o que o quantitativo permite decidir</h2><p>A planilha mostra origem e data de cada composição.</p><p data-boundary-id=\"data\">Custo unitário permanece UNKNOWN sem insumo de medição.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.edificacoes.unknown",
+          "nucleus": "edificacoes_bim_orcamento",
+          "claim": "Custo unitário permanece UNKNOWN sem insumo de medição.",
+          "proof_role": "unknown",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "UNKNOWN",
+          "placement_target": "fixture",
+          "boundary": "UNKNOWN não é preço baixo nem alto.",
+          "prohibited_inference": "prova_positiva_ou_negativa",
+          "revocation": "fixture_only"
+        }
+      ],
+      "required_caveats": [
+        { "boundary_id": "data", "needle": "UNKNOWN" }
+      ],
+      "expected": {
+        "unknown_is_neither_proof": true
+      }
+    },
+    {
+      "id": "sst_positive_expertise_method",
+      "nucleus": "sst",
+      "profile": "commercial",
+      "html": "<main><section><h2>Priorize controles antes do litígio</h2><p>A análise de risco documenta perigos, controles e residual para a direção escolher a ação preventiva.</p><p>A experiência em segurança do trabalho entra na classificação de perigo e na cronologia do evento.</p><a class=\"button\" href=\"#captura\">Registrar o contexto de SST</a><p data-boundary-id=\"scope\">O método não garante acidente zero nem êxito no processo trabalhista.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.sst.metodo",
+          "nucleus": "sst",
+          "claim": "A análise de risco documenta perigos, controles e residual para a direção escolher a ação preventiva.",
+          "proof_role": "method",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "AUTHORIZED_METHOD",
+          "placement_target": "fixture",
+          "boundary": "O método não garante acidente zero nem êxito no processo trabalhista.",
+          "prohibited_inference": "garantia_de_resultado",
+          "revocation": "fixture_only"
+        }
+      ],
+      "required_caveats": [
+        { "boundary_id": "scope", "needle": "não garante acidente zero" }
+      ],
+      "expected": {
+        "defensive_opening": false,
+        "required_qa_labels": ["value_outcome", "mechanism", "action", "limitation"],
+        "forbidden_qa_labels": ["hype", "proof_mismatch"]
+      }
+    },
+    {
+      "id": "sst_negative_method_as_result",
+      "nucleus": "sst",
+      "profile": "commercial",
+      "html": "<main><section><h2>Acidente zero garantido</h2><p>Nosso método garante resultado e elimina acidentes na operação do cliente.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.sst.metodo.resultado",
+          "nucleus": "sst",
+          "claim": "Nosso método garante resultado e elimina acidentes na operação do cliente.",
+          "proof_role": "method",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "PROHIBITED_PROMOTION",
+          "placement_target": "fixture",
+          "boundary": "Método não é resultado.",
+          "prohibited_inference": "garantia_de_resultado",
+          "revocation": "fixture_only",
+          "promotes_to": "permissioned_client_outcome"
+        }
+      ],
+      "expected": {
+        "required_qa_labels": ["proof_mismatch"],
+        "promotion_codes": ["method_not_result"]
+      }
+    },
+    {
+      "id": "sst_unknown_cause",
+      "nucleus": "sst",
+      "profile": "public_data",
+      "html": "<main><section><h2>Veja o que o dossiê permite afirmar</h2><p>A cronologia mostra fonte e data de cada evento.</p><p data-boundary-id=\"data\">A causa do acidente permanece UNKNOWN sem suporte documental.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.sst.unknown",
+          "nucleus": "sst",
+          "claim": "A causa do acidente permanece UNKNOWN sem suporte documental.",
+          "proof_role": "unknown",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "UNKNOWN",
+          "placement_target": "fixture",
+          "boundary": "UNKNOWN não prova culpa nem isenção.",
+          "prohibited_inference": "prova_positiva_ou_negativa",
+          "revocation": "fixture_only"
+        }
+      ],
+      "required_caveats": [
+        { "boundary_id": "data", "needle": "UNKNOWN" }
+      ],
+      "expected": {
+        "unknown_is_neither_proof": true
+      }
+    },
+    {
+      "id": "b2g_positive_public_source_method",
+      "nucleus": "b2g",
+      "profile": "commercial",
+      "html": "<main><section><h2>Rastreie o contrato até a fonte pública</h2><p>A leitura reúne evento, impacto e opção para a direção escolher a próxima ação.</p><p>Fonte, data, fórmula e UNKNOWN permanecem visíveis em cada item.</p><a class=\"button\" href=\"#captura\">Registrar o contrato para enquadramento</a><p data-boundary-id=\"synthetic\">O exemplo público não é cliente nem economia observada.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.b2g.fonte",
+          "nucleus": "b2g",
+          "claim": "Fonte, data, fórmula e UNKNOWN permanecem visíveis em cada item.",
+          "proof_role": "source_provenance",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "AUTHORIZED_SOURCE",
+          "placement_target": "fixture",
+          "boundary": "O exemplo público não é cliente nem economia observada.",
+          "prohibited_inference": "cliente_ou_outcome",
+          "revocation": "fixture_only",
+          "public_source": true
+        }
+      ],
+      "required_caveats": [
+        { "boundary_id": "synthetic", "needle": "não é cliente" }
+      ],
+      "expected": {
+        "defensive_opening": false,
+        "required_qa_labels": ["value_outcome", "proof", "action"],
+        "forbidden_qa_labels": ["proof_mismatch", "hype"]
+      }
+    },
+    {
+      "id": "b2g_negative_public_source_as_client",
+      "nucleus": "b2g",
+      "profile": "commercial",
+      "html": "<main><section><h2>Nosso cliente no PNCP</h2><p>Este contrato público comprova o cliente atendido e o resultado obtido.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.b2g.fonte.cliente",
+          "nucleus": "b2g",
+          "claim": "Este contrato público comprova o cliente atendido e o resultado obtido.",
+          "proof_role": "source_provenance",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "PROHIBITED_PROMOTION",
+          "placement_target": "fixture",
+          "boundary": "Fonte pública não é cliente.",
+          "prohibited_inference": "cliente_ou_outcome",
+          "revocation": "fixture_only",
+          "public_source": true,
+          "promotes_to": "permissioned_client_outcome"
+        }
+      ],
+      "expected": {
+        "required_qa_labels": ["proof_mismatch"],
+        "promotion_codes": ["public_source_not_client"]
+      }
+    },
+    {
+      "id": "b2g_unknown_savings",
+      "nucleus": "b2g",
+      "profile": "public_data",
+      "html": "<main><section><h2>Veja o que a fonte permite decidir</h2><p>A base mostra data, cobertura e origem de cada fato.</p><p data-boundary-id=\"data\">A economia permanece UNKNOWN; a fonte não sustenta o número.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.b2g.unknown",
+          "nucleus": "b2g",
+          "claim": "A economia permanece UNKNOWN; a fonte não sustenta o número.",
+          "proof_role": "unknown",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "UNKNOWN",
+          "placement_target": "fixture",
+          "boundary": "UNKNOWN não é economia zero nem economia alta.",
+          "prohibited_inference": "prova_positiva_ou_negativa",
+          "revocation": "fixture_only"
+        }
+      ],
+      "required_caveats": [
+        { "boundary_id": "data", "needle": "UNKNOWN" }
+      ],
+      "expected": {
+        "unknown_is_neither_proof": true
+      }
+    },
+    {
+      "id": "benefit_with_sem",
+      "nucleus": "pericia_assistencia",
+      "profile": "commercial",
+      "html": "<main><section><h2>Rotina de quesitos</h2><p>Priorize documentos e decisões sem montar uma equipe interna de perícia.</p><a href=\"#captura\">Configurar a rotina</a></section></main>",
+      "expected": {
+        "defensive_opening": false,
+        "text_contains_primary": {
+          "sem montar uma equipe interna de perícia": "value_outcome"
+        },
+        "forbidden_qa_labels": ["defensive_repetition"],
+        "benefit_with_sem_not_punished": true
+      }
+    },
+    {
+      "id": "hype_is_not_value",
+      "nucleus": "pericia_assistencia",
+      "profile": "commercial",
+      "html": "<main><section><h2>Solução revolucionária</h2><p>Experiência transformadora, líder e o melhor perito do Brasil, completo para qualquer empresa.</p></section></main>",
+      "expected": {
+        "required_qa_labels": ["hype"],
+        "forbidden_qa_labels": ["value_outcome", "proof"],
+        "hype_does_not_improve_score": true
+      }
+    },
+    {
+      "id": "orphan_claim",
+      "nucleus": "avaliacao",
+      "profile": "commercial",
+      "html": "<main><section><h2>Reduza o risco da disputa</h2><p>Entregamos o melhor resultado do mercado imobiliário.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.orphan",
+          "nucleus": "avaliacao",
+          "claim": "Entregamos o melhor resultado do mercado imobiliário.",
+          "proof_role": "",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "ORPHAN",
+          "placement_target": "fixture",
+          "boundary": "",
+          "prohibited_inference": "outcome_sem_prova",
+          "revocation": "fixture_only"
+        }
+      ],
+      "expected": {
+        "required_qa_labels": ["orphan_claim"],
+        "claim_without_proof_reported": true
+      }
+    },
+    {
+      "id": "proof_mismatch",
+      "nucleus": "b2g",
+      "profile": "commercial",
+      "html": "<main><section><h2>Resultado do cliente</h2><p>A fonte pública demonstra o cliente e o êxito obtido.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.mismatch",
+          "nucleus": "b2g",
+          "claim": "A fonte pública demonstra o cliente e o êxito obtido.",
+          "proof_role": "source_provenance",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "PROHIBITED_PROMOTION",
+          "placement_target": "fixture",
+          "boundary": "Fonte pública não é cliente.",
+          "prohibited_inference": "cliente_ou_outcome",
+          "revocation": "fixture_only",
+          "public_source": true,
+          "promotes_to": "permissioned_client_outcome"
+        }
+      ],
+      "expected": {
+        "required_qa_labels": ["proof_mismatch"],
+        "promotion_codes": ["public_source_not_client"]
+      }
+    },
+    {
+      "id": "required_caveat_present",
+      "nucleus": "edificacoes_bim_orcamento",
+      "profile": "commercial",
+      "html": "<main><section><h2>Inspecione a trilha antes de contratar</h2><p>A matriz permite rastrear cada decisão até fonte, data e cálculo.</p><p>O modelo integral mostra colunas, fórmulas e prioridades do artefato.</p><p data-boundary-id=\"synthetic\">Os dados são sintéticos e não representam cliente ou resultado observado.</p><a href=\"#captura\">Configurar esta análise</a></section></main>",
+      "required_caveats": [
+        { "boundary_id": "synthetic", "needle": "sintéticos" }
+      ],
+      "expected": {
+        "caveat_gate_pass": true,
+        "forbidden_qa_labels": ["caveat_removed"]
+      }
+    },
+    {
+      "id": "required_caveat_removed",
+      "nucleus": "edificacoes_bim_orcamento",
+      "profile": "commercial",
+      "strip_from_id": "required_caveat_present",
+      "html": "<main><section><h2>Inspecione a trilha antes de contratar</h2><p>A matriz permite rastrear cada decisão até fonte, data e cálculo.</p><p>O modelo integral mostra colunas, fórmulas e prioridades do artefato.</p><a href=\"#captura\">Configurar esta análise</a></section></main>",
+      "required_caveats": [
+        { "boundary_id": "synthetic", "needle": "sintéticos" }
+      ],
+      "expected": {
+        "caveat_gate_pass": false,
+        "required_qa_labels": ["caveat_removed"],
+        "independent_truth_gate_fails": true,
+        "semantic_score_must_not_hide_failure": true
+      }
+    },
+    {
+      "id": "defensive_repetition",
+      "nucleus": "b2g",
+      "profile": "commercial",
+      "html": "<main><section><h2>O que não fazemos</h2><p>Não há case, logo, review nem economia prometida.</p><p>Resultados de clientes: nenhum publicado até agora.</p><p>Sem case publicado, sem logo e sem review independente.</p><p>A matriz organiza cronologia, cálculo e evidências para a direção decidir.</p></section></main>",
+      "expected": {
+        "defensive_opening": true,
+        "required_qa_labels": ["defensive_repetition"],
+        "minimum_negations": 3
+      }
+    },
+    {
+      "id": "absence_of_case_at_confusion_point",
+      "nucleus": "b2g",
+      "profile": "commercial",
+      "html": "<main><section><h2>Inspecione o método antes de contratar</h2><p>A matriz permite rastrear cada decisão até fonte, data e cálculo.</p><p>Você recebe o artefato para revisar com engenharia e jurídico.</p><a class=\"button\" href=\"#captura\">Registrar o contrato para enquadramento</a><p data-boundary-id=\"client\">Não há case, logo ou review autorizado neste objeto de evidência.</p></section></main>",
+      "required_caveats": [
+        { "boundary_id": "client", "needle": "Não há case" }
+      ],
+      "expected": {
+        "defensive_opening": false,
+        "forbidden_qa_labels": ["defensive_repetition"],
+        "absence_of_case_does_not_dominate": true
+      }
+    },
+    {
+      "id": "empty_client_outcome_fail_closed",
+      "nucleus": "sst",
+      "profile": "commercial",
+      "html": "<main><section><h2>Resultado do cliente em SST</h2><p>Publicamos o êxito observado na operação do cliente.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.client.outcome.attempt",
+          "nucleus": "sst",
+          "claim": "Publicamos o êxito observado na operação do cliente.",
+          "proof_role": "permissioned_client_outcome",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "PUBLISHED",
+          "placement_target": "fixture",
+          "boundary": "",
+          "prohibited_inference": "",
+          "revocation": "fixture_only",
+          "publishable": true
+        }
+      ],
+      "expected": {
+        "client_outcome_fail_closed": true,
+        "required_qa_labels": ["proof_mismatch"]
+      }
+    },
+    {
+      "id": "user_supplied_fact_not_measurement",
+      "nucleus": "avaliacao",
+      "profile": "commercial",
+      "html": "<main><section><h2>Separe o que o contratante informou</h2><p>A área de 200 m² entra como fato informado pelo contratante, não como medição da CONFENGE.</p><p data-boundary-id=\"data\">Fato do usuário permanece rotulado até haver medição própria.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.user.fact",
+          "nucleus": "avaliacao",
+          "claim": "A área de 200 m² entra como fato informado pelo contratante, não como medição da CONFENGE.",
+          "proof_role": "user_supplied_fact",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "USER_SUPPLIED",
+          "placement_target": "fixture",
+          "boundary": "Fato do usuário não é medição nem cálculo da CONFENGE.",
+          "prohibited_inference": "medicao_propria",
+          "revocation": "fixture_only"
+        }
+      ],
+      "expected": {
+        "claim_promotions_pass": true,
+        "forbidden_qa_labels": ["proof_mismatch"]
+      }
+    },
+    {
+      "id": "inference_not_fact",
+      "nucleus": "pericia_assistencia",
+      "profile": "commercial",
+      "html": "<main><section><h2>Separe fato e inferência</h2><p>Se a cronologia estiver completa, o nexo poderá ser discutido; isso é inferência, não fato observado.</p></section></main>",
+      "claims": [
+        {
+          "claim_id": "fx.inference",
+          "nucleus": "pericia_assistencia",
+          "claim": "Se a cronologia estiver completa, o nexo poderá ser discutido; isso é inferência, não fato observado.",
+          "proof_role": "inference",
+          "source_owner": "fixture",
+          "as_of": "2026-09-04",
+          "status": "INFERENCE_ONLY",
+          "placement_target": "fixture",
+          "boundary": "Inferência não é fato nem cálculo.",
+          "prohibited_inference": "fato_observado",
+          "revocation": "fixture_only"
+        }
+      ],
+      "expected": {
+        "claim_promotions_pass": true
+      }
+    }
+  ]
+}

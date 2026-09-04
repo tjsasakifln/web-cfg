@@ -1,0 +1,425 @@
+{
+  "schema": "confenge.proof-role-contract/2.0",
+  "contract_version": "CFG-PROOF-ROLE-2026-09-04-v2",
+  "campaign_id": 12,
+  "as_of": "2026-09-04",
+  "issues": ["#531", "#534", "#328", "#581", "#577"],
+  "decision_state": "EXECUTE_NOW",
+  "extends": {
+    "contract": "data/commercial/value-first-copy-contract.v1.json",
+    "proof_roles_v1_count": 8,
+    "reason": "Campaign 12 is exclusive owner of the proof-role contract. v1 remains the #527 constitution and frozen #534 baseline; this file generalizes the eight roles without mutating the shared JSON."
+  },
+  "consumed_not_rewritten": [
+    "data/site/permissioned-proof-registry.json",
+    "data/commercial/real-proof-registry.v1.json",
+    "data/organic/public-family-registry.json",
+    "docs/contracts/permissioned-proof/permissioned-proof-v1.json"
+  ],
+  "nuclei": [
+    {
+      "id": "pericia_assistencia",
+      "label_pt": "Perícias e Assistência Técnica"
+    },
+    {
+      "id": "avaliacao",
+      "label_pt": "Avaliações de Imóveis"
+    },
+    {
+      "id": "edificacoes_bim_orcamento",
+      "label_pt": "Engenharia de Edificações, BIM e Orçamento"
+    },
+    {
+      "id": "sst",
+      "label_pt": "Segurança do Trabalho"
+    },
+    {
+      "id": "b2g",
+      "label_pt": "Obras Públicas e B2G"
+    }
+  ],
+  "proof_roles": [
+    {
+      "id": "artifact",
+      "demonstrates": "Objeto de trabalho inspecionável: laudo, matriz, modelo, memória de cálculo, dossiê ou trilha.",
+      "must_not_demonstrate": "resultado observado de cliente quando o artefato é sintético ou demonstrativo"
+    },
+    {
+      "id": "calculation",
+      "demonstrates": "Conta reproduzível, fórmula, quantitativo ou memória com insumos visíveis.",
+      "must_not_demonstrate": "economia, êxito ou valor de mercado sem os insumos e a classe epistêmica"
+    },
+    {
+      "id": "source_provenance",
+      "demonstrates": "Origem rastreável de um fato: fonte pública, documento, data de corte, dono.",
+      "must_not_demonstrate": "relação de cliente, falha do contratante da fonte, ou outcome"
+    },
+    {
+      "id": "freshness",
+      "demonstrates": "Quando o fato foi verificado e até quando vale.",
+      "must_not_demonstrate": "atualidade de um claim distinto sem as_of próprio"
+    },
+    {
+      "id": "method",
+      "demonstrates": "Como insumos viram artefato: reconciliação, inspeção, quesitos, NBR, análise de risco.",
+      "must_not_demonstrate": "resultado, garantia de êxito, acidente zero ou nomeação"
+    },
+    {
+      "id": "expertise",
+      "demonstrates": "Experiência ligada a uma tarefa específica (cronologia, cálculo, inspeção, SST).",
+      "must_not_demonstrate": "superlativo, cobertura nacional ou selo de terceiro"
+    },
+    {
+      "id": "credential",
+      "demonstrates": "Aderência específica verificável: formação, cadastro, especialidade, com fonte e as_of.",
+      "must_not_demonstrate": "endosso, homologação, acreditação, certificação pelo Tribunal ou nomeação como perito do juízo"
+    },
+    {
+      "id": "permissioned_client_outcome",
+      "demonstrates": "Resultado de cliente com consentimento escopado, hash-bound e revogável.",
+      "must_not_demonstrate": "qualquer outcome na ausência de registro PUBLISHED",
+      "empty_fails_closed": true
+    },
+    {
+      "id": "boundary",
+      "demonstrates": "Limite material no ponto de confusão: sintético, jurídico, escopo, UNKNOWN, ausência de case.",
+      "must_not_demonstrate": "tese da página nem prova negativa de capacidade"
+    },
+    {
+      "id": "user_supplied_fact",
+      "demonstrates": "Fato informado pelo usuário/contratante, rotulado como tal.",
+      "must_not_demonstrate": "medição, perícia ou cálculo da CONFENGE"
+    },
+    {
+      "id": "inference",
+      "demonstrates": "Conclusão derivada, condicional, explicitamente inferida.",
+      "must_not_demonstrate": "fato observado ou cálculo reproduzível"
+    },
+    {
+      "id": "unknown",
+      "demonstrates": "Ausência de suporte: o campo permanece UNKNOWN.",
+      "must_not_demonstrate": "prova positiva nem prova negativa"
+    }
+  ],
+  "claim_map_fields": [
+    "claim_id",
+    "nucleus",
+    "claim",
+    "proof_role",
+    "source_owner",
+    "as_of",
+    "status",
+    "placement_target",
+    "boundary",
+    "prohibited_inference",
+    "revocation"
+  ],
+  "claim_status_values": [
+    "AUTHORIZED_METHOD",
+    "AUTHORIZED_ARTIFACT",
+    "AUTHORIZED_CALCULATION",
+    "AUTHORIZED_SOURCE",
+    "AUTHORIZED_CREDENTIAL_FACT_NOT_PUBLISHED",
+    "AUTHORIZED_EXPERTISE",
+    "AUTHORIZED_BOUNDARY",
+    "USER_SUPPLIED",
+    "INFERENCE_ONLY",
+    "UNKNOWN",
+    "NO_APPROVED_CLIENT_PROOF",
+    "PROHIBITED_PROMOTION",
+    "ORPHAN",
+    "DEFERRED_HTML"
+  ],
+  "client_outcome": {
+    "authority": "data/commercial/real-proof-registry.v1.json",
+    "registry": "data/site/permissioned-proof-registry.json",
+    "state": "NO_APPROVED_CLIENT_PROOF",
+    "fail_closed": true,
+    "empty_role_fails": true,
+    "owner_issue": "#328",
+    "publishable_statuses": ["AUTHORIZED", "APPROVED", "PUBLISHED"],
+    "sentinel_status": "NO_APPROVED_CLIENT_PROOF"
+  },
+  "promotion_prohibitions": [
+    {
+      "id": "synthetic_artifact_not_outcome",
+      "from_role": "artifact",
+      "when": "synthetic_or_demonstrative",
+      "must_not_demonstrate": "permissioned_client_outcome"
+    },
+    {
+      "id": "public_source_not_client",
+      "from_role": "source_provenance",
+      "when": "public_source",
+      "must_not_demonstrate": "permissioned_client_outcome"
+    },
+    {
+      "id": "credential_not_endorsement",
+      "from_role": "credential",
+      "must_not_demonstrate": "endorsement"
+    },
+    {
+      "id": "method_not_result",
+      "from_role": "method",
+      "must_not_demonstrate": "permissioned_client_outcome"
+    },
+    {
+      "id": "cptec_registration_not_nomeacao",
+      "from_role": "credential",
+      "when": "cptec_registration",
+      "must_not_demonstrate": "court_appointment"
+    },
+    {
+      "id": "unknown_is_neither",
+      "from_role": "unknown",
+      "must_not_demonstrate": ["positive_proof", "negative_proof"]
+    },
+    {
+      "id": "superlative_is_not_value",
+      "from_role": null,
+      "when": "hype_or_adjective",
+      "must_not_demonstrate": "value_outcome"
+    },
+    {
+      "id": "absence_of_case_does_not_dominate",
+      "from_role": "boundary",
+      "rule": "A ausência de case permanece explícita no ponto de confusão e não vira a mensagem principal."
+    },
+    {
+      "id": "material_limit_not_hidden",
+      "from_role": "boundary",
+      "rule": "Remover caveat obrigatório falha por gate de verdade independente; não melhora o diagnóstico semântico."
+    }
+  ],
+  "semantic_qa": {
+    "classifier_version": "CFG-MULTIVERTICAL-PROOF-QA-2.0.0",
+    "mode": "SHADOW_REPORT",
+    "ci_blocking": false,
+    "decision": "ITERATE",
+    "decision_reason": "Não existe corpus anotado por pessoa identificada e consentida. O classificador permanece report-only. Ratchet, threshold universal e CI bloqueante estão proibidos nesta versão.",
+    "labels": [
+      {
+        "id": "value_outcome",
+        "definition": "Decisão, consequência ou capacidade concreta. Superlativo ou adjetivo isolado não conta."
+      },
+      {
+        "id": "mechanism",
+        "definition": "Operação verificável que liga insumos ao artefato."
+      },
+      {
+        "id": "artifact",
+        "definition": "Objeto de trabalho reconhecível."
+      },
+      {
+        "id": "proof",
+        "definition": "Razão positiva autorizada para acreditar: fonte, data, método, cálculo, artefato, freshness, expertise ou credencial específica."
+      },
+      {
+        "id": "action",
+        "definition": "Próximo estado ou compromisso reconhecível."
+      },
+      {
+        "id": "limitation",
+        "definition": "Condição, exclusão, UNKNOWN ou fronteira material."
+      },
+      {
+        "id": "hype",
+        "definition": "Superlativo, adjetivo vazio ou claim inflado. Não soma valor nem prova."
+      },
+      {
+        "id": "orphan_claim",
+        "definition": "Claim material sem proof_role ou sem mapa de prova."
+      },
+      {
+        "id": "proof_mismatch",
+        "definition": "Papel de prova que não pode sustentar o claim ( promoção proibida )."
+      },
+      {
+        "id": "caveat_removed",
+        "definition": "Caveat obrigatório ausente. Avaliado por gate de verdade independente do score semântico."
+      },
+      {
+        "id": "defensive_repetition",
+        "definition": "Anti-claim repetido que domina a mensagem antes do valor, artefato ou ação."
+      }
+    ],
+    "quality_score": null,
+    "universal_ratio": null,
+    "word_count_is_not_persuasion_gate": true,
+    "benefit_with_sem_is_value": true,
+    "hype_does_not_improve_score": true,
+    "ratchet_policy": {
+      "first_delivery": "report_only",
+      "future_decision": "ITERATE",
+      "forbidden_now": [
+        "ADOPT_RATCHET",
+        "ratio universal",
+        "CI blocking",
+        "limite bruto de não ou sem",
+        "recompensa por hype",
+        "remoção de caveat para melhorar score"
+      ],
+      "future_blocking_requires": [
+        "corpus anotado por humano identificado e consentido",
+        "matriz de erros preenchida",
+        "teto de falso positivo",
+        "escape auditável",
+        "decisão explícita posterior"
+      ]
+    }
+  },
+  "human_review": {
+    "state": "AWAITING_HUMAN_ANNOTATION",
+    "identified_human_corpus": false,
+    "agent_or_llm_self_label_as_human": "FORBIDDEN",
+    "protocol": "docs/commercial/multivertical-proof-qa-annotation-protocol.md",
+    "reviewed_fixtures": 0,
+    "confusion_matrix": null,
+    "note": "Fixtures exercitam o classificador automaticamente. Isso não é anotação humana."
+  },
+  "error_matrix": {
+    "state": "AWAITING_HUMAN_ANNOTATION",
+    "human_confusion_matrix": null,
+    "machine_vs_fixture": {
+      "purpose": "Documentar erros do classificador contra rótulos de fixture de contrato, sem pretender revisão humana.",
+      "known_false_positives": [
+        {
+          "label": "limitation",
+          "example_fixture": "benefit_with_sem",
+          "risk": "Frase de benefício com 'sem' classificada como limite. O contrato exige value_outcome.",
+          "mitigation": "BENEFIT_WITHOUT_RE e teste dedicado."
+        }
+      ],
+      "known_false_negatives": [
+        {
+          "label": "hype",
+          "example_fixture": "hype_is_not_value",
+          "risk": "Superlativo não listado no léxico escapa da etiqueta hype.",
+          "mitigation": "Fixture cobre o léxico atual; expansão exige revisão humana, não ratchet."
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "rule": "source_sha nomeia o objeto Git cujos bytes foram lidos. HTML de working tree nunca é rotulado HEAD ou main.",
+    "working_tree_labels_forbidden": ["HEAD", "main", "origin/main"],
+    "ref_source_sha_equals_resolved_ref": true,
+    "no_silent_wt_fallback_when_ref_missing_file": true
+  },
+  "coverage": {
+    "manual_route_allowlist": false,
+    "public_authority": "data/organic/public-family-registry.json",
+    "reusable_across_derived_public_routes": true,
+    "html_application": "DEFERRED",
+    "html_application_owner": "#531 residual; campaign 12 does not mutate public copy",
+    "credential_publication_owner": "#581",
+    "client_proof_owner": "#328"
+  },
+  "privacy": {
+    "analytics_pii": "forbidden",
+    "fixture_pii": "forbidden",
+    "real_client_names": "forbidden",
+    "docket_numbers": "forbidden"
+  },
+  "implementation": {
+    "audit_runner": "scripts/commercial/multivertical_proof_qa.mjs",
+    "fixture_corpus": "data/commercial/proof-qa-fixtures.v2.json",
+    "test_runner": "tests/commercial/test_multivertical_proof_qa.mjs",
+    "report_command": "node scripts/commercial/multivertical_proof_qa.mjs --fixtures-only",
+    "test_command": "node tests/commercial/test_multivertical_proof_qa.mjs",
+    "package_json": "unchanged; see docs/integration/campaign-20260904/12/npm-script-registration.md"
+  },
+  "claims": [
+    {
+      "claim_id": "pericia.assistente.metodo",
+      "nucleus": "pericia_assistencia",
+      "claim": "Assistência técnica organiza cronologia, documentos e quesitos para a parte decidir o próximo ato.",
+      "proof_role": "method",
+      "source_owner": "web-cfg/proof-role-contract.v2",
+      "as_of": "2026-09-04",
+      "status": "AUTHORIZED_METHOD",
+      "placement_target": "deferred_html_application",
+      "boundary": "Assistência técnica não é advocacia, representação jurídica nem nomeação como perito do juízo.",
+      "prohibited_inference": "nomeacao_como_perito_do_juizo",
+      "revocation": "Remover o claim e a prova adjacente juntos; manter histórico."
+    },
+    {
+      "claim_id": "pericia.cptec.cadastro",
+      "nucleus": "pericia_assistencia",
+      "claim": "Cadastro em órgão de perícia, quando publicado por #581, demonstra aderência de especialidade e não nomeação.",
+      "proof_role": "credential",
+      "source_owner": "issue_581",
+      "as_of": "2026-09-04",
+      "status": "AUTHORIZED_CREDENTIAL_FACT_NOT_PUBLISHED",
+      "placement_target": "deferred_#581",
+      "boundary": "Cadastro não é nomeação, homologação, chancela do Tribunal nem garantia de êxito.",
+      "prohibited_inference": "perito_oficial_ou_nomeacao",
+      "revocation": "Revogar o registro de credencial e todas as projeções juntos."
+    },
+    {
+      "claim_id": "avaliacao.metodo.laudo",
+      "nucleus": "avaliacao",
+      "claim": "O laudo de avaliação torna visível método, insumos e memória de cálculo usados na opinião de valor.",
+      "proof_role": "artifact",
+      "source_owner": "web-cfg/proof-role-contract.v2",
+      "as_of": "2026-09-04",
+      "status": "AUTHORIZED_ARTIFACT",
+      "placement_target": "deferred_html_application",
+      "boundary": "Opinião de valor não é garantia de transação nem resultado de cliente.",
+      "prohibited_inference": "garantia_de_negocio_ou_outcome_de_cliente",
+      "revocation": "Remover o claim e o artefato adjacente juntos."
+    },
+    {
+      "claim_id": "edificacoes.modelo.sintetico",
+      "nucleus": "edificacoes_bim_orcamento",
+      "claim": "Modelo sintético de orçamento ou BIM demonstra método e colunas do artefato.",
+      "proof_role": "artifact",
+      "source_owner": "web-cfg/proof-role-contract.v2",
+      "as_of": "2026-09-04",
+      "status": "AUTHORIZED_ARTIFACT",
+      "placement_target": "deferred_html_application",
+      "boundary": "Dados sintéticos não representam cliente, obra real nem economia observada.",
+      "prohibited_inference": "outcome_de_cliente",
+      "revocation": "Manter o rótulo sintético em todo ponto de confusão; revogar o claim com o modelo."
+    },
+    {
+      "claim_id": "sst.analise.risco.metodo",
+      "nucleus": "sst",
+      "claim": "Análise de risco documenta perigos, controles e residual para decisão preventiva ou assistencial.",
+      "proof_role": "method",
+      "source_owner": "web-cfg/proof-role-contract.v2",
+      "as_of": "2026-09-04",
+      "status": "AUTHORIZED_METHOD",
+      "placement_target": "deferred_html_application",
+      "boundary": "Método não garante acidente zero nem êxito em litígio trabalhista.",
+      "prohibited_inference": "garantia_de_resultado",
+      "revocation": "Remover o claim e o método adjacente juntos."
+    },
+    {
+      "claim_id": "b2g.fonte.publica.pncp",
+      "nucleus": "b2g",
+      "claim": "Contrato público rastreável demonstra fonte, data e cálculo, não relação de cliente.",
+      "proof_role": "source_provenance",
+      "source_owner": "extra-cli SELECT-only",
+      "as_of": "2026-09-04",
+      "status": "AUTHORIZED_SOURCE",
+      "placement_target": "deferred_html_application",
+      "boundary": "Fonte pública não é cliente, logo, review nem economia observada.",
+      "prohibited_inference": "cliente_ou_outcome",
+      "revocation": "Remover o claim com a trilha de fonte."
+    },
+    {
+      "claim_id": "all.client_outcome.sentinel",
+      "nucleus": "b2g",
+      "claim": "Nenhum resultado de cliente autorizado está publicado.",
+      "proof_role": "permissioned_client_outcome",
+      "source_owner": "data/site/permissioned-proof-registry.json",
+      "as_of": "2026-09-04",
+      "status": "NO_APPROVED_CLIENT_PROOF",
+      "placement_target": "none",
+      "boundary": "A ausência de case permanece explícita no ponto de confusão e não domina a mensagem.",
+      "prohibited_inference": "synthetic_or_public_source_as_client",
+      "revocation": "n/a_empty_sentinel"
+    }
+  ]
+}
