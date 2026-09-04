@@ -9,6 +9,7 @@ const EXPECTED_FUNCTIONS = [
   "conversion-intake",
   "correction",
   "lead",
+  "live-intelligence-analyze",
   "market-answer-intake",
   "nurture",
   "offer-checkout",
@@ -22,17 +23,17 @@ const INVENTORY = buildFunctionInventory();
 
 test("inventory discovers every current file and every top-level handler automatically", () => {
   const inventory = INVENTORY;
-  assert.equal(inventory.file_count, 38);
-  assert.equal(inventory.function_count, 14);
+  assert.equal(inventory.file_count, 42);
+  assert.equal(inventory.function_count, 15);
   assert.equal(inventory.validation.ok, true);
-  assert.equal(inventory.validation.loaded_handlers, 14);
+  assert.equal(inventory.validation.loaded_handlers, 15);
   assert.deepEqual(
     inventory.functions.map((entry) => entry.name),
     EXPECTED_FUNCTIONS,
   );
   assert.equal(
     inventory.files.filter((entry) => entry.role === "support_library").length,
-    23,
+    26,
   );
   assert.ok(
     inventory.files.some((entry) =>
