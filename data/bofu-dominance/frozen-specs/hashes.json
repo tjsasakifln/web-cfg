@@ -3,7 +3,7 @@
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
   "baseline_commit": "6f95e392515d845d14107e63ebacd5ad0a26282b",
   "recaptured_at": "2026-09-04",
-  "recapture_reason": "Recaptura compacta de styles.css: minify whitespace in already-shipped layout/home rules to bring home critical payload under 150KiB (153667->~153496). Hash 9a3be8311b7fde19030a470809c23ef576093323418e2b53d7d1a4d9dd99645b. Sem html_mutation #291.",
+  "recapture_reason": "Recaptura compacta de styles.css: minify whitespace (journeys/hero/editorial/offer-context) so gzipped home payload clears 150KiB. Hash df11d4f0a53e8e727b29c929509008013533907b257b4ce40546116eb6152ac2. Sem html_mutation #291.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -21,7 +21,7 @@
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "fbfb0ee348841ae3a01c437cee579832139cc7868e6dcb081534ff956bfae654",
     "script.js": "412795711992bc7620347d34320c2007bef412a02b6bf1941eb0ff5c2fd30fe6",
-    "styles.css": "9a3be8311b7fde19030a470809c23ef576093323418e2b53d7d1a4d9dd99645b",
+    "styles.css": "df11d4f0a53e8e727b29c929509008013533907b257b4ce40546116eb6152ac2",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
     "robots.txt": "f5fcb01b1b51cb993860a8f6a77c2ea3e31584f95721e8e95e6093e2e54ec44d",
