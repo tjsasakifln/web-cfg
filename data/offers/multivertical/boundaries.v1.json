@@ -1,0 +1,423 @@
+{
+  "schema": "confenge.offer-boundary-rules/1.0",
+  "contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+  "note": "Sobreposição resolve-se por decisão e objeto, não por persona. Assistência trabalhista vive em expert_evidence_assistance; SST preventiva vive em occupational_safety.",
+  "rules": [
+    {
+      "rule_id": "screen",
+      "match": {
+        "decision": "screen_before_suit"
+      },
+      "primary_offer_id": "pre_litigation_technical_screening"
+    },
+    {
+      "rule_id": "civil_assist",
+      "match": {
+        "decision": "assist_civil_case"
+      },
+      "primary_offer_id": "civil_building_technical_assistance"
+    },
+    {
+      "rule_id": "labor_assist",
+      "match": {
+        "decision": "assist_labor_case"
+      },
+      "primary_offer_id": "labor_sst_technical_assistance"
+    },
+    {
+      "rule_id": "formal_val_urban",
+      "match": {
+        "decision": "formal_valuation",
+        "object": "urban_property"
+      },
+      "primary_offer_id": "urban_property_valuation"
+    },
+    {
+      "rule_id": "prelim_val",
+      "match": {
+        "decision": "preliminary_opinion",
+        "object": "urban_property"
+      },
+      "primary_offer_id": "preliminary_property_opinion",
+      "alternatives": [
+        {
+          "offer_id": "urban_property_valuation",
+          "justification": "se finalidade, data, imóvel e vistoria já sustentarem NBR 14653"
+        }
+      ]
+    },
+    {
+      "rule_id": "takeoff",
+      "match": {
+        "decision": "takeoff"
+      },
+      "primary_offer_id": "quantity_takeoff_budgeting"
+    },
+    {
+      "rule_id": "audit_budget",
+      "match": {
+        "decision": "audit_budget"
+      },
+      "primary_offer_id": "budget_audit_feasibility"
+    },
+    {
+      "rule_id": "bim",
+      "match": {
+        "decision": "bim_clash"
+      },
+      "primary_offer_id": "bim_coordination_clash_register"
+    },
+    {
+      "rule_id": "inspect",
+      "match": {
+        "decision": "inspect_pathology"
+      },
+      "primary_offer_id": "building_inspection_pathology"
+    },
+    {
+      "rule_id": "renovation",
+      "match": {
+        "decision": "renovation_plan"
+      },
+      "primary_offer_id": "renovation_plan_condo_review"
+    },
+    {
+      "rule_id": "asbuilt",
+      "match": {
+        "decision": "asbuilt"
+      },
+      "primary_offer_id": "asbuilt_document_reconciliation"
+    },
+    {
+      "rule_id": "readiness",
+      "match": {
+        "decision": "private_readiness"
+      },
+      "primary_offer_id": "private_project_technical_readiness_assessment"
+    },
+    {
+      "rule_id": "sst_diag",
+      "match": {
+        "decision": "sst_diagnosis"
+      },
+      "primary_offer_id": "sst_risk_documentation_diagnosis"
+    },
+    {
+      "rule_id": "sst_docs",
+      "match": {
+        "decision": "sst_docs"
+      },
+      "primary_offer_id": "sst_pgr_ltcat_aet_inputs"
+    },
+    {
+      "rule_id": "insalubrity_employer",
+      "match": {
+        "decision": "insalubrity",
+        "litigation": false
+      },
+      "primary_offer_id": "sst_insalubrity_perilousness_analysis"
+    },
+    {
+      "rule_id": "insalubrity_litigation",
+      "match": {
+        "decision": "insalubrity",
+        "litigation": true
+      },
+      "primary_offer_id": "labor_sst_technical_assistance",
+      "alternatives": [
+        {
+          "offer_id": "sst_insalubrity_perilousness_analysis",
+          "justification": "análise preventiva do empregador só se não houver assistência de parte"
+        }
+      ]
+    },
+    {
+      "rule_id": "sst_audit",
+      "match": {
+        "decision": "sst_audit"
+      },
+      "primary_offer_id": "sst_preventive_audit"
+    },
+    {
+      "rule_id": "b2g_planning_entity",
+      "match": {
+        "decision": "public_procurement_planning",
+        "public_entity": true
+      },
+      "primary_offer_id": "public_works_technical_procurement_planning"
+    },
+    {
+      "rule_id": "b2g_planning_contractor",
+      "match": {
+        "decision": "public_procurement_planning",
+        "public_entity": false
+      },
+      "gap_id": "GAP_UNMAPPED",
+      "reason": "licitante pedindo planejamento de ente deve ir às ofertas B2G retidas, não à #587"
+    },
+    {
+      "rule_id": "valuation_in_suit",
+      "match": {
+        "decision": "formal_valuation",
+        "object": "urban_property",
+        "litigation": true
+      },
+      "primary_offer_id": "urban_property_valuation",
+      "alternatives": [
+        {
+          "offer_id": "civil_building_technical_assistance",
+          "justification": "se a decisão da parte for tese construtiva e não valor"
+        }
+      ]
+    },
+    {
+      "rule_id": "inspection_vs_renovation",
+      "match": {
+        "decision": "renovation_plan",
+        "object": "building",
+        "condition_unknown": true
+      },
+      "primary_offer_id": "building_inspection_pathology",
+      "alternatives": [
+        {
+          "offer_id": "renovation_plan_condo_review",
+          "justification": "depois que a condição do recorte estiver conhecida"
+        }
+      ]
+    },
+    {
+      "rule_id": "readiness_vs_asbuilt",
+      "match": {
+        "decision": "private_readiness",
+        "object": "private_work",
+        "built_divergence": true
+      },
+      "primary_offer_id": "private_project_technical_readiness_assessment",
+      "alternatives": [
+        {
+          "offer_id": "asbuilt_document_reconciliation",
+          "justification": "se a pergunta já for só reconciliação documental do construído"
+        }
+      ]
+    },
+    {
+      "rule_id": "takeoff_vs_audit",
+      "match": {
+        "decision": "audit_budget",
+        "produces_new_budget": true
+      },
+      "primary_offer_id": "quantity_takeoff_budgeting",
+      "alternatives": [
+        {
+          "offer_id": "budget_audit_feasibility",
+          "justification": "se ainda for só testar a planilha de terceiro"
+        }
+      ]
+    },
+    {
+      "rule_id": "screen_vs_assist",
+      "match": {
+        "decision": "assist_civil_case",
+        "corpus_unknown": true
+      },
+      "primary_offer_id": "pre_litigation_technical_screening",
+      "alternatives": [
+        {
+          "offer_id": "civil_building_technical_assistance",
+          "justification": "após a triagem concluir que há tese técnica"
+        }
+      ]
+    },
+    {
+      "rule_id": "retained_generic",
+      "match": {
+        "decision": "retained_b2g"
+      },
+      "primary_from_field": "retained_offer_id"
+    },
+    {
+      "rule_id": "prioritize_bids",
+      "match": {
+        "decision": "prioritize_open_bids"
+      },
+      "primary_offer_id": "CFG-D01"
+    },
+    {
+      "rule_id": "bid_go_nogo",
+      "match": {
+        "decision": "bid_go_nogo"
+      },
+      "primary_offer_id": "CFG-D12"
+    },
+    {
+      "rule_id": "bid_budget_audit",
+      "match": {
+        "decision": "bid_budget_audit"
+      },
+      "primary_offer_id": "CFG-D14"
+    },
+    {
+      "rule_id": "measurement_glosa",
+      "match": {
+        "decision": "measurement_glosa"
+      },
+      "primary_offer_id": "CFG-D18"
+    },
+    {
+      "rule_id": "contract_dispute",
+      "match": {
+        "decision": "contract_dispute_b2g"
+      },
+      "primary_offer_id": "CFG-D42"
+    },
+    {
+      "rule_id": "expansion_package",
+      "match": {
+        "decision": "expansion_package"
+      },
+      "primary_offer_id": "CFG-DIAG-EXP-v1"
+    },
+    {
+      "rule_id": "b2g_retainer",
+      "match": {
+        "decision": "b2g_retainer_monthly"
+      },
+      "primary_offer_id": "CFG-DIRB2G-FLEX-v1"
+    },
+    {
+      "rule_id": "issue_588_page",
+      "match": {
+        "decision": "publish_money_page"
+      },
+      "gap_id": "GAP_ISSUE_588_PUBLICATION"
+    },
+    {
+      "rule_id": "rural",
+      "match": {
+        "decision": "formal_valuation",
+        "object": "rural_property"
+      },
+      "gap_id": "GAP_RURAL_VALUATION"
+    },
+    {
+      "rule_id": "court_expert",
+      "match": {
+        "decision": "court_appointed_expert"
+      },
+      "gap_id": "GAP_COURT_APPOINTED_EXPERT"
+    },
+    {
+      "rule_id": "advocacy",
+      "match": {
+        "decision": "legal_representation"
+      },
+      "gap_id": "GAP_LEGAL_REPRESENTATION"
+    },
+    {
+      "rule_id": "physician",
+      "match": {
+        "decision": "occupational_physician"
+      },
+      "gap_id": "GAP_OCCUPATIONAL_PHYSICIAN_AS_INTERNAL"
+    },
+    {
+      "rule_id": "architecture",
+      "match": {
+        "decision": "architecture_design"
+      },
+      "gap_id": "GAP_ARCHITECTURE_DESIGN"
+    },
+    {
+      "rule_id": "criminal",
+      "match": {
+        "decision": "criminal_forensics"
+      },
+      "gap_id": "GAP_CRIMINAL_FORENSICS"
+    },
+    {
+      "rule_id": "licensing",
+      "match": {
+        "decision": "environmental_licensing"
+      },
+      "gap_id": "GAP_ENVIRONMENTAL_LICENSING"
+    },
+    {
+      "rule_id": "nr12",
+      "match": {
+        "decision": "nr12_machine"
+      },
+      "gap_id": "GAP_NR12_MACHINE_SAFETY_SPECIALIST"
+    },
+    {
+      "rule_id": "saas",
+      "match": {
+        "decision": "software_saas"
+      },
+      "gap_id": "GAP_SOFTWARE_SAAS"
+    },
+    {
+      "rule_id": "hourly",
+      "match": {
+        "decision": "hourly_staff"
+      },
+      "gap_id": "GAP_HOURLY_STAFF_AUGMENTATION"
+    },
+    {
+      "rule_id": "open_retainer",
+      "match": {
+        "decision": "open_ended_retainer"
+      },
+      "gap_id": "GAP_OPEN_ENDED_RETAINER"
+    },
+    {
+      "rule_id": "intl_val",
+      "match": {
+        "decision": "formal_valuation",
+        "object": "foreign_property"
+      },
+      "gap_id": "GAP_INTERNATIONAL_VALUATION"
+    },
+    {
+      "rule_id": "mining",
+      "match": {
+        "decision": "mining"
+      },
+      "gap_id": "GAP_MINING"
+    },
+    {
+      "rule_id": "naval",
+      "match": {
+        "decision": "naval"
+      },
+      "gap_id": "GAP_NAVAL"
+    },
+    {
+      "rule_id": "electrical",
+      "match": {
+        "decision": "electrical_design"
+      },
+      "gap_id": "GAP_ELECTRICAL_DESIGN_PRIMARY"
+    },
+    {
+      "rule_id": "brigade",
+      "match": {
+        "decision": "fire_brigade_training"
+      },
+      "gap_id": "GAP_FIRE_BRIGADE_TRAINING"
+    },
+    {
+      "rule_id": "iso",
+      "match": {
+        "decision": "iso_certification"
+      },
+      "gap_id": "GAP_ISO_CERTIFICATION_BODY"
+    },
+    {
+      "rule_id": "airport",
+      "match": {
+        "decision": "airport_pavement"
+      },
+      "gap_id": "GAP_AIRPORT_PAVEMENT_SPECIALTY"
+    }
+  ]
+}
