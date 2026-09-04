@@ -337,6 +337,17 @@ body[data-content-cluster="home"] .journey-row-actions{
 }
 body[data-content-cluster="home"] .journey-alt-link{color:var(--muted);font-size:.9rem;text-underline-offset:3px}
 body[data-content-cluster="home"] .journey-alt-link:hover{color:var(--accent)}
+body[data-content-cluster="home"] .nucleus-chooser .journey-row{
+  padding:clamp(.85rem,2vw,1.2rem) 0;
+}
+body[data-content-cluster="home"] .nucleus-chooser .journey-row-body h3{
+  max-width:32ch;font-size:clamp(1.05rem,1.8vw,1.3rem);margin:0 0 .35rem;
+}
+body[data-content-cluster="home"] .nucleus-chooser .journey-row-body>p{margin:0 0 .4rem}
+body[data-content-cluster="home"] .nucleus-chooser .journey-row-actions{margin:.35rem 0 0}
+body[data-content-cluster="home"] .nucleus-chooser .journey-alt-link{
+  display:inline-flex;align-items:center;min-height:44px;
+}
 
 /* ── 5. Ofertas: uma tese dominante, apoios subordinados por formato ───── */
 body[data-content-cluster="home"] .offer-layout{
