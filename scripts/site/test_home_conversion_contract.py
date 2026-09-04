@@ -47,18 +47,19 @@ def test_first_fold_answers_the_four_skeptical_questions() -> None:
     html = _home()
     hero = _section(html, r'class="hero')
 
-    assert "Consultoria para licitações e contratos de obras públicas" in hero
-    assert "Para construtoras:" in hero
-    assert "decidir se o edital merece o capital" in hero
-    assert "precificar o risco" in hero
-    assert "proteger a margem" in hero
+    assert "Engenharia, Perícias e Inteligência Técnica" in hero
+    assert "advogados" in hero
+    assert "construtoras" in hero
+    assert "perícia" in hero.lower()
+    assert "contrato público" in hero
     assert "Engenharia Civil pela EESC-USP" in hero
     assert "Iniciativa privada e Administração Pública" in hero
     assert "Ver exemplo demonstrativo de relatório" in hero
-    # A primeira dobra precisa dizer o que o visitante recebe, nao so o que doi.
-    assert "relatório, matriz de risco e memória de cálculo" in hero
+    assert "responsável" in hero
+    assert "Assistência técnica não é advocacia" in hero
     assert 'href="#formulario-contato"' in hero
     assert hero.count("button-primary") == 1
+    assert 'href="#nucleos"' in hero
 
 
 def test_pncp_is_market_context_after_decision_and_capture() -> None:
