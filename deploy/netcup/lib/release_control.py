@@ -76,6 +76,18 @@ def is_live_intel_overlay(rel: str) -> bool:
     )
 
 
+def is_live_intel_withdrawal(rel: str) -> bool:
+    """Packaged fixture/opportunity files overlay may delete. Rewrites must stay."""
+    return rel in LIVE_INTEL_OVERLAY_FILES or rel.startswith(
+        LIVE_INTEL_OVERLAY_PREFIXES
+    )
+
+
+def is_release_ephemeral(rel: str) -> bool:
+    """Interpreter residue from overlay import; never part of the hashed payload."""
+    return "__pycache__" in Path(rel).parts or rel.endswith(".pyc")
+
+
 class ReleaseError(RuntimeError):
     """The requested release operation failed closed."""
 
@@ -396,16 +408,26 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
     expected = _parse_files_manifest(release / "metadata" / "files.sha256")
     actual = _actual_release_files(release)
     ignored = {"metadata/files.sha256", "metadata/release-manifest.json"}
-    actual_hashed = set(actual) - ignored
+    actual_hashed = {
+        rel for rel in actual if rel not in ignored and not is_release_ephemeral(rel)
+    }
 
     extra = sorted(actual_hashed - set(expected))
-    missing = sorted(set(expected) - actual_hashed)
+    missing = sorted(
+        rel
+        for rel in (set(expected) - actual_hashed)
+        if not is_live_intel_withdrawal(rel)
+    )
     unexpected = [rel for rel in extra if not is_live_intel_overlay(rel)]
     if missing or unexpected:
         raise ReleaseError(
             f"release file set mismatch; missing={missing}, extra={unexpected}"
         )
     for rel, digest in expected.items():
+        if rel not in actual:
+            if is_live_intel_withdrawal(rel):
+                continue
+            raise ReleaseError(f"release file checksum mismatch: {rel}")
         found = sha256_file(actual[rel])
         if found != digest:
             if rel in LIVE_INTEL_OVERLAY_REWRITES:
@@ -831,6 +853,8 @@ def _publish_live_intelligence_overlay(release: Path) -> None:
             return
         official = bundled.parent
     os.environ["CONFENGE_LI_OFFICIAL_DIR"] = str(official)
+    os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
+    sys.dont_write_bytecode = True
     publish_py = release / "scripts" / "live_intelligence" / "publish.py"
     organic_py = release / "scripts" / "organic" / "sitemap_graph.py"
     if not publish_py.is_file() or not organic_py.is_file():
