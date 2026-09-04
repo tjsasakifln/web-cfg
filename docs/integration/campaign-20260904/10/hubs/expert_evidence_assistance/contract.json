@@ -1,0 +1,8 @@
+{
+  "taxonomy": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
+  "nucleus_id": "expert_evidence_assistance",
+  "index_state": "withheld",
+  "href": "/#formulario-contato",
+  "fail_closed": true,
+  "not_production_fallback": true
+}
