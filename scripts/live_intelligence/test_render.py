@@ -130,6 +130,41 @@ def test_official_index_page_emits_canonical_robots_and_sitemap():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def test_producer_limitation_tokens_are_rewritten_to_reader_copy():
+    record = {
+        "opportunity_id": "12345678000190-1/2026",
+        "objeto": "Pavimentação asfáltica de via urbana",
+        "orgao": {"nome": "Município de Chapecó"},
+        "local": {"municipio": "Chapecó", "uf": "SC"},
+        "prazo": {"status": "ABERTA", "data_encerramento": "2026-09-24"},
+        "valor": {
+            "estimado_brl": "2500000",
+            "faixa": "100K_1M",
+            "epistemic_class": "FACT",
+        },
+        "fonte": [{"nome": "PNCP", "url": "https://pncp.gov.br/app/editais/1"}],
+        "freshness": {
+            "source_as_of": "2026-09-01T03:00:00+00:00",
+            "generated_at": "2026-09-01T09:00:00+00:00",
+            "max_age_hours": 48,
+        },
+        "publication_state": "PUBLISHABLE_INDEX",
+        "index_eligible": True,
+        "source_kind": "official_live",
+        "limitations": [
+            "UNKNOWN permanece UNKNOWN: ausência de evidência nunca é tratada como zero.",
+            "O status SUSPENSA previsto no contrato público nunca é emitido: não existe fonte observada para ele no produtor.",
+        ],
+    }
+    html = R.render_opportunity_html(record)
+    assert "UNKNOWN" not in html
+    assert "SUSPENSA" not in html
+    assert "100K_1M" not in html
+    assert "de R$ 100 mil a R$ 1 milhão" in html
+    assert "Ausência de evidência permanece ausência de evidência" in html
+    assert "sessão suspensa que esta fonte nunca emitiu" in html
+
+
 def test_one_hundred_rebuilds_do_not_mint_duplicate_urls_or_canonicals():
     tmp = _tmp_root()
     try:

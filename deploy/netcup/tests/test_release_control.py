@@ -443,8 +443,26 @@ def test_same_inputs_produce_identical_tarball(tmp_path: Path) -> None:
         "ops/bin/verify-release",
         "ops/bin/promote-release",
         "ops/bin/rollback",
+        "scripts/__init__.py",
+        "scripts/live_intelligence/publish.py",
+        "scripts/organic/sitemap_graph.py",
     ):
         assert required in names
+
+
+def test_overlay_import_failure_is_fail_closed_when_official_present(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("CONFENGE_RELEASE_TEST_MODE", raising=False)
+    official = tmp_path / "official"
+    official.mkdir()
+    (official / "manifest.json").write_text("{}\n", encoding="utf-8")
+    monkeypatch.setattr(control, "HOST_OFFICIAL_DIR", official)
+    release = tmp_path / "release"
+    release.mkdir()
+    (release / "_site").mkdir()
+    with pytest.raises(control.ReleaseError, match="missing packaged scripts"):
+        control._publish_live_intelligence_overlay(release)
 
 
 # systemd returns from `restart` as soon as it has spawned a Type=simple unit, so

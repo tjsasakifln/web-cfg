@@ -339,10 +339,19 @@ def build_release(
         for source, destination in (
             (repo_root / "scripts" / "conversion", payload / "scripts" / "conversion"),
             (repo_root / "scripts" / "offers", payload / "scripts" / "offers"),
+            (
+                repo_root / "scripts" / "live_intelligence",
+                payload / "scripts" / "live_intelligence",
+            ),
+            (repo_root / "scripts" / "organic", payload / "scripts" / "organic"),
             (repo_root / "data" / "commercial", payload / "data" / "commercial"),
             (repo_root / "data" / "conversion", payload / "data" / "conversion"),
         ):
             copy_tree(source, destination)
+        scripts_init = repo_root / "scripts" / "__init__.py"
+        if not scripts_init.is_file() or scripts_init.is_symlink():
+            raise PackageError("required runtime file is missing: scripts/__init__.py")
+        shutil.copy2(scripts_init, payload / "scripts" / "__init__.py")
         copy_tree(
             repo_root / "data" / "offers" / "fixtures",
             payload / "data" / "offers" / "fixtures",
@@ -399,6 +408,9 @@ def build_release(
                 "netlify/functions/",
                 "scripts/conversion/",
                 "scripts/offers/",
+                "scripts/live_intelligence/",
+                "scripts/organic/",
+                "scripts/__init__.py",
                 "data/commercial/",
                 "data/conversion/",
                 "data/nurture/tracks.json",
