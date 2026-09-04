@@ -27,6 +27,7 @@ def test_live_intel_overlay_paths_are_explicit() -> None:
     assert control.is_live_intel_overlay("_site/oportunidades/abc/index.html")
     assert control.is_live_intel_overlay("_site/sitemap-oportunidades.xml")
     assert control.is_live_intel_overlay("_site/sitemap-index.xml")
+    assert control.is_live_intel_overlay("_site/ferramentas/index.html")
     assert control.is_live_intel_overlay("data/live_intelligence/official/manifest.json")
     assert not control.is_live_intel_overlay("_site/index.html")
     assert not control.is_live_intel_overlay("netlify/functions/lead.cjs")

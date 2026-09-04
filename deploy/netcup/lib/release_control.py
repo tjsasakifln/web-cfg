@@ -62,7 +62,9 @@ LIVE_INTEL_OVERLAY_PREFIXES = (
 LIVE_INTEL_OVERLAY_FILES = frozenset({"_site/sitemap-oportunidades.xml"})
 # sitemap-index is hashed in the package. Stage overlay may add the
 # oportunidades child after official consume; checksum may then differ.
-LIVE_INTEL_OVERLAY_REWRITES = frozenset({"_site/sitemap-index.xml"})
+LIVE_INTEL_OVERLAY_REWRITES = frozenset(
+    {"_site/sitemap-index.xml", "_site/ferramentas/index.html"}
+)
 HOST_OFFICIAL_DIR = Path("/var/lib/confenge-web/live_intelligence/official")
 
 
@@ -836,7 +838,7 @@ def _publish_live_intelligence_overlay(release: Path) -> None:
     result = publish(
         root=release,
         public_root=release / "_site",
-        mutate_discovery=False,
+        mutate_discovery=True,
     )
     if result.get("ok") is False:
         raise ReleaseError(
