@@ -225,6 +225,13 @@ def test_rendered_radar_page_uses_the_right_preposition():
     assert "no Paraná" in html
     assert "em Parana" not in html
     assert not re.search(r"\bParana\b", html)
+    assert 'property="og:title"' in html
+    assert "application/ld+json" in html
+    assert 'class="breadcrumbs' in html
+    og = re.search(r'property="og:title" content="([^"]+)"', html) or re.search(
+        r'content="([^"]+)" property="og:title"', html
+    )
+    assert og and "Paraná" in og.group(1) and "Parana" not in og.group(1)
 
 
 def test_rendered_radar_page_for_a_non_no_uf():

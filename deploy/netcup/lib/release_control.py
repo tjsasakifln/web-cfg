@@ -48,6 +48,23 @@ ALLOWED_TOP_LEVEL = {
     "package-lock.json",
 }
 LOOPBACK_HOSTS = {"127.0.0.1", "localhost", "::1"}
+# Host-owned official snapshot and the INDEX pages rendered from it. These are
+# not in the GitHub package (gitignored producer input). They may appear as
+# extra files after stage-time consume/render. They must never replace a hashed
+# packaged file.
+LIVE_INTEL_OVERLAY_PREFIXES = (
+    "_site/oportunidades/",
+    "data/live_intelligence/official/",
+    "data/live_intelligence/official.private/",
+    "data/live_intelligence/accepted/",
+    "data/live_intelligence/accepted.last/",
+)
+LIVE_INTEL_OVERLAY_FILES = frozenset({"_site/sitemap-oportunidades.xml"})
+HOST_OFFICIAL_DIR = Path("/var/lib/confenge-web/live_intelligence/official")
+
+
+def is_live_intel_overlay(rel: str) -> bool:
+    return rel in LIVE_INTEL_OVERLAY_FILES or rel.startswith(LIVE_INTEL_OVERLAY_PREFIXES)
 
 
 class ReleaseError(RuntimeError):
@@ -371,11 +388,13 @@ def verify_release_tree_at(release: Path, sha: str) -> dict[str, Any]:
     actual = _actual_release_files(release)
     ignored = {"metadata/files.sha256", "metadata/release-manifest.json"}
     actual_hashed = set(actual) - ignored
-    if set(expected) != actual_hashed:
-        missing = sorted(set(expected) - actual_hashed)
-        extra = sorted(actual_hashed - set(expected))
+
+    extra = sorted(actual_hashed - set(expected))
+    missing = sorted(set(expected) - actual_hashed)
+    unexpected = [rel for rel in extra if not is_live_intel_overlay(rel)]
+    if missing or unexpected:
         raise ReleaseError(
-            f"release file set mismatch; missing={missing}, extra={extra}"
+            f"release file set mismatch; missing={missing}, extra={unexpected}"
         )
     for rel, digest in expected.items():
         found = sha256_file(actual[rel])
@@ -790,6 +809,32 @@ def _adopt_uploaded_bundle(root: Path, sha: str, upload_dir: Path) -> None:
     os.replace(upload_dir, destination)
 
 
+def _publish_live_intelligence_overlay(release: Path) -> None:
+    """Render official INDEX pages into the staged `_site` without rewriting hashed files."""
+    official = HOST_OFFICIAL_DIR
+    if not (official / "manifest.json").is_file():
+        bundled = release / "data" / "live_intelligence" / "official" / "manifest.json"
+        if not bundled.is_file():
+            return
+        official = bundled.parent
+    os.environ["CONFENGE_LI_OFFICIAL_DIR"] = str(official)
+    if str(release) not in sys.path:
+        sys.path.insert(0, str(release))
+    try:
+        from scripts.live_intelligence.publish import publish
+    except ImportError:
+        return
+    result = publish(
+        root=release,
+        public_root=release / "_site",
+        mutate_discovery=False,
+    )
+    if result.get("ok") is False:
+        raise ReleaseError(
+            f"live-intelligence official overlay rejected: {result.get('reason')}"
+        )
+
+
 def stage_release(sha: str, upload_dir: Path | None = None) -> dict[str, Any]:
     sha = validate_sha(sha)
     root = release_root()
@@ -824,6 +869,8 @@ def stage_release(sha: str, upload_dir: Path | None = None) -> dict[str, Any]:
                 + "\n",
                 encoding="utf-8",
             )
+            stored = verify_release_tree_at(temporary, sha)
+            _publish_live_intelligence_overlay(temporary)
             stored = verify_release_tree_at(temporary, sha)
             os.replace(temporary, target)
         except Exception:

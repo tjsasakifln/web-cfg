@@ -26,7 +26,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
+import shutil
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, NamedTuple
@@ -35,6 +38,8 @@ from scripts.live_intelligence import (
     COMPANIES_OUT,
     COMPANY_FAMILY,
     CONTRACT_VERSION,
+    DEFAULT_ACCEPTED_DIR,
+    DEFAULT_LAST_ACCEPTED_DIR,
     DEFAULT_LIVE_DIR,
     DEFAULT_OFFICIAL_DIR,
     FIXTURE_SCHEMA,
@@ -48,6 +53,8 @@ from scripts.live_intelligence import (
     SOURCE_FIXTURE,
     SOURCE_OFFICIAL_LIVE,
 )
+
+OFFICIAL_DIR_ENV = "CONFENGE_LI_OFFICIAL_DIR"
 
 INTEGRITY_REASON_CODES = (
     "schema_absent",
@@ -97,6 +104,14 @@ class ConsumeError(ValueError):
 
 def _root() -> Path:
     return Path(__file__).resolve().parents[2]
+
+
+def official_dir() -> Path:
+    """Host-delivered official input. Env overrides the repo-relative default."""
+    override = str(os.environ.get(OFFICIAL_DIR_ENV) or "").strip()
+    if override:
+        return Path(override)
+    return Path(DEFAULT_OFFICIAL_DIR)
 
 
 def _parse_json(path: Path) -> dict[str, Any]:
@@ -926,14 +941,22 @@ def build_projection(bundle: dict[str, Any]) -> dict[str, Any]:
             if row["opportunity_id"] in ready_ids
         ]
 
+    observed_hash = ""
+    if isinstance(manifest, dict) and str(manifest.get("manifest_hash") or "").strip():
+        observed_hash = manifest_hash_of(manifest)
     projection = {
-        "schema": LIVE_SCHEMA,
+        "schema": str(manifest.get("schema") or LIVE_SCHEMA),
         "contract_version": CONTRACT_VERSION,
         "source_kind": source_kind,
         "source_path": bundle.get("_source_path"),
         "catalog_mode": bundle.get("catalog_mode"),
         "generated_at": bundle.get("generated_at"),
-        "source_as_of": bundle.get("source_as_of"),
+        "source_as_of": bundle.get("source_as_of") or manifest.get("as_of"),
+        "as_of": manifest.get("as_of") or bundle.get("source_as_of"),
+        "source_run_id": manifest.get("source_run_id") or manifest.get("snapshot_id"),
+        "manifest_hash": manifest.get("manifest_hash"),
+        "consumer_observed_manifest_hash": observed_hash or manifest.get("manifest_hash"),
+        "official_live": official_live_declared(manifest),
         # Projection-level flag is true iff at least one official opportunity
         # earned INDEX. Fixture and company records stay false per-record.
         "index_eligible": any(item.get("index_eligible") is True for item in opportunities),
@@ -952,11 +975,8 @@ def _assert_no_company_ref(payload: Any) -> None:
         raise ConsumeError("company_ref leaked into public projection")
 
 
-def write_projection(projection: dict[str, Any], out_dir: Path | None = None) -> list[Path]:
-    """Write the validated projection the runtime function and renderer read."""
-    target = out_dir or (_root() / DEFAULT_LIVE_DIR)
-    target.mkdir(parents=True, exist_ok=True)
-    common = {
+def _projection_common(projection: dict[str, Any]) -> dict[str, Any]:
+    return {
         "schema": projection["schema"],
         "contract_version": projection["contract_version"],
         "source_kind": projection["source_kind"],
@@ -964,31 +984,130 @@ def write_projection(projection: dict[str, Any], out_dir: Path | None = None) ->
         "catalog_mode": projection["catalog_mode"],
         "generated_at": projection["generated_at"],
         "source_as_of": projection["source_as_of"],
+        "as_of": projection.get("as_of"),
+        "source_run_id": projection.get("source_run_id"),
+        "manifest_hash": projection.get("manifest_hash"),
+        "consumer_observed_manifest_hash": projection.get("consumer_observed_manifest_hash"),
+        "official_live": projection.get("official_live"),
         "index_eligible": projection["index_eligible"],
     }
-    opportunities_path = target / OPPORTUNITIES_OUT
-    companies_path = target / COMPANIES_OUT
-    opportunities_path.write_text(
-        json.dumps(
-            {**common, "opportunities": projection["opportunities"], "rejected": projection["rejected"]},
-            ensure_ascii=False,
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n",
-        encoding="utf-8",
+
+
+def _fsync_file(path: Path) -> None:
+    with path.open("rb") as handle:
+        os.fsync(handle.fileno())
+
+
+def _is_official_projection_dir(path: Path) -> bool:
+    opp = path / OPPORTUNITIES_OUT
+    if not opp.is_file():
+        return False
+    try:
+        payload = json.loads(opp.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    return (
+        isinstance(payload, dict)
+        and payload.get("source_kind") == SOURCE_OFFICIAL_LIVE
+        and payload.get("official_live") is True
     )
-    companies_path.write_text(
-        json.dumps(
-            {**common, "companies": projection["companies"]},
-            ensure_ascii=False,
-            indent=2,
-            sort_keys=True,
+
+
+def ack_payload(projection: dict[str, Any]) -> dict[str, Any]:
+    """Consumer ACK of the official envelope. Hashes must match the producer."""
+    declared = str(projection.get("manifest_hash") or "").strip()
+    observed = str(projection.get("consumer_observed_manifest_hash") or "").strip()
+    return {
+        "schema": projection.get("schema"),
+        "source_run_id": projection.get("source_run_id"),
+        "manifest_hash": declared,
+        "consumer_observed_manifest_hash": observed,
+        "as_of": projection.get("as_of"),
+        "catalog_mode": projection.get("catalog_mode"),
+        "source_kind": projection.get("source_kind"),
+        "official_live": projection.get("official_live") is True
+        and projection.get("source_kind") == SOURCE_OFFICIAL_LIVE,
+        "index_eligible": projection.get("index_eligible") is True,
+        "opportunities_ready": len(projection.get("opportunities") or []),
+        "companies_ready": len(projection.get("companies") or {}),
+        "rejected": projection.get("rejected") or [],
+        "hash_identity": bool(declared) and declared == observed,
+    }
+
+
+def write_projection(
+    projection: dict[str, Any],
+    out_dir: Path | None = None,
+    *,
+    last_accepted: Path | None = None,
+) -> list[Path]:
+    """Atomically write the validated projection. Preserve last-accepted official.
+
+    A failed consume never reaches this function. A failed write leaves the
+    previous directory (and last-accepted, if any) untouched: files land in a
+    temp directory and only replace the target after fsync.
+    """
+    target = Path(out_dir) if out_dir is not None else (_root() / DEFAULT_LIVE_DIR)
+    if not target.is_absolute():
+        target = _root() / target
+    parent = target.parent
+    parent.mkdir(parents=True, exist_ok=True)
+    tmp = Path(tempfile.mkdtemp(prefix=f".{target.name}.tmp-", dir=str(parent)))
+    common = _projection_common(projection)
+    opportunities_path = tmp / OPPORTUNITIES_OUT
+    companies_path = tmp / COMPANIES_OUT
+    try:
+        opportunities_path.write_text(
+            json.dumps(
+                {
+                    **common,
+                    "opportunities": projection["opportunities"],
+                    "rejected": projection["rejected"],
+                },
+                ensure_ascii=False,
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
         )
-        + "\n",
-        encoding="utf-8",
-    )
-    return [opportunities_path, companies_path]
+        companies_path.write_text(
+            json.dumps(
+                {**common, "companies": projection["companies"]},
+                ensure_ascii=False,
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        _fsync_file(opportunities_path)
+        _fsync_file(companies_path)
+        fd = os.open(str(tmp), os.O_RDONLY)
+        try:
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+        preserve = last_accepted
+        if preserve is None and projection.get("source_kind") == SOURCE_OFFICIAL_LIVE:
+            preserve = _root() / DEFAULT_LAST_ACCEPTED_DIR
+        if (
+            preserve is not None
+            and target.exists()
+            and _is_official_projection_dir(target)
+        ):
+            preserve = Path(preserve)
+            if preserve.exists():
+                shutil.rmtree(preserve)
+            os.replace(target, preserve)
+        elif target.exists():
+            shutil.rmtree(target)
+        os.replace(tmp, target)
+    except Exception:
+        if tmp.exists():
+            shutil.rmtree(tmp, ignore_errors=True)
+        raise
+    return [target / OPPORTUNITIES_OUT, target / COMPANIES_OUT]
 
 
 def assert_official_bundle(bundle: dict[str, Any]) -> None:
@@ -1013,11 +1132,11 @@ def consume(
 
     With no `source`, the official input dir is required and FAIL CLOSED when
     absent, invalid or stale. The fixture catalog is consumed only when the
-    caller passes it explicitly.
+    caller passes it explicitly. Failure never writes a projection.
     """
     del out_dir  # write path is owned by write_projection / main --write
     if source is None:
-        source = Path(DEFAULT_OFFICIAL_DIR)
+        source = official_dir()
         if require_official is None:
             require_official = True
     bundle = load_export_dir(source)
@@ -1033,7 +1152,11 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="producer export directory (default: official; fixture must be passed explicitly)",
     )
-    parser.add_argument("--out", default=DEFAULT_LIVE_DIR, help="validated projection directory")
+    parser.add_argument(
+        "--out",
+        default=None,
+        help="validated projection directory (official default: accepted/; fixture: live/)",
+    )
     parser.add_argument("--write", action="store_true", help="write the projection to --out")
     args = parser.parse_args(argv)
     explicit_source = Path(args.source) if args.source else None
@@ -1048,30 +1171,32 @@ def main(argv: list[str] | None = None) -> int:
                     "source_kind": None,
                     "index_eligible": False,
                     "official_live": False,
+                    "schema": None,
+                    "source_run_id": None,
+                    "manifest_hash": None,
+                    "as_of": None,
+                    "catalog_mode": None,
                 },
                 ensure_ascii=False,
             )
         )
         return 1
+    ack = ack_payload(projection)
     if args.write:
         if projection["source_kind"] != SOURCE_OFFICIAL_LIVE and projection["index_eligible"] is True:
             print(json.dumps({"ok": False, "error": "refusing to write an index-eligible fixture projection"}))
             return 1
-        written = write_projection(projection, _root() / args.out)
+        if args.out:
+            out_dir = Path(args.out)
+        elif projection["source_kind"] == SOURCE_OFFICIAL_LIVE:
+            out_dir = _root() / DEFAULT_ACCEPTED_DIR
+        else:
+            out_dir = _root() / DEFAULT_LIVE_DIR
+        last = _root() / DEFAULT_LAST_ACCEPTED_DIR if projection["source_kind"] == SOURCE_OFFICIAL_LIVE else None
+        written = write_projection(projection, out_dir, last_accepted=last)
         for path in written:
             print(f"wrote {_rel(path)}")
-    print(
-        json.dumps(
-            {
-                "source_kind": projection["source_kind"],
-                "index_eligible": projection["index_eligible"],
-                "opportunities_ready": len(projection["opportunities"]),
-                "companies_ready": len(projection["companies"]),
-                "rejected": projection["rejected"],
-            },
-            ensure_ascii=False,
-        )
-    )
+    print(json.dumps({"ok": True, **ack, "rejected": projection["rejected"]}, ensure_ascii=False))
     return 0
 
 

@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+from datetime import datetime, timezone
 from html import escape
 from pathlib import Path
 from typing import Any
@@ -26,6 +27,7 @@ from scripts.live_intelligence import (
     ADHERENCE_DISCLAIMER_PT,
     ASSET_FAMILY,
     COMPANY_ROUTE_PREFIX,
+    DEFAULT_ACCEPTED_DIR,
     DEFAULT_LIVE_DIR,
     FAMILY_PATH,
     FAMILY_SLUG,
@@ -79,6 +81,28 @@ PRAZO_LABEL = {
     "ENCERRADA": "Encerrada",
     "UNKNOWN": NAO_INFORMADO,
 }
+
+FAIXA_LABEL = {
+    "ATE_100K": "até R$ 100 mil",
+    "100K_1M": "de R$ 100 mil a R$ 1 milhão",
+    "1M_10M": "de R$ 1 milhão a R$ 10 milhões",
+    "ACIMA_10M": "acima de R$ 10 milhões",
+}
+
+_MONTHS_PT = (
+    "janeiro",
+    "fevereiro",
+    "março",
+    "abril",
+    "maio",
+    "junho",
+    "julho",
+    "agosto",
+    "setembro",
+    "outubro",
+    "novembro",
+    "dezembro",
+)
 
 # The masthead reads as a sentence fragment ("... · sessão aberta"), so it needs
 # its own agreement rather than the table-cell label.
@@ -181,6 +205,35 @@ def _brl(amount: Any) -> str:
     return f"R$ {inteiro.replace(',', '.')},{centavos}"
 
 
+def _parse_instant(value: Any) -> datetime | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    if text.endswith("Z"):
+        text = f"{text[:-1]}+00:00"
+    try:
+        parsed = datetime.fromisoformat(text)
+    except ValueError:
+        if len(text) == 10:
+            try:
+                parsed = datetime.fromisoformat(text + "T00:00:00+00:00")
+            except ValueError:
+                return None
+        else:
+            return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed
+
+
+def _human_date(value: Any) -> str:
+    parsed = _parse_instant(value)
+    if parsed is None:
+        text = str(value or "").strip()
+        return NAO_INFORMADO if not text or text.upper() == "UNKNOWN" else text
+    return f"{parsed.day} de {_MONTHS_PT[parsed.month - 1]} de {parsed.year}"
+
+
 def _declared_amount(valor: dict[str, Any]) -> Any:
     if valor.get("estimado_brl") not in (None, ""):
         return valor.get("estimado_brl")
@@ -272,12 +325,26 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
     canonical = f"{SITE}{route}"
     robots = "index,follow" if indexable else "noindex,nofollow"
     index_state = "INDEX" if indexable else "NOINDEX"
-    modified = str(freshness.get("generated_at") or freshness.get("source_as_of") or "").strip()
-    modified_meta = (
-        f'<meta content="{e(modified)}" property="article:modified_time"/>\n'
-        if modified
-        else ""
-    )
+    as_of_human = _human_date(freshness.get("source_as_of") or record.get("as_of"))
+    iso_as_of = str(freshness.get("source_as_of") or record.get("as_of") or "").strip()
+    json_ld_doc: dict[str, Any] = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": title,
+        "description": description,
+        "url": canonical,
+        "inLanguage": "pt-BR",
+        "isAccessibleForFree": True,
+        "about": {
+            "@type": "GovernmentService",
+            "name": objeto,
+            "provider": {"@type": "GovernmentOrganization", "name": orgao_nome},
+        },
+    }
+    if iso_as_of[:10]:
+        json_ld_doc["dateModified"] = iso_as_of[:10]
+    json_ld = json.dumps(json_ld_doc, ensure_ascii=False, separators=(",", ":"))
+    json_ld = json_ld.replace("</", "<\\/")
     return f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -292,7 +359,15 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 <script defer="" src="/script.js?v=fortune02"></script>
 <script defer="" src="/assets/js/live-intelligence.js"></script>
 <meta content="{e(description)}" name="description"/>
-{modified_meta}</head>
+<meta content="{e(title)}" property="og:title"/>
+<meta content="{e(description)}" property="og:description"/>
+<meta content="{e(canonical)}" property="og:url"/>
+<meta content="website" property="og:type"/>
+<meta content="{e(title)}" name="twitter:title"/>
+<meta content="{e(description)}" name="twitter:description"/>
+<meta content="summary" name="twitter:card"/>
+<script type="application/ld+json">{json_ld}</script>
+</head>
 <body class="simple-page" data-asset-id="{e(opportunity_id)}" data-asset-family="{e(ASSET_FAMILY)}" data-route-family="{e(ROUTE_FAMILY)}" data-intel-surface="opportunity" data-opportunity-id="{e(opportunity_id)}" data-index-state="{index_state}">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <header class="site-header" id="inicio">
@@ -330,7 +405,7 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 {_kv_rows([
     ("Objeto", objeto),
     ("Valor estimado declarado na fonte", _brl(_declared_amount(valor))),
-    ("Faixa de valor declarada", _pt(valor.get("faixa"))),
+    ("Faixa de valor declarada", _mapped(valor.get("faixa"), FAIXA_LABEL, NAO_INFORMADO)),
     ("Base do valor", _pt(valor.get("basis"))),
     ("Como o valor foi declarado", _mapped(valor.get("epistemic_class"), EPISTEMIC_LABEL, "classificação não declarada pela fonte")),
     ("Órgão", orgao_nome),
@@ -350,11 +425,9 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 <section class="section" id="atualizacao"{archetype_attr("atualizacao")}>
 <h2>Atualização dos dados</h2>
 {_kv_rows([
-    ("Data de referência da fonte", _pt(freshness.get("source_as_of"))),
-    ("Data da exportação declarada", _pt(freshness.get("generated_at"))),
-    ("Janela de frescor declarada", f"{freshness.get('max_age_hours', 48)} horas"),
+    ("Data de referência da fonte", as_of_human),
 ])}
-<p class="form-hint">As datas acima são declaradas pela fonte e pela exportação. Nenhuma delas é o relógio de quem lê esta página.</p>
+<p class="form-hint">A data acima é a referência declarada pela fonte pública. Não é o relógio de quem lê esta página.</p>
 </section>
 
 <section class="section" id="limitacoes"{archetype_attr("limitacoes")}>
@@ -375,16 +448,14 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 <a class="button button-primary" data-intel-cta="analyze" data-cta-id="intel_analyze_company" data-cta-position="opportunity_next_action" href="{e(COMPANY_ROUTE_PREFIX)}">Analisar para minha empresa</a>
 <a class="button button-secondary" data-intel-cta="monitor" data-intent-kind="MONITOR_OPPORTUNITY" data-analysis-id="{e(opportunity_id)}" data-cta-id="intel_monitor_opportunity" data-cta-position="opportunity_next_action" href="/#formulario-contato">Monitorar esta licitação</a>
 </div>
+<p><a href="/ferramentas/">Ver outras ferramentas públicas</a></p>
 </section>
 
 <section class="section" id="hashes"{archetype_attr("hashes")}>
-<h2>Procedência técnica</h2>
+<h2>Identificação do edital</h2>
 {_kv_rows([
-    ("Identificador estável", opportunity_id),
-    ("Hash de integridade da fonte", _pt(record.get("content_hash"))),
+    ("Identificador público do edital", opportunity_id),
     ("Origem dos dados", _mapped(record.get("source_kind"), SOURCE_KIND_LABEL, "origem não classificada")),
-    ("Estado editorial", _mapped(record.get("publication_state"), PUBLICATION_STATE_LABEL, "estado não classificado")),
-    ("Elegível a indexação", "sim" if indexable else "não"),
 ])}
 </section>
 </article>
@@ -398,7 +469,14 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
 
 
 def load_projection(path: Path | None = None) -> dict[str, Any]:
-    target = path or (_root() / DEFAULT_LIVE_DIR / OPPORTUNITIES_OUT)
+    if path is not None:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    accepted = _root() / DEFAULT_ACCEPTED_DIR / OPPORTUNITIES_OUT
+    if accepted.is_file():
+        payload = json.loads(accepted.read_text(encoding="utf-8"))
+        if payload.get("source_kind") == SOURCE_OFFICIAL_LIVE and payload.get("official_live") is True:
+            return payload
+    target = _root() / DEFAULT_LIVE_DIR / OPPORTUNITIES_OUT
     return json.loads(target.read_text(encoding="utf-8"))
 
 

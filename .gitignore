@@ -89,3 +89,6 @@ docs/design-audit/evidence/capture/**/*.png
 # Official Live Intelligence producer input is delivered at the host, not committed.
 data/live_intelligence/official/
 data/live_intelligence/official.private/
+# Official consumer projection and last-accepted rollback snapshot.
+data/live_intelligence/accepted/
+data/live_intelligence/accepted.last/

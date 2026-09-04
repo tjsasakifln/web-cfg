@@ -74,8 +74,12 @@ def test_write_pages_keeps_pncp_ids_with_slash_and_prunes_others():
         assert page.exists()
         html = page.read_text(encoding="utf-8")
         assert "R$ 2.500.000,00" in html
-        assert "1M_10M" in html
+        assert "de R$ 1 milhão a R$ 10 milhões" in html
+        assert "1M_10M" not in html
         assert "company_ref" not in html
+        assert "content_hash" not in html
+        assert "generated_at" not in html
+        assert "PUBLISHABLE_" not in html
         assert not orphan.exists()
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -113,8 +117,75 @@ def test_official_index_page_emits_canonical_robots_and_sitemap():
         assert 'rel="canonical"' in html
         assert "https://confenge.com.br/oportunidades/12345678000190-1/2026/" in html
         assert "company_ref" not in html
+        assert "content_hash" not in html
+        assert "generated_at" not in html
+        assert "UNKNOWN" not in html
+        assert "1 de setembro de 2026" in html
+        assert 'property="og:title"' in html
+        assert 'name="twitter:title"' in html
+        assert 'application/ld+json' in html
         sitemap = (tmp / R.SITEMAP_NAME).read_text(encoding="utf-8")
         assert "https://confenge.com.br/oportunidades/12345678000190-1/2026/" in sitemap
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def test_one_hundred_rebuilds_do_not_mint_duplicate_urls_or_canonicals():
+    tmp = _tmp_root()
+    try:
+        records = []
+        for i in range(100):
+            records.append(
+                {
+                    "opportunity_id": f"12345678000190-1/{i:04d}",
+                    "objeto": f"Pavimentação do trecho {i} em Chapecó",
+                    "orgao": {"nome": f"Município de Chapecó {i}"},
+                    "local": {"municipio": "Chapecó", "uf": "SC"},
+                    "prazo": {"status": "ABERTA", "data_encerramento": "2026-09-24"},
+                    "valor": {
+                        "estimado_brl": str(1_000_000 + i * 1000),
+                        "faixa": "1M_10M",
+                        "epistemic_class": "FACT",
+                    },
+                    "fonte": [{"nome": "PNCP", "url": f"https://pncp.gov.br/app/editais/{i}"}],
+                    "freshness": {
+                        "source_as_of": "2026-09-01T03:00:00+00:00",
+                        "generated_at": "2026-09-01T09:00:00+00:00",
+                        "max_age_hours": 48,
+                    },
+                    "publication_state": "PUBLISHABLE_INDEX",
+                    "index_eligible": True,
+                    "source_kind": "official_live",
+                }
+            )
+        projection = {
+            "source_kind": "official_live",
+            "index_eligible": True,
+            "opportunities": records,
+        }
+        urls = set()
+        canonicals = set()
+        for _ in range(100):
+            written = R.write_pages(projection, root=tmp)
+            assert len(written) == 100
+            for path in written:
+                html = path.read_text(encoding="utf-8")
+                assert 'content="index,follow" name="robots"' in html
+                marker = 'rel="canonical" href="'
+                if marker not in html:
+                    marker = 'href="'
+                    tail = html.split('rel="canonical"', 1)[0]
+                    href = tail.rsplit('href="', 1)[-1].split('"', 1)[0]
+                else:
+                    href = html.split(marker, 1)[1].split('"', 1)[0]
+                canonicals.add(href)
+            sitemap = (tmp / R.SITEMAP_NAME).read_text(encoding="utf-8")
+            urls.update(
+                part.split("</loc>", 1)[0]
+                for part in sitemap.split("<loc>")[1:]
+            )
+        assert len(urls) == 100
+        assert len(canonicals) == 100
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

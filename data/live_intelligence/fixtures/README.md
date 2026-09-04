@@ -1,7 +1,7 @@
 # Labeled live-intelligence fixture — never official_live
 
-`extra-cli` has not shipped `CONFENGE_LIVE_INTELLIGENCE/1.0` yet. This catalog is
-the only input the consumer has, and it is labeled as such at every level.
+This catalog is a labeled test fixture. Official live input is host-delivered at
+`data/live_intelligence/official/` (gitignored) and is never this tree.
 
 | Path | Role |
 |---|---|
@@ -29,5 +29,6 @@ raw CNPJ never appears in a payload, a route or an analytics event.
 Regenerate the validated projection with:
 
 ```
-python3 -m scripts.live_intelligence.consume --write
+python3 -m scripts.live_intelligence.consume --source data/live_intelligence/fixtures
+python3 -m scripts.live_intelligence.consume --source data/live_intelligence/fixtures --write
 ```

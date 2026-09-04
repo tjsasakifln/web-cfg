@@ -417,6 +417,45 @@ def test_noindex_justified_never_covers_a_route_that_earned_its_slot():
         assert row["governance_reason_code"], route
 
 
+def test_one_hundred_near_duplicate_templates_fail_doorway():
+    """A rewrite of the same economic fact 100 times is a doorway, not 100 URLs."""
+    from scripts.site.inbound_gates import FAMILY_CLONE_JACCARD, _jaccard, _shingle_set
+
+    pages = []
+    for i in range(100):
+        html = (
+            f"<main><h1>Radar de obras {i}</h1>"
+            "<p>Oportunidades abertas de pavimentação urbana com o mesmo objeto, "
+            "mesmo órgão e mesmo valor estimado. Página gerada por template.</p>"
+            "<p>Valor estimado declarado na fonte: R$ 2.500.000,00.</p></main>"
+        )
+        pages.append((f"/oportunidades/dup-{i}/", html))
+    shingles = [(r, _shingle_set(G.visible_main_text(h))) for r, h in pages]
+    worst = 0.0
+    for i in range(len(shingles)):
+        for j in range(i + 1, min(i + 5, len(shingles))):
+            worst = max(worst, _jaccard(shingles[i][1], shingles[j][1]))
+    assert worst >= FAMILY_CLONE_JACCARD
+
+
+def test_fixture_backed_and_low_quality_index_counters_are_zero_or_named():
+    report = sweep()
+    assert report["counts"]["INDEX_READY_BUT_NOINDEX"] == 0
+    fixture_indexed = [
+        route
+        for route, row in report["routes"].items()
+        if row.get("noindex") is False
+        and route.startswith(("/oportunidades/", "/analise-cnpj/"))
+        and "fixture" in (row.get("governance_reason_code") or "")
+    ]
+    assert fixture_indexed == []
+    low_quality = report["buckets"].get("INDEXABLE_WITHOUT_EVIDENCE") or []
+    # Named counter: low-quality indexed must stay empty of live-intelligence
+    # opportunity pages. Broader INDEXABLE_WITHOUT_EVIDENCE is tracked separately.
+    li_low = [r for r in low_quality if r.startswith("/oportunidades/")]
+    assert li_low == []
+
+
 def test_the_sweep_does_not_mutate_public_html():
     before = {
         route: ctx().path_by_route[route].read_bytes()
