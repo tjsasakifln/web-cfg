@@ -224,7 +224,7 @@ def _headers(body: str) -> str:
         "  Cache-Control: no-cache, max-age=0, must-revalidate, no-transform\n"
         + body
         + "/ops/*\n"
-        "  Cache-Control: no-store\n"
+        "  Cache-Control: no-store, no-transform\n"
     )
 
 
@@ -297,7 +297,7 @@ def test_assets_wildcard_immutable_fails() -> None:
     assert any("/assets/*" in item and "immutable" in item for item in errors), errors
 
 
-def test_private_ops_surface_must_be_no_store() -> None:
+def test_private_ops_surface_must_be_no_store_and_no_transform() -> None:
     text = (
         "/*\n"
         "  Cache-Control: no-cache, max-age=0, must-revalidate, no-transform\n"
@@ -306,10 +306,13 @@ def test_private_ops_surface_must_be_no_store() -> None:
         "/.well-known/build-info.json\n"
         "  Cache-Control: no-cache, max-age=0, must-revalidate\n"
         "/ops/*\n"
-        "  Cache-Control: private, max-age=60\n"
+        "  Cache-Control: no-store\n"
     )
     errors = evaluate_cache_contract(headers_text=text, hashed_source_assets=set())
-    assert any("/ops/*" in item and "no-store" in item for item in errors), errors
+    assert any(
+        "/ops/*" in item and "no-store" in item and "no-transform" in item
+        for item in errors
+    ), errors
 
 
 def test_downloadable_without_content_disposition_fails() -> None:

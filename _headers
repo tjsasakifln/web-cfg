@@ -64,7 +64,7 @@
 # RevOps private surfaces
 /ops/*
   X-Robots-Tag: noindex, nofollow
-  Cache-Control: no-store
+  Cache-Control: no-store, no-transform
 
 # Intranet gateway — redirect-only, never a public/indexable page
 /intranet
