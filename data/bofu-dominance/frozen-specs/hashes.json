@@ -2,8 +2,8 @@
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
   "baseline_commit": "6f95e392515d845d14107e63ebacd5ad0a26282b",
-  "recaptured_at": "2026-09-01",
-  "recapture_reason": "Recaptura de uma chave so: diagnostico-pre-licitacao/index.html, de b5828ec2e88ff6df78dbd2677b33816fa56ab1b5a13377e36d71616112056432 para fbfb0ee348841ae3a01c437cee579832139cc7868e6dcb081534ff956bfae654. Motivo, issue #566. O gate editorial do pSEO reprovou /radar/edificacoes-publicas-pr/ (status reject, zero usado no lugar de valor ausente) e a rota deixou de ser escrita no diretorio publico. O bloco 'Inteligencia relacionada' desta pagina, na secao id=inteligencia-relacionada, continuava a link-la, e o link passou a resolver em 404. internal-link-reachability, dentro do site-excellence, e MEASURED_FAIL e nao tem caminho de excecao: nao existe forma de retirar a pagina reprovada do ar e manter o check verde sem tirar o link. Duas linhas mudaram, ambas dentro do mesmo <ul class=pillar-docs>: o <li> do radar reprovado foi removido, e o rotulo do hub deixou de ser 'Radar evergreen de oportunidades' para ser 'Radar de oportunidades abertas', porque 'evergreen' e metalinguagem de CMS e era a ultima ocorrencia do termo na superficie publica. Nada mais na pagina mudou: o content-hero e o bloco entre os marcadores GENERATED:LICITACAO-PRODUCTS estao byte-identicos, e data/commercial/first-fold-measurements.v1.json so registra a geometria dos papeis do heroi (eyebrow, h1, lead, cta) nos tres viewports, que ficam acima da secao alterada. html_mutation continua false e nenhuma precondicao do unlock-plan foi marcada READY: o html_mutation_authorized=false do #291 governa a aplicacao do patch da campanha (apply_frozen_patch e o bloco gerado por render_licitacao_products.mjs), que segue recusada e imprime LICITACAO_PRODUCTS_HELD com o hash novo. Esta e a mesma operacao dos commits cf33385d4 (2026-08-28) e 2f26ac0ba (2026-08-25), que editaram esta mesma pagina congelada e recapturaram forbidden no mesmo commit com a janela aberta. Como naqueles, pillars nao foi mexido: ele guarda a baseline anterior de proposito. baseline_commit continua em 6f95e392, que nao e ancestral do HEAD depois do squash-merge, entao test_recapture_provenance_snapshot_matches_baseline_bytes_with_or_without_git verifica esta recaptura contra os bytes da arvore, que e o caminho que o proprio teste documenta.",
+  "recaptured_at": "2026-09-04",
+  "recapture_reason": "Recaptura de duas chaves forbidden do W1 live-intelligence, sem html_mutation e sem abrir o unlock-plan #291. _redirects: de c32debd36d9ce4bc2d46121c7d7c229139ab11ab5dc1f4aa2db09541ab21e73a para ac438fa0eb4430b221c4563d3659c3a6cdf6de4c6757103bc8c13c1bce42b358. O arquivo ganhou um bloco de comentario que documenta a ausencia deliberada de regra para /analise-cnpj/r/ (token opaco via query, nao path). Nenhuma regra de redirecionamento mudou. js/modules/analytics.js: de 10587de5c5d04ac88f33474934836612462cc796a7c1196aba42d32b92013456 para e5e40f52630f6b014150765a3fadad0068513b97144785a0262170e8658ffda5. O W1 passou a carregar eventos da superficie live-intelligence no mesmo modulo, sem alterar o contrato de campos proibidos. script.js ja tinha sido recapturado em ef42264de. O gate de igualdade nao foi afrouxado: as demais chaves forbidden e todos os pillars permanecem. baseline_commit continua em 6f95e392.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -28,8 +28,8 @@
     "sitemap.xml": "48d45634e1116405f7a06c27f1d73ee6520de98200947da2618b4441429e9adc",
     "sitemap.txt": "eba93e6e485b644b9a947da48840394f943cdd396e618f7ea91a9caec5460363",
     "sitemap-index.xml": "70a612f8863e45a6df4c3b69ab03397079c3a6386eb78f7e58df562b34eb5190",
-    "_redirects": "c32debd36d9ce4bc2d46121c7d7c229139ab11ab5dc1f4aa2db09541ab21e73a",
+    "_redirects": "ac438fa0eb4430b221c4563d3659c3a6cdf6de4c6757103bc8c13c1bce42b358",
     "data/organic/content-service-map.json": "7f3840a5092fc2b9636899d850d9d68660d377636bce36d63a7a60f6b345d4ef",
-    "js/modules/analytics.js": "10587de5c5d04ac88f33474934836612462cc796a7c1196aba42d32b92013456"
+    "js/modules/analytics.js": "e5e40f52630f6b014150765a3fadad0068513b97144785a0262170e8658ffda5"
   }
 }

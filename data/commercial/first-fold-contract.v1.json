@@ -340,7 +340,8 @@
         "surface_class": "money_example",
         "from": "data/organic/public-family-registry.json#families[profile=priced_offer].match.prefix",
         "resolves_to": "expansão do prefixo contra os diretórios publicados que têm index.html",
-        "note_pt_br": "Modelo novo publicado com preço passa a exigir linha de censo no mesmo commit."
+        "filter_pt_br": "Famílias classification=PILOT_STAGING ficam fora do censo obrigado enquanto a decisão de ativação permanecer DEFER. Elas continuam no registro público para dono, noindex e governança; não entram na dobra de produção até activation_authorized.",
+        "note_pt_br": "Modelo novo publicado com preço passa a exigir linha de censo no mesmo commit, exceto prefixo piloto em DEFER."
       },
       {
         "id": "money_hub_priced",
