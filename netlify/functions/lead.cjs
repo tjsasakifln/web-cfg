@@ -298,6 +298,9 @@ exports.handler = async (event) => {
         email_status: rec.delivery?.email?.status,
         idempotent: true,
         document_intent: rec.document_intent,
+        nucleus_id: rec.nucleus_id,
+        qualification_state: rec.qualification_state,
+        conflict_status: rec.conflict_status,
         // Correlation comes from the stored record, never from the request.
         correlation_id: rec.radar_params ? rec.radar_params.correlation_id : undefined,
         external_reference: rec.radar_params ? rec.external_reference : undefined,
@@ -457,6 +460,9 @@ exports.handler = async (event) => {
             email_status: "pending",
             idempotent: true,
             document_intent: record.document_intent,
+            nucleus_id: record.nucleus_id,
+            qualification_state: record.qualification_state,
+            conflict_status: record.conflict_status,
             ...(radarPublic || {}),
           }),
         ),
@@ -619,6 +625,9 @@ exports.handler = async (event) => {
         notify_status,
         email_status,
         document_intent: record.document_intent,
+        nucleus_id: record.nucleus_id,
+        qualification_state: record.qualification_state,
+        conflict_status: record.conflict_status,
         // Fail-closed contract: the visitor only ever learns the payment
         // correlation on this path, after the record is durably stored.
         ...(radarPublic || {}),
