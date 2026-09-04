@@ -291,7 +291,7 @@
     "chrome-launcher": "^1.2.1",
     "lighthouse": "^13.4.1",
     "puppeteer-core": "^25.8.0",
-    "terser": "^5.50.0"
+    "terser": "^5.51.2"
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.13"
