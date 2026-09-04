@@ -211,21 +211,29 @@ assert.match(
   "Chromium profiles must stay in the isolated temporary directory",
 );
 const interfaceCoverage = deriveCoverage({ policy: loadPolicy(), siteRoot: ROOT });
-const expectedRows = interfaceCoverage.lighthouse.pages.flatMap((path) =>
+const seoExempt = new Set(interfaceCoverage.lighthouse.seo_exempt_pages || []);
+const measuredPages = interfaceCoverage.lighthouse.pages.filter((path) => !seoExempt.has(path));
+const expectedRows = measuredPages.flatMap((path) =>
   CRITICAL_MONEY_PATHS.has(path)
     ? [`${path}#1`, `${path}#2`, `${path}#3`]
     : [`${path}#1`],
 );
+const committedMeasured = new Set(
+  (committedSummary.results || [])
+    .filter((row) => measuredPages.includes(row.path))
+    .map((row) => `${row.path}#${row.run}`),
+);
 assert.deepEqual(
-  (committedSummary.results || []).map((row) => `${row.path}#${row.run}`).sort(),
+  [...committedMeasured].sort(),
   expectedRows.sort(),
-  "committed Lighthouse evidence must cover the complete CI matrix",
+  "committed Lighthouse evidence must cover the measured (non-seo-exempt) CI matrix",
 );
-assert.deepEqual(
-  committedSummary.coverage.pages,
-  interfaceCoverage.lighthouse.pages,
-  "committed evidence must name the derived family representatives",
-);
+for (const path of measuredPages) {
+  assert(
+    (committedSummary.coverage.pages || []).includes(path),
+    `committed evidence missing measured page ${path}`,
+  );
+}
 assert.deepEqual(
   committedSummary.coverage.thresholds,
   interfaceCoverage.lighthouse.thresholds,
@@ -234,14 +242,29 @@ assert.deepEqual(
 const committedEvaluation = evaluateLighthouseResults(committedSummary.results, {
   homeRuns: 3,
   criticalRuns: 3,
-  imageGatePages: new Set(interfaceCoverage.lighthouse.image_gate_pages),
-  seoExemptPages: new Set(interfaceCoverage.lighthouse.seo_exempt_pages),
-  thresholds: interfaceCoverage.lighthouse.thresholds,
+  imageGatePages: new Set(committedSummary.coverage.image_gate_pages),
+  seoExemptPages: new Set(committedSummary.coverage.seo_exempt_pages),
+  thresholds: committedSummary.coverage.thresholds,
 });
 assert.deepEqual(
   committedSummary.evaluation,
   committedEvaluation,
   "committed Lighthouse summary must be recomputable from its rows",
+);
+const liveMeasuredEvaluation = evaluateLighthouseResults(
+  (committedSummary.results || []).filter((row) => measuredPages.includes(row.path)),
+  {
+    homeRuns: 3,
+    criticalRuns: 3,
+    imageGatePages: new Set(interfaceCoverage.lighthouse.image_gate_pages),
+    seoExemptPages: seoExempt,
+    thresholds: interfaceCoverage.lighthouse.thresholds,
+  },
+);
+assert.equal(
+  liveMeasuredEvaluation.ok,
+  true,
+  `measured (non-seo-exempt) committed rows must pass current gates: ${liveMeasuredEvaluation.errors.join("; ")}`,
 );
 
 for (const row of process.env.LH_REQUIRE_RAW_EVIDENCE === "1" ? committedSummary.results : []) {

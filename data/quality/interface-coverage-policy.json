@@ -5,8 +5,22 @@
   "purpose": "Derive axe coverage from visible money/capture risk and Lighthouse coverage from the canonical public-family-registry, with explicit noindex-only supplemental families for public artifact routes outside the indexable registry.",
   "axe": {
     "viewports": [
-      { "id": "mobile", "width": 390, "height": 844, "device_scale_factor": 2, "is_mobile": true, "has_touch": true },
-      { "id": "desktop", "width": 1440, "height": 1000, "device_scale_factor": 1, "is_mobile": false, "has_touch": false }
+      {
+        "id": "mobile",
+        "width": 390,
+        "height": 844,
+        "device_scale_factor": 2,
+        "is_mobile": true,
+        "has_touch": true
+      },
+      {
+        "id": "desktop",
+        "width": 1440,
+        "height": 1000,
+        "device_scale_factor": 1,
+        "is_mobile": false,
+        "has_touch": false
+      }
     ],
     "risk_rules": [
       {
@@ -29,8 +43,17 @@
   },
   "lighthouse": {
     "form_factor": "mobile",
-    "viewport": { "width": 390, "height": 844, "device_scale_factor": 2 },
-    "thresholds": { "performance": 90, "accessibility": 95, "best_practices": 95, "seo": 95 },
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "device_scale_factor": 2
+    },
+    "thresholds": {
+      "performance": 90,
+      "accessibility": 95,
+      "best_practices": 95,
+      "seo": 95
+    },
     "thresholds_note": "#293 widens coverage only. Any change to these numbers belongs to a different issue.",
     "canonical_representatives": [
       {
@@ -139,6 +162,84 @@
         "family_id": "ferramentas",
         "route": "/ferramentas/diagnostico-defesa-margem/",
         "reason": "heaviest canonical tool, with client-side scoring and persistent lead capture"
+      },
+      {
+        "family_id": "live-intelligence-cnpj-tool",
+        "route": "/analise-cnpj/",
+        "reason": "CNPJ analysis tool landing; noindex until INSTANCE_INDEX_READY",
+        "seo_exempt_reason": "tool landing stays noindex until INSTANCE_INDEX_READY on official data"
+      },
+      {
+        "family_id": "live-intelligence-cnpj-result",
+        "route": "/analise-cnpj/r/",
+        "reason": "share-token result is permanently noindex",
+        "seo_exempt_reason": "share-token result is permanently noindex"
+      },
+      {
+        "family_id": "live-intelligence-opportunity",
+        "route": "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+        "reason": "fixture opportunity page; official INDEX pages replace this representative when live",
+        "seo_exempt_reason": "fixture opportunity pages are noindex; official INDEX is host-rendered"
+      },
+      {
+        "family_id": "diagnostico-b2g-expansao-estados",
+        "route": "/diagnostico-b2g-expansao/cancelado/",
+        "reason": "post-checkout state page, not a priced offer",
+        "seo_exempt_reason": "post-checkout receipts intentionally noindex"
+      },
+      {
+        "family_id": "obrigado-transacional",
+        "route": "/obrigado.html",
+        "reason": "primary post-form receipt",
+        "seo_exempt_reason": "post-form receipts intentionally noindex"
+      },
+      {
+        "family_id": "pagina-nao-encontrada",
+        "route": "/404.html",
+        "reason": "host 404 utility",
+        "seo_exempt_reason": "HTTP 404 utility is permanently noindex"
+      },
+      {
+        "family_id": "piloto-ofertas",
+        "route": "/piloto/ofertas/",
+        "reason": "priced offer index on the pilot shell",
+        "seo_exempt_reason": "pilot surface intentionally noindex"
+      },
+      {
+        "family_id": "piloto-preview",
+        "route": "/piloto/",
+        "reason": "pilot shell hub",
+        "seo_exempt_reason": "pilot shell intentionally noindex"
+      },
+      {
+        "family_id": "market-answer-canary",
+        "route": "/inteligencia/valor-tipico-contratos-pavimentacao/",
+        "reason": "published market-answer canary",
+        "seo_exempt_reason": "market-answer publication gate still noindex"
+      },
+      {
+        "family_id": "inteligencia-pseo",
+        "route": "/inteligencia/",
+        "reason": "pSEO intelligence hub",
+        "seo_exempt_reason": "pSEO drafts remain noindex pending approval"
+      },
+      {
+        "family_id": "data-desk-citation-kit",
+        "route": "/assets/data-desk/valor-tipico-contratos-pavimentacao-sc/v1/",
+        "reason": "versioned citation-kit index (noindex) for the published market-answer",
+        "seo_exempt_reason": "citation kit index is noindex,follow"
+      },
+      {
+        "family_id": "jurisprudencia-contratos-obras",
+        "route": "/jurisprudencia-contratos-obras/",
+        "reason": "jurisprudence family hub",
+        "seo_exempt_reason": "jurisprudence drafts remain noindex pending editorial approval"
+      },
+      {
+        "family_id": "panorama-mercado-obras-publicas",
+        "route": "/panorama-mercado-obras-publicas/",
+        "reason": "market panorama hub",
+        "seo_exempt_reason": "panorama publication authorization remains false"
       }
     ],
     "additional_pages": [
@@ -161,52 +262,14 @@
   },
   "supplemental_families": [
     {
-      "id": "diagnostic-outcomes-noindex",
-      "label": "Diagnostic outcome utilities",
-      "patterns": ["^/diagnostico-b2g-expansao/(?:cancelado|expirado|obrigado)/$"],
-      "lighthouse_representative": "/diagnostico-b2g-expansao/obrigado/",
-      "representative_reason": "post-checkout result template",
-      "seo_exempt_reason": "all routes in this supplemental family intentionally declare noindex"
-    },
-    {
-      "id": "intelligence-drafts-noindex",
-      "label": "Intelligence and data-desk drafts",
-      "patterns": ["^/inteligencia/", "^/assets/data-desk/"],
-      "lighthouse_representative": "/inteligencia/",
-      "representative_reason": "index of the largest noindex pSEO draft family",
-      "seo_exempt_reason": "all routes remain noindex until editorial and data approval"
-    },
-    {
-      "id": "jurisprudence-drafts-noindex",
-      "label": "Jurisprudence drafts",
-      "patterns": ["^/jurisprudencia-contratos-obras/"],
-      "lighthouse_representative": "/jurisprudencia-contratos-obras/",
-      "representative_reason": "noindex jurisprudence family hub",
-      "seo_exempt_reason": "all routes remain noindex pending editorial approval"
-    },
-    {
       "id": "transaction-utilities-noindex",
       "label": "Post-conversion, operations and error utilities",
-      "patterns": ["^/obrigado(?:-[a-z]+)?\\.html$", "^/404\\.html$", "^/ops/$"],
-      "lighthouse_representative": "/obrigado.html",
-      "representative_reason": "primary post-conversion utility template",
+      "patterns": [
+        "^/ops/$"
+      ],
+      "lighthouse_representative": "/ops/",
+      "representative_reason": "operations utility surface",
       "seo_exempt_reason": "post-conversion, operations and error routes intentionally declare noindex"
-    },
-    {
-      "id": "market-panorama-noindex",
-      "label": "Market panorama drafts",
-      "patterns": ["^/panorama-mercado-obras-publicas/"],
-      "lighthouse_representative": "/panorama-mercado-obras-publicas/obras-publicas-sc-2026-08/",
-      "representative_reason": "rendered panorama edition is heavier than its hub",
-      "seo_exempt_reason": "publication and index authorization remain false for every route"
-    },
-    {
-      "id": "pilot-noindex",
-      "label": "Commercial pilot surfaces",
-      "patterns": ["^/piloto/"],
-      "lighthouse_representative": "/piloto/ofertas/",
-      "representative_reason": "priced offer index on the shared pilot shell",
-      "seo_exempt_reason": "the entire pilot surface intentionally declares noindex"
     }
   ]
 }
