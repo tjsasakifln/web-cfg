@@ -32,6 +32,7 @@ DEFAULT_MEMBERS = (
     "sitemap-editorial.xml",
     "sitemap-jurisprudencia.xml",
     "sitemap-inteligencia.xml",
+    "sitemap-oportunidades.xml",
 )
 
 PUBLIC_HTML_SKIP_DIRS = frozenset(
@@ -58,6 +59,7 @@ FAMILY_FOR_MEMBER = {
     "sitemap-jurisprudencia.xml": "jurisprudencia",
     "sitemap-inteligencia.xml": "inteligencia",
     "sitemap-analises-contratos.xml": "contract_analysis",
+    "sitemap-oportunidades.xml": "live-intelligence-opportunity",
 }
 
 _DATE_HEAD = re.compile(r"^(\d{4}-\d{2}-\d{2})")

@@ -3,8 +3,10 @@
 Accepts the shipped export layout (manifest.json + opportunities/<id>.json +
 companies/<digest>.json, plus the sibling `<out_dir>.private/identity_projection.json`).
 Does not crawl, extract or invent facts. extra-cli DATA_* never becomes editorial
-INDEX. `catalog_mode=fixture` and fixture-claimed-live payloads are labeled
-test-only and cannot reach `PUBLISHABLE_INDEX`.
+INDEX by itself. `catalog_mode=fixture` and fixture-claimed-live payloads are
+labeled test-only and cannot reach `PUBLISHABLE_INDEX`. An official_live
+opportunity with empty index bars may earn INDEX; company/CNPJ and share
+surfaces stay noindex.
 
 The production entry point reads one official producer bundle. Missing, invalid
 or stale official input FAIL CLOSED: no fixture fallback, no parallel schema, no
@@ -461,25 +463,35 @@ def index_bars(payload: dict[str, Any]) -> list[str]:
     return sorted(set(bars))
 
 
+def is_opportunity_payload(payload: dict[str, Any]) -> bool:
+    """Opportunity records may earn INDEX. Company/CNPJ payloads never do."""
+    schema = str(payload.get("schema") or "")
+    if schema == OPPORTUNITY_FAMILY or schema.startswith("live-opportunity/"):
+        return True
+    has_opp = bool(str(payload.get("opportunity_id") or "").strip())
+    has_company = bool(str(payload.get("company_digest") or "").strip())
+    return has_opp and not has_company
+
+
 def decide(payload: dict[str, Any], *, manifest: dict[str, Any] | None = None) -> dict[str, Any]:
     """Fail-closed editorial decision for one payload.
 
-    READY means the payload may be projected. It is never permission to index:
-    W1 renders every live-intelligence surface noindex.
+    READY means the payload may be projected. INDEX is earned only by an
+    official_live opportunity with empty index bars; fixture, company/CNPJ
+    and barred provenance stay PUBLISHABLE_NOINDEX. INSTANCE_INDEX_READY on
+    the rendered HTML is the inbound_gates check, not this function.
     """
     reasons = inspect_producer_integrity(payload, manifest=manifest)
     bars = index_bars(payload)
     state = data_state_of(payload)
     source_kind = source_kind_of(payload)
+    index_eligible = False
     base = {
         "reason_codes": reasons,
         "index_bars": bars,
         "data_state": state,
         "source_kind": source_kind,
-        # W1 ships every live-intelligence surface noindex. Nothing in this
-        # module may return True: INDEX needs a declared public family plus the
-        # full editorial gate, and W1 declares none.
-        "index_eligible": False,
+        "index_eligible": index_eligible,
     }
     if state and state != "DATA_READY":
         return {
@@ -494,8 +506,17 @@ def decide(payload: dict[str, Any], *, manifest: dict[str, Any] | None = None) -
             "state": "HOLD_FOR_DATA" if hold_only else "REJECT",
             "ready": False,
         }
-    # DATA_READY is not INDEX. READY here only means "may be projected".
-    return {**base, "state": "PUBLISHABLE_NOINDEX", "ready": True}
+    index_eligible = (
+        source_kind == SOURCE_OFFICIAL_LIVE
+        and not bars
+        and is_opportunity_payload(payload)
+    )
+    return {
+        **base,
+        "index_eligible": index_eligible,
+        "state": "PUBLISHABLE_INDEX" if index_eligible else "PUBLISHABLE_NOINDEX",
+        "ready": True,
+    }
 
 
 def _looks_export_dir(path: Path) -> bool:
@@ -874,7 +895,7 @@ def build_projection(bundle: dict[str, Any]) -> dict[str, Any]:
         projected["publication_state"] = decision["state"]
         projected["source_kind"] = decision["source_kind"]
         projected["index_bars"] = decision["index_bars"]
-        projected["index_eligible"] = False
+        projected["index_eligible"] = decision["index_eligible"]
         opportunities.append(projected)
 
     for record in bundle.get("companies") or []:
@@ -913,9 +934,9 @@ def build_projection(bundle: dict[str, Any]) -> dict[str, Any]:
         "catalog_mode": bundle.get("catalog_mode"),
         "generated_at": bundle.get("generated_at"),
         "source_as_of": bundle.get("source_as_of"),
-        # A fixture-sourced projection can never be promoted to INDEX. The flag
-        # is written into the artifact so a downstream renderer cannot lose it.
-        "index_eligible": False,
+        # Projection-level flag is true iff at least one official opportunity
+        # earned INDEX. Fixture and company records stay false per-record.
+        "index_eligible": any(item.get("index_eligible") is True for item in opportunities),
         "opportunities": sorted(opportunities, key=lambda item: item["opportunity_id"]),
         "companies": companies,
         "rejected": sorted(rejected, key=lambda item: (item["family"], item["id"])),
@@ -943,7 +964,7 @@ def write_projection(projection: dict[str, Any], out_dir: Path | None = None) ->
         "catalog_mode": projection["catalog_mode"],
         "generated_at": projection["generated_at"],
         "source_as_of": projection["source_as_of"],
-        "index_eligible": False,
+        "index_eligible": projection["index_eligible"],
     }
     opportunities_path = target / OPPORTUNITIES_OUT
     companies_path = target / COMPANIES_OUT
@@ -1033,8 +1054,8 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 1
     if args.write:
-        if projection["source_kind"] == SOURCE_OFFICIAL_LIVE and projection["index_eligible"] is not False:
-            print(json.dumps({"ok": False, "error": "refusing to write an index-eligible projection"}))
+        if projection["source_kind"] != SOURCE_OFFICIAL_LIVE and projection["index_eligible"] is True:
+            print(json.dumps({"ok": False, "error": "refusing to write an index-eligible fixture projection"}))
             return 1
         written = write_projection(projection, _root() / args.out)
         for path in written:

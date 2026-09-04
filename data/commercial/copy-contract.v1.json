@@ -876,8 +876,8 @@
     "method": "Cada rota derivada é lida do repositório, tem script e style removidos, tem a marcação removida e é normalizada por NFD_STRIP_ACCENTS_LOWERCASE. Cada entrada com checker term_scan roda o seu padrão sobre o texto resultante. Só um instituto de mercado, uma negação na mesma frase ou uma seção estrutural Não inclui pode gerar isenção no texto visível; aliases antigos ficam apenas em metadados de busca, analytics e compatibilidade.",
     "gate_rule": "O runner deriva todas as rotas a cada execução, expõe cada ocorrência viva no relatório e reprova qualquer violação. Não existe exceção nominal ou de rota para apresentar nome público aposentado. pages e boundaries abaixo preservam apenas a medição histórica inicial e não limitam nem autorizam a varredura viva.",
     "live_measurement": {
-      "routes_derived": 23,
-      "language_boundaries": 78,
+      "routes_derived": 30,
+      "language_boundaries": 79,
       "language_observations": 0,
       "language_violations": 0,
       "structured_social_proof_hits": 0,

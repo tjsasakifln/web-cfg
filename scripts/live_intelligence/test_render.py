@@ -81,6 +81,44 @@ def test_write_pages_keeps_pncp_ids_with_slash_and_prunes_others():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def test_official_index_page_emits_canonical_robots_and_sitemap():
+    tmp = _tmp_root()
+    try:
+        record = {
+            "opportunity_id": "12345678000190-1/2026",
+            "objeto": "Pavimentação asfáltica de via urbana",
+            "orgao": {"nome": "Município de Chapecó"},
+            "local": {"municipio": "Chapecó", "uf": "SC"},
+            "prazo": {"status": "ABERTA", "data_encerramento": "2026-09-24"},
+            "valor": {"estimado_brl": "2500000", "faixa": "1M_10M", "epistemic_class": "FACT"},
+            "fonte": [{"nome": "PNCP", "url": "https://pncp.gov.br/app/editais/1"}],
+            "freshness": {
+                "source_as_of": "2026-09-01T03:00:00+00:00",
+                "generated_at": "2026-09-01T09:00:00+00:00",
+                "max_age_hours": 48,
+            },
+            "publication_state": "PUBLISHABLE_INDEX",
+            "index_eligible": True,
+            "source_kind": "official_live",
+            "content_hash": "abc",
+        }
+        projection = {
+            "source_kind": "official_live",
+            "index_eligible": True,
+            "opportunities": [record],
+        }
+        written = R.write_pages(projection, root=tmp)
+        html = written[0].read_text(encoding="utf-8")
+        assert 'content="index,follow" name="robots"' in html
+        assert 'rel="canonical"' in html
+        assert "https://confenge.com.br/oportunidades/12345678000190-1/2026/" in html
+        assert "company_ref" not in html
+        sitemap = (tmp / R.SITEMAP_NAME).read_text(encoding="utf-8")
+        assert "https://confenge.com.br/oportunidades/12345678000190-1/2026/" in sitemap
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def test_write_pages_reruns_are_idempotent_and_still_prune():
     tmp = _tmp_root()
     try:

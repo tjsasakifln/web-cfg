@@ -193,11 +193,11 @@ def test_fixture_records_carry_index_bars(projection):
         assert "catalog_mode_fixture" in record["index_bars"]
 
 
-def test_decide_never_returns_publishable_index(bundle):
-    """No input reaches INDEX in W1, not even a well-formed official-live one."""
+def test_official_live_opportunity_earns_publishable_index(bundle):
+    """#563: official opportunity that is ready is canonical INDEX candidate."""
     record = _opportunity(bundle)
     record.update(
-        schema=LIVE_SCHEMA,
+        schema=OPPORTUNITY_FAMILY,
         catalog_mode=SOURCE_OFFICIAL_LIVE,
         producer_status=SOURCE_OFFICIAL_LIVE,
         official_live=True,
@@ -207,9 +207,53 @@ def test_decide_never_returns_publishable_index(bundle):
     record.pop("never_index", None)
     decision = C.decide(_rehash(record))
     assert decision["ready"] is True
+    assert decision["source_kind"] == SOURCE_OFFICIAL_LIVE
+    assert decision["index_bars"] == []
+    assert decision["state"] == "PUBLISHABLE_INDEX"
+    assert decision["index_eligible"] is True
+
+
+def test_official_live_company_stays_noindex(bundle):
+    """CNPJ analysis records never index, even from an official producer."""
+    record = _company(bundle)
+    record.update(
+        schema=COMPANY_FAMILY,
+        catalog_mode=SOURCE_OFFICIAL_LIVE,
+        producer_status=SOURCE_OFFICIAL_LIVE,
+        official_live=True,
+        claimed_live=True,
+        test_only=False,
+    )
+    record.pop("never_index", None)
+    decision = C.decide(_rehash(record))
+    assert decision["ready"] is True
+    assert decision["source_kind"] == SOURCE_OFFICIAL_LIVE
     assert decision["state"] == "PUBLISHABLE_NOINDEX"
     assert decision["index_eligible"] is False
-    assert decision["source_kind"] == SOURCE_OFFICIAL_LIVE
+
+
+def test_fixture_payload_with_live_labels_is_never_official_live():
+    """negotiate_schema / catalog-mode derivation, not a copy of the rule."""
+    payload = {
+        "schema": FIXTURE_SCHEMA,
+        "contract_version": CONTRACT_VERSION,
+        "catalog_mode": SOURCE_OFFICIAL_LIVE,
+        "official_live": True,
+        "claimed_live": True,
+        "producer_status": SOURCE_OFFICIAL_LIVE,
+        "generated_at": "2026-09-03T12:00:00+00:00",
+        "opportunity_id": "fixture-looking-live",
+    }
+    negotiated = C.negotiate_schema(payload["schema"], payload["contract_version"])
+    assert negotiated.kind == "fixture"
+    assert negotiated.accepted is False
+    assert C.is_fixture_catalog(payload) is True
+    assert C.official_live_declared(payload) is False
+    assert C.source_kind_of(payload) == SOURCE_FIXTURE
+    decision = C.decide(payload)
+    assert decision["state"] != "PUBLISHABLE_INDEX"
+    assert decision["index_eligible"] is False
+    assert decision["source_kind"] == SOURCE_FIXTURE
 
 
 def test_fixture_claiming_live_is_rejected(bundle):
@@ -519,25 +563,23 @@ def test_rendered_pages_carry_no_price_markup():
         assert not _displays_price(_main_html(html)), path
 
 
-def test_render_writes_no_hub_sitemap_or_feed():
-    """A pointer at a noindex route is a gate finding. W1 creates no pointer."""
+def test_render_writes_no_hub_or_crawler_sync():
+    """No hub page. Sitemap is INDEX-only, never a pointer at a noindex route."""
     from scripts.live_intelligence import render as R
 
     source = (ROOT / "scripts/live_intelligence/render.py").read_text(encoding="utf-8")
-    for forbidden in ("write_sitemap", "render_hub_html", "sync_family_crawler_rules", "robots.txt"):
-        assert forbidden not in source.replace(
-            "A noindex route that something points at", ""
-        ), forbidden
+    for forbidden in ("render_hub_html", "sync_family_crawler_rules"):
+        assert forbidden not in source, forbidden
     assert not (ROOT / "oportunidades" / "index.html").exists()
-    assert not list((ROOT).glob("sitemap-oportunidades*.xml"))
     assert R.FAMILY_SLUG == "oportunidades"
+    assert R.SITEMAP_NAME == "sitemap-oportunidades.xml"
 
 
-def test_renderable_refuses_an_index_eligible_projection():
+def test_renderable_refuses_an_index_eligible_fixture_projection():
     from scripts.live_intelligence import render as R
 
     with pytest.raises(ValueError):
-        R.renderable({"index_eligible": True, "opportunities": []})
+        R.renderable({"source_kind": "test_only_fixture", "index_eligible": True, "opportunities": []})
 
 
 def test_renderable_skips_non_ready_records():

@@ -4,14 +4,10 @@ Fail-closed by construction:
 
 * Only records the adapter marked READY are rendered. Stale, rejected or
   fixture-as-live data produces no page.
-* Every page ships ``noindex``. W1 declares no family in
-  ``data/organic/public-family-registry.json``, and an indexable page without a
-  declared family fails the conversion gate — so noindex is the honest state,
-  not a workaround.
-* There is deliberately **no** hub, sitemap, feed or robots/_headers sync here.
-  A noindex route that something points at is a finding in `gate_index_surface`
-  (``noindex_in_sitemap`` / ``noindex_in_hub_*`` / ``noindex_in_feed``), and W1
-  puts internal-linking expansion out of scope.
+* Fixture and company/CNPJ pages stay ``noindex``. An official_live opportunity
+  that earned ``PUBLISHABLE_INDEX`` ships ``index,follow``, a self-canonical
+  and a sitemap loc. Inertia noindex on an INDEX_READY opportunity is a defect.
+* Sitemap membership is derived from the same indexable set (``sitemap-oportunidades.xml``).
 * ``valor`` is rendered as plain declared data. No schema.org price markup and
   no commitment wording near the amount: this is a public estimate carried by
   the source document, never something CONFENGE sells.
@@ -31,10 +27,15 @@ from scripts.live_intelligence import (
     ASSET_FAMILY,
     COMPANY_ROUTE_PREFIX,
     DEFAULT_LIVE_DIR,
+    FAMILY_PATH,
     FAMILY_SLUG,
     OPPORTUNITIES_OUT,
     ROUTE_FAMILY,
+    SOURCE_OFFICIAL_LIVE,
 )
+
+SITE = "https://confenge.com.br"
+SITEMAP_NAME = "sitemap-oportunidades.xml"
 
 # One archetype per narrative block. Names are reused from
 # data/site/design-system.json → section_archetypes; a section that repeats a
@@ -196,6 +197,20 @@ def _page_dir(base: Path, opportunity_id: str) -> Path:
     return target
 
 
+def opportunity_route(opportunity_id: str) -> str:
+    return f"{FAMILY_PATH}{opportunity_id.strip('/')}/"
+
+
+def record_is_indexable(record: dict[str, Any], *, projection_kind: str | None = None) -> bool:
+    """INDEX only for official_live opportunities that earned PUBLISHABLE_INDEX."""
+    kind = record.get("source_kind") or projection_kind
+    return (
+        kind == SOURCE_OFFICIAL_LIVE
+        and record.get("publication_state") == "PUBLISHABLE_INDEX"
+        and record.get("index_eligible") is True
+    )
+
+
 def _kv_rows(rows: list[tuple[str, str]]) -> str:
     cells = "".join(
         f"<tr><th scope=\"row\">{e(label)}</th><td>{e(value)}</td></tr>" for label, value in rows
@@ -231,7 +246,7 @@ def _limitations_html(limitations: list[str]) -> str:
 
 
 def render_opportunity_html(record: dict[str, Any]) -> str:
-    """Render one opportunity page. Always noindex."""
+    """Render one opportunity page. INDEX only when the record earned it."""
     opportunity_id = record["opportunity_id"]
     objeto = _pt(record.get("objeto"))
     orgao = record.get("orgao") or {}
@@ -248,21 +263,33 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
         f"declarado na fonte, órgão, local, prazo e status, com fonte e data de referência."
     )
     status = str(prazo.get("status") or "UNKNOWN")
+    indexable = record_is_indexable(record)
+    route = opportunity_route(opportunity_id)
+    canonical = f"{SITE}{route}"
+    robots = "index,follow" if indexable else "noindex,nofollow"
+    index_state = "INDEX" if indexable else "NOINDEX"
+    modified = str(freshness.get("generated_at") or freshness.get("source_as_of") or "").strip()
+    modified_meta = (
+        f'<meta content="{e(modified)}" property="article:modified_time"/>\n'
+        if modified
+        else ""
+    )
     return f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<meta content="noindex,nofollow" name="robots"/>
+<meta content="{robots}" name="robots"/>
 <meta content="#061a33" name="theme-color"/>
 <title>{e(title)}</title>
 <link href="/assets/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link href="/styles.css" rel="stylesheet"/>
+<link href="{e(canonical)}" rel="canonical"/>
 <script defer="" src="/script.js?v=fortune02"></script>
 <script defer="" src="/assets/js/live-intelligence.js"></script>
 <meta content="{e(description)}" name="description"/>
-</head>
-<body class="simple-page" data-asset-id="{e(opportunity_id)}" data-asset-family="{e(ASSET_FAMILY)}" data-route-family="{e(ROUTE_FAMILY)}" data-intel-surface="opportunity" data-opportunity-id="{e(opportunity_id)}" data-index-state="NOINDEX">
+{modified_meta}</head>
+<body class="simple-page" data-asset-id="{e(opportunity_id)}" data-asset-family="{e(ASSET_FAMILY)}" data-route-family="{e(ROUTE_FAMILY)}" data-intel-surface="opportunity" data-opportunity-id="{e(opportunity_id)}" data-index-state="{index_state}">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 <header class="site-header" id="inicio">
 <div class="container header-inner">
@@ -353,7 +380,7 @@ def render_opportunity_html(record: dict[str, Any]) -> str:
     ("Hash de integridade da fonte", _pt(record.get("content_hash"))),
     ("Origem dos dados", _mapped(record.get("source_kind"), SOURCE_KIND_LABEL, "origem não classificada")),
     ("Estado editorial", _mapped(record.get("publication_state"), PUBLICATION_STATE_LABEL, "estado não classificado")),
-    ("Elegível a indexação", "não"),
+    ("Elegível a indexação", "sim" if indexable else "não"),
 ])}
 </section>
 </article>
@@ -372,15 +399,19 @@ def load_projection(path: Path | None = None) -> dict[str, Any]:
 
 
 def renderable(projection: dict[str, Any]) -> list[dict[str, Any]]:
-    """Only READY, noindex-capped records reach a page."""
-    if projection.get("index_eligible") is not False:
-        raise ValueError("projection claims index eligibility; refusing to render")
+    """READY opportunity records reach a page. Fixture cannot claim INDEX."""
+    projection_kind = projection.get("source_kind")
+    if projection_kind != SOURCE_OFFICIAL_LIVE and projection.get("index_eligible") is True:
+        raise ValueError("fixture projection claims index eligibility; refusing to render")
     out = []
     for record in projection.get("opportunities") or []:
-        if record.get("publication_state") != "PUBLISHABLE_NOINDEX":
+        state = record.get("publication_state")
+        if state not in {"PUBLISHABLE_NOINDEX", "PUBLISHABLE_INDEX"}:
             continue
-        if record.get("index_eligible") is not False:
-            continue
+        rec_kind = record.get("source_kind") or projection_kind
+        if rec_kind != SOURCE_OFFICIAL_LIVE:
+            if record.get("index_eligible") is True or state == "PUBLISHABLE_INDEX":
+                continue
         out.append(record)
     return out
 
@@ -415,7 +446,39 @@ def write_pages(projection: dict[str, Any], root: Path | None = None) -> list[Pa
                 next(dirpath.iterdir())
             except StopIteration:
                 dirpath.rmdir()
+    _write_opportunity_sitemap(projection, records=renderable(projection), root=root)
     return written
+
+
+def _write_opportunity_sitemap(
+    projection: dict[str, Any],
+    *,
+    records: list[dict[str, Any]],
+    root: Path | None = None,
+) -> Path:
+    """Urlset of INDEX opportunities only. close_graph drops any noindex loc."""
+    site_root = root or _root()
+    locs: list[tuple[str, str]] = []
+    for record in records:
+        if not record_is_indexable(record, projection_kind=projection.get("source_kind")):
+            continue
+        freshness = record.get("freshness") or {}
+        lastmod = str(freshness.get("generated_at") or freshness.get("source_as_of") or "")[:10]
+        locs.append((f"{SITE}{opportunity_route(record['opportunity_id'])}", lastmod))
+    locs.sort(key=lambda item: item[0])
+    rows = []
+    for loc, lastmod in locs:
+        lastmod_xml = f"<lastmod>{lastmod}</lastmod>" if lastmod else ""
+        rows.append(f"<url><loc>{loc}</loc>{lastmod_xml}</url>")
+    body = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + ("\n".join(rows) + ("\n" if rows else ""))
+        + "</urlset>\n"
+    )
+    target = site_root / SITEMAP_NAME
+    target.write_text(body, encoding="utf-8")
+    return target
 
 
 def main(argv: list[str] | None = None) -> int:
