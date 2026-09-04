@@ -3,10 +3,8 @@
 Fail-closed consumer of the extra-cli `CONFENGE_LIVE_INTELLIGENCE/1.0` contract.
 extra-cli DATA_* is never editorial INDEX. `catalog_mode=fixture` and
 fixture-claimed-live payloads are labeled test-only and cannot reach
-`PUBLISHABLE_INDEX`.
-
-W1 ships Surface A (`/oportunidades/<opportunity_id>/`) as noindex, so the
-family declares no entry in `data/organic/public-family-registry.json`.
+`PUBLISHABLE_INDEX`. An official_live opportunity that earns INDEX is
+published as `index,follow` under `/oportunidades/<opportunity_id>/`.
 """
 
 from __future__ import annotations
@@ -59,10 +57,14 @@ ADHERENCE_DISCLAIMER_PT = (
 
 DEFAULT_FIXTURE_DIR = "data/live_intelligence/fixtures"
 # Official producer bundle (SELECT-only input). Distinct from DEFAULT_LIVE_DIR,
-# which is the consumer projection output. Absent/invalid/stale official input
-# FAIL CLOSED — the fixture catalog is never a silent fallback.
+# which is the committed fixture projection for tests. Absent/invalid/stale
+# official input FAIL CLOSED — the fixture catalog is never a silent fallback.
 DEFAULT_OFFICIAL_DIR = "data/live_intelligence/official"
 DEFAULT_LIVE_DIR = "data/live_intelligence/live"
+# Host-owned official projection. Never committed. Last-accepted is the
+# previous successful official write, kept for rollback.
+DEFAULT_ACCEPTED_DIR = "data/live_intelligence/accepted"
+DEFAULT_LAST_ACCEPTED_DIR = "data/live_intelligence/accepted.last"
 OPPORTUNITIES_OUT = "opportunities.json"
 COMPANIES_OUT = "companies.json"
 

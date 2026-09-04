@@ -634,6 +634,30 @@ def main(argv: list[str] | None = None) -> int:
 
     man_path = write_public_manifest(summary, snap)
 
+    live_intel_publish: dict = {}
+    try:
+        from scripts.live_intelligence.publish import publish as publish_live_intelligence
+
+        live_intel_publish = publish_live_intelligence(ROOT)
+        if live_intel_publish.get("ok") is False:
+            errors.append(
+                "live_intelligence_official_rejected:"
+                + str(live_intel_publish.get("reason") or "unknown")
+            )
+        else:
+            print(
+                "live-intelligence publish: "
+                + json.dumps(
+                    {
+                        k: live_intel_publish.get(k)
+                        for k in ("skipped", "reason", "pages", "indexable", "index_ready_url")
+                    },
+                    ensure_ascii=False,
+                )
+            )
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"live_intelligence_publish_failed:{exc}")
+
     # Assemble _site BEFORE validate/editorial so audits see the public artifact
     artifact = assemble_public_artifact(ROOT)
     if not artifact.get("ok"):

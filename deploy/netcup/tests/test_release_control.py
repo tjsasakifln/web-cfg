@@ -21,6 +21,16 @@ from deploy.netcup.lib.schedule_gate import validate_gate
 from deploy.netcup.package_release import build_release, sha256_file
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
+
+
+def test_live_intel_overlay_paths_are_explicit() -> None:
+    assert control.is_live_intel_overlay("_site/oportunidades/abc/index.html")
+    assert control.is_live_intel_overlay("_site/sitemap-oportunidades.xml")
+    assert control.is_live_intel_overlay("_site/sitemap-index.xml")
+    assert control.is_live_intel_overlay("_site/ferramentas/index.html")
+    assert control.is_live_intel_overlay("data/live_intelligence/official/manifest.json")
+    assert not control.is_live_intel_overlay("_site/index.html")
+    assert not control.is_live_intel_overlay("netlify/functions/lead.cjs")
 SHA_A = "a" * 40
 SHA_B = "b" * 40
 SHA_C = "c" * 40

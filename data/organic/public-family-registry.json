@@ -662,7 +662,7 @@
     },
     {
       "id": "live-intelligence-opportunity",
-      "visitor_job": "Visualizar detalhes de oportunidade de obra pública com análise de risco e contexto (atualmente fixture-backed → noindex; candidata a indexação quando dados live/official chegarem).",
+      "visitor_job": "Visualizar detalhes de uma oportunidade pública de obra com fatos, fonte e data de referência, e escolher o próximo passo real.",
       "profile": "commercial_content",
       "terminal_action": "capture_form_or_whatsapp",
       "match": {

@@ -614,21 +614,11 @@ def test_renderable_skips_non_ready_records():
 
 
 def test_live_intelligence_families_are_declared_and_still_governed_noindex():
-    """W1 is fixture-backed, so its families must be declared *and* proven noindex.
+    """Fixture/CNPJ-result surfaces stay noindex; official INDEX is earned per page.
 
-    Before the CONFENGE-PSEO-EDITORIAL-INDEXATION-CUTOVER gate work (see
-    scripts/site/inbound_gates.py's instance_index_ready_for_route /
-    archetype_editorial_ready_for_family), an undeclared family was the only
-    way this suite could prove W1 wasn't claiming a public indexable surface --
-    absence from data/organic/public-family-registry.json stood in for
-    "correctly not indexable". That proxy is gone now: the families ARE
-    declared (data/organic/public-family-registry.json and
-    data/organic/noindex-governance-registry.json), because declaring and
-    governing them is what lets the evidence gate check them at all. The
-    real invariant this test now proves is the same one as before -- W1
-    still doesn't claim an indexable public surface -- just checked
-    directly against the gate that actually decides that, instead of via
-    registry absence.
+    Families are declared so the evidence gate can judge them. Fixture pages in
+    the repo remain noindex. Official INDEX_READY pages, when published from the
+    host-delivered snapshot, must not stay noindex by inertia.
     """
     registry = json.loads(
         (ROOT / "data/organic/public-family-registry.json").read_text(encoding="utf-8")
@@ -846,6 +836,8 @@ def _write_539_candidate(
         "official_live": official_live,
         "producer_status": producer_status,
         "as_of": "2026-09-01",
+        "source_run_id": _SNAPSHOT_ID,
+        "snapshot_id": _SNAPSHOT_ID,
         "generated_at": "2026-09-01T09:00:00+00:00",
         "source_as_of": "2026-09-01T03:00:00+00:00",
         "freshness": {
@@ -1111,6 +1103,109 @@ def test_539_pncp_id_is_not_path_traversal():
     with pytest.raises(C.ConsumeError):
         C.assert_safe_opportunity_id("foo/../../etc")
     assert C.assert_safe_opportunity_id(_PNCP_OPPORTUNITY_ID) == _PNCP_OPPORTUNITY_ID
+
+
+def test_ack_round_trips_producer_schema_run_hash_and_as_of(tmp_path):
+    export_dir = _write_539_candidate(tmp_path, catalog_mode="official_live")
+    projection = C.consume(export_dir, require_official=True)
+    ack = C.ack_payload(projection)
+    manifest = json.loads((export_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert ack["schema"] == LIVE_SCHEMA
+    assert ack["source_run_id"] == manifest["source_run_id"]
+    assert ack["manifest_hash"] == manifest["manifest_hash"]
+    assert ack["consumer_observed_manifest_hash"] == manifest["manifest_hash"]
+    assert ack["hash_identity"] is True
+    assert ack["as_of"] == manifest["as_of"]
+    assert ack["catalog_mode"] == "official_live"
+    assert ack["official_live"] is True
+
+
+def test_official_write_is_atomic_and_keeps_last_accepted(tmp_path):
+    export_dir = _write_539_candidate(tmp_path, catalog_mode="official_live")
+    first = C.consume(export_dir, require_official=True)
+    target = tmp_path / "accepted"
+    last = tmp_path / "accepted.last"
+    C.write_projection(first, target, last_accepted=last)
+    first_hash = json.loads((target / OPPORTUNITIES_OUT).read_text(encoding="utf-8"))["manifest_hash"]
+
+    def bump(record):
+        record["objeto"] = record["objeto"] + " (revisado)"
+        return record
+
+    export_dir = _write_539_candidate(
+        tmp_path / "second", catalog_mode="official_live", mutate_opportunity=bump
+    )
+    second = C.consume(export_dir, require_official=True)
+    C.write_projection(second, target, last_accepted=last)
+    assert last.is_dir()
+    rolled = json.loads((last / OPPORTUNITIES_OUT).read_text(encoding="utf-8"))
+    current = json.loads((target / OPPORTUNITIES_OUT).read_text(encoding="utf-8"))
+    assert rolled["manifest_hash"] == first_hash
+    assert current["manifest_hash"] != first_hash
+    assert current["official_live"] is True
+
+
+def test_failed_official_consume_does_not_refresh_projection_mtime(tmp_path, monkeypatch):
+    live = tmp_path / "live"
+    live.mkdir()
+    marker = live / OPPORTUNITIES_OUT
+    marker.write_text('{"source_kind":"official_live","opportunities":[]}\n', encoding="utf-8")
+    before = marker.stat().st_mtime_ns
+    monkeypatch.setattr(C, "official_dir", lambda: tmp_path / "absent-official")
+    monkeypatch.setattr(C, "DEFAULT_OFFICIAL_DIR", str(tmp_path / "absent-official"))
+    rc = C.main(["--out", str(live), "--write"])
+    assert rc == 1
+    assert marker.stat().st_mtime_ns == before
+    assert json.loads(marker.read_text(encoding="utf-8"))["opportunities"] == []
+
+
+def test_stale_official_envelope_does_not_write(tmp_path):
+    def stale(manifest):
+        manifest["freshness"] = {
+            **manifest["freshness"],
+            "source_as_of": "2026-01-01T00:00:00+00:00",
+            "generated_at": "2026-08-01T00:00:00+00:00",
+        }
+        manifest["source_as_of"] = "2026-01-01T00:00:00+00:00"
+        manifest["generated_at"] = "2026-08-01T00:00:00+00:00"
+        manifest["as_of"] = "2026-01-01"
+        manifest["manifest_hash"] = C.manifest_hash_of(manifest)
+
+    export_dir = _write_539_candidate(
+        tmp_path, catalog_mode="official_live", mutate_manifest=stale
+    )
+    out = tmp_path / "accepted"
+    with pytest.raises(C.ConsumeError):
+        C.consume(export_dir, require_official=True)
+    assert not out.exists()
+
+
+def test_partial_official_bundle_does_not_write(tmp_path):
+    export_dir = _write_539_candidate(tmp_path, catalog_mode="official_live")
+    listed = json.loads((export_dir / "manifest.json").read_text(encoding="utf-8"))
+    opp = listed["index"]["opportunities"][0]
+    (export_dir / opp["file"]).unlink()
+    with pytest.raises(C.ConsumeError):
+        C.consume(export_dir, require_official=True)
+
+
+def test_schema_incompatible_official_does_not_write(tmp_path):
+    export_dir = _write_539_candidate(
+        tmp_path,
+        catalog_mode="official_live",
+        mutate_manifest=lambda manifest: manifest.update({"schema": "CONFENGE_LIVE_INTELLIGENCE/2.0"}),
+    )
+    with pytest.raises(C.ConsumeError):
+        C.consume(export_dir, require_official=True)
+
+
+def test_explicit_fixture_source_never_labels_official_live(capsys):
+    rc = C.main(["--source", DEFAULT_FIXTURE_DIR])
+    assert rc == 0
+    payload = json.loads(capsys.readouterr().out.strip().splitlines()[-1])
+    assert payload["official_live"] is False
+    assert payload["source_kind"] == SOURCE_FIXTURE
+    assert payload["catalog_mode"] == "fixture"
 
 
 def test_539_company_without_fonte_is_not_source_absent(tmp_path):

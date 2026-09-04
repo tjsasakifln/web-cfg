@@ -112,7 +112,7 @@
       "reason_code": "fixture_synthetic",
       "owner_issue": 563,
       "review_at": "2026-12-01",
-      "note": "REMEDIABLE: Fixture-backed hoje. Trigger real de revisão é o contrato live/official da extra-cli chegar e a próxima execução do gate rodar contra dados reais (evento interno) — 2026-12-01 é apenas o teto de SLA, não uma data para esperar passivamente; se o contrato chegar antes, revalidar imediatamente."
+      "note": "REMEDIABLE: aplica-se só a páginas fixture/noindex. Instâncias official_live INDEX_READY publicam index,follow a partir do snapshot extra-cli#530; fixture permanece noindex e fora do sitemap."
     },
     {
       "family_id": "live-intelligence-cnpj-tool",
