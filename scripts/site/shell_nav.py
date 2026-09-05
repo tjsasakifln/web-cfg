@@ -2,7 +2,7 @@
 """Task-first shell navigation: one source of truth, applied to every page.
 
 The header is replicated on ~200 shipped HTML files. `data/site/public-ia-map.json`
-(three purchase situations, ≤5 destinations + CTA) is the IA contract;
+(short corporate nav, B2G conserved, ≤5 destinations + CTA) is the IA contract;
 `data/site/brand.json` (`navigation.desktop` + `navigation.cta`) mirrors the
 header so existing generators keep a single write path. This module renders the
 desktop nav, the mobile nav and the footer discovery columns and can rewrite
@@ -12,9 +12,9 @@ Usage:
     python3 scripts/site/shell_nav.py --check    # CI: shipped HTML == source
     python3 scripts/site/shell_nav.py --write    # regenerate shipped HTML
 
-Design notes (CFG10X-11 / issue #183):
-  * Header names the three purchase situations in visitor language, plus one
-    essential Biblioteca. Destinations are real pages, never home anchors.
+Design notes (CFG10X-11 / issue #183, campaign 10 / issue #582):
+  * Header keeps a short nav: Obras públicas + conserved B2G doors + Biblioteca.
+    Destinations are real pages, never home anchors. Nuclei chooser is on home.
   * `aria-current="page"` marks the active branch on internal pages.
   * Desktop and mobile carry the same links in the same order; the footer is a
     short discovery set derived from the IA map, not a taxonomy dump.
@@ -102,6 +102,18 @@ def _frozen_shell_files() -> frozenset[str]:
 
 FROZEN_SHELL_FILES = _frozen_shell_files()
 
+# Hash-bound editorial canaries (#127). Chrome sync changes the approval
+# material hash. Skip until goal 97 re-approves; do not widen FROZEN_SHELL_FILES.
+HASH_PINNED_SHELL_FILES = frozenset(
+    {
+        "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
+        "conteudos/atraso-na-medicao-obra-publica/index.html",
+        "conteudos/glosa-de-medicao-obra-publica/index.html",
+        "conteudos/medicao-de-obra-publica-rejeitada/index.html",
+        "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
+    }
+)
+
 DESKTOP_NAV_RE = re.compile(
     r'(<nav\b[^>]*\bclass="[^"]*\bdesktop-nav\b[^"]*"[^>]*>)(.*?)(</nav>)',
     re.S | re.I,
@@ -132,6 +144,10 @@ LEGACY_ANCHOR_HREFS = {
     "/#ofertas": "/servicos-obras-publicas/",
     "/#jornadas": "/problemas-que-resolvemos/",
 }
+FOOTER_BRAND_P_RE = re.compile(
+    r'(<div class="footer-brand">(?:(?!</div>).)*?<img\b[^>]*>)\s*<p>.*?</p>',
+    re.S | re.I,
+)
 
 
 def load_brand() -> dict[str, Any]:
@@ -270,6 +286,8 @@ def shipped_html_files() -> list[Path]:
             continue
         if rel.as_posix() in FROZEN_SHELL_FILES:
             continue
+        if rel.as_posix() in HASH_PINNED_SHELL_FILES:
+            continue
         out.append(path)
     return out
 
@@ -346,10 +364,23 @@ def sync_breadcrumbs(text: str, current: str | None) -> str:
     return text
 
 
+def sync_footer_blurb(text: str, brand: dict[str, Any]) -> str:
+    """Keep the footer-brand paragraph on the current corporate category."""
+    from scripts.site.brand import footer_blurb as brand_footer_blurb
+
+    blurb = brand_footer_blurb(brand)
+    if not blurb or not FOOTER_BRAND_P_RE.search(text):
+        return text
+    paragraph = f"<p>{html_lib.escape(blurb)}</p>"
+    return FOOTER_BRAND_P_RE.sub(lambda m: f"{m.group(1)}{paragraph}", text, count=1)
+
+
 def sync_text(text: str, brand: dict[str, Any], current: str | None) -> str:
     """Idempotently align one page's header/footer/breadcrumbs with the IA map."""
     if 'class="desktop-nav"' not in text and 'class="mobile-nav"' not in text:
         return text
+
+    text = sync_footer_blurb(text, brand)
 
     if DESKTOP_NAV_RE.search(text):
         text = _replace_nav(text, DESKTOP_NAV_RE, desktop_links(brand, current))

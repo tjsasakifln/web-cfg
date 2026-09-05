@@ -234,7 +234,7 @@ def main() -> int:
     active_cases = {
         problems["url"]: problems["url"],
         "/bid-room-licitacoes-obras/": "/bid-room-licitacoes-obras/",
-        "/diretoria-b2g/": "/diretoria-b2g/",
+        "/diretoria-b2g/": "/servicos-obras-publicas/",
         "/defesa-tecnica-contratos-publicos/": problems["url"],
         "/conteudos/ata-reuniao-ordem-servico-obra-publica/": "/conteudos/",
         "/ferramentas/limite-acrescimos-supressoes/": "/conteudos/",

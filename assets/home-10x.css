@@ -1,54 +1,5 @@
-/* CONFENGE · camada da home
- * ---------------------------------------------------------------------------
- * Revisao 2026-08-30 (direcao "parecer"), com a paleta revertida em
- * 2026-08-31 a pedido do dono da marca. Registro em
- * docs/design-audit/issues/13-home-commercial-direction.md.
- *
- * LEIA ISTO ANTES DA SECAO 0. O campo escuro descrito abaixo como decisao 1
- * NAO esta mais em producao. O dono da marca inspecionou a versao escura e
- * preferiu a paleta institucional, e so as CORES foram revertidas: a dobra
- * voltou a ser folha, o escuro voltou para a oferta dominante, a captura e o
- * rodape em navy #071a31, e o acento voltou a --green-700. Composicao,
- * hierarquia, faixa de escala, terna, copy, Archivo e o eixo wdth continuam
- * exatamente como esta camada os instalou. As decisoes 2 e 3 seguem valendo
- * na integra; a decisao 1 fica no texto como historico do que foi tentado.
- *
- * Historico curto. A revisao de #525/#526 instalou uma planilha orcamentaria
- * como motor de layout (regua ITEM/DESCRICAO/UNIDADE/QUANT/FONTE, cinco
- * trilhos por secao). #538 mediu o custo e a revisao seguinte a removeu — mas
- * o que sobrou foi a folha global de volta: caixa cinza com fio de acento no
- * topo, tres familias tipograficas na mesma pagina e nenhuma tese visual.
- * Sair da planilha para o generico nao e a terceira direcao; e a segunda de
- * novo.
- *
- * A tese desta camada. A CONFENGE vende julgamento tecnico e economico. O
- * artefato do julgamento neste mercado e o parecer, e o parecer termina em uma
- * palavra: participar, condicionar ou recusar. Essa terna e o unico elemento
- * que nenhum concorrente copia sem mudar de negocio, entao ela — e nao a
- * mobilia de tabela — carrega a identidade da primeira dobra.
- *
- * As tres decisoes que produzem a identidade:
- *
- *   1. UM CAMPO ESCURO, no topo. A dobra e um campo continuo em tinta
- *      #08130e, nao mais uma folha branca com caixas. O cabecalho permanece
- *      claro (contrato de logo em test_design_gates.py:768) e a aresta entre
- *      os dois e deliberada.
- *   2. UMA FAMILIA, TRES LARGURAS. Archivo variavel ja estava carregada e
- *      tem eixo wdth 66-110 que quase ninguem usa. Display em 96% (--wide),
- *      rotulo em 78% (--narrow), texto em 100%. Serifa de sistema e
- *      monoespacada saem da home:
- *      eram Georgia e Menlo, isto e, o default de qualquer pagina.
- *   3. REGUA NO LUGAR DE CAIXA. Um unico estilo de fio (1px --rule). Nenhuma
- *      barra de acento de 2px/3px, nenhum painel cinza. Raio sobrevive so
- *      onde significa "clicavel": botao e campo de formulario.
- *
- * O que esta camada NAO faz: nao redesenha as outras ~260 rotas, nao inventa
- * paleta global (uma superficie nova, --field, ver secao 0), nao adiciona
- * arquivo de fonte,
- * nao toca styles.css / styles-tokens.css / script.js — congelados por janela
- * de medicao ate 2026-09-13, ver docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md.
- * Nao carregar em outra rota.
- * ------------------------------------------------------------------------- */
+/* Home layer only. Palette, type and rules live in this file.
+ * Direction log: docs/design-audit/issues/13-home-commercial-direction.md */
 
 /* Archivo v2.001 · Omnibus-Type · SIL OFL 1.1 · assets/archivo-OFL.txt
  * Subconjunto latino pt-BR, dois eixos (wght 100-900, wdth 66-110), tnum e
@@ -115,7 +66,9 @@ body[data-content-cluster="home"]{
   font-variant-numeric:tabular-nums slashed-zero;
   background:var(--white);
 }
-body[data-content-cluster="home"] main{overflow-x:clip}
+body[data-content-cluster="home"] main{overflow-x:hidden}
+body[data-content-cluster="home"] #formulario-contato{scroll-margin-top:160px}
+body[data-content-cluster="home"] .contact-section{padding-bottom:clamp(4.5rem,8vw,6.5rem)}
 
 /* ── 1. Sistema tipografico: uma familia, tres larguras ────────────────── */
 /* A serifa de sistema (--serif resolve para Georgia/Palatino) e a monoespacada
@@ -163,10 +116,10 @@ body[data-content-cluster="home"] .section-lead{
 /* ── 2. Ritmo ──────────────────────────────────────────────────────────── */
 /* Quatro alturas de secao, nao oito. A regua entre secoes e sempre a mesma:
  * 1px --rule, largura do container. */
-body[data-content-cluster="home"] .section{padding:clamp(3.5rem,7vw,6rem) 0}
+body[data-content-cluster="home"] .section{padding:clamp(2.75rem,5.5vw,4.5rem) 0}
 body[data-content-cluster="home"] .section--tight{padding:0}
 body[data-content-cluster="home"] .section--loose{padding:clamp(4.25rem,8vw,7.5rem) 0}
-body[data-content-cluster="home"] .section-head{max-width:none;margin-bottom:clamp(2rem,4vw,3rem)}
+body[data-content-cluster="home"] .section-head{max-width:none;margin-bottom:clamp(1.25rem,2.6vw,2rem)}
 body[data-content-cluster="home"] .section-head h2{max-width:20ch}
 /* Cabecalho de secao em duas colunas: a tese a esquerda, a qualificacao a
  * direita, no lugar de uma coluna curta com 45% da largura vazia. So quando
@@ -312,7 +265,8 @@ body[data-content-cluster="home"] .journey-row{
   gap:.6rem clamp(1.5rem,4vw,3.5rem);align-items:start;
   margin:0;padding:clamp(1.6rem,3vw,2.25rem) 0;border-bottom:1px solid var(--rule);border-top:0;
 }
-body[data-content-cluster="home"] .journey-kind{margin:.35rem 0 0;color:var(--accent)}
+body[data-content-cluster="home"] .journey-kind,
+body[data-content-cluster="home"] .nucleus-kind{margin:.35rem 0 0;color:var(--accent)}
 body[data-content-cluster="home"] .journey-row-body{min-width:0}
 @media (min-width:1000px){
   body[data-content-cluster="home"] .journey-row-body{
@@ -337,6 +291,35 @@ body[data-content-cluster="home"] .journey-row-actions{
 }
 body[data-content-cluster="home"] .journey-alt-link{color:var(--muted);font-size:.9rem;text-underline-offset:3px}
 body[data-content-cluster="home"] .journey-alt-link:hover{color:var(--accent)}
+body[data-content-cluster="home"] .nucleus-chooser .journey-row{
+  padding:clamp(.45rem,1.2vw,.7rem) 0;
+}
+body[data-content-cluster="home"] .home-method-limits{
+  margin-top:clamp(1.25rem,2.5vw,1.75rem);padding-top:clamp(1rem,2vw,1.4rem);
+  border-top:1px solid var(--rule);
+}
+body[data-content-cluster="home"] .home-method-limits .section-head{margin-bottom:1rem}
+body[data-content-cluster="home"] .home-method-facts{
+  margin:0;padding:0;list-style:none;
+}
+body[data-content-cluster="home"] .home-method-facts li{
+  margin:0 0 .55rem;color:var(--text);line-height:1.55;max-width:68ch;
+}
+body[data-content-cluster="home"] .home-method-facts strong{color:var(--ink);font-weight:650}
+body[data-content-cluster="home"] #inteligencia-privada{
+  margin:0 0 clamp(1.25rem,2.5vw,1.75rem);
+}
+body[data-content-cluster="home"] #inteligencia-privada code{
+  color:var(--ink);background:var(--soft);padding:.05em .3em;
+}
+body[data-content-cluster="home"] .nucleus-chooser .journey-row-body h3{
+  max-width:32ch;font-size:clamp(1.05rem,1.8vw,1.3rem);margin:0 0 .35rem;
+}
+body[data-content-cluster="home"] .nucleus-chooser .journey-row-body>p{margin:0 0 .4rem}
+body[data-content-cluster="home"] .nucleus-chooser .journey-row-actions{margin:.35rem 0 0}
+body[data-content-cluster="home"] .nucleus-chooser .journey-alt-link{
+  display:inline-flex;align-items:center;min-height:44px;
+}
 
 /* ── 5. Ofertas: uma tese dominante, apoios subordinados por formato ───── */
 body[data-content-cluster="home"] .offer-layout{
@@ -350,8 +333,8 @@ body[data-content-cluster="home"] .offer-dominant{
 body[data-content-cluster="home"] .offer-dominant .offer-label{color:var(--dark-accent)}
 body[data-content-cluster="home"] .offer-dominant h3{font-size:clamp(1.4rem,2.2vw,1.9rem)}
 body[data-content-cluster="home"] .offer-dominant .offer-headline{color:var(--dark-ink);font-size:1.05rem;font-weight:600}
-body[data-content-cluster="home"] .offer-facts li{color:var(--dark-muted)}
-body[data-content-cluster="home"] .offer-facts strong{color:var(--dark-ink);font-weight:650}
+body[data-content-cluster="home"] .offer-dominant .offer-facts li{color:var(--dark-muted)}
+body[data-content-cluster="home"] .offer-dominant .offer-facts strong{color:var(--dark-ink);font-weight:650}
 body[data-content-cluster="home"] .offer-dominant-link{color:var(--dark-ink)}
 body[data-content-cluster="home"] .offer-dominant-link .icon{color:var(--dark-accent)}
 body[data-content-cluster="home"] .offer-dominant{--focus-ring-halo:var(--dark);--focus-ring-core:var(--white)}
@@ -374,7 +357,7 @@ body[data-content-cluster="home"] .path-cta{margin-top:.35rem;color:var(--accent
 .home-deliverables{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);
   gap:clamp(1.75rem,4vw,3.5rem);align-items:start;
-  margin-top:clamp(2.5rem,5vw,4rem);padding-top:clamp(1.75rem,3vw,2.5rem);border-top:1px solid var(--rule);
+  margin-top:clamp(1.25rem,2.5vw,2rem);padding-top:clamp(1.1rem,2vw,1.6rem);border-top:1px solid var(--rule);
 }
 .home-deliverables-copy h3{max-width:20ch;margin:.5rem 0 .75rem;font-size:clamp(1.35rem,2.2vw,1.9rem)}
 .home-deliverables-copy>p:not(.eyebrow){max-width:54ch;margin:0;color:var(--text);font-size:1rem;line-height:1.65}
@@ -409,7 +392,7 @@ body[data-content-cluster="home"] .home-deliverables-actions .button-light:hover
  * transportava informacao: os quatro verbos ja estao em ordem. */
 .home-method-strip{
   display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;
-  margin:clamp(2.5rem,5vw,4rem) 0 0;padding:0;list-style:none;border-top:2px solid var(--rule-strong);
+  margin:clamp(1.25rem,2.5vw,2rem) 0 0;padding:0;list-style:none;border-top:2px solid var(--rule-strong);
 }
 .home-method-strip .macro-phase{
   padding:1.4rem clamp(1rem,2vw,1.75rem) 0 0;background:none;border:0;border-radius:0;

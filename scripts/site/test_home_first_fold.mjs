@@ -18,11 +18,11 @@ const PRIMARY_CTA_HREF_SUFFIX = "#formulario-contato";
 // Presence/visibility tokens only. This gate never scores wording quality:
 // it asserts that the words a visitor needs are actually rendered in the fold.
 const CONTENT_TOKENS = [
-  { id: "icp", label: "ICP (construtora)", any: ["construtora"] },
-  { id: "categoria_licitacao", label: "categoria (licitação)", any: ["licitaç"] },
-  { id: "categoria_contrato", label: "categoria (contrato)", any: ["contrato"] },
-  { id: "obra_publica", label: "obra pública", any: ["obras públicas", "obra pública"] },
-  { id: "resultado_economico", label: "resultado econômico", any: ["margem", "capital", "risco", "preço"] },
+  { id: "categoria", label: "categoria corporativa", any: ["engenharia, perícias e inteligência técnica"] },
+  { id: "icp", label: "para quem", any: ["advogados", "construtoras"] },
+  { id: "problemas", label: "problemas técnicos", any: ["perícia", "contrato público"] },
+  { id: "confianca", label: "por que confiar", any: ["eesc-usp"] },
+  { id: "proximo_passo", label: "próximo passo", any: ["triagem"] },
 ];
 const VIEWPORTS = [
   { width: 390, height: 844 },

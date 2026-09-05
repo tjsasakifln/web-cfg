@@ -43,10 +43,13 @@ def test_ia_contract_is_valid_without_html():
     assert "b2g" not in labels
     assert all(
         phrase in labels
-        for phrase in ("edital e proposta", "contrato sob pressão", "operação recorrente")
+        for phrase in ("edital e proposta", "contrato sob pressão", "obras públicas")
     )
     assert "biblioteca" in labels
     assert "ferramentas" not in labels
+    hrefs = [item["href"] for item in items]
+    assert "/servicos-obras-publicas/" in hrefs
+    assert not any(href.startswith("/#") for href in hrefs)
 
 
 def test_brand_header_mirrors_ia_map():

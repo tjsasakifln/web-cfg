@@ -275,8 +275,8 @@ def test_home_card_grid_limit():
     assert "offer-paths" in html
     assert html.find("offer-dominant") < html.find("offer-paths") or "Diretoria Fracionada" in html
     assert "Diretoria Fracionada para o Mercado Público" in html
-    assert "Licitação vencida não paga a conta" in html
-    assert "Contrato rentável, sim" in html
+    assert "Engenharia, Perícias e Inteligência Técnica" in html
+    assert "Decisão técnica documentada" in html
     # Seven-block narrative: hero risk offers method authority fit conversion
     sections = re.findall(r"<main[\s\S]*?</main>", html)
     assert sections, "main missing"
@@ -441,8 +441,8 @@ def test_home_five_second_clarity():
     # who
     assert "construtor" in fold_lower
     # problem
-    assert "licitação vencida não paga a conta" in fold_lower
-    assert "margem" in fold_lower
+    assert "engenharia, perícias e inteligência técnica" in fold_lower
+    assert "decisão técnica documentada" in fold_lower
     # trust (true microproof, not an invented metric)
     assert "eesc-usp" in fold_lower
     assert "iniciativa privada" in fold_lower and "administração pública" in fold_lower
@@ -451,7 +451,8 @@ def test_home_five_second_clarity():
     assert "#formulario-contato" in fold
     assert "ver edital, contrato ou operação" in fold_lower
     assert "#jornadas" in fold
-    assert "consultoria para licitações" in lower or "licitações e contratos" in lower
+    assert "id=\"nucleos\"" in html
+    assert "licitações e contratos" in lower
     assert "diretoria fracionada para o mercado público" in lower
     assert "#contato" in html or 'id="contato"' in html
 
@@ -462,8 +463,8 @@ def test_home_decision_fold_hierarchy():
     hero = re.search(r'<section[^>]*class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     hero_html = hero.group(0)
-    assert "Licitação vencida não paga a conta" in hero_html
-    assert "Contrato rentável, sim" in hero_html
+    assert "Decisão técnica documentada" in hero_html
+    assert "Engenharia, Perícias e Inteligência Técnica" in hero_html
     assert "data-evidence-selector" not in hero_html
     assert "hero-evidence" not in hero_html
     assert hero_html.count("button-primary") == 1

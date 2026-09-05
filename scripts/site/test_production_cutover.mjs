@@ -91,7 +91,7 @@ const origin = createOriginClient({
   resolveIp: OPTIONS.resolveIp,
 });
 /** Full H1 as required by production gate (exact phrase family). */
-const EXPECTED_H1_FULL = "Licitação vencida não paga a conta. Contrato rentável, sim.";
+const EXPECTED_H1_FULL = "Decisão técnica documentada, com responsável e data.";
 const RETIRED = [
   "Oito momentos em que",
   "Todo o conteúdo permanece legível sem JavaScript",
@@ -233,9 +233,7 @@ const home = await fetchText("/");
 ok("home_200", home.status === 200, `status=${home.status}`);
 ok(
   "home_h1_full",
-  home.body.includes(EXPECTED_H1_FULL) ||
-    (home.body.includes("Licitação vencida não paga a conta.") &&
-      home.body.includes("Contrato rentável, sim.")),
+  home.body.includes(EXPECTED_H1_FULL),
   "full H1 phrase missing"
 );
 // Prefer exact h1 element text when present
@@ -244,8 +242,8 @@ if (h1Match) {
   const h1Text = h1Match[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
   ok(
     "home_h1_element",
-    h1Text.includes("Licitação vencida não paga a conta.") &&
-      h1Text.includes("Contrato rentável, sim."),
+    h1Text.includes("Decisão técnica documentada") &&
+      h1Text.includes("com responsável e data."),
     `h1=${h1Text.slice(0, 80)}`
   );
 }

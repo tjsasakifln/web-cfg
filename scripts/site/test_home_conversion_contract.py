@@ -47,18 +47,20 @@ def test_first_fold_answers_the_four_skeptical_questions() -> None:
     html = _home()
     hero = _section(html, r'class="hero')
 
-    assert "Consultoria para licitações e contratos de obras públicas" in hero
-    assert "Para construtoras:" in hero
-    assert "decidir se o edital merece o capital" in hero
-    assert "precificar o risco" in hero
-    assert "proteger a margem" in hero
+    assert "Engenharia, Perícias e Inteligência Técnica" in hero
+    assert "advogados" in hero
+    assert "construtoras" in hero
+    assert "perícia" in hero.lower()
+    assert "contrato público" in hero
     assert "Engenharia Civil pela EESC-USP" in hero
     assert "Iniciativa privada e Administração Pública" in hero
     assert "Ver exemplo demonstrativo de relatório" in hero
-    # A primeira dobra precisa dizer o que o visitante recebe, nao so o que doi.
-    assert "relatório, matriz de risco e memória de cálculo" in hero
+    assert "responsável" in hero
+    assert "Assistência técnica não é advocacia" in hero
     assert 'href="#formulario-contato"' in hero
     assert hero.count("button-primary") == 1
+    html = _home()
+    assert 'id="nucleos"' in html
 
 
 def test_pncp_is_market_context_after_decision_and_capture() -> None:
@@ -90,7 +92,9 @@ def test_three_icp_doors_lead_to_one_honest_intake() -> None:
     for door in ("Edital e proposta", "Contrato sob pressão", "Operação recorrente"):
         assert door in html
     assert html.count('name="diagnostico-b2g"') == 1
-    assert html.index('id="jornadas"') < html.index('id="ofertas"') < html.index('id="contato"')
+    assert 'id="jornadas"' in html
+    assert html.index('id="ofertas"') < html.index('id="contato"')
+    assert html.index('id="jornadas"') < html.index('id="contato"')
     assert 'name="document_intent" type="hidden" value="secure_channel_request"' in html
     assert 'id="canal_seguro"' in html
     assert 'type="file"' not in html.lower()

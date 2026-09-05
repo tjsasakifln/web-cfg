@@ -50,34 +50,28 @@ def test_home_has_canonical_copy():
     brand = load_brand()
     hero = brand["hero"]
     html = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert hero["h1"] in html or "Contrato rentável, sim" in html
+    assert hero["h1"] in html
+    assert hero["eyebrow"] in html
+    assert "Engenharia, Perícias e Inteligência Técnica" in html
     assert "Diretoria Fracionada para o Mercado Público" in html
-    # Conventional category language first (not only proprietary label)
-    assert "Consultoria para licitações e contratos de obras públicas" in html
     assert 'name="diagnostico-b2g"' in html
     assert 'id="estagio"' in html
     assert 'id="urgencia"' in html
     assert 'data-form-multistep="true"' in html
-    # Three differentiated journey CTAs (client-facing; no Jornada A/B/C labels)
-    assert "Solicitar canal seguro para envio" in html
     assert "Solicitar triagem do edital" in html
     assert "Solicitar diagnóstico da operação" in html
     assert "Como podemos ajudar" in html
     assert "Analisar meu caso" in html
     assert "Contrato sob pressão" in html
-    # 2026-08-30: rotulo canonico da jornada, identico ao menu, ao rodape e ao
-    # formulario. O rotulo antigo so existia na home e criava vocabulario
-    # concorrente com a propria navegacao.
     assert "Edital e proposta" in html
     assert "Operação recorrente" in html
+    assert "Obras públicas" in html
     assert "enviar documentos para análise" not in html.lower()
     assert "Sem CTA genérico" not in html
     for j in brand.get("journeys") or []:
         assert j["label"] in html, j["label"]
-        assert j["cta"] in html, j["cta"]
     for o in brand["offers"]:
         assert o["url"] in html, o["url"]
-    # FAQ sync
     for f in brand["faq"]:
         assert f["q"] in html
 

@@ -55,8 +55,17 @@ SKIP_DIR_PARTS = frozenset(
 JOURNEY_PHRASES = (
     "edital e proposta",
     "contrato sob pressão",
-    "operação recorrente",
+    "obras públicas",
 )
+REQUIRED_NUCLEUS_IDS = (
+    "expert_evidence_assistance",
+    "property_valuation",
+    "building_engineering_documentation",
+    "occupational_safety",
+    "public_works_b2g",
+)
+TAXONOMY_DRAFT_ID = "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904"
+B2G_NUCLEUS_HREF = "/servicos-obras-publicas/"
 CONTACT = {
     "email_href": "mailto:tiago.sasaki@confenge.com.br",
     "email_label": "tiago.sasaki@confenge.com.br",
@@ -109,6 +118,11 @@ def header_cta(ia: dict[str, Any] | None = None) -> dict[str, str]:
 def journey_items(ia: dict[str, Any] | None = None) -> list[dict[str, str]]:
     data = ia or load_ia_map()
     return list(data.get("journeys") or [])
+
+
+def nucleus_items(ia: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    data = ia or load_ia_map()
+    return list(data.get("nuclei") or [])
 
 
 def hubs(ia: dict[str, Any] | None = None) -> list[dict[str, Any]]:
@@ -619,20 +633,26 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
             f"header has {len(destinations)} destinations; max is {MAX_HEADER_DESTINATIONS}"
         )
     if len(destinations) < 3:
-        errors.append("header must name the three purchase situations")
+        errors.append("header must keep a short corporate nav (at least three destinations)")
     hrefs = [item["href"] for item in destinations]
     if len(set(hrefs)) != len(hrefs):
         errors.append("header has duplicate hrefs")
+    if any(href.startswith("/#") or href.startswith("#") for href in hrefs):
+        errors.append("header destinations must be real pages, never home anchors")
     labels = " ".join(item["label"].lower() for item in destinations)
     found_journeys = [phrase for phrase in JOURNEY_PHRASES if phrase in labels]
     if len(found_journeys) != len(JOURNEY_PHRASES):
         missing = sorted(set(JOURNEY_PHRASES) - set(found_journeys))
-        errors.append(f"header misses purchase situations in visitor language: {missing}")
+        errors.append(f"header misses conserved B2G visitor language: {missing}")
     if "b2g" in labels:
-        errors.append("header requires the term B2G")
+        errors.append("header must not use the term B2G as a visitor label")
+    if B2G_NUCLEUS_HREF not in hrefs:
+        errors.append(f"header must keep B2G reachable via {B2G_NUCLEUS_HREF}")
     cta = header_cta(data)
     if not cta.get("label") or not cta.get("href"):
         errors.append("header CTA missing")
+    if not str(cta.get("href") or "").endswith("#formulario-contato"):
+        errors.append("header CTA must point at technical triage")
     seen_hubs: set[str] = set()
     for hub in hubs(data):
         route = str(hub.get("route") or "")
@@ -646,7 +666,27 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
             errors.append(f"hub {route} has no dominant next action")
     journeys = journey_items(data)
     if {j.get("id") for j in journeys} != {"edital", "contrato", "operacao"}:
-        errors.append("journeys must be edital, contrato, operacao")
+        errors.append("journeys must remain edital, contrato, operacao for B2G conservation")
+    nuclei = nucleus_items(data)
+    nucleus_ids = [str(item.get("id") or "") for item in nuclei]
+    if nucleus_ids != list(REQUIRED_NUCLEUS_IDS):
+        errors.append(f"nuclei must be {list(REQUIRED_NUCLEUS_IDS)} in order, got {nucleus_ids}")
+    taxonomy_id = str((data.get("taxonomy") or {}).get("id") or "")
+    if taxonomy_id != TAXONOMY_DRAFT_ID:
+        errors.append(f"taxonomy draft id missing or divergent: {taxonomy_id!r}")
+    if not (data.get("taxonomy") or {}).get("fail_closed"):
+        errors.append("taxonomy draft must fail closed (not a production fallback)")
+    for item in nuclei:
+        state = str(item.get("index_state") or "")
+        href = str(item.get("href") or "")
+        nucleus_id = str(item.get("id") or "")
+        if nucleus_id == "public_works_b2g":
+            if state != "index" or href != B2G_NUCLEUS_HREF:
+                errors.append("public_works_b2g must stay indexable at the existing B2G hub")
+        elif state != "withheld":
+            errors.append(f"{nucleus_id} must remain withheld until offer/proof/action exist")
+        elif href not in {"/#formulario-contato", "#formulario-contato"}:
+            errors.append(f"{nucleus_id} must not mint a public hub URL while withheld")
     footer_count = 0
     for column in (data.get("footer") or {}).get("columns") or []:
         footer_count += len(column.get("links") or [])
