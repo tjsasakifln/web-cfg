@@ -128,6 +128,23 @@ def test_prototype_markup_does_not_keep_a_public_class_alive() -> None:
             assert not rel.startswith(PROTOTYPE_SOURCE_DIR + "/"), f"{name} kept alive by {rel}"
 
 
+def test_integration_campaign_css_is_outside_the_public_css_scope() -> None:
+    """Campaign sources under docs/integration/ must not spend the public ceiling.
+
+    The private-readiness canary is promoted to
+    `ferramentas/prontidao-tecnica-obra-privada/`; the docs copy stays
+    unpublished. If this path starts counting as public CSS, three campaign
+    radii fail `decoration_regression` against a visitor budget they never
+    ship into.
+    """
+    campaign_dir = "docs/integration"
+    assert campaign_dir in SKIP_DIRS, SKIP_DIRS
+    leaked = [rel for rel in public_css_files(ROOT) if rel.startswith(campaign_dir + "/")]
+    assert leaked == [], leaked
+    on_disk = sorted((ROOT / campaign_dir).rglob("*.css"))
+    assert on_disk, "no campaign stylesheet to exclude; the assertion would prove nothing"
+
+
 if __name__ == "__main__":
     failed = 0
     for name, fn in sorted(globals().items()):

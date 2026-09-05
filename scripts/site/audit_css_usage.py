@@ -52,6 +52,11 @@ SKIP_DIRS = (
     # excluded one line above. `test_audit_css_usage.py` pins this string to
     # `PROTOTYPE_SOURCE_DIR` so the two cannot drift.
     "docs/design-audit/prototypes",
+    # Integration-campaign sources (#598 / REV-01). The canary HTML/CSS under
+    # `docs/integration/` is skipped by the visitor census and never enters
+    # `_site`; counting its radius against the public decoration ceiling would
+    # charge for bytes the visitor never receives.
+    "docs/integration",
 )
 # Bundles whose class inventory is tracked selector by selector.
 AUDITED_BUNDLES = ("styles.css", "entregas/styles.css")
