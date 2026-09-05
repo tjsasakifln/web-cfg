@@ -15,7 +15,7 @@
   "base_url": "https://confenge.com.br",
   "web_cfg_sha": "25725ac22ea91b58a914b174f5b2d7f86a8dd9bd",
   "git_head": "25725ac22ea91b58a914b174f5b2d7f86a8dd9bd",
-  "production_release_sha": "73030dd88f9883bef0d841c59b04a7991ca99653",
+  "netlify_deployed_sha": "73030dd88f9883bef0d841c59b04a7991ca99653",
   "dataset_hash": "0d8757f7cda3a6770aefaea9b8732574fa7bae5265b5f446abcfd0a6562d7b30",
   "vocabulary_note": "CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. index,follow / sitemap / local build never mean 'indexado'. ok=true only when technical audit passes AND identities match live deploy.",
   "sitemap": {

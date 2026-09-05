@@ -17,7 +17,7 @@
     "compare_status": "identical",
     "reason": null
   },
-  "production_release_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+  "netlify_deployed_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
   "production_audit_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
   "production_audit_is_current": false,
   "public_directory": "_site",

@@ -4,7 +4,7 @@
   "extra_cli_sha": "704975a7bcdd43d4dc6769fbf6c14726327ab37b",
   "extra_cli_branch": "main",
   "extra_cli_main_integration": true,
-  "production_release_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
+  "netlify_deployed_sha": "06edd555fab77c96e8e69d624ec58f9f785cbda0",
   "snapshot_hash": "4b5350997a6adfd72d96befda1c576ca96a8a4a5d56e28b5a160507b4f684023",
   "public_directory": "_site",
   "public_artifact_hash": "beaa2f168ea5551f678bb60e9d6eab8bd9e06df3260ab481de42eb5ada1ab40f",
