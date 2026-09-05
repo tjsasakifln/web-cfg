@@ -467,7 +467,7 @@ def first_step_form_html(contract: dict[str, Any] | None = None) -> str:
     def tri_field(fid: str, label: str) -> str:
         return (
             f'<div class="field"><label for="{_esc(fid)}">{_esc(label)}</label>'
-            f'<select id="{_esc(fid)}" name="{_esc(fid)}" required="">'
+            f'<select id="{_esc(fid)}" name="{_esc(fid)}" required="" disabled="" data-conflict-input="">'
             '<option value="">Selecione</option>'
             '<option value="yes">Sim</option>'
             '<option value="no">Não</option>'
@@ -486,14 +486,14 @@ def first_step_form_html(contract: dict[str, Any] | None = None) -> str:
 <input name="conflict_gate_hash" type="hidden" value="{digest}"/>
 <input name="protected_path_available" type="hidden" value="false"/>
 <p class="honeypot"><label for="conflict-gate-company">Não preencha este campo</label>
-<input autocomplete="off" id="conflict-gate-company" name="company" tabindex="-1"/></p>
+<input autocomplete="off" id="conflict-gate-company" name="company" tabindex="-1" disabled=""/></p>
 <div class="field"><label for="nucleus_id">Área da demanda</label>
-<select id="nucleus_id" name="nucleus_id" required="">
+<select id="nucleus_id" name="nucleus_id" required="" disabled="" data-conflict-input="">
 <option value="">Selecione</option>
 {nucleus_opts}
 </select></div>
 <div class="field"><label for="intended_role">Papel solicitado à CONFENGE</label>
-<select id="intended_role" name="intended_role" required="">
+<select id="intended_role" name="intended_role" required="" disabled="" data-conflict-input="">
 <option value="">Selecione</option>
 {role_opts}
 </select></div>
@@ -506,7 +506,7 @@ def first_step_form_html(contract: dict[str, Any] | None = None) -> str:
 {tri_field("mitigation_requires_disclosure", "Existe uma medida concreta que exige informar a outra parte?")}
 {tri_field("client_requests_public_influence", "Há pedido para usar cargo, acesso ou influência pública?")}
 {tri_field("distinct_matter_no_signal", "A matéria é distinta e, neste recorte, não há sinal de conflito?")}
-<button class="button button-primary" type="submit">Ver próximo passo da triagem</button>
+<button class="button button-primary" type="submit" disabled="" data-conflict-submit="">Ver próximo passo da triagem</button>
 <p class="form-note">Use apenas estas opções. Nomes, detalhes e documentos serão pedidos depois, somente se houver canal protegido disponível.</p>
 <div id="conflict-gate-result" role="status" aria-live="polite" data-conflict-gate-result="idle">Responda às perguntas para ver o próximo passo. Nenhum documento será enviado.</div>
 </form>
@@ -677,18 +677,23 @@ function confengePublicProjection(decision) {{
 function confengeEvaluateConflict(raw) {{
   var inner = confengeScreenConflict(raw);
   var adapted = confengeAdaptProtectedPath(inner, raw);
-  return {{ decision: adapted, public: confengePublicProjection(adapted), inner: inner }};
+  return confengePublicProjection(adapted);
 }}
 """
 
 
 def client_runtime_js(contract: dict[str, Any] | None = None) -> str:
     src = interpreter_source(contract)
-    return src + """
-(function () {
+    return "(function () {\n" + src + """
+  window.confengeEvaluateConflict = confengeEvaluateConflict;
   var form = document.getElementById("conflict-gate-form");
   var out = document.getElementById("conflict-gate-result");
   if (!form || !out) return;
+  Array.prototype.forEach.call(form.querySelectorAll("[data-conflict-input]"), function (el) {
+    el.disabled = false;
+  });
+  var submit = form.querySelector("[data-conflict-submit]");
+  if (submit) submit.disabled = false;
   function triFromSelect(name) {
     var el = form.elements.namedItem(name);
     if (!el) return null;
@@ -719,8 +724,7 @@ def client_runtime_js(contract: dict[str, Any] | None = None) -> str:
       contract_version: CONFENGE_CONFLICT_GATE.contract_version,
       contract_hash: CONFENGE_CONFLICT_GATE.content_sha256
     };
-    var result = confengeEvaluateConflict(facts);
-    var pub = result.public || {};
+    var pub = confengeEvaluateConflict(facts) || {};
     var status = pub.status || "UNKNOWN";
     if (status === "CLEAR" || status === "CLEAR_WITH_DISCLOSURE") {
       status = "REVIEW_REQUIRED";

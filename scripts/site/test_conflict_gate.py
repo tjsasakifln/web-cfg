@@ -349,6 +349,32 @@ process.stdout.write(JSON.stringify(out));
         assert row["leaked_reason"] is False
 
 
+def test_public_browser_api_exposes_only_public_projection():
+    facts = _fixtures()["cases"][0]["facts"]
+    script = (
+        "global.window = {}; global.document = { getElementById: function () { return null; } };\n"
+        + client_runtime_js(load_contract())
+        + "\nconst result = window.confengeEvaluateConflict("
+        + json.dumps(facts, ensure_ascii=False)
+        + "); process.stdout.write(JSON.stringify({result, innerGlobal: typeof global.confengeScreenConflict}));"
+    )
+    proc = subprocess.run(
+        ["node", "-e", script],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 0, proc.stderr
+    payload = json.loads(proc.stdout)
+    result = payload["result"]
+    assert payload["innerGlobal"] == "undefined"
+    assert set(result) <= set(load_contract()["public_projection_keys"])
+    assert "reason_class" not in result
+    assert "decision" not in result
+    assert "inner" not in result
+
+
 def test_rendered_conflitos_covers_nuclei_min_data_and_fail_closed_copy():
     html = CONFLITOS.read_text(encoding="utf-8")
     article_match = re.search(r"<article\b[^>]*>(.*?)</article>", html, flags=re.I | re.S)
@@ -371,6 +397,10 @@ def test_rendered_conflitos_covers_nuclei_min_data_and_fail_closed_copy():
     assert 'data-conflict-gate-result="idle"' in html
     assert "Nenhum documento será enviado" in html
     assert 'src="/conflitos/conflict-gate.js"' in html
+    assert 'data-conflict-input=""' in html
+    assert 'data-conflict-submit=""' in html
+    assert '<button class="button button-primary" type="submit" disabled=""' in html
+    assert 'id="conflict-gate-company" name="company" tabindex="-1" disabled=""' in html
     runtime_path = ROOT / "conflitos" / "conflict-gate.js"
     assert runtime_path.is_file()
     assert runtime_path.read_text(encoding="utf-8") == client_runtime_js(load_contract())

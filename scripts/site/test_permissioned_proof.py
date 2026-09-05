@@ -571,7 +571,7 @@ def test_trust_surface_states_executor_correction_evidence_and_method_split():
     assert path.is_file()
     for needle in (
         "Quem responde pela CONFENGE",
-        "Como corrigir",
+        "Pedir correção",
         "Prova que acompanha a afirmação",
         "Veja o trabalho antes de conversar",
         "exemplos de entrega",

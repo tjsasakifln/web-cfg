@@ -1,3 +1,4 @@
+(function () {
 
 var CONFENGE_CONFLICT_GATE = {"consumer_pins":{"admission_policy":"NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904","catalog":"CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904","handraiser_state":"CONFENGE_HANDRAISER_STATE/1.0.0-draft.20260904","intake":"CONFENGE_WEB_INTAKE/2.0.0-draft.20260904","meetcfg_context":"MEETCFG_HANDRAISER_CONTEXT/1.0.0-draft.20260904","taxonomy":"CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904"},"content_sha256":"9db68822a3f74146a1ac42b24562964c455ceeba0f297d47c3577a6fc6945fe0","contract_id":"CONFENGE_PUBLIC_CONFLICT_GATE","contract_version":"1.1.0","decline_true_flags":[{"field":"same_public_duty_matter","reason_class":"same_public_duty_matter"},{"field":"nonpublic_office_information_risk","reason_class":"nonpublic_office_information_risk"},{"field":"incompatible_expert_roles","reason_class":"incompatible_expert_roles"},{"field":"client_requests_public_influence","reason_class":"public_influence_request"}],"fact_allowlist":["nucleus_id","intended_role","same_public_duty_matter","nonpublic_office_information_risk","incompatible_expert_roles","relevant_personal_or_financial_relation","relation_cannot_be_mitigated","mitigation_requires_disclosure","client_requests_public_influence","information_sufficient","distinct_matter_no_signal","prior_status","prior_role_fingerprint","current_role_fingerprint","protected_path_available","contract_id","contract_version","contract_hash","taxonomy_version","catalog_version","intake_version","rollback"],"intended_roles":["consultant","technical_responsible","valuer","technical_assistant","court_appointed_expert"],"next_steps":{"CLEAR":"Nenhum sinal de conflito apareceu neste recorte. Os documentos só podem seguir por canal protegido depois da confirmação final.","CLEAR_WITH_DISCLOSURE":"A demanda pode seguir apenas com a condição registrada no canal protegido. Não envie documentos por esta página.","DECLINE":"A CONFENGE não pode aceitar esta demanda. A resposta não expõe partes nem motivos protegidos.","REVIEW_REQUIRED":"A demanda precisa de análise humana antes do envio de documentos.","UNKNOWN":"Ainda faltam informações para concluir. Não envie documentos até a análise ser retomada."},"nuclei":["expert_evidence_assistance","property_valuation","building_engineering_documentation","occupational_safety","public_works_b2g"],"public_projection_keys":["status","next_step","policy_version","corpus_suspended","public_readback"],"reason_classes":["contract_pin_mismatch","insufficient_information","same_public_duty_matter","nonpublic_office_information_risk","incompatible_expert_roles","public_influence_request","unmitigable_personal_or_financial_relation","personal_or_financial_relation_review","disclosure_mitigation","role_change_recheck","no_signal_distinct_matter","protected_path_unavailable","rollback_fail_closed"],"statuses":["CLEAR","CLEAR_WITH_DISCLOSURE","REVIEW_REQUIRED","DECLINE","UNKNOWN"]};
 function confengeConflictTriBool(v) {
@@ -145,13 +146,18 @@ function confengePublicProjection(decision) {
 function confengeEvaluateConflict(raw) {
   var inner = confengeScreenConflict(raw);
   var adapted = confengeAdaptProtectedPath(inner, raw);
-  return { decision: adapted, public: confengePublicProjection(adapted), inner: inner };
+  return confengePublicProjection(adapted);
 }
 
-(function () {
+  window.confengeEvaluateConflict = confengeEvaluateConflict;
   var form = document.getElementById("conflict-gate-form");
   var out = document.getElementById("conflict-gate-result");
   if (!form || !out) return;
+  Array.prototype.forEach.call(form.querySelectorAll("[data-conflict-input]"), function (el) {
+    el.disabled = false;
+  });
+  var submit = form.querySelector("[data-conflict-submit]");
+  if (submit) submit.disabled = false;
   function triFromSelect(name) {
     var el = form.elements.namedItem(name);
     if (!el) return null;
@@ -182,8 +188,7 @@ function confengeEvaluateConflict(raw) {
       contract_version: CONFENGE_CONFLICT_GATE.contract_version,
       contract_hash: CONFENGE_CONFLICT_GATE.content_sha256
     };
-    var result = confengeEvaluateConflict(facts);
-    var pub = result.public || {};
+    var pub = confengeEvaluateConflict(facts) || {};
     var status = pub.status || "UNKNOWN";
     if (status === "CLEAR" || status === "CLEAR_WITH_DISCLOSURE") {
       status = "REVIEW_REQUIRED";

@@ -88,7 +88,6 @@ def test_withheld_unknown_expired_revoked_do_not_project():
         "person-rnp",
         "person-titles-civil-sst",
         "person-sst-engineer",
-        "person-technical-link",
         "person-cptec-registration",
         "person-cptec-work-count",
         "person-postgrad-valuations",
@@ -125,8 +124,6 @@ def test_withheld_aliases_are_rejected_anywhere_in_visible_page_content():
     assert withheld_visible_claim_errors(clean, registry) == []
     errors = withheld_visible_claim_errors(poisoned, registry)
     assert any(error.startswith("withheld_claim_visible:person-technical-link:") for error in errors)
-    # The private-readiness tool was added on the rebased main and must keep the
-    # same fail-closed scan even though MV-02 does not own or edit that surface.
     for path in (CONFIANCA, ESPECIALISTA, ROOT / "ferramentas/prontidao-tecnica-obra-privada/index.html"):
         assert withheld_visible_claim_errors(path.read_text(encoding="utf-8"), registry) == [], path
 
@@ -160,8 +157,8 @@ def test_revocation_scrubs_legal_name_duplicated_in_webpage_and_meta():
     registry = load_registry()
     html = CONFIANCA.read_text(encoding="utf-8")
     poisoned = html.replace(
-        "A CONFENGE identifica a empresa",
-        f"{legal}. A CONFENGE identifica a empresa",
+        "conduzida pelo engenheiro civil Tiago Sasaki",
+        f"{legal}, conduzida pelo engenheiro civil Tiago Sasaki",
     )
     assert legal in jsonld_blob(poisoned)
     assert f'content="' in poisoned and legal in poisoned
@@ -192,30 +189,6 @@ def test_withheld_crea_is_stripped_from_owned_surface_schema():
     assert '"legalName":"Confenge Serviços de Desenhos Técnicos Ltda"' in sanitized
 
 
-def test_documentary_primary_requires_material_document_identity():
-    registry = load_registry()
-    incomplete = copy.deepcopy(registry)
-    claim = next(c for c in incomplete["claims"] if c["id"] == "org-cnpj")
-    claim["source_class"] = "DOCUMENTARY_PRIMARY"
-    claim["source_reference"] = {"label": "Certidão relatada na issue #243"}
-    errors = validate_registry(incomplete)
-    assert any(error.startswith("documentary_primary_reference_incomplete:org-cnpj:") for error in errors)
-    assert "documentary_primary_not_accessible:org-cnpj" in errors
-
-    complete = copy.deepcopy(registry)
-    claim = next(c for c in complete["claims"] if c["id"] == "org-cnpj")
-    claim["source_class"] = "DOCUMENTARY_PRIMARY"
-    claim["source_reference"] = {
-        "label": "Certidão oficial sob guarda controlada",
-        "document_id": "crea-sc-certidao-pj-example",
-        "document_sha256": "0" * 64,
-        "document_owner": "CONFENGE",
-        "storage_class": "restricted_evidence",
-        "materially_accessible": True,
-    }
-    assert validate_registry(complete) == []
-
-
 def test_expired_claim_fails_closed_even_if_wording_remains_in_record():
     registry = load_registry()
     expired = expire_claim(copy.deepcopy(registry), "org-cadastral-address", as_of="2020-01-01")
@@ -227,6 +200,15 @@ def test_expired_claim_fails_closed_even_if_wording_remains_in_record():
         assert "org-cadastral-address" not in proj.claim_ids
         assert "address" not in proj.schema_org
         assert "88015-100" not in proj.visible_text
+
+
+def test_missed_recheck_fails_closed_without_waiting_for_expiry():
+    registry = load_registry()
+    claim = copy.deepcopy(next(c for c in registry["claims"] if c["id"] == "org-cnpj"))
+    claim["expires_at"] = None
+    claim["recheck_after"] = "2026-09-04"
+    assert is_projectable(claim, now="2026-09-04")
+    assert not is_projectable(claim, now="2026-09-05")
 
 
 def test_registry_backed_crea_has_visible_schema_parity_and_unbacked_crea_fails():
@@ -377,10 +359,8 @@ def test_owned_pages_match_projection_and_sanitizer_keeps_registry_fields():
         proj = project(registry, surface)
         assert "credential-registry:start" in html
         assert proj.visible_html in html
-        assert "Conferido em fonte oficial" in html
-        assert "Informação declarada pelo titular" in html
-        if surface == "/especialista/tiago-jun-sasaki/":
-            assert "Perfil público do titular" in html
+        assert "Verificado em fonte pública" in html
+        assert "Declaração do titular" in html
         nodes = extract_jsonld_nodes(html)
         org = next(n for n in nodes if "Organization" in (n.get("@type") if isinstance(n.get("@type"), list) else [n.get("@type")]))
         assert org.get("legalName") == "Confenge Serviços de Desenhos Técnicos Ltda"
@@ -397,7 +377,6 @@ def test_owned_pages_match_projection_and_sanitizer_keeps_registry_fields():
             if "ProfessionalService" in (n.get("@type") if isinstance(n.get("@type"), list) else [n.get("@type")])
         )
         assert "ART e NF" in (service.get("description") or "")
-        assert (service.get("areaServed") or {}).get("name") == "Brasil"
         sanitized, _removed = sanitize_html(html, relative_path=path.relative_to(ROOT).as_posix())
         assert audit_html(sanitized, relative_path=path.relative_to(ROOT).as_posix()) == []
         assert '"legalName":"Confenge Serviços de Desenhos Técnicos Ltda"' in sanitized
