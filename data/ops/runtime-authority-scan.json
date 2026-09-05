@@ -79,7 +79,7 @@
     },
     {
       "name": "imperative_netlify_step",
-      "re": "\\b(set|unset|configure|configurar|defina|definir|publish|publique|publicar|deploy|redeploy|republish|restore|restaure|rollback|reverta|promote|promova|enable|habilite)\\b[^.\\n]{0,120}\\bNetlify\\b",
+      "re": "\\b(set|unset|configure|configurar|defina|definir|publish|publique|publicar|deploy|redeploy|republish|restore|restaure|rollback|reverta|promote|promova|enable|habilite)\\b[^.;\\n]{0,120}\\bNetlify\\b",
       "detail": "an imperative operator step executed on Netlify"
     },
     {
@@ -105,7 +105,8 @@
     {
       "name": "retired_netlify_deploy_proof",
       "re": "\\b(?:NETLIFY_DEPLOY_SHA|netlify_deployed_sha)\\b",
-      "detail": "the retired Netlify deploy field used as canonical production proof"
+      "detail": "the retired Netlify deploy field used as canonical production proof",
+      "allow_benign_context": false
     },
     {
       "name": "where_to_set_netlify",

@@ -6,6 +6,8 @@
 **Status:** DRAFT — pending specialist validation (Phases 5–7)  
 **Project:** CONFENGE / confenge-site  
 
+> Historical pre-cutover assessment. Runtime and deployment statements were superseded on 2026-08-29 by `docs/architecture/RUNTIME-AUTHORITY.md`.
+
 Sources:
 
 1. `docs/architecture/system-architecture.md`  
@@ -17,7 +19,7 @@ Sources:
 
 ## 0. Context
 
-CONFENGE is a production static inbound site (Netlify) with serverless lead/ops functions and heavy editorial/pSEO governance. Overall conversion and SEO maturity is **high**. Debt concentrates in **data queryability**, **content/repo scale**, and **frontend maintainability** during visitor redesign.
+Historical pre-cutover context: on 2026-08-05, CONFENGE ran as a static inbound site on Netlify with serverless lead/ops functions and heavy editorial/pSEO governance. Overall conversion and SEO maturity was **high**. Debt concentrated in **data queryability**, **content/repo scale**, and **frontend maintainability** during visitor redesign.
 
 ---
 
@@ -116,7 +118,7 @@ CONFENGE is a production static inbound site (Netlify) with serverless lead/ops 
 
 1. Qual volume atual/estimado de leads nos próximos 12 meses? O scan Blobs já dói hoje?  
 2. Preferência: **export nightly** vs **dual-write Supabase** vs **HTTP CRM**?  
-3. `LEAD_ALLOW_MEMORY_FALLBACK` está garantidamente off em produção Netlify?  
+3. No antigo runtime Netlify, `LEAD_ALLOW_MEMORY_FALLBACK` estava garantidamente off?
 4. Existe procedimento DSAR documentado para apagar lead por contato?  
 5. Os dual files GSC (`data/ops` vs `netlify/functions/data`) são gerados por um único comando canônico?  
 

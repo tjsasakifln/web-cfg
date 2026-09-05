@@ -8,6 +8,8 @@
 **Source:** `docs/prd/technical-debt-assessment.md` + `docs/reports/TECHNICAL-DEBT-REPORT.md`  
 **Reversa inputs:** `_reversa_sdd/` (domain, ADRs 004–007, lead-intake, permissions, architecture)
 
+> Historical pre-cutover epic. Runtime dependencies below describe the 2026-08-05 execution and are superseded by `docs/architecture/RUNTIME-AUTHORITY.md`.
+
 ---
 
 ## Objetivo
@@ -67,7 +69,7 @@ Reduzir risco operacional e custo de evolução do site CONFENGE **sem reescreve
 
 ## Dependências
 
-- Acesso Netlify env + Blobs  
+- Historical pre-cutover dependency: access to Netlify env + Blobs
 - Secrets ops/ntfy/Resend  
 - Branch protection para required checks  
 - Continuidade do redesign em `feat/visitor-experience-redesign` (merge strategy)  
