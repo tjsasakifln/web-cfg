@@ -107,6 +107,10 @@ FROZEN_SHELL_FILES = _frozen_shell_files()
 HASH_PINNED_SHELL_FILES = frozenset(
     {
         "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
+        "conteudos/atraso-na-medicao-obra-publica/index.html",
+        "conteudos/glosa-de-medicao-obra-publica/index.html",
+        "conteudos/medicao-de-obra-publica-rejeitada/index.html",
+        "conteudos/fiscal-nao-assina-medicao-obra-publica/index.html",
     }
 )
 

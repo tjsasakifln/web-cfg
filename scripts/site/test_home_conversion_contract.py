@@ -59,7 +59,8 @@ def test_first_fold_answers_the_four_skeptical_questions() -> None:
     assert "Assistência técnica não é advocacia" in hero
     assert 'href="#formulario-contato"' in hero
     assert hero.count("button-primary") == 1
-    assert 'href="#nucleos"' in hero
+    html = _home()
+    assert 'id="nucleos"' in html
 
 
 def test_pncp_is_market_context_after_decision_and_capture() -> None:

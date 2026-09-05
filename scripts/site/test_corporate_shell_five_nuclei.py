@@ -105,7 +105,7 @@ def test_shipped_home_chooser_and_single_primary_cta() -> None:
         assert row, item["id"]
         assert "/docs/" not in row.group(0)
         assert "index.html" not in row.group(0)
-        assert 'href="#formulario-contato"' in row.group(0)
+        assert 'href="#formulario-contato"' not in row.group(0)
 
 
 def test_b2g_routes_stay_linked_in_two_steps() -> None:
@@ -249,8 +249,10 @@ def test_hash_pinned_rain_canary_keeps_approved_material() -> None:
 
     rel = "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html"
     assert rel in HASH_PINNED_SHELL_FILES
+    assert "conteudos/atraso-na-medicao-obra-publica/index.html" in HASH_PINNED_SHELL_FILES
     shipped = {path.relative_to(ROOT).as_posix() for path in shipped_html_files()}
     assert rel not in shipped
+    assert "conteudos/atraso-na-medicao-obra-publica/index.html" not in shipped
     assert rel not in FROZEN_SHELL_FILES
     row = next(item for item in load_decisions()["urls"] if item.get("canary") is True)
     assert row["html"] == rel
@@ -258,3 +260,10 @@ def test_hash_pinned_rain_canary_keeps_approved_material() -> None:
     assert approval_errors(row) == []
     report = evaluate_striking_distance()
     assert report["ok"] is True, report["fails"]
+    delay = ROOT / "conteudos" / "atraso-na-medicao-obra-publica" / "index.html"
+    expected = json.loads(
+        (ROOT / "docs" / "evidence" / "389-measurement-glosa-canary" / "canary-contract.json").read_text(
+            encoding="utf-8"
+        )
+    )["canary"]["after_sha256"]
+    assert hashlib.sha256(delay.read_bytes()).hexdigest() == expected
