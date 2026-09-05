@@ -115,7 +115,9 @@ body[data-content-cluster="home"]{
   font-variant-numeric:tabular-nums slashed-zero;
   background:var(--white);
 }
-body[data-content-cluster="home"] main{overflow-x:clip}
+body[data-content-cluster="home"] main{overflow-x:hidden}
+body[data-content-cluster="home"] #formulario-contato{scroll-margin-top:160px}
+body[data-content-cluster="home"] .contact-section{padding-bottom:clamp(4.5rem,8vw,6.5rem)}
 
 /* ── 1. Sistema tipografico: uma familia, tres larguras ────────────────── */
 /* A serifa de sistema (--serif resolve para Georgia/Palatino) e a monoespacada
