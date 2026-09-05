@@ -38,6 +38,7 @@ Observado em 2026-09-05 (America/Sao_Paulo).
 | `python3 scripts/site/test_public_plain_language.py` | PASS em 251 superfícies públicas já embarcadas |
 | `python3 scripts/site/test_public_internal_marketing_labels.py` | `PUBLIC_INTERNAL_MARKETING_LABELS=0`; `DL_HERO_PROOF=0` |
 | `python3 scripts/site/test_html_integrity.py` | `HTML_INTEGRITY_TESTS_OK` |
+| `python3 scripts/site/audit_css_usage.py` | `CSS_USAGE_OK`; decoração permaneceu no orçamento-base (`border_radius=137`, `gradient=51`) |
 | Browser 1440×1000 e 390×844 | 6/6 sem overflow horizontal; todos os anchors locais resolvidos |
 | axe-core WCAG 2 A/AA + 2.1 A/AA nos dois viewports | 0 violações `serious`/`critical` nas 6 combinações |
 | JSON parse + `git diff --check` | PASS |

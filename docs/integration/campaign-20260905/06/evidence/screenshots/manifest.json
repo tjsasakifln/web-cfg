@@ -1,6 +1,6 @@
 {
   "schema_version": "mv06-screenshot-evidence/v1",
-  "captured_at": "2026-09-05T23:01:47Z",
+  "captured_at": "2026-09-05T23:15:53Z",
   "base_sha": "470a5ffafeaf45a59649109742ce5885f9789328",
   "tree_state": "provisional_uncommitted_candidate",
   "browser": "Chrome/152.0.7977.76",
@@ -9,7 +9,7 @@
   "source_files": [
     {
       "file": "../../public-candidates/candidate.css",
-      "sha256": "b12d3aead4b4d45ddffd812a1449232e161fd00ff56d58e4e13d189fdedbefd6"
+      "sha256": "05406c7bbebffe94333b695961475c1dc4820c2f5bc6dd1bd41ef192f0b6760a"
     },
     {
       "file": "../../public-candidates/avaliacoes-imoveis/index.html",
@@ -32,7 +32,7 @@
       "pixel_width": 1440,
       "pixel_height": 1000,
       "file": "pericias-assistencia-tecnica-desktop-1440x1000.png",
-      "sha256": "b51e205ab0055f3f65811671b04e8b0fe56ac5ca7940875f5da3ecbd6407d353"
+      "sha256": "cb989a4f270d7442a516418fc84aa96e399cd3deca30e5993d46790550e3d610"
     },
     {
       "route": "/pericias-assistencia-tecnica/",
@@ -41,7 +41,7 @@
       "pixel_width": 390,
       "pixel_height": 844,
       "file": "pericias-assistencia-tecnica-mobile-390x844.png",
-      "sha256": "bd7a5c5092460b95ebe582b6ec49008a49cf8358c2bbf566f08a12086ed90c4d"
+      "sha256": "669de7958e05835238be69096de249d28ebad5a2c9ae84c4481890045af3dea0"
     },
     {
       "route": "/pericias-assistencia-tecnica/",
@@ -51,7 +51,7 @@
       "pixel_width": 1180,
       "pixel_height": 434,
       "file": "pericias-assistencia-tecnica-proof-desktop.png",
-      "sha256": "01456bea7d7baa2cc420c74ae0b465fb0f9979dfafa223a182e24e39f7051fd1"
+      "sha256": "2cf6e4c72f52a1332636d8647321b0b75f79dfd98cea87c09ceaa7e8f676fdba"
     },
     {
       "route": "/pericias-assistencia-tecnica/",
@@ -61,7 +61,7 @@
       "pixel_width": 1180,
       "pixel_height": 380,
       "file": "pericias-assistencia-tecnica-contact-desktop.png",
-      "sha256": "9ef6d8fa417204ee65bed23544c088737ba9283dd2c1771d1c5b2a1b38c2ff7f"
+      "sha256": "9e4b6992dfce6ccefbf4ee1c3478c7af7b63fd1bee0971308ee5288fe45a010d"
     },
     {
       "route": "/avaliacoes-imoveis/",
@@ -70,7 +70,7 @@
       "pixel_width": 1440,
       "pixel_height": 1000,
       "file": "avaliacoes-imoveis-desktop-1440x1000.png",
-      "sha256": "937a224524df5985152fab36132eaab1a62ae6efe548e16b008446021123c129"
+      "sha256": "bd64b62a0a51dc340ddd7b79c838edf925a4c12dc0dc39d74ff85d47bc36f931"
     },
     {
       "route": "/avaliacoes-imoveis/",
@@ -79,7 +79,7 @@
       "pixel_width": 390,
       "pixel_height": 844,
       "file": "avaliacoes-imoveis-mobile-390x844.png",
-      "sha256": "a18bb7f3b545a0c384e19a6ffa0e7c207ec94f29f937e111559541cbb344a173"
+      "sha256": "989bf99dc2c86330d5380954ec70728b2aa3a9c8cc2c5bab4eecd4218eda1262"
     },
     {
       "route": "/avaliacoes-imoveis/",
@@ -89,7 +89,7 @@
       "pixel_width": 1180,
       "pixel_height": 384,
       "file": "avaliacoes-imoveis-proof-desktop.png",
-      "sha256": "af83b38818cbb899805b005d10a37cfdcc02b71f38747aaf9cee185e49baf778"
+      "sha256": "65f3ece5d96f4424259f432b24afa63f7bceca4c9fa092afb57a42f3f6b7ff60"
     },
     {
       "route": "/avaliacoes-imoveis/",
@@ -99,7 +99,7 @@
       "pixel_width": 1180,
       "pixel_height": 379,
       "file": "avaliacoes-imoveis-contact-desktop.png",
-      "sha256": "c72e49553c1683ec03519eb995c6a28f6c3a1e125d2b1e3ee06ab3ae6bb62576"
+      "sha256": "aa896a02cb2849f8f7041d9dfe79be47b515d064766338cbf772f07242eb166c"
     },
     {
       "route": "/seguranca-trabalho/",
@@ -108,7 +108,7 @@
       "pixel_width": 1440,
       "pixel_height": 1000,
       "file": "seguranca-trabalho-desktop-1440x1000.png",
-      "sha256": "eb99246cf26e1437031eea7ab522ba731a75cc6cb9512dfe6ffee8884a0ec399"
+      "sha256": "4b02de7a3b563519377a94a364d3975f9b5dbe5cd45824965cc23de27386ece8"
     },
     {
       "route": "/seguranca-trabalho/",
@@ -117,7 +117,7 @@
       "pixel_width": 390,
       "pixel_height": 844,
       "file": "seguranca-trabalho-mobile-390x844.png",
-      "sha256": "c1f7490f76be86059790d74bddd85d4a79a64db296f17f166be0ae2eb66d891f"
+      "sha256": "de1734977e72ffb7a335b8f66bc3855cd9c5f09a5b79ea3f2068a233faffae01"
     },
     {
       "route": "/seguranca-trabalho/",
@@ -127,7 +127,7 @@
       "pixel_width": 1180,
       "pixel_height": 461,
       "file": "seguranca-trabalho-proof-desktop.png",
-      "sha256": "3eaea50ed4af6a0099e1700329a6df6a009aaa5fa3b518f87772df34151ff85d"
+      "sha256": "24b99cc26cd017d4a7b3d403c8d53fa44d46ddba6cbb450278f3a1fb7be340bf"
     },
     {
       "route": "/seguranca-trabalho/",
@@ -137,7 +137,7 @@
       "pixel_width": 1180,
       "pixel_height": 380,
       "file": "seguranca-trabalho-contact-desktop.png",
-      "sha256": "6a982029992038a52f2ebfd5ee9f4cdc62c4b2362065bf7774afd3442247c12d"
+      "sha256": "e8cd11dbd3ab9a8d96c550629ae8fe80771a69f0be47f4ee5a8cfc64bb42ccd7"
     }
   ]
 }
