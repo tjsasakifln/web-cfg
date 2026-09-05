@@ -1,9 +1,9 @@
 {
   "schema": "bofu_frozen_hashes/v1",
   "campaign": "CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01",
-  "baseline_commit": "710e4a15d7f96799d5ccd90d804efdb6395aac80",
+  "baseline_commit": "f0c692e776ff47c86bd61a3e9225a500c555e4b1",
   "recaptured_at": "2026-09-05",
-  "recapture_reason": "Recaptura no candidato REV-01 apos editorial:build: script.js 67e8fda0f07313a0b60bf988db682dad1c48c658174461e93b6a7ddf5e6bb265; sitemap.xml e49925ddd5b9d042fc50b9122b5ba9cad9c73bcaa3bbc58c754d67b2eb83ea10; sitemap.txt c720dac63a0ca3dc0996a5a458b8ab378d87ccae52cee0622d5fe6790c73b776; sitemap-index.xml 9fe92fbdb18e83ab8ccda50b915a4bf1ea86c917f4ae1d7c9e83c3cf7016242f. Sem html_mutation.",
+  "recapture_reason": "Recaptura no candidato REV-01 apos conserto do validateStep1 adaptativo: script.js af1e95f220d05a20343cf6d1286237eb9e6ef4ef87f78c3109bad2d6a5524683. Sem html_mutation.",
   "html_mutation": false,
   "pillars": {
     "aditivos-obras-publicas": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
@@ -20,7 +20,7 @@
     "auditoria-orcamento-licitacao/index.html": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
     "diagnostico-b2g-360/index.html": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
     "diagnostico-pre-licitacao/index.html": "fbfb0ee348841ae3a01c437cee579832139cc7868e6dcb081534ff956bfae654",
-    "script.js": "67e8fda0f07313a0b60bf988db682dad1c48c658174461e93b6a7ddf5e6bb265",
+    "script.js": "af1e95f220d05a20343cf6d1286237eb9e6ef4ef87f78c3109bad2d6a5524683",
     "styles.css": "df11d4f0a53e8e727b29c929509008013533907b257b4ce40546116eb6152ac2",
     "styles-tokens.css": "15cc0770e76276b418c11493fa9e53827ae14bb8f854b0a63d8c6dd63afc02fc",
     "styles-tools.css": "8c42a4b5fadba13e4dae52bd7168c64b9f5548f3fd3f8d4f0707ce4e9463c7ba",
