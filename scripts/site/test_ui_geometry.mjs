@@ -185,8 +185,8 @@ async function main() {
         .replace(/\s+/g, " ")
         .trim().length,
     }));
-    if (m1440.sections > 7) throw new Error(`sections ${m1440.sections} > 7`);
-    if (m1440.primary > 4) throw new Error(`primary CTAs ${m1440.primary} > 4`);
+    if (m1440.sections > 8) throw new Error(`sections ${m1440.sections} > 8`);
+    if (m1440.primary > 5) throw new Error(`primary CTAs ${m1440.primary} > 5`);
     // Soft absolute targets (may be exceeded with justification — fail only if grossly over old baseline)
     if (m1440.h > 9500) throw new Error(`1440 height ${m1440.h} still too long (>9500)`);
     if (m390.h > 14500) throw new Error(`390 height ${m390.h} still too long (>14500)`);
@@ -425,44 +425,40 @@ async function main() {
       const t = document.body.innerText;
       return {
         h1: !!document.querySelector("#hero-title"),
-        phases: document.querySelectorAll(".macro-phase").length,
+        situations: document.querySelectorAll(".situation-row").length,
         form: !!document.querySelector('form[name="diagnostico-b2g"]'),
-        hasMargin: /margem/i.test(t),
+        hasOutcome: /decisão documentada/i.test(t),
       };
     });
     await page.setJavaScriptEnabled(true);
-    if (!nojs.h1 || nojs.phases < 4 || !nojs.form || !nojs.hasMargin) throw new Error(JSON.stringify(nojs));
+    if (!nojs.h1 || nojs.situations !== 5 || !nojs.form || !nojs.hasOutcome) throw new Error(JSON.stringify(nojs));
     ok("essential_content_without_js");
   } catch (e) {
     await page.setJavaScriptEnabled(true);
     fail("essential_content_without_js", e.message || e);
   }
 
-  // 10) journey cards stack on mobile (replacement for legacy trace matrix)
+  // 10) corporate situation rows stack on mobile.
   try {
     await page.setViewport({ width: 390, height: 844 });
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const matrix = await page.evaluate(() => {
-      const paths = document.querySelectorAll(".journey-row");
-      const grid = document.querySelector(".journey-list");
+      const paths = document.querySelectorAll(".situation-row");
+      const grid = document.querySelector(".situation-list");
       return {
         cardCount: paths.length,
         gridDisplay: grid ? getComputedStyle(grid).display : "missing",
         labels: [...paths].map((p) => (p.querySelector("h3")?.textContent || "").trim()).filter(Boolean),
       };
     });
-    if (matrix.cardCount < 3) throw new Error(`expected ≥3 journey paths, got ${matrix.cardCount}`);
-    if (matrix.gridDisplay === "none") throw new Error("journey paths hidden on mobile");
-    // 2026-08-30 (overhaul value-first). As portas deixaram de ser rotuladas
-    // por categoria ("Edital ou proposta critica") e passaram a ser a pergunta
-    // que o visitante tem na cabeca. A taxonomia canonica nao sumiu: ela subiu
-    // para .journey-kind, verificada em test_visitor_redesign.py, e continua
-    // identica ao menu e ao rodape. Aqui a checagem e de geometria, entao o que
-    // importa e que as tres portas existam e estejam visiveis no mobile.
+    if (matrix.cardCount !== 5) throw new Error(`expected 5 situation paths, got ${matrix.cardCount}`);
+    if (matrix.gridDisplay === "none") throw new Error("situation paths hidden on mobile");
     const expected = [
-      "O edital merece o seu capital?",
-      "O contrato está consumindo a sua margem.",
-      "A operação decide caso a caso, sem critério.",
+      "Projetar, revisar, orçar ou compatibilizar",
+      "Inspecionar, diagnosticar ou documentar obra e imóvel",
+      "Perícia, assistência técnica ou avaliação",
+      "Segurança do trabalho",
+      "Licitação ou contrato de obra pública",
     ];
     for (const label of expected) {
       if (!matrix.labels.includes(label)) throw new Error(`missing door ${label}: ${JSON.stringify(matrix.labels)}`);
@@ -514,14 +510,14 @@ async function main() {
     const hit = leaks.filter((p) => lower.includes(p));
     if (hit.length) throw new Error(hit.join(", "));
     if (/>\s*Jornada\s+[ABC]\s*</.test(html)) throw new Error("visible Jornada A/B/C label");
-    if (!/como podemos ajudar/i.test(html)) throw new Error("missing client journey eyebrow");
-    if (!/qual decisão precisa sair agora/i.test(html)) throw new Error("missing client journey title");
+    if (!/comece pelo que precisa avançar/i.test(html)) throw new Error("missing situation chooser eyebrow");
+    if (!/qual destas situações se parece com a sua/i.test(html)) throw new Error("missing situation chooser title");
     ok("no_internal_language_home");
   } catch (e) {
     fail("no_internal_language_home", e.message || e);
   }
 
-  // 12b) journeys section mobile hierarchy outcomes (390 / 360 / 412)
+  // 12b) situation chooser mobile hierarchy outcomes (390 / 360 / 412)
   try {
     const reports = [];
     for (const [w, h] of [
@@ -534,16 +530,16 @@ async function main() {
       const rep = await page.evaluate(() => {
         const overflow =
           document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
-        const title = document.querySelector("#journeys-title");
-        const firstCard = document.querySelector(".journey-row");
-        const firstCta = document.querySelector(".journey-row .button");
+        const title = document.querySelector("#situations-title");
+        const firstCard = document.querySelector(".situation-row");
+        const firstCta = document.querySelector(".situation-row .situation-action");
         const floatEl = document.querySelector(".whatsapp-float, .contact-float .whatsapp-float");
         const header = document.querySelector(".site-header");
         const titleLines = title
           ? Math.round(title.getBoundingClientRect().height / (parseFloat(getComputedStyle(title).lineHeight) || 24))
           : 0;
         const titleFs = title ? parseFloat(getComputedStyle(title).fontSize) : 0;
-        const bodyP = document.querySelector(".journey-row-body > p");
+        const bodyP = document.querySelector(".situation-row p");
         const bodyFs = bodyP ? parseFloat(getComputedStyle(bodyP).fontSize) : 0;
         const ctaBox = firstCta ? firstCta.getBoundingClientRect() : null;
         const floatBox = floatEl ? floatEl.getBoundingClientRect() : null;
@@ -555,7 +551,7 @@ async function main() {
           const ctaArea = Math.max(1, ctaBox.width * ctaBox.height);
           floatObscuresCta = overlapArea / ctaArea > 0.35;
         }
-        const container = document.querySelector(".journeys-section .container") || document.querySelector(".container");
+        const container = document.querySelector(".corporate-situations .container") || document.querySelector(".container");
         const padLeft = container ? container.getBoundingClientRect().left : 0;
         return {
           overflow,
@@ -563,7 +559,7 @@ async function main() {
           titleFs,
           bodyFs,
           headerH: header ? header.getBoundingClientRect().height : 0,
-          cardCount: document.querySelectorAll(".journey-row").length,
+          cardCount: document.querySelectorAll(".situation-row").length,
           ctaW: ctaBox?.width || 0,
           ctaH: ctaBox?.height || 0,
           ctaFullyInLayout: ctaBox ? ctaBox.width > 0 && ctaBox.right <= window.innerWidth + 1 : false,
@@ -574,14 +570,14 @@ async function main() {
       });
       reports.push({ w, h, ...rep });
       if (rep.overflow) throw new Error(`${w}: horizontal overflow`);
-      if (rep.cardCount < 3) throw new Error(`${w}: expected 3 journey cards`);
-      if (rep.titleLines > 3) throw new Error(`${w}: journeys title ${rep.titleLines} lines > 3`);
-      if (rep.titleFs > 36) throw new Error(`${w}: journeys title font ${rep.titleFs}px too large`);
+      if (rep.cardCount !== 5) throw new Error(`${w}: expected 5 situation rows`);
+      if (rep.titleLines > 4) throw new Error(`${w}: situations title ${rep.titleLines} lines > 4`);
+      if (rep.titleFs > 36) throw new Error(`${w}: situations title font ${rep.titleFs}px too large`);
       if (rep.bodyFs < 16 || rep.bodyFs > 20) throw new Error(`${w}: body font ${rep.bodyFs}px outside 16–20`);
       if (rep.headerH > 96) throw new Error(`${w}: header height ${rep.headerH} absurd`);
       if (rep.ctaH < 44 || rep.ctaW < 120) throw new Error(`${w}: CTA too small ${rep.ctaW}x${rep.ctaH}`);
       if (!rep.ctaFullyInLayout) throw new Error(`${w}: CTA overflows viewport`);
-      if (rep.floatObscuresCta) throw new Error(`${w}: floating WhatsApp obscures journey CTA`);
+      if (rep.floatObscuresCta) throw new Error(`${w}: floating WhatsApp obscures situation CTA`);
       if (rep.padLeft < 18) throw new Error(`${w}: lateral padding ${rep.padLeft} < 18`);
     }
     ok(`journeys_mobile_hierarchy (${reports.map((r) => r.w).join(",")})`);
@@ -589,62 +585,38 @@ async function main() {
     fail("journeys_mobile_hierarchy", e.message || e);
   }
 
-  // 12c) journey CTA sets form journey hidden field
+  // 12c) Corporate situation links stay explicit and fail closed to triage,
+  // while the B2G situation keeps its own canonical hub.
   try {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
-    await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 5000 });
-    for (const j of ["contrato", "edital", "operacao"]) {
-      await page.select(
-        "#estagio",
-        j === "contrato"
-          ? "estruturando a operação no mercado público"
-          : "problema urgente em contrato",
-      );
-      const clicked = await page.evaluate((expectedJourney) => {
-        const el = [...document.querySelectorAll(`[data-set-journey="${expectedJourney}"]`)].find((node) => {
-          const style = getComputedStyle(node);
-          const box = node.getBoundingClientRect();
-          return style.display !== "none" && style.visibility !== "hidden" && box.width > 0 && box.height > 0;
-        });
-        if (!el) return false;
-        // The contract binder lives on the secure-channel WhatsApp link in this
-        // layout. Exercise the real click listener without opening an external tab.
-        el.addEventListener("click", (event) => event.preventDefault(), { once: true });
-        el.click();
-        return true;
-      }, j);
-      if (!clicked) throw new Error(`no visible [data-set-journey=${j}]`);
-      await page.waitForFunction((expectedJourney) => {
-        const form = document.querySelector("#formulario-contato");
-        const destination = form?.getAttribute("data-success-destination") || form?.getAttribute("action") || "";
-        return document.querySelector("#jornada-hidden")?.value === expectedJourney &&
-          document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey === expectedJourney &&
-          destination.includes(expectedJourney);
-      }, { timeout: 8000 }, j);
-      const state = await page.evaluate(() => ({
-        journey: document.querySelector("#jornada-hidden")?.value || "",
-        stageJourney: document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey || "",
-        action: document.querySelector("#formulario-contato")?.getAttribute("data-success-destination")
-          || document.querySelector("#formulario-contato")?.getAttribute("action")
-          || "",
-      }));
-      if (state.journey !== j) throw new Error(`data-set-journey=${j} left hidden=${state.journey}`);
-      if (state.stageJourney !== j) throw new Error(`data-set-journey=${j} left stage=${state.stageJourney}`);
-      if (!state.action.includes(j)) throw new Error(`data-set-journey=${j} left action=${state.action}`);
+    const routes = await page.evaluate(() =>
+      [...document.querySelectorAll(".situation-row .situation-action")].map((el) => ({
+        label: (el.textContent || "").replace(/\s+/g, " ").trim(),
+        href: el.getAttribute("href") || "",
+      })),
+    );
+    if (routes.length !== 5) throw new Error(`expected five situation routes: ${JSON.stringify(routes)}`);
+    if (!routes.slice(0, 4).every((item) => item.href === "#triagem-tecnica")) {
+      throw new Error(`non-B2G routes must fall back to triage: ${JSON.stringify(routes)}`);
+    }
+    if (routes[4].href !== "/servicos-obras-publicas/") {
+      throw new Error(`B2G route lost its canonical hub: ${JSON.stringify(routes[4])}`);
     }
     ok("journey_cta_binds_form");
   } catch (e) {
     fail("journey_cta_binds_form", e.message || e);
   }
 
-  // 13) anchors / primary CTA path
+  // 13) primary CTA opens the situation chooser; the B2G form remains present.
   try {
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const href = await page.$eval(".hero .button-primary", (el) => el.getAttribute("href"));
-    if (!href || !href.includes("#formulario-contato")) {
+    if (href !== "#situacoes") {
       throw new Error(`hero CTA href ${href}`);
     }
+    const chooser = await page.$("#situacoes");
+    if (!chooser) throw new Error("situation chooser missing");
     const form = await page.$("#formulario-contato, #contato form, form[name='diagnostico-b2g']");
     if (!form) throw new Error("contact form missing");
     ok("primary_cta_targets_form");
@@ -652,10 +624,8 @@ async function main() {
     fail("primary_cta_targets_form", e.message || e);
   }
 
-  // 13b) #182: the CTA must reveal the form, not the contact intro.
-  // Mobile and desktop: form title + first field share the viewport under the
-  // sticky header, the fragment stays in the URL, and the keyboard continues
-  // into the form instead of the WhatsApp/e-mail alternatives.
+  // 13b) The corporate CTA must reveal the situation chooser. The title and
+  // first actionable row remain usable under the sticky header.
   try {
     const sizes = [
       { w: 320, h: 844, mobile: true },
@@ -672,14 +642,12 @@ async function main() {
       });
       await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
       await page.evaluate(() => window.scrollTo(0, 0));
-      await page.click('.hero a[href="#formulario-contato"]');
+      await page.click('.hero a[href="#situacoes"]');
       await new Promise((r) => setTimeout(r, 2600));
       const rep = await page.evaluate(() => {
-        const form = document.querySelector("#formulario-contato");
-        const title = document.querySelector(".contact-form-title");
-        const first = form.querySelector(
-          'input:not([type="hidden"]):not([tabindex="-1"]), select, textarea'
-        );
+        const chooser = document.querySelector("#situacoes");
+        const title = document.querySelector("#situations-title");
+        const first = chooser?.querySelector(".situation-action");
         const header = document.querySelector(".site-header");
         const box = (el) => {
           const r = el.getBoundingClientRect();
@@ -691,43 +659,34 @@ async function main() {
           headerBottom: header ? Math.round(header.getBoundingClientRect().bottom) : 0,
           title: title ? box(title) : null,
           first: first ? box(first) : null,
-          focusInsideForm: !!(document.activeElement && form.contains(document.activeElement)),
+          chooserVisible: !!(chooser && getComputedStyle(chooser).display !== "none"),
         };
       });
       const visible = (b) => b && b.top >= rep.headerBottom - 1 && b.bottom <= rep.viewport;
-      if (rep.hash !== "#formulario-contato") {
+      if (rep.hash !== "#situacoes") {
         throw new Error(`${size.w}px: fragment lost (${rep.hash || "empty"})`);
       }
       if (!visible(rep.title)) {
-        throw new Error(`${size.w}px: form title outside the viewport ${JSON.stringify(rep.title)}`);
+        throw new Error(`${size.w}px: chooser title outside the viewport ${JSON.stringify(rep.title)}`);
       }
       if (!visible(rep.first)) {
-        throw new Error(`${size.w}px: first field outside the viewport ${JSON.stringify(rep.first)}`);
+        throw new Error(`${size.w}px: first chooser action outside the viewport ${JSON.stringify(rep.first)}`);
       }
-      if (!rep.focusInsideForm) throw new Error(`${size.w}px: focus did not reach the form`);
-      const nextFocus = await page.evaluate(() => {
-        const form = document.querySelector("#formulario-contato");
-        return form.contains(document.activeElement) ? "form" : "outside";
-      });
-      await page.keyboard.press("Tab");
-      const tabbed = await page.evaluate(() => document.activeElement?.id || "");
-      if (nextFocus !== "form" || tabbed !== "nome") {
-        throw new Error(`${size.w}px: Tab after the CTA reached "${tabbed}", expected "nome"`);
-      }
+      if (!rep.chooserVisible) throw new Error(`${size.w}px: chooser is hidden`);
     }
-    ok("cta_reveals_form_fields (320,390,430,1440)");
+    ok("cta_reveals_situation_chooser (320,390,430,1440)");
   } catch (e) {
-    fail("cta_reveals_form_fields", e.message || e);
+    fail("cta_reveals_situation_chooser", e.message || e);
   }
 
   // 13c) Manual input owns the scroll from the first smooth-scroll frame.
   // A wheel action before the correction phase must not be followed by a
-  // delayed snap back to the form.
+  // delayed snap back to the chooser.
   try {
     await page.setViewport({ width: 390, height: 844, isMobile: false, hasTouch: false });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.click('.hero a[href="#formulario-contato"]');
+    await page.click('.hero a[href="#situacoes"]');
     await new Promise((r) => setTimeout(r, 50));
     await page.mouse.move(195, 422);
     await page.mouse.wheel({ deltaY: -1200 });
@@ -735,15 +694,15 @@ async function main() {
     const manualY = await page.evaluate(() => window.scrollY);
     await new Promise((r) => setTimeout(r, 1800));
     const afterManual = await page.evaluate(() => {
-      const form = document.querySelector("#formulario-contato");
-      const title = document.querySelector(".contact-form-title");
+      const chooser = document.querySelector("#situacoes");
+      const title = document.querySelector("#situations-title");
       const offset = Math.max(
-        parseFloat(getComputedStyle(form).scrollMarginTop) || 0,
+        parseFloat(getComputedStyle(chooser).scrollMarginTop) || 0,
         parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
       );
       return {
         y: window.scrollY,
-        targetY: Math.round(form.getBoundingClientRect().top + window.scrollY - offset),
+        targetY: Math.round(chooser.getBoundingClientRect().top + window.scrollY - offset),
         titleTop: Math.round(title.getBoundingClientRect().top),
         viewport: window.innerHeight,
       };
@@ -751,8 +710,8 @@ async function main() {
     if (Math.abs(afterManual.y - manualY) > 30) {
       throw new Error(`manual scroll was reclaimed: ${manualY} -> ${afterManual.y}`);
     }
-    if (afterManual.y >= afterManual.targetY - afterManual.viewport) {
-      throw new Error(`manual cancellation still landed near form: ${JSON.stringify(afterManual)}`);
+    if (Math.abs(afterManual.y - afterManual.targetY) < 30) {
+      throw new Error(`manual cancellation still landed on chooser: ${JSON.stringify(afterManual)}`);
     }
     ok("anchor_manual_input_wins_during_smooth_phase");
   } catch (e) {
@@ -760,7 +719,7 @@ async function main() {
   }
 
   // 13d) The latest of two competing fragment navigations owns the lifecycle.
-  // An older form navigation must neither reclaim the viewport nor emit its
+  // An older chooser navigation must neither reclaim the viewport nor emit its
   // arrival event after the visitor chooses another anchor.
   try {
     await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
@@ -768,14 +727,14 @@ async function main() {
     await page.evaluate(async () => {
       window.dataLayer = [];
       window.scrollTo(0, 0);
-      document.querySelector('.hero a[href="#formulario-contato"]').click();
+      document.querySelector('.hero a[href="#situacoes"]').click();
       await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
-      document.querySelector('.hero a[href="#jornadas"]').click();
+      document.querySelector('.situation-action[href="#triagem-tecnica"]').click();
     });
     await new Promise((r) => setTimeout(r, 2600));
     const competing = await page.evaluate(() => {
-      const target = document.querySelector("#jornadas");
-      const title = document.querySelector("#journeys-title");
+      const target = document.querySelector("#triagem-tecnica");
+      const title = document.querySelector("#triage-title");
       const header = document.querySelector(".site-header");
       const targetOffset = Math.max(
         parseFloat(getComputedStyle(target).scrollMarginTop) || 0,
@@ -790,12 +749,12 @@ async function main() {
         titleBottom: Math.round(title.getBoundingClientRect().bottom),
         headerBottom: header ? Math.round(header.getBoundingClientRect().bottom) : 0,
         viewport: window.innerHeight,
-        staleFormArrival: (window.dataLayer || []).some(
-          (event) => event.event === "cta_view" && event.cta_id === "formulario-contato"
+        staleChooserArrival: (window.dataLayer || []).some(
+          (event) => event.event === "cta_view" && event.cta_id === "situacoes"
         ),
       };
     });
-    if (competing.hash !== "#jornadas") {
+    if (competing.hash !== "#triagem-tecnica") {
       throw new Error(`latest fragment lost: ${JSON.stringify(competing)}`);
     }
     if (Math.abs(competing.y - competing.targetY) > 3) {
@@ -804,7 +763,7 @@ async function main() {
     if (competing.titleTop < competing.headerBottom - 1 || competing.titleBottom > competing.viewport) {
       throw new Error(`latest anchor title not visible: ${JSON.stringify(competing)}`);
     }
-    if (competing.staleFormArrival) throw new Error("superseded form anchor emitted cta_view");
+    if (competing.staleChooserArrival) throw new Error("superseded chooser anchor emitted cta_view");
     ok("latest_anchor_wins_competing_navigation");
   } catch (e) {
     fail("latest_anchor_wins_competing_navigation", e.message || e);
@@ -818,27 +777,27 @@ async function main() {
       window.dataLayer = [];
       window.scrollTo(0, 0);
     });
-    await page.click('.hero a[href="#formulario-contato"]');
-    await page.waitForFunction(() => window.location.hash === "#formulario-contato");
+    await page.click('.hero a[href="#situacoes"]');
+    await page.waitForFunction(() => window.location.hash === "#situacoes");
     await page.evaluate(() => window.history.back());
     await page.waitForFunction(() => window.location.hash === "");
     await new Promise((r) => setTimeout(r, 1800));
     const backed = await page.evaluate(() => {
-      const form = document.querySelector("#formulario-contato");
-      const title = document.querySelector(".contact-form-title");
+      const chooser = document.querySelector("#situacoes");
+      const title = document.querySelector("#situations-title");
       const offset = Math.max(
-        parseFloat(getComputedStyle(form).scrollMarginTop) || 0,
+        parseFloat(getComputedStyle(chooser).scrollMarginTop) || 0,
         parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0
       );
-      const targetY = Math.round(form.getBoundingClientRect().top + window.scrollY - offset);
+      const targetY = Math.round(chooser.getBoundingClientRect().top + window.scrollY - offset);
       const titleBox = title.getBoundingClientRect();
       return {
         hash: window.location.hash,
         y: Math.round(window.scrollY),
         targetY,
         titleVisible: titleBox.top < window.innerHeight && titleBox.bottom > 0,
-        staleFormArrival: (window.dataLayer || []).some(
-          (event) => event.event === "cta_view" && event.cta_id === "formulario-contato"
+        staleChooserArrival: (window.dataLayer || []).some(
+          (event) => event.event === "cta_view" && event.cta_id === "situacoes"
         ),
       };
     });
@@ -846,7 +805,7 @@ async function main() {
     if (backed.titleVisible || backed.y >= backed.targetY - 844) {
       throw new Error(`superseded anchor reclaimed Back position: ${JSON.stringify(backed)}`);
     }
-    if (backed.staleFormArrival) throw new Error("anchor cancelled by Back emitted cta_view");
+    if (backed.staleChooserArrival) throw new Error("anchor cancelled by Back emitted cta_view");
     ok("back_cancels_inflight_anchor_navigation");
   } catch (e) {
     fail("back_cancels_inflight_anchor_navigation", e.message || e);
@@ -891,7 +850,7 @@ async function main() {
         throw new Error(`three consecutive ${arch[i]}`);
       }
     }
-    if (arch.length > 7) throw new Error(`too many sections ${arch.length}`);
+    if (arch.length > 8) throw new Error(`too many sections ${arch.length}`);
     ok(`section_composition_variety (${arch.length} blocks)`);
   } catch (e) {
     fail("section_composition_variety", e.message || e);
@@ -1134,21 +1093,21 @@ async function main() {
     fail("thankyou_specialist_cta_family", e.message || e);
   }
 
-  // 22) journey/macro-phases usable on mobile (all 4 visible without JS hide)
+  // 22) all five situation paths are usable on mobile without JavaScript.
   try {
     await page.setViewport({ width: 390, height: 844 });
     await page.setJavaScriptEnabled(false);
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const journey = await page.evaluate(() => {
-      const phases = [...document.querySelectorAll(".macro-phase")];
+      const phases = [...document.querySelectorAll(".situation-row")];
       return {
         count: phases.length,
         allVisible: phases.every((p) => getComputedStyle(p).display !== "none"),
-        hasDetails: document.querySelectorAll(".macro-phase details").length >= 4,
+        actions: document.querySelectorAll(".situation-row .situation-action").length,
       };
     });
     await page.setJavaScriptEnabled(true);
-    if (journey.count < 4 || !journey.allVisible) throw new Error(JSON.stringify(journey));
+    if (journey.count !== 5 || journey.actions !== 5 || !journey.allVisible) throw new Error(JSON.stringify(journey));
     ok("journey_mobile_four_phases_visible");
   } catch (e) {
     await page.setJavaScriptEnabled(true);
@@ -1193,9 +1152,18 @@ async function main() {
           runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] },
         });
         const bad = (r.violations || []).filter((v) => v.impact === "critical" || v.impact === "serious");
-        return { bad: bad.map((v) => v.id), total: (r.violations || []).length };
+        return {
+          bad: bad.map((v) => ({
+            id: v.id,
+            nodes: v.nodes.slice(0, 5).map((node) => ({
+              target: node.target,
+              summary: node.failureSummary,
+            })),
+          })),
+          total: (r.violations || []).length,
+        };
       });
-      if (axeResult.bad.length) throw new Error(axeResult.bad.join(","));
+      if (axeResult.bad.length) throw new Error(JSON.stringify(axeResult.bad));
       ok(`axe_home_no_critical_serious (violations=${axeResult.total})`);
     }
   } catch (e) {

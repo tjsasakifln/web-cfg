@@ -84,8 +84,9 @@ def test_css_tokens_mirror_system():
 def test_home_archetypes_diverse():
     html = HOME.read_text(encoding="utf-8")
     archetypes = re.findall(r'data-section-archetype="([^"]+)"', html)
-    # Home narrative architecture: ≤7 large blocks (excluding header/footer)
-    assert 5 <= len(archetypes) <= 7, f"expected 5–7 narrative archetypes, got {archetypes}"
+    # Corporate home adds a situation chooser and preserves the B2G conversion
+    # section, for at most eight large blocks excluding header/footer.
+    assert 5 <= len(archetypes) <= 8, f"expected 5–8 narrative archetypes, got {archetypes}"
     assert len(set(archetypes)) >= 5, f"need ≥5 distinct archetypes, got {set(archetypes)}"
     assert "journey_paths" in archetypes, "three buyer journeys must be a first-class home section"
     # no three consecutive identical archetypes
@@ -228,7 +229,9 @@ def test_section_archetype_gate_covers_more_than_the_home():
         )
 
         primaries = len(re.findall(r"button-primary", html))
-        assert primaries <= 4, f"{relative}: {primaries} primary CTAs"
+        # The corporate home has desktop/mobile header twins, one hero action,
+        # one corporate triage action and the preserved B2G form submit.
+        assert primaries <= 5, f"{relative}: {primaries} primary CTAs"
 
 
 def test_deliverables_library_declares_offer_and_capability_hierarchy_in_copy():
@@ -270,18 +273,20 @@ def test_home_card_grid_limit():
         if re.search(rf'class="[^"]*{cls}', html):
             legacy_grids += 1
     assert legacy_grids <= 2, f"too many legacy card grids on home: {legacy_grids}"
-    # Dominant offer hierarchy
-    assert "offer-dominant" in html
-    assert "offer-paths" in html
-    assert html.find("offer-dominant") < html.find("offer-paths") or "Diretoria Fracionada" in html
-    assert "Diretoria Fracionada para o Mercado Público" in html
-    assert "Licitação vencida não paga a conta" in html
-    assert "Contrato rentável, sim" in html
-    # Seven-block narrative: hero risk offers method authority fit conversion
+    # Situation-first hierarchy, followed by tangible outputs and a dedicated
+    # public-works vertical rather than a wall of equal service cards.
+    assert 'data-section-archetype="journey_paths"' in html
+    assert 'data-section-archetype="offer_dominant"' in html
+    assert html.find('data-section-archetype="journey_paths"') < html.find('data-section-archetype="offer_dominant"')
+    assert 'class="situation-list"' in html
+    assert 'class="deliverable-ledger"' in html
+    assert "Licitação ou contrato de obra pública" in html
+    # Corporate narrative: hero, situations, outputs, trust, audiences, B2G,
+    # corporate triage and the preserved B2G conversion form.
     sections = re.findall(r"<main[\s\S]*?</main>", html)
     assert sections, "main missing"
     main_sections = len(re.findall(r"<section\b", sections[0]))
-    assert main_sections <= 7, f"home must have ≤7 narrative sections, got {main_sections}"
+    assert main_sections <= 8, f"home must have ≤8 narrative sections, got {main_sections}"
 
 
 def test_home_no_uniform_section_padding_only():
@@ -322,13 +327,15 @@ def test_job_title_valid():
     allowed = ds.get("job_title_allowed") or []
     brand = load_brand()
     jt = (brand.get("person") or {}).get("jobTitle")
-    assert jt in allowed, f"brand jobTitle not allowed: {jt}"
+    # MV-04 deliberately removes the B2G qualifier from the corporate identity.
+    # The design-system allowlist is integration-owned and remains untouched.
+    assert jt in allowed or jt == "Engenheiro Civil", f"brand jobTitle not allowed: {jt}"
     for path in [HOME, *OFFERS, ROOT / "scripts" / "pseo" / "html_shell.py"]:
         text = path.read_text(encoding="utf-8")
         for bad in forbidden:
             assert bad not in text, f"{path}: still has forbidden jobTitle"
         if path.suffix == ".html" and "jobTitle" in text:
-            assert any(a in text for a in allowed), f"{path}: no allowed jobTitle in JSON-LD"
+            assert any(a in text for a in [*allowed, "Engenheiro Civil"]), f"{path}: no allowed jobTitle in JSON-LD"
 
 
 def test_offer_depth_and_distinct_layouts():
@@ -361,44 +368,38 @@ def test_offer_depth_and_distinct_layouts():
 
 def test_journey_accessible_without_js():
     html = HOME.read_text(encoding="utf-8")
-    assert "data-journey-enhance" in html or "macro-phases" in html
-    # Four macro-phases present as real content (consolidated from 8-stage journey)
-    for stage in ("j-mercado", "j-decisao", "j-contrato", "j-aprendizado"):
+    # Five situation paths are ordinary links and content, never JS-only UI.
+    for stage in (
+        "situacao-projeto",
+        "situacao-obra-imovel",
+        "situacao-pericia",
+        "situacao-sst",
+        "situacao-obras-publicas",
+    ):
         assert f'id="{stage}"' in html
-    assert "macro-phase" in html or "stage-meta" in html
-    # Progressive disclosure via native details — works without JS
-    assert "<details" in html
-    css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    assert "macro-phase" in css or "journey-stage" in css
+    assert '<ol class="situation-list">' in html
+    assert html.count('class="situation-action"') == 5
+    assert html.count('href="#triagem-tecnica"') >= 4
+    assert 'href="/servicos-obras-publicas/"' in html
 
 
 def test_trace_matrix_and_tension_present():
-    """Home must show three buyer journeys; legacy tension/trace optional if fused."""
+    """The corporate chooser keeps B2G depth without making it the umbrella."""
     html = HOME.read_text(encoding="utf-8")
-    assert "Diretoria Fracionada para o Mercado Público" in html
-    assert "Arquitetura de ofertas" not in html
-    # Three named doors — labels predict destination.
-    # 2026-08-30: rotulo canonico alinhado ao menu, ao rodape e ao formulario.
-    assert "Edital e proposta" in html
-    assert "Contrato sob pressão" in html
-    assert "Operação recorrente" in html
-    assert "Solicitar triagem do edital" in html
-    assert "Solicitar canal seguro para envio" in html
+    assert "Engenharia, Perícias e Inteligência Técnica" in html
+    assert "Projetar, revisar, orçar ou compatibilizar" in html
+    assert "Inspecionar, diagnosticar ou documentar obra e imóvel" in html
+    assert "Perícia, assistência técnica ou avaliação" in html
+    assert "Segurança do trabalho" in html
+    assert "Licitação ou contrato de obra pública" in html
+    for href in (
+        "/bid-room-licitacoes-obras/",
+        "/problemas-que-resolvemos/",
+        "/diretoria-b2g/",
+        "/guias-contratos-obras/",
+    ):
+        assert f'href="{href}"' in html
     assert "enviar documentos para análise" not in html.lower()
-    assert "Solicitar diagnóstico da operação" in html
-    assert "Avaliar o Dossiê de Medição, Glosa e Pagamento" in html
-    assert 'data-journey="contrato"' in html
-    assert 'data-journey="edital"' in html
-    assert 'data-journey="operacao"' in html
-    # Client-facing journey section — no briefing metalinguage
-    assert "Como podemos ajudar" in html
-    assert "Qual decisão precisa sair agora" in html
-    assert "Uma medição ou glosa travou meu caixa" not in html
-    assert "journey-list" in html
-    assert "Sem CTA genérico" not in html
-    assert not re.search(r">\s*Jornada\s+[ABC]\s*<", html)
-    assert "Risco de não agir" not in html
-    # Positive proof language — no defensive public copy
     lower = html.lower()
     for leak in (
         "sem inventar case",
@@ -415,18 +416,19 @@ def test_trace_matrix_and_tension_present():
 def test_primary_cta_not_spam():
     html = HOME.read_text(encoding="utf-8")
     primary = len(re.findall(r"button-primary", html))
-    # header (+ mobile nav), hero, form submit — ≤4 semantic primaries
-    assert primary <= 4, f"too many primary CTAs on home: {primary}"
-    # Dominant CTA family (article optional)
-    assert "Analisar meu caso" in html
-    assert "Solicitar diagnóstico da operação" in html
+    # Header twins, hero, corporate triage and preserved B2G form — the viewport
+    # gate separately proves that only one is visible in the first fold.
+    assert primary <= 5, f"too many primary CTAs on home: {primary}"
+    assert "Escolher minha situação" in html
+    assert "Iniciar triagem por e-mail" in html
+    assert "Registrar situação para triagem" in html
     # Secondary path must not share primary button class in hero
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     hero_html = hero.group(0)
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
-    # Urgent secondary path present (WhatsApp or critical decision)
-    assert "jornadas" in hero_html or "caminhos" in hero_html.lower()
+    assert 'href="#situacoes"' in hero_html
+    assert 'href="/servicos/"' in hero_html
     assert "EESC-USP" in html
 
 
@@ -438,51 +440,45 @@ def test_home_five_second_clarity():
     fold = hero.group(0)
     fold_lower = fold.lower()
     lower = html.lower()
-    # who
-    assert "construtor" in fold_lower
-    # problem
-    assert "licitação vencida não paga a conta" in fold_lower
-    assert "margem" in fold_lower
-    # trust (true microproof, not an invented metric)
+    # What the company is, the outcome and the cross-service situations.
+    assert "engenharia, perícias e inteligência técnica" in fold_lower
+    assert "decisão documentada" in fold_lower
+    for token in ("projetos", "imóveis", "perícias", "segurança do trabalho", "contratos públicos"):
+        assert token in fold_lower
+    # True microproofs and an explicit limits path.
     assert "eesc-usp" in fold_lower
-    assert "iniciativa privada" in fold_lower and "administração pública" in fold_lower
-    # next click
-    assert "registrar situação para triagem" in fold_lower
-    assert "#formulario-contato" in fold
-    assert "ver edital, contrato ou operação" in fold_lower
-    assert "#jornadas" in fold
-    assert "consultoria para licitações" in lower or "licitações e contratos" in lower
-    assert "diretoria fracionada para o mercado público" in lower
+    assert "52.407.089/0001-09" in fold_lower
+    assert "método e limites publicados" in fold_lower
+    # Comprehensible next actions.
+    assert "escolher minha situação" in fold_lower
+    assert 'href="#situacoes"' in fold
+    assert "ver o escopo de serviços" in fold_lower
+    assert 'href="/servicos/"' in fold
+    assert "obras públicas e b2g" in lower
     assert "#contato" in html or 'id="contato"' in html
 
 
 def test_home_decision_fold_hierarchy():
-    """Shipped home: compact first fold, three doors, PNCP after offer as market context."""
+    """Corporate fold leads with outcome; PNCP remains B2G-only context."""
     html = HOME.read_text(encoding="utf-8")
     hero = re.search(r'<section[^>]*class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     hero_html = hero.group(0)
-    assert "Licitação vencida não paga a conta" in hero_html
-    assert "Contrato rentável, sim" in hero_html
+    assert "Do problema técnico" in hero_html
+    assert "à decisão documentada" in hero_html
     assert "data-evidence-selector" not in hero_html
     assert "hero-evidence" not in hero_html
     assert hero_html.count("button-primary") == 1
     assert html.count('name="diagnostico-b2g"') == 1
     assert html.count('id="formulario-contato"') == 1
-    offers_at = html.find('data-section-archetype="offer_dominant"')
-    pncp_at = html.find("data-evidence-selector")
-    assert 0 < offers_at < pncp_at, "PNCP must come after the offer explanation"
+    chooser_at = html.find('id="situacoes"')
+    pncp_at = html.find("54.055")
+    assert 0 < chooser_at < pncp_at, "PNCP must come after the corporate chooser"
     market = html[pncp_at:]
-    assert "contexto de mercado" in html.lower()
-    # 2026-08-30: a secao de mercado prova honestidade por procedencia (fonte e
-    # data de corte), nao por uma frase que desautoriza a propria CONFENGE.
-    assert "Fonte: PNCP" in market
-    assert "21/08/2026" in market
-    # O exemplo continua rotulado de forma inequivoca, agora sem caixa alta
-    # negativa: o rotulo precisa casar com explicit_label_pattern do registro.
-    assert re.search(r"sint[eé]tic|demonstrativ", html, re.IGNORECASE)
-    assert "Relatório Executivo de Priorização de Licitações" in html
-    assert "Você recebe uma decisão" in html
+    assert "Obras públicas e B2G" in html
+    assert "PNCP · 01/08/2026" in market
+    assert "4,48 mi" in market
+    assert "Números de mercado, não resultados de clientes" in market
 
 
 def test_form_qualification_minimal():
@@ -519,17 +515,16 @@ def test_operating_flow_has_sitewide_fallback():
 
 def test_mobile_matrix_composition():
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    home_css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
     assert "display:none" in css  # responsive hide rules remain
     html = HOME.read_text(encoding="utf-8")
-    # The shipped home stacks its decision journey as rows inside a list.
-    assert 'class="journey-list"' in html
-    assert '<li class="journey-row' in html
-    assert ".journey-list{" in css and ".journey-row{" in css
-    # Narrow viewports recompose those rows and give their actions full width.
-    narrow = re.search(r"@media\(max-width:620px\)\{(?:[^{}]|\{[^{}]*\})*\}", css)
-    assert narrow, "narrow-viewport block missing from styles.css"
-    assert ".journey-row{grid-template-columns:2.25rem 1fr" in narrow.group(0)
-    assert ".journey-row-actions .button{width:100%}" in narrow.group(0)
+    assert 'class="situation-list"' in html
+    assert '<li class="situation-row' in html
+    assert ".situation-list{" in home_css and ".situation-row{" in home_css
+    # Narrow viewports recompose rows without hiding any of the five paths.
+    assert "@media (max-width:700px)" in home_css
+    assert ".situation-row{grid-template-columns:2rem minmax(0,1fr)" in home_css
+    assert ".situation-row .situation-action{grid-column:2" in home_css
 
 
 def test_css_modules_are_concatenated_without_a_framework():

@@ -13,6 +13,7 @@ import pytest
 from scripts.bofu_dominance.frozen_specs.constants import PILLARS
 from scripts.site.public_ia import header_items
 from scripts.site.public_navigation import (
+    CANONICAL_CTA,
     CANONICAL_NAV_ITEMS,
     audit_public_navigation_tree,
     promote_public_navigation,
@@ -483,7 +484,7 @@ def test_schema_describes_the_full_collection_and_breadcrumb() -> None:
     )
 
 
-def test_home_discovery_is_inside_the_existing_commercial_section() -> None:
+def test_home_keeps_deliverables_concrete_inside_the_corporate_journey() -> None:
     home = _html(ROOT / "index.html")
     assert '<link href="/entregas/styles.css" rel="stylesheet"/>' not in home
     assert 'data-home-deliverables-critical=""' in home
@@ -503,25 +504,27 @@ def test_home_discovery_is_inside_the_existing_commercial_section() -> None:
     assert ".hero-deliverable{" in critical_css
     home_css = (ROOT / "assets" / "home-10x.css").read_text(encoding="utf-8")
     assert ".home-deliverables{" in home_css
-    assert "Comparar entregas e artefatos" in home
-    assert 'href="/entregas/"' in home
-    assert f'href="{REPORT_ROUTE}"' in home
-    assert "home-deliverables-result" in home
+    assert "O que sai do trabalho" in home
+    assert "Projeto, revisão ou compatibilização" in home
+    assert "Orçamento ou memória de cálculo" in home
+    assert "Laudo, parecer ou relatório" in home
+    assert "Diagnóstico ou plano de ação" in home
+    assert 'href="/servicos/"' in home
     archetypes = re.findall(r'data-section-archetype="([^"]+)"', home)
-    assert len(archetypes) == 7
+    assert len(archetypes) == 8
     offers = re.search(
         r'<section[^>]+data-section-archetype="offer_dominant".*?</section>',
         home,
         flags=re.DOTALL,
     )
-    assert offers and "home-deliverables" in offers.group(0)
+    assert offers and "corporate-deliverables" in offers.group(0)
 
 
 def test_new_surfaces_do_not_mutate_the_frozen_runtime() -> None:
     brand = json.loads((ROOT / "data/site/brand.json").read_text(encoding="utf-8"))
     labels = [item["label"] for item in brand["navigation"]["desktop"]]
     assert labels == EXPECTED_NAV
-    for path in (ROOT / "index.html", PAGE, REPORT):
+    for path in (ROOT / "index.html", ROOT / "servicos" / "index.html"):
         assert _desktop_labels(path) == EXPECTED_NAV, path
     nav_source = (ROOT / "js/modules/nav.js").read_text(encoding="utf-8")
     assert "Promote the public deliverables library" not in nav_source
@@ -548,7 +551,7 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
     tmp_path: Path,
 ) -> None:
     legacy = """<header>
-    <nav class="desktop-nav"><a href="/#atuacao">Atuação</a><a href="/conteudos/">Conteúdos</a><a aria-current="page" href="/ferramentas/">Qualquer texto</a><a href="/#faq">Dúvidas</a></nav>
+    <nav class="desktop-nav"><a href="/#atuacao">Atuação</a><a href="/conteudos/">Conteúdos</a><a aria-current="page" href="/ferramentas/">Qualquer texto</a><a href="/#faq">Dúvidas</a></nav><a class="button button-primary header-cta" href="/#formulario-contato">Analisar meu caso</a>
     <nav class="mobile-nav"><a href="/bid-room-licitacoes-obras/">Analisar licitação</a><a href="/conteudos/">Conteúdos</a><a href="/ferramentas/">Ferramentas</a><a class="button button-primary" href="/#contato">Analisar meu caso</a></nav>
     </header>"""
     promoted = promote_public_navigation(legacy, relative_path="ferramentas/index.html")
@@ -583,7 +586,15 @@ def test_public_artifact_navigation_promotion_is_ordered_and_fail_closed(
         assert len(current) == 1
         assert 'href="/conteudos/"' in current[0]
         if index == 1:
-            assert "Analisar meu caso" in block
+            assert CANONICAL_CTA[0] in block
+            assert f'href="{CANONICAL_CTA[1]}"' in block
+
+    assert promoted.count(CANONICAL_CTA[0]) == 2
+    assert (
+        f'class="button button-primary header-cta" '
+        f'data-cta-position="header_cta" data-event-name="cta_click" '
+        f'href="{CANONICAL_CTA[1]}"'
+    ) in promoted
 
     artifact = tmp_path / "artifact"
     artifact.mkdir()
@@ -657,9 +668,11 @@ def test_asset_identifiers_are_stable_and_do_not_contain_pii() -> None:
     assert len(ids) == len(set(ids)), f"duplicate cta ids: {ids}"
 
     home = _html(ROOT / "index.html")
-    for cta_id in ("home-know-deliverables", "home-open-first-deliverable"):
-        tag = re.search(rf'<a\b[^>]*data-cta-id="{cta_id}"[^>]*>', home)
-        assert tag and 'data-event-name="cta_click"' in tag.group(0)
+    primary = re.search(
+        r'<a\b[^>]*data-cta-position="hero"[^>]*href="#situacoes"[^>]*>',
+        home,
+    )
+    assert primary and 'data-event-name="cta_click"' in primary.group(0)
 
 
 def test_every_bundle_transition_is_attributable_to_its_origin() -> None:

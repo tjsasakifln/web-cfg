@@ -710,9 +710,15 @@ def gate_index_surface() -> GateReport:
 def gate_brand_shell() -> GateReport:
     """Public commercial + indexable content must use brand navigation and footer blurb."""
     from scripts.site.brand import footer_blurb, load_brand, org_description
+    from scripts.site.public_ia import load_ia_map
 
     brand = load_brand()
+    ia = load_ia_map()
     nav_labels = [n["label"] for n in (brand.get("navigation") or {}).get("desktop") or []]
+    rollout = ia.get("rollout") or {}
+    staged_routes = set(rollout.get("campaign_routes") or [])
+    staged_shell = rollout.get("shell_scope") == "campaign_routes_only"
+    legacy_labels = [n.get("label", "") for n in (rollout.get("legacy_header") or [])]
     org = org_description(brand)
     foot = footer_blurb(brand)
     findings: list[Finding] = []
@@ -747,6 +753,13 @@ def gate_brand_shell() -> GateReport:
             continue
         scanned += 1
         html = p.read_text(encoding="utf-8", errors="replace")
+        rel = p.relative_to(ROOT)
+        route = "/" if rel == Path("index.html") else f"/{rel.parent.as_posix()}/"
+        expected_nav_labels = (
+            nav_labels
+            if not staged_shell or route in staged_routes
+            else legacy_labels
+        )
         for marker in legacy_nav_markers:
             if marker in html and 'class="desktop-nav"' in html:
                 # only fail if desktop nav still has old anchors as primary
@@ -792,13 +805,13 @@ def gate_brand_shell() -> GateReport:
                 )
             )
         # Require at least one brand nav label present
-        if nav_labels and not any(lab in html for lab in nav_labels[:3]):
+        if expected_nav_labels and not any(lab in html for lab in expected_nav_labels[:3]):
             findings.append(
                 Finding(
                     gate="brand_shell",
                     path=str(p.relative_to(ROOT)),
                     reason="missing_brand_nav_labels",
-                    excerpt=",".join(nav_labels[:3]),
+                    excerpt=",".join(expected_nav_labels[:3]),
                 )
             )
 
@@ -2082,7 +2095,6 @@ def gate_legacy_entity_matrix() -> GateReport:
         "/ia": "410",
         "/automacao": "410",
         "/blog": "301",
-        "/servicos": "301",
     }
     for path, code in expected.items():
         # line like `/vision     /404.html  410`
@@ -2095,6 +2107,27 @@ def gate_legacy_entity_matrix() -> GateReport:
                     excerpt=f"{path} -> {code}",
                 )
             )
+
+    # `/servicos/` is a first-class corporate candidate in MV-04. It must be a
+    # real, fail-closed page and must no longer hand every visitor to B2G.
+    services_page = ROOT / "servicos" / "index.html"
+    if not services_page.is_file():
+        findings.append(
+            Finding(
+                gate="legacy_entity",
+                path="servicos/index.html",
+                reason="corporate_services_page_missing",
+            )
+        )
+    if re.search(r"^/servicos/?\s+\S+\s+30[1278]", redirects, re.M):
+        findings.append(
+            Finding(
+                gate="legacy_entity",
+                path="_redirects",
+                reason="corporate_services_still_redirected",
+                excerpt="/servicos/ must not collapse into the B2G hub",
+            )
+        )
 
     # Public pages should not promote abandoned products
     for p in [ROOT / "index.html", ROOT / "diretoria-b2g" / "index.html"]:
@@ -2111,7 +2144,11 @@ def gate_legacy_entity_matrix() -> GateReport:
                 )
             )
 
-    return GateReport(ok=not findings, findings=findings, stats={"rules_checked": len(expected)})
+    return GateReport(
+        ok=not findings,
+        findings=findings,
+        stats={"rules_checked": len(expected), "corporate_services_page": services_page.is_file()},
+    )
 
 
 def gate_similarity_indexable(threshold: float = 0.55) -> GateReport:
@@ -3851,6 +3888,29 @@ def gate_instance_index_ready(root: Path | None = None) -> GateReport:
         for entry in (governance.get("families") or [])
         if entry.get("family_id")
     }
+    # A route candidate can be explicitly held by the IA rollout before it has
+    # a public-family declaration. This is narrower than a noindex exception:
+    # it requires an exact route, hidden chrome, a triage fallback and a named
+    # integration owner. It can never authorize indexation.
+    candidate_noindex_routes: dict[str, str] = {}
+    ia_path = ctx.base / "data/site/public-ia-map.json"
+    if ia_path.is_file():
+        ia = _read_json(ia_path)
+        rollout = ia.get("rollout") or {}
+        candidate_state = "candidate_noindex_until_mv09_registry"
+        if (
+            rollout.get("corporate_services_hub") == candidate_state
+            and rollout.get("activation_owner")
+        ):
+            for hub in ia.get("hubs") or []:
+                route = str(hub.get("route") or "")
+                if (
+                    route
+                    and hub.get("index_state") == candidate_state
+                    and hub.get("chrome") == "hidden"
+                    and str(hub.get("next_action") or "").startswith("/#triagem")
+                ):
+                    candidate_noindex_routes[route] = str(rollout["activation_owner"])
 
     scanned = 0
     ready_count = 0
@@ -3902,6 +3962,20 @@ def gate_instance_index_ready(root: Path | None = None) -> GateReport:
         fid = str((family or {}).get("id") or "")
         entry = governance_by_family.get(fid)
         if not (entry and entry.get("reason_code")):
+            if route in candidate_noindex_routes:
+                findings.append(
+                    Finding(
+                        gate="instance_index_ready",
+                        path=rel,
+                        reason="candidate_noindex_pending_family_activation",
+                        excerpt=(
+                            f"{route} is fail-closed until family declaration and "
+                            f"activation by {candidate_noindex_routes[route]}"
+                        ),
+                        severity="warn",
+                    )
+                )
+                continue
             noindex_without_reason.append(route)
             findings.append(
                 Finding(
@@ -3928,6 +4002,7 @@ def gate_instance_index_ready(root: Path | None = None) -> GateReport:
             "index_ready_but_noindex": index_ready_but_noindex,
             "indexable_without_evidence": len(indexable_without_evidence),
             "noindex_without_reason": noindex_without_reason,
+            "candidate_noindex_pending_family_activation": sorted(candidate_noindex_routes),
             "blocking_subgates": dict(blocking_histogram.most_common()),
         },
     )
