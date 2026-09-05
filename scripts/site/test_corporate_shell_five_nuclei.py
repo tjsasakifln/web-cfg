@@ -204,7 +204,7 @@ def test_banned_empty_marketing_absent_from_home() -> None:
 def test_private_intelligence_placeholder_is_fail_closed() -> None:
     html = _home()
     block = re.search(
-        r'<aside\b[^>]*id="inteligencia-privada"[\s\S]*?</aside>', html
+        r'<div\b[^>]*id="inteligencia-privada"[\s\S]*?</div>', html
     )
     assert block
     text = block.group(0)

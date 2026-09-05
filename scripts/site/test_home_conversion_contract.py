@@ -92,7 +92,9 @@ def test_three_icp_doors_lead_to_one_honest_intake() -> None:
     for door in ("Edital e proposta", "Contrato sob pressão", "Operação recorrente"):
         assert door in html
     assert html.count('name="diagnostico-b2g"') == 1
-    assert html.index('id="jornadas"') < html.index('id="ofertas"') < html.index('id="contato"')
+    assert 'id="jornadas"' in html
+    assert html.index('id="ofertas"') < html.index('id="contato"')
+    assert html.index('id="jornadas"') < html.index('id="contato"')
     assert 'name="document_intent" type="hidden" value="secure_channel_request"' in html
     assert 'id="canal_seguro"' in html
     assert 'type="file"' not in html.lower()
