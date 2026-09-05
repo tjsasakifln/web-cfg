@@ -46,7 +46,7 @@
     },
     {
       "name": "repository_artifact_name",
-      "re": "netlify\\.toml|netlify/functions|@netlify/|netlify-cli|netlify-blobs|netlify_search_observation|NETLIFY_[A-Z_]+|`netlify|functions\\s*=\\s*`?netlify",
+      "re": "netlify\\.toml|netlify/functions|@netlify/|netlify-cli|netlify-blobs|netlify_search_observation|NETLIFY_(?!DEPLOY_SHA\\b)[A-Z_]+|`netlify|functions\\s*=\\s*`?netlify",
       "reason": "Names a file, package or variable that exists in this repository."
     },
     {
@@ -101,6 +101,11 @@
       "name": "prod_traffic_unchanged_marker",
       "re": "PROD_TRAFFIC_UNCHANGED",
       "detail": "the retired marker that declared the cutover a no-op for production traffic"
+    },
+    {
+      "name": "retired_netlify_deploy_proof",
+      "re": "\\bNETLIFY_DEPLOY_SHA\\b",
+      "detail": "the retired Netlify deploy field used as canonical production proof"
     },
     {
       "name": "where_to_set_netlify",

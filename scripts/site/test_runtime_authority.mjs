@@ -260,6 +260,7 @@ test("the instructions that used to hide outside the allowlist are now rejected"
     "WHERE_TO_SET:\nNetlify production environment for confenge.com.br",
     "host: Netlify",
     "PROD_TRAFFIC_UNCHANGED",
+    "NETLIFY_DEPLOY_SHA=deadbeef",
   ];
   for (const text of cases) {
     const hits = findForbiddenProductionInstructions(text, "<case>");

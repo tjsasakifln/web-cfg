@@ -97,9 +97,10 @@ if (!BASE) {
       res.end("not found");
       return;
     }
-    // Model the delivery contract both production hosts implement. Netlify and
-    // the Netcup origin (deploy/netcup/nginx/confenge-web-http.conf) gzip every
-    // text response; serving this fixture uncompressed measured a cost that no
+    // Model the delivery contract implemented by the canonical Netcup origin
+    // (deploy/netcup/nginx/confenge-web-http.conf). The legacy Netlify preview
+    // also gzips text responses. Serving this fixture uncompressed measured a
+    // cost that no
     // visitor pays and pushed the score of text-heavy pages down by hundreds of
     // milliseconds of imaginary transfer. Thresholds are unchanged — only the
     // transport now matches production. Cache the gzip so lab TTFB models nginx

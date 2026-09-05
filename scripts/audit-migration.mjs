@@ -131,8 +131,8 @@ async function main() {
   const isLocal =
     /localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]/i.test(base) ||
     base.startsWith("http://127.");
-  // Netlify redirects (host + path rules in netlify.toml) are not applied by
-  // plain static servers; only production/Netlify edge proves them over HTTP.
+  // Redirect rules from netlify.toml are not applied by plain static servers.
+  // Test them only on a deployed edge: canonical Netcup or the legacy preview.
   const httpRedirectsAuthoritative = isProd && !isLocal;
   const failures = [];
   const warnings = [];

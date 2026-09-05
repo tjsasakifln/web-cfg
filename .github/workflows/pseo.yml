@@ -31,7 +31,7 @@ jobs:
         run: npm ci --engine-strict
       - name: Workflow gate shape
         run: npm run test:workflow-gates
-      - name: Netlify publish must equal _site
+      - name: Legacy Netlify preview must publish the gated _site artifact
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -48,7 +48,7 @@ jobs:
                   sys.exit(1)
           print("ok: netlify publish=_site command=build:site")
           PY
-      - name: Build site (exact production command)
+      - name: Build the canonical public artifact
         run: npm run build:site
       - name: Published medição cluster originality
         run: npm run test:cluster-medicao-published
@@ -84,7 +84,7 @@ jobs:
               print("FAIL: _site missing after build:site")
               sys.exit(1)
 
-          # Align netlify publish dir with artifact
+          # Keep the legacy preview publish dir aligned with the gated artifact.
           toml = (root / "netlify.toml").read_text(encoding="utf-8")
           m = re.search(r'publish\s*=\s*"([^"]+)"', toml)
           if not m or m.group(1) != "_site":
