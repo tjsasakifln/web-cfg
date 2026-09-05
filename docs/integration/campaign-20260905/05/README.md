@@ -1,6 +1,6 @@
 # MV-05 — engenharia privada de alta intenção
 
-`CONFENGE_MV_CAMPAIGN=05`  
+`CONFENGE_MV_CAMPAIGN=05`
 `READY_FOR_INTEGRATION=YES`
 
 Este pacote entrega candidatos isolados. Ele **não publica**, não altera o checkout público, não cria rota no root, não muda registry, navegação, sitemap, formulário ou runtime. A promoção pertence à MV-09 e continua condicionada aos gates descritos abaixo.

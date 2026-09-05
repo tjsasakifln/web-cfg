@@ -34,4 +34,3 @@ Remover o elemento `[data-integration-only]` no copy. Preservar canonical, H1, a
 - `npm run inbound:gates`;
 - testes de schema, canonical, acessibilidade, privacidade, analytics e captura;
 - smoke de 390×844 e 1366×768 no artefato integrado.
-

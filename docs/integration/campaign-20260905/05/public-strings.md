@@ -53,4 +53,3 @@ Este inventário traduz o contrato das issues #602/#583 para o que o visitante l
 ## Preço e proposta
 
 Não há número, faixa, prazo ou disponibilidade publicados. As páginas explicam de forma humana que a proposta depende de recorte, qualidade/quantidade de arquivos, disciplinas, interfaces, revisões, necessidade de campo, local, ensaios e responsabilidade técnica. “Escopo após análise técnica” não esconde um preço existente; registra que não há autoridade para publicá-lo antes do enquadramento.
-
