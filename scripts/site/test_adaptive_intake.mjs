@@ -518,6 +518,9 @@ for (const nucleus of Object.keys(NUCLEI)) {
   if (!formJs.includes("stripAdaptiveBarriers") || !formJs.includes("persistAdaptiveDraft")) {
     fail("formjs_barrier");
   }
+  if (!formJs.includes("if (step1 && !step1.contains(el)")) {
+    fail("step1_requires_fields_outside_step1");
+  }
   pass("sandbox_structure");
 }
 

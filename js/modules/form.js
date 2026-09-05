@@ -345,7 +345,8 @@
             form.querySelector('[name="sensitive_docs_ack"]'),
           ];
           requiredAdaptive.forEach((el) => {
-            if (!el) { ok = false; return; }
+            if (!el) return;
+            if (step1 && !step1.contains(el) && el.type !== 'hidden') return;
             const checked = el.type === 'checkbox' ? el.checked : String(el.value || '').trim();
             if (!checked) {
               setControlInvalid(el, true, 'Preencha este campo.');
