@@ -385,6 +385,18 @@ def test_brand_shell_on_indexable_conteudos():
     assert r.ok, r.findings[:10]
 
 
+def test_frozen_offer_keeps_pre_campaign_nav_without_failing_brand_shell():
+    from scripts.site.shell_nav import FROZEN_SHELL_FILES
+
+    rel = "diagnostico-b2g-360/index.html"
+    assert rel in FROZEN_SHELL_FILES
+    html = (ROOT / rel).read_text(encoding="utf-8")
+    assert "Obra privada" not in html
+    assert 'class="desktop-nav"' in html
+    r = gate_brand_shell()
+    assert not any(f.path == rel for f in r.findings), r.findings
+
+
 def test_conversion_indexable_has_cta():
     r = gate_conversion()
     assert r.ok, r.findings[:10]

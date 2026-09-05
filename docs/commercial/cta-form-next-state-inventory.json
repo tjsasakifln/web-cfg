@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 128
+    "expected_declared_ctas": 120
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 26,
-    "declared_ctas": 128,
+    "declared_ctas": 120,
     "protected_routes_with_capture": [],
     "problems": []
   },
@@ -3122,14 +3122,14 @@
           "current_label": "Registrar situação para triagem",
           "useful_next_state": "A situação fica registrada para triagem; o protocolo confirma a gravação e a confirmação indica qual decisão vem depois.",
           "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "pre_form_value": "Registre o contexto para a CONFENGE separar edital, contrato e operação e indicar o próximo enquadramento.",
+          "pre_form_value": "Registre a demanda e a decisão que está na mesa para a CONFENGE enquadrar a entrega, a prova necessária e a capacidade de atendimento.",
           "pre_form_value_visible": true,
           "field_purpose": {
-            "visible_text": "Nome identifica o responsável; o contato permite retorno; a necessidade direciona a triagem. Empresa, urgência e contexto são opcionais. WhatsApp: DDD e 10/11 dígitos; e-mail completo.",
+            "visible_text": "Nome identifica o responsável; o contato permite retorno; o núcleo direciona a triagem. Empresa e urgência são opcionais. WhatsApp: DDD e 10/11 dígitos; e-mail completo.",
             "visible": true,
             "required": [
               "nome",
-              "estagio",
+              "nucleus_id",
               "consentimento",
               "email_or_whatsapp"
             ],
@@ -3138,12 +3138,12 @@
               "email",
               "empresa",
               "urgencia",
+              "b2g_situation",
               "faixa_contrato",
               "risco_em_jogo",
               "frequencia",
               "maturidade_documental",
               "capacidade_interna",
-              "mensagem",
               "canal_seguro"
             ]
           },
@@ -3194,32 +3194,16 @@
         {
           "cta_id": "",
           "position": "hero",
-          "href": "#jornadas",
-          "stage": "compare",
+          "href": "/ferramentas/prontidao-tecnica-obra-privada/",
+          "stage": "calculate",
           "commitment": "low",
-          "current_label": "Ver edital, contrato ou operação",
-          "useful_next_state": "Abre o destino declarado por “Ver edital, contrato ou operação” para continuar a decisão.",
+          "current_label": "Diagnóstico de prontidão técnica",
+          "useful_next_state": "Abre a ferramenta pública para calcular ou inspecionar a situação antes do contato.",
           "actual_receipt": "Destino renderizado; esta ação isolada não emite receipt.",
           "field_purpose": "not_applicable",
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
           "event_semantics": [
             "cta_click"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "journey_b",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Solicitar triagem do edital",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_click",
-            "cta_view"
           ]
         },
         {
@@ -3235,22 +3219,6 @@
           "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
           "event_semantics": [
             "cta_click"
-          ]
-        },
-        {
-          "cta_id": "",
-          "position": "journey_c",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Solicitar diagnóstico da operação",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_click",
-            "cta_view"
           ]
         },
         {
@@ -3284,99 +3252,9 @@
           ]
         },
         {
-          "cta_id": "home-market-context-local-form",
-          "position": "market_context",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Registrar contrato para triagem",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_view"
-          ]
-        },
-        {
-          "cta_id": "home-market-context-local-whatsapp",
-          "position": "market_context",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20de%20at%C3%A9%20R%24%20250%20mil%20e%20quero%20entender%20como%20a%20CONFENGE%20pode%20ajudar.",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Pedir triagem pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "whatsapp_click"
-          ]
-        },
-        {
-          "cta_id": "home-market-context-regional-form",
-          "position": "market_context",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Registrar contrato para triagem",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_view"
-          ]
-        },
-        {
-          "cta_id": "home-market-context-regional-whatsapp",
-          "position": "market_context",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20entre%20R%24%20250%20mil%20e%20R%24%201%20milh%C3%A3o%20e%20quero%20entender%20como%20a%20CONFENGE%20pode%20ajudar.",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Pedir triagem pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "whatsapp_click"
-          ]
-        },
-        {
-          "cta_id": "home-market-context-strategic-form",
-          "position": "market_context",
-          "href": "#formulario-contato",
-          "stage": "register_context",
-          "commitment": "medium",
-          "current_label": "Registrar contrato para triagem",
-          "useful_next_state": "Leva ao formulário que registra o contexto mínimo e só confirma depois da persistência.",
-          "actual_receipt": "lead_id ou receipt_id persistido antes da página de confirmação",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "cta_view"
-          ]
-        },
-        {
-          "cta_id": "home-market-context-strategic-whatsapp",
-          "position": "market_context",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20contrato%20p%C3%BAblico%20acima%20de%20R%24%201%20milh%C3%A3o%20e%20quero%20entender%20como%20a%20CONFENGE%20pode%20ajudar.",
-          "stage": "talk",
-          "commitment": "medium",
-          "current_label": "Pedir triagem pelo WhatsApp",
-          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
-          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
-          "field_purpose": "not_applicable",
-          "boundary": "O formulário não recebe arquivos, não cobra e não conclui contratação; documentos seguem apenas por canal seguro combinado depois do protocolo.",
-          "event_semantics": [
-            "whatsapp_click"
-          ]
-        },
-        {
           "cta_id": "",
           "position": "contact",
-          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Tenho%20um%20problema%20urgente%20em%20contrato%20p%C3%BAblico%20e%20quero%20solicitar%20um%20canal%20seguro%20para%20envio.",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20falar%20com%20a%20CONFENGE%20sobre%20uma%20situa%C3%A7%C3%A3o%20t%C3%A9cnica.",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "WhatsApp (48) 98834-4559",
@@ -3392,7 +3270,7 @@
         {
           "cta_id": "",
           "position": "contact",
-          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Contato%20CONFENGE%20-%20licitacao%20ou%20contrato&body=Ol%C3%A1%2C%20Tiago.%0A%0AEmpresa%3A%0ASitua%C3%A7%C3%A3o%20(contrato%2Fedital%2Fopera%C3%A7%C3%A3o)%3A%0AUrg%C3%AAncia%3A%0A",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Contato%20CONFENGE&body=Ol%C3%A1%2C%20Tiago.%0A%0AEmpresa%3A%0ASitua%C3%A7%C3%A3o%20t%C3%A9cnica%3A%0AUrg%C3%AAncia%3A%0A",
           "stage": "talk",
           "commitment": "medium",
           "current_label": "E-mail tiago.sasaki@confenge.com.br",

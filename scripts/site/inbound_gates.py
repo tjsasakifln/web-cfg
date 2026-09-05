@@ -710,6 +710,7 @@ def gate_index_surface() -> GateReport:
 def gate_brand_shell() -> GateReport:
     """Public commercial + indexable content must use brand navigation and footer blurb."""
     from scripts.site.brand import footer_blurb, load_brand, org_description
+    from scripts.site.shell_nav import FROZEN_SHELL_FILES
 
     brand = load_brand()
     nav_labels = [n["label"] for n in (brand.get("navigation") or {}).get("desktop") or []]
@@ -791,12 +792,19 @@ def gate_brand_shell() -> GateReport:
                     excerpt=old_org[:80],
                 )
             )
-        # Require at least one brand nav label present
-        if nav_labels and not any(lab in html for lab in nav_labels[:3]):
+        # Require at least one current brand nav label. Frozen BOFU pillars
+        # keep pre-campaign chrome until 2026-09-16; shell_nav is forbidden
+        # to rewrite them, so current labels are not required on those bytes.
+        rel = str(p.relative_to(ROOT))
+        if (
+            nav_labels
+            and rel not in FROZEN_SHELL_FILES
+            and not any(lab in html for lab in nav_labels[:3])
+        ):
             findings.append(
                 Finding(
                     gate="brand_shell",
-                    path=str(p.relative_to(ROOT)),
+                    path=rel,
                     reason="missing_brand_nav_labels",
                     excerpt=",".join(nav_labels[:3]),
                 )
