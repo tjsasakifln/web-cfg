@@ -36,7 +36,7 @@ Arquivos owner:
 - `data/commercial/cta-form-next-state.v1.json`;
 - `docs/commercial/cta-form-next-state-inventory.json`.
 
-A página agora mantém dois caminhos reais paralelos ao formulário: WhatsApp e e-mail. O censo derivado cresce de 128 para 130 CTAs declaradas. Atualizar `coverage.expected_declared_ctas` para `130` e regenerar o inventário com o script canônico. O telefone continua presente, mas não entra no censo atual de WhatsApp/e-mail.
+A página agora mantém três caminhos reais paralelos ao formulário: WhatsApp, e-mail e telefone. O censo derivado cresce de 128 para 131 CTAs declaradas. Atualizar `coverage.expected_declared_ctas` para `131` e regenerar o inventário com o script canônico.
 
 Não remover esses canais para satisfazer o contador: eles são o fallback obrigatório quando a autoridade externa ou o POST estiverem indisponíveis.
 
