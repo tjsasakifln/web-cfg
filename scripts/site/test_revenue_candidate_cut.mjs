@@ -54,7 +54,14 @@ for (const route of [
 ]) {
   expect("b2g_link_" + route, home.includes(`href="${route}"`));
 }
-expect("b2g_form_conserved", /id="formulario-contato"/.test(home) && /name="diagnostico-b2g"/.test(home));
+expect("b2g_form_conserved", /id="formulario-contato"/.test(home) && /name="diagnostico-confenge"/.test(home));
+expect("home_has_nucleus_chooser_field", /name="nucleus_id"/.test(home));
+expect(
+  "b2g_pages_keep_b2g_form",
+  /name="diagnostico-b2g"/.test(
+    readFileSync(resolve(root, "ferramentas/diagnostico-defesa-margem/index.html"), "utf8"),
+  ),
+);
 expect("canonical_home", home.includes('href="https://confenge.com.br/" rel="canonical"'));
 
 expect("public_canary_exists", existsSync(resolve(root, "ferramentas/prontidao-tecnica-obra-privada/index.html")));

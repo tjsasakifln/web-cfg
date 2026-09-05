@@ -426,7 +426,7 @@ async function main() {
       return {
         h1: !!document.querySelector("#hero-title"),
         phases: document.querySelectorAll(".macro-phase").length,
-        form: !!document.querySelector('form[name="diagnostico-b2g"]'),
+        form: !!document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]'),
         hasMargin: /margem/i.test(t),
       };
     });
@@ -477,7 +477,7 @@ async function main() {
     await page.setViewport({ width: 1024, height: 800 });
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const invalid = await page.evaluate(() => {
-      const form = document.querySelector('form[name="diagnostico-b2g"]');
+      const form = document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]');
       if (!form) return false;
       // Prefer Continuar (step 1) when multi-step is active
       const next = form.querySelector("[data-form-next]");
@@ -645,7 +645,7 @@ async function main() {
     if (!href || !href.includes("#formulario-contato")) {
       throw new Error(`hero CTA href ${href}`);
     }
-    const form = await page.$("#formulario-contato, #contato form, form[name='diagnostico-b2g']");
+    const form = await page.$("#formulario-contato, #contato form, form[name='diagnostico-b2g'], form[name='diagnostico-confenge']");
     if (!form) throw new Error("contact form missing");
     ok("primary_cta_targets_form");
   } catch (e) {
@@ -770,7 +770,7 @@ async function main() {
       window.scrollTo(0, 0);
       document.querySelector('.hero a[href="#formulario-contato"]').click();
       await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(resolveFrame)));
-      document.querySelector('.hero a[href="#jornadas"]').click();
+      document.querySelector('a[href="#jornadas"]').click();
     });
     await new Promise((r) => setTimeout(r, 2600));
     const competing = await page.evaluate(() => {

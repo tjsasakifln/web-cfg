@@ -57,6 +57,10 @@ JOURNEY_PHRASES = (
     "contrato sob pressão",
     "obras públicas",
 )
+HEADER_DOOR_PHRASES = (
+    "obra privada",
+    "obras públicas",
+)
 REQUIRED_NUCLEUS_IDS = (
     "expert_evidence_assistance",
     "property_valuation",
@@ -66,6 +70,7 @@ REQUIRED_NUCLEUS_IDS = (
 )
 TAXONOMY_DRAFT_ID = "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904"
 B2G_NUCLEUS_HREF = "/servicos-obras-publicas/"
+PRIVATE_DOOR_HREF = "/ferramentas/prontidao-tecnica-obra-privada/"
 CONTACT = {
     "email_href": "mailto:tiago.sasaki@confenge.com.br",
     "email_label": "tiago.sasaki@confenge.com.br",
@@ -640,14 +645,16 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
     if any(href.startswith("/#") or href.startswith("#") for href in hrefs):
         errors.append("header destinations must be real pages, never home anchors")
     labels = " ".join(item["label"].lower() for item in destinations)
-    found_journeys = [phrase for phrase in JOURNEY_PHRASES if phrase in labels]
-    if len(found_journeys) != len(JOURNEY_PHRASES):
-        missing = sorted(set(JOURNEY_PHRASES) - set(found_journeys))
-        errors.append(f"header misses conserved B2G visitor language: {missing}")
+    found_doors = [phrase for phrase in HEADER_DOOR_PHRASES if phrase in labels]
+    if len(found_doors) != len(HEADER_DOOR_PHRASES):
+        missing = sorted(set(HEADER_DOOR_PHRASES) - set(found_doors))
+        errors.append(f"header misses the two public doors: {missing}")
     if "b2g" in labels:
         errors.append("header must not use the term B2G as a visitor label")
     if B2G_NUCLEUS_HREF not in hrefs:
         errors.append(f"header must keep B2G reachable via {B2G_NUCLEUS_HREF}")
+    if PRIVATE_DOOR_HREF not in hrefs:
+        errors.append(f"header must keep the private door at {PRIVATE_DOOR_HREF}")
     cta = header_cta(data)
     if not cta.get("label") or not cta.get("href"):
         errors.append("header CTA missing")
@@ -683,6 +690,11 @@ def validate_contract(ia: dict[str, Any] | None = None) -> list[str]:
         if nucleus_id == "public_works_b2g":
             if state != "index" or href != B2G_NUCLEUS_HREF:
                 errors.append("public_works_b2g must stay indexable at the existing B2G hub")
+        elif nucleus_id == "building_engineering_documentation":
+            if state != "index" or href != PRIVATE_DOOR_HREF:
+                errors.append(
+                    "building_engineering_documentation must publish the private readiness diagnostic"
+                )
         elif state != "withheld":
             errors.append(f"{nucleus_id} must remain withheld until offer/proof/action exist")
         elif href not in {"/#formulario-contato", "#formulario-contato"}:
@@ -802,6 +814,6 @@ def first_viewport_names_journey(html: str, ia: dict[str, Any] | None = None) ->
         r'<header class="site-header".*?</header>', html, re.S | re.I
     )
     blob = (header.group(0) if header else html[:4000]).lower()
-    if "b2g" in blob and not any(p in blob for p in JOURNEY_PHRASES):
+    if "b2g" in blob and not any(p in blob for p in HEADER_DOOR_PHRASES):
         return False
-    return any(phrase in blob for phrase in JOURNEY_PHRASES)
+    return all(phrase in blob for phrase in HEADER_DOOR_PHRASES)

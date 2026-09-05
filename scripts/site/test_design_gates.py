@@ -271,9 +271,8 @@ def test_home_card_grid_limit():
             legacy_grids += 1
     assert legacy_grids <= 2, f"too many legacy card grids on home: {legacy_grids}"
     # Dominant offer hierarchy
-    assert "offer-dominant" in html
-    assert "offer-paths" in html
-    assert html.find("offer-dominant") < html.find("offer-paths") or "Diretoria Fracionada" in html
+    assert "offer_dominant" in html or "offer-dominant" in html
+    assert "Diretoria Fracionada" in html
     assert "Diretoria Fracionada para o Mercado Público" in html
     assert "Engenharia, Perícias e Inteligência Técnica" in html
     assert "Decisão técnica documentada" in html
@@ -361,15 +360,15 @@ def test_offer_depth_and_distinct_layouts():
 
 def test_journey_accessible_without_js():
     html = HOME.read_text(encoding="utf-8")
-    assert "data-journey-enhance" in html or "macro-phases" in html
-    # Four macro-phases present as real content (consolidated from 8-stage journey)
-    for stage in ("j-mercado", "j-decisao", "j-contrato", "j-aprendizado"):
-        assert f'id="{stage}"' in html
-    assert "macro-phase" in html or "stage-meta" in html
+    assert "journey-list" in html or "macro-phases" in html or "data-journey-enhance" in html
+    assert 'id="jornada-edital"' in html
+    assert 'id="jornada-contrato"' in html
+    assert 'id="jornada-operacao"' in html
+    assert "journey-kind" in html
     # Progressive disclosure via native details — works without JS
     assert "<details" in html
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    assert "macro-phase" in css or "journey-stage" in css
+    assert "journey-list" in css or "macro-phase" in css or "journey-stage" in css
 
 
 def test_trace_matrix_and_tension_present():
@@ -382,17 +381,16 @@ def test_trace_matrix_and_tension_present():
     assert "Edital e proposta" in html
     assert "Contrato sob pressão" in html
     assert "Operação recorrente" in html
-    assert "Solicitar triagem do edital" in html
     assert "Solicitar canal seguro para envio" in html
     assert "enviar documentos para análise" not in html.lower()
-    assert "Solicitar diagnóstico da operação" in html
     assert "Avaliar o Dossiê de Medição, Glosa e Pagamento" in html
+    assert "Diagnóstico de prontidão técnica" in html
     assert 'data-journey="contrato"' in html
     assert 'data-journey="edital"' in html
     assert 'data-journey="operacao"' in html
     # Client-facing journey section — no briefing metalinguage
     assert "Como podemos ajudar" in html
-    assert "Qual decisão precisa sair agora" in html
+    assert "Edital, contrato ou operação recorrente" in html or "Qual decisão precisa sair agora" in html
     assert "Uma medição ou glosa travou meu caixa" not in html
     assert "journey-list" in html
     assert "Sem CTA genérico" not in html
@@ -419,14 +417,14 @@ def test_primary_cta_not_spam():
     assert primary <= 4, f"too many primary CTAs on home: {primary}"
     # Dominant CTA family (article optional)
     assert "Analisar meu caso" in html
-    assert "Solicitar diagnóstico da operação" in html
+    assert "Diagnóstico de prontidão técnica" in html
     # Secondary path must not share primary button class in hero
     hero = re.search(r'class="hero[\s\S]*?</section>', html)
     assert hero, "hero missing"
     hero_html = hero.group(0)
     assert hero_html.count("button-primary") == 1, "hero must have exactly one primary CTA"
     # Urgent secondary path present (WhatsApp or critical decision)
-    assert "jornadas" in hero_html or "caminhos" in hero_html.lower()
+    assert "prontidão técnica" in hero_html.lower() or "jornadas" in hero_html
     assert "EESC-USP" in html
 
 
@@ -449,8 +447,8 @@ def test_home_five_second_clarity():
     # next click
     assert "registrar situação para triagem" in fold_lower
     assert "#formulario-contato" in fold
-    assert "ver edital, contrato ou operação" in fold_lower
-    assert "#jornadas" in fold
+    assert "diagnóstico de prontidão técnica" in fold_lower
+    assert "/ferramentas/prontidao-tecnica-obra-privada/" in fold
     assert "id=\"nucleos\"" in html
     assert "licitações e contratos" in lower
     assert "diretoria fracionada para o mercado público" in lower
@@ -468,10 +466,10 @@ def test_home_decision_fold_hierarchy():
     assert "data-evidence-selector" not in hero_html
     assert "hero-evidence" not in hero_html
     assert hero_html.count("button-primary") == 1
-    assert html.count('name="diagnostico-b2g"') == 1
+    assert html.count('name="diagnostico-confenge"') == 1
     assert html.count('id="formulario-contato"') == 1
     offers_at = html.find('data-section-archetype="offer_dominant"')
-    pncp_at = html.find("data-evidence-selector")
+    pncp_at = html.find('id="mercado-pncp"')
     assert 0 < offers_at < pncp_at, "PNCP must come after the offer explanation"
     market = html[pncp_at:]
     assert "contexto de mercado" in html.lower()

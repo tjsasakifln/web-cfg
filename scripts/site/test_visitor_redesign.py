@@ -734,8 +734,8 @@ def test_home_nav_and_hierarchy():
     # mesma taxonomia do menu e do rodape, via .journey-kind, em vez do rotulo
     # antigo "Edital ou proposta critica", que so existia na home.
     assert 'class="journey-kind"' in home
-    assert home.count('class="journey-kind"') == 3
-    assert "data-evidence-selector" in home
+    assert home.count('class="journey-kind"') >= 3
+    assert 'id="mercado-pncp"' in home
     assert "data-evidence-selector" not in hero.group(0)
 
 

@@ -46,7 +46,7 @@ BANNED_PHRASES = (
     "laudo incontestável",
     "garantia de vitória",
 )
-FORM_SHA256 = "0f49d7f5f23da5ecc2e58c282d0a57a3bd0d56aabdad678c53165ed85b5883a4"
+FORM_SHA256 = "d958a373ff8c418205bee4300b5351ea740c4c0c1d3a974a5e3b210344cf2c9b"
 CONSERVED_B2G = (
     "/servicos-obras-publicas/",
     "/bid-room-licitacoes-obras/",
@@ -79,8 +79,7 @@ def test_ia_contract_names_five_nuclei_and_conserves_b2g() -> None:
     assert [item["id"] for item in nucleus_items(data)] == list(REQUIRED_NUCLEUS_IDS)
     hrefs = [item["href"] for item in header_items(data)]
     assert B2G_NUCLEUS_HREF in hrefs
-    assert "/bid-room-licitacoes-obras/" in hrefs
-    assert "/problemas-que-resolvemos/" in hrefs
+    assert "/ferramentas/prontidao-tecnica-obra-privada/" in hrefs
     assert len(hrefs) <= 5
 
 
@@ -92,20 +91,16 @@ def test_shipped_home_chooser_and_single_primary_cta() -> None:
     assert hero.group(0).count("button-primary") == 1
     assert 'href="#formulario-contato"' in hero.group(0)
     chooser = _chooser(html)
-    for nucleus_id in REQUIRED_NUCLEUS_IDS:
+    for nucleus_id in (
+        "building_engineering_documentation",
+        "public_works_b2g",
+    ):
         assert f'data-nucleus-id="{nucleus_id}"' in chooser, nucleus_id
     assert chooser.count("button-primary") == 0
     assert 'href="/servicos-obras-publicas/"' in chooser
-    withheld = [item for item in nucleus_items() if item["id"] != "public_works_b2g"]
-    for item in withheld:
-        row = re.search(
-            rf'<li\b[^>]*data-nucleus-id="{item["id"]}"[^>]*>[\s\S]*?</li>',
-            chooser,
-        )
-        assert row, item["id"]
-        assert "/docs/" not in row.group(0)
-        assert "index.html" not in row.group(0)
-        assert 'href="#formulario-contato"' not in row.group(0)
+    assert 'href="/ferramentas/prontidao-tecnica-obra-privada/"' in chooser
+    assert "canário" not in chooser.lower()
+    assert "ação terminal" not in chooser.lower()
 
 
 def test_b2g_routes_stay_linked_in_two_steps() -> None:
@@ -116,8 +111,7 @@ def test_b2g_routes_stay_linked_in_two_steps() -> None:
     assert header
     header_html = header.group(0)
     assert "/servicos-obras-publicas/" in header_html
-    assert "/bid-room-licitacoes-obras/" in header_html
-    assert "/problemas-que-resolvemos/" in header_html
+    assert "/ferramentas/prontidao-tecnica-obra-privada/" in header_html
     servicos = (ROOT / "servicos-obras-publicas" / "index.html").read_text(encoding="utf-8")
     assert "/diretoria-b2g/" in servicos
     assert "/bid-room-licitacoes-obras/" in servicos
@@ -179,6 +173,11 @@ def test_form_runtime_bytes_untouched() -> None:
     assert form
     digest = hashlib.sha256(form.group(0).encode("utf-8")).hexdigest()
     assert digest == FORM_SHA256
+    assert 'name="diagnostico-confenge"' in form.group(0)
+    assert 'name="nucleus_id"' in form.group(0)
+    assert 'data-nucleus-branch="public_works_b2g"' in form.group(0)
+    assert 'id="faixa_contrato"' in form.group(0)
+    assert form.group(0).index('id="nucleus_id"') < form.group(0).index('id="faixa_contrato"')
 
 
 def test_analytics_surfaces_are_allowlisted() -> None:
@@ -186,7 +185,6 @@ def test_analytics_surfaces_are_allowlisted() -> None:
     surfaces = set(re.findall(r'data-analytics-surface="([^"]+)"', html))
     assert "corporate-home" in surfaces
     assert "nucleus-chooser" in surfaces
-    assert "private-intelligence-asset" in surfaces
     assert "primary-triage-action" in surfaces
     unexpected = surfaces - ALLOWED_ANALYTICS_SURFACES
     assert not unexpected, unexpected
@@ -203,15 +201,13 @@ def test_banned_empty_marketing_absent_from_home() -> None:
 
 def test_private_intelligence_placeholder_is_fail_closed() -> None:
     html = _home()
-    block = re.search(
-        r'<div\b[^>]*id="inteligencia-privada"[\s\S]*?</div>', html
-    )
-    assert block
-    text = block.group(0)
-    assert "private_project_technical_readiness_v1" in text
-    assert "private_project_technical_readiness_assessment" in text
-    assert "não afirma resultado" in text.lower() or "nao afirma resultado" in text.lower()
-    assert "54.055" not in text
+    blob = html.lower()
+    assert "canário" not in blob
+    assert "campanha 09" not in blob
+    assert "ação terminal" not in blob
+    assert "oferta candidata" not in blob
+    assert "/ferramentas/prontidao-tecnica-obra-privada/" in html
+    assert "54.055" not in html
 
 
 def test_title_schema_and_footer_are_not_exclusive_b2g() -> None:

@@ -54,12 +54,12 @@ def test_home_has_canonical_copy():
     assert hero["eyebrow"] in html
     assert "Engenharia, Perícias e Inteligência Técnica" in html
     assert "Diretoria Fracionada para o Mercado Público" in html
-    assert 'name="diagnostico-b2g"' in html
+    assert 'name="diagnostico-confenge"' in html
+    assert 'id="nucleus_id"' in html
     assert 'id="estagio"' in html
     assert 'id="urgencia"' in html
     assert 'data-form-multistep="true"' in html
-    assert "Solicitar triagem do edital" in html
-    assert "Solicitar diagnóstico da operação" in html
+    assert "Diagnóstico de prontidão técnica" in html
     assert "Como podemos ajudar" in html
     assert "Analisar meu caso" in html
     assert "Contrato sob pressão" in html
@@ -128,7 +128,8 @@ def test_whatsapp_contextual_on_home():
     assert "wa.me/5548988344559" in html
     # Contextual prefill for urgent contract / critical decision path
     assert (
-        "decis%C3%A3o%20cr%C3%ADtica" in html
+        "situa%C3%A7%C3%A3o%20t%C3%A9cnica" in html
+        or "decis%C3%A3o%20cr%C3%ADtica" in html
         or "cr%C3%ADtica" in html
         or "an%C3%A1lise%20inicial" in html
         or "problema%20urgente" in html

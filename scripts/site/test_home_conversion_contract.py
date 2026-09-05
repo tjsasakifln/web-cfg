@@ -74,14 +74,12 @@ def test_pncp_is_market_context_after_decision_and_capture() -> None:
     assert html.index('id="jornadas"') < html.index('id="mercado-pncp"')
     assert html.index('id="mercado-pncp"') < html.index('id="formulario-contato"')
     assert "Contexto de mercado · PNCP" in market
-    # Procedencia no lugar de autodesqualificacao: fonte, data de corte e papel.
     assert "Fonte: PNCP" in market
     assert "21/08/2026" in market
     assert "Contexto de mercado." in market
     assert 'data-event-name="proof_expand"' not in market
     assert 'data-cta-position="hero_proof"' not in market
-    assert market.count('data-event-name="evidence_drilldown"') == 3
-    assert market.count('data-cta-position="market_context"') == 6
+    assert 'data-event-name="evidence_drilldown"' not in market
 
 
 def test_three_icp_doors_lead_to_one_honest_intake() -> None:
@@ -91,7 +89,9 @@ def test_three_icp_doors_lead_to_one_honest_intake() -> None:
     # rodape e no formulario. Nada de vocabulario concorrente.
     for door in ("Edital e proposta", "Contrato sob pressão", "Operação recorrente"):
         assert door in html
-    assert html.count('name="diagnostico-b2g"') == 1
+    assert html.count('id="formulario-contato"') == 1
+    assert 'name="diagnostico-confenge"' in html
+    assert 'name="nucleus_id"' in html
     assert 'id="jornadas"' in html
     assert html.index('id="ofertas"') < html.index('id="contato"')
     assert html.index('id="jornadas"') < html.index('id="contato"')

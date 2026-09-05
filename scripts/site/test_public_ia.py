@@ -36,19 +36,17 @@ def test_ia_contract_is_valid_without_html():
     errors = validate_contract()
     assert errors == []
     items = header_items()
-    assert len(items) == 4
+    assert len(items) == 3
     assert len(items) <= MAX_HEADER_DESTINATIONS
     assert header_cta()["href"].endswith("#formulario-contato")
     labels = " ".join(item["label"].lower() for item in items)
     assert "b2g" not in labels
-    assert all(
-        phrase in labels
-        for phrase in ("edital e proposta", "contrato sob pressão", "obras públicas")
-    )
+    assert all(phrase in labels for phrase in ("obra privada", "obras públicas"))
     assert "biblioteca" in labels
     assert "ferramentas" not in labels
     hrefs = [item["href"] for item in items]
     assert "/servicos-obras-publicas/" in hrefs
+    assert "/ferramentas/prontidao-tecnica-obra-privada/" in hrefs
     assert not any(href.startswith("/#") for href in hrefs)
 
 
@@ -230,5 +228,6 @@ def test_page_shell_output_is_idempotent_with_shell_nav():
         wa_message="Olá",
     )
     assert 'class="desktop-nav"' in html
-    assert "Edital e proposta" in html
+    assert "Obra privada" in html
+    assert "Obras públicas" in html
     assert sync_text(html, load_brand(), "/guias-contratos-obras/") == html

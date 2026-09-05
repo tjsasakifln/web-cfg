@@ -78,7 +78,7 @@
       add(wrap, "p", "", "Consequência decisória possível: " + domain.decision_consequence);
       add(wrap, "p", "", "Próxima verificação: " + domain.next_verification);
       if (domain.limits) add(wrap, "p", "", domain.limits);
-      if (domain.candidate_offer) add(wrap, "p", "", "Oferta candidata: " + domain.candidate_offer);
+      if (domain.named_gap_artifact) add(wrap, "p", "", "Recorte que poderia fechar a lacuna: " + domain.named_gap_artifact);
       lines.push(domain.label);
       lines.push(statusLabel(domain.status));
       lines.push("Falta: " + domain.missing_evidence);
@@ -87,16 +87,19 @@
       lines.push("");
     }
     lastText = lines.join("\n");
-    lastBridge = JSON.stringify(result.commercial_bridge, null, 2);
+    lastBridge = lastText;
     if (resultActions) resultActions.hidden = false;
     if (cta) {
       cta.hidden = false;
       if (ctaArtifact) {
         ctaArtifact.textContent = result.named_gap_artifact
-          ? ("Artefato que poderia fechar a lacuna nomeada: " + result.named_gap_artifact + ".")
-          : "Não há lacuna nomeada nesta autoavaliação. A conferência documental continua sendo o próximo passo se a decisão for crítica.";
+          ? ("Recorte que a conferência dos originais precisaria fechar: " + result.named_gap_artifact + ".")
+          : "Não há lacuna nomeada nesta leitura. A conferência dos originais continua sendo o próximo passo se a decisão for crítica.";
       }
-      if (ctaPayload) ctaPayload.textContent = lastBridge;
+      if (ctaPayload) {
+        ctaPayload.hidden = true;
+        ctaPayload.textContent = "";
+      }
     }
     var handoff = document.getElementById("prontidao-handoff");
     if (handoff) handoff.hidden = false;

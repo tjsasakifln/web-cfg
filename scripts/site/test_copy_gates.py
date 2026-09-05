@@ -99,15 +99,13 @@ def test_microcopy_preferences():
         assert phrase not in lower, f"public leak: {phrase}"
     # Client-facing journey section (not briefing metalinguage)
     assert "como podemos ajudar" in lower
-    assert "qual decisão precisa sair agora" in lower
     assert "contrato sob pressão" in lower
-    # Rotulo canonico da jornada, identico ao menu e ao rodape (#527 taxonomia).
     assert "edital e proposta" in lower
     assert "operação recorrente" in lower
     assert "analisar meu caso" in lower
     assert "solicitar canal seguro para envio" in lower
-    assert "solicitar triagem do edital" in lower
-    assert "solicitar diagnóstico da operação" in lower
+    assert "diagnóstico de prontidão técnica" in lower
+    assert "obra privada" in lower
     # Visible labels "Jornada A/B/C" must not appear (data-journey attrs OK)
     assert not re.search(r">\s*Jornada\s+[ABC]\s*<", home), "visible Jornada A/B/C label"
     assert "risco de não agir" not in lower
