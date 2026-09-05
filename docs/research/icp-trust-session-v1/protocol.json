@@ -1,6 +1,13 @@
 {
   "schema": "confenge.icp-trust-session-protocol.v1",
-  "protocol_version": "1.1.0",
+  "protocol_version": "1.2.0",
+  "unique_human_protocol": {
+    "owner_issue": 336,
+    "second_study_forbidden": true,
+    "this_package_role": "session_machinery_and_absorbed_instruments",
+    "absorbed_issues": [183, 184],
+    "sample_n": 20
+  },
   "decision": {
     "state": "VALIDATE",
     "priority": "P2",
@@ -9,28 +16,28 @@
       "trust",
       "conversion"
     ],
-    "time_to_evidence": "one completed five-person session"
+    "time_to_evidence": "one completed twenty-person unique protocol owned by #336"
   },
   "owner": {
     "accountable_role": "CONFENGE founder",
     "operator_role": "research moderator",
-    "review_due_at": "2026-09-13"
+    "review_due_at": "2026-10-04"
   },
   "recruitment": {
-    "named_source": "founder-managed professional network of directors and engineers at construction companies that bid for or execute public works",
-    "minimum_eligible_consented_completions": 5,
+    "named_source": "founder-managed professional network covering the five nuclei of the unique #336 sample: private engineering/construction/incorporation, expert evidence, property valuation, occupational safety, and current B2G buyers",
+    "minimum_eligible_consented_completions": 20,
     "eligibility_all_of": [
-      "works in company direction, bids/proposals, engineering, contracts or public-works delivery",
-      "company bids for or executes public works",
-      "has participated in an edital, measurement, glosa, amendment or rebalancing decision in the last 24 months",
-      "can complete both protocols without coaching"
+      "represents one declared nucleus of the unique #336 qualitative sample",
+      "can complete assigned tasks without coaching from implementers",
+      "gives explicit research consent separate from marketing",
+      "is not a CONFENGE team member or implementation contributor"
     ],
     "exclusions_any_of": [
       "CONFENGE team member or implementation contributor",
       "was coached on the navigation, evidence panel or offer wording",
       "does not provide explicit research consent"
     ],
-    "quota_policy": "No result is calculated from fewer than five eligible, consented completions. Replacements must independently pass the same screen."
+    "quota_policy": "No result is calculated from fewer than twenty eligible, consented completions. The 8/3/3/3/3 split is a predeclared qualitative sample, not market share. Four or fewer people per nucleus is qualitative reading. Replacements must independently pass the same screen. A second study is forbidden."
   },
   "privacy": {
     "repository_record": "AGGREGATE_ONLY_NO_PII",
@@ -51,42 +58,44 @@
     {
       "id": "tree-test-v1",
       "issue": 183,
-      "sample_minimum": 5,
+      "sample_minimum": 20,
       "moderator_may_explain": false,
+      "absorbed_into_unique_protocol": 336,
       "tasks": [
         {
           "id": "edital",
-          "prompt": "Você recebeu um edital de obra pública e precisa avaliar riscos antes de decidir se participa. Onde procuraria?",
+          "prompt": "Voce recebeu um edital de obra publica e precisa avaliar riscos antes de decidir se participa. Onde procuraria?",
           "success_destination": "/diagnostico-pre-licitacao/"
         },
         {
           "id": "glosa",
-          "prompt": "Uma medição da obra foi parcialmente glosada e você precisa organizar a contestação. Onde procuraria?",
+          "prompt": "Uma medicao da obra foi parcialmente glosada e voce precisa organizar a contestacao. Onde procuraria?",
           "success_destination": "/medicoes-glosas-obras-publicas/"
         },
         {
           "id": "reequilibrio",
-          "prompt": "Um evento extraordinário elevou custos do contrato e você precisa avaliar recomposição. Onde procuraria?",
+          "prompt": "Um evento extraordinario elevou custos do contrato e voce precisa avaliar recomposicao. Onde procuraria?",
           "success_destination": "/reequilibrio-obras-publicas/"
         }
       ],
-      "approval_rule": "At least 80% of participants complete each named task without moderator correction or explanation; at the minimum sample this is four of five.",
+      "approval_rule": "At least 80% of participants complete each named task without moderator correction or explanation; at the minimum sample this is sixteen of twenty.",
       "rejection_rule": "Any task below 80% success is REPROVADO and requires an evidence-derived taxonomy proposal before retest."
     },
     {
       "id": "five-second-v1",
       "issue": 184,
-      "sample_minimum": 5,
+      "sample_minimum": 20,
       "moderator_may_explain": false,
+      "absorbed_into_unique_protocol": 336,
       "exposure_seconds": 5,
       "stimulus": "current production-equivalent first viewport of the CONFENGE home page at the bound git SHA",
       "questions": [
-        "Para quem é esta página?",
+        "Para quem e esta pagina?",
         "Que problema ela ajuda a resolver?",
-        "O que você faria em seguida?",
-        "Isto parece consultoria, software/produto, ou outra coisa? Por quê?"
+        "O que voce faria em seguida?",
+        "Isto parece consultoria, software/produto, ou outra coisa? Por que?"
       ],
-      "approval_rule": "At least 80% identify the ICP, problem and plausible next action, and at least 80% do not misclassify the evidence panel as software/product; at the minimum sample this is four of five.",
+      "approval_rule": "At least 80% identify the audience, problem and plausible next action, and at least 80% do not misclassify the evidence panel as software/product; at the minimum sample this is sixteen of twenty.",
       "rejection_rule": "Any dimension below 80% success is REPROVADO; record the observed confusion before considering move-after-hero or replacement."
     }
   ],
@@ -95,6 +104,7 @@
       183,
       184
     ],
+    "unique_owner_issue": 336,
     "default_disposition": "OPEN_BLOCKED_HUMAN_EVIDENCE",
     "closing_language_forbidden_before_human_evidence": true,
     "insufficient_sample_status": "AMOSTRA_INSUFICIENTE"
