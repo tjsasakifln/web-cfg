@@ -263,9 +263,21 @@
     },
     {
       "rule": "plain_language",
+      "match": "\\bhandoff\\b",
+      "path": "politica-editorial/v/1.0.0/index.html",
+      "reason": "/politica-editorial/v/1.0.0/ e o arquivo imutavel da versao 1.0.0 da politica editorial. A ocorrencia documenta literalmente a arquitetura publicada naquela versao; reescrever o arquivo falsificaria o historico. A excecao nao se aplica a nenhuma pagina vigente ou nova."
+    },
+    {
+      "rule": "plain_language",
       "match": "\\bcfg-",
       "path": "comercial/privacidade-leads/index.html",
       "reason": "CFG-... e o identificador versionado do instrumento (termos B2B, aviso de privacidade de leads, snapshot de oferta). O identificador e a prova de qual versao do instrumento o cliente aceitou; remove-lo da pagina tiraria prova contratual, nao jargao interno."
+    },
+    {
+      "rule": "plain_language",
+      "match": "\\bleads?\\b",
+      "path": "comercial/privacidade-leads/index.html",
+      "reason": "A palavra permanece apenas dentro do identificador juridico imutavel CFG-LEGAL-PRIVACY-LEADS-FOUNDER-v1. O titulo, o inventario e a regra de retencao visiveis usam 'contato'; a excecao preserva a prova da versao aceita e nao autoriza 'lead' como copy."
     },
     {
       "rule": "plain_language",

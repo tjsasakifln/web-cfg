@@ -343,7 +343,7 @@ def render_html(
 
 <section id="evidencias" aria-labelledby="evidencias-titulo">
 <h2 id="evidencias-titulo">Contratos e evidência</h2>
-<p>Drill-down: mercado → estrato permitido → contratos/evidence → análise → X-Ray/CTA. Filtros dinâmicos nesta URL são noindex. Não há páginas combinatórias UF × município × objeto × métrica.</p>
+<p>Do panorama ao contrato: avance do recorte de mercado para os documentos que sustentam a análise. Filtros dinâmicos nesta URL não são publicados nos mecanismos de busca. Não há páginas combinatórias por UF, município, objeto e métrica.</p>
 <ul class="ma-strata">{strata_html}</ul>
 <ul>{''.join(evidence_html)}</ul>
 </section>

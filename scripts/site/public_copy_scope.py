@@ -190,11 +190,13 @@ def visitor_facing_html_files(root: Path | None = None) -> list[Path]:
 
 def visitor_facing_relpaths(root: Path | None = None) -> list[str]:
     base = root or ROOT
-    return [str(p.relative_to(base)) for p in visitor_facing_html_files(base)]
+    return [p.relative_to(base).as_posix() for p in visitor_facing_html_files(base)]
 
 
 def relpath(path: Path, root: Path | None = None) -> str:
-    return str(Path(path).relative_to(root or ROOT))
+    # Repository contracts and exception keys always use POSIX separators.
+    # Normalizing here keeps the same gates effective on Windows and Linux.
+    return Path(path).relative_to(root or ROOT).as_posix()
 
 
 def route_for(rel: str) -> str:

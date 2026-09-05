@@ -20,3 +20,19 @@ State the visitor job, acquisition/conversion hypothesis, data owner/contract, q
 ## Market-capture gate
 
 P0/P1 work must name its decision state (EXECUTE_NOW/VALIDATE/DEFER/SUNSET/SUPERSEDED), executive front, time to evidence and at least one leverage type: revenue, distribution, data, automation, trust or customer. Ask whether 100 repetitions improve the system or merely create 100 units of work. Qualified commercial opportunities—not development volume, raw leads, messages or page count—are the corporate North Star.
+
+## ICP language contract
+
+Every issue that can affect a visitor-facing surface must separate internal coordination language from public copy. Internal terms may remain in architecture, analytics, data contracts and implementation notes, but they are never default wording for a visitor.
+
+Before implementation, the issue must state in direct Brazilian Portuguese:
+
+1. who is arriving and the concrete situation they recognize;
+2. the problem in the buyer's own professional vocabulary;
+3. what CONFENGE helps decide, produce, review or organize;
+4. the evidence and limit that make the claim defensible; and
+5. the next step in terms of what happens after the action.
+
+Do not expose `ICP`, `lead`, `CTA`, `handoff`, `pipeline`, `QCO`, `TOFU`, `MOFU`, `BOFU`, `white-label`, “capacidade elástica”, “demanda elástica”, `SKU`, `fail-closed`, `rollback`, executive-front names, repository names or system names as value propositions, navigation, labels, buttons, form guidance, confirmation messages or public metadata. Translate the underlying concept into the customer's situation and desired result. Examples include “apoio para completar uma disciplina do projeto”, “revisão técnica independente”, “compatibilização entre projetos” and “entenda quais informações precisamos para avaliar sua demanda”.
+
+Purely technical issues must explicitly state that they do not authorize visible copy. If their scope grows to touch visitor-facing text, add the full language contract before implementation. Run `python scripts/site/test_public_plain_language.py` for every public-copy change and include the changed public strings plus their situation/problem/deliverable/limit/next-step mapping in review evidence.

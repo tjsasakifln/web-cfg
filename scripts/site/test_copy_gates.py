@@ -218,7 +218,7 @@ def test_new_public_family_is_gated_without_editing_a_list(tmp_path=None):
             "<html><body><p>Conversão com utilidade real</p></body></html>",
             encoding="utf-8",
         )
-        found = [str(p.relative_to(root)) for p in scope(root)]
+        found = [p.relative_to(root).as_posix() for p in scope(root)]
     assert found == ["familia-nova-2027/index.html"], found
 
 
