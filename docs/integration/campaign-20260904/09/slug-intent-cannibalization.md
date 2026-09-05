@@ -17,7 +17,7 @@ Não é leitura de contrato público, edital, PNCP, margem B2G nem orçamento de
 
 Uma rota, não família mecânica. Title/H1 prometem o visitor job. Indexação só depois de conteúdo, método, captura e prova verdes.
 
-Canário atual (isolado): `docs/integration/campaign-20260904/09/canary/index.html` com canonical documentado para `/piloto/prontidao-tecnica-obra-privada/` até o inventário de `/piloto/` aceitar a 25ª URL.
+Canário atual (isolado): `docs/integration/campaign-20260904/09/canary/index.html`. Sem `rel=canonical` público: o arquivo não é rota publicada, `/piloto/` está travado em 24 URLs e `/ferramentas/prontidao-tecnica-obra-privada/` só existe depois do goal 97.
 
 ## Mapa contra rotas B2G existentes
 
