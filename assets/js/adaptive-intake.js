@@ -164,7 +164,8 @@
 
   function safeAttribution(value) {
     var text = String(value || "").slice(0, 80);
-    if (/@/.test(text) || /^\+?\d{10,15}$/.test(text.replace(/[\s()-]/g, ""))) return "";
+    var compactDigits = text.replace(/[\s()./+\-]/g, "");
+    if (/@/.test(text) || /^\d{10,15}$/.test(compactDigits)) return "";
     return /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,79}$/.test(text) ? text : "";
   }
 

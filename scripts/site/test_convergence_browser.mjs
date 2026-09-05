@@ -143,6 +143,7 @@ try {
   await triage.evaluate(() => sessionStorage.setItem("confenge_pseo_attribution", JSON.stringify({
     utm_source: "google",
     utm_campaign: "mv03_launch",
+    utm_content: "12.345.678/0001-90",
     asset_id: "private_project_technical_readiness_v1",
     route_family: "prontidao-tecnica-obra-privada",
   })));
@@ -155,6 +156,7 @@ try {
   check("triage_retry_same_payload", attempts.length === 2 && attempts[0] === attempts[1], JSON.stringify({ attempts: attempts.length, same: attempts[0] === attempts[1] }));
   const submitted = JSON.parse(attempts[0]);
   check("triage_utm_allowlist", submitted.utm_source === "google" && submitted.utm_campaign === "mv03_launch", JSON.stringify({ utm_source: submitted.utm_source, utm_campaign: submitted.utm_campaign }));
+  check("triage_utm_pii_scrubbed", submitted.utm_content === undefined, JSON.stringify({ utm_content: submitted.utm_content }));
   check("triage_source_asset_preserved", submitted.asset_id === "technical_triage_v1" && submitted.source_origin_asset_id === "private_project_technical_readiness_v1" && submitted.source_origin_route_family === "prontidao-tecnica-obra-privada", JSON.stringify({ asset_id: submitted.asset_id, source_origin_asset_id: submitted.source_origin_asset_id, source_origin_route_family: submitted.source_origin_route_family }));
   const triageResult = await triage.evaluate(() => ({ receipt: document.querySelector("[data-intake-protocol]").textContent, events: window.dataLayer || [] }));
   check("triage_receipt_visible", triageResult.receipt === "lead-canary-receipt", JSON.stringify({ receipt: triageResult.receipt }));

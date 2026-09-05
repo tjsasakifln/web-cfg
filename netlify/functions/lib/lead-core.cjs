@@ -409,8 +409,8 @@ function looksLikePii(value, key) {
   if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)) return false;
   if (s.startsWith("c-")) return false;
   if (/^(sess|lead|opp|prop|sale|evt)-/.test(s)) return false;
-  const compact = s.replace(/[\s()-]/g, "");
-  return /^\+?\d{10,15}$/.test(compact);
+  const compactDigits = s.replace(/[\s()./+\-]/g, "");
+  return /^\d{10,15}$/.test(compactDigits);
 }
 
 function sanitizeAttributionValue(val, maxLen, key) {

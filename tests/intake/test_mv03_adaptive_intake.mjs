@@ -7,6 +7,7 @@ import { after, before, describe, test } from "node:test";
 const require = createRequire(import.meta.url);
 const adaptive = require("../../netlify/functions/lib/adaptive-intake.cjs");
 const handoff = require("../../netlify/functions/lib/inbound-handoff.cjs");
+const leadCore = require("../../netlify/functions/lib/lead-core.cjs");
 
 const pin = Object.freeze({
   policy_id: "NET_NEW_INBOUND_HANDRAISER",
@@ -178,12 +179,16 @@ describe("MV-03 pure adaptive intake", () => {
     assert.equal(adaptive.validateAdaptiveIntake(base({ preferred_channel: "email" }), { env }).error, "contact_channel_mismatch");
     assert.equal(adaptive.validateAdaptiveIntake(base({ asset_id: "tampered_asset" }), { env }).error, "source_asset_unknown");
     const scrubbedAttribution = adaptive.validateAdaptiveIntake(base({
-      source_origin_asset_id: "pessoa@example.com",
-      source_origin_route_family: "48999999999",
+      source_origin_asset_id: "12.345.678/0001-90",
+      source_origin_route_family: "123.456.789-09",
+      utm_campaign: "pessoa@example.com",
     }), { env });
     assert.equal(scrubbedAttribution.ok, true);
     assert.equal(scrubbedAttribution.fields.source_origin_asset_id, "");
     assert.equal(scrubbedAttribution.fields.source_origin_route_family, "");
+    assert.equal(scrubbedAttribution.fields.utm_campaign || "", "");
+    assert.equal(leadCore.sanitizeAttributionValue("12.345.678/0001-90", 80, "utm_campaign"), "");
+    assert.equal(leadCore.sanitizeAttributionValue("123.456.789-09", 80, "utm_content"), "");
   });
 });
 
