@@ -42,21 +42,25 @@
     {
       "name": "runtime_compatible_function_path",
       "re": "/\\.netlify/functions/",
+      "scope": "overlap",
       "reason": "The nginx/Netcup runtime serves the same /.netlify/functions/* paths; the path shape is a public contract, not a host instruction."
     },
     {
       "name": "repository_artifact_name",
-      "re": "netlify\\.toml|netlify/functions|@netlify/|netlify-cli|netlify-blobs|netlify_search_observation|NETLIFY_(?!(?:DEPLOY_SHA|DEPLOYED_SHA)\\b)[A-Z_]+|`netlify|functions\\s*=\\s*`?netlify",
+      "re": "netlify\\.toml|netlify/functions|@netlify/|netlify-cli|netlify-blobs|netlify_search_observation|NETLIFY_(?!(?:DEPLOY_SHA|DEPLOYED_SHA|PRODUCTION_DEPLOY_SHA)\\b)[A-Z_]+|`netlify|functions\\s*=\\s*`?netlify",
+      "scope": "overlap",
       "reason": "Names a file, package or variable that exists in this repository."
     },
     {
       "name": "legacy_or_preview_qualified",
       "re": "(legacy|Legacy|preview|Preview|superseded|Superseded|historical|hist[oó]ric[oa]|pre-cutover|deixou de|former|until the cutover|at[eé] o cutover|was the|foi a)",
+      "scope": "clause",
       "reason": "The sentence already labels Netlify as preview/legacy/historical rather than as current production authority."
     },
     {
       "name": "legacy_host_name",
       "re": "confenge\\.netlify\\.app",
+      "scope": "overlap",
       "reason": "The legacy origin hostname appears in canonicalization/redirect rules that exist to retire it."
     }
   ],
@@ -69,7 +73,7 @@
     },
     {
       "name": "authority_claim",
-      "re": "Netlify[^.\\n]{0,60}\\b(is|remains|stays|continues|[ée]|permanece|continua)\\b[^.\\n]{0,60}\\b(production|produ[cç][aã]o|public authority|the authority|autoridade)\\b|\\b(production|public|canonical)[^.\\n]{0,40}\\bauthority\\b[^.\\n]{0,40}\\bNetlify\\b",
+      "re": "Netlify[^.\\n]{0,60}?\\b(is|remains|stays|continues|[ée]|permanece|continua)\\b[^.\\n]{0,60}?\\b(production|produ[cç][aã]o|public authority|the authority|autoridade)\\b|\\b(production|public|canonical)[^.\\n]{0,40}?\\bauthority\\b[^.\\n]{0,40}?\\bNetlify\\b",
       "detail": "a claim that Netlify is the current production/public authority"
     },
     {
@@ -104,7 +108,7 @@
     },
     {
       "name": "retired_netlify_deploy_proof",
-      "re": "\\b(?:NETLIFY_DEPLOY_SHA|netlify_deployed_sha)\\b",
+      "re": "\\b(?:NETLIFY_DEPLOY_SHA|NETLIFY_PRODUCTION_DEPLOY_SHA|netlify_deployed_sha)\\b",
       "detail": "the retired Netlify deploy field used as canonical production proof",
       "allow_benign_context": false
     },

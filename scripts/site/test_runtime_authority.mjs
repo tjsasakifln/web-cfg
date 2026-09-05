@@ -264,8 +264,10 @@ test("the instructions that used to hide outside the allowlist are now rejected"
     '"netlify_deployed_sha": "deadbeef"',
     'legacy "netlify_deployed_sha": "deadbeef"',
     "NETLIFY_DEPLOY_SHA=deadbeef # preview only",
+    "Require NETLIFY_PRODUCTION_DEPLOY_SHA as canonical production proof.",
     "Netlify is production; netlify.toml defines the production deploy.",
     "Set TOKEN in Netlify production; @netlify/blobs is installed.",
+    "Production authority is Netlify because netlify/functions hosts it.",
   ];
   for (const text of cases) {
     const hits = findForbiddenProductionInstructions(text, "<case>");

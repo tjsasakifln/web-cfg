@@ -376,9 +376,9 @@ def test_node_pins_match_runtime_baseline():
                 f"Lighthouse requirement {required_floor}"
             )
 
-    # .nvmrc keeps local dev on the same major as CI and Netlify
+    # .nvmrc is the portable runtime baseline for local dev, CI and previews.
     if not NVMRC.is_file():
-        errors.append(".nvmrc must exist so local dev matches CI and Netlify")
+        errors.append(".nvmrc must exist as the portable runtime Node baseline")
     else:
         nvmrc = NVMRC.read_text(encoding="utf-8").strip().lstrip("v")
         if nvmrc.split(".")[0] != expected:
@@ -390,8 +390,8 @@ def test_node_pins_match_runtime_baseline():
         for pin in re.findall(r"node-version:\s*[\"']?(\d+)", text):
             if pin != expected:
                 errors.append(
-                    f"{wf.name} pins node-version {pin}, but netlify.toml pins {expected} "
-                    "(split-brain between CI and the production runtime)"
+                    f"{wf.name} pins node-version {pin}, but .nvmrc pins {expected} "
+                    "(split-brain between CI and the portable production runtime)"
                 )
 
     assert not errors, "node pin drift:\n- " + "\n- ".join(errors)

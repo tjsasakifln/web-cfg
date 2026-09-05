@@ -119,6 +119,8 @@ export function findForbiddenProductionInstructions(text, file = "<text>", polic
         for (const benignMatch of unit.content.matchAll(new RegExp(ctx.re.source, flags))) {
           const benignStart = benignMatch.index ?? 0;
           const benignEnd = benignStart + benignMatch[0].length;
+          const overlaps = benignStart < matchEnd && benignEnd > matchStart;
+          if (ctx.scope !== "clause") return overlaps;
           if (benignEnd < matchStart) {
             if (!/[.;\n]/.test(unit.content.slice(benignEnd, matchStart))) return true;
           } else if (benignStart > matchEnd) {
