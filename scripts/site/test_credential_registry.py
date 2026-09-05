@@ -20,6 +20,7 @@ if str(ROOT) not in sys.path:
 from scripts.site.authority import check_credentials_against_proof  # noqa: E402
 from scripts.site.credential_registry import (  # noqa: E402
     OWNED_SURFACES,
+    allowed_schema_values,
     apply_to_html,
     client_proof_approved_count,
     expire_claim,
@@ -136,6 +137,44 @@ def test_revocation_removes_claim_from_every_owned_html_and_jsonld():
             if "Organization" in (n.get("@type") if isinstance(n.get("@type"), list) else [n.get("@type")])
         )
         assert "legalName" not in org
+        assert "Confenge Serviços de Desenhos Técnicos Ltda" not in jsonld_blob(after)
+
+
+def test_revocation_scrubs_legal_name_duplicated_in_webpage_and_meta():
+    legal = "Confenge Serviços de Desenhos Técnicos Ltda"
+    registry = load_registry()
+    html = CONFIANCA.read_text(encoding="utf-8")
+    poisoned = html.replace(
+        "conduzida pelo engenheiro civil Tiago Sasaki",
+        f"{legal}, conduzida pelo engenheiro civil Tiago Sasaki",
+    )
+    assert legal in jsonld_blob(poisoned)
+    assert f'content="' in poisoned and legal in poisoned
+    after = apply_to_html(poisoned, project(revoke_claim(registry, "org-legal-name"), "/confianca/"))
+    assert legal not in jsonld_blob(after)
+    assert legal not in after
+
+
+def test_withheld_crea_is_stripped_from_owned_surface_schema():
+    registry = load_registry()
+    crea = next(c for c in registry["claims"] if c["id"] == "org-crea-pj")
+    assert not is_projectable(crea)
+    allowed = allowed_schema_values(registry)
+    assert "CREA-SC PJ 205402-8" not in allowed["name"]
+    assert "CREA-SC PJ 205402-8" not in allowed["hasCredential"]
+    assert "166954-1" not in allowed["hasCredential"]
+    html = CONFIANCA.read_text(encoding="utf-8")
+    injected = html.replace(
+        '"taxID":"52.407.089/0001-09"',
+        '"taxID":"52.407.089/0001-09","hasCredential":{"@type":"EducationalOccupationalCredential","credentialCategory":"ProfessionalLicense","name":"CREA-SC PJ 205402-8","identifier":"205402-8"}',
+    )
+    assert "CREA-SC PJ 205402-8" in injected
+    sanitized, removed = sanitize_html(injected, relative_path="confianca/index.html")
+    assert removed >= 1
+    assert "CREA-SC PJ 205402-8" not in sanitized
+    assert "205402-8" not in sanitized
+    assert '"taxID":"52.407.089/0001-09"' in sanitized
+    assert '"legalName":"Confenge Serviços de Desenhos Técnicos Ltda"' in sanitized
 
 
 def test_expired_claim_fails_closed_even_if_wording_remains_in_record():

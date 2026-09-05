@@ -102,6 +102,7 @@ class Projection:
     schema_service: dict[str, Any] = field(default_factory=dict)
     official_links: list[dict[str, str]] = field(default_factory=list)
     limits: list[str] = field(default_factory=list)
+    unprojected_phrases: list[str] = field(default_factory=list)
 
     @property
     def visible_text(self) -> str:
@@ -514,11 +515,62 @@ def project(
     if proj.schema_service and "url" not in proj.schema_service:
         proj.schema_service["url"] = f"https://confenge.com.br{surface}"
         proj.schema_service["provider"] = {"@id": "https://confenge.com.br/#organization"}
+    projected = set(proj.claim_ids)
+    for claim in registry.get("claims") or []:
+        surfaces = claim.get("projection_surfaces") or []
+        if surface not in surfaces:
+            continue
+        if str(claim.get("id")) in projected:
+            continue
+        proj.unprojected_phrases.extend(_claim_public_phrases(claim))
     proj.visible_html = render_visible_html(surface, claims, as_of)
     defects = projection_defects(proj)
     if defects:
         raise ValueError(";".join(defects))
     return proj
+
+
+_SKIP_PHRASE_VALUES = frozenset(
+    {
+        "BR",
+        "SC",
+        "ProfessionalLicense",
+        "EducationalOccupationalCredential",
+        "PostalAddress",
+        "CollegeOrUniversity",
+        "ProfessionalService",
+        "Organization",
+        "Person",
+    }
+)
+
+
+def _claim_public_phrases(claim: dict[str, Any]) -> list[str]:
+    phrases: list[str] = []
+    if claim.get("claim"):
+        phrases.append(str(claim["claim"]))
+    for phrase in claim.get("allowed_wording") or []:
+        phrases.append(str(phrase))
+
+    def walk(obj: Any) -> None:
+        if isinstance(obj, str):
+            text = obj.strip()
+            if len(text) < 8 or text in _SKIP_PHRASE_VALUES or text.startswith("http"):
+                return
+            phrases.append(text)
+            return
+        if isinstance(obj, dict):
+            for value in obj.values():
+                walk(value)
+            return
+        if isinstance(obj, list):
+            for item in obj:
+                walk(item)
+
+    walk(claim.get("schema") or {})
+    # Longest first so "Confenge Serviços..." is removed before a substring.
+    unique = sorted(set(phrases), key=len, reverse=True)
+    return unique
 
 
 def _asserted_match(blob: str, pat: str) -> bool:
@@ -631,32 +683,37 @@ def allowed_schema_values(registry: dict[str, Any] | None = None) -> dict[str, s
         if not isinstance(schema, dict):
             continue
 
-        def walk(obj: Any) -> None:
+        def walk(obj: Any, parent_key: str | None) -> None:
             if isinstance(obj, dict):
                 for key, value in obj.items():
                     if key.startswith("@"):
                         continue
                     if isinstance(value, str) and key in allowed:
                         allowed[key].add(value)
-                    walk(value)
+                        if parent_key == "hasCredential":
+                            allowed["hasCredential"].add(value)
+                    walk(value, parent_key=key)
             elif isinstance(obj, list):
                 for item in obj:
                     if isinstance(item, str):
-                        allowed["sameAs"].add(item)
+                        if parent_key == "sameAs":
+                            allowed["sameAs"].add(item)
+                        elif parent_key == "hasCredential":
+                            allowed["hasCredential"].add(item)
                     else:
-                        walk(item)
+                        walk(item, parent_key=parent_key)
 
-        walk(schema)
+        walk(schema, parent_key=None)
         for phrase in claim.get("allowed_wording") or []:
-            if "CNPJ" in str(claim.get("id")) or claim.get("id") == "org-cnpj":
-                allowed["taxID"].add(str(phrase).replace("CNPJ ", ""))
-    allowed["taxID"].add("52.407.089/0001-09")
-    allowed["taxID"].add("52407089000109")
-    allowed["name"].add("Endereço cadastral e fiscal")
-    allowed["name"].add("Universidade de São Paulo")
-    allowed["name"].add("Serviços técnicos de engenharia")
-    allowed["name"].add("CREA-SC PJ 205402-8")
-    allowed["name"].add("CREA-SC 166954-1")
+            if claim.get("id") == "org-cnpj":
+                allowed["taxID"].add(str(phrase).replace("CNPJ ", "").strip())
+    for tax in list(allowed["taxID"]):
+        digits = re.sub(r"\D", "", tax)
+        if len(digits) == 14:
+            allowed["taxID"].add(digits)
+            allowed["taxID"].add(
+                f"{digits[:2]}.{digits[2:5]}.{digits[5:8]}/{digits[8:12]}-{digits[12:]}"
+            )
     return allowed
 
 
@@ -680,18 +737,21 @@ def schema_value_allowed(key: str, value: Any, allowed: dict[str, set[str]] | No
     if isinstance(value, list):
         return all(schema_value_allowed(key, item, table) for item in value)
     if isinstance(value, dict):
-        name = value.get("name") or value.get("identifier") or value.get("credentialID")
-        if isinstance(name, str) and name in accepted.union(table.get("name") or set()):
-            return True
+        if key == "hasCredential":
+            nested = value.get("name") or value.get("identifier")
+            cred_names = (table.get("hasCredential") or set()) | (table.get("identifier") or set())
+            return isinstance(nested, str) and nested in cred_names
         if key == "address":
             street = value.get("streetAddress")
             return isinstance(street, str) and street in (table.get("streetAddress") or set())
         if key == "alumniOf":
             nested = value.get("name")
-            return isinstance(nested, str) and nested in (table.get("alumniOf") or set()).union(table.get("name") or set())
-        if key == "hasCredential":
-            nested = value.get("name") or value.get("identifier")
-            return isinstance(nested, str) and nested in (table.get("hasCredential") or set()).union(table.get("name") or set())
+            return isinstance(nested, str) and nested in (table.get("alumniOf") or set()).union(
+                table.get("name") or set()
+            )
+        name = value.get("name") or value.get("identifier") or value.get("credentialID")
+        if isinstance(name, str) and name in accepted.union(table.get("name") or set()):
+            return True
     return False
 
 
@@ -718,10 +778,77 @@ def apply_to_html(html: str, proj: Projection) -> str:
         except json.JSONDecodeError:
             return match.group(0)
         _patch_jsonld(payload, proj)
+        _scrub_unprojected_jsonld(payload, proj.unprojected_phrases)
         body = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
         return f"{match.group(1)}{body}{match.group(3)}"
 
-    return JSON_LD_RE.sub(replace, rendered)
+    rendered = JSON_LD_RE.sub(replace, rendered)
+    return _scrub_unprojected_meta(rendered, proj.unprojected_phrases)
+
+
+def _scrub_phrase(text: str, phrase: str) -> str:
+    if not phrase or phrase not in text:
+        return text
+    cleaned = text.replace(phrase, "")
+    cleaned = re.sub(r"\s{2,}", " ", cleaned)
+    cleaned = re.sub(r"\s+,", ",", cleaned)
+    cleaned = re.sub(r",\s*,", ",", cleaned)
+    cleaned = re.sub(r"\s+de\s+,", " ", cleaned)
+    return cleaned.strip(" ,")
+
+
+def _scrub_unprojected_jsonld(payload: Any, phrases: list[str]) -> None:
+    if not phrases:
+        return
+    if isinstance(payload, list):
+        for item in payload:
+            _scrub_unprojected_jsonld(item, phrases)
+        return
+    if not isinstance(payload, dict):
+        return
+    for key, value in list(payload.items()):
+        if isinstance(value, str):
+            updated = value
+            for phrase in phrases:
+                updated = _scrub_phrase(updated, phrase)
+            if updated != value:
+                if updated:
+                    payload[key] = updated
+                else:
+                    del payload[key]
+        else:
+            _scrub_unprojected_jsonld(value, phrases)
+
+
+def _scrub_unprojected_meta(html: str, phrases: list[str]) -> str:
+    if not phrases:
+        return html
+
+    def scrub_content(content: str) -> str:
+        for phrase in phrases:
+            content = _scrub_phrase(content, phrase)
+        return content
+
+    def replace_content_first(match: re.Match[str]) -> str:
+        return f"{match.group(1)}{scrub_content(match.group(2))}{match.group(3)}"
+
+    def replace_name_first(match: re.Match[str]) -> str:
+        return f"{match.group(1)}{scrub_content(match.group(2))}{match.group(3)}"
+
+    desc = r'name=["\']description["\']|property=["\'](?:og|twitter):description["\']'
+    html = re.sub(
+        rf'(<meta\b[^>]*content=["\'])([^"\']*)(["\'][^>]*(?:{desc}))',
+        replace_content_first,
+        html,
+        flags=re.I,
+    )
+    html = re.sub(
+        rf'(<meta\b[^>]*(?:{desc})[^>]*content=["\'])([^"\']*)(["\'])',
+        replace_name_first,
+        html,
+        flags=re.I,
+    )
+    return html
 
 
 def _types(node: dict[str, Any]) -> set[str]:

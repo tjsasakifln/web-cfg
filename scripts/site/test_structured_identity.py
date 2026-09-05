@@ -66,6 +66,19 @@ def test_owned_surface_keeps_registry_backed_identity_fields() -> None:
     assert "unsupported" not in sanitized
 
 
+def test_owned_surface_strips_withheld_crea_has_credential() -> None:
+    root = Path(__file__).resolve().parents[2]
+    page = (root / "confianca" / "index.html").read_text(encoding="utf-8")
+    injected = page.replace(
+        '"taxID":"52.407.089/0001-09"',
+        '"taxID":"52.407.089/0001-09","hasCredential":{"@type":"EducationalOccupationalCredential","name":"CREA-SC PJ 205402-8","identifier":"205402-8"}',
+    )
+    sanitized, removed = sanitize_html(injected, relative_path="confianca/index.html")
+    assert removed >= 1
+    assert "CREA-SC PJ 205402-8" not in sanitized
+    assert audit_html(sanitized, relative_path="confianca/index.html") == []
+
+
 def test_public_artifact_audit_rejects_reintroduced_identity_claim(tmp_path: Path) -> None:
     artifact = tmp_path / "_site"
     artifact.mkdir()
