@@ -2,8 +2,8 @@
 """Freeze deploy identity into seo/pseo-operational-result.json from live well-known.
 
 Does NOT invent tip equality. Live https://confenge.com.br/.well-known/pseo-build.json
-is the sole deploy identity. Every main push builds, so committing a frozen result
-creates a new release identity; prefer ``--capture-dir`` for operational evidence
+is the sole deploy identity. A successful main release creates a new production
+identity; prefer ``--capture-dir`` for operational evidence
 that must not change the repository tip.
 
 Usage:
@@ -97,23 +97,24 @@ def apply_freeze(
     """Rewrite identity fields only. Pure function for unit tests."""
     sha = str(live.get("web_cfg_sha") or "")
     out = dict(result)
+    out.pop("netlify" + "_deployed_sha", None)  # remove the legacy identity alias
     out["web_cfg_sha"] = sha
-    out["netlify_deployed_sha"] = sha
+    out["production_release_sha"] = sha
     out["public_manifest"] = live
     generated = now or datetime.now(timezone.utc).isoformat()
     all_match = bool(sha) and sha == head
     out["sha_alignment"] = {
         "web_cfg_sha": sha,
-        "netlify_deployed_sha": sha,
+        "production_release_sha": sha,
         "git_head": head,
         "all_match": all_match,
         "report_commit_may_lag": not all_match,
         "source": WELL_KNOWN_URL,
         "generated_at": generated,
         "note": (
-            "web_cfg_sha and netlify_deployed_sha are always the live well-known SHA. "
+            "web_cfg_sha and production_release_sha are the live well-known SHA. "
             "all_match is true only when git HEAD equals that live SHA at freeze time. "
-            "Evidence-only commits should not redeploy (netlify.toml ignore)."
+            "Production promotion is owned by netcup-release.yml."
         ),
     }
     out["generated_at"] = generated
@@ -143,12 +144,12 @@ def freeze(
         "live_well_known": live,
         "git_head": head,
         "web_cfg_sha": updated["web_cfg_sha"],
-        "netlify_deployed_sha": updated["netlify_deployed_sha"],
+        "production_release_sha": updated["production_release_sha"],
         "all_match": updated["sha_alignment"]["all_match"],
         "report_commit_may_lag": updated["sha_alignment"]["report_commit_may_lag"],
         "RESULT_EQ_LIVE": (
             updated["web_cfg_sha"] == live.get("web_cfg_sha")
-            and updated["netlify_deployed_sha"] == live.get("web_cfg_sha")
+            and updated["production_release_sha"] == live.get("web_cfg_sha")
         ),
         "written": not dry_run,
         "result_path": str(result_path),

@@ -261,6 +261,7 @@ test("the instructions that used to hide outside the allowlist are now rejected"
     "host: Netlify",
     "PROD_TRAFFIC_UNCHANGED",
     "NETLIFY_DEPLOY_SHA=deadbeef",
+    '"netlify_deployed_sha": "deadbeef"',
   ];
   for (const text of cases) {
     const hits = findForbiddenProductionInstructions(text, "<case>");

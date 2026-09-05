@@ -2,14 +2,14 @@
 
 **Schema version:** `1.0.0`  
 **Estratégia:** ICP-Derived Evidence pSEO  
-**Consumidor:** build estático Netlify (`web-cfg`)  
+**Consumidor:** artefato público versionado de `web-cfg`
 **Produtor:** `python -m scripts.pseo.export_web_cfg` em `extra-cli` (read-only)
 
 ## Princípios
 
 1. Apenas campos na allowlist pública (`scripts/pseo/allowlist.py` no extra-cli).
 2. Proibido: scores comerciais, ranks Top 20, labels humanos, estados de pipeline, contatos, autorização de contato, `suggested_offer`, `next_human_step`.
-3. Netlify **nunca** conecta ao PostgreSQL. O deploy consome snapshot versionado em `data/pseo/`.
+3. O runtime público **nunca** conecta ao PostgreSQL. O release Netcup consome o snapshot versionado em `data/pseo/`.
 4. Build **falha fechado** se schema, checksum ou freshness forem inválidos.
 
 ## Arquivos do snapshot (`data/pseo/`)

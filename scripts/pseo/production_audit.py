@@ -295,7 +295,7 @@ def load_sitemap_urls(path: Path) -> set[str]:
 
 def local_html_hash(root: Path, path: str) -> str | None:
     rel = path.strip("/")
-    # Netlify publishes _site. Once that artifact exists, never conceal a
+    # The canonical release publishes _site. Once that artifact exists, never conceal a
     # missing public route by falling back to a source HTML file at repo root.
     artifact = root / "_site"
     base = artifact if artifact.is_dir() else root
@@ -558,7 +558,7 @@ def evaluate_row(
 
 
 def audit_sitemap_lastmod(sitemap_text: str, today: date | None = None) -> list[str]:
-    # Prefer UTC calendar day — Netlify/build and lastmod are written in UTC.
+    # Prefer UTC calendar day because build metadata and lastmod are written in UTC.
     # Local date.today() can lag behind UTC near midnight and false-flag lastmod.
     if today is None:
         from datetime import datetime, timezone
@@ -720,7 +720,7 @@ def run_audit(
     )
     currency = evaluate_audit_currency(
         identity,
-        netlify_deployed_sha=live_manifest_sha,
+        production_release_sha=live_manifest_sha,
         live_snapshot_hash=live_snapshot_short,
         current_seed_set_hash=seed_set_hash(seed_urls),
     )
@@ -743,7 +743,7 @@ def run_audit(
         "base_url": base_url,
         "web_cfg_sha": web_cfg_sha,
         "git_head": web_cfg_sha,
-        "netlify_deployed_sha": live_manifest_sha,
+        "production_release_sha": live_manifest_sha,
         "dataset_hash": reg.get("dataset_hash"),
         "vocabulary_note": (
             "CRAWLABLE_PRODUCTION ≠ INDEXED_BY_GOOGLE. "

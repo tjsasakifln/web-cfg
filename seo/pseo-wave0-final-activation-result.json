@@ -130,7 +130,7 @@
     "/radar/edificacoes-publicas-pr/"
   ],
   "radar_sc_removed": true,
-  "netlify_deployed_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
+  "production_release_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
   "production_audit_sha": "edc279ebead5148f10ffb5a323fc035bf31ed545",
   "production_audit_is_current": true,
   "public_directory": "_site",

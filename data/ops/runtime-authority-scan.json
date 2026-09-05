@@ -46,7 +46,7 @@
     },
     {
       "name": "repository_artifact_name",
-      "re": "netlify\\.toml|netlify/functions|@netlify/|netlify-cli|netlify-blobs|netlify_search_observation|NETLIFY_(?!DEPLOY_SHA\\b)[A-Z_]+|`netlify|functions\\s*=\\s*`?netlify",
+      "re": "netlify\\.toml|netlify/functions|@netlify/|netlify-cli|netlify-blobs|netlify_search_observation|NETLIFY_(?!(?:DEPLOY_SHA|DEPLOYED_SHA)\\b)[A-Z_]+|`netlify|functions\\s*=\\s*`?netlify",
       "reason": "Names a file, package or variable that exists in this repository."
     },
     {
@@ -104,7 +104,7 @@
     },
     {
       "name": "retired_netlify_deploy_proof",
-      "re": "\\bNETLIFY_DEPLOY_SHA\\b",
+      "re": "\\b(?:NETLIFY_DEPLOY_SHA|netlify_deployed_sha)\\b",
       "detail": "the retired Netlify deploy field used as canonical production proof"
     },
     {
@@ -272,6 +272,13 @@
       "reason": "Dated pSEO operational-inbound closure recording the console steps taken to reach it.",
       "owner": "tjsasakifln",
       "sha256": "75cecd110960030512539a1a33c972cddf2942bea8ea5050c655b1a9ed9e1e16"
+    },
+    {
+      "path": "seo/PSEO-WAVE0-CLOSURE-02-FINAL.md",
+      "kind": "historical_record",
+      "reason": "Generated 2026-08-01 Wave 0 closure report preserving the production identity label used before the Netcup cutover.",
+      "owner": "tjsasakifln",
+      "sha256": "30524c396504d3070bfee8124b5932729c5615e59dc1291cdc5573e685a0046b"
     },
     {
       "path": "seo/PSEO-WAVE0-FINAL-ACTIVATION-03.md",

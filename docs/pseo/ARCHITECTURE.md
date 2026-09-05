@@ -18,7 +18,7 @@ web-cfg/data/pseo/
     ├─ registry.json
     └─ sitemap-inteligencia.xml
         │
-  Netlify publish (estático)
+  Netcup release (artefato site-ci → stage/verify → promoção atômica)
 ```
 
 ## Tipos de página

@@ -16,7 +16,7 @@
     "source_branch": "feat/pseo-semantic-sota",
     "reason": "source_commit_lookup_failed_or_missing"
   },
-  "netlify_deployed_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
+  "production_release_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
   "production_audit_sha": "8bfd24fcd98f62998e60c63a10254e81147717ed",
   "production_audit_is_current": true,
   "public_directory": "_site",

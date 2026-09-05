@@ -39,14 +39,14 @@ jobs:
           text = Path("netlify.toml").read_text(encoding="utf-8")
           m = re.search(r'publish\s*=\s*"([^"]+)"', text)
           if not m or m.group(1) != "_site":
-              print("FAIL: netlify.toml publish must be _site, got", m.group(1) if m else None)
+              print("FAIL: legacy netlify.toml preview publish must be _site, got", m.group(1) if m else None)
               sys.exit(1)
           if 'command = "npm run build:site"' not in text and "command = 'npm run build:site'" not in text:
               # allow whitespace variants
               if not re.search(r'command\s*=\s*"npm run build:site"', text):
-                  print("FAIL: netlify build command must be npm run build:site")
+                  print("FAIL: legacy Netlify preview build command must be npm run build:site")
                   sys.exit(1)
-          print("ok: netlify publish=_site command=build:site")
+          print("ok: legacy Netlify preview publish=_site command=build:site")
           PY
       - name: Build the canonical public artifact
         run: npm run build:site

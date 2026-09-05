@@ -86,7 +86,7 @@ quality_gate_tools: ["test:report-model", "test:report-model-ui", "test:design",
 **Quality Gate Tasks**:
 - [ ] Pre-Commit (@dev): conteúdo, HTML/CSS, PII, acessibilidade e regressões dedicadas
 - [ ] Pre-PR (@github-devops): diff contra `origin/main`, políticas, build e CodeRabbit quando disponível
-- [ ] Pre-Deployment (@github-devops): CI, Netlify, rollback e smoke público
+- [ ] Pre-Deployment (@github-devops): CI, package/stage/verify Netcup, promoção atômica, rollback e smoke público
 
 **Severity Policy**:
 - CRITICAL: corrigir antes do PR
