@@ -1,8 +1,8 @@
 /**
- * Minimal multi-vertical intake validation.
- *
- * Governance owns admission policy. This module only consumes an explicit
- * version/hash pin and maps public situation codes to the canonical nuclei.
+ * Adaptive five-nucleus public intake — fail-closed field matrix and pin check.
+ * Draft contract IDs are never a production fallback. A pin must be injected
+ * (tests: ADAPTIVE_INTAKE_PIN_JSON). Missing/unknown version or hash fails closed.
+ * Feature flag: ADAPTIVE_INTAKE_NUCLEI (comma-separated). Empty = new nuclei off.
  */
 const crypto = require("crypto");
 const authority = require("../data/adaptive-intake-authority.json");
@@ -10,168 +10,230 @@ const authority = require("../data/adaptive-intake-authority.json");
 const INTAKE_FLAG = "adaptive_intake";
 const SOURCE = "CONFENGE_WEB";
 const OTHER = "OTHER_NEEDS_CONTEXT";
-const OTHER_NUCLEUS = "other_technical_need";
-const DEFAULT_OFFER_CANDIDATE = "technical_triage_review";
-const DEFAULT_SOURCE_ASSET = "technical_triage_v1";
 
 const NUCLEI = Object.freeze({
   expert_evidence_assistance: {
     estagio: "pericia-assistencia-tecnica",
     jornada: "outro",
-    location_material: false,
+    branch: "claim_stage",
   },
   property_valuation: {
     estagio: "avaliacao-imoveis",
     jornada: "outro",
-    location_material: true,
+    branch: "valuation",
   },
   building_engineering_documentation: {
     estagio: "engenharia-edificacoes",
     jornada: "outro",
-    location_material: true,
+    branch: "buildings",
   },
   occupational_safety: {
     estagio: "seguranca-do-trabalho",
     jornada: "outro",
-    location_material: true,
+    branch: "sst",
   },
   public_works_b2g: {
     estagio: "obras-publicas-b2g",
     jornada: "operacao",
-    location_material: false,
-  },
-  [OTHER_NUCLEUS]: {
-    estagio: "outra-demanda-tecnica",
-    jornada: "outro",
-    location_material: false,
+    branch: "b2g",
   },
 });
 
-const NEEDS = Object.freeze({
-  pericia_ou_disputa_tecnica: "expert_evidence_assistance",
-  avaliacao_de_imovel: "property_valuation",
-  obra_edificacao_ou_documentacao: "building_engineering_documentation",
-  seguranca_do_trabalho: "occupational_safety",
-  licitacao_obra_ou_contrato_publico: "public_works_b2g",
-  outra_demanda_tecnica: OTHER_NUCLEUS,
-});
-
-const PIN_KEYS = Object.freeze([
-  "policy_id",
-  "policy_version",
-  "canonical_name",
-  "policy_hash",
-  "governance_source_sha",
-  "intake_version",
+const PIN_KEYS = [
+  "taxonomy",
+  "offer_catalog",
+  "intake",
+  "admission_policy",
+  "handraiser_state",
+  "meetcfg_context",
   "source_asset_id",
   "offer_candidate_id",
-  "outbound_eligible",
-  "auto_send",
-]);
+];
 
-const ATTRIBUTION_KEYS = Object.freeze([
-  "landing_family",
-  "landing_page",
-  "landing_url",
-  "origem",
-  "route_family",
-  "cta_id",
-  "asset_id",
-  "content_cluster",
-  "utm_source",
-  "utm_medium",
-  "utm_campaign",
-  "utm_term",
-  "utm_content",
-  "gclid",
-  "fbclid",
-  "referrer",
-  "correlation_id",
-  "session_id",
-]);
+const ENUMS = Object.freeze({
+  canal_preferido: new Set(["whatsapp", "email", "phone"]),
+  pessoa_tipo: new Set(["pessoa", "empresa"]),
+  decision_role: new Set(["decisor", "procurador", "assessor", OTHER]),
+  city_class: new Set(["grande_florianopolis", "sc", "br", "unknown"]),
+  site_class: new Set([
+    "residencia",
+    "comercial",
+    "industrial",
+    "condominio",
+    "obra",
+    "estabelecimento",
+    "certame",
+    "unknown",
+  ]),
+  urgency: new Set(["ate_48h", "ate_7d", "ate_30d", "planejamento", "unknown"]),
+  why_now: new Set([
+    "audiencia",
+    "prazo_legal",
+    "transacao",
+    "sinistro",
+    "licitacao",
+    "saude_ocupacional",
+    OTHER,
+  ]),
+  desired_decision: new Set([
+    "parecer",
+    "laudo",
+    "assistencia",
+    "orcamento",
+    "documentacao",
+    "sst",
+    "b2g_triage",
+    "unknown",
+  ]),
+  document_availability_class: new Set(["none", "partial", "organized", "unknown"]),
+  conflict_status: new Set(["none", "unknown", "check_required"]),
+  claim_stage: new Set(["pre_processo", "em_curso", "sentenca", "unknown", OTHER]),
+  valuation_purpose: new Set(["disputa", "garantia", "negociacao", "patrimonio", "unknown", OTHER]),
+  inspection_window: new Set(["this_week", "this_month", "later", "unknown"]),
+  property_class: new Set(["residencial", "comercial", "industrial", "rural", "unknown"]),
+  work_type: new Set(["reforma", "obra_nova", "regularizacao", "inspecao", "unknown", OTHER]),
+  work_stage: new Set(["estudo", "projeto", "execucao", "concluida", "unknown"]),
+  project_status: new Set(["inexistente", "parcial", "completo", "unknown"]),
+  budget_class: new Set(["sem_orcamento", "parcial", "fechado", "unknown"]),
+  bim_status: new Set(["nao", "parcial", "sim", "unknown"]),
+  establishment_class: new Set(["industria", "comercio", "obra", "servico", "unknown", OTHER]),
+  risk_class: new Set(["acidente", "documentacao", "litigio", "preventivo", "unknown"]),
+  sst_doc_class: new Set(["none", "partial", "organized", "unknown"]),
+  certame_stage: new Set(["edital", "proposta", "contrato", "execucao", "unknown"]),
+  contract_relation: new Set(["licitante", "contratada", "subcontratada", "assessoria", "unknown"]),
+  entity_class: new Set(["municipal", "estadual", "federal", "autarquia", "unknown"]),
+});
 
-const ALLOWED_KEYS = new Set([
+const BRANCH_FIELDS = Object.freeze({
+  expert_evidence_assistance: ["claim_stage"],
+  property_valuation: ["valuation_purpose", "inspection_window", "property_class"],
+  building_engineering_documentation: [
+    "work_type",
+    "work_stage",
+    "project_status",
+    "budget_class",
+    "bim_status",
+  ],
+  occupational_safety: ["establishment_class", "risk_class", "sst_doc_class"],
+  public_works_b2g: ["certame_stage", "contract_relation", "entity_class"],
+});
+
+const SHARED_REQUIRED = [
+  "canal_preferido",
+  "pessoa_tipo",
+  "decision_role",
+  "city_class",
+  "site_class",
+  "urgency",
+  "why_now",
+  "desired_decision",
+  "document_availability_class",
+  "conflict_status",
+];
+
+const CANONICAL_ROUTE_MARKERS = new Set([
+  "adaptive-intake",
+  "triagem-tecnica",
+  "/triagem-tecnica/",
+  "private_project_technical_readiness_v1",
+  "private_project_technical_readiness_assessment",
+]);
+const ADAPTIVE_ALLOWED_KEYS = new Set([
+  INTAKE_FLAG, "intake_mode", "nucleus_id", "intake_contract_version", "contract_version",
+  "intake_pin_hash", "contract_pin_hash", "offer_candidate_id", "source_asset_id", "asset_id",
+  "landing_family", "landing_page", "origem", "route_family", "cta_id", "form-name",
+  "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid",
+  "referrer", "correlation_id", "public_id_slug",
+  "nome", "name", "email", "telefone", "phone", "consentimento", "sensitive_docs_ack",
+  "idempotency_key", "turnstile_token", "cf-turnstile-response", "document_intent", "jornada",
+  "estagio", "conflict_reference",
+  ...SHARED_REQUIRED,
+  ...Object.values(BRANCH_FIELDS).flat(),
+]);
+const ADAPTIVE_RESERVED_KEYS = new Set([
   INTAKE_FLAG,
   "intake_mode",
-  "form-name",
-  "intake_version",
+  "nucleus_id",
   "intake_contract_version",
+  "contract_version",
   "intake_pin_hash",
   "contract_pin_hash",
-  "need_code",
-  "source_asset_id",
   "offer_candidate_id",
-  "nome",
-  "name",
-  "email",
-  "telefone",
-  "whatsapp",
-  "phone",
-  "preferred_channel",
-  "canal_preferido",
-  "empresa",
-  "organization",
-  "location_city",
-  "location_uf",
-  "consentimento",
-  "consent",
-  "lgpd",
+  "source_asset_id",
   "sensitive_docs_ack",
-  "document_intent",
-  "idempotency_key",
-  "idempotencyKey",
-  "turnstile_token",
-  "cf-turnstile-response",
-  "website",
-  "company_site",
-  ...ATTRIBUTION_KEYS,
+  ...SHARED_REQUIRED,
+  ...Object.values(BRANCH_FIELDS).flat(),
 ]);
 
 const FORBIDDEN_KEYS = new Set([
-  "cpf", "cpf_cnpj", "rg", "processo", "process_number", "numero_processo",
-  "processo_numero", "corpus", "prontuario", "empregados", "employee_list",
-  "lista_empregados", "planta", "projeto_arquivo", "projeto_planta", "laudo",
-  "relatorio_pericial", "relatorio", "demonstrativo_financeiro",
-  "documento_financeiro", "conflict_parties", "conflict_party", "partes",
-  "parte_contraria", "parties", "upload", "arquivo", "file", "files",
-  "attachment", "mensagem", "message",
+  "cpf",
+  "cpf_cnpj",
+  "rg",
+  "processo",
+  "process_number",
+  "numero_processo",
+  "processo_numero",
+  "corpus",
+  "prontuario",
+  "empregados",
+  "employee_list",
+  "lista_empregados",
+  "planta",
+  "projeto_arquivo",
+  "projeto_planta",
+  "laudo",
+  "relatorio_pericial",
+  "relatorio",
+  "demonstrativo_financeiro",
+  "documento_financeiro",
+  "conflict_parties",
+  "conflict_party",
+  "partes",
+  "parte_contraria",
+  "parties",
+  "upload",
+  "arquivo",
+  "file",
+  "files",
+  "attachment",
 ]);
 
 const FORBIDDEN_KEY_RE =
-  /cpf|prontuario|empregad|planta|laudo|relatorio|corpus|processo|conflict_part|parte_contraria|partes|demonstrativo|documento_financeiro|upload|arquivo|attachment/;
-
-const UF = new Set([
-  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS",
-  "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC",
-  "SP", "SE", "TO",
-]);
+  /cpf|prontuario|empregad|planta|laudo|relatorio_pericial|corpus|processo_numero|numero_processo|conflict_part|parte_contraria|\bpartes\b|demonstrativo_financeiro|documento_financeiro/;
 
 function fail(error, message, status = 422) {
   return { ok: false, handled: true, status, error, message };
 }
 
-function stripControl(value) {
-  return String(value == null ? "" : value)
+function stripControl(s) {
+  return String(s || "")
     .replace(/[\u0000-\u001F\u007F]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
 
-function clamp(value, max) {
-  const text = stripControl(value);
-  return text.length > max ? text.slice(0, max) : text;
+function clamp(s, n) {
+  const t = stripControl(s);
+  return t.length > n ? t.slice(0, n) : t;
 }
 
-function truthy(value) {
-  return value === true || ["true", "on", "1", "yes", "sim"].includes(String(value).toLowerCase());
+function pickEnum(value, allowed) {
+  const raw = clamp(value, 80);
+  if (!raw) return "";
+  if (raw === "outro") return OTHER;
+  return allowed.has(raw) ? raw : "";
 }
 
 function isAdaptivePayload(data) {
   if (!data || typeof data !== "object") return false;
-  const flag = data[INTAKE_FLAG] ?? data.intake_mode;
-  if (flag === true || flag === "true" || flag === "1" || flag === "adaptive") return true;
-  return clamp(data["form-name"], 80) === "triagem-tecnica"
-    || Boolean(data.need_code || data.intake_version || data.intake_contract_version);
+  for (const key of ADAPTIVE_RESERVED_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) return true;
+  }
+  if (clamp(data["form-name"], 120) === "triagem-tecnica") return true;
+  for (const key of ["route_family", "landing_family", "cta_id", "asset_id", "source_asset_id", "origem", "landing_page"]) {
+    if (CANONICAL_ROUTE_MARKERS.has(clamp(data[key], 120))) return true;
+  }
+  return false;
 }
 
 function canonicalPinMaterial(pin) {
@@ -198,24 +260,7 @@ function parsePin(raw) {
     return { ok: false, error: "pin_invalid" };
   }
   for (const key of PIN_KEYS) {
-    if (pin[key] == null || (typeof pin[key] === "string" && !pin[key].trim())) {
-      return { ok: false, error: "pin_incomplete", key };
-    }
-  }
-  if (pin.policy_id !== "NET_NEW_INBOUND_HANDRAISER") {
-    return { ok: false, error: "policy_id_unknown" };
-  }
-  if (pin.canonical_name !== `${pin.policy_id}/${pin.policy_version}`) {
-    return { ok: false, error: "policy_version_mismatch" };
-  }
-  if (!/^sha256:[0-9a-f]{64}$/.test(String(pin.policy_hash))) {
-    return { ok: false, error: "policy_hash_invalid" };
-  }
-  if (!/^[0-9a-f]{40}$/.test(String(pin.governance_source_sha))) {
-    return { ok: false, error: "governance_sha_invalid" };
-  }
-  if (pin.outbound_eligible !== false || pin.auto_send !== false) {
-    return { ok: false, error: "unsafe_pin" };
+    if (!String(pin[key] || "").trim()) return { ok: false, error: "pin_incomplete", key };
   }
   return { ok: true, pin, hash: pinHash(pin) };
 }
@@ -223,21 +268,16 @@ function parsePin(raw) {
 function loadPin(env = process.env) {
   const parsed = parsePin(env && env.ADAPTIVE_INTAKE_PIN_JSON);
   if (!parsed.ok) return parsed;
-
-  // Synthetic fixtures may inject an explicit pin. Every deployed context stays
-  // closed until MV-09 installs the reviewed final authority snapshot and proves
-  // that Warmbly is running the same Governance revision/hash.
-  const testOnly = env.NODE_ENV === "test"
-    && !env.CONTEXT
-    && !env.NETLIFY_CONTEXT
-    && !env.CONFENGE_RUNTIME_PROFILE
-    && !env.LEAD_STORE_PROFILE;
+  // Explicit injected fixtures are confined to isolated unit tests. A deploy,
+  // including a preview, can never use draft coordination IDs as authority.
+  const testOnly = env.NODE_ENV === "test" && !env.CONTEXT && !env.NETLIFY_CONTEXT
+    && !env.CONFENGE_RUNTIME_PROFILE && !env.LEAD_STORE_PROFILE;
   if (testOnly) return parsed;
   if (authority.status !== "FINAL" || !authority.pin || !authority.contract_hashes) {
     return { ok: false, error: "governance_final_authority_missing" };
   }
   for (const key of PIN_KEYS) {
-    if (parsed.pin[key] !== authority.pin[key]) {
+    if (parsed.pin[key] !== authority.pin[key] || /draft|test-only/i.test(parsed.pin[key])) {
       return { ok: false, error: "governance_authority_mismatch" };
     }
   }
@@ -251,17 +291,23 @@ function loadPin(env = process.env) {
 function enabledNuclei(env = process.env) {
   const raw = String((env && env.ADAPTIVE_INTAKE_NUCLEI) || "").trim();
   if (!raw) return new Set();
-  return new Set(raw.split(",").map((item) => item.trim()).filter(Boolean));
+  return new Set(
+    raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean),
+  );
 }
 
 function rejectForbiddenKeys(data) {
   if (!data || typeof data !== "object") return null;
   for (const key of Object.keys(data)) {
-    const normalized = String(key).toLowerCase();
-    if (FORBIDDEN_KEYS.has(normalized) || FORBIDDEN_KEY_RE.test(normalized)) {
+    const lower = String(key).toLowerCase();
+    if (FORBIDDEN_KEYS.has(lower) || FORBIDDEN_KEY_RE.test(lower)) {
       return fail(
         "sensitive_field_rejected",
-        "Não envie documentos, CPF, número de processo, dados de pessoas ou partes em conflito neste formulário.",
+        "Este formulário não recebe documentos, CPF, processo, prontuário ou partes em conflito.",
+        422,
       );
     }
   }
@@ -270,9 +316,7 @@ function rejectForbiddenKeys(data) {
 
 function rejectUnknownKeys(data) {
   for (const key of Object.keys(data || {})) {
-    if (!ALLOWED_KEYS.has(key)) {
-      return fail("unknown_field_rejected", "Este formulário aceita somente os campos indicados.");
-    }
+    if (!ADAPTIVE_ALLOWED_KEYS.has(key)) return fail("unknown_field_rejected", "Este canal aceita somente os campos fechados da triagem.");
   }
   return null;
 }
@@ -280,152 +324,196 @@ function rejectUnknownKeys(data) {
 function rejectConflictParties(data) {
   if (!data || typeof data !== "object") return null;
   for (const key of Object.keys(data)) {
-    if (/conflict_part|parte_contraria|\bpartes\b|parties/i.test(String(key))) {
+    const lower = String(key).toLowerCase();
+    if (/conflict_part|parte_contraria|\bpartes\b|parties/.test(lower)) {
       return fail(
         "conflict_parties_rejected",
-        "Nomes de partes em conflito serão tratados somente em canal seguro, depois da triagem.",
+        "Partes em conflito não são aceitas neste canal. Use o caminho protegido posterior.",
+        422,
       );
     }
+  }
+  const bait = String(data.conflict_detail || data.conflict_notes || data.mensagem || "");
+  if (/parte[s]?\s+(contrária|contraria|adversa)/i.test(bait) && data[INTAKE_FLAG]) {
+    return fail(
+      "conflict_parties_rejected",
+      "Partes em conflito não são aceitas neste canal.",
+      422,
+    );
   }
   return null;
 }
 
-function normalizeCity(value) {
-  const city = clamp(value, 80);
-  if (!city) return "";
-  if (/[0-9@,;:/\\#|<>\[\]{}()"=+*&%$!?]/.test(city)) return "";
-  return city;
+function looksLikeProcessCorpus(value) {
+  const text = String(value || "");
+  if (text.length > 280) return true;
+  if (/\b\d{7}-?\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}\b/.test(text)) return true;
+  if (/\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/.test(text)) return true;
+  return false;
 }
 
-function contactChannel(data) {
-  const requested = clamp(data.preferred_channel || data.canal_preferido, 20).toLowerCase();
-  if (!["whatsapp", "email", "phone"].includes(requested)) return "";
-  const hasPhone = Boolean(clamp(data.telefone || data.whatsapp || data.phone, 40));
-  const hasEmail = Boolean(clamp(data.email, 180));
-  if (requested === "email" && !hasEmail) return "";
-  if ((requested === "whatsapp" || requested === "phone") && !hasPhone) return "";
-  return requested;
+function otherNeedsContext(fields) {
+  return Object.values(fields).some((v) => v === OTHER);
 }
 
 function deriveQualification(fields) {
-  if (fields.nucleus_id === OTHER_NUCLEUS) return "NEEDS_CONTEXT";
-  if (fields.conflict_status === "NOT_SCREENED" || fields.conflict_status === "UNKNOWN") {
-    return "CONFLICT_CHECK_REQUIRED";
-  }
-  return "NEEDS_CONTEXT";
+  if (fields.conflict_status === "check_required") return "CONFLICT_CHECK_REQUIRED";
+  if (otherNeedsContext(fields)) return "NEEDS_CONTEXT";
+  if (fields.document_availability_class === "none") return "DOCUMENT_GAP";
+  return "POTENTIAL_FIT";
 }
 
+function truthyAck(value) {
+  return (
+    value === true ||
+    value === "true" ||
+    value === "on" ||
+    value === "1" ||
+    value === "yes" ||
+    value === "sim"
+  );
+}
+
+/**
+ * Validate adaptive payload. Not invoked for legacy B2G (no nucleus/contract fields).
+ * @returns {{ handled: false } | { handled: true, ok: false, status: number, error: string, message: string } | { handled: true, ok: true, fields: object }}
+ */
 function validateAdaptiveIntake(data, options = {}) {
   if (!isAdaptivePayload(data)) return { handled: false };
   const env = options.env || process.env;
-  const rejected = rejectForbiddenKeys(data) || rejectUnknownKeys(data) || rejectConflictParties(data);
-  if (rejected) return rejected;
+  const forbidden = rejectForbiddenKeys(data) || rejectUnknownKeys(data) || rejectConflictParties(data);
+  if (forbidden) return forbidden;
 
-  const pinResult = options.pin ? parsePin(options.pin) : loadPin(env);
-  if (!pinResult.ok) {
+  const nucleusId = clamp(data.nucleus_id, 80);
+  if (!nucleusId || !NUCLEI[nucleusId]) {
+    return fail("nucleus_unknown", "Informe um núcleo válido.");
+  }
+  const enabled = enabledNuclei(env);
+  if (!enabled.has(nucleusId)) {
     return fail(
-      "contract_pin_missing",
-      "O recebimento pelo formulário está temporariamente indisponível. Use um dos canais de contato.",
-      503,
+      "nucleus_not_enabled",
+      "Este núcleo ainda não está disponível neste canal.",
+      422,
     );
   }
+
+  const pinResult = loadPin(options.pin
+    ? { ...env, ADAPTIVE_INTAKE_PIN_JSON: JSON.stringify(options.pin) } : env);
+  if (!pinResult.ok) {
+    return fail("contract_pin_missing", "Contrato de captura não pinado. Ramo novo permanece fechado.");
+  }
   const pin = pinResult.pin;
-  const submittedVersion = clamp(data.intake_version || data.intake_contract_version, 120);
+  const expectedHash = pinResult.hash;
+  const submittedVersion = clamp(data.intake_contract_version || data.contract_version, 120);
+  if (!submittedVersion) {
+    return fail("contract_version_missing", "Versão de contrato ausente.");
+  }
+  if (submittedVersion !== pin.intake) {
+    return fail("contract_version_unknown", "Versão de contrato desconhecida.");
+  }
   const submittedHash = clamp(data.intake_pin_hash || data.contract_pin_hash, 64);
-  if (submittedVersion !== pin.intake_version) {
-    return fail("contract_version_unknown", "A configuração deste formulário mudou. Recarregue a página.");
+  if (submittedHash && submittedHash !== expectedHash) {
+    return fail("contract_hash_mismatch", "Hash de contrato divergente.");
   }
-  if (submittedHash !== pinResult.hash) {
-    return fail("contract_hash_mismatch", "A configuração deste formulário mudou. Recarregue a página.");
-  }
-  const submittedAsset = clamp(data.source_asset_id || data.asset_id, 120);
-  const submittedOffer = clamp(data.offer_candidate_id, 120);
-  if (submittedAsset && submittedAsset !== pin.source_asset_id) {
-    return fail("source_asset_unknown", "A origem deste formulário não corresponde à configuração ativa.");
-  }
-  if (submittedOffer && submittedOffer !== pin.offer_candidate_id) {
-    return fail("offer_candidate_unknown", "A triagem solicitada não corresponde à configuração ativa.");
+  if (!submittedHash) {
+    return fail("contract_hash_missing", "Hash de contrato ausente.");
   }
 
-  const needCode = clamp(data.need_code, 80);
-  const nucleusId = NEEDS[needCode];
-  if (!nucleusId || !NUCLEI[nucleusId]) {
-    return fail("need_unknown", "Selecione a situação que mais se aproxima da sua demanda.", 400);
-  }
-  if (!enabledNuclei(env).has(nucleusId)) {
-    return fail("nucleus_not_enabled", "Esta opção ainda não está disponível no formulário.", 503);
+  if (data.mensagem || data.message) {
+    if (looksLikeProcessCorpus(data.mensagem || data.message)) {
+      return fail(
+        "sensitive_free_text_rejected",
+        "Não envie processo, laudo ou texto livre sensível neste passo.",
+      );
+    }
+    return fail(
+      "free_text_rejected",
+      "O primeiro passo não aceita texto livre. Use as classes fechadas.",
+    );
   }
 
-  const channel = contactChannel(data);
-  if (!channel) {
-    return fail("contact_channel_mismatch", "Informe um canal de retorno válido: WhatsApp ou e-mail.", 400);
-  }
-  if (!truthy(data.sensitive_docs_ack)) {
+  if (!truthyAck(data.sensitive_docs_ack)) {
     return fail(
       "sensitive_docs_ack_required",
-      "Confirme que documentos e dados sensíveis serão enviados somente depois, em canal seguro.",
+      "Confirme que documentos sensíveis não serão enviados neste passo.",
       400,
     );
   }
 
-  const meta = NUCLEI[nucleusId];
-  const cityRaw = clamp(data.location_city, 80);
-  const ufRaw = clamp(data.location_uf, 2).toUpperCase();
-  let city = null;
-  let uf = null;
-  if (meta.location_material) {
-    city = normalizeCity(cityRaw);
-    uf = UF.has(ufRaw) ? ufRaw : null;
-    if (!city || !uf) {
-      return fail("location_required", "Informe cidade e UF para avaliarmos a necessidade de vistoria.", 400);
-    }
-  } else if (cityRaw || ufRaw) {
-    return fail("irrelevant_location_rejected", "Localização não é necessária para esta primeira triagem.");
-  }
-
-  const organization = clamp(data.empresa || data.organization, 180);
   const fields = {
-    need_code: needCode,
     nucleus_id: nucleusId,
-    intake_contract_version: pin.intake_version,
-    intake_pin_hash: pinResult.hash,
-    admission_policy_id: pin.policy_id,
-    admission_policy_version: pin.canonical_name,
-    admission_policy_hash: pin.policy_hash,
-    governance_source_sha: pin.governance_source_sha,
-    offer_candidate_id: pin.offer_candidate_id || DEFAULT_OFFER_CANDIDATE,
-    source_asset_id: pin.source_asset_id || DEFAULT_SOURCE_ASSET,
-    landing_family: clamp(data.landing_family || data.route_family, 80) || "triagem-tecnica",
+    intake_contract_version: submittedVersion,
+    intake_pin_hash: expectedHash,
+    taxonomy_version: pin.taxonomy,
+    offer_catalog_version: pin.offer_catalog,
+    admission_policy_version: pin.admission_policy,
+    handraiser_state_version: pin.handraiser_state,
+    meetcfg_context_version: pin.meetcfg_context,
+    offer_candidate_id: clamp(data.offer_candidate_id, 80) || pin.offer_candidate_id,
+    source_asset_id: clamp(data.source_asset_id, 80) || pin.source_asset_id,
+    landing_family: "adaptive-intake",
     source: SOURCE,
     outbound_eligible: false,
     auto_send: false,
-    pessoa_tipo: organization ? "COMPANY" : "PERSON",
-    decision_role: "UNKNOWN",
-    canal_preferido: channel,
-    location_material: meta.location_material,
-    city,
-    uf,
-    city_class: meta.location_material ? `${city}/${uf}` : "NOT_MATERIAL",
-    site_class: "UNKNOWN",
-    urgency: "UNKNOWN",
-    why_now: "UNKNOWN",
-    desired_decision: "UNKNOWN",
-    document_availability_class: "UNKNOWN",
-    conflict_status: "NOT_SCREENED",
-    conflict_reference: null,
   };
+
+  if (fields.offer_candidate_id !== pin.offer_candidate_id) {
+    return fail("offer_candidate_unknown", "Oferta candidata desconhecida.");
+  }
+  if (fields.source_asset_id !== pin.source_asset_id) {
+    return fail("source_asset_unknown", "Ativo de origem desconhecido.");
+  }
+
+  for (const key of SHARED_REQUIRED) {
+    const picked = pickEnum(data[key], ENUMS[key]);
+    if (!picked) {
+      return fail("validation", `Informe ${key.replace(/_/g, " ")}.`, 400);
+    }
+    fields[key] = picked;
+  }
+
+  const branchKeys = BRANCH_FIELDS[nucleusId] || [];
+  for (const key of branchKeys) {
+    const picked = pickEnum(data[key], ENUMS[key]);
+    if (!picked) {
+      return fail("validation", `Informe ${key.replace(/_/g, " ")}.`, 400);
+    }
+    fields[key] = picked;
+  }
+  for (const [otherNucleus, keys] of Object.entries(BRANCH_FIELDS)) {
+    if (otherNucleus === nucleusId) continue;
+    for (const key of keys) {
+      const raw = clamp(data[key], 80);
+      if (raw) {
+        return fail(
+          "irrelevant_branch_rejected",
+          "Campos de outro núcleo não são aceitos nesta submissão.",
+        );
+      }
+    }
+  }
+
+  const conflictRef = clamp(data.conflict_reference, 80);
+  if (conflictRef && !/^[A-Za-z0-9][A-Za-z0-9._:-]*$/.test(conflictRef)) {
+    return fail("conflict_reference_invalid", "Referência de conflito inválida.");
+  }
+  fields.conflict_reference = conflictRef || null;
+  if (fields.conflict_status === "check_required" && !fields.conflict_reference) {
+    fields.conflict_reference = "pending_protected_path";
+  }
+
   fields.qualification_state = deriveQualification(fields);
+  const meta = NUCLEI[nucleusId];
   fields.estagio = meta.estagio;
   fields.jornada = meta.jornada;
   fields.urgencia_label = fields.urgency;
-  return { handled: true, ok: true, fields, pin, pin_hash: pinResult.hash };
+  return { handled: true, ok: true, fields, pin, pin_hash: expectedHash };
 }
 
 function publicAdaptiveSlice(fields) {
   if (!fields) return {};
   return {
     source: SOURCE,
-    need_code: fields.need_code,
     nucleus_id: fields.nucleus_id,
     qualification_state: fields.qualification_state,
     intake_contract_version: fields.intake_contract_version,
@@ -435,23 +523,16 @@ function publicAdaptiveSlice(fields) {
 
 function redactedAnalyticsProps(fields) {
   if (!fields) return {};
-  return {
-    nucleus_id: fields.nucleus_id,
-    landing_family: fields.landing_family,
-    qualification_state: fields.qualification_state,
-    location_required: fields.location_material,
-    source: SOURCE,
-  };
+  return { source: SOURCE };
 }
 
 module.exports = {
   INTAKE_FLAG,
   SOURCE,
   OTHER,
-  OTHER_NUCLEUS,
   NUCLEI,
-  NEEDS,
-  PIN_KEYS,
+  BRANCH_FIELDS,
+  ENUMS,
   FORBIDDEN_KEYS,
   isAdaptivePayload,
   pinHash,

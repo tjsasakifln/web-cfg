@@ -43,7 +43,7 @@
       "id": "triagem-tecnica",
       "visitor_job": "Enquadrar a necessidade técnica em um dos cinco núcleos e solicitar retorno com dados mínimos, quando o recebimento estiver disponível.",
       "profile": "commercial_content",
-      "terminal_action": "capture_form",
+      "terminal_action": "capture_form_or_whatsapp",
       "match": {
         "routes": [
           "/triagem-tecnica/"
@@ -51,6 +51,7 @@
       },
       "capture_availability": {
         "mode": "external_authority_fail_closed",
+        "withheld_fallback": ["whatsapp", "email", "telephone"],
         "runtime_profile": "adaptive_intake_standalone_v1",
         "config_endpoint": "/.netlify/functions/adaptive-intake-config",
         "client_script": "/assets/js/adaptive-intake.js",

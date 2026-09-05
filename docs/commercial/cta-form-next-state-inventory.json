@@ -29,13 +29,13 @@
       "commercial_configuration"
     ],
     "baseline_sha": "81c600b7c26dcc606d3a03e648ecd9820d9c1c37",
-    "expected_declared_ctas": 128
+    "expected_declared_ctas": 130
   },
   "coverage": {
     "authority": "data/organic/public-family-registry.json",
     "manual_route_allowlist": false,
     "active_capture_routes": 26,
-    "declared_ctas": 128,
+    "declared_ctas": 130,
     "protected_routes_with_capture": [],
     "problems": []
   },
@@ -3486,18 +3486,18 @@
       "file": "triagem-tecnica/index.html",
       "family_id": "triagem-tecnica",
       "family_profile": "commercial_content",
-      "terminal_action": "capture_form",
+      "terminal_action": "capture_form_or_whatsapp",
       "forms": [
         {
           "action": "/.netlify/functions/lead",
-          "cta_id": "",
+          "cta_id": "triagem-tecnica",
           "form_contract": "next-state/v1",
           "profile": "adaptive_triage",
           "runtime_profile": "adaptive_intake_standalone_v1",
           "stage": "register_context",
           "commitment": "medium",
-          "submit_label": "Registrar triagem e obter protocolo",
-          "current_label": "Registrar triagem e obter protocolo",
+          "submit_label": "Registrar pedido de triagem",
+          "current_label": "Registrar pedido de triagem",
           "useful_next_state": "A triagem fica registrada somente após a persistência confirmada; o protocolo permite à equipe avaliar enquadramento e capacidade em canal posterior.",
           "actual_receipt": "lead_id ou receipt_id opaco, exibido na confirmação inline apenas após a persistência.",
           "pre_form_value": "Selecione classes fechadas para registrar a necessidade técnica; o envio permanece bloqueado enquanto o contrato de intake não estiver disponível.",
@@ -3506,18 +3506,9 @@
             "visible_text": "Nome e canal permitem retorno. Núcleo, classes de situação, urgência, documentos e conflito delimitam a triagem sem texto livre, documentos ou identificação de partes. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.",
             "visible": true,
             "required": [
+              "need_code",
               "nome",
-              "canal_preferido",
-              "pessoa_tipo",
-              "decision_role",
-              "nucleus_id",
-              "city_class",
-              "site_class",
-              "urgency",
-              "why_now",
-              "desired_decision",
-              "document_availability_class",
-              "conflict_status",
+              "preferred_channel",
               "sensitive_docs_ack",
               "consentimento",
               "email_or_whatsapp"
@@ -3525,21 +3516,9 @@
             "optional": [
               "telefone",
               "email",
-              "claim_stage",
-              "valuation_purpose",
-              "inspection_window",
-              "property_class",
-              "work_type",
-              "work_stage",
-              "project_status",
-              "budget_class",
-              "bim_status",
-              "establishment_class",
-              "risk_class",
-              "sst_doc_class",
-              "certame_stage",
-              "contract_relation",
-              "entity_class"
+              "empresa",
+              "location_city",
+              "location_uf"
             ]
           },
           "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível; se necessário, o canal seguro é solicitado depois do protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da Política de Privacidade , com o protocolo.",
@@ -3564,13 +3543,44 @@
           "turnstile_token_forwarding": true,
           "receipt_required": true,
           "contact_constraints_ready": true,
-          "form_whatsapp_relationship": "form_only",
+          "form_whatsapp_relationship": "parallel_talk_path",
           "shared_runtime_selectors_ready": true,
           "shared_runtime_journey_ready": true,
           "standalone_runtime_ready": true
         }
       ],
-      "actions": []
+      "actions": [
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo.",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Explicar a demanda pelo WhatsApp",
+          "useful_next_state": "Abre uma conversa no WhatsApp com o contexto desta rota para continuar o enquadramento.",
+          "actual_receipt": "Protocolo CFG-WA anexado no clique; não simula o receipt do formulário.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível; se necessário, o canal seguro é solicitado depois do protocolo.",
+          "event_semantics": [
+            "whatsapp_click"
+          ]
+        },
+        {
+          "cta_id": "",
+          "position": "",
+          "href": "mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE",
+          "stage": "talk",
+          "commitment": "medium",
+          "current_label": "Descrever a demanda por e-mail",
+          "useful_next_state": "Abre o cliente de e-mail com assunto e contexto para continuar o enquadramento.",
+          "actual_receipt": "Rascunho local de e-mail; não existe receipt do servidor antes do envio.",
+          "field_purpose": "not_applicable",
+          "boundary": "Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível; se necessário, o canal seguro é solicitado depois do protocolo.",
+          "event_semantics": [
+            "email_click"
+          ]
+        }
+      ]
     },
     {
       "route": "/analise-cnpj/",

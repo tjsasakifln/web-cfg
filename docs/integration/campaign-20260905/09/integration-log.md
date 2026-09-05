@@ -71,7 +71,9 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 | Campanha | PR / HEAD observado | Disposição MV-09 | Motivo / arquivos usados |
 |---|---|---|---|
 | MV-01 | #607 / `895005bb52de6c70817b98357b0bbc685efccde5` | PARTIAL / ADOPT corrigido | Adotadas ADR-STRAT-002/004, constituição, taxonomia, matriz de intenção, contrato de página, catálogo modelado, validadores e testes. A projeção de preço foi tornada não autoritativa e fail-closed; CNPJ duplicado foi removido do catálogo; regra absoluta de ART na triagem foi condicionada. Nenhuma rota ou oferta modelada ganhou autorização de publicação. |
+| MV-03 | #608 / `7575323b86122b84ccd23b5fcc3713726eaba52f` | PARTIAL | Adotados HTML/CSS/JS de dois passos, mensagem de próximo estado e fallback real por WhatsApp/e-mail/telefone; backend, pins e ativação foram rejeitados. A autoridade continua `WITHHELD`; a família usa `capture_form_or_whatsapp`. |
 | MV-05 | #605 / `32fa6390f803493722ad34c5089b93c1331e9f6b` | PARTIAL | Pesquisa, copy por trabalho e matriz de intenção são donors. Nenhuma das quatro rotas candidatas tem aprovação de oferta/capacidade suficiente; o fragmento de captura conflita com o contrato ativo. A primeira execução de pSEO também revelou impacto global de CSS, corrigido no commit final do producer. Não promover páginas sem nova evidência. |
+| MV-06 | #609 / `5a1e632744045ced0902547fc39218d7746c87fe` | PARTIAL / DEFER rotas | Pacote de pesquisa, limites e copy é donor. Perícia, avaliação e SST não foram promovidas: `offer_id` nulo, capacidades/credenciais WITHHELD, conflito/captura incompletos; SST ainda exige título e atribuição específicos. |
 | MV-07 | #606 / `8066046cba697c598745070a50ef602db0390bc0` | PARTIAL / DEFER rota | Pesquisa legal, separação ente/licitante, matriz de aplicabilidade e contrato de conservação B2G são donors. Não criar `CFG-D55`: MV-01 canonizou `public_works_technical_procurement_planning`. Não promover a rota opcional, pois capacidade multidisciplinar/ART/RRT e captura compatível não estão provadas. |
 
 ### Revisão independente de MV-05 / #605
@@ -109,6 +111,23 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 - P1: a família candidata exigia `capture_form`, mas o intake observado estava `WITHHELD` e os campos propostos não pertenciam ao contrato aceito. Sem fallback funcional na rota, não há ação terminal publicável.
 - P1: o fragmento propunha `CFG-D55`, em conflito com o offer ID canônico da MV-01; a mutação foi rejeitada.
 - P1: a copy assumia produção multidisciplinar, campo e ART/RRT sem prova nominal/capacidade aprovada. A rota permanece candidata e fora do sitemap/runtime.
+
+### Revisão independente de MV-03 / #608 e dependências
+
+- P1: web enviaria `CONFENGE_WEB_INTAKE/2.1.0-mv03.20260905`, enquanto Warmbly #266 aceita `2.0.0-draft.20260904`; toda submissão seria recusada.
+- P1: o consumer converte `PHONE` em `WHATSAPP` e registra opt-in de WhatsApp, ampliando consentimento de canal indevidamente.
+- P1: o readback Warmbly não implementa o schema fechado exigido por Governance #172; o teste web usava resposta mockada.
+- P1: o envelope web acrescenta campos não aceitos pelo schema fechado da Governance; falta um wrapper protegido versionado.
+- P1: replay da mesma idempotency key com payload diferente pode retornar sucesso do registro anterior antes do consumer.
+- P2: `other_technical_need` foi tratado como sexto núcleo, contrariando a taxonomia de cinco; deve ser intenção `NEEDS_CONTEXT`.
+- Resultado: Governance #172 e Warmbly #266 permanecem dependências abertas; nenhum merge/ativação. O código backend do producer não foi portado. Os canais alternativos são a ação real e não autorizam outbound/SMTP.
+
+### Revisão independente de MV-06 / #609
+
+- P1 de promoção: as três famílias propõem `capture_form`, mas os candidatos contêm somente WhatsApp/e-mail e não há submit adaptativo ativável.
+- P1 de promoção: todos os `offer_id` continuam nulos/blocked e as ofertas correspondentes estão `MODEL_ONLY` ou `WITHHELD_PROOF`.
+- P1: SST não tem título/registro/atribuição publicável; perícia e avaliação também não exibem prova profissional suficiente para money pages.
+- O pacote continua noindex fora do artefato público. Pesquisa, limites, copy condicional e capturas podem orientar uma rodada posterior.
 
 ## Regra de integração
 

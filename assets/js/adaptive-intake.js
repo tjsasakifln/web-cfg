@@ -234,12 +234,7 @@
     submit.disabled = true;
     form.setAttribute("aria-busy", "true");
     showStatus("Registrando seu pedido…");
-    track("lead_form_submit", {
-      form_step: 2,
-      need_category: need.value,
-      channel: channel.value,
-      location_required: locationRequired()
-    });
+    track("lead_form_submit");
 
     fetch(form.action, {
       method: "POST",

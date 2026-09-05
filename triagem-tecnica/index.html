@@ -57,8 +57,9 @@
       data-cta-id="triagem-tecnica"
       data-receipt-required="true"
       data-current-step="1"
-      novalidate>
-      <input type="hidden" name="form-name" value="triagem-tecnica">
+      novalidate><p class="form-hint" data-form-value>Selecione classes fechadas para registrar a necessidade técnica; o envio permanece bloqueado enquanto o contrato de intake não estiver disponível.</p>
+<p class="form-hint" data-field-purpose>Nome e canal permitem retorno. Núcleo, classes de situação, urgência, documentos e conflito delimitam a triagem sem texto livre, documentos ou identificação de partes. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
+<input type="hidden" name="form-name" value="triagem-tecnica">
       <input type="hidden" name="adaptive_intake" value="true">
       <input type="hidden" name="intake_version" value="">
       <input type="hidden" name="intake_pin_hash" value="">
@@ -71,8 +72,6 @@
       <input type="hidden" name="document_intent" value="secure_channel_request">
 
       <p class="step-progress" aria-live="polite">Etapa <span data-current-step-label>1</span> de 2</p>
-      <p class="field-help" data-field-purpose>A situação direciona a triagem; nome e um canal válido permitem o retorno. Empresa é opcional, e cidade e UF são pedidas apenas quando uma vistoria pode ser necessária.</p>
-
       <fieldset data-intake-step>
         <legend>Qual situação você precisa resolver?</legend>
         <p class="field-help">Escolha a opção mais próxima. Você não precisa conhecer o nome técnico do serviço.</p>
@@ -146,10 +145,9 @@
         </div>
       </fieldset>
 
-      <p class="field-help" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível. Retenção de até 730 dias; a exclusão pode ser solicitada pelos canais da <a href="/privacidade/">Política de Privacidade</a> com o protocolo.</p>
-
       <p class="intake-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
-    </form>
+<p class="form-hint" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível; se necessário, o canal seguro é solicitado depois do protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
+</form>
 
     <section class="receipt-card" data-intake-receipt hidden aria-labelledby="receipt-title">
       <p class="triage-eyebrow">Pedido registrado</p>
@@ -163,8 +161,8 @@
       <h2 id="canais-titulo">Prefere falar por outro canal?</h2>
       <p>Esses canais continuam disponíveis mesmo quando o formulário não puder registrar o pedido.</p>
       <div class="channel-actions">
-        <a class="button button-primary" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Conversar pelo WhatsApp</a>
-        <a class="button button-secondary" href="mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE">Enviar e-mail</a>
+        <a class="button button-primary" href="https://wa.me/5548988344559?text=Ol%C3%A1%2C%20Tiago.%20Quero%20explicar%20uma%20demanda%20t%C3%A9cnica%20e%20entender%20o%20pr%C3%B3ximo%20passo." rel="noopener" target="_blank">Explicar a demanda pelo WhatsApp</a>
+        <a class="button button-secondary" href="mailto:tiago.sasaki@confenge.com.br?subject=Triagem%20t%C3%A9cnica%20CONFENGE">Descrever a demanda por e-mail</a>
         <a class="text-link" href="tel:+5548988344559">Ligar para (48) 98834-4559</a>
       </div>
     </aside>
