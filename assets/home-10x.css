@@ -312,7 +312,8 @@ body[data-content-cluster="home"] .journey-row{
   gap:.6rem clamp(1.5rem,4vw,3.5rem);align-items:start;
   margin:0;padding:clamp(1.6rem,3vw,2.25rem) 0;border-bottom:1px solid var(--rule);border-top:0;
 }
-body[data-content-cluster="home"] .journey-kind{margin:.35rem 0 0;color:var(--accent)}
+body[data-content-cluster="home"] .journey-kind,
+body[data-content-cluster="home"] .nucleus-kind{margin:.35rem 0 0;color:var(--accent)}
 body[data-content-cluster="home"] .journey-row-body{min-width:0}
 @media (min-width:1000px){
   body[data-content-cluster="home"] .journey-row-body{
