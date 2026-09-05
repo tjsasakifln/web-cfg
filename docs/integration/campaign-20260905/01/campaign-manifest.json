@@ -2,6 +2,7 @@
   "campaign": "CONFENGE_MV_CAMPAIGN=01",
   "title": "Constituição comercial, taxonomia e portfólio finito",
   "base_sha": "89b081a8676d8a0b30747dfcb1477f21d9ac4dfb",
+  "pr_base_sha": "470a5ffafeaf45a59649109742ce5885f9789328",
   "branch": "feat/mv-01-commercial-constitution-20260905",
   "integration_owner": "MV-09",
   "producer_may_merge_or_deploy": false,
@@ -18,5 +19,8 @@
   "public_family_registry_changed": false,
   "runtime_changed": false,
   "production_observed_sha": "89b081a8676d8a0b30747dfcb1477f21d9ac4dfb",
+  "production_expected_main_sha_at_final_check": "470a5ffafeaf45a59649109742ce5885f9789328",
+  "production_parity_at_final_check": false,
+  "production_parity_note": "origin/main avançou por #604 durante a campanha; produção ainda servia o BASE_SHA no check final. MV-01 não faz deploy.",
   "rollback": "revert producer commits; no public route, capture, checkout, workflow or runtime migration"
 }

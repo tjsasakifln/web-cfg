@@ -7,6 +7,11 @@ situacionalidade, catálogo finito, política de preço, contrato de página e
 validadores. Nenhum HTML, rota, formulário, checkout, registro público de
 famílias, sitemap, workflow ou produção foi alterado.
 
+O BASE_SHA inicial e a produção observada eram `89b081a...`. Durante a execução,
+`origin/main` avançou para `470a5ffa...` por #604; a branch foi rebaseada nesse
+SHA, enquanto produção ainda servia o BASE_SHA no check final. Esse atraso de
+deploy é externo à MV-01, que não publica.
+
 ## Visitor job e hipótese
 
 O comprador precisa reconhecer sua situação e saber qual decisão ou prova pode
