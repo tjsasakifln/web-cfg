@@ -190,6 +190,46 @@ def _campaign_01_table_rows(text: str) -> list[dict[str, str]]:
     return rows
 
 
+def _campaign_01_residual_rows(text: str) -> dict[str, dict[str, str]]:
+    """Parse the #536 residual table from the shipped handoff, not a reimplemented map."""
+    started = False
+    rows: dict[str, dict[str, str]] = {}
+    for line in text.splitlines():
+        if "target_path" in line and "operation" in line and line.startswith("|"):
+            started = True
+            continue
+        if not started:
+            continue
+        if not line.startswith("|"):
+            break
+        if re.match(r"^\|\s*-+", line):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 5:
+            continue
+        path = cells[0]
+        if path in {"target_path", ""} or " " in path.split("/")[0] and not path.startswith(
+            ("deploy/", "runtime/", "netlify/", "scripts/", "docs/")
+        ):
+            continue
+        if not re.match(
+            r"^(deploy|runtime|netlify|scripts|docs)/",
+            path,
+        ):
+            continue
+        operation = cells[1]
+        assert operation in {"port", "do-not-replay", "editorial"}, (
+            f"{path} operation {operation!r} not port|do-not-replay|editorial"
+        )
+        rows[path] = {
+            "operation": operation,
+            "stable_key": cells[2],
+            "test": cells[3],
+            "rollback": cells[4],
+        }
+    return rows
+
+
 def test_campaign_01_open_pr_convergence_report():
     assert CAMPAIGN_01_REPORT.is_file(), (
         "missing docs/integration/campaign-20260904/open-pr-convergence.md"
@@ -213,6 +253,23 @@ def test_campaign_01_open_pr_convergence_report():
     assert "target_path" in residual_text
     assert "LCP_HOLD=YES" in residual_text
     assert "goal 97" in residual_text.lower() or "goal 97" in residual_text
+    overlapping = _campaign_01_residual_rows(residual_text)
+    required_overlap = {
+        "deploy/netcup/lib/schedule_gate.py": "port",
+        "deploy/netcup/package_release.py": "do-not-replay",
+        "deploy/netcup/tests/test_release_control.py": "do-not-replay",
+        "deploy/netcup/README.md": "editorial",
+    }
+    for path, expected_op in required_overlap.items():
+        row = overlapping.get(path)
+        assert row, f"#536 residual handoff missing overlapping-different path {path}"
+        assert row["operation"] == expected_op, (
+            f"{path} operation {row['operation']!r} != {expected_op}"
+        )
+        assert row["test"], f"{path} missing test"
+        assert row["rollback"], f"{path} missing rollback"
+        assert path in text, f"report Not-absorbed list missing {path}"
+        print(f"OK overlapping_different {path} operation={expected_op}")
     rows = _campaign_01_table_rows(text)
     numbers = [int(row["pr"]) for row in rows]
     assert numbers, "classification table has no PR rows"

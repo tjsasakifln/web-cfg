@@ -127,6 +127,10 @@ Not absorbed (residual, do not implement on this branch):
 - `scripts/storage/retention.mjs` + `scripts/storage/test_host_owned_storage.mjs` — apply-authority / dry-run
 - `scripts/site/test_inbound_security.mjs`
 - `deploy/netcup/lib/release_control.py` — main is ahead; do not replay the PR blob
+- `deploy/netcup/lib/schedule_gate.py` — **port** (not in the #586 trio): `run_retention` still has unique `--authority-fd/--lock-fd/--deploy-lock-fd` + `pass_fds` vs main `89b081a`; depends on residual `retention.mjs`
+- `deploy/netcup/package_release.py` — **do-not-replay** the PR blob (would drop live_intelligence/organic packaging from #584); capability keys are a later surgical port, not a file replay
+- `deploy/netcup/tests/test_release_control.py` — **do-not-replay** the PR blob (would drop live-intel overlay tests); unique privacy-capability tests stay in the handoff
+- `deploy/netcup/README.md` — **editorial**: unique #442/#443/#410 sections; keep the #586 timer-disabled heading
 - one-line notes in `docs/architecture/RUNTIME-AUTHORITY.md` and `runtime/README.md`
 
 ## Disposition by commit
