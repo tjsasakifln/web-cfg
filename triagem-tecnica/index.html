@@ -57,8 +57,9 @@
       data-cta-id="triagem-tecnica"
       data-receipt-required="true"
       data-current-step="1"
+      aria-describedby="contato-hint form-status"
       novalidate><p class="form-hint" data-form-value>Selecione classes fechadas para registrar a necessidade técnica; o envio permanece bloqueado enquanto o contrato de intake não estiver disponível.</p>
-<p class="form-hint" data-field-purpose>Nome e canal permitem retorno. Núcleo, classes de situação, urgência, documentos e conflito delimitam a triagem sem texto livre, documentos ou identificação de partes. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
+<p class="form-hint" id="contato-hint" data-field-purpose>Nome e canal permitem retorno. A situação escolhida delimita a triagem sem texto livre, documentos ou identificação de partes. WhatsApp aceita DDD e 10 ou 11 dígitos; e-mail precisa de domínio e extensão completos.</p>
 <input type="hidden" name="form-name" value="triagem-tecnica">
       <input type="hidden" name="adaptive_intake" value="true">
       <input type="hidden" name="intake_version" value="">
@@ -145,7 +146,7 @@
         </div>
       </fieldset>
 
-      <p class="intake-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
+      <p class="intake-status" id="form-status" data-intake-status role="status" aria-live="polite">Verificando a disponibilidade do formulário…</p>
 <p class="form-hint" data-form-boundary>Não há contratação, pagamento, aceite ou prazo prometido. Este passo não recebe CPF, processo, prontuário, planta, laudo, lista de empregados, partes em conflito, upload ou texto livre sensível; se necessário, o canal seguro é solicitado depois do protocolo. Dados usados apenas para este retorno; retenção de até 730 dias. A exclusão pode ser pedida pelos canais da <a href="/privacidade/">Política de Privacidade</a>, com o protocolo.</p>
 </form>
 

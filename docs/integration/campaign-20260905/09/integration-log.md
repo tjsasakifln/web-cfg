@@ -64,7 +64,7 @@
 
 ## Mudança concorrente em `main`
 
-Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avançou para `470a5ffafeaf45a59649109742ce5885f9789328`. A branch MV-09 incorporou esse SHA por merge sem force-push. Os achados P1 acima passaram a ser dívida real de `main` e deverão ser corrigidos ou retirados na convergência final. Como havia FAIL material de conversão e somente MV-09 está autorizada a publicar, o release concorrente `33996397421` foi cancelado antes de pacote, stage ou promoção. A produção permaneceu no SHA inicial; nenhum rollback foi necessário.
+Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avançou para `470a5ffafeaf45a59649109742ce5885f9789328`. A branch MV-09 incorporou esse SHA por merge sem force-push. Os achados P1 acima passaram a ser dívida real de `main` e deverão ser corrigidos ou retirados na convergência final. Como havia FAIL material de conversão e somente MV-09 está autorizada a publicar, o release concorrente `33996397421` foi cancelado antes de pacote, stage ou promoção. Outro run autoritativo publicou posteriormente `470a5ffafeaf45a59649109742ce5885f9789328`; esse SHA passou a ser o baseline vivo e candidato a rollback da release final. A publicação não libera os achados da revisão de #604: a home continua B2G-exclusiva, `/servicos/` continua redirecionando para B2G e a ferramenta privada foi indexada antes da shell corporativa.
 
 ## Campanhas MV — decisões à medida que chegam a terminal
 
@@ -75,6 +75,8 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 | MV-05 | #605 / `32fa6390f803493722ad34c5089b93c1331e9f6b` | PARTIAL | Pesquisa, copy por trabalho e matriz de intenção são donors. Nenhuma das quatro rotas candidatas tem aprovação de oferta/capacidade suficiente; o fragmento de captura conflita com o contrato ativo. A primeira execução de pSEO também revelou impacto global de CSS, corrigido no commit final do producer. Não promover páginas sem nova evidência. |
 | MV-06 | #609 / `5a1e632744045ced0902547fc39218d7746c87fe` | PARTIAL / DEFER rotas | Pacote de pesquisa, limites e copy é donor. Perícia, avaliação e SST não foram promovidas: `offer_id` nulo, capacidades/credenciais WITHHELD, conflito/captura incompletos; SST ainda exige título e atribuição específicos. |
 | MV-07 | #606 / `8066046cba697c598745070a50ef602db0390bc0` | PARTIAL / DEFER rota | Pesquisa legal, separação ente/licitante, matriz de aplicabilidade e contrato de conservação B2G são donors. Não criar `CFG-D55`: MV-01 canonizou `public_works_technical_procurement_planning`. Não promover a rota opcional, pois capacidade multidisciplinar/ART/RRT e captura compatível não estão provadas. |
+| MV-02 | #610 / `870500fcea63ad73e95bcd0145c286c2fe6cb378` | PARTIAL | Adotar copy de confiança, caveat nacional e regras puras de conflito somente após retirar exposição de `reason_class`, impedir POST sem JavaScript e preservar o registry factual atual. O producer não provou pin SELECT-only de `extra-cli`; a PR também delegou a recaptura do sitemap à MV-09. |
+| MV-08 | Warmbly #267 / `a4201f2ff3396f3e08030997563ec397b9627df2` | PARTIAL / BLOCKED | O mapping mantém oito landings B2G exatas, sete destinos privados retidos e SMTP/dispatch inalterados. Não integrar ainda: `INTELIGENCIA_PNCP` foi mapeado para uma landing de proposta específica sem message match; o resolver exportado por vertical também é ambíguo. Correção registrada na PR. |
 
 ### Revisão independente de MV-05 / #605
 
@@ -128,6 +130,22 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 - P1 de promoção: todos os `offer_id` continuam nulos/blocked e as ofertas correspondentes estão `MODEL_ONLY` ou `WITHHELD_PROOF`.
 - P1: SST não tem título/registro/atribuição publicável; perícia e avaliação também não exibem prova profissional suficiente para money pages.
 - O pacote continua noindex fora do artefato público. Pesquisa, limites, copy condicional e capturas podem orientar uma rodada posterior.
+
+### Revisão independente de MV-02 / #610
+
+- P1: `confengeEvaluateConflict` exportava `decision`/`inner.reason_class`, embora o contrato declare que motivo pertence à camada protegida.
+- P1: com JavaScript desligado, o formulário de conflitos fazia POST de respostas sensíveis e do honeypot para a própria rota.
+- P1: o registry se declarava projeção SELECT-only sem contrato, versão, record key ou hash de `extra-cli`; claims continuavam localmente owned.
+- P2: “Responsável” podia ser lido como responsável técnico, quando a fonte prova apenas sócio/quem conduz e o CREA segue WITHHELD.
+- P2: `recheck_after` não retirava claim vencido; somente `expires_at` fechava a projeção.
+- Resultado: não adotar o registry novo. Portar apenas copy e lógica de conflitos corrigida, mantendo CREA/RNP/CPTEC/SST WITHHELD e wording nacional condicionado.
+
+### Revisão independente de MV-08 / Warmbly #267
+
+- P2 material para continuidade comercial: `INTELIGENCIA_PNCP` era colapsado em `EDITAL_OU_PROPOSTA` e apontava para o Bid Room, sem corresponder à promessa de inteligência de mercado/PNCP.
+- P2: `CommercialDestinationForVertical(B2G)` retornava silenciosamente a primeira de oito rotas, embora a API pareça route-exact.
+- As oito rotas B2G ativas responderam 200, self-canonical e com âncoras válidas. Sete superfícies privadas permanecem `NOT_ACTIVATED`/`WITHHELD`.
+- A PR não toca scheduler, SMTP, eligibility ou dispatch; `SMTP_DELTA=0` e dispatch permanece pausado. Checks ficaram verdes, mas o erro de message match impede a adoção integral neste fixed point.
 
 ## Regra de integração
 

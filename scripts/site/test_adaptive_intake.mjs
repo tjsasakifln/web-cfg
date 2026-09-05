@@ -595,31 +595,20 @@ for (const nucleus of Object.keys(NUCLEI)) {
   if (/type=["']file["']/i.test(page)) fail("page_file");
   if (/name=["']cpf["']/i.test(page) || /name=["']mensagem["']/i.test(page)) fail("page_sensitive_fields");
   for (const needle of [
-    "canal_preferido",
-    "pessoa_tipo",
-    "decision_role",
-    "nucleus_id",
-    "city_class",
-    "urgency",
-    "why_now",
-    "desired_decision",
-    "document_availability_class",
+    "need_code",
+    "preferred_channel",
+    "location_city",
+    "location_uf",
     "consentimento",
     "sensitive_docs_ack",
-    "Não houve contratação, pagamento nem aceite",
+    "Não há contratação, pagamento, aceite ou prazo prometido",
     "canal seguro",
     "Protocolo",
-    "OTHER_NEEDS_CONTEXT",
-    'data-nucleus-branch="expert_evidence_assistance"',
-    'data-nucleus-branch="property_valuation"',
-    'data-nucleus-branch="building_engineering_documentation"',
-    'data-nucleus-branch="occupational_safety"',
-    'data-nucleus-branch="public_works_b2g"',
   ]) {
     if (!page.includes(needle)) fail("page_missing", needle);
   }
   if (/data-other-free-text|textarea/.test(page)) fail("page_textarea");
-  for (const needle of ["/.netlify/functions/adaptive-intake-config", "config_unavailable", "intake_contract_version", "intake_pin_hash", "receipt_not_persisted", "idempotency_key", "confenge_triagem_idempotency_v1", "confenge_triagem_enums_v1"]) {
+  for (const needle of ["config_unavailable", "intake_version", "intake_pin_hash", "receipt_unconfirmed", "idempotency_key", "confenge_triagem_retry_v2"]) {
     if (!client.includes(needle)) fail("triage_client_missing", needle);
   }
   if (/sessionStorage\.setItem\([^\n]+(?:nome|email|telefone)/.test(client)) fail("triage_client_pii_session");
@@ -629,12 +618,12 @@ for (const nucleus of Object.keys(NUCLEI)) {
 
 {
   const a11y = fs.readFileSync(path.join(root, "triagem-tecnica/index.html"), "utf8");
-  if (!/for="nome"/.test(a11y) || !/for="nucleus_id"/.test(a11y) || !/for="consentimento"/.test(a11y)) {
+  if (!/for="nome"/.test(a11y) || !/for="need-code"/.test(a11y) || !/name="consentimento"/.test(a11y)) {
     fail("a11y_labels");
   }
-  if (!/id="form-status"/.test(a11y) || !/aria-describedby="contato-hint"/.test(a11y)) fail("a11y_errors");
+  if (!/id="form-status"/.test(a11y) || !/aria-describedby="[^"]*contato-hint[^"]*"/.test(a11y)) fail("a11y_errors");
   if (!/viewport/.test(a11y)) fail("viewport");
-  if (!/width=device-width/.test(a11y) || !/contact-form/.test(a11y)) fail("triage_mobile_baseline");
+  if (!/width=device-width/.test(a11y) || !/technical-intake-form/.test(a11y)) fail("triage_mobile_baseline");
   pass("keyboard_sr_and_mobile_structure");
 }
 

@@ -14,6 +14,7 @@ const authority = require("../../netlify/functions/data/adaptive-intake-authorit
 const family = registry.families.find((entry) => entry.id === "triagem-tecnica");
 assert.deepEqual(family.capture_availability, {
   mode: "external_authority_fail_closed",
+  withheld_fallback: ["whatsapp", "email", "telephone"],
   runtime_profile: "adaptive_intake_standalone_v1",
   config_endpoint: "/.netlify/functions/adaptive-intake-config",
   client_script: "/assets/js/adaptive-intake.js",
