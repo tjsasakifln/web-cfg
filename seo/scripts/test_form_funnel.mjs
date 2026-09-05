@@ -53,9 +53,10 @@ for (const needle of [
     process.exit(1);
   }
 }
-// Conserved B2G diagnostic label remains reachable from home, not as the only CTA.
-if (!home.includes("Solicitar diagnóstico da operação")) {
-  console.error("FAIL: home missing Solicitar diagnóstico da operação");
+// Conserved B2G diagnostic route remains reachable from home; the form CTA
+// label stays on the B2G offer pages, not as a second destination type.
+if (!home.includes("/diagnostico-b2g-360/")) {
+  console.error("FAIL: home missing conserved B2G diagnostic URL");
   process.exit(1);
 }
 const b2gTool = fs.readFileSync(path.join(root, "ferramentas/diagnostico-defesa-margem/index.html"), "utf8");

@@ -26,6 +26,7 @@ if str(ROOT) not in sys.path:
 
 from scripts.site.public_ia import (  # noqa: E402
     HUB_ROLES,
+    active_header_href,
     audit_orphans,
     audit_primary_nav_hygiene,
     breadcrumb_trail,
@@ -231,13 +232,21 @@ def main() -> int:
             )
 
     # --- 3. Active state is visible and inherited by descendant/task routes -
+    # Two-door chrome: B2G children highlight Obras públicas; biblioteca and
+    # ferramentas highlight Biblioteca. The IA map is the authority.
     active_cases = {
-        problems["url"]: problems["url"],
-        "/bid-room-licitacoes-obras/": "/bid-room-licitacoes-obras/",
-        "/diretoria-b2g/": "/servicos-obras-publicas/",
-        "/defesa-tecnica-contratos-publicos/": problems["url"],
-        "/conteudos/ata-reuniao-ordem-servico-obra-publica/": "/conteudos/",
-        "/ferramentas/limite-acrescimos-supressoes/": "/conteudos/",
+        problems["url"]: active_header_href(problems["url"]),
+        "/bid-room-licitacoes-obras/": active_header_href("/bid-room-licitacoes-obras/"),
+        "/diretoria-b2g/": active_header_href("/diretoria-b2g/"),
+        "/defesa-tecnica-contratos-publicos/": active_header_href(
+            "/defesa-tecnica-contratos-publicos/"
+        ),
+        "/conteudos/ata-reuniao-ordem-servico-obra-publica/": active_header_href(
+            "/conteudos/ata-reuniao-ordem-servico-obra-publica/"
+        ),
+        "/ferramentas/limite-acrescimos-supressoes/": active_header_href(
+            "/ferramentas/limite-acrescimos-supressoes/"
+        ),
     }
     for current, active in active_cases.items():
         path = ROOT / current.strip("/") / "index.html"
