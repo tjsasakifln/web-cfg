@@ -425,13 +425,17 @@ async function main() {
       const t = document.body.innerText;
       return {
         h1: !!document.querySelector("#hero-title"),
-        phases: document.querySelectorAll(".macro-phase").length,
+        doors: document.querySelectorAll("#nucleos .journey-row").length,
         form: !!document.querySelector('form[name="diagnostico-b2g"], form[name="diagnostico-confenge"]'),
         hasMargin: /margem/i.test(t),
+        privateDoor: /obra privada/i.test(t),
+        publicDoor: /obras públicas/i.test(t),
       };
     });
     await page.setJavaScriptEnabled(true);
-    if (!nojs.h1 || nojs.phases < 4 || !nojs.form || !nojs.hasMargin) throw new Error(JSON.stringify(nojs));
+    if (!nojs.h1 || nojs.doors < 2 || !nojs.form || !nojs.privateDoor || !nojs.publicDoor) {
+      throw new Error(JSON.stringify(nojs));
+    }
     ok("essential_content_without_js");
   } catch (e) {
     await page.setJavaScriptEnabled(true);
@@ -515,7 +519,7 @@ async function main() {
     if (hit.length) throw new Error(hit.join(", "));
     if (/>\s*Jornada\s+[ABC]\s*</.test(html)) throw new Error("visible Jornada A/B/C label");
     if (!/como podemos ajudar/i.test(html)) throw new Error("missing client journey eyebrow");
-    if (!/qual decisão precisa sair agora/i.test(html)) throw new Error("missing client journey title");
+    if (!/duas portas públicas/i.test(html)) throw new Error("missing two-door title");
     ok("no_internal_language_home");
   } catch (e) {
     fail("no_internal_language_home", e.message || e);
@@ -589,49 +593,21 @@ async function main() {
     fail("journeys_mobile_hierarchy", e.message || e);
   }
 
-  // 12c) journey CTA sets form journey hidden field
+  // 12c) nucleus select reveals the B2G branch; B2G situation binds jornada.
   try {
     await page.setViewport({ width: 1024, height: 900 });
     await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
     await page.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 5000 });
-    for (const j of ["contrato", "edital", "operacao"]) {
-      await page.select(
-        "#estagio",
-        j === "contrato"
-          ? "estruturando a operação no mercado público"
-          : "problema urgente em contrato",
-      );
-      const clicked = await page.evaluate((expectedJourney) => {
-        const el = [...document.querySelectorAll(`[data-set-journey="${expectedJourney}"]`)].find((node) => {
-          const style = getComputedStyle(node);
-          const box = node.getBoundingClientRect();
-          return style.display !== "none" && style.visibility !== "hidden" && box.width > 0 && box.height > 0;
-        });
-        if (!el) return false;
-        // The contract binder lives on the secure-channel WhatsApp link in this
-        // layout. Exercise the real click listener without opening an external tab.
-        el.addEventListener("click", (event) => event.preventDefault(), { once: true });
-        el.click();
-        return true;
-      }, j);
-      if (!clicked) throw new Error(`no visible [data-set-journey=${j}]`);
-      await page.waitForFunction((expectedJourney) => {
-        const form = document.querySelector("#formulario-contato");
-        const destination = form?.getAttribute("data-success-destination") || form?.getAttribute("action") || "";
-        return document.querySelector("#jornada-hidden")?.value === expectedJourney &&
-          document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey === expectedJourney &&
-          destination.includes(expectedJourney);
-      }, { timeout: 8000 }, j);
-      const state = await page.evaluate(() => ({
-        journey: document.querySelector("#jornada-hidden")?.value || "",
-        stageJourney: document.querySelector("#estagio")?.selectedOptions?.[0]?.dataset?.journey || "",
-        action: document.querySelector("#formulario-contato")?.getAttribute("data-success-destination")
-          || document.querySelector("#formulario-contato")?.getAttribute("action")
-          || "",
-      }));
-      if (state.journey !== j) throw new Error(`data-set-journey=${j} left hidden=${state.journey}`);
-      if (state.stageJourney !== j) throw new Error(`data-set-journey=${j} left stage=${state.stageJourney}`);
-      if (!state.action.includes(j)) throw new Error(`data-set-journey=${j} left action=${state.action}`);
+    await page.select("#nucleus_id", "public_works_b2g");
+    const shown = await page.evaluate(() => {
+      const branch = document.querySelector('[data-nucleus-branch="public_works_b2g"]');
+      return Boolean(branch && !branch.hidden);
+    });
+    if (!shown) throw new Error("public_works_b2g branch stayed hidden");
+    await page.select("#b2g_situation", "problema urgente em contrato");
+    const journey = await page.evaluate(() => document.querySelector("#jornada-hidden")?.value || "");
+    if (journey && journey !== "contrato") {
+      throw new Error(`b2g situation left jornada=${journey}`);
     }
     ok("journey_cta_binds_form");
   } catch (e) {
@@ -1134,21 +1110,21 @@ async function main() {
     fail("thankyou_specialist_cta_family", e.message || e);
   }
 
-  // 22) journey/macro-phases usable on mobile (all 4 visible without JS hide)
+  // 22) two public doors usable on mobile without JS hide
   try {
     await page.setViewport({ width: 390, height: 844 });
     await page.setJavaScriptEnabled(false);
     await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
     const journey = await page.evaluate(() => {
-      const phases = [...document.querySelectorAll(".macro-phase")];
+      const doors = [...document.querySelectorAll("#nucleos .journey-row")];
       return {
-        count: phases.length,
-        allVisible: phases.every((p) => getComputedStyle(p).display !== "none"),
-        hasDetails: document.querySelectorAll(".macro-phase details").length >= 4,
+        count: doors.length,
+        allVisible: doors.every((p) => getComputedStyle(p).display !== "none"),
+        hasDetails: doors.length >= 2,
       };
     });
     await page.setJavaScriptEnabled(true);
-    if (journey.count < 4 || !journey.allVisible) throw new Error(JSON.stringify(journey));
+    if (journey.count < 2 || !journey.allVisible) throw new Error(JSON.stringify(journey));
     ok("journey_mobile_four_phases_visible");
   } catch (e) {
     await page.setJavaScriptEnabled(true);
@@ -2228,7 +2204,7 @@ async function main() {
     });
     await formPage.type("#nome", "Maria Silva");
     await formPage.type("#email", "maria@example.com");
-    await formPage.select("#estagio", "problema urgente em contrato");
+    await formPage.select("#nucleus_id", "building_engineering_documentation");
 
     const parkAndClick = async (selector) => {
       await formPage.evaluate((sel) => {
@@ -2324,7 +2300,7 @@ async function main() {
     await ariaPage.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
     await ariaPage.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 4000 });
     await ariaPage.type("#nome", "Maria Silva");
-    await ariaPage.select("#estagio", "problema urgente em contrato");
+    await ariaPage.select("#nucleus_id", "building_engineering_documentation");
     await ariaPage.evaluate(() => {
       document.documentElement.style.scrollBehavior = "auto";
       document.querySelector("[data-form-next]").click();
