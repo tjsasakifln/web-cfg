@@ -1,1 +1,8 @@
 document.querySelectorAll('a[href^="#"]').forEach((link)=>link.addEventListener('click',()=>{const target=document.querySelector(link.getAttribute('href'));if(target){target.setAttribute('tabindex','-1');target.focus({preventScroll:true)}}));
+const examples={
+  'compatibilizacao-revisao-projetos':'<h2>Exemplo sintético</h2><p><strong>Situação fictícia:</strong> versões de arquitetura e instalações trazem uma passagem sem definição. O registro de pendências proposto daria à coordenação a interface, os arquivos envolvidos e a decisão a devolver aos autores. Não é caso, resultado, preço ou prazo da CONFENGE.</p>',
+  'quantitativos-orcamento-obras':'<h2>Exemplo sintético</h2><p><strong>Situação fictícia:</strong> duas propostas usam o mesmo nome de serviço, mas incluem quantidades diferentes. A memória e a planilha propostas permitiriam comparar o que cada uma considera. Não é caso, resultado, preço ou prazo da CONFENGE.</p>',
+  'inspecao-documentacao-edificacoes':'<h2>Exemplo sintético</h2><p><strong>Situação fictícia:</strong> antes de uma reforma há fotos e plantas antigas, mas faltam documentos e encaminhamentos. O plano proposto organizaria o que registrar e o que precisa de avaliação habilitada. Não é caso, resultado, preço ou prazo da CONFENGE.</p>'
+};
+const pathParts=location.pathname.split('/').filter(Boolean);const slug=pathParts.at(-1)==='index.html'?pathParts.at(-2):pathParts.at(-1),example=examples[slug];
+if(example){const section=document.createElement('section');section.className='section tint';section.innerHTML=`<div class="shell"><div class="example">${example}</div></div>`;document.querySelector('main').append(section)}
