@@ -1,7 +1,64 @@
 {
-  "schema_version": "1.0.0",
-  "updated_at": "2026-08-29",
-  "purpose": "Source of truth for public information architecture: three purchase situations, hub roles, header/footer chrome, and route → job → parent → next action → index state.",
+  "schema_version": "1.1.0",
+  "updated_at": "2026-09-05",
+  "purpose": "Source of truth for the corporate situation chooser, compact global chrome, protected public-works vertical, hub roles, and route → job → parent → next action → index state.",
+  "rollout": {
+    "campaign": "CONFENGE_MV_CAMPAIGN=04",
+    "decision_state": "EXECUTE_NOW",
+    "corporate_services_hub": "candidate_noindex_until_mv09_registry",
+    "header_fallback": "/#situacoes",
+    "activation_owner": "MV-09",
+    "shell_scope": "campaign_routes_only",
+    "campaign_routes": ["/", "/servicos/"],
+    "legacy_header": [
+      { "label": "Edital e proposta", "href": "/bid-room-licitacoes-obras/" },
+      { "label": "Contrato sob pressão", "href": "/problemas-que-resolvemos/" },
+      { "label": "Operação recorrente", "href": "/diretoria-b2g/" },
+      { "label": "Biblioteca", "href": "/conteudos/" }
+    ]
+  },
+  "service_situations": [
+    {
+      "id": "project_delivery",
+      "label": "Projetar, revisar, orçar ou compatibilizar",
+      "visitor_language": "Preciso tirar um projeto do impasse ou conferir se ele pode avançar",
+      "href": "/#triagem-tecnica",
+      "index_state": "triage_fallback"
+    },
+    {
+      "id": "building_diagnosis",
+      "label": "Inspecionar, diagnosticar ou documentar obra e imóvel",
+      "visitor_language": "Preciso entender e registrar uma condição da obra ou do imóvel",
+      "href": "/#triagem-tecnica",
+      "index_state": "triage_fallback"
+    },
+    {
+      "id": "expert_evidence_valuation",
+      "label": "Perícia, assistência técnica ou avaliação",
+      "visitor_language": "Preciso produzir, examinar ou contestar uma prova ou um valor técnico",
+      "href": "/#triagem-tecnica",
+      "index_state": "triage_fallback"
+    },
+    {
+      "id": "occupational_safety",
+      "label": "Segurança do trabalho",
+      "visitor_language": "Preciso reconhecer, documentar ou tratar uma situação de risco ocupacional",
+      "href": "/#triagem-tecnica",
+      "index_state": "triage_fallback"
+    },
+    {
+      "id": "public_works_b2g",
+      "label": "Licitação ou contrato de obra pública",
+      "visitor_language": "Preciso decidir ou proteger margem em uma licitação ou contrato público",
+      "href": "/servicos-obras-publicas/",
+      "index_state": "index"
+    }
+  ],
+  "breadcrumb_labels": {
+    "/servicos-obras-publicas/": "Serviços",
+    "/problemas-que-resolvemos/": "Contrato sob pressão",
+    "/conteudos/": "Biblioteca"
+  },
   "quality_baseline": {
     "origin_main_sha": "72ed3831ba28c9400627cdc9599aa54e9329e178",
     "measured_at": "2026-08-29",
@@ -44,19 +101,14 @@
   "header": {
     "destinations": [
       {
-        "label": "Edital e proposta",
-        "href": "/bid-room-licitacoes-obras/",
-        "journey": "edital"
+        "label": "Serviços e problemas",
+        "href": "/#situacoes",
+        "surface": "corporate_home_chooser"
       },
       {
-        "label": "Contrato sob pressão",
-        "href": "/problemas-que-resolvemos/",
-        "journey": "contrato"
-      },
-      {
-        "label": "Operação recorrente",
-        "href": "/diretoria-b2g/",
-        "journey": "operacao"
+        "label": "Obras públicas",
+        "href": "/servicos-obras-publicas/",
+        "vertical": "public_works_b2g"
       },
       {
         "label": "Biblioteca",
@@ -65,8 +117,8 @@
       }
     ],
     "cta": {
-      "label": "Analisar meu caso",
-      "href": "/#formulario-contato"
+      "label": "Iniciar triagem",
+      "href": "/#triagem-tecnica"
     }
   },
   "footer": {
@@ -74,30 +126,27 @@
       {
         "heading": "Situações",
         "links": [
-          { "label": "Edital e proposta", "href": "/bid-room-licitacoes-obras/" },
-          { "label": "Contrato sob pressão", "href": "/problemas-que-resolvemos/" },
-          { "label": "Operação recorrente", "href": "/diretoria-b2g/" }
+          { "label": "Projetos e edificações", "href": "/#situacao-projeto" },
+          { "label": "Perícias e avaliações", "href": "/#situacao-pericia" },
+          { "label": "Segurança do trabalho", "href": "/#situacao-sst" },
+          { "label": "Obras públicas", "href": "/servicos-obras-publicas/" }
         ]
       },
       {
-        "heading": "Biblioteca",
+        "heading": "Biblioteca e provas",
         "links": [
           { "label": "Conteúdos", "href": "/conteudos/" },
           { "label": "Ferramentas", "href": "/ferramentas/" },
           { "label": "Entregas", "href": "/entregas/" },
-          { "label": "Casos", "href": "/casos/" },
-          { "label": "Aditivos", "href": "/aditivos-obras-publicas/" },
-          { "label": "Atrasos", "href": "/atrasos-prorrogacao-obras-publicas/" },
-          { "label": "Defesa técnica", "href": "/defesa-tecnica-contratos-publicos/" },
-          { "label": "Reequilíbrio", "href": "/reequilibrio-obras-publicas/" }
+          { "label": "Casos demonstrativos", "href": "/casos/" }
         ]
       },
       {
         "heading": "Empresa",
         "links": [
-          { "label": "Serviços", "href": "/servicos-obras-publicas/" },
-          { "label": "Especialista", "href": "/especialista/tiago-jun-sasaki/" },
-          { "label": "Imprensa", "href": "/imprensa/" }
+          { "label": "Quem responde", "href": "/especialista/tiago-jun-sasaki/" },
+          { "label": "Como verificamos", "href": "/confianca/" },
+          { "label": "Contato e triagem", "href": "/#triagem-tecnica" }
         ],
         "contact": true
       }
@@ -105,17 +154,27 @@
   },
   "hubs": [
     {
-      "id": "servicos",
-      "route": "/servicos-obras-publicas/",
+      "id": "servicos-corporativo",
+      "route": "/servicos/",
       "role": "solucao_comercial",
       "label": "Serviços",
+      "next_action": "/#triagem-tecnica",
+      "index_state": "candidate_noindex_until_mv09_registry",
+      "chrome": "hidden",
+      "chrome_reason": "Candidato acessível a partir da home, mas fora do chrome global até a MV-09 registrar a família e ativar a indexação."
+    },
+    {
+      "id": "servicos-obras-publicas",
+      "route": "/servicos-obras-publicas/",
+      "role": "solucao_comercial",
+      "label": "Obras públicas",
       "next_action": "/#formulario-contato"
     },
     {
       "id": "problemas",
       "route": "/problemas-que-resolvemos/",
       "role": "problema",
-      "label": "Problemas que resolvemos",
+      "label": "Contrato sob pressão",
       "next_action": "/defesa-margem-contratos-publicos/"
     },
     {
@@ -222,6 +281,7 @@
     { "prefix": "/conteudos/", "parent": "/conteudos/" },
     { "prefix": "/ferramentas/", "parent": "/", "exact": true },
     { "prefix": "/ferramentas/", "parent": "/ferramentas/" },
+    { "prefix": "/servicos/", "parent": "/", "exact": true },
     { "prefix": "/servicos-obras-publicas/", "parent": "/", "exact": true },
     { "prefix": "/problemas-que-resolvemos/", "parent": "/", "exact": true },
     { "prefix": "/entregas/", "parent": "/", "exact": true },
@@ -270,6 +330,8 @@
     { "prefix": "/piloto/", "parent": "/" }
   ],
   "active_header": [
+    { "prefix": "/servicos/", "href": "/#situacoes" },
+    { "prefix": "/servicos-obras-publicas/", "href": "/servicos-obras-publicas/" },
     { "prefix": "/bid-room-licitacoes-obras/", "href": "/bid-room-licitacoes-obras/" },
     { "prefix": "/diagnostico-pre-licitacao/", "href": "/bid-room-licitacoes-obras/" },
     { "prefix": "/auditoria-orcamento-licitacao/", "href": "/bid-room-licitacoes-obras/" },
@@ -281,9 +343,9 @@
     { "prefix": "/atrasos-prorrogacao-obras-publicas/", "href": "/problemas-que-resolvemos/" },
     { "prefix": "/reequilibrio-obras-publicas/", "href": "/problemas-que-resolvemos/" },
     { "prefix": "/acompanhamento-contratos-obras/", "href": "/problemas-que-resolvemos/" },
-    { "prefix": "/diretoria-b2g/", "href": "/diretoria-b2g/" },
-    { "prefix": "/diagnostico-b2g-360/", "href": "/diretoria-b2g/" },
-    { "prefix": "/diagnostico-b2g-expansao/", "href": "/diretoria-b2g/" },
+    { "prefix": "/diretoria-b2g/", "href": "/servicos-obras-publicas/" },
+    { "prefix": "/diagnostico-b2g-360/", "href": "/servicos-obras-publicas/" },
+    { "prefix": "/diagnostico-b2g-expansao/", "href": "/servicos-obras-publicas/" },
     { "prefix": "/conteudos/", "href": "/conteudos/" },
     { "prefix": "/guias-contratos-obras/", "href": "/conteudos/" },
     { "prefix": "/lei-14133-obras/", "href": "/conteudos/" },
@@ -292,14 +354,14 @@
   ],
   "removed_from_primary_nav": [
     {
-      "label": "Serviços",
-      "href": "/servicos-obras-publicas/",
-      "reason": "Taxonomia sobreposta às três situações de compra; permanece como hub de solução comercial no rodapé."
+      "label": "Hub corporativo /servicos/ durante a ativação",
+      "href": "/servicos/",
+      "reason": "A navegação usa o chooser da home até a MV-09 registrar a família e liberar a indexação do hub; evita apontar o chrome global para uma rota noindex."
     },
     {
-      "label": "Problemas que resolvemos",
+      "label": "Problemas B2G",
       "href": "/problemas-que-resolvemos/",
-      "reason": "O destino permanece no header com o rótulo da situação (Contrato sob pressão), sem um segundo item de taxonomia."
+      "reason": "Permanece a até duas ações dentro da vertical Obras públicas, sem se passar pelo hub corporativo."
     },
     {
       "label": "Entregas",
@@ -307,9 +369,9 @@
       "reason": "Catálogo de evidência, não uma situação de compra; descoberta no rodapé Biblioteca."
     },
     {
-      "label": "Especialista",
+      "label": "Quem responde",
       "href": "/especialista/tiago-jun-sasaki/",
-      "reason": "Página institucional; descoberta no rodapé Empresa."
+      "reason": "Página institucional presente no rodapé; a primeira dobra usa apenas sinais de confiança já seguros no main."
     }
   ],
   "removed_from_prominent_chrome": [
@@ -344,9 +406,9 @@
       "reason": "O rodapé deixa de enumerar os oito temas; mantém apenas atalhos de alta intenção, enquanto o hub cobre a descoberta completa."
     },
     {
-      "label": "ofertas individuais no rodapé",
+      "label": "ofertas B2G individuais no rodapé corporativo",
       "href": "/servicos-obras-publicas/",
-      "reason": "O rodapé listava cada oferta; as três situações e o hub de serviços cobrem a descoberta."
+      "reason": "A vertical Obras públicas e seu hub preservado cobrem a descoberta sem transformar o rodapé em catálogo."
     }
   ]
 }

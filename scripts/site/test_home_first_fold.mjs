@@ -14,15 +14,22 @@ const PORT = Number(process.env.HOME_FIRST_FOLD_PORT || 8794);
 const CLEARANCE_PX = 8;
 const MIN_TAP_TARGET_PX = 44;
 const MIN_CTA_CONTRAST = 4.5;
-const PRIMARY_CTA_HREF_SUFFIX = "#formulario-contato";
+const PRIMARY_CTA_HREF_SUFFIX = "#situacoes";
 // Presence/visibility tokens only. This gate never scores wording quality:
 // it asserts that the words a visitor needs are actually rendered in the fold.
 const CONTENT_TOKENS = [
-  { id: "icp", label: "ICP (construtora)", any: ["construtora"] },
-  { id: "categoria_licitacao", label: "categoria (licitação)", any: ["licitaç"] },
-  { id: "categoria_contrato", label: "categoria (contrato)", any: ["contrato"] },
-  { id: "obra_publica", label: "obra pública", any: ["obras públicas", "obra pública"] },
-  { id: "resultado_economico", label: "resultado econômico", any: ["margem", "capital", "risco", "preço"] },
+  {
+    id: "categoria_corporativa",
+    label: "categoria corporativa",
+    any: ["engenharia, perícias e inteligência técnica"],
+  },
+  { id: "beneficio", label: "benefício concreto", any: ["decisão documentada"] },
+  { id: "metodo", label: "base técnica", any: ["diagnóstico, cálculo e evidências"] },
+  { id: "projetos", label: "situação de projeto", any: ["projetos"] },
+  { id: "imoveis", label: "situação de imóvel", any: ["imóveis"] },
+  { id: "pericias", label: "situação de perícia", any: ["perícias"] },
+  { id: "sst", label: "situação de SST em linguagem pública", any: ["segurança do trabalho"] },
+  { id: "obras_publicas", label: "situação de contrato público", any: ["contratos públicos"] },
 ];
 const VIEWPORTS = [
   { width: 390, height: 844 },
@@ -73,7 +80,7 @@ try {
         h1: "#hero-title",
         promise: ".hero-lead",
         proof: ".hero-proof",
-        proofLink: ".hero-proof-line",
+        chooserPath: ".hero-secondary",
         primaryCta: ".hero .button-primary",
       };
       const boxes = Object.fromEntries(
@@ -91,18 +98,15 @@ try {
           }];
         }),
       );
-      const required = Object.entries(boxes).filter(([name]) => name !== "proofLink");
+      const required = Object.entries(boxes);
       const fullyVisible = required.every(([, box]) =>
         box && box.width > 0 && box.height > 0 && box.top >= 0 && box.bottom <= innerHeight - clearance
       );
-      const proofLinkVisible = boxes.proofLink
-        && boxes.proofLink.width > 0
-        && boxes.proofLink.bottom <= innerHeight - clearance;
       return {
         viewport: `${innerWidth}x${innerHeight}`,
         clearance,
         boxes,
-        fullyVisible: Boolean(fullyVisible && proofLinkVisible),
+        fullyVisible: Boolean(fullyVisible),
         horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       };
     }, CLEARANCE_PX);

@@ -32,6 +32,7 @@ from scripts.site.public_ia import (  # noqa: E402
     first_viewport_names_journey,
     footer_problem_cluster_dump,
     hubs,
+    load_ia_map,
     materialize_route_map,
     parent_of,
     parse_jsonld_breadcrumb_trail,
@@ -124,20 +125,26 @@ def internal_hrefs(html: str) -> set[str]:
     return out
 
 
+def public_target_exists(href: str) -> bool:
+    path, _, fragment = href.partition("#")
+    target = ROOT / "index.html" if path in ("", "/") else ROOT / path.strip("/") / "index.html"
+    if not target.is_file():
+        return False
+    if not fragment:
+        return True
+    html = target.read_text(encoding="utf-8")
+    return bool(re.search(rf'\bid=["\']{re.escape(fragment)}["\']', html))
+
+
 def main() -> int:
     brand = load_brand()
+    ia = load_ia_map()
     failures: list[str] = []
 
     # --- 1. Header labels point at destinations that match them -------------
     for item in nav_items(brand):
         href = item["href"]
-        if href.startswith("/#") or href.startswith("#"):
-            failures.append(
-                f"nav label {item['label']!r} still points at a home anchor: {href}"
-            )
-            continue
-        target = ROOT / href.strip("/") / "index.html"
-        if not target.is_file():
+        if not public_target_exists(href):
             failures.append(f"nav label {item['label']!r} target missing: {href}")
 
     services = hub(brand, "services")
@@ -151,19 +158,36 @@ def main() -> int:
     expected_cta = nav_cta(brand)
     expected_desktop_cta = desktop_cta(brand)
     expected_mobile_cta = mobile_cta(brand)
+    rollout = ia.get("rollout") or {}
+    campaign_routes = set(rollout.get("campaign_routes") or [])
+    staged_shell = rollout.get("shell_scope") == "campaign_routes_only"
+    legacy = [
+        (item["href"], item["label"])
+        for item in (rollout.get("legacy_header") or [])
+    ]
     checked = 0
+    staged = 0
+    legacy_count = 0
     for path in shipped_html_files():
         html = path.read_text(encoding="utf-8", errors="replace")
         if 'class="desktop-nav"' not in html:
             continue
         checked += 1
         rel = path.relative_to(ROOT).as_posix()
+        route = page_path(path)
+        route_expected = (
+            expected if not staged_shell or route in campaign_routes else legacy
+        )
+        if route in campaign_routes:
+            staged += 1
+        else:
+            legacy_count += 1
         desktop = nav_links(html, "desktop-nav")
-        if desktop != expected:
-            failures.append(f"{rel}: desktop nav {desktop} != {expected}")
+        if desktop != route_expected:
+            failures.append(f"{rel}: desktop nav {desktop} != {route_expected}")
         mobile = nav_links(html, "mobile-nav")
-        if mobile and mobile != expected:
-            failures.append(f"{rel}: mobile nav {mobile} != {expected}")
+        if mobile and mobile != route_expected:
+            failures.append(f"{rel}: mobile nav {mobile} != {route_expected}")
         header_cta = HEADER_CTA_RE.search(html)
         protected_offer_cta = bool(
             header_cta
@@ -175,12 +199,18 @@ def main() -> int:
         declared_header_value_first = declared_value_first_cta(
             html, page_path(path), mobile=False
         )
-        if (
-            expected_desktop_cta not in html
-            and not protected_offer_cta
-            and not (
-                header_cta
-                and declared_header_value_first == header_cta.group(0)
+        campaign_cta = not staged_shell or route in campaign_routes
+        generic_legacy_cta = bool(
+            header_cta
+            and "Analisar meu caso" in header_cta.group(0)
+            and "/#formulario-contato" in header_cta.group(0)
+        )
+        if not any(
+            (
+                campaign_cta and expected_desktop_cta in html,
+                protected_offer_cta,
+                bool(header_cta and declared_header_value_first == header_cta.group(0)),
+                not campaign_cta and generic_legacy_cta,
             )
         ):
             failures.append(
@@ -191,12 +221,19 @@ def main() -> int:
         declared_mobile_value_first = declared_value_first_cta(
             html, page_path(path), mobile=True
         )
-        if (
-            mobile_block
-            and expected_mobile_cta not in mobile_block.group(2)
-            and not (
-                declared_mobile_value_first
-                and declared_mobile_value_first in mobile_block.group(2)
+        mobile_inner = mobile_block.group(2) if mobile_block else ""
+        generic_legacy_mobile = (
+            "Analisar meu caso" in mobile_inner
+            and "/#formulario-contato" in mobile_inner
+        )
+        if mobile_block and not any(
+            (
+                campaign_cta and expected_mobile_cta in mobile_inner,
+                bool(
+                    declared_mobile_value_first
+                    and declared_mobile_value_first in mobile_inner
+                ),
+                not campaign_cta and generic_legacy_mobile,
             )
         ):
             failures.append(
@@ -208,10 +245,10 @@ def main() -> int:
             html,
             re.S,
         )
-        if footer_top:
+        if footer_top and not campaign_cta:
             missing = [
                 href
-                for href, _ in expected
+                for href, _ in route_expected
                 if f'href="{href}"' not in footer_top.group(1)
             ]
             if missing:
@@ -227,6 +264,14 @@ def main() -> int:
             failures.append(f"{rel}: header nav links miss data-cta-position")
     if checked < 200:
         failures.append(f"expected the shell on ~200 pages, saw {checked}")
+    if staged_shell and staged != len(campaign_routes):
+        failures.append(
+            f"expected {len(campaign_routes)} MV-04 route shells, saw {staged}"
+        )
+    if staged_shell and legacy_count < 190:
+        failures.append(
+            f"staged rollout covered too few untouched shells: {legacy_count}"
+        )
     if declared_value_first_cta(
         '<main id="diagnostico"></main>',
         "/conteudos/",
@@ -309,7 +354,12 @@ def main() -> int:
     hub_targets: dict[str, set[str]] = {}
     for item in nav_items(brand):
         href = item["href"]
-        target = ROOT / href.strip("/") / "index.html"
+        public_path = href.split("#", 1)[0]
+        target = (
+            ROOT / "index.html"
+            if public_path in ("", "/")
+            else ROOT / public_path.strip("/") / "index.html"
+        )
         if target.is_file():
             hub_targets[href] = internal_hrefs(target.read_text(encoding="utf-8"))
 
@@ -408,8 +458,39 @@ def main() -> int:
     clusters = [c["url"] for c in brand.get("problem_clusters") or [] if c.get("url")]
     if footer_problem_cluster_dump(home, clusters):
         failures.append("home footer dumps the full problem-cluster taxonomy")
-    failures.extend(f"nav hygiene: {err}" for err in audit_primary_nav_hygiene(ROOT))
-    graph = audit_orphans(ROOT)
+    services_candidate = (ROOT / "servicos" / "index.html").read_text(
+        encoding="utf-8"
+    )
+    if 'content="noindex,follow" name="robots"' not in services_candidate:
+        failures.append("/servicos/ must remain noindex until MV-09 integration")
+    corporate_hub = next(
+        (row for row in hubs() if row.get("route") == "/servicos/"),
+        None,
+    )
+    if not corporate_hub or corporate_hub.get("chrome") != "hidden":
+        failures.append("/servicos/ must remain hidden from global chrome")
+    if "/servicos/" in {href for href, _ in expected}:
+        failures.append("header must use the chooser until /servicos/ is registered")
+
+    situations = ia.get("service_situations") or []
+    if len(situations) != 5:
+        failures.append(f"expected five customer situations, saw {len(situations)}")
+    for situation in situations:
+        label = str(situation.get("label") or "")
+        href = str(situation.get("href") or "")
+        if label not in home:
+            failures.append(f"home chooser misses {label!r}")
+        if not public_target_exists(href):
+            failures.append(f"situation target missing: {label!r} -> {href!r}")
+    if home.count('class="situation-row') != 5:
+        failures.append("home chooser must contain exactly five situation rows")
+    if 'href="/servicos-obras-publicas/"' not in home:
+        failures.append("public-works vertical lost its canonical entry")
+
+    failures.extend(
+        f"nav hygiene: {err}" for err in audit_primary_nav_hygiene(ROOT, ia)
+    )
+    graph = audit_orphans(ROOT, ia)
     if graph["orphan_count"] != 0:
         failures.append(
             f"indexable orphans={graph['orphan_count']}: {graph['orphans'][:12]}"

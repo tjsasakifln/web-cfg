@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import html as html_lib
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -33,7 +34,7 @@ from scripts.pseo.html_shell import (  # noqa: E402
     breadcrumb_jsonld,
     breadcrumbs_html,
 )
-from scripts.site.public_ia import breadcrumb_trail  # noqa: E402
+from scripts.site.public_ia import breadcrumb_trail, load_ia_map  # noqa: E402
 from scripts.site.shell_nav import (  # noqa: E402
     hub,
     load_brand,
@@ -207,6 +208,24 @@ def _preserve_managed_extensions(rendered: str, current: str | None) -> str:
     return next_document
 
 
+def _preserve_staged_shell(rendered: str, current: str | None, url: str) -> str:
+    """Keep generated hub bodies checked while MV-04 chrome awaits integration."""
+    if current is None:
+        return rendered
+    rollout = load_ia_map().get("rollout") or {}
+    if rollout.get("shell_scope") != "campaign_routes_only":
+        return rendered
+    if url in set(rollout.get("campaign_routes") or []):
+        return rendered
+    next_document = rendered
+    for tag in ("header", "footer"):
+        pattern = re.compile(rf"<{tag}\b[\s\S]*?</{tag}>", re.IGNORECASE)
+        existing = pattern.search(current)
+        if existing and pattern.search(next_document):
+            next_document = pattern.sub(existing.group(0), next_document, count=1)
+    return next_document
+
+
 def _services_body(brand: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
     meta = hub(brand, "services")
     offers = brand.get("offers") or []
@@ -368,6 +387,7 @@ def run(write: bool) -> int:
     for url, text in pages.items():
         path = ROOT / url.strip("/") / "index.html"
         current = path.read_text(encoding="utf-8") if path.exists() else None
+        text = _preserve_staged_shell(text, current, url)
         text = _preserve_managed_extensions(text, current)
         if current == text:
             continue

@@ -33,6 +33,10 @@ _ANY_TOP_NAV_OPEN_RE = re.compile(
     flags=re.IGNORECASE,
 )
 _ANCHOR_RE = re.compile(r"<a\b[^>]*>.*?</a>", flags=re.IGNORECASE | re.DOTALL)
+_HEADER_CTA_RE = re.compile(
+    r'<a\b(?=[^>]*\bheader-cta\b)[^>]*>.*?</a>',
+    flags=re.IGNORECASE | re.DOTALL,
+)
 _ATTRIBUTE_RE = re.compile(
     r"\b(?P<name>[a-z_:][-a-z0-9_:.]*)\s*=\s*(?P<quote>['\"])(?P<value>.*?)"
     r"(?P=quote)",
@@ -41,8 +45,12 @@ _ATTRIBUTE_RE = re.compile(
 _TAG_RE = re.compile(r"<[^>]+>")
 
 
+def _brand_contract() -> dict:
+    return json.loads(BRAND_PATH.read_text(encoding="utf-8"))
+
+
 def _canonical_navigation_items() -> tuple[tuple[str, str], ...]:
-    brand = json.loads(BRAND_PATH.read_text(encoding="utf-8"))
+    brand = _brand_contract()
     raw_items = (brand.get("navigation") or {}).get("desktop") or []
     items = tuple(
         (str(item.get("label", "")), str(item.get("href", "")))
@@ -62,6 +70,19 @@ def _canonical_navigation_items() -> tuple[tuple[str, str], ...]:
 
 
 CANONICAL_NAV_ITEMS = _canonical_navigation_items()
+
+
+def _canonical_cta() -> tuple[str, str]:
+    brand = _brand_contract()
+    raw = (brand.get("navigation") or {}).get("cta") or {}
+    label = str(raw.get("label", ""))
+    href = str(raw.get("href", ""))
+    if not label or not href.startswith("/"):
+        raise ValueError("data/site/brand.json has an invalid navigation CTA")
+    return label, href
+
+
+CANONICAL_CTA = _canonical_cta()
 
 
 def _attribute(anchor: str, name: str) -> str:
@@ -123,6 +144,21 @@ def _canonical_anchor(
     )
 
 
+def _canonical_cta_anchor(*, kind: str) -> str:
+    label, href = CANONICAL_CTA
+    classes = (
+        "button button-primary header-cta"
+        if kind == "desktop"
+        else "button button-primary"
+    )
+    position = "header_cta" if kind == "desktop" else "mobile_nav"
+    return (
+        f'<a class="{classes}" data-cta-position="{position}" '
+        f'data-event-name="cta_click" href="{escape(href, quote=True)}">'
+        f"{escape(label)}</a>"
+    )
+
+
 def _canonicalize_nav_block(
     inner: str,
     *,
@@ -151,7 +187,7 @@ def _canonicalize_nav_block(
     if utility:
         utility_href = _attribute(utility[0], "href")
         if (
-            not (utility_href.startswith("#") or utility_href.startswith("/#"))
+            not utility_href.startswith(("#", "/#"))
             or _attribute(utility[0], "aria-current")
         ):
             raise ValueError(
@@ -163,11 +199,14 @@ def _canonicalize_nav_block(
         _canonical_anchor(label, href, current=href in current, kind=kind)
         for label, href in CANONICAL_NAV_ITEMS
     ]
-    rendered.extend(utility)
+    if kind == "mobile":
+        rendered.append(_canonical_cta_anchor(kind="mobile"))
     return "\n" + "\n".join(rendered) + "\n"
 
 
-def _validate_canonical_block(inner: str, *, relative_path: str) -> None:
+def _validate_canonical_block(
+    inner: str, *, opening: str, relative_path: str
+) -> None:
     anchors = [match.group(0) for match in _ANCHOR_RE.finditer(inner)]
     navigation = [anchor for anchor in anchors if not _is_button(anchor)]
     signature = tuple(
@@ -185,6 +224,32 @@ def _validate_canonical_block(inner: str, *, relative_path: str) -> None:
         raise ValueError(
             f"{relative_path}: multiple current pages in top navigation"
         )
+    utility = [anchor for anchor in anchors if _is_button(anchor)]
+    if _nav_kind(opening) == "mobile":
+        expected = CANONICAL_CTA
+        actual = tuple(
+            (_anchor_text(anchor), _attribute(anchor, "href"))
+            for anchor in utility
+        )
+        if actual != (expected,):
+            raise ValueError(
+                f"{relative_path}: mobile CTA differs from brand contract; "
+                f"expected={expected!r}, actual={actual!r}"
+            )
+    elif utility:
+        raise ValueError(f"{relative_path}: desktop nav contains a utility CTA")
+
+
+def _canonicalize_header_cta(anchor: str) -> str:
+    """Preserve versioned offer actions; normalize the generic shell CTA."""
+
+    if (
+        _attribute(anchor, "data-cta-kind") == "offer"
+        and _attribute(anchor, "data-next-action-id")
+        and _attribute(anchor, "data-offer-id")
+    ):
+        return anchor
+    return _canonical_cta_anchor(kind="desktop")
 
 
 def promote_public_navigation(html: str, *, relative_path: str) -> str:
@@ -230,12 +295,27 @@ def promote_public_navigation(html: str, *, relative_path: str) -> str:
     pieces.append(html[cursor:])
     result = "".join(pieces)
 
+    header_ctas = list(_HEADER_CTA_RE.finditer(result))
+    if len(header_ctas) > 1:
+        raise ValueError(
+            f"{normalized_path}: expected at most one desktop header CTA; "
+            f"found {len(header_ctas)}"
+        )
+    if header_ctas:
+        result = _HEADER_CTA_RE.sub(
+            lambda match: _canonicalize_header_cta(match.group(0)),
+            result,
+            count=1,
+        )
+
     result_blocks = list(_NAV_RE.finditer(result))
     if len(result_blocks) != len(blocks):
         raise ValueError(f"{normalized_path}: navigation block count changed")
     for block in result_blocks:
         _validate_canonical_block(
-            block.group(2), relative_path=normalized_path
+            block.group(2),
+            opening=block.group(1),
+            relative_path=normalized_path,
         )
     return result
 

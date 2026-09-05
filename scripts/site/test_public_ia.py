@@ -36,17 +36,26 @@ def test_ia_contract_is_valid_without_html():
     errors = validate_contract()
     assert errors == []
     items = header_items()
-    assert len(items) == 4
+    assert len(items) == 3
     assert len(items) <= MAX_HEADER_DESTINATIONS
-    assert header_cta()["href"].endswith("#formulario-contato")
+    assert header_cta()["href"].endswith("#triagem-tecnica")
     labels = " ".join(item["label"].lower() for item in items)
     assert "b2g" not in labels
     assert all(
         phrase in labels
-        for phrase in ("edital e proposta", "contrato sob pressão", "operação recorrente")
+        for phrase in ("serviços e problemas", "obras públicas", "biblioteca")
     )
     assert "biblioteca" in labels
     assert "ferramentas" not in labels
+    ia = load_ia_map()
+    situations = ia["service_situations"]
+    assert len(situations) == 5
+    assert sum(row["href"] == "/servicos-obras-publicas/" for row in situations) == 1
+    assert all(
+        row["href"] == "/#triagem-tecnica"
+        for row in situations
+        if row["id"] != "public_works_b2g"
+    )
 
 
 def test_brand_header_mirrors_ia_map():
@@ -142,7 +151,7 @@ def test_all_mutable_indexable_breadcrumbs_equal_visible_ia_and_jsonld():
     assert checked >= 60
 
 
-def test_sync_text_inserts_missing_parent_into_crumbs_and_jsonld():
+def test_sync_text_keeps_non_campaign_route_byte_stable_during_mv04_rollout():
     brand = load_brand()
     route = "/defesa-margem-contratos-publicos/"
     html = """<!DOCTYPE html><html><head>
@@ -153,11 +162,8 @@ def test_sync_text_inserts_missing_parent_into_crumbs_and_jsonld():
 <nav aria-label="Navegação estrutural" class="breadcrumbs container"><ol><li><a href="/">Início</a><span aria-hidden="true">/</span></li><li aria-current="page">Defesa de margem</li></ol></nav>
 </main></body></html>"""
     updated = sync_text(html, brand, route)
-    trail = breadcrumb_trail(route, current_label="Defesa de margem")
-    assert parse_visible_breadcrumb_trail(updated) == trail
-    assert parse_jsonld_breadcrumb_trail(updated, route) == trail
-    assert trail[1][1] == "/problemas-que-resolvemos/"
-    assert sync_text(updated, brand, route) == updated
+    assert updated == html
+    assert load_ia_map()["rollout"]["shell_scope"] == "campaign_routes_only"
 
 
 def test_shipped_home_header_names_a_journey():
@@ -227,5 +233,6 @@ def test_page_shell_output_is_idempotent_with_shell_nav():
         wa_message="Olá",
     )
     assert 'class="desktop-nav"' in html
-    assert "Edital e proposta" in html
+    assert "Serviços e problemas" in html
+    assert "Obras públicas" in html
     assert sync_text(html, load_brand(), "/guias-contratos-obras/") == html
