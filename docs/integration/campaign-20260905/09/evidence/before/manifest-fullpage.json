@@ -1,0 +1,483 @@
+{
+  "schema_version": "2.1.0",
+  "captured_at": "2026-09-05T22:41:38.285Z",
+  "commit_sha": "89b081a8676d8a0b30747dfcb1477f21d9ac4dfb",
+  "tree_dirty": true,
+  "base_url": "https://confenge.com.br",
+  "output_dir": "docs/integration/campaign-20260905/09/evidence/before",
+  "state": {
+    "id": "fullpage",
+    "fullpage": true,
+    "javascript": "on",
+    "motion": "system"
+  },
+  "capture_runtime": {
+    "browser_version": "Chrome/152.0.7977.42",
+    "fullpage_preparation": {
+      "strategy": "content-visibility-visible/v1",
+      "stable_samples": 3,
+      "sample_interval_ms": 50,
+      "max_wait_ms": 5000
+    }
+  },
+  "routes": [
+    "/",
+    "/servicos/",
+    "/confianca/",
+    "/especialista/tiago-jun-sasaki/",
+    "/contato/",
+    "/servicos-obras-publicas/"
+  ],
+  "viewports": [
+    "390x844",
+    "1440x1000"
+  ],
+  "files": [
+    "home-390x844--fullpage.png",
+    "home-1440x1000--fullpage.png",
+    "servicos-390x844--fullpage.png",
+    "servicos-1440x1000--fullpage.png",
+    "confianca-390x844--fullpage.png",
+    "confianca-1440x1000--fullpage.png",
+    "especialistatiago-jun-sasaki-390x844--fullpage.png",
+    "especialistatiago-jun-sasaki-1440x1000--fullpage.png",
+    "contato-390x844--fullpage.png",
+    "contato-1440x1000--fullpage.png",
+    "servicos-obras-publicas-390x844--fullpage.png",
+    "servicos-obras-publicas-1440x1000--fullpage.png"
+  ],
+  "captures": [
+    {
+      "file": "home-390x844--fullpage.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 1119148,
+      "sha256": "a90ff48c4734d6e4a4d21aeb6068d8b72a08c112945b53c7a89a5be24248c6d7",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 6,
+        "initial_scroll_height": 8877,
+        "scroll_height": 13032,
+        "scroll_height_samples": [
+          13032,
+          13032,
+          13032
+        ],
+        "observed_scroll_heights": [
+          13032,
+          13032,
+          13032
+        ],
+        "post_screenshot_scroll_height_samples": [
+          13032,
+          13032,
+          13032
+        ]
+      }
+    },
+    {
+      "file": "home-1440x1000--fullpage.png",
+      "route": "/",
+      "slug": "home",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 1394789,
+      "sha256": "9fe174a953abbb3fabd930537ecdc710e5b529ce26e632c17f63e4db69bcfb39",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 6,
+        "initial_scroll_height": 8553,
+        "scroll_height": 7984,
+        "scroll_height_samples": [
+          7984,
+          7984,
+          7984
+        ],
+        "observed_scroll_heights": [
+          7984,
+          7984,
+          7984
+        ],
+        "post_screenshot_scroll_height_samples": [
+          7984,
+          7984,
+          7984
+        ]
+      }
+    },
+    {
+      "file": "servicos-390x844--fullpage.png",
+      "route": "/servicos/",
+      "slug": "servicos",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 624415,
+      "sha256": "7f4aafe659682466e036591db57cd34610a7ce282b1250ef0975e5c06bdd5e72",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 7904,
+        "scroll_height": 7904,
+        "scroll_height_samples": [
+          7904,
+          7904,
+          7904
+        ],
+        "observed_scroll_heights": [
+          7904,
+          7904,
+          7904
+        ],
+        "post_screenshot_scroll_height_samples": [
+          7904,
+          7904,
+          7904
+        ]
+      }
+    },
+    {
+      "file": "servicos-1440x1000--fullpage.png",
+      "route": "/servicos/",
+      "slug": "servicos",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 731540,
+      "sha256": "252d635c1f8ed75ad2e5735c6f153ed4bbb43bcb872be7d80d5afb309263df26",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 5514,
+        "scroll_height": 5514,
+        "scroll_height_samples": [
+          5514,
+          5514,
+          5514
+        ],
+        "observed_scroll_heights": [
+          5514,
+          5514,
+          5514
+        ],
+        "post_screenshot_scroll_height_samples": [
+          5514,
+          5514,
+          5514
+        ]
+      }
+    },
+    {
+      "file": "confianca-390x844--fullpage.png",
+      "route": "/confianca/",
+      "slug": "confianca",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 640667,
+      "sha256": "b7b0c77ab28ec43c7a251d32a8e159ad2a19966f4cf4493830bb2dc2fb12f831",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 5919,
+        "scroll_height": 5919,
+        "scroll_height_samples": [
+          5919,
+          5919,
+          5919
+        ],
+        "observed_scroll_heights": [
+          5919,
+          5919,
+          5919
+        ],
+        "post_screenshot_scroll_height_samples": [
+          5919,
+          5919,
+          5919
+        ]
+      }
+    },
+    {
+      "file": "confianca-1440x1000--fullpage.png",
+      "route": "/confianca/",
+      "slug": "confianca",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 681860,
+      "sha256": "99f339ac1895f8a4013609bf1b9ec3376b1d587efd9c6cf1c7735b1aff42c237",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 4253,
+        "scroll_height": 4253,
+        "scroll_height_samples": [
+          4253,
+          4253,
+          4253
+        ],
+        "observed_scroll_heights": [
+          4253,
+          4253,
+          4253
+        ],
+        "post_screenshot_scroll_height_samples": [
+          4253,
+          4253,
+          4253
+        ]
+      }
+    },
+    {
+      "file": "especialistatiago-jun-sasaki-390x844--fullpage.png",
+      "route": "/especialista/tiago-jun-sasaki/",
+      "slug": "especialistatiago-jun-sasaki",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 739213,
+      "sha256": "9fd73cdcdb52a72b8ca2b40cddfe2a4ad6ca469d04e9c754a12fe261f7578217",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 7297,
+        "scroll_height": 7297,
+        "scroll_height_samples": [
+          7297,
+          7297,
+          7297
+        ],
+        "observed_scroll_heights": [
+          7297,
+          7297,
+          7297
+        ],
+        "post_screenshot_scroll_height_samples": [
+          7297,
+          7297,
+          7297
+        ]
+      }
+    },
+    {
+      "file": "especialistatiago-jun-sasaki-1440x1000--fullpage.png",
+      "route": "/especialista/tiago-jun-sasaki/",
+      "slug": "especialistatiago-jun-sasaki",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 860898,
+      "sha256": "97385e28403b687bc126d6a1d9a8272d7f302232ea5ef2adb39cbfd4e96b6c8d",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 5044,
+        "scroll_height": 5044,
+        "scroll_height_samples": [
+          5044,
+          5044,
+          5044
+        ],
+        "observed_scroll_heights": [
+          5044,
+          5044,
+          5044
+        ],
+        "post_screenshot_scroll_height_samples": [
+          5044,
+          5044,
+          5044
+        ]
+      }
+    },
+    {
+      "file": "contato-390x844--fullpage.png",
+      "route": "/contato/",
+      "slug": "contato",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 1178869,
+      "sha256": "ae6178ddd731623a9508f1900e9b6d477db3c131acad57ef5cbd1edd87e78056",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 6,
+        "initial_scroll_height": 10380,
+        "scroll_height": 13032,
+        "scroll_height_samples": [
+          13032,
+          13032,
+          13032
+        ],
+        "observed_scroll_heights": [
+          13032,
+          13032,
+          13032
+        ],
+        "post_screenshot_scroll_height_samples": [
+          13032,
+          13032,
+          13032
+        ]
+      }
+    },
+    {
+      "file": "contato-1440x1000--fullpage.png",
+      "route": "/contato/",
+      "slug": "contato",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 1379611,
+      "sha256": "16011fea8a8b3d2534ce2eec18d0062fb85e0e02bb1cd05d4b01c45baa1d538c",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 6,
+        "initial_scroll_height": 8139,
+        "scroll_height": 7984,
+        "scroll_height_samples": [
+          7984,
+          7984,
+          7984
+        ],
+        "observed_scroll_heights": [
+          7984,
+          7984,
+          7984
+        ],
+        "post_screenshot_scroll_height_samples": [
+          7984,
+          7984,
+          7984
+        ]
+      }
+    },
+    {
+      "file": "servicos-obras-publicas-390x844--fullpage.png",
+      "route": "/servicos-obras-publicas/",
+      "slug": "servicos-obras-publicas",
+      "viewport": "390x844",
+      "width": 390,
+      "height": 844,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 624415,
+      "sha256": "7f4aafe659682466e036591db57cd34610a7ce282b1250ef0975e5c06bdd5e72",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 7904,
+        "scroll_height": 7904,
+        "scroll_height_samples": [
+          7904,
+          7904,
+          7904
+        ],
+        "observed_scroll_heights": [
+          7904,
+          7904,
+          7904
+        ],
+        "post_screenshot_scroll_height_samples": [
+          7904,
+          7904,
+          7904
+        ]
+      }
+    },
+    {
+      "file": "servicos-obras-publicas-1440x1000--fullpage.png",
+      "route": "/servicos-obras-publicas/",
+      "slug": "servicos-obras-publicas",
+      "viewport": "1440x1000",
+      "width": 1440,
+      "height": 1000,
+      "kind": "page",
+      "state": "fullpage",
+      "fullpage": true,
+      "javascript": "on",
+      "motion": "system",
+      "bytes": 731540,
+      "sha256": "252d635c1f8ed75ad2e5735c6f153ed4bbb43bcb872be7d80d5afb309263df26",
+      "layout": {
+        "strategy": "content-visibility-visible/v1",
+        "materialized_elements": 0,
+        "initial_scroll_height": 5514,
+        "scroll_height": 5514,
+        "scroll_height_samples": [
+          5514,
+          5514,
+          5514
+        ],
+        "observed_scroll_heights": [
+          5514,
+          5514,
+          5514
+        ],
+        "post_screenshot_scroll_height_samples": [
+          5514,
+          5514,
+          5514
+        ]
+      }
+    }
+  ]
+}
