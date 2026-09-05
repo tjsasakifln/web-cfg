@@ -19,7 +19,7 @@
 - Worktree: `.worktrees/web-cfg/mv-03-multivertical-conversion-intake-20260905`.
 - `DISCOVERY_BASE_SHA`: `89b081a8676d8a0b30747dfcb1477f21d9ac4dfb`.
 - Durante a execução, `origin/main` avançou com a PR #604. A campanha foi rebaseada para `FINAL_BASE_SHA=470a5ffafeaf45a59649109742ce5885f9789328`, preservando o inventário runtime e a família pública já integrados.
-- Produção observada em 2026-09-05: `https://confenge.com.br/` respondeu `200`, arquitetura `confenge-nginx-node/v2`; `/triagem-tecnica/` ainda respondeu `404`. Nenhum POST, merge, canário humano ou deploy foi executado.
+- Produção observada em 2026-09-05: `https://confenge.com.br/` respondeu `200`, arquitetura `confenge-nginx-node/v2`. Durante a execução, `/triagem-tecnica/` avançou externamente de `404` para `200`; a configuração pública permaneceu fail-closed em `503` (`intake_unavailable`). Nenhum POST, merge, canário humano ou deploy foi executado pela MV-03.
 - Issues donas: #580 e #532. #596 foi auditada como doadora; #604 deixou de ser somente doadora e entrou em `main` durante esta execução.
 
 ## Resultado do red team
@@ -79,4 +79,4 @@ Verdes:
 - `node --test runtime/test/inventory.test.mjs runtime/test/parity.test.mjs`;
 - `npm run build:site`, incluindo paridade visível e auditoria do artefato público.
 
-O gate `npm run test:cta-form-next-state` acusa apenas o censo 130 versus contrato 128 por causa dos dois canais alternativos obrigatórios; a correção owner está descrita no fragmento, sem editar arquivos fora do WRITE_SET. O smoke de navegador foi atualizado para o novo fluxo, mas não pôde ser executado localmente porque não havia Chrome e o download ambiental não concluiu; CI deve executá-lo com a dependência provisionada.
+O gate `npm run test:cta-form-next-state` acusa apenas o censo 131 versus contrato 128 por causa dos três canais alternativos obrigatórios; a correção owner está descrita no fragmento, sem editar arquivos fora do WRITE_SET. O smoke de navegador foi atualizado para o novo fluxo, mas não pôde ser executado localmente porque não havia Chrome e o download ambiental não concluiu. No CI producer, o pretest interrompe a execução antes do navegador ao encontrar esse censo; a MV-09 deve repetir o smoke depois de aplicar o fragmento.
