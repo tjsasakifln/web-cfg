@@ -1,184 +1,192 @@
 {
- "schema_version": "1.0.0",
- "generated_by": "scripts/site/audit_css_usage.py",
- "public_css_files": [
-  "assets/editorial-a11y-v293.css",
-  "assets/eight-offer-contract.css",
-  "assets/home-10x.css",
-  "assets/report-capture.css",
-  "assets/report-model-a11y-v293.css",
-  "assets/report-model.css",
-  "assets/simple-page-a11y-v293.css",
-  "casos/modelo-apresentacao-executiva-resultados/styles.css",
-  "casos/modelo-base-quantitativa-canonica/styles.css",
-  "casos/modelo-contratos-vincendos-relicitacao/styles.css",
-  "casos/modelo-mapa-compradores-publicos/styles.css",
-  "casos/modelo-mapeamento-concorrentes-publicos/styles.css",
-  "casos/modelo-painel-precos-obras-publicas/styles.css",
-  "casos/modelo-relatorio-executivo-consolidado/styles.css",
-  "casos/modelo-relatorio-inteligencia-licitacoes/styles.css",
-  "css/contracts.css",
-  "css/type-floor.css",
-  "entregas/styles.css",
-  "ferramentas/diagnostico-defesa-margem/styles.css",
-  "ferramentas/matriz-atraso-obra/styles.css",
-  "styles-hubs.css",
-  "styles-offers.css",
-  "styles-tokens.css",
-  "styles-tools.css",
-  "styles.css"
- ],
- "unreferenced_css_files": [],
- "bundles": {
-  "styles.css": {
-   "bytes": 101515,
-   "class_selectors": 356,
-   "used": 355,
-   "unused": [
-    "journey-num",
-    "opaque-token"
-   ]
+  "schema_version": "1.0.0",
+  "generated_by": "scripts/site/audit_css_usage.py",
+  "public_css_files": [
+    "assets/editorial-a11y-v293.css",
+    "assets/eight-offer-contract.css",
+    "assets/home-10x.css",
+    "assets/report-capture.css",
+    "assets/report-model-a11y-v293.css",
+    "assets/report-model.css",
+    "assets/simple-page-a11y-v293.css",
+    "casos/modelo-apresentacao-executiva-resultados/styles.css",
+    "casos/modelo-base-quantitativa-canonica/styles.css",
+    "casos/modelo-contratos-vincendos-relicitacao/styles.css",
+    "casos/modelo-mapa-compradores-publicos/styles.css",
+    "casos/modelo-mapeamento-concorrentes-publicos/styles.css",
+    "casos/modelo-painel-precos-obras-publicas/styles.css",
+    "casos/modelo-relatorio-executivo-consolidado/styles.css",
+    "casos/modelo-relatorio-inteligencia-licitacoes/styles.css",
+    "css/contracts.css",
+    "css/type-floor.css",
+    "entregas/styles.css",
+    "ferramentas/diagnostico-defesa-margem/styles.css",
+    "ferramentas/matriz-atraso-obra/styles.css",
+    "styles-hubs.css",
+    "styles-offers.css",
+    "styles-tokens.css",
+    "styles-tools.css",
+    "styles.css"
+  ],
+  "unreferenced_css_files": [],
+  "bundles": {
+    "styles.css": {
+      "bytes": 100900,
+      "class_selectors": 357,
+      "used": 344,
+      "unused": [
+        "journey-num",
+        "macro-phase",
+        "macro-phases",
+        "offer-dominant",
+        "offer-dominant-link",
+        "offer-facts",
+        "offer-headline",
+        "offer-label",
+        "offer-layout",
+        "offer-path",
+        "offer-paths",
+        "opaque-token",
+        "path-cta"
+      ]
+    },
+    "entregas/styles.css": {
+      "bytes": 21362,
+      "class_selectors": 54,
+      "used": 54,
+      "unused": []
+    }
   },
-  "entregas/styles.css": {
-   "bytes": 19684,
-   "class_selectors": 54,
-   "used": 54,
-   "unused": []
+  "decoration": {
+    "assets/editorial-a11y-v293.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/eight-offer-contract.css": {
+      "border_radius": 1,
+      "box_shadow": 1,
+      "gradient": 0
+    },
+    "assets/home-10x.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/report-capture.css": {
+      "border_radius": 3,
+      "box_shadow": 2,
+      "gradient": 0
+    },
+    "assets/report-model-a11y-v293.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "assets/report-model.css": {
+      "border_radius": 0,
+      "box_shadow": 2,
+      "gradient": 5
+    },
+    "assets/simple-page-a11y-v293.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "casos/modelo-apresentacao-executiva-resultados/styles.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "casos/modelo-base-quantitativa-canonica/styles.css": {
+      "border_radius": 1,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "casos/modelo-contratos-vincendos-relicitacao/styles.css": {
+      "border_radius": 1,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "casos/modelo-mapa-compradores-publicos/styles.css": {
+      "border_radius": 1,
+      "box_shadow": 0,
+      "gradient": 1
+    },
+    "casos/modelo-mapeamento-concorrentes-publicos/styles.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "casos/modelo-painel-precos-obras-publicas/styles.css": {
+      "border_radius": 1,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "casos/modelo-relatorio-executivo-consolidado/styles.css": {
+      "border_radius": 2,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": {
+      "border_radius": 0,
+      "box_shadow": 2,
+      "gradient": 5
+    },
+    "css/contracts.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "css/type-floor.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "entregas/styles.css": {
+      "border_radius": 9,
+      "box_shadow": 3,
+      "gradient": 5
+    },
+    "ferramentas/diagnostico-defesa-margem/styles.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "ferramentas/matriz-atraso-obra/styles.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "styles-hubs.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "styles-offers.css": {
+      "border_radius": 5,
+      "box_shadow": 2,
+      "gradient": 0
+    },
+    "styles-tokens.css": {
+      "border_radius": 0,
+      "box_shadow": 0,
+      "gradient": 0
+    },
+    "styles-tools.css": {
+      "border_radius": 17,
+      "box_shadow": 7,
+      "gradient": 1
+    },
+    "styles.css": {
+      "border_radius": 96,
+      "box_shadow": 42,
+      "gradient": 34
+    }
+  },
+  "decoration_totals": {
+    "border_radius": 137,
+    "box_shadow": 61,
+    "gradient": 51
   }
- },
- "decoration": {
-  "assets/editorial-a11y-v293.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "assets/eight-offer-contract.css": {
-   "border_radius": 1,
-   "box_shadow": 1,
-   "gradient": 0
-  },
-  "assets/home-10x.css": {
-   "border_radius": 0,
-   "box_shadow": 6,
-   "gradient": 0
-  },
-  "assets/report-capture.css": {
-   "border_radius": 3,
-   "box_shadow": 2,
-   "gradient": 0
-  },
-  "assets/report-model-a11y-v293.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "assets/report-model.css": {
-   "border_radius": 0,
-   "box_shadow": 2,
-   "gradient": 5
-  },
-  "assets/simple-page-a11y-v293.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "casos/modelo-apresentacao-executiva-resultados/styles.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "casos/modelo-base-quantitativa-canonica/styles.css": {
-   "border_radius": 1,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "casos/modelo-contratos-vincendos-relicitacao/styles.css": {
-   "border_radius": 1,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "casos/modelo-mapa-compradores-publicos/styles.css": {
-   "border_radius": 1,
-   "box_shadow": 0,
-   "gradient": 1
-  },
-  "casos/modelo-mapeamento-concorrentes-publicos/styles.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "casos/modelo-painel-precos-obras-publicas/styles.css": {
-   "border_radius": 1,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "casos/modelo-relatorio-executivo-consolidado/styles.css": {
-   "border_radius": 2,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "casos/modelo-relatorio-inteligencia-licitacoes/styles.css": {
-   "border_radius": 0,
-   "box_shadow": 2,
-   "gradient": 5
-  },
-  "css/contracts.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "css/type-floor.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "entregas/styles.css": {
-   "border_radius": 9,
-   "box_shadow": 3,
-   "gradient": 5
-  },
-  "ferramentas/diagnostico-defesa-margem/styles.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "ferramentas/matriz-atraso-obra/styles.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "styles-hubs.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "styles-offers.css": {
-   "border_radius": 5,
-   "box_shadow": 2,
-   "gradient": 0
-  },
-  "styles-tokens.css": {
-   "border_radius": 0,
-   "box_shadow": 0,
-   "gradient": 0
-  },
-  "styles-tools.css": {
-   "border_radius": 17,
-   "box_shadow": 7,
-   "gradient": 1
-  },
-  "styles.css": {
-   "border_radius": 96,
-   "box_shadow": 42,
-   "gradient": 34
-  }
- },
- "decoration_totals": {
-  "border_radius": 137,
-  "box_shadow": 67,
-  "gradient": 51
- },
- "notes": {
-  "journey-num": "Morta desde a direcao 'parecer' da home: a numeracao ornamental 01/02/03 saiu da tira de metodo e do trilho das portas, e nenhuma outra rota usa a classe. A regra vive em styles.css, congelado por docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md ate 2026-09-13, entao nao pode ser deletada agora. Entra na lista de nao-usadas com data: apagar styles.css .journey-num quando o dono da janela liberar, e remover esta entrada no mesmo commit."
- }
 }
