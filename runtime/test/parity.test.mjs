@@ -173,6 +173,11 @@ test("every HTTP function preserves direct-handler status, relevant headers and 
     date_of_birth: "1990-01-01",
   });
   const fixtures = [
+    {
+      name: "adaptive-intake-config",
+      method: "GET",
+      path: "/.netlify/functions/adaptive-intake-config",
+    },
     { name: "asaas-webhook", method: "GET", path: "/.netlify/functions/asaas-webhook" },
     { name: "asaas-webhook-sandbox", method: "GET", path: "/.netlify/functions/asaas-webhook-sandbox" },
     { name: "collect", method: "POST", path: "/.netlify/functions/collect", body: collectBody },
