@@ -1,0 +1,16 @@
+{
+  "campaign_from": "03",
+  "campaign_to": ["01", "97"],
+  "target_path": "package.json",
+  "operation": "add_npm_script",
+  "stable_key": "scripts.test:multivertical-catalog",
+  "dependency": "tests/offers/test_multivertical_catalog.mjs",
+  "test": "node tests/offers/test_multivertical_catalog.mjs",
+  "rollback": "Remove the script key only; do not delete the test file owned by campaign 03.",
+  "proposed_script": {
+    "test:multivertical-catalog": "node tests/offers/test_multivertical_catalog.mjs"
+  },
+  "site_ci_target_path": ".github/workflows/site-ci.yml",
+  "site_ci_operation": "invoke npm run test:multivertical-catalog after test:offer-naming",
+  "note": "Campaign 03 must not edit package.json or .github. Local node tests/offers/test_multivertical_catalog.mjs is the product gate."
+}

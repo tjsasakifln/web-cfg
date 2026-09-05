@@ -1,0 +1,39 @@
+{
+  "campaign_from": "03",
+  "campaign_to": "08",
+  "target_path": "capture/intake offer-id enum (owner: campaign 08)",
+  "operation": "pin_consumer_conformance",
+  "stable_key": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+  "dependency": "scripts/offers/multivertical/index.cjs consumerPin()",
+  "test": "node tests/offers/test_multivertical_catalog.mjs",
+  "rollback": "Stop consuming offer IDs; do not invent a parallel enum. Revert the pin, not the B2G registries.",
+  "contract": "CONFENGE_WEB_INTAKE/2.0.0-draft.20260904",
+  "admission_policy": "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904",
+  "instructions": [
+    "Fix catalog_contract and catalog_hash from consumer-pin.json at the merged HEAD.",
+    "Fix taxonomy_contract CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904 and taxonomy_hash.",
+    "Offer IDs must be catalog IDs. Fail closed on unknown ID.",
+    "source=CONFENGE_WEB, outbound_eligible=false, auto_send=false.",
+    "Do not copy this schema into a second authority."
+  ],
+  "modeled_offer_ids_owned_here": [
+    "pre_litigation_technical_screening",
+    "civil_building_technical_assistance",
+    "labor_sst_technical_assistance",
+    "urban_property_valuation",
+    "preliminary_property_opinion",
+    "quantity_takeoff_budgeting",
+    "budget_audit_feasibility",
+    "bim_coordination_clash_register",
+    "building_inspection_pathology",
+    "renovation_plan_condo_review",
+    "asbuilt_document_reconciliation",
+    "private_project_technical_readiness_assessment",
+    "sst_risk_documentation_diagnosis",
+    "sst_pgr_ltcat_aet_inputs",
+    "sst_insalubrity_perilousness_analysis",
+    "sst_preventive_audit",
+    "public_works_technical_procurement_planning"
+  ],
+  "retained_b2g": "Use existing CFG-D01..CFG-D54 and checkout IDs; do not rename."
+}

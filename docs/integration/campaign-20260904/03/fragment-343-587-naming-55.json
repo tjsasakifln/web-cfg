@@ -1,0 +1,25 @@
+{
+  "campaign_from": "03",
+  "campaign_to": ["97", "owner-#343"],
+  "target_path": "data/commercial/offer-naming.v1.json",
+  "operation": "append_name_record_54_to_55",
+  "stable_key": "public_works_technical_procurement_planning",
+  "dependency": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904 offer public_works_technical_procurement_planning",
+  "test": "node tests/commercial/test_offer_naming.mjs after the 55-count gate is intentionally versioned",
+  "rollback": "Remove only the new naming row; do not rename CFG-D01..CFG-D54.",
+  "proposed_record": {
+    "deliverable_id": "CFG-D55",
+    "catalog_number": "55",
+    "public_name_pt_br": "Planejamento Técnico de Licitações de Obras Públicas",
+    "value_line_pt_br": "Ajuda o ente a transformar necessidade em pacote técnico rastreável antes de publicar a licitação.",
+    "aliases": ["DOD", "DFD", "ETP", "Termo de Referência"],
+    "public_slug": null,
+    "redirects": [],
+    "note": "DOD e DFD são nomenclaturas dependentes do ente, não equivalência universal. Não publicar #588 nesta onda."
+  },
+  "constraints": [
+    "Do not reclassify Diretoria plans or containers as products.",
+    "Do not change the previous 54 names, aliases, slugs or prices.",
+    "Campaign 03 modeled the offer but did not bump the 54-count gates."
+  ]
+}

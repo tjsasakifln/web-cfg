@@ -1,0 +1,27 @@
+{
+  "contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+  "status": "DRAFT_TEST_ONLY",
+  "owner_campaign": "03",
+  "owner_issue": "#583",
+  "parent_issue": "#577",
+  "producer": "scripts/offers/multivertical/index.cjs",
+  "catalog_path": "data/offers/multivertical/catalog.v2.json",
+  "taxonomy_contract": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
+  "note": "Producers publish contract and content_hash. Consumers pin both and keep conformance fixtures in tests only. Missing or divergent version/hash fails closed. Not a second checkout catalog. Goal 97 ratifies.",
+  "invariants": {
+    "source": "CONFENGE_WEB",
+    "outbound_eligible": false,
+    "auto_send": false,
+    "catalog_public": false,
+    "issue_588_in_scope": false,
+    "canary_offer_id": "private_project_technical_readiness_assessment",
+    "private_asset_id": "private_project_technical_readiness_v1"
+  },
+  "nuclei": [
+    "expert_evidence_assistance",
+    "property_valuation",
+    "building_engineering_documentation",
+    "occupational_safety",
+    "public_works_b2g"
+  ]
+}

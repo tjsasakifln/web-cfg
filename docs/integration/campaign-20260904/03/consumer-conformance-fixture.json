@@ -1,0 +1,36 @@
+{
+  "schema": "confenge.offer-consumer-conformance/1.0",
+  "usage": "test-only",
+  "pin": {
+    "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+    "catalog_hash": "sha256:72706ef9c2e1fd26f4b1797f958daf8d0c75599528856207497d2b7b20f3a662",
+    "taxonomy_contract": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
+    "taxonomy_hash": "sha256:f53731b6af4fc116ef112b671494a905381c923d791d3d5976cde447e0e72ebb",
+    "canary_offer_id": "private_project_technical_readiness_assessment",
+    "private_asset_id": "private_project_technical_readiness_v1",
+    "source": "CONFENGE_WEB",
+    "outbound_eligible": false,
+    "auto_send": false
+  },
+  "valid_demand": {
+    "demand_id": "CONFORMANCE_CANARY",
+    "decision": "private_readiness",
+    "buyer_role": "developer",
+    "object": "private_work",
+    "litigation": false
+  },
+  "expected": {
+    "primary_offer_id": "private_project_technical_readiness_assessment",
+    "gap": null
+  },
+  "invalid_unknown_offer": {
+    "demand_id": "CONFORMANCE_INVENTED",
+    "decision": "retained_b2g",
+    "retained_offer_id": "invented_parallel_offer"
+  },
+  "invariants": {
+    "source": "CONFENGE_WEB",
+    "outbound_eligible": false,
+    "auto_send": false
+  }
+}
