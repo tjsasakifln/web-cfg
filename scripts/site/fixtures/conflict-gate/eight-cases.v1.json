@@ -1,0 +1,149 @@
+{
+  "contract_id": "CONFENGE_PUBLIC_CONFLICT_GATE",
+  "contract_version": "1.0.0",
+  "note": "Deterministic fixtures for issue #585. Extra party keys exist only to prove they never leak into the public projection. Draft taxonomy IDs are pins, not runtime fallbacks.",
+  "cases": [
+    {
+      "id": "same_contract_public_fiscal",
+      "expect_status": "DECLINE",
+      "expect_reason_class": "same_public_duty_matter",
+      "facts": {
+        "nucleus_id": "public_works_b2g",
+        "intended_role": "consultant",
+        "information_sufficient": true,
+        "same_public_duty_matter": true,
+        "nonpublic_office_information_risk": false,
+        "incompatible_expert_roles": false,
+        "relevant_personal_or_financial_relation": false,
+        "distinct_matter_no_signal": false,
+        "protected_path_available": true,
+        "party_name": "Construtora Exemplo Ltda",
+        "process_id": "0001234-55.2024.8.24.0000"
+      }
+    },
+    {
+      "id": "nonpublic_office_information_risk",
+      "expect_status": "DECLINE",
+      "expect_reason_class": "nonpublic_office_information_risk",
+      "facts": {
+        "nucleus_id": "building_engineering_documentation",
+        "intended_role": "technical_responsible",
+        "information_sufficient": true,
+        "same_public_duty_matter": false,
+        "nonpublic_office_information_risk": true,
+        "incompatible_expert_roles": false,
+        "relevant_personal_or_financial_relation": false,
+        "distinct_matter_no_signal": false,
+        "protected_path_available": true,
+        "orgao": "Secretaria Municipal de Obras"
+      }
+    },
+    {
+      "id": "court_expert_and_technical_assistant",
+      "expect_status": "DECLINE",
+      "expect_reason_class": "incompatible_expert_roles",
+      "facts": {
+        "nucleus_id": "expert_evidence_assistance",
+        "intended_role": "technical_assistant",
+        "information_sufficient": true,
+        "same_public_duty_matter": false,
+        "nonpublic_office_information_risk": false,
+        "incompatible_expert_roles": true,
+        "relevant_personal_or_financial_relation": false,
+        "distinct_matter_no_signal": false,
+        "protected_path_available": true,
+        "lawyer_name": "Dra. Exemplo",
+        "expert_name": "Perito do Juizo"
+      }
+    },
+    {
+      "id": "personal_financial_relation_review",
+      "expect_status": "REVIEW_REQUIRED",
+      "expect_reason_class": "personal_or_financial_relation_review",
+      "facts": {
+        "nucleus_id": "property_valuation",
+        "intended_role": "valuer",
+        "information_sufficient": true,
+        "same_public_duty_matter": false,
+        "nonpublic_office_information_risk": false,
+        "incompatible_expert_roles": false,
+        "relevant_personal_or_financial_relation": true,
+        "relation_cannot_be_mitigated": null,
+        "mitigation_requires_disclosure": null,
+        "client_requests_public_influence": false,
+        "distinct_matter_no_signal": false,
+        "protected_path_available": true,
+        "employee_name": "Funcionario Exemplo"
+      }
+    },
+    {
+      "id": "insufficient_information",
+      "expect_status": "UNKNOWN",
+      "expect_reason_class": "insufficient_information",
+      "facts": {
+        "nucleus_id": "occupational_safety",
+        "intended_role": "consultant",
+        "information_sufficient": false,
+        "protected_path_available": true,
+        "medical": "afastamento por lesao"
+      }
+    },
+    {
+      "id": "distinct_matter_no_signal",
+      "expect_status": "CLEAR",
+      "expect_reason_class": "no_signal_distinct_matter",
+      "facts": {
+        "nucleus_id": "building_engineering_documentation",
+        "intended_role": "consultant",
+        "information_sufficient": true,
+        "same_public_duty_matter": false,
+        "nonpublic_office_information_risk": false,
+        "incompatible_expert_roles": false,
+        "relevant_personal_or_financial_relation": false,
+        "client_requests_public_influence": false,
+        "distinct_matter_no_signal": true,
+        "protected_path_available": true
+      }
+    },
+    {
+      "id": "disclosure_mitigation",
+      "expect_status": "CLEAR_WITH_DISCLOSURE",
+      "expect_reason_class": "disclosure_mitigation",
+      "facts": {
+        "nucleus_id": "expert_evidence_assistance",
+        "intended_role": "technical_assistant",
+        "information_sufficient": true,
+        "same_public_duty_matter": false,
+        "nonpublic_office_information_risk": false,
+        "incompatible_expert_roles": false,
+        "relevant_personal_or_financial_relation": true,
+        "relation_cannot_be_mitigated": false,
+        "mitigation_requires_disclosure": true,
+        "client_requests_public_influence": false,
+        "distinct_matter_no_signal": false,
+        "protected_path_available": true
+      }
+    },
+    {
+      "id": "role_change_recheck",
+      "expect_status": "REVIEW_REQUIRED",
+      "expect_reason_class": "role_change_recheck",
+      "expect_prior_invalidated": true,
+      "facts": {
+        "nucleus_id": "public_works_b2g",
+        "intended_role": "consultant",
+        "information_sufficient": true,
+        "same_public_duty_matter": false,
+        "nonpublic_office_information_risk": false,
+        "incompatible_expert_roles": false,
+        "relevant_personal_or_financial_relation": false,
+        "client_requests_public_influence": false,
+        "distinct_matter_no_signal": true,
+        "prior_status": "CLEAR",
+        "prior_role_fingerprint": "public_fiscal_v1",
+        "current_role_fingerprint": "private_consultant_v2",
+        "protected_path_available": true
+      }
+    }
+  ]
+}

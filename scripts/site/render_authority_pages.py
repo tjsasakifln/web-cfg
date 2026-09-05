@@ -23,11 +23,20 @@ from scripts.site.authority import (  # noqa: E402
     load_governance,
     write_sealed_editorial_policy,
 )
+from scripts.site.conflict_gate import (  # noqa: E402
+    client_runtime_js,
+    first_step_form_html,
+    load_contract as load_conflict_contract,
+    public_policy_body,
+)
 from scripts.site.responsive_text import escape_prose_with_opaque_tokens  # noqa: E402
+from scripts.site.structured_identity import sanitize_html  # noqa: E402
 
 UPDATED_BR = {
     "2026-08-15": "15 de agosto de 2026",
     "2026-08-16": "16 de agosto de 2026",
+    "2026-09-04": "4 de setembro de 2026",
+    "2026-09-05": "5 de setembro de 2026",
 }
 
 
@@ -35,11 +44,11 @@ def _esc(s: str) -> str:
     return html.escape(s or "", quote=True)
 
 
-def _byline(updated: str, version: str) -> str:
+def _byline(updated: str, version: str, role_label: str = "Responsável técnico") -> str:
     br = UPDATED_BR.get(updated, updated)
     return (
         '<p class="authority-byline">'
-        'Responsável técnico: <a href="/especialista/tiago-jun-sasaki/">Engº Tiago Sasaki</a>'
+        f'{_esc(role_label)}: <a href="/especialista/tiago-jun-sasaki/">Tiago Jun Sasaki</a>'
         f' · Política <span data-policy-version="{_esc(version)}">{_esc(version)}</span>'
         f' · Atualizado em <time datetime="{_esc(updated)}">{_esc(br)}</time>'
         ' · <a href="/correcoes/">Como corrigir</a>'
@@ -149,6 +158,10 @@ def _page(
     updated: str,
     version: str,
     historical: bool = False,
+    role_label: str = "Responsável técnico",
+    show_version_banner: bool = True,
+    author_name: str = "Engº Tiago Sasaki",
+    wa_message: str = "Olá, Tiago. Quero pedir uma correção ou esclarecer a governança editorial da CONFENGE.",
 ) -> str:
     webpage = {
         "@type": "WebPage",
@@ -179,12 +192,12 @@ def _page(
 <p class="eyebrow">{eyebrow}</p>
 <h1>{h1}</h1>
 <p class="content-lead">{description}</p>
-{_byline(updated, version)}
+{_byline(updated, version, role_label)}
 {_nav()}
 </div></header>
 <section class="section"><div class="container article-layout">
 <article class="article-main simple-card privacy-card" data-policy-version="{_esc(version)}">
-{_version_banner(version, historical=historical)}
+{_version_banner(version, historical=historical) if show_version_banner else ""}
 {body}
 </article>
 </div></section>
@@ -196,8 +209,8 @@ def _page(
         robots="index,follow,max-snippet:-1",
         jsonld_graph=[ORG_JSONLD, PERSON_JSONLD, breadcrumb_jsonld(crumbs), webpage],
         body_main=main,
-        wa_message="Olá, Tiago. Quero pedir uma correção ou esclarecer a governança editorial da CONFENGE.",
-        author_name="Engº Tiago Sasaki",
+        wa_message=wa_message,
+        author_name=author_name,
         data_attrs={"surface-type": "policy", "policy-version": version},
     )
 
@@ -270,19 +283,64 @@ def render_all() -> list[Path]:
         if not slug:
             continue
         body = spec.get("body") or ""
+        title = spec.get("title") or slug
+        description = spec.get("description") or ""
+        h1 = spec.get("h1") or spec.get("title") or slug
+        eyebrow = spec.get("eyebrow") or "Governança"
+        crumb_label = h1
+        page_updated = updated
+        page_version = version
+        role_label = "Responsável técnico"
+        show_version_banner = True
+        author_name = "Engº Tiago Sasaki"
+        wa_message = "Olá, Tiago. Quero pedir uma correção ou esclarecer a governança editorial da CONFENGE."
         if key == "corrections":
             body = body + _correction_form(version, owner_email)
+        if key == "conflicts":
+            conflict = load_conflict_contract()
+            copy = conflict.get("public_copy") or {}
+            title = str(copy.get("title") or title)
+            description = str(copy.get("description") or description)
+            h1 = str(copy.get("h1") or h1)
+            eyebrow = str(copy.get("eyebrow") or eyebrow)
+            crumb_label = h1
+            page_updated = str(conflict.get("effective_at") or page_updated)
+            page_version = str(conflict.get("contract_version") or page_version)
+            role_label = "Responsável pela política"
+            show_version_banner = False
+            author_name = "Tiago Jun Sasaki"
+            wa_message = "Olá, Tiago. Quero verificar se a CONFENGE pode analisar minha demanda com independência."
+            written.append(_write("conflitos/conflict-gate.js", client_runtime_js(conflict)))
+            body = (
+                public_policy_body(conflict)
+                + first_step_form_html(conflict)
+                + '<script src="/conflitos/conflict-gate.js" defer=""></script>\n'
+            )
         html_doc = _page(
             path=f"/{slug}/",
-            title=spec.get("title") or slug,
-            description=spec.get("description") or "",
-            h1=spec.get("h1") or spec.get("title") or slug,
-            eyebrow=spec.get("eyebrow") or "Governança",
-            crumbs=[("Início", "/"), (spec.get("h1") or spec.get("title") or slug, None)],
+            title=title,
+            description=description,
+            h1=h1,
+            eyebrow=eyebrow,
+            crumbs=[("Início", "/"), (crumb_label, None)],
             body=body,
-            updated=updated,
-            version=version,
+            updated=page_updated,
+            version=page_version,
+            role_label=role_label,
+            show_version_banner=show_version_banner,
+            author_name=author_name,
+            wa_message=wa_message,
         )
+        if key == "conflicts":
+            html_doc = html_doc.replace(
+                "Consultoria para licitações e contratos de obras públicas: análise de edital, orçamento, proposta e proteção de margem na execução para construtoras.",
+                "Serviços de engenharia, perícias e inteligência técnica para empresas, profissionais e órgãos públicos.",
+            )
+            html_doc, _removed = sanitize_html(
+                html_doc,
+                relative_path="conflitos/index.html",
+            )
+            html_doc = html_doc.replace('"name":"Tiago Sasaki"', '"name":"Tiago Jun Sasaki"')
         written.append(_write(f"{slug}/index.html", html_doc))
 
     historico = _page(
