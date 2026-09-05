@@ -293,7 +293,6 @@ def render_all() -> list[Path]:
             h1 = str(copy.get("h1") or h1)
             eyebrow = str(copy.get("eyebrow") or eyebrow)
             crumb_label = h1
-            page_updated = str(conflict.get("effective_at") or updated)
             body = body.replace("Owner: Engº Tiago Sasaki", "Responsável: Engº Tiago Sasaki")
             written.append(_write("conflitos/conflict-gate.js", client_runtime_js(conflict)))
             body = (
