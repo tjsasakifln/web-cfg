@@ -1,0 +1,100 @@
+{
+  "schema_version": "confenge-mv-commercial-candidates/v1",
+  "campaign_id": "06",
+  "campaign_env": "CONFENGE_MV_CAMPAIGN=06",
+  "title": "Perícias, avaliações de imóveis e Segurança do Trabalho",
+  "repository": "tjsasakifln/web-cfg",
+  "base_sha": "470a5ffafeaf45a59649109742ce5885f9789328",
+  "observed_at": "2026-09-05",
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": [
+    "INBOUND_ENGINE",
+    "REVENUE_NOW"
+  ],
+  "leverage": [
+    "revenue",
+    "distribution",
+    "trust",
+    "customer"
+  ],
+  "north_star": "qualified_commercial_opportunity",
+  "time_to_evidence": "primeiro contato voluntário por família com contexto suficiente para aceitar ou recusar o enquadramento",
+  "public_state": "CANDIDATE_NOINDEX",
+  "publication_owner": "MV-09",
+  "family_count": 3,
+  "hundred_repetition_test": "Cem demandas devem melhorar três enquadramentos e seus motivos de aceite/recusa, sem criar cem páginas ou ofertas artesanais.",
+  "families": [
+    {
+      "id": "pericias-assistencia-tecnica",
+      "nucleus_id": "expert_evidence_assistance",
+      "nucleus_authority": "PR #590 data/corporate/taxonomy.v1.json",
+      "route": "/pericias-assistencia-tecnica/",
+      "candidate_file": "public-candidates/pericias-assistencia-tecnica/index.html",
+      "visitor_job": "Entender o papel da assistência técnica de engenharia no momento atual do processo e pedir um enquadramento sem enviar autos no primeiro contato.",
+      "buyer": ["advogado", "parte", "empresa", "condomínio", "gestor de patrimônio"],
+      "trigger": ["triagem pré-litígio", "prazo para quesitos", "diligência", "laudo recebido", "pedido de esclarecimentos"],
+      "deliverable_boundary": ["mapa técnico do caso", "quesitos", "preparação ou acompanhamento de diligência", "análise de laudo", "parecer ou esclarecimentos conforme escopo"],
+      "primary_cta": "Enquadrar a demanda técnica do processo",
+      "terminal_action": "capture_form",
+      "offer_id": null,
+      "offer_id_state": "BLOCKED_PENDING_ISSUE_583",
+      "proof_state": "CURRENT_REGISTRY_SELF_ATTESTED_CIVIL_WITH_SPECIALTY_WITHHELD",
+      "conflict_gate": "REQUIRED_BEFORE_SUBSTANTIVE_DOCUMENTS",
+      "price_state": "NOT_DISPLAYED"
+    },
+    {
+      "id": "avaliacoes-imoveis",
+      "nucleus_id": "property_valuation",
+      "nucleus_authority": "PR #590 data/corporate/taxonomy.v1.json",
+      "route": "/avaliacoes-imoveis/",
+      "candidate_file": "public-candidates/avaliacoes-imoveis/index.html",
+      "visitor_job": "Saber quais dados definem uma avaliação de imóvel para sua finalidade e solicitar o enquadramento antes de prometer formato ou aceitação.",
+      "buyer": ["proprietário", "herdeiro", "advogado", "empresa", "gestor patrimonial"],
+      "trigger": ["inventário ou partilha", "negociação", "garantia", "disputa", "decisão patrimonial"],
+      "deliverable_boundary": ["finalidade", "data de referência", "imóvel e direitos", "documentação", "vistoria", "método e norma aplicáveis", "laudo ou parecer conforme escopo"],
+      "primary_cta": "Solicitar enquadramento da avaliação",
+      "terminal_action": "capture_form",
+      "offer_id": null,
+      "offer_id_state": "BLOCKED_PENDING_ISSUE_583",
+      "proof_state": "CURRENT_REGISTRY_SELF_ATTESTED_CIVIL_WITH_SPECIALTY_WITHHELD",
+      "conflict_gate": "REQUIRED_WHEN_PARTIES_OR_PUBLIC_DUTY_APPLY",
+      "price_state": "NOT_DISPLAYED"
+    },
+    {
+      "id": "seguranca-trabalho",
+      "nucleus_id": "occupational_safety",
+      "nucleus_authority": "PR #590 data/corporate/taxonomy.v1.json",
+      "route": "/seguranca-trabalho/",
+      "candidate_file": "public-candidates/seguranca-trabalho/index.html",
+      "visitor_job": "Separar a necessidade de PGR, LTCAT, ergonomia, exposição e eSocial e pedir um enquadramento que revele campo e especialidades necessárias.",
+      "buyer": ["empregador", "RH", "operação", "jurídico", "contabilidade"],
+      "trigger": ["nova unidade ou processo", "mudança de atividade", "fiscalização", "evento do eSocial", "revisão de risco", "demanda trabalhista"],
+      "deliverable_boundary": ["diagnóstico de escopo", "PGR quando aplicável", "LTCAT quando aplicável", "avaliação ergonômica preliminar e AET quando necessária", "análises NR-15 e NR-16", "insumos técnicos para eSocial sob autorização"],
+      "primary_cta": "Enquadrar a necessidade de SST",
+      "terminal_action": "capture_form",
+      "offer_id": null,
+      "offer_id_state": "BLOCKED_PENDING_ISSUE_583",
+      "proof_state": "CURRENT_REGISTRY_WITHHELD_OCCUPATIONAL_SAFETY_CREDENTIAL",
+      "conflict_gate": "REQUIRED_BEFORE_SUBSTANTIVE_DOCUMENTS",
+      "price_state": "NOT_DISPLAYED"
+    }
+  ],
+  "analytics_contract": {
+    "source": "CONFENGE_WEB",
+    "events": ["service_page_view", "cta_click", "whatsapp_click", "email_click", "lead_form_start", "lead_form_submit", "lead_persisted"],
+    "allowed_dimensions": ["route_family", "nucleus_id", "cta_id", "cta_position", "channel", "landing_page"],
+    "forbidden_dimensions": ["nome", "email", "telefone", "cpf", "cnpj", "processo", "partes", "documentos", "dados_de_trabalhador"],
+    "auto_send": false
+  },
+  "publication_gates": [
+    "promote exact files into root routes only through MV-09",
+    "consume canonical offer IDs and boundaries from issue #583",
+    "project verified credentials from MV-02 and keep unknown claims absent",
+    "generalize conflict policy under issue #585 before substantive intake",
+    "integrate protected multivertical form from MV-03 with source CONFENGE_WEB",
+    "add public-family registry declarations and run inbound gates",
+    "remove noindex and add self canonical only in the same reviewed promotion",
+    "add sitemap entries only after all publication gates pass"
+  ],
+  "rollback": "Retirar cada nova rota por URL exata e restaurar o SHA anterior; não redirecionar em massa e preservar os registros de contato já aceitos pelo owner comercial."
+}
