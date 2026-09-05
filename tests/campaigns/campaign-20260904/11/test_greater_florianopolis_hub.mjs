@@ -138,11 +138,24 @@ function extractHrefs(html) {
   return out;
 }
 
+function decodeHref(href) {
+  return String(href).replaceAll("&amp;", "&");
+}
+
+function parseHref(href) {
+  return new URL(decodeHref(href), "https://confenge.com.br/");
+}
+
 function queryKeys(href) {
-  const qIndex = href.indexOf("?");
-  if (qIndex < 0) return [];
-  const q = href.slice(qIndex + 1).split("#")[0];
-  return q.split("&").map((part) => decodeURIComponent(part.split("=")[0] || "").toLowerCase());
+  const parsed = parseHref(href);
+  const keys = [...parsed.searchParams.keys()].map((k) => k.toLowerCase());
+  const hashQueryAt = parsed.hash.indexOf("?");
+  if (hashQueryAt >= 0) {
+    for (const part of parsed.hash.slice(hashQueryAt + 1).split("&")) {
+      keys.push(decodeURIComponent(part.split("=")[0] || "").toLowerCase());
+    }
+  }
+  return keys;
 }
 
 function jsonLdBlocks(html) {
@@ -268,10 +281,42 @@ assert("art_is_qualified_placeholder", /quando o ato e a atribuição profission
 assert("credential_placeholder_present", /não são publicados aqui|não é publicado nesta página/i.test(vis), "credential placeholder");
 
 const hrefs = extractHrefs(html);
-const ctaHrefs = hrefs.filter((h) => h.includes("source=CONFENGE_WEB") || h.includes("wa.me"));
-assert("cta_has_confenge_web_source", hrefs.some((h) => h.includes("source=CONFENGE_WEB")), hrefs.filter((h) => h.includes("source=")));
-assert("cta_has_landing_family", hrefs.some((h) => /landing_family=grande-florianopolis-hub/.test(h)), "landing_family");
-assert("cta_has_service_area", hrefs.some((h) => /service_area=grande-florianopolis/.test(h)), "service_area");
+const parsedHrefs = hrefs.map((href) => ({ href, url: parseHref(href) }));
+const formHandoffs = parsedHrefs.filter(
+  (row) =>
+    row.url.hash.includes("formulario-contato") ||
+    (row.url.pathname === "/" && row.url.searchParams.has("source")),
+);
+assert(
+  "no_hash_query_form_handoff",
+  !hrefs.some((href) => /#formulario-contato\?/.test(decodeHref(href))),
+  hrefs.filter((href) => href.includes("formulario-contato")),
+);
+assert("form_handoff_present", formHandoffs.length >= 1, formHandoffs.map((row) => row.href));
+for (const row of formHandoffs) {
+  const params = row.url.searchParams;
+  assert(`form_handoff_search_source_${row.href.slice(0, 80)}`, params.get("source") === "CONFENGE_WEB", { href: row.href, search: row.url.search });
+  assert(`form_handoff_search_landing_family_${row.href.slice(0, 80)}`, params.get("landing_family") === "grande-florianopolis-hub", row.url.search);
+  assert(`form_handoff_search_service_area_${row.href.slice(0, 80)}`, params.get("service_area") === "grande-florianopolis", row.url.search);
+  assert(`form_handoff_search_nucleus_id_${row.href.slice(0, 80)}`, Boolean(params.get("nucleus_id")), params.get("nucleus_id"));
+  assert(`form_handoff_hash_exact_${row.href.slice(0, 80)}`, row.url.hash === "#formulario-contato", row.url.hash);
+  assert(`form_handoff_no_hash_query_${row.href.slice(0, 80)}`, !row.url.hash.includes("?"), row.url.hash);
+}
+assert(
+  "cta_has_confenge_web_source",
+  parsedHrefs.some((row) => row.url.searchParams.get("source") === "CONFENGE_WEB"),
+  parsedHrefs.filter((row) => row.url.search.includes("source=")).map((row) => row.href),
+);
+assert(
+  "cta_has_landing_family",
+  parsedHrefs.some((row) => row.url.searchParams.get("landing_family") === "grande-florianopolis-hub"),
+  "landing_family must live in URL.search",
+);
+assert(
+  "cta_has_service_area",
+  parsedHrefs.some((row) => row.url.searchParams.get("service_area") === "grande-florianopolis"),
+  "service_area must live in URL.search",
+);
 assert("outbound_eligible_false", /data-outbound-eligible="false"/.test(html) && ledger.invariants.outbound_eligible === false, ledger.invariants);
 assert("auto_send_false", /data-auto-send="false"/.test(html) && ledger.invariants.auto_send === false, ledger.invariants);
 assert("draft_invariants_match", contracts.invariants.outbound_eligible === false && contracts.invariants.auto_send === false, contracts.invariants);
