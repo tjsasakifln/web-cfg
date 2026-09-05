@@ -12,7 +12,7 @@ Este pacote entrega candidatos isolados. Ele **não publica**, não altera o che
 - `BASE_SHA`: `89b081a8676d8a0b30747dfcb1477f21d9ac4dfb` (`origin/main` em 05-09-2026).
 - Produção observada em 05-09-2026: `confenge.com.br`, Cloudflare diante de `confenge-nginx-node/v2`, release `89b081a8676d8a0b30747dfcb1477f21d9ac4dfb`; `node scripts/site/runtime_authority.mjs --live` retornou `ok: true`.
 - Issues de origem: [#602](https://github.com/tjsasakifln/web-cfg/issues/602) aberta, P1/VALIDATE; [#583](https://github.com/tjsasakifln/web-cfg/issues/583) aberta, modelagem EXECUTE_NOW e escala VALIDATE.
-- Dependências lidas, não copiadas: PRs #590 (taxonomia), #594 (catálogo), #597 (shell de núcleos) e #604 (prontidão, confiança e triagem). Em 05-09-2026, todas permaneciam fora de `main`; #604 tinha `site-ci` em execução.
+- Dependências lidas, não copiadas: PRs #590 (taxonomia), #594 (catálogo), #597 (shell de núcleos) e #604 (prontidão, confiança e triagem). Durante a execução, #604 foi integrado em `origin/main` como `470a5ffafeaf45a59649109742ce5885f9789328`; `site-ci`, pSEO e release estavam em execução e a produção ainda servia o SHA anterior. #590, #594 e #597 permaneciam abertas.
 
 ## Decisão da campanha
 
@@ -73,4 +73,3 @@ Cada rota só pode ficar indexável quando, no mesmo SHA de integração:
 Cem pedidos devem melhorar uma taxonomia finita de três decisões e revelar documentos/escopos recorrentes; não criar cem páginas, ofertas ou fluxos manuais. Eventos públicos permitidos: visualização do candidato, ativação da ação, início/envio/sucesso da captura e protocolo opaco, sempre com IDs fechados. Texto livre, nome, e-mail, telefone, endereço, planta, orçamento, cliente e documento não entram em analytics.
 
 Rollback: retirar do sitemap/nav/registry e do artefato apenas a rota exata, preservando protocolos já aceitos pelo owner comercial. Nunca redirecionar páginas privadas retiradas para a home sem decisão URL-específica. ADR-STRAT-002 e RUNTIME-AUTHORITY não mudam.
-

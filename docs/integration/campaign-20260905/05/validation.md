@@ -33,6 +33,6 @@ Cada PNG é uma captura do viewport, com `deviceScaleFactor=1` e scroll no topo.
 
 - A ação dos candidatos navega para a triagem com contexto fechado de prévia. O próprio fragmento de captura exige formulário persistido dentro do `<main>` no SHA de promoção; o link sozinho não libera indexação.
 - A produção não foi alterada. Nenhum POST, envio de lead, mensagem, outbound, SMTP, merge ou deploy foi realizado.
+- Enquanto o pacote era produzido, `origin/main` avançou para `470a5ffafeaf45a59649109742ce5885f9789328` com o merge de #604. Os checks/release desse push estavam em execução; a produção ainda respondia no SHA-base `89b081a8676d8a0b30747dfcb1477f21d9ac4dfb`. A campanha não aguardou nem interferiu no deploy de outra campanha.
 - A oferta privada, capacidade, presença em campo, responsabilidade técnica, ART/NF e disciplina permanecem sujeitas à autoridade comercial/profissional vigente e à integração das dependências abertas.
 - As screenshots mostram o shell local do candidato. MV-09 deve repetir a matriz após aplicar o shell corporativo, captura e assets públicos finais.
-
