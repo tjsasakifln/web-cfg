@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 CONTRACT_ID = "CONFENGE_CORPORATE_TAXONOMY"
-CONTRACT_VERSION = "1.0.0-draft.20260904"
+CONTRACT_VERSION = "1.0.0"
 SCHEMA_ID = "confenge-corporate-taxonomy/v1"
 PROTECTED_VERTICAL_ID = "public_works_b2g"
 REQUIRED_NUCLEUS_IDS = (
@@ -118,6 +118,7 @@ DOCUMENT_REQUIRED = {
     "owner_planes",
     "north_star",
     "addition_rules",
+    "expression_policy",
     "nuclei",
     "route_bindings",
     "b2g_coexistence",
@@ -329,6 +330,32 @@ def _validate_addition_rules(value: Any) -> dict[str, Any]:
     return rules
 
 
+def _validate_expression_policy(value: Any) -> dict[str, Any]:
+    policy = _require_exact_keys(
+        value,
+        required={
+            "nuclei_role",
+            "nucleus_names_required_in_public_copy",
+            "public_entrypoint_contract",
+            "public_entrypoint_path",
+            "route_source_of_truth",
+            "unknown_demand_state",
+        },
+        code="expression_policy",
+    )
+    if policy["nuclei_role"] != "internal_operational_grouping":
+        raise TaxonomyError("nuclei_must_remain_internal_operational_grouping")
+    if policy["nucleus_names_required_in_public_copy"] is not False:
+        raise TaxonomyError("nucleus_names_must_not_be_required_public_copy")
+    if policy["route_source_of_truth"] != "intent_family_not_persona":
+        raise TaxonomyError("persona_must_not_route")
+    if policy["unknown_demand_state"] != "NEEDS_CONTEXT":
+        raise TaxonomyError("unknown_demand_must_need_context")
+    _require_text(policy["public_entrypoint_contract"], "public_entrypoint_contract_invalid")
+    _require_text(policy["public_entrypoint_path"], "public_entrypoint_path_invalid")
+    return policy
+
+
 def _validate_offer_ref(value: Any, *, nucleus_id: str, index: int) -> dict[str, Any]:
     ref = _require_exact_keys(
         value,
@@ -503,6 +530,7 @@ def validate_taxonomy(payload: dict[str, Any]) -> dict[str, Any]:
     _validate_owner_planes(document["owner_planes"])
     _validate_north_star(document["north_star"])
     _validate_addition_rules(document["addition_rules"])
+    _validate_expression_policy(document["expression_policy"])
     nuclei_raw = document["nuclei"]
     if not isinstance(nuclei_raw, list):
         raise TaxonomyError("nuclei_invalid")

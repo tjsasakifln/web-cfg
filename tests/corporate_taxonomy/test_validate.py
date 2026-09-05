@@ -23,9 +23,6 @@ from scripts.corporate_taxonomy.validate import (  # noqa: E402
     validate_taxonomy,
 )
 
-FIXTURES = Path(__file__).resolve().parent / "fixtures"
-
-
 def committed() -> dict:
     return json.loads(COMMITTED_PATH.read_text(encoding="utf-8"))
 
@@ -110,7 +107,7 @@ def test_offer_reference_does_not_need_a_second_schema() -> None:
         {
             "offer_id": f"repeatable_offer_{index:03d}",
             "status": "candidate",
-            "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+            "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0",
         }
         for index in range(100)
     ]
@@ -182,9 +179,3 @@ def test_divergent_contract_version_fails() -> None:
     reseal(payload)
     with pytest.raises(TaxonomyError, match="contract_version_mismatch"):
         validate_taxonomy(payload)
-
-
-def test_negative_fixture_unknown_version_fails() -> None:
-    fixture = json.loads((FIXTURES / "taxonomy-unknown-version.json").read_text(encoding="utf-8"))
-    with pytest.raises(TaxonomyError, match="contract_version_mismatch|content_sha256"):
-        validate_taxonomy(fixture)

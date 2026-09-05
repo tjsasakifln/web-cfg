@@ -1,0 +1,22 @@
+{
+  "campaign": "CONFENGE_MV_CAMPAIGN=01",
+  "title": "Constituição comercial, taxonomia e portfólio finito",
+  "base_sha": "89b081a8676d8a0b30747dfcb1477f21d9ac4dfb",
+  "branch": "feat/mv-01-commercial-constitution-20260905",
+  "integration_owner": "MV-09",
+  "producer_may_merge_or_deploy": false,
+  "decision_state": "EXECUTE_NOW",
+  "executive_front": "REVENUE_NOW",
+  "time_to_evidence_days": 30,
+  "leverage": ["revenue", "trust", "customer", "automation"],
+  "donors": [
+    {"pr": 590, "head": "66878b5c343ebb1f11ab535f3821fa675c006138", "decision": "RED_TEAM_AND_INTEGRATE"},
+    {"pr": 594, "head": "cd14b726ffc4304227c10d2d09b8d60be4dcdd91", "decision": "RED_TEAM_AND_INTEGRATE"}
+  ],
+  "public_html_changed": false,
+  "checkout_changed": false,
+  "public_family_registry_changed": false,
+  "runtime_changed": false,
+  "production_observed_sha": "89b081a8676d8a0b30747dfcb1477f21d9ac4dfb",
+  "rollback": "revert producer commits; no public route, capture, checkout, workflow or runtime migration"
+}

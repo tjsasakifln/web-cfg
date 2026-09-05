@@ -1,0 +1,32 @@
+{
+  "schema": "confenge.mv01-consumer-conformance/1.0",
+  "pin": {
+    "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0",
+    "catalog_hash": "sha256:9242935fd35676f294d11a112fc7da8c0890ca40195a2c38977b4900357d59e0",
+    "taxonomy_contract": "CONFENGE_CORPORATE_TAXONOMY/1.0.0",
+    "taxonomy_hash": "sha256:99d17ac874d1dbd550c8cd4c655f2e5a262229232ee77af77cdde4fe5dd00f09",
+    "constitution_contract": "CONFENGE_COMMERCIAL_CONSTITUTION/1.0.0",
+    "constitution_hash": "sha256:30a822a67fe27f57ef3bc5df8b0a6ee53c74cee34e9fa7fccd26cea827963082",
+    "intent_matrix_contract": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
+    "intent_matrix_hash": "sha256:4d8f2a660872e822f17f64c4f9385d6d23aaa429433b7e65019736b28f39b855",
+    "page_contract": "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0",
+    "page_contract_hash": "sha256:967af64031ba5e01471baa215c496fa071496906c53dde585876d963034f1d70",
+    "price_authority": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+    "price_authority_hash": "sha256:c1ab7e48d2e828b49e7967022f6ccbfe7475a28801f5eec7d75d8bffc79b815f",
+    "canary_offer_id": "private_project_technical_readiness_assessment",
+    "private_asset_id": "private_project_technical_readiness_v1"
+  },
+  "valid_demand": {
+    "demand_id": "MV01-CONFORMANCE-602",
+    "decision": "complementary_project_review",
+    "buyer_role": "architecture_office",
+    "object": "structural_interface",
+    "architecture_authorship": false
+  },
+  "expected": {
+    "primary_offer_id": "complementary_engineering_project_review",
+    "catalog_public": false,
+    "public_price": null,
+    "technical_responsibility": "confirm_before_contract"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
-  "taxonomy_contract": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
+  "contract": "CONFENGE_OFFER_CATALOG/2.0.0",
+  "taxonomy_contract": "CONFENGE_CORPORATE_TAXONOMY/1.0.0",
   "issue": "#583",
   "parent_issue": "#577",
   "compatibility_issues": [
@@ -9,10 +9,12 @@
     "#343",
     "#587"
   ],
-  "campaign_id": "03",
+  "campaign_id": "01",
   "publication": {
     "catalog_public": false,
     "prices_public": false,
+    "professional_claims_authorized": false,
+    "credential_authority_present": false,
     "html_routes": [],
     "issue_588_in_scope": false,
     "modeling_is_not_publishing": true
@@ -72,7 +74,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART não se aplica à triagem de enquadramento; ART só entra se a unidade evoluir para serviço técnico de atribuição.",
-        "responsible": "engenheiro civil para objetos de edificação; outro profissional habilitado quando o recorte exigir",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "triagem",
           "encaminhamento",
@@ -104,7 +106,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -177,7 +179,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART quando o produto for opinião ou relatório técnico de atribuição; não há ART para reunião de alinhamento isolada.",
-        "responsible": "engenheiro civil habilitado no recorte de edificações",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "advocacia",
           "ato do perito do juízo"
@@ -210,7 +212,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -283,7 +285,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART quando houver relatório técnico de SST na atribuição do engenheiro; não cobre ato médico.",
-        "responsible": "engenheiro de segurança do trabalho ou engenheiro com atribuição no recorte",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "ato médico",
           "advocacia",
@@ -317,7 +319,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -388,7 +390,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART quando o produto for avaliação de engenharia de atribuição; não se emite ART de avaliação sem recorte e método.",
-        "responsible": "engenheiro com atribuição para avaliação de imóveis urbanos no recorte",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "promessa de preço de venda",
           "parecer preliminar"
@@ -420,7 +422,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -490,7 +492,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART só se o parecer for opinião técnica de atribuição com recorte explícito; não há ART de avaliação formal nesta unidade.",
-        "responsible": "engenheiro com atribuição no recorte urbano",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "avaliação formal",
           "promessa de valor"
@@ -519,7 +521,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -588,7 +590,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART quando o orçamento for serviço de engenharia de atribuição; não há ART para simples conferência de planilha sem recorte técnico.",
-        "responsible": "engenheiro civil no recorte contratado",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "execução",
           "aprovação de alvará"
@@ -620,7 +622,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -689,7 +691,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART quando a auditoria for relatório técnico de engenharia; não há ART para leitura comercial isolada.",
-        "responsible": "engenheiro civil no recorte",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "aprovação de investimento financeiro como analista de valores mobiliários"
         ]
@@ -719,7 +721,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -743,6 +745,123 @@
       ],
       "readiness": "MODELED",
       "wave_class": "MODEL_ONLY"
+    },
+    {
+      "offer_id": "complementary_engineering_project_review",
+      "public_name": "Engenharia Complementar, Revisão e Interfaces de Projeto",
+      "nucleus_id": "building_engineering_documentation",
+      "buyer_job": "Completar ou revisar uma disciplina de engenharia e organizar suas interfaces sem transferir autoria arquitetônica à CONFENGE.",
+      "icp": [
+        "construtora",
+        "incorporadora ou desenvolvedor imobiliário",
+        "escritório de engenharia",
+        "escritório de arquitetura como cliente de engenharia complementar",
+        "plataforma de arquitetura ou projetos como cliente de revisão técnica"
+      ],
+      "trigger_why_now": "O pacote de projeto tem disciplina de engenharia ausente, incompleta ou incompatível antes de orçamento, contratação ou obra.",
+      "supported_decision": "Definir o que pode ser completado ou revisado, por qual responsável e quais interfaces retornam aos autores de origem.",
+      "unit_of_work": "uma disciplina ou interface de engenharia, um pacote documental e um ciclo de revisão",
+      "deliverables": [
+        "matriz de escopo, autoria e interfaces",
+        "revisão ou complemento técnico da disciplina expressamente contratada",
+        "registro de pendências e devolutivas aos autores de origem"
+      ],
+      "exclusions": [
+        "autoria, assinatura ou atribuição arquitetônica",
+        "todas as disciplinas como pacote implícito",
+        "aprovação em órgão, condomínio ou concessionária",
+        "white-label que oculte autoria e responsabilidade técnica",
+        "execução de obra ou correção pelo autor de terceiro",
+        "disciplina sem atribuição comprovada e responsável definido"
+      ],
+      "minimum_documents": [
+        "pacote de projeto disponível",
+        "disciplina ou interface solicitada",
+        "autores e responsáveis conhecidos",
+        "finalidade e etapa da decisão"
+      ],
+      "inspection_field_rule": {
+        "included_by_default": false,
+        "when_required": "vistoria ou levantamento só entra se a disciplina e a proposta nomearem local, recorte e produto de campo",
+        "output": "registro de campo limitado ao recorte, quando contratado"
+      },
+      "method_standard": {
+        "applicable": true,
+        "refs": [
+          "normas da disciplina confirmadas na proposta",
+          "matriz de interfaces e autoria do pacote"
+        ],
+        "note": "BIM, plataforma e arquitetura são contexto ou método; não ampliam atribuição profissional."
+      },
+      "technical_responsibility": {
+        "art_rule": "ART somente para o serviço de engenharia efetivamente contratado, após confirmar profissional, atribuição, local, registro ou visto e disciplina.",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
+        "not_promised_for": [
+          "arquitetura",
+          "disciplina de terceiro não contratada",
+          "aprovação",
+          "execução"
+        ]
+      },
+      "invoice_nf": {
+        "issued": true,
+        "when": "serviço técnico contratado; NF não prova atribuição nem aprovação e não incide na conversa gratuita de enquadramento",
+        "cnpj": "52.407.089/0001-09"
+      },
+      "sla_window": {
+        "state": "UNKNOWN",
+        "public_days": null,
+        "reason": "prazo depende de disciplina, qualidade dos insumos, interfaces, campo e capacidade confirmada"
+      },
+      "urgency_rule": "Urgência depende de segurança técnica e capacidade confirmada; não cria prazo automático nem disciplina disponível.",
+      "revisions": {
+        "included_rounds": 1,
+        "client_window_business_days": 5,
+        "scope_change": "change_order"
+      },
+      "multidisciplinary_dependencies": [
+        "arquiteto autor quando houver interface arquitetônica",
+        "projetistas autores das demais disciplinas",
+        "profissional habilitado nominal quando a disciplina não estiver comprovada internamente"
+      ],
+      "price_model": {
+        "publication": "NOT_PUBLIC",
+        "public_amount_cents": null,
+        "public_range": null,
+        "currency": "BRL",
+        "basis": "proposal_after_scope",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "ticket_class": "remote_documental_or_field",
+        "primary_unit": "fixed_scope_unit_not_hourly"
+      },
+      "paid_triage_rule": "A conversa gratuita confirma apenas situação, disciplina, conflito e próximo passo. Leitura técnica do pacote é triagem paga quando houver autorização material de preço.",
+      "acceptance_criteria": [
+        "disciplina, autoria, interfaces e entregáveis estão nomeados",
+        "atribuição e formalidades estão confirmadas antes da execução",
+        "a entrega não atribui arquitetura nem correção de terceiro à CONFENGE",
+        "pendências podem terminar em NEEDS_CONTEXT"
+      ],
+      "proof_classes": [
+        "method_structure",
+        "credential_required_before_sale"
+      ],
+      "conflict_gate": "Não revisar silenciosamente trabalho próprio como auditor independente nem atender lados opostos da mesma disputa; autoria e papéis são declarados.",
+      "confidentiality_retention": "Projetos, modelos, custos e dados de clientes não entram em analytics. Insumos sensíveis só são recebidos após escopo, conflito e canal adequado.",
+      "legitimate_cross_sell": [
+        "bim_coordination_clash_register",
+        "quantity_takeoff_budgeting",
+        "budget_audit_feasibility",
+        "private_project_technical_readiness_assessment"
+      ],
+      "disqualification": [
+        "pedido de autoria arquitetônica",
+        "disciplina sem atribuição ou responsável confirmável",
+        "promessa de aprovação",
+        "pacote irrestrito de todas as disciplinas"
+      ],
+      "readiness": "WITHHELD",
+      "wave_class": "WITHHELD_PROOF",
+      "source_issue": "#602"
     },
     {
       "offer_id": "bim_coordination_clash_register",
@@ -788,7 +907,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART quando a coordenação for serviço técnico de engenharia sobre o recorte; não há ART de 'BIM' genérico.",
-        "responsible": "engenheiro coordenador no recorte contratado",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "projeto de disciplina não contratada",
           "execução"
@@ -820,7 +939,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -890,7 +1009,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART do relatório de inspeção de engenharia no recorte; não cobre disciplinas de instalações se não contratadas.",
-        "responsible": "engenheiro civil no recorte predial",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "projeto de recuperação completo",
           "avaliação de valor"
@@ -922,7 +1041,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -991,7 +1110,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART do parecer/plano de engenharia no recorte; não assume ART de projeto de terceiro.",
-        "responsible": "engenheiro civil no recorte da intervenção",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "alvará",
           "execução"
@@ -1023,7 +1142,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1090,7 +1209,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART quando o produto for documento técnico de as-built ou reconciliação de engenharia.",
-        "responsible": "engenheiro civil no recorte",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "alvará",
           "habite-se como ato do órgão"
@@ -1122,7 +1241,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1192,7 +1311,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART quando o diagnóstico for relatório técnico de engenharia; não há ART para enquadramento comercial.",
-        "responsible": "engenheiro civil no recorte da obra privada",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "alvará",
           "execução",
@@ -1225,7 +1344,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1304,7 +1423,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART do diagnóstico de engenharia de SST quando houver relatório técnico; não cobre ato médico.",
-        "responsible": "engenheiro de segurança do trabalho ou engenheiro com atribuição no recorte",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "ato médico",
           "eSocial como software"
@@ -1336,7 +1455,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1408,7 +1527,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART por módulo de engenharia efetivamente produzido; LTCAT e PGR não autorizam ART de AET médica.",
-        "responsible": "engenheiro de segurança no módulo de engenharia; médico ou fisioterapeuta apenas se contratados nominalmente",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "ato médico não contratado",
           "certificação de sistema de gestão"
@@ -1441,7 +1560,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1510,7 +1629,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART da análise de engenharia no recorte; não substitui perícia judicial nem ato médico.",
-        "responsible": "engenheiro de segurança do trabalho no recorte",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "perito do juízo",
           "ato médico"
@@ -1542,7 +1661,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1610,7 +1729,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART do relatório de auditoria de engenharia de SST; não é selo ISO.",
-        "responsible": "engenheiro de segurança do trabalho no recorte",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "certificação",
           "ato médico"
@@ -1642,7 +1761,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1714,7 +1833,7 @@
       },
       "technical_responsibility": {
         "art_rule": "ART por módulo de engenharia efetivamente produzido; não há ART de ato administrativo.",
-        "responsible": "engenheiro no recorte de cada módulo; autor de projeto de disciplina só se contratado",
+        "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "ato da Administração",
           "parecer jurídico",
@@ -1748,7 +1867,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "#341",
+        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },

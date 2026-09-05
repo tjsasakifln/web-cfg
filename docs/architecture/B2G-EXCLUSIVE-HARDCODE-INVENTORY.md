@@ -12,7 +12,7 @@ Classificações: `KEEP_VERTICAL` | `GENERALIZE_CORPORATE` | `REPLACE` | `REMOVE
 | docs/strategy/MARKET-CAPTURE-OS.md | CONFENGE is a B2G intelligence company | tese operacional | REPLACE | umbrella + QCO por núcleo | tests/corporate_taxonomy/test_claims.py |
 | AGENTS.md | (não afirmava B2G como única categoria; só superfície única) | guardrail de agentes | GENERALIZE_CORPORATE | núcleos, taxonomia, planos de owner, QCO por núcleo | tests/corporate_taxonomy/test_claims.py |
 | docs/architecture/system-architecture.md | static marketing site for B2G engineering consulting | overview brownfield | GENERALIZE_CORPORATE | umbrella + vertical B2G publicado | tests/corporate_taxonomy/test_claims.py |
-| data/corporate/taxonomy.v1.json | public_works_b2g + b2g_is_corporate_category=false | autoridade de conteúdo | REPLACE | contrato CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904 | tests/corporate_taxonomy/test_validate.py |
+| data/corporate/taxonomy.v1.json | public_works_b2g + b2g_is_corporate_category=false | autoridade de conteúdo | REPLACE | contrato CONFENGE_CORPORATE_TAXONOMY/1.0.0 | tests/corporate_taxonomy/test_validate.py |
 | data/site/brand.json | positioning.label Consultoria para licitações… | copy canônica da home atual | KEEP_VERTICAL | fragmento brand-json.corporate-positioning.md (campanhas 08/10) | scripts/site/test_brand_contract.py |
 | data/site/brand.json | hero.h1 / org_description obras públicas | schema e home atuais | KEEP_VERTICAL | fragmento; não editar HTML nesta campanha | scripts/site/test_brand_contract.py |
 | data/site/public-ia-map.json | journeys edital/contrato/operacao B2G | IA pública atual | KEEP_VERTICAL | fragmento public-ia-map.taxonomy-consumer.md | scripts/site/test_public_ia.py |

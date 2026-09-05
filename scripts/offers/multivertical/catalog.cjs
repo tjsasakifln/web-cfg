@@ -31,6 +31,21 @@ function loadAuthorities(root) {
   };
 }
 
+function catalogContentHash(assembled) {
+  return hashRecord({
+    contract: assembled.contract,
+    taxonomy_contract: assembled.taxonomy_contract,
+    taxonomy_hash: assembled.taxonomy_hash,
+    issue: assembled.issue,
+    parent_issue: assembled.parent_issue,
+    publication: assembled.publication,
+    retained_b2g: assembled.retained_b2g,
+    offers: assembled.offers,
+    gaps: assembled.gaps,
+    boundaries: assembled.boundaries,
+  });
+}
+
 function assembleCatalog(options = {}) {
   const root = options.root || defaultRoot();
   const pin = options.pin || null;
@@ -68,18 +83,7 @@ function assembleCatalog(options = {}) {
     gaps: authorities.gaps,
     boundaries: authorities.boundaries,
   };
-  const content_hash = hashRecord({
-    contract: assembled.contract,
-    taxonomy_contract: assembled.taxonomy_contract,
-    publication: assembled.publication,
-    retained_b2g: {
-      deliverable_ids: authorities.deliverables.deliverables.map((entry) => entry.deliverable_id),
-      checkout_offer_ids: CHECKOUT_OFFER_IDS,
-    },
-    modeled_offers: raw.offers,
-    gaps: authorities.gaps.gaps,
-    boundaries: authorities.boundaries.rules,
-  });
+  const content_hash = catalogContentHash(assembled);
   assembled.content_hash = content_hash;
   if (raw.content_hash && raw.content_hash !== content_hash) {
     throw new Error("catalog_declared_hash_mismatch");
@@ -114,6 +118,7 @@ function modeledOfferIds(assembled) {
 
 module.exports = {
   assembleCatalog,
+  catalogContentHash,
   loadAuthorities,
   getOffer,
   modeledOfferIds,

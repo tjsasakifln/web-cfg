@@ -1,14 +1,14 @@
 # ADR-STRAT-002 — CONFENGE como superfície pública canônica
 
-- **Status:** Accepted (amended 2026-09-04)
+- **Status:** Accepted (amended 2026-09-05)
 - **Date:** 2026-08-14
-- **Amended:** 2026-09-04
+- **Amended:** 2026-09-05
 - **Decision owner:** CONFENGE
 - **Supersedes:** SmartLic `ADR-STRAT-001` and SmartLic issue #1262
-- **Amendment authority:** [#577](https://github.com/tjsasakifln/web-cfg/issues/577), [#578](https://github.com/tjsasakifln/web-cfg/issues/578)
-- **Taxonomy contract:** `CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904` in `data/corporate/taxonomy.v1.json`
+- **Amendment authority:** [#577](https://github.com/tjsasakifln/web-cfg/issues/577), [#578](https://github.com/tjsasakifln/web-cfg/issues/578), [#583](https://github.com/tjsasakifln/web-cfg/issues/583) and ADR-STRAT-004
+- **Taxonomy contract:** `CONFENGE_CORPORATE_TAXONOMY/1.0.0` in `data/corporate/taxonomy.v1.json`
 
-## Amendment 2026-09-04 (current)
+## Amendment 2026-09-05 (current)
 
 On 2026-09-04 the founder recorded that CONFENGE is the umbrella public brand
 for **Engenharia, Perícias e Inteligência Técnica** (Engineering, Expert
@@ -21,13 +21,14 @@ category and not a deprecated leftover. Current B2G URLs, offers, proof, index
 and conversion stay in force until a later campaign mutates those families
 URL-by-URL.
 
-The architecture reads one versioned taxonomy. Nucleus content is not a
-Python/JS constant. Consumers pin `contract_id`, `contract_version` and
-`content_sha256`. Missing or divergent version/hash fails closed.
+The architecture reads one versioned commercial constitution. The five nuclei
+are internal operational groupings; the public entry point is a versioned
+situation/intent matrix. Neither is a Python/JS constant. Consumers pin contract
+and content hashes. Missing or divergent version/hash fails closed.
 
-### Five canonical nuclei
+### Five internal operational nuclei
 
-| ID | Public name | Publication |
+| ID | Operational label | Current publication state |
 |---|---|---|
 | `expert_evidence_assistance` | Perícias e Assistência Técnica | draft |
 | `property_valuation` | Avaliações de Imóveis | draft |
@@ -35,10 +36,11 @@ Python/JS constant. Consumers pin `contract_id`, `contract_version` and
 | `occupational_safety` | Segurança do Trabalho | draft |
 | `public_works_b2g` | Obras Públicas e B2G | published, protected vertical |
 
-Each nucleus carries visitor job, ICPs, triggers, typical decisions/artifacts,
-limits, conflict profile, sensitivity profile, geo/field rule, proof classes,
-terminal action, owner plane, referenced offer IDs (no catalog duplicate),
-per-nucleus metrics and publication status.
+Each nucleus carries ownership, limits, conflict, sensitivity, field rule,
+proof classes, references and measurement. Its label is not required public
+copy and does not decide a route. `CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0` maps a
+recognizable situation to a canonical service family, finite offer IDs or
+`NEEDS_CONTEXT`/GAP. Audience examples never become route truth.
 
 ### Owner planes (unchanged split, named explicitly)
 
@@ -65,8 +67,9 @@ metrics.
 
 - Do not rewrite, redirect or noindex B2G routes to make room for new nuclei.
 - Do not dilute B2G equity, catalog 54/54 or conversion gates as “strategy”.
-- Shared chrome may name five nuclei only when the IA campaign ships those
-  pages. This ADR does not change home, navigation, footer or forms.
+- Shared chrome and service pages start from buyer situations. Nucleus names may
+  be secondary organization only when useful. This ADR does not change home,
+  navigation, footer or forms.
 - New nuclei reuse the same taxonomy, family registry, capture contract and
   conversion gate. The 100th offer or route does not get special-case code.
 
@@ -77,12 +80,17 @@ metrics.
 2. **Offer:** catalog owner references an existing `nucleus_id`; missing
    nucleus fails closed. Taxonomy stores `offer_id` only.
 3. **Route:** `public-family-registry.json` remains fail-closed (visitor job,
-   terminal action, gate coverage) and must point at an existing nucleus.
-   Goal 97 applies the nucleus field; this campaign does not edit that file.
+   terminal action and gate coverage). MV-09 must bind each new route to an
+   existing `intent_family`, resolve its canonical service family and retain an
+   operational `nucleus_id` only as ownership metadata. This campaign does not
+   edit that shared registry.
 4. **Location:** distinct visitor utility; no doorway pages; geography is a
    field rule, not a nucleus.
 5. **Proof:** source, date and permission class. Invented credentials, cases,
    rankings or seals fail closed.
+6. **National service:** commercial availability may be national, but technical
+   acceptance confirms scope, location, field/logistics, professional and PJ
+   formalities, proven attribution, registration or visa and ART when applicable.
 
 ### What this amendment does not change
 
@@ -164,6 +172,7 @@ Priority is assessed with a shared model: `(demand × commercial relevance × re
 
 - [Runtime authority map](RUNTIME-AUTHORITY.md)
 - [Corporate taxonomy](../../data/corporate/taxonomy.v1.json)
+- [Commercial constitution and finite portfolio](ADR-STRAT-004-commercial-constitution-and-finite-portfolio.md)
 - [B2G exclusive-hardcode inventory](B2G-EXCLUSIVE-HARDCODE-INVENTORY.md)
 - [#577 — umbrella positioning epic](https://github.com/tjsasakifln/web-cfg/issues/577)
 - [#578 — architectural generalization](https://github.com/tjsasakifln/web-cfg/issues/578)

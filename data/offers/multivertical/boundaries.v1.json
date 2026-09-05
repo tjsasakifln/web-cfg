@@ -1,6 +1,6 @@
 {
   "schema": "confenge.offer-boundary-rules/1.0",
-  "contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+  "contract": "CONFENGE_OFFER_CATALOG/2.0.0",
   "note": "Sobreposição resolve-se por decisão e objeto, não por persona. Assistência trabalhista vive em expert_evidence_assistance; SST preventiva vive em occupational_safety.",
   "rules": [
     {
@@ -66,6 +66,30 @@
         "decision": "bim_clash"
       },
       "primary_offer_id": "bim_coordination_clash_register"
+    },
+    {
+      "rule_id": "complementary_project_review",
+      "match": {
+        "decision": "complementary_project_review"
+      },
+      "primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "rule_id": "land_development_confirmed_civil_scope",
+      "match": {
+        "decision": "land_development_infrastructure",
+        "civil_interface": "confirmed"
+      },
+      "primary_offer_id": "complementary_engineering_project_review"
+    },
+    {
+      "rule_id": "land_development_unknown_scope",
+      "match": {
+        "decision": "land_development_infrastructure",
+        "civil_interface": "unknown"
+      },
+      "gap_id": "GAP_ATTRIBUTION_OR_DISCIPLINE_UNCONFIRMED",
+      "reason": "loteamento ou infraestrutura exige confirmar disciplina, atribuição, local e responsável antes de enquadrar"
     },
     {
       "rule_id": "inspect",
@@ -290,6 +314,50 @@
         "decision": "publish_money_page"
       },
       "gap_id": "GAP_ISSUE_588_PUBLICATION"
+    },
+    {
+      "rule_id": "property_condition_alias",
+      "match": {
+        "decision": "property_condition_inspection"
+      },
+      "primary_offer_id": "building_inspection_pathology"
+    },
+    {
+      "rule_id": "technical_evidence_alias",
+      "match": {
+        "decision": "technical_evidence_assistance"
+      },
+      "primary_offer_id": "civil_building_technical_assistance"
+    },
+    {
+      "rule_id": "formal_property_valuation_alias",
+      "match": {
+        "decision": "formal_property_valuation",
+        "object": "urban_property"
+      },
+      "primary_offer_id": "urban_property_valuation"
+    },
+    {
+      "rule_id": "sst_program_alias",
+      "match": {
+        "decision": "sst_program_and_documentation"
+      },
+      "primary_offer_id": "sst_pgr_ltcat_aet_inputs"
+    },
+    {
+      "rule_id": "public_contract_execution_alias",
+      "match": {
+        "decision": "public_contract_execution_support"
+      },
+      "primary_offer_id": "CFG-D25"
+    },
+    {
+      "rule_id": "other_technical_demand",
+      "match": {
+        "decision": "technical_demand_needs_context"
+      },
+      "gap_id": "GAP_UNMAPPED",
+      "reason": "demanda técnica ainda sem situação, decisão e disciplina suficientes"
     },
     {
       "rule_id": "rural",

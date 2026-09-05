@@ -1,7 +1,7 @@
 "use strict";
 
 const { CATALOG_CONTRACT, TAXONOMY_CONTRACT } = require("./constants.cjs");
-const { assembleCatalog } = require("./catalog.cjs");
+const { assembleCatalog, catalogContentHash } = require("./catalog.cjs");
 const { validateCatalog } = require("./validate.cjs");
 
 function demandValue(demand, key) {
@@ -39,7 +39,11 @@ function assertPins(assembled, pin) {
   }
   if (!pin.catalog_hash) throw new Error("catalog_pin_hash_missing");
   if (!pin.taxonomy_hash) throw new Error("taxonomy_pin_hash_missing");
-  if (pin.catalog_hash !== assembled.content_hash) {
+  const recomputedCatalogHash = catalogContentHash(assembled);
+  if (assembled.content_hash !== recomputedCatalogHash) {
+    throw new Error("catalog_assembled_hash_mismatch");
+  }
+  if (pin.catalog_hash !== recomputedCatalogHash) {
     throw new Error("catalog_pin_hash_mismatch");
   }
   if (pin.taxonomy_hash !== assembled.taxonomy_hash) {

@@ -1,12 +1,12 @@
 "use strict";
 
 /**
- * Canonical identifiers for CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904.
- * Campaign 03 owner. Not a second checkout catalog.
+ * Canonical identifiers for CONFENGE_OFFER_CATALOG/2.0.0.
+ * MV-01 owner. Not a second checkout catalog.
  */
 
-const CATALOG_CONTRACT = "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904";
-const TAXONOMY_CONTRACT = "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904";
+const CATALOG_CONTRACT = "CONFENGE_OFFER_CATALOG/2.0.0";
+const TAXONOMY_CONTRACT = "CONFENGE_CORPORATE_TAXONOMY/1.0.0";
 const INTAKE_CONTRACT = "CONFENGE_WEB_INTAKE/2.0.0-draft.20260904";
 const ADMISSION_POLICY = "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904";
 const HANDRAISER_STATE = "CONFENGE_HANDRAISER_STATE/1.0.0-draft.20260904";
@@ -84,6 +84,7 @@ const MODELED_OFFER_IDS = Object.freeze([
   "preliminary_property_opinion",
   "quantity_takeoff_budgeting",
   "budget_audit_feasibility",
+  "complementary_engineering_project_review",
   "bim_coordination_clash_register",
   "building_inspection_pathology",
   "renovation_plan_condo_review",

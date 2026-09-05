@@ -1,6 +1,6 @@
-# Multi-vertical offer catalog (campaign 03 / #583)
+# Catálogo multivertical finito (MV-01 / #583)
 
-Canonical contract: `CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904`.
+Canonical contract: `CONFENGE_OFFER_CATALOG/2.0.0`.
 
 This is not a second checkout catalog. Frozen B2G IDs, names and cents stay in:
 
@@ -10,13 +10,15 @@ This is not a second checkout catalog. Frozen B2G IDs, names and cents stay in:
 
 New nuclei are modeled here. B2G rows are expanded by reference.
 
-Taxonomy: consume campaign 02 if present on one of the paths in `constants.cjs`; otherwise `data/offers/multivertical/taxonomy-fixture.v1.json` (replaceable).
+Taxonomia: consuma primeiro a autoridade canônica em `data/corporate/taxonomy.v1.json`. A fixture em `data/offers/multivertical/taxonomy-fixture.v1.json` existe apenas para testes isolados; não é fallback de produção nem fonte de verdade pública.
 
 ```js
 const catalog = require("./index.cjs");
-const assembled = catalog.loadPinnedCatalog();
-const pin = catalog.consumerPin(assembled);
+const pin = catalog.loadCommittedConsumerPin();
+const assembled = catalog.loadPinnedCatalog({ consumerPin: pin });
 const result = catalog.mapDemand(demand, { assembled, pin });
 ```
 
-Missing or divergent contract/hash fails closed. Consumers must not invent offer IDs.
+O pin é autoridade externa commitada; nunca deve ser derivado do mesmo payload
+que está sendo validado. Contrato ou hash ausente/divergente falha fechado.
+Consumidores não inventam IDs de oferta.
