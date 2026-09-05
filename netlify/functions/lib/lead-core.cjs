@@ -4,6 +4,7 @@
  */
 const crypto = require("crypto");
 const { validateCnpj } = require("../../../scripts/conversion/cnpj.cjs");
+const adaptiveIntake = require("./adaptive-intake.cjs");
 
 const MAX_BODY_BYTES = 24 * 1024;
 // Standard antivirus fixture. Rejected as bytes, never persisted. Not a real sample.
@@ -771,6 +772,13 @@ function validateAndNormalize(data) {
     return { ok: true, honeypot: true };
   }
 
+  const conflictParties = adaptiveIntake.rejectConflictParties(data);
+  if (conflictParties) return conflictParties;
+
+  const adaptiveResult = adaptiveIntake.validateAdaptiveIntake(data);
+  if (adaptiveResult.handled && !adaptiveResult.ok) return adaptiveResult;
+  const adaptiveFields = adaptiveResult.handled && adaptiveResult.ok ? adaptiveResult.fields : null;
+
   const offerCheck = assertOfferTermsAndPrice(data);
   if (!offerCheck.ok) return offerCheck;
   const deliverableCheck = assertDeliverableSelection(data.deliverable_id);
@@ -778,12 +786,17 @@ function validateAndNormalize(data) {
   const qualificationDeliverableId = isGenericDeliverablesHandraise(data)
     ? null
     : deliverableCheck.deliverable_id;
-  const licitacaoCheck = assertLicitacaoQualification(data, qualificationDeliverableId);
-  if (!licitacaoCheck.ok) return licitacaoCheck;
-  const eightCheck = assertEightProductQualification(data, qualificationDeliverableId);
-  if (!eightCheck.ok) return eightCheck;
-  const contractCheck = assertContractDefenseQualification(data, qualificationDeliverableId);
-  if (!contractCheck.ok) return contractCheck;
+  let licitacaoCheck = { ok: true, qualification: null };
+  let eightCheck = { ok: true, qualification: null };
+  let contractCheck = { ok: true, qualification: null };
+  if (!adaptiveFields) {
+    licitacaoCheck = assertLicitacaoQualification(data, qualificationDeliverableId);
+    if (!licitacaoCheck.ok) return licitacaoCheck;
+    eightCheck = assertEightProductQualification(data, qualificationDeliverableId);
+    if (!eightCheck.ok) return eightCheck;
+    contractCheck = assertContractDefenseQualification(data, qualificationDeliverableId);
+    if (!contractCheck.ok) return contractCheck;
+  }
   const productQualification = licitacaoCheck.qualification || eightCheck.qualification || contractCheck.qualification;
 
   // Radar Decisório purchase parameters. Server-side, fail-closed: the browser
@@ -823,8 +836,12 @@ function validateAndNormalize(data) {
   const normalizedEmail = normalizeEmail(rawEmail);
   // On a Radar order the delivery e-mail is also the contact channel.
   const email = normalizedEmail || (radarParams ? radarParams.email_entrega : "");
-  const estagio = clamp(data.estagio || data.tipo_demanda || data.demand_type, MAX_FIELD.estagio);
-  const jornada = normalizeJourney(data.jornada || data.journey, estagio);
+  const estagio = adaptiveFields
+    ? adaptiveFields.estagio
+    : clamp(data.estagio || data.tipo_demanda || data.demand_type, MAX_FIELD.estagio);
+  const jornada = adaptiveFields
+    ? adaptiveFields.jornada
+    : normalizeJourney(data.jornada || data.journey, estagio);
   const consentRaw = data.consentimento ?? data.consent ?? data.lgpd;
   const consentimento =
     consentRaw === true ||
@@ -896,8 +913,10 @@ function validateAndNormalize(data) {
     empresa: clamp(data.empresa, MAX_FIELD.empresa) || null,
     estagio,
     jornada,
-    urgencia: clamp(data.urgencia, MAX_FIELD.urgencia) || null,
-    mensagem: clamp(data.mensagem || data.message, MAX_FIELD.mensagem) || null,
+    urgencia: adaptiveFields
+      ? adaptiveFields.urgency
+      : clamp(data.urgencia, MAX_FIELD.urgencia) || null,
+    mensagem: adaptiveFields ? null : clamp(data.mensagem || data.message, MAX_FIELD.mensagem) || null,
     consentimento: true,
     origem: sanitizeAttributionLocation(data.origem, MAX_FIELD.origem, "origem") || null,
     landing_page:
@@ -980,6 +999,48 @@ function validateAndNormalize(data) {
       clamp(data.document_intent, MAX_FIELD.document_intent) === "secure_channel_request",
   };
 
+  if (adaptiveFields) {
+    lead.adaptive_intake = true;
+    lead.nucleus_id = adaptiveFields.nucleus_id;
+    lead.offer_candidate_id = adaptiveFields.offer_candidate_id;
+    lead.source_asset_id = adaptiveFields.source_asset_id;
+    lead.landing_family = adaptiveFields.landing_family;
+    lead.city_class = adaptiveFields.city_class;
+    lead.site_class = adaptiveFields.site_class;
+    lead.decision_role = adaptiveFields.decision_role;
+    lead.pessoa_tipo = adaptiveFields.pessoa_tipo;
+    lead.canal_preferido = adaptiveFields.canal_preferido;
+    lead.why_now = adaptiveFields.why_now;
+    lead.desired_decision = adaptiveFields.desired_decision;
+    lead.document_availability_class = adaptiveFields.document_availability_class;
+    lead.qualification_state = adaptiveFields.qualification_state;
+    lead.conflict_status = adaptiveFields.conflict_status;
+    lead.conflict_reference = adaptiveFields.conflict_reference;
+    lead.intake_contract_version = adaptiveFields.intake_contract_version;
+    lead.intake_pin_hash = adaptiveFields.intake_pin_hash;
+    lead.taxonomy_version = adaptiveFields.taxonomy_version;
+    lead.offer_catalog_version = adaptiveFields.offer_catalog_version;
+    lead.admission_policy_version = adaptiveFields.admission_policy_version;
+    lead.outbound_eligible = false;
+    lead.auto_send = false;
+    lead.sensitive_docs_ack = true;
+    lead.claim_stage = adaptiveFields.claim_stage || null;
+    lead.valuation_purpose = adaptiveFields.valuation_purpose || null;
+    lead.inspection_window = adaptiveFields.inspection_window || null;
+    lead.property_class = adaptiveFields.property_class || null;
+    lead.work_type = adaptiveFields.work_type || null;
+    lead.work_stage = adaptiveFields.work_stage || null;
+    lead.project_status = adaptiveFields.project_status || null;
+    lead.budget_class = adaptiveFields.budget_class || null;
+    lead.bim_status = adaptiveFields.bim_status || null;
+    lead.establishment_class = adaptiveFields.establishment_class || null;
+    lead.risk_class = adaptiveFields.risk_class || null;
+    lead.sst_doc_class = adaptiveFields.sst_doc_class || null;
+    lead.certame_stage = adaptiveFields.certame_stage || null;
+    lead.contract_relation = adaptiveFields.contract_relation || null;
+    lead.entity_class = adaptiveFields.entity_class || null;
+  }
+
   return { ok: true, honeypot: false, lead };
 }
 
@@ -1052,6 +1113,14 @@ function idempotencyKeyFor(lead, explicit) {
         decision_intent: lead.decision_intent || "",
       })
     : "";
+  const adaptiveMaterial = lead?.nucleus_id
+    ? JSON.stringify({
+        nucleus_id: lead.nucleus_id,
+        offer_candidate_id: lead.offer_candidate_id || "",
+        qualification_state: lead.qualification_state || "",
+        conflict_status: lead.conflict_status || "",
+      })
+    : "";
   const material = [
     lead.nome,
     lead.telefone || "",
@@ -1060,6 +1129,7 @@ function idempotencyKeyFor(lead, explicit) {
     lead.estagio,
     radarMaterial,
     productMaterial,
+    adaptiveMaterial,
     String(bucket),
   ].join("|");
   return `auto:${crypto.createHash("sha256").update(material).digest("hex").slice(0, 32)}`;
@@ -1148,16 +1218,23 @@ function publicSuccessBody({
   external_reference,
   delivery_business_days,
   document_intent,
+  nucleus_id,
+  qualification_state,
+  conflict_status,
 }) {
   const body = {
     ok: true,
     lead_id,
     receipt_id: lead_id, // back-compat for front-end
     received_at,
+    source: "CONFENGE_WEB",
     journey,
     stage_category: stage_category ? String(stage_category).slice(0, 80) : undefined,
     status: status || "persisted",
   };
+  if (nucleus_id) body.nucleus_id = String(nucleus_id).slice(0, 80);
+  if (qualification_state) body.qualification_state = String(qualification_state).slice(0, 40);
+  if (conflict_status) body.conflict_status = String(conflict_status).slice(0, 40);
   if (document_intent === "secure_channel_request") {
     body.document_intent = "secure_channel_request";
     body.channel_status = "canal escolhido posteriormente";
@@ -1283,4 +1360,5 @@ module.exports = {
   normalizePhone,
   normalizeEmail,
   normalizeJourney,
+  adaptiveIntake,
 };

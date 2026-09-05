@@ -17,6 +17,78 @@
       const maturidadeEl = form.querySelector('#maturidade_documental');
       const capacidadeEl = form.querySelector('#capacidade_interna');
       const offerFitHintEl = form.querySelector('[data-offer-fit-hint]');
+      const adaptive = form.getAttribute('data-adaptive-intake') === 'true';
+      const nucleusEl = form.querySelector('#nucleus_id, [name="nucleus_id"]');
+      const OTHER_NEEDS_CONTEXT = 'OTHER_NEEDS_CONTEXT';
+      const ADAPTIVE_FORBIDDEN_NAMES = /^(cpf|rg|processo|process_number|numero_processo|corpus|prontuario|empregados|employee_list|planta|projeto_arquivo|laudo|relatorio_pericial|demonstrativo_financeiro|conflict_parties|partes|parte_contraria|upload|arquivo|file|files|attachment|mensagem|message)$/i;
+      const stripAdaptiveBarriers = () => {
+        if (!adaptive) return;
+        form.querySelectorAll('input[type="file"]').forEach((el) => el.remove());
+        form.querySelectorAll('input, textarea, select').forEach((el) => {
+          const name = String(el.getAttribute('name') || el.id || '');
+          if (ADAPTIVE_FORBIDDEN_NAMES.test(name)) el.remove();
+        });
+        form.querySelectorAll('[data-other-free-text]').forEach((el) => el.remove());
+        if (form.getAttribute('enctype') && /multipart/i.test(form.getAttribute('enctype'))) {
+          form.removeAttribute('enctype');
+        }
+      };
+      const applyNucleusBranch = () => {
+        if (!adaptive) return;
+        const nucleus = (nucleusEl?.value || '').trim();
+        form.querySelectorAll('[data-nucleus-branch]').forEach((panel) => {
+          const match = panel.getAttribute('data-nucleus-branch') === nucleus;
+          panel.hidden = !match;
+          panel.setAttribute('aria-hidden', match ? 'false' : 'true');
+          panel.querySelectorAll('input, select, textarea').forEach((el) => {
+            el.disabled = !match;
+            if (match && el.hasAttribute('data-branch-required')) el.required = true;
+            else el.required = false;
+          });
+        });
+        const estagioHidden = form.querySelector('#estagio, [name="estagio"]');
+        const map = {
+          expert_evidence_assistance: 'pericia-assistencia-tecnica',
+          property_valuation: 'avaliacao-imoveis',
+          building_engineering_documentation: 'engenharia-edificacoes',
+          occupational_safety: 'seguranca-do-trabalho',
+          public_works_b2g: 'obras-publicas-b2g',
+        };
+        if (estagioHidden && nucleus && map[nucleus]) estagioHidden.value = map[nucleus];
+        const jornadaHidden = form.querySelector('#jornada-hidden, [name="jornada"]');
+        if (jornadaHidden) jornadaHidden.value = nucleus === 'public_works_b2g' ? 'operacao' : 'outro';
+      };
+      stripAdaptiveBarriers();
+      applyNucleusBranch();
+      if (adaptive) {
+        try {
+          const rawDraft = sessionStorage.getItem(`confenge_adaptive_draft:${pagePath}`);
+          if (rawDraft) {
+            const draft = JSON.parse(rawDraft);
+            Object.keys(draft || {}).forEach((key) => {
+              if (!/^[A-Za-z0-9_]+$/.test(key) || ADAPTIVE_FORBIDDEN_NAMES.test(key)) return;
+              const el = form.querySelector(`[name="${key}"]`);
+              if (!el || el.type === 'file' || el.type === 'hidden' && el.name === 'idempotency_key') return;
+              if (el.type === 'checkbox') el.checked = draft[key] === '1' || draft[key] === 'true' || draft[key] === 'on';
+              else if (!el.value) el.value = String(draft[key] || '').slice(0, 180);
+            });
+            applyNucleusBranch();
+          }
+        } catch (_) { /* private mode */ }
+      }
+      nucleusEl?.addEventListener('change', () => {
+        applyNucleusBranch();
+        const v = (nucleusEl.value || '').slice(0, 80);
+        if (!v) return;
+        track('qualification_stage_select', {
+          page_path: pagePath,
+          content_cluster: defaultCluster,
+          device_context: deviceContext,
+          stage_category: v,
+          nucleus_id: v,
+          journey: form.querySelector('#jornada-hidden')?.value || '',
+        });
+      });
       const urgencyToBand = (raw) => {
         const v = (raw || '').trim();
         if (v === 'até 48 horas') return 'ate_48h';
@@ -250,11 +322,47 @@
           setControlInvalid(nomeEl, false);
         }
         if (!requireEmailOrPhone()) ok = false;
-        if (estagioEl && !estagioEl.value) {
+        if (!adaptive && estagioEl && !estagioEl.value) {
           setControlInvalid(estagioEl, true, 'Selecione o tipo de necessidade.');
           ok = false;
-        } else {
+        } else if (!adaptive) {
           setControlInvalid(estagioEl, false);
+        }
+        if (adaptive) {
+          const requiredAdaptive = [
+            nucleusEl,
+            form.querySelector('[name="canal_preferido"]'),
+            form.querySelector('[name="pessoa_tipo"]'),
+            form.querySelector('[name="decision_role"]'),
+            form.querySelector('[name="city_class"]'),
+            form.querySelector('[name="site_class"]'),
+            form.querySelector('[name="urgency"]'),
+            form.querySelector('[name="why_now"]'),
+            form.querySelector('[name="desired_decision"]'),
+            form.querySelector('[name="document_availability_class"]'),
+            form.querySelector('[name="conflict_status"]'),
+            form.querySelector('[name="consentimento"]'),
+            form.querySelector('[name="sensitive_docs_ack"]'),
+          ];
+          requiredAdaptive.forEach((el) => {
+            if (!el) { ok = false; return; }
+            const checked = el.type === 'checkbox' ? el.checked : String(el.value || '').trim();
+            if (!checked) {
+              setControlInvalid(el, true, 'Preencha este campo.');
+              ok = false;
+            } else {
+              setControlInvalid(el, false);
+            }
+          });
+          form.querySelectorAll('[data-nucleus-branch]:not([hidden]) [data-branch-required]').forEach((el) => {
+            if (el.disabled) return;
+            if (!String(el.value || '').trim()) {
+              setControlInvalid(el, true, 'Preencha este campo.');
+              ok = false;
+            } else {
+              setControlInvalid(el, false);
+            }
+          });
         }
         if (!ok) {
           form.reportValidity();
@@ -357,6 +465,15 @@
             return;
           }
         }
+        if (adaptive) {
+          stripAdaptiveBarriers();
+          applyNucleusBranch();
+          if (!validateStep1()) {
+            event.preventDefault();
+            form.reportValidity();
+            return;
+          }
+        }
         if (!requireEmailOrPhone() || !form.checkValidity()) {
           event.preventDefault();
           form.reportValidity();
@@ -381,18 +498,23 @@
         const routed = typeof window.confengeRouteOfferFit === 'function'
           ? window.confengeRouteOfferFit(readOfferFitInput())
           : null;
+        const nucleusId = (nucleusEl?.value || '').slice(0, 80);
         track('lead_form_submit', {
           page_path: pagePath,
           content_cluster: defaultCluster,
           device_context: deviceContext,
           destination_type: 'form',
           stage_category: (estagioEl?.value || '').slice(0, 80),
-          urgency_category: (urgenciaEl?.value || '').slice(0, 80),
+          urgency_category: adaptive
+            ? (form.querySelector('[name="urgency"]')?.value || '').slice(0, 40)
+            : (urgenciaEl?.value || '').slice(0, 80),
           journey: journey || '',
           cta_label: (estagioEl?.value || '').slice(0, 80),
           route_family: routeFamily,
           asset_id: assetId,
           cta_id: ctaId,
+          nucleus_id: nucleusId,
+          landing_family: (form.querySelector('[name="landing_family"]')?.value || '').slice(0, 80),
           ticket_band_category: (faixaContratoEl?.value || '').slice(0, 40),
           risk_band_category: (riscoEmJogoEl?.value || '').slice(0, 40),
           frequency_category: (frequenciaEl?.value || '').slice(0, 40),
@@ -420,14 +542,37 @@
           if (!fd.get('form-name')) fd.set('form-name', form.getAttribute('name') || 'diagnostico-b2g');
           if (!fd.get('jornada')) fd.set('jornada', journey || '');
           const payload = {};
-          fd.forEach((val, key) => { payload[key] = String(val); });
+          fd.forEach((val, key) => {
+            if (ADAPTIVE_FORBIDDEN_NAMES.test(String(key))) return;
+            if (typeof val !== 'string') return;
+            payload[key] = String(val);
+          });
           const submitBtn = form.querySelector('[type="submit"]');
           if (submitBtn) submitBtn.disabled = true;
+          form.setAttribute('aria-busy', 'true');
           showFormStatus('Enviando…', 'ok');
+          let submitSucceeded = false;
+          const draftKey = `confenge_adaptive_draft:${pagePath}`;
+          const persistAdaptiveDraft = () => {
+            if (!adaptive) return;
+            try {
+              const safe = {};
+              Object.keys(payload).forEach((key) => {
+                if (ADAPTIVE_FORBIDDEN_NAMES.test(key)) return;
+                if (/nome|email|telefone|empresa/.test(key)) {
+                  safe[key] = String(payload[key] || '').slice(0, 180);
+                  return;
+                }
+                safe[key] = String(payload[key] || '').slice(0, 80);
+              });
+              sessionStorage.setItem(draftKey, JSON.stringify(safe));
+            } catch (_) { /* private mode */ }
+          };
           const finishOk = (receipt) => {
             const protocol = (receipt && (receipt.lead_id || receipt.receipt_id))
               ? String(receipt.lead_id || receipt.receipt_id).slice(0, 32)
               : '';
+            submitSucceeded = Boolean(protocol);
             track('lead_form_success', {
               page_path: pagePath,
               content_cluster: defaultCluster,
@@ -438,6 +583,8 @@
               route_family: routeFamily,
               asset_id: assetId,
               cta_id: ctaId,
+              nucleus_id: nucleusId,
+              source: 'CONFENGE_WEB',
             });
             track('lead_persisted', {
               page_path: pagePath,
@@ -448,12 +595,31 @@
               asset_id: assetId,
               cta_id: ctaId,
               public_id_slug: publicSlug,
+              nucleus_id: nucleusId,
               source: 'CONFENGE_WEB',
             });
             try {
               if (protocol) sessionStorage.setItem('confenge_last_receipt', protocol);
               if (receiptRequired) sessionStorage.removeItem(receiptStorageKey());
+              sessionStorage.removeItem(draftKey);
             } catch (_) { /* private mode */ }
+            if (adaptive && form.getAttribute('data-success-mode') === 'inline') {
+              const box = form.querySelector('[data-adaptive-confirmation]');
+              if (box) {
+                box.hidden = false;
+                const protocolEl = box.querySelector('[data-receipt-protocol]');
+                if (protocolEl) protocolEl.textContent = protocol;
+                box.setAttribute('tabindex', '-1');
+                if (typeof box.focus === 'function') box.focus();
+              }
+              form.querySelectorAll('input, select, textarea, button').forEach((el) => {
+                if (box && box.contains(el)) return;
+                el.disabled = true;
+              });
+              showFormStatus('', '');
+              flushAnalytics();
+              return;
+            }
             const q = protocol
               ? `${dest}${dest.includes('?') ? '&' : '?'}receipt=${encodeURIComponent(protocol)}`
               : dest;
@@ -461,12 +627,13 @@
             window.location.assign(q);
           };
           const finishFallback = (reason) => {
-            const stage = (estagioEl?.value || '').slice(0, 80);
+            persistAdaptiveDraft();
+            const stage = (estagioEl?.value || nucleusId || '').slice(0, 80);
             const msg = encodeURIComponent(
               `Olá, Tiago. Tentei enviar pelo formulário do site (${stage || journey || 'contato'}) e preciso de retorno. Protocolo local indisponível.`,
             );
             showFormStatus(
-              'Não foi possível registrar no servidor. Use o WhatsApp para não perder o contato — o protocolo só aparece após gravação confirmada.',
+              'Não foi possível registrar no servidor. Os dados desta tentativa foram preservados neste aparelho. Não envie de novo com outra chave — use Tentar novamente para repetir o mesmo protocolo, ou o WhatsApp se o servidor continuar indisponível.',
               'error',
             );
             track('lead_form_backend_error', {
@@ -475,6 +642,7 @@
               device_context: deviceContext,
               destination_type: 'form_fallback_whatsapp',
               journey: journey || '',
+              nucleus_id: nucleusId,
               error_code: String(reason || 'unknown').slice(0, 40),
             });
             const wa = document.createElement('a');
@@ -536,7 +704,8 @@
             finishFallback(err && err.name === 'AbortError' ? 'timeout' : (err && err.message) || 'network');
           }).finally(() => {
             if (timeoutId) clearTimeout(timeoutId);
-            if (submitBtn) submitBtn.disabled = false;
+            form.setAttribute('aria-busy', 'false');
+            if (submitBtn && !submitSucceeded) submitBtn.disabled = false;
           });
         }
       });
