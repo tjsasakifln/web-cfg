@@ -32,6 +32,14 @@
   font-weight: 700;
   padding: 0 0.35rem;
 }
+.pptr-form,
+.pptr-form fieldset,
+.pptr-field,
+.pptr-field select {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
 .pptr-field {
   display: flex;
   flex-direction: column;

@@ -60,10 +60,13 @@ directive and terminal action. The readiness family also declares the exact
 local-fragment header CTA that must deliver value before contact; the renderer
 cannot self-authorize that exception from HTML. Only the derived buyer-map
 family-registry pin and sitemap XML/index/text provenance pins were updated.
-The family pin was recalculated after that explicit declaration and verified by
-the inbound and query-ownership gates. Frozen HTML and rendering hashes were not
-recaptured. Existing gate limits and exceptions remain unchanged; capture
-inventory tests include the new route.
+The family pin was recalculated after that explicit declaration and after the
+adaptive family recorded its exact authority-gated capture profile, endpoint,
+client and WITHHELD manifest. The sitewide layout gate validates that external
+record before accepting an initially disabled submit; HTML cannot self-authorize
+the state. Inbound and query-ownership gates verify the resulting pin. Frozen
+HTML and rendering hashes were not recaptured. Existing gate limits and
+exceptions remain unchanged; capture inventory tests include the new route.
 
 Analytics uses the existing event bus and carries tool/page/source metadata,
 without selected answers, result counts or contact data. No SMTP is part of the

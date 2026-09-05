@@ -49,6 +49,13 @@
           "/triagem-tecnica/"
         ]
       },
+      "capture_availability": {
+        "mode": "external_authority_fail_closed",
+        "runtime_profile": "adaptive_intake_standalone_v1",
+        "config_endpoint": "/.netlify/functions/adaptive-intake-config",
+        "client_script": "/assets/js/adaptive-intake.js",
+        "authority_manifest": "netlify/functions/data/adaptive-intake-authority.json"
+      },
       "gate_coverage": {
         "conversion": "full",
         "copy": "full",

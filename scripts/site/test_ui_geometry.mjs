@@ -1561,12 +1561,12 @@ async function main() {
   // Truthful-gates fixtures: foco offscreen, texto em 42 px, overflow,
   // useless anchor, missing sticky CTA, broken form. Same browser engine.
   const fixtureDir = join(ROOT, "scripts/site/fixtures/truthful_gates");
-  async function layoutFindingsFromHtml(html, viewport = { width: 390, height: 844 }) {
+  async function layoutFindingsFromHtml(html, viewport = { width: 390, height: 844 }, options = {}) {
     const tab = await browser.newPage();
     try {
       await tab.setViewport({ ...viewport, deviceScaleFactor: 1 });
       await tab.setContent(html, { waitUntil: "domcontentloaded" });
-      return await renderedLayoutFindings(tab);
+      return await renderedLayoutFindings(tab, options);
     } finally {
       await tab.close();
     }
@@ -1724,6 +1724,44 @@ async function main() {
     ok("fixture_hidden_only_capture_form_fails");
   } catch (e) {
     fail("fixture_hidden_only_capture_form_fails", e.message || e);
+  }
+
+  const authorityGatedHtml = `<!doctype html>
+    <html lang="pt-BR"><body><main>
+    <form method="post" action="/.netlify/functions/lead"
+      data-runtime-profile="adaptive_intake_standalone_v1"
+      data-authority-config-endpoint="/.netlify/functions/adaptive-intake-config">
+    <label>Nome <input name="nome"></label><button type="submit" disabled>Enviar</button>
+    </form>
+    <script src="/assets/js/adaptive-intake.js"></script>
+    <aside class="contact-float"><a href="https://wa.me/5548988344559">WhatsApp</a></aside>
+    </main></body></html>`;
+  const authorityGatedContract = {
+    runtimeProfile: "adaptive_intake_standalone_v1",
+    configEndpoint: "/.netlify/functions/adaptive-intake-config",
+    clientScript: "/assets/js/adaptive-intake.js",
+  };
+  try {
+    const selfAuthorized = await layoutFindingsFromHtml(authorityGatedHtml);
+    if (!selfAuthorized.includes("broken_form")) {
+      throw new Error(`HTML self-authorized an unavailable capture: ${selfAuthorized.join(",")}`);
+    }
+    ok("fixture_authority_gated_capture_requires_registry_contract");
+  } catch (e) {
+    fail("fixture_authority_gated_capture_requires_registry_contract", e.message || e);
+  }
+  try {
+    const declared = await layoutFindingsFromHtml(
+      authorityGatedHtml,
+      { width: 390, height: 844 },
+      { authorityGatedCapture: authorityGatedContract },
+    );
+    if (declared.includes("broken_form")) {
+      throw new Error(`declared authority-gated capture remained broken: ${declared.join(",")}`);
+    }
+    ok("fixture_authority_gated_capture_passes_with_registry_contract");
+  } catch (e) {
+    fail("fixture_authority_gated_capture_passes_with_registry_contract", e.message || e);
   }
 
   try {

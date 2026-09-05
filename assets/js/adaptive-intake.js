@@ -6,6 +6,7 @@
   var submit = form.querySelector('[type="submit"]');
   var status = document.getElementById("form-status");
   var nucleus = form.querySelector('[name="nucleus_id"]');
+  var configEndpoint = form.getAttribute("data-authority-config-endpoint");
   var configured = false;
   var started = false;
   var volatileRetryKey = "";
@@ -93,7 +94,11 @@
   }
   submit.disabled = true;
   message("Verificando a disponibilidade do recebimento…");
-  fetch("/.netlify/functions/adaptive-intake-config", { headers: { Accept: "application/json" } })
+  if (configEndpoint !== "/.netlify/functions/adaptive-intake-config") {
+    message("Recebimento indisponível enquanto a autoridade do intake não for confirmada.", "error");
+    return;
+  }
+  fetch(configEndpoint, { headers: { Accept: "application/json" } })
     .then(function (res) { if (!res.ok) throw new Error("config_unavailable"); return res.json(); })
     .then(configure)
     .catch(function () { message("Recebimento temporariamente indisponível. Você pode revisar as opções, mas o envio permanece bloqueado até a confirmação do serviço.", "error"); });
