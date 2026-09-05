@@ -62,6 +62,32 @@
 - O pin final comum MV-03 ainda não estava publicado no snapshot inicial; submit adaptativo permanece bloqueado até prova atual.
 - MV-08 ainda não tinha delta/PR terminal no snapshot inicial.
 
+## Mudança concorrente em `main`
+
+Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avançou para `470a5ffafeaf45a59649109742ce5885f9789328`. A branch MV-09 incorporou esse SHA por merge sem force-push. Os achados P1 acima passaram a ser dívida real de `main` e deverão ser corrigidos ou retirados na convergência final. Como havia FAIL material de conversão e somente MV-09 está autorizada a publicar, o release concorrente `33996397421` foi cancelado antes de pacote, stage ou promoção. A produção permaneceu no SHA inicial; nenhum rollback foi necessário.
+
+## Campanhas MV — decisões à medida que chegam a terminal
+
+| Campanha | PR / HEAD observado | Disposição MV-09 | Motivo / arquivos usados |
+|---|---|---|---|
+| MV-05 | #605 / `32fa6390f803493722ad34c5089b93c1331e9f6b` | PARTIAL | Pesquisa, copy por trabalho e matriz de intenção são donors. Nenhuma das quatro rotas candidatas tem aprovação de oferta/capacidade suficiente; o fragmento de captura conflita com o contrato ativo. A primeira execução de pSEO também revelou impacto global de CSS, corrigido no commit final do producer. Não promover páginas sem nova evidência. |
+
+### Revisão independente de MV-05 / #605
+
+#### Standards
+
+- P1: `capture.fragment.json` pede o campo `source`, rejeitado pelo allowlist atual; a fonte deve ser normalizada no servidor.
+- P1: o formulário ativo sobrescreve os IDs route-specific por um único pin global, perdendo contexto de próxima ação.
+- P1: o pacote afirmou que a ADR B2G antiga não mudava, embora a expansão privada atravesse essa decisão.
+- Julgamento: a tupla rota/família/asset/oferta/CTA/decisão está duplicada em várias projeções.
+
+#### Spec
+
+- P1: nenhuma rota está promotable sem confirmação escrita de delivery, atribuição/ART/campo conforme o caso.
+- P1: o fragmento não é compatível com o intake atual e poderia rejeitar ou reclassificar submissões.
+- P1: o primeiro HEAD `7b1e348d…` falhou pSEO por `border_radius` e `gradient`; o producer publicou `32fa6390…` para corrigir o orçamento, sujeito aos checks atualizados.
+- Sem scope creep material: IA por trabalho, ausência de doorway por persona, exemplos sintéticos e wording nacional condicional estão alinhados.
+
 ## Regra de integração
 
 Cada campanha MV-01..08 será registrada como `ADOPT | PARTIAL | SUPERSEDE | REJECT`, com SHA, arquivos portados, testes e justificativa. Candidatos só serão promovidos preservando conteúdo/hash/intenção; qualquer alteração material será descrita neste arquivo.
