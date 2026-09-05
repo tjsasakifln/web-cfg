@@ -26,6 +26,9 @@ PERMISSIONED_PROOF_PATH = ROOT / "data" / "site" / "permissioned-proof-registry.
 
 STATUSES = frozenset({"VERIFIED", "SELF_ATTESTED", "WITHHELD", "EXPIRED", "UNKNOWN"})
 PROJECTABLE_STATUSES = frozenset({"VERIFIED", "SELF_ATTESTED"})
+DOCUMENTARY_PRIMARY_REFERENCE_KEYS = frozenset(
+    {"document_id", "document_sha256", "document_owner", "storage_class"}
+)
 OWNED_SURFACES = ("/confianca/", "/especialista/tiago-jun-sasaki/")
 OWNED_RELATIVE_PATHS = frozenset(
     {
@@ -48,8 +51,8 @@ REGION_START = "<!-- credential-registry:start -->"
 REGION_END = "<!-- credential-registry:end -->"
 
 MANAGED_ORG_KEYS = ("legalName", "taxID", "address")
-MANAGED_PERSON_KEYS = ("jobTitle", "alumniOf", "hasCredential", "sameAs")
-MANAGED_SERVICE_KEYS = ("name", "description")
+MANAGED_PERSON_KEYS = ("name", "jobTitle", "alumniOf", "hasCredential", "sameAs")
+MANAGED_SERVICE_KEYS = ("name", "description", "areaServed")
 
 JSON_LD_RE = re.compile(
     r'(<script\b[^>]*\btype=["\']application/ld\+json["\'][^>]*>)(.*?)(</script>)',
@@ -171,6 +174,22 @@ def validate_registry(registry: dict[str, Any]) -> list[str]:
         status = claim.get("status")
         if status not in STATUSES:
             errors.append(f"invalid_status:{cid}:{status}")
+        source_class = str(claim.get("source_class") or "")
+        source_reference = claim.get("source_reference")
+        if not isinstance(source_reference, dict):
+            errors.append(f"source_reference_not_object:{cid}")
+        if source_class == "DOCUMENTARY_PRIMARY":
+            missing_reference = sorted(
+                key
+                for key in DOCUMENTARY_PRIMARY_REFERENCE_KEYS
+                if not isinstance(source_reference, dict) or not source_reference.get(key)
+            )
+            if missing_reference:
+                errors.append(
+                    f"documentary_primary_reference_incomplete:{cid}:{','.join(missing_reference)}"
+                )
+            if isinstance(source_reference, dict) and source_reference.get("materially_accessible") is not True:
+                errors.append(f"documentary_primary_not_accessible:{cid}")
         if claim.get("status") in PROJECTABLE_STATUSES and not claim.get("source_class"):
             errors.append(f"projectable_without_source:{cid}")
         if is_projectable(claim) and not (claim.get("allowed_wording") or []):
@@ -371,17 +390,18 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
         "org-cnae-servicos-engenharia",
         "person-legal-name",
         "person-civil-eesc-usp",
-        "person-github",
         "service-art-nf",
+        "service-national-formalities",
     )
     order_especialista = (
         "person-legal-name",
         "person-civil-eesc-usp",
-        "person-github",
         "org-legal-name",
         "org-cnpj",
         "org-cadastral-address",
         "service-art-nf",
+        "service-national-formalities",
+        "person-github",
     )
     preferred = order_especialista if "especialista" in surface else order_confianca
     ordered_ids: list[str] = []
@@ -412,6 +432,11 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
                 f' · <a href="{escape(url, quote=True)}" rel="noopener" target="_blank">'
                 "github.com/tjsasakifln</a>"
             )
+        elif cid == "service-national-formalities" and url:
+            extra = (
+                f' · <a href="{escape(url, quote=True)}" rel="noopener" target="_blank">'
+                "ver regra de visto no Confea</a>"
+            )
         term = {
             "org-legal-name": "Razão social",
             "org-cnpj": "CNPJ",
@@ -421,7 +446,7 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
             "org-crea-pj": "Registro CREA-SC da pessoa jurídica",
             "person-legal-name": "Responsável",
             "person-civil-eesc-usp": "Formação",
-            "person-github": "Perfil público",
+            "person-github": "Perfil técnico complementar",
             "person-crea-sc": "Registro CREA-SC",
             "person-rnp": "RNP",
             "person-titles-civil-sst": "Títulos profissionais",
@@ -430,16 +455,26 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
             "person-cptec-work-count": "Trabalhos no CPTEC/TJSC",
             "person-postgrad-valuations": "Pós-graduação",
             "service-art-nf": "Contratação",
+            "service-national-formalities": "Atuação nacional",
         }.get(cid, claim["claim"])
         desc = (
             f'<span data-credential="{escape(wording, quote=True)}" data-credential-id="{escape(cid, quote=True)}">'
             f"{escape(wording)}</span>"
             f"{extra}"
         )
-        status_label = {
-            "VERIFIED": "Verificado em fonte pública",
-            "SELF_ATTESTED": "Declaração do titular",
-        }.get(str(claim.get("status") or ""))
+        source_class = str(claim.get("source_class") or "")
+        if claim.get("status") == "VERIFIED" and source_class == "official_public_registry":
+            status_label = "Conferido em fonte oficial"
+        elif claim.get("status") == "VERIFIED" and source_class == "official_public_url":
+            status_label = "Perfil público do titular"
+        elif claim.get("status") == "VERIFIED":
+            status_label = "Fonte registrada"
+        elif source_class.startswith("owner_declared"):
+            status_label = "Regra de atuação"
+        elif claim.get("status") == "SELF_ATTESTED":
+            status_label = "Informação declarada pelo titular"
+        else:
+            status_label = None
         if status_label:
             desc += f' <small class="credential-status">{escape(status_label)}</small>'
         rows.append((term, desc, claim))
@@ -453,23 +488,23 @@ def render_visible_html(surface: str, claims: list[dict[str, Any]], as_of: str) 
         for term, desc, _claim in rows
     )
     heading = (
-        "Credenciais do especialista"
+        "Identidade e formação"
         if "especialista" in surface
         else "Identidade e registros"
     )
     lead = (
-        "O que dá para conferir agora, com fonte e data ao lado."
+        "Dados do profissional, da empresa e das regras de atuação, com origem e data."
         if "especialista" in surface
-        else "Quem responde, com o que a consulta pública da Receita Federal reproduz nesta data."
+        else "Dados que identificam a empresa e quem a conduz, com origem e data."
     )
     limits: list[str] = []
     if any(c["id"] == "org-cadastral-address" for c in claims):
         limits.append(
-            "O endereço acima é cadastral e fiscal. Reuniões acontecem online ou no local do cliente, com agendamento."
+            "O atendimento ocorre online ou no local do cliente, com agendamento. O endereço cadastral e fiscal não recebe visitas espontâneas."
         )
     if any(c["id"] == "service-art-nf" for c in claims):
         limits.append(
-            "ART e NF acompanham o serviço quando o escopo e a atribuição profissional as exigem; não são um selo genérico."
+            "A proposta define o escopo e a atribuição profissional; a ART e a nota fiscal são tratadas quando aplicáveis ao serviço."
         )
     limit_html = "".join(f"<p class=\"credential-limit\">{escape(item)}</p>" for item in limits)
     return (
@@ -478,11 +513,20 @@ def render_visible_html(surface: str, claims: list[dict[str, Any]], as_of: str) 
         f"<p>{escape(lead)}</p>"
         f'<dl class="credential-list">{items}</dl>'
         f"{limit_html}"
-        f'<p class="credential-as-of">as_of <time datetime="{escape(as_of)}">{escape(_format_br_date(as_of))}</time>. '
-        "Fonte oficial da pessoa jurídica: consulta pública de CNPJ da Receita Federal. "
-        "Formação em engenharia civil: declaração do titular.</p>"
+        f'<p class="credential-as-of">Informações conferidas em <time datetime="{escape(as_of)}">{escape(_format_br_date(as_of))}</time>. '
+        "Os dados da pessoa jurídica vêm da consulta pública de CNPJ da Receita Federal; "
+        "a formação em Engenharia Civil é informação declarada pelo titular.</p>"
         "</section>"
     )
+
+
+def render_trust_proof_block(
+    surface: str,
+    claims: list[dict[str, Any]],
+    as_of: str,
+) -> str:
+    """Render the reusable visible proof block from the same claims as JSON-LD."""
+    return render_visible_html(surface, claims, as_of)
 
 
 def project(
@@ -533,7 +577,7 @@ def project(
         if str(claim.get("id")) in projected:
             continue
         proj.unprojected_phrases.extend(_claim_public_phrases(claim))
-    proj.visible_html = render_visible_html(surface, claims, as_of)
+    proj.visible_html = render_trust_proof_block(surface, claims, as_of)
     defects = projection_defects(proj)
     if defects:
         raise ValueError(";".join(defects))
@@ -643,6 +687,7 @@ def visible_schema_parity_errors(proj: Projection) -> list[str]:
             "EducationalOccupationalCredential",
             "ProfessionalLicense",
             "ProfessionalService",
+            "Country",
             "BR",
             "SC",
         }:
@@ -680,6 +725,7 @@ def allowed_schema_values(
         "sameAs": set(),
         "alumniOf": set(),
         "hasCredential": set(),
+        "areaServed": set(),
         "address": set(),
         "streetAddress": set(),
         "addressLocality": set(),
@@ -818,7 +864,8 @@ def apply_to_html(html: str, proj: Projection) -> str:
         return f"{match.group(1)}{body}{match.group(3)}"
 
     rendered = JSON_LD_RE.sub(replace, rendered)
-    return _scrub_unprojected_meta(rendered, proj.unprojected_phrases)
+    rendered = _scrub_unprojected_meta(rendered, proj.unprojected_phrases)
+    return _scrub_unprojected_visible(rendered, proj.unprojected_phrases)
 
 
 def _scrub_phrase(text: str, phrase: str) -> str:
@@ -884,6 +931,25 @@ def _scrub_unprojected_meta(html: str, phrases: list[str]) -> str:
         flags=re.I,
     )
     return html
+
+
+def _scrub_unprojected_visible(html: str, phrases: list[str]) -> str:
+    """Remove withdrawn wording from text nodes without rewriting markup or JS."""
+    if not phrases:
+        return html
+    protected_or_tag = re.compile(
+        r"(<script\b[^>]*>.*?</script>|<style\b[^>]*>.*?</style>|<[^>]+>)",
+        flags=re.I | re.S,
+    )
+    parts = protected_or_tag.split(html)
+    for index, part in enumerate(parts):
+        if not part or part.startswith("<"):
+            continue
+        updated = part
+        for phrase in phrases:
+            updated = _scrub_phrase(updated, phrase)
+        parts[index] = updated
+    return "".join(parts)
 
 
 def _types(node: dict[str, Any]) -> set[str]:
