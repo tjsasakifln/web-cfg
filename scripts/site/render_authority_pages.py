@@ -294,13 +294,13 @@ def render_all() -> list[Path]:
             eyebrow = str(copy.get("eyebrow") or eyebrow)
             crumb_label = h1
             page_updated = str(conflict.get("effective_at") or updated)
+            body = body.replace("Owner: Engº Tiago Sasaki", "Responsável: Engº Tiago Sasaki")
+            written.append(_write("conflitos/conflict-gate.js", client_runtime_js(conflict)))
             body = (
                 body
                 + public_policy_body(conflict)
                 + first_step_form_html(conflict)
-                + "<script>\n"
-                + client_runtime_js(conflict)
-                + "\n</script>\n"
+                + '<script src="/conflitos/conflict-gate.js" defer=""></script>\n'
             )
         html_doc = _page(
             path=f"/{slug}/",

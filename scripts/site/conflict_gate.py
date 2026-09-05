@@ -421,12 +421,12 @@ def public_policy_body(contract: dict[str, Any] | None = None) -> str:
 {nucleus_items}
 </ul>
 <h2 id="estados">Estados da triagem</h2>
-<p>Os únicos estados possíveis são CLEAR, CLEAR_WITH_DISCLOSURE, REVIEW_REQUIRED, DECLINE e UNKNOWN. Informação insuficiente produz UNKNOWN, nunca CLEAR. Se o canal protegido estiver indisponível, o visitante vê REVIEW_REQUIRED ou UNKNOWN e o envio de corpus fica suspenso. Rollback também volta para REVIEW_REQUIRED, nunca para CLEAR.</p>
+<p>Os únicos estados possíveis são: sem sinal neste recorte; segue com divulgação no canal protegido; revisão humana; recusa; informação insuficiente. Informação insuficiente nunca libera o envio de documentos. Se o canal protegido estiver indisponível, o visitante vê revisão humana ou pausa e o envio de corpus fica suspenso. Rollback também volta para revisão humana, nunca para liberação.</p>
 <h2 id="dados-minimos">Primeira etapa: dados mínimos</h2>
 <p>Nesta página pedimos só recortes não sensíveis: núcleo, papel pretendido e respostas sim/não/não sei. Não pedimos nomes de partes, processo, contrato, órgão, empregado, condição médica, advogado, perito ou motivo detalhado. Esses dados, quando cabíveis, ficam no canal protegido fora da analítica pública.</p>
 <p>Não há envio de arquivo nem de corpus substantivo nesta etapa. Recusa é neutra: o site não revela o motivo protegido.</p>
 <h2 id="canal-protegido">O que não entra no plano público</h2>
-<p>Decisão protegida (owner, data, classe de motivo, referência da matéria, papel, validade, divulgação, recibo e versão da política) não é publicada, não vai para query string, evento ou log público, e não é armazenada neste site. Este repositório não implementa cadastro de partes nem de casos.</p>
+<p>Decisão protegida (responsável, data, classe de motivo, referência da matéria, papel, validade, divulgação, recibo e versão da política) não é publicada, não vai para query string, evento ou log público, e não é armazenada neste site. Este repositório não implementa cadastro de partes nem de casos.</p>
 """
 
 
@@ -450,15 +450,15 @@ def first_step_form_html(contract: dict[str, Any] | None = None) -> str:
             '<option value="">Selecione</option>'
             '<option value="yes">Sim</option>'
             '<option value="no">Não</option>'
-            '<option value="unknown">Não sei</option>'
+            '<option value="unsure">Não sei</option>'
             "</select></div>"
         )
 
     return f"""
 <h2 id="primeira-etapa">Primeira etapa da triagem</h2>
-<p>Responda só o mínimo. O resultado público mostra o estado neutro e o próximo passo. Se o JavaScript falhar ou o canal protegido estiver indisponível, o estado visível é REVIEW_REQUIRED ou UNKNOWN e o corpus permanece suspenso.</p>
+<p>Responda só o mínimo. O resultado público mostra o estado neutro e o próximo passo. Se o JavaScript falhar ou o canal protegido estiver indisponível, o estado visível é revisão humana ou pausa e o corpus permanece suspenso.</p>
 <noscript>
-<p class="form-note" data-conflict-gate-fallback="unavailable">JavaScript indisponível. Estado: REVIEW_REQUIRED. Não envie o corpus.</p>
+<p class="form-note" data-conflict-gate-fallback="REVIEW_REQUIRED">JavaScript indisponível. Estado: revisão humana. Não envie o corpus.</p>
 </noscript>
 <form class="contact-form" id="conflict-gate-form" method="post" action="#primeira-etapa" data-conflict-gate-version="{version}" data-conflict-gate-hash="{digest}" novalidate="">
 <input name="conflict_gate_version" type="hidden" value="{version}"/>
@@ -487,7 +487,7 @@ def first_step_form_html(contract: dict[str, Any] | None = None) -> str:
 {tri_field("distinct_matter_no_signal", "A matéria é distinta e, neste recorte, não há sinal de conflito?")}
 <button class="button button-primary" type="submit">Ver próximo passo da triagem</button>
 <p class="form-note">Não anexe arquivo. Não escreva nomes de partes, processo, órgão ou motivo detalhado. Recusa é neutra.</p>
-<div id="conflict-gate-result" role="status" aria-live="polite" data-conflict-gate-result="idle">A triagem ainda não rodou. Nenhum estado CLEAR é presumido.</div>
+<div id="conflict-gate-result" role="status" aria-live="polite" data-conflict-gate-result="idle">A triagem ainda não rodou. Nenhum envio de documentos é presumido.</div>
 </form>
 """
 
@@ -707,8 +707,15 @@ def client_runtime_js(contract: dict[str, Any] | None = None) -> str:
         policy_version: CONFENGE_CONFLICT_GATE.contract_version
       });
     }
+    var labels = {
+      CLEAR: "sem sinal neste recorte",
+      CLEAR_WITH_DISCLOSURE: "segue com divulgação no canal protegido",
+      REVIEW_REQUIRED: "revisão humana",
+      DECLINE: "recusa",
+      UNKNOWN: "informação insuficiente"
+    };
     out.setAttribute("data-conflict-gate-result", status);
-    out.textContent = "Estado: " + status + ". " + (pub.next_step || "");
+    out.textContent = "Estado: " + (labels[status] || labels.UNKNOWN) + ". " + (pub.next_step || "");
   });
 })();
 """

@@ -6,6 +6,7 @@ Drives scripts.site.conflict_gate from real start state. No second oracle.
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -292,13 +293,21 @@ def test_rendered_conflitos_covers_nuclei_min_data_and_fail_closed_copy():
     assert "cargo público" in lower or "cargo publico" in lower
     assert "independência" in lower or "independencia" in lower
     assert "não é um parecer jurídico geral" in lower or "nao e um parecer juridico geral" in lower
-    assert "review_required" in lower
-    assert "unknown" in lower
+    assert "revisão humana" in lower or "revisao humana" in lower
+    assert "informação insuficiente" in lower or "informacao insuficiente" in lower
+    assert 'data-conflict-gate-fallback="REVIEW_REQUIRED"' in html
     assert 'type="file"' not in lower
     assert "type='file'" not in lower
     assert 'id="conflict-gate-form"' in html
     assert 'data-conflict-gate-result="idle"' in html
-    assert "Nenhum estado CLEAR é presumido" in html
+    assert "Nenhum envio de documentos é presumido" in html
+    assert 'src="/conflitos/conflict-gate.js"' in html
+    assert (ROOT / "conflitos" / "conflict-gate.js").is_file()
+    from scripts.site.public_copy_scope import visible_text
+
+    vis = visible_text(html)
+    assert re.search(r"\bunknown\b", vis, flags=re.I) is None
+    assert re.search(r"\bowner\b", vis, flags=re.I) is None
     assert 'protected_path_available" type="hidden" value="false"' in html or 'name="protected_path_available"' in html
     assert "Não seguiremos com esta demanda neste canal" in html or "recusa" in lower
     assert "/.netlify/functions/lead" not in html
