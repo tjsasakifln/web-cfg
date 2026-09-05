@@ -322,7 +322,8 @@ def test_public_surfaces_have_no_prose_em_dashes():
         assert "data-lead-success" in t
         assert "Prazo" in t or "prazo" in t
         assert "wa.me" in t
-    assert "Solicitar diagnóstico da operação" in home
+    assert "/diagnostico-b2g-360/" in home
+    assert "Ver Diagnóstico da Operação em Obras Públicas" in home
     assert "Solicitar canal seguro para envio" in home
     assert "enviar documentos para análise" not in home.lower()
     # Thank-you pages must not expose journey letter labels to visitors
