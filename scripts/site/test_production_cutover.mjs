@@ -242,8 +242,8 @@ ok(
   /id="hero-title"[\s\S]{0,400}Decisão técnica documentada[\s\S]{0,120}com responsável e data\./i.test(home.body),
   "hero-title does not carry the documented-decision phrase"
 );
-const macro = (home.body.match(/macro-phase/g) || []).length;
-ok("four_macrofases", macro >= 4, `macro-phase count=${macro}`);
+const doors = (home.body.match(/id="nucleo-(?:edificacoes|obras-publicas)"/g) || []).length;
+ok("two_public_doors", doors >= 2, `public door count=${doors}`);
 const blocks = (home.body.match(/data-section-archetype="/g) || []).length;
 ok("seven_narrative_blocks", blocks === 7, `archetypes=${blocks}`);
 for (const phrase of RETIRED) {
@@ -320,7 +320,7 @@ ok(
   /servicos-obras-publicas/.test(loc),
   `loc=${loc}`
 );
-ok("fragment_como_atuamos", home.body.includes('id="como-atuamos"'), "missing id");
+ok("fragment_nucleos", home.body.includes('id="nucleos"'), "missing id");
 
 // 410
 for (const path of ["/vision", "/nexgen", "/avcbclcb"]) {
