@@ -6,7 +6,8 @@ Data: 05-09-2026. Os candidatos continuam isolados em `docs/integration`; nenhum
 
 | Verificação | Resultado |
 | --- | --- |
-| `python3 tests/campaigns/mv-05/test_candidates.py` | **PASS — 8 testes**: conjunto exato, assets locais, metadata/canonical, JSON-LD, linguagem/prova, CTAs fechados sem PII, limites campo/remoto e fragmentos. |
+| `python3 tests/campaigns/mv-05/test_candidates.py` | **PASS — 9 testes**: conjunto exato, assets locais, metadata/canonical, JSON-LD, linguagem/prova, CTAs fechados sem PII, limites campo/remoto, fragmentos e dimensões das capturas. |
+| `python3 scripts/site/audit_css_usage.py` | **PASS — `CSS_USAGE_OK`**; o CSS local preserva o orçamento de decoração do repositório (`border_radius=137`, `gradient=51`). |
 | `python3 scripts/site/test_public_plain_language.py` | **PASS — 249 superfícies públicas atuais**. Os candidatos são cobertos adicionalmente pelo teste autocontido. |
 | `python3 scripts/site/inbound_gates.py --out /tmp/mv05-inbound-gates-report.json` | **PASS — `ok: true`** no baseline público. Avisos de dívida já registrada permanecem; candidatos isolados não foram tratados como rotas publicadas. MV-09 deve repetir o gate no artefato promovido. |
 | `node scripts/site/runtime_authority.mjs --live` | **PASS — `ok: true`**. Produção observada no release `89b081a8676d8a0b30747dfcb1477f21d9ac4dfb`, host `confenge-nginx-node/v2`, ambiente `production`. |
