@@ -232,6 +232,23 @@ def test_title_schema_and_footer_are_not_exclusive_b2g() -> None:
     assert "/servicos-obras-publicas/" in footer.group(0)
 
 
+def test_contract_analysis_canary_org_jsonld_follows_brand() -> None:
+    from scripts.site.brand import org_description
+
+    rel = (
+        "analises-contratos-publicos/"
+        "reajuste-incc-coluna-35-paralelepipedo-sao-goncalo-piaui-2026/index.html"
+    )
+    html = (ROOT / rel).read_text(encoding="utf-8")
+    block = re.search(
+        r'<script type="application/ld\+json">(.*?)</script>', html, re.S
+    )
+    assert block, rel
+    graph = json.loads(block.group(1))["@graph"]
+    org = next(node for node in graph if node.get("@type") == "Organization")
+    assert org["description"] == org_description()
+
+
 def test_frozen_bofu_pages_were_not_rewritten_by_this_campaign() -> None:
     assert FROZEN_SHELL_FILES
     for rel in sorted(FROZEN_SHELL_FILES):
