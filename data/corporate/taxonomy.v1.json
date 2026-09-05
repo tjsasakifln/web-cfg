@@ -1,13 +1,13 @@
 {
   "contract_id": "CONFENGE_CORPORATE_TAXONOMY",
-  "contract_version": "1.0.0-draft.20260904",
+  "contract_version": "1.0.0",
   "schema_id": "confenge-corporate-taxonomy/v1",
-  "as_of": "2026-09-04",
+  "as_of": "2026-09-05",
   "decision_date": "2026-09-04",
   "owner_issue": 578,
   "parent_issue": 577,
   "producer": {
-    "authority": "web-cfg-campaign-02",
+    "authority": "web-cfg-mv-01",
     "repository": "tjsasakifln/web-cfg",
     "path": "data/corporate/taxonomy.v1.json"
   },
@@ -79,10 +79,18 @@
   },
   "addition_rules": {
     "nucleus": "Founder decision plus ADR amendment plus taxonomy version bump. The new nucleus needs a unique ASCII id and every required field. A nucleus is not a sub-brand, domain or second identity model.",
-    "offer": "Campaign 08 / offer catalog owns commercial records. An offer references an existing nucleus_id; a missing nucleus fails closed. This taxonomy stores offer_id only and never duplicates price, SLA or checkout.",
-    "route": "Every indexable public route stays in public-family-registry with visitor job, terminal action and conversion-gate coverage, plus a nucleus_id that exists here. Goal 97 applies the registry field; this campaign does not edit that file.",
-    "location": "Local surfaces require distinct visitor utility and must not become doorway pages. Campaign 11 owns Grande Florianópolis validation. Geography is a field rule, not a nucleus.",
+    "offer": "The finite offer catalog owns commercial records. An offer references an existing nucleus_id; a missing nucleus fails closed. This taxonomy stores offer_id only and never duplicates price, SLA or checkout.",
+    "route": "Every indexable public route stays in public-family-registry with visitor job, terminal action and conversion-gate coverage. MV-09 applies shared-registry integration; this producer does not edit that file.",
+    "location": "Geography is a qualification field, not a nucleus or doorway-page multiplier. National availability never overrides local professional formalities.",
     "proof": "Proof items need source, date and permission class. Invented credentials, rankings, cases or seals fail closed. extra-cli owns facts when acquisition is required."
+  },
+  "expression_policy": {
+    "nuclei_role": "internal_operational_grouping",
+    "nucleus_names_required_in_public_copy": false,
+    "public_entrypoint_contract": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
+    "public_entrypoint_path": "data/corporate/intent-family-matrix.v1.json",
+    "route_source_of_truth": "intent_family_not_persona",
+    "unknown_demand_state": "NEEDS_CONTEXT"
   },
   "nuclei": [
     {
@@ -116,7 +124,7 @@
       ],
       "conflict_profile": "Alto. Atuação como assistente técnico de uma parte; não atuar simultaneamente para partes opostas no mesmo conflito.",
       "sensitivity_profile": "Alta. Peças processuais, dados de partes e documentos de obra permanecem fora de analytics e de páginas públicas.",
-      "geo_field_rule": "Atuação documental nacional quando o dossiê não exige campo; vistorias e campo priorizam Santa Catarina / Grande Florianópolis. Não gerar páginas doorway por cidade.",
+      "geo_field_rule": "Atendimento em todo o Brasil. Escopo, local, campo, logística, atribuições, registro ou visto e ART são confirmados antes de assumir responsabilidade técnica; não gerar páginas doorway por cidade.",
       "proof_classes": [
         "credential",
         "method",
@@ -129,7 +137,7 @@
         {
           "offer_id": "expert_evidence_technical_assistance",
           "status": "candidate",
-          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904"
+          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0"
         }
       ],
       "metrics": {
@@ -173,7 +181,7 @@
       ],
       "conflict_profile": "Médio-alto quando o valor alimenta disputa entre partes.",
       "sensitivity_profile": "Alta. Endereço, matrícula e valores de ativo não vazam para analytics.",
-      "geo_field_rule": "Campo e vistorias priorizam Grande Florianópolis / Santa Catarina; peças documentais podem ser nacionais. Sem páginas doorway por bairro.",
+      "geo_field_rule": "Atendimento em todo o Brasil. Avaliação e vistoria dependem de local, logística, método, atribuições, registro ou visto e ART confirmados; sem páginas doorway por bairro ou cidade.",
       "proof_classes": [
         "credential",
         "method",
@@ -186,7 +194,7 @@
         {
           "offer_id": "property_valuation_report",
           "status": "candidate",
-          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904"
+          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0"
         }
       ],
       "metrics": {
@@ -231,7 +239,7 @@
       ],
       "conflict_profile": "Médio. Evitar atuar em lados opostos da mesma edificação em disputa.",
       "sensitivity_profile": "Média-alta. Plantas, custos e falhas construtivas são privados até permissão.",
-      "geo_field_rule": "Campo prioriza Grande Florianópolis / Santa Catarina; documentação pode ser remota. Sem expansão doorway 5 núcleos × N cidades.",
+      "geo_field_rule": "Atendimento em todo o Brasil. Projeto, revisão, documentação e campo dependem da disciplina, do local, das atribuições, do registro ou visto e da ART aplicável; sem expansão doorway por cidade.",
       "proof_classes": [
         "credential",
         "method",
@@ -244,7 +252,7 @@
         {
           "offer_id": "private_project_technical_readiness_assessment",
           "status": "candidate",
-          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904"
+          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0"
         }
       ],
       "metrics": {
@@ -286,7 +294,7 @@
       ],
       "conflict_profile": "Alto em lide trabalhista. Assistência de uma parte por vez.",
       "sensitivity_profile": "Alta. Dados de trabalhadores e processos não entram em analytics.",
-      "geo_field_rule": "Documental nacional; campo e inspeções priorizam Santa Catarina.",
+      "geo_field_rule": "Atendimento em todo o Brasil. Campo, medições, responsáveis multidisciplinares, atribuições, registro ou visto e ART são confirmados para o estabelecimento e a atividade.",
       "proof_classes": [
         "credential",
         "method",
@@ -299,7 +307,7 @@
         {
           "offer_id": "occupational_safety_technical_assistance",
           "status": "candidate",
-          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904"
+          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0"
         }
       ],
       "metrics": {
@@ -342,7 +350,7 @@
       ],
       "conflict_profile": "Médio. Cliente é o contratado privado; a Administração não é cliente simultâneo no mesmo contrato.",
       "sensitivity_profile": "Média. Contratos públicos têm camada pública e camada comercial confidencial; PII de contato não vai para analytics.",
-      "geo_field_rule": "Nacional para contratos e editais públicos. Presença de campo conforme o dossiê. URLs B2G atuais permanecem; sem redirect em massa.",
+      "geo_field_rule": "Atendimento em todo o Brasil. Campo e responsabilidade técnica dependem do objeto, local, atribuições, registro ou visto e ART; URLs B2G atuais permanecem, sem redirect em massa.",
       "proof_classes": [
         "credential",
         "method",
@@ -356,17 +364,17 @@
         {
           "offer_id": "CFG-D01",
           "status": "published",
-          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904"
+          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0"
         },
         {
           "offer_id": "CFG-DIAG-EXP-v1",
           "status": "published",
-          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904"
+          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0"
         },
         {
           "offer_id": "CFG-DIRB2G-FLEX-v1",
           "status": "published",
-          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904"
+          "catalog_contract": "CONFENGE_OFFER_CATALOG/2.0.0"
         }
       ],
       "metrics": {
@@ -387,7 +395,7 @@
       "route": "/",
       "nucleus_id": "public_works_b2g",
       "status": "published",
-      "notes": "Current production home remains the B2G vertical surface until campaign 08."
+      "notes": "Current production home remains the B2G vertical surface until MV-09 integrates an approved public information architecture."
     },
     {
       "route": "/servicos-obras-publicas/",
@@ -412,18 +420,22 @@
   ],
   "b2g_coexistence": {
     "status": "protected_vertical",
-    "cannibalization": "New nuclei must not rewrite, redirect or noindex B2G URLs. Shared chrome may name five nuclei only after campaign 08 ships the IA.",
+    "cannibalization": "New service families must not rewrite, redirect or noindex B2G URLs. Public navigation may expose only approved buyer-language intent families after MV-09 integrates the information architecture; internal nucleus names are not public route truth.",
     "url_policy": "Preserve current B2G routes, indexation and conversion. No blanket redirect to home. MIGRATE/REDIRECT/RETIRE remains URL-exact.",
     "equity_policy": "B2G content, offers, proof and data remain in force. The vertical is not deprecated and is not the corporate category."
   },
   "sibling_contracts": {
-    "offer_catalog": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+    "offer_catalog": "CONFENGE_OFFER_CATALOG/2.0.0",
+    "commercial_constitution": "CONFENGE_COMMERCIAL_CONSTITUTION/1.0.0",
+    "public_intent_matrix": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
+    "public_service_page": "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0",
+    "price_authority": "CONFENGE_PRICE_AUTHORITY/1.0.0",
     "web_intake": "CONFENGE_WEB_INTAKE/2.0.0-draft.20260904",
     "admission_policy": "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904",
     "handraiser_state": "CONFENGE_HANDRAISER_STATE/1.0.0-draft.20260904",
     "meetcfg_context": "MEETCFG_HANDRAISER_CONTEXT/1.0.0-draft.20260904",
-    "notes": "Sibling IDs are coordination fixtures for campaigns 03/08/09/10/11 and goal 97. They are not runtime fallbacks. Missing or divergent taxonomy version/hash fails closed."
+    "notes": "Sibling contracts are consumed by MV-03 through MV-07 and integrated only by MV-09. They are not runtime fallbacks. Missing or divergent taxonomy version/hash fails closed."
   },
-  "notes": "Founder decision 2026-09-04 recorded in #577/#578. This document is the single content authority for nuclei. Consumers pin contract_id, contract_version and content_sha256.",
-  "content_sha256": "75d8c323accc953f18a2fb8340196393f24ca73b0af51fa2096d472495850fd0"
+  "notes": "Founder decision 2026-09-04 recorded in #577/#578 and red-teamed by MV-01 on 2026-09-05. This document is the single operational authority for five internal nuclei. Their names are not mandatory public navigation or route labels; customer-facing entry is the public intent matrix. Consumers pin contract_id, contract_version and content_sha256.",
+  "content_sha256": "99d17ac874d1dbd550c8cd4c655f2e5a262229232ee77af77cdde4fe5dd00f09"
 }

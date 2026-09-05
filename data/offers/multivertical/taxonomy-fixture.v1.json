@@ -1,9 +1,9 @@
 {
-  "contract": "CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904",
-  "owner": "campaign-02",
+  "contract": "CONFENGE_CORPORATE_TAXONOMY/1.0.0",
+  "owner": "web-cfg-mv-01",
   "replaceable_fixture": true,
-  "fixture_owner": "campaign-03-consume-only",
-  "note": "Fixture explícita e substituível. Campanha 02 é a autoridade da taxonomia. Goal 97 ratifica ou migra. Cinco núcleos de #577; não criar segunda taxonomia.",
+  "fixture_owner": "mv-01-test-only",
+  "note": "Fixture explícita para testes isolados. A autoridade canônica é data/corporate/taxonomy.v1.json; esta fixture não é fallback de produção nem fonte de linguagem pública.",
   "nuclei": [
     {
       "nucleus_id": "expert_evidence_assistance",

@@ -128,6 +128,12 @@ function validateCatalog(assembled) {
   if (assembled.publication && assembled.publication.catalog_public !== false) {
     errors.push("catalog_public_not_false");
   }
+  if (assembled.publication && assembled.publication.professional_claims_authorized !== false) {
+    errors.push("professional_claims_must_remain_unauthorized");
+  }
+  if (assembled.publication && assembled.publication.credential_authority_present !== false) {
+    errors.push("credential_authority_must_remain_absent");
+  }
   if (authorities.flags.CONFENGE_OFFER_CATALOG_PUBLIC !== false) {
     errors.push("flags_catalog_public");
   }
@@ -137,6 +143,12 @@ function validateCatalog(assembled) {
     if (offer.price_model.public_amount_cents !== null) errors.push(`invented_public_price:${offer.offer_id}`);
     if (offer.price_model.public_range !== null) errors.push(`invented_public_range:${offer.offer_id}`);
     if (offer.sla_window.state !== "UNKNOWN") errors.push(`new_offer_sla_not_unknown:${offer.offer_id}`);
+    if (!/a confirmar antes da contrata[cç][aã]o/i.test(offer.technical_responsibility.responsible || "")) {
+      errors.push(`professional_responsible_not_conditional:${offer.offer_id}`);
+    }
+    if (offer.price_model.policy !== "CONFENGE_PRICE_AUTHORITY/1.0.0") {
+      errors.push(`price_authority_mismatch:${offer.offer_id}`);
+    }
     if (typeof offer.price_model.internal_floor_cents === "number") {
       errors.push(`internal_floor_in_catalog:${offer.offer_id}`);
     }
@@ -184,6 +196,17 @@ function validateCatalog(assembled) {
     if (b2gNew.nucleus_id !== "public_works_b2g") errors.push("issue_587_nucleus");
     if (b2gNew.wave_class === "FIRST_WAVE_CANARY") errors.push("issue_587_must_not_be_canary");
     if (b2gNew.readiness === "PUBLISHABLE") errors.push("issue_587_must_not_be_publishable");
+  }
+
+  const issue602 = modeled.find((offer) => offer.offer_id === "complementary_engineering_project_review");
+  if (!issue602) errors.push("issue_602_not_modeled");
+  else {
+    const text = JSON.stringify(issue602).toLowerCase();
+    if (!text.includes("arquitet")) errors.push("issue_602_architecture_boundary_missing");
+    if (!text.includes("escritório de arquitetura") || !text.includes("plataforma de arquitetura")) {
+      errors.push("issue_602_client_coverage_missing");
+    }
+    if (issue602.readiness === "PUBLISHABLE") errors.push("issue_602_must_not_be_publishable");
   }
 
   const deliverables = authorities.deliverables.deliverables;

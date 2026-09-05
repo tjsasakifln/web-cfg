@@ -1,0 +1,14 @@
+{
+  "owner": "MV-09",
+  "reason": "package.json está fora do WRITE_SET do producer MV-01",
+  "suggested_scripts": {
+    "test:corporate-taxonomy": "python3 -m pytest tests/corporate_taxonomy -q",
+    "test:multivertical-catalog": "node tests/offers/test_multivertical_catalog.mjs"
+  },
+  "suggested_parent": "test:commercial-contracts",
+  "apply_only_after": [
+    "consumer-pin hashes match integrated files",
+    "MV-09 resolves overlapping donor PRs #590 and #594",
+    "existing inbound and commercial gates remain green"
+  ]
+}

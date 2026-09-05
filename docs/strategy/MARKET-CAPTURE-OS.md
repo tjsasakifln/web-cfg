@@ -4,12 +4,13 @@
 
 **Date:** 2026-08-25
 
-**Amended:** 2026-09-04 (#577 / #578)
+**Amended:** 2026-09-05 (MV-01; #577 / #578 / #583)
 
 **Architecture:** [ADR-STRAT-002](../architecture/ADR-STRAT-002-confenge-canonical-public-surface.md)
 
-**Taxonomy:** `CONFENGE_CORPORATE_TAXONOMY/1.0.0-draft.20260904`
-(`data/corporate/taxonomy.v1.json`)
+**Commercial authority:** `CONFENGE_COMMERCIAL_CONSTITUTION/1.0.0`,
+`CONFENGE_CORPORATE_TAXONOMY/1.0.0` and
+`CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0` (`data/corporate/`)
 
 **Inbound execution:** [#61](https://github.com/tjsasakifln/web-cfg/issues/61)
 
@@ -36,20 +37,17 @@ a technical house, not another consultancy. That is earned through original data
 explicit methods, expert authorship/review, correction history, permissioned
 proof and repeated third-party citation.
 
-## Canonical nuclei
+## Taxonomia em duas camadas
 
-The architecture reads one taxonomy. Do not encode a second list in Python, JS,
-navigation or schema.
+Os cinco núcleos permanecem agrupamentos operacionais internos para ownership,
+conflito, sensibilidade e medição. Seus nomes não são navegação nem copy
+obrigatória. A linguagem pública começa pela situação e pela decisão descritas
+em `CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0`, resolve para uma família canônica de
+serviço e então para oferta finita ou `NEEDS_CONTEXT`/GAP.
 
-1. `expert_evidence_assistance` — Perícias e Assistência Técnica
-2. `property_valuation` — Avaliações de Imóveis
-3. `building_engineering_documentation` — Engenharia de Edificações e Documentação
-4. `occupational_safety` — Segurança do Trabalho
-5. `public_works_b2g` — Obras Públicas e B2G (protected, published)
-
-Adding a nucleus, offer, route, location or proof follows the rules in
-ADR-STRAT-002 and in the taxonomy `addition_rules`. The 100th record uses the
-same schema.
+Persona é apenas exemplo de audiência. Não decide rota. Adicionar núcleo,
+oferta, rota, local ou prova segue ADR-STRAT-002, ADR-STRAT-004 e os contratos
+versionados. O 120º e o milésimo caso usam a mesma estrutura.
 
 ## Two distinct revenue paths
 
@@ -103,10 +101,14 @@ ela não pertence ao `web-cfg`.
 - CONFENGE e `confenge.com.br` são a única marca e superfície pública.
 - A categoria corporativa é Engenharia, Perícias e Inteligência Técnica.
   Obras públicas / B2G permanece vertical protegida, com rotas e catálogo atuais.
-- O catálogo comercial canônico tem **54 entregáveis e 2 contêineres** no
-  vertical B2G; planos e condições de contratação não criam produtos. #343 é a
-  autoridade nominal desse catálogo. Novas ofertas de outros núcleos entram pelo
-  mesmo catálogo, referenciando um `nucleus_id` existente.
+- O catálogo B2G canônico mantém **54 entregáveis e 2 contêineres**; #343 é sua
+  autoridade nominal. O catálogo multivertical modela 18 ofertas novas e expande
+  o B2G somente por referência, sem duplicar ID, nome, preço ou checkout.
+- Atendimento em todo o Brasil é disponibilidade comercial, não autorização
+  técnica irrestrita. Escopo, local, atribuições, registro ou visto e ART são
+  confirmados antes de assumir responsabilidade.
+- `FOUNDER_AUTHORIZED_EXPERIMENT`, `MARGIN_VALIDATED`, preço público e checkout
+  são decisões independentes e fail-closed.
 - A operação outbound é uma esteira `extra-cli → Warmbly → Governance/Control
   Center`, não um experimento artesanal de um contato e não uma função do site.
 - A operação pode preparar cohorts, enriquecer contatos, personalizar e validar

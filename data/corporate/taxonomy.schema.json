@@ -20,13 +20,14 @@
     "owner_planes",
     "north_star",
     "addition_rules",
+    "expression_policy",
     "nuclei",
     "route_bindings",
     "b2g_coexistence"
   ],
   "properties": {
     "contract_id": { "const": "CONFENGE_CORPORATE_TAXONOMY" },
-    "contract_version": { "const": "1.0.0-draft.20260904" },
+    "contract_version": { "const": "1.0.0" },
     "schema_id": { "const": "confenge-corporate-taxonomy/v1" },
     "as_of": { "type": "string" },
     "decision_date": { "type": "string" },
@@ -39,6 +40,7 @@
     "owner_planes": { "type": "object" },
     "north_star": { "type": "object" },
     "addition_rules": { "type": "object" },
+    "expression_policy": { "type": "object" },
     "nuclei": {
       "type": "array",
       "minItems": 5,

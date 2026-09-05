@@ -1,0 +1,166 @@
+{
+  "schema": "confenge.public-intent-matrix/1.0",
+  "contract": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
+  "effective_at": "2026-09-05",
+  "routing_rule": "A situação e a decisão definem a família. A audiência é somente exemplo e nunca resolve rota ou oferta.",
+  "operational_domains_note": "Os cinco núcleos da taxonomia são agrupamentos internos. Os nomes abaixo são famílias canônicas de serviço e situações públicas; não são sub-marcas.",
+  "offer_id_semantics": {
+    "default": "exhaustive_for_modeled_multivertical_offers",
+    "retained_b2g": {
+      "mode": "representative_entry_points_plus_complete_typed_authority",
+      "applies_to_intent_families": ["decidir_disputar_licitacao", "executar_proteger_contrato_publico"],
+      "deliverables_authority": "data/commercial/deliverables-registry.v1.json",
+      "deliverables_schema": "confenge.deliverables-registry/1.0",
+      "deliverables_registry_version": "CFG-DELIVERABLES-2026-08-25-v2",
+      "required_deliverable_count": 54,
+      "checkout_authority": "data/offers/catalog.snapshot.json",
+      "checkout_schema": "confenge.offer-catalog-snapshot/1.0",
+      "checkout_authority_version": "CFG-OFFER-REGISTRY-2026-08-17-v1",
+      "required_checkout_offer_ids": ["CFG-DIAG-EXP-v1", "CFG-DIRB2G-FLEX-v1", "CFG-DIRB2G-180-v1", "CFG-DIRB2G-365-v1"],
+      "consumer_rule": "Os offer_ids dessas duas intenções são entradas representativas, não lista exaustiva. O consumidor deve preservar e resolver o catálogo B2G completo pela autoridade tipada; ausência, divergência de contagem, ID, nome, preço ou hash falha fechado."
+    }
+  },
+  "service_families": [
+    {"id": "engineering_projects_coordination", "operational_domain": "building_engineering_documentation", "canonical_name_pt_br": "Projetos de engenharia, revisão e coordenação"},
+    {"id": "cost_planning_feasibility", "operational_domain": "building_engineering_documentation", "canonical_name_pt_br": "Orçamento, quantitativos, planejamento e viabilidade"},
+    {"id": "building_condition_documentation", "operational_domain": "building_engineering_documentation", "canonical_name_pt_br": "Condição, inspeção e documentação de edificações"},
+    {"id": "technical_evidence_disputes", "operational_domain": "expert_evidence_assistance", "canonical_name_pt_br": "Prova e assistência técnica em disputas"},
+    {"id": "property_valuation", "operational_domain": "property_valuation", "canonical_name_pt_br": "Avaliação de imóveis"},
+    {"id": "occupational_safety", "operational_domain": "occupational_safety", "canonical_name_pt_br": "Segurança e saúde no trabalho"},
+    {"id": "public_procurement_owner", "operational_domain": "public_works_b2g", "canonical_name_pt_br": "Planejamento técnico da contratação pública"},
+    {"id": "public_bidder_decision", "operational_domain": "public_works_b2g", "canonical_name_pt_br": "Licitação e proposta para empresas"},
+    {"id": "public_contract_execution", "operational_domain": "public_works_b2g", "canonical_name_pt_br": "Execução e proteção de contratos públicos"}
+  ],
+  "intent_families": [
+    {
+      "intent_family": "projetar_revisar_compatibilizar",
+      "public_wording": "Preciso completar, revisar ou compatibilizar projetos de engenharia antes da obra.",
+      "canonical_service_family": "engineering_projects_coordination",
+      "offer_ids": ["complementary_engineering_project_review", "bim_coordination_clash_register", "private_project_technical_readiness_assessment"],
+      "audience_examples": ["construtoras", "incorporadoras", "escritórios de engenharia", "escritórios e plataformas de arquitetura como clientes de engenharia complementar"],
+      "terminal_action": "REQUEST_SCOPE_REVIEW",
+      "adjacent_intents": ["orcar_planejar_decidir", "documentar_as_built_regularizar"],
+      "disambiguation": "Não oferece autoria arquitetônica. Disciplina, atribuição, autoria de origem, interfaces e responsabilidade técnica precisam ser confirmadas antes da proposta."
+    },
+    {
+      "intent_family": "orcar_planejar_decidir",
+      "public_wording": "Preciso levantar quantidades, revisar custos ou testar a viabilidade técnica da obra.",
+      "canonical_service_family": "cost_planning_feasibility",
+      "offer_ids": ["quantity_takeoff_budgeting", "budget_audit_feasibility", "private_project_technical_readiness_assessment"],
+      "audience_examples": ["construtoras", "incorporadoras", "desenvolvedores imobiliários", "escritórios de engenharia"],
+      "terminal_action": "REQUEST_SCOPE_REVIEW",
+      "adjacent_intents": ["projetar_revisar_compatibilizar", "planejar_contratacao_publica"],
+      "disambiguation": "Orçamento privado não é automaticamente orçamento de licitação; a finalidade, a base de preços, o estágio do projeto e o objeto definem a família."
+    },
+    {
+      "intent_family": "inspecionar_diagnosticar",
+      "public_wording": "Preciso entender uma fissura, infiltração, falha ou condição da edificação antes de decidir o reparo.",
+      "canonical_service_family": "building_condition_documentation",
+      "offer_ids": ["building_inspection_pathology", "pre_litigation_technical_screening"],
+      "audience_examples": ["administradoras", "síndicos", "condomínios", "proprietários", "construtoras"],
+      "terminal_action": "REQUEST_TECHNICAL_TRIAGE",
+      "adjacent_intents": ["receber_entregar_reformar", "produzir_prova_tecnica"],
+      "disambiguation": "Diagnóstico não é projeto de reparo, laudo pericial ou garantia de causa; o produto depende da pergunta, da vistoria e do método aplicável."
+    },
+    {
+      "intent_family": "receber_entregar_reformar",
+      "public_wording": "Preciso vistoriar recebimento, entrega ou reforma e registrar o que deve ser corrigido.",
+      "canonical_service_family": "building_condition_documentation",
+      "offer_ids": ["renovation_plan_condo_review", "building_inspection_pathology", "asbuilt_document_reconciliation"],
+      "audience_examples": ["condomínios", "administradoras", "síndicos", "incorporadoras", "compradores institucionais"],
+      "terminal_action": "REQUEST_SCOPE_REVIEW",
+      "adjacent_intents": ["inspecionar_diagnosticar", "documentar_as_built_regularizar"],
+      "disambiguation": "Recebimento, inspeção e plano de reforma são decisões diferentes. A rota não presume aprovação do condomínio, do órgão ou do responsável da obra."
+    },
+    {
+      "intent_family": "documentar_as_built_regularizar",
+      "public_wording": "Preciso registrar o que foi construído e organizar a documentação técnica que falta.",
+      "canonical_service_family": "building_condition_documentation",
+      "offer_ids": ["asbuilt_document_reconciliation", "private_project_technical_readiness_assessment"],
+      "audience_examples": ["proprietários", "condomínios", "construtoras", "gestores de ativos"],
+      "terminal_action": "REQUEST_SCOPE_REVIEW",
+      "adjacent_intents": ["projetar_revisar_compatibilizar", "receber_entregar_reformar"],
+      "disambiguation": "Organizar e produzir documentação dentro da atribuição não promete regularização, aprovação ou assinatura por terceiro."
+    },
+    {
+      "intent_family": "avaliar_imovel",
+      "public_wording": "Preciso de um valor de imóvel para uma finalidade e uma data definidas.",
+      "canonical_service_family": "property_valuation",
+      "offer_ids": ["urban_property_valuation", "preliminary_property_opinion"],
+      "audience_examples": ["advogados", "partes", "empresas", "incorporadoras", "gestores patrimoniais"],
+      "terminal_action": "REQUEST_FORMAL_VALUATION_SCOPE",
+      "adjacent_intents": ["produzir_prova_tecnica"],
+      "disambiguation": "Parecer preliminar não substitui avaliação formal. Imóvel rural, exterior ou avaliação em massa permanece GAP até existir capacidade e método comprovados."
+    },
+    {
+      "intent_family": "produzir_prova_tecnica",
+      "public_wording": "Preciso organizar prova técnica ou assistência de engenharia para uma disputa.",
+      "canonical_service_family": "technical_evidence_disputes",
+      "offer_ids": ["pre_litigation_technical_screening", "civil_building_technical_assistance", "urban_property_valuation"],
+      "audience_examples": ["advogados", "empresas", "condomínios", "partes em disputa"],
+      "terminal_action": "REQUEST_CONFLICT_CHECK",
+      "adjacent_intents": ["avaliar_imovel", "inspecionar_diagnosticar", "assistencia_trabalhista_sst"],
+      "disambiguation": "Assistência de parte não é advocacia nem nomeação como perito do juízo; conflito e sigilo são verificados antes de receber material sensível."
+    },
+    {
+      "intent_family": "assistencia_trabalhista_sst",
+      "public_wording": "Preciso de suporte técnico de SST em uma reclamação ou perícia trabalhista.",
+      "canonical_service_family": "technical_evidence_disputes",
+      "offer_ids": ["labor_sst_technical_assistance"],
+      "audience_examples": ["advogados trabalhistas", "empresas", "partes com representação jurídica"],
+      "terminal_action": "REQUEST_CONFLICT_CHECK",
+      "adjacent_intents": ["organizar_sst", "produzir_prova_tecnica"],
+      "disambiguation": "Não é advocacia, ato médico nem perícia do juízo. A análise preventiva de SST é outra família."
+    },
+    {
+      "intent_family": "organizar_sst",
+      "public_wording": "Preciso saber quais riscos e documentos de SST se aplicam e o que precisa ser atualizado.",
+      "canonical_service_family": "occupational_safety",
+      "offer_ids": ["sst_risk_documentation_diagnosis", "sst_pgr_ltcat_aet_inputs", "sst_insalubrity_perilousness_analysis", "sst_preventive_audit"],
+      "audience_examples": ["empresas", "gestores de obra", "RH", "SESMT"],
+      "terminal_action": "REQUEST_SST_SCOPE",
+      "adjacent_intents": ["assistencia_trabalhista_sst"],
+      "disambiguation": "PGR, LTCAT e AET não são sinônimos nem pacote automático. Atos médicos e disciplinas externas exigem profissional nominal e escopo próprio."
+    },
+    {
+      "intent_family": "planejar_contratacao_publica",
+      "public_wording": "O ente precisa organizar tecnicamente uma contratação de obra ou serviço de engenharia.",
+      "canonical_service_family": "public_procurement_owner",
+      "offer_ids": ["public_works_technical_procurement_planning"],
+      "audience_examples": ["órgãos públicos", "autarquias", "estatais", "consórcios públicos"],
+      "terminal_action": "REQUEST_PUBLIC_ENTITY_PLANNING_SCOPE",
+      "adjacent_intents": ["decidir_disputar_licitacao", "orcar_planejar_decidir"],
+      "disambiguation": "É apoio técnico ao planejamento do ente, não consultoria ao licitante, parecer jurídico, ato administrativo ou garantia de contratação sem questionamento."
+    },
+    {
+      "intent_family": "decidir_disputar_licitacao",
+      "public_wording": "A empresa precisa decidir se disputa e preparar uma proposta de obra pública.",
+      "canonical_service_family": "public_bidder_decision",
+      "offer_ids": ["CFG-D01", "CFG-D12", "CFG-D14", "CFG-D16", "CFG-D49"],
+      "audience_examples": ["construtoras", "empresas de engenharia", "equipes de licitações"],
+      "terminal_action": "REQUEST_B2G_FIT",
+      "adjacent_intents": ["executar_proteger_contrato_publico", "planejar_contratacao_publica"],
+      "disambiguation": "Não se mistura com apoio ao ente no mesmo certame. A matriz referencia o catálogo B2G vigente sem duplicar nomes, preços ou checkout."
+    },
+    {
+      "intent_family": "executar_proteger_contrato_publico",
+      "public_wording": "A empresa precisa registrar, calcular ou decidir antes de perder prazo, caixa, margem ou prova no contrato público.",
+      "canonical_service_family": "public_contract_execution",
+      "offer_ids": ["CFG-D17", "CFG-D18", "CFG-D19", "CFG-D20", "CFG-D22", "CFG-D23", "CFG-D25", "CFG-D42"],
+      "audience_examples": ["construtoras", "empresas de engenharia", "gestores de contratos públicos"],
+      "terminal_action": "REQUEST_B2G_FIT",
+      "adjacent_intents": ["decidir_disputar_licitacao", "produzir_prova_tecnica"],
+      "disambiguation": "Não promete deferimento, pagamento, reequilíbrio ou vitória. A camada jurídica permanece com o advogado ou órgão competente."
+    },
+    {
+      "intent_family": "outra_demanda_tecnica",
+      "public_wording": "Tenho outra demanda técnica e preciso saber se existe enquadramento seguro.",
+      "canonical_service_family": null,
+      "offer_ids": [],
+      "audience_examples": ["qualquer comprador com situação ainda não delimitada"],
+      "terminal_action": "NEEDS_CONTEXT",
+      "adjacent_intents": [],
+      "disambiguation": "Coletar somente contexto mínimo. Não inventar competência, disciplina, preço, prazo, parceiro ou SKU; registrar GAP quando não houver família aplicável."
+    }
+  ]
+}

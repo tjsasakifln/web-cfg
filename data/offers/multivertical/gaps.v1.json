@@ -1,6 +1,6 @@
 {
   "schema": "confenge.offer-gap-register/1.0",
-  "contract": "CONFENGE_OFFER_CATALOG/2.0.0-draft.20260904",
+  "contract": "CONFENGE_OFFER_CATALOG/2.0.0",
   "gaps": [
     {
       "gap_id": "GAP_RURAL_VALUATION",
@@ -95,6 +95,11 @@
     {
       "gap_id": "GAP_AIRPORT_PAVEMENT_SPECIALTY",
       "reason": "especialidade aeroportuária não está no conjunto mínimo",
+      "nucleus_hint": "building_engineering_documentation"
+    },
+    {
+      "gap_id": "GAP_ATTRIBUTION_OR_DISCIPLINE_UNCONFIRMED",
+      "reason": "disciplina, atribuição, local ou responsável técnico ainda não permitem enquadramento seguro",
       "nucleus_hint": "building_engineering_documentation"
     },
     {
