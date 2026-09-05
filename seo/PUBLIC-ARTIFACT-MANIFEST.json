@@ -44,6 +44,7 @@
     "reequilibrio-obras-publicas/",
     "servicos-obras-publicas/",
     "termos-de-uso/",
+    "triagem-tecnica/",
     "uso-de-ia/"
   ],
   "root_files": [
@@ -74,7 +75,7 @@
     "styles-tools.css",
     "styles.css"
   ],
-  "html_route_count": 245,
+  "html_route_count": 247,
   "html_routes": [
     "/",
     "/acompanhamento-contratos-obras/",
@@ -246,6 +247,7 @@
     "/ferramentas/",
     "/ferramentas/limite-acrescimos-supressoes/",
     "/ferramentas/matriz-atraso-obra/",
+    "/ferramentas/prontidao-tecnica-obra-privada/",
     "/guias-contratos-obras/checklist-pedido-aditivo/",
     "/guias-contratos-obras/contestar-glosa-medicao/",
     "/guias-contratos-obras/documentos-pedido-reequilibrio/",
@@ -320,10 +322,11 @@
     "/reequilibrio-obras-publicas/",
     "/servicos-obras-publicas/",
     "/termos-de-uso/",
+    "/triagem-tecnica/",
     "/uso-de-ia/"
   ],
-  "generated_at": "2026-09-03T13:51:48Z",
-  "public_artifact_hash": "5282532a552959e84df025d9abec56c4b0e8551656d549c62b7ef8c253da8b0e",
+  "generated_at": "2026-09-05T21:02:03Z",
+  "public_artifact_hash": "d85ee5e30b43f611ce58fc73f872bd0367d92b015b07f5da3d7ba28acff2bd26",
   "copied_dirs": [
     ".well-known/",
     "acompanhamento-contratos-obras/",
@@ -368,6 +371,7 @@
     "reequilibrio-obras-publicas/",
     "servicos-obras-publicas/",
     "termos-de-uso/",
+    "triagem-tecnica/",
     "uso-de-ia/"
   ],
   "copied_files": [
@@ -400,13 +404,13 @@
   ],
   "promoted_navigation_files": 0,
   "navigation_audit": {
-    "audited_files": 212,
-    "audited_blocks": 422,
+    "audited_files": 213,
+    "audited_blocks": 424,
     "frozen_files": 6
   },
   "structured_identity": {
-    "html_scanned": 251,
+    "html_scanned": 253,
     "html_rewritten": 193,
-    "fields_removed": 822
+    "fields_removed": 817
   }
 }

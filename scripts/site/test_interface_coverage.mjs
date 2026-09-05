@@ -63,10 +63,11 @@ assert(coverage.axe.routes.every((entry) =>
 // All 18 rendered a visible price and none carried a capture form, so the
 // price count drops by exactly 18. The recovered Art. 125 receipt and the
 // issue #61 reequilibrio checklist receipt are result-gated capture forms and
-// have to be included in the recaptured census.
+// have to be included in the recaptured census. Direct convergence adds one
+// fail-closed capture route, so the current census is 28 forms across 57 routes.
 assert.equal(coverage.axe.price_route_count, 47);
-assert.equal(coverage.axe.capture_form_route_count, 27);
-assert.equal(coverage.axe.route_count, 56);
+assert.equal(coverage.axe.capture_form_route_count, 28);
+assert.equal(coverage.axe.route_count, 57);
 assert(selected.has("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(selected.has("/conteudos/sinapi-desonerado-nao-desonerado/"));
 assert.deepEqual(
@@ -90,12 +91,14 @@ for (const [route, why] of [
 assert.equal(coverage.axe.page_loads, coverage.axe.route_count * 2);
 assert(coverage.axe.not_sampled.every((entry) => entry.reason), "every omitted axe route needs a reason");
 assert.equal(coverage.lighthouse.canonical_family_count, registry.families.length);
-assert.equal(coverage.lighthouse.canonical_family_count, 34);
+assert.equal(coverage.lighthouse.canonical_family_count, 36);
 assert.equal(coverage.lighthouse.supplemental_family_count, 1);
-assert.equal(coverage.lighthouse.pages.length, 38);
+assert.equal(coverage.lighthouse.pages.length, 40);
 assert(coverage.lighthouse.pages.includes("/conteudos/atraso-na-medicao-obra-publica/"));
 assert(coverage.lighthouse.pages.includes("/diretoria-b2g/"));
 assert(coverage.lighthouse.pages.includes("/diagnostico-b2g-expansao/"));
+assert(coverage.lighthouse.pages.includes("/ferramentas/prontidao-tecnica-obra-privada/"));
+assert(coverage.lighthouse.pages.includes("/triagem-tecnica/"));
 assert.equal(new Set(coverage.lighthouse.pages).size, coverage.lighthouse.pages.length);
 assert.deepEqual(
   new Set(coverage.lighthouse.families.filter((family) => family.kind === "canonical").map((family) => family.id)),

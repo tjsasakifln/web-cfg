@@ -1,6 +1,6 @@
 {
   "schema_version": "public-family-registry-v1",
-  "as_of": "2026-09-03",
+  "as_of": "2026-09-05",
   "owner_issue": 300,
   "fail_closed": true,
   "purpose": "Declaração versionada das famílias públicas indexáveis de confenge.com.br. O gate de conversão é fail-closed: toda rota indexável varrida por _conversion_files() precisa pertencer a uma família declarada aqui, e a ação terminal declarada é conferida contra o HTML renderizado. Rota indexável sem família reprova o CI.",
@@ -39,6 +39,49 @@
     "reported_in": "docs/seo/INBOUND-GATES-REPORT.json → gates.conversion.stats.exemptions"
   },
   "families": [
+    {
+      "id": "triagem-tecnica",
+      "visitor_job": "Enquadrar a necessidade técnica em um dos cinco núcleos e solicitar retorno com dados mínimos, quando o recebimento estiver disponível.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "match": {
+        "routes": [
+          "/triagem-tecnica/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-05",
+      "owner_issue": 577,
+      "debt": []
+    },
+    {
+      "id": "prontidao-tecnica-obra-privada",
+      "visitor_job": "Identificar evidências presentes, lacunas e desconhecidos antes de contratar, executar ou retomar uma obra privada; ler o resultado completo sem contato.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form_or_whatsapp",
+      "match": {
+        "routes": [
+          "/ferramentas/prontidao-tecnica-obra-privada/"
+        ]
+      },
+      "value_first_header_cta": {
+        "mode": "local_fragment_before_contact",
+        "label": "Iniciar diagnóstico",
+        "href": "#diagnostico"
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-05",
+      "owner_issue": 589,
+      "debt": []
+    },
     {
       "id": "home",
       "visitor_job": "Entender em 10 segundos o que a CONFENGE resolve em contrato de obra pública e escolher a próxima ação.",

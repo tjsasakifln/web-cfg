@@ -157,7 +157,9 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           CSP_BROWSER_REQUIRED: "1"
-        run: npm run test:csp-browser
+        run: |
+          npm run test:csp-browser
+          npm run test:convergence-browser
       - name: Money asset canary browser e2e
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
@@ -279,6 +281,7 @@ jobs:
             seo/pseo-*.json
             build/reports/deliverables-hub-ui.json
             build/reports/axe-report.json
+            build/reports/convergence/
             build/reports/site-excellence.json
             build/reports/site-excellence.md
           if-no-files-found: ignore

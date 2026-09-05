@@ -1,0 +1,114 @@
+.pptr-page {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+  color: #071a31;
+}
+.pptr-page h1 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1.25;
+  margin: 0.35rem 0 0.75rem;
+}
+.pptr-page .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  color: #647182;
+}
+.pptr-page .lead {
+  font-size: 1.05rem;
+  max-width: 68ch;
+}
+.pptr-method,
+.pptr-result,
+.pptr-cta,
+.pptr-form fieldset {
+  border: 1px solid #dce3e8;
+  padding: 1rem 1.1rem;
+  margin: 1rem 0;
+  background: #f5f7f6;
+}
+.pptr-form legend {
+  font-weight: 700;
+  padding: 0 0.35rem;
+}
+.pptr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.75rem 0;
+}
+.pptr-field label {
+  font-weight: 600;
+}
+.pptr-field select,
+.pptr-page button {
+  min-height: 44px;
+  font: inherit;
+}
+.pptr-field select {
+  max-width: 40rem;
+  padding: 0.4rem 0.6rem;
+}
+.pptr-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.pptr-page button,
+.pptr-page .button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.55rem 1rem;
+  border: 1px solid #2d6f2d;
+  background: #2d6f2d;
+  color: #fff;
+  cursor: pointer;
+}
+.pptr-page button.secondary,
+.pptr-page .button.secondary {
+  background: #fff;
+  color: #071a31;
+  border-color: #071a31;
+}
+.pptr-status {
+  display: inline-block;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid currentColor;
+}
+.pptr-status[data-status="EVIDENCE_PRESENT"] { color: #166534; }
+.pptr-status[data-status="GAP"] { color: #b91c1c; }
+.pptr-status[data-status="UNKNOWN"] { color: #4b5563; }
+.pptr-domain {
+  border-top: 1px solid #dce3e8;
+  padding-top: 0.85rem;
+  margin-top: 0.85rem;
+}
+.pptr-runtime {
+  border-inline-start: 4px solid #3d8238;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+.pptr-payload {
+  white-space: pre-wrap;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  overflow-x: auto;
+}
+.skip-link {
+  position: absolute;
+  left: -999px;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 2;
+  background: #fff;
+  padding: 0.5rem 0.75rem;
+}
+@media (max-width: 640px) {
+  .pptr-page { padding: 1rem 0.75rem 2.5rem; }
+  .pptr-field select { max-width: 100%; }
+}

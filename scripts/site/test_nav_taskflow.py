@@ -44,11 +44,13 @@ from scripts.site.shell_nav import (  # noqa: E402
     MOBILE_NAV_RE,
     ROOT as SHELL_ROOT,
     desktop_cta,
+    declared_value_first_cta,
     hub,
     load_brand,
     mobile_cta,
     nav_items,
     nav_cta,
+    page_path,
     shipped_html_files,
 )
 
@@ -170,13 +172,33 @@ def main() -> int:
             and 'data-offer-id="' in header_cta.group(0)
             and 'data-cta-position="report_header"' in header_cta.group(0)
         )
-        if expected_desktop_cta not in html and not protected_offer_cta:
+        declared_header_value_first = declared_value_first_cta(
+            html, page_path(path), mobile=False
+        )
+        if (
+            expected_desktop_cta not in html
+            and not protected_offer_cta
+            and not (
+                header_cta
+                and declared_header_value_first == header_cta.group(0)
+            )
+        ):
             failures.append(
                 f"{rel}: desktop CTA is not navigation.cta "
                 f"{expected_cta['label']!r} -> {expected_cta['href']!r}"
             )
         mobile_block = MOBILE_NAV_RE.search(html)
-        if mobile_block and expected_mobile_cta not in mobile_block.group(2):
+        declared_mobile_value_first = declared_value_first_cta(
+            html, page_path(path), mobile=True
+        )
+        if (
+            mobile_block
+            and expected_mobile_cta not in mobile_block.group(2)
+            and not (
+                declared_mobile_value_first
+                and declared_mobile_value_first in mobile_block.group(2)
+            )
+        ):
             failures.append(
                 f"{rel}: mobile CTA is not navigation.cta "
                 f"{expected_cta['label']!r} -> {expected_cta['href']!r}"
@@ -205,6 +227,12 @@ def main() -> int:
             failures.append(f"{rel}: header nav links miss data-cta-position")
     if checked < 200:
         failures.append(f"expected the shell on ~200 pages, saw {checked}")
+    if declared_value_first_cta(
+        '<main id="diagnostico"></main>',
+        "/conteudos/",
+        mobile=False,
+    ) is not None:
+        failures.append("undeclared route received a value-first CTA exception")
 
     # --- 2b. The freeze exception is declared, bounded and label-consistent --
     # The six BOFU pillars are byte-frozen by CONFENGE-WEB-BOFU-FROZEN-PILLAR-SPECS-01

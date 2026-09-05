@@ -1,0 +1,5 @@
+#conteudo { max-width: 48rem; padding-top: 1.5rem; padding-bottom: 2rem; }
+#conteudo h1 { font-size: clamp(1.65rem, 3vw, 2.3rem); line-height: 1.2; }
+#conteudo fieldset { margin: 1.25rem 0; }
+#conteudo [data-nucleus-branch] { padding: 1rem; }
+.form-step-legend { color: #425265; }

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -458,7 +459,11 @@ def test_cli_text_format_prints_a_per_route_census() -> None:
     # keeps the assertion about the contract, which is what may not drift.
     assert f"/{budget['font_files_max']}" in proc.stdout, proc.stdout
     assert "font_files=" in proc.stdout, proc.stdout
-    assert "cls_max_observed=0.0/0.05" in proc.stdout
+    cls_match = re.search(r"cls_max_observed=([0-9.]+)/([0-9.]+)", proc.stdout)
+    assert cls_match, proc.stdout
+    observed_cls, declared_cls = map(float, cls_match.groups())
+    assert declared_cls == budget["cls_max"]
+    assert observed_cls <= declared_cls
     assert proc.stdout.count("\n") > 200, "every shipped route must appear"
 
 

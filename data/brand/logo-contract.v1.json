@@ -132,14 +132,14 @@
     "header_primary": "/assets/logo-confenge-500-f8a83f6d.png",
     "footer_primary": "/assets/logo-confenge-white-500-1677038e.png",
     "source_html_files_scanned": 276,
-    "logo_image_occurrences": 434,
-    "header_lockup_occurrences": 227,
-    "footer_lockup_occurrences": 207,
+    "logo_image_occurrences": 436,
+    "header_lockup_occurrences": 228,
+    "footer_lockup_occurrences": 208,
     "legacy_asset_occurrences": {
       "/assets/logo-confenge.png": 6,
-      "/assets/logo-confenge-500-f8a83f6d.png": 221,
+      "/assets/logo-confenge-500-f8a83f6d.png": 222,
       "/assets/logo-confenge-white.png": 6,
-      "/assets/logo-confenge-white-500-1677038e.png": 201
+      "/assets/logo-confenge-white-500-1677038e.png": 202
     },
     "intrinsic_ratio": "50:13",
     "header_black_on_white": "NON_COMPLIANT",

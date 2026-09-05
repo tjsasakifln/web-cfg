@@ -215,7 +215,10 @@ function captureForms(html, contract) {
       }
       const captureEligible = ["/.netlify/functions/lead", "/api/web/lead"].includes(attrValue(attrs, "action"))
         || attrValue(attrs, "id") === "formulario-contato";
+      const adaptiveStandalone = runtimeProfileId === "adaptive_intake_standalone_v1";
       const tokenForwarding = runtimeProfileId === "shared_lead_form_v1"
+        || (adaptiveStandalone
+          && /<script\b[^>]*\bsrc=["']\/assets\/js\/adaptive-intake\.js["']/i.test(html))
         || (/cf-turnstile-response/.test(html) && /turnstile_token/.test(html));
       const hasWhatsapp = /https:\/\/(?:wa\.me|api\.whatsapp\.com)\//i.test(html);
       const sharedEmail = /<(?:input)\b(?=[^>]*\bid=["']email["'])[^>]*>/i.test(body);
@@ -262,7 +265,7 @@ function captureForms(html, contract) {
         boundary_visible: Boolean(markerText(body, "data-form-boundary") || markerText(html, "data-form-boundary")),
         privacy_link_visible: /<p\b(?=[^>]*\bdata-form-boundary(?:\s|=|>))[^>]*>[\s\S]*?href=["']\/privacidade\/["'][\s\S]*?<\/p>/i.test(body)
           || /<p\b(?=[^>]*\bdata-form-boundary(?:\s|=|>))[^>]*>[\s\S]*?href=["']\/privacidade\/["'][\s\S]*?<\/p>/i.test(html),
-        event_semantics: [...(contract?.event_semantics || [])],
+        event_semantics: [...(profile.event_semantics || contract?.event_semantics || [])],
         runtime_states: {
           initial: runtime.initial || "",
           validation_error: runtime.validation_error || "",
@@ -283,6 +286,7 @@ function captureForms(html, contract) {
         shared_runtime_journey_ready: runtimeProfileId !== "shared_lead_form_v1"
           || sharedJourney
           || sharedStage,
+        standalone_runtime_ready: !adaptiveStandalone || tokenForwarding,
       };
     });
 }

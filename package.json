@@ -31,7 +31,7 @@
     "test:attribution": "node tests/attribution/test_source_to_service.mjs",
     "test:event-dictionary": "node seo/scripts/test_event_dictionary.mjs",
     "test:form-funnel": "node seo/scripts/test_form_funnel.mjs",
-    "test:lead-function": "node scripts/site/test_lead_function.mjs && node scripts/site/test_synthetic_lead_probe.mjs",
+    "test:lead-function": "node scripts/site/test_lead_function.mjs && node scripts/site/test_synthetic_lead_probe.mjs && npm run test:adaptive-intake && npm run test:private-readiness",
     "test:inbound-handoff": "node scripts/site/test_inbound_handoff.mjs",
     "test:search-observation": "node scripts/site/test_search_observation.mjs",
     "test:commercial-event": "node scripts/site/test_commercial_event.mjs",
@@ -108,7 +108,7 @@
     "test:structure": "python3 seo/scripts/test_criterion_structure.py",
     "test:brand": "python3 scripts/site/test_brand_contract.py",
     "test:logo-contract": "node tests/brand/test_logo_contract.mjs",
-    "test:authority": "python3 scripts/site/test_authority_contract.py && python3 scripts/site/test_permissioned_proof.py && python3 -m pytest scripts/site/test_structured_identity.py -q && node scripts/site/test_correction_request.mjs",
+    "test:authority": "python3 scripts/site/test_credential_registry.py && python3 scripts/site/test_authority_contract.py && python3 scripts/site/test_permissioned_proof.py && python3 -m pytest scripts/site/test_structured_identity.py -q && node scripts/site/test_correction_request.mjs",
     "test:visible-parity": "python3 scripts/site/test_visible_parity.py",
     "parity:site": "python3 -m scripts.site.visible_parity --root _site --json seo/visible-parity.json --md seo/visible-parity.md",
     "build:css": "python3 scripts/site/build_css.py",
@@ -281,7 +281,10 @@
     "scrub:em-dashes": "python3 scripts/site/scrub_em_dashes.py --write",
     "scrub:em-dashes:check": "python3 scripts/site/scrub_em_dashes.py --check",
     "test:public-offer-truth": "node tests/commercial/test_public_offer_truth.mjs",
-    "test:offer-fit": "node tests/commercial/test_offer_fit_matrix.mjs && node tests/commercial/test_offer_fit_copy.mjs && python3 -m pytest scripts/site/test_home_real_contract_case.py -q"
+    "test:offer-fit": "node tests/commercial/test_offer_fit_matrix.mjs && node tests/commercial/test_offer_fit_copy.mjs && python3 -m pytest scripts/site/test_home_real_contract_case.py -q",
+    "test:adaptive-intake": "node scripts/site/test_adaptive_authority.mjs && node scripts/site/test_adaptive_intake.mjs",
+    "test:private-readiness": "node scripts/site/test_private_project_technical_readiness.mjs",
+    "test:convergence-browser": "node scripts/site/test_convergence_browser.mjs"
   },
   "engines": {
     "node": ">=22.19 <23"

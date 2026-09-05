@@ -3,6 +3,7 @@ import test from "node:test";
 import { buildFunctionInventory } from "../inventory.mjs";
 
 const EXPECTED_FUNCTIONS = [
+  "adaptive-intake-config",
   "asaas-webhook",
   "asaas-webhook-sandbox",
   "collect",
@@ -23,17 +24,17 @@ const INVENTORY = buildFunctionInventory();
 
 test("inventory discovers every current file and every top-level handler automatically", () => {
   const inventory = INVENTORY;
-  assert.equal(inventory.file_count, 42);
-  assert.equal(inventory.function_count, 15);
+  assert.equal(inventory.file_count, 45);
+  assert.equal(inventory.function_count, 16);
   assert.equal(inventory.validation.ok, true);
-  assert.equal(inventory.validation.loaded_handlers, 15);
+  assert.equal(inventory.validation.loaded_handlers, 16);
   assert.deepEqual(
     inventory.functions.map((entry) => entry.name),
     EXPECTED_FUNCTIONS,
   );
   assert.equal(
     inventory.files.filter((entry) => entry.role === "support_library").length,
-    26,
+    27,
   );
   assert.ok(
     inventory.files.some((entry) =>
@@ -42,7 +43,7 @@ test("inventory discovers every current file and every top-level handler automat
   );
   assert.equal(
     inventory.files.filter((entry) => entry.role === "bundled_data").length,
-    1,
+    2,
   );
 });
 
