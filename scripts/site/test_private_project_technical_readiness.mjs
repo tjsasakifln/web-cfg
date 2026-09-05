@@ -177,13 +177,16 @@ function domainById(result, id) {
 
 {
   const unknownAll = diagnose({});
-  expect("all_unknown_count", unknownAll.unknown_count === 5 && unknownAll.present_count === 2 && unknownAll.gap_count === 0, JSON.stringify({ u: unknownAll.unknown_count, p: unknownAll.present_count, g: unknownAll.gap_count }));
-  for (const id of ["decision_scope_stage", "design_set_revisions_responsibility", "quantities_budget_bases_memory", "coordination_constructability_bim", "technical_responsibility_art_inspections"]) {
+  expect("all_unknown_count", unknownAll.unknown_count === 7 && unknownAll.present_count === 0 && unknownAll.gap_count === 0, JSON.stringify({ u: unknownAll.unknown_count, p: unknownAll.present_count, g: unknownAll.gap_count }));
+  for (const id of DOMAIN_IDS) {
     expect("unknown_" + id, domainById(unknownAll, id).status === UNKNOWN);
     expect("unknown_priority_" + id, domainById(unknownAll, id).priority === PRIORITY_UNKNOWN);
   }
-  expect("planning_skips_execution", domainById(unknownAll, "changes_execution_measurement").applicability === "not_required_at_declared_stage");
-  expect("planning_skips_handover", domainById(unknownAll, "asbuilt_handover_operations").applicability === "not_required_at_declared_stage");
+  expect("unknown_stage_not_present_execution", domainById(unknownAll, "changes_execution_measurement").applicability === "unknown_until_stage_or_decision_declared");
+  expect("unknown_stage_not_present_handover", domainById(unknownAll, "asbuilt_handover_operations").applicability === "unknown_until_stage_or_decision_declared");
+  const planning = diagnose({ work_stage: "planejamento" });
+  expect("planning_skips_execution", domainById(planning, "changes_execution_measurement").applicability === "not_required_at_declared_stage" && domainById(planning, "changes_execution_measurement").status === EVIDENCE_PRESENT);
+  expect("planning_skips_handover", domainById(planning, "asbuilt_handover_operations").applicability === "not_required_at_declared_stage" && domainById(planning, "asbuilt_handover_operations").status === EVIDENCE_PRESENT);
 }
 
 {
@@ -192,6 +195,13 @@ function domainById(result, id) {
   const art = domainById(gapped, "technical_responsibility_art_inspections");
   expect("d7_gap_declared_absence", art.status === GAP);
   expect("d7_no_legal", art.legal_conclusion === false && art.art_validity_conclusion === false && art.declared_condition_only === true);
+  expect("d7_gap_names_art_document", /documento de ART/i.test(art.missing_evidence));
+  expect("d7_gap_names_inspection_records", /registros de inspeção/i.test(art.missing_evidence));
+  expect("d7_gap_not_restating_declaration_prompt", !/Declaração de condição de ART \(emitida/i.test(art.missing_evidence));
+  const artOnly = diagnose({ ...gapAnswers(), inspections_declared: "registradas" });
+  const artOnlyRow = domainById(artOnly, "technical_responsibility_art_inspections");
+  expect("d7_art_only_gap_names_art", /documento de ART/i.test(artOnlyRow.missing_evidence));
+  expect("d7_art_only_gap_skips_inspections", !/registros de inspeção/i.test(artOnlyRow.missing_evidence));
   const blob = JSON.stringify(gapped).toLowerCase();
   expect("d7_no_validade", !blob.includes("art válida") && !blob.includes("art valida"));
   expect("d7_no_regular", !blob.includes("regularidade comprovada"));
@@ -303,6 +313,10 @@ function domainById(result, id) {
   expect("html_noindex", /name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html));
   expect("html_nofollow", /noindex,?\s*nofollow/i.test(html));
   expect("html_noarchive", /noarchive/i.test(html));
+  expect("html_no_piloto_canonical", !/rel=["']canonical["'][^>]*piloto\/prontidao-tecnica-obra-privada/i.test(html));
+  expect("html_no_ferramentas_canonical_yet", !/rel=["']canonical["'][^>]*ferramentas\/prontidao-tecnica-obra-privada/i.test(html));
+  const canonicalTag = html.match(/<link\b[^>]*rel=["']canonical["'][^>]*>/i);
+  expect("html_no_public_canonical", !canonicalTag || !/confenge\.com\.br\//i.test(canonicalTag[0]));
   expect("html_h1_job", /<h1[^>]*>[\s\S]*evidências técnicas[\s\S]*obra privada/i.test(html) || /<h1[^>]*>[\s\S]*evidencias tecnicas[\s\S]*obra privada/i.test(html) || /<h1[^>]*>[\s\S]*presentes, ausentes ou desconhecidas/i.test(html));
   expect("html_title_job", /<title>[\s\S]*prontidão técnica de obra privada/i.test(html) || /<title>[\s\S]*prontidao tecnica de obra privada/i.test(html));
   for (const label of [
