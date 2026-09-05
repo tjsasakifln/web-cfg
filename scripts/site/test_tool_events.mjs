@@ -44,12 +44,16 @@ const tools = [
   "ferramentas/checklist-reequilibrio/index.html",
   "ferramentas/matriz-atraso-obra/index.html",
   "ferramentas/diagnostico-defesa-margem/index.html",
+  "ferramentas/prontidao-tecnica-obra-privada/index.html",
 ];
 for (const rel of tools) {
   const t = readFileSync(resolve(ROOT, rel), "utf8");
-  if (!t.includes("bindToolLifecycle")) fail("bind_" + rel);
+  const appPath = resolve(ROOT, rel.replace(/index\.html$/, "app.js"));
+  const app = existsSync(appPath) ? readFileSync(appPath, "utf8") : "";
+  const blob = t + "\n" + app;
+  if (!blob.includes("bindToolLifecycle")) fail("bind_" + rel);
   else pass("bind_" + rel);
-  if (!t.includes("tool_complete")) fail("complete_" + rel);
+  if (!blob.includes("tool_complete")) fail("complete_" + rel);
   else pass("complete_" + rel);
   if (!existsSync(resolve(ROOT, rel))) fail("exists_" + rel);
 }

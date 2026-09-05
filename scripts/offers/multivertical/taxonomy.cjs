@@ -23,13 +23,40 @@ function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
 }
 
+function contractFromDocument(taxonomy) {
+  if (taxonomy && taxonomy.contract) return String(taxonomy.contract);
+  const id = taxonomy && taxonomy.contract_id;
+  const version = taxonomy && taxonomy.contract_version;
+  if (id && version) return `${id}/${version}`;
+  return "";
+}
+
+function nucleusId(item) {
+  if (!item || typeof item !== "object") return "";
+  return String(item.nucleus_id || item.id || "");
+}
+
+function normalizeTaxonomy(raw) {
+  const contract = contractFromDocument(raw);
+  const nuclei = (raw.nuclei || []).map((item) => ({
+    ...item,
+    nucleus_id: nucleusId(item),
+  }));
+  let content_hash = raw.content_hash || null;
+  if (!content_hash && raw.content_sha256) {
+    content_hash = `sha256:${raw.content_sha256}`;
+  }
+  return { ...raw, contract, nuclei, content_hash };
+}
+
 function assertTaxonomyShape(taxonomy, sourcePath) {
   const errors = [];
   if (!taxonomy || typeof taxonomy !== "object") errors.push("taxonomy_not_object");
-  if (taxonomy.contract !== TAXONOMY_CONTRACT) {
-    errors.push(`taxonomy_contract_mismatch:${taxonomy.contract || "missing"}`);
+  const normalized = normalizeTaxonomy(taxonomy);
+  if (normalized.contract !== TAXONOMY_CONTRACT) {
+    errors.push(`taxonomy_contract_mismatch:${normalized.contract || "missing"}`);
   }
-  const nuclei = taxonomy.nuclei || [];
+  const nuclei = normalized.nuclei || [];
   const ids = nuclei.map((item) => item && item.nucleus_id);
   if (ids.length !== NUCLEUS_IDS.length) errors.push("taxonomy_nucleus_count");
   for (const expected of NUCLEUS_IDS) {
@@ -37,8 +64,13 @@ function assertTaxonomyShape(taxonomy, sourcePath) {
   }
   const unique = new Set(ids);
   if (unique.size !== ids.length) errors.push("taxonomy_duplicate_nucleus");
-  const computed = hashRecord(taxonomy);
-  if (taxonomy.content_hash && taxonomy.content_hash !== computed) {
+  if (normalized.content_sha256 && !/^[a-f0-9]{64}$/.test(normalized.content_sha256)) {
+    errors.push("taxonomy_content_sha256_invalid");
+  }
+  const computed = normalized.content_sha256
+    ? `sha256:${normalized.content_sha256}`
+    : hashRecord({ contract: normalized.contract, nuclei: normalized.nuclei });
+  if (normalized.content_hash && normalized.content_hash !== computed) {
     errors.push("taxonomy_hash_mismatch");
   }
   if (errors.length) {
@@ -47,7 +79,7 @@ function assertTaxonomyShape(taxonomy, sourcePath) {
     error.sourcePath = sourcePath;
     throw error;
   }
-  return { ...taxonomy, content_hash: computed, source_path: sourcePath };
+  return { ...normalized, content_hash: computed, source_path: sourcePath };
 }
 
 function findCampaign02Taxonomy(root) {

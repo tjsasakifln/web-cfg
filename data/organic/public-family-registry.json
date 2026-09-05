@@ -860,6 +860,41 @@
       "debt": []
     },
     {
+      "id": "private-project-technical-readiness",
+      "visitor_job": "Identificar evidências técnicas presentes, ausentes ou desconhecidas antes de contratar, executar ou retomar uma obra privada.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "classification": "PUBLIC_FAMILY",
+      "nucleus_id": "building_engineering_documentation",
+      "match": {
+        "routes": [
+          "/ferramentas/prontidao-tecnica-obra-privada/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-03",
+      "owner_issue": 589,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source",
+          "official_live"
+        ],
+        "reason": "Ferramenta de autoavaliação de primeira parte: o valor é o cálculo no navegador, não um registro externo.",
+        "authority": [
+          "data/organic/public-family-registry.json (profile_rules.commercial_content)",
+          "scripts/site/inbound_gates.py::gate_conversion"
+        ],
+        "declared_at": "2026-09-03",
+        "owner_issue": 589
+      }
+    },
+    {
       "id": "panorama-mercado-obras-publicas",
       "visitor_job": "Ler o panorama desidentificado de contratacao de um recorte de mercado (faixas de valor por categoria, estrutura de concorrencia e editais abertos) sem que nenhuma empresa seja identificada.",
       "profile": "commercial_content",

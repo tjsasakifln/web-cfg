@@ -40,7 +40,17 @@ const checkout = readJson("data/offers/catalog.snapshot.json");
 
 assert("catalog_contract", assembled.contract === catalogApi.CATALOG_CONTRACT, assembled.contract);
 assert("taxonomy_contract", assembled.taxonomy_contract === catalogApi.TAXONOMY_CONTRACT, assembled.taxonomy_contract);
-assert("taxonomy_fixture_replaceable", assembled.taxonomy_replaceable_fixture === true);
+assert("taxonomy_not_replaceable_fixture", assembled.taxonomy_replaceable_fixture === false);
+assert(
+  "taxonomy_source_is_incorporated",
+  assembled.taxonomy_source === "data/corporate/taxonomy.v1.json",
+  assembled.taxonomy_source,
+);
+assert(
+  "taxonomy_hash_is_sealed_content",
+  /^sha256:[a-f0-9]{64}$/.test(assembled.taxonomy_hash),
+  assembled.taxonomy_hash,
+);
 assert("validation_ok", validation.ok === true, validation.errors);
 assert("unique_ids", new Set(assembled.offers.map((o) => o.offer_id)).size === assembled.offers.length);
 assert("modeled_count", assembled.modeled_offers.length === catalogApi.MODELED_OFFER_IDS.length);

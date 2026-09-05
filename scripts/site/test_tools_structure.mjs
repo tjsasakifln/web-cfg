@@ -3,7 +3,7 @@ import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 let fail=0;
-const pages=["ferramentas/index.html","ferramentas/limite-acrescimos-supressoes/index.html","ferramentas/checklist-reequilibrio/index.html","ferramentas/matriz-atraso-obra/index.html","ferramentas/diagnostico-defesa-margem/index.html"];
+const pages=["ferramentas/index.html","ferramentas/limite-acrescimos-supressoes/index.html","ferramentas/checklist-reequilibrio/index.html","ferramentas/matriz-atraso-obra/index.html","ferramentas/diagnostico-defesa-margem/index.html","ferramentas/prontidao-tecnica-obra-privada/index.html"];
 if(!existsSync(resolve(ROOT,"styles-tools.css"))){console.error("FAIL styles-tools");fail++;}else console.log("PASS styles-tools");
 for(const rel of pages){
   const html=readFileSync(resolve(ROOT,rel),"utf8");
@@ -20,7 +20,7 @@ for(const rel of pages){
   } else console.log("PASS layers_language",rel);
 
   if (rel !== "ferramentas/index.html") {
-    const clientForm = html.match(/<form\b[^>]*\b(id="(?:limite-form|f|lookup)")[^>]*>/i);
+    const clientForm = html.match(/<form\b[^>]*\b(id="(?:limite-form|f|lookup|diagnostico)")[^>]*>/i);
     if (!clientForm || !/\bmethod="post"/i.test(clientForm[0])) {
       console.error("FAIL client_form_post_no_url_leak", rel); fail++;
     } else console.log("PASS client_form_post_no_url_leak", rel);

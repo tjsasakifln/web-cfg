@@ -5,6 +5,8 @@
  * Feature flag: ADAPTIVE_INTAKE_NUCLEI (comma-separated). Empty = new nuclei off.
  */
 const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 
 const INTAKE_FLAG = "adaptive_intake";
 const SOURCE = "CONFENGE_WEB";
@@ -230,8 +232,32 @@ function parsePin(raw) {
   return { ok: true, pin, hash: pinHash(pin) };
 }
 
-function loadPin(env = process.env) {
-  return parsePin(env && env.ADAPTIVE_INTAKE_PIN_JSON);
+function committedPinPath(root) {
+  return path.join(root || path.resolve(__dirname, "../../.."), "data/site/adaptive-intake-pin.json");
+}
+
+function loadCommittedPin(root) {
+  const filePath = committedPinPath(root);
+  if (!fs.existsSync(filePath)) return { ok: false, error: "pin_missing" };
+  let pin;
+  try {
+    pin = JSON.parse(fs.readFileSync(filePath, "utf8"));
+  } catch {
+    return { ok: false, error: "pin_invalid_json" };
+  }
+  if (pin && pin.not_runtime_fallback === true) {
+    return { ok: false, error: "pin_draft_fixture" };
+  }
+  return parsePin(pin);
+}
+
+function loadPin(env = process.env, root) {
+  const raw = env && env.ADAPTIVE_INTAKE_PIN_JSON;
+  if (raw != null && String(raw).trim() !== "") return parsePin(raw);
+  if (env && env.ADAPTIVE_INTAKE_DISABLE_COMMITTED_PIN === "1") {
+    return { ok: false, error: "pin_missing" };
+  }
+  return loadCommittedPin(root);
 }
 
 function enabledNuclei(env = process.env) {
@@ -483,6 +509,8 @@ module.exports = {
   pinHash,
   parsePin,
   loadPin,
+  loadCommittedPin,
+  committedPinPath,
   enabledNuclei,
   rejectForbiddenKeys,
   rejectConflictParties,

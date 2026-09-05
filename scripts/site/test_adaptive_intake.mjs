@@ -234,13 +234,17 @@ _reset();
 
 {
   const prevPin = process.env.ADAPTIVE_INTAKE_PIN_JSON;
+  const prevDisable = process.env.ADAPTIVE_INTAKE_DISABLE_COMMITTED_PIN;
   delete process.env.ADAPTIVE_INTAKE_PIN_JSON;
+  process.env.ADAPTIVE_INTAKE_DISABLE_COMMITTED_PIN = "1";
   delete require.cache[require.resolve(adaptivePath)];
   delete require.cache[require.resolve(corePath)];
   const isolated = require(corePath);
   const denied = isolated.validateAndNormalize(adaptiveBody("occupational_safety"));
   if (denied.ok || denied.error !== "contract_pin_missing") fail("no_pin", denied);
   process.env.ADAPTIVE_INTAKE_PIN_JSON = prevPin;
+  if (prevDisable == null) delete process.env.ADAPTIVE_INTAKE_DISABLE_COMMITTED_PIN;
+  else process.env.ADAPTIVE_INTAKE_DISABLE_COMMITTED_PIN = prevDisable;
   pass("missing_pin_fail_closed");
 }
 

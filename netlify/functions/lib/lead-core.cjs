@@ -1221,6 +1221,10 @@ function publicSuccessBody({
   nucleus_id,
   qualification_state,
   conflict_status,
+  offer_candidate_id,
+  source_asset_id,
+  landing_family,
+  consent,
 }) {
   const body = {
     ok: true,
@@ -1235,6 +1239,10 @@ function publicSuccessBody({
   if (nucleus_id) body.nucleus_id = String(nucleus_id).slice(0, 80);
   if (qualification_state) body.qualification_state = String(qualification_state).slice(0, 40);
   if (conflict_status) body.conflict_status = String(conflict_status).slice(0, 40);
+  if (offer_candidate_id) body.offer_candidate_id = String(offer_candidate_id).slice(0, 80);
+  if (source_asset_id) body.source_asset_id = String(source_asset_id).slice(0, 80);
+  if (landing_family) body.landing_family = String(landing_family).slice(0, 80);
+  if (consent) body.consent = true;
   if (document_intent === "secure_channel_request") {
     body.document_intent = "secure_channel_request";
     body.channel_status = "canal escolhido posteriormente";

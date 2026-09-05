@@ -105,6 +105,14 @@ jobs:
           npm run test:commercial-release-ledger
           npm run test:demand-radar
           npm run demand-radar:check
+          npm run test:corporate-taxonomy
+          npm run test:multivertical-catalog
+          npm run test:credential-registry
+          npm run test:conflict-gate
+          npm run test:adaptive-intake
+          npm run test:private-project-technical-readiness
+          npm run test:corporate-shell
+          npm run test:revenue-candidate-cut
           npm run test:local-entity
           npm run test:market-answers
           npm run test:contract-analysis

@@ -301,6 +301,10 @@ exports.handler = async (event) => {
         nucleus_id: rec.nucleus_id,
         qualification_state: rec.qualification_state,
         conflict_status: rec.conflict_status,
+        offer_candidate_id: rec.offer_candidate_id,
+        source_asset_id: rec.source_asset_id,
+        landing_family: rec.landing_family,
+        consent: rec.consentimento ? true : undefined,
         // Correlation comes from the stored record, never from the request.
         correlation_id: rec.radar_params ? rec.radar_params.correlation_id : undefined,
         external_reference: rec.radar_params ? rec.external_reference : undefined,
@@ -463,6 +467,10 @@ exports.handler = async (event) => {
             nucleus_id: record.nucleus_id,
             qualification_state: record.qualification_state,
             conflict_status: record.conflict_status,
+            offer_candidate_id: record.offer_candidate_id,
+            source_asset_id: record.source_asset_id,
+            landing_family: record.landing_family,
+            consent: record.consentimento ? true : undefined,
             ...(radarPublic || {}),
           }),
         ),
@@ -628,6 +636,10 @@ exports.handler = async (event) => {
         nucleus_id: record.nucleus_id,
         qualification_state: record.qualification_state,
         conflict_status: record.conflict_status,
+        offer_candidate_id: record.offer_candidate_id,
+        source_asset_id: record.source_asset_id,
+        landing_family: record.landing_family,
+        consent: record.consentimento ? true : undefined,
         // Fail-closed contract: the visitor only ever learns the payment
         // correlation on this path, after the record is durably stored.
         ...(radarPublic || {}),

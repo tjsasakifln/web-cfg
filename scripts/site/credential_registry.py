@@ -400,12 +400,12 @@ def _visible_rows(surface: str, claims: list[dict[str, Any]]) -> list[tuple[str,
         extra = ""
         if cid == "org-cnpj" and url:
             extra = (
-                f' — <a href="{escape(url, quote=True)}" rel="noopener" target="_blank">'
+                f' - <a href="{escape(url, quote=True)}" rel="noopener" target="_blank">'
                 "consultar na Receita Federal</a>"
             )
         elif cid == "person-github" and url:
             extra = (
-                f' — <a href="{escape(url, quote=True)}" rel="noopener" target="_blank">'
+                f' - <a href="{escape(url, quote=True)}" rel="noopener" target="_blank">'
                 "github.com/tjsasakifln</a>"
             )
         term = {
