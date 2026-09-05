@@ -1,0 +1,236 @@
+{
+  "schema": "confenge-b2g-conservation-baseline/v1",
+  "campaign_id": "07",
+  "observed_at": "2026-09-05",
+  "repository": "tjsasakifln/web-cfg",
+  "base_sha": "470a5ffafeaf45a59649109742ce5885f9789328",
+  "production": {
+    "canonical_domain": "confenge.com.br",
+    "build_info_commit": "89b081a8676d8a0b30747dfcb1477f21d9ac4dfb",
+    "relation_to_base": "PRODUCTION_ONE_MAIN_COMMIT_BEHIND_AT_OBSERVATION",
+    "environment": "production",
+    "host_architecture_version": "confenge-nginx-node/v2",
+    "edge": "cloudflare",
+    "corporate_services_observation": {
+      "route": "/servicos/",
+      "status": 301,
+      "location": "/servicos-obras-publicas/",
+      "disposition_for_integration": "MIGRATE_REDIRECT_TARGET_TO_CORPORATE_SERVICES_IF_ROUTE_SHIPS"
+    }
+  },
+  "outbound_acquisition": {
+    "warmbly_remote_main_sha": "33bd329437bc04a2e95ef0f4d562d26b85f34e35",
+    "extra_cli_remote_main_sha": "96f1bea8fa5f2a44d9563943f9875b350da3ccc4",
+    "transport_owner": "warmbly",
+    "control_issue": "tjsasakifln/warmbly#43",
+    "verdict": "NO_GO_SMTP",
+    "dispatch": "PAUSED",
+    "smtp_sent": false,
+    "new_entity_cohort": {
+      "accounts": 36,
+      "composition": "16 Prefeituras, 16 Câmaras, 2 autarquias de saneamento e 2 consórcios públicos",
+      "campaign_state": "PAUSED",
+      "sends": 0,
+      "evidence": "tjsasakifln/web-cfg#587 comment 2026-09-04T19:24:42Z"
+    },
+    "live_landing_destinations": "UNKNOWN_NOT_OBSERVED_BECAUSE_NO_SEND_WAS_AUTHORIZED",
+    "repository_search": "No hard-coded current B2G landing destination URL was found in the Warmbly or extra-cli source checkouts; do not infer a destination from drafts or site links.",
+    "conservation_rule": "Preserve all existing B2G destination candidates and attribution contracts; this inbound campaign cannot choose, resume or send an outbound touch."
+  },
+  "core_routes": [
+    {
+      "route": "/servicos-obras-publicas/",
+      "role": "b2g_hub",
+      "sha256": "dcee7d5a395f6abadf543297b571ccef14b01f03669241c291c40ae96e1e0669",
+      "incoming_html_files": 205
+    },
+    {
+      "route": "/aditivos-obras-publicas/",
+      "role": "money_page",
+      "sha256": "a4be02dc6705bb15cbbec882412e3b383887e18800abdd85272d506c1c56c450",
+      "incoming_html_files": 209
+    },
+    {
+      "route": "/medicoes-glosas-obras-publicas/",
+      "role": "money_page",
+      "sha256": "9872c48c11cbf4b62d63d37c81593eeae59afcd52775edcc19ec80aebe58ddc2",
+      "incoming_html_files": 28
+    },
+    {
+      "route": "/reequilibrio-obras-publicas/",
+      "role": "money_page",
+      "sha256": "d7bcec301f3dafc38c01168dffd9af507823f91f0da648a4cef380af802149a3",
+      "incoming_html_files": 208
+    },
+    {
+      "route": "/auditoria-orcamento-licitacao/",
+      "role": "money_page",
+      "sha256": "a00f9f49c758be22efd40dbb81e3b2d55b9bb8bad60bed22e0a6988b49639235",
+      "incoming_html_files": 26
+    },
+    {
+      "route": "/diagnostico-pre-licitacao/",
+      "role": "money_page_bidder",
+      "sha256": "fbfb0ee348841ae3a01c437cee579832139cc7868e6dcb081534ff956bfae654",
+      "incoming_html_files": 23
+    },
+    {
+      "route": "/diagnostico-b2g-360/",
+      "role": "money_page",
+      "sha256": "1ed2f5d815a11056c599d12ba6b7f844cb5225ef96b664f93df61ff929a1dc02",
+      "incoming_html_files": 17
+    },
+    {
+      "route": "/atrasos-prorrogacao-obras-publicas/",
+      "role": "money_page",
+      "sha256": "118dec53dab64b354703c4f376ae4160b0c5daa8082ba2eb018fe7a6767185e0",
+      "incoming_html_files": 207
+    },
+    {
+      "route": "/defesa-tecnica-contratos-publicos/",
+      "role": "money_page",
+      "sha256": "21ef1d98ce2df98178a42467dc395d96b70f2a0bd73f1a35b7743d4c5b39af66",
+      "incoming_html_files": 208
+    },
+    {
+      "route": "/acompanhamento-contratos-obras/",
+      "role": "money_page",
+      "sha256": "d6b7c1366112edce35af06e0754ba565e6fdc1ef6368530efa583dceada74f11",
+      "incoming_html_files": 21
+    },
+    {
+      "route": "/defesa-margem-contratos-publicos/",
+      "role": "money_page",
+      "sha256": "be286c5192a30b9ccc1360dac8ab657a463c2b6570d664b3473a44e0002f9dd9",
+      "incoming_html_files": 18
+    },
+    {
+      "route": "/bid-room-licitacoes-obras/",
+      "role": "money_page_bidder",
+      "sha256": "6e80abb3ed43d647e2022af7303de3bbfc0595ef753714bad812fe0f5c8b4025",
+      "incoming_html_files": 236
+    },
+    {
+      "route": "/diretoria-b2g/",
+      "role": "money_page",
+      "sha256": "075707f0673438afad2dfa291cc49b5c1cf477fa6d6106a438a6d12343609e98",
+      "incoming_html_files": 239
+    },
+    {
+      "route": "/diagnostico-b2g-expansao/",
+      "role": "money_page",
+      "sha256": "27b8387671e68d6f24c0a0de78cd757ad7001d502af808eef4927b9441313c1d",
+      "incoming_html_files": 21
+    }
+  ],
+  "b2g_tools": [
+    {
+      "route": "/ferramentas/",
+      "index_state": "INDEXABLE",
+      "canonical_required": true,
+      "sitemap_required": true
+    },
+    {
+      "route": "/ferramentas/checklist-reequilibrio/",
+      "index_state": "INDEXABLE",
+      "canonical_required": true,
+      "sitemap_required": true
+    },
+    {
+      "route": "/ferramentas/diagnostico-defesa-margem/",
+      "index_state": "INDEXABLE",
+      "canonical_required": true,
+      "sitemap_required": true
+    },
+    {
+      "route": "/ferramentas/limite-acrescimos-supressoes/",
+      "index_state": "INDEXABLE",
+      "canonical_required": true,
+      "sitemap_required": true
+    },
+    {
+      "route": "/ferramentas/matriz-atraso-obra/",
+      "index_state": "INDEXABLE",
+      "canonical_required": true,
+      "sitemap_required": true
+    },
+    {
+      "route": "/analise-cnpj/",
+      "index_state": "QUARANTINED_NOINDEX",
+      "canonical_required": false,
+      "sitemap_required": false
+    }
+  ],
+  "b2g_data_surfaces": [
+    {
+      "route": "/analises-contratos-publicos/",
+      "index_state": "QUARANTINED_NOINDEX",
+      "canonical_required": true,
+      "sitemap_required": false
+    },
+    {
+      "prefix": "/oportunidades/",
+      "index_state": "QUARANTINED_NOINDEX",
+      "canonical_required": false,
+      "sitemap_required": false,
+      "instance_routes": [
+        "/oportunidades/cc-2026-000047-ponte-rio-do-sul-sc/",
+        "/oportunidades/pe-2026-000188-reforma-ubs-londrina-pr/",
+        "/oportunidades/pe-2026-000412-pav-urbana-chapeco-sc/",
+        "/oportunidades/pe-2026-000903-sinalizacao-viaria-caxias-rs/"
+      ]
+    },
+    {
+      "route": "/inteligencia/",
+      "index_state": "QUARANTINED_NOINDEX",
+      "canonical_required": true,
+      "sitemap_required": false
+    },
+    {
+      "route": "/panorama-mercado-obras-publicas/",
+      "index_state": "QUARANTINED_NOINDEX",
+      "canonical_required": true,
+      "sitemap_required": false
+    },
+    {
+      "route": "/radar/",
+      "index_state": "QUARANTINED_NOINDEX",
+      "canonical_required": true,
+      "sitemap_required": false
+    },
+    {
+      "route": "/metodologia-inteligencia/",
+      "index_state": "INDEXABLE",
+      "canonical_required": true,
+      "sitemap_required": true
+    }
+  ],
+  "current_terminal_and_external_destinations": {
+    "persistent_capture": "/.netlify/functions/lead",
+    "whatsapp_host": "wa.me",
+    "published_phone_e164": "+5548988344559",
+    "published_mailbox": "tiago.sasaki@confenge.com.br",
+    "official_evidence_host": "pncp.gov.br",
+    "smartlic_allowed": false,
+    "inbound_authorizes_outbound": false
+  },
+  "source_artifacts": {
+    "home_sha256": "49180abcaa39c047962d92ecb10b3ec7eda27cde5f1c0c2a85c634271fa87b7b",
+    "sitemap_sha256": "2776c80930c5276ad01a1a2224c9572326bf55138d802e868d3fe8c0028bd45d",
+    "redirects_sha256": "ac438fa0eb4430b221c4563d3659c3a6cdf6de4c6757103bc8c13c1bce42b358",
+    "bofu_intent_matrix_sha256": "c8a8c7f0e1d73144f9b3f8f938e12e7f70122b7c87e3af01ca3ea1c57de78409",
+    "public_family_registry_sha256": "464cd7ee44cc637a6b8ba3670ba67420ac0c26ad7f9d65584af48e3448b2677c"
+  },
+  "required_post_integration_invariants": {
+    "b2g_hub_max_actions_from_home": 2,
+    "all_core_routes_keep_self_canonical": true,
+    "all_core_routes_keep_index_follow": true,
+    "all_core_routes_remain_in_sitemap": true,
+    "corporate_services_has_own_canonical": true,
+    "corporate_services_links_to_b2g_hub": true,
+    "pncp_numbers_require_b2g_context_method_cutoff_and_limit": true,
+    "home_keeps_explicit_b2g_first_touch_path": true,
+    "existing_b2g_html_exact_hash_required": false,
+    "hashes_are_diagnostic_not_freeze": true
+  }
+}

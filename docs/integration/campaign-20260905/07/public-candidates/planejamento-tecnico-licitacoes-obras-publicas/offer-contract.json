@@ -1,0 +1,401 @@
+{
+  "schema": "confenge-public-offer-candidate/v1",
+  "campaign_id": "07",
+  "as_of": "2026-09-05",
+  "decision_state": "EXECUTE_NOW",
+  "implementation_state": "CANDIDATE_FOR_MV_09",
+  "identity": {
+    "deliverable_id": "CFG-D55",
+    "offer_candidate_id": "planejamento_tecnico_licitacoes_obras_publicas",
+    "public_name_pt_br": "Planejamento Técnico de Licitações de Obras Públicas",
+    "canonical_nucleus_id": "public_works_b2g",
+    "canonical_route": "/planejamento-tecnico-licitacoes-obras-publicas/",
+    "source_issues": [
+      587,
+      588
+    ],
+    "naming_authority_issue": 343
+  },
+  "visitor_job": "Transformar uma necessidade pública de obra ou serviço de engenharia em um pacote técnico coerente e rastreável antes da publicação da contratação.",
+  "legal_regime_gate": {
+    "required_before_applicability": true,
+    "states": [
+      "LEI_14133_E_REGULAMENTO_DO_ENTE",
+      "LEI_13303_E_REGULAMENTO_INTERNO_DA_ESTATAL",
+      "OUTRO_REGIME_CONFIRMADO",
+      "PENDENTE_DE_CONFIRMAÇÃO"
+    ],
+    "rule_pt_br": "Confirmar primeiro o regime jurídico, o regulamento do ente e a origem do recurso. Empresa pública, sociedade de economia mista e subsidiária não são presumidas sob a Lei 14.133 nem sob as INs SEGES.",
+    "unknown_state": "REVIEW_REQUIRED"
+  },
+  "acquisition_hypothesis": "Uma página que nomeia as peças, separa o ente contratante do licitante e oferece uma matriz preliminar reduz ambiguidade e aumenta demandas corretamente enquadradas.",
+  "conversion_hypothesis": "Pedir apenas contexto não sensível no primeiro contato reduz abandono e permite verificar escopo e conflito antes de receber documentos.",
+  "audiences": {
+    "contracting_entity": {
+      "status": "IN_SCOPE",
+      "who": [
+        "prefeitura",
+        "secretaria",
+        "câmara municipal",
+        "autarquia",
+        "autarquia de saneamento",
+        "empresa estatal, sob a Lei 13.303 e seu regulamento interno quando aplicáveis",
+        "consórcio público",
+        "outro ente público com competência para preparar a contratação"
+      ],
+      "moment": "fase preparatória de uma contratação de obra ou serviço de engenharia"
+    },
+    "bidder_or_contractor": {
+      "status": "OUT_OF_SCOPE_FOR_THIS_OFFER",
+      "who": "empresa que pretende disputar o edital, formular proposta ou executar o contrato",
+      "destination_routes": [
+        "/bid-room-licitacoes-obras/",
+        "/diagnostico-pre-licitacao/",
+        "/servicos-obras-publicas/"
+      ]
+    },
+    "same_matter_rule": "DECLINE",
+    "same_matter_rule_pt_br": "A CONFENGE não atende, no mesmo certame ou matéria relacionada, o ente contratante e uma empresa interessada em disputar ou executar o objeto."
+  },
+  "when_to_contract": [
+    "antes da publicação, quando a necessidade existe mas as peças técnicas ainda não formam um conjunto coerente",
+    "quando é preciso descobrir quais documentos se aplicam ao objeto, ao regime, ao regulamento do ente e à fonte do recurso",
+    "quando quantitativos, orçamento, prazo, medição e riscos não fecham entre si",
+    "quando faltam levantamentos, projetos, memoriais ou disciplinas para caracterizar o objeto",
+    "quando a equipe do ente precisa de apoio técnico delimitado sem transferir decisões administrativas"
+  ],
+  "unit_of_work": "uma contratação ou matéria identificada, com um objeto delimitado, uma matriz de aplicabilidade versionada e os módulos expressamente selecionados na proposta",
+  "modules": [
+    {
+      "id": "M00",
+      "name_pt_br": "Enquadramento técnico e matriz de aplicabilidade",
+      "possible_outputs": [
+        "mapa necessidade-solução-objeto",
+        "inventário de peças existentes",
+        "matriz preliminar e matriz contratada",
+        "lacunas, dependências e responsáveis"
+      ]
+    },
+    {
+      "id": "M01",
+      "name_pt_br": "Formalização da demanda",
+      "possible_outputs": [
+        "DFD ou DOD, somente quando a nomenclatura, o regime e o regulamento aplicáveis exigirem",
+        "registro da necessidade e dos resultados esperados como subsídio à equipe do ente"
+      ]
+    },
+    {
+      "id": "M02",
+      "name_pt_br": "Estudo Técnico Preliminar",
+      "possible_outputs": [
+        "caracterização do problema",
+        "levantamento e comparação de alternativas",
+        "estimativas e memórias",
+        "riscos, impactos, providências e conclusão técnica para validação do ente"
+      ]
+    },
+    {
+      "id": "M03",
+      "name_pt_br": "Definição técnica do objeto",
+      "possible_outputs": [
+        "Termo de Referência",
+        "anteprojeto",
+        "projeto básico",
+        "projeto executivo"
+      ],
+      "selection_rule": "A peça ou combinação depende da natureza do objeto, do regime de execução, da fase, do regulamento e da demonstração do caso; não existe sequência universal."
+    },
+    {
+      "id": "M04",
+      "name_pt_br": "Levantamentos, projetos e especificações",
+      "possible_outputs": [
+        "levantamentos de campo expressamente contratados",
+        "projetos e compatibilizações de disciplinas contratadas",
+        "memoriais descritivos e de cálculo",
+        "especificações e cadernos técnicos"
+      ]
+    },
+    {
+      "id": "M05",
+      "name_pt_br": "Quantitativos e orçamento de referência",
+      "possible_outputs": [
+        "memórias de levantamento de quantitativos",
+        "planilha orçamentária",
+        "composições e cotações previstas no escopo",
+        "BDI de referência e encargos aplicáveis com premissas declaradas",
+        "memórias de cálculo e fontes"
+      ]
+    },
+    {
+      "id": "M06",
+      "name_pt_br": "Prazo e cronograma",
+      "possible_outputs": [
+        "premissas de prazo",
+        "cronograma físico-financeiro",
+        "marcos, dependências e caminho de verificação"
+      ]
+    },
+    {
+      "id": "M07",
+      "name_pt_br": "Medição, pagamento e recebimento",
+      "possible_outputs": [
+        "critérios técnicos de medição",
+        "evidências e marcos de pagamento",
+        "critérios de recebimento provisório e definitivo",
+        "requisitos técnicos de aceite para decisão do ente"
+      ]
+    },
+    {
+      "id": "M08",
+      "name_pt_br": "Riscos e responsabilidades",
+      "possible_outputs": [
+        "registro de riscos técnicos e premissas",
+        "subsídios para matriz de alocação de riscos quando aplicável",
+        "mapa de owners, interfaces e decisões reservadas ao ente"
+      ]
+    },
+    {
+      "id": "M09",
+      "name_pt_br": "Consolidação e rastreabilidade",
+      "possible_outputs": [
+        "índice versionado das peças",
+        "matriz de consistência entre objeto, projeto, quantitativos, orçamento, prazo, medição e riscos",
+        "registro de revisão e pendências",
+        "pacote técnico final no formato contratado"
+      ]
+    }
+  ],
+  "applicability": {
+    "statuses": [
+      "APLICÁVEL",
+      "NÃO_APLICÁVEL",
+      "PENDENTE_DE_INFORMAÇÃO",
+      "FORA_DO_ESCOPO"
+    ],
+    "required_columns": [
+      "módulo ou peça",
+      "status",
+      "fundamento ou critério",
+      "insumo",
+      "responsável por fornecer",
+      "responsável por produzir",
+      "responsável por validar ou decidir",
+      "responsabilidade técnica",
+      "versão",
+      "dependência ou pendência"
+    ],
+    "decision_dimensions": [
+      "tipo e complexidade do objeto",
+      "regime jurídico: Lei 14.133, Lei 13.303 ou outro confirmado",
+      "obra ou serviço de engenharia",
+      "regime de execução",
+      "fase e maturidade dos insumos",
+      "regulamento e manual do ente",
+      "origem do recurso e instrumento de transferência",
+      "disciplinas e levantamentos necessários",
+      "atribuições profissionais",
+      "riscos e decisões reservadas à Administração"
+    ],
+    "open_scope_forbidden": true
+  },
+  "minimum_inputs_for_proposal": [
+    "ente, esfera, natureza jurídica e unidade demandante",
+    "regime jurídico e regulamento de licitações/contratos, quando conhecidos",
+    "descrição não sensível da obra ou do serviço",
+    "estágio atual do planejamento",
+    "lista das peças existentes e pretendidas",
+    "origem do recurso e regulamento, quando conhecidos",
+    "prazo objetivo e evento que o determina",
+    "necessidade provável de levantamento ou visita",
+    "existência de certame, contrato ou matéria relacionada para triagem de conflito por canal protegido",
+    "responsável do ente pela validação e pelas decisões administrativas"
+  ],
+  "responsibilities": {
+    "confenge": [
+      "produzir somente os módulos e disciplinas contratados",
+      "declarar premissas, fontes, cálculos, inferências, lacunas e versões",
+      "apontar inconsistências e informações faltantes",
+      "emitir ART ou RRT apenas quando cabível ao escopo e às atribuições efetivas",
+      "emitir documentação fiscal conforme o contrato e a legislação aplicável"
+    ],
+    "contracting_entity": [
+      "definir a necessidade pública, a competência, a governança e os responsáveis",
+      "fornecer insumos, acessos, normas, decisões e validações no prazo acordado",
+      "aprovar ou rejeitar alternativas e peças",
+      "praticar e assinar atos administrativos",
+      "obter controle jurídico, interno e demais aprovações competentes",
+      "publicar, conduzir, julgar, homologar, receber, atestar e pagar conforme suas competências"
+    ],
+    "legal_and_control": [
+      "examinar legalidade e emitir pareceres ou manifestações de sua competência",
+      "validar minutas e decisões jurídicas",
+      "executar controles e linhas de defesa do ente"
+    ],
+    "third_parties": [
+      "executar ensaios, laudos, licenças, projetos ou disciplinas que não integrem a proposta da CONFENGE",
+      "assumir sua própria responsabilidade técnica"
+    ]
+  },
+  "technical_and_fiscal_responsibility": {
+    "art_rrt": "A proposta identifica as atividades sujeitas a responsabilidade técnica, o profissional habilitado, a atribuição, o conselho e a taxa aplicáveis. Não há promessa genérica de ART/RRT para qualquer documento.",
+    "invoice": "A documentação fiscal segue o contrato e a legislação tributária aplicável; emissão não equivale a ateste, liquidação, aceite ou pagamento pela Administração."
+  },
+  "conflict_gate": {
+    "sequence": [
+      "contato geral sem identificadores protegidos nem documentos",
+      "canal seguro para identificadores mínimos das partes e da matéria",
+      "verificação de conflito liberada",
+      "proposta e acesso ao acervo substantivo somente depois da liberação"
+    ],
+    "checkpoints": [
+      "antes de receber acervo substantivo",
+      "antes da proposta",
+      "antes do início",
+      "antes da publicação do edital",
+      "sempre que objeto, partes, papéis ou informação relevante mudarem"
+    ],
+    "protected_inputs": [
+      "partes e beneficiários",
+      "identificador do processo, certame, contrato ou projeto",
+      "agentes e unidades envolvidos",
+      "atuação pública, pericial, consultiva ou técnica anterior",
+      "informação não pública relevante"
+    ],
+    "same_matter_entity_and_bidder": "DECLINE",
+    "unknown_or_unavailable": "REVIEW_REQUIRED",
+    "analytics_receives_details": false
+  },
+  "pricing": {
+    "public_price": null,
+    "public_copy_rule": "Não publicar preço ou prazo de entrega sem evidência específica e capacidade confirmada.",
+    "proposal_variables": [
+      "objeto e complexidade",
+      "módulos e disciplinas",
+      "maturidade e qualidade dos insumos",
+      "levantamentos e campo",
+      "volume e formatos",
+      "responsabilidade técnica",
+      "prazo e capacidade",
+      "revisões",
+      "despesas, ensaios e terceiros"
+    ],
+    "validation_ledger_first_cases": [
+      "horas",
+      "retrabalho",
+      "despesas",
+      "receita recebida",
+      "margem de contribuição",
+      "motivo de perda ou recusa"
+    ],
+    "authority_issues": [
+      341,
+      583
+    ]
+  },
+  "revision_and_acceptance": {
+    "default_included_rounds": 1,
+    "round_definition": "uma devolutiva consolidada de esclarecimentos e ajustes compatíveis com objetivo, método, corpus e escopo contratados",
+    "technical_error_rule": "erro de autoria, cálculo ou omissão contratada da CONFENGE é corrigido sem consumir a rodada",
+    "scope_change_rule": "novo fato, documento tardio, disciplina, objeto, finalidade ou premissa exige avaliação de impacto e aditivo ou nova proposta",
+    "acceptance_is_not_administrative_approval": true,
+    "versioning_required": true
+  },
+  "confidentiality_and_retention": {
+    "purpose": "enquadrar a demanda, verificar conflito, preparar proposta e executar somente o escopo aceito",
+    "public_first_contact": "sem upload; contato, contexto livre e identificadores sensíveis não entram em analytics nem em query string",
+    "public_intake_owner": "web-cfg até o recibo de transporte; Warmbly após aceite do handoff comercial",
+    "public_intake_retention_days_max": 730,
+    "public_intake_retention_authority": "/privacidade/ e LEAD_RETAIN_DAYS vigente",
+    "technical_corpus": "acesso mínimo por pessoas autorizadas, canal seguro posterior, finalidade e retenção definidas na proposta/contrato e nas obrigações legais aplicáveis",
+    "reuse_for_outbound_or_training": false,
+    "early_deletion_channel": "canal de direitos publicado em /privacidade/, com validação razoável de titularidade e ressalvas legais",
+    "no_invented_corpus_period": true
+  },
+  "disqualification": {
+    "reason_codes": [
+      "CONFLICT_OR_INCOMPATIBLE_ROLE",
+      "BIDDER_SIDE_WRONG_OFFER",
+      "LEGAL_REGIME_NOT_CONFIRMED",
+      "UNBOUNDED_OR_UNLAWFUL_SCOPE",
+      "PROFESSIONAL_ATTRIBUTION_NOT_AVAILABLE",
+      "MINIMUM_INPUTS_NOT_AVAILABLE",
+      "DEADLINE_TECHNICALLY_INFEASIBLE",
+      "CAPACITY_NOT_AVAILABLE",
+      "SENSITIVE_FIRST_CONTACT",
+      "OUTSIDE_CONFENGE_SCOPE"
+    ],
+    "public_response_rule": "informar de modo neutro que não é possível avançar ou indicar a rota adequada, sem expor partes, conflito protegido ou avaliação jurídica",
+    "analytics_rule": "somente reason_code enumerado; nunca nomes, processo, texto livre ou evidência protegida"
+  },
+  "exclusions": [
+    "ato administrativo, assinatura ou decisão em nome do ente",
+    "parecer jurídico, advocacia ou substituição da assessoria jurídica",
+    "controle interno ou aprovação por órgão de controle",
+    "direcionamento, justificativa fictícia ou restrição competitiva sem fundamento",
+    "garantia de aprovação, ausência de impugnação ou êxito do certame",
+    "protocolo, publicação, condução, julgamento, adjudicação ou homologação",
+    "atendimento simultâneo ao ente e a licitante ou contratado no mesmo certame ou matéria relacionada",
+    "qualquer peça, disciplina, levantamento, revisão, visita ou terceiro não marcado como aplicável e incluído na proposta"
+  ],
+  "capture": {
+    "terminal_action_pt_br": "Enquadrar a contratação e receber a lista preliminar do que precisa ser produzido",
+    "first_contact_upload": false,
+    "sensitive_document_warning_pt_br": "Não envie documentos sigilosos, dados pessoais, plantas restritas ou o acervo do processo neste primeiro contato. Se houver aderência e o conflito estiver liberado, combinaremos um canal seguro.",
+    "source": "CONFENGE_WEB",
+    "nucleus_id": "public_works_b2g",
+    "offer_candidate_id": "planejamento_tecnico_licitacoes_obras_publicas",
+    "deliverable_id": "CFG-D55",
+    "landing_family": "planejamento-tecnico-licitacoes-obras-publicas",
+    "next_state_profile": "service_fit_and_conflict_review",
+    "analytics_allowlist": [
+      "source",
+      "route",
+      "nucleus_id",
+      "offer_candidate_id",
+      "deliverable_id",
+      "landing_family",
+      "cta_id",
+      "planning_stage",
+      "entity_type",
+      "field_visit_needed",
+      "related_matter_present",
+      "qualification_state"
+    ],
+    "analytics_forbidden": [
+      "name",
+      "email",
+      "phone",
+      "free_text",
+      "process_or_tender_identifier",
+      "party_names",
+      "documents",
+      "sensitive_or_restricted_information"
+    ],
+    "outbound_eligible": false,
+    "auto_send": false,
+    "smtp_authorized": false
+  },
+  "public_promises_forbidden": [
+    "ato administrativo pela CONFENGE",
+    "parecer jurídico pela CONFENGE",
+    "aprovação garantida",
+    "ausência de impugnação",
+    "certame bem-sucedido",
+    "contratação direta ou dispensa garantida",
+    "atendimento dos dois lados no mesmo certame"
+  ],
+  "quality_gates": [
+    "conflito",
+    "aplicabilidade",
+    "insumos mínimos",
+    "atribuição e responsabilidade técnica",
+    "consistência entre peças",
+    "revisão e versionamento",
+    "aceite técnico do escopo",
+    "privacidade e canal seguro",
+    "canonical, sitemap e família pública",
+    "captura e handoff fail-closed"
+  ],
+  "rollback": "Remover a exposição pela rota e pelo ID CFG-D55 sem alterar, desindexar ou redirecionar as rotas B2G existentes; preservar solicitações e contratos já recebidos segundo retenção e finalidade aplicáveis.",
+  "hundred_repetition_test": "Cem demandas usam os mesmos módulos, estados e matriz de aplicabilidade; a repetição melhora estimativas e critérios sem criar cem ofertas, cem páginas ou decisões administrativas paralelas."
+}
