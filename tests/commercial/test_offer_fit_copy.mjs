@@ -76,15 +76,16 @@ for (const route of ROUTES) {
     );
     const form = html.match(/<form\b[^>]*id="formulario-contato"[\s\S]*?<\/form>/);
     assert("home_form_present", Boolean(form), "form");
-    const step1 = form ? form[0].match(/data-form-step="1"[\s\S]*?<\/fieldset>/) : null;
-    const step2 = form ? form[0].match(/data-form-step="2"[\s\S]*?<\/fieldset>/) : null;
+    const step1 = form ? form[0].match(/<fieldset\b[^>]*data-form-step="1"[^>]*>[\s\S]*?<\/fieldset>/) : null;
+    const step2Start = form ? form[0].search(/<fieldset\b[^>]*data-form-step="2"/) : -1;
+    const step2 = step2Start >= 0 ? form[0].slice(step2Start) : null;
     assert("home_form_steps", Boolean(step1 && step2), "steps");
     for (const field of ["faixa_contrato", "risco_em_jogo", "frequencia", "maturidade_documental", "capacidade_interna"]) {
-      assert(`icp_field_in_step2_${field}`, step2 && step2[0].includes(`name="${field}"`), field);
+      assert(`icp_field_in_step2_${field}`, step2 && step2.includes(`name="${field}"`), field);
       assert(`icp_field_not_step1_${field}`, step1 && !step1[0].includes(`name="${field}"`), field);
     }
     assert("step1_no_cnpj", step1 && !/name="(cnpj|cpf)"|type="file"/i.test(step1[0]), "sensitive");
-    assert("step2_no_cnpj_upload", step2 && !/name="(cnpj|cpf)"|type="file"/i.test(step2[0]), "sensitive");
+    assert("step2_no_cnpj_upload", step2 && !/name="(cnpj|cpf)"|type="file"/i.test(step2), "sensitive");
     assert("consent_required", form[0].includes('name="consentimento"') && form[0].includes("required"), "consent");
   } else {
     const copy = matrix.route_copy[route.key];
