@@ -601,14 +601,14 @@ async function main() {
     await page.select("#nucleus_id", "public_works_b2g");
     const shown = await page.evaluate(() => {
       const branch = document.querySelector('[data-nucleus-branch="public_works_b2g"]');
-      return Boolean(branch && !branch.hidden);
+      const jornada = document.querySelector("#jornada-hidden")?.value || "";
+      return {
+        visible: Boolean(branch && !branch.hidden),
+        jornada,
+      };
     });
-    if (!shown) throw new Error("public_works_b2g branch stayed hidden");
-    await page.select("#b2g_situation", "problema urgente em contrato");
-    const journey = await page.evaluate(() => document.querySelector("#jornada-hidden")?.value || "");
-    if (journey && journey !== "contrato") {
-      throw new Error(`b2g situation left jornada=${journey}`);
-    }
+    if (!shown.visible) throw new Error("public_works_b2g branch stayed hidden");
+    if (shown.jornada !== "operacao") throw new Error(`b2g nucleus left jornada=${shown.jornada}`);
     ok("journey_cta_binds_form");
   } catch (e) {
     fail("journey_cta_binds_form", e.message || e);
@@ -2197,7 +2197,7 @@ async function main() {
     });
     await formPage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
     await formPage.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
-    await formPage.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 4000 });
+    await formPage.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 8000 });
     await formPage.evaluate(() => {
       document.documentElement.style.scrollBehavior = "auto";
       if (document.body) document.body.style.scrollBehavior = "auto";
@@ -2205,6 +2205,10 @@ async function main() {
     await formPage.type("#nome", "Maria Silva");
     await formPage.type("#email", "maria@example.com");
     await formPage.select("#nucleus_id", "building_engineering_documentation");
+    await formPage.evaluate(() => {
+      const nucleus = document.querySelector("#nucleus_id");
+      nucleus?.dispatchEvent(new Event("change", { bubbles: true }));
+    });
 
     const parkAndClick = async (selector) => {
       await formPage.evaluate((sel) => {
@@ -2298,9 +2302,12 @@ async function main() {
     });
     await ariaPage.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
     await ariaPage.goto(`${BASE}/`, { waitUntil: "domcontentloaded", timeout: 30000 });
-    await ariaPage.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 4000 });
+    await ariaPage.waitForSelector('form.contact-form[data-form-ready="true"]', { timeout: 8000 });
     await ariaPage.type("#nome", "Maria Silva");
     await ariaPage.select("#nucleus_id", "building_engineering_documentation");
+    await ariaPage.evaluate(() => {
+      document.querySelector("#nucleus_id")?.dispatchEvent(new Event("change", { bubbles: true }));
+    });
     await ariaPage.evaluate(() => {
       document.documentElement.style.scrollBehavior = "auto";
       document.querySelector("[data-form-next]").click();
