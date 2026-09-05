@@ -15,7 +15,7 @@ PATHS = {
     "constitution": ROOT / "data/corporate/commercial-constitution.v1.json",
     "taxonomy": ROOT / "data/corporate/taxonomy.v1.json",
     "matrix": ROOT / "data/corporate/intent-family-matrix.v1.json",
-    "pricing": ROOT / "data/corporate/pricing-authority.v1.json",
+    "pricing": ROOT / "data/corporate/pricing-gate-projection.v1.json",
     "page": ROOT / "data/corporate/public-service-page-contract.v1.json",
     "catalog": ROOT / "data/offers/multivertical/catalog.v2.json",
     "b2g": ROOT / "data/commercial/deliverables-registry.v1.json",
@@ -204,20 +204,29 @@ def validate_commercial_contracts(
     if page.get("conversion", {}).get("inbound_authorizes_outbound") is not False:
         raise CommercialContractError("inbound_must_not_authorize_outbound")
 
-    states = pricing.get("states", [])
+    if pricing.get("role") != "NON_AUTHORITATIVE_FAIL_CLOSED_PROJECTION":
+        raise CommercialContractError("pricing_projection_role")
+    if pricing.get("authority_owner") != "governance":
+        raise CommercialContractError("pricing_projection_owner")
+    if pricing.get("authority_pin") is not None or pricing.get("authority_status") != "UNAVAILABLE":
+        raise CommercialContractError("pricing_projection_unproved_authority")
+    if pricing.get("local_decision_default") != "DENY":
+        raise CommercialContractError("pricing_projection_not_fail_closed")
+
+    states = pricing.get("state_semantics", [])
     state_ids = [row.get("state") for row in states]
     _unique(state_ids, "duplicate_price_state")
     state_by_id = {row.get("state"): row for row in states}
     experiment = state_by_id.get("FOUNDER_AUTHORIZED_EXPERIMENT", {})
-    if experiment.get("allows_checkout") is not False or experiment.get("means_margin_validated") is not False:
+    if "checkout" in experiment.get("capabilities_if_authoritatively_granted", []) or experiment.get("means_margin_validated") is not False:
         raise CommercialContractError("founder_experiment_must_not_validate_or_checkout")
     margin = state_by_id.get("MARGIN_VALIDATED", {})
-    if margin.get("allows_checkout") is not False or margin.get("means_margin_validated") is not True:
+    if "checkout" in margin.get("capabilities_if_authoritatively_granted", []) or margin.get("means_margin_validated") is not True:
         raise CommercialContractError("margin_state_semantics")
     checkout = state_by_id.get("CHECKOUT_AUTHORIZED", {})
-    if checkout.get("allows_checkout") is not True:
+    if "checkout" not in checkout.get("capabilities_if_authoritatively_granted", []):
         raise CommercialContractError("checkout_state_semantics")
-    for authorization in pricing.get("founder_authorizations", []):
+    for authorization in pricing.get("observed_authorization_evidence", []):
         if authorization.get("checkout_authorized") is not False:
             raise CommercialContractError("founder_authorization_checkout")
         if authorization.get("public_display_authorized") is not False:
@@ -251,7 +260,7 @@ def validate_commercial_contracts(
         "constitution": ("constitution_contract", "constitution_hash", "CONFENGE_COMMERCIAL_CONSTITUTION/1.0.0"),
         "matrix": ("intent_matrix_contract", "intent_matrix_hash", "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0"),
         "page": ("page_contract", "page_contract_hash", "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0"),
-        "pricing": ("price_authority", "price_authority_hash", "CONFENGE_PRICE_AUTHORITY/1.0.0"),
+        "pricing": ("price_gate_projection", "price_gate_projection_hash", "CONFENGE_PRICE_GATE_PROJECTION/1.0.0"),
     }
     for document_name, (contract_key, hash_key, expected_contract) in pinned_contracts.items():
         document = docs[document_name]

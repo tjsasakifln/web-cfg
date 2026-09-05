@@ -23,7 +23,6 @@ const B2G_DEFAULTS = Object.freeze({
   invoice_nf: {
     issued: true,
     when: "serviço técnico contratado da oferta B2G retida",
-    cnpj: "52.407.089/0001-09",
   },
   technical_responsibility: {
     art_rule:

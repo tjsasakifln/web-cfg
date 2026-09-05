@@ -49,20 +49,21 @@ def test_unknown_offer_fails_closed() -> None:
 def test_founder_price_experiment_does_not_validate_margin_or_checkout() -> None:
     docs = load_contracts()
     experiment = next(
-        row for row in docs["pricing"]["states"]
+        row for row in docs["pricing"]["state_semantics"]
         if row["state"] == "FOUNDER_AUTHORIZED_EXPERIMENT"
     )
-    assert experiment["allows_manual_proposal"] is True
-    assert experiment["allows_public_display"] is False
-    assert experiment["allows_checkout"] is False
+    assert experiment["capabilities_if_authoritatively_granted"] == ["manual_proposal"]
     assert experiment["means_margin_validated"] is False
+    assert docs["pricing"]["authority_owner"] == "governance"
+    assert docs["pricing"]["authority_pin"] is None
+    assert docs["pricing"]["local_decision_default"] == "DENY"
     assert docs["pricing"]["margin_validation"]["state"] == "NOT_OBSERVED"
 
 
 def test_duplicate_price_state_fails_closed() -> None:
     docs = load_contracts()
     docs["pricing"] = copy.deepcopy(docs["pricing"])
-    docs["pricing"]["states"].append(copy.deepcopy(docs["pricing"]["states"][0]))
+    docs["pricing"]["state_semantics"].append(copy.deepcopy(docs["pricing"]["state_semantics"][0]))
     with pytest.raises(CommercialContractError, match="duplicate_price_state"):
         validate_commercial_contracts(docs)
 
@@ -70,7 +71,7 @@ def test_duplicate_price_state_fails_closed() -> None:
 def test_unauthorized_field_floor_fails_closed() -> None:
     docs = load_contracts()
     docs["pricing"] = copy.deepcopy(docs["pricing"])
-    docs["pricing"]["founder_authorizations"][0]["field_floor_cents"] = 490000
+    docs["pricing"]["observed_authorization_evidence"][0]["field_floor_cents"] = 490000
     with pytest.raises(CommercialContractError, match="unauthorized_field_floor"):
         validate_commercial_contracts(docs)
 

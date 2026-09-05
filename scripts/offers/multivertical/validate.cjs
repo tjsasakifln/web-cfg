@@ -146,8 +146,8 @@ function validateCatalog(assembled) {
     if (!/a confirmar antes da contrata[cç][aã]o/i.test(offer.technical_responsibility.responsible || "")) {
       errors.push(`professional_responsible_not_conditional:${offer.offer_id}`);
     }
-    if (offer.price_model.policy !== "CONFENGE_PRICE_AUTHORITY/1.0.0") {
-      errors.push(`price_authority_mismatch:${offer.offer_id}`);
+    if (offer.price_model.policy !== "CONFENGE_PRICE_GATE_PROJECTION/1.0.0") {
+      errors.push(`price_gate_projection_mismatch:${offer.offer_id}`);
     }
     if (typeof offer.price_model.internal_floor_cents === "number") {
       errors.push(`internal_floor_in_catalog:${offer.offer_id}`);

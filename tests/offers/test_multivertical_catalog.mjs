@@ -69,7 +69,7 @@ for (const offer of assembled.modeled_offers) {
   assert(`new_offer_unknown_sla_${offer.offer_id}`, offer.sla_window.state === "UNKNOWN", offer.sla_window);
   assert(`new_offer_no_public_price_${offer.offer_id}`, offer.price_model.public_amount_cents === null, offer.price_model);
   assert(`new_offer_no_range_${offer.offer_id}`, offer.price_model.public_range === null);
-  assert(`new_offer_price_authority_${offer.offer_id}`, offer.price_model.policy === "CONFENGE_PRICE_AUTHORITY/1.0.0");
+  assert(`new_offer_price_gate_projection_${offer.offer_id}`, offer.price_model.policy === "CONFENGE_PRICE_GATE_PROJECTION/1.0.0");
   assert(`new_offer_professional_scope_conditional_${offer.offer_id}`, /a confirmar antes da contratação/i.test(offer.technical_responsibility.responsible));
   assert(`new_offer_not_retained_wave_${offer.offer_id}`, offer.wave_class !== "RETAIN_B2G");
 }
@@ -324,8 +324,8 @@ for (const field of [
   "intent_matrix_hash",
   "page_contract",
   "page_contract_hash",
-  "price_authority",
-  "price_authority_hash",
+  "price_gate_projection",
+  "price_gate_projection_hash",
 ]) {
   assert(`conformance_core_pin_${field}`, conformance.pin[field] === consumerPinDoc[field], {
     conformance: conformance.pin[field],

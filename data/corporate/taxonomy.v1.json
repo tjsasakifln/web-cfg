@@ -429,7 +429,7 @@
     "commercial_constitution": "CONFENGE_COMMERCIAL_CONSTITUTION/1.0.0",
     "public_intent_matrix": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
     "public_service_page": "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0",
-    "price_authority": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+    "price_gate_projection": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
     "web_intake": "CONFENGE_WEB_INTAKE/2.0.0-draft.20260904",
     "admission_policy": "NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904",
     "handraiser_state": "CONFENGE_HANDRAISER_STATE/1.0.0-draft.20260904",
@@ -437,5 +437,5 @@
     "notes": "Sibling contracts are consumed by MV-03 through MV-07 and integrated only by MV-09. They are not runtime fallbacks. Missing or divergent taxonomy version/hash fails closed."
   },
   "notes": "Founder decision 2026-09-04 recorded in #577/#578 and red-teamed by MV-01 on 2026-09-05. This document is the single operational authority for five internal nuclei. Their names are not mandatory public navigation or route labels; customer-facing entry is the public intent matrix. Consumers pin contract_id, contract_version and content_sha256.",
-  "content_sha256": "99d17ac874d1dbd550c8cd4c655f2e5a262229232ee77af77cdde4fe5dd00f09"
+  "content_sha256": "967d301289a1dcaaa5616d9363c90d17058fd27785c26b426917ba454e0b1683"
 }

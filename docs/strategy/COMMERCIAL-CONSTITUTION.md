@@ -74,19 +74,23 @@ campo, logística ou aceitação da atividade.
 
 ## Preço
 
-O contrato `CONFENGE_PRICE_AUTHORITY/1.0.0` separa:
+O contrato `CONFENGE_PRICE_GATE_PROJECTION/1.0.0` descreve, sem conceder,
+estados que a governança pode autorizar:
 
-- `FOUNDER_AUTHORIZED_EXPERIMENT`: permite proposta manual dentro da autorização
-  material; não significa margem validada, preço público ou checkout;
+- `FOUNDER_AUTHORIZED_EXPERIMENT`: quando confirmado pela governança, descreve
+  proposta manual dentro da autorização material; não significa margem validada,
+  preço público ou checkout;
 - `MARGIN_VALIDATED`: exige a evidência comparável da #341; ainda não liga
   checkout;
-- `PUBLICATION_AUTHORIZED`: permite exibição sob gate de captura;
+- `PUBLICATION_AUTHORIZED`: quando concedido pela governança, permite exibição
+  sob gate de captura;
 - `CHECKOUT_AUTHORIZED`: depende de autorização e contratos financeiros próprios.
 
-O registro preserva a autorização do fundador na #577 para testar triagem
-técnica com piso interno de R$ 2.900 no recorte documental/remoto. Campo não
-tem preço autorizado neste contrato. O piso não foi ligado a uma SKU, não é
-tabela pública, não prova margem e não autoriza cobrança automática.
+A projeção registra como evidência observada o comentário do fundador na #577
+sobre teste de triagem técnica com piso interno de R$ 2.900 no recorte
+documental/remoto. Sem pin material da governança, o estado local é `DENY`.
+Campo não tem preço autorizado neste contrato. O piso não foi ligado a uma SKU,
+não é tabela pública, não prova margem e não autoriza cobrança automática.
 
 ## Teste das cem repetições
 

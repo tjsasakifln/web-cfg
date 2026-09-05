@@ -37,7 +37,7 @@
     "public_intent_matrix": "CONFENGE_PUBLIC_INTENT_MATRIX/1.0.0",
     "offer_catalog": "CONFENGE_OFFER_CATALOG/2.0.0",
     "public_page_contract": "CONFENGE_PUBLIC_SERVICE_PAGE/1.0.0",
-    "pricing_authority": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+    "pricing_gate_projection": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
     "b2g_authority_by_reference": "data/commercial/deliverables-registry.v1.json",
     "five_nuclei_role": "internal_operational_grouping_only",
     "public_route_truth": "intent_family",

@@ -73,7 +73,7 @@
         "note": "Triagem não aplica método de laudo; apenas delimita cabimento."
       },
       "technical_responsibility": {
-        "art_rule": "ART não se aplica à triagem de enquadramento; ART só entra se a unidade evoluir para serviço técnico de atribuição.",
+        "art_rule": "A aplicabilidade de ART na triagem depende do conteúdo efetivamente contratado, das atribuições profissionais e da orientação do Crea competente; não é inferida pelo nome da oferta.",
         "responsible": "a confirmar antes da contratação: profissional legalmente habilitado e com atribuição comprovada para o recorte",
         "not_promised_for": [
           "triagem",
@@ -83,8 +83,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -106,7 +105,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -187,8 +186,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -212,7 +210,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -294,8 +292,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -319,7 +316,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -398,8 +395,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -422,7 +418,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -500,8 +496,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -521,7 +516,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -598,8 +593,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -622,7 +616,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -698,8 +692,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -721,7 +714,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -805,8 +798,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; NF não prova atribuição nem aprovação e não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; NF não prova atribuição nem aprovação e não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -830,7 +822,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "remote_documental_or_field",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -915,8 +907,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -939,7 +930,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1017,8 +1008,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -1041,7 +1031,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1118,8 +1108,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -1142,7 +1131,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1217,8 +1206,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -1241,7 +1229,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1320,8 +1308,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -1344,7 +1331,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1431,8 +1418,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -1455,7 +1441,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1535,8 +1521,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -1560,7 +1545,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1637,8 +1622,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -1661,7 +1645,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1737,8 +1721,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -1761,7 +1744,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "field_inspection",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },
@@ -1842,8 +1825,7 @@
       },
       "invoice_nf": {
         "issued": true,
-        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento",
-        "cnpj": "52.407.089/0001-09"
+        "when": "serviço técnico contratado; não incide na conversa gratuita de enquadramento"
       },
       "sla_window": {
         "state": "UNKNOWN",
@@ -1867,7 +1849,7 @@
         "public_range": null,
         "currency": "BRL",
         "basis": "proposal_after_scope",
-        "policy": "CONFENGE_PRICE_AUTHORITY/1.0.0",
+        "policy": "CONFENGE_PRICE_GATE_PROJECTION/1.0.0",
         "ticket_class": "remote_documental",
         "primary_unit": "fixed_scope_unit_not_hourly"
       },

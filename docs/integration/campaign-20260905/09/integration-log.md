@@ -70,7 +70,9 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 
 | Campanha | PR / HEAD observado | Disposição MV-09 | Motivo / arquivos usados |
 |---|---|---|---|
+| MV-01 | #607 / `895005bb52de6c70817b98357b0bbc685efccde5` | PARTIAL / ADOPT corrigido | Adotadas ADR-STRAT-002/004, constituição, taxonomia, matriz de intenção, contrato de página, catálogo modelado, validadores e testes. A projeção de preço foi tornada não autoritativa e fail-closed; CNPJ duplicado foi removido do catálogo; regra absoluta de ART na triagem foi condicionada. Nenhuma rota ou oferta modelada ganhou autorização de publicação. |
 | MV-05 | #605 / `32fa6390f803493722ad34c5089b93c1331e9f6b` | PARTIAL | Pesquisa, copy por trabalho e matriz de intenção são donors. Nenhuma das quatro rotas candidatas tem aprovação de oferta/capacidade suficiente; o fragmento de captura conflita com o contrato ativo. A primeira execução de pSEO também revelou impacto global de CSS, corrigido no commit final do producer. Não promover páginas sem nova evidência. |
+| MV-07 | #606 / `8066046cba697c598745070a50ef602db0390bc0` | PARTIAL / DEFER rota | Pesquisa legal, separação ente/licitante, matriz de aplicabilidade e contrato de conservação B2G são donors. Não criar `CFG-D55`: MV-01 canonizou `public_works_technical_procurement_planning`. Não promover a rota opcional, pois capacidade multidisciplinar/ART/RRT e captura compatível não estão provadas. |
 
 ### Revisão independente de MV-05 / #605
 
@@ -87,6 +89,26 @@ Durante a execução, #604 foi mergeada por outra sessão e `origin/main` avanç
 - P1: o fragmento não é compatível com o intake atual e poderia rejeitar ou reclassificar submissões.
 - P1: o primeiro HEAD `7b1e348d…` falhou pSEO por `border_radius` e `gradient`; o producer publicou `32fa6390…` para corrigir o orçamento, sujeito aos checks atualizados.
 - Sem scope creep material: IA por trabalho, ausência de doorway por persona, exemplos sintéticos e wording nacional condicional estão alinhados.
+
+### Revisão independente de MV-01 / #607
+
+#### Standards
+
+- P1 corrigido na integração: o arquivo local de preço se declarava autoridade executável, embora governança seja owner de política/aprovação. Foi renomeado para `CONFENGE_PRICE_GATE_PROJECTION/1.0.0`, com `authority_pin=null`, estado `UNAVAILABLE` e default `DENY`.
+- P2 corrigido: a triagem dizia categoricamente que ART não se aplicava. A regra agora depende do conteúdo contratado, das atribuições e da orientação do Crea competente.
+
+#### Spec
+
+- P2 corrigido: o CNPJ literal repetido em 18 ofertas criava cópias de identidade fora da autoridade canônica; foi removido de cada `invoice_nf`.
+- Taxonomia, ADR, matriz, contrato de página e catálogo B2G por referência foram adotados. Ofertas continuam `MODEL_ONLY`/`WITHHELD`, sem inferência de publicação.
+
+### Revisão independente de MV-07 / #606
+
+#### Standards e Spec
+
+- P1: a família candidata exigia `capture_form`, mas o intake observado estava `WITHHELD` e os campos propostos não pertenciam ao contrato aceito. Sem fallback funcional na rota, não há ação terminal publicável.
+- P1: o fragmento propunha `CFG-D55`, em conflito com o offer ID canônico da MV-01; a mutação foi rejeitada.
+- P1: a copy assumia produção multidisciplinar, campo e ART/RRT sem prova nominal/capacidade aprovada. A rota permanece candidata e fora do sitemap/runtime.
 
 ## Regra de integração
 
