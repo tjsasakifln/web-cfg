@@ -39,11 +39,44 @@ def test_public_artifact_sanitization_is_fail_closed(tmp_path: Path) -> None:
 
 
 def test_live_source_contains_no_structured_credential_object() -> None:
+    from scripts.site.credential_registry import is_projectable, load_registry
+
     root = Path(__file__).resolve().parents[2]
     specialist = (root / "especialista" / "tiago-jun-sasaki" / "index.html").read_text(encoding="utf-8")
     sanitized, _removed = sanitize_html(specialist)
     assert audit_html(sanitized) == []
-    assert "hasCredential" not in sanitized
+    crea_projectable = any(
+        is_projectable(claim) and "crea" in str(claim.get("id", "")).lower()
+        for claim in load_registry()["claims"]
+    )
+    if crea_projectable:
+        assert "hasCredential" in sanitized
+        assert "CREA" in sanitized
+    else:
+        assert "hasCredential" not in sanitized
+
+
+def test_owned_surface_keeps_registry_backed_identity_fields() -> None:
+    root = Path(__file__).resolve().parents[2]
+    page = (root / "confianca" / "index.html").read_text(encoding="utf-8")
+    sanitized, _removed = sanitize_html(page, relative_path="confianca/index.html")
+    assert audit_html(sanitized, relative_path="confianca/index.html") == []
+    assert '"legalName":"Confenge Serviços de Desenhos Técnicos Ltda"' in sanitized
+    assert '"taxID":"52.407.089/0001-09"' in sanitized
+    assert "unsupported" not in sanitized
+
+
+def test_owned_surface_strips_withheld_crea_has_credential() -> None:
+    root = Path(__file__).resolve().parents[2]
+    page = (root / "confianca" / "index.html").read_text(encoding="utf-8")
+    injected = page.replace(
+        '"taxID":"52.407.089/0001-09"',
+        '"taxID":"52.407.089/0001-09","hasCredential":{"@type":"EducationalOccupationalCredential","name":"CREA-SC PJ 205402-8","identifier":"205402-8"}',
+    )
+    sanitized, removed = sanitize_html(injected, relative_path="confianca/index.html")
+    assert removed >= 1
+    assert "CREA-SC PJ 205402-8" not in sanitized
+    assert audit_html(sanitized, relative_path="confianca/index.html") == []
 
 
 def test_public_artifact_audit_rejects_reintroduced_identity_claim(tmp_path: Path) -> None:

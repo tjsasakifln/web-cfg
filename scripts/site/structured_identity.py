@@ -50,11 +50,28 @@ def _plain_identity_name(value: Any) -> str | None:
     return candidate
 
 
-def _sanitize_node(value: Any) -> int:
+def _keep_registry_backed(key: str, value: Any) -> bool:
+    from scripts.site.credential_registry import schema_value_allowed
+
+    if isinstance(value, list):
+        return any(schema_value_allowed(key, item) for item in value)
+    return schema_value_allowed(key, value)
+
+
+def _filter_registry_backed(key: str, value: Any) -> Any:
+    from scripts.site.credential_registry import schema_value_allowed
+
+    if isinstance(value, list):
+        kept = [item for item in value if schema_value_allowed(key, item)]
+        return kept
+    return value
+
+
+def _sanitize_node(value: Any, *, allow_registry_backed: bool = False) -> int:
     removed = 0
     if isinstance(value, list):
         for child in value:
-            removed += _sanitize_node(child)
+            removed += _sanitize_node(child, allow_registry_backed=allow_registry_backed)
         return removed
     if not isinstance(value, dict):
         return 0
@@ -68,9 +85,18 @@ def _sanitize_node(value: Any) -> int:
     if "hasCredential" in value:
         forbidden.add("hasCredential")
     for key in forbidden:
-        if key in value:
-            del value[key]
-            removed += 1
+        if key not in value:
+            continue
+        current = value[key]
+        if allow_registry_backed and _keep_registry_backed(key, current):
+            filtered = _filter_registry_backed(key, current)
+            if filtered or filtered == 0:
+                if filtered != current:
+                    value[key] = filtered
+                    removed += 1
+                continue
+        del value[key]
+        removed += 1
     if kinds.intersection({"Person", "ProfilePage"}) and "name" in value:
         plain_name = _plain_identity_name(value.get("name"))
         if plain_name is not None:
@@ -80,43 +106,75 @@ def _sanitize_node(value: Any) -> int:
                 del value["name"]
             removed += 1
     for child in value.values():
-        removed += _sanitize_node(child)
+        removed += _sanitize_node(child, allow_registry_backed=allow_registry_backed)
     return removed
 
 
-def sanitize_jsonld_payload(payload: Any) -> tuple[Any, int]:
+def sanitize_jsonld_payload(
+    payload: Any,
+    *,
+    allow_registry_backed: bool = False,
+) -> tuple[Any, int]:
     clone = json.loads(json.dumps(payload, ensure_ascii=False))
-    return clone, _sanitize_node(clone)
+    return clone, _sanitize_node(clone, allow_registry_backed=allow_registry_backed)
 
 
-def unsupported_structured_identity(payload: Any, path: str = "$") -> list[str]:
+def unsupported_structured_identity(
+    payload: Any,
+    path: str = "$",
+    *,
+    allow_registry_backed: bool = False,
+) -> list[str]:
     errors: list[str] = []
     if isinstance(payload, list):
         for index, child in enumerate(payload):
-            errors.extend(unsupported_structured_identity(child, f"{path}[{index}]"))
+            errors.extend(
+                unsupported_structured_identity(
+                    child,
+                    f"{path}[{index}]",
+                    allow_registry_backed=allow_registry_backed,
+                )
+            )
         return errors
     if not isinstance(payload, dict):
         return errors
     kinds = _types(payload)
     if "Organization" in kinds:
         for key in ORGANIZATION_FIELDS_WITHOUT_CANONICAL_EVIDENCE:
-            if key in payload:
+            if key in payload and not (
+                allow_registry_backed and _keep_registry_backed(key, payload[key])
+            ):
                 errors.append(f"unsupported_structured_identity:{path}.{key}")
     if "Person" in kinds:
         for key in PERSON_FIELDS_WITHOUT_CANONICAL_EVIDENCE:
-            if key in payload:
+            if key in payload and not (
+                allow_registry_backed and _keep_registry_backed(key, payload[key])
+            ):
                 errors.append(f"unsupported_structured_identity:{path}.{key}")
     if kinds.intersection({"Person", "ProfilePage"}) and CREDENTIAL_NAME_RE.search(str(payload.get("name") or "")):
         errors.append(f"unsupported_structured_credential_name:{path}.name")
-    if "hasCredential" in payload and f"unsupported_structured_identity:{path}.hasCredential" not in errors:
+    if (
+        "hasCredential" in payload
+        and f"unsupported_structured_identity:{path}.hasCredential" not in errors
+        and not (allow_registry_backed and _keep_registry_backed("hasCredential", payload["hasCredential"]))
+    ):
         errors.append(f"unsupported_structured_identity:{path}.hasCredential")
     for key, child in payload.items():
-        errors.extend(unsupported_structured_identity(child, f"{path}.{key}"))
+        errors.extend(
+            unsupported_structured_identity(
+                child,
+                f"{path}.{key}",
+                allow_registry_backed=allow_registry_backed,
+            )
+        )
     return errors
 
 
-def sanitize_html(html: str) -> tuple[str, int]:
+def sanitize_html(html: str, relative_path: str | None = None) -> tuple[str, int]:
+    from scripts.site.credential_registry import is_owned_surface
+
     removed = 0
+    allow = is_owned_surface(html, relative_path)
 
     def replace(match: re.Match[str]) -> str:
         nonlocal removed
@@ -124,7 +182,7 @@ def sanitize_html(html: str) -> tuple[str, int]:
             payload = json.loads(match.group(2))
         except json.JSONDecodeError:
             return match.group(0)
-        sanitized, count = sanitize_jsonld_payload(payload)
+        sanitized, count = sanitize_jsonld_payload(payload, allow_registry_backed=allow)
         removed += count
         body = json.dumps(sanitized, ensure_ascii=False, separators=(",", ":"))
         return f"{match.group(1)}{body}{match.group(3)}"
@@ -132,7 +190,10 @@ def sanitize_html(html: str) -> tuple[str, int]:
     return JSON_LD_RE.sub(replace, html), removed
 
 
-def audit_html(html: str) -> list[str]:
+def audit_html(html: str, relative_path: str | None = None) -> list[str]:
+    from scripts.site.credential_registry import is_owned_surface
+
+    allow = is_owned_surface(html, relative_path)
     errors: list[str] = []
     for index, match in enumerate(JSON_LD_RE.finditer(html)):
         try:
@@ -140,7 +201,13 @@ def audit_html(html: str) -> list[str]:
         except json.JSONDecodeError:
             errors.append(f"invalid_jsonld:{index}")
             continue
-        errors.extend(unsupported_structured_identity(payload, f"$jsonld[{index}]"))
+        errors.extend(
+            unsupported_structured_identity(
+                payload,
+                f"$jsonld[{index}]",
+                allow_registry_backed=allow,
+            )
+        )
     return errors
 
 
@@ -151,7 +218,11 @@ def sanitize_tree(root: Path) -> dict[str, int]:
     for path in sorted(root.rglob("*.html")):
         scanned += 1
         raw = path.read_text(encoding="utf-8")
-        cleaned, removed = sanitize_html(raw)
+        try:
+            rel = path.relative_to(root).as_posix()
+        except ValueError:
+            rel = path.name
+        cleaned, removed = sanitize_html(raw, relative_path=rel)
         if removed:
             path.write_text(cleaned, encoding="utf-8")
             rewritten += 1

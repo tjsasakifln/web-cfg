@@ -730,6 +730,7 @@ def check_case_permission_class(html: str) -> list[str]:
 
 def public_verified_claim_texts(proof: dict[str, Any] | None = None) -> list[str]:
     from scripts.site.brand import public_proof_claims
+    from scripts.site.credential_registry import projectable_phrases
 
     out: list[str] = []
     for c in public_proof_claims(proof):
@@ -737,6 +738,7 @@ def public_verified_claim_texts(proof: dict[str, Any] | None = None) -> list[str
             out.append(str(c["claim"]))
         for phrase in c.get("allowed_public_phrases") or []:
             out.append(str(phrase))
+    out.extend(projectable_phrases())
     return out
 
 
@@ -812,6 +814,9 @@ def check_credentials_against_proof(
         for m in re.finditer(pat, blob):
             window = blob[max(0, m.start() - 48) : m.start()]
             if re.search(r"\b(n[aã]o|sem|nunca|jamais|evitar|proibid)\b", window):
+                continue
+            matched = blob[m.start() : min(len(blob), m.end() + 48)]
+            if _claim_supported(matched, allowed):
                 continue
             errors.append(f"credential_pattern_forbidden:{pat}")
             break
