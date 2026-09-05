@@ -97,6 +97,33 @@ function publicRoutes() {
   return loadManifestRoutes();
 }
 
+function authorityGatedCaptureFor(family) {
+  const spec = family?.capture_availability;
+  if (!spec) return null;
+  const expected = {
+    mode: "external_authority_fail_closed",
+    runtime_profile: "adaptive_intake_standalone_v1",
+    config_endpoint: "/.netlify/functions/adaptive-intake-config",
+    client_script: "/assets/js/adaptive-intake.js",
+    authority_manifest: "netlify/functions/data/adaptive-intake-authority.json",
+  };
+  for (const [key, value] of Object.entries(expected)) {
+    if (spec[key] !== value) throw new Error(`capture availability ${key} is not authoritative for ${family.id}`);
+  }
+  if (family.terminal_action !== "capture_form") {
+    throw new Error(`authority-gated capture requires capture_form for ${family.id}`);
+  }
+  const manifest = JSON.parse(readFileSync(join(ROOT, spec.authority_manifest), "utf8"));
+  if (manifest.status !== "WITHHELD" || manifest.pin !== null || manifest.contract_hashes !== null) {
+    throw new Error(`authority-gated capture requires a WITHHELD manifest without runtime pins for ${family.id}`);
+  }
+  return {
+    runtimeProfile: spec.runtime_profile,
+    configEndpoint: spec.config_endpoint,
+    clientScript: spec.client_script,
+  };
+}
+
 const baseArg = process.argv[2];
 const reportArg = process.env.LAYOUT_AUDIT_REPORT || process.argv[3] || "";
 const server = baseArg ? null : await startStaticServer(SITE_ROOT);
@@ -112,6 +139,7 @@ const routeContracts = new Map(routes.map((route) => {
     return [route, {
       family: publicFamilyForRoute(route, registry, bofuRoutes),
       hasCapture: hasCaptureForm(html),
+      authorityGatedCapture: null,
       error: null,
     }];
   } catch (error) {
@@ -122,6 +150,9 @@ const routeContracts = new Map(routes.map((route) => {
     }];
   }
 }));
+for (const contract of routeContracts.values()) {
+  if (contract.family) contract.authorityGatedCapture = authorityGatedCaptureFor(contract.family);
+}
 const report = {
   generated_at: new Date().toISOString(),
   base_url: BASE,
@@ -433,6 +464,7 @@ async function auditWorker() {
         requireCaptureForm: contract.hasCapture
           || (contract.family?.profile === "priced_offer"
             && contract.family?.classification !== "PILOT_STAGING"),
+        authorityGatedCapture: contract.authorityGatedCapture,
       });
       issues.push(...truthful.map((detail) => ({ code: "layout_truth", detail })));
     } catch (error) {

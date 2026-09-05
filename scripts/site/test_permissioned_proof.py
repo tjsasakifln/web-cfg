@@ -29,6 +29,10 @@ from scripts.site.permissioned_proof import (  # noqa: E402
     validate_registry,
 )
 from scripts.site.visible_parity import compare_visible_parity  # noqa: E402
+from scripts.site.credential_registry import (  # noqa: E402
+    is_projectable,
+    load_registry as load_credential_registry,
+)
 
 
 FIXTURES = ROOT / "scripts" / "site" / "fixtures" / "permissioned_proof"
@@ -576,7 +580,15 @@ def test_trust_surface_states_executor_correction_evidence_and_method_split():
         "https://github.com/tjsasakifln",
     ):
         assert needle in html, needle
-    assert "CREA" not in html
+    crea_claims = [
+        claim
+        for claim in load_credential_registry()["claims"]
+        if "crea" in str(claim.get("id", "")).lower()
+    ]
+    if any(is_projectable(claim) for claim in crea_claims):
+        assert "CREA" in html
+    else:
+        assert "CREA" not in html
     assert '"Review"' not in html
     assert '"AggregateRating"' not in html
     assert "R$" not in html

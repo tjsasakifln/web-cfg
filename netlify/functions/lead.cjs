@@ -298,6 +298,9 @@ exports.handler = async (event) => {
         email_status: rec.delivery?.email?.status,
         idempotent: true,
         document_intent: rec.document_intent,
+        nucleus_id: rec.nucleus_id,
+        qualification_state: rec.qualification_state,
+        conflict_status: rec.conflict_status,
         // Correlation comes from the stored record, never from the request.
         correlation_id: rec.radar_params ? rec.radar_params.correlation_id : undefined,
         external_reference: rec.radar_params ? rec.external_reference : undefined,
@@ -418,6 +421,7 @@ exports.handler = async (event) => {
       verified = await store.get(lead_id);
     }
     if (!verified || verified.lead_id !== lead_id) {
+      if (lead.adaptive_intake) throw new Error("adaptive_persist_readback_missing");
       safeLog("warn", "persist_verify_miss_soft", { lead_id });
     }
     try {
@@ -441,6 +445,11 @@ exports.handler = async (event) => {
         safeLog("info", "lead_idempotent_hit", { lead_id: existing.lead_id, via: "only_if_new" });
         return idempotentOk(existing);
       }
+      if (lead.adaptive_intake) {
+        return { statusCode: 503, headers, body: JSON.stringify(publicErrorBody({
+          error: "persist_unconfirmed", message: "O registro ainda não foi confirmado. Tente novamente.",
+        })) };
+      }
       // Key exists (412) but body not yet readable — still must not re-deliver.
       safeLog("info", "lead_idempotent_hit", { lead_id, via: "only_if_new_body_pending" });
       return {
@@ -457,6 +466,9 @@ exports.handler = async (event) => {
             email_status: "pending",
             idempotent: true,
             document_intent: record.document_intent,
+            nucleus_id: record.nucleus_id,
+            qualification_state: record.qualification_state,
+            conflict_status: record.conflict_status,
             ...(radarPublic || {}),
           }),
         ),
@@ -555,17 +567,24 @@ exports.handler = async (event) => {
 
   // Delivery after persist — failures update status, never drop the lead
   let delivery;
-  try {
-    delivery = await deliverAll(record);
-  } catch (err) {
-    safeLog("error", "delivery_unexpected", {
-      lead_id,
-      code: err && err.message ? String(err.message).slice(0, 80) : "error",
-    });
+  if (record.adaptive_intake === true) {
     delivery = {
-      notify: { status: "error" },
-      email: { status: "error" },
+      notify: { status: "skipped_adaptive" },
+      email: { status: "skipped_adaptive" },
     };
+  } else {
+    try {
+      delivery = await deliverAll(record);
+    } catch (err) {
+      safeLog("error", "delivery_unexpected", {
+        lead_id,
+        code: err && err.message ? String(err.message).slice(0, 80) : "error",
+      });
+      delivery = {
+        notify: { status: "error" },
+        email: { status: "error" },
+      };
+    }
   }
 
   // Normalize channel statuses for public non-PII surface
@@ -619,6 +638,9 @@ exports.handler = async (event) => {
         notify_status,
         email_status,
         document_intent: record.document_intent,
+        nucleus_id: record.nucleus_id,
+        qualification_state: record.qualification_state,
+        conflict_status: record.conflict_status,
         // Fail-closed contract: the visitor only ever learns the payment
         // correlation on this path, after the record is durably stored.
         ...(radarPublic || {}),

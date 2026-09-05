@@ -9,9 +9,10 @@ export async function renderedLayoutFindings(page, options = {}) {
   const requirements = {
     requireStickyCta: options.requireStickyCta ?? true,
     requireCaptureForm: options.requireCaptureForm ?? true,
+    authorityGatedCapture: options.authorityGatedCapture ?? null,
   };
 
-  return page.evaluate(async ({ requireStickyCta, requireCaptureForm }) => {
+  return page.evaluate(async ({ requireStickyCta, requireCaptureForm, authorityGatedCapture }) => {
     const findings = [];
     const root = document.documentElement;
     if (root.scrollWidth > root.clientWidth + 1) {
@@ -183,11 +184,20 @@ export async function renderedLayoutFindings(page, options = {}) {
 
             const submitControls = [...form.querySelectorAll(
               "button:not([type]), button[type='submit'], input[type='submit'], input[type='image']",
-            )].filter(enabled);
-            const hasVisibleSubmit = submitControls.some(actionable);
-            const hasReachableMultistepSubmit = submitControls.length > 0
+            )];
+            const enabledSubmitControls = submitControls.filter(enabled);
+            const hasVisibleSubmit = enabledSubmitControls.some(actionable);
+            const hasReachableMultistepSubmit = enabledSubmitControls.length > 0
               && [...form.querySelectorAll("[data-form-next]")].some(actionable);
-            usable = hasVisibleSubmit || hasReachableMultistepSubmit;
+            const isAuthorityGated = authorityGatedCapture
+              && form.getAttribute("data-runtime-profile") === authorityGatedCapture.runtimeProfile
+              && form.getAttribute("data-authority-config-endpoint") === authorityGatedCapture.configEndpoint
+              && [...document.scripts].some(
+                (script) => script.getAttribute("src") === authorityGatedCapture.clientScript,
+              )
+              && submitControls.length > 0
+              && enabledSubmitControls.length === 0;
+            usable = hasVisibleSubmit || hasReachableMultistepSubmit || isAuthorityGated;
           } finally {
             if (restore) restore();
           }

@@ -1,7 +1,7 @@
 {
   "schema_version": "interface-coverage-policy-v2",
   "issue": 293,
-  "updated_at": "2026-08-25",
+  "updated_at": "2026-09-05",
   "purpose": "Derive axe coverage from visible money/capture risk and Lighthouse coverage from the canonical public-family-registry, with explicit noindex-only supplemental families for public artifact routes outside the indexable registry.",
   "axe": {
     "viewports": [
@@ -240,6 +240,16 @@
         "route": "/panorama-mercado-obras-publicas/",
         "reason": "market panorama hub",
         "seo_exempt_reason": "panorama publication authorization remains false"
+      },
+      {
+        "family_id": "prontidao-tecnica-obra-privada",
+        "route": "/ferramentas/prontidao-tecnica-obra-privada/",
+        "reason": "single-route anonymous private-project readiness tool; complete result before contact"
+      },
+      {
+        "family_id": "triagem-tecnica",
+        "route": "/triagem-tecnica/",
+        "reason": "single-route adaptive intake with runtime availability gate and persistent receipt"
       }
     ],
     "additional_pages": [

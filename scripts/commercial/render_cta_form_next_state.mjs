@@ -23,8 +23,10 @@ function attrValue(attrs, name) {
 }
 
 function setAttr(tag, name, value) {
-  const cleaned = tag.replace(new RegExp(`\\s${name}(?:=["'][^"']*["'])?`, "gi"), "");
-  return cleaned.replace(/>$/, ` ${name}="${escapeHtml(value)}">`);
+  const escaped = escapeHtml(value);
+  const pattern = new RegExp(`(\\b${name}=["'])[^"']*(["'])`, "i");
+  if (pattern.test(tag)) return tag.replace(pattern, `$1${escaped}$2`);
+  return tag.replace(/>$/, ` ${name}="${escaped}">`);
 }
 
 function setInputAttr(tag, name, value) {
@@ -56,6 +58,8 @@ function removeInlineStyle(tag, property, value) {
 function profileFor(surface) {
   for (const rule of contract.profile_derivation || []) {
     if (rule.family_id && rule.family_id === surface.family_id) return rule.profile;
+  }
+  for (const rule of contract.profile_derivation || []) {
     if (rule.terminal_action && rule.terminal_action === surface.terminal_action) return rule.profile;
   }
   throw new Error(`CTA_FORM_PROFILE_UNRESOLVED: ${surface.route}`);
@@ -65,6 +69,7 @@ function runtimeProfile(open) {
   const id = attrValue(open, "id");
   if (id === "radar-params-form") return "inline_reference_v1";
   if (id === "handraise-diag") return "inline_receipt_v1";
+  if (id === "triagem-tecnica-form") return "adaptive_intake_standalone_v1";
   return "shared_lead_form_v1";
 }
 

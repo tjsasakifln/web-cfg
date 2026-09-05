@@ -66,6 +66,12 @@ const PII_QUERY_KEYS = new Set([
   "lead_name",
   "lead_email",
   "lead_phone",
+  "conflict_parties",
+  "conflict_party",
+  "partes",
+  "parte_contraria",
+  "parties",
+  "cpf",
 ]);
 
 let _fetchOverride = null;
@@ -144,6 +150,10 @@ function mapLeadToInboundV1(record) {
 
   // Analytics/store stay CONFENGE_WEB; Warmbly receives the same canonical source.
   body.source = SOURCE_WARMBLY;
+  if (record.adaptive_intake === true) {
+    body.outbound_eligible = false;
+    body.auto_send = false;
+  }
 
   // Warmbly's current confenge.inbound.v1 consumer persists record_kind and
   // excludes synthetic receipts from INBOUND NOW/include_synthetic=0. Only a
@@ -227,6 +237,39 @@ function mapLeadToInboundV1(record) {
     ["capacidade", record.capacidade_interna],
     ["lotes", record.lot_count],
     ["regime", record.execution_regime],
+    ["nucleo", record.nucleus_id],
+    ["oferta_candidata", record.offer_candidate_id],
+    ["ativo", record.source_asset_id],
+    ["familia", record.landing_family],
+    ["cidade_classe", record.city_class],
+    ["sitio_classe", record.site_class],
+    ["canal", record.canal_preferido],
+    ["pessoa_tipo", record.pessoa_tipo],
+    ["papel", record.decision_role],
+    ["urgencia", record.urgencia],
+    ["porque_agora", record.why_now],
+    ["decisao_desejada", record.desired_decision],
+    ["docs_classe", record.document_availability_class],
+    ["qualificacao", record.qualification_state],
+    ["conflito", record.conflict_status],
+    ["conflito_ref", record.conflict_reference],
+    ["contrato_captura", record.intake_contract_version],
+    ["pin_captura", record.intake_pin_hash],
+    ["claim_stage", record.claim_stage],
+    ["valuation_purpose", record.valuation_purpose],
+    ["inspection_window", record.inspection_window],
+    ["property_class", record.property_class],
+    ["work_type", record.work_type],
+    ["work_stage", record.work_stage],
+    ["project_status", record.project_status],
+    ["budget_class", record.budget_class],
+    ["bim_status", record.bim_status],
+    ["establishment_class", record.establishment_class],
+    ["risk_class", record.risk_class],
+    ["sst_doc_class", record.sst_doc_class],
+    ["certame_stage", record.certame_stage],
+    ["contract_relation", record.contract_relation],
+    ["entity_class", record.entity_class],
   ]
     .filter(([, value]) => value !== null && value !== undefined && String(value).trim())
     .map(([label, value]) => `${label}=${clampText(value, 80)}`)
@@ -869,6 +912,11 @@ async function postSignedInbound(payload, { now = new Date(), env = process.env 
 }
 
 async function postInbound(record, { now = new Date(), env = process.env } = {}) {
+  // Never route a multivertical record through the legacy B2G envelope when
+  // final Governance authority is absent or the receiving runtime is unpinned.
+  if (record && record.adaptive_intake && !require("./adaptive-intake.cjs").loadPin(env).ok) {
+    return { status: STATUS.BLOCKED, reason: "governance_final_authority_missing", attemptsDelta: 0 };
+  }
   if (!isHandoffTransportableRecord(record)) {
     return { status: STATUS.SKIPPED, reason: "non_real", attemptsDelta: 0 };
   }
