@@ -95,7 +95,9 @@
 }
 .technical-intake-form input:focus,
 .technical-intake-form select:focus {
-  outline: 3px solid rgb(30 113 166 / 22%);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: var(--focus-ring);
   border-color: #1e71a6;
 }
 .check-row {

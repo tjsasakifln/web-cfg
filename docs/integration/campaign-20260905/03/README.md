@@ -39,7 +39,7 @@ Antes do envio, a página informa o que será registrado, o receipt, a revisão 
 
 - web-cfg: captura, persistência, receipt, atribuição allowlisted e origem `CONFENGE_WEB`.
 - Governance: `NET_NEW_INBOUND_HANDRAISER/1.0.0-draft.20260904`; implementação da PR #172 em `990c6ae237c3f7188728e97283bc69c130f6028d`, policy hash `sha256:405ac86064a90641b843352d21cd21703744115de9592558e100671d92276df7`.
-- Warmbly: oportunidade, ação, outcome e readback. A dependência MV-03 deve consumir a mesma policy, aceitar telefone/WhatsApp sem e-mail artificial e manter a fila inbound-only.
+- Warmbly: oportunidade, ação, outcome e readback. A PR #266, HEAD `38ec557b57bb61085282ce7d27bf2fee02e53484`, consome a mesma policy, aceita telefone/WhatsApp sem e-mail artificial e mantém a fila inbound-only.
 - `extra-cli`: fatos, identidade e proveniência; nenhum crawler, DataLake ou modelo de identidade paralelo foi criado.
 - Invariantes: `outbound_eligible=false`, `auto_send=false`, sem autorização SMTP, sem PII em analytics ou URL.
 
@@ -47,9 +47,10 @@ O runtime web continua fail-closed: fixtures podem injetar a policy em `NODE_ENV
 
 ## Evidência de implementação
 
-- Aceite, `NEEDS_CONTEXT`, localização condicional, rejeição de campos sensíveis, receipt sem PII, retry idempotente, compatibilidade B2G e ausência de notificação/SMTP são exercitados em `tests/intake/test_mv03_adaptive_intake.mjs`.
-- O handoff assinado exige outcome explícito, logical id correspondente, receipt e invariantes inbound-only. `REJECTED_WITH_REASON` bloqueia; outcome desconhecido é retryable.
-- Analytics recebe apenas rota/família, categoria de necessidade, canal, campanha/UTMs allowlisted e indicação de localização material. Nome, e-mail, telefone e organização não são enviados aos eventos.
+- Aceite dos seis núcleos, `NEEDS_CONTEXT`, localização condicional, rejeição de campos sensíveis, receipt sem PII, retry idempotente, conflito quando uma chave é reutilizada com outro material, compatibilidade B2G e ausência de notificação/SMTP são exercitados em `tests/intake/test_mv03_adaptive_intake.mjs`.
+- O handoff assinado exige outcome explícito, logical id correspondente, receipt e invariantes inbound-only no POST e no readback HMAC do mesmo `logical_id`. Só então `ACCEPTED` é entregue ou `REJECTED_WITH_REASON` é bloqueado; resposta não correlacionada, readback divergente e outcome desconhecido são retryable.
+- O lead preserva rota/família de triagem, asset canônico, asset/família de origem e campanha/UTMs allowlisted, inclusive após navegação interna. Analytics recebe apenas essas categorias, a necessidade, o canal e a indicação de localização material; nome, e-mail, telefone e organização não são enviados aos eventos.
+- O carregamento da página não emite início/etapa de formulário. O browser vincula a chave de retry ao SHA-256 do payload e persiste somente digest/chave na sessão: o mesmo material conserva a chave após reload, e qualquer mudança recebe outra. O servidor também recusa com `409` colisões, registros adaptativos antigos sem digest e chaves pertencentes a outro tipo de registro.
 
 ## Rollback
 
@@ -69,7 +70,7 @@ O fragmento de integração obrigatório está em `integration-fragments.md`. A 
 Verdes:
 
 - `npm run test:lead-function` (`LEAD_FUNCTION_OK`, 72 testes, mais intake e private-readiness);
-- `npm run test:adaptive-intake` (12 testes MV-03);
+- `npm run test:adaptive-intake` (15 testes MV-03);
 - `npm run test:inbound-handoff` (26 testes);
 - `npm run test:form-funnel`;
 - `npm run test:analytics` e `npm run test:attribution`;

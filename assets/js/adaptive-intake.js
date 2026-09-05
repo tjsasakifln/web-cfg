@@ -21,11 +21,14 @@
   var uf = form.querySelector("[name=location_uf]");
   var receipt = document.querySelector("[data-intake-receipt]");
   var protocol = document.querySelector("[data-intake-protocol]");
+  var fallbackLinks = Array.prototype.slice.call(document.querySelectorAll("[data-fallback-channel]"));
   var configured = false;
   var started = false;
   var pendingFingerprint = "";
   var volatileKey = "";
-  var retryStorageKey = "confenge_triagem_retry_v2";
+  var retryStorageKey = "confenge_triagem_retry_v3";
+  var attributionStorageKey = "confenge_pseo_attribution";
+  var attributionKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
 
   function track(eventName, props) {
     if (typeof window.confengeTrack !== "function") return;
@@ -45,19 +48,21 @@
     status.setAttribute("role", kind === "error" ? "alert" : "status");
   }
 
-  function setStep(index) {
+  function setStep(index, interactive) {
     steps.forEach(function (step, current) {
       step.hidden = current !== index;
     });
     form.setAttribute("data-current-step", String(index + 1));
     var current = form.querySelector("[data-current-step-label]");
     if (current) current.textContent = String(index + 1);
-    var heading = steps[index] && steps[index].querySelector("legend");
-    if (heading) {
-      heading.setAttribute("tabindex", "-1");
-      heading.focus({ preventScroll: true });
+    if (interactive) {
+      var heading = steps[index] && steps[index].querySelector("legend");
+      if (heading) {
+        heading.setAttribute("tabindex", "-1");
+        heading.focus({ preventScroll: true });
+      }
+      track("lead_form_step", { form_step: index + 1 });
     }
-    track("lead_form_step", { form_step: index + 1 });
   }
 
   function setHidden(name, value) {
@@ -113,6 +118,23 @@
     }
   }
 
+  function updateFallbackChannels() {
+    var option = need.options[need.selectedIndex];
+    var situation = option && option.value ? option.textContent.trim() : "demanda técnica";
+    fallbackLinks.forEach(function (link) {
+      var selectedChannel = link.getAttribute("data-fallback-channel");
+      if (selectedChannel === "whatsapp") {
+        link.href = "https://wa.me/5548988344559?text=" + encodeURIComponent(
+          "Olá, Tiago. Quero iniciar uma triagem técnica. Situação: " + situation + "."
+        );
+      } else if (selectedChannel === "email") {
+        link.href = "mailto:tiago.sasaki@confenge.com.br?subject=" + encodeURIComponent(
+          "Triagem técnica CONFENGE — " + situation
+        );
+      }
+    });
+  }
+
   function updateChannel() {
     var selected = channel.value;
     var emailActive = selected === "email";
@@ -133,19 +155,6 @@
     track("lead_form_start");
   }
 
-  function idempotencyKey() {
-    try {
-      var stored = sessionStorage.getItem(retryStorageKey);
-      if (stored) return stored;
-      var key = newKey();
-      sessionStorage.setItem(retryStorageKey, key);
-      return key;
-    } catch (_) {
-      volatileKey = volatileKey || newKey();
-      return volatileKey;
-    }
-  }
-
   function newKey() {
     if (window.crypto && typeof window.crypto.randomUUID === "function") {
       return "triage-" + window.crypto.randomUUID();
@@ -153,13 +162,63 @@
     return "triage-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12);
   }
 
+  function safeAttribution(value) {
+    var text = String(value || "").slice(0, 80);
+    if (/@/.test(text) || /^\+?\d{10,15}$/.test(text.replace(/[\s()-]/g, ""))) return "";
+    return /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,79}$/.test(text) ? text : "";
+  }
+
+  function storedAttribution() {
+    try {
+      var parsed = JSON.parse(sessionStorage.getItem(attributionStorageKey) || "null");
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (_) {
+      return {};
+    }
+  }
+
+  async function idempotencyKeyFor(currentFingerprint) {
+    if (window.crypto && window.crypto.subtle && typeof window.TextEncoder === "function") {
+      try {
+        var bytes = new window.TextEncoder().encode(currentFingerprint);
+        var digestBuffer = await window.crypto.subtle.digest("SHA-256", bytes);
+        var digest = Array.prototype.map.call(new Uint8Array(digestBuffer), function (value) {
+          return value.toString(16).padStart(2, "0");
+        }).join("");
+        var stored = JSON.parse(sessionStorage.getItem(retryStorageKey) || "null");
+        if (stored && stored.digest === digest && /^triage-[A-Za-z0-9-]+$/.test(stored.key || "")) {
+          return stored.key;
+        }
+        var boundKey = newKey();
+        sessionStorage.setItem(retryStorageKey, JSON.stringify({ digest: digest, key: boundKey }));
+        return boundKey;
+      } catch (_) {
+        /* Session storage is optional; in-page retry remains idempotent below. */
+      }
+    }
+    if (!pendingFingerprint || pendingFingerprint !== currentFingerprint) {
+      pendingFingerprint = currentFingerprint;
+      volatileKey = newKey();
+    }
+    return volatileKey;
+  }
+
   function publicPayload() {
     var body = {};
     new FormData(form).forEach(function (value, key) {
       if (typeof value === "string") body[key] = value;
     });
-    body.idempotency_key = idempotencyKey();
     body.landing_page = "/triagem-tecnica/";
+    var query = new URLSearchParams(window.location.search);
+    var stored = storedAttribution();
+    attributionKeys.forEach(function (key) {
+      var value = safeAttribution(query.get(key) || stored[key]);
+      if (value) body[key] = value;
+    });
+    var sourceAsset = safeAttribution(stored.asset_id);
+    var sourceFamily = safeAttribution(stored.route_family);
+    if (sourceAsset && sourceAsset !== "technical_triage_v1") body.source_origin_asset_id = sourceAsset;
+    if (sourceFamily && sourceFamily !== "triagem-tecnica") body.source_origin_route_family = sourceFamily;
     var token = form.querySelector("[name=cf-turnstile-response]");
     if (token && token.value) {
       body.turnstile_token = token.value;
@@ -172,6 +231,7 @@
     var copy = Object.assign({}, body);
     delete copy.turnstile_token;
     delete copy["cf-turnstile-response"];
+    delete copy.idempotency_key;
     return JSON.stringify(copy);
   }
 
@@ -186,6 +246,7 @@
   form.addEventListener("focusin", markStart, { once: true });
   need.addEventListener("change", function () {
     updateLocation();
+    updateFallbackChannels();
     showStatus("");
   });
   channel.addEventListener("change", function () {
@@ -202,13 +263,29 @@
       return;
     }
     updateLocation();
-    setStep(1);
+    setStep(1, true);
   });
   back.addEventListener("click", function () {
-    setStep(0);
+    setStep(0, true);
+  });
+  fallbackLinks.forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      event.__confengeTracked = true;
+      var selectedChannel = link.getAttribute("data-fallback-channel");
+      var source = storedAttribution();
+      track(selectedChannel === "whatsapp" ? "whatsapp_click" : selectedChannel === "email" ? "email_click" : "outbound_click", {
+        channel: selectedChannel,
+        destination_type: selectedChannel,
+        need_category: need.value || "not_selected",
+        route_family: link.getAttribute("data-route-family") || "triagem-tecnica",
+        asset_id: link.getAttribute("data-asset-id") || "technical_triage_v1",
+        cta_id: link.getAttribute("data-cta-id") || "technical-triage-alternative-" + selectedChannel,
+        source_asset_id: safeAttribution(source.asset_id)
+      });
+    }, true);
   });
 
-  form.addEventListener("submit", function (event) {
+  form.addEventListener("submit", async function (event) {
     event.preventDefault();
     markStart();
     if (!configured) return unavailable();
@@ -223,17 +300,10 @@
 
     var body = publicPayload();
     var currentFingerprint = fingerprint(body);
-    if (pendingFingerprint && pendingFingerprint !== currentFingerprint) {
-      showStatus(
-        "A tentativa anterior ainda não foi confirmada. Mantenha os mesmos dados para tentar novamente ou reabra a página para iniciar outro pedido.",
-        "error"
-      );
-      return;
-    }
-    pendingFingerprint = currentFingerprint;
     submit.disabled = true;
     form.setAttribute("aria-busy", "true");
     showStatus("Registrando seu pedido…");
+    body.idempotency_key = await idempotencyKeyFor(currentFingerprint);
     track("lead_form_submit", {
       form_step: 2,
       need_category: need.value,
@@ -292,5 +362,6 @@
 
   updateChannel();
   updateLocation();
-  setStep(0);
+  updateFallbackChannels();
+  setStep(0, false);
 })();

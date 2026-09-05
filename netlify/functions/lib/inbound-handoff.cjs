@@ -339,6 +339,7 @@ function mapAdaptiveLeadToNetNewInbound(record) {
     policy_version: policyVersion,
     canonical_name: policyVersion,
     content_hash: policyHash,
+    hash: policyHash,
     policy_hash: policyHash,
     governance_source_sha: clampText(record.governance_source_sha, 40),
     logical_id: logicalId,
@@ -355,7 +356,7 @@ function mapAdaptiveLeadToNetNewInbound(record) {
     intake_source: SOURCE_WARMBLY,
     intake_schema: clampText(record.intake_contract_version, 160),
     intent_kind: "REQUEST_HUMAN_REVIEW",
-    landing_asset: { id: sourceAsset, kind: "OFFER" },
+    landing_asset: { id: sourceAsset, kind: "TRIAGE" },
     nucleus_id: clampText(record.nucleus_id, 80),
     nucleus: clampText(record.nucleus_id, 80),
     offer_candidate_id: offerCandidate,
@@ -400,12 +401,14 @@ function mapAdaptiveLeadToNetNewInbound(record) {
       name: clampText(record.nome, 160),
       email: clampText(record.email, 180).toLowerCase(),
       phone: clampText(record.telefone, 40),
-      preferred_channel: channel,
+      preferred_channel: channel.toUpperCase(),
       organization: clampText(record.empresa, 200),
     },
     attribution: {
       route_family: clampText(record.route_family || record.landing_family, 80),
       source_asset: sourceAsset,
+      source_origin_asset: clampText(record.source_origin_asset_id, 80),
+      source_origin_family: clampText(record.source_origin_route_family, 80),
       campaign: clampText(record.utm_campaign, 80),
       utm_source: clampText(record.utm_source, 80),
       utm_medium: clampText(record.utm_medium, 80),
@@ -429,6 +432,54 @@ function mapAdaptiveLeadToNetNewInbound(record) {
 
 function stableBody(payload) {
   return JSON.stringify(payload);
+}
+
+function netNewTerminalSnapshot(inner, payload, expectedReceipt) {
+  if (!inner || !payload) return null;
+  const outcome = String(inner.outcome || "");
+  if (outcome !== "ACCEPTED" && outcome !== "REJECTED_WITH_REASON") return null;
+  const receipt = inner.receipt_id || inner.receipt;
+  if (
+    inner.logical_id !== payload.logical_id ||
+    !receipt ||
+    (expectedReceipt && String(receipt) !== String(expectedReceipt)) ||
+    inner.inbound_only !== true ||
+    inner.outbound_eligible !== false ||
+    inner.auto_send !== false ||
+    inner.dispatch_attempted !== false
+  ) {
+    return null;
+  }
+  return {
+    outcome,
+    reason: inner.reason ? String(inner.reason).slice(0, 80) : undefined,
+    receipt: String(receipt).slice(0, 80),
+    logical_id: String(inner.logical_id).slice(0, 160),
+  };
+}
+
+async function readNetNewInbound(cfg, payload, expected, { unix, signal, fetchFn }) {
+  const target = new URL(cfg.url);
+  target.search = "";
+  target.hash = "";
+  target.pathname = `${target.pathname.replace(/\/$/, "")}/handraisers/${encodeURIComponent(payload.logical_id)}`;
+  const signedMaterial = `GET\n/api/v1/webhooks/confenge/inbound/handraisers/${payload.logical_id}`;
+  const signature = signWarmblyInbound(cfg.secret, signedMaterial, unix);
+  const response = await fetchFn(target.toString(), {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "User-Agent": "confenge-inbound/1.0",
+      "X-Warmbly-Signature": signature,
+    },
+    signal,
+  });
+  if (response.status !== 200) return null;
+  const data = await response.json().catch(() => ({}));
+  const inner = data && data.data ? data.data : data;
+  const verified = netNewTerminalSnapshot(inner, payload, expected.receipt);
+  if (!verified || verified.outcome !== expected.outcome) return null;
+  return { inner, verified };
 }
 
 function signWarmblyInbound(secret, rawBody, unixSeconds) {
@@ -997,19 +1048,30 @@ async function postSignedInbound(payload, { now = new Date(), env = process.env 
         reason: inner && inner.reason ? String(inner.reason).slice(0, 80) : undefined,
       };
       if (isNetNew) {
-        const accepted =
-          inner &&
-          inner.outcome === "ACCEPTED" &&
-          inner.logical_id === payload.logical_id &&
-          Boolean(receipt) &&
-          inner.inbound_only === true &&
-          inner.outbound_eligible === false &&
-          inner.auto_send === false &&
-          inner.dispatch_attempted === false;
-        if (!accepted) {
-          classified = inner && inner.outcome === "REJECTED_WITH_REASON"
-            ? STATUS.BLOCKED
-            : STATUS.RETRYABLE;
+        const posted = netNewTerminalSnapshot(inner, payload);
+        if (!posted) {
+          classified = STATUS.RETRYABLE;
+          downstream = null;
+        } else {
+          const readback = await readNetNewInbound(cfg, payload, posted, {
+            unix,
+            signal: controller ? controller.signal : undefined,
+            fetchFn,
+          });
+          if (!readback) {
+            classified = STATUS.RETRYABLE;
+            downstream = null;
+          } else {
+            classified = posted.outcome === "ACCEPTED" ? STATUS.DELIVERED : STATUS.BLOCKED;
+            downstream = {
+              ...downstream,
+              downstream_receipt: readback.verified.receipt,
+              logical_id: readback.verified.logical_id,
+              outcome: readback.verified.outcome,
+              reason: readback.verified.reason,
+              readback_verified: true,
+            };
+          }
         }
       }
       // Lead payloads (lead_id/receipt_id present) keep the original fail-closed

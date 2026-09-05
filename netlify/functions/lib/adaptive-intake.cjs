@@ -88,6 +88,8 @@ const ATTRIBUTION_KEYS = Object.freeze([
   "referrer",
   "correlation_id",
   "session_id",
+  "source_origin_asset_id",
+  "source_origin_route_family",
 ]);
 
 const ALLOWED_KEYS = new Set([
@@ -164,6 +166,12 @@ function clamp(value, max) {
 
 function truthy(value) {
   return value === true || ["true", "on", "1", "yes", "sim"].includes(String(value).toLowerCase());
+}
+
+function attributionToken(value) {
+  const text = clamp(value, 80);
+  if (/@/.test(text) || /^\+?\d{10,15}$/.test(text.replace(/[\s()-]/g, ""))) return "";
+  return /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,79}$/.test(text) ? text : "";
 }
 
 function isAdaptivePayload(data) {
@@ -395,6 +403,8 @@ function validateAdaptiveIntake(data, options = {}) {
     governance_source_sha: pin.governance_source_sha,
     offer_candidate_id: pin.offer_candidate_id || DEFAULT_OFFER_CANDIDATE,
     source_asset_id: pin.source_asset_id || DEFAULT_SOURCE_ASSET,
+    source_origin_asset_id: attributionToken(data.source_origin_asset_id),
+    source_origin_route_family: attributionToken(data.source_origin_route_family),
     landing_family: clamp(data.landing_family || data.route_family, 80) || "triagem-tecnica",
     source: SOURCE,
     outbound_eligible: false,

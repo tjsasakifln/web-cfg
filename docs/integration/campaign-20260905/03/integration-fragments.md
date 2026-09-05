@@ -43,7 +43,7 @@ Não remover esses canais para satisfazer o contador: eles são o fallback obrig
 ## 3. Ordem de ativação
 
 1. Integrar e verificar Governance PR #172; registrar SHA/hash finais.
-2. Integrar e publicar a PR Warmbly MV-03; provar readback, idempotência, rejeição segura, WhatsApp-only e ausência de SMTP.
+2. Integrar e publicar a PR Warmbly #266, a partir do HEAD revisado `38ec557b57bb61085282ce7d27bf2fee02e53484`; provar readback HMAC do mesmo `logical_id`, idempotência, rejeição segura, WhatsApp-only, telefone distinto de WhatsApp e ausência de SMTP.
 3. Integrar a PR web MV-03 e os dois fragmentos acima.
 4. Rodar `npm run inbound:gates`, testes de runtime, intake, handoff, analytics e CTA.
 5. Publicar somente pela MV-09.

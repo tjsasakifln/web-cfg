@@ -54,6 +54,20 @@ test("public route is low-friction, transparent and free of sensitive inputs", (
   assert.match(html, /action="\/\.netlify\/functions\/lead"/);
   assert.match(html, /data-config-endpoint="\/\.netlify\/functions\/adaptive-intake-config"/);
   assert.equal((html.match(/data-intake-step/g) || []).length, 2);
+  assert.equal((html.match(/data-fallback-channel=/g) || []).length, 3);
+  const browser = fs.readFileSync(path.resolve("assets/js/adaptive-intake.js"), "utf8");
+  assert.match(browser, /crypto\.subtle\.digest\("SHA-256"/);
+  assert.match(browser, /JSON\.stringify\(\{ digest: digest, key: boundKey \}\)/);
+  assert.doesNotMatch(browser, /sessionStorage\.setItem\([^\n]+currentFingerprint/);
+  assert.match(browser, /confenge_pseo_attribution/);
+  assert.doesNotMatch(browser, /lead_alternative_channel/);
+  for (const eventName of ["whatsapp_click", "email_click", "outbound_click"]) {
+    assert.equal(browser.includes(`"${eventName}"`), true, `non-canonical alternative event: ${eventName}`);
+  }
+  assert.match(browser, /setStep\(0, false\)/);
+  for (const key of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]) {
+    assert.equal(browser.includes(`"${key}"`), true, `missing attribution allowlist: ${key}`);
+  }
 });
 
 function base(overrides = {}) {
@@ -75,6 +89,8 @@ function base(overrides = {}) {
     origem: "/triagem-tecnica/",
     landing_page: "/triagem-tecnica/",
     document_intent: "secure_channel_request",
+    source_origin_asset_id: "private_project_technical_readiness_v1",
+    source_origin_route_family: "prontidao-tecnica-obra-privada",
     idempotency_key: "mv03-test-fixed-001",
     ...overrides,
   };
@@ -97,6 +113,25 @@ describe("MV-03 pure adaptive intake", () => {
     assert.equal(result.fields.location_material, false);
     assert.equal(result.fields.outbound_eligible, false);
     assert.equal(result.fields.auto_send, false);
+  });
+
+  test("keeps every admitted technical nucleus reachable from public vocabulary", () => {
+    const cases = [
+      ["pericia_ou_disputa_tecnica", "expert_evidence_assistance", false],
+      ["avaliacao_de_imovel", "property_valuation", true],
+      ["obra_edificacao_ou_documentacao", "building_engineering_documentation", true],
+      ["seguranca_do_trabalho", "occupational_safety", true],
+      ["licitacao_obra_ou_contrato_publico", "public_works_b2g", false],
+      ["outra_demanda_tecnica", "other_technical_need", false],
+    ];
+    for (const [needCode, nucleus, needsLocation] of cases) {
+      const result = adaptive.validateAdaptiveIntake(base({
+        need_code: needCode,
+        ...(needsLocation ? { location_city: "São José", location_uf: "SC" } : {}),
+      }), { env: adaptiveEnv() });
+      assert.equal(result.ok, true, needCode);
+      assert.equal(result.fields.nucleus_id, nucleus, needCode);
+    }
   });
 
   test("turns another technical need into NEEDS_CONTEXT", () => {
@@ -142,6 +177,13 @@ describe("MV-03 pure adaptive intake", () => {
     assert.equal(adaptive.validateAdaptiveIntake(base({ mensagem: "texto" }), { env }).error, "sensitive_field_rejected");
     assert.equal(adaptive.validateAdaptiveIntake(base({ preferred_channel: "email" }), { env }).error, "contact_channel_mismatch");
     assert.equal(adaptive.validateAdaptiveIntake(base({ asset_id: "tampered_asset" }), { env }).error, "source_asset_unknown");
+    const scrubbedAttribution = adaptive.validateAdaptiveIntake(base({
+      source_origin_asset_id: "pessoa@example.com",
+      source_origin_route_family: "48999999999",
+    }), { env });
+    assert.equal(scrubbedAttribution.ok, true);
+    assert.equal(scrubbedAttribution.fields.source_origin_asset_id, "");
+    assert.equal(scrubbedAttribution.fields.source_origin_route_family, "");
   });
 });
 
@@ -203,7 +245,7 @@ describe("MV-03 config and persisted lead", () => {
   });
 
   test("persists, returns a PII-free receipt and replays idempotently", async () => {
-    const payload = base();
+    const payload = base({ utm_source: "google", utm_campaign: "triagem_tecnica" });
     const first = await leadModule.handler(event(payload));
     const firstBody = JSON.parse(first.body);
     assert.equal(first.statusCode, 201);
@@ -222,8 +264,36 @@ describe("MV-03 config and persisted lead", () => {
     assert.equal(stored.source, "CONFENGE_WEB");
     assert.equal(stored.outbound_eligible, false);
     assert.equal(stored.auto_send, false);
+    assert.equal(stored.utm_source, "google");
+    assert.equal(stored.utm_campaign, "triagem_tecnica");
+    assert.equal(stored.source_origin_asset_id, "private_project_technical_readiness_v1");
+    assert.equal(stored.source_origin_route_family, "prontidao-tecnica-obra-privada");
     assert.match(stored.delivery.email.status, /^skipped(?:_adaptive)?$/);
     assert.match(stored.delivery.notify.status, /^skipped(?:_adaptive)?$/);
+  });
+
+  test("rejects reuse of an adaptive idempotency key with different admission material", async () => {
+    const reused = base({
+      idempotency_key: "mv03-test-conflict-001",
+      need_code: "pericia_ou_disputa_tecnica",
+    });
+    const first = await leadModule.handler(event(reused));
+    assert.equal(first.statusCode, 201);
+
+    const changed = await leadModule.handler(event({
+      ...reused,
+      need_code: "licitacao_obra_ou_contrato_publico",
+    }));
+    assert.equal(changed.statusCode, 409);
+    assert.equal(JSON.parse(changed.body).error, "idempotency_conflict");
+
+    const unbound = base({ idempotency_key: "mv03-test-unbound-001" });
+    const unboundFirst = await leadModule.handler(event(unbound));
+    const unboundRecord = await store.get(JSON.parse(unboundFirst.body).lead_id);
+    delete unboundRecord.idempotency_material_hash;
+    const unboundRetry = await leadModule.handler(event(unbound));
+    assert.equal(unboundRetry.statusCode, 409);
+    assert.equal(JSON.parse(unboundRetry.body).error, "idempotency_conflict");
   });
 
   test("persists another need as NEEDS_CONTEXT and safely rejects a sensitive payload", async () => {
@@ -296,6 +366,8 @@ describe("MV-03 signed Warmbly handoff", () => {
     admission_policy_version: pin.canonical_name,
     admission_policy_hash: pin.policy_hash,
     governance_source_sha: pin.governance_source_sha,
+    source_origin_asset_id: "private_project_technical_readiness_v1",
+    source_origin_route_family: "prontidao-tecnica-obra-privada",
     outbound_eligible: false,
     auto_send: false,
   };
@@ -309,13 +381,21 @@ describe("MV-03 signed Warmbly handoff", () => {
     const payload = handoff.mapAdaptiveLeadToNetNewInbound(record);
     assert.equal(payload.origin, "CONFENGE_WEB");
     assert.equal(payload.source.system, "web-cfg");
+    assert.equal(payload.hash, pin.policy_hash);
     assert.equal(payload.acquisition_lane, "NET_NEW_INBOUND");
     assert.equal(payload.nucleus_id, "other_technical_need");
+    assert.equal(payload.landing_asset.kind, "TRIAGE");
     assert.equal(payload.site_location.material, false);
     assert.equal(payload.protected_contact.phone, "5548988344559");
+    assert.equal(payload.protected_contact.preferred_channel, "WHATSAPP");
+    assert.equal(payload.protected_contact.organization, "Organização Sintética");
     assert.equal(payload.attribution.phone, undefined);
+    assert.equal(payload.attribution.source_origin_asset, "private_project_technical_readiness_v1");
+    assert.equal(payload.attribution.source_origin_family, "prontidao-tecnica-obra-privada");
     assert.equal(payload.outbound_eligible, false);
     assert.equal(payload.auto_send, false);
+    const byPhone = handoff.mapAdaptiveLeadToNetNewInbound({ ...record, canal_preferido: "phone" });
+    assert.equal(byPhone.protected_contact.preferred_channel, "PHONE");
   });
 
   test("accepts only an explicit safe receipt, blocks rejection and retries UNKNOWN", async () => {
@@ -325,8 +405,14 @@ describe("MV-03 signed Warmbly handoff", () => {
       { outcome: "REJECTED_WITH_REASON", reason: "nucleus_unknown", receipt: "warmbly-receipt-2" },
       { outcome: "UNKNOWN", reason: "downstream_unavailable", receipt: "warmbly-receipt-3" },
     ];
-    handoff.setFetchForTests(async () => {
-      const reply = replies.shift();
+    let posted = null;
+    handoff.setFetchForTests(async (url, options) => {
+      if (options.method === "POST") posted = replies.shift();
+      const reply = posted;
+      if (options.method === "GET") {
+        assert.match(String(url), /\/api\/v1\/webhooks\/confenge\/inbound\/handraisers\/lead-/);
+        assert.match(options.headers["X-Warmbly-Signature"], /^t=\d+,v1=[0-9a-f]{64}$/);
+      }
       return new Response(JSON.stringify({ data: {
         ...reply,
         logical_id: payload.logical_id,
@@ -334,11 +420,12 @@ describe("MV-03 signed Warmbly handoff", () => {
         outbound_eligible: false,
         auto_send: false,
         dispatch_attempted: false,
-      } }), { status: 201, headers: { "content-type": "application/json" } });
+      } }), { status: options.method === "GET" ? 200 : 201, headers: { "content-type": "application/json" } });
     });
 
     const accepted = await handoff.postSignedInbound(payload, { env });
-    assert.equal(accepted.status, handoff.STATUS.DELIVERED);
+    assert.equal(accepted.status, handoff.STATUS.DELIVERED, JSON.stringify(accepted));
+    assert.equal(accepted.downstream.readback_verified, true);
     assert.equal(accepted.downstream.outcome, "ACCEPTED");
     assert.equal(accepted.downstream.downstream_receipt, "warmbly-receipt-1");
 
@@ -348,5 +435,37 @@ describe("MV-03 signed Warmbly handoff", () => {
 
     const unknown = await handoff.postSignedInbound(payload, { env });
     assert.equal(unknown.status, handoff.STATUS.RETRYABLE);
+  });
+
+  test("retries uncorrelated rejection and mismatched readback instead of blocking or delivering", async () => {
+    const payload = handoff.mapAdaptiveLeadToNetNewInbound(record);
+    handoff.setFetchForTests(async () => new Response(JSON.stringify({ data: {
+      outcome: "REJECTED_WITH_REASON",
+      reason: "nucleus_unknown",
+      logical_id: "WRONG",
+      inbound_only: true,
+      outbound_eligible: false,
+      auto_send: false,
+      dispatch_attempted: false,
+    } }), { status: 201, headers: { "content-type": "application/json" } }));
+    const uncorrelated = await handoff.postSignedInbound(payload, { env });
+    assert.equal(uncorrelated.status, handoff.STATUS.RETRYABLE);
+
+    let call = 0;
+    handoff.setFetchForTests(async () => {
+      call += 1;
+      return new Response(JSON.stringify({ data: {
+        outcome: "ACCEPTED",
+        receipt: call === 1 ? "warmbly-receipt-post" : "warmbly-receipt-other",
+        logical_id: payload.logical_id,
+        inbound_only: true,
+        outbound_eligible: false,
+        auto_send: false,
+        dispatch_attempted: false,
+      } }), { status: call === 1 ? 201 : 200, headers: { "content-type": "application/json" } });
+    });
+    const mismatched = await handoff.postSignedInbound(payload, { env });
+    assert.equal(mismatched.status, handoff.STATUS.RETRYABLE);
+    assert.equal(call, 2);
   });
 });

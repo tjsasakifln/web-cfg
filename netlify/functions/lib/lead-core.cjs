@@ -1005,6 +1005,8 @@ function validateAndNormalize(data) {
     lead.nucleus_id = adaptiveFields.nucleus_id;
     lead.offer_candidate_id = adaptiveFields.offer_candidate_id;
     lead.source_asset_id = adaptiveFields.source_asset_id;
+    lead.source_origin_asset_id = adaptiveFields.source_origin_asset_id || null;
+    lead.source_origin_route_family = adaptiveFields.source_origin_route_family || null;
     lead.landing_family = adaptiveFields.landing_family;
     lead.city_class = adaptiveFields.city_class;
     lead.site_class = adaptiveFields.site_class;
