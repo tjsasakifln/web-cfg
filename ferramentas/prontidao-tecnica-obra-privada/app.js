@@ -88,6 +88,7 @@
     }
     lastText = lines.join("\n");
     lastBridge = lastText;
+    if (resultEl) resultEl.hidden = false;
     if (resultActions) resultActions.hidden = false;
     if (cta) {
       cta.hidden = false;
@@ -124,6 +125,7 @@
       form.reset();
       while (resultBody.firstChild) resultBody.removeChild(resultBody.firstChild);
       add(resultBody, "p", "", "O resultado aparece aqui depois de classificar as respostas. Contato não é exigido.");
+      if (resultEl) resultEl.hidden = true;
       if (resultActions) resultActions.hidden = true;
       if (cta) cta.hidden = true;
       var handoff = document.getElementById("prontidao-handoff");

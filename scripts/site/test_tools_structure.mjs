@@ -129,6 +129,17 @@ if (!reequilibrio.includes('id="reequilibrio-handoff"')
 if (!reequilibrio.includes("btn-copy") || !reequilibrio.includes("btn-dl") || !reequilibrio.includes("btn-print") || !reequilibrio.includes("btn-reset")) {
   console.error("FAIL reequilibrio_clear_export"); fail++;
 } else console.log("PASS reequilibrio_clear_export");
+const prontidao = readFileSync(resolve(ROOT, "ferramentas/prontidao-tecnica-obra-privada/index.html"), "utf8");
+if (!prontidao.includes('id="prontidao-handoff"')
+    || !prontidao.includes('action="/.netlify/functions/lead"')
+    || !prontidao.includes('data-receipt-required="true"')
+    || !prontidao.includes('data-result-gated-capture="true"')
+    || !prontidao.includes('data-result-source="#resultado"')
+    || !/id="resultado"[^>]*\bhidden\b/.test(prontidao)
+    || !/class="[^"]*\bbutton\b[^"]*\btool-run\b|\btool-run\b[^"]*\bbutton\b/.test(prontidao)
+    || !/id="btn-reset"[^>]*\bbutton-secondary\b|\bbutton-secondary\b[^>]*id="btn-reset"/.test(prontidao)) {
+  console.error("FAIL prontidao_result_gated_capture_touch"); fail++;
+} else console.log("PASS prontidao_result_gated_capture_touch");
 if (!reequilibrio.includes("Premissas") && !reequilibrio.includes("premissas")) {
   console.error("FAIL reequilibrio_premises"); fail++;
 } else console.log("PASS reequilibrio_premises");

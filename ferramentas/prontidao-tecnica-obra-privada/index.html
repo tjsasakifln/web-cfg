@@ -257,12 +257,12 @@
 </fieldset>
 
 <div class="pptr-actions">
-<button class="tool-run" type="submit" disabled aria-describedby="runtime-status">Ver resultado</button>
-<button type="button" class="secondary" id="btn-reset" data-tool-reset>Limpar respostas</button>
+<button class="button button-primary tool-run" type="submit" disabled aria-describedby="runtime-status">Ver resultado</button>
+<button type="button" class="button button-secondary" id="btn-reset" data-tool-reset>Limpar respostas</button>
 </div>
 <p>Respostas ficam só neste navegador.</p>
 </form>
-<section class="tool-result-panel pptr-result" id="resultado" tabindex="-1" aria-live="polite">
+<section class="tool-result-panel pptr-result" id="resultado" hidden tabindex="-1" aria-live="polite">
 <h2>Resultado da autoavaliação</h2>
 <p>O resultado aparece aqui depois de classificar as respostas. Contato não é exigido.</p>
 <div id="resultado-corpo"></div>
@@ -291,6 +291,8 @@
     data-adaptive-intake="true"
     data-ajax="true"
     data-success-mode="inline"
+    data-result-gated-capture="true"
+    data-result-source="#resultado"
    
     data-form-multistep="false"
    

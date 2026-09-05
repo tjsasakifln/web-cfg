@@ -80,6 +80,22 @@ expect(
   "capture_after_result",
   canary.indexOf('id="prontidao-capture-form"') > canary.indexOf('id="resultado"'),
 );
+expect(
+  "canary_result_gated_capture",
+  /data-result-gated-capture="true"/.test(canary) && /data-result-source="#resultado"/.test(canary),
+);
+expect(
+  "canary_result_starts_hidden",
+  /id="resultado"[^>]*\bhidden\b/.test(canary),
+);
+expect(
+  "canary_run_button_touch_class",
+  /class="[^"]*\bbutton\b[^"]*\btool-run\b|\btool-run\b[^"]*\bbutton\b/.test(canary),
+);
+expect(
+  "canary_reset_button_touch_class",
+  /id="btn-reset"[^>]*\bbutton-secondary\b|\bbutton-secondary\b[^>]*id="btn-reset"/.test(canary),
+);
 expect("offer_id", canary.includes("private_project_technical_readiness_assessment"));
 expect("asset_id", canary.includes("private_project_technical_readiness_v1"));
 const nuclei = [
