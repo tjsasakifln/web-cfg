@@ -6,6 +6,7 @@ hard-code a golden HTML dump, and does not start past the HTML.
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import re
@@ -20,7 +21,11 @@ from scripts.site.public_ia import (
     nucleus_items,
     validate_contract,
 )
-from scripts.site.shell_nav import FROZEN_SHELL_FILES, shipped_html_files
+from scripts.site.shell_nav import (
+    FROZEN_SHELL_FILES,
+    HASH_PINNED_SHELL_FILES,
+    shipped_html_files,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -152,6 +157,20 @@ def test_withheld_hubs_are_isolated_templates() -> None:
             assert 'href="#formulario-contato"' in html or "/#formulario-contato" in html
 
 
+def test_home_critical_css_hash_is_authorized_in_headers() -> None:
+    html = _home()
+    match = re.search(
+        r'<style data-home-deliverables-critical="">(.*?)</style>', html, re.S
+    )
+    assert match, "missing home critical style block"
+    digest = (
+        "sha256-"
+        + base64.b64encode(hashlib.sha256(match.group(1).encode("utf-8")).digest()).decode()
+    )
+    headers = (ROOT / "_headers").read_text(encoding="utf-8")
+    assert f"'{digest}'" in headers, digest
+
+
 def test_form_runtime_bytes_untouched() -> None:
     html = _home()
     form = re.search(
@@ -218,3 +237,24 @@ def test_frozen_bofu_pages_were_not_rewritten_by_this_campaign() -> None:
     for rel in sorted(FROZEN_SHELL_FILES):
         html = (ROOT / rel).read_text(encoding="utf-8", errors="replace")
         assert "Engenharia, Perícias e Inteligência Técnica" not in html
+
+
+def test_hash_pinned_rain_canary_keeps_approved_material() -> None:
+    from scripts.editorial.striking_distance import (
+        approval_errors,
+        evaluate_striking_distance,
+        load_decisions,
+        page_material_hash,
+    )
+
+    rel = "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html"
+    assert rel in HASH_PINNED_SHELL_FILES
+    shipped = {path.relative_to(ROOT).as_posix() for path in shipped_html_files()}
+    assert rel not in shipped
+    assert rel not in FROZEN_SHELL_FILES
+    row = next(item for item in load_decisions()["urls"] if item.get("canary") is True)
+    assert row["html"] == rel
+    assert page_material_hash(row) == row["approval"]["material_hash"]
+    assert approval_errors(row) == []
+    report = evaluate_striking_distance()
+    assert report["ok"] is True, report["fails"]

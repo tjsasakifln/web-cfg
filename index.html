@@ -24,8 +24,9 @@ body[data-content-cluster="home"] .hero{padding:clamp(2.75rem,5.5vw,4.5rem) 0 cl
 body[data-content-cluster="home"] .hero h1{max-width:22ch;margin:0 0 1.15rem;color:#071a31;font-size:clamp(2.15rem,4.1vw,3.3rem);line-height:1.04;letter-spacing:-.032em}
 body[data-content-cluster="home"] .hero h1 .type-serif{display:block;color:#2d6f2d;font-family:inherit}
 body[data-content-cluster="home"] .hero-lead{max-width:50ch;margin:0 0 1.15rem;color:#5d6a7a;font-size:clamp(1rem,1.35vw,1.12rem);line-height:1.6}
-body[data-content-cluster="home"] .home-hero-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:1.25rem;align-items:center;max-width:none}
+body[data-content-cluster="home"] .home-hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(272px,.68fr);gap:clamp(2rem,4.5vw,4.5rem);align-items:center;max-width:none}
 body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1.5rem;padding:1rem 0 0;border-top:1px solid #dce3e8;color:#071a31;font-size:1rem;font-weight:600;line-height:1.55}
+@media(max-width:940px){body[data-content-cluster="home"] .home-hero-grid{grid-template-columns:minmax(0,1fr);gap:1.25rem}}
 @media(max-width:700px){body[data-content-cluster="home"] .hero{padding:1.4rem 0 1.15rem}body[data-content-cluster="home"] .hero-lead{font-size:1rem;margin-bottom:.9rem}body[data-content-cluster="home"] .hero h1{font-size:clamp(1.95rem,7.5vw,2.4rem);max-width:none}body[data-content-cluster="home"] .hero-deliverable{font-size:.97rem;margin-bottom:1rem;padding-top:.8rem}}
 </style>
 <link href="/styles.css" rel="stylesheet"/>
@@ -35,7 +36,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1.
 <meta content="pt_BR" property="og:locale"/>
 <meta content="CONFENGE" property="og:site_name"/>
 <meta content="Decisão técnica documentada, com responsável e data." property="og:title"/>
-<meta content="Engenharia, perícias e inteligência técnica. Perícia, avaliação, edificação, segurança do trabalho e obras públicas — com próximo passo de triagem." property="og:description"/>
+<meta content="Engenharia, perícias e inteligência técnica. Perícia, avaliação, edificação, segurança do trabalho e obras públicas, com próximo passo de triagem." property="og:description"/>
 <meta content="https://confenge.com.br/" property="og:url"/>
 <meta content="https://confenge.com.br/assets/og-confenge.jpg" property="og:image"/>
 <meta content="1200" property="og:image:width"/>
@@ -90,7 +91,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1.
 <div class="hero-copy">
 <p class="eyebrow hero-eyebrow"><span aria-hidden="true" class="eyebrow-dot"></span>Engenharia, Perícias e Inteligência Técnica</p>
 <h1 id="hero-title">Decisão técnica documentada, <span class="type-serif">com responsável e data.</span></h1>
-<p class="hero-lead">Para advogados, empresas, condomínios e construtoras: perícia, avaliação, edificação, segurança do trabalho ou contrato público — a CONFENGE organiza o que a decisão precisa ver.</p>
+<p class="hero-lead">Para advogados, empresas, condomínios e construtoras: perícia, avaliação, edificação, segurança do trabalho ou contrato público, a CONFENGE organiza o que a decisão precisa ver.</p>
 <p class="hero-deliverable">Você recebe parecer, laudo ou relatório com responsável nomeado. Assistência técnica não é advocacia.</p>
 <div class="hero-actions">
 <a class="button button-primary button-lg" data-analytics-surface="primary-triage-action" data-cta-position="hero" data-event-name="cta_click" href="#formulario-contato">Registrar situação para triagem <svg class="icon"><use href="#i-arrow"></use></svg></a>
@@ -130,7 +131,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1.
 <p class="journey-kind">Avaliações de imóveis</p>
 <div class="journey-row-body">
 <h3>Saber o valor defensável de um imóvel.</h3>
-<p>Laudo ou parecer para disputa, garantia, negociação, patrimônio ou decisão de investimento — com método e limites visíveis.</p>
+<p>Laudo ou parecer para disputa, garantia, negociação, patrimônio ou decisão de investimento, com método e limites visíveis.</p>
 <p class="journey-row-actions">
 <a class="journey-alt-link" href="#formulario-contato">Pedir triagem deste núcleo</a>
 </p>
@@ -183,7 +184,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1.
 <ul class="offer-facts">
 <li><strong>Prova disponível hoje:</strong> o núcleo de obras públicas já publica método, exemplos demonstrativos e rotas de entrada. Os demais núcleos não recebem copy de preenchimento.</li>
 <li><strong>Limite:</strong> assistência técnica não é advocacia. Perito cadastrado não é perito do TJSC nem perito nomeado.</li>
-<li><strong>Contratação:</strong> ART e NF acompanham o escopo quando a atribuição profissional exigir — não como selo genérico.</li>
+<li><strong>Contratação:</strong> ART e NF acompanham o escopo quando a atribuição profissional exigir, não como selo genérico.</li>
 </ul>
 </div>
 </section>
@@ -196,7 +197,7 @@ body[data-content-cluster="home"] .hero-deliverable{max-width:52ch;margin:0 0 1.
 <p class="eyebrow">Canário de inteligência privada</p>
 <h2 id="private-intel-title">Prontidão técnica de projeto privado</h2>
 <p>Ativo candidato <code>private_project_technical_readiness_v1</code>. A campanha 09 é dona do canário; esta faixa não copia schema, não afirma resultado e não é oferta publicada.</p>
-<p>Enquanto prova, oferta e ação terminal não existirem neste repositório, o próximo passo é a triagem técnica — sem indexar um hub genérico.</p>
+<p>Enquanto prova, oferta e ação terminal não existirem neste repositório, o próximo passo é a triagem técnica, sem indexar um hub genérico.</p>
 <p><a class="journey-alt-link" href="#formulario-contato">Pedir triagem do ativo privado</a></p>
 </div>
 </aside>

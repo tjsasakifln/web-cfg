@@ -102,6 +102,14 @@ def _frozen_shell_files() -> frozenset[str]:
 
 FROZEN_SHELL_FILES = _frozen_shell_files()
 
+# Hash-bound editorial canaries (#127). Chrome sync changes the approval
+# material hash. Skip until goal 97 re-approves; do not widen FROZEN_SHELL_FILES.
+HASH_PINNED_SHELL_FILES = frozenset(
+    {
+        "conteudos/chuva-prorrogacao-prazo-obra-publica/index.html",
+    }
+)
+
 DESKTOP_NAV_RE = re.compile(
     r'(<nav\b[^>]*\bclass="[^"]*\bdesktop-nav\b[^"]*"[^>]*>)(.*?)(</nav>)',
     re.S | re.I,
@@ -273,6 +281,8 @@ def shipped_html_files() -> list[Path]:
         if any(part in SKIP_DIR_PARTS for part in rel.parts):
             continue
         if rel.as_posix() in FROZEN_SHELL_FILES:
+            continue
+        if rel.as_posix() in HASH_PINNED_SHELL_FILES:
             continue
         out.append(path)
     return out
