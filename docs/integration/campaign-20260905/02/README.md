@@ -31,4 +31,4 @@ Repetir o sistema 100 vezes melhora a operação: novas credenciais entram por c
 - A campanha não alterou home, navegação, footer, formulários, famílias públicas, sitemap, workflow ou deploy.
 - Inbound não aciona outbound nem SMTP.
 
-Veja [evidence-audit.md](evidence-audit.md), [trust-proof-block.md](trust-proof-block.md), [national-professional-formalities-research.md](national-professional-formalities-research.md) e [validation-results.md](validation-results.md).
+Veja [evidence-audit.md](evidence-audit.md), [trust-proof-block.md](trust-proof-block.md), [national-professional-formalities-research.md](national-professional-formalities-research.md), [sitemap-lastmod-handoff.md](sitemap-lastmod-handoff.md) e [validation-results.md](validation-results.md).
