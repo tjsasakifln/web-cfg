@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Diagnóstico de prontidão técnica de obra privada | CONFENGE</title>
+<meta name="description" content="Identifique, antes de contratar, executar ou retomar uma obra privada, quais evidências técnicas estão presentes, ausentes ou desconhecidas. Sem cadastro."/>
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body data-asset-id="private_project_technical_readiness_v1" data-nucleus="building_engineering_documentation">
+<a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+<main id="conteudo" class="pptr-page">
+<p class="eyebrow">Canário isolado · Engenharia de edificações e documentação</p>
+<h1>Identifique evidências técnicas presentes, ausentes ou desconhecidas antes de contratar, executar ou retomar uma obra privada</h1>
+<p class="lead">Responda só classes fechadas. O resultado sai completo neste navegador, sem nome, contato, documento, upload, endereço ou valor. Não substitui conferência dos originais, não emite ART e não valida norma.</p>
+
+<section class="pptr-method" aria-labelledby="metodo">
+<p class="eyebrow">Método e limites</p>
+<h2 id="metodo">Como esta leitura é feita</h2>
+<p>Cada resposta é um fato informado pelo usuário. O estado de cada domínio é um cálculo determinístico: evidência presente, lacuna ou desconhecido. A consequência decisória é inferência. Dado ausente permanece desconhecido e não melhora nem piora a prontidão.</p>
+<p>Esta página não emite ART, não valida norma e não substitui análise documental. Autoavaliação pública não é conferência dos originais.</p>
+<ul>
+<li>Fato do usuário: a classe escolhida.</li>
+<li>Cálculo: estado do domínio e prioridade por regra explícita, sem percentual.</li>
+<li>Inferência: consequência decisória possível, sem alarmismo.</li>
+<li>Desconhecido: pergunta não respondida ou marcada como desconhecida.</li>
+</ul>
+</section>
+
+<p class="pptr-runtime" id="runtime-status" role="status">Ative o JavaScript para classificar as respostas neste navegador. Nada é enviado à CONFENGE para ver o resultado.</p>
+<noscript><p>Sem JavaScript o formulário permanece bloqueado. O método, os sete domínios e os limites continuam visíveis acima. O cálculo determinístico não roda no servidor.</p></noscript>
+
+<form id="diagnostico" class="pptr-form" method="post" action="#">
+<fieldset class="pptr-runtime-fields" disabled>
+<legend>Decisão, escopo e estágio</legend>
+<div class="pptr-field">
+<label for="work_stage">Estágio declarado da obra</label>
+<select id="work_stage" name="work_stage">
+<option value="UNKNOWN">Desconhecido</option>
+<option value="planejamento">Planejamento ou estudo</option>
+<option value="projeto">Projeto</option>
+<option value="contratacao">Contratação</option>
+<option value="execucao">Execução</option>
+<option value="entrega">Entrega ou recebimento</option>
+<option value="operacao">Operação</option>
+<option value="retomada">Retomada</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="decision_on_table">Decisão que está na mesa</label>
+<select id="decision_on_table" name="decision_on_table">
+<option value="UNKNOWN">Desconhecida</option>
+<option value="contratar_projeto">Contratar projeto</option>
+<option value="contratar_execucao">Contratar execução</option>
+<option value="iniciar_execucao">Iniciar execução</option>
+<option value="retomar_obra">Retomar obra</option>
+<option value="aprovar_medicao">Aprovar medição</option>
+<option value="aceitar_entrega">Aceitar entrega</option>
+<option value="operar_manter">Operar ou manter</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="scope_record">Registro de escopo</label>
+<select id="scope_record" name="scope_record">
+<option value="UNKNOWN">Desconhecido</option>
+<option value="escrito_assinado">Escrito e assinado</option>
+<option value="escrito_sem_assinatura">Escrito, sem assinatura</option>
+<option value="so_verbal">Só verbal</option>
+</select>
+</div>
+</fieldset>
+
+<fieldset class="pptr-runtime-fields" disabled>
+<legend>Projetos, revisões e responsabilidade</legend>
+<div class="pptr-field">
+<label for="design_set">Conjunto de projetos</label>
+<select id="design_set" name="design_set">
+<option value="UNKNOWN">Desconhecido</option>
+<option value="completo_revisao_atual">Completo na revisão atual</option>
+<option value="parcial">Parcial</option>
+<option value="nenhum">Nenhum conjunto localizado</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="revision_control">Controle de revisão</label>
+<select id="revision_control" name="revision_control">
+<option value="UNKNOWN">Desconhecido</option>
+<option value="numerada_com_datas">Numerada, com datas</option>
+<option value="arquivos_sem_controle">Arquivos sem controle</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="design_responsibility">Responsabilidade por disciplina</label>
+<select id="design_responsibility" name="design_responsibility">
+<option value="UNKNOWN">Desconhecida</option>
+<option value="nomeada_por_disciplina">Nomeada por disciplina</option>
+<option value="nomeada_parcial">Nomeada só em parte</option>
+<option value="nao_nomeada">Não nomeada</option>
+</select>
+</div>
+</fieldset>
+
+<fieldset class="pptr-runtime-fields" disabled>
+<legend>Quantitativos, orçamento, bases e memória</legend>
+<div class="pptr-field">
+<label for="quantities">Quantitativos</label>
+<select id="quantities" name="quantities">
+<option value="UNKNOWN">Desconhecidos</option>
+<option value="takeoff_ligado_projetos">Levantamento ligado aos projetos</option>
+<option value="planilha_sem_rastreio">Planilha sem rastreio</option>
+<option value="nenhum">Nenhum quantitativo localizado</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="budget">Orçamento</label>
+<select id="budget" name="budget">
+<option value="UNKNOWN">Desconhecido</option>
+<option value="composicoes_e_bases">Com composições e bases</option>
+<option value="preco_global_so">Só preço global</option>
+<option value="nenhum">Nenhum orçamento localizado</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="calc_memory">Memória de cálculo</label>
+<select id="calc_memory" name="calc_memory">
+<option value="UNKNOWN">Desconhecida</option>
+<option value="presente_ligada">Presente e ligada ao quantitativo</option>
+<option value="presente_desligada">Presente, sem ligação</option>
+<option value="nenhum">Nenhuma memória localizada</option>
+</select>
+</div>
+</fieldset>
+
+<fieldset class="pptr-runtime-fields" disabled>
+<legend>Compatibilização, constructability e BIM</legend>
+<div class="pptr-field">
+<label for="coordination">Compatibilização e issue register</label>
+<select id="coordination" name="coordination">
+<option value="UNKNOWN">Desconhecido</option>
+<option value="issue_register_rastreado">Issue register rastreado</option>
+<option value="reunioes_sem_registro">Reuniões sem registro</option>
+<option value="nenhum">Nenhum registro localizado</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="bim_or_constructability">BIM ou revisão de construtibilidade</label>
+<select id="bim_or_constructability" name="bim_or_constructability">
+<option value="UNKNOWN">Desconhecido</option>
+<option value="modelo_federado_atual">Modelo federado atual</option>
+<option value="revisao_construtibilidade_registrada">Revisão de construtibilidade registrada</option>
+<option value="modelos_isolados">Modelos isolados</option>
+<option value="nenhum">Nenhum modelo ou revisão localizada</option>
+</select>
+</div>
+</fieldset>
+
+<fieldset class="pptr-runtime-fields" disabled>
+<legend>Mudanças, execução, medição e rastreabilidade</legend>
+<p>Perguntas usadas quando o estágio ou a decisão envolvem execução, medição, entrega, operação ou retomada.</p>
+<div class="pptr-field">
+<label for="change_control">Controle de mudanças</label>
+<select id="change_control" name="change_control">
+<option value="UNKNOWN">Desconhecido</option>
+<option value="registro_escrito_com_impacto">Registro escrito com impacto</option>
+<option value="informal">Informal</option>
+<option value="nenhum">Nenhum registro localizado</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="execution_records">Registros de execução</label>
+<select id="execution_records" name="execution_records">
+<option value="UNKNOWN">Desconhecidos</option>
+<option value="diario_e_base_medicao">Diário e base de medição</option>
+<option value="parcial">Parcial</option>
+<option value="nenhum">Nenhum registro localizado</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="measurement_trace">Rastreabilidade da medição</label>
+<select id="measurement_trace" name="measurement_trace">
+<option value="UNKNOWN">Desconhecida</option>
+<option value="ligada_orcamento_e_executado">Ligada ao orçamento e ao executado</option>
+<option value="planilha_isolada">Planilha isolada</option>
+<option value="nenhum">Nenhuma medição localizada</option>
+</select>
+</div>
+</fieldset>
+
+<fieldset class="pptr-runtime-fields" disabled>
+<legend>As-built, entrega, operação e documentação final</legend>
+<p>Perguntas usadas quando o estágio ou a decisão envolvem entrega, operação ou retomada.</p>
+<div class="pptr-field">
+<label for="asbuilt">As-built</label>
+<select id="asbuilt" name="asbuilt">
+<option value="UNKNOWN">Desconhecido</option>
+<option value="atual">Atual</option>
+<option value="desatualizado">Desatualizado</option>
+<option value="nenhum">Nenhum as-built localizado</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="handover_docs">Documentação de entrega e operação</label>
+<select id="handover_docs" name="handover_docs">
+<option value="UNKNOWN">Desconhecida</option>
+<option value="manuais_garantias_ensaios">Manuais, garantias e ensaios</option>
+<option value="parcial">Parcial</option>
+<option value="nenhum">Nenhum pacote localizado</option>
+</select>
+</div>
+</fieldset>
+
+<fieldset class="pptr-runtime-fields" disabled>
+<legend>Condições declaradas de ART e inspeções</legend>
+<p>Só condições declaradas. Esta leitura não conclui validade, atribuição nem responsabilidade técnica.</p>
+<div class="pptr-field">
+<label for="art_declared">Condição declarada de ART</label>
+<select id="art_declared" name="art_declared">
+<option value="UNKNOWN">Desconhecida</option>
+<option value="emitida_declarada">Declarada como emitida</option>
+<option value="nao_emitida_declarada">Declarada como não emitida</option>
+<option value="nao_aplicavel_declarada">Declarada como não aplicável ao recorte</option>
+</select>
+</div>
+<div class="pptr-field">
+<label for="inspections_declared">Condição declarada de inspeções</label>
+<select id="inspections_declared" name="inspections_declared">
+<option value="UNKNOWN">Desconhecida</option>
+<option value="registradas">Declaradas como registradas</option>
+<option value="nao_registradas">Declaradas como não registradas</option>
+</select>
+</div>
+</fieldset>
+
+<div class="pptr-actions">
+<button class="tool-run" type="submit" disabled aria-describedby="runtime-status">Ver resultado</button>
+<button type="button" class="secondary" id="btn-reset" data-tool-reset>Limpar respostas</button>
+</div>
+<p>Respostas ficam só neste navegador.</p>
+</form>
+
+<section class="pptr-result" id="resultado" tabindex="-1" aria-live="polite">
+<h2>Resultado da autoavaliação</h2>
+<p>O resultado aparece aqui depois de classificar as respostas. Contato não é exigido.</p>
+<div id="resultado-corpo"></div>
+<div class="pptr-actions" id="resultado-acoes" hidden>
+<button type="button" class="secondary" id="btn-copy" data-tool-copy>Copiar leitura</button>
+<button type="button" class="secondary" id="btn-print">Imprimir</button>
+</div>
+</section>
+
+<section class="pptr-cta" id="cta-comercial" hidden>
+<h2>Depois do resultado</h2>
+<p>Evidência pública e autoavaliação não substituem análise documental. Se houver lacuna, o artefato abaixo é o recorte que poderia fechá-la.</p>
+<p id="cta-artefato"></p>
+<p>A triagem comercial, quando integrada, usa o componente de captura da campanha 08 com <code>source_asset_id</code>, núcleo e oferta candidata, sem dado pessoal. Envio automático permanece desligado.</p>
+<pre class="pptr-payload" id="cta-payload"></pre>
+<button type="button" class="secondary" id="btn-copy-bridge">Copiar contexto de triagem</button>
+</section>
+</main>
+<script src="../../../../../assets/js/private-project-technical-readiness.js"></script>
+<script src="../../../../../assets/js/tools-common.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
