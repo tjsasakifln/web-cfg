@@ -33,7 +33,7 @@
     "manual_route_allowlist": false,
     "authority": "data/organic/public-family-registry.json",
     "rule": "Derive every lead-bearing public HTML form, including declared noindex commercial configuration steps, then exclude mutation on the six routes held by the frozen unlock plan.",
-    "expected_active_capture_routes": 23,
+    "expected_active_capture_routes": 26,
     "expected_declared_ctas": 128
   },
   "invariants": [
