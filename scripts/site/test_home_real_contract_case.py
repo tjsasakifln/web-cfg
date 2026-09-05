@@ -40,9 +40,9 @@ def test_home_contract_profiles_are_manual_and_accessible():
     selector = selector_match.group(0)
     assert selector.count('role="tab"') == 3
     assert selector.count('role="tabpanel"') == 3
-    assert selector.count('data-event-name="evidence_drilldown"') == 3
+    assert 'data-event-name="evidence_drilldown"' not in selector
     assert 'data-event-name="proof_expand"' not in selector
-    assert selector.count('data-cta-position="market_context"') == 6
+    assert 'data-cta-position="market_context"' not in selector
     assert 'data-cta-position="hero_proof"' not in selector
     assert selector.count('aria-selected="true"') == 1
     assert selector.count('aria-selected="false"') == 2
