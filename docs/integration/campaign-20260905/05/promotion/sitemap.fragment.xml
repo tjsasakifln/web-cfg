@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MV-09: copy only route-exact candidates whose offer, capture and gates pass in the same SHA. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://confenge.com.br/engenharia-projetos-obras/</loc>
+    <lastmod>2026-09-05</lastmod>
+  </url>
+  <url>
+    <loc>https://confenge.com.br/compatibilizacao-revisao-projetos/</loc>
+    <lastmod>2026-09-05</lastmod>
+  </url>
+  <url>
+    <loc>https://confenge.com.br/quantitativos-orcamento-obras/</loc>
+    <lastmod>2026-09-05</lastmod>
+  </url>
+  <url>
+    <loc>https://confenge.com.br/inspecao-documentacao-edificacoes/</loc>
+    <lastmod>2026-09-05</lastmod>
+  </url>
+</urlset>
+

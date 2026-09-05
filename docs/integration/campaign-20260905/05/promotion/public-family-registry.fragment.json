@@ -1,0 +1,157 @@
+{
+  "fragment_schema": "confenge.integration.public-family-fragment/1.0",
+  "campaign": "05",
+  "target": "data/organic/public-family-registry.json",
+  "apply_owner": "MV-09",
+  "apply_mode": "append_selected_route_exact_families",
+  "preconditions": [
+    "selected route exists at the exact canonical path in the same integration SHA",
+    "an adaptive capture form is rendered inside main; a link to /triagem-tecnica/ alone is insufficient",
+    "nucleus building_engineering_documentation exists in the active corporate taxonomy",
+    "offer/delivery/professional approval is recorded for the selected route",
+    "inbound, copy, privacy, canonical, schema and accessibility gates pass"
+  ],
+  "families": [
+    {
+      "id": "private-engineering-projects-works-hub",
+      "nucleus_id": "building_engineering_documentation",
+      "visitor_job": "Escolher entre coordenação de projetos, quantitativos e orçamento, ou inspeção e documentação para uma decisão de projeto ou obra privada.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "match": {
+        "routes": [
+          "/engenharia-projetos-obras/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-05",
+      "owner_issue": 602,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte que descreve escopos condicionais, método e próxima ação da própria CONFENGE; não representa um registro externo.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/taxonomy.v1.json",
+          "data/offers/multivertical/catalog.v2.json",
+          "docs/integration/campaign-20260905/05/research-intents.md"
+        ],
+        "declared_at": "2026-09-05",
+        "owner_issue": 602
+      }
+    },
+    {
+      "id": "private-engineering-project-coordination",
+      "nucleus_id": "building_engineering_documentation",
+      "visitor_job": "Registrar interferências, premissas e responsáveis entre disciplinas antes que o conflito chegue à obra.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "match": {
+        "routes": [
+          "/compatibilizacao-revisao-projetos/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-05",
+      "owner_issue": 602,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte; o método e os artefatos condicionais são a proposição da própria CONFENGE.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/taxonomy.v1.json",
+          "data/offers/multivertical/catalog.v2.json",
+          "docs/integration/campaign-20260905/05/research-intents.md"
+        ],
+        "declared_at": "2026-09-05",
+        "owner_issue": 602
+      }
+    },
+    {
+      "id": "private-engineering-quantities-budget",
+      "nucleus_id": "building_engineering_documentation",
+      "visitor_job": "Produzir ou revisar uma base rastreável de quantidades e custos antes de contratar, investir ou alterar o escopo.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "match": {
+        "routes": [
+          "/quantitativos-orcamento-obras/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-05",
+      "owner_issue": 602,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte; planilha, memória e premissas são artefatos propostos pela própria CONFENGE.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/taxonomy.v1.json",
+          "data/offers/multivertical/catalog.v2.json",
+          "docs/integration/campaign-20260905/05/research-intents.md"
+        ],
+        "declared_at": "2026-09-05",
+        "owner_issue": 602
+      }
+    },
+    {
+      "id": "private-engineering-building-inspection-docs",
+      "nucleus_id": "building_engineering_documentation",
+      "visitor_job": "Registrar condição, pendências e documentação de uma edificação para decidir recebimento, intervenção ou regularização.",
+      "profile": "commercial_content",
+      "terminal_action": "capture_form",
+      "match": {
+        "routes": [
+          "/inspecao-documentacao-edificacoes/"
+        ]
+      },
+      "gate_coverage": {
+        "conversion": "full",
+        "copy": "full",
+        "accessibility": "full"
+      },
+      "declared_at": "2026-09-05",
+      "owner_issue": 602,
+      "debt": [],
+      "index_evidence": {
+        "substrate": "first_party_publication",
+        "not_applicable": [
+          "citable_source"
+        ],
+        "reason": "Página comercial de primeira parte; a condição de campo, os artefatos e as limitações são declarados como escopo proposto, não como registro externo.",
+        "authority": [
+          "docs/architecture/ADR-STRAT-002-confenge-canonical-public-surface.md",
+          "data/corporate/taxonomy.v1.json",
+          "data/offers/multivertical/catalog.v2.json",
+          "docs/integration/campaign-20260905/05/research-intents.md"
+        ],
+        "declared_at": "2026-09-05",
+        "owner_issue": 602
+      }
+    }
+  ]
+}
+

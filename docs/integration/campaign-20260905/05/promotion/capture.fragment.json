@@ -1,0 +1,103 @@
+{
+  "fragment_schema": "confenge.integration.capture-fragment/1.0",
+  "campaign": "05",
+  "target_owner": "MV-09",
+  "source": "CONFENGE_WEB",
+  "nucleus_id": "building_engineering_documentation",
+  "endpoint": "/.netlify/functions/lead",
+  "authority_config_endpoint": "/.netlify/functions/adaptive-intake-config",
+  "terminal_action": "capture_form",
+  "promotion_rule": "Render the current authority-pinned adaptive form inside main on every promoted route. Candidate links to /triagem-tecnica/ are preview navigation only and do not satisfy the conversion gate.",
+  "route_contexts": [
+    {
+      "route": "/engenharia-projetos-obras/",
+      "family_id": "private-engineering-projects-works-hub",
+      "asset_id": "private_engineering_hub_v1",
+      "offer_candidate_id": "private_project_technical_readiness_assessment",
+      "cta_id": "frame_private_engineering_demand",
+      "public_action": "Enquadrar uma demanda de projeto ou obra",
+      "desired_decision": "private_readiness"
+    },
+    {
+      "route": "/compatibilizacao-revisao-projetos/",
+      "family_id": "private-engineering-project-coordination",
+      "asset_id": "project_coordination_route_v1",
+      "offer_candidate_id": "bim_coordination_clash_register",
+      "cta_id": "request_coordination_scope",
+      "public_action": "Solicitar escopo para compatibilização",
+      "desired_decision": "bim_clash",
+      "partner_context_allowlist": [
+        "PROJECT_OFFICE",
+        "DIGITAL_PROJECT_PLATFORM",
+        "PROJECT_COMPLETION_OR_REVIEW",
+        "CONTRACTOR_OR_DEVELOPER",
+        "UNKNOWN"
+      ]
+    },
+    {
+      "route": "/quantitativos-orcamento-obras/",
+      "family_id": "private-engineering-quantities-budget",
+      "asset_id": "private_quantities_budget_route_v1",
+      "offer_candidate_id": "quantity_takeoff_budgeting",
+      "alternate_offer_candidate_id": "budget_audit_feasibility",
+      "cta_id": "frame_quantities_budget",
+      "public_action": "Enquadrar quantitativos ou orçamento",
+      "desired_decision_allowlist": [
+        "takeoff",
+        "audit_budget"
+      ]
+    },
+    {
+      "route": "/inspecao-documentacao-edificacoes/",
+      "family_id": "private-engineering-building-inspection-docs",
+      "asset_id": "building_inspection_docs_route_v1",
+      "offer_candidate_id": "building_inspection_pathology",
+      "alternate_offer_candidate_ids": [
+        "renovation_plan_condo_review",
+        "asbuilt_document_reconciliation"
+      ],
+      "cta_id": "request_inspection_or_docs_review",
+      "public_action": "Solicitar análise de inspeção ou documentação",
+      "desired_decision_allowlist": [
+        "inspect_pathology",
+        "renovation_plan",
+        "asbuilt"
+      ]
+    }
+  ],
+  "required_hidden_fields": [
+    "source",
+    "nucleus_id",
+    "offer_candidate_id",
+    "source_asset_id",
+    "landing_family",
+    "origem",
+    "landing_page",
+    "route_family",
+    "asset_id",
+    "cta_id",
+    "intake_contract_version",
+    "intake_pin_hash"
+  ],
+  "privacy": {
+    "url_and_analytics": "No PII, free text, address, client identity, document contents or commercial terms.",
+    "initial_form": "No upload, CPF, process number, medical record, employee list, drawing, report, budget file or conflict-party identity.",
+    "secure_channel": "If documents are required, request a secure channel only after an opaque persisted receipt.",
+    "outbound": "Inbound capture does not authorize outbound or SMTP."
+  },
+  "receipt": {
+    "required": true,
+    "persistence_before_success": true,
+    "idempotent_retry": true,
+    "analytics_value": "opaque_receipt_only"
+  },
+  "events": [
+    "candidate_view",
+    "candidate_action_activate",
+    "lead_form_start",
+    "lead_form_submit",
+    "lead_form_success",
+    "lead_persisted"
+  ]
+}
+
