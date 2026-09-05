@@ -1,6 +1,6 @@
 {
   "schema_version": "noindex-governance-v1",
-  "as_of": "2026-09-03",
+  "as_of": "2026-09-05",
   "purpose": "Registra governança de páginas permanentemente noindex e fixture-backed. Separa a decisão de não indexação do HTML (tags meta robots) e fornece rastreabilidade, data de revisão futura (para REMEDIABLE), e cadeia de decisão (reason_code + owner).",
   "reason_codes": {
     "cnpj_individual_result": {
@@ -32,6 +32,11 @@
       "description": "Página editorial em pipeline de aprovação humana (scripts/editorial/approve_cli.py). Requer revisão nomeada por humano específico e validação em Netlify preview antes de indexação.",
       "class": "REMEDIABLE",
       "context": "editorial-approval-gate"
+    },
+    "commercial_surface_deferred": {
+      "description": "Superfície comercial candidata retida até corrigir utilidade, prova, oferta e posição na arquitetura pública.",
+      "class": "REMEDIABLE",
+      "context": "commercial-integration"
     },
     "transactional_exit": {
       "description": "Página transacional de saída de usuário (descadastro, unsubscribe, etc). Não é conteúdo público de descoberta/conversão, é ação de usuário já convertido.",
@@ -232,6 +237,13 @@
       "owner_issue": 245,
       "review_at": "2026-10-31",
       "note": "REMEDIABLE: /jurisprudencia-contratos-obras/tcu-sumula-260-art-obras/ esta REJECTED em data/editorial/EDITORIAL-REGISTRY.json, publication_hold true, hold_reason official_sumula_text_date_and_specific_url_not_verified, com historico de reprovacao repetida desde 2026-08-02 e uma nota de 2026-08-03 revogando marcacoes HUMAN_APPROVED sem evidencia humana externa valida. O hub /jurisprudencia-contratos-obras/ fica noindex por consequencia: nao ha nenhum artigo publicavel para listar. Remediacao e verificar o texto, a data e a URL oficial da sumula no portal TCU e reaprovar por scripts/editorial/approve_cli.py."
+    },
+    {
+      "family_id": "prontidao-tecnica-obra-privada",
+      "reason_code": "commercial_surface_deferred",
+      "owner_issue": 589,
+      "review_at": "2026-10-05",
+      "note": "REMEDIABLE: MV-09 retirou a ferramenta do índice, sitemap e hub porque ela antecedeu as money pages e o red-team encontrou falso positivo de prontidão no estágio de planejamento. A rota permanece acessível para correção e nova revisão; só volta ao índice com lógica corrigida, oferta real e CTA compatível."
     },
     {
       "family_id": "panorama-mercado-obras-publicas",
