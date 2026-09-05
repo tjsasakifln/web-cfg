@@ -1,54 +1,5 @@
-/* CONFENGE · camada da home
- * ---------------------------------------------------------------------------
- * Revisao 2026-08-30 (direcao "parecer"), com a paleta revertida em
- * 2026-08-31 a pedido do dono da marca. Registro em
- * docs/design-audit/issues/13-home-commercial-direction.md.
- *
- * LEIA ISTO ANTES DA SECAO 0. O campo escuro descrito abaixo como decisao 1
- * NAO esta mais em producao. O dono da marca inspecionou a versao escura e
- * preferiu a paleta institucional, e so as CORES foram revertidas: a dobra
- * voltou a ser folha, o escuro voltou para a oferta dominante, a captura e o
- * rodape em navy #071a31, e o acento voltou a --green-700. Composicao,
- * hierarquia, faixa de escala, terna, copy, Archivo e o eixo wdth continuam
- * exatamente como esta camada os instalou. As decisoes 2 e 3 seguem valendo
- * na integra; a decisao 1 fica no texto como historico do que foi tentado.
- *
- * Historico curto. A revisao de #525/#526 instalou uma planilha orcamentaria
- * como motor de layout (regua ITEM/DESCRICAO/UNIDADE/QUANT/FONTE, cinco
- * trilhos por secao). #538 mediu o custo e a revisao seguinte a removeu — mas
- * o que sobrou foi a folha global de volta: caixa cinza com fio de acento no
- * topo, tres familias tipograficas na mesma pagina e nenhuma tese visual.
- * Sair da planilha para o generico nao e a terceira direcao; e a segunda de
- * novo.
- *
- * A tese desta camada. A CONFENGE vende julgamento tecnico e economico. O
- * artefato do julgamento neste mercado e o parecer, e o parecer termina em uma
- * palavra: participar, condicionar ou recusar. Essa terna e o unico elemento
- * que nenhum concorrente copia sem mudar de negocio, entao ela — e nao a
- * mobilia de tabela — carrega a identidade da primeira dobra.
- *
- * As tres decisoes que produzem a identidade:
- *
- *   1. UM CAMPO ESCURO, no topo. A dobra e um campo continuo em tinta
- *      #08130e, nao mais uma folha branca com caixas. O cabecalho permanece
- *      claro (contrato de logo em test_design_gates.py:768) e a aresta entre
- *      os dois e deliberada.
- *   2. UMA FAMILIA, TRES LARGURAS. Archivo variavel ja estava carregada e
- *      tem eixo wdth 66-110 que quase ninguem usa. Display em 96% (--wide),
- *      rotulo em 78% (--narrow), texto em 100%. Serifa de sistema e
- *      monoespacada saem da home:
- *      eram Georgia e Menlo, isto e, o default de qualquer pagina.
- *   3. REGUA NO LUGAR DE CAIXA. Um unico estilo de fio (1px --rule). Nenhuma
- *      barra de acento de 2px/3px, nenhum painel cinza. Raio sobrevive so
- *      onde significa "clicavel": botao e campo de formulario.
- *
- * O que esta camada NAO faz: nao redesenha as outras ~260 rotas, nao inventa
- * paleta global (uma superficie nova, --field, ver secao 0), nao adiciona
- * arquivo de fonte,
- * nao toca styles.css / styles-tokens.css / script.js — congelados por janela
- * de medicao ate 2026-09-13, ver docs/decisions/DEFERRED-BY-MEASUREMENT-FREEZE-2026-08-30.md.
- * Nao carregar em outra rota.
- * ------------------------------------------------------------------------- */
+/* Home layer only. Palette, type and rules live in this file.
+ * Direction log: docs/design-audit/issues/13-home-commercial-direction.md */
 
 /* Archivo v2.001 · Omnibus-Type · SIL OFL 1.1 · assets/archivo-OFL.txt
  * Subconjunto latino pt-BR, dois eixos (wght 100-900, wdth 66-110), tnum e
