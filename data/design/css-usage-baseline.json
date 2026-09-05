@@ -33,8 +33,11 @@
     "styles.css": {
       "bytes": 100900,
       "class_selectors": 357,
-      "used": 344,
+      "used": 341,
       "unused": [
+        "evidence-actions",
+        "evidence-cta",
+        "evidence-whatsapp",
         "journey-num",
         "macro-phase",
         "macro-phases",
